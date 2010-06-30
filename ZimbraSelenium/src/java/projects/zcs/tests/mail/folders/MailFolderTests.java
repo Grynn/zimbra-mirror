@@ -16,11 +16,6 @@ import projects.zcs.tests.CommonTest;
 /**
  * @author Jitesh Sojitra
  * 
- *         Class contains 5 methods regarding 1.create folder 2.rename folder
- *         3.delete folder 4.valid special character 5.invalid special character
- * 
- *         Below parameter used to pass values from data provider
- * 
  * @param folderName
  *            - specify folder name in data provider according to test
  * @param renameFolderName

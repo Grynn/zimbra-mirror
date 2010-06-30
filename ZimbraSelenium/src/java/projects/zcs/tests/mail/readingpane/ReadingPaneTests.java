@@ -28,36 +28,39 @@ public class ReadingPaneTests extends CommonTest {
 	public Object[][] createData(Method method) throws Exception {
 		String test = method.getName();
 		if (test.equals("readingPaneOnRight")) {
-			return new Object[][] { { SelNGBase.selfAccountName,
-				SelNGBase.selfAccountName, "ccuser@testdomain.com",
-				"bccuser@testdomain.com", "subject_readingPaneOnRight",
-				"body_readingPaneOnRight", "byNormalMethod" },
-				{ SelNGBase.selfAccountName,
-					SelNGBase.selfAccountName, "ccuser@testdomain.com",
-					"bccuser@testdomain.com", "subject_readingPaneOnRight",
-					"body_readingPaneOnRight", "byKeyboardShortCut" }};
+			return new Object[][] {
+					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+							"ccuser@testdomain.com", "bccuser@testdomain.com",
+							"subject_readingPaneOnRight",
+							"body_readingPaneOnRight", "byNormalMethod" },
+					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+							"ccuser@testdomain.com", "bccuser@testdomain.com",
+							"subject_readingPaneOnRight",
+							"body_readingPaneOnRight", "byKeyboardShortCut" } };
 		} else if (test.equals("readingPaneOnBottom")) {
-			return new Object[][] { { SelNGBase.selfAccountName,
-				SelNGBase.selfAccountName, "ccuser@testdomain.com",
-				"bccuser@testdomain.com", "subject_readingPaneOnBottom",
-				"body_readingPaneOnBottom", "byNormalMethod" },
-				{ SelNGBase.selfAccountName,
-					SelNGBase.selfAccountName, "ccuser@testdomain.com",
-					"bccuser@testdomain.com", "subject_readingPaneOnBottom",
-					"body_readingPaneOnBottom", "byKeyboardShortCut" }};
+			return new Object[][] {
+					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+							"ccuser@testdomain.com", "bccuser@testdomain.com",
+							"subject_readingPaneOnBottom",
+							"body_readingPaneOnBottom", "byNormalMethod" },
+					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+							"ccuser@testdomain.com", "bccuser@testdomain.com",
+							"subject_readingPaneOnBottom",
+							"body_readingPaneOnBottom", "byKeyboardShortCut" } };
 		} else if (test.equals("readingPaneOff")) {
-			return new Object[][] { { SelNGBase.selfAccountName,
-				SelNGBase.selfAccountName, "ccuser@testdomain.com",
-				"bccuser@testdomain.com", "subject_readingPaneOff",
-				"body_readingPaneOff", "byNormalMethod" },
-				{ SelNGBase.selfAccountName,
-					SelNGBase.selfAccountName, "ccuser@testdomain.com",
-					"bccuser@testdomain.com", "subject_readingPaneOff",
-					"body_readingPaneOff", "byKeyboardShortCut" }};
+			return new Object[][] {
+					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+							"ccuser@testdomain.com", "bccuser@testdomain.com",
+							"subject_readingPaneOff", "body_readingPaneOff",
+							"byNormalMethod" },
+					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+							"ccuser@testdomain.com", "bccuser@testdomain.com",
+							"subject_readingPaneOff", "body_readingPaneOff",
+							"byKeyboardShortCut" } };
 		} else {
 			return new Object[][] { { SelNGBase.selfAccountName,
-				SelNGBase.selfAccountName, "ccuser@testdomain.com",
-				"bccuser@testdomain.com", "testsubject", "testbody", "" } };
+					SelNGBase.selfAccountName, "ccuser@testdomain.com",
+					"bccuser@testdomain.com", "testsubject", "testbody", "" } };
 		}
 	}
 
@@ -84,20 +87,21 @@ public class ReadingPaneTests extends CommonTest {
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void readingPaneOnRight(String from, String to, String cc,
 			String bcc, String subject, String body, String method)
-	throws Exception {
+			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
 		/**
-		 * This step is added for bug 36935 : Multiple issues after setting reading pane on right.
+		 * This step is added for bug 36935 : Multiple issues after setting
+		 * reading pane on right.
 		 */
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneOnRight));
 
-
 		/**
-		 * Following redundant code is added because MailApp.ClickCheckMailUntilMailShowsUp(subject); is
-		 * not working with Reading pane set to right.
+		 * Following redundant code is added because
+		 * MailApp.ClickCheckMailUntilMailShowsUp(subject); is not working with
+		 * Reading pane set to right.
 		 */
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneAtBottom));
@@ -109,16 +113,15 @@ public class ReadingPaneTests extends CommonTest {
 
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneOff));
-		
-		
-		if(method.equals("byNormalMethod")) {
+
+		if (method.equals("byNormalMethod")) {
 			obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 			obj.zMenuItem.zClick(localize(locator.readingPaneOnRight));
 		}
 
-		if(method.equals("byKeyboardShortCut")) {
+		if (method.equals("byKeyboardShortCut")) {
 			selenium.windowFocus();
-			Thread.sleep(3000);		
+			Thread.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
 			zRobot.keyRelease(KeyEvent.VK_M);
@@ -129,47 +132,46 @@ public class ReadingPaneTests extends CommonTest {
 			Thread.sleep(2000);
 		}
 
-
 		Boolean isVisible = selenium.isVisible("id=DWT6");
 		Boolean isNotVisible = selenium.isVisible("id=DWT7");
 		Boolean isSubDblRowClassExists = selenium
-		.isElementPresent("class=SubjectDoubleRow");
+				.isElementPresent("class=SubjectDoubleRow");
 		assertReport("true", isVisible.toString(),
-		"Verifying whether vertical scrollbar exists or not");
+				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isNotVisible.toString(),
-		"Verifying whether horizontal scrollbar exists or not");
+				"Verifying whether horizontal scrollbar exists or not");
 		assertReport("true", isSubDblRowClassExists.toString(),
-		"Verifying subject double row view for reading pane on right");
+				"Verifying subject double row view for reading pane on right");
 
 		selenium.refresh();
 		Thread.sleep(3000);
 		assertReport("true", isVisible.toString(),
-		"Verifying whether vertical scrollbar exists or not");
+				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isNotVisible.toString(),
-		"Verifying whether horizontal scrollbar exists or not");
+				"Verifying whether horizontal scrollbar exists or not");
 		assertReport("true", isSubDblRowClassExists.toString(),
-		"Verifying subject double row view for reading pane on right");
+				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"right",
 				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
-				"zimbraPrefReadingPaneLocation"),
-		"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
+						"zimbraPrefReadingPaneLocation"),
+				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
 		selenium.click("link=" + localize(locator.logOff));
 		zKillBrowsers();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		Thread.sleep(3000);
 		assertReport("true", isVisible.toString(),
-		"Verifying whether vertical scrollbar exists or not");
+				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isNotVisible.toString(),
-		"Verifying whether horizontal scrollbar exists or not");
+				"Verifying whether horizontal scrollbar exists or not");
 		assertReport("true", isSubDblRowClassExists.toString(),
-		"Verifying subject double row view for reading pane on right");
+				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"right",
 				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
-				"zimbraPrefReadingPaneLocation"),
-		"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
+						"zimbraPrefReadingPaneLocation"),
+				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneAtBottom));
 
@@ -190,15 +192,15 @@ public class ReadingPaneTests extends CommonTest {
 
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneOnRight));
-		
-		if(method.equals("byNormalMethod")) {
+
+		if (method.equals("byNormalMethod")) {
 			obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 			obj.zMenuItem.zClick(localize(locator.readingPaneOff));
 		}
 
-		if(method.equals("byKeyboardShortCut")) {
+		if (method.equals("byKeyboardShortCut")) {
 			selenium.windowFocus();
-			Thread.sleep(3000);		
+			Thread.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
 			zRobot.keyRelease(KeyEvent.VK_M);
@@ -215,43 +217,43 @@ public class ReadingPaneTests extends CommonTest {
 		Boolean isNotVisible1 = selenium.isVisible("id=DWT6");
 		Boolean isNotVisible2 = selenium.isVisible("id=DWT7");
 		Boolean isSubDblRowClassExists = selenium
-		.isElementPresent("class=SubjectDoubleRow");
+				.isElementPresent("class=SubjectDoubleRow");
 		assertReport("false", isNotVisible1.toString(),
-		"Verifying whether vertical scrollbar exists or not");
+				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isNotVisible2.toString(),
-		"Verifying whether horizontal scrollbar exists or not");
+				"Verifying whether horizontal scrollbar exists or not");
 		assertReport("false", isSubDblRowClassExists.toString(),
-		"Verifying subject double row view for reading pane on right");
+				"Verifying subject double row view for reading pane on right");
 
 		selenium.refresh();
 		Thread.sleep(3000);
 		assertReport("false", isNotVisible1.toString(),
-		"Verifying whether vertical scrollbar exists or not");
+				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isNotVisible2.toString(),
-		"Verifying whether horizontal scrollbar exists or not");
+				"Verifying whether horizontal scrollbar exists or not");
 		assertReport("false", isSubDblRowClassExists.toString(),
-		"Verifying subject double row view for reading pane on right");
+				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"off",
 				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
-				"zimbraPrefReadingPaneLocation"),
-		"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
+						"zimbraPrefReadingPaneLocation"),
+				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
 		selenium.click("link=" + localize(locator.logOff));
 		zKillBrowsers();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		Thread.sleep(3000);
 		assertReport("false", isNotVisible1.toString(),
-		"Verifying whether vertical scrollbar exists or not");
+				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isNotVisible2.toString(),
-		"Verifying whether horizontal scrollbar exists or not");
+				"Verifying whether horizontal scrollbar exists or not");
 		assertReport("false", isSubDblRowClassExists.toString(),
-		"Verifying subject double row view for reading pane on right");
+				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"off",
 				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
-				"zimbraPrefReadingPaneLocation"),
-		"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
+						"zimbraPrefReadingPaneLocation"),
+				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneAtBottom));
 
@@ -261,7 +263,7 @@ public class ReadingPaneTests extends CommonTest {
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void readingPaneOnBottom(String from, String to, String cc,
 			String bcc, String subject, String body, String method)
-	throws Exception {
+			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
@@ -273,16 +275,15 @@ public class ReadingPaneTests extends CommonTest {
 
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneOff));
-		
-		
-		if(method.equals("byNormalMethod")) {
+
+		if (method.equals("byNormalMethod")) {
 			obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 			obj.zMenuItem.zClick(localize(locator.readingPaneAtBottom));
 		}
 
-		if(method.equals("byKeyboardShortCut")) {
+		if (method.equals("byKeyboardShortCut")) {
 			selenium.windowFocus();
-			Thread.sleep(3000);		
+			Thread.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
 			zRobot.keyRelease(KeyEvent.VK_M);
@@ -293,56 +294,54 @@ public class ReadingPaneTests extends CommonTest {
 			Thread.sleep(2000);
 		}
 
-
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(1500);
 		obj.zMessageItem.zVerifyIsRead(subject);
 		Boolean isNotVisible = selenium.isVisible("id=DWT6");
 		Boolean isVisible = selenium.isVisible("id=DWT7");
 		Boolean isSubDblRowClassExists = selenium
-		.isElementPresent("class=SubjectDoubleRow");
+				.isElementPresent("class=SubjectDoubleRow");
 		assertReport("false", isNotVisible.toString(),
-		"Verifying whether horizontal scrollbar exists or not");
+				"Verifying whether horizontal scrollbar exists or not");
 		assertReport("true", isVisible.toString(),
-		"Verifying whether vertical scrollbar exists or not");
+				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isSubDblRowClassExists.toString(),
-		"Verifying subject double row view for reading pane on right");
+				"Verifying subject double row view for reading pane on right");
 
 		selenium.refresh();
 		Thread.sleep(3000);
 		assertReport("false", isNotVisible.toString(),
-		"Verifying whether horizontal scrollbar exists or not");
+				"Verifying whether horizontal scrollbar exists or not");
 		assertReport("true", isVisible.toString(),
-		"Verifying whether vertical scrollbar exists or not");
+				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isSubDblRowClassExists.toString(),
-		"Verifying subject double row view for reading pane on right");
+				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"bottom",
 				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
-				"zimbraPrefReadingPaneLocation"),
-		"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
+						"zimbraPrefReadingPaneLocation"),
+				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
 		selenium.click("link=" + localize(locator.logOff));
 		zKillBrowsers();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		Thread.sleep(3000);
 		assertReport("false", isNotVisible.toString(),
-		"Verifying whether horizontal scrollbar exists or not");
+				"Verifying whether horizontal scrollbar exists or not");
 		assertReport("true", isVisible.toString(),
-		"Verifying whether vertical scrollbar exists or not");
+				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isSubDblRowClassExists.toString(),
-		"Verifying subject double row view for reading pane on right");
+				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"bottom",
 				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
-				"zimbraPrefReadingPaneLocation"),
-		"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
+						"zimbraPrefReadingPaneLocation"),
+				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneAtBottom));
 
 		needReset = false;
 	}
-
 
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS

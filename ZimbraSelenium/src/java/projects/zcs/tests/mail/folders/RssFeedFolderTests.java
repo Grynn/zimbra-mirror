@@ -14,12 +14,6 @@ import projects.zcs.ui.MailApp;
 
 /**
  * @author Jitesh Sojitra
- * 
- *         Class contains 3 methods (funtionality covers - create rss feed
- *         folder, renaming, deleting, moving and verifying rss feed related UI
- * 
- *         Below parameter used to pass values in zCreateRssFeedFolder method
- * 
  * @param rssFeedfolderName
  *            - specify rss feed folder name in data provider according to test
  * @param rssFeedURL
@@ -29,17 +23,29 @@ import projects.zcs.ui.MailApp;
 public class RssFeedFolderTests extends CommonTest {
 	protected int i = 0;
 	protected String rssFeedFolderName, renameRssFeedFolderName, rssFeedURL;
+
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
 	@DataProvider(name = "RSSFeedDataProvier")
 	protected Object[][] createData(Method method) {
 		String test = method.getName();
-		if ( test.equals("duplicateRSSFeeds_Bug41488")) {
-			return new Object[][] { { getLocalizedData_NoSpecialChar(), "http://xkcd.com/rss.xml", "xkcd.com" },
-					{ getLocalizedData_NoSpecialChar(), "http://d.yimg.com/ds/rss/V1/top10/all", "Yahoo! Buzz US: Top Stories" },
-					{ getLocalizedData_NoSpecialChar(), "http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml", "BBC News | News Front Page | World Edition" }
-					/*{ getLocalizedData_NoSpecialChar(), "http://www.zimbra.com/forums/external.php?type=RSS2&forumids=2", "mmorse" }*/};
+		if (test.equals("duplicateRSSFeeds_Bug41488")) {
+			return new Object[][] {
+					{ getLocalizedData_NoSpecialChar(),
+							"http://xkcd.com/rss.xml", "xkcd.com" },
+					{ getLocalizedData_NoSpecialChar(),
+							"http://d.yimg.com/ds/rss/V1/top10/all",
+							"Yahoo! Buzz US: Top Stories" },
+					{
+							getLocalizedData_NoSpecialChar(),
+							"http://newsrss.bbc.co.uk/rss/newsonline_world_edition/front_page/rss.xml",
+							"BBC News | News Front Page | World Edition" }
+			/*
+			 * { getLocalizedData_NoSpecialChar(),
+			 * "http://www.zimbra.com/forums/external.php?type=RSS2&forumids=2",
+			 * "mmorse" }
+			 */};
 		} else {// default
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
@@ -48,8 +54,6 @@ public class RssFeedFolderTests extends CommonTest {
 		}
 	}
 
-	
-	
 	//--------------------------------------------------------------------------
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
@@ -203,31 +207,27 @@ public class RssFeedFolderTests extends CommonTest {
 		}
 	}
 
-	
 	@Test(dataProvider = "RSSFeedDataProvier", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void duplicateRSSFeeds_Bug41488(String folderName,
-			String rssFeedURL, String fromName)
-			throws Exception {
+			String rssFeedURL, String fromName) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (isExecutionARetry)
 			handleRetry();
 		/**
-		 * 1. Create a RSS feed. 
-		 * 2. Go to newly created folder. 
-		 * 3. Click on first message. 
-		 * 4. Get a subject.
+		 * 1. Create a RSS feed. 2. Go to newly created folder. 3. Click on
+		 * first message. 4. Get a subject.
 		 */
 		page.zMailApp.zCreateRssFeedFolder(folderName, rssFeedURL);
-		 //page.zMailApp.zCreateFolderWithRss(folderName, "http://xkcd.com/rss.xml");
+		// page.zMailApp.zCreateFolderWithRss(folderName,
+		// "http://xkcd.com/rss.xml");
 		obj.zFolder.zClick(folderName);
 		obj.zMessageItem.zClick(fromName, "1");
 		String latestFeedSubject = selenium
 				.getText("//*[contains(@class,'LabelColValue SubjectCol')]");
 
 		/**
-		 * 1. Reload feed 2-3 times. 
-		 * 2. Refresh seesion to be on safer side. 
-		 * 3. Again go to RSS feed folder.
+		 * 1. Reload feed 2-3 times. 2. Refresh seesion to be on safer side. 3.
+		 * Again go to RSS feed folder.
 		 */
 		obj.zFolder.zClick(folderName);
 		obj.zFolder.zClick(folderName);

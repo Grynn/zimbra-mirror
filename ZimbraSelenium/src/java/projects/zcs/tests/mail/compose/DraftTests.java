@@ -309,8 +309,9 @@ public class DraftTests extends CommonTest {
 				"Verifying html formatting in show original");
 		selenium.selectWindow(null);
 		obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
-		if(config.getString("browser").equals("IE")){
-			//IE 8 requires this  click event that is why we again wrote same line here
+		if (config.getString("browser").equals("IE")) {
+			// IE 8 requires this click event that is why we again wrote same
+			// line here
 			obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
 		}
 		obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
@@ -331,8 +332,9 @@ public class DraftTests extends CommonTest {
 				"Verifying html formatting in show original");
 		selenium.selectWindow(null);
 		obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
-		if(config.getString("browser").equals("IE")){
-			//IE 8 requires this  click event that is why we again wrote same line here
+		if (config.getString("browser").equals("IE")) {
+			// IE 8 requires this click event that is why we again wrote same
+			// line here
 			obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
 		}
 		obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
@@ -384,12 +386,17 @@ public class DraftTests extends CommonTest {
 				"Verifying html formatting in show original");
 		selenium.selectWindow(null);
 		obj.zMessageItem.zClick("Bug34870 save draft(html format) subject");
-		if(config.getString("browser").equals("IE")){
-			//IE 8 requires this is click event that is why we again wrote same line here
+		if (config.getString("browser").equals("IE")) {
+			// IE 8 requires this is click event that is why we again wrote same
+			// line here
 			obj.zMessageItem.zClick("Bug34870 save draft(html format) subject");
 		}
 		selenium.selectFrame("css=iframe[id*='zv__CLV__MSG_body__iframe']");
-		Assert.assertTrue(selenium.isElementPresent("xpath=/html/body[contains(@class,'MsgBody MsgBody-text')]"),"Reading pane still shows in Html formate");
+		Assert
+				.assertTrue(
+						selenium
+								.isElementPresent("xpath=/html/body[contains(@class,'MsgBody MsgBody-text')]"),
+						"Reading pane still shows in Html formate");
 		selenium.selectFrame("relative=top");
 		obj.zMessageItem.zClick("Bug34870 save draft(html format) subject");
 		obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);

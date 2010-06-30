@@ -20,183 +20,227 @@ import projects.zcs.ui.ComposeView;
 import projects.zcs.ui.MailApp;
 
 @SuppressWarnings("static-access")
-public class ComposeReplyFwdInHTMLTests extends CommonTest{
+public class ComposeReplyFwdInHTMLTests extends CommonTest {
 
-    //--------------------------------------------------------------------------
-    //		SECTION 1: DATA-PROVIDERS
-    //--------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
+	// SECTION 1: DATA-PROVIDERS
+	//--------------------------------------------------------------------------
 	@DataProvider(name = "composeDataProvider")
 	public Object[][] createData(Method method) {
-		
 		String test = method.getName();
-		if(test.equals("sendMailToSelfAndVerify") 
-			|| test.equals("sendMailToSelfAndVerify_NewWindow")) {
-				return new Object[][] {
-						
-						{"_selfAccountName_", "ccuser@testdomain.com", "bccuser@testdomain.com", getLocalizedData(2),getLocalizedData(5), ""},
-						{"", "_selfAccountName_", "bccuser@testdomain.com", getLocalizedData(1),getLocalizedData(5), ""},
-						{"", "", "_selfAccountName_", getLocalizedData(1),getLocalizedData(5), ""}
-				};
-		} else {//default
+		if (test.equals("sendMailToSelfAndVerify")
+				|| test.equals("sendMailToSelfAndVerify_NewWindow")) {
 			return new Object[][] {
-					{"_selfAccountName_", "ccuser@testdomain.com", "bccuser@testdomain.com", getLocalizedData(2),getLocalizedData(5), ""},
-			};
+					{ "_selfAccountName_", "ccuser@testdomain.com",
+							"bccuser@testdomain.com", getLocalizedData(2),
+							getLocalizedData(5), "" },
+					{ "", "_selfAccountName_", "bccuser@testdomain.com",
+							getLocalizedData(1), getLocalizedData(5), "" },
+					{ "", "", "_selfAccountName_", getLocalizedData(1),
+							getLocalizedData(5), "" } };
+		} else {
+			return new Object[][] { { "_selfAccountName_",
+					"ccuser@testdomain.com", "bccuser@testdomain.com",
+					getLocalizedData(2), getLocalizedData(5), "" }, };
 		}
-		
+
 	}
-	
+
 	//--------------------------------------------------------------------------
-	//		SECTION 2: SETUP
-	//--------------------------------------------------------------------------	
-	@BeforeClass(groups = {"always"})
-	public  void zLogin() throws Exception {
-		//set Compose in html-mode ON	
+	// SECTION 2: SETUP
+	//--------------------------------------------------------------------------
+	@BeforeClass(groups = { "always" })
+	public void zLogin() throws Exception {
+		// set Compose in html-mode ON
 		Map<String, Object> accntAttrs = new HashMap<String, Object>();
-		accntAttrs.put(Provisioning.A_zimbraPrefComposeFormat, Provisioning.MAIL_FORMAT_HTML);		
+		accntAttrs.put(Provisioning.A_zimbraPrefComposeFormat,
+				Provisioning.MAIL_FORMAT_HTML);
 		zLoginIfRequired(accntAttrs);
 		isExecutionARetry = false;
 	}
 
-	@BeforeMethod(groups = {"always"})
-	public  void zResetIfRequired() throws Exception {
-		if(needReset && !isExecutionARetry){
-			zLogin(); 
+	@BeforeMethod(groups = { "always" })
+	public void zResetIfRequired() throws Exception {
+		if (needReset && !isExecutionARetry) {
+			zLogin();
 		}
-		needReset = true;		
+		needReset = true;
 	}
+
 	//--------------------------------------------------------------------------
-	//		SECTION 3: TEST-METHODS
-	//--------------------------------------------------------------------------	
-	//------------------------------Compose Tests..------------------------------------------------------
+	// SECTION 3: TEST-METHODS
+	//--------------------------------------------------------------------------
+	// ------------------------------Compose
+	// Tests..------------------------------------------------------
 	/**
-	* Test: Send an email(to self) in html-mode in several ways(to-only,cc-only, etc) 
-	* and verify if the received mail has all the information
-	*/
-	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full"}, retryAnalyzer = RetryFailedTests.class)
-	public  void sendMailToSelfAndVerify_htmlMode(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+	 * Test: Send an email(to self) in html-mode in several
+	 * ways(to-only,cc-only, etc) and verify if the received mail has all the
+	 * information
+	 */
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void sendMailToSelfAndVerify_htmlMode(String to, String cc,
+			String bcc, String subject, String body, String attachments)
+			throws Exception {
 		if (isExecutionARetry)
-		    handleRetry();
+			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(to,  cc,  bcc,  subject,  body,  attachments);
+		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
+				attachments);
 		needReset = false;
 	}
+
 	/**
-	* Test: Send an email(to self) in html-mode and in-newwindow in several ways(to-only,cc-only, etc) 
-	* and verify if the received mail has all the information
-	*/	
-	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full"}, retryAnalyzer = RetryFailedTests.class)
-	public  void sendMailToSelfAndVerify_NewWindowHtmlMode(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+	 * Test: Send an email(to self) in html-mode and in-newwindow in several
+	 * ways(to-only,cc-only, etc) and verify if the received mail has all the
+	 * information
+	 */
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void sendMailToSelfAndVerify_NewWindowHtmlMode(String to, String cc,
+			String bcc, String subject, String body, String attachments)
+			throws Exception {
 		if (isExecutionARetry)
-		    handleRetry();
+			handleRetry();
 		page.zComposeView.zNavigateToComposeByShiftClick();
-		page.zComposeView.zSendMailToSelfAndVerify( to,  cc,  bcc,  subject,  body,  attachments);
+		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
+				attachments);
 		needReset = false;
 	}
-	//----------------------------------Reply tests...----------------------------------------
+
+	// ----------------------------------Reply
+	// tests...----------------------------------------
 	/**
-	* Test: Reply to an email in html-mode and verify if the mail-compose
-	*  and verify that cc and bcc is empty,to is filled, subject has Re appended 
-	*/	
-	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public  void replyTest_HtmlMode(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+	 * Test: Reply to an email in html-mode and verify if the mail-compose and
+	 * verify that cc and bcc is empty,to is filled, subject has Re appended
+	 */
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void replyTest_HtmlMode(String to, String cc, String bcc,
+			String subject, String body, String attachments) throws Exception {
 		if (isExecutionARetry)
-		    handleRetry();
+			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_",  cc,  bcc,  subject,  body,  attachments);
+		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
+				bcc, subject, body, attachments);
 		obj.zButton.zClick(MailApp.zReplyIconBtn);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
-		page.zComposeView.zVerifyComposeFilledValues("Reply", "_selfAccountName_",  "",  "",  "Re: "+subject,  body,  attachments);		
+		page.zComposeView.zVerifyComposeFilledValues("Reply",
+				"_selfAccountName_", "", "", "Re: " + subject, body,
+				attachments);
 		needReset = false;
 	}
-	
+
 	/**
-	* Test: Reply to an email in html-mode  and in new-window and verify if the mail-compose
-	*  and verify that cc and bcc is empty,to is filled, subject has Re appended 
-	*/	
-	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full"  }, retryAnalyzer = RetryFailedTests.class)
-	public  void replyTest_NewWindowHtml(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+	 * Test: Reply to an email in html-mode and in new-window and verify if the
+	 * mail-compose and verify that cc and bcc is empty,to is filled, subject
+	 * has Re appended
+	 */
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void replyTest_NewWindowHtml(String to, String cc, String bcc,
+			String subject, String body, String attachments) throws Exception {
 		if (isExecutionARetry)
-		    handleRetry();
+			handleRetry();
 		page.zComposeView.zNavigateToComposeByShiftClick();
-		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_",  cc,  bcc,  subject,  body,  attachments);
-		obj.zButton.zClick(MailApp.zReplyIconBtn);	
+		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
+				bcc, subject, body, attachments);
+		obj.zButton.zClick(MailApp.zReplyIconBtn);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
-		page.zComposeView.zVerifyComposeFilledValues("Reply", "_selfAccountName_",  "",  "",  "Re: "+subject,  body,  attachments);	
+		page.zComposeView.zVerifyComposeFilledValues("Reply",
+				"_selfAccountName_", "", "", "Re: " + subject, body,
+				attachments);
 		needReset = false;
-		
+
 	}
-	
-	//-------------------Forward tests...----------------------------
+
+	// -------------------Forward tests...----------------------------
 	/**
-	* Test: Hit "Forward" to an email in html-mode  and verify if the mail-compose
-	*  and verify that cc, bcc and to are empty, but subject and body are filled. Also: subject has Fwd prepended 
-	*/		
-	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full", "enabled"}, retryAnalyzer = RetryFailedTests.class)	
-	public  void fwdMailTest_HtmlMode(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+	 * Test: Hit "Forward" to an email in html-mode and verify if the
+	 * mail-compose and verify that cc, bcc and to are empty, but subject and
+	 * body are filled. Also: subject has Fwd prepended
+	 */
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full",
+			"enabled" }, retryAnalyzer = RetryFailedTests.class)
+	public void fwdMailTest_HtmlMode(String to, String cc, String bcc,
+			String subject, String body, String attachments) throws Exception {
 		if (isExecutionARetry)
-		    handleRetry();
+			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_",  cc,  bcc,  subject,  body,  attachments);
+		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
+				bcc, subject, body, attachments);
 		obj.zButton.zClick(MailApp.zForwardIconBtn);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
-		page.zComposeView.zVerifyComposeFilledValues("Forward", "",  "",  "",   "Fwd: "+subject,  body,  attachments);	
+		page.zComposeView.zVerifyComposeFilledValues("Forward", "", "", "",
+				"Fwd: " + subject, body, attachments);
 		needReset = false;
 	}
+
 	/**
-	* Test: Hit "Forward" to an email in html-mode and in-newwindow and verify if the mail-compose
-	*  and verify that cc, bcc and to are empty, but subject and body are filled. Also: subject has Fwd prepended 
-	*/	
-	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)	
-	public  void fwdMailTest_NewWindowHtml(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+	 * Test: Hit "Forward" to an email in html-mode and in-newwindow and verify
+	 * if the mail-compose and verify that cc, bcc and to are empty, but subject
+	 * and body are filled. Also: subject has Fwd prepended
+	 */
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void fwdMailTest_NewWindowHtml(String to, String cc, String bcc,
+			String subject, String body, String attachments) throws Exception {
 		if (isExecutionARetry)
-		    handleRetry();
+			handleRetry();
 		page.zComposeView.zNavigateToComposeByShiftClick();
-		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_",  cc,  bcc,  subject,  body,  attachments);
-		obj.zButton.zClick(MailApp.zForwardIconBtn );
+		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
+				bcc, subject, body, attachments);
+		obj.zButton.zClick(MailApp.zForwardIconBtn);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
-		page.zComposeView.zVerifyComposeFilledValues("Forward", "",  "",  "",   "Fwd: "+subject,  body,  attachments);	
+		page.zComposeView.zVerifyComposeFilledValues("Forward", "", "", "",
+				"Fwd: " + subject, body, attachments);
 		needReset = false;
 	}
-	
-	//----------------------Reply All tests...------------------
+
+	// ----------------------Reply All tests...------------------
 	/**
-	* Test: "Reply-all" to an email in html-mode and verify if the mail-compose
-	*  and verify that cc, bcc,to,subject and body are filled, subject has Re appended 
-	*/	
-	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public  void replyAllTest_HtmlMode(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+	 * Test: "Reply-all" to an email in html-mode and verify if the mail-compose
+	 * and verify that cc, bcc,to,subject and body are filled, subject has Re
+	 * appended
+	 */
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void replyAllTest_HtmlMode(String to, String cc, String bcc,
+			String subject, String body, String attachments) throws Exception {
 		if (isExecutionARetry)
-		    handleRetry();	    
+			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_",  cc,  bcc,  subject,  body,  attachments);
+		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
+				bcc, subject, body, attachments);
 		obj.zButton.zClick(MailApp.zReplyAllIconBtn);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
-		page.zComposeView.zVerifyComposeFilledValues("ReplyAll", "_selfAccountName_",  cc,  "",  "Re: "+subject,  body,  attachments);			
+		page.zComposeView.zVerifyComposeFilledValues("ReplyAll",
+				"_selfAccountName_", cc, "", "Re: " + subject, body,
+				attachments);
 		needReset = false;
 	}
+
 	/**
-	* Test: "Reply-all" to an email in html-mode and in-newwindow and verify if the mail-compose
-	*  and verify that cc, bcc,to,subject and body are filled, subject has Re appended 
-	*/	
-	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public  void replyAllTest_NewWindowHtml(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+	 * Test: "Reply-all" to an email in html-mode and in-newwindow and verify if
+	 * the mail-compose and verify that cc, bcc,to,subject and body are filled,
+	 * subject has Re appended
+	 */
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void replyAllTest_NewWindowHtml(String to, String cc, String bcc,
+			String subject, String body, String attachments) throws Exception {
 		if (isExecutionARetry)
-		    handleRetry();	    
+			handleRetry();
 		page.zComposeView.zNavigateToComposeByShiftClick();
-		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_",  cc,  bcc,  subject,  body,  attachments);
+		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
+				bcc, subject, body, attachments);
 		obj.zButton.zClick(MailApp.zReplyAllIconBtn);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
-		page.zComposeView.zVerifyComposeFilledValues("ReplyAll", "_selfAccountName_",  cc,  "",  "Re: "+subject,  body,  attachments);		
+		page.zComposeView.zVerifyComposeFilledValues("ReplyAll",
+				"_selfAccountName_", cc, "", "Re: " + subject, body,
+				attachments);
 		needReset = false;
 	}
+
 	/**
 	 * Test Case:No tab created after canceling compose
-	 * @step:
-	 * 1. Go to Mail
-	 * 2. Click on New MAil button
-	 * 3. Verify Compose Tab gets open
-	 * 3.Click on Cancel  and again clikc 2nd time on New Mail button
-	 * 4. Verify Compose Tab should get open again in 2nd attempt.
+	 * 
+	 * @step: 1. Go to Mail 2. Click on New MAil button 3. Verify Compose Tab
+	 *        gets open 3.Click on Cancel and again clikc 2nd time on New Mail
+	 *        button 4. Verify Compose Tab should get open again in 2nd attempt.
 	 * @param to
 	 * @param cc
 	 * @param bcc
@@ -206,8 +250,10 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest{
 	 * @throws Exception
 	 * @author Girish
 	 */
-	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full"}, retryAnalyzer = RetryFailedTests.class)
-	public  void checkComposeTabForTheSecondComposeView_41755(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void checkComposeTabForTheSecondComposeView_41755(String to,
+			String cc, String bcc, String subject, String body,
+			String attachments) throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
@@ -233,41 +279,49 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest{
 		needReset = false;
 	}
 
-	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full"}, retryAnalyzer = RetryFailedTests.class)
-	public  void differentCasePrefFromAddress_Bug40068(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void differentCasePrefFromAddress_Bug40068(String to, String cc,
+			String bcc, String subject, String body, String attachments)
+			throws Exception {
 		if (isExecutionARetry)
-		    handleRetry();
-		
+			handleRetry();
+
 		String accountName = selfAccountName;
-		ProvZCS.modifyAccount(accountName, "zimbraPrefFromAddress", accountName.toUpperCase());
+		ProvZCS.modifyAccount(accountName, "zimbraPrefFromAddress", accountName
+				.toUpperCase());
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(to,  cc,  bcc,  subject,  body,  attachments);
+		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
+				attachments);
 		needReset = false;
 	}
 
-
-	@Test(dataProvider = "composeDataProvider",groups = { "smoke", "full"}, retryAnalyzer = RetryFailedTests.class)
-	public  void lossOfDataOnChangingFormat_Bug44545(String to, String cc, String bcc, String subject, String body, String attachments) throws Exception {
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void lossOfDataOnChangingFormat_Bug44545(String to, String cc,
+			String bcc, String subject, String body, String attachments)
+			throws Exception {
 		if (isExecutionARetry)
-		    handleRetry();
-		
+			handleRetry();
+
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(to,  cc,  bcc,  subject,  body,  attachments);
+		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
+				attachments);
 		obj.zButton.zClick(localize(locator.reply));
 		obj.zButton.zClick(ComposeView.zOptionsDownArrowBtn);
 		obj.zMenuItem.zClick(localize(locator.formatAsText));
-		page.zComposeView.zVerifyComposeFilledValues("Reply", "_selfAccountName_",  "",  "",  "Re: "+subject,  body,  attachments);	
+		page.zComposeView.zVerifyComposeFilledValues("Reply",
+				"_selfAccountName_", "", "", "Re: " + subject, body,
+				attachments);
 
 		needReset = false;
 	}
-	
-	    //--------------------------------------------------------------------------
-	    //		SECTION 4: RETRY-METHODS
-	    //--------------------------------------------------------------------------	
-	    // since all the tests are independent, retry is simply kill and re-login
-	    private void handleRetry() throws Exception {
+
+	//--------------------------------------------------------------------------
+	// SECTION 4: RETRY-METHODS
+	//--------------------------------------------------------------------------
+	// since all the tests are independent, retry is simply kill and re-login
+	private void handleRetry() throws Exception {
 		isExecutionARetry = false;
 		zLogin();
-	    }
+	}
 
 }

@@ -1,7 +1,14 @@
 package projects.zcs.ui;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
 import org.testng.Assert;
 
+import framework.core.SelNGBase;
+
+import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -368,6 +375,37 @@ public class MailApp extends CommonTest {
 				localize(locator.createNewFolder));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.createNewFolder));
+	}
+
+	public static String zInjectMessage(String fileName) throws Exception {
+		String subject = null;
+		Boolean foundFlag = false;
+		File dir = new File("src/java/projects/zcs/data/lmtpInject");
+		StringBuffer contents = new StringBuffer();
+		File file = new File(dir.getAbsolutePath() + "/" + fileName + ".txt");
+		BufferedReader reader = null;
+		reader = new BufferedReader(new FileReader(file));
+		String text = null;
+		while ((text = reader.readLine()) != null) {
+			contents.append(text).append(System.getProperty("line.separator"));
+			if (text.contains("Subject:") && foundFlag == false) {
+				if (text.length() >= 19) {
+					subject = text.substring(9, 19).trim();
+					foundFlag = true;
+				} else {
+					subject = text.substring(9).trim();
+					foundFlag = true;
+				}
+			}
+		}
+		String[] accounts = { SelNGBase.selfAccountName };
+		ProvZCS.addMessageLmtp(accounts, SelNGBase.selfAccountName, contents
+				.toString());
+		zGoToApplication("Mail");
+		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
+
+		foundFlag = false;
+		return subject;
 	}
 
 	/**

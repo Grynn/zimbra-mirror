@@ -21,7 +21,6 @@ import framework.util.RetryFailedTests;
  */
 @SuppressWarnings("static-access")
 public class SpellCheckTests extends CommonTest {
-	protected int j = 0;
 	private static String DRAFT_NEW_WINDOW_BUTTON = "zb__COMPOSE1__DETACH_COMPOSE_left_icon";
 
 	//--------------------------------------------------------------------------
@@ -59,7 +58,6 @@ public class SpellCheckTests extends CommonTest {
 	public void mandatorySpellCheck_And_Send_Bug36365(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-
 		if (isExecutionARetry)
 			handleRetry();
 
@@ -77,7 +75,6 @@ public class SpellCheckTests extends CommonTest {
 	public void spellCheck_For_TextAppt_Bug4345(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-
 		if (isExecutionARetry)
 			handleRetry();
 
@@ -104,7 +101,6 @@ public class SpellCheckTests extends CommonTest {
 	public void spellCheck_forDraft_inNewWindow_Bug5769_And_Bug39130(String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-
 		if (isExecutionARetry)
 			handleRetry();
 
@@ -138,7 +134,6 @@ public class SpellCheckTests extends CommonTest {
 	public void objError_inSpellcheck_Bug26037(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-
 		if (isExecutionARetry)
 			handleRetry();
 
@@ -166,7 +161,6 @@ public class SpellCheckTests extends CommonTest {
 	public void illegalCharacters_and_replyAfterSpellCheck_Bug29432_and_Bug41760(
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-
 		if (isExecutionARetry)
 			handleRetry();
 
@@ -194,13 +188,12 @@ public class SpellCheckTests extends CommonTest {
 		obj.zFolder.zClick(localize(locator.drafts));
 		obj.zMessageItem.zClick(subject);
 		if ((SelNGBase.currentBrowserName.indexOf("MSIE 8") >= 0)) {
-			Assert.assertTrue(obj.zMessageItem.zGetCurrentMsgBodyText().contains(
-			"onee twoo threee"));
+			Assert.assertTrue(obj.zMessageItem.zGetCurrentMsgBodyText()
+					.contains("onee twoo threee"));
 		} else {
-			Assert.assertTrue(obj.zMessageItem.zGetCurrentMsgBodyText().contains(
-			"onee twoo  threee"));
+			Assert.assertTrue(obj.zMessageItem.zGetCurrentMsgBodyText()
+					.contains("onee twoo  threee"));
 		}
-		
 		selenium.selectWindow(null);
 
 		needReset = false;
@@ -213,6 +206,5 @@ public class SpellCheckTests extends CommonTest {
 	private void handleRetry() throws Exception {
 		isExecutionARetry = false;
 		zLogin();
-		j = 0;
 	}
 }

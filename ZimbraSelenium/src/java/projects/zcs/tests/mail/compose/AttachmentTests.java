@@ -16,24 +16,32 @@ import projects.zcs.ui.MailApp;
 
 @SuppressWarnings("static-access")
 public class AttachmentTests extends CommonTest {
-
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
 	@SuppressWarnings("unused")
 	@DataProvider(name = "composeDataProvider")
 	private Object[][] createData(Method method) {
-
 		String test = method.getName();
 		if (test.equals("simpleAttachTest")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), "", "putty.log" }, };
-		}else if (test.equals("rplyFwdInlineImageAttchMailInPlainText_Bug30335")) {
-			return new Object[][] { { "_selfAccountName_", "", "",
-				getLocalizedData(2), "", "" }, };
-	}else {// default
+		} else if (test
+				.equals("rplyFwdInlineImageAttchMailInPlainText_Bug30335")
+		|| test.equals("attachMultipleTest")
+		|| test.equals("fwdAMailWithAttachment")
+		|| test.equals("changeToHTMLAndAttachInline")
+		|| test.equals("detachRetainsAttachments")
+		|| test.equals("sendAttachmentsFromNewWindow")
+		) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), "", "putty.log,testexcelfile.xls" }, };
+		} else if (test
+				.equals("rplyFwdInlineImageAttchMailInPlainText_Bug30335")) {
+			return new Object[][] { { "_selfAccountName_", "", "",
+					getLocalizedData(2), "", "" }, };
+		} else {
+			return new Object[][] { { "" }, };
 		}
 
 	}
@@ -178,24 +186,20 @@ public class AttachmentTests extends CommonTest {
 	}
 
 	/**
-	 * Test Case :replying to mail with inline attachment doesn't show it until saved as draft
-	 * Expected:The attachment checkbox should be included in the compose for reply/forward.
-	 * At that point, the user can choose whether or not to remove the attachment.
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
+	 * Test Case :replying to mail with inline attachment doesn't show it until
+	 * saved as draft Expected:The attachment checkbox should be included in the
+	 * compose for reply/forward. At that point, the user can choose whether or
+	 * not to remove the attachment.
+	 * 
 	 * @author Girish
 	 */
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void rplyFwdInlineImageAttchMailInPlainText_Bug30335(String to, String cc, String bcc,
-			String subject, String body, String attachments) throws Exception {
+	public void rplyFwdInlineImageAttchMailInPlainText_Bug30335(String to,
+			String cc, String bcc, String subject, String body,
+			String attachments) throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
-		
+
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zButton.zClick(ComposeView.zOptionsDownArrowBtn);
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
@@ -241,6 +245,7 @@ public class AttachmentTests extends CommonTest {
 
 		needReset = false;
 	}
+
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
