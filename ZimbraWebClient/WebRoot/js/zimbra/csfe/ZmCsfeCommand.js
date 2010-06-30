@@ -42,7 +42,9 @@ function() {
 // Global settings for each CSFE command
 ZmCsfeCommand._COOKIE_NAME = "ZM_AUTH_TOKEN";
 ZmCsfeCommand.serverUri = null;
-ZmCsfeCommand._sessionId = null;
+
+ZmCsfeCommand._sessionId = null;	// current session ID
+ZmCsfeCommand._staleSession = {};	// old sessions
 
 // Reasons for re-sending a request
 ZmCsfeCommand.REAUTH	= "reauth";
@@ -134,11 +136,23 @@ function() {
  * 
  */
 ZmCsfeCommand.setSessionId =
-function(sessionId) {
-	var id = (sessionId != null)
-		? ((sessionId instanceof Array) ? sessionId[0].id : sessionId.id)
-		: null;
-	ZmCsfeCommand._sessionId = id ? parseInt(id) : null;
+function(id) {
+	var sid = (typeof id == "number") ? id : ZmCsfeCommand.extractSessionId(id);
+	if (sid) {
+		ZmCsfeCommand._sessionId = sid;
+	}
+};
+
+ZmCsfeCommand.clearSessionId =
+function() {
+	ZmCsfeCommand._sessionId = null;
+};
+
+ZmCsfeCommand.extractSessionId =
+function(session) {
+	if (!session) { return null; }
+	var id = (session instanceof Array) ? session[0].id : session.id;
+	return id ? parseInt(id) : null;
 };
 
 /**
@@ -176,20 +190,21 @@ function(fault, params) {
 };
 
 /**
- * Gets the method name (<code>*Request</code>) of the given request, which may be either a SOAP doc
- * or a JSON object.
- * 
+ * Gets the method name of the given request or response.
+ *
  * @param {AjxSoapDoc|Object}	request	the request
- * @return	{String}		the method name or "[unknown]"
+ * @return	{String}			the method name or "[unknown]"
  */
 ZmCsfeCommand.getMethodName =
 function(request) {
+
+	// SOAP request
 	var methodName = (request && request._methodEl && request._methodEl.tagName)
 		? request._methodEl.tagName : null;
 
 	if (!methodName) {
 		for (var prop in request) {
-			if (prop.indexOf("Request") != -1) {
+			if (/Request|Response$/.test(prop)) {
 				methodName = prop;
 				break;
 			}
@@ -573,16 +588,6 @@ function(response, params) {
 		}
 	}
 
-	var linkName = "Response";
-	if (respDoc && respDoc.match) {
-		var m = respDoc.match(/\{"?Body"?:\{"?(\w+)"?:/);
-		if (m && m.length) linkName = m[1];
-	}
-	if (window.DBG) {
-		var ts = DBG._getTimeStamp();
-		DBG.println(["<b>RESPONSE", params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</b>"].join(""), linkName);
-	}
-
 	var obj = restResponse ? response.text : {};
 
 	if (xmlResponse) {
@@ -606,6 +611,11 @@ function(response, params) {
 
 	}
 
+	if (window.DBG) {
+		var ts = DBG._getTimeStamp();
+		var method = ZmCsfeCommand.getMethodName(obj.Body);
+		DBG.println(["<b>" + method, params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</b>"].join(""), method);
+	}
 	DBG.dumpObj(AjxDebug.DBG1, obj, -1);
 
 	var fault = obj && obj.Body && obj.Body.Fault;
@@ -634,8 +644,16 @@ function(response, params) {
 		}
 	}
 
-	if (obj.Header && obj.Header.context && obj.Header.context.session) {
-		ZmCsfeCommand.setSessionId(obj.Header.context.session);
+	// check for new session ID
+	var session = obj.Header && obj.Header.context && obj.Header.context.session;
+	var sid = session && ZmCsfeCommand.extractSessionId(session);
+	if (sid && !ZmCsfeCommand._staleSession[sid]) {
+		if (sid != ZmCsfeCommand._sessionId) {
+			if (ZmCsfeCommand._sessionId) {
+				ZmCsfeCommand._staleSession[ZmCsfeCommand._sessionId] = true;
+			}
+			ZmCsfeCommand.setSessionId(sid);
+		}
 	}
 
 	return params.asyncMode ? result : obj;
