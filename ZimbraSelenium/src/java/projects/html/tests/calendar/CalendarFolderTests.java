@@ -48,7 +48,7 @@ public class CalendarFolderTests extends CommonTest {
 					"webcal://ical.mac.com/ical/US32Holidays.ics",
 					getLocalizedData_NoSpecialChar(),
 					"http://" + config.getString("server")
-							+ "/zimbra/h/calendar?date=20081225" } };
+							+ "/zimbra/h/calendar?date=20091225" } };
 		} else if (test.equals("verifyDeleteConfirmationAsked")
 				|| test.equals("verifyDeleteAllAppts")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
