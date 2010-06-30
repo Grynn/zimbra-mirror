@@ -6,35 +6,39 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
-import com.zimbra.common.service.ServiceException;
 import framework.util.RetryFailedTests;
 
 /**
- * @author Jitesh Sojitra
+ * @written by Prashant Jaiswal
+ * 
  */
-
+@SuppressWarnings("static-access")
 public class AddressBookFolderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
-	@DataProvider(name = "mailDataProvider")
-	public Object[][] createData(Method method) throws ServiceException {
+	@DataProvider(name = "ABDataProvider")
+	public Object[][] createData(Method method) {
 		String test = method.getName();
-		if (test.equals("test1")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
-					"bccuser@testdomain.com", getLocalizedData(5),
-					getLocalizedData(5), "testexcelfile.xls" } };
+		if (test.equals("createAndRenameABFolder")) {
+			return new Object[][] { {
+					"newAB" + getLocalizedData_NoSpecialChar(),
+					"renamedAB" + getLocalizedData_NoSpecialChar() } };
+		} else if (test.equals("createAndQDeleteABFolder")) {
+			return new Object[][] { { "newAB"
+					+ getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { { "" } };
 		}
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 2: SETUP
-	//--------------------------------------------------------------------------
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
-	public void zLogin() throws Exception {
+	private void zLogin() throws Exception {
 		zLoginIfRequired();
+		page.zABCompose.zNavigateToContact();
 		isExecutionARetry = false;
 	}
 
@@ -46,14 +50,42 @@ public class AddressBookFolderTests extends CommonTest {
 		needReset = true;
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 3: TEST-METHODS
-	//--------------------------------------------------------------------------
-	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void test1(String to, String cc, String bcc, String subject,
-			String body, String attachments) throws Exception {
+	/**
+	 * Test to create a notebook folder and then rename the notebook folder and
+	 * verify
+	 */
+	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void createAndRenameABFolder(String newAddBookName,
+			String renamedABName) throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
+
+		page.zABCompose.zCreateNewAddBook(newAddBookName);
+		zWaitTillObjectExist("folder", newAddBookName);
+		obj.zFolder.zRtClick(newAddBookName);
+		obj.zMenuItem.zClick(localize(locator.renameFolder));
+		obj.zEditField.zTypeInDlg(localize(locator.newName), renamedABName);
+		obj.zButton.zClickInDlg(localize(locator.ok));
+		obj.zFolder.zExists(renamedABName);
+
+		needReset = false;
+	}
+
+	/**
+	 * To create AB folder and then delete the same.Verify the creation and
+	 * deletion of the AB folder
+	 */
+	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void createAndQDeleteABFolder(String newAddBookName)
+			throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		page.zABCompose.zCreateNewAddBook(newAddBookName);
+		zWaitTillObjectExist("folder", newAddBookName);
+		page.zMailApp.zDeleteFolder(newAddBookName);
+		obj.zFolder.zClick(localize(locator.trash));
+		obj.zFolder.zExists(newAddBookName);
 
 		needReset = false;
 	}
@@ -61,9 +93,10 @@ public class AddressBookFolderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
+	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		isExecutionARetry = false;// reset this to false
 		zLogin();
 	}
+
 }

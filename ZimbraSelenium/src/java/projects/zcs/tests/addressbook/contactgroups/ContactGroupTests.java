@@ -1,40 +1,45 @@
 package projects.zcs.tests.addressbook.contactgroups;
 
 import java.lang.reflect.Method;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
-import com.zimbra.common.service.ServiceException;
 import framework.util.RetryFailedTests;
 
 /**
- * @author Jitesh Sojitra
+ * This covers some high priority test cases related to address book
+ * 
+ * @written by Prashant Jaiswal
+ * 
  */
-
+@SuppressWarnings("static-access")
 public class ContactGroupTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
-	@DataProvider(name = "mailDataProvider")
-	public Object[][] createData(Method method) throws ServiceException {
+	@DataProvider(name = "ABDataProvider")
+	public Object[][] createData(Method method) {
 		String test = method.getName();
-		if (test.equals("test1")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
-					"bccuser@testdomain.com", getLocalizedData(5),
-					getLocalizedData(5), "testexcelfile.xls" } };
+		if (test.equals("createContactGroupAndVerify")
+				|| test.equals("updateContactGroupPaneWhenNoResult_Bug44331")) {
+			return new Object[][] { { getLocalizedData_NoSpecialChar() } };
 		} else {
+
 			return new Object[][] { { "" } };
 		}
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 2: SETUP
-	//--------------------------------------------------------------------------
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
-	public void zLogin() throws Exception {
+	private void zLogin() throws Exception {
 		zLoginIfRequired();
+		page.zABCompose.zNavigateToContact();
 		isExecutionARetry = false;
 	}
 
@@ -46,14 +51,89 @@ public class ContactGroupTests extends CommonTest {
 		needReset = true;
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 3: TEST-METHODS
-	//--------------------------------------------------------------------------
-	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void test1(String to, String cc, String bcc, String subject,
-			String body, String attachments) throws Exception {
+	/**
+	 * Test to create Contact Group and to verify
+	 */
+	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void createContactGroupAndVerify(String groupName) throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
+
+		obj.zButtonMenu.zClick(page.zABCompose.zNewMenuDropdownIconBtn);
+
+		obj.zMenuItem.zClick(localize(locator.group));
+		obj.zEditField.zType(
+				getNameWithoutSpace(localize(locator.groupNameLabel)),
+				groupName);
+		for (int i = 1; i <= 2; i++) {
+			ProvZCS.createAccount("acc" + i + "@testdomain.com");
+			obj.zEditField.zType(localize(locator.findLabel), "acc" + i
+					+ "@testdomain.com");
+			obj.zButton.zClick(localize(locator.search), "2");
+			Thread.sleep(2500);
+			if (currentBrowserName.contains("Safari")) {
+				obj.zButton.zClick(localize(locator.search), "2");
+				obj.zButton.zClick(localize(locator.search), "2");
+				Thread.sleep(1000);
+			}
+
+			obj.zListItem.zDblClickItemInSpecificList("acc" + i
+					+ "@testdomain.com", "2");
+
+			obj.zButton.zClick(localize(locator.add));
+		}
+		obj.zButton.zClick(localize(locator.save), "2");
+		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.groupCreated),
+				"Group Created message should be shown");
+		obj.zContactListItem.zExists(groupName);
+
+		needReset = false;
+	}
+
+	/**
+	 * Test case:-Previously selected contact group details are shown when no
+	 * results found in search
+	 */
+	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void updateContactGroupPaneWhenNoResult_Bug44331(String groupName)
+			throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		obj.zButtonMenu.zClick(page.zABCompose.zNewMenuDropdownIconBtn);
+		obj.zMenuItem.zClick(localize(locator.group));
+		obj.zEditField.zType(
+				getNameWithoutSpace(localize(locator.groupNameLabel)),
+				groupName);
+		for (int i = 1; i <= 2; i++) {
+			ProvZCS.createAccount("acc" + i + "@testdomain.com");
+			obj.zEditField.zType(localize(locator.findLabel), "acc" + i
+					+ "@testdomain.com");
+			obj.zButton.zClick(localize(locator.search), "2");
+			Thread.sleep(2500);
+			if (currentBrowserName.contains("Safari")) {
+				obj.zButton.zClick(localize(locator.search), "2");
+				obj.zButton.zClick(localize(locator.search), "2");
+				Thread.sleep(1000);
+			}
+
+			obj.zListItem.zDblClickItemInSpecificList("acc" + i
+					+ "@testdomain.com", "2");
+
+			obj.zButton.zClick(localize(locator.add));
+		}
+		obj.zButton.zClick(localize(locator.save), "2");
+		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.groupCreated),
+				"Group Created message should be shown");
+		obj.zContactListItem.zExists(groupName);
+
+		selenium.type("xpath=//input[@class='search_input']", "abc");
+		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
+		obj.zContactListItem.zNotExists(groupName);
+		Assert
+				.assertFalse(selenium
+						.isElementPresent("xpath=//div[contains(@class,'contactHeader') and contains(text(),'"
+								+ groupName + "')]"));
 
 		needReset = false;
 	}
@@ -61,9 +141,9 @@ public class ContactGroupTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
+	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		isExecutionARetry = false;// reset this to false
 		zLogin();
 	}
 }
