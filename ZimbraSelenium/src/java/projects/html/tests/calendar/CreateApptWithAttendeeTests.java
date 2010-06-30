@@ -252,16 +252,9 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		obj.zAppointment.zClick(subject);
 
 		Thread.sleep(MEDIUM_WAIT);
-
-		String messageDisplayed = obj.zMiscObj.zGetInnerText("");
-
-		Assert.assertTrue(messageDisplayed
-				.contains(localize(locator.apptInstNote)),
-				"Appointment instance note is not displayed");
-
-		Assert.assertTrue(messageDisplayed
-				.contains(localize(locator.apptInstEditSeries)),
-				"Appointment instance edit series link is not present");
+		
+		selenium.isElementPresent(localize(locator.apptInstEditSeries));
+		selenium.isElementPresent(localize(locator.apptInstNote));
 
 		needReset = false;
 	}
