@@ -16,7 +16,7 @@ import framework.util.RetryFailedTests;
  */
 
 @SuppressWarnings("static-access")
-public class AddRemoveAttachmentAndAddToBriefcaseTests extends CommonTest {
+public class MessagePreviewPaneActionTests extends CommonTest {
 	protected int j = 0;
 
 	//--------------------------------------------------------------------------

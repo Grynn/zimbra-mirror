@@ -110,7 +110,7 @@ public class ExecuteTests {
 		cls
 				.add("projects.zcs.tests.mail.messageactions.MultipleMessageActionTests");
 		cls
-				.add("projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests");
+				.add("projects.zcs.tests.mail.messageactions.MessagePreviewPaneActionTests");
 		addTests(testName, cls);
 
 		// ---------------------------------------------------

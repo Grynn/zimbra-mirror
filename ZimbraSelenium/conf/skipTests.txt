@@ -30,9 +30,6 @@
 #------------------------------------------------------------------------------------------------------------
 
 
-
-
-
 #Shortcuts do not work with Selenium on SF browser
 CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsCustom;METHOD:shortcutsMailFolder;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
 CLASS:projects.zcs.tests.preferences.shortcuts.ShortcutsCustom;METHOD:shortcutsTag;LOCALE:na;BROWSERS:SF;BUGS:na;REMARK: shortcuts dont work with Selenium on Safari
@@ -90,7 +87,6 @@ CLASS:projects.zcs.tests.briefcase.sharing.BriefcaseSharingTests;METHOD:verifyBr
 #Bug 38617
 CLASS:projects.zcs.tests.mail.sharing.MailSharingTests;METHOD:shareAsAdminAndAdminSharesFolderto3rduser;LOCALE:all;BROWSERS:na;BUGS:34084;REMARK:'Share folder' menu item remains disabled for administer rights
 
-
 CLASS:projects.zcs.tests.preferences.calendar.CalendarPreferencesSetTrueTest;METHOD:zCalendarPrefShowReminders;LOCALE:all;BROWSERS:na;BUGS:na;REMARK: Timezone options changed in mainline so reminder doesn't popluates. Need proper method to get current timezone.
 CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesTestsUI;METHOD:zComposingComposeFormat;LOCALE:all;BROWSERS:na;BUGS:na;REMARK: Not able to identify 'compose as html' radio button (tried localize key as well)
 CLASS:projects.zcs.tests.preferences.mail.MailPreferencesTestsUI;METHOD:zMailForwardCopyTo;LOCALE:all;BROWSERS:na;BUGS:na;REMARK: Not able to type values in 'Forward a copy to:' edit field
@@ -103,34 +99,33 @@ CLASS:projects.zcs.tests.mail.compose.SendBtnNegativeTest;METHOD:sendThrowsError
 
 CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesSetTrueTest;METHOD:composePrefAutoSaveDraft;LOCALE:fr;BROWSERS:na;BUGS:na;REMARK:Expected and actual value are same though throwing error (because of some UTF-8 character)
 
-CLASS:projects.zcs.tests.mail.MiscMailTests;METHOD:removingAllAttachmentFromMessage;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:'Invalid key code' exception while upload file
-CLASS:projects.zcs.tests.mail.MiscMailTests;METHOD:removingAllAttachmentFromMessage_NewWindow;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:'Invalid key code' exception while upload file
+CLASS:projects.zcs.tests.mail.messageactions.MessagePreviewPaneActionTests;METHOD:removingAllAttachmentFromMessage;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:'Invalid key code' exception while upload file
+CLASS:projects.zcs.tests.mail.messageactions.MessagePreviewPaneActionTests;METHOD:removingAllAttachmentFromMessage_NewWindow;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:'Invalid key code' exception while upload file
 
 # change password error message issue with locales
 CLASS:projects.zcs.tests.preferences.GeneralPreferencesUI;METHOD:WrongOldPassword;LOCALE:hi,zh_CN,zh_HK,ko,pl,de,da,fr,ru,sv,es;BROWSERS:na;BUGS:na;REMARK:Error message doesn't match with corresponding localize key
 CLASS:projects.zcs.tests.preferences.GeneralPreferencesUI;METHOD:NewConfirmPwdMismatch;LOCALE:zh_CN,zh_HK,ko,pl,nl,ru;BROWSERS:na;BUGS:na;REMARK:Error message doesn't match with corresponding localize key
 
-
 #Bug 39446
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInHTMLTest;METHOD:fwdMailTest_NewWindowHtml;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInHTMLTest;METHOD:replyAllTest_NewWindowHtml;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInHTMLTest;METHOD:replyTest_NewWindowHtml;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInHTMLTest;METHOD:sendMailToSelfAndVerify_NewWindowHtmlMode;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInPlainText;METHOD:fwdMailTest_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInPlainText;METHOD:replyAllTest_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInPlainText;METHOD:replyTest_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInPlainText;METHOD:sendMailToSelfAndVerify_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInHTMLTest;METHOD:fwdMailTest_NewWindowHtml;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInHTMLTest;METHOD:replyAllTest_NewWindowHtml;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInHTMLTest;METHOD:replyTest_NewWindowHtml;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInHTMLTest;METHOD:sendMailToSelfAndVerify_NewWindowHtmlMode;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainText;METHOD:fwdMailTest_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainText;METHOD:replyAllTest_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainText;METHOD:replyTest_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainText;METHOD:sendMailToSelfAndVerify_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
 CLASS:projects.zcs.tests.mail.compose.SendBtnNegativeTest;METHOD:sendThrowsErrorTest_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.mail.MiscMailTests;METHOD:attachBriefcaseFileInMail_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.mail.MiscMailTests;METHOD:removingAttachmentFromMessage_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.mail.NewWindowTests;METHOD:closeNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.mail.NewWindowTests;METHOD:tagUntagMsgFromNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.mail.NewWindowTests;METHOD:deleteMsgFromNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.mail.NewWindowTests;METHOD:forwardMsgFromNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.mail.NewWindowTests;METHOD:networkServiceErrorInNewWindow_Bug41205;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.mail.NewWindowTests;METHOD:replyAllMsgFromNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.mail.NewWindowTests;METHOD:replyMsgFromNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
-CLASS:projects.zcs.tests.compose.DraftsTest;METHOD:autoDraftAndSendMailToSelfInNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.messageactions.MessagePreviewPaneActionTests;METHOD:attachBriefcaseFileInMail_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.messageactions.MessagePreviewPaneActionTests;METHOD:removingAttachmentFromMessage_NewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.newwindow.NewWindowTests;METHOD:closeNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.newwindow.NewWindowTests;METHOD:tagUntagMsgFromNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.newwindow.NewWindowTests;METHOD:deleteMsgFromNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.newwindow.NewWindowTests;METHOD:forwardMsgFromNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.newwindow.NewWindowTests;METHOD:networkServiceErrorInNewWindow_Bug41205;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.newwindow.NewWindowTests;METHOD:replyAllMsgFromNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.newwindow.NewWindowTests;METHOD:replyMsgFromNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
+CLASS:projects.zcs.tests.mail.compose.DraftsTest;METHOD:autoDraftAndSendMailToSelfInNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
 CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesSetTrueTest;METHOD:composePrefOpensInNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
 CLASS:projects.zcs.tests.preferences.mail.MailPreferencesSetTrueTest;METHOD:mailPrefDoubleClickOpensInNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
 CLASS:projects.zcs.tests.mail.compose.AttachmentsTests;METHOD:sendAttachmentsFromNewWindow;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
@@ -138,22 +133,7 @@ CLASS:projects.zcs.tests.mail.compose.AttachmentsTests;METHOD:detachRetainsAttac
 CLASS:projects.zcs.tests.mail.MailBugTests;METHOD:NotAbletoViewRfc822Msg_Bug40561;LOCALE:na;BROWSERS:SF;BUGS:39446;REMARK:New window goes blank while typing SHIFT C suddenly after login to web client (SF only)
 
 CLASS:projects.zcs.tests.preferences.filters.FilterTests;METHOD:RunFilter;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK: not able to mark ON to inbox folder using zactivate method in IE (selenium bug)
-CLASS:projects.zcs.tests.preferences.SharingPreferencesTests;METHOD:editABShareAndModifyRights;LOCALE:all;BROWSERS:na;BUGS:na;REMARK: Contact can't be saved via java script in new AB UI
-
-# Not able mark ON using checkbox zActivate method
-#CLASS:projects.zcs.tests.preferences.zimlets.ZimletPreferenceTests;METHOD:zimletPreferenceTest;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
-#CLASS:projects.zcs.tests.calendar.sharing.CalendarSharingTests;METHOD:shareAsViewerVerifyApptAndChangeRoleToNone;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
-#CLASS:projects.zcs.tests.calendar.sharing.CalendarSharingTests;METHOD:shareAsManagerAndCreateUpdateDelApptVerify;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
-#CLASS:projects.zcs.tests.calendar.sharing.CalendarSharingTests;METHOD:shareAsAdminAndCreateUpdateDelApptVerify;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
-#CLASS:projects.zcs.tests.calendar.sharing.CalendarSharingTests;METHOD:allowToSeePrivateApptWithManagerRights;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able mark ON using checkbox zActivate method
-
-# zVerifyHasAttachment method not working in IE
-#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:attachBriefcaseFileInMail;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
-#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:attachBriefcaseFileInMail_NewWindow;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
-#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:addingAttachFromMsgToBriefcaseFolder;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
-#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:removingAttachmentFromMessage;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
-#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:removingAllAttachmentFromMessage;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
-#CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:attachingFilesFromBothWayAndVerifyAllLinks;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:zVerifyHasAttachment method not working in IE
+CLASS:projects.zcs.tests.preferences.sharing.SharingPreferencesTests;METHOD:editABShareAndModifyRights;LOCALE:all;BROWSERS:na;BUGS:na;REMARK: Contact can't be saved via java script in new AB UI
 
 # Need to convert date
 CLASS:projects.zcs.tests.features.ClientURLTests;METHOD:calendarViewURL;LOCALE:zh_CN,zh_HK,ko;BROWSERS:na;BUGS:na;REMARK:Need to convert date
@@ -164,15 +144,12 @@ CLASS:projects.zcs.tests.preferences.SharingPreferencesTests;METHOD:shareAllAppl
 
 CLASS:projects.zcs.tests.preferences.SharingPreferencesTests;METHOD:shareTaskFldrFromPrefAndAcceptVerify;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:zTaskItem fails to find item from list item
 
-CLASS:projects.zcs.tests.tasks.Tasks;METHOD:createTask;LOCALE:da,ar;BROWSERS:na;BUGS:na;REMARK:Percentage special character different in da, ar locale
-CLASS:projects.zcs.tests.tasks.Tasks;METHOD:editTask;LOCALE:da,ar;BROWSERS:na;BUGS:na;REMARK:Percentage special character different in da, ar locale
-
-# bug 43443
-#CLASS:projects.zcs.tests.mail.NewWindowTests;METHOD:tagUntagMsgFromNewWindow;LOCALE:all;BROWSERS:na;BUGS:43443;REMARK:Tag doesn't get removed while click on 'Remove Tag ' menu option from new launched window
+CLASS:projects.zcs.tests.tasks.newtask.BasicTaskTests;METHOD:createTask;LOCALE:da,ar;BROWSERS:na;BUGS:na;REMARK:Percentage special character different in da, ar locale
+CLASS:projects.zcs.tests.tasks.newtask.BasicTaskTests;METHOD:editTask;LOCALE:da,ar;BROWSERS:na;BUGS:na;REMARK:Percentage special character different in da, ar locale
 
 # bug 43526
-CLASS:projects.zcs.tests.addressbook.AddressBookTest;METHOD:moveContactAndVerify;LOCALE:all;BROWSERS:na;BUGS:43526;REMARK:EMailed Contacts & Trash folder is not visible in move contact dialog
-CLASS:projects.zcs.tests.addressbook.AddressBookTest;METHOD:rghtClickMoveContactAndVerify;LOCALE:all;BROWSERS:na;BUGS:43526;REMARK:EMailed Contacts & Trash folder is not visible in move contact dialog
+CLASS:projects.zcs.tests.addressbook.newcontact.BasicContactTests;METHOD:moveContactAndVerify;LOCALE:all;BROWSERS:na;BUGS:43526;REMARK:EMailed Contacts & Trash folder is not visible in move contact dialog
+CLASS:projects.zcs.tests.addressbook.newcontact.BasicContactTests;METHOD:rghtClickMoveContactAndVerify;LOCALE:all;BROWSERS:na;BUGS:43526;REMARK:EMailed Contacts & Trash folder is not visible in move contact dialog
 
 CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesSetTrueTest;METHOD:composeFwdIncludeMsg;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:UI change for prefix while reply/forward message
 CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesSetTrueTest;METHOD:composePrefReplyIncludeMsg;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:UI change for prefix while reply/forward message
@@ -183,15 +160,11 @@ CLASS:projects.zcs.tests.features.ClientURLTests;METHOD:calendarViewURL;LOCALE:a
 
 CLASS:projects.zcs.tests.addressbook.newcontact.CreateContactTests;METHOD:addRemoveContactPhotoAndVerify;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Typing file name through keyboard event fails
 
-
 #Need to work on these IE specific failures
 CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addBasicPersonaWithTextSignature;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
 CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:editTextSignature;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
 CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addPOP3ExternalAccComposeWindow_38611;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
 CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addBasicPersonaWithEditTextSignature;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
-
-#not able to identify checkbox
-#CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesTestsUI;METHOD:zComposingSaveToSent;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Not able to identify checkbox
 
 #SpellCheck test cases are skipped to avoid false alarms. Skipped for all locales except english
 CLASS:projects.zcs.tests.mail.spellcheck.SpellCheckTests;METHOD:illegalCharacters_and_replyAfterSpellCheck_Bug29432_and_Bug41760;LOCALE:ar,da,de,el,es,fr,he,hi,it,id,ja,ko,nl,pl,pt_BR,ru,sv,tr,zh_CN,zh_HK;BROWSERS:na;BUGS:na;REMARK:Skipped for all charset other than english"
@@ -224,25 +197,25 @@ CLASS:projects.zcs.tests.addressbook.sharing.AddressBookSharingTests;METHOD:revo
 CLASS:projects.zcs.tests.addressbook.sharing.AddressBookSharingTests;METHOD:modifyABShare;LOCALE:na;BROWSERS:IE;BUGS:44288;REMARK:Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI
 CLASS:projects.zcs.tests.addressbook.sharing.AddressBookSharingTests;METHOD:sharingABToExternalGuest;LOCALE:na;BROWSERS:IE;BUGS:44288;REMARK:Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI
 CLASS:projects.zcs.tests.addressbook.sharing.AddressBookSharingTests;METHOD:publicShareAB;LOCALE:na;BROWSERS:IE;BUGS:44288;REMARK:Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI
-CLASS:projects.zcs.tests.searchandautocomplete.AutoCompleteAddressTests;METHOD:verifyAutoCompleteAndRankWithContactsFolder;LOCALE:na;BROWSERS:IE;BUGS:44288;REMARK:Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI
-CLASS:projects.zcs.tests.searchandautocomplete.AutoCompleteAddressTests;METHOD:autocompleteReturnsTooManyResults_Bug40959;LOCALE:na;BROWSERS:IE;BUGS:44288;REMARK:Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI
-CLASS:projects.zcs.tests.searchandautocomplete.AutoCompleteAddressTests;METHOD:autocompleteOnSpecialCharacters;LOCALE:na;BROWSERS:IE;BUGS:44288;REMARK:Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI
+CLASS:projects.zcs.tests.mail.autocomplete.MailAutoCompleteAddressTests;METHOD:verifyAutoCompleteAndRankWithContactsFolder;LOCALE:na;BROWSERS:IE;BUGS:44288;REMARK:Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI
+CLASS:projects.zcs.tests.mail.autocomplete.MailAutoCompleteAddressTests;METHOD:autocompleteReturnsTooManyResults_Bug40959;LOCALE:na;BROWSERS:IE;BUGS:44288;REMARK:Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI
+CLASS:projects.zcs.tests.mail.autocomplete.MailAutoCompleteAddressTests;METHOD:autocompleteOnSpecialCharacters;LOCALE:na;BROWSERS:IE;BUGS:44288;REMARK:Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI
 
 #bug 45662
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInPlainText;METHOD:replyTest_NewWindow;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInPlainText;METHOD:replyAllTest;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInPlainText;METHOD:replyAllTest_NewWindow;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInPlainText;METHOD:fwdMailTest;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInPlainText;METHOD:replyTest;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInPlainText;METHOD:fwdMailTest_NewWindow;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
-CLASS:projects.zcs.tests.compose.ComposeReplyFwdInPlainText;METHOD:checkMesgViewWithInTabWithArrowPosition_40614;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainText;METHOD:replyTest_NewWindow;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainText;METHOD:replyAllTest;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainText;METHOD:replyAllTest_NewWindow;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainText;METHOD:fwdMailTest;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainText;METHOD:replyTest;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainText;METHOD:fwdMailTest_NewWindow;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
+CLASS:projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainText;METHOD:checkMesgViewWithInTabWithArrowPosition_40614;LOCALE:all;BROWSERS:na;BUGS:45662;REMARK:Message body wrapped up on Reply/Forward
 
 #bug 46702
-CLASS:projects.zcs.tests.mail.messageactions.AddRemoveAttachmentAndAddToBriefcaseTests;METHOD:addingAttachFromMsgToBriefcaseFolder;LOCALE:all;BROWSERS:na;BUGS:46702;REMARK:can not move attachment to briefcase folder
+CLASS:projects.zcs.tests.mail.messageactions.MessagePreviewPaneActionTests;METHOD:addingAttachFromMsgToBriefcaseFolder;LOCALE:all;BROWSERS:na;BUGS:46702;REMARK:can not move attachment to briefcase folder
 
 
 #bug 46718
-CLASS:projects.zcs.tests.mail.autocomplete.AutoCompleteAddressTests;METHOD:luceneStopWordsAutoComplete_Bug46718;LOCALE:all;BROWSERS:na;BUGS:46718;REMARK:Need to be able to search for the terms defined in Lucene stop words depending on context of the search
+CLASS:projects.zcs.tests.mail.autocomplete.MailAutoCompleteAddressTests;METHOD:luceneStopWordsAutoComplete_Bug46718;LOCALE:all;BROWSERS:na;BUGS:46718;REMARK:Need to be able to search for the terms defined in Lucene stop words depending on context of the search
 
 #bug 47017
 CLASS:projects.zcs.tests.mail.autocomplete.IsInColonAutoCompleteAndSearchTests;METHOD:verifyAutocompleteNegativeInColonRemoteFolder;LOCALE:all;BROWSERS:na;BUGS:47017;REMARK:Search : -in:remotefolder doesn't show messages from local folder
@@ -260,7 +233,6 @@ CLASS:projects.zcs.tests.calendar.newappt.ApptInviteTests;METHOD:apptAddRemoveAt
 
 
 #------------------------HTML tests to be skipped ------------------
-
 #Bug 22626
 CLASS:projects.html.tests.addressbook.AddressBookTestHtml;METHOD:importFromCSVAndVerify;LOCALE:all;BROWSERS:na;BUGS:22626;REMARK:Some important fields are populated when Yahoo csv is imported
 
@@ -295,12 +267,6 @@ CLASS:projects.html.tests.calendar.CreateApptWithAttendeeTests;METHOD:zVerifyOpe
 
 # Bug 38405
 CLASS:projects.html.tests.mail.MailFolderTests;METHOD:saveSearchFolderDeleteItAndVerify;LOCALE:da;BROWSERS:na;BUGS:38405;REMARK:'Unmatched braces in the pattern' exception while clicking to saved search folder (da locale)
-
-#Bug 38432
-#CLASS:projects.html.tests.mail.MailTopBtmToolBarTests;METHOD:verifyAddRemoveFlagToMail;LOCALE:fr;BROWSERS:na;BUGS:38432;REMARK:'Unmatched braces in the pattern' exception while removing flag
-
-#Bug 38433
-#CLASS:projects.html.tests.mail.MailTopBtmToolBarTests;METHOD:composeAsHTMLAndAsText;LOCALE:fr;BROWSERS:na;BUGS:38433;REMARK:YUI editor is not loading in fr
 
 CLASS:projects.html.tests.mail.MailTopBtmToolBarTests;METHOD:markMailJunkNotJunkAndVerify;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Not able to select particular action from bottom toolbar
 CLASS:projects.html.tests.mail.MailTopBtmToolBarTests;METHOD:verifyAddRemoveFlagToMail;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Not able to select particular action from bottom toolbar
