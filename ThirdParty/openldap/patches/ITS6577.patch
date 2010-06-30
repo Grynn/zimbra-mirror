@@ -62,7 +62,7 @@
  					}
  					if ( rc == 0 ) {
  						ep->e_private = *eip;
-@@ -1410,9 +1441,6 @@
+@@ -1427,10 +1427,9 @@
  {
  	/* Enter with ei locked */
  
@@ -70,8 +70,11 @@
 -	if ( !ei->bei_parent ) return;
 -
  	if ( ei->bei_e ) {
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_delete_cleanup: id %ld rdn %s clearing bei_e, state %#x\n",
++			ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
  		ei->bei_e->e_private = NULL;
  #ifdef SLAP_ZONE_ALLOC
+ 		bdb_entry_return( ei->bei_bdb, ei->bei_e, ei->bei_zseq );
 --- openldap-2.4.22.3z/servers/slapd/back-bdb/add.c	13 Apr 2010 20:18:11 -0000	1.184
 +++ openldap-2.4.22.3z/servers/slapd/back-bdb/add.c	29 Jun 2010 22:00:59 -0000	1.185
 @@ -513,7 +513,6 @@ retry:	/* transaction retry */
