@@ -547,6 +547,10 @@ public class BulkImportAccounts extends AdminDocumentHandler {
     }
 
     private Domain createMissingDomain(String name,ZimbraSoapContext zsc,Map<String, Object> context) throws ServiceException {
+        //
+        // TODO: check permission has to be consolidated with the one in CraeteDomain
+        //
+        
 	    // check permission
 	    if (name.indexOf('.') == -1) {
 	        // is a top domain
@@ -566,7 +570,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
                     checkRight(zsc, context, null, Admin.R_createTopDomain);
                     
                     // then create a pseudo domain for checking the createSubDomain right
-                    parentDomain = (Domain)PseudoTarget.createPseudoTarget(Provisioning.getInstance(), TargetType.domain, null, null, false, null, null);
+                    parentDomain = PseudoTarget.createPseudoDomain(Provisioning.getInstance());
                     break;
                 } else {
                     domainName = domainName.substring(nextDot+1);
@@ -575,6 +579,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
     	    }
     	    checkRight(zsc, context, parentDomain, Admin.R_createSubDomain);
 	    }    
+	    
 	    //create domain
 	    Map<String, Object> attrs = new HashMap<String,Object>();
 	    StringUtil.addToMultiMap(attrs, Provisioning.A_zimbraGalMode, "zimbra");
