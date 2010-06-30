@@ -1642,10 +1642,10 @@ function(command, option) {
 };
 
 DwtHtmlEditor.prototype._convertHtml2Text =
-function() {
+function(convertor) {
 	var iFrameDoc = this._getIframeDoc();
 	return (iFrameDoc && iFrameDoc.body)
-		? AjxStringUtil.convertHtml2Text(iFrameDoc.body) : "";
+		? AjxStringUtil.convertHtml2Text(iFrameDoc.body, convertor) : "";
 };
 
 // params must contain:
