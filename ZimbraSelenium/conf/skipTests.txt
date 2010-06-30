@@ -161,10 +161,10 @@ CLASS:projects.zcs.tests.features.ClientURLTests;METHOD:calendarViewURL;LOCALE:a
 CLASS:projects.zcs.tests.addressbook.newcontact.CreateContactTests;METHOD:addRemoveContactPhotoAndVerify;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Typing file name through keyboard event fails
 
 #Need to work on these IE specific failures
-CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addBasicPersonaWithTextSignature;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
-CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:editTextSignature;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
-CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addPOP3ExternalAccComposeWindow_38611;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
-CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addBasicPersonaWithEditTextSignature;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
+#CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addBasicPersonaWithTextSignature;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
+#CLASS:projects.zcs.tests.preferences.signatures.BasicSignatureTests;METHOD:editTextSignature;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
+#CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addPOP3ExternalAccComposeWindow_38611;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
+#CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addBasicPersonaWithEditTextSignature;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
 
 #SpellCheck test cases are skipped to avoid false alarms. Skipped for all locales except english
 CLASS:projects.zcs.tests.mail.spellcheck.SpellCheckTests;METHOD:illegalCharacters_and_replyAfterSpellCheck_Bug29432_and_Bug41760;LOCALE:ar,da,de,el,es,fr,he,hi,it,id,ja,ko,nl,pl,pt_BR,ru,sv,tr,zh_CN,zh_HK;BROWSERS:na;BUGS:na;REMARK:Skipped for all charset other than english"
