@@ -86,7 +86,7 @@ ${ATTRIBUTE_DEFINITIONS}
 # to an entry.
 #
 # classes can be AUXILIARY or STRUCTURAL. An entry in the directory
-# must have one and only one structural class, but can have many
+# must have one and only one structural class hierarchy, but can have many
 # AUXILIARY classes.
 #
 ###########################################################################
