@@ -1,10 +1,14 @@
 package projects.zcs.tests.calendar.newappt;
 
 import java.lang.reflect.Method;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.apache.tools.ant.taskdefs.WaitFor;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 
@@ -23,11 +27,10 @@ import projects.zcs.ui.MailApp;
 
 @SuppressWarnings( { "static-access", "unused" })
 public class ApptInviteTests extends CommonTest {
-
 	@DataProvider(name = "apptInviteTestDataProvider")
 	private Object[][] createData(Method method) throws Exception {
 		String test = method.getName();
-		if (test.equals("acceptDeclineTentativeAppt_Bug42832_Bug46214")) {
+		if (test.equals("acceptDeclineTentativeAppt")) {
 			return new Object[][] {
 					{ getLocalizedData_NoSpecialChar(), getLocalizedData(1),
 							ProvZCS.getRandomAccount(), getLocalizedData(3),
@@ -62,11 +65,6 @@ public class ApptInviteTests extends CommonTest {
 							"11:00:" + localize(locator.periodAm), "", "",
 							"11:00:" + localize(locator.periodAm),
 							"12:00:" + localize(locator.periodPm) } };
-		} else if (test.equals("deleteAppt_bug38150")) {
-			return new Object[][] { { "single",
-					getLocalizedData_NoSpecialChar(),
-					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(), getLocalizedData(3), "" } };
 		} else if (test.equals("apptModifyRecurringCheckContent")) {
 			return new Object[][] {
 					{ "instance", getLocalizedData_NoSpecialChar(),
@@ -116,14 +114,13 @@ public class ApptInviteTests extends CommonTest {
 							ProvZCS.getRandomAccount(), getLocalizedData(3),
 							localize(locator.everyWeek),
 							ProvZCS.getRandomAccount() } };
-		} else if (test.equals("verifyNumberOfRecurringItems")) {
+		} else if (test.equals("editReplyAppt_Bug37186")
+				|| test.equals("editReplyApptAsAnAlias_Bug12301")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(), getLocalizedData(3),
-					localize(locator.everyDay) } };
+					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(3) } };
 		} else {
-			return new Object[][] { { getLocalizedData(1), getLocalizedData(1),
-					localize(locator.low), getLocalizedData(3), "", } };
+			return new Object[][] { { "" } };
 		}
 	}
 
@@ -148,9 +145,8 @@ public class ApptInviteTests extends CommonTest {
 	 */
 	@Test(dataProvider = "apptInviteTestDataProvider", groups = { "smoke",
 			"full" }, retryAnalyzer = RetryFailedTests.class)
-	public void acceptDeclineTentativeAppt_Bug42832_Bug46214(String subject,
-			String location, String attendees, String body, String action)
-			throws Exception {
+	public void acceptDeclineTentativeAppt(String subject, String location,
+			String attendees, String body, String action) throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
@@ -510,62 +506,6 @@ public class ApptInviteTests extends CommonTest {
 		needReset = false;
 	}
 
-	@Test(dataProvider = "apptInviteTestDataProvider", groups = { "smoke",
-			"full" }, retryAnalyzer = RetryFailedTests.class)
-	public void verifyNumberOfRecurringItems(String subject, String location,
-			String attendees, String body, String recurring) throws Exception {
-		if (isExecutionARetry)
-			handleRetry();
-
-		// ////////////////////////////////////////////
-		// Gets the current system date and adds 10 days to it.
-		// ///////////////////////////////////////////
-		String DATE_FORMAT = "yyyyMMdd";
-		SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-		Calendar testcal = Calendar.getInstance();
-		testcal.add(Calendar.DATE, 9);
-		String dateToVerify = sdf.format(testcal.getTime());
-		testcal.add(Calendar.DATE, 1);
-		String nextDateToVerify = sdf.format(testcal.getTime());
-		String urlToNavigate = config.getString("mode") + "://"
-				+ config.getString("server")
-				+ "/zimbra/?app=calendar&view=day&date=" + dateToVerify;
-		String urlToNavigate2 = config.getString("mode") + "://"
-				+ config.getString("server")
-				+ "/zimbra/?app=calendar&view=day&date=" + nextDateToVerify;
-		// Creating the appointment
-		page.zCalApp.zNavigateToCalendar();
-		// obj.zButton.zClick(page.zCalApp.zCalWeekBtn);
-		page.zCalApp.zNavigateToApptCompose();
-		page.zCalCompose.zCalendarEnterSimpleDetails(subject, location,
-				attendees, body);
-		obj.zFeatureMenu.zClick(localize(locator.repeatLabel));
-		obj.zMenuItem.zClick(localize(locator.custom));
-		Thread.sleep(1000);
-		obj.zDialog.zExists(localize(locator.customRepeat));
-
-		String locale = config.getString("locale");
-		String endField = localize(locator.recurEndNumber);
-		int a = endField.indexOf("{");
-		endField = endField.substring(0, a);
-		if (locale.equals("ru") || locale.equals("es")
-				|| locale.equals("pt_BR") || locale.equals("it")
-				|| locale.equals("de") || locale.equals("ar"))
-			obj.zEditField.zTypeInDlg(endField, "10");
-		else
-			obj.zEditField.zTypeInDlg(localize(locator.end), "10");
-		obj.zButton.zClickInDlg(localize(locator.ok));
-		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(1000);
-		obj.zAppointment.zExists(subject);
-		selenium.open(urlToNavigate);
-		obj.zAppointment.zExists(subject);
-		selenium.open(urlToNavigate2);
-		obj.zAppointment.zNotExists(subject);
-
-		needReset = false;
-	}
-
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zAppointmentsRespondWithEditReply() throws Exception {
 		if (isExecutionARetry)
@@ -640,46 +580,119 @@ public class ApptInviteTests extends CommonTest {
 		needReset = false;
 	}
 
+	/**
+	 * Test Case:- editReplyAccept Appointment
+	 * 
+	 * @steps 1.user1 creates an appointment and send to user2 2. user2 logs in
+	 *        and goes to calendar 3. rt. clicks the appointment in the calendar
+	 *        grid 4. selects 'Edit Reply', Accept. 5. Compose page opens 6.
+	 *        Verify 'To' and 'Subject' fields they should not remains empty.
+	 *        7.'user1' should be filled in To, and 'appointment subject' should
+	 *        be filled in the 'Subject' field
+	 * @author Girish
+	 */
 	@Test(dataProvider = "apptInviteTestDataProvider", groups = { "smoke",
 			"full" }, retryAnalyzer = RetryFailedTests.class)
-	public void deleteAppt_bug38150(String singleOrInstanceOrSeries,
-			String subject, String location, String attendees, String body,
-			String recurring) throws Exception {
+	public void editReplyAppt_Bug37186(String subject, String location,
+			String attendees, String body) throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		String firstLineSummary;
+		String loggeduser = SelNGBase.selfAccountName;
 		page.zCalApp.zNavigateToCalendar();
-		page.zCalCompose.zCreateAppt(subject, location, "", "", "", "", "", "",
-				"", "", recurring, "", attendees, body);
+		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
 		obj.zAppointment.zExists(subject);
-		if (singleOrInstanceOrSeries.equals("instance")) {
-			page.zCalApp.zDeleteInstanceOfRecurringAppt(subject);
-			firstLineSummary = localize(locator.apptInstanceCanceled);
-		} else if (singleOrInstanceOrSeries.equals("series")) {
-			page.zCalApp.zDeleteSeriesRecurringAppt(subject);
-			firstLineSummary = localize(locator.apptCanceled);
-		} else {
-			page.zCalApp.zDeleteAppointmentWithAttendees(subject);
-			firstLineSummary = localize(locator.apptCanceled);
-		}
 
-		subject = "Edited Subject";
-		body = "Edited body";
-		obj.zEditField.zType(localize(locator.subject), subject);
-		obj.zEditor.zType(body);
-		obj.zButton.zClick(localize(locator.send));
-		Thread.sleep(10000);
-
-		String[] itemsToVerify = { body };
 		zKillBrowsers();
-		Thread.sleep(1000);
-		SelNGBase.selfAccountName = attendees;
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
-		MailApp.ClickCheckMailUntilMailShowsUp(subject);
+		SelNGBase.selfAccountName = attendees;
+		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
-		waitForSF();
-		page.zCalApp.zVerifyInviteContent(firstLineSummary, itemsToVerify);
+		page.zCalApp.zNavigateToCalendar();
+		obj.zAppointment.zRtClick(subject);
+		obj.zMenuItem.zMouseOver(localize(locator.editReply));
+		selenium.clickAt("xpath=//td[contains(@id,'DW') and contains(text(),'"
+				+ localize(locator.accept) + "')][1]", "");
+		zWaitTillObjectExist("editfield", localize(locator.subjectLabel));
+		Assert.assertTrue(obj.zTextAreaField.zGetInnerText(
+				page.zComposeView.zToField).equalsIgnoreCase(loggeduser),
+				"Replied and logged user does not Match");
+		Assert.assertTrue(obj.zTextAreaField.zGetInnerText(
+				page.zComposeView.zSubjectField).contains(subject),
+				"Subject does not matched");
+
+		needReset = false;
+
+	}
+
+	/**
+	 * Test case users can't reply to appt invitations as an alias
+	 * 
+	 * @param subject
+	 * @param location
+	 * @param attendees
+	 * @param body
+	 * @throws Exception
+	 * @author Girish
+	 */
+	@Test(dataProvider = "apptInviteTestDataProvider", groups = { "smoke",
+			"full" }, retryAnalyzer = RetryFailedTests.class)
+	public void editReplyApptAsAnAlias_Bug12301(String subject,
+			String location, String attendees, String body) throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		String acc1 = ProvZCS.getRandomAccount();
+		GregorianCalendar thisday = new GregorianCalendar();
+		Date d = thisday.getTime();
+		DateFormat df = new SimpleDateFormat("yyMMddHHmmss");
+		String s = df.format(d);
+		String alias = s + "@testdomain.com";
+
+		ProvZCS.addAlias(acc1, alias);
+		ProvZCS.modifyAccount(acc1, "zimbraPrefFromAddress", alias);
+		String loggeduser = SelNGBase.selfAccountName;
+		page.zCalApp.zNavigateToCalendar();
+		page.zCalCompose.zCreateSimpleAppt(subject, location, alias, body);
+		obj.zAppointment.zExists(subject);
+
+		zKillBrowsers();
+		page.zLoginpage.zLoginToZimbraAjax(acc1);
+		SelNGBase.selfAccountName = acc1;
+		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
+		obj.zMessageItem.zClick(subject);
+		page.zCalApp.zNavigateToCalendar();
+		obj.zAppointment.zRtClick(subject);
+		obj.zMenuItem.zMouseOver(localize(locator.editReply));
+		selenium.clickAt("xpath=//td[contains(@id,'DW') and contains(text(),'"
+				+ localize(locator.accept) + "')][1]", "");
+		zWaitTillObjectExist("editfield", localize(locator.subjectLabel));
+		Assert.assertTrue(obj.zTextAreaField.zGetInnerText(
+				page.zComposeView.zToField).equalsIgnoreCase(loggeduser),
+				"Replied and logged user does not Match");
+		Assert.assertTrue(obj.zTextAreaField.zGetInnerText(
+				page.zComposeView.zSubjectField).contains(subject),
+				"Subject does not matched");
+
+		obj.zButton.zClick(localize(locator.send));
+
+		zKillBrowsers();
+		page.zLoginpage.zLoginToZimbraAjax(loggeduser);
+		SelNGBase.selfAccountName = loggeduser;
+		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
+		obj.zMessageItem.zClick(subject);
+		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
+		obj.zMenuItem.zClick(localize(locator.byMessage));
+		Thread.sleep(1000);
+		obj.zMessageItem.zRtClick(subject);
+		obj.zMenuItem.zClick(localize(locator.showOrig));
+		Thread.sleep(4000);
+		selenium.selectWindow("_blank");
+		String showOrigText = selenium.getBodyText();
+		Thread.sleep(1000);
+		Assert.assertTrue(showOrigText.contains("From: " + alias));
+		Assert.assertFalse(showOrigText.contains("From: " + acc1));
+		selenium.selectWindow(null);
 
 		needReset = false;
 	}
