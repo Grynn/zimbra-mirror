@@ -51,7 +51,7 @@ public class BasicSignatureTests extends CommonTest {
 	/**
 	 * This test case is to create text signature
 	 */
-	@Test(dataProvider = "AccPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createTextSignature(String signatureName, String signatureBody)
 			throws Exception {
 		if (isExecutionARetry)
@@ -72,7 +72,7 @@ public class BasicSignatureTests extends CommonTest {
 	/**
 	 * Test To create text Signature and then edit the signature
 	 */
-	@Test(dataProvider = "AccPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void editTextSignature(String signatureName, String signatureBody)
 			throws Exception {
 		if (isExecutionARetry)
