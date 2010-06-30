@@ -3,7 +3,7 @@
  * the properties in a TNEF file
  */
 
-package com.zimbra.sxtnef2xml;
+package com.zimbra.zmtnef2xml;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -958,10 +958,9 @@ public class Main {
     }
 
     private static void appendXmlEquiv(StringBuffer s, MAPIProp mp) throws IOException {
-        appendFormattedInfo(s, "<mapiprop>\n");
-        xmlIndentLevel++;
-        appendFormattedInfo(s, "<type>%s</type>\n",
+        appendFormattedInfo(s, "<mapiprop type=\"%s\">\n",
                 TNEFUtils.getConstName(mp.getClass(),"PT_",mp.getType()));
+        xmlIndentLevel++;
         MAPIPropName pName = mp.getName();
         if (pName != null) {
             GUID guid = pName.getGUID();

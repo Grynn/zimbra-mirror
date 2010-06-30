@@ -1,4 +1,4 @@
-<project name="sxtnef2xml" default="jar">
+<project name="zmtnef2xml" default="jar">
 	
 	<!-- Diagnostic tool which provides a more friendly, XML-like view
 		 of a TNEF file -->
@@ -7,7 +7,7 @@
 
 	<property name="javac.target" value="1.5"/>
 
-	<property name="jar.file" value="sxtnef2xml.jar" />
+	<property name="jar.file" value="zmtnef2xml.jar" />
 	<property name="src.java.dir" location="src/java" />
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
@@ -42,7 +42,7 @@
 				<zipfileset dir="${build.classes.dir}" prefix="" />
 				<zipfileset src="${common.jars.dir}/tnef-1.6.0.jar" />
 				<manifest>
-					<attribute name="Main-Class" value="com.zimbra.sxtnef2xml.Main" />
+					<attribute name="Main-Class" value="com.zimbra.zmtnef2xml.Main" />
 				</manifest>
 			</jar>
 	</target>
