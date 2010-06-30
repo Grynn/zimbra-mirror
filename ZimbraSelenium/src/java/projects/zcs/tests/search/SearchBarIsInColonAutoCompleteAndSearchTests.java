@@ -457,6 +457,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
+		commonData();
 		Robot zRobot = new Robot();
 		obj.zEditField.zActivate("xpath=//input[@class='search_input']");
 		zRobot.keyPress(KeyEvent.VK_CONTROL);

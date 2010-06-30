@@ -715,34 +715,10 @@ public class MailSharingTests extends CommonTest {
 				.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
 		page.zSharing.zAcceptShare(mountingfoldername);
 		obj.zFolder.zClick(mountingfoldername);
-		
-		
-		/**
-		 * Following code has been added to test bug 23876.
-		 */
-		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
-		obj.zMenuItem.zClick(localize(locator.byMessage));
-		obj.zMessageItem.zClick(subject);
 
-		obj.zButton.zClick(localize(locator.reply));
-		obj.zButton.zClick(localize(locator.send));
-		Thread.sleep(2000);
-		selenium.isElementPresent("//*[contains(@class, 'ImgMsgStatusReply')]");
-
-		obj.zButton.zClick(localize(locator.forward));
-		obj.zTextAreaField.zType(page.zComposeView.zToField, invitedusers);
-		obj.zButton.zClick(localize(locator.send));
-		Thread.sleep(2000);
-		selenium.isElementPresent("//*[contains(@class, 'ImgMsgStatusForward')]");
-		
-		/**
-		 * Code for bug 23876 ended.
-		 */
-
-		
-		
 		if (role.equals(localize(locator.shareRoleAdmin))
 				|| role.equals(localize(locator.shareRoleManager))) {
+			obj.zMessageItem.zClick(subject);
 			obj.zButton.zIsEnabled(page.zMailApp.zDeleteBtn);
 			obj.zMessageItem.zRtClick(subject);
 			obj.zMenuItem.zIsEnabled(localize(locator.del));
@@ -1118,8 +1094,8 @@ public class MailSharingTests extends CommonTest {
 	 */
 
 	@Test(dataProvider = "SharingDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void ExceptionWhileMovingMailsFromSharedToLocalFolder_Bug45034(String to,
-			String cc, String bcc, String subject, String body,
+	public void ExceptionWhileMovingMailsFromSharedToLocalFolder_Bug45034(
+			String to, String cc, String bcc, String subject, String body,
 			String attachments, String applicationtab,
 			String sharingfoldername, String sharetype, String invitedusers,
 			String role, String message, String sharingnoteifany,
