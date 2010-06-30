@@ -5,36 +5,27 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import projects.zcs.tests.CommonTest;
-import com.zimbra.common.service.ServiceException;
 import framework.util.RetryFailedTests;
+import projects.zcs.tests.CommonTest;
 
-/**
- * @author Jitesh Sojitra
- */
-
+@SuppressWarnings( { "static-access" })
 public class TaskFolderTests extends CommonTest {
-	//--------------------------------------------------------------------------
-	// SECTION 1: DATA-PROVIDERS
-	//--------------------------------------------------------------------------
-	@DataProvider(name = "mailDataProvider")
-	public Object[][] createData(Method method) throws ServiceException {
+	@DataProvider(name = "taskCreateDataProvider")
+	protected Object[][] createData(Method method) {
 		String test = method.getName();
-		if (test.equals("test1")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
-					"bccuser@testdomain.com", getLocalizedData(5),
-					getLocalizedData(5), "testexcelfile.xls" } };
+		if (test.equals("createTaskFolder") || test.equals("deleteTaskFolder")
+				|| test.equals("renameTaskFolder")) {
+			return new Object[][] { { getLocalizedData_NoSpecialChar(),
+					getLocalizedData(1), "", getLocalizedData(3) } };
 		} else {
 			return new Object[][] { { "" } };
 		}
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 2: SETUP
-	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
-	public void zLogin() throws Exception {
+	private void zLogin() throws Exception {
 		zLoginIfRequired();
+		Thread.sleep(2000);
 		isExecutionARetry = false;
 	}
 
@@ -46,22 +37,73 @@ public class TaskFolderTests extends CommonTest {
 		needReset = true;
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 3: TEST-METHODS
-	//--------------------------------------------------------------------------
-	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void test1(String to, String cc, String bcc, String subject,
-			String body, String attachments) throws Exception {
+	/**
+	 * Creates a task list folder Verifies that the folder is created
+	 * successfully
+	 * 
+	 */
+	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void createTaskFolder() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
+
+		page.zTaskApp.zNavigateToTasks();
+		String taskListBtn = "newTestTaskListToolbarBtn";
+		String taskListRtClick = "newTestTaskListRtClickMenu";
+		page.zTaskApp.zTaskListCreateNewBtn(taskListBtn);
+		Thread.sleep(1000);
+		page.zTaskApp.zTaskListCreateRtClick(taskListRtClick);
+		obj.zTaskFolder.zExists(taskListBtn);
+		obj.zTaskFolder.zExists(taskListRtClick);
 
 		needReset = false;
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
+	/**
+	 * Creates a task list folder Deletes the task list folder Verifies that the
+	 * task list folder is deleted successfully
+	 * 
+	 */
+	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void deleteTaskFolder() throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		page.zTaskApp.zNavigateToTasks();
+		String taskList = "deleteTaskList";
+		page.zTaskApp.zTaskListCreateNewBtn(taskList);
+		obj.zTaskFolder.zExists(taskList);
+		page.zTaskApp.zTaskListDelete(taskList);
+		obj.zTaskFolder.zNotExists(taskList);
+
+		needReset = false;
+	}
+
+	/**
+	 * Creates a task list folder Renames the task list folder Verifies that the
+	 * task list folder is renamed successfully
+	 * 
+	 */
+	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void renameTaskFolder() throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		page.zTaskApp.zNavigateToTasks();
+		String orgTaskList = "orgTaskList";
+		String renamedTaskList = "renamedTaskList";
+		page.zTaskApp.zTaskListCreateNewBtn(orgTaskList);
+		obj.zTaskFolder.zExists(orgTaskList);
+		page.zTaskApp.zTaskListRename(orgTaskList, renamedTaskList);
+		obj.zTaskFolder.zNotExists(orgTaskList);
+		obj.zTaskFolder.zExists(renamedTaskList);
+
+		needReset = false;
+	}
+
+	/**
+	 * retry handler function
+	 */
 	private void handleRetry() throws Exception {
 		isExecutionARetry = false;
 		zLogin();
