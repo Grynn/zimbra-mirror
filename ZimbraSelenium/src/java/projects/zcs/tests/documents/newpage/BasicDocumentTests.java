@@ -1,16 +1,13 @@
 package projects.zcs.tests.documents.newpage;
 
 import java.lang.reflect.Method;
-
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentApp;
-import projects.zcs.ui.DocumentCompose;
 import framework.util.RetryFailedTests;
 
 /**
@@ -21,37 +18,33 @@ import framework.util.RetryFailedTests;
  */
 @SuppressWarnings("static-access")
 public class BasicDocumentTests extends CommonTest {
-
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
-	
-	private static String WARNING_MESSAGE="The name must be at most 128 characters long";
 	@DataProvider(name = "DocumentDataProvider")
 	public Object[][] createData(Method method) {
 		String test = method.getName();
-
 		if (test.equals("createSimplePageInSpecificNotebook")) {
 			return new Object[][] { {
 					"noteBookName" + getLocalizedData_NoSpecialChar(),
 					"pageName" + getLocalizedData_NoSpecialChar(),
 					"bodyContent:" + getLocalizedData(3) } };
-		}
-		if (test.equals("toolbarEditNotebookPageAndVerify")
+		} else if (test.equals("toolbarEditNotebookPageAndVerify")
 				|| test.equals("linkEditNotebookPageAndVerify")) {
 			return new Object[][] { {
 					"pageName" + getLocalizedData_NoSpecialChar(),
 					"bodyContent:" + getLocalizedData(3),
 					"newBodyContent" + getLocalizedData(1) } };
+		} else if (test.equals("createSimpleNotebookPage")
+				|| test.equals("toolbarDeleteNotebookPageAndVerify")
+				|| test.equals("linkDeleteNotebookPageAndVerify")
+				|| test.equals("negativeTestCreatePage")) {
+			return new Object[][] { {
+					"pageName" + getLocalizedData_NoSpecialChar(),
+					"bodyContent:" + getLocalizedData(3) } };
+		} else {
+			return new Object[][] { { "" } };
 		}
-
-		if (test.equals("deleteNotebookFolder")) {
-			return new Object[][] { { "noteBookName"
-					+ getLocalizedData_NoSpecialChar() } };
-		}
-		return new Object[][] { {
-				"pageName" + getLocalizedData_NoSpecialChar(),
-				"bodyContent:" + getLocalizedData(3) } };
 	}
 
 	// --------------
@@ -61,7 +54,6 @@ public class BasicDocumentTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zDocumentCompose.zNavigateToDocument();
-		zWaitTillObjectExist("button", page.zDocumentCompose.zRefreshIconBtn);
 		isExecutionARetry = false;
 	}
 
@@ -73,16 +65,8 @@ public class BasicDocumentTests extends CommonTest {
 		needReset = true;
 	}
 
-	// --------------
-	// section 8 test methods
-	// --------------
-
 	/**
 	 * Test to create simple page with pageName and body
-	 * 
-	 * @param pageName
-	 * @param bodyContent
-	 * @throws Exception
 	 */
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createSimpleNotebookPage(String pageName, String bodyContent)
@@ -98,33 +82,8 @@ public class BasicDocumentTests extends CommonTest {
 		needReset = false;
 	}
 
-	@Test(dataProvider = "", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void tooLongDocName_Bug37614()
-	throws Exception {
-		if (isExecutionARetry)
-			handleRetry();
-
-		obj.zButton.zClick(DocumentCompose.zNewPageIconBtn);
-		zWaitTillObjectExist("button", DocumentCompose.zSavePageIconBtn);
-		DocumentCompose.zEnterBasicPageData("page1pagepage1pagepage1pagepage1pagepage1pagepage1pagepage1pagepage1pagepage1page page1page page1page page1page23456789pageNamepage1pagepage1pagepage1pagepage1pagepage1pagepage1pagepage1pagepage1pagepage1page page1page page1page page1page23456789pageName", "Hello World");
-		obj.zButton.zClick(DocumentCompose.zSavePageIconBtn);
-
-		obj.zDialog.zExists(localize(locator.warningMsg));
-		if(config.getString("locale").equalsIgnoreCase("en_US")) {
-			Assert.assertTrue(obj.zDialog.zGetMessage(localize(locator.warningMsg)).equals(WARNING_MESSAGE));
-		}
-		needReset = false;
-	}
-	
-	
 	/**
 	 * Test to create page inside user created notebook
-	 * 
-	 * @param newNotebookName
-	 *            : name of new notebook to be created
-	 * @param pageName
-	 * @param bodyContent
-	 * @throws Exception
 	 */
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createSimplePageInSpecificNotebook(String newNotebookName,
@@ -146,13 +105,6 @@ public class BasicDocumentTests extends CommonTest {
 	/**
 	 * Test to modify the page body content and verify the changes using
 	 * "Toolbar EDIT" btn
-	 * 
-	 * @param pageName
-	 * @param bodyContent
-	 *            : body of the page
-	 * @param newBodyContent
-	 *            :new body content of the page
-	 * @throws Exception
 	 */
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void toolbarEditNotebookPageAndVerify(String pageName,
@@ -179,13 +131,6 @@ public class BasicDocumentTests extends CommonTest {
 	/**
 	 * Test to modify the page body content and verify the changes using EDIT
 	 * LINK
-	 * 
-	 * @param pageName
-	 * @param bodyContent
-	 *            : body of the page
-	 * @param newBodyContent
-	 *            :new body content of the page
-	 * @throws Exception
 	 */
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void linkEditNotebookPageAndVerify(String pageName,
@@ -213,10 +158,6 @@ public class BasicDocumentTests extends CommonTest {
 	/**
 	 * Test to delete the page in a notebook using Toolbar DELETE button and
 	 * verify
-	 * 
-	 * @param pageName
-	 * @param bodyContent
-	 * @throws Exception
 	 */
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void toolbarDeleteNotebookPageAndVerify(String pageName,
@@ -233,10 +174,7 @@ public class BasicDocumentTests extends CommonTest {
 
 		obj.zButton.zClick((page.zDocumentCompose.zRefreshIconBtn));
 		obj.zFolder.zClick(page.zDocumentApp.zNotebookFolder);
-		Thread.sleep(1000);// added sleep because the deleted page still appears
-		// for few moments after deletion and if not waited
-		// the test fails.There is no toaster message displayed when page is
-		// deleted
+		Thread.sleep(1000);
 		Assert.assertFalse(selenium.isElementPresent("link=" + pageName),
 				"The page is not deleted");
 		needReset = false;
@@ -246,10 +184,6 @@ public class BasicDocumentTests extends CommonTest {
 	/**
 	 * Test to delete the page in a notebook using Toolbar DELETE button and
 	 * verify
-	 * 
-	 * @param pageName
-	 * @param bodyContent
-	 * @throws Exception
 	 */
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void linkDeleteNotebookPageAndVerify(String pageName,
@@ -265,52 +199,23 @@ public class BasicDocumentTests extends CommonTest {
 				pageName, "LinkDelete");
 		obj.zButton.zClick((page.zDocumentCompose.zRefreshIconBtn));
 		obj.zFolder.zClick(page.zDocumentApp.zNotebookFolder);
-		Thread.sleep(3000);// added sleep because the deleted page still appears
-		// for few moments after deletion and if not waited
-		// the test fails.There is no toaster message displayed when page is
-		// deleted
-
+		Thread.sleep(3000);
 		Assert.assertFalse(selenium.isElementPresent("link=" + pageName),
 				"The page is not deleted");
-		needReset = false;
-
-	}
-
-	/**
-	 * Test to delete Notebook folder using right click delete menu and verify
-	 * 
-	 * @param newNotebookName
-	 * @throws Exception
-	 */
-	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void deleteNotebookFolder(String newNotebookName) throws Exception {
-		if (isExecutionARetry)
-			handleRetry();
-		// page.zDocumentCompose.zNavigateToDocument();
-
-		page.zDocumentCompose.zCreateNewNotebook(newNotebookName, "", "");
-		page.zDocumentApp.zDeleteNotebookFolder(newNotebookName);
-		obj.zFolder.zNotExists(newNotebookName);
 
 		needReset = false;
-
 	}
 
 	/**
 	 * Negative test to verify the warning message when page creation closed in
 	 * between and also to verify the when clicked "No" in warning dialog box it
 	 * should save the page.
-	 * 
-	 * @param pageName
-	 * @param bodyContent
-	 * @throws Exception
 	 */
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void negativeTestCreatePage(String pageName, String bodyContent)
 			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
-		// page.zDocumentCompose.zNavigateToDocument();
 
 		obj.zButton.zClick(page.zDocumentCompose.zNewPageIconBtn);
 		page.zDocumentCompose.zEnterBasicPageData(pageName, bodyContent);
@@ -324,7 +229,6 @@ public class BasicDocumentTests extends CommonTest {
 				"The page is Saved.However it should not");
 
 		needReset = false;
-
 	}
 
 	//--------------------------------------------------------------------------
@@ -336,5 +240,4 @@ public class BasicDocumentTests extends CommonTest {
 		// page.zCalendarView.zCancelAptInBtw();
 		zLogin();
 	}
-
 }

@@ -6,35 +6,37 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
-import com.zimbra.common.service.ServiceException;
 import framework.util.RetryFailedTests;
 
 /**
- * @author Jitesh Sojitra
+ * This covers some high priority test cases related to Documents
+ * 
+ * @author Prashant JAISWAL
+ * 
  */
-
+@SuppressWarnings("static-access")
 public class DocumentFolderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
-	@DataProvider(name = "mailDataProvider")
-	public Object[][] createData(Method method) throws ServiceException {
+	@DataProvider(name = "DocumentDataProvider")
+	public Object[][] createData(Method method) {
 		String test = method.getName();
-		if (test.equals("test1")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
-					"bccuser@testdomain.com", getLocalizedData(5),
-					getLocalizedData(5), "testexcelfile.xls" } };
+		if (test.equals("createDeleteNotebookFolder")) {
+			return new Object[][] { { "noteBookName"
+					+ getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { { "" } };
 		}
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 2: SETUP
-	//--------------------------------------------------------------------------
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
-	public void zLogin() throws Exception {
+	private void zLogin() throws Exception {
 		zLoginIfRequired();
+		page.zDocumentCompose.zNavigateToDocument();
 		isExecutionARetry = false;
 	}
 
@@ -46,14 +48,18 @@ public class DocumentFolderTests extends CommonTest {
 		needReset = true;
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 3: TEST-METHODS
-	//--------------------------------------------------------------------------
-	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void test1(String to, String cc, String bcc, String subject,
-			String body, String attachments) throws Exception {
+	/**
+	 * Test to delete Notebook folder using right click delete menu and verify
+	 */
+	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void createDeleteNotebookFolder(String newNotebookName)
+			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
+
+		page.zDocumentCompose.zCreateNewNotebook(newNotebookName, "", "");
+		page.zDocumentApp.zDeleteNotebookFolder(newNotebookName);
+		obj.zFolder.zNotExists(newNotebookName);
 
 		needReset = false;
 	}
@@ -61,7 +67,6 @@ public class DocumentFolderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
 		isExecutionARetry = false;
 		zLogin();
