@@ -75,7 +75,7 @@ public class BriefcaseSharingTests extends CommonTest {
 					ProvZCS.getRandomAccount(),
 					localize(locator.shareRoleManager), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
-		else if (test.equals("publicBriefcaseSharing_Bug44557"))
+		else if (test.equals("publicBriefcaseSharing"))
 			return new Object[][] { { "structure.jpg", "Briefcase",
 					localize(locator.briefcase),
 					localize(locator.shareWithPublicLong),
@@ -263,7 +263,7 @@ public class BriefcaseSharingTests extends CommonTest {
 	}
 
 	@Test(dataProvider = "BriefcaseSharing", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void publicBriefcaseSharing_Bug44557(String filename,
+	public void publicBriefcaseSharing(String filename,
 			String applicationtab, String sharingfoldername, String sharetype,
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,

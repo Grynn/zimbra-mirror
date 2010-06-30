@@ -29,10 +29,9 @@ import projects.zcs.ui.ComposeView;
  */
 @SuppressWarnings("static-access")
 public class BasicBriefcaseTests extends CommonTest {
-
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	@DataProvider(name = "BriefcaseFileUpload")
 	public Object[][] createData(Method method) {
 		String test = method.getName();
@@ -45,11 +44,10 @@ public class BasicBriefcaseTests extends CommonTest {
 		else if (test.equals("moveBriefcaseFiletoNewFolder"))
 			return new Object[][] { { "samlejpg.jpg",
 					getLocalizedData_NoSpecialChar() } };
-		else if (test.equals("sendBriefcaseFileAsAttachment_35944"))
+		else if (test.equals("sendBriefcaseFileAsAttachment"))
 			return new Object[][] { { "testexcelfile.xls",
 					getLocalizedData_NoSpecialChar() } };
-		else if (test
-				.equals("verifyDownloadMenuDisabledForNewDoc_39112_45687"))
+		else if (test.equals("verifyDownloadMenuDisabledForNewDoc"))
 			return new Object[][] { { "CreateNewDoc",
 					getLocalizedData_NoSpecialChar() } };
 		else
@@ -57,9 +55,9 @@ public class BasicBriefcaseTests extends CommonTest {
 					getLocalizedData_NoSpecialChar() } };
 	}
 
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	// SECTION 2: SETUP
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
@@ -76,9 +74,9 @@ public class BasicBriefcaseTests extends CommonTest {
 		needReset = true;
 	}
 
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	/**
 	 * This test uploads files in briefcase folder and verifies file exist
 	 */
@@ -87,8 +85,10 @@ public class BasicBriefcaseTests extends CommonTest {
 			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
+
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
 		obj.zBriefcaseItem.zExists(filename);
+
 		needReset = false;
 	}
 
@@ -100,6 +100,7 @@ public class BasicBriefcaseTests extends CommonTest {
 			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
+
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
 		obj.zBriefcaseItem.zClick(filename);
 		obj.zButton.zClick(page.zBriefcaseApp.zDeleteIconBtn);
@@ -107,6 +108,7 @@ public class BasicBriefcaseTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.confirmTitle));
 		obj.zMenuItem.zNotExists(filename);
+
 		needReset = false;
 	}
 
@@ -119,6 +121,7 @@ public class BasicBriefcaseTests extends CommonTest {
 			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
+
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
 		obj.zBriefcaseItem.zClick(filename);
 		obj.zButton.zClick(page.zBriefcaseApp.zMoveItemIconBtn);
@@ -139,6 +142,7 @@ public class BasicBriefcaseTests extends CommonTest {
 		obj.zBriefcaseItem.zNotExists(filename);
 		obj.zFolder.zClick(newBFFolder);
 		obj.zBriefcaseItem.zExists(filename);
+
 		needReset = false;
 	}
 
@@ -153,7 +157,7 @@ public class BasicBriefcaseTests extends CommonTest {
 	 * @author Girish
 	 */
 	@Test(dataProvider = "BriefcaseFileUpload", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void sendBriefcaseFileAsAttachment_35944(String filename,
+	public void sendBriefcaseFileAsAttachment(String filename,
 			String newBFFolder) throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
@@ -185,54 +189,52 @@ public class BasicBriefcaseTests extends CommonTest {
 	}
 
 	/**
-	 * 1. Login to web client 
-	 * 2. Go to Briefcase > create any document Or presentation Or spreadsheet
-	 * 3. Right click to Saved doc.
-	 * 4. Verify 'Download' menu remains disabled 
-	 * 5. Right side column 'Download' link as disabled. 
-	 * @param filename
-	 * @param newBFFolder
+	 * 1. Login to web client 2. Go to Briefcase > create any document Or
+	 * presentation Or spreadsheet 3. Right click to Saved doc. 4. Verify
+	 * 'Download' menu remains disabled 5. Right side column 'Download' link as
+	 * disabled.
+	 * 
 	 * @author Girish
 	 */
 	@Test(dataProvider = "BriefcaseFileUpload", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void verifyDownloadMenuDisabledForNewDoc_39112_45687(
-			String filename, String newBFFolder) throws Exception {
+	public void verifyDownloadMenuDisabledForNewDoc(String filename,
+			String newBFFolder) throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
 		if (config.getString("locale").equals("en_US")) {
-		obj.zButton.zClick(localize(locator.newDocument));
-		Thread.sleep(1500);
-		selenium.selectWindow(selenium.getAllWindowTitles()[1]);
-		selenium.windowFocus();
-		zWaitTillObjectExist("button", localize(locator.save));
-		selenium.type("xpath=//input[@type='text']", filename);
-		obj.zButton.zClick(localize(locator.save));
-		Thread.sleep(1000);
-		selenium.close();
-		selenium.selectWindow(null);
-		obj.zFolder.zClick(page.zBriefcaseApp.zBriefcaseFolder);
-		Thread.sleep(1000);
-		obj.zBriefcaseItem.zClick(filename);
-		obj.zBriefcaseItem.zRtClick(filename);
-		Thread.sleep(500);
-		String download = selenium
-				.getEval("selenium.browserbot.getCurrentWindow().document.getElementById('zmi__Briefcase__SAVE_FILE').className");
-		Assert.assertTrue(download.contains("ZDisabled"),
-				"Download is in enable state");
+			obj.zButton.zClick(localize(locator.newDocument));
+			Thread.sleep(1500);
+			selenium.selectWindow(selenium.getAllWindowTitles()[1]);
+			selenium.windowFocus();
+			zWaitTillObjectExist("button", localize(locator.save));
+			selenium.type("xpath=//input[@type='text']", filename);
+			obj.zButton.zClick(localize(locator.save));
+			Thread.sleep(1000);
+			selenium.close();
+			selenium.selectWindow(null);
+			obj.zFolder.zClick(page.zBriefcaseApp.zBriefcaseFolder);
+			Thread.sleep(1000);
+			obj.zBriefcaseItem.zClick(filename);
+			obj.zBriefcaseItem.zRtClick(filename);
+			Thread.sleep(500);
+			String download = selenium
+					.getEval("selenium.browserbot.getCurrentWindow().document.getElementById('zmi__Briefcase__SAVE_FILE').className");
+			Assert.assertTrue(download.contains("ZDisabled"),
+					"Download is in enable state");
 
-		Boolean downloadLink = selenium.isElementPresent("Link="
-				+ localize(locator.saveFile));
-		assertReport("false", downloadLink.toString(),
-				"Verifying Download link exist");
+			Boolean downloadLink = selenium.isElementPresent("Link="
+					+ localize(locator.saveFile));
+			assertReport("false", downloadLink.toString(),
+					"Verifying Download link exist");
 		}
-		
+
 		needReset = false;
 	}
 
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
 		isExecutionARetry = false;
