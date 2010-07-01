@@ -1,80 +1,3 @@
---- openldap-2.4.22.3z/servers/slapd/back-bdb/cache.c.orig	2010-04-15 13:06:59.000000000 -0700
-+++ openldap-2.4.22.3z/servers/slapd/back-bdb/cache.c	2010-06-20 23:07:36.583439246 -0700
-@@ -482,17 +482,21 @@
- 				*res = eip;
- 				return rc;
- 			}
--		} else if ( ei2->bei_state & CACHE_ENTRY_DELETED ) {
-+		}
-+		bdb_cache_entryinfo_lock( ei2 );
-+		if ( ei2->bei_state & CACHE_ENTRY_DELETED ) {
- 			/* In the midst of deleting? Give it a chance to
- 			 * complete.
- 			 */
-+			Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_ndn: id %ld rdn %s being deleted, state %#x\n",
-+				ei2->bei_id, ei2->bei_nrdn.bv_val, ei2->bei_state );
-+			bdb_cache_entryinfo_unlock( ei2 );
- 			bdb_cache_entryinfo_unlock( eip );
- 			ldap_pvt_thread_yield();
- 			bdb_cache_entryinfo_lock( eip );
- 			*res = eip;
- 			return DB_NOTFOUND;
- 		}
--		bdb_cache_entryinfo_lock( ei2 );
- 		bdb_cache_entryinfo_unlock( eip );
- 
- 		eip = ei2;
-@@ -893,6 +897,8 @@
- 				 * as if the delete has already finished
- 				 */
- 				if ( del ) {
-+					Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id: id %ld rdn %s being deleted, state %#x\n",
-+				id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
- 					return DB_NOTFOUND;
- 				}
- 				/* otherwise, wait for the info to free up */
-@@ -945,6 +951,8 @@
- 		}
- 
- 		if ( (*eip)->bei_state & CACHE_ENTRY_DELETED ) {
-+			Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id #2: id %ld rdn %s being deleted, state %#x\n",
-+			id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
- 			rc = DB_NOTFOUND;
- 		} else {
- 			(*eip)->bei_finders++;
-@@ -987,6 +995,8 @@
- 			}
- 			rc = bdb_cache_entry_db_lock( bdb, tid, *eip, load, 0, lock );
- 			if ( (*eip)->bei_state & CACHE_ENTRY_DELETED ) {
-+				Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id #3: id %ld rdn %s being deleted, state %#x\n",
-+				id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
- 				rc = DB_NOTFOUND;
- 				bdb_cache_entry_db_unlock( bdb, lock );
- 				bdb_cache_entryinfo_lock( *eip );
-@@ -996,6 +1006,10 @@
- 				if ( load ) {
- 					if ( !ep) {
- 						rc = bdb_id2entry( op->o_bd, tid, id, &ep );
-+						if (rc == DB_NOTFOUND) {
-+							Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id #3.5: id %ld rdn %s being deleted, state %#x\n",
-+							id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
-+						}
- 					}
- 					if ( rc == 0 ) {
- 						ep->e_private = *eip;
-@@ -1427,10 +1427,9 @@
- {
- 	/* Enter with ei locked */
- 
--	/* already freed? */
--	if ( !ei->bei_parent ) return;
--
- 	if ( ei->bei_e ) {
-+		Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_delete_cleanup: id %ld rdn %s clearing bei_e, state %#x\n",
-+			ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
- 		ei->bei_e->e_private = NULL;
- #ifdef SLAP_ZONE_ALLOC
- 		bdb_entry_return( ei->bei_bdb, ei->bei_e, ei->bei_zseq );
 --- openldap-2.4.22.3z/servers/slapd/back-bdb/add.c	13 Apr 2010 20:18:11 -0000	1.184
 +++ openldap-2.4.22.3z/servers/slapd/back-bdb/add.c	29 Jun 2010 22:00:59 -0000	1.185
 @@ -513,7 +513,6 @@ retry:	/* transaction retry */
@@ -179,31 +102,79 @@
  	return rc;
  }
  
---- openldap-2.4.22/servers/slapd/back-bdb/dn2id.c.orig	2010-06-30 18:54:23.000000000 -0700
-+++ openldap-2.4.22/servers/slapd/back-bdb/dn2id.c	2010-06-30 18:58:56.000000000 -0700
-@@ -755,7 +755,7 @@
+--- openldap-2.4.22/servers/slapd/back-bdb/dn2id.c.orig	2010-06-30 22:02:38.000000000 -0700
++++ openldap-2.4.22/servers/slapd/back-bdb/dn2id.c	2010-06-30 22:05:11.000000000 -0700
+@@ -285,11 +285,10 @@
+ 	struct berval	*dn,
+ 	EntryInfo *ei,
+ 	DB_TXN *txn,
+-	DB_LOCK *lock )
++	DBC **cursor )
+ {
+ 	struct bdb_info *bdb = (struct bdb_info *) op->o_bd->be_private;
+ 	DB *db = bdb->bi_dn2id->bdi_db;
+-	DBC	*cursor;
+ 	int		rc;
+ 	DBT		key, data;
+ 	ID		nid;
+@@ -308,18 +307,11 @@
+ 	data.ulen = sizeof(ID);
+ 	data.flags = DB_DBT_USERMEM;
+ 
+-	rc = db->cursor( db, txn, &cursor, bdb->bi_db_opflags );
+-	if ( rc ) goto func_leave;
+-
+-	rc = bdb_dn2id_lock( bdb, dn, 0, txn, lock );
+-	if ( rc ) goto nolock;
++	rc = db->cursor( db, txn, cursor, bdb->bi_db_opflags );
+ 
+ 	/* fetch it */
+-	rc = cursor->c_get( cursor, &key, &data, DB_SET );
+-
+-nolock:
+-	cursor->c_close( cursor );
+-func_leave:
++	if ( !rc )
++		rc = (*cursor)->c_get( *cursor, &key, &data, DB_SET );
+ 
+ 	if( rc != 0 ) {
+ 		Debug( LDAP_DEBUG_TRACE, "<= bdb_dn2id: get failed: %s (%d)\n",
+@@ -749,12 +741,11 @@
+ 	struct berval	*in,
+ 	EntryInfo	*ei,
+ 	DB_TXN *txn,
+-	DB_LOCK *lock )
++	DBC **cursor )
+ {
+ 	struct bdb_info *bdb = (struct bdb_info *) op->o_bd->be_private;
  	DB *db = bdb->bi_dn2id->bdi_db;
  	DBT		key, data;
- 	DBC	*cursor;
--	int		rc = 0, nrlen;
-+	int		rc = 0, nrlen, reader = 0;
+-	DBC	*cursor;
+ 	int		rc = 0, nrlen;
  	diskNode *d;
  	char	*ptr;
- 	unsigned char dlen[2];
-@@ -783,6 +783,12 @@
- 	rc = db->cursor( db, txn, &cursor, bdb->bi_db_opflags );
+@@ -780,7 +771,7 @@
+ 	data.dlen = data.ulen;
+ 	data.flags = DB_DBT_USERMEM | DB_DBT_PARTIAL;
+ 
+-	rc = db->cursor( db, txn, &cursor, bdb->bi_db_opflags );
++	rc = db->cursor( db, txn, cursor, bdb->bi_db_opflags );
  	if ( rc ) return rc;
  
-+	/* We need regular locking on this cursor */
-+	if ( cursor->flags & DBC_READ_COMMITTED ) {
-+		cursor->flags ^= DBC_READ_COMMITTED;
-+		reader = 1;
-+	}
-+
  	d = op->o_tmpalloc( data.size * 3, op->o_tmpmemctx );
- 	d->nrdnlen[1] = nrlen & 0xff;
- 	d->nrdnlen[0] = (nrlen >> 8) | 0x80;
-@@ -803,6 +809,8 @@
+@@ -792,10 +783,7 @@
+ 	*ptr = '\0';
+ 	data.data = d;
+ 
+-	rc = bdb_dn2id_lock( bdb, in, 0, txn, lock );
+-	if ( rc ) goto func_leave;
+-
+-	rc = cursor->c_get( cursor, &key, &data, DB_GET_BOTH_RANGE );
++	rc = (*cursor)->c_get( *cursor, &key, &data, DB_GET_BOTH_RANGE );
+ 	if ( rc == 0 && (dlen[1] != d->nrdnlen[1] || dlen[0] != d->nrdnlen[0] ||
+ 		strncmp( d->nrdn, in->bv_val, nrlen ))) {
+ 		rc = DB_NOTFOUND;
+@@ -803,6 +791,8 @@
  	if ( rc == 0 ) {
  		ptr = (char *) data.data + data.size - sizeof(ID);
  		BDB_DISK2ID( ptr, &ei->bei_id );
@@ -212,22 +183,137 @@
  		ei->bei_rdn.bv_len = data.size - sizeof(diskNode) - nrlen;
  		ptr = d->nrdn + nrlen + 1;
  		ber_str2bv( ptr, ei->bei_rdn.bv_len, 1, &ei->bei_rdn );
-@@ -818,7 +826,18 @@
+@@ -812,13 +802,11 @@
+ 			/* FIXME: do we need to lock the parent
+ 			 * entryinfo? Seems safe...
+ 			 */
+-			cursor->c_count( cursor, &dkids, 0 );
++			(*cursor)->c_count( *cursor, &dkids, 0 );
+ 			ei->bei_parent->bei_dkids = dkids;
+ 		}
  	}
  
- func_leave:
-+	/* If using the reader txn, restore flags then release all locks */
-+	if ( reader )
-+		cursor->flags |= DBC_READ_COMMITTED;
- 	cursor->c_close( cursor );
-+	Debug( LDAP_DEBUG_TRACE, "<= hdb_dn2idq2: got id=0x%lx\n",
-+		ei->bei_id, 0, 0 );
-+	if ( reader ) {
-+		DB_LOCKREQ list;
-+		list.op = DB_LOCK_PUT_ALL;
-+		list.obj = NULL;
-+		bdb->bi_dbenv->lock_vec( bdb->bi_dbenv, txn->id( txn ), 0, &list, 1, NULL );
-+	}
+-func_leave:
+-	cursor->c_close( cursor );
  	op->o_tmpfree( d, op->o_tmpmemctx );
  	if( rc != 0 ) {
  		Debug( LDAP_DEBUG_TRACE, "<= hdb_dn2id: get failed: %s (%d)\n",
+--- openldap-2.4.22/servers/slapd/back-bdb/cache.c.orig	2010-04-15 13:06:59.000000000 -0700
++++ openldap-2.4.22/servers/slapd/back-bdb/cache.c	2010-06-30 22:03:10.000000000 -0700
+@@ -442,7 +442,7 @@
+ 		ei.bei_parent = eip;
+ 		ei2 = (EntryInfo *)avl_find( eip->bei_kids, &ei, bdb_rdn_cmp );
+ 		if ( !ei2 ) {
+-			DB_LOCK lock;
++			DBC *cursor;
+ 			int len = ei.bei_nrdn.bv_len;
+ 				
+ 			if ( BER_BVISEMPTY( ndn )) {
+@@ -458,12 +458,12 @@
+ 			BDB_LOG_PRINTF( bdb->bi_dbenv, NULL, "slapd Reading %s",
+ 				ei.bei_nrdn.bv_val );
+ 
+-			lock.mode = DB_LOCK_NG;
+-			rc = bdb_dn2id( op, &ei.bei_nrdn, &ei, txn, &lock );
++			cursor = NULL;
++			rc = bdb_dn2id( op, &ei.bei_nrdn, &ei, txn, &cursor );
+ 			if (rc) {
+ 				bdb_cache_entryinfo_lock( eip );
+ 				eip->bei_finders--;
+-				bdb_cache_entry_db_unlock( bdb, &lock );
++				if ( cursor ) cursor->c_close( cursor );
+ 				*res = eip;
+ 				return rc;
+ 			}
+@@ -477,22 +477,26 @@
+ 			/* add_internal left eip and c_rwlock locked */
+ 			eip->bei_finders--;
+ 			ldap_pvt_thread_rdwr_wunlock( &bdb->bi_cache.c_rwlock );
+-			bdb_cache_entry_db_unlock( bdb, &lock );
++			if ( cursor ) cursor->c_close( cursor );
+ 			if ( rc ) {
+ 				*res = eip;
+ 				return rc;
+ 			}
+-		} else if ( ei2->bei_state & CACHE_ENTRY_DELETED ) {
++		}
++		bdb_cache_entryinfo_lock( ei2 );
++		if ( ei2->bei_state & CACHE_ENTRY_DELETED ) {
+ 			/* In the midst of deleting? Give it a chance to
+ 			 * complete.
+ 			 */
++			Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_ndn: id %ld rdn %s being deleted, state %#x\n",
++				ei2->bei_id, ei2->bei_nrdn.bv_val, ei2->bei_state );
++			bdb_cache_entryinfo_unlock( ei2 );
+ 			bdb_cache_entryinfo_unlock( eip );
+ 			ldap_pvt_thread_yield();
+ 			bdb_cache_entryinfo_lock( eip );
+ 			*res = eip;
+ 			return DB_NOTFOUND;
+ 		}
+-		bdb_cache_entryinfo_lock( ei2 );
+ 		bdb_cache_entryinfo_unlock( eip );
+ 
+ 		eip = ei2;
+@@ -893,6 +897,8 @@
+ 				 * as if the delete has already finished
+ 				 */
+ 				if ( del ) {
++					Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id: id %ld rdn %s being deleted, state %#x\n",
++				id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
+ 					return DB_NOTFOUND;
+ 				}
+ 				/* otherwise, wait for the info to free up */
+@@ -945,6 +951,8 @@
+ 		}
+ 
+ 		if ( (*eip)->bei_state & CACHE_ENTRY_DELETED ) {
++			Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id #2: id %ld rdn %s being deleted, state %#x\n",
++			id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
+ 			rc = DB_NOTFOUND;
+ 		} else {
+ 			(*eip)->bei_finders++;
+@@ -987,6 +995,8 @@
+ 			}
+ 			rc = bdb_cache_entry_db_lock( bdb, tid, *eip, load, 0, lock );
+ 			if ( (*eip)->bei_state & CACHE_ENTRY_DELETED ) {
++				Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id #3: id %ld rdn %s being deleted, state %#x\n",
++				id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
+ 				rc = DB_NOTFOUND;
+ 				bdb_cache_entry_db_unlock( bdb, lock );
+ 				bdb_cache_entryinfo_lock( *eip );
+@@ -996,6 +1006,10 @@
+ 				if ( load ) {
+ 					if ( !ep) {
+ 						rc = bdb_id2entry( op->o_bd, tid, id, &ep );
++						if (rc == DB_NOTFOUND) {
++							Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_find_id #3.5: id %ld rdn %s being deleted, state %#x\n",
++							id, (*eip)->bei_nrdn.bv_val, (*eip)->bei_state );
++						}
+ 					}
+ 					if ( rc == 0 ) {
+ 						ep->e_private = *eip;
+@@ -1408,10 +1422,9 @@
+ {
+ 	/* Enter with ei locked */
+ 
+-	/* already freed? */
+-	if ( !ei->bei_parent ) return;
+-
+ 	if ( ei->bei_e ) {
++		Debug( LDAP_DEBUG_TRACE, "====> bdb_cache_delete_cleanup: id %ld rdn %s clearing bei_e, state %#x\n",
++			ei->bei_id, ei->bei_nrdn.bv_val, ei->bei_state );
+ 		ei->bei_e->e_private = NULL;
+ #ifdef SLAP_ZONE_ALLOC
+ 		bdb_entry_return( ei->bei_bdb, ei->bei_e, ei->bei_zseq );
+--- openldap-2.4.22/servers/slapd/back-bdb/proto-bdb.h.orig	2010-06-30 22:02:33.000000000 -0700
++++ openldap-2.4.22/servers/slapd/back-bdb/proto-bdb.h	2010-06-30 22:03:10.000000000 -0700
+@@ -106,7 +106,7 @@
+ 	struct berval *dn,
+ 	EntryInfo *ei,
+ 	DB_TXN *txn,
+-	DB_LOCK *lock );
++	DBC **cursor );
+ 
+ int bdb_dn2id_add(
+ 	Operation *op,
