@@ -687,6 +687,7 @@ public class Main {
         myMap.put(0x00008214L, "PidLidAppointmentColor");
         myMap.put(0x00008215L, "PidLidAppointmentSubType");
         myMap.put(0x00008216L, "PidLidAppointmentRecur");
+        myMap.put(0x00008217L, "PidLidAppointmentStateFlags");
         myMap.put(0x00008218L, "PidLidResponseStatus");
         myMap.put(0x00008223L, "PidLidRecurring");
         myMap.put(0x00008224L, "PidLidIntendedBusyStatus");
