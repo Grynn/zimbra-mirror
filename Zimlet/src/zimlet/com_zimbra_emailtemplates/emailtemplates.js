@@ -193,6 +193,7 @@ Com_Zimbra_EmailTemplates.prototype._testTemplateContentForKeys = function(param
 Com_Zimbra_EmailTemplates.prototype._showReplaceStringsDlg =
 function(params) {
 	if (this.replaceDlg) {
+		this.replaceDlg.params = params;
 		this._createReplaceView(params);
 		this.replaceDlg.popup();
 		return;
@@ -201,7 +202,8 @@ function(params) {
 	this.replaceDlgView.getHtmlElement().style.overflow = "auto";
 	this._createReplaceView(params);
 	this.replaceDlg = this._createDialog({title:this.getMessage("EmailTemplatesZimlet_replaceTemplateData"), view:this.replaceDlgView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
-	this.replaceDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._replaceOKBtnListener, params));
+	this.replaceDlg.params = params;
+	this.replaceDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._replaceOKBtnListener));
 	this.replaceDlg.popup();
 };
 
@@ -237,7 +239,8 @@ function(params) {
 };
 
 Com_Zimbra_EmailTemplates.prototype._replaceOKBtnListener =
-function(params) {
+function() {
+	var params = this.replaceDlg.params;
 	var insertMode = params.insertMode;
 	var templateBody = params.templateBody;
 	var templateSubject = params.templateSubject;
