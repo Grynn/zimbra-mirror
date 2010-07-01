@@ -797,6 +797,8 @@ AjxStringUtil.HTML_QUOTE_COLOR = "rgb(16, 16, 255)";
  */
 AjxStringUtil.getTopLevel =
 function(text, eol, htmlMode) {
+
+	if (!text) { return [""]; }
 	var isHtml = /<br|<div/i.test(text);
 	var split = isHtml ? AjxStringUtil.HTML_BR_RE : AjxStringUtil.SPLIT_RE;
 	var eol = isHtml ? '<br>' : '\n';
