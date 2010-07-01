@@ -236,11 +236,7 @@ CLASS:projects.zcs.tests.calendar.newappt.ApptInviteTests;METHOD:apptAddRemoveAt
 #Bug 22626
 CLASS:projects.html.tests.addressbook.AddressBookTestHtml;METHOD:importFromCSVAndVerify;LOCALE:all;BROWSERS:na;BUGS:22626;REMARK:Some important fields are populated when Yahoo csv is imported
 
-CLASS:projects.html.tests.mail.MiscMailTests;METHOD:rplyMail2TimeApplyFlagToAllAndVerify;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:need a way to click replied (2 time) mail in message list item
-CLASS:projects.html.tests.mail.MailFolderTests;METHOD:systemFolderTest;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:zIsDisabled method doesn't work for edit field objects (disabled system folder edit field)
-
-CLASS:projects.html.tests.calendar.CalendarMiscTests;METHOD:zApptAttendeeNegativeTest;LOCALE:hi,ja,ko,pl,pt_BR,ru,zh_CN,zh_HK;BROWSERS:na;BUGS:na;REMARK:problem with localization of 'mailSendAddressFailure' key
-CLASS:projects.html.tests.preferences.ABPreference;METHOD:verifyEnabledAutoAddingOfContacts;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:localize key issue for "EMailed contacts" folder
+CLASS:projects.html.tests.mail.MiscMailTests;METHOD:rplyMail2TimeApplyFlagToAllAndVerify;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:need a way to click replied (2 time) mail in message list item : Still not working. 
 
 #Bug 34114
 CLASS:projects.html.tests.addressbook.AddressBookTestHtml;METHOD:searchContact;LOCALE:ar;BROWSERS:na;BUGS:34114;REMARK:Searched keyword replaced by question marks
@@ -249,27 +245,19 @@ CLASS:projects.html.tests.addressbook.AddressBookTestHtml;METHOD:searchContact;L
 #CLASS:projects.html.tests.compose.DraftsTests;METHOD:saveAndUpdateDraftWithProrityAndVerify;LOCALE:all;BROWSERS:na;BUGS:37524;REMARK:HTML Client - Unwanted confirmation message displayed while Save draft and cancel it
 
 #Signature html editor issue
-CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:createSignatureAndVerifyInAccTab;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures
-CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:create2ndSignatureAndVerifyInAccTab;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures
-CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:verifyAccountsOptionsLink;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures
-CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:verifySignatureInMailCompose;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures
-CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:verifySignatureAboveIncludedMsg;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures
-CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:verifySignatureBelowIncludedMsg;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures
-CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:verifyAccountsSettings;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures
+CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:createSignatureAndVerifyInAccTab;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures : Still not working.
+CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:create2ndSignatureAndVerifyInAccTab;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures : Still not working.
+CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:verifyAccountsOptionsLink;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures : Still not working.
+CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:verifySignatureInMailCompose;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures : Still not working.
+CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:verifySignatureAboveIncludedMsg;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures : Still not working.
+CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:verifySignatureBelowIncludedMsg;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures : Still not working.
+CLASS:projects.html.tests.preferences.SignatureAndAccPref;METHOD:verifyAccountsSettings;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Need to find out a way to write in html signatures : Still not working.
 
 #below test failed because of new feature 'Reading pane' in html client
-CLASS:projects.html.tests.mail.MiscMailTests;METHOD:verifyNextPrevPageConversionFor3Mail;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:As we put reading pane feature in html client, so button remains disabled
+CLASS:projects.html.tests.mail.MiscMailTests;METHOD:verifyNextPrevPageConversionFor3Mail;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:As we put reading pane feature in html client, so button remains disabled : Still not working.
 
-CLASS:projects.html.tests.mail.MailTopBtmToolBarTests;METHOD:moveSingleMailAndVerify;LOCALE:fr,it;BROWSERS:na;BUGS:na;REMARK:Not able to identify list box option (Sent) in french. Tried using .* also.
-CLASS:projects.html.tests.mail.MailTopBtmToolBarTests;METHOD:moveMultipleMailsAndVerify;LOCALE:fr,it;BROWSERS:na;BUGS:na;REMARK:Not able to identify list box option (Sent) in french. Tried using .* also.
-
-CLASS:projects.html.tests.calendar.CreateApptWithAttendeeTests;METHOD:zVerifyOpenInstanceMessage;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:zMiscObj.zGetInnerText returns wrong string
+CLASS:projects.html.tests.mail.MailTopBtmToolBarTests;METHOD:moveSingleMailAndVerify;LOCALE:fr,it;BROWSERS:na;BUGS:na;REMARK:Not able to identify list box option (Sent) in french. Tried using .* also. : Still not working.
+CLASS:projects.html.tests.mail.MailTopBtmToolBarTests;METHOD:moveMultipleMailsAndVerify;LOCALE:fr,it;BROWSERS:na;BUGS:na;REMARK:Not able to identify list box option (Sent) in french. Tried using .* also. : Still not working.
 
 # Bug 38405
 CLASS:projects.html.tests.mail.MailFolderTests;METHOD:saveSearchFolderDeleteItAndVerify;LOCALE:da;BROWSERS:na;BUGS:38405;REMARK:'Unmatched braces in the pattern' exception while clicking to saved search folder (da locale)
-
-CLASS:projects.html.tests.mail.MailTopBtmToolBarTests;METHOD:markMailJunkNotJunkAndVerify;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Not able to select particular action from bottom toolbar
-CLASS:projects.html.tests.mail.MailTopBtmToolBarTests;METHOD:verifyAddRemoveFlagToMail;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Not able to select particular action from bottom toolbar
-CLASS:projects.html.tests.mail.MailTopBtmToolBarTests;METHOD:verifyEmptyJunkMail;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Not able to select particular action from bottom toolbar
-
-CLASS:projects.html.tests.calendar.CalendarFolderTests;METHOD:subscribeCalendar;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Ical public calendar doesn't find christmas holiday (still debugging)
