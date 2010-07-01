@@ -1,35 +1,37 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
- *
  * Zimbra Collaboration Suite Zimlets
- * Copyright (C) 2006, 2007 Zimbra, Inc.
- *
- * The contents of this file are subject to the Yahoo! Public License
- * Version 1.0 ("License"); you may not use this file except in
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- *
+ * 
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
- *
  * ***** END LICENSE BLOCK *****
- *@Author Raja Rao DV
  */
 
-function com_zimbra_emailtemplates() {
+/**
+ * Constructor.
+ * 
+ * @author Raja Rao DV
+ */
+function Com_Zimbra_EmailTemplates() {
 }
-com_zimbra_emailtemplates.prototype = new ZmZimletBase();
-com_zimbra_emailtemplates.prototype.constructor = com_zimbra_emailtemplates;
+Com_Zimbra_EmailTemplates.prototype = new ZmZimletBase();
+Com_Zimbra_EmailTemplates.prototype.constructor = Com_Zimbra_EmailTemplates;
 
 //--------------------------------------------------------------------------------------------------
 // INIT AND INITIALIZE TOOLBAR MENU BUTTON
 //--------------------------------------------------------------------------------------------------
-com_zimbra_emailtemplates.prototype.init =
+Com_Zimbra_EmailTemplates.prototype.init =
 function() {
 	this._folderPath = this.getUserProperty("etemplates_sourcefolderPath");
 };
 
-com_zimbra_emailtemplates.prototype.initializeToolbar =
+Com_Zimbra_EmailTemplates.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
 	this._currentViewId = viewId;
 	if (!this._viewIdAndMenuMap) {
@@ -46,7 +48,7 @@ function(app, toolbar, controller, viewId) {
 		//create params obj with button details
 		var buttonArgs = {
 			text	: "Templates",
-			tooltip: "This button shows up in Conversation view, traditional view, and in convlist view",
+			tooltip: this.getMessage("EmailTemplatesZimlet_tooltip"),
 			index: buttonIndex, //position of the button
 			image: "zimbraicon" //icon
 		};
@@ -65,7 +67,7 @@ function(app, toolbar, controller, viewId) {
 	}
 };
 
-com_zimbra_emailtemplates.prototype._addMenuItems =
+Com_Zimbra_EmailTemplates.prototype._addMenuItems =
 function(button, menu) {
 	if (!menu._loaded) {
 		this._getRecentEmails(false);
@@ -80,7 +82,7 @@ function(button, menu) {
 //--------------------------------------------------------------------------------------------------
 // TEST TEMPLATE FOR GENERIC WORDS AND THEN INSERT
 //--------------------------------------------------------------------------------------------------
-com_zimbra_emailtemplates.prototype._getRecentEmails =
+Com_Zimbra_EmailTemplates.prototype._getRecentEmails =
 function(removeChildren) {
 	if (this._folderPath == "") {
 		this._getRecentEmailsHdlr(removeChildren);
@@ -95,7 +97,7 @@ function(removeChildren) {
 		offset:0, types:_types, noRender:true, getHtml: getHtml, callback:callbck, errorCallback:callbck});
 };
 
-com_zimbra_emailtemplates.prototype._getRecentEmailsHdlr =
+Com_Zimbra_EmailTemplates.prototype._getRecentEmailsHdlr =
 function(removeChildren, result) {
 	var menu = this._viewIdAndMenuMap[this._currentViewId].menu;
 	if (removeChildren) {
@@ -103,7 +105,7 @@ function(removeChildren, result) {
 	}
 	if (result) {
 		if (result instanceof ZmCsfeException) {
-			appCtxt.setStatusMsg("Template's folder does not exist " + result.getErrorMsg(), ZmStatusView.LEVEL_WARNING);
+			appCtxt.setStatusMsg(this.getMessage("EmailTemplatesZimlet_folderNotExist")+" " + result.getErrorMsg(), ZmStatusView.LEVEL_WARNING);
 			this._addStandardMenuItems(menu);
 			return;
 		}
@@ -115,11 +117,11 @@ function(removeChildren, result) {
 			var submenu = new ZmPopupMenu(mi); //create submenu
 			mi.setMenu(submenu);//add submenu to menuitem
 
-			var subMi = submenu.createMenuItem("subMenu_" + Dwt.getNextId(), {image:"Edit", text:"Insert (body only)"});
+			var subMi = submenu.createMenuItem("subMenu_" + Dwt.getNextId(), {image:"Edit", text:this.getMessage("EmailTemplatesZimlet_bodyOnly")});
 			subMi.addSelectionListener(new AjxListener(this, this._insertMsg, {msg:msg, insertMode:"body"}));
-			subMi = submenu.createMenuItem("subMenu_" + Dwt.getNextId(), {image:"Edit", text:"Insert (body & subject)"});
+			subMi = submenu.createMenuItem("subMenu_" + Dwt.getNextId(), {image:"Edit", text:this.getMessage("EmailTemplatesZimlet_bodyAndSubject")});
 			subMi.addSelectionListener(new AjxListener(this, this._insertMsg, {msg:msg, insertMode:"bodyAndSubject"}));
-			subMi = submenu.createMenuItem("subMenu_" + Dwt.getNextId(), {image:"Edit", text:"Insert (body, subject & participants)"});
+			subMi = submenu.createMenuItem("subMenu_" + Dwt.getNextId(), {image:"Edit", text:this.getMessage("EmailTemplatesZimlet_bodySubjectAndParticipants")});
 			subMi.addSelectionListener(new AjxListener(this, this._insertMsg, {msg:msg, insertMode:"all"}));
 		}
 		if (array.length != 0) {
@@ -134,11 +136,11 @@ function(removeChildren, result) {
 	menu.popup(0, bounds.x, bounds.y + bounds.height, false);
 };
 
-com_zimbra_emailtemplates.prototype._addStandardMenuItems =
+Com_Zimbra_EmailTemplates.prototype._addStandardMenuItems =
 function(menu) {
-	var mi = menu.createMenuItem("reloadTemplates", {image:"Refresh", text:"Reload Templates"});
+	var mi = menu.createMenuItem("reloadTemplates", {image:"Refresh", text:this.getMessage("EmailTemplatesZimlet_reloadTemplates")});
 	mi.addSelectionListener(new AjxListener(this, this._getRecentEmails, true));
-	var mi = menu.createMenuItem("preferences", {image:"Resource", text:"Preferences"});
+	var mi = menu.createMenuItem("preferences", {image:"Resource", text:this.getMessage("EmailTemplatesZimlet_preferences")});
 	mi.addSelectionListener(new AjxListener(this, this._displayPrefDialog));
 };
 
@@ -146,13 +148,13 @@ function(menu) {
 //--------------------------------------------------------------------------------------------------
 // LOAD SELECTED MESSAGE/TEMPLATE
 //--------------------------------------------------------------------------------------------------
-com_zimbra_emailtemplates.prototype._insertMsg =
+Com_Zimbra_EmailTemplates.prototype._insertMsg =
 function(params) {
 	this.msg = params.msg;
 	this.msg.load({callback: new AjxCallback(this, this._handleLoadedMsg, params.insertMode)});
 };
 
-com_zimbra_emailtemplates.prototype._handleLoadedMsg =
+Com_Zimbra_EmailTemplates.prototype._handleLoadedMsg =
 function(insertMode) {
 	this.viewId = appCtxt.getCurrentViewId(); // make sure we use proper viewId to support multiple-compose views
 	var controller = this._viewIdAndMenuMap[this._currentViewId].controller;
@@ -160,7 +162,7 @@ function(insertMode) {
 	var currentBodyContent = currentBodyContent = appCtxt.getCurrentView().getHtmlEditor().getContent();
 	this._composeMode = appCtxt.getCurrentView().getHtmlEditor().getMode();
 	var templateBody = this.getTemplateContent(this.msg, this._composeMode);
-	var params = {templateSubject:this.msg.subject, templateBody: templateBody,  currentBodyContent:currentBodyContent, composeView:composeView, insertMode:insertMode};
+	var params = {controller:controller, templateSubject:this.msg.subject, templateBody: templateBody,  currentBodyContent:currentBodyContent, composeView:composeView, insertMode:insertMode};
 	this._testTemplateContentForKeys(params);
 };
 
@@ -168,7 +170,7 @@ function(insertMode) {
 // TEST TEMPLATE FOR GENERIC WORDS AND THEN INSERT
 //--------------------------------------------------------------------------------------------------
 
-com_zimbra_emailtemplates.prototype._testTemplateContentForKeys = function(params) {
+Com_Zimbra_EmailTemplates.prototype._testTemplateContentForKeys = function(params) {
 	//var regex = new RegExp("\\breplace__[a-z0-9A-Z]*", "ig");
 	var regex = new RegExp("\\$\\{[-a-zA-Z._0-9]+\\}", "ig");
 	
@@ -184,11 +186,11 @@ com_zimbra_emailtemplates.prototype._testTemplateContentForKeys = function(param
 		params["subjectArry"] = subjectArry;
 		this._showReplaceStringsDlg(params);
 	} else {
-		this._doInsert(params.composeView, params.templateSubject, params.templateBody, params.currentBodyContent, params.insertMode);
+		this._doInsert(params.controller, params.composeView, params.templateSubject, params.templateBody, params.currentBodyContent, params.insertMode);
 	}
 };
 
-com_zimbra_emailtemplates.prototype._showReplaceStringsDlg =
+Com_Zimbra_EmailTemplates.prototype._showReplaceStringsDlg =
 function(params) {
 	if (this.replaceDlg) {
 		this._createReplaceView(params);
@@ -198,12 +200,12 @@ function(params) {
 	this.replaceDlgView = new DwtComposite(this.getShell());
 	this.replaceDlgView.getHtmlElement().style.overflow = "auto";
 	this._createReplaceView(params);
-	this.replaceDlg = this._createDialog({title:"Replace Template Data", view:this.replaceDlgView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this.replaceDlg = this._createDialog({title:this.getMessage("EmailTemplatesZimlet_replaceTemplateData"), view:this.replaceDlgView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this.replaceDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._replaceOKBtnListener, params));
 	this.replaceDlg.popup();
 };
 
-com_zimbra_emailtemplates.prototype._createReplaceView =
+Com_Zimbra_EmailTemplates.prototype._createReplaceView =
 function(params) {
 	var bodyArry = params.bodyArry;
 	var subjectArry = params.subjectArry;
@@ -222,7 +224,7 @@ function(params) {
 	this._replaceFieldIdsMap = [];
 	var i = 0;
 	var html = new Array();
-	html[i++] = "<div class='emailTemplates_yellow'>Please replace the following generic text(s) with valid data</div><BR/>";
+	html[i++] = "<div class='emailTemplates_yellow'>"+this.getMessage("EmailTemplatesZimlet_replaceGenericData")+"</div><BR/>";
 	html[i++] = "<TABLE  class='emailTemplates_table' width=100% cellspacing=3 cellpadding=3>";
 	for (var k = 0; k < dataArry.length; k++) {
 		var key = dataArry[k];
@@ -234,7 +236,7 @@ function(params) {
 	this.replaceDlgView.getHtmlElement().innerHTML = html.join("");
 };
 
-com_zimbra_emailtemplates.prototype._replaceOKBtnListener =
+Com_Zimbra_EmailTemplates.prototype._replaceOKBtnListener =
 function(params) {
 	var insertMode = params.insertMode;
 	var templateBody = params.templateBody;
@@ -255,11 +257,11 @@ function(params) {
 		templateBody = templateBody.replace(regEx, val);
 	}
 	this.replaceDlg.popdown();
-	this._doInsert(params.composeView, templateSubject, templateBody, currentBodyContent, insertMode);
+	this._doInsert(params.controller, params.composeView, templateSubject, templateBody, currentBodyContent, insertMode);
 };
 
-com_zimbra_emailtemplates.prototype._doInsert =
-function(composeView, templateSubject, templateBody, currentBodyContent, insertMode) {
+Com_Zimbra_EmailTemplates.prototype._doInsert =
+function(controller, composeView, templateSubject, templateBody, currentBodyContent, insertMode) {
 	//insert subject
 	if (insertMode == "bodyAndSubject" || insertMode == "all") {
 		if (this.viewId == "APPT") {
@@ -292,7 +294,7 @@ function(composeView, templateSubject, templateBody, currentBodyContent, insertM
 			try{
 				composeView._apptEditView._attInputField.PERSON.setValue(toStr.concat(ccStr).join(";"));
 			} catch(e) {
-				appCtxt.setStatusMsg("Could not insert appointment's attendees " + result.getErrorMsg(), ZmStatusView.LEVEL_WARNING);
+				appCtxt.setStatusMsg(this.getMessage("EmailTemplatesZimlet_couldNotInsertApptAttendees")+" " + result.getErrorMsg(), ZmStatusView.LEVEL_WARNING);
 			}
 		} else {
 			if (toStr.length != 0) {
@@ -309,15 +311,42 @@ function(composeView, templateSubject, templateBody, currentBodyContent, insertM
 	if ((this._composeMode == DwtHtmlEditor.HTML)) {
 		saperator = "</br>";
 	}
-	var newData = [templateBody, saperator, currentBodyContent,saperator].join("");
 	if (this.viewId == "APPT") {
-		composeView.getHtmlEditor().setContent(newData);
+		//in appt, we append templateBody below currentBodyContent to facilitate things like conf-call templates
+		composeView.getHtmlEditor().setContent([currentBodyContent, saperator, templateBody].join(""));
 	} else {
-		composeView._htmlEditor.setContent(newData);
+		//in email, we append templatebody ABOVE currentBodyContent to facilitate Reply/Fwd emails
+		composeView._htmlEditor.setContent([templateBody, saperator, currentBodyContent].join(""));
+	}
+	if(this.msg.attachments && this.msg.attachments.length > 0) {
+		this._isDrafInitiatedByThisZimlet = true;
+		controller.saveDraft(ZmComposeController.DRAFT_TYPE_AUTO);
 	}
 };
 
-com_zimbra_emailtemplates.arrayContainsElement =
+Com_Zimbra_EmailTemplates.prototype.addExtraMsgParts =
+function(request, isDraft) {
+	if(!isDraft || !this._isDrafInitiatedByThisZimlet) {
+		return;
+	}
+	if(request && request.m) {
+		if(!request.m.attach) {
+			request.m.attach = {};
+			request.m.attach.mp = [];
+		} else if(!request.m.attach.mp) {
+			request.m.attach.mp = [];
+		}
+		var attmnts = this.msg.attachments;
+		if(attmnts) {			
+			for(var i = 0; i < attmnts.length; i++) {
+				request.m.attach.mp.push({mid:this.msg.id, part:attmnts[i].part});
+			}
+		}
+	}
+	this._isDrafInitiatedByThisZimlet = false;
+};
+
+Com_Zimbra_EmailTemplates.arrayContainsElement =
 function(array, val) {
 	for (var i = 0; i < array.length; i++) {
 		if (array[i] == val) {
@@ -330,14 +359,14 @@ function(array, val) {
 function emailtemplates_unique(b) {
 	var a = [], i, l = b.length;
 	for (i = 0; i < l; i++) {
-		if (!com_zimbra_emailtemplates.arrayContainsElement(a, b[i])) {
+		if (!Com_Zimbra_EmailTemplates.arrayContainsElement(a, b[i])) {
 			a.push(b[i]);
 		}
 	}
 	return a;
 }
 
-com_zimbra_emailtemplates.prototype.getTemplateContent = function(note, mode) {
+Com_Zimbra_EmailTemplates.prototype.getTemplateContent = function(note, mode) {
 	var body = "";
 	var body = note.getBodyContent();
 	if (note.isHtmlMail() && mode == ZmMimeTable.TEXT_PLAIN) {
@@ -354,7 +383,7 @@ com_zimbra_emailtemplates.prototype.getTemplateContent = function(note, mode) {
 //--------------------------------------------------------------------------------------------------
 // SHOW PREFERENCE DIALOG
 //--------------------------------------------------------------------------------------------------
-com_zimbra_emailtemplates.prototype._displayPrefDialog =
+Com_Zimbra_EmailTemplates.prototype._displayPrefDialog =
 function() {
 	if (this.prefDlg) {
 		this.prefDlg.popup();
@@ -364,13 +393,13 @@ function() {
 	//this.pView.setSize("200", "50");
 	this.pView.getHtmlElement().style.overflow = "auto";
 	this.pView.getHtmlElement().innerHTML = this._createPreferenceView();
-	this.prefDlg = this._createDialog({title:"Zimlet Preferences", view:this.pView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this.prefDlg = this._createDialog({title:this.getMessage("EmailTemplatesZimlet_preferences"), view:this.pView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this.prefDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._prefOKBtnListener));
 	this._initializePrefDialog();
 	this.prefDlg.popup();
 };
 
-com_zimbra_emailtemplates.prototype._createPreferenceView =
+Com_Zimbra_EmailTemplates.prototype._createPreferenceView =
 function() {
 	var str = "Templates folder not set";
 	if (this._folderPath != "") {
@@ -378,33 +407,33 @@ function() {
 	}
 	var html = new Array();
 	var i = 0;
-	html[i++] = "<TABLE cellspacing=3 cellpadding=3>";
-	html[i++] = ["<TR><TD><DIV style='font-weight:bold;'>Template Folder's path:</div></TD><TD><DIV style='color:blue;font-weight:bold;' id='emailtemplates_folderInfo'>",str,"</div></TD></TR>"].join("");
-	html[i++] = "<TR><TD colspan=2><DIV id='emailtemplates_folderLookupDiv'></DIV></TD></TR></TABLE>";
-
-	html[i++] = "<br/><div class='emailTemplates_yellow'>Generic Names </div><div  class='emailTemplates_yellowNormal'>";
-	html[i++] = "<br/>You can use generic names technique to replace common words. Just before inserting the template <br/>Zimlet will alert you to replace them";
-	html[i++] = "<br/> For example: You could have <strong>hi ${firstName}</strong> in the body or in the subject";
-	html[i++] = "<br/><br/><strong>Generic Name Rules:</strong><br/>1. The name of the generic word <strong>can only contain</strong> letters, numbers and underscore ";
-	html[i++] = "<br/>For example: <strong>${firstName}</strong>, <strong>${first123}</strong> or  <strong>${First_Name}</strong>";
-	html[i++] = "<br/>2.The generic names are <strong>case sensitive</strong>."; 
-	html[i++] = "<br/>For example:<strong>${firstName}</strong> and <strong>${FIRSTNAME}</strong> are considered different";
+	html.push("<TABLE cellspacing=3 cellpadding=3>",
+		"<TR><TD><DIV style='font-weight:bold;'>",this.getMessage("EmailTemplatesZimlet_templateFolderPath"),
+		"</div></TD><TD><DIV style='color:blue;font-weight:bold;' id='emailtemplates_folderInfo'>",str,"</div></TD></TR>",
+		"<TR><TD colspan=2><DIV id='emailtemplates_folderLookupDiv'></DIV></TD></TR></TABLE>",
+		"<br/><div class='emailTemplates_yellow'>",this.getMessage("EmailTemplatesZimlet_genericNames"),"</div><div  class='emailTemplates_yellowNormal'>",
+		"<br/>",this.getMessage("EmailTemplatesZimlet_helpLine1"),
+		"<br/> ",this.getMessage("EmailTemplatesZimlet_helpLine2"),
+		"<br/><br/>",this.getMessage("EmailTemplatesZimlet_helpLine3"),
+		"<br/>",this.getMessage("EmailTemplatesZimlet_helpLine4"),
+		"<br/>", this.getMessage("EmailTemplatesZimlet_helpLine5"),
+		"<br/>", this.getMessage("EmailTemplatesZimlet_helpLine6"));
 
 	return html.join("");
 };
 
-com_zimbra_emailtemplates.prototype._initializePrefDialog =
+Com_Zimbra_EmailTemplates.prototype._initializePrefDialog =
 function() {
 	var btn = new DwtButton({parent:this.getShell()});
-	btn.setText("Set Templates Folder");
+	btn.setText(this.getMessage("EmailTemplatesZimlet_setTemplatesFolder"));
 	btn.setImage("Search");
-	btn.setToolTipContent("Please select a folder where Templates are stored");
+	btn.setToolTipContent(this.getMessage("EmailTemplatesZimlet_selectTemplatesFolder"));
 	btn.addSelectionListener(new AjxListener(this, this._setFolderBtnListener));
 	document.getElementById("emailtemplates_folderLookupDiv").appendChild(btn.getHtmlElement());
 };
 
 
-com_zimbra_emailtemplates.prototype._prefOKBtnListener =
+Com_Zimbra_EmailTemplates.prototype._prefOKBtnListener =
 function() {
 	if (this.needRefresh) {
 		this.setUserProperty("etemplates_sourcefolderPath", this._folderPath);
@@ -414,7 +443,7 @@ function() {
 	this.prefDlg.popdown();
 };
 
-com_zimbra_emailtemplates.prototype._setFolderBtnListener =
+Com_Zimbra_EmailTemplates.prototype._setFolderBtnListener =
 function() {
 	if (!this._chooseFolderDialog) {
 		AjxDispatcher.require("Extras");
@@ -425,9 +454,9 @@ function() {
 
 	var params = {
 		treeIds:		[ZmOrganizer.FOLDER],
-		title:			"Choose Folder For Email Tempates",
+		title:			this.getMessage("EmailTemplatesZimlet_selectTemplatesFolder"),
 		overviewId:		this.toString(),
-		description:	"Choose Folder For Email Tempates:",
+		description:	this.getMessage("EmailTemplatesZimlet_selectTemplatesFolder"),
 		skipReadOnly:	false,
 		hideNewButton:	false,
 		appName:		ZmApp.MAIL,
@@ -436,7 +465,7 @@ function() {
 	this._chooseFolderDialog.popup(params);
 };
 
-com_zimbra_emailtemplates.prototype._chooseFolderOkBtnListener =
+Com_Zimbra_EmailTemplates.prototype._chooseFolderOkBtnListener =
 function(dlg, folder) {
 	dlg.popdown();
 	var fp = folder.getPath();
@@ -448,7 +477,7 @@ function(dlg, folder) {
 	document.getElementById("emailtemplates_folderInfo").innerHTML = this._folderPath;
 };
 
-com_zimbra_emailtemplates.prototype._handleSaveProperties =
+Com_Zimbra_EmailTemplates.prototype._handleSaveProperties =
 function(needRefresh) {
 	appCtxt.setStatusMsg("Preferences Saved", ZmStatusView.LEVEL_INFO);
 	if (needRefresh) {
@@ -459,7 +488,7 @@ function(needRefresh) {
 //--------------------------------------------------------------------------------------------------
 // SHOW YES NO DIALOG TO REFRESH BROWSER
 //--------------------------------------------------------------------------------------------------
-com_zimbra_emailtemplates.prototype.showYesNoDialog =
+Com_Zimbra_EmailTemplates.prototype.showYesNoDialog =
 function() {
 	var dlg = appCtxt.getYesNoMsgDialog();
 	dlg.registerCallback(DwtDialog.YES_BUTTON, this._yesButtonClicked, this, dlg);
@@ -468,18 +497,18 @@ function() {
 	dlg.popup();
 };
 
-com_zimbra_emailtemplates.prototype._yesButtonClicked =
+Com_Zimbra_EmailTemplates.prototype._yesButtonClicked =
 function(dlg) {
 	dlg.popdown();
 	this._refreshBrowser();
 };
 
-com_zimbra_emailtemplates.prototype._NoButtonClicked =
+Com_Zimbra_EmailTemplates.prototype._NoButtonClicked =
 function(dlg) {
 	dlg.popdown();
 };
 
-com_zimbra_emailtemplates.prototype._refreshBrowser =
+Com_Zimbra_EmailTemplates.prototype._refreshBrowser =
 function() {
 	window.onbeforeunload = null;
 	var url = AjxUtil.formatUrl({});
