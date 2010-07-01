@@ -18,7 +18,6 @@ import projects.zcs.ui.ComposeView;
 
 @SuppressWarnings("static-access")
 public class AboveBelowSignatureTests extends CommonTest {
-
 	@DataProvider(name = "SigPrefDataProvider")
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
@@ -45,12 +44,14 @@ public class AboveBelowSignatureTests extends CommonTest {
 						.equals("verifyHtmlSignatureAboveIncludedMsgInReplyAll_Bug45880")
 				|| test
 						.equals("verifyHtmlSignatureBelowIncludedMsgInReplyAll_Bug45880")
-				|| test
-						.equals("twoSignaturesOnSwitching_Bug41404")						) {
+				|| test.equals("twoSignaturesOnSwitching_Bug41404")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData_NoSpecialChar()} };
+					getLocalizedData_NoSpecialChar(), selfAccountName,
+					"ccuser@testdomain.com", "bccuser@testdomain.com",
+					getLocalizedData_NoSpecialChar(),
+					getLocalizedData_NoSpecialChar(), "" } };
 		} else
-			return new Object[][] { {} };
+			return new Object[][] { { "" } };
 	}
 
 	// --------------
@@ -80,15 +81,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * whether signature name place above or below included message 10.It should
 	 * place above included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 
@@ -135,15 +127,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * and select signature name 9.Verify whether signature name place above or
 	 * below included message 10.It should place above included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 	// Reply:-html: aboveinclmsg
@@ -195,15 +178,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * whether signature name place above or below included message 10.It should
 	 * place Below included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 	// Reply:-Text: belowinclmsg
@@ -252,15 +226,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * select signature name 9.Verify whether signature name place above or
 	 * below included message 10.It should place below included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 	// Reply:-html: belowinclmsg
@@ -313,15 +278,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * whether signature name place above or below included message 10.It should
 	 * place above included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 
@@ -368,15 +324,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * button and select signature name 9.Verify whether signature name place
 	 * above or below included message 10.It should place above included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 
@@ -429,15 +376,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * whether signature name place above or below included message 10.It should
 	 * place Below included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 	// Fwd:-Text: belowinclmsg
@@ -486,15 +424,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * signature name 9.Verify whether signature name place above or below
 	 * included message 10.It should place below included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 	// Fwd:-html: belowinclmsg
@@ -547,15 +476,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * name 9.Verify whether signature name place above or below included
 	 * message 10.It should place above included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 	// ReplyAll:-Text: aboveinclmsg
@@ -602,15 +522,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * signature name 9.Verify whether signature name place above or below
 	 * included message 10.It should place above included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 	// ReplyAll:-html: aboveinclmsg
@@ -662,15 +573,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * name 9.Verify whether signature name place above or below included
 	 * message 10.It should place Below included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 
@@ -719,15 +621,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 	 * button and select signature name 9.Verify whether signature name place
 	 * above or below included message 10.It should place below included message
 	 * 
-	 * @param signatureName
-	 * @param signatureBody
-	 * @param to
-	 * @param cc
-	 * @param bcc
-	 * @param subject
-	 * @param body
-	 * @param attachments
-	 * @throws Exception
 	 * @author Girish
 	 */
 	// ReplyAll:-html: belowinclmsg
@@ -770,7 +663,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 
 		needReset = false;
 	}
-	
+
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void twoSignaturesOnSwitching_Bug41404(String signatureName,
 			String signatureBody) throws Exception {
@@ -788,7 +681,6 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zRadioBtn.zClick(localize(locator.composeAsHTML));
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		
 		/**
 		 * Following code is added to test bug 43244
 		 */
@@ -796,21 +688,22 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.formatAsText));
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
 		Thread.sleep(1000);
-		selenium.clickAt("//*[contains(@class,'ImgImageDoc')]","");
-		obj.zButton.zClickInDlgByName(localize(locator.cancel), localize(locator.addImg));
-		selenium.clickAt("//*[contains(@class,'ImgInsertImage')]","");
-		obj.zButton.zClickInDlgByName(localize(locator.cancel), localize(locator.uploadImage));
+		selenium.clickAt("//*[contains(@class,'ImgImageDoc')]", "");
+		obj.zButton.zClickInDlgByName(localize(locator.cancel),
+				localize(locator.addImg));
+		selenium.clickAt("//*[contains(@class,'ImgInsertImage')]", "");
+		obj.zButton.zClickInDlgByName(localize(locator.cancel),
+				localize(locator.uploadImage));
 		/**
 		 * Code for bug 43244 ends here.
 		 */
-		
 
 		/**
 		 * Create Signature 1
 		 */
 		page.zSignaturePref.zNavigateToPreferenceSignature();
-		page.zSignaturePref.zCreateSignature(defaultSignature, defaultSignatureBody,
-		"TEXT");
+		page.zSignaturePref.zCreateSignature(defaultSignature,
+				defaultSignatureBody, "TEXT");
 
 		Thread.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
@@ -821,8 +714,8 @@ public class AboveBelowSignatureTests extends CommonTest {
 		 */
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		obj.zButton.zClick(localize(locator.addSignature));
-		page.zSignaturePref.zCreateSignature(signatureName, nondefaultSignatureBody,
-		"TEXT");
+		page.zSignaturePref.zCreateSignature(signatureName,
+				nondefaultSignatureBody, "TEXT");
 		Thread.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
 		Thread.sleep(1000);
@@ -837,12 +730,10 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
 		Thread.sleep(1000);
 
-
 		/**
-		 * 1. Compose Mail. 
-		 * 2. Switch Signature to non-default. 
-		 * 3. Switch back to default signature.
-		 * 4. Send Mail to self and click on received mail.
+		 * 1. Compose Mail. 2. Switch Signature to non-default. 3. Switch back
+		 * to default signature. 4. Send Mail to self and click on received
+		 * mail.
 		 */
 		page.zMailApp.zNavigateToMailApp();
 		obj.zButton.zClick(page.zMailApp.zNewMenuIconBtn);
@@ -860,23 +751,22 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 
 		/**
-		 * 1. Verify Body contains default signature.
-		 * 2. Verify body does not contain non-default signature.
-		 *  
+		 * 1. Verify Body contains default signature. 2. Verify body does not
+		 * contain non-default signature.
+		 * 
 		 */
 		obj.zMessageItem.zVerifyCurrentMsgBodyText(defaultSignatureBody);
-		obj.zMessageItem.zVerifyCurrentMsgBodyDoesNotHaveText(nondefaultSignatureBody);
+		obj.zMessageItem
+				.zVerifyCurrentMsgBodyDoesNotHaveText(nondefaultSignatureBody);
 
 		needReset = false;
 	}
-
 
 	// //end
 	private void waitForIE() throws Exception {
 		String browser = config.getString("browser");
 		if (browser.equals("IE"))
 			Thread.sleep(1000);
-
 	}
 
 	private void handleRetry() throws Exception {
@@ -884,5 +774,4 @@ public class AboveBelowSignatureTests extends CommonTest {
 		isExecutionARetry = false;// reset this to false
 		zLogin();
 	}
-
 }

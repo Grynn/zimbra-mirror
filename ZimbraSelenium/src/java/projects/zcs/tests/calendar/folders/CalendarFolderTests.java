@@ -24,10 +24,7 @@ public class CalendarFolderTests extends CommonTest {
 		if (test.equals("createCalendarFolder")
 				|| test.equals("deleteCalendarFolder")
 				|| test.equals("renameCalendarFolder")) {
-			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1),
-					"ccuser@testdomain.com, bccuser@testdomain.com",
-					getLocalizedData(3) } };
+			return new Object[][] { {} };
 		} else {
 			return new Object[][] { { "" } };
 		}
@@ -57,8 +54,8 @@ public class CalendarFolderTests extends CommonTest {
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
-		String calendarNameBtn = "calendarNewBtn";
-		String calendarNameRtClick = "calendarRtClick";
+		String calendarNameBtn = getLocalizedData_NoSpecialChar();
+		String calendarNameRtClick = getLocalizedData_NoSpecialChar();
 		page.zCalApp.zCreateNewCalendarFolder(calendarNameBtn);
 		page.zCalApp.zCreateNewCalendarFolder(calendarNameRtClick);
 		obj.zCalendarFolder.zExists(calendarNameBtn);
@@ -76,7 +73,7 @@ public class CalendarFolderTests extends CommonTest {
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
-		String deleteCalendarName = "deleteCalendar";
+		String deleteCalendarName = getLocalizedData_NoSpecialChar();
 		page.zCalApp.zCreateNewCalendarFolder(deleteCalendarName);
 		obj.zCalendarFolder.zExists(deleteCalendarName);
 		page.zCalApp.zDeleteCalendarFolder(deleteCalendarName);
@@ -94,8 +91,8 @@ public class CalendarFolderTests extends CommonTest {
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
-		String calendarName = "renameCalendar";
-		String newCalendarName = "newRenamedCalendar";
+		String calendarName = getLocalizedData_NoSpecialChar();
+		String newCalendarName = getLocalizedData_NoSpecialChar();
 		page.zCalApp.zCreateNewCalendarFolder(calendarName);
 		obj.zCalendarFolder.zExists(calendarName);
 		page.zCalApp.zRenameCalendarFolder(calendarName, newCalendarName);

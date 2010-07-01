@@ -25,8 +25,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 	@DataProvider(name = "mailDataProvider")
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
-		if (test.equals("attachBriefcaseFileInMail")
-				|| test.equals("createApptFromICSAttachment_Bug27959")) {
+		if (test.equals("attachBriefcaseFileInMail")) {
 			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
 					getLocalizedData(5), "testexcelfile.xls,testwordfile.doc" } };
@@ -52,11 +51,10 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
 					getLocalizedData(5), "MultiLingualContact.csv" } };
-
+		} else if (test.equals("createApptFromICSAttachment_Bug27959")) {
+			return new Object[][] { {} };
 		} else {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
-					"bccuser@testdomain.com", getLocalizedData(5),
-					getLocalizedData(5), "" } };
+			return new Object[][] { { "" } };
 		}
 	}
 

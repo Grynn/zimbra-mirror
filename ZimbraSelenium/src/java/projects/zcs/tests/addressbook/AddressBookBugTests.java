@@ -30,8 +30,13 @@ public class AddressBookBugTests extends CommonTest {
 					"touser@testdomain.com" } };
 		} else if (test
 				.equals("CreateContactWhileSrchFldrAndTagSelected_Bug40517")) {
-			return new Object[][] { { "lastName:" + getLocalizedData(1),
-					"middleName:" + getLocalizedData(1), "" } };
+			return new Object[][] { { "LN" + getLocalizedData_NoSpecialChar(),
+					"MN" + getLocalizedData_NoSpecialChar(),
+					"FN" + getLocalizedData_NoSpecialChar(),
+					"NLN" + getLocalizedData_NoSpecialChar(),
+					"NMN" + getLocalizedData_NoSpecialChar(),
+					"NFN" + getLocalizedData_NoSpecialChar(),
+					"NNMN" + getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { { "" } };
 		}

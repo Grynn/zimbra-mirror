@@ -15,8 +15,7 @@ public class TaskFolderTests extends CommonTest {
 		String test = method.getName();
 		if (test.equals("createTaskFolder") || test.equals("deleteTaskFolder")
 				|| test.equals("renameTaskFolder")) {
-			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), "", getLocalizedData(3) } };
+			return new Object[][] { {} };
 		} else {
 			return new Object[][] { { "" } };
 		}
@@ -48,8 +47,8 @@ public class TaskFolderTests extends CommonTest {
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
-		String taskListBtn = "newTestTaskListToolbarBtn";
-		String taskListRtClick = "newTestTaskListRtClickMenu";
+		String taskListBtn = getLocalizedData_NoSpecialChar();
+		String taskListRtClick = getLocalizedData_NoSpecialChar();
 		page.zTaskApp.zTaskListCreateNewBtn(taskListBtn);
 		Thread.sleep(1000);
 		page.zTaskApp.zTaskListCreateRtClick(taskListRtClick);
@@ -70,7 +69,7 @@ public class TaskFolderTests extends CommonTest {
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
-		String taskList = "deleteTaskList";
+		String taskList = getLocalizedData_NoSpecialChar();
 		page.zTaskApp.zTaskListCreateNewBtn(taskList);
 		obj.zTaskFolder.zExists(taskList);
 		page.zTaskApp.zTaskListDelete(taskList);
@@ -90,8 +89,8 @@ public class TaskFolderTests extends CommonTest {
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
-		String orgTaskList = "orgTaskList";
-		String renamedTaskList = "renamedTaskList";
+		String orgTaskList = getLocalizedData_NoSpecialChar();
+		String renamedTaskList = getLocalizedData_NoSpecialChar();
 		page.zTaskApp.zTaskListCreateNewBtn(orgTaskList);
 		obj.zTaskFolder.zExists(orgTaskList);
 		page.zTaskApp.zTaskListRename(orgTaskList, renamedTaskList);

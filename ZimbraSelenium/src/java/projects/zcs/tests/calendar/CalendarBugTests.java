@@ -34,7 +34,7 @@ public class CalendarBugTests extends CommonTest {
 		if (test.equals("subCalendarBreaks_Bug28846")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData(1), "", getLocalizedData(3) } };
-		} else if (test.equals("setPermissionToReceiveAppt_Bug41072")
+		} else if (test.equals("setPermissionToReceiveAppt_Bug43046")
 				|| test.equals("dontReceiveAnyInvitePermission_Bug43046")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData(1), "", getLocalizedData(3) } };
