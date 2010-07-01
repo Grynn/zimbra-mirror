@@ -28,6 +28,7 @@ import framework.util.SendEmail;
 import framework.util.SkipTestClass;
 import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * Programatically runs full or debug testng suite. Reads information to
@@ -187,7 +188,7 @@ public class ExecuteTests {
 	}
 
 	public static void loadConfig() throws ConfigurationException {
-		conf = new PropertiesConfiguration(WorkingDirectory +"/conf/config.properties");
+		conf = ZimbraSeleniumProperties.getInstance().getConfigProperties();
 		locale = conf.getString("locale");
 		testoutputfolder = conf.getString("ZimbraLogRoot") + "/" + appType;
 		browser = conf.getString("browser");

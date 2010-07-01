@@ -23,6 +23,7 @@ import projects.html.PageObjects;
 import projects.html.clients.ProvZCS;
 
 import framework.core.SelNGBase;
+import framework.util.ZimbraSeleniumProperties;
 import framework.util.ZimbraUtil;
 
 import com.zimbra.common.service.ServiceException;
@@ -63,26 +64,15 @@ public class CommonTest extends SelNGBase {
 	public static String ZimbraVersion = "";
 
 	public CommonTest() {
-		try {
-			this.conf = new PropertiesConfiguration("conf/config.properties");
-			zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg",
-					new Locale(this.conf.getString("locale")));
-			zhMsg = ResourceBundle.getBundle("framework.locale.ZhMsg",
-					new Locale(this.conf.getString("locale")));
-			ajxMsg = ResourceBundle.getBundle("framework.locale.AjxMsg",
-					new Locale(this.conf.getString("locale")));
-			i18Msg = ResourceBundle.getBundle("framework.locale.I18nMsg",
-					new Locale(this.conf.getString("locale")));
-			zsMsg = ResourceBundle.getBundle("framework.locale.ZsMsg",
-					new Locale(this.conf.getString("locale")));
+		conf = ZimbraSeleniumProperties.getInstance().getConfigProperties();
+		zmMsg = (ResourceBundle) conf.getProperty("zmMsg");
+		zhMsg = (ResourceBundle) conf.getProperty("zhMsg");
+		ajxMsg = (ResourceBundle) conf.getProperty("ajxMsg");
+		i18Msg = (ResourceBundle) conf.getProperty("i18Msg");
+		zsMsg = (ResourceBundle) conf.getProperty("zsMsg");
 
-			obj = new CoreObjects();
-			page = new PageObjects();
-		} catch (ConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
+		obj = new CoreObjects();
+		page = new PageObjects();
 	}
 
 	public static void zKillBrowsers() throws Exception {
@@ -91,9 +81,9 @@ public class CommonTest extends SelNGBase {
 		SelNGBase.labelStartsWith = false;
 		SelNGBase.fieldLabelIsAnObject = false;
 		SelNGBase.actOnLabel = false;
-		CmdExec("taskkill /f /t /im iexplore.exe");
+		//CmdExec("taskkill /f /t /im iexplore.exe");
 		CmdExec("taskkill /f /t /im firefox.exe");
-		CmdExec("taskkill /f /t /im Safari.exe");
+		//CmdExec("taskkill /f /t /im Safari.exe");
 		CmdExec("taskkill /f /t /im chrome.exe");
 
 	}
@@ -200,9 +190,9 @@ public class CommonTest extends SelNGBase {
 		if (!SelNGBase.suiteName.equals("debugSuite")) {
 			ZimbraVersion = zGetZimbraVersionFromAjax();
 			SelNGBase.ZimbraVersion = ZimbraVersion;
-			CmdExec("taskkill /f /t /im iexplore.exe");
+			//CmdExec("taskkill /f /t /im iexplore.exe");
 			CmdExec("taskkill /f /t /im firefox.exe");
-			CmdExec("taskkill /f /t /im Safari.exe");
+			//CmdExec("taskkill /f /t /im Safari.exe");
 			CmdExec("taskkill /f /t /im chrome.exe");
 		}
 
