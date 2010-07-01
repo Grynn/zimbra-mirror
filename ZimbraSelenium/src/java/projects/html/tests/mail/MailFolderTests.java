@@ -2,6 +2,7 @@ package projects.html.tests.mail;
 
 import java.lang.reflect.Method;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -370,9 +371,10 @@ public class MailFolderTests extends CommonTest {
 				localize(locator.junk), localize(locator.trash) };
 		for (int i = 0; i <= sysFolders.length - 1; i++) {
 			obj.zFolder.zClick(sysFolders[i]);
-			obj.zEditField.zIsDisabled(page.zMailApp.zSystemFolderEditField);
-			if (!sysFolders[i].equals(page.zMailApp.zJunkFldr)
-					&& !sysFolders[i].equals(page.zMailApp.zTrashFldr)) {
+			Thread.sleep(2000);
+			Assert.assertTrue(selenium.isElementPresent("//*[contains(@id,'name') and contains(@disabled,'')]"));
+			if (!sysFolders[i].equals(localize(locator.junk))
+					&& !sysFolders[i].equals(localize(locator.trash))) {
 				obj.zCheckbox.zExists(page.zMailApp.zPermDelMailItemChkBox);
 				obj.zCheckbox.zExists(page.zMailApp.zDeleteAllItemsBtn);
 			}
