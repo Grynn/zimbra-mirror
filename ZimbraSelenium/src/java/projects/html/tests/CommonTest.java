@@ -45,7 +45,7 @@ public class CommonTest extends SelNGBase {
 	 * static Editor editor = new Editor(); protected static PwdField pwdField =
 	 * new PwdField(); protected static CheckBox checkbox = new CheckBox();
 	 * protected static RadioBtn radioBtn = new RadioBtn();
-	 * 
+	 *
 	 * protected static Login login = new Login(); protected static ComposeView
 	 * composeView = new ComposeView(); protected static MailApp mailApp = new
 	 * MailApp();
@@ -81,9 +81,9 @@ public class CommonTest extends SelNGBase {
 		SelNGBase.labelStartsWith = false;
 		SelNGBase.fieldLabelIsAnObject = false;
 		SelNGBase.actOnLabel = false;
-		//CmdExec("taskkill /f /t /im iexplore.exe");
+		CmdExec("taskkill /f /t /im iexplore.exe");
 		CmdExec("taskkill /f /t /im firefox.exe");
-		//CmdExec("taskkill /f /t /im Safari.exe");
+		CmdExec("taskkill /f /t /im Safari.exe");
 		CmdExec("taskkill /f /t /im chrome.exe");
 
 	}
@@ -107,7 +107,7 @@ public class CommonTest extends SelNGBase {
 
 	/**
 	 * Logs into zimbraAjax and returns zimbra-version
-	 * 
+	 *
 	 * @return Zimbra Version
 	 * @throws ServiceException
 	 */
@@ -190,9 +190,9 @@ public class CommonTest extends SelNGBase {
 		if (!SelNGBase.suiteName.equals("debugSuite")) {
 			ZimbraVersion = zGetZimbraVersionFromAjax();
 			SelNGBase.ZimbraVersion = ZimbraVersion;
-			//CmdExec("taskkill /f /t /im iexplore.exe");
+			CmdExec("taskkill /f /t /im iexplore.exe");
 			CmdExec("taskkill /f /t /im firefox.exe");
-			//CmdExec("taskkill /f /t /im Safari.exe");
+			CmdExec("taskkill /f /t /im Safari.exe");
 			CmdExec("taskkill /f /t /im chrome.exe");
 		}
 
@@ -227,13 +227,13 @@ public class CommonTest extends SelNGBase {
 		if (key.indexOf("=") > 0)
 			return key;
 
-		//some keys have . in them(represented by _dot_ in java).	
+		//some keys have . in them(represented by _dot_ in java).
 		if(key.indexOf("_dot_")>0)
 			key = key.replace("_dot_", ".");
-		
+
 		// else.. it must be a label, so localize...
 
-		
+
 		if (key.equals("ok") || key.equals("cancel"))// bug(zhmsg is different
 			// from ajxmsg)
 			return prependthis + HTMLUtil.stripHTMLTags(ajxMsg.getString(key));
@@ -270,10 +270,10 @@ public class CommonTest extends SelNGBase {
 		return loc;
 	}
 
-	//   
+	//
 	/**
 	 * Returns localized version of import toast message
-	 * 
+	 *
 	 * @param key
 	 *            localize key
 	 * @param itemType
@@ -341,7 +341,7 @@ public class CommonTest extends SelNGBase {
 	/**
 	 * Returns a 5-char length word with random-characters that are localized.
 	 * Also, the returned word is special-char or space free.
-	 * 
+	 *
 	 * @return "tesxe"
 	 */
 	public static String getLocalizedData_NoSpecialChar() {
