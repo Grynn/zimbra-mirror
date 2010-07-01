@@ -110,21 +110,21 @@ public class InstallCert extends AdminDocumentHandler {
         String subject = GenerateCSR.getSubject(subjectEl) ;
 
         String subjectAltNames = GenerateCSR.getSubjectAltNames(request) ;
-        Element keysizeEl = request.getElement (KEYSIZE) ;
-        String keysize = null ;
 
-        if (keysizeEl != null)  {
-            if (certType.equals("self")) {
-                keysize = keysizeEl.getText() ;
-                if (!(keysize.equalsIgnoreCase("1024") || keysize.equalsIgnoreCase("2048"))) {
-                    keysize = "2048";
-                }
-            }
-        } else {
-            keysize = "2048";
-        }
-        
         if (certType.equals("self")) {
+            Element keysizeEl = request.getElement (KEYSIZE) ;
+            String keysize = null ;
+
+            if (keysizeEl != null)  {
+                if (certType.equals("self")) {
+                    keysize = keysizeEl.getText() ;
+                    if (!(keysize.equalsIgnoreCase("1024") || keysize.equalsIgnoreCase("2048"))) {
+                        keysize = "2048";
+                    }
+                }
+            } else {
+                keysize = "2048";
+            }
             cmd += " -keysize " + keysize + " " ;
 
             if (subject != null && subject.length() > 0) {
