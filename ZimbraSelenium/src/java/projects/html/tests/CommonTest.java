@@ -70,7 +70,6 @@ public class CommonTest extends SelNGBase {
 		ajxMsg = (ResourceBundle) conf.getProperty("ajxMsg");
 		i18Msg = (ResourceBundle) conf.getProperty("i18Msg");
 		zsMsg = (ResourceBundle) conf.getProperty("zsMsg");
-
 		obj = new CoreObjects();
 		page = new PageObjects();
 	}
