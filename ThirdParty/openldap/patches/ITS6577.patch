@@ -179,8 +179,8 @@
  	return rc;
  }
  
---- openldap-2.4.22.3z/servers/slapd/back-bdb/dn2id.c	13 Apr 2010 20:18:12 -0000	1.171
-+++ openldap-2.4.22.3z/servers/slapd/back-bdb/dn2id.c	29 Jun 2010 23:04:16 -0000
+--- openldap-2.4.22/servers/slapd/back-bdb/dn2id.c.orig	2010-06-30 18:54:23.000000000 -0700
++++ openldap-2.4.22/servers/slapd/back-bdb/dn2id.c	2010-06-30 18:58:56.000000000 -0700
 @@ -755,7 +755,7 @@
  	DB *db = bdb->bi_dn2id->bdi_db;
  	DBT		key, data;
@@ -203,7 +203,16 @@
  	d = op->o_tmpalloc( data.size * 3, op->o_tmpmemctx );
  	d->nrdnlen[1] = nrlen & 0xff;
  	d->nrdnlen[0] = (nrlen >> 8) | 0x80;
-@@ -818,7 +824,16 @@
+@@ -803,6 +809,8 @@
+ 	if ( rc == 0 ) {
+ 		ptr = (char *) data.data + data.size - sizeof(ID);
+ 		BDB_DISK2ID( ptr, &ei->bei_id );
++		Debug( LDAP_DEBUG_TRACE, "<= hdb_dn2idq1: got id=0x%lx\n",
++			ei->bei_id, 0, 0 );
+ 		ei->bei_rdn.bv_len = data.size - sizeof(diskNode) - nrlen;
+ 		ptr = d->nrdn + nrlen + 1;
+ 		ber_str2bv( ptr, ei->bei_rdn.bv_len, 1, &ei->bei_rdn );
+@@ -818,7 +826,18 @@
  	}
  
  func_leave:
@@ -211,6 +220,8 @@
 +	if ( reader )
 +		cursor->flags |= DBC_READ_COMMITTED;
  	cursor->c_close( cursor );
++	Debug( LDAP_DEBUG_TRACE, "<= hdb_dn2idq2: got id=0x%lx\n",
++		ei->bei_id, 0, 0 );
 +	if ( reader ) {
 +		DB_LOCKREQ list;
 +		list.op = DB_LOCK_PUT_ALL;
