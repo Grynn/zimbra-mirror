@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import com.zimbra.common.net.SocketFactories;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
@@ -36,13 +35,9 @@ public class ProvZCS extends SelNGBase {
 
 	public static void setupZCSTestBed() throws ServiceException {
 		try {
-
-	        // Set up SSL
-	        // Always accept self-signed SSL certificates.
-	        SocketFactories.registerProtocols(true);
-
-	        CliUtil.toolSetup();
-
+			// Set up SSL - always accept self-signed SSL certificates.
+			SocketFactories.registerProtocols(true);
+			CliUtil.toolSetup();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -50,13 +45,17 @@ public class ProvZCS extends SelNGBase {
 		String soapuri = "https://" + config.getString("server") + ":7071"
 				+ AdminConstants.ADMIN_SERVICE_URI;
 		sp.soapSetURI(soapuri);
-		sp.soapAdminAuthenticate(config.getString("adminName"), config
-				.getString("adminPwd"));
+		if (config.getString("isAppliance").toLowerCase().equals("true")) {
+			sp.soapAdminAuthenticate(config.getString("applianceAdmin"), config
+					.getString("adminPwd"));
+		} else {
+			sp.soapAdminAuthenticate(config.getString("adminName"), config
+					.getString("adminPwd"));
+		}
 		// sp.soapZimbraAdminAuthenticate();
 		Provisioning.setInstance(sp);
 		preferences = Provisioning.getInstance();
 		createDomain(config.getString("testdomain"));
-
 	}
 
 	public static String randomizeAccntName(String username) {
@@ -64,7 +63,6 @@ public class ProvZCS extends SelNGBase {
 		String testdomain = config.getString("testdomain");
 		return config.getString("locale") + username + "_" + systimestamp + "@"
 				+ testdomain;
-
 	}
 
 	public static String getRandomAccount() throws ServiceException {
@@ -80,16 +78,34 @@ public class ProvZCS extends SelNGBase {
 		try {
 			getRandomAccount(username, new HashMap<String, Object>());
 		} catch (ServiceException e) {
+		}
+	}
 
+	public static void createResource(String username) {
+		try {
+			getRandomResource(username, new HashMap<String, Object>(), "");
+		} catch (ServiceException e) {
+		}
+	}
+
+	public static void createResource(String username, String locequip) {
+		try {
+			getRandomResource(username, new HashMap<String, Object>(), locequip);
+		} catch (ServiceException e) {
 		}
 	}
 
 	public static String getRandomAccount(String username)
 			throws ServiceException {
-
 		String accnt = randomizeAccntName(username);
 		getRandomAccount(accnt, new HashMap<String, Object>());
+		return accnt;
+	}
 
+	public static String getRandomResource(String username, String locequip)
+			throws ServiceException {
+		String accnt = randomizeAccntName(username);
+		getRandomResource(accnt, new HashMap<String, Object>(), locequip);
 		return accnt;
 	}
 
@@ -101,16 +117,41 @@ public class ProvZCS extends SelNGBase {
 		accntAttrs.put("zimbraPrefAutoAddAddressEnabled", "FALSE");
 		accntAttrs.put("zimbraPrefCalendarInitialView", "week");
 		accntAttrs.put("zimbraPrefCalendarApptReminderWarningTime", "0");
+		accntAttrs.put("zimbraPrefTimeZoneId", "Asia/Calcutta");
+		accntAttrs.put("zimbraFeatureReadReceiptsEnabled", "TRUE");
+		accntAttrs.put("zimbraPrefCalendarAlwaysShowMiniCal", "FALSE");
 		accntAttrs.put("zimbraPrefSkin", "beach");
-		
-
 		accntAttrs.put("zimbraPrefReplyIncludeOriginalText",
-				"includeBody");
+				"includeBodyAndHeaders");
 		accntAttrs.put("zimbraPrefForwardIncludeOriginalText",
-				"includeBody");
+				"includeBodyAndHeaders");
 		prov.createAccount(username, "test123", accntAttrs);
-
 		return username;
+	}
+
+	private static String getRandomResource(String resource,
+			Map<String, Object> accntAttrs, String locequip)
+			throws ServiceException {
+		locequip = locequip.toLowerCase();
+
+		Provisioning prov = Provisioning.getInstance();
+		accntAttrs.put(Provisioning.A_zimbraPrefLocale, config
+				.getString("locale"));
+		if (locequip.equals("equipment")) {
+			accntAttrs.put("zimbraCalResType", "Equipment");
+		} else {
+			accntAttrs.put("zimbraCalResType", "Location");
+		}
+		accntAttrs.put("displayName", resource);
+		prov.createCalendarResource(resource, "test123", accntAttrs);
+		return resource;
+	}
+
+	public static void addAlias(String primaryAccount, String aliasAccount)
+			throws ServiceException {
+		Account accnt = getAccount(primaryAccount);
+		Provisioning prov = Provisioning.getInstance();
+		prov.addAlias(accnt, aliasAccount);
 	}
 
 	/**
@@ -303,12 +344,12 @@ public class ProvZCS extends SelNGBase {
 			String message) throws Exception {
 
 		Provisioning prov = Provisioning.getInstance();
-		LmtpClient lmtp = new LmtpClient("localhost", prov.getLocalServer()
-				.getIntAttr(Provisioning.A_zimbraLmtpBindPort, 7025));
+		LmtpClient lmtp = new LmtpClient(config.getString("server"), prov
+				.getServer(getAccount(sender)).getIntAttr(
+						Provisioning.A_zimbraLmtpBindPort, 7025));
 		byte[] data = message.getBytes();
 		lmtp.sendMessage(new ByteArrayInputStream(data), recipients, sender,
 				"TestUtil", (long) data.length);
 		lmtp.close();
 	}
-
 }

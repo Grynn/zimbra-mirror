@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
 import com.zimbra.common.net.SocketFactories;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
@@ -36,13 +35,9 @@ public class ProvZCS extends SelNGBase {
 
 	public static void setupZCSTestBed() throws ServiceException {
 		try {
-
-	        // Set up SSL
-	        // Always accept self-signed SSL certificates.
-	        SocketFactories.registerProtocols(true);
-
-	        CliUtil.toolSetup();
-
+			// Set up SSL - always accept self-signed SSL certificates.
+			SocketFactories.registerProtocols(true);
+			CliUtil.toolSetup();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -50,8 +45,13 @@ public class ProvZCS extends SelNGBase {
 		String soapuri = "https://" + config.getString("server") + ":7071"
 				+ AdminConstants.ADMIN_SERVICE_URI;
 		sp.soapSetURI(soapuri);
-		sp.soapAdminAuthenticate(config.getString("adminName"), config
-				.getString("adminPwd"));
+		if (config.getString("isAppliance").toLowerCase().equals("true")) {
+			sp.soapAdminAuthenticate(config.getString("applianceAdmin"), config
+					.getString("adminPwd"));
+		} else {
+			sp.soapAdminAuthenticate(config.getString("adminName"), config
+					.getString("adminPwd"));
+		}
 		// sp.soapZimbraAdminAuthenticate();
 		Provisioning.setInstance(sp);
 		preferences = Provisioning.getInstance();
@@ -63,7 +63,6 @@ public class ProvZCS extends SelNGBase {
 		String testdomain = config.getString("testdomain");
 		return config.getString("locale") + username + "_" + systimestamp + "@"
 				+ testdomain;
-
 	}
 
 	public static String getRandomAccount() throws ServiceException {
@@ -79,7 +78,6 @@ public class ProvZCS extends SelNGBase {
 		try {
 			getRandomAccount(username, new HashMap<String, Object>());
 		} catch (ServiceException e) {
-
 		}
 	}
 
@@ -87,7 +85,6 @@ public class ProvZCS extends SelNGBase {
 		try {
 			getRandomResource(username, new HashMap<String, Object>(), "");
 		} catch (ServiceException e) {
-
 		}
 	}
 
@@ -95,7 +92,6 @@ public class ProvZCS extends SelNGBase {
 		try {
 			getRandomResource(username, new HashMap<String, Object>(), locequip);
 		} catch (ServiceException e) {
-
 		}
 	}
 
@@ -129,7 +125,6 @@ public class ProvZCS extends SelNGBase {
 				"includeBodyAndHeaders");
 		accntAttrs.put("zimbraPrefForwardIncludeOriginalText",
 				"includeBodyAndHeaders");
-
 		prov.createAccount(username, "test123", accntAttrs);
 		return username;
 	}
@@ -357,5 +352,4 @@ public class ProvZCS extends SelNGBase {
 				"TestUtil", (long) data.length);
 		lmtp.close();
 	}
-
 }
