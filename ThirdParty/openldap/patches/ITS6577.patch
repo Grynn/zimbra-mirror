@@ -1,11 +1,5 @@
-Index: add.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/add.c,v
-retrieving revision 1.152.2.18
-retrieving revision 1.152.2.19
-diff -u -p -r1.152.2.18 -r1.152.2.19
---- add.c	13 Apr 2010 20:23:23 -0000	1.152.2.18
-+++ add.c	1 Jul 2010 15:19:43 -0000	1.152.2.19
+--- openldap-2.4.23/servers/slapd/back-bdb/add.c	13 Apr 2010 20:23:23 -0000	1.152.2.18
++++ openldap-2.4.23/servers/slapd/back-bdb/add.c	1 Jul 2010 15:19:43 -0000	1.152.2.19
 @@ -492,7 +492,6 @@ retry:	/* transaction retry */
  return_results:
  	success = rs->sr_err;
@@ -27,14 +21,8 @@ diff -u -p -r1.152.2.18 -r1.152.2.19
 -
  	return rs->sr_err;
  }
-Index: cache.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/cache.c,v
-retrieving revision 1.120.2.37
-retrieving revision 1.120.2.38
-diff -u -p -r1.120.2.37 -r1.120.2.38
---- cache.c	15 Apr 2010 20:06:59 -0000	1.120.2.37
-+++ cache.c	1 Jul 2010 15:19:43 -0000	1.120.2.38
+--- openldap-2.4.23/servers/slapd/back-bdb/cache.c	15 Apr 2010 20:06:59 -0000	1.120.2.37
++++ openldap-2.4.23/servers/slapd/back-bdb/cache.c	1 Jul 2010 15:19:43 -0000	1.120.2.38
 @@ -442,7 +442,7 @@ bdb_cache_find_ndn(
  		ei.bei_parent = eip;
  		ei2 = (EntryInfo *)avl_find( eip->bei_kids, &ei, bdb_rdn_cmp );
@@ -88,14 +76,8 @@ diff -u -p -r1.120.2.37 -r1.120.2.38
  		bdb_cache_entryinfo_unlock( eip );
  
  		eip = ei2;
-Index: dn2id.c
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/dn2id.c,v
-retrieving revision 1.137.2.23
-retrieving revision 1.137.2.24
-diff -u -p -r1.137.2.23 -r1.137.2.24
---- dn2id.c	23 Jun 2010 15:57:26 -0000	1.137.2.23
-+++ dn2id.c	1 Jul 2010 15:19:43 -0000	1.137.2.24
+--- openldap-2.4.23/servers/slapd/back-bdb/dn2id.c	23 Jun 2010 15:57:26 -0000	1.137.2.23
++++ openldap-2.4.23/servers/slapd/back-bdb/dn2id.c	1 Jul 2010 15:19:43 -0000	1.137.2.24
 @@ -23,32 +23,6 @@
  #include "idl.h"
  #include "lutil.h"
@@ -244,14 +226,8 @@ diff -u -p -r1.137.2.23 -r1.137.2.24
  	op->o_tmpfree( d, op->o_tmpmemctx );
  	if( rc != 0 ) {
  		Debug( LDAP_DEBUG_TRACE, "<= hdb_dn2id: get failed: %s (%d)\n",
-Index: proto-bdb.h
-===================================================================
-RCS file: /repo/OpenLDAP/pkg/ldap/servers/slapd/back-bdb/proto-bdb.h,v
-retrieving revision 1.137.2.17
-retrieving revision 1.137.2.18
-diff -u -p -r1.137.2.17 -r1.137.2.18
---- proto-bdb.h	14 Apr 2010 22:59:10 -0000	1.137.2.17
-+++ proto-bdb.h	1 Jul 2010 15:19:43 -0000	1.137.2.18
+--- openldap-2.4.23/servers/slapd/back-bdb/proto-bdb.h	14 Apr 2010 22:59:10 -0000	1.137.2.17
++++ openldap-2.4.23/servers/slapd/back-bdb/proto-bdb.h	1 Jul 2010 15:19:43 -0000	1.137.2.18
 @@ -106,7 +106,7 @@ int bdb_dn2id(
  	struct berval *dn,
  	EntryInfo *ei,
