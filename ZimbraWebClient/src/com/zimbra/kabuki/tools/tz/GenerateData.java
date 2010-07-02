@@ -111,6 +111,7 @@ public class GenerateData {
 		out.println(" * convenience and should not be edited in any way.");
 		out.println(" * <p>");
 		out.println(" * Generated at "+now.getTime());
+        out.println(" * @private");
 		out.println(" */");
         out.println("AjxTimezoneData = {};");
         out.println();
