@@ -30,11 +30,22 @@ ZaApplianceSettings.license = "license";
 ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly = "zimbraAttachmentsViewInHtmlOnly";
 ZaApplianceSettings.A_serverName = "serverName";
 ZaApplianceSettings.A_server = "server";
+ZaApplianceSettings.A2_secureConnection = "secureConnection" ;
 ZaApplianceSettings.myXModel = {
 		items: [
 		    {id:ZaApplianceSettings.A_serverName, type: _STRING_, ref:ZaApplianceSettings.A_server + "/attrs/" + ZaServer.A_ServiceHostname},    
-			
-	       //config
+
+                //secure connection
+            {id:ZaApplianceSettings.A2_secureConnection, ref: ZaApplianceSettings.A2_secureConnection,
+                type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+            //need the definition for the event handling
+            { id: ZaGlobalConfig.A_zimbraMailMode, ref: "attrs/" +  ZaGlobalConfig.A_zimbraMailMode, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+            { id: ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, ref: "attrs/" +  ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+            { id: ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, ref: "attrs/" +  ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+            { id: ZaGlobalConfig.A_zimbraImapSSLServerEnabled, ref: "attrs/" +  ZaGlobalConfig.A_zimbraImapSSLServerEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+            { id: ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, ref: "attrs/" +  ZaGlobalConfig.A_zimbraPop3SSLServerEnabled, type: _ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+
+           //config
 			{id:ZaGlobalConfig.A_zimbraFileUploadMaxSize, ref:"attrs/" + ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _FILE_SIZE_, units: AjxUtil.SIZE_KILOBYTES },
 			{id:ZaGlobalConfig.A_zimbraMtaRelayHost, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaRelayHost, type:_LIST_, listItem:{ type: _HOSTNAME_OR_IP_, maxLength: 256 }},
 			{id:ZaGlobalConfig.A_zimbraAttachmentsBlocked, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsBlocked, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
@@ -42,7 +53,7 @@ ZaApplianceSettings.myXModel = {
 			{id:ZaGlobalConfig.A_zimbraMtaBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaBlockedExtension, type: _LIST_, dataType: _STRING_ },
 			{id:ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, ref:"attrs/" + ZaGlobalConfig.A_zimbraMtaCommonBlockedExtension, type: _LIST_, dataType: _STRING_ },
 			{id:ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, ref:"attrs/" + ZaGlobalConfig.A_zimbraAttachmentsViewInHtmlOnly, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES},
-			{id:ZaGlobalConfig.A_zimbraDefaultDomainName, ref:"attrs/" + ZaGlobalConfig.A_zimbraDefaultDomainName, type:_STRING_, maxLength: 256},
+            {id:ZaGlobalConfig.A_zimbraDefaultDomainName, ref:"attrs/" + ZaGlobalConfig.A_zimbraDefaultDomainName, type:_STRING_, maxLength: 256},
 	        {id:ZaGlobalConfig.A2_blocked_extension_selection, type:_LIST_},
 	        {id:ZaGlobalConfig.A2_common_extension_selection, type:_LIST_}			
 		]
@@ -120,7 +131,10 @@ ZaApplianceSettings.prototype.initFromJS = function(obj) {
 	
 	if(AjxUtil.isString(this.attrs[ZaGlobalConfig.A_zimbraSmtpHostname])) {
 		this.attrs[ZaGlobalConfig.A_zimbraSmtpHostname] = [this.attrs[ZaGlobalConfig.A_zimbraSmtpHostname]];
-	}	
+	}
+
+    
+
 	// convert available components to hidden fields for xform binding
 	var components = this.attrs[ZaGlobalConfig.A_zimbraComponentAvailable];
 	if (components) {
@@ -159,7 +173,26 @@ ZaApplianceSettings.prototype.initFromJS = function(obj) {
 		this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin] = [this.attrs[ZaGlobalConfig.A_zimbraInstalledSkin]];
 	}
 }
-	
+
+ZaApplianceSettings.prototype.isSecureConnection = function () {
+    var mailMode = this.attrs [ZaGlobalConfig.A_zimbraMailMode] ;
+    var pop3cleartxt = this.attrs [ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled] ;
+    var imapcleartxt = this.attrs [ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled] ;
+    var pop3ssl = this.attrs [ZaGlobalConfig.A_zimbraImapSSLServerEnabled] ;
+    var imapssl = this.attrs [ZaGlobalConfig.A_zimbraPop3SSLServerEnabled] ;
+
+    if ((mailMode != null && mailMode == "redirect")
+        && (pop3cleartxt != null && pop3cleartxt == "FALSE")
+        && (imapcleartxt != null && imapcleartxt == "FALSE")
+        && (pop3ssl != null && pop3ssl == "TRUE")
+        && (imapssl != null && imapssl == "TRUE" ))
+    {
+      return true ;
+    }
+
+    return false;
+}
+
 ZaApplianceSettings.modifyMethod = function (mods) {
 	var soapDoc = AjxSoapDoc.create("ModifyConfigRequest", ZaZimbraAdmin.URN, null);
 	for (var aname in mods) {

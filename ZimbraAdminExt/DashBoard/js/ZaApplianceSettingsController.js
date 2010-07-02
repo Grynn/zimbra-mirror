@@ -98,7 +98,7 @@ ZaApplianceSettingsController.setViewMethod = function (item) {
 	this._currentObject = item;	
 }
 ZaController.setViewMethods["ZaApplianceSettingsController"].push(ZaApplianceSettingsController.setViewMethod) ;
-
+                                           
 ZaApplianceSettingsController.prototype.setEnabled = 
 function(enable) {
 	this._view.setEnabled(enable);
@@ -181,7 +181,24 @@ function () {
 		} 
 	} else if (AjxUtil.isEmpty(tmpObj.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])  && !AjxUtil.isEmpty(this._currentObject.attrs[ZaGlobalConfig.A_zimbraMtaBlockedExtension])) {
 		mods[ZaGlobalConfig.A_zimbraMtaBlockedExtension] = "";
-	}		
+	}
+
+    //check the change of secure connections
+    if (tmpObj [ZaApplianceSettings.A2_secureConnection] != this._currentObject [ZaApplianceSettings.A2_secureConnection]) {
+        if (tmpObj [ZaApplianceSettings.A2_secureConnection] == "TRUE") {
+            mods [ZaGlobalConfig.A_zimbraMailMode] = "redirect" ;
+            mods [ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled] = "FALSE";
+            mods [ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled] = "FALSE";
+            mods [ZaGlobalConfig.A_zimbraImapSSLServerEnabled] = "TRUE" ;
+            mods [ZaGlobalConfig.A_zimbraPop3SSLServerEnabled] = "TRUE" ;
+        } else if (tmpObj [ZaApplianceSettings.A2_secureConnection] == "FALSE") {
+            mods [ZaGlobalConfig.A_zimbraMailMode] = "both" ;
+            mods [ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled] = "TRUE";
+            mods [ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled] = "TRUE";
+            mods [ZaGlobalConfig.A_zimbraImapSSLServerEnabled] = "TRUE" ;
+            mods [ZaGlobalConfig.A_zimbraPop3SSLServerEnabled] = "TRUE" ;
+        }
+    }
 
 	//save the model
 

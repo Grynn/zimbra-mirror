@@ -111,7 +111,13 @@ function(entry) {
 	}
 	this._containedObject[ZaApplianceSettings.license][ZaApplianceLicense.InstallStatusCode] = 0;
 	this._containedObject[ZaApplianceSettings.license][ZaApplianceLicense.InstallStatusMsg] = "";
-	if(!entry[ZaModel.currentTab])
+
+    if (entry.isSecureConnection()) {
+        entry [ZaApplianceSettings.A2_secureConnection] == "TRUE" ; //it will update the this._currentObject
+        this._containedObject [ZaApplianceSettings.A2_secureConnection] = "TRUE" ;
+    } 
+
+    if(!entry[ZaModel.currentTab])
 		this._containedObject[ZaModel.currentTab] = "1";
 	else
 		this._containedObject[ZaModel.currentTab] = entry[ZaModel.currentTab];
@@ -279,7 +285,41 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 					 		onMouseout: "ZaController.hideTooltip"
 						}
 					]
-		  		},	  						
+		  		},
+                {
+                    //TODO: add the zimbraMailMode
+                    ref: ZaApplianceSettings.A2_secureConnection, type: _CHECKBOX_ ,
+                      label: com_zimbra_dashboard.LB_secureConnection ,
+                      visibilityChecks: [
+                          [ZaItem.hasReadPermission,ZaGlobalConfig.A_zimbraMailMode],
+                          [ZaItem.hasReadPermission,ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled],
+                          [ZaItem.hasReadPermission,ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled],
+                          [ZaItem.hasReadPermission,ZaGlobalConfig.A_zimbraImapSSLServerEnabled],
+                          [ZaItem.hasReadPermission,ZaGlobalConfig.A_zimbraPop3SSLServerEnabled]
+                      ] ,
+                      enableDisableChecks: [
+                          [ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraMailMode],
+                          [ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled],
+                          [ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled],
+                          [ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraImapSSLServerEnabled],
+                          [ZaItem.hasWritePermission,ZaGlobalConfig.A_zimbraPop3SSLServerEnabled] 
+                      ] ,
+                      enableDisableChangeEventSources :[
+                          ZaGlobalConfig.A_zimbraMailMode,
+                          ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled,
+                          ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled,
+                          ZaGlobalConfig.A_zimbraImapSSLServerEnabled,
+                          ZaGlobalConfig.A_zimbraPop3SSLServerEnabled    
+                      ],
+                      visibilityChangeEventSources: [
+                          ZaGlobalConfig.A_zimbraMailMode,
+                          ZaGlobalConfig.A_zimbraPop3CleartextLoginEnabled,
+                          ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled,
+                          ZaGlobalConfig.A_zimbraImapSSLServerEnabled,
+                          ZaGlobalConfig.A_zimbraPop3SSLServerEnabled
+                      ] ,    
+                      trueValue:"TRUE", falseValue:"FALSE"
+                }
             ]
 		}
 	]};    

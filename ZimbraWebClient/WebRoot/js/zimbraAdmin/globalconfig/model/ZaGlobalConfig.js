@@ -123,6 +123,9 @@ ZaGlobalConfig.A_zimbraCOSInheritedAttr = "zimbraCOSInheritedAttr";
 ZaGlobalConfig.A_zimbraGalLdapAttrMap = "zimbraGalLdapAttrMap";
 ZaGlobalConfig.A_zimbraGalLdapFilterDef = "zimbraGalLdapFilterDef";
 
+//security
+ZaGlobalConfig.A_zimbraMailMode = "zimbraMailMode"  ;
+
 //mailproxy
 ZaGlobalConfig.A_zimbraImapProxyBindPort="zimbraImapProxyBindPort";
 ZaGlobalConfig.A_zimbraImapSSLProxyBindPort="zimbraImapSSLProxyBindPort";
