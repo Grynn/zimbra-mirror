@@ -146,7 +146,9 @@ public class GenerateData {
         printEscaped(out, timezone.id);
         out.print("\", clientId: \"");
         printEscaped(out, timezone.id);
-        out.print("\",");
+        out.print("\", score: ");
+        out.print(timezone.matchScore);
+        out.print(", ");
         if (timezone.daylight == null) {
             out.print(" standard: { offset: ");
             out.print(timezone.standard.offset);
@@ -231,6 +233,7 @@ public class GenerateData {
         private static Pattern RE_TZ_ID = Pattern.compile("^TZID:(.+)");
         private static Pattern RE_TZNAME = Pattern.compile("^TZNAME:(.+)");
         private static Pattern RE_X_ZIMBRA_TZ_PRIMARY = Pattern.compile("^X-ZIMBRA-TZ-PRIMARY:(.+)");
+        private static Pattern RE_X_ZIMBRA_TZ_MATCH_SCORE = Pattern.compile("^X-ZIMBRA-TZ-MATCH-SCORE:(\\d+)");
         private static Pattern RE_TZ_OFFSET_TO = Pattern.compile("^TZOFFSETTO:([-+]?\\d+)");
         private static Pattern RE_DT_START = Pattern.compile(
             "DTSTART:(\\d{4})(\\d{2})(\\d{2})T(\\d{2})(\\d{2})(\\d{2})[Z]?"
@@ -271,6 +274,15 @@ public class GenerateData {
                     String val = isPrimary.group(1);
                     timezone.isPrimary = "TRUE".equals(val.toUpperCase());
                     continue;
+                }
+                Matcher matchScore = RE_X_ZIMBRA_TZ_MATCH_SCORE.matcher(line);
+                if (matchScore.matches()) {
+                    try {
+                        timezone.matchScore = Integer.parseInt(matchScore.group(1), 10);
+                    }
+                    catch (NumberFormatException e) {
+                        // ignore
+                    }
                 }
                 Matcher beginStd = RE_BEGIN_STANDARD.matcher(line);
                 if (beginStd.matches()) {
@@ -390,6 +402,7 @@ public class GenerateData {
         public Onset standard = new Onset();
         public Onset daylight = null;
         public boolean isPrimary = false;
+        public int matchScore;
     }
 
     public static class Onset {

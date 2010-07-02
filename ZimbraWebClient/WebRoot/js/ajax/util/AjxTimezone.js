@@ -608,6 +608,14 @@ function(timezonePreference) {
     }
 
     if(matchingRules.length > 0) {
+        // resolve conflict, if possible
+        if (matchingRules.length > 1) {
+            matchingRules.sort(AjxTimezone.__BY_SCORE);
+            if (matchingRules[0].score != matchingRules[1].score) {
+                matchingRules.length = 1;
+            }
+        }
+        // mark if conflict and return best guess
         AjxTimezone.TIMEZONE_CONFLICT = (matchingRules.length > 1);  
         return matchingRules[0];        
     }
@@ -623,6 +631,10 @@ function(timezonePreference) {
 
     // generate default rule
     return AjxTimezone._generateDefaultRule();
+};
+
+AjxTimezone.__BY_SCORE = function(a, b) {
+    return b.score - a.score;
 };
 
 // Thanks to Jiho for this new, improved logic for generating the timezone rule.

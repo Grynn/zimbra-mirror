@@ -1,240 +1,254 @@
 /**
- * DO NOT EDIT! This file is generated at build-time.
+ * DO NOT EDIT! This file is generated.
  * <p>
  * Any copy of this file checked into source control is merely for
  * convenience and should not be edited in any way.
  * <p>
- * Generated at Fri Mar 07 16:44:19 PST 2008
+ * Generated at Sun Sep 25 14:19:30 PDT 2011
+ * @private
  */
 AjxTimezoneData = {};
 
-AjxTimezoneData.TRANSITION_YEAR = 2008;
+AjxTimezoneData.TRANSITION_YEAR = 2011;
 
 AjxTimezoneData.TIMEZONE_RULES = [
-	{ serverId: "(GMT-12.00) International Date Line West", clientId: "Etc/GMT+12", standard: { offset: -720 } },
-	{ serverId: "(GMT-11.00) Midway Island / Samoa", clientId: "Pacific/Midway", standard: { offset: -660 } },
-	{ serverId: "(GMT-10.00) Hawaii", clientId: "US/Hawaii", standard: { offset: -600 } },
-	{ serverId: "(GMT-09.00) Alaska", clientId: "US/Alaska",
-	  standard: { offset: -540, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 11, 2 ] },
-	  daylight: { offset: -480, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 9 ] }
+	{ serverId: "Etc/GMT+12", clientId: "Etc/GMT+12", score: 100,  standard: { offset: -720, tzname: "GMT+12" } },
+	{ serverId: "Pacific/Midway", clientId: "Pacific/Midway", score: 100,  standard: { offset: -660, tzname: "SST" } },
+	{ serverId: "Pacific/Honolulu", clientId: "Pacific/Honolulu", score: 200,  standard: { offset: -600, tzname: "HST" } },
+	{ serverId: "America/Anchorage", clientId: "America/Anchorage", score: 200, 
+	  standard: { offset: -540, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 11, 6 ], tzname: "AKST" },
+	  daylight: { offset: -480, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 13 ], tzname: "AKDT" }
 	},
-	{ serverId: "(GMT-08.00) Pacific Time (US & Canada)", clientId: "US/Pacific",
-	  standard: { offset: -480, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 11, 2 ] },
-	  daylight: { offset: -420, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 9 ] }
+	{ serverId: "America/Los_Angeles", clientId: "America/Los_Angeles", score: 200, 
+	  standard: { offset: -480, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 11, 6 ], tzname: "PST" },
+	  daylight: { offset: -420, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 13 ], tzname: "PDT" }
 	},
-	{ serverId: "(GMT-08.00) Tijuana / Baja California", clientId: "America/Tijuana",
-	  standard: { offset: -480, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: -420, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 4, 6 ] }
+	{ serverId: "America/Tijuana", clientId: "America/Tijuana", score: 100, 
+	  standard: { offset: -480, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "PST" },
+	  daylight: { offset: -420, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 4, 3 ], tzname: "PDT" }
 	},
-	{ serverId: "(GMT-07.00) Arizona", clientId: "US/Arizona", standard: { offset: -420 } },
-	{ serverId: "(GMT-07.00) Chihuahua / La Paz / Mazatlan - New", clientId: "America/Chihuahua",
-	  standard: { offset: -420, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: -360, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 4, 6 ] }
+	{ serverId: "America/Chihuahua", clientId: "America/Chihuahua", score: 100, 
+	  standard: { offset: -420, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "MST" },
+	  daylight: { offset: -360, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 4, 3 ], tzname: "MDT" }
 	},
-	{ serverId: "(GMT-07.00) Chihuahua / La Paz / Mazatlan - Old", clientId: "America/Chihuahua",
-	  standard: { offset: -420, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: -360, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 4, 6 ] }
+	{ serverId: "America/Denver", clientId: "America/Denver", score: 200, 
+	  standard: { offset: -420, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 11, 6 ], tzname: "MST" },
+	  daylight: { offset: -360, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 13 ], tzname: "MDT" }
 	},
-	{ serverId: "(GMT-07.00) Mountain Time (US & Canada)", clientId: "US/Mountain",
-	  standard: { offset: -420, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 11, 2 ] },
-	  daylight: { offset: -360, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 9 ] }
+	{ serverId: "America/Phoenix", clientId: "America/Phoenix", score: 200,  standard: { offset: -420, tzname: "MST" } },
+	{ serverId: "America/Chicago", clientId: "America/Chicago", score: 200, 
+	  standard: { offset: -360, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 11, 6 ], tzname: "CST" },
+	  daylight: { offset: -300, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 13 ], tzname: "CDT" }
 	},
-	{ serverId: "(GMT-06.00) Central America", clientId: "America/Guatemala", standard: { offset: -360 } },
-	{ serverId: "(GMT-06.00) Central Time (US & Canada)", clientId: "US/Central",
-	  standard: { offset: -360, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 11, 2 ] },
-	  daylight: { offset: -300, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 9 ] }
+	{ serverId: "America/Guatemala", clientId: "America/Guatemala", score: 100,  standard: { offset: -360 } },
+	{ serverId: "America/Mexico_City", clientId: "America/Mexico_City", score: 100, 
+	  standard: { offset: -360, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "CST" },
+	  daylight: { offset: -300, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 4, 3 ], tzname: "CDT" }
 	},
-	{ serverId: "(GMT-06.00) Guadalajara / Mexico City / Monterrey - New", clientId: "America/Mexico_City",
-	  standard: { offset: -360, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: -300, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 4, 6 ] }
+	{ serverId: "America/Regina", clientId: "America/Regina", score: 200,  standard: { offset: -360, tzname: "CST" } },
+	{ serverId: "America/Bogota", clientId: "America/Bogota", score: 100,  standard: { offset: -300 } },
+	{ serverId: "America/Indiana/Indianapolis", clientId: "America/Indiana/Indianapolis", score: 100, 
+	  standard: { offset: -300, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 11, 6 ], tzname: "EST" },
+	  daylight: { offset: -240, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 13 ], tzname: "EDT" }
 	},
-	{ serverId: "(GMT-06.00) Guadalajara / Mexico City / Monterrey - Old", clientId: "America/Mexico_City",
-	  standard: { offset: -360, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: -300, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 4, 6 ] }
+	{ serverId: "America/New_York", clientId: "America/New_York", score: 200, 
+	  standard: { offset: -300, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 11, 6 ], tzname: "EST" },
+	  daylight: { offset: -240, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 13 ], tzname: "EDT" }
 	},
-	{ serverId: "(GMT-06.00) Saskatchewan", clientId: "Canada/Saskatchewan", standard: { offset: -360 } },
-	{ serverId: "(GMT-05.00) Bogota / Lima / Quito / Rio Branco", clientId: "America/Bogota", standard: { offset: -300 } },
-	{ serverId: "(GMT-05.00) Eastern Time (US & Canada)", clientId: "US/Eastern",
-	  standard: { offset: -300, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 11, 2 ] },
-	  daylight: { offset: -240, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 9 ] }
+	{ serverId: "America/Caracas", clientId: "America/Caracas", score: 100,  standard: { offset: -270, tzname: "VET" } },
+	{ serverId: "America/Asuncion", clientId: "America/Asuncion", score: 100, 
+	  standard: { offset: -240, mon: 4, week: 2, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 4, 10 ], tzname: "PYT" },
+	  daylight: { offset: -180, mon: 10, week: 1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 10, 2 ], tzname: "PYST" }
 	},
-	{ serverId: "(GMT-05.00) Indiana (East)", clientId: "US/East-Indiana", standard: { offset: -300 } },
-	{ serverId: "(GMT-04.00) Atlantic Time (Canada)", clientId: "Canada/Eastern",
-	  standard: { offset: -240, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 11, 2 ] },
-	  daylight: { offset: -180, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 9 ] }
+	{ serverId: "America/Cuiaba", clientId: "America/Cuiaba", score: 100, 
+	  standard: { offset: -240, mon: 2, week: 3, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 2, 20 ], tzname: "AMT" },
+	  daylight: { offset: -180, mon: 10, week: 3, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 10, 16 ], tzname: "AMST" }
 	},
-	{ serverId: "(GMT-04.00) Caracas / La Paz", clientId: "America/Caracas", standard: { offset: -240 } },
-	{ serverId: "(GMT-04.00) Manaus", clientId: "America/Manaus",
-	  standard: { offset: -240, mon: 2, week: -1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2008, 2, 24 ] },
-	  daylight: { offset: -180, mon: 11, week: 1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2008, 11, 2 ] }
+	{ serverId: "America/Guyana", clientId: "America/Guyana", score: 100,  standard: { offset: -240, tzname: "GYT" } },
+	{ serverId: "America/Halifax", clientId: "America/Halifax", score: 100, 
+	  standard: { offset: -240, mon: 11, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 11, 6 ], tzname: "AST" },
+	  daylight: { offset: -180, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 13 ], tzname: "ADT" }
 	},
-	{ serverId: "(GMT-04.00) Santiago", clientId: "America/Santiago",
-	  standard: { offset: -240, mon: 3, week: 2, wkday: 7, hour: 23, min: 59, sec: 59, trans: [ 2008, 3, 8 ] },
-	  daylight: { offset: -180, mon: 10, week: 2, wkday: 7, hour: 23, min: 59, sec: 59, trans: [ 2008, 10, 11 ] }
+	{ serverId: "America/Santiago", clientId: "America/Santiago", score: 100, 
+	  standard: { offset: -240, mon: 4, week: 1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 4, 3 ], tzname: "CLT" },
+	  daylight: { offset: -180, mon: 10, week: 2, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 10, 9 ], tzname: "CLST" }
 	},
-	{ serverId: "(GMT-03.30) Newfoundland", clientId: "Canada/Newfoundland",
-	  standard: { offset: -210, mon: 11, week: 1, wkday: 1, hour: 0, min: 1, sec: 0, trans: [ 2008, 11, 2 ] },
-	  daylight: { offset: -150, mon: 3, week: 2, wkday: 1, hour: 0, min: 1, sec: 0, trans: [ 2008, 3, 9 ] }
+	{ serverId: "America/St_Johns", clientId: "America/St_Johns", score: 100, 
+	  standard: { offset: -210, mon: 11, week: 1, wkday: 1, hour: 0, min: 1, sec: 0, trans: [ 2011, 11, 6 ], tzname: "NST" },
+	  daylight: { offset: -150, mon: 3, week: 2, wkday: 1, hour: 0, min: 1, sec: 0, trans: [ 2011, 3, 13 ], tzname: "NDT" }
 	},
-	{ serverId: "(GMT-03.00) Brasilia", clientId: "Brazil/East",
-	  standard: { offset: -180, mon: 2, week: -1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2008, 2, 24 ] },
-	  daylight: { offset: -120, mon: 11, week: 1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2008, 11, 2 ] }
+	{ serverId: "America/Argentina/Buenos_Aires", clientId: "America/Argentina/Buenos_Aires", score: 100,  standard: { offset: -180 } },
+	{ serverId: "America/Cayenne", clientId: "America/Cayenne", score: 100,  standard: { offset: -180, tzname: "GFT" } },
+	{ serverId: "America/Godthab", clientId: "America/Godthab", score: 100, 
+	  standard: { offset: -180, mon: 10, week: -1, wkday: 1, hour: 1, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "WGT" },
+	  daylight: { offset: -120, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "WGST" }
 	},
-	{ serverId: "(GMT-03.00) Buenos Aires / Georgetown", clientId: "America/Buenos_Aires", standard: { offset: -180 } },
-	{ serverId: "(GMT-03.00) Greenland", clientId: "America/Godthab",
-	  standard: { offset: -180, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: -120, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 4, 6 ] }
+	{ serverId: "America/Montevideo", clientId: "America/Montevideo", score: 100, 
+	  standard: { offset: -180, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 13 ], tzname: "UYT" },
+	  daylight: { offset: -120, mon: 10, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 10, 2 ], tzname: "UYST" }
 	},
-	{ serverId: "(GMT-03.00) Montevideo", clientId: "America/Montevideo",
-	  standard: { offset: -180, mon: 3, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 9 ] },
-	  daylight: { offset: -120, mon: 10, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 5 ] }
+	{ serverId: "America/Sao_Paulo", clientId: "America/Sao_Paulo", score: 100, 
+	  standard: { offset: -180, mon: 2, week: 3, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 2, 20 ], tzname: "BRT" },
+	  daylight: { offset: -120, mon: 10, week: 3, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 10, 16 ], tzname: "BRST" }
 	},
-	{ serverId: "(GMT-02.00) Mid-Atlantic", clientId: "Atlantic/South_Georgia",
-	  standard: { offset: -120, mon: 9, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 9, 28 ] },
-	  daylight: { offset: -60, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Atlantic/South_Georgia", clientId: "Atlantic/South_Georgia", score: 100,  standard: { offset: -120, tzname: "GST" } },
+	{ serverId: "Atlantic/Azores", clientId: "Atlantic/Azores", score: 100, 
+	  standard: { offset: -60, mon: 10, week: -1, wkday: 1, hour: 1, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "AZOT" },
+	  daylight: { offset: 0, mon: 3, week: -1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "AZOST" }
 	},
-	{ serverId: "(GMT-01.00) Azores", clientId: "Atlantic/Azores",
-	  standard: { offset: -60, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 0, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Atlantic/Cape_Verde", clientId: "Atlantic/Cape_Verde", score: 100,  standard: { offset: -60, tzname: "CVT" } },
+	{ serverId: "Africa/Casablanca", clientId: "Africa/Casablanca", score: 100, 
+	  standard: { offset: 0, mon: 8, week: 2, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 8, 14 ], tzname: "WET" },
+	  daylight: { offset: 60, mon: 5, week: 1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 5, 1 ], tzname: "WEST" }
 	},
-	{ serverId: "(GMT-01.00) Cape Verde Is.", clientId: "Atlantic/Cape_Verde", standard: { offset: -60 } },
-	{ serverId: "(GMT) Casablanca / Monrovia / Reykjavik", clientId: "Africa/Casablanca", standard: { offset: 0 } },
-	{ serverId: "(GMT) Greenwich Mean Time - Dublin / Edinburgh / Lisbon / London", clientId: "Europe/London",
-	  standard: { offset: 0, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 60, mon: 3, week: -1, wkday: 1, hour: 1, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Africa/Monrovia", clientId: "Africa/Monrovia", score: 100,  standard: { offset: 0, tzname: "GMT" } },
+	{ serverId: "Europe/London", clientId: "Europe/London", score: 100, 
+	  standard: { offset: 0, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "GMT/BST" },
+	  daylight: { offset: 60, mon: 3, week: -1, wkday: 1, hour: 1, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "GMT/BST" }
 	},
-	{ serverId: "(GMT+01.00) Amsterdam / Berlin / Bern / Rome / Stockholm / Vienna", clientId: "Europe/Berlin",
-	  standard: { offset: 60, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 120, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "UTC", clientId: "UTC", score: 100,  standard: { offset: 0, tzname: "UTC" } },
+	{ serverId: "Africa/Algiers", clientId: "Africa/Algiers", score: 100,  standard: { offset: 60, tzname: "CET" } },
+	{ serverId: "Africa/Windhoek", clientId: "Africa/Windhoek", score: 100, 
+	  standard: { offset: 60, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 4, 3 ], tzname: "WAT" },
+	  daylight: { offset: 120, mon: 9, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 9, 4 ], tzname: "WAST" }
 	},
-	{ serverId: "(GMT+01.00) Belgrade / Bratislava / Budapest / Ljubljana / Prague", clientId: "Europe/Belgrade",
-	  standard: { offset: 60, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 120, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Europe/Belgrade", clientId: "Europe/Belgrade", score: 100, 
+	  standard: { offset: 60, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "CET" },
+	  daylight: { offset: 120, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "CEST" }
 	},
-	{ serverId: "(GMT+01.00) Brussels / Copenhagen / Madrid / Paris", clientId: "Europe/Brussels",
-	  standard: { offset: 60, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 120, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Europe/Berlin", clientId: "Europe/Berlin", score: 200, 
+	  standard: { offset: 60, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "CET" },
+	  daylight: { offset: 120, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "CEST" }
 	},
-	{ serverId: "(GMT+01.00) Sarajevo / Skopje / Warsaw / Zagreb", clientId: "Europe/Warsaw",
-	  standard: { offset: 60, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 120, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Europe/Brussels", clientId: "Europe/Brussels", score: 100, 
+	  standard: { offset: 60, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "CET" },
+	  daylight: { offset: 120, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "CEST" }
 	},
-	{ serverId: "(GMT+01.00) West Central Africa", clientId: "Africa/Algiers", standard: { offset: 60 } },
-	{ serverId: "(GMT+02.00) Amman", clientId: "Asia/Amman",
-	  standard: { offset: 120, mon: 9, week: -1, wkday: 6, hour: 1, min: 0, sec: 0, trans: [ 2008, 9, 26 ] },
-	  daylight: { offset: 180, mon: 3, week: -1, wkday: 5, hour: 0, min: 0, sec: 0, trans: [ 2008, 3, 27 ] }
+	{ serverId: "Europe/Warsaw", clientId: "Europe/Warsaw", score: 100, 
+	  standard: { offset: 60, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "CET" },
+	  daylight: { offset: 120, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "CEST" }
 	},
-	{ serverId: "(GMT+02.00) Athens / Bucharest / Istanbul", clientId: "Europe/Athens",
-	  standard: { offset: 120, mon: 10, week: -1, wkday: 1, hour: 4, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 180, mon: 3, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Africa/Cairo", clientId: "Africa/Cairo", score: 100, 
+	  standard: { offset: 120, mon: 9, week: -1, wkday: 5, hour: 0, min: 0, sec: 0, trans: [ 2011, 9, 29 ], tzname: "EET" },
+	  daylight: { offset: 180, mon: 4, week: -1, wkday: 6, hour: 0, min: 0, sec: 0, trans: [ 2011, 4, 29 ], tzname: "EEST" }
 	},
-	{ serverId: "(GMT+02.00) Beirut", clientId: "Asia/Beirut",
-	  standard: { offset: 120, mon: 10, week: -1, wkday: 7, hour: 23, min: 59, sec: 59, trans: [ 2008, 10, 25 ] },
-	  daylight: { offset: 180, mon: 3, week: -1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Africa/Harare", clientId: "Africa/Harare", score: 100,  standard: { offset: 120, tzname: "CAT" } },
+	{ serverId: "Asia/Amman", clientId: "Asia/Amman", score: 100, 
+	  standard: { offset: 120, mon: 10, week: -1, wkday: 6, hour: 1, min: 0, sec: 0, trans: [ 2011, 10, 28 ], tzname: "EET" },
+	  daylight: { offset: 180, mon: 3, week: -1, wkday: 5, hour: 23, min: 59, sec: 59, trans: [ 2011, 3, 31 ], tzname: "EEST" }
 	},
-	{ serverId: "(GMT+02.00) Cairo", clientId: "Africa/Cairo",
-	  standard: { offset: 120, mon: 9, week: -1, wkday: 5, hour: 23, min: 59, sec: 59, trans: [ 2008, 9, 25 ] },
-	  daylight: { offset: 180, mon: 4, week: -1, wkday: 5, hour: 23, min: 59, sec: 59, trans: [ 2008, 4, 24 ] }
+	{ serverId: "Asia/Beirut", clientId: "Asia/Beirut", score: 100, 
+	  standard: { offset: 120, mon: 10, week: -1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "EET" },
+	  daylight: { offset: 180, mon: 3, week: -1, wkday: 1, hour: 0, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "EEST" }
 	},
-	{ serverId: "(GMT+02.00) Harare / Pretoria", clientId: "Africa/Harare", standard: { offset: 120 } },
-	{ serverId: "(GMT+02.00) Helsinki / Kyiv / Riga / Sofia / Tallinn / Vilnius", clientId: "Europe/Helsinki",
-	  standard: { offset: 120, mon: 10, week: -1, wkday: 1, hour: 4, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 180, mon: 3, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Asia/Jerusalem", clientId: "Asia/Jerusalem", score: 100, 
+	  standard: { offset: 120, mon: 9, week: 2, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 9, 11 ], tzname: "IST" },
+	  daylight: { offset: 180, mon: 3, week: -1, wkday: 6, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 25 ], tzname: "IDT" }
 	},
-	{ serverId: "(GMT+02.00) Jerusalem", clientId: "Asia/Jerusalem",
-	  standard: { offset: 120, mon: 9, week: 3, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 9, 21 ] },
-	  daylight: { offset: 180, mon: 3, week: -1, wkday: 6, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 28 ] }
+	{ serverId: "Europe/Athens", clientId: "Europe/Athens", score: 200, 
+	  standard: { offset: 120, mon: 10, week: -1, wkday: 1, hour: 4, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "EET" },
+	  daylight: { offset: 180, mon: 3, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "EEST" }
 	},
-	{ serverId: "(GMT+02.00) Minsk", clientId: "Europe/Minsk",
-	  standard: { offset: 120, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 180, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Europe/Helsinki", clientId: "Europe/Helsinki", score: 100, 
+	  standard: { offset: 120, mon: 10, week: -1, wkday: 1, hour: 4, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "EET" },
+	  daylight: { offset: 180, mon: 3, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "EEST" }
 	},
-	{ serverId: "(GMT+02.00) Windhoek", clientId: "Africa/Windhoek",
-	  standard: { offset: 120, mon: 9, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 9, 7 ] },
-	  daylight: { offset: 60, mon: 4, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 4, 6 ] }
+	{ serverId: "Europe/Minsk", clientId: "Europe/Minsk", score: 100, 
+	  standard: { offset: 120, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "EET" },
+	  daylight: { offset: 180, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "EEST" }
 	},
-	{ serverId: "(GMT+03.00) Baghdad", clientId: "Asia/Baghdad",
-	  standard: { offset: 180, mon: 10, week: 1, wkday: 1, hour: 4, min: 0, sec: 0, trans: [ 2008, 10, 5 ] },
-	  daylight: { offset: 240, mon: 4, week: 1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 4, 6 ] }
+	{ serverId: "Africa/Nairobi", clientId: "Africa/Nairobi", score: 200,  standard: { offset: 180, tzname: "EAT" } },
+	{ serverId: "Asia/Baghdad", clientId: "Asia/Baghdad", score: 100,  standard: { offset: 180 } },
+	{ serverId: "Asia/Kuwait", clientId: "Asia/Kuwait", score: 100,  standard: { offset: 180, tzname: "AST" } },
+	{ serverId: "Europe/Moscow", clientId: "Europe/Moscow", score: 100, 
+	  standard: { offset: 180, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "MSK/MSD" },
+	  daylight: { offset: 240, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "MSK/MSD" }
 	},
-	{ serverId: "(GMT+03.00) Kuwait / Riyadh", clientId: "Asia/Kuwait", standard: { offset: 180 } },
-	{ serverId: "(GMT+03.00) Moscow / St. Petersburg / Volgograd", clientId: "Europe/Moscow",
-	  standard: { offset: 180, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 240, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Asia/Tehran", clientId: "Asia/Tehran", score: 100, 
+	  standard: { offset: 210, mon: 9, week: 4, wkday: 4, hour: 0, min: 0, sec: 0, trans: [ 2011, 9, 28 ], tzname: "IRST" },
+	  daylight: { offset: 270, mon: 3, week: 4, wkday: 2, hour: 0, min: 0, sec: 0, trans: [ 2011, 3, 28 ], tzname: "IRDT" }
 	},
-	{ serverId: "(GMT+03.00) Nairobi", clientId: "Africa/Nairobi", standard: { offset: 180 } },
-	{ serverId: "(GMT+03.00) Tbilisi", clientId: "Asia/Tbilisi", standard: { offset: 180 } },
-	{ serverId: "(GMT+03.30) Tehran", clientId: "Asia/Tehran", standard: { offset: 210 } },
-	{ serverId: "(GMT+04.00) Abu Dhabi / Muscat", clientId: "Asia/Muscat", standard: { offset: 240 } },
-	{ serverId: "(GMT+04.00) Baku", clientId: "Asia/Baku",
-	  standard: { offset: 240, mon: 10, week: -1, wkday: 1, hour: 5, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 300, mon: 3, week: -1, wkday: 1, hour: 4, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Asia/Baku", clientId: "Asia/Baku", score: 100, 
+	  standard: { offset: 240, mon: 10, week: -1, wkday: 1, hour: 5, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "AZT" },
+	  daylight: { offset: 300, mon: 3, week: -1, wkday: 1, hour: 4, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "AZST" }
 	},
-	{ serverId: "(GMT+04.00) Yerevan", clientId: "Asia/Yerevan",
-	  standard: { offset: 240, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 300, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Asia/Muscat", clientId: "Asia/Muscat", score: 100,  standard: { offset: 240, tzname: "GST" } },
+	{ serverId: "Asia/Tbilisi", clientId: "Asia/Tbilisi", score: 200,  standard: { offset: 240, tzname: "GET" } },
+	{ serverId: "Asia/Yerevan", clientId: "Asia/Yerevan", score: 100, 
+	  standard: { offset: 240, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "AMT" },
+	  daylight: { offset: 300, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "AMST" }
 	},
-	{ serverId: "(GMT+04.30) Kabul", clientId: "Asia/Kabul", standard: { offset: 270 } },
-	{ serverId: "(GMT+05.00) Ekaterinburg", clientId: "Asia/Yekaterinburg",
-	  standard: { offset: 300, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 360, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Indian/Mauritius", clientId: "Indian/Mauritius", score: 100,  standard: { offset: 240 } },
+	{ serverId: "Asia/Kabul", clientId: "Asia/Kabul", score: 100,  standard: { offset: 270, tzname: "AFT" } },
+	{ serverId: "Asia/Karachi", clientId: "Asia/Karachi", score: 200,  standard: { offset: 300 } },
+	{ serverId: "Asia/Tashkent", clientId: "Asia/Tashkent", score: 100,  standard: { offset: 300, tzname: "UZT" } },
+	{ serverId: "Asia/Yekaterinburg", clientId: "Asia/Yekaterinburg", score: 100, 
+	  standard: { offset: 300, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "YEKT" },
+	  daylight: { offset: 360, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "YEKST" }
 	},
-	{ serverId: "(GMT+05.00) Islamabad / Karachi / Tashkent", clientId: "Asia/Karachi", standard: { offset: 300 } },
-	{ serverId: "(GMT+05.30) Chennai / Kolkata / Mumbai / New Delhi", clientId: "Asia/Calcutta", standard: { offset: 330 } },
-	{ serverId: "(GMT+05.30) Sri Jayawardenepura", clientId: "Asia/Colombo", standard: { offset: 330 } },
-	{ serverId: "(GMT+05.45) Kathmandu", clientId: "Asia/Katmandu", standard: { offset: 345 } },
-	{ serverId: "(GMT+06.00) Almaty / Novosibirsk", clientId: "Asia/Novosibirsk",
-	  standard: { offset: 360, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 420, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Asia/Colombo", clientId: "Asia/Colombo", score: 100,  standard: { offset: 330, tzname: "IST" } },
+	{ serverId: "Asia/Kolkata", clientId: "Asia/Kolkata", score: 200,  standard: { offset: 330, tzname: "IST" } },
+	{ serverId: "Asia/Almaty", clientId: "Asia/Almaty", score: 100,  standard: { offset: 360, tzname: "ALMT" } },
+	{ serverId: "Asia/Dhaka", clientId: "Asia/Dhaka", score: 100,  standard: { offset: 360 } },
+	{ serverId: "Asia/Novosibirsk", clientId: "Asia/Novosibirsk", score: 100, 
+	  standard: { offset: 360, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "NOVT" },
+	  daylight: { offset: 420, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "NOVST" }
 	},
-	{ serverId: "(GMT+06.00) Astana / Dhaka", clientId: "Asia/Dhaka", standard: { offset: 360 } },
-	{ serverId: "(GMT+06.30) Yangon (Rangoon)", clientId: "Asia/Rangoon", standard: { offset: 390 } },
-	{ serverId: "(GMT+07.00) Bangkok / Hanoi / Jakarta", clientId: "Asia/Bangkok", standard: { offset: 420 } },
-	{ serverId: "(GMT+07.00) Krasnoyarsk", clientId: "Asia/Krasnoyarsk",
-	  standard: { offset: 420, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 480, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Asia/Rangoon", clientId: "Asia/Rangoon", score: 100,  standard: { offset: 390, tzname: "MMT" } },
+	{ serverId: "Asia/Bangkok", clientId: "Asia/Bangkok", score: 100,  standard: { offset: 420, tzname: "ICT" } },
+	{ serverId: "Asia/Krasnoyarsk", clientId: "Asia/Krasnoyarsk", score: 100, 
+	  standard: { offset: 420, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "KRAT" },
+	  daylight: { offset: 480, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "KRAST" }
 	},
-	{ serverId: "(GMT+08.00) Beijing / Chongqing / Hong Kong / Urumqi", clientId: "Asia/Hong_Kong", standard: { offset: 480 } },
-	{ serverId: "(GMT+08.00) Irkutsk / Ulaan Bataar", clientId: "Asia/Irkutsk",
-	  standard: { offset: 480, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 540, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Asia/Hong_Kong", clientId: "Asia/Hong_Kong", score: 200,  standard: { offset: 480 } },
+	{ serverId: "Asia/Irkutsk", clientId: "Asia/Irkutsk", score: 100, 
+	  standard: { offset: 480, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "IRKT" },
+	  daylight: { offset: 540, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "IRKST" }
 	},
-	{ serverId: "(GMT+08.00) Kuala Lumpur / Singapore", clientId: "Asia/Kuala_Lumpur", standard: { offset: 480 } },
-	{ serverId: "(GMT+08.00) Perth", clientId: "Australia/Perth",
-	  standard: { offset: 480, mon: 3, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 3, 30 ] },
-	  daylight: { offset: 540, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 26 ] }
+	{ serverId: "Asia/Kuala_Lumpur", clientId: "Asia/Kuala_Lumpur", score: 100,  standard: { offset: 480, tzname: "MYT" } },
+	{ serverId: "Asia/Taipei", clientId: "Asia/Taipei", score: 100,  standard: { offset: 480 } },
+	{ serverId: "Asia/Ulaanbaatar", clientId: "Asia/Ulaanbaatar", score: 100,  standard: { offset: 480 } },
+	{ serverId: "Australia/Perth", clientId: "Australia/Perth", score: 100,  standard: { offset: 480, tzname: "WST" } },
+	{ serverId: "Asia/Seoul", clientId: "Asia/Seoul", score: 100,  standard: { offset: 540 } },
+	{ serverId: "Asia/Tokyo", clientId: "Asia/Tokyo", score: 200,  standard: { offset: 540 } },
+	{ serverId: "Asia/Yakutsk", clientId: "Asia/Yakutsk", score: 100, 
+	  standard: { offset: 540, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "YAKT" },
+	  daylight: { offset: 600, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "YAKST" }
 	},
-	{ serverId: "(GMT+08.00) Taipei", clientId: "Asia/Taipei", standard: { offset: 480 } },
-	{ serverId: "(GMT+09.00) Osaka / Sapporo / Tokyo", clientId: "Asia/Tokyo", standard: { offset: 540 } },
-	{ serverId: "(GMT+09.00) Seoul", clientId: "Asia/Seoul", standard: { offset: 540 } },
-	{ serverId: "(GMT+09.00) Yakutsk", clientId: "Asia/Yakutsk",
-	  standard: { offset: 540, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 600, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Australia/Adelaide", clientId: "Australia/Adelaide", score: 100, 
+	  standard: { offset: 570, mon: 4, week: 1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 4, 3 ], tzname: "CST" },
+	  daylight: { offset: 630, mon: 10, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 10, 2 ], tzname: "CST" }
 	},
-	{ serverId: "(GMT+09.30) Adelaide", clientId: "Australia/Adelaide",
-	  standard: { offset: 570, mon: 3, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 3, 30 ] },
-	  daylight: { offset: 630, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 26 ] }
+	{ serverId: "Australia/Darwin", clientId: "Australia/Darwin", score: 100,  standard: { offset: 570, tzname: "CST" } },
+	{ serverId: "Asia/Vladivostok", clientId: "Asia/Vladivostok", score: 100, 
+	  standard: { offset: 600, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "VLAT" },
+	  daylight: { offset: 660, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "VLAST" }
 	},
-	{ serverId: "(GMT+09.30) Darwin", clientId: "Australia/Darwin", standard: { offset: 570 } },
-	{ serverId: "(GMT+10.00) Brisbane", clientId: "Australia/Brisbane", standard: { offset: 600 } },
-	{ serverId: "(GMT+10.00) Canberra / Melbourne / Sydney", clientId: "Australia/Sydney",
-	  standard: { offset: 600, mon: 3, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 3, 30 ] },
-	  daylight: { offset: 660, mon: 10, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 26 ] }
+	{ serverId: "Australia/Brisbane", clientId: "Australia/Brisbane", score: 200,  standard: { offset: 600, tzname: "EST" } },
+	{ serverId: "Australia/Hobart", clientId: "Australia/Hobart", score: 100, 
+	  standard: { offset: 600, mon: 4, week: 1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 4, 3 ], tzname: "EST" },
+	  daylight: { offset: 660, mon: 10, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 10, 2 ], tzname: "EST" }
 	},
-	{ serverId: "(GMT+10.00) Guam / Port Moresby", clientId: "Pacific/Guam", standard: { offset: 600 } },
-	{ serverId: "(GMT+10.00) Hobart", clientId: "Australia/Hobart",
-	  standard: { offset: 600, mon: 3, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 3, 30 ] },
-	  daylight: { offset: 660, mon: 10, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 5 ] }
+	{ serverId: "Australia/Sydney", clientId: "Australia/Sydney", score: 200, 
+	  standard: { offset: 600, mon: 4, week: 1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 4, 3 ], tzname: "EST" },
+	  daylight: { offset: 660, mon: 10, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 10, 2 ], tzname: "EST" }
 	},
-	{ serverId: "(GMT+10.00) Vladivostok", clientId: "Asia/Vladivostok",
-	  standard: { offset: 600, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 10, 26 ] },
-	  daylight: { offset: 660, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 3, 30 ] }
+	{ serverId: "Pacific/Guam", clientId: "Pacific/Guam", score: 100,  standard: { offset: 600, tzname: "ChST" } },
+	{ serverId: "Asia/Magadan", clientId: "Asia/Magadan", score: 100, 
+	  standard: { offset: 660, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "MAGT" },
+	  daylight: { offset: 720, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "MAGST" }
 	},
-	{ serverId: "(GMT+11.00) Magadan / Solomon Is. / New Caledonia", clientId: "Asia/Magadan", standard: { offset: 660 } },
-	{ serverId: "(GMT+12.00) Auckland / Wellington", clientId: "Pacific/Auckland",
-	  standard: { offset: 720, mon: 3, week: 3, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2008, 3, 16 ] },
-	  daylight: { offset: 780, mon: 10, week: 1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2008, 10, 5 ] }
+	{ serverId: "Asia/Kamchatka", clientId: "Asia/Kamchatka", score: 100, 
+	  standard: { offset: 720, mon: 10, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 10, 30 ], tzname: "PETT" },
+	  daylight: { offset: 780, mon: 3, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "PETST" }
 	},
-	{ serverId: "(GMT+12.00) Fiji / Kamchatka / Marshall Is.", clientId: "Pacific/Fiji", standard: { offset: 720 } },
-	{ serverId: "(GMT+13.00) Nuku'alofa", clientId: "Pacific/Tongatapu", standard: { offset: 780 } }
+	{ serverId: "Pacific/Auckland", clientId: "Pacific/Auckland", score: 100, 
+	  standard: { offset: 720, mon: 4, week: 1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 4, 3 ], tzname: "NZST" },
+	  daylight: { offset: 780, mon: 9, week: -1, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 9, 25 ], tzname: "NZDT" }
+	},
+	{ serverId: "Pacific/Fiji", clientId: "Pacific/Fiji", score: 100, 
+	  standard: { offset: 720, mon: 3, week: -1, wkday: 1, hour: 3, min: 0, sec: 0, trans: [ 2011, 3, 27 ], tzname: "FJT" },
+	  daylight: { offset: 780, mon: 10, week: 4, wkday: 1, hour: 2, min: 0, sec: 0, trans: [ 2011, 10, 23 ], tzname: "FJST" }
+	},
+	{ serverId: "Pacific/Tongatapu", clientId: "Pacific/Tongatapu", score: 100,  standard: { offset: 780 } }
 ];
