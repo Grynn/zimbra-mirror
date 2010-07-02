@@ -142,10 +142,9 @@ function(viewId, isNewView) {
         if (viewId == ZmId.VIEW_COMPOSE || viewId.indexOf(ZmId.VIEW_COMPOSE) != -1) {
             var curView = appCtxt.getAppViewMgr().getCurrentView();
             var el = curView.getHtmlElement();
-
-            var ifrEl = el.getElementsByTagName("iframe");
+            
             this._addHandlers(el);
-            var dndTooltip = document.getElementById(el.id + '_zdnd_tooltip');
+            var dndTooltip = this.dndTooltipEl = document.getElementById(el.id + '_zdnd_tooltip');
             dndTooltip.style.display = "block";
         }
     } else if ("createEvent" in document && document.getElementById("zdnd_files") && !AjxEnv.isIE && !isWindowsSafari) {
@@ -189,7 +188,7 @@ function() {
 Com_Zimbra_DnD.prototype._addHandlers = function(el) {
     Dwt.setHandler(el,"ondragenter",this._onDragEnter);
     Dwt.setHandler(el,"ondragover",this._onDragOver);
-    Dwt.setHandler(el,"ondrop",this._onDrop);
+    Dwt.setHandler(el,"ondrop", AjxCallback.simpleClosure(this._onDrop, this));
 };
 
 Com_Zimbra_DnD.prototype._onDragEnter = function(ev) {
@@ -225,13 +224,14 @@ Com_Zimbra_DnD.prototype._onDrop = function(ev) {
         Com_Zimbra_DnD.flength = files.length;
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
-            Com_Zimbra_DnD._uploadFiles(file);
+            this._uploadFiles(file);
+            this.dndTooltipEl.innerHTML = "<img src='/img/animated/ImgSpinner.gif' width='16' height='16' border='0' style='float:left;'/>&nbsp;<div style='display:inline;'>" + ZmMsg.attachingFiles + "</div>";
         }
     }
 
 };
 
-Com_Zimbra_DnD._uploadFiles = function(file) {
+Com_Zimbra_DnD.prototype._uploadFiles = function(file) {
 
     try {
 
@@ -245,14 +245,10 @@ Com_Zimbra_DnD._uploadFiles = function(file) {
         req.setRequestHeader("Content-Disposition", 'attachment; filename="'+ file.fileName + '"');
 
         var tempThis = req;
-        req.onreadystatechange = function() {
-            Com_Zimbra_DnD._handleResponse(tempThis);
-        }
+        req.onreadystatechange = AjxCallback.simpleClosure(this._handleResponse, this, tempThis);
 
         req.send(file);
-
         delete req;
-
     } catch(exp) {
         var msgDlg = appCtxt.getMsgDialog();
         msgDlg.setMessage(ZmMsg.importErrorUpload, DwtMessageDialog.CRITICAL_STYLE);
@@ -262,7 +258,7 @@ Com_Zimbra_DnD._uploadFiles = function(file) {
 };
 
 
-Com_Zimbra_DnD._handleErrorResponse = function(respCode) {
+Com_Zimbra_DnD.prototype._handleErrorResponse = function(respCode) {
 
     var warngDlg = appCtxt.getMsgDialog();
     var style = DwtMessageDialog.CRITICAL_STYLE;
@@ -274,16 +270,16 @@ Com_Zimbra_DnD._handleErrorResponse = function(respCode) {
        var msg = AjxMessageFormat.format(ZmMsg.errorAttachment, (respCode || AjxPost.SC_NO_CONTENT));
        warngDlg.setMessage(msg, style);
     }
+    this.dndTooltipEl.innerHTML = ZmMsg.dndTooltip;
     warngDlg.popup();
-
 };
 
-Com_Zimbra_DnD._handleResponse = function(req) {
+Com_Zimbra_DnD.prototype._handleResponse = function(req) {
     if(req) {
         if(req.readyState == 4 && req.status == 200) {
             var resp = eval("["+req.responseText+"]");
 
-            Com_Zimbra_DnD._handleErrorResponse(resp[0]);
+            this._handleErrorResponse(resp[0]);
 
             if(resp.length > 2) {
                 var respObj = resp[2];
@@ -301,8 +297,10 @@ Com_Zimbra_DnD._handleResponse = function(req) {
 
                     attachment_list = Com_Zimbra_DnD.attachment_ids.join(",");
                     cc.sendMsg(attachment_list,ZmComposeController.DRAFT_TYPE_MANUAL,callback);
+                    this.dndTooltipEl.innerHTML = ZmMsg.dndTooltip;
                 }
             }
         }
     }
+    
 };
