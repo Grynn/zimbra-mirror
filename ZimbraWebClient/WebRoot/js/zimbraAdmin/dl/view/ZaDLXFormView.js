@@ -1126,6 +1126,27 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 		} else {
 			addAliasButton.enableDisableChecks = [[ZaItem.hasWritePermission, ZaAccount.A_zimbraMailAlias]];
 		}
+		
+		var editAliasButton = {type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
+				enableDisableChangeEventSources:[ZaDistributionList.A2_alias_selection_cache],
+				onActivate:"ZaDLXFormView.editAliasButtonListener.call(this);",id:"editAliasButton"
+			};
+		if(entry.id) {
+			editAliasButton.enableDisableChecks = [ZaDLXFormView.isEditAliasEnabled,[XFormItem.prototype.hasRight,ZaDistributionList.REMOVE_DL_ALIAS_RIGHT],[XFormItem.prototype.hasRight,ZaAccount.ADD_DL_ALIAS_RIGHT]];	
+		} else {
+			editAliasButton.enableDisableChecks = [ZaDLXFormView.isEditAliasEnabled,[ZaItem.hasWritePermission, ZaAccount.A_zimbraMailAlias]];
+		}
+		
+		var deleteAliasButton = {type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
+				onActivate:"ZaDLXFormView.deleteAliasButtonListener.call(this);",id:"deleteAliasButton",
+				
+				enableDisableChangeEventSources:[ZaDistributionList.A2_alias_selection_cache]
+			};
+		if(entry.id) {
+			deleteAliasButton.enableDisableChecks=[ZaDLXFormView.isDeleteAliasEnabled,[XFormItem.prototype.hasRight,ZaDistributionList.REMOVE_DL_ALIAS_RIGHT]];
+		} else {
+			deleteAliasButton.enableDisableChecks=[ZaDLXFormView.isDeleteAliasEnabled,[ZaItem.hasWritePermission, ZaAccount.A_zimbraMailAlias]];
+		}
 		var case4 = {type:_ZATABCASE_, width:"100%", numCols:1, colSizes:["auto"],caseKey:_tab4,
 		items: [
 				{type:_ZA_TOP_GROUPER_, borderCssClass:"LowPadedTopGrouperBorder",
@@ -1139,17 +1160,9 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 						{type:_GROUP_, numCols:5, width:"350px", colSizes:["100px","auto","100px","auto","100px"], 
 							cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
 							items: [
-								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Delete,width:"100px",
-									onActivate:"ZaDLXFormView.deleteAliasButtonListener.call(this);",id:"deleteAliasButton",
-									enableDisableChecks:[ZaDLXFormView.isDeleteAliasEnabled,[XFormItem.prototype.hasRight,ZaDistributionList.REMOVE_DL_ALIAS_RIGHT]],
-									enableDisableChangeEventSources:[ZaDistributionList.A2_alias_selection_cache]
-								},
+								deleteAliasButton,
 								{type:_CELLSPACER_},
-								{type:_DWT_BUTTON_, label:ZaMsg.TBB_Edit,width:"100px",
-									enableDisableChangeEventSources:[ZaDistributionList.A2_alias_selection_cache],
-									enableDisableChecks:[ZaDLXFormView.isEditAliasEnabled,[XFormItem.prototype.hasRight,ZaDistributionList.REMOVE_DL_ALIAS_RIGHT],[XFormItem.prototype.hasRight,ZaAccount.ADD_DL_ALIAS_RIGHT]],
-									onActivate:"ZaDLXFormView.editAliasButtonListener.call(this);",id:"editAliasButton"
-								},
+								editAliasButton,
 								{type:_CELLSPACER_},
 								addAliasButton
 							]
