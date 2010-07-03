@@ -913,14 +913,18 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 					align:_CENTER_,				
 					style: DwtAlert.INFORMATION
 				},
-				{ref:ZaDomain.A_zimbraVirtualHostname, type:_REPEAT_, label:null, repeatInstance:"", showAddButton:true, showRemoveButton:true, 
+				{ref:ZaDomain.A_zimbraVirtualHostname, type:_REPEAT_,
+                        label:null, repeatInstance:"", showAddButton:true,
+                        showRemoveButton:true,
 						addButtonLabel:ZaMsg.NAD_AddVirtualHost, 
 						showAddOnNextRow:true,
 						removeButtonLabel:ZaMsg.NAD_RemoveVirtualHost,
-						items: [
-							{ref:".", type:_TEXTFIELD_, label:null, onChange:ZaDomainXFormView.onFormFieldChanged}
-						]/*,
-						onRemove:ZaDomainXFormView.onRepeatRemove*/
+                      	items: [
+							{ref:".", type:_TEXTFIELD_, label:null,
+                                enableDisableChecks:[[ZaItem.hasWritePermission,ZaDomain.A_zimbraVirtualHostname]],
+								visibilityChecks:[[ZaItem.hasReadPermission,ZaDomain.A_zimbraVirtualHostname]],
+                                onChange:ZaDomainXFormView.onFormFieldChanged}
+						]
 				}
 			]
 		};
