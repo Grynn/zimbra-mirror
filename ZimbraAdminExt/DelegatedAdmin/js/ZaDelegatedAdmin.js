@@ -410,8 +410,6 @@ if (ZaTabView.XFormModifiers["ZaDLXFormView"]) {
                 label:com_zimbra_delegatedadmin.LBL_IsAdminGroup,
                 labelLocation:_LEFT_,  align:_LEFT_,
 				labelCssClass:"xform_label", cssStyle:"padding-left:0px",
-                enableDisableChecks:[],
-                visibilityChecks:[],
                 nowrap:false,labelWrap:true,
                 trueValue:"TRUE", falseValue:"FALSE"
             }  ;
