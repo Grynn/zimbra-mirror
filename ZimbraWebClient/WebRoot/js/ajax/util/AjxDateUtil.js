@@ -147,6 +147,30 @@ function(date, field, offset) {
 	return date;
 };
 
+/**
+ * checks whether given date is derived from DST shift
+ */
+AjxDateUtil.isDayShifted =
+function(date) {
+    var refDate = new Date(date.getTime());
+
+    //advance it by 1 day and reset to beginning of the day
+    refDate.setDate(refDate.getDate() +1)
+    refDate.setHours(0,0,0,0);
+
+    //if DST has no effect the advanced time should differ from given time
+    return refDate.getTime() == date.getTime();
+};
+
+/**
+ * rolls to next day. This can be used to roll to next day avoiding the daylight saving shift in time.
+ */
+AjxDateUtil.rollToNextDay =
+function(date) {
+    date.setHours(0,0,0,0);
+    date.setTime(date.getTime() + AjxDateUtil.MSEC_PER_DAY);
+};
+
 // Computes the difference between now and <dateMSec>. Returns a string describing
 // the difference
 AjxDateUtil.computeDateDelta =
