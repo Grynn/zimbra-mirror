@@ -204,7 +204,7 @@ public class ApptMultiDayLayoutTag extends ZimbraSimpleTag {
                     cell.setWidth((int)(percentPerCol*cell.getColSpan()));
                     cells.add(cell);
                     if (cell.getColSpan() > 1)
-                        colIndex += cell.getColSpan();
+                        colIndex += cell.getColSpan() - 1;
                 }
 
                 if (rowNum >= rows.size())
