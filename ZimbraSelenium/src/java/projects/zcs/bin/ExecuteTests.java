@@ -61,10 +61,9 @@ public class ExecuteTests {
 		// ---------------------------------------------------
 		testName = "Message Action";
 		cls = new ArrayList<String>();
+		cls.add("projects.zcs.tests.zcscommon.TagActionTestsForAllAppTab");
 		cls
-				.add("projects.zcs.tests.mail.messageactions.MessageRightClickMenuTests");
-		cls
-				.add("projects.zcs.tests.mail.messageactions.MultipleMessageActionTests");
+				.add("projects.zcs.tests.zcscommon.SavedSearchActionTestsForAllAppTab");
 		addTests(testName, cls);
 	}
 
@@ -618,6 +617,9 @@ public class ExecuteTests {
 		testName = "Common Features Acorss All Application Tab";
 		cls = new ArrayList<String>();
 		cls.add("projects.zcs.tests.zcscommon.NewDropdownMenuTests");
+		cls.add("projects.zcs.tests.zcscommon.TagActionTestsForAllAppTab");
+		cls
+				.add("projects.zcs.tests.zcscommon.SavedSearchActionTestsForAllAppTab");
 		addTests(testName, cls);
 	}
 
@@ -697,7 +699,8 @@ public class ExecuteTests {
 	}
 
 	public static void loadConfig() throws ConfigurationException {
-		conf = new PropertiesConfiguration(WorkingDirectory + "/conf/config.properties");
+		conf = new PropertiesConfiguration(WorkingDirectory
+				+ "/conf/config.properties");
 		locale = conf.getString("locale");
 		testoutputfolder = conf.getString("ZimbraLogRoot") + "/" + appType;
 		browser = conf.getString("browser");

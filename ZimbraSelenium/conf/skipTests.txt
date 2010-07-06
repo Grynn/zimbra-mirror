@@ -230,6 +230,8 @@ CLASS:projects.zcs.tests.addressbook.newcontact.BasicContactTests;METHOD:verifyA
 #bug 47189
 CLASS:projects.zcs.tests.calendar.newappt.ApptInviteTests;METHOD:apptAddRemoveAttendeeCheckContent;LOCALE:all;BROWSERS:na;BUGS:47189;REMARK:Updating attendees broken (doesn't send invite to newly added attendees)
 
+#bug 48696
+CLASS:projects.zcs.tests.zcscommon.TagActionTestsForAllAppTab;METHOD:createRenameDeleteTagAndVerifyInAllTab;LOCALE:all;BROWSERS:na;BUGS:48696;REMARK:Js error (appCtxt.getById(this.tagId) is undefined) while navigate Mail tab
 
 
 #------------------------HTML tests to be skipped ------------------
