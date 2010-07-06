@@ -734,6 +734,45 @@ public class CommonTest extends SelNGBase {
 		obj.zFolder.zNotExists(tagName);
 	}
 
+	public static void zCreateSavedSearchFolder(String savedSearchFolderName,
+			String searchString) throws Exception {
+		selenium.type("xpath=//input[@class='search_input']", searchString);
+		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
+		Thread.sleep(1000);
+		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");
+		obj.zEditField.zTypeInDlgByName(localize(locator.name),
+				savedSearchFolderName, localize(locator.saveSearch));
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.saveSearch));
+	}
+
+	public void zRenameSavedSearchFolder(String oldSavedSearchFolderName,
+			String newSavedSearchFolderName) throws Exception {
+		obj.zFolder.zRtClick(oldSavedSearchFolderName);
+		obj.zMenuItem.zClick(localize(locator.renameSearch));
+		obj.zEditField.zTypeInDlg(localize(locator.newName),
+				newSavedSearchFolderName);
+		obj.zButton.zClickInDlg(localize(locator.ok));
+		Thread.sleep(500);
+	}
+
+	public void zMoveSavedSearchFolderToTrash(String savedSearchFolderName)
+			throws Exception {
+		obj.zFolder.zRtClick(savedSearchFolderName);
+		obj.zMenuItem.zClick(localize(locator.del));
+		Thread.sleep(1000);
+	}
+
+	public void zPermanentlyDeleteSavedSearchFolder(String savedSearchFolderName)
+			throws Exception {
+		obj.zFolder.zRtClick(savedSearchFolderName);
+		obj.zMenuItem.zClick(localize(locator.del));
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.warningMsg));
+		Thread.sleep(1000);
+		obj.zFolder.zNotExists(savedSearchFolderName);
+	}
+
 	public static void pressKeys(String keys) throws Exception {
 		String individualKey;
 		Robot zRobot = new Robot();
