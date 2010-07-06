@@ -11,7 +11,7 @@ import projects.zcs.tests.CommonTest;
 
 @SuppressWarnings("static-access")
 public class BriefcaseApp extends CommonTest {
-	public static String zNewBriefcaseOverviewPaneIcon = "id=ztih__main_Briefcase__BRIEFCASE_headerButton";
+	public static String zNewBriefcaseOverviewPaneIcon = "id=ztih__main_Briefcase__BRIEFCASE_textCell";
 	public static String zBriefcaseFolder = "id=zti__main_Briefcase__16_textCell";
 	public static String zTrashFolder = "id=zti__main_Briefcase__3_textCell";
 	public static final String zBriefcaseAppIconBtn = "id=zb__App__Briefcase_left_icon";

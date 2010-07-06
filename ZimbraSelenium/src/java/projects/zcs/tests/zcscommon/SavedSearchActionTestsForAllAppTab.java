@@ -93,7 +93,7 @@ public class SavedSearchActionTestsForAllAppTab extends CommonTest {
 		// obj.zFolder.zClick(renameSavedSearchFolder);
 		// obj.zFolder.zExists(page.zDocumentApp.zNotebookFolder);
 
-		zMoveSavedSearchFolderToTrash(renameSavedSearchFolder);
+		zMoveFolderToTrash(renameSavedSearchFolder);
 		obj.zFolder.zNotExists(renameSavedSearchFolder);
 		zGoToApplication("Mail");
 		obj.zFolder.zClick(renameSavedSearchFolder);
@@ -107,7 +107,7 @@ public class SavedSearchActionTestsForAllAppTab extends CommonTest {
 		// obj.zFolder.zNotExists(renameSavedSearchFolder);
 
 		zGoToApplication("Mail");
-		zPermanentlyDeleteSavedSearchFolder(renameSavedSearchFolder);
+		zPermanentlyDeleteFolder(renameSavedSearchFolder);
 		obj.zFolder.zNotExists(renameSavedSearchFolder);
 		zGoToApplication("Address Book");
 		obj.zFolder.zNotExists(renameSavedSearchFolder);

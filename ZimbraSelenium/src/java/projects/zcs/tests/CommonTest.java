@@ -756,14 +756,14 @@ public class CommonTest extends SelNGBase {
 		Thread.sleep(500);
 	}
 
-	public void zMoveSavedSearchFolderToTrash(String savedSearchFolderName)
+	public void zMoveFolderToTrash(String savedSearchFolderName)
 			throws Exception {
 		obj.zFolder.zRtClick(savedSearchFolderName);
 		obj.zMenuItem.zClick(localize(locator.del));
 		Thread.sleep(1000);
 	}
 
-	public void zPermanentlyDeleteSavedSearchFolder(String savedSearchFolderName)
+	public void zPermanentlyDeleteFolder(String savedSearchFolderName)
 			throws Exception {
 		obj.zFolder.zRtClick(savedSearchFolderName);
 		obj.zMenuItem.zClick(localize(locator.del));

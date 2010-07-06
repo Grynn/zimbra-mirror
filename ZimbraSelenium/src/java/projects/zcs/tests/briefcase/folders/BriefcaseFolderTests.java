@@ -1,40 +1,43 @@
 package projects.zcs.tests.briefcase.folders;
 
 import java.lang.reflect.Method;
+import junit.framework.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
-import com.zimbra.common.service.ServiceException;
 import framework.util.RetryFailedTests;
 
 /**
  * @author Jitesh Sojitra
+ * 
  */
-
+@SuppressWarnings("static-access")
 public class BriefcaseFolderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
-	@DataProvider(name = "mailDataProvider")
-	public Object[][] createData(Method method) throws ServiceException {
+	@DataProvider(name = "briefcaseDataProvider")
+	public Object[][] createData(Method method) {
 		String test = method.getName();
-		if (test.equals("test1")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
-					"bccuser@testdomain.com", getLocalizedData(5),
-					getLocalizedData(5), "testexcelfile.xls" } };
+		if (test.equals("createDeleteBriefcaseFolder")
+				|| test.equals("renameBriefcaseFolder")
+				|| test.equals("moveBriefcaseFolder")
+				|| test.equals("tryToCreateDuplicateBriefcaseFolder")) {
+			return new Object[][] { { getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { { "" } };
 		}
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 2: SETUP
-	//--------------------------------------------------------------------------
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
-	public void zLogin() throws Exception {
+	private void zLogin() throws Exception {
 		zLoginIfRequired();
+		zGoToApplication("Briefcase");
 		isExecutionARetry = false;
 	}
 
@@ -46,14 +49,80 @@ public class BriefcaseFolderTests extends CommonTest {
 		needReset = true;
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 3: TEST-METHODS
-	//--------------------------------------------------------------------------
-	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void test1(String to, String cc, String bcc, String subject,
-			String body, String attachments) throws Exception {
+	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void createDeleteBriefcaseFolder(String briefcaseName)
+			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
+
+		page.zBriefcaseApp.zCreateNewBriefcaseFolder(briefcaseName);
+		zMoveFolderToTrash(briefcaseName);
+		zPermanentlyDeleteFolder(briefcaseName);
+		obj.zFolder.zNotExists(briefcaseName);
+
+		needReset = false;
+	}
+
+	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void renameBriefcaseFolder(String briefcaseName) throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		String newBriefcase = getLocalizedData_NoSpecialChar();
+		page.zBriefcaseApp.zCreateNewBriefcaseFolder(briefcaseName);
+		Thread.sleep(1000);
+		obj.zFolder.zRtClick(briefcaseName);
+		obj.zMenuItem.zClick(localize(locator.editProperties));
+		obj.zEditField.zTypeInDlg(localize(locator.nameLabel), newBriefcase);
+		obj.zButton.zClickInDlg(localize(locator.ok));
+		Thread.sleep(1000);
+		obj.zFolder.zExists(newBriefcase);
+		obj.zFolder.zNotExists(briefcaseName);
+
+		needReset = false;
+	}
+
+	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void moveBriefcaseFolder(String briefcaseName) throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		page.zBriefcaseApp.zCreateNewBriefcaseFolder(briefcaseName);
+		zDragAndDrop(
+				"//td[contains(@id, 'zti__main_Briefcase') and contains(text(), '"
+						+ briefcaseName + "')]",
+				page.zBriefcaseApp.zTrashFolder);
+		Assert
+				.assertTrue(selenium
+						.isElementPresent("//td[contains(@id, 'zti__main_Briefcase') and contains(text(), '"
+								+ briefcaseName + "')]"));
+
+		needReset = false;
+	}
+
+	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void tryToCreateDuplicateBriefcaseFolder(String briefcaseName)
+			throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		page.zBriefcaseApp.zCreateNewBriefcaseFolder(briefcaseName);
+		obj.zButton.zRtClick(page.zBriefcaseApp.zNewBriefcaseOverviewPaneIcon);
+		obj.zMenuItem.zClick(localize(locator.newBriefcase));
+		Thread.sleep(1000);
+		obj.zFolder.zClickInDlgByName(localize(locator.folders),
+				localize(locator.createNewBriefcaseItem));
+		obj.zEditField.zTypeInDlgByName(localize(locator.name), briefcaseName,
+				localize(locator.createNewBriefcaseItem));
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.createNewBriefcaseItem));
+		assertReport(localize(locator.errorAlreadyExists, briefcaseName, ""),
+				obj.zDialog.zGetMessage(localize(locator.criticalMsg)),
+				"Verifying dialog message");
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.criticalMsg));
+		obj.zButton.zClickInDlgByName(localize(locator.cancel),
+				localize(locator.createNewBriefcaseItem));
 
 		needReset = false;
 	}
@@ -61,7 +130,6 @@ public class BriefcaseFolderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
 		isExecutionARetry = false;
 		zLogin();
