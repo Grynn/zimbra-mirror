@@ -50,32 +50,36 @@ function (v){
 ZaUtil.findValueInObjArrByPropertyName =
 function (arr, value, property){
 	if (!property) property = "name" ; //for ZaAccountMemberOfListView 
-	   
-	for(var i=0; i<arr.length; i++) {
-		if (arr[i][property] == value){
-			return i ;
-		}
-	}	
+	if (arr != null) {
+        for(var i=0; i<arr.length; i++) {
+            if (arr[i][property] == value){
+                return i ;
+            }
+        }
+    }
 	return -1;
 }
 
 ZaUtil.getListItemLabel = function (arr, value)  {
-   for(var i=0; i<arr.length; i++) {
-		if (arr[i]["value"] == value){
-			return arr[i]["label"] ;
-		}
-	}
-
+   if (arr != null) {
+       for(var i=0; i<arr.length; i++) {
+            if (arr[i]["value"] == value){
+                return arr[i]["label"] ;
+            }
+       }
+   }
     return null ;
 }
 
 ZaUtil.findValueInArray =
 function (arr, value){
-	for(var i=0; i<arr.length; i++) {
-		if (arr[i] == value){
-			return i ;
-		}
-	}	
+    if (arr != null) {
+        for(var i=0; i<arr.length; i++) {
+            if (arr[i] == value){
+                return i ;
+            }
+        }	
+    }
 	return -1;
 }
 
