@@ -6,6 +6,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.DocumentApp;
 import framework.util.RetryFailedTests;
 
 /**
@@ -22,9 +23,10 @@ public class DocumentFolderTests extends CommonTest {
 	@DataProvider(name = "DocumentDataProvider")
 	public Object[][] createData(Method method) {
 		String test = method.getName();
-		if (test.equals("createDeleteNotebookFolder")) {
-			return new Object[][] { { "noteBookName"
-					+ getLocalizedData_NoSpecialChar() } };
+		if (test.equals("createDeleteNotebookFolder")
+				|| test.equals("renameNotebookFolder")
+				|| test.equals("tryToCreateDuplicateNotebookFolder")) {
+			return new Object[][] { { getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { { "" } };
 		}
@@ -52,14 +54,53 @@ public class DocumentFolderTests extends CommonTest {
 	 * Test to delete Notebook folder using right click delete menu and verify
 	 */
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void createDeleteNotebookFolder(String newNotebookName)
+	public void createDeleteNotebookFolder(String notebookName)
 			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zDocumentCompose.zCreateNewNotebook(newNotebookName, "", "");
-		page.zDocumentApp.zDeleteNotebookFolder(newNotebookName);
-		obj.zFolder.zNotExists(newNotebookName);
+		page.zDocumentCompose.zCreateNewNotebook(notebookName, "", "");
+		page.zDocumentApp.zDeleteNotebookFolder(notebookName);
+		obj.zFolder.zNotExists(notebookName);
+
+		needReset = false;
+	}
+
+	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void renameNotebookFolder(String notebookName) throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		String newNotebookName = getLocalizedData_NoSpecialChar();
+		page.zDocumentCompose.zCreateNewNotebook(notebookName, "", "");
+		Thread.sleep(1000);
+		obj.zFolder.zRtClick(notebookName);
+		obj.zMenuItem.zClick(localize(locator.editProperties));
+		obj.zEditField.zTypeInDlg(localize(locator.nameLabel), newNotebookName);
+		obj.zButton.zClickInDlg(localize(locator.ok));
+		Thread.sleep(1000);
+		obj.zFolder.zExists(newNotebookName);
+		obj.zFolder.zNotExists(notebookName);
+
+		needReset = false;
+	}
+
+	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void tryToCreateDuplicateNotebookFolder(String notebookName)
+			throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		page.zDocumentCompose.zCreateNewNotebook(notebookName, "", "");
+		Thread.sleep(1000);
+		obj.zButton
+				.zRtClick(replaceUserNameInStaticId(DocumentApp.zNewNotebookOverviewPaneIcon));
+		obj.zMenuItem.zClick(localize(locator.newNotebook));
+		obj.zEditField.zTypeInDlg(localize(locator.nameLabel), notebookName);
+		obj.zButton.zClickInDlg(localize(locator.ok));
+		assertReport(localize(locator.errorAlreadyExists, notebookName, ""),
+				obj.zDialog.zGetMessage(localize(locator.criticalMsg)),
+				"Verifying dialog message");
 
 		needReset = false;
 	}

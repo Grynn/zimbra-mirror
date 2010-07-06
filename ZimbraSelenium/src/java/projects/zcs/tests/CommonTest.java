@@ -773,6 +773,17 @@ public class CommonTest extends SelNGBase {
 		obj.zFolder.zNotExists(savedSearchFolderName);
 	}
 
+	public void zRenameFolder(String folderName, String newFolderName)
+			throws Exception {
+		obj.zFolder.zRtClick(folderName);
+		obj.zMenuItem.zClick(localize(locator.renameFolder));
+		obj.zEditField.zTypeInDlg(localize(locator.newName), newFolderName);
+		obj.zButton.zClickInDlg(localize(locator.ok));
+		Thread.sleep(1000);
+		obj.zFolder.zExists(newFolderName);
+		obj.zFolder.zNotExists(folderName);
+	}
+
 	public static void pressKeys(String keys) throws Exception {
 		String individualKey;
 		Robot zRobot = new Robot();
@@ -1018,19 +1029,15 @@ public class CommonTest extends SelNGBase {
 	 * customized method for DragAndDrop, in case the default Selenium
 	 * DragAndDrop doesn't work.
 	 * 
-	 * @param objectToBeDragged
-	 * @param objectToBeDroppedInto
-	 * @throws Exception
 	 * @author Girish
 	 */
-	public static void zDragAndDrop(String objectToBeDragged,
-			String objectToBeDroppedInto) throws Exception {
+	public static void zDragAndDrop(String source, String destination)
+			throws Exception {
 		Thread.sleep(2000);
-		Number x_coord1 = selenium
-				.getElementPositionLeft(objectToBeDroppedInto);
-		Number y_coord1 = selenium.getElementPositionTop(objectToBeDroppedInto);
-		Number x_coord2 = selenium.getElementPositionLeft(objectToBeDragged);
-		Number y_coord2 = selenium.getElementPositionTop(objectToBeDragged);
+		Number x_coord1 = selenium.getElementPositionLeft(destination);
+		Number y_coord1 = selenium.getElementPositionTop(destination);
+		Number x_coord2 = selenium.getElementPositionLeft(source);
+		Number y_coord2 = selenium.getElementPositionTop(source);
 		Number x_coord = (x_coord1.intValue() - x_coord2.intValue());
 		Number y_coord = (y_coord1.intValue() - y_coord2.intValue());
 
@@ -1043,14 +1050,14 @@ public class CommonTest extends SelNGBase {
 				.println("x,y coordinate of the objectToBeDroppedInto relative to objectToBeDragged = "
 						+ xy_coord);
 
-		selenium.mouseDown(objectToBeDragged);
+		selenium.mouseDown(source);
 		Thread.sleep(1000);
-		selenium.mouseMoveAt(objectToBeDragged, xy_coord);
+		selenium.mouseMoveAt(source, xy_coord);
 		Thread.sleep(1000 * 2);
-		selenium.mouseMove(objectToBeDroppedInto);
-		selenium.mouseOver(objectToBeDroppedInto);
+		selenium.mouseMove(destination);
+		selenium.mouseOver(destination);
 		Thread.sleep(1000);
-		selenium.mouseUp(objectToBeDroppedInto);
+		selenium.mouseUp(destination);
 		Thread.sleep(2000);
 	}
 }
