@@ -289,9 +289,10 @@ public class BeanUtils {
 
         if (text.length() <= length) {
             return text;
-        }
-        else{
-            return text.subSequence(0, length)+(ellipses ? "..." : "");    
+        }                                                          
+        else {
+            String filler = (ellipses ? "..." : "");
+            return text.subSequence(0,length/2)+filler+text.subSequence((text.length() - length/2 - filler.length()),text.length()) ;
         }
     }
 
