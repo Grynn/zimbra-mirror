@@ -458,7 +458,7 @@ function(ev) {
 		newDL.rights[ZaDistributionList.RENAME_DL_RIGHT]=true;
 		newDL.rights[ZaDistributionList.REMOVE_DL_MEMBER_RIGHT]=true;
 		newDL.rights[ZaDistributionList.ADD_DL_MEMBER_RIGHT]=true;
-		ZaApp.getInstance().getDistributionListController().show(newDL);
+		ZaApp.getInstance().getDistributionListController().show(newDL,true,true);
 	} catch (ex) {
 		this._handleException(ex, "ZaAccountListController.prototype._newDistributionListListener", null, false);
 	}

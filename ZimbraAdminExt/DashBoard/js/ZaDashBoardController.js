@@ -114,6 +114,11 @@ ZaDashBoardController.hijackMessages = function () {
 	 * Add Flush Cache button to Domain toolbar
 	 */
 	ZaController.initToolbarMethods["ZaDomainController"].push(ZaDashBoardController.initDomainToolbarMethod);
+	
+	/**
+	 * Adjust max tabs for appliance
+	 */
+	ZaAppTabGroup.TAB_LIMIT = 8;
 }
 
 
