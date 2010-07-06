@@ -136,6 +136,24 @@ function() {
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 	} else if(cStep == ZaBulkImportXWizard.STEP_LDAP_INFO) {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+
+		/**
+		 * Check that LDAP URL is not empty
+		 */
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapURL])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_URL_REQUIRED);
+			return;
+		}		
+
+		/**
+		 * Check that Bind DN is not empty
+		 */
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapBindDn])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_BIND_DN_REQUIRED);
+			return;
+		}		
+
+
 		/**
 		 * Check that passwords match
 		 */
@@ -143,6 +161,24 @@ function() {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PASSWORDS_DONT_MATCH);
 			return;
 		}		
+		
+
+		/**
+		 * Check that LDAP filter is not empty
+		 */
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapFilter])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_FILTER_REQUIRED);
+			return;
+		}
+		
+		/**
+		 * Check that LDAP search base is not empty
+		 */
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapSearchBase])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_BASE_REQUIRED);
+			return;
+		}		
+
 		var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.previewCallback,{});
 		ZaBulkProvision.generateBulkProvisionPreview(this._containedObject,callback);
 	} else if(cStep == ZaBulkImportXWizard.STEP_REVIEW) {
@@ -190,11 +226,7 @@ function() {
 ZaBulkImportXWizard.prototype.previewCallback = function(params,resp) {
 	try {
 		if(resp && resp.isException()) {
-			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkImportXWizard.prototype.previewCallback");
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
+			throw(resp.getException());
 		} else {
 			var response = resp.getResponse().Body.GenerateBulkProvisionFileFromLDAPResponse;
 			var accountCount = "0";
@@ -227,7 +259,13 @@ ZaBulkImportXWizard.prototype.previewCallback = function(params,resp) {
 			this._localXForm.setInstanceValue(skippedCount,ZaBulkProvision.A2_skippedAccountCount);
 		}
 	} catch (ex) {
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaBulkImportXWizard.prototype.previewCallback");
+		if(ex.code == ZaBulkProvision.BP_INVALID_SEARCH_FILTER) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(com_zimbra_bulkprovision.ERROR_INVALID_SEARCH_FILTER,[ex.msg]),ex);	
+		} else if(ex.code == ZaBulkProvision.BP_NAMING_EXCEPTION) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(com_zimbra_bulkprovision.BP_NAMING_EXCEPTION,[ex.msg]),ex);	
+		} else {
+			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaBulkImportXWizard.prototype.previewCallback");
+		}
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);

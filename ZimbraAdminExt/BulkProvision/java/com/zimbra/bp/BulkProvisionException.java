@@ -30,11 +30,17 @@ public class BulkProvisionException extends ServiceException {
     public static final String BP_NO_ACCOUNTS_TO_IMPORT = "bulkprovision.BP_NO_ACCOUNTS_TO_IMPORT";
     public static final String BP_IMPORT_ALREADY_RUNNING = "bulkprovision.BP_IMPORT_ALREADY_RUNNING";
     public static final String BP_IMPORT_TOO_MANY_FAILURES = "bulkprovision.BP_IMPORT_TOO_MANY_FAILURES";
+    public static final String BP_INVALID_SEARCH_FILTER = "bulkprovision.BP_INVALID_SEARCH_FILTER";
+    public static final String BP_NAMING_EXCEPTION = "bulkprovision.BP_NAMING_EXCEPTION";
 
     private BulkProvisionException(String message, String code, boolean isReceiversFault) {
         super(message, code, isReceiversFault);
     }
 
+    private BulkProvisionException(String message, String code, boolean isReceiversFault, Throwable cause) {
+        super(message, code, isReceiversFault, cause);
+    }
+    
     public static BulkProvisionException BP_TOO_MANY_ACCOUNTS (String desc) {
         return new BulkProvisionException("too many accounts: " + desc, BP_TOO_MANY_ACCOUNTS, SENDERS_FAULT);
     }
@@ -57,5 +63,13 @@ public class BulkProvisionException extends ServiceException {
     
     public static BulkProvisionException BP_IMPORT_TOO_MANY_FAILURES (int failNum) {
         return new BulkProvisionException(String.format("Bulk provisioning task encountered too many errors. Failed to import at least %d accounts",failNum), BP_IMPORT_TOO_MANY_FAILURES, SENDERS_FAULT);
+    }    
+    
+    public static BulkProvisionException BP_INVALID_SEARCH_FILTER (Throwable cause) {
+        return new BulkProvisionException(cause.getMessage(), BP_INVALID_SEARCH_FILTER, SENDERS_FAULT, cause);
+    }
+    
+    public static BulkProvisionException BP_NAMING_EXCEPTION (Throwable cause) {
+        return new BulkProvisionException(cause.getMessage(), BP_NAMING_EXCEPTION, SENDERS_FAULT, cause);
     }    
 }

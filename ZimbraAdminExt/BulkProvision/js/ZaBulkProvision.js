@@ -99,6 +99,8 @@ ZaBulkProvision.FILE_FORMAT_BULK_XML = "bulkxml";
 ZaBulkProvision.FILE_FORMAT_BULK_CSV = "csv";
 
 ZaBulkProvision.TOO_MANY_ACCOUNTS = "bulkprovision.BP_TOO_MANY_ACCOUNTS";
+ZaBulkProvision.BP_INVALID_SEARCH_FILTER = "bulkprovision.BP_INVALID_SEARCH_FILTER";
+ZaBulkProvision.BP_NAMING_EXCEPTION = "bulkprovision.BP_NAMING_EXCEPTION";
 
 ZaBulkProvision.getMyXModel = function () {
 	ZaBulkProvision.ProvActionChoices = [

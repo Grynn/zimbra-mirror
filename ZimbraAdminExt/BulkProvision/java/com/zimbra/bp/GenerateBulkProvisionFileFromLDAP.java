@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 import javax.naming.NamingException;
+import javax.naming.directory.InvalidSearchFilterException;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
@@ -391,11 +392,21 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                 }
                 response.addElement(E_fileToken).setText(fileToken);
             }
+		} catch (InvalidSearchFilterException e) {
+			throw BulkProvisionException.BP_INVALID_SEARCH_FILTER(e);
 		} catch (NamingException e) {
-			throw ServiceException.FAILURE(e.getMessage(), e) ;
+			throw BulkProvisionException.BP_NAMING_EXCEPTION(e);
 		} catch (IOException e) {
-			throw ServiceException.FAILURE(e.getMessage(), e) ;
-		} 
+			throw ServiceException.FAILURE(e.getMessage(), e);
+		} catch (ServiceException e) {
+			if(e.getCause() instanceof InvalidSearchFilterException) {
+				throw BulkProvisionException.BP_INVALID_SEARCH_FILTER(e.getCause());
+			} else if (e.getCause() instanceof NamingException) {
+				throw BulkProvisionException.BP_NAMING_EXCEPTION(e);
+			} else {
+				throw e;
+			}
+		}
 		return response;
 	}
 	
