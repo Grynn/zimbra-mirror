@@ -25,7 +25,7 @@ ZaAllGrantsViewController = function (appCtxt, container) {
 
 ZaAllGrantsViewController.prototype = new ZaXFormViewController();
 ZaAllGrantsViewController.prototype.constructor = ZaAllGrantsViewController;
-ZaAllGrantsViewController.helpURL = location.pathname + ZaUtil.HELP_URL + "TODO_View_All_Effective_Rigthts.html?locid=" + AjxEnv.DEFAULT_LOCALE;
+ZaAllGrantsViewController.helpURL = location.pathname + ZaUtil.HELP_URL + "Manage_Delegated_Admin_Grants.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
 
 ZaController.setViewMethods["ZaAllGrantsViewController"] = new Array();
 ZaController.initToolbarMethods["ZaAllGrantsViewController"] = new Array();

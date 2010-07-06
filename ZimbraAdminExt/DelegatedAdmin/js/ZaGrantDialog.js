@@ -56,6 +56,8 @@ ZaGrantDialog = function(parent,  app, title, by, isEditDialog) {
     this.granteeNameChoices = new XFormChoices([], XFormChoices.OBJECT_LIST, "name", "name");
 
     this.initForm(ZaGrant.myXModel, this.getMyXForm());
+
+    this._helpURL = location.pathname + ZaUtil.HELP_URL + "da_process/Adding_Access_Control_Entries.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
 
 ZaGrantDialog.prototype = new ZaXDialog;

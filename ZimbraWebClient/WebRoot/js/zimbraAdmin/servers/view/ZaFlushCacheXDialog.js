@@ -28,6 +28,7 @@ ZaFlushCacheXDialog = function(parent) {
 	ZaXDialog.call(this, parent,null, ZaMsg.FlushCacheDlgTitle, "480px", "380px","ZaFlushCacheXDialog");
 	this._containedObject = {};
 	this.initForm(ZaServer.volumeObjModel,this.getMyXForm());
+    this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_servers/flushing_the_server_cache.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
 
 ZaFlushCacheXDialog.prototype = new ZaXDialog;

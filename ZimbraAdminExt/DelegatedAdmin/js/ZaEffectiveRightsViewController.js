@@ -23,7 +23,7 @@ ZaXFormViewController.call(this, appCtxt, container, "ZaEffectiveRightsViewContr
 
 ZaEffectiveRightsViewController.prototype = new ZaXFormViewController();
 ZaEffectiveRightsViewController.prototype.constructor = ZaEffectiveRightsViewController;
-ZaEffectiveRightsViewController.helpURL = location.pathname + ZaUtil.HELP_URL + "TODO_View_All_Effective_Rigthts.html?locid="+AjxEnv.DEFAULT_LOCALE;
+ZaEffectiveRightsViewController.helpURL = location.pathname + ZaUtil.HELP_URL + "Viewing_Rights_Granted_to_Administrators.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 ZaController.setViewMethods["ZaEffectiveRightsViewController"] = new Array();
 ZaController.initToolbarMethods["ZaEffectiveRightsViewController"] = new Array();

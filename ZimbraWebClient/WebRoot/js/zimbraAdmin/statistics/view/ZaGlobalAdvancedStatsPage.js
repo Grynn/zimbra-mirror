@@ -46,7 +46,18 @@ ZaGlobalAdvancedStatsPage.prototype.showMe =  function(refresh) {
         ZaGlobalAdvancedStatsPage.insertChartHTML(this.getHtmlElement());
         this._chartHtmlShown = true;
 	}
+
+    var controller = ZaApp.getInstance().getCurrentController();
+    controller._helpURL = location.pathname + ZaUtil.HELP_URL + "Monitoring/Creating_Advanced_Server_Statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
+
+ZaGlobalAdvancedStatsPage.prototype.hideMe =
+function (){
+	DwtTabViewPage.prototype.hideMe.call(this);
+	var controller = ZaApp.getInstance().getCurrentController();
+    controller._helpURL = location.pathname + ZaUtil.HELP_URL + "monitoring/checking_usage_statistics.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+};
+
 
 ZaGlobalAdvancedStatsPage.getDataTipText = function (item, index, series) {
     var text = AjxMessageFormat.format(ZaMsg.NAD_AdvStatsDataTip,
