@@ -327,7 +327,7 @@ function() {
 		this._addressesTi.enableSelection(false);
 		this._addressesTi.setText(ZaMsg.OVP_addresses);
 		this._addressesTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._ADDRESSES);
-	    this._addressesTi.setSty
+
 		if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {	
 			this.accountTi = ti = new DwtTreeItem({parent:this._addressesTi,className:"AdminTreeItem"});
 			ti.setText(ZaMsg.OVP_accounts);
