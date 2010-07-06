@@ -1,6 +1,7 @@
 package projects.zcs.tests.tasks.folders;
 
 import java.lang.reflect.Method;
+import junit.framework.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -14,7 +15,9 @@ public class TaskFolderTests extends CommonTest {
 	protected Object[][] createData(Method method) {
 		String test = method.getName();
 		if (test.equals("createTaskFolder") || test.equals("deleteTaskFolder")
-				|| test.equals("renameTaskFolder")) {
+				|| test.equals("renameTaskFolder")
+				|| test.equals("moveTaskFolder")
+				|| test.equals("tryToCreateDuplicateTaskFolder")) {
 			return new Object[][] { {} };
 		} else {
 			return new Object[][] { { "" } };
@@ -25,6 +28,7 @@ public class TaskFolderTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		Thread.sleep(2000);
+		page.zTaskApp.zNavigateToTasks();
 		isExecutionARetry = false;
 	}
 
@@ -46,7 +50,6 @@ public class TaskFolderTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zTaskApp.zNavigateToTasks();
 		String taskListBtn = getLocalizedData_NoSpecialChar();
 		String taskListRtClick = getLocalizedData_NoSpecialChar();
 		page.zTaskApp.zTaskListCreateNewBtn(taskListBtn);
@@ -68,7 +71,6 @@ public class TaskFolderTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zTaskApp.zNavigateToTasks();
 		String taskList = getLocalizedData_NoSpecialChar();
 		page.zTaskApp.zTaskListCreateNewBtn(taskList);
 		obj.zTaskFolder.zExists(taskList);
@@ -88,7 +90,6 @@ public class TaskFolderTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zTaskApp.zNavigateToTasks();
 		String orgTaskList = getLocalizedData_NoSpecialChar();
 		String renamedTaskList = getLocalizedData_NoSpecialChar();
 		page.zTaskApp.zTaskListCreateNewBtn(orgTaskList);
@@ -100,9 +101,50 @@ public class TaskFolderTests extends CommonTest {
 		needReset = false;
 	}
 
-	/**
-	 * retry handler function
-	 */
+	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void moveTaskFolder() throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		String orgTaskList = getLocalizedData_NoSpecialChar();
+		page.zTaskApp.zTaskListCreateNewBtn(orgTaskList);
+		zDragAndDrop(
+				"//td[contains(@id, 'zti__main_Tasks') and contains(text(), '"
+						+ orgTaskList + "')]", page.zTaskApp.zTasksFolder);
+		Assert
+				.assertTrue(selenium
+						.isElementPresent("//td[contains(@id, 'zti__main_Tasks') and contains(text(), '"
+								+ orgTaskList + "')]"));
+
+		needReset = false;
+	}
+
+	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void tryToCreateDuplicateTaskFolder() throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		String orgTaskList = getLocalizedData_NoSpecialChar();
+		page.zTaskApp.zTaskListCreateNewBtn(orgTaskList);
+		Thread.sleep(1000);
+		obj.zButton
+				.zRtClick(replaceUserNameInStaticId(page.zTaskApp.zNewTasksOverviewPaneIcon));
+		obj.zMenuItem.zClick(localize(locator.newTaskFolder));
+		obj.zEditField.zTypeInDlgByName(localize(locator.name), orgTaskList,
+				localize(locator.createNewTaskFolder));
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.createNewTaskFolder));
+		assertReport(localize(locator.errorAlreadyExists, orgTaskList, ""),
+				obj.zDialog.zGetMessage(localize(locator.criticalMsg)),
+				"Verifying dialog message");
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.criticalMsg));
+		obj.zButton.zClickInDlgByName(localize(locator.cancel),
+				localize(locator.createNewTaskFolder));
+
+		needReset = false;
+	}
+
 	private void handleRetry() throws Exception {
 		isExecutionARetry = false;
 		zLogin();

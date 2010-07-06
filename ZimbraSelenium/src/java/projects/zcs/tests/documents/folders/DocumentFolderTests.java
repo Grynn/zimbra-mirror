@@ -101,6 +101,10 @@ public class DocumentFolderTests extends CommonTest {
 		assertReport(localize(locator.errorAlreadyExists, notebookName, ""),
 				obj.zDialog.zGetMessage(localize(locator.criticalMsg)),
 				"Verifying dialog message");
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.criticalMsg));
+		obj.zButton.zClickInDlgByName(localize(locator.cancel),
+				localize(locator.createNewNotebook));
 
 		needReset = false;
 	}
