@@ -1,6 +1,9 @@
 package projects.zcs.tests.addressbook.folders;
 
 import java.lang.reflect.Method;
+
+import junit.framework.Assert;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -9,7 +12,7 @@ import projects.zcs.tests.CommonTest;
 import framework.util.RetryFailedTests;
 
 /**
- * @written by Prashant Jaiswal
+ * @written by Prashant Jaiswal & updated by Jitesh
  * 
  */
 @SuppressWarnings("static-access")
@@ -27,6 +30,10 @@ public class AddressBookFolderTests extends CommonTest {
 		} else if (test.equals("createAndQDeleteABFolder")) {
 			return new Object[][] { { "newAB"
 					+ getLocalizedData_NoSpecialChar() } };
+		} else if (test.equals("moveABFolder")) {
+			return new Object[][] { { getLocalizedData_NoSpecialChar() } };
+		} else if (test.equals("tryToCreateDuplicateABFolder")) {
+			return new Object[][] { { getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { { "" } };
 		}
@@ -86,6 +93,50 @@ public class AddressBookFolderTests extends CommonTest {
 		page.zMailApp.zDeleteFolder(newAddBookName);
 		obj.zFolder.zClick(localize(locator.trash));
 		obj.zFolder.zExists(newAddBookName);
+
+		needReset = false;
+	}
+
+	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void moveABFolder(String newAddBookName) throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		page.zABCompose.zCreateNewAddBook(newAddBookName);
+		zDragAndDrop(
+				"//td[contains(@id, 'zti__main_Contacts') and contains(text(), '"
+						+ newAddBookName + "')]",
+				page.zABCompose.zEmailedContactsFolder);
+		Assert
+				.assertTrue(selenium
+						.isElementPresent("//div[@id='zti__main_Contacts__13']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
+								+ newAddBookName + "')]"));
+
+		needReset = false;
+	}
+
+	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void tryToCreateDuplicateABFolder(String newAddBookName)
+			throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		page.zABCompose.zCreateNewAddBook(newAddBookName);
+		obj.zButton
+				.zRtClick(replaceUserNameInStaticId(replaceUserNameInStaticId(page.zABCompose.zNewABOverviewPaneIcon)));
+		obj.zMenuItem.zClick(localize(locator.newAddrBook));
+		Thread.sleep(1000);
+		obj.zEditField.zTypeInDlgByName(localize(locator.nameLabel),
+				newAddBookName, localize(locator.createNewAddrBook));
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.createNewAddrBook));
+		assertReport(localize(locator.errorAlreadyExists, newAddBookName, ""),
+				obj.zDialog.zGetMessage(localize(locator.criticalMsg)),
+				"Verifying dialog message");
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.criticalMsg));
+		obj.zButton.zClickInDlgByName(localize(locator.cancel),
+				localize(locator.createNewAddrBook));
 
 		needReset = false;
 	}

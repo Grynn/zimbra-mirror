@@ -94,7 +94,7 @@ public class BriefcaseFolderTests extends CommonTest {
 				page.zBriefcaseApp.zTrashFolder);
 		Assert
 				.assertTrue(selenium
-						.isElementPresent("//td[contains(@id, 'zti__main_Briefcase') and contains(text(), '"
+						.isElementPresent("//div[@id='zti__main_Briefcase__3']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
 								+ briefcaseName + "')]"));
 
 		needReset = false;

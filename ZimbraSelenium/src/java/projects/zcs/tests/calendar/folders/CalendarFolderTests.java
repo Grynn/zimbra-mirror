@@ -23,7 +23,8 @@ public class CalendarFolderTests extends CommonTest {
 		String test = method.getName();
 		if (test.equals("createCalendarFolder")
 				|| test.equals("deleteCalendarFolder")
-				|| test.equals("renameCalendarFolder")) {
+				|| test.equals("renameCalendarFolder")
+				|| test.equals("tryToCreateDuplicateCalendarFolder")) {
 			return new Object[][] { {} };
 		} else {
 			return new Object[][] { { "" } };
@@ -34,6 +35,7 @@ public class CalendarFolderTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		Thread.sleep(2000);
+		page.zCalApp.zNavigateToCalendar();
 		isExecutionARetry = false;
 	}
 
@@ -53,7 +55,6 @@ public class CalendarFolderTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zCalApp.zNavigateToCalendar();
 		String calendarNameBtn = getLocalizedData_NoSpecialChar();
 		String calendarNameRtClick = getLocalizedData_NoSpecialChar();
 		page.zCalApp.zCreateNewCalendarFolder(calendarNameBtn);
@@ -72,7 +73,6 @@ public class CalendarFolderTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zCalApp.zNavigateToCalendar();
 		String deleteCalendarName = getLocalizedData_NoSpecialChar();
 		page.zCalApp.zCreateNewCalendarFolder(deleteCalendarName);
 		obj.zCalendarFolder.zExists(deleteCalendarName);
@@ -90,7 +90,6 @@ public class CalendarFolderTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zCalApp.zNavigateToCalendar();
 		String calendarName = getLocalizedData_NoSpecialChar();
 		String newCalendarName = getLocalizedData_NoSpecialChar();
 		page.zCalApp.zCreateNewCalendarFolder(calendarName);
@@ -98,6 +97,33 @@ public class CalendarFolderTests extends CommonTest {
 		page.zCalApp.zRenameCalendarFolder(calendarName, newCalendarName);
 		obj.zCalendarFolder.zNotExists(calendarName);
 		obj.zCalendarFolder.zExists(newCalendarName);
+
+		needReset = false;
+	}
+
+	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void tryToCreateDuplicateCalendarFolder() throws Exception {
+		if (isExecutionARetry)
+			handleRetry();
+
+		String calendarName = getLocalizedData_NoSpecialChar();
+		page.zCalApp.zCreateNewCalendarFolder(calendarName);
+
+		obj.zButton
+				.zRtClick(replaceUserNameInStaticId(page.zCalApp.zNewCalOverviewPaneIcon));
+		Thread.sleep(1000);
+		obj.zMenuItem.zClick(localize(locator.newCalendar));
+		obj.zEditField.zTypeInDlgByName(localize(locator.nameLabel),
+				calendarName, localize(locator.createNewCalendar));
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.createNewCalendar));
+		assertReport(localize(locator.errorAlreadyExists, calendarName, ""),
+				obj.zDialog.zGetMessage(localize(locator.criticalMsg)),
+				"Verifying dialog message");
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.criticalMsg));
+		obj.zButton.zClickInDlgByName(localize(locator.cancel),
+				localize(locator.createNewCalendar));
 
 		needReset = false;
 	}

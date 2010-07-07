@@ -113,7 +113,7 @@ public class TaskFolderTests extends CommonTest {
 						+ orgTaskList + "')]", page.zTaskApp.zTasksFolder);
 		Assert
 				.assertTrue(selenium
-						.isElementPresent("//td[contains(@id, 'zti__main_Tasks') and contains(text(), '"
+						.isElementPresent("//div[@id='zti__main_Tasks__15']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
 								+ orgTaskList + "')]"));
 
 		needReset = false;

@@ -87,11 +87,12 @@ public class MailFolderTests extends CommonTest {
 	public void createAndVerifyFolder(String folderName,
 			String renameFolderName, String errDlgName, String errMsg)
 			throws Exception {
-		// if we are retrying the test, run cleanup and re-login etc
 		if (isExecutionARetry)
 			handleRetry();
+
 		page.zMailApp.zCreateFolder(folderName);
 		obj.zFolder.zExists(folderName);
+
 		needReset = false;
 	}
 
@@ -102,9 +103,9 @@ public class MailFolderTests extends CommonTest {
 	public void renameAndVerifyFolder(String folderName,
 			String renameFolderName, String errDlgName, String errMsg)
 			throws Exception {
-		// if we are retrying the test, run cleanup and re-login etc
 		if (isExecutionARetry)
 			handleRetry();
+
 		page.zMailApp.zCreateFolder(folderName);
 		obj.zFolder.zRtClick(folderName);
 		obj.zMenuItem.zClick(localize(locator.renameFolder));
@@ -115,6 +116,7 @@ public class MailFolderTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.renameFolder) + ": " + folderName);
 		obj.zFolder.zExists(renameFolderName);
+
 		needReset = false;
 	}
 
@@ -125,11 +127,12 @@ public class MailFolderTests extends CommonTest {
 	public void deleteAndVerifyFolder(String folderName,
 			String renameFolderName, String errDlgName, String errMsg)
 			throws Exception {
-		// if we are retrying the test, run cleanup and re-login etc
 		if (isExecutionARetry)
 			handleRetry();
+
 		page.zMailApp.zCreateFolder(folderName);
 		page.zMailApp.zDeleteFolder(folderName);
+
 		needReset = false;
 	}
 
@@ -139,37 +142,17 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "FolderDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void moveAndVerifyFolder(String folderName, String renameFolderName,
 			String errDlgName, String errMsg) throws Exception {
-		// if we are retrying the test, run cleanup and re-login etc
 		if (isExecutionARetry)
 			handleRetry();
+
 		page.zMailApp.zCreateFolder(folderName);
-		page.zMailApp.zDeleteFolder(folderName);
-		obj.zFolder.zRtClick(folderName);
-		/* Lot of wait because move test continiuosly retrying here */
-		Thread.sleep(1000);
-		obj.zMenuItem.zClick(localize(locator.move));
-		Thread.sleep(2000);
-		if (config.getString("locale").equals("nl")) {
-			obj.zFolder.zClickInDlgByName(localize(locator.folders), localize(
-					locator.moveFolder, folderName, ""));
-			Thread.sleep(1000);
-			obj.zButton.zClickInDlgByName(localize(locator.ok), localize(
-					locator.moveFolder, folderName, ""));
-		} else if (config.getString("locale").equals("de")) {
-			obj.zFolder.zClickInDlgByName(localize(locator.folders),
-					localize(locator.folder));
-			Thread.sleep(1000);
-			obj.zButton.zClickInDlgByName(localize(locator.ok),
-					localize(locator.folder));
-		} else {
-			obj.zFolder.zClickInDlgByName(localize(locator.folders),
-					localize(locator.move));
-			Thread.sleep(1000);
-			obj.zButton.zClickInDlgByName(localize(locator.ok),
-					localize(locator.move));
-		}
-		zWaitTillObjectExist("folder", folderName);
-		obj.zFolder.zExists(folderName);
+		zDragAndDrop(
+				"//td[contains(@id, 'zti__main_Mail') and contains(text(), '"
+						+ folderName + "')]", page.zMailApp.zTrashFldr);
+		Assert
+				.assertTrue(selenium
+						.isElementPresent("//div[@id='zti__main_Mail__3']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
+								+ folderName + "')]"));
 
 		needReset = false;
 	}
@@ -181,11 +164,12 @@ public class MailFolderTests extends CommonTest {
 	public void validSpecialCharFolderTest(String folderName,
 			String renameFolderName, String errDlgName, String errMsg)
 			throws Exception {
-		// if we are retrying the test, run cleanup and re-login etc
 		if (isExecutionARetry)
 			handleRetry();
+
 		page.zMailApp.zCreateFolder(folderName);
 		obj.zFolder.zExists(folderName);
+
 		needReset = false;
 	}
 
@@ -196,9 +180,9 @@ public class MailFolderTests extends CommonTest {
 	public void invalidSpecialCharFolderTest(String folderName,
 			String renameFolderName, String errDlgName, String errMsg)
 			throws Exception {
-		// if we are retrying the test, run cleanup and re-login etc
 		if (isExecutionARetry)
 			handleRetry();
+
 		page.zMailApp.zCreateFolder(folderName, renameFolderName, errDlgName,
 				errMsg);
 		String actualMsg = obj.zDialog.zGetMessage(errDlgName);
@@ -211,6 +195,7 @@ public class MailFolderTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewFolder));
 		obj.zFolder.zNotExists(folderName);
+
 		needReset = false;
 	}
 
