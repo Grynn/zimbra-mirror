@@ -23,7 +23,7 @@ $enable_dkim_verification = 1;
 %%uncomment VAR:zimbraDomainMandatoryMailSignatureEnabled%%@altermime_args_disclaimer = qw(--verbose --disclaimer=/opt/zimbra/data/altermime/_OPTION_.txt --disclaimer-html=/opt/zimbra/data/altermime/_OPTION_.html );
 %%uncomment VAR:zimbraDomainMandatoryMailSignatureEnabled%%$defang_maps_by_ccat{+CC_CATCHALL} = ['disclaimer'];
 
-@debug_sender_acl = qw( kaos@kaostech.com );
+#@debug_sender_acl = qw( );
 
 @disclaimer_options_bysender_maps = (
   { '.' => 'global-default' },
