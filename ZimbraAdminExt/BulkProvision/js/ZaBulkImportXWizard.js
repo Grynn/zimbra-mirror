@@ -179,6 +179,11 @@ function() {
 			return;
 		}		
 
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
+
 		var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.previewCallback,{});
 		ZaBulkProvision.generateBulkProvisionPreview(this._containedObject,callback);
 	} else if(cStep == ZaBulkImportXWizard.STEP_REVIEW) {

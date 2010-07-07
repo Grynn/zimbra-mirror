@@ -83,11 +83,7 @@ function(params,resp) {
 ZaMigrationXWizard.prototype.previewCallback = function(params,resp) {
 	try {
 		if(resp && resp.isException()) {
-			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaMigrationXWizard.prototype.previewCallback");
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
+			throw(resp.getException());
 		} else {
 			var response = resp.getResponse().Body.GenerateBulkProvisionFileFromLDAPResponse;
 			var accountCount = "0";
@@ -120,7 +116,14 @@ ZaMigrationXWizard.prototype.previewCallback = function(params,resp) {
 			this._localXForm.setInstanceValue(skippedCount,ZaBulkProvision.A2_skippedAccountCount);
 		}
 	} catch (ex) {
-		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaMigrationXWizard.prototype.previewCallback");
+		if(ex.code == ZaBulkProvision.BP_INVALID_SEARCH_FILTER) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(com_zimbra_bulkprovision.ERROR_INVALID_SEARCH_FILTER,[ex.msg]),ex);	
+		} else if(ex.code == ZaBulkProvision.BP_NAMING_EXCEPTION) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(com_zimbra_bulkprovision.BP_NAMING_EXCEPTION,[ex.msg]),ex);	
+		} else {
+			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaMigrationXWizard.prototype.previewCallback");
+		}
+
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
@@ -209,10 +212,43 @@ function() {
 				
 	} else if(cStep == ZaMigrationXWizard.STEP_LDAP_INFO) {
 		/**
+		 * Check that LDAP URL is not empty
+		 */
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapURL])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_URL_REQUIRED);
+			return;
+		}		
+
+		/**
+		 * Check that Bind DN is not empty
+		 */
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapBindDn])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_BIND_DN_REQUIRED);
+			return;
+		}		
+		
+		
+		/**
 		 * Check that passwords match
 		 */
 		if(this._containedObject[ZaBulkProvision.A2_GalLdapBindPassword] != this._containedObject[ZaBulkProvision.A2_GalLdapConfirmBindPassword]) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PASSWORDS_DONT_MATCH);
+			return;
+		}		
+		
+		/**
+		 * Check that LDAP filter is not empty
+		 */
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapFilter])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_FILTER_REQUIRED);
+			return;
+		}
+		
+		/**
+		 * Check that LDAP search base is not empty
+		 */
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapSearchBase])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_BASE_REQUIRED);
 			return;
 		}		
 		
