@@ -298,6 +298,7 @@ function(content) {
 	if (this._mainContainer) {
 		document.getElementById("undoSendZimlet_mainContainer").innerHTML = content;
 		this._mainContainer.style.display = "block";
+		this._alertViewDisplayed = true;
 		return;
 	}
 	this._mainContainer = document.getElementById("z_shell").appendChild(document.createElement('div'));
