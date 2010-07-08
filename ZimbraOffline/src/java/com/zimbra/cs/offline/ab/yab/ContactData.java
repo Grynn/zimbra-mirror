@@ -167,11 +167,16 @@ public class ContactData implements Serializable {
     private static DateField getBirthday(Map<String, String> fields) {
         String value = fields.get(A_birthday);
         if (value != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
-                return DateField.birthday(sdf.parse(value));
+                return DateField.birthday(new SimpleDateFormat("yyyy-MM-dd").parse(value));
             } catch (ParseException e) {
-                OfflineLog.yab.warn("Cannot parse birthday: " + value);
+                try {
+                    new SimpleDateFormat("--MM-dd").parse(value);
+                    String[] ss = value.split("-");
+                    return DateField.birthday(new Integer(ss[3]), new Integer(ss[2]), -1);
+                } catch (Exception e1) {
+                    OfflineLog.yab.warn("Cannot parse birthday: " + value, e1);
+                }
             }
         }
         return null;
@@ -180,11 +185,16 @@ public class ContactData implements Serializable {
     private static DateField getAnniversary(Map<String, String> fields) {
         String value = fields.get("anniversary");
         if (value != null) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
-                return DateField.anniversary(sdf.parse(value));
+                return DateField.anniversary(new SimpleDateFormat("yyyy-MM-dd").parse(value));
             } catch (ParseException e) {
-                OfflineLog.yab.warn("Cannot parse anniversary: " + value);
+                try {
+                    new SimpleDateFormat("--MM-dd").parse(value);
+                    String[] ss = value.split("-");
+                    return DateField.anniversary(new Integer(ss[3]), new Integer(ss[2]), -1);
+                } catch (Exception e1) {
+                    OfflineLog.yab.warn("Cannot parse anniversary: " + value, e1);
+                }
             }
         }
         return null;
