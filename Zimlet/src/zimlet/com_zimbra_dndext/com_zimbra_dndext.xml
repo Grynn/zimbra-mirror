@@ -1,4 +1,0 @@
-<zimlet name="com_zimbra_dndext" version="1.0" target="main compose-window view-window" description="Illustrates new drag-and-drop.">
-	<include>dndext.js</include>
-	<handlerObject>Com_Zimbra_DnDExt</handlerObject>
-</zimlet>
