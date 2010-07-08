@@ -134,6 +134,8 @@ public class InstallCert extends AdminDocumentHandler {
             if (subjectAltNames != null && subjectAltNames.length() >0) {
                 cmd += " -subjectAltNames \"" + subjectAltNames + "\"" ;
             }
+        } else if (certType.equals("comm")) {
+            deploycrt_cmd += " " + ZimbraCertMgrExt.UPLOADED_CRT_FILE +  " "  + ZimbraCertMgrExt.UPLOADED_CRT_CHAIN_FILE ;
         }
         
         if (isTargetAllServer) {
@@ -142,9 +144,7 @@ public class InstallCert extends AdminDocumentHandler {
                     ZimbraLog.security.debug("Subject for allserver: " + subject);
                     cmd += " -subject " + " \"" + subject +"\"";
                 }
-            }else{
-               deploycrt_cmd += " " + ZimbraCertMgrExt.UPLOADED_CRT_FILE +  " "  + ZimbraCertMgrExt.UPLOADED_CRT_CHAIN_FILE ;
-           }
+            }
 
             cmd += " " + ALLSERVER_FLAG;
             deploycrt_cmd += " " + ALLSERVER_FLAG;
