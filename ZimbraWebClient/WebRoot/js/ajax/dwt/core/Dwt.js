@@ -334,7 +334,7 @@ function(domElement, attrName) {
 };
 
 /**
- * Finds an ancestor element with the given attr.
+ * Finds an ancestor element with a value for the given attr.
  * 
  * @param {DOMElement} domElement the DOM element (typically an HTML element)
  * @param {string}	attrName	the attribute name
@@ -342,8 +342,10 @@ function(domElement, attrName) {
  */
 Dwt.findAncestor =
 function(domElement, attrName) {
-	while (domElement && (Dwt.getAttr(domElement, attrName) == null)) {
+	var attr = Dwt.getAttr(domElement, attrName);
+	while (domElement && (attr == null || attr == "")) {
 		domElement = domElement.parentNode;
+		attr = Dwt.getAttr(domElement, attrName);
 	}
 	return domElement;
 };
@@ -970,9 +972,11 @@ function(cell) {
  */
 Dwt.delClass =
 function(el, del, add) {
-	if (el == null) { return };
 
-	if (typeof del == "string") {
+	if (el == null) { return };
+	if (!del && !add) { return; }
+
+	if (typeof del == "string" && del.length) {
 		del = Dwt._DELCLASS_CACHE[del] || (Dwt._DELCLASS_CACHE[del] = new RegExp("\\b" + del + "\\b", "ig"));
 	}
 	var className = el.className || "";
