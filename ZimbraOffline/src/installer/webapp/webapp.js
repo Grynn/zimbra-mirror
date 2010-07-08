@@ -163,8 +163,7 @@ function checkForUpdates()
 }
 
 function quitApp() {
-  var appStartup = Cc["@mozilla.org/toolkit/app-startup;1"].getService(Ci.nsIAppStartup);
-  appStartup.quit(appStartup.eAttemptQuit);
+  window.platform.quit();
 }
 
 function shutdownService() {
