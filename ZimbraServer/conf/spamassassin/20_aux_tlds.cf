@@ -37,7 +37,7 @@
 #
 
 
-# Last Update:2010-03-13-AXB
+# Last Update:2010-04-21-AXB
 
 
 
@@ -82,6 +82,7 @@ util_rb_2tld altervista.org
 util_rb_2tld biz.tm
 util_rb_2tld blogspot.com
 util_rb_2tld bravehost.com
+util_rb_2tld bravejournal.com 
 util_rb_2tld by.ru
 util_rb_2tld chat.ru
 util_rb_2tld cjb.net
@@ -263,3 +264,7 @@ util_rb_2tld ph.tc
 util_rb_2tld at.lv
 util_rb_2tld de.lv
 util_rb_2tld ch.lv
+util_rb_2tld org.rw
+util_rb_2tld myvnc.com
+util_rb_2tld blog4ever.com
+util_rb_2tld sytes.net
