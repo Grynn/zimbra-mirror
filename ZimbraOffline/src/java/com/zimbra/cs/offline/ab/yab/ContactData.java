@@ -83,6 +83,7 @@ public class ContactData implements Serializable {
         importField(A_otherAnniversary, getAnniversary(zfields));
         for (Map.Entry<String, String> entry : zfields.entrySet()) {
             String name = entry.getKey();
+            if (name.startsWith("anniversary")) continue;
             importField(name, getSimple(name, entry.getValue()));
         }
     }
@@ -177,7 +178,7 @@ public class ContactData implements Serializable {
     }
 
     private static DateField getAnniversary(Map<String, String> fields) {
-        String value = fields.get(A_birthday);
+        String value = fields.get("anniversary");
         if (value != null) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             try {
@@ -304,7 +305,7 @@ public class ContactData implements Serializable {
                 fieldDelta.put(A_birthday, toString((DateField) field));
                 break;
             case otherAnniversary:
-                fieldDelta.put(A_otherAnniversary, toString((DateField) field));
+                fieldDelta.put("anniversary", toString((DateField) field));
                 break;
             case imAddress1: case imAddress2: case imAddress3: {
                 SimpleField simple = (SimpleField) field;
