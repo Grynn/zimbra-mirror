@@ -383,7 +383,10 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	                    	ePassword.setText(String.valueOf(GetBulkProvisionAccounts.generateStrongPassword(genPwdLength)));
 	                	}   
 	                	eUser.add(ePassword);                        
-                    	usersEl.add(eUser);
+	                	org.dom4j.Element elMustChangePassword = DocumentHelper.createElement(Provisioning.A_zimbraPasswordMustChange);
+	                	elMustChangePassword.setText(mustChangePassword);
+	                	eUser.add(elMustChangePassword);                  
+	                	usersEl.add(eUser);
                     }                	
                     xw.write(doc);
                     xw.flush();                	
