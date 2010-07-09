@@ -173,7 +173,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         
         return authToken;
     }
-     String getRemoteUser() throws ServiceException {
+    
+    String getRemoteUser() throws ServiceException {
         return getAccount().getName();
     }
 
@@ -494,12 +495,10 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
     
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout, SoapProtocol resProto,
-            Map<String, ElementHandler> saxHandlers) throws ServiceException {
+        Map<String, ElementHandler> saxHandlers) throws ServiceException {
         String uri = getSoapUri();
-        ZAuthToken authToken = null;
-        if (requiresAuth)
-        	authToken = getAuthToken();
-        return sendRequest(request, requiresAuth, noSession, timeout, resProto, null, uri, authToken);
+        ZAuthToken authToken = requiresAuth ? getAuthToken() : null;
+        return sendRequest(request, requiresAuth, noSession, timeout, resProto, saxHandlers, uri, authToken);
     }
     
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout, SoapProtocol resProto,
@@ -510,7 +509,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             transport.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
             transport.setTimeout(timeout);
             if (requiresAuth)
-                transport.setAuthToken(authToken==null?getAuthToken():authToken);
+                transport.setAuthToken(authToken == null ? getAuthToken() : authToken);
             transport.setRequestProtocol(SoapProtocol.Soap12);
             if (resProto != null)
                 transport.setResponseProtocol(resProto);

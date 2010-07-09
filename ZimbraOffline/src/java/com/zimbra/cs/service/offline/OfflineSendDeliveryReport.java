@@ -42,7 +42,6 @@ public class OfflineSendDeliveryReport extends SendDeliveryReport {
     @Override
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
         ZimbraSoapContext zsc = getZimbraSoapContext(context);
-
         Mailbox mbox = getRequestedMailbox(zsc);
         OperationContext octxt = getOperationContext(zsc, context);
 
@@ -54,7 +53,7 @@ public class OfflineSendDeliveryReport extends SendDeliveryReport {
             throw ServiceException.PERM_DENIED("you do not have sufficient permissions on the message");
 
         // first, send the notification
-        //make new auth token so we are sure proxy is not set. 
+        // make new auth token so we are sure proxy is not set. 
         ZAuthToken authToken = new ZAuthToken(zsc.getRawAuthToken().getValue());
         sendReport(getSenderAccount(zsc), msg, false, zsc.getRequestIP(), zsc.getUserAgent(), authToken);
 
@@ -65,17 +64,14 @@ public class OfflineSendDeliveryReport extends SendDeliveryReport {
         return response;
     }
 
-    
-    //TODO - don't see these in MailConstants?, maybe somewhere else?
-    private static String FROM_ADDRESS_TYPE = "f";
-    private static String TO_ADDRESS_TYPE = "t";
-    private static String READ_RECEIPT = "Read-Receipt: ";
-    private static String MIME_DISP_NOTIFICATION_TO = "Disposition-Notification-To";
-    private static String CONTENT_TYPE_TEXT = "text/plain; charset=utf-8";
-    private static String CONTENT_TYPE_NOTIFICATION = "message/disposition-notification; charset=utf-8";
-    private static String CONTENT_TYPE_REPORT = "multipart/report; report-type=disposition-notification";
+    private static final String FROM_ADDRESS_TYPE = "f";
+    private static final String TO_ADDRESS_TYPE = "t";
+    private static final String READ_RECEIPT = "Read-Receipt: ";
+    private static final String MIME_DISP_NOTIFICATION_TO = "Disposition-Notification-To";
+    private static final String CONTENT_TYPE_TEXT = "text/plain; charset=utf-8";
+    private static final String CONTENT_TYPE_NOTIFICATION = "message/disposition-notification; charset=utf-8";
+    private static final String CONTENT_TYPE_REPORT = "multipart/report; report-type=disposition-notification";
 
-    
     protected void sendReport(Account authAccount, Message msg, boolean automatic, String requestHost, String userAgent, ZAuthToken authToken)
     throws ServiceException {
         OfflineLog.offline.debug("sending report for msg ["+msg+"] in account ["+authAccount+"]");
@@ -91,34 +87,41 @@ public class OfflineSendDeliveryReport extends SendDeliveryReport {
             InternetAddress[] recipients = Mime.parseAddressHeader(mm, MIME_DISP_NOTIFICATION_TO);
             if (recipients == null || recipients.length == 0)
                 return;
-            for (InternetAddress recipient:recipients)
-            	m.addElement(MailConstants.E_EMAIL).addAttribute(MailConstants.A_ADDRESS_TYPE,TO_ADDRESS_TYPE).addAttribute(MailConstants.A_ADDRESS,recipient.getAddress()).addAttribute(MailConstants.A_PERSONAL,recipient.getPersonal()); 
+            for (InternetAddress recipient : recipients) {
+            	m.addElement(MailConstants.E_EMAIL).addAttribute(MailConstants.A_ADDRESS_TYPE, TO_ADDRESS_TYPE).
+            	    addAttribute(MailConstants.A_ADDRESS, recipient.getAddress()).
+            	    addAttribute(MailConstants.A_PERSONAL, recipient.getPersonal());
+            }
             InternetAddress fromAddr = AccountUtil.getFromAddress(authAccount);
-            m.addElement(MailConstants.E_EMAIL).addAttribute(MailConstants.A_ADDRESS_TYPE,FROM_ADDRESS_TYPE).addAttribute(MailConstants.A_ADDRESS,fromAddr.getAddress()).addAttribute(MailConstants.A_PERSONAL, fromAddr.getPersonal());
-            m.addElement(MailConstants.E_SUBJECT).setText(READ_RECEIPT+msg.getSubject());
+            m.addElement(MailConstants.E_EMAIL).addAttribute(MailConstants.A_ADDRESS_TYPE, FROM_ADDRESS_TYPE).
+                addAttribute(MailConstants.A_ADDRESS, fromAddr.getAddress()).
+                addAttribute(MailConstants.A_PERSONAL, fromAddr.getPersonal());
+            m.addElement(MailConstants.E_SUBJECT).setText(READ_RECEIPT + msg.getSubject());
 
-            Element multiPartReport = m.addElement(MailConstants.E_MIMEPART).addAttribute(MailConstants.A_CONTENT_TYPE, CONTENT_TYPE_REPORT);
-            Element text = multiPartReport.addElement(MailConstants.E_MIMEPART).addAttribute(MailConstants.A_CONTENT_TYPE,CONTENT_TYPE_TEXT);
-            text.addElement(MailConstants.E_CONTENT).setText(generateTextPart(owner, mm, authAccount.getLocale()));
-            Element mdn = multiPartReport.addElement(MailConstants.E_MIMEPART).addAttribute(MailConstants.A_CONTENT_TYPE,CONTENT_TYPE_NOTIFICATION);
-            mdn.addElement(MailConstants.E_CONTENT).setText(generateReport(owner, mm, automatic, requestHost, userAgent));
+            Element multiPartReport = m.addElement(MailConstants.E_MIMEPART).
+                addAttribute(MailConstants.A_CONTENT_TYPE, CONTENT_TYPE_REPORT);
+            Element text = multiPartReport.addElement(MailConstants.E_MIMEPART).
+                addAttribute(MailConstants.A_CONTENT_TYPE, CONTENT_TYPE_TEXT);
+            text.addElement(MailConstants.E_CONTENT).
+                setText(generateTextPart(owner, mm, authAccount.getLocale()));
+            Element mdn = multiPartReport.addElement(MailConstants.E_MIMEPART).
+                addAttribute(MailConstants.A_CONTENT_TYPE, CONTENT_TYPE_NOTIFICATION);
+            mdn.addElement(MailConstants.E_CONTENT).
+                setText(generateReport(owner, mm, automatic, requestHost, userAgent));
             
-            ZcsMailbox ombx = (ZcsMailbox)MailboxManager.getInstance().getMailboxByAccountId(owner.getId(), false);
-            
-        	ombx.sendRequest(request, true, true, OfflineLC.zdesktop_request_timeout.intValue(), null, null, getSelfUri(), authToken);
-        	OfflineLog.offline.debug("sent report (" + sendUID + ") " + msg.getSubject());
-        }        	
-       	catch (MessagingException me) {
-       		throw ServiceException.FAILURE("error while sending read receipt", me);
-       	}
+            ZcsMailbox ombx = (ZcsMailbox)MailboxManager.getInstance().getMailboxByAccountId(owner.getId(), false);            
+            ombx.sendRequest(request, true, true, OfflineLC.zdesktop_request_timeout.intValue(), null, null, getSelfUri(), authToken);
+            OfflineLog.offline.debug("sent report (" + sendUID + ") " + msg.getSubject());
+        } catch (MessagingException me) {
+            throw ServiceException.FAILURE("error while sending read receipt", me);
+        }
     }
 
-    private String selfUri = null;
-    private String getSelfUri()
-    {
-    	if (selfUri == null) selfUri = "http://127.0.0.1:"+LC.zimbra_admin_service_port.intValue()+"/service/soap";
-    	return selfUri;
-    }
-
+    private static String selfUri = null;
     
+    private synchronized String getSelfUri() {
+    	if (selfUri == null) 
+    	    selfUri = "http://127.0.0.1:" + LC.zimbra_admin_service_port.intValue() + "/service/soap";
+    	return selfUri;
+    }    
 }
