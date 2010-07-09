@@ -24,12 +24,12 @@
 ZaCosController = function(appCtxt, container) {
 	ZaXFormViewController.call(this, appCtxt, container, "ZaCosController");
 	this._UICreated = false;	
-	this._helpURL = location.pathname + ZaUtil.HELP_URL + "cos/creating_classes_of_service.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._helpURL = [location.pathname, ZaUtil.HELP_URL, ZaCosController.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	this.deleteMsg = ZaMsg.Q_DELETE_COS;
 	this.objType = ZaEvent.S_COS;
 	this.tabConstructor = ZaCosXFormView;
 }
-
+ZaCosController.helpURL = "cos/creating_classes_of_service.htm";
 ZaCosController.prototype = new ZaXFormViewController();
 ZaCosController.prototype.constructor = ZaCosController;
 ZaController.initToolbarMethods["ZaCosController"] = new Array();

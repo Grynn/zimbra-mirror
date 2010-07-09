@@ -35,7 +35,7 @@ ZaDashBoardController.prototype = new ZaXFormViewController();
 ZaDashBoardController.prototype.constructor = ZaDashBoardController;
 ZaController.initToolbarMethods["ZaDashBoardController"] = new Array();
 ZaController.changeActionsStateMethods["ZaDashBoardController"] = new Array();
-ZaDashBoardController.helpURL = location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm#appliance/zap_working_in_the_administration_console.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+ZaDashBoardController.helpURL = location.pathname + ZaUtil.HELP_URL + "appliance/zap_working_in_the_dashboard_tab.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 ZaOperation.MANAGE_DOMAINS = ++ZA_OP_INDEX;
 ZaOperation.MANAGE_PROFILES = ++ZA_OP_INDEX;
@@ -119,6 +119,8 @@ ZaDashBoardController.hijackMessages = function () {
 	 * Adjust max tabs for appliance
 	 */
 	ZaAppTabGroup.TAB_LIMIT = 8;
+	ZaCosController.helpURL = "appliance/zap_managing_user_profiles.htm";
+	ZaAccountViewController.helpURL = "appliance/zap_editing_accounts.htm";
 }
 
 

@@ -27,14 +27,14 @@ ZaAccountViewController = function(appCtxt, container) {
 	ZaXFormViewController.call(this, appCtxt, container, "ZaAccountViewController");
 	this._UICreated = false;
 	this.objType = ZaEvent.S_ACCOUNT;
-	this._helpURL = ZaAccountViewController.helpURL;
+	this._helpURL = [location.pathname, ZaUtil.HELP_URL, ZaAccountViewController.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 	this.deleteMsg = ZaMsg.Q_DELETE_ACCOUNT;
 	this.tabConstructor = ZaAccountXFormView;
 }
 
 ZaAccountViewController.prototype = new ZaXFormViewController();
 ZaAccountViewController.prototype.constructor = ZaAccountViewController;
-ZaAccountViewController.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/editing_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+ZaAccountViewController.helpURL = "managing_accounts/editing_accounts.htm";
 ZaController.changeActionsStateMethods["ZaAccountViewController"] = new Array();
 ZaController.setViewMethods["ZaAccountViewController"] = new Array();
 ZaController.initToolbarMethods["ZaAccountViewController"] = new Array();

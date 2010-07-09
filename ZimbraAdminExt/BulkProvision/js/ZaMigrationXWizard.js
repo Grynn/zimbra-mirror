@@ -35,7 +35,7 @@ function ZaMigrationXWizard (parent, entry) {
 		
     this.initForm(ZaBulkProvision.getMyXModel(),this.getMyXForm(entry),null);
 
-  	this._helpURL = ZaMigrationXWizard.helpURL;
+    this._helpURL = [location.pathname, ZaUtil.HELP_URL, ZaMigrationXWizard.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join("");;
 }
 ZaMigrationXWizard.STEP_INDEX = 1;
 ZaMigrationXWizard.STEP_INTRODUCTION = ZaMigrationXWizard.STEP_INDEX++;
@@ -49,7 +49,7 @@ ZaMigrationXWizard.prototype = new ZaXWizardDialog;
 ZaMigrationXWizard.prototype.constructor = ZaMigrationXWizard;
 
 ZaXDialog.XFormModifiers["ZaMigrationXWizard"] = new Array();
-ZaMigrationXWizard.helpURL = location.pathname + "help/admin/html/managing_accounts/how_to_provision_multiple_accounts.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
+ZaMigrationXWizard.helpURL = "appliance/zap_migrating_multiple_accounts.htm";
 
 /**
  * server callbacks

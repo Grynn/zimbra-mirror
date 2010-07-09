@@ -48,7 +48,7 @@ function ZaBulkImportXWizard (parent, entry) {
 	
     this.initForm(ZaBulkProvision.getMyXModel(),this.getMyXForm(entry),null);
 
-  	this._helpURL = ZaBulkImportXWizard.helpURL;
+  	this._helpURL = [location.pathname, ZaUtil.HELP_URL, ZaBulkImportXWizard.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join(""); 
 }
 ZaBulkImportXWizard.POLL_INTERVAL = 500;
 // -1 : No status, 0: Install succeed, >0 : Install Failed (different number is different error)
@@ -64,7 +64,7 @@ ZaBulkImportXWizard.prototype = new ZaXWizardDialog;
 ZaBulkImportXWizard.prototype.constructor = ZaBulkImportXWizard;
 
 ZaXDialog.XFormModifiers["ZaBulkImportXWizard"] = new Array();
-ZaBulkImportXWizard.helpURL = location.pathname + "help/admin/html/managing_accounts/how_to_provision_multiple_accounts.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
+ZaBulkImportXWizard.helpURL = "appliance/zap_importing_accounts.htm";
 
 /**
 * Overwritten methods that control wizard's flow (open, go next,go previous, finish)

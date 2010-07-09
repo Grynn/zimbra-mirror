@@ -24,7 +24,7 @@
 ZaApplianceAdvancedToolsController = function(appCtxt, container) {
 	ZaXFormViewController.call(this, appCtxt, container, "ZaApplianceAdvancedToolsController");
 	this._UICreated = false;
-	this._helpURL = location.pathname + ZaUtil.HELP_URL + "administration_console_help.htm#appliance/zap_managing_the_server_settings.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+	this._helpURL = location.pathname + ZaUtil.HELP_URL + "appliance/zap_using_advanced_tools.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 	this.objType = ZaEvent.S_GLOBALCONFIG;
 	this.tabConstructor = ZaApplianceAdvancedToolsView;	
 	this.loaded = false;
