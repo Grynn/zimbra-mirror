@@ -200,12 +200,20 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
 
     @Override MailItem getItemById(int id, byte type) throws ServiceException {
-        MailItem item = super.getItemById(id, type);
-        if (item != null)
-            return item;
+        NoSuchItemException trappedExcept = null;
+        try { 
+            MailItem item = super.getItemById(id, type);
+            if (item != null)
+                return item;
+        }
+        catch (NoSuchItemException nsie) {
+            trappedExcept = nsie;
+        }
         Integer renumbered = mRenumbers.get(id < -FIRST_USER_ID ? -id : id);
         if (renumbered != null)
             return super.getItemById(id < 0 ? -renumbered : renumbered, type);
+        if (trappedExcept != null)
+            throw trappedExcept;
         return null;
     }
 
