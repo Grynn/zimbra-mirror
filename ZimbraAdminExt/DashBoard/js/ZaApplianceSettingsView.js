@@ -264,7 +264,7 @@ ZaApplianceSettingsView.myXFormModifier = function(xFormObject, entry) {
 					dataFetcherClass:ZaSearch,editable:true
 				},
                 {ref: ZaGlobalConfig.A_zimbraFileUploadMaxSize, type: _TEXTFIELD_,
-					  label: ZaMsg.NAD_DOC_MaxUploadSize, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"
+					  label: com_zimbra_dashboard.NAD_DOC_MaxUploadSize, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"
 				},
 			    { ref: ZaGlobalConfig.A_zimbraMtaRelayHost, type: _REPEAT_,
 		  	  		label: ZaMsg.NAD_MTA_RelayMTA,
