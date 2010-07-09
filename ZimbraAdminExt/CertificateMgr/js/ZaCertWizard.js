@@ -756,6 +756,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				},
 				{ref: ZaCert.A_force_new_csr, type: _CHECKBOX_ , label: com_zimbra_cert_manager.FORCE_NEW_CSR , 
 					visibilityChecks:[" instance[ZaCert.A_csr_exists] == true "],
+                    enableDisableChecks:[" instance[ZaCert.A_csr_exists] == true "],
+                    enableDisableChangeEventSources:[ZaCert.A_csr_exists],
                     onChange: function (value, event, form) {
 						this.setInstanceValue (value) ;
 						form.parent._containedObject.modifySubjectAltNames();
@@ -768,7 +770,8 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 					labelLocation:_LEFT_,
 					choices:ZaCert.KEY_SIZE_CHOICES,
                     visibilityChecks:[],
-                    enableDisableChecks:[] },
+                    enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
+				    enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr] },
 				{ ref: ZaCert.A_commonName, type:_TEXTFIELD_, width: 150,
 					visibilityChecks:[],  bmolsnr:true,
                     enableDisableChecks:[ZaCertWizard.isCSRFieldsEnabled],
