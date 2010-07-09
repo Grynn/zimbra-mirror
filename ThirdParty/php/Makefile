@@ -37,7 +37,7 @@ endif
 PHP_TGZ_TARGET := \
 	$(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/php/php-$(PHP_VERSION).tgz
 
-files	:= $(wildcard src/php-$(PHP_VERSION).tar.gz)
+files	:= $(wildcard src/php-$(PHP_VERSION).tar.bz2)
 
 all: checksrc allclean build tar
 
@@ -45,7 +45,7 @@ checksrc:
 	$(if $(files), @echo "", exit 1)
 
 build:
-	tar xzf src/php-$(PHP_VERSION).tar.gz
+	tar xzf src/php-$(PHP_VERSION).tar.bz2
 	(cd php-$(PHP_VERSION); \
 	$(PATCH) $(ACEXE) CFLAGS="-g -O2" \
 	./configure --prefix=/opt/zimbra/php-$(PHP_VERSION) --with-apxs2=/opt/zimbra/httpd-$(HTTPD_VERSION)/bin/apxs --with-config-file-path=/opt/zimbra/conf --with-pspell=/opt/zimbra/aspell-$(ASPELL_VERSION) --with-libxml-dir=/opt/zimbra/libxml2-$(XML_VERSION); \
