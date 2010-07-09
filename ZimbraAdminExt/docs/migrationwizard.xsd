@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://www.zimbra.com/migrationwizard/" targetNamespace="http://www.zimbra.com/migrationwizard/">
+
+    <include schemaLocation=""></include>
+    <simpleType name="Bit">
+        <annotation>
+        	<documentation>true/false flag</documentation>
+        </annotation>
+        <restriction base="int">
+    		<minInclusive value="0"></minInclusive>
+    		<maxInclusive value="1"></maxInclusive>
+    	</restriction>
+    </simpleType>
+
+    <simpleType name="EmailAddress">
+    	<restriction base="string">
+    		<pattern value="^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$"></pattern>
+    	</restriction>
+    </simpleType>
+    
+    <complexType name="Options">
+    	<sequence>
+    		<element name="importMails" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
+		    <element name="importContacts" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
+		    <element name="importCalendar" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
+		    <element name="importTasks" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
+		    <element name="importJunk" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
+		    <element name="importDeletedItems" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
+		    <element name="ignorePreviouslyImported" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
+		    <element name="InvalidSSLOk" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
+    	</sequence>
+    </complexType>
+	<complexType name="MapiProfile">
+		<sequence>
+		    <element name="profile" type="string" maxOccurs="1" minOccurs="1"></element>
+		    <element name="server" type="string" maxOccurs="1" minOccurs="1"></element>
+		    <element name="logonUserDN" type="string" maxOccurs="1" minOccurs="1"></element>
+		</sequence>
+	</complexType>
+	<complexType name="ZimbraServer">
+		<sequence>
+	        <element name="serverName" type="string" maxOccurs="1" minOccurs="1"></element>
+	        <element name="port" type="int" maxOccurs="1" minOccurs="0"></element>
+	        <element name="adminUserName" type="string" maxOccurs="1" minOccurs="1"></element> 
+			<element name="password" type="string" maxOccurs="1" minOccurs="0"></element>
+			<element name="adminSSLEnabled" type="tns:Bit" maxOccurs="1" minOccurs="0"></element>
+			<element name="domain" type="string" maxOccurs="1" minOccurs="0"></element>
+		</sequence>    
+    </complexType>
+    <complexType name="User">
+    	<sequence>
+    		<element name="ExchangeMail" type="string" maxOccurs="1" minOccurs="1"></element>
+    		<element name="password" type="string" maxOccurs="1" minOccurs="0"></element>
+		    <element name="zimbraPasswordMustChange" maxOccurs="1" minOccurs="0">
+		    	<simpleType>
+		    		<restriction base="boolean">
+		    			<enumeration value="TRUE"></enumeration>
+		    			<enumeration value="FALSE"></enumeration>
+		    		</restriction>
+		    	</simpleType>
+		    </element>
+    	</sequence>
+    </complexType>
+	<complexType name="ImportUsers">
+		<sequence>
+			<element name="User" type="tns:User" maxOccurs="unbounded" minOccurs="1"/>
+		</sequence>
+	</complexType>    
+	<complexType name="UserProvision">
+		<sequence>
+			<element name="provisionUsers" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
+			<element name="COS" type="string" maxOccurs="1" minOccurs="0"></element>
+			<element name="initialPassword" type="string" maxOccurs="1" minOccurs="0"></element>
+		    <element name="zimbraPasswordMustChange" maxOccurs="1" minOccurs="0">
+		    	<simpleType>
+		    		<restriction base="boolean">
+		    			<enumeration value="TRUE"></enumeration>
+		    			<enumeration value="FALSE"></enumeration>
+		    		</restriction>
+		    	</simpleType>
+		    </element>			
+		</sequence>
+	</complexType>
+	<complexType name="ZCSImport">
+		<sequence>
+			<element name="Options" type="tns:Options" maxOccurs="1" minOccurs="1"/>
+			<element name="ZimbraServer" type="tns:ZimbraServer" maxOccurs="1" minOccurs="1"/>
+			<element name="MapiProfile" type="tns:MapiProfile" maxOccurs="1" minOccurs="1"/>
+			<element name="ImportUsers" type="tns:ImportUsers" maxOccurs="1" minOccurs="1"/>
+			<element name="UserProvision" type="tns:UserProvision" maxOccurs="1" minOccurs="1"/>			
+		</sequence>   
+    </complexType>
+	
+</schema>
