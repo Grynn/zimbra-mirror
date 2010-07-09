@@ -511,6 +511,11 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout, SoapProtocol resProto,
         Map<String, ElementHandler> saxHandlers, String uri, ZAuthToken authToken) throws ServiceException {
+        return sendRequest(request, requiresAuth, noSession, timeout, resProto, saxHandlers, uri, authToken, false);
+    }
+    
+    public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout, SoapProtocol resProto,
+        Map<String, ElementHandler> saxHandlers, String uri, ZAuthToken authToken, boolean sendAcctId) throws ServiceException {
         OfflineAccount acct = getOfflineAccount();
         SoapHttpTransport transport = new SoapHttpTransport(uri);
         try {
@@ -541,7 +546,10 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             if (saxHandlers != null) {
                 response = transport.invoke(request.detach(), false, true, null, null, null, saxHandlers);
             } else if (noSession) {
-            	response = transport.invokeWithoutSession(request.detach());
+            	if (sendAcctId)
+                    response = transport.invoke(request.detach(), false, true, acct.getId());
+            	else 
+            	    response = transport.invokeWithoutSession(request.detach());
             } else {
             	if (mSessionId != null)
             		transport.setSessionId(mSessionId);

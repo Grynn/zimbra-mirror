@@ -110,7 +110,7 @@ public class OfflineSendDeliveryReport extends SendDeliveryReport {
                 setText(generateReport(owner, mm, automatic, requestHost, userAgent));
             
             ZcsMailbox ombx = (ZcsMailbox)MailboxManager.getInstance().getMailboxByAccountId(owner.getId(), false);            
-            ombx.sendRequest(request, true, true, OfflineLC.zdesktop_request_timeout.intValue(), null, null, getSelfUri(), authToken);
+            ombx.sendRequest(request, true, true, OfflineLC.zdesktop_request_timeout.intValue(), null, null, getSelfUri(), authToken, true);
             OfflineLog.offline.debug("sent report (" + sendUID + ") " + msg.getSubject());
         } catch (MessagingException me) {
             throw ServiceException.FAILURE("error while sending read receipt", me);
