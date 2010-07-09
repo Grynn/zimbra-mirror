@@ -13,6 +13,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(HEIMDAL_ROOT)/../beta_versions.def
+	OPATCH	:= patch -g0 -N -p1 < ../patches/openssl1x.patch;
 else
 	include $(HEIMDAL_ROOT)/../versions.def
 endif
@@ -44,6 +45,7 @@ build:
 	(tar xzf src/heimdal-$(HEIMDAL_VERSION).tar.gz; \
 	cd heimdal-$(HEIMDAL_VERSION); \
 	$(PATCH) \
+	$(OPATCH) \
 	CFLAGS="-g -O2 -D_REENTRANT" \
 	CCFLAGS="-g -O2 -D_REENTRANT" \
 	COMPILE_ET="NO" \
