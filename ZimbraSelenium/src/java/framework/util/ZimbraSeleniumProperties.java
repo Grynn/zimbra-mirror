@@ -13,16 +13,30 @@ public class ZimbraSeleniumProperties {
 	private File dir;
 	private String workingDir = ".";
 
-	public static ZimbraSeleniumProperties getInstance() {
+	public static String getStringProperty(String key, String defaultValue) {
+		return (ZimbraSeleniumProperties.getInstance().getConfigProp()
+				.getString(key, defaultValue));
+	}
+
+	public static ResourceBundle getResourceBundleProperty(String key) {
+		return ((ResourceBundle) ZimbraSeleniumProperties.getInstance()
+				.getConfigProp().getProperty(key));
+	}
+
+	public static PropertiesConfiguration getConfigProperties() {
+		return ZimbraSeleniumProperties.getInstance().getConfigProp();
+	}
+
+	private PropertiesConfiguration getConfigProp() {
+		return configProp;
+	}
+
+	private static ZimbraSeleniumProperties getInstance() {
 		return instance;
 	}
 
 	private ZimbraSeleniumProperties() {
 		init();
-	}
-
-	public PropertiesConfiguration getConfigProperties() {
-		return configProp;
 	}
 
 	private void init() {
@@ -150,19 +164,21 @@ public class ZimbraSeleniumProperties {
 	// for unit test need to change access to public
 	private static void main(String[] args) {
 		ZimbraSeleniumLogger.setmLog(new CurClassGetter().getCurrentClass());
-		
-		System.setProperty("log4j.configuration","file:///C:/log4j.properties");
+
+		System
+				.setProperty("log4j.configuration",
+						"file:///C:/log4j.properties");
 		System.out.println(System.getProperty("log4j.configuration"));
-		
+
 		System.out.println(System.getProperty("user.dir"));
 
 		String br = (String) ZimbraSeleniumProperties.getInstance()
-				.getConfigProperties().getProperty("browser");
+				.getConfigProp().getProperty("browser");
 		System.out.println(br);
 		ZimbraSeleniumLogger.mLog.debug(br);
 
 		ResourceBundle zmMsg = (ResourceBundle) ZimbraSeleniumProperties
-				.getInstance().getConfigProperties().getProperty("zmMsg");
+				.getInstance().getConfigProp().getProperty("zmMsg");
 		System.out.println(zmMsg.getLocale());
 		ZimbraSeleniumLogger.mLog.debug(zmMsg.getLocale());
 	}
