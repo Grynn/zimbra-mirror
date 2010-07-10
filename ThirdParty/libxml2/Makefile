@@ -21,7 +21,7 @@ ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
 
-files	:= $(wildcard src/$(XML_NAME)-$(XML_RELEASE).tar.gz)
+files	:= $(wildcard src/$(XML_NAME)-$(XML_VERSION).tar.gz)
 
 all: checksrc allclean build tar
 
@@ -29,8 +29,8 @@ checksrc:
 	$(if $(files), @echo "", exit 1)
 
 build:
-	(tar xzf src/$(XML_NAME)-$(XML_RELEASE).tar.gz; \
-	mv $(XML_NAME)-$(XML_RELEASE) $(XML_NAME)-$(XML_VERSION); \
+	(tar xzf src/$(XML_NAME)-$(XML_VERSION).tar.gz; \
+	mv $(XML_NAME)-$(XML_VERSION) $(XML_NAME)-$(XML_VERSION); \
 	cd $(XML_NAME)-$(XML_VERSION); \
 	patch -g0 -N -p1 < ../patches/CVE-2009-2414-CVE-2009-2416.patch; \
 	CFLAGS="-g -O2 -fPIC" \
