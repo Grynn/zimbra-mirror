@@ -188,11 +188,12 @@ public class ExecuteTests {
 	}
 
 	public static void loadConfig() throws ConfigurationException {
-		conf = ZimbraSeleniumProperties.getInstance().getConfigProperties();
-		locale = conf.getString("locale");
-		testoutputfolder = conf.getString("ZimbraLogRoot") + "/" + appType;
-		browser = conf.getString("browser");
+		conf = ZimbraSeleniumProperties.getConfigProperties();
+		locale = ZimbraSeleniumProperties.getStringProperty("locale","en_US");
+		testoutputfolder = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot","test-output") + "/" + appType;
+		browser = ZimbraSeleniumProperties.getStringProperty("browser","FF3");
 		createResultFolders();
+		
 	}
 
 	public static void sendEmail() throws Exception {
