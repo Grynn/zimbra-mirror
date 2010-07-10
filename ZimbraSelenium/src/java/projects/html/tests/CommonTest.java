@@ -64,12 +64,12 @@ public class CommonTest extends SelNGBase {
 	public static String ZimbraVersion = "";
 
 	public CommonTest() {
-		conf = ZimbraSeleniumProperties.getInstance().getConfigProperties();
-		zmMsg = (ResourceBundle) conf.getProperty("zmMsg");
-		zhMsg = (ResourceBundle) conf.getProperty("zhMsg");
-		ajxMsg = (ResourceBundle) conf.getProperty("ajxMsg");
-		i18Msg = (ResourceBundle) conf.getProperty("i18Msg");
-		zsMsg = (ResourceBundle) conf.getProperty("zsMsg");
+		conf = ZimbraSeleniumProperties.getConfigProperties();
+		zmMsg = ZimbraSeleniumProperties.getResourceBundleProperty("zmMsg");
+		zhMsg = ZimbraSeleniumProperties.getResourceBundleProperty("zhMsg");
+		ajxMsg = ZimbraSeleniumProperties.getResourceBundleProperty("ajxMsg");
+		i18Msg = ZimbraSeleniumProperties.getResourceBundleProperty("i18Msg");
+		zsMsg = ZimbraSeleniumProperties.getResourceBundleProperty("zsMsg");
 		obj = new CoreObjects();
 		page = new PageObjects();
 	}
