@@ -22,7 +22,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
         ZimbraMailHost = DomainName;
         
         // TODO: Add a default password to the config.properties
-        Password = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("adminPwd", "test123");
+        Password = ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123");
         		
 	}
 	
@@ -73,8 +73,8 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 	 */
 	public static synchronized ZimbraAdminAccount GlobalAdmin() {
 		if ( _GlobalAdmin == null ) {
-			String name = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("adminName", "admin");
-			String domain = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("server");
+			String name = ZimbraSeleniumProperties.getStringProperty("adminName", "admin");
+			String domain = ZimbraSeleniumProperties.getStringProperty("server","qa60.lab.zimbra.com");
 			_GlobalAdmin = new ZimbraAdminAccount(name +"@"+ domain);
 			_GlobalAdmin.authenticate();
 		}
@@ -102,7 +102,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 		
 		
 		// Create a new global admin account
-		String domain = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("server");
+		String domain = ZimbraSeleniumProperties.getStringProperty("server","qa60.lab.zimbra.com");
 		ZimbraAdminAccount admin = new ZimbraAdminAccount("admin"+ System.currentTimeMillis() +"@"+ domain);
 		admin.provisionAccount();	// Create the account (CreateAccountRequest)
 		admin.authenticate();		// Authenticate the account (AuthRequest)
