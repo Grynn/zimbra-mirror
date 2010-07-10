@@ -82,12 +82,12 @@ public class ZimbraAccount {
         CN = (name != null ? name : "account" + System.currentTimeMillis());
         DisplayName = CN;
 
-        DomainName = (domain != null ? domain : ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("testdomain", "testdomain.com"));
+        DomainName = (domain != null ? domain : ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com"));
         ZimbraMailHost = DomainName;
         EmailAddress = CN + "@" + DomainName;
         
         // TODO: Add a default password to the config.properties
-        Password = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("adminPwd", "test123");
+        Password = ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123");
         
 	}
 	
@@ -903,7 +903,7 @@ public class ZimbraAccount {
 	 * @throws HarnessException 
 	 */
 	public static void main(String[] args) throws HarnessException {
-		String domain = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("server");
+		String domain = ZimbraSeleniumProperties.getStringProperty("server","qa60.lab.zimbra.com");
 		
 		// Configure log4j using the basic configuration
 		BasicConfigurator.configure();
