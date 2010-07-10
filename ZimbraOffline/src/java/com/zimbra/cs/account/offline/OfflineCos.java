@@ -45,6 +45,9 @@ class OfflineCos extends Cos {
             attrs.put(Provisioning.A_zimbraAuthTokenLifetime, OfflineLC.auth_token_lifetime.value());
             attrs.put(Provisioning.A_zimbraAdminAuthTokenLifetime, OfflineLC.auth_token_lifetime.value());
             
+            //allow proxy to any domains
+            attrs.put(Provisioning.A_zimbraProxyAllowedDomains, "*");
+            
             return new OfflineCos("default", (String) attrs.get(Provisioning.A_zimbraId), attrs, prov);
         } catch (ServiceException e) {
             // throw RuntimeException because we're being called at startup...

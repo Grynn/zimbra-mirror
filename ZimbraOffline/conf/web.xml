@@ -134,8 +134,8 @@
   </servlet>
     
   <servlet>
-    <servlet-name>ProxyServlet</servlet-name>
-    <servlet-class>com.zimbra.cs.zimlet.ProxyServlet</servlet-class>
+    <servlet-name>OfflineProxyServlet</servlet-name>
+    <servlet-class>com.zimbra.cs.offline.OfflineProxyServlet</servlet-class>
     <load-on-startup>8</load-on-startup>
   </servlet>
 
@@ -222,7 +222,7 @@
   </servlet-mapping>
     
   <servlet-mapping>
-    <servlet-name>ProxyServlet</servlet-name>
+    <servlet-name>OfflineProxyServlet</servlet-name>
     <url-pattern>/proxy/*</url-pattern>
   </servlet-mapping>
 
