@@ -57,14 +57,26 @@ public class ZimbraAccount {
     public String Alias = null;
     public String DomainName = null;
 
+    /*
+     * Create an account with the email address account<num>@<testdomain>
+     * The password is set to config property "adminPwd"
+     */
 	public ZimbraAccount() {
 		this(null, null);
 	}
 	
+    /*
+     * Create an account on the specified domain with the email address account<num>@<domain>
+     * The password is set to config property "adminPwd"
+     */
 	public ZimbraAccount(String domain) {
 		this(null, domain);
 	}
 	
+    /*
+     * Create an account with the email address <name>@<domain>
+     * The password is set to config property "adminPwd"
+     */
 	public ZimbraAccount(String name, String domain) {
 		
         CN = (name != null ? name : "account" + System.currentTimeMillis());
@@ -75,39 +87,52 @@ public class ZimbraAccount {
         EmailAddress = CN + "@" + DomainName;
         
         // TODO: Add a default password to the config.properties
-        Password = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("defaultpassword", "test123");
+        Password = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("adminPwd", "test123");
         
 	}
 	
-	private static ZimbraAccount _AccountA = null;
+	/**
+	 * Get the user account logged into ZWC being tested
+	 * @return the ZimbraAccount object representing the test account
+	 */
+	public static ZimbraAccount AccountZWC() {
+		// TODO: need to integrate with the harness and point an account at the test account
+		logger.error("Implement me!");
+		return(null);
+	}
+	
+	/**
+	 * Get a general use account for interacting with the test account
+	 * @return a general use ZimbraAccount
+	 */
 	public static synchronized ZimbraAccount AccountA() {
 		if ( _AccountA == null ) {
 			_AccountA = new ZimbraAccount();
 			_AccountA.provisionAccount();
 			_AccountA.authenticate();
 		}
-		
 		return (_AccountA);
-		
 	}
+	private static ZimbraAccount _AccountA = null;
 	
-	private static ZimbraAccount _AccountB = null;
+	/**
+	 * Get a general use account for interacting with the test account
+	 * @return a general use ZimbraAccount
+	 */
 	public static synchronized ZimbraAccount AccountB() {
 		if ( _AccountB == null ) {
 			_AccountB = new ZimbraAccount();
 			_AccountB.provisionAccount();
 			_AccountB.authenticate();
-		}
-		
+		}	
 		return (_AccountB);
-		
 	}
+	private static ZimbraAccount _AccountB = null;
 	
 	/**
-	 * Creates the account on the ZCS
-	 * @throws HarnessException 
+	 * Creates the account on the ZCS using CreateAccountRequest
 	 */
-	protected void provisionAccount() {
+	public void provisionAccount() {
 		try {
 			ZimbraAdminAccount.GlobalAdmin().soapSend(
 					"<CreateAccountRequest xmlns='urn:zimbraAdmin'>" +
@@ -117,16 +142,15 @@ public class ZimbraAccount {
 			ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
 			ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
 		} catch (HarnessException e) {
-			logger.error("Unable to provision account: "+ EmailAddress);
+			logger.error("Unable to provision account: "+ EmailAddress, e);
 			ZimbraId = null;
 			ZimbraMailHost = null;
 		}
 	}
 	
 	/**
-	 * Authenticates the account using SOAP.
-	 * Sets the authToken and sessionId
-	 * @throws HarnessException 
+	 * Authenticates the account (using SOAP client AuthRequest)
+	 * Sets the authToken
 	 */
 	public void authenticate() {
 		try {
@@ -143,6 +167,12 @@ public class ZimbraAccount {
 		}
 	}
 	
+	/**
+	 * Send a SOAP request from this account
+	 * @param request the SOAP request body (see ZimbraServer/docs/soap.txt)
+	 * @return the response envelope
+	 * @throws HarnessException on failure
+	 */
 	public Element soapSend(String request) throws HarnessException {
 		
 		// TODO: need to watch for certain SOAP requests, such
@@ -160,14 +190,76 @@ public class ZimbraAccount {
 		}
 	}
 
+	/**
+	 * Match an xpath or regex from the last SOAP response
+	 * if xpath == null, then use the root element - TODO: not yet supported
+	 * if attr == null, value is element text.  if attr != null, value is attr value
+	 * if regex == null, return true if xpath matches.  If regex != null, a regex to match against the value
+	 * @param xpath
+	 * @param attr
+	 * @param regex
+	 * @return
+	 */
+	public boolean soapMatch(String xpath, String attr, String regex) {
+		
+		// TODO: support xpath == null
+		
+		// Find all nodes that match the expath
+		Element[] elements = soapClient.selectNodes(xpath);
+		
+		// If regex == null, return true if xpath matched elements
+		if ( regex == null ) {
+			return (elements.length > 0);
+		}
+		
+		// Loop through all xpath matches, looking for values that may match
+		for (Element e : elements) {
+			
+			String value;
+			if ( attr == null ) {
+				value = e.getText();
+			} else {
+				value = e.getAttribute("attr", null);
+			}
+
+			if ( value == null )
+				continue; // No match in this element
+			
+			Pattern p = Pattern.compile(regex);
+			Matcher m = p.matcher(value);
+			if ( m.matches() )
+				return (true); // Otherwise, continue on next element
+		}
+		
+		return (false); // Never found a match
+	}
+	
+	/**
+	 * Get a value from the last SOAP response
+	 * @param xpath
+	 * @param attr
+	 * @return if attr == null, the element text.  if attr != null, the attr text.
+	 */
 	public String soapSelectValue(String xpath, String attr) {
 		return (soapClient.selectValue(xpath, attr, 1));
 	}
 	
+	/**
+	 * Get a list of elements from the last response that match an xpath
+	 * @param xpath
+	 * @return
+	 */
 	public Element[] soapSelectNodes(String xpath) {
+	 
 		return (soapClient.selectNodes(xpath));
 	}
 
+	/**
+	 * Get an element that matches the last response
+	 * @param xpath
+	 * @param index 1-based index if xpath matches multiple elements
+	 * @return
+	 */
 	public Element soapSelectNode(String xpath, int index) {
 		return (soapClient.selectNode(xpath, index));
 	}
@@ -811,13 +903,13 @@ public class ZimbraAccount {
 	 * @throws HarnessException 
 	 */
 	public static void main(String[] args) throws HarnessException {
-		Element[] response;
+		String domain = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("server");
 		
 		// Configure log4j using the basic configuration
 		BasicConfigurator.configure();
 		
 		// Create a new account object
-		ZimbraAccount account = new ZimbraAccount("foo"+System.currentTimeMillis(), "qa62.lab.zimbra.com");
+		ZimbraAccount account = new ZimbraAccount("foo"+System.currentTimeMillis(), domain);
 		
 		// Provision it on the server
 		account.provisionAccount();
@@ -827,8 +919,7 @@ public class ZimbraAccount {
 		
 		// Send a basic SOAP request.  Check the response.
 		account.soapSend("<NoOpRequest xmlns='urn:zimbraMail'/>");
-		response = account.soapSelectNodes("//mail:NoOpResponse");
-		if ( response.length != 1 )
+		if ( !account.soapMatch("//mail:NoOpResponse", null, null) )
 			throw new HarnessException("NoOpRequest did not return NoOpResponse");
 		
 		// Add a message to the mailbox.  Check the response
@@ -842,8 +933,7 @@ public class ZimbraAccount {
 							"</mp>" +
 						"</m>" +
 					"</SendMsgRequest>");
-		response = account.soapSelectNodes("//mail:SendMsgResponse");
-		if ( response.length != 1 )
+		if ( !account.soapMatch("//mail:SendMsgResponse", null, null) )
 			throw new HarnessException("SendMsgRequest did not return SendMsgResponse");
 
 		logger.info("Done!");

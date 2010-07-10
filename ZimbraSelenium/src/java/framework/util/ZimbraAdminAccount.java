@@ -4,8 +4,6 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import com.zimbra.common.soap.Element;
-
 public class ZimbraAdminAccount extends ZimbraAccount {
 	private static Logger logger = LogManager.getLogger(ZimbraAccount.class);
 
@@ -24,15 +22,15 @@ public class ZimbraAdminAccount extends ZimbraAccount {
         ZimbraMailHost = DomainName;
         
         // TODO: Add a default password to the config.properties
-        Password = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("defaultpassword", "test123");
+        Password = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("adminPwd", "test123");
         		
 	}
 	
 	/**
-	 * Creates the admin account on the ZCS
-	 * @throws HarnessException 
+	 * Creates the account on the ZCS using CreateAccountRequest
+	 * zimbraIsAdminAccount is set to TRUE
 	 */
-	protected void provisionAccount() {
+	public void provisionAccount() {
 		try {
 			ZimbraAdminAccount.GlobalAdmin().soapSend(
 					"<CreateAccountRequest xmlns='urn:zimbraAdmin'>" +
@@ -48,10 +46,10 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 			ZimbraMailHost = null;
 		}
 	}
+	
 	/**
-	 * Authenticates the admin account using SOAP using the Admin AuthRequest
-	 * Sets the authToken and sessionId
-	 * @throws HarnessException 
+	 * Authenticates the admin account (using SOAP admin AuthRequest)
+	 * Sets the authToken
 	 */
 	public void authenticate() {
 		try {
@@ -68,23 +66,28 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 		}
 	}
 
-	private static ZimbraAdminAccount _GlobalAdmin = null;
+	/**
+	 * Get the global admin account
+	 * This account is defined in config.properties as <adminName>@<server>
+	 * @return The global admin account
+	 */
 	public static synchronized ZimbraAdminAccount GlobalAdmin() {
 		if ( _GlobalAdmin == null ) {
-			// TODO: determine this from config.properties
-			_GlobalAdmin = new ZimbraAdminAccount("admin@qa62.lab.zimbra.com");
+			String name = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("adminName", "admin");
+			String domain = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("server");
+			_GlobalAdmin = new ZimbraAdminAccount(name +"@"+ domain);
 			_GlobalAdmin.authenticate();
 		}
-		
 		return (_GlobalAdmin);
-		
 	}
+	private static ZimbraAdminAccount _GlobalAdmin = null;
+
+	
 	/**
 	 * @param args
 	 * @throws HarnessException 
 	 */
 	public static void main(String[] args) throws HarnessException {
-		Element[] response;
 		
 		// Configure log4j using the basic configuration
 		BasicConfigurator.configure();
@@ -93,21 +96,20 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 		
 		// Use the pre-provisioned global admin account to send a basic request
 		ZimbraAdminAccount.GlobalAdmin().soapSend("<GetVersionInfoRequest xmlns='urn:zimbraAdmin'/>");
-		response = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:GetVersionInfoResponse");
-		if ( response.length != 1 )
+		if ( !ZimbraAdminAccount.GlobalAdmin().soapMatch("//admin:GetVersionInfoResponse", null, null) )
 			throw new HarnessException("GetVersionInfoRequest did not return GetVersionInfoResponse");
 		
 		
 		
 		// Create a new global admin account
-		ZimbraAdminAccount admin = new ZimbraAdminAccount("admin"+ System.currentTimeMillis() +"@qa62.lab.zimbra.com");
+		String domain = ZimbraSeleniumProperties.getInstance().getConfigProperties().getString("server");
+		ZimbraAdminAccount admin = new ZimbraAdminAccount("admin"+ System.currentTimeMillis() +"@"+ domain);
 		admin.provisionAccount();	// Create the account (CreateAccountRequest)
 		admin.authenticate();		// Authenticate the account (AuthRequest)
 		
 		// Send a basic request as the new admin account
 		admin.soapSend("<GetServiceStatusRequest xmlns='urn:zimbraAdmin'/>");
-		response = admin.soapSelectNodes("//admin:GetServiceStatusResponse");
-		if ( response.length != 1 )
+		if ( !admin.soapMatch("//admin:GetServiceStatusResponse", null, null) )
 			throw new HarnessException("GetServiceStatusRequest did not return GetServiceStatusResponse");
 
 		
