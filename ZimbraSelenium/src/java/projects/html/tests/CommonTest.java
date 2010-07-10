@@ -186,7 +186,7 @@ public class CommonTest extends SelNGBase {
 		startSeleniumServer();
 		ProvZCS.createAccount("ccuser@testdomain.com");
 		ProvZCS.createAccount("bccuser@testdomain.com");
-		if (!SelNGBase.suiteName.equals("debugSuite")) {
+		if (SelNGBase.suiteName.equals("fullSuite")) {
 			ZimbraVersion = zGetZimbraVersionFromAjax();
 			SelNGBase.ZimbraVersion = ZimbraVersion;
 			CmdExec("taskkill /f /t /im iexplore.exe");
