@@ -314,7 +314,7 @@ public class OfflineDataSource extends DataSource {
 
     @Override
     public boolean isSyncNeeded() throws ServiceException {
-        return getType() == Type.imap ? ImapSync.isSyncNeeded(this) : null;
+        return getType() == Type.imap && ImapSync.isSyncNeeded(this);
     }
 
     @Override
