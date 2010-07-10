@@ -112,10 +112,10 @@ function(controller) {
 		" <a  style='text-decoration:underline;color:#CA0000;font-weight:bold;font-size:12px' href=# id='",undoLinkId,"'>",this._msg_UndoSendZimlet_Undo,"</a> or",
 		" <a  style='text-decoration:underline;color:darkblue;font-size:10px;font-weight:normal' href=# id='",sendNowId,"'>",this._msg_UndoSendZimlet_sendNow,"</a>"].join("");
 
+	var params = {controller:controller, viewId:viewId, timerSpanId:timerSpanId};
 
-	this._setAlertViewContent(html);
-	this._addListenersToLinks(controller);
-	this.timer = setInterval(AjxCallback.simpleClosure(this._updateCounter, this, controller, viewId, timerSpanId), 1000);
+	this._setAlertViewContent(html, params);
+
 };
 
 /**
@@ -292,32 +292,62 @@ function(controller, expn, msg) {
 /**
  * Sets Html content to undo-send canvas
  * @param {string} content String that should be displayed
+ * @param {params} An Object with controller, viewId, timerSpanId info
  */
 UndoSendZimlet.prototype._setAlertViewContent =
-function(content) {
+function(content, params) {
 	if (this._mainContainer) {
-		document.getElementById("undoSendZimlet_mainContainer").innerHTML = content;
-		this._mainContainer.style.display = "block";
-		this._alertViewDisplayed = true;
+		this._setDelayedContent(content, params);
 		return;
 	}
 	this._mainContainer = document.getElementById("z_shell").appendChild(document.createElement('div'));
 	this._mainContainer.style.left = "40%";
 	this._mainContainer.style.position = "absolute";
-	this._mainContainer.style.display = "block";
+	this._mainContainer.style.display = "none";
 	this._mainContainer.style.zIndex = 9000;
 
-	var html = new Array();
-	var i = 0;
-	html[i++] = "<DIV id ='undoSendZimlet_mainContainer' class='undosend_yellow'>";
-	html[i++] = "</DIV>";
-	this._mainContainer.innerHTML = html.join("");
+	var container = document.createElement('div');
+	container.id = "undoSendZimlet_mainContainer";
+	container.className = "undosend_yellow";
+	
+	this._mainContainer.appendChild(container);
+
 
 	if (content) {
-		document.getElementById("undoSendZimlet_mainContainer").innerHTML = content;
+		this._setDelayedContent(content, params);
 	}
+};
+
+/**
+ * Delays setting content by 200ms to make super-fast v8 js Google Chrome happy
+ * @param {string} content String that should be displayed
+ * @param {params} An Object with controller, viewId, timerSpanId info
+ */
+UndoSendZimlet.prototype._setDelayedContent =
+function(content, params) {//this dilay is required to make sure Chrome's super-fast v8-js engine to wait a little
+	if(AjxEnv.isChrome) {
+		setTimeout(AjxCallback.simpleClosure(this._doSetContent, this, content, params), 200);
+	} else {
+		this._doSetContent(content, params);
+	}
+};
+
+/**
+ * Sets Html content to undo-send canvas
+ * @param {string} content String that should be displayed
+ * @param {params} An Object with controller, viewId, timerSpanId info
+ */
+UndoSendZimlet.prototype._doSetContent =
+function(content, params) {
+	document.getElementById("undoSendZimlet_mainContainer").innerHTML = content;
+	this._mainContainer.style.display = "block";
+
+	this._addListenersToLinks(params.controller);
+	this.timer = setInterval(AjxCallback.simpleClosure(this._updateCounter, this, params.controller, params.viewId, params.timerSpanId), 1000);
 	this._alertViewDisplayed = true;
 };
+
+
 
 /**
  * Hides the view
