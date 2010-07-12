@@ -14,7 +14,10 @@ import java.io.InputStreamReader;
 import java.io.Writer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.configuration.*;
 import org.testng.TestNG;
@@ -28,14 +31,11 @@ import framework.util.SendEmail;
 import framework.util.SkipTestClass;
 import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;
+import framework.util.ZimbraSeleniumLogger;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
- * Programatically runs full or debug testng suite. Reads information to
- * automatically configure things to be ignored based on language, bug etc Read
- * the skipTests.text for more info
- * 
- * @author Raja Rao
+ * Programatically runs testng suite
  */
 public class ExecuteTests {
 	private static String appType = "HTML";// note this should match
@@ -52,21 +52,29 @@ public class ExecuteTests {
 	private static String skippedTableRows = "";
 	private static Configuration conf;
 	public static String WorkingDirectory = ".";
+	public static final String PACKAGE_OPT = "-p";
+	public static final String CLASS_OPT = "-c";
+	public static final String METHOD_OPT = "-m";
+	public static final String GROUP_OPT = "-g";
+	public static final String SUITE_OPT = "fullSuiteORdebugSuite";
+	public static final String CONF_PROP_OPT = "-cfg";
+	private static Map<String, Object> margs = new HashMap<String, Object>();
 
 	/**
 	 * Use this to debug a particular testMethod
 	 */
 	private static void debugSuite() {
-
-		includedGrps = "always,smoke";// run 'test'(and 'always') tests
 		suiteName = "debugSuite";
+
 		// ---------------------------------------------------
 		testName = "Debug";
 		cls = new ArrayList<String>();
-		//cls.add("projects.html.tests.preferences.GeneralPref");
-		cls.add("projects.html.tests.preferences.MailPreferencesTests");
-		//cls.add("projects.html.tests.preferences.ComposePref");
-		//cls.add("projects.html.tests.preferences.SignatureAndAccPref");
+		// cls.add("projects.html.tests.preferences.GeneralPref");
+		// cls.add("projects.html.tests.preferences.MailPreferencesTests");
+		cls.add("projects.html.tests.calendar.CalendarMiscTests");
+		// cls.add("projects.html.tests.calendar.MountPointTests");
+		// cls.add("projects.html.tests.preferences.ComposePref");
+		// cls.add("projects.html.tests.preferences.SignatureAndAccPref");
 		addTests(testName, cls);
 		// ---------------------------------------------------
 	}
@@ -75,8 +83,8 @@ public class ExecuteTests {
 	 * Add any new class with test methods here..
 	 */
 	private static void fullSuite() {
-		includedGrps = "always,smoke";
 		suiteName = "fullSuite";
+
 		// ---------------------------------------------------
 		testName = "Compose";
 		cls = new ArrayList<String>();
@@ -136,19 +144,144 @@ public class ExecuteTests {
 		// ---------------------------------------------------
 	}
 
-	//--------------------------------------------------------------------------
-	//--------------------------------------------------------------------------
+	/**
+	 * This is used with arguments provided from command line
+	 */
+	private static void customSuite() {
+		suiteName = "customSuite";
+		XmlTest test = new XmlTest(suite);
+		List<XmlClass> lxc = new ArrayList<XmlClass>();
+		if (null != margs.get(CLASS_OPT)) {
+			testName = CLASS_OPT;
+			test.setName(suiteName + " " + testName);
+			//cls = new ArrayList<String>();
+			//cls.addAll(Arrays.asList(((String) margs.get(CLASS_OPT)).split(",")));
+			String [] testClassNames = ((String)margs.get(CLASS_OPT)).split(",");
+			if (null == margs.get(METHOD_OPT)) {
+				if (null != includedGrps)
+					test.setIncludedGroups(Arrays.asList(includedGrps.split(",")));				
+			}
+			for (String cl : testClassNames) {
+				lxc.add(new XmlClass(cl));
+				}
+				test.setXmlClasses(lxc);			
+		}
+
+		if (null != margs.get(METHOD_OPT)) {
+			testName = METHOD_OPT;
+			test.setName(test.getName() + " " + testName);
+			String[] methodnames = ((String) margs.get(METHOD_OPT)).split(",");
+			List<String> methods = Arrays.asList(methodnames);			
+			for (XmlClass xc : lxc) {
+				xc.setIncludedMethods(methods);				
+			}			
+		}
+	}
+
+	private static void usage() {
+		ZimbraSeleniumLogger.setmLog(ExecuteTests.class);
+		ZimbraSeleniumLogger.mLog.debug("Usage:");
+		ZimbraSeleniumLogger.mLog
+				.debug("[fullSuite|debugSuite]");
+		/*
+		ZimbraSeleniumLogger.mLog.debug("[" + PACKAGE_OPT
+				+ " <full package name>] \n runs all classes in the package");
+		*/
+		ZimbraSeleniumLogger.mLog.debug("[" + CLASS_OPT
+				+ " <comma separated fully qualified class names>]");
+		ZimbraSeleniumLogger.mLog.debug("[" + METHOD_OPT
+				+ " <comma separated method names>],must be used with -c option");
+		ZimbraSeleniumLogger.mLog.debug("[" + GROUP_OPT
+				+ " <comma separated group names>]\n");
+		
+		ZimbraSeleniumLogger.mLog.debug("Example 1: \n" +
+				"debugSuite\n" + 
+				"-g always,smoke\n" +
+				"runs debugSuite with specified group\n");
+
+		ZimbraSeleniumLogger.mLog.debug("Example 2: \n" +
+			"-c projects.html.tests.calendar.CalendarMiscTests,projects.html.tests.mail.MailFolderTests\n" +
+			 "runs all methods in the specified classes\n");
+		
+		ZimbraSeleniumLogger.mLog.debug("Example 3: \n" +
+		"-c projects.html.tests.calendar.CalendarMiscTests,projects.html.tests.mail.MailFolderTests\n" +
+		"-g always,debug\n" +
+		"runs specified groups in the classes\n");
+		
+		ZimbraSeleniumLogger.mLog.debug("Example 4: \n" +
+				"-c projects.html.tests.calendar.CalendarMiscTests\n" +
+				"-m verifyFreeBusyView,verifyRepeatApptExceptionChangeTimezon\n" +
+				"runs specified methods");
+			}
+
+	private static void parseCommandLine(final String[] args) throws Exception {
+		for (int i = 0; i < args.length; ++i) {
+			ZimbraSeleniumLogger.mLog.debug("args[" + i + "] = \"" + args[i]
+					+ "\"");
+		}
+
+		for (int i = 0; i < args.length; i++) {
+			if ("fullSuite".equals(args[i]) || "debugSuite".equals(args[i])) {
+				margs.put(SUITE_OPT, args[i]);
+			} else if (GROUP_OPT.equalsIgnoreCase(args[i])) {
+				if ((i + 1) < args.length) {
+					margs.put(GROUP_OPT, args[i + 1]);
+					i++;
+				}
+			} else if (args[i].startsWith("-")) {
+				if (PACKAGE_OPT.equalsIgnoreCase(args[i])) {
+					if ((i + 1) < args.length) {
+						margs.put(PACKAGE_OPT, args[i + 1]);
+						i++;
+					}
+				} else if (CLASS_OPT.equalsIgnoreCase(args[i])) {
+					if ((i + 1) < args.length) {
+						margs.put(CLASS_OPT, args[i + 1]);
+						i++;
+					}
+				} else if (METHOD_OPT.equalsIgnoreCase(args[i])) {
+					if ((i + 1) < args.length) {
+						margs.put(METHOD_OPT, args[i + 1]);
+						i++;
+					}
+				}
+			}
+		}
+		if (margs.isEmpty()) {
+			usage();
+			throw new Exception("invalid option");
+		} else {
+			includedGrps = (String) margs.get(GROUP_OPT);					
+			if (null == margs.get(SUITE_OPT)
+					&& (null != margs.get(PACKAGE_OPT)
+							|| null != margs.get(CLASS_OPT) || null != margs
+							.get(METHOD_OPT))) {
+				customSuite();
+			} else {
+				if (null == includedGrps)
+					includedGrps = "always,smoke";
+				if ("fullSuite".equals(margs.get(SUITE_OPT))) {
+					fullSuite();
+				} else if ("debugSuite".equals(margs.get(SUITE_OPT))) {
+					debugSuite();
+				}
+			}
+		}
+	}
+
+	// --------------------------------------------------------------------------
+	// --------------------------------------------------------------------------
 
 	public static void main(String[] args) throws Exception {
 
 		loadConfig();
 		loadSkipTestsDetails();
 
-		// first argument can be suite name fullSuite|debugSuite
-		if (args.length == 1) {
-			suiteName = args[0];
+		if (args.length == 0) {
+			usage();
+			throw new Exception("Empty program arguments");
 		} else {
-			throw new Exception("Pass suiteName: <[fullSuite|debugSuite]>");
+			parseCommandLine(args);
 		}
 
 		suite.setName(suiteName);
@@ -157,12 +290,6 @@ public class ExecuteTests {
 		// store suitename. used to ignore posting to report server and also to
 		// avoid trying to get zimbraVersion during startserver
 		SelNGBase.suiteName = suiteName;
-
-		// load appropriate suite
-		if (suiteName.equals("fullSuite"))
-			fullSuite();
-		else if (suiteName.equals("debugSuite"))
-			debugSuite();
 
 		List<XmlSuite> suites = new ArrayList<XmlSuite>();
 		suites.add(suite);
@@ -189,11 +316,13 @@ public class ExecuteTests {
 
 	public static void loadConfig() throws ConfigurationException {
 		conf = ZimbraSeleniumProperties.getConfigProperties();
-		locale = ZimbraSeleniumProperties.getStringProperty("locale","en_US");
-		testoutputfolder = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot","test-output") + "/" + appType;
-		browser = ZimbraSeleniumProperties.getStringProperty("browser","FF3");
+		locale = ZimbraSeleniumProperties.getStringProperty("locale", "en_US");
+		testoutputfolder = ZimbraSeleniumProperties.getStringProperty(
+				"ZimbraLogRoot", "test-output")
+				+ "/" + appType;
+		browser = ZimbraSeleniumProperties.getStringProperty("browser", "FF3");
 		createResultFolders();
-		
+
 	}
 
 	public static void sendEmail() throws Exception {
@@ -263,13 +392,15 @@ public class ExecuteTests {
 
 				e.printStackTrace();
 			}
+
 		test.setIncludedGroups(includedGroups);
 		test.setName(testName);
 		List<XmlClass> classes = new ArrayList<XmlClass>();
 		for (String el : testClassNames) {
 			XmlClass c = new XmlClass(el);
 			c = addExcludeMethodsInfo(c);// check if any methods needs to be
-			// excluded
+											// excluded
+
 			classes.add(c);
 		}
 		test.setXmlClasses(classes);
@@ -316,18 +447,22 @@ public class ExecuteTests {
 					|| (s.browsers.indexOf(browser) >= 0)
 					|| (s.locales.indexOf("all") >= 0)
 					|| (s.browsers.indexOf("all") >= 0)) {
-				
+
 				// perform Browser AND locale test to skip
-				if(s.browsers.indexOf("na") < 0 
-					&& s.browsers.indexOf("all") < 0 
-					&& s.locales.indexOf("na") < 0
-					&& s.locales.indexOf("all") < 0) {
-					if(s.browsers.indexOf(browser) < 0 || s.locales.indexOf(locale) <0){
-						dontSkipBecauseOfAndCombination = true;//either browser or locale didnt match
-					}					
+				if (s.browsers.indexOf("na") < 0
+						&& s.browsers.indexOf("all") < 0
+						&& s.locales.indexOf("na") < 0
+						&& s.locales.indexOf("all") < 0) {
+					if (s.browsers.indexOf(browser) < 0
+							|| s.locales.indexOf(locale) < 0) {
+						dontSkipBecauseOfAndCombination = true;// either browser
+																// or locale
+																// didnt match
+					}
 				}
-				if(!dontSkipBecauseOfAndCombination){
-					matchedMethods.add(s.methodToSkip);// add the method to be				
+				if (!dontSkipBecauseOfAndCombination) {
+					matchedMethods.add(s.methodToSkip);// add the method to be
+														// skipped
 					addToSkippedTableRowsHTML(s);// add to html-email row
 					logSkippedMethodsToFile(s);// add to log file
 				}
