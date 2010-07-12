@@ -151,7 +151,7 @@ public class ExecuteTests {
 	/**
 	 * This is used with arguments provided from command line
 	 */
-	private static void customSuite() {
+	private static void customSuite() throws Exception{
 		suiteName = "customSuite";
 		XmlTest test = new XmlTest(suite);
 		List<XmlClass> lxc = new ArrayList<XmlClass>();
@@ -172,13 +172,18 @@ public class ExecuteTests {
 		}
 
 		if (null != margs.get(METHOD_OPT)) {
-			testName = METHOD_OPT;
-			test.setName(test.getName() + " " + testName);
-			String[] methodnames = ((String) margs.get(METHOD_OPT)).split(",");
-			List<String> methods = Arrays.asList(methodnames);			
-			for (XmlClass xc : lxc) {
-				xc.setIncludedMethods(methods);				
-			}			
+			if(null != margs.get(CLASS_OPT)){
+				testName = METHOD_OPT;
+				test.setName(test.getName() + " " + testName);
+				String[] methodnames = ((String) margs.get(METHOD_OPT)).split(",");
+				List<String> methods = Arrays.asList(methodnames);			
+				for (XmlClass xc : lxc) {
+					xc.setIncludedMethods(methods);				
+				}	
+			}else{
+				usage();
+				throw new Exception(METHOD_OPT + " must be used with " + CLASS_OPT);
+			} 
 		}
 	}
 
@@ -215,7 +220,7 @@ public class ExecuteTests {
 		ZimbraSeleniumLogger.mLog.debug("Example 4: \n" +
 				"-c projects.html.tests.calendar.CalendarMiscTests\n" +
 				"-m verifyFreeBusyView,verifyRepeatApptExceptionChangeTimezon\n" +
-				"runs specified methods");
+				"runs specified methods\n");
 			}
 
 	private static void parseCommandLine(final String[] args) throws Exception {
