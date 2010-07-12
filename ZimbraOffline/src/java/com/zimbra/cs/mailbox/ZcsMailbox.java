@@ -62,7 +62,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 
     private String mSessionId;
     
-    private MailboxSync mMailboxSync = new MailboxSync(this);
+    private MailboxSync mMailboxSync = null;
 
     private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
     private Set<Integer> mLocalTagDeletes = new HashSet<Integer>();
@@ -626,4 +626,15 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     
     @Override
     protected void updateRssDataSource(Folder folder) {} //bug 38129, to suppress creation of datasource
+    
+    @Override
+    synchronized boolean finishInitialization() throws ServiceException {
+        if (super.finishInitialization()) {
+            if (mMailboxSync == null) {
+                mMailboxSync = new MailboxSync(this);            
+            }
+            return true;
+        }
+        return false;
+    }
 }
