@@ -1,11 +1,10 @@
-<zimlet name="com_zimbra_stickynotes" version="1.3" description="Add a sticky note to email messages.">
+<zimlet name="com_zimbra_stickynotes" version="1.5" description="Add a sticky note to email messages.">
 	<include>stickynotes.js</include>
 	<includeCSS>stickynotes.css</includeCSS>
-	<resource>stickynotes-icon.gif</resource>
-	<handlerObject>com_zimbra_stickynotes</handlerObject>
+	<handlerObject>com_zimbra_stickyNotes_HandlerObject</handlerObject>
 
-	<zimletPanelItem label="Sticky Notes" icon="stickynotes-panelIcon">
-		<toolTipText>Add a sticky note to email messages.</toolTipText>
+	<zimletPanelItem label="${msg.sn_label}" icon="stickynotes-panelIcon">
+		<toolTipText>${msg.sn_tooltip}</toolTipText>
 		<dragSource type="ZmConv" />
 	    <dragSource type="ZmMailMsg"/>
 	</zimletPanelItem>
