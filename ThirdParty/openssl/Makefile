@@ -13,7 +13,7 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(OPENSSL_ROOT)/../beta_versions.def
-	CONFIG_OPT	:= --libdir="${exec_prefix}/lib"
+	CONFIG_OPT	:= --libdir=/opt/zimbra/openssl-$(OPENSSL_VERSION)/lib
 else
 	include $(OPENSSL_ROOT)/../versions.def
 endif
