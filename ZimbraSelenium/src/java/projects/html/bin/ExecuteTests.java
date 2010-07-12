@@ -64,6 +64,8 @@ public class ExecuteTests {
 	 * Use this to debug a particular testMethod
 	 */
 	private static void debugSuite() {
+		if (null == includedGrps)
+			includedGrps = "always,smoke";
 		suiteName = "debugSuite";
 
 		// ---------------------------------------------------
@@ -83,6 +85,8 @@ public class ExecuteTests {
 	 * Add any new class with test methods here..
 	 */
 	private static void fullSuite() {
+		if (null == includedGrps)
+			includedGrps = "always,smoke";
 		suiteName = "fullSuite";
 
 		// ---------------------------------------------------
@@ -258,8 +262,6 @@ public class ExecuteTests {
 							.get(METHOD_OPT))) {
 				customSuite();
 			} else {
-				if (null == includedGrps)
-					includedGrps = "always,smoke";
 				if ("fullSuite".equals(margs.get(SUITE_OPT))) {
 					fullSuite();
 				} else if ("debugSuite".equals(margs.get(SUITE_OPT))) {
