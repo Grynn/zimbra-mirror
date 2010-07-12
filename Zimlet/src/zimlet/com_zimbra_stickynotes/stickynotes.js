@@ -48,6 +48,7 @@ function() {
 
 	this.stickyNotes_ToolbarBtn = this.getUserProperty("stickyNotes_ToolbarBtn") == "true";
 	this._createTagAndStoreId();
+	this._migrateOldData();
 };
 
 /**
@@ -484,6 +485,29 @@ function() {
 	"<DIV><input id='turnONstickynotesZimlet_chkbx'  type='checkbox'/>", this.getMessage("sn_enableStickyNotesZimlet"), "</DIV>",
 	"<BR>", this.getMessage("sn_notes"));
 	return html.join("");
+};
+
+/**
+ * Migrates old data from LDAP(ZCS5.0 - 6.0.6 & Zimlet v1.3) to DB(ZCS 6.0.7 & Zimlet V1.5)
+ */
+StickyNotesZimlet.prototype._migrateOldData =
+function() {
+	var stickyNotes_data = this.getUserProperty("stickyNotes_data");
+	if(stickyNotes_data == "") {
+		return;
+	}
+	var tmpArry = stickyNotes_data.split(":=:");
+	this._msgIdAndDataArry = [];
+	for (var i = 0; i < tmpArry.length; i++) {
+		if (tmpArry[i] == "") {
+			continue;
+		}
+		var tmp2Arry = tmpArry[i].split(",__data::");
+		var msgId = tmp2Arry[0].replace("__id::", "").replace("MSG", "").replace("CONV", ""); 
+		var data = tmp2Arry[1];
+		this._saveStickyNotesDataToServer(msgId, data);
+	}
+	this.setUserProperty("stickyNotes_data", "", true);
 };
 
 /**
