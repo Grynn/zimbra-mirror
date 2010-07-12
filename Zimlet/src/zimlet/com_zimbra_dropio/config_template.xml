@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_dropio" version="2.0">
+  <global>
+    <property name="allowedDomains">*.drop.id</property>
+  </global>
+</zimletConfig>
