@@ -2111,7 +2111,8 @@ function(clickedCol, ev) {
 
 	var list = this.getList();
 	var size = list ? list.size() : null;
-	if (!size) { return; }
+	var customQuery = this._columnHasCustomQuery(hdr);
+	if (!size && !customQuery) { return; }
 
 	// reset order by sorting preference
 	this._bSortAsc = (hdr._id == this._currentColId) ? !this._bSortAsc : this._getDefaultSortbyForCol(hdr);
@@ -2120,9 +2121,15 @@ function(clickedCol, ev) {
 	this._setSortedColStyle(hdr._id);
 
 	// call sorting callback if more than one item to sort
-	if (size >= 1){
+	if (size >= 1 || customQuery) {
 		this._sortColumn(hdr, this._bSortAsc);
 	}
+};
+
+DwtListView.prototype._columnHasCustomQuery =
+function(columnItem) {
+	// overload me
+	return false;
 };
 
 DwtListView.prototype._sortColumn =
