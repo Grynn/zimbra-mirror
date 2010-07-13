@@ -44,7 +44,6 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     // 
     private boolean serviceIsRunning = false;
     
-	@Override
 	public STAFResult acceptRequest(RequestInfo info) {
         mLog.info("StafIntegration: acceptRequest ...");
 
@@ -212,7 +211,6 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	}
 	
 
-	@Override
 	public STAFResult init(InitInfo info) {
         mLog.info("StafIntegration: init ...");
 
@@ -289,7 +287,6 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         return (new STAFResult(STAFResult.Ok));
 	}
 
-	@Override
 	public STAFResult term() {
         mLog.info("StafIntegration: term ...");
 
