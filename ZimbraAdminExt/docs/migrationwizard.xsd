@@ -27,24 +27,46 @@
 		    <element name="importJunk" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
 		    <element name="importDeletedItems" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
 		    <element name="ignorePreviouslyImported" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
-		    <element name="InvalidSSLOk" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
+		    <element name="InvalidSSLOk" type="tns:Bit" maxOccurs="1" minOccurs="1">
+		    	<annotation>
+		    		<documentation>This element controls weather Migration Wizard utility will proceed with migration in case  SSL certificate installed in the Appliance is invalid.
+Set this option value to 1 if you have not installed a valid commercial SSL certificate to Appliance at the time when you are running migration. </documentation>
+		    	</annotation></element>
     	</sequence>
     </complexType>
 	<complexType name="MapiProfile">
 		<sequence>
-		    <element name="profile" type="string" maxOccurs="1" minOccurs="1"></element>
-		    <element name="server" type="string" maxOccurs="1" minOccurs="1"></element>
-		    <element name="logonUserDN" type="string" maxOccurs="1" minOccurs="1"></element>
+		    <element name="profile" type="string" maxOccurs="1" minOccurs="1">
+		    	<annotation>
+		    		<documentation>Outlook profile name used to accessthe Exchange server for the migration.</documentation>
+		    	</annotation></element>
+		    <element name="server" type="string" maxOccurs="1" minOccurs="1">
+		    	<annotation>
+		    		<documentation>Exchange server for the migration.</documentation>
+		    	</annotation></element>
+		    <element name="logonUserDN" type="string" maxOccurs="1" minOccurs="1">
+		    	<annotation>
+		    		<documentation>Logon DN used to accessthe Exchange server for the migration.</documentation>
+		    	</annotation></element>
 		</sequence>
 	</complexType>
 	<complexType name="ZimbraServer">
 		<sequence>
 	        <element name="serverName" type="string" maxOccurs="1" minOccurs="1"></element>
 	        <element name="port" type="int" maxOccurs="1" minOccurs="0"></element>
-	        <element name="adminUserName" type="string" maxOccurs="1" minOccurs="1"></element> 
-			<element name="password" type="string" maxOccurs="1" minOccurs="0"></element>
+	        <element name="adminUserName" type="string" maxOccurs="1" minOccurs="1">
+	        	<annotation>
+	        		<documentation>Login name of your Appliance administrator user. This will be used by the Migration Wizard utility to log in to Zimbra Server on the Appliance and to execute provisioning tasks.</documentation>
+	        	</annotation></element> 
+			<element name="password" type="string" maxOccurs="1" minOccurs="0">
+				<annotation>
+					<documentation>Password of your Appliance administrator. This will be used by the Migration Wizard utility to log in to Zimbra Server on the Appliance and to execute provisioning tasks.</documentation>
+				</annotation></element>
 			<element name="adminSSLEnabled" type="tns:Bit" maxOccurs="1" minOccurs="0"></element>
-			<element name="domain" type="string" maxOccurs="1" minOccurs="0"></element>
+			<element name="domain" type="string" maxOccurs="1" minOccurs="0">
+				<annotation>
+					<documentation>This is the ZCS domain whereaccount migrate to. This domain must alreadyexist on the ZCS server.</documentation>
+				</annotation></element>
 		</sequence>    
     </complexType>
     <complexType name="User">
@@ -52,7 +74,10 @@
     		<element name="ExchangeMail" type="string" maxOccurs="1" minOccurs="1"></element>
     		<element name="password" type="string" maxOccurs="1" minOccurs="0"></element>
 		    <element name="zimbraPasswordMustChange" maxOccurs="1" minOccurs="0">
-		    	<simpleType>
+                <annotation>
+                	<documentation>Setting this to TRUE will force the user to change password after first login. This translates into setting zimbraPasswordMustChange attribute to TRUE on user account record in Zimbra LDAP.</documentation>
+                </annotation>
+                <simpleType>
 		    		<restriction base="boolean">
 		    			<enumeration value="TRUE"></enumeration>
 		    			<enumeration value="FALSE"></enumeration>
@@ -70,8 +95,15 @@
 		<sequence>
 			<element name="provisionUsers" type="tns:Bit" maxOccurs="1" minOccurs="1"></element>
 			<element name="COS" type="string" maxOccurs="1" minOccurs="0"></element>
-			<element name="initialPassword" type="string" maxOccurs="1" minOccurs="0"></element>
+			<element name="initialPassword" type="string" maxOccurs="1" minOccurs="0">
+				<annotation>
+					<documentation>Default value for passwords to be set for user accounts that are created by Migration Wizard utility.  This value will be used only when <User> element does not contain <password> element.
+For each account, if <User> element contains <password> element, the value of <password> element supercedes the value of this element.</documentation>
+				</annotation></element>
 		    <element name="zimbraPasswordMustChange" maxOccurs="1" minOccurs="0">
+		    	<annotation>
+                	<documentation>Setting this to TRUE will force the user to change password after first login. This translates into setting zimbraPasswordMustChange attribute to TRUE on user account record in Zimbra LDAP.</documentation>
+                </annotation>
 		    	<simpleType>
 		    		<restriction base="boolean">
 		    			<enumeration value="TRUE"></enumeration>
