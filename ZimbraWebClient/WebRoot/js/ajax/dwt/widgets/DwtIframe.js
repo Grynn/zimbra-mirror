@@ -135,7 +135,7 @@ DwtIframe.prototype._rawEventHandler = function(ev) {
 //  		" returnValue: " + dw._returnValue;
 
 	var capture = DwtMouseEventCapture.getCaptureObj();
-	if (AjxEnv.isIE || AjxEnv.isSafari || !capture) {
+	if (AjxEnv.isIE || (AjxEnv.isSafari && !AjxEnv.isChrome) || !capture) {
 		// go for Dwt events
 		DwtEventManager.notifyListeners(type, dw);
 		this.parent.notifyListeners(type, dw);
