@@ -15,12 +15,13 @@
 package com.zimbra.cs.nginx;
 
 import java.util.List;
+import java.util.Map;
 
-import org.apache.commons.collections.map.LRUMap;
+import com.zimbra.common.util.MapUtil;
 
 public class NginxLookupCache<E extends LookupEntry> {
     
-    private LRUMap mCache;
+    private Map mCache;
     private long mRefreshTTL;
 
     static class CacheEntry<E extends LookupEntry> {
@@ -41,7 +42,7 @@ public class NginxLookupCache<E extends LookupEntry> {
      * @param refreshTTL
      */
     public NginxLookupCache(int maxItems, long refreshTTL) {
-        mCache = new LRUMap(maxItems);
+        mCache = MapUtil.newLruMap(maxItems);
         mRefreshTTL = refreshTTL;
     }
 

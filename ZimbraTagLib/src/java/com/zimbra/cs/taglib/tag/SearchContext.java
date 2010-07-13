@@ -14,13 +14,15 @@
  */
 package com.zimbra.cs.taglib.tag;
 
+import java.util.Map;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.taglib.bean.*;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZSearchParams;
 import com.zimbra.cs.zclient.ZSearchPagerResult;
 import com.zimbra.cs.zclient.ZPhoneAccount;
-import org.apache.commons.collections.map.LRUMap;
+import com.zimbra.common.util.MapUtil;
 
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.PageContext;
@@ -105,21 +107,21 @@ public class SearchContext {
     public static SearchContext getSearchContext(PageContext ctxt, String searchContext) {
         if (searchContext == null || searchContext.length() == 0)
             return null;
-        LRUMap cache = getSearchContextCache(ctxt);
+        Map cache = getSearchContextCache(ctxt);
         return (SearchContext) cache.get(searchContext);
     }
 
     public static SearchContext newSearchContext(PageContext ctxt) {
-        LRUMap cache = getSearchContextCache(ctxt);
+        Map cache = getSearchContextCache(ctxt);
         SearchContext sc = new SearchContext(nextSearchContext());
         cache.put(sc.getId(), sc);
         return sc;
     }
 
-    private static LRUMap getSearchContextCache(PageContext ctxt) {
-        LRUMap cache = (LRUMap) ctxt.getAttribute("SearchTag.queryCache", PageContext.SESSION_SCOPE);
+    private static Map getSearchContextCache(PageContext ctxt) {
+        Map cache = (Map) ctxt.getAttribute("SearchTag.queryCache", PageContext.SESSION_SCOPE);
         if (cache == null) {
-            cache = new LRUMap(MAX_QUERY_CACHE);
+            cache = MapUtil.newLruMap(MAX_QUERY_CACHE);
             ctxt.setAttribute("SearchTag.queryCache", cache, PageContext.SESSION_SCOPE);
         }
 

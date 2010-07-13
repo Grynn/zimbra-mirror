@@ -16,18 +16,12 @@
 			<attribute name="javadoc_location" value="http://java.sun.com/products/javabeans/glasgow/javadocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-2.0.jar" sourcepath="/ThirdParty/commons-cli-20050601/src/java">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-1.2.jar" sourcepath="/ZimbraCommon/jars-src/commons-cli-1.2-src.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/cli/apidocs/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.4.jar" sourcepath="/ThirdParty/commons-codec/src"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-collections-3.2.1.jar" sourcepath="/ThirdParty/commons-collections-3.2.1/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/collections/apidocs-COLLECTIONS_3_1/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-digester-2.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.0.jar" sourcepath="/ThirdParty/commons-httpclient-3.0/src">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/httpclient/apidocs/"/>

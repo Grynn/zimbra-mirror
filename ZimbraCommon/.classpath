@@ -10,24 +10,12 @@
 	<classpathentry kind="lib" path="jars/ant-contrib-1.0b1.jar"/>
 	<classpathentry kind="lib" path="jars/bouncycastle.jar"/>
 	<classpathentry kind="lib" path="jars/catalina-ant.jar"/>
-	<classpathentry kind="lib" path="jars/commons-beanutils-1.8.0.jar"/>
-	<classpathentry kind="lib" path="jars/commons-cli-2.0.jar" sourcepath="/ThirdParty/commons-cli-20050601/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/cli/apidocs/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="jars/commons-codec-1.4.jar" sourcepath="/ThirdParty/commons-codec/src"/>
-	<classpathentry kind="lib" path="jars/commons-collections-3.2.1.jar" sourcepath="/ThirdParty/commons-collections-3.2.1/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/collections/apidocs-COLLECTIONS_3_1/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="jars/commons-dbcp-1.2.2.jar" sourcepath="/ThirdParty/commons-dbcp/src">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-digester-2.0.jar"/>
 	<classpathentry kind="lib" path="jars/commons-fileupload-1.2.1.jar" sourcepath="/ThirdParty/commons-fileupload-1.2.1/src/java">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
@@ -36,11 +24,6 @@
 	<classpathentry kind="lib" path="jars/commons-httpclient-3.0.jar" sourcepath="/ThirdParty/commons-httpclient-3.0/src">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/httpclient/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-io-1.4.jar" sourcepath="/ThirdParty/commons-io-1.4/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/io/apidocs/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/commons-logging.jar" sourcepath="/ThirdParty/commons-logging-1.0.3/src">
@@ -61,8 +44,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/ganymed-ssh2-build210.jar" sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2/src"/>
 	<classpathentry kind="lib" path="jars/ical4j-0.9.16-patched.jar"/>
-	<classpathentry kind="lib" path="jars/jakarta-oro-2.0.8.jar"/>
-	<classpathentry kind="lib" path="jars/jaxen-1.1.1.jar"/>
 	<classpathentry kind="lib" path="jars/junit-4.4.jar" sourcepath="/ThirdParty/junit-4.4">
 		<attributes>
 			<attribute name="javadoc_location" value="http://junit.sourceforge.net/javadoc/"/>
@@ -106,5 +87,15 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/jython-2.5.1.jar"/>
+	<classpathentry kind="lib" path="jars/guava-r06.jar" sourcepath="jars-src/guava-src-r06.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-r06-javadoc.zip!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="jars/commons-cli-1.2.jar" sourcepath="jars-src/commons-cli-1.2-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

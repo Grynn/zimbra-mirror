@@ -11,24 +11,12 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-1.7.0-ziputil-patched.jar" sourcepath="/ThirdParty/ant-1.7.0-ziputil-patched/src/java"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-contrib-1.0b1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-tar-patched.jar" sourcepath="/ThirdParty/ant-tar-patched/src/java"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-beanutils-1.8.0.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-2.0.jar" sourcepath="/ThirdParty/commons-cli-20050601/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/cli/apidocs/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.4.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-dbcp-1.2.2.jar" sourcepath="/ThirdParty/commons-dbcp/src">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-collections-3.2.1.jar" sourcepath="/ThirdParty/commons-collections-3.2.1/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/collections/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-digester-2.0.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.2.1.jar" sourcepath="/ThirdParty/commons-fileupload-1.2.1/src/java">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
@@ -37,11 +25,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.0.jar" sourcepath="/ThirdParty/commons-httpclient-3.0/src/java">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/httpclient/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-io-1.4.jar" sourcepath="/ThirdParty/commons-io-1.4/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/io/apidocs/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar"/>
@@ -55,7 +38,6 @@
 			<attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jaxen-1.1.1.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.4.jar" sourcepath="/ThirdParty/junit-4.4">
 		<attributes>
 			<attribute name="javadoc_location" value="http://www.junit.org/junit/javadoc/4.4/"/>
@@ -66,7 +48,6 @@
 			<attribute name="javadoc_location" value="http://testng.org/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jakarta-oro-2.0.8.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.2-javadoc.zip!/"/>
@@ -119,6 +100,16 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/sqlite-jdbc-3.6.20.1.jar" sourcepath="/ZimbraCommon/jars-src/sqlite-jdbc-3.6.20.1-sources.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/sqlite-jdbc-3.6.20.1-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/guava-r06.jar" sourcepath="/ZimbraCommon/jars-src/guava-src-r06.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-r06-javadoc.zip!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-1.2.jar" sourcepath="/ZimbraCommon/jars-src/commons-cli-1.2-src.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="output" path="build/classes"/>

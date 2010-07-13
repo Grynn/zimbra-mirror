@@ -4,11 +4,6 @@
 	<classpathentry kind="lib" path="jars/jsp-api.jar"/>
 	<classpathentry kind="lib" path="jars/jstl.jar"/>
 	<classpathentry kind="lib" path="jars/standard.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-collections-3.2.1.jar" sourcepath="/ThirdParty/commons-collections-3.2.1/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/collections/apidocs-COLLECTIONS_3_1/"/>
-		</attributes>
-	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.2.1.jar" sourcepath="/ThirdParty/commons-fileupload-1.2.1/src/java">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
@@ -17,11 +12,6 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.0.jar" sourcepath="/ThirdParty/commons-httpclient-3.0/src">
 		<attributes>
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/httpclient/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-io-1.4.jar" sourcepath="/ThirdParty/commons-io-1.4/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/io/apidocs/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/json.jar" sourcepath="/ThirdParty/json/src/java">

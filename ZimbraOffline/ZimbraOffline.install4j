@@ -132,11 +132,10 @@
       <archive location="./build/dist/jetty/lib/log4j-1.2.8.jar" />
       <archive location="./build/dist/jetty/common/lib/derby.jar" />
       <archive location="./build/dist/jetty/common/lib/dom4j-1.5.2.jar" />
-      <archive location="./build/dist/jetty/common/lib/commons-cli-2.0.jar" />
+      <archive location="./build/dist/jetty/common/lib/commons-cli-1.2.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-codec-1.3.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-httpclient-3.0.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-logging.jar" />
-      <archive location="./build/dist/jetty/common/lib/commons-collections-3.2.1.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-dbcp-1.1.jar" />
       <archive location="./build/dist/jetty/common/lib/commons-pool-1.1.jar" />
       <archive location="./build/dist/jetty/common/lib/json.jar" />

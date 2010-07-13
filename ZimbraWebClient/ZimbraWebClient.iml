@@ -199,13 +199,8 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/commons-beanutils-1.6.1.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-beanutils-1.6.1.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/commons-cli-2.0.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-cli-2.0.jar!/</url>
+      <attribute name="URI" value="/WEB-INF/lib/commons-cli-1.2.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-cli-1.2.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -214,18 +209,8 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/commons-collections-3.1.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-collections-3.1.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/commons-dbcp-1.1.jar" />
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-dbcp-1.1.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/commons-digester-1.5.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-digester-1.5.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
@@ -271,11 +256,6 @@
       <attribute name="method" value="1" />
       <attribute name="URI" value="/WEB-INF/lib/ical4j-0.9.16-patched.jar" />
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/ical4j-0.9.16-patched.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/jakarta-oro-2.0.7.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/jakarta-oro-2.0.7.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />

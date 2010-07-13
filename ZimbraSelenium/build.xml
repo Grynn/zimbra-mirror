@@ -122,7 +122,7 @@
 				<section name="staf/service/info">
 					<attribute name="Service-Class" value="staf.StafIntegration"/>
 					<attribute name="Packaged-Jars" value="commons-configuration-1.5 commons-lang-2.4 ocutil-2.4.2 selenium-java-client-driver-1.0-SNAPSHOT
-						selenium-server-1.0-SNAPSHOT-standalone testng-5.8-jdk15 xalan activation commons-cli-2.0 commons-codec-1.4 commons-collections-3.2.1 commons-digester-2.0 commons-httpclient-3.0 commons-logging dom4j-1.5.2 log4j-1.2.15 mail libidn-1.15 zimbracommon zimbrastore"/>
+						selenium-server-1.0-SNAPSHOT-standalone testng-5.8-jdk15 xalan activation commons-cli-1.2 commons-codec-1.4 commons-collections-3.2.1 commons-digester-2.0 commons-httpclient-3.0 commons-logging dom4j-1.5.2 log4j-1.2.15 mail libidn-1.15 zimbracommon zimbrastore"/>
 				</section>
 			</manifest>
 		</jar>

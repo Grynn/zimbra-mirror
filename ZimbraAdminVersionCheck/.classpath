@@ -19,9 +19,9 @@
 			<attribute name="javadoc_location" value="http://www.json.org/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-2.0.jar" sourcepath="/ThirdParty/commons-cli-20050601/src/java">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-1.2.jar" sourcepath="/ZimbraCommon/jars-src/commons-cli-1.2-src.zip">
 		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/cli/apidocs/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.4.jar" sourcepath="/ThirdParty/junit-4.4">
