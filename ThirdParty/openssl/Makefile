@@ -13,7 +13,6 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(OPENSSL_ROOT)/../beta_versions.def
-	CONFIG_OPT	:= --libdir=lib
 else
 	include $(OPENSSL_ROOT)/../versions.def
 endif
@@ -55,7 +54,7 @@ build:
 	CXXFLAGS="-g -O2" \
 	PERL=/usr/bin/perl \
 	LDFLAGS="-L$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib -R$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib" \
-	LD_RUN_PATH=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib ./Configure --prefix=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) $(CONFIG_OPT) \
+	LD_RUN_PATH=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib ./Configure --prefix=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) --libdir=lib \
 	shared $(PLAT) -g -O2; \
 	LD_RUN_PATH=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib $(MAKE) $(MAKEARGS); \
 	LD_RUN_PATH=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION)/lib $(MAKE) install)
