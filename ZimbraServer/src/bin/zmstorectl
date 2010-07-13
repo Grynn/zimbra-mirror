@@ -20,7 +20,7 @@ zmsetvars \
   mailboxd_directory \
   zimbra_mysql_password
 
-MYSQL="${zimbra_home}/bin/mysql -u zimbra -P ${zimbra_mysql_password}"
+MYSQL="${zimbra_home}/bin/mysql -u zimbra --password=${zimbra_mysql_password}"
 
 START_ORDER="zmmtaconfigctl mysql.server zmmailboxdctl"
 STOP_ORDER="zmmtaconfigctl zmmailboxdctl mysql.server"
