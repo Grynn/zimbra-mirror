@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.Semaphore;
 
 import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
@@ -255,21 +256,22 @@ public class GalSync {
         private OfflineAccount galAccount;
         private long lastFullSync;
         private boolean traceOn;
+        private Semaphore lock;
         
-        public SyncThread(ZcsMailbox ombx, String user, OfflineAccount galAccount, long lastFullSync, boolean traceOn) {
+        public SyncThread(ZcsMailbox ombx, String user, OfflineAccount galAccount, long lastFullSync, boolean traceOn, Semaphore lock) {
             super("sync-gal-" + user);
             this.ombx = ombx;
             this.user = user;            
             this.galAccount = galAccount;
             this.lastFullSync = lastFullSync;
             this.traceOn = traceOn;
+            this.lock = lock;
             
             setPriority(MIN_PRIORITY);
         }
         
         public void run() {
             OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-            //String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;                      
             try {
                 OfflineLog.offline.info("Offline GAL sync started for " + user);
                 syncGal(ombx, galAccount, lastFullSync, traceOn); 
@@ -279,22 +281,24 @@ public class GalSync {
                 syncMan.processSyncException(galAccount, "", e, traceOn);
                 OfflineLog.offline.info("Offline GAL sync failed for " + user +
                     ": " + e.getMessage());
+            } finally {
+                lock.release();
             }
         }
     };
-               
+             
+    private static Semaphore galSyncLock = new Semaphore(1);
+    
     public static void sync(ZcsMailbox ombx, boolean isOnRequest) throws ServiceException {
         OfflineAccount account = (OfflineAccount)ombx.getAccount();
         if (!account.getBooleanAttr(Provisioning.A_zimbraFeatureGalEnabled , false) ||
             !account.getBooleanAttr(Provisioning.A_zimbraFeatureGalSyncEnabled , false)) {
             OfflineLog.offline.debug("Offline GAL sync is disabled: " + ombx.getRemoteUser());
             ensureGalAccountNotExists(account);
-            //syncMan.resetLastSyncTime(target);
             return;
         }
         OfflineAccount galAccount = ensureGalAccountExists(account);
         OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-        //String target = user + OfflineConstants.GAL_ACCOUNT_SUFFIX;
         if (syncMan.getSyncStatus(galAccount) == SyncStatus.running)
             return;
                     
@@ -313,13 +317,19 @@ public class GalSync {
             return;
         }
         
+        // to reduce system resources used by gal sync, only one active gal sync op is allowed
+        if (!galSyncLock.tryAcquire()) {
+            OfflineLog.offline.debug("Another account is running Offline GAL sync. Will retry later.");
+            return;
+        }
+        
         long lastFullSync = galAccount.getLongAttr(OfflineConstants.A_offlineGalAccountLastFullSync, 0);
         syncMan.syncStart(galAccount);
         
         /* TODO: allow graceful shutdown of this thread once offline improves its shutdown routines
          * currently if server shuts down during gal sync, we get a nasty redo log exception from this thread, 
          * which is the same as what we would get during mailbox sync. */
-        new SyncThread(ombx, ombx.getRemoteUser(), galAccount, lastFullSync, account.isDebugTraceEnabled()).start();
+        new SyncThread(ombx, ombx.getRemoteUser(), galAccount, lastFullSync, account.isDebugTraceEnabled(), galSyncLock).start();
     }
     
     private static void ensureGalAccountNotExists(OfflineAccount account) throws ServiceException {       
