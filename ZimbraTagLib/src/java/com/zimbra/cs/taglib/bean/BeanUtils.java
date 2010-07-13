@@ -890,6 +890,21 @@ public class BeanUtils {
     public static int getDay(Calendar cal) { return cal.get(Calendar.DAY_OF_MONTH); }
     public static int getDayOfWeek(Calendar cal) { return cal.get(Calendar.DAY_OF_WEEK); }
 
+    /** Given the checkedCalendars folder id, returns the canonical folder id for mountpoints
+     * @return canonical folder ids in case of mountpoints, local folder ids otherwise
+     */
+    public static String getCanonicalFolderIds(ZMailboxBean mailbox, String checkedCalendars) throws ServiceException {
+        StringBuilder sb = new StringBuilder();
+        String folders[] = checkedCalendars.split(",");
+        ZMailbox mbox = mailbox.getMailbox();
+        for (int i = 0; i < folders.length; i++) {
+            ZFolder f = mbox.getFolderById(folders[i]);
+            String folderid = f instanceof ZMountpoint ? ((ZMountpoint) f ).getCanonicalRemoteId() : f.getId();
+            if (sb.length() > 0) sb.append(',');
+            sb.append(folderid);
+        }
+        return sb.toString();
+    }
 
     public static String getCheckedCalendarFolderIds(ZMailboxBean mailbox) throws ServiceException {
         StringBuilder sb = new StringBuilder();

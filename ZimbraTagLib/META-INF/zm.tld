@@ -6975,6 +6975,12 @@
     </function>
 
     <function>
+        <name>getCanonicalFolderIds</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getCanonicalFolderIds(com.zimbra.cs.taglib.bean.ZMailboxBean, java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>hasAnyAppointments</name>
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean hasAnyAppointments(com.zimbra.cs.taglib.bean.ZApptSummariesBean,long,long)</function-signature>
