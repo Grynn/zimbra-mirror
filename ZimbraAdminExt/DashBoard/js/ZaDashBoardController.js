@@ -121,8 +121,13 @@ ZaDashBoardController.hijackMessages = function () {
 	ZaAppTabGroup.TAB_LIMIT = 8;
 	ZaCosController.helpURL = "appliance/zap_managing_user_profiles.htm";
 	ZaAccountViewController.helpURL = "appliance/zap_editing_accounts.htm";
+	
+	/**
+	 * disable "Reset to COS/Global" fields
+	 */
+	Super_XFormItem.checkIfOverWriten = function() {return false; };
+	Super_XFormItem.updateCss = function () { return true; };
 }
-
 
 ZaDashBoardController.initDomainToolbarMethod = function() {
    	this._toolbarOperations[ZaOperation.FLUSH_CACHE]=new ZaOperation(ZaOperation.FLUSH_CACHE,com_zimbra_dashboard.TBB_FlushCache, com_zimbra_dashboard.TBB_FlushCache_tt, "FlushCache", "FlushCache", new AjxListener(this, ZaDashBoardController.flushThemeCacheListener));
