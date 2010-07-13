@@ -158,7 +158,7 @@ ARRAY_COMPARE	:= \
 	Array-Compare-1.17
 
 NET_SSLeay := \
-	Net-SSLeay-1.35
+	Net-SSLeay-1.36
 
 CRYPT_SSLeay := \
 	Crypt-SSLeay-0.57
