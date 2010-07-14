@@ -233,11 +233,6 @@
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/commons-pool-1.1.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
-      <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/concurrent-1.3.4-zimbra-1.0.0.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/concurrent-1.3.4-zimbra-1.0.0.jar!/</url>
-    </containerElement>
-    <containerElement type="library" level="module">
       <attribute name="method" value="0" />
       <attribute name="URI" value="/WEB-INF/lib/custom_rhino.jar" />
       <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/custom_rhino.jar!/</url>

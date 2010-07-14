@@ -53,7 +53,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.2-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/concurrent-1.3.4-zimbra-1.0.0.jar" sourcepath="/ThirdParty/concurrent-1.3.4-zimbra/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/derby.jar"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ganymed-ssh2-build210.jar" sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2/src"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/ical4j-0.9.16-patched.jar" sourcepath="/ThirdParty/ical4j-0.9.16-patched"/>
