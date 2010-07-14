@@ -36,14 +36,14 @@ DeleteAcctsPgrsDlg = function(parent,  w, h) {
 	this.initForm(DeleteAcctsPgrsDlg.myXModel,this.getMyXForm());
 	this._pollHandler = null;	
 	this._aborted = false;
-    this._helpURL = DeleteAcctsPgrsDlg.helpURL ;
-
+    //this._helpURL = DeleteAcctsPgrsDlg.helpURL ;
+	this._helpURL = [location.pathname, ZaUtil.HELP_URL, DeleteAcctsPgrsDlg.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
 }
 
 DeleteAcctsPgrsDlg._ERROR_MSG = "errorMsg";
 DeleteAcctsPgrsDlg._STATUS = "status";
 DeleteAcctsPgrsDlg._DELETED_ACCTS = "deletedAccounts";
-DeleteAcctsPgrsDlg.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/provisioning_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+DeleteAcctsPgrsDlg.helpURL = "managing_accounts/provisioning_accounts.htm";
 
 DeleteAcctsPgrsDlg.myXModel = {
 	getDeletedAccounts: function (model, instance) {
