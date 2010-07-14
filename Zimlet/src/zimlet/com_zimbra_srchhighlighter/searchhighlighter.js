@@ -87,6 +87,9 @@ function(html, idx, obj, spanId, context) {
  */
 SearchHighlighterZimlet.prototype._getSearchWords =
 function(searchStr) {
+	if(!searchStr) {
+		return [];
+	}
 	searchStr = searchStr.toLowerCase().replace(/in:"(\w+?\s).*"/, "");//folder with multip-word names
 	var dArry = searchStr.split(" ");
 	if (dArry == "") {
