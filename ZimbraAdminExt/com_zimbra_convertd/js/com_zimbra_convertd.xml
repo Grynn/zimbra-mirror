@@ -1,4 +1,0 @@
-<zimlet name="com_zimbra_convertd" version="6.0.6" description="Convertd Extension for Admin UI" extension="true">
-<include>com_zimbra_convertd.js</include>
-<disableUIUndeploy>TRUE</disableUIUndeploy>
-</zimlet>
