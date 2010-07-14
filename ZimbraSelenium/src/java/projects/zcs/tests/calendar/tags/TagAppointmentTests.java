@@ -22,7 +22,8 @@ public class TagAppointmentTests extends CommonTest {
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
 		if (test.equals("createRenameDeleteTagForApptAndVerify_ListView")
-				|| test.equals("createRenameDeleteTagForApptInAll6View")
+				|| test
+						.equals("createRenameDeleteTagForApptAndVerifyInAll6View")
 				|| test
 						.equals("verifyTagFunctionalityFor2ApptAndRemoveTag_ListView")
 				|| test.equals("applyMutlipleTagToApptAndVerify_ListView")
@@ -101,104 +102,162 @@ public class TagAppointmentTests extends CommonTest {
 	 * (all 6 view)
 	 */
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void createRenameDeleteTagForApptInAll6View(String subject)
+	public void createRenameDeleteTagForApptAndVerifyInAll6View(String subject)
 			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
 		String tag1, newTag1;
-		obj.zButton.zClick(page.zCalApp.zViewBtn);
-		obj.zMenuItem.zClick(localize(locator.month));
-		page.zCalCompose.zCreateSimpleAppt(subject);
 		tag1 = getLocalizedData_NoSpecialChar();
 		newTag1 = getLocalizedData_NoSpecialChar();
+
+		obj.zButton.zClick(page.zCalApp.zViewBtn);
+		obj.zMenuItem.zClick(localize(locator.viewMonth));
+		page.zCalCompose.zCreateSimpleAppt(subject);
+
+		// Verify tagged appointment in all 6 view
 		zCreateTag(tag1);
 		zClickApptInMonthView(subject);
-
-		Thread.sleep(1000);
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zClick(tag1);
 		Thread.sleep(1000);
-		// verify tagged appt. in month view
-
-		zRenameTag(tag1, newTag1);
-		obj.zFolder.zNotExists(tag1);
-		obj.zFolder.zClick(newTag1);
-		Thread.sleep(1000);
-		// verify new tagged appt. in month view
+		zRtClickApptInDiffView(subject, "month");
+		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
+		obj.zMenuItem.zNotExists(tag1);
+		// right now there is no way to verify tagged appt. in month view - bug
+		// 30645
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
-		obj.zMenuItem.zClick(localize(locator.week));
+		obj.zMenuItem.zClick(localize(locator.viewDay));
 		Thread.sleep(1000);
-		// verify new tagged appt. in week view
+		zRtClickApptInDiffView(subject, "day");
+		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
+		obj.zMenuItem.zNotExists(tag1);
+
+		obj.zButton.zClick(page.zCalApp.zViewBtn);
+		obj.zMenuItem.zClick(localize(locator.viewWorkWeek));
+		Thread.sleep(1000);
+		zRtClickApptInDiffView(subject, "workweek");
+		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
+		obj.zMenuItem.zNotExists(tag1);
+
+		obj.zButton.zClick(page.zCalApp.zViewBtn);
+		obj.zMenuItem.zClick(localize(locator.viewWeek));
+		Thread.sleep(1000);
+		zRtClickApptInDiffView(subject, "week");
+		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
+		obj.zMenuItem.zNotExists(tag1);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.list));
 		Thread.sleep(1000);
-		// verify new tagged appt. in list view
+		obj.zListItem.zVerifyIsTagged(subject);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
-		obj.zMenuItem.zClick(localize(locator.workWeek));
+		obj.zMenuItem.zClick(localize(locator.viewSchedule));
 		Thread.sleep(1000);
-		// verify new tagged appt. in work week view
+		obj.zListItem.zVerifyIsTagged(subject);
+
+		// Verify renamed tagged appointment in all 6 view
+		zRenameTag(tag1, newTag1);
+		obj.zFolder.zNotExists(tag1);
+		obj.zFolder.zClick(newTag1);
+		Thread.sleep(1000);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
-		obj.zMenuItem.zClick(localize(locator.day));
+		obj.zMenuItem.zClick(localize(locator.viewDay));
 		Thread.sleep(1000);
-		// verify new tagged appt. in day view
+		zRtClickApptInDiffView(subject, "day");
+		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
+		obj.zMenuItem.zNotExists(newTag1);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
-		obj.zMenuItem.zClick(localize(locator.schedule));
+		obj.zMenuItem.zClick(localize(locator.viewWorkWeek));
 		Thread.sleep(1000);
-		// verify new tagged appt. in schedule view
+		zRtClickApptInDiffView(subject, "workweek");
+		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
+		obj.zMenuItem.zNotExists(newTag1);
 
+		obj.zButton.zClick(page.zCalApp.zViewBtn);
+		obj.zMenuItem.zClick(localize(locator.viewWeek));
+		Thread.sleep(1000);
+		zRtClickApptInDiffView(subject, "week");
+		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
+		obj.zMenuItem.zNotExists(newTag1);
+
+		obj.zButton.zClick(page.zCalApp.zViewBtn);
+		obj.zMenuItem.zClick(localize(locator.list));
+		Thread.sleep(1000);
+		obj.zListItem.zVerifyIsTagged(subject);
+
+		obj.zButton.zClick(page.zCalApp.zViewBtn);
+		obj.zMenuItem.zClick(localize(locator.viewSchedule));
+		Thread.sleep(1000);
+		obj.zListItem.zVerifyIsTagged(subject);
+
+		// Verify tag is deleted from appointment in all 6 view
 		zDeleteTag(newTag1);
+		Thread.sleep(1000);
 
-		// verify appt. is not tagged in schedule view
-		// click to appt. in schedule view
+		selenium
+				.clickAt(
+						"//div[contains(@id,'zli__CLS')]//td[contains(@class,'_name') and contains(text(), '"
+								+ subject + "')]", "");
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
-
-		obj.zButton.zClick(page.zCalApp.zViewBtn);
-		obj.zMenuItem.zClick(localize(locator.day));
-		// verify appt. is not tagged in day view
-		// click to appt. in day view
-		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
-		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
-		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
+		obj.zListItem.zVerifyIsNotTagged(subject);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
-		obj.zMenuItem.zClick(localize(locator.workWeek));
-		// verify appt. is not tagged in work week view
-		// click to appt. in work week view
+		obj.zMenuItem.zClick(localize(locator.viewDay));
+		zClickApptInDiffView(subject, "day");
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
+		zRtClickApptInDiffView(subject, "day");
+		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
+		obj.zMenuItem.zNotExists(newTag1);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
-		obj.zMenuItem.zClick(localize(locator.week));
-		// verify appt. is not tagged in week view
-		// click to appt. in week view
+		obj.zMenuItem.zClick(localize(locator.viewWorkWeek));
+		zClickApptInDiffView(subject, "workweek");
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
+		zRtClickApptInDiffView(subject, "workweek");
+		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
+		obj.zMenuItem.zNotExists(newTag1);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
-		obj.zMenuItem.zClick(localize(locator.month));
-		// verify appt. is not tagged in month view
-		// click to appt. in month view
+		obj.zMenuItem.zClick(localize(locator.viewWeek));
+		zClickApptInDiffView(subject, "week");
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
+		zRtClickApptInDiffView(subject, "week");
+		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
+		obj.zMenuItem.zNotExists(newTag1);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
-		obj.zMenuItem.zClick(localize(locator.month));
-		// verify appt. is not tagged in list view
-		// click to appt. in list view
+		obj.zMenuItem.zClick(localize(locator.viewMonth));
+		zClickApptInDiffView(subject, "month");
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
+		zRtClickApptInDiffView(subject, "month");
+		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
+		obj.zMenuItem.zNotExists(newTag1);
+
+		obj.zButton.zClick(page.zCalApp.zViewBtn);
+		obj.zMenuItem.zClick(localize(locator.list));
+		Thread.sleep(1000);
+		selenium.clickAt(
+				"//td[contains(@id,'zlif__CLL') and contains(text(), '"
+						+ subject + "')]", "");
+		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
+		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
+		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
+		obj.zListItem.zVerifyIsNotTagged(subject);
 
 		needReset = false;
 	}
@@ -376,16 +435,72 @@ public class TagAppointmentTests extends CommonTest {
 	}
 
 	public static void zClickApptInMonthView(String subject) throws Exception {
-		selenium.clickAt(
-				"xpath=//td[contains(@class, 'calendar_month_day_item') and contains(text(), "
-						+ subject + ")]", "");
+		Thread.sleep(1000);
+		selenium
+				.clickAt(
+						"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
+								+ subject + ")]", "");
+	}
+
+	public static void zRtClickApptInDiffView(String subject, String view)
+			throws Exception {
+		Thread.sleep(1000);
+		if (view.toLowerCase().equals("day")) {
+			selenium
+					.mouseDownRight("xpath=//div[contains(@id, 'zli__CLD')]//td[contains(@class, '_name') and contains(text(), "
+							+ subject + ")]");
+		} else if (view.toLowerCase().equals("workweek")) {
+			selenium
+					.mouseDownRight("xpath=//div[contains(@id, 'zli__CLWW')]//td[contains(@class, '_name') and contains(text(), "
+							+ subject + ")]");
+		} else if (view.toLowerCase().equals("week")) {
+			selenium
+					.mouseDownRight("xpath=//div[contains(@id, 'zli__CLW')]//td[contains(@class, '_name') and contains(text(), "
+							+ subject + ")]");
+		} else if (view.toLowerCase().equals("month")) {
+			selenium
+					.mouseDownRight("xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
+							+ subject + ")]");
+		}
+		obj.zMenuItem.zMouseOver(localize(locator.tagAppt));
+		Thread.sleep(1000);
+		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
+	}
+
+	public static void zClickApptInDiffView(String subject, String view)
+			throws Exception {
+		Thread.sleep(1000);
+		if (view.toLowerCase().equals("day")) {
+			selenium
+					.clickAt(
+							"xpath=//div[contains(@id, 'zli__CLD')]//td[contains(@class, '_name') and contains(text(), "
+									+ subject + ")]", "");
+		} else if (view.toLowerCase().equals("workweek")) {
+			selenium
+					.clickAt(
+							"xpath=//div[contains(@id, 'zli__CLWW')]//td[contains(@class, '_name') and contains(text(), "
+									+ subject + ")]", "");
+		} else if (view.toLowerCase().equals("week")) {
+			selenium
+					.clickAt(
+							"xpath=//div[contains(@id, 'zli__CLW')]//td[contains(@class, '_name') and contains(text(), "
+									+ subject + ")]", "");
+		} else if (view.toLowerCase().equals("month")) {
+			selenium
+					.clickAt(
+							"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
+									+ subject + ")]", "");
+		}
+		Thread.sleep(1000);
 	}
 
 	public static void zDblClickApptInMonthView(String subject)
 			throws Exception {
-		selenium.doubleClickAt(
-				"xpath=//td[contains(@class, 'calendar_month_day_item') and contains(text(), "
-						+ subject + ")]", "");
+		Thread.sleep(1000);
+		selenium
+				.doubleClickAt(
+						"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
+								+ subject + ")]", "");
 	}
 
 	//--------------------------------------------------------------------------
