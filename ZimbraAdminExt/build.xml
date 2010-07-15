@@ -122,9 +122,67 @@
 		</copy>
 		<ant dir="${zimbraServer.dir}" target="start-webserver" inheritAll="false"/>
 	 </target>
-	    	
-	    	
 
+    <target name="scp" description="Copy the zip file to the deploy machine">
+		<echo message="Secure Copying the ${scp_src} to ${scp_dest}" />
+		<exec executable="${scp}">
+			<!-- remote port -->
+			<arg value="-P" />
+			<arg value="${remote_port}" />
+			<arg value="-q" />
+			<arg value="${scp_src}" />
+			<arg value ="${scp_dest}" />
+		</exec>
+		<!-- PSCP on windows
+		<exec executable="${scp}">
+			<arg value="-q" />
+		    <arg value="-i" />
+			<arg value="${private_key}" />
+			<arg value="${scp_src}" />
+			<arg value ="${scp_dest}" />
+		</exec>
+		-->
+	</target>
+
+	    	
+	<target name="copy-files-to-dev-machine" depends="package-zimlet" description="copy the files to the test/dev machine" >
+		<!-- PSCP copy the file to the build -->
+		<!-- Copy the jar file -->
+		<antcall target="scp">
+	    	<param name="scp_src" value="${build.dir}/${ext.name}.jar"/>
+			<param name="scp_dest" value="root@${dev_machine}:/opt/zimbra/lib/ext/${ext.name}/${ext.name}.jar" />
+	  	</antcall>
+
+	  	<!-- Copy the zmrcd & zmcertmgr: may need to run dos2unix for zmrcd   -->
+	  	<!--
+	  	<antcall target="scp">
+	    	<param name="scp_src" value="${zimbraServer.dir}/src/libexec/zmrcd"/>
+			<param name="scp_dest" value="root@${dev_machine}:/opt/zimbra/libexec/zmrcd" />
+	  	</antcall>
+         -->
+		<antcall target="scp">
+	    	<param name="scp_src" value="${zimbraServer.dir}/src/bin/zmcertmgr"/>
+			<param name="scp_dest" value="root@${dev_machine}:/opt/zimbra/bin/zmcertmgr" />
+	  	</antcall>
+
+          <!-- Copy the zimlet zip file -->
+		<antcall target="scp">
+	    	<param name="scp_src" value="${build.zimlet.dir}/${ext.name}.zip"/>
+			<param name="scp_dest" value="zimbra@${dev_machine}:/opt/zimbra/zimlets-admin-extra" />
+	  	</antcall>
+
+	  	<!-- May need to copy the zimbraAdmin: generate the productioin zimbraAdmin.war - ant admin-war
+
+	  	<antcall target="scp">
+	    	<param name="scp_src" value="../ZimbraWebClient/build/dist/jetty/webapps/zimbraAdmin.war"/>
+			<param name="scp_dest" value="zimbra@${dev_machine}:/opt/zimbra/jetty/webapps" />
+
+	  	</antcall>
+	  	-->
+	</target>    	
+
+    <target name="deploy-dev-cert" depends="package-zimlet, jar, copy-files-to-dev-machine" description="Deploy the extension"/>
+    
 	<!-- deploy the extension for development -->
     <target name="deploy" depends="deploy-zimlet, deploy-server-extension"
             description="Deploy the extension, must have ext.dir and ext.name property set"/>
@@ -133,6 +191,11 @@
         <antcall target="deploy">
 	    	<param name="ext.dir" value="BulkProvision"/>
 			<param name="ext.name" value="com_zimbra_bulkprovision" />
+	  	</antcall>
+
+        <antcall target="deploy">
+	    	<param name="ext.dir" value="CertificateMgr"/>
+			<param name="ext.name" value="com_zimbra_cert_manager" />
 	  	</antcall>
     </target>
 

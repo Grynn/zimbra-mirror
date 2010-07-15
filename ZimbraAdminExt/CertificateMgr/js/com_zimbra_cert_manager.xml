@@ -1,0 +1,13 @@
+<zimlet name="com_zimbra_cert_manager" version="6.0.6" 
+	description="Certificate Manager Extension for Admin UI" 
+	extension="true">
+
+	<include>ZaCert.js</include>
+	<include>ZaCertView.js</include>
+	<include>ZaCertWizard.js</include>
+	<include>ZaCertsServerListView.js</include>
+	<include>ZaCertViewController.js</include>
+	<include>ZaCertsServerListController.js</include>
+	<include>zimbra_cert.js</include>
+	<disableUIUndeploy>TRUE</disableUIUndeploy>
+</zimlet>
