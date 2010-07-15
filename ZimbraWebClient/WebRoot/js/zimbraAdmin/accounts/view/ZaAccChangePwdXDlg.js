@@ -25,12 +25,13 @@ ZaAccChangePwdXDlg = function(parent,   w, h) {
 	this._standardButtons = [DwtDialog.CANCEL_BUTTON,DwtDialog.OK_BUTTON];
 	ZaXDialog.call(this, parent, null, ZaMsg.CHNP_Title, w, h,"ZaAccChangePwdXDlg");
 	this.initForm(ZaAccount.myXModel,this.getMyXForm());
-    this._helpURL = ZaAccChangePwdXDlg.helpURL;
+	this._helpURL = [location.pathname, ZaUtil.HELP_URL, ZaAccChangePwdXDlg.helpURL, "?locid=", AjxEnv.DEFAULT_LOCALE].join("");
+    //this._helpURL = ZaAccChangePwdXDlg.helpURL;
 }
 
 ZaAccChangePwdXDlg.prototype = new ZaXDialog;
 ZaAccChangePwdXDlg.prototype.constructor = ZaAccChangePwdXDlg;
-ZaAccChangePwdXDlg.helpURL = location.pathname + ZaUtil.HELP_URL + "passwords/setting_passwords.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+ZaAccChangePwdXDlg.helpURL = "passwords/setting_passwords.htm";
 
 ZaAccChangePwdXDlg.prototype.getPassword = 
 function() {
