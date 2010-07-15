@@ -4363,6 +4363,69 @@
         </attribute>
     </tag>
 
+
+    <tag>
+        <description>
+           get rid of the invalid mountpoints, either the user does not exist or has deleted the shared folder.
+        </description>
+
+        <name>getValidFolderIds</name>
+
+        <tag-class>com.zimbra.cs.taglib.tag.calendar.GetValidFolderIdsTag</tag-class>
+
+        <body-content>scriptless</body-content>
+
+        <variable>
+            <name-from-attribute>var</name-from-attribute>
+            <variable-class>java.lang.String</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <variable>
+            <name-from-attribute>varexception</name-from-attribute>
+            <variable-class>com.zimbra.common.service.ServiceException</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+
+        <attribute>
+            <description>ZMailboxBean object to use</description>
+            <name>box</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMailboxBean</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                comma-separated list of folder ids, a mix of local folders and mountpoints.
+            </description>
+            <name>folderid</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                list of valid existing folder-ids
+            </description>
+            <name>var</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+
+        <attribute>
+            <description>
+                variable to store service exception, otherwise it is thrown.
+            </description>
+            <name>varexception</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
+    </tag>
+    
     <tag>
         <description>
            get appointments that fall with the specified range.
