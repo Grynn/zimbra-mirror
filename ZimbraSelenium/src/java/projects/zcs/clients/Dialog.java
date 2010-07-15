@@ -13,7 +13,7 @@ public class Dialog extends SelNGBase{
 	}
 	public String zExistsDontWait(String dialogNameOrId) {
 		//this method doesnt wait and also doesnt fail if object doesnt exist
-		return  dialogCore(dialogNameOrId, "exists_dontwait");
+		return  dialogCore(dialogNameOrId, "exists", false);
 	}
 	public void zNotExists(String dialogNameOrId) {
 		String actual = dialogCore(dialogNameOrId, "notexist");
@@ -32,7 +32,7 @@ public class Dialog extends SelNGBase{
 	}
 	public void zWait(String dialogNameOrId, String panel, String param1) {
 		//don't call core(since it could go one of the core might be calling this(chicken and egg)
-		selenium.call(coreName,  dialogNameOrId, "wait",panel, param1);
+		selenium.call(coreName,  dialogNameOrId, "wait", true, panel, param1);
 	}	
 	public void zExists(String dialogNameOrId) {
 		String actual = dialogCore(dialogNameOrId, "exists");
@@ -54,13 +54,15 @@ public class Dialog extends SelNGBase{
 			Assert.fail("Expected text("+expectedText+") not found in actual("+actual+")");
 	}	
 	protected String dialogCore(String dialogNameOrId, String action) {
-		return dialogCore(dialogNameOrId, action, "", "");
+		return dialogCore(dialogNameOrId, action, true);
 	}
-	protected String dialogCore(String dialogNameOrId, String action,
+	protected String dialogCore(String dialogNameOrId, String action, Boolean retryOnFalse) {
+		return dialogCore(dialogNameOrId, action, retryOnFalse, "", "");
+	}
+	protected String dialogCore(String dialogNameOrId, String action, Boolean retryOnFalse,
 			String panel, String param1) {
-		String rc = "false";
-		rc = selenium.call(coreName, dialogNameOrId, action, panel, param1);
-		return rc;
+		return selenium.call(coreName, dialogNameOrId, action, retryOnFalse, panel, param1);
+
 	}
 	
 

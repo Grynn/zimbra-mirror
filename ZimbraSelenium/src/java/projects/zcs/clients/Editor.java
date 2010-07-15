@@ -8,7 +8,7 @@ public class Editor extends ZFieldObject {
 	}
 	public void zType(String data) {
 		if (data != "")
-			ZObjectCore("", "type", data, "", "", "");
+			ZObjectCore("", "type", true, data, "", "", "");
 	}
 
 }

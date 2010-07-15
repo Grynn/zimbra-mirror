@@ -12,10 +12,7 @@ public class Folder extends ZObject {
 		super("folderCore_html", "Folder");
 	} 
 
-
-
-	
-	public  String ZObjectCore(String folderNameseparatedBySlash, String action,
+	public  String ZObjectCore(String folderNameseparatedBySlash, String action, Boolean retryOnFalse,
 			String panel, String param1) {
 		String rc = "false";
 		String[] fldrs = folderNameseparatedBySlash.split("/");
@@ -29,17 +26,17 @@ public class Folder extends ZObject {
 				this._expndFldrIfRequired(currentFolder, panel, param1);
 				continue;
 			}
-			rc = selenium.call("folderCore_html",  currentFolder, action, panel, param1);
+			rc = selenium.call("folderCore_html",  currentFolder, action, retryOnFalse, panel, param1);
 		}
 		return rc;		
 	}	
 	
 	public  void zExpand(String folder) {
-		selenium.call("folderCore_html",  folder+"_expand", "click","", "");
+		selenium.call("folderCore_html",  folder+"_expand", "click", true, "", "");
 	}
 
 	public  void zCollapse(String folder) {
-		selenium.call("folderCore_html",  folder+"_collapse", "click","", "");
+		selenium.call("folderCore_html",  folder+"_collapse", "click", true, "", "");
 	}
 
 	/**
@@ -47,7 +44,7 @@ public class Folder extends ZObject {
 	 * @param folder
 	 */
 	public  void zEdit(String folder) {
-		selenium.call("folderCore_html",  folder+"_edit", "click","", "");
+		selenium.call("folderCore_html",  folder+"_edit", "click", true, "", "");
 	}	
 
 
@@ -56,9 +53,9 @@ public class Folder extends ZObject {
 	private  void _expndFldrIfRequired(String folder, String panel, String param1) {
 	//	String rc = selenium.call("this.doZfolderExpandBtnExists("
 	//			+ doubleQuote + folder + doubleQuote + ")");
-		String rc = selenium.call("folderCore_html",  folder+"_expand", "exists", panel, param1);
+		String rc = selenium.call("folderCore_html",  folder+"_expand", "exists", true, panel, param1);
 		if(rc.equals("true"))
-			selenium.call("folderCore_html",  folder+"_expand", "click", panel, param1);
+			selenium.call("folderCore_html",  folder+"_expand", "click", true, panel, param1);
 	}	
 
 }

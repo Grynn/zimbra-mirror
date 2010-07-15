@@ -27,12 +27,13 @@ public class MenuButton extends SelNGBase {
 		Assert.assertEquals(actual, "true", "Menu(" + menuBtnNameOrId
 				+ ") is enabled(instead of disabled)");
 	}	
-	private static String MenuButtonCore(String menuBtnNameOrId, String action, String param1, String param2) {
-		String rc = "false";
-		rc = selenium.call("buttonMenuCore",  menuBtnNameOrId, action, param1, param2);
-		return rc;
-	}
 	private static String MenuButtonCore(String menuBtnNameOrId, String action) {
-		return MenuButtonCore(menuBtnNameOrId, action,"", "");
+		return MenuButtonCore(menuBtnNameOrId, action, true);
+	}
+	private static String MenuButtonCore(String menuBtnNameOrId, String action, Boolean retryOnFalse) {
+		return MenuButtonCore(menuBtnNameOrId, action, retryOnFalse, "", "");
+	}
+	private static String MenuButtonCore(String menuBtnNameOrId, String action, Boolean retryOnFalse, String param1, String param2) {
+		return selenium.call("buttonMenuCore",  menuBtnNameOrId, action, retryOnFalse, param1, param2);
 	}
 }

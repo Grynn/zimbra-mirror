@@ -7,39 +7,38 @@ public class RadioBtn extends ZObject{
 		super("radioBtnCore", "RadioBtn");
 	} 
 	public void zClick(String objNameOrId) {
-		ZObjectCore(objNameOrId, "click",
-				 "",  "",  "",  "");
+		ZObjectCore(objNameOrId, "click");
 	}
 	public void zClickInDlg(String objNameOrId) {
-		ZObjectCore(objNameOrId, "click",
+		ZObjectCore(objNameOrId, "click", true,
 				 "",  "dialog",  "",  "");
 	}	
 	public void zClickInDlgByName(String objNameOrId, String dialogName) {
-		ZObjectCore(objNameOrId, "click",
+		ZObjectCore(objNameOrId, "click", true,
 				 "",  "__dialogByName__"+dialogName,  "",  "");
 	}	
 
 
 	public void zVerifyIsChecked(String objNameOrId, String data) {
-		String actual = ZObjectCore(objNameOrId, "checked",
+		String actual = ZObjectCore(objNameOrId, "checked", true,
 				 data,  "",  "",  "");
 		Assert.assertEquals(actual, "true", objTypeName+"(" + objNameOrId
 				+ ") doesn't exist in dialog or no dialog was found");
 	}
 	public void zExists(String objNameOrId) {
-		String actual =ZObjectCore(objNameOrId, "exists",
+		String actual =ZObjectCore(objNameOrId, "exists", true,
 				 "",  "",  "",  "");
 		Assert.assertEquals("true", actual, objTypeName+"(" + objNameOrId
 				+ ") Not Found.");
 	}	
 	public void zExistsInDlg(String objNameOrId) {
-		String actual =ZObjectCore(objNameOrId, "exists",
+		String actual =ZObjectCore(objNameOrId, "exists", true,
 				 "",  "dialog",  "",  "");
 		Assert.assertEquals(actual, "true", objTypeName+"(" + objNameOrId
 				+ ") doesn't exist in dialog or no dialog was found");
 	}
 	public void zExistsInDlgByName(String objNameOrId, String dialogName) {
-		String actual =ZObjectCore(objNameOrId, "exists",
+		String actual =ZObjectCore(objNameOrId, "exists", true,
 				 "",  "__dialogByName__"+dialogName,  "",  "");
 		Assert.assertEquals(actual, "true", objTypeName+"(" + objNameOrId
 				+ ") doesn't exist in dialog("+dialogName+")");

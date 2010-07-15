@@ -15,7 +15,7 @@ public class ZFieldObject extends ZObject {
 
 	public void zType(String objNameOrId, String data) {
 		if (data != "")
-			ZObjectCore(objNameOrId, "type", data, "", "1", "");
+			ZObjectCore(objNameOrId, "type", true, data, "", "1", "");
 	}
 
 	public void zActivateAndType(String objNameOrId, String data) {
@@ -29,7 +29,7 @@ public class ZFieldObject extends ZObject {
 
 	public void zType(String objNameOrId, String data, String objectNumber) {
 		if (data != "")
-			ZObjectCore(objNameOrId, "type", data, "", objectNumber, "");
+			ZObjectCore(objNameOrId, "type", true, data, "", objectNumber, "");
 	}
 
 	public void zTypeWithKeyboard(String objNameOrId, String data) {
@@ -42,11 +42,11 @@ public class ZFieldObject extends ZObject {
 	}
 
 	public void zTypeInDlg(String objNameOrId, String data) {
-		ZObjectCore(objNameOrId, "type", data, "dialog", "", "");
+		ZObjectCore(objNameOrId, "type", true, data, "dialog", "", "");
 	}
 
 	public void zTypeInDlg(String objNameOrId, String data, String objNumber) {
-		ZObjectCore(objNameOrId, "type", data, "dialog", objNumber, "");
+		ZObjectCore(objNameOrId, "type", true, data, "dialog", objNumber, "");
 	}
 
 	public void zTypeInDlgWithKeyboard(String objNameOrId, String data,
@@ -56,41 +56,40 @@ public class ZFieldObject extends ZObject {
 
 	public void zTypeInDlgByName(String objNameOrId, String data,
 			String dialogName) {
-		ZObjectCore(objNameOrId, "type", data, "__dialogByName__" + dialogName,
+		ZObjectCore(objNameOrId, "type", true, data, "__dialogByName__" + dialogName,
 				"1", "");
 	}
 
 	public void zTypeInDlgByName(String objNameOrId, String data,
 			String dialogName, String objNumber) {
-		ZObjectCore(objNameOrId, "type", data, "__dialogByName__" + dialogName,
+		ZObjectCore(objNameOrId, "type", true, data, "__dialogByName__" + dialogName,
 				objNumber, "");
 	}
 
 	public String zGetCoordinatesInDlg(String objNameOrId) {
-		return ZObjectCore(objNameOrId, "getcoord", "", "dialog", "1", "");
+		return ZObjectCore(objNameOrId, "getcoord", true, "", "dialog", "1", "");
 	}
 
 	public String zGetCoordinates(String objNameOrId) {
-		return ZObjectCore(objNameOrId, "getcoord", "", "", "", "");
+		return ZObjectCore(objNameOrId, "getcoord");
 	}
 
 	public void zExists(String objNameOrId) {
-		String actual = ZObjectCore(objNameOrId, "exists", "", "", "", "");
+		String actual = ZObjectCore(objNameOrId, "exists");
 		Assert.assertEquals("true", actual, objTypeName + "(" + objNameOrId
 				+ ") Not Found.");
 	}
 
 	public void zExistsInDlg(String objNameOrId) {
-		String actual = ZObjectCore(objNameOrId, "exists", "", "dialog", "", "");
+		String actual = ZObjectCore(objNameOrId, "exists", true, "", "dialog", "", "");
 		Assert.assertEquals(actual, "true", objTypeName + "(" + objNameOrId
 				+ ") doesn't exist in dialog or no dialog was found");
 	}
 
 	public void zExistsInDlgByName(String objNameOrId, String dialogName) {
-		String actual = ZObjectCore(objNameOrId, "exists", "",
-				"__dialogByName__" + dialogName, "", "");
-		Assert.assertEquals(actual, "true", objTypeName + "(" + objNameOrId
-				+ ") doesn't exist in dialog(" + dialogName + ")");
+		String actual = ZObjectCore(objNameOrId, "exists", true, "", "__dialogByName__" + dialogName, "", "");
+		Assert.assertEquals(actual, "true",
+							objTypeName + "(" + objNameOrId	+ ") doesn't exist in dialog(" + dialogName + ")");
 	}
 
 	// Internal methods...
@@ -112,7 +111,7 @@ public class ZFieldObject extends ZObject {
 	private void handleFileUploadGeneral(String objNameOrId, String data,
 			String dialog, String objNumber) {
 
-		ZObjectCore(objNameOrId, "click", "", dialog, objNumber, "");
+		ZObjectCore(objNameOrId, "click", true, "", dialog, objNumber, "");
 		Robot robot;
 		try {
 			robot = new Robot();
@@ -139,16 +138,14 @@ public class ZFieldObject extends ZObject {
 	private void handleFileUploadIE(String objNameOrId, String data,
 			String dialog, String objNumber) {
 
-		String xy = ZObjectCore(objNameOrId, "getcoord", "", dialog, objNumber,
-				"");
+		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", dialog, objNumber, "");
 		moveMouseAndTypeDirectlyInBrowser(xy, data);
 	}
 
 	private void handleFileUploadSafariOrFF3(String objNameOrId, String data,
 			String dialog, String objNumber) {
 
-		String xy = ZObjectCore(objNameOrId, "getcoord", "", dialog, objNumber,
-				"");
+		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", dialog, objNumber, "");
 
 		try {
 			Thread.sleep(500);

@@ -51,7 +51,7 @@ public class MiscObject extends ZObject {
      *            "50,50"
      */
     public void zClickXY(String classNameOridWithZIndx, String XCommaY) {
-	ZObjectCore(classNameOridWithZIndx, "click", "", "true", XCommaY, "");
+	ZObjectCore(classNameOridWithZIndx, "click", true, "", "true", XCommaY, "");
     }
 
     /**
@@ -66,7 +66,7 @@ public class MiscObject extends ZObject {
      *            "50,50"
      */
     public void zDblClickXY(String classNameOridWithZIndx, String XCommaY) {
-	ZObjectCore(classNameOridWithZIndx, "dblclick", "", "true", XCommaY, "");
+	ZObjectCore(classNameOridWithZIndx, "dblclick", true, "", "true", XCommaY, "");
     }
 
     /**
@@ -79,11 +79,11 @@ public class MiscObject extends ZObject {
      *            "50,50"
      */
     public void zRtClickXY(String classNameOridWithZIndx, String XCommaY) {
-	ZObjectCore(classNameOridWithZIndx, "rtclick", "", "true", XCommaY, "");
+	ZObjectCore(classNameOridWithZIndx, "rtclick", true, "", "true", XCommaY, "");
     }
 
 	public void zType(String objNameOrId, String data) {
 		if (data != "")
-			ZObjectCore(objNameOrId, "type", data, "", "1", "");
+			ZObjectCore(objNameOrId, "type", true, data, "", "1", "");
 	}
 }

@@ -22,15 +22,15 @@ public class TaskItem extends ListItem{
 	}
 	
 	public void zVerifyCurrentTaskBodyText(String requiredTxt) {
-		String actual =  selenium.call("msgBodyCore", "", "gettext", "", "");
+		String actual =  selenium.call("msgBodyCore", "", "gettext", true, "", "");
 		Assert.assertTrue(actual.indexOf(requiredTxt)>=0);
 	}
 	public void zVerifyCurrentTaskBodyHasImage() {
-		String actual =  selenium.call("msgBodyCore", "", "gethtml", "", "");		
+		String actual =  selenium.call("msgBodyCore", "", "gethtml", true, "", "");		
 		Assert.assertTrue(actual.indexOf("dfsrc=")>=0);
 	}	
 	public String zGetTaskBodyHTML() {
-		return selenium.call("msgBodyCore", "", "gethtml", "", "");		
+		return selenium.call("msgBodyCore", "", "gethtml", true, "", "");		
 	}	
 
 

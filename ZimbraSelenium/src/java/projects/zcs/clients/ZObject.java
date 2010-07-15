@@ -27,17 +27,11 @@ public class ZObject extends SelNGBase {
 	}
 
 	public void zClick(String objNameOrId, String objNumber) {
-		ZObjectCore(objNameOrId, "click", "", objNumber);
-	}
-
-	// perf related
-	public String zClickAndGetPerf(String objNameOrId, String perfJSFunction) {
-		return ZObjectCore(objNameOrId, "clickAndGetPerf", "", "1",
-				perfJSFunction, "");
+		ZObjectCore(objNameOrId, "click", true, "", objNumber);
 	}
 
 	public void zClickInDlg(String objNameOrId, String objNumber) {
-		ZObjectCore(objNameOrId, "click", "dialog", objNumber);
+		ZObjectCore(objNameOrId, "click", true, "dialog", objNumber);
 	}
 
 	/**
@@ -47,7 +41,7 @@ public class ZObject extends SelNGBase {
 	 * @param objNumber
 	 */
 	public void zActivate(String objNameOrId, String objNumber) {
-		String xy = ZObjectCore(objNameOrId, "getcoord", "", "", objNumber, "");
+		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", "", objNumber, "");
 		moveMouseAndClick(xy, this.isCheckbox);
 	}
 
@@ -57,7 +51,7 @@ public class ZObject extends SelNGBase {
 	 * @param objNameOrId
 	 */
 	public void zActivate(String objNameOrId) {
-		String xy = ZObjectCore(objNameOrId, "getcoord", "", "", "", "");
+		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", "", "", "");
 		moveMouseAndClick(xy, this.isCheckbox);
 	}
 	/**
@@ -66,7 +60,7 @@ public class ZObject extends SelNGBase {
 	 * @param objNameOrId
 	 */
 	public void zActivateByDoubleClick(String objNameOrId) {
-		String xy = ZObjectCore(objNameOrId, "getcoord", "", "", "", "");
+		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", "", "", "");
 		moveMouseAndDblClick(xy, this.isCheckbox);
 	}
 	/**
@@ -76,7 +70,7 @@ public class ZObject extends SelNGBase {
 	 * @param objNumber
 	 */
 	public void zActivateInDlg(String objNameOrId, String objNumber) {
-		String xy = ZObjectCore(objNameOrId, "getcoord", "", "dialog",
+		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", "dialog",
 				objNumber, "");
 		moveMouseAndClick(xy, this.isCheckbox);
 	}
@@ -87,22 +81,22 @@ public class ZObject extends SelNGBase {
 	 * @param objNameOrId
 	 */
 	public void zActivateInDlg(String objNameOrId) {
-		String xy = ZObjectCore(objNameOrId, "getcoord", "", "dialog", "", "");
+		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", "dialog", "", "");
 		moveMouseAndClick(xy, this.isCheckbox);
 	}
 
 	public void zClickInDlgByName(String objNameOrId, String dialogName,
 			String objNumber) {
-		ZObjectCore(objNameOrId, "click", "__dialogByName__" + dialogName,
+		ZObjectCore(objNameOrId, "click", true, "__dialogByName__" + dialogName,
 				objNumber);
 	}
 
 	public void zClickInDlg(String objNameOrId) {
-		ZObjectCore(objNameOrId, "click", "dialog", "");
+		ZObjectCore(objNameOrId, "click", true, "dialog", "");
 	}
 
 	public void zClickInDlgByName(String objNameOrId, String dialogName) {
-		ZObjectCore(objNameOrId, "click", "__dialogByName__" + dialogName, "");
+		ZObjectCore(objNameOrId, "click", true, "__dialogByName__" + dialogName, "");
 	}
 
 	public void zDblClick(String objNameOrId) {
@@ -126,43 +120,41 @@ public class ZObject extends SelNGBase {
 	}
 
 	public String zGetInnerText(String objNameOrId, String objNumber) {
-		return ZObjectCore(objNameOrId, "gettext", "", objNumber);
+		return ZObjectCore(objNameOrId, "gettext", true, "", objNumber);
 	}
 
 	public String zGetInnerText(String objNameOrId) {
-		return ZObjectCore(objNameOrId, "gettext", "", "");
+		return ZObjectCore(objNameOrId, "gettext", true, "", "");
 	}
 
 	public String zGetInnerTextInDlg(String objNameOrId) {
-		return ZObjectCore(objNameOrId, "gettext", "dialog", "");
+		return ZObjectCore(objNameOrId, "gettext", true, "dialog", "");
 	}
 
 	public String zGetInnerHTML(String objNameOrId, String objNumber) {
-		return ZObjectCore(objNameOrId, "gethtml", "", objNumber);
+		return ZObjectCore(objNameOrId, "gethtml", true, "", objNumber);
 	}
 
 	public String zGetInnerTextInDlgByName(String objNameOrId, String dialogName) {
-		return ZObjectCore(objNameOrId, "gettext", "__dialogByName__"
+		return ZObjectCore(objNameOrId, "gettext", true, "__dialogByName__"
 				+ dialogName, "");
 	}
 
 	public String zGetInnerTextInDlgByName(String objNameOrId,
 			String dialogName, String objNumber) {
-		return ZObjectCore(objNameOrId, "gettext", "__dialogByName__"
+		return ZObjectCore(objNameOrId, "gettext", true, "__dialogByName__"
 				+ dialogName, objNumber);
 	}
 
 	public String zGetInnerHTML(String objNameOrId) {
-		return ZObjectCore(objNameOrId, "gethtml", "", "");
+		return ZObjectCore(objNameOrId, "gethtml", true, "", "");
 	}
 
 	public void zNotExists(String objNameOrId) {
-		// try {
-		// Thread.sleep(2000);
-		// } catch (InterruptedException e) {
-		// }
+		Assert.assertEquals("true", ZObjectCore(objNameOrId, "notexists", false));
+
 		try {
-			String actual = ZObjectCore(objNameOrId, "notexist");
+			String actual = ZObjectCore(objNameOrId, "notexist", false);
 			Assert.assertEquals("true", actual, objTypeName + "(" + objNameOrId
 					+ ") Found, which should not be present.");
 		} catch (SeleniumException e) {
@@ -175,7 +167,7 @@ public class ZObject extends SelNGBase {
 	}
 
 	public String zNotExistsDontWait(String objNameOrId) {
-		return ZObjectCore(objNameOrId, "notexists_dontwait");
+		return ZObjectCore(objNameOrId, "notexists", false);
 	}
 
 	public void zWait(String objNameOrId) {
@@ -185,44 +177,37 @@ public class ZObject extends SelNGBase {
 	public void zWait(String objNameOrId, String panel, String param1) {
 		// don't call core(since it could go one of the core might be calling
 		// this(chicken and egg)
-		selenium.call(coreName, objNameOrId, "wait", panel, param1);
+		selenium.call(coreName, objNameOrId, "wait", true, panel, param1);
 	}
 
 	public void zExists(String objNameOrId) {
-		String actual = ZObjectCore(objNameOrId, "exists");
-		if (actual.indexOf("false") == -1)// convert OK to true and OK,false to
-			// false
-			actual = "true";
-		else
-			actual = "false";
-		Assert.assertEquals(actual, "true", objTypeName + "(" + objNameOrId
-				+ ") Not Found.");
+		Assert.assertEquals("true", ZObjectCore(objNameOrId, "exists"));
 	}
 
 	public String zExistsDontWait(String objNameOrId) {
 		// this method doesnt wait and also doesnt fail if object doesnt exist
-		return ZObjectCore(objNameOrId, "exists_dontwait");
+		return ZObjectCore(objNameOrId, "exists", false);
 
 	}
 
 	public void zExistsInDlg(String objNameOrId) {
-		String actual = ZObjectCore(objNameOrId, "exists", "dialog", "");
+		String actual = ZObjectCore(objNameOrId, "exists", true, "dialog", "");
 		Assert.assertEquals(actual, "true", objTypeName + "(" + objNameOrId
 				+ ") doesn't exist in dialog or no dialog was found");
 	}
 
 	public String zExistsInDlgDontWait(String objNameOrId) {
-		return ZObjectCore(objNameOrId, "exists_dontwait", "dialog", "");
+		return ZObjectCore(objNameOrId, "exists", false, "dialog", "");
 	}
 
 	public String zExistsInDlgByNameDontWait(String objNameOrId,
 			String dialogName) {
-		return ZObjectCore(objNameOrId, "exists_dontwait", "__dialogByName__"
+		return ZObjectCore(objNameOrId, "exists", false, "__dialogByName__"
 				+ dialogName, "");
 	}
 
 	public void zExistsInDlgByName(String objNameOrId, String dialogName) {
-		String actual = ZObjectCore(objNameOrId, "exists", "__dialogByName__"
+		String actual = ZObjectCore(objNameOrId, "exists", true, "__dialogByName__"
 				+ dialogName, "");
 		Assert.assertEquals(actual, "true", objTypeName + "(" + objNameOrId
 				+ ") doesn't exist in dialog(" + dialogName + ")");
@@ -241,29 +226,28 @@ public class ZObject extends SelNGBase {
 	}
 
 	protected String ZObjectCore(String objNameOrId, String action) {
-		return ZObjectCore(objNameOrId, action, "", "");
+		return ZObjectCore(objNameOrId, action, true);
 	}
 
-	protected String ZObjectCore(String objNameOrId, String action,
+	protected String ZObjectCore(String objNameOrId, String action, Boolean wait) {
+		return ZObjectCore(objNameOrId, action, wait, "", "");
+	}
+	
+	protected String ZObjectCore(String objNameOrId, String action, Boolean wait,
 			String panel, String param1) {
-		String rc = "false";
-		rc = selenium.call(coreName, objNameOrId, action, panel, param1);
-		return rc;
+		return ZObjectCore(objNameOrId, action, wait, panel, param1, "", "");
 	}
 
-	protected String ZObjectCore(String objNameOrId, String action,
+	protected String ZObjectCore(String objNameOrId, String action, Boolean wait,
 			String panel, String param1, String param2, String param3) {
-		String rc = "false";
-		rc = selenium.call(coreName, objNameOrId, action, panel, param1,
-				param2, param3);
-		return rc;
+		return selenium.call(coreName, objNameOrId, action, wait, panel, param1, param2, param3);
 	}
 
 	public static String zVerifyObjDisplayed(String nameOrIdWithZIndex) {
 		// action "get" is mentioned just to indicate to selenium.call that its
 		// a getMethod
 		return selenium.call("verifyZObjectDisplayed", nameOrIdWithZIndex,
-				"get", null, null, null, null);
+				"get", false, null, null, null, null);
 	}
 
 	public String adjustXY(String xy, boolean isCheckbox) {

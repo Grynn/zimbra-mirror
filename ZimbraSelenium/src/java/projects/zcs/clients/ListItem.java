@@ -15,7 +15,7 @@ public class ListItem extends ZObject{
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */
 	public void zClickItemInSpecificList(String objNameOrId, String listNumber) {
-		ZObjectCore(objNameOrId, "click", "", "", listNumber, "");
+		ZObjectCore(objNameOrId, "click", true, "", "", listNumber, "");
 	}
 	/**
 	 * Clicks on a LINK within a listItem in a specific list when there are multiple lists
@@ -24,7 +24,7 @@ public class ListItem extends ZObject{
 	 * @param linkName name of the link to click
 	 */
 	public void zClickLinkWithInListItemInSpecificList(String listItemName, String listNumber, String linkName) {
-		ZObjectCore(listItemName, "clickLink="+linkName, "", "", listNumber, "");
+		ZObjectCore(listItemName, "clickLink="+linkName, true, "", "", listNumber, "");
 	}
 	
 	/**
@@ -33,7 +33,7 @@ public class ListItem extends ZObject{
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
 	public void zDblClickItemInSpecificList(String objNameOrId,  String listNumber) {
-	    ZObjectCore(objNameOrId, "dblclick", "", "", listNumber, ""); 
+	    ZObjectCore(objNameOrId, "dblclick", true, "", "", listNumber, ""); 
 	}
 	/**
 	 * @param objNameOrId listItemName or listItemId
@@ -41,7 +41,7 @@ public class ListItem extends ZObject{
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */
 	public void zClickItemInSpecificList(String objNameOrId, String objNumber, String listNumber) {
-		ZObjectCore(objNameOrId, "click", "", objNumber, listNumber, "");
+		ZObjectCore(objNameOrId, "click", true, "", objNumber, listNumber, "");
 	}
 	
 	/**
@@ -51,7 +51,7 @@ public class ListItem extends ZObject{
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
 	public void zClickItemInSpecificListInDlg(String objNameOrId, String objNumber, String listNumber) {
-		ZObjectCore(objNameOrId, "click", "dialog", objNumber, listNumber, "");
+		ZObjectCore(objNameOrId, "click", true, "dialog", objNumber, listNumber, "");
 	}
 	/**
 	 *  Verifies if a listItem exists in a specific list (within a dialog) when there are multiple lists
@@ -60,7 +60,7 @@ public class ListItem extends ZObject{
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
 	public void zVerifyItemInSpecificListInDlg(String objNameOrId, String objNumber, String listNumber) {
-	    	String actual = ZObjectCore(objNameOrId, "exists", "dialog", objNumber, listNumber, "");
+	    	String actual = ZObjectCore(objNameOrId, "exists", true, "dialog", objNumber, listNumber, "");
 		if(actual.indexOf("false") == -1)//convert OK to true and OK,false to false
 			actual = "true";
 		else
@@ -75,7 +75,7 @@ public class ListItem extends ZObject{
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
 	public void zVerifyItemInSpecificList(String objNameOrId, String objNumber, String listNumber) {
-	    	String actual = ZObjectCore(objNameOrId, "exists", "", objNumber, listNumber, "");
+	    	String actual = ZObjectCore(objNameOrId, "exists", true, "", objNumber, listNumber, "");
 		if(actual.indexOf("false") == -1)//convert OK to true and OK,false to false
 			actual = "true";
 		else
@@ -90,7 +90,7 @@ public class ListItem extends ZObject{
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
 	public void zVerifyItemInSpecificListInDlgNotExist(String objNameOrId, String objNumber, String listNumber) {
-	    	String actual = ZObjectCore(objNameOrId, "notexist", "dialog", objNumber, listNumber, "");
+	    	String actual = ZObjectCore(objNameOrId, "notexist", false, "dialog", objNumber, listNumber, "");
 		if(actual.indexOf("false") == -1)//convert OK to true and OK,false to false
 			actual = "true";
 		else
@@ -105,7 +105,7 @@ public class ListItem extends ZObject{
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
 	public void zVerifyItemInSpecificListNotExist(String objNameOrId, String objNumber, String listNumber) {
-		String actual = ZObjectCore(objNameOrId, "notexist", "", objNumber, listNumber, "");
+		String actual = ZObjectCore(objNameOrId, "notexist", false, "", objNumber, listNumber, "");
 		if(actual.indexOf("false") == -1)//convert OK to true and OK,false to false
 			actual = "true";
 		else

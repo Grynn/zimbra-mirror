@@ -16,14 +16,14 @@ public class CalendarFolder extends Folder {
 	 * @param folder
 	 */
 	public  void zCheck(String folder) {
-		selenium.call("folderCore_html",  folder+"_check", "click","", "");
+		selenium.call("folderCore_html",  folder+"_check", "click", true, "", "");
 	}	
 	/**
 	 * unchecks Calendar folder
 	 * @param folder
 	 */
 	public  void zUnCheck(String folder) {
-		selenium.call("folderCore_html",  folder+"_uncheck", "click","", "");
+		selenium.call("folderCore_html",  folder+"_uncheck", "click", true, "", "");
 	}		
 
 	/**
@@ -31,7 +31,7 @@ public class CalendarFolder extends Folder {
 	 * @param folder
 	 */
 	public  String zIsUnChecked(String folder) {
-		return selenium.call("folderCore_html",  folder+"_uncheck", "exists","", "");
+		return selenium.call("folderCore_html",  folder+"_uncheck", "exists", true, "", "");
 	}
 
 	/**
@@ -39,6 +39,6 @@ public class CalendarFolder extends Folder {
 	 * @param folder
 	 */
 	public  String zIsChecked(String folder) {
-		return selenium.call("folderCore_html",  folder+"_check", "exists","", "");
+		return selenium.call("folderCore_html",  folder+"_check", "exists", true, "", "");
 	}	
 }

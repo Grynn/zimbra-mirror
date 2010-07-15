@@ -11,7 +11,7 @@ public class Folder extends ZObject {
 
 
 	
-	public  String ZObjectCore(String folderNameseparatedBySlash, String action,
+	public  String ZObjectCore(String folderNameseparatedBySlash, String action, Boolean retryOnFalse,
 			String panel, String param1) {
 		String rc = "false";
 		String[] fldrs = folderNameseparatedBySlash.split("/");
@@ -25,26 +25,26 @@ public class Folder extends ZObject {
 				this._expndFldrIfRequired(currentFolder, panel, param1);
 				continue;
 			}
-			rc = selenium.call("folderCore",  currentFolder, action, panel, param1);
+			rc = selenium.call("folderCore",  currentFolder, action, retryOnFalse, panel, param1);
 		}
 		return rc;		
 	}	
 	
 	public  void zExpand(String folder) {
-		selenium.call("folderExpandBtnCore",  folder, "click","", "");
+		selenium.call("folderExpandBtnCore",  folder, "click", true, "", "");
 	}
 
 	public  void zCollapse(String folder) {
-		selenium.call("folderCollapseBtnCore",  folder, "click","", "");
+		selenium.call("folderCollapseBtnCore",  folder, "click", true, "", "");
 	}
 
 	private  void _expndFldrIfRequired(String folder, String panel, String param1) {
 
 	//	String rc = selenium.call("this.doZfolderExpandBtnExists("
 	//			+ doubleQuote + folder + doubleQuote + ")");
-		String rc = selenium.call("folderExpandBtnCore",  folder, "exists", panel, param1);
+		String rc = selenium.call("folderExpandBtnCore",  folder, "exists", true, panel, param1);
 		if(rc.equals("true"))
-			selenium.call("folderExpandBtnCore",  folder, "click", panel, param1);
+			selenium.call("folderExpandBtnCore",  folder, "click", true, panel, param1);
 	}	
 
 }

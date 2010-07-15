@@ -14,7 +14,7 @@ public class CheckBox extends ZObject{
 	} 
 	
 	public void zActivate(String objNameOrId, String objNumber) {
-		String xy = ZObjectCore(objNameOrId, "getcoord", "", "", objNumber,
+		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", "", objNumber,
 		"");
 		moveMouseAndClick(xy, this.isCheckbox);
 	}
@@ -23,7 +23,7 @@ public class CheckBox extends ZObject{
 	 * @param objNameOrId
 	 */
 	public void zActivate(String objNameOrId) {
-		String xy = ZObjectCore(objNameOrId, "getcoord", "", "", "",
+		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", "", "",
 		"");
 		moveMouseAndClick(xy, this.isCheckbox);
 	}	
@@ -33,7 +33,7 @@ public class CheckBox extends ZObject{
 	 * @param objNumber
 	 */	
 	public void zActivateInDlg(String objNameOrId, String objNumber) {
-		String xy = ZObjectCore(objNameOrId, "getcoord", "", "dialog", objNumber,
+		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", "dialog", objNumber,
 		"");
 		moveMouseAndClick(xy, this.isCheckbox);
 	}
@@ -42,41 +42,41 @@ public class CheckBox extends ZObject{
 	 * @param objNameOrId
 	 */	
 	public void zActivateInDlg(String objNameOrId) {
-		String xy = ZObjectCore(objNameOrId, "getcoord", "", "dialog", "",
+		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", "dialog", "",
 		"");
 		moveMouseAndClick(xy, this.isCheckbox);
 	}	
 
 	public void zClick(String objNameOrId) {
-		ZObjectCore(objNameOrId, "click",
+		ZObjectCore(objNameOrId, "click", true,
 				 "",  "",  "",  "");
 	}
 	public void zClickInDlg(String objNameOrId) {
-		ZObjectCore(objNameOrId, "click",
+		ZObjectCore(objNameOrId, "click", true,
 				 "",  "dialog",  "",  "");
 	}	
 	public void zClickInDlgByName(String objNameOrId, String dialogName) {
-		ZObjectCore(objNameOrId, "click",
+		ZObjectCore(objNameOrId, "click", true,
 				 "",  "__dialogByName__"+dialogName,  "",  "");
 	}	
 
 
 	public void zVerifyIsChecked(String objNameOrId) {
-		String actual = ZObjectCore(objNameOrId, "checked",
+		String actual = ZObjectCore(objNameOrId, "checked", true,
 				 "",  "",  "",  "");
 		Assert.assertEquals(actual, "true", objTypeName+"(" + objNameOrId
 				+ ") doesn't exist in dialog or no dialog was found");
 	}
 	
 	public void zVerifyIsNotChecked(String objNameOrId) {
-		String actual = ZObjectCore(objNameOrId, "checked",
+		String actual = ZObjectCore(objNameOrId, "checked", true,
 				 "",  "",  "",  "");
 		Assert.assertEquals(actual, "false", objTypeName+"(" + objNameOrId
 				+ ") exist in dialog or no dialog was found");
 	}
 	
 	public boolean zGetStatus(String objNameOrId) {
-		String actual = ZObjectCore(objNameOrId, "checked",
+		String actual = ZObjectCore(objNameOrId, "checked", true,
 				 "",  "",  "",  "");
 		if (actual.equals("true"))
 			return true;
@@ -85,19 +85,19 @@ public class CheckBox extends ZObject{
 	}
 	
 	public void zExists(String objNameOrId) {
-		String actual =ZObjectCore(objNameOrId, "exists",
+		String actual =ZObjectCore(objNameOrId, "exists", true,
 				 "",  "",  "",  "");
 		Assert.assertEquals("true", actual, objTypeName+"(" + objNameOrId
 				+ ") Not Found.");
 	}	
 	public void zExistsInDlg(String objNameOrId) {
-		String actual =ZObjectCore(objNameOrId, "exists",
+		String actual =ZObjectCore(objNameOrId, "exists", true,
 				 "",  "dialog",  "",  "");
 		Assert.assertEquals(actual, "true", objTypeName+"(" + objNameOrId
 				+ ") doesn't exist in dialog or no dialog was found");
 	}
 	public void zExistsInDlgByName(String objNameOrId, String dialogName) {
-		String actual =ZObjectCore(objNameOrId, "exists",
+		String actual =ZObjectCore(objNameOrId, "exists", true,
 				 "",  "__dialogByName__"+dialogName,  "",  "");
 		Assert.assertEquals(actual, "true", objTypeName+"(" + objNameOrId
 				+ ") doesn't exist in dialog("+dialogName+")");

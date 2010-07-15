@@ -15,7 +15,7 @@ public class DocumentPage extends ZObject {
 	 * @pageName pageName
 	 */	
 	public void zClick(String pageName) {
-		ZObjectCore(pageName, "click", "", "");
+		ZObjectCore(pageName, "click");
 	}
 
 	/* Clicks on a link(Edit, History, Delete etc links) for a given page in Documents's Table Of Contents
@@ -23,7 +23,7 @@ public class DocumentPage extends ZObject {
 	 * @linkNameInPage link(Edit, History, Delete etc links)
 	 */
 	public void zClick(String pageName, String linkNameInPage) {
-		ZObjectCore(pageName, "click", linkNameInPage, "");
+		ZObjectCore(pageName, "click", true, linkNameInPage);
 	}
 	
 }	
