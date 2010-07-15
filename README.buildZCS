@@ -16,7 +16,7 @@ Make sure the "zimbra" group exists in /etc/group
 
 Make sure that the p4 binary is in your path.
 
-The 1.5 Java JDK must also be installed into /usr/local/java, so that the binary is:
+The 1.6 Java JDK must also be installed into /usr/local/java, so that the binary is:
 /usr/local/java/bin/java
 
 Ant must be installed in /usr/local/ant, so that the binary is:
