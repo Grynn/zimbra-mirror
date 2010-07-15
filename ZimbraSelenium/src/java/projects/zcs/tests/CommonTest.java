@@ -999,7 +999,7 @@ public class CommonTest extends SelNGBase {
 		Assert
 				.assertTrue(
 						selenium
-								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//div[contains(@id, 'AutoCompleteListViewDiv_"
+								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
 										+ (rank - 1)
 										+ "')]//td[contains(text(), '"
 										+ value
@@ -1016,7 +1016,7 @@ public class CommonTest extends SelNGBase {
 		Assert
 				.assertFalse(
 						selenium
-								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//div[contains(@id, 'AutoCompleteListViewDiv_"
+								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
 										+ (rank - 1)
 										+ "')]//td[contains(text(), '"
 										+ value

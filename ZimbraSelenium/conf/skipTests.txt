@@ -233,6 +233,11 @@ CLASS:projects.zcs.tests.calendar.newappt.ApptInviteTests;METHOD:apptAddRemoveAt
 #bug 48696
 CLASS:projects.zcs.tests.zcscommon.TagActionTestsForAllAppTab;METHOD:createRenameDeleteTagAndVerifyInAllTab;LOCALE:all;BROWSERS:na;BUGS:48696;REMARK:Js error (appCtxt.getById(this.tagId) is undefined) while navigate Mail tab
 
+#bug 47044
+CLASS:projects.zcs.tests.mail.autocomplete.MailAutoCompleteAddressTests;METHOD:verifyAutocompleteFromContactsSubAndSubSubFolders_Bug47044;LOCALE:all;BROWSERS:na;BUGS:47044;REMARK:Autocomplete shows contact from deleted(Trashed) address book folders
+CLASS:projects.zcs.tests.mail.autocomplete.MailAutoCompleteAddressTests;METHOD:autocompleteShowsContactFromTrashedABFolders_Bug47044;LOCALE:all;BROWSERS:na;BUGS:47044;REMARK:Autocomplete shows contact from deleted(Trashed) address book folders
+CLASS:projects.zcs.tests.mail.autocomplete.MailAutoCompleteAddressTests;METHOD:unableToGetRidOfEmailedContacts_Bug40081;LOCALE:all;BROWSERS:na;BUGS:47044;REMARK:Autocomplete shows contact from deleted(Trashed) address book folders
+
 
 #------------------------HTML tests to be skipped ------------------
 #Bug 22626
