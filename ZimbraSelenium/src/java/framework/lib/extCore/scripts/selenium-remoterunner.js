@@ -202,9 +202,14 @@ objectExtend(RemoteRunner.prototype, {
                 cmdText += ', ' + command.value;
             }
         }
-        cmdText += ")";
+        cmdText += ")\n";
         var commandList = document.commands.commandList;
-        commandList.value += cmdText + "\n";
+        // DGF flush commandList on "open"
+        if (command.command == "open") {
+            commandList.value = cmdText;
+        } else {
+            commandList.value += cmdText;
+        }
         commandList.scrollTop = commandList.scrollHeight;
 
     },
@@ -567,6 +572,15 @@ Selenium.prototype.doCaptureScreenshot = function(filename) {
     * Captures a PNG screenshot to the specified file.
     *
     * @param filename the absolute path to the file to be written, e.g. "c:\blah\screenshot.png"
+    */
+    // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
+};
+
+Selenium.prototype.doCaptureScreenshotToString = function() {
+    /**
+    * Capture a PNG screenshot.  It then returns the file as a base 64 encoded string. 
+    * 
+    * @return string The base 64 encoded string of the screen shot (PNG file)
     */
     // This doesn't really do anything on the JS side; we let the Selenium Server take care of this for us!
 };

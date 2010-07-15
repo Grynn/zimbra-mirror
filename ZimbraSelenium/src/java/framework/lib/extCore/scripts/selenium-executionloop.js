@@ -74,10 +74,6 @@ TestLoop.prototype = {
          */
         LOG.debug("currentTest.resume() - actually execute");
         try {
-
-			this._startTime = new Date().getTime();
-			LOG.debug("***selenium-execution loop: this._startTime " + this._startTime);
-
             selenium.browserbot.runScheduledPollers();
             this._executeCurrentCommand();
             this.continueTestWhenConditionIsTrue();
@@ -123,7 +119,7 @@ TestLoop.prototype = {
     _handleCommandError : function(e) {
         if (!e.isSeleniumError) {
             LOG.exception(e);
-            var msg = "Selenium failure. Please report to the Selenium Users forum at http://forums.openqa.org, with error details from the log window.";
+            var msg = "Command execution failure. Please search the forum at http://clearspace.openqa.org for error details from the log window.";
             msg += "  The error message is: " + extractExceptionMessage(e);
             return this.commandError(msg);
         } else {
@@ -140,75 +136,26 @@ TestLoop.prototype = {
          */
         //LOG.debug("currentTest.continueTestWhenConditionIsTrue()");
         selenium.browserbot.runScheduledPollers();
-		 LOG.debug("continueTestWhenConditionIsTrue is called ");
-
         try {
-            if (this.waitForCondition == null || selenium.browserbot.selNGResult!= "") {
-				//LOG.setPerfLogLevelCount(LOG.getPerfLogLevelCount() + 1);
-				LOG.debug("0");
+            if (this.waitForCondition == null) {
                 LOG.debug("null condition; let's continueTest()");
                 LOG.debug("Command complete");
-				this._endTime =  new Date().getTime();
-				LOG.debug("***selenium-execution loop: this._endTime " + this._endTime);
-				if(LOG.perfStartLogging) {
-					var t = (this._endTime - this._startTime)/1000;
-					LOG.perfinfo("TIME TAKEN: " +  ( t + "seconds"));
-					//LOG.perfinfo("INNERHTML SIZE: "+ selenium.browserbot.getCurrentWindow().document.getElementsByTagName("HTML")[0].innerHTML.length);
-					ZM_DB_OBJ.setTimeTakenAndCommit(t);
-					selenium.browserbot.timetaken_CSV = selenium.browserbot.timetaken_CSV + "," + t;
-					selenium.browserbot.headers_CSV = selenium.browserbot.headers_CSV + "," + selenium.browserbot.headerName;
-					LOG.perfStartLogging = false;
-				}
-				if(selenium.browserbot.selNGResult != ""){
-					this.result.result = selenium.browserbot.selNGResult;
-				}                
-				this.commandComplete(this.result);
-				selenium.browserbot.selNGResult = "";
+                this.commandComplete(this.result);
                 this.continueTest();
-            } else if (this.waitForCondition() || selenium.browserbot.selNGResult!= "") {
-				//LOG.setPerfLogLevelCount(LOG.getPerfLogLevelCount() + 1);
-				LOG.debug("1");
+            } else if (this.waitForCondition()) {
                 LOG.debug("condition satisfied; let's continueTest()");
                 this.waitForCondition = null;
                 LOG.debug("Command complete");
-				this._endTime =  new Date().getTime();
-				if(LOG.perfStartLogging) {
-					var t = (this._endTime - this._startTime)/1000;
-					LOG.perfinfo("TIME TAKEN: " +  ( t + "seconds"));
-					selenium.browserbot.timetaken_CSV = selenium.browserbot.timetaken_CSV + "," + t;
-					selenium.browserbot.headers_CSV = selenium.browserbot.headers_CSV + "," + selenium.browserbot.headerName;
-
-					//LOG.perfinfo("INNERHTML SIZE: "+ selenium.browserbot.getCurrentWindow().document.getElementsByTagName("HTML")[0].innerHTML.length);
-					ZM_DB_OBJ.setTimeTakenAndCommit(t);
-					LOG.perfStartLogging = false;
-				}
-				if(selenium.browserbot.selNGResult != ""){
-					this.result.result = selenium.browserbot.selNGResult;
-				}
                 this.commandComplete(this.result);
-				selenium.browserbot.selNGResult = "";
                 this.continueTest();
             } else {
-				LOG.debug("2");
-                LOG.debug("waitForCondition was false; keep waiting!");
-				window.setTimeout(fnBind(this.continueTestWhenConditionIsTrue, this), 250);
+                //LOG.debug("waitForCondition was false; keep waiting!");
+                window.setTimeout(fnBind(this.continueTestWhenConditionIsTrue, this), 10);
             }
         } catch (e) {
-			LOG.debug("3");
             this.result = {};
-			var expnMsg = extractExceptionMessage(e);
-			if(expnMsg == "Permission denied"){
-				 LOG.debug("There was a permission denied expn, could be because the window is still loading, so retry");
-				 window.setTimeout(fnBind(this.continueTestWhenConditionIsTrue, this), 250);
-				 return;
-			}
-			if (expnMsg.indexOf("Timed") >= 0 && selenium.browserbot.dontFailOnTimeout) {
-				this.result.failed = false;
-				this.result.result = false;
-			} else {
             this.result.failed = true;
-				this.result.failureMessage = expnMsg;
-			}
+            this.result.failureMessage = extractExceptionMessage(e);
             this.commandComplete(this.result);
             this.continueTest();
         }
