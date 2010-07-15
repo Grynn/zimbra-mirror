@@ -630,7 +630,7 @@ ZaController.prototype._errorDialogCallback =
 function() {
 	ZaApp.getInstance().dialogs["errorDialog"].popdown();
 	if (this._execFrame) {
-		if (this._execFrame.restartOnError && !this._authenticating)
+		if (this._execFrame.restartOnError && !this._authenticating && this._execFrame.method)
 			this._execFrame.method.apply(this, this._execFrame.args);
 		this._execFrame = null;
 	}
