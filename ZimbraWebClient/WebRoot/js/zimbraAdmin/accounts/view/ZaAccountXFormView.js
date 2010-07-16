@@ -2488,6 +2488,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									visibilityChecks:[ZaItem.hasReadPermission]
 								},
 								{type:_GROUP_, numCols:6, width:"625px",colSizes:["275","100px","auto","100px","auto","100px"], colSpan:2,
+									visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_zimbraPrefCalendarForwardInvitesTo]],
 									cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
 									items: [
 										{type:_CELLSPACER_},
