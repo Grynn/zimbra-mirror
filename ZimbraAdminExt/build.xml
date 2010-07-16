@@ -1,4 +1,4 @@
-<project name="ZimbraAdminExt" default="deploy">
+<project name="ZimbraAdminExt" default="deploy-all">
 
     <import file="../ZimbraCustomerServices/hosted/YahooSmb/ZimbraAdminExt/build.xml" optional="true" />
     <property file="build.properties"/>
