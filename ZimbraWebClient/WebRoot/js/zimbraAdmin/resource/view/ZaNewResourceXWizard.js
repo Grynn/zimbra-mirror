@@ -427,7 +427,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 							removeButtonLabel:ZaMsg.NAD_RemoveAddress,
 							nowrap:false,labelWrap:true,
 							items: [
-								{ref:".", type:_TEXTFIELD_, label:null, width:250, enableDisableChecks:[]}
+								{ref:".", type:_TEXTFIELD_, label:null, width:250,visibilityChecks:[], enableDisableChecks:[]}
 							]
 						});
 						
