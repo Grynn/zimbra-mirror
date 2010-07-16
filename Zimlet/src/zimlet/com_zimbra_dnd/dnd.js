@@ -145,7 +145,7 @@ function(viewId, isNewView) {
             
             this._addHandlers(el);
             var dndTooltip = this.dndTooltipEl = document.getElementById(el.id + '_zdnd_tooltip');
-            dndTooltip.style.display = "block";
+            if(dndTooltip && dndTooltip.style) dndTooltip.style.display = "block";
         }
     } else if ("createEvent" in document && document.getElementById("zdnd_files") && !AjxEnv.isIE && !isWindowsSafari) {
         if (viewId == ZmId.VIEW_COMPOSE ||
