@@ -75,7 +75,7 @@ function(/* arg1 ... argN */) {
 	// sometimes we want to pass a null or false argument, so simply
 	// checking for if (this.args) won't do.
 	if (typeof this.args != "undefined") {
-		if (this.args instanceof Array) {
+		if (this.args!==null && this.args instanceof Array) { // IE mysteriously screws up the instanceof test if this.args is null
 			// NOTE: We must NOT use this.args directly if this method's
 			//       params are gonna be pushed onto the array because it
 			//       will change the original args!
@@ -116,7 +116,7 @@ function(argList) {
 	// sometimes we want to pass a null or false argument, so simply
 	// checking for if (this.args) won't do.
 	if (typeof this.args != "undefined") {
-		if (this.args instanceof Array) {
+		if (this.args!==null && this.args instanceof Array) {
 			// NOTE: We must NOT use this.args directly if this method's
 			//       params are gonna be pushed onto the array because it
 			//       will change the original args!
