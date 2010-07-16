@@ -1,0 +1,7 @@
+<zimlet name="com_zimbra_attachcontacts" label="Attach Contacts" version="0.1" description="Allows Attaching contacts when composing a new message." target="main compose-window">
+	<include>attachcontacts.js</include>
+	<include>ACZimletNavToolBar.js</include>
+	<include>AttachContactsTabView.js</include>
+	<includeCSS>attachcontacts.css</includeCSS>
+	<handlerObject>com_zimbra_attachcontacts_HandlerObject</handlerObject>
+</zimlet>
