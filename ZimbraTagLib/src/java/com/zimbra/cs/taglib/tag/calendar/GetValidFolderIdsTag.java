@@ -29,7 +29,7 @@ public class GetValidFolderIdsTag extends ZimbraSimpleTag {
         JspContext jctxt = getJspContext();
         try {
             ZMailbox mbox = mMailbox != null ? mMailbox.getMailbox() :  getMailbox();
-            String result = mbox.getValFolderIds(mFolderId);
+            String result = mbox.getValidFolderIds(mFolderId);
             jctxt.setAttribute(mVar, result,  PageContext.PAGE_SCOPE);
         } catch (ServiceException e){
             if (mVarException != null) {
