@@ -90,6 +90,35 @@
    		</javadoc>
    	</target>
 	
+	<target name="build-selng" depends="clean,jar-staf">
+			<copy todir="${src.java.dir}/framework/locale">
+				<fileset dir="${webclient.dir}/WebRoot/messages/">
+					<include name = "**/*"/>
+				</fileset>
+			</copy>	
+			<copy todir="${src.java.dir}/framework/locale">
+				<fileset dir="${server.dir}/conf/msgs/">
+					<include name = "**/*"/>
+				</fileset>
+			</copy>					
+			<tar destfile="${build.dir}/selng.tgz" compression="gzip">
+				<tarfileset dir="${conf.dir}" prefix="conf" mode="777">
+			 		<include name="**/*"/>
+				</tarfileset>	 
+				<tarfileset dir="${src.dir}" prefix="src" mode="777">
+					<include name="**/*"/>
+				</tarfileset>	  
+				<tarfileset dir="jars" prefix="jars" mode="777">
+					<include name="**/*"/>
+				</tarfileset>	
+				<tarfileset file="build.xml" mode="777">
+				</tarfileset>
+				<tarfileset file="package-list" mode="777">
+				</tarfileset>
+			</tar>		
+			<copy file="${build.dir}/selng.tgz" todir="${dist.dir.root}"/>
+		</target>
+	
 	<target name="jar-staf-selenium" depends="compile" description="Creates the selenium service jar file">
 		<property name="build.staf.selenium.classes.dir"  	location="${build.dir}/staf/selenium/STAF-INF/classes"/>
 		<property name="build.staf.selenium.jars.dir"  		location="${build.dir}/staf/selenium/STAF-INF/jars"/>
