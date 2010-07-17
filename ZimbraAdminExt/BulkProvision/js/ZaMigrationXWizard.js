@@ -449,7 +449,7 @@ ZaMigrationXWizard.myXFormModifier = function(xFormObject,entry) {
 	 * Enter LDAP info for generating bulk file or direct import
 	 */
 	var case_ldap_info = {
-		type:_CASE_, numCols:2, colSizes:["250px","*"],tabGroupKey:ZaMigrationXWizard.STEP_LDAP_INFO, caseKey:ZaMigrationXWizard.STEP_LDAP_INFO,
+		type:_CASE_, numCols:2, colSizes:["250px","380px"],tabGroupKey:ZaMigrationXWizard.STEP_LDAP_INFO, caseKey:ZaMigrationXWizard.STEP_LDAP_INFO,
 		items:[
 		       	{type:_DWT_ALERT_, style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.ADInfoStepNote,colSpan:2},
 		       	{ref:ZaBulkProvision.A2_maxResults, type:_TEXTFIELD_,cssClass:"admin_xform_number_input", 
