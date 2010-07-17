@@ -31,22 +31,39 @@ com_zimbra_attachcontacts_HandlerObject.prototype.constructor = com_zimbra_attac
  */
 var AttachContactsZimlet = com_zimbra_attachcontacts_HandlerObject;
 
-/**
- * Initializes the zimlet.
- *
- */
 AttachContactsZimlet.prototype.init =
 function() {
-	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
-	var tabview = attachDialog ? attachDialog.getTabView() : null;
+	if (appCtxt.isChildWindow) {
+		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
+	}
+};
 
-	this.AMV = new AttachContactsTabView(tabview, this);
+AttachContactsZimlet.prototype.initializeToolbar =
+function(app, toolbar, controller, viewId) {
+	if (viewId.indexOf("COMPOSE") >= 0) {
+		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
+	}
+};
+
+AttachContactsZimlet.prototype._delayedAddTab =
+function() {
 	var tabLabel = this.getMessage("ACZ_tab_label");
-	var tabkey = attachDialog.addTab("AttachContacts", tabLabel, this.AMV);
-	this.AMV.attachDialog = attachDialog;
+	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
 
-	var callback = new AjxCallback(this.AMV, this.AMV.uploadFiles);
-	attachDialog.addOkListener(tabkey, callback);
+	var tabview = attachDialog ? attachDialog.getTabView() : null;
+	var tabs = attachDialog.getTabView()._tabs;
+	for (var indx in tabs) {
+		if (tabs[indx].title == tabLabel) {
+			return;
+		}
+	}
+	this.AttachContactsView = new AttachContactsTabView(tabview, this);
+
+	this._tabkey = attachDialog.addTab("AttachContacts", tabLabel, this.AttachContactsView);
+	this.AttachContactsView.attachDialog = attachDialog;
+
+	var callback = new AjxCallback(this.AttachContactsView, this.AttachContactsView.uploadFiles);
+	attachDialog.addOkListener(this._tabkey, callback);
 };
 
 /**

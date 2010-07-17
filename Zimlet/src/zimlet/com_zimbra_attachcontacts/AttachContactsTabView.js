@@ -60,20 +60,17 @@ AttachContactsTabView.prototype.toString = function() {
 AttachContactsTabView.prototype.showMe =
 function() {
 	DwtTabViewPage.prototype.showMe.call(this);
-	//this.treeView.addSelectionListener(new AjxListener(this, this._treeListener));
+	this._createHtml1();
 	document.getElementById(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
-
+	
 	this.setSize(Dwt.DEFAULT, "255");
-	if (this._currentQuery == undefined) {
-		this._currentQuery = this._getQueryFromFolder("7");
-		this.treeView.setSelected("7");
-	}
+	this._currentQuery = this._getQueryFromFolder("7");
+	this.treeView.setSelected("7");
 	this._treeListener();
 };
 
 /**
  * Resets the query.
- *
  * @param	{string}	newQuery		the new query
  */
 AttachContactsTabView.prototype._resetQuery =
@@ -90,7 +87,6 @@ function(newQuery) {
 
 /**
  * Gets the "from folder id" query.
- *
  * @param	{string}		folderId
  * @return	{string}	the query
  */
@@ -101,7 +97,6 @@ function(folderId) {
 
 /**
  * Hides the tab view.
- *
  */
 AttachContactsTabView.prototype.hideMe =
 function() {
@@ -110,9 +105,8 @@ function() {
 
 /**
  * Creates HTML for for the attach contacts tab UI.
- *
  */
-AttachContactsTabView.prototype._createHtml =
+AttachContactsTabView.prototype._createHtml1 =
 function() {
 	this._contentEl = this.getContentHtmlElement();
 	this._tableID = Dwt.getNextId();
@@ -149,7 +143,6 @@ function() {
 
 /**
  * Listens for "search" button events.
- *
  * @see			_createHtml
  */
 AttachContactsTabView.prototype._searchButtonListener =
@@ -166,7 +159,6 @@ function(ev) {
 
 /**
  * Listens for "navigation bar" button events.
- *
  * @see			_createHtml
  */
 AttachContactsTabView.prototype._navBarListener =
@@ -206,7 +198,6 @@ function(params) {
 	} else {
 		this._navTB.setText((this._offset + 1) + "-" + (this._offset + numItems));
 	}
-
 	this._setListView(items);
 };
 
@@ -340,11 +331,12 @@ function(params) {
 			treeIds: params.treeIds
 		};
 		overview =  opc.createOverview(ovParams);
+			overview.set(params.treeIds);
+
 	} else if (params.account) {
 		overview.account = params.account;
 	}
 	this._overview = overview;
-	overview.set(params.treeIds);
 	document.getElementById(this._folderTreeCellId).appendChild(overview.getHtmlElement());
 	this.treeView = overview.getTreeView("ADDRBOOK");
 	document.getElementById(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
