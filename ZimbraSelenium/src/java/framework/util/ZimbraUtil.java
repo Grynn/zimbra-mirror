@@ -10,7 +10,7 @@ public class ZimbraUtil extends SelNGBase {
 		// return string(because of get*)
 		if (zimbraVersion.equals(""))
 			zimbraVersion = selenium.call("zGetZimbraVersion", "",
-					"getZimbraVersion", false, "","");
+					"getZimbraVersion", false, "", "");
 
 		return zimbraVersion;
 	}
