@@ -226,6 +226,8 @@
 		</java>
 	</target>
 	
+	<target name="test-html-zcs" depends="compile-zcs, run-html-zcs"/>
+	<target name="test-ajax-zcs" depends="compile-zcs, run-ajax-zcs"/>
 	<target name="test-zcs" depends="compile-zcs, run-html-zcs, run-ajax-zcs"/>
 	
 </project>
