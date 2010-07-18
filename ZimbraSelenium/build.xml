@@ -211,9 +211,7 @@
 	<target name="run-html-zcs">
 		<echo message="running  html tests..." />
 		<java classname="projects.html.bin.ExecuteTests" classpathref="runpath" fork="true">
-			<!--<arg value="fullSuite" />-->
-			<!--<arg value="debugSuite" />-->
-			<arg value="debugSuite" />
+			<arg value="fullSuite" />
 			<jvmarg value="-ea" />
 			<jvmarg value="-Dfile.encoding=UTF-8" />
 		</java>
