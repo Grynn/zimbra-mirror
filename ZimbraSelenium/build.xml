@@ -146,6 +146,8 @@
 	<target name="generate.locale.files" depends="generate.locale.files.ZimbraWebClient, generate.local.files.ZimbraServer" description="Grab I18N message files" />
 
 	<target name="copy-data" depends="generate.locale.files" description="copies i18n and test data">
+		<mkdir dir="${src.java.dir}/projects/zcs/data"/>
+		<mkdir dir="${src.java.dir}/framework/locale"/>
 		<copy todir="${build.classes.dir}/projects/zcs/data">
 			<fileset dir="${src.java.dir}/projects/zcs/data" />
 		</copy>
