@@ -140,7 +140,7 @@ function(html, idx, obj, contact, buddy, spanId) {
 
 		this._getRoster();
 	} else {
-		if (contact && contact instanceof ZmContact) {
+		if (contact && contact.toString() == "ZmContact") {
 			content = AjxStringUtil.htmlEncode(contact.getFullName());
 		}
 		if (!content) {
@@ -485,7 +485,7 @@ function(create) {
 	var contact;
 	var addr = this._actionObject;
 	if (this._actionObject) {
-		if (this._actionObject instanceof ZmContact) {
+		if (this._actionObject.toString() == "ZmContact") {
 			contact = this._actionObject;
 		} else if (AjxUtil.isString(this._actionObject)) {
 			addr = this._getAddress(this._actionObject);
