@@ -1,8 +1,6 @@
 package framework.core;
 
-import com.thoughtworks.selenium.CommandProcessor;
 import com.thoughtworks.selenium.DefaultSelenium;
-import com.thoughtworks.selenium.HttpCommandProcessor;
 import com.thoughtworks.selenium.SeleniumException;
 
 public class ZimbraSelenium extends DefaultSelenium {
@@ -15,6 +13,9 @@ public class ZimbraSelenium extends DefaultSelenium {
 		super(serverHost, serverPort, browserStartCommand, browserURL);
 	}
 	
+	public String call(String coreFunction, String locator, String action, Boolean retryOnFalse) {
+		return this.call(coreFunction, locator, action, retryOnFalse, "", "");
+	}
 	public String call(String coreFunction, String locator, String action, Boolean retryOnFalse,
 			String panel, String param1) {
 		return this.call(coreFunction, locator, action, retryOnFalse, panel, param1, "", "");
