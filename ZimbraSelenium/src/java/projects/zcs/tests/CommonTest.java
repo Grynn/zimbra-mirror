@@ -196,7 +196,6 @@ public class CommonTest extends SelNGBase {
 
 	@AfterSuite(groups = { "always" })
 	public void stopSeleniumServer() {
-		ZimbraVersion = ZimbraUtil.getZimbraVersion();
 		super.stopSeleniumServer();
 	}
 
