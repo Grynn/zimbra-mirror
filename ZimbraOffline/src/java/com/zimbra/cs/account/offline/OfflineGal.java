@@ -150,7 +150,7 @@ public class OfflineGal {
             
                 Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.TYPE_CONTACT);
                 Element cn = response.addElement(MailConstants.E_CONTACT);
-                cn.addAttribute(MailConstants.A_ID, id);
+                cn.addAttribute(MailConstants.A_ID, hit.getAcctIdStr() + ":" + Integer.toString(id));
             
                 Map<String, String> fields = contact.getFields();
                 Iterator<String> it = fields.keySet().iterator();
@@ -164,7 +164,7 @@ public class OfflineGal {
                 if (sortOrder != null) {
                     Object sf = hit.getSortField(sortOrder);
                     if (sf != null && sf instanceof String)
-                        cn.addKeyValuePair(MailConstants.A_SORT_FIELD, (String)sf, MailConstants.E_ATTRIBUTE, MailConstants.A_ATTRIBUTE_NAME);
+                        cn.addAttribute(MailConstants.A_SORT_FIELD, (String)sf);
                 }
             }
                     
