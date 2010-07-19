@@ -63,10 +63,7 @@ function() {
 	this._createHtml1();
 	document.getElementById(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
 	
-	this.setSize(Dwt.DEFAULT, "255");
-	this._currentQuery = this._getQueryFromFolder("7");
-	this.treeView.setSelected("7");
-	this._treeListener();
+
 };
 
 /**
@@ -298,10 +295,14 @@ function() {
  */
 AttachContactsTabView.prototype.showAttachContactsTreeView =
 function() {
+	var callback = new AjxCallback(this, this._showTreeView);
+	AjxPackage.undefine("zimbraMail.abook.controller.ZmAddrBookTreeController");
+	AjxPackage.require({name:["ContactsCore","Contacts"], forceReload:true, callback:callback});
+};
 
-	AjxDispatcher.require("Contacts");
+AttachContactsTabView.prototype._showTreeView =
+function() {
 	if( appCtxt.isChildWindow) {
-		AjxPackage.require("zimbraMail.abook.controller.ZmAddrBookTreeController");
 		ZmOverviewController.CONTROLLER["ADDRBOOK"] = "ZmAddrBookTreeController";
 	}
 	var app = appCtxt.getApp(ZmApp.CONTACTS);
@@ -316,7 +317,12 @@ function() {
 	};
 	this._setOverview(params);
 
-};
+	this.setSize(Dwt.DEFAULT, "255");
+	this._currentQuery = this._getQueryFromFolder("7");
+	this.treeView.setSelected("7");
+	this._treeListener();
+
+}
 /**
  * Called by Framework
  * @param {Object} params Object with Overview information
