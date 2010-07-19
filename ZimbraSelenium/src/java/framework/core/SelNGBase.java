@@ -70,9 +70,10 @@ public class SelNGBase {
 	public void startSeleniumServer() throws Exception {
 		rcConfig = new RemoteControlConfiguration();
 		rcConfig.setPort(Integer.parseInt(config.getString("serverport")));
-		rcConfig.setUserExtensions(new File("c:\\user-extensions.js"));
+		File a = new File("src/java/framework/lib/user-extensions.js");
+		rcConfig.setUserExtensions(a.getCanonicalFile());
 		ss = new SeleniumServer(false, rcConfig);
-		ss.start();
+		ss.boot();
 		expectedValue.clear();
 	}
 
