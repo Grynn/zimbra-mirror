@@ -7,7 +7,9 @@ package com.zimbra.zmtnef2xml;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -839,7 +841,11 @@ public class Main {
 
     private static void usage() {
         // System.err.println("Usage: java com.zimbra.sxtnef2xml.Main [-t <tnef file>]");
-        System.err.println("Usage: java -jar sxtnef2xml.jar [-t <tnef file>]");
+        System.err.println("Usage: java -jar sxtnef2xml.jar [-t <tnef file>] | <tnef file>...");
+        System.err.println("    \"-t\" option --> Xml-like output for single TNEF file is");
+        System.err.println("                      sent to System.out");
+        System.err.println("    Otherwise, output is placed in files with the same name");
+        System.err.println("    as the TNEF files plus a \".xml\" suffix");
         System.exit(1);
     }
 
@@ -849,20 +855,39 @@ public class Main {
     public static void main(String[] args) {
         File tnefFile = null;
 
-        for (int i = 0; i < args.length; ++i) {
-            String arg = args[i];
-            if (arg != null) {
-                if (arg.equals("-t")) {
-                    if (i >= args.length - 1) {
-                        usage();
+        if (args.length == 0) {
+            usage();
+        } else if ((args.length == 2) && (args[0].equals("-t"))) {
+            tnefFile = new File(args[1]);
+            writeXmlToStream(tnefFile, System.out);
+        } else {
+            String xmlFimeName;
+            for (int i = 0; i < args.length; ++i) {
+                tnefFile = new File(args[i]);
+                String xmlFileName = new String(tnefFile + ".xml");
+                PrintStream ps = null;
+                FileOutputStream wout = null;
+                try {
+                    wout = new FileOutputStream(xmlFileName);
+                    ps = new PrintStream(wout, false);
+                    writeXmlToStream(tnefFile, ps);
+                    wout.flush();
+                } catch (IOException ex) {
+                    Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                } finally {
+                    if (wout != null) {
+                        try {
+                            wout.close();
+                        } catch (IOException ex) {
+                            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+                        }
                     }
-                    tnefFile = new File(args[i+1]);
-                    ++i;
-                } else {
-                    usage();
                 }
             }
         }
+    }
+
+    public static void writeXmlToStream(File tnefFile, PrintStream outStream) {
         if (tnefFile != null) {
             FileInputStream tnefInput = null;
             try {
@@ -872,7 +897,7 @@ public class Main {
 
                 tnefStream = new TNEFInputStream(tnefInput);
                 tnefView = new Message(tnefStream);
-                System.out.println(toXmlStringBuffer(tnefView));
+                outStream.println(toXmlStringBuffer(tnefView));
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
             } finally {
@@ -886,6 +911,7 @@ public class Main {
             }
         }
     }
+
     /**
      * Provide an Xml-like representation of the scheduling
      * view of the TNEF Message
