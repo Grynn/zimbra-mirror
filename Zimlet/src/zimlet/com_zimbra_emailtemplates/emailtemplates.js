@@ -196,6 +196,7 @@ function(params) {
 		this.replaceDlg.params = params;
 		this._createReplaceView(params);
 		this.replaceDlg.popup();
+		this._addTabControl();
 		return;
 	}
 	this.replaceDlgView = new DwtComposite(this.getShell());
@@ -205,6 +206,8 @@ function(params) {
 	this.replaceDlg.params = params;
 	this.replaceDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._replaceOKBtnListener));
 	this.replaceDlg.popup();
+	this._addTabControl();
+
 };
 
 Com_Zimbra_EmailTemplates.prototype._createReplaceView =
@@ -223,6 +226,7 @@ function(params) {
 		tmpArry.push(AjxStringUtil.trim(dataArry[j]));
 	}
 	dataArry = emailtemplates_unique(tmpArry);
+	this._replaceFieldIds = [];
 	this._replaceFieldIdsMap = [];
 	var i = 0;
 	var html = new Array();
@@ -231,11 +235,30 @@ function(params) {
 	for (var k = 0; k < dataArry.length; k++) {
 		var key = dataArry[k];
 		var id = Dwt.getNextId();
+		this._replaceFieldIds.push(id);
 		this._replaceFieldIdsMap.push({key:key, id:id});
 		html[i++] = ["<TR><TD><DIV style='font-weight:bold;'>",key,"</div></TD><TD><input type=text id='",id,"'></input></TD></TR>"].join("");
 	}
 	html[i++] = "</TABLE>";
 	this.replaceDlgView.getHtmlElement().innerHTML = html.join("");
+};
+
+/**
+ * Adds tab control for Account Preferences' fields
+ */
+Com_Zimbra_EmailTemplates.prototype._addTabControl =
+function() {
+	this.replaceDlg._tabGroup.removeAllMembers();
+	for (var i = 0; i < this._replaceFieldIds.length; i++) {
+		var obj = document.getElementById(this._replaceFieldIds[i]);
+		if (obj) {
+			this.replaceDlg._tabGroup.addMember(obj);
+		}
+	}
+	this.replaceDlg._tabGroup.addMember(this.replaceDlg.getButton(DwtDialog.OK_BUTTON));
+	this.replaceDlg._tabGroup.addMember(this.replaceDlg.getButton(DwtDialog.CANCEL_BUTTON));
+
+	document.getElementById(this._replaceFieldIds[0]).focus();
 };
 
 Com_Zimbra_EmailTemplates.prototype._replaceOKBtnListener =
