@@ -36,6 +36,20 @@ var AttachMailZimlet = com_zimbra_attachmail_HandlerObject;
  */
 AttachMailZimlet.prototype.init =
 function() {
+	if (appCtxt.isChildWindow) {
+		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
+	}
+};
+
+AttachMailZimlet.prototype.initializeToolbar =
+function(app, toolbar, controller, viewId) {
+	if (viewId.indexOf("COMPOSE") >= 0 && !appCtxt.isChildWindow) {
+		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
+	}
+};
+
+AttachMailZimlet.prototype._delayedAddTab =
+function() {
 	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
 	var tabview = attachDialog ? attachDialog.getTabView() : null;
 	
@@ -47,7 +61,6 @@ function() {
 	
 	var callback = new AjxCallback(this.AMV, this.AMV.uploadFiles);
 	attachDialog.addOkListener(tabkey, callback);
-
 };
 
 /**
@@ -117,13 +130,15 @@ AttachMailTabView.prototype.toString = function() {
  */
 AttachMailTabView.prototype.showMe =
 function() {
+
 	DwtTabViewPage.prototype.showMe.call(this);
-	this.setSize(Dwt.DEFAULT, "255");
-	if (this._currentQuery == undefined) {
-		this._currentQuery = this._getQueryFromFolder("2");
-		this.treeView.setSelected("2");
+	if(this._isLoaded) {
+			this.setSize(Dwt.DEFAULT, "255");
+		return;
 	}
-	this.executeQuery(this._currentQuery);
+	this._createHtml1();
+	document.getElementById(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
+	this._isLoaded = true;
 };
 
 /**
@@ -167,7 +182,7 @@ function() {
  * Creates HTML for for the attach mail tab UI.
  * 
  */
-AttachMailTabView.prototype._createHtml =
+AttachMailTabView.prototype._createHtml1 =
 function() {
 	this._contentEl = this.getContentHtmlElement();
 	this._tableID = Dwt.getNextId();
@@ -214,7 +229,8 @@ function() {
 	document.getElementById(AttachMailTabView.ELEMENT_ID_VIEW_MESSAGE_BUTTON).appendChild(viewMsgButton.getHtmlElement());
 
 	this._navigationContainer = new DwtComposite(appCtxt.getShell());
-	this._navTB = new ZmNavToolBar({parent:this._navigationContainer});
+	
+	this._navTB = new AMZimletNavToolBar({parent:this._navigationContainer});
 	var navBarListener = new AjxListener(this, this._navBarListener);
 	this._navTB.addSelectionListener(ZmOperation.PAGE_BACK, navBarListener);
 	this._navTB.addSelectionListener(ZmOperation.PAGE_FORWARD, navBarListener);
@@ -225,7 +241,7 @@ function() {
 	var params = {parent: appCtxt.getShell(), className: "AttachMailTabBox AttachMailList", posStyle: DwtControl.ABSOLUTE_STYLE, view: ZmId.VIEW_BRIEFCASE_ICON, type: ZmItem.ATT};
 	var bcView = this._tabAttachMailView = new ZmAttachMailListView(params);
 	bcView.reparentHtmlElement(this._folderListId);
-	//bcView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
+	bcView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	Dwt.setPosition(bcView.getHtmlElement(), Dwt.RELATIVE_STYLE);
 	//this.executeQuery(ZmOrganizer.ID_BRIEFCASE);
 };
@@ -447,10 +463,22 @@ function(items) {
  */
 AttachMailTabView.prototype.showAttachMailTreeView =
 function() {
+	var callback = new AjxCallback(this, this._showTreeView);
+	AjxPackage.undefine("zimbraMail.mail.controller.ZmMailFolderTreeController");
+	AjxPackage.require({name:["MailCore","Mail"], forceReload:true, callback:callback});
+
+
+
+};
+
+AttachMailTabView.prototype._showTreeView =
+function() {
+	if(appCtxt.isChildWindow) {
+		ZmOverviewController.CONTROLLER["FOLDER"] = "ZmMailFolderTreeController";
+	}
 	//Force create deferred folders if not created
-	var aCtxt = appCtxt.isChildWindow ? parentAppCtxt : appCtxt;
-	var briefcaseApp = aCtxt.getApp(ZmApp.MAIL);
-	briefcaseApp._createDeferredFolders();
+	var app = appCtxt.getApp(ZmApp.MAIL);
+	app._createDeferredFolders();
 
 	var base = this.toString();
 	var acct = appCtxt.getActiveAccount();
@@ -461,8 +489,13 @@ function() {
 		account: acct
 	};
 	this._setOverview(params);
-
+	this.setSize(Dwt.DEFAULT, "255");
+	this._currentQuery = this._getQueryFromFolder("2");
+	this.treeView.setSelected("2");
+	this._treeListener();
 };
+
+
 
 AttachMailTabView.prototype._setOverview =
 function(params) {
@@ -477,28 +510,25 @@ function(params) {
 			noTooltips: true,
 			treeIds: params.treeIds
 		};
-		overview = this._overview = opc.createOverview(ovParams);
+		overview =  opc.createOverview(ovParams);
 		overview.set(params.treeIds);
-		document.getElementById(params.fieldId).appendChild(overview.getHtmlElement());
-		this.treeView = overview.getTreeView("FOLDER");
-		this.treeView.addSelectionListener(new AjxListener(this, this._treeListener));
-		this._hideRoot(this.treeView);
+
 	} else if (params.account) {
 		overview.account = params.account;
 	}
+	this._overview = overview;
+	document.getElementById(params.fieldId).appendChild(overview.getHtmlElement());
+	this.treeView = overview.getTreeView("FOLDER");
+	this.treeView.addSelectionListener(new AjxListener(this, this._treeListener));
+	this._hideRoot(this.treeView);
 };
 
 AttachMailTabView.prototype._treeListener =
 function(ev) {
-	if (ev.detail == DwtTree.ITEM_SELECTED) {
-		var ti = ev.item;
-		var folder = ti.getData(Dwt.KEY_OBJECT);
-		if (folder) {
-			document.getElementById(AttachMailTabView.ELEMENT_ID_SEARCH_FIELD).value = "in:" + folder.getSearchPath();
-			var query = this._getQueryFromFolder(folder.id);
-			this.executeQuery(query);
-		}
-	}
+	var item = this.treeView.getSelected();
+	document.getElementById(AttachMailTabView.ELEMENT_ID_SEARCH_FIELD).value = "in:" + item.getSearchPath();
+	var query = this._getQueryFromFolder(item.id);
+	this.executeQuery(query);
 };
 
 AttachMailTabView.prototype._hideRoot =

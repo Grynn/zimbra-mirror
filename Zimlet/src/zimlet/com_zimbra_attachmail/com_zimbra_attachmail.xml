@@ -1,8 +1,6 @@
-<zimlet name="com_zimbra_attachmail" label="Email Attacher" version="0.4" description="Attach email messages when composing a new message.">
+<zimlet name="com_zimbra_attachmail" label="Email Attacher" version="0.5" description="Attach email messages when composing a new message." target="main compose-window">
 	<include>attachmail.js</include>
+	<include>AMZimletNavToolBar.js</include>
 	<includeCSS>attachmail.css</includeCSS>
 	<handlerObject>com_zimbra_attachmail_HandlerObject</handlerObject>
-	<zimletPanelItem label="${msg.AttachMailZimlet_panel_label}" icon="attachmail-panelIcon">
-		<toolTipText>${msg.AttachMailZimlet_panel_tooltip}</toolTipText>
-	</zimletPanelItem>
 </zimlet>
