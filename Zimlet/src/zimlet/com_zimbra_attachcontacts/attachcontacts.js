@@ -42,6 +42,8 @@ AttachContactsZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
 	if (viewId.indexOf("COMPOSE") >= 0) {
 		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
+	} else	if (viewId == "CNS") {
+		this._initContactsReminderToolbar(toolbar, controller);
 	}
 };
 
@@ -91,4 +93,45 @@ function(request, isDraft) {
 		}
 	}
 	this._isDrafInitiatedByThisZimlet = false;
+};
+
+
+/**
+ *  Called by Framework and adds toolbar button
+ */
+AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, controller) {
+	if (!toolbar.getButton("SEND_CONTACTS_IN_EMAIL")) {
+		var opList = toolbar.opList;
+		for (var i = 0; i < opList.length; i++) {
+			if (opList[i] == "TAG_MENU") {
+				buttonIndex = i + 1;
+				break;
+			}
+		}
+		var btn = toolbar.createOp("SEND_CONTACTS_IN_EMAIL", {image:"MsgStatusSent", text:this.getMessage("ACZ_Send"), tooltip:this.getMessage("ACZ_SendContactsAsAttachments"), index:buttonIndex});
+		var buttonIndex = 0;
+
+
+		this._composerCtrl = controller;
+		this._composerCtrl._AttachContactsZimlet = this;
+		btn.addSelectionListener(new AjxListener(this._composerCtrl, this._getIdsAndOpenCompose));
+	}
+};
+
+/**
+ * Fethes Contacts information(if any), save the contact and shows Contacts Reminder dialog w/ this Contacts information
+ */
+AttachContactsZimlet.prototype._getIdsAndOpenCompose = function() {
+	var items = this.getCurrentView().getSelection();
+	 this._AttachContactsZimlet.contactIdsToAttach = [];
+	 for(var i=0; i < items.length; i++) {
+		 this._AttachContactsZimlet.contactIdsToAttach.push(items[i].id);
+	 }
+
+	var action = ZmOperation.NEW_MESSAGE;
+	var msg = new ZmMailMsg();
+	AjxDispatcher.run("Compose", {action: action, inNewWindow: false, msg: msg});
+    var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
+	this._AttachContactsZimlet._isDrafInitiatedByThisZimlet = true;   //set this to true
+	controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL);
 };

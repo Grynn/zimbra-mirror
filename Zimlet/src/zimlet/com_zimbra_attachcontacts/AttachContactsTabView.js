@@ -159,6 +159,7 @@ function(ev) {
 
 /**
  * Listens for "navigation bar" button events.
+ *
  * @see			_createHtml
  */
 AttachContactsTabView.prototype._navBarListener =
@@ -198,6 +199,7 @@ function(params) {
 	} else {
 		this._navTB.setText((this._offset + 1) + "-" + (this._offset + numItems));
 	}
+
 	this._setListView(items);
 };
 
@@ -296,11 +298,14 @@ function() {
  */
 AttachContactsTabView.prototype.showAttachContactsTreeView =
 function() {
-	//Force create deferred folders if not created
-	AjxDispatcher.require(ZmOrganizer.ORG_PACKAGE["ADDRBOOK"]);
+
 	AjxDispatcher.require("Contacts");
-	var aCtxt = appCtxt.isChildWindow ? parentAppCtxt : appCtxt;
-	var app = aCtxt.getApp(ZmApp.CONTACTS);
+	if( appCtxt.isChildWindow) {
+		AjxPackage.require("zimbraMail.abook.controller.ZmAddrBookTreeController");
+		ZmOverviewController.CONTROLLER["ADDRBOOK"] = "ZmAddrBookTreeController";
+	}
+	var app = appCtxt.getApp(ZmApp.CONTACTS);
+
 	app._createDeferredFolders();
 	var base = this.toString();
 	var acct = appCtxt.getActiveAccount();
@@ -319,8 +324,7 @@ function() {
 AttachContactsTabView.prototype._setOverview =
 function(params) {
 	var overviewId = params.overviewId;
-	var aCtxt = appCtxt.isChildWindow ? parentAppCtxt : appCtxt;
-	var opc = aCtxt.getOverviewController();
+	var opc = appCtxt.getOverviewController();
 	var overview = opc.getOverview(overviewId);
 	if (!overview) {
 		var ovParams = {
@@ -334,7 +338,7 @@ function(params) {
 			overview.set(params.treeIds);
 
 	} else if (params.account) {
-		overview.account = params.account;
+		//overview.account = params.account;
 	}
 	this._overview = overview;
 	document.getElementById(this._folderTreeCellId).appendChild(overview.getHtmlElement());
