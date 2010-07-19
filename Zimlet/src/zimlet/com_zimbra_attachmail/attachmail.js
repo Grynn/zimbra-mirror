@@ -465,7 +465,7 @@ AttachMailTabView.prototype.showAttachMailTreeView =
 function() {
 	var callback = new AjxCallback(this, this._showTreeView);
 	AjxPackage.undefine("zimbraMail.mail.controller.ZmMailFolderTreeController");
-	AjxPackage.require({name:["MailCore","Mail"], forceReload:true, callback:callback});
+	AjxPackage.require({name:"MailCore", forceReload:true, callback:callback});
 
 
 
