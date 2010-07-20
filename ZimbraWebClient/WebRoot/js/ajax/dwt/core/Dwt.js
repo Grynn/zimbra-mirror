@@ -1336,7 +1336,9 @@ function(ev) {
 
 	if (AjxEnv.isFirefox3_6up || AjxEnv.isDesktop2up) {
 		var t = ev.target;
-		if (t && (t.clientHeight != t.scrollHeight || t.clientWidth != t.scrollWidth)) {
+		if (t && (t.clientHeight && t.scrollHeight && (t.clientHeight != t.scrollHeight)) ||
+				 (t.clientWidth && t.scrollWidth && (t.clientWidth != t.scrollWidth))) {
+
 			ev._dontCallPreventDefault = true;
 			ev._stopPropagation = false;
 			ev._returnValue = true;
