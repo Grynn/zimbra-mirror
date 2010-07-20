@@ -8,6 +8,5 @@
 	<classpathentry kind="lib" path="jars/jstl.jar"/>
 	<classpathentry kind="lib" path="jars/jsp-api.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-collections-3.2.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
