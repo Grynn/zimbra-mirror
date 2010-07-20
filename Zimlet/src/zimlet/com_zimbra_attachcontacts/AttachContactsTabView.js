@@ -60,10 +60,13 @@ AttachContactsTabView.prototype.toString = function() {
 AttachContactsTabView.prototype.showMe =
 function() {
 	DwtTabViewPage.prototype.showMe.call(this);
+	if(this._isLoaded) {
+		this.setSize(Dwt.DEFAULT, "255");
+		return;
+	}
 	this._createHtml1();
 	document.getElementById(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
-	
-
+	this._isLoaded = true;
 };
 
 /**
@@ -285,6 +288,7 @@ function() {
 AttachContactsTabView.prototype.uploadFiles =
 function() {
     var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
+	debugger;
 	this.zimlet.contactIdsToAttach = this._getSelectedItems();
 	this.zimlet._isDrafInitiatedByThisZimlet = true;   //set this to true
 	controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL);

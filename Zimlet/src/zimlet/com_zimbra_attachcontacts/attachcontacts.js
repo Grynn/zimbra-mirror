@@ -40,7 +40,8 @@ function() {
 
 AttachContactsZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("COMPOSE") >= 0) {
+	if (viewId.indexOf("COMPOSE") >= 0 && !appCtxt.isChildWindow && !this._addedToMainWindow) {
+		this._addedToMainWindow = true;
 		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
 	} else	if (viewId == "CNS") {
 		this._initContactsReminderToolbar(toolbar, controller);
