@@ -1015,6 +1015,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
     if(_tab7) {
         var case7 = {type:_ZATABCASE_, numCols:1, colSizes:["auto"], caseKey:_tab7, id:"cos_form_advanced_tab"};
         var case7Items = [
+            ZaItem.getZeroIsUnlimitedItem () ,    
             {type:_ZA_TOP_GROUPER_, id:"cos_attachment_settings",
                 label:ZaMsg.NAD_AttachmentsGrouper,visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                                                           			[ZaCos.A_zimbraAttachmentsBlocked]]],
