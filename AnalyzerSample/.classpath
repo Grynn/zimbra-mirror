@@ -5,6 +5,6 @@
 	<classpathentry kind="src" path="/ZimbraServer"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-2.4.1.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-3.0.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
