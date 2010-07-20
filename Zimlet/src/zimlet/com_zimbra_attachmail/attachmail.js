@@ -43,7 +43,8 @@ function() {
 
 AttachMailZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("COMPOSE") >= 0 && !appCtxt.isChildWindow) {
+	if (viewId.indexOf("COMPOSE") >= 0 && !appCtxt.isChildWindow && !this._addedToMainWindow) {
+		this._addedToMainWindow = true;
 		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
 	}
 };
