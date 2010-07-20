@@ -102,7 +102,7 @@ public class AddressBookSharingTests extends CommonTest {
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				role, "", "", "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
@@ -139,7 +139,7 @@ public class AddressBookSharingTests extends CommonTest {
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				role, "", "", "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
@@ -184,7 +184,7 @@ public class AddressBookSharingTests extends CommonTest {
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				role, "", "", "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
@@ -255,7 +255,7 @@ public class AddressBookSharingTests extends CommonTest {
 		page.zSharing.zModifySharedFolder("Address Book", folderName,
 				localize(locator.shareRoleManager), "", "", "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		String currentloggedinuser = SelNGBase.selfAccountName;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
@@ -297,7 +297,7 @@ public class AddressBookSharingTests extends CommonTest {
 		page.zSharing.zShareFolder("Address Book", folderName,
 				localize(locator.shareWithGuest), attendee, role, "", "", "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,

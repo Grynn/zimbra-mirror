@@ -1317,7 +1317,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS
 				.modifyAccount(acc2, "zimbraPrefGalAutoCompleteEnabled",
 						"FALSE");
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(user2);
 		page.zSharing.zAcceptShare(mountingfoldername);
 

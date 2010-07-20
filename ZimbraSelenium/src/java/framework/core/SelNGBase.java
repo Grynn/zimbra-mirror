@@ -9,6 +9,8 @@ import org.testng.Assert;
 
 import org.apache.commons.configuration.*;
 
+import projects.zcs.tests.zcscommon.TagActionTestsForAllAppTab;
+
 import java.awt.Dimension;
 import java.awt.Robot;
 import java.awt.Toolkit;
@@ -68,14 +70,29 @@ public class SelNGBase {
 
 	// can be used @beforeTest
 	public void startSeleniumServer() throws Exception {
-		rcConfig = new RemoteControlConfiguration();
-		rcConfig.setPort(Integer.parseInt(config.getString("serverport")));
-		File a = new File("src/java/framework/lib/user-extensions.js");
-		rcConfig.setUserExtensions(a.getCanonicalFile());
-		ss = new SeleniumServer(false, rcConfig);
-		ss.boot();
-		expectedValue.clear();
+		if (config.getString("serverMachineName").toLowerCase().equals("localhost")){
+			rcConfig = new RemoteControlConfiguration();
+			rcConfig.setPort(Integer.parseInt(config.getString("serverPort", "4444")));
+			rcConfig.setUserExtensions(new File("src/java/framework/lib/user-extensions.js"));
+			ss = new SeleniumServer(false, rcConfig);
+			ss.boot();
+			expectedValue.clear(); // todo: check if this is needed
+		}
 	}
+	
+	// can be used as @aftermethod
+	public static void stopSeleniumSession() {
+		if (selenium != null){
+		selenium.stop();
+		}
+	}
+
+	// Can be used @aftertest
+	public void stopSeleniumServer() {
+		if (config.getString("serverMachineName").toLowerCase().equals("localhost"))
+			ss.stop();
+	}
+
 
 	public void openApplication() {
 		openApplication("AJAX");
@@ -95,7 +112,6 @@ public class SelNGBase {
 
 	public void openApplication(String app_type) {
 		appType = app_type;
-		String browser = config.getString("browser");
 
 		if (config.containsKey("small_wait")) {
 			SMALL_WAIT = Integer.parseInt(config.getString("small_wait"));
@@ -112,33 +128,27 @@ public class SelNGBase {
 		}
 
 		String serverMachineName = config.getString("serverMachineName");
-
-		String browserLauncher = "";
-		if (browser.equals("IE")) {
-			browserLauncher = "*iexplore";
-		} else if (browser.equals("IEHTA")) {
-			browserLauncher = "*iehta";
-		} else if (browser.equals("FF")) {
-			browserLauncher = "*firefox";
-		} else if (browser.equals("IE8")) {
-			browserLauncher = "*custom C:\\Program Files\\Internet Explorer\\iexplore.exe";
-		} else if (browser.equals("FF3")) {
-			browserLauncher = "*custom C:\\Program Files\\Mozilla Firefox\\firefox.exe";
-		} else if (browser.equals("SF4")) {
-			browserLauncher = "*custom C:\\Program Files\\Safari\\Safari.exe";
-		} else if (browser.equals("GC") || browser.equals("googleChrome")) {
-			browserLauncher = "*custom 	C:\\Documents and Settings\\"
-					+ System.getProperty("user.name")
-					+ "\\Local Settings\\Application Data\\Google\\Chrome\\Application\\chrome.exe";
-		} else if (browser.equals("SF")) {
-			browserLauncher = "*safari C:\\Program Files\\Safari\\Safari.exe";
-		} else if (browser.equals("SF-NIGHTLY")) {
-			browserLauncher = "*custom C:\\SAFARI-NIGHTLY\\run-nightly-webkit.cmd";
-		}
+		Integer serverPort = Integer.parseInt(config.getString("serverPort", "4444"));
+		String browser = config.getString("browser");
+		String browserVersion = config.getString("browserVersion");
+		
+		if (serverMachineName.toLowerCase().equals("sauceondemand")){
+			serverMachineName = "ondemand.saucelabs.com";
+			serverPort = 80;
+			String browserFinal = "{\"username\": \"" + config.getString("sauceUsername") + "\"," +
+						          "\"access-key\": \"" + config.getString("sauceAccessKey") + "\"," +
+						          "\"os\": \"" + config.getString("OS", "Windows 2003") + "\"," +
+						          "\"browser\": \"" + browser + "\"," +
+						          "\"browser-version\": \"" + browserVersion + "\"," +
+			/* TODO: Adding the job name would be useful for finding the test videos in OnDemand
+						          "\"job-name\": \"" + 	Current method or class name + "\"," +  */
+						          "\"user-extensions-url\": \"http://" + config.getString("server") + ":8080/user-extensions.js\"}";
+			browser = browserFinal;
+		};
 
 		selenium = new ZimbraSelenium(serverMachineName, 
-									  Integer.parseInt(config.getString("serverport")),
-									  browserLauncher,
+									  serverPort,
+									  browser,
 									  getBaseURL());
 		selenium.start();
 		selenium.windowMaximize();
@@ -147,76 +157,41 @@ public class SelNGBase {
 		selenium.allowNativeXpath("true");
 		selenium.open(getBaseURL());
 
-		/* google's chrome */
-		if (browser.equals("GC") || browser.equals("googleChrome")) {
-			clickOnGoogleChromePopup();
-		}
 	}
 
 	public static void customLogin(String parameter) {
-		String browser = config.getString("browser");
-		String serverMachineName = config.getString("serverMachineName");
 
-		String browserLauncher = "";
-		if (browser.equals("IE")) {
-			browserLauncher = "*iexplore";
-		} else if (browser.equals("IEHTA")) {
-			browserLauncher = "*iehta";
-		} else if (browser.equals("FF")) {
-			browserLauncher = "*firefox";
-		} else if (browser.equals("FF3")) {
-			browserLauncher = "*firefox";
-		} else if (browser.equals("GC") || browser.equals("googleChrome")) {// google's chrome
-			browserLauncher = "*custom 	C:\\Documents and Settings\\"
-					+ System.getProperty("user.name")
-					+ "\\Local Settings\\Application Data\\Google\\Chrome\\Application\\chrome.exe";
-		} else if (browser.equals("SF")) {
-			browserLauncher = "*safari C:\\Program Files\\Safari\\Safari.exe";
-		} else if (browser.equals("SF-NIGHTLY")) {
-			browserLauncher = "*custom C:\\SAFARI-NIGHTLY\\run-nightly-webkit.cmd";
+		String serverMachineName = config.getString("serverMachineName");
+		Integer serverPort = Integer.parseInt(config.getString("serverPort", "4444"));
+		String browser = config.getString("browser");
+		String browserVersion = config.getString("browserVersion");
+		
+		if (serverMachineName.toLowerCase().equals("sauceondemand")){
+			serverMachineName = "ondemand.saucelabs.com";
+			serverPort = 80;
+			String browserFinal = "{\"username\": \"" + config.getString("sauceUsername") + "\"," +
+						          "\"access-key\": \"" + config.getString("sauceAccessKey") + "\"," +
+						          "\"os\": \"" + config.getString("OS", "Windows 2003") + "\"," +
+						          "\"browser\": \"" + browser + "\"," +
+						          "\"browser-version\": \"" + browserVersion + "\"}";
+			/* TODO: Adding the job name would be useful for finding the test videos in OnDemand
+						          "\"job-name\": \"" + 	Current method or class name + "\"}";  */
+		} else {
+			if (!browser.startsWith("*")){
+				browser = "*" + browser;
+			}
 		}
 
-		selenium = new ZimbraSelenium(serverMachineName, Integer
-				.parseInt(config.getString("serverport")), browserLauncher,
-				config.getString("mode") + "://" + config.getString("server")
-						+ "/" + parameter);
+
+		selenium = new ZimbraSelenium(serverMachineName, 
+									  serverPort,
+									  browser,
+									  config.getString("mode") + "://" + config.getString("server")	+ "/" + parameter);
 		selenium.start();
 		selenium.windowMaximize();
 		selenium.windowFocus();
 		selenium.allowNativeXpath("true");
-		selenium.open(config.getString("mode") + "://"
-				+ config.getString("server") + "/" + parameter);
-
-		if (browser.equals("GC") || browser.equals("googleChrome")) {
-			clickOnGoogleChromePopup();
-		}
-	}
-
-	public static void clickOnGoogleChromePopup() {
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		Dimension d = tk.getScreenSize();
-
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		try {
-			Robot robot = new Robot();
-			robot.mouseMove(500, d.height - 50);// just a hack for now
-			robot.mousePress(InputEvent.BUTTON1_MASK);
-			robot.mousePress(InputEvent.BUTTON1_MASK);
-			robot.mouseRelease(InputEvent.BUTTON1_MASK);
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		selenium.windowFocus();
-		selenium.windowMaximize();
+		selenium.open(config.getString("mode") + "://"	+ config.getString("server") + "/" + parameter);
 	}
 
 	public static String getBaseURL() {
@@ -236,16 +211,6 @@ public class SelNGBase {
 	// can be used as @aftermethod
 	public void deleteCookie(String name, String path) {
 		selenium.deleteCookie(name, path);
-	}
-
-	// can be used as @aftermethod
-	public void stopSeleniumSession() {
-		selenium.stop();
-	}
-
-	// Can be used @aftertest
-	public void stopSeleniumServer() {
-		ss.stop();
 	}
 
 	public static void stopClient() {

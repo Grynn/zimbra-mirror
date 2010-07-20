@@ -152,7 +152,7 @@ public class MailPreferencesTests extends CommonTest {
 		page.zMailPrefUI.zNavigateToPrefAndEditDefaultMailSearch("in:junk");
 
 		Thread.sleep(SMALL_WAIT);
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraHTML(selfAccName);
 		obj.zMessageItem.zExists(subject);
 
@@ -180,7 +180,7 @@ public class MailPreferencesTests extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndSelectIt(ProvZCS.selfAccountName,
 				"", "", subject, getLocalizedData_NoSpecialChar(), "");
 
-		zKillBrowsers();
+		resetSession();
 
 		page.zLoginpage.zLoginToZimbraHTML(fwdToAcc);
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
@@ -212,7 +212,7 @@ public class MailPreferencesTests extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndSelectIt(ProvZCS.selfAccountName,
 				"", "", subject, getLocalizedData_NoSpecialChar(), "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = notificationToAcc;
 		page.zLoginpage.zLoginToZimbraHTML(notificationToAcc);
 		page.zMailApp.zClickCheckMailUntilMailShowsUp("New message received");
@@ -239,7 +239,7 @@ public class MailPreferencesTests extends CommonTest {
 		String body = getLocalizedData_NoSpecialChar();
 		page.zMailPrefUI.zNavigateToPrefMailAndSetAutoReply(autoReplyMsg);
 		Thread.sleep(SMALL_WAIT);
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraHTML(randomAccount);
 		page.zComposeView.zSendMail(currentAccount, "", "", subject, body, "");
 		Thread.sleep(MEDIUM_WAIT);
@@ -248,13 +248,13 @@ public class MailPreferencesTests extends CommonTest {
 				currentAccount);
 		// to test negative of autoreply msg.to verify unchecking of auto reply
 		// does work.
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraHTML(currentAccount);
 		page.zMailPrefUI.zNavigateToPrefMail();
 		obj.zCheckbox.zClick(page.zMailPrefUI.zSendASendAutoReplyMsgChkBox);
 		obj.zButton.zClick(page.zAccPref.zSaveIconBtn);
 		Thread.sleep(SMALL_WAIT);
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraHTML(randomAccount2);
 		SelNGBase.selfAccountName = randomAccount2;
 		page.zComposeView.zSendMail(currentAccount, "", "", subject, body, "");

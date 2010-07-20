@@ -103,11 +103,11 @@ public class ChangePasswordTests extends CommonTest {
 		obj.zButton.zClick("class=zLoginButton");
 		Thread.sleep(2000);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage
 				.zLoginToZimbraAjax(SelNGBase.selfAccountName, "test321");
 
-		zKillBrowsers();
+		resetSession();
 
 		String accountName = ProvZCS.getRandomAccount();
 		SelNGBase.selfAccountName = accountName;

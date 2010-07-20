@@ -116,7 +116,7 @@ public class SharingPreferencesTests extends CommonTest {
 		obj.zListItem.zClickItemInSpecificList(invitedusers, "3");
 
 		// verifying share related mail in preferences > sharing
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		SelNGBase.selfAccountName = invitedusers;
 		zGoToApplication("Preferences");
@@ -181,7 +181,7 @@ public class SharingPreferencesTests extends CommonTest {
 				localize(locator.shareProperties));
 
 		// Decline share and verify in preferences > sharing
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		SelNGBase.selfAccountName = invitedusers;
 		page.zSharing.zDeclineShare();
@@ -226,7 +226,7 @@ public class SharingPreferencesTests extends CommonTest {
 		obj.zListItem.zClickItemInSpecificList(invitedusers, "1", "3");
 
 		// Decline share and verify in preferences > sharing
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		SelNGBase.selfAccountName = invitedusers;
 		MailApp
@@ -269,13 +269,13 @@ public class SharingPreferencesTests extends CommonTest {
 				allowtoseeprivateappt);
 
 		// Decline share and verify in preferences > sharing
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		SelNGBase.selfAccountName = invitedusers;
 		page.zSharing.zAcceptShare(mountingfoldername);
 
 		// sharing calendar folder via preferences
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedinUser);
 		SelNGBase.selfAccountName = currentLoggedinUser;
 		zGoToApplication("Preferences");
@@ -287,7 +287,7 @@ public class SharingPreferencesTests extends CommonTest {
 		Thread.sleep(1000);
 
 		// shared folder should not contain invitation
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		SelNGBase.selfAccountName = invitedusers;
 		page.zMailApp
@@ -328,7 +328,7 @@ public class SharingPreferencesTests extends CommonTest {
 				localize(locator.resend));
 
 		// verify in preferences > sharing
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		SelNGBase.selfAccountName = invitedusers;
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
@@ -373,7 +373,7 @@ public class SharingPreferencesTests extends CommonTest {
 		obj.zListItem.zVerifyItemInSpecificList(invitedusers, "1", "3");
 
 		// verifying share related mail in preferences > sharing
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		SelNGBase.selfAccountName = invitedusers;
 		zGoToApplication("Preferences");
@@ -455,7 +455,7 @@ public class SharingPreferencesTests extends CommonTest {
 		obj.zListItem.zVerifyItemInSpecificList(invitedusers, "6", "3");
 
 		// verifying share related mail in preferences > sharing
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		SelNGBase.selfAccountName = invitedusers;
 		for (int i = 0; i <= 5; i++) {

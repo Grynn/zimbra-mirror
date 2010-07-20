@@ -76,7 +76,7 @@ public class ReadReceiptTests extends CommonTest {
 		ProvZCS.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "never");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = to;
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zComposeView.zNavigateToMailCompose();
@@ -87,7 +87,7 @@ public class ReadReceiptTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 		Thread.sleep(2000);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = currentloggedinuser;
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -108,7 +108,7 @@ public class ReadReceiptTests extends CommonTest {
 		ProvZCS.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "always");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = to;
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zComposeView.zNavigateToMailCompose();
@@ -119,7 +119,7 @@ public class ReadReceiptTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 		Thread.sleep(2000);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = currentloggedinuser;
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -127,7 +127,7 @@ public class ReadReceiptTests extends CommonTest {
 		assertReport(localize(locator.readReceiptSent), obj.zToastAlertMessage
 				.zGetMsg(), "Verifying toast message for sending read receipt");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = to;
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zMailApp
@@ -147,7 +147,7 @@ public class ReadReceiptTests extends CommonTest {
 		ProvZCS.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "prompt");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = to;
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zComposeView.zNavigateToMailCompose();
@@ -162,7 +162,7 @@ public class ReadReceiptTests extends CommonTest {
 		Thread.sleep(2000);
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = currentloggedinuser;
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -178,7 +178,7 @@ public class ReadReceiptTests extends CommonTest {
 		assertReport(localize(locator.readReceiptSent), obj.zToastAlertMessage
 				.zGetMsg(), "Verifying toast message for sending read receipt");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = to;
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zMailApp

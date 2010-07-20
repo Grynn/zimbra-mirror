@@ -483,7 +483,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(1000);
 

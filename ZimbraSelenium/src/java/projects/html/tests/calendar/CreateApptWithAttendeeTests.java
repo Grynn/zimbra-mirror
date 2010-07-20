@@ -123,7 +123,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		page.zCalendarApp.zCreateAppt(subject, location, attendees, body, "",
 				"", "", "", startDate, endDate, startTime, endTime);
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(SMALL_WAIT);
 
@@ -165,7 +165,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 				attendees, body, startTime, endTime, startDate, endDate, day,
 				noEndDate, endAfterNOccur, endByDate);
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(SMALL_WAIT);
 
@@ -205,7 +205,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		page.zCalendarApp.zCreateAllDayAppt(subject, location, attendees, body,
 				startDate, endDate);
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(SMALL_WAIT);
 
@@ -298,7 +298,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		SelNGBase.selfAccountName = attendees;
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(MEDIUM_WAIT);
 
@@ -345,7 +345,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		SelNGBase.selfAccountName = attendees;
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(MEDIUM_WAIT);
 
@@ -389,7 +389,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		SelNGBase.selfAccountName = attendees;
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(MEDIUM_WAIT);
 
@@ -467,7 +467,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		SelNGBase.selfAccountName = attendees;
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(MEDIUM_WAIT);
 

@@ -318,7 +318,7 @@ public class DraftTests extends CommonTest {
 		obj.zButton.zExists("ImgBold");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zReloginToAjax();
 		obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 		obj.zMessageItem.zRtClick("Bug24431 save draft(html format) subject");

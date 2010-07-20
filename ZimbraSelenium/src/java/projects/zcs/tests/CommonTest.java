@@ -84,18 +84,13 @@ public class CommonTest extends SelNGBase {
 
 	}
 
-	public static void zKillBrowsers() throws Exception {
+	public static void resetSession() throws Exception {
 		// reset all the selngbase settings, since they might have been set to
 		// true by the failing test
 		SelNGBase.labelStartsWith = false;
 		SelNGBase.fieldLabelIsAnObject = false;
 		SelNGBase.actOnLabel = false;
-		Thread.sleep(2000);
-		CmdExec("taskkill /f /t /im iexplore.exe");
-		CmdExec("taskkill /f /t /im firefox.exe");
-		CmdExec("taskkill /f /t /im Safari.exe");
-		CmdExec("taskkill /f /t /im chrome.exe");
-		CmdExec("taskkill /f /t /im firefox.exe");
+		SelNGBase.stopSeleniumSession();
 	}
 
 	public static void zLoginIfRequired() throws Exception {
@@ -110,7 +105,7 @@ public class CommonTest extends SelNGBase {
 			throws Exception {
 		if (needsReLogin(accntAttrs) || needReset) {
 
-			zKillBrowsers();
+			resetSession();
 			selfAccountAttrs = accntAttrs;
 			selfAccountName = page.zLoginpage.zLoginToZimbraAjax(accntAttrs);
 		}
@@ -154,10 +149,10 @@ public class CommonTest extends SelNGBase {
 	}
 
 	@BeforeSuite(groups = { "always" })
-	public void initTests() throws ServiceException {
+	public void initTests() throws Exception {
 		initFramework();
 		ProvZCS.setupZCSTestBed();
-		startSeleniumServer();
+		super.startSeleniumServer();
 		ProvZCS.createAccount("ccuser@testdomain.com");
 		ProvZCS.createAccount("bccuser@testdomain.com");
 		if (!SelNGBase.suiteName.equals("debugSuite")) {
@@ -169,6 +164,11 @@ public class CommonTest extends SelNGBase {
 			CmdExec("taskkill /f /t /im chrome.exe");
 		}
 
+	}
+
+	@AfterSuite(groups = { "always" })
+	public void cleanup() {
+		super.stopSeleniumServer();
 	}
 
 	/**
@@ -194,10 +194,6 @@ public class CommonTest extends SelNGBase {
 		return "";
 	}
 
-	@AfterSuite(groups = { "always" })
-	public void stopSeleniumServer() {
-		super.stopSeleniumServer();
-	}
 
 	public void initFramework() {
 		super.initFramework(this.conf);
@@ -644,19 +640,10 @@ public class CommonTest extends SelNGBase {
 
 	public static void zReloginToAjax() throws Exception {
 		String accountName = selfAccountName;
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(1000);
 		SelNGBase.selfAccountName = accountName;
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
-	}
-
-	public void startSeleniumServer() {
-		try {
-			super.startSeleniumServer();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public static void verifyShowOriginalMsgBody(String bodyValue, String from,

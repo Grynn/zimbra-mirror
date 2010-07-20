@@ -176,7 +176,7 @@ public class NewWindowTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zExists("Re: " + subject);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = cc;
 		page.zLoginpage.zLoginToZimbraAjax(cc);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Re: " + subject);

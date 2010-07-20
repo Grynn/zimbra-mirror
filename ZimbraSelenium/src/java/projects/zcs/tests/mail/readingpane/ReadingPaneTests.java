@@ -158,7 +158,7 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
 		selenium.click("link=" + localize(locator.logOff));
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		Thread.sleep(3000);
 		assertReport("true", isVisible.toString(),
@@ -240,7 +240,7 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
 		selenium.click("link=" + localize(locator.logOff));
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		Thread.sleep(3000);
 		assertReport("false", isNotVisible1.toString(),
@@ -323,7 +323,7 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
 		selenium.click("link=" + localize(locator.logOff));
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		Thread.sleep(3000);
 		assertReport("false", isNotVisible.toString(),

@@ -283,7 +283,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		Thread.sleep(500);
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(500);
 

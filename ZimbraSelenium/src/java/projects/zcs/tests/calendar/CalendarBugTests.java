@@ -68,7 +68,7 @@ public class CalendarBugTests extends CommonTest {
 		String user1 = ProvZCS.getRandomAccount();
 		String user2 = ProvZCS.getRandomAccount();
 
-		zKillBrowsers();
+		resetSession();
 		String subject2 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user1);
 		SelNGBase.selfAccountName = user1;
@@ -105,7 +105,7 @@ public class CalendarBugTests extends CommonTest {
 		Thread.sleep(2000);
 
 		// -ve test case
-		zKillBrowsers();
+		resetSession();
 		String subject1 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user3_Notallowed);
 		SelNGBase.selfAccountName = user3_Notallowed;
@@ -134,7 +134,7 @@ public class CalendarBugTests extends CommonTest {
 		Thread.sleep(2000);
 
 		// positive test case
-		zKillBrowsers();
+		resetSession();
 		String subject2 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user1_allowed);
 		SelNGBase.selfAccountName = user1_allowed;
@@ -148,7 +148,7 @@ public class CalendarBugTests extends CommonTest {
 		obj.zDialog.zNotExists(localize(locator.infoMsg));
 
 		// Verification for both case
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 		Thread.sleep(2000);
 		SelNGBase.selfAccountName = currentLoggedInUser;
@@ -186,7 +186,7 @@ public class CalendarBugTests extends CommonTest {
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
 		Thread.sleep(2000);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(user1);
 		SelNGBase.selfAccountName = user1;
 		page.zCalApp.zNavigateToCalendar();
@@ -214,7 +214,7 @@ public class CalendarBugTests extends CommonTest {
 		Thread.sleep(2000); // this wait is necessary, because zcs crashes
 		// browser without sending email
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 		SelNGBase.selfAccountName = currentLoggedInUser;
 		Thread.sleep(2000);

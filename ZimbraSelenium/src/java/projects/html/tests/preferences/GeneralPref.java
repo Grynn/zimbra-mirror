@@ -79,11 +79,11 @@ public class GeneralPref extends CommonTest {
 		obj.zButton.zClick("class=zLoginButton");
 		Thread.sleep(MEDIUM_WAIT);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage
 				.zLoginToZimbraHTML(SelNGBase.selfAccountName, "test321");
 
-		zKillBrowsers();
+		resetSession();
 
 		String accountName = ProvZCS.getRandomAccount();
 		SelNGBase.selfAccountName = accountName;

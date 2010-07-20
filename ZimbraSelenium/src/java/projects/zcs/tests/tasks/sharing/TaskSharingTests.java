@@ -117,7 +117,7 @@ public class TaskSharingTests extends CommonTest {
 				sharingfoldername, sharetype, invitedusers, role,
 				sharingnoteifany);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = invitedusers;
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,

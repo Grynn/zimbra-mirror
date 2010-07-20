@@ -81,7 +81,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 				location, attendees, body, RSRP, Notifcation);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		SelNGBase.selfAccountName = attendees;
 		obj.zMessageItem.zNotExists(subject);
@@ -108,7 +108,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 				location, attendees, body, RSRP, Notifcation);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		SelNGBase.selfAccountName = attendees;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -119,7 +119,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zNotExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(organizer);
 		SelNGBase.selfAccountName = organizer;
 		obj.zMessageItem.zNotExists(subject);
@@ -144,7 +144,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 				location, attendees, body, RSRP, Notifcation);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		SelNGBase.selfAccountName = attendees;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -156,7 +156,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zExists(localize(locator.accept) + ": " + subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(organizer);
 		SelNGBase.selfAccountName = organizer;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(localize(locator.accept)
@@ -180,7 +180,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 				location, attendees, body, RSRP, Notifcation);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		SelNGBase.selfAccountName = attendees;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -195,7 +195,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zExists(localize(locator.replyTentative) + ": " + subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(organizer);
 		SelNGBase.selfAccountName = organizer;
 		page.zMailApp
@@ -220,7 +220,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 				location, attendees, body, RSRP, Notifcation);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		SelNGBase.selfAccountName = attendees;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -232,7 +232,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zNotExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(organizer);
 		SelNGBase.selfAccountName = organizer;
 		obj.zMessageItem.zNotExists(subject);

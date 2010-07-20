@@ -248,7 +248,7 @@ public class CalendarSharingTests extends CommonTest {
 		page.zSharing.zShareFolder(applicationtab, calendarName, "", account,
 				localize(locator.shareRoleViewer), "", "", "");
 
-		zKillBrowsers();
+		resetSession();
 
 		SelNGBase.selfAccountName = account;
 		page.zLoginpage.zLoginToZimbraAjax(account);
@@ -310,12 +310,12 @@ public class CalendarSharingTests extends CommonTest {
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, userC, role, message, sharingnoteifany, "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = userC;
 		page.zLoginpage.zLoginToZimbraAjax(userC);
 		page.zSharing.zAcceptShare(mountingfoldername);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = userB;
 		page.zLoginpage.zLoginToZimbraAjax(userB);
 
@@ -332,13 +332,13 @@ public class CalendarSharingTests extends CommonTest {
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, userC, role, message, sharingnoteifany, "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = userC;
 		page.zLoginpage.zLoginToZimbraAjax(userC);
 		String mountingfoldername1 = getLocalizedData_NoSpecialChar();
 		page.zSharing.zAcceptShare(mountingfoldername1);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = userD;
 		page.zLoginpage.zLoginToZimbraAjax(userD);
 		page.zCalApp.zNavigateToCalendar();
@@ -349,7 +349,7 @@ public class CalendarSharingTests extends CommonTest {
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 		Thread.sleep(2000);
 
-		zKillBrowsers();
+		resetSession();
 
 		page.zLoginpage.zLoginToZimbraAjax(userC);
 		SelNGBase.selfAccountName = userC;
@@ -460,7 +460,7 @@ public class CalendarSharingTests extends CommonTest {
 			Thread.sleep(2000);
 		}
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = invitedusers;
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
@@ -515,7 +515,7 @@ public class CalendarSharingTests extends CommonTest {
 
 			obj.zAppointment.zExists(apptSubject);
 
-			zKillBrowsers();
+			resetSession();
 			SelNGBase.selfAccountName = currentloggedinuser;
 			page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 			zGoToApplication(applicationtab);
@@ -548,7 +548,7 @@ public class CalendarSharingTests extends CommonTest {
 				 * (-ve case) don't allow to see private appointment and verify
 				 * its corresponding UI
 				 */
-				zKillBrowsers();
+				resetSession();
 				SelNGBase.selfAccountName = currentloggedinuser;
 				page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 				zGoToApplication(applicationtab);
@@ -556,7 +556,7 @@ public class CalendarSharingTests extends CommonTest {
 						sharingfoldername, localize(locator.shareRoleManager),
 						message, sharingnoteifany, "");
 
-				zKillBrowsers();
+				resetSession();
 				SelNGBase.selfAccountName = invitedusers;
 				page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 				zGoToApplication(applicationtab);
@@ -590,7 +590,7 @@ public class CalendarSharingTests extends CommonTest {
 				 * "shareAsViewerAndVerifyAppt" test itself. >> it modifies
 				 * share to none and check appointment doesn't exist
 				 */
-				zKillBrowsers();
+				resetSession();
 				SelNGBase.selfAccountName = currentloggedinuser;
 				page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 				zGoToApplication(applicationtab);
@@ -598,7 +598,7 @@ public class CalendarSharingTests extends CommonTest {
 						sharingfoldername, localize(locator.shareRoleNone),
 						message, sharingnoteifany, allowtoseeprivateappt);
 
-				zKillBrowsers();
+				resetSession();
 				SelNGBase.selfAccountName = invitedusers;
 				page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 				zGoToApplication(applicationtab);

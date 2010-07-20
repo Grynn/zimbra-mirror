@@ -89,7 +89,7 @@ public class ComposePref extends CommonTest {
 				.zClick(page.zComposePrefUI.zReplyFwdUsingOrignalMailFormatChckBox);
 		obj.zButton.zClick(page.zAccPref.zSaveIconBtn);
 
-		zKillBrowsers();
+		resetSession();
 		// to login to random acc and send text and html mails to req
 		// account
 		page.zLoginpage.zLoginToZimbraHTML(randomAcc);
@@ -99,7 +99,7 @@ public class ComposePref extends CommonTest {
 		page.zComposeView.zSendMail(currentUser, "", "", htmlSubject, "", "");
 		Thread.sleep(MEDIUM_WAIT);
 
-		zKillBrowsers();
+		resetSession();
 		// to login back to acc where the reply fwd using orignal mail format
 		// setting is made and verify
 

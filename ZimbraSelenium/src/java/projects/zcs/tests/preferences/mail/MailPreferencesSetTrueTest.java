@@ -286,7 +286,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 		Thread.sleep(500);
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(500);
 
@@ -300,7 +300,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 			MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		}
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(500);
 
@@ -339,7 +339,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 		Thread.sleep(500);
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(500);
 

@@ -67,7 +67,7 @@ public class AccountImportExportTest extends CommonTest {
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
-		zKillBrowsers();
+		resetSession();
 		String acc1 = ProvZCS.getRandomAccount();
 		SelNGBase.selfAccountName = acc1;
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
@@ -95,7 +95,7 @@ public class AccountImportExportTest extends CommonTest {
 			createTestData();
 			exportAccount();
 
-			zKillBrowsers();
+			resetSession();
 			String acc2 = ProvZCS.getRandomAccount();
 			SelNGBase.selfAccountName = acc2;
 			page.zLoginpage.zLoginToZimbraAjax(acc2);

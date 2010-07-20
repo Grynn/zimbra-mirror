@@ -154,7 +154,7 @@ public class ApptInviteTests extends CommonTest {
 		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(1000);
 		SelNGBase.selfAccountName = attendees;
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
@@ -189,7 +189,7 @@ public class ApptInviteTests extends CommonTest {
 		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(1000);
 		SelNGBase.selfAccountName = attendees;
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
@@ -228,7 +228,7 @@ public class ApptInviteTests extends CommonTest {
 		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(500);
 		SelNGBase.selfAccountName = attendees;
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
@@ -264,7 +264,7 @@ public class ApptInviteTests extends CommonTest {
 				"", "", recurring, "", attendees, body);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(1000);
 		SelNGBase.selfAccountName = attendees;
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
@@ -318,7 +318,7 @@ public class ApptInviteTests extends CommonTest {
 			verifyTime = "";
 		}
 
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(1000);
 		SelNGBase.selfAccountName = attendees;
 		String[] itemsToVerify = { verifySubject, verifyLocation, verifyTime };
@@ -385,7 +385,7 @@ public class ApptInviteTests extends CommonTest {
 		}
 
 		String[] itemsToVerify = { verifySubject, verifyLocation, verifyTime };
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(1000);
 		SelNGBase.selfAccountName = attendees;
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
@@ -430,7 +430,7 @@ public class ApptInviteTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.send));
 
 		String[] itemsToVerify = { subject };
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(1000);
 		SelNGBase.selfAccountName = attendees;
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
@@ -484,7 +484,7 @@ public class ApptInviteTests extends CommonTest {
 		obj.zButton.zClickInDlg(localize(locator.ok));
 		Thread.sleep(1000);
 
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(1000);
 		SelNGBase.selfAccountName = attendees;
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
@@ -493,7 +493,7 @@ public class ApptInviteTests extends CommonTest {
 		// Thread.sleep(2000);
 		// page.zCalApp.zVerifyInviteContent(firstLineSummary, itemsToVerify);
 
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(1000);
 		SelNGBase.selfAccountName = newAttendees;
 		page.zLoginpage.zLoginToZimbraAjax(newAttendees);
@@ -541,7 +541,7 @@ public class ApptInviteTests extends CommonTest {
 		Thread.sleep(1000);
 		waitForIE();
 
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(500);
 		SelNGBase.selfAccountName = attendees;
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
@@ -558,7 +558,7 @@ public class ApptInviteTests extends CommonTest {
 				tentativeEditedReplyContent);
 		Thread.sleep(500);
 
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(500);
 		SelNGBase.selfAccountName = organizer;
 		page.zLoginpage.zLoginToZimbraAjax(organizer);
@@ -603,7 +603,7 @@ public class ApptInviteTests extends CommonTest {
 		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		SelNGBase.selfAccountName = attendees;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -656,7 +656,7 @@ public class ApptInviteTests extends CommonTest {
 		page.zCalCompose.zCreateSimpleAppt(subject, location, alias, body);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
 		SelNGBase.selfAccountName = acc1;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -676,7 +676,7 @@ public class ApptInviteTests extends CommonTest {
 
 		obj.zButton.zClick(localize(locator.send));
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(loggeduser);
 		SelNGBase.selfAccountName = loggeduser;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);

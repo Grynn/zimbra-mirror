@@ -177,7 +177,7 @@ public class BasicApptTests extends CommonTest {
 		Thread.sleep(10000);
 
 		String[] itemsToVerify = { body };
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(1000);
 		SelNGBase.selfAccountName = attendees;
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
@@ -296,7 +296,7 @@ public class BasicApptTests extends CommonTest {
 		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
 		obj.zAppointment.zExists(subject);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		SelNGBase.selfAccountName = attendees;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -324,7 +324,7 @@ public class BasicApptTests extends CommonTest {
 						thirdUser);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(thirdUser);
 		SelNGBase.selfAccountName = thirdUser;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -363,7 +363,7 @@ public class BasicApptTests extends CommonTest {
 				user2 + "," + user3);
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
 		Thread.sleep(2000);
-		zKillBrowsers();
+		resetSession();
 		// login to user1 and send invitaion currentLoggeduser
 		String subject1 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user1);
@@ -376,7 +376,7 @@ public class BasicApptTests extends CommonTest {
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 		Thread.sleep(2000);
 		// login to currentLoggeduser and accept invitation
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 		SelNGBase.selfAccountName = currentLoggedInUser;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject1);
@@ -384,7 +384,7 @@ public class BasicApptTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.accept));
 		page.zCalApp.zNavigateToCalendar();
 		obj.zAppointment.zExists(subject1);
-		zKillBrowsers();
+		resetSession();
 		// login to user2 and check fwd'ed invitation
 		page.zLoginpage.zLoginToZimbraAjax(user2);
 		SelNGBase.selfAccountName = user2;
@@ -414,7 +414,7 @@ public class BasicApptTests extends CommonTest {
 
 		page.zCalApp.zNavigateToCalendar();
 		obj.zAppointment.zNotExists(subject1);
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(user3);
 		SelNGBase.selfAccountName = user3;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject1);

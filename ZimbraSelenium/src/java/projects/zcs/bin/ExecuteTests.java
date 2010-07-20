@@ -61,8 +61,10 @@ public class ExecuteTests {
 		// ---------------------------------------------------
 		testName = "Message Action";
 		cls = new ArrayList<String>();
-		cls.add("projects.zcs.tests.zcscommon.TagActionTestsForAllAppTab");
-		cls.add("projects.zcs.tests.zcscommon.SavedSearchActionTestsForAllAppTab");
+		cls.add("projects.zcs.tests.mail.compose.ComposeReplyFwdInHTMLTests");
+		cls.add("projects.zcs.tests.mail.sharing.MailSharingTests");
+		cls.add("projects.zcs.tests.calendar.apptactions.AppointmentActionTests");
+
 		addTests(testName, cls);
 	}
 
@@ -77,8 +79,7 @@ public class ExecuteTests {
 		testName = "Mail Compose";
 		cls = new ArrayList<String>();
 		cls.add("projects.zcs.tests.mail.compose.ComposeReplyFwdInHTMLTests");
-		cls
-				.add("projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainTextTests");
+		cls.add("projects.zcs.tests.mail.compose.ComposeReplyFwdInPlainTextTests");
 		cls.add("projects.zcs.tests.mail.compose.SendBtnNegativeTests");
 		addTests(testName, cls);
 
@@ -191,22 +192,19 @@ public class ExecuteTests {
 		// ---------------------------------------------------
 		testName = "Address Book Actions";
 		cls = new ArrayList<String>();
-		cls
-				.add("projects.zcs.tests.addressbook.contactactions.ContactActionTests");
+		cls.add("projects.zcs.tests.addressbook.contactactions.ContactActionTests");
 		addTests(testName, cls);
 
 		// ---------------------------------------------------
 		testName = "Address Book Folders";
 		cls = new ArrayList<String>();
-		cls
-				.add("projects.zcs.tests.addressbook.folders.AddressBookFolderTests");
+		cls.add("projects.zcs.tests.addressbook.folders.AddressBookFolderTests");
 		addTests(testName, cls);
 
 		// ---------------------------------------------------
 		testName = "Contact Groups";
 		cls = new ArrayList<String>();
-		cls
-				.add("projects.zcs.tests.addressbook.contactgroups.ContactGroupTests");
+		cls.add("projects.zcs.tests.addressbook.contactgroups.ContactGroupTests");
 		addTests(testName, cls);
 
 		// ---------------------------------------------------
@@ -218,15 +216,13 @@ public class ExecuteTests {
 		// ---------------------------------------------------
 		testName = "Address Book Folder Sharing";
 		cls = new ArrayList<String>();
-		cls
-				.add("projects.zcs.tests.addressbook.sharing.AddressBookSharingTests");
+		cls.add("projects.zcs.tests.addressbook.sharing.AddressBookSharingTests");
 		addTests(testName, cls);
 
 		// ---------------------------------------------------
 		testName = "Address Book Saved Searches";
 		cls = new ArrayList<String>();
-		cls
-				.add("projects.zcs.tests.addressbook.savedsearches.AddressBookSavedSearchTests");
+		cls.add("projects.zcs.tests.addressbook.savedsearches.AddressBookSavedSearchTests");
 		addTests(testName, cls);
 
 		// ---------------------------------------------------

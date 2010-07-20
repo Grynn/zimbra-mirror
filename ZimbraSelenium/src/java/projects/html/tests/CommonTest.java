@@ -74,17 +74,13 @@ public class CommonTest extends SelNGBase {
 		page = new PageObjects();
 	}
 
-	public static void zKillBrowsers() throws Exception {
+	public static void resetSession() throws Exception {
 		// reset all the selngbase settings, since they might have been set to
 		// true by the failing test
 		SelNGBase.labelStartsWith = false;
 		SelNGBase.fieldLabelIsAnObject = false;
 		SelNGBase.actOnLabel = false;
-		CmdExec("taskkill /f /t /im iexplore.exe");
-		CmdExec("taskkill /f /t /im firefox.exe");
-		CmdExec("taskkill /f /t /im Safari.exe");
-		CmdExec("taskkill /f /t /im chrome.exe");
-
+		SelNGBase.stopSeleniumSession();
 	}
 
 	public static void zLoginIfRequired() throws Exception {
@@ -98,7 +94,7 @@ public class CommonTest extends SelNGBase {
 	public static void zLoginIfRequired(Map<String, Object> accntAttrs)
 			throws Exception {
 		if (needsReLogin(accntAttrs) || needReset) {
-			zKillBrowsers();
+			resetSession();
 			selfAccountAttrs = accntAttrs;
 			selfAccountName = page.zLoginpage.zLoginToZimbraHTML(accntAttrs);
 		}
@@ -187,12 +183,7 @@ public class CommonTest extends SelNGBase {
 		ProvZCS.createAccount("ccuser@testdomain.com");
 		ProvZCS.createAccount("bccuser@testdomain.com");
 		if (SelNGBase.suiteName.equals("fullSuite")) {
-			ZimbraVersion = zGetZimbraVersionFromAjax();
-			SelNGBase.ZimbraVersion = ZimbraVersion;
-			CmdExec("taskkill /f /t /im iexplore.exe");
-			CmdExec("taskkill /f /t /im firefox.exe");
-			CmdExec("taskkill /f /t /im Safari.exe");
-			CmdExec("taskkill /f /t /im chrome.exe");
+			SelNGBase.ZimbraVersion = zGetZimbraVersionFromAjax();
 		}
 
 	}
@@ -495,7 +486,7 @@ public class CommonTest extends SelNGBase {
 
 		String accountName = selfAccountName;
 
-		zKillBrowsers();
+		resetSession();
 		Thread.sleep(2000);
 
 		SelNGBase.selfAccountName = accountName;

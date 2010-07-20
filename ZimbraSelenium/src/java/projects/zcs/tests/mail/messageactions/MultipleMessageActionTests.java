@@ -434,7 +434,7 @@ public class MultipleMessageActionTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 		Thread.sleep(2500);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = acc2;
 		page.zLoginpage.zLoginToZimbraAjax(acc2);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(fwdSubject);

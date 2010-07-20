@@ -137,7 +137,7 @@ public class BriefcaseSharingTests extends CommonTest {
 				sharetype, invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = invitedusers;
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
@@ -180,7 +180,7 @@ public class BriefcaseSharingTests extends CommonTest {
 				sharetype, invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = invitedusers;
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
@@ -197,7 +197,7 @@ public class BriefcaseSharingTests extends CommonTest {
 				localize(locator.confirmTitle));
 		obj.zMenuItem.zNotExists(filename);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = currentloggedinuser;
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zBriefcaseApp.zGoToBriefcaseApp();
@@ -249,7 +249,7 @@ public class BriefcaseSharingTests extends CommonTest {
 				sharetype, invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = invitedusers;
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
@@ -286,7 +286,7 @@ public class BriefcaseSharingTests extends CommonTest {
 		zWaitTillObjectExist("xpath",
 				"//td[contains(@class, 'zmwiki-author') and contains(text(), '"
 						+ selfAccountName.toLowerCase() + "')]");
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(SelNGBase.selfAccountName);
 
 		needReset = false;

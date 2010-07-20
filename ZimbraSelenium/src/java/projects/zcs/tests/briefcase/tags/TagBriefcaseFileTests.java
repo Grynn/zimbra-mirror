@@ -234,7 +234,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 			handleRetry();
 
 		// temporary work around for proper object identification
-		zKillBrowsers();
+		resetSession();
 		String acc1;
 		acc1 = ProvZCS.getRandomAccount();
 		page.zLoginpage.zLoginToZimbraAjax(acc1);

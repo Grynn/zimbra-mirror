@@ -40,7 +40,7 @@ public class ClientURLTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zCustomLoginToZimbraAjax("?app=calendar");
 		obj.zFolder.zExists(localize(locator.calendar));
 		obj.zButton.zNotExists(localize(locator.newFolder));
@@ -153,7 +153,7 @@ public class ClientURLTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage
 				.zCustomLoginToZimbraAjax("mail?view=compose&to=foo@example.com&subject=יאט&body=body");
 		zNavigateAgainIfRequired(config.getString("mode") + "://"

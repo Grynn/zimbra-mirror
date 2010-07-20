@@ -255,7 +255,7 @@ public class FilterTests extends CommonTest {
 					"", "", conditionValue1, body, "");
 
 			// log off, login to that user to whom forwarded mail & verify mail
-			zKillBrowsers();
+			resetSession();
 			SelNGBase.selfAccountName = forwardtoUser;
 			page.zLoginpage.zLoginToZimbraAjax(forwardtoUser);
 			MailApp.ClickCheckMailUntilMailShowsUp(conditionValue1);

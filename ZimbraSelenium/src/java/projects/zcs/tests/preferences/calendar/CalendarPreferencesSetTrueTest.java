@@ -117,7 +117,7 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 
 		Thread.sleep(500);
 
-		zKillBrowsers();
+		resetSession();
 
 		Thread.sleep(1000);
 

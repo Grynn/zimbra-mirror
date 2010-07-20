@@ -105,7 +105,7 @@ public class DocumentSharingTests extends CommonTest {
 		page.zSharing.zShareFolder("Documents", folderName, "", attendee, role,
 				"", "", "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
@@ -146,7 +146,7 @@ public class DocumentSharingTests extends CommonTest {
 		page.zSharing.zShareFolder("Documents", folderName, "", attendee, role,
 				"", "", "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
@@ -188,7 +188,7 @@ public class DocumentSharingTests extends CommonTest {
 		page.zSharing.zShareFolder("Documents", folderName, "", attendee, role,
 				"", "", "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
@@ -259,7 +259,7 @@ public class DocumentSharingTests extends CommonTest {
 
 		String currentloggedinuser = SelNGBase.selfAccountName;
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 
@@ -295,7 +295,7 @@ public class DocumentSharingTests extends CommonTest {
 		page.zSharing.zShareFolder("Documents", folderName,
 				localize(locator.shareWithGuest), attendee, role, "", "", "");
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,

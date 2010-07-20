@@ -1,11 +1,15 @@
 package projects.zcs.tests.zcscommon;
 
 import java.lang.reflect.Method;
+
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import projects.zcs.tests.CommonTest;
 
@@ -36,7 +40,12 @@ public class SavedSearchActionTestsForAllAppTab extends CommonTest {
 		zGoToApplication("Mail");
 		isExecutionARetry = false;
 	}
-
+	
+	@AfterClass(groups = { "always" })
+	public void stopSession() throws Exception {
+		selenium.stop();
+	}
+	
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
 		if (needReset && !isExecutionARetry) {

@@ -116,7 +116,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 				getNameWithoutSpace(localize(locator.subjectLabel)), subject);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 		Thread.sleep(2000);
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = acc2;
 		page.zLoginpage.zLoginToZimbraAjax(acc2);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -135,7 +135,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 				getNameWithoutSpace(localize(locator.subjectLabel)), subject);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 		Thread.sleep(2000);
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = acc1;
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);

@@ -339,18 +339,18 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 				sharetype, invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = invitedusers;
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = currentloggedinuser;
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zSharing.zModifySharedFolder(applicationtab, sharingfoldername,
 				newRole, message, sharingnoteifany, allowtoseeprivateappt);
 
-		zKillBrowsers();
+		resetSession();
 		SelNGBase.selfAccountName = invitedusers;
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zVerifyShareModifiedMail(currentloggedinuser,

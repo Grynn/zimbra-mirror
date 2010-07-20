@@ -293,7 +293,7 @@ public class MiscMailTests extends CommonTest {
 		// set mail items per page to 10
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName,
 				"zimbraPrefMailItemsPerPage", "10");
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraHTML(SelNGBase.selfAccountName);
 		String[] subjectArray = { "subject1", "subject2", "subject3",
 				"subject4", "subject5", "subject6", "subject7", "subject8",

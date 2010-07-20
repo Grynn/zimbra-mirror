@@ -67,7 +67,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zKillBrowsers();
+		resetSession();
 		currentLoggedInUser = ProvZCS.getRandomAccount();
 		SelNGBase.selfAccountName = currentLoggedInUser;
 		ProvZCS.modifyAccount(currentLoggedInUser, "userPassword", "test123");
@@ -79,7 +79,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
 		if (needReset && !isExecutionARetry) {
-			zKillBrowsers();
+			resetSession();
 			page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 		}
 		needReset = true;
@@ -952,7 +952,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			ProvZCS.modifyAccount("remote@testdomain.com", "zimbraPrefLocale",
 					config.getString("locale"));
 
-			zKillBrowsers();
+			resetSession();
 			String[] recipientsArray2 = { "remote@testdomain.com" };
 			page.zLoginpage.zLoginToZimbraAjax("remote@testdomain.com");
 			ProvZCS.injectMessage("invite@testdomain.com", recipientsArray2,
@@ -960,7 +960,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			page.zSharing.zShareFolder("Mail", localize(locator.inbox), "",
 					currentLoggedInUser, "", "", "", "");
 
-			zKillBrowsers();
+			resetSession();
 			page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 			page.zSharing.zAcceptShare("remotefolder");
 
@@ -980,7 +980,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
 		isExecutionARetry = false;
-		zKillBrowsers();
+		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 	}
 }
