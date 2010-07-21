@@ -177,55 +177,7 @@
 
 
 	<!-- TARGETS FOR REMOTE MACHINES -->
-	
-	<target name="cleanjar" description="Removes unneccessary jars">
-
-			<delete deleteonexit="true">
-				<fileset dir="jars">
-					<include name="ant-1.7.0-ziputil-patched.jar" />
-					<include name="ant-contrib-1.0b1.jar" />
-					<include name="ant-tar-patched.jar" />
-					<include name="apache-jsieve-0.3-zimbra.jar" />
-					<include name="bouncycastle.jar" />
-					<include name="catalina-ant.jar" />
-					<include name="commons-dbcp-1.2.2.jar" />
-					<include name="commons-fileupload-1.2.1.jar" />
-					<include name="commons-io-1.4.jar" />
-					<include name="commons-pool-1.5.3.jar" />
-					<include name="derby.jar" />
-					<include name="ganymed-ssh2-build210.jar" />
-					<include name="gifencoder.jar" />
-					<include name="guava-r06.jar" />
-					<include name="ical4j-0.9.16-patched.jar" />
-					<include name="jaxen-1.1.1.jar" />
-					<include name="jcommon-1.0.16.jar" />
-					<include name="jdom.jar" />
-					<include name="jetty-6.1.22.z6.jar" />
-					<include name="jetty-util-6.1.22.z6.jar" />
-					<include name="jfreechart-1.0.1.jar" />
-					<include name="junit-4.4.jar" />
-					<include name="jython-2.5.1.jar" />
-					<include name="jzlib.jar" />
-					<include name="lucene-core-2.4.1.jar" />
-					<include name="memcached-2.3.1.jar" />
-					<include name="mina-core-1.1.7-zimbra.jar" />
-					<include name="mina-filter-ssl-1.1.7.jar" />
-					<include name="mysql-connector-java-5.0.8-bin.jar" />
-					<include name="nekohtml.jar" />
-					<include name="servlet-api.jar" />
-					<include name="slf4j-api-1.5.8.jar" />
-					<include name="slf4j-log4j12-1.5.8.jar" />
-					<include name="sqlite-jdbc-3.6.20.1.jar" />
-					<include name="tnef-1.6.0.jar" />
-					<include name="xercesImpl-2.9.1.jar" />
-					<include name="yuicompressor-2.4.2-zimbra.jar" />
-					<include name="zimbra-charset.jar" />
-					<include name="zimbra-native.jar" />
-				</fileset>
-			</delete>
-		</target>
-
-	
+			
 	<target name="compile-zcs" description="compiles classes on remote machines">
 		<delete dir="build/classes" />
 		<mkdir dir="${test.log.dir}" />
