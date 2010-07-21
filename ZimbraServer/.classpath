@@ -91,6 +91,7 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/lucene-core-3.0.2.jar"/>
 	<classpathentry kind="src" path="src/java"/>
+	<classpathentry kind="src" path="src/java-test"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraIM"/>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-1.1.7-zimbra.jar"/>
