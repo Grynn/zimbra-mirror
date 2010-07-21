@@ -105,7 +105,7 @@ ZaMigrationXWizard.prototype.previewCallback = function(params,resp) {
 			
 			this.goPage(ZaMigrationXWizard.STEP_REVIEW);
 			
-			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
@@ -124,7 +124,7 @@ ZaMigrationXWizard.prototype.previewCallback = function(params,resp) {
 			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaMigrationXWizard.prototype.previewCallback");
 		}
 
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
@@ -138,6 +138,7 @@ ZaMigrationXWizard.prototype.popup =
 function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
     this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+    this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 }
 
 ZaMigrationXWizard.prototype.goNext =
