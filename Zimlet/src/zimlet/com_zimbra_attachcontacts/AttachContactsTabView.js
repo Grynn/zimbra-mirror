@@ -288,7 +288,6 @@ function() {
 AttachContactsTabView.prototype.uploadFiles =
 function() {
     var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
-	debugger;
 	this.zimlet.contactIdsToAttach = this._getSelectedItems();
 	this.zimlet._isDrafInitiatedByThisZimlet = true;   //set this to true
 	controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL);
