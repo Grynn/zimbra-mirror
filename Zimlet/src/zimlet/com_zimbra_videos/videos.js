@@ -519,7 +519,7 @@ Com_Zimbra_Video.prototype._getSearchDiv = function(){
 
 Com_Zimbra_Video.prototype.isValidVideoURL = function(videoURL){
 	if(!videoURL) return false;
-	var isVideoLink = videoURL.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=)|(video\.google\.com\/googleplayer\.swf\?docId=)|(youtube\.com\/v\/))((-)?[0-9a-zA-Z]+)?(&\w+=\w+)*)\b)/gi);
+	var isVideoLink = videoURL.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=)|(video\.google\.com\/googleplayer\.swf\?docId=)|(youtube\.com\/v\/))((-)?[0-9a-zA-Z_]+)?(&\w+=\w+)*)\b)/gi);
 	return (isVideoLink == null)?false:true;
 //	var isVideoLink = videoURL.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=))(-)?[0-9a-zA-Z]+)\b)/gi);
 //	videoURL.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=)|(video\.google\.com\/googleplayer\.swf\?docId=)|(youtube\.com\/v\/))(-)?[0-9a-zA-Z]+)\b)/gi);
@@ -528,7 +528,7 @@ Com_Zimbra_Video.prototype.isValidVideoURL = function(videoURL){
 Com_Zimbra_Video.prototype.getValidVideoLinksFromText = function(text){
 	
 	//var videoLinks = text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=))(-)?[0-9a-zA-Z]+)\b)/gi);
-	return text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=)|(video\.google\.com\/googleplayer\.swf\?docId=)|(youtube\.com\/v\/))((-)?[0-9a-zA-Z]+)?(&\w+=\w+)*)\b)/gi);
+	return text.match(/(\b(((http | https)\:\/\/)?(www\.)?((youtube\.com\/watch\?v=)|(video\.google\.com\/videoplay\?docid=)|(video\.google\.com\/googleplayer\.swf\?docId=)|(youtube\.com\/v\/))((-)?[0-9a-zA-Z_]+)?(&\w+=\w+)*)\b)/gi);
 };
 
 Com_Zimbra_Video.prototype._loadSearchAPI = function(file){
