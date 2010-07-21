@@ -30,12 +30,6 @@ public class ZObject extends SelNGBase {
 		ZObjectCore(objNameOrId, "click", true, "", objNumber);
 	}
 
-	// perf related
-	public String zClickAndGetPerf(String objNameOrId, String perfJSFunction) {
-		return ZObjectCore(objNameOrId, "clickAndGetPerf", true, "", "1",
-				perfJSFunction, "");
-	}
-
 	public void zClickInDlg(String objNameOrId, String objNumber) {
 		ZObjectCore(objNameOrId, "click", true, "dialog", objNumber);
 	}
@@ -157,30 +151,13 @@ public class ZObject extends SelNGBase {
 	}
 
 	public void zNotExists(String objNameOrId) {
-		// try {
-		// Thread.sleep(2000);
-		// } catch (InterruptedException e) {
-		// }
-		try {
-			String actual = ZObjectCore(objNameOrId, "notexist");
-			Assert.assertEquals("true", actual, objTypeName + "(" + objNameOrId
-					+ ") Found, which should not be present.");
-		} catch (SeleniumException e) {
-			// ignore window or frame is closed exception
-			if (e.getMessage().indexOf("is closed") == -1)
-				e.printStackTrace();
-
-		}
-
+		Assert.assertEquals("true", ZObjectCore(objNameOrId, "notexists", true));
 	}
 
+	//TODO: both methods zNotExists should be consistent, 
+	// both returning or not, but doing the same as the user expects
 	public String zNotExistsDontWait(String objNameOrId) {
 		return ZObjectCore(objNameOrId, "notexists", false);
-	}
-
-	private String ZObjectCore(String objNameOrId, String string, boolean b) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public void zWait(String objNameOrId) {
@@ -194,19 +171,11 @@ public class ZObject extends SelNGBase {
 	}
 
 	public void zExists(String objNameOrId) {
-		String actual = ZObjectCore(objNameOrId, "exists");
-		if (actual.indexOf("false") == -1)// convert OK to true and OK,false to
-			// false
-			actual = "true";
-		else
-			actual = "false";
-		Assert.assertEquals(actual, "true", objTypeName + "(" + objNameOrId
-				+ ") Not Found.");
 	}
 
 	public String zExistsDontWait(String objNameOrId) {
 		// this method doesnt wait and also doesnt fail if object doesnt exist
-		return ZObjectCore(objNameOrId, "exists_dontwait");
+		return ZObjectCore(objNameOrId, "exists", false);
 
 	}
 
@@ -273,7 +242,7 @@ public class ZObject extends SelNGBase {
 		// action "get" is mentioned just to indicate to selenium.call that its
 		// a getMethod
 		return selenium.call("verifyZObjectDisplayed", nameOrIdWithZIndex,
-				"get", null, null, null, null);
+				"get", false, null, null, null, null);
 	}
 
 	public String adjustXY(String xy, boolean isCheckbox) {
