@@ -165,7 +165,7 @@ ZaAppTab.prototype.setSelectState =
 function () {
 	this._selected = true ;
     this.setDisplayState(DwtControl.SELECTED);
-	this.setCursor ("default") ;
+	//this.setCursor ("default") ;
 	this.removeListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
 	
 	var viewId = this.getTabId () ;
@@ -181,7 +181,7 @@ ZaAppTab.prototype.setUnselectState =
 function () {
 	this._selected = false ;
     this.setDisplayState(DwtControl.NORMAL);
-	this.setCursor ("pointer") ;
+	//this.setCursor ("pointer") ;
 	this.addListener(DwtEvent.ONMOUSEUP, this._mouseUpListenerObj);
 	
 	if (this._closeCell) {
@@ -390,7 +390,7 @@ function (ev) {
 	//DBG.println(AjxDebug.DBG1, "Over the close button ....") ;
 	var obj = DwtControl.getTargetControl(ev);
 	AjxImg.setImage (obj._closeCell, "Close") ;
-	obj.setCursor("pointer");
+	//obj.setCursor("pointer");
 	obj._mainToolTip = obj.getToolTipContent ();
 	obj.setToolTipContent (ZaMsg.ALTBB_Close_tt) ;
 }
@@ -403,7 +403,7 @@ function (ev) {
 	}else{
 		AjxImg.setDisabledImage (obj._closeCell, "Close");
 	}
-	obj.setCursor("default");
+	//obj.setCursor("default");
 	obj.setToolTipContent (obj._mainToolTip) ;
 }
 ZaAppTab.prototype._createHtmlFromTemplate = function(templateId, data) {
