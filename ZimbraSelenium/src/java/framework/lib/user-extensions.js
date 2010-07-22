@@ -3232,7 +3232,7 @@ Selenium.prototype.findZFormObjectsMultipleElements_html = function(locatorWithN
 
 	locatorWithNameOrId = locatorWithNameOrId.replace("id=","").replace("name=","");
 	var formObjs =  mainForm.getElementsByTagName(objTag);
-	for(var i=0; formObjs.length; i++) {
+	for(var i=0; i < formObjs.length; i++) {
 		var obj = formObjs[i];
 		try{
 			if(objType) {//objType is passed as null for html-menus(<select>)
