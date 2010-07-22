@@ -446,7 +446,16 @@
              <name>instanceDuration</name>
              <required>false</required>
              <rtexprvalue>true</rtexprvalue>
-         </attribute>
+        </attribute>
+
+        <attribute>
+             <description>
+                 true if the request is coming from the mobile interface
+             </description>
+             <name>ismobile</name>
+             <required>false</required>
+             <rtexprvalue>true</rtexprvalue>
+        </attribute>
     </tag>
 
 	<tag>

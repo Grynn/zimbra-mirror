@@ -612,7 +612,7 @@ public class ZMessageComposeBean {
      * @param options appointment options
      */
     public ZMessageComposeBean(Action action, ZMessageBean msg, ZMailbox mailbox, PageContext pc,
-                               AppointmentOptions options) throws ServiceException {
+                               AppointmentOptions options, Boolean isMobile) throws ServiceException {
         HttpServletRequest req = (HttpServletRequest) pc.getRequest();
 
         setDateFormat(I18nUtil.getLocalizedMessage(pc, "CAL_APPT_EDIT_DATE_FORMAT"));
@@ -789,8 +789,8 @@ public class ZMessageComposeBean {
                 action == Action.INVITE_TENTATIVE || action == Action.FORWARD) && mailbox.getPrefs().getForwardReplyInOriginalFormat()){
             if (getContentType() != null) {isText = getContentType().equals("text/plain");} 
         }
-
-        if(isText && zsignature != null && (zsignature.getType().equals("text/html"))){
+        // Compose in mobile interface is always in text/plain. Decode the HTML signatures, if any.
+        if((isText || isMobile) && zsignature != null && (zsignature.getType().equals("text/html"))){
            signature = BeanUtils.htmlDecode(signature);
         }
         if (signatureTop && signature != null && signature.length() > 0)

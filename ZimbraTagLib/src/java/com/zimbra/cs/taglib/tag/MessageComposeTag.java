@@ -52,6 +52,7 @@ public class MessageComposeTag extends ZimbraSimpleTag {
     private long mInstanceStartTime;
     private long mInstanceDuration;
     private boolean mIstask;
+    private boolean mIsmobile;
 
     public void setVar(String var) { this.mVar = var; }
 
@@ -67,6 +68,7 @@ public class MessageComposeTag extends ZimbraSimpleTag {
     public void setIstask(boolean isTask) { mIstask = isTask; }
     public void setInstanceStartTime(long instanceStartTime) { mInstanceStartTime = instanceStartTime; }
     public void setInstanceDuration(long instanceDuration) { mInstanceDuration = instanceDuration; }
+    public void setIsmobile(boolean isMobile) { mIsmobile = isMobile; }
 
     public void doTag() throws JspException, IOException {
         try {
@@ -77,26 +79,26 @@ public class MessageComposeTag extends ZimbraSimpleTag {
             ZMessageComposeBean compose;
 
             if (ACTION_REPLY.equals(mAction)) {
-                compose = new ZMessageComposeBean(Action.REPLY, mMessage, mailbox, pc, null);
+                compose = new ZMessageComposeBean(Action.REPLY, mMessage, mailbox, pc, null, mIsmobile);
             } else if (ACTION_REPLY_ALL.equals(mAction)) {
-                compose = new ZMessageComposeBean(Action.REPLY_ALL, mMessage, mailbox, pc, null);
+                compose = new ZMessageComposeBean(Action.REPLY_ALL, mMessage, mailbox, pc, null, mIsmobile);
             } else if (ACTION_FORWARD.equals(mAction)) {
-                compose = new ZMessageComposeBean(Action.FORWARD, mMessage, mailbox, pc, null);
+                compose = new ZMessageComposeBean(Action.FORWARD, mMessage, mailbox, pc, null, mIsmobile);
             } else if (ACTION_RESEND.equals(mAction)) {
-                compose = new ZMessageComposeBean(Action.RESEND, mMessage, mailbox, pc, null);
+                compose = new ZMessageComposeBean(Action.RESEND, mMessage, mailbox, pc, null, mIsmobile);
             } else if (ACTION_DRAFT.equals(mAction)) {
-                compose = new ZMessageComposeBean(Action.DRAFT, mMessage, mailbox, pc, null);
+                compose = new ZMessageComposeBean(Action.DRAFT, mMessage, mailbox, pc, null, mIsmobile);
             } else if (ACTION_ACCEPT.equals(mAction)) {
-                compose = new ZMessageComposeBean(Action.INVITE_ACCEPT, mMessage, mailbox, pc, null);
+                compose = new ZMessageComposeBean(Action.INVITE_ACCEPT, mMessage, mailbox, pc, null, mIsmobile);
             } else if (ACTION_DECLINE.equals(mAction)) {
-                compose = new ZMessageComposeBean(Action.INVITE_DECLINE, mMessage, mailbox, pc, null);
+                compose = new ZMessageComposeBean(Action.INVITE_DECLINE, mMessage, mailbox, pc, null, mIsmobile);
             } else if (ACTION_TENTATIVE.equals(mAction)) {
-                compose = new ZMessageComposeBean(Action.INVITE_TENTATIVE, mMessage, mailbox, pc, null);
+                compose = new ZMessageComposeBean(Action.INVITE_TENTATIVE, mMessage, mailbox, pc, null, mIsmobile);
             } else if (ACTION_APPT_NEW.equals(mAction)) {
                 AppointmentOptions options = new AppointmentOptions();
                 options.setDate(mDate);
                 options.setIsTask(mIstask);
-                compose = new ZMessageComposeBean(Action.APPT_NEW, null, mailbox, pc, options);
+                compose = new ZMessageComposeBean(Action.APPT_NEW, null, mailbox, pc, options, mIsmobile);
             } else if (ACTION_APPT_EDIT.equals(mAction)) {
                 AppointmentOptions options = new AppointmentOptions();
                 options.setDate(mDate);
@@ -106,9 +108,9 @@ public class MessageComposeTag extends ZimbraSimpleTag {
                 options.setInstanceStartTime(mInstanceStartTime);
                 options.setInstanceDuration(mInstanceDuration);
                 options.setIsTask(mIstask);
-                compose = new ZMessageComposeBean(Action.APPT_EDIT, mMessage, mailbox, pc, options);
+                compose = new ZMessageComposeBean(Action.APPT_EDIT, mMessage, mailbox, pc, options, mIsmobile);
             } else {
-                compose = new ZMessageComposeBean(Action.NEW, null, mailbox, pc, null);
+                compose = new ZMessageComposeBean(Action.NEW, null, mailbox, pc, null, mIsmobile);
             }
             jctxt.setAttribute(mVar, compose, PageContext.PAGE_SCOPE);
             
