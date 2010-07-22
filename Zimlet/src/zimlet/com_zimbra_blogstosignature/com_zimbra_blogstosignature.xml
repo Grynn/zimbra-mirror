@@ -1,0 +1,4 @@
+<zimlet name="com_zimbra_blogstosignature" version="0.1" label="Blogs to Signature" description="Converts Company blog posts into email-signature to help promote products and services" target="main compose-window">
+	<include>blogstosignature.js</include>
+	<handlerObject>com_zimbra_blogstosignature_HandlerObj</handlerObject>
+</zimlet>

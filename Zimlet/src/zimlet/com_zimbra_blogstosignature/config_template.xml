@@ -1,0 +1,7 @@
+<zimletConfig name="com_zimbra_blogstosignature" version="1.18">
+    <global>
+        <property name="allowedDomains">*.feedburner.com,*.bit.ly</property>
+        <property name="rssFeed">http://feeds.feedburner.com/zimbra?format=xml</property>
+        <property name="signatureLabel">Zimbra Blog:</property>
+    </global>
+</zimletConfig>
