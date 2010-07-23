@@ -1,0 +1,46 @@
+.ImgGDocs_Icon{
+    background: transparent url("google_icon.gif") no-repeat 0 0;
+    width: 16px;
+    height: 16px;
+    overflow: hidden
+}
+
+.GDocsTabBox {
+    border-color:#B2B2B2 #6E6E6E #6E6E6E #B2B2B2;
+    border-style:inset;
+    border-width:1px;
+    background:none repeat scroll 0 0 white;
+}
+
+.GDocsList{
+    margin-left: 5px;
+}
+
+.GDocsTabView_Table{
+    padding-top:10px;
+}
+
+.GDocsItemSmall{
+    border-color:#F8F5ED;
+    border-style:solid;
+    border-width:1px 0;
+}
+.GDocsListLoader{
+    margin:auto;
+    padding:13% 30%;
+}
+.GDocsRefreshBtn{
+    clear:both;
+    padding-left:8px;
+}
+.GDocsVerifyForm{
+    float:left;
+    clear:both;
+}
+.GDocsVerifyBtn{
+    float:right;
+}
+.GDocsDocLink{
+    display:block;
+    float:left;
+}

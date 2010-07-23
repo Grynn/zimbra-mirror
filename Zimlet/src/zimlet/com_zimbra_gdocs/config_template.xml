@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_gdocs" version="0.1">
+    <global>
+        <property name="allowedDomains">*.google.com,*.googleusercontent.com,localhost,ssutar.*,*.zimbra.com</property>
+    </global>
+</zimletConfig>

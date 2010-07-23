@@ -1,0 +1,10 @@
+<zimlet name="com_zimbra_gdocs" version="0.1" description="Get the docs from Google Docs">
+  <include>gdocs.js</include>
+  <includeCSS>gdocs.css</includeCSS>
+  <handlerObject>com_zimbra_gdocs</handlerObject>
+  <userProperties>
+        <property type="string" name="gdocs_is_connected" value="false"/>
+        <property type="string" name="gdocs_access_token" value=""/>
+        <property type="string" name="gdocs_access_token_secret" value=""/>
+  </userProperties>
+</zimlet>
