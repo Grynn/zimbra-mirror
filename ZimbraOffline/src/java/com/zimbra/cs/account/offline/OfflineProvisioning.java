@@ -2018,7 +2018,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraDataSourceName, name); // must be the same
         attrs.put(A_offlineDataSourceType, type.toString());
         attrs.put(A_objectClass, "zimbraDataSource");
-        if (!passwdAlreadyEncrypted)
+        if (!passwdAlreadyEncrypted && attrs.get(A_zimbraDataSourcePassword) != null)
             attrs.put(A_zimbraDataSourcePassword, DataSource.encryptData(dsid, (String) attrs.get(A_zimbraDataSourcePassword)));
         if (markChanged)
             attrs.put(A_offlineModifiedAttrs, A_offlineDn);
