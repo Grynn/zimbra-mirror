@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_stickynotes" version="1.5" description="Add a sticky note to email messages.">
+<zimlet name="com_zimbra_stickynotes" version="1.6" description="Add a sticky note to email messages.">
 	<include>stickynotes.js</include>
 	<includeCSS>stickynotes.css</includeCSS>
 	<handlerObject>com_zimbra_stickyNotes_HandlerObject</handlerObject>

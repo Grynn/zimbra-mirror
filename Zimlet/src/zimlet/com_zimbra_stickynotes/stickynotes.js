@@ -51,6 +51,23 @@ function() {
 	this._migrateOldData();
 };
 
+StickyNotesZimlet.prototype.onShowView =
+function(viewId, isNewView) {
+	if(viewId == "CNS" || viewId == "CAL") {
+		var controller = appCtxt.getCurrentController();
+		try{
+			if(viewId == "CAL") {//in calendar, there are multiple views and viewId doesnt match internal views
+				for(var vid in controller._listView) {
+					controller._listView[vid].addSelectionListener(new AjxListener(this, this._onContactOrApptView, [controller]));
+				}
+			} else {
+				controller._listView[viewId].addSelectionListener(new AjxListener(this, this._onContactOrApptView, [controller]));
+			}
+		} catch(e) {
+		}
+	}
+};
+
 /**
  * Creates Tags and stores its id
  */
@@ -119,7 +136,7 @@ function() {
 	}
 	var content = this._getStickyContent();
 	if (!this._createNewStickyNotes || (this._createNewStickyNotes && content != "")) {
-		this._saveStickyNotesDataToServer(this._msgId, content);
+		this._saveStickyNotesDataToServer(this._itemId, content);
 	}
 	if (this._createNewStickyNotes && content != "") {
 		this._tagAction(true);
@@ -221,7 +238,7 @@ function() {
 	if (!this._mainContainer)
 		return;
 
-	this._saveStickyNotesDataToServer(this._msgId, "");
+	this._saveStickyNotesDataToServer(this._itemId, "");
 
 	this._hideStickyNotes();
 	if (this.srcMsgObj.hasTag(this._tagId))
@@ -321,7 +338,7 @@ function(app, toolbar, controller, view) {
 	if (!this.turnONstickynotesZimlet) {
 		return;
 	}
-	if (view == ZmId.VIEW_CONVLIST || view == ZmId.VIEW_CONV || view == ZmId.VIEW_TRAD) {
+	if (view == ZmId.VIEW_CONVLIST || view == ZmId.VIEW_CONV || view == ZmId.VIEW_TRAD || view == "CNS" || view == "CLD") {
 		var buttonIndex = -1;
 		for (var i = 0, count = toolbar.opList.length; i < count; i++) {
 			if (toolbar.opList[i] == ZmOperation.PRINT) {
@@ -338,8 +355,10 @@ function(app, toolbar, controller, view) {
 			index: buttonIndex,
 			image: "stickynotes-panelIcon"
 		};
-		var button = toolbar.createOp(StickyNotesZimlet.stickyNotes, buttonArgs);
-		button.addSelectionListener(new AjxListener(this, this._stickyTBListener, [controller]));
+		if(!toolbar.getOp(StickyNotesZimlet.stickyNotes)) {
+			var button = toolbar.createOp(StickyNotesZimlet.stickyNotes, buttonArgs);
+			button.addSelectionListener(new AjxListener(this, this._stickyTBListener, [controller]));
+		}
 	}
 };
 
@@ -380,14 +399,14 @@ function(msgObj) {
 
 /**
  * Passes Email object to create StickyNotes
- * @param ZmMailMsg mail
+ * @param {Object} obj Obj can be ZmMailMsg | ZmContact | ZmConv | ZmAppt
  */
 StickyNotesZimlet.prototype._createStickyNotes =
-function(mail) {
-	if (mail.type == "CONV") {
-		this._msgId = mail.cid;
-	} else if (mail.type == "MSG") {
-		this._msgId = mail.id;
+function(obj) {
+	if (obj.type == "CONV") {
+		this._itemId = obj.cid;
+	} else if (obj.type == "MSG" || obj.type == "CONTACT" || obj.type == "APPT") {
+		this._itemId = obj.id;
 	} else {
 		return;
 	}
@@ -409,18 +428,38 @@ function(msg) {
 		return;
 	}
 	if (msg.type == "CONV") {
-		this._msgId = msg.cid;
+		this._itemId = msg.cid;
 	} else if (msg.type == "MSG") {
-		this._msgId = msg.id;
+		this._itemId = msg.id;
 	} else {
 		if (this.stickyNotesDisplayed) {
 			this._hideStickyNotes();
 		}
 		return;
 	}
-	this._getStickyNotesMetaData(this._msgId, new AjxCallback(this, this._showStickyNotes, false));
+	this._handleItemSelect();
+};
 
-	//this._showStickyNotes();
+StickyNotesZimlet.prototype._onContactOrApptView =
+function(controller) {
+	if (!this.turnONstickynotesZimlet) {
+		return;
+	}
+	var selectedItms = controller.getCurrentView().getSelection();
+	if (selectedItms.length > 0) {
+		this.srcMsgObj = selectedItms[0];
+		this._itemId = this.srcMsgObj.id;
+	}
+	this._handleItemSelect();
+};
+
+/**
+ * Checks if the item(this._itemId) has stickyNotes, if so, displays that
+ * @param ZmMailMsg mail
+ */
+StickyNotesZimlet.prototype._handleItemSelect =
+function() {
+	this._getStickyNotesMetaData(this._itemId, new AjxCallback(this, this._showStickyNotes, false));
 };
 
 /**
