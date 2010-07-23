@@ -1,6 +1,7 @@
 package framework.core;
 
 import framework.core.ZimbraSelenium;
+import framework.util.ZimbraSeleniumLogger;
 
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
@@ -9,14 +10,10 @@ import org.testng.Assert;
 
 import org.apache.commons.configuration.*;
 
-import projects.zcs.tests.zcscommon.TagActionTestsForAllAppTab;
-
-import java.awt.Dimension;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.event.InputEvent;
-
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.util.HashMap;
 
 public class SelNGBase {
@@ -75,8 +72,23 @@ public class SelNGBase {
 			rcConfig.setPort(Integer.parseInt(config.getString("serverPort", "4444")));
 			rcConfig.setUserExtensions(new File("src/java/framework/lib/user-extensions.js"));
 			ss = new SeleniumServer(false, rcConfig);
-			ss.boot();
-			expectedValue.clear(); // todo: check if this is needed
+			
+			try {
+				ss.boot();
+			} catch (Exception e) {
+				URL stopUrl;
+				stopUrl = new URL("http://localhost:" +
+						config.getString("serverPort", "4444") +
+						"/selenium-server/driver/?cmd=shutDownSeleniumServer");
+				BufferedReader in = new BufferedReader(new InputStreamReader(stopUrl.openStream()));
+
+				while (in.readLine() != null)
+					ZimbraSeleniumLogger.mLog.info("A Selenium Server was running already." +
+							" Attempting to kill and start again");
+				in.close();
+				Thread.sleep(5000);
+				ss.boot();
+			}
 		}
 	}
 	
@@ -169,11 +181,11 @@ public class SelNGBase {
 		if (serverMachineName.toLowerCase().equals("sauceondemand")){
 			serverMachineName = "ondemand.saucelabs.com";
 			serverPort = 80;
-			String browserFinal = "{\"username\": \"" + config.getString("sauceUsername") + "\"," +
-						          "\"access-key\": \"" + config.getString("sauceAccessKey") + "\"," +
-						          "\"os\": \"" + config.getString("OS", "Windows 2003") + "\"," +
-						          "\"browser\": \"" + browser + "\"," +
-						          "\"browser-version\": \"" + browserVersion + "\"}";
+			browser = "{\"username\": \"" + config.getString("sauceUsername") + "\"," +
+					  "\"access-key\": \"" + config.getString("sauceAccessKey") + "\"," +
+					  "\"os\": \"" + config.getString("OS", "Windows 2003") + "\"," +
+			          "\"browser\": \"" + browser + "\"," +
+				      "\"browser-version\": \"" + browserVersion + "\"}";
 			/* TODO: Adding the job name would be useful for finding the test videos in OnDemand
 						          "\"job-name\": \"" + 	Current method or class name + "\"}";  */
 		} else {
