@@ -67,9 +67,9 @@ checkListening()
 {
   SEARCHTIMEOUT=30 #timelimit for ldapsearch
   if [ x"$ldap_common_require_tls" = "x0" ]; then
-    /opt/zimbra/openldap/bin/ldapsearch -x -l $SEARCHTIMEOUT -b "" -s base -H ${bind_url} >/dev/null 2>&1
+    /opt/zimbra/openldap/bin/ldapsearch -x -l $SEARCHTIMEOUT -b "" -s base -H ldapi:/// >/dev/null 2>&1
   else
-    /opt/zimbra/openldap/bin/ldapsearch -ZZ -x -l $SEARCHTIMEOUT -b "" -s base -H ${bind_url} >/dev/null 2>&1
+    /opt/zimbra/openldap/bin/ldapsearch -ZZ -x -l $SEARCHTIMEOUT -b "" -s base -H ldapi:/// >/dev/null 2>&1
   fi
   if [ $? -ne 0 ]; then
     LISTENING=0
