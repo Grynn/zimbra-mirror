@@ -1037,7 +1037,7 @@ public class InitialSync {
                     } else if (te.getName().endsWith(".err")) {
                     	OfflineLog.offline.warn("server returned error on message %d", msgId);
                     } else {
-                        throw new RuntimeException("missing meta entry reading tgz stream");
+                        OfflineLog.offline.warn("failed to sync message due to missing meta entry reading tgz stream");
                     }
                 }
             } catch (IOException x) {
