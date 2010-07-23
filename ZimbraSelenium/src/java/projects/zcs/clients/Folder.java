@@ -19,7 +19,7 @@ public class Folder extends ZObject {
 		for (int i = 0; i < fldrs.length; i++) {
 			String currentFolder = fldrs[i];
 			//dont wait if we are checking for not exist
-			if(!action.equals("notexist"))
+			if(!action.equals("notexists"))
 			    zWait(currentFolder, panel, param1);
 			if (i < fldrs.length-1){
 				this._expndFldrIfRequired(currentFolder, panel, param1);

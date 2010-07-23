@@ -151,7 +151,7 @@ public class ZObject extends SelNGBase {
 	}
 
 	public void zNotExists(String objNameOrId) {
-		Assert.assertEquals("true", ZObjectCore(objNameOrId, "notexists", true));
+		Assert.assertEquals(ZObjectCore(objNameOrId, "notexists", true), "true");
 	}
 
 	//TODO: both methods zNotExists should be consistent, 

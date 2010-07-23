@@ -16,7 +16,7 @@ public class Dialog extends SelNGBase{
 		return  dialogCore(dialogNameOrId, "exists", false);
 	}
 	public void zNotExists(String dialogNameOrId) {
-		String actual = dialogCore(dialogNameOrId, "notexist");
+		String actual = dialogCore(dialogNameOrId, "notexists");
 		Assert.assertEquals("true", actual, "Dialog(" + dialogNameOrId
 				+ ") Found, which should not be present.");
 	}
@@ -24,7 +24,7 @@ public class Dialog extends SelNGBase{
 		return dialogCore(dialogNameOrId, "getmessage");
 	}
 	public String zIsNotPresent(String dialogNameOrId) {
-		return  dialogCore(dialogNameOrId, "notexist");
+		return  dialogCore(dialogNameOrId, "notexists");
 
 	}	
 	public void zWait(String dialogNameOrId) {

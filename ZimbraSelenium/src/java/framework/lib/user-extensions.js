@@ -755,7 +755,7 @@ Selenium.prototype.verifyZButton = function(locator) {
 
 Selenium.prototype.buttonCore = function(locator, action, panel, objNumber, param2) {
 	var element = this.findZButton(locator, panel, objNumber);
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
 		return true;
 	else if(element == null)
 		return false;
@@ -766,7 +766,7 @@ Selenium.prototype.buttonCore = function(locator, action, panel, objNumber, para
 
 Selenium.prototype.buttonCore_html = function(locator, action, panel, objNumber, param2) {
 	var element = this.findZButton_html(locator, panel, objNumber);
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
 		return true;
 	else if(element == null)
 		return false;
@@ -813,7 +813,7 @@ Selenium.prototype.buttonMenuCore = function(locator, action, panel, param1) {
 		return false;
 	var arrowElement = this.getMenuDownArrowOfZObj(testElement, locator);
 
-	if(arrowElement == null && action == "notexist")
+	if(arrowElement == null && action == "notexists")
 		return true;
 	else if(arrowElement == null)
 		return false;
@@ -1027,7 +1027,7 @@ Selenium.prototype.findZFormObject = function(objName, objTag, objType, panel, o
 Selenium.prototype.formObjCore = function(objName, objTag, objType, action, data, panel, objNumber) {
 	var element = this.findZFormObject(objName, objTag, objType, panel, objNumber);
 	
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
 		return true;
 	else if(element == null)
 		return false;
@@ -1146,7 +1146,7 @@ Selenium.prototype._getFormObjsInRow_MultipleObjs = function(formObjs, rowObj, o
 Selenium.prototype.editorCore_html = function(locator, action, data, panel, objNumber) {
 	var element = this.findZIframeOrTextArea_html(locator, panel, objNumber);
 
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
 		return true;
 	else if(element == null)
 		return false;
@@ -1160,7 +1160,7 @@ Selenium.prototype.editorCore_html = function(locator, action, data, panel, objN
 
 Selenium.prototype.editorCore = function(locator, action, data, panel, objNumber) {
 	var element = this.findZEditor(locator, panel, objNumber);
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
 		return true;
 	else if(element == null)
 		return false;
@@ -1248,7 +1248,7 @@ Selenium.prototype.actOnZElement = function(element, action, locator, useXY,para
 		else{
 			return this.isZObjVisible(element);
 		}
-	} else if (action == "notexist") {
+	} else if (action == "notexists") {
 		if(!isZObjHTMLObj && !isZObjButWithid)
 			return false;
 		else//if we are dealing with zimbraObj, then verify zindex etc b4 saying anything
@@ -2286,7 +2286,7 @@ Selenium.prototype.msgBodyCore = function(locator, action, data, panel, objNumbe
 
 	var element = this.findZMsgBody(locator, panel, objNumber);
 	
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2296,7 +2296,7 @@ Selenium.prototype.msgBodyCore = function(locator, action, data, panel, objNumbe
 Selenium.prototype.msgHeaderCore = function(locator, action, data, panel, objNumber) {
 	var element = this.findZMsgHeader(locator, panel, objNumber);
 	
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2460,7 +2460,7 @@ Selenium.prototype.folderCollapseBtnCore = function(locator, action, panel, para
 			break;	
 		}
     }
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2482,7 +2482,7 @@ Selenium.prototype.folderCheckboxCore = function(locator, action, panel, param1)
 		}
     }
 
-	if(element == null && action == "notexist"){
+	if(element == null && action == "notexists"){
         return true;
 	} else if(element == null) {
 		return false;
@@ -2506,7 +2506,7 @@ Selenium.prototype.folderExpandBtnCore = function(locator, action, panel, param1
 		}
     }
 
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2517,7 +2517,7 @@ Selenium.prototype.folderExpandBtnCore = function(locator, action, panel, param1
 Selenium.prototype.apptCore = function(locator, action, panel, param1) {
 	var element = this.findZAppt(locator, panel, param1);
 
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2529,7 +2529,7 @@ Selenium.prototype.apptCore = function(locator, action, panel, param1) {
 Selenium.prototype.apptCore_html = function(locator, action, panel, param1) {
 		var element = this.findZAppt_html(locator, panel, param1);
 
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2540,7 +2540,7 @@ Selenium.prototype.apptCore_html = function(locator, action, panel, param1) {
 Selenium.prototype.calGridCore_html = function(locator, action, panel, param1) {
 		var elementOrValue = this.findZcalGrid_html(locator, action, panel, param1);
 
-	if(elementOrValue == null && action == "notexist")
+	if(elementOrValue == null && action == "notexists")
         return true;
 	else if(elementOrValue == null)
 		return false;
@@ -2555,7 +2555,7 @@ Selenium.prototype.calGridCore_html = function(locator, action, panel, param1) {
 
 Selenium.prototype.folderCore = function(locator, action, panel, param1) {
 	var element = this.findZFolder(locator, panel, param1);
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
 		return true;
 	else if(element == null)
 		return false;
@@ -2567,7 +2567,7 @@ Selenium.prototype.folderCore = function(locator, action, panel, param1) {
 
 Selenium.prototype.featureMenuCore = function(locator, action, panel, param1) {
 		var element = this.findZFeatureMenu(locator, panel, param1);
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2578,7 +2578,7 @@ Selenium.prototype.featureMenuCore = function(locator, action, panel, param1) {
 
 Selenium.prototype.tabCore_html = function(locator, action, panel, objNumber, param2) {
 	var element = this.findZTabs_html(locator, panel, objNumber);
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2589,7 +2589,7 @@ Selenium.prototype.tabCore_html = function(locator, action, panel, objNumber, pa
 
 Selenium.prototype.folderCore_html = function(locator, action, panel, objNumber, param2) {
 	var element = this.findZFolder_html(locator, panel, objNumber);
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2601,7 +2601,7 @@ Selenium.prototype.folderCore_html = function(locator, action, panel, objNumber,
 Selenium.prototype.tabCore = function(locator, action, panel, param1) {
 		var element = this.findZAppTab(locator, panel, param1);
 
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2612,7 +2612,7 @@ Selenium.prototype.tabCore = function(locator, action, panel, param1) {
 
 Selenium.prototype.tabCore = function(locator, action, panel, param1) {
 	var element = this.findZTab(locator, panel, param1);
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2629,7 +2629,7 @@ Selenium.prototype.listItemCore_html = function(locator, action, panel, objNumbe
 		actOnLabel = true;
 	}
 	var element = this.findZListItem_html(locator, panel, objNumber, listNumber);
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2693,7 +2693,7 @@ Selenium.prototype.listItemCore_html = function(locator, action, panel, objNumbe
 			return false;
 	} else if((action == "selectchkbox") || (action == "ischecked") || (action == "isunchecked")) {
 			var element = element.getElementsByTagName("input")[0];
-			if(element == null && action == "notexist")
+			if(element == null && action == "notexists")
                 return true;
 			else if(element == null)
 				false;
@@ -2731,7 +2731,7 @@ Selenium.prototype.listItemCore_html = function(locator, action, panel, objNumbe
 				}
 			}
 
-			if(element == null && action == "notexist")
+			if(element == null && action == "notexists")
                 return true;
 			else if(element == null)
 				return false;
@@ -2756,7 +2756,7 @@ Selenium.prototype.listItemCore = function(locator, action, panel, objNumber, li
 			element = this.findZLinkInListItem(element, linkName);
 		}
 	}
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2833,7 +2833,7 @@ Selenium.prototype.listItemCore = function(locator, action, panel, objNumber, li
 				}
 			}
 
-			if(element == null && action == "notexist")
+			if(element == null && action == "notexists")
                 return true;
 			else if(element == null)
 				return false;
@@ -2866,7 +2866,7 @@ Selenium.prototype.listItemCore = function(locator, action, panel, objNumber, li
 				}
 			}
 
-			if(element == null && action == "notexist")
+			if(element == null && action == "notexists")
                 return true;
 			else if(element == null)
 				return false;
@@ -2891,7 +2891,7 @@ Selenium.prototype.htmlMenuCore_html = function(locator, action, itemToSelect, i
 	if(itemNumber != undefined && itemNumber != "")
 		 reqNumber = parseInt(itemNumber);
 
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -2961,7 +2961,7 @@ Selenium.prototype.htmlMenuCore_html = function(locator, action, itemToSelect, i
 
 Selenium.prototype.menuItemCore = function(locator, action, panel, param1) {
 	var element = this.findZMenuItem(locator, panel, param1);
-	if (element == null && action == "notexist")
+	if (element == null && action == "notexists")
 		return true;
 	else if (element == null)
 		return false;
@@ -2972,7 +2972,7 @@ Selenium.prototype.menuItemCore = function(locator, action, panel, param1) {
 
 Selenium.prototype.dialogCore = function(locator, action, panel, param1) {
 	var element = this.findZDialog(locator, panel, param1);
-	if(element == null && action == "notexist")
+	if(element == null && action == "notexists")
         return true;
 	else if(element == null)
 		return false;
@@ -3176,7 +3176,7 @@ Selenium.prototype.verifyZDisplayed = function(locatorWithZIndx) {
 
 Selenium.prototype.msgZHdrBodyCore_html = function(locator, action) {
 	var element = this.findZElementByClassOrId_html(locator);
-	if(element == null && (action == "notexist" || action == "notdisplayed")){
+	if(element == null && (action == "notexists" || action == "notdisplayed")){
         return true;
 	}else if(element == null){
 		return false;
@@ -3210,7 +3210,7 @@ Selenium.prototype.msgZHdrBodyCore_html = function(locator, action) {
 
 Selenium.prototype.miscZObjectCore_html = function(locator, action, panel, objNumber, param2) {
 	var element = this.findZElementByClassOrId_html(locator, panel, objNumber);
-	if(element == null && (action == "notexist" || action == "notdisplayed"))
+	if(element == null && (action == "notexists" || action == "notdisplayed"))
         return true;
 	else if(element == null)
 		return false;
@@ -3325,7 +3325,7 @@ Selenium.prototype.miscZObjectCore = function(classNameOridWithZIndx, action, pa
 		}
 	}
 
-	if(element == null && (action == "notexist" || action == "notdisplayed"))
+	if(element == null && (action == "notexists" || action == "notdisplayed"))
 		return true;
 	else if(element == null)
 		return false;

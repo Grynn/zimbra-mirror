@@ -154,7 +154,7 @@ public class ZObject extends SelNGBase {
 		Assert.assertEquals("true", ZObjectCore(objNameOrId, "notexists", false));
 
 		try {
-			String actual = ZObjectCore(objNameOrId, "notexist", false);
+			String actual = ZObjectCore(objNameOrId, "notexists", false);
 			Assert.assertEquals("true", actual, objTypeName + "(" + objNameOrId
 					+ ") Found, which should not be present.");
 		} catch (SeleniumException e) {

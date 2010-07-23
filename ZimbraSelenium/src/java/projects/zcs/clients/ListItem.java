@@ -90,7 +90,7 @@ public class ListItem extends ZObject{
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
 	public void zVerifyItemInSpecificListInDlgNotExist(String objNameOrId, String objNumber, String listNumber) {
-	    	String actual = ZObjectCore(objNameOrId, "notexist", false, "dialog", objNumber, listNumber, "");
+	    	String actual = ZObjectCore(objNameOrId, "notexists", false, "dialog", objNumber, listNumber, "");
 		if(actual.indexOf("false") == -1)//convert OK to true and OK,false to false
 			actual = "true";
 		else
@@ -105,7 +105,7 @@ public class ListItem extends ZObject{
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
 	public void zVerifyItemInSpecificListNotExist(String objNameOrId, String objNumber, String listNumber) {
-		String actual = ZObjectCore(objNameOrId, "notexist", false, "", objNumber, listNumber, "");
+		String actual = ZObjectCore(objNameOrId, "notexists", false, "", objNumber, listNumber, "");
 		if(actual.indexOf("false") == -1)//convert OK to true and OK,false to false
 			actual = "true";
 		else
