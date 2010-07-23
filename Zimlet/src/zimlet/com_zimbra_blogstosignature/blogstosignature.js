@@ -58,12 +58,25 @@ function() {
  */
 BlogsToSignatureZimlet.prototype.appendExtraSignature =
 function(buffer) {
-	buffer.push(this._getARecentBlogPost());
+	var sig = this._getARecentBlogPost();
+	if(sig != "") {
+		buffer.push(sig);
+	}
 };
 
 BlogsToSignatureZimlet.prototype._getARecentBlogPost =
 function() {
-	if(!this.blogsInArray) {
+	var addtoArray = true;
+	if(appCtxt.isChildWindow) {
+		var parentCtxt = parentAppCtxt.getZimletMgr().getZimletByName("com_zimbra_blogstosignature");
+		if(parentCtxt && parentCtxt.blogToSignatureZimletRecentPosts) {
+			this.blogToSignatureZimletRecentPosts = parentCtxt.blogToSignatureZimletRecentPosts;
+		}
+	}
+	if(this.blogsInArray && this.blogsInArray.length > 0) {
+		addtoArray = false;
+	}
+	if(addtoArray) {
 		this.blogsInArray = [];
 		for(var title in this.blogToSignatureZimletRecentPosts) {
 			this.blogsInArray.push({title:title, link:this.blogToSignatureZimletRecentPosts[title]});
@@ -71,6 +84,9 @@ function() {
 	}
 	var randomNumber = Math.floor(Math.random() * this.blogsInArray.length);
 	var obj = this.blogsInArray[randomNumber];	
+	if(!obj) {
+		return ""
+	}
 	var title = obj.title.length > 80 ? obj.title.substring(0, 80) + "...":  obj.title;
 	return  [this._signatureLabel, " ", title," ", this._shortenUrl(obj.link)].join("");
 };
@@ -113,7 +129,10 @@ function(reponse) {
 			return;
 		}
 	}
-	this.metaData.set("blogToSignatureZimletRecentPosts", this.blogToSignatureZimletRecentPosts, null, new AjxCallback(this, this._saveRecentPostsHandler));
+	if(this.blogToSignatureZimletRecentPosts) {
+		this._cacheBlogsInZimletContext(this.blogToSignatureZimletRecentPosts);
+		this.metaData.set("blogToSignatureZimletRecentPosts", this.blogToSignatureZimletRecentPosts, null, new AjxCallback(this, this._saveRecentPostsHandler));
+	}
 };
 
 BlogsToSignatureZimlet.prototype._shortenUrl =
@@ -163,12 +182,32 @@ function() {
 BlogsToSignatureZimlet.prototype._handleRecentPostsMetaData =
 function(result) {
 	this.blogToSignatureZimletRecentPosts = null; //nullify old data
+	this._zimletContext.blogToSignatureZimletRecentPosts = null;
 	try {
-		this.blogToSignatureZimletRecentPosts = result.getResponse().BatchResponse.GetMailboxMetadataResponse[0].meta[0]._attrs;
+		var list = result.getResponse().BatchResponse.GetMailboxMetadataResponse[0].meta[0]._attrs;
+		this.blogToSignatureZimletRecentPosts = list;
+		this._cacheBlogsInZimletContext(list);
+
 	} catch(ex) {
 		this._showErrorMessage(ex);
 	}
 };
+
+/**
+ * Store the blogs list in parent ZimletContext so that we can utilize this for compose-in-newWindow
+ *
+ * @param {object} List  List of blog posts and associated url
+ */
+BlogsToSignatureZimlet.prototype._cacheBlogsInZimletContext =
+function(list) {
+	if(appCtxt.isChildWindow) {//if compose-in newWindow, store this in parentContext
+		var parentCtxt = parentAppCtxt.getZimletMgr().getZimletByName("com_zimbra_blogstosignature");
+		parentCtxt.blogToSignatureZimletRecentPosts = list;
+	} else {
+		this._zimletContext.blogToSignatureZimletRecentPosts = list;//store this so that we can utilize this for compose-in-newWindow
+	}
+};
+
 /*
  * -------------------------------------
  * Supporting functions
