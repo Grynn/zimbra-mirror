@@ -55,7 +55,7 @@ public class ZimbraSelenium extends DefaultSelenium {
 		
 		if (retryOnFalse){
 			Integer second = 0;
-			while(second < 30 && retval == "false"){
+			while(second < 10 && retval.equals("false")){
 			    try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {

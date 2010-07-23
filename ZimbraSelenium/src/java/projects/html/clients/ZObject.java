@@ -222,7 +222,7 @@ public class ZObject extends SelNGBase {
 	}
 	protected String ZObjectCore(String objNameOrId, String action, Boolean retryOnFalse,
 			String panel) {
-		return ZObjectCore(objNameOrId, action, retryOnFalse, panel, "", "");
+		return ZObjectCore(objNameOrId, action, retryOnFalse, panel, "");
 	}
 	protected String ZObjectCore(String objNameOrId, String action, Boolean retryOnFalse,
 			String panel, String param1) {
@@ -230,8 +230,8 @@ public class ZObject extends SelNGBase {
 	}
 	protected String ZObjectCore(String objNameOrId, String action, Boolean retryOnFalse,
 			String panel, String param1, String param2) {
-		return selenium.call(coreName, objNameOrId, action, retryOnFalse, panel, param1,
-				param2, "");
+		return ZObjectCore(objNameOrId, action, retryOnFalse, panel, param1, param2, "");
+
 	}
 	protected String ZObjectCore(String objNameOrId, String action, Boolean retryOnFalse,
 			String panel, String param1, String param2, String param3) {
