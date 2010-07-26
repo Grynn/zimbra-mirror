@@ -22,19 +22,19 @@ import projects.zcs.tests.CommonTest;
  */
 @SuppressWarnings("static-access")
 public class ComposeView extends CommonTest {
-	public static final String zSendIconBtn = "id=zb__COMPOSE1__SEND_left_icon";
-	public static final String zCancelIconBtn = "id=zb__COMPOSE1__CANCEL_left_icon";
-	public static final String zSaveDraftsIconBtn = "id=zb__COMPOSE1__SAVE_DRAFT_left_icon";
-	public static final String zAddAttachmentIconBtn = "id=zb__COMPOSE1__ATTACHMENT_left_icon";
-	public static final String zSpellCheckIconBtn = "id=zb__COMPOSE1__SPELL_CHECK_left_icon";
-	public static final String zSignatureIconBtn = "id=zb__COMPOSE1__ADD_SIGNATURE_left_icon";
-	public static final String zOptionsIconBtn = "id=zb__COMPOSE1__COMPOSE_OPTIONS_left_icon";
-	public static final String zOptionsDownArrowBtn = "id=zb__COMPOSE1__COMPOSE_OPTIONS_dropdown";
-	public static final String zAttachInineChkbox = "id=inline";
-	public static final String zToField = "id=zv__COMPOSE1_to_control";
-	public static final String zCcField = "id=zv__COMPOSE1_cc_control";
-	public static final String zBccField = "id=zv__COMPOSE1_bcc_control";
-	public static final String zSubjectField = "id=zv__COMPOSE1_subject_control";
+	public static final String zSendIconBtn = "css=[id^=zb__COMPOSE][id$=__SEND_left_icon]";
+	public static final String zCancelIconBtn = "css=[id^=zb__COMPOSE][id$=__CANCEL_left_icon]";
+	public static final String zSaveDraftsIconBtn = "css=[id^=zb__COMPOSE][id$=__SAVE_DRAFT_left_icon]";
+	public static final String zAddAttachmentIconBtn = "css=[id^=zb__COMPOSE][id$=__ATTACHMENT_left_icon]";
+	public static final String zSpellCheckIconBtn = "css=[id^=zb__COMPOSE][id$=__SPELL_CHECK_left_icon]";
+	public static final String zSignatureIconBtn = "css=[id^=zb__COMPOSE][id$=__ADD_SIGNATURE_left_icon]";
+	public static final String zOptionsIconBtn = "css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_left_icon]";
+	public static final String zOptionsDownArrowBtn = "css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
+	public static final String zAttachInineChkbox = "id=inline]";
+	public static final String zToField = "css=[id^=zv__COMPOSE][id$=_to_control]";
+	public static final String zCcField = "css=[id^=zv__COMPOSE][id$=_cc_control]";
+	public static final String zBccField = "css=[id^=zv__COMPOSE][id$=_bcc_control]";
+	public static final String zSubjectField = "css=[id^=zv__COMPOSE][id$=_subject_control]";
 	public static String zRequestReadReceiptMenuItem = "id=zmi__COMPOSE1_NEW_MESSAGE__REQUEST_READ_RECEIPT_left_icon";
 
 	// ===========================
