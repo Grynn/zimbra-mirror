@@ -4,3 +4,9 @@
   height: 16px;
   overflow: hidden;
 }
+
+.gTranslator_barTbl {
+	padding-right:2px;
+	padding-left:1px;
+	border:0px;
+}
