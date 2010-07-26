@@ -74,21 +74,26 @@ public class SelNGBase {
 			rcConfig.setUserExtensions(new File("src/java/framework/lib/user-extensions.js"));
 			ss = new SeleniumServer(false, rcConfig);
 			
-			try {
-				ss.boot();
-			} catch (Exception e) {
+			try{
 				URL stopUrl;
 				stopUrl = new URL("http://localhost:" +
 						config.getString("serverPort", "4444") +
 						"/selenium-server/driver/?cmd=shutDownSeleniumServer");
 				BufferedReader in = new BufferedReader(new InputStreamReader(stopUrl.openStream()));
-
+	
 				while (in.readLine() != null)
 					ZimbraSeleniumLogger.mLog.info("A Selenium Server was running already." +
-							" Attempting to kill and start again");
+							" Attempting to kill and start then");
 				in.close();
-				Thread.sleep(5000);
+			} catch (Exception e) {
+				// Server was not running, ignore
+			}
+			Thread.sleep(10000);
+			try{
 				ss.boot();
+			} catch (Exception e){
+				// TODO: Couldn't kill running RC, we will try to reuse it to 
+				// avoid skips for now but that is not the best approach
 			}
 		}
 	}
