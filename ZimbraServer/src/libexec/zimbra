@@ -19,6 +19,13 @@
 # chkconfig: 345 99 01
 # description: Zimbra mail service
 #
+### BEGIN INIT INFO
+# Provides:       zimbra
+# Required-Start: $network $remote_fs $syslog $time nscd cron
+# Required-Stop:  $network $remote_fs $syslog $time
+# Default-Start:  3 5
+# Description:    Zimbra mail service
+### END INIT INFO
 
 
 command()
