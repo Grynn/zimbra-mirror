@@ -16,6 +16,7 @@ import org.apache.commons.configuration.*;
 import org.clapper.util.text.HTMLUtil;
 
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 import projects.zcs.CoreObjects;
@@ -169,6 +170,11 @@ public class CommonTest extends SelNGBase {
 	@AfterSuite(groups = { "always" })
 	public void cleanup() {
 		super.stopSeleniumServer();
+	}
+	
+	@AfterClass(groups = { "always" })
+	public void stopSession() throws Exception {
+		selenium.stop();
 	}
 
 	/**
