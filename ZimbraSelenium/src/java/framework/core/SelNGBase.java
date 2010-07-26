@@ -12,6 +12,7 @@ import org.apache.commons.configuration.*;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.HashMap;
@@ -95,14 +96,28 @@ public class SelNGBase {
 	// can be used as @aftermethod
 	public static void stopSeleniumSession() {
 		if (selenium != null){
-		selenium.stop();
+			selenium.stop();
 		}
 	}
 
 	// Can be used @aftertest
 	public void stopSeleniumServer() {
-		if (config.getString("serverMachineName").toLowerCase().equals("localhost"))
+		if (config.getString("serverMachineName").toLowerCase().equals("localhost")){
 			ss.stop();
+			try {
+				URL stopUrl;
+				stopUrl = new URL("http://localhost:" +
+						config.getString("serverPort", "4444") +
+						"/selenium-server/driver/?cmd=shutDownSeleniumServer");
+				BufferedReader in = new BufferedReader(new InputStreamReader(stopUrl.openStream()));
+		
+				while (in.readLine() != null)
+					ZimbraSeleniumLogger.mLog.info("A Selenium Server was not stopped. Attempting to kill");
+				in.close();
+			} catch (IOException e) {
+				// Selenium server must be down already, ignore
+			}
+		}
 	}
 
 
