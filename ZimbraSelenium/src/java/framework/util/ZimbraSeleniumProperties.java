@@ -121,8 +121,6 @@ public class ZimbraSeleniumProperties {
 
 		defaultProp.setProperty("server", "qa60.lab.zimbra.com");
 
-		defaultProp.setProperty("ProvServer", "qa60.lab.zimbra.com");
-
 		defaultProp.setProperty("ZimbraLogRoot", "test-output");
 
 		defaultProp.setProperty("adminName", "admin");
