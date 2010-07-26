@@ -85,10 +85,10 @@ public class SelNGBase {
 					ZimbraSeleniumLogger.mLog.info("A Selenium Server was running already." +
 							" Attempting to kill and start then");
 				in.close();
+				Thread.sleep(10000);
 			} catch (Exception e) {
 				// Server was not running, ignore
 			}
-			Thread.sleep(10000);
 			try{
 				ss.boot();
 			} catch (Exception e){
