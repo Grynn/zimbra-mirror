@@ -192,10 +192,21 @@ public class SkinResources
 		if (templates == null) templates = V_TRUE;
 		String serverName = getServerName(req);
 
-		Locale locale = getLocale(req);
         String cacheId = serverName + ":" + uri + ":" + client + ":" + skin + "/templates=" + templates + ":" + browserType;
+
+        Locale locale = getLocale(req);
         if (type.equals(T_JAVASCRIPT) || type.equals(T_CSS)) {
             cacheId += ":" + locale;
+        }
+
+        String compressStr = req.getParameter(P_COMPRESS);
+        boolean compress =
+            LC.zimbra_web_generate_gzip.booleanValue() &&
+            (compressStr != null && (compressStr.equals("true") || compressStr.equals("1")))
+        ;
+        compress = compress && macros.get("MSIE_6") == null;
+        if (compress) {
+            cacheId += ":" + EXT_COMPRESSED;
         }
 
         if (ZimbraLog.webclient.isDebugEnabled()) {
@@ -263,8 +274,9 @@ public class SkinResources
 			                file = createCacheFile(cacheId, type);
 					if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: buffer file: "+file);
 					copy(buffer, file);
-					if (LC.zimbra_web_generate_gzip.booleanValue())
-						compress(file);
+					if (compress) {
+						file = compress(file);
+                    }
 					putCacheFile(cacheId, file);
 				}
             }
@@ -273,9 +285,6 @@ public class SkinResources
         }
 
         // set headers
-		String compressStr = req.getParameter(P_COMPRESS);
-		boolean compress = compressStr != null && (compressStr.equals("true") || compressStr.equals("1"));
-		compress = compress && macros.get("MSIE_6") == null;
         try {
             // We browser sniff so need to make sure any caches do the same.
             resp.addHeader("Vary", "User-Agent");
@@ -287,10 +296,20 @@ public class SkinResources
             resp.setHeader("Cache-control", "public, max-age="+maxAge);
             resp.setContentType(contentType);
 
+            if (compress && file != null) {
+                resp.setHeader("Content-Encoding", "gzip");
+            }
+
 			// NOTE: I cast the file length to an int which I think is
 			//       fine. If the aggregated contents are larger than
 			//       Integer.MAX_VALUE, then we've got other problems. ;)
-            resp.setContentLength(file != null ? (int)file.length() : buffer.length());
+            //
+            // NOTE: We can only be certain we know the final size if we are
+            // NOTE: *not* compressing the output OR if we're just writing
+            // NOTE: the contents of the generated file to the stream.
+            if (!compress || file != null) {
+                resp.setContentLength(file != null ? (int)file.length() : buffer.length());
+            }
         }
         catch (IllegalStateException e) {
             // ignore -- thrown if called from including JSP
@@ -298,7 +317,10 @@ public class SkinResources
 
 		// write buffer
 		if (file != null) {
-			copy(file, resp, compress);
+            // NOTE: If we saved the buffer to a file and compression is
+            // NOTE: enabled then the file has *already* been compressed
+            // NOTE: and the Content-Encoding header has been added. 
+			copy(file, resp, false);
 		}
 		else {
 			copy(buffer, resp, compress);
