@@ -122,6 +122,8 @@ AjxEnv.isSafari3up;
 AjxEnv.isSafari4;
 /** Safari version 4 (or higher). */
 AjxEnv.isSafari4up;
+/** Safari version 5 (or higher). */
+AjxEnv.isSafari5up;
 /** Camino. */
 AjxEnv.isCamino;
 /** Chrome. */
@@ -198,6 +200,7 @@ function() {
     AjxEnv.isSafari4 = false;
 	AjxEnv.isSafari3up = false;
 	AjxEnv.isSafari4up = false;
+	AjxEnv.isSafari5up = false;
 	AjxEnv.isCamino = false;
 	AjxEnv.isChrome = false;
 	AjxEnv.isGeckoBased = false;
@@ -336,6 +339,7 @@ function() {
         AjxEnv.isSafari4        = (AjxEnv.isSafari && browserVersion >= 4.0);
 		AjxEnv.isSafari3up		= (AjxEnv.isSafari && browserVersion >= 3.0) || AjxEnv.isChrome;
 		AjxEnv.isSafari4up		= (AjxEnv.isSafari && browserVersion >= 4.0) || AjxEnv.isChrome;
+		AjxEnv.isSafari5up		= (AjxEnv.isSafari && browserVersion >= 5.0) || AjxEnv.isChrome;
 		AjxEnv.isDesktop2up		= (AjxEnv.isDesktop && browserVersion >= 2.0);
 
 		AjxEnv.browser = "[unknown]";
