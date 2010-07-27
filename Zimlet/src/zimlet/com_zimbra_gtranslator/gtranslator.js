@@ -179,28 +179,6 @@ GTranslatorZimlet.prototype._splitTo4900Chunks = function(text) {
 };
 
 /**
- * Gets current emails body as html
- */
-GTranslatorZimlet.prototype.getMailBodyAsHtml = function() {
-	var body = "";
-	if (this.srcMsgObj.body) {
-		body = this.srcMsgObj.body;
-	} else if (this.srcMsgObj._topPart && this.srcMsgObj._topPart.getContentForType) {
-		body = this.srcMsgObj._topPart.getContentForType(ZmMimeTable.TEXT_HTML);
-	} else {
-		body = "";
-	}
-
-	if (!body || body == "") {//If we dont have body, try using getBodyContent api
-		body = this.srcMsgObj.getBodyContent();
-		body = !body ? "" : body;
-	}
-
-	body = AjxStringUtil.htmlEncode(body);
-	return AjxStringUtil.nl2br(body);
-};
-
-/**
  *   ets current emails body as Text
  */
 GTranslatorZimlet.prototype.getMailBodyAsText = function() {
@@ -500,8 +478,12 @@ function(action) {
 		this._tCompareCanvas.style.display = "block";
 		this._toolbar.style.display = "none";
 		this._closeCompareToolbar.style.display = "block";
-		var origBodyContent = this.getMailBodyAsHtml();
-		origBodyContent = this._zimletifyText(origBodyContent);
+		var origBodyContent = this.getMailBodyAsText();
+		if (AjxEnv.isIE) {
+			origBodyContent = this._zimletifyText(AjxStringUtil.nl2br(origBodyContent))
+		} else {
+			origBodyContent = AjxStringUtil.nl2br(this._zimletifyText(origBodyContent));
+		}
 
 		document.getElementById(this._compareCanvasId_from).innerHTML = origBodyContent;
 		document.getElementById(this._compareCanvasId_to).innerHTML = this._tCanvas.innerHTML;
