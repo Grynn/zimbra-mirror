@@ -1,5 +1,7 @@
 <zimlet name="com_zimbra_gdocs" version="0.1" description="Get the docs from Google Docs">
   <include>gdocs.js</include>
+  <include>oauth.js</include>
+  <include>sha1.js</include>
   <includeCSS>gdocs.css</includeCSS>
   <handlerObject>com_zimbra_gdocs</handlerObject>
   <userProperties>

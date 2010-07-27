@@ -78,6 +78,20 @@ com_zimbra_gdocs.prototype.openCenteredWindow = function (url) {
 	}
 };
 
+com_zimbra_gdocs.prototype.accessor = {
+                consumerKey   : "anonymous",
+                consumerSecret: "anonymous",
+                serviceProvider: {
+                        signatureMethod     : "HMAC-SHA1",
+                        scope               : "http://docs.google.com/feeds/ https://docs.google.com/feeds/ http://docs.googleusercontent.com/ https://docs.googleusercontent.com/",
+                        requestTokenURL     : "https://www.google.com/accounts/OAuthGetRequestToken",
+                        userAuthorizationURL: "https://www.google.com/accounts/OAuthAuthorizeToken",
+                        accessTokenURL      : "https://www.google.com/accounts/OAuthGetAccessToken",
+                        docListURL          : "http://docs.google.com/feeds/documents/private/full",
+                        docExportURL        : "https://docs.google.com/feeds/download/documents/Export"
+                }
+            };
+
 /**
  * Object definition for tab view object.
  * 
@@ -144,12 +158,29 @@ GoogleDocsTabView.prototype.gotAttachments = function() {
 GoogleDocsTabView.prototype.getRequestToken = function() {
     this._access_token = null;
     this._access_token_secret = null;
+    var accessor = this.zimlet.accessor,
+        pArray = [],
+        jspUrl,
+        message = {
+            action: accessor.serviceProvider.requestTokenURL,
+            method: "GET",
+            parameters: [
+                            ["oauth_callback", "oob"],
+                            ["scope", accessor.serviceProvider.scope],                            
+                            ["xoauth_displayname", "Zimbra"]
+                        ]
+            };
+    OAuth.completeRequest(message, accessor);
+    var requestBody = OAuth.formEncode(message.parameters);
+    var authorizationHeader = OAuth.getAuthorizationHeader("", message.parameters);
 
-    var pArray = [],
-        jspUrl;
-	
     pArray.push("_action=reqToken");
-	jspUrl = this.zimlet.getResource("oauth2.jsp") + "?" + pArray.join("&");
+    pArray.push("_scope="+AjxStringUtil.urlComponentEncode(accessor.serviceProvider.scope));
+    pArray.push("_url="+AjxStringUtil.urlComponentEncode(accessor.serviceProvider.requestTokenURL));
+    pArray.push("_auth="+AjxStringUtil.urlComponentEncode(authorizationHeader));
+    //pArray.push("_requestBody="+requestBody);
+    //pArray.push("_xoauth_displayname=Zimbra");
+	jspUrl = this.zimlet.getResource("oauth3.jsp") + "?" + pArray.join("&");
 	AjxRpc.invoke(null, jspUrl, null, new AjxCallback(this, this.getRequestTokenCallback), true);
 };
 /**
@@ -164,16 +195,20 @@ GoogleDocsTabView.prototype.getRequestTokenCallback = function(response) {
     if(response.success) {
         var txt = response.text,
             authorizeUrl,
-            jsonResponse = eval("(" + txt + ")");
+            jsonResponse = eval("(" + txt + ")"),
+            tokens,
+            pArray = [];
         
-        if(jsonResponse._rt) {
-            this._requestToken = jsonResponse._rt;
-        }
-        if(jsonResponse._rs) {
-            this._requestTokenSecret = jsonResponse._rs;
-        }
-        if(jsonResponse._url) {
-            authorizeUrl = jsonResponse._url;
+        if(jsonResponse.postResponse) {
+            /*tokens = jsonResponse.postResponse.split("&");
+            this._requestToken = tokens[0].substring(tokens[0].indexOf("="));
+            this._requestTokenSecret = tokens[1].substring(tokens[1].indexOf("=")); */
+
+            tokens = OAuth.decodeForm(jsonResponse.postResponse);
+            this._requestToken = OAuth.getParameter(tokens, "oauth_token");
+            this._requestTokenSecret = OAuth.getParameter(tokens, "oauth_token_secret");
+            pArray.push("oauth_token="+AjxStringUtil.urlComponentEncode(this._requestToken));
+            authorizeUrl = this.zimlet.accessor.serviceProvider.userAuthorizationURL + "?" + pArray.join("&");
             this.zimlet.openCenteredWindow(authorizeUrl);
         }
     }
@@ -242,23 +277,40 @@ GoogleDocsTabView.prototype.getLinkedView = function() {
  *  
  * @param button
  */
-GoogleDocsTabView.prototype.getDocList = function(button) {    
-    var pArray = [],
+GoogleDocsTabView.prototype.getDocList = function(button) {
+    if(!this._accessToken || !this._accessTokenSecret) {
+        this.unlinkFromGoogle();
+        this.getUnlinkedView();
+    }
+    var accessor = this.zimlet.accessor,
+        pArray = [],
         jspUrl,
-        refreshBtn = document.getElementById("gdocs_refresh_btn");
+        refreshBtn = document.getElementById("gdocs_refresh_btn"),
+        message;
 
     document.getElementById("gdocs_list_loader").style.display = "block";
     document.getElementById("gdocs_list_container").style.display = "none";
     if(refreshBtn) {
-        refreshBtn.style.display = "none";
+        //refreshBtn.style.display = "none";
     }
+    message = {
+            method: "get",
+            action: accessor.serviceProvider.docListURL,
+            parameters: [["showfolders", "true"]]
+    };
+    OAuth.completeRequest(message,
+                            {
+                                consumerKey   : accessor.consumerKey,
+                                consumerSecret: accessor.consumerSecret,
+                                token         : this._accessToken,
+                                tokenSecret   : this._accessTokenSecret
+                            });
     
+    pArray.push("_url=" + AjxStringUtil.urlComponentEncode(accessor.serviceProvider.docListURL));
+    pArray.push("_auth=" + AjxStringUtil.urlComponentEncode(OAuth.getAuthorizationHeader("", message.parameters)));
     pArray.push("_action=docList");
-    pArray.push("_url=" + AjxStringUtil.urlComponentEncode("https://docs.google.com/feeds/default/private/full"));
-    pArray.push("_as=" + AjxStringUtil.urlComponentEncode(this._accessTokenSecret));
-    pArray.push("_at=" + AjxStringUtil.urlComponentEncode(this._accessToken));
 
-    jspUrl = this.zimlet.getResource("oauth2.jsp") + "?" + pArray.join("&");
+    jspUrl = this.zimlet.getResource("oauth3.jsp") + "?" + pArray.join("&");
 
     AjxRpc.invoke(null, jspUrl, null, new AjxCallback(this, this.getDocListCallback), true);
 
@@ -276,6 +328,7 @@ GoogleDocsTabView.prototype.parseDocListResponse = function(docListItems) {
         i,
         j,
         k,
+        rawItem,
         item,
         labels,
         labelResId,
@@ -288,10 +341,26 @@ GoogleDocsTabView.prototype.parseDocListResponse = function(docListItems) {
     this._folderList = [];
     
     for(i=0; i<numOfDocs; i++) {
-        item = docListItems[i];
-        itemIndex = item.id.substring(item.id.lastIndexOf(":")+1);
-        if(item.id.indexOf("folder:") !== -1) {
-            item.isFolder = true;
+        rawItem = docListItems[i];
+        var resId = rawItem["gd:resourceId"].__msh_content;
+        item = {
+            id : resId,
+            title: rawItem.title.__msh_content,
+            size: rawItem["gd:quotaBytesUsed"].__msh_content,
+            url: rawItem.content.src,
+            type: rawItem.content.type,
+            labels: [],
+            isFolder: resId.indexOf("folder:") !== -1 ? true: false
+        };
+        if(!item.isFolder && rawItem.category && rawItem.category.length>2) {
+            for(j=0; j<rawItem.category.length; j++) {
+                if(rawItem.category[j].term.indexOf("http://") === -1) {
+                    item.labels.push({title: rawItem.category[j].label});
+                }
+            }
+        }
+        if(item.isFolder == true) {
+
             this._folderList.push(item);
         }
         else {
@@ -304,12 +373,9 @@ GoogleDocsTabView.prototype.parseDocListResponse = function(docListItems) {
         if(item.labels) {
             labels = item.labels;
             for(j=0; j<labels.length; j++) {
-                labelUrl = AjxStringUtil.urlComponentDecode(item.labels[j].url);
-                labelResId = labelUrl.substring(labelUrl.lastIndexOf(":")+1);
                 for(k=0; k<this._folderList.length; k++) {
                     folderItem = this._folderList[k];
-                    itemIndex = folderItem.id.substring(folderItem.id.lastIndexOf(":")+1);
-                    if(itemIndex == labelResId) {
+                    if(folderItem.title == labels[j].title) {
                         if(!folderItem.contents) {
                             folderItem.contents = [];
                         }
@@ -353,7 +419,8 @@ GoogleDocsTabView.prototype.addItemsToList = function(list, items) {
  */
 GoogleDocsTabView.prototype.getDocListCallback = function(response) {
     var txt = response.text,
-        docList = eval("(" + txt + ")"),
+        docResponse = eval("(" + txt + ")"),
+        docList = AjxXmlDoc.createFromXml(docResponse.xml).toJSObject(false, false, true),
         numOfDocs,
         tableContainer = document.getElementById("gdocs_list_container"),
         folderList,
@@ -361,7 +428,7 @@ GoogleDocsTabView.prototype.getDocListCallback = function(response) {
         refreshBtn = document.getElementById("gdocs_refresh_btn"),
         list;
     
-    if(!docList.success) {
+    if(!docResponse.success) {
         this.unlinkFromGoogle();
         this.getUnlinkedView();
     }
@@ -374,10 +441,11 @@ GoogleDocsTabView.prototype.getDocListCallback = function(response) {
     if(refreshBtn) {
         refreshBtn.style.display = "block";
     }
-    numOfDocs = docList.docs.length;
+    
+    numOfDocs = docList.entry.length;
     
     //parse the docs list
-    this.parseDocListResponse(docList.docs);
+    this.parseDocListResponse(docList.entry);
 
     list = new ZmList(ZmItem.BRIEFCASE_ITEM);
     //the 0th element in folder list is ALWAYS the root folder which contains the list of all the docs
@@ -441,10 +509,16 @@ GoogleDocsTabView.prototype.showFolderContents = function(e) {
  * @param response
  */
 GoogleDocsTabView.prototype.uploadFiles = function(attachDialog, docIds, index, response) {
-    var pArray = [],
+    var accessor = this.zimlet.accessor,
+        pArray = [],
         jspUrl,
         docId,
-        items;
+        items,
+        message,
+            extension,
+            exportDocId,
+            exportUrl,
+            currentItem;
     
     items = this._listView.getSelection();
     if (!items || (items.length == 0)) {
@@ -470,13 +544,29 @@ GoogleDocsTabView.prototype.uploadFiles = function(attachDialog, docIds, index, 
         //docIds.push({id: items[i].id, ct: items[i].type, s: items[i].size});
         document.getElementById("gdocs_attachment_status").innerHTML = "Attaching "+(index+1)+" of "+items.length+" files. Please wait.";
         docId = false;
+        currentItem = items[index];
+        extension = currentItem.title.substring(Number(currentItem.title.lastIndexOf("."))+1);
+        exportDocId = currentItem.id.substring(Number(currentItem.id.indexOf(":"))+1);
+        exportUrl = "https"+currentItem.url.substring(currentItem.url.indexOf(":")) + "&format="+extension;
+        message = {
+            method: "get",
+            action: exportUrl,
+            parameters: []
+        };
+        OAuth.completeRequest(message,
+                                {
+                                    consumerKey   : accessor.consumerKey,
+                                    consumerSecret: accessor.consumerSecret,
+                                    token         : this._accessToken,
+                                    tokenSecret   : this._accessTokenSecret
+                                });
         pArray.push("_action=postResource");
-        pArray.push("_url=" + AjxStringUtil.urlComponentEncode(items[index].url));
-        pArray.push("_as=" + AjxStringUtil.urlComponentEncode(this._accessTokenSecret));
-        pArray.push("_at=" + AjxStringUtil.urlComponentEncode(this._accessToken));
-        pArray.push("_fid=" + AjxStringUtil.urlComponentEncode(items[index].title));
+        pArray.push("_url=" + AjxStringUtil.urlComponentEncode(exportUrl)); //"https"+currentItem.url.substring(currentItem.url.indexOf(":")) + "&format="+extension));//accessor.serviceProvider.docExportURL+ "?format="+extension+"&id="+exportDocId));
+        pArray.push("_auth=" + AjxStringUtil.urlComponentEncode(OAuth.getAuthorizationHeader("", message.parameters)));
 
-        jspUrl = this.zimlet.getResource("oauth2.jsp") + "?" + pArray.join("&");
+        pArray.push("_fid=" + AjxStringUtil.urlComponentEncode(currentItem.title));
+
+        jspUrl = this.zimlet.getResource("oauth3.jsp") + "?" + pArray.join("&");
         AjxRpc.invoke(null, jspUrl, null, new AjxCallback(this, this.uploadFiles, [attachDialog, docIds, ++index]), true);
     }
     else {
@@ -562,20 +652,33 @@ GoogleDocsTabView.prototype.getUnlinkedView = function() {
  * It makes request to the zimlet's oauth page with the request tokens and verification code.
  */
 GoogleDocsTabView.prototype.getAccessToken = function() {
-    var code = AjxStringUtil.trim(document.getElementById('gdocs_act_code').value),
+    var accessor = this.zimlet.accessor,
+        code = AjxStringUtil.trim(document.getElementById('gdocs_act_code').value),
         pArray = [],
-        jspUrl;
+        jspUrl,
+        message = {};
 
     if(code == undefined || code == "") {
         return;
     }
-
+    message = {
+            method: "post",
+            action: accessor.serviceProvider.accessTokenURL,
+            parameters: [["oauth_verifier", code]]
+    };
+    OAuth.completeRequest(message,
+                            {
+                                consumerKey   : accessor.consumerKey,
+                                consumerSecret: accessor.consumerSecret,
+                                token         : this._requestToken,
+                                tokenSecret   : this._requestTokenSecret
+                            });
     pArray.push("_action=accessToken");
     pArray.push("_vc=" + AjxStringUtil.urlComponentEncode(code));
-    pArray.push("_rs=" + AjxStringUtil.urlComponentEncode(this._requestTokenSecret));
-    pArray.push("_rt=" + AjxStringUtil.urlComponentEncode(this._requestToken));
+    pArray.push("_url=" + AjxStringUtil.urlComponentEncode(accessor.serviceProvider.accessTokenURL));
+    pArray.push("_auth=" + AjxStringUtil.urlComponentEncode(OAuth.getAuthorizationHeader("", message.parameters)));
 
-    jspUrl = this.zimlet.getResource("oauth2.jsp") + "?" + pArray.join("&");
+    jspUrl = this.zimlet.getResource("oauth3.jsp") + "?" + pArray.join("&");
 	AjxRpc.invoke(null, jspUrl, null, new AjxCallback(this, this.getAccessTokenCallback), true);
 };
 /**
@@ -589,13 +692,18 @@ GoogleDocsTabView.prototype.getAccessToken = function() {
 GoogleDocsTabView.prototype.getAccessTokenCallback = function(response) {
     if(response.success) {
         var txt = response.text,
-            jsonResponse = eval("(" + txt + ")");
+            jsonResponse = eval("(" + txt + ")"),
+            tokens;
 
-        if(jsonResponse._rt) {
-            this._accessToken = jsonResponse._rt;
-        }
-        if(jsonResponse._rs) {
-            this._accessTokenSecret = jsonResponse._rs;
+        if(jsonResponse.postResponse) {
+            /*tokens = jsonResponse.postResponse.split("&");
+            this._requestToken = tokens[0].substring(tokens[0].indexOf("="));
+            this._requestTokenSecret = tokens[1].substring(tokens[1].indexOf("=")); */
+
+            tokens = OAuth.decodeForm(jsonResponse.postResponse);
+            this._accessToken = OAuth.getParameter(tokens, "oauth_token");
+            this._accessTokenSecret = OAuth.getParameter(tokens, "oauth_token_secret");
+
         }
     }
     if(this._accessToken && this._accessTokenSecret) {
