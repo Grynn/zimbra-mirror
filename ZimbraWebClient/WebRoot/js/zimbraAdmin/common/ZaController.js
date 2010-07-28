@@ -50,20 +50,14 @@ ZaController = function(appCtxt, container,iKeyName) {
 }
 ZaController.CLICK_DELAY = 150;
 ZaController.prototype.initDialogs = function (refresh) {
-
 	if(ZaApp.getInstance()) {
-		this._msgDialog = ZaApp.getInstance().dialogs["msgDialog"] = this._appCtxt.getMsgDialog(refresh);
-
-		this._errorDialog = ZaApp.getInstance().dialogs["errorDialog"] = this._appCtxt.getErrorDialog(refresh);
-		ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON]);
-		ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"] = new ZaMsgDialog(this._shell, null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
+		this._msgDialog = ZaApp.getInstance().dialogs["msgDialog"];
+		this._errorDialog = ZaApp.getInstance().dialogs["errorDialog"];
 	    this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
     	this._msgDialog.registerCallback(DwtDialog.OK_BUTTON, this._msgDialogCallback, this);
 	}
 	this._loginDialog = this._appCtxt.getLoginDialog();
-
 	this._loginDialog.registerCallback(this.loginCallback, this);
-	
 }
 
 /**
@@ -130,10 +124,9 @@ function(enable) {
 }
 
 ZaController.prototype.popupErrorDialog = 
-function(msg, ex, noExecReset,style)  {
+function(msg, ex, style)  {
 	style = style ? style : DwtMessageDialog.CRITICAL_STYLE;
-	if (!noExecReset)
-		this._execFrame = {func: null, args: null, restartOnError: false};
+	this._execFrame = {func: null, args: null, restartOnError: false};
 	
 	var detailStr = "";
 	if(ex != null) {
@@ -390,58 +383,58 @@ function(ex, method, params, restartOnError, obj) {
         if (this._errorDialog)
             this._errorDialog.registerCallback(DwtDialog.OK_BUTTON, this._errorDialogCallback, this);
         if(!ex.code) {
-			this.popupErrorDialog(ZaMsg.JAVASCRIPT_ERROR + " in method " + method, ex, true);
+			this.popupErrorDialog(ZaMsg.JAVASCRIPT_ERROR + " in method " + method, ex);
 		
 		} else if(ex.code == ZmCsfeException.EMPTY_RESPONSE) {
-			this.popupErrorDialog(ZaMsg.ERROR_ZCS_NOT_RUNNING, ex, true);
+			this.popupErrorDialog(ZaMsg.ERROR_ZCS_NOT_RUNNING, ex);
 		} else if (ex.code == ZmCsfeException.SOAP_ERROR) {
-			this.popupErrorDialog(ZaMsg.SOAP_ERROR, ex, true);
+			this.popupErrorDialog(ZaMsg.SOAP_ERROR, ex);
 		} else if (ex.code == ZmCsfeException.NETWORK_ERROR) {
-			this.popupErrorDialog(ZaMsg.NETWORK_ERROR, ex, true);
+			this.popupErrorDialog(ZaMsg.NETWORK_ERROR, ex);
 		} else if (ex.code ==  ZmCsfeException.SVC_PARSE_ERROR) {
-			this.popupErrorDialog(ZaMsg.PARSE_ERROR, ex, true);
+			this.popupErrorDialog(ZaMsg.PARSE_ERROR, ex);
 		} else if (ex.code ==  ZmCsfeException.SVC_PERM_DENIED) {
-			this.popupErrorDialog(ZaMsg.PERMISSION_DENIED, ex, true);
+			this.popupErrorDialog(ZaMsg.PERMISSION_DENIED, ex);
 		} else if (ex.code == ZmCsfeException.ACCT_NO_SUCH_ACCOUNT) {
-			this.popupErrorDialog(ZaMsg.ERROR_NO_SUCH_ACCOUNT, ex, true);
+			this.popupErrorDialog(ZaMsg.ERROR_NO_SUCH_ACCOUNT, ex);
 		} else if (ex.code == ZmCsfeException.NO_SUCH_DISTRIBUTION_LIST) {
-			this.popupErrorDialog(ZaMsg.NO_SUCH_DISTRIBUTION_LIST, ex, true);
+			this.popupErrorDialog(ZaMsg.NO_SUCH_DISTRIBUTION_LIST, ex);
 		} else if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-			this.popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS, ex, true);
+			this.popupErrorDialog(ZaMsg.ERROR_ACCOUNT_EXISTS, ex);
         } else if(ex.code == ZmCsfeException.ACCT_TOO_MANY_ACCOUNTS) {
 			this.popupErrorDialog(ZaMsg.ERROR_TOO_MANY_ACCOUNTS,
                     ex, true);
         } else if(ex.code == ZmCsfeException.VOLUME_NO_SUCH_PATH) {
-			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VOLUME_PATH, ex, true);
+			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VOLUME_PATH, ex);
 		} else if(ex.code == ZmCsfeException.LICENSE_ERROR) {
-			this.popupErrorDialog(ZaMsg.ERROR_LICENSE, ex, true);
+			this.popupErrorDialog(ZaMsg.ERROR_LICENSE, ex);
 		} else if (ex.code == ZmCsfeException.SVC_INVALID_REQUEST) {
-			this.popupErrorDialog(ZaMsg.ERROR_INVALID_REQUEST, ex, true);
+			this.popupErrorDialog(ZaMsg.ERROR_INVALID_REQUEST, ex);
 		} else if (ex.code == ZmCsfeException.TOO_MANY_SEARCH_RESULTS) {
-			this.popupErrorDialog(ZaMsg.ERROR_TOO_MANY_SEARCH_RESULTS, ex, true);
+			this.popupErrorDialog(ZaMsg.ERROR_TOO_MANY_SEARCH_RESULTS, ex);
 		} else if (ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
-			this.popupErrorDialog(ZaMsg.ERROR_NO_SUCH_DOMAIN, ex, true);
+			this.popupErrorDialog(ZaMsg.ERROR_NO_SUCH_DOMAIN, ex);
 		}else if (ex.code == ZmCsfeException.CSFE_SVC_ERROR || 
 					ex.code == ZmCsfeException.SVC_FAILURE || 
 						(typeof(ex.code) == 'string' && ex.code && ex.code.match(/^(service|account|mail)\./))
 
 				   ) {
-			this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex, true);
+			this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex);
 		} else if (ex.code == AjxException.INVALID_PARAM){
-			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE, ex, true);
+			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VALUE, ex);
 			this._errorDialog._showDetail();
 		} else {
 			//search for error code
 			var gotit = false;
 			for(var ix in ZmCsfeException) {
 				if(ZmCsfeException[ix] == ex.code) {
-					this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex, true);
+					this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex);
 					gotit = true;
 					break;
 				}
 			}
 			if(!gotit)	
-				this.popupErrorDialog(ZaMsg.ERROR_UNKNOWN, ex, true);		
+				this.popupErrorDialog(ZaMsg.ERROR_UNKNOWN, ex);		
 		}
 	}
 }
@@ -701,8 +694,8 @@ function () {
 
 ZaController.prototype.closeCnfrmDelDlg = 
 function () {
-	if(ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"])
-		ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popdown();	
+	if(ZaApp.getInstance().dialogs["confirmMessageDialog2"])
+		ZaApp.getInstance().dialogs["confirmMessageDialog2"].popdown();	
 }
 /**
 * public getToolBar

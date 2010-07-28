@@ -292,7 +292,7 @@ function (status, attId) {
     		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
     		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
     		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-    		this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_upload_bulk_no_aid, null, null, true);
+    		this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_upload_bulk_no_aid, null, null);
     		return ;
         }
 	} else {
@@ -302,7 +302,7 @@ function (status, attId) {
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		var msg = AjxMessageFormat.format(com_zimbra_bulkprovision.error_upload_bulk, [status]);
-		this._app.getCurrentController().popupErrorDialog(msg, null, null, true);
+		this._app.getCurrentController().popupErrorDialog(msg, null, null);
 	}
 };
 

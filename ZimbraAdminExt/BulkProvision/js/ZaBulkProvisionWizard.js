@@ -72,7 +72,7 @@ function (status, uploadResults) {
         if (v.aid != null && v.aid.length > 0) {
            this._containedObject [ZaBulkProvision.A_csv_aid] =  v.aid ;
         } else {
-           this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_upload_csv_no_aid, null, null, true);
+           this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_upload_csv_no_aid);
            return ;
         }
         //File is uploaded successfully
@@ -87,7 +87,7 @@ function (status, uploadResults) {
             }
         }catch (ex) {
             if (ex.code == "bulkprovision.BP_TOO_MANY_ACCOUNTS")  {
-                this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_TOO_MANY_ACCOUNTS, ex, true);
+                this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_TOO_MANY_ACCOUNTS, ex);
             }else{
                 this._app.getCurrentController()._handleException(ex) ;
             }
@@ -97,7 +97,7 @@ function (status, uploadResults) {
 	} else {
 		// handle errors during attachment upload.
 		var msg = AjxMessageFormat.format(com_zimbra_bulkprovision.error_upload_csv, [status]);
-		this._app.getCurrentController().popupErrorDialog(msg, null, null, true);
+		this._app.getCurrentController().popupErrorDialog(msg);
 	}
 }
 

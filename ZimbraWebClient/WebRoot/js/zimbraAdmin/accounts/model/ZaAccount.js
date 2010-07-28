@@ -1828,10 +1828,8 @@ function (value, event, form){
         	domainObj =  ZaDomain.getDomainByName(newDomainName) ;
         } catch (ex) {
         	if(ex.code == ZmCsfeException.SVC_PERM_DENIED) {
-        		//form.getModel().setInstanceValue(form.getInstance(),"getAttrs",[]);
         		form.getModel().setInstanceValue(form.getInstance(),"setAttrs",[]);
         		form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_errorMessage,AjxMessageFormat.format(ZaMsg.CANNOT_CREATE_ACCOUNTS_IN_THIS_DOMAIN,[newDomainName]));
-        		//ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.CANNOT_CREATE_ACCOUNTS_IN_THIS_DOMAIN,[newDomainName])	, ex, true);
         		return;
         	} else if(ex.code == ZmCsfeException.NO_SUCH_DOMAIN) {
         		return;

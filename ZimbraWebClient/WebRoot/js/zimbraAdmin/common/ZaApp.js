@@ -87,6 +87,13 @@ ZaApp.checkMyRight = function(targetType,targetBy,targetVal,right,attrs) {
 	
 }
 
+ZaApp.prototype.initDialogs = function () {
+	this.dialogs["errorDialog"] = this._appCtxt.getErrorDialog(true);
+	this.dialogs["msgDialog"] = this._appCtxt.getMsgDialog(true);
+	this.dialogs["confirmMessageDialog"] = this._appCtxt.getConfirmMsgDialog(true);
+	this.dialogs["confirmMessageDialog2"] = this._appCtxt.getConfirmMsgDialog2(true);
+}
+
 ZaApp.prototype.launch =
 function(appCtxt) {
 	if(ZaSettings.DASHBOARD_VIEW && ZaApp.prototype.getDashBoardController) {

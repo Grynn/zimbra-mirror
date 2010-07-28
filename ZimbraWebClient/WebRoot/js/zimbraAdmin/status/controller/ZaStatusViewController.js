@@ -111,7 +111,7 @@ ZaStatusViewController.prototype.refreshListener = function () {
 ZaStatusViewController.prototype._handleException =
 function(ex, method, params, restartOnError, obj) {
 	if (ex.code && ex.code == ZmCsfeException.SVC_AUTH_REQUIRED) {
-		this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex, true);
+		this.popupErrorDialog(ZaMsg.SERVER_ERROR, ex);
 	} else {
 		ZaController.prototype._handleException.call(this, ex, method, params, restartOnError, obj);
 	}

@@ -28,10 +28,6 @@ ZaMsgDialog = function(parent, className, buttons, extraButtons) {
 ZaMsgDialog.prototype = new DwtMessageDialog;
 ZaMsgDialog.prototype.constructor = ZaMsgDialog;
 
-ZaMsgDialog.prototype.setApp = 
-function() {
-	this._app=app;
-}
 ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON = "close tab and delete";
 ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON_DESC = 
 	new DwtDialog_ButtonDescriptor (ZaMsgDialog.CLOSE_TAB_DELETE_BUTTON, ZaMsg.bt_close_tab_delete, DwtDialog.ALIGN_RIGHT);

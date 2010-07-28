@@ -429,7 +429,7 @@ ZaDistributionList.addRemoveAliases = function (mods, obj) {
 					ZaApp.getInstance().getCurrentController()._errorDialog.popup();			
 				}
 			} catch (ex) {
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.FAILED_ADD_ALIASES, ex, true);	
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.FAILED_ADD_ALIASES, ex);	
 				return false;
 			}
 		}
@@ -509,62 +509,12 @@ ZaDistributionList.addAliases = function (obj, dl) {
 				ZaApp.getInstance().getCurrentController()._errorDialog.popup();			
 			}
 		} catch (ex) {
-			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.FAILED_ADD_ALIASES, ex, true);	
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.FAILED_ADD_ALIASES, ex);	
 			return false;
 		}
 	}
 }
 ZaItem.createMethods["ZaDistributionList"].push(ZaDistributionList.addAliases);
-/*
-ZaDistributionList.prototype.modify =
-function(tmpObj, callback) {
-	//update the object
-	var soapDoc = AjxSoapDoc.create("ModifyDistributionListRequest", ZaZimbraAdmin.URN, null);
-	soapDoc.set("id", this.id);
-
-	for (var aname in tmpObj.attrs) {
-		if(aname == ZaItem.A_objectClass || aname==ZaAccount.A_mail || aname == ZaItem.A_cn
-			|| aname == ZaItem.A_zimbraId || aname == ZaAccount.A_uid
-			|| aname == ZaDistributionList.A_zimbraGroupId || aname == ZaAccount.A_zimbraMailAlias
-            || aname == ZaDistributionList.A_zimbraCreateTimestamp) {
-			continue;
-		}		
-		//multi-value attribute
-		if(tmpObj.attrs[aname] instanceof Array) {
-			var cnt = tmpObj.attrs[aname].length;
-			if(cnt) {
-				for(var ix=0; ix <cnt; ix++) {
-					if(tmpObj.attrs[aname][ix]) { //if there is an empty element in the array - don't send it
-						var attr = soapDoc.set("a", tmpObj.attrs[aname][ix]);
-						attr.setAttribute("n", aname);
-					}
-				}
-			} else {
-				var attr = soapDoc.set("a", "");
-				attr.setAttribute("n", aname);
-			}
-		} else {
-			var attr = soapDoc.set("a", tmpObj.attrs[aname]);
-			attr.setAttribute("n", aname);
-		}
-	}
-	var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
-	if(callback) {
-		params.asyncMode = true;
-		params.callback = callback;
-		command.invoke(params);
-	} else {
-		var reqMgrParams = {
-			controller : ZaApp.getInstance().getCurrentController(),
-			busyMsg : ZaMsg.BUSY_MODIFY_DL
-		}
-		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDistributionListResponse;	
-		this.initFromJS(resp.dl[0]);		
-	}
-	return true;
-}*/
 
 
 ZaDistributionList.checkValues = function(tmpObj) {

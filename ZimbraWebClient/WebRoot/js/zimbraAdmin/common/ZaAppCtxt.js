@@ -90,6 +90,21 @@ function(refresh) {
 	return this._msgDialog;
 }
 
+ZaAppCtxt.prototype.getConfirmMsgDialog = function (refresh) {
+	if(!this._confirmMsgDialog || refresh) {
+		this._confirmMsgDialog = new ZaMsgDialog(this.getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON, DwtDialog.CANCEL_BUTTON]);
+	}
+	return this._confirmMsgDialog;
+}
+ 
+ZaAppCtxt.prototype.getConfirmMsgDialog2 = function (refresh) {
+	if(!this._confirmMessageDialog2 || refresh) {
+		this._confirmMessageDialog2 = new ZaMsgDialog(this.getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
+	}
+	return this._confirmMessageDialog2;
+}
+
+
 ZaAppCtxt.prototype.getErrorDialog = 
 function(refresh) {
 	if (!this._errorDialog || refresh)

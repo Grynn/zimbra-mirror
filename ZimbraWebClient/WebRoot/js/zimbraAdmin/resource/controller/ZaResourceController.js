@@ -276,7 +276,7 @@ function () {
 			try {
 				this._currentObject.changePassword(tmpObj.attrs[ZaResource.A_password]);
 			} catch (ex) {
-				this.popupErrorDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex, true);
+				this.popupErrorDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex);
 				return false;				
 				
 			}
@@ -297,7 +297,7 @@ function () {
 			this._currentObject.rename(newName);
 		} catch (ex) {
 			if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-				this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
+				this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex);
 			} else {
 				this._handleException(ex, "ZaResourceController.prototype._saveChanges", null, false);	
 			} 
@@ -320,7 +320,7 @@ function () {
 				continue; //skip uid, it is changed throw a separate request
 			}
 			if(a == ZaResource.A_COSId && !AjxUtil.isEmpty(tmpObj.attrs[ZaResource.A_COSId]) && !ZaItem.ID_PATTERN.test(tmpObj.attrs[ZaResource.A_COSId])) {
-				this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[tmpObj.attrs[ZaResource.A_COSId]]), null, true);
+				this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[tmpObj.attrs[ZaResource.A_COSId]]), null);
 				return false;
 			}
 			if(tmpObj.attrs[a] instanceof Array && this._currentObject.attrs[a] instanceof Array) {
@@ -338,9 +338,9 @@ function () {
 		this._currentObject.modify(mods);
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-			this.popupErrorDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex, true);
+			this.popupErrorDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex);
 		} else if(ex.code == ZmCsfeException.NO_SUCH_COS) {
-			this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[tmpObj.attrs[ZaResource.A_COSId]]), ex, true);
+			this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[tmpObj.attrs[ZaResource.A_COSId]]), ex);
         } else {
 			this._handleException(ex, "ZaResourceController.prototype._saveChanges", null, false);	
 		}

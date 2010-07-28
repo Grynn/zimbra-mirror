@@ -698,7 +698,8 @@ function() {
 		this._createApp();
 
     //recreate the error/msg dialogs
-    if (ZaZimbraAdmin._LOCALE_MSG_RELOADED) this.initDialogs(true) ;
+    ZaApp.getInstance().initDialogs();
+   // if (ZaZimbraAdmin._LOCALE_MSG_RELOADED) this.initDialogs(true) ;
 
     this._appCtxt.setClientCmdHdlr(new ZaClientCmdHandler());
     //draw stuff

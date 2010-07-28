@@ -272,7 +272,7 @@ function () {
 			try {
 				this._currentObject.changePassword(tmpObj.attrs[ZaAccount.A_password]);
 			} catch (ex) {
-				this.popupErrorDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex, true);
+				this.popupErrorDialog(ZaMsg.FAILED_SAVE_ACCOUNT, ex);
 				return false;	
 			}
 		}
@@ -355,9 +355,9 @@ function () {
 		this._currentObject.modify(mods, tmpObj);
 	} catch (ex) {
 		if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-			this.popupErrorDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex, true);
+			this.popupErrorDialog(ZaMsg.FAILED_CREATE_ACCOUNT_1, ex);
 		} else if(ex.code == ZmCsfeException.NO_SUCH_COS) {
-			this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[tmpObj.attrs[ZaAccount.A_COSId]]), ex, true);
+			this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[tmpObj.attrs[ZaAccount.A_COSId]]), ex);
         } else {
 			this._handleException(ex, "ZaAccountViewController.prototype._saveChanges", null, false);	
 		}
@@ -471,7 +471,7 @@ function () {
 				this._errorDialog.popup();			
 			}
 		} catch (ex) {
-			this.popupErrorDialog(ZaMsg.FAILED_ADD_ALIASES, ex, true);	
+			this.popupErrorDialog(ZaMsg.FAILED_ADD_ALIASES, ex);	
 			return false;
 		}
 	}
@@ -494,7 +494,7 @@ function () {
 			this._currentObject.rename(newName);
 		} catch (ex) {
 			if(ex.code == ZmCsfeException.ACCT_EXISTS) {
-				this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex, true);
+				this.popupErrorDialog(ZaMsg.FAILED_RENAME_ACCOUNT_1, ex);
 			} else {
 				this._handleException(ex, "ZaAccountViewController.prototype._saveChanges", null, false);	
 			}

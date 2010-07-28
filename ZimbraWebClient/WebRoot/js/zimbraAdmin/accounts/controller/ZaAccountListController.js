@@ -771,10 +771,10 @@ function () {
 				break;
 			}
 		}
-		ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].setMessage(dlgMsg,  DwtMessageDialog.INFO_STYLE);
-		ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype._deleteAccountsCallback, this);
-		ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, ZaAccountListController.prototype._donotDeleteAccountsCallback, this);		
-		ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popup();
+		ZaApp.getInstance().dialogs["confirmMessageDialog2"].setMessage(dlgMsg,  DwtMessageDialog.INFO_STYLE);
+		ZaApp.getInstance().dialogs["confirmMessageDialog2"].registerCallback(DwtDialog.YES_BUTTON, ZaAccountListController.prototype._deleteAccountsCallback, this);
+		ZaApp.getInstance().dialogs["confirmMessageDialog2"].registerCallback(DwtDialog.NO_BUTTON, ZaAccountListController.prototype._donotDeleteAccountsCallback, this);		
+		ZaApp.getInstance().dialogs["confirmMessageDialog2"].popup();
 	}
 }
 
@@ -820,7 +820,7 @@ function () {
 	if(!ZaApp.getInstance().dialogs["removeProgressDlg"]) {
 		ZaApp.getInstance().dialogs["removeProgressDlg"] = new DeleteAcctsPgrsDlg(this._container, "500px","300px");
 	}
-	ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popdown();
+	ZaApp.getInstance().dialogs["confirmMessageDialog2"].popdown();
 	ZaApp.getInstance().dialogs["removeProgressDlg"].popup();
 	ZaApp.getInstance().dialogs["removeProgressDlg"].setObject(this._removeList);
 	ZaApp.getInstance().dialogs["removeProgressDlg"].startDeletingAccounts();
@@ -832,7 +832,7 @@ function () {
 ZaAccountListController.prototype._donotDeleteAccountsCallback = 
 function () {
 	this._removeList = new Array();
-	ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popdown();
+	ZaApp.getInstance().dialogs["confirmMessageDialog2"].popdown();
 }
 
 

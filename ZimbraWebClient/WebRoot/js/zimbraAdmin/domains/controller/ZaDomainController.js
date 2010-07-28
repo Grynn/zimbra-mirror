@@ -337,10 +337,10 @@ function () {
             		}
             		
             		if(serverList.length > 0) {
-						ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].setMessage(ZaMsg.Domain_flush_cache_q, DwtMessageDialog.INFO_STYLE);
-						ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.openFlushCacheDlg, this, [serverList]);		
-						ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDelDlg, this, null);				
-						ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popup();             			
+						ZaApp.getInstance().dialogs["confirmMessageDialog2"].setMessage(ZaMsg.Domain_flush_cache_q, DwtMessageDialog.INFO_STYLE);
+						ZaApp.getInstance().dialogs["confirmMessageDialog2"].registerCallback(DwtDialog.YES_BUTTON, this.openFlushCacheDlg, this, [serverList]);		
+						ZaApp.getInstance().dialogs["confirmMessageDialog2"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDelDlg, this, null);				
+						ZaApp.getInstance().dialogs["confirmMessageDialog2"].popup();             			
             		}
             		
             	} catch (ex) {
@@ -363,7 +363,7 @@ function () {
 
 ZaDomainController.prototype.openFlushCacheDlg = 
 function (serverList) {
-	ZaApp.getInstance().dialogs["confirmDeleteMessageDialog"].popdown(); 
+	ZaApp.getInstance().dialogs["confirmMessageDialog2"].popdown(); 
 	if(!ZaApp.getInstance().dialogs["flushCacheDialog"]) {
 		ZaApp.getInstance().dialogs["flushCacheDialog"] = new ZaFlushCacheXDialog(this._container);
 	}

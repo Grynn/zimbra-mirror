@@ -383,7 +383,7 @@ ZaDLXFormView.addFreeFormAddressToMembers = function (event) {
 			}
 			if(!AjxUtil.isValidEmailNonReg(tmpval)) {
 				//how error msg
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_DL_INVALID_EMAIL,[values[i]]),null,null,DwtMessageDialog.WARNING_STYLE);
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(ZaMsg.WARNING_DL_INVALID_EMAIL,[values[i]]),null,DwtMessageDialog.WARNING_STYLE);
 				return false;
 			}
 			members.push(new ZaDistributionListMember(tmpval));
