@@ -3,7 +3,7 @@
 // development update url : http://devel.zimbra.com/aus/desktop/nightly/update.php
 
 $download_url_prefix = "http://files.zimbra.com/downloads/zdesktop/updates";
-$details_url = "http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop";
+$details_url = "http://wiki.zimbra.com/index.php?title=Zimbra_Desktop";
 $license_url = "http://www.zimbra.com/license/zimbra_public_eula_2.1.html";
 $version = "@version@";
 $buildid = @buildid@;
