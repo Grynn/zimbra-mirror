@@ -1558,7 +1558,7 @@ ZAGroup_XFormItem.isGroupVisible = function(entry, attrsArray, rightsArray) {
 ZAWizGroup_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZAWIZGROUP_", "zawizgroup", ZAWizGroup_XFormItem, Group_XFormItem);
 ZAWizGroup_XFormItem.prototype.numCols = 2;
-ZAWizGroup_XFormItem.prototype.colSizes = ["200px","275px"];
+ZAWizGroup_XFormItem.prototype.colSizes = [(AjxEnv.isIE ? "100px":"200px"),(AjxEnv.isIE ? "450px":"275px" )];// modified by qin@zimbra.com
 ZAWizGroup_XFormItem.prototype.cssStyle = "margin-top:20px;margin-bottom:0px;padding-bottom:0px;";
 
 ZARightGrouper_XFormItem = function() {}
