@@ -59,17 +59,6 @@ ZaItem._ATTR[ZaItem.A_zimbraId] = ZaMsg.attrDesc_zimbraId;
 
 ZaItem.ID_PATTERN = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
 
-/*
-ZaItem.prototype.getTabToolTip =
-function () {
-	return	ZaMsg.TBB_Edit + " " +  this.type + " " + this.name ;
-}
-
-ZaItem.prototype.getTabIcon = 
-function () {
-	return this.type ;
-}*/
-
 ZaItem.prototype.toString = 
 function() {
 	if(this.name)
@@ -327,53 +316,6 @@ ZaItem.prototype.initEffectiveRightsFromJS = function(resp) {
 	this._defaultValues = {attrs:{}};
 	if(resp && resp.target && resp.target instanceof Array) {
 		this.parseTargetsRightsFromJS(resp.target[0]);
-		
-		/*if(resp.target[0]) {
-			if(resp.target[0].right && resp.target[0].right instanceof Array) {
-				var rights = resp.target[0].right;
-				if(!this.rights)
-					this.rights = {};
-					
-				for(var r in rights) {
-					this.rights[rights[r].n] = true;
-				}
-			}
-			if(resp.target[0].getAttrs && resp.target[0].getAttrs instanceof Array && 
-				resp.target[0].getAttrs[0]) {
-				if(!this.getAttrs)
-					this.getAttrs = {};
-				if(resp.target[0].getAttrs[0].a && resp.target[0].getAttrs[0].a instanceof Array) {
-					var getAttrs = resp.target[0].getAttrs[0].a;
-					for (var a in getAttrs) {
-						this.getAttrs[getAttrs[a].n] = true;
-						if(getAttrs[a]["default"] && getAttrs[a]["default"][0] && getAttrs[a]["default"][0].v && getAttrs[a]["default"][0].v instanceof Array) {
-							var cnt = getAttrs[a]["default"][0].v.length; 
-							for(var i = 0; i<cnt;i++) { 
-								this._defaultValues.attrs[getAttrs[a].n] = getAttrs[a]["default"][0].v[i]._content;
-							}
-						}
-					}
-				} 
-				if (resp.target[0].getAttrs[0].all){
-					this.getAttrs.all = true; 	
-				}
-			}			
-			if(resp.target[0].setAttrs && resp.target[0].setAttrs instanceof Array && 
-				resp.target[0].setAttrs[0]) {
-				if(!this.setAttrs)
-					this.setAttrs = {};
-					
-				if(resp.target[0].setAttrs[0].a && resp.target[0].setAttrs[0].a instanceof Array) {
-					var setAttrs = resp.target[0].setAttrs[0].a;
-					for (var a in setAttrs) {
-						this.setAttrs[setAttrs[a].n] = true;
-					}
-				} 
-				if(resp.target[0].setAttrs[0].all) {
-					this.setAttrs.all = true;
-				}
-			}	
-		}*/
 	}
 	
 }
@@ -816,56 +758,6 @@ function () {
         controller._handleException(e)  ;
     }
 }
-
-/*
-ZaItem.checkFBSettings = function (oldSettingObj, currentSettingObj, controller) {
-    var attrNames = [ZaDomain.A_zimbraFreebusyExchangeURL, ZaDomain.A_zimbraFreebusyExchangeAuthScheme,
-                     ZaDomain.A_zimbraFreebusyExchangeAuthUsername, ZaDomain.A_zimbraFreebusyExchangeAuthPassword,
-                     ZaDomain.A_zimbraFreebusyExchangeUserOrg ] ;
-
-    var changedSettings = {} ;
-    var isChanged = false ;
-    for (var i=0; i < attrNames.length; i ++ ) {
-        var n = attrNames [i] ;
-        if (oldSettingObj.attrs[n] != currentSettingObj.attrs[n]) {
-            changedSettings[n] = currentSettingObj.attrs[n];
-            isChanged = true ;
-        }
-    }
-
-    if (isChanged) {
-        var soapCmd ;
-        if (controller instanceof ZaDomainController) {
-            //ModifyDomainRequest
-            soapCmd = "ModifyDomainRequest" ;
-        } else if (controller instanceof ZaGlobalConfigViewController) {
-            //ModifyConfigRequest
-            soapCmd = "ModifyConfigRequest" ;
-        } else {
-            throw new AjxException ("Invalid Controller Object") ;
-        }
-
-        var soapDoc = AjxSoapDoc.create(soapCmd, ZaZimbraAdmin.URN, null);
-
-        if (controller instanceof ZaDomainController)    {
-            soapDoc.set("id", currentSettingObj.id);
-        }
-
-        for (var aname in changedSettings) {
-            var attr = soapDoc.set("a", changedSettings[aname]);
-            attr.setAttribute("n", aname);
-        }
-
-
-        var params = new Object();
-        params.soapDoc = soapDoc;
-        var reqMgrParams = {
-            controller : controller ,
-            busyMsg : ZaMsg.BUSY_MODIFY_INTEROP_SETTINGS
-        }
-        ZaRequestMgr.invoke(params, reqMgrParams) ;
-    }
-}  */
 
 ZaItem.clearInteropSettings = function () {
      var currentSettingObj = this.getForm().getInstance() ;
