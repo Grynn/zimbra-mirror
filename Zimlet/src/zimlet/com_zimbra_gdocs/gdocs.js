@@ -32,8 +32,7 @@ com_zimbra_gdocs.prototype.constructor = com_zimbra_gdocs;
  * Required method inplemented for the initialization of the gdocs zimlet.
  *
  * It gets the object of attachment dialog from app context. It creates the instance of the @see GoogleDocsTabView and adds it to the attachment dialog.
- *
- * @returns none 
+ * 
  */
 com_zimbra_gdocs.prototype.init = function() {
     var attachDialog = this._attachDialog = appCtxt.getAttachDialog(),
@@ -82,15 +81,17 @@ com_zimbra_gdocs.prototype.accessor = {
                 consumerKey   : "anonymous",
                 consumerSecret: "anonymous",
                 serviceProvider: {
-                        signatureMethod     : "HMAC-SHA1",
-                        scope               : "http://docs.google.com/feeds/ https://docs.google.com/feeds/ http://docs.googleusercontent.com/ https://docs.googleusercontent.com/",
-                        requestTokenURL     : "https://www.google.com/accounts/OAuthGetRequestToken",
-                        userAuthorizationURL: "https://www.google.com/accounts/OAuthAuthorizeToken",
-                        accessTokenURL      : "https://www.google.com/accounts/OAuthGetAccessToken",
-                        docListURL          : "http://docs.google.com/feeds/documents/private/full",
-                        docExportURL        : "https://docs.google.com/feeds/download/documents/Export"
+                    signatureMethod     : "HMAC-SHA1",
+                    scope               : "http://docs.google.com/feeds/ https://docs.google.com/feeds/ http://docs.googleusercontent.com/ https://docs.googleusercontent.com/",
+                    requestTokenURL     : "https://www.google.com/accounts/OAuthGetRequestToken",
+                    userAuthorizationURL: "https://www.google.com/accounts/OAuthAuthorizeToken",
+                    accessTokenURL      : "https://www.google.com/accounts/OAuthGetAccessToken",
+                    docListURL          : "http://docs.google.com/feeds/documents/private/full",
+                    docExportURL        : "https://docs.google.com/feeds/download/documents/Export"
                 }
             };
+
+com_zimbra_gdocs.prototype.oauthHandlerJSP = "oauth3.jsp"
 
 /**
  * Object definition for tab view object.
@@ -178,9 +179,7 @@ GoogleDocsTabView.prototype.getRequestToken = function() {
     pArray.push("_scope="+AjxStringUtil.urlComponentEncode(accessor.serviceProvider.scope));
     pArray.push("_url="+AjxStringUtil.urlComponentEncode(accessor.serviceProvider.requestTokenURL));
     pArray.push("_auth="+AjxStringUtil.urlComponentEncode(authorizationHeader));
-    //pArray.push("_requestBody="+requestBody);
-    //pArray.push("_xoauth_displayname=Zimbra");
-	jspUrl = this.zimlet.getResource("oauth3.jsp") + "?" + pArray.join("&");
+	jspUrl = this.zimlet.getResource(this.zimlet.oauthHandlerJSP) + "?" + pArray.join("&");
 	AjxRpc.invoke(null, jspUrl, null, new AjxCallback(this, this.getRequestTokenCallback), true);
 };
 /**
@@ -200,10 +199,6 @@ GoogleDocsTabView.prototype.getRequestTokenCallback = function(response) {
             pArray = [];
         
         if(jsonResponse.postResponse) {
-            /*tokens = jsonResponse.postResponse.split("&");
-            this._requestToken = tokens[0].substring(tokens[0].indexOf("="));
-            this._requestTokenSecret = tokens[1].substring(tokens[1].indexOf("=")); */
-
             tokens = OAuth.decodeForm(jsonResponse.postResponse);
             this._requestToken = OAuth.getParameter(tokens, "oauth_token");
             this._requestTokenSecret = OAuth.getParameter(tokens, "oauth_token_secret");
@@ -233,8 +228,7 @@ GoogleDocsTabView.prototype.getLinkedView = function() {
     html[i++] = '<td id="gdocs_folder_list" width="30%" height="100%" valign="top"></td>';
     html[i++] = '<td id="gdocs_doc_list" width="70%" height="100%" valign="top"></td>';
     html[i++] = '</tr></tbody></table>';
-    html[i++] = '<div id="gdocs_refresh_btn" class="GDocsRefreshBtn"></div>';
-    html[i++] = '<div id="gdocs_attachment_status" class="GDocsRefreshBtn"></div>';
+    html[i++] = '<div id="gdocs_refresh_btn" class="GDocsRefreshBtn"></div>';    
 
     this.getContentHtmlElement().innerHTML = html.join('');
     
@@ -281,6 +275,7 @@ GoogleDocsTabView.prototype.getDocList = function(button) {
     if(!this._accessToken || !this._accessTokenSecret) {
         this.unlinkFromGoogle();
         this.getUnlinkedView();
+        return;
     }
     var accessor = this.zimlet.accessor,
         pArray = [],
@@ -291,7 +286,7 @@ GoogleDocsTabView.prototype.getDocList = function(button) {
     document.getElementById("gdocs_list_loader").style.display = "block";
     document.getElementById("gdocs_list_container").style.display = "none";
     if(refreshBtn) {
-        //refreshBtn.style.display = "none";
+        refreshBtn.style.display = "none";
     }
     message = {
             method: "get",
@@ -310,7 +305,7 @@ GoogleDocsTabView.prototype.getDocList = function(button) {
     pArray.push("_auth=" + AjxStringUtil.urlComponentEncode(OAuth.getAuthorizationHeader("", message.parameters)));
     pArray.push("_action=docList");
 
-    jspUrl = this.zimlet.getResource("oauth3.jsp") + "?" + pArray.join("&");
+    jspUrl = this.zimlet.getResource(this.zimlet.oauthHandlerJSP) + "?" + pArray.join("&");
 
     AjxRpc.invoke(null, jspUrl, null, new AjxCallback(this, this.getDocListCallback), true);
 
@@ -331,26 +326,24 @@ GoogleDocsTabView.prototype.parseDocListResponse = function(docListItems) {
         rawItem,
         item,
         labels,
-        labelResId,
-        labelUrl,
-        itemIndex,
         folderItem,
         defaultFolder,
-        docList = [];
+        docList = [],
+        resourceId;
 
     this._folderList = [];
     
     for(i=0; i<numOfDocs; i++) {
         rawItem = docListItems[i];
-        var resId = rawItem["gd:resourceId"].__msh_content;
+        resourceId = rawItem["gd:resourceId"].__msh_content;
         item = {
-            id : resId,
+            id : resourceId,
             title: rawItem.title.__msh_content,
             size: rawItem["gd:quotaBytesUsed"].__msh_content,
             url: rawItem.content.src,
             type: rawItem.content.type,
             labels: [],
-            isFolder: resId.indexOf("folder:") !== -1 ? true: false
+            isFolder: resourceId.indexOf("folder:") !== -1 ? true: false
         };
         if(!item.isFolder && rawItem.category && rawItem.category.length>2) {
             for(j=0; j<rawItem.category.length; j++) {
@@ -360,7 +353,6 @@ GoogleDocsTabView.prototype.parseDocListResponse = function(docListItems) {
             }
         }
         if(item.isFolder == true) {
-
             this._folderList.push(item);
         }
         else {
@@ -380,6 +372,7 @@ GoogleDocsTabView.prototype.parseDocListResponse = function(docListItems) {
                             folderItem.contents = [];
                         }
                         folderItem.contents.push(item);
+                        break;
                     }
                 }
             }
@@ -418,8 +411,7 @@ GoogleDocsTabView.prototype.addItemsToList = function(list, items) {
  * @param response
  */
 GoogleDocsTabView.prototype.getDocListCallback = function(response) {
-    var txt = response.text,
-        docResponse = eval("(" + txt + ")"),
+    var docResponse = eval("(" + response.text + ")"),
         docList = AjxXmlDoc.createFromXml(docResponse.xml).toJSObject(false, false, true),
         numOfDocs,
         tableContainer = document.getElementById("gdocs_list_container"),
@@ -429,8 +421,14 @@ GoogleDocsTabView.prototype.getDocListCallback = function(response) {
         list;
     
     if(!docResponse.success) {
-        this.unlinkFromGoogle();
-        this.getUnlinkedView();
+        if(docResponse.statusCode == 401) {
+            this.unlinkFromGoogle();
+            this.getUnlinkedView(docResponse.statusCode);
+            return;
+        }
+        else {
+            appCtxt.getAttachDialog().setFooter("<strong>We could not retrieve the docs from Google, please try again later.</strong>");
+        }
     }
     if(loader) {
         loader.style.display = "none";
@@ -478,8 +476,6 @@ GoogleDocsTabView.prototype.showFolderContents = function(e) {
         targetId = target.id;
 
     if(isFolder) {
-        //this.openFolderContents()
-
         for(k=0; k<this._folderList.length; k++) {
             folderItem = this._folderList[k];
             if(folderItem.id == targetId) {
@@ -515,15 +511,16 @@ GoogleDocsTabView.prototype.uploadFiles = function(attachDialog, docIds, index, 
         docId,
         items,
         message,
-            extension,
-            exportDocId,
-            exportUrl,
-            currentItem;
+        extension,
+        exportDocId,
+        exportUrl,
+        currentItem,
+        cc,
+        callback;
     
     items = this._listView.getSelection();
     if (!items || (items.length == 0)) {
-        var attachDialog = appCtxt.getAttachDialog();
-        attachDialog.setFooter(ZmMsg.attachSelectMessage);
+        appCtxt.getAttachDialog().setFooter(ZmMsg.attachSelectMessage);
         return;
     }
 
@@ -541,8 +538,8 @@ GoogleDocsTabView.prototype.uploadFiles = function(attachDialog, docIds, index, 
         }
     }
     if(index < items.length) {
-        //docIds.push({id: items[i].id, ct: items[i].type, s: items[i].size});
-        document.getElementById("gdocs_attachment_status").innerHTML = "Attaching "+(index+1)+" of "+items.length+" files. Please wait.";
+        appCtxt.getAttachDialog().setFooter("Attaching "+(index+1)+" of "+items.length+" files. Please wait.");
+        //document.getElementById("gdocs_attachment_status").innerHTML = "Attaching "+(index+1)+" of "+items.length+" files. Please wait.";
         docId = false;
         currentItem = items[index];
         extension = currentItem.title.substring(Number(currentItem.title.lastIndexOf("."))+1);
@@ -563,20 +560,17 @@ GoogleDocsTabView.prototype.uploadFiles = function(attachDialog, docIds, index, 
         pArray.push("_action=postResource");
         pArray.push("_url=" + AjxStringUtil.urlComponentEncode(exportUrl)); //"https"+currentItem.url.substring(currentItem.url.indexOf(":")) + "&format="+extension));//accessor.serviceProvider.docExportURL+ "?format="+extension+"&id="+exportDocId));
         pArray.push("_auth=" + AjxStringUtil.urlComponentEncode(OAuth.getAuthorizationHeader("", message.parameters)));
-
         pArray.push("_fid=" + AjxStringUtil.urlComponentEncode(currentItem.title));
 
-        jspUrl = this.zimlet.getResource("oauth3.jsp") + "?" + pArray.join("&");
+        jspUrl = this.zimlet.getResource(this.zimlet.oauthHandlerJSP) + "?" + pArray.join("&");
         AjxRpc.invoke(null, jspUrl, null, new AjxCallback(this, this.uploadFiles, [attachDialog, docIds, ++index]), true);
     }
     else {
-        document.getElementById("gdocs_attachment_status").innerHTML = "";
-        var cc = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
-        var callback = new AjxCallback (cc,cc._handleResponseSaveDraftListener);
+        //document.getElementById("gdocs_attachment_status").innerHTML = "";
+        cc = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
+        callback = new AjxCallback (cc,cc._handleResponseSaveDraftListener);
 
-        // build up the attachment list
-        var attachmentList = docIds.join(",");
-        cc.sendMsg(attachmentList,ZmComposeController.DRAFT_TYPE_MANUAL,callback);
+        cc.sendMsg(docIds.join(","), ZmComposeController.DRAFT_TYPE_MANUAL,callback);
     }
 };
 /**
@@ -612,21 +606,24 @@ GoogleDocsTabView.prototype.getUploadIdFromResponse = function(responseText) {
  * Called to remove the tokens from User settings
  */
 GoogleDocsTabView.prototype.unlinkFromGoogle = function() {
-    this.zimlet.setUserProperty("gdocs_is_connected", "false");
+    this.zimlet.setUserProperty("gdocs_is_connected", false);
     this.zimlet.setUserProperty("gdocs_access_token", "");
     this.zimlet.setUserProperty("gdocs_access_token_secret", "");
     this.zimlet.saveUserProperties();
     this._viewLoaded = false;
+    this._connected = false;
 };
 /**
  * Called to get the view in unlinked state
  */
-GoogleDocsTabView.prototype.getUnlinkedView = function() {
+GoogleDocsTabView.prototype.getUnlinkedView = function(statusCode) {
     var html = [],
         i = 0,
         button,
         okBtn;
-
+    if(statusCode) {
+        appCtxt.getAttachDialog().setFooter('<strong> An authentication error occurred maybe because the tokens are expired or invalid. Please link your Google account again to access your docs.</strong>');
+    }
     html[i++] = '<ol id="gdocs_linking_steps">';
     html[i++] = '<li> Click on the <strong>Link with Google!</strong> button to open Google\'s authentication/authorization page. <div id="gdocs_link_btn" class="GDocsRefreshBtn"></div></li>';
     html[i++] = '<li> Enter your Google account information there.</li>';
@@ -665,9 +662,8 @@ GoogleDocsTabView.prototype.getAccessToken = function() {
             method: "post",
             action: accessor.serviceProvider.accessTokenURL,
             parameters: [["oauth_verifier", code]]
-    };
-    OAuth.completeRequest(message,
-                            {
+        };
+    OAuth.completeRequest(message, {
                                 consumerKey   : accessor.consumerKey,
                                 consumerSecret: accessor.consumerSecret,
                                 token         : this._requestToken,
@@ -678,7 +674,7 @@ GoogleDocsTabView.prototype.getAccessToken = function() {
     pArray.push("_url=" + AjxStringUtil.urlComponentEncode(accessor.serviceProvider.accessTokenURL));
     pArray.push("_auth=" + AjxStringUtil.urlComponentEncode(OAuth.getAuthorizationHeader("", message.parameters)));
 
-    jspUrl = this.zimlet.getResource("oauth3.jsp") + "?" + pArray.join("&");
+    jspUrl = this.zimlet.getResource(this.zimlet.oauthHandlerJSP) + "?" + pArray.join("&");
 	AjxRpc.invoke(null, jspUrl, null, new AjxCallback(this, this.getAccessTokenCallback), true);
 };
 /**
@@ -696,10 +692,6 @@ GoogleDocsTabView.prototype.getAccessTokenCallback = function(response) {
             tokens;
 
         if(jsonResponse.postResponse) {
-            /*tokens = jsonResponse.postResponse.split("&");
-            this._requestToken = tokens[0].substring(tokens[0].indexOf("="));
-            this._requestTokenSecret = tokens[1].substring(tokens[1].indexOf("=")); */
-
             tokens = OAuth.decodeForm(jsonResponse.postResponse);
             this._accessToken = OAuth.getParameter(tokens, "oauth_token");
             this._accessTokenSecret = OAuth.getParameter(tokens, "oauth_token_secret");
@@ -708,7 +700,7 @@ GoogleDocsTabView.prototype.getAccessTokenCallback = function(response) {
     }
     if(this._accessToken && this._accessTokenSecret) {
         this._connected = true;
-        this.zimlet.setUserProperty("gdocs_is_connected", "true");
+        this.zimlet.setUserProperty("gdocs_is_connected", true);
         this.zimlet.setUserProperty("gdocs_access_token", this._accessToken);
         this.zimlet.setUserProperty("gdocs_access_token_secret", this._accessTokenSecret);
         this.zimlet.saveUserProperties();
@@ -726,10 +718,10 @@ function(width, height) {
 
     DwtTabViewPage.prototype.setSize.call(this, width, height);
 
-    var size = this.getSize();
-    var treeWidth = size.x * 0.40;
-    var listWidth = size.x - treeWidth;
-    var newHeight = height - 55;
+    var size = this.getSize(),
+        treeWidth = size.x * 0.40,
+        listWidth = size.x - treeWidth,
+        newHeight = height - 55;
 	if (this._folderListView) {
 		this._folderListView.setSize(treeWidth - 10, newHeight);
 		this._listView.setSize(listWidth - 15, newHeight);
@@ -768,19 +760,17 @@ GoogleDocsListView.prototype._createItemHtml =
 function(doc, params) {
 
 	
-	var div = document.createElement("div");
-	div.className = "GDocsItemSmall";
-
-	var html = [],
+	var div = document.createElement("div"),
+        html = [],
 	    j = 0,
         i,
         icon,
-        labelHtml,
+        labelHtml = '',
         mimeInfo,
         cssClass = doc.isFolder === true ? 'folder' : '';
-
+    
+    div.className = "GDocsItemSmall";
     html[j++] = "<table><tbody>";
-    labelHtml = '';
     /*
     if(doc.labels) {
         labelHtml = "[";
