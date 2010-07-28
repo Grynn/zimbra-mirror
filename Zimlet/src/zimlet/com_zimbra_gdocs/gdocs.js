@@ -542,7 +542,12 @@ GoogleDocsTabView.prototype.uploadFiles = function(attachDialog, docIds, index, 
         //document.getElementById("gdocs_attachment_status").innerHTML = "Attaching "+(index+1)+" of "+items.length+" files. Please wait.";
         docId = false;
         currentItem = items[index];
-        extension = currentItem.title.substring(Number(currentItem.title.lastIndexOf("."))+1);
+        if(currentItem.title.lastIndexOf(".") === -1) {
+            extension = "html";
+        }
+        else {
+            extension = currentItem.title.substring(Number(currentItem.title.lastIndexOf("."))+1);
+        }
         exportDocId = currentItem.id.substring(Number(currentItem.id.indexOf(":"))+1);
         exportUrl = "https"+currentItem.url.substring(currentItem.url.indexOf(":")) + "&format="+extension;
         message = {
