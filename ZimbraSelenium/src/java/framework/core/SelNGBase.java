@@ -27,7 +27,7 @@ public class SelNGBase {
 	public static String currentBrowserName = "";
 	public static HashMap<String, String> expectedValue = new HashMap<String, String>();
 	protected RemoteControlConfiguration rcConfig;
-	public static int maxRetryCount = 1;
+	public static int maxRetryCount = 0;
 	public static int currentRetryCount = 0;
 	public static boolean isExecutionARetry = false;
 	public static boolean needReset = false;
