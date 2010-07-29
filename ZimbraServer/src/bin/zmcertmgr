@@ -313,6 +313,11 @@ createKeystore () {
     current_key=${commercial_key} 
   fi
 
+  if [ x"$mailboxd_server" = "x" ]; then
+    echo "Not a mailbox server, skipping pkcs12 creation...."
+    exit 0
+  fi
+
   if [ ! -f ${current_crt} ]; then
     echo "${ERROR_PREFIX} Certificate $current_crt does not exist."
     usage
