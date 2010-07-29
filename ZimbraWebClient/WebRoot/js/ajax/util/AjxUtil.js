@@ -549,19 +549,6 @@ function(type, enable) {
 };
 
 /**
- * Logs a message with a particular key into memory, for on-demand output later.
- * A key is a way to group related messages together.
- * 
- * @param type		[string]		key for this msg
- * @param msg		[string]		text to log
- */
-AjxUtil.log =
-function(type, msg) {
-	if (!AjxUtil.LOG[type]) { return; }
-	AjxUtil.LOG[type].push(msg);
-};
-
-/**
  * mergesort+dedupe
 **/
 AjxUtil.mergeArrays =

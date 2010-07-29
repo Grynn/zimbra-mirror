@@ -15,34 +15,38 @@
 
 
 /**
-* Creates a new debug window. The document inside is not kept open.  All the 
-  output goes into a single &lt;div&gt; element.
-* @constructor
-* @class
-* This class pops up a debug window and provides functions to send output there 
-* in various ways. The output is continuously appended to the bottom of the 
-* window. The document is left unopened so that the browser doesn't think it's 
-* continuously loading and keep its little icon flailing forever. Also, the DOM 
-* tree can't be manipulated on an open document. All the output is added to the 
-* window by appending it the DOM tree. Another method of appending output is to 
-* open the document and use document.write(), but then the document is left open.
-* <p>
-* Any client that uses this class can turn off debugging by changing the first 
-* argument to the constructor to {@link AjxDebug.NONE}.
-*
-* @author Conrad Damon
-* @author Ross Dargahi
-* 
-* @param {constant}	level	 	debug level for the current debugger (no window will be displayed for a level of NONE)
-* @param {string}	name 		the name of the window. Defaults to "debug_" prepended to the calling window's URL.
-* @param {boolean}	showTime	if <code>true</code>, display timestamps before debug messages
-* 
-* @private
-*/
-AjxDebug = function(level, name, showTime) {
-	this._dbgName = "AjxDebugWin_" + location.hostname.replace(/\./g,'_');
-	this._level = Number(level);
-	this._showTime = showTime;
+ * Creates a new debug window. The document inside is not kept open.  All the
+ * output goes into a single &lt;div&gt; element.
+ * @constructor
+ * @class
+ * This class pops up a debug window and provides functions to send output there
+ * in various ways. The output is continuously appended to the bottom of the
+ * window. The document is left unopened so that the browser doesn't think it's
+ * continuously loading and keep its little icon flailing forever. Also, the DOM
+ * tree can't be manipulated on an open document. All the output is added to the
+ * window by appending it the DOM tree. Another method of appending output is to
+ * open the document and use document.write(), but then the document is left open.
+ * <p>
+ * Any client that uses this class can turn off debugging by changing the first
+ * argument to the constructor to {@link AjxDebug.NONE}.
+ *
+ * @author Conrad Damon
+ * @author Ross Dargahi
+ *
+ * @param {constant}	level	 	debug level for the current debugger (no window will be displayed for a level of NONE)
+ * @param {string}		name 		the name of the window (deprecated)
+ * @param {boolean}		showTime	if <code>true</code>, display timestamps before debug messages
+ * @param {constant}	target		output target (AjxDebug.TGT_WINDOW | AjxDebug.TGT_CONSOLE)
+ *
+ * @private
+ */
+AjxDebug = function(params) {
+
+	params = Dwt.getParams(arguments, AjxDebug.PARAMS);
+
+	this._level = (params.level != null) ? Number(params.level) : AjxDebug.DBG1;
+	this._showTime = params.showTime;
+	this._target = params.target || AjxDebug.TGT_WINDOW;
 	this._showTiming = false;
 	this._startTimePt = this._lastTimePt = 0;
 	this._dbgWindowInited = false;
@@ -51,6 +55,8 @@ AjxDebug = function(level, name, showTime) {
 	this._isPrevWinOpen = false;
 	this._enable(this._level != AjxDebug.NONE);
 };
+
+AjxDebug.PARAMS = ["level", "name", "showTime"];
 
 /**
  * Defines "no debugging" level.
@@ -69,7 +75,15 @@ AjxDebug.DBG2 = 2; // moderate debugging
  */
 AjxDebug.DBG3 = 3; // anything goes
 
-AjxDebug.MAX_OUT = 25000; // max length capable of outputting
+// log output targets
+AjxDebug.TGT_WINDOW		= "window";
+AjxDebug.TGT_CONSOLE	= "console";
+
+// holds log output in memory so we can show it to user
+AjxDebug.BUFFER = [];
+AjxDebug.BUFFER_MAX = 500;
+
+AjxDebug.MAX_OUT = 25000; // max length capable of outputting an XML msg
 
 AjxDebug._CONTENT_FRAME_ID	= "AjxDebug_CF";
 AjxDebug._LINK_FRAME_ID		= "AjxDebug_LF";
@@ -131,7 +145,8 @@ function(level, msg, linkName) {
 		if (!result) { return; }
 
 		msg = result.args.join("");
-		this._add(this._timestamp() + msg + "<br>", null, null, null, result.linkName);
+		var eol = (this._target != AjxDebug.TGT_CONSOLE) ? "<br>" : "";
+		this._add(this._timestamp() + msg + eol, null, null, null, result.linkName);
 	} catch (ex) {
 		// do nothing
 	}
@@ -312,21 +327,34 @@ function(noOpen) {
 
 AjxDebug.prototype._enable =
 function(enabled) {
+
 	this._enabled = enabled;
-	if (enabled) {
-		if (this._debugWindow == null || this._debugWindow.closed)
-			this._openDebugWindow();
-	} else {
-		if (this._debugWindow) {
-			this._debugWindow.close();
-			this._debugWindow = null;
+	if (this._target == AjxDebug.TGT_WINDOW) {
+		if (enabled) {
+			if (!this._dbgName) {
+				this._dbgName = "AjxDebugWin_" + location.hostname.replace(/\./g,'_');
+			}
+			if (this._debugWindow == null || this._debugWindow.closed) {
+				this._openDebugWindow();
+			}
+		} else {
+			if (this._debugWindow) {
+				this._debugWindow.close();
+				this._debugWindow = null;
+			}
 		}
 	}
 };
 
 AjxDebug.prototype._isWriteable =
 function() {
-	return (!this._isPaused && !this.isDisabled() && this._debugWindow && !this._debugWindow.closed);
+	if (this.isDisabled()) {
+		return false;
+	}
+	if (this._target == AjxDebug.TGT_WINDOW) {
+		return (!this._isPaused && this._debugWindow && !this._debugWindow.closed);
+	}
+	return true;
 };
 
 AjxDebug.prototype._getHtmlForObject =
@@ -358,14 +386,14 @@ function(anObj, isXml, isRaw, timestamp, showFuncs) {
 	//				html[idx++] = [doc.documentElement.nodeName, this._getTimeStamp(timestamp)].join(" - ");
 	//			}
 				html[idx++] = "<div style='border-width:2px; border-style:inset; width:100%; height:300px; overflow:auto'>";
-				html[idx++] = this._createXmlTree(doc, 0);
+				html[idx++] = this._createXmlTree(doc, 0, {"authToken":true});
 				html[idx++] = "</div>";
 			} else {
 				html[idx++] = "<span>Unable to create XmlDocument to show XML</span>";
 			}
 		} else {
 			html[idx++] = "<div style='border-width:2px; border-style:inset; width:100%; height:300px; overflow:auto'><pre>";
-			html[idx++] = this._dump(anObj, true, showFuncs);
+			html[idx++] = this._dump(anObj, true, showFuncs, {"ZmAppCtxt":true, "authToken":true});
 			html[idx++] = "</div></pre>";
 		}
 	}
@@ -374,9 +402,9 @@ function(anObj, isXml, isRaw, timestamp, showFuncs) {
 
 // Pretty-prints a Javascript object
 AjxDebug.prototype._dump =
-function(obj, recurse, showFuncs) {
+function(obj, recurse, showFuncs, omit) {
 
-	return AjxStringUtil.prettyPrint(obj, recurse, showFuncs, {ZmAppCtxt:true});
+	return AjxStringUtil.prettyPrint(obj, recurse, showFuncs, omit);
 };
 
 /**
@@ -600,7 +628,7 @@ function(show) {
  * @private
  */
 AjxDebug.prototype._createXmlTree =
-function (node, indent) {
+function (node, indent, omit) {
 	if (node == null) { return ""; }
 
 	var str = "";
@@ -608,6 +636,10 @@ function (node, indent) {
 	switch (node.nodeType) {
 		case 1:	// Element
 			str += "<div style='color: blue; padding-left: 16px;'>&lt;<span style='color: DarkRed;'>" + node.nodeName + "</span>";
+
+			if (omit && omit[node.nodeName]) {
+				return str + "/&gt;</div>";
+			}
 
 			var attrs = node.attributes;
 			len = attrs.length;
@@ -623,7 +655,7 @@ function (node, indent) {
 			var cs = node.childNodes;
 			len = cs.length;
 			for (var i = 0; i < len; i++) {
-				str += this._createXmlTree(cs[i], indent + 3);
+				str += this._createXmlTree(cs[i], indent + 3, omit);
 			}
 			str += "&lt;/<span style='color: DarkRed;'>" + node.nodeName + "</span>&gt;</div>";
 			break;
@@ -632,7 +664,7 @@ function (node, indent) {
 			var cs = node.childNodes;
 			len = cs.length;
 			for (var i = 0; i < len; i++) {
-				str += this._createXmlTree(cs[i], indent);
+				str += this._createXmlTree(cs[i], indent, omit);
 			}
 			break;
 
@@ -721,6 +753,21 @@ function(aMsg) {
 
 AjxDebug.prototype._showMessages =
 function() {
+
+	switch (this._target) {
+		case AjxDebug.TGT_WINDOW:
+			this._showMessagesInWindow();
+			break;
+		case AjxDebug.TGT_CONSOLE:
+			this._showMessagesInConsole();
+	}
+	this._addMessagesToBuffer();
+	this._msgQueue = [];
+};
+
+AjxDebug.prototype._showMessagesInWindow =
+function() {
+
 	if (!this._dbgWindowInited) {
 		// For now, don't show the messages-- assuming that this case only
 		// happens at startup, and many messages will be written
@@ -732,23 +779,47 @@ function() {
 			var linkFrame = this.getLinkFrame();
 			if (!contentFrame || !linkFrame) { return; }
 
-			var msg;
 			var contentFrameDoc = contentFrame.contentWindow.document;
 			var linkFrameDoc = linkFrame.contentWindow.document;
-			var len = this._msgQueue.length;
-			for (var i = 0 ; i < len; ++i ) {
-				var now = new Date();
-				msg = this._msgQueue[i];
+			var now = new Date();
+			for (var i = 0, len = this._msgQueue.length; i < len; ++i ) {
+				var msg = this._msgQueue[i];
 				var linkLabel = msg.linkName;
 				var contentLabel = [msg.message, msg.eHtml].join("");
-				this._createLinkNContent("Link", linkLabel, "Content", contentLabel);
+				this._createLinkNContent("Link", linkLabel, "Content", contentLabel, now);
 			}
 		}
-	
-		this._msgQueue.length = 0;
+
 		this._scrollToBottom();
-	} catch (ex) {
-		//debuggins should not stop execution
+	} catch (ex) {}
+};
+
+AjxDebug.prototype._addMessagesToBuffer =
+function() {
+
+	var eol = (this._target == AjxDebug.TGT_CONSOLE) ? "<br>" : "";
+	var now = new Date();
+	var buffer = AjxDebug.BUFFER;
+	for (var i = 0, len = this._msgQueue.length; i < len; ++i ) {
+		var msg = this._msgQueue[i];
+		while (buffer.length >= AjxDebug.BUFFER_MAX) {
+			buffer.shift();
+		}
+		buffer.push(msg.message + msg.eHtml + eol);
+	}
+};
+
+AjxDebug.prototype._showMessagesInConsole =
+function() {
+
+	if (!window.console) { return; }
+
+	var now = new Date();
+	for (var i = 0, len = this._msgQueue.length; i < len; ++i ) {
+		var msg = this._msgQueue[i];
+		if (console && console.log) {
+			console.log(AjxStringUtil.stripTags(msg.message + msg.eHtml));
+		}
 	}
 };
 
@@ -762,11 +833,12 @@ function(date) {
 };
 
 AjxDebug.prototype._createLinkNContent =
-function(linkClass, linkLabel, contentClass, contentLabel) {
+function(linkClass, linkLabel, contentClass, contentLabel, now) {
+
 	var linkFrame = this.getLinkFrame();
 	if (!linkFrame) { return; }
 
-	var now = new Date();
+	now = now || new Date();
 	var timeStamp = ["[", this._getTimeStamp(now), "]"].join("");
 	var id = "Lnk_" + now.getTime();
 

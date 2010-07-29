@@ -1492,7 +1492,7 @@ function(obj, recurse, showFuncs, omit) {
 				if (nextObj == window || nextObj == document || (!AjxEnv.isIE && nextObj instanceof Node)){
 					value = nextObj.toString();
 				}
-				if ((typeof(nextObj) == "function")){
+				if ((typeof(nextObj) == "function")) {
 					if (showFuncs) {
 						value = "[function]";
 					} else {
@@ -1504,7 +1504,9 @@ function(obj, recurse, showFuncs, omit) {
 					text += ",";
 				}
 				text += "\n" + indent;
-				if (value != null) {
+				if (omit && omit[key]) {
+					text += key + ": [" + key + "]";
+				} else if (value != null) {
 					text += key + ": " + value;
 				} else {
 					text += key + ": " + this._prettyPrint(nextObj, recurse, showFuncs, omit, indentLevel + 2, true, stopRecursion);
