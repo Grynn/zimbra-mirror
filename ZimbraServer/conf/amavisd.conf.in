@@ -155,7 +155,7 @@ $myhostname = '@@zimbra_server_hostname@@';  # must be a fully-qualified domain 
 # $forward_method = 'smtp:[127.0.0.1]:10025';  # set to undef with milter!
 %%uncomment SERVICE:archiving%%$archive_quarantine_method = 'smtp:[127.0.0.1]:10025';
 
-# $final_virus_destiny      = D_DISCARD;
+%%uncomment VAR:zimbraAmavisQuarantineAccount%%$final_virus_destiny      = D_DISCARD;
 $final_banned_destiny     = D_BOUNCE;
 $final_spam_destiny       = D_DISCARD;
 # $final_bad_header_destiny = D_PASS;
@@ -170,6 +170,7 @@ $final_spam_destiny       = D_DISCARD;
 
 $warnvirusrecip = %%binary VAR:zimbraVirusWarnRecipient%%;
 $warnbannedrecip = %%binary VAR:zimbraMtaBlockedExtensionWarnRecipient%%;
+%%uncomment VAR:zimbraAmavisQuarantineAccount%%$virus_quarantine_to = %%zimbraAmavisQuarantineAccount%%;
 # SOME OTHER VARIABLES WORTH CONSIDERING (see amavisd.conf-default for all)
 
 # $warnbadhsender,
