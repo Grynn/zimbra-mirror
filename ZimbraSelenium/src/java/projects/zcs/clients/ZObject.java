@@ -151,19 +151,7 @@ public class ZObject extends SelNGBase {
 	}
 
 	public void zNotExists(String objNameOrId) {
-		Assert.assertEquals("true", ZObjectCore(objNameOrId, "notexists", false));
-
-		try {
-			String actual = ZObjectCore(objNameOrId, "notexists", false);
-			Assert.assertEquals("true", actual, objTypeName + "(" + objNameOrId
-					+ ") Found, which should not be present.");
-		} catch (SeleniumException e) {
-			// ignore window or frame is closed exception
-			if (e.getMessage().indexOf("is closed") == -1)
-				e.printStackTrace();
-
-		}
-
+		Assert.assertEquals(ZObjectCore(objNameOrId, "notexists"), "true");
 	}
 
 	public String zNotExistsDontWait(String objNameOrId) {
