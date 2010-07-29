@@ -105,7 +105,7 @@ public class AddressBookSharingTests extends CommonTest {
 		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
-		page.zSharing.zAcceptShare(mountFolderName);
+		page.zSharing.zAcceptShareForAddressBookSharingTest(mountFolderName);
 		page.zABCompose.zNavigateToContact();
 		obj.zFolder.zClick(mountFolderName);
 		obj.zContactListItem.zExists(cnLastName);
@@ -142,7 +142,7 @@ public class AddressBookSharingTests extends CommonTest {
 		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
-		page.zSharing.zAcceptShare(mountFolderName);
+		page.zSharing.zAcceptShareForAddressBookSharingTest(mountFolderName);
 		page.zABCompose.zNavigateToContact();
 		obj.zFolder.zClick(mountFolderName);
 		obj.zContactListItem.zExists(cnLastName);
@@ -187,7 +187,7 @@ public class AddressBookSharingTests extends CommonTest {
 		resetSession();
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
-		page.zSharing.zAcceptShare(mountFolderName);
+		page.zSharing.zAcceptShareForAddressBookSharingTest(mountFolderName);
 		page.zABCompose.zNavigateToContact();
 		obj.zFolder.zClick(mountFolderName);
 		obj.zContactListItem.zExists(cnLastName);
@@ -304,7 +304,7 @@ public class AddressBookSharingTests extends CommonTest {
 				folderName, localize(locator.shareWithGuest), attendee, role,
 				"");
 
-		page.zSharing.zAcceptShare(mountFolderName);
+		page.zSharing.zAcceptShareForAddressBookSharingTest(mountFolderName);
 
 		page.zABCompose.zNavigateToContact();
 		obj.zFolder.zClick(mountFolderName);

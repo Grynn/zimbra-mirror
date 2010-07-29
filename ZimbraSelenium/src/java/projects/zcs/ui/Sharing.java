@@ -17,6 +17,9 @@ public class Sharing extends CommonTest {
 	public static final String zAcceptShareIconBtn = "id=zb__CLV__Shr__SHARE_ACCEPT_left_icon";
 	public static final String zDeclineShareIconBtn = "id=zb__CLV__Shr__SHARE_DECLINE_left_icon";
 
+	public static final String zAcceptShareIconBtnInDivision = "css=#zv__CLV__MSG #zb__CLV__Shr__SHARE_ACCEPT_left_icon";
+	public static final String zDeclineShareIconBtnInDivision = "css=#zv__CLV__MSG #zb__CLV__Shr__SHARE_DECLINE_left_icon";
+
 	public void zShareFolder(String applicationtab, String sharingfoldername,
 			String sharetype, String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt)
@@ -475,14 +478,42 @@ public class Sharing extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.acceptShare));
 		Thread.sleep(2000);
-		Assert
-				.assertEquals(
-						obj.zMessageItem
-								.zExistsDontWait(localize(locator.shareCreatedSubject)),
+		Assert.assertEquals(
+						obj.zMessageItem.zExistsDontWait(localize(locator.shareCreatedSubject)),
 						"false",
 						"Share created message doesn't move to Trash folder after accept/decline share");
 		obj.zButton.zNotExists(zAcceptShareIconBtn);
 		obj.zButton.zNotExists(zDeclineShareIconBtn);
+	}
+
+	// This action is using our new locators, feel free to move from the previous to this one
+	// if your tests fail
+	public void zAcceptShareForAddressBookSharingTest(String mountingfoldername) throws Exception {
+		MailApp
+				.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
+		obj.zMessageItem.zClick(localize(locator.shareCreatedSubject));
+		Thread.sleep(2000); /*
+							 * this is necessary because selenium suddenly
+							 * clicks to mail & presses to Accept Share button
+							 * but accept share dialog doesn't appears
+							 */
+		obj.zButton.zClick(zAcceptShareIconBtnInDivision);
+		Thread.sleep(1000); /*
+							 * this is necessary because selenium suddenly
+							 * clicks to mail & presses to Accept Share button
+							 * but accept share dialog doesn't appears
+							 */
+		obj.zEditField.zTypeInDlgByName(localize(locator.name),
+				mountingfoldername, localize(locator.acceptShare));
+		obj.zButton.zClickInDlgByName(localize(locator.yes),
+				localize(locator.acceptShare));
+		Thread.sleep(2000);
+		Assert.assertEquals(
+						obj.zMessageItem.zExistsDontWait(localize(locator.shareCreatedSubject)),
+						"false",
+						"Share created message doesn't move to Trash folder after accept/decline share");
+		obj.zButton.zNotExists(zAcceptShareIconBtnInDivision);
+		obj.zButton.zNotExists(zDeclineShareIconBtnInDivision);
 	}
 
 	public void zAcceptShare(String mountingfoldername, String color,
