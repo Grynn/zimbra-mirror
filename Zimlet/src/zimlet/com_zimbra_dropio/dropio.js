@@ -30,11 +30,27 @@ com_zimbra_dropio_HandlerObject.prototype.constructor = com_zimbra_dropio_Handle
  */
 var DropioZimlet = com_zimbra_dropio_HandlerObject;
 
+
 /**
  * Initializes the zimlet.
- *
+ * 
  */
 DropioZimlet.prototype.init =
+function() {
+	if (appCtxt.isChildWindow) {
+		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
+	}
+};
+
+DropioZimlet.prototype.initializeToolbar =
+function(app, toolbar, controller, viewId) {
+	if (viewId.indexOf("COMPOSE") >= 0 && !appCtxt.isChildWindow && !this._addedToMainWindow) {
+		this._addedToMainWindow = true;
+		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
+	}
+};
+
+DropioZimlet.prototype._delayedAddTab =
 function() {
 	this.metaData = appCtxt.getActiveAccount().metaData;
 	this._allDropioFileMetaData = null;
@@ -48,7 +64,6 @@ function() {
 	var callback = new AjxCallback(this.dropioView, this.dropioView.uploadFiles);
 	attachDialog.addOkListener(tabkey, callback);
 };
-
 
 /**
  * Zimlet framework calls this when the overview panel icon is single clicked
