@@ -33,6 +33,7 @@ import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.SyncErrorManager;
 import com.zimbra.cs.datasource.imap.ImapSync;
 import com.zimbra.cs.db.DbOfflineDirectory;
+import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.mailbox.DesktopMailbox;
 import com.zimbra.cs.mailbox.Folder;
 import com.zimbra.cs.mailbox.LocalJMSession;
@@ -145,6 +146,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         mSyncServerCache = new HashMap<String, Server>();
         mAccountCache = new NamedEntryCache<Account>(16, LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
         mGranterCache = new NamedEntryCache<Account>(16, LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
+        DbPool.disableUsageWarning();
     }
     
     public ZMailbox newZMailbox(OfflineAccount account, String serviceUri) throws ServiceException {
