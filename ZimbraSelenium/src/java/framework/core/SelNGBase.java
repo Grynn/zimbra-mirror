@@ -69,6 +69,10 @@ public class SelNGBase {
 	// can be used @beforeTest
 	public void startSeleniumServer() throws Exception {
 		if (config.getString("serverMachineName").toLowerCase().equals("localhost")){
+			CmdExec("taskkill /f /t /im iexplore.exe");
+			CmdExec("taskkill /f /t /im firefox.exe");
+			CmdExec("taskkill /f /t /im Safari.exe");
+			CmdExec("taskkill /f /t /im chrome.exe");
 			rcConfig = new RemoteControlConfiguration();
 			rcConfig.setPort(Integer.parseInt(config.getString("serverPort", "4444")));
 			rcConfig.setUserExtensions(new File("src/java/framework/lib/user-extensions.js"));
