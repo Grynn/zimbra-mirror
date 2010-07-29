@@ -1242,17 +1242,6 @@ Selenium.prototype.actOnZElement = function(element, action, locator, useXY,para
             if (selenium.browserbot._windowClosed(win)) {
                 return;
             }
-
-            // Perform the link action if preventDefault was set.
-            // In chrome URL, the link action is already executed by triggerMouseEvent.
-            if (!browserVersion.isChrome && savedEvent != null && !savedEvent.getPreventDefault()) {
-                var targetWindow = selenium.browserbot._getTargetWindow(element);
-                if (element.href) {
-                    targetWindow.location.href = element.href;
-                } else {
-                    selenium.browserbot._handleClickingImagesInsideLinks(targetWindow, element);
-                }
-            }
         }
 		custom_fireEvent("mousedown", element, x, y, 2);
 		custom_fireEvent("mouseup", element, x, y, 2);
