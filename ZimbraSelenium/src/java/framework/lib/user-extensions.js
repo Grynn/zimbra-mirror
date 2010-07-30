@@ -1219,32 +1219,19 @@ Selenium.prototype.actOnZElement = function(element, action, locator, useXY,para
 		var xy = this.getCoordinates(element);
 		x = xy[0];
 		y = xy[1];
-        custom_fireEvent = function(eventType, element, clientX, clientY, button){
-            var win = selenium.browserbot.getCurrentWindow();
-            triggerEvent(element, 'focus', false);
+        var agent = navigator.userAgent;
+        var browserName = "";
+        if (agent.indexOf("Firefox/") >= 0){
+            custom_FF_fireEventOnElement("mousedown", element, x, y, 2);
+            custom_FF_fireEventOnElement("mouseup", element, x, y, 2);
+        } else if (agent.indexOf("MSIE") >= 0) {
+            custom_IE_fireEventOnElement("mousedown", element, x, y, 2);
+            custom_IE_fireEventOnElement("mouseup", element, x, y, 2);
 
-            // Add an event listener that detects if the default action has been prevented.
-            // (This is caused by a javascript onclick handler returning false)
-            // we capture the whole event, rather than the getPreventDefault() state at the time,
-            // because we need to let the entire event bubbling and capturing to go through
-            // before making a decision on whether we should force the href
-            var savedEvent = null;
-
-            element.addEventListener(eventType, function(evt) {
-                savedEvent = evt;
-            }, false);
-
-            selenium.browserbot._modifyElementTarget(element);
-
-            // Trigger the event.
-            selenium.browserbot.triggerMouseEvent(element, eventType, true, clientX, clientY, button);
-
-            if (selenium.browserbot._windowClosed(win)) {
-                return;
-            }
+        } else if (agent.indexOf("Safari") >= 0) {
+            custom_Safari_fireEventOnElement("mousedown", element, x, y, 2);
+            custom_Safari_fireEventOnElement("mouseup", element, x, y, 2);
         }
-		custom_fireEvent("mousedown", element, x, y, 2);
-		custom_fireEvent("mouseup", element, x, y, 2);
 	} else if(action == "dblclick") {
 		selenium.browserbot._fireEventOnElement("dblclick", element, x, y);
 		this.browserbot._fireEventOnElement("mousedown", element, x, y);
@@ -3613,4 +3600,98 @@ Selenium.prototype.verifyZText = function(text) {
 		}
 	}
 	return false;
+};
+
+// We are copying Selenium's fireEvent functions as we
+// need to send button = 2 to them. Once Zimbra's devs
+// get to fix selenium native right click, we'll be able
+// to remove all this stuff
+custom_IE_fireEventOnElement = function(eventType, element, clientX, clientY, button) {
+    var win = selenium.browserbot.getCurrentWindow();
+    triggerEvent(element, 'focus', false);
+    var wasChecked = element.checked;
+    var pageUnloading = false;
+    var pageUnloadDetector = function() {
+        pageUnloading = true;
+    };
+    win.attachEvent("onbeforeunload", pageUnloadDetector);
+    selenium.browserbot._modifyElementTarget(element);
+    if (element[eventType]) {
+        element[eventType]();
+    }
+    else {
+        selenium.browserbot.triggerMouseEvent(element, eventType, true, clientX, clientY, button);
+    }
+
+
+    // If the page is going to unload - still attempt to fire any subsequent events.
+    // However, we can't guarantee that the page won't unload half way through, so we need to handle exceptions.
+    try {
+        win.detachEvent("onbeforeunload", pageUnloadDetector);
+
+        if (selenium.browserbot._windowClosed(win)) {
+            return;
+        }
+
+        // Onchange event is not triggered automatically in IE.
+        if (isDefined(element.checked) && wasChecked != element.checked) {
+            triggerEvent(element, 'change', true);
+        }
+
+    }
+    catch (e) {
+        // If the page is unloading, we may get a "Permission denied" or "Unspecified error".
+        // Just ignore it, because the document may have unloaded.
+        if (pageUnloading) {
+            LOG.logHook = function() {
+            };
+            LOG.warn("Caught exception when firing events on unloading page: " + e.message);
+            return;
+        }
+        throw e;
+    }
+};
+
+custom_FF_fireEventOnElement = function(eventType, element, clientX, clientY, button){
+    var win = selenium.browserbot.getCurrentWindow();
+    triggerEvent(element, 'focus', false);
+
+    // Add an event listener that detects if the default action has been prevented.
+    // (This is caused by a javascript onclick handler returning false)
+    // we capture the whole event, rather than the getPreventDefault() state at the time,
+    // because we need to let the entire event bubbling and capturing to go through
+    // before making a decision on whether we should force the href
+    var savedEvent = null;
+
+    element.addEventListener(eventType, function(evt) {
+        savedEvent = evt;
+    }, false);
+
+    selenium.browserbot._modifyElementTarget(element);
+
+    // Trigger the event.
+    selenium.browserbot.triggerMouseEvent(element, eventType, true, clientX, clientY, button);
+
+    if (selenium.browserbot._windowClosed(win)) {
+        return;
+    }
+}
+custom_Safari_fireEventOnElement = function(eventType, element, clientX, clientY, button) {
+    triggerEvent(element, 'focus', false);
+    var wasChecked = element.checked;
+
+    selenium.browserbot._modifyElementTarget(element);
+
+    // For form element it is simple.
+    if (element[eventType]) {
+        element[eventType]();
+    }
+    // For links and other elements, event emulation is required.
+    else {
+        var targetWindow = selenium.browserbot._getTargetWindow(element);
+        // todo: deal with anchors?
+        selenium.browserbot.triggerMouseEvent(element, eventType, true, clientX, clientY, button);
+
+    }
+
 };
