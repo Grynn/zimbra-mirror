@@ -35,8 +35,24 @@ function(val) {
 	return val ? String(val) : "";
 };
 
+/**
+ * Capitalizes the specified string by upper-casing the first character
+ * and lower-casing the rest of the string.
+ *
+ * @param {string} str  The string to capitalize.
+ */
 AjxStringUtil.capitalize = function(str) {
-	return str.charAt(0).toUpperCase() + str.substr(1).toLowerCase();
+	return str.length > 0 ? str.charAt(0).toUpperCase() + str.substr(1).toLowerCase() : "";
+};
+
+/**
+ * Capitalizes all the words in the specified string by upper-casing the first
+ * character of each word and lower-casing the rest of the word.
+ *
+ * @param {string} str  The string to capitalize.
+ */
+AjxStringUtil.capitalizeWords = function(str) {
+    return AjxUtil.map(str.split(/\s+/g), AjxStringUtil.capitalize).join(" ");
 };
 
 /**
@@ -59,6 +75,19 @@ function(text, sep, camel) {
 		newText.push(wds[i].substring(0, 1).toUpperCase() + wds[i].substring(1).toLowerCase());
 	}
 	return newText.join("");
+};
+
+/**
+ * Converts the given mixed-case text to a string of one or more words
+ * separated by spaces.
+ *
+ * @param {string} text The mixed-case text.
+ * @param {string} sep  (Optional) The separator between words. Default
+ *                      is a single space.
+ */
+AjxStringUtil.fromMixed = function(text, sep) {
+    sep = ["$1", sep || " ", "$2"].join("");
+    return text.replace(/([a-z])([A-Z]+)/g, sep).trim();
 };
 
 /**
