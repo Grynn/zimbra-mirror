@@ -1,6 +1,8 @@
 package projects.zcs.tests.preferences.signatures;
 
 import java.lang.reflect.Method;
+
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -329,7 +331,7 @@ public class BasicSignatureTests extends CommonTest {
 	 * @throws Exception
 	 * @author Girish
 	 */
-	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "f" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteHtmlSignatureWithSave(String signatureName,
 			String signatureBody) throws Exception {
 		if (isExecutionARetry)
@@ -352,15 +354,17 @@ public class BasicSignatureTests extends CommonTest {
 				"Signature should be saved");
 		Thread.sleep(500);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
-		selenium.clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
-				+ signatureName + "')]", "");
-		selenium
-				.clickAt(
-						"xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
+		selenium.clickAt("css=tr[id^=DWT]>td:contains("+ signatureName +")", "");
+		selenium.clickAt("xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
 								+ localize(locator.del) + "')]", "");
-		obj.zEditor.zExists(signatureBody);
-		obj.zEditField.zNotExists(signatureName);
 
+		for (int second = 0;; second++) {
+			if (second >= 60) fail("timeout");
+			try { if (!selenium.isTextPresent(signatureName)) break; } catch (Exception e) {}
+			Thread.sleep(1000);
+		}
+		Assert.assertFalse(selenium.isTextPresent(signatureBody));
+		
 		needReset = false;
 	}
 
