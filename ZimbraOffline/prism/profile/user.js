@@ -18,3 +18,9 @@ user_pref("network.prefetch-next", "false");
 user_pref("capability.principal.codebase.p1.granted", "UniversalXPConnect UniversalBrowserRead UniversalBrowserWrite UniversalPreferencesRead UniversalPreferencesWrite UniversalFileRead");
 user_pref("capability.principal.codebase.p1.subjectName", "");
 user_pref("signed.applets.codebase_principal_support", true);
+
+// let prism forget the last printer used so that the system default printer can get selected
+user_pref("print.print_printer", "");
+
+// enable about:config access. use shift-f7 to toggle it.
+user_pref("prism.shortcut.aboutConfig.enabled", false);
