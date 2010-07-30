@@ -99,8 +99,11 @@ public class OfflineAutoComplete extends AutoComplete {
         
         int lmt = limit - result.entries.size();
         for(Account account : accounts) {
-            if (account.getId().equals(reqAcctId) || !account.getBooleanAttr(OfflineProvisioning.A_zimbraPrefShareContactsInAutoComplete , false))
+            String acctId = account.getId();
+            if (acctId.equals(reqAcctId) || (!acctId.equals(OfflineProvisioning.LOCAL_ACCOUNT_ID) &&
+                !account.getBooleanAttr(OfflineProvisioning.A_zimbraPrefShareContactsInAutoComplete , false))) {
                 continue;
+            }
             
             AutoCompleteResult res = query(request, ctxt, account, true, name, lmt, stype);
             if (res != null)
