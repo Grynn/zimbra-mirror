@@ -181,6 +181,11 @@ public class OfflineAccount extends Account {
                 OfflineLog.offline.error(x);
             }
         }
+        
+        // no need to return this multi-attr for any child accounts
+        if (!isLocalAccount() && name.equals(Provisioning.A_zimbraZimletAvailableZimlets))
+            return new String[0];
+        
         return super.getMultiAttr(name);
     }
 

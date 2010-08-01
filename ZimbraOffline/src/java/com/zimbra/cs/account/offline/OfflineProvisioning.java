@@ -665,7 +665,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_zimbraFeatureIMEnabled, FALSE);
         attrs.put(A_zimbraFeatureNotebookEnabled, FALSE);
         attrs.put(A_zimbraPrefAccountTreeOpen , getAllAccounts().size() == 0 ? TRUE : FALSE);
-        attrs.put(A_zimbraZimletAvailableZimlets, new String[0]);
 
         Account account = createAccountInternal(emailAddress, accountId, attrs, false, false);
         OfflineDataSource ds = null;
@@ -1201,9 +1200,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         if (granter != null)
             acct = makeGranter(granter.name, granter.id, granter.granteeId);
 
-        if (acct != null)
-            attrs = acct.getAttrs();
-
+        if (acct != null) {
+            // don't copy over attrs from OfflineCos, so that account won't cache stale values of COS attrs.
+            attrs = acct.getAttrs(false);
+        }
+        
         String name = null;
         if (attrs != null)
             name = (String)attrs.get(A_mail);
