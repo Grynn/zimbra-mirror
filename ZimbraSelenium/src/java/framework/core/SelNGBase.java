@@ -3,6 +3,8 @@ package framework.core;
 import framework.core.ZimbraSelenium;
 import framework.util.ZimbraSeleniumLogger;
 
+import net.sf.json.JSONArray;
+
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
 
@@ -15,13 +17,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class SelNGBase {
 
 	protected SeleniumServer ss;
 	public static ZimbraSelenium selenium;
-	public static final String WAIT_FOR_PAGE_LOAD = "30000";
+	public static  String WAIT_FOR_PAGE_LOAD = "30000";
 
 	public static Configuration config = null;
 	public static String currentBrowserName = "";
@@ -40,6 +44,10 @@ public class SelNGBase {
 	public static long MEDIUM_WAIT = 2000;
 	public static long LONG_WAIT = 4000;
 	public static long VERY_LONG_WAIT = 10000;
+	
+    public static Map<String, ArrayList<Integer>> FILENAME_TO_COVERAGE = new HashMap<String, ArrayList<Integer>>();
+    public static Map<String, JSONArray> FILENAME_TO_SOURCE = new HashMap<String, JSONArray>();
+
 
 	/**
 	 * indicates that the actual object name must start with required obj name
@@ -77,6 +85,10 @@ public class SelNGBase {
 			rcConfig.setPort(Integer.parseInt(config.getString("serverPort", "4444")));
 			rcConfig.setUserExtensions(new File("src/java/framework/lib/user-extensions.js"));
 			ss = new SeleniumServer(false, rcConfig);
+			if(config.containsKey("runCodeCoverage") && config.getString("runCodeCoverage").equalsIgnoreCase("yes")) {
+				WAIT_FOR_PAGE_LOAD="90000";
+			}
+
 			
 			try{
 				URL stopUrl;
@@ -239,9 +251,12 @@ public class SelNGBase {
 		else if (appType.equals("MOBILE"))
 			return config.getString("mode") + "://"
 					+ config.getString("server") + "/m/";
-		else
+		else if(config.containsKey("runCodeCoverage") && config.getString("runCodeCoverage").equalsIgnoreCase("yes")) 
 			return config.getString("mode") + "://"
-					+ config.getString("server");
+					+ config.getString("server") + "?dev=1";
+			else
+				return config.getString("mode") + "://"
+				+ config.getString("server") + "";
 	}
 
 	// can be used as @aftermethod
