@@ -777,7 +777,7 @@ function() {
 		var treeItem = a[i];
 		if (!treeItem._initialized) {
 			treeItem._initialize(treeItem._index, true);
-		} else if (treeItem._isSeparator && !treeItem.div) {
+		} else if (treeItem._isSeparator && !treeItem.div && this._childDiv) {
 			// Note: separators marked as initialized on construction
 			var div = treeItem.div = document.createElement("div");
 			div.className = "vSpace";
