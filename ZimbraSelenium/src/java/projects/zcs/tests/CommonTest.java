@@ -28,7 +28,9 @@ import org.clapper.util.text.HTMLUtil;
 
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
+import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 import projects.zcs.CoreObjects;
 import projects.zcs.Locators;
@@ -1130,7 +1132,14 @@ public class CommonTest extends SelNGBase {
 		Thread.sleep(2000);
 	}
 
-
+	@AfterMethod(groups = { "always" })
+	public void calculateCoverageIfRequired() throws Exception {
+		if(config.containsKey("runCodeCoverage") && config.getString("runCodeCoverage").equalsIgnoreCase("yes")) {
+			calculateCoverage();
+		}
+	}	
+	
+	
 	public static void calculateCoverage() throws Exception {
 		String coverage_string = selenium.getEval(COVERAGE_SCRIPT);
 		JSONObject jsonCoverage = (JSONObject)JSONSerializer.toJSON(coverage_string);
