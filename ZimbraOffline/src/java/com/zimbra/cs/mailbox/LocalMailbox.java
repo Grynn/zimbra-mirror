@@ -18,12 +18,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.db.DbOfflineMailbox;
+import com.zimbra.cs.db.DbPool.Connection;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.redolog.op.CreateFolder;
+import com.zimbra.cs.redolog.op.DeleteMailbox;
 
 public class LocalMailbox extends DesktopMailbox {
     public LocalMailbox(MailboxData data) throws ServiceException {
@@ -84,4 +88,36 @@ public class LocalMailbox extends DesktopMailbox {
         }
         return visible;
     }
+    
+    public synchronized void forceDeleteMailbox(Mailbox mbox) throws ServiceException {
+        DeleteMailbox redoRecorder = new DeleteMailbox(mbox.getId());
+        boolean success = false;
+        try {
+            beginTransaction("deleteMailbox", null, redoRecorder);
+            redoRecorder.log();
+
+            try {
+                // remove all the relevant entries from the database
+                Connection conn = getOperationConnection();
+                ZimbraLog.mailbox.info("attempting to remove the zimbra.mailbox row for id "+mbox.getId());
+                DbOfflineMailbox.forceDeleteMailbox(conn, mbox.getId());    
+                success = true;
+            } finally {
+                // commit the DB transaction before touching the store!  (also ends the operation)
+                endTransaction(success);
+            }
+
+            if (success) {
+                // remove all traces of the mailbox from the Mailbox cache
+                //   (so anyone asking for the Mailbox gets NO_SUCH_MBOX or creates a fresh new empty one with a different id)
+                MailboxManager.getInstance().markMailboxDeleted(mbox);
+            }
+        } finally {
+            if (success)
+                redoRecorder.commit();
+            else
+                redoRecorder.abort();
+        }
+    }
+
 }

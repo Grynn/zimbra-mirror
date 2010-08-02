@@ -80,4 +80,20 @@ public class OfflineMailboxManager extends MailboxManager {
             }
         }
     }
+
+    public synchronized void purgeBadMailboxByAccountId(String accountId) throws ServiceException {
+        long mailboxId = lookupMailboxId(accountId);
+        try {
+            MailboxData mbData = new MailboxData();
+            mbData.accountId = accountId;
+            mbData.id = mailboxId;
+            mbData.schemaGroupId = mailboxId;
+            Mailbox tempMb = new Mailbox(mbData);
+            LocalMailbox mbox = (LocalMailbox) OfflineMailboxManager.getInstance().getMailboxByAccount(
+                    ((OfflineProvisioning)Provisioning.getInstance()).getLocalAccount());
+            mbox.forceDeleteMailbox(tempMb);
+        } catch (Exception e) {
+            OfflineLog.offline.error("failed to purge bad mailbox due to exception",e);
+        }
+    }
 }

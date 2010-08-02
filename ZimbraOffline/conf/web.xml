@@ -62,7 +62,7 @@
     <!-- Admin servlet allows both admin and user commands -->
     <init-param>
       <param-name>engine.handler.0</param-name>
-      <param-value>com.zimbra.cs.service.admin.AdminService</param-value>
+      <param-value>com.zimbra.cs.service.offline.OfflineAdminService</param-value>
     </init-param>
     <init-param>
       <param-name>engine.handler.1</param-name>

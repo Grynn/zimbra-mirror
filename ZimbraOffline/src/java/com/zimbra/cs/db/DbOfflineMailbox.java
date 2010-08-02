@@ -31,6 +31,7 @@ import com.zimbra.cs.mailbox.ChangeTrackingMailbox;
 import com.zimbra.cs.mailbox.Flag;
 import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.Tag;
 import com.zimbra.cs.mailbox.util.TypedIdList;
 import com.zimbra.cs.session.PendingModifications.Change;
@@ -696,6 +697,23 @@ public class DbOfflineMailbox {
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw ServiceException.FAILURE("failed to replace account ID on mailbox " + mbox.getId() , e);
+        } finally {
+            DbPool.closeStatement(stmt);
+        }
+    }
+    
+    public static void forceDeleteMailbox(Connection conn, long id) throws ServiceException {
+        assert(Db.supports(Db.Capability.ROW_LEVEL_LOCKING) || Thread.holdsLock(MailboxManager.getInstance()));
+        PreparedStatement stmt = null;
+        try {
+            // remove entry from mailbox table
+            if (!DebugConfig.externalMailboxDirectory) {
+                stmt = conn.prepareStatement("DELETE FROM mailbox WHERE id = ?");
+                stmt.setLong(1, id);
+                stmt.executeUpdate();
+            }
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("deleting mailbox " +id, e);
         } finally {
             DbPool.closeStatement(stmt);
         }

@@ -695,11 +695,23 @@ public class OfflineSyncManager {
             OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
             List<Account> dsAccounts = prov.getAllDataSourceAccounts();
             for (Account dsAccount : dsAccounts) {
-                MailboxManager.getInstance().getMailboxByAccount(dsAccount);
+                try {
+                    MailboxManager.getInstance().getMailboxByAccount(dsAccount);
+                }
+                catch (Exception e) {
+                    OfflineLog.offline.error("Failed to initialize account ["+dsAccount+"] due to exception",e);
+                    markAccountSyncDisabled(dsAccount, e);
+                }
             }
             List<Account> syncAccounts = prov.getAllZcsAccounts();
             for (Account syncAccount : syncAccounts) {
-                MailboxManager.getInstance().getMailboxByAccount(syncAccount);
+                try {
+                    MailboxManager.getInstance().getMailboxByAccount(syncAccount);
+                }
+                catch (Exception e) {
+                    OfflineLog.offline.error("Failed to initialize account ["+syncAccount+"] due to exception",e);
+                    markAccountSyncDisabled(syncAccount, e);
+                }
             }
             DirectorySync.getInstance();
 
@@ -729,10 +741,17 @@ public class OfflineSyncManager {
      */
     public void encode(Element context, String requestedAccountId) throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
-
         Element zdsync = context.addUniqueElement(ZDSYNC_ZDSYNC);
         List<Account> accounts = prov.getAllAccounts();
         for (Account account : accounts) {
+            Mailbox mb = null;
+            try {
+                mb = MailboxManager.getInstance().getMailboxByAccount(account);
+            } catch (Exception e) {
+                OfflineLog.offline.error("exception fetching mailbox for account ["+account+"]",e);
+                markAccountSyncDisabled(account, e);
+                continue;
+            }
             if (!(account instanceof OfflineAccount) || prov.isLocalAccount(account))
                 continue;
 
@@ -746,8 +765,18 @@ public class OfflineSyncManager {
                 OfflineLog.offline.warn("Invalid account: " + account.getName());
                 continue;
             }
-            e.addAttribute(A_ZDSYNC_UNREAD, MailboxManager.getInstance().getMailboxByAccount(account).getFolderById(null, Mailbox.ID_FOLDER_INBOX).getUnreadCount());
+            e.addAttribute(A_ZDSYNC_UNREAD, mb.getFolderById(null, Mailbox.ID_FOLDER_INBOX).getUnreadCount());
         }
+    }
+
+    private void markAccountSyncDisabled(Account account, Exception e) {
+        if (account instanceof OfflineAccount) {
+            ((OfflineAccount) account).setDisabledDueToError(true);    
+            processSyncException(account, ((OfflineAccount)account).getRemotePassword(), e, ((OfflineAccount)account).isDebugTraceEnabled(), true);
+        } else {
+            OfflineLog.offline.warn("cannot mark non-offline account as disabled sync.");
+        }
+        
     }
 
     private long lastClientPing;
