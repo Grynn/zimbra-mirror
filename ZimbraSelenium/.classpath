@@ -49,5 +49,8 @@
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/libidn-1.15.jar" sourcepath="/ThirdParty/libidn/libidn/src"/>
 	<classpathentry kind="lib" path="jars/JSTAF.jar"/>
 	<classpathentry kind="lib" path="jars/selenium-server.jar"/>
+	<classpathentry kind="lib" path="jars/json-lib-2.3-jdk15.jar"/>
+	<classpathentry kind="lib" path="jars/ezmorph-1.0.6.jar"/>
+	<classpathentry kind="lib" path="jars/commons-beanutils-1.7.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
