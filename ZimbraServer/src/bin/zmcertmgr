@@ -305,6 +305,8 @@ createCACert() {
 
 createKeystore () {
   type=$1
+  not_a_mailbox_server="FALSE"
+
   if [ x"$type" = "xself" ]; then
     current_crt=${server_crt}
     current_key=${server_key}
@@ -314,8 +316,8 @@ createKeystore () {
   fi
 
   if [ x"$mailboxd_server" = "x" ]; then
-    echo "Not a mailbox server, skipping pkcs12 creation...."
-    exit 0
+    not_a_mailbox_server="TRUE"
+    mailboxd_server=${zimbra_server_hostname}
   fi
 
   if [ ! -f ${current_crt} ]; then
@@ -376,6 +378,9 @@ createKeystore () {
   fi
 
   rm -f ${tmpfile} 2> /dev/null
+  if [ x"$not_a_mailbox_server" = "xTRUE" ]; then
+    mailboxd_server=""
+  fi
 }
 
 addCACERT() {
