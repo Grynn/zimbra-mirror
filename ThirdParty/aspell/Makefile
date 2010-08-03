@@ -61,7 +61,6 @@ dict-install:
 		PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH $(MAKE) $(MAKEARGS); \
 		PATH=$(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin:$$PATH $(MAKE) $(MAKEARGS) install) \
 	done
-	echo -e "zimbra\nzimlet\nzimlets\ncomcast" | $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/bin/aspell create master --lang=en $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/lib/aspell-0.60/zimbra.rws
 	echo "add zimbra.rws" >> $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/lib/aspell-0.60/en.multi
 	echo "add zimbra.rws" >> $(ZIMBRA_HOME)/aspell-$(ASPELL_VERSION)/lib/aspell-0.60/en_US.multi
 
