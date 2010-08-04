@@ -1,5 +1,5 @@
 <project name="ZimbraIM" default="jar"> <!-- default="jar" -->
-	<property name="javac.target" value="1.5"/>
+	<property name="javac.target" value="1.6"/>
 
 	<property name="jar.file" value="zimbraim.jar" />
 	<property name="src.dir" location="src" />

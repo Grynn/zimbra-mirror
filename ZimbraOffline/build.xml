@@ -197,7 +197,7 @@
 			<property name="zimbra.buildinfo.type" value="${offline.appid}"/>
 			<property name="zimbra.buildinfo.release" value="${offline.name}"/>
 		</ant>
-		<javac destdir="${build.classes.dir}" debug="true" classpathref="offline.class.path" target="1.5">
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="offline.class.path" target="1.6">
 			<src refid="all.java.path" />
 		</javac>
 	</target>
@@ -1153,7 +1153,7 @@
 	</target>
 
 	<target name="offline-jspc.compile">
-		<javac destdir="${jspc.build.dir}" optimize="on" debug="off" srcdir="${jspc.build.dir}" classpathref="jspc.class.path" target="1.5">
+		<javac destdir="${jspc.build.dir}" optimize="on" debug="off" srcdir="${jspc.build.dir}" classpathref="jspc.class.path" target="1.6">
 			<include name="**"/>
 		</javac>
 	</target>

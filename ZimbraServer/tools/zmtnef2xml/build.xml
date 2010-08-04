@@ -5,7 +5,7 @@
 
 	<!-- Properties -->
 
-	<property name="javac.target" value="1.5"/>
+	<property name="javac.target" value="1.6"/>
 
 	<property name="jar.file" value="zmtnef2xml.jar" />
 	<property name="src.java.dir" location="src/java" />
