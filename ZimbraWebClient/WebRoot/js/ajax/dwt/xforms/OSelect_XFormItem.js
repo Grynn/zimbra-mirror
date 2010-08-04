@@ -996,6 +996,12 @@ OSelect_Check_XFormItem.prototype.cssClass = "oselect_check";
 OSelect_Check_XFormItem.prototype.getChoiceHTML = function (itemNum, value, label, cssClass) {
 	var ref = this.getFormGlobalRef() + ".getItemById('"+ this.getId()+ "')";
 	var id = this.getId();
+
+/*
+ 	// Bug 44925
+ 	// The checkbox label is always on activated status. Since it is not a standard XForm component,
+ 	// it is not controlled by enableDisableChecks property.
+
 	return AjxBuffer.concat(
 		"<tr><td class=", cssClass, 
 			" onmouseover=\"",ref, ".onChoiceOver(", itemNum,", event||window.event)\"",
@@ -1004,10 +1010,31 @@ OSelect_Check_XFormItem.prototype.getChoiceHTML = function (itemNum, value, labe
 			" ondblclick=\"",ref, ".onChoiceDoubleClick(", itemNum,", event||window.event)\"",
 		">",
 		"<table cellspacing=0 cellpadding=0><tr><td><input type=checkbox id='",id,"_choiceitem_",itemNum,"'></td><td>",
-				label,
+				label,                     //<--  the label is always on activated status
 		"</td></tr></table></td></tr>"
 	);
+*/
+
+	// The bugfixing for bug 44925
+	// By checking the __isEnabled property via getIsEnabled(), the fixing can make the label working with
+	// checkbox under same property: 
+	//     1) both should be in grey(disabled) when the item is disabled, vise versa;
+	//     2) both should be removed all the event handlers on element when it is disabled, vise versa.
+
+        return AjxBuffer.concat(
+                "<tr><td class=", cssClass,
+                        (this.getIsEnabled())?(" onmouseover=\"" + ref + ".onChoiceOver(" + itemNum + ", event||window.event)\""):"",
+                        (this.getIsEnabled())?(" onmouseout=\"" + ref +  ".onChoiceOut(" + itemNum + ", event||window.event)\""):"",
+                        (this.getIsEnabled())?(" onclick=\"" + ref + ".onChoiceClick(" + itemNum + ", event||window.event)\""):"",
+                        (this.getIsEnabled())?(" ondblclick=\"" + ref + ".onChoiceDoubleClick(" + itemNum + ", event||window.event)\""):"",
+                ">",
+                "<table cellspacing=0 cellpadding=0><tr><td><input type=checkbox id='",id,"_choiceitem_",itemNum,"'></td><td>",
+                                (!this.getIsEnabled())?("<font color=\"#808080\">"):"", label,(!this.getIsEnabled())?("</font>"):"",
+                "</td></tr></table></td></tr>"
+        );
+
 }
+
 
 OSelect_Check_XFormItem.prototype.hiliteChoice = function (itemNum) {
 	var chEl = this.getChoiceElements(itemNum);
