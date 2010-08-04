@@ -431,6 +431,7 @@ DwtKeyboardMgr.prototype.__doGrabFocus =
 function(focusObj) {
 
 	if (!focusObj) { return; }
+	if (focusObj == this.__focusObj) { return; }
 	
 	var dwtInputCtrl = (Dwt.instanceOf(focusObj, "DwtInputField") ||
 						Dwt.instanceOf(focusObj, "DwtHtmlEditor") ||
@@ -438,7 +439,9 @@ function(focusObj) {
 						Dwt.instanceOf(focusObj, "DwtRadioButton") ||
 						Dwt.instanceOf(focusObj, "ZmAdvancedHtmlEditor"));
 //	DBG.println("kbnav", "DwtKeyboardMgr._doGrabFocus: " + focusObj);
+	DBG.println("focus", "DwtKeyboardMgr._doGrabFocus: " + focusObj);
 	if (dwtInputCtrl || !(focusObj instanceof DwtControl)) {
+		DBG.println("focus", "DwtKeyboardMgr._doGrabFocus: input or non-control");
 		// dealing with an input field
 		if (this.__focusObj instanceof DwtControl && !this.__dwtInputCtrl) {
 			// ctrl -> input
@@ -456,6 +459,7 @@ function(focusObj) {
 			} catch(ex) {}
 		}
 	} else {
+		DBG.println("focus", "DwtKeyboardMgr._doGrabFocus: control");
 		/* If the current focus of obj and the one grabbing focus are both DwtControls
 		 * then we need to simulate a blur on the control losing focus */
 		if (this.__dwtCtrlHasFocus && (this.__focusObj instanceof DwtControl)) {
@@ -488,6 +492,7 @@ function(focusObj) {
  */
 DwtKeyboardMgr.__onFocusHdlr =
 function(ev) {
+	DBG.println("focus", "DwtKeyboardMgr.__onFocusHdlr");
 
 	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 	kbMgr.__dwtCtrlHasFocus = true;
@@ -505,6 +510,7 @@ function(ev) {
  */
 DwtKeyboardMgr.__onBlurHdlr =
 function(ev) {
+	DBG.println("focus", "DwtKeyboardMgr.__onBlurHdlr");
 
 	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 
