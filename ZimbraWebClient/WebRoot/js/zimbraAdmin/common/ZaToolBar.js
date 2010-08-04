@@ -315,7 +315,19 @@ ZaToolBar.prototype.getAlwaysVisibleButtonWidths = function () {
         if (this._btnOrder [i] == ZaOperation.NONE ) {
             isAfterNoneOp = true ;
         }
+        
+        /*
+         Handle for LABEL, label uses labelid to index, but button uses id.
+         */ 
+        if (this._btnOrder [i] == ZaOperation.LABEL) { 
+            b = this._buttons[ZaOperation.SEARCH_RESULT_COUNT]; 
+        }
+  
         if (isAfterNoneOp) {
+            if (this._btnOrder [i] == ZaOperation.SEP){
+               w += 5; // for seperator, we give it a fixed value.
+            }
+            
             if (b && b.getVisible()) {
                 w += b.getW () ;
             }
