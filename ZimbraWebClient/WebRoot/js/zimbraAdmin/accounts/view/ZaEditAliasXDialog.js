@@ -20,16 +20,22 @@
 * @param parent
 * param app
 **/
+//ZaAilasXDialogHelpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/creating_a_mail_aliases.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+
 ZaEditAliasXDialog = function(parent,   w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
 	ZaXDialog.call(this, parent, null, title, w, h);
 	this._containedObject = {};
 	this.initForm(ZaAlias.myXModel,this.getMyXForm());
+	this._helpURL = ZaEditAliasXDialog.helpURL;
 }
 
 ZaEditAliasXDialog.prototype = new ZaXDialog;
 ZaEditAliasXDialog.prototype.constructor = ZaEditAliasXDialog;
+ZaEditAliasXDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/creating_a_mail_aliases.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+
+
 
 ZaEditAliasXDialog.prototype.getMyXForm = 
 function() {	
@@ -66,6 +72,8 @@ ZaNewAliasXDialog = function(parent,   w, h, title) {
 ZaNewAliasXDialog.prototype = new ZaXDialog;
 ZaNewAliasXDialog.prototype.constructor = ZaNewAliasXDialog;
 ZaNewAliasXDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/creating_a_mail_aliases.htm?locid="+AjxEnv.DEFAULT_LOCALE;
+
+
 
 ZaNewAliasXDialog.prototype.getMyXForm = 
 function() {	
