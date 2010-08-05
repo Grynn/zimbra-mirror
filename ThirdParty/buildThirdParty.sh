@@ -220,6 +220,10 @@ fi
 NONMACLIB="libpcre.so libexpat.so libpopt.so"
 NONMACHEADER="expat.h popt.h"
 
+if [[ $PLAT == "UBUNTU"*"64" || $PLAT == "DEBIAN"*"64" ]]; then
+	NONMACLIB="libpcre.so libexpat.so libpopt.so libperl.so"
+fi
+
 if [ x$RELEASE = "xmain" ]; then
 	LIBREQ="libncurses.$LIBEXT libz.$LIBEXT"
 	HEADERREQ="ncurses.h zlib.h"
