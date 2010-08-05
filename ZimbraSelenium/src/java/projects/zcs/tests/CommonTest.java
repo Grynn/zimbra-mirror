@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -23,25 +24,25 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
-import org.apache.commons.configuration.*;
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.ConfigurationException;
+import org.apache.commons.configuration.PropertiesConfiguration;
 import org.clapper.util.text.HTMLUtil;
-
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+
 import projects.zcs.CoreObjects;
 import projects.zcs.Locators;
 import projects.zcs.PageObjects;
-
 import projects.zcs.clients.ProvZCS;
+
+import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.ZimbraUtil;
-
-import com.zimbra.common.service.ServiceException;
 
 /**
  * @author Raja Rao DV
@@ -226,10 +227,12 @@ public class CommonTest extends SelNGBase {
 			CmdExec("taskkill /f /t /im Safari.exe");
 			CmdExec("taskkill /f /t /im chrome.exe");
 		}
-
+	BufferedWriter out = new BufferedWriter(new FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt"));
+    out.close();
 	}
 
-	public void writeCoverage() throws Exception {
+	public static void writeCoverage() throws Exception {
+		System.out.println("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
 		BufferedWriter out = new BufferedWriter(new FileWriter("test-output\\CODECOVERAGE\\jscoverage.json"));
 		Set<String> keys = FILENAME_TO_COVERAGE.keySet();
 		Iterator itr = keys.iterator();
@@ -238,7 +241,7 @@ public class CommonTest extends SelNGBase {
 			String key = (String) itr.next();
 			jsonString = jsonString + "\"" + key + "\"" + ":{\"coverage\":" + FILENAME_TO_COVERAGE.get(key) + ",\"source\":" + FILENAME_TO_SOURCE.get(key) + "},";
 		}
-	    out.write("{" + jsonString + "}");
+		out.write("{" + jsonString + "}");
 	    out.close();
 	}
 	
@@ -246,15 +249,27 @@ public class CommonTest extends SelNGBase {
 	@AfterSuite(groups = { "always" })
 	public void cleanup() throws Exception {
 		super.stopSeleniumServer();
-		if(config.containsKey("runCodeCoverage") && config.getString("runCodeCoverage").equalsIgnoreCase("yes")) {
-			writeCoverage();
-			}
 	}
 	
 	@AfterClass(groups = { "always" })
 	public void stopSession() throws Exception {
+		BufferedWriter out = new BufferedWriter(new FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt", true));
+		out.write(this.getClass().toString() + "\n");
+	    out.close();
+		System.out.println("Executing AfterClass For " + this.getClass().toString());
+		if(config.containsKey("runCodeCoverage") && config.getString("runCodeCoverage").equalsIgnoreCase("yes")) {
+			writeCoverage();
+		}
 		selenium.stop();
 	}
+	
+	@AfterMethod(groups = { "always" })
+	public void calculateCoverageIfRequired() throws Exception {
+		if(config.containsKey("runCodeCoverage") && config.getString("runCodeCoverage").equalsIgnoreCase("yes")) {
+			calculateCoverage();
+		}
+	}	
+
 
 	/**
 	 * Logs into zimbraAjax and returns zimbra-version
@@ -1132,14 +1147,6 @@ public class CommonTest extends SelNGBase {
 		Thread.sleep(2000);
 	}
 
-	@AfterMethod(groups = { "always" })
-	public void calculateCoverageIfRequired() throws Exception {
-		if(config.containsKey("runCodeCoverage") && config.getString("runCodeCoverage").equalsIgnoreCase("yes")) {
-			calculateCoverage();
-		}
-	}	
-	
-	
 	public static void calculateCoverage() throws Exception {
 		String coverage_string = selenium.getEval(COVERAGE_SCRIPT);
 		JSONObject jsonCoverage = (JSONObject)JSONSerializer.toJSON(coverage_string);
@@ -1157,8 +1164,6 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public static void parseCoverage(String file, JSONObject jsonCoverage) 	{
-		System.out.println("Parsing Coverage ... ");
-
 		JSONObject fileName = jsonCoverage.getJSONObject(file);
 		JSONArray jsonCoverageArray = fileName.getJSONArray("coverage");
 		ArrayList<Integer> coverage = new ArrayList<Integer>();
@@ -1169,8 +1174,6 @@ public class CommonTest extends SelNGBase {
 				coverage.add(Integer.parseInt(jsonCoverageArray.getString(j))) ;
 			}
 		}
-		//System.out.println("fileName: " + file);
-		//System.out.println("Coverage: " + coverage);
 		updateCoverage(file, coverage);
 	}
 
