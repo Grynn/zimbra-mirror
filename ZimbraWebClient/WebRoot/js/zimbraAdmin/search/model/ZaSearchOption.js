@@ -225,7 +225,7 @@ function (optionId, height){
 					label: ZaMsg.SearchFilter_Accounts_domainadmin, 
 					align: _LEFT_, labelLocation:_RIGHT_, 
 					onChange: ZaSearchBuilderController.handleOptions,
-					bmolsnr:true,enableDisableChecks:[],visibilityChecks:[]
+					bmolsnr:true,enableDisableChecks:[],visibilityChecks:[], labelWrap:true
 				 } ;
 			basicItems[i-1].items.push( domainAdminObjTypeItem ) ;
 		}
@@ -345,7 +345,7 @@ function (optionId, height){
 			 				trueValue:"TRUE", falseValue:"FALSE",
 			 				align: _LEFT_, labelLocation:_RIGHT_, 
 							onChange: ZaSearchBuilderController.handleOptions,
-							enableDisableChecks:[],visibilityChecks:[] }
+							enableDisableChecks:[],visibilityChecks:[], labelWrap: true }
 		 			]
 		 		},
 		 		{type: _GROUP_, colSpan: "*", numCols: 2, colSize: ["60px", "auto"],
