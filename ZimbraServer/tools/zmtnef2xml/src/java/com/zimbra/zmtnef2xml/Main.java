@@ -16,6 +16,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import net.freeutils.tnef.Attachment;
 import net.freeutils.tnef.Attr;
 import net.freeutils.tnef.GUID;
 import net.freeutils.tnef.MAPIProp;
@@ -897,6 +899,7 @@ public class Main {
 
                 tnefStream = new TNEFInputStream(tnefInput);
                 tnefView = new Message(tnefStream);
+                xmlIndentLevel = 0;
                 outStream.println(toXmlStringBuffer(tnefView));
             } catch (IOException ex) {
                 Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
@@ -921,7 +924,6 @@ public class Main {
      * @throws IOException if an I/O error occurs
      */
     public static StringBuffer toXmlStringBuffer(Message tnef) throws IOException {
-        xmlIndentLevel = 0;
         StringBuffer s = new StringBuffer();
         appendFormattedInfo(s, "<tnef>\n");
         xmlIndentLevel++;
@@ -963,6 +965,42 @@ public class Main {
                 xmlIndentLevel--;
                 appendFormattedInfo(s, "</tnef_attribute>\n");
             }
+        }
+        List <?> attaches = (List <?>) tnef.getAttachments();
+        for (Object thisObj : attaches) {
+            if (! (thisObj instanceof Attachment)) {
+                continue;
+            }
+            Attachment currAttach = (Attachment) thisObj;
+            String fnam = currAttach.getFilename();
+            xmlIndentLevel++;
+            if (fnam == null) {
+                appendFormattedInfo(s, "<attachment>\n");
+            } else {
+                appendFormattedInfo(s, "<attachment filename=\"%s\">\n", fnam);
+            }
+            List <?> attAttribs = (List <?>) currAttach.getAttributes();
+            for (Object attribObj : attAttribs) {
+                if (! (attribObj instanceof Attr)) {
+                    continue;
+                }
+                Attr attAttrib = (Attr) attribObj;
+                String attAttribId = TNEFUtils.getConstName(attAttrib.getClass(),"att", attAttrib.getID());
+                appendFormattedInfo(s, "<tnef_attribute id=\"%s\" type=\"%s\" level=\"%s\" length=\"%s\">\n",
+                        attAttribId,
+                        TNEFUtils.getConstName(attAttrib.getClass(),"atp",attAttrib.getType()),
+                        attAttrib.getLevel(),
+                        attAttrib.getLength());
+                xmlIndentLevel++;
+                appendFormattedInfo(s, "<value>%s</value>\n", attAttrib.getValue());
+                xmlIndentLevel--;
+                appendFormattedInfo(s, "</tnef_attribute>\n");
+            }
+
+            MAPIProps attachMPs = currAttach.getMAPIProps();
+            appendXmlEquiv(s, attachMPs);
+            xmlIndentLevel--;
+            appendFormattedInfo(s, "</attachment>\n");
         }
         xmlIndentLevel--;
         appendFormattedInfo(s, "</tnef>\n");
@@ -1060,7 +1098,15 @@ public class Main {
                     valHex.append(Long.toHexString(intVal));
                 }
             }
-            if (valHex == null) {
+            if (theVal instanceof TNEFInputStream) {
+                TNEFInputStream tnefSubStream = (TNEFInputStream) theVal;
+                Message subTnefView = new Message(tnefSubStream);
+                appendFormattedInfo(s, "<value>\n");
+                xmlIndentLevel++;
+                s.append(toXmlStringBuffer(subTnefView));
+                xmlIndentLevel--;
+                appendFormattedInfo(s, "</value>\n");
+            } else if (valHex == null) {
                 appendFormattedInfo(s, "<value>%s</value>\n", theVal);
             } else {
                 appendFormattedInfo(s, "<value hex=\"%s\">%s</value>\n", valHex, theVal);
