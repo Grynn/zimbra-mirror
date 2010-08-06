@@ -899,7 +899,7 @@ public class BeanUtils {
         ZMailbox mbox = mailbox.getMailbox();
         for (int i = 0; i < folders.length; i++) {
             ZFolder f = mbox.getFolderById(folders[i]);
-            String folderid = f instanceof ZMountpoint ? ((ZMountpoint) f ).getCanonicalRemoteId() : f.getId();
+            String folderid = f instanceof ZMountpoint ? ((ZMountpoint) f ).getCanonicalRemoteId() : folders[i];
             if (sb.length() > 0) sb.append(',');
             sb.append(folderid);
         }
