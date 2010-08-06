@@ -542,6 +542,7 @@ public class InitialSync {
         } catch (ServiceException e) {
             if (e.getCode() != MailServiceException.ALREADY_EXISTS)
                 throw e;
+            OfflineLog.offline.debug("initial: folder already exists (id=" + id + " type=" + type + "): " + name);
             getDeltaSync().syncFolder(elt, id, type);
         }
     }
