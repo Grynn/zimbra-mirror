@@ -11,9 +11,10 @@ endif
 
 ZIMBRA_HOME ?= /opt/zimbra
 
+OPATCH	:= patch -g0 -N -p1 < ../patches/openssl1x.patch;
+
 ifdef BETA
 	include $(HEIMDAL_ROOT)/../beta_versions.def
-	OPATCH	:= patch -g0 -N -p1 < ../patches/openssl1x.patch;
 else
 	include $(HEIMDAL_ROOT)/../versions.def
 endif
