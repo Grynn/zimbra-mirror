@@ -48,6 +48,7 @@ DwtUnits.PCT_UNIT = "%";
 DwtUnits.POINT = "pt";
 
 // pixel widths
-DwtUnits.WIDTH_EM = AjxEnv.isIE ? 9 : 11; // width of "m"
-DwtUnits.WIDTH_SEP = AjxEnv.isIE ? 6 : 8; // width of ", "
-DwtUnits.WIDTH_ELLIPSIS = 15;			 // width of " ... "
+DwtUnits.WIDTH_CHAR		= 5.3;		// width of average name char
+DwtUnits.WIDTH_BOLD		= 6.1;		// width of average bold name char
+DwtUnits.WIDTH_ELLIPSIS	= 10;		// width of AjxStringUtil.ELLIPSIS
+DwtUnits.WIDTH_SEP		= 3;		// width of ", "
