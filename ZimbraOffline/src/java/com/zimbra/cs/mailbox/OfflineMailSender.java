@@ -15,7 +15,6 @@
 package com.zimbra.cs.mailbox;
 
 import java.io.IOException;
-import java.util.Collection;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -23,7 +22,6 @@ import javax.mail.internet.MimeMessage;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.Identity;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mime.ParsedAddress;
@@ -31,7 +29,6 @@ import com.zimbra.cs.mime.ParsedContact;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.FileUploadServlet;
-import com.zimbra.cs.service.FileUploadServlet.Upload;
 import com.zimbra.cs.service.util.ItemId;
 
 public class OfflineMailSender extends MailSender {
@@ -41,15 +38,12 @@ public class OfflineMailSender extends MailSender {
     }
     
     @Override
-    public ItemId sendMimeMessage(OperationContext octxt, Mailbox mbox, Boolean saveToSent, MimeMessage mm,
-        Collection<InternetAddress> newContacts, Collection<Upload> uploads,
-        ItemId origMsgId, String replyType, Identity identity, boolean ignoreFailedAddresses,
-        boolean replyToSender) throws ServiceException {
+    public ItemId sendMimeMessage(OperationContext octxt, Mailbox mbox,
+            MimeMessage mm) throws ServiceException {
         try {
             // for messages that aren't actually *sent*, just go down the standard save-to-sent path
             if (mm.getAllRecipients() == null)
-                return super.sendMimeMessage(octxt, mbox, saveToSent, mm,
-                    newContacts, uploads, origMsgId, replyType, identity, ignoreFailedAddresses, replyToSender);
+                return super.sendMimeMessage(octxt, mbox, mm);
         } catch (MessagingException me) {
             throw ServiceException.FAILURE("could not determine message recipients; aborting mail send", me);
         }
@@ -61,26 +55,26 @@ public class OfflineMailSender extends MailSender {
             authuser = acct;
         try {
             // set the From, Sender, Date, Reply-To, etc. headers
-            updateHeaders(mm, acct, authuser, octxt, null /* don't set originating IP in offline client */, replyToSender, false);
+            updateHeaders(mm, acct, authuser, octxt, null /* don't set originating IP in offline client */, isReplyToSender(), false);
 
             // save as a draft to be sent during sync interval
             ParsedMessage pm = new ParsedMessage(mm, mm.getSentDate().getTime(),
                 mbox.attachmentsIndexingEnabled());
-            if (identity == null)
-                identity = Provisioning.getInstance().getDefaultIdentity(authuser);
-            String identityId = identity == null ? null :
-                identity.getAttr(Provisioning.A_zimbraPrefIdentityId);
+            if (getIdentity() == null)
+                setIdentity(Provisioning.getInstance().getDefaultIdentity(authuser));
+            String identityId = getIdentity() == null ? null :
+                getIdentity().getAttr(Provisioning.A_zimbraPrefIdentityId);
             int draftId = mbox.saveDraft(octxt, pm, Mailbox.ID_AUTO_INCREMENT,
-                (origMsgId != null ? origMsgId.toString(acct) : null), replyType,
+                (getOriginalMessageId() != null ? getOriginalMessageId().toString(acct) : null), getReplyType(),
                 identityId, acct.getId()).getId();
             mbox.move(octxt, draftId, MailItem.TYPE_MESSAGE, DesktopMailbox.ID_FOLDER_OUTBOX);
 
             // we can now purge the uploaded attachments
-            if (uploads != null)
-                FileUploadServlet.deleteUploads(uploads);
+            if (getUploads() != null)
+                FileUploadServlet.deleteUploads(getUploads());
 
             // add any new contacts to the personal address book
-            if (newContacts != null) {
+            if (getSaveContacts() != null) {
                 Mailbox contactMbox = mbox;
                 
                 if (!acct.isFeatureContactsEnabled()) {
@@ -88,7 +82,7 @@ public class OfflineMailSender extends MailSender {
                     
                     contactMbox = MailboxManager.getInstance().getMailboxByAccount(localAcct);
                 }
-                for (InternetAddress iaddr : newContacts) {
+                for (InternetAddress iaddr : getSaveContacts()) {
                     ParsedAddress addr = new ParsedAddress(iaddr);
                     try {
                         ParsedContact pc = new ParsedContact(addr.getAttributes());
