@@ -51,7 +51,7 @@ InboxZero.KEY_OP_CATEGORY = "inboxzero_op_category";
 
 InboxZero.prototype.init = function() {
     // register ops
-    for (id in InboxZero.OPS) {
+    for (var id in InboxZero.OPS) {
         ZmOperation.registerOp("INBOXZERO_"+id);
     }
 
@@ -163,10 +163,27 @@ InboxZero.prototype.onSaveApptSuccess = function(controller, calItem, result) {
 // Protected
 //
 
+// utility
+
+InboxZero.prototype._getActiveInbox = function() {
+    return appCtxt.getById(ZmOrganizer.ID_INBOX) || this._getAccountInbox();
+};
+
+InboxZero.prototype._getAccountInbox = function(account) {
+    account = account || appCtxt.getActiveAccount();
+    var inboxId = [account.id,ZmOrganizer.ID_INBOX].join(":");
+    return appCtxt.getById(inboxId);
+}
+
+InboxZero.prototype._getAccounts = function() {
+    var list = appCtxt.isChildWindow ? parentAppCtxt.accountList : appCtxt.accountList;
+    return list.getAccounts();
+};
+
 // operations
 
 InboxZero.prototype._archive = function(msg, callback) {
-    var inbox = appCtxt.getById(ZmOrganizer.ID_INBOX);
+    var inbox = this._getActiveInbox();
     var archive = inbox.getByName(this.getMessage("archiveFolder"));
     // HACK: needed to ensure current list updates to next message
     this.__selectNext();
@@ -213,7 +230,7 @@ InboxZero.prototype._defer1w = function(msg, callback) {
 };
 
 InboxZero.prototype._deferMove = function(msg, callback) {
-    var inbox = appCtxt.getById(ZmOrganizer.ID_INBOX);
+    var inbox = this._getActiveInbox();
     var deferred = inbox.getByName(this.getMessage("deferFolder"));
     // HACK: needed to ensure current list updates to next message
     this.__selectNext();
@@ -281,23 +298,34 @@ InboxZero.prototype._pollDeferredItems = function() {
     if (!this.__pollCallback) {
         this.__pollCallback = new AjxCallback(this, this._pollDeferredItemsResponse);
     }
-    var inbox = appCtxt.getById(ZmOrganizer.ID_INBOX);
-    var deferred = inbox.getByName(this.getMessage("deferFolder"));
-    if (!deferred) return;
 
-    var params = {
-        jsonObj: {
+    var batchCmd = new ZmBatchCommand(null, null, true);
+
+    var accounts = this._getAccounts();
+    for (var id in accounts) {
+        var inbox = this._getAccountInbox(accounts[id]);
+        var deferred = inbox && inbox.getByName(this.getMessage("deferFolder"));
+        if (!deferred) continue;
+
+        var request = {
             SearchRequest: {
                 _jsns: "urn:zimbraMail",
-                query: [ "inid:",deferred.id," AND ","before:-1minutes" ].join(""),
+                query: [ "inid:\"",deferred.id,"\" AND ","before:-1minutes" ].join(""),
                 types: "message"
             }
-        },
-        asyncMode: true,
-        noBusyOverlay: true,
-        callback: this.__pollCallback
-    };
-    appCtxt.getAppController().sendRequest(params);
+        };
+//        var params = {
+//            jsonObj: request,
+//            asyncMode: true,
+//            noBusyOverlay: true,
+//            callback: this.__pollCallback
+//        };
+        batchCmd.addNewRequestParams(request, this.__pollCallback);
+    }
+
+    if (batchCmd.size() > 0) {
+        batchCmd.run();
+    }
 };
 
 InboxZero.prototype._pollDeferredItemsResponse = function(result) {
@@ -355,8 +383,8 @@ InboxZero.prototype._pollRestoreItemsResponse = function(result) {
         var createdMsgs = created.m = created.m || [];
         for (var i = 0; i < messages.length; i++) {
             var message = messages[i];
-            if (message.l == ZmOrganizer.ID_INBOX) {
-                // HACK: This uses the full msg info form the SearchResponse
+            if (appCtxt.getById(message.l).nId == ZmOrganizer.ID_INBOX) {
+                // HACK: This uses the full msg info from the SearchResponse
                 // HACK: and puts it in the "created" list with the folder
                 // HACK: updated to the inbox. If there are any other fields
                 // HACK: modified on the message, the normal notification
@@ -446,7 +474,7 @@ InboxZero.prototype._handleButton = function(event) {
     }
 
     // are folders created?
-    var inbox = appCtxt.getById(ZmOrganizer.ID_INBOX);
+    var inbox = this._getActiveInbox();
     var archive = inbox.getByName(this.getMessage("archiveFolder"));
     if (!archive) {
         this._createFolders(new AjxCallback(this, method, [this._msg]));
