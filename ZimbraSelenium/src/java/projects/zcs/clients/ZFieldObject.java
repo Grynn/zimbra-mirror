@@ -14,8 +14,9 @@ public class ZFieldObject extends ZObject {
 	}
 
 	public void zType(String objNameOrId, String data) {
-		if (data != "")
-			ZObjectCore(objNameOrId, "type", true, data, "", "1", "");
+		selenium.type(objNameOrId, data);
+//		selenium.commandProcessor.doCommand("doType", data);
+//		selenium.getEval("this.doType(\""+ objNameOrId + "\", \"" + data + "\");");
 	}
 
 	public void zActivateAndType(String objNameOrId, String data) {
