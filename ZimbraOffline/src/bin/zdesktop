@@ -102,6 +102,7 @@ ARGS="$*"
 ZIMBRA_HOME="@install.data.root@"
 JETTY_HOME="@install.app.root@/jetty"
 CONFIGS="${ZIMBRA_HOME}/jetty/etc/jetty.xml"
+#@install.leopard.java.home@
 #@install.linux.java.home@
 
 ##################################################
