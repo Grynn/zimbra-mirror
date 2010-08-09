@@ -264,6 +264,13 @@ public class ZimbraAccount {
 		return (soapClient.selectNode(xpath, index));
 	}
 
+	/**
+	 * Return the last SOAP response
+	 * @return the last SOAP envelope in prettyPrint() string format
+	 */ 
+	public String soapLastResponse() {
+		return (soapClient.responseEnvelope == null ? "null" : soapClient.responseEnvelope.prettyPrint());
+	}
 
 	
 	

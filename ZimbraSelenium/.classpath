@@ -52,5 +52,6 @@
 	<classpathentry kind="lib" path="jars/json-lib-2.3-jdk15.jar"/>
 	<classpathentry kind="lib" path="jars/ezmorph-1.0.6.jar"/>
 	<classpathentry kind="lib" path="jars/commons-beanutils-1.7.jar"/>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/jaxen-1.1.1.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

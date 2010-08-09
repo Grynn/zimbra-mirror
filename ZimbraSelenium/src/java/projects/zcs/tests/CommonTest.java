@@ -42,6 +42,8 @@ import projects.zcs.clients.ProvZCS;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.util.HarnessException;
+import framework.util.ZimbraAdminAccount;
 import framework.util.ZimbraUtil;
 
 /**
@@ -272,26 +274,20 @@ public class CommonTest extends SelNGBase {
 
 
 	/**
-	 * Logs into zimbraAjax and returns zimbra-version
+	 * Gets the zimbra version string from GetVersionInfoRequest (e.g. 6.0.7_GA_2470.UBUNTU8.NETWORK)
 	 * 
 	 * @return Zimbra Version
-	 * @throws ServiceException
+	 * @throws HarnessException
 	 */
-	private String zGetZimbraVersionFromAjax() throws ServiceException {
-		try {
-			openApplication();
-			Thread.sleep(1500);
-			obj.zEditField.zType("Username:", "admin");
-			obj.zPwdField.zType("Password:", "test123");
-			obj.zButton.zClick("class=zLoginButton");
-			// zWaitTillObjectExist("button", page.zLoginpage.zSearchFldr);
-			Thread.sleep(2000);
-			return ZimbraUtil.getZimbraVersion().split(" ")[0];
-		} catch (Exception e) {
-			e.printStackTrace(System.out);
-
-		}
-		return "";
+	private String zGetZimbraVersionFromAjax() throws HarnessException {
+		
+		ZimbraAdminAccount.GlobalAdmin().soapSend("<GetVersionInfoRequest xmlns='urn:zimbraAdmin'/>");
+		String version = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:info", "version");
+		if ( version == null )
+			throw new HarnessException("Unable to determine version from GetVersionInfoResponse "+ ZimbraAdminAccount.GlobalAdmin().soapLastResponse());
+		
+		// The version string looks like 6.0.7_GA_2470.UBUNTU8.NETWORK
+		return (version);
 	}
 
 
