@@ -431,7 +431,6 @@ DwtKeyboardMgr.prototype.__doGrabFocus =
 function(focusObj) {
 
 	if (!focusObj) { return; }
-	if (focusObj == this.__focusObj) { return; }
 	
 	var dwtInputCtrl = (Dwt.instanceOf(focusObj, "DwtInputField") ||
 						Dwt.instanceOf(focusObj, "DwtHtmlEditor") ||
