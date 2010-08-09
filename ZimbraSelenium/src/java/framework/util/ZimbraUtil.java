@@ -3,16 +3,7 @@ package framework.util;
 import framework.core.SelNGBase;
 
 public class ZimbraUtil extends SelNGBase {
-	private static String zimbraVersion = "";
 
-	public static String getZimbraVersion() {
-		// ps: getZimbraVersion is being passed just to trick selenium.call to
-		// return string(because of get*)
-		if (zimbraVersion.equals(""))
-			zimbraVersion = selenium.call("zGetZimbraVersion", "", "getZimbraVersion", false);
-
-		return zimbraVersion;
-	}
 
 	public static String printUnMatchedTextWithIndex(String actual,
 			String expected) {

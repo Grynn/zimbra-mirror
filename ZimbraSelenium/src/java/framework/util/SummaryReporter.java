@@ -65,7 +65,7 @@ public class SummaryReporter implements IReporter {
 				+ SelNGBase.currentBrowserName + " client:"
 				+ System.getenv("COMPUTERNAME") + " server:"
 				+ conf.getString("server") + " zimbra:"
-				+ (CommonTest.ZimbraVersion.split(" ")[0]);
+				+ ZimbraSeleniumProperties.getStringProperty(ZimbraSeleniumProperties.PropZimbraVersion, "unknown");
 		String subject = "SelNG-" + appType.toLowerCase()+" "+testdetails;
 		String bodyfileXpPath = outputfolder;
 		String lines = "\n--------------------------------------------\n";

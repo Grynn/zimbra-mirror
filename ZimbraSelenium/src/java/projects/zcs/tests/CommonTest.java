@@ -8,7 +8,6 @@ import java.io.FileWriter;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -38,13 +37,8 @@ import projects.zcs.CoreObjects;
 import projects.zcs.Locators;
 import projects.zcs.PageObjects;
 import projects.zcs.clients.ProvZCS;
-
-import com.zimbra.common.service.ServiceException;
-
 import framework.core.SelNGBase;
 import framework.util.HarnessException;
-import framework.util.ZimbraAdminAccount;
-import framework.util.ZimbraUtil;
 
 /**
  * @author Raja Rao DV
@@ -127,7 +121,6 @@ public class CommonTest extends SelNGBase {
 		"window.jscoverage_report()\n";
 
 	protected static Map<String, Object> selfAccountAttrs = new HashMap<String, Object>();
-	public static String ZimbraVersion = "";
 
 	public CommonTest() {
 		try {
@@ -222,8 +215,6 @@ public class CommonTest extends SelNGBase {
 		ProvZCS.createAccount("ccuser@testdomain.com");
 		ProvZCS.createAccount("bccuser@testdomain.com");
 		if (!SelNGBase.suiteName.equals("debugSuite")) {
-			ZimbraVersion = zGetZimbraVersionFromAjax();
-			SelNGBase.ZimbraVersion = ZimbraVersion;
 			CmdExec("taskkill /f /t /im iexplore.exe");
 			CmdExec("taskkill /f /t /im firefox.exe");
 			CmdExec("taskkill /f /t /im Safari.exe");
@@ -273,22 +264,6 @@ public class CommonTest extends SelNGBase {
 	}	
 
 
-	/**
-	 * Gets the zimbra version string from GetVersionInfoRequest (e.g. 6.0.7_GA_2470.UBUNTU8.NETWORK)
-	 * 
-	 * @return Zimbra Version
-	 * @throws HarnessException
-	 */
-	private String zGetZimbraVersionFromAjax() throws HarnessException {
-		
-		ZimbraAdminAccount.GlobalAdmin().soapSend("<GetVersionInfoRequest xmlns='urn:zimbraAdmin'/>");
-		String version = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:info", "version");
-		if ( version == null )
-			throw new HarnessException("Unable to determine version from GetVersionInfoResponse "+ ZimbraAdminAccount.GlobalAdmin().soapLastResponse());
-		
-		// The version string looks like 6.0.7_GA_2470.UBUNTU8.NETWORK
-		return (version);
-	}
 
 
 	public void initFramework() {

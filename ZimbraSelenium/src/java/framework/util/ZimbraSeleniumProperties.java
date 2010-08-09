@@ -5,8 +5,15 @@ import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
 import org.apache.commons.configuration.PropertiesConfiguration;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 public class ZimbraSeleniumProperties {
+	Logger logger = LogManager.getLogger(ZimbraSeleniumProperties.class);
+	
+	// Use these strings as arguments for some standard properties, e.g. ZimbraSeleniumProperties.getStringProperty(PropZimbraServer, "default");
+	public static final String PropZimbraVersion = "zimbraserverversion"; 
+	
 	private static ZimbraSeleniumProperties instance = new ZimbraSeleniumProperties();
 	private final String configPropName = "config.properties";
 	private PropertiesConfiguration configProp;
@@ -66,6 +73,9 @@ public class ZimbraSeleniumProperties {
 
 			if (null == configProp)
 				configProp = new PropertiesConfiguration(file);
+			
+			// Set global properties, such as zimbraversion
+			createStandardProperties();
 
 		} catch (Exception ex) {
 			ZimbraSeleniumLogger.mLog.error("Exception : " + ex);
@@ -88,6 +98,11 @@ public class ZimbraSeleniumProperties {
 		configProp.setProperty("zsMsg", ResourceBundle.getBundle(
 				"framework.locale.ZsMsg", new Locale(locale)));
 
+	}
+
+	private void createStandardProperties() {
+		if ( !configProp.containsKey(PropZimbraVersion) )
+			configProp.setProperty(PropZimbraVersion, zimbraGetVersionString());
 	}
 
 	private PropertiesConfiguration createDefaultProperties() {
@@ -158,6 +173,25 @@ public class ZimbraSeleniumProperties {
 			return getClassContext()[1];
 		}
 	}
+
+	private String zimbraGetVersionString() {
+		
+		try {
+		
+			ZimbraAdminAccount.GlobalAdmin().soapSend("<GetVersionInfoRequest xmlns='urn:zimbraAdmin'/>");
+			String version = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:info", "version");
+			if ( version == null )
+				throw new HarnessException("Unable to determine version from GetVersionInfoResponse "+ ZimbraAdminAccount.GlobalAdmin().soapLastResponse());
+			
+			// The version string looks like 6.0.7_GA_2470.UBUNTU8.NETWORK
+			return (version);
+			
+		} catch (HarnessException e) {
+			logger.error("Unable to send GetVersionInfoRequest", e);
+			return ("unknown");
+		}
+	}
+
 
 	// for unit test need to change access to public
 	private static void main(String[] args) {

@@ -61,7 +61,6 @@ public class CommonTest extends SelNGBase {
 	public static Locators locator;
 
 	protected static Map<String, Object> selfAccountAttrs = new HashMap<String, Object>();
-	public static String ZimbraVersion = "";
 
 	public CommonTest() {
 		conf = ZimbraSeleniumProperties.getConfigProperties();
@@ -98,31 +97,6 @@ public class CommonTest extends SelNGBase {
 			selfAccountAttrs = accntAttrs;
 			selfAccountName = page.zLoginpage.zLoginToZimbraHTML(accntAttrs);
 		}
-	}
-
-	/**
-	 * Logs into zimbraAjax and returns zimbra-version
-	 *
-	 * @return Zimbra Version
-	 * @throws ServiceException
-	 */
-	private String zGetZimbraVersionFromAjax() throws ServiceException {
-		try {
-			openApplication();
-			Thread.sleep(1500);
-			obj.zEditField.zType("Username:", "admin");
-			obj.zPwdField.zType("Password:", "test123");
-			obj.zButton.zClick("class=zLoginButton");
-			Thread.sleep(2000);// without this we get permission denied error
-			obj.zButton.zExists("id=zb__Search__MENU_left_icon");
-			Thread.sleep(2000);// wait another 2 secs after we see the search
-			// icon
-			return ZimbraUtil.getZimbraVersion().split(" ")[0];
-		} catch (Exception e) {
-			e.printStackTrace(System.out);
-
-		}
-		return "";
 	}
 
 	public static boolean zWaitForElement(String elementId) {
@@ -182,9 +156,6 @@ public class CommonTest extends SelNGBase {
 		startSeleniumServer();
 		ProvZCS.createAccount("ccuser@testdomain.com");
 		ProvZCS.createAccount("bccuser@testdomain.com");
-		if (SelNGBase.suiteName.equals("fullSuite")) {
-			SelNGBase.ZimbraVersion = zGetZimbraVersionFromAjax();
-		}
 
 	}
 

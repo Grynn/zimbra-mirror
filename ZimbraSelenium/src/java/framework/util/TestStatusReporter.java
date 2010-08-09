@@ -17,7 +17,6 @@ import framework.core.SelNGBase;
 public class TestStatusReporter extends TestListenerAdapter {  
    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd H:m:s");
    private Calendar cl = Calendar.getInstance();
-   private  String zimbraVersion = "";
    private String productName = "";
    private String locale = "";
    private String serverName = "";   
@@ -59,8 +58,6 @@ public class TestStatusReporter extends TestListenerAdapter {
 	  if(SelNGBase.suiteName.equals("debugSuite"))//ignore reporting when debugging
 		 return false;
 
-	  if(zimbraVersion == "")
-		  zimbraVersion = SelNGBase.ZimbraVersion.split(" ")[0];
 	  if(productName == "")
 		  productName = "Zimbra-"+SelNGBase.appType.toLowerCase();
 	  if(locale == "")
@@ -74,7 +71,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 	        // Construct data
 	        String data = URLEncoder.encode("tc_name", "UTF-8") + "=" + URLEncoder.encode(tc_name, "UTF-8");
 	        data += "&" + URLEncoder.encode("product", "UTF-8") + "=" + URLEncoder.encode(productName, "UTF-8");
-	        data += "&" + URLEncoder.encode("build", "UTF-8") + "=" + URLEncoder.encode(zimbraVersion, "UTF-8");
+	        data += "&" + URLEncoder.encode("build", "UTF-8") + "=" + URLEncoder.encode(ZimbraSeleniumProperties.getStringProperty(ZimbraSeleniumProperties.PropZimbraVersion, "unknown"), "UTF-8");
 	        data += "&" + URLEncoder.encode("intl", "UTF-8") + "=" + URLEncoder.encode(locale, "UTF-8");
 	        data += "&" + URLEncoder.encode("date", "UTF-8") + "=" + URLEncoder.encode(datetime, "UTF-8");
 	        data += "&" + URLEncoder.encode("browser", "UTF-8") + "=" + URLEncoder.encode(SelNGBase.currentBrowserName.trim(), "UTF-8");

@@ -38,7 +38,6 @@ public class SelNGBase {
 	public static String selfAccountName = "";
 	public static String someting = " ";
 	public static String appType = "AJAX";
-	public static String ZimbraVersion = "";
 	public static String suiteName = "";
 	public static long SMALL_WAIT = 1000;
 	public static long MEDIUM_WAIT = 2000;
