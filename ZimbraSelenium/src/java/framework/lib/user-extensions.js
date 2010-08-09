@@ -1,3 +1,34 @@
+Selenium.prototype.doCallFunctions = function(completeFunction) {
+	/**
+	 *Calls other javascript functions that are passed in string format
+	 * e.g: "this.doClickZFolder(\"Inbox\",\"verify_fldr:=zti|Mail|2\")"
+	 *
+	 * @param completeFunction Pass the complete function
+	 */
+	 /*
+	//open log window and set start logging
+	if (LOG.getLogWindow() == null) {
+		LOG.show();
+		LOG.setLogLevelThreshold(3);
+		this.doWaitForPopUp(LOG.getLogWindow(), 5000);
+	}
+	*/
+
+	return eval( "("+  completeFunction + ")");
+
+
+};
+
+Selenium.prototype.pause = function (millis)
+{
+	var date = new Date();
+	var curDate = null;
+
+	do {
+		curDate = new Date();
+	} while (curDate - date < millis);
+}
+
 //BUTTON FUNCTIONS......
 Selenium.prototype.doClickZButton = function(locator, param1, param2) {
 	return Selenium.decorateFunctionWithTimeout(fnBind(this.buttonCore, this.browserbot, locator, "click",  param1, param2), 30000);
@@ -62,10 +93,363 @@ Selenium.prototype.isZMenuItemDisabled = function(locator, param1, param2) {
 	return this.menuItemCore(locator, "disabled",  param1, param2);
 };
 
+Selenium.prototype.doShiftClickZButton = function(locator, verifyParam) {
+	/**
+	 * Shift Clicks zimbra button
+	 *
+	 * @param locator button label
+	 * @param verifyParam verify_text verify_btn verify_tab verify_dlg verify_view verify_menu verify_tbl verify_fldr
+	 */
+	
+	this.browserbot.shiftKeyDown = true;
+	this.doClickZButton(locator, verifyParam);
+	this.browserbot.shiftKeyDown = false;
 
-//////////////////////////////////////////////////////////////////////////////
-// All the commands from here are probably not used at all and can be removed
-//////////////////////////////////////////////////////////////////////////////
+};
+
+Selenium.prototype.doCtrlClickZButton = function(locator, verifyParam) {
+	/**
+	 *  Clicks zimbra button with control-btn down
+	 *
+	 * @param locator button label
+	 * @param verifyParam verify_text verify_btn verify_tab verify_dlg verify_view verify_menu verify_tbl verify_fldr
+	 */
+	
+	this.browserbot.controlKeyDown = true;
+	this.doClickZButton(locator, verifyParam);
+	this.browserbot.controlKeyDown = false;
+
+};
+
+Selenium.prototype.doClickZMail = function(mailSubject, verifyParam) {
+	/**
+	 * Clicks zimbra mail
+	 *
+	 * @param mailSubject subject of the mail
+	 * @param verifyParam verify_msgBdyInHyb
+	 */
+
+	var element = this.findZMail(mailSubject);
+	this.clickZElement(element);
+	if (verifyParam.indexOf(":=") >= 0)
+		return this._addWaitDecorator(verifyParam);
+};
+
+Selenium.prototype.doDblClickZMail = function(mailSubject, verifyParam) {
+	/**
+	 * Double clicks zimbra mail
+	 *
+	 * @param mailSubject subject of the mail
+	 * @param verifyParam verify_msgBdyInConv
+	 */
+
+	var element = this.findZMail(mailSubject);
+	this.doubleclickZElement(element);
+	if (verifyParam.indexOf(":=") >= 0)
+		return this._addWaitDecorator(verifyParam);
+};
+
+Selenium.prototype.doClickZHTMLButton = function(locator, verifyParam) {
+	/**
+	 * Clicks zimbra(HTML) button
+	 *
+	 * @param locator button label
+	 * @param verifyParam verify_text verify_btn verify_tab verify_dlg verify_view verify_menu verify_tbl verify_fldr
+	 */
+
+	var element = this.browserbot.findElement(locator);
+	this.browserbot.clickElement(element);
+	if (verifyParam.indexOf(":=") >= 0)
+		return this._addWaitDecorator(verifyParam);
+};
+
+Selenium.prototype.doZTextAreaSet = function(name, value) {
+	/**
+	 * Clicks zimbra button
+	 *
+	 * @param name Textarea field label(text near the field)
+	 * @param value Textarea field value
+	 */
+
+	this._setText(name, value, "textarea","textarea", 1);
+};
+
+Selenium.prototype.doZCheckboxSet = function(name) {
+	/**
+	 * Clicks zimbra button
+	 *
+	 * @param name Textarea field label(text near the field)
+	 */
+
+	var element = this.findZFormObject(name, "input", "checkbox", 1);
+	element.checked=true;
+};
+
+Selenium.prototype.doZEditSet = function(name, value) {
+	/**
+	 * Clicks zimbra button
+	 *
+	 * @param name field label(text near the field)
+	 * @param value field value
+	 */
+
+	this._setText(name, value, "input", "text");
+};
+
+Selenium.prototype.doZPasswordEditSet = function(name, value) {
+	/**
+	 * Clicks zimbra button
+	 *
+	 * @param name field label(text near the field)
+	 * @param value field value
+	 */
+
+	this._setText(name, value, "input", "password");
+};
+
+Selenium.prototype._setText = function(name, value, tag, type) {
+	var element = this.findZFormObject(name, tag, type);
+	if (this.browserbot.shiftKeyDown)
+		value = new String(value).toUpperCase();
+	this.browserbot.replaceText(element, value);
+};
+
+Selenium.prototype.doClickZIconButton = function(locator, verifyParam) {
+	/**
+	 * Clicks Zimbra Icon button
+	 *
+	 * @param locator button virtual name.
+	 * @param verifyParam verify_text verify_btn verify_tab verify_dlg verify_view verify_menu verify_tbl verify_fldr
+	 */
+	if (locator == "Detach")
+		var className = "ImgOpenInNewWindow";
+
+	var element = this.findZIconButton(className);
+	this.clickZElement(element);
+
+
+	if (verifyParam.indexOf(":=") >= 0)
+		return this._addWaitDecorator(verifyParam);
+
+};
+
+Selenium.prototype.doOpenMailOrComposeInNewWindow = function(locator, verifyParam) {
+	/**
+	 * Clicks on Detach button to open  a new window
+	 *
+	 * @param locator button virtual name(Detach).
+	 * @param verifyParam verify_text verify_btn verify_tab verify_dlg verify_view verify_menu verify_tbl verify_fldr
+	 */
+	
+	if(locator.indexOf("=")>0) {	
+		var element = this.browserbot.findElementOrNull(locator);
+	} else {
+		if (locator == "Detach") {
+		var className = "ImgOpenInNewWindow";
+	var element = this.findZIconButton(className);
+		}
+	}
+	this.doShiftClickZButton(locator, "");
+	this.doSelectWindow("_blank");
+
+	if (verifyParam.indexOf(":=") >= 0)
+		return this._addWaitDecorator(verifyParam);
+
+};
+
+Selenium.prototype.doOpenZmAjaxClient = function() {
+	/**
+	 * Opens Zimbra if senium is deployed within Zimbra Server(only for Selenium CORE)
+	 *
+	 */
+	var loc = this.browserbot.getCurrentWindow().document.location;
+	this.doOpen(loc.protocol + "//" + loc.host);
+}
+Selenium.prototype.doZVerifyTitle = function(locator) {
+	/**
+	 * Verifies if title *contains* a string
+	 *
+	 * @param locator partial or full window title
+	 */
+	var title = this.browserbot.getTitle();
+
+	Assert.contains(locator, title);
+
+	/*
+	if((locator.indexOf(title)>=0) || (title.indexOf(locator)>=0)) {
+		 //return new PredicateResult(true, "Actual value '" + locator  + "' did match '" + title + "'");
+		Assert.matches(title, locator);
+	} else {
+		Assert.fail("Actual Title: " + title);
+	 // return new PredicateResult(false, "Actual value '" + locator + "' did not match '" + title + "'");
+	}*/
+
+};
+
+Selenium.prototype.doCloseDlgIfExists = function(dlgNameCommaBtnName) {
+	/**
+	 * Closes zimbra Dialog by clicking on a button iff dialog exists. timeout 3Seconds
+	 *
+	 * @param dlgNameCommaBtnName dialog name comma button name
+	 */
+	var arry = dlgNameCommaBtnName.split(",");
+	var buttonName, dialogName;
+	(arry[0] != undefined) ? dialogName = arry[0] : dialogName = "";
+	(arry[1] != undefined) ? buttonName = arry[1] : buttonName = "";
+
+	return Selenium.decorateFunctionWithTimeout(fnBind(this._closeDlgIfExists, this, dlgNameCommaBtnName), 3000);
+
+
+}
+Selenium.prototype.doClickZButtonInDlg = function(btnNameCommaDlgName, verifyParam) {
+	/**
+	 * Clicks Zimbra button in a dialog
+	 *
+	 * @param btnNameCommaDlgName button name comma dialog name
+	 * @param verifyParam verify_text verify_btn verify_tab verify_dlg verify_view verify_menu verify_tbl verify_fldr
+	 */
+	var arry = btnNameCommaDlgName.split(",");
+	var buttonName, dialogName;
+	(arry[0] != undefined) ? buttonName = arry[0] : buttonName = "";
+	(arry[1] != undefined) ? dialogName = arry[1] : dialogName = "";
+	var element = this.findZButtonInDlg(buttonName, dialogName);
+	this.clickZElement(element);
+
+	if (verifyParam.indexOf(":=") >= 0)
+		return this._addWaitDecorator(verifyParam);
+
+};
+
+
+
+Selenium.prototype._addWaitDecorator = function(verifyParam) {
+	/**
+	 *   (private)Adds a wait decorator
+	 *
+	 * @param verifyParam verify_text verify_btn verify_tab verify_dlg verify_view verify_menu verify_tbl verify_fldr
+	 */
+
+	var txt = verifyParam.split(":=")[1];
+	if (verifyParam.indexOf("verify_text:=") >= 0) {
+		return Selenium.decorateFunctionWithTimeout(fnBind(this._verifyZText, this, txt), 30000);
+	} else if (verifyParam.indexOf("verify_btn:=") >= 0) {
+		return Selenium.decorateFunctionWithTimeout(fnBind(this._verifyZButton, this, txt), 30000);
+	} else if (verifyParam.indexOf("verify_tab:=") >= 0) {
+		return Selenium.decorateFunctionWithTimeout(fnBind(this._verifyZTab, this, txt), 30000);
+	} else if (verifyParam.indexOf("verify_dlg:=") >= 0) {
+		return Selenium.decorateFunctionWithTimeout(fnBind(this._verifyZDialog, this, txt), 30000);
+	} else if (verifyParam.indexOf("verify_view:=") >= 0) {
+		return Selenium.decorateFunctionWithTimeout(fnBind(this._verifyZview, this, txt), 30000);
+	} else if (verifyParam.indexOf("verify_menu:=") >= 0) {
+		return Selenium.decorateFunctionWithTimeout(fnBind(this._verifyZMenuWithMenuItem, this, txt), 30000);
+	} else if (verifyParam.indexOf("verify_tbl:=") >= 0) {//table id
+		return Selenium.decorateFunctionWithTimeout(fnBind(this._verifyZTable, this, txt), 30000);
+	} else if (verifyParam.indexOf("verify_fldr:=") >= 0) {
+		return Selenium.decorateFunctionWithTimeout(fnBind(this._verifyZFolder, this, txt), 30000);
+	} else if (verifyParam.indexOf("verify_displayed:=") >= 0) {
+		return Selenium.decorateFunctionWithTimeout(fnBind(this._verifyZDisplayed, this, txt), 30000);
+	} else if (verifyParam.indexOf("verify_msgBdyInHyb:=") >= 0) {
+		return Selenium.decorateFunctionWithTimeout(fnBind(this._verifyMsgBdyInHyb, this, txt), 30000);
+	} else if (verifyParam.indexOf("verify_msgBdyInConv:=") >= 0) {
+		return Selenium.decorateFunctionWithTimeout(fnBind(this._verifyZmsgBdyInConv, this, txt), 30000);
+	}
+
+}
+
+Selenium.prototype.doClickZTab = function(locator, verifyParam) {
+	/**
+	 * Waits for Zimbra Tab
+	 *
+	 * @param locator tab label
+	 * @param verifyParam verify_text verify_btn verify_tab verify_dlg verify_view verify_menu verify_tbl verify_fldr
+	 */
+	var element = this.findZTab(locator);
+	this.clickZElement(element);
+
+	if (verifyParam.indexOf(":=") >= 0)
+		return this._addWaitDecorator(verifyParam);
+
+};
+
+
+Selenium.prototype.doCallFunctions = function(completeFunction) {
+	/**
+	 *Calls other javascript functions that are passed in string format
+	 * e.g: "this.doClickZFolder(\"Inbox\",\"verify_fldr:=zti|Mail|2\")"
+	 *
+	 * @param completeFunction Pass the complete function
+	 */
+	 /*
+	//open log window and set start logging
+	if (LOG.getLogWindow() == null) {
+		LOG.show();
+		LOG.setLogLevelThreshold(3);
+		this.doWaitForPopUp(LOG.getLogWindow(), 5000);
+	}
+	*/
+
+	return eval( "("+  completeFunction + ")");
+
+
+};
+
+Selenium.prototype.getStrFunctions = function(completeFunction) {
+	/**
+	 *Calls other javascript functions that are passed in string format
+	 * e.g: "this.doClickZFolder(\"Inbox\",\"verify_fldr:=zti|Mail|2\")"
+	 *
+	 * @param completeFunction Pass the complete function
+	 */
+	return eval( "("+  completeFunction + ")");
+
+
+};
+
+
+
+Selenium.prototype.doGoToAppln = function(appln, verifyParam) {
+	/**
+	 * Navigates to an application
+	 *
+	 * @param appln can be Calendar,Address Book,Tasks,Documents,Preferences,Mail
+	 * @param verifyParam  can be verify_text verify_btn verify_tab verify_dlg verify_view verify_menu verify_tbl verify_fldr
+	 */
+	var func;
+	var element = this.findZAppTab(appln);
+	this.clickZElement(element);
+
+	switch (appln) {
+		case "Calendar":
+			func = "this._isCalLoaded";
+			break;
+		case "Address Book":
+			func = "this._isABLoaded";
+			break;
+		case "Tasks":
+			func = "this._isTasksLoaded";
+			break;
+		case "Documents":
+			func = "this._isDocLoaded";
+			break;
+		case "Preferences":
+			func = "this._isPrefLoaded";
+			break;
+		case "Mail":
+			func = "this._isMailLoaded";
+			break;
+	}
+
+	return Selenium.decorateFunctionWithTimeout(fnBind(eval(func), this), 30000);
+
+};
+Selenium.prototype._isCalLoaded = function() {
+	/**
+	 * (private)Verifies if calendar is loaded
+	 *
+	 */
+	return this.isCalLoaded();
+};
+
 
 Selenium.prototype._isABLoaded = function() {
 	/**
@@ -219,12 +603,38 @@ Selenium.prototype._verifyZText = function(text) {
 	return this.verifyZText(text);
 };
 
-//////////////////////////////////////////////////////////////////////////////
-// all the commands till here are probably not used at all and can be removed
-//////////////////////////////////////////////////////////////////////////////
+
+Selenium.prototype.doOpen = function(url) {
+    /**
+   * Opens an URL in the test frame. This accepts both relative and absolute
+   * URLs.
+   *
+   * The &quot;open&quot; command waits for the page to load before proceeding,
+   * ie. the &quot;AndWait&quot; suffix is implicit.
+   *
+   * <em>Note</em>: The URL must be on the same domain as the runner HTML
+   * due to security restrictions in the browser (Same Origin Policy). If you
+   * need to open an URL on another domain, use the Selenium Server to start a
+   * new browser session on that domain.
+   *
+   * @param url the URL to open; may be relative or absolute
+   */
+	if (url == "http://zimbraAjax") {
+		var loc = this.browserbot.getCurrentWindow().document.location;
+		url = loc.protocol + "//" + loc.host;
+	}
+
+    this.browserbot.openLocation(url);
+    if (window["proxyInjectionMode"] == null || !window["proxyInjectionMode"]) {
+        return this.makePageLoadCondition();
+    } // in PI mode, just return "OK"; the server will waitForLoad
+};
 
 Selenium.prototype.doSetupZVariables = function() {
+	this.browserbot.rightClick = false;
 	this.browserbot._browserName  = this.zGetBrowserName();//set browsername
+	this.browserbot.totalDivs_CSV = "";
+	this.browserbot.totalDivsCount = 0;
 	this.browserbot.totalElements_CSV = "";
 	this.browserbot.verifyingObjIds_CSV = "";
 	this.browserbot.timetaken_CSV = "";
@@ -958,7 +1368,7 @@ Selenium.prototype.rightClickZElement = function(element) {
 };
 
 Selenium.prototype.getShellChildNodes = function() {
-	var win = this.browserbot.getCurrentWindow();
+		var win = this.browserbot.getCurrentWindow();
 	var inDocument = win.document;
 	if(inDocument.getElementById("z_shell") != undefined) //zimbraajax
 		return inDocument.getElementById("z_shell").childNodes;
@@ -3283,4 +3693,5 @@ custom_Safari_fireEventOnElement = function(eventType, element, clientX, clientY
         selenium.browserbot.triggerMouseEvent(element, eventType, true, clientX, clientY, button);
 
     }
+
 };
