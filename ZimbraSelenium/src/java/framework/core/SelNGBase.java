@@ -93,29 +93,13 @@ public class SelNGBase {
 		LONG_WAIT = ZimbraSeleniumProperties.getIntProperty("long_wait", 4000);
 		VERY_LONG_WAIT = ZimbraSeleniumProperties.getIntProperty("very_long_wait", 10000);
 
-		String serverMachineName = ZimbraSeleniumProperties.getStringProperty("serverMachineName");
-		Integer serverPort = Integer.parseInt(ZimbraSeleniumProperties.getStringProperty("serverPort", "4444"));
-		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
-		String browserVersion = ZimbraSeleniumProperties.getStringProperty("browserVersion");
-		
-		if (serverMachineName.toLowerCase().equals("sauceondemand")){
-			serverMachineName = "ondemand.saucelabs.com";
-			serverPort = 80;
-			String browserFinal = "{\"username\": \"" + ZimbraSeleniumProperties.getStringProperty("sauceUsername") + "\"," +
-						          "\"access-key\": \"" + ZimbraSeleniumProperties.getStringProperty("sauceAccessKey") + "\"," +
-						          "\"os\": \"" + ZimbraSeleniumProperties.getStringProperty("OS", "Windows 2003") + "\"," +
-						          "\"browser\": \"" + browser + "\"," +
-						          "\"browser-version\": \"" + browserVersion + "\"," +
-			/* TODO: Adding the job name would be useful for finding the test videos in OnDemand
-						          "\"job-name\": \"" + 	Current method or class name + "\"," +  */
-						          "\"user-extensions-url\": \"http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":8080/user-extensions.js\"}";
-			browser = browserFinal;
-		};
 
-		selenium = new ZimbraSelenium(serverMachineName, 
-									  serverPort,
-									  browser,
-									  getBaseURL());
+		selenium = new ZimbraSelenium(
+				SeleniumService.getInstance().getSeleniumServer(), 
+				SeleniumService.getInstance().getSeleniumPort(),
+				SeleniumService.getInstance().getSeleniumBrowser(),
+				getBaseURL());
+		
 		selenium.start();
 		selenium.windowMaximize();
 		selenium.windowFocus();
@@ -127,32 +111,19 @@ public class SelNGBase {
 
 	public static void customLogin(String parameter) {
 
-		String serverMachineName = ZimbraSeleniumProperties.getStringProperty("serverMachineName");
-		Integer serverPort = Integer.parseInt(ZimbraSeleniumProperties.getStringProperty("serverPort", "4444"));
-		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
-		String browserVersion = ZimbraSeleniumProperties.getStringProperty("browserVersion");
-		
-		if (serverMachineName.toLowerCase().equals("sauceondemand")){
-			serverMachineName = "ondemand.saucelabs.com";
-			serverPort = 80;
-			browser = "{\"username\": \"" + ZimbraSeleniumProperties.getStringProperty("sauceUsername") + "\"," +
-					  "\"access-key\": \"" + ZimbraSeleniumProperties.getStringProperty("sauceAccessKey") + "\"," +
-					  "\"os\": \"" + ZimbraSeleniumProperties.getStringProperty("OS", "Windows 2003") + "\"," +
-			          "\"browser\": \"" + browser + "\"," +
-				      "\"browser-version\": \"" + browserVersion + "\"}";
-			/* TODO: Adding the job name would be useful for finding the test videos in OnDemand
-						          "\"job-name\": \"" + 	Current method or class name + "\"}";  */
-		} else {
-			if (!browser.startsWith("*")){
-				browser = "*" + browser;
-			}
+
+		// TODO: is this needed?  It is not specified in openApplication()
+		String browser = SeleniumService.getInstance().getSeleniumBrowser();
+		if (!browser.startsWith("*")){
+			browser = "*" + browser;
 		}
 
-
-		selenium = new ZimbraSelenium(serverMachineName, 
-									  serverPort,
-									  browser,
-									  ZimbraSeleniumProperties.getStringProperty("mode") + "://" + ZimbraSeleniumProperties.getStringProperty("server")	+ "/" + parameter);
+		selenium = new ZimbraSelenium(
+				SeleniumService.getInstance().getSeleniumServer(), 
+				SeleniumService.getInstance().getSeleniumPort(),
+				SeleniumService.getInstance().getSeleniumBrowser(),
+				ZimbraSeleniumProperties.getStringProperty("mode") + "://" + ZimbraSeleniumProperties.getStringProperty("server")	+ "/" + parameter);
+		
 		selenium.start();
 		selenium.windowMaximize();
 		selenium.windowFocus();
@@ -200,14 +171,5 @@ public class SelNGBase {
 
 	}
 
-	public static void CmdExec(String str) {
-		try {
-			Process p = Runtime.getRuntime().exec(str);
-			p.waitFor();
-			System.out.println(p.exitValue());
-		} catch (Exception err) {
-			err.printStackTrace();
-		}
-	}
 
 }

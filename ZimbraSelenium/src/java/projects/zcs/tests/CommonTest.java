@@ -206,12 +206,6 @@ public class CommonTest extends SelNGBase {
 		SeleniumService.getInstance().startSeleniumServer();
 		ProvZCS.createAccount("ccuser@testdomain.com");
 		ProvZCS.createAccount("bccuser@testdomain.com");
-		if (!SelNGBase.suiteName.equals("debugSuite")) {
-			CmdExec("taskkill /f /t /im iexplore.exe");
-			CmdExec("taskkill /f /t /im firefox.exe");
-			CmdExec("taskkill /f /t /im Safari.exe");
-			CmdExec("taskkill /f /t /im chrome.exe");
-		}
 	//BufferedWriter out = new BufferedWriter(new FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt"));
     //out.close();
 	}

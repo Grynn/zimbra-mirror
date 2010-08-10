@@ -11,11 +11,12 @@ import org.apache.log4j.Logger;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
 
+import framework.util.CommandLine;
 import framework.util.HarnessException;
 import framework.util.ZimbraSeleniumProperties;
 
 public class SeleniumService {
-	Logger logger = LogManager.getLogger(SeleniumService.class);
+	private static Logger logger = LogManager.getLogger(SeleniumService.class);
 
 	
 	public enum SeleniumMode {
@@ -120,7 +121,21 @@ public class SeleniumService {
 		return (mode == m);
 	}
 	
+	public String getSeleniumServer() {
+		return (SeleniumServer);
+	}
 	
+	public int getSeleniumPort() {
+		return (SeleniumPort);
+	}
+	
+	public String getSeleniumBrowser() {
+		return (SeleniumBrowser);
+	}
+	
+	public String getSeleniumBrowserVersion() {
+		return (SeleniumBrowserVersion);
+	}
 	
 	private void stopBrowsers() throws HarnessException {
 		try {
@@ -133,10 +148,10 @@ public class SeleniumService {
 	
 	private void stopBrowsersXP() throws IOException, InterruptedException {
 		if (!SelNGBase.suiteName.equals("debugSuite")) {
-			CmdExec("taskkill /f /t /im iexplore.exe");
-			CmdExec("taskkill /f /t /im firefox.exe");
-			CmdExec("taskkill /f /t /im Safari.exe");
-			CmdExec("taskkill /f /t /im chrome.exe");
+			CommandLine.CmdExec("taskkill /f /t /im iexplore.exe");
+			CommandLine.CmdExec("taskkill /f /t /im firefox.exe");
+			CommandLine.CmdExec("taskkill /f /t /im Safari.exe");
+			CommandLine.CmdExec("taskkill /f /t /im chrome.exe");
 		}
 	}
 
@@ -145,15 +160,12 @@ public class SeleniumService {
 		logger.warn("Implement me!");
 	}
 	
-	private void CmdExec(String command) throws IOException, InterruptedException {
-		Process p = Runtime.getRuntime().exec(command);
-		p.waitFor();
-		logger.debug(command + " - " + p.exitValue());
-	}
 
 	private SeleniumMode mode;
 	private String SeleniumServer;
 	private int SeleniumPort;
+	private String SeleniumBrowser;
+	private String SeleniumBrowserVersion;
 	
 	private SeleniumServer ss;
 
@@ -187,6 +199,8 @@ public class SeleniumService {
 		mode = SeleniumMode.Local;
 		SeleniumServer = ZimbraSeleniumProperties.getStringProperty("serverName", "localhost");
 		SeleniumPort = ZimbraSeleniumProperties.getIntProperty("serverPort", 4444);
+		SeleniumBrowser = ZimbraSeleniumProperties.getStringProperty("browser");
+		SeleniumBrowserVersion = ZimbraSeleniumProperties.getStringProperty("browserVersion");
 
 		if (modeProp.equals(SeleniumMode.Local.toString().toLowerCase())) {
 			
@@ -199,11 +213,22 @@ public class SeleniumService {
 		} else if (modeProp.equals(SeleniumMode.Grid.toString().toLowerCase())) {
 			
 			mode = SeleniumMode.Grid;
+			SeleniumServer = ZimbraSeleniumProperties.getStringProperty("grid.serverMachineName", "tbd.lab.zimbra.com");
+			SeleniumPort = ZimbraSeleniumProperties.getIntProperty("grid.serverMachinePort", 4444);
 		
 		} else if (modeProp.equals(SeleniumMode.SauceLabs.toString().toLowerCase())) {
 			
 			mode = SeleniumMode.SauceLabs;
-			// TODO
+			SeleniumServer = ZimbraSeleniumProperties.getStringProperty("sauce.serverMachineName", "ondemand.saucelabs.com");
+			SeleniumPort = ZimbraSeleniumProperties.getIntProperty("sauce.serverMachinePort", 80);
+			SeleniumBrowser = "{\"username\": \"" + ZimbraSeleniumProperties.getStringProperty("sauceUsername") + "\"," +
+	          "\"access-key\": \"" + ZimbraSeleniumProperties.getStringProperty("sauceAccessKey") + "\"," +
+	          "\"os\": \"" + ZimbraSeleniumProperties.getStringProperty("OS", "Windows 2003") + "\"," +
+	          "\"browser\": \"" + ZimbraSeleniumProperties.getStringProperty("browser") + "\"," +
+	          "\"browser-version\": \"" + ZimbraSeleniumProperties.getStringProperty("browserVersion") + "\"," +
+/* TODO: Adding the job name would be useful for finding the test videos in OnDemand
+	          "\"job-name\": \"" + 	Current method or class name + "\"," +  */
+	          "\"user-extensions-url\": \"http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":8080/user-extensions.js\"}";
 		
 		} else {
 			
