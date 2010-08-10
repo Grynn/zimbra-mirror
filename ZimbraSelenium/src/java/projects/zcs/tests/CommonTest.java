@@ -243,8 +243,8 @@ public class CommonTest extends SelNGBase {
 		//System.out.println("Executing AfterClass For " + this.getClass().toString());
 		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) {
 			writeCoverage();
+			selenium.stop();
 		}
-		selenium.stop();
 	}
 	
 	@AfterMethod(groups = { "always" })
