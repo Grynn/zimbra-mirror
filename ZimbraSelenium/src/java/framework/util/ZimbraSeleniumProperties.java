@@ -25,6 +25,21 @@ public class ZimbraSeleniumProperties {
 				.getString(key, defaultValue));
 	}
 
+	public static String getStringProperty(String key) {
+		return (getStringProperty(key, null));
+	}
+	
+	public static long getIntProperty(String key) {
+		return (getIntProperty(key, 0));
+	}
+
+	public static long getIntProperty(String key, int defaultValue) {
+		String value = ZimbraSeleniumProperties.getInstance().getConfigProp().getString(key, null);
+		if ( value == null )
+			return (defaultValue);
+		return (Integer.parseInt(value));
+	}
+
 	public static ResourceBundle getResourceBundleProperty(String key) {
 		return ((ResourceBundle) ZimbraSeleniumProperties.getInstance()
 				.getConfigProp().getProperty(key));
@@ -214,4 +229,5 @@ public class ZimbraSeleniumProperties {
 		System.out.println(zmMsg.getLocale());
 		ZimbraSeleniumLogger.mLog.debug(zmMsg.getLocale());
 	}
+
 }

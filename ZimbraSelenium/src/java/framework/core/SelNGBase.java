@@ -1,17 +1,5 @@
 package framework.core;
 
-import framework.core.ZimbraSelenium;
-import framework.util.ZimbraSeleniumLogger;
-
-import net.sf.json.JSONArray;
-
-import org.openqa.selenium.server.RemoteControlConfiguration;
-import org.openqa.selenium.server.SeleniumServer;
-
-import org.testng.Assert;
-
-import org.apache.commons.configuration.*;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -21,13 +9,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import net.sf.json.JSONArray;
+
+import org.openqa.selenium.server.RemoteControlConfiguration;
+import org.openqa.selenium.server.SeleniumServer;
+import org.testng.Assert;
+
+import framework.util.ZimbraSeleniumLogger;
+import framework.util.ZimbraSeleniumProperties;
+
 public class SelNGBase {
 
 	protected SeleniumServer ss;
 	public static ZimbraSelenium selenium;
 	public static  String WAIT_FOR_PAGE_LOAD = "30000";
 
-	public static Configuration config = null;
 	public static String currentBrowserName = "";
 	public static HashMap<String, String> expectedValue = new HashMap<String, String>();
 	protected RemoteControlConfiguration rcConfig;
@@ -75,16 +71,16 @@ public class SelNGBase {
 
 	// can be used @beforeTest
 	public void startSeleniumServer() throws Exception {
-		if (config.getString("serverMachineName").toLowerCase().equals("localhost")){
+		if (ZimbraSeleniumProperties.getStringProperty("serverMachineName").toLowerCase().equals("localhost")){
 			CmdExec("taskkill /f /t /im iexplore.exe");
 			CmdExec("taskkill /f /t /im firefox.exe");
 			CmdExec("taskkill /f /t /im Safari.exe");
 			CmdExec("taskkill /f /t /im chrome.exe");
 			rcConfig = new RemoteControlConfiguration();
-			rcConfig.setPort(Integer.parseInt(config.getString("serverPort", "4444")));
+			rcConfig.setPort(Integer.parseInt(ZimbraSeleniumProperties.getStringProperty("serverPort", "4444")));
 			rcConfig.setUserExtensions(new File("src/java/framework/lib/user-extensions.js"));
 			ss = new SeleniumServer(false, rcConfig);
-			if(config.containsKey("runCodeCoverage") && config.getString("runCodeCoverage").equalsIgnoreCase("yes")) {
+			if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) {
 				WAIT_FOR_PAGE_LOAD="90000";
 			}
 
@@ -92,7 +88,7 @@ public class SelNGBase {
 			try{
 				URL stopUrl;
 				stopUrl = new URL("http://localhost:" +
-						config.getString("serverPort", "4444") +
+						ZimbraSeleniumProperties.getStringProperty("serverPort", "4444") +
 						"/selenium-server/driver/?cmd=shutDownSeleniumServer");
 				BufferedReader in = new BufferedReader(new InputStreamReader(stopUrl.openStream()));
 	
@@ -122,12 +118,12 @@ public class SelNGBase {
 
 	// Can be used @aftertest
 	public void stopSeleniumServer() {
-		if (config.getString("serverMachineName").toLowerCase().equals("localhost")){
+		if (ZimbraSeleniumProperties.getStringProperty("serverMachineName").toLowerCase().equals("localhost")){
 			ss.stop();
 			try {
 				URL stopUrl;
 				stopUrl = new URL("http://localhost:" +
-						config.getString("serverPort", "4444") +
+						ZimbraSeleniumProperties.getStringProperty("serverPort", "4444") +
 						"/selenium-server/driver/?cmd=shutDownSeleniumServer");
 				BufferedReader in = new BufferedReader(new InputStreamReader(stopUrl.openStream()));
 		
@@ -160,36 +156,28 @@ public class SelNGBase {
 	public void openApplication(String app_type) {
 		appType = app_type;
 
-		if (config.containsKey("small_wait")) {
-			SMALL_WAIT = Integer.parseInt(config.getString("small_wait"));
-		}
-		if (config.containsKey("medium_wait")) {
-			MEDIUM_WAIT = Integer.parseInt(config.getString("medium_wait"));
-		}
-		if (config.containsKey("long_wait")) {
-			LONG_WAIT = Integer.parseInt(config.getString("long_wait"));
-		}
-		if (config.containsKey("very_long_wait")) {
-			VERY_LONG_WAIT = Integer.parseInt(config
-					.getString("very_long_wait"));
-		}
 
-		String serverMachineName = config.getString("serverMachineName");
-		Integer serverPort = Integer.parseInt(config.getString("serverPort", "4444"));
-		String browser = config.getString("browser");
-		String browserVersion = config.getString("browserVersion");
+		SMALL_WAIT = ZimbraSeleniumProperties.getIntProperty("small_wait", 1000);
+		MEDIUM_WAIT = ZimbraSeleniumProperties.getIntProperty("medium_wait", 2000);
+		LONG_WAIT = ZimbraSeleniumProperties.getIntProperty("long_wait", 4000);
+		VERY_LONG_WAIT = ZimbraSeleniumProperties.getIntProperty("very_long_wait", 10000);
+
+		String serverMachineName = ZimbraSeleniumProperties.getStringProperty("serverMachineName");
+		Integer serverPort = Integer.parseInt(ZimbraSeleniumProperties.getStringProperty("serverPort", "4444"));
+		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
+		String browserVersion = ZimbraSeleniumProperties.getStringProperty("browserVersion");
 		
 		if (serverMachineName.toLowerCase().equals("sauceondemand")){
 			serverMachineName = "ondemand.saucelabs.com";
 			serverPort = 80;
-			String browserFinal = "{\"username\": \"" + config.getString("sauceUsername") + "\"," +
-						          "\"access-key\": \"" + config.getString("sauceAccessKey") + "\"," +
-						          "\"os\": \"" + config.getString("OS", "Windows 2003") + "\"," +
+			String browserFinal = "{\"username\": \"" + ZimbraSeleniumProperties.getStringProperty("sauceUsername") + "\"," +
+						          "\"access-key\": \"" + ZimbraSeleniumProperties.getStringProperty("sauceAccessKey") + "\"," +
+						          "\"os\": \"" + ZimbraSeleniumProperties.getStringProperty("OS", "Windows 2003") + "\"," +
 						          "\"browser\": \"" + browser + "\"," +
 						          "\"browser-version\": \"" + browserVersion + "\"," +
 			/* TODO: Adding the job name would be useful for finding the test videos in OnDemand
 						          "\"job-name\": \"" + 	Current method or class name + "\"," +  */
-						          "\"user-extensions-url\": \"http://" + config.getString("server") + ":8080/user-extensions.js\"}";
+						          "\"user-extensions-url\": \"http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":8080/user-extensions.js\"}";
 			browser = browserFinal;
 		};
 
@@ -208,17 +196,17 @@ public class SelNGBase {
 
 	public static void customLogin(String parameter) {
 
-		String serverMachineName = config.getString("serverMachineName");
-		Integer serverPort = Integer.parseInt(config.getString("serverPort", "4444"));
-		String browser = config.getString("browser");
-		String browserVersion = config.getString("browserVersion");
+		String serverMachineName = ZimbraSeleniumProperties.getStringProperty("serverMachineName");
+		Integer serverPort = Integer.parseInt(ZimbraSeleniumProperties.getStringProperty("serverPort", "4444"));
+		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
+		String browserVersion = ZimbraSeleniumProperties.getStringProperty("browserVersion");
 		
 		if (serverMachineName.toLowerCase().equals("sauceondemand")){
 			serverMachineName = "ondemand.saucelabs.com";
 			serverPort = 80;
-			browser = "{\"username\": \"" + config.getString("sauceUsername") + "\"," +
-					  "\"access-key\": \"" + config.getString("sauceAccessKey") + "\"," +
-					  "\"os\": \"" + config.getString("OS", "Windows 2003") + "\"," +
+			browser = "{\"username\": \"" + ZimbraSeleniumProperties.getStringProperty("sauceUsername") + "\"," +
+					  "\"access-key\": \"" + ZimbraSeleniumProperties.getStringProperty("sauceAccessKey") + "\"," +
+					  "\"os\": \"" + ZimbraSeleniumProperties.getStringProperty("OS", "Windows 2003") + "\"," +
 			          "\"browser\": \"" + browser + "\"," +
 				      "\"browser-version\": \"" + browserVersion + "\"}";
 			/* TODO: Adding the job name would be useful for finding the test videos in OnDemand
@@ -233,29 +221,29 @@ public class SelNGBase {
 		selenium = new ZimbraSelenium(serverMachineName, 
 									  serverPort,
 									  browser,
-									  config.getString("mode") + "://" + config.getString("server")	+ "/" + parameter);
+									  ZimbraSeleniumProperties.getStringProperty("mode") + "://" + ZimbraSeleniumProperties.getStringProperty("server")	+ "/" + parameter);
 		selenium.start();
 		selenium.windowMaximize();
 		selenium.windowFocus();
 		selenium.allowNativeXpath("true");
-		selenium.open(config.getString("mode") + "://"	+ config.getString("server") + "/" + parameter);
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"	+ ZimbraSeleniumProperties.getStringProperty("server") + "/" + parameter);
 	}
 
 	public static String getBaseURL() {
 		if (appType.equals("DESKTOP"))
 			return "http://localhost:7633/zimbra/desktop/zmail.jsp";
 		else if (appType.equals("HTML"))
-			return config.getString("mode") + "://"
-					+ config.getString("server") + "/h/";
+			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+					+ ZimbraSeleniumProperties.getStringProperty("server") + "/h/";
 		else if (appType.equals("MOBILE"))
-			return config.getString("mode") + "://"
-					+ config.getString("server") + "/m/";
-		else if(config.containsKey("runCodeCoverage") && config.getString("runCodeCoverage").equalsIgnoreCase("yes")) 
-			return config.getString("mode") + "://"
-					+ config.getString("server") + "?dev=1";
+			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+					+ ZimbraSeleniumProperties.getStringProperty("server") + "/m/";
+		else if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) 
+			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+					+ ZimbraSeleniumProperties.getStringProperty("server") + "?dev=1";
 			else
-				return config.getString("mode") + "://"
-				+ config.getString("server") + "";
+				return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "";
 	}
 
 	// can be used as @aftermethod
@@ -267,10 +255,6 @@ public class SelNGBase {
 		selenium.close();
 	}
 
-	public static void initFramework(Configuration configfile) {
-		config = configfile;
-
-	}
 
 	protected void fail(String name) {
 		Assert.fail(name);

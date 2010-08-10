@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -227,9 +228,9 @@ public class FilterTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		if (config.getString("locale").equals("en_US")
-				|| config.getString("locale").equals("en_AU")
-				|| config.getString("locale").equals("en_GB")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")) {
 			setFilterConditionsActions(filterName, activeStatus, conditionType,
 					condition11, condition12, conditionValue1, condition21,
 					condition22, conditionValue2, condition31, condition32,
@@ -493,8 +494,8 @@ public class FilterTests extends CommonTest {
 		obj.zButton.zClick(zRunFilterButton);
 		Thread.sleep(2000);
 		obj.zCheckbox.zActivate(zInboxChkBoxInChooseFolderDlg);
-		if (config.getString("browser").equals("FF")
-				|| config.getString("browser").equals("FF3")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("FF")
+				|| ZimbraSeleniumProperties.getStringProperty("browser").equals("FF3")) {
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.chooseFolder));
 		}
@@ -628,8 +629,8 @@ public class FilterTests extends CommonTest {
 		obj.zDialog.zExists(dialogName);
 
 		// Filter name
-		if (config.getString("locale").equals("fr")
-				&& config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+				&& ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			obj.zEditField.zTypeInDlgByName(localize(locator.filterName),
 					filterName, dialogName);
 		} else {

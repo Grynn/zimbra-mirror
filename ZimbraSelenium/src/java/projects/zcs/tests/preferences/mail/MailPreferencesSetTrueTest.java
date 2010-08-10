@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -350,7 +351,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 		obj.zMessageItem.zClick("Postmaster");
 
-		String browser = config.getString("browser");
+		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 
 		if (browser.equals("IE"))
 			Thread.sleep(1000);
@@ -394,7 +395,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 			obj.zMessageItem.zClick(subject);
 
-			String browser = config.getString("browser");
+			String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 			if (browser.equals("IE"))
 				Thread.sleep(1000);
 

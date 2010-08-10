@@ -2,6 +2,8 @@ package projects.zcs.ui;
 
 import org.testng.Assert;
 
+import framework.util.ZimbraSeleniumProperties;
+
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 
@@ -157,10 +159,10 @@ public class TaskApp extends CommonTest {
 		}
 
 		if (!progressPercent.equals("")) {
-			if (config.getString("locale").equals("fr")
-					|| config.getString("locale").equals("sv")
-					|| config.getString("locale").equals("da")
-					|| config.getString("locale").equals("de")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("sv")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("da")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("de")) {
 				obj.zButton.zClick("0 %");
 				progressPercent = progressPercent + " %";
 			} else {
@@ -629,7 +631,7 @@ public class TaskApp extends CommonTest {
 	}
 
 	private static String getSubjectLabel() {
-		if (config.getString("browser").equals("IE"))
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE"))
 			return getNameWithoutSpace(localize(locator.subjectLabel));
 		else
 			return localize(locator.subjectLabel);

@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
 import projects.zcs.clients.ProvZCS;
@@ -94,13 +95,12 @@ public class ABPreference extends CommonTest {
 			handleRetry();
 
 		String contactFoldername = localize(locator.emailedContacts);
-		if (config.getString("locale").equals("fr")
-				|| config.getString("locale").equals("nl")
-				|| config.getString("locale").equals("es")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("es")) {
 			String[] testArray = contactFoldername.split(" ");
 			contactFoldername = testArray[0] + " ...";
-		} else if (!(config.getString("locale").equals("nl") || config
-				.getString("locale").equals("hi"))) {
+		} else if (!(ZimbraSeleniumProperties.getStringProperty("locale").equals("nl") || ZimbraSeleniumProperties.getStringProperty("locale").equals("hi"))) {
 			if (contactFoldername.length() > 16) {
 				String[] testArray = contactFoldername.split(" ");
 				if (testArray[2].length() > 3) {

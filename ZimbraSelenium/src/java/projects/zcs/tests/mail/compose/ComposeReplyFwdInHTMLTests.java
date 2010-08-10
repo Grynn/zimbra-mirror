@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 import com.zimbra.cs.account.Provisioning;
 
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -262,7 +263,7 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 				selenium.isElementPresent("id=zb__App__tab_COMPOSE1"),
 				"Compose Tab is not present");
 		obj.zButton.zClick(localize(locator.cancel));
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			obj.zDialog.zVerifyAlertMessage(localize(locator.warningMsg),
 					localize(locator.askSaveDraft));
 			obj.zButton.zClickInDlg(localize(locator.no));

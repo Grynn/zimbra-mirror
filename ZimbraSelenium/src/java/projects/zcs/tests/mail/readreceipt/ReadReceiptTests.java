@@ -11,6 +11,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -168,7 +169,7 @@ public class ReadReceiptTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		zWaitTillObjectExist("dialog", localize(locator.warningMsg));
-		if (!config.getString("browser").equals("IE")) {
+		if (!ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			assertReport(localize(locator.readReceiptSend).replaceAll("<br>",
 					""), obj.zDialog.zGetMessage(localize(locator.warningMsg)),
 					"Verifying dialog text for notifying read receipt");

@@ -5,6 +5,7 @@ import java.io.File;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
 
@@ -174,10 +175,10 @@ public class ABComposeHtml extends CommonTest {
 	 */
 	public static void zSelectABFolder(String folderName) throws Exception {
 		Thread.sleep(1500);
-		if (config.getString("locale").equals("pl")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")) {
 			obj.zHtmlMenu.zClick(zABFolderId,
 					folderName.substring(0, 8) + ".*", "2");
-		} else if (config.getString("locale").equals("fr")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")) {
 			obj.zHtmlMenu
 					.zClick(zABFolderId, folderName.substring(0, 8) + ".*");
 		} else {
@@ -282,13 +283,12 @@ public class ABComposeHtml extends CommonTest {
 		Thread.sleep(5000);
 
 		String folderToBeClicked = localize(locator.emailedContacts);
-		if (config.getString("locale").equals("fr")
-				|| config.getString("locale").equals("nl")
-				|| config.getString("locale").equals("es")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("es")) {
 			String[] testArray = folderToBeClicked.split(" ");
 			folderToBeClicked = testArray[0] + " ...";
-		} else if (!(config.getString("locale").equals("nl") || config
-				.getString("locale").equals("hi"))) {
+		} else if (!(ZimbraSeleniumProperties.getStringProperty("locale").equals("nl") || ZimbraSeleniumProperties.getStringProperty("locale").equals("hi"))) {
 			if (folderToBeClicked.length() > 16) {
 				String[] testArray = folderToBeClicked.split(" ");
 				if (testArray[2].length() > 3) {
@@ -547,13 +547,12 @@ public class ABComposeHtml extends CommonTest {
 		zSelectABFolder(targetAB);
 		Thread.sleep(1000);
 
-		if (config.getString("locale").equals("fr")
-				|| config.getString("locale").equals("nl")
-				|| config.getString("locale").equals("es")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("es")) {
 			String[] testArray = targetAB.split(" ");
 			targetAB = testArray[0] + " ...";
-		} else if (!(config.getString("locale").equals("nl") || config
-				.getString("locale").equals("hi"))) {
+		} else if (!(ZimbraSeleniumProperties.getStringProperty("locale").equals("nl") || ZimbraSeleniumProperties.getStringProperty("locale").equals("hi"))) {
 			if (targetAB.length() > 16) {
 				String[] testArray = targetAB.split(" ");
 				if (testArray[2].length() > 3) {
@@ -895,7 +894,7 @@ public class ABComposeHtml extends CommonTest {
 	public static void zNavigateToTrashAndVerifyDeletedContacts(
 			String commaSeparatedContacts) throws Exception {
 		String[] contactName = commaSeparatedContacts.split(",");
-		if (config.getString("locale").equals("zh_CN")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 			obj.zFolder.zClick(localize(locator.trash).substring(0, 3));
 		} else {
 			obj.zFolder.zClick(localize(locator.trash));

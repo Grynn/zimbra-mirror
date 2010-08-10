@@ -2,6 +2,7 @@ package projects.zcs.ui;
 
 import org.testng.Assert;
 import framework.core.SelNGBase;
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -38,8 +39,8 @@ public class Sharing extends CommonTest {
 		 * obj.zRadioBtn.zIsDisabled(localize(locator.shareWithUserOrGroup));
 		 * obj.zRadioBtn.zIsDisabled(localize(locator.shareWithGuest));
 		 * obj.zRadioBtn.zIsDisabled(localize(locator.shareWithPublic)); String
-		 * emailLabel = ""; if (config.getString("locale").equals("fr") &&
-		 * config.getString("browser").equals("IE")) emailLabel =
+		 * emailLabel = ""; if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr") &&
+		 * ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) emailLabel =
 		 * localize(locator.email); else emailLabel =
 		 * localize(locator.emailLabel); obj.zEditField.zIsDisabled(emailLabel);
 		 */
@@ -111,15 +112,15 @@ public class Sharing extends CommonTest {
 		if (!invitedusers.equals("")
 				&& !sharetype.equals(localize(locator.shareWithPublicLong))) {
 			String emailLabel = "";
-			if (config.getString("locale").equals("fr")
-					&& config.getString("browser").equals("IE"))
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+					&& ZimbraSeleniumProperties.getStringProperty("browser").equals("IE"))
 				emailLabel = localize(locator.email);
 			else
 				emailLabel = localize(locator.emailLabel);
 
 			if (sharetype.equals(localize(locator.shareWithGuest))
-					&& config.getString("locale").equals("fr")
-					&& config.getString("browser").equals("IE")) {
+					&& ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+					&& ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 				obj.zRadioBtn.zClickInDlgByName(
 						localize(locator.shareWithUserOrGroup),
 						localize(locator.shareProperties));
@@ -164,7 +165,7 @@ public class Sharing extends CommonTest {
 				&& (sharetype.equals(localize(locator.shareWithGuest)))
 				&& (!sharetype.equals(localize(locator.shareWithPublic)))) {
 			
-			if(config.getString("locale").equals("es")){
+			if(ZimbraSeleniumProperties.getStringProperty("locale").equals("es")){
 				selenium.type("xpath=//div[contains(@id,'DWT')]/div[contains(@id,'DWT') and contains(@class,'DwtInputField')]/input", "test123");
 				
 			}else{
@@ -215,8 +216,8 @@ public class Sharing extends CommonTest {
 					 * locator
 					 */
 
-					if (config.getString("locale").equals("fr")
-							&& config.getString("browser").equals("IE")) {
+					if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+							&& ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 						obj.zTextAreaField
 								.zTypeInDlgByName(
 										localize(locator.sendStandardMailAboutSharePlusNote),
@@ -421,10 +422,10 @@ public class Sharing extends CommonTest {
 					"URL text mismatched"
 							+ page.zComposeView.formatExpActValues(
 									lCaseBodyTxt, "URL"));
-			String folderSharedURL = "http://" + config.getString("server")
+			String folderSharedURL = "http://" + ZimbraSeleniumProperties.getStringProperty("server")
 					+ ":80/home/" + currentloggedinuser + "/";
 			/*
-			 * String folderSharedURL = "http://" + config.getString("server") +
+			 * String folderSharedURL = "http://" + ZimbraSeleniumProperties.getStringProperty("server") +
 			 * ":80/home/" + currentloggedinuser + "/" + sharingfoldername;
 			 */
 
@@ -433,7 +434,7 @@ public class Sharing extends CommonTest {
 							+ page.zComposeView.formatExpActValues(
 									lCaseBodyTxt, folderSharedURL));
 
-			if (!config.getString("locale").equals("ru")) {
+			if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("ru")) {
 				String username = localize(locator.usernameLabel);
 				Assert.assertTrue(bodyTxt.indexOf(username) >= 0,
 						"Username text mismatched"

@@ -10,6 +10,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 
@@ -86,9 +87,9 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 			handleRetry();
 
 		subject = getLocalizedData_NoSpecialChar();
-		acc1 = config.getString("locale").replace("_", "")
+		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
 				+ "atte1@testdomain.com";
-		acc2 = config.getString("locale").replace("_", "")
+		acc2 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
 				+ "atte2@testdomain.com";
 		ProvZCS.createAccount(acc1);
 		ProvZCS.createAccount(acc2);
@@ -153,12 +154,12 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 				"Verifying autocomplete value - selected using tab key");
 		obj.zTextAreaField.zActivate(localize(locator.attendeesLabel));
 		pressKeys("ctrl+a");
-		if (config.getString("locale").equals("en_US")
-				|| config.getString("locale").equals("en_GB")
-				|| config.getString("locale").equals("en_AU")
-				|| config.getString("locale").equals("pt_BR")
-				|| config.getString("locale").equals("zh_CN")
-				|| config.getString("locale").equals("zh_HK")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("pt_BR")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_HK")) {
 			pressKeys(first + "," + second + "," + third + "," + fourth + ","
 					+ fifth + "," + sixth + "," + seventh + "," + eighth);
 		} else {
@@ -236,7 +237,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 			handleRetry();
 
 		String actualValue, expectedValue;
-		acc1 = config.getString("locale").replace("_", "")
+		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
 				+ "sche1@testdomain.com";
 		acc1 = acc1.toLowerCase();
 		getKeyboardKeys(acc1);
@@ -251,12 +252,12 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		page.zCalApp.zNavigateToApptCompose();
 		obj.zTab.zClick(localize(locator.schedule));
 		Thread.sleep(1000);
-		if (config.getString("locale").equals("en_US")
-				|| config.getString("locale").equals("en_GB")
-				|| config.getString("locale").equals("en_AU")
-				|| config.getString("locale").equals("pt_BR")
-				|| config.getString("locale").equals("zh_CN")
-				|| config.getString("locale").equals("zh_HK")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("pt_BR")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_HK")) {
 			pressKeys(first + "," + second + "," + third + "," + fourth + ","
 					+ fifth + "," + sixth + "," + seventh + "," + eighth);
 		} else {
@@ -610,12 +611,12 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 	}
 
 	private static void getKeyboardKeys(String accont) throws Exception {
-		if (config.getString("locale").equals("en_US")
-				|| config.getString("locale").equals("en_GB")
-				|| config.getString("locale").equals("en_AU")
-				|| config.getString("locale").equals("pt_BR")
-				|| config.getString("locale").equals("zh_CN")
-				|| config.getString("locale").equals("zh_HK")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("pt_BR")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_HK")) {
 			first = accont.substring(0, 1);
 			second = accont.substring(1, 2);
 			third = accont.substring(2, 3);
@@ -638,12 +639,12 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		zGoToApplication("Calendar");
 		page.zCalApp.zNavigateToApptCompose();
 		obj.zTextAreaField.zActivate(localize(locator.attendeesLabel));
-		if (config.getString("locale").equals("en_US")
-				|| config.getString("locale").equals("en_GB")
-				|| config.getString("locale").equals("en_AU")
-				|| config.getString("locale").equals("pt_BR")
-				|| config.getString("locale").equals("zh_CN")
-				|| config.getString("locale").equals("zh_HK")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("pt_BR")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_HK")) {
 			pressKeys(first + "," + second + "," + third + "," + fourth + ","
 					+ fifth + "," + sixth + "," + seventh + "," + eighth);
 		} else {

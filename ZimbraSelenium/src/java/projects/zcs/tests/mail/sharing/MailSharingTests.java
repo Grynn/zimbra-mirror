@@ -14,6 +14,7 @@ import projects.zcs.ui.ComposeView;
 import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * @author Jitesh Sojitra
@@ -1133,7 +1134,7 @@ public class MailSharingTests extends CommonTest {
 		String toastmsg = localize(locator.actionMove, "2", localize(
 				locator.conversations).toLowerCase(), localize(locator.inbox));
 		Thread.sleep(900);
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			obj.zToastAlertMessage
 					.zAlertMsgExists(toastmsg,
 							"conversations does not moved or draged into required folder");

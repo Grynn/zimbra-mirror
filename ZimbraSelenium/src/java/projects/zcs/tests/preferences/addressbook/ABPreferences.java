@@ -19,6 +19,7 @@ import projects.zcs.ui.ComposeView;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * This covers some high priority test cases related to address book
@@ -100,7 +101,7 @@ public class ABPreferences extends CommonTest {
 
 		obj.zContactListItem.zExists(englishContact);
 
-		String currentLocale = config.getString("locale");
+		String currentLocale = ZimbraSeleniumProperties.getStringProperty("locale");
 		if (currentLocale.equals("ja") || currentLocale.equals("zh_CN")
 				|| currentLocale.equals("ru") || currentLocale.equals("de")
 				|| currentLocale.equals("pl")) {
@@ -133,8 +134,8 @@ public class ABPreferences extends CommonTest {
 		if (actualValue.equals("FALSE")) {
 			String[] autoAddToEmailedContact = localize(locator.autoAddContacts)
 					.split("\"");
-			if (config.getString("locale").equals("ko")
-					|| config.getString("locale").equals("hi")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ko")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("hi")) {
 				obj.zCheckbox.zClick(autoAddToEmailedContact[1]);
 			} else
 				obj.zCheckbox.zClick(autoAddToEmailedContact[0]);
@@ -211,7 +212,7 @@ public class ABPreferences extends CommonTest {
 		keyToPress.keyPress(KeyEvent.VK_ESCAPE);
 		keyToPress.keyRelease(KeyEvent.VK_ESCAPE);
 
-		// if (config.getString("locale").equals("zh_HK")) {
+		// if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_HK")) {
 		// obj.zFeatureMenu.zExistsDontWait(GAL);
 		// Robot keyToPress = new Robot();
 		// keyToPress.keyPress(KeyEvent.VK_ESCAPE);

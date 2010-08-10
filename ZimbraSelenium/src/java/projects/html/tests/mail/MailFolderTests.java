@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
 import projects.zcs.clients.ProvZCS;
@@ -82,7 +83,7 @@ public class MailFolderTests extends CommonTest {
 				renameFldrName);
 		Thread.sleep(SMALL_WAIT);
 		obj.zButton.zClick(page.zMailApp.zCreateFolderBtn); // save changes
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String folderUpdateMsg = obj.zToastAlertMessage.zGetMsg();
 			assertReport(folderUpdateMsg, "Folder Updated",
 					"Verifying folder updataion toast message");
@@ -111,7 +112,7 @@ public class MailFolderTests extends CommonTest {
 		Thread.sleep(MEDIUM_WAIT);
 		page.zMailApp.zCreateFolder(folderName, parentFolder);
 		page.zMailApp.zCreateFolder(folderName, parentFolder);
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String errorMsg = obj.zToastAlertMessage.zGetMsg();
 			assertReport(errorMsg, "Item already exists.",
 					"Verifying duplicate folder creation toast message");
@@ -140,7 +141,7 @@ public class MailFolderTests extends CommonTest {
 		obj.zButton.zClick(page.zMailApp.zCreateFolderBtn); // save changes
 		Thread.sleep(LONG_WAIT);
 		zWaitTillObjectExist("htmlmenu", page.zMailApp.zParentFolderWebList);
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String folderUpdateMsg = obj.zToastAlertMessage.zGetMsg();
 			obj.zToastAlertMessage.zAlertMsgExists("Folder Updated",
 					folderUpdateMsg);
@@ -178,7 +179,7 @@ public class MailFolderTests extends CommonTest {
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
 		Thread.sleep(LONG_WAIT);
 		page.zMailApp.zCreateFolder(folderName, parentFolder);
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String folderCreatedMsg = obj.zToastAlertMessage.zGetMsg();
 			String actualmsg = "Created folder " + (char) 34 + "!@#$"
 					+ (char) 34 + ".";
@@ -210,7 +211,7 @@ public class MailFolderTests extends CommonTest {
 
 		}
 		obj.zButton.zClick(page.zMailApp.zCreateFolderBtn);
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String invalidFolderMsg = obj.zToastAlertMessage.zGetMsg();
 			assertReport(
 					invalidFolderMsg,
@@ -238,7 +239,7 @@ public class MailFolderTests extends CommonTest {
 		obj.zFolder.zClick(localize(locator.inbox));
 		Thread.sleep(MEDIUM_WAIT);
 		obj.zButton.zClick(page.zMailApp.zDeleteAllItemsBtn);
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String folderEmptyMsg = obj.zToastAlertMessage.zGetMsg();
 			assertReport(
 					folderEmptyMsg,
@@ -269,7 +270,7 @@ public class MailFolderTests extends CommonTest {
 		Thread.sleep(MEDIUM_WAIT);
 		obj.zCheckbox.zClick(page.zMailApp.zPermDelMailItemChkBox);
 		obj.zButton.zClick(page.zMailApp.zDeleteAllItemsBtn);
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String folderEmptyMsg = obj.zToastAlertMessage.zGetMsg();
 			assertReport(folderEmptyMsg, "Folder " + (char) 34 + "Inbox"
 					+ (char) 34 + " emptied.",
@@ -299,7 +300,7 @@ public class MailFolderTests extends CommonTest {
 		obj.zFolder.zClick(folderName);
 		Thread.sleep(MEDIUM_WAIT);
 		obj.zButton.zClick(page.zMailApp.zDeleteFolderBtn);
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String deleteFolderMsg = obj.zToastAlertMessage.zGetMsg();
 			assertReport(
 					deleteFolderMsg,
@@ -328,7 +329,7 @@ public class MailFolderTests extends CommonTest {
 		Thread.sleep(MEDIUM_WAIT);
 		obj.zCheckbox.zClick(page.zMailApp.zDeleteThisFolderChkBox);
 		obj.zButton.zClick(page.zMailApp.zDeleteFolderBtn);
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String deleteFolderMsg = obj.zToastAlertMessage.zGetMsg();
 			String currentMsg = "Folder " + (char) 34 + folderName + (char) 34
 					+ " moved to " + (char) 34 + "Trash" + (char) 34;
@@ -341,7 +342,7 @@ public class MailFolderTests extends CommonTest {
 		Thread.sleep(MEDIUM_WAIT);
 		obj.zCheckbox.zClick(page.zMailApp.zDeleteThisFolderChkBox);
 		obj.zButton.zClick(page.zMailApp.zPermDeleteFolderBtn);
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String deleteFolderMsg = obj.zToastAlertMessage.zGetMsg();
 			assertReport(deleteFolderMsg, "Deleted folder " + (char) 34
 					+ folderName + (char) 34,
@@ -445,7 +446,7 @@ public class MailFolderTests extends CommonTest {
 		page.zMailApp.zInjectMessage(ProvZCS.getRandomAccount(),
 				SelNGBase.selfAccountName, "ccuser@testdomain.com", "",
 				subject, subject + "body", "");
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
 		}
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);

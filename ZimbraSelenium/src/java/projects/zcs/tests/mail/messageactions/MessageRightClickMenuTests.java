@@ -12,6 +12,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -277,21 +278,21 @@ public class MessageRightClickMenuTests extends CommonTest {
 							 */
 		obj.zMessageItem.zExists(subject);
 		obj.zMessageItem.zExists(newSubject);
-		if (!config.getString("locale").equals("zh_CN")
-				&& !config.getString("locale").equals("zh_HK")
-				&& !config.getString("locale").equals("fr")
-				&& !config.getString("locale").equals("hi")
-				&& !config.getString("locale").equals("ja")) {
+		if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")
+				&& !ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_HK")
+				&& !ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+				&& !ZimbraSeleniumProperties.getStringProperty("locale").equals("hi")
+				&& !ZimbraSeleniumProperties.getStringProperty("locale").equals("ja")) {
 			String FromValue = obj.zEditField
 					.zGetInnerText(localize(locator.fromLabel));
 			assertReport(from, FromValue,
 					"From user text mismatched in advanced search");
 		}
 
-		if (config.getString("locale").equals("ru")
-				|| config.getString("locale").equals("pl")
-				|| config.getString("locale").equals("sv")
-				|| config.getString("locale").equals("ko")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ru")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("sv")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ko")) {
 			obj.zButton.zClick(localize(locator.close));
 		} else {
 			obj.zButton.zClick(localize(locator.advanced));
@@ -351,7 +352,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		String firstNameValue = obj.zEditField
 				.zGetInnerText(page.zABCompose.zFirstEditField);
 		String emailValue;
-		if (config.getString("locale").equals("ja")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ja")) {
 			emailValue = obj.zEditField
 					.zGetInnerText(page.zABCompose.zEmail1EditField + ":");
 		} else {
@@ -814,7 +815,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		Thread.sleep(1000);
 		verifyShowOriginalMsgBody(showOrigText, from, to, cc, bcc, subject,
 				body);
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			assertReport(showOrigText, localize(locator.received),
 					"Received: text mismatched in show original body");
 		}
@@ -839,8 +840,8 @@ public class MessageRightClickMenuTests extends CommonTest {
 		rightClickOnSubject(subject);
 		obj.zMenuItem.zClick(page.zMailApp.zNewFilterMenuIconBtn);
 		obj.zDialog.zExists(localize(locator.editFilter));
-		if (config.getString("locale").equals("fr")
-				&& config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+				&& ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			obj.zEditField.zTypeInDlg(localize(locator.filterName),
 					"FilterFromMail");
 		} else {
@@ -878,7 +879,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 						subjectValue,
 						subject,
 						"Subject default value mismatched while create filter from mail right click menu");
-		if (config.getString("locale").equals("hi")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("hi")) {
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.editFilter), "2");
 		} else {
@@ -1003,7 +1004,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		Thread.sleep(2000); // failed because of timing issue
 
 		// due to composing preference change, below check fails
-		// if (config.getString("locale").equals("en_US")) {
+		// if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 		// assertReport(bodyValue, localize(locator.fromLabel),
 		// "From: text mismatched in mail body");
 		// assertReport(bodyValue, localize(locator.toLabel),

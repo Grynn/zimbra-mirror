@@ -23,6 +23,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
 import projects.html.clients.ProvZCS;
@@ -44,46 +45,46 @@ public class CalendarMiscTests extends CommonTest {
 					{
 							"day",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=day&date=20081015",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=day&date=20081016",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=day&date=20081014" },
 					{
 							"workWeek",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=workWeek&date=20081015",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=workWeek&date=20081022",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=workWeek&date=20081008" },
 					{
 							"month",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=month&date=20081015",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=month&date=20081115",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=month&date=20080915" },
 					{
 							"week",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=week&date=20081015",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=week&date=20081022",
 							"http://"
-									+ config.getString("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server")
 									+ "/zimbra/h/calendar?view=week&date=20081008" } };
 		} else if (test.equals("zCalendarScheduleView")) {
 			return new Object[][] { { "check" }, { "uncheck" } };
@@ -127,9 +128,9 @@ public class CalendarMiscTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 				
-		String urlInitial =  "http://" + config.getString("server") + "/zimbra/h/calendar";
+		String urlInitial =  "http://" + ZimbraSeleniumProperties.getStringProperty("server") + "/zimbra/h/calendar";
 		
-		String urlToNavigate = "http://" + config.getString("server") + ":80/home/"
+		String urlToNavigate = "http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":80/home/"
 		+ selfAccountName + "?fmt=freebusy";
 		
 		if(null == someting || someting.trim().length() == 0)
@@ -186,7 +187,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		String subject = getLocalizedData_NoSpecialChar();
 		String location = getLocalizedData_NoSpecialChar();
-		String url =  "http://" + config.getString("server") + "/zimbra/h/calendar";
+		String url =  "http://" + ZimbraSeleniumProperties.getStringProperty("server") + "/zimbra/h/calendar";
 		String timezone;
 		
 		//open calendar view
@@ -265,7 +266,7 @@ public class CalendarMiscTests extends CommonTest {
 			handleRetry();
 
 		String expectedMsg;
-		expectedMsg = "http://" + config.getString("server") + ":80/home/"
+		expectedMsg = "http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":80/home/"
 				+ selfAccountName + "?fmt=freebusy";
 
 		page.zCalFolderApp.zNavigateToCalendarFoldersPage();
@@ -306,8 +307,8 @@ public class CalendarMiscTests extends CommonTest {
 
 		String dateToNavigate = sdf.format(testcal.getTime());
 
-		String urlToNavigate = config.getString("mode") + "://"
-				+ config.getString("server") + "/zimbra/h/calendar?view="
+		String urlToNavigate = ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/zimbra/h/calendar?view="
 				+ view + "&date=" + dateToNavigate;
 
 		page.zCalendarApp.zCreateSimpleAppt(subject, "", "", "");
@@ -575,7 +576,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		// there is no localize key for 'invalid attendees' string so running
 		// only for english as of now
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			Assert
 					.assertTrue(ToastMsg.trim().contains("Invalid attendees"),
 							"Correct toast message is not thrown on entering invalid attendees");
@@ -681,13 +682,13 @@ public class CalendarMiscTests extends CommonTest {
 	// Private functions
 	private static void waitForIE() throws Exception {
 
-		if (config.getString("browser").equals("IE"))
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE"))
 			Thread.sleep(MEDIUM_WAIT);
 	}
 
 	private static void waitForSF() throws Exception {
 
-		if (config.getString("browser").equals("SF"))
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("SF"))
 			Thread.sleep(SMALL_WAIT);
 	}
 

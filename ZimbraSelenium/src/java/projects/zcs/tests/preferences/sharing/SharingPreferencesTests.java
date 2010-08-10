@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -536,7 +537,7 @@ public class SharingPreferencesTests extends CommonTest {
 			obj.zMenuItem.zClickInDlgByName(localize(locator.mailFolder),
 					localize(locator.chooseFolder));
 		} else if (application.equalsIgnoreCase("Briefcase")) {
-			if (config.getString("locale").equals("de")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("de")) {
 				obj.zButton.zClick(localize(locator.briefcase), "3");
 			} else {
 				obj.zButton.zClick(localize(locator.briefcase), "2");

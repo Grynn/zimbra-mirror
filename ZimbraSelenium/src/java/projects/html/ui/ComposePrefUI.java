@@ -2,6 +2,8 @@ package projects.html.ui;
 
 import org.testng.Assert;
 
+import framework.util.ZimbraSeleniumProperties;
+
 import projects.html.tests.CommonTest;
 
 /**
@@ -49,7 +51,7 @@ public class ComposePrefUI extends CommonTest {
 		zGoToApplication("Preferences");
 		// obj.zTab.zClick(localize(locator.preferences));
 		Thread.sleep(2000);
-		String currentLocale = config.getString("locale");
+		String currentLocale = ZimbraSeleniumProperties.getStringProperty("locale");
 		if (currentLocale.equals("zh_HK") || currentLocale.equals("ja")
 				|| currentLocale.equals("nl") || currentLocale.equals("zh_CN")
 				|| currentLocale.equals("de") || currentLocale.equals("es") || currentLocale.equals("ko"))

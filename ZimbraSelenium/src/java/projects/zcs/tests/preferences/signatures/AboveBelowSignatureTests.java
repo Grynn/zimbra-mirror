@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
 
@@ -764,7 +765,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 
 	// //end
 	private void waitForIE() throws Exception {
-		String browser = config.getString("browser");
+		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 		if (browser.equals("IE"))
 			Thread.sleep(1000);
 	}

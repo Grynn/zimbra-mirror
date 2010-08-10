@@ -17,6 +17,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -393,7 +394,7 @@ public class BasicApptTests extends CommonTest {
 		obj.zButton.zExists(localize(locator.replyAccept));
 		obj.zButton.zExists(localize(locator.replyDecline));
 		obj.zButton.zExists(localize(locator.replyTentative));
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 
 			String onbehalfof = localize(locator.onBehalfOf).toLowerCase();
 			Assert
@@ -424,7 +425,7 @@ public class BasicApptTests extends CommonTest {
 		obj.zButton.zExists(localize(locator.replyDecline));
 		obj.zButton.zExists(localize(locator.replyTentative));
 
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String onbehalfof = localize(locator.onBehalfOf).toLowerCase();
 			Assert
 					.assertTrue(selenium
@@ -465,11 +466,11 @@ public class BasicApptTests extends CommonTest {
 		String dateToVerify = sdf.format(testcal.getTime());
 		testcal.add(Calendar.DATE, 1);
 		String nextDateToVerify = sdf.format(testcal.getTime());
-		String urlToNavigate = config.getString("mode") + "://"
-				+ config.getString("server")
+		String urlToNavigate = ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/?app=calendar&view=day&date=" + dateToVerify;
-		String urlToNavigate2 = config.getString("mode") + "://"
-				+ config.getString("server")
+		String urlToNavigate2 = ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/?app=calendar&view=day&date=" + nextDateToVerify;
 		// Creating the appointment
 		page.zCalApp.zNavigateToCalendar();
@@ -482,7 +483,7 @@ public class BasicApptTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zDialog.zExists(localize(locator.customRepeat));
 
-		String locale = config.getString("locale");
+		String locale = ZimbraSeleniumProperties.getStringProperty("locale");
 		String endField = localize(locator.recurEndNumber);
 		int a = endField.indexOf("{");
 		endField = endField.substring(0, a);

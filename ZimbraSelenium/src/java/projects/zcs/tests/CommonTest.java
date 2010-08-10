@@ -23,9 +23,6 @@ import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.ConfigurationException;
-import org.apache.commons.configuration.PropertiesConfiguration;
 import org.clapper.util.text.HTMLUtil;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
@@ -39,6 +36,7 @@ import projects.zcs.PageObjects;
 import projects.zcs.clients.ProvZCS;
 import framework.core.SelNGBase;
 import framework.util.HarnessException;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * @author Raja Rao DV
@@ -66,7 +64,6 @@ public class CommonTest extends SelNGBase {
 	public static ResourceBundle zsMsg;
 	public static ResourceBundle ajxMsg;
 	public static ResourceBundle i18Msg;
-	private Configuration conf;
 	public static CoreObjects obj;
 	public static PageObjects page;
 	public static Locators locator;
@@ -123,23 +120,17 @@ public class CommonTest extends SelNGBase {
 	protected static Map<String, Object> selfAccountAttrs = new HashMap<String, Object>();
 
 	public CommonTest() {
-		try {
-			this.conf = new PropertiesConfiguration("conf/config.properties");
-			zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg",
-					new Locale(this.conf.getString("locale")));
-			ajxMsg = ResourceBundle.getBundle("framework.locale.AjxMsg",
-					new Locale(this.conf.getString("locale")));
-			i18Msg = ResourceBundle.getBundle("framework.locale.I18nMsg",
-					new Locale(this.conf.getString("locale")));
-			zsMsg = ResourceBundle.getBundle("framework.locale.ZsMsg",
-					new Locale(this.conf.getString("locale")));
+		zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg",
+				new Locale(ZimbraSeleniumProperties.getStringProperty("locale")));
+		ajxMsg = ResourceBundle.getBundle("framework.locale.AjxMsg",
+				new Locale(ZimbraSeleniumProperties.getStringProperty("locale")));
+		i18Msg = ResourceBundle.getBundle("framework.locale.I18nMsg",
+				new Locale(ZimbraSeleniumProperties.getStringProperty("locale")));
+		zsMsg = ResourceBundle.getBundle("framework.locale.ZsMsg",
+				new Locale(ZimbraSeleniumProperties.getStringProperty("locale")));
 
-			obj = new CoreObjects();
-			page = new PageObjects();
-		} catch (ConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		obj = new CoreObjects();
+		page = new PageObjects();
 
 	}
 
@@ -250,7 +241,7 @@ public class CommonTest extends SelNGBase {
 		out.write(this.getClass().toString() + "\n");
 	    out.close();
 		System.out.println("Executing AfterClass For " + this.getClass().toString());
-		if(config.containsKey("runCodeCoverage") && config.getString("runCodeCoverage").equalsIgnoreCase("yes")) {
+		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) {
 			writeCoverage();
 		}
 		selenium.stop();
@@ -258,7 +249,7 @@ public class CommonTest extends SelNGBase {
 	
 	@AfterMethod(groups = { "always" })
 	public void calculateCoverageIfRequired() throws Exception {
-		if(config.containsKey("runCodeCoverage") && config.getString("runCodeCoverage").equalsIgnoreCase("yes")) {
+		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) {
 			calculateCoverage();
 		}
 	}	
@@ -267,9 +258,8 @@ public class CommonTest extends SelNGBase {
 
 
 	public void initFramework() {
-		super.initFramework(this.conf);
 		zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg", new Locale(
-				conf.getString("locale")));
+				ZimbraSeleniumProperties.getStringProperty("locale")));
 
 	}
 
@@ -703,7 +693,7 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public static String getNameWithoutSpace(String key) {
-		if (config.getString("browser").equals("IE"))
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE"))
 			return key.replace("\u00a0:", "");
 		else
 			return key;
@@ -720,7 +710,7 @@ public class CommonTest extends SelNGBase {
 	public static void verifyShowOriginalMsgBody(String bodyValue, String from,
 			String to, String cc, String bcc, String subject, String body)
 			throws Exception {
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			assertReport(bodyValue, localize(locator.dateLabel),
 					"Date: text mismatched in show original body");
 			assertReport(bodyValue, localize(locator.fromLabel),
@@ -1152,7 +1142,7 @@ public class CommonTest extends SelNGBase {
 	{
 		if(!FILENAME_TO_SOURCE.containsKey(file)) {
 			URL  url;
-			url = new URL("http://"+config.getString("coverageServer")+"/zimbra/"+file);
+			url = new URL("http://"+ZimbraSeleniumProperties.getStringProperty("coverageServer")+"/zimbra/"+file);
 			URLConnection uc = url.openConnection();
 			DataInputStream dis;
 			dis = new DataInputStream(uc.getInputStream());

@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
@@ -202,7 +203,7 @@ public class BasicBriefcaseTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			obj.zButton.zClick(localize(locator.newDocument));
 			Thread.sleep(1500);
 			selenium.selectWindow(selenium.getAllWindowTitles()[1]);

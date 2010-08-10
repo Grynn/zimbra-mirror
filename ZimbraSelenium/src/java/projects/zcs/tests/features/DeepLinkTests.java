@@ -10,6 +10,7 @@ import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * @author Jitesh Sojitra
@@ -61,8 +62,8 @@ public class DeepLinkTests extends CommonTest {
 		String[] recipients = { to };
 		ProvZCS.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
-		selenium.open(config.getString("mode") + "://"
-				+ config.getString("server") + "/h");
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/h");
 		Thread.sleep(5000);
 		selenium.click("xpath=id('R0')/td[2]");
 		Thread.sleep(2000);
@@ -73,8 +74,8 @@ public class DeepLinkTests extends CommonTest {
 		msgLocation = currentURL.substring(msgId).replaceAll("&cid=-", "");
 		System.out.println(msgLocation);
 
-		selenium.open(config.getString("mode") + "://"
-				+ config.getString("server") + "?app=mails&id=" + msgLocation);
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "?app=mails&id=" + msgLocation);
 		Thread.sleep(5000);
 
 		obj.zFolder.zExists(page.zMailApp.zInboxFldr);

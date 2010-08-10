@@ -5,6 +5,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.CalApp;
@@ -55,46 +56,46 @@ public class ClientURLTests extends CommonTest {
 			handleRetry();
 
 		// Address book
-		selenium.open(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=contacts");
-		zNavigateAgainIfRequired(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=contacts");
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=contacts");
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=contacts");
 		obj.zFolder.zExists(page.zABCompose.zContactsFolder);
 		obj.zButton.zExists(page.zABCompose.zNewABOverviewPaneIcon);
 		obj.zButton.zExists(page.zABCompose.zNewContactMenuIconBtn);
 
 		// Calendar
-		selenium.open(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=calendar");
-		zNavigateAgainIfRequired(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=calendar");
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar");
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar");
 		obj.zFolder.zExists(page.zCalApp.zCalendarFolder);
 		obj.zButton.zExists(page.zCalApp.zNewCalOverviewPaneIcon);
 		obj.zButton.zExists(page.zCalApp.zCalNewApptBtn);
 
 		// Tasks
-		selenium.open(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=tasks");
-		zNavigateAgainIfRequired(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=tasks");
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=tasks");
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=tasks");
 		obj.zFolder.zExists(page.zTaskApp.zTasksFolder);
 		obj.zButton.zExists(page.zTaskApp.zNewTasksOverviewPaneIcon);
 		obj.zButton.zExists(page.zTaskApp.zTasksNewBtn);
 
 		// Documents
-		selenium.open(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=documents");
-		zNavigateAgainIfRequired(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=documents");
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=documents");
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=documents");
 		obj.zFolder.zExists(page.zDocumentApp.zNotebookFolder);
 		obj.zButton.zExists(page.zDocumentApp.zNewNotebookOverviewPaneIcon);
 		obj.zButton.zExists(page.zDocumentCompose.zNewPageIconBtn);
 
 		// Briefcase
-		selenium.open(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=briefcase");
-		zNavigateAgainIfRequired(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=briefcase");
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=briefcase");
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=briefcase");
 		obj.zFolder.zExists(page.zBriefcaseApp.zBriefcaseFolder);
 		obj.zButton.zExists("id=ztih__main_Briefcase__BRIEFCASE_textCell");
 		obj.zButton.zExists(page.zBriefcaseApp.zNewMenuIconBtn);
@@ -110,22 +111,22 @@ public class ClientURLTests extends CommonTest {
 		String toField = ProvZCS.getRandomAccount();
 		String subjectField;
 		String bodyField;
-		if (config.getString("locale").equals("zh_CN")
-				|| config.getString("locale").equals("ko")
-				|| config.getString("locale").equals("zh_HK")
-				|| config.getString("locale").equals("ja")
-				|| config.getString("locale").equals("ru")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ko")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_HK")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ja")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ru")) {
 			subjectField = "testSubject";
 			bodyField = "testBody";
 		} else {
 			subjectField = getLocalizedData_NoSpecialChar();
 			bodyField = getLocalizedData_NoSpecialChar();
 		}
-		selenium.open(config.getString("mode") + "://"
-				+ config.getString("server") + "/?view=compose" + "&to="
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?view=compose" + "&to="
 				+ toField + "&subject=" + subjectField + "&body=" + bodyField);
-		zNavigateAgainIfRequired(config.getString("mode") + "://"
-				+ config.getString("server") + "/?view=compose" + "&to="
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?view=compose" + "&to="
 				+ toField + "&subject=" + subjectField + "&body=" + bodyField);
 		obj.zButton.zExists(page.zComposeView.zSendIconBtn);
 		String toValue = obj.zTextAreaField
@@ -156,8 +157,8 @@ public class ClientURLTests extends CommonTest {
 		resetSession();
 		page.zLoginpage
 				.zCustomLoginToZimbraAjax("mail?view=compose&to=foo@example.com&subject=יאט&body=body");
-		zNavigateAgainIfRequired(config.getString("mode") + "://"
-				+ config.getString("server")
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/mail?view=compose&to=foo@example.com&subject=יאט&body=body");
 		obj.zButton.zExists(page.zComposeView.zSendIconBtn);
 		assertReport(
@@ -183,49 +184,49 @@ public class ClientURLTests extends CommonTest {
 		// day|workWeek|week|month
 		String startDate = "20090310";
 		String expectedDate = null;
-		if (config.getString("locale").equals("zh_CN")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 			expectedDate = "2009/3/10";
-		} else if (config.getString("locale").equals("zh_HK")
-				|| config.getString("locale").equals("en_GB")
-				|| config.getString("locale").equals("en_AU")
-				|| config.getString("locale").equals("es")
-				|| config.getString("locale").equals("pt_BR")
-				|| config.getString("locale").equals("it")
-				|| config.getString("locale").equals("hi")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_HK")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("es")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("pt_BR")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("it")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("hi")) {
 			expectedDate = "10/3/2009";
-		} else if (config.getString("locale").equals("ja")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ja")) {
 			expectedDate = "2009/3/10";
-		} else if (config.getString("locale").equals("nl")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")) {
 			expectedDate = "10-3-2009";
-		} else if (config.getString("locale").equals("fr")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")) {
 			expectedDate = "10/3/2009";
-		} else if (config.getString("locale").equals("ru")
-				|| config.getString("locale").equals("de")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ru")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("de")) {
 			expectedDate = "10.3.2009";
-		} else if (config.getString("locale").equals("pl")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")) {
 			expectedDate = "2009-3-10";
-		} else if (config.getString("locale").equals("da")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("da")) {
 			expectedDate = "10/3/2009";
-		} else if (config.getString("locale").equals("ar")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ar")) {
 			expectedDate = "200/3/10";
-		} else if (config.getString("locale").equals("en_US")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			expectedDate = "3/10/2009";
-		} else if (config.getString("locale").equals("sv")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("sv")) {
 			expectedDate = "2009-3-10";
 		}
 		String calView = "workWeek";
-		selenium.open(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=calendar&view=" + calView
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar&view=" + calView
 				+ "&date=" + startDate);
-		zNavigateAgainIfRequired(config.getString("mode") + "://"
-				+ config.getString("server") + "/?app=calendar&view=" + calView
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar&view=" + calView
 				+ "&date=" + startDate);
 		obj.zFolder.zExists(page.zCalApp.zCalendarFolder);
 		obj.zButton.zExists(CalApp.zViewBtn);
 		page.zCalApp.zNavigateToApptCompose();
 		String actualDate;
 		actualDate = obj.zEditField.zGetInnerText("id=startDateField*");
-		if (!config.getString("locale").equals("ar")) {
+		if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("ar")) {
 			assertReport(
 					expectedDate,
 					actualDate,

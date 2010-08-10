@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 
 import org.testng.annotations.Test;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -121,12 +122,12 @@ public class RssFeedFolderTests extends CommonTest {
 		page.zMailApp.zDeleteFolder(rssFeedFolderName);
 		obj.zFolder.zRtClick(rssFeedFolderName);
 		obj.zMenuItem.zClick(localize(locator.move));
-		if (config.getString("locale").equals("nl")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")) {
 			obj.zFolder.zClickInDlgByName(localize(locator.folders), localize(
 					locator.moveFolder, rssFeedFolderName, ""));
 			obj.zButton.zClickInDlgByName(localize(locator.ok), localize(
 					locator.moveFolder, rssFeedFolderName, ""));
-		} else if (config.getString("locale").equals("de")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("de")) {
 			obj.zFolder.zClickInDlgByName(localize(locator.folders),
 					localize(locator.folder));
 			obj.zButton.zClickInDlgByName(localize(locator.ok),

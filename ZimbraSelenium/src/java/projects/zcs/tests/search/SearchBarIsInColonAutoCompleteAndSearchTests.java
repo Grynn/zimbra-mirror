@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 
@@ -950,7 +951,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			ProvZCS.modifyAccount("remote@testdomain.com", "userPassword",
 					"test123");
 			ProvZCS.modifyAccount("remote@testdomain.com", "zimbraPrefLocale",
-					config.getString("locale"));
+					ZimbraSeleniumProperties.getStringProperty("locale"));
 
 			resetSession();
 			String[] recipientsArray2 = { "remote@testdomain.com" };

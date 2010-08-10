@@ -1,5 +1,6 @@
 package projects.zcs.ui;
 
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -182,7 +183,7 @@ public class ABCompose extends CommonTest {
 	public static void zCreateContactInAddressBook(String AddBook,
 			String lastName, String MiddleName, String firstName)
 			throws Exception {
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(2500);
 		} else {
 			Thread.sleep(2000);
@@ -197,7 +198,7 @@ public class ABCompose extends CommonTest {
 	public static void zCreateContactInAddressBook(String AddBook,
 			String lastName, String MiddleName, String firstName,
 			String emailAddress) throws Exception {
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(2500);
 		} else {
 			Thread.sleep(2000);
@@ -256,7 +257,7 @@ public class ABCompose extends CommonTest {
 			obj.zContactListItem.zRtClick(contactName);
 			obj.zMenuItem.zClick(page.zABApp.zRtClickContactEditMenuIconBtn);
 		}
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(2500);
 		} else {
 			Thread.sleep(2000);
@@ -294,7 +295,7 @@ public class ABCompose extends CommonTest {
 			String notes) throws Exception {
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zABCompose.zContactsFolder));
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(2500);
 		} else {
 			Thread.sleep(2000);

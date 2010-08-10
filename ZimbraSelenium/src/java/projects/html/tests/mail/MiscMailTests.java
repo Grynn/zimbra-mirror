@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
 import projects.zcs.clients.ProvZCS;
@@ -234,7 +235,7 @@ public class MiscMailTests extends CommonTest {
 			assertReport(bodyValue, dataToVerify[i], "Verifying - "
 					+ dataToVerify[i] + " in show original body");
 		}
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			for (int i = 0; i < localizedToVerify.length - 1; i++) {
 				assertReport(bodyValue, localizedToVerify[i], "Verifying - "
 						+ localizedToVerify[i] + " in show original body");

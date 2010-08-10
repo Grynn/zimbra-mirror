@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 
@@ -277,8 +278,8 @@ public class BriefcaseSharingTests extends CommonTest {
 				allowtoseeprivateappt);
 		page.zLoginpage.logoutOfZimbraAjax();
 		Thread.sleep(3000);
-		selenium.open(config.getString("mode") + "://"
-				+ config.getString("server") + "/home/"
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "/home/"
 				+ selfAccountName.toLowerCase() + "/" + "Briefcase");
 		zWaitTillObjectExist(
 				"xpath",

@@ -6,6 +6,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.tests.CommonTest;
 
@@ -140,7 +141,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zButtonMenu.zClick(page.zMailApp.zNewMenuDropDown);
 		obj.zMenuItem.zClick(menuItemArray[3]);
 		obj.zEditField.zExists(localize(locator.subject));
-		if (config.getString("locale").equals("zh_CN")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 			obj.zTextAreaField.zExists(localize(locator.attendeesLabel));
 		} else {
 			obj.zTextAreaField.zExists(localize(locator.attendees));
@@ -167,7 +168,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		// Page
 		obj.zButtonMenu.zClick(page.zMailApp.zNewMenuDropDown);
 		obj.zMenuItem.zClick(menuItemArray[5]);
-		if (config.getString("locale").equals("sv")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("sv")) {
 			obj.zEditField.zExists(localize(locator.pageLabel));
 		} else {
 			obj.zEditField.zExists(localize(locator.page));

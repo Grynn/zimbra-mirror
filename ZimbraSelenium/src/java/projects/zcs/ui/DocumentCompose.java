@@ -1,5 +1,6 @@
 package projects.zcs.ui;
 
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -99,8 +100,8 @@ public class DocumentCompose extends CommonTest {
 	 */
 	public static void zEnterBasicPageData(String pageName, String bodyContent) {
 		if (pageName != "")
-			if (config.getString("locale").equals("fr")
-					&& config.getString("browser").equals("IE")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+					&& ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 				obj.zEditField.zType(localize(locator.page), pageName);
 			} else {
 				obj.zEditField.zType(localize(locator.pageLabel), pageName);

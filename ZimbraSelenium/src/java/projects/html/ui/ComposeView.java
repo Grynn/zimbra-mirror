@@ -5,6 +5,8 @@ import java.io.File;
 import java.util.Map;
 import org.testng.Assert;
 
+import framework.util.ZimbraSeleniumProperties;
+
 import projects.html.clients.ProvZCS;
 import projects.html.tests.CommonTest;
 
@@ -93,7 +95,7 @@ public class ComposeView extends CommonTest {
 	 * Navigates to mailcompose using bottom toolbar
 	 */
 	public static void zNavigateToMailComposeTopToolBar() throws Exception {
-		if (config.getString("locale").equals("sv")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("sv")) {
 			obj.zButton.zClick(localize(locator.compose), "3");
 		} else {
 			obj.zButton.zClick(localize(locator.compose), "2");

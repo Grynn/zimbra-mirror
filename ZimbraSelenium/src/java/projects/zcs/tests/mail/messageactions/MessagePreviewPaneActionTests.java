@@ -10,6 +10,7 @@ import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * @author Jitesh Sojitra
@@ -124,7 +125,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
 							selenium
@@ -192,7 +193,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
 							selenium
@@ -226,7 +227,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
 							selenium
@@ -236,7 +237,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 			obj.zMessageItem.zVerifyHasAttachment(subject);
 		}
 		// obj.zMessageItem.zVerifyHasAttachment(subject);
-		if (config.getString("locale").equals("nl")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")) {
 			selenium.click("link=Aktetas");
 		} else {
 			selenium.click("link=" + localize(locator.briefcase));
@@ -265,7 +266,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
 							selenium
@@ -417,7 +418,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
 							selenium
@@ -498,7 +499,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 				cc, bcc, subject, body, "putty.log");
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
 							selenium
@@ -511,7 +512,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		Boolean downloadLink = selenium.isElementPresent("Link="
 				+ localize(locator.download));
 		Boolean briefcaseLink;
-		if (config.getString("locale").equals("nl")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")) {
 			briefcaseLink = selenium.isElementPresent("Link=Aktetas");
 		} else {
 			briefcaseLink = selenium.isElementPresent("Link="
@@ -564,7 +565,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Re: " + subject);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
 							selenium

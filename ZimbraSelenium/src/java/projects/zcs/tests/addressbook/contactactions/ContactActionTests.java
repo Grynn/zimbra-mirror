@@ -12,6 +12,7 @@ import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * @author Prashant Jaiswal
@@ -213,11 +214,11 @@ public class ContactActionTests extends CommonTest {
 
 		page.zABCompose.zNavigateToContact();
 		obj.zFolder.zClick(localize(locator.contacts));
-		if (config.getString("locale").equals("ar")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ar")) {
 			obj.zContactListItem.zExists(contactName.substring(0, 5));
-		} else if (config.getString("locale").equals("zh_HK")
-				|| config.getString("locale").equals("ja")
-				|| config.getString("locale").equals("ko")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_HK")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ja")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ko")) {
 			obj.zContactListItem.zExists(contactLastName);
 		} else {
 			obj.zContactListItem.zExists(contactName);

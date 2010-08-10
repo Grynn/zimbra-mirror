@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
@@ -368,7 +369,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 		 */
 		obj.zFeatureMenu.zClick(localize(locator.forwardingEmail), "3");
 		obj.zMenuItem.zClick(localize(locator.includeOriginalAsAttach));
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(1000);
 		}
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);

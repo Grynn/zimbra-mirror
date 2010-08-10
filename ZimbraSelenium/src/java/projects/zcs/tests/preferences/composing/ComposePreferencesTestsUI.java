@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -139,7 +140,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String actualVal;
 			String accountName = selfAccountName;
 			String fontSize;
@@ -150,16 +151,16 @@ public class ComposePreferencesTestsUI extends CommonTest {
 			obj.zMenuItem.zClick("Arial");
 
 			String currentFont = "10";
-			if (config.getString("locale").equals("fr")
-					|| config.getString("locale").equals("nl")
-					|| config.getString("locale").equals("de")
-					|| config.getString("locale").equals("hi")
-					|| config.getString("locale").equals("sv")
-					|| config.getString("locale").equals("da")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("de")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("hi")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("sv")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("da")) {
 				fontSize = currentFont + " pt";
-			} else if (config.getString("locale").equals("es")) {
+			} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("es")) {
 				fontSize = currentFont + " p";
-			} else if (config.getString("locale").equals("it")) {
+			} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("it")) {
 				fontSize = currentFont + " punti";
 			} else {
 				fontSize = currentFont + "pt";
@@ -191,16 +192,16 @@ public class ComposePreferencesTestsUI extends CommonTest {
 			page.zMailApp.zNavigateToComposingPreferences();
 
 			currentFont = "12";
-			if (config.getString("locale").equals("fr")
-					|| config.getString("locale").equals("nl")
-					|| config.getString("locale").equals("de")
-					|| config.getString("locale").equals("hi")
-					|| config.getString("locale").equals("sv")
-					|| config.getString("locale").equals("da")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("de")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("hi")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("sv")
+					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("da")) {
 				fontSize = currentFont + " pt";
-			} else if (config.getString("locale").equals("es")) {
+			} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("es")) {
 				fontSize = currentFont + " p";
-			} else if (config.getString("locale").equals("it")) {
+			} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("it")) {
 				fontSize = currentFont + " punti";
 			} else {
 				fontSize = currentFont + "pt";
@@ -552,7 +553,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		page.zMailApp.zNavigateToComposingPreferences();
 
 		selenium.check("//input[contains(@id,'_SAVE_TO_SENT')]");
-	/*	if (config.getString("locale").equals("de")) {
+	/*	if (ZimbraSeleniumProperties.getStringProperty("locale").equals("de")) {
 			obj.zRadioBtn.zClick("Kopie im Ordner");
 		} else {
 			//obj.zRadioBtn.zClick(localize(locator.saveToSent));
@@ -577,7 +578,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 	}
 
 	private void waitForIE() throws Exception {
-		String browser = config.getString("browser");
+		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 
 		if (browser.equals("IE"))
 			Thread.sleep(1000);
@@ -611,16 +612,16 @@ public class ComposePreferencesTestsUI extends CommonTest {
 						+ localize(locator.composeAsHTML) + "')]", "");
 
 		currentFont = "12";
-		if (config.getString("locale").equals("fr")
-				|| config.getString("locale").equals("nl")
-				|| config.getString("locale").equals("de")
-				|| config.getString("locale").equals("hi")
-				|| config.getString("locale").equals("sv")
-				|| config.getString("locale").equals("da")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("de")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("hi")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("sv")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("da")) {
 			fontSize = currentFont + " pt";
-		} else if (config.getString("locale").equals("es")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("es")) {
 			fontSize = currentFont + " p";
-		} else if (config.getString("locale").equals("it")) {
+		} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("it")) {
 			fontSize = currentFont + " punti";
 		} else {
 			fontSize = currentFont + "pt";

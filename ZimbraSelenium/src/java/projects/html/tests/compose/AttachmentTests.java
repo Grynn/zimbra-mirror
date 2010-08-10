@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
 import projects.html.ui.ComposeView;
@@ -176,7 +177,7 @@ public class AttachmentTests extends CommonTest {
 				break;
 		}
 		String bigAttToastMessage = obj.zToastAlertMessage.zGetMsg();
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			assertReport(
 					bigAttToastMessage,
 					"This file cannot be attached because it has exceeded the maximum allowed size",

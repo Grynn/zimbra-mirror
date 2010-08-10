@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
@@ -55,9 +56,9 @@ public class ChangePasswordTests extends CommonTest {
 		Thread.sleep(2000);
 		actualEnterNewPWMsg = selenium.getText("class=errorText");
 
-		if (config.getString("locale").equals("en_US")
-				|| config.getString("locale").equals("en_GB")
-				|| config.getString("locale").equals("en_AU")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU")) {
 			Assert.assertTrue(localize(locator.enterNewPassword).contains(
 					actualEnterNewPWMsg), "expeted message is "
 					+ localize(locator.enterNewPassword)

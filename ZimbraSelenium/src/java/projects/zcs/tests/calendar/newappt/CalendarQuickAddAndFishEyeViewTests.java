@@ -16,6 +16,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -109,7 +110,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		}
 
 		// obj.zButton.zRtClick(element);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Robot zRobot = new Robot();
 			zRobot.mouseMove(500, 500);
 			zRobot.mousePress(InputEvent.BUTTON3_MASK);
@@ -171,7 +172,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 					+ --i
 					+ "]/div[contains(@class, 'calendar_hour_scroll')]//table/tbody/tr/td/div[contains(@class, 'calendar_grid_body_time_text') and contains(text(), '9')]";
 		}
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Robot zRobot = new Robot();
 			zRobot.mouseMove(500, 500);
 			zRobot.mousePress(InputEvent.BUTTON3_MASK);
@@ -189,7 +190,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		// Thread.sleep(1000);
 		// obj.zMenuItem.zClick(localize(locator.newAppt));
 		// time objects are changed
-		// if (config.getString("browser").contains("FF")) {
+		// if (ZimbraSeleniumProperties.getStringProperty("browser").contains("FF")) {
 		// page.zCalCompose.zVerifyStartEndTimeInQuickAddApptDlg(startTime,
 		// "startTime");
 		// page.zCalCompose.zVerifyStartEndTimeInQuickAddApptDlg(endTime,
@@ -205,7 +206,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 						"xpath=//div[contains(@class, 'ImgCalendarDayGrid')]/div[contains(@class, 'appt')]/div[contains(@class, 'appt_body')]/table/tbody/tr/td[contains(@class, appt_name) and contains(text(), '"
 								+ subject + "')]", "");
 		// time objects are changed
-		// if (!config.getString("browser").equals("IE")) {
+		// if (!ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 		// page.zCalCompose.zVerifyStartEndTime(startTime, "startTime");
 		// page.zCalCompose.zVerifyStartEndTime(endTime, "endTime");
 		// }
@@ -239,7 +240,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 					+ "]/div[contains(@class, 'calendar_hour_scroll')]//table/tbody/tr/td/div[contains(@class, 'calendar_grid_body_time_text') and contains(text(), '9')]";
 		}
 		// obj.zButton.zRtClick(element);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Robot zRobot = new Robot();
 			zRobot.mouseMove(500, 500);
 			zRobot.mousePress(InputEvent.BUTTON3_MASK);
@@ -292,7 +293,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 					+ "]/div[contains(@class, 'calendar_hour_scroll')]//table/tbody/tr/td/div[contains(@class, 'calendar_grid_body_time_text') and contains(text(), '9')]";
 		}
 		// obj.zButton.zRtClick(element);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Robot zRobot = new Robot();
 			zRobot.mouseMove(500, 500);
 			zRobot.mousePress(InputEvent.BUTTON3_MASK);
@@ -351,7 +352,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 					+ --i
 					+ "]/div[contains(@class, 'calendar_hour_scroll')]//table/tbody/tr/td/div[contains(@class, 'calendar_grid_body_time_text') and contains(text(), '9')]";
 		}
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Robot zRobot = new Robot();
 			zRobot.mouseMove(500, 500);
 			zRobot.mousePress(InputEvent.BUTTON3_MASK);
@@ -370,7 +371,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		// Thread.sleep(1000);
 		// obj.zMenuItem.zClick(localize(locator.newAppt));
 		// time objects are changed
-		// if (config.getString("browser").contains("FF")) {
+		// if (ZimbraSeleniumProperties.getStringProperty("browser").contains("FF")) {
 		// page.zCalCompose.zVerifyStartEndTimeInQuickAddApptDlg(startTime,
 		// "startTime");
 		// page.zCalCompose.zVerifyStartEndTimeInQuickAddApptDlg(endTime,
@@ -386,7 +387,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 						"xpath=//div[contains(@class, 'ImgCalendarDayGrid')]/div[contains(@class, 'appt')]/div[contains(@class, 'appt_body')]/table/tbody/tr/td[contains(@class, appt_name) and contains(text(), '"
 								+ subject + "')]", "");
 		// time objects are changed
-		// if (!config.getString("browser").equals("IE")) {
+		// if (!ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 		// page.zCalCompose.zVerifyStartEndTime(startTime, "startTime");
 		// page.zCalCompose.zVerifyStartEndTime(endTime, "endTime");
 		// }
@@ -419,7 +420,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 					+ "]/div[contains(@class, 'calendar_hour_scroll')]//table/tbody/tr/td/div[contains(@class, 'calendar_grid_body_time_text') and contains(text(), '9')]";
 		}
 		// obj.zButton.zRtClick(element);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Robot zRobot = new Robot();
 			zRobot.mouseMove(500, 500);
 			zRobot.mousePress(InputEvent.BUTTON3_MASK);
@@ -653,7 +654,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 	
 
 	private void closeWarningDlg() throws Exception {
-		// if (config.getString("browser").equals("IE")) {
+		// if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 		String isDlgExists;
 		for (int i = 0; i <= 5; i++) {
 			Thread.sleep(500);

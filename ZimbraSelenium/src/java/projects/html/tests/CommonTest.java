@@ -10,9 +10,7 @@ import java.util.MissingResourceException;
 import java.util.Random;
 import java.util.ResourceBundle;
 
-import org.apache.commons.configuration.*;
 import org.clapper.util.text.HTMLUtil;
-
 import org.testng.Assert;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
@@ -22,11 +20,10 @@ import projects.html.Locators;
 import projects.html.PageObjects;
 import projects.html.clients.ProvZCS;
 
+import com.zimbra.common.service.ServiceException;
+
 import framework.core.SelNGBase;
 import framework.util.ZimbraSeleniumProperties;
-import framework.util.ZimbraUtil;
-
-import com.zimbra.common.service.ServiceException;
 
 /**
  * @author Raja Rao DV
@@ -55,7 +52,6 @@ public class CommonTest extends SelNGBase {
 	public static ResourceBundle zsMsg;
 	public static ResourceBundle ajxMsg;
 	public static ResourceBundle i18Msg;
-	private Configuration conf;
 	public static CoreObjects obj;
 	public static PageObjects page;
 	public static Locators locator;
@@ -63,7 +59,6 @@ public class CommonTest extends SelNGBase {
 	protected static Map<String, Object> selfAccountAttrs = new HashMap<String, Object>();
 
 	public CommonTest() {
-		conf = ZimbraSeleniumProperties.getConfigProperties();
 		zmMsg = ZimbraSeleniumProperties.getResourceBundleProperty("zmMsg");
 		zhMsg = ZimbraSeleniumProperties.getResourceBundleProperty("zhMsg");
 		ajxMsg = ZimbraSeleniumProperties.getResourceBundleProperty("ajxMsg");
@@ -171,9 +166,7 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public void initFramework() {
-		super.initFramework(this.conf);
-		zhMsg = ResourceBundle.getBundle("framework.locale.ZhMsg", new Locale(
-				conf.getString("locale")));
+		zhMsg = ResourceBundle.getBundle("framework.locale.ZhMsg", new Locale(ZimbraSeleniumProperties.getConfigProperties().getString("locale")));
 
 	}
 
@@ -447,7 +440,7 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public static String getNameWithoutSpace(String key) {
-		if (config.getString("browser").equals("IE"))
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE"))
 			return key.replace("�:", "");
 		else
 			return key;

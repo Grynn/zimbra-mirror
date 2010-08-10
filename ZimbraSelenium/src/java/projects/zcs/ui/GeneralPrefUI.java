@@ -2,6 +2,8 @@ package projects.zcs.ui;
 
 import org.testng.Assert;
 
+import framework.util.ZimbraSeleniumProperties;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -39,10 +41,10 @@ public class GeneralPrefUI extends CommonTest {
 		errorMessage = selenium.getText("class=errorText");
 
 		String expectedMsg = localize(locator.loginError);
-		if (config.getString("locale").equals("en_US")
-				|| config.getString("locale").equals("en_GB")
-				|| config.getString("locale").equals("ar")
-				|| config.getString("locale").equals("en_AU")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ar")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU")) {
 			expectedMsg = expectedMsg + ".";
 		}
 		System.out.println(type);

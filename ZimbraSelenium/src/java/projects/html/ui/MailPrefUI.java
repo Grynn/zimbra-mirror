@@ -3,6 +3,7 @@ package projects.html.ui;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.ZimbraSeleniumProperties;
 import projects.html.clients.ProvZCS;
 import projects.html.tests.CommonTest;
 
@@ -50,9 +51,9 @@ public class MailPrefUI extends CommonTest {
 		obj.zButton.zClick("id=TAB_OPTIONS");
 		// obj.zTab.zClick(localize(locator.preferences));
 		Thread.sleep(2000);
-		if (config.getString("locale").equals("zh_CN")
-				|| config.getString("locale").equals("de")
-				|| config.getString("locale").equals("ko")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("de")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ko")) {
 			obj.zTab.zClick(localize(locator.mail), "3");
 		} else {
 			obj.zTab.zClick(localize(locator.mail), "2");

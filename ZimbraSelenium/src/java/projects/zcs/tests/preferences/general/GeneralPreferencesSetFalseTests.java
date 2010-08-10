@@ -10,6 +10,7 @@ import com.zimbra.cs.service.admin.GetAccount;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentApp;
@@ -64,7 +65,7 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 			handleRetry();
 
 		zGoToApplication("Preferences");
-		if (!config.getString("locale").equals("ru")) {
+		if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("ru")) {
 			obj.zCheckbox
 					.zVerifyIsNotChecked(localize(locator.includeJunkFolder));
 		}
@@ -317,7 +318,7 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 						"zimbraPrefShowSelectionCheckbox"),
 				"'Display checkboxes to quickly select items in lists' general preference not marked FALSE in database");
 
-		if (!config.getString("locale").equals("ru")) {
+		if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("ru")) {
 			obj.zCheckbox.zClick(localize(locator.includeJunkFolder));
 		}
 		obj.zCheckbox.zClick(localize(locator.includeTrashFolder));
@@ -331,7 +332,7 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 		;
 		zGoToApplication("Preferences");
 
-		if (!config.getString("locale").equals("ru")) {
+		if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("ru")) {
 			assertReport(
 					"TRUE",
 					ProvZCS.getAccountPreferenceValue(currentloggedinuser,
@@ -354,7 +355,7 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 						"zimbraPrefShowSelectionCheckbox"),
 				"'Display checkboxes to quickly select items in lists' general preference not marked TRUE in database");
 
-		if (!config.getString("locale").equals("ru")) {
+		if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("ru")) {
 			obj.zCheckbox.zClick(localize(locator.includeJunkFolder));
 		}
 		obj.zCheckbox.zClick(localize(locator.includeTrashFolder));

@@ -21,6 +21,7 @@ import com.zimbra.cs.zclient.ZInvite.ZRole;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -314,7 +315,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		}
 
-		String browser = config.getString("browser");
+		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 
 		if ((browser.equals("IE"))
 				&& (composeFormat.equals("html") && replyFwdInOriginalFormat

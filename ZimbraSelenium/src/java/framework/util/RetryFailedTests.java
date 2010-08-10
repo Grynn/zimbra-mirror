@@ -24,8 +24,8 @@ public class RetryFailedTests extends RetryAnalyzerCount {
 	}
 
 	private void logRetriedTests(String testName) {
-		File retriedTestFile = new File(SelNGBase.config
-				.getString("ZimbraLogRoot")
+		File retriedTestFile = new File(
+				ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")
 				+ "/" + SelNGBase.appType + "/retriedTests.txt");
 	    if(!retriedTestFile.exists())
 			try {

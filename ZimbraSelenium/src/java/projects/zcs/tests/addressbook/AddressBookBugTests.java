@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * This covers some high priority test cases related to address book
@@ -81,7 +82,7 @@ public class AddressBookBugTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(2500);
 		} else {
 			Thread.sleep(2000);

@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -122,7 +123,7 @@ public class CalendarBugTests extends CommonTest {
 				System.getProperty("line.separator"), " ");
 		String actualValue = obj.zDialog.zGetMessage(localize(locator.infoMsg)
 				.replace(System.getProperty("line.separator"), ""));
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			expectedValue = expectedValue.replace("  ", " ");
 			actualValue = actualValue.replace(System
 					.getProperty("line.separator"), "");
@@ -202,7 +203,7 @@ public class CalendarBugTests extends CommonTest {
 		String actualValue = obj.zDialog.zGetMessage(localize(locator.infoMsg)
 				.replace(System.getProperty("line.separator"), ""));
 
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			expectedValue = expectedValue.replace("  ", " ");
 			actualValue = actualValue.replace(System
 					.getProperty("line.separator"), "");

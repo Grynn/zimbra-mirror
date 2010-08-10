@@ -20,6 +20,7 @@ import com.zimbra.cs.service.admin.GetConfig;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -454,7 +455,7 @@ public class ApptInviteTests extends CommonTest {
 		String itemsToVerify[] = { subject };
 		String firstLineSummary;
 		String firstLineSummaryNewAttendee;
-		String browser = config.getString("browser");
+		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateAppt(subject, location, "", "", "", "", "", "",
@@ -698,14 +699,14 @@ public class ApptInviteTests extends CommonTest {
 	}
 
 	private void waitForIE() throws Exception {
-		String browser = config.getString("browser");
+		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 		if (browser.equals("IE"))
 			Thread.sleep(2000);
 
 	}
 
 	private void waitForSF() throws Exception {
-		String browser = config.getString("browser");
+		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 		if (browser.equals("SF"))
 			Thread.sleep(2000);
 	}

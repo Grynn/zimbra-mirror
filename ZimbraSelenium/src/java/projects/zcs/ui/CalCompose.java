@@ -8,6 +8,7 @@ package projects.zcs.ui;
 
 //import projects.zcs.Locators;
 
+import framework.util.ZimbraSeleniumProperties;
 import junit.framework.Assert;
 import projects.zcs.tests.CommonTest;
 
@@ -340,13 +341,13 @@ public class CalCompose extends CommonTest {
 						"//td[contains(@id, 'startTimeSelect')]//td[contains(@id, 'timeSelectBtn')]//div[contains(@class, 'ImgSelectPullDownArrow')]",
 						"");
 		if (!ampmLoc.equals("-1")) {
-			if (config.getString("locale").equals("zh_CN")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 				obj.zMenuItem.zClickInDlg(tmp[2] + " " + tmp[0] + ":" + tmp[1]);
 			} else {
 				obj.zMenuItem.zClickInDlg(tmp[0] + ":" + tmp[1] + " " + tmp[2]);
 			}
 		} else {
-			if (config.getString("locale").equals("zh_CN")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 				obj.zMenuItem.zClickInDlg(tmp[1] + ":" + tmp[0]);
 			} else {
 				obj.zMenuItem.zClickInDlg(tmp[0] + ":" + tmp[1]);
@@ -365,13 +366,13 @@ public class CalCompose extends CommonTest {
 		System.out.println(tmp[2] + " " + tmp[0] + ":" + tmp[1]);
 		System.out.println(tmp[1] + " " + tmp[0]);
 		if (!ampmLoc.equals("-1")) {
-			if (config.getString("locale").equals("zh_CN")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 				obj.zMenuItem.zClickInDlg(tmp[2] + " " + tmp[0] + ":" + tmp[1]);
 			} else {
 				obj.zMenuItem.zClickInDlg(tmp[0] + ":" + tmp[1] + " " + tmp[2]);
 			}
 		} else {
-			if (config.getString("locale").equals("zh_CN")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 				obj.zMenuItem.zClickInDlg(tmp[1] + ":" + tmp[0]);
 			} else {
 				obj.zMenuItem.zClickInDlg(tmp[0] + ":" + tmp[1]);
@@ -395,13 +396,13 @@ public class CalCompose extends CommonTest {
 						"//td[contains(@id, 'endTimeSelect')]//td[contains(@id, 'timeSelectBtn')]//div[contains(@class, 'ImgSelectPullDownArrow')]",
 						"");
 		if (!ampmLoc.equals("-1")) {
-			if (config.getString("locale").equals("zh_CN")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 				obj.zMenuItem.zClickInDlg(tmp[2] + " " + tmp[0] + ":" + tmp[1]);
 			} else {
 				obj.zMenuItem.zClickInDlg(tmp[0] + ":" + tmp[1] + " " + tmp[2]);
 			}
 		} else {
-			if (config.getString("locale").equals("zh_CN")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 				obj.zMenuItem.zClickInDlg(tmp[1] + ":" + tmp[0]);
 			} else {
 				obj.zMenuItem.zClickInDlg(tmp[0] + ":" + tmp[1]);
@@ -418,13 +419,13 @@ public class CalCompose extends CommonTest {
 						"//td[contains(@id, 'endTime')]//td[contains(@id, 'timeSelectBtn')]//div[contains(@class, 'ImgSelectPullDownArrow')]",
 						"");
 		if (!ampmLoc.equals("-1")) {
-			if (config.getString("locale").equals("zh_CN")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 				obj.zMenuItem.zClickInDlg(tmp[2] + " " + tmp[0] + ":" + tmp[1]);
 			} else {
 				obj.zMenuItem.zClickInDlg(tmp[0] + ":" + tmp[1] + " " + tmp[2]);
 			}
 		} else {
-			if (config.getString("locale").equals("zh_CN")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 				obj.zMenuItem.zClickInDlg(tmp[1] + ":" + tmp[0]);
 			} else {
 				obj.zMenuItem.zClickInDlg(tmp[0] + ":" + tmp[1]);
@@ -563,7 +564,7 @@ public class CalCompose extends CommonTest {
 			String time) throws Exception {
 		if (time.equals("startTime")) {
 			Thread.sleep(1000);
-			if (config.getString("locale").equals("en_US")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 				Assert
 						.assertTrue(selenium
 								.isElementPresent("//td[contains(@id, 'startTime')]//td[contains(@id, 'timeSelectInput') and contains(text(), '"
@@ -576,7 +577,7 @@ public class CalCompose extends CommonTest {
 										+ hhmmss.split(":")[0] + "')]"));
 			}
 		} else if (time.equals("endTime")) {
-			if (config.getString("locale").equals("en_US")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 				Assert
 						.assertTrue(selenium
 								.isElementPresent("//td[contains(@id, 'endTime')]//td[contains(@id, 'timeSelectInput') and contains(text(), '"

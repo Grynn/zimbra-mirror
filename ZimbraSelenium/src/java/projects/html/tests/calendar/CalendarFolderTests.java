@@ -22,6 +22,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
 import projects.html.clients.ProvZCS;
@@ -47,7 +48,7 @@ public class CalendarFolderTests extends CommonTest {
 			return new Object[][] { {
 					"webcal://ical.mac.com/ical/US32Holidays.ics",
 					getLocalizedData_NoSpecialChar(),
-					"http://" + config.getString("server")
+					"http://" + ZimbraSeleniumProperties.getStringProperty("server")
 							+ "/zimbra/h/calendar?date=20091225" } };
 		} else if (test.equals("verifyDeleteConfirmationAsked")
 				|| test.equals("verifyDeleteAllAppts")) {
@@ -94,7 +95,7 @@ public class CalendarFolderTests extends CommonTest {
 
 		Thread.sleep(SMALL_WAIT);
 
-		if (!config.getString("locale").equals("fr"))
+		if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("fr"))
 			obj.zToastAlertMessage.zAlertMsgExists(expectedMsg,
 					"Toast message incorrect");
 

@@ -575,7 +575,7 @@ public class TaskApp extends CommonTest {
 	// }
 	//
 	// private static String getSubjectLabel() {
-	// if (config.getString("browser").equals("IE"))
+	// if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE"))
 	// return localize(locator.subjectLabel).replace("�:", "");
 	// else
 	// return localize(locator.subjectLabel);
@@ -583,7 +583,7 @@ public class TaskApp extends CommonTest {
 	//	
 	//	
 	// // private static String getNameWithoutSpace(String key) {
-	// // if (config.getString("browser").equals("IE"))
+	// // if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE"))
 	// // return key.replace("�:", "");
 	// // else
 	// // return key;

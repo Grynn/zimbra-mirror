@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentCompose;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * This covers some high priority test cases related to Documents
@@ -67,7 +68,7 @@ public class DocumentBugTests extends CommonTest {
 		obj.zButton.zClick(DocumentCompose.zSavePageIconBtn);
 
 		obj.zDialog.zExists(localize(locator.warningMsg));
-		if (config.getString("locale").equalsIgnoreCase("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equalsIgnoreCase("en_US")) {
 			Assert.assertTrue(obj.zDialog.zGetMessage(
 					localize(locator.warningMsg)).equals(WARNING_MESSAGE));
 		}

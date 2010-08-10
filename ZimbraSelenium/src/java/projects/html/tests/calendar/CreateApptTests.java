@@ -18,6 +18,7 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
 import projects.html.clients.ProvZCS;
@@ -330,14 +331,14 @@ public class CreateApptTests extends CommonTest {
 				"", body, apptStartDate, apptEndDate, startTime, endTime,
 				localize(locator.recurBasicSelectDaily));
 
-		selenium.open("http://" + config.getString("server")
+		selenium.open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=day&date=20090601");
 
 		Thread.sleep(MEDIUM_WAIT);
 
 		obj.zAppointment.zExists(subject);
 
-		selenium.open("http://" + config.getString("server")
+		selenium.open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=day&date=20090702");
 
 		Thread.sleep(MEDIUM_WAIT);

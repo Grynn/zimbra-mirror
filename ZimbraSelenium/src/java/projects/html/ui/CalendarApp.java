@@ -5,6 +5,7 @@ import java.io.File;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
 
@@ -813,7 +814,7 @@ public class CalendarApp extends CommonTest {
 
 		String[] temp = viewAndDateSeparatedByColon.split(":");
 		Thread.sleep(3000);
-		String url = "http://" + config.getString("server")
+		String url = "http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=" + temp[0] + "&date=" + temp[1];
 
 		selenium.open(url);
@@ -948,7 +949,7 @@ public class CalendarApp extends CommonTest {
 	}
 
 	private static void waitForSF() throws Exception {
-		if (config.getString("browser").equals("SF"))
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("SF"))
 			Thread.sleep(2000);
 	}
 
@@ -973,8 +974,8 @@ public class CalendarApp extends CommonTest {
 		String newDate = localize(locator.CAL_APPT_EDIT_DATE_FORMAT);
 
 		String dateReturn;
-		if(config.getProperty("locale").equals("zh_HK") || config.getProperty("locale").equals("ko")
-				|| config.getProperty("locale").equals("zh_CN")) {
+		if(ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_HK") || ZimbraSeleniumProperties.getStringProperty("locale").equals("ko")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")) {
 			dateReturn = newDate.replace("M", dateArr[0]).replace("d",
 					dateArr[1]).replace("yyyy", dateArr[2]);
 			
@@ -1048,14 +1049,14 @@ public class CalendarApp extends CommonTest {
 		String[] timeArr = time.split(":");
 		String timeFormat = localize(locator.formatTimeShort);
 
-		if (config.getString("locale").equals("ja")
-				|| config.getString("locale").equals("ru"))
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ja")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ru"))
 			timeFormat = "HH:mm";
 
-		if (config.getString("locale").equals("en_AU")
-				|| config.getString("locale").equals("da")
-				|| config.getString("locale").equals("en_GB")
-				|| config.getString("locale").equals("ar"))
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("da")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ar"))
 			timeFormat = "H:mm";
 
 		if (timeFormat.equals("'kl 'H:mm"))
@@ -1073,7 +1074,7 @@ public class CalendarApp extends CommonTest {
 			if (timeArr[2].equals("PM") && (!timeArr[0].equals("12"))) {
 				int hr = Integer.parseInt(timeArr[0]);
 				hr = hr + 12;
-				if (config.getString("locale").equals("it")) {
+				if (ZimbraSeleniumProperties.getStringProperty("locale").equals("it")) {
 					return timeFormat.replace("H", Integer.toString(hr))
 							.replace("mm", timeArr[1]).replace(":", ".");
 				} else {
@@ -1082,11 +1083,11 @@ public class CalendarApp extends CommonTest {
 				}
 			} else {
 
-				if (config.getString("locale").equals("it")) {
+				if (ZimbraSeleniumProperties.getStringProperty("locale").equals("it")) {
 					return timeFormat.replace("H", timeArr[0]).replace("mm",
 							timeArr[1]).replace(":", ".");
 				}
-				if (config.getString("locale").equals("nl")) {
+				if (ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")) {
 					return timeFormat.replace("H", timeArr[0]).replace("mm",
 							timeArr[1]);
 				} else if (timeArr[0].length() == 1) {

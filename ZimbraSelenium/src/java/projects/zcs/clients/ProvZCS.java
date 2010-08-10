@@ -21,6 +21,7 @@ import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.zclient.ZMailbox;
 
 import framework.core.SelNGBase;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * @author raodv
@@ -42,26 +43,24 @@ public class ProvZCS extends SelNGBase {
 			e.printStackTrace();
 		}
 		SoapProvisioning sp = new SoapProvisioning();
-		String soapuri = "https://" + config.getString("server") + ":7071"
+		String soapuri = "https://" + ZimbraSeleniumProperties.getStringProperty("server") + ":7071"
 				+ AdminConstants.ADMIN_SERVICE_URI;
 		sp.soapSetURI(soapuri);
-		if (config.getString("isAppliance").toLowerCase().equals("true")) {
-			sp.soapAdminAuthenticate(config.getString("applianceAdmin"), config
-					.getString("adminPwd"));
+		if (ZimbraSeleniumProperties.getStringProperty("isAppliance").toLowerCase().equals("true")) {
+			sp.soapAdminAuthenticate(ZimbraSeleniumProperties.getStringProperty("applianceAdmin"), ZimbraSeleniumProperties.getStringProperty("adminPwd"));
 		} else {
-			sp.soapAdminAuthenticate(config.getString("adminName"), config
-					.getString("adminPwd"));
+			sp.soapAdminAuthenticate(ZimbraSeleniumProperties.getStringProperty("adminName"), ZimbraSeleniumProperties.getStringProperty("adminPwd"));
 		}
 		// sp.soapZimbraAdminAuthenticate();
 		Provisioning.setInstance(sp);
 		preferences = Provisioning.getInstance();
-		createDomain(config.getString("testdomain"));
+		createDomain(ZimbraSeleniumProperties.getStringProperty("testdomain"));
 	}
 
 	public static String randomizeAccntName(String username) {
 		long systimestamp = System.currentTimeMillis();
-		String testdomain = config.getString("testdomain");
-		return config.getString("locale") + username + "_" + systimestamp + "@"
+		String testdomain = ZimbraSeleniumProperties.getStringProperty("testdomain");
+		return ZimbraSeleniumProperties.getStringProperty("locale") + username + "_" + systimestamp + "@"
 				+ testdomain;
 	}
 
@@ -112,8 +111,7 @@ public class ProvZCS extends SelNGBase {
 	private static String getRandomAccount(String username,
 			Map<String, Object> accntAttrs) throws ServiceException {
 		Provisioning prov = Provisioning.getInstance();
-		accntAttrs.put(Provisioning.A_zimbraPrefLocale, config
-				.getString("locale"));
+		accntAttrs.put(Provisioning.A_zimbraPrefLocale, ZimbraSeleniumProperties.getStringProperty("locale"));
 		accntAttrs.put("zimbraPrefAutoAddAddressEnabled", "FALSE");
 		accntAttrs.put("zimbraPrefCalendarInitialView", "week");
 		accntAttrs.put("zimbraPrefCalendarApptReminderWarningTime", "0");
@@ -135,8 +133,7 @@ public class ProvZCS extends SelNGBase {
 		locequip = locequip.toLowerCase();
 
 		Provisioning prov = Provisioning.getInstance();
-		accntAttrs.put(Provisioning.A_zimbraPrefLocale, config
-				.getString("locale"));
+		accntAttrs.put(Provisioning.A_zimbraPrefLocale, ZimbraSeleniumProperties.getStringProperty("locale"));
 		if (locequip.equals("equipment")) {
 			accntAttrs.put("zimbraCalResType", "Equipment");
 		} else {
@@ -260,7 +257,7 @@ public class ProvZCS extends SelNGBase {
 		// config.getAttr(Provisioning.A_zimbraDefaultDomainName, null);
 		// assert(domain != null && domain.length() > 0);
 		// return domain;
-		return config.getString("server");
+		return ZimbraSeleniumProperties.getStringProperty("server");
 	}
 
 	private static String getDateHeaderValue(Date date) {
@@ -317,7 +314,7 @@ public class ProvZCS extends SelNGBase {
 			String ccUser, String subject, String body) throws Exception {
 
 		Provisioning prov = Provisioning.getInstance();
-		LmtpClient lmtp = new LmtpClient(config.getString("server"), prov
+		LmtpClient lmtp = new LmtpClient(ZimbraSeleniumProperties.getStringProperty("server"), prov
 				.getServer(getAccount(sender)).getIntAttr(
 						Provisioning.A_zimbraLmtpBindPort, 7025));
 		String message = getTestMessageContent(sender, recipients[0], ccUser,
@@ -344,7 +341,7 @@ public class ProvZCS extends SelNGBase {
 			String message) throws Exception {
 
 		Provisioning prov = Provisioning.getInstance();
-		LmtpClient lmtp = new LmtpClient(config.getString("server"), prov
+		LmtpClient lmtp = new LmtpClient(ZimbraSeleniumProperties.getStringProperty("server"), prov
 				.getServer(getAccount(sender)).getIntAttr(
 						Provisioning.A_zimbraLmtpBindPort, 7025));
 		byte[] data = message.getBytes();

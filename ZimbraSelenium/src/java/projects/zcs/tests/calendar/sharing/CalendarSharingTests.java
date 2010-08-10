@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 
@@ -356,7 +357,7 @@ public class CalendarSharingTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(apptSubject);
 		obj.zButtonMenu.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.byMessage));
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			obj.zMessageItem.zClick(apptSubject, "1");
 			obj.zButton.zExists(localize(locator.replyAccept));
 			obj.zButton.zExists(localize(locator.replyDecline));
@@ -477,9 +478,9 @@ public class CalendarSharingTests extends CommonTest {
 			obj.zAppointment.zRtClick(apptSubject);
 			obj.zMenuItem.zIsEnabled(localize(locator.viewAppointment));
 			obj.zMenuItem.zIsDisabled(localize(locator.accept));
-			if (!config.getString("locale").equals("pt_BR")
-					&& !config.getString("locale").equals("pl")
-					&& !config.getString("locale").equals("hi")) {
+			if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("pt_BR")
+					&& !ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")
+					&& !ZimbraSeleniumProperties.getStringProperty("locale").equals("hi")) {
 				obj.zMenuItem.zIsDisabled(localize(locator.tentative));
 			}
 			obj.zMenuItem.zIsDisabled(localize(locator.replyDecline));
@@ -534,9 +535,9 @@ public class CalendarSharingTests extends CommonTest {
 				obj.zAppointment.zRtClick(apptSubject);
 				obj.zMenuItem.zIsEnabled(localize(locator.viewAppointment));
 				obj.zMenuItem.zIsDisabled(localize(locator.accept));
-				if (!config.getString("locale").equals("pt_BR")
-						&& !config.getString("locale").equals("pl")
-						&& !config.getString("locale").equals("hi")) {
+				if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("pt_BR")
+						&& !ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")
+						&& !ZimbraSeleniumProperties.getStringProperty("locale").equals("hi")) {
 					obj.zMenuItem.zIsDisabled(localize(locator.tentative));
 				}
 				obj.zMenuItem.zIsDisabled(localize(locator.replyDecline));
@@ -573,9 +574,9 @@ public class CalendarSharingTests extends CommonTest {
 				obj.zAppointment.zRtClick(apptSubject);
 				obj.zMenuItem.zIsEnabled(localize(locator.viewAppointment));
 				obj.zMenuItem.zIsDisabled(localize(locator.accept));
-				if (!config.getString("locale").equals("pt_BR")
-						&& !config.getString("locale").equals("pl")
-						&& !config.getString("locale").equals("hi")) {
+				if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("pt_BR")
+						&& !ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")
+						&& !ZimbraSeleniumProperties.getStringProperty("locale").equals("hi")) {
 					obj.zMenuItem.zIsDisabled(localize(locator.tentative));
 				}
 				obj.zMenuItem.zIsDisabled(localize(locator.replyDecline));

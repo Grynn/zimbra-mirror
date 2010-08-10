@@ -16,6 +16,7 @@ import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * 
@@ -90,7 +91,7 @@ public class AccountImportExportTest extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		if (config.getString("browser").substring(0, 2).equals("FF")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").substring(0, 2).equals("FF")) {
 			clearDirectory();
 			createTestData();
 			exportAccount();

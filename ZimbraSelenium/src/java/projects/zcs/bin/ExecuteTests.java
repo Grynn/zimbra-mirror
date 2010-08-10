@@ -16,7 +16,6 @@ import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.configuration.*;
 import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
@@ -28,6 +27,7 @@ import framework.util.SendEmail;
 import framework.util.SkipTestClass;
 import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * Programatically runs full or debug testng suite. Reads information to
@@ -49,7 +49,6 @@ public class ExecuteTests {
 	private static String locale = "en_US";
 	private static String browser = "";
 	private static String skippedTableRows = "";
-	private static Configuration conf;
 	public static String WorkingDirectory = ".";
 
 	/**
@@ -644,7 +643,7 @@ public class ExecuteTests {
 		List<XmlSuite> suites = new ArrayList<XmlSuite>();
 		suites.add(suite);
 		System.out.println(suite.toXml());
-		SummaryReporter createSummary = new SummaryReporter(conf, appType);
+		SummaryReporter createSummary = new SummaryReporter(appType);
 		TestStatusReporter testReporter = new TestStatusReporter();
 		TestNG tng = new TestNG();
 		tng.setXmlSuites(suites);
@@ -674,8 +673,7 @@ public class ExecuteTests {
 		try {
 
 			// Create channel on the source
-			FileChannel srcChannel = new FileInputStream(conf
-					.getString("ZimbraLogRoot")
+			FileChannel srcChannel = new FileInputStream(ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")
 					+ "/testresult.txt").getChannel();
 
 			// Create channel on the destination
@@ -692,11 +690,10 @@ public class ExecuteTests {
 
 	}
 
-	public static void loadConfig() throws ConfigurationException {
-		conf = new PropertiesConfiguration(WorkingDirectory + "/conf/config.properties");
-		locale = conf.getString("locale");
-		testoutputfolder = conf.getString("ZimbraLogRoot") + "/" + appType;
-		browser = conf.getString("browser");
+	public static void loadConfig() {
+		locale = ZimbraSeleniumProperties.getStringProperty("locale");
+		testoutputfolder = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") + "/" + appType;
+		browser = ZimbraSeleniumProperties.getStringProperty("browser");
 		createResultFolders();
 	}
 

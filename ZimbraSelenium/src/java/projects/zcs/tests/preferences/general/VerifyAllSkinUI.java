@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.tests.CommonTest;
 
@@ -64,11 +65,11 @@ public class VerifyAllSkinUI extends CommonTest {
 		for (int i = 0; i <= skin.length - 1; i++) {
 			System.out.println("---------- Verifying skin UI(" + skin[i]
 					+ ") ----------");
-			selenium.open(config.getString("mode") + "://"
-					+ config.getString("server") + "/?skin="
+			selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+					+ ZimbraSeleniumProperties.getStringProperty("server") + "/?skin="
 					+ skin[i].toLowerCase());
-			zNavigateAgainIfRequired(config.getString("mode") + "://"
-					+ config.getString("server") + "/?skin="
+			zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+					+ ZimbraSeleniumProperties.getStringProperty("server") + "/?skin="
 					+ skin[i].toLowerCase());
 
 			// mail

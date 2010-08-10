@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentApp;
@@ -61,7 +62,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 			handleRetry();
 
 		zGoToApplication("Preferences");
-		if (!config.getString("locale").equals("ru")) {
+		if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("ru")) {
 			obj.zCheckbox.zVerifyIsChecked(localize(locator.includeJunkFolder));
 		}
 		obj.zCheckbox.zVerifyIsChecked(localize(locator.includeTrashFolder));
@@ -176,7 +177,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 		Thread.sleep(1000);
 		String inboxSearchValue = selenium
 				.getValue("xpath=//input[@class='search_input']");
-		if (config.getString("locale").equals("deDELETED")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("deDELETED")) {
 			expectedSearchValue = "in:inbox";
 		} else {
 			expectedSearchValue = "in:" + (char) 34 + "inbox" + (char) 34;
@@ -188,7 +189,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				"Advanced search string not showing on search edit field while click on folder (Inbox)");
 
 		// Sent folder
-		if (config.getString("locale").equals("deDELETED")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("deDELETED")) {
 			expectedSearchValue = "in:sent";
 		} else {
 			expectedSearchValue = "in:" + (char) 34 + "sent" + (char) 34;
@@ -203,7 +204,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				"Advanced search string not showing on search edit field while click on folder (Sent)");
 
 		// Drafts folder
-		if (config.getString("locale").equals("deDELETED")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("deDELETED")) {
 			expectedSearchValue = "in:drafts";
 		} else {
 			expectedSearchValue = "in:" + (char) 34 + "drafts" + (char) 34;
@@ -219,7 +220,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				"Advanced search string not showing on search edit field while click on folder (Drafts)");
 
 		// Junk folder
-		if (config.getString("locale").equals("deDELETED")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("deDELETED")) {
 			expectedSearchValue = "in:junk";
 		} else {
 			expectedSearchValue = "in:" + (char) 34 + "junk" + (char) 34;
@@ -234,7 +235,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				"Advanced search string not showing on search edit field while click on folder (Junk)");
 
 		// Trash folder
-		if (config.getString("locale").equals("deDELETED")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("deDELETED")) {
 			expectedSearchValue = "in:trash";
 		} else {
 			expectedSearchValue = "in:" + (char) 34 + "trash" + (char) 34;
@@ -289,17 +290,17 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				"from:(" + SelNGBase.selfAccountName + ")",
 				userNameSearchValue,
 				"Advanced search string not showing on search edit field while do mail right click menu > Advanced Search");
-		if (config.getString("locale").equals("ru")
-				|| config.getString("locale").equals("pl")
-				|| config.getString("locale").equals("sv")
-				|| config.getString("locale").equals("ko")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ru")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("sv")
+				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ko")) {
 			obj.zButton.zClick(localize(locator.close));
 		} else {
 			obj.zButton.zClick(localize(locator.advanced));
 		}
 
 		// Address Book - Contacts folder
-		if (config.getString("locale").equals("deDELETED")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("deDELETED")) {
 			expectedSearchValue = "in:contacts";
 		} else {
 			expectedSearchValue = "in:" + (char) 34 + "contacts" + (char) 34;
@@ -319,7 +320,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				"Advanced search string not showing on search edit field while click on folder (Contacts)");
 
 		// Address Book - 'Emailed Contacts' folder
-		if (config.getString("locale").equals("deDELETED")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("deDELETED")) {
 			expectedSearchValue = "in:Emailed Contacts";
 		} else {
 			expectedSearchValue = "in:" + (char) 34 + "Emailed Contacts"
@@ -336,7 +337,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				"Advanced search string not showing on search edit field while click on folder (Emailed Contacts)");
 
 		// Tasks - Tasks folder
-		if (config.getString("locale").equals("deDELETED")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("deDELETED")) {
 			expectedSearchValue = "in:tasks";
 		} else {
 			expectedSearchValue = "in:" + (char) 34 + "tasks" + (char) 34;

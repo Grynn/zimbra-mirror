@@ -10,6 +10,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
@@ -309,7 +310,7 @@ public class DraftTests extends CommonTest {
 				"Verifying html formatting in show original");
 		selenium.selectWindow(null);
 		obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			// IE 8 requires this click event that is why we again wrote same
 			// line here
 			obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
@@ -332,7 +333,7 @@ public class DraftTests extends CommonTest {
 				"Verifying html formatting in show original");
 		selenium.selectWindow(null);
 		obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			// IE 8 requires this click event that is why we again wrote same
 			// line here
 			obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
@@ -340,7 +341,7 @@ public class DraftTests extends CommonTest {
 		obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
 		obj.zButton.zExists("ImgBold");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			obj.zDialog.zVerifyAlertMessage(localize(locator.warningMsg),
 					localize(locator.askSaveDraft));
 			obj.zButton.zClickInDlg(localize(locator.no));
@@ -386,7 +387,7 @@ public class DraftTests extends CommonTest {
 				"Verifying html formatting in show original");
 		selenium.selectWindow(null);
 		obj.zMessageItem.zClick("Bug34870 save draft(html format) subject");
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			// IE 8 requires this is click event that is why we again wrote same
 			// line here
 			obj.zMessageItem.zClick("Bug34870 save draft(html format) subject");

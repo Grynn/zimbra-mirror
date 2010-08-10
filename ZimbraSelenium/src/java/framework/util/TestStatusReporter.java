@@ -61,9 +61,9 @@ public class TestStatusReporter extends TestListenerAdapter {
 	  if(productName == "")
 		  productName = "Zimbra-"+SelNGBase.appType.toLowerCase();
 	  if(locale == "")
-		  locale = SelNGBase.config.getString("locale");
+		  locale = ZimbraSeleniumProperties.getStringProperty("locale");
 	  if(serverName == "")
-		  serverName = SelNGBase.config.getString("server");
+		  serverName = ZimbraSeleniumProperties.getStringProperty("server");
 	  
       String datetime =  sdf.format(cl.getTime());
 

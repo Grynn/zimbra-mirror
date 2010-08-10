@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.configuration.*;
 import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
@@ -50,7 +49,6 @@ public class ExecuteTests {
 	private static String locale = "en_US";
 	private static String browser = "";
 	private static String skippedTableRows = "";
-	private static Configuration conf;
 	public static String WorkingDirectory = ".";
 	public static final String PACKAGE_OPT = "-p";
 	public static final String CLASS_OPT = "-c";
@@ -301,7 +299,7 @@ public class ExecuteTests {
 		List<XmlSuite> suites = new ArrayList<XmlSuite>();
 		suites.add(suite);
 		System.out.println(suite.toXml());
-		SummaryReporter createSummary = new SummaryReporter(conf, appType);
+		SummaryReporter createSummary = new SummaryReporter(appType);
 		TestStatusReporter testReporter = new TestStatusReporter();
 		TestNG tng = new TestNG();
 		tng.setXmlSuites(suites);
@@ -321,8 +319,7 @@ public class ExecuteTests {
 
 	}
 
-	public static void loadConfig() throws ConfigurationException {
-		conf = ZimbraSeleniumProperties.getConfigProperties();
+	public static void loadConfig() {
 		locale = ZimbraSeleniumProperties.getStringProperty("locale", "en_US");
 		testoutputfolder = ZimbraSeleniumProperties.getStringProperty(
 				"ZimbraLogRoot", "test-output")
@@ -365,9 +362,9 @@ public class ExecuteTests {
 		try {
 
 			// Create channel on the source
-			FileChannel srcChannel = new FileInputStream(conf
-					.getString("ZimbraLogRoot")
-					+ "/testresult.txt").getChannel();
+			FileChannel srcChannel = new FileInputStream(
+					ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") + "/testresult.txt"
+					).getChannel();
 
 			// Create channel on the destination
 			FileChannel dstChannel = new FileOutputStream(testoutputfolder

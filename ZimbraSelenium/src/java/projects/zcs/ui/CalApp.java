@@ -10,6 +10,8 @@ package projects.zcs.ui;
 
 import org.testng.Assert;
 
+import framework.util.ZimbraSeleniumProperties;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -99,7 +101,7 @@ public class CalApp extends CommonTest {
 		if (view.equals("day"))
 			obj.zMenuItem.zClick(localize(locator.day));
 		else if (view.equals("week"))
-			if (config.getString("locale").equals("zh_HK")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_HK")) {
 				obj.zMenuItem.zClick(localize(locator.viewWeek));
 			} else {
 				obj.zMenuItem.zClick(localize(locator.week));

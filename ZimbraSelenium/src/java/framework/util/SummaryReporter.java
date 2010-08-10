@@ -8,7 +8,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
-
 import java.io.Writer;
 
 import org.testng.IReporter;
@@ -17,27 +16,21 @@ import org.testng.ISuiteResult;
 import org.testng.ITestContext;
 import org.testng.xml.XmlSuite;
 
-import org.apache.commons.configuration.*;
-
-import projects.html.tests.CommonTest;
-
 import framework.core.SelNGBase;
 
 public class SummaryReporter implements IReporter {
 
 	private String dynSkippedTestMethods = "";
-	private static Configuration conf;
 	private static String outputfolder ="";
 	private static String appType = "";
     
-    public SummaryReporter(Configuration conf1, String atype){
-    	conf = conf1;
+    public SummaryReporter(String atype){
     	appType = atype;
-    	outputfolder = conf.getString("ZimbraLogRoot")+"/"+atype;
+    	outputfolder = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")+"/"+atype;
     }	
 	public void generateReport(java.util.List<XmlSuite> xmlSuites,
 			java.util.List<ISuite> suites, java.lang.String outputDirectory) {
-		System.out.println(conf.getString("locale"));
+		System.out.println(ZimbraSeleniumProperties.getStringProperty("locale"));
 		int passed = 0;
 		int failed = 0;
 		int skipped = 0;
@@ -61,10 +54,10 @@ public class SummaryReporter implements IReporter {
 				+ (passed + failed + skipped + dynamicallySkipped) + " passed:"
 				+ passed + " failed:" + failed + " skipped:"
 				+ (skipped + dynamicallySkipped) + " locale:"
-				+ conf.getString("locale") + " browser:"
+				+ ZimbraSeleniumProperties.getStringProperty("locale") + " browser:"
 				+ SelNGBase.currentBrowserName + " client:"
 				+ System.getenv("COMPUTERNAME") + " server:"
-				+ conf.getString("server") + " zimbra:"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + " zimbra:"
 				+ ZimbraSeleniumProperties.getStringProperty(ZimbraSeleniumProperties.PropZimbraVersion, "unknown");
 		String subject = "SelNG-" + appType.toLowerCase()+" "+testdetails;
 		String bodyfileXpPath = outputfolder;

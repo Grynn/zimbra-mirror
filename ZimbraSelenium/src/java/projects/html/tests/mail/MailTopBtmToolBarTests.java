@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
 import projects.zcs.clients.ProvZCS;
@@ -165,7 +166,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		} else if (subject.equals("BTdoActionWithoutSelectingMail")) {
 			obj.zButton.zClick(page.zMailApp.zDeleteBtn, "2");
 		}
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			currentToastMessage = obj.zToastAlertMessage.zGetMsg();
 			assertReport(currentToastMessage, "No conversation selected",
 					"Verifying message when try to click Delete button without selecting message");
@@ -180,7 +181,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		} else if (subject.equals("BTdoActionWithoutSelectingMail")) {
 			page.zMailApp.zMoveToBtmToolbar(localize(locator.sent));
 		}
-		if (config.getString("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			currentToastMessage = obj.zToastAlertMessage.zGetMsg();
 			assertReport(currentToastMessage, "No conversation selected",
 					"Verifying message when try to move message without selecting message");
@@ -197,7 +198,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 				page.zMailApp
 						.zMoreActionsBtmToolbar(localize(locator.actionMarkRead));
 			}
-			if (config.getString("locale").equals("en_US")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 				currentToastMessage = obj.zToastAlertMessage.zGetMsg();
 				assertReport(
 						currentToastMessage,
@@ -270,17 +271,17 @@ public class MailTopBtmToolBarTests extends CommonTest {
 
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
 		}
 		obj.zCheckbox.zClick(subject);
 		Thread.sleep(SMALL_WAIT);
 		if (subject.equals("TTmoveSingleMailAndVerify")) {
-			if (config.getString("locale").equals("pl")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")) {
 				obj.zHtmlMenu.zClick("name=folderId", localize(locator.sent)
 						.substring(0, 5)
 						+ ".*");
-			} else if (config.getString("locale").equals("ar")) {
+			} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ar")) {
 				obj.zHtmlMenu.zClick("name=folderId", localize(locator.sent)
 						.substring(0, 2)
 						+ ".*");
@@ -288,11 +289,11 @@ public class MailTopBtmToolBarTests extends CommonTest {
 				page.zMailApp.zMoveTo(localize(locator.sent));
 			}
 		} else if (subject.equals("BTmoveSingleMailAndVerify")) {
-			if (config.getString("locale").equals("pl")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")) {
 				obj.zHtmlMenu.zClickMenuByLocation("name=folderId", localize(
 						locator.sent).substring(0, 5)
 						+ ".*", "2", "2");
-			} else if (config.getString("locale").equals("ar")) {
+			} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ar")) {
 				obj.zHtmlMenu.zClickMenuByLocation("name=folderId", localize(
 						locator.sent).substring(0, 2)
 						+ ".*", "2", "2");
@@ -329,7 +330,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 					.println("--- Test (moveMultipleMailsAndVerify) started for bottom toolbar ---");
 			newSubject = "bottomtblformove";
 		}
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
 		}
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, subject, body,
@@ -340,11 +341,11 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		obj.zCheckbox.zClick(newSubject);
 		Thread.sleep(SMALL_WAIT);
 		if (subject.equals("TTmoveMultipleMailsAndVerify")) {
-			if (config.getString("locale").equals("pl")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")) {
 				obj.zHtmlMenu.zClick("name=folderId", localize(locator.sent)
 						.substring(0, 5)
 						+ ".*");
-			} else if (config.getString("locale").equals("ar")) {
+			} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ar")) {
 				obj.zHtmlMenu.zClick("name=folderId", localize(locator.sent)
 						.substring(0, 2)
 						+ ".*");
@@ -352,11 +353,11 @@ public class MailTopBtmToolBarTests extends CommonTest {
 				page.zMailApp.zMoveTo(localize(locator.sent));
 			}
 		} else if (subject.equals("BTmoveMultipleMailsAndVerify")) {
-			if (config.getString("locale").equals("pl")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")) {
 				obj.zHtmlMenu.zClickMenuByLocation("name=folderId", localize(
 						locator.sent).substring(0, 5)
 						+ ".*", "2", "2");
-			} else if (config.getString("locale").equals("ar")) {
+			} else if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ar")) {
 				obj.zHtmlMenu.zClickMenuByLocation("name=folderId", localize(
 						locator.sent).substring(0, 2)
 						+ ".*", "2", "2");
@@ -396,7 +397,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		// verify junk - not junk mail functionality
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
 		}
 		obj.zCheckbox.zClick(subject);
@@ -449,7 +450,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
 		}
 		obj.zCheckbox.zClick(subject);
@@ -538,7 +539,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
-		if (config.getString("browser").equals("IE")) {
+		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
 		}
 		obj.zCheckbox.zClick(subject);

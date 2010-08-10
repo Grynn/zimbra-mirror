@@ -16,6 +16,7 @@ import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 @SuppressWarnings( { "static-access", "unused" })
 public class ShortcutsCalendar extends CommonTest {
@@ -106,7 +107,7 @@ public class ShortcutsCalendar extends CommonTest {
 			Thread.sleep(2000);
 
 
-			if(config.getString("locale").equals("en_US") || config.getString("locale").equals("en_AU") || config.getString("locale").equals("en_GB")) {
+			if(ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")) {
 				/**
 				 * Following code makes test case english locale specific.
 				 */
@@ -125,7 +126,7 @@ public class ShortcutsCalendar extends CommonTest {
 			zRobot.keyRelease(keyToPress);
 			Thread.sleep(2000);
 
-			if(config.getString("locale").equals("en_US") || config.getString("locale").equals("en_AU") || config.getString("locale").equals("en_GB")) {
+			if(ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")) {
 				/**
 				 * Following code makes test case english locale specific.
 				 */
@@ -142,7 +143,7 @@ public class ShortcutsCalendar extends CommonTest {
 			zRobot.keyRelease(keyToPress);
 			Thread.sleep(2000);
 
-			if(config.getString("locale").equals("en_US") || config.getString("locale").equals("en_AU") || config.getString("locale").equals("en_GB")) {
+			if(ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")) {
 				/**
 				 * Following code makes test case english locale specific.
 				 */
@@ -173,7 +174,7 @@ public class ShortcutsCalendar extends CommonTest {
 			zRobot.keyRelease(keyToPress);
 			Thread.sleep(2000);
 
-			if(config.getString("locale").equals("en_US") || config.getString("locale").equals("en_AU") || config.getString("locale").equals("en_GB")) {
+			if(ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")) {
 				/**
 				 * Following code makes test case english locale specific.
 				 */

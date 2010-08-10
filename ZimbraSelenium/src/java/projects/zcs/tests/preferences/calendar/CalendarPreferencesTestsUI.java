@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -507,7 +508,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 	}
 
 	private void waitForIE() throws Exception {
-		String browser = config.getString("browser");
+		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 		
 		if (browser.equals("IE"))
 			Thread.sleep(1000);
@@ -516,7 +517,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 	
 	
 //	private static String getNameWithoutSpace(String key) {
-//		if (config.getString("browser").equals("IE"))
+//		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE"))
 //			return key.replace(" :", "");
 //		else
 //			return key;
