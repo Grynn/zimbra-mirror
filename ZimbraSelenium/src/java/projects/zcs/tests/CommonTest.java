@@ -211,8 +211,8 @@ public class CommonTest extends SelNGBase {
 			CmdExec("taskkill /f /t /im Safari.exe");
 			CmdExec("taskkill /f /t /im chrome.exe");
 		}
-	BufferedWriter out = new BufferedWriter(new FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt"));
-    out.close();
+	//BufferedWriter out = new BufferedWriter(new FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt"));
+    //out.close();
 	}
 
 	public static void writeCoverage() throws Exception {
@@ -237,10 +237,10 @@ public class CommonTest extends SelNGBase {
 	
 	@AfterClass(groups = { "always" })
 	public void stopSession() throws Exception {
-		BufferedWriter out = new BufferedWriter(new FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt", true));
-		out.write(this.getClass().toString() + "\n");
-	    out.close();
-		System.out.println("Executing AfterClass For " + this.getClass().toString());
+		//BufferedWriter out = new BufferedWriter(new FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt", true));
+		//out.write(this.getClass().toString() + "\n");
+	    //out.close();
+		//System.out.println("Executing AfterClass For " + this.getClass().toString());
 		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) {
 			writeCoverage();
 		}
