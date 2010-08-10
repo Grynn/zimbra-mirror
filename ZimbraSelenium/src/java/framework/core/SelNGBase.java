@@ -1,32 +1,22 @@
 package framework.core;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import net.sf.json.JSONArray;
 
-import org.openqa.selenium.server.RemoteControlConfiguration;
-import org.openqa.selenium.server.SeleniumServer;
 import org.testng.Assert;
 
-import framework.util.ZimbraSeleniumLogger;
 import framework.util.ZimbraSeleniumProperties;
 
 public class SelNGBase {
 
-	protected SeleniumServer ss;
 	public static ZimbraSelenium selenium;
 	public static  String WAIT_FOR_PAGE_LOAD = "30000";
 
 	public static String currentBrowserName = "";
 	public static HashMap<String, String> expectedValue = new HashMap<String, String>();
-	protected RemoteControlConfiguration rcConfig;
 	public static int maxRetryCount = 0;
 	public static int currentRetryCount = 0;
 	public static boolean isExecutionARetry = false;
@@ -69,70 +59,11 @@ public class SelNGBase {
 	 */
 	public static boolean ignoreFolderHdr = false;
 
-	// can be used @beforeTest
-	public void startSeleniumServer() throws Exception {
-		if (ZimbraSeleniumProperties.getStringProperty("serverMachineName").toLowerCase().equals("localhost")){
-			CmdExec("taskkill /f /t /im iexplore.exe");
-			CmdExec("taskkill /f /t /im firefox.exe");
-			CmdExec("taskkill /f /t /im Safari.exe");
-			CmdExec("taskkill /f /t /im chrome.exe");
-			rcConfig = new RemoteControlConfiguration();
-			rcConfig.setPort(Integer.parseInt(ZimbraSeleniumProperties.getStringProperty("serverPort", "4444")));
-			rcConfig.setUserExtensions(new File("src/java/framework/lib/user-extensions.js"));
-			ss = new SeleniumServer(false, rcConfig);
-			if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) {
-				WAIT_FOR_PAGE_LOAD="90000";
-			}
-
-			
-			try{
-				URL stopUrl;
-				stopUrl = new URL("http://localhost:" +
-						ZimbraSeleniumProperties.getStringProperty("serverPort", "4444") +
-						"/selenium-server/driver/?cmd=shutDownSeleniumServer");
-				BufferedReader in = new BufferedReader(new InputStreamReader(stopUrl.openStream()));
-	
-				while (in.readLine() != null)
-					ZimbraSeleniumLogger.mLog.info("A Selenium Server was running already." +
-							" Attempting to kill and start then");
-				in.close();
-				Thread.sleep(10000);
-			} catch (Exception e) {
-				// Server was not running, ignore
-			}
-			try{
-				ss.boot();
-			} catch (Exception e){
-				// TODO: Couldn't kill running RC, we will try to reuse it to 
-				// avoid skips for now but that is not the best approach
-			}
-		}
-	}
 	
 	// can be used as @aftermethod
 	public static void stopSeleniumSession() {
 		if (selenium != null){
 			selenium.stop();
-		}
-	}
-
-	// Can be used @aftertest
-	public void stopSeleniumServer() {
-		if (ZimbraSeleniumProperties.getStringProperty("serverMachineName").toLowerCase().equals("localhost")){
-			ss.stop();
-			try {
-				URL stopUrl;
-				stopUrl = new URL("http://localhost:" +
-						ZimbraSeleniumProperties.getStringProperty("serverPort", "4444") +
-						"/selenium-server/driver/?cmd=shutDownSeleniumServer");
-				BufferedReader in = new BufferedReader(new InputStreamReader(stopUrl.openStream()));
-		
-				while (in.readLine() != null)
-					ZimbraSeleniumLogger.mLog.info("A Selenium Server was not stopped. Attempting to kill");
-				in.close();
-			} catch (IOException e) {
-				// Selenium server must be down already, ignore
-			}
 		}
 	}
 

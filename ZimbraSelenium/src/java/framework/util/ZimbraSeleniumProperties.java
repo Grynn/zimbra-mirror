@@ -29,11 +29,11 @@ public class ZimbraSeleniumProperties {
 		return (getStringProperty(key, null));
 	}
 	
-	public static long getIntProperty(String key) {
+	public static int getIntProperty(String key) {
 		return (getIntProperty(key, 0));
 	}
 
-	public static long getIntProperty(String key, int defaultValue) {
+	public static int getIntProperty(String key, int defaultValue) {
 		String value = ZimbraSeleniumProperties.getInstance().getConfigProp().getString(key, null);
 		if ( value == null )
 			return (defaultValue);

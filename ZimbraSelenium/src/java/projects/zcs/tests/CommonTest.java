@@ -35,6 +35,7 @@ import projects.zcs.Locators;
 import projects.zcs.PageObjects;
 import projects.zcs.clients.ProvZCS;
 import framework.core.SelNGBase;
+import framework.core.SeleniumService;
 import framework.util.HarnessException;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -202,7 +203,7 @@ public class CommonTest extends SelNGBase {
 	public void initTests() throws Exception {
 		initFramework();
 		ProvZCS.setupZCSTestBed();
-		super.startSeleniumServer();
+		SeleniumService.getInstance().startSeleniumServer();
 		ProvZCS.createAccount("ccuser@testdomain.com");
 		ProvZCS.createAccount("bccuser@testdomain.com");
 		if (!SelNGBase.suiteName.equals("debugSuite")) {
@@ -231,8 +232,8 @@ public class CommonTest extends SelNGBase {
 	
 	
 	@AfterSuite(groups = { "always" })
-	public void cleanup() throws Exception {
-		super.stopSeleniumServer();
+	public void cleanup() throws HarnessException {
+		SeleniumService.getInstance().stopSeleniumServer();
 	}
 	
 	@AfterClass(groups = { "always" })

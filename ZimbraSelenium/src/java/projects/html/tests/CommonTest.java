@@ -23,6 +23,8 @@ import projects.html.clients.ProvZCS;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.core.SeleniumService;
+import framework.util.HarnessException;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -145,24 +147,18 @@ public class CommonTest extends SelNGBase {
 	}
 
 	@BeforeSuite(groups = { "always" })
-	public void initTests() throws ServiceException {
+	public void initTests() throws ServiceException, HarnessException {
 		initFramework();
 		ProvZCS.setupZCSTestBed();
-		startSeleniumServer();
+		SeleniumService.getInstance().startSeleniumServer();
 		ProvZCS.createAccount("ccuser@testdomain.com");
 		ProvZCS.createAccount("bccuser@testdomain.com");
 
 	}
 
 	@AfterSuite(groups = { "always" })
-	public void stopSeleniumServer() {
-		// selenium.click("link="+localize(locator.switchToAdvancedClient));
-		// try {
-		// Thread.sleep(10000);
-		// } catch (InterruptedException e) {
-		// }
-		// ZimbraVersion = ZimbraUtil.getZimbraVersion();
-		super.stopSeleniumServer();
+	public void cleanup() throws HarnessException {
+		SeleniumService.getInstance().stopSeleniumServer();
 	}
 
 	public void initFramework() {
@@ -458,13 +454,5 @@ public class CommonTest extends SelNGBase {
 
 	}
 
-	public void startSeleniumServer() {
-		try {
-			super.startSeleniumServer();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
 
 }
