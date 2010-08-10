@@ -13,17 +13,16 @@ import framework.util.RetryFailedTests;
  * @author Jitesh Sojitra
  */
 
+@SuppressWarnings("static-access")
 public class CalendarSavedSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
-	@DataProvider(name = "mailDataProvider")
+	@DataProvider(name = "dataProvider")
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
-		if (test.equals("test1")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
-					"bccuser@testdomain.com", getLocalizedData(5),
-					getLocalizedData(5), "testexcelfile.xls" } };
+		if (test.equals("appointmentSavedSearchTest")) {
+			return new Object[][] { { getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { { "" } };
 		}
@@ -35,6 +34,7 @@ public class CalendarSavedSearchTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
+		zGoToApplication("Calendar");
 		isExecutionARetry = false;
 	}
 
@@ -49,11 +49,26 @@ public class CalendarSavedSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
-	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void test1(String to, String cc, String bcc, String subject,
-			String body, String attachments) throws Exception {
+	@Test(dataProvider = "dataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void appointmentSavedSearchTest(String subject) throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
+
+		page.zCalCompose.zCreateSimpleAppt(subject);
+		page.zCalCompose.zCreateSimpleAppt("123xyz");
+
+		selenium.type("xpath=//input[@class='search_input']", subject);
+		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
+		obj.zAppointment.zExists(subject);
+		obj.zAppointment.zNotExists("123xyz");
+		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");
+		obj.zEditField.zTypeInDlgByName("id=*nameField", "Srch" + subject,
+				localize(locator.saveSearch));
+		obj.zButton.zClickInDlgByName(localize(locator.ok),
+				localize(locator.saveSearch));
+		obj.zFolder.zClick("Srch" + subject);
+		obj.zAppointment.zExists(subject);
+		obj.zAppointment.zNotExists("123xyz");
 
 		needReset = false;
 	}

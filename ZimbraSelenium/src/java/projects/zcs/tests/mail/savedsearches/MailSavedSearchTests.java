@@ -25,8 +25,8 @@ public class MailSavedSearchTests extends CommonTest {
 	@DataProvider(name = "mailDataProvider")
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
-		if (test.equals("saveSearch_Bug34872_Bug44871")
-				|| test.equals("saveSearch_Bug44232")) {
+		if (test.equals("mailSaveSearch_Bug34872_Bug44871")
+				|| test.equals("mailSaveSearch_Bug44232")) {
 			return new Object[][] { { "_selfAccountName_",
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData_NoSpecialChar(), getLocalizedData(5), "" } };
@@ -41,6 +41,7 @@ public class MailSavedSearchTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
+		zGoToApplication("Mail");
 		isExecutionARetry = false;
 	}
 
@@ -56,8 +57,9 @@ public class MailSavedSearchTests extends CommonTest {
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void saveSearch_Bug34872_Bug44871(String to, String cc, String bcc,
-			String subject, String body, String attachments) throws Exception {
+	public void mailSaveSearch_Bug34872_Bug44871(String to, String cc,
+			String bcc, String subject, String body, String attachments)
+			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
@@ -98,7 +100,7 @@ public class MailSavedSearchTests extends CommonTest {
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void saveSearch_Bug44232(String to, String cc, String bcc,
+	public void mailSaveSearch_Bug44232(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
