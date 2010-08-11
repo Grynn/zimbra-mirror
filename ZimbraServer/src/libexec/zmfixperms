@@ -422,6 +422,12 @@ if [ -L ${zimbra_home}/jetty ]; then
   chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/fbqueue
   chmod 755 ${zimbra_home}/fbqueue
 
+  if [ ! -d ${zimbra_home}/data/mailboxd/imap/cache ]; then
+    mkdir -p ${zimbra_home}/data/mailboxd/imap/cache
+  fi
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/mailboxd/imap/cache
+  chmod 755 ${zimbra_home}/data/mailboxd/imap/cache
+
   if [ ! -d ${zimbra_home}/zimlets-deployed ]; then
     mkdir -p ${zimbra_home}/zimlets-deployed
   fi
