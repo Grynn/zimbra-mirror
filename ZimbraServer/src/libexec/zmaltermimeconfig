@@ -57,7 +57,7 @@ exit 0;
 # ***** Subroutines *****
 sub usage {
   print "\n";
-  print "Usage: $0 [-h] [-d] [-f] [-v+]\n";
+  print "Usage: $0 [-h] [-f] [-v]\n";
   print " --help: print this usage statement.\n";
   print " --force: Force the rename, bypassing safety checks.\n";
   print " --verbose: Set the verbosity level.\n";
