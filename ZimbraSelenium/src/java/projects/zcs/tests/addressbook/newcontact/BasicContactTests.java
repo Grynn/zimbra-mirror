@@ -1,12 +1,16 @@
 package projects.zcs.tests.addressbook.newcontact;
 
+
 import java.lang.reflect.Method;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import projects.zcs.tests.CommonTest;
+import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
 
 /**
@@ -86,9 +90,13 @@ public class BasicContactTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstname);
-		obj.zContactListItem.zExists(cnLastName);
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstname;
+		contact.middleName = cnMiddleName;
+		contact.lastName = cnLastName;
+
+		page.zABCompose.zCreateBasicContact(contact);
+		obj.zContactListItem.zExists(contact.lastName);
 
 		needReset = false;
 	}
@@ -104,8 +112,12 @@ public class BasicContactTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstname);
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstname;
+		contact.middleName = cnMiddleName; 
+		contact.lastName = cnLastName;
+
+		page.zABCompose.zCreateBasicContact(contact);
 		page.zABCompose.zModifyContact(cnLastName, newcnLastName,
 				newMiddleName, "", "", "ToolbarEdit");
 
@@ -128,8 +140,12 @@ public class BasicContactTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstname);
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstname;
+		contact.middleName = cnMiddleName; 
+		contact.lastName = cnLastName;
+
+		page.zABCompose.zCreateBasicContact(contact);
 		page.zABCompose.zModifyContact(cnLastName, newcnLastName,
 				newMiddleName, "", "", "RightClickEdit");
 		Assert
@@ -150,8 +166,12 @@ public class BasicContactTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstname);
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstname;
+		contact.middleName = cnMiddleName; 
+		contact.lastName = cnLastName;
+
+		page.zABCompose.zCreateBasicContact(contact);
 		if (obj.zContactListItem.zExistsDontWait(cnLastName).equals("true"))
 			page.zABApp.zDeleteContactAndVerify(cnLastName, "ToolbarDelete");
 
@@ -168,8 +188,12 @@ public class BasicContactTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstname);
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstname;
+		contact.middleName = cnMiddleName; 
+		contact.lastName = cnLastName;
+
+		page.zABCompose.zCreateBasicContact(contact);
 		if (obj.zContactListItem.zExistsDontWait(cnLastName).equals("true"))
 			page.zABApp.zMoveContactAndVerify(cnLastName, targetAB,
 					"ToolbarMove");
@@ -188,8 +212,12 @@ public class BasicContactTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstname);
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstname;
+		contact.middleName = cnMiddleName; 
+		contact.lastName = cnLastName;
+
+		page.zABCompose.zCreateBasicContact(contact);
 		if (obj.zContactListItem.zExistsDontWait(cnLastName).equals("true"))
 			page.zABApp.zMoveContactAndVerify(cnLastName, targetAB,
 					"RightClickMove");
@@ -207,8 +235,12 @@ public class BasicContactTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstname);
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstname;
+		contact.middleName = cnMiddleName; 
+		contact.lastName = cnLastName;
+
+		page.zABCompose.zCreateBasicContact(contact);
 		if (obj.zContactListItem.zExistsDontWait(cnLastName).equals("true"))
 			page.zABApp.zDeleteContactAndVerify(cnLastName, "RightClickDelete");
 
@@ -226,8 +258,12 @@ public class BasicContactTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstname);
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstname;
+		contact.middleName = cnMiddleName; 
+		contact.lastName = cnLastName;
+
+		page.zABCompose.zCreateBasicContact(contact);
 		obj.zContactListItem.zRtClick(cnLastName);
 		page.zABApp.zVerifyAllMenuItems(enabledItemsSeparatedByComma,
 				disabledItemsSeparatedByComma, ignoreContext);

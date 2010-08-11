@@ -4,14 +4,14 @@ import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
-import framework.util.RetryFailedTests;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
+import framework.core.SelNGBase;
+import framework.items.ContactItem;
+import framework.util.RetryFailedTests;
 
 //written by Prashant Jaiswal
 
@@ -95,9 +95,14 @@ public class AddressBookSharingTests extends CommonTest {
 			String cnMiddleName, String cnFirstName, String folderName,
 			String attendee, String role, String mountFolderName)
 			throws Exception {
+		
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstName;
+		contact.middleName = cnMiddleName;
+		contact.lastName = cnLastName;
+
 		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstName);
+		page.zABCompose.zCreateBasicContact(contact);
 
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				role, "", "", "");
@@ -132,9 +137,14 @@ public class AddressBookSharingTests extends CommonTest {
 			String cnMiddleName, String cnFirstName, String folderName,
 			String attendee, String role, String mountFolderName)
 			throws Exception {
+
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstName;
+		contact.middleName = cnMiddleName;
+		contact.lastName = cnLastName;
+
 		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstName);
+		page.zABCompose.zCreateBasicContact(contact);
 
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				role, "", "", "");
@@ -177,9 +187,14 @@ public class AddressBookSharingTests extends CommonTest {
 			String cnMiddleName, String cnFirstName, String folderName,
 			String attendee, String role, String mountFolderName)
 			throws Exception {
+
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstName;
+		contact.middleName = cnMiddleName;
+		contact.lastName = cnLastName;
+
 		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstName);
+		page.zABCompose.zCreateBasicContact(contact);
 
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				role, "", "", "");
@@ -215,9 +230,14 @@ public class AddressBookSharingTests extends CommonTest {
 	public void revokeShareAB(String cnLastName, String cnMiddleName,
 			String cnFirstName, String folderName, String attendee,
 			String role, String mountFolderName) throws Exception {
+
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstName;
+		contact.middleName = cnMiddleName;
+		contact.lastName = cnLastName;
+
 		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstName);
+		page.zABCompose.zCreateBasicContact(contact);
 
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				role, "", "", "");
@@ -247,9 +267,14 @@ public class AddressBookSharingTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstName;
+		contact.middleName = cnMiddleName;
+		contact.lastName = cnLastName;
+
 		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstName);
+		page.zABCompose.zCreateBasicContact(contact);
+
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				localize(locator.shareRoleViewer), "", "", "");
 		page.zSharing.zModifySharedFolder("Address Book", folderName,
@@ -291,9 +316,15 @@ public class AddressBookSharingTests extends CommonTest {
 			handleRetry();
 
 		String currentloggedinuser = SelNGBase.selfAccountName;
+
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstName;
+		contact.middleName = cnMiddleName;
+		contact.lastName = cnLastName;
+
 		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstName);
+		page.zABCompose.zCreateBasicContact(contact);
+
 		page.zSharing.zShareFolder("Address Book", folderName,
 				localize(locator.shareWithGuest), attendee, role, "", "", "");
 
@@ -332,9 +363,14 @@ public class AddressBookSharingTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstName;
+		contact.middleName = cnMiddleName;
+		contact.lastName = cnLastName;
+
 		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(cnLastName, cnMiddleName,
-				cnFirstName);
+		page.zABCompose.zCreateBasicContact(contact);
+
 		page.zSharing.zShareFolder("Address Book", folderName,
 				localize(locator.shareWithPublicLong), "", "", "", "", "");
 

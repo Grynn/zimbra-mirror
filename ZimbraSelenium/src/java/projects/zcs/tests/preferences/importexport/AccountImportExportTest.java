@@ -15,6 +15,7 @@ import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
+import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -165,11 +166,16 @@ public class AccountImportExportTest extends CommonTest {
 
 		// ------------------------- Address Book -------------------------
 		zGoToApplication("Address Book");
-		page.zABCompose.zCreateBasicContact(lastName, "", firstName);
+		ContactItem contact1 = new ContactItem();
+		contact1.firstName=firstName;
+		contact1.lastName = lastName;
+		page.zABCompose.zCreateBasicContact(contact1);
 
 		// apply tag to contact
-		page.zABCompose
-				.zCreateBasicContact(lastNameTagged, "", firstNameTagged);
+		ContactItem contact2 = new ContactItem();
+		contact2.firstName = lastNameTagged;
+		contact2.firstName = firstNameTagged;
+		page.zABCompose.zCreateBasicContact(contact2);
 		obj.zFolder.zClick(page.zABCompose.zContactsFolder);
 		Thread.sleep(2000);
 		obj.zContactListItem.zClick(lastNameTagged);

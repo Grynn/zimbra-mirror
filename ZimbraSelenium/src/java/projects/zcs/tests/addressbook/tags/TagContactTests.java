@@ -1,12 +1,17 @@
 package projects.zcs.tests.addressbook.tags;
 
 import java.lang.reflect.Method;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import projects.zcs.tests.CommonTest;
+
 import com.zimbra.common.service.ServiceException;
+
+import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
 
 /**
@@ -69,7 +74,13 @@ public class TagContactTests extends CommonTest {
 			handleRetry();
 
 		String tag1, newTag1;
-		page.zABCompose.zCreateBasicContact(lastName, "", firstName);
+		
+		ContactItem contact = new ContactItem();
+		contact.firstName = firstName;
+		contact.lastName = lastName;
+
+		page.zABCompose.zCreateBasicContact(contact);
+
 		tag1 = getLocalizedData_NoSpecialChar();
 		newTag1 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
@@ -107,9 +118,18 @@ public class TagContactTests extends CommonTest {
 			handleRetry();
 
 		String lastName2, tag1, tag2;
-		lastName2 = getLocalizedData_NoSpecialChar();
-		page.zABCompose.zCreateBasicContact(lastName, "", firstName);
-		page.zABCompose.zCreateBasicContact(lastName2, "", firstName);
+		
+		ContactItem contact1 = new ContactItem();
+		contact1.firstName = firstName;
+		contact1.lastName = lastName;
+
+		ContactItem contact2 = new ContactItem();
+		contact2.firstName = firstName;
+		contact2.lastName = getLocalizedData_NoSpecialChar();
+
+		page.zABCompose.zCreateBasicContact(contact1);
+		page.zABCompose.zCreateBasicContact(contact2);
+
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
@@ -120,39 +140,39 @@ public class TagContactTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zContactListItem.zVerifyIsTagged(lastName);
 		Thread.sleep(1000);
-		obj.zContactListItem.zClick(lastName2);
+		obj.zContactListItem.zClick(contact2.lastName);
 		Thread.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
 		Thread.sleep(1000);
-		obj.zContactListItem.zVerifyIsTagged(lastName2);
+		obj.zContactListItem.zVerifyIsTagged(contact2.lastName);
 		obj.zFolder.zClick(tag1);
 		Thread.sleep(1000);
 		obj.zContactListItem.zExists(lastName);
-		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName2),
+		assertReport("false", obj.zContactListItem.zExistsDontWait(contact2.lastName),
 				"Verify contact2 not exists");
 		obj.zFolder.zClick(tag2);
 		Thread.sleep(1000);
-		obj.zContactListItem.zExists(lastName2);
+		obj.zContactListItem.zExists(contact2.lastName);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName),
 				"Verify contact1 not exists");
 		obj.zFolder.zClick(localize(locator.contacts));
 		Thread.sleep(1000);
 		assertReport("true", obj.zContactListItem.zExistsDontWait(lastName),
 				"Verify contact1 not exists");
-		assertReport("true", obj.zContactListItem.zExistsDontWait(lastName2),
+		assertReport("true", obj.zContactListItem.zExistsDontWait(contact2.lastName),
 				"Verify contact2 not exists");
 		obj.zFolder.zClick(localize(locator.emailedContacts));
 		Thread.sleep(1000);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName),
 				"Verify contact1 not exists");
-		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName2),
+		assertReport("false", obj.zContactListItem.zExistsDontWait(contact2.lastName),
 				"Verify contact2 not exists");
 
 		obj.zFolder.zClick(localize(locator.contacts));
-		obj.zContactListItem.zClick(lastName2);
+		obj.zContactListItem.zClick(contact2.lastName);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(localize(locator.removeTag));
 		Thread.sleep(1000);
@@ -174,7 +194,12 @@ public class TagContactTests extends CommonTest {
 			handleRetry();
 
 		String tag1, tag2;
-		page.zABCompose.zCreateBasicContact(lastName, "", firstName);
+		
+		ContactItem contact = new ContactItem();
+		contact.lastName = lastName;
+		contact.firstName = firstName;
+		
+		page.zABCompose.zCreateBasicContact(contact);
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
 		obj.zContactListItem.zClick(lastName);
@@ -215,7 +240,11 @@ public class TagContactTests extends CommonTest {
 			handleRetry();
 
 		String tag1, tag2;
-		page.zABCompose.zCreateBasicContact(lastName, "", firstName);
+		ContactItem contact = new ContactItem();
+		contact.firstName = firstName;
+		contact.lastName = lastName;
+		
+		page.zABCompose.zCreateBasicContact(contact);
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
@@ -374,9 +403,15 @@ public class TagContactTests extends CommonTest {
 			handleRetry();
 
 		String lastName2, tag1, tag2;
-		lastName2 = getLocalizedData_NoSpecialChar();
-		page.zABCompose.zCreateBasicContact(lastName, "", firstName);
-		page.zABCompose.zCreateBasicContact(lastName2, "", firstName);
+		
+		ContactItem contact1 = new ContactItem();
+		contact1.firstName = firstName;
+		contact1.lastName = lastName;
+		ContactItem contact2 = new ContactItem();
+		contact2.firstName = firstName;
+		contact2.lastName = getLocalizedData_NoSpecialChar();
+		page.zABCompose.zCreateBasicContact(contact1);
+		page.zABCompose.zCreateBasicContact(contact2);
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
@@ -392,7 +427,7 @@ public class TagContactTests extends CommonTest {
 		Thread.sleep(1000);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName),
 				"Verify contact1 not exists");
-		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName2),
+		assertReport("false", obj.zContactListItem.zExistsDontWait(contact2.lastName),
 				"Verify contact2 not exists");
 		obj.zFolder.zClick(tag1);
 		Thread.sleep(1000);
@@ -403,14 +438,14 @@ public class TagContactTests extends CommonTest {
 				"//td[contains(@id, 'zti__main_Contacts') and contains(text(), '"
 						+ tag2 + "')]",
 				"//tr[contains(@id, 'zlif__CNS')]//td[contains(text(), '"
-						+ lastName2 + "')]");
-		obj.zContactListItem.zVerifyIsTagged(lastName2);
+						+ contact2.lastName + "')]");
+		obj.zContactListItem.zVerifyIsTagged(contact2.lastName);
 		Thread.sleep(1000);
 		obj.zFolder.zClick(localize(locator.contacts));
 		Thread.sleep(1000);
 		obj.zFolder.zClick(tag2);
 		Thread.sleep(1000);
-		obj.zContactListItem.zExists(lastName2);
+		obj.zContactListItem.zExists(contact2.lastName);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName),
 				"Verify contact1 not exists");
 

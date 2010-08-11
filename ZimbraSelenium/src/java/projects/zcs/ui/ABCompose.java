@@ -1,5 +1,6 @@
 package projects.zcs.ui;
 
+import framework.items.ContactItem;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.tests.CommonTest;
 
@@ -234,12 +235,12 @@ public class ABCompose extends CommonTest {
 	 * @param firstName
 	 * @throws Exception
 	 */
-	public static void zCreateBasicContact(String lastName, String MiddleName,
-			String firstName) throws Exception {
+	public static ContactItem zCreateBasicContact(ContactItem c) throws Exception {
 		obj.zFolder.zClick(replaceUserNameInStaticId(zContactsFolder));
-		zCreateContactInAddressBook("", lastName, MiddleName, firstName);
+		zCreateContactInAddressBook("", c.lastName, c.middleName, c.firstName);
 		Thread.sleep(2000);
 		obj.zFolder.zClick(localize(locator.contacts));
+		return (c);
 	}
 
 	/**

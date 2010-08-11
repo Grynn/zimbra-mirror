@@ -1,12 +1,17 @@
 package projects.zcs.tests.addressbook.savedsearches;
 
 import java.lang.reflect.Method;
+
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import projects.zcs.tests.CommonTest;
+
 import com.zimbra.common.service.ServiceException;
+
+import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
 
 /**
@@ -54,7 +59,10 @@ public class AddressBookSavedSearchTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateBasicContact(lastName, "", "");
+		ContactItem contact = new ContactItem();
+		contact.lastName = lastName;
+
+		page.zABCompose.zCreateBasicContact(contact);
 
 		selenium.type("xpath=//input[@class='search_input']", lastName);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
