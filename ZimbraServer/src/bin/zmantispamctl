@@ -15,7 +15,7 @@
 # 
 
 BASE=/opt/zimbra
-SCRIPTS="zmmtaconfigctl zmamavisdctl"
+SCRIPTS="zmamavisdctl"
 
 source /opt/zimbra/.bashrc
 
@@ -42,9 +42,7 @@ case "$1" in
 			R=$?
 			if [ $R -ne "0" ]; then
 				echo "$i is not running"
-        if [ x"$i" != "xzmmtaconfigctl" ]; then
-				  STATUS=$R
-        fi
+				STATUS=$R
 			fi
 		done
 		exit $STATUS

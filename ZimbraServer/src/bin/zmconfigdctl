@@ -22,14 +22,19 @@ fi
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
     zimbra_home \
-    zimbra_log_directory
+    zimbra_log_directory \
+	zmmtaconfig_listen_port
 
 pid=""
-pidfile="${zimbra_log_directory}/zmmtaconfig.pid"
+pidfile="${zimbra_log_directory}/zmconfigd.pid"
+
+NC=`which nc 2>/dev/null`; NC=${NC:-`which netcat 2>/dev/null`}
 
 getpid()
 {
-  if [ -f ${pidfile} ]; then
+  if [ "x$ppid" != "x" ]; then
+  	pid=$ppid
+  elif [ -f ${pidfile} ]; then
     pid=$(cat ${pidfile})
   fi
 }
@@ -43,9 +48,14 @@ checkrunning()
     kill -0 $pid 2> /dev/null
     if [ $? != 0 ]; then
       pid=""
-      running=0
+      running=-1
     else
-      running=1
+		status=`echo STATUS | $NC localhost ${zmmtaconfig_listen_port} 2>/dev/null`
+		if [ $? = 0 -a "x$status" = "xSUCCESS ACTIVE" ]; then
+			running=1
+		else
+			running=0
+		fi
     fi 
   fi
 } 
@@ -56,17 +66,27 @@ checkrunning()
 case "$1" in
   'start')
     checkrunning
-    echo -n "Starting zmmtaconfig..."
+    echo -n "Starting zmconfigd..."
     if [ $running = 1 ]; then
-      echo "zmmtaconfig is already running."
+      echo "zmconfigd is already running."
       exit 0
     fi
-    ${zimbra_home}/libexec/zmmtaconfig >> ${zimbra_log_directory}/zmmtaconfig.log 2>&1 
+	if [ "x$JYTHONPATH" = "x" ]; then
+      echo "JYTHONPATH is unset!"
+      exit 1
+	fi
+	# Grab the pid here, so we don't have to wait for the jvm to write the pid file
+    ${zimbra_home}/libexec/zmconfigd >> ${zimbra_log_directory}/zmconfigd.log 2>&1 &
+	ppid=$!
     for ((i = 0; i < 30; i++)) do
       checkrunning
       if [ $running = 1 ]; then
         echo "done."
         exit 0
+      fi
+      if [ $running = -1 ]; then
+        echo "Failed to start"
+        exit 1
       fi
       sleep 1
     done
@@ -76,9 +96,9 @@ case "$1" in
 
   'kill'|'stop')
     checkrunning
-    echo -n "Stopping zmmtaconfig..."
-    if [ $running = 0 ]; then
-      echo "zmmtaconfig is not running."
+    echo -n "Stopping zmconfigd..."
+    if [ $running -lt 1 ]; then
+      echo "zmconfigd is not running."
       exit 0
     else 
       for ((i = 0; i < 30; i++)); do
@@ -107,9 +127,9 @@ case "$1" in
   ;;
   
   'status')
-    echo -n "zmmtaconfig is "
+    echo -n "zmconfigd is "
     checkrunning
-    if [ $running = 0 ]; then
+    if [ $running -lt 1 ]; then
       echo "not running." 
       exit 1
     else

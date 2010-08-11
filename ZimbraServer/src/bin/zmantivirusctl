@@ -15,14 +15,14 @@
 # 
 
 BASE=/opt/zimbra
-SCRIPTS="zmmtaconfigctl zmamavisdctl zmclamdctl"
+SCRIPTS="zmamavisdctl zmclamdctl"
 
 source /opt/zimbra/.bashrc
 
 case "$1" in 
 	start)
 		if [ x$2 = "x" ]; then
-			/opt/zimbra/libexec/zmmtaconfig antivirus
+			/opt/zimbra/libexec/configrewrite antivirus
 		fi
 		for i in $SCRIPTS; do
 			/opt/zimbra/bin/$i start norewrite
@@ -47,9 +47,7 @@ case "$1" in
 			R=$?
 			if [ $R -ne "0" ]; then
 				echo "$i is not running"
-        if [ x"$i" != "xzmmtaconfigctl" ]; then
-				  STATUS=$R
-        fi
+				STATUS=$R
 			fi
 		done
 		exit $STATUS

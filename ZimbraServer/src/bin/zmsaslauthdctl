@@ -26,11 +26,10 @@ zmsetvars \
     zimbra_log_directory
 
 pid=""
-pidfile="${zimbra_log_directory}/zmmtaconfig.pid"
 pidfile="${zimbra_home}/cyrus-sasl/state/saslauthd.pid"
 
 rewriteconfig() {
-  ${zimbra_home}/libexec/zmmtaconfig sasl > /dev/null 2>&1
+  ${zimbra_home}/libexec/configrewrite sasl > /dev/null 2>&1
 }
 
 getpid()

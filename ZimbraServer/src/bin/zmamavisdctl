@@ -38,7 +38,7 @@ if [ ! -d "/opt/zimbra/data/amavisd/db" ]; then
 fi
 
 rewriteconfig() {
-  /opt/zimbra/libexec/zmmtaconfig amavis > /dev/null 2>&1
+  /opt/zimbra/libexec/configrewrite amavis > /dev/null 2>&1
   /opt/zimbra/libexec/zmaltermimeconfig > /dev/null 2>&1
 }
 

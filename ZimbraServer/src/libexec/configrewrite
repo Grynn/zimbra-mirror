@@ -1,0 +1,16 @@
+#!/bin/bash
+
+source /opt/zimbra/bin/zmshutil || exit 1
+zmsetvars zmmtaconfig_listen_port
+
+NC=`which nc 2>/dev/null`; NC=${NC:-`which netcat 2>/dev/null`}
+
+echo REWRITE $@ | $NC localhost ${zmmtaconfig_listen_port} > /dev/null 2>&1
+rc=$?
+
+# If nc fails to connect, run zmconfigd directly
+if [ $rc -ne 0 ]; then
+	/opt/zimbra/libexec/zmconfigd $@
+	rc=$?
+fi
+exit $rc

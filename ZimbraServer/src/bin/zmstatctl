@@ -42,9 +42,17 @@ sub getProcList() {
     my @services;
     my $all = 0;
     my $server = getZimbraServerHostname();
-    if ($server) {
-        eval { @services = `zmprov -l gs $server | grep -i zimbraServiceEnabled | sed -e 's/^zimbraServiceEnabled: //'`; };
-    }
+	if (-f "/opt/zimbra/conf/stats.conf") {
+		open F, "/opt/zimbra/conf/stats.conf";
+		@services = <F>;
+		close F;
+		chomp @services;
+		map {s/service //} @services;
+	} else {
+		if ($server) {
+			eval { @services = `zmprov -l gs $server | grep -i zimbraServiceEnabled | sed -e 's/^zimbraServiceEnabled: //'`; };
+		}
+	}
     if (scalar(@services) < 1) {
         print STDERR "Unable to determine ZCS service list on this host.  Assuming all.\n";
         $all = 1;

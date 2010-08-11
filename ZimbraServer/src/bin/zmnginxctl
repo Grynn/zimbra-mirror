@@ -70,7 +70,7 @@ case "$1" in
       exit 0
     fi
     if [ "x$2" = "x" ]; then
-      ${zimbra_home}/libexec/zmmtaconfig imapproxy > /dev/null 2>&1
+      ${zimbra_home}/libexec/configrewrite imapproxy > /dev/null 2>&1
     fi
 
     if [ ! -f ${configfile} ]; then

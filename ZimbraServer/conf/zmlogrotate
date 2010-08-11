@@ -97,19 +97,6 @@
     compress
 }
 
-/opt/zimbra/log/zmmtaconfig.log {
-    daily
-    missingok
-    copytruncate
-    notifempty
-    create 0740 zimbra zimbra
-    postrotate
-      su - zimbra -c "/opt/zimbra/bin/zmmtaconfigctl restart" > /dev/null 2>&1 || true
-    endscript
-    rotate 5
-    compress
-}
-
 /opt/zimbra/log/nginx.log /opt/zimbra/log/nginx.access.log {
     daily
     sharedscripts

@@ -35,7 +35,7 @@ if [ ! -d "/opt/zimbra/data/clamav/db" ]; then
 fi
 
 rewriteconfig() {
-  /opt/zimbra/libexec/zmmtaconfig antivirus > /dev/null 2>&1
+  /opt/zimbra/libexec/configrewrite antivirus > /dev/null 2>&1
 }
 
 getpid() {

@@ -48,18 +48,19 @@ my $services;
 my %devicesChecked;
 my %startorder = ( 
 	"ldap" 		=> 0,
-	"logger" 	=> 1,
-	"convertd"	=> 2,
-	"mailbox" 	=> 3,
-	"memcached"	=> 4,
-	"imapproxy"	=> 5,
-	"antispam" 	=> 6,
-	"antivirus"	=> 7,
-	"archiving"	=> 8,
-	"snmp" 		=> 9,
-	"spell" 	=> 10,
-	"mta" 		=> 11,
-	"stats"		=> 12,
+	"zmconfigd"	=> 5,
+	"logger" 	=> 10,
+	"convertd"	=> 20,
+	"mailbox" 	=> 30,
+	"memcached"	=> 40,
+	"imapproxy"	=> 50,
+	"antispam" 	=> 60,
+	"antivirus"	=> 70,
+	"archiving"	=> 80,
+	"snmp" 		=> 90,
+	"spell" 	=> 100,
+	"mta" 		=> 110,
+	"stats"		=> 120,
 );
 
 my %allservices = ( 
@@ -76,6 +77,7 @@ my %allservices = (
 	"memcached" => "/opt/zimbra/bin/zmmemcachedctl",
 	"imapproxy" => "/opt/zimbra/bin/zmproxyctl",
 	"stats" => "/opt/zimbra/bin/zmstatctl",
+	"zmconfigd" => "/opt/zimbra/bin/zmconfigdctl",
 );
 
 my %rewrites = ( 
@@ -212,7 +214,7 @@ sub doRewrite {
 		$rew .= " $rewrites{$_}";
 	}
 	Zimbra::Mon::Logger::Log ("info", "Rewriting configs $rew");
-	my $rc = 0xffff & system("/opt/zimbra/libexec/zmmtaconfig $rew > $zmcontrolLogfile 2>&1");
+	my $rc = 0xffff & system("/opt/zimbra/libexec/configrewrite $rew > $zmcontrolLogfile 2>&1");
 	$rc = $rc >> 8;
 	return $rc;
 }
@@ -260,18 +262,16 @@ sub doStartup {
 		exit (1);
 	}
 
-	doRewrite (sort keys %{$services});
-
-  checkAvailableSpace();
+	checkAvailableSpace();
 	foreach (sort {$startorder{$a} <=> $startorder{$b}} keys %{$services}) {
 		if ($_ eq "ldap") {next;}
-    checkAvailableServiceSpace($_);
+		checkAvailableServiceSpace($_);
 		Zimbra::Mon::Logger::Log ("info", "Starting $_ via zmcontrol");
 		print "\tStarting $_...";
-    unless (-x "$allservices{$_}") {
-      print "skipped.\n\t\t$allservices{$_} missing or not executable.\n";
-      next;
-    }
+		unless (-x "$allservices{$_}") {
+			print "skipped.\n\t\t$allservices{$_} missing or not executable.\n";
+			next;
+		}
 		$rrc = 0xffff & system ("$allservices{$_} start norewrite > $zmcontrolLogfile 2>&1");
 		$rrc = $rrc >> 8;
 		if ($rrc) {
@@ -349,6 +349,7 @@ sub getLocalConfig {
 sub getCachedServices {
 
   my %s = ();
+  $s{"zmconfigd"} = "zmconfigd";
 	if (-f $cache_file && -M $cache_file <= 1) {
     open(CACHE, "<$cache_file");
     my @lines = <CACHE>;
@@ -378,6 +379,7 @@ sub getEnabledServices {
   }
 
   my %s = ();
+  $s{"zmconfigd"} = "zmconfigd";
   foreach (@lines) {
     if (m/^zimbraServiceEnabled: (.*)/) {
       $s{$1} = $1;

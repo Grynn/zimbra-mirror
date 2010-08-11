@@ -14,13 +14,9 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-zimbra_home="`dirname $0`/.."
-zimbra_home=$(cd "${zimbra_home}"; pwd)
-zimbra_java_home=${zimbra_home}/java
-
-zimbra_zmjava_options="`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmjava_options`"
-zimbra_zmjava_java_library_path="`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmjava_java_library_path`"
-zimbra_zmjava_java_ext_dirs="`/opt/zimbra/bin/zmlocalconfig -m nokey zimbra_zmjava_java_ext_dirs`"
+# Much faster; just call zmlocalconfig once
+source `dirname $0`/zmshutil || exit 1
+zmsetvars -f
 
 if [ -d ${zimbra_java_home}/jre ]; then
     JRE_EXT_DIR=${zimbra_java_home}/jre/lib/ext
