@@ -62,7 +62,6 @@
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${dist.lib.dir}" />
 		<mkdir dir="${generated.java.dir}" />
-		<mkdir dir="${src.java.dir}/framework/locale" />
 	</target>
 	<target name="compile" depends="build-init" description="Compiles the source code">
 		<echo message="compiling framework..." />
@@ -147,7 +146,6 @@
 
 	<target name="copy-data" depends="generate.locale.files" description="copies i18n and test data">
 		<mkdir dir="${src.java.dir}/projects/zcs/data"/>
-		<mkdir dir="${src.java.dir}/framework/locale"/>
 		<copy todir="${build.classes.dir}/projects/zcs/data">
 			<fileset dir="${src.java.dir}/projects/zcs/data" />
 		</copy>
@@ -177,7 +175,45 @@
 
 
 	<!-- TARGETS FOR REMOTE MACHINES -->
-			
+	
+	<target name="seleniumjar" depends="copy-data,build-init" description="Creates the jar file">
+		<echo message="compiling framework..." />
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
+			<src refid="all.java.path" />
+		</javac>
+		<jar destfile="${dist.lib.dir}/zimbraselenium.jar" basedir="${build.classes.dir}" />
+	</target>
+	
+	<target name="build-selng" depends="clean,seleniumjar">
+		<copy todir="../ZimbraSelenium/jars">
+			<fileset dir="../ZimbraServer/build">
+				<include name="zimbrastore.jar"/>
+			</fileset>
+		</copy>			
+		<copy todir="../ZimbraSelenium/jars">
+			<fileset dir="../ZimbraCommon/build">
+				<include name="zimbracommon.jar"/>
+			</fileset>
+			<fileset dir="../ZimbraCommon/jars">
+				<include name="**/*.jar"/>
+				<exclude name = "**/jetty-6.1.22.z6.jar"/>	
+				<exclude name = "**/jetty-util-6.1.22.z6.jar"/>
+			</fileset>
+		</copy>
+		<tar destfile="${build.dir}/selng.tgz" compression="gzip">
+			<tarfileset dir="../ZimbraSelenium" prefix="SelNG" mode="777">
+				<include name="**/*"/>
+				<exclude name = "build/**"/>	
+				<exclude name = "bin/**"/>
+				<exclude name = "test-output/**"/>
+				<exclude name = "docs/**"/>			 	
+			</tarfileset>	  
+		</tar>		
+			<copy file="${build.dir}/selng.tgz" todir="${dist.dir.root}"/>
+			<checksum file="${dist.dir.root}/selng.tgz" forceOverwrite="yes"/>		  
+		</target>
+	
+	
 	<target name="compile-zcs" description="compiles classes on remote machines">
 		<delete dir="build/classes" />
 		<mkdir dir="${test.log.dir}" />
