@@ -33,7 +33,7 @@ public class NewWindowTests extends CommonTest {
 				|| test.equals("networkServiceErrorInNewWindow_Bug41205")) {
 			return new Object[][] { { SelNGBase.selfAccountName,
 					SelNGBase.selfAccountName, "ccuser@testdomain.com",
-					"bccuser@testdomain.com", "testsubject", "testbody", "" } };
+					"bccuser@testdomain.com", getOnlyEnglishAlphabetCharAndNumber(), getOnlyEnglishAlphabetCharAndNumber(), "" } };
 		} else if (test
 				.equals("cancelingComposeInNewWindowSavesDraft_Bug43560")) {
 			return new Object[][] { { SelNGBase.selfAccountName,
@@ -114,10 +114,11 @@ public class NewWindowTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
-		Thread.sleep(2000);
+		Thread.sleep(10000);
 		selenium.selectWindow("_blank");
+		
 		obj.zButton.zClick(page.zMailApp.zDeleteIconBtn_newWindow);
-		Thread.sleep(2000);
+		Thread.sleep(8000);
 		selenium.selectWindow(null);
 		obj.zMessageItem.zNotExists(subject);
 
