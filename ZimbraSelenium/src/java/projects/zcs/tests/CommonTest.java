@@ -443,7 +443,7 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public static String getOnlyEnglishAlphabetCharAndNumber() {
-		String str = "0WhenReplyingToAddresS1";
+	/*	String str = "0WhenReplyingToAddresS1";
 		str = str + "2EditNotebookIndeX3";
 		str = str + "4InviteeS5";
 		str = str + "6SubjecT7";
@@ -454,9 +454,17 @@ public class CommonTest extends SelNGBase {
 		str = str.replace(".", "");
 		str = str.replace(":", "");
 		Random r = new Random();
-		int max = str.length() - 1;
+		int max = str.length() - 5;
 		int randInt = r.nextInt(max);
-		return str.substring(randInt, randInt + 1);
+		return str.substring(randInt, randInt + 5);*/
+		
+		String alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		int character=(int)(Math.random()*26);
+		String str=alphabet.substring(character, character+1);
+		Random randomGenerator = new Random();
+		int randomInt = randomGenerator.nextInt(1000);
+		String ss = str +""+randomInt;
+		return ss;
 
 	}
 
