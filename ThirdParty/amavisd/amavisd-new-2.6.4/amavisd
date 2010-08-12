@@ -1709,8 +1709,8 @@ use vars qw(%defang_by_ccat);
 
 @virus_name_to_spam_score_maps =
   (new_RE(  # the order matters!
-    [ qr'^Phishing\.'                                             => 0.1 ],
     [ qr'^Structured\.(SSN|CreditCardNumber)\b'                   => 0.1 ],
+    [ qr'^(Heuristics\.)?Phishing\.'                              => 0.1 ],
     [ qr'^(Email|HTML)\.Phishing\.(?!.*Sanesecurity)'             => 0.1 ],
     [ qr'^Sanesecurity\.(Malware|Rogue|Trojan)\.' => undef ],# keep as infected
     [ qr'^Sanesecurity\.'                                         => 0.1 ],
@@ -1725,6 +1725,9 @@ use vars qw(%defang_by_ccat);
     [ qr'^Safebrowsing\.'                                         => 0.1 ],
     [ qr'^winnow\.(phish|spam)\.'                                 => 0.1 ],
     [ qr'^INetMsg\.SpamDomain'                                    => 0.1 ],
+    [ qr'^Doppelstern\.(Scam4|Phishing)'                   => 0.1 ],
+    [ qr'^ScamNailer\.Phish\.'                             => 0.1 ],
+    [ qr'^HTML/Bankish'                                    => 0.1 ],  # F-Prot
     [ qr'-SecuriteInfo\.com(\.|\z)'         => undef ],  # keep as infected
     [ qr'^MBL_NA\.UNOFFICIAL'               => 0.1 ],    # false positives
     [ qr'^MBL_'                             => undef ],  # keep as infected
