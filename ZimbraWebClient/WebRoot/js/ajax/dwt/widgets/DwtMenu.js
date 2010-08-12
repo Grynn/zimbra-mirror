@@ -36,6 +36,7 @@
  * @param {string}      params.className		the CSS class
  * @param {constant}      params.posStyle		the positioning style (see {@link DwtControl})
  * @param {boolean}      [params.cascade=true]		if <code>true</code>, menu should cascade (i.e. multiple columns)
+ * @param {int}          [params.maxRows=0]     if >0 and cascade=true, define how many rows are allowed before cascading
  * 
  * @extends		DwtComposite
  */
@@ -62,6 +63,7 @@ DwtMenu = function(params) {
 	params.className = params.className || "DwtMenu";
 
 	this._cascade = params.cascade == null || params.cascade;
+	this._maxRows = this._cascade && params.maxRows || 0;
 
 	// Hack to force us to hang off of the shell for positioning.
 	params.parent = (parent instanceof DwtShell) ? parent : parent.shell;
@@ -363,6 +365,7 @@ function(x, y) {
 		var newY = null;
 		var rows = this._table.rows;
 		var numRows = rows.length;
+		var maxRows = this._maxRows;
 		var height = mySize.y;
 		var requiredSpace = space - 25; // Account for space on top & bottom of menu.
 		for (var i = numRows - 1; i >= 0; i--) {
@@ -371,7 +374,7 @@ function(x, y) {
 				break;
 			}
 		}
-		var count = i + 1;
+		var count = maxRows ? Math.min(i + 1, maxRows) : (i + 1);
 		for (var j = count; j < numRows; j++) {
 			var row = rows[(j - count) % count];
 			var cell = row.insertCell(-1);
