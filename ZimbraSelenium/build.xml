@@ -176,7 +176,7 @@
 
 	<!-- TARGETS FOR REMOTE MACHINES -->
 	
-	<target name="seleniumjar" depends="copy-data,build-init" description="Creates the jar file">
+	<target name="seleniumjar" depends="clean,copy-data,build-init" description="Creates the jar file">
 		<echo message="compiling framework..." />
 		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
 			<src refid="all.java.path" />
@@ -184,7 +184,8 @@
 		<jar destfile="${dist.lib.dir}/zimbraselenium.jar" basedir="${build.classes.dir}" />
 	</target>
 	
-	<target name="build-selng" depends="clean,seleniumjar">
+	<target name="build-selng" depends="seleniumjar">
+		<echo message="coping jars..." />
 		<copy todir="../ZimbraSelenium/jars">
 			<fileset dir="../ZimbraServer/build">
 				<include name="zimbrastore.jar"/>
@@ -211,8 +212,7 @@
 		</tar>		
 			<copy file="${build.dir}/selng.tgz" todir="${dist.dir.root}"/>
 			<checksum file="${dist.dir.root}/selng.tgz" forceOverwrite="yes"/>		  
-		</target>
-	
+	</target>	
 	
 	<target name="compile-zcs" description="compiles classes on remote machines">
 		<delete dir="build/classes" />
