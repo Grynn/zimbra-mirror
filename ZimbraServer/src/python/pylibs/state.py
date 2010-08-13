@@ -713,11 +713,16 @@ class State:
 				valset = parts[2].split(',')
 			val = self.lookUpConfig(cmd, key)
 			Log.logMsg(5, "comment after lookup key=%s val=%s cmd=%s sr=%s" % (key, val, cmd, sr))
-			# Negative test because we're testing against self.falseSet
-			if not val in valset:
-				val = ""
+			if (len(parts) > 2):
+				if val in valset:
+					val = commentstr
+				else:
+					val = ""
 			else:
-				val = commentstr
+				if self.isTrueValue(val):
+					val = commentstr
+				else:
+					val = ""
 			Log.logMsg(5, "comment after rep key=%s val=%s cmd=%s" % (key, val, cmd))
 
 		elif re.match(r"uncomment", sr):

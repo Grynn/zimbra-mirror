@@ -170,7 +170,7 @@ $final_spam_destiny       = D_DISCARD;
 
 $warnvirusrecip = %%binary VAR:zimbraVirusWarnRecipient%%;
 $warnbannedrecip = %%binary VAR:zimbraMtaBlockedExtensionWarnRecipient%%;
-%%uncomment VAR:zimbraAmavisQuarantineAccount%%$virus_quarantine_to = %%zimbraAmavisQuarantineAccount%%;
+%%uncomment VAR:zimbraAmavisQuarantineAccount%%$virus_quarantine_to = '%%zimbraAmavisQuarantineAccount%%';
 # SOME OTHER VARIABLES WORTH CONSIDERING (see amavisd.conf-default for all)
 
 # $warnbadhsender,
