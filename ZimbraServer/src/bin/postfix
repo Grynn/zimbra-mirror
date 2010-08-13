@@ -27,8 +27,11 @@ fi
 
 platform=`/opt/zimbra/libexec/get_plat_tag.sh`
 
-rewriteconfig() {
+rewritemtaconfig() {
     /opt/zimbra/libexec/zmmtainit
+}
+
+rewriteconfig() {
     /opt/zimbra/libexec/configrewrite mta > /dev/null 2>&1
 }
 
@@ -49,6 +52,7 @@ if [ "x$1" = "xstatus" -o "x$1" = "xstart" ]; then
 fi
 
 if [ "x$1" = "xstart" -o "x$1" = "xreload" ]; then
+	rewritemtaconfig
 	if [ "x$2" != "xnorewrite" ]; then
 		rewriteconfig
 	fi
