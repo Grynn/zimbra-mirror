@@ -13,12 +13,24 @@
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 # ***** END LICENSE BLOCK *****
 # 
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+	zimbra_home \
+  postfix_mail_owner \
+  postfix_setgid_group \
+	zimbra_server_hostname 
 
-BASE=/opt/zimbra
+BASE=${zimbra_home:=/opt/zimbra}
 SCRIPTS="postfix zmsaslauthdctl"
 
 rewriteconfig() {
   echo -n "Rewriting configuration files..."
+  if [ -L ${zimbra_home}/postfix ]; then
+    if [ ! -f ${zimbra_home}/postfix/conf/main.cf ]; then
+      touch ${zimbra_home}/postfix/conf/main.cf
+      ${zimbra_home}/bin/postconf -e mail_owner=${postfix_mail_owner} setgid_group=${postfix_setgid_group}
+    fi
+  fi
   /opt/zimbra/libexec/configrewrite antispam antivirus mta sasl  > /dev/null 2>&1
   if [ $? = 0 ]; then
     echo "done."
