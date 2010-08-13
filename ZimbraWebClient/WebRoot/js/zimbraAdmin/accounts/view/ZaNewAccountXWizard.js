@@ -1514,6 +1514,21 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							]
 						});
 		}
+
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraDataSourcePollingInterval],[])) {						
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_datasourcepolling_settings",colSizes:["260px","190px","150px"],numCols:3,
+							label:ZaMsg.NAD_DataSourcePolling,						
+							items: [
+								{ref:ZaAccount.A_zimbraDataSourcePollingInterval, type:_SUPERWIZ_TEXTFIELD_, 
+									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
+									txtBoxLabel:ZaMsg.LBL_zimbraDataSourcePollingInterval, labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input"
+								}
+							]
+						});
+		}
+	
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPasswordLocked,ZaAccount.A_zimbraMinPwdLength,
 			ZaAccount.A_zimbraMaxPwdLength,ZaAccount.A_zimbraPasswordMinUpperCaseChars,ZaAccount.A_zimbraPasswordMinLowerCaseChars,
 			ZaAccount.A_zimbraPasswordMinPunctuationChars,ZaAccount.A_zimbraPasswordMinNumericChars,

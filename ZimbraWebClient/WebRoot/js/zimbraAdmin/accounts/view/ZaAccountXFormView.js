@@ -2724,6 +2724,21 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							]
 						},
 
+						{type:_ZA_TOP_GROUPER_, id:"account_datasourcepolling_settings",colSizes:["auto"],numCols:1,
+							label:ZaMsg.NAD_DataSourcePolling,
+							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                        			[ZaAccount.A_zimbraDataSourcePollingInterval]]],
+							items: [
+								{ref:ZaAccount.A_zimbraDataSourcePollingInterval, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+									msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
+									txtBoxLabel:ZaMsg.LBL_zimbraDataSourcePollingInterval, labelLocation:_LEFT_, 
+									textFieldCssClass:"admin_xform_number_input"
+								}
+
+							]
+						},
+
+
 						{type:_ZA_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_PasswordGrouper,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,

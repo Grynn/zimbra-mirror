@@ -1059,6 +1059,20 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     }
                 ]
             },
+
+            {type:_ZA_TOP_GROUPER_, id:"cos_datasourcepolling_settings",
+                label:ZaMsg.NAD_DataSourcePolling,
+                items: [
+                    {ref:ZaCos.A_zimbraDataSourcePollingInterval, type:_TEXTFIELD_, 
+                    	msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
+                    	label:ZaMsg.LBL_zimbraDataSourcePollingInterval, 
+                    	labelLocation:_LEFT_, 
+                    	cssClass:"admin_xform_number_input"
+                    }
+                ]
+            },
+ 
+
             {type:_ZA_TOP_GROUPER_,id:"cos_password_settings",
                 label:ZaMsg.NAD_PasswordGrouper,
                 items: [
