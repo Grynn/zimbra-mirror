@@ -68,6 +68,7 @@ public class CommonTest extends SelNGBase {
 	public static CoreObjects obj;
 	public static PageObjects page;
 	public static Locators locator;
+	public static String CODE_COVERAGE_DIRECTORY_PATH = "CODECOVERAGE\\jscoverage.json";
 	public static String COVERAGE_SCRIPT =
 		"if (! window.jscoverage_report) {\n" +
 		"  window.jscoverage_report = function jscoverage_report(dir) {\n" +
@@ -212,7 +213,7 @@ public class CommonTest extends SelNGBase {
 
 	public static void writeCoverage() throws Exception {
 		System.out.println("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
-		BufferedWriter out = new BufferedWriter(new FileWriter("test-output\\CODECOVERAGE\\jscoverage.json"));
+		BufferedWriter out = new BufferedWriter(new FileWriter(CODE_COVERAGE_DIRECTORY_PATH));
 		Set<String> keys = FILENAME_TO_COVERAGE.keySet();
 		Iterator itr = keys.iterator();
 		String jsonString = "";
