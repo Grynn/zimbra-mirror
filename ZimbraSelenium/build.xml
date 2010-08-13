@@ -207,7 +207,8 @@
 				<exclude name = "build/**"/>	
 				<exclude name = "bin/**"/>
 				<exclude name = "test-output/**"/>
-				<exclude name = "docs/**"/>			 	
+				<exclude name = "docs/**"/>
+				<exclude name = "zmBrowserPerf/**"/>	
 			</tarfileset>	  
 		</tar>		
 			<copy file="${build.dir}/selng.tgz" todir="${dist.dir.root}"/>
