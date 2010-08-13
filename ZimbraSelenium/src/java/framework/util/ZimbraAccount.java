@@ -411,13 +411,28 @@ public class ZimbraAccount {
         }
         
         /**
+         * Return the first matching element from the context that match the xpath
+         * @param context
+         * @param xpath
+         * @return
+         * @throws HarnessException 
+         */
+        public static Element selectNode(Element context, String xpath) {
+        	Element[] nodes = selectNodes(context, xpath);
+        	if (nodes == null)
+        		return (null);
+        	return (nodes[0]);        		
+        }
+        
+        /**
          * Return an array of elements from the context that match the xpath
          * @param context
          * @param xpath
          * @return
+         * @throws HarnessException 
          */
         @SuppressWarnings("unchecked")
-		public Element[] selectNodes(Element context, String xpath) {
+		public static Element[] selectNodes(Element context, String xpath) {
         	if ( context == null )
         		return (null);
     		org.dom4j.Element d4context = context.toXML();
