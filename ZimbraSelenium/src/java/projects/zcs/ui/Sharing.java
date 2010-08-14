@@ -1,9 +1,9 @@
 package projects.zcs.ui;
 
 import org.testng.Assert;
+
 import framework.core.SelNGBase;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.tests.CommonTest;
 
 /**
  * @author Jitesh Sojitra
@@ -14,7 +14,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class Sharing extends CommonTest {
+public class Sharing extends AppPage {
 	public static final String zAcceptShareIconBtn = "css=#zv__CLV__MSG #zb__CLV__Shr__SHARE_ACCEPT_left_icon";
 	public static final String zDeclineShareIconBtn = "css=#zv__CLV__MSG #zb__CLV__Shr__SHARE_DECLINE_left_icon";
 

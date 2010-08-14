@@ -1,6 +1,5 @@
 package projects.zcs.ui;
 
-import projects.zcs.tests.CommonTest;
 
 /**
  * This Class have UI-level methods related to Documents app like
@@ -14,7 +13,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class DocumentApp extends CommonTest {
+public class DocumentApp extends AppPage {
 	public static final String zNewNotebookOverviewPaneIcon = "id=ztih__main_Notebook__NOTEBOOK_textCell";
 	public static final String zNotebookFolder = "id=zti__main_Notebook__12_textCell";
 

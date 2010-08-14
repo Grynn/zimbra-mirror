@@ -1,6 +1,5 @@
 package projects.zcs.ui;
 
-import projects.zcs.tests.CommonTest;
 
 /**
  * This Class have UI-level methods related to Address book app. e.g:
@@ -15,7 +14,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class ABApp extends CommonTest {
+public class ABApp extends AppPage {
 
 	public static final String zNewContactMenuIconBtn = "id=zb__CNS__NEW_MENU_left_icon";
 	public static final String zEditContactIconBtn = "id=zb__CNS__EDIT_left_icon";

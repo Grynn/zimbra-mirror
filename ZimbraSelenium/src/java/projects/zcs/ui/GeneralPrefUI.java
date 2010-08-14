@@ -4,8 +4,6 @@ import org.testng.Assert;
 
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.tests.CommonTest;
-
 /**
  * This Class have UI-level methods related to preference-general tab
  * 
@@ -13,7 +11,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class GeneralPrefUI extends CommonTest {
+public class GeneralPrefUI extends AppPage {
 	public static final String zOldPassword = "id=oldPassword";
 	public static final String zNewPassword = "id=newPassword";
 	public static final String zConfirm = "id=confirm";

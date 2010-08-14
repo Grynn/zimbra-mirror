@@ -1,13 +1,11 @@
 package projects.zcs.ui;
 
 import java.io.File;
-
 import java.util.Map;
 
 import org.testng.Assert;
 
 import projects.zcs.clients.ProvZCS;
-import projects.zcs.tests.CommonTest;
 
 /**
  * This Class have UI-level methods related composing a mail and verifying the
@@ -21,7 +19,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class ComposeView extends CommonTest {
+public class ComposeView extends AppPage {
 	public static final String zSendIconBtn = "css=[id^=zb__COMPOSE][id$=__SEND_left_icon]";
 	public static final String zCancelIconBtn = "css=[id^=zb__COMPOSE][id$=__CANCEL_left_icon]";
 	public static final String zSaveDraftsIconBtn = "css=[id^=zb__COMPOSE][id$=__SAVE_DRAFT_left_icon]";

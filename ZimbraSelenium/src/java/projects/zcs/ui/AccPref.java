@@ -1,6 +1,5 @@
 package projects.zcs.ui;
 
-import projects.zcs.tests.CommonTest;
 
 /**
  * This Class have UI-level methods related composing a contact and verifying
@@ -15,7 +14,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class AccPref extends CommonTest {
+public class AccPref extends AppPage {
 	public static final String zPrefAccTabIcon = "id=ztab__PREF__"
 			+ localize(locator.accounts) + "_title";
 	public static final String zPrefSignatureTabIcon = "id=ztab__PREF__"

@@ -1,18 +1,13 @@
 package projects.zcs.ui;
 
-import java.awt.Robot;
-import java.awt.event.KeyEvent;
-
 import org.testng.Assert;
-
-import projects.zcs.tests.CommonTest;
 
 /**
  * @author Jitesh Sojitra
  * 
  */
 @SuppressWarnings("static-access")
-public class SignaturePref extends CommonTest {
+public class SignaturePref extends AppPage {
 	public static void zNavigateToPreferenceSignature() throws Exception {
 		zGoToApplication("Preferences");
 		zGoToPreferences("Signatures");

@@ -1,18 +1,9 @@
 package projects.zcs.ui;
 
-//import java.io.File;
-
-//import java.util.Map;
-
-//import org.testng.Assert;
-
-//import projects.zcs.Locators;
 
 import org.testng.Assert;
 
 import framework.util.ZimbraSeleniumProperties;
-
-import projects.zcs.tests.CommonTest;
 
 /**
  * This Class have UI-level methods related calendar application. If you are
@@ -23,7 +14,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class CalApp extends CommonTest {
+public class CalApp extends AppPage {
 	public static String zNewCalOverviewPaneIcon = "id=ztih__main_Calendar__CALENDAR_textCell";
 	public static String zCalendarFolder = "id=zti__main_Calendar__10_checkbox";
 	public static final String zCalendarTab = "id=zb__App__Calendar_left_icon";

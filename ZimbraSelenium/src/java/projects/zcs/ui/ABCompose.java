@@ -2,7 +2,6 @@ package projects.zcs.ui;
 
 import framework.items.ContactItem;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.tests.CommonTest;
 
 /**
  * This Class have UI-level methods related composing a contact and verifying
@@ -17,7 +16,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class ABCompose extends CommonTest {
+public class ABCompose extends AppPage {
 	public static String zNewABOverviewPaneIcon = "id=ztih__main_Contacts__ADDRBOOK_textCell";
 
 	public static final String zContactTabIconBtn = "id=zb__App__Contacts_left_icon";

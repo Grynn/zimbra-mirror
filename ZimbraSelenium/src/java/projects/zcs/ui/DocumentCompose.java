@@ -1,7 +1,6 @@
 package projects.zcs.ui;
 
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.tests.CommonTest;
 
 /**
  * This Class have UI-level methods related composing a document and verifying
@@ -19,7 +18,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class DocumentCompose extends CommonTest {
+public class DocumentCompose extends AppPage {
 	public static final String zDocumentTabIconBtn = "id=zb__App__Notebook_left_icon";
 	public static final String zNewPageIconBtn = "id=zb__NBP__NEW_MENU_left_icon";
 	public static final String zEditPageIconBtn = "id=zb__NBP__EDIT_left_icon";

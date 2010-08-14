@@ -1,16 +1,8 @@
 package projects.zcs.ui;
 
-//import java.io.File;
 
-//import java.util.Map;
-
-//import org.testng.Assert;
-
-//import projects.zcs.Locators;
-
-import framework.util.ZimbraSeleniumProperties;
 import junit.framework.Assert;
-import projects.zcs.tests.CommonTest;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * This Class have UI-level methods related calendar compose. If you are dealing
@@ -21,7 +13,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class CalCompose extends CommonTest {
+public class CalCompose extends AppPage {
 	public static final String zApptSaveBtn = "id=zb__APPT__SAVE_left_icon";
 	public static final String zApptCancelBtn = "id=zb__APPT__CANCEL_left_icon";
 	public static final String zApptCloseBtn = "id=zb__APPT__CANCEL_left_icon";

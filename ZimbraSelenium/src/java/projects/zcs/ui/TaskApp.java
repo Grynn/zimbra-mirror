@@ -2,10 +2,8 @@ package projects.zcs.ui;
 
 import org.testng.Assert;
 
-import framework.util.ZimbraSeleniumProperties;
-
 import projects.zcs.clients.ProvZCS;
-import projects.zcs.tests.CommonTest;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * This Class has UI-level methods related creating a task and other task
@@ -19,7 +17,7 @@ import projects.zcs.tests.CommonTest;
  */
 
 @SuppressWarnings("static-access")
-public class TaskApp extends CommonTest {
+public class TaskApp extends AppPage {
 	public static String zNewTasksOverviewPaneIcon = "id=ztih__main_Tasks__TASK_textCell";
 	public static final String zTasksFolder = "id=zti__main_Tasks__15_imageCell";
 	public static final String zTasksTab = "id=zb__App__Tasks_left_icon";

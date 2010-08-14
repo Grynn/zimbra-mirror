@@ -6,10 +6,8 @@ import java.io.FileReader;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
-
 import projects.zcs.clients.ProvZCS;
-import projects.zcs.tests.CommonTest;
+import framework.core.SelNGBase;
 
 /**
  * This Class have UI-level methods related Mail-app(conversation view). e.g:
@@ -23,7 +21,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class MailApp extends CommonTest {
+public class MailApp extends AppPage {
 
 	public static String zNewFolderOverviewPaneIcon = "id=ztih__main_Mail__FOLDER_textCell";
 

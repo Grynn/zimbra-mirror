@@ -1,6 +1,5 @@
 package projects.zcs.ui;
 
-import projects.zcs.tests.CommonTest;
 
 /**
  *This Class contains all the UI-level objects and methods for Preferences>Mail
@@ -10,7 +9,7 @@ import projects.zcs.tests.CommonTest;
  * 
  */
 @SuppressWarnings("static-access")
-public class FilterPref extends CommonTest {
+public class FilterPref extends AppPage {
 
 	/**
 	 * Returns localised value of "all" or "any" menuItems in MailFilter

@@ -4,16 +4,15 @@ import static org.testng.Assert.assertTrue;
 
 import java.util.Map;
 
-import com.zimbra.common.service.ServiceException;
-
 import projects.zcs.clients.ProvZCS;
-import projects.zcs.tests.CommonTest;
+
+import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.BrowserUtil;
 
 @SuppressWarnings("static-access")
-public class LoginPage extends CommonTest {
+public class LoginPage extends AppPage {
 	public static final String zSearchFldr = "id=zb__Search__SEARCH_left_icon";
 
 	/**

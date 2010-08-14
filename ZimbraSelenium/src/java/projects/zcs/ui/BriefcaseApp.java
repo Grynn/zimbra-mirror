@@ -1,7 +1,6 @@
 package projects.zcs.ui;
 
 import java.io.File;
-import projects.zcs.tests.CommonTest;
 
 /**
  * @author Jitesh Sojitra
@@ -10,7 +9,7 @@ import projects.zcs.tests.CommonTest;
  */
 
 @SuppressWarnings("static-access")
-public class BriefcaseApp extends CommonTest {
+public class BriefcaseApp extends AppPage {
 	public static String zNewBriefcaseOverviewPaneIcon = "id=ztih__main_Briefcase__BRIEFCASE_textCell";
 	public static String zBriefcaseFolder = "id=zti__main_Briefcase__16_textCell";
 	public static String zTrashFolder = "id=zti__main_Briefcase__3_textCell";
