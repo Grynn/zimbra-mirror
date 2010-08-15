@@ -57,6 +57,7 @@ ZaAppViewMgr = function(shell, controller, hasSkin) {
 	this._shell.addControlListener(new AjxListener(this, this._shellControlListener));
 	this._needBannerLayout = false;
 	this._sashSupported = (window.skin && typeof window.skin.setTreeWidth == "function");
+        this._sbSashSupported = (window.skin && typeof window.skin.setSBHeight == "function");
 /*	this._sash = new DwtSash(this._shell, DwtSash.HORIZONTAL_STYLE, "AppSash-horiz", 5);
 	this._sash.registerCallback(this._sashCallback, this);
 */	
@@ -105,6 +106,7 @@ ZaAppViewMgr.C_BANNER					= "BANNER";
 ZaAppViewMgr.C_SEARCH					= "SEARCH";
 ZaAppViewMgr.C_SEARCH_BUILDER			= "SEARCH BUILDER";
 ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR	= "SEARCH BUILDER TOOLBAR";
+ZaAppViewMgr.C_SEARCH_BUILDER_SASH     = "SEARCH BUILDER SASH";
 ZaAppViewMgr.C_CURRENT_APP				= "CURRENT APP";
 ZaAppViewMgr.C_APP_TABS					= "APP TABS" ;
 ZaAppViewMgr.C_TREE						= "TREE";
@@ -121,6 +123,7 @@ ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_BANNER]					= ZaSettings.SKIN_LOGO_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SEARCH]					= ZaSettings.SKIN_SEARCH_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SEARCH_BUILDER]			= ZaSettings.SKIN_SEARCH_BUILDER_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR]	= ZaSettings.SKIN_SEARCH_BUILDER_TOOLBAR_ID;
+ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_SEARCH_BUILDER_SASH] = ZaSettings.SKIN_SEARCH_BUILDER_SASH_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_CURRENT_APP]			= ZaSettings.SKIN_CURRENT_APP_ID;
 ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TREE]					= ZaSettings.SKIN_TREE_ID;
 //ZaAppViewMgr.CONT_ID_KEY[ZaAppViewMgr.C_TREE_FOOTER]			= ZaSettings.SKIN_TREE_FOOTER_ID;
@@ -272,7 +275,15 @@ function(components, doFit, noSetZ) {
 			DBG.println(AjxDebug.DBG1, "Enforce Z-index to hidden " + cid) ;
 			comp.zShow(false);
 		}
-
+                
+                if (cid == ZaAppViewMgr.C_SEARCH_BUILDER_SASH){
+                        comp.zShow(false);
+                        if(this._sbSashSupported){
+                             comp.registerCallback(this._sbAppSashCallback, this);
+                        }
+                        comp.setCursor("default");
+                }
+                
 		if (cid == ZaAppViewMgr.C_SASH) {
 			if (this._sashSupported){
 				comp.registerCallback(this._appTreeSashCallback, this);
@@ -289,6 +300,8 @@ function(visible) {
 	skin.showSearchBuilder(visible);
 	this._components[ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR].zShow(visible);
 	this._components[ZaAppViewMgr.C_SEARCH_BUILDER].zShow(visible);
+        this._components[ZaAppViewMgr.C_SEARCH_BUILDER_SASH].zShow(visible);
+
     if (visible) this._isAdvancedSearchBuilderDisplayed = true ;
    /* var list = [ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR,
                 ZaAppViewMgr.C_LOGIN_MESSAGE,
@@ -303,7 +316,7 @@ function(visible) {
 	}
 };
 ZaAppViewMgr.prototype.fitAll = function () {
-    var list = [ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR,
+    var list = [ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR, ZaAppViewMgr.C_SEARCH_BUILDER_SASH,
                 ZaAppViewMgr.C_LOGIN_MESSAGE,
                 ZaAppViewMgr.C_CURRENT_APP, /*ZaAppViewMgr.C_APP_CHOOSER,*/ ZaAppViewMgr.C_APP_TABS,
 				ZaAppViewMgr.C_TREE,ZaAppViewMgr.C_SASH,
@@ -407,7 +420,7 @@ function(ev) {
 				var list = [ZaAppViewMgr.C_BANNER, ZaAppViewMgr.C_APP_TABS, ZaAppViewMgr.C_LOGIN_MESSAGE,
 							ZaAppViewMgr.C_TOOLBAR_TOP, ZaAppViewMgr.C_APP_CONTENT, 
 							ZaAppViewMgr.C_SEARCH,
-							ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR];
+							ZaAppViewMgr.C_SEARCH_BUILDER, ZaAppViewMgr.C_SEARCH_BUILDER_TOOLBAR, ZaAppViewMgr.C_SEARCH_BUILDER_SASH];
 				this._stickToGrid(list);
 			}
 		}
@@ -489,3 +502,34 @@ function(delta) {
 	setTimeout(function(){me.fitAll(true)},0);
 	return delta;
 };
+
+
+ZaAppViewMgr.prototype._sbAppSashCallback = function(delta) {
+	if (!window.skin) {
+           return;
+        }
+ 
+        var currentHeight = skin.getSBHeight();
+        if (!currentHeight){
+           return 0;
+        }
+        
+        if (!this.sbMinSize){
+           this.sbMinSize = window.skin.hints.searchBuilder.minHeight || 50;
+           this.sbMoveSize = currentHeight; //record the orginal height, the search builder is not allowed to big than its original height; 
+        }
+        
+        if (currentHeight + delta > this.sbMoveSize){
+            return 0;
+        }
+
+        if (currentHeight + delta < this.sbMinSize){
+            delta = Math.min (0, this.sbMinSize - currentHeight);
+        }
+
+        var newSBHeight = currentHeight + delta; 
+        skin.setSBHeight(newSBHeight);
+        var me = this;
+        setTimeout(function(){me.fitAll(true)}, 0);
+        return delta;
+}

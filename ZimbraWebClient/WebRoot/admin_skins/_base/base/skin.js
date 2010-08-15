@@ -32,7 +32,11 @@ ZaSkin.hints = {
 	presence:	  	{ width:"40px", height: "24px" },
 	appView:		{ position:"static" },
 
-	searchBuilder:  { containers: ["skin_tr_search_builder"] },
+	searchBuilder: 		 { minHeight:parseInt("@SBMinHeight@"), 
+				   maxHeight:parseInt("@SBMaxHeight@"),
+                                   containers: ["skin_container_search_builder", "skin_tr_sb_app_sash"],
+				   resizeContainers: ["skin_container_search_builder"]
+				 },
 	
 	tree:			{ minWidth:parseInt("@TreeMinWidth@"), maxWidth:parseInt("@TreeMaxWidth@"), 
 					  containers: ["skin_td_tree","skin_td_tree_app_sash"],
@@ -121,6 +125,14 @@ ZaSkin.prototype = {
 		this._setContainerSizes("tree", width, null);
 	},
 		
+        getSBHeight : function() {
+                return Dwt.getSize(this._getEl(this.hints.searchBuilder.containers[0])).y;
+        },
+
+        setSBHeight: function(height) {
+                this._setContainerSizes("searchBuilder", null, height);
+        },
+
 	showLoginMsg : function (state) {
 		this._showEl("skin_container_login_msg", state);
 		this._showEl("skin_td_login_msg", state);
@@ -136,10 +148,11 @@ ZaSkin.prototype = {
 	hideSkin : function () {
 		this._hideEl("skin_outer");
 	},
-	showSearchBuilder : function (state) {
-		this._showEl("search_builder_outer", state);
+	showSearchBuilder : function (state){
+              this._showEl("search_builder_outer", state);
 		this._showEl("skin_td_search_builder", state);
 		this._showEl("skin_tr_search_builder", state);
+                this._showEl("skin_tr_sb_app_sash", state);
 	},
 	hideSearchBuilder : function () {
 		this.showSearchBuilder(false);
@@ -195,7 +208,7 @@ ZaSkin.prototype = {
 	_setContainerSizes : function(containerName, width, height) {
 		var containers = this.hints[containerName].resizeContainers || this.hints[containerName].containers;
 		for (var i = 0; i < containers.length; i++) {
-			this._setSize(containers[i], width, null);
+			this._setSize(containers[i], width, height);
 		}
 	},
 	

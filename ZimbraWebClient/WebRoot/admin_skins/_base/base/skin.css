@@ -73,6 +73,11 @@ body						{	@ChromeBg@	}
 
 #skin_container_login_msg { height: 39; margin: 5; padding: 5;  }
 
+/* search builder app sash*/
+#skin_tr_sb_app_sash    {}
+#skin_td_sb_app_sash    { text-align:center; vertical-align:middle; height:@SashSize@; }
+#skin_container_sb_app_sash   {@SkinBorderSBSash@ }
+
 /** User Name section **/
 #skin_container_username				{	height:auto; padding-top:2px;	}
 #skin_container_username *				{	@SkinTextUsername@	}
