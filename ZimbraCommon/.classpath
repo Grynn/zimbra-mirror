@@ -1,100 +1,101 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="src/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="jars/activation.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://java.sun.com/products/javabeans/glasgow/javadocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/ant-contrib-1.0b1.jar"/>
-	<classpathentry kind="lib" path="jars/bouncycastle.jar"/>
-	<classpathentry kind="lib" path="jars/catalina-ant.jar"/>
-	<classpathentry kind="lib" path="jars/commons-codec-1.4.jar" sourcepath="/ThirdParty/commons-codec/src"/>
-	<classpathentry kind="lib" path="jars/commons-dbcp-1.2.2.jar" sourcepath="/ThirdParty/commons-dbcp/src">
-		<attributes>
-			<attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-fileupload-1.2.1.jar" sourcepath="/ThirdParty/commons-fileupload-1.2.1/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-httpclient-3.0.jar" sourcepath="/ThirdParty/commons-httpclient-3.0/src">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/httpclient/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-logging.jar" sourcepath="/ThirdParty/commons-logging-1.0.3/src">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/logging/commons-logging-1.0.4/docs/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-pool-1.5.3.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://commons.apache.org/pool/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/dom4j-1.5.2.jar" sourcepath="/ThirdParty/dom4j/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/ganymed-ssh2-build210.jar" sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2/src"/>
-	<classpathentry kind="lib" path="jars/ical4j-0.9.16-patched.jar"/>
-	<classpathentry kind="lib" path="jars/junit-4.4.jar" sourcepath="/ThirdParty/junit-4.4">
-		<attributes>
-			<attribute name="javadoc_location" value="http://junit.sourceforge.net/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/jzlib.jar"/>
-	<classpathentry kind="lib" path="jars/log4j-1.2.15.jar" sourcepath="/ThirdParty/jakarta-log4j">
-		<attributes>
-			<attribute name="javadoc_location" value="http://logging.apache.org/log4j/1.2/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/mail.jar" sourcepath="jars-src/javamail-1.4.2-src.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.2-javadoc.zip!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/mysql-connector-java-5.0.8-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.0.8/src"/>
-	<classpathentry kind="lib" path="jars/nekohtml.jar"/>
-	<classpathentry kind="lib" path="jars/servlet-api.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/tnef-1.6.0.jar" sourcepath="jars-src/tnef-1.6.0-src.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/tnef-1.6.0-javadoc.zip!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/xercesImpl-2.9.1.jar" sourcepath="/ThirdParty/xerces-2_9_1-src/src"/>
-	<classpathentry kind="lib" path="jars/zimbra-charset.jar"/>
-	<classpathentry kind="lib" path="jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
-	<classpathentry kind="lib" path="jars/jfreechart-1.0.1.jar"/>
-	<classpathentry kind="lib" path="jars/jcommon-1.0.16.jar"/>
-	<classpathentry kind="lib" path="jars/json.jar" sourcepath="/ThirdParty/json/src/java"/>
-	<classpathentry kind="lib" path="jars/ant-1.7.0-ziputil-patched.jar"/>
-	<classpathentry kind="lib" path="jars/memcached-2.3.1.jar" sourcepath="/ThirdParty/spymemcached/memcached-2.3.1-sources"/>
-	<classpathentry kind="lib" path="jars/testng-5.8-jdk15.jar" sourcepath="/ThirdParty/testng-5.8/src/main"/>
-	<classpathentry kind="lib" path="jars/apache-jsieve-0.3-zimbra.jar" sourcepath="jars-src/apache-jsieve-0.3-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-jsieve-0.3-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/jython-2.5.1.jar"/>
-	<classpathentry kind="lib" path="jars/guava-r06.jar" sourcepath="jars-src/guava-src-r06.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-r06-javadoc.zip!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-cli-1.2.jar" sourcepath="jars-src/commons-cli-1.2-src.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="output" path="build/classes"/>
+  <classpathentry kind="src" path="src/java"/>
+  <classpathentry kind="src" output="build/test-classes" path="src/java-test"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry kind="lib" path="jars/activation.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="http://java.sun.com/products/javabeans/glasgow/javadocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/ant-contrib-1.0b1.jar"/>
+  <classpathentry kind="lib" path="jars/bouncycastle.jar"/>
+  <classpathentry kind="lib" path="jars/catalina-ant.jar"/>
+  <classpathentry kind="lib" path="jars/commons-codec-1.4.jar" sourcepath="/ThirdParty/commons-codec/src"/>
+  <classpathentry kind="lib" path="jars/commons-dbcp-1.2.2.jar" sourcepath="/ThirdParty/commons-dbcp/src">
+    <attributes>
+      <attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/commons-fileupload-1.2.1.jar" sourcepath="/ThirdParty/commons-fileupload-1.2.1/src/java">
+    <attributes>
+      <attribute name="javadoc_location" value="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/commons-httpclient-3.0.jar" sourcepath="/ThirdParty/commons-httpclient-3.0/src">
+    <attributes>
+      <attribute name="javadoc_location" value="http://jakarta.apache.org/commons/httpclient/apidocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/commons-logging.jar" sourcepath="/ThirdParty/commons-logging-1.0.3/src">
+    <attributes>
+      <attribute name="javadoc_location" value="http://jakarta.apache.org/commons/logging/commons-logging-1.0.4/docs/apidocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/commons-pool-1.5.3.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="http://commons.apache.org/pool/apidocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/dom4j-1.5.2.jar" sourcepath="/ThirdParty/dom4j/src/java">
+    <attributes>
+      <attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/ganymed-ssh2-build210.jar" sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2/src"/>
+  <classpathentry kind="lib" path="jars/ical4j-0.9.16-patched.jar"/>
+  <classpathentry kind="lib" path="jars/junit-4.4.jar" sourcepath="/ThirdParty/junit-4.4">
+    <attributes>
+      <attribute name="javadoc_location" value="http://junit.sourceforge.net/javadoc/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/jzlib.jar"/>
+  <classpathentry kind="lib" path="jars/log4j-1.2.15.jar" sourcepath="/ThirdParty/jakarta-log4j">
+    <attributes>
+      <attribute name="javadoc_location" value="http://logging.apache.org/log4j/1.2/apidocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/mail.jar" sourcepath="jars-src/javamail-1.4.2-src.zip">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.2-javadoc.zip!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/mysql-connector-java-5.0.8-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.0.8/src"/>
+  <classpathentry kind="lib" path="jars/nekohtml.jar"/>
+  <classpathentry kind="lib" path="jars/servlet-api.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/tnef-1.6.0.jar" sourcepath="jars-src/tnef-1.6.0-src.zip">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/tnef-1.6.0-javadoc.zip!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/xercesImpl-2.9.1.jar" sourcepath="/ThirdParty/xerces-2_9_1-src/src"/>
+  <classpathentry kind="lib" path="jars/zimbra-charset.jar"/>
+  <classpathentry kind="lib" path="jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
+  <classpathentry kind="lib" path="jars/jfreechart-1.0.1.jar"/>
+  <classpathentry kind="lib" path="jars/jcommon-1.0.16.jar"/>
+  <classpathentry kind="lib" path="jars/json.jar" sourcepath="/ThirdParty/json/src/java"/>
+  <classpathentry kind="lib" path="jars/ant-1.7.0-ziputil-patched.jar"/>
+  <classpathentry kind="lib" path="jars/memcached-2.3.1.jar" sourcepath="/ThirdParty/spymemcached/memcached-2.3.1-sources"/>
+  <classpathentry kind="lib" path="jars/testng-5.8-jdk15.jar" sourcepath="/ThirdParty/testng-5.8/src/main"/>
+  <classpathentry kind="lib" path="jars/apache-jsieve-0.3-zimbra.jar" sourcepath="jars-src/apache-jsieve-0.3-sources.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-jsieve-0.3-javadoc.jar!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/jython-2.5.1.jar"/>
+  <classpathentry kind="lib" path="jars/guava-r06.jar" sourcepath="jars-src/guava-src-r06.zip">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-r06-javadoc.zip!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/commons-cli-1.2.jar" sourcepath="jars-src/commons-cli-1.2-src.zip">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="output" path="build/classes"/>
 </classpath>
