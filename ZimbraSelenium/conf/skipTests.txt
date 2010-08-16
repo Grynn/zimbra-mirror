@@ -238,6 +238,11 @@ CLASS:projects.zcs.tests.mail.autocomplete.MailAutoCompleteAddressTests;METHOD:v
 CLASS:projects.zcs.tests.mail.autocomplete.MailAutoCompleteAddressTests;METHOD:autocompleteShowsContactFromTrashedABFolders_Bug47044;LOCALE:all;BROWSERS:na;BUGS:47044;REMARK:Autocomplete shows contact from deleted(Trashed) address book folders
 CLASS:projects.zcs.tests.mail.autocomplete.MailAutoCompleteAddressTests;METHOD:unableToGetRidOfEmailedContacts_Bug40081;LOCALE:all;BROWSERS:na;BUGS:47044;REMARK:Autocomplete shows contact from deleted(Trashed) address book folders
 
+#bug 49898
+CLASS:projects.zcs.tests.preferences.signatures.ChangeMailFormatSignatureTests;METHOD:draft_AttachDontAttachSignatureAndChangeBodyFormat;LOCALE:all;BROWSERS:na;BUGS:49898;REMARK:Signature is not removed on selecting "Do not attach signature" for html saved draft
+CLASS:projects.zcs.tests.preferences.signatures.ChangeMailFormatSignatureTests;METHOD:fwd_AttachDontAttachSignatureAndChangeBodyFormat;LOCALE:all;BROWSERS:na;BUGS:49898;REMARK:Signature is not removed on selecting "Do not attach signature" for html saved draft
+CLASS:projects.zcs.tests.preferences.signatures.ChangeMailFormatSignatureTests;METHOD:newMail_AttachDontAttachSignatureAndChangeBodyFormat;LOCALE:all;BROWSERS:na;BUGS:49898;REMARK:Signature is not removed on selecting "Do not attach signature" for html saved draft
+
 
 #------------------------HTML tests to be skipped ------------------
 #Bug 22626
