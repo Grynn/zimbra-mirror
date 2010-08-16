@@ -1,12 +1,10 @@
 package projects.zcs.tests.addressbook.contactactions;
 
-import java.lang.reflect.Method;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import com.zimbra.common.service.ServiceException;
+
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
@@ -21,22 +19,11 @@ import framework.util.ZimbraSeleniumProperties;
  */
 @SuppressWarnings("static-access")
 public class ContactActionTests extends CommonTest {
+	
+	
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
-	@DataProvider(name = "ABMiscDataProvider")
-	public Object[][] createData(Method method) throws ServiceException {
-		String test = method.getName();
-		if (test.equals("addressPicker")
-				|| test.equals("addressPicker_Bug20969")) {
-			return new Object[][] { { localize(locator.toLabel) } };
-		} else if (test.equals("contextAddToContacts")) {
-			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData_NoSpecialChar() } };
-		} else {
-			return new Object[][] { {} };
-		}
-	}
 
 	// --------------
 	// section 2 BeforeClass
@@ -61,15 +48,19 @@ public class ContactActionTests extends CommonTest {
 	 * on mail compose
 	 * 
 	 */
-	@Test(dataProvider = "ABMiscDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void addressPicker(String to) throws Exception {
+	@Test(
+			description = "test to select To/CC/BCC values in Select Address dlg box and verify them on mail compose",
+			groups = { "smoke", "full" },
+			retryAnalyzer = RetryFailedTests.class)
+	public void addressPicker() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
+		// Get the 'select addresses dialog'
 		obj.zButton.zClick(page.zABCompose.zMailTabIconBtn);
 		page.zComposeView.zNavigateToMailCompose();
-		obj.zButton.zClick(to);
-
+		obj.zButton.zClick(localize(locator.toLabel));
+		
 		String infoDlgExist;
 		infoDlgExist = obj.zDialog.zExistsDontWait(localize(locator.infoMsg));
 		if (infoDlgExist.equals("true")) {
@@ -79,31 +70,39 @@ public class ContactActionTests extends CommonTest {
 
 		obj.zDialog.zExists(localize(locator.selectAddresses));
 		obj.zEditField.zActivateInDlg(localize(locator.search), "");
+		
+		
 		for (int i = 1; i <= 3; i++) {
-			ProvZCS.createAccount("ac" + i + "@testdomain.com");
-			obj.zEditField.zTypeInDlg(localize(locator.search), "ac" + i
-					+ "@testdomain.com");
+			
+			// Create a new account to be the destination
+			String emailAddress = "ac" + i + "@testdomain.com";
+			ProvZCS.createAccount(emailAddress);
+			Thread.sleep(1000);
+			
+			// Search for the account
+			obj.zEditField.zTypeInDlg(localize(locator.search), emailAddress);
 			obj.zButton.zClickInDlg(localize(locator.search));
-			if (i == 1) {
-				obj.zButton.zClickInDlg(localize(locator.to));
-			} else if (i == 2) {
-				obj.zButton.zClickInDlg(localize(locator.cc));
-			} else {
-				obj.zButton.zClickInDlg(localize(locator.bcc));
+			
+			// Add the account to the To, CC, and Bcc fields
+			switch (i) {
+			case 1: obj.zButton.zClickInDlg(localize(locator.to)); break;
+			case 2: obj.zButton.zClickInDlg(localize(locator.cc)); break;
+			default: obj.zButton.zClickInDlg(localize(locator.bcc)); break;
 			}
 		}
 
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		String toValue = obj.zTextAreaField
-				.zGetInnerText(localize(locator.toLabel));
-		String ccValue = obj.zTextAreaField
-				.zGetInnerText(localize(locator.ccLabel));
-		String bccValue = obj.zTextAreaField
-				.zGetInnerText(localize(locator.bccLabel));
-		Assert.assertTrue(toValue.contains("ac1" + "@testdomain.com")
-				|| ccValue.contains("ac2" + "@testdomain.com")
-				|| bccValue.contains("ac3" + "@testdomain.com"),
-				"to/cc/bcc field not picked properly from address picker");
+		Assert.assertTrue(
+				obj.zTextAreaField.zGetInnerText(localize(locator.toLabel)).contains("ac1@testdomain.com"),
+				"Verify that the To field ("+ obj.zTextAreaField.zGetInnerText(localize(locator.toLabel)) +") contains ac1@testdomain.com");
+		
+		Assert.assertTrue(
+				obj.zTextAreaField.zGetInnerText(localize(locator.ccLabel)).contains("ac2@testdomain.com"),
+				"Verify that the Cc field ("+ obj.zTextAreaField.zGetInnerText(localize(locator.ccLabel)) +") contains ac2@testdomain.com");
+
+		Assert.assertTrue(
+				obj.zTextAreaField.zGetInnerText(localize(locator.bccLabel)).contains("ac3@testdomain.com"),
+				"Verify that the Bcc field ("+ obj.zTextAreaField.zGetInnerText(localize(locator.bccLabel)) +") contains ac3@testdomain.com");
 
 		needReset = false;
 	}
@@ -112,14 +111,17 @@ public class ContactActionTests extends CommonTest {
 	 * Test related to address picker w.r.t. bug 20969
 	 * 
 	 */
-	@Test(dataProvider = "ABMiscDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void addressPicker_Bug20969(String to) throws Exception {
+	@Test(
+			description = "Test related to address picker w.r.t. bug 20969",
+			groups = { "smoke", "full" },
+			retryAnalyzer = RetryFailedTests.class)
+	public void addressPicker_Bug20969() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
 		obj.zButton.zClick(page.zABCompose.zMailTabIconBtn);
 		page.zComposeView.zNavigateToMailCompose();
-		obj.zButton.zClick(to);
+		obj.zButton.zClick(localize(locator.toLabel));
 
 		String infoDlgExist;
 		Thread.sleep(3000);
@@ -152,7 +154,7 @@ public class ContactActionTests extends CommonTest {
 		obj.zButton.zClickInDlg(localize(locator.ok));
 		obj.zTextAreaField.zType(localize(locator.toLabel),
 				"add@testdomain.com");
-		obj.zButton.zClick(to);
+		obj.zButton.zClick(localize(locator.toLabel));
 		Thread.sleep(3000);
 		infoDlgExist = obj.zDialog.zExistsDontWait(localize(locator.infoMsg));
 		if (infoDlgExist.equals("true")) {
@@ -183,12 +185,17 @@ public class ContactActionTests extends CommonTest {
 	 * account and adds it to contacts
 	 * 
 	 */
-	@Test(dataProvider = "ABMiscDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void contextAddToContacts(String subject, String mailBody)
-			throws Exception {
+	@Test(
+			description = "Test to check the new mail right click 'Add to Contacts' functionality",
+			groups = { "smoke", "full" },
+			retryAnalyzer = RetryFailedTests.class)
+	public void contextAddToContacts() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
+		String subject = getLocalizedData_NoSpecialChar();
+		String mailBody = getLocalizedData_NoSpecialChar();
+		
 		String contactName = null;
 		String[] fromAccount = SelNGBase.selfAccountName.split("@");
 		String[] firstAndLastName = fromAccount[0].split("_");

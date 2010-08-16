@@ -1,14 +1,14 @@
 package projects.zcs.tests.addressbook;
 
-import java.lang.reflect.Method;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import framework.items.ContactItem;
+import framework.items.ContactItem.GenerateItemType;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -20,30 +20,12 @@ import framework.util.ZimbraSeleniumProperties;
  */
 @SuppressWarnings("static-access")
 public class AddressBookBugTests extends CommonTest {
+	
+	
+	
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
-	@DataProvider(name = "ABDataProvider")
-	public Object[][] createData(Method method) {
-		String test = method.getName();
-		if (test.equals("checkAutoFillForConatctWorkAddr_41144")) {
-			return new Object[][] { {
-					"lastName  " + getLocalizedData_NoSpecialChar(),
-					"middleName " + getLocalizedData_NoSpecialChar(), "",
-					"touser@testdomain.com" } };
-		} else if (test
-				.equals("CreateContactWhileSrchFldrAndTagSelected_Bug40517")) {
-			return new Object[][] { { "LN" + getLocalizedData_NoSpecialChar(),
-					"MN" + getLocalizedData_NoSpecialChar(),
-					"FN" + getLocalizedData_NoSpecialChar(),
-					"NLN" + getLocalizedData_NoSpecialChar(),
-					"NMN" + getLocalizedData_NoSpecialChar(),
-					"NFN" + getLocalizedData_NoSpecialChar(),
-					"NNMN" + getLocalizedData_NoSpecialChar() } };
-		} else {
-			return new Object[][] { { "" } };
-		}
-	}
 
 	// --------------
 	// section 2 BeforeClass
@@ -77,10 +59,16 @@ public class AddressBookBugTests extends CommonTest {
 	 * @throws Exception
 	 * @author Girish
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void checkAutoFillForConatctWorkAddr_41144(String cnLastName,
-			String cnMiddleName, String cnFirstName, String email)
-			throws Exception {
+	@Test(
+			description = "Contact added as Work Address is not autofilled Login and go" +
+					" to Address book tab. Create a new contact and add the email address as" +
+					" 'Work Address'. Save the contact and compose a new mail. When a letter is" +
+					" placed in a 'To' or 'Cc' field it is suppose to auto fill Expected" +
+					" result:-The contact must get auto filled.",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void checkAutoFillForConatctWorkAddr_41144()	throws Exception {
+		
 		if (isExecutionARetry)
 			handleRetry();
 
@@ -90,29 +78,28 @@ public class AddressBookBugTests extends CommonTest {
 			Thread.sleep(2000);
 		}
 		
-		ContactItem contact = new ContactItem();
-		contact.firstName = cnFirstName;
-		contact.middleName = cnMiddleName;
-		contact.lastName = cnLastName;
-		contact.email = email;
+
+		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
+		contact.email = "touser@testdomain.com";
 		
 		obj.zButton.zClick(page.zABCompose.zNewContactMenuIconBtn);
 		page.zABCompose.zEnterBasicABData(contact);
 		Thread.sleep(1000);
+		
 		selenium.clickAt("id=editcontactform_EMAIL_0_add", "");
 		Thread.sleep(2000);
-		obj.zEditField.zActivateAndType(page.zABCompose.zWorkEmail1EditField,
-				email);
+		
+		obj.zEditField.zActivateAndType(page.zABCompose.zWorkEmail1EditField, contact.email);
 		obj.zButton.zClick(localize(locator.save), "2");
 		Thread.sleep(1500);
-		obj.zContactListItem.zExists(cnLastName);
+		
+		obj.zContactListItem.zExists(contact.lastName);
+		
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		System.out.println(email);
-		if (email.contains("@")) {
-			email = email.substring(0, email.indexOf('@'));
-		}
-		selenium.typeKeys("id=zv__COMPOSE1_to_control", email);
+		System.out.println(contact.email);
+		
+		selenium.typeKeys("id=zv__COMPOSE1_to_control", contact.getCN());
 		selenium.keyDown("id=zv__COMPOSE1_to_control", "\\13");
 		selenium.keyUp("id=zv__COMPOSE1_to_control", "\\13");
 		Thread.sleep(1000);
@@ -137,7 +124,12 @@ public class AddressBookBugTests extends CommonTest {
 	 * 
 	 * @author Girish
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			description = "Scenario 1: Login to Web Client. Create a new contact and create Saved "+
+							"Search with a Contact. Go to Searches -> Click on New Contact. Enter "+
+							"Details and try to save it. Expected :Should able to add new contact",
+			groups = { "smoke", "full" },
+			retryAnalyzer = RetryFailedTests.class)
 	public void CreateContactWhileSrchFldrAndTagSelected_Bug40517() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
@@ -178,6 +170,7 @@ public class AddressBookBugTests extends CommonTest {
 				.clickAt(
 						"xpath=//td[contains(@id,'zti__main_Contacts') and contains(text(),'savecontact')]",
 						"");
+		
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact2);
 		obj.zFolder.zClick(localize(locator.contacts));
 		obj.zContactListItem.zRtClick(contact2.lastName);
@@ -195,6 +188,7 @@ public class AddressBookBugTests extends CommonTest {
 				.clickAt(
 						"xpath=//td[contains(@id,'zti__main_Contacts') and contains(text(),'tagName')]",
 						"");
+		
 		obj.zContactListItem.zExists(contact2.lastName);
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact3);
 		obj.zFolder.zClick(localize(locator.contacts));

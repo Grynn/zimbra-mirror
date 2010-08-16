@@ -1,5 +1,6 @@
 package projects.zcs.ui;
 
+import framework.items.ContactGroupItem;
 import framework.items.ContactItem;
 import framework.items.ZimbraItem;
 import framework.util.HarnessException;
@@ -183,44 +184,54 @@ public class ABCompose extends AppPage {
 		}
 	}
 
-	/*
-	public static void zCreateContactInAddressBook(String AddBook,
-			String lastName, String MiddleName, String firstName,
-			String emailAddress) throws Exception {
-		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(2500);
-		} else {
-			Thread.sleep(2000);
-		}
-		obj.zButton.zClick(zNewContactMenuIconBtn);
-		zWaitTillObjectExist("editfield", zLastEditField);
-		if (lastName != "")
-			obj.zEditField.zActivateAndType(zLastEditField, lastName);
-		if (MiddleName != "")
-			obj.zEditField.zActivateAndType(zMiddleEditField, MiddleName);
-		if (firstName != "")
-			obj.zEditField.zActivateAndType(zFirstEditField, firstName);
-		if (emailAddress != "")
-			obj.zEditField.zActivateAndType(zEmail1EditField, emailAddress);
-		if (AddBook != "" && AddBook != localize(locator.contacts)) {
-			obj.zButton.zClick(zContactsFolder_NewUI);
-			Thread.sleep(1500);
-			obj.zFolder.zClickInDlgByName(AddBook,
-					localize(locator.chooseAddrBook));
-			obj.zButton.zClickInDlgByName(localize(locator.ok),
-					localize(locator.chooseAddrBook));
-		}
-
-		obj.zButton.zClick(zSaveContactMenuIconBtn);
-		Thread.sleep(1500);
-	}
-
-*/
 	public void navigateTo(ActionMethod method) throws HarnessException {
 		try {
 			zGoToApplication("Address Book");
 		} catch (Exception e) {
 			throw new HarnessException(e);
+		}
+	}
+	
+	/**
+	 * Create a new contact group
+	 */
+	public ZimbraItem createContactGroupItem(ActionMethod method, ZimbraItem item) throws HarnessException {
+		try
+		{
+			ContactGroupItem g = (ContactGroupItem)item;
+			
+			// Click New
+			obj.zButtonMenu.zClick(page.zABCompose.zNewMenuDropdownIconBtn);
+
+			// Click Group
+			obj.zMenuItem.zClick(localize(locator.group));
+			obj.zEditField.zType( getNameWithoutSpace(localize(locator.groupNameLabel)), g.nickname);
+			
+			
+			// Add any members
+			for (String member : g.dlist) {
+				obj.zEditField.zType(localize(locator.findLabel), member);
+				obj.zButton.zClick(localize(locator.search), "2");
+				Thread.sleep(2500);
+				if (currentBrowserName.contains("Safari")) {
+					obj.zButton.zClick(localize(locator.search), "2");
+					obj.zButton.zClick(localize(locator.search), "2");
+					Thread.sleep(1000);
+				}
+				obj.zListItem.zDblClickItemInSpecificList(member, "2");
+				obj.zButton.zClick(localize(locator.add));
+			}
+
+			// Save
+			obj.zButton.zClick(localize(locator.save), "2");
+			obj.zToastAlertMessage.zAlertMsgExists(localize(locator.groupCreated),
+					"Group Created message should be shown");
+			obj.zContactListItem.zExists(g.nickname);
+			
+			return (g);	
+			
+		} catch (Exception e) {
+			throw new HarnessException("Unable to create Contact Group", e);
 		}
 	}
 	
