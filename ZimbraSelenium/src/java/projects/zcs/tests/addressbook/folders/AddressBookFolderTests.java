@@ -1,16 +1,17 @@
 package projects.zcs.tests.addressbook.folders;
 
-import java.lang.reflect.Method;
-
 import junit.framework.Assert;
 
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
+import projects.zcs.ui.ABCompose.ABComposeActionMethod;
+import framework.items.FolderItem;
 import framework.util.RetryFailedTests;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * @written by Prashant Jaiswal & updated by Jitesh
@@ -21,24 +22,6 @@ public class AddressBookFolderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
-	@DataProvider(name = "ABDataProvider")
-	public Object[][] createData(Method method) {
-		String test = method.getName();
-		if (test.equals("createAndRenameABFolder")) {
-			return new Object[][] { {
-					"newAB" + getLocalizedData_NoSpecialChar(),
-					"renamedAB" + getLocalizedData_NoSpecialChar() } };
-		} else if (test.equals("createAndQDeleteABFolder")) {
-			return new Object[][] { { "newAB"
-					+ getLocalizedData_NoSpecialChar() } };
-		} else if (test.equals("moveABFolder")) {
-			return new Object[][] { { getLocalizedData_NoSpecialChar() } };
-		} else if (test.equals("tryToCreateDuplicateABFolder")) {
-			return new Object[][] { { getLocalizedData_NoSpecialChar() } };
-		} else {
-			return new Object[][] { { "" } };
-		}
-	}
 
 	// --------------
 	// section 2 BeforeClass
@@ -62,19 +45,27 @@ public class AddressBookFolderTests extends CommonTest {
 	 * Test to create a notebook folder and then rename the notebook folder and
 	 * verify
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void createAndRenameABFolder(String newAddBookName,
-			String renamedABName) throws Exception {
+	@Test(
+			description = "Test to create a notebook folder and then rename the notebook folder and verify",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void createAndRenameABFolder() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateNewAddBook(newAddBookName);
-		zWaitTillObjectExist("folder", newAddBookName);
-		obj.zFolder.zRtClick(newAddBookName);
-		obj.zMenuItem.zClick(localize(locator.renameFolder));
-		obj.zEditField.zTypeInDlg(localize(locator.newName), renamedABName);
-		obj.zButton.zClickInDlg(localize(locator.ok));
-		obj.zFolder.zExists(renamedABName);
+		FolderItem addressbook = new FolderItem();
+		addressbook.name = "original" + ZimbraSeleniumProperties.getUniqueString();
+		String renamed = "renamed" + ZimbraSeleniumProperties.getUniqueString();
+		
+		// Create the addressbook
+		page.zABCompose.createAddressBookItem(ActionMethod.DEFAULT, addressbook);
+		zWaitTillObjectExist("folder", addressbook.name);
+		
+		// Right click and rename
+		page.zABCompose.renameAddressBookItem(ABComposeActionMethod.RightClickEdit, addressbook, renamed);
+		
+		// Verify the folder with the new name exists
+		obj.zFolder.zExists(renamed);
 
 		needReset = false;
 	}
@@ -83,55 +74,76 @@ public class AddressBookFolderTests extends CommonTest {
 	 * To create AB folder and then delete the same.Verify the creation and
 	 * deletion of the AB folder
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void createAndQDeleteABFolder(String newAddBookName)
-			throws Exception {
+	@Test(
+			description = "To create AB folder and then delete the same.Verify the creation and deletion of the AB folder",
+			groups = { "smoke", "full" },
+			retryAnalyzer = RetryFailedTests.class)
+	public void createAndQDeleteABFolder() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateNewAddBook(newAddBookName);
-		zWaitTillObjectExist("folder", newAddBookName);
-		page.zMailApp.zDeleteFolder(newAddBookName);
+		FolderItem addressbook = new FolderItem();
+		addressbook.name = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		
+		page.zABCompose.createAddressBookItem(ActionMethod.DEFAULT, addressbook);
+		zWaitTillObjectExist("folder", addressbook.name);
+		
+		page.zMailApp.zDeleteFolder(addressbook.name);
+		
 		obj.zFolder.zClick(localize(locator.trash));
-		obj.zFolder.zExists(newAddBookName);
+		obj.zFolder.zExists(addressbook.name);
 
 		needReset = false;
 	}
 
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void moveABFolder(String newAddBookName) throws Exception {
+	@Test(
+			description = "Drag and Drop an addressbook to a different folder",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void moveABFolder() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateNewAddBook(newAddBookName);
+		FolderItem addressbook = new FolderItem();
+		addressbook.name = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		
+		page.zABCompose.createAddressBookItem(ActionMethod.DEFAULT, addressbook);
 		zDragAndDrop(
 				"//td[contains(@id, 'zti__main_Contacts') and contains(text(), '"
-						+ newAddBookName + "')]",
+						+ addressbook.name + "')]",
 				page.zABCompose.zEmailedContactsFolder);
+		
 		Assert
 				.assertTrue(selenium
 						.isElementPresent("//div[@id='zti__main_Contacts__13']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
-								+ newAddBookName + "')]"));
+								+ addressbook.name + "')]"));
 
 		needReset = false;
 	}
 
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void tryToCreateDuplicateABFolder(String newAddBookName)
-			throws Exception {
+	@Test(
+			description = "Create a duplicate folder with same name.  Verify error dialog box appears.",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void tryToCreateDuplicateABFolder() throws Exception {
+		
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateNewAddBook(newAddBookName);
-		obj.zButton
-				.zRtClick(replaceUserNameInStaticId(replaceUserNameInStaticId(page.zABCompose.zNewABOverviewPaneIcon)));
+		FolderItem addressbook = new FolderItem();
+		addressbook.name = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		
+		// Create addressbook
+		page.zABCompose.createAddressBookItem(ActionMethod.DEFAULT, addressbook);
+		
+		obj.zButton .zRtClick(replaceUserNameInStaticId(replaceUserNameInStaticId(page.zABCompose.zNewABOverviewPaneIcon)));
 		obj.zMenuItem.zClick(localize(locator.newAddrBook));
 		Thread.sleep(1000);
 		obj.zEditField.zTypeInDlgByName(localize(locator.nameLabel),
-				newAddBookName, localize(locator.createNewAddrBook));
+				addressbook.name, localize(locator.createNewAddrBook));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.createNewAddrBook));
-		assertReport(localize(locator.errorAlreadyExists, newAddBookName, ""),
+		assertReport(localize(locator.errorAlreadyExists, addressbook.name, ""),
 				obj.zDialog.zGetMessage(localize(locator.criticalMsg)),
 				"Verifying dialog message");
 		obj.zButton.zClickInDlgByName(localize(locator.ok),

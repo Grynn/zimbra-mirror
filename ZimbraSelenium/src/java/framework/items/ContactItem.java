@@ -16,6 +16,7 @@ import framework.util.ZimbraSeleniumProperties;
  */
 public class ContactItem extends ZimbraItem implements IItem {
 
+	public String type = null;
 	public String firstName = null;
 	public String middleName = null;
 	public String lastName = null;
@@ -53,6 +54,35 @@ public class ContactItem extends ZimbraItem implements IItem {
 		ContactAttributes.put(key, value);
 		
 		return (ContactAttributes.get(key));
+	}
+	
+	/**
+	 * Get the CN for this contact (cn@domain.com)
+	 * @return the CN, or null if email is not set
+	 */
+	public String getCN() {
+		String address = null;
+
+		// Determine the current contact email address
+		// either from the "email" property or from
+		// the ContactAttributes
+		//
+		if ( email != null ) {
+			address = email;
+		} else if ( getAttribute("email", null) != null) {
+			address = getAttribute("email", null);
+		} else {
+			return (null); // No email set
+		}
+		
+		// If the email contains an '@', use the first part
+		//
+		if ( address.contains("@")) {
+			return (address.split("@")[0]);
+		}
+		
+		// If the email does not contain the '@', return the entire part
+		return (address);
 	}
 	
 	public enum GenerateItemType {

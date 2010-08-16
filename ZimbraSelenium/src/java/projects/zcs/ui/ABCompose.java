@@ -2,6 +2,7 @@ package projects.zcs.ui;
 
 import framework.items.ContactGroupItem;
 import framework.items.ContactItem;
+import framework.items.FolderItem;
 import framework.items.ZimbraItem;
 import framework.util.HarnessException;
 import framework.util.ZimbraSeleniumProperties;
@@ -235,6 +236,47 @@ public class ABCompose extends AppPage {
 		}
 	}
 	
+	/**
+	 * Create a new contact AddressBook
+	 */
+	public ZimbraItem createAddressBookItem(ActionMethod method, ZimbraItem item) throws HarnessException {
+		try
+		{
+			FolderItem f = (FolderItem)item;
+			
+			zWaitTillObjectExist("button", replaceUserNameInStaticId(zNewABOverviewPaneIcon));
+			obj.zButton .zRtClick(replaceUserNameInStaticId(replaceUserNameInStaticId(zNewABOverviewPaneIcon)));
+			obj.zMenuItem.zClick(localize(locator.newAddrBook));
+			obj.zEditField.zTypeInDlg(localize(locator.nameLabel), f.name);
+			obj.zButton.zClickInDlg(localize(locator.ok));
+			Thread.sleep(1000);
+			
+			return (f);	
+			
+		} catch (Exception e) {
+			throw new HarnessException("Unable to create Address Book", e);
+		}
+	}
+	
+
+	/**
+	 * Rename an existing AddressBook
+	 * @param rightclickedit
+	 * @param addressbook
+	 * @param renamed
+	 * @throws HarnessException 
+	 */
+	public FolderItem renameAddressBookItem(ActionMethod method, FolderItem addressbook, String newname) throws HarnessException {
+		if ( !(method.equals(ActionMethod.DEFAULT) || method.equals(ABComposeActionMethod.RightClickEdit))) {
+			throw new HarnessException("Implement me!  Only Right Click is supported.");
+		}
+		obj.zFolder.zRtClick(addressbook.name);
+		obj.zMenuItem.zClick(localize(locator.renameFolder));
+		obj.zEditField.zTypeInDlg(localize(locator.newName), newname);
+		obj.zButton.zClickInDlg(localize(locator.ok));
+		return (addressbook);
+	}
+
 
 	/**
 	 * Create a new contact item
@@ -517,4 +559,5 @@ public class ABCompose extends AppPage {
 		return (true);
 
 	}
+
 }
