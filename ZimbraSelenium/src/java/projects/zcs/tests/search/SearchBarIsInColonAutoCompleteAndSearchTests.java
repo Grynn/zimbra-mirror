@@ -415,19 +415,20 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		pressKeys("i");
 		Thread.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
-			page.zMailApp.zVerifyAutocompleteNotExists(autoComplete[i - 1], i,
-					1);
+			page.zMailApp.zVerifyAutocompleteNotExistsForSearchBar(
+					autoComplete[i - 1], i, 1);
 		}
 		pressKeys("n");
 		Thread.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
-			page.zMailApp.zVerifyAutocompleteNotExists(autoComplete[i - 1], i,
-					1);
+			page.zMailApp.zVerifyAutocompleteNotExistsForSearchBar(
+					autoComplete[i - 1], i, 1);
 		}
 		pressKeys(":");
 		Thread.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
-			page.zMailApp.zVerifyAutocompleteExists(autoComplete[i - 1], i, 1);
+			page.zMailApp.zVerifyAutocompleteExistsForSearchBar(
+					autoComplete[i - 1], i, 1);
 		}
 		Thread.sleep(1000);
 		pressKeys("down");
@@ -471,32 +472,34 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		pressKeys("-");
 		Thread.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
-			page.zMailApp.zVerifyAutocompleteNotExists(autoComplete[i - 1], i,
-					1);
+			page.zMailApp.zVerifyAutocompleteNotExistsForSearchBar(
+					autoComplete[i - 1], i, 1);
 		}
 		pressKeys("i");
 		Thread.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
-			page.zMailApp.zVerifyAutocompleteNotExists(autoComplete[i - 1], i,
-					1);
+			page.zMailApp.zVerifyAutocompleteNotExistsForSearchBar(
+					autoComplete[i - 1], i, 1);
 		}
 		pressKeys("n");
 		Thread.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
-			page.zMailApp.zVerifyAutocompleteNotExists(autoComplete[i - 1], i,
-					1);
+			page.zMailApp.zVerifyAutocompleteNotExistsForSearchBar(
+					autoComplete[i - 1], i, 1);
 		}
 		pressKeys(":");
 		Thread.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
-			page.zMailApp.zVerifyAutocompleteExists(autoComplete[i - 1], i, 1);
+			page.zMailApp.zVerifyAutocompleteExistsForSearchBar(
+					autoComplete[i - 1], i, 1);
 		}
 		pressKeys("tab");
 		Thread.sleep(1000);
-		String sent = selenium.getValue("xpath=//input[@class='search_input']");
+		String inbox = selenium
+				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
-				"in:" + (char) 34 + "inbox" + (char) 34,
-				sent,
+				"-in:" + (char) 34 + "inbox" + (char) 34,
+				inbox,
 				"Advanced search string not showing 'in:inbox' on search edit field while press tab in autocomplete option");
 
 		needReset = false;
@@ -668,7 +671,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		pressKeys("-, i, n, :, r, e, m, o, t, e, f, enter");
 		obj.zButton.zClick("id=zb__Search__SEARCH_title");
 		VerifyMessageNotExists("remotesubject, remotex");
-		VerifyMessageExists("drafts, "
+		VerifyMessageNotExists("drafts, "
 				+ localize(locator.cancelled)
 				+ ": testSubject"
 				+ ", Repliedly, Fwd: forwardedx, parentfolder, subfolder, subsubxfolder, anywhere, ccme, fromme, fromccmex, local, readx, invite, received, tofromccme, solo, sent, tome, tofromme");
@@ -679,30 +682,20 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	//------------------------------autocomplete_functions----------------------
 	public static void VerifyIsColonAutocompleteExists(String value, int rank)
 			throws Exception {
-		Assert
-				.assertTrue(
-						"Verifying is: autocomplete list rank " + rank
-								+ " for " + value,
-						selenium
-								.isElementPresent("//div[contains(@id, 'AutoCompleteListViewDiv_"
-										+ (rank - 1)
-										+ "') and contains(text(), '"
-										+ value
-										+ "')]"));
+		Assert.assertTrue("Verifying is: autocomplete list rank " + rank
+				+ " for " + value, selenium
+				.isElementPresent("//tr[contains(@id, 'DWT18_acRow_"
+						+ (rank - 1) + "')]//td[contains(text(), '" + value
+						+ "')]"));
 	}
 
 	public static void VerifyIsColonAutocompleteNotExists(String value, int rank)
 			throws Exception {
-		Assert
-				.assertFalse(
-						"Verifying is: autocomplete list rank " + rank
-								+ " for " + value,
-						selenium
-								.isElementPresent("//div[contains(@id, 'AutoCompleteListViewDiv_"
-										+ (rank - 1)
-										+ "') and contains(text(), '"
-										+ value
-										+ "')]"));
+		Assert.assertFalse("Verifying is: autocomplete list rank " + rank
+				+ " for " + value, selenium
+				.isElementPresent("//tr[contains(@id, 'DWT18_acRow_"
+						+ (rank - 1) + "')]//td[contains(text(), '" + value
+						+ "')]"));
 	}
 
 	public static void ClickAutoComplete(String value, int rank)
@@ -721,17 +714,14 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 				|| value.contains("remotefolder")) {
 			pressKeys("i, n, :");
 			Thread.sleep(1000);
-			selenium.clickAt("//div[contains(@id, 'AutoCompleteListViewDiv_"
-					+ rank + "')]//td[contains(text(), '" + value + "')]",
-					"0,0");
+			selenium.clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
+					+ "')]//td[contains(text(), '" + value + "')]", "0,0");
 
 		} else {
 			pressKeys("i, s, :");
 			Thread.sleep(1000);
-			selenium
-					.clickAt("//div[contains(@id, 'AutoCompleteListViewDiv_"
-							+ rank + "') and contains(text(), '" + value
-							+ "')]", "0,0");
+			selenium.clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
+					+ "')]//td[contains(text(), '" + value + "')]", "0,0");
 		}
 	}
 

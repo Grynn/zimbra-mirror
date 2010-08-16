@@ -69,67 +69,66 @@ public class CommonTest extends SelNGBase {
 	public static PageObjects page;
 	public static Locators locator;
 	public static String CODE_COVERAGE_DIRECTORY_PATH = "CODECOVERAGE\\jscoverage.json";
-	public static String COVERAGE_SCRIPT =
-		"if (! window.jscoverage_report) {\n" +
-		"  window.jscoverage_report = function jscoverage_report(dir) {\n" +
-		"    if(window._$jscoverage == undefined) return \"\";\n" +
-		"    var pad = function (s) {   \n" +
-		"          return '0000'.substr(s.length) + s; \n" +
-		"   };\n" +
-		"  var quote = function (s) {   \n" +
-		"   return '\"' + s.replace(/[\\u0000-\\u001f\"\\\\\\u007f-\\uffff]/g, function (c) {  \n" +
-		"      switch (c) {\n" +
-		"        case '\\b':\n" +
-		"          return '\\\\b';\n" +
-		"        case '\\f':    \n" +
-		"         return '\\\\f';\n" +
-		"        case '\\n': \n" +
-		"         return '\\\\n'; \n" +
-		"       case '\\r':\n" +
-		"          return '\\\\r'; \n" +
-		"       case '\\t':\n" +
-		"          return '\\\\t'; \n" +
-		"       case '\"':     \n" +
-		"         return '\\\\\"'; \n" +
-		"       case '\\\\':\n" +
-		"          return '\\\\\\\\';\n" +
-		"       default:   \n" +
-		"              return '\\\\u' + pad(c.charCodeAt(0).toString(16));\n" +
-		"        }\n" +
-		"      }) + '\"';\n" +
-		"    };\n" +
-		"\n" +
-		"    var json = [];\n" +
-		"    for (var file in window._$jscoverage) { \n" +
-		"     var coverage = window._$jscoverage[file];\n" +
-		"      var array = []; \n" +
-		"     var length = coverage.length;\n" +
-		"      for (var line = 0; line < length; line++) {\n" +
-		"        var value = coverage[line];       \n" +
-		"    if (value === undefined || value === null) {\n" +
-		"          value = 'null';    \n" +
-		"    }else{\n" +
-		"          coverage[line] = 0; //stops double counting\n" +
-		"        }\n" +
-		"        array.push(value);}\n" +			
-		"      json.push(quote(file) + ':{\"coverage\":[' + array.join(',') + ']}');    } \n" +
-		"   json = '{' + json.join(',') + '}';\n" +
-		"    return json;\n" +
-		"  };\n" +
-		"}; \n" +
-		"window.jscoverage_report()\n";
+	public static String COVERAGE_SCRIPT = "if (! window.jscoverage_report) {\n"
+			+ "  window.jscoverage_report = function jscoverage_report(dir) {\n"
+			+ "    if(window._$jscoverage == undefined) return \"\";\n"
+			+ "    var pad = function (s) {   \n"
+			+ "          return '0000'.substr(s.length) + s; \n"
+			+ "   };\n"
+			+ "  var quote = function (s) {   \n"
+			+ "   return '\"' + s.replace(/[\\u0000-\\u001f\"\\\\\\u007f-\\uffff]/g, function (c) {  \n"
+			+ "      switch (c) {\n"
+			+ "        case '\\b':\n"
+			+ "          return '\\\\b';\n"
+			+ "        case '\\f':    \n"
+			+ "         return '\\\\f';\n"
+			+ "        case '\\n': \n"
+			+ "         return '\\\\n'; \n"
+			+ "       case '\\r':\n"
+			+ "          return '\\\\r'; \n"
+			+ "       case '\\t':\n"
+			+ "          return '\\\\t'; \n"
+			+ "       case '\"':     \n"
+			+ "         return '\\\\\"'; \n"
+			+ "       case '\\\\':\n"
+			+ "          return '\\\\\\\\';\n"
+			+ "       default:   \n"
+			+ "              return '\\\\u' + pad(c.charCodeAt(0).toString(16));\n"
+			+ "        }\n"
+			+ "      }) + '\"';\n"
+			+ "    };\n"
+			+ "\n"
+			+ "    var json = [];\n"
+			+ "    for (var file in window._$jscoverage) { \n"
+			+ "     var coverage = window._$jscoverage[file];\n"
+			+ "      var array = []; \n"
+			+ "     var length = coverage.length;\n"
+			+ "      for (var line = 0; line < length; line++) {\n"
+			+ "        var value = coverage[line];       \n"
+			+ "    if (value === undefined || value === null) {\n"
+			+ "          value = 'null';    \n"
+			+ "    }else{\n"
+			+ "          coverage[line] = 0; //stops double counting\n"
+			+ "        }\n"
+			+ "        array.push(value);}\n"
+			+ "      json.push(quote(file) + ':{\"coverage\":[' + array.join(',') + ']}');    } \n"
+			+ "   json = '{' + json.join(',') + '}';\n"
+			+ "    return json;\n"
+			+ "  };\n" + "}; \n" + "window.jscoverage_report()\n";
 
 	protected static Map<String, Object> selfAccountAttrs = new HashMap<String, Object>();
 
 	public CommonTest() {
-		zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg",
-				new Locale(ZimbraSeleniumProperties.getStringProperty("locale")));
-		ajxMsg = ResourceBundle.getBundle("framework.locale.AjxMsg",
-				new Locale(ZimbraSeleniumProperties.getStringProperty("locale")));
-		i18Msg = ResourceBundle.getBundle("framework.locale.I18nMsg",
-				new Locale(ZimbraSeleniumProperties.getStringProperty("locale")));
-		zsMsg = ResourceBundle.getBundle("framework.locale.ZsMsg",
-				new Locale(ZimbraSeleniumProperties.getStringProperty("locale")));
+		zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg", new Locale(
+				ZimbraSeleniumProperties.getStringProperty("locale")));
+		ajxMsg = ResourceBundle
+				.getBundle("framework.locale.AjxMsg", new Locale(
+						ZimbraSeleniumProperties.getStringProperty("locale")));
+		i18Msg = ResourceBundle
+				.getBundle("framework.locale.I18nMsg", new Locale(
+						ZimbraSeleniumProperties.getStringProperty("locale")));
+		zsMsg = ResourceBundle.getBundle("framework.locale.ZsMsg", new Locale(
+				ZimbraSeleniumProperties.getStringProperty("locale")));
 
 		obj = new CoreObjects();
 		page = new PageObjects();
@@ -207,51 +206,56 @@ public class CommonTest extends SelNGBase {
 		SeleniumService.getInstance().startSeleniumServer();
 		ProvZCS.createAccount("ccuser@testdomain.com");
 		ProvZCS.createAccount("bccuser@testdomain.com");
-	//BufferedWriter out = new BufferedWriter(new FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt"));
-    //out.close();
+		// BufferedWriter out = new BufferedWriter(new
+		// FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt"));
+		// out.close();
 	}
 
 	public static void writeCoverage() throws Exception {
-		System.out.println("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
-		BufferedWriter out = new BufferedWriter(new FileWriter(CODE_COVERAGE_DIRECTORY_PATH));
+		System.out
+				.println("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
+		BufferedWriter out = new BufferedWriter(new FileWriter(
+				CODE_COVERAGE_DIRECTORY_PATH));
 		Set<String> keys = FILENAME_TO_COVERAGE.keySet();
 		Iterator itr = keys.iterator();
 		String jsonString = "";
-		while(itr.hasNext()) {
+		while (itr.hasNext()) {
 			String key = (String) itr.next();
-			jsonString = jsonString + "\"" + key + "\"" + ":{\"coverage\":" + FILENAME_TO_COVERAGE.get(key) + ",\"source\":" + FILENAME_TO_SOURCE.get(key) + "},";
+			jsonString = jsonString + "\"" + key + "\"" + ":{\"coverage\":"
+					+ FILENAME_TO_COVERAGE.get(key) + ",\"source\":"
+					+ FILENAME_TO_SOURCE.get(key) + "},";
 		}
 		out.write("{" + jsonString + "}");
-	    out.close();
+		out.close();
 	}
-	
-	
+
 	@AfterSuite(groups = { "always" })
 	public void cleanup() throws HarnessException {
 		SeleniumService.getInstance().stopSeleniumServer();
 	}
-	
+
 	@AfterClass(groups = { "always" })
 	public void stopSession() throws Exception {
-		//BufferedWriter out = new BufferedWriter(new FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt", true));
-		//out.write(this.getClass().toString() + "\n");
-	    //out.close();
-		//System.out.println("Executing AfterClass For " + this.getClass().toString());
-		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) {
+		// BufferedWriter out = new BufferedWriter(new
+		// FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt", true));
+		// out.write(this.getClass().toString() + "\n");
+		// out.close();
+		// System.out.println("Executing AfterClass For " +
+		// this.getClass().toString());
+		if (ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no")
+				.equalsIgnoreCase("yes")) {
 			writeCoverage();
 			selenium.stop();
 		}
 	}
-	
+
 	@AfterMethod(groups = { "always" })
 	public void calculateCoverageIfRequired() throws Exception {
-		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) {
+		if (ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no")
+				.equalsIgnoreCase("yes")) {
 			calculateCoverage();
 		}
-	}	
-
-
-
+	}
 
 	public void initFramework() {
 		zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg", new Locale(
@@ -444,27 +448,22 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public static String getOnlyEnglishAlphabetCharAndNumber() {
-	/*	String str = "0WhenReplyingToAddresS1";
-		str = str + "2EditNotebookIndeX3";
-		str = str + "4InviteeS5";
-		str = str + "6SubjecT7";
-		str = str + "8SearchCalendaR9";
-		str = str + "0GoToMaiL1";
-		str = str + "2TagIteM3";
-		str = str.replace(" ", "");
-		str = str.replace(".", "");
-		str = str.replace(":", "");
-		Random r = new Random();
-		int max = str.length() - 5;
-		int randInt = r.nextInt(max);
-		return str.substring(randInt, randInt + 5);*/
-		
-		String alphabet="ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-		int character=(int)(Math.random()*26);
-		String str=alphabet.substring(character, character+1);
+		/*
+		 * String str = "0WhenReplyingToAddresS1"; str = str +
+		 * "2EditNotebookIndeX3"; str = str + "4InviteeS5"; str = str +
+		 * "6SubjecT7"; str = str + "8SearchCalendaR9"; str = str +
+		 * "0GoToMaiL1"; str = str + "2TagIteM3"; str = str.replace(" ", "");
+		 * str = str.replace(".", ""); str = str.replace(":", ""); Random r =
+		 * new Random(); int max = str.length() - 5; int randInt =
+		 * r.nextInt(max); return str.substring(randInt, randInt + 5);
+		 */
+
+		String alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		int character = (int) (Math.random() * 26);
+		String str = alphabet.substring(character, character + 1);
 		Random randomGenerator = new Random();
 		int randomInt = randomGenerator.nextInt(1000);
-		String ss = str +""+randomInt;
+		String ss = str + "" + randomInt;
 		return ss;
 
 	}
@@ -714,7 +713,8 @@ public class CommonTest extends SelNGBase {
 	public static void verifyShowOriginalMsgBody(String bodyValue, String from,
 			String to, String cc, String bcc, String subject, String body)
 			throws Exception {
-		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale")
+				.equals("en_US")) {
 			assertReport(bodyValue, localize(locator.dateLabel),
 					"Date: text mismatched in show original body");
 			assertReport(bodyValue, localize(locator.fromLabel),
@@ -1059,6 +1059,23 @@ public class CommonTest extends SelNGBase {
 								+ value);
 	}
 
+	public static void zVerifyAutocompleteExistsForSearchBar(String value,
+			int rank, int wait) throws Exception {
+		if (wait == 1) {
+			Thread.sleep(1000);
+		}
+		Assert
+				.assertTrue(
+						selenium
+								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'DWT18_acRow_"
+										+ (rank - 1)
+										+ "')]//td[contains(text(), '"
+										+ value
+										+ "')]"),
+						"Verifying autocomplete list rank " + rank + " for "
+								+ value);
+	}
+
 	public static void zVerifyAutocompleteNotExists(String value, int rank,
 			int wait) throws Exception {
 		if (wait == 1) {
@@ -1068,6 +1085,23 @@ public class CommonTest extends SelNGBase {
 				.assertFalse(
 						selenium
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
+										+ (rank - 1)
+										+ "')]//td[contains(text(), '"
+										+ value
+										+ "')]"),
+						"Verifying autocomplete list rank " + rank + " for "
+								+ value);
+	}
+
+	public static void zVerifyAutocompleteNotExistsForSearchBar(String value,
+			int rank, int wait) throws Exception {
+		if (wait == 1) {
+			Thread.sleep(1000);
+		}
+		Assert
+				.assertFalse(
+						selenium
+								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'DWT18_acRow_"
 										+ (rank - 1)
 										+ "')]//td[contains(text(), '"
 										+ value
@@ -1114,39 +1148,43 @@ public class CommonTest extends SelNGBase {
 
 	public static void calculateCoverage() throws Exception {
 		String coverage_string = selenium.getEval(COVERAGE_SCRIPT);
-		JSONObject jsonCoverage = (JSONObject)JSONSerializer.toJSON(coverage_string);
+		JSONObject jsonCoverage = (JSONObject) JSONSerializer
+				.toJSON(coverage_string);
 		String individualFileInfo[] = coverage_string.split("},");
-		for(int i=0; i<individualFileInfo.length;i++) {
+		for (int i = 0; i < individualFileInfo.length; i++) {
 			String jsonElements[] = individualFileInfo[i].split(":");
-			if(jsonElements[0].startsWith("{")) jsonElements[0]=jsonElements[0].replace("{", "");
-			if(jsonElements[0].startsWith("\"") && jsonElements[0].endsWith(".js\"")) 
-			{
+			if (jsonElements[0].startsWith("{"))
+				jsonElements[0] = jsonElements[0].replace("{", "");
+			if (jsonElements[0].startsWith("\"")
+					&& jsonElements[0].endsWith(".js\"")) {
 				String jsFileName = jsonElements[0].replace("\"", "");
 				parseCoverage(jsFileName, jsonCoverage);
 				updateSource(jsFileName);
-			}	
-		}		
+			}
+		}
 	}
 
-	public static void parseCoverage(String file, JSONObject jsonCoverage) 	{
+	public static void parseCoverage(String file, JSONObject jsonCoverage) {
 		JSONObject fileName = jsonCoverage.getJSONObject(file);
 		JSONArray jsonCoverageArray = fileName.getJSONArray("coverage");
 		ArrayList<Integer> coverage = new ArrayList<Integer>();
-		for(int j=0;j<jsonCoverageArray.size();j++) {
-			if(jsonCoverageArray.getString(j).equalsIgnoreCase("null")) {
+		for (int j = 0; j < jsonCoverageArray.size(); j++) {
+			if (jsonCoverageArray.getString(j).equalsIgnoreCase("null")) {
 				coverage.add(null);
 			} else {
-				coverage.add(Integer.parseInt(jsonCoverageArray.getString(j))) ;
+				coverage.add(Integer.parseInt(jsonCoverageArray.getString(j)));
 			}
 		}
 		updateCoverage(file, coverage);
 	}
 
-	public static void updateSource(String file) throws Exception
-	{
-		if(!FILENAME_TO_SOURCE.containsKey(file)) {
-			URL  url;
-			url = new URL("http://"+ZimbraSeleniumProperties.getStringProperty("coverageServer")+"/zimbra/"+file);
+	public static void updateSource(String file) throws Exception {
+		if (!FILENAME_TO_SOURCE.containsKey(file)) {
+			URL url;
+			url = new URL("http://"
+					+ ZimbraSeleniumProperties
+							.getStringProperty("coverageServer") + "/zimbra/"
+					+ file);
 			URLConnection uc = url.openConnection();
 			DataInputStream dis;
 			dis = new DataInputStream(uc.getInputStream());
@@ -1154,48 +1192,38 @@ public class CommonTest extends SelNGBase {
 
 			String line;
 
-			while ((line = dis.readLine()) != null)
-			{
+			while ((line = dis.readLine()) != null) {
 				jsonSourceArray.add(line);
-			} 
+			}
 			dis.close();
 			FILENAME_TO_SOURCE.put(file, jsonSourceArray);
 		}
 	}
 
-	public static void updateCoverage(String file, ArrayList<Integer> data)
-	{
-		if (FILENAME_TO_COVERAGE.containsKey(file))
-		{
+	public static void updateCoverage(String file, ArrayList<Integer> data) {
+		if (FILENAME_TO_COVERAGE.containsKey(file)) {
 			ArrayList<Integer> coverage = FILENAME_TO_COVERAGE.get(file);
 			int i = 0;
-			for (; i < coverage.size(); i++)
-			{
+			for (; i < coverage.size(); i++) {
 				Integer oldValue = coverage.get(i);
 				Integer newValue = data.get(i);
-				if (oldValue == null && newValue == null)
-				{
+				if (oldValue == null && newValue == null) {
 					continue;
 				}
-				if (newValue == null)
-				{
+				if (newValue == null) {
 					continue;
 				}
-				if (oldValue == null)
-				{
+				if (oldValue == null) {
 					oldValue = 0;
 				}
 				coverage.set(i, oldValue + newValue);
 			}
 
-			for (; i < data.size(); i++)
-			{
+			for (; i < data.size(); i++) {
 				coverage.add(data.get(i));
 			}
 			FILENAME_TO_COVERAGE.put(file, coverage);
-		}
-		else
-		{
+		} else {
 			FILENAME_TO_COVERAGE.put(file, data);
 		}
 	}
