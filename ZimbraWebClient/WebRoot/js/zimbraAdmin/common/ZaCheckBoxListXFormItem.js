@@ -16,7 +16,7 @@ ZaCheckBox_List_XFormItem.prototype.initializeItems = function() {
 	var selectRef = this.getInheritedProperty("selectRef");
 	var choices = this.getInheritedProperty("choices");	
 	var selectLabel = this.getInheritedProperty("selectLabel");
-    var choicesWidth = this.getInheritedProperty ("choicesWidth") || "275px" ;
+    var choicesWidth = AjxEnv.isIE? "275px": (this.getInheritedProperty ("choicesWidth") || "275px") ;
     
     var selectChck = {
 		type:_OSELECT_CHECK_,
