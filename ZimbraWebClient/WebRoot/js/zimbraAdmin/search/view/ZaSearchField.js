@@ -323,7 +323,7 @@ ZaSearchField.prototype.modifySavedSearchCallback =
 function () {
 	//update the ZaSearch.SAVED_SEARCH
 	ZaSearch.updateSavedSearch (ZaSearch.getSavedSearches()); 
-	
+
 	//Update the Search Tree
 	if(ZaSettings.TREE_ENABLED) {
 		var overviewPanelCtrl = ZaApp.getInstance()._appCtxt.getAppController().getOverviewPanelController() ;
@@ -639,7 +639,7 @@ ZaSaveSearchDialog = function(searchField) {
 	this._searchField = searchField
 	DwtDialog.call(this, searchField.shell);
 	this._okButton = this.getButton(DwtDialog.OK_BUTTON);
-	this.registerCallback (DwtDialog.OK_BUTTON, ZaSaveSearchDialog.prototype.okCallback, this );		
+	this.registerCallback (DwtDialog.OK_BUTTON, ZaSaveSearchDialog.prototype.okCallback, this );
 }
 
 ZaSaveSearchDialog.prototype = new DwtDialog ;
@@ -651,6 +651,11 @@ function() {
 	var savedSearchArr = [] ;
 	var nameValue = this._nameInput.value;
 	var queryValue =  this._queryInput.value ;
+
+	if(!nameValue) {
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_SAVENAME_EMPTY);
+		ZaSaveSearchDialog.prototype.show(null,queryValue);
+	}
 	
 	savedSearchArr.push({
 			name: nameValue,
@@ -664,12 +669,61 @@ function() {
 		}); 
 	}
 	
-	
-	ZaSearch.modifySavedSearches(savedSearchArr, 
-			new AjxCallback(this._searchField, this._searchField.modifySavedSearchCallback )) ;
-	//ZaSearch._savedSearchToBeUpdated = true ;
+	this.savedSearchArr = savedSearchArr;
+	// check whether replace existing queries
+	this._checkExistSearch();
+
 	this.popdown();
+
 }
+
+
+ZaSaveSearchDialog.prototype._checkExistSearch = function() {
+
+	var isExist = false;
+        ZaSearch.updateSavedSearch (ZaSearch.getSavedSearches());
+	for(var i = 0; i < this.savedSearchArr.length; i++) {
+		var searchName = this.savedSearchArr[i].name;
+	        if(ZaSearch.SAVED_SEARCHES && searchName) {
+        	        for(var j = 0; j < ZaSearch.SAVED_SEARCHES.length; j++) {
+	                        if(ZaSearch.SAVED_SEARCHES[j].name == searchName) {
+        	                        isExist = true;
+                	                break;
+	                        }
+        	        }
+	        }
+	}
+        if(isExist) {
+		// If exist searchquries, call confirm dialog
+		ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.YES_BUTTON, DwtDialog.NO_BUTTON]);
+                ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(ZaMsg.Q_SAVE_REPLACE, DwtMessageDialog.INFO_STYLE);
+                ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this._continueDoSave, this);
+                ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this._cancelDoSave, this);
+                ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
+                
+        } else {
+	        ZaSearch.modifySavedSearches(this.savedSearchArr,
+                        new AjxCallback(this._searchField, this._searchField.modifySavedSearchCallback )) ;
+	}
+
+        return isExist;
+}
+
+
+ZaSaveSearchDialog.prototype._continueDoSave = function() {
+
+        ZaSearch.modifySavedSearches(this.savedSearchArr,
+                        new AjxCallback(this._searchField, this._searchField.modifySavedSearchCallback )) ;
+
+        ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
+
+}
+
+ZaSaveSearchDialog.prototype._cancelDoSave = function() {
+	ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
+	this.popup();
+}
+
 
 ZaSaveSearchDialog.prototype.show =
 function (name, query){
