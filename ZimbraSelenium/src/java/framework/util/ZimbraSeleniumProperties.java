@@ -40,6 +40,11 @@ public class ZimbraSeleniumProperties {
 		return (Integer.parseInt(value));
 	}
 
+	private static int counter = 0;
+	public static String getUniqueString() {
+		return ("" + System.currentTimeMillis() + (++counter));
+	}
+
 	public static ResourceBundle getResourceBundleProperty(String key) {
 		return ((ResourceBundle) ZimbraSeleniumProperties.getInstance()
 				.getConfigProp().getProperty(key));

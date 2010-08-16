@@ -7,6 +7,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
+import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -49,7 +51,7 @@ public class AddressBookBugTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		page.zABCompose.zNavigateToContact();
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		isExecutionARetry = false;
 	}
 
@@ -87,9 +89,15 @@ public class AddressBookBugTests extends CommonTest {
 		} else {
 			Thread.sleep(2000);
 		}
+		
+		ContactItem contact = new ContactItem();
+		contact.firstName = cnFirstName;
+		contact.middleName = cnMiddleName;
+		contact.lastName = cnLastName;
+		contact.email = email;
+		
 		obj.zButton.zClick(page.zABCompose.zNewContactMenuIconBtn);
-		page.zABCompose.zEnterBasicABData("", cnLastName, cnMiddleName,
-				cnFirstName);
+		page.zABCompose.zEnterBasicABData(contact);
 		Thread.sleep(1000);
 		selenium.clickAt("id=editcontactform_EMAIL_0_add", "");
 		Thread.sleep(2000);
@@ -130,20 +138,31 @@ public class AddressBookBugTests extends CommonTest {
 	 * @author Girish
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void CreateContactWhileSrchFldrAndTagSelected_Bug40517(
-			String cnLastName, String cnMiddleName, String cnFirstName,
-			String newcnLastName, String newMiddleName, String newcnLastName1,
-			String newMiddleName1) throws Exception {
+	public void CreateContactWhileSrchFldrAndTagSelected_Bug40517() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		page.zABCompose.zCreateContactInAddressBook("", cnLastName,
-				cnMiddleName, cnFirstName);
+		ContactItem contact1 = new ContactItem();
+		contact1.lastName = "LN" + getLocalizedData_NoSpecialChar();
+		contact1.middleName = "MN" + getLocalizedData_NoSpecialChar();
+		contact1.firstName = "FN" + getLocalizedData_NoSpecialChar();
+		
+		ContactItem contact2 = new ContactItem();
+		contact2.lastName = "NLN" + getLocalizedData_NoSpecialChar();
+		contact2.middleName = "NMN" + getLocalizedData_NoSpecialChar();
+		contact2.firstName = "";
+		
+		ContactItem contact3 = new ContactItem();
+		contact2.lastName = "NFN" + getLocalizedData_NoSpecialChar();
+		contact2.middleName = "NNMN" + getLocalizedData_NoSpecialChar();
+		contact2.firstName = "";
+
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact1);
 		obj.zFolder.zClick(page.zABCompose.zContactsFolder);
-		obj.zContactListItem.zExists(cnLastName);
-		selenium.type("xpath=//input[@class='search_input']", cnLastName);
+		obj.zContactListItem.zExists(contact1.lastName);
+		selenium.type("xpath=//input[@class='search_input']", contact1.lastName);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
-		obj.zContactListItem.zExists(cnLastName);
+		obj.zContactListItem.zExists(contact1.lastName);
 		obj.zButton.zClick(localize(locator.save));
 		obj.zDialog.zExists(localize(locator.saveSearch));
 		selenium.type("xpath=//td/input[contains(@id,'_nameField')]",
@@ -159,10 +178,9 @@ public class AddressBookBugTests extends CommonTest {
 				.clickAt(
 						"xpath=//td[contains(@id,'zti__main_Contacts') and contains(text(),'savecontact')]",
 						"");
-		page.zABCompose.zCreateContactInAddressBook("", newcnLastName,
-				newMiddleName, "");
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact2);
 		obj.zFolder.zClick(localize(locator.contacts));
-		obj.zContactListItem.zRtClick(newcnLastName);
+		obj.zContactListItem.zRtClick(contact2.lastName);
 		selenium.mouseOver("id=zmi__Contacts__TAG_MENU_title");
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), "tagName");
@@ -177,11 +195,10 @@ public class AddressBookBugTests extends CommonTest {
 				.clickAt(
 						"xpath=//td[contains(@id,'zti__main_Contacts') and contains(text(),'tagName')]",
 						"");
-		obj.zContactListItem.zExists(newcnLastName);
-		page.zABCompose.zCreateContactInAddressBook("", newcnLastName1,
-				newMiddleName1, "");
+		obj.zContactListItem.zExists(contact2.lastName);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact3);
 		obj.zFolder.zClick(localize(locator.contacts));
-		obj.zContactListItem.zExists(newcnLastName1);
+		obj.zContactListItem.zExists(contact3.lastName);
 
 		needReset = false;
 	}

@@ -1,6 +1,8 @@
 package projects.zcs.ui;
 
 import framework.items.ContactItem;
+import framework.items.ZimbraItem;
+import framework.util.HarnessException;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -17,18 +19,27 @@ import framework.util.ZimbraSeleniumProperties;
  */
 @SuppressWarnings("static-access")
 public class ABCompose extends AppPage {
-	public static String zNewABOverviewPaneIcon = "id=ztih__main_Contacts__ADDRBOOK_textCell";
+	
+	public static class ABComposeActionMethod extends ActionMethod {
+		public static final ABComposeActionMethod ToolbarEdit = new ABComposeActionMethod("ToolbarEdit");
+		public static final ABComposeActionMethod RightClickEdit = new ABComposeActionMethod("ToolbarEdit");
+		protected ABComposeActionMethod(String method) {
+			super(method);
+		}
+	}
+	
+	public static final String zNewABOverviewPaneIcon = "id=ztih__main_Contacts__ADDRBOOK_textCell";
 
 	public static final String zContactTabIconBtn = "id=zb__App__Contacts_left_icon";
 	public static final String zMailTabIconBtn = "id=zb__App__Mail_left_icon";
 	public static final String zPreferencesTabIconBtn = "id=zb__App__Options_left_icon";
 
-	public static String zPreferencesABIconBtn = "id=ztab__PREF__"
+	public static final String zPreferencesABIconBtn = "id=ztab__PREF__"
 			+ localize(locator.addressBook) + "_title";
 	public static final String zPreferencesSaveIconBtn = "id=zb__PREF__SAVE_left_icon";
 
-	public static String zContactsFolder = "id=zti__main_Contacts__7_textCell";
-	public static String zEmailedContactsFolder = "id=zti__main_Contacts__13_textCell";
+	public static final String zContactsFolder = "id=zti__main_Contacts__7_textCell";
+	public static final String zEmailedContactsFolder = "id=zti__main_Contacts__13_textCell";
 
 	public static final String zNewAddressBookIconBtn = "id=zb_newFolder_left_icon";
 
@@ -84,7 +95,7 @@ public class ABCompose extends AppPage {
 	 * 
 	 * @throws Exception
 	 */
-	public static void zNavigateToContact() throws Exception {
+	private void zNavigateToContact() throws Exception {
 		zGoToApplication("Address Book");
 	}
 
@@ -106,7 +117,7 @@ public class ABCompose extends AppPage {
 	 * @return
 	 * @throws Exception
 	 */
-	public static String zLoginAndNavigateToContact(String username)
+	public String zLoginAndNavigateToContact(String username)
 			throws Exception {
 		page.zLoginpage.zLoginToZimbraAjax(username);
 		zNavigateToContact();
@@ -153,48 +164,26 @@ public class ABCompose extends AppPage {
 	 * @param MiddleName
 	 * @param firstName
 	 */
-	public static void zEnterBasicABData(String AddBook, String lastName,
-			String MiddleName, String firstName) throws Exception {
-		if (lastName != "")
-			obj.zEditField.zActivateAndType(zLastEditField, lastName);
-		if (MiddleName != "")
-			obj.zEditField.zActivateAndType(zMiddleEditField, MiddleName);
-		if (firstName != "")
-			obj.zEditField.zActivateAndType(zFirstEditField, firstName);
-		if (AddBook != "" && AddBook != localize(locator.contacts)) {
+	public void zEnterBasicABData(ContactItem c) throws Exception {
+		
+		if ((c.lastName != null) && (!c.lastName.equals("")))
+			obj.zEditField.zActivateAndType(zLastEditField, c.lastName);
+		
+		if ((c.middleName != null) && (!c.middleName.equals("")))
+			obj.zEditField.zActivateAndType(zMiddleEditField, c.middleName);
+		
+		if ((c.firstName != null) && (!c.firstName.equals("")))
+			obj.zEditField.zActivateAndType(zFirstEditField, c.firstName);
+		
+		if ((c.AddressBook != null) && (!c.AddressBook.name.equals("")) && (c.AddressBook.name.equals(localize(locator.contacts))) ) {
 			obj.zButton.zClick(zContactsFolder_NewUI);
 			Thread.sleep(1500);
-			obj.zFolder.zClickInDlgByName(AddBook,
-					localize(locator.chooseAddrBook));
-			obj.zButton.zClickInDlgByName(localize(locator.ok),
-					localize(locator.chooseAddrBook));
+			obj.zFolder.zClickInDlgByName(c.AddressBook.name, localize(locator.chooseAddrBook));
+			obj.zButton.zClickInDlgByName(localize(locator.ok), localize(locator.chooseAddrBook));
 		}
 	}
 
-	/**
-	 * This method is to create a basic contact in Address Book folder
-	 * 
-	 * @param AddBook
-	 * @param lastName
-	 * @param MiddleName
-	 * @param firstName
-	 * @throws Exception
-	 */
-	public static void zCreateContactInAddressBook(String AddBook,
-			String lastName, String MiddleName, String firstName)
-			throws Exception {
-		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(2500);
-		} else {
-			Thread.sleep(2000);
-		}
-		obj.zButton.zClick(zNewContactMenuIconBtn);
-		zWaitTillObjectExist("editfield", zLastEditField);
-		zEnterBasicABData(AddBook, lastName, MiddleName, firstName);
-		obj.zButton.zClick(zSaveContactMenuIconBtn);
-		Thread.sleep(1500);
-	}
-
+	/*
 	public static void zCreateContactInAddressBook(String AddBook,
 			String lastName, String MiddleName, String firstName,
 			String emailAddress) throws Exception {
@@ -226,21 +215,89 @@ public class ABCompose extends AppPage {
 		Thread.sleep(1500);
 	}
 
-	/**
-	 * This method is to create a basic contact
-	 * 
-	 * @param lastName
-	 * @param MiddleName
-	 * @param firstName
-	 * @throws Exception
-	 */
-	public static ContactItem zCreateBasicContact(ContactItem c) throws Exception {
-		obj.zFolder.zClick(replaceUserNameInStaticId(zContactsFolder));
-		zCreateContactInAddressBook("", c.lastName, c.middleName, c.firstName);
-		Thread.sleep(2000);
-		obj.zFolder.zClick(localize(locator.contacts));
-		return (c);
+*/
+	public void navigateTo(ActionMethod method) throws HarnessException {
+		try {
+			zGoToApplication("Address Book");
+		} catch (Exception e) {
+			throw new HarnessException(e);
+		}
 	}
+	
+
+	/**
+	 * Create a new contact item
+	 */
+	public ZimbraItem createItem(ActionMethod method, ZimbraItem item) throws HarnessException {
+		try
+		{
+			ContactItem c = (ContactItem)item;
+			
+			// ??
+			obj.zFolder.zClick(replaceUserNameInStaticId(zContactsFolder));
+	
+			if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
+				Thread.sleep(2500);
+			} else {
+				Thread.sleep(2000);
+			}
+			
+			// Click on "New" -> "Contact"
+			obj.zButton.zClick(zNewContactMenuIconBtn);
+			zWaitTillObjectExist("editfield", zLastEditField);
+			
+			// Enter the data
+			zEnterBasicABData(c);
+			
+			// Click "Save"
+			obj.zButton.zClick(zSaveContactMenuIconBtn);
+	
+			// TODO: wait for page to return
+			Thread.sleep(2000);
+			
+			// ??
+			obj.zFolder.zClick(localize(locator.contacts));
+			
+			return (c);	
+			
+		} catch (Exception e) {
+			throw new HarnessException("Unable to create contact", e);
+		}
+	}
+	
+	public ZimbraItem modifyItem(ActionMethod method, ZimbraItem oldItem, ZimbraItem newItem) throws HarnessException {
+		try {
+			ContactItem oldContact = (ContactItem)oldItem;
+			ContactItem newContact = (ContactItem)newItem;
+			
+			// Find the old contact and open it
+			zSelectAndClickEdit(method, oldContact);
+			
+			// Update the field values
+			zEnterBasicABData(newContact);
+			
+			// If a new email was specified, enter it.  
+			// ??? why not in zEnterBasicABData?
+			if ((newContact.email != null) && (!newContact.email.equals("")) )
+				obj.zEditField.zActivateAndType(zEmail1EditField, newContact.email);
+			
+			Thread.sleep(1000);
+			
+			// Click Save
+			obj.zButton.zClick(zSaveContactMenuIconBtn);
+
+			return (newContact);
+			
+		}catch (Exception e) {
+			throw new HarnessException("Unable to create contact", e);
+		}
+
+	}
+
+	public void deleteItem(ActionMethod method, ZimbraItem item) throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+	
 
 	/**
 	 * This method is to select the contact and click on Edit button
@@ -248,13 +305,16 @@ public class ABCompose extends AppPage {
 	 * @param contactName
 	 * @throws Exception
 	 */
-	public static void zSelectAndClickEdit(String contactName, String type)
+	public static void zSelectAndClickEdit(ActionMethod m, ContactItem c)
 			throws Exception {
-		obj.zContactListItem.zClick(contactName);
-		if (type.equals("ToolbarEdit")) {
+		
+		// Select the contact
+		obj.zContactListItem.zClick(c.lastName);
+		
+		if ( m == ABComposeActionMethod.ToolbarEdit ) {
 			obj.zButton.zClick(page.zABApp.zEditContactIconBtn);
-		} else if (type.equals("RightClickEdit")) {
-			obj.zContactListItem.zRtClick(contactName);
+		} else if ( m == ABComposeActionMethod.RightClickEdit) {
+			obj.zContactListItem.zRtClick(c.lastName);
 			obj.zMenuItem.zClick(page.zABApp.zRtClickContactEditMenuIconBtn);
 		}
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
@@ -264,27 +324,6 @@ public class ABCompose extends AppPage {
 		}
 	}
 
-	/**
-	 * This method is to edit contact's last Name,MiddleName,firstName,email
-	 * 
-	 * @param oldlastName
-	 * @param NewlastName
-	 * @param NewMiddleName
-	 * @param NewfirstName
-	 * @param NeweMail
-	 * @throws Exception
-	 */
-
-	public static void zModifyContact(String oldlastName, String newlastName,
-			String newMiddleName, String newfirstName, String neweMail,
-			String type) throws Exception {
-		zSelectAndClickEdit(oldlastName, type);
-		zEnterBasicABData("", newlastName, newMiddleName, newfirstName);
-		if (neweMail != "")
-			obj.zEditField.zActivateAndType(zEmail1EditField, neweMail);
-		Thread.sleep(1000);
-		obj.zButton.zClick(zSaveContactMenuIconBtn);
-	}
 
 	public static void zCreateContactWithAllFields(String prefix,
 			String firstName, String middleName, String maidenName,
@@ -430,43 +469,41 @@ public class ABCompose extends AppPage {
 	 * @return
 	 * @throws Exception
 	 */
-	public static boolean zVerifyEditContact(String newlastName,
-			String newMiddleName, String newfirstName, String neweMail)
-			throws Exception {
-		String actualLastName = null;
-		String actualMiddleName = null;
-		String actualfirstName = null;
-		String actualeMail = null;
-		boolean flag = true;
+	public boolean zVerifyEditContact(ZimbraItem item) throws Exception {
+		
+		ContactItem c = (ContactItem)item;
+		ContactItem actual = new ContactItem();
 
-		zSelectAndClickEdit(newlastName, "ToolbarEdit");
+		zSelectAndClickEdit(ABComposeActionMethod.ToolbarEdit, c);
 
-		if (newlastName != "") {
-			actualLastName = obj.zEditField.zGetInnerText(zLastEditField);
-			if (!actualLastName.equals(newlastName))
-				flag = false;
-
+		// TODO: would be great to create 'actual' from a GUI method
+		
+		if ((c.lastName != null) && (!c.lastName.equals("")) ) {
+			actual.lastName = obj.zEditField.zGetInnerText(zLastEditField);
+			if (!actual.lastName.equals(c.lastName))
+				return (false);
 		}
-		if (newMiddleName != "") {
-			actualMiddleName = obj.zEditField.zGetInnerText(zMiddleEditField);
-			if (!actualMiddleName.equals(newMiddleName))
-				flag = false;
+		
+		if ((c.middleName != null) && (!c.middleName.equals(""))) {
+			actual.middleName = obj.zEditField.zGetInnerText(zMiddleEditField);
+			if (!actual.middleName.equals(c.middleName))
+				return (false);
 		}
-		if (newfirstName != "") {
-			actualfirstName = obj.zEditField.zGetInnerText(zFirstEditField);
-			if (!actualfirstName.equals(newfirstName))
-				flag = false;
+		
+		if ((c.firstName != null) && (!c.firstName.equals(""))) {
+			actual.firstName = obj.zEditField.zGetInnerText(zFirstEditField);
+			if (!actual.firstName.equals(c.firstName))
+				return (false);
 		}
-		if (neweMail != "") {
-			actualeMail = obj.zEditField.zGetInnerText(zEmail1EditField);
-			if (!actualeMail.equals(neweMail))
-				flag = false;
+		
+		if ((c.email != null) && (!c.email.equals(""))) {
+			actual.email = obj.zEditField.zGetInnerText(zEmail1EditField);
+			if (!actual.email.equals(c.email))
+				return (false);
 		}
-
-		if (flag == true)
-			return true;
-		else
-			return false;
+		
+		// Made it here, all fields were the same.
+		return (true);
 
 	}
 }

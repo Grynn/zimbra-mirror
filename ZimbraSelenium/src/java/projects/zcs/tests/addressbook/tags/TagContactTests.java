@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
 
 import com.zimbra.common.service.ServiceException;
 
@@ -79,7 +80,7 @@ public class TagContactTests extends CommonTest {
 		contact.firstName = firstName;
 		contact.lastName = lastName;
 
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		tag1 = getLocalizedData_NoSpecialChar();
 		newTag1 = getLocalizedData_NoSpecialChar();
@@ -127,8 +128,8 @@ public class TagContactTests extends CommonTest {
 		contact2.firstName = firstName;
 		contact2.lastName = getLocalizedData_NoSpecialChar();
 
-		page.zABCompose.zCreateBasicContact(contact1);
-		page.zABCompose.zCreateBasicContact(contact2);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact1);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact2);
 
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
@@ -199,7 +200,7 @@ public class TagContactTests extends CommonTest {
 		contact.lastName = lastName;
 		contact.firstName = firstName;
 		
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
 		obj.zContactListItem.zClick(lastName);
@@ -244,7 +245,7 @@ public class TagContactTests extends CommonTest {
 		contact.firstName = firstName;
 		contact.lastName = lastName;
 		
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
@@ -410,8 +411,8 @@ public class TagContactTests extends CommonTest {
 		ContactItem contact2 = new ContactItem();
 		contact2.firstName = firstName;
 		contact2.lastName = getLocalizedData_NoSpecialChar();
-		page.zABCompose.zCreateBasicContact(contact1);
-		page.zABCompose.zCreateBasicContact(contact2);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact1);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact2);
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);

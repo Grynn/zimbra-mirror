@@ -10,10 +10,14 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
+
+import framework.items.ContactItem;
+import framework.items.FolderItem;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.MailApp;
 
 /**
@@ -1154,8 +1158,18 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS.createAccount(acc1);
 		zGoToApplication("Address Book");
 		page.zABCompose.zCreateNewAddBook(newAddressBook);
-		page.zABCompose.zCreateContactInAddressBook(newAddressBook, lastName,
-				"", firstName, acc1);
+		
+		FolderItem folder = new FolderItem();
+		folder.name = newAddressBook;
+		
+		ContactItem contact = new ContactItem();
+		contact.lastName = lastName;
+		contact.middleName = "";
+		contact.firstName = firstName;
+		contact.email = acc1;
+		contact.AddressBook = folder;
+		
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		getKeyboardKeys(acc1);
 		typeKeyboardKeys();
@@ -1226,11 +1240,22 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 				localize(locator.contacts));
 		page.zABCompose.zCreateNewAddBook(subSubAddressBook, subAddressBook);
 		obj.zFolder.zClick(subAddressBook);
-		page.zABCompose.zCreateContactInAddressBook("", sublastName, "", "",
-				acc1);
+		
+		ContactItem contact = new ContactItem();
+		contact.lastName = sublastName;
+		contact.middleName = "";
+		contact.firstName = "";
+		contact.email = acc1;
+		
+		ContactItem contact2 = new ContactItem();
+		contact2.lastName = subSublastName;
+		contact2.middleName = "";
+		contact2.firstName = "";
+		contact2.email = acc2;
+		
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 		obj.zFolder.zClick(subSubAddressBook);
-		page.zABCompose.zCreateContactInAddressBook("", subSublastName, "", "",
-				acc2);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact2);
 
 		getKeyboardKeys(acc1);
 		typeKeyboardKeys();
@@ -1282,9 +1307,13 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 
-		String subAddressBook, subSubAddressBook, lastName, sublastName, subSublastName, user2, mountingfoldername;
-		subAddressBook = getLocalizedData_NoSpecialChar();
-		subSubAddressBook = getLocalizedData_NoSpecialChar();
+		FolderItem subAddressBook = new FolderItem();
+		subAddressBook.name = getLocalizedData_NoSpecialChar();
+		
+		FolderItem subSubAddressBook = new FolderItem();
+		subSubAddressBook.name = getLocalizedData_NoSpecialChar();
+
+		String lastName, sublastName, subSublastName, user2, mountingfoldername;
 		lastName = "1" + getLocalizedData_NoSpecialChar();
 		sublastName = "2" + getLocalizedData_NoSpecialChar();
 		subSublastName = "3" + getLocalizedData_NoSpecialChar();
@@ -1301,17 +1330,37 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS.createAccount(acc2);
 		ProvZCS.createAccount(acc3);
 		zGoToApplication("Address Book");
-		page.zABCompose.zCreateNewAddBook(subAddressBook,
+		page.zABCompose.zCreateNewAddBook(subAddressBook.name,
 				localize(locator.contacts));
-		page.zABCompose.zCreateNewAddBook(subSubAddressBook, subAddressBook);
+		page.zABCompose.zCreateNewAddBook(subSubAddressBook.name, subAddressBook.name);
+		
+		ContactItem contact1 = new ContactItem();
+		contact1.lastName = lastName;
+		contact1.middleName = "";
+		contact1.firstName = "";
+		contact1.email = acc1;
+		
 		obj.zFolder.zClick(page.zABCompose.zContactsFolder);
-		page.zABCompose.zCreateContactInAddressBook("", lastName, "", "", acc1);
-		obj.zFolder.zClick(subAddressBook);
-		page.zABCompose.zCreateContactInAddressBook("", sublastName, "", "",
-				acc2);
-		obj.zFolder.zClick(subSubAddressBook);
-		page.zABCompose.zCreateContactInAddressBook("", subSublastName, "", "",
-				acc3);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact1);
+		
+		ContactItem subContact = new ContactItem();
+		subContact.lastName = sublastName;
+		subContact.middleName = "";
+		subContact.firstName = "";
+		subContact.email = acc2;
+		
+		obj.zFolder.zClick(subAddressBook.name);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, subContact);
+
+		ContactItem subSubContact = new ContactItem();
+		subSubContact.lastName = subSublastName;
+		subSubContact.middleName = "";
+		subSubContact.firstName = "";
+		subSubContact.email = acc3;
+		
+		obj.zFolder.zClick(subSubAddressBook.name);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, subSubContact);
+
 
 		page.zSharing.zShareFolder("Address Book",
 				page.zABCompose.zContactsFolder, "", user2, "", "", "", "");

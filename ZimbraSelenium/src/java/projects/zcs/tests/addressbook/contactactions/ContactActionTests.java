@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
@@ -43,7 +44,7 @@ public class ContactActionTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		// page.zABCompose.zNavigateToContact();
+		// page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		isExecutionARetry = false;
 	}
 
@@ -212,7 +213,7 @@ public class ContactActionTests extends CommonTest {
 				localize(locator.contactCreated),
 				"Contact should be created in Address Book");
 
-		page.zABCompose.zNavigateToContact();
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		obj.zFolder.zClick(localize(locator.contacts));
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("ar")) {
 			obj.zContactListItem.zExists(contactName.substring(0, 5));

@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -66,7 +67,7 @@ public class CreateContactTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		page.zABCompose.zNavigateToContact();
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		isExecutionARetry = false;
 	}
 

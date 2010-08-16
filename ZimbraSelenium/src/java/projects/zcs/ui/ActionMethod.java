@@ -33,4 +33,18 @@ public class ActionMethod  {
 		myMethod = method;
 	}
 
+	@Override
+	public boolean equals(Object other) {
+		if ( this == other )
+			return (true);
+		if ( !(other instanceof ActionMethod) )
+			return (false);
+		ActionMethod o = (ActionMethod)other;
+		return (myMethod.equals(o.myMethod));
+	}
+	
+	@Override
+	public int hashCode() {
+		return(myMethod.hashCode());
+	}
 }

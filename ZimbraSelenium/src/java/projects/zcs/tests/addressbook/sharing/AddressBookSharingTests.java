@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
 import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
@@ -63,7 +64,7 @@ public class AddressBookSharingTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		// page.zABCompose.zNavigateToContact();
+		// page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		isExecutionARetry = false;
 	}
 
@@ -101,8 +102,8 @@ public class AddressBookSharingTests extends CommonTest {
 		contact.middleName = cnMiddleName;
 		contact.lastName = cnLastName;
 
-		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				role, "", "", "");
@@ -111,7 +112,7 @@ public class AddressBookSharingTests extends CommonTest {
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
-		page.zABCompose.zNavigateToContact();
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		obj.zFolder.zClick(mountFolderName);
 		obj.zContactListItem.zExists(cnLastName);
 		page.zABApp.zDeleteContactAndVerify(cnLastName, "ToolbarDelete");
@@ -143,8 +144,8 @@ public class AddressBookSharingTests extends CommonTest {
 		contact.middleName = cnMiddleName;
 		contact.lastName = cnLastName;
 
-		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				role, "", "", "");
@@ -153,7 +154,7 @@ public class AddressBookSharingTests extends CommonTest {
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
-		page.zABCompose.zNavigateToContact();
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		obj.zFolder.zClick(mountFolderName);
 		obj.zContactListItem.zExists(cnLastName);
 		obj.zButton.zIsDisabled(page.zABApp.zEditContactIcon);
@@ -193,8 +194,8 @@ public class AddressBookSharingTests extends CommonTest {
 		contact.middleName = cnMiddleName;
 		contact.lastName = cnLastName;
 
-		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				role, "", "", "");
@@ -203,7 +204,7 @@ public class AddressBookSharingTests extends CommonTest {
 		SelNGBase.selfAccountName = attendee;
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
-		page.zABCompose.zNavigateToContact();
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		obj.zFolder.zClick(mountFolderName);
 		obj.zContactListItem.zExists(cnLastName);
 
@@ -236,8 +237,8 @@ public class AddressBookSharingTests extends CommonTest {
 		contact.middleName = cnMiddleName;
 		contact.lastName = cnLastName;
 
-		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				role, "", "", "");
@@ -272,8 +273,8 @@ public class AddressBookSharingTests extends CommonTest {
 		contact.middleName = cnMiddleName;
 		contact.lastName = cnLastName;
 
-		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		page.zSharing.zShareFolder("Address Book", folderName, "", attendee,
 				localize(locator.shareRoleViewer), "", "", "");
@@ -322,8 +323,8 @@ public class AddressBookSharingTests extends CommonTest {
 		contact.middleName = cnMiddleName;
 		contact.lastName = cnLastName;
 
-		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		page.zSharing.zShareFolder("Address Book", folderName,
 				localize(locator.shareWithGuest), attendee, role, "", "", "");
@@ -337,7 +338,7 @@ public class AddressBookSharingTests extends CommonTest {
 
 		page.zSharing.zAcceptShare(mountFolderName);
 
-		page.zABCompose.zNavigateToContact();
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		obj.zFolder.zClick(mountFolderName);
 		obj.zContactListItem.zExists(cnLastName);
 
@@ -368,8 +369,8 @@ public class AddressBookSharingTests extends CommonTest {
 		contact.middleName = cnMiddleName;
 		contact.lastName = cnLastName;
 
-		page.zABCompose.zNavigateToContact();
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		page.zSharing.zShareFolder("Address Book", folderName,
 				localize(locator.shareWithPublicLong), "", "", "", "", "");

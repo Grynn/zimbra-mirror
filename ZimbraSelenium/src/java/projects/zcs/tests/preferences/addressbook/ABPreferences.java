@@ -15,6 +15,7 @@ import com.zimbra.common.service.ServiceException;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.ComposeView;
 
 import framework.core.SelNGBase;
@@ -97,7 +98,7 @@ public class ABPreferences extends CommonTest {
 		// "Actual message of import contact " + actualMsg
 		// + " is not same as expected message " + expectedMsg);
 		// to verify the contacts got imported successfully
-		page.zABCompose.zNavigateToContact();
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 
 		obj.zContactListItem.zExists(englishContact);
 
@@ -161,7 +162,7 @@ public class ABPreferences extends CommonTest {
 				"TestBody", "");
 		obj.zButton.zClick(ComposeView.zSendIconBtn);
 
-		page.zABCompose.zNavigateToContact();
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		obj.zFolder.zClick(page.zABCompose.zEmailedContactsFolder);
 		obj.zContactListItem.zExists(toContactSplit[0]);
 		// reset auto-add contact to false

@@ -1,17 +1,20 @@
 package projects.zcs.tests.addressbook.newcontact;
 
 
-import java.lang.reflect.Method;
-
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
+import projects.zcs.ui.ABCompose.ABComposeActionMethod;
 import framework.items.ContactItem;
+import framework.items.FolderItem;
+import framework.items.ContactItem.GenerateItemType;
 import framework.util.RetryFailedTests;
+
+
 
 /**
  * This covers some high priority test cases related to address book
@@ -21,46 +24,34 @@ import framework.util.RetryFailedTests;
  */
 @SuppressWarnings("static-access")
 public class BasicContactTests extends CommonTest {
+	
+	private String itemsEnabled = null;
+	private String itemsDisabled = null;
+
+	private FolderItem EmailedContacts;
+	
+	public BasicContactTests() {
+		
+		EmailedContacts = new FolderItem();
+		EmailedContacts.name = localize(locator.emailedContacts);
+		
+		itemsEnabled = localize(locator.AB_EDIT_CONTACT) + ","
+						+ localize(locator.AB_TAG_CONTACT) + ","
+						+ localize(locator.del) + "," 
+						+ localize(locator.move) + ","
+						+ localize(locator.print) + "," 
+						+ localize(locator.search) + ","
+						+ localize(locator.advancedSearch) + ","
+						+ localize(locator.newEmail);
+
+		itemsDisabled = "";
+	}
+	
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
-	@DataProvider(name = "ABDataProvider")
-	public Object[][] createData(Method method) {
-		String test = method.getName();
-		String itemsDisabled = "";
-		String targetAddressBookFolder = localize(locator.emailedContacts);
-		String itemsEnabled = localize(locator.AB_EDIT_CONTACT) + ","
-				+ localize(locator.AB_TAG_CONTACT) + ","
-				+ localize(locator.del) + "," + localize(locator.move) + ","
-				+ localize(locator.print) + "," + localize(locator.search)
-				+ "," + localize(locator.advancedSearch) + ","
-				+ localize(locator.newEmail);
 
-		if (test.equals("createBasicContact")
-				|| test.equals("deleteContactAndVerify")
-				|| test.equals("rghtClkDeleteContactAndVerify")
-				|| test.equals("negativeTestCreateContact")) {
-			return new Object[][] { { "lastName:" + getLocalizedData(1),
-					"middleName:" + getLocalizedData(1), "" } };
-		} else if (test.equals("editNameAndVerify")
-				|| test.equals("rghtClickEditNameAndVerify")) {
-			return new Object[][] { { "lastName:" + getLocalizedData(1),
-					"middleName:" + getLocalizedData(1), "",
-					"NewLastName:" + getLocalizedData(1),
-					"NewMiddleName:" + getLocalizedData(1) } };
-		} else if (test.equals("rtClickContactAndVerify")) {
-			return new Object[][] { { "lastName:" + getLocalizedData(1),
-					"middleName:" + getLocalizedData(1), "", itemsEnabled,
-					itemsDisabled, "false" } };
-		} else if (test.equals("moveContactAndVerify")
-				|| test.equals("rghtClickMoveContactAndVerify")) {
-			return new Object[][] { { "lastNameForMove:" + getLocalizedData(1),
-					"middleName:" + getLocalizedData(1), "",
-					targetAddressBookFolder } };
-		} else {
-			return new Object[][] { { "" } };
-		}
-	}
+
 
 	// --------------
 	// section 2 BeforeClass
@@ -68,7 +59,7 @@ public class BasicContactTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		page.zABCompose.zNavigateToContact();
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		isExecutionARetry = false;
 	}
 
@@ -84,18 +75,17 @@ public class BasicContactTests extends CommonTest {
 	 * Enters some basic fields to create a contact in address book and verifies
 	 * the contact exist or not
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void createBasicContact(String cnLastName, String cnMiddleName,
-			String cnFirstname) throws Exception {
+	@Test(
+			description = "Enters some basic fields to create a contact in address book and verifies the contact exist or not",
+			groups = { "smoke", "full" },
+			retryAnalyzer = RetryFailedTests.class)
+	public void createBasicContact() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		ContactItem contact = new ContactItem();
-		contact.firstName = cnFirstname;
-		contact.middleName = cnMiddleName;
-		contact.lastName = cnLastName;
+		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
 
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 		obj.zContactListItem.zExists(contact.lastName);
 
 		needReset = false;
@@ -105,26 +95,26 @@ public class BasicContactTests extends CommonTest {
 	 * Creates a contact with basic fields,edits the contacts using the ToolBar
 	 * delete last name and verifies the change
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void editNameAndVerify(String cnLastName, String cnMiddleName,
-			String cnFirstname, String newcnLastName, String newMiddleName)
-			throws Exception {
+	@Test(
+			description = "Creates a contact with basic fields,edits the contacts using the ToolBar delete last name and verifies the change",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void editNameAndVerify() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		ContactItem contact = new ContactItem();
-		contact.firstName = cnFirstname;
-		contact.middleName = cnMiddleName; 
-		contact.lastName = cnLastName;
+		ContactItem oldContact = ContactItem.generateContactItem(GenerateItemType.Basic);
+		
+		ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
+		
 
-		page.zABCompose.zCreateBasicContact(contact);
-		page.zABCompose.zModifyContact(cnLastName, newcnLastName,
-				newMiddleName, "", "", "ToolbarEdit");
+		page.zABCompose.createItem(ActionMethod.DEFAULT, oldContact);
+		page.zABCompose.modifyItem(ABComposeActionMethod.ToolbarEdit, oldContact, newContact);
 
-		Assert
-				.assertTrue(page.zABCompose.zVerifyEditContact(newcnLastName,
-						newMiddleName, "", ""),
-						"The Contact is not modified correctly");
+		Assert.assertTrue(
+				page.zABCompose.zVerifyEditContact(newContact),
+				"Verify the contact fields match the correct values");
+		
 		needReset = false;
 
 	}
@@ -133,25 +123,26 @@ public class BasicContactTests extends CommonTest {
 	 * Creates a contact with basic fields,edits the contacts using Right Click
 	 * last name and verifies the change
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void rghtClickEditNameAndVerify(String cnLastName,
-			String cnMiddleName, String cnFirstname, String newcnLastName,
-			String newMiddleName) throws Exception {
+	@Test(
+			description = "Creates a contact with basic fields,edits the contacts using Right Click last name and verifies the change",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void rghtClickEditNameAndVerify() throws Exception {
+		
+		
 		if (isExecutionARetry)
 			handleRetry();
+		
+		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
 
-		ContactItem contact = new ContactItem();
-		contact.firstName = cnFirstname;
-		contact.middleName = cnMiddleName; 
-		contact.lastName = cnLastName;
-
-		page.zABCompose.zCreateBasicContact(contact);
-		page.zABCompose.zModifyContact(cnLastName, newcnLastName,
-				newMiddleName, "", "", "RightClickEdit");
-		Assert
-				.assertTrue(page.zABCompose.zVerifyEditContact(newcnLastName,
-						newMiddleName, "", ""),
-						"The Contact is not modified correctly");
+		ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
+		
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
+		page.zABCompose.modifyItem(ABComposeActionMethod.RightClickEdit, contact, newContact);
+		
+		Assert.assertTrue(
+				page.zABCompose.zVerifyEditContact(newContact),
+				"Verify the contact fields match the correct values");
 
 		needReset = false;
 	}
@@ -160,20 +151,24 @@ public class BasicContactTests extends CommonTest {
 	 * Creates a contact with basic fields,deletes the contact and verifies the
 	 * contact does not exist after ToolBar delete
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void deleteContactAndVerify(String cnLastName, String cnMiddleName,
-			String cnFirstname) throws Exception {
+	@Test(
+			description = "Creates a contact with basic fields,deletes the contact and verifies the contact does not exist after ToolBar delete",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void deleteContactAndVerify() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		ContactItem contact = new ContactItem();
-		contact.firstName = cnFirstname;
-		contact.middleName = cnMiddleName; 
-		contact.lastName = cnLastName;
+		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
 
-		page.zABCompose.zCreateBasicContact(contact);
-		if (obj.zContactListItem.zExistsDontWait(cnLastName).equals("true"))
-			page.zABApp.zDeleteContactAndVerify(cnLastName, "ToolbarDelete");
+		// Create the contact
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
+		
+		if (obj.zContactListItem.zExistsDontWait(contact.lastName).equals("true")) {
+			page.zABApp.zDeleteContactAndVerify(contact.lastName, "ToolbarDelete");
+			obj.zContactListItem.zNotExists(contact.lastName);
+		}
+
 
 		needReset = false;
 	}
@@ -182,21 +177,21 @@ public class BasicContactTests extends CommonTest {
 	 * Creates a contact with basic fields,deletes the contact and verifies the
 	 * contact gets moved to target AB folder using tool bar move button
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void moveContactAndVerify(String cnLastName, String cnMiddleName,
-			String cnFirstname, String targetAB) throws Exception {
+	@Test(
+			description = "Creates a contact with basic fields,deletes the contact and verifies the contact gets moved to target AB folder using tool bar move button",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void moveContactAndVerify() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		ContactItem contact = new ContactItem();
-		contact.firstName = cnFirstname;
-		contact.middleName = cnMiddleName; 
-		contact.lastName = cnLastName;
-
-		page.zABCompose.zCreateBasicContact(contact);
-		if (obj.zContactListItem.zExistsDontWait(cnLastName).equals("true"))
-			page.zABApp.zMoveContactAndVerify(cnLastName, targetAB,
-					"ToolbarMove");
+		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
+		contact.AddressBook = EmailedContacts;
+		
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
+		if (obj.zContactListItem.zExistsDontWait(contact.lastName).equals("true")) {
+			page.zABApp.zMoveContactAndVerify(contact.lastName, EmailedContacts.name, "ToolbarMove");
+		}
 
 		needReset = false;
 	}
@@ -205,22 +200,22 @@ public class BasicContactTests extends CommonTest {
 	 * Creates a contact with basic fields,deletes the contact and verifies the
 	 * contact gets moved to target AB folder using tool bar move button
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void rghtClickMoveContactAndVerify(String cnLastName,
-			String cnMiddleName, String cnFirstname, String targetAB)
+	@Test(
+			description = "Creates a contact with basic fields,deletes the contact and verifies the contact gets moved to target AB folder using tool bar move button",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void rghtClickMoveContactAndVerify()
 			throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		ContactItem contact = new ContactItem();
-		contact.firstName = cnFirstname;
-		contact.middleName = cnMiddleName; 
-		contact.lastName = cnLastName;
+		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
 
-		page.zABCompose.zCreateBasicContact(contact);
-		if (obj.zContactListItem.zExistsDontWait(cnLastName).equals("true"))
-			page.zABApp.zMoveContactAndVerify(cnLastName, targetAB,
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
+		if (obj.zContactListItem.zExistsDontWait(contact.lastName).equals("true")) {
+			page.zABApp.zMoveContactAndVerify(contact.lastName, EmailedContacts.name,
 					"RightClickMove");
+		}
 
 		needReset = false;
 	}
@@ -229,20 +224,20 @@ public class BasicContactTests extends CommonTest {
 	 * Creates a contact with basic fields,deletes the contact and verifies the
 	 * contact does not exist after Right Click delete
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void rghtClkDeleteContactAndVerify(String cnLastName,
-			String cnMiddleName, String cnFirstname) throws Exception {
+	@Test(
+			description = "Creates a contact with basic fields,deletes the contact and verifies the contact does not exist after Right Click delete",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void rghtClkDeleteContactAndVerify() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		ContactItem contact = new ContactItem();
-		contact.firstName = cnFirstname;
-		contact.middleName = cnMiddleName; 
-		contact.lastName = cnLastName;
+		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
 
-		page.zABCompose.zCreateBasicContact(contact);
-		if (obj.zContactListItem.zExistsDontWait(cnLastName).equals("true"))
-			page.zABApp.zDeleteContactAndVerify(cnLastName, "RightClickDelete");
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
+		if (obj.zContactListItem.zExistsDontWait(contact.lastName).equals("true")) {
+			page.zABApp.zDeleteContactAndVerify(contact.lastName, "RightClickDelete");
+		}
 
 		needReset = false;
 	}
@@ -250,23 +245,19 @@ public class BasicContactTests extends CommonTest {
 	/**
 	 *Test to verify the contact right click menus exits and are enabled or not
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void rtClickContactAndVerify(String cnLastName, String cnMiddleName,
-			String cnFirstname, String enabledItemsSeparatedByComma,
-			String disabledItemsSeparatedByComma, String ignoreContext)
-			throws Exception {
+	@Test(
+			description = "Test to verify the contact right click menus exits and are enabled or not",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void rtClickContactAndVerify() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		ContactItem contact = new ContactItem();
-		contact.firstName = cnFirstname;
-		contact.middleName = cnMiddleName; 
-		contact.lastName = cnLastName;
+		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
 
-		page.zABCompose.zCreateBasicContact(contact);
-		obj.zContactListItem.zRtClick(cnLastName);
-		page.zABApp.zVerifyAllMenuItems(enabledItemsSeparatedByComma,
-				disabledItemsSeparatedByComma, ignoreContext);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
+		obj.zContactListItem.zRtClick(contact.lastName);
+		page.zABApp.zVerifyAllMenuItems(itemsEnabled, itemsDisabled, "false");
 
 		needReset = false;
 	}
@@ -274,22 +265,23 @@ public class BasicContactTests extends CommonTest {
 	/**
 	 *Test to verify the contact right click menus exits and are enabled or not
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void negativeTestCreateContact(String cnLastName,
-			String cnMiddleName, String cnFirstName) throws Exception {
+	@Test(
+			description = "Test to verify the contact right click menus exits and are enabled or not",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void negativeTestCreateContact() throws Exception {
 		if (isExecutionARetry)
 			handleRetry();
 
-		obj.zFolder
-				.zClick(replaceUserNameInStaticId(page.zABCompose.zContactsFolder));
+		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
+		
+		obj.zFolder.zClick(replaceUserNameInStaticId(page.zABCompose.zContactsFolder));
 		obj.zButton.zClick(page.zABCompose.zNewContactMenuIconBtn);
-		page.zABCompose.zEnterBasicABData("", cnLastName, cnMiddleName,
-				cnFirstName);
+		page.zABCompose.zEnterBasicABData(contact);
 		obj.zButton.zClick(page.zABCompose.zCancelContactMenuIconBtn);
-		obj.zButton.zClickInDlgByName(localize(locator.no),
-				localize(locator.warningMsg));
+		obj.zButton.zClickInDlgByName(localize(locator.no), localize(locator.warningMsg));
 		Thread.sleep(500);
-		obj.zContactListItem.zNotExists(cnLastName);
+		obj.zContactListItem.zNotExists(contact.lastName);
 
 		needReset = false;
 	}

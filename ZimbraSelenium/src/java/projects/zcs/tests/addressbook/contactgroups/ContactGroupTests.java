@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
 import framework.util.RetryFailedTests;
 
 /**
@@ -39,7 +40,7 @@ public class ContactGroupTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		page.zABCompose.zNavigateToContact();
+		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		isExecutionARetry = false;
 	}
 

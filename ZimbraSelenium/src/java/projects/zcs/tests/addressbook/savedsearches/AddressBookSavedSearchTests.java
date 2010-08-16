@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
 
 import com.zimbra.common.service.ServiceException;
 
@@ -62,7 +63,7 @@ public class AddressBookSavedSearchTests extends CommonTest {
 		ContactItem contact = new ContactItem();
 		contact.lastName = lastName;
 
-		page.zABCompose.zCreateBasicContact(contact);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		selenium.type("xpath=//input[@class='search_input']", lastName);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);

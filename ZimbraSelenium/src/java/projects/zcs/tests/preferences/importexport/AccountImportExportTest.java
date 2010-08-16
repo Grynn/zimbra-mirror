@@ -13,9 +13,11 @@ import org.testng.annotations.Test;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
 import framework.items.ContactItem;
+import framework.items.FolderItem;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -169,13 +171,13 @@ public class AccountImportExportTest extends CommonTest {
 		ContactItem contact1 = new ContactItem();
 		contact1.firstName=firstName;
 		contact1.lastName = lastName;
-		page.zABCompose.zCreateBasicContact(contact1);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact1);
 
 		// apply tag to contact
 		ContactItem contact2 = new ContactItem();
 		contact2.firstName = lastNameTagged;
 		contact2.firstName = firstNameTagged;
-		page.zABCompose.zCreateBasicContact(contact2);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact2);
 		obj.zFolder.zClick(page.zABCompose.zContactsFolder);
 		Thread.sleep(2000);
 		obj.zContactListItem.zClick(lastNameTagged);
@@ -183,9 +185,16 @@ public class AccountImportExportTest extends CommonTest {
 		obj.zMenuItem.zClick(newTag);
 
 		// keep one contact in new AB folder
-		page.zABCompose.zCreateNewAddBook(newABFolder);
-		page.zABCompose.zCreateContactInAddressBook(newABFolder,
-				lastNameNewFolder, "", firstNameNewFolder);
+		FolderItem folder = new FolderItem();
+		folder.name = newABFolder;
+		ContactItem contact = new ContactItem();
+		contact.firstName = firstNameNewFolder;
+		contact.middleName = "";
+		contact.lastName = lastNameNewFolder;
+		contact.AddressBook = folder;
+		
+		page.zABCompose.zCreateNewAddBook(folder.name);
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		// ------------------------- Calendar -------------------------
 		zGoToApplication("Calendar");

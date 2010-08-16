@@ -6,6 +6,7 @@ import com.zimbra.common.soap.Element;
 
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * Used to define a Zimbra Contact
@@ -54,6 +55,37 @@ public class ContactItem extends ZimbraItem implements IItem {
 		return (ContactAttributes.get(key));
 	}
 	
+	public enum GenerateItemType {
+		Default, Basic, AllAttributes
+	}
+	
+	/**
+	 * Create a ContactItem with basic properties
+	 * 
+	 * For type = Default or Basic, create a contact with first, middle, last and email set
+	 * For type = AllAttributes, create a contact with all attributes set
+	 * 
+	 * @param type The type of ContactItem to create
+	 * @return the new ContactItem
+	 * @throws HarnessException 
+	 */
+	public static ContactItem generateContactItem(GenerateItemType type) throws HarnessException {
+		if ( type.equals(GenerateItemType.Default) || type.equals(GenerateItemType.Basic) ) {
+			ContactItem c = new ContactItem();
+			c.firstName = "first" + ZimbraSeleniumProperties.getUniqueString();
+			c.middleName = "middle" + ZimbraSeleniumProperties.getUniqueString();
+			c.lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
+			return (c);
+		}
+		
+		if ( type.equals(GenerateItemType.AllAttributes) ) {
+			throw new HarnessException("Implement me!");
+		}
+		
+		// Default:
+		// Return empty Item
+		return (new ContactItem());
+	}
 	@Override
 	public void importFromSOAP(Element GetContactsResponse) throws HarnessException {
 		
