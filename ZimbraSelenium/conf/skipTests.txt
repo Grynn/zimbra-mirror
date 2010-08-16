@@ -243,6 +243,11 @@ CLASS:projects.zcs.tests.preferences.signatures.ChangeMailFormatSignatureTests;M
 CLASS:projects.zcs.tests.preferences.signatures.ChangeMailFormatSignatureTests;METHOD:fwd_AttachDontAttachSignatureAndChangeBodyFormat;LOCALE:all;BROWSERS:na;BUGS:49898;REMARK:Signature is not removed on selecting "Do not attach signature" for html saved draft
 CLASS:projects.zcs.tests.preferences.signatures.ChangeMailFormatSignatureTests;METHOD:newMail_AttachDontAttachSignatureAndChangeBodyFormat;LOCALE:all;BROWSERS:na;BUGS:49898;REMARK:Signature is not removed on selecting "Do not attach signature" for html saved draft
 
+#bug 49903
+CLASS:projects.zcs.tests.mail.messageactions.MessageRightClickMenuTests;METHOD:rtClickToContactAndSubject_CreateTask_Bug39954;LOCALE:all;BROWSERS:na;BUGS:49903;REMARK:Appointment/Task is not created from message right click menu option
+CLASS:projects.zcs.tests.mail.messageactions.MessageRightClickMenuTests;METHOD:rtClickToContactAndSubject_CreateAppt_Bug39954;LOCALE:all;BROWSERS:na;BUGS:49903;REMARK:Appointment/Task is not created from message right click menu option
+
+
 
 #------------------------HTML tests to be skipped ------------------
 #Bug 22626
