@@ -20,6 +20,7 @@ import com.zimbra.common.util.HttpUtil.Browser;
 
 import framework.core.SelNGBase;
 import framework.util.BrowserUtil;
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
 import projects.html.tests.CommonTest;
@@ -92,7 +93,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		zLoginIfRequired();
 
 		page.zCalendarApp.zSetCalPrefInitialView(localize(locator.calViewWeek));
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		isExecutionARetry = false;
 	}
 
@@ -125,7 +126,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		resetSession();
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		SelNGBase.selfAccountName = attendees;
 
@@ -167,7 +168,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		resetSession();
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		SelNGBase.selfAccountName = attendees;
 
@@ -207,13 +208,13 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		resetSession();
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		SelNGBase.selfAccountName = attendees;
 
 		page.zLoginpage.zLoginToZimbraHTML(attendees);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
@@ -247,11 +248,11 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		page.zCalendarApp.zNavigateToViewAndDate(viewAndDateToNavigate);
 
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 
 		obj.zAppointment.zClick(subject);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		
 		selenium.isElementPresent(localize(locator.apptInstEditSeries));
 		selenium.isElementPresent(localize(locator.apptInstNote));
@@ -284,7 +285,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		page.zCalendarApp.zNavigateToViewAndDate(viewAndDateToNavigate);
 
-		Thread.sleep(VERY_LONG_WAIT); // test continuously fails here. Earlier wait was 7 seconds.
+		SleepUtil.sleepVeryLong(); // test continuously fails here. Earlier wait was 7 seconds.
 
 		String apptDetails = obj.zCalendarGrid.zGetApptDateTime(subject);
 
@@ -300,11 +301,11 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		resetSession();
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		page.zLoginpage.zLoginToZimbraHTML(attendees);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
 
@@ -347,11 +348,11 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		resetSession();
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		page.zLoginpage.zLoginToZimbraHTML(attendees);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
@@ -391,11 +392,11 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		resetSession();
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		page.zLoginpage.zLoginToZimbraHTML(attendees);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
@@ -428,19 +429,19 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		page.zCalendarApp.zCreateApptRepeatDayOfWeek(subject, location,
 				attendees, body, startTime, endTime, startDate, endDate, day,
 				noEndDate, endAfterNOccur, endByDate);
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		page.zCalendarApp.zNavigateToViewAndDate(viewAndDateToNavigate);
 
 		obj.zButton.zClick(page.zCalendarApp.calRefresh);
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 
 		obj.zAppointment.zClick(subject);
 
-		Thread.sleep(VERY_LONG_WAIT); // for below statement. Earlier wait was 6 seconds.
+		SleepUtil.sleepVeryLong(); // for below statement. Earlier wait was 6 seconds.
 
 		selenium.click("link=" + localize(locator.apptInstEditSeries));
 
-		Thread.sleep(LONG_WAIT); // for below statement
+		SleepUtil.sleepLong(); // for below statement
 
 		page.zCalendarApp.zEnterApptDetails("", "", "", "", "", "", "", "", "",
 				"", newStartTime, newEndTime);
@@ -449,13 +450,13 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		page.zCalendarApp.zRepeatSetEndDate(noEndDate, endAfterNOccur,
 				endByDate);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zCalendarApp.apptComposeSaveBtn);
 
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 
 		page.zCalendarApp.zNavigateToViewAndDate(newViewAndDateToNavigate);
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		String apptDetails = obj.zCalendarGrid.zGetApptDateTime(subject);
 
 		String apptDetailsToVerify = apptDurationHrs + "_"
@@ -469,18 +470,18 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		resetSession();
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		page.zLoginpage.zLoginToZimbraHTML(attendees);
 
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		
 
 
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		String[] itemsToVerify = { subject, organizer.toLowerCase(), location,
 				attendees, body };
 

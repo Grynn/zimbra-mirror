@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -79,12 +80,12 @@ public class MiscMailTests extends CommonTest {
 								 * in suite, some time it doesn't go to mail tab
 								 */
 		page.zComposeView.zNavigateToMailComposeTopToolBar();
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zButton.zExists(page.zComposeView.zSendBtn);
 		obj.zTextAreaField.zExists(page.zComposeView.zToField);
 		obj.zTextAreaField.zExists(page.zComposeView.zCcField);
 		selenium.click("link=" + localize(locator.showBcc));
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zTextAreaField.zExists(page.zComposeView.zBccField);
 		obj.zEditField.zExists(page.zComposeView.zSubjectField);
 		// obj.zEditor.zExists(body);
@@ -103,7 +104,7 @@ public class MiscMailTests extends CommonTest {
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
-		Thread.sleep(LONG_WAIT); // required because composing takes some time
+		SleepUtil.sleepLong(); // required because composing takes some time
 		selenium.click("link=" + localize(locator.showBcc));
 		obj.zButton.zExists(page.zComposeView.zBccBtn);
 		obj.zTextAreaField.zExists(page.zComposeView.zBccField);
@@ -130,13 +131,13 @@ public class MiscMailTests extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(to, cc, "", subject, body,
 				attachments);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zHtmlMenu.zClick(page.zComposeView.zPriorityListBox,
 				localize(locator.high));
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zVerifyHasHighPriority(subject);
 
 		needReset = false;
@@ -156,14 +157,14 @@ public class MiscMailTests extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(to, cc, "", subject, body,
 				attachments);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zHtmlMenu.zClick(page.zComposeView.zPriorityListBox,
 				localize(locator.low));
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zVerifyHasLowPriority(subject);
 
 		needReset = false;
@@ -183,15 +184,15 @@ public class MiscMailTests extends CommonTest {
 		page.zComposeView.zEnterComposeValues(to, cc, "", subject, "",
 				attachments);
 		obj.zButton.zClick(page.zComposeView.zAddReceipientsBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		zWaitTillObjectExist("button", page.zComposeView.zAddReceipCancelBtn);
 		obj.zButton.zExists(page.zComposeView.zAddReceipAddSelectedBtn);
 		obj.zButton.zExists(page.zComposeView.zAddReceipCancelBtn);
 		obj.zButton.zClick(page.zComposeView.zAddReceipDoneBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		//obj.zButton.zClick(page.zComposeView.zCancelBtn);
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zMailApp.zDraftFldr);
 		needReset = false;
 	}
@@ -213,13 +214,13 @@ public class MiscMailTests extends CommonTest {
 		 * test fails while getting body, so waiting for long time and clicking
 		 * 'Show Original' button 2 time (increasing time again)
 		 */
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zMailApp.zShowOrigIconBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zButton.zClick(page.zMailApp.zShowOrigIconBtn);
-		Thread.sleep(VERY_LONG_WAIT);
+		SleepUtil.sleepVeryLong();
 		selenium.selectWindow("_blank");
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		String bodyValue = selenium.getBodyText();
 		String[] columnToVerify = { "Return-Path:", "Received:", "Date:",
 				"From:", "To:", "Cc:", "Message-ID:", "Subject:",
@@ -260,7 +261,7 @@ public class MiscMailTests extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndSelectIt(to, cc, "", subject, body,
 				attachments);
 		obj.zButton.zClick(page.zMailApp.zOpenInNewWindowIconBtn);
-		Thread.sleep(LONG_WAIT); // test fails here
+		SleepUtil.sleepLong(); // test fails here
 		selenium.selectWindow("_blank");
 		String bodyValue = selenium.getBodyText();
 		String[] columnToVerify = { localize(locator.from),
@@ -344,35 +345,35 @@ public class MiscMailTests extends CommonTest {
 					bcc, subjectArray[i], subjectArray[i] + "body", "");
 		}
 		obj.zMessageItem.zClick(subjectArray[2]);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zExists(subjectArray[2]);
 		obj.zMessageItem.zNotExists(subjectArray[1]);
 		obj.zMessageItem.zNotExists(subjectArray[0]);
 		obj.zButton.zClick(page.zMailApp.zNextPageIconBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zNotExists(subjectArray[2]);
 		obj.zMessageItem.zExists(subjectArray[1]);
 		obj.zMessageItem.zNotExists(subjectArray[0]);
 		obj.zButton.zClick(page.zMailApp.zNextPageIconBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zNotExists(subjectArray[2]);
 		obj.zMessageItem.zNotExists(subjectArray[1]);
 		obj.zMessageItem.zExists(subjectArray[0]);
 
 		obj.zButton.zClick(page.zMailApp.zPreviousPageIconBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zNotExists(subjectArray[2]);
 		obj.zMessageItem.zExists(subjectArray[1]);
 		obj.zMessageItem.zNotExists(subjectArray[0]);
 		obj.zButton.zClick(page.zMailApp.zPreviousPageIconBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zClick(subjectArray[2]);
 		obj.zMessageItem.zExists(subjectArray[2]);
 		obj.zMessageItem.zNotExists(subjectArray[1]);
 		obj.zMessageItem.zNotExists(subjectArray[0]);
 
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zVerifyIsRead(subjectArray[0]);
 		obj.zMessageItem.zVerifyIsRead(subjectArray[1]);
 		obj.zMessageItem.zVerifyIsRead(subjectArray[2]);
@@ -392,10 +393,10 @@ public class MiscMailTests extends CommonTest {
 
 		page.zMailApp.zInjectMessage(from, SelNGBase.selfAccountName, cc, bcc,
 				subject, subject + "body", "");
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zComposeView.zReplyBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zTextAreaField.zType(page.zComposeView.zToField,
 				SelNGBase.selfAccountName);
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
@@ -403,7 +404,7 @@ public class MiscMailTests extends CommonTest {
 		obj.zMessageItem.zClick("Re: " + subject);
 		obj.zButton.zClick(page.zComposeView.zReplyBtn);
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		zGoToApplication("Preferences");
 		obj.zTab.zClick(localize(locator.mail), "2");

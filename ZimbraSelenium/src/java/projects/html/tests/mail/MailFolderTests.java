@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -74,14 +75,14 @@ public class MailFolderTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zMailApp.zCreateFolder(folderName, parentFolder);
 		obj.zFolder.zClick(folderName);
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		String renameFldrName = getLocalizedData_NoSpecialChar();
 		obj.zEditField.zType(page.zMailApp.zEditFldrNameEditField,
 				renameFldrName);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zButton.zClick(page.zMailApp.zCreateFolderBtn); // save changes
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String folderUpdateMsg = obj.zToastAlertMessage.zGetMsg();
@@ -89,7 +90,7 @@ public class MailFolderTests extends CommonTest {
 					"Verifying folder updataion toast message");
 		}
 		obj.zFolder.zClick(renameFldrName);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		String verifyFldrValue = obj.zEditField
 				.zGetInnerText(page.zMailApp.zEditFldrNameEditField);
 		assertReport(verifyFldrValue, renameFldrName,
@@ -109,7 +110,7 @@ public class MailFolderTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zMailApp.zCreateFolder(folderName, parentFolder);
 		page.zMailApp.zCreateFolder(folderName, parentFolder);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
@@ -133,13 +134,13 @@ public class MailFolderTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zMailApp.zCreateFolder(folderName, "");
 		obj.zFolder.zClick(folderName);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zHtmlMenu.zClick(page.zMailApp.zParentFolderWebList, parentFolder);
 		obj.zButton.zClick(page.zMailApp.zCreateFolderBtn); // save changes
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		zWaitTillObjectExist("htmlmenu", page.zMailApp.zParentFolderWebList);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String folderUpdateMsg = obj.zToastAlertMessage.zGetMsg();
@@ -147,7 +148,7 @@ public class MailFolderTests extends CommonTest {
 					folderUpdateMsg);
 		}
 		obj.zFolder.zClick(folderName);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		String parentFolderValue = obj.zHtmlMenu
 				.zGetSelectedItemName(page.zMailApp.zParentFolderWebList);
 		assertReport(parentFolder, parentFolderValue,
@@ -177,7 +178,7 @@ public class MailFolderTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		page.zMailApp.zCreateFolder(folderName, parentFolder);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String folderCreatedMsg = obj.zToastAlertMessage.zGetMsg();
@@ -202,9 +203,9 @@ public class MailFolderTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		obj.zButton.zClick(page.zMailApp.zNewFolderBtn);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zEditField.zType(page.zMailApp.zNewFldrNameEditField, folderName);
 		if (!parentFolder.equals("")) {
 			obj.zHtmlMenu.zClick(page.zMailApp.zParentFolderWebList, "Inbox");
@@ -235,9 +236,9 @@ public class MailFolderTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		obj.zFolder.zClick(localize(locator.inbox));
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zMailApp.zDeleteAllItemsBtn);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String folderEmptyMsg = obj.zToastAlertMessage.zGetMsg();
@@ -265,9 +266,9 @@ public class MailFolderTests extends CommonTest {
 				SelNGBase.selfAccountName, "ccuser@testdomain.com", "",
 				subject, subject + " body", "");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(LONG_WAIT); // required
+		SleepUtil.sleepLong(); // required
 		obj.zFolder.zClick(localize(locator.inbox));
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zCheckbox.zClick(page.zMailApp.zPermDelMailItemChkBox);
 		obj.zButton.zClick(page.zMailApp.zDeleteAllItemsBtn);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
@@ -295,10 +296,10 @@ public class MailFolderTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zMailApp.zCreateFolder(folderName, parentFolder);
 		obj.zFolder.zClick(folderName);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zMailApp.zDeleteFolderBtn);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String deleteFolderMsg = obj.zToastAlertMessage.zGetMsg();
@@ -323,10 +324,10 @@ public class MailFolderTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zMailApp.zCreateFolder(folderName, parentFolder);
 		obj.zFolder.zClick(folderName);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zCheckbox.zClick(page.zMailApp.zDeleteThisFolderChkBox);
 		obj.zButton.zClick(page.zMailApp.zDeleteFolderBtn);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
@@ -339,7 +340,7 @@ public class MailFolderTests extends CommonTest {
 					"Verifying toast message after moving folder to trash without selecting confirmation checkbox");
 		}
 		obj.zFolder.zClick(folderName);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zCheckbox.zClick(page.zMailApp.zDeleteThisFolderChkBox);
 		obj.zButton.zClick(page.zMailApp.zPermDeleteFolderBtn);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
@@ -366,7 +367,7 @@ public class MailFolderTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		String[] sysFolders = { localize(locator.inbox),
 				localize(locator.sent), localize(locator.drafts),
 				localize(locator.junk), localize(locator.trash) };
@@ -407,10 +408,10 @@ public class MailFolderTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		String rssFeed = "http://blogsearch.google.com/blogsearch_feeds?q=zimbra&oe=UTF-8&client=firefox-a&um=1&oi=property_suggestions&ct=property-revision&cd=2&ie=utf-8&num=10&output=rss";
 		obj.zButton.zClick(page.zMailApp.zNewRssFeedBtn);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zEditField.zType(page.zMailApp.zNewFldrNameEditField, folderName);
 		if (!parentFolder.equals("")) {
 			obj.zHtmlMenu.zClick(page.zMailApp.zParentFolderWebList,
@@ -418,11 +419,11 @@ public class MailFolderTests extends CommonTest {
 		}
 		obj.zEditField.zType(page.zMailApp.zRssFeedURLEditField, rssFeed);
 		obj.zButton.zClick(page.zMailApp.zCreateFolderBtn);
-		Thread.sleep(LONG_WAIT); // selenium failure
+		SleepUtil.sleepLong(); // selenium failure
 		zWaitTillObjectExist("folder", folderName); // wait for rss folder
 		zGoToApplication("Mail");
 		obj.zFolder.zClick(folderName);
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		zWaitTillObjectExist("message", "Zimbra"); // wait for feed
 		obj.zMessageItem.zExists("Zimbra");
 
@@ -447,40 +448,40 @@ public class MailFolderTests extends CommonTest {
 				SelNGBase.selfAccountName, "ccuser@testdomain.com", "",
 				subject, subject + "body", "");
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
+			SleepUtil.sleepMedium(); // selenium failure in IE
 		}
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zMailApp.zNewSearchBtn);
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		obj.zEditField.zType(page.zMailApp.zNewFldrNameEditField, folderName);
 		if (!parentFolder.equals("")) {
 			obj.zHtmlMenu.zClick(page.zMailApp.zParentFolderWebList,
 					parentFolder);
 		}
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zEditField.zType(page.zMailApp.zSearchQueryEditField, subject);
 		obj.zButton.zClick(page.zMailApp.zCreateFolderBtn);
-		Thread.sleep(MEDIUM_WAIT); // selenium failure here
+		SleepUtil.sleepMedium(); // selenium failure here
 		zWaitTillObjectExist("folder", folderName);
 		zGoToApplication("Mail");
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zFolder.zClick(folderName);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		obj.zFolder.zClick(folderName);
-		Thread.sleep(MEDIUM_WAIT); // selenium failure here
+		SleepUtil.sleepMedium(); // selenium failure here
 		obj.zCheckbox.zClick(page.zMailApp.zDeleteThisFolderChkBox);
 		obj.zButton.zClick(page.zMailApp.zDeleteFolderBtn);
-		Thread.sleep(MEDIUM_WAIT); // selenium failure here
+		SleepUtil.sleepMedium(); // selenium failure here
 		obj.zCheckbox.zClick(page.zMailApp.zDeleteThisFolderChkBox);
 		obj.zButton.zClick(page.zMailApp.zPermDeleteFolderBtn);
-		Thread.sleep(MEDIUM_WAIT); // selenium failure here
+		SleepUtil.sleepMedium(); // selenium failure here
 		obj.zFolder.zNotExists(folderName);
 		zGoToApplication("Mail");
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zFolder.zNotExists(folderName);
 
 		needReset = false;

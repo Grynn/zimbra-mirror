@@ -5,6 +5,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
 import projects.html.tests.CommonTest;
@@ -77,7 +79,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 				"Verify To field value using To button", addReceipAcc, cc, bcc);
 		//obj.zButton.zClick(page.zComposeView.zCancelBtn);
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		obj.zButton.zClick(page.zMailApp.zDraftFldr);
 
 
@@ -107,7 +109,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 				"Verify Cc field value using Cc button", to, addReceipAcc, bcc);
 		//obj.zButton.zClick(page.zComposeView.zCancelBtn);
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zMailApp.zDraftFldr);
 
 

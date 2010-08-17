@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -92,7 +93,7 @@ public class AttachmentTests extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		zWaitTillObjectExist("message", subject); // timing issue
 		obj.zMessageItem.zVerifyHasAttachment(subject);
 
@@ -118,7 +119,7 @@ public class AttachmentTests extends CommonTest {
 		obj.zCheckbox.zVerifyIsChecked(attachments);
 		obj.zCheckbox.zVerifyIsChecked(newAttachment);
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		needReset = false;
 	}
@@ -142,7 +143,7 @@ public class AttachmentTests extends CommonTest {
 		obj.zCheckbox.zNotExists(attachments);
 		obj.zCheckbox.zVerifyIsChecked(newAttachment);
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zMailApp.zDraftFldr);
 		obj.zMessageItem.zClick(subject);
 		obj.zCheckbox.zNotExists(attachments);
@@ -170,7 +171,7 @@ public class AttachmentTests extends CommonTest {
 		page.zComposeView.zAddAttachments(attachments, false);
 		String isSendBtnExists;
 		for (int i = 0; i <= 150; i++) {
-			Thread.sleep(MEDIUM_WAIT); // big attachment takes too much time
+			SleepUtil.sleepMedium(); // big attachment takes too much time
 			isSendBtnExists = obj.zButton
 					.zExistsDontWait(page.zComposeView.zSendBtn);
 			if (isSendBtnExists.equals("true"))
@@ -185,7 +186,7 @@ public class AttachmentTests extends CommonTest {
 		}
 		obj.zCheckbox.zNotExists(attachments);
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		needReset = false;
 	}
@@ -205,7 +206,7 @@ public class AttachmentTests extends CommonTest {
 		obj.zTextAreaField.zType(page.zComposeView.zToField, to);
 		obj.zEditField.zType(page.zComposeView.zSubjectField, subject);
 		obj.zButton.zClick(ComposeView.zAddAttachmentBtn);
-		Thread.sleep(LONG_WAIT); // please don't remove this
+		SleepUtil.sleepLong(); // please don't remove this
 		String[] attList = attachments.split(",");
 		for (int i = 0; i < attList.length; i++) {
 			File f = new File("src/java/projects/html/data/" + attList[i]);
@@ -215,7 +216,7 @@ public class AttachmentTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zAddAttachCancelBtn);
 		obj.zCheckbox.zNotExists(attachments);
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		needReset = false;
 	}
@@ -234,11 +235,11 @@ public class AttachmentTests extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		String[] attList = attachments.split(",");
 		obj.zCheckbox.zClick(attList[0]);
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		MailApp.zClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		// verify one attachment not present

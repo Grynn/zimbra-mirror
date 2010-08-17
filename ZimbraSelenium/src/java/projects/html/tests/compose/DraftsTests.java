@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.cs.account.Provisioning;
 
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
 import projects.html.tests.CommonTest;
@@ -99,11 +100,11 @@ public class DraftsTests extends CommonTest {
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
 		selenium.select("name=priority", localize(locator.high));
-		Thread.sleep(SMALL_WAIT);// to avoid navigate away dialog
+		SleepUtil.sleepSmall();// to avoid navigate away dialog
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
-		Thread.sleep(MEDIUM_WAIT);// to avoid navigate away dialog
+		SleepUtil.sleepMedium();// to avoid navigate away dialog
 		obj.zButton.zClick(page.zComposeView.zCancelBtn);
-		Thread.sleep(SMALL_WAIT); // to avoid navigate away dialog
+		SleepUtil.sleepSmall(); // to avoid navigate away dialog
 		obj.zFolder.zClick(page.zMailApp.zDraftFldr);
 		obj.zMessageItem.zClick(subject);
 		zVerifyDraftFilledValues("update draft", to, cc, bcc, subject, body,
@@ -131,9 +132,9 @@ public class DraftsTests extends CommonTest {
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zFolder.zClick(page.zMailApp.zDraftFldr);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		
 		/**
 		 * Amit Jagtap : Following line solves the problem of pop-up window.
@@ -152,9 +153,9 @@ public class DraftsTests extends CommonTest {
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
-		Thread.sleep(LONG_WAIT); // to overcome navigate away dialog
+		SleepUtil.sleepLong(); // to overcome navigate away dialog
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zFolder.zClick(page.zMailApp.zDraftFldr);
 		obj.zMessageItem.zNotExists(subject);
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);

@@ -22,6 +22,7 @@ import projects.html.tests.CommonTest;
 import projects.html.ui.ComposeView;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
 @SuppressWarnings( { "static-access", "unused" })
@@ -86,11 +87,11 @@ public class MailPreferencesTests extends CommonTest {
 		// Assert.assertEquals(actualVal, "10",
 		// "Number of mails value set is not set in db. Actual value is "
 		// + actualVal);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		// to verify only 10 mails are displayed per page in UI
 		page.zMailPrefUI.zInjectSpecificNoOfMails(mailSubject, 11);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		obj.zTab.zClick(localize(locator.mail));
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(mailSubject[10]);
@@ -151,7 +152,7 @@ public class MailPreferencesTests extends CommonTest {
 
 		page.zMailPrefUI.zNavigateToPrefAndEditDefaultMailSearch("in:junk");
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		resetSession();
 		page.zLoginpage.zLoginToZimbraHTML(selfAccName);
 		obj.zMessageItem.zExists(subject);
@@ -174,7 +175,7 @@ public class MailPreferencesTests extends CommonTest {
 		String subject = getLocalizedData_NoSpecialChar();
 
 		page.zMailPrefUI.zNavigateToPrefMailAndSetFwdCopyTo(fwdToAcc);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt(ProvZCS.selfAccountName,
@@ -205,10 +206,10 @@ public class MailPreferencesTests extends CommonTest {
 
 		page.zMailPrefUI
 				.zNavigateToPrefMailAndSetSendNotificationMsgTo(notificationToAcc);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		page.zComposeView.zNavigateToMailCompose();
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zComposeView.zSendMailToSelfAndSelectIt(ProvZCS.selfAccountName,
 				"", "", subject, getLocalizedData_NoSpecialChar(), "");
 
@@ -238,11 +239,11 @@ public class MailPreferencesTests extends CommonTest {
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData_NoSpecialChar();
 		page.zMailPrefUI.zNavigateToPrefMailAndSetAutoReply(autoReplyMsg);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		resetSession();
 		page.zLoginpage.zLoginToZimbraHTML(randomAccount);
 		page.zComposeView.zSendMail(currentAccount, "", "", subject, body, "");
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		page.zMailPrefUI.zVerifyAutoReplyMsg(subject, autoReplyMsg,
 				currentAccount);
@@ -253,7 +254,7 @@ public class MailPreferencesTests extends CommonTest {
 		page.zMailPrefUI.zNavigateToPrefMail();
 		obj.zCheckbox.zClick(page.zMailPrefUI.zSendASendAutoReplyMsgChkBox);
 		obj.zButton.zClick(page.zAccPref.zSaveIconBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		resetSession();
 		page.zLoginpage.zLoginToZimbraHTML(randomAccount2);
 		SelNGBase.selfAccountName = randomAccount2;
@@ -262,7 +263,7 @@ public class MailPreferencesTests extends CommonTest {
 				+ subject;
 
 		// little change here
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
 		obj.zMessageItem.zNotExists(replyMsgSubject);
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
@@ -298,7 +299,7 @@ public class MailPreferencesTests extends CommonTest {
 				subject2, "", "");
 
 		// little change here
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
 		obj.zMessageItem.zNotExists(subject2);
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
@@ -324,7 +325,7 @@ public class MailPreferencesTests extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMail(SelNGBase.selfAccountName, "", "", subject,
 				"", "");
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		// little change here
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
 		obj.zMessageItem.zNotExists(subject);

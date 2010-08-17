@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.cs.account.Provisioning;
 
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
 import projects.html.tests.CommonTest;
@@ -113,13 +114,13 @@ public class ComposeBtmToolBarTests extends CommonTest {
 		page.zComposeView.zNavigateToMailComposeBtmToolBar();
 		page.zComposeView.zEnterComposeValues(to, cc, "", subject, body,
 				attachments);
-		Thread.sleep(SMALL_WAIT); // lot of timing issue (also error command time out)
+		SleepUtil.sleepSmall(); // lot of timing issue (also error command time out)
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtnBtmToolBar);
-		Thread.sleep(SMALL_WAIT);// lot of timing issue (also error command time out)
+		SleepUtil.sleepSmall();// lot of timing issue (also error command time out)
 		obj.zButton.zClick(page.zComposeView.zCancelBtnBtmToolBar);
-		Thread.sleep(SMALL_WAIT);// lot of timing issue (also error command time out)
+		SleepUtil.sleepSmall();// lot of timing issue (also error command time out)
 		obj.zFolder.zClick(page.zMailApp.zDraftFldr);
-		Thread.sleep(SMALL_WAIT);// lot of timing issue (also error command time out)
+		SleepUtil.sleepSmall();// lot of timing issue (also error command time out)
 		obj.zMessageItem.zExists(subject);
 
 		needReset = false;

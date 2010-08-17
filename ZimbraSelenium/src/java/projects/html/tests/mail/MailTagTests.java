@@ -6,6 +6,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
 import projects.html.tests.CommonTest;
@@ -87,7 +89,7 @@ public class MailTagTests extends CommonTest {
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, newSubject, body,
 				attachments);
 		obj.zCheckbox.zClick(subject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zCheckbox.zClick(newSubject);
 		page.zMailApp.zMoreActions(tagName);
 		obj.zMessageItem.zVerifyIsTagged(subject);
@@ -95,10 +97,10 @@ public class MailTagTests extends CommonTest {
 
 		// remove tag
 		obj.zCheckbox.zClick(subject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zCheckbox.zClick(newSubject);
 		obj.zHtmlMenu.zClick("name=actionOp", tagName, "2");
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zVerifyIsNotTagged(subject);
 		obj.zMessageItem.zVerifyIsNotTagged(newSubject);
 
@@ -133,10 +135,10 @@ public class MailTagTests extends CommonTest {
 				attachments);
 		obj.zCheckbox.zClick(subject);
 		obj.zCheckbox.zClick(newSubject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zMailApp.zMoreActions(tagName);
 		obj.zFolder.zClick(tagName);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zExists(subject);
 		obj.zMessageItem.zExists(newSubject);
 		obj.zMessageItem.zNotExists(newSubject1);
@@ -146,14 +148,14 @@ public class MailTagTests extends CommonTest {
 		page.zMailApp.zRenameTag(tagName, newTagName);
 		zGoToApplication("Mail");
 		obj.zFolder.zClick(newTagName);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zExists(subject);
 		obj.zMessageItem.zExists(newSubject);
 		obj.zMessageItem.zNotExists(newSubject1);
 		obj.zMessageItem.zClick(page.zMailApp.zSelectAllMailChkBox);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zMailApp.zMoreActions("all");
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		needReset = false;
 	}

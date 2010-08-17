@@ -21,6 +21,7 @@ import projects.html.tests.CommonTest;
 import projects.html.ui.ComposeView;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
 @SuppressWarnings( { "static-access", "unused" })
@@ -95,9 +96,9 @@ public class ComposePref extends CommonTest {
 		page.zLoginpage.zLoginToZimbraHTML(randomAcc);
 		page.zComposeView.zSendMail(currentUser, "", "", textSubject, "", "");
 		page.zComposePrefUI.zNavigateToPrefComposeAndSelectComposeAse("AsHTML");
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zComposeView.zSendMail(currentUser, "", "", htmlSubject, "", "");
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		resetSession();
 		// to login back to acc where the reply fwd using orignal mail format
@@ -106,12 +107,12 @@ public class ComposePref extends CommonTest {
 		page.zLoginpage.zLoginToZimbraHTML(currentUser);
 		page.zComposePrefUI
 				.zClickCheckMailUntilMailShowsUpAndClickReply(textSubject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zButton.zNotExists(page.zComposePrefUI.zHtmlComposeBoldBtn);
 		obj.zTab.zClick(localize(locator.mail));
 		page.zComposePrefUI
 				.zClickCheckMailUntilMailShowsUpAndClickReply(htmlSubject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		// obj.zButton.zExists(page.zComposePrefUI.zHtmlComposeBoldBtn);//have
 		// to ask to raja about verification
 

@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.cs.account.Provisioning;
 
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
 import projects.html.tests.CommonTest;
@@ -184,7 +185,8 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 											 * zVerifyNotChecked
 											 */
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
-		Thread.sleep(LONG_WAIT*2);
+		SleepUtil.sleepLong();
+		SleepUtil.sleepLong();
 		obj.zButton.zClick(page.zComposeView.zCancelBtn);
 		
 
@@ -218,7 +220,8 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 											 */
 //		obj.zButton.zClick(page.zComposeView.zCancelBtn);
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
-		Thread.sleep(LONG_WAIT*2);
+		SleepUtil.sleepLong();
+		SleepUtil.sleepLong();
 		obj.zButton.zClick(page.zMailApp.zDraftFldr);
 
 		needReset = false;
@@ -247,7 +250,7 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 		obj.zCheckbox.zVerifyIsChecked(attachments);
 		//obj.zButton.zClick(page.zComposeView.zCancelBtn);
 		//obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
-		//Thread.sleep(LONG_WAIT);
+		//DelayUtil.sleepLong();
 		//obj.zButton.zClick(page.zMailApp.zDraftFldr);
 
 

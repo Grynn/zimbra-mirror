@@ -21,6 +21,7 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -93,7 +94,7 @@ public class CalendarFolderTests extends CommonTest {
 
 		page.zCalFolderApp.zCreateNewCalendar(calName, color);
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("fr"))
 			obj.zToastAlertMessage.zAlertMsgExists(expectedMsg,
@@ -162,13 +163,13 @@ public class CalendarFolderTests extends CommonTest {
 
 		obj.zCalendarFolder.zClick(calName);
 
-		Thread.sleep(MEDIUM_WAIT); //unchecking checking takes some time
+		SleepUtil.sleepMedium(); //unchecking checking takes some time
 
 		obj.zAppointment.zNotExists(subject);
 
 		obj.zCalendarFolder.zClick(calName);
 
-		Thread.sleep(MEDIUM_WAIT); //unchecking checking takes some time
+		SleepUtil.sleepMedium(); //unchecking checking takes some time
 
 		obj.zAppointment.zExists(subject);
 

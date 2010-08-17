@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
 import projects.html.tests.CommonTest;
@@ -95,7 +96,7 @@ public class SignatureAndAccPref extends CommonTest {
 
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				signatureBody, "");
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zAccPref.zVerifyPrefToasterMsgs(obj.zToastAlertMessage.zGetMsg(),
 				localize(locator.optionsSaved));
 
@@ -158,7 +159,7 @@ public class SignatureAndAccPref extends CommonTest {
 		if (isExecutionARetry)
 			handleRetry();
 		page.zAccPref.zNavigateToPreferenceSignature();
-		Thread.sleep(SMALL_WAIT);//this wait is req for some locales
+		SleepUtil.sleepSmall();//this wait is req for some locales
 		selenium.click("link=" + localize(locator.optionsManageAccountsLink));
 		obj.zEditField.zExists(page.zAccPref.zAccNameEditField);
 		needReset = false;
@@ -178,9 +179,9 @@ public class SignatureAndAccPref extends CommonTest {
 			handleRetry();
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				signatureBody, "");
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zComposeView.zNavigateToMailCompose();
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		String displayedSignature = obj.zTextAreaField
 				.zGetInnerText(page.zComposeView.zBodyTextAreaField);
 		Assert.assertTrue(displayedSignature.contains(signatureBody),
@@ -204,7 +205,7 @@ public class SignatureAndAccPref extends CommonTest {
 			handleRetry();
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				constantSignatureBody, "Above");
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName,
 				"", "", constantSubject, "", "");
@@ -232,7 +233,7 @@ public class SignatureAndAccPref extends CommonTest {
 		page.zAccPref.zChangeSignaturePlacment("Below");
 		obj.zTab.zClick(localize(locator.mail));
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		obj.zMessageItem.zClick(constantSubject);
 		page.zAccPref.zClickReplyToAMailAndVerifySignaturePlace("Below",
@@ -264,7 +265,7 @@ public class SignatureAndAccPref extends CommonTest {
 		page.zAccPref.zNavigateToPreferenceAccounts();
 		page.zAccPref.zMakeAccSettings("", fromField, "setReplyTo",
 				replyToName, replyToAcc, signatureName);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zAccPref.zVerifySignatureInMailCompose(signatureBody);
 

@@ -16,6 +16,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -66,11 +67,11 @@ public class ABPreference extends CommonTest {
 		Arrays.sort(contactsArray);
 
 		page.zABComposeHTML.zNavigateToPreferenceAB();
-		Thread.sleep(SMALL_WAIT);// wait because it takes some time to load page after
+		SleepUtil.sleepSmall();// wait because it takes some time to load page after
 		// cliking on Pref-AB
 		page.zABComposeHTML.zSelectContactPerPage("10");
 		obj.zButton.zClick(page.zABComposeHTML.zPrefSaveButton);
-		Thread.sleep(MEDIUM_WAIT);// to wait for preferences to be saved
+		SleepUtil.sleepMedium();// to wait for preferences to be saved
 		page.zABComposeHTML.zVerifyContactToasterMsgs(obj.zToastAlertMessage
 				.zGetMsg(), localize(locator.optionsSaved));
 		page.zABComposeHTML.zNavigateToCnctAndCreateMultipleCncts(noOfContacts,
@@ -139,7 +140,7 @@ public class ABPreference extends CommonTest {
 			handleRetry();
 
 		page.zABComposeHTML.zNavigateToPreferenceAB();
-		Thread.sleep(SMALL_WAIT);// wait because it takes some time to load page after
+		SleepUtil.sleepSmall();// wait because it takes some time to load page after
 		// cliking on Pref-AB
 		selenium.click("link="
 				+ localize(locator.optionsManageAddressBooksLink));

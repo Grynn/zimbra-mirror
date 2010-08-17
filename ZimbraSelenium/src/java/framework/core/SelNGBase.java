@@ -6,29 +6,28 @@ import java.util.Map;
 
 import net.sf.json.JSONArray;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 import org.testng.Assert;
 
 import framework.util.ZimbraSeleniumProperties;
 
 public class SelNGBase {
-
+	private static Logger logger = LogManager.getLogger(SelNGBase.class);
+	
 	public static ZimbraSelenium selenium;
-	public static  String WAIT_FOR_PAGE_LOAD = "30000";
 
 	public static String currentBrowserName = "";
-	public static HashMap<String, String> expectedValue = new HashMap<String, String>();
+
 	public static int maxRetryCount = 0;
 	public static int currentRetryCount = 0;
 	public static boolean isExecutionARetry = false;
 	public static boolean needReset = false;
 	public static String selfAccountName = "";
+	
 	public static String someting = " ";
 	public static String appType = "AJAX";
 	public static String suiteName = "";
-	public static long SMALL_WAIT = 1000;
-	public static long MEDIUM_WAIT = 2000;
-	public static long LONG_WAIT = 4000;
-	public static long VERY_LONG_WAIT = 10000;
 	
     public static Map<String, ArrayList<Integer>> FILENAME_TO_COVERAGE = new HashMap<String, ArrayList<Integer>>();
     public static Map<String, JSONArray> FILENAME_TO_SOURCE = new HashMap<String, JSONArray>();
@@ -60,6 +59,10 @@ public class SelNGBase {
 	public static boolean ignoreFolderHdr = false;
 
 	
+	public SelNGBase() {
+		logger.debug("New SelNGBase");
+	}
+	
 	// can be used as @aftermethod
 	public static void stopSeleniumSession() {
 		if (selenium != null){
@@ -86,12 +89,6 @@ public class SelNGBase {
 
 	public void openApplication(String app_type) {
 		appType = app_type;
-
-
-		SMALL_WAIT = ZimbraSeleniumProperties.getIntProperty("small_wait", 1000);
-		MEDIUM_WAIT = ZimbraSeleniumProperties.getIntProperty("medium_wait", 2000);
-		LONG_WAIT = ZimbraSeleniumProperties.getIntProperty("long_wait", 4000);
-		VERY_LONG_WAIT = ZimbraSeleniumProperties.getIntProperty("very_long_wait", 10000);
 
 
 		selenium = new ZimbraSelenium(

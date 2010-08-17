@@ -22,6 +22,7 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -139,7 +140,7 @@ public class CalendarMiscTests extends CommonTest {
 		//open calendar tab
 		selenium.open(urlInitial);
 		
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		
 		//check if appointment exists and create if doesn't exist
 		if(obj.zAppointment.zExistsDontWait(someting).equalsIgnoreCase("false"))
@@ -148,7 +149,7 @@ public class CalendarMiscTests extends CommonTest {
 		//open rest url
 		selenium.open(urlToNavigate);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		//open different rest views
 		if (view.equals(localize(locator.calViewDay)))
@@ -163,7 +164,7 @@ public class CalendarMiscTests extends CommonTest {
 		else if (view.equals(localize(locator.calViewWeek)))
 			obj.zButton.zClick(page.zCalendarApp.calWeekViewBtn);
 		
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		//verify appointment exists in rest view
 		obj.zAppointment.zExists("Busy");
@@ -192,7 +193,7 @@ public class CalendarMiscTests extends CommonTest {
 		
 		//open calendar view
 		selenium.open(url);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 				
 		// Navigate To Preferences view 
 		obj.zButton.zClick(page.zCalendarApp.preferencesTab);
@@ -315,11 +316,11 @@ public class CalendarMiscTests extends CommonTest {
 
 		selenium.open(urlToNavigate);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		obj.zButton.zClick(page.zCalendarApp.calTodayBtn);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		obj.zAppointment.zExists(subject);
 
@@ -346,17 +347,17 @@ public class CalendarMiscTests extends CommonTest {
 		String browserTitle2;
 
 		selenium.open(url);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		obj.zButton.zClick(page.zCalendarApp.calNextPageBtn);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		browserTitle = selenium.getTitle();
 
 		selenium.open(nextUrl);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		browserTitle2 = selenium.getTitle();
 
@@ -364,16 +365,16 @@ public class CalendarMiscTests extends CommonTest {
 				"Next pagination button works fine");
 
 		selenium.open(url);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zCalendarApp.calPrevPageBtn);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		browserTitle = selenium.getTitle();
 
 		selenium.open(prevUrl);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		browserTitle2 = selenium.getTitle();
 
@@ -437,16 +438,16 @@ public class CalendarMiscTests extends CommonTest {
 
 		page.zCalendarApp.zCreateApptInCalendar(subject2, "", "", "", calName);
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		obj.zButton.zClick(page.zCalendarApp.calScheduleViewBtn);
-		Thread.sleep(LONG_WAIT); //timing issue
+		SleepUtil.sleepLong(); //timing issue
 		obj.zButton.zClick(page.zCalendarApp.calTodayBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		
 		if (calCheck.equals("uncheck")) {
 			obj.zCalendarFolder.zClick(calName);
-			Thread.sleep(MEDIUM_WAIT);
+			SleepUtil.sleepMedium();
 
 			obj.zAppointment.zExists(subject1);
 			obj.zAppointment.zNotExists(subject2);
@@ -476,7 +477,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		page.zCalendarApp.zNavigateToCalendar();
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		browserTitle1 = selenium.getTitle();
 
@@ -489,7 +490,7 @@ public class CalendarMiscTests extends CommonTest {
 		else if (initialView.equals(localize(locator.calViewMonth)))
 			obj.zButton.zClick(page.zCalendarApp.calMonthViewBtn);
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		browserTitle2 = selenium.getTitle();
 
@@ -568,11 +569,11 @@ public class CalendarMiscTests extends CommonTest {
 		page.zCalendarApp.zCreateSimpleAppt(getLocalizedData_NoSpecialChar(),
 				"", "invalid-address", "");
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		String ToastMsg = obj.zToastAlertMessage.zGetMsg();
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		// there is no localize key for 'invalid attendees' string so running
 		// only for english as of now
@@ -683,13 +684,13 @@ public class CalendarMiscTests extends CommonTest {
 	private static void waitForIE() throws Exception {
 
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE"))
-			Thread.sleep(MEDIUM_WAIT);
+			SleepUtil.sleepMedium();
 	}
 
 	private static void waitForSF() throws Exception {
 
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("SF"))
-			Thread.sleep(SMALL_WAIT);
+			SleepUtil.sleepSmall();
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login

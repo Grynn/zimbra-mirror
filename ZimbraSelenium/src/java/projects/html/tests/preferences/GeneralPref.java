@@ -23,6 +23,7 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
 import projects.html.tests.CommonTest;
@@ -77,7 +78,7 @@ public class GeneralPref extends CommonTest {
 
 		page.zGeneralPrefUI.zEnterChangePWData("test123", "test321", "test321");
 		obj.zButton.zClick("class=zLoginButton");
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		resetSession();
 		page.zLoginpage
@@ -111,12 +112,12 @@ public class GeneralPref extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndSelectIt(ProvZCS.selfAccountName,
 				"", "", constantSubjectForJunk, body, "");
 		obj.zCheckbox.zClick(constantSubjectForJunk);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zHtmlMenu.zClick("name=actionOp", localize(locator.actionSpam));
 
 		// To verify the message moved in junk folder
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zExists(constantSubjectForJunk);
 
 		page.zGeneralPrefUI
@@ -168,7 +169,7 @@ public class GeneralPref extends CommonTest {
 
 		// To verify the message moved in junk folder
 		obj.zFolder.zClick(page.zMailApp.zTrashFldr);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zExists(constantSubjectForTrash);
 
 		page.zGeneralPrefUI
@@ -213,9 +214,9 @@ public class GeneralPref extends CommonTest {
 		page.zGeneralPrefUI
 				.zNavigateToPrefGenralAndSelectAlwaysShowSrchString();
 		obj.zTab.zClick(localize(locator.mail));
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		String actualValueDisplayed = obj.zEditField
 				.zGetInnerText(page.zGeneralPrefUI.zFindEditFiled);
 		Assert.assertTrue(actualValueDisplayed.equals("in:\"Inbox\""),

@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.service.ServiceException;
 
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -146,10 +147,10 @@ public class CreateApptTests extends CommonTest {
 
 		zLoginIfRequired();
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		page.zCalendarApp.zSetCalPrefInitialView(localize(locator.calViewWeek));
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		isExecutionARetry = false;
 	}
 
@@ -224,7 +225,7 @@ public class CreateApptTests extends CommonTest {
 
 		obj.zButton.zClick(page.zCalendarApp.calTodayBtn);
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		String apptDetails = obj.zCalendarGrid.zGetApptDateTime(subject);
 
@@ -334,14 +335,14 @@ public class CreateApptTests extends CommonTest {
 		selenium.open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=day&date=20090601");
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		obj.zAppointment.zExists(subject);
 
 		selenium.open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=day&date=20090702");
 
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		obj.zAppointment.zExists(subject);
 

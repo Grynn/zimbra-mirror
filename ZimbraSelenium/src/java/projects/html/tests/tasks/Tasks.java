@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import projects.html.clients.ProvZCS;
 import projects.html.tests.CommonTest;
@@ -135,7 +136,7 @@ public class Tasks extends CommonTest {
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zTaskApp.zTaskListCreate(taskListName);
 		page.zTaskApp.zNavigateToTasks();
 		page.zTaskApp.zTaskCreateSimpleInTaskList(subject, location, priority,
@@ -287,7 +288,7 @@ public class Tasks extends CommonTest {
 
 		page.zTaskApp.zTaskListRename(taskList, newTaskList);
 
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 
 		obj.zFolder.zNotExists(taskList);
 		obj.zFolder.zExists(newTaskList);
@@ -346,9 +347,9 @@ public class Tasks extends CommonTest {
 		String taskListName = getLocalizedData_NoSpecialChar();
 		page.zTaskApp.zTaskListCreate(taskListName);
 		obj.zFolder.zClick(taskListName);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zButton.zClick(page.zTaskApp.zTaskListDeleteListBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zToastAlertMessage.zAlertMsgExists(
 				localize(locator.actionTaskListCheckConfirm),
 				"Toast message to check the checkbox is incorrect");

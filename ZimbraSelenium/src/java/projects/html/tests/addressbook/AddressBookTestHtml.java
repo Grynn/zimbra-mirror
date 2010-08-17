@@ -15,6 +15,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
 import projects.html.tests.CommonTest;
@@ -103,7 +104,7 @@ public class AddressBookTestHtml extends CommonTest {
 		page.zABComposeHTML.zNavigateToContact();
 		page.zABComposeHTML.zCreateBasicContact(lastName, middleName,
 				firstName, "", "");
-		Thread.sleep(SMALL_WAIT);		
+		SleepUtil.sleepSmall();		
 		// To verify Contact created toaster message
 		page.zABComposeHTML.zVerifyContactToasterMsgs(obj.zToastAlertMessage
 				.zGetMsg(), localize(locator.contactCreated));
@@ -132,11 +133,11 @@ public class AddressBookTestHtml extends CommonTest {
 			createContactInHtmlReusable();
 
 		obj.zButton.zClick(page.zABComposeHTML.zEditIconBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		//page.zABComposeHTML.zSelectAndClickEdit("oldlastName","upperToolbar");
 		String newLastName = getLocalizedData(1);
 		page.zABComposeHTML.zModifyContact(newLastName, "", "", "", "");
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		// To verify Contact Modified toaster message
 		page.zABComposeHTML.zVerifyContactToasterMsgs(obj.zToastAlertMessage
@@ -185,7 +186,7 @@ public class AddressBookTestHtml extends CommonTest {
 		page.zABComposeHTML.zNavigateToContact();
 
 		page.zABComposeHTML.zCreateAB(addressBookName);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 
 		// To verify the toaster message "Address book moved to Trash
 		String expectedToastMsg = localize(locator.actionAddressBookCreated);
@@ -268,7 +269,7 @@ public class AddressBookTestHtml extends CommonTest {
 
 		page.zABComposeHTML.zNavigateToContact();
 		page.zABComposeHTML.zNavigateToNewABPage();
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zABComposeHTML.zChangeABColor(localize(locator.purple));
 
 		// To verify the toaster message for AB updated
@@ -297,7 +298,7 @@ public class AddressBookTestHtml extends CommonTest {
 		// To verify address book emptied toaster message
 		String expectedToastMsg = localize(locator.addressBookEmptied);
 		String[] splitedExpectedToastMsg = expectedToastMsg.split("{0}");
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zToastAlertMessage.zAlertMsgExists(splitedExpectedToastMsg[0],
 				"1st part of the Address Book contacts emptied is not proper");
 
@@ -327,11 +328,11 @@ public class AddressBookTestHtml extends CommonTest {
 		page.zABComposeHTML.zNavigateToContact();
 		page.zABComposeHTML.zCreateContactAndSearch(lastName, "", "", "", "",
 				"UpperToolbar");
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zCheckbox.zExists("link=" + lastName);
 
 		obj.zButton.zClick(localize(locator.refresh), "2");
-		Thread.sleep(LONG_WAIT);
+		SleepUtil.sleepLong();
 		lastName = getLocalizedData_NoSpecialChar();
 		String email1 = ProvZCS.getRandomAccount();
 		page.zABComposeHTML.zCreateContactAndSearch(lastName, "", "", email1,
@@ -379,23 +380,23 @@ public class AddressBookTestHtml extends CommonTest {
 		page.zABComposeHTML.zNavigateToContact();
 
 		page.zABComposeHTML.zNavigateToNewABPageAndImportContact(zimbraCSV);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zABComposeHTML.zNavigateToContactAndVerifyImportedContactDisplay(
 				"link=" + "lastName" + "," + " " + "firstName", "Zimbra");
 
 		page.zABComposeHTML.zNavigateToNewABPageAndImportContact(gmailCSV);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zABComposeHTML.zNavigateToContactAndVerifyImportedContactDisplay(
 				"NameGmail", "Gmail");
 
 		page.zABComposeHTML.zNavigateToNewABPageAndImportContact(outLookCSV);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zABComposeHTML.zNavigateToContactAndVerifyImportedContactDisplay(
 				"link=" + "lastNameOutlook" + "," + " " + "firstNameOutlook",
 				"Outlook");
 
 		page.zABComposeHTML.zNavigateToNewABPageAndImportContact(yahooCSV);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zABComposeHTML.zNavigateToContactAndVerifyImportedContactDisplay(
 				"lastNameYahoo" + "," + " " + "firstNameYahoo", "Yahoo");
 
@@ -436,7 +437,7 @@ public class AddressBookTestHtml extends CommonTest {
 
 		page.zABComposeHTML.zCreateContactGroup(contactGroupName,
 				commaSeparatedAccForGroup, noOfAcc);
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		page.zABComposeHTML.zVerifyContactToasterMsgs(obj.zToastAlertMessage
 				.zGetMsg(), localize(locator.contactGroupCreated));
 		obj.zCheckbox.zExists("link=" + contactGroupName);
@@ -550,7 +551,7 @@ public class AddressBookTestHtml extends CommonTest {
 				commaSeparatedContacts);
 		page.zABComposeHTML.zSelectContactAndApplyTag(tagName,
 				commaSeparatedContacts);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zABComposeHTML.zVerifyContactHasTag(commaSeparatedContacts);
 
 		// Click on Tag and see if only those 2 with tags exists
@@ -560,7 +561,7 @@ public class AddressBookTestHtml extends CommonTest {
 		// select those 2 contacts and remove tag and verify tag is removed
 		page.zABComposeHTML.zSelectContactAndRemoveTag(tagName,
 				commaSeparatedContacts);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zABComposeHTML.zVerifyContactHasNoTag(commaSeparatedContacts);
 		needReset = false;
 
@@ -578,7 +579,7 @@ public class AddressBookTestHtml extends CommonTest {
 			handleRetry();
 		page.zABComposeHTML.zNavigateToContact();
 		obj.zButton.zClick(page.zABComposeHTML.zNewContactIconBtn);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zABComposeHTML.zCreateContactWithAllDetailsAndVerifyDisplay();
 
 		needReset = false;
@@ -603,7 +604,7 @@ public class AddressBookTestHtml extends CommonTest {
 		page.zABComposeHTML.zNavigateToContact();
 		page.zABComposeHTML.zCreateBasicContact(lastName, middleName,
 				firstName, "", company);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		page.zABComposeHTML.zVerifyFileAsOptions(lastName, firstName, company);
 
 		needReset = false;

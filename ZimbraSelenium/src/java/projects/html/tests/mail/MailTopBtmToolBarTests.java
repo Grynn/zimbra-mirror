@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -160,7 +161,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		// "Delete" without selecting message
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
-		Thread.sleep(MEDIUM_WAIT); // selenium failure here in IE
+		SleepUtil.sleepMedium(); // selenium failure here in IE
 		if (subject.equals("TTdoActionWithoutSelectingMail")) {
 			obj.zButton.zClick(page.zMailApp.zDeleteBtn);
 		} else if (subject.equals("BTdoActionWithoutSelectingMail")) {
@@ -174,7 +175,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 
 		// "Move To" without selecting message
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-		Thread.sleep(MEDIUM_WAIT); // selenium failure here in IE
+		SleepUtil.sleepMedium(); // selenium failure here in IE
 		zWaitTillObjectExist("htmlmenu", "name=actionOp");
 		if (subject.equals("TTdoActionWithoutSelectingMail")) {
 			page.zMailApp.zMoveTo(localize(locator.sent));
@@ -190,7 +191,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		// "More Actions" without selecting message
 		if (!subject.equals("BTdoActionWithoutSelectingMail")) {
 			obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-			Thread.sleep(MEDIUM_WAIT); // selenium failure here in IE
+			SleepUtil.sleepMedium(); // selenium failure here in IE
 			zWaitTillObjectExist("htmlmenu", "name=actionOp");
 			if (subject.equals("TTdoActionWithoutSelectingMail")) {
 				page.zMailApp.zMoreActions(localize(locator.actionMarkRead));
@@ -272,10 +273,10 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
+			SleepUtil.sleepMedium(); // selenium failure in IE
 		}
 		obj.zCheckbox.zClick(subject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		if (subject.equals("TTmoveSingleMailAndVerify")) {
 			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")) {
 				obj.zHtmlMenu.zClick("name=folderId", localize(locator.sent)
@@ -301,10 +302,10 @@ public class MailTopBtmToolBarTests extends CommonTest {
 				page.zMailApp.zMoveToBtmToolbar(localize(locator.sent));
 			}
 		}
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zNotExists(subject);
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zExists(subject);
 
 		needReset = false;
@@ -331,7 +332,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 			newSubject = "bottomtblformove";
 		}
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
+			SleepUtil.sleepMedium(); // selenium failure in IE
 		}
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
@@ -339,7 +340,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 				attachments);
 		obj.zCheckbox.zClick(subject);
 		obj.zCheckbox.zClick(newSubject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		if (subject.equals("TTmoveMultipleMailsAndVerify")) {
 			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")) {
 				obj.zHtmlMenu.zClick("name=folderId", localize(locator.sent)
@@ -365,11 +366,11 @@ public class MailTopBtmToolBarTests extends CommonTest {
 				page.zMailApp.zMoveToBtmToolbar(localize(locator.sent));
 			}
 		}
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zNotExists(subject);
 		obj.zMessageItem.zNotExists(newSubject);
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
-		Thread.sleep(SMALL_WAIT); // selenium failure in IE
+		SleepUtil.sleepSmall(); // selenium failure in IE
 		obj.zMessageItem.zExists(subject);
 		obj.zMessageItem.zExists(newSubject);
 
@@ -398,7 +399,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
+			SleepUtil.sleepMedium(); // selenium failure in IE
 		}
 		obj.zCheckbox.zClick(subject);
 		if (subject.equals("TTmarkMailJunkNotJunkAndVerify")) {
@@ -407,13 +408,13 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		} else if (subject.equals("BTmarkMailJunkNotJunkAndVerify")) {
 			page.zMailApp.zMoreActionsBtmToolbar(localize(locator.actionSpam));
 		}
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zNotExists(subject);
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zExists(subject);
 		obj.zCheckbox.zClick(subject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		if (subject.equals("TTmarkMailJunkNotJunkAndVerify")) {
 			// customized for pt_BR
 			page.zMailApp.zMoreActions(localize(locator.actionNotSpam));
@@ -421,10 +422,10 @@ public class MailTopBtmToolBarTests extends CommonTest {
 			page.zMailApp
 					.zMoreActionsBtmToolbar(localize(locator.actionNotSpam));
 		}
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zNotExists(subject);
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zExists(subject);
 
 		needReset = false;
@@ -451,28 +452,28 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
+			SleepUtil.sleepMedium(); // selenium failure in IE
 		}
 		obj.zCheckbox.zClick(subject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		if (subject.equals("TTverifyEmptyJunkMail")) {
 			page.zMailApp.zMoreActions(localize(locator.actionSpam));
 		} else if (subject.equals("BTverifyEmptyJunkMail")) {
 			page.zMailApp.zMoreActionsBtmToolbar(localize(locator.actionSpam));
 		}
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zExists(subject);
 		if (subject.equals("TTverifyEmptyJunkMail")) {
 			obj.zButton.zClick(page.zMailApp.zEmptyJunkBtn);
 		} else if (subject.equals("BTverifyEmptyJunkMail")) {
 			obj.zButton.zClick(page.zMailApp.zEmptyJunkBtn, "2");
 		}
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zNotExists(subject);
 		obj.zFolder.zClick(page.zMailApp.zTrashFldr);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zNotExists(subject);
 
 		needReset = false;
@@ -540,27 +541,27 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(MEDIUM_WAIT); // selenium failure in IE
+			SleepUtil.sleepMedium(); // selenium failure in IE
 		}
 		obj.zCheckbox.zClick(subject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		if (subject.equals("TTverifyAddRemoveFlagToMail")) {
 			page.zMailApp.zMoreActions(localize(locator.actionAddFlag));
 		} else if (subject.equals("BTverifyAddRemoveFlagToMail")) {
 			page.zMailApp
 					.zMoreActionsBtmToolbar(localize(locator.actionAddFlag));
 		}
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zMessageItem.zVerifyIsFlagged(subject);
 		obj.zCheckbox.zClick(subject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		if (subject.equals("TTverifyAddRemoveFlagToMail")) {
 			page.zMailApp.zMoreActions(localize(locator.actionRemoveFlag));
 		} else if (subject.equals("BTverifyAddRemoveFlagToMail")) {
 			page.zMailApp
 					.zMoreActionsBtmToolbar(localize(locator.actionRemoveFlag));
 		}
-		Thread.sleep(MEDIUM_WAIT);
+		SleepUtil.sleepMedium();
 		obj.zMessageItem.zVerifyIsNotFlagged(subject);
 
 		needReset = false;
@@ -592,28 +593,28 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		page.zMailApp.zInjectMessage(from, to, cc, bcc, newSubject, body,
 				attachments);
 		obj.zCheckbox.zClick(subject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zCheckbox.zClick(newSubject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		if (subject.equals("TTverifyPermanentDeleteMail")) {
 			obj.zButton.zClick(page.zMailApp.zDeleteBtn);
 		} else if (subject.equals("BTverifyPermanentDeleteMail")) {
 			obj.zButton.zClick(page.zMailApp.zDeleteBtn, "2");
 		}
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zFolder.zClick(page.zMailApp.zTrashFldr);
 		obj.zMessageItem.zExists(subject);
 		obj.zMessageItem.zExists(newSubject);
 		obj.zCheckbox.zClick(subject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zCheckbox.zClick(newSubject);
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		if (subject.equals("TTverifyPermanentDeleteMail")) {
 			obj.zButton.zClick(page.zMailApp.zDeleteBtn);
 		} else if (subject.equals("BTverifyPermanentDeleteMail")) {
 			obj.zButton.zClick(page.zMailApp.zDeleteBtn, "2");
 		}
-		Thread.sleep(SMALL_WAIT);
+		SleepUtil.sleepSmall();
 		obj.zMessageItem.zNotExists(subject);
 		obj.zMessageItem.zNotExists(newSubject);
 
