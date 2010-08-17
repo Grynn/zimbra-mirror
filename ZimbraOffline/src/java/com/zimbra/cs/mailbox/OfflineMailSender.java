@@ -30,6 +30,7 @@ import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.service.FileUploadServlet;
 import com.zimbra.cs.service.util.ItemId;
+import com.zimbra.cs.util.AccountUtil;
 
 public class OfflineMailSender extends MailSender {
 
@@ -49,10 +50,13 @@ public class OfflineMailSender extends MailSender {
         }
 
         Account acct = mbox.getAccount();
-        Account authuser = octxt == null ? null : octxt.getAuthenticatedUser();
-        
+        Account authuser = octxt == null ? null : octxt.getAuthenticatedUser();        
         if (authuser == null)
             authuser = acct;
+        // bug 49820: Hide the "local@host.local" fake account address from From/Sender header checks. 
+        if (AccountUtil.isZDesktopLocalAccount(authuser.getId()))
+            authuser = acct;
+
         try {
             // set the From, Sender, Date, Reply-To, etc. headers
             updateHeaders(mm, acct, authuser, octxt, null /* don't set originating IP in offline client */, isReplyToSender(), false);
