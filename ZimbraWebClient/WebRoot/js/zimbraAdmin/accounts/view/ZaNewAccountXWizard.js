@@ -1201,7 +1201,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			ZaAccount.A_zimbraPrefHtmlEditorDefaultFontFamily,ZaAccount.A_zimbraPrefHtmlEditorDefaultFontSize,
 			ZaAccount.A_zimbraPrefHtmlEditorDefaultFontColor,ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat,
 			ZaAccount.A_zimbraPrefMailSignatureEnabled,/*ZaAccount.A_zimbraPrefMailSignatureStyle,*/
-			ZaAccount.A_zimbraMailSignatureMaxLength,ZaAccount.A_zimbraPrefMailSignature,ZaAccount.A_zimbraPrefMandatorySpellCheckEnabled],[])) {				
+			ZaAccount.A_zimbraMailSignatureMaxLength,ZaAccount.A_zimbraPrefMailSignature,
+			ZaAccount.A_zimbraPrefMandatorySpellCheckEnabled, ZaAccount.A_zimbraPrefAutoSaveDraftInterval],[])) {				
 			prefItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_prefs_mail_composing",borderCssClass:"LowPadedTopGrouperBorder",
 							label:ZaMsg.NAD_MailOptionsComposing,
 							items :[																										
@@ -1267,7 +1268,14 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									labelCssStyle:"vertical-align:top", width:"30em",
 									enableDisableChangeEventSources:[ZaAccount.A_zimbraPrefMailSignatureEnabled],
 									enableDisableChecks:[ZaAccountXFormView.isMailSignatureEnabled]									
-								}
+								},
+                                                                {ref:ZaAccount.A_zimbraPrefAutoSaveDraftInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraPrefAutoSaveDraftInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraPrefAutoSaveDraftInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true                                                          
+                                                                }
 							]
 						});
 		}		
@@ -1519,16 +1527,26 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_datasourcepolling_settings",colSizes:["260px","190px","150px"],numCols:3,
 							label:ZaMsg.NAD_DataSourcePolling,						
 							items: [
-								{ref:ZaAccount.A_zimbraDataSourcePollingInterval, type:_SUPERWIZ_TEXTFIELD_, 
-									resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-									msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
-									txtBoxLabel:ZaMsg.LBL_zimbraDataSourcePollingInterval, labelLocation:_LEFT_, 
-									textFieldCssClass:"admin_xform_number_input"
-								}
+/*
+                                                                {ref:ZaAccount.A_zimbraDataSourcePollingInterval, type:_LIFETIME_,
+                                                                    msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
+                                                                    label:ZaMsg.LBL_zimbraDataSourcePollingInterval, labelLocation:_LEFT_,
+                                                                    onChange:ZaCosXFormView.validatePollingInterval,
+                                                                    labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                                                                }
+*/
+                                                                {ref:ZaAccount.A_zimbraDataSourcePollingInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraDataSourcePollingInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true
+                                                                }
+
 							]
 						});
 		}
-	
+
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPasswordLocked,ZaAccount.A_zimbraMinPwdLength,
 			ZaAccount.A_zimbraMaxPwdLength,ZaAccount.A_zimbraPasswordMinUpperCaseChars,ZaAccount.A_zimbraPasswordMinLowerCaseChars,
 			ZaAccount.A_zimbraPasswordMinPunctuationChars,ZaAccount.A_zimbraPasswordMinNumericChars,

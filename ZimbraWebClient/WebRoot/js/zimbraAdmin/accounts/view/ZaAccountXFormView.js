@@ -906,6 +906,7 @@ ZaAccountXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaAccount.A_zimbraPrefNewMailNotificationEnabled,
 	ZaAccount.A_zimbraMailMinPollingInterval,
 	ZaAccount.A_zimbraPrefMailPollingInterval,
+	ZaAccount.A_zimbraPrefAutoSaveDraftInterval,
     ZaAccount.A_zimbraPrefMailSoundsEnabled,
     ZaAccount.A_zimbraPrefMailFlashIcon,
     ZaAccount.A_zimbraPrefMailFlashTitle,
@@ -2131,7 +2132,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								 	ZaAccount.A_zimbraPrefForwardReplyInOriginalFormat,
 								 	ZaAccount.A_zimbraPrefMandatorySpellCheckEnabled,
 								 	ZaAccount.A_zimbraMailSignatureMaxLength,
-								 	ZaAccount.A_zimbraPrefMailSignature
+								 	ZaAccount.A_zimbraPrefMailSignature,
+									ZaAccount.A_zimbraPrefAutoSaveDraftInterval
 								]]
 							],
 							items :[
@@ -2215,7 +2217,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									labelCssStyle:"vertical-align:top", width:"30em",
 									enableDisableChangeEventSources:[ZaAccount.A_zimbraPrefMailSignatureEnabled],
 									enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraPrefMailSignatureEnabled,"TRUE"]]
-								}
+								},
+                                                                {ref:ZaAccount.A_zimbraPrefAutoSaveDraftInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraPrefAutoSaveDraftInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraPrefAutoSaveDraftInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true                                                          
+                                                                }
 						
 							]
 						},						
@@ -2729,16 +2738,16 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
                         			[ZaAccount.A_zimbraDataSourcePollingInterval]]],
 							items: [
-								{ref:ZaAccount.A_zimbraDataSourcePollingInterval, type:_SUPER_TEXTFIELD_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-									msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
-									txtBoxLabel:ZaMsg.LBL_zimbraDataSourcePollingInterval, labelLocation:_LEFT_, 
-									textFieldCssClass:"admin_xform_number_input"
-								}
+                                                                {ref:ZaAccount.A_zimbraDataSourcePollingInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraDataSourcePollingInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true
+                                                                }
 
 							]
 						},
-
-
 						{type:_ZA_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_PasswordGrouper,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
