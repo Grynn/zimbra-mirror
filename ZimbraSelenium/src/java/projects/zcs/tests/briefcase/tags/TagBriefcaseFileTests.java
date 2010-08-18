@@ -11,6 +11,8 @@ import org.testng.annotations.Test;
 import projects.html.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 /**
@@ -50,15 +52,15 @@ public class TagBriefcaseFileTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Briefcase");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -72,7 +74,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createRenameDeleteTagForFileAndVerify_ColumnView(String fileName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1, newTag1;
@@ -104,7 +106,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -114,7 +116,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyTagFunctionalityFor2FileAndRemoveTag_DetailView(
 			String fileName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String fileName2, tag1, tag2;
@@ -174,7 +176,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -184,7 +186,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void applyMutlipleTagToFileAndVerify_ColumnView(String fileName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1, tag2;
@@ -220,7 +222,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zBriefcaseItem.zExists(fileName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -230,7 +232,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void addRemoveTagAndVerifyInAll3View(String fileName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// temporary work around for proper object identification
@@ -249,7 +251,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 		tag1 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		Thread.sleep(1000);
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"//div[contains(@id, 'zlif__BC') and contains(@class, 'ZmThumbnailItem')]",
 						"");
@@ -258,7 +260,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 		obj.zMenuItem.zClick(tag1);
 		Thread.sleep(1000);
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("//div[contains(@id, 'zv__BC')]//div[contains(@class, 'ImgTagOrange')]"));
 
 		obj.zButton.zClick(localize(locator.view));
@@ -271,9 +273,9 @@ public class TagBriefcaseFileTests extends CommonTest {
 		obj.zFolder.zClick(tag1);
 		Thread.sleep(1000);
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("//div[contains(@id, 'zv__BC')]//div[contains(@class, 'ImgTagOrange')]"));
-		assertReport(fileName, selenium.getText(
+		assertReport(fileName, SelNGBase.selenium.get().getText(
 				"//div[contains(@id, 'zli__BC')]").trim(),
 				"Verify clicking to tag returns proper file in explorer view");
 
@@ -281,7 +283,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 		obj.zMenuItem.zClick(localize(locator.detailView));
 		Thread.sleep(1000);
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("//tr[contains(@id, 'zlif__BCD')]//td[contains(@class, 'Tag')]//div[contains(@class, 'ImgTagOrange')]"));
 
 		obj.zButton.zClick(localize(locator.view));
@@ -289,7 +291,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zBriefcaseItem.zVerifyIsTagged(fileName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -299,7 +301,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void applyTagByDnDTagToFileAndViceVersa(String fileName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String fileName2, tag1, tag2;
@@ -346,7 +348,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 		assertReport("false", obj.zBriefcaseItem.zExistsDontWait(fileName),
 				"Verify message1 not exists");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -355,7 +357,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tryToCreateDuplicateTagInBriefcase(String fileName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1;
@@ -363,7 +365,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 		zCreateTag(tag1);
 		zDuplicateTag(tag1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -371,7 +373,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

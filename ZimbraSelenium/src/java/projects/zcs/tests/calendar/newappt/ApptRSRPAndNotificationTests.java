@@ -57,15 +57,15 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		Thread.sleep(2000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -73,7 +73,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 			String attendees, String body, String RSRP, String Notifcation)
 			throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -83,14 +83,14 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
-		SelNGBase.selfAccountName = attendees;
+		SelNGBase.selfAccountName.set(attendees);
 		obj.zMessageItem.zNotExists(subject);
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
 		obj.zMessageItem.zNotExists(subject);
 		zGoToApplication("Calendar");
 		obj.zAppointment.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -99,10 +99,10 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 			String attendees, String body, String RSRP, String Notifcation)
 			throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String organizer = SelNGBase.selfAccountName;
+		String organizer = SelNGBase.selfAccountName.get();
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateSimpleApptWithRSRPNotification(subject,
 				location, attendees, body, RSRP, Notifcation);
@@ -110,7 +110,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
-		SelNGBase.selfAccountName = attendees;
+		SelNGBase.selfAccountName.set(attendees);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(1000);
@@ -121,12 +121,12 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(organizer);
-		SelNGBase.selfAccountName = organizer;
+		SelNGBase.selfAccountName.set(organizer);
 		obj.zMessageItem.zNotExists(subject);
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
 		obj.zMessageItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -135,10 +135,10 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 			String attendees, String body, String RSRP, String Notifcation)
 			throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String organizer = SelNGBase.selfAccountName;
+		String organizer = SelNGBase.selfAccountName.get();
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateSimpleApptWithRSRPNotification(subject,
 				location, attendees, body, RSRP, Notifcation);
@@ -146,7 +146,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
-		SelNGBase.selfAccountName = attendees;
+		SelNGBase.selfAccountName.set(attendees);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButtonMenu.zClick(localize(locator.accept));
@@ -158,11 +158,11 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(organizer);
-		SelNGBase.selfAccountName = organizer;
+		SelNGBase.selfAccountName.set(organizer);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(localize(locator.accept)
 				+ ": " + subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -171,10 +171,10 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 			String attendees, String body, String RSRP, String Notifcation)
 			throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String organizer = SelNGBase.selfAccountName;
+		String organizer = SelNGBase.selfAccountName.get();
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateSimpleApptWithRSRPNotification(subject,
 				location, attendees, body, RSRP, Notifcation);
@@ -182,7 +182,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
-		SelNGBase.selfAccountName = attendees;
+		SelNGBase.selfAccountName.set(attendees);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButtonMenu.zClick(localize(locator.replyTentative));
@@ -197,12 +197,12 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(organizer);
-		SelNGBase.selfAccountName = organizer;
+		SelNGBase.selfAccountName.set(organizer);
 		page.zMailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.replyTentative)
 						+ ": " + subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -211,10 +211,10 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 			String attendees, String body, String RSRP, String Notifcation)
 			throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String organizer = SelNGBase.selfAccountName;
+		String organizer = SelNGBase.selfAccountName.get();
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateSimpleApptWithRSRPNotification(subject,
 				location, attendees, body, RSRP, Notifcation);
@@ -222,7 +222,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
-		SelNGBase.selfAccountName = attendees;
+		SelNGBase.selfAccountName.set(attendees);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButtonMenu.zClick(localize(locator.replyDecline));
@@ -234,17 +234,17 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(organizer);
-		SelNGBase.selfAccountName = organizer;
+		SelNGBase.selfAccountName.set(organizer);
 		obj.zMessageItem.zNotExists(subject);
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
 		obj.zMessageItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

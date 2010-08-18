@@ -154,11 +154,11 @@ public class CommonTest extends SelNGBase {
 
 	public static void zLoginIfRequired(Map<String, Object> accntAttrs)
 			throws Exception {
-		if (needsReLogin(accntAttrs) || needReset) {
+		if (needsReLogin(accntAttrs) || SelNGBase.needReset.get()) {
 
 			resetSession();
 			selfAccountAttrs = accntAttrs;
-			selfAccountName = page.zLoginpage.zLoginToZimbraAjax(accntAttrs);
+			SelNGBase.selfAccountName.set(page.zLoginpage.zLoginToZimbraAjax(accntAttrs));
 		}
 	}
 
@@ -166,7 +166,7 @@ public class CommonTest extends SelNGBase {
 		int currentAccntAttrsSize = selfAccountAttrs.size() - 4;// -4 is to
 		// remove default settings
 		// none has logged in yet
-		if (selfAccountName.equals(""))
+		if (SelNGBase.selfAccountName.get().equals(""))
 			return true;
 		// a user has already logged in with default settings
 		// and test needs to use default-settings as well.
@@ -245,7 +245,7 @@ public class CommonTest extends SelNGBase {
 		if (ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no")
 				.equalsIgnoreCase("yes")) {
 			writeCoverage();
-			selenium.stop();
+			SelNGBase.selenium.get().stop();
 		}
 	}
 
@@ -484,9 +484,9 @@ public class CommonTest extends SelNGBase {
 	public static void assertReport(String expectedValue, String actualValue,
 			String reportSummary) throws Exception {
 		if (expectedValue.equals("_selfAccountName_"))
-			expectedValue = selfAccountName;
+			expectedValue = SelNGBase.selfAccountName.get();
 		if (actualValue.equals("_selfAccountName_"))
-			actualValue = selfAccountName;
+			actualValue = SelNGBase.selfAccountName.get();
 		Assert.assertTrue(expectedValue.indexOf(actualValue) >= 0,
 				"Expected value(" + expectedValue + "), Actual Value("
 						+ actualValue + ")");
@@ -494,7 +494,7 @@ public class CommonTest extends SelNGBase {
 
 	public static String replaceUserNameInStaticId(String staticID) {
 		String actualID = null;
-		actualID = staticID.replace("USERNAME", SelNGBase.selfAccountName
+		actualID = staticID.replace("USERNAME", SelNGBase.selfAccountName.get()
 				.toLowerCase());
 		return actualID;
 	}
@@ -523,7 +523,7 @@ public class CommonTest extends SelNGBase {
 				break;
 			} else {
 				zReloginToAjax();
-				selenium.open(navURL);
+				SelNGBase.selenium.get().open(navURL);
 				Thread.sleep(5000);
 			}
 		}
@@ -561,25 +561,25 @@ public class CommonTest extends SelNGBase {
 			} else if (objectType.equals("dialog")) {
 				retVal = obj.zDialog.zExistsDontWait(objectName);
 			} else if (objectType.equals("link")) {
-				if (selenium.isElementPresent("link=" + objectName))
+				if (SelNGBase.selenium.get().isElementPresent("link=" + objectName))
 					retVal = "true";
 				else
 					retVal = "false";
 			} else if (objectType.equals("element")
 					|| objectType.equals("xpath")) {
-				if (selenium.isElementPresent(objectName))
+				if (SelNGBase.selenium.get().isElementPresent(objectName))
 					retVal = "true";
 				else
 					retVal = "false";
 			} else if (objectType.equals("class")) {
-				if (selenium.isElementPresent("xpath=//td[contains(@class,'"
+				if (SelNGBase.selenium.get().isElementPresent("xpath=//td[contains(@class,'"
 						+ objectName + "')]")) {
 					retVal = "true";
 				} else {
 					retVal = "false";
 				}
 			} else if (objectType.equals("text")) {
-				if (selenium.isTextPresent(objectName))
+				if (SelNGBase.selenium.get().isTextPresent(objectName))
 					retVal = "true";
 				else
 					retVal = "false";
@@ -703,10 +703,10 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public static void zReloginToAjax() throws Exception {
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 		resetSession();
 		Thread.sleep(1000);
-		SelNGBase.selfAccountName = accountName;
+		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 	}
 
@@ -787,7 +787,7 @@ public class CommonTest extends SelNGBase {
 
 	public static void zCreateSavedSearchFolder(String savedSearchFolderName,
 			String searchString) throws Exception {
-		selenium.type("xpath=//input[@class='search_input']", searchString);
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", searchString);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		Thread.sleep(1000);
 		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");
@@ -1049,7 +1049,7 @@ public class CommonTest extends SelNGBase {
 		}
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
 										+ (rank - 1)
 										+ "')]//td[contains(text(), '"
@@ -1066,7 +1066,7 @@ public class CommonTest extends SelNGBase {
 		}
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'DWT18_acRow_"
 										+ (rank - 1)
 										+ "')]//td[contains(text(), '"
@@ -1083,7 +1083,7 @@ public class CommonTest extends SelNGBase {
 		}
 		Assert
 				.assertFalse(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
 										+ (rank - 1)
 										+ "')]//td[contains(text(), '"
@@ -1100,7 +1100,7 @@ public class CommonTest extends SelNGBase {
 		}
 		Assert
 				.assertFalse(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'DWT18_acRow_"
 										+ (rank - 1)
 										+ "')]//td[contains(text(), '"
@@ -1119,10 +1119,10 @@ public class CommonTest extends SelNGBase {
 	public static void zDragAndDrop(String source, String destination)
 			throws Exception {
 		Thread.sleep(2000);
-		Number x_coord1 = selenium.getElementPositionLeft(destination);
-		Number y_coord1 = selenium.getElementPositionTop(destination);
-		Number x_coord2 = selenium.getElementPositionLeft(source);
-		Number y_coord2 = selenium.getElementPositionTop(source);
+		Number x_coord1 = SelNGBase.selenium.get().getElementPositionLeft(destination);
+		Number y_coord1 = SelNGBase.selenium.get().getElementPositionTop(destination);
+		Number x_coord2 = SelNGBase.selenium.get().getElementPositionLeft(source);
+		Number y_coord2 = SelNGBase.selenium.get().getElementPositionTop(source);
 		Number x_coord = (x_coord1.intValue() - x_coord2.intValue());
 		Number y_coord = (y_coord1.intValue() - y_coord2.intValue());
 
@@ -1135,19 +1135,19 @@ public class CommonTest extends SelNGBase {
 				.println("x,y coordinate of the objectToBeDroppedInto relative to objectToBeDragged = "
 						+ xy_coord);
 
-		selenium.mouseDown(source);
+		SelNGBase.selenium.get().mouseDown(source);
 		Thread.sleep(1000);
-		selenium.mouseMoveAt(source, xy_coord);
+		SelNGBase.selenium.get().mouseMoveAt(source, xy_coord);
 		Thread.sleep(1000 * 2);
-		selenium.mouseMove(destination);
-		selenium.mouseOver(destination);
+		SelNGBase.selenium.get().mouseMove(destination);
+		SelNGBase.selenium.get().mouseOver(destination);
 		Thread.sleep(1000);
-		selenium.mouseUp(destination);
+		SelNGBase.selenium.get().mouseUp(destination);
 		Thread.sleep(2000);
 	}
 
 	public static void calculateCoverage() throws Exception {
-		String coverage_string = selenium.getEval(COVERAGE_SCRIPT);
+		String coverage_string = SelNGBase.selenium.get().getEval(COVERAGE_SCRIPT);
 		JSONObject jsonCoverage = (JSONObject) JSONSerializer
 				.toJSON(coverage_string);
 		String individualFileInfo[] = coverage_string.split("},");

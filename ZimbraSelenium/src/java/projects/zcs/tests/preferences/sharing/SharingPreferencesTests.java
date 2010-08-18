@@ -73,15 +73,15 @@ public class SharingPreferencesTests extends CommonTest {
 		zLoginIfRequired();
 		//page.zLoginpage.zLoginToZimbraAjax("en_US_1254899953724@testdomain.com"
 		// );
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -94,12 +94,12 @@ public class SharingPreferencesTests extends CommonTest {
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// injecting mail
 		zGoToApplication("Mail");
-		String currentLoggedinUser = SelNGBase.selfAccountName.toLowerCase();
+		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
 		String subject = "subject_shareMailFolderAndAccept";
 		String body = "body_shareMailFolderAndAccept";
 		String recipients[] = { currentLoggedinUser };
@@ -119,7 +119,7 @@ public class SharingPreferencesTests extends CommonTest {
 		// verifying share related mail in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		zGoToApplication("Preferences");
 		zGoToPreferences("Sharing");
 		obj.zRadioBtn.zClick("id=*_user");
@@ -142,7 +142,7 @@ public class SharingPreferencesTests extends CommonTest {
 		obj.zFolder.zClick(mountingfoldername);
 		obj.zMessageItem.zVerifyIsUnRead(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "SharingDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -152,11 +152,11 @@ public class SharingPreferencesTests extends CommonTest {
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// address book folder share
-		String currentLoggedinUser = SelNGBase.selfAccountName.toLowerCase();
+		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
 		String aSubject = getLocalizedData_NoSpecialChar();
 		String aBody = getLocalizedData_NoSpecialChar();
 		zGoToApplication("Address Book");
@@ -184,7 +184,7 @@ public class SharingPreferencesTests extends CommonTest {
 		// Decline share and verify in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zSharing.zDeclineShare();
 		zGoToApplication("Preferences");
 		zGoToPreferences("Sharing");
@@ -194,7 +194,7 @@ public class SharingPreferencesTests extends CommonTest {
 		obj.zListItem.zVerifyItemInSpecificListNotExist(currentLoggedinUser,
 				"1", "1"); // here bug 41633
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "SharingDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -204,11 +204,11 @@ public class SharingPreferencesTests extends CommonTest {
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// calendar
-		String currentLoggedinUser = SelNGBase.selfAccountName.toLowerCase();
+		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
 		String cSubject = getLocalizedData_NoSpecialChar();
 		String cBody = getLocalizedData_NoSpecialChar();
 		zGoToApplication("Calendar");
@@ -229,7 +229,7 @@ public class SharingPreferencesTests extends CommonTest {
 		// Decline share and verify in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		MailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
 		obj.zMessageItem.zClick(localize(locator.shareCreatedSubject));
@@ -246,7 +246,7 @@ public class SharingPreferencesTests extends CommonTest {
 		obj.zListItem.zVerifyItemInSpecificListNotExist(currentLoggedinUser,
 				"1", "1"); // here bug 41633
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "SharingDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -256,11 +256,11 @@ public class SharingPreferencesTests extends CommonTest {
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// calendar
-		String currentLoggedinUser = SelNGBase.selfAccountName.toLowerCase();
+		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
 		String cSubject = getLocalizedData_NoSpecialChar();
 		String cBody = getLocalizedData_NoSpecialChar();
 		zGoToApplication("Calendar");
@@ -272,13 +272,13 @@ public class SharingPreferencesTests extends CommonTest {
 		// Decline share and verify in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 
 		// sharing calendar folder via preferences
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedinUser);
-		SelNGBase.selfAccountName = currentLoggedinUser;
+		SelNGBase.selfAccountName.set(currentLoggedinUser);
 		zGoToApplication("Preferences");
 		zGoToPreferences("Sharing");
 		obj.zListItem.zClickLinkWithInListItemInSpecificList(invitedusers, "3",
@@ -290,13 +290,13 @@ public class SharingPreferencesTests extends CommonTest {
 		// shared folder should not contain invitation
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zMailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.shareRevokedSubject));
 		zGoToApplication("Calendar");
 		obj.zAppointment.zNotExists(cSubject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "SharingDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -306,12 +306,12 @@ public class SharingPreferencesTests extends CommonTest {
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// injecting mail
 		zGoToApplication("Mail");
-		String currentLoggedinUser = SelNGBase.selfAccountName.toLowerCase();
+		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
 		String subject = "subject_resendMailFolderShareFromPref";
 		String body = "body_resendMailFolderShareFromPref";
 		String recipients[] = { currentLoggedinUser };
@@ -331,7 +331,7 @@ public class SharingPreferencesTests extends CommonTest {
 		// verify in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
 		page.zMailApp
@@ -341,7 +341,7 @@ public class SharingPreferencesTests extends CommonTest {
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byConversation));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "SharingDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -351,10 +351,10 @@ public class SharingPreferencesTests extends CommonTest {
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentLoggedinUser = SelNGBase.selfAccountName.toLowerCase();
+		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
 
 		// tasks
 		String tSubject = getLocalizedData_NoSpecialChar();
@@ -376,7 +376,7 @@ public class SharingPreferencesTests extends CommonTest {
 		// verifying share related mail in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		zGoToApplication("Preferences");
 		zGoToPreferences("Sharing");
 		obj.zRadioBtn.zClick("id=*_user");
@@ -399,7 +399,7 @@ public class SharingPreferencesTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zTaskItem.zExists(tSubject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "SharingDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -409,10 +409,10 @@ public class SharingPreferencesTests extends CommonTest {
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentLoggedinUser = SelNGBase.selfAccountName.toLowerCase();
+		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
 
 		// mail
 		zGoToApplication("Mail");
@@ -458,7 +458,7 @@ public class SharingPreferencesTests extends CommonTest {
 		// verifying share related mail in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		for (int i = 0; i <= 5; i++) {
 			page.zMailApp
 					.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
@@ -479,7 +479,7 @@ public class SharingPreferencesTests extends CommonTest {
 		obj.zListItem.zVerifyItemInSpecificList(currentLoggedinUser, "5", "2");
 		obj.zListItem.zVerifyItemInSpecificList(currentLoggedinUser, "6", "2");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void shareFolder(String application, String sharingfoldername,
@@ -552,7 +552,7 @@ public class SharingPreferencesTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import projects.zcs.tests.CommonTest;
 
@@ -37,15 +38,15 @@ public class TagActionTestsForAllAppTab extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 	
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -53,7 +54,7 @@ public class TagActionTestsForAllAppTab extends CommonTest {
 	//--------------------------------------------------------------------------
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createRenameDeleteTagAndVerifyInAllTab() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag = getLocalizedData_NoSpecialChar();
@@ -109,14 +110,14 @@ public class TagActionTestsForAllAppTab extends CommonTest {
 		zGoToApplication("Briefcase");
 		obj.zFolder.zNotExists(renameTag);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

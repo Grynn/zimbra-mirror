@@ -124,16 +124,16 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		obj.zButton.zClick(page.zMailApp.zMailTabIconBtn);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -157,7 +157,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
@@ -165,7 +165,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 				role, message, sharingnoteifany, allowtoseeprivateappt,
 				mountingfoldername, localize(locator.shareRoleNone));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -186,7 +186,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
@@ -194,7 +194,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 				role, message, sharingnoteifany, allowtoseeprivateappt,
 				mountingfoldername, localize(locator.shareRoleNone));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -217,7 +217,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
@@ -225,7 +225,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 				role, message, sharingnoteifany, allowtoseeprivateappt,
 				mountingfoldername, localize(locator.shareRoleNone));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -249,7 +249,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
@@ -257,7 +257,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 				role, message, sharingnoteifany, allowtoseeprivateappt,
 				mountingfoldername, localize(locator.shareRoleManager));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -281,7 +281,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
@@ -289,7 +289,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 				role, message, sharingnoteifany, allowtoseeprivateappt,
 				mountingfoldername, localize(locator.shareRoleViewer));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -313,7 +313,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
@@ -321,7 +321,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 				role, message, sharingnoteifany, allowtoseeprivateappt,
 				mountingfoldername, localize(locator.shareRoleAdmin));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void changeRoletoDiff(String to, String cc, String bcc,
@@ -331,7 +331,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername, String newRole) throws Exception {
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
@@ -340,18 +340,18 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 
 		resetSession();
-		SelNGBase.selfAccountName = currentloggedinuser;
+		SelNGBase.selfAccountName.set(currentloggedinuser);
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zSharing.zModifySharedFolder(applicationtab, sharingfoldername,
 				newRole, message, sharingnoteifany, allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zVerifyShareModifiedMail(currentloggedinuser,
 				sharingfoldername, sharetype, invitedusers, newRole,
@@ -385,7 +385,7 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

@@ -85,15 +85,15 @@ public class BasicApptTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		Thread.sleep(2000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -103,14 +103,14 @@ public class BasicApptTests extends CommonTest {
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createSimpleAppt(String subject, String location,
 			String attendees, String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -119,7 +119,7 @@ public class BasicApptTests extends CommonTest {
 			String startDate, String endDate, String startTime, String endTime,
 			String repeat, String reminder, String attendees, String body)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -128,13 +128,13 @@ public class BasicApptTests extends CommonTest {
 				repeat, reminder, attendees, body);
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteAppt(String subject, String location, String attendees,
 			String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -143,7 +143,7 @@ public class BasicApptTests extends CommonTest {
 		page.zCalApp.zDeleteAppointmentWithAttendees(subject);
 		obj.zAppointment.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "apptInviteTestDataProvider", groups = { "smoke",
@@ -151,7 +151,7 @@ public class BasicApptTests extends CommonTest {
 	public void deleteAppt_Bug38150(String singleOrInstanceOrSeries,
 			String subject, String location, String attendees, String body,
 			String recurring) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String firstLineSummary;
@@ -180,14 +180,14 @@ public class BasicApptTests extends CommonTest {
 		String[] itemsToVerify = { body };
 		resetSession();
 		Thread.sleep(1000);
-		SelNGBase.selfAccountName = attendees;
+		SelNGBase.selfAccountName.set(attendees);
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
 		page.zCalApp.zVerifyInviteContent(firstLineSummary, itemsToVerify);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -196,7 +196,7 @@ public class BasicApptTests extends CommonTest {
 			String startDate, String endDate, String startTime, String endTime,
 			String repeat, String reminder, String attendees, String body)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		for (int i = 0; i <= 2; i++) {
@@ -207,7 +207,7 @@ public class BasicApptTests extends CommonTest {
 			obj.zAppointment.zExists(subject);
 		}
 		page.zCalApp.zCalViewSwitch("list");
-		selenium.clickAt(("//*[@id=\"zlhi__CLL__se\"]"), "");
+		SelNGBase.selenium.get().clickAt(("//*[@id=\"zlhi__CLL__se\"]"), "");
 		obj.zButton.zClick(page.zCalApp.zCalDeleteBtn);
 		obj.zRadioBtn.zClickInDlgByName(localize(locator.deleteSeries),
 				localize(locator.deleteRecurringItem));
@@ -215,7 +215,7 @@ public class BasicApptTests extends CommonTest {
 				localize(locator.deleteRecurringItem));
 		obj.zAppointment.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class BasicApptTests extends CommonTest {
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteApptByKeyBoard_Bug35866(String subject, String location,
 			String attendees, String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -246,13 +246,13 @@ public class BasicApptTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zAppointment.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void editAppt(String subject, String location, String attendees,
 			String body, String newSubject) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -261,13 +261,13 @@ public class BasicApptTests extends CommonTest {
 		obj.zAppointment.zNotExists(subject);
 		obj.zAppointment.zExists(newSubject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void moveAppt(String subject, String location, String attendees,
 			String body, String newCalendar) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -282,13 +282,13 @@ public class BasicApptTests extends CommonTest {
 		obj.zButton.zClick(page.zCalApp.zCalRefreshBtn);
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void forwardAppt(String subject, String location, String attendees,
 			String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String newBody = "ForwardAppt_BodyUpdated";
@@ -299,7 +299,7 @@ public class BasicApptTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
-		SelNGBase.selfAccountName = attendees;
+		SelNGBase.selfAccountName.set(attendees);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.accept));
@@ -327,14 +327,14 @@ public class BasicApptTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(thirdUser);
-		SelNGBase.selfAccountName = thirdUser;
+		SelNGBase.selfAccountName.set(thirdUser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.accept));
 		page.zCalApp.zNavigateToCalendar();
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -348,10 +348,10 @@ public class BasicApptTests extends CommonTest {
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void forwardApptInviteForMultivalue(String subject, String location,
 			String attendees, String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentLoggedInUser = SelNGBase.selfAccountName;
+		String currentLoggedInUser = SelNGBase.selfAccountName.get();
 		String user1 = ProvZCS.getRandomAccount();
 		String user2 = ProvZCS.getRandomAccount();
 		String user3 = ProvZCS.getRandomAccount();
@@ -368,7 +368,7 @@ public class BasicApptTests extends CommonTest {
 		// login to user1 and send invitaion currentLoggeduser
 		String subject1 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user1);
-		SelNGBase.selfAccountName = user1;
+		SelNGBase.selfAccountName.set(user1);
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject1, location,
@@ -379,7 +379,7 @@ public class BasicApptTests extends CommonTest {
 		// login to currentLoggeduser and accept invitation
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
-		SelNGBase.selfAccountName = currentLoggedInUser;
+		SelNGBase.selfAccountName.set(currentLoggedInUser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		obj.zMessageItem.zClick(subject1);
 		obj.zButton.zClick(localize(locator.accept));
@@ -388,7 +388,7 @@ public class BasicApptTests extends CommonTest {
 		resetSession();
 		// login to user2 and check fwd'ed invitation
 		page.zLoginpage.zLoginToZimbraAjax(user2);
-		SelNGBase.selfAccountName = user2;
+		SelNGBase.selfAccountName.set(user2);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		obj.zMessageItem.zClick(subject1);
 		obj.zButton.zExists(localize(locator.replyAccept));
@@ -398,7 +398,7 @@ public class BasicApptTests extends CommonTest {
 
 			String onbehalfof = localize(locator.onBehalfOf).toLowerCase();
 			Assert
-					.assertTrue(selenium
+					.assertTrue(SelNGBase.selenium.get()
 							.isElementPresent("xpath=//td[contains(@id,'ztb__CLV__Inv_item') and contains(text(),'"
 									+ onbehalfof
 									+ "') ]/b[contains(text(),'"
@@ -417,7 +417,7 @@ public class BasicApptTests extends CommonTest {
 		obj.zAppointment.zNotExists(subject1);
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(user3);
-		SelNGBase.selfAccountName = user3;
+		SelNGBase.selfAccountName.set(user3);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		obj.zMessageItem.zClick(subject1);
 
@@ -428,7 +428,7 @@ public class BasicApptTests extends CommonTest {
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String onbehalfof = localize(locator.onBehalfOf).toLowerCase();
 			Assert
-					.assertTrue(selenium
+					.assertTrue(SelNGBase.selenium.get()
 							.isElementPresent("xpath=//td[contains(@id,'ztb__CLV__Inv_item') and contains(text(),'"
 									+ onbehalfof
 									+ "') ]/b[contains(text(),'"
@@ -445,7 +445,7 @@ public class BasicApptTests extends CommonTest {
 		page.zCalApp.zNavigateToCalendar();
 		obj.zAppointment.zNotExists(subject1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -453,7 +453,7 @@ public class BasicApptTests extends CommonTest {
 			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyNumberOfRecurringItems(String subject, String location,
 			String attendees, String body, String recurring) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// ////////////////////////////////////////////
@@ -497,16 +497,16 @@ public class BasicApptTests extends CommonTest {
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 		Thread.sleep(1000);
 		obj.zAppointment.zExists(subject);
-		selenium.open(urlToNavigate);
+		SelNGBase.selenium.get().open(urlToNavigate);
 		obj.zAppointment.zExists(subject);
-		selenium.open(urlToNavigate2);
+		SelNGBase.selenium.get().open(urlToNavigate2);
 		obj.zAppointment.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

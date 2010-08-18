@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.testng.Assert;
 
+import framework.core.SelNGBase;
+
 import projects.zcs.clients.ProvZCS;
 
 /**
@@ -55,7 +57,7 @@ public class ComposeView extends AppPage {
 		zGoToApplication("Mail");
 		obj.zButton.zShiftClick(MailApp.zNewMenuIconBtn);
 		Thread.sleep(2000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 	}
 
@@ -79,7 +81,7 @@ public class ComposeView extends AppPage {
 		if (obj.zButton.zExistsDontWait(localize("cancel")).equals("true")) {
 			obj.zButton.zClick(zmMsg.getString("cancel"));
 		}
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 	}
 
 	/**
@@ -210,15 +212,15 @@ public class ComposeView extends AppPage {
 			String bcc, String subject, String body, String attachments,
 			boolean inlineAttachment) throws Exception {
 		if (to.equals("_selfAccountName_"))
-			to = selfAccountName;
+			to = SelNGBase.selfAccountName.get();
 		else if (cc.equals("_selfAccountName_"))
-			cc = selfAccountName;
+			cc = SelNGBase.selfAccountName.get();
 		else if (bcc.equals("_selfAccountName_"))
-			bcc = selfAccountName;
+			bcc = SelNGBase.selfAccountName.get();
 		obj.zTextAreaField.zType(zToField, to);
 		obj.zTextAreaField.zType(zCcField, cc);
-		if (selenium.isElementPresent("link=" + localize(locator.showBCC)))
-			selenium.click("link=" + localize(locator.showBCC));
+		if (SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.showBCC)))
+			SelNGBase.selenium.get().click("link=" + localize(locator.showBCC));
 		obj.zTextAreaField.zType(zBccField, bcc);
 		obj.zEditField.zType(zSubjectField, subject);
 		if (attachments != "")
@@ -309,7 +311,7 @@ public class ComposeView extends AppPage {
 	public static void zVerifyAttachmentsExists(String attachmentList) {
 		String[] attList = attachmentList.split(",");
 		for (int i = 0; i < attList.length; i++) {
-			boolean b = selenium.isElementPresent("link=" + attList[0]);
+			boolean b = SelNGBase.selenium.get().isElementPresent("link=" + attList[0]);
 			Assert.assertTrue(b, "Attachment link for: (" + attList[0]
 					+ ") doesnt exist");
 		}
@@ -352,11 +354,11 @@ public class ComposeView extends AppPage {
 			String subject, String body, String attachments) throws Exception {
 		Thread.sleep(1500);
 		if (to.equals("_selfAccountName_"))
-			to = selfAccountName;
+			to = SelNGBase.selfAccountName.get();
 		else if (cc.equals("_selfAccountName_"))
-			cc = selfAccountName;
+			cc = SelNGBase.selfAccountName.get();
 		else if (bcc.equals("_selfAccountName_"))
-			bcc = selfAccountName;
+			bcc = SelNGBase.selfAccountName.get();
 		String headerTxt = obj.zMessageItem.zGetCurrentMsgHeaderText();
 		Assert.assertTrue(
 				headerTxt.indexOf(MailApp.zGetNameFromEmail(to)) >= 0,
@@ -425,11 +427,11 @@ public class ComposeView extends AppPage {
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
 		if (to.equals("_selfAccountName_"))
-			to = selfAccountName;
+			to = SelNGBase.selfAccountName.get();
 		else if (cc.equals("_selfAccountName_"))
-			cc = selfAccountName;
+			cc = SelNGBase.selfAccountName.get();
 		else if (bcc.equals("_selfAccountName_"))
-			bcc = selfAccountName;
+			bcc = SelNGBase.selfAccountName.get();
 		String actualToVal = obj.zTextAreaField.zGetInnerText(zToField);
 		String actualccVal = obj.zTextAreaField.zGetInnerText(zCcField);
 		String actualbccVal = obj.zTextAreaField.zGetInnerText(zBccField);
@@ -518,7 +520,7 @@ public class ComposeView extends AppPage {
 				attachments);
 		obj.zButton.zClick(ComposeView.zSendIconBtn);
 		Thread.sleep(1000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 	}

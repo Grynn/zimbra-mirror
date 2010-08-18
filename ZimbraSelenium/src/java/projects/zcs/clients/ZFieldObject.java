@@ -19,11 +19,11 @@ public class ZFieldObject extends ZObject {
 	}
 
 	public void zActivateAndType(String objNameOrId, String data) {
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 		zActivate(objNameOrId);
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 		enterSpaceUsingRobot();
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 		zType(objNameOrId, data);
 	}
 

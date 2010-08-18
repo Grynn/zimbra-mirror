@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.ABCompose.ABComposeActionMethod;
+import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
 import framework.items.ContactItem.GenerateItemType;
@@ -60,15 +61,15 @@ public class BasicContactTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -80,7 +81,7 @@ public class BasicContactTests extends CommonTest {
 			groups = { "smoke", "full" },
 			retryAnalyzer = RetryFailedTests.class)
 	public void createBasicContact() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
@@ -88,7 +89,7 @@ public class BasicContactTests extends CommonTest {
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 		obj.zContactListItem.zExists(contact.lastName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -100,7 +101,7 @@ public class BasicContactTests extends CommonTest {
 			groups = { "smoke", "full" }, 
 			retryAnalyzer = RetryFailedTests.class)
 	public void editNameAndVerify() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem oldContact = ContactItem.generateContactItem(GenerateItemType.Basic);
@@ -115,7 +116,7 @@ public class BasicContactTests extends CommonTest {
 				page.zABCompose.zVerifyEditContact(newContact),
 				"Verify the contact fields match the correct values");
 		
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -130,7 +131,7 @@ public class BasicContactTests extends CommonTest {
 	public void rghtClickEditNameAndVerify() throws Exception {
 		
 		
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		
 		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
@@ -144,7 +145,7 @@ public class BasicContactTests extends CommonTest {
 				page.zABCompose.zVerifyEditContact(newContact),
 				"Verify the contact fields match the correct values");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -156,7 +157,7 @@ public class BasicContactTests extends CommonTest {
 			groups = { "smoke", "full" }, 
 			retryAnalyzer = RetryFailedTests.class)
 	public void deleteContactAndVerify() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
@@ -170,7 +171,7 @@ public class BasicContactTests extends CommonTest {
 		}
 
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -182,7 +183,7 @@ public class BasicContactTests extends CommonTest {
 			groups = { "smoke", "full" }, 
 			retryAnalyzer = RetryFailedTests.class)
 	public void moveContactAndVerify() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
@@ -193,7 +194,7 @@ public class BasicContactTests extends CommonTest {
 			page.zABApp.zMoveContactAndVerify(contact.lastName, EmailedContacts.name, "ToolbarMove");
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -206,7 +207,7 @@ public class BasicContactTests extends CommonTest {
 			retryAnalyzer = RetryFailedTests.class)
 	public void rghtClickMoveContactAndVerify()
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
@@ -217,7 +218,7 @@ public class BasicContactTests extends CommonTest {
 					"RightClickMove");
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -229,7 +230,7 @@ public class BasicContactTests extends CommonTest {
 			groups = { "smoke", "full" }, 
 			retryAnalyzer = RetryFailedTests.class)
 	public void rghtClkDeleteContactAndVerify() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
@@ -239,7 +240,7 @@ public class BasicContactTests extends CommonTest {
 			page.zABApp.zDeleteContactAndVerify(contact.lastName, "RightClickDelete");
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -250,7 +251,7 @@ public class BasicContactTests extends CommonTest {
 			groups = { "smoke", "full" }, 
 			retryAnalyzer = RetryFailedTests.class)
 	public void rtClickContactAndVerify() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
@@ -259,7 +260,7 @@ public class BasicContactTests extends CommonTest {
 		obj.zContactListItem.zRtClick(contact.lastName);
 		page.zABApp.zVerifyAllMenuItems(itemsEnabled, itemsDisabled, "false");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -270,7 +271,7 @@ public class BasicContactTests extends CommonTest {
 			groups = { "smoke", "full" }, 
 			retryAnalyzer = RetryFailedTests.class)
 	public void negativeTestCreateContact() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
@@ -283,7 +284,7 @@ public class BasicContactTests extends CommonTest {
 		Thread.sleep(500);
 		obj.zContactListItem.zNotExists(contact.lastName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -291,7 +292,7 @@ public class BasicContactTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 

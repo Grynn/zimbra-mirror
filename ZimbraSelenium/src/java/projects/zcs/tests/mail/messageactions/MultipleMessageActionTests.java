@@ -37,16 +37,16 @@ public class MultipleMessageActionTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zMailApp.zNavigateToMailApp();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -61,7 +61,7 @@ public class MultipleMessageActionTests extends CommonTest {
 	public void markMultipleMailsToJunkNotJunk(String from, String to,
 			String cc, String bcc) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject[] = { "subject1", "subject2", "subject3" };
@@ -86,7 +86,7 @@ public class MultipleMessageActionTests extends CommonTest {
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));
 		verifyInjectedMailsExists();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -98,7 +98,7 @@ public class MultipleMessageActionTests extends CommonTest {
 	public void deleteMultipleMails(String from, String to, String cc,
 			String bcc) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject[] = { "subject1", "subject2", "subject3" };
@@ -121,7 +121,7 @@ public class MultipleMessageActionTests extends CommonTest {
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zTrashFldr));
 		verifyInjectedMailsNotExists();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class MultipleMessageActionTests extends CommonTest {
 	public void moveMultipleMailsToSentFolder(String from, String to,
 			String cc, String bcc) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject[] = { "subject1", "subject2", "subject3" };
@@ -157,7 +157,7 @@ public class MultipleMessageActionTests extends CommonTest {
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zSentFldr));
 		verifyInjectedMailsExists();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class MultipleMessageActionTests extends CommonTest {
 	public void moveMultipleMailsToNewFolder(String from, String to, String cc,
 			String bcc) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String newFolder = getLocalizedData_NoSpecialChar();
@@ -200,7 +200,7 @@ public class MultipleMessageActionTests extends CommonTest {
 		obj.zFolder.zClick(newFolder);
 		verifyInjectedMailsExists();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -211,7 +211,7 @@ public class MultipleMessageActionTests extends CommonTest {
 	public void deleteMultipleDraftedMails(String from, String to, String cc,
 			String bcc) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject[] = { "subject1", "subject2", "subject3" };
@@ -240,7 +240,7 @@ public class MultipleMessageActionTests extends CommonTest {
 			obj.zMessageItem.zExists(subject[i]);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -251,7 +251,7 @@ public class MultipleMessageActionTests extends CommonTest {
 	public void verifyRtClickMenusForMultipleMails(String from, String to,
 			String cc, String bcc) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject[] = { "subject1", "subject2" };
@@ -281,7 +281,7 @@ public class MultipleMessageActionTests extends CommonTest {
 			obj.zMenuItem.zIsDisabled(disabledMenuItemsArray[i]);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -292,7 +292,7 @@ public class MultipleMessageActionTests extends CommonTest {
 	public void verifyToolbarBtnForMultipleMails(String from, String to,
 			String cc, String bcc) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject[] = { "subject1", "subject2" };
@@ -318,7 +318,7 @@ public class MultipleMessageActionTests extends CommonTest {
 			obj.zButton.zIsDisabled(disabledToolbarItemsArray[i]);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -341,7 +341,7 @@ public class MultipleMessageActionTests extends CommonTest {
 	@Test(dataProvider = "MailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void checkStatusOfSelectCheckboxAfterSearch_Bug43116(String from,
 			String to, String cc, String bcc) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject[] = { "subject1", "subject2", "subject3" };
@@ -352,7 +352,7 @@ public class MultipleMessageActionTests extends CommonTest {
 		obj.zMessageItem.zExists(subject[0]);
 		obj.zMessageItem.zExists(subject[1]);
 		obj.zMessageItem.zExists(subject[2]);
-		selenium.type("xpath=//input[@class='search_input']", "body2");
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", "body2");
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		Thread.sleep(1000);
 		obj.zMessageItem.zNotExists(subject[0]);
@@ -369,37 +369,37 @@ public class MultipleMessageActionTests extends CommonTest {
 		Thread.sleep(1000);
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[contains(@id,'zlhi__CLV__se') and contains(@class,'ImgCheckboxChecked')]"),
 						"Select All check box is unchecked");
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[contains(@id,'zl__CLV__rows')]/div[contains(@class,'Row RowEven')]/table//tr/td/div[contains(@id,'zlif__CLV') and contains (@class,'ImgCheckboxChecked')]"),
 						"1st list item shows unchecked after clicking Select All check box");
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[contains(@id,'zl__CLV__rows')]/div[contains(@class,'Row RowOdd Row-selected')]/table//tr/td/div[contains(@id,'zlif__CLV') and contains (@class,'ImgCheckboxChecked')]"),
 						"2nd list item shows unchecked after clicking Select All check box");
 		// unchecked all
 		obj.zCheckbox.zClick(zMailListItemChkBox);
 		Thread.sleep(500);
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("xpath=//div[contains(@id,'zlhi__CLV__se') and contains(@class,'ImgCheckboxUnchecked')]"));
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[contains(@id,'zl__CLV__rows')]/div[contains(@class,'Row RowEven')]/table//tr/td/div[contains(@id,'zlif__CLV') and contains (@class,'ImgCheckboxUnchecked')]"),
 						"1st list item shows checked after doing unchecked on 'Select All' check box");
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[contains(@id,'zl__CLV__rows')]/div[contains(@class,'Row RowOdd')]/table//tr/td/div[contains(@id,'zlif__CLV') and contains (@class,'ImgCheckboxUnchecked')]"),
 						"2nd list item shows checked after doing unchecked on 'Select All' check box");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -408,11 +408,11 @@ public class MultipleMessageActionTests extends CommonTest {
 	@Test(dataProvider = "MailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void forwardMultipleMessages_Bug44236(String from, String to,
 			String cc, String bcc) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject1, subject2, acc1, acc2, fwdSubject, fwdBody;
-		acc1 = SelNGBase.selfAccountName;
+		acc1 = SelNGBase.selfAccountName.get();
 		subject1 = "subject1";
 		subject2 = "subject2";
 		fwdSubject = "fwdSubject";
@@ -435,16 +435,16 @@ public class MultipleMessageActionTests extends CommonTest {
 		Thread.sleep(2500);
 
 		resetSession();
-		SelNGBase.selfAccountName = acc2;
+		SelNGBase.selfAccountName.set(acc2);
 		page.zLoginpage.zLoginToZimbraAjax(acc2);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(fwdSubject);
 		obj.zMessageItem.zClick(fwdSubject);
 		Thread.sleep(1500);
-		selenium.click("link=subject1");
+		SelNGBase.selenium.get().click("link=subject1");
 		Thread.sleep(5000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		String msgBody = null;
-		msgBody = selenium.getBodyText();
+		msgBody = SelNGBase.selenium.get().getBodyText();
 		assertReport(msgBody, localize(locator.from), "Verifying From header");
 		assertReport(msgBody, localize(locator.to), "Verifying To header");
 		assertReport(msgBody, localize(locator.cc), "Verifying Cc header");
@@ -455,7 +455,7 @@ public class MultipleMessageActionTests extends CommonTest {
 		assertReport(msgBody.toLowerCase(), "ccuser@testdomain.com",
 				"Verifying Cc field value");
 		assertReport(msgBody, subject1, "Verifying Subject field value");
-		Assert.assertTrue(selenium
+		Assert.assertTrue(SelNGBase.selenium.get()
 				.isElementPresent("//html/body[contains(text(), 'body1')]"));
 		Assert
 				.assertFalse(msgBody.contains("HTTP ERROR: 404"),
@@ -469,12 +469,12 @@ public class MultipleMessageActionTests extends CommonTest {
 				.assertFalse(msgBody.contains("Internal Server Error"),
 						"Verifying message data after clicking to 'View entire message' link");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		selenium.click("link=subject2");
+		SelNGBase.selenium.get().click("link=subject2");
 		Thread.sleep(5000);
-		selenium.selectWindow("_blank");
-		msgBody = selenium.getBodyText();
+		SelNGBase.selenium.get().selectWindow("_blank");
+		msgBody = SelNGBase.selenium.get().getBodyText();
 		assertReport(msgBody, localize(locator.from), "Verifying From header");
 		assertReport(msgBody, localize(locator.to), "Verifying To header");
 		assertReport(msgBody, localize(locator.cc), "Verifying Cc header");
@@ -485,7 +485,7 @@ public class MultipleMessageActionTests extends CommonTest {
 		assertReport(msgBody.toLowerCase(), "ccuser@testdomain.com",
 				"Verifying Cc field value");
 		assertReport(msgBody, subject2, "Verifying Subject field value");
-		Assert.assertTrue(selenium
+		Assert.assertTrue(SelNGBase.selenium.get()
 				.isElementPresent("//html/body[contains(text(), 'body2')]"));
 		Assert
 				.assertFalse(msgBody.contains("HTTP ERROR: 404"),
@@ -499,14 +499,14 @@ public class MultipleMessageActionTests extends CommonTest {
 				.assertFalse(msgBody.contains("Internal Server Error"),
 						"Verifying message data after clicking to 'View entire message' link");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void commonInjectMessage(String from, String to, String cc,
 			String bcc, String subject, String body) throws Exception {
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
@@ -545,7 +545,7 @@ public class MultipleMessageActionTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

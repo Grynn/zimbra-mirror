@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 import projects.html.tests.CommonTest;
@@ -35,44 +36,44 @@ public class SendBtnNegativeTests extends CommonTest {
 	@BeforeClass(groups = {"always"})
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = {"always"})
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 	@Test( groups = {"smoke", "test"})
 	public void test()
 			throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		
 		
 		obj.zButton.zClick("Compose");
 		obj.zTextAreaField.zType(page.zComposeView.zToField, "admin@jitesh.com");
 		obj.zButton.zClick("Send");
-		selenium.selectWindow("The page at http://jitesh.com says:");
-		selenium.click("OK");
+		SelNGBase.selenium.get().selectWindow("The page at http://jitesh.com says:");
+		SelNGBase.selenium.get().click("OK");
 		
 		obj.zTab.zClick("Calendar");
 	
 		obj.zAppointment.zClick("test me", "2"); //clicks second appointment(we can use this to count)
 		String str3 = obj.zMiscObj.zGetInnerText("ZhApptRecurrInfo", "2"); //gets some text from some object with classname ZhApptRecurrInfo
 		String str4 = obj.zMiscObj.zGetInnerText("ZhCalDaySEP ZhCalDayHeaderToday");//get the text from Today's header (in week view)
-		selenium.click("link=Edit the series.");//click on edit the series link
+		SelNGBase.selenium.get().click("link=Edit the series.");//click on edit the series link
 		obj.zFolder.zClick("first");
 		//menus
-		selenium.select("name=actionOp", "Mark as read");//html menu that selects mark as read
+		SelNGBase.selenium.get().select("name=actionOp", "Mark as read");//html menu that selects mark as read
 		String message = obj.zToastAlertMessage.zGetMsg();//Toast message
 	
 		//folders
-		selenium.select("name=folderId", "Sent");
+		SelNGBase.selenium.get().select("name=folderId", "Sent");
 		obj.zFolder.zEdit("Folders");
 		obj.zFolder.zClick("Sent");
 		obj.zFolder.zExpand("Inbox");
@@ -99,14 +100,14 @@ public class SendBtnNegativeTests extends CommonTest {
 
 		obj.zMessageItem.zClick("test");
 		obj.zButton.zClick(localize(locator.compose), "2");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		page.zComposeView.zGoToMailAppFromCompose();
 		zLogin();
 	}

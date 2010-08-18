@@ -27,29 +27,29 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
 		if (test.equals("attachBriefcaseFileInMail")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
 					getLocalizedData(5), "testexcelfile.xls,testwordfile.doc" } };
 		} else if (test.equals("attachBriefcaseFileInMail_NewWindow")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
 					getLocalizedData(5), "testexcelfile.xls,testwordfile.doc" } };
 		} else if (test.equals("addingAttachFromMsgToBriefcaseFolder")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
 					getLocalizedData(5), "testtextfile.txt" } };
 		} else if (test.equals("removingAttachmentFromMessage")
 				|| test.equals("removingAttachmentFromMessage_NewWindow")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
 					getLocalizedData(5), "bug22417.ics" } };
 		} else if (test.equals("removingAllAttachmentFromMessage")
 				|| test.equals("removingAllAttachmentFromMessage_NewWindow")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
 					getLocalizedData(5), "structure.jpg, contact25.pst" } };
 		} else if (test.equals("attachingFilesFromBothWayAndVerifyAllLinks")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
 					getLocalizedData(5), "MultiLingualContact.csv" } };
 		} else if (test.equals("createApptFromICSAttachment_Bug27959")) {
@@ -65,15 +65,15 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -82,7 +82,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void attachBriefcaseFileInMail(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String[] attachment = attachments.split(",");
@@ -92,7 +92,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zTextAreaField.zType(page.zComposeView.zToField,
-				SelNGBase.selfAccountName);
+				SelNGBase.selfAccountName.get());
 		obj.zTextAreaField.zType(page.zComposeView.zCcField, cc);
 		obj.zEditField.zType(page.zComposeView.zSubjectField, subject);
 		obj.zEditor.zType(body);
@@ -128,7 +128,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
 		} else {
@@ -143,14 +143,14 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		Thread.sleep(1000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void attachBriefcaseFileInMail_NewWindow(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String[] attachment = attachments.split(",");
@@ -159,7 +159,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		obj.zTextAreaField.zType(page.zComposeView.zToField,
-				SelNGBase.selfAccountName);
+				SelNGBase.selfAccountName.get());
 		obj.zTextAreaField.zType(page.zComposeView.zCcField, cc);
 		obj.zEditField.zType(page.zComposeView.zSubjectField, subject);
 		obj.zEditor.zType(body);
@@ -189,14 +189,14 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		Thread.sleep(3000);
 
 		// verification
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
 		} else {
@@ -211,26 +211,26 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		Thread.sleep(1000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void addingAttachFromMsgToBriefcaseFolder(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(),
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
 		} else {
@@ -238,9 +238,9 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		}
 		// obj.zMessageItem.zVerifyHasAttachment(subject);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")) {
-			selenium.click("link=Aktetas");
+			SelNGBase.selenium.get().click("link=Aktetas");
 		} else {
-			selenium.click("link=" + localize(locator.briefcase));
+			SelNGBase.selenium.get().click("link=" + localize(locator.briefcase));
 		}
 		obj.zFolder.zClickInDlgByName(localize(locator.briefcase),
 				localize(locator.addToBriefcaseTitle));
@@ -251,39 +251,39 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		obj.zFolder.zClick(page.zBriefcaseApp.zBriefcaseFolder);
 		obj.zBriefcaseItem.zExists(attachments);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void removingAttachmentFromMessage(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(),
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
 		} else {
 			obj.zMessageItem.zVerifyHasAttachment(subject);
 		}
 		// obj.zMessageItem.zVerifyHasAttachment(subject);
-		selenium.click("link=" + localize(locator.remove));
+		SelNGBase.selenium.get().click("link=" + localize(locator.remove));
 		assertReport(localize(locator.attachmentConfirmRemove), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
 				"Verifying dialog text for removing attachment from the message");
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
 		Thread.sleep(3000);
-		Boolean removeLink = selenium
+		Boolean removeLink = SelNGBase.selenium.get()
 				.isElementPresent(localize(locator.remove));
 		assertReport("false", removeLink.toString(),
 				"Verifying Remove link exist or not after removing attachment from message");
@@ -319,19 +319,19 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		Thread.sleep(1000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void removingAttachmentFromMessage_NewWindow(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(),
 				cc, bcc, subject, body, attachments);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
@@ -339,58 +339,58 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn);
 		Thread.sleep(2500);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		Thread.sleep(1000);
 		zWaitTillObjectExist("button", page.zMailApp.zCloseIconBtn_newWindow);
-		selenium.click("link=" + localize(locator.remove));
+		SelNGBase.selenium.get().click("link=" + localize(locator.remove));
 		Thread.sleep(1000);
 		assertReport(localize(locator.attachmentConfirmRemove), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
 				"Verifying dialog text for removing attachment from the message");
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
-		selenium.selectWindow("_blank");
-		Boolean removeLink = selenium
+		SelNGBase.selenium.get().selectWindow("_blank");
+		Boolean removeLink = SelNGBase.selenium.get()
 				.isElementPresent(localize(locator.remove));
 		assertReport("false", removeLink.toString(),
 				"Verifying Remove link exist or not after removing attachment from message");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		Thread.sleep(1000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byConversation));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void removingAllAttachmentFromMessage_NewWindow(String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(),
 				cc, bcc, subject, body, attachments);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		Thread.sleep(2500);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		Thread.sleep(1000);
-		selenium.click("link=" + localize(locator.removeAllAttachments));
+		SelNGBase.selenium.get().click("link=" + localize(locator.removeAllAttachments));
 		Thread.sleep(1000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		assertReport(localize(locator.attachmentConfirmRemoveAll), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
 				"Verifying dialog text for removing attachments from the message");
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
-		selenium.selectWindow("_blank");
-		Boolean removeLink = selenium
+		SelNGBase.selenium.get().selectWindow("_blank");
+		Boolean removeLink = SelNGBase.selenium.get()
 				.isElementPresent(localize(locator.removeAllAttachments));
 		assertReport(
 				"false",
@@ -398,43 +398,43 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 				"Verifying Remove All Attachments link exist or not after removing all attachments from message");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		Thread.sleep(1000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void removingAllAttachmentFromMessage(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String[] attachment = attachments.split(",");
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(),
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
 		} else {
 			obj.zMessageItem.zVerifyHasAttachment(subject);
 		}
 		// obj.zMessageItem.zVerifyHasAttachment(subject);
-		selenium.click("link=" + localize(locator.removeAllAttachments));
+		SelNGBase.selenium.get().click("link=" + localize(locator.removeAllAttachments));
 		assertReport(localize(locator.attachmentConfirmRemoveAll), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
 				"Verifying dialog text for removing attachments from the message");
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
-		Boolean removeLink = selenium
+		Boolean removeLink = SelNGBase.selenium.get()
 				.isElementPresent(localize(locator.removeAllAttachments));
 		assertReport(
 				"false",
@@ -480,14 +480,14 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		Thread.sleep(1000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void attachingFilesFromBothWayAndVerifyAllLinks(String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String[] attachment = attachments.split(",");
@@ -495,30 +495,30 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(),
 				cc, bcc, subject, body, "putty.log");
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
 		} else {
 			obj.zMessageItem.zVerifyHasAttachment(subject);
 		}
 		// obj.zMessageItem.zVerifyHasAttachment(subject);
-		Boolean downloadLink = selenium.isElementPresent("Link="
+		Boolean downloadLink = SelNGBase.selenium.get().isElementPresent("Link="
 				+ localize(locator.download));
 		Boolean briefcaseLink;
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")) {
-			briefcaseLink = selenium.isElementPresent("Link=Aktetas");
+			briefcaseLink = SelNGBase.selenium.get().isElementPresent("Link=Aktetas");
 		} else {
-			briefcaseLink = selenium.isElementPresent("Link="
+			briefcaseLink = SelNGBase.selenium.get().isElementPresent("Link="
 					+ localize(locator.briefcase));
 		}
-		Boolean removeLink = selenium.isElementPresent("Link="
+		Boolean removeLink = SelNGBase.selenium.get().isElementPresent("Link="
 				+ localize(locator.remove));
 		assertReport("true", downloadLink.toString(),
 				"Verify Download link exists for message");
@@ -568,16 +568,16 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
 		} else {
 			obj.zMessageItem.zVerifyHasAttachment(subject);
 		}
 		// obj.zMessageItem.zVerifyHasAttachment(subject);
-		Boolean downloadAllAttachmentsLink = selenium.isElementPresent("Link="
+		Boolean downloadAllAttachmentsLink = SelNGBase.selenium.get().isElementPresent("Link="
 				+ localize(locator.downloadAll));
-		Boolean removeAllAttachmentsLink = selenium.isElementPresent("Link="
+		Boolean removeAllAttachmentsLink = SelNGBase.selenium.get().isElementPresent("Link="
 				+ localize(locator.removeAllAttachments));
 		assertReport("true", downloadAllAttachmentsLink.toString(),
 				"Verify Download all attachments link exists for message");
@@ -594,7 +594,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		Thread.sleep(1000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -602,7 +602,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 	 */
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createApptFromICSAttachment_Bug27959() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject1, subject2;
@@ -616,7 +616,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 
 		obj.zMessageItem.zClick(subject1);
 		Thread.sleep(1000);
-		selenium.click("link=" + localize(locator.addToCalendar));
+		SelNGBase.selenium.get().click("link=" + localize(locator.addToCalendar));
 		obj.zFolder.zClickInDlgByName(localize(locator.calendar),
 				localize(locator.addToCalendar));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
@@ -633,7 +633,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		zGoToApplication("Mail");
 		obj.zMessageItem.zClick(subject2);
 		Thread.sleep(1000);
-		selenium.click("link=" + localize(locator.addToCalendar));
+		SelNGBase.selenium.get().click("link=" + localize(locator.addToCalendar));
 		obj.zFolder.zClickInDlgByName(localize(locator.calendar),
 				localize(locator.addToCalendar));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
@@ -645,7 +645,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 				localize(locator.openRecurringItem));
 		obj.zButton.zClick(localize(locator.close));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void uploadFile(String attachments) throws Exception {
@@ -664,7 +664,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 		j = 0;
 	}

@@ -39,7 +39,6 @@ import framework.util.ZimbraSeleniumProperties;
  */
 public class ExecuteTests {
 	private static String appType = "HTML";// note this should match
-	// selngbase.appType
 	private static String suiteName = "debugSuite";
 	private static XmlSuite suite = new XmlSuite();
 	private static ArrayList<String> cls = new ArrayList<String>();
@@ -64,20 +63,37 @@ public class ExecuteTests {
 	 */
 	private static void debugSuite() {
 		if (null == includedGrps)
-			includedGrps = "always,smoke";
+			includedGrps = "always,parallel";
+		
 		suiteName = "debugSuite";
 
 		// ---------------------------------------------------
-		testName = "Debug";
+		testName = "tasks";
 		cls = new ArrayList<String>();
-		// cls.add("projects.html.tests.preferences.GeneralPref");
-		// cls.add("projects.html.tests.preferences.MailPreferencesTests");
-		cls.add("projects.html.tests.calendar.CalendarMiscTests");
-		// cls.add("projects.html.tests.calendar.MountPointTests");
-		// cls.add("projects.html.tests.preferences.ComposePref");
-		// cls.add("projects.html.tests.preferences.SignatureAndAccPref");
+		//cls.add("projects.html.tests.mail.MailTagTests");
+		//cls.add("projects.html.tests.compose.ComposeReplyFwdInHTMLTests");
+		//cls.add("projects.html.tests.compose.DraftsTests");
+		//cls.add("projects.html.tests.mail.MailFolderTests");
+		//cls.add("projects.html.tests.addressbook.AddressBookTestHtml");
+		//cls.add("projects.html.tests.compose.ComposeBtmToolBarTests");
+		//		cls.add("projects.html.tests.tasks.Tasks");
+		//cls.add("projects.html.tests.preferences.ComposePref");
+		//cls.add("projects.html.tests.preferences.GeneralPref");
+		//cls.add("projects.html.tests.preferences.ABPreference");			
+		//cls.add("projects.html.tests.calendar.CalendarMiscTests");
 		addTests(testName, cls);
-		// ---------------------------------------------------
+		
+        testName = "calendar";
+	    cls = new ArrayList<String>();
+		cls.add("projects.html.tests.calendar.CalendarMiscTests");
+	    //cls.add("projects.html.tests.preferences.SignatureAndAccPref");
+	    //cls.add("projects.html.tests.preferences.ComposePref");
+	    //cls.add("projects.html.tests.preferences.GeneralPref");
+		//cls.add("projects.html.tests.preferences.ABPreference");
+	    //cls.add("projects.html.tests.tasks.Tasks");
+	  	addTests(testName, cls);
+	  			
+	    // ---------------------------------------------------
 	}
 
 	/**
@@ -297,6 +313,10 @@ public class ExecuteTests {
 
 		suite.setName(suiteName);
 		suite.setVerbose(2);
+		//"classes","tests","methods"
+		//threadPoolSize = 3
+		suite.setThreadCount(4);
+		suite.setParallel("classes");		
 
 		// store suitename. used to ignore posting to report server and also to
 		// avoid trying to get zimbraVersion during startserver
@@ -312,6 +332,8 @@ public class ExecuteTests {
 		tng.addListener(createSummary);
 		tng.addListener(testReporter);
 		tng.setOutputDirectory(testoutputfolder);
+		//tng.setParallel("tests");
+		//tng.setThreadCount(4);
 		tng.run();
 
 		// convert result to utf8
@@ -322,7 +344,6 @@ public class ExecuteTests {
 			copyCommandLineOutputFile();
 			sendEmail();
 		}
-
 	}
 
 	public static void loadConfig() {
@@ -383,7 +404,6 @@ public class ExecuteTests {
 			dstChannel.close();
 		} catch (IOException e) {
 		}
-
 	}
 
 	public static void addTests(String testName,
@@ -414,7 +434,6 @@ public class ExecuteTests {
 			classes.add(c);
 		}
 		test.setXmlClasses(classes);
-
 	}
 
 	public static void loadSkipTestsDetails() throws Exception {
@@ -431,9 +450,7 @@ public class ExecuteTests {
 			skipClasses.add(new SkipTestClass(str));
 
 		}
-
 		br.close();
-
 	}
 
 	public static ArrayList<SkipTestClass> getSkipTestClassByName(
@@ -465,23 +482,18 @@ public class ExecuteTests {
 						&& s.locales.indexOf("all") < 0) {
 					if (s.browsers.indexOf(browser) < 0
 							|| s.locales.indexOf(locale) < 0) {
-						dontSkipBecauseOfAndCombination = true;// either browser
-																// or locale
-																// didnt match
+						dontSkipBecauseOfAndCombination = true; // either browser or locale didnt match
 					}
 				}
 				if (!dontSkipBecauseOfAndCombination) {
-					matchedMethods.add(s.methodToSkip);// add the method to be
-														// skipped
+					matchedMethods.add(s.methodToSkip);// add the method to be skipped
 					addToSkippedTableRowsHTML(s);// add to html-email row
 					logSkippedMethodsToFile(s);// add to log file
 				}
 			}
 		}
 		c.setExcludedMethods(matchedMethods);
-
 		return c;
-
 	}
 
 	public static void addToSkippedTableRowsHTML(SkipTestClass s) {
@@ -511,7 +523,6 @@ public class ExecuteTests {
 						+ el + "\">" + el + "</a>";
 		}
 		return retStr;
-
 	}
 
 	public static String getSkippedTestsTable() {

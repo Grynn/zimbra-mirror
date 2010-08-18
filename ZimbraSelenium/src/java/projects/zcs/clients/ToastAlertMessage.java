@@ -6,7 +6,7 @@ import framework.core.SelNGBase;
 
 public class ToastAlertMessage extends SelNGBase{
 	public String zGetMsg() {
-		return selenium.getText("id=z_toast");
+		return SelNGBase.selenium.get().getText("id=z_toast");
 	}
 	
 	public boolean zAlertMsgExists(String expectedMsg, String customMsg) {

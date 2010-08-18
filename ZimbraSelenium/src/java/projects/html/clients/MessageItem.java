@@ -2,6 +2,8 @@ package projects.html.clients;
 
 import org.testng.Assert;
 
+import framework.core.SelNGBase;
+
 public class MessageItem extends ListItem{
 	public MessageItem() {
 		super("listItemCore_html", "MessageItem");
@@ -27,25 +29,25 @@ public class MessageItem extends ListItem{
 	}	
 
 	public void zVerifyCurrentMsgHeaderText(String requiredTxt) {
-		String actual = selenium.call("msgZHdrBodyCore_html", "", "gettext", true, "", "");
+		String actual = SelNGBase.selenium.get().call("msgZHdrBodyCore_html", "", "gettext", true, "", "");
 		Assert.assertTrue(actual.indexOf(requiredTxt)>=0);
 	}
 	public String zGetCurrentMsgHeaderText() {
-		return selenium.call("msgZHdrBodyCore_html", "MsgHdr", "gettext", true, "", "");
+		return SelNGBase.selenium.get().call("msgZHdrBodyCore_html", "MsgHdr", "gettext", true, "", "");
 	}
 	public void zVerifyCurrentMsgBodyText(String requiredTxt) {
 		String actual =  zGetCurrentMsgBodyText();
 		Assert.assertTrue(actual.indexOf(requiredTxt)>=0);
 	}
 	public String zGetCurrentMsgBodyText() {
-		return selenium.call("msgZHdrBodyCore_html", "MsgBody", "gettext", true, "", "");
+		return SelNGBase.selenium.get().call("msgZHdrBodyCore_html", "MsgBody", "gettext", true, "", "");
 	}
 	public void zVerifyCurrentMsgBodyHasImage() {
-		String actual =  selenium.call("msgZHdrBodyCore_html", "MsgBody", "gethtml", true, "", "");		
+		String actual =  SelNGBase.selenium.get().call("msgZHdrBodyCore_html", "MsgBody", "gethtml", true, "", "");		
 		Assert.assertTrue(actual.indexOf("dfsrc=")>=0);
 	}	
 	public String zGetMsgBodyHTML() {
-		return selenium.call("msgZHdrBodyCore_html", "MsgBody", "gethtml", true, "", "");		
+		return SelNGBase.selenium.get().call("msgZHdrBodyCore_html", "MsgBody", "gethtml", true, "", "");		
 	}
 }
 

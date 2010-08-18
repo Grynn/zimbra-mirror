@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
@@ -63,16 +64,16 @@ public class AttachmentTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	// --------------------------------------------------------------------------
@@ -86,7 +87,7 @@ public class AttachmentTests extends CommonTest {
 	public void sendMailWith3AttachmentsAndVerify(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -97,7 +98,7 @@ public class AttachmentTests extends CommonTest {
 		zWaitTillObjectExist("message", subject); // timing issue
 		obj.zMessageItem.zVerifyHasAttachment(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -107,7 +108,7 @@ public class AttachmentTests extends CommonTest {
 	public void addAttachmentOneByOneAndVerify(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -121,7 +122,7 @@ public class AttachmentTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
 		SleepUtil.sleepMedium();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -131,7 +132,7 @@ public class AttachmentTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void uncheckAttachmentAndVerify(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -150,7 +151,7 @@ public class AttachmentTests extends CommonTest {
 		obj.zCheckbox.zVerifyIsChecked(newAttachment);
 		obj.zButton.zClick(page.zMailApp.zDraftFldr);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -160,12 +161,12 @@ public class AttachmentTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void bigAttachmentThrowErrorTest(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
 		if (to.equals("_selfAccountName_"))
-			to = selfAccountName;
+			to = SelNGBase.selfAccountName.get();
 		obj.zTextAreaField.zType(page.zComposeView.zToField, to);
 		obj.zEditField.zType(page.zComposeView.zSubjectField, subject);
 		page.zComposeView.zAddAttachments(attachments, false);
@@ -188,7 +189,7 @@ public class AttachmentTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
 		SleepUtil.sleepMedium();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -197,12 +198,12 @@ public class AttachmentTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void cancelAddingAttachmentTest(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
 		if (to.equals("_selfAccountName_"))
-			to = selfAccountName;
+			to = SelNGBase.selfAccountName.get();
 		obj.zTextAreaField.zType(page.zComposeView.zToField, to);
 		obj.zEditField.zType(page.zComposeView.zSubjectField, subject);
 		obj.zButton.zClick(ComposeView.zAddAttachmentBtn);
@@ -218,7 +219,7 @@ public class AttachmentTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
 		SleepUtil.sleepMedium();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -229,7 +230,7 @@ public class AttachmentTests extends CommonTest {
 	public void unCheckOneAttachmentAndSendMailTest(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -244,7 +245,7 @@ public class AttachmentTests extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		// verify one attachment not present
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// --------------------------------------------------------------------------
@@ -252,7 +253,7 @@ public class AttachmentTests extends CommonTest {
 	// --------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

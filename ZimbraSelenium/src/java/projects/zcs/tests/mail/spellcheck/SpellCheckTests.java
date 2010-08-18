@@ -39,15 +39,15 @@ public class SpellCheckTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -58,7 +58,7 @@ public class SpellCheckTests extends CommonTest {
 	public void mandatorySpellCheck_And_Send_Bug36365(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zNavigateToComposingPreferences();
@@ -68,14 +68,14 @@ public class SpellCheckTests extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject,
 				"This is test.", attachments);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void spellCheck_For_TextAppt_Bug4345(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zNavigateToComposingPreferences();
@@ -85,7 +85,7 @@ public class SpellCheckTests extends CommonTest {
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject, subject,
-				selfAccountName, "onee twoo");
+				SelNGBase.selfAccountName.get(), "onee twoo");
 		obj.zButton.zClick(localize(locator.spellCheck));
 
 		obj.zToastAlertMessage.zAlertMsgExists("2 Misspellings",
@@ -94,14 +94,14 @@ public class SpellCheckTests extends CommonTest {
 		// misspellings), "Strings did not match.");
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void spellCheck_forDraft_inNewWindow_Bug5769_And_Bug39130(String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		/**
@@ -118,23 +118,23 @@ public class SpellCheckTests extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(500);
 		obj.zButton.zClick(localize(locator.edit));
-		selenium.mouseOver(DRAFT_NEW_WINDOW_BUTTON);
-		selenium.clickAt(DRAFT_NEW_WINDOW_BUTTON, "");
+		SelNGBase.selenium.get().mouseOver(DRAFT_NEW_WINDOW_BUTTON);
+		SelNGBase.selenium.get().clickAt(DRAFT_NEW_WINDOW_BUTTON, "");
 		Thread.sleep(2000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(localize(locator.spellCheck));
 		obj.zToastAlertMessage.zAlertMsgExists("2 Misspellings",
 				"Strings did not match.");
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void objError_inSpellcheck_Bug26037(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		subject = "anoother mostake";
@@ -144,24 +144,24 @@ public class SpellCheckTests extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.reply));
 		Thread.sleep(2000);
-		selenium.mouseOver(DRAFT_NEW_WINDOW_BUTTON);
-		selenium.clickAt(DRAFT_NEW_WINDOW_BUTTON, "");
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().mouseOver(DRAFT_NEW_WINDOW_BUTTON);
+		SelNGBase.selenium.get().clickAt(DRAFT_NEW_WINDOW_BUTTON, "");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", localize(locator.spellCheck));
 		obj.zButton.zClick(localize(locator.spellCheck));
 		Thread.sleep(2000);
 		obj.zToastAlertMessage.zAlertMsgExists("6 Misspellings",
 				"Strings did not match.");
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void illegalCharacters_and_replyAfterSpellCheck_Bug29432_and_Bug41760(
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		subject = "anoother mostake";
@@ -179,7 +179,7 @@ public class SpellCheckTests extends CommonTest {
 		obj.zEditor.zType("onee twoo  threee");
 		obj.zButton.zClick(localize(locator.spellCheck));
 		Thread.sleep(2000);
-		selenium
+		SelNGBase.selenium.get()
 				.click("xpath=//span[contains(@class,'SpellCheckLink') and contains(text(),'"
 						+ localize(locator.checkAgain) + "')]");
 		obj.zToastAlertMessage.zAlertMsgExists("3 Misspellings",
@@ -194,9 +194,9 @@ public class SpellCheckTests extends CommonTest {
 			Assert.assertTrue(obj.zMessageItem.zGetCurrentMsgBodyText()
 					.contains("onee twoo  threee"));
 		}
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -204,7 +204,7 @@ public class SpellCheckTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

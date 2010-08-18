@@ -71,7 +71,7 @@ public class ShortcutsMail extends CommonTest {
 		zLoginIfRequired();
 		Thread.sleep(2000);
 
-		String[] recipients = { selfAccountName };
+		String[] recipients = { SelNGBase.selfAccountName.get() };
 		ProvZCS.injectMessage(ProvZCS.getRandomAccount(), recipients, ProvZCS
 				.getRandomAccount(), "test mail", "test content");
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("test mail");
@@ -80,16 +80,16 @@ public class ShortcutsMail extends CommonTest {
 
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("flag message");
 
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -98,10 +98,10 @@ public class ShortcutsMail extends CommonTest {
 
 		String verifyTo, verifyCc;
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 		Thread.sleep(2000);
 		obj.zMessageItem.zClick("test mail");
 
@@ -153,14 +153,14 @@ public class ShortcutsMail extends CommonTest {
 		zRobot.keyRelease(KeyEvent.VK_ESCAPE);
 		Thread.sleep(2000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void shortcutsJunkMessage() throws Exception {
 
-		String[] recipients = { selfAccountName };
-		if (isExecutionARetry)
+		String[] recipients = { SelNGBase.selfAccountName.get() };
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ProvZCS.injectMessage(ProvZCS.getRandomAccount(), recipients, ProvZCS
@@ -188,7 +188,7 @@ public class ShortcutsMail extends CommonTest {
 
 		obj.zFolder.zClick(localize(locator.inbox));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -196,11 +196,11 @@ public class ShortcutsMail extends CommonTest {
 	public void shortcutsMoveMessage() throws Exception {
 
 		// String[] recipients = { selfAccountName };
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(selfAccountName, "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
 				"move message", "test content", "");
 
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("move message");
@@ -236,7 +236,7 @@ public class ShortcutsMail extends CommonTest {
 		obj.zFolder.zClick(localize(locator.inbox));
 		obj.zMessageItem.zExists("move message");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -244,8 +244,8 @@ public class ShortcutsMail extends CommonTest {
 	public void shortcutsFlagMessage(int keyToPress, String actionType)
 			throws Exception {
 
-		String[] recipients = { selfAccountName };
-		if (isExecutionARetry)
+		String[] recipients = { SelNGBase.selfAccountName.get() };
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		obj.zMessageItem.zClick("flag message");
@@ -270,7 +270,7 @@ public class ShortcutsMail extends CommonTest {
 		else if (actionType.equals("unflag"))
 			obj.zMessageItem.zVerifyIsNotFlagged("flag message");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -278,8 +278,8 @@ public class ShortcutsMail extends CommonTest {
 	public void shortcutsGoToMailFolders(int keyToPress, String folderName)
 			throws Exception {
 
-		String[] recipients = { selfAccountName };
-		if (isExecutionARetry)
+		String[] recipients = { SelNGBase.selfAccountName.get() };
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		
 		String subject="This is test for GoTo Folder Shortcuts";
@@ -313,14 +313,14 @@ public class ShortcutsMail extends CommonTest {
 		zRobot.keyRelease(keyToPress);
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 	
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void shortcutsMoveToTrash_And_MoveToInbox() throws Exception {
 
-		String[] recipients = { selfAccountName };
-		if (isExecutionARetry)
+		String[] recipients = { SelNGBase.selfAccountName.get() };
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		
 		String subject = "Move to Trash";
@@ -368,7 +368,7 @@ public class ShortcutsMail extends CommonTest {
 
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -378,7 +378,7 @@ public class ShortcutsMail extends CommonTest {
 	
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

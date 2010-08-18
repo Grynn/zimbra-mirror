@@ -71,28 +71,28 @@ public class ShortcutsCustom extends CommonTest {
 		zLoginIfRequired();
 		Thread.sleep(2000);
 
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void shortcutsMailFolder() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String folderName = getLocalizedData_NoSpecialChar();
 		String shortcut = "1";
-		String[] recipients = { selfAccountName };
+		String[] recipients = { SelNGBase.selfAccountName.get() };
 		String subject = "test subject mail folder";
 
 		page.zMailApp.zCreateFolder(folderName);
@@ -106,7 +106,7 @@ public class ShortcutsCustom extends CommonTest {
 
 		obj.zMessageItem.zClick(subject);
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 
 		Robot zRobot = new Robot();
 
@@ -126,18 +126,18 @@ public class ShortcutsCustom extends CommonTest {
 
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void shortcutsTag() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tagName = getLocalizedData_NoSpecialChar();
 		String shortcut = "2";
-		String[] recipients = { selfAccountName };
+		String[] recipients = { SelNGBase.selfAccountName.get() };
 		String subject = "test subject shortcutsTag";
 
 		page.zMailApp.zCreateTag(tagName);
@@ -151,7 +151,7 @@ public class ShortcutsCustom extends CommonTest {
 
 		obj.zMessageItem.zClick(subject);
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 
 		Robot zRobot = new Robot();
 
@@ -175,18 +175,18 @@ public class ShortcutsCustom extends CommonTest {
 
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void shortcutsSearches() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String searchName = getLocalizedData_NoSpecialChar();
 		String shortcut = "3";
-		String[] recipients = { selfAccountName };
+		String[] recipients = { SelNGBase.selfAccountName.get() };
 		String subject = "test subject shortcutsSearches";
 
 		
@@ -219,7 +219,7 @@ public class ShortcutsCustom extends CommonTest {
 
 		obj.zFolder.zClick(localize(locator.trash));
 		
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 
 		Robot zRobot = new Robot();
 
@@ -232,7 +232,7 @@ public class ShortcutsCustom extends CommonTest {
 		
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 	
 	
@@ -268,7 +268,7 @@ public class ShortcutsCustom extends CommonTest {
 		
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

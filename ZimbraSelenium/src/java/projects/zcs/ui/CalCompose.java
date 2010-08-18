@@ -2,6 +2,7 @@ package projects.zcs.ui;
 
 
 import junit.framework.Assert;
+import framework.core.SelNGBase;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -328,7 +329,7 @@ public class CalCompose extends AppPage {
 		// hrColonMinColonAmPm);
 		String[] tmp = hrColonMinColonAmPm.split(":");
 		String ampmLoc = getTimeMenuLocation("a");
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"//td[contains(@id, 'startTimeSelect')]//td[contains(@id, 'timeSelectBtn')]//div[contains(@class, 'ImgSelectPullDownArrow')]",
 						"");
@@ -351,7 +352,7 @@ public class CalCompose extends AppPage {
 			throws Exception {
 		String[] tmp = hrColonMinColonAmPm.split(":");
 		String ampmLoc = getTimeMenuLocation("a");
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"//td[contains(@id, 'startTime')]//td[contains(@id, 'timeSelectBtn')]//div[contains(@class, 'ImgSelectPullDownArrow')]",
 						"");
@@ -383,7 +384,7 @@ public class CalCompose extends AppPage {
 		// zSetTimeCore(localize(locator.endLabel), hrColonMinColonAmPm);
 		String[] tmp = hrColonMinColonAmPm.split(":");
 		String ampmLoc = getTimeMenuLocation("a");
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"//td[contains(@id, 'endTimeSelect')]//td[contains(@id, 'timeSelectBtn')]//div[contains(@class, 'ImgSelectPullDownArrow')]",
 						"");
@@ -406,7 +407,7 @@ public class CalCompose extends AppPage {
 			throws Exception {
 		String[] tmp = hrColonMinColonAmPm.split(":");
 		String ampmLoc = getTimeMenuLocation("a");
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"//td[contains(@id, 'endTime')]//td[contains(@id, 'timeSelectBtn')]//div[contains(@class, 'ImgSelectPullDownArrow')]",
 						"");
@@ -520,11 +521,11 @@ public class CalCompose extends AppPage {
 		if (time.equals("startTime")) {
 			Thread.sleep(2000);
 			Assert
-					.assertTrue(selenium
+					.assertTrue(SelNGBase.selenium.get()
 							.isElementPresent("//div[contains(@class, 'DwtDialog LightWindowOuterContainer')]//td[contains(@id, 'DWT') and contains(@id, 'startTime')]//td[contains(text(), '"
 									+ hhmmss.split(":")[0] + "')]"));
 
-			selenium
+			SelNGBase.selenium.get()
 					.clickAt(
 							"//td[contains(@id, 'startTimeSelect')]//td[contains(@id, 'timeSelectInput') and contains(text(), '10:00')]",
 							"");
@@ -558,25 +559,25 @@ public class CalCompose extends AppPage {
 			Thread.sleep(1000);
 			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 				Assert
-						.assertTrue(selenium
+						.assertTrue(SelNGBase.selenium.get()
 								.isElementPresent("//td[contains(@id, 'startTime')]//td[contains(@id, 'timeSelectInput') and contains(text(), '"
 										+ hhmmss.split(":")[0] + "')]"));
 
 			} else {
 				Assert
-						.assertTrue(selenium
+						.assertTrue(SelNGBase.selenium.get()
 								.isElementPresent("//td[contains(@id, 'startTime')]//td[contains(@id, 'timeSelectInput') and contains(text(), '"
 										+ hhmmss.split(":")[0] + "')]"));
 			}
 		} else if (time.equals("endTime")) {
 			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 				Assert
-						.assertTrue(selenium
+						.assertTrue(SelNGBase.selenium.get()
 								.isElementPresent("//td[contains(@id, 'endTime')]//td[contains(@id, 'timeSelectInput') and contains(text(), '"
 										+ hhmmss.split(":")[0] + "')]"));
 			} else {
 				Assert
-						.assertTrue(selenium
+						.assertTrue(SelNGBase.selenium.get()
 								.isElementPresent("//td[contains(@id, 'endTime')]//td[contains(@id, 'timeSelectInput') and contains(text(), '"
 										+ hhmmss.split(":")[0] + "')]"));
 			}
@@ -587,11 +588,11 @@ public class CalCompose extends AppPage {
 			throws Exception {
 		Thread.sleep(2000);
 		Assert
-				.assertFalse(selenium
+				.assertFalse(SelNGBase.selenium.get()
 						.isElementPresent("//div[contains(@class, 'DwtDialog LightWindowOuterContainer')]//td[contains(@id, 'DWT') and contains(@id, 'startTime') and contains(@style, 'visibility: hidden')]"));
 
 		Assert
-				.assertFalse(selenium
+				.assertFalse(SelNGBase.selenium.get()
 						.isElementPresent("//div[contains(@class, 'DwtDialog LightWindowOuterContainer')]//td[contains(@id, 'DWT') and contains(@id, 'endTime') and contains(@style, 'visibility: hidden')]"));
 	}
 

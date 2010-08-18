@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
@@ -123,16 +124,16 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -147,7 +148,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	public void doActionWithoutSelectingMail(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String currentToastMessage = null;
@@ -208,7 +209,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 			}
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -218,7 +219,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	public void deleteMultipleMailsAndVerify(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String newSubject = null;
@@ -249,7 +250,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		obj.zMessageItem.zExists(subject);
 		obj.zMessageItem.zExists(newSubject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -259,7 +260,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	public void moveSingleMailAndVerify(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		if (subject.equals("TTmoveSingleMailAndVerify")) {
@@ -308,7 +309,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		SleepUtil.sleepSmall();
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -318,7 +319,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	public void moveMultipleMailsAndVerify(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String newSubject = null;
@@ -374,7 +375,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		obj.zMessageItem.zExists(subject);
 		obj.zMessageItem.zExists(newSubject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -384,7 +385,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	public void markMailJunkNotJunkAndVerify(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		if (subject.equals("TTmarkMailJunkNotJunkAndVerify")) {
@@ -428,7 +429,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		SleepUtil.sleepSmall();
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -438,7 +439,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	public void verifyEmptyJunkMail(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		if (subject.equals("TTverifyEmptyJunkMail")) {
@@ -476,7 +477,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		SleepUtil.sleepSmall();
 		obj.zMessageItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -486,7 +487,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	public void verifyMarkAsReadUnreadToMail(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		if (subject.equals("TTverifyMarkAsReadUnreadToMail")) {
@@ -517,7 +518,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		// zVerifyIsUnRead is not working
 		// obj.zMessageItem.zVerifyIsUnRead(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -527,7 +528,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	public void verifyAddRemoveFlagToMail(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		if (subject.equals("TTverifyAddRemoveFlagToMail")) {
@@ -564,7 +565,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		SleepUtil.sleepMedium();
 		obj.zMessageItem.zVerifyIsNotFlagged(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -574,7 +575,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	public void verifyPermanentDeleteMail(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String newSubject = null;
@@ -618,7 +619,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		obj.zMessageItem.zNotExists(subject);
 		obj.zMessageItem.zNotExists(newSubject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -628,7 +629,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	public void verifyMultipleSelectedMailActions(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// verify check box status by selecting multiple mail
@@ -652,7 +653,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		Assert.assertEquals(newSubChkBoxStatus, false);
 		Assert.assertEquals(newSub1ChkBoxStatus, false);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -660,7 +661,7 @@ public class MailTopBtmToolBarTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

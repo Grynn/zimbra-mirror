@@ -42,7 +42,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefMailPollingInterval",
 				"5m");
@@ -91,26 +91,26 @@ public class MailPreferencesTestsUI extends CommonTest {
 		zReloginToAjax();
 
 		Thread.sleep(5000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailCheckForNewMail() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -132,17 +132,17 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailDisplayMail() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -179,17 +179,17 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailDisplaySnippets() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -226,17 +226,17 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailOpenInNewWindow() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -279,17 +279,17 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailDownloadPicturesAutomatically() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -326,17 +326,17 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailMarkAsRead() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -373,17 +373,17 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailInitialMailSearch() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -425,17 +425,17 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailPlayASound() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -479,17 +479,17 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailFlashBrowser() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -533,17 +533,17 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailForwardCopyTo() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -600,17 +600,17 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailSendNotification() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -666,17 +666,17 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zMailAutoReply() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -730,7 +730,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void waitForIE() throws Exception {
@@ -750,7 +750,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

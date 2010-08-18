@@ -6,6 +6,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -35,15 +37,15 @@ public class ShortcutBugTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -54,12 +56,12 @@ public class ShortcutBugTests extends CommonTest {
 	public void thisKeySequenceUndefinedError_Bug40797(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefUseKeyboardShortcuts", "FALSE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -125,7 +127,7 @@ public class ShortcutBugTests extends CommonTest {
 		obj.zButton.zExists(page.zMailApp.zZimletsPrefFolder);
 		Thread.sleep(2000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@SuppressWarnings("static-access")
@@ -141,7 +143,7 @@ public class ShortcutBugTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

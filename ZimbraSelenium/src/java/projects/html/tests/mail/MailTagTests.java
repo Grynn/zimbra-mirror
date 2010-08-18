@@ -7,6 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
@@ -53,15 +54,15 @@ public class MailTagTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -75,7 +76,7 @@ public class MailTagTests extends CommonTest {
 	public void applyRemoveTagToMultipleMails(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// apply tag
@@ -104,7 +105,7 @@ public class MailTagTests extends CommonTest {
 		obj.zMessageItem.zVerifyIsNotTagged(subject);
 		obj.zMessageItem.zVerifyIsNotTagged(newSubject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -117,7 +118,7 @@ public class MailTagTests extends CommonTest {
 	public void renameTagAndVerifyTaggedUnTaggedMail(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// apply tag
@@ -157,7 +158,7 @@ public class MailTagTests extends CommonTest {
 		page.zMailApp.zMoreActions("all");
 		SleepUtil.sleepSmall();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -170,7 +171,7 @@ public class MailTagTests extends CommonTest {
 	public void deleteTagAndVerifyTaggedUnTaggedMail(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// apply tag
@@ -193,7 +194,7 @@ public class MailTagTests extends CommonTest {
 		obj.zMessageItem.zVerifyIsNotTagged(subject);
 		obj.zMessageItem.zVerifyIsNotTagged(newSubject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -201,7 +202,7 @@ public class MailTagTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

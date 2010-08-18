@@ -166,15 +166,15 @@ public class MailSharingTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		obj.zButton.zClick(page.zMailApp.zMailTabIconBtn);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -192,16 +192,16 @@ public class MailSharingTests extends CommonTest {
 			String sharetype, String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zDeclineShare();
 		obj.zButton.zClick(page.zMailApp.zGetMailIconBtn);
@@ -212,14 +212,14 @@ public class MailSharingTests extends CommonTest {
 				sharingnoteifany);
 
 		resetSession();
-		SelNGBase.selfAccountName = currentloggedinuser;
+		SelNGBase.selfAccountName.set(currentloggedinuser);
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zSharing.zVerifyShareDeclinedMailInInboxFolder(
 				currentloggedinuser, sharingfoldername, sharetype,
 				currentloggedinuser, role, sharingnoteifany);
 		page.zSharing.zRevokeShare(sharingfoldername, "", "");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -239,7 +239,7 @@ public class MailSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		verifyMailDeletionOnDiffRole(to, cc, bcc, subject, body, attachments,
@@ -247,7 +247,7 @@ public class MailSharingTests extends CommonTest {
 				role, message, sharingnoteifany, allowtoseeprivateappt,
 				mountingfoldername);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "SharingDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -257,11 +257,11 @@ public class MailSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		ProvZCS.injectMessage(to, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -270,7 +270,7 @@ public class MailSharingTests extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 		obj.zFolder.zClick(mountingfoldername);
@@ -293,7 +293,7 @@ public class MailSharingTests extends CommonTest {
 		obj.zButton.zClick(page.zMailApp.zCancelIconBtn);
 		Thread.sleep(1000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "SharingDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -303,11 +303,11 @@ public class MailSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
-		String User1 = selfAccountName;
+		String User1 = SelNGBase.selfAccountName.get();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				"");
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
@@ -315,7 +315,7 @@ public class MailSharingTests extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zMailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
@@ -326,8 +326,8 @@ public class MailSharingTests extends CommonTest {
 
 		obj.zEditField
 				.zType(localize(locator.accountPersonaLabel), "MyPersona");
-		selenium.check("//input[contains(@id, '_PERSONA_WHEN_SENT_TO')]");
-		selenium.type("//input[contains(@id, '_PERSONA_WHEN_SENT_TO_LIST')]",
+		SelNGBase.selenium.get().check("//input[contains(@id, '_PERSONA_WHEN_SENT_TO')]");
+		SelNGBase.selenium.get().type("//input[contains(@id, '_PERSONA_WHEN_SENT_TO_LIST')]",
 				User1);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
 
@@ -337,7 +337,7 @@ public class MailSharingTests extends CommonTest {
 		obj.zFolder.zClick(mountingfoldername);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.reply));
-		selenium.isElementPresent("zv__COMPOSE1_obo_checkbox");
+		SelNGBase.selenium.get().isElementPresent("zv__COMPOSE1_obo_checkbox");
 		page.zComposeView.zAddAttachments(attachments, false);
 		obj.zButton.zClick(localize(locator.send));
 
@@ -346,10 +346,10 @@ public class MailSharingTests extends CommonTest {
 		subject = "Re: " + subject;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
-		selenium.isTextPresent(User1);
-		selenium.isTextPresent(invitedusers);
+		SelNGBase.selenium.get().isTextPresent(User1);
+		SelNGBase.selenium.get().isTextPresent(invitedusers);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -371,7 +371,7 @@ public class MailSharingTests extends CommonTest {
 			String role, String message, String sharingnoteifany,
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		verifyMailDeletionOnDiffRole(to, cc, bcc, subject, body, attachments,
@@ -379,7 +379,7 @@ public class MailSharingTests extends CommonTest {
 				role, message, sharingnoteifany, allowtoseeprivateappt,
 				mountingfoldername);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -400,7 +400,7 @@ public class MailSharingTests extends CommonTest {
 			String role, String message, String sharingnoteifany,
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		verifyMailDeletionOnDiffRole(to, cc, bcc, subject, body, attachments,
@@ -408,7 +408,7 @@ public class MailSharingTests extends CommonTest {
 				role, message, sharingnoteifany, allowtoseeprivateappt,
 				mountingfoldername);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -430,10 +430,10 @@ public class MailSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
@@ -442,7 +442,7 @@ public class MailSharingTests extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				sharingfoldername, sharetype, invitedusers, role,
@@ -457,7 +457,7 @@ public class MailSharingTests extends CommonTest {
 				message, sharingnoteifany, allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = thirdUser;
+		SelNGBase.selfAccountName.set(thirdUser);
 		page.zLoginpage.zLoginToZimbraAjax(thirdUser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		page.zSharing.zAcceptShare(mountingfoldername);
@@ -465,7 +465,7 @@ public class MailSharingTests extends CommonTest {
 		obj.zButton.zIsDisabled(page.zMailApp.zDeleteBtn);
 		obj.zMessageItem.zRtClick(subject);
 		obj.zMenuItem.zIsDisabled(localize(locator.del));
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -485,10 +485,10 @@ public class MailSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
@@ -500,13 +500,13 @@ public class MailSharingTests extends CommonTest {
 				sharingnoteifany);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername, localize(locator.green),
 				localize(locator.sendStandardMailAboutShare), sharingnoteifany);
 
 		resetSession();
-		SelNGBase.selfAccountName = currentloggedinuser;
+		SelNGBase.selfAccountName.set(currentloggedinuser);
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zSharing.zVerifyShareAcceptedMail(currentloggedinuser,
 				sharingfoldername, sharetype, invitedusers, role,
@@ -515,14 +515,14 @@ public class MailSharingTests extends CommonTest {
 				.zRevokeShare(sharingfoldername, message, sharingnoteifany);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zVerifyShareRevokedMail(currentloggedinuser,
 				sharingfoldername, sharetype, invitedusers, role,
 				sharingnoteifany);
 		obj.zFolder.zClick(mountingfoldername);
 		obj.zMessageItem.zNotExists(subject);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -542,10 +542,10 @@ public class MailSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
@@ -554,17 +554,17 @@ public class MailSharingTests extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 
 		resetSession();
-		SelNGBase.selfAccountName = currentloggedinuser;
+		SelNGBase.selfAccountName.set(currentloggedinuser);
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zSharing.zResendShare(sharingfoldername);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		String samemountedfolder = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
@@ -575,7 +575,7 @@ public class MailSharingTests extends CommonTest {
 		obj.zMessageItem.zExists(subject);
 		obj.zFolder.zClick(samemountedfolder);
 		obj.zMessageItem.zExists(subject);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -596,10 +596,10 @@ public class MailSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
@@ -613,7 +613,7 @@ public class MailSharingTests extends CommonTest {
 		String[] invitedarray = { inviteduser1, inviteduser2 };
 		for (int i = 0; i <= 1; i++) {
 			resetSession();
-			SelNGBase.selfAccountName = invitedarray[i];
+			SelNGBase.selfAccountName.set(invitedarray[i]);
 			page.zLoginpage.zLoginToZimbraAjax(invitedarray[i]);
 			page.zSharing.zVerifyShareCreatedMailInInboxFolder(
 					currentloggedinuser, sharingfoldername, sharetype,
@@ -625,7 +625,7 @@ public class MailSharingTests extends CommonTest {
 			obj.zMessageItem.zRtClick(subject);
 			obj.zMenuItem.zIsDisabled(localize(locator.del));
 		}
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -646,10 +646,10 @@ public class MailSharingTests extends CommonTest {
 			String role, String message, String sharingnoteifany,
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
@@ -664,7 +664,7 @@ public class MailSharingTests extends CommonTest {
 		for (int i = 0; i <= 1; i++) {
 			if (i == 0) {
 				resetSession();
-				SelNGBase.selfAccountName = invitedarray[i];
+				SelNGBase.selfAccountName.set(invitedarray[i]);
 				page.zLoginpage.zLoginToZimbraAjax(invitedarray[i]);
 				page.zSharing.zVerifyShareCreatedMailInInboxFolder(
 						currentloggedinuser, sharingfoldername, sharetype,
@@ -677,7 +677,7 @@ public class MailSharingTests extends CommonTest {
 				obj.zMenuItem.zIsEnabled(localize(locator.del));
 			} else if (i == 1) {
 				resetSession();
-				SelNGBase.selfAccountName = invitedarray[i];
+				SelNGBase.selfAccountName.set(invitedarray[i]);
 				page.zLoginpage.zLoginToZimbraAjax(invitedarray[i]);
 				page.zSharing.zVerifyShareCreatedMailInInboxFolder(
 						currentloggedinuser, sharingfoldername, sharetype,
@@ -685,14 +685,14 @@ public class MailSharingTests extends CommonTest {
 				page.zSharing.zDeclineShare();
 
 				resetSession();
-				SelNGBase.selfAccountName = currentloggedinuser;
+				SelNGBase.selfAccountName.set(currentloggedinuser);
 				page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 				page.zSharing.zVerifyShareDeclinedMailInInboxFolder(
 						currentloggedinuser, sharingfoldername, sharetype,
 						invitedarray[i], role, sharingnoteifany);
 			}
 		}
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void verifyMailDeletionOnDiffRole(String to, String cc, String bcc,
@@ -710,7 +710,7 @@ public class MailSharingTests extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zMailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
@@ -797,10 +797,10 @@ public class MailSharingTests extends CommonTest {
 			String role, String message, String sharingnoteifany,
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
@@ -813,7 +813,7 @@ public class MailSharingTests extends CommonTest {
 
 		// user3 send mail to user1
 		resetSession();
-		SelNGBase.selfAccountName = inviteduser3;
+		SelNGBase.selfAccountName.set(inviteduser3);
 		page.zLoginpage.zLoginToZimbraAjax(inviteduser3);
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(currentloggedinuser, cc, bcc,
@@ -822,7 +822,7 @@ public class MailSharingTests extends CommonTest {
 		Thread.sleep(5000);
 
 		resetSession();
-		SelNGBase.selfAccountName = inviteduser2;
+		SelNGBase.selfAccountName.set(inviteduser2);
 		page.zLoginpage.zLoginToZimbraAjax(inviteduser2);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				sharingfoldername, sharetype, inviteduser2, role,
@@ -835,7 +835,7 @@ public class MailSharingTests extends CommonTest {
 		obj.zButton.zClick(ComposeView.zSendIconBtn);
 
 		resetSession();
-		SelNGBase.selfAccountName = inviteduser3;
+		SelNGBase.selfAccountName.set(inviteduser3);
 		page.zLoginpage.zLoginToZimbraAjax(inviteduser3);
 		MailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),
@@ -843,13 +843,13 @@ public class MailSharingTests extends CommonTest {
 		Thread.sleep(5000);
 
 		resetSession();
-		SelNGBase.selfAccountName = currentloggedinuser;
+		SelNGBase.selfAccountName.set(currentloggedinuser);
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 
 		MailApp.ClickCheckMailUntilMailShowsUp(page.zMailApp.zSentFldr, "Re: "
 				+ subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -898,10 +898,10 @@ public class MailSharingTests extends CommonTest {
 			String role, String message, String sharingnoteifany,
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendar();
 		obj.zCalendarFolder.zExists(localize(locator.calendar));
@@ -920,7 +920,7 @@ public class MailSharingTests extends CommonTest {
 		Thread.sleep(5000);
 
 		resetSession();
-		SelNGBase.selfAccountName = inviteduser2;
+		SelNGBase.selfAccountName.set(inviteduser2);
 		page.zLoginpage.zLoginToZimbraAjax(inviteduser2);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				sharingfoldername, sharetype, inviteduser2, role,
@@ -934,12 +934,12 @@ public class MailSharingTests extends CommonTest {
 		String admins[] = admin.split(",");
 		// use tokinize here to seperate accept and ecline
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("xpath=//td[contains(@class,'Label') and contains(text(),'"
 								+ localize(locator.permissions) + "')]"));
 
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("xpath=//td[contains(@class,'Field')]/div[contains(text(),'"
 								+ localize(locator.shareActionRead)
 								+ ", "
@@ -956,7 +956,7 @@ public class MailSharingTests extends CommonTest {
 								+ localize(locator.shareActionAdmin) + "')]"));
 
 		resetSession();
-		SelNGBase.selfAccountName = inviteduser3;
+		SelNGBase.selfAccountName.set(inviteduser3);
 		page.zLoginpage.zLoginToZimbraAjax(inviteduser3);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				sharingfoldername, sharetype, inviteduser3,
@@ -971,7 +971,7 @@ public class MailSharingTests extends CommonTest {
 		// use tokinize here to seperate accept and decline
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@class,'Label') and contains(text(),'"
 										+ localize(locator.permissions) + "')]"),
 						"Permission Label doesn't present for Admin Rights");
@@ -980,7 +980,7 @@ public class MailSharingTests extends CommonTest {
 		// +localize(locator.permissions)+"')]"));
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@class,'Field')]/div[contains(text(),'"
 										+ localize(locator.shareActionRead)
 										+ ", "
@@ -995,7 +995,7 @@ public class MailSharingTests extends CommonTest {
 										+ mangr[1].trim() + "')]"),
 						"View, Edit, Add, Remove, Accept, Decline not showing for Admin Rights");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -1032,10 +1032,10 @@ public class MailSharingTests extends CommonTest {
 			String role, String message, String sharingnoteifany,
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(currentloggedinuser, cc,
@@ -1048,7 +1048,7 @@ public class MailSharingTests extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = inviteduser2;
+		SelNGBase.selfAccountName.set(inviteduser2);
 		page.zLoginpage.zLoginToZimbraAjax(inviteduser2);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				sharingfoldername, sharetype, inviteduser2, role,
@@ -1068,7 +1068,7 @@ public class MailSharingTests extends CommonTest {
 		Thread.sleep(1500);
 		obj.zFolder.zNotExists(mountingfoldername);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -1102,10 +1102,10 @@ public class MailSharingTests extends CommonTest {
 			String role, String message, String sharingnoteifany,
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(currentloggedinuser, cc,
@@ -1119,7 +1119,7 @@ public class MailSharingTests extends CommonTest {
 				sharetype, inviteduser2, role, message, sharingnoteifany,
 				allowtoseeprivateappt);
 		resetSession();
-		SelNGBase.selfAccountName = inviteduser2;
+		SelNGBase.selfAccountName.set(inviteduser2);
 		page.zLoginpage.zLoginToZimbraAjax(inviteduser2);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				sharingfoldername, sharetype, inviteduser2, role,
@@ -1142,7 +1142,7 @@ public class MailSharingTests extends CommonTest {
 		obj.zFolder.zClick(localize(locator.inbox));
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -1150,7 +1150,7 @@ public class MailSharingTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -37,15 +38,15 @@ public class VerifyAllSkinUI extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -56,7 +57,7 @@ public class VerifyAllSkinUI extends CommonTest {
 	@Test(dataProvider = "SkinDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAllSkinsBasicUI(String skinName) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String skin[];
@@ -65,7 +66,7 @@ public class VerifyAllSkinUI extends CommonTest {
 		for (int i = 0; i <= skin.length - 1; i++) {
 			System.out.println("---------- Verifying skin UI(" + skin[i]
 					+ ") ----------");
-			selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+			SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 					+ ZimbraSeleniumProperties.getStringProperty("server") + "/?skin="
 					+ skin[i].toLowerCase());
 			zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
@@ -171,7 +172,7 @@ public class VerifyAllSkinUI extends CommonTest {
 			Thread.sleep(2000);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@SuppressWarnings("static-access")
@@ -187,7 +188,7 @@ public class VerifyAllSkinUI extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

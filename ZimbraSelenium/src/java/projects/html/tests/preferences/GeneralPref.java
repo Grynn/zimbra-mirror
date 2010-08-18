@@ -53,15 +53,15 @@ public class GeneralPref extends CommonTest {
 	private void zLogin() throws Exception {
 
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class GeneralPref extends CommonTest {
 	 */
 	@Test(dataProvider = "GeneralPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void ChangePwdRelogin() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zGeneralPrefUI.zNavigateToChangePasswordWindow();
@@ -82,15 +82,15 @@ public class GeneralPref extends CommonTest {
 
 		resetSession();
 		page.zLoginpage
-				.zLoginToZimbraHTML(SelNGBase.selfAccountName, "test321");
+				.zLoginToZimbraHTML(SelNGBase.selfAccountName.get(), "test321");
 
 		resetSession();
 
 		String accountName = ProvZCS.getRandomAccount();
-		SelNGBase.selfAccountName = accountName;
+		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraHTML(accountName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -102,14 +102,14 @@ public class GeneralPref extends CommonTest {
 	 */
 	@Test(dataProvider = "GeneralPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyIncludeJunkFolderInSearch(String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zGeneralPrefUI.zNavigateToPrefGenralAndSelectSearchFolder("Junk");
 
 		// to have a mail in Junk folder
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(ProvZCS.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
 				"", "", constantSubjectForJunk, body, "");
 		obj.zCheckbox.zClick(constantSubjectForJunk);
 		SleepUtil.sleepSmall();
@@ -121,11 +121,11 @@ public class GeneralPref extends CommonTest {
 		obj.zMessageItem.zExists(constantSubjectForJunk);
 
 		page.zGeneralPrefUI
-				.zSearchUsingMainSearchField(ProvZCS.selfAccountName);
+				.zSearchUsingMainSearchField(SelNGBase.selfAccountName.get());
 
 		obj.zMessageItem.zExists(constantSubjectForJunk);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -134,17 +134,17 @@ public class GeneralPref extends CommonTest {
 	@Test(dataProvider = "GeneralPrefDataProvider", dependsOnMethods = "verifyIncludeJunkFolderInSearch", groups = {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void NegativeTestIncludeJunkFolderInSearch() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			IncludeJunkFolderInSearch();
 		// This test works on the message which is in junk folder from test
 		// verifyIncludeJunkFolderInSearch
 		page.zGeneralPrefUI.zNavigateToPrefGenralAndSelectSearchFolder("Junk");
 
 		page.zGeneralPrefUI
-				.zSearchUsingMainSearchField(ProvZCS.selfAccountName);
+				.zSearchUsingMainSearchField(SelNGBase.selfAccountName.get());
 		obj.zMessageItem.zNotExists(constantSubjectForJunk);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -155,14 +155,14 @@ public class GeneralPref extends CommonTest {
 	 */
 	@Test(dataProvider = "GeneralPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyIncludeTrashFolderInSearch(String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zGeneralPrefUI.zNavigateToPrefGenralAndSelectSearchFolder("Trash");
 
 		// to have a mail in Junk folder
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(ProvZCS.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
 				"", "", constantSubjectForTrash, body, "");
 		obj.zCheckbox.zClick(constantSubjectForTrash);
 		obj.zButton.zClick(localize(locator.del));
@@ -173,11 +173,11 @@ public class GeneralPref extends CommonTest {
 		obj.zMessageItem.zExists(constantSubjectForTrash);
 
 		page.zGeneralPrefUI
-				.zSearchUsingMainSearchField(ProvZCS.selfAccountName);
+				.zSearchUsingMainSearchField(SelNGBase.selfAccountName.get());
 
 		obj.zMessageItem.zExists(constantSubjectForTrash);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -188,17 +188,17 @@ public class GeneralPref extends CommonTest {
 	@Test(dataProvider = "GeneralPrefDataProvider", dependsOnMethods = "verifyIncludeTrashFolderInSearch", groups = {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void NegativeTestIncludeTrashFolderInSearch() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			IncludeTrashFolderInSearch();
 		// This test works on the message which is in junk folder from test
 		// verifyIncludeJunkFolderInSearch
 		page.zGeneralPrefUI.zNavigateToPrefGenralAndSelectSearchFolder("Trash");
 
 		page.zGeneralPrefUI
-				.zSearchUsingMainSearchField(ProvZCS.selfAccountName);
+				.zSearchUsingMainSearchField(SelNGBase.selfAccountName.get());
 		obj.zMessageItem.zNotExists(constantSubjectForTrash);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -208,7 +208,7 @@ public class GeneralPref extends CommonTest {
 	 */
 	@Test(dataProvider = "GeneralPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAlwaysShowSrchString() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zGeneralPrefUI
@@ -222,7 +222,7 @@ public class GeneralPref extends CommonTest {
 		Assert.assertTrue(actualValueDisplayed.equals("in:\"Inbox\""),
 				"The string in:\"Inbox\" is not displayed in find edit field");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class GeneralPref extends CommonTest {
 	@Test(dataProvider = "GeneralPrefDataProvider", dependsOnMethods = "verifyAlwaysShowSrchString", groups = {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void NegativeTestAlwaysShowSrchString() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			AlwaysShowSrchString();
 
 		page.zGeneralPrefUI
@@ -244,12 +244,12 @@ public class GeneralPref extends CommonTest {
 				.zGetInnerText(page.zGeneralPrefUI.zFindEditFiled);
 		Assert.assertTrue(actualValueDisplayed.equals("<blank>"),
 				"The Find edit field is not blank ");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

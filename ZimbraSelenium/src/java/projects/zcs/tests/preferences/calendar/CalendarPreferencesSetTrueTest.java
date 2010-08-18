@@ -53,7 +53,7 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefCalendarInitialView",
 				"week");
@@ -74,27 +74,27 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 //		selenium.refresh();
 
 		Thread.sleep(5000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarPrefShowMiniCal() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		obj.zMiscObj.zExists("DwtCalendar");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "calendarPreferencesDataProvider", groups = { "smoke",
@@ -102,7 +102,7 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 	public void zCalendarPrefDeleteInvite(String subject, String location,
 			String body, String deleteInvite) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String accountName = ProvZCS.getRandomAccount();
@@ -121,7 +121,7 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 
 		Thread.sleep(1000);
 
-		SelNGBase.selfAccountName = accountName;
+		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 
 		MailApp
@@ -137,13 +137,13 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 		else
 			obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full","enabled" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarPrefQuickAdd() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -159,13 +159,13 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 		
 		obj.zButton.zClickInDlg(localize(locator.cancel));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full"}, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarPrefShowTimeZone() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -180,15 +180,15 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 		// Assert.assertEquals(timeZone, "true",
 		// "Timezone menu doesn't exist on setting the ShowTimeZone pref to True");
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("xpath=//td[contains(@id,'_tzoneSelect')]/div[contains(@class,'ZSelectAutoSizingContainer')]"));
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 	
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarPrefShowReminders() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -203,13 +203,13 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 		
 		obj.zButton.zClickInDlg(localize(locator.dismissAll));
 		
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

@@ -1,5 +1,7 @@
 package projects.html.clients;
 
+import framework.core.SelNGBase;
+
 
 
 /**
@@ -26,17 +28,17 @@ public class Folder extends ZObject {
 				this._expndFldrIfRequired(currentFolder, panel, param1);
 				continue;
 			}
-			rc = selenium.call("folderCore_html",  currentFolder, action, retryOnFalse, panel, param1);
+			rc = SelNGBase.selenium.get().call("folderCore_html",  currentFolder, action, retryOnFalse, panel, param1);
 		}
 		return rc;		
 	}	
 	
 	public  void zExpand(String folder) {
-		selenium.call("folderCore_html",  folder+"_expand", "click", true, "", "");
+		SelNGBase.selenium.get().call("folderCore_html",  folder+"_expand", "click", true, "", "");
 	}
 
 	public  void zCollapse(String folder) {
-		selenium.call("folderCore_html",  folder+"_collapse", "click", true, "", "");
+		SelNGBase.selenium.get().call("folderCore_html",  folder+"_collapse", "click", true, "", "");
 	}
 
 	/**
@@ -44,7 +46,7 @@ public class Folder extends ZObject {
 	 * @param folder
 	 */
 	public  void zEdit(String folder) {
-		selenium.call("folderCore_html",  folder+"_edit", "click", true, "", "");
+		SelNGBase.selenium.get().call("folderCore_html",  folder+"_edit", "click", true, "", "");
 	}	
 
 
@@ -53,9 +55,9 @@ public class Folder extends ZObject {
 	private  void _expndFldrIfRequired(String folder, String panel, String param1) {
 	//	String rc = selenium.call("this.doZfolderExpandBtnExists("
 	//			+ doubleQuote + folder + doubleQuote + ")");
-		String rc = selenium.call("folderCore_html",  folder+"_expand", "exists", true, panel, param1);
+		String rc = SelNGBase.selenium.get().call("folderCore_html",  folder+"_expand", "exists", true, panel, param1);
 		if(rc.equals("true"))
-			selenium.call("folderCore_html",  folder+"_expand", "click", true, panel, param1);
+			SelNGBase.selenium.get().call("folderCore_html",  folder+"_expand", "click", true, panel, param1);
 	}	
 
 }

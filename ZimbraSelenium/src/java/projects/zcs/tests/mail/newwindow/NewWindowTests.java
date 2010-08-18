@@ -31,31 +31,31 @@ public class NewWindowTests extends CommonTest {
 				|| test.equals("forwardMsgFromNewWindow")
 				|| test.equals("tagUntagMsgFromNewWindow")
 				|| test.equals("networkServiceErrorInNewWindow_Bug41205")) {
-			return new Object[][] { { SelNGBase.selfAccountName,
-					SelNGBase.selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(),
+					SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getOnlyEnglishAlphabetCharAndNumber(), getOnlyEnglishAlphabetCharAndNumber(), "" } };
 		} else if (test
 				.equals("cancelingComposeInNewWindowSavesDraft_Bug43560")) {
-			return new Object[][] { { SelNGBase.selfAccountName,
-					SelNGBase.selfAccountName, ProvZCS.getRandomAccount(),
+			return new Object[][] { { SelNGBase.selfAccountName.get(),
+					SelNGBase.selfAccountName.get(), ProvZCS.getRandomAccount(),
 					"bccuser@testdomain.com",
 					"subject_cancelingComposeInNewWindowSavesDraft_Bug43560",
 					"body_cancelingComposeInNewWindowSavesDraft_Bug43560", "" } };
 		} else if (test.equals("cancelingComposeInNewWindowAndSavingDraft")) {
-			return new Object[][] { { SelNGBase.selfAccountName,
-					SelNGBase.selfAccountName, ProvZCS.getRandomAccount(),
+			return new Object[][] { { SelNGBase.selfAccountName.get(),
+					SelNGBase.selfAccountName.get(), ProvZCS.getRandomAccount(),
 					"bccuser@testdomain.com",
 					"subject_cancelingComposeInNewWindowSavingDraft",
 					"body_cancelingComposeInNewWindowSavingDraft", "" } };
 		} else if (test.equals("replyAllMsgFromNewWindow")) {
-			return new Object[][] { { SelNGBase.selfAccountName,
-					SelNGBase.selfAccountName, ProvZCS.getRandomAccount(),
+			return new Object[][] { { SelNGBase.selfAccountName.get(),
+					SelNGBase.selfAccountName.get(), ProvZCS.getRandomAccount(),
 					"bccuser@testdomain.com",
 					"subject_replyAllMsgFromNewWindow",
 					"body_replyAllMsgFromNewWindow", "" } };
 		} else {
-			return new Object[][] { { SelNGBase.selfAccountName,
-					SelNGBase.selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(),
+					SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
 					"commonbody", "" } };
 		}
@@ -72,10 +72,10 @@ public class NewWindowTests extends CommonTest {
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -84,144 +84,144 @@ public class NewWindowTests extends CommonTest {
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void closeNewWindow(String from, String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		Thread.sleep(2000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteMsgFromNewWindow(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		Thread.sleep(10000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		
 		obj.zButton.zClick(page.zMailApp.zDeleteIconBtn_newWindow);
 		Thread.sleep(8000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		obj.zMessageItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void replyMsgFromNewWindow(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		Thread.sleep(2000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn_newWindow);
 		Thread.sleep(1500);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 		Thread.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		Thread.sleep(2000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Re: " + subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void replyAllMsgFromNewWindow(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		Thread.sleep(2000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zReplyAllIconBtn_newWindow);
 		Thread.sleep(1500);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 		Thread.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		Thread.sleep(2000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zExists("Re: " + subject);
 
 		resetSession();
-		SelNGBase.selfAccountName = cc;
+		SelNGBase.selfAccountName.set(cc);
 		page.zLoginpage.zLoginToZimbraAjax(cc);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Re: " + subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void forwardMsgFromNewWindow(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		Thread.sleep(2000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn_newWindow);
 		Thread.sleep(1500);
 		obj.zEditField.zType(page.zComposeView.zToField,
-				SelNGBase.selfAccountName);
+				SelNGBase.selfAccountName.get());
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 		Thread.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		Thread.sleep(2000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Fwd: " + subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tagUntagMsgFromNewWindow(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -230,42 +230,42 @@ public class NewWindowTests extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		Thread.sleep(1500);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn_newWindow);
 		obj.zMenuItem.zClick("testTag");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		Thread.sleep(2000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		obj.zMessageItem.zVerifyIsTagged(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		Thread.sleep(1500);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn_newWindow);
 		obj.zMenuItem.zClick(localize(locator.removeTag));
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		Thread.sleep(2000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		obj.zMessageItem.zVerifyIsNotTagged(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void networkServiceErrorInNewWindow_Bug41205(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		Thread.sleep(2000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		for (int i = 0; i <= 10; i++) {
 			String dlgExists = obj.zDialog
 					.zExistsDontWait(localize(locator.zimbraTitle));
@@ -285,19 +285,19 @@ public class NewWindowTests extends CommonTest {
 		}
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		Thread.sleep(2000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void cancelingComposeInNewWindowSavesDraft_Bug43560(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -306,30 +306,30 @@ public class NewWindowTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zButton.zClick("id=zb__COMPOSE1__DETACH_COMPOSE_left_icon");
 		Thread.sleep(2000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zEditor.zType("Modifying body");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		Thread.sleep(1000);
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
 		Thread.sleep(1000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 		Thread.sleep(1000);
 		assertReport("false", obj.zMessageItem.zExistsDontWait(subject),
 				"Verifying drafted message");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void cancelingComposeInNewWindowAndSavingDraft(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -338,19 +338,19 @@ public class NewWindowTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zButton.zClick("id=zb__COMPOSE1__DETACH_COMPOSE_left_icon");
 		Thread.sleep(2000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zEditor.zType("Modifying body");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		Thread.sleep(1000);
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
 		Thread.sleep(1000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 		Thread.sleep(1000);
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -358,7 +358,7 @@ public class NewWindowTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

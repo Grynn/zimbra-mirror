@@ -89,7 +89,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefShowFragments", "TRUE");
 		ProvZCS.modifyAccount(accountName, "zimbraPrefOpenMailInNewWindow",
@@ -99,16 +99,16 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		zReloginToAjax();
 
 		Thread.sleep(5000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -123,10 +123,10 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData(3);
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zComposeView.zNavigateToMailCompose();
 
@@ -135,7 +135,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 		obj.zMessageItem.zExists(body);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -148,10 +148,10 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		String browserWindowTitle;
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(accountName, "", "",
@@ -159,14 +159,14 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		Thread.sleep(2000);
 		obj.zMessageItem.zDblClick(subject);
 		Thread.sleep(4000); // test continuously fails here
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", "id=zb__MSG1__CLOSE_left_icon");
 		obj.zButton.zClick("id=zb__MSG1__CLOSE_left_icon");
-		selenium.selectWindow(null);
-		selenium.refresh();
+		SelNGBase.selenium.get().selectWindow(null);
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailPreferencesDataProvider", groups = { "smoke",
@@ -175,10 +175,10 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 			throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefMarkMsgRead", readTime);
 
@@ -222,19 +222,19 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 		obj.zMenuItem.zClick(localize(locator.byConversation));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void mailPrefInitialMailSearch() throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData(3);
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefMailInitialSearch",
 				"in:sent");
@@ -259,7 +259,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailPreferencesDataProvider", groups = { "smoke",
@@ -269,7 +269,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 			throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String accountName = ProvZCS.getRandomAccount();
@@ -291,7 +291,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 		Thread.sleep(500);
 
-		SelNGBase.selfAccountName = accountName;
+		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 
 		if (donotKeepLocalCopy.equals("TRUE")) {
@@ -305,13 +305,13 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 		Thread.sleep(500);
 
-		SelNGBase.selfAccountName = forwardingAddress;
+		SelNGBase.selfAccountName.set(forwardingAddress);
 		page.zLoginpage.zLoginToZimbraAjax(forwardingAddress);
 
 		MailApp
 				.ClickCheckMailUntilMailShowsUp(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailPreferencesDataProvider", groups = { "smoke",
@@ -320,7 +320,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 			throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String accountName = ProvZCS.getRandomAccount();
@@ -344,7 +344,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 		Thread.sleep(500);
 
-		SelNGBase.selfAccountName = notificationAddress;
+		SelNGBase.selfAccountName.set(notificationAddress);
 		page.zLoginpage.zLoginToZimbraAjax(notificationAddress);
 
 		MailApp.ClickCheckMailUntilMailShowsUp("Postmaster");
@@ -360,7 +360,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		page.zMailApp.zVerifyMailContentContains("New message received at");
 		page.zMailApp.zVerifyMailContentContains(accountName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailPreferencesDataProvider", groups = { "smoke",
@@ -370,7 +370,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 			String oOOReceived) throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String accountName = ProvZCS.getRandomAccount();
@@ -409,12 +409,12 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 			obj.zMessageItem.zNotExists(subject);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

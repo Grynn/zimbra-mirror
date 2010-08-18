@@ -42,7 +42,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeFormat", "text");
 
@@ -76,26 +76,26 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		zReloginToAjax();
 
 		Thread.sleep(5000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zComposingComposeFormat() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -132,17 +132,17 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zComposingFontSetting() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String actualVal;
-			String accountName = selfAccountName;
+			String accountName = SelNGBase.selfAccountName.get();
 			String fontSize;
 
 			page.zMailApp.zNavigateToComposingPreferences();
@@ -234,17 +234,17 @@ public class ComposePreferencesTestsUI extends CommonTest {
 							+ actualVal);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zComposingReplyFwdUsingOriginalFormat() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -281,17 +281,17 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zComposingComposeInNewWindow() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -328,17 +328,17 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zComposingAutomaticallySaveDrafts() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -375,17 +375,17 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zComposingReplyingToEmail() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -424,17 +424,17 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zComposingForwardEmail() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -473,17 +473,17 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zComposingPrefixSetting() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -520,20 +520,20 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zComposingSaveToSent() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToComposingPreferences();
-		selenium.uncheck("//input[contains(@id,'_SAVE_TO_SENT')]");
+		SelNGBase.selenium.get().uncheck("//input[contains(@id,'_SAVE_TO_SENT')]");
 		
 		//obj.zRadioBtn.zClick(localize(locator.saveToSentNOT));
 
@@ -552,7 +552,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
-		selenium.check("//input[contains(@id,'_SAVE_TO_SENT')]");
+		SelNGBase.selenium.get().check("//input[contains(@id,'_SAVE_TO_SENT')]");
 	/*	if (ZimbraSeleniumProperties.getStringProperty("locale").equals("de")) {
 			obj.zRadioBtn.zClick("Kopie im Ordner");
 		} else {
@@ -574,7 +574,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void waitForIE() throws Exception {
@@ -598,16 +598,16 @@ public class ComposePreferencesTestsUI extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void checkFontSizeInMsgBody_36919() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String fontSize;
 		String currentFont;
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
-		selenium.clickAt(
+		SelNGBase.selenium.get().clickAt(
 				"xpath=//label[contains(@id,'_text_right') and contains(text(),'"
 						+ localize(locator.composeAsHTML) + "')]", "");
 
@@ -640,21 +640,21 @@ public class ComposePreferencesTestsUI extends CommonTest {
 				"ccuser@testdomain.com", "bccuser@testdomain.com", "sub",
 				"hello", "");
 
-		selenium.selectFrame("css=iframe[id*='zv__CLV__MSG_body__iframe']");
-		String messageBodyText = selenium.getText("xpath=/html/body/div");
+		SelNGBase.selenium.get().selectFrame("css=iframe[id*='zv__CLV__MSG_body__iframe']");
+		String messageBodyText = SelNGBase.selenium.get().getText("xpath=/html/body/div");
 		Assert.assertTrue(messageBodyText.contains("hello"));
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("xpath=/html/body/div[contains(@style,'font-size: "
 								+ fontSize + "')]"));
-		selenium.selectFrame("relative=top");
+		SelNGBase.selenium.get().selectFrame("relative=top");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

@@ -15,6 +15,7 @@ import projects.zcs.tests.CommonTest;
 
 import com.zimbra.common.service.ServiceException;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -52,17 +53,17 @@ public class ShortcutsCalendar extends CommonTest {
 		zLoginIfRequired();
 		Thread.sleep(2000);
 
-		String[] recipients = { selfAccountName };
-		isExecutionARetry = false;
+		String[] recipients = { SelNGBase.selfAccountName.get() };
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -74,10 +75,10 @@ public class ShortcutsCalendar extends CommonTest {
 		String attendees = ProvZCS.getRandomAccount();
 		String body = getLocalizedData(3);
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 		Thread.sleep(2000);
 		page.zCalApp.zNavigateToCalendar();
 
@@ -93,9 +94,9 @@ public class ShortcutsCalendar extends CommonTest {
 		} else if(actionType.equals("Today")){
 			page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
 			obj.zAppointment.zExists(subject);
-			selenium.clickAt("//*[contains(@class,'ImgRightArrow')]", "");
-			selenium.clickAt("//*[contains(@class,'ImgRightArrow')]", "");
-			selenium.clickAt("//*[contains(@class,'ImgRightArrow')]", "");
+			SelNGBase.selenium.get().clickAt("//*[contains(@class,'ImgRightArrow')]", "");
+			SelNGBase.selenium.get().clickAt("//*[contains(@class,'ImgRightArrow')]", "");
+			SelNGBase.selenium.get().clickAt("//*[contains(@class,'ImgRightArrow')]", "");
 			obj.zAppointment.zNotExists(subject);
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
@@ -160,15 +161,15 @@ public class ShortcutsCalendar extends CommonTest {
 			zRobot.keyRelease(keyToPress);
 			Thread.sleep(2000);
 
-			Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__se"));
-			Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__tg"));
-			Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__at"));
-			Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__su"));
-			Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__lo"));
-			Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__st"));
-			Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__fo"));
-			Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__re"));
-			Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__dt"));
+			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__se"));
+			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__tg"));
+			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__at"));
+			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__su"));
+			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__lo"));
+			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__st"));
+			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__fo"));
+			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__re"));
+			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__dt"));
 		}else if(actionType.equals("Schedule")){
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
@@ -185,7 +186,7 @@ public class ShortcutsCalendar extends CommonTest {
 		zRobot.keyPress(KeyEvent.VK_ESCAPE);
 		zRobot.keyRelease(KeyEvent.VK_ESCAPE);
 		Thread.sleep(2000);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider",groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -193,10 +194,10 @@ public class ShortcutsCalendar extends CommonTest {
 	throws Exception {
 
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 		Thread.sleep(2000);
 		page.zCalApp.zNavigateToCalendar();
 
@@ -208,7 +209,7 @@ public class ShortcutsCalendar extends CommonTest {
 		Thread.sleep(2000);
 		
 		obj.zDialog.zExists(localize(locator.quickAddAppt));
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 
@@ -221,10 +222,10 @@ public class ShortcutsCalendar extends CommonTest {
 		String attendees = ProvZCS.getRandomAccount();
 		String body = getLocalizedData(3);
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 		Thread.sleep(2000);
 		page.zCalApp.zNavigateToCalendar();
 
@@ -238,18 +239,18 @@ public class ShortcutsCalendar extends CommonTest {
 		zRobot.keyRelease(KeyEvent.VK_E);
 		Thread.sleep(2000);
 		obj.zEditField.zExists(localize(locator.subject));
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 	
 	
 	public Boolean getElementStatus(String className, String day) throws Exception{
-		return(selenium.isElementPresent("//*[contains(@class,'"+className+"') and contains(text(),'"+day+"')]"));
+		return(SelNGBase.selenium.get().isElementPresent("//*[contains(@class,'"+className+"') and contains(text(),'"+day+"')]"));
 	}
 
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

@@ -18,8 +18,8 @@ public class RetryFailedTests extends RetryAnalyzerCount {
 	@Override
 	public boolean retryMethod(ITestResult result) {
 		logRetriedTests(result.getMethod().toString());
-		SelNGBase.isExecutionARetry = true;
-		SelNGBase.needReset = false;
+		SelNGBase.isExecutionARetry.set(true);
+		SelNGBase.needReset.set(false);
 		return true;
 	}
 

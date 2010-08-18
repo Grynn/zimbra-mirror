@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 import projects.zcs.tests.CommonTest;
@@ -32,15 +33,15 @@ public class SendBtnNegativeTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -53,13 +54,13 @@ public class SendBtnNegativeTests extends CommonTest {
 			String errMsg) throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zVerifySendThrowsError(to, cc, bcc, subject, body,
 				attachments, errDlgName, errMsg);
 		page.zComposeView.zGoToMailAppFromCompose();
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -71,18 +72,18 @@ public class SendBtnNegativeTests extends CommonTest {
 			String subject, String body, String attachments, String errDlgName,
 			String errMsg) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		page.zComposeView.zVerifySendThrowsError(to, cc, bcc, subject, body,
 				attachments, errDlgName, errMsg);
 		page.zComposeView.zGoToMailAppFromCompose();
-		needReset = false;// indicates no need to login for the next test
+		SelNGBase.needReset.set(false);// indicates no need to login for the next test
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		page.zComposeView.zGoToMailAppFromCompose();
 		zLogin();
 	}

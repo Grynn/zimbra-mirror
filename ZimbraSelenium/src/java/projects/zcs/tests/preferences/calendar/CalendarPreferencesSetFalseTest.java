@@ -53,7 +53,7 @@ public class CalendarPreferencesSetFalseTest extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefCalendarInitialView",
 				"workWeek");
@@ -74,33 +74,33 @@ public class CalendarPreferencesSetFalseTest extends CommonTest {
 		zReloginToAjax();
 
 		Thread.sleep(5000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarPrefShowMiniCal() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		obj.zMiscObj.zNotExists("DwtCalendar");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarPrefQuickAdd() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -111,13 +111,13 @@ public class CalendarPreferencesSetFalseTest extends CommonTest {
 
 		obj.zDialog.zNotExists(localize(locator.quickAddAppt));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarPrefShowTimeZone() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -129,13 +129,13 @@ public class CalendarPreferencesSetFalseTest extends CommonTest {
 		obj.zMiscObj
 				.zNotExists("ZmApptComposeView ZWidget/*tzoneSelect/ZSelectAutoSizingContainer ZHasDropDown");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarPrefShowReminders() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -149,12 +149,12 @@ public class CalendarPreferencesSetFalseTest extends CommonTest {
 		Thread.sleep(1000);
 
 		obj.zDialog.zNotExists(localize(locator.apptReminders));
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

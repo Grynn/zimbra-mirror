@@ -106,15 +106,15 @@ public class CalendarMiscTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 				
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 	
 	/**
@@ -126,19 +126,19 @@ public class CalendarMiscTests extends CommonTest {
 	@Test(dataProvider = "CreateApptsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyFreeBusyView(String view) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 				
 		String urlInitial =  "http://" + ZimbraSeleniumProperties.getStringProperty("server") + "/zimbra/h/calendar";
 		
 		String urlToNavigate = "http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":80/home/"
-		+ selfAccountName + "?fmt=freebusy";
+		+ SelNGBase.selfAccountName.get() + "?fmt=freebusy";
 		
 		if(null == someting || someting.trim().length() == 0)
 			someting = getLocalizedData_NoSpecialChar();
 		
 		//open calendar tab
-		selenium.open(urlInitial);
+		SelNGBase.selenium.get().open(urlInitial);
 		
 		SleepUtil.sleepMedium();
 		
@@ -147,7 +147,7 @@ public class CalendarMiscTests extends CommonTest {
 			page.zCalendarApp.zCreateSimpleAppt(someting, "", "", "");
 				
 		//open rest url
-		selenium.open(urlToNavigate);
+		SelNGBase.selenium.get().open(urlToNavigate);
 
 		SleepUtil.sleepMedium();
 
@@ -170,9 +170,9 @@ public class CalendarMiscTests extends CommonTest {
 		obj.zAppointment.zExists("Busy");
 		
 		//return to initial page
-		selenium.open(urlInitial);
+		SelNGBase.selenium.get().open(urlInitial);
 		
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -183,7 +183,7 @@ public class CalendarMiscTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyRepeatApptExceptionChangeTimezone() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = getLocalizedData_NoSpecialChar();
@@ -192,7 +192,7 @@ public class CalendarMiscTests extends CommonTest {
 		String timezone;
 		
 		//open calendar view
-		selenium.open(url);
+		SelNGBase.selenium.get().open(url);
 		SleepUtil.sleepMedium();
 				
 		// Navigate To Preferences view 
@@ -251,7 +251,7 @@ public class CalendarMiscTests extends CommonTest {
 		Thread.sleep(1000);	
 		obj.zHtmlMenu.zClick(page.zCalendarApp.apptComposeTimezoneDropdown, timezone);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	
@@ -263,12 +263,12 @@ public class CalendarMiscTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void sendFreeBusyLink() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String expectedMsg;
 		expectedMsg = "http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":80/home/"
-				+ selfAccountName + "?fmt=freebusy";
+				+ SelNGBase.selfAccountName.get() + "?fmt=freebusy";
 
 		page.zCalFolderApp.zNavigateToCalendarFoldersPage();
 
@@ -280,7 +280,7 @@ public class CalendarMiscTests extends CommonTest {
 				expectedMsg.toLowerCase()),
 				"Incorrect free busy link is formed");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -293,7 +293,7 @@ public class CalendarMiscTests extends CommonTest {
 	@Test(dataProvider = "CreateApptsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zNavigateToToday(String view, String subject) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		// ////////////////////////////////////////////
 		// Gets the current system date and adds 10 days to it.
@@ -314,7 +314,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		page.zCalendarApp.zCreateSimpleAppt(subject, "", "", "");
 
-		selenium.open(urlToNavigate);
+		SelNGBase.selenium.get().open(urlToNavigate);
 
 		SleepUtil.sleepMedium();
 
@@ -324,7 +324,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -340,50 +340,50 @@ public class CalendarMiscTests extends CommonTest {
 	public void zVerifyPaginationButtons(String view, String url,
 			String nextUrl, String prevUrl) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String browserTitle;
 		String browserTitle2;
 
-		selenium.open(url);
+		SelNGBase.selenium.get().open(url);
 		SleepUtil.sleepMedium();
 
 		obj.zButton.zClick(page.zCalendarApp.calNextPageBtn);
 
 		SleepUtil.sleepMedium();
 
-		browserTitle = selenium.getTitle();
+		browserTitle = SelNGBase.selenium.get().getTitle();
 
-		selenium.open(nextUrl);
+		SelNGBase.selenium.get().open(nextUrl);
 
 		SleepUtil.sleepMedium();
 
-		browserTitle2 = selenium.getTitle();
+		browserTitle2 = SelNGBase.selenium.get().getTitle();
 
 		Assert.assertTrue(browserTitle.equals(browserTitle2),
 				"Next pagination button works fine");
 
-		selenium.open(url);
+		SelNGBase.selenium.get().open(url);
 		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zCalendarApp.calPrevPageBtn);
 
 		SleepUtil.sleepMedium();
 
-		browserTitle = selenium.getTitle();
+		browserTitle = SelNGBase.selenium.get().getTitle();
 
-		selenium.open(prevUrl);
+		SelNGBase.selenium.get().open(prevUrl);
 
 		SleepUtil.sleepMedium();
 
-		browserTitle2 = selenium.getTitle();
+		browserTitle2 = SelNGBase.selenium.get().getTitle();
 
 		Assert.assertTrue(browserTitle.equals(browserTitle2),
 				"Prev pagination button works fine");
 
 		obj.zButton.zClick(page.zCalendarApp.calTodayBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -394,7 +394,7 @@ public class CalendarMiscTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zVerifyCalendarEditField() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String calName = getLocalizedData_NoSpecialChar();
@@ -413,7 +413,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		obj.zEditField.zIsEnabled(page.zCalFolderApp.calNameField);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -425,7 +425,7 @@ public class CalendarMiscTests extends CommonTest {
 	@Test(dataProvider = "CreateApptsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarScheduleView(String calCheck) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String calName = getLocalizedData_NoSpecialChar();
@@ -456,7 +456,7 @@ public class CalendarMiscTests extends CommonTest {
 			obj.zAppointment.zExists(subject1);
 			obj.zAppointment.zExists(subject2);
 		}
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -468,7 +468,7 @@ public class CalendarMiscTests extends CommonTest {
 	@Test(dataProvider = "CreateApptsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalPrefInitialView(String initialView) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String browserTitle1, browserTitle2;
@@ -479,7 +479,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		SleepUtil.sleepSmall();
 
-		browserTitle1 = selenium.getTitle();
+		browserTitle1 = SelNGBase.selenium.get().getTitle();
 
 		if (initialView.equals(localize(locator.calViewDay)))
 			obj.zButton.zClick(page.zCalendarApp.calDayViewBtn);
@@ -492,12 +492,12 @@ public class CalendarMiscTests extends CommonTest {
 
 		SleepUtil.sleepMedium();
 
-		browserTitle2 = selenium.getTitle();
+		browserTitle2 = SelNGBase.selenium.get().getTitle();
 
 		Assert.assertTrue(browserTitle1.equals(browserTitle2),
 				"Initial view calendar preference doesn't work");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -508,7 +508,7 @@ public class CalendarMiscTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalPrefManageCalendars() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String calName = getLocalizedData_NoSpecialChar();
@@ -520,7 +520,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		obj.zButton.zExists(page.zCalFolderApp.calSaveChangesBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -531,7 +531,7 @@ public class CalendarMiscTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalPrefShowTimezone() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zSetCalPrefShowTimezone();
@@ -542,13 +542,13 @@ public class CalendarMiscTests extends CommonTest {
 
 		obj.zHtmlMenu.zExists(page.zCalendarApp.apptComposeTimezoneDropdown);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zApptSubjectNegativeTest() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateSimpleAppt("", "", "", "");
@@ -557,13 +557,13 @@ public class CalendarMiscTests extends CommonTest {
 				.zAlertMsgExists(localize(locator.errorMissingSubject),
 						"Correct toast message is not thrown on entering blank subject");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zApptAttendeeNegativeTest() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateSimpleAppt(getLocalizedData_NoSpecialChar(),
@@ -583,13 +583,13 @@ public class CalendarMiscTests extends CommonTest {
 							"Correct toast message is not thrown on entering invalid attendees");
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zApptDateNegativeTest() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateAppt("test", "", "", "", "", "", "", "",
@@ -600,13 +600,13 @@ public class CalendarMiscTests extends CommonTest {
 						localize(locator.errorInvalidApptEndBeforeStart),
 						"Correct toast message is not thrown on entering invalid dates");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zApptTimeNegativeTest() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateAppt("test", "", "", "", "", "", "", "",
@@ -617,13 +617,13 @@ public class CalendarMiscTests extends CommonTest {
 						localize(locator.errorInvalidApptEndBeforeStart),
 						"Correct toast message is not thrown on entering invalid dates");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
-	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(groups = { "parallel", "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zApptAddAttendeesTest() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zNavigateToCalendar();
@@ -650,13 +650,13 @@ public class CalendarMiscTests extends CommonTest {
 		Assert.assertTrue(addAttendees.contains("bccuser"),
 				"Add attendees doesn't add attendees properly");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zImportICSTest() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String calName = getLocalizedData_NoSpecialChar();
@@ -676,7 +676,7 @@ public class CalendarMiscTests extends CommonTest {
 		page.zCalendarApp.zNavigateToViewAndDate("day:20091201");
 		obj.zAppointment.zExists("dec appt - imported from ICS");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -695,7 +695,7 @@ public class CalendarMiscTests extends CommonTest {
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

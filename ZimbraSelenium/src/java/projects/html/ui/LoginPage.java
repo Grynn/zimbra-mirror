@@ -41,8 +41,8 @@ public class LoginPage extends CommonTest {
 			throws ServiceException {
 		String username = "";
 		// if we are retrying the execution, then use the same account.
-		if (SelNGBase.isExecutionARetry)
-			username = SelNGBase.selfAccountName;
+		if (SelNGBase.isExecutionARetry.get())
+			username = SelNGBase.selfAccountName.get();
 		else
 			username = ProvZCS.getRandomAccount(accntAttrs);
 
@@ -88,7 +88,7 @@ public class LoginPage extends CommonTest {
 
 	public static boolean zWaitForElement(String elementId) {
 		for (int i = 0; i < 10; i++) {
-			if (selenium.isElementPresent(elementId))
+			if (SelNGBase.selenium.get().isElementPresent(elementId))
 				return true;
 			try {
 				Thread.sleep(2000);
@@ -102,7 +102,7 @@ public class LoginPage extends CommonTest {
 	public static void zCustomLoginToZimbraAjax(String parameter) {
 		try {
 			String username = ProvZCS.getRandomAccount();
-			SelNGBase.selfAccountName = username;
+			SelNGBase.selfAccountName.set(username);
 			customLogin(parameter);
 			Thread.sleep(1500);
 			currentBrowserName = BrowserUtil.getBrowserName();
@@ -124,7 +124,7 @@ public class LoginPage extends CommonTest {
 	 * @throws Exception
 	 */
 	public static void logoutOfZimbraAjax() throws Exception {
-		selenium.click("link=" + localize("logOff"));
+		SelNGBase.selenium.get().click("link=" + localize("logOff"));
 		Thread.sleep(1000);
 		assertTrue(true);
 	}

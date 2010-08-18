@@ -1,5 +1,7 @@
 package projects.zcs.clients;
 
+import framework.core.SelNGBase;
+
 
 
 public class Folder extends ZObject {
@@ -25,26 +27,26 @@ public class Folder extends ZObject {
 				this._expndFldrIfRequired(currentFolder, panel, param1);
 				continue;
 			}
-			rc = selenium.call("folderCore",  currentFolder, action, retryOnFalse, panel, param1);
+			rc = SelNGBase.selenium.get().call("folderCore",  currentFolder, action, retryOnFalse, panel, param1);
 		}
 		return rc;		
 	}	
 	
 	public  void zExpand(String folder) {
-		selenium.call("folderExpandBtnCore",  folder, "click", true, "", "");
+		SelNGBase.selenium.get().call("folderExpandBtnCore",  folder, "click", true, "", "");
 	}
 
 	public  void zCollapse(String folder) {
-		selenium.call("folderCollapseBtnCore",  folder, "click", true, "", "");
+		SelNGBase.selenium.get().call("folderCollapseBtnCore",  folder, "click", true, "", "");
 	}
 
 	private  void _expndFldrIfRequired(String folder, String panel, String param1) {
 
 	//	String rc = selenium.call("this.doZfolderExpandBtnExists("
 	//			+ doubleQuote + folder + doubleQuote + ")");
-		String rc = selenium.call("folderExpandBtnCore",  folder, "exists", true, panel, param1);
+		String rc = SelNGBase.selenium.get().call("folderExpandBtnCore",  folder, "exists", true, panel, param1);
 		if(rc.equals("true"))
-			selenium.call("folderExpandBtnCore",  folder, "click", true, panel, param1);
+			SelNGBase.selenium.get().call("folderExpandBtnCore",  folder, "click", true, panel, param1);
 	}	
 
 }

@@ -5,6 +5,7 @@ import org.testng.annotations.BeforeMethod;
 
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -23,15 +24,15 @@ public class NewDropdownMenuTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zMailApp.zNavigateToMailApp();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -40,7 +41,7 @@ public class NewDropdownMenuTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyNewDropdownMenusInAllApptab() throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String[] menuItemArray = { localize(locator.message),
@@ -92,13 +93,13 @@ public class NewDropdownMenuTests extends CommonTest {
 		for (int i = 0; i <= 13; i++) {
 			obj.zMenuItem.zExists(menuItemArray[i]);
 		}
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyNewDropdownMenusFunctionality() throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String[] menuItemArray = { localize(locator.message),
@@ -242,7 +243,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zDialog.zNotExists(localize(locator.createNewBriefcaseItem));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -250,7 +251,7 @@ public class NewDropdownMenuTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

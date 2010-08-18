@@ -29,37 +29,37 @@ public class ReadingPaneTests extends CommonTest {
 		String test = method.getName();
 		if (test.equals("readingPaneOnRight")) {
 			return new Object[][] {
-					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOnRight",
 							"body_readingPaneOnRight", "byNormalMethod" },
-					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOnRight",
 							"body_readingPaneOnRight", "byKeyboardShortCut" } };
 		} else if (test.equals("readingPaneOnBottom")) {
 			return new Object[][] {
-					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOnBottom",
 							"body_readingPaneOnBottom", "byNormalMethod" },
-					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOnBottom",
 							"body_readingPaneOnBottom", "byKeyboardShortCut" } };
 		} else if (test.equals("readingPaneOff")) {
 			return new Object[][] {
-					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOff", "body_readingPaneOff",
 							"byNormalMethod" },
-					{ SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOff", "body_readingPaneOff",
 							"byKeyboardShortCut" } };
 		} else {
-			return new Object[][] { { SelNGBase.selfAccountName,
-					SelNGBase.selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(),
+					SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "testsubject", "testbody", "" } };
 		}
 	}
@@ -75,10 +75,10 @@ public class ReadingPaneTests extends CommonTest {
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -88,7 +88,7 @@ public class ReadingPaneTests extends CommonTest {
 	public void readingPaneOnRight(String from, String to, String cc,
 			String bcc, String subject, String body, String method)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		/**
@@ -106,7 +106,7 @@ public class ReadingPaneTests extends CommonTest {
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneAtBottom));
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -120,7 +120,7 @@ public class ReadingPaneTests extends CommonTest {
 		}
 
 		if (method.equals("byKeyboardShortCut")) {
-			selenium.windowFocus();
+			SelNGBase.selenium.get().windowFocus();
 			Thread.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
@@ -132,9 +132,9 @@ public class ReadingPaneTests extends CommonTest {
 			Thread.sleep(2000);
 		}
 
-		Boolean isVisible = selenium.isVisible("id=DWT6");
-		Boolean isNotVisible = selenium.isVisible("id=DWT7");
-		Boolean isSubDblRowClassExists = selenium
+		Boolean isVisible = SelNGBase.selenium.get().isVisible("id=DWT6");
+		Boolean isNotVisible = SelNGBase.selenium.get().isVisible("id=DWT7");
+		Boolean isSubDblRowClassExists = SelNGBase.selenium.get()
 				.isElementPresent("class=SubjectDoubleRow");
 		assertReport("true", isVisible.toString(),
 				"Verifying whether vertical scrollbar exists or not");
@@ -143,7 +143,7 @@ public class ReadingPaneTests extends CommonTest {
 		assertReport("true", isSubDblRowClassExists.toString(),
 				"Verifying subject double row view for reading pane on right");
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3000);
 		assertReport("true", isVisible.toString(),
 				"Verifying whether vertical scrollbar exists or not");
@@ -153,11 +153,11 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"right",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
+				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
-		selenium.click("link=" + localize(locator.logOff));
+		SelNGBase.selenium.get().click("link=" + localize(locator.logOff));
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		Thread.sleep(3000);
@@ -169,22 +169,22 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"right",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
+				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneAtBottom));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void readingPaneOff(String from, String to, String cc, String bcc,
 			String subject, String body, String method) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
@@ -199,7 +199,7 @@ public class ReadingPaneTests extends CommonTest {
 		}
 
 		if (method.equals("byKeyboardShortCut")) {
-			selenium.windowFocus();
+			SelNGBase.selenium.get().windowFocus();
 			Thread.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
@@ -214,9 +214,9 @@ public class ReadingPaneTests extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(1500);
 		obj.zMessageItem.zVerifyIsUnRead(subject);
-		Boolean isNotVisible1 = selenium.isVisible("id=DWT6");
-		Boolean isNotVisible2 = selenium.isVisible("id=DWT7");
-		Boolean isSubDblRowClassExists = selenium
+		Boolean isNotVisible1 = SelNGBase.selenium.get().isVisible("id=DWT6");
+		Boolean isNotVisible2 = SelNGBase.selenium.get().isVisible("id=DWT7");
+		Boolean isSubDblRowClassExists = SelNGBase.selenium.get()
 				.isElementPresent("class=SubjectDoubleRow");
 		assertReport("false", isNotVisible1.toString(),
 				"Verifying whether vertical scrollbar exists or not");
@@ -225,7 +225,7 @@ public class ReadingPaneTests extends CommonTest {
 		assertReport("false", isSubDblRowClassExists.toString(),
 				"Verifying subject double row view for reading pane on right");
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3000);
 		assertReport("false", isNotVisible1.toString(),
 				"Verifying whether vertical scrollbar exists or not");
@@ -235,11 +235,11 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"off",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
+				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
-		selenium.click("link=" + localize(locator.logOff));
+		SelNGBase.selenium.get().click("link=" + localize(locator.logOff));
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		Thread.sleep(3000);
@@ -251,23 +251,23 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"off",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
+				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneAtBottom));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "lmtpDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void readingPaneOnBottom(String from, String to, String cc,
 			String bcc, String subject, String body, String method)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
@@ -282,7 +282,7 @@ public class ReadingPaneTests extends CommonTest {
 		}
 
 		if (method.equals("byKeyboardShortCut")) {
-			selenium.windowFocus();
+			SelNGBase.selenium.get().windowFocus();
 			Thread.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
@@ -297,9 +297,9 @@ public class ReadingPaneTests extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(1500);
 		obj.zMessageItem.zVerifyIsRead(subject);
-		Boolean isNotVisible = selenium.isVisible("id=DWT6");
-		Boolean isVisible = selenium.isVisible("id=DWT7");
-		Boolean isSubDblRowClassExists = selenium
+		Boolean isNotVisible = SelNGBase.selenium.get().isVisible("id=DWT6");
+		Boolean isVisible = SelNGBase.selenium.get().isVisible("id=DWT7");
+		Boolean isSubDblRowClassExists = SelNGBase.selenium.get()
 				.isElementPresent("class=SubjectDoubleRow");
 		assertReport("false", isNotVisible.toString(),
 				"Verifying whether horizontal scrollbar exists or not");
@@ -308,7 +308,7 @@ public class ReadingPaneTests extends CommonTest {
 		assertReport("false", isSubDblRowClassExists.toString(),
 				"Verifying subject double row view for reading pane on right");
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3000);
 		assertReport("false", isNotVisible.toString(),
 				"Verifying whether horizontal scrollbar exists or not");
@@ -318,11 +318,11 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"bottom",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
+				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
-		selenium.click("link=" + localize(locator.logOff));
+		SelNGBase.selenium.get().click("link=" + localize(locator.logOff));
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		Thread.sleep(3000);
@@ -334,13 +334,13 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"bottom",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName,
+				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneAtBottom));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -348,7 +348,7 @@ public class ReadingPaneTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

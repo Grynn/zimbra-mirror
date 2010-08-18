@@ -7,6 +7,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 /**
@@ -39,15 +41,15 @@ public class TagDocumentPageTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Documents");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -60,7 +62,7 @@ public class TagDocumentPageTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createRenameDeleteTagForPageAndVerify(String pageName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1, newTag1;
@@ -93,7 +95,7 @@ public class TagDocumentPageTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -103,7 +105,7 @@ public class TagDocumentPageTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyTagFunctionalityFor2PageAndRemoveTag(String pageName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String pageName2, tag1, tag2;
@@ -160,7 +162,7 @@ public class TagDocumentPageTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -170,7 +172,7 @@ public class TagDocumentPageTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void applyMutlipleTagToPageAndVerify(String pageName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1, tag2;
@@ -205,7 +207,7 @@ public class TagDocumentPageTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zListItem.zExists(pageName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -215,7 +217,7 @@ public class TagDocumentPageTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void applyTagByDnDTagToPageAndViceVersa(String pageName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String pageName2, tag1, tag2;
@@ -257,7 +259,7 @@ public class TagDocumentPageTests extends CommonTest {
 		assertReport("false", obj.zListItem.zExistsDontWait(pageName),
 				"Verify page1 not exists");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -266,7 +268,7 @@ public class TagDocumentPageTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tryToCreateDuplicateTagInDocuments(String pageName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1;
@@ -274,7 +276,7 @@ public class TagDocumentPageTests extends CommonTest {
 		zCreateTag(tag1);
 		zDuplicateTag(tag1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -282,7 +284,7 @@ public class TagDocumentPageTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

@@ -29,7 +29,7 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		currentloggedinuser = selfAccountName;
+		currentloggedinuser = SelNGBase.selfAccountName.get();
 		ProvZCS.modifyAccount(currentloggedinuser,
 				"zimbraPrefIncludeSpamInSearch", "FALSE");
 		ProvZCS.modifyAccount(currentloggedinuser,
@@ -38,7 +38,7 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 				"zimbraPrefShowSearchString", "FALSE");
 		ProvZCS.modifyAccount(currentloggedinuser,
 				"zimbraPrefShowSelectionCheckbox", "FALSE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3000);/* without this we get permission denied error */
 		zWaitTillObjectExist("button", page.zLoginpage.zSearchFldr);
 		Thread.sleep(2000);/*
@@ -46,22 +46,22 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 							 * button
 							 */
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	// Tests
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void GeneralPrefVerifyAllCheckBoxesFalse() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Preferences");
@@ -74,18 +74,18 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 		obj.zCheckbox
 				.zVerifyIsNotChecked(localize(locator.showSelectionString));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void GeneralPrefIncludeJunkFolderInSearchFalse() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String[] recipients = { SelNGBase.selfAccountName };
+		String[] recipients = { SelNGBase.selfAccountName.get() };
 		String[] message = { "junksubject21", "junksubject22" };
 		for (int i = 0; i <= 1; i++) {
-			ProvZCS.injectMessage(SelNGBase.selfAccountName, recipients,
+			ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 					"ccuser@testdomain.com", message[i], "generalbody");
 			MailApp.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),
 					message[i]);
@@ -97,26 +97,26 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 				obj.zFolder.zClick(localize(locator.junk));
 				obj.zMessageItem.zExists(message[0]);
 				obj.zFolder.zClick(localize(locator.inbox));
-				selenium.type("xpath=//input[@class='search_input']",
-						SelNGBase.selfAccountName);
+				SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
+						SelNGBase.selfAccountName.get());
 				obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 				obj.zMessageItem.zNotExists(message[0]);
 				obj.zMessageItem.zExists(message[1]);
 			}
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void GeneralPrefIncludeTrashFolderInSearchFalse() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String[] recipients = { SelNGBase.selfAccountName };
+		String[] recipients = { SelNGBase.selfAccountName.get() };
 		String[] message = { "trashsubject21", "trashsubject22" };
 		for (int i = 0; i <= 1; i++) {
-			ProvZCS.injectMessage(SelNGBase.selfAccountName, recipients,
+			ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 					"ccuser@testdomain.com", message[i], "generalbody");
 			MailApp.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),
 					message[i]);
@@ -126,32 +126,32 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 				obj.zFolder.zClick(localize(locator.trash));
 				Thread.sleep(1000);
 				obj.zMessageItem.zExists(message[0]);
-				selenium.type("xpath=//input[@class='search_input']",
-						SelNGBase.selfAccountName);
+				SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
+						SelNGBase.selfAccountName.get());
 				obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 				obj.zMessageItem.zNotExists(message[0]);
 				obj.zMessageItem.zExists(message[1]);
 			}
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void GeneralPrefShowAdvSearchLangFalse() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Inbox folder
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));
-		String inboxSearchValue = selenium
+		String inboxSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), inboxSearchValue,
 				"Advanced search string not showing blank while click on folder (Inbox)");
 
 		// Sent folder
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zSentFldr));
-		String sentSearchValue = selenium
+		String sentSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), sentSearchValue,
 				"Advanced search string not showing blank while click on folder (Sent)");
@@ -159,21 +159,21 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 		// Drafts folder
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zMailApp.zDraftsFldr));
-		String draftsSearchValue = selenium
+		String draftsSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), draftsSearchValue,
 				"Advanced search string not showing blank while click on folder (Drafts)");
 
 		// Junk folder
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zJunkFldr));
-		String junkSearchValue = selenium
+		String junkSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), junkSearchValue,
 				"Advanced search string not showing blank while click on folder (Junk)");
 
 		// Trash folder
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zTrashFldr));
-		String trashSearchValue = selenium
+		String trashSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), trashSearchValue,
 				"Advanced search string not showing blank while click on folder (Trash)");
@@ -182,7 +182,7 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 		String newFolder = getLocalizedData_NoSpecialChar();
 		page.zMailApp.zCreateFolder(newFolder);
 		obj.zFolder.zClick(newFolder);
-		String newFolderSearchValue = selenium
+		String newFolderSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), newFolderSearchValue,
 				"Advanced search string not showing blank while click on new folder ("
@@ -190,11 +190,11 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 
 		// Address Book - Contacts folder
 		zGoToApplication("Address Book");
-		String contactsSearchValue = selenium
+		String contactsSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zABCompose.zContactsFolder));
-		contactsSearchValue = selenium
+		contactsSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), contactsSearchValue,
 				"Advanced search string not showing blank while click on folder (Contacts)");
@@ -202,7 +202,7 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 		// Address Book - 'Emailed Contacts' folder
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zABCompose.zEmailedContactsFolder));
-		String emailedContactsSearchValue = selenium
+		String emailedContactsSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
 				localize(locator.search),
@@ -211,13 +211,13 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 
 		// Tasks - Tasks folder
 		zGoToApplication("Tasks");
-		String tasksSearchValue = selenium
+		String tasksSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), tasksSearchValue,
 				"Advanced search string not showing blank while go to 'Tasks' application tab");
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zTaskApp.zTasksFolder));
-		tasksSearchValue = selenium
+		tasksSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), tasksSearchValue,
 				"Advanced search string not showing blank while click on folder (Tasks)");
@@ -225,22 +225,22 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 		// Documents - Notebook folder
 		zGoToApplication("Documents");
 		obj.zFolder.zClick(DocumentApp.zNotebookFolder);
-		String notebookSearchValue = selenium
+		String notebookSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), notebookSearchValue,
 				"Advanced search string not showing blank while click on folder (Notebook)");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void GeneralPrefDisplayChkboxInListItemFalse() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Verify mail list item check box
-		String[] recipients = { SelNGBase.selfAccountName };
-		ProvZCS.injectMessage(SelNGBase.selfAccountName, recipients,
+		String[] recipients = { SelNGBase.selfAccountName.get() };
+		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 				"ccuser@testdomain.com", "checkboxinlistitem",
 				"checkboxinlistitemmailbody");
 		MailApp.ClickCheckMailUntilMailShowsUp(
@@ -277,12 +277,12 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 				briefcaseListItemChkBoxExist,
 				"Briefcase list item check box still showing though 'Display checkboxes to quickly select items in lists' general preference is TRUE");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void VerifyGeneralPreferenceDBValues() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Preferences");
@@ -364,12 +364,12 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 
 		obj.zButton.zClick(zPrefSaveIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

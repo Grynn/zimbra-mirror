@@ -817,7 +817,7 @@ public class CalendarApp extends CommonTest {
 		String url = "http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=" + temp[0] + "&date=" + temp[1];
 
-		selenium.open(url);
+		SelNGBase.selenium.get().open(url);
 
 		Thread.sleep(5000);
 	}
@@ -910,9 +910,9 @@ public class CalendarApp extends CommonTest {
 
 		Thread.sleep(500);
 
-		if (selenium.isElementPresent("link="
+		if (SelNGBase.selenium.get().isElementPresent("link="
 				+ localize(locator.optionsManageCalendarsLink)))
-			selenium.click("link="
+			SelNGBase.selenium.get().click("link="
 					+ localize(locator.optionsManageCalendarsLink));
 
 	}

@@ -42,11 +42,11 @@ public class LoginPage extends AppPage {
 			throws ServiceException {
 		String username = "";
 		// if we are retrying the execution, then use the same account.
-		if (SelNGBase.isExecutionARetry)
-			username = SelNGBase.selfAccountName;
+		if (SelNGBase.isExecutionARetry.get())
+			username = SelNGBase.selfAccountName.get();
 		else
 			username = ProvZCS.getRandomAccount(accntAttrs);
-		SelNGBase.selfAccountName = username;
+		SelNGBase.selfAccountName.set(username);
 		zLoginToZimbraAjax(username);
 		return username;
 	}
@@ -86,7 +86,7 @@ public class LoginPage extends AppPage {
 			throws Exception {
 		try {
 			String username = ProvZCS.getRandomAccount();
-			SelNGBase.selfAccountName = username;
+			SelNGBase.selfAccountName.set(username);
 			customLogin(parameter);
 			Thread.sleep(1000);
 			currentBrowserName = BrowserUtil.getBrowserName();
@@ -105,7 +105,7 @@ public class LoginPage extends AppPage {
 	 * @throws Exception
 	 */
 	public static void logoutOfZimbraAjax() throws Exception {
-		selenium.click("link=" + localize("logOff"));
+		SelNGBase.selenium.get().click("link=" + localize("logOff"));
 		Thread.sleep(1000);
 		assertTrue(true);
 	}

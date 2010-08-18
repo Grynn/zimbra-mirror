@@ -53,15 +53,15 @@ public class ReadReceiptTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zMailApp.zNavigateToMailApp();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -70,15 +70,15 @@ public class ReadReceiptTests extends CommonTest {
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void neverSendReadReceipt(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		ProvZCS.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "never");
 
 		resetSession();
-		SelNGBase.selfAccountName = to;
+		SelNGBase.selfAccountName.set(to);
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zButtonMenu.zClick(page.zComposeView.zOptionsDownArrowBtn);
@@ -89,28 +89,28 @@ public class ReadReceiptTests extends CommonTest {
 		Thread.sleep(2000);
 
 		resetSession();
-		SelNGBase.selfAccountName = currentloggedinuser;
+		SelNGBase.selfAccountName.set(currentloggedinuser);
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(3000);
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void alwaysSendReadReceipt(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		ProvZCS.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "always");
 
 		resetSession();
-		SelNGBase.selfAccountName = to;
+		SelNGBase.selfAccountName.set(to);
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zButtonMenu.zClick(page.zComposeView.zOptionsDownArrowBtn);
@@ -121,7 +121,7 @@ public class ReadReceiptTests extends CommonTest {
 		Thread.sleep(2000);
 
 		resetSession();
-		SelNGBase.selfAccountName = currentloggedinuser;
+		SelNGBase.selfAccountName.set(currentloggedinuser);
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
@@ -129,27 +129,27 @@ public class ReadReceiptTests extends CommonTest {
 				.zGetMsg(), "Verifying toast message for sending read receipt");
 
 		resetSession();
-		SelNGBase.selfAccountName = to;
+		SelNGBase.selfAccountName.set(to);
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zMailApp
 				.ClickCheckMailUntilMailShowsUp("Read-Receipt: " + subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void askMeForReadReceiptAndBug36344(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		ProvZCS.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "prompt");
 
 		resetSession();
-		SelNGBase.selfAccountName = to;
+		SelNGBase.selfAccountName.set(to);
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zButtonMenu.zClick(page.zComposeView.zOptionsDownArrowBtn);
@@ -164,7 +164,7 @@ public class ReadReceiptTests extends CommonTest {
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
 
 		resetSession();
-		SelNGBase.selfAccountName = currentloggedinuser;
+		SelNGBase.selfAccountName.set(currentloggedinuser);
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
@@ -180,19 +180,19 @@ public class ReadReceiptTests extends CommonTest {
 				.zGetMsg(), "Verifying toast message for sending read receipt");
 
 		resetSession();
-		SelNGBase.selfAccountName = to;
+		SelNGBase.selfAccountName.set(to);
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zMailApp
 				.ClickCheckMailUntilMailShowsUp("Read-Receipt: " + subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void unwantedReadReceiptDlgWhileMarkRead_Bug41499(String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Preferences");
@@ -202,9 +202,9 @@ public class ReadReceiptTests extends CommonTest {
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
 		Thread.sleep(1000);
 		zGoToApplication("Mail");
-		to = SelNGBase.selfAccountName;
-		String[] recipients = { SelNGBase.selfAccountName };
-		ProvZCS.injectMessage(SelNGBase.selfAccountName, recipients, cc,
+		to = SelNGBase.selfAccountName.get();
+		String[] recipients = { SelNGBase.selfAccountName.get() };
+		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients, cc,
 				subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject);
@@ -214,7 +214,7 @@ public class ReadReceiptTests extends CommonTest {
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
 		obj.zDialog.zNotExists(localize(locator.infoMsg));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -222,7 +222,7 @@ public class ReadReceiptTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

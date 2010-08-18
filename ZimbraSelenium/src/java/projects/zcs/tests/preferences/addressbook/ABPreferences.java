@@ -53,15 +53,15 @@ public class ABPreferences extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -74,7 +74,7 @@ public class ABPreferences extends CommonTest {
 	@Test(dataProvider = "ABPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void importContact(String csvFile, String englishContact)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zABCompose.zNavigateToPrefImportExport();
@@ -110,7 +110,7 @@ public class ABPreferences extends CommonTest {
 
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -124,10 +124,10 @@ public class ABPreferences extends CommonTest {
 	@Test(dataProvider = "ABPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyNewMailedContactAddsToEmailedContact(String to)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 		page.zABCompose.zNavigateToPreferenceAB();
 
 		String actualValue = ProvZCS.getAccountPreferenceValue(accountName,
@@ -166,9 +166,9 @@ public class ABPreferences extends CommonTest {
 		obj.zFolder.zClick(page.zABCompose.zEmailedContactsFolder);
 		obj.zContactListItem.zExists(toContactSplit[0]);
 		// reset auto-add contact to false
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoAddAddressEnabled", "FALSE");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -181,17 +181,17 @@ public class ABPreferences extends CommonTest {
 	@Test(dataProvider = "ABPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyIntialSearchInGALForAddressPicker(String GAL)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zABCompose.zNavigateToPreferenceAB();
 		String actualValue = ProvZCS.getAccountPreferenceValue(
-				SelNGBase.selfAccountName, "zimbraPrefGalSearchEnabled");
+				SelNGBase.selfAccountName.get(), "zimbraPrefGalSearchEnabled");
 		if (actualValue.equals("FALSE")) {
 			obj.zCheckbox.zClick(localize(locator.initiallySearchGal));
 			obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
 			actualValue = ProvZCS.getAccountPreferenceValue(
-					SelNGBase.selfAccountName, "zimbraPrefGalSearchEnabled");
+					SelNGBase.selfAccountName.get(), "zimbraPrefGalSearchEnabled");
 
 			Assert
 					.assertEquals(actualValue, "TRUE",
@@ -229,7 +229,7 @@ public class ABPreferences extends CommonTest {
 		// obj.zFeatureMenu.zExistsDontWait(GAL);
 		// obj.zButton.zClickInDlg(localize(locator.cancel));
 		// }
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -238,7 +238,7 @@ public class ABPreferences extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 

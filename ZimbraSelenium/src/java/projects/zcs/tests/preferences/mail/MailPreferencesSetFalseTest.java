@@ -43,7 +43,7 @@ public class MailPreferencesSetFalseTest extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefShowFragments", "FALSE");
 		ProvZCS.modifyAccount(accountName, "zimbraPrefOpenMailInNewWindow",
@@ -53,16 +53,16 @@ public class MailPreferencesSetFalseTest extends CommonTest {
 		zReloginToAjax();
 
 		Thread.sleep(5000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -75,10 +75,10 @@ public class MailPreferencesSetFalseTest extends CommonTest {
 	public void mailPrefDisplaySnippets() throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData(3);
 
@@ -89,7 +89,7 @@ public class MailPreferencesSetFalseTest extends CommonTest {
 
 		obj.zMessageItem.zNotExists(body);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -98,10 +98,10 @@ public class MailPreferencesSetFalseTest extends CommonTest {
 		String browserWindowTitle;
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData(3);
 
@@ -112,21 +112,21 @@ public class MailPreferencesSetFalseTest extends CommonTest {
 
 		obj.zMessageItem.zDblClick(subject);
 
-		browserWindowTitle = selenium.getTitle();
+		browserWindowTitle = SelNGBase.selenium.get().getTitle();
 
 		Assert
 				.assertTrue(
 						browserWindowTitle.indexOf(subject) >= 0,
 						"Double clicking a mail opens in new window when 'zimbraPrefOpenMailInNewWindow' is set to FALSE");
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

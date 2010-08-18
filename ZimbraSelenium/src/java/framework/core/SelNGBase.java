@@ -1,5 +1,6 @@
 package framework.core;
 
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,20 +11,20 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 
+import com.zimbra.common.service.ServiceException;
+
+import projects.html.clients.ProvZCS;
+
 import framework.util.ZimbraSeleniumProperties;
 
 public class SelNGBase {
 	private static Logger logger = LogManager.getLogger(SelNGBase.class);
 	
-	public static ZimbraSelenium selenium;
 
 	public static String currentBrowserName = "";
-
+	
 	public static int maxRetryCount = 0;
 	public static int currentRetryCount = 0;
-	public static boolean isExecutionARetry = false;
-	public static boolean needReset = false;
-	public static String selfAccountName = "";
 	
 	public static String someting = " ";
 	public static String appType = "AJAX";
@@ -65,8 +66,8 @@ public class SelNGBase {
 	
 	// can be used as @aftermethod
 	public static void stopSeleniumSession() {
-		if (selenium != null){
-			selenium.stop();
+		if (SelNGBase.selenium.get() != null){
+			SelNGBase.selenium.get().stop();
 		}
 	}
 
@@ -91,18 +92,13 @@ public class SelNGBase {
 		appType = app_type;
 
 
-		selenium = new ZimbraSelenium(
-				SeleniumService.getInstance().getSeleniumServer(), 
-				SeleniumService.getInstance().getSeleniumPort(),
-				SeleniumService.getInstance().getSeleniumBrowser(),
-				getBaseURL());
 		
-		selenium.start();
-		selenium.windowMaximize();
-		selenium.windowFocus();
-		selenium.setupZVariables();
-		selenium.allowNativeXpath("true");
-		selenium.open(getBaseURL());
+		SelNGBase.selenium.get().start();
+		SelNGBase.selenium.get().windowMaximize();
+		SelNGBase.selenium.get().windowFocus();
+		SelNGBase.selenium.get().setupZVariables();
+		SelNGBase.selenium.get().allowNativeXpath("true");
+		SelNGBase.selenium.get().open(getBaseURL());
 
 	}
 
@@ -115,17 +111,12 @@ public class SelNGBase {
 			browser = "*" + browser;
 		}
 
-		selenium = new ZimbraSelenium(
-				SeleniumService.getInstance().getSeleniumServer(), 
-				SeleniumService.getInstance().getSeleniumPort(),
-				SeleniumService.getInstance().getSeleniumBrowser(),
-				ZimbraSeleniumProperties.getStringProperty("mode") + "://" + ZimbraSeleniumProperties.getStringProperty("server")	+ "/" + parameter);
 		
-		selenium.start();
-		selenium.windowMaximize();
-		selenium.windowFocus();
-		selenium.allowNativeXpath("true");
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"	+ ZimbraSeleniumProperties.getStringProperty("server") + "/" + parameter);
+		SelNGBase.selenium.get().start();
+		SelNGBase.selenium.get().windowMaximize();
+		SelNGBase.selenium.get().windowFocus();
+		SelNGBase.selenium.get().allowNativeXpath("true");
+		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"	+ ZimbraSeleniumProperties.getStringProperty("server") + "/" + parameter);
 	}
 
 	public static String getBaseURL() {
@@ -147,11 +138,11 @@ public class SelNGBase {
 
 	// can be used as @aftermethod
 	public void deleteCookie(String name, String path) {
-		selenium.deleteCookie(name, path);
+		SelNGBase.selenium.get().deleteCookie(name, path);
 	}
 
 	public static void stopClient() {
-		selenium.close();
+		SelNGBase.selenium.get().close();
 	}
 
 
@@ -168,5 +159,46 @@ public class SelNGBase {
 
 	}
 
+
+	
+	protected static ThreadLocal<ZimbraSelenium> selenium = new ThreadLocal<ZimbraSelenium>() {
+		protected synchronized ZimbraSelenium initialValue() {
+			// return new ZimbraSelenium instance per thread
+			return new ZimbraSelenium(SeleniumService.getInstance()
+					.getSeleniumServer(), SeleniumService.getInstance()
+					.getSeleniumPort(), SeleniumService.getInstance()
+					.getSeleniumBrowser(), getBaseURL());
+		}
+	};
+
+	public static ThreadLocal<Boolean> isExecutionARetry = new ThreadLocal<Boolean>() {
+		protected synchronized Boolean initialValue() {
+			// return Boolean value per thread
+			boolean retry = false;
+			return retry;
+		}
+	};
+
+	public static ThreadLocal<Boolean> needReset = new ThreadLocal<Boolean>() {
+		protected synchronized Boolean initialValue() {
+			// return Boolean value per thread
+			boolean reset = false;
+			return reset;
+		}
+	};
+	
+	public static ThreadLocal<String> selfAccountName = new ThreadLocal<String>() {
+		protected synchronized String initialValue() {
+			String username = "invalid";
+			try {
+				username = ProvZCS.getRandomAccount(new HashMap<String, Object>());
+				return (new String(username));
+			} catch (ServiceException e) {
+				logger.error("Unable to create new account", e);
+			}
+			return (new String(username));
+		}
+	};
+	
 
 }

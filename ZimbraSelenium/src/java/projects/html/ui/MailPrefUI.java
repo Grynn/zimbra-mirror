@@ -166,7 +166,7 @@ public class MailPrefUI extends CommonTest {
 	public static void zInjectSpecificNoOfMails(String[] mailSubject,
 			int numberOfMails) throws Exception {
 		String mailBody = getLocalizedData_NoSpecialChar();
-		String to = SelNGBase.selfAccountName;
+		String to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		String sender = ProvZCS.getRandomAccount();
 
@@ -187,7 +187,7 @@ public class MailPrefUI extends CommonTest {
 	 */
 	public static void zSendMailToSelfAndMoveItToJunkAndVerify(String subject)
 			throws Exception {
-		String selfAccName = SelNGBase.selfAccountName;
+		String selfAccName = SelNGBase.selfAccountName.get();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt(selfAccName, "", "",

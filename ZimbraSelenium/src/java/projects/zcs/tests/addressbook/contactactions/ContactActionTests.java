@@ -32,15 +32,15 @@ public class ContactActionTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		// page.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -53,7 +53,7 @@ public class ContactActionTests extends CommonTest {
 			groups = { "smoke", "full" },
 			retryAnalyzer = RetryFailedTests.class)
 	public void addressPicker() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Get the 'select addresses dialog'
@@ -104,7 +104,7 @@ public class ContactActionTests extends CommonTest {
 				obj.zTextAreaField.zGetInnerText(localize(locator.bccLabel)).contains("ac3@testdomain.com"),
 				"Verify that the Bcc field ("+ obj.zTextAreaField.zGetInnerText(localize(locator.bccLabel)) +") contains ac3@testdomain.com");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -116,7 +116,7 @@ public class ContactActionTests extends CommonTest {
 			groups = { "smoke", "full" },
 			retryAnalyzer = RetryFailedTests.class)
 	public void addressPicker_Bug20969() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		obj.zButton.zClick(page.zABCompose.zMailTabIconBtn);
@@ -175,7 +175,7 @@ public class ContactActionTests extends CommonTest {
 		}
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -190,14 +190,14 @@ public class ContactActionTests extends CommonTest {
 			groups = { "smoke", "full" },
 			retryAnalyzer = RetryFailedTests.class)
 	public void contextAddToContacts() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = getLocalizedData_NoSpecialChar();
 		String mailBody = getLocalizedData_NoSpecialChar();
 		
 		String contactName = null;
-		String[] fromAccount = SelNGBase.selfAccountName.split("@");
+		String[] fromAccount = SelNGBase.selfAccountName.get().split("@");
 		String[] firstAndLastName = fromAccount[0].split("_");
 		String contactFirstName = firstAndLastName[0];
 		String contactLastName = firstAndLastName[firstAndLastName.length - 1];
@@ -206,7 +206,7 @@ public class ContactActionTests extends CommonTest {
 		fromAccount[0] = fromAccount[0].toLowerCase();
 		obj.zButton.zClick(page.zABCompose.zMailTabIconBtn);
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
 				"", "", subject, mailBody, "");
 
 		MailApp.ClickCheckMailUntilMailShowsUp("", subject);
@@ -232,7 +232,7 @@ public class ContactActionTests extends CommonTest {
 			obj.zContactListItem.zExists(contactName);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -240,7 +240,7 @@ public class ContactActionTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 

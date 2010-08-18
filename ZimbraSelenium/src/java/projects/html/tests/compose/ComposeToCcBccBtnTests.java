@@ -6,6 +6,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
@@ -41,15 +42,15 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -64,7 +65,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void addReceipientsThroughToButton(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String firstAcc = ProvZCS.getRandomAccount();
@@ -83,7 +84,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 		obj.zButton.zClick(page.zMailApp.zDraftFldr);
 
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -94,7 +95,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void addReceipientsThroughCcButton(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String firstAcc = ProvZCS.getRandomAccount();
@@ -113,7 +114,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 		obj.zButton.zClick(page.zMailApp.zDraftFldr);
 
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -126,7 +127,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String firstAcc = ProvZCS.getRandomAccount();
@@ -143,7 +144,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 						addReceipAcc);
 		obj.zButton.zClick(page.zComposeView.zCancelBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -156,7 +157,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String firstAcc = ProvZCS.getRandomAccount();
@@ -174,7 +175,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 						addReceipAcc, addReceipAcc, addReceipAcc);
 		obj.zButton.zClick(page.zComposeView.zCancelBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -182,7 +183,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

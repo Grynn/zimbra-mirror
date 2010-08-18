@@ -7,6 +7,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.tests.CommonTest;
@@ -47,7 +49,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 						.equals("verifyHtmlSignatureBelowIncludedMsgInReplyAll_Bug45880")
 				|| test.equals("twoSignaturesOnSwitching_Bug41404")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData_NoSpecialChar(), selfAccountName,
+					getLocalizedData_NoSpecialChar(), SelNGBase.selfAccountName.get(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(), "" } };
@@ -61,16 +63,16 @@ public class AboveBelowSignatureTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -91,7 +93,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -116,7 +118,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInText(
 				localize(locator.aboveQuotedText), signatureBody, "Reply");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zNavigateToComposingPreferences();
@@ -167,7 +169,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInHTML(
 				localize(locator.aboveQuotedText), signatureBody, "Reply");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -187,7 +189,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -214,7 +216,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInText(
 				localize(locator.atBottomOfMessage), signatureBody, "Reply");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -235,7 +237,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zNavigateToComposingPreferences();
@@ -267,7 +269,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInHTML(
 				localize(locator.atBottomOfMessage), signatureBody, "Reply");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -288,7 +290,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -313,7 +315,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInText(
 				localize(locator.aboveQuotedText), signatureBody, "Forward");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -334,7 +336,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zNavigateToComposingPreferences();
@@ -365,7 +367,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInHTML(
 				localize(locator.aboveQuotedText), signatureBody, "Forward");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -385,7 +387,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -412,7 +414,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInText(
 				localize(locator.atBottomOfMessage), signatureBody, "Forward");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -433,7 +435,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zNavigateToComposingPreferences();
@@ -465,7 +467,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInHTML(
 				localize(locator.atBottomOfMessage), signatureBody, "Forward");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -485,7 +487,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -510,7 +512,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInText(
 				localize(locator.aboveQuotedText), signatureBody, "ReplyAll");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -531,7 +533,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zNavigateToComposingPreferences();
@@ -562,7 +564,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInHTML(
 				localize(locator.aboveQuotedText), signatureBody, "ReplyAll");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -582,7 +584,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -609,7 +611,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInText(
 				localize(locator.atBottomOfMessage), signatureBody, "ReplyAll");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -630,7 +632,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zNavigateToComposingPreferences();
@@ -662,13 +664,13 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zVerifySignaturePlaceInHTML(
 				localize(locator.atBottomOfMessage), signatureBody, "ReplyAll");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void twoSignaturesOnSwitching_Bug41404(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String defaultSignature = signatureName + "_default";
@@ -689,10 +691,10 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.formatAsText));
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
 		Thread.sleep(1000);
-		selenium.clickAt("//*[contains(@class,'ImgImageDoc')]", "");
+		SelNGBase.selenium.get().clickAt("//*[contains(@class,'ImgImageDoc')]", "");
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.addImg));
-		selenium.clickAt("//*[contains(@class,'ImgInsertImage')]", "");
+		SelNGBase.selenium.get().clickAt("//*[contains(@class,'ImgInsertImage')]", "");
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.uploadImage));
 		/**
@@ -760,7 +762,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zMessageItem
 				.zVerifyCurrentMsgBodyDoesNotHaveText(nondefaultSignatureBody);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// //end
@@ -772,7 +774,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 
 	private void handleRetry() throws Exception {
 		// TODO Auto-generated method stub
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 }

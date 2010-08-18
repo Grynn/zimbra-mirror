@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.cs.account.Provisioning;
 
+import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
@@ -76,16 +77,16 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 				Provisioning.MAIL_FORMAT_HTML);
 		zLoginIfRequired(accntAttrs);
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -99,14 +100,14 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void sendMailOnlyWithToAndVerify(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -116,14 +117,14 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void sendMailOnlyWithCcAndVerify(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -133,14 +134,14 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void sendMailOnlyWithBccAndVerify(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -150,24 +151,24 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void sendMailWithToCcBccAndVerify(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
 	 * Send an email(to self) in html-mode, reply it and verify compose filled
 	 * values
 	 */
-	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "composeDataProvider", groups = { "parallel", "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void replyMailAndVerify(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -190,7 +191,7 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelBtn);
 		
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -200,7 +201,7 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void replyAllMailAndVerify(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 
@@ -224,7 +225,7 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 		SleepUtil.sleepLong();
 		obj.zButton.zClick(page.zMailApp.zDraftFldr);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -234,7 +235,7 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void forwardMailAndVerify(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -254,7 +255,7 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 		//obj.zButton.zClick(page.zMailApp.zDraftFldr);
 
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -262,7 +263,7 @@ public class ComposeReplyFwdInHTMLTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

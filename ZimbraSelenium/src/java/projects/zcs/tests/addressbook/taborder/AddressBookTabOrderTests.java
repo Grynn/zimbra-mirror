@@ -7,6 +7,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 /**
@@ -21,7 +23,7 @@ public class AddressBookTabOrderTests extends CommonTest {
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
 		if (test.equals("test1")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
 					getLocalizedData(5), "testexcelfile.xls" } };
 		} else {
@@ -35,15 +37,15 @@ public class AddressBookTabOrderTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -52,10 +54,10 @@ public class AddressBookTabOrderTests extends CommonTest {
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void test1(String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -63,7 +65,7 @@ public class AddressBookTabOrderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

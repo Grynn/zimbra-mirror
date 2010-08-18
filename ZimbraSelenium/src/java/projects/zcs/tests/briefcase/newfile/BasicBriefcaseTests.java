@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -64,15 +65,15 @@ public class BasicBriefcaseTests extends CommonTest {
 		zLoginIfRequired();
 		page.zBriefcaseApp.zGoToBriefcaseApp();
 		Thread.sleep(2000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -84,13 +85,13 @@ public class BasicBriefcaseTests extends CommonTest {
 	@Test(dataProvider = "BriefcaseFileUpload", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void newBriefcaseFileUpload(String filename, String newBFFolder)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
 		obj.zBriefcaseItem.zExists(filename);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -99,7 +100,7 @@ public class BasicBriefcaseTests extends CommonTest {
 	@Test(dataProvider = "BriefcaseFileUpload", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteBriefcaseFile(String filename, String newBFFolder)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
@@ -110,7 +111,7 @@ public class BasicBriefcaseTests extends CommonTest {
 				localize(locator.confirmTitle));
 		obj.zMenuItem.zNotExists(filename);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -120,7 +121,7 @@ public class BasicBriefcaseTests extends CommonTest {
 	@Test(dataProvider = "BriefcaseFileUpload", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void moveBriefcaseFiletoNewFolder(String filename, String newBFFolder)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
@@ -144,7 +145,7 @@ public class BasicBriefcaseTests extends CommonTest {
 		obj.zFolder.zClick(newBFFolder);
 		obj.zBriefcaseItem.zExists(filename);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -160,13 +161,13 @@ public class BasicBriefcaseTests extends CommonTest {
 	@Test(dataProvider = "BriefcaseFileUpload", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void sendBriefcaseFileAsAttachment(String filename,
 			String newBFFolder) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
 		obj.zBriefcaseItem.zExists(filename);
 		obj.zBriefcaseItem.zClick(filename);
-		selenium.clickAt("id=zb__BCC__SEND_FILE_MENU_title", "");
+		SelNGBase.selenium.get().clickAt("id=zb__BCC__SEND_FILE_MENU_title", "");
 		Thread.sleep(1000);
 		obj.zMenuItem.zClick(localize(locator.sendAsAttachment));
 		Thread.sleep(1000);
@@ -186,7 +187,7 @@ public class BasicBriefcaseTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -200,37 +201,37 @@ public class BasicBriefcaseTests extends CommonTest {
 	@Test(dataProvider = "BriefcaseFileUpload", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyDownloadMenuDisabledForNewDoc(String filename,
 			String newBFFolder) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			obj.zButton.zClick(localize(locator.newDocument));
 			Thread.sleep(1500);
-			selenium.selectWindow(selenium.getAllWindowTitles()[1]);
-			selenium.windowFocus();
+			SelNGBase.selenium.get().selectWindow(SelNGBase.selenium.get().getAllWindowTitles()[1]);
+			SelNGBase.selenium.get().windowFocus();
 			zWaitTillObjectExist("button", localize(locator.save));
-			selenium.type("xpath=//input[@type='text']", filename);
+			SelNGBase.selenium.get().type("xpath=//input[@type='text']", filename);
 			obj.zButton.zClick(localize(locator.save));
 			Thread.sleep(1000);
-			selenium.close();
-			selenium.selectWindow(null);
+			SelNGBase.selenium.get().close();
+			SelNGBase.selenium.get().selectWindow(null);
 			obj.zFolder.zClick(page.zBriefcaseApp.zBriefcaseFolder);
 			Thread.sleep(1000);
 			obj.zBriefcaseItem.zClick(filename);
 			obj.zBriefcaseItem.zRtClick(filename);
 			Thread.sleep(500);
-			String download = selenium
+			String download = SelNGBase.selenium.get()
 					.getEval("selenium.browserbot.getCurrentWindow().document.getElementById('zmi__Briefcase__SAVE_FILE').className");
 			Assert.assertTrue(download.contains("ZDisabled"),
 					"Download is in enable state");
 
-			Boolean downloadLink = selenium.isElementPresent("Link="
+			Boolean downloadLink = SelNGBase.selenium.get().isElementPresent("Link="
 					+ localize(locator.saveFile));
 			assertReport("false", downloadLink.toString(),
 					"Verifying Download link exist");
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -238,7 +239,7 @@ public class BasicBriefcaseTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

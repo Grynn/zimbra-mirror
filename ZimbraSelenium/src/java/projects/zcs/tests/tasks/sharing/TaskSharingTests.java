@@ -71,16 +71,16 @@ public class TaskSharingTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -99,10 +99,10 @@ public class TaskSharingTests extends CommonTest {
 			String role, String message, String sharingnoteifany,
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		String subject = getLocalizedData_NoSpecialChar();
 
 		zGoToApplication(applicationtab);
@@ -118,7 +118,7 @@ public class TaskSharingTests extends CommonTest {
 				sharingnoteifany);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				sharingfoldername, sharetype, invitedusers, role,
@@ -129,7 +129,7 @@ public class TaskSharingTests extends CommonTest {
 		obj.zFolder.zClick(mountingfoldername);
 		obj.zTaskItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -137,7 +137,7 @@ public class TaskSharingTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

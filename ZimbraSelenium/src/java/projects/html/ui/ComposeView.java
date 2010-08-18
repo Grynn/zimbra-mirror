@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.Map;
 import org.testng.Assert;
 
+import framework.core.SelNGBase;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.clients.ProvZCS;
@@ -123,7 +124,7 @@ public class ComposeView extends CommonTest {
 		if (obj.zButton.zExistsDontWait(localize("cancel")).equals("true")) {
 			obj.zButton.zClick(zhMsg.getString("cancel"));
 		}
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 	}
 
 	/**
@@ -207,18 +208,18 @@ public class ComposeView extends CommonTest {
 			String bcc, String subject, String body, String attachments,
 			boolean inlineAttachment) throws Exception {
 		if (to.equals("_selfAccountName_"))
-			to = selfAccountName;
+			to = SelNGBase.selfAccountName.get();
 		if (cc.equals("_selfAccountName_"))
-			cc = selfAccountName;
+			cc = SelNGBase.selfAccountName.get();
 		if (bcc.equals("_selfAccountName_"))
-			bcc = selfAccountName;
+			bcc = SelNGBase.selfAccountName.get();
 		obj.zTextAreaField.zType(zToField, to);
 		obj.zTextAreaField.zType(zCcField, cc);
 		// temporarily comment this out -- due to bug 32611
 		if (!bcc.equals("")) {
 			Thread.sleep(2000);
-			if (selenium.isElementPresent("link=" + localize(locator.showBcc)))
-				selenium.click("link=" + localize(locator.showBcc));
+			if (SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.showBcc)))
+				SelNGBase.selenium.get().click("link=" + localize(locator.showBcc));
 			obj.zTextAreaField.zType(zBccField, bcc);
 		}
 		obj.zEditField.zType(zSubjectField, subject);
@@ -311,7 +312,7 @@ public class ComposeView extends CommonTest {
 	public static void zVerifyAttachmentsExists(String attachmentList) {
 		String[] attList = attachmentList.split(",");
 		for (int i = 0; i < attList.length; i++) {
-			boolean b = selenium.isElementPresent("link=" + attList[0]);
+			boolean b = SelNGBase.selenium.get().isElementPresent("link=" + attList[0]);
 			Assert.assertTrue(b, "Attachment link for: (" + attList[0]
 					+ ") doesnt exist");
 		}
@@ -354,11 +355,11 @@ public class ComposeView extends CommonTest {
 			String subject, String body, String attachments) throws Exception {
 		Thread.sleep(1500);
 		if (to.equals("_selfAccountName_"))
-			to = selfAccountName;
+			to = SelNGBase.selfAccountName.get();
 		if (cc.equals("_selfAccountName_"))
-			cc = selfAccountName;
+			cc = SelNGBase.selfAccountName.get();
 		if (bcc.equals("_selfAccountName_"))
-			bcc = selfAccountName;
+			bcc = SelNGBase.selfAccountName.get();
 		String headerTxt = obj.zMessageItem.zGetCurrentMsgHeaderText();
 		Assert.assertTrue(
 				headerTxt.indexOf(MailApp.zGetNameFromEmail(to)) >= 0,
@@ -419,13 +420,13 @@ public class ComposeView extends CommonTest {
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
 		if (to.equals("_selfAccountName_"))
-			to = selfAccountName;
+			to = SelNGBase.selfAccountName.get();
 		to = to.toLowerCase();
 		if (cc.equals("_selfAccountName_"))
-			cc = selfAccountName;
+			cc = SelNGBase.selfAccountName.get();
 		cc = cc.toLowerCase();
 		if (bcc.equals("_selfAccountName_"))
-			bcc = selfAccountName;
+			bcc = SelNGBase.selfAccountName.get();
 		bcc = bcc.toLowerCase();
 		String actualToVal = obj.zTextAreaField.zGetInnerText(zToField);
 		String actualccVal = obj.zTextAreaField.zGetInnerText(zCcField);
@@ -511,13 +512,13 @@ public class ComposeView extends CommonTest {
 				attachments);
 		obj.zButton.zClick(localize(locator.send));
 		Thread.sleep(2000);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		try {
 			obj.zButton.zNotExists(localize(locator.send));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		MailApp.zClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		Thread.sleep(2000); // takes some time to open message - test fails here
@@ -567,7 +568,7 @@ public class ComposeView extends CommonTest {
 		if (fieldToVerify.toLowerCase().equals("to")
 				|| fieldToVerify.toLowerCase().equals("toccbcc")) {
 			if (toCommaSeparated.equals("_selfAccountName_"))
-				toCommaSeparated = selfAccountName;
+				toCommaSeparated = SelNGBase.selfAccountName.get();
 
 			toCommaSeparated = toCommaSeparated.trim();
 			if (!toCommaSeparated.equals("")) {
@@ -593,7 +594,7 @@ public class ComposeView extends CommonTest {
 		if (fieldToVerify.toLowerCase().equals("cc")
 				|| fieldToVerify.toLowerCase().equals("toccbcc")) {
 			if (ccCommaSeparated.equals("_selfAccountName_"))
-				ccCommaSeparated = selfAccountName;
+				ccCommaSeparated = SelNGBase.selfAccountName.get();
 
 			ccCommaSeparated = ccCommaSeparated.trim();
 			if (!ccCommaSeparated.equals("")) {
@@ -619,15 +620,15 @@ public class ComposeView extends CommonTest {
 		if (fieldToVerify.toLowerCase().equals("bcc")
 				|| fieldToVerify.toLowerCase().equals("toccbcc")) {
 			if (bccCommaSeparated.equals("_selfAccountName_"))
-				bccCommaSeparated = selfAccountName;
+				bccCommaSeparated = SelNGBase.selfAccountName.get();
 
 			bccCommaSeparated = bccCommaSeparated.trim();
 			if (!bccCommaSeparated.equals("")) {
 				String[] bccCommaSeparatedArray = bccCommaSeparated.split(",");
 				for (int i = 0; i < bccCommaSeparatedArray.length; i++) {
-					if (selenium.isElementPresent("link="
+					if (SelNGBase.selenium.get().isElementPresent("link="
 							+ localize(locator.showBcc)))
-						selenium.click("link=" + localize(locator.showBcc));
+						SelNGBase.selenium.get().click("link=" + localize(locator.showBcc));
 					String actualBccVal = obj.zTextAreaField
 							.zGetInnerText(page.zComposeView.zBccField);
 					Assert.assertTrue(
@@ -658,8 +659,8 @@ public class ComposeView extends CommonTest {
 			obj.zButton.zClick(page.zComposeView.zCcBtn);
 		} else if (toorCcOrBccbtn.toLowerCase().equals("bcc")
 				|| toorCcOrBccbtn.equals(page.zComposeView.zBccBtn)) {
-			if (selenium.isElementPresent("link=" + localize(locator.showBcc)))
-				selenium.click("link=" + localize(locator.showBcc));
+			if (SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.showBcc)))
+				SelNGBase.selenium.get().click("link=" + localize(locator.showBcc));
 			obj.zButton.zClick(page.zComposeView.zBccBtn);
 		}
 
@@ -674,7 +675,7 @@ public class ComposeView extends CommonTest {
 			for (int i = 0; i < toRecepientsCommaSeparatedArray.length; i++) {
 				obj.zEditField.zType(page.zComposeView.zAddReceipFindEditField,
 						toRecepientsCommaSeparatedArray[i]);
-				selenium.select(
+				SelNGBase.selenium.get().select(
 						page.zComposeView.zAddReceipContactsSrchWebList,
 						findIn_DefaultGAL);
 				obj.zButton
@@ -693,7 +694,7 @@ public class ComposeView extends CommonTest {
 			for (int i = 0; i < ccRecepientsCommaSeparatedArray.length; i++) {
 				obj.zEditField.zType(page.zComposeView.zAddReceipFindEditField,
 						ccRecepientsCommaSeparatedArray[i]);
-				selenium.select(
+				SelNGBase.selenium.get().select(
 						page.zComposeView.zAddReceipContactsSrchWebList,
 						findIn_DefaultGAL);
 				obj.zButton
@@ -712,7 +713,7 @@ public class ComposeView extends CommonTest {
 			for (int i = 0; i < bccRecepientsCommaSeparatedArray.length; i++) {
 				obj.zEditField.zType(page.zComposeView.zAddReceipFindEditField,
 						bccRecepientsCommaSeparatedArray[i]);
-				selenium.select(
+				SelNGBase.selenium.get().select(
 						page.zComposeView.zAddReceipContactsSrchWebList,
 						findIn_DefaultGAL);
 				obj.zButton

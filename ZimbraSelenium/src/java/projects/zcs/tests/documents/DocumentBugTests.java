@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentCompose;
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -43,20 +44,20 @@ public class DocumentBugTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zDocumentCompose.zNavigateToDocument();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(dataProvider = "", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tooLongDocName_Bug37614() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		obj.zButton.zClick(DocumentCompose.zNewPageIconBtn);
@@ -72,7 +73,7 @@ public class DocumentBugTests extends CommonTest {
 			Assert.assertTrue(obj.zDialog.zGetMessage(
 					localize(locator.warningMsg)).equals(WARNING_MESSAGE));
 		}
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -80,7 +81,7 @@ public class DocumentBugTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

@@ -31,7 +31,7 @@ public class Dialog extends SelNGBase{
 	}
 	public void zWait(String dialogNameOrId, String panel, String param1) {
 		//don't call core(since it could go one of the core might be calling this(chicken and egg)
-		selenium.call(coreName,  dialogNameOrId, "wait", true, panel, param1);
+		SelNGBase.selenium.get().call(coreName,  dialogNameOrId, "wait", true, panel, param1);
 	}	
 	public void zExists(String dialogNameOrId) {
 		String actual = dialogCore(dialogNameOrId, "exists");
@@ -59,6 +59,6 @@ public class Dialog extends SelNGBase{
 	}
 	protected String dialogCore(String dialogNameOrId, String action, Boolean retryOnFalse,
 			String panel, String param1) {
-		return selenium.call(coreName, dialogNameOrId, action, retryOnFalse, panel, param1);
+		return SelNGBase.selenium.get().call(coreName, dialogNameOrId, action, retryOnFalse, panel, param1);
 	}
 }

@@ -96,7 +96,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		// Setup
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeFormat", "html");
 		ProvZCS.modifyAccount(accountName,
@@ -111,16 +111,16 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		zReloginToAjax();
 
 		Thread.sleep(5000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -133,7 +133,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 	public void composePrefComposeAs() throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// zReloginToAjax();
@@ -145,7 +145,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -154,10 +154,10 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		String browserWindowTitle;
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
 				"TRUE");
@@ -169,13 +169,13 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zNewMenuIconBtn);
 		Thread.sleep(1500);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 		obj.zTextAreaField.zType(page.zComposeView.zToField, "test@test.com");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		// obj.zButton.zClickInDlgByName(localize(locator.no),
 		// localize(locator.warningMsg));
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
 				"FALSE");
@@ -184,7 +184,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		Thread.sleep(1000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -199,7 +199,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		int autoSaveDraftTime = 10;
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -223,7 +223,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -233,7 +233,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		String body = getLocalizedData(3);
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String recepient = ProvZCS.getRandomAccount();
@@ -249,7 +249,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "composePreferencesDataProvider", groups = { "smoke",
@@ -259,10 +259,10 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 			throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentAccount = selfAccountName;
+		String currentAccount = SelNGBase.selfAccountName.get();
 		String accountName = ProvZCS.getRandomAccount();
 
 		ProvZCS.modifyAccount(accountName,
@@ -288,7 +288,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		Thread.sleep(500);
 
-		SelNGBase.selfAccountName = accountName;
+		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 
 		MailApp
@@ -326,7 +326,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "composePreferencesDataProvider", groups = { "smoke",
@@ -336,10 +336,10 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		String actualReplyMsg;
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefForwardReplyPrefixChar",
 				replyPrefix);
@@ -425,11 +425,11 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 			obj.zMessageItem.zClick(subject);
 
-			selenium.isElementPresent("link=" + subject);
+			SelNGBase.selenium.get().isElementPresent("link=" + subject);
 
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "composePreferencesDataProvider", groups = { "smoke",
@@ -439,10 +439,10 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		String actualFwdMsg;
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefForwardReplyPrefixChar",
 				fwdPrefix);
@@ -517,16 +517,16 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 			obj.zMessageItem.zClick(subject);
 
-			selenium.isElementPresent("link=" + subject);
+			SelNGBase.selenium.get().isElementPresent("link=" + subject);
 
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

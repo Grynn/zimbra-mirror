@@ -12,6 +12,7 @@ import projects.zcs.ui.ActionMethod;
 
 import com.zimbra.common.service.ServiceException;
 
+import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
 
@@ -50,15 +51,15 @@ public class TagContactTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Address Book");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -71,7 +72,7 @@ public class TagContactTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createRenameDeleteTagForContactAndVerify(String firstName,
 			String lastName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1, newTag1;
@@ -105,7 +106,7 @@ public class TagContactTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -115,7 +116,7 @@ public class TagContactTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyTagFunctionalityFor2ContactAndRemoveTag(String firstName,
 			String lastName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String lastName2, tag1, tag2;
@@ -181,7 +182,7 @@ public class TagContactTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -191,7 +192,7 @@ public class TagContactTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void applyMutlipleTagToContactAndVerify(String firstName,
 			String lastName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1, tag2;
@@ -228,7 +229,7 @@ public class TagContactTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zContactListItem.zExists(lastName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -237,7 +238,7 @@ public class TagContactTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void editContactAndVerifyAddRemoveTag(String firstName,
 			String lastName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1, tag2;
@@ -277,7 +278,7 @@ public class TagContactTests extends CommonTest {
 		obj.zFolder.zClick(tag2);
 		obj.zContactListItem.zExists(lastName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -286,7 +287,7 @@ public class TagContactTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void editContactGroupAndVerifyAddRemoveTag(String firstName,
 			String groupName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1, tag2;
@@ -322,7 +323,7 @@ public class TagContactTests extends CommonTest {
 		obj.zFolder.zClick(tag2);
 		obj.zContactListItem.zExists(groupName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -332,7 +333,7 @@ public class TagContactTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyTagFunctionalityFor2ContactGroupAndRemoveTag(
 			String firstName, String group1) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String group2, tag1, tag2;
@@ -389,7 +390,7 @@ public class TagContactTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -400,7 +401,7 @@ public class TagContactTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void applyTagByDnDTagToContactAndViceVersa(String firstName,
 			String lastName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String lastName2, tag1, tag2;
@@ -450,7 +451,7 @@ public class TagContactTests extends CommonTest {
 		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName),
 				"Verify contact1 not exists");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -459,7 +460,7 @@ public class TagContactTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tryToCreateDuplicateTagInAddressBook(String firstName,
 			String lastName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1;
@@ -467,7 +468,7 @@ public class TagContactTests extends CommonTest {
 		zCreateTag(tag1);
 		zDuplicateTag(tag1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -475,7 +476,7 @@ public class TagContactTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

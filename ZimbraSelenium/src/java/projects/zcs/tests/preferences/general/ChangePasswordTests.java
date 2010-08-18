@@ -33,28 +33,28 @@ public class ChangePasswordTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(dataProvider = "GeneralPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void WrongOldPassword() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualEnterNewPWMsg;
 		String errorMessage;
 		page.zGenPrefUI.zNavigateToChangePasswordWindow();
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		Thread.sleep(2000);
-		actualEnterNewPWMsg = selenium.getText("class=errorText");
+		actualEnterNewPWMsg = SelNGBase.selenium.get().getText("class=errorText");
 
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
 				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
@@ -68,34 +68,34 @@ public class ChangePasswordTests extends CommonTest {
 		page.zGenPrefUI.zVerifyChangePwdErrMsg("WrongOldPassword", "test321",
 				"testtest", "testtest");
 
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "GeneralPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void NewConfirmPwdMismatch() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualEnterNewPWMsg;
 		String errorMessage;
 		page.zGenPrefUI.zNavigateToChangePasswordWindow();
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		Thread.sleep(2000);
-		actualEnterNewPWMsg = selenium.getText("class=errorText");
+		actualEnterNewPWMsg = SelNGBase.selenium.get().getText("class=errorText");
 
 		page.zGenPrefUI.zVerifyChangePwdErrMsg("New&ConfirmPwdMismatch",
 				"test123", "testtest", "test321");
 
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "GeneralPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void ChangePwdRelogin() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zGenPrefUI.zNavigateToChangePasswordWindow();
@@ -106,21 +106,21 @@ public class ChangePasswordTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage
-				.zLoginToZimbraAjax(SelNGBase.selfAccountName, "test321");
+				.zLoginToZimbraAjax(SelNGBase.selfAccountName.get(), "test321");
 
 		resetSession();
 
 		String accountName = ProvZCS.getRandomAccount();
-		SelNGBase.selfAccountName = accountName;
+		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

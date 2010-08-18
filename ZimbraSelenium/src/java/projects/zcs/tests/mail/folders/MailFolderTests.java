@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 import projects.zcs.tests.CommonTest;
@@ -65,16 +66,16 @@ public class MailFolderTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zMailApp.zNavigateToMailApp();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -87,13 +88,13 @@ public class MailFolderTests extends CommonTest {
 	public void createAndVerifyFolder(String folderName,
 			String renameFolderName, String errDlgName, String errMsg)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zCreateFolder(folderName);
 		obj.zFolder.zExists(folderName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -103,7 +104,7 @@ public class MailFolderTests extends CommonTest {
 	public void renameAndVerifyFolder(String folderName,
 			String renameFolderName, String errDlgName, String errMsg)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zCreateFolder(folderName);
@@ -117,7 +118,7 @@ public class MailFolderTests extends CommonTest {
 				localize(locator.renameFolder) + ": " + folderName);
 		obj.zFolder.zExists(renameFolderName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -127,13 +128,13 @@ public class MailFolderTests extends CommonTest {
 	public void deleteAndVerifyFolder(String folderName,
 			String renameFolderName, String errDlgName, String errMsg)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zCreateFolder(folderName);
 		page.zMailApp.zDeleteFolder(folderName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -142,7 +143,7 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "FolderDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void moveAndVerifyFolder(String folderName, String renameFolderName,
 			String errDlgName, String errMsg) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zCreateFolder(folderName);
@@ -150,11 +151,11 @@ public class MailFolderTests extends CommonTest {
 				"//td[contains(@id, 'zti__main_Mail') and contains(text(), '"
 						+ folderName + "')]", page.zMailApp.zTrashFldr);
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("//div[@id='zti__main_Mail__3']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
 								+ folderName + "')]"));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -164,13 +165,13 @@ public class MailFolderTests extends CommonTest {
 	public void validSpecialCharFolderTest(String folderName,
 			String renameFolderName, String errDlgName, String errMsg)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zCreateFolder(folderName);
 		obj.zFolder.zExists(folderName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -180,7 +181,7 @@ public class MailFolderTests extends CommonTest {
 	public void invalidSpecialCharFolderTest(String folderName,
 			String renameFolderName, String errDlgName, String errMsg)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zCreateFolder(folderName, renameFolderName, errDlgName,
@@ -196,7 +197,7 @@ public class MailFolderTests extends CommonTest {
 				localize(locator.createNewFolder));
 		obj.zFolder.zNotExists(folderName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -204,7 +205,7 @@ public class MailFolderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

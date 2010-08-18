@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -68,21 +69,21 @@ public class CreateContactTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void addRemoveContactPhotoAndVerify(String cnLastName,
 			String cnFirstname, String filename) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		Boolean viewLinkPresent, removeLinkPresent;
@@ -97,7 +98,7 @@ public class CreateContactTests extends CommonTest {
 		Thread.sleep(1500);
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[contains(@id,'editcontactform_REMOVE_IMAGE_row') and contains(@style,'display: none')]"),
 						"View/Remove image link exist even photo is not uploaded");
 
@@ -133,12 +134,12 @@ public class CreateContactTests extends CommonTest {
 		}
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[contains(@id,'editcontactform_REMOVE_IMAGE_row') and contains(@style,'display: block')]"),
 						"View/Remove image link not exist after uploading photo");
 
 		// Remove photo and re verify
-		selenium.click("id=editcontactform_REMOVE_IMAGE");
+		SelNGBase.selenium.get().click("id=editcontactform_REMOVE_IMAGE");
 		obj.zButton.zClick(page.zABCompose.zSaveContactMenuIconBtn);
 		obj.zContactListItem.zClick(cnLastName);
 		obj.zButton.zClick(page.zABCompose.zEditContactIconBtn);
@@ -147,22 +148,22 @@ public class CreateContactTests extends CommonTest {
 		} else {
 			Thread.sleep(2000);
 		}
-		viewLinkPresent = selenium
+		viewLinkPresent = SelNGBase.selenium.get()
 				.isElementPresent("id=editcontactform_VIEW_IMAGE");
-		removeLinkPresent = selenium
+		removeLinkPresent = SelNGBase.selenium.get()
 				.isElementPresent("id=editcontactform_REMOVE_IMAGE");
 		assertReport("false", viewLinkPresent.toString(),
 				"View link exist after uploading contact photo");
 		assertReport("false", removeLinkPresent.toString(),
 				"Remove link exist after uploading contact photo");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAllFileAsOptionForContact(String cnLastName,
 			String cnFirstname, String company) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		obj.zFolder
@@ -184,7 +185,7 @@ public class CreateContactTests extends CommonTest {
 		Thread.sleep(2500);
 		editContactUpdateFileAsAndVerify(cnLastName, cnFirstname, company);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -195,7 +196,7 @@ public class CreateContactTests extends CommonTest {
 			String iM, String street, String city, String state,
 			String postalCode, String country, String uRL, String other,
 			String notes) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zABCompose.zCreateContactWithAllFields(prefix, firstName,
@@ -210,7 +211,7 @@ public class CreateContactTests extends CommonTest {
 				postalCode, country, uRL, other, notes);
 		obj.zButton.zClick(localize(locator._close));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void editContactUpdateFileAsAndVerify(String cnLastName,
@@ -268,7 +269,7 @@ public class CreateContactTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 

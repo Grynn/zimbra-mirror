@@ -63,15 +63,15 @@ public class CalendarFolderTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -86,7 +86,7 @@ public class CalendarFolderTests extends CommonTest {
 	public void createCalendarFolder(String calName, String color)
 			throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String expectedMsg = localize(locator.actionCalendarCreated).replace(
@@ -104,7 +104,7 @@ public class CalendarFolderTests extends CommonTest {
 
 		obj.zCalendarFolder.zExists(calName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -124,7 +124,7 @@ public class CalendarFolderTests extends CommonTest {
 			String subject, String location, String attendees, String body)
 			throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalFolderApp.zCreateNewCalendar(calName, color);
@@ -134,7 +134,7 @@ public class CalendarFolderTests extends CommonTest {
 
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -153,7 +153,7 @@ public class CalendarFolderTests extends CommonTest {
 	public void uncheckCalendar(String calName, String color, String subject,
 			String location, String attendees, String body) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalFolderApp.zCreateNewCalendar(calName, color);
@@ -173,7 +173,7 @@ public class CalendarFolderTests extends CommonTest {
 
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -188,12 +188,12 @@ public class CalendarFolderTests extends CommonTest {
 	public void subscribeCalendar(String url, String calName,
 			String urlToNavigate) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalFolderApp.zSubscribeToCalendar(calName, url);
 
-		selenium.open(urlToNavigate);
+		SelNGBase.selenium.get().open(urlToNavigate);
 
 		obj.zButton.zClick(page.zCalendarApp.calRefresh);
 
@@ -201,7 +201,7 @@ public class CalendarFolderTests extends CommonTest {
 
 		obj.zButton.zClick(page.zCalendarApp.calTodayBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -218,7 +218,7 @@ public class CalendarFolderTests extends CommonTest {
 	public void verifyDeleteConfirmationAsked(String subject, String location,
 			String attendees, String body) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateSimpleAppt(subject, location, attendees, body);
@@ -233,7 +233,7 @@ public class CalendarFolderTests extends CommonTest {
 				.contains(localize(locator.actionDeleteCheckConfirm)),
 				"Toast message to check the checkbox is incorrect");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -250,7 +250,7 @@ public class CalendarFolderTests extends CommonTest {
 	public void verifyDeleteAllAppts(String subject, String location,
 			String attendees, String body) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String calName = getLocalizedData_NoSpecialChar();
@@ -268,7 +268,7 @@ public class CalendarFolderTests extends CommonTest {
 
 		obj.zAppointment.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -279,7 +279,7 @@ public class CalendarFolderTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyDeleteCalendar() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String calName = getLocalizedData_NoSpecialChar();
@@ -292,7 +292,7 @@ public class CalendarFolderTests extends CommonTest {
 
 		obj.zCalendarFolder.zNotExists(calName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -303,7 +303,7 @@ public class CalendarFolderTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void calendarRename() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String calName = getLocalizedData_NoSpecialChar();
@@ -317,7 +317,7 @@ public class CalendarFolderTests extends CommonTest {
 
 		obj.zCalendarFolder.zNotExists(calName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -329,7 +329,7 @@ public class CalendarFolderTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void calendarRenameVerifyInMenu() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String calName = getLocalizedData_NoSpecialChar();
@@ -346,13 +346,13 @@ public class CalendarFolderTests extends CommonTest {
 		obj.zHtmlMenu.zClick(page.zCalendarApp.apptComposeCalendarDropdown,
 				renameCalName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

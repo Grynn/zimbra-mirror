@@ -7,6 +7,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 /**
@@ -35,15 +37,15 @@ public class CalendarSavedSearchTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Calendar");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -51,13 +53,13 @@ public class CalendarSavedSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	@Test(dataProvider = "dataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void appointmentSavedSearchTest(String subject) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalCompose.zCreateSimpleAppt(subject);
 		page.zCalCompose.zCreateSimpleAppt("123xyz");
 
-		selenium.type("xpath=//input[@class='search_input']", subject);
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", subject);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zAppointment.zExists(subject);
 		obj.zAppointment.zNotExists("123xyz");
@@ -70,7 +72,7 @@ public class CalendarSavedSearchTests extends CommonTest {
 		obj.zAppointment.zExists(subject);
 		obj.zAppointment.zNotExists("123xyz");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -78,7 +80,7 @@ public class CalendarSavedSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

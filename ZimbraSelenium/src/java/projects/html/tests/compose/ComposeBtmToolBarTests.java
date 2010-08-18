@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.cs.account.Provisioning;
 
+import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
@@ -49,16 +50,16 @@ public class ComposeBtmToolBarTests extends CommonTest {
 				Provisioning.MAIL_FORMAT_HTML);
 		zLoginIfRequired(accntAttrs);
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -72,7 +73,7 @@ public class ComposeBtmToolBarTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void sendMailWithBtmToolbar(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailComposeBtmToolBar();
@@ -81,7 +82,7 @@ public class ComposeBtmToolBarTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zSendBtnBtmToolBar);
 		MailApp.zClickCheckMailUntilMailShowsUp(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -91,7 +92,7 @@ public class ComposeBtmToolBarTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void cancelMailWithBtmToolbar(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailComposeBtmToolBar();
@@ -99,7 +100,7 @@ public class ComposeBtmToolBarTests extends CommonTest {
 		obj.zButton.zExists(page.zMailApp.zRefreshBtn);
 		obj.zButton.zExists(page.zMailApp.zComposeBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -108,7 +109,7 @@ public class ComposeBtmToolBarTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void saveDraftWithBtmToolbar(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailComposeBtmToolBar();
@@ -123,7 +124,7 @@ public class ComposeBtmToolBarTests extends CommonTest {
 		SleepUtil.sleepSmall();// lot of timing issue (also error command time out)
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -132,7 +133,7 @@ public class ComposeBtmToolBarTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void addAttachmentsWithBtmToolbar(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailComposeBtmToolBar();
@@ -143,16 +144,16 @@ public class ComposeBtmToolBarTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zAddAttachCancelBtn);
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
 	 * Add receipients using bottom toolbar and verify it
 	 */
-	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "composeDataProvider", groups = { "parallel", "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void addRecepientsWithBtmToolbar(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailComposeBtmToolBar();
@@ -164,7 +165,7 @@ public class ComposeBtmToolBarTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zAddReceipDoneBtn);
 		obj.zButton.zClick(page.zComposeView.zCancelBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -172,7 +173,7 @@ public class ComposeBtmToolBarTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

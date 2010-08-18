@@ -2,6 +2,7 @@ package projects.zcs.ui;
 
 import org.testng.Assert;
 
+import framework.core.SelNGBase;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -24,7 +25,7 @@ public class GeneralPrefUI extends AppPage {
 
 	public static void zEnterChangePWData(String oldPwd, String newPwd,
 			String confirmPwd) {
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zPwdField.zType(zOldPassword, oldPwd);
 		obj.zPwdField.zType(zNewPassword, newPwd);
 		obj.zPwdField.zType(zConfirm, confirmPwd);
@@ -36,7 +37,7 @@ public class GeneralPrefUI extends AppPage {
 		page.zGenPrefUI.zEnterChangePWData(oldPwd, newPwd, confirmPwd);
 		obj.zButton.zClick("class=zLoginButton");
 		Thread.sleep(2000);
-		errorMessage = selenium.getText("class=errorText");
+		errorMessage = SelNGBase.selenium.get().getText("class=errorText");
 
 		String expectedMsg = localize(locator.loginError);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")

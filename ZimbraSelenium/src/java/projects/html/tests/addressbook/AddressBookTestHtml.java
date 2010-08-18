@@ -15,6 +15,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
@@ -59,15 +60,15 @@ public class AddressBookTestHtml extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -78,13 +79,13 @@ public class AddressBookTestHtml extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyContactsUI() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zABComposeHTML.zNavigateToContact();
 		page.zABComposeHTML.zVerifyABUI();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -98,7 +99,7 @@ public class AddressBookTestHtml extends CommonTest {
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createContactInHtml(String lastName, String middleName,
 			String firstName, String email) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zABComposeHTML.zNavigateToContact();
@@ -112,7 +113,7 @@ public class AddressBookTestHtml extends CommonTest {
 		// To verify contact is created
 		obj.zCheckbox.zExists("link=" + lastName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -129,7 +130,7 @@ public class AddressBookTestHtml extends CommonTest {
 	@Test(dataProvider = "ABDataProvider", dependsOnMethods = "createContactInHtml", groups = {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void editAndVerifyContactInHtml() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			createContactInHtmlReusable();
 
 		obj.zButton.zClick(page.zABComposeHTML.zEditIconBtn);
@@ -147,7 +148,7 @@ public class AddressBookTestHtml extends CommonTest {
 		Assert.assertTrue(page.zABComposeHTML.zVerifyEditContact(newLastName,
 				"", "", ""), "The contact is not modified successfully");
 		obj.zButton.zClick(page.zABComposeHTML.zSaveNewContactIconBtn);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -161,7 +162,7 @@ public class AddressBookTestHtml extends CommonTest {
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteContactAndVerify(String lastName, String middleName,
 			String firstName, String email) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			createContactInHtmlReusable();
 		String tmp = lastName;
 		page.zABComposeHTML.zNavigateToContact();
@@ -170,7 +171,7 @@ public class AddressBookTestHtml extends CommonTest {
 		page.zABComposeHTML.zDeleteContactAndVerify(lastName);
 		// to add toaster message check for delete contact
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -178,9 +179,9 @@ public class AddressBookTestHtml extends CommonTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "ABDataProvider", groups = { "parallel", "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createAddressBook() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String addressBookName = getLocalizedData(1);
 		page.zABComposeHTML.zNavigateToContact();
@@ -200,7 +201,7 @@ public class AddressBookTestHtml extends CommonTest {
 
 		// obj.zFolder.zExists(addressBookName); //zFolder.zExists is not
 		// working and has been mailed to raja by kk on 24-10.
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -210,7 +211,7 @@ public class AddressBookTestHtml extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteAddressBook() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String addressBookName = getLocalizedData(1);
 		page.zABComposeHTML.zNavigateToContact();
@@ -229,7 +230,7 @@ public class AddressBookTestHtml extends CommonTest {
 		obj.zToastAlertMessage.zAlertMsgExists(splitedExpectedToastMsg[1],
 				"2nd part of the Address Book moved to Trash is not proper");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -244,7 +245,7 @@ public class AddressBookTestHtml extends CommonTest {
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void moveContactAndVerify(String lastName, String middleName,
 			String firstName, String email, String targetAB) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String addressBookName = getLocalizedData(1);
@@ -253,7 +254,7 @@ public class AddressBookTestHtml extends CommonTest {
 				firstName, email, "");
 		page.zABComposeHTML.zMoveContactAndVerify(lastName, targetAB);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -264,7 +265,7 @@ public class AddressBookTestHtml extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void modifyABColorAndVerifyToasterMsg() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zABComposeHTML.zNavigateToContact();
@@ -276,7 +277,7 @@ public class AddressBookTestHtml extends CommonTest {
 		page.zABComposeHTML.zVerifyContactToasterMsgs(obj.zToastAlertMessage
 				.zGetMsg(), localize(locator.addressBookUpdated));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -287,7 +288,7 @@ public class AddressBookTestHtml extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void permanentlyDeleteAllContacts() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zABComposeHTML.zNavigateToContact();
@@ -305,7 +306,7 @@ public class AddressBookTestHtml extends CommonTest {
 		obj.zToastAlertMessage.zAlertMsgExists(splitedExpectedToastMsg[1],
 				"2nd part of the Address Book contacts emptied is not proper");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -323,7 +324,7 @@ public class AddressBookTestHtml extends CommonTest {
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void searchContact(String lastName, String middleName,
 			String firstName, String email) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zABComposeHTML.zNavigateToContact();
 		page.zABComposeHTML.zCreateContactAndSearch(lastName, "", "", "", "",
@@ -339,7 +340,7 @@ public class AddressBookTestHtml extends CommonTest {
 				"", "BottomToolbar");
 		obj.zCheckbox.zExists("link=" + lastName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -350,7 +351,7 @@ public class AddressBookTestHtml extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createContactNegativeTest() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zABComposeHTML.zNavigateToContact();
 
@@ -358,7 +359,7 @@ public class AddressBookTestHtml extends CommonTest {
 
 		page.zABComposeHTML.zNegativeTestSaveEmptyContactsOrGroup("Contact");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -374,7 +375,7 @@ public class AddressBookTestHtml extends CommonTest {
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void importFromCSVAndVerify(String zimbraCSV, String gmailCSV,
 			String yahooCSV, String outLookCSV) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zABComposeHTML.zNavigateToContact();
@@ -400,7 +401,7 @@ public class AddressBookTestHtml extends CommonTest {
 		page.zABComposeHTML.zNavigateToContactAndVerifyImportedContactDisplay(
 				"lastNameYahoo" + "," + " " + "firstNameYahoo", "Yahoo");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -415,7 +416,7 @@ public class AddressBookTestHtml extends CommonTest {
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createContactGroupAndVerify(String contactGroupName, int noOfAcc)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String acc;
 		String commaSeparatedAccForGroup = "";
@@ -447,7 +448,7 @@ public class AddressBookTestHtml extends CommonTest {
 		
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -459,7 +460,7 @@ public class AddressBookTestHtml extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void negativeTestSaveEmptypContactGroup() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zABComposeHTML.zNavigateToContact();
 
@@ -467,7 +468,7 @@ public class AddressBookTestHtml extends CommonTest {
 		page.zABComposeHTML
 				.zNegativeTestSaveEmptyContactsOrGroup("ContactGroup");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -481,7 +482,7 @@ public class AddressBookTestHtml extends CommonTest {
 	@Test(dataProvider = "ABDataProvider", dependsOnMethods = "negativeTestSaveEmptypContactGroup", groups = {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void negativeTestGroupWithoutMember() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			negativeTestContactGroup();
 
 		obj.zEditField.zType(page.zABComposeHTML.zGroupNameEditfield,
@@ -491,7 +492,7 @@ public class AddressBookTestHtml extends CommonTest {
 				.zGetMsg(), localize(locator.noContactGroupMembers));
 		obj.zButton.zClick(page.zABComposeHTML.zCancelNewContactIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -502,7 +503,7 @@ public class AddressBookTestHtml extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void allItemsCheckUncheck() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		int noOfContacts = 3;
@@ -523,7 +524,7 @@ public class AddressBookTestHtml extends CommonTest {
 		page.zABComposeHTML
 				.zNavigateToTrashAndVerifyDeletedContacts(commaSeparatedContacts);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -536,7 +537,7 @@ public class AddressBookTestHtml extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCreateAndVerifyTagForContacts() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String tagName = getLocalizedData_NoSpecialChar();
 		String commaSeparatedContacts = page.zABComposeHTML
@@ -563,7 +564,7 @@ public class AddressBookTestHtml extends CommonTest {
 				commaSeparatedContacts);
 		SleepUtil.sleepSmall();
 		page.zABComposeHTML.zVerifyContactHasNoTag(commaSeparatedContacts);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -575,14 +576,14 @@ public class AddressBookTestHtml extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zVerifyDisplayedValues() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zABComposeHTML.zNavigateToContact();
 		obj.zButton.zClick(page.zABComposeHTML.zNewContactIconBtn);
 		SleepUtil.sleepSmall();
 		page.zABComposeHTML.zCreateContactWithAllDetailsAndVerifyDisplay();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -599,7 +600,7 @@ public class AddressBookTestHtml extends CommonTest {
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyFileAS(String lastName, String middleName,
 			String firstName, String email, String company) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zABComposeHTML.zNavigateToContact();
 		page.zABComposeHTML.zCreateBasicContact(lastName, middleName,
@@ -607,12 +608,12 @@ public class AddressBookTestHtml extends CommonTest {
 		SleepUtil.sleepSmall();
 		page.zABComposeHTML.zVerifyFileAsOptions(lastName, firstName, company);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

@@ -17,15 +17,15 @@ public class FamilyMailboxTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -34,20 +34,20 @@ public class FamilyMailboxTests extends CommonTest {
 	@SuppressWarnings("static-access")
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void familyMailbox_UIverification() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		/**
 		 * Add child Account
 		 */
-		String parentAccount=SelNGBase.selfAccountName.toLowerCase();
+		String parentAccount=SelNGBase.selfAccountName.get().toLowerCase();
 		String childAccount=ProvZCS.getRandomAccount().toLowerCase();
 		String childUserAccountId=ProvZCS.getAccount(childAccount).getId();
 
 		ProvZCS.modifyAccount(parentAccount, "zimbraChildAccount", childUserAccountId);
 		ProvZCS.modifyAccount(parentAccount, "zimbraPrefChildVisibleAccount", childUserAccountId);
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("class", "ZmOverviewZimletHeader");
 
@@ -152,19 +152,19 @@ public class FamilyMailboxTests extends CommonTest {
 		checkHeaders(localize(locator.messagesReceiving));		
 		obj.zRadioBtn.zExists(localize(locator.displayAsHTML));
 		obj.zEditField.zExists(localize(locator.forwardCopyTo));
-		selenium.isElementPresent("//*[contains(@class, 'DwtListView ZmWhiteBlackList')]");
+		SelNGBase.selenium.get().isElementPresent("//*[contains(@class, 'DwtListView ZmWhiteBlackList')]");
 
 		clickAt(parentAccount, localize(locator.composing));
 		checkHeaders(localize(locator.composingMessages));
 		checkLabels("Compose:");
 		checkLabels("Prefix:");
-		selenium.isElementPresent("link=Accounts Page");
+		SelNGBase.selenium.get().isElementPresent("link=Accounts Page");
 
 		clickAt(parentAccount, localize(locator.signatures));
 		checkHeaders(localize(locator.signatures));
 		checkHeaders(localize(locator.signaturesUsing));
 		obj.zButton.zExists(localize(locator.addSignature));
-		selenium.isElementPresent("link=Accounts Page");
+		SelNGBase.selenium.get().isElementPresent("link=Accounts Page");
 
 		clickAt(parentAccount, localize(locator.accounts));
 		checkHeaders(localize(locator.accounts));
@@ -178,8 +178,8 @@ public class FamilyMailboxTests extends CommonTest {
 
 		clickAt(parentAccount, localize(locator.addressBook));
 		checkHeaders(localize(locator.options));
-		selenium.isElementPresent("//*[contains(@id, 'AUTOCOMPLETE_NO_GROUP_MATCH')]");
-		selenium.isElementPresent("//*[contains(@id, 'AUTO_ADD_ADDRESS')]");
+		SelNGBase.selenium.get().isElementPresent("//*[contains(@id, 'AUTOCOMPLETE_NO_GROUP_MATCH')]");
+		SelNGBase.selenium.get().isElementPresent("//*[contains(@id, 'AUTO_ADD_ADDRESS')]");
 
 		clickAt(parentAccount, localize(locator.calendar));
 		checkHeaders(localize(locator.general));
@@ -202,13 +202,13 @@ public class FamilyMailboxTests extends CommonTest {
 		 */
 		clickAt(childAccount, localize(locator.mail));
 		checkHeaders(localize(locator.messagesReceiving));		
-		selenium.isElementPresent("//*[contains(@class, 'DwtListView ZmWhiteBlackList')]");
+		SelNGBase.selenium.get().isElementPresent("//*[contains(@class, 'DwtListView ZmWhiteBlackList')]");
 
 		clickAt(childAccount, localize(locator.signature));
 		checkHeaders(localize(locator.signatures));
 		checkHeaders(localize(locator.signaturesUsing));
 		obj.zButton.zExists(localize(locator.addSignature));
-		selenium.isElementPresent("link=Accounts Page");
+		SelNGBase.selenium.get().isElementPresent("link=Accounts Page");
 
 		clickAt(childAccount, localize(locator.accounts));
 		checkHeaders(localize(locator.accounts));
@@ -222,8 +222,8 @@ public class FamilyMailboxTests extends CommonTest {
 
 		clickAt(childAccount, localize(locator.addressBook));
 		checkHeaders(localize(locator.options));
-		selenium.isElementPresent("//*[contains(@id, 'AUTOCOMPLETE_NO_GROUP_MATCH')]");
-		selenium.isElementPresent("//*[contains(@id, 'AUTO_ADD_ADDRESS')]");
+		SelNGBase.selenium.get().isElementPresent("//*[contains(@id, 'AUTOCOMPLETE_NO_GROUP_MATCH')]");
+		SelNGBase.selenium.get().isElementPresent("//*[contains(@id, 'AUTO_ADD_ADDRESS')]");
 
 		clickAt(childAccount, localize(locator.calendar));
 		checkHeaders(localize(locator.general));
@@ -236,12 +236,12 @@ public class FamilyMailboxTests extends CommonTest {
 		checkHeaders(localize(locator.importLabel));
 		checkHeaders(localize(locator.importLabel));		
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 
 	public void clickAt(String accountName, String tabName) throws Exception{
-		selenium.clickAt("//*[contains(@id,'"+accountName+"') and contains(text(),'"+tabName+"')]","");
+		SelNGBase.selenium.get().clickAt("//*[contains(@id,'"+accountName+"') and contains(text(),'"+tabName+"')]","");
 	}
 
 	public String createXpath(String accountName, String tabName) throws Exception{
@@ -249,11 +249,11 @@ public class FamilyMailboxTests extends CommonTest {
 	}
 
 	public void checkHeaders(String headerText) throws Exception {
-		selenium.isElementPresent("//*[contains(@class, 'ZOptionsHeader ImgPrefsHeader') and contains(text(), '"+headerText+"')]");
+		SelNGBase.selenium.get().isElementPresent("//*[contains(@class, 'ZOptionsHeader ImgPrefsHeader') and contains(text(), '"+headerText+"')]");
 	}
 
 	public void checkLabels(String labelText) throws Exception {
-		selenium.isElementPresent("//*[contains(@class, 'ZOptionsLabel') and contains(text(), '"+labelText+"')]");
+		SelNGBase.selenium.get().isElementPresent("//*[contains(@class, 'ZOptionsLabel') and contains(text(), '"+labelText+"')]");
 	}
 
 
@@ -262,7 +262,7 @@ public class FamilyMailboxTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 

@@ -29,15 +29,15 @@ public class ZimletPreferenceTests extends CommonTest {
 		zLoginIfRequired();
 		zGoToApplication("Preferences");
 		zGoToPreferences("Zimlets");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -47,16 +47,16 @@ public class ZimletPreferenceTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zimletPreferenceTest() throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zWaitTillObjectExist("checkbox", zZimletDateChkBox);
 		Thread.sleep(3000);
-		selenium.clickAt(zZimletEmailChkBox,"");
-		selenium.clickAt(zZimletURLChkBox,"");
-		selenium.clickAt(zZimletEmoticonsChkBox,"");
-		selenium.clickAt(zZimletDateChkBox,"");
-		selenium.clickAt(zZimletHighlightPhoneChkBox,"");
+		SelNGBase.selenium.get().clickAt(zZimletEmailChkBox,"");
+		SelNGBase.selenium.get().clickAt(zZimletURLChkBox,"");
+		SelNGBase.selenium.get().clickAt(zZimletEmoticonsChkBox,"");
+		SelNGBase.selenium.get().clickAt(zZimletDateChkBox,"");
+		SelNGBase.selenium.get().clickAt(zZimletHighlightPhoneChkBox,"");
 		
 		//Some times zActivate  and selenium.uncheck method is not working for IE so added above code
 		/*obj.zCheckbox.zActivate(zZimletEmailChkBox);
@@ -74,7 +74,7 @@ public class ZimletPreferenceTests extends CommonTest {
 		zGoToApplication("Preferences");
 		zGoToPreferences("Zimlets");
 		System.out.println(ProvZCS.getAccountPreferenceValue(
-				SelNGBase.selfAccountName, "zimbraPrefZimlets"));
+				SelNGBase.selfAccountName.get(), "zimbraPrefZimlets"));
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletEmailChkBox);
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletURLChkBox);
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletEmoticonsChkBox);
@@ -88,7 +88,7 @@ public class ZimletPreferenceTests extends CommonTest {
 		//		"", "", "subject", "body", "");
 		
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -96,7 +96,7 @@ public class ZimletPreferenceTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

@@ -117,7 +117,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zMailApp.zNavigateToMailApp();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		randomAcctCreatedFlag = false;
 		i = 0;
 	}
@@ -125,10 +125,10 @@ public class MessageRightClickMenuTests extends CommonTest {
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -141,7 +141,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void verifyAllRightClickMenusExists(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		fromUserName = commonInjectMessage(from, to, cc, bcc, subject, body,
@@ -187,7 +187,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 			obj.zMenuItem.zExists(subjectMenuItemArray[i]);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -197,7 +197,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContact_Search(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Search
@@ -206,7 +206,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 
 		String newSubject = "searchsubject";
 		String newBody = "searchsubject";
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 
 		ProvZCS.injectMessage(commonAccount, recipients, cc, newSubject,
@@ -243,7 +243,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		obj.zMessageItem.zRtClick(newSubject);
 		obj.zMenuItem.zClick(page.zMailApp.zDeleteIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -253,7 +253,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContact_AdvancedSearch(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Advanced search
@@ -262,7 +262,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 
 		String newSubject = "advancedsearchsubject";
 		String newBody = "advancedsearchbody";
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 
 		ProvZCS.injectMessage(commonAccount, recipients, cc, newSubject,
@@ -303,7 +303,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		obj.zMessageItem.zRtClick(newSubject);
 		obj.zMenuItem.zClick(page.zMailApp.zDeleteIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -313,7 +313,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContact_NewEmail(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// New email
@@ -329,7 +329,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 				"To edit field value mismatched while add contact from contact right click menu");
 		obj.zButton.zClick(page.zMailApp.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -340,7 +340,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContact_AddEditContact(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Add contact & edit contact both
@@ -387,7 +387,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		obj.zButton.zClick(page.zABCompose.zSaveContactMenuIconBtn);
 		zGoToApplication("Mail");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -398,7 +398,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_MarkAsReadUnread(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Mark as read
@@ -420,7 +420,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		obj.zMenuItem.zIsDisabled(page.zMailApp.zMarkReadMenuEnaDisaBtn);
 		obj.zMenuItem.zIsEnabled(page.zMailApp.zMarkUnReadMenuIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -430,7 +430,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_Reply(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Reply
@@ -464,7 +464,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		verifyCurrentMsgBody(bodyValue, from, to, cc, bcc, subject, body);
 		obj.zButton.zClick(page.zMailApp.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -474,7 +474,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_ReplytoAll(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Reply to all
@@ -510,7 +510,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		verifyCurrentMsgBody(bodyValue, from, to, cc, bcc, subject, body);
 		obj.zButton.zClick(page.zMailApp.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -520,7 +520,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_Forward(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Forward
@@ -562,7 +562,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 
 		obj.zButton.zClick(page.zMailApp.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -572,7 +572,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_EditasNew(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Edit as new
@@ -611,7 +611,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 				"Body editor field value mismatched while do edit as new from mail right click menu");
 		obj.zButton.zClick(page.zMailApp.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -621,7 +621,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_TagMessage(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Tag message
@@ -640,7 +640,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		obj.zMenuItem.zNotExists("TagFromMail");
 		obj.zMenuItem.zClick(page.zMailApp.zRemoveTagMenuIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -650,7 +650,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_Delete(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Delete & permanent delete
@@ -698,7 +698,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zTrashFldr));
 		obj.zMessageItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -708,7 +708,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_Move_Bug39558(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Move
@@ -731,7 +731,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		Thread.sleep(1500);
 		obj.zMessageItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -741,7 +741,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_Print(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Print
@@ -750,7 +750,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		// rightClickOnContact(fromUserName);
 		// obj.zMenuItem.zClick(localize(locator.print));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -760,7 +760,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_Junk_And_Bug42845(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Junk
@@ -791,7 +791,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -801,7 +801,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_ShowOriginal(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Show original
@@ -810,8 +810,8 @@ public class MessageRightClickMenuTests extends CommonTest {
 		rightClickOnSubject(subject);
 		obj.zMenuItem.zClick(page.zMailApp.zShowOriginalMenuIconBtn);
 		Thread.sleep(4000); // failed because of timing issue
-		selenium.selectWindow("_blank");
-		showOrigText = selenium.getBodyText();
+		SelNGBase.selenium.get().selectWindow("_blank");
+		showOrigText = SelNGBase.selenium.get().getBodyText();
 		Thread.sleep(1000);
 		verifyShowOriginalMsgBody(showOrigText, from, to, cc, bcc, subject,
 				body);
@@ -819,9 +819,9 @@ public class MessageRightClickMenuTests extends CommonTest {
 			assertReport(showOrigText, localize(locator.received),
 					"Received: text mismatched in show original body");
 		}
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -831,7 +831,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_NewFilter(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// New filter
@@ -910,7 +910,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 				localize(locator.warningMsg));
 		zGoToApplication("Mail");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -920,7 +920,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_CreateAppt_Bug39954(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Create appointment
@@ -935,7 +935,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		obj.zAppointment.zExists(subject);
 		zGoToApplication("Mail");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -945,7 +945,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	public void rtClickToContactAndSubject_CreateTask_Bug39954(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Create task
@@ -959,13 +959,13 @@ public class MessageRightClickMenuTests extends CommonTest {
 		obj.zTaskItem.zExists(subject);
 		zGoToApplication("Mail");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private String commonInjectMessage(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		if (from.equals(commonAccount) && randomAcctCreatedFlag == false) {
 			ProvZCS.injectMessage(from, recipients, cc, subject, body);
@@ -1055,7 +1055,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

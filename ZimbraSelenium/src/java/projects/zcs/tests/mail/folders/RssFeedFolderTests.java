@@ -8,6 +8,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 
 import org.testng.annotations.Test;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.tests.CommonTest;
@@ -62,16 +64,16 @@ public class RssFeedFolderTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zMailApp.zNavigateToMailApp();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		i = 0;
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -83,7 +85,7 @@ public class RssFeedFolderTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createAndRenameRssFeedFolder() throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		createData();
 		obj.zFolder.zClick(rssFeedFolderName);
@@ -107,7 +109,7 @@ public class RssFeedFolderTests extends CommonTest {
 		obj.zButton.zClickInDlg(localize(locator.ok));
 		obj.zFolder.zExists(rssFeedFolderName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -116,7 +118,7 @@ public class RssFeedFolderTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteAndMoveRssFeedFolder() throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		createData();
 		page.zMailApp.zDeleteFolder(rssFeedFolderName);
@@ -140,7 +142,7 @@ public class RssFeedFolderTests extends CommonTest {
 		}
 		obj.zFolder.zExists(rssFeedFolderName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -150,7 +152,7 @@ public class RssFeedFolderTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyRssFeedUI() throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		createData();
 		obj.zFolder.zRtClick(rssFeedFolderName);
@@ -194,7 +196,7 @@ public class RssFeedFolderTests extends CommonTest {
 			obj.zButton.zIsEnabled(page.zMailApp.zForwardBtn);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void createData() throws Exception {
@@ -212,7 +214,7 @@ public class RssFeedFolderTests extends CommonTest {
 	public void duplicateRSSFeeds_Bug41488(String folderName,
 			String rssFeedURL, String fromName) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		/**
 		 * 1. Create a RSS feed. 2. Go to newly created folder. 3. Click on
@@ -223,7 +225,7 @@ public class RssFeedFolderTests extends CommonTest {
 		// "http://xkcd.com/rss.xml");
 		obj.zFolder.zClick(folderName);
 		obj.zMessageItem.zClick(fromName, "1");
-		String latestFeedSubject = selenium
+		String latestFeedSubject = SelNGBase.selenium.get()
 				.getText("//*[contains(@class,'LabelColValue SubjectCol')]");
 
 		/**
@@ -233,7 +235,7 @@ public class RssFeedFolderTests extends CommonTest {
 		obj.zFolder.zClick(folderName);
 		obj.zFolder.zClick(folderName);
 		obj.zFolder.zClick(folderName);
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3000);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		obj.zFolder.zClick(folderName);
@@ -242,10 +244,10 @@ public class RssFeedFolderTests extends CommonTest {
 		 * 1. After refreshment again get subject of first and second message.
 		 */
 		obj.zMessageItem.zClick(fromName, "1");
-		String latestFeedSubject_2 = selenium
+		String latestFeedSubject_2 = SelNGBase.selenium.get()
 				.getText("//*[contains(@class,'LabelColValue SubjectCol')]");
 		obj.zMessageItem.zClick(fromName, "2");
-		String penultimate_latestFeed_Subject = selenium
+		String penultimate_latestFeed_Subject = SelNGBase.selenium.get()
 				.getText("//*[contains(@class,'LabelColValue SubjectCol')]");
 
 		/**
@@ -259,7 +261,7 @@ public class RssFeedFolderTests extends CommonTest {
 					.equals(penultimate_latestFeed_Subject));
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -267,7 +269,7 @@ public class RssFeedFolderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

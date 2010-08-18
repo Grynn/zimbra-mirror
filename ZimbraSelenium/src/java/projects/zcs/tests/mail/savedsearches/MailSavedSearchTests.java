@@ -42,15 +42,15 @@ public class MailSavedSearchTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -60,19 +60,19 @@ public class MailSavedSearchTests extends CommonTest {
 	public void mailSaveSearch_Bug34872_Bug44871(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byConversation));
-		Assert.assertTrue(selenium.isElementPresent("zlhi__CLV__ex"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLV__ex"));
 
 		ProvZCS.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
-		selenium.type("xpath=//input[@class='search_input']", subject);
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", subject);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zMessageItem.zExists(subject);
 		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");
@@ -83,7 +83,7 @@ public class MailSavedSearchTests extends CommonTest {
 
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
-		Assert.assertTrue(selenium.isElementPresent("zlhi__TV__fg"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__TV__fg"));
 
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		Thread.sleep(1000);
@@ -94,18 +94,18 @@ public class MailSavedSearchTests extends CommonTest {
 
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
-		Assert.assertTrue(selenium.isElementPresent("zlhi__TV__fg"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__TV__fg"));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void mailSaveSearch_Bug44232(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		/**
 		 * Send mail and verify that is:flagged search is not returning
@@ -113,7 +113,7 @@ public class MailSavedSearchTests extends CommonTest {
 		 */
 		ProvZCS.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
-		selenium.type("xpath=//input[@class='search_input']", "is:flagged");
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", "is:flagged");
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zMessageItem.zNotExists(subject);
 
@@ -122,7 +122,7 @@ public class MailSavedSearchTests extends CommonTest {
 		 */
 		obj.zFolder.zClick(localize(locator.inbox));
 		obj.zMessageItem.zClick(subject);
-		selenium.clickAt(
+		SelNGBase.selenium.get().clickAt(
 				"//*[contains(@id, '__fg')  and contains(@class, 'ImgBlank')]",
 				"");
 
@@ -137,12 +137,12 @@ public class MailSavedSearchTests extends CommonTest {
 		 * is:flagged search should return only first mail. Second mail should
 		 * not be present after hitting search button.
 		 */
-		selenium.type("xpath=//input[@class='search_input']", "is:flagged");
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", "is:flagged");
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zMessageItem.zNotExists(new_subject);
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -150,7 +150,7 @@ public class MailSavedSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

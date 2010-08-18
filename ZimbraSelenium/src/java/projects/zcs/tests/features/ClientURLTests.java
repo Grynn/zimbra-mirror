@@ -4,6 +4,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
@@ -23,22 +24,22 @@ public class ClientURLTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	// Tests
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void customLoginToCalendarApp() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		resetSession();
@@ -47,16 +48,16 @@ public class ClientURLTests extends CommonTest {
 		obj.zButton.zNotExists(localize(locator.newFolder));
 		obj.zButton.zNotExists(page.zMailApp.zGetMailIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void appTabURL() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// Address book
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=contacts");
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=contacts");
@@ -65,7 +66,7 @@ public class ClientURLTests extends CommonTest {
 		obj.zButton.zExists(page.zABCompose.zNewContactMenuIconBtn);
 
 		// Calendar
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar");
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar");
@@ -74,7 +75,7 @@ public class ClientURLTests extends CommonTest {
 		obj.zButton.zExists(page.zCalApp.zCalNewApptBtn);
 
 		// Tasks
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=tasks");
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=tasks");
@@ -83,7 +84,7 @@ public class ClientURLTests extends CommonTest {
 		obj.zButton.zExists(page.zTaskApp.zTasksNewBtn);
 
 		// Documents
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=documents");
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=documents");
@@ -92,7 +93,7 @@ public class ClientURLTests extends CommonTest {
 		obj.zButton.zExists(page.zDocumentCompose.zNewPageIconBtn);
 
 		// Briefcase
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=briefcase");
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=briefcase");
@@ -100,12 +101,12 @@ public class ClientURLTests extends CommonTest {
 		obj.zButton.zExists("id=ztih__main_Briefcase__BRIEFCASE_textCell");
 		obj.zButton.zExists(page.zBriefcaseApp.zNewMenuIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void composeURL() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String toField = ProvZCS.getRandomAccount();
@@ -122,7 +123,7 @@ public class ClientURLTests extends CommonTest {
 			subjectField = getLocalizedData_NoSpecialChar();
 			bodyField = getLocalizedData_NoSpecialChar();
 		}
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?view=compose" + "&to="
 				+ toField + "&subject=" + subjectField + "&body=" + bodyField);
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
@@ -146,12 +147,12 @@ public class ClientURLTests extends CommonTest {
 				"Body editor value mismatched while directly type client URL to compose a mail");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void composeURLWithSpecialCharacter_Bug44332() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		resetSession();
@@ -173,12 +174,12 @@ public class ClientURLTests extends CommonTest {
 				"Body editor value mismatched while directly type client URL to compose a mail");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void calendarViewURL() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// day|workWeek|week|month
@@ -215,7 +216,7 @@ public class ClientURLTests extends CommonTest {
 			expectedDate = "2009-3-10";
 		}
 		String calView = "workWeek";
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar&view=" + calView
 				+ "&date=" + startDate);
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
@@ -251,7 +252,7 @@ public class ClientURLTests extends CommonTest {
 					localize(locator.warningMsg));
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	public static String getTimeMenuLocation(String val) {
@@ -306,7 +307,7 @@ public class ClientURLTests extends CommonTest {
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

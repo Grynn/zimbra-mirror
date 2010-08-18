@@ -102,16 +102,16 @@ public class CalendarSharingTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zCalApp.zNavigateToCalendar();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -135,14 +135,14 @@ public class CalendarSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		verifyApptOnDiffRole(applicationtab, sharingfoldername, sharetype,
 				invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt, mountingfoldername);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -164,14 +164,14 @@ public class CalendarSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		verifyApptOnDiffRole(applicationtab, sharingfoldername, sharetype,
 				invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt, mountingfoldername);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -193,14 +193,14 @@ public class CalendarSharingTests extends CommonTest {
 			String role, String message, String sharingnoteifany,
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		verifyApptOnDiffRole(applicationtab, sharingfoldername, sharetype,
 				invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt, mountingfoldername);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -223,14 +223,14 @@ public class CalendarSharingTests extends CommonTest {
 			String role, String message, String sharingnoteifany,
 			String allowtoseeprivateappt, String mountingfoldername)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		verifyApptOnDiffRole(applicationtab, sharingfoldername, sharetype,
 				invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt, mountingfoldername);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "SharingDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -239,7 +239,7 @@ public class CalendarSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String account = ProvZCS.getRandomAccount();
@@ -251,7 +251,7 @@ public class CalendarSharingTests extends CommonTest {
 
 		resetSession();
 
-		SelNGBase.selfAccountName = account;
+		SelNGBase.selfAccountName.set(account);
 		page.zLoginpage.zLoginToZimbraAjax(account);
 		page.zSharing.zAcceptShare(calendarName);
 
@@ -260,7 +260,7 @@ public class CalendarSharingTests extends CommonTest {
 		obj.zFeatureMenu.zNotExists(localize(locator.calendar));
 		page.zCalCompose.zCreateSimpleAppt("full", "", "", "");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -286,10 +286,10 @@ public class CalendarSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentLoggedInUser = SelNGBase.selfAccountName;
+		String currentLoggedInUser = SelNGBase.selfAccountName.get();
 		String userB = ProvZCS.getRandomAccount();
 		String userC = ProvZCS.getRandomAccount();
 		String userD = ProvZCS.getRandomAccount();
@@ -312,12 +312,12 @@ public class CalendarSharingTests extends CommonTest {
 				sharetype, userC, role, message, sharingnoteifany, "");
 
 		resetSession();
-		SelNGBase.selfAccountName = userC;
+		SelNGBase.selfAccountName.set(userC);
 		page.zLoginpage.zLoginToZimbraAjax(userC);
 		page.zSharing.zAcceptShare(mountingfoldername);
 
 		resetSession();
-		SelNGBase.selfAccountName = userB;
+		SelNGBase.selfAccountName.set(userB);
 		page.zLoginpage.zLoginToZimbraAjax(userB);
 
 		zGoToApplication("Preferences");
@@ -327,20 +327,20 @@ public class CalendarSharingTests extends CommonTest {
 				userC);
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
 		Thread.sleep(2000);
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(1000);
 		zGoToApplication("Calendar");
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, userC, role, message, sharingnoteifany, "");
 
 		resetSession();
-		SelNGBase.selfAccountName = userC;
+		SelNGBase.selfAccountName.set(userC);
 		page.zLoginpage.zLoginToZimbraAjax(userC);
 		String mountingfoldername1 = getLocalizedData_NoSpecialChar();
 		page.zSharing.zAcceptShare(mountingfoldername1);
 
 		resetSession();
-		SelNGBase.selfAccountName = userD;
+		SelNGBase.selfAccountName.set(userD);
 		page.zLoginpage.zLoginToZimbraAjax(userD);
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
@@ -353,7 +353,7 @@ public class CalendarSharingTests extends CommonTest {
 		resetSession();
 
 		page.zLoginpage.zLoginToZimbraAjax(userC);
-		SelNGBase.selfAccountName = userC;
+		SelNGBase.selfAccountName.set(userC);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(apptSubject);
 		obj.zButtonMenu.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.byMessage));
@@ -362,20 +362,20 @@ public class CalendarSharingTests extends CommonTest {
 			obj.zButton.zExists(localize(locator.replyAccept));
 			obj.zButton.zExists(localize(locator.replyDecline));
 			obj.zButton.zExists(localize(locator.replyTentative));
-			String onbehalfofuser = selenium
+			String onbehalfofuser = SelNGBase.selenium.get()
 					.getText("xpath=//td[contains(@id,'ztb__TV__Inv_item')]/b");
 			String onbehalfof = localize(locator.onBehalfOf).toLowerCase();
 			if (onbehalfofuser.equals(currentloggedInUser)) {
 
 				Assert
-						.assertTrue(selenium
+						.assertTrue(SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@id,'ztb__TV__Inv_item') and contains(text(),'"
 										+ onbehalfof
 										+ "') ]/b[contains(text(),'"
 										+ currentloggedInUser + "')]"));
 			} else {
 				Assert
-						.assertTrue(selenium
+						.assertTrue(SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@id,'ztb__TV__Inv_item') and contains(text(),'"
 										+ onbehalfof
 										+ "') ]/b[contains(text(),'"
@@ -387,19 +387,19 @@ public class CalendarSharingTests extends CommonTest {
 			obj.zButton.zExists(localize(locator.replyAccept));
 			obj.zButton.zExists(localize(locator.replyDecline));
 			obj.zButton.zExists(localize(locator.replyTentative));
-			String onbehalfofuser1 = selenium
+			String onbehalfofuser1 = SelNGBase.selenium.get()
 					.getText("xpath=//td[contains(@id,'ztb__TV__Inv_item')]/b");
 			if (onbehalfofuser1.equals(currentloggedInUser)) {
 
 				Assert
-						.assertTrue(selenium
+						.assertTrue(SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@id,'ztb__TV__Inv_item') and contains(text(),'"
 										+ onbehalfof
 										+ "') ]/b[contains(text(),'"
 										+ currentloggedInUser + "')]"));
 			} else {
 				Assert
-						.assertTrue(selenium
+						.assertTrue(SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@id,'ztb__TV__Inv_item') and contains(text(),'"
 										+ onbehalfof
 										+ "') ]/b[contains(text(),'"
@@ -416,7 +416,7 @@ public class CalendarSharingTests extends CommonTest {
 			obj.zButton.zClickInDlg(localize(locator.ok));
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void verifyApptOnDiffRole(String applicationtab,
@@ -431,7 +431,7 @@ public class CalendarSharingTests extends CommonTest {
 		String apptBody = getLocalizedData_NoSpecialChar();
 		String newSubject = getLocalizedData_NoSpecialChar();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		if (allowtoseeprivateappt.equals(localize(locator.privatePermission))) {
 			page.zCalApp.zCreateNewCalendarFolder(sharingfoldername);
 			zWaitTillObjectExist("folder", sharingfoldername);
@@ -462,7 +462,7 @@ public class CalendarSharingTests extends CommonTest {
 		}
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 		zGoToApplication(applicationtab);
@@ -517,7 +517,7 @@ public class CalendarSharingTests extends CommonTest {
 			obj.zAppointment.zExists(apptSubject);
 
 			resetSession();
-			SelNGBase.selfAccountName = currentloggedinuser;
+			SelNGBase.selfAccountName.set(currentloggedinuser);
 			page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 			zGoToApplication(applicationtab);
 			obj.zAppointment.zNotExists(newSubject);
@@ -550,7 +550,7 @@ public class CalendarSharingTests extends CommonTest {
 				 * its corresponding UI
 				 */
 				resetSession();
-				SelNGBase.selfAccountName = currentloggedinuser;
+				SelNGBase.selfAccountName.set(currentloggedinuser);
 				page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 				zGoToApplication(applicationtab);
 				page.zSharing.zModifySharedFolder(applicationtab,
@@ -558,7 +558,7 @@ public class CalendarSharingTests extends CommonTest {
 						message, sharingnoteifany, "");
 
 				resetSession();
-				SelNGBase.selfAccountName = invitedusers;
+				SelNGBase.selfAccountName.set(invitedusers);
 				page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 				zGoToApplication(applicationtab);
 				obj.zAppointment.zClick("11");
@@ -592,7 +592,7 @@ public class CalendarSharingTests extends CommonTest {
 				 * share to none and check appointment doesn't exist
 				 */
 				resetSession();
-				SelNGBase.selfAccountName = currentloggedinuser;
+				SelNGBase.selfAccountName.set(currentloggedinuser);
 				page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 				zGoToApplication(applicationtab);
 				page.zSharing.zModifySharedFolder(applicationtab,
@@ -600,7 +600,7 @@ public class CalendarSharingTests extends CommonTest {
 						message, sharingnoteifany, allowtoseeprivateappt);
 
 				resetSession();
-				SelNGBase.selfAccountName = invitedusers;
+				SelNGBase.selfAccountName.set(invitedusers);
 				page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 				zGoToApplication(applicationtab);
 				obj.zAppointment.zNotExists(apptSubject);
@@ -613,7 +613,7 @@ public class CalendarSharingTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

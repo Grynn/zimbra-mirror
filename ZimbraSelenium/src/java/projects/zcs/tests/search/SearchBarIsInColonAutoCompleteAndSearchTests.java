@@ -70,20 +70,20 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	public void zLogin() throws Exception {
 		resetSession();
 		currentLoggedInUser = ProvZCS.getRandomAccount();
-		SelNGBase.selfAccountName = currentLoggedInUser;
+		SelNGBase.selfAccountName.set(currentLoggedInUser);
 		ProvZCS.modifyAccount(currentLoggedInUser, "userPassword", "test123");
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			resetSession();
 			page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -96,7 +96,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	@Test(dataProvider = "autocompleteDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAutocompleteUIWithIsColonInTopSearchBox(
 			String isColonString, int no) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		Robot zRobot = new Robot();
@@ -125,7 +125,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			VerifyIsColonAutocompleteExists(autoComplete[i - 1], i);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	@Test(dataProvider = "autocompleteDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAutocompleteUIWithIsColonNegativeInTopSearchBox(
 			String isColonString, int no) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		Robot zRobot = new Robot();
@@ -173,13 +173,13 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		pressKeys("down");
 		pressKeys("enter");
 		Thread.sleep(1000);
-		String ccme = selenium.getValue("xpath=//input[@class='search_input']");
+		String ccme = SelNGBase.selenium.get().getValue("xpath=//input[@class='search_input']");
 		assertReport(
 				"-is:ccme",
 				ccme,
 				"Advanced search string not showing on search edit field while select '-is:ccme' autocomplete");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -191,7 +191,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	@Test(dataProvider = "autocompleteDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAll_IsColon_AutocompleteOptions(String isColonString,
 			int no) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		commonData();
@@ -361,7 +361,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			break;
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -371,7 +371,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	@Test(dataProvider = "autocompleteDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAutocompleteNegativeIsColonRead(String isColonString,
 			int no) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		commonData();
@@ -387,7 +387,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		VerifyMessageExists("Fwd: forwardedx, ccme, fromccmex, flagged, fromme, local, invite, remotex, received, sent, tofromccme, tofromme, solo, tome, unforwarded, unflagged, unreplied, unread");
 		VerifyMessageNotExists("readx, anywhere, parentfolder, subfolder, subsubxfolder");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -399,7 +399,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	@Test(dataProvider = "autocompleteDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAutocompleteUIWithInColonInTopSearchBox(
 			String isColonString, int no) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		commonData();
@@ -436,7 +436,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		pressKeys("down");
 		pressKeys("enter");
 		Thread.sleep(1000);
-		String sent = selenium.getValue("xpath=//input[@class='search_input']");
+		String sent = SelNGBase.selenium.get().getValue("xpath=//input[@class='search_input']");
 		assertReport(
 				"in:" + (char) 34 + "sent" + (char) 34,
 				sent,
@@ -445,7 +445,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 				+ "Repliedly, Fwd: forwardedx");
 		VerifyMessageNotExists("parentfolder, subfolder, subsubxfolder, junk, anywhere, ccme, flagged, fromme, fromccmex, local, readx, remotex, received, tofromccme, solo, sent, tome, tofromme, unread, unforwarded, unflagged, unreplied");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -456,7 +456,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	@Test(dataProvider = "autocompleteDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAutocompleteUIWithInColonNegativeInTopSearchBox(
 			String isColonString, int no) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		commonData();
@@ -495,14 +495,14 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		}
 		pressKeys("tab");
 		Thread.sleep(1000);
-		String inbox = selenium
+		String inbox = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
 				"-in:" + (char) 34 + "inbox" + (char) 34,
 				inbox,
 				"Advanced search string not showing 'in:inbox' on search edit field while press tab in autocomplete option");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -514,7 +514,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	@Test(dataProvider = "autocompleteDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAll_InColon_AutocompleteOptions(String inColonString,
 			int no) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		commonData();
@@ -616,7 +616,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			break;
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -627,7 +627,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	@Test(dataProvider = "autocompleteDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAutocompleteNegativeInColonInbox(String inColonString,
 			int no) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		commonData();
@@ -646,7 +646,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 				+ ", Repliedly, Fwd: forwardedx, parentfolder, subfolder, subsubxfolder");
 		VerifyMessageNotExists("anywhere, ccme, fromme, fromccmex, local, readx, invite, remotex, received, tofromccme, solo, sent, tome, tofromme");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -657,7 +657,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	@Test(dataProvider = "autocompleteDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAutocompleteNegativeInColonRemoteFolder(
 			String inColonString, int no) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		commonData();
@@ -676,14 +676,14 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 				+ ": testSubject"
 				+ ", Repliedly, Fwd: forwardedx, parentfolder, subfolder, subsubxfolder, anywhere, ccme, fromme, fromccmex, local, readx, invite, received, tofromccme, solo, sent, tome, tofromme");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//------------------------------autocomplete_functions----------------------
 	public static void VerifyIsColonAutocompleteExists(String value, int rank)
 			throws Exception {
 		Assert.assertTrue("Verifying is: autocomplete list rank " + rank
-				+ " for " + value, selenium
+				+ " for " + value, SelNGBase.selenium.get()
 				.isElementPresent("//tr[contains(@id, 'DWT18_acRow_"
 						+ (rank - 1) + "')]//td[contains(text(), '" + value
 						+ "')]"));
@@ -692,7 +692,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	public static void VerifyIsColonAutocompleteNotExists(String value, int rank)
 			throws Exception {
 		Assert.assertFalse("Verifying is: autocomplete list rank " + rank
-				+ " for " + value, selenium
+				+ " for " + value, SelNGBase.selenium.get()
 				.isElementPresent("//tr[contains(@id, 'DWT18_acRow_"
 						+ (rank - 1) + "')]//td[contains(text(), '" + value
 						+ "')]"));
@@ -714,13 +714,13 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 				|| value.contains("remotefolder")) {
 			pressKeys("i, n, :");
 			Thread.sleep(1000);
-			selenium.clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
+			SelNGBase.selenium.get().clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
 					+ "')]//td[contains(text(), '" + value + "')]", "0,0");
 
 		} else {
 			pressKeys("i, s, :");
 			Thread.sleep(1000);
-			selenium.clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
+			SelNGBase.selenium.get().clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
 					+ "')]//td[contains(text(), '" + value + "')]", "0,0");
 		}
 	}
@@ -751,27 +751,27 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 
 	public void commonData() throws Exception {
 		int i = 0;
-		String[] fromArray = { SelNGBase.selfAccountName,
+		String[] fromArray = { SelNGBase.selfAccountName.get(),
 				"ccme@testdomain.com", "flagged@testdomain.com",
-				"forwardedx@testdomain.com", SelNGBase.selfAccountName,
-				SelNGBase.selfAccountName, "invite@testdomain.com",
-				SelNGBase.selfAccountName, "readx@testdomain.com",
+				"forwardedx@testdomain.com", SelNGBase.selfAccountName.get(),
+				SelNGBase.selfAccountName.get(), "invite@testdomain.com",
+				SelNGBase.selfAccountName.get(), "readx@testdomain.com",
 				"received@testdomain.com", "remote@testdomain.com",
 				"repliedx@testdomain.com", "sent@testdomain.com",
-				"solo@testdomain.com", SelNGBase.selfAccountName,
-				SelNGBase.selfAccountName, SelNGBase.selfAccountName,
+				"solo@testdomain.com", SelNGBase.selfAccountName.get(),
+				SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
 				"unflagged@testdomain.com", "unforwarded@testdomain.com",
 				"unread@testdomain.com", "unreplied@testdomain.com" };
-		String[] recipientsArray = { SelNGBase.selfAccountName };
-		String[] ccArray = { SelNGBase.selfAccountName,
-				SelNGBase.selfAccountName, "flagged@testdomain.com",
+		String[] recipientsArray = { SelNGBase.selfAccountName.get() };
+		String[] ccArray = { SelNGBase.selfAccountName.get(),
+				SelNGBase.selfAccountName.get(), "flagged@testdomain.com",
 				"forwardedx@testdomain.com", "ccuser@testdomain.com",
-				SelNGBase.selfAccountName, "invite@testdomain.com",
-				SelNGBase.selfAccountName, "readx@testdomain.com",
+				SelNGBase.selfAccountName.get(), "invite@testdomain.com",
+				SelNGBase.selfAccountName.get(), "readx@testdomain.com",
 				"received@testdomain.com", "remote@testdomain.com",
 				"repliedx@testdomain.com", "sent@testdomain.com",
-				"solo@testdomain.com", SelNGBase.selfAccountName,
-				"ccuser@testdomain.com", SelNGBase.selfAccountName,
+				"solo@testdomain.com", SelNGBase.selfAccountName.get(),
+				"ccuser@testdomain.com", SelNGBase.selfAccountName.get(),
 				"unflagged@testdomain.com", "unforwarded@testdomain.com",
 				"unread@testdomain.com", "unreplied@testdomain.com" };
 		String[] subjectArray = { "anywhere", "ccme", "flagged", "forwardedx",
@@ -780,9 +780,9 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 				"tofromme", "tome", "unflagged", "unforwarded", "unread",
 				"unreplied" };
 
-		String[] fromArray1 = { SelNGBase.selfAccountName };
-		String[] recipientsArray1 = { SelNGBase.selfAccountName };
-		String[] ccArray1 = { SelNGBase.selfAccountName };
+		String[] fromArray1 = { SelNGBase.selfAccountName.get() };
+		String[] recipientsArray1 = { SelNGBase.selfAccountName.get() };
+		String[] ccArray1 = { SelNGBase.selfAccountName.get() };
 		String[] subjectArray1 = { "junk", "parentfolder", "subfolder",
 				"subsubxfolder" };
 
@@ -846,10 +846,10 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			obj.zButton.zClick(page.zMailApp.zMoveIconBtn);
 			zWaitTillObjectExist("dialog", localize(locator.moveMessage));
 			Boolean isElementPresent;
-			isElementPresent = selenium
+			isElementPresent = SelNGBase.selenium.get()
 					.isElementPresent("//div[contains(@id, 'zti__ZmChooseFolderDialog_Mail')]//div[contains(@class, 'ImgNodeCollapsed')]");
 			if (isElementPresent == true) {
-				selenium
+				SelNGBase.selenium.get()
 						.clickAt(
 								"//div[contains(@id, 'zti__ZmChooseFolderDialog_Mail')]//div[contains(@class, 'ImgNodeCollapsed')]",
 								"");
@@ -868,7 +868,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			obj.zButton.zClick(page.zMailApp.zMoveIconBtn);
 			zWaitTillObjectExist("dialog", localize(locator.moveMessage));
 			if (isElementPresent == true) {
-				selenium
+				SelNGBase.selenium.get()
 						.click("//div[contains(@id, 'zti__ZmChooseFolderDialog_Mail')]//div[contains(@class, 'ImgNodeCollapsed')]");
 			}
 			pressKeys("right");
@@ -904,7 +904,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			obj.zMessageItem.zClick("forwardedx");
 			obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
 			obj.zTextAreaField.zType(page.zComposeView.zToField,
-					SelNGBase.selfAccountName);
+					SelNGBase.selfAccountName.get());
 			obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 			Thread.sleep(1000);
 
@@ -915,7 +915,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			obj.zMessageItem.zClick("repliedx");
 			obj.zButton.zClick(page.zMailApp.zReplyAllBtn);
 			obj.zTextAreaField.zType(page.zComposeView.zToField,
-					SelNGBase.selfAccountName);
+					SelNGBase.selfAccountName.get());
 			obj.zEditField.zType(page.zComposeView.zSubjectField, "Repliedly");
 			obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 			Thread.sleep(1000);
@@ -960,7 +960,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	}
 
 	protected String GetInnerHtml(String ElemId) throws Exception {
-		return selenium
+		return SelNGBase.selenium.get()
 				.getEval("this.browserbot.getCurrentWindow().document.getElementById('"
 						+ ElemId + "').innerHTML");
 	}
@@ -970,7 +970,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 	}

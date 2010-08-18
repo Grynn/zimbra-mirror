@@ -97,16 +97,16 @@ public class BriefcaseSharingTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zBriefcaseApp.zGoToBriefcaseApp();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -130,7 +130,7 @@ public class BriefcaseSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
@@ -139,7 +139,7 @@ public class BriefcaseSharingTests extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 		page.zBriefcaseApp.zGoToBriefcaseApp();
@@ -150,7 +150,7 @@ public class BriefcaseSharingTests extends CommonTest {
 		obj.zBriefcaseItem.zRtClick(filename);
 		obj.zMenuItem.zIsDisabled(localize(locator.del));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -172,17 +172,17 @@ public class BriefcaseSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 		page.zBriefcaseApp.zGoToBriefcaseApp();
@@ -199,14 +199,14 @@ public class BriefcaseSharingTests extends CommonTest {
 		obj.zMenuItem.zNotExists(filename);
 
 		resetSession();
-		SelNGBase.selfAccountName = currentloggedinuser;
+		SelNGBase.selfAccountName.set(currentloggedinuser);
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zBriefcaseApp.zGoToBriefcaseApp();
 		obj.zFolder.zClick(sharingfoldername);
 		obj.zBriefcaseItem.zExists(newfilename);
 		obj.zBriefcaseItem.zNotExists(filename);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -226,7 +226,7 @@ public class BriefcaseSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
@@ -251,7 +251,7 @@ public class BriefcaseSharingTests extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName = invitedusers;
+		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(filename);
@@ -260,7 +260,7 @@ public class BriefcaseSharingTests extends CommonTest {
 		obj.zFolder.zClick(mountingfoldername);
 		obj.zBriefcaseItem.zExists(filename);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "BriefcaseSharing", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -269,7 +269,7 @@ public class BriefcaseSharingTests extends CommonTest {
 			String invitedusers, String role, String message,
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
@@ -278,19 +278,19 @@ public class BriefcaseSharingTests extends CommonTest {
 				allowtoseeprivateappt);
 		page.zLoginpage.logoutOfZimbraAjax();
 		Thread.sleep(3000);
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/home/"
-				+ selfAccountName.toLowerCase() + "/" + "Briefcase");
+				+ SelNGBase.selfAccountName.get().toLowerCase() + "/" + "Briefcase");
 		zWaitTillObjectExist(
 				"xpath",
 				"//td[contains(@class, 'zmwiki-pageLink')]//a[contains(text(), 'structure.jpg')]");
 		zWaitTillObjectExist("xpath",
 				"//td[contains(@class, 'zmwiki-author') and contains(text(), '"
-						+ selfAccountName.toLowerCase() + "')]");
+						+ SelNGBase.selfAccountName.get().toLowerCase() + "')]");
 		resetSession();
-		page.zLoginpage.zLoginToZimbraAjax(SelNGBase.selfAccountName);
+		page.zLoginpage.zLoginToZimbraAjax(SelNGBase.selfAccountName.get());
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -298,7 +298,7 @@ public class BriefcaseSharingTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

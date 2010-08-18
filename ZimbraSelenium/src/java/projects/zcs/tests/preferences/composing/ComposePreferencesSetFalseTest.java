@@ -97,7 +97,7 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 
 		// Setup
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeFormat", "text");
 		ProvZCS.modifyAccount(accountName,
@@ -114,16 +114,16 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 		zReloginToAjax();
 
 		Thread.sleep(5000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -136,14 +136,14 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 	public void composePrefComposeAs() throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
 
 		obj.zButton.zNotExists("Times New Roman");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -153,14 +153,14 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 		String browserWindowTitle;
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zComposeView.zNavigateToMailCompose();
 
-		browserWindowTitle = selenium.getTitle();
+		browserWindowTitle = SelNGBase.selenium.get().getTitle();
 
 		Assert
 		.assertTrue(
@@ -168,7 +168,7 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 						.indexOf(localize(locator.compose)) >= 0,
 				"Compose opens in new window or doesn't open when 'zimbraPrefComposeInNewWindow' is set to FALSE");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 		
 //		selenium.refresh();
 		zReloginToAjax();
@@ -185,7 +185,7 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -203,7 +203,7 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 
 		obj.zButton.zClickInDlg(localize(locator.no));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -213,7 +213,7 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 		String body = getLocalizedData(3);
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String recepient = ProvZCS.getRandomAccount();
@@ -229,12 +229,12 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 
 		obj.zMessageItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

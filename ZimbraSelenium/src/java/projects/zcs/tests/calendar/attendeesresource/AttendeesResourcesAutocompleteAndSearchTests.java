@@ -55,15 +55,15 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -83,7 +83,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 	public void verifyAttendeesFieldAutocompleteUsingEnterTabAndUPDownKey(
 			String from, String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		subject = getLocalizedData_NoSpecialChar();
@@ -93,14 +93,14 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 				+ "atte2@testdomain.com";
 		ProvZCS.createAccount(acc1);
 		ProvZCS.createAccount(acc2);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		ProvZCS.modifyAccount(acc1, "zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		ProvZCS.modifyAccount(acc2, "zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
 		System.out
 				.println("Select autocomplete value using keyboard ENTER key");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		getKeyboardKeys(acc1);
@@ -118,7 +118,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 		Thread.sleep(2000);
 		resetSession();
-		SelNGBase.selfAccountName = acc2;
+		SelNGBase.selfAccountName.set(acc2);
 		page.zLoginpage.zLoginToZimbraAjax(acc2);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 
@@ -137,7 +137,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 		Thread.sleep(2000);
 		resetSession();
-		SelNGBase.selfAccountName = acc1;
+		SelNGBase.selfAccountName.set(acc1);
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 
@@ -178,7 +178,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -190,15 +190,15 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 	public void verifyLocationAutocompleteAndLocationLink(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String location, actualValue, expectedValue;
 		location = "location1@testdomain.com";
 		ProvZCS.createResource(location, "location");
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -213,14 +213,14 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport(expectedValue.trim(), actualValue.trim(),
 				"Verifying autocomplete for location");
-		selenium.click("link=" + location);
+		SelNGBase.selenium.get().click("link=" + location);
 		obj.zButton.zIsDisabled(localize(locator.select));
 		obj.zButton.zIsEnabled(localize(locator.remove));
 		obj.zButton.zClick(page.zCalCompose.zApptCancelBtn);
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -233,7 +233,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 	public void verifyAttendeeAutocompleteInScheduleTab(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualValue, expectedValue;
@@ -242,9 +242,9 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		acc1 = acc1.toLowerCase();
 		getKeyboardKeys(acc1);
 		ProvZCS.createAccount(acc1);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -278,7 +278,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -291,15 +291,15 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 	public void verifyLocationAutocompleteInScheduleTab(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String location, actualValue, expectedValue;
 		location = "location2@testdomain.com";
 		ProvZCS.createResource(location, "location");
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -307,7 +307,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		page.zCalApp.zNavigateToApptCompose();
 		obj.zTab.zClick(localize(locator.schedule));
 		Thread.sleep(1000);
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"//div//table[contains(@id, 'attendeesTable')]//td[contains(@id, 'select_container')]",
 						"");
@@ -320,14 +320,14 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport(expectedValue, actualValue,
 				"Verifying autocomplete for resource in schedule tab");
-		selenium.click("link=" + location);
+		SelNGBase.selenium.get().click("link=" + location);
 		obj.zButton.zIsDisabled(localize(locator.select));
 		obj.zButton.zIsEnabled(localize(locator.remove));
 		obj.zButton.zClick(page.zCalCompose.zApptCancelBtn);
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -340,15 +340,15 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 	public void verifyResourcesAutocompleteInScheduleTab(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String equipment;
 		equipment = "equipment1@testdomain.com";
 		ProvZCS.createResource(equipment, "equipment");
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -356,7 +356,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		page.zCalApp.zNavigateToApptCompose();
 		obj.zTab.zClick(localize(locator.schedule));
 		Thread.sleep(1000);
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"//div//table[contains(@id, 'attendeesTable')]//td[contains(@id, 'select_container')]",
 						"");
@@ -364,7 +364,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		pressKeys("tab, e, q, u, i, p, m, e, n, t, 1, enter");
 		Thread.sleep(1000);
 		obj.zTab.zClick(localize(locator.apptDetails));
-		selenium.click("link=" + equipment);
+		SelNGBase.selenium.get().click("link=" + equipment);
 		obj.zButton.zIsDisabled(localize(locator.add));
 		obj.zButton.zIsDisabled(localize(locator.addAll));
 		obj.zButton.zIsEnabled(localize(locator.remove));
@@ -373,7 +373,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -386,15 +386,15 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 	public void searchLocationAndAddtoAppointment(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String location, actualValue, expectedValue;
 		location = "location3@testdomain.com";
 		ProvZCS.createResource(location, "location");
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -420,14 +420,14 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport(expectedValue, actualValue,
 				"Verifying autocomplete for location");
-		selenium.click("link=" + location);
+		SelNGBase.selenium.get().click("link=" + location);
 		obj.zButton.zIsDisabled(localize(locator.select));
 		obj.zButton.zIsEnabled(localize(locator.remove));
 		obj.zButton.zClick(page.zCalCompose.zApptCancelBtn);
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -440,15 +440,15 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 	public void searchResourceAndAddtoAppointment(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String equipment;
 		equipment = "equipment2@testdomain.com";
 		ProvZCS.createResource(equipment, "equipment");
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -479,14 +479,14 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		obj.zButton.zIsEnabled(localize(locator.removeAll));
 
 		obj.zTab.zClick(localize(locator.apptDetails));
-		selenium.click("link=" + equipment);
+		SelNGBase.selenium.get().click("link=" + equipment);
 		obj.zButton.zIsEnabled(localize(locator.remove));
 		obj.zButton.zIsEnabled(localize(locator.removeAll));
 		obj.zButton.zClick(page.zCalCompose.zApptCancelBtn);
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -502,7 +502,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 	public void addRemoveLocationAndResourceAndVerify(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String apptSubject, location, equipment, actualValue, expectedValue;
@@ -511,9 +511,9 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		equipment = "equipment3@testdomain.com";
 		ProvZCS.createResource(location, "location");
 		ProvZCS.createResource(equipment, "equipment");
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -542,9 +542,9 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		obj.zTab.zClick(localize(locator.apptDetails));
 		Thread.sleep(1000);
 		Assert.assertEquals(true,
-				selenium.isElementPresent("link=" + location),
+				SelNGBase.selenium.get().isElementPresent("link=" + location),
 				"Verifying location link exists");
-		Assert.assertEquals(true, selenium
+		Assert.assertEquals(true, SelNGBase.selenium.get()
 				.isElementPresent("link=" + equipment),
 				"Verifying resource link exists");
 		expectedValue = location;
@@ -569,9 +569,9 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		assertReport(expectedValue, actualValue,
 				"Verifying autocomplete for location");
 		Assert.assertEquals(true,
-				selenium.isElementPresent("link=" + location),
+				SelNGBase.selenium.get().isElementPresent("link=" + location),
 				"Verifying location link exists");
-		Assert.assertEquals(true, selenium
+		Assert.assertEquals(true, SelNGBase.selenium.get()
 				.isElementPresent("link=" + equipment),
 				"Verifying resource link exists");
 		obj.zEditField
@@ -583,13 +583,13 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport("<blank>", actualValue,
 				"Verifying autocomplete for location");
-		Assert.assertEquals(false, selenium
+		Assert.assertEquals(false, SelNGBase.selenium.get()
 				.isElementPresent("link=" + location),
 				"Verifying location link not exists");
-		Assert.assertEquals(true, selenium
+		Assert.assertEquals(true, SelNGBase.selenium.get()
 				.isElementPresent("link=" + equipment),
 				"Verifying resource link exists");
-		selenium.click("link=" + equipment);
+		SelNGBase.selenium.get().click("link=" + equipment);
 		obj.zButton.zClick(localize(locator.remove));
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 		Thread.sleep(1000);
@@ -600,14 +600,14 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport("<blank>", actualValue,
 				"Verifying autocomplete for location");
-		Assert.assertEquals(false, selenium
+		Assert.assertEquals(false, SelNGBase.selenium.get()
 				.isElementPresent("link=" + location),
 				"Verifying location link not exists");
-		Assert.assertEquals(false, selenium.isElementPresent("link="
+		Assert.assertEquals(false, SelNGBase.selenium.get().isElementPresent("link="
 				+ equipment), "Verifying resource link not exists");
 		obj.zButton.zClick(page.zCalCompose.zApptCloseBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private static void getKeyboardKeys(String accont) throws Exception {
@@ -658,7 +658,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

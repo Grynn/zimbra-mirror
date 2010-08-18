@@ -1,5 +1,7 @@
 package projects.zcs.ui;
 
+import framework.core.SelNGBase;
+
 
 /**
  * This Class have UI-level methods related composing a contact and verifying
@@ -38,7 +40,7 @@ public class AccPref extends AppPage {
 			obj.zRadioBtn.zClick(localize(locator.accountTypeImap));
 		}
 		if (!password.equals("")) {
-			selenium.type("xpath=//input[@type='password']", password);
+			SelNGBase.selenium.get().type("xpath=//input[@type='password']", password);
 		}
 		if (ssl.equals("SSL")) {
 			obj.zCheckbox.zClick(localize(locator.accountUseSSL));

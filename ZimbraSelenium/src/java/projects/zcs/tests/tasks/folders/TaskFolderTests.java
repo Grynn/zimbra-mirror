@@ -6,6 +6,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import projects.zcs.tests.CommonTest;
 
@@ -29,15 +31,15 @@ public class TaskFolderTests extends CommonTest {
 		zLoginIfRequired();
 		Thread.sleep(2000);
 		page.zTaskApp.zNavigateToTasks();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -47,7 +49,7 @@ public class TaskFolderTests extends CommonTest {
 	 */
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createTaskFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String taskListBtn = getLocalizedData_NoSpecialChar();
@@ -58,7 +60,7 @@ public class TaskFolderTests extends CommonTest {
 		obj.zTaskFolder.zExists(taskListBtn);
 		obj.zTaskFolder.zExists(taskListRtClick);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -68,7 +70,7 @@ public class TaskFolderTests extends CommonTest {
 	 */
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteTaskFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String taskList = getLocalizedData_NoSpecialChar();
@@ -77,7 +79,7 @@ public class TaskFolderTests extends CommonTest {
 		page.zTaskApp.zTaskListDelete(taskList);
 		obj.zTaskFolder.zNotExists(taskList);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -87,7 +89,7 @@ public class TaskFolderTests extends CommonTest {
 	 */
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void renameTaskFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String orgTaskList = getLocalizedData_NoSpecialChar();
@@ -98,12 +100,12 @@ public class TaskFolderTests extends CommonTest {
 		obj.zTaskFolder.zNotExists(orgTaskList);
 		obj.zTaskFolder.zExists(renamedTaskList);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void moveTaskFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String orgTaskList = getLocalizedData_NoSpecialChar();
@@ -112,16 +114,16 @@ public class TaskFolderTests extends CommonTest {
 				"//td[contains(@id, 'zti__main_Tasks') and contains(text(), '"
 						+ orgTaskList + "')]", page.zTaskApp.zTasksFolder);
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("//div[@id='zti__main_Tasks__15']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
 								+ orgTaskList + "')]"));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tryToCreateDuplicateTaskFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String orgTaskList = getLocalizedData_NoSpecialChar();
@@ -142,11 +144,11 @@ public class TaskFolderTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewTaskFolder));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

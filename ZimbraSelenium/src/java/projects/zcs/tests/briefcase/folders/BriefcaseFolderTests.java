@@ -7,6 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 /**
@@ -38,21 +39,21 @@ public class BriefcaseFolderTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Briefcase");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createDeleteBriefcaseFolder(String briefcaseName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zBriefcaseApp.zCreateNewBriefcaseFolder(briefcaseName);
@@ -60,12 +61,12 @@ public class BriefcaseFolderTests extends CommonTest {
 		zPermanentlyDeleteFolder(briefcaseName);
 		obj.zFolder.zNotExists(briefcaseName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void renameBriefcaseFolder(String briefcaseName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String newBriefcase = getLocalizedData_NoSpecialChar();
@@ -79,12 +80,12 @@ public class BriefcaseFolderTests extends CommonTest {
 		obj.zFolder.zExists(newBriefcase);
 		obj.zFolder.zNotExists(briefcaseName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void moveBriefcaseFolder(String briefcaseName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zBriefcaseApp.zCreateNewBriefcaseFolder(briefcaseName);
@@ -93,17 +94,17 @@ public class BriefcaseFolderTests extends CommonTest {
 						+ briefcaseName + "')]",
 				page.zBriefcaseApp.zTrashFolder);
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("//div[@id='zti__main_Briefcase__3']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
 								+ briefcaseName + "')]"));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tryToCreateDuplicateBriefcaseFolder(String briefcaseName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zBriefcaseApp.zCreateNewBriefcaseFolder(briefcaseName);
@@ -124,14 +125,14 @@ public class BriefcaseFolderTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewBriefcaseItem));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

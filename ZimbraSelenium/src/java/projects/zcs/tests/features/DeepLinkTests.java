@@ -24,7 +24,7 @@ public class DeepLinkTests extends CommonTest {
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
 		if (test.equals("simpleDeepLinkTest")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "deepLinkTestSubject",
 					"deepLinkTestBody", "" } };
 		} else {
@@ -38,15 +38,15 @@ public class DeepLinkTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -55,26 +55,26 @@ public class DeepLinkTests extends CommonTest {
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void simpleDeepLinkTest(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		ProvZCS.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/h");
 		Thread.sleep(5000);
-		selenium.click("xpath=id('R0')/td[2]");
+		SelNGBase.selenium.get().click("xpath=id('R0')/td[2]");
 		Thread.sleep(2000);
 		String currentURL, msgLocation;
 		int msgId;
-		currentURL = selenium.getLocation();
+		currentURL = SelNGBase.selenium.get().getLocation();
 		msgId = currentURL.indexOf("&cid=");
 		msgLocation = currentURL.substring(msgId).replaceAll("&cid=-", "");
 		System.out.println(msgLocation);
 
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "?app=mails&id=" + msgLocation);
 		Thread.sleep(5000);
 
@@ -90,7 +90,7 @@ public class DeepLinkTests extends CommonTest {
 		obj.zFolder.zExists(page.zMailApp.zTrashFldr);
 		obj.zMessageItem.zClick(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -98,7 +98,7 @@ public class DeepLinkTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

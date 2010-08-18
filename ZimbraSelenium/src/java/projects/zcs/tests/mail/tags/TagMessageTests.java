@@ -29,7 +29,7 @@ public class TagMessageTests extends CommonTest {
 				|| test.equals("applyMutlipleTagToMessageAndVerify")
 				|| test.equals("applyTagByDnDTagToMessageAndViceVersa")
 				|| test.equals("tryToCreateDuplicateTagInMail")) {
-			return new Object[][] { { selfAccountName, "ccuser@testdomain.com",
+			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "tagMessageSubject",
 					"tagMessageBody", "" } };
 		} else {
@@ -44,15 +44,15 @@ public class TagMessageTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -66,14 +66,14 @@ public class TagMessageTests extends CommonTest {
 	public void createRenameDeleteTagForMessageAndVerify(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject1, tag1, newTag1;
 		subject1 = "tagSubject1";
 		tag1 = getLocalizedData_NoSpecialChar();
 		newTag1 = getLocalizedData_NoSpecialChar();
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		ProvZCS.injectMessage(to, recipients, cc, subject1, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject1);
@@ -98,7 +98,7 @@ public class TagMessageTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class TagMessageTests extends CommonTest {
 	public void verifyTagFunctionalityFor2MessageAndRemoveTag(String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject1, subject2, tag1, tag2;
@@ -117,7 +117,7 @@ public class TagMessageTests extends CommonTest {
 		subject2 = "tagSubject3";
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		ProvZCS.injectMessage(to, recipients, cc, subject1, body);
 		ProvZCS.injectMessage(to, recipients, cc, subject2, body);
@@ -171,7 +171,7 @@ public class TagMessageTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -182,14 +182,14 @@ public class TagMessageTests extends CommonTest {
 	public void applyMutlipleTagToMessageAndVerify(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject1, tag1, tag2;
 		subject1 = "tagSubject4";
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		ProvZCS.injectMessage(to, recipients, cc, subject1, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject1);
@@ -218,7 +218,7 @@ public class TagMessageTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zMessageItem.zExists(subject1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class TagMessageTests extends CommonTest {
 	public void applyTagByDnDTagToMessageAndViceVersa(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject1, subject2, tag1, tag2;
@@ -238,7 +238,7 @@ public class TagMessageTests extends CommonTest {
 		subject2 = "tagSubject6";
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		ProvZCS.injectMessage(to, recipients, cc, subject1, body);
 		ProvZCS.injectMessage(to, recipients, cc, subject2, body);
@@ -278,7 +278,7 @@ public class TagMessageTests extends CommonTest {
 		assertReport("false", obj.zMessageItem.zExistsDontWait(subject1),
 				"Verify message1 not exists");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -287,7 +287,7 @@ public class TagMessageTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tryToCreateDuplicateTagInMail(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1;
@@ -295,7 +295,7 @@ public class TagMessageTests extends CommonTest {
 		zCreateTag(tag1);
 		zDuplicateTag(tag1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -303,7 +303,7 @@ public class TagMessageTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

@@ -65,16 +65,16 @@ public class AddressBookSharingTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		// page.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -109,14 +109,14 @@ public class AddressBookSharingTests extends CommonTest {
 				role, "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName = attendee;
+		SelNGBase.selfAccountName.set(attendee);
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
 		obj.zFolder.zClick(mountFolderName);
 		obj.zContactListItem.zExists(cnLastName);
 		page.zABApp.zDeleteContactAndVerify(cnLastName, "ToolbarDelete");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -151,7 +151,7 @@ public class AddressBookSharingTests extends CommonTest {
 				role, "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName = attendee;
+		SelNGBase.selfAccountName.set(attendee);
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
@@ -167,7 +167,7 @@ public class AddressBookSharingTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.print));
 		obj.zMenuItem.zIsEnabled(localize(locator.newEmail));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class AddressBookSharingTests extends CommonTest {
 				role, "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName = attendee;
+		SelNGBase.selfAccountName.set(attendee);
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
@@ -212,7 +212,7 @@ public class AddressBookSharingTests extends CommonTest {
 		page.zABApp.zMoveContactAndVerify(cnLastName,
 				localize(locator.emailedContacts), "ToolbarMove");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -245,7 +245,7 @@ public class AddressBookSharingTests extends CommonTest {
 
 		page.zSharing.zRevokeShare(folderName, "", "");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -265,7 +265,7 @@ public class AddressBookSharingTests extends CommonTest {
 	public void modifyABShare(String cnLastName, String cnMiddleName,
 			String cnFirstName, String folderName, String attendee,
 			String role, String mountFolderName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem contact = new ContactItem();
@@ -282,8 +282,8 @@ public class AddressBookSharingTests extends CommonTest {
 				localize(locator.shareRoleManager), "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName = attendee;
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		SelNGBase.selfAccountName.set(attendee);
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing
 				.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
@@ -292,7 +292,7 @@ public class AddressBookSharingTests extends CommonTest {
 		page.zSharing.zVerifyShareModifiedMail(currentloggedinuser, folderName,
 				"", attendee, localize(locator.shareRoleManager), "");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -313,10 +313,10 @@ public class AddressBookSharingTests extends CommonTest {
 			String cnMiddleName, String cnFirstName, String folderName,
 			String attendee, String role, String mountFolderName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 
 		ContactItem contact = new ContactItem();
 		contact.firstName = cnFirstName;
@@ -330,7 +330,7 @@ public class AddressBookSharingTests extends CommonTest {
 				localize(locator.shareWithGuest), attendee, role, "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName = attendee;
+		SelNGBase.selfAccountName.set(attendee);
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				folderName, localize(locator.shareWithGuest), attendee, role,
@@ -342,7 +342,7 @@ public class AddressBookSharingTests extends CommonTest {
 		obj.zFolder.zClick(mountFolderName);
 		obj.zContactListItem.zExists(cnLastName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -361,7 +361,7 @@ public class AddressBookSharingTests extends CommonTest {
 	public void publicShareAB(String cnLastName, String cnMiddleName,
 			String cnFirstName, String folderName, String attendee,
 			String role, String mountFolderName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem contact = new ContactItem();
@@ -375,7 +375,7 @@ public class AddressBookSharingTests extends CommonTest {
 		page.zSharing.zShareFolder("Address Book", folderName,
 				localize(locator.shareWithPublicLong), "", "", "", "", "");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -383,7 +383,7 @@ public class AddressBookSharingTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

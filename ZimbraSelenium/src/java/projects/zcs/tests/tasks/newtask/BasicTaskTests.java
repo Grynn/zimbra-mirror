@@ -5,6 +5,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import projects.zcs.tests.CommonTest;
 
@@ -53,15 +55,15 @@ public class BasicTaskTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		Thread.sleep(2000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -71,14 +73,14 @@ public class BasicTaskTests extends CommonTest {
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createSimpleTask(String subject, String location,
 			String priority, String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
 		page.zTaskApp.zTaskCreateSimple(subject, location, priority, body);
 		obj.zTaskItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -89,7 +91,7 @@ public class BasicTaskTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createSimpleTaskInTaskList() throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String taskList = getLocalizedData_NoSpecialChar();
@@ -104,7 +106,7 @@ public class BasicTaskTests extends CommonTest {
 		obj.zTaskFolder.zClick(taskList);
 		obj.zTaskItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -116,7 +118,7 @@ public class BasicTaskTests extends CommonTest {
 			String body, String taskList, String progress,
 			String progressPercent, String startDate, String endDate)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
@@ -126,7 +128,7 @@ public class BasicTaskTests extends CommonTest {
 		page.zTaskApp.zTaskVerifyPercentProgress(subject, progressPercent,
 				progress);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -136,7 +138,7 @@ public class BasicTaskTests extends CommonTest {
 	 */
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void editTask() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = getLocalizedData_NoSpecialChar();
@@ -156,7 +158,7 @@ public class BasicTaskTests extends CommonTest {
 				"", "", "", "", "");
 		obj.zTaskItem.zExists(newSubject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -166,7 +168,7 @@ public class BasicTaskTests extends CommonTest {
 	 */
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteTask() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = getLocalizedData(1);
@@ -180,7 +182,7 @@ public class BasicTaskTests extends CommonTest {
 		page.zTaskApp.zTaskDeleteToolbarBtn(subject);
 		obj.zTaskItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -190,7 +192,7 @@ public class BasicTaskTests extends CommonTest {
 	 */
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void moveTask() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = getLocalizedData(1);
@@ -210,13 +212,13 @@ public class BasicTaskTests extends CommonTest {
 		obj.zTaskItem.zExists(subject);
 		obj.zFolder.zClick(localize(locator.tasks));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void taskView(String subject, String location, String priority,
 			String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
@@ -330,14 +332,14 @@ public class BasicTaskTests extends CommonTest {
 		obj.zMenuItem.zClick(localize(locator.deferred));
 		obj.zTaskItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
 	 * retry handler function
 	 */
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

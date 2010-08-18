@@ -11,6 +11,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
+import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
 import framework.util.RetryFailedTests;
@@ -80,15 +81,15 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -105,7 +106,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void verifyAutoCompleteAndRankOnlyWithContactsFolder(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		first = ZimbraSeleniumProperties.getStringProperty("locale").substring(0, 1);
@@ -115,7 +116,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		acc3 = ProvZCS.getRandomAccount();
 		acc4 = ProvZCS.getRandomAccount();
 		acc5 = ProvZCS.getRandomAccount();
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		sendMails();
 		page.zComposeView.zNavigateToMailCompose();
@@ -129,7 +130,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		pressKeys(first + "," + second);
 		verifyAutocompleteUpdated();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -143,7 +144,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void verifyAutoCompleteAndRankOnlyWithContactsFolder_NewWindow(
 			String from, String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		first = ZimbraSeleniumProperties.getStringProperty("locale").substring(0, 1);
@@ -153,10 +154,10 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		acc1 = acc1.toLowerCase();
 		getKeyboardKeys(acc1);
 		ProvZCS.createAccount(acc1);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToComposeByShiftClick();
@@ -191,7 +192,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		}
 		page.zMailApp.zVerifyAutocompleteExists(acc1, 1, 1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -205,7 +206,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void verifyAutoCompleteAndRankOnlyWithGAL(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
@@ -229,10 +230,10 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS.createAccount(acc4);
 		ProvZCS.createAccount(acc5);
 		getKeyboardKeys(acc1);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		getKeyboardKeys(acc1);
@@ -240,13 +241,13 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		verifyAutocomplete(true);
 
 		sendMailsUpdated();
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		verifyAutocompleteUpdated();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -260,7 +261,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void verifyAutoCompleteAndRankWithContactsAndGAL(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
@@ -279,25 +280,25 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS.createAccount(acc4);
 		ProvZCS.createAccount(acc5);
 		getKeyboardKeys(acc1);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		verifyAutocomplete(true);
 
 		sendMailsUpdated();
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		verifyAutocompleteUpdated();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -312,7 +313,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void verifyAutoCompleteAndRankWithContactsAndGALONOFF(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
@@ -331,12 +332,12 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS.createAccount(acc4);
 		ProvZCS.createAccount(acc5);
 		getKeyboardKeys(acc1);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -360,40 +361,40 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 										+ acc3.toLowerCase() + "')]"));
 
 		Assert
 				.assertTrue(
 						"Verifying second autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 										+ acc5.toLowerCase() + "')]"));
 
 		Assert
 				.assertTrue(
 						"Verifying third autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_2')]//td[contains(text(), '"
 										+ acc1.toLowerCase() + "')]"));
 
 		Assert
 				.assertTrue(
 						"Verifying fourth autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_3')]//td[contains(text(), '"
 										+ acc4.toLowerCase() + "')]"));
 
 		Assert
 				.assertTrue(
 						"Verifying fifth autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_4')]//td[contains(text(), '"
 										+ acc2.toLowerCase() + "')]"));
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -407,7 +408,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void verifyAutoCompleteAndRankWithContactsFolder(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
@@ -423,13 +424,13 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		String[] contacts = { acc1, acc2, acc3, acc4, acc5 };
 		createContacts(contacts, false);
 		getKeyboardKeys(acc1);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		typeKeyboardKeys();
 		verifyAutocomplete(false);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -443,7 +444,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void zwcHangsDuringAutoCompOnApostropheChar_Bug45815(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
@@ -453,9 +454,9 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS.createAccount(acc1);
 		ProvZCS.createAccount(acc2);
 		getKeyboardKeys(acc1);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
 		page.zComposeView.zComposeAndSendMail(acc1 + ";" + acc2, "", "",
@@ -463,7 +464,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 
 		page.zComposeView.zComposeAndSendMail(acc2, "", "", "testSubject",
 				"testBody", "");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToMailCompose();
@@ -487,20 +488,20 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 										+ acc2.toLowerCase() + "')]"));
 
 		Assert
 				.assertTrue(
 						"Verifying second autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 										+ acc1.toLowerCase() + "')]"));
 		pressKeys("'");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -514,7 +515,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void autocompleteReturnsTooManyResults_Bug40959(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
@@ -530,7 +531,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		String[] contacts = { acc1, acc2, acc3, acc4, acc5 };
 		createContacts(contacts, true);
 		getKeyboardKeys(acc1);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		typeKeyboardKeys();
 		verifyAutocomplete(false);
@@ -566,7 +567,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc5, 5, 0);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -578,7 +579,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void verifyContactGroupAutoComplete_Bug45545(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String groupName = "VM1Ware Fi3nance";
@@ -620,7 +621,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteExists(groupName, 1, 1);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -632,7 +633,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void luceneStopWordsAutoComplete_Bug46718(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String groupName = "IT Department";
@@ -664,7 +665,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteExists(groupName, 1, 1);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -681,7 +682,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void autocompleteOnComma_Bug43179(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// verify1
@@ -694,15 +695,15 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS.createAccount(acc1);
 		ProvZCS.createAccount(acc2);
 		getKeyboardKeys(acc1);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoCompleteQuickCompletionOnComma", "TRUE");
 		page.zComposeView.zComposeAndSendMail(acc1 + ";" + acc2, "", "",
 				"testSubject", "testBody", "");
 		page.zComposeView.zComposeAndSendMail(acc2, "", "", "testSubject",
 				"testBody", "");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -710,13 +711,13 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 										+ acc2.toLowerCase() + "')]"));
 		Assert
 				.assertTrue(
 						"Verifying second autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 										+ acc1.toLowerCase() + "')]"));
 		Robot zRobot = new Robot();
@@ -731,22 +732,22 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		// verify2
 		System.out
 				.println("verify2 : Set zimbraPrefAutoCompleteQuickCompletionOnComma to FALSE");
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoCompleteQuickCompletionOnComma", "FALSE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 										+ acc2.toLowerCase() + "')]"));
 		Assert
 				.assertTrue(
 						"Verifying second autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 										+ acc1.toLowerCase() + "')]"));
 		zRobot.keyPress(KeyEvent.VK_COMMA);
@@ -777,47 +778,47 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		displayName1 = char1 + char2 + char3 + char4 + char5;
 		displayName2 = char6 + char7 + char8 + char9 + char10;
 		displayName = displayName1 + ", " + displayName2;
-		ProvZCS.modifyAccount(selfAccountName, "displayName", displayName);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "displayName", displayName);
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoCompleteQuickCompletionOnComma", "FALSE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zTextAreaField.zActivate(page.zComposeView.zToField);
 		pressKeys(char1 + "," + char2 + "," + char3 + "," + char4 + "," + char5);
 		page.zMailApp.zVerifyAutocompleteExists(displayName, 1, 1);
-		page.zMailApp.zVerifyAutocompleteExists(selfAccountName.toLowerCase(),
+		page.zMailApp.zVerifyAutocompleteExists(SelNGBase.selfAccountName.get().toLowerCase(),
 				1, 1);
 		zRobot.keyPress(KeyEvent.VK_COMMA);
 		zRobot.keyRelease(KeyEvent.VK_COMMA);
 		page.zMailApp.zVerifyAutocompleteExists(displayName, 1, 1);
-		page.zMailApp.zVerifyAutocompleteExists(selfAccountName.toLowerCase(),
+		page.zMailApp.zVerifyAutocompleteExists(SelNGBase.selfAccountName.get().toLowerCase(),
 				1, 1);
 		pressKeys("space");
 		page.zMailApp.zVerifyAutocompleteExists(displayName, 1, 1);
-		page.zMailApp.zVerifyAutocompleteExists(selfAccountName.toLowerCase(),
+		page.zMailApp.zVerifyAutocompleteExists(SelNGBase.selfAccountName.get().toLowerCase(),
 				1, 1);
 		pressKeys(char6 + "," + char7 + "," + char8 + "," + char9 + ","
 				+ char10);
 		page.zMailApp.zVerifyAutocompleteExists(displayName, 1, 1);
-		page.zMailApp.zVerifyAutocompleteExists(selfAccountName.toLowerCase(),
+		page.zMailApp.zVerifyAutocompleteExists(SelNGBase.selfAccountName.get().toLowerCase(),
 				1, 1);
 
 		// use of tab key
 		pressKeys("tab");
 		Thread.sleep(1000);
 		System.out.println((char) 34 + displayName + (char) 34 + " <"
-				+ selfAccountName.toLowerCase() + ">;".trim());
+				+ SelNGBase.selfAccountName.get().toLowerCase() + ">;".trim());
 		System.out.println(obj.zEditField
 				.zGetInnerText(page.zComposeView.zToField.trim()));
 		assertReport(obj.zEditField.zGetInnerText(page.zComposeView.zToField
 				.trim()), (char) 34 + displayName + (char) 34 + " <"
-				+ selfAccountName.toLowerCase() + ">;".trim(),
+				+ SelNGBase.selfAccountName.get().toLowerCase() + ">;".trim(),
 				"Verifying To field autocomplete value");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -829,7 +830,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void autocompleteOnSpecialCharacters_Bug41512(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "") + "-"
@@ -838,7 +839,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 				+ "chr2@testdomain.com";
 		String[] contacts = { acc1, acc2 };
 		createContacts(contacts, true);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		getKeyboardKeys(acc1);
 		typeKeyboardKeys();
@@ -872,7 +873,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 						.indexOf("zimbra@testdomain.com") >= 0);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -888,13 +889,13 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void unableToGetRidOfEmailedContacts_Bug40081(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
 				+ "ridc1@testdomain.com";
 		ProvZCS.createAccount(acc1);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		zGoToApplication("Mail");
 		page.zComposeView.zComposeAndSendMail(acc1, "", "", "testSubject",
@@ -931,14 +932,14 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc1.toLowerCase(), 1, 1);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		page.zMailApp.zVerifyAutocompleteNotExists(acc1.toLowerCase(), 1, 1);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -952,7 +953,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void galAutoCompleteDoesntWorkAfterPrefChange_Bug45337_Bug37377(
 			String from, String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
@@ -971,7 +972,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 
 		getKeyboardKeys(acc1);
 		page.zComposeView.zNavigateToMailCompose();
-		selenium.click("link=" + localize(locator.showBCC));
+		SelNGBase.selenium.get().click("link=" + localize(locator.showBCC));
 		obj.zTextAreaField.zActivate(page.zComposeView.zBccField);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
 				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
@@ -988,7 +989,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -1003,7 +1004,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void optionNotToAutoCompleteContactGroupsByMember_Bug44509(
 			String from, String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
@@ -1012,7 +1013,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 				+ "grop2@testdomain.com";
 		ProvZCS.createAccount(acc1);
 		ProvZCS.createAccount(acc2);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
 		String groupName = "1ABc 2DeF";
@@ -1035,7 +1036,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.save), "2");
 		obj.zContactListItem.zExists(groupName);
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		getKeyboardKeys(acc1);
@@ -1080,7 +1081,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc2.toLowerCase(), 2, 0);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -1094,16 +1095,16 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void autocompleteDoesNotWorkAfterPeriod_Bug47045(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace("_", "")
 				+ "peri@testdomain.com";
 		ProvZCS.createAccount(acc1);
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		getKeyboardKeys(acc1);
@@ -1132,7 +1133,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -1146,7 +1147,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void autocompleteShowsContactFromTrashedABFolders_Bug47044(
 			String from, String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String newAddressBook, lastName, firstName;
@@ -1194,14 +1195,14 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc1, 1, 1);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		page.zMailApp.zVerifyAutocompleteNotExists(acc1, 1, 1);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -1215,12 +1216,12 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void verifyAutocompleteFromContactsSubAndSubSubFolders_Bug47044(
 			String from, String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		ProvZCS.modifyAccount(selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -1282,7 +1283,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc2, 2, 0);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -1290,7 +1291,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc2, 2, 0);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -1304,7 +1305,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void verifyAutocompleteFromSharedSubAndSubSubFolders_Bug45550(
 			String from, String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		FolderItem subAddressBook = new FolderItem();
@@ -1379,7 +1380,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 
 		ProvZCS.modifyAccount(user2,
 				"zimbraPrefSharedAddrBookAutoCompleteEnabled", "TRUE");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -1409,7 +1410,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc3, 3, 0);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -1418,7 +1419,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc3, 3, 0);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -1430,7 +1431,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public void verifyAutoCompleteWithLargeAddressBook_1KContacts(String from,
 			String to, String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zABCompose.zNavigateToPrefImportExport();
@@ -1513,7 +1514,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zComposeView.zComposeAndSendMail("999@testdomain.com", "", "",
 				"testSubject", "testBody", "");
 
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToMailCompose();
@@ -1533,7 +1534,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteExists("998@testdomain.com", 11, 0);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//------------------------------autocomplete_functions----------------------
@@ -1588,7 +1589,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 				+ "; " + acc5, "", "", "testSubject", "testBody", "");
 		page.zComposeView.zComposeAndSendMail(acc1 + "; " + acc2 + "; " + acc5,
 				"", "", "testSubject", "testBody", "");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 	}
@@ -1600,35 +1601,35 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying first autocomplete list rank",
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 											+ acc3.toLowerCase() + "')]"));
 
 			Assert
 					.assertTrue(
 							"Verifying second autocomplete list rank",
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 											+ acc5.toLowerCase() + "')]"));
 
 			Assert
 					.assertTrue(
 							"Verifying third autocomplete list rank",
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_2')]//td[contains(text(), '"
 											+ acc1.toLowerCase() + "')]"));
 
 			Assert
 					.assertTrue(
 							"Verifying fourth autocomplete list rank",
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_3')]//td[contains(text(), '"
 											+ acc4.toLowerCase() + "')]"));
 
 			Assert
 					.assertTrue(
 							"Verifying fifth autocomplete list rank",
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_4')]//td[contains(text(), '"
 											+ acc2.toLowerCase() + "')]"));
 			obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
@@ -1636,35 +1637,35 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying first autocomplete list rank",
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 											+ acc1 + "')]"));
 
 			Assert
 					.assertTrue(
 							"Verifying second autocomplete list rank",
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 											+ acc2 + "')]"));
 
 			Assert
 					.assertTrue(
 							"Verifying third autocomplete list rank",
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_2')]//td[contains(text(), '"
 											+ acc3 + "')]"));
 
 			Assert
 					.assertTrue(
 							"Verifying fourth autocomplete list rank",
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_3')]//td[contains(text(), '"
 											+ acc4 + "')]"));
 
 			Assert
 					.assertTrue(
 							"Verifying fifth autocomplete list rank",
-							selenium
+							SelNGBase.selenium.get()
 									.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_4')]//td[contains(text(), '"
 											+ acc5 + "')]"));
 		}
@@ -1675,35 +1676,35 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 										+ acc5.toLowerCase() + "')]"));
 
 		Assert
 				.assertTrue(
 						"Verifying second autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 										+ acc1.toLowerCase() + "')]"));
 
 		Assert
 				.assertTrue(
 						"Verifying third autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_2')]//td[contains(text(), '"
 										+ acc2.toLowerCase() + "')]"));
 
 		Assert
 				.assertTrue(
 						"Verifying fourth autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_3')]//td[contains(text(), '"
 										+ acc3.toLowerCase() + "')]"));
 
 		Assert
 				.assertTrue(
 						"Verifying fifth autocomplete list rank",
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_4')]//td[contains(text(), '"
 										+ acc4.toLowerCase() + "')]"));
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
@@ -1783,7 +1784,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	public static void zVerifyIsColonAutocompleteExists(String value, int rank)
 			throws Exception {
 		Assert.assertTrue("Verifying is: autocomplete list rank " + rank
-				+ " for " + value, selenium
+				+ " for " + value, SelNGBase.selenium.get()
 				.isElementPresent("//div[contains(@id, 'acRow_" + (rank - 1)
 						+ "') and contains(text(), '" + value + "')]"));
 	}
@@ -1793,7 +1794,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

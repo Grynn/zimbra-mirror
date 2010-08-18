@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.ABCompose.ABComposeActionMethod;
+import framework.core.SelNGBase;
 import framework.items.FolderItem;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
@@ -30,15 +31,15 @@ public class AddressBookFolderTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -50,7 +51,7 @@ public class AddressBookFolderTests extends CommonTest {
 			groups = { "smoke", "full" }, 
 			retryAnalyzer = RetryFailedTests.class)
 	public void createAndRenameABFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		FolderItem addressbook = new FolderItem();
@@ -67,7 +68,7 @@ public class AddressBookFolderTests extends CommonTest {
 		// Verify the folder with the new name exists
 		obj.zFolder.zExists(renamed);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -79,7 +80,7 @@ public class AddressBookFolderTests extends CommonTest {
 			groups = { "smoke", "full" },
 			retryAnalyzer = RetryFailedTests.class)
 	public void createAndQDeleteABFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		FolderItem addressbook = new FolderItem();
@@ -93,7 +94,7 @@ public class AddressBookFolderTests extends CommonTest {
 		obj.zFolder.zClick(localize(locator.trash));
 		obj.zFolder.zExists(addressbook.name);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(
@@ -101,7 +102,7 @@ public class AddressBookFolderTests extends CommonTest {
 			groups = { "smoke", "full" }, 
 			retryAnalyzer = RetryFailedTests.class)
 	public void moveABFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		FolderItem addressbook = new FolderItem();
@@ -114,11 +115,11 @@ public class AddressBookFolderTests extends CommonTest {
 				page.zABCompose.zEmailedContactsFolder);
 		
 		Assert
-				.assertTrue(selenium
+				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("//div[@id='zti__main_Contacts__13']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
 								+ addressbook.name + "')]"));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(
@@ -127,7 +128,7 @@ public class AddressBookFolderTests extends CommonTest {
 			retryAnalyzer = RetryFailedTests.class)
 	public void tryToCreateDuplicateABFolder() throws Exception {
 		
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		FolderItem addressbook = new FolderItem();
@@ -151,7 +152,7 @@ public class AddressBookFolderTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewAddrBook));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -159,7 +160,7 @@ public class AddressBookFolderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 

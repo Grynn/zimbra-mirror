@@ -49,7 +49,7 @@ public class FilterTests extends CommonTest {
 		if (test.equals("FromContains_FileToFolder")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					localize(locator.active), "any", localize(locator.from),
-					localize(locator.contains), SelNGBase.selfAccountName, "",
+					localize(locator.contains), SelNGBase.selfAccountName.get(), "",
 					"", "", "", "", "", localize(locator.fileIntoFolder), "",
 					"", localize(locator.stopFilterProcessing) } };
 		} else if (test.equals("SubjectContains_FileToFolder")) {
@@ -69,13 +69,13 @@ public class FilterTests extends CommonTest {
 		} else if (test.equals("FromContains_Discard")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					localize(locator.active), "any", localize(locator.from),
-					localize(locator.contains), SelNGBase.selfAccountName, "",
+					localize(locator.contains), SelNGBase.selfAccountName.get(), "",
 					"", "", "", "", "", localize(locator.discard), "", "",
 					localize(locator.stopFilterProcessing) } };
 		} else if (test.equals("CCContains_Discard")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					localize(locator.active), "any", localize(locator.cc),
-					localize(locator.contains), SelNGBase.selfAccountName, "",
+					localize(locator.contains), SelNGBase.selfAccountName.get(), "",
 					"", "", "", "", "", localize(locator.discard), "", "",
 					localize(locator.stopFilterProcessing) } };
 		} else if (test.equals("SubjectContains_FileToFolder_PriorityTest")) {
@@ -88,7 +88,7 @@ public class FilterTests extends CommonTest {
 		} else if (test.equals("RunFilter")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					localize(locator.active), "any", localize(locator.cc),
-					localize(locator.contains), SelNGBase.selfAccountName, "",
+					localize(locator.contains), SelNGBase.selfAccountName.get(), "",
 					"", "", "", "", "", localize(locator.discard), "", "",
 					localize(locator.stopFilterProcessing) } };
 		} else if (test.equals("MsgBodyShouldNotBeCaseSensitive_Bug36905")) {
@@ -122,15 +122,15 @@ public class FilterTests extends CommonTest {
 		zLoginIfRequired();
 		zGoToApplication("Preferences");
 		obj.zTab.zClick(localize(locator.filterRules));
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -150,7 +150,7 @@ public class FilterTests extends CommonTest {
 			String action2, String action3, String additionalFilterIfAny)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Preferences");
@@ -172,7 +172,7 @@ public class FilterTests extends CommonTest {
 		MailApp.ClickCheckMailUntilMailShowsUp(fileIntoNewFolder,
 				conditionValue1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class FilterTests extends CommonTest {
 			String action2, String action3, String additionalFilterIfAny)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		setFilterConditionsActions(filterName, activeStatus, conditionType,
@@ -203,12 +203,12 @@ public class FilterTests extends CommonTest {
 
 		// Send mail and verify filter
 		String body = getLocalizedData_NoSpecialChar();
-		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName, "",
+		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName.get(), "",
 				"", conditionValue1, body, "");
 		MailApp.ClickCheckMailUntilMailShowsUp(fileIntoNewFolder,
 				conditionValue1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -225,7 +225,7 @@ public class FilterTests extends CommonTest {
 			String action2, String action3, String additionalFilterIfAny)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
@@ -252,17 +252,17 @@ public class FilterTests extends CommonTest {
 			 */
 			zGoToApplication("Mail");
 			String body = getLocalizedData_NoSpecialChar();
-			page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName,
+			page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName.get(),
 					"", "", conditionValue1, body, "");
 
 			// log off, login to that user to whom forwarded mail & verify mail
 			resetSession();
-			SelNGBase.selfAccountName = forwardtoUser;
+			SelNGBase.selfAccountName.set(forwardtoUser);
 			page.zLoginpage.zLoginToZimbraAjax(forwardtoUser);
 			MailApp.ClickCheckMailUntilMailShowsUp(conditionValue1);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -277,7 +277,7 @@ public class FilterTests extends CommonTest {
 			String conditionValue3, String action1, String action2,
 			String action3, String additionalFilterIfAny) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		setFilterConditionsActions(filterName, activeStatus, conditionType,
@@ -298,7 +298,7 @@ public class FilterTests extends CommonTest {
 		obj.zFolder.zClick(localize(locator.inbox));
 		obj.zMessageItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -313,7 +313,7 @@ public class FilterTests extends CommonTest {
 			String conditionValue3, String action1, String action2,
 			String action3, String additionalFilterIfAny) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		setFilterConditionsActions(filterName, activeStatus, conditionType,
@@ -329,13 +329,13 @@ public class FilterTests extends CommonTest {
 		String to = ProvZCS.getRandomAccount();
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData_NoSpecialChar();
-		page.zComposeView.zComposeAndSendMail(to, SelNGBase.selfAccountName,
+		page.zComposeView.zComposeAndSendMail(to, SelNGBase.selfAccountName.get(),
 				"", subject, body, "");
 		obj.zButton.zClick(page.zMailApp.zGetMailIconBtn);
 		obj.zFolder.zClick(localize(locator.inbox));
 		obj.zMessageItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -352,7 +352,7 @@ public class FilterTests extends CommonTest {
 			String action2, String action3, String additionalFilterIfAny)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		setFilterConditionsActions(filterName, activeStatus, conditionType,
@@ -389,7 +389,7 @@ public class FilterTests extends CommonTest {
 		zGoToApplication("mail");
 		obj.zFolder.zExists(FolderName);
 		obj.zFolder.zExists(newFolderName);
-		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName, "",
+		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName.get(), "",
 				"", conditionValue1, getLocalizedData_NoSpecialChar(), "");
 		MailApp.ClickCheckMailUntilMailShowsUp(FolderName, conditionValue1);
 		obj.zButton.zClick(page.zMailApp.zGetMailIconBtn);
@@ -397,7 +397,7 @@ public class FilterTests extends CommonTest {
 		Thread.sleep(1500);
 		obj.zMessageItem.zNotExists(conditionValue1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "FilterDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -408,7 +408,7 @@ public class FilterTests extends CommonTest {
 			String conditionValue3, String action1, String action2,
 			String action3, String additionalFilterIfAny) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		/* Preparing for test data to run filter */
@@ -418,7 +418,7 @@ public class FilterTests extends CommonTest {
 
 		// 1. subject contains(subjectcontains_filetofolder) file to
 		// folder
-		String to = SelNGBase.selfAccountName;
+		String to = SelNGBase.selfAccountName.get();
 		String subject1 = "subjectcontains_filetofolder";
 		String body1 = "body_subjectcontains_filetofolder";
 		String[] recipients = { to };
@@ -474,7 +474,7 @@ public class FilterTests extends CommonTest {
 		setFilterConditionsActions(subject3, localize(locator.active), "all",
 				localize(locator.subject), localize(locator.contains),
 				"subjectandtocontains_filetofolder", localize(locator.to),
-				localize(locator.contains), SelNGBase.selfAccountName, "", "",
+				localize(locator.contains), SelNGBase.selfAccountName.get(), "", "",
 				"", localize(locator.fileIntoFolder), "", "",
 				localize(locator.stopFilterProcessing));
 		String folder3 = fileIntoNewFolder;
@@ -530,7 +530,7 @@ public class FilterTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
 		obj.zMessageItem.zNotExists(subject4);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -547,7 +547,7 @@ public class FilterTests extends CommonTest {
 			String action2, String action3, String additionalFilterIfAny)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		setFilterConditionsActions(filterName, activeStatus, conditionType,
@@ -560,12 +560,12 @@ public class FilterTests extends CommonTest {
 		zGoToApplication("Mail");
 
 		// Send mail and verify filter
-		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName, "",
+		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName.get(), "",
 				"", conditionValue1, conditionValue1.toLowerCase(), "");
 		MailApp.ClickCheckMailUntilMailShowsUp(fileIntoNewFolder,
 				conditionValue1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "FilterDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -577,7 +577,7 @@ public class FilterTests extends CommonTest {
 			String action2, String action3, String additionalFilterIfAny)
 			throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		setFilterConditionsActions(filterName, activeStatus, conditionType,
@@ -591,7 +591,7 @@ public class FilterTests extends CommonTest {
 
 		// Send mail and verify filter
 		String body = getLocalizedData_NoSpecialChar();
-		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName, "",
+		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName.get(), "",
 				"", "testing doesn't contains", body, "");
 		MailApp.ClickCheckMailUntilMailShowsUp(fileIntoNewFolder,
 				"testing doesn't contains");
@@ -612,7 +612,7 @@ public class FilterTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.editFilter));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// private method to select various filter conditions and actions
@@ -673,7 +673,7 @@ public class FilterTests extends CommonTest {
 
 		// Condition value1
 		SelNGBase.fieldLabelIsAnObject = true;
-		selenium
+		SelNGBase.selenium.get()
 				.type(
 						"xpath=//table[contains(@id,'_conditions')]/tbody/tr[contains(@id,'DWT')]/td/div[contains(@id,'DWT')]/input",
 						conditionValue1);
@@ -784,7 +784,7 @@ public class FilterTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

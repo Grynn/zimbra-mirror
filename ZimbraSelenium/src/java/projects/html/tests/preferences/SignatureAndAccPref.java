@@ -69,15 +69,15 @@ public class SignatureAndAccPref extends CommonTest {
 	private void zLogin() throws Exception {
 
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -91,7 +91,7 @@ public class SignatureAndAccPref extends CommonTest {
 			"enabled" }, retryAnalyzer = RetryFailedTests.class)
 	public void createSignatureAndVerifyInAccTab(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
@@ -104,7 +104,7 @@ public class SignatureAndAccPref extends CommonTest {
 
 		// page.zAccPref.zNavigateToPreferenceSignature();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class SignatureAndAccPref extends CommonTest {
 			"smoke", "full", "enabled" }, retryAnalyzer = RetryFailedTests.class)
 	public void create2ndSignatureAndVerifyInAccTab(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			createSignatureAndVerify();
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				signatureBody, "");
@@ -127,7 +127,7 @@ public class SignatureAndAccPref extends CommonTest {
 
 		page.zAccPref.zNavigateToPreferenceSignature();
 //		obj.zButton.zClick(localize(locator.del));
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/* to write delete signature tests .there is problem in clicking on delete
@@ -156,13 +156,13 @@ public class SignatureAndAccPref extends CommonTest {
 	 */
 	@Test(dataProvider = "AccPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyAccountsOptionsLink() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zAccPref.zNavigateToPreferenceSignature();
 		SleepUtil.sleepSmall();//this wait is req for some locales
-		selenium.click("link=" + localize(locator.optionsManageAccountsLink));
+		SelNGBase.selenium.get().click("link=" + localize(locator.optionsManageAccountsLink));
 		obj.zEditField.zExists(page.zAccPref.zAccNameEditField);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -175,7 +175,7 @@ public class SignatureAndAccPref extends CommonTest {
 	@Test(dataProvider = "AccPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifySignatureInMailCompose(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				signatureBody, "");
@@ -187,7 +187,7 @@ public class SignatureAndAccPref extends CommonTest {
 		Assert.assertTrue(displayedSignature.contains(signatureBody),
 				" The signature " + signatureName
 						+ "  is not displayed in mail compose");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -201,19 +201,19 @@ public class SignatureAndAccPref extends CommonTest {
 	@Test(dataProvider = "AccPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifySignatureAboveIncludedMsg(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				constantSignatureBody, "Above");
 		SleepUtil.sleepSmall();
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
 				"", "", constantSubject, "", "");
 
 		page.zAccPref.zClickReplyToAMailAndVerifySignaturePlace("Above",
 				signatureBody);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -227,7 +227,7 @@ public class SignatureAndAccPref extends CommonTest {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifySignatureBelowIncludedMsg(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			verifyAboveBelowSignature();
 		page.zAccPref.zNavigateToPreferenceSignature();
 		page.zAccPref.zChangeSignaturePlacment("Below");
@@ -239,7 +239,7 @@ public class SignatureAndAccPref extends CommonTest {
 		page.zAccPref.zClickReplyToAMailAndVerifySignaturePlace("Below",
 				constantSignatureBody);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -258,7 +258,7 @@ public class SignatureAndAccPref extends CommonTest {
 	public void verifyAccountsSettings(String signatureName,
 			String signatureBody, String fromField, String replyToName,
 			String replyToAcc) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				signatureBody, "");
@@ -272,12 +272,12 @@ public class SignatureAndAccPref extends CommonTest {
 		page.zAccPref.zSendMailToSelfAndVerifyAccSettings(fromField,
 				replyToName, replyToAcc);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

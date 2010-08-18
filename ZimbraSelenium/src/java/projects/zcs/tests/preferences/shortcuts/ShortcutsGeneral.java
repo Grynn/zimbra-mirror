@@ -90,16 +90,16 @@ public class ShortcutsGeneral extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		Thread.sleep(2000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -107,12 +107,12 @@ public class ShortcutsGeneral extends CommonTest {
 			throws Exception {
 
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		Robot zRobot = new Robot();
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 
 		zRobot.keyPress(KeyEvent.VK_G);
 		zRobot.keyPress(keyToPress);
@@ -128,22 +128,22 @@ public class ShortcutsGeneral extends CommonTest {
 			obj.zFolder.zExists(toVerify);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void shortcutsNew(String isFirst, int keyToPress, String toVerify,
 			String objType) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		if (!isFirst.equals("")) {
-			selenium.refresh();
+			SelNGBase.selenium.get().refresh();
 			Thread.sleep(5000);
 		}
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 
 		Robot zRobot = new Robot();
 
@@ -171,16 +171,16 @@ public class ShortcutsGeneral extends CommonTest {
 
 		Thread.sleep(2000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void newItem_N(String tabName, String toVerify) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 
 		obj.zTab.zClick(tabName);
 
@@ -207,23 +207,23 @@ public class ShortcutsGeneral extends CommonTest {
 
 		Thread.sleep(2000);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void visit_Folder_V(String test) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		Robot zRobot = new Robot();
 
 		String subject = "Test For visit Folder";
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(selfAccountName, "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
 				subject, "test content", "");
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 
 		zRobot.keyPress(KeyEvent.VK_V);
 		zRobot.keyRelease(KeyEvent.VK_V);
@@ -233,13 +233,13 @@ public class ShortcutsGeneral extends CommonTest {
 		obj.zButton.zClickInDlg(localize(locator.ok));
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void visitTag_VV_And_ApplyTag_T(String test) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = getLocalizedData_NoSpecialChar();
@@ -249,7 +249,7 @@ public class ShortcutsGeneral extends CommonTest {
 		page.zMailApp.zCreateTag(tagName);
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(selfAccountName, "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
 				subject, "test content", "");
 
 		Robot zRobot = new Robot();
@@ -262,10 +262,10 @@ public class ShortcutsGeneral extends CommonTest {
 				localize(locator.pickATag));
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(selfAccountName, "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
 				subject2, "test content", "");
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 		Robot zRobot2 = new Robot();
 		Thread.sleep(3000);
 
@@ -281,13 +281,13 @@ public class ShortcutsGeneral extends CommonTest {
 		obj.zMessageItem.zExists(subject);
 		obj.zMessageItem.zNotExists(subject2);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void removeTag_U(String test) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tagName = getLocalizedData_NoSpecialChar();
@@ -296,7 +296,7 @@ public class ShortcutsGeneral extends CommonTest {
 		String subject2 = getLocalizedData_NoSpecialChar();
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(selfAccountName, "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
 				subject, "test content", "");
 
 		Robot zRobot = new Robot();
@@ -309,10 +309,10 @@ public class ShortcutsGeneral extends CommonTest {
 				localize(locator.pickATag));
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(selfAccountName, "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
 				subject2, "test content", "");
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 		Robot zRobot3 = new Robot();
 		Thread.sleep(3000);
 
@@ -321,7 +321,7 @@ public class ShortcutsGeneral extends CommonTest {
 		zRobot3.keyRelease(KeyEvent.VK_U);
 		Thread.sleep(4000);
 
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 		Robot zRobot4 = new Robot();
 		Thread.sleep(3000);
 
@@ -337,13 +337,13 @@ public class ShortcutsGeneral extends CommonTest {
 		obj.zMessageItem.zNotExists(subject);
 		obj.zMessageItem.zNotExists(subject2);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void newfFolder_NF(String test) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String folderName = getLocalizedData_NoSpecialChar();
@@ -363,7 +363,7 @@ public class ShortcutsGeneral extends CommonTest {
 				localize(locator.createNewFolder));
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(selfAccountName, "", "",
+		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(), "", "",
 				subject, "test content", "");
 
 		obj.zButton.zClick(page.zMailApp.zMoveBtn);
@@ -375,17 +375,17 @@ public class ShortcutsGeneral extends CommonTest {
 		obj.zFolder.zClick(folderName);
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void runSavedSearch_S(String test) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String searchName = getLocalizedData_NoSpecialChar();
 
-		selenium.type("//input[@type='text']", "asdfg");
+		SelNGBase.selenium.get().type("//input[@type='text']", "asdfg");
 		obj.zButton.zClick(localize(locator.save));
 		obj.zEditField.zTypeInDlgByName(localize(locator.name), searchName,
 				localize(locator.saveSearch));
@@ -397,11 +397,11 @@ public class ShortcutsGeneral extends CommonTest {
 		String subject2 = getLocalizedData_NoSpecialChar();
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(selfAccountName, "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
 				subject, "test content", "");
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(selfAccountName, "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
 				subject2, "test content", "");
 
 		Robot zRobot = new Robot();
@@ -415,44 +415,44 @@ public class ShortcutsGeneral extends CommonTest {
 		obj.zMessageItem.zExists(subject);
 		obj.zMessageItem.zNotExists(subject2);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void composeInNewWindow_Shift_C(String test) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		Robot zRobot = new Robot();
 		Thread.sleep(3000);
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 		zRobot.keyPress(KeyEvent.VK_SHIFT);
 		zRobot.keyPress(KeyEvent.VK_C);
 		zRobot.keyRelease(KeyEvent.VK_SHIFT);
 		zRobot.keyRelease(KeyEvent.VK_C);
 		Thread.sleep(3000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 		obj.zButton.zClick(page.zMailApp.zCancelBtn_newWindow);
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteItem_Delete_And_Backspace(int keyToPress)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = "Test For Delete Item";
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(selfAccountName, "", "",
+		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(), "", "",
 				subject, "test content", "");
 
 		Robot zRobot = new Robot();
 		Thread.sleep(3000);
-		selenium.windowFocus();
+		SelNGBase.selenium.get().windowFocus();
 
 		zRobot.keyPress(keyToPress);
 		zRobot.keyRelease(keyToPress);
@@ -462,13 +462,13 @@ public class ShortcutsGeneral extends CommonTest {
 		obj.zFolder.zClick(localize(locator.trash));
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void listAppointments_L(String test) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -486,22 +486,22 @@ public class ShortcutsGeneral extends CommonTest {
 		/**
 		 * Verification : Check all the headers in list view of appointments are present.
 		 */
-		Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__se"));
-		Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__tg"));
-		Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__at"));
-		Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__su"));
-		Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__lo"));
-		Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__st"));
-		Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__fo"));
-		Assert.assertTrue(selenium.isElementPresent("zlhi__CLL__re"));
-		Assert.assertTrue(selenium.isElementPresent("zlhl__CLL__dt"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__se"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__tg"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__at"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__su"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__lo"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__st"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__fo"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__re"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__dt"));
 		
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

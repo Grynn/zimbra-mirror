@@ -37,15 +37,15 @@ public class ABPreference extends CommonTest {
 	private void zLogin() throws Exception {
 
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -57,7 +57,7 @@ public class ABPreference extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyNextPrevButton() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		int noOfContacts = 11;
@@ -82,7 +82,7 @@ public class ABPreference extends CommonTest {
 		page.zABComposeHTML.zClickArrowAndVerifyContactExist("PreviousArrow",
 				contactsArray[noOfContacts - 8]);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -92,7 +92,7 @@ public class ABPreference extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyEnabledAutoAddingOfContacts() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String contactFoldername = localize(locator.emailedContacts);
@@ -116,7 +116,7 @@ public class ABPreference extends CommonTest {
 
 		page.zABComposeHTML
 				.zSendMailToSelfAndNavigateToSpecificContactsFolder(contactFoldername);
-		obj.zCheckbox.zNotExists("link=" + SelNGBase.selfAccountName);
+		obj.zCheckbox.zNotExists("link=" + SelNGBase.selfAccountName.get());
 
 		// commented for time being because of bug 32738
 		// to verify enabled auto add to contacts selected
@@ -126,7 +126,7 @@ public class ABPreference extends CommonTest {
 		// (localize(locator.emailedContacts));
 		// obj.zCheckbox.zExists("link=" + SelNGBase.selfAccountName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -136,21 +136,21 @@ public class ABPreference extends CommonTest {
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyManageAddressbookLink() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zABComposeHTML.zNavigateToPreferenceAB();
 		SleepUtil.sleepSmall();// wait because it takes some time to load page after
 		// cliking on Pref-AB
-		selenium.click("link="
+		SelNGBase.selenium.get().click("link="
 				+ localize(locator.optionsManageAddressBooksLink));
 		obj.zButton.zExists(page.zABComposeHTML.zNewABIconBtn);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

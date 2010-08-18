@@ -2,6 +2,8 @@ package projects.zcs.clients;
 
 import org.testng.Assert;
 
+import framework.core.SelNGBase;
+
 public class MessageItem extends ListItem{
 	public MessageItem() {
 		super("listItemCore", "MessageItem");
@@ -27,29 +29,29 @@ public class MessageItem extends ListItem{
 	}	
 
 	public void zVerifyCurrentMsgHeaderText(String requiredTxt) {
-		String actual = selenium.call("msgHeaderCore", "", "gettext", true, "", "");
+		String actual = SelNGBase.selenium.get().call("msgHeaderCore", "", "gettext", true, "", "");
 		Assert.assertTrue(actual.indexOf(requiredTxt)>=0);
 	}
 	public String zGetCurrentMsgHeaderText() {
-		return selenium.call("msgHeaderCore", "", "gettext", true, "", "");
+		return SelNGBase.selenium.get().call("msgHeaderCore", "", "gettext", true, "", "");
 	}
 	public void zVerifyCurrentMsgBodyText(String requiredTxt) {
-		String actual =  selenium.call("msgBodyCore", "", "gettext", true, "", "");
+		String actual =  SelNGBase.selenium.get().call("msgBodyCore", "", "gettext", true, "", "");
 		Assert.assertTrue(actual.indexOf(requiredTxt)>=0);
 	}
 	public void zVerifyCurrentMsgBodyDoesNotHaveText(String requiredTxt) {
-		String actual =  selenium.call("msgBodyCore", "", "gettext", true, "", "");
+		String actual =  SelNGBase.selenium.get().call("msgBodyCore", "", "gettext", true, "", "");
 		Assert.assertFalse(actual.indexOf(requiredTxt)>=0);
 	}
 	public String zGetCurrentMsgBodyText() {
-		return selenium.call("msgBodyCore", "", "gettext", true, "", "");
+		return SelNGBase.selenium.get().call("msgBodyCore", "", "gettext", true, "", "");
 	}
 	public void zVerifyCurrentMsgBodyHasImage() {
-		String actual =  selenium.call("msgBodyCore", "", "gethtml", true, "", "");		
+		String actual =  SelNGBase.selenium.get().call("msgBodyCore", "", "gethtml", true, "", "");		
 		Assert.assertTrue(actual.indexOf("dfsrc=")>=0);
 	}	
 	public String zGetMsgBodyHTML() {
-		return selenium.call("msgBodyCore", "", "gethtml", true, "", "");		
+		return SelNGBase.selenium.get().call("msgBodyCore", "", "gethtml", true, "", "");		
 	}
 }
 

@@ -7,6 +7,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
@@ -39,23 +41,23 @@ public class SignatureBugTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	// Tests
 	@Test(dataProvider = "AccPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void lossOfSpacesAfterSignatureChange_Bug41092(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String defaultSignature = signatureName + "_default";
@@ -118,7 +120,7 @@ public class SignatureBugTests extends CommonTest {
 				subject, body, "");
 		obj.zMessageItem.zVerifyCurrentMsgBodyText(body);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -139,7 +141,7 @@ public class SignatureBugTests extends CommonTest {
 	@Test(dataProvider = "AccPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyingComposingAndSignaturePref_39282(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zNavigateToComposingPreferences();
@@ -162,7 +164,7 @@ public class SignatureBugTests extends CommonTest {
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zNewMenuIconBtn);
 		Thread.sleep(1500);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 		obj.zButton.zClick(ComposeView.zOptionsDownArrowBtn);
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
@@ -185,12 +187,12 @@ public class SignatureBugTests extends CommonTest {
 		obj.zFolder.zClick(localize(locator.inbox));
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void handleRetry() throws Exception {
 		// TODO Auto-generated method stub
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 

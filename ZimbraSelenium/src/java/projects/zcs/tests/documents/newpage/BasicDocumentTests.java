@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentApp;
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 /**
@@ -54,15 +55,15 @@ public class BasicDocumentTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zDocumentCompose.zNavigateToDocument();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -71,15 +72,15 @@ public class BasicDocumentTests extends CommonTest {
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createSimpleNotebookPage(String pageName, String bodyContent)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// page.zDocumentCompose.zNavigateToDocument();
 		page.zDocumentCompose.zCreateBasicPage(pageName, bodyContent);
-		Assert.assertTrue(selenium.isElementPresent("link=" + pageName),
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
 				"The page is not created");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -88,7 +89,7 @@ public class BasicDocumentTests extends CommonTest {
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createSimplePageInSpecificNotebook(String newNotebookName,
 			String pageName, String bodyContent) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// page.zDocumentCompose.zNavigateToDocument();
@@ -96,10 +97,10 @@ public class BasicDocumentTests extends CommonTest {
 		obj.zFolder.zExistsDontWait(newNotebookName);
 		page.zDocumentCompose.zCreatePageInSpecificNotebook(newNotebookName,
 				pageName, bodyContent);
-		Assert.assertTrue(selenium.isElementPresent("link=" + pageName),
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
 				"The page is not created");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -109,7 +110,7 @@ public class BasicDocumentTests extends CommonTest {
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void toolbarEditNotebookPageAndVerify(String pageName,
 			String bodyContent, String newBodyContent) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		// page.zDocumentCompose.zNavigateToDocument();
 
@@ -124,7 +125,7 @@ public class BasicDocumentTests extends CommonTest {
 		Assert.assertTrue(page.zDocumentCompose.zVerifyEditPage(
 				DocumentApp.zNotebookFolder, pageName, "", newBodyContent),
 				"Page Body Not Modified Successfully");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -135,7 +136,7 @@ public class BasicDocumentTests extends CommonTest {
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void linkEditNotebookPageAndVerify(String pageName,
 			String bodyContent, String newBodyContent) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		// page.zDocumentCompose.zNavigateToDocument();
 
@@ -151,7 +152,7 @@ public class BasicDocumentTests extends CommonTest {
 		obj.zButton.zClick(page.zDocumentCompose.zClosePageIconBtn);
 		zWaitTillObjectExist("button", page.zDocumentCompose.zRefreshIconBtn);
 		obj.zButton.zClick(page.zDocumentCompose.zRefreshIconBtn);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -162,7 +163,7 @@ public class BasicDocumentTests extends CommonTest {
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void toolbarDeleteNotebookPageAndVerify(String pageName,
 			String bodyContent) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		// page.zDocumentCompose.zNavigateToDocument();
 
@@ -175,9 +176,9 @@ public class BasicDocumentTests extends CommonTest {
 		obj.zButton.zClick((page.zDocumentCompose.zRefreshIconBtn));
 		obj.zFolder.zClick(page.zDocumentApp.zNotebookFolder);
 		Thread.sleep(1000);
-		Assert.assertFalse(selenium.isElementPresent("link=" + pageName),
+		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
 				"The page is not deleted");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -188,7 +189,7 @@ public class BasicDocumentTests extends CommonTest {
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void linkDeleteNotebookPageAndVerify(String pageName,
 			String bodyContent) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		// page.zDocumentCompose.zNavigateToDocument();
 
@@ -200,10 +201,10 @@ public class BasicDocumentTests extends CommonTest {
 		obj.zButton.zClick((page.zDocumentCompose.zRefreshIconBtn));
 		obj.zFolder.zClick(page.zDocumentApp.zNotebookFolder);
 		Thread.sleep(3000);
-		Assert.assertFalse(selenium.isElementPresent("link=" + pageName),
+		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
 				"The page is not deleted");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -214,7 +215,7 @@ public class BasicDocumentTests extends CommonTest {
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void negativeTestCreatePage(String pageName, String bodyContent)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		obj.zButton.zClick(page.zDocumentCompose.zNewPageIconBtn);
@@ -225,10 +226,10 @@ public class BasicDocumentTests extends CommonTest {
 		Assert.assertTrue(warningMsg.equals(localize(locator.askToSave)),
 				"Warning message for save page is not correct");
 		obj.zButton.zClickInDlg(localize(locator.no));
-		Assert.assertFalse(selenium.isElementPresent("link=" + pageName),
+		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
 				"The page is Saved.However it should not");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -236,7 +237,7 @@ public class BasicDocumentTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		// page.zCalendarView.zCancelAptInBtw();
 		zLogin();
 	}

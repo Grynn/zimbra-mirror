@@ -396,8 +396,8 @@ public class MailApp extends AppPage {
 				}
 			}
 		}
-		String[] accounts = { SelNGBase.selfAccountName };
-		ProvZCS.addMessageLmtp(accounts, SelNGBase.selfAccountName, contents
+		String[] accounts = { SelNGBase.selfAccountName.get() };
+		ProvZCS.addMessageLmtp(accounts, SelNGBase.selfAccountName.get(), contents
 				.toString());
 		zGoToApplication("Mail");
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);

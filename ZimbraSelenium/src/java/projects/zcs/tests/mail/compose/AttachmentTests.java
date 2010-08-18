@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 import projects.zcs.tests.CommonTest;
@@ -52,16 +53,16 @@ public class AttachmentTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -74,12 +75,12 @@ public class AttachmentTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void simpleAttachTest(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -89,13 +90,13 @@ public class AttachmentTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void attachMultipleTest(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		// "_selfAccountName_" = page.zComposeView.zLoginAndNavigateToCompose();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -107,7 +108,7 @@ public class AttachmentTests extends CommonTest {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void fwdAMailWithAttachment(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)// relogin and call all the dependsOnmethods
+		if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
 			fwdAMailWithAttachment_Retry();
 		obj.zButton.zClick(MailApp.zForwardIconBtn);
 		obj.zTextAreaField.zWait(localize(locator.toLabel));
@@ -115,7 +116,7 @@ public class AttachmentTests extends CommonTest {
 		for (int i = 0; i < att.length; i++) {
 			obj.zCheckbox.zVerifyIsChecked(att[i].toLowerCase());
 		}
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -126,7 +127,7 @@ public class AttachmentTests extends CommonTest {
 	@Test(dependsOnMethods = "fwdAMailWithAttachment", groups = { "smoke",
 			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void changeToHTMLAndAttachInline() throws Exception {
-		if (isExecutionARetry)// relogin and call all the dependsOnmethods
+		if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
 			changeToHTMLAndAttachInline_Retry();
 		obj.zButton.zClick(ComposeView.zOptionsDownArrowBtn);
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
@@ -136,7 +137,7 @@ public class AttachmentTests extends CommonTest {
 		boolean b = (html.toLowerCase().indexOf("dfsrc=") > 0);
 		Assert.assertTrue(b,
 				"html content of the message body didnt contain <img string");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -148,12 +149,12 @@ public class AttachmentTests extends CommonTest {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void detachRetainsAttachments(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)// relogin and call all the dependsOnmethods
+		if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
 			detachRetainsAttachments_Retry();
 		Thread.sleep(2000);
 		obj.zButton.zClick("id=zb__COMPOSE1__DETACH_COMPOSE_left_icon");
 		Thread.sleep(4000);
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zCancelIconBtn);
 		obj.zButton.zWait(ComposeView.zSendIconBtn);
 		String[] att = attachments.split(",");
@@ -165,7 +166,7 @@ public class AttachmentTests extends CommonTest {
 		boolean b = (html.toLowerCase().indexOf("dfsrc=") > 0);
 		Assert.assertTrue(b,
 				"html content of the message body didnt contain <img string");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -176,13 +177,13 @@ public class AttachmentTests extends CommonTest {
 	@Test(dependsOnMethods = "detachRetainsAttachments", groups = { "smoke",
 			"full" })
 	public void sendAttachmentsFromNewWindow() throws Exception {
-		if (isExecutionARetry)// relogin and call all the dependsOnmethods
+		if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
 			sendAttachmentsFromNewWindow_Retry();
 		page.zComposeView.zSendMailToSelfAndVerify("_selfAccountName_", "", "",
 				"somesubject", "", "");
 		// verify if messagebody has image...
 		obj.zMessageItem.zVerifyCurrentMsgBodyHasImage();
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -197,7 +198,7 @@ public class AttachmentTests extends CommonTest {
 	public void rplyFwdInlineImageAttchMailInPlainText_Bug30335(String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -212,12 +213,12 @@ public class AttachmentTests extends CommonTest {
 
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[@id='zv__COMPOSE1_attachments_div']/table/tbody/tr/td/div[contains(@class,'ImgAttachment')]"),
 						"orignal msg doesn't contains attachment");
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[@id='zv__COMPOSE1_attachments_div']/table/tbody/tr/td[3]/a[contains(text(),'"
 										+ attachment + "')]"),
 						"orignal msg doesn't contains attachment with subject");
@@ -230,12 +231,12 @@ public class AttachmentTests extends CommonTest {
 
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[@id='zv__COMPOSE1_attachments_div']/table/tbody/tr/td/div[contains(@class,'ImgAttachment')]"),
 						"orignal msg doesn't contains attachment");
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[@id='zv__COMPOSE1_attachments_div']/table/tbody/tr/td[3]/a[contains(text(),'"
 										+ attachment + "')]"),
 						"orignal msg doesn't contains attachment with subject");
@@ -243,7 +244,7 @@ public class AttachmentTests extends CommonTest {
 		obj.zTextAreaField.zWait(localize(locator.toLabel));
 		obj.zCheckbox.zVerifyIsNotChecked(attachment);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -251,7 +252,7 @@ public class AttachmentTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those that needs just relogin
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 

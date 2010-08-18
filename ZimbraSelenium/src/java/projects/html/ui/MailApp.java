@@ -171,7 +171,7 @@ public class MailApp extends CommonTest {
 	public static void zInjectMessage(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		to = SelNGBase.selfAccountName;
+		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
 		Thread.sleep(1000);

@@ -8,7 +8,7 @@ public class BrowserUtil extends SelNGBase {
     public static void setBrowserAgent() {
 	//ps: getZimbraVersion is being passed just to trick selenium.call to return string(because of get*)
 	if (userAgent.equals(""))
-	    userAgent = selenium.getEval("navigator.userAgent;");
+	    userAgent = SelNGBase.selenium.get().getEval("navigator.userAgent;");
     }
 
     public static String getBrowserName() {

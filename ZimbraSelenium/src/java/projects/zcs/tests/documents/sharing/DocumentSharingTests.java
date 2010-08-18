@@ -69,16 +69,16 @@ public class DocumentSharingTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zDocumentCompose.zNavigateToDocument();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -97,7 +97,7 @@ public class DocumentSharingTests extends CommonTest {
 	public void shareDocManagerRightsAndDeleteSharedPage(String pageName,
 			String bodyContent, String folderName, String attendee,
 			String role, String mountFolderName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		obj.zFolder.zClick(localize(locator.notebook));
@@ -106,18 +106,18 @@ public class DocumentSharingTests extends CommonTest {
 				"", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName = attendee;
+		SelNGBase.selfAccountName.set(attendee);
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		zGoToApplication("Documents");
 		obj.zFolder.zClick(mountFolderName);
 		zWaitTillObjectExist("button", localize(locator.send));
-		Assert.assertTrue(selenium.isElementPresent("link=" + pageName),
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
 				"The shared page is not displayed");
 		page.zDocumentApp.zDeleteNotebookPage(mountFolderName, pageName,
 				"ToolbarDelete");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -137,7 +137,7 @@ public class DocumentSharingTests extends CommonTest {
 	public void shareDocViewerRghtsAndVerifyEditLink(String pageName,
 			String bodyContent, String folderName, String attendee,
 			String role, String mountFolderName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		obj.zFolder.zClick(localize(locator.notebook));
@@ -147,7 +147,7 @@ public class DocumentSharingTests extends CommonTest {
 				"", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName = attendee;
+		SelNGBase.selfAccountName.set(attendee);
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zDocumentCompose.zNavigateToDocument();
@@ -158,10 +158,10 @@ public class DocumentSharingTests extends CommonTest {
 
 		boolean bisExists = false;
 		String sIsExists = new Boolean(bisExists).toString();
-		bisExists = selenium.isElementPresent("link=" + localize(locator.edit));
+		bisExists = SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.edit));
 		assertReport("false", sIsExists, "Edit link exists for viewer rights");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -179,7 +179,7 @@ public class DocumentSharingTests extends CommonTest {
 	public void shareDocAdminRghtsAndVerifyDeletePage(String pageName,
 			String bodyContent, String folderName, String attendee,
 			String role, String mountFolderName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		obj.zFolder.zClick(localize(locator.notebook));
@@ -189,7 +189,7 @@ public class DocumentSharingTests extends CommonTest {
 				"", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName = attendee;
+		SelNGBase.selfAccountName.set(attendee);
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zDocumentCompose.zNavigateToDocument();
@@ -197,11 +197,11 @@ public class DocumentSharingTests extends CommonTest {
 		obj.zFolder.zDblClick(mountFolderName);
 		obj.zFolder.zClick(mountFolderName);
 		zWaitTillObjectExist("button", localize(locator.send));
-		Assert.assertTrue(selenium.isElementPresent("link="
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("link="
 				+ localize(locator.del)),
 				"The shared page's delete link should be displayed");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -219,7 +219,7 @@ public class DocumentSharingTests extends CommonTest {
 	public void revokeShareDoc(String pageName, String bodyContent,
 			String folderName, String attendee, String role,
 			String mountFolderName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSharing.zShareFolder("Documents", folderName, "", attendee, role,
@@ -227,7 +227,7 @@ public class DocumentSharingTests extends CommonTest {
 
 		page.zSharing.zRevokeShare(folderName, "", "");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -245,7 +245,7 @@ public class DocumentSharingTests extends CommonTest {
 	public void modifyDocShare(String pageName, String bodyContent,
 			String folderName, String attendee, String role,
 			String mountFolderName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		obj.zFolder.zClick(localize(locator.notebook));
@@ -257,17 +257,17 @@ public class DocumentSharingTests extends CommonTest {
 		page.zSharing.zModifySharedFolder(localize(locator.documents),
 				folderName, localize(locator.shareRoleViewer), "", "", "");
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 
 		resetSession();
-		SelNGBase.selfAccountName = attendee;
+		SelNGBase.selfAccountName.set(attendee);
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 
 		page.zSharing.zVerifyShareModifiedMail(currentloggedinuser, folderName,
 				"", attendee, localize(locator.shareRoleViewer), "");
 		page.zDocumentCompose.zNavigateToDocument();
 		Thread.sleep(1000);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -285,10 +285,10 @@ public class DocumentSharingTests extends CommonTest {
 	public void sharingDocToExternalGuest(String pageName, String bodyContent,
 			String folderName, String attendee, String role,
 			String mountFolderName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName;
+		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		obj.zFolder.zClick(localize(locator.notebook));
 		page.zDocumentCompose.zCreateBasicPage(pageName, bodyContent);
 
@@ -296,7 +296,7 @@ public class DocumentSharingTests extends CommonTest {
 				localize(locator.shareWithGuest), attendee, role, "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName = attendee;
+		SelNGBase.selfAccountName.set(attendee);
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				folderName, localize(locator.shareWithGuest), attendee, role,
@@ -310,10 +310,10 @@ public class DocumentSharingTests extends CommonTest {
 
 		boolean bisExists = false;
 		String sIsExists = new Boolean(bisExists).toString();
-		bisExists = selenium.isElementPresent("link=" + localize(locator.del));
+		bisExists = SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.del));
 		assertReport("false", sIsExists, "Edit link exists for viewer rights");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -331,13 +331,13 @@ public class DocumentSharingTests extends CommonTest {
 	public void publicShareDoc(String pageName, String bodyContent,
 			String folderName, String attendee, String role,
 			String mountFolderName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSharing.zShareFolder("Documents", folderName,
 				localize(locator.shareWithPublic), "", role, "", "", "");
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -345,7 +345,7 @@ public class DocumentSharingTests extends CommonTest {
 	//--------------------------------------------------------------------------
 
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

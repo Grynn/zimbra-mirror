@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -68,16 +69,16 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -93,12 +94,12 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void sendMailToSelfAndVerify(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -110,12 +111,12 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 	public void sendMailToSelfAndVerify_NewWindow(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// ----------------------------------Reply
@@ -128,7 +129,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void replyTest(String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
@@ -138,7 +139,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 		page.zComposeView.zVerifyComposeFilledValues("Reply",
 				"_selfAccountName_", "", "", "Re: " + subject, body,
 				attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -149,7 +150,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void replyTest_NewWindow(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
@@ -159,7 +160,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 		page.zComposeView.zVerifyComposeFilledValues("Reply",
 				"_selfAccountName_", "", "", "Re: " + subject, body,
 				attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// ----------------------Reply All tests...------------------
@@ -171,7 +172,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void replyAllTest(String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
@@ -181,7 +182,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 		page.zComposeView.zVerifyComposeFilledValues("ReplyAll",
 				"_selfAccountName_", cc, "", "Re: " + subject, body,
 				attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -193,7 +194,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 			"test24" }, retryAnalyzer = RetryFailedTests.class)
 	public void replyAllTest_NewWindow(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
@@ -203,7 +204,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 		page.zComposeView.zVerifyComposeFilledValues("ReplyAll",
 				"_selfAccountName_", cc, "", "Re: " + subject, body,
 				attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// -------------------Forward tests...----------------------------
@@ -215,7 +216,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void fwdMailTest(String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
@@ -224,7 +225,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		page.zComposeView.zVerifyComposeFilledValues("Forward", "", "", "",
 				"Fwd: " + subject, body, attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -236,7 +237,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 	public void fwdMailTest_NewWindow(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
 		// if we are retrying the test, run cleanup and re-login etc
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
@@ -245,7 +246,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		page.zComposeView.zVerifyComposeFilledValues("Forward", "", "", "",
 				"Fwd: " + subject, body, attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -272,7 +273,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 	public void checkMesgViewWithInTabWithArrowPosition_40614(String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -290,7 +291,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 		obj.zMessageItem.zClick("Re: " + subject);
 		obj.zMessageItem.zDblClick("Re: " + subject);
 
-		Assert.assertTrue(selenium.isElementPresent("id=zv__CV_closeBtnCell"));
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("id=zv__CV_closeBtnCell"));
 		/*
 		 * obj.zMessageItem.zDblClick("-- Original Message --");
 		 * System.out.println("--" +localize(locator.origMsg)+ "--");
@@ -299,32 +300,32 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 		obj.zMessageItem.zDblClick(localize(locator.origMsg));
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@id,'zb__MSG1__Nav__PAGE_BACK_left_icon')]/div[contains(@class,'ImgLeftArrow ZDisabledImage')]"),
 						"Left Arrow displyed as enable");
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@id,'zb__MSG1__Nav__PAGE_FORWARD_left_icon')]/div[contains(@class,'ImgRightArrow')]"),
 						"Right Arrow displyed as disable");
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@id,'zb__App__DWT') and contains(text(),'Re:')]"),
 						"Tab is not showing Re:");
-		selenium
+		SelNGBase.selenium.get()
 				.mouseOver("//td[contains(@id,'zb__MSG1__Nav__PAGE_FORWARD_left_icon')]/div[contains(@class,'ImgRightArrow')]");
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"//td[contains(@id,'zb__MSG1__Nav__PAGE_FORWARD_left_icon')]/div[contains(@class,'ImgRightArrow')]",
 						"");
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@id,'zb__App__DWT') and contains(text(),'Re:')]"),
 						"After clicking Right arrow Tab is not showing Re:");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -350,7 +351,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 	public void fwdingAMailWithAttachment_bug46375(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zNavigateToComposingPreferences();
@@ -382,12 +383,12 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[@id='zv__COMPOSE1_attachments_div']/table/tbody/tr/td/div[contains(@class,'ImgAttachment')]"),
 						"orignal msg doesn't contains attachment");
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[@id='zv__COMPOSE1_attachments_div']/table/tbody/tr/td[2]/b[contains(text(),'"
 										+ subject + "')]"),
 						"orignal msg doesn't contains attachment with subject");
@@ -405,7 +406,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 				localize(locator.origMsg)),
 				"Body Should  contains  msg but still not showing msg");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -413,7 +414,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

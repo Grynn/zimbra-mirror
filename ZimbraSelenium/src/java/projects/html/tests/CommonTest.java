@@ -89,16 +89,16 @@ public class CommonTest extends SelNGBase {
 
 	public static void zLoginIfRequired(Map<String, Object> accntAttrs)
 			throws Exception {
-		if (needsReLogin(accntAttrs) || needReset) {
+		if (needsReLogin(accntAttrs) || SelNGBase.needReset.get()) {
 			resetSession();
 			selfAccountAttrs = accntAttrs;
-			selfAccountName = page.zLoginpage.zLoginToZimbraHTML(accntAttrs);
+			SelNGBase.selfAccountName.set(page.zLoginpage.zLoginToZimbraHTML(accntAttrs));
 		}
 	}
 
 	public static boolean zWaitForElement(String elementId) {
 		for (int i = 0; i < 10; i++) {
-			if (selenium.isElementPresent(elementId))
+			if (SelNGBase.selenium.get().isElementPresent(elementId))
 				return true;
 			try {
 				Thread.sleep(2000);
@@ -113,7 +113,7 @@ public class CommonTest extends SelNGBase {
 		int currentAccntAttrsSize = selfAccountAttrs.size() - 4;// -4 is to
 		// remove default settings
 		// none has logged in yet
-		if (selfAccountName.equals(""))
+		if (SelNGBase.selfAccountName.get().equals(""))
 			return true;
 		// a user has already logged in with default settings
 		// and test needs to use default-settings as well.
@@ -329,9 +329,9 @@ public class CommonTest extends SelNGBase {
 	public static void assertReport(String expectedFullBody,
 			String dataToVerify, String reportSummary) throws Exception {
 		if (expectedFullBody.equals("_selfAccountName_"))
-			expectedFullBody = selfAccountName;
+			expectedFullBody = SelNGBase.selfAccountName.get();
 		if (dataToVerify.equals("_selfAccountName_"))
-			dataToVerify = selfAccountName;
+			dataToVerify = SelNGBase.selfAccountName.get();
 		Assert.assertTrue(expectedFullBody.indexOf(dataToVerify) >= 0,
 				"Expected value(" + expectedFullBody + "), Actual Value("
 						+ dataToVerify + ")");
@@ -411,12 +411,12 @@ public class CommonTest extends SelNGBase {
 			} else if (objectType.equals("textarea")) {
 				retVal = obj.zTextAreaField.zExistsDontWait(objectName);
 			} else if (objectType.equals("link")) {
-				if (selenium.isElementPresent("link=" + objectName))
+				if (SelNGBase.selenium.get().isElementPresent("link=" + objectName))
 					retVal = "true";
 				else
 					retVal = "false";
 			} else if (objectType.equals("text")) {
-				if (selenium.isTextPresent(objectName))
+				if (SelNGBase.selenium.get().isTextPresent(objectName))
 					retVal = "true";
 				else
 					retVal = "false";
@@ -444,12 +444,12 @@ public class CommonTest extends SelNGBase {
 
 	public static void zReloginToAjax() throws Exception {
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		resetSession();
 		Thread.sleep(2000);
 
-		SelNGBase.selfAccountName = accountName;
+		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraHTML(accountName);
 
 	}

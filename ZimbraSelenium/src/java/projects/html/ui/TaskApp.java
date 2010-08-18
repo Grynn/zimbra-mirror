@@ -2,6 +2,8 @@ package projects.html.ui;
 
 import org.testng.Assert;
 
+import framework.core.SelNGBase;
+
 import projects.html.clients.ProvZCS;
 import projects.html.tests.CommonTest;
 
@@ -141,7 +143,7 @@ public class TaskApp extends CommonTest {
 			obj.zEditField.zType(zTaskComposeLocationField, location);
 
 		if (!priority.equals("")) {
-			selenium.select(zTaskComposePriorityMenu, priority);
+			SelNGBase.selenium.get().select(zTaskComposePriorityMenu, priority);
 		}
 
 		if (!body.equals(""))
@@ -187,7 +189,7 @@ public class TaskApp extends CommonTest {
 		}
 
 		if (!percent.equals("")) {
-			selenium.select(zTaskComposePercentMenu, percent);
+			SelNGBase.selenium.get().select(zTaskComposePercentMenu, percent);
 		}
 
 		if (!startDate.equals("")) {
@@ -419,7 +421,7 @@ public class TaskApp extends CommonTest {
 		obj.zMessageItem.zExists(taskname);
 		obj.zMessageItem.zClickCheckBox(taskname);
 		Thread.sleep(1000); // test fails here
-		selenium.select(zTaskMoveMenu, destinationTaskList);
+		SelNGBase.selenium.get().select(zTaskMoveMenu, destinationTaskList);
 		Thread.sleep(1000);
 		obj.zButton.zClick(zTaskMoveBtn);
 		Thread.sleep(1000);

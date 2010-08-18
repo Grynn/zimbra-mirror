@@ -41,16 +41,16 @@ public class MailPreferencesTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -64,13 +64,13 @@ public class MailPreferencesTests extends CommonTest {
 	@Test(dataProvider = "mailPreferencesDataProvider", groups = { "smoke",
 			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void MailDisplayPerPage() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		int numberOfMails = 11;
 		String noOfEmailsToBeDisplayed = "10";
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 		String subject = "subject";
 		String[] mailSubject = new String[numberOfMails];
 		for (int i = 0; i < numberOfMails; i++) {
@@ -97,7 +97,7 @@ public class MailPreferencesTests extends CommonTest {
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(mailSubject[10]);
 		obj.zMessageItem.zNotExists(mailSubject[0]);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// this test is failing at the moment because of known issue that is when we
@@ -144,10 +144,10 @@ public class MailPreferencesTests extends CommonTest {
 			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void VerifyDefaultMailSearch() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String subject = getLocalizedData_NoSpecialChar();
-		String selfAccName = SelNGBase.selfAccountName;
+		String selfAccName = SelNGBase.selfAccountName.get();
 		page.zMailPrefUI.zSendMailToSelfAndMoveItToJunkAndVerify(subject);
 
 		page.zMailPrefUI.zNavigateToPrefAndEditDefaultMailSearch("in:junk");
@@ -157,7 +157,7 @@ public class MailPreferencesTests extends CommonTest {
 		page.zLoginpage.zLoginToZimbraHTML(selfAccName);
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class MailPreferencesTests extends CommonTest {
 			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void VerifyForwardACopyTo() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String fwdToAcc = ProvZCS.getRandomAccount();
 		String subject = getLocalizedData_NoSpecialChar();
@@ -178,14 +178,14 @@ public class MailPreferencesTests extends CommonTest {
 		SleepUtil.sleepSmall();
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(ProvZCS.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
 				"", "", subject, getLocalizedData_NoSpecialChar(), "");
 
 		resetSession();
 
 		page.zLoginpage.zLoginToZimbraHTML(fwdToAcc);
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -197,9 +197,9 @@ public class MailPreferencesTests extends CommonTest {
 			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void VerifySendNotificationMsgTo() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
-		String selfAcc = SelNGBase.selfAccountName.toLowerCase();
+		String selfAcc = SelNGBase.selfAccountName.get().toLowerCase();
 		String notificationSubject = "New message received at " + selfAcc;
 		String notificationToAcc = ProvZCS.getRandomAccount();
 		String subject = getLocalizedData_NoSpecialChar();
@@ -210,15 +210,15 @@ public class MailPreferencesTests extends CommonTest {
 
 		page.zComposeView.zNavigateToMailCompose();
 		SleepUtil.sleepSmall();
-		page.zComposeView.zSendMailToSelfAndSelectIt(ProvZCS.selfAccountName,
+		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
 				"", "", subject, getLocalizedData_NoSpecialChar(), "");
 
 		resetSession();
-		SelNGBase.selfAccountName = notificationToAcc;
+		SelNGBase.selfAccountName.set(notificationToAcc);
 		page.zLoginpage.zLoginToZimbraHTML(notificationToAcc);
 		page.zMailApp.zClickCheckMailUntilMailShowsUp("New message received");
 		obj.zMessageItem.zExists("New message received");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -229,10 +229,10 @@ public class MailPreferencesTests extends CommonTest {
 	@Test(dataProvider = "mailPreferencesDataProvider", groups = { "smoke",
 			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void VerifyAutoReply() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentAccount = SelNGBase.selfAccountName;
+		String currentAccount = SelNGBase.selfAccountName.get();
 		String randomAccount = ProvZCS.getRandomAccount();
 		String randomAccount2 = ProvZCS.getRandomAccount();
 		String autoReplyMsg = localize(locator.auto);
@@ -257,7 +257,7 @@ public class MailPreferencesTests extends CommonTest {
 		SleepUtil.sleepSmall();
 		resetSession();
 		page.zLoginpage.zLoginToZimbraHTML(randomAccount2);
-		SelNGBase.selfAccountName = randomAccount2;
+		SelNGBase.selfAccountName.set(randomAccount2);
 		page.zComposeView.zSendMail(currentAccount, "", "", subject, body, "");
 		String replyMsgSubject = localize(locator.ZM_replySubjectPrefix) + " "
 				+ subject;
@@ -269,7 +269,7 @@ public class MailPreferencesTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
 		obj.zMessageItem.zNotExists(replyMsgSubject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -280,7 +280,7 @@ public class MailPreferencesTests extends CommonTest {
 	@Test(dataProvider = "mailPreferencesDataProvider", groups = { "smoke",
 			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void VerifyMsgFrmMePlaceInInboxIfInToOrCc() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject1 = getLocalizedData_NoSpecialChar();
@@ -289,13 +289,13 @@ public class MailPreferencesTests extends CommonTest {
 				.zNavigateToPrefMailAndSelectMsgFrmMe("PlaceInInboxIfInToOrCc");
 		// to verify cc mail is received in Inbox
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMail("", SelNGBase.selfAccountName, "",
+		page.zComposeView.zSendMail("", SelNGBase.selfAccountName.get(), "",
 				subject1, "", "");
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject1);
 
 		// to verify bcc mail is not received
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMail("", "", SelNGBase.selfAccountName,
+		page.zComposeView.zSendMail("", "", SelNGBase.selfAccountName.get(),
 				subject2, "", "");
 
 		// little change here
@@ -305,7 +305,7 @@ public class MailPreferencesTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
 		obj.zMessageItem.zNotExists(subject2);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -316,14 +316,14 @@ public class MailPreferencesTests extends CommonTest {
 	@Test(dataProvider = "mailPreferencesDataProvider", groups = { "smoke",
 			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void VerifyMsgFrmMeIgnoreMsg() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String subject = getLocalizedData_NoSpecialChar();
 
 		page.zMailPrefUI.zNavigateToPrefMailAndSelectMsgFrmMe("IgnoreMsg");
 		// to verify the mail sent to self is not received
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName, "", "", subject,
+		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "", subject,
 				"", "");
 		SleepUtil.sleepLong();
 		// little change here
@@ -332,12 +332,12 @@ public class MailPreferencesTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
 		obj.zMessageItem.zNotExists(subject);
 		page.zMailPrefUI.zNavigateToPrefMailAndSelectMsgFrmMe("PlaceInInbox");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

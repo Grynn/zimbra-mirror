@@ -7,6 +7,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 /**
@@ -35,15 +37,15 @@ public class TaskSavedSearchTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Tasks");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -51,12 +53,12 @@ public class TaskSavedSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	@Test(dataProvider = "dataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void taskSavedSearchTest(String subject) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zTaskCreateSimple(subject, "", "", "");
 		page.zTaskApp.zTaskListCreateNewBtn("newTaskFolder");
-		selenium.type("xpath=//input[@class='search_input']", subject);
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", subject);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zTaskItem.zExists(subject);
 		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");
@@ -69,7 +71,7 @@ public class TaskSavedSearchTests extends CommonTest {
 		obj.zFolder.zClick("Srch" + subject);
 		obj.zTaskItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -77,7 +79,7 @@ public class TaskSavedSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

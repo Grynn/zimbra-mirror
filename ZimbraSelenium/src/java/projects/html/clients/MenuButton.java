@@ -34,6 +34,6 @@ public class MenuButton extends SelNGBase {
 		return MenuButtonCore(menuBtnNameOrId, action, retryOnFalse, "", "");
 	}
 	private static String MenuButtonCore(String menuBtnNameOrId, String action, Boolean retryOnFalse, String param1, String param2) {
-		return selenium.call("buttonMenuCore",  menuBtnNameOrId, action, retryOnFalse, param1, param2);
+		return SelNGBase.selenium.get().call("buttonMenuCore",  menuBtnNameOrId, action, retryOnFalse, param1, param2);
 	}
 }

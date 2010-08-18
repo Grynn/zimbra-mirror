@@ -81,22 +81,22 @@ public class Tasks extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
-	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "taskCreateDataProvider", groups = { "parallel", "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createSimpleTask(String subject, String location,
 			String priority, String body) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
@@ -105,7 +105,7 @@ public class Tasks extends CommonTest {
 
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -115,7 +115,7 @@ public class Tasks extends CommonTest {
 			String progressPercent, String startDate, String endDate)
 			throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
@@ -125,14 +125,14 @@ public class Tasks extends CommonTest {
 
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createTaskInTaskList(String subject, String location,
 			String priority, String body, String taskListName) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
@@ -143,14 +143,14 @@ public class Tasks extends CommonTest {
 				body, taskListName);
 		page.zTaskApp.zTaskVerifyExistsInTaskList(subject, taskListName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteTask(String subject, String location, String priority,
 			String body) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
@@ -163,7 +163,7 @@ public class Tasks extends CommonTest {
 
 		obj.zMessageItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -171,7 +171,7 @@ public class Tasks extends CommonTest {
 			String body, String newSub, String newLoc, String newPriority,
 			String newBody) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTasks();
@@ -187,7 +187,7 @@ public class Tasks extends CommonTest {
 
 		obj.zMessageItem.zExists(newSub);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -195,7 +195,7 @@ public class Tasks extends CommonTest {
 	public void tagTask(String subject, String location, String priority,
 			String body, String tagName) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zMailApp.zCreateTag(tagName);
@@ -204,14 +204,14 @@ public class Tasks extends CommonTest {
 		page.zTaskApp.zTaskTagToolbar(subject, tagName, "");
 		obj.zMessageItem.zVerifyIsTagged(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void moveTask(String subject, String location, String priority,
 			String body, String folder1, String folder2) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zTaskListCreate(folder1);
@@ -229,13 +229,13 @@ public class Tasks extends CommonTest {
 
 		page.zTaskApp.zTaskVeriyNotExistsInTaskList(subject, folder1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createTaskList() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String taskListName = getLocalizedData_NoSpecialChar();
@@ -246,14 +246,14 @@ public class Tasks extends CommonTest {
 
 		obj.zFolder.zExists(taskListName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteTaskList() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String taskListName = getLocalizedData_NoSpecialChar();
@@ -269,14 +269,14 @@ public class Tasks extends CommonTest {
 
 		obj.zFolder.zNotExists(taskListName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void renameTaskList() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String taskList = getLocalizedData_NoSpecialChar();
@@ -293,7 +293,7 @@ public class Tasks extends CommonTest {
 		obj.zFolder.zNotExists(taskList);
 		obj.zFolder.zExists(newTaskList);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -301,7 +301,7 @@ public class Tasks extends CommonTest {
 	public void deleteTasksInTaskList(String subject, String location,
 			String priority, String body, String taskList) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zTaskListCreate(taskList);
@@ -317,14 +317,14 @@ public class Tasks extends CommonTest {
 
 		page.zTaskApp.zTaskVeriyNotExistsInTaskList(subject, taskList);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteAllTasksNegativeTest() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zTaskApp.zNavigateToTaskListPage();
@@ -335,13 +335,13 @@ public class Tasks extends CommonTest {
 				localize(locator.actionDeleteCheckConfirm),
 				"Toast message to check the checkbox is incorrect");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteTaskListNegativeTest() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String taskListName = getLocalizedData_NoSpecialChar();
@@ -354,14 +354,14 @@ public class Tasks extends CommonTest {
 				localize(locator.actionTaskListCheckConfirm),
 				"Toast message to check the checkbox is incorrect");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
 	 * retry handler function
 	 */
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

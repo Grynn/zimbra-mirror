@@ -7,6 +7,8 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 /**
@@ -42,15 +44,15 @@ public class TagAppointmentTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Calendar");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -64,7 +66,7 @@ public class TagAppointmentTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createRenameDeleteTagForApptAndVerify_ListView(String subject)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1, newTag1;
@@ -94,7 +96,7 @@ public class TagAppointmentTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -104,7 +106,7 @@ public class TagAppointmentTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createRenameDeleteTagForApptAndVerifyInAll6View(String subject)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1, newTag1;
@@ -199,7 +201,7 @@ public class TagAppointmentTests extends CommonTest {
 		zDeleteTag(newTag1);
 		Thread.sleep(1000);
 
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"//div[contains(@id,'zli__CLS')]//td[contains(@class,'_name') and contains(text(), '"
 								+ subject + "')]", "");
@@ -251,7 +253,7 @@ public class TagAppointmentTests extends CommonTest {
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.list));
 		Thread.sleep(1000);
-		selenium.clickAt(
+		SelNGBase.selenium.get().clickAt(
 				"//td[contains(@id,'zlif__CLL') and contains(text(), '"
 						+ subject + "')]", "");
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
@@ -259,7 +261,7 @@ public class TagAppointmentTests extends CommonTest {
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 		obj.zListItem.zVerifyIsNotTagged(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -269,7 +271,7 @@ public class TagAppointmentTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyTagFunctionalityFor2ApptAndRemoveTag_ListView(
 			String subject) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject2, tag1, tag2;
@@ -322,7 +324,7 @@ public class TagAppointmentTests extends CommonTest {
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -332,7 +334,7 @@ public class TagAppointmentTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void applyMutlipleTagToApptAndVerify_ListView(String subject)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1, tag2;
@@ -367,7 +369,7 @@ public class TagAppointmentTests extends CommonTest {
 		Thread.sleep(1000);
 		obj.zListItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -378,7 +380,7 @@ public class TagAppointmentTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void applyTagByDnDTagToApptAndViceVersa_ListView(String subject)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject2, tag1, tag2;
@@ -414,7 +416,7 @@ public class TagAppointmentTests extends CommonTest {
 		assertReport("false", obj.zListItem.zExistsDontWait(subject),
 				"Verify appointment1 not exists");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -423,7 +425,7 @@ public class TagAppointmentTests extends CommonTest {
 	@Test(dataProvider = "tagDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tryToCreateDuplicateTagInCalendar(String subject)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String tag1;
@@ -431,12 +433,12 @@ public class TagAppointmentTests extends CommonTest {
 		zCreateTag(tag1);
 		zDuplicateTag(tag1);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	public static void zClickApptInMonthView(String subject) throws Exception {
 		Thread.sleep(1000);
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
 								+ subject + ")]", "");
@@ -446,19 +448,19 @@ public class TagAppointmentTests extends CommonTest {
 			throws Exception {
 		Thread.sleep(1000);
 		if (view.toLowerCase().equals("day")) {
-			selenium
+			SelNGBase.selenium.get()
 					.mouseDownRight("xpath=//div[contains(@id, 'zli__CLD')]//td[contains(@class, '_name') and contains(text(), "
 							+ subject + ")]");
 		} else if (view.toLowerCase().equals("workweek")) {
-			selenium
+			SelNGBase.selenium.get()
 					.mouseDownRight("xpath=//div[contains(@id, 'zli__CLWW')]//td[contains(@class, '_name') and contains(text(), "
 							+ subject + ")]");
 		} else if (view.toLowerCase().equals("week")) {
-			selenium
+			SelNGBase.selenium.get()
 					.mouseDownRight("xpath=//div[contains(@id, 'zli__CLW')]//td[contains(@class, '_name') and contains(text(), "
 							+ subject + ")]");
 		} else if (view.toLowerCase().equals("month")) {
-			selenium
+			SelNGBase.selenium.get()
 					.mouseDownRight("xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
 							+ subject + ")]");
 		}
@@ -471,22 +473,22 @@ public class TagAppointmentTests extends CommonTest {
 			throws Exception {
 		Thread.sleep(1000);
 		if (view.toLowerCase().equals("day")) {
-			selenium
+			SelNGBase.selenium.get()
 					.clickAt(
 							"xpath=//div[contains(@id, 'zli__CLD')]//td[contains(@class, '_name') and contains(text(), "
 									+ subject + ")]", "");
 		} else if (view.toLowerCase().equals("workweek")) {
-			selenium
+			SelNGBase.selenium.get()
 					.clickAt(
 							"xpath=//div[contains(@id, 'zli__CLWW')]//td[contains(@class, '_name') and contains(text(), "
 									+ subject + ")]", "");
 		} else if (view.toLowerCase().equals("week")) {
-			selenium
+			SelNGBase.selenium.get()
 					.clickAt(
 							"xpath=//div[contains(@id, 'zli__CLW')]//td[contains(@class, '_name') and contains(text(), "
 									+ subject + ")]", "");
 		} else if (view.toLowerCase().equals("month")) {
-			selenium
+			SelNGBase.selenium.get()
 					.clickAt(
 							"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
 									+ subject + ")]", "");
@@ -497,7 +499,7 @@ public class TagAppointmentTests extends CommonTest {
 	public static void zDblClickApptInMonthView(String subject)
 			throws Exception {
 		Thread.sleep(1000);
-		selenium
+		SelNGBase.selenium.get()
 				.doubleClickAt(
 						"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
 								+ subject + ")]", "");
@@ -508,7 +510,7 @@ public class TagAppointmentTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

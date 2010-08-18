@@ -50,15 +50,15 @@ public class MiscMailTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -73,7 +73,7 @@ public class MiscMailTests extends CommonTest {
 	public void composeMailWithTopToolbar(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail"); /*
@@ -84,13 +84,13 @@ public class MiscMailTests extends CommonTest {
 		obj.zButton.zExists(page.zComposeView.zSendBtn);
 		obj.zTextAreaField.zExists(page.zComposeView.zToField);
 		obj.zTextAreaField.zExists(page.zComposeView.zCcField);
-		selenium.click("link=" + localize(locator.showBcc));
+		SelNGBase.selenium.get().click("link=" + localize(locator.showBcc));
 		SleepUtil.sleepSmall();
 		obj.zTextAreaField.zExists(page.zComposeView.zBccField);
 		obj.zEditField.zExists(page.zComposeView.zSubjectField);
 		// obj.zEditor.zExists(body);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -100,21 +100,21 @@ public class MiscMailTests extends CommonTest {
 	public void verifyShowHideBccLink(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
 		SleepUtil.sleepLong(); // required because composing takes some time
-		selenium.click("link=" + localize(locator.showBcc));
+		SelNGBase.selenium.get().click("link=" + localize(locator.showBcc));
 		obj.zButton.zExists(page.zComposeView.zBccBtn);
 		obj.zTextAreaField.zExists(page.zComposeView.zBccField);
 
-		selenium.click("link=" + localize(locator.hideBcc));
+		SelNGBase.selenium.get().click("link=" + localize(locator.hideBcc));
 		obj.zButton.zNotExists(page.zComposeView.zBccBtn);
 		obj.zTextAreaField.zNotExists(page.zComposeView.zBccField);
 		obj.zButton.zClick(page.zComposeView.zCancelBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -125,7 +125,7 @@ public class MiscMailTests extends CommonTest {
 	public void verifyMessageHighPriority(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -140,7 +140,7 @@ public class MiscMailTests extends CommonTest {
 		SleepUtil.sleepSmall();
 		obj.zMessageItem.zVerifyHasHighPriority(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -151,7 +151,7 @@ public class MiscMailTests extends CommonTest {
 	public void verifyMessageLowPriority(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -167,7 +167,7 @@ public class MiscMailTests extends CommonTest {
 		SleepUtil.sleepSmall();
 		obj.zMessageItem.zVerifyHasLowPriority(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -177,7 +177,7 @@ public class MiscMailTests extends CommonTest {
 	public void addRecepientsWithTopToolbar(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -194,7 +194,7 @@ public class MiscMailTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
 		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zMailApp.zDraftFldr);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -204,7 +204,7 @@ public class MiscMailTests extends CommonTest {
 	public void verifyShowOriginal(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -219,9 +219,9 @@ public class MiscMailTests extends CommonTest {
 		SleepUtil.sleepSmall();
 		obj.zButton.zClick(page.zMailApp.zShowOrigIconBtn);
 		SleepUtil.sleepVeryLong();
-		selenium.selectWindow("_blank");
+		SelNGBase.selenium.get().selectWindow("_blank");
 		SleepUtil.sleepMedium();
-		String bodyValue = selenium.getBodyText();
+		String bodyValue = SelNGBase.selenium.get().getBodyText();
 		String[] columnToVerify = { "Return-Path:", "Received:", "Date:",
 				"From:", "To:", "Cc:", "Message-ID:", "Subject:",
 				"MIME-Version:", "Content-Type:", "Content-Transfer-Encoding:",
@@ -242,9 +242,9 @@ public class MiscMailTests extends CommonTest {
 						+ localizedToVerify[i] + " in show original body");
 			}
 		}
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -254,7 +254,7 @@ public class MiscMailTests extends CommonTest {
 	public void verifyOpenMailInNewWindow(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -262,8 +262,8 @@ public class MiscMailTests extends CommonTest {
 				attachments);
 		obj.zButton.zClick(page.zMailApp.zOpenInNewWindowIconBtn);
 		SleepUtil.sleepLong(); // test fails here
-		selenium.selectWindow("_blank");
-		String bodyValue = selenium.getBodyText();
+		SelNGBase.selenium.get().selectWindow("_blank");
+		String bodyValue = SelNGBase.selenium.get().getBodyText();
 		String[] columnToVerify = { localize(locator.from),
 				localize(locator.to), localize(locator.cc),
 				localize(locator.subject) };
@@ -276,9 +276,9 @@ public class MiscMailTests extends CommonTest {
 			assertReport(bodyValue, dataToVerify[i], "Verifying - "
 					+ dataToVerify[i] + " in show original body");
 		}
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -289,19 +289,19 @@ public class MiscMailTests extends CommonTest {
 	public void nextPrevPageTestFor12Mail(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// set mail items per page to 10
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName,
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefMailItemsPerPage", "10");
 		resetSession();
-		page.zLoginpage.zLoginToZimbraHTML(SelNGBase.selfAccountName);
+		page.zLoginpage.zLoginToZimbraHTML(SelNGBase.selfAccountName.get());
 		String[] subjectArray = { "subject1", "subject2", "subject3",
 				"subject4", "subject5", "subject6", "subject7", "subject8",
 				"subject9", "subject10", "subject11", "subject12" };
 		for (int i = 0; i <= subjectArray.length - 1; i++) {
-			page.zMailApp.zInjectMessage(from, SelNGBase.selfAccountName, cc,
+			page.zMailApp.zInjectMessage(from, SelNGBase.selfAccountName.get(), cc,
 					bcc, subjectArray[i], subjectArray[i] + "body", "");
 		}
 		for (int i = 2; i <= 11; i++) {
@@ -325,7 +325,7 @@ public class MiscMailTests extends CommonTest {
 			obj.zMessageItem.zNotExists(subjectArray[i]);
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -335,13 +335,13 @@ public class MiscMailTests extends CommonTest {
 	public void verifyNextPrevPageConversionFor3Mail(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String[] subjectArray = { "verifyNextPrevPage1", "verifyNextPrevPage2",
 				"verifyNextPrevPage3" };
 		for (int i = 0; i <= subjectArray.length - 1; i++) {
-			page.zMailApp.zInjectMessage(from, SelNGBase.selfAccountName, cc,
+			page.zMailApp.zInjectMessage(from, SelNGBase.selfAccountName.get(), cc,
 					bcc, subjectArray[i], subjectArray[i] + "body", "");
 		}
 		obj.zMessageItem.zClick(subjectArray[2]);
@@ -378,7 +378,7 @@ public class MiscMailTests extends CommonTest {
 		obj.zMessageItem.zVerifyIsRead(subjectArray[1]);
 		obj.zMessageItem.zVerifyIsRead(subjectArray[2]);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -388,17 +388,17 @@ public class MiscMailTests extends CommonTest {
 	public void rplyMail2TimeApplyFlagToAllAndVerify(String from, String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		page.zMailApp.zInjectMessage(from, SelNGBase.selfAccountName, cc, bcc,
+		page.zMailApp.zInjectMessage(from, SelNGBase.selfAccountName.get(), cc, bcc,
 				subject, subject + "body", "");
 		SleepUtil.sleepSmall();
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zComposeView.zReplyBtn);
 		SleepUtil.sleepSmall();
 		obj.zTextAreaField.zType(page.zComposeView.zToField,
-				SelNGBase.selfAccountName);
+				SelNGBase.selfAccountName.get());
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
 		page.zMailApp.zClickCheckMailUntilMailShowsUp("Re: " + subject);
 		obj.zMessageItem.zClick("Re: " + subject);
@@ -415,7 +415,7 @@ public class MiscMailTests extends CommonTest {
 		obj.zCheckbox.zClick(page.zMailApp.zSelectAllMailChkBox);
 		page.zMailApp.zMoreActions(localize(locator.actionAddFlag));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -423,7 +423,7 @@ public class MiscMailTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

@@ -12,6 +12,7 @@ import projects.zcs.ui.ActionMethod;
 
 import com.zimbra.common.service.ServiceException;
 
+import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
 
@@ -41,15 +42,15 @@ public class AddressBookSavedSearchTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		zGoToApplication("Address Book");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -57,7 +58,7 @@ public class AddressBookSavedSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	@Test(dataProvider = "dataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void contactSavedSearchTest(String lastName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem contact = new ContactItem();
@@ -65,7 +66,7 @@ public class AddressBookSavedSearchTests extends CommonTest {
 
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
-		selenium.type("xpath=//input[@class='search_input']", lastName);
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", lastName);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zContactListItem.zExists(lastName);
 		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");
@@ -78,7 +79,7 @@ public class AddressBookSavedSearchTests extends CommonTest {
 		obj.zFolder.zClick("Srch" + lastName);
 		obj.zContactListItem.zExists(lastName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -86,7 +87,7 @@ public class AddressBookSavedSearchTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

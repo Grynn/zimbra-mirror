@@ -8,6 +8,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
+
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import projects.zcs.tests.CommonTest;
 
@@ -44,16 +46,16 @@ public class BasicSignatureTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	// Tests
@@ -64,7 +66,7 @@ public class BasicSignatureTests extends CommonTest {
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createTextSignature(String signatureName, String signatureBody)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -76,7 +78,7 @@ public class BasicSignatureTests extends CommonTest {
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -85,7 +87,7 @@ public class BasicSignatureTests extends CommonTest {
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void editTextSignature(String signatureName, String signatureBody)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -103,7 +105,7 @@ public class BasicSignatureTests extends CommonTest {
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Edited Signature should be saved");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -115,7 +117,7 @@ public class BasicSignatureTests extends CommonTest {
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void clearTextSignatureWoSave(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -126,7 +128,7 @@ public class BasicSignatureTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.clear));
 		obj.zEditor.zExists(signatureBody);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -138,7 +140,7 @@ public class BasicSignatureTests extends CommonTest {
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void clearHtmlSignatureWoSave(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -149,7 +151,7 @@ public class BasicSignatureTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.clear));
 		obj.zEditor.zExists(signatureBody);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -158,7 +160,7 @@ public class BasicSignatureTests extends CommonTest {
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void clearTextSignatureWithSave(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -171,13 +173,13 @@ public class BasicSignatureTests extends CommonTest {
 				"Signature should be saved");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		// obj.zMenuItem.zClick(signatureName);
-		selenium.clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
+		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
 		obj.zButton.zClick(localize(locator.clear));
 		obj.zEditor.zExists(signatureBody);
 		obj.zEditField.zExists(signatureName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -186,7 +188,7 @@ public class BasicSignatureTests extends CommonTest {
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void clearHtmlSignatureWithSave(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -198,13 +200,13 @@ public class BasicSignatureTests extends CommonTest {
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
-		selenium.clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
+		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
 		obj.zButton.zClick(localize(locator.clear));
 		obj.zEditor.zExists(signatureBody);
 		obj.zEditField.zExists(signatureName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -218,7 +220,7 @@ public class BasicSignatureTests extends CommonTest {
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteTextSignatureWoSave(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String signatureName1 = getLocalizedData_NoSpecialChar();
 		String signatureBody1 = getLocalizedData_NoSpecialChar();
@@ -232,15 +234,15 @@ public class BasicSignatureTests extends CommonTest {
 				"TEXT");
 		Thread.sleep(1000);
 		obj.zButton.zClick(localize(locator.addSignature));
-		selenium.clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
+		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
 								+ localize(locator.del) + "')]", "");
 		obj.zEditField.zNotExists(signatureName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -254,7 +256,7 @@ public class BasicSignatureTests extends CommonTest {
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteHtmlSignatureWoSave(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String signatureName1 = getLocalizedData_NoSpecialChar();
 		String signatureBody1 = getLocalizedData_NoSpecialChar();
@@ -268,16 +270,16 @@ public class BasicSignatureTests extends CommonTest {
 				"HTML");
 		Thread.sleep(1000);
 		obj.zButton.zClick(localize(locator.addSignature));
-		selenium.clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
+		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
 								+ localize(locator.del) + "')]", "");
 		obj.zEditor.zExists(signatureBody);
 		obj.zEditField.zNotExists(signatureName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -291,7 +293,7 @@ public class BasicSignatureTests extends CommonTest {
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteTextSignatureWithSave(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String signatureName1 = getLocalizedData_NoSpecialChar();
@@ -311,16 +313,16 @@ public class BasicSignatureTests extends CommonTest {
 				"Signature should be saved");
 		Thread.sleep(500);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
-		selenium.clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
+		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
 								+ localize(locator.del) + "')]", "");
 		obj.zEditor.zExists(signatureBody);
 		obj.zEditField.zNotExists(signatureName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -334,7 +336,7 @@ public class BasicSignatureTests extends CommonTest {
 	@Test(dataProvider = "SigPrefDataProvider", groups = { "smoke", "f" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteHtmlSignatureWithSave(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String signatureName1 = getLocalizedData_NoSpecialChar();
@@ -354,23 +356,23 @@ public class BasicSignatureTests extends CommonTest {
 				"Signature should be saved");
 		Thread.sleep(500);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
-		selenium.clickAt("css=tr[id^=DWT]>td:contains("+ signatureName +")", "");
-		selenium.clickAt("xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
+		SelNGBase.selenium.get().clickAt("css=tr[id^=DWT]>td:contains("+ signatureName +")", "");
+		SelNGBase.selenium.get().clickAt("xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
 								+ localize(locator.del) + "')]", "");
 
 		for (int second = 0;; second++) {
 			if (second >= 60) fail("timeout");
-			try { if (!selenium.isTextPresent(signatureName)) break; } catch (Exception e) {}
+			try { if (!SelNGBase.selenium.get().isTextPresent(signatureName)) break; } catch (Exception e) {}
 			Thread.sleep(1000);
 		}
-		Assert.assertFalse(selenium.isTextPresent(signatureBody));
+		Assert.assertFalse(SelNGBase.selenium.get().isTextPresent(signatureBody));
 		
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void handleRetry() throws Exception {
 		// TODO Auto-generated method stub
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 }

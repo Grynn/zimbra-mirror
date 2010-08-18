@@ -73,17 +73,17 @@ public class AccountImportExportTest extends CommonTest {
 	private void zLogin() throws Exception {
 		resetSession();
 		String acc1 = ProvZCS.getRandomAccount();
-		SelNGBase.selfAccountName = acc1;
+		SelNGBase.selfAccountName.set(acc1);
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -91,7 +91,7 @@ public class AccountImportExportTest extends CommonTest {
 	//--------------------------------------------------------------------------
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void exportImportEntireMailboxAndVerify() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		if (ZimbraSeleniumProperties.getStringProperty("browser").substring(0, 2).equals("FF")) {
@@ -101,12 +101,12 @@ public class AccountImportExportTest extends CommonTest {
 
 			resetSession();
 			String acc2 = ProvZCS.getRandomAccount();
-			SelNGBase.selfAccountName = acc2;
+			SelNGBase.selfAccountName.set(acc2);
 			page.zLoginpage.zLoginToZimbraAjax(acc2);
 			importAccount();
 			verifyTestData();
 		}
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	public static void clearDirectory() throws Exception {
@@ -130,14 +130,14 @@ public class AccountImportExportTest extends CommonTest {
 		page.zMailApp.zCreateTag(newTag);
 
 		// ------------------------- Mail -------------------------
-		String[] recipients = { SelNGBase.selfAccountName };
-		ProvZCS.injectMessage(SelNGBase.selfAccountName, recipients,
+		String[] recipients = { SelNGBase.selfAccountName.get() };
+		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 				"ccuser@testdomain.com", inboxMsg, inboxMsg);
 		MailApp.ClickCheckMailUntilMailShowsUp(inboxMsg);
 
 		// create folder and keep one mail
 		page.zMailApp.zCreateFolder(newMailFolder);
-		ProvZCS.injectMessage(SelNGBase.selfAccountName, recipients,
+		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 				"ccuser@testdomain.com", newFolderMsg, newFolderMsg);
 		MailApp.ClickCheckMailUntilMailShowsUp(newFolderMsg);
 		obj.zMessageItem.zClick(newFolderMsg);
@@ -150,7 +150,7 @@ public class AccountImportExportTest extends CommonTest {
 		Thread.sleep(1000);
 
 		// apply tag to mail
-		ProvZCS.injectMessage(SelNGBase.selfAccountName, recipients,
+		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 				"ccuser@testdomain.com", taggedMsg, taggedMsg);
 		MailApp.ClickCheckMailUntilMailShowsUp(taggedMsg);
 		obj.zMessageItem.zClick(taggedMsg);
@@ -158,7 +158,7 @@ public class AccountImportExportTest extends CommonTest {
 		obj.zMenuItem.zClick(newTag);
 
 		// create search folder
-		selenium.type("xpath=//input[@class='search_input']", newFolderMsg);
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", newFolderMsg);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");
 		obj.zEditField.zTypeInDlgByName("id=*nameField", newSearchFolder,
@@ -405,7 +405,7 @@ public class AccountImportExportTest extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs re login..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 }

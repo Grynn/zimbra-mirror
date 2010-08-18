@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
+import framework.core.SelNGBase;
 import framework.items.ContactGroupItem;
 import framework.util.RetryFailedTests;
 
@@ -31,15 +32,15 @@ public class ContactGroupTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -51,7 +52,7 @@ public class ContactGroupTests extends CommonTest {
 			retryAnalyzer = RetryFailedTests.class)
 	public void createContactGroupAndVerify() throws Exception {
 		
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactGroupItem group = new ContactGroupItem();
@@ -66,7 +67,7 @@ public class ContactGroupTests extends CommonTest {
 		page.zABCompose.createContactGroupItem(ActionMethod.DEFAULT, group);
 		obj.zContactListItem.zExists(group.nickname);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -79,7 +80,7 @@ public class ContactGroupTests extends CommonTest {
 			retryAnalyzer = RetryFailedTests.class)
 	public void updateContactGroupPaneWhenNoResult_Bug44331() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactGroupItem group = new ContactGroupItem();
@@ -95,15 +96,15 @@ public class ContactGroupTests extends CommonTest {
 		obj.zContactListItem.zExists(group.nickname);
 		
 
-		selenium.type("xpath=//input[@class='search_input']", "abc");
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", "abc");
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zContactListItem.zNotExists(group.nickname);
 		
 		Assert.assertFalse(
-				selenium.isElementPresent("xpath=//div[contains(@class,'contactHeader') and contains(text(),'" + group.nickname + "')]"),
+				SelNGBase.selenium.get().isElementPresent("xpath=//div[contains(@class,'contactHeader') and contains(text(),'" + group.nickname + "')]"),
 				"Verify that the group does not display if no search results are found");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -111,7 +112,7 @@ public class ContactGroupTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 }

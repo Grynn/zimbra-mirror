@@ -7,6 +7,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentApp;
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 /**
@@ -39,15 +40,15 @@ public class DocumentFolderTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zDocumentCompose.zNavigateToDocument();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -56,19 +57,19 @@ public class DocumentFolderTests extends CommonTest {
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createDeleteNotebookFolder(String notebookName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zDocumentCompose.zCreateNewNotebook(notebookName, "", "");
 		page.zDocumentApp.zDeleteNotebookFolder(notebookName);
 		obj.zFolder.zNotExists(notebookName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void renameNotebookFolder(String notebookName) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String newNotebookName = getLocalizedData_NoSpecialChar();
@@ -82,13 +83,13 @@ public class DocumentFolderTests extends CommonTest {
 		obj.zFolder.zExists(newNotebookName);
 		obj.zFolder.zNotExists(notebookName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "DocumentDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tryToCreateDuplicateNotebookFolder(String notebookName)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zDocumentCompose.zCreateNewNotebook(notebookName, "", "");
@@ -106,14 +107,14 @@ public class DocumentFolderTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewNotebook));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

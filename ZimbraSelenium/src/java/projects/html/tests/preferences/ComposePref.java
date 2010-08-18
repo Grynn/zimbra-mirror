@@ -41,16 +41,16 @@ public class ComposePref extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -61,13 +61,13 @@ public class ComposePref extends CommonTest {
 	@Test(dataProvider = "ComposePrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void composeAsHTMLAndAsText() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposePrefUI.zNavigateToPrefCompose();
 		page.zComposePrefUI.zSetComposeAsAndVerifyInMailCompose("AsHTML");
 		page.zComposePrefUI.zNavigateToPrefCompose();
 		page.zComposePrefUI.zSetComposeAsAndVerifyInMailCompose("AsText");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -77,10 +77,10 @@ public class ComposePref extends CommonTest {
 	 */
 	@Test(dataProvider = "ComposePrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyReplyFwdUsingOrignalMailFormat() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentUser = SelNGBase.selfAccountName;
+		String currentUser = SelNGBase.selfAccountName.get();
 		String randomAcc = ProvZCS.getRandomAccount();
 		String textSubject = getLocalizedData_NoSpecialChar();
 		String htmlSubject = getLocalizedData_NoSpecialChar();
@@ -116,7 +116,7 @@ public class ComposePref extends CommonTest {
 		// obj.zButton.zExists(page.zComposePrefUI.zHtmlComposeBoldBtn);//have
 		// to ask to raja about verification
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -129,11 +129,11 @@ public class ComposePref extends CommonTest {
 	@Test(dataProvider = "ComposePrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void replyReplyAllIncludeOriginalMsgAs() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData_NoSpecialChar();
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName, "", "", subject,
+		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "", subject,
 				body, "");
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(page.zMailApp.zInboxFldr,
 				subject);
@@ -168,7 +168,7 @@ public class ComposePref extends CommonTest {
 		page.zComposePrefUI.zVerifyReplyReplyAllIncludeMsgAs("DoNotInclude",
 				"", subject, body);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -181,11 +181,11 @@ public class ComposePref extends CommonTest {
 	@Test(dataProvider = "ComposePrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void fwdIncludeOriginalMsgAs() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData_NoSpecialChar();
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName, "", "", subject,
+		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "", subject,
 				body, "");
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
 
@@ -209,7 +209,7 @@ public class ComposePref extends CommonTest {
 		page.zComposePrefUI.zVerifyFwdIncludeMsgAs("AnAttachment", "", subject,
 				body);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -220,7 +220,7 @@ public class ComposePref extends CommonTest {
 	@Test(dataProvider = "ComposePrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void sentMsgCopyInSentFolder() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String subject1 = getLocalizedData_NoSpecialChar();
 		String subject2 = getLocalizedData_NoSpecialChar();
@@ -230,7 +230,7 @@ public class ComposePref extends CommonTest {
 		page.zComposePrefUI
 				.zNavigateToPrefComposeAndSelectSentMsgOption("SaveInSent");
 
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName, "", "",
+		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "",
 				subject1, body, "");
 
 		zWaitTillObjectExist("folder", page.zMailApp.zSentFldr);
@@ -243,19 +243,19 @@ public class ComposePref extends CommonTest {
 		.zNavigateToPrefComposeAndSelectSentMsgOption("DoNotSaveInSent");
 
 		
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName, "", "",
+		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "",
 				subject2, body, "");
 
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 
 		obj.zMessageItem.zNotExists(subject2);
 		
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

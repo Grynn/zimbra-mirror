@@ -52,7 +52,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName,
 				"zimbraPrefCalendarAlwaysShowMiniCal", "TRUE");
@@ -74,26 +74,26 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		zReloginToAjax();
 
 		Thread.sleep(5000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	// Before method
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarPrefDefaultViewUITest() throws Exception {
 		
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 
@@ -101,7 +101,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		 * Added following check for bug 36480 : Support calenar invite forwarding address preference
 		 *
 		 */
-		selenium.isElementPresent("DWT43_CAL_INV_FORWARDING_ADDRESS");
+		SelNGBase.selenium.get().isElementPresent("DWT43_CAL_INV_FORWARDING_ADDRESS");
 		
 		obj.zFeatureMenu.zClick(localize(locator.defaultViewLabel));
 		obj.zMenuItem.zClick(localize(locator.calViewMonth));
@@ -138,17 +138,17 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(500);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarPrefStartWeekOnUITest() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String actualVal;
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 
@@ -167,7 +167,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 				"Start week on is not set to 4 in db for Thursday. Actual value is "
 						+ actualVal);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -175,10 +175,10 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		String actualVal;
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 
@@ -221,7 +221,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 				"Always show minical is not set to TRUE in db when checked. Actual value is "
 						+ actualVal);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -230,10 +230,10 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		String actualVal;
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 		
@@ -276,7 +276,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 						"Delete invite on reply is not set to TRUE in db when checked. Actual value is "
 								+ actualVal);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -285,13 +285,13 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		String actualVal;
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
-		selenium.uncheck("//input[contains(@id,'_CAL_USE_QUICK_ADD')]");
+		SelNGBase.selenium.get().uncheck("//input[contains(@id,'_CAL_USE_QUICK_ADD')]");
 
 	//	obj.zCheckbox.zClick(localize(locator.useQuickAdd));
 
@@ -311,7 +311,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		page.zCalApp.zNavigateToCalendarPreferences();
 
 		//obj.zCheckbox.zClick(localize(locator.useQuickAdd));
-		selenium.check("//input[contains(@id,'_CAL_USE_QUICK_ADD')]");
+		SelNGBase.selenium.get().check("//input[contains(@id,'_CAL_USE_QUICK_ADD')]");
 		
 		waitForIE();
 		
@@ -326,7 +326,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 				"Use quick add dialog is not set to TRUE in db when checked. Actual value is "
 						+ actualVal);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -335,10 +335,10 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		String actualVal;
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 
@@ -380,7 +380,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 						"Show timezone list in appointment compose is not set to TRUE in db when checked. Actual value is "
 								+ actualVal);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -389,10 +389,10 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		String actualVal;
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = selfAccountName;
+		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 
@@ -460,7 +460,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 						"Flash the browser title is not set to TRUE in db when checked. Actual value is "
 								+ actualVal);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -469,7 +469,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 	public void zCalendarPrefDeleteInvite(String subject, String location,
 			String body, String deleteInvite) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String accountName = ProvZCS.getRandomAccount();
@@ -488,7 +488,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		Thread.sleep(1000);
 
-		SelNGBase.selfAccountName = accountName;
+		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 
 		MailApp
@@ -504,7 +504,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		else
 			obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void waitForIE() throws Exception {
@@ -526,7 +526,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 	
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

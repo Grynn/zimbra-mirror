@@ -11,6 +11,7 @@ import org.testng.annotations.DataProvider;
 //import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
 import projects.zcs.clients.ProvZCS;
@@ -36,15 +37,15 @@ public class CalendarFolderTests extends CommonTest {
 		zLoginIfRequired();
 		Thread.sleep(2000);
 		page.zCalApp.zNavigateToCalendar();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -52,7 +53,7 @@ public class CalendarFolderTests extends CommonTest {
 	 */
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createCalendarFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String calendarNameBtn = getLocalizedData_NoSpecialChar();
@@ -62,7 +63,7 @@ public class CalendarFolderTests extends CommonTest {
 		obj.zCalendarFolder.zExists(calendarNameBtn);
 		obj.zCalendarFolder.zExists(calendarNameRtClick);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -70,7 +71,7 @@ public class CalendarFolderTests extends CommonTest {
 	 */
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteCalendarFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String deleteCalendarName = getLocalizedData_NoSpecialChar();
@@ -79,7 +80,7 @@ public class CalendarFolderTests extends CommonTest {
 		page.zCalApp.zDeleteCalendarFolder(deleteCalendarName);
 		obj.zCalendarFolder.zNotExists(deleteCalendarName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -87,7 +88,7 @@ public class CalendarFolderTests extends CommonTest {
 	 */
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void renameCalendarFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String calendarName = getLocalizedData_NoSpecialChar();
@@ -98,12 +99,12 @@ public class CalendarFolderTests extends CommonTest {
 		obj.zCalendarFolder.zNotExists(calendarName);
 		obj.zCalendarFolder.zExists(newCalendarName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tryToCreateDuplicateCalendarFolder() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String calendarName = getLocalizedData_NoSpecialChar();
@@ -125,12 +126,12 @@ public class CalendarFolderTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewCalendar));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		page.zComposeView.zGoToMailAppFromCompose();
 		zLogin();
 	}

@@ -48,31 +48,31 @@ public class CalendarBugTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		Thread.sleep(2000);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void subCalendarBreaks_Bug28846(String subject, String location,
 			String attendees, String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentLoggedInUser = SelNGBase.selfAccountName;
+		String currentLoggedInUser = SelNGBase.selfAccountName.get();
 		String user1 = ProvZCS.getRandomAccount();
 		String user2 = ProvZCS.getRandomAccount();
 
 		resetSession();
 		String subject2 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user1);
-		SelNGBase.selfAccountName = user1;
+		SelNGBase.selfAccountName.set(user1);
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject2, location,
@@ -82,17 +82,17 @@ public class CalendarBugTests extends CommonTest {
 		Thread.sleep(2000);
 		obj.zDialog.zNotExists(localize(locator.infoMsg));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void setPermissionToReceiveAppt_Bug43046(String subject,
 			String location, String attendees, String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String currentLoggedInUser;
-		currentLoggedInUser = SelNGBase.selfAccountName;
+		currentLoggedInUser = SelNGBase.selfAccountName.get();
 
 		String user1_allowed = ProvZCS.getRandomAccount();
 		String user2_allowed = ProvZCS.getRandomAccount();
@@ -109,7 +109,7 @@ public class CalendarBugTests extends CommonTest {
 		resetSession();
 		String subject1 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user3_Notallowed);
-		SelNGBase.selfAccountName = user3_Notallowed;
+		SelNGBase.selfAccountName.set(user3_Notallowed);
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject1, location,
@@ -138,7 +138,7 @@ public class CalendarBugTests extends CommonTest {
 		resetSession();
 		String subject2 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user1_allowed);
-		SelNGBase.selfAccountName = user1_allowed;
+		SelNGBase.selfAccountName.set(user1_allowed);
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject2, location,
@@ -152,7 +152,7 @@ public class CalendarBugTests extends CommonTest {
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 		Thread.sleep(2000);
-		SelNGBase.selfAccountName = currentLoggedInUser;
+		SelNGBase.selfAccountName.set(currentLoggedInUser);
 		String msgExists = obj.zMessageItem.zExistsDontWait(subject1);
 		// already enhancement 43340 for this bug otherwise it would be false
 		assertReport(
@@ -168,17 +168,17 @@ public class CalendarBugTests extends CommonTest {
 		obj.zAppointment.zNotExists(subject1);
 		obj.zAppointment.zExists(subject2);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void dontReceiveAnyInvitePermission_Bug43046(String subject,
 			String location, String attendees, String body) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String currentLoggedInUser;
-		currentLoggedInUser = SelNGBase.selfAccountName;
+		currentLoggedInUser = SelNGBase.selfAccountName.get();
 
 		String user1 = ProvZCS.getRandomAccount();
 		zGoToApplication("Preferences");
@@ -189,7 +189,7 @@ public class CalendarBugTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(user1);
-		SelNGBase.selfAccountName = user1;
+		SelNGBase.selfAccountName.set(user1);
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject, location,
@@ -217,7 +217,7 @@ public class CalendarBugTests extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
-		SelNGBase.selfAccountName = currentLoggedInUser;
+		SelNGBase.selfAccountName.set(currentLoggedInUser);
 		Thread.sleep(2000);
 		String msgExists = obj.zMessageItem.zExistsDontWait(subject);
 		// already enhancement 43340 for this bug otherwise it would be false
@@ -228,11 +228,11 @@ public class CalendarBugTests extends CommonTest {
 		zGoToApplication("Calendar");
 		obj.zAppointment.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

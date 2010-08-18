@@ -68,16 +68,16 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@SuppressWarnings("unused")
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	// Tests
@@ -91,13 +91,13 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments,
 			String signatureType) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// format as text
-		ProvZCS.modifyAccount(selfAccountName, "zimbraPrefComposeFormat",
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"text");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -122,9 +122,9 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		cancelMailCompose();
 
 		// change compose format as html
-		ProvZCS.modifyAccount(selfAccountName, "zimbraPrefComposeFormat",
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"html");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		// keeping mail format as html and verifying signature
@@ -141,7 +141,7 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 				signatureBody, "true", "true", "", "");
 		cancelMailCompose();
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -154,13 +154,13 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments,
 			String signatureType) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// format as text
-		ProvZCS.modifyAccount(selfAccountName, "zimbraPrefComposeFormat",
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"text");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -187,9 +187,9 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
 		// change compose format as html
-		ProvZCS.modifyAccount(selfAccountName, "zimbraPrefComposeFormat",
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"html");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		// keeping mail format as html and verifying signature
@@ -208,7 +208,7 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -220,13 +220,13 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments,
 			String signatureType) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// format as text
-		ProvZCS.modifyAccount(selfAccountName, "zimbraPrefComposeFormat",
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"text");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -252,7 +252,7 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -264,13 +264,13 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 			String signatureName, String signatureBody, String to, String cc,
 			String bcc, String subject, String body, String attachments,
 			String signatureType) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// change compose format as html
-		ProvZCS.modifyAccount(selfAccountName, "zimbraPrefComposeFormat",
+		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"html");
-		selenium.refresh();
+		SelNGBase.selenium.get().refresh();
 		Thread.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -296,7 +296,7 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private static void setDefaultSignature(String signatureName)
@@ -324,7 +324,7 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 			Thread.sleep(1000);
 		} else if (isRplyFwd.equals("true")) {
 			String to;
-			to = SelNGBase.selfAccountName;
+			to = SelNGBase.selfAccountName.get();
 			String[] recipients = { to };
 			ProvZCS.injectMessage(to, recipients, "ccuser@testdomain.com",
 					rplyFwdSubject, "");
@@ -444,7 +444,7 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 
 	private void handleRetry() throws Exception {
 		// TODO Auto-generated method stub
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 

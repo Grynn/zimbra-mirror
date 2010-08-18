@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -71,15 +72,15 @@ public class DraftTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zMailApp.zNavigateToMailApp();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 
 	}
 
@@ -94,7 +95,7 @@ public class DraftTests extends CommonTest {
 	public void cancelComposeAsksForSavingDraft(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
@@ -103,7 +104,7 @@ public class DraftTests extends CommonTest {
 		obj.zDialog.zVerifyAlertMessage(localize(locator.warningMsg),
 				localize(locator.askSaveDraft));
 		obj.zButton.zClickInDlg(localize(locator.no));
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// =================================================
@@ -116,7 +117,7 @@ public class DraftTests extends CommonTest {
 	@Test(dataProvider = "draftsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void saveDraftSaysDraftSaved(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
@@ -124,7 +125,7 @@ public class DraftTests extends CommonTest {
 		obj.zButton.zClick(ComposeView.zSaveDraftsIconBtn);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.draftSaved),
 				"Draft Saved -msg should be shown");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -135,11 +136,11 @@ public class DraftTests extends CommonTest {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void saveDraftNoAlertOnCancel(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			saveDraftNoAlertOnCancel_retry();
 		obj.zButton.zClick(ComposeView.zCancelIconBtn);
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -151,7 +152,7 @@ public class DraftTests extends CommonTest {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void goToDraftAndEdit(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			goToDraftAndEdit_retry();
 		obj.zFolder.zClick(localize(locator.drafts));
 		obj.zMessageItem.zClick(subject);
@@ -160,7 +161,7 @@ public class DraftTests extends CommonTest {
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		page.zComposeView.zVerifyComposeFilledValues("Edit draft", to, cc, bcc,
 				subject, body, attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -172,14 +173,14 @@ public class DraftTests extends CommonTest {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void modifyDraftAndVerify(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			modifyDraftAndVerify_retry();
 		Thread.sleep(500);
 		obj.zButton.zClick(MailApp.zEditDraftIconBtn);
 		obj.zButton.zWait(ComposeView.zSendIconBtn);
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc,
 				modifiedSubject, modifiedBody, attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// =============================
@@ -192,7 +193,7 @@ public class DraftTests extends CommonTest {
 	@Test(dataProvider = "draftsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void autoSaveDraftAfter30Sec(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
@@ -208,7 +209,7 @@ public class DraftTests extends CommonTest {
 		obj.zToastAlertMessage
 				.zAlertMsgExists(tmp[1],
 						"2nd part of the auto-draft msg(after timestamp) not isnt proper");
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -219,11 +220,11 @@ public class DraftTests extends CommonTest {
 	@Test(dependsOnMethods = "autoSaveDraftAfter30Sec", groups = { "smoke",
 			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void askSaveAutosavedDraftWhenInboxIsClicked() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			askSaveAutosavedDraftWhenInboxIsClicked_retry();
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -235,7 +236,7 @@ public class DraftTests extends CommonTest {
 	public void goToDraftAndVerifyAutodraftMsg(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			goToDraftAndVerifyAutodraftMsg_retry();
 
 		obj.zFolder.zClick(localize(locator.drafts));
@@ -245,7 +246,7 @@ public class DraftTests extends CommonTest {
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		page.zComposeView.zVerifyComposeFilledValues("Edit Auto-draft", to, cc,
 				bcc, subject, body, attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// =============================
@@ -260,7 +261,7 @@ public class DraftTests extends CommonTest {
 	public void autoDraftAndSendMailToSelfInNewWindow(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		page.zComposeView.zEnterComposeValues("", "", "",
@@ -272,14 +273,14 @@ public class DraftTests extends CommonTest {
 				"Draft saved- message not shown");
 		page.zComposeView.zSendMailToSelfAndSelectIt(to, cc, bcc, subject,
 				body, attachments);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "draftsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void htmlDraftOpenAsPlainText_Bug24431(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Preferences");
@@ -302,13 +303,13 @@ public class DraftTests extends CommonTest {
 		obj.zMessageItem.zRtClick("Bug24431 save draft(html format) subject");
 		obj.zMenuItem.zClick(localize(locator.showOrig));
 		Thread.sleep(3000);
-		selenium.selectWindow("_blank");
-		String messageBody = selenium.getBodyText();
+		SelNGBase.selenium.get().selectWindow("_blank");
+		String messageBody = SelNGBase.selenium.get().getBodyText();
 		Boolean htmlBodyExists = messageBody
 				.contains("<html><head><style type='text/css'>");
 		assertReport("true", htmlBodyExists.toString(),
 				"Verifying html formatting in show original");
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			// IE 8 requires this click event that is why we again wrote same
@@ -325,13 +326,13 @@ public class DraftTests extends CommonTest {
 		obj.zMessageItem.zRtClick("Bug24431 save draft(html format) subject");
 		obj.zMenuItem.zClick(localize(locator.showOrig));
 		Thread.sleep(3000);
-		selenium.selectWindow("_blank");
-		messageBody = selenium.getBodyText();
+		SelNGBase.selenium.get().selectWindow("_blank");
+		messageBody = SelNGBase.selenium.get().getBodyText();
 		htmlBodyExists = messageBody
 				.contains("<html><head><style type='text/css'>");
 		assertReport("true", htmlBodyExists.toString(),
 				"Verifying html formatting in show original");
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			// IE 8 requires this click event that is why we again wrote same
@@ -349,14 +350,14 @@ public class DraftTests extends CommonTest {
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneAtBottom));
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "draftsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void draftLoosesHtmlFormatting_Bug34870(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Preferences");
@@ -379,32 +380,32 @@ public class DraftTests extends CommonTest {
 		obj.zMessageItem.zRtClick("Bug34870 save draft(html format) subject");
 		obj.zMenuItem.zClick(localize(locator.showOrig));
 		Thread.sleep(3000);
-		selenium.selectWindow("_blank");
-		String messageBody = selenium.getBodyText();
+		SelNGBase.selenium.get().selectWindow("_blank");
+		String messageBody = SelNGBase.selenium.get().getBodyText();
 		Boolean htmlBodyExists = messageBody
 				.contains("<html><head><style type='text/css'>");
 		assertReport("true", htmlBodyExists.toString(),
 				"Verifying html formatting in show original");
-		selenium.selectWindow(null);
+		SelNGBase.selenium.get().selectWindow(null);
 		obj.zMessageItem.zClick("Bug34870 save draft(html format) subject");
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			// IE 8 requires this is click event that is why we again wrote same
 			// line here
 			obj.zMessageItem.zClick("Bug34870 save draft(html format) subject");
 		}
-		selenium.selectFrame("css=iframe[id*='zv__CLV__MSG_body__iframe']");
+		SelNGBase.selenium.get().selectFrame("css=iframe[id*='zv__CLV__MSG_body__iframe']");
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=/html/body[contains(@class,'MsgBody MsgBody-text')]"),
 						"Reading pane still shows in Html formate");
-		selenium.selectFrame("relative=top");
+		SelNGBase.selenium.get().selectFrame("relative=top");
 		obj.zMessageItem.zClick("Bug34870 save draft(html format) subject");
 		obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
 		obj.zButton.zExists("ImgBold");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -412,13 +413,13 @@ public class DraftTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 
 	private void saveDraftNoAlertOnCancel_retry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		handleRetry();// kill browser and relogin
 		saveDraftSaysDraftSaved("_selfAccountName_", "ccuser@testdomain.com",
 				"bccuser@testdomain.com", draftSubject, draftBody, "");
@@ -426,7 +427,7 @@ public class DraftTests extends CommonTest {
 	}
 
 	private void goToDraftAndEdit_retry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		handleRetry();// kill browser and relogin
 		saveDraftSaysDraftSaved("_selfAccountName_", "ccuser@testdomain.com",
 				"bccuser@testdomain.com", draftSubject, draftBody, "");
@@ -435,7 +436,7 @@ public class DraftTests extends CommonTest {
 	}
 
 	private void modifyDraftAndVerify_retry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		handleRetry();// kill browser and relogin
 		saveDraftSaysDraftSaved("_selfAccountName_", "ccuser@testdomain.com",
 				"bccuser@testdomain.com", draftSubject, draftBody, "");
@@ -447,14 +448,14 @@ public class DraftTests extends CommonTest {
 
 	private void askSaveAutosavedDraftWhenInboxIsClicked_retry()
 			throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		handleRetry();
 		autoSaveDraftAfter30Sec("_selfAccountName_", "ccuser@testdomain.com",
 				"bccuser@testdomain.com", autoDraftSubject, autoDraftBody, "");
 	}
 
 	private void goToDraftAndVerifyAutodraftMsg_retry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		handleRetry();
 		autoSaveDraftAfter30Sec("_selfAccountName_", "ccuser@testdomain.com",
 				"bccuser@testdomain.com", autoDraftSubject, autoDraftBody, "");

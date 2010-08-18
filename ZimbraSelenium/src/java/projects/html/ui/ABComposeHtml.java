@@ -600,7 +600,7 @@ public class ABComposeHtml extends CommonTest {
 	 */
 	public static void zPermanentDelAllContact() {
 		obj.zCheckbox.zClick(zPermanentlyDelAllContact);
-		selenium.click(zDeleteAllContactsBtn);
+		SelNGBase.selenium.get().click(zDeleteAllContactsBtn);
 		// obj.zButton.zClick(localize(locator.folderEmptyAddressBook));
 	}
 
@@ -642,7 +642,7 @@ public class ABComposeHtml extends CommonTest {
 			obj.zButton.zClick(zSearchContacsBtn);
 			Thread.sleep(1000);// wait need as it takes time to search a contact
 			obj.zCheckbox.zClick(zSearchedContactForGrp);
-			selenium.click(zAddSelectedlink);
+			SelNGBase.selenium.get().click(zAddSelectedlink);
 			Thread.sleep(2000);// wait is added as it takes some time to click
 			// on Add Selected link
 		}
@@ -1018,7 +1018,7 @@ public class ABComposeHtml extends CommonTest {
 	public static void zSendMailToSelfAndNavigateToSpecificContactsFolder(
 			String contactFolderName) throws Exception {
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName, "", "",
+		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "",
 				getLocalizedData_NoSpecialChar(), "", "");
 		// page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName,
 		// "", "", getLocalizedData_NoSpecialChar(), "", "");

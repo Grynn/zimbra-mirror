@@ -17,6 +17,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.service.ServiceException;
 
+import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.ZimbraSeleniumProperties;
@@ -151,15 +152,15 @@ public class CreateApptTests extends CommonTest {
 
 		page.zCalendarApp.zSetCalPrefInitialView(localize(locator.calViewWeek));
 		SleepUtil.sleepSmall();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	private void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -172,7 +173,7 @@ public class CreateApptTests extends CommonTest {
 			String attendees, String body, String startTime, String endTime,
 			String apptDurationHrs) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String[] startTimeArr = startTime.split(":");
@@ -194,7 +195,7 @@ public class CreateApptTests extends CommonTest {
 		page.zCalendarApp.zVerifySimpleApptDetails(subject, location,
 				attendees, body);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -204,7 +205,7 @@ public class CreateApptTests extends CommonTest {
 			String apptDurationHrs, String view) throws Exception {
 
 		String apptDetailsToVerify = "";
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateAppt(subject, location, attendees, body, "",
@@ -236,7 +237,7 @@ public class CreateApptTests extends CommonTest {
 				apptDetailsToVerify.replace(" ", "")),
 				"Appt details are incorrect");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "CreateApptsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -246,7 +247,7 @@ public class CreateApptTests extends CommonTest {
 			String newBody, String newStartTime, String newEndTime,
 			String apptDurationHrs) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateAppt(subject, location, attendees, body, "",
@@ -270,7 +271,7 @@ public class CreateApptTests extends CommonTest {
 		page.zCalendarApp.zVerifySimpleApptDetails(newSubject, newLocation,
 				newAttendees, newBody);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 
 	}
 
@@ -278,7 +279,7 @@ public class CreateApptTests extends CommonTest {
 			"" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCreateAllDayAppt() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = getLocalizedData_NoSpecialChar();
@@ -298,7 +299,7 @@ public class CreateApptTests extends CommonTest {
 			String apptEndDate, String apptStartTime, String apptEndTime,
 			String repeatType, String viewAndDateToVerify) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateRepeatApptBasicNoEndDate(subject, location,
@@ -309,7 +310,7 @@ public class CreateApptTests extends CommonTest {
 
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// Creates Everyday appointment with no end date and verifies multiple
@@ -317,7 +318,7 @@ public class CreateApptTests extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zApptEveryDayVerifyMultipleInstances() throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = getLocalizedData_NoSpecialChar();
@@ -332,21 +333,21 @@ public class CreateApptTests extends CommonTest {
 				"", body, apptStartDate, apptEndDate, startTime, endTime,
 				localize(locator.recurBasicSelectDaily));
 
-		selenium.open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
+		SelNGBase.selenium.get().open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=day&date=20090601");
 
 		SleepUtil.sleepMedium();
 
 		obj.zAppointment.zExists(subject);
 
-		selenium.open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
+		SelNGBase.selenium.get().open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=day&date=20090702");
 
 		SleepUtil.sleepMedium();
 
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// Creates a recurring appointment repeating every weekday
@@ -358,7 +359,7 @@ public class CreateApptTests extends CommonTest {
 			String endAfterNOccur, String endByDate, String existsViewAndDate,
 			String notExistViewAndDate) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateApptRepeatEveryWeekDay(subject, location,
@@ -374,7 +375,7 @@ public class CreateApptTests extends CommonTest {
 
 		obj.zAppointment.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// Creates appointment with repeat at some interval of days
@@ -387,7 +388,7 @@ public class CreateApptTests extends CommonTest {
 			String endByDate, String existsViewAndDate,
 			String notExistViewAndDate) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateApptRepeatEveryDaysInterval(subject, location,
@@ -403,7 +404,7 @@ public class CreateApptTests extends CommonTest {
 
 		obj.zAppointment.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// Creates a recurring appointment that ends by a particular date and
@@ -415,7 +416,7 @@ public class CreateApptTests extends CommonTest {
 			String endAfterNOccur, String endByDate, String existsViewAndDate,
 			String notExistViewAndDate) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateApptRepeatEveryDay(subject, location,
@@ -435,7 +436,7 @@ public class CreateApptTests extends CommonTest {
 
 		obj.zAppointment.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// Creates a recurring appointment that ends by a particular date and
@@ -447,7 +448,7 @@ public class CreateApptTests extends CommonTest {
 			String endAfterNOccur, String endByDate, String existsViewAndDate,
 			String existsViewAndDate2) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateApptRepeatDayOfWeek(subject, location,
@@ -458,7 +459,7 @@ public class CreateApptTests extends CommonTest {
 		page.zCalendarApp.zNavigateToViewAndDate(existsViewAndDate2);
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// Creates appointment on specified day of every week n weeks
@@ -471,7 +472,7 @@ public class CreateApptTests extends CommonTest {
 			String endAfterNOccur, String endByDate, String existsViewAndDate,
 			String notExistsViewAndDate) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateApptRepeatWeeklyInterval(subject, location,
@@ -487,7 +488,7 @@ public class CreateApptTests extends CommonTest {
 
 		obj.zAppointment.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// Creates appointment on every particular day of given month interval
@@ -500,7 +501,7 @@ public class CreateApptTests extends CommonTest {
 			String endByDate, String existsViewAndDate,
 			String existsViewAndDate2) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateApptRepeatDayOfMonthInterval(subject,
@@ -516,7 +517,7 @@ public class CreateApptTests extends CommonTest {
 
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// Creates appointment on every Nth particular day of month
@@ -529,7 +530,7 @@ public class CreateApptTests extends CommonTest {
 			String endByDate, String existsViewAndDate,
 			String existsViewAndDate2) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateApptRepeatEveryNthDayOfMonthInterval(subject,
@@ -545,7 +546,7 @@ public class CreateApptTests extends CommonTest {
 
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// Creates appointment on every particular day of year
@@ -558,7 +559,7 @@ public class CreateApptTests extends CommonTest {
 			String endByDate, String existsViewAndDate,
 			String existsViewAndDate2) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateApptRepeatYearlyDay(subject, location,
@@ -573,7 +574,7 @@ public class CreateApptTests extends CommonTest {
 
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// Creates appointment on every Nth particular day of given month of every
@@ -587,7 +588,7 @@ public class CreateApptTests extends CommonTest {
 			String endByDate, String existsViewAndDate,
 			String existsViewAndDate2) throws Exception {
 
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		page.zCalendarApp.zCreateApptRepeatYearlyRelative(subject, location,
@@ -603,12 +604,12 @@ public class CreateApptTests extends CommonTest {
 
 		obj.zAppointment.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 

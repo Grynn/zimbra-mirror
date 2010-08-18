@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
+import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.items.ContactItem.GenerateItemType;
 import framework.util.RetryFailedTests;
@@ -34,15 +35,15 @@ public class AddressBookBugTests extends CommonTest {
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	/**
@@ -69,7 +70,7 @@ public class AddressBookBugTests extends CommonTest {
 			retryAnalyzer = RetryFailedTests.class)
 	public void checkAutoFillForConatctWorkAddr_41144()	throws Exception {
 		
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
@@ -86,7 +87,7 @@ public class AddressBookBugTests extends CommonTest {
 		page.zABCompose.zEnterBasicABData(contact);
 		Thread.sleep(1000);
 		
-		selenium.clickAt("id=editcontactform_EMAIL_0_add", "");
+		SelNGBase.selenium.get().clickAt("id=editcontactform_EMAIL_0_add", "");
 		Thread.sleep(2000);
 		
 		obj.zEditField.zActivateAndType(page.zABCompose.zWorkEmail1EditField, contact.email);
@@ -99,17 +100,17 @@ public class AddressBookBugTests extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		System.out.println(contact.email);
 		
-		selenium.typeKeys("id=zv__COMPOSE1_to_control", contact.getCN());
-		selenium.keyDown("id=zv__COMPOSE1_to_control", "\\13");
-		selenium.keyUp("id=zv__COMPOSE1_to_control", "\\13");
+		SelNGBase.selenium.get().typeKeys("id=zv__COMPOSE1_to_control", contact.getCN());
+		SelNGBase.selenium.get().keyDown("id=zv__COMPOSE1_to_control", "\\13");
+		SelNGBase.selenium.get().keyUp("id=zv__COMPOSE1_to_control", "\\13");
 		Thread.sleep(1000);
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//div[contains(@id,'DWT') and contains(@style,'display: block') and @class='ZmAutocompleteListView']/div"),
 						"Auto complete not showing");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -131,7 +132,7 @@ public class AddressBookBugTests extends CommonTest {
 			groups = { "smoke", "full" },
 			retryAnalyzer = RetryFailedTests.class)
 	public void CreateContactWhileSrchFldrAndTagSelected_Bug40517() throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		ContactItem contact1 = new ContactItem();
@@ -152,21 +153,21 @@ public class AddressBookBugTests extends CommonTest {
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact1);
 		obj.zFolder.zClick(page.zABCompose.zContactsFolder);
 		obj.zContactListItem.zExists(contact1.lastName);
-		selenium.type("xpath=//input[@class='search_input']", contact1.lastName);
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", contact1.lastName);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zContactListItem.zExists(contact1.lastName);
 		obj.zButton.zClick(localize(locator.save));
 		obj.zDialog.zExists(localize(locator.saveSearch));
-		selenium.type("xpath=//td/input[contains(@id,'_nameField')]",
+		SelNGBase.selenium.get().type("xpath=//td/input[contains(@id,'_nameField')]",
 				"savecontact");
 		obj.zButton.zClickInDlg(localize(locator.ok));
 		Thread.sleep(2000);
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@id,'zti__main_Contacts') and contains(text(),'savecontact')]"),
 						"savecontact folder does not present");
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"xpath=//td[contains(@id,'zti__main_Contacts') and contains(text(),'savecontact')]",
 						"");
@@ -174,17 +175,17 @@ public class AddressBookBugTests extends CommonTest {
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact2);
 		obj.zFolder.zClick(localize(locator.contacts));
 		obj.zContactListItem.zRtClick(contact2.lastName);
-		selenium.mouseOver("id=zmi__Contacts__TAG_MENU_title");
+		SelNGBase.selenium.get().mouseOver("id=zmi__Contacts__TAG_MENU_title");
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), "tagName");
 		obj.zButton.zClickInDlg(localize(locator.ok));
 		Thread.sleep(2000);
 		Assert
 				.assertTrue(
-						selenium
+						SelNGBase.selenium.get()
 								.isElementPresent("xpath=//td[contains(@id,'zti__main_Contacts') and contains(text(),'tagName')]"),
 						"tagName folder does not present");
-		selenium
+		SelNGBase.selenium.get()
 				.clickAt(
 						"xpath=//td[contains(@id,'zti__main_Contacts') and contains(text(),'tagName')]",
 						"");
@@ -194,7 +195,7 @@ public class AddressBookBugTests extends CommonTest {
 		obj.zFolder.zClick(localize(locator.contacts));
 		obj.zContactListItem.zExists(contact3.lastName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -202,7 +203,7 @@ public class AddressBookBugTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// for those tests that just needs relogin..
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;// reset this to false
+		SelNGBase.isExecutionARetry.set(false);// reset this to false
 		zLogin();
 	}
 

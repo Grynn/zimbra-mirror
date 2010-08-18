@@ -49,15 +49,15 @@ public class MailFolderTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -70,7 +70,7 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createRenameMailFolderAndVerify(String folderName,
 			String parentFolder) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
@@ -96,7 +96,7 @@ public class MailFolderTests extends CommonTest {
 		assertReport(verifyFldrValue, renameFldrName,
 				"Verifying updated folder value");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -105,7 +105,7 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tryToCreateDuplicateFolderAndVerify(String folderName,
 			String parentFolder) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
@@ -120,7 +120,7 @@ public class MailFolderTests extends CommonTest {
 		}
 		obj.zButton.zClick(page.zMailApp.zCreateFolderCancelBtn);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -129,7 +129,7 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void moveMailFolderAndVerify(String folderName, String parentFolder)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
@@ -163,7 +163,7 @@ public class MailFolderTests extends CommonTest {
 		assertReport(parentFolder + "/" + folderName, parentFolderValue,
 				"Verifying parent folder value from respected web list");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -173,7 +173,7 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void validSpecialCharFolderTest(String folderName,
 			String parentFolder) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
@@ -188,7 +188,7 @@ public class MailFolderTests extends CommonTest {
 					"Verifying valid special character folder creation toast message");
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -198,7 +198,7 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void invalidSpecialCharFolderTest(String folderName,
 			String parentFolder) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
@@ -221,7 +221,7 @@ public class MailFolderTests extends CommonTest {
 		}
 		obj.zFolder.zNotExists(folderName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -231,7 +231,7 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void delAllMailWOSelectingConfChkBox(String folderName,
 			String parentFolder) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
@@ -248,7 +248,7 @@ public class MailFolderTests extends CommonTest {
 					"Verifying toast message while delete all mail items without selecting confirmation checkbox");
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -257,13 +257,13 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void perDelAllMailAndVerify(String folderName, String parentFolder)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = "perDelAllMail";
 		zGoToApplication("Mail");
-		page.zMailApp.zInjectMessage(SelNGBase.selfAccountName,
-				SelNGBase.selfAccountName, "ccuser@testdomain.com", "",
+		page.zMailApp.zInjectMessage(SelNGBase.selfAccountName.get(),
+				SelNGBase.selfAccountName.get(), "ccuser@testdomain.com", "",
 				subject, subject + " body", "");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
 		SleepUtil.sleepLong(); // required
@@ -281,7 +281,7 @@ public class MailFolderTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
 		obj.zMessageItem.zNotExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -291,7 +291,7 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void delMailFolderWOSelectingConfChkBox(String folderName,
 			String parentFolder) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
@@ -309,7 +309,7 @@ public class MailFolderTests extends CommonTest {
 					"Verifying toast message while delete folders without selecting confirmation checkbox");
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -319,7 +319,7 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void permDeleteMailFolderAndVerify(String folderName,
 			String parentFolder) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
@@ -352,7 +352,7 @@ public class MailFolderTests extends CommonTest {
 		obj.zFolder.zNotExists(folderName);
 		zGoToApplication("Mail");
 		obj.zFolder.zNotExists(folderName);
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -362,7 +362,7 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void systemFolderTest(String folderName, String parentFolder)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
@@ -374,7 +374,7 @@ public class MailFolderTests extends CommonTest {
 		for (int i = 0; i <= sysFolders.length - 1; i++) {
 			obj.zFolder.zClick(sysFolders[i]);
 			Thread.sleep(2000);
-			Assert.assertTrue(selenium.isElementPresent("//*[contains(@id,'name') and contains(@disabled,'')]"));
+			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("//*[contains(@id,'name') and contains(@disabled,'')]"));
 			if (!sysFolders[i].equals(localize(locator.junk))
 					&& !sysFolders[i].equals(localize(locator.trash))) {
 				obj.zCheckbox.zExists(page.zMailApp.zPermDelMailItemChkBox);
@@ -394,7 +394,7 @@ public class MailFolderTests extends CommonTest {
 			}
 		}
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -403,7 +403,7 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createRssFeedFolderAndVerify(String folderName,
 			String parentFolder) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		zGoToApplication("Mail");
@@ -427,7 +427,7 @@ public class MailFolderTests extends CommonTest {
 		zWaitTillObjectExist("message", "Zimbra"); // wait for feed
 		obj.zMessageItem.zExists("Zimbra");
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/**
@@ -438,14 +438,14 @@ public class MailFolderTests extends CommonTest {
 	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void saveSearchFolderDeleteItAndVerify(String folderName,
 			String parentFolder) throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		String subject = "testSavedSearch";
 		folderName = "fldr_" + folderName;
 		zGoToApplication("Mail");
 		page.zMailApp.zInjectMessage(ProvZCS.getRandomAccount(),
-				SelNGBase.selfAccountName, "ccuser@testdomain.com", "",
+				SelNGBase.selfAccountName.get(), "ccuser@testdomain.com", "",
 				subject, subject + "body", "");
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			SleepUtil.sleepMedium(); // selenium failure in IE
@@ -484,7 +484,7 @@ public class MailFolderTests extends CommonTest {
 		SleepUtil.sleepSmall();
 		obj.zFolder.zNotExists(folderName);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	//--------------------------------------------------------------------------
@@ -492,7 +492,7 @@ public class MailFolderTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }

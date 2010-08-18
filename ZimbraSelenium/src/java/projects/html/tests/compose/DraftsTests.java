@@ -12,6 +12,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.cs.account.Provisioning;
 
+import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 
@@ -51,15 +52,15 @@ public class DraftsTests extends CommonTest {
 				Provisioning.MAIL_FORMAT_HTML);
 		zLoginIfRequired(accntAttrs);
 		zGoToApplication("Mail");
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 	}
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
-		if (needReset && !isExecutionARetry) {
+		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
 			zLogin();
 		}
-		needReset = true;
+		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -75,14 +76,14 @@ public class DraftsTests extends CommonTest {
 	public void saveAndUpdateDraftWithProrityAndVerify(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// save draft with some priority set
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
-		selenium.select("name=priority", localize(locator.low));
+		SelNGBase.selenium.get().select("name=priority", localize(locator.low));
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
 		obj.zButton.zClick(page.zComposeView.zCancelBtn);
 		zWaitTillObjectExist("folder", page.zMailApp.zDraftFldr);
@@ -99,7 +100,7 @@ public class DraftsTests extends CommonTest {
 		body = getLocalizedData_NoSpecialChar();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
-		selenium.select("name=priority", localize(locator.high));
+		SelNGBase.selenium.get().select("name=priority", localize(locator.high));
 		SleepUtil.sleepSmall();// to avoid navigate away dialog
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
 		SleepUtil.sleepMedium();// to avoid navigate away dialog
@@ -112,7 +113,7 @@ public class DraftsTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelBtn);
 		obj.zMessageItem.zExists(subject);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	/*
@@ -124,7 +125,7 @@ public class DraftsTests extends CommonTest {
 	public void sendUpdatedDraftedMailAndVerify(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (isExecutionARetry)
+		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		// save draft with some prority set
@@ -163,18 +164,18 @@ public class DraftsTests extends CommonTest {
 		page.zComposeView.zVerifyMsgHeaders(to, cc, bcc, subject, body,
 				attachments);
 
-		needReset = false;
+		SelNGBase.needReset.set(false);
 	}
 
 	private void zVerifyDraftFilledValues(String action, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
 		if (to.equals("_selfAccountName_"))
-			to = selfAccountName;
+			to = SelNGBase.selfAccountName.get();
 		if (cc.equals("_selfAccountName_"))
-			cc = selfAccountName;
+			cc = SelNGBase.selfAccountName.get();
 		if (bcc.equals("_selfAccountName_"))
-			bcc = selfAccountName;
+			bcc = SelNGBase.selfAccountName.get();
 		String actualToVal = obj.zTextAreaField
 				.zGetInnerText(page.zComposeView.zToField);
 		String actualccVal = obj.zTextAreaField
@@ -208,7 +209,7 @@ public class DraftsTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
-		isExecutionARetry = false;
+		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 	}
 }
