@@ -50,7 +50,7 @@ checkrunning()
       pid=""
       running=-1
     else
-		status=`echo STATUS | $NC localhost ${zmmtaconfig_listen_port} 2>/dev/null`
+		status=`echo STATUS | $NC -i 1 localhost ${zmmtaconfig_listen_port} 2>/dev/null`
 		if [ $? = 0 -a "x$status" = "xSUCCESS ACTIVE" ]; then
 			running=1
 		else
