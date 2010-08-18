@@ -158,7 +158,7 @@ CLASS:projects.zcs.tests.preferences.composing.ComposePreferencesSetTrueTest;MET
 CLASS:projects.zcs.tests.features.ClientURLTests;METHOD:CustomLoginToCalendarApp;LOCALE:all;BROWSERS:na;BUGS:44367;REMARK:Client URL for composing appointment broken
 CLASS:projects.zcs.tests.features.ClientURLTests;METHOD:calendarViewURL;LOCALE:all;BROWSERS:na;BUGS:44367;REMARK:Client URL for composing appointment broken
 
-CLASS:projects.zcs.tests.addressbook.newcontact.CreateContactTests;METHOD:addRemoveContactPhotoAndVerify;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Typing file name through keyboard event fails
+#CLASS:projects.zcs.tests.addressbook.newcontact.CreateContactTests;METHOD:addRemoveContactPhotoAndVerify;LOCALE:all;BROWSERS:na;BUGS:na;REMARK:Typing file name through keyboard event fails
 
 #Need to work on these IE specific failures
 #CLASS:projects.zcs.tests.preferences.accounts.AccountsPref;METHOD:addBasicPersonaWithTextSignature;LOCALE:na;BROWSERS:IE;BUGS:na;REMARK:Not able to select signature drop down
@@ -243,9 +243,9 @@ CLASS:projects.zcs.tests.preferences.signatures.ChangeMailFormatSignatureTests;M
 CLASS:projects.zcs.tests.preferences.signatures.ChangeMailFormatSignatureTests;METHOD:fwd_AttachDontAttachSignatureAndChangeBodyFormat;LOCALE:all;BROWSERS:na;BUGS:49898;REMARK:Signature is not removed on selecting "Do not attach signature" for html saved draft
 CLASS:projects.zcs.tests.preferences.signatures.ChangeMailFormatSignatureTests;METHOD:newMail_AttachDontAttachSignatureAndChangeBodyFormat;LOCALE:all;BROWSERS:na;BUGS:49898;REMARK:Signature is not removed on selecting "Do not attach signature" for html saved draft
 
-#bug 49903
-CLASS:projects.zcs.tests.mail.messageactions.MessageRightClickMenuTests;METHOD:rtClickToContactAndSubject_CreateTask_Bug39954;LOCALE:all;BROWSERS:na;BUGS:49903;REMARK:Appointment/Task is not created from message right click menu option
-CLASS:projects.zcs.tests.mail.messageactions.MessageRightClickMenuTests;METHOD:rtClickToContactAndSubject_CreateAppt_Bug39954;LOCALE:all;BROWSERS:na;BUGS:49903;REMARK:Appointment/Task is not created from message right click menu option
+#bug 49957
+CLASS:projects.zcs.tests.mail.tags.TagMessageTests;METHOD:applyMutlipleTagToMessageAndVerify;LOCALE:all;BROWSERS:na;BUGS:49957;REMARK:Message is not tagged after creating new tag from toolbar button
+CLASS:projects.zcs.tests.mail.tags.TagMessageTests;METHOD:verifyTagFunctionalityFor2MessageAndRemoveTag;LOCALE:all;BROWSERS:na;BUGS:49957;REMARK:Message is not tagged after creating new tag from toolbar button
 
 
 
