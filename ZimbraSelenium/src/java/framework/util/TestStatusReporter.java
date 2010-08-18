@@ -71,7 +71,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 	        // Construct data
 	        String data = URLEncoder.encode("tc_name", "UTF-8") + "=" + URLEncoder.encode(tc_name, "UTF-8");
 	        data += "&" + URLEncoder.encode("product", "UTF-8") + "=" + URLEncoder.encode(productName, "UTF-8");
-	        data += "&" + URLEncoder.encode("build", "UTF-8") + "=" + URLEncoder.encode(ZimbraSeleniumProperties.getStringProperty(ZimbraSeleniumProperties.PropZimbraVersion, "unknown"), "UTF-8");
+	        data += "&" + URLEncoder.encode("build", "UTF-8") + "=" + URLEncoder.encode(ZimbraSeleniumProperties.zimbraGetVersionString(), "UTF-8");
 	        data += "&" + URLEncoder.encode("intl", "UTF-8") + "=" + URLEncoder.encode(locale, "UTF-8");
 	        data += "&" + URLEncoder.encode("date", "UTF-8") + "=" + URLEncoder.encode(datetime, "UTF-8");
 	        data += "&" + URLEncoder.encode("browser", "UTF-8") + "=" + URLEncoder.encode(SelNGBase.currentBrowserName.trim(), "UTF-8");

@@ -9,8 +9,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 public class ZimbraSeleniumProperties {
-	Logger logger = LogManager.getLogger(ZimbraSeleniumProperties.class);
-	
+
 	// Use these strings as arguments for some standard properties, e.g. ZimbraSeleniumProperties.getStringProperty(PropZimbraServer, "default");
 	public static final String PropZimbraVersion = "zimbraserverversion"; 
 	
@@ -191,7 +190,7 @@ public class ZimbraSeleniumProperties {
 		}
 	}
 
-	public String zimbraGetVersionString() {		
+	public static String zimbraGetVersionString() {		
 		try {
 			ZimbraAdminAccount.GlobalAdmin().soapSend("<GetVersionInfoRequest xmlns='urn:zimbraAdmin'/>");
 			String version = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:info", "version");
@@ -202,7 +201,7 @@ public class ZimbraSeleniumProperties {
 			return (version);
 			
 		} catch (HarnessException e) {
-			logger.error("Unable to send GetVersionInfoRequest", e);
+			ZimbraSeleniumLogger.mLog.error("Unable to send GetVersionInfoRequest", e);
 			return ("unknown");
 		}
 	}
