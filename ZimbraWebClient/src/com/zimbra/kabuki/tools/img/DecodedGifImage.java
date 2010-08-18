@@ -17,40 +17,36 @@
 package com.zimbra.kabuki.tools.img;
 
 import java.awt.*;
-import java.io.*;
 import java.awt.image.*;
+import java.io.*;
+import java.util.*;
 
 public class DecodedGifImage extends DecodedImage {
+
+    //
+    // Data
+    //
 
     private GifDecoder d;
     private int mSortedColorTable[];
 
-    public DecodedGifImage(String filename,
-                           String prefix,
-                           int layoutStyle
-                           ) 
-    {
+    //
+    // Constructors
+    //
+
+    public DecodedGifImage(String filename) {
+        super(filename);
         d = new GifDecoder();
-        mFilename = filename;
-        mPrefix = prefix;
-        mSuffix = "gif";
-        mLayoutStyle = layoutStyle;
     }
 
+    //
+    // Public methods
+    //
 
-    public BufferedImage getBufferedImage() { return d.getImage(); }
-    
     public boolean usesTransparency() { return d.transparency; }
 
     public int getTransparencyColor() {
         return d.gct[d.transIndex];
-    }
-
-    public int getWidth() {
-        return d.width;
-    }
-    public int getHeight() {
-        return d.height;
     }
 
     public int[] getImagesColorTable() {
@@ -61,65 +57,40 @@ public class DecodedGifImage extends DecodedImage {
         return mSortedColorTable;
     }
 
-    /*
-     * Ensure that any colors that are present in this image are included
-     * in the colorTable.  This returns the total number of colors in the
-     * color table after any needed colors are added.
-     */
-    public int addImageColors(Color colorTable[],
-                              int combinedColors)
-    {
-        for (int aMSortedColorTable : mSortedColorTable) {
-            int j;
-            // the 1 starting point skips the transparent color
-            for (j = 1; j < combinedColors; j++)
-                if (colorTable[j].getRGB() == aMSortedColorTable)
-                    break;
-            if (j >= combinedColors)
-                // not found so add it
-                colorTable[combinedColors++] = new Color(aMSortedColorTable);
-        }
-        return combinedColors;
+    //
+    // DecodedImage methods
+    //
+
+    public BufferedImage getBufferedImage() { return d.getFrame(0); }
+    
+    public int getWidth() {
+        return d.width;
     }
-
-
-
-    private static void sort(int ct[],
-                             int numElems) 
-    {
-        // bubble sort 
-        int flag;
-        do { 
-            /* do...while loop to sort the array */
-            flag=0;
-            for(int z=0; z<(numElems-1); z++) {
-                if(ct[z] > ct[z+1]) {
-                    int temp = ct[z];
-                    ct[z] = ct[z+1];
-                    ct[z+1] = temp;
-                    flag = 1;
-                }
-            }
-        } while(flag!=0); /* end of bubble sort */
+    public int getHeight() {
+        return d.height;
     }
-
 
     /*
      * Load the image.  This includes parsing out the color table, transparency,
      * etc.  It will also determine the unique colors in this image.
      */
-    public void load() 
-        throws ImageMergeException
-    {
+    public void load() throws IOException {
+        FileInputStream in = null;
         try {
-            int status = d.read(new FileInputStream(new File(mFilename)));
+            in = new FileInputStream(new File(mFilename));
+            int status = d.read(in);
             if (status != GifDecoder.STATUS_OK) {
                 System.err.println("ERROR " + status + " decoding " + mFilename);
                 throw new ImageMergeException("ERROR " + status + " decoding " + mFilename);
             }
-        } catch (FileNotFoundException f) {
-            System.err.println("ERROR cannot find file " + mFilename);
-            throw new ImageMergeException("ERROR cannot find file " + mFilename, f);
+        }
+        finally {
+            try {
+                in.close();
+            }
+            catch (Exception e) {
+                // ignore
+            }
         }
 
         int n = d.getFrameCount();
@@ -128,42 +99,38 @@ public class DecodedGifImage extends DecodedImage {
             throw new ImageMergeException("ERROR: There are " + n + " frames in " + mFilename);
         }
         
-        //System.out.println("gctFlag is " + d.gctFlag);
-        //System.out.println("gctSize is " + d.gctSize);
-        //System.out.println("gct.length is " + d.gct.length);
-        //System.out.println("transparency is " + ((d.transparency) ? "on" : "off"));
-        //System.out.println("transparency index is " + d.transIndex + ", and color is " + d.gct[d.transIndex]);
+        // get unique colors used in image
+        BufferedImage image = d.getImage();
+        int rows = image.getHeight();
+        int cols = image.getWidth();
 
-        // get a sorted list of the colors in the color table
-        int ct[] = new int[d.gctSize];
-        System.arraycopy(d.gct, 0, ct, 0, d.gctSize);
-        sort(ct, ct.length);
-
-        // get a list of the unique colors using the sorted list
-        mSortedColorTable = uniqify(ct, ct.length);
-    }
-
-    /*
-     * Given a sorted array, returns an array that contains exactly
-     * one instance of each int in the array (removing duplicates).
-     */
-    private static int[] uniqify(int ct[],
-                                 int numElems) 
-    {
-        int unique = 1;
-        for (int i = 1; i < numElems; i++)
-            if (ct[i] != ct[i-1])
-                unique++;
-
-        int result[] = new int[unique];
-        result[0] = ct[0];
-        unique = 1;
-        for (int i = 1; i < numElems; i++) {
-            if (ct[i] != ct[i-1]) {
-                result[unique] = ct[i];
-                unique++;
+        Map<Integer,Color> colors = new HashMap<Integer,Color>();
+        for (int x = 0; x < cols; x++) {
+            for (int y = 0; y < rows; y++) {
+                int argb = image.getRGB(x, y);
+//                if ((argb & 0x0FF000000) == 0) continue; // skip transparent
+                if (colors.get(argb) == null) {
+                    colors.put(argb, new Color(argb));
+                }
             }
         }
-        return result;
+        image.flush();
+
+        java.util.List<Integer> colorList = new LinkedList<Integer>();
+        for (int argb : colors.keySet()) {
+            colorList.add(argb);
+        }
+        Collections.sort(colorList, new Comparator<Integer>() {
+            public int compare(Integer i1, Integer i2) {
+                return i2.intValue() - i1.intValue();
+            }
+        });
+
+        mSortedColorTable = new int[colorList.size()];
+        Iterator<Integer> iter = colorList.iterator();
+        for (int i = 0; iter.hasNext(); i++) {
+            mSortedColorTable[i] = iter.next();
+        }
     }
-}
+
+} // class DecodedGifImage

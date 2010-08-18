@@ -21,16 +21,24 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 public abstract class DecodedImage {
-	private static final Pattern sBACKSLASH = Pattern.compile("\\\\");
-	private static final String IMG_RELATIVE_PATH = "img" + File.separatorChar;
+
+    //
+    // Data
+    //
+
 	protected String mFilename;
-    protected File mInputDir;
-    protected int mCombinedRow = -1;
-    protected int mCombinedColumn = -1;
-    protected String mPrefix;
-    protected String mSuffix;
     
-    protected int mLayoutStyle;
+    //
+    // Constructors
+    //
+
+    public DecodedImage(String filename) {
+        mFilename = filename;
+    }
+
+    //
+    // Public methods
+    //
 
     public abstract BufferedImage getBufferedImage();
 
@@ -38,169 +46,29 @@ public abstract class DecodedImage {
 
     public abstract int getHeight();
 
-    public void setCombinedRow(int r) {
-        mCombinedRow = r;
-    }
-
-    public int getCombinedRow() {
-        return mCombinedRow;
-    }
-
-    public void setCombinedColumn(int c) {
-        mCombinedColumn = c;
-    }
-
-    public int getCombinedColumn() {
-        return mCombinedColumn;
-    }
-
-    public int getLayoutStyle() {
-        return mLayoutStyle;
-    }
-
-    /*
-     * Get a CSS definition for this piece of the combined image.
-     * expects combinedFilename to be of the form "megaimage.gif".
-     */
-    public String getCssString(int combinedWidth,
-                               int combinedHeight,
-                               String combinedFilename,
-                               boolean includeDisableCss) {
-        return getCssString(combinedWidth, combinedHeight, combinedFilename, includeDisableCss, false);
-    }
-
-    public String getCssString(int combinedWidth,
-                               int combinedHeight,
-                               String combinedFilename,
-                               boolean includeDisableCss,
-                               boolean unmerged) {
-        String fileNameBase = this.getName();
-
-        // background image
-        String bgImgStr = mPrefix + (unmerged ? getNameAfterBase(mFilename) : combinedFilename) + "?v=@jsVersion@";
-
-        // background position
-        String bgPosStr = (unmerged)
-                            ? "0px 0px"
-                            : getBgPosition();
-
-		// background repeat
-        // NOTE: Images that are explicitly laid out horizontally are used as
-        //		 vertical borders and should y-repeat. Likewise, images laid
-        //		 out vertically are used for horizontal borders and should
-        //		 x-repeat. All other images should be set no-repeat, unless
-        //		 explicitly set as a repeat layout.
-        String bgRptStr = "no-repeat";
-        switch (getLayoutStyle()) {
-            case ImageMerge.HORIZ_LAYOUT:
-                bgRptStr = "repeat-x";
-                break;
-            case ImageMerge.VERT_LAYOUT:
-                bgRptStr = "repeat-y";
-                break;
-            case ImageMerge.TILE_LAYOUT:
-                bgRptStr = "repeat";
-                break;
-        }
-
-		// width
-        String widthStr = getLayoutStyle() != ImageMerge.HORIZ_LAYOUT && getLayoutStyle() != ImageMerge.TILE_LAYOUT
-                ? "width:" + getWidth() + "px !important;" : "";
-		
-		// height
-        String heightStr = getLayoutStyle() != ImageMerge.VERT_LAYOUT && getLayoutStyle() != ImageMerge.TILE_LAYOUT
-                ? "height:" + getHeight() + "px !important;" : "";
-
-		StringBuffer buffer = new StringBuffer();
-	    String[] namePieces = fileNameBase.split("-");
-	    for (String p : namePieces) {
-		    buffer.append(" .");
-		    buffer.append(p);
-	    }
-
-	    // CSS selector (may be further modified below)
-        String selector = buffer.toString();
-
-		// body of the style definition
-		// NOTE:	IE doesn't process PNG graphics normally, so we output PNGs with
-		//			the filter attribute in IE (using the #IFDEF syntax to make sure that
-		//			it only shows up for IE)
-		String styleBody;
-        if (mSuffix.equalsIgnoreCase("png")) {
-            styleBody = "\n" +
-                "#IFDEF MSIE\n" +
-                    "filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(src='" + bgImgStr + "',sizingMethod='image');\n" +
-                "#ELSE\n" +
-                    "background: url('"+bgImgStr+"') " + bgPosStr + " " + bgRptStr + ";\n" +
-                "#ENDIF\n"
-            ;
-		} else {
-			styleBody = "background:url(\"" + bgImgStr + "\") " + bgPosStr + " " + bgRptStr + ";"
-							+ widthStr + heightStr + "overflow:hidden;";
-		}
-
-        if (includeDisableCss) {
-            return selector + "," + selector + "Dis" + "{" + styleBody + "}\n" 
-            	 + selector + "Dis" + "{opacity:.3;\n#IFDEF MSIE\nfilter:alpha(opacity=30);\n#ENDIF\n}";
-        } else {
-            return selector + "{" + styleBody + "}";
-        }
-    }
-
-    public abstract void load() throws java.io.IOException, ImageMergeException;
+    public abstract void load() throws java.io.IOException;
 
 	public String getName() {
-		String fileName = this.getFilename();
+		String fileName = mFilename;
 		String fileNameBase = fileName.substring(fileName.lastIndexOf(File.separator) + 1);
 
 		// Strip the extension.
 	    fileNameBase = fileNameBase.substring(0, fileNameBase.lastIndexOf('.'));
 
 		// Strip any "repeat*" tiling derectives.  (Static layout has no directive.)
-		if (fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.HORIZ_LAYOUT])
-				|| fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.VERT_LAYOUT])
-				|| fileNameBase.endsWith(ImageMerge.LAYOUT_EXTENSIONS[ImageMerge.TILE_LAYOUT])) {
-			fileNameBase = fileNameBase.substring(0, fileNameBase.lastIndexOf('.'));
-		}
+        for (ImageLayout layout : ImageLayout.values()) {
+            if (layout.equals(ImageLayout.NONE)) continue;
+            if (fileNameBase.endsWith(layout.toExtension())) {
+                fileNameBase = fileNameBase.substring(0, fileNameBase.lastIndexOf('.'));
+                break;
+            }
+        }
 
 		return fileNameBase;
-	}
-
-	public int getTop() {
-		return mCombinedRow;
-	}
-	
-	public int getLeft() {
-		return mCombinedColumn;
 	}
 
     public String getFilename() {
         return mFilename;
     }
 
-
-    //
-    // Protected
-    //
-
-    protected String getBgPosition() {
-        return ((mCombinedColumn == 0) ? "" : "-") + mCombinedColumn + "px " +
-               ((mCombinedRow == 0) ? "" : "-") + mCombinedRow + "px";
-    }
-
-    //
-    // Private
-    //
-
-    /*
-     * Get the relavent part of the image name, the part after "img/".
-     */
-    private static String getNameAfterBase(String fullname) {
-        int i = fullname.lastIndexOf(IMG_RELATIVE_PATH);
-        if (i == -1) {
-            return null;
-        }
-		String relativePath = fullname.substring(i+4);
-		return sBACKSLASH.matcher(relativePath).replaceAll("/");
-    }
-}
+} // class DecodedImage

@@ -29,54 +29,41 @@ import java.util.*;
  */
 public class DecodedFullColorImage extends DecodedImage {
 
+    //
+    // Data
+    //
+
     private BufferedImage mBufImg;
 
-    public DecodedFullColorImage(String filename,
-                                 String suffix,
-                                 String prefix,
-                                 int layoutStyle
-                                ) 
-    {
-        mFilename = filename;
-        mSuffix = suffix;
-        mPrefix = prefix;
-        mLayoutStyle = layoutStyle;
+    //
+    // Constructors
+    //
+
+    public DecodedFullColorImage(String filename) {
+        super(filename);
     }
 
-    public String getSuffix() { return mSuffix; }
+    //
+    // DecodedImage methods
+    //
+
     public BufferedImage getBufferedImage() { return mBufImg; }
 
     public int getWidth() { return mBufImg.getWidth(); }
     public int getHeight() { return mBufImg.getHeight(); }
 
-
-
-    /*
-     * Get a JavaScript definition for this piece of the combined image.
-     * expects combinedFilename to be of the form "megaimage.gif".
-     */
-	/* MOW: moved the png-specific logic into DecodedImage.java since the code 
-			here was mangling the original string, which made it hard to change.
-	
-    public String getCssString(int combinedWidth,
-                               int combinedHeight,
-                               String combinedFilename,
-                               boolean includeDisableCss) {}
-                               
-     */
-     
-
     /*
      * Load the contents of this image
      */
-    public void load() 
-        throws java.io.IOException
-    {
-        Iterator iter = ImageIO.getImageReadersBySuffix(mSuffix);
+    public void load() throws IOException {
+        String name = getFilename();
+        int index = name.lastIndexOf('.');
+        String suffix = index != -1 ? name.substring(index + 1) : "";
+        Iterator iter = ImageIO.getImageReadersBySuffix(suffix);
         ImageReader reader = (ImageReader) iter.next();
         // make the input file be the input source for the ImageReader (decoder)
-        reader.setInput(new FileImageInputStream(new File(mInputDir, mFilename)));
+        reader.setInput(new FileImageInputStream(new File(mFilename)));
         mBufImg = reader.read(0);
     }
 
-}
+} // class DecodedFullColorImage

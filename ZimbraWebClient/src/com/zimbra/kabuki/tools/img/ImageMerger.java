@@ -1,8 +1,24 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * Zimbra Collaboration Suite Web Client
+ * Copyright (C) 2010 Zimbra, Inc.
+ *
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.3 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ * ***** END LICENSE BLOCK *****
+ */
+
 package com.zimbra.kabuki.tools.img;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
+import java.awt.image.*;
 import java.io.*;
 import java.nio.channels.FileChannel;
 import java.util.*;
@@ -36,9 +52,9 @@ public class ImageMerger {
     private static final FileFilter F_PNG = new ExtensionFileFilter(".png");
 
     // layout file filters
-    private static final FileFilter F_HORIZONTAL = new SubExtensionFileFilter(Layout.HORIZONTAL.toExtension());
-    private static final FileFilter F_VERTICAL = new SubExtensionFileFilter(Layout.VERTICAL.toExtension());
-    private static final FileFilter F_TILE = new SubExtensionFileFilter(Layout.TILE.toExtension());
+    private static final FileFilter F_HORIZONTAL = new SubExtensionFileFilter(ImageLayout.HORIZONTAL.toExtension());
+    private static final FileFilter F_VERTICAL = new SubExtensionFileFilter(ImageLayout.VERTICAL.toExtension());
+    private static final FileFilter F_TILE = new SubExtensionFileFilter(ImageLayout.TILE.toExtension());
     private static final FileFilter F_NONE = new AndFileFilter(
         new NotFileFilter(F_HORIZONTAL), new NotFileFilter(F_VERTICAL), new NotFileFilter(F_TILE)
     );
@@ -121,19 +137,19 @@ public class ImageMerger {
             for (File dir : dirs) {
                 // ignore directory entirely
                 if (new File(dir, "_ignore.flag").exists()) {
-                    System.out.println("ignoring: "+dir);
+                    System.out.println("ignoring "+dir);
                     continue;
                 }
 
                 // only copy files
                 if (copyFiles || new File(dir, "_nomerge.flag").exists()) {
-                    System.out.println("copying: "+dir);
+                    System.out.println("copying "+dir);
                     processCopy(dir);
                     continue;
                 }
 
                 // merge
-                System.out.println("processing: "+dir);
+                if (verbose) System.out.println("processing "+dir);
                 processMerge(dir);
             }
         }
@@ -191,14 +207,14 @@ public class ImageMerger {
 
     private void processMerge(File dir, File[] files, ImageFactory factory) throws IOException {
         if (files.length == 0) return;
-        processMerge(dir, listFiles(files, F_NONE), factory, Layout.NONE);
-        processMerge(dir, listFiles(files, F_HORIZONTAL), factory, Layout.HORIZONTAL);
-        processMerge(dir, listFiles(files, F_VERTICAL), factory, Layout.VERTICAL);
+        processMerge(dir, listFiles(files, F_NONE), factory, ImageLayout.NONE);
+        processMerge(dir, listFiles(files, F_HORIZONTAL), factory, ImageLayout.HORIZONTAL);
+        processMerge(dir, listFiles(files, F_VERTICAL), factory, ImageLayout.VERTICAL);
         processCopy(dir, dir.listFiles(F_TILE), factory);
     }
 
     private void processMerge(File dir, File[] files, ImageFactory factory,
-                              Layout layout) throws IOException {
+                              ImageLayout layout) throws IOException {
         if (files.length == 0) return;
         if (verbose) System.out.println("merging files with layout "+layout.toString().toLowerCase());
 
@@ -252,7 +268,7 @@ public class ImageMerger {
                 String ext = files[0].getName().replaceAll("^.*\\.", ".");
                 String filename = dir.getName()+(filecount>1?""+filecount:"")+layout.toExtension()+ext;
                 File file = new File(outputDir, filename);
-                System.out.println("generating file: "+file);
+                System.out.println("generating "+file);
                 aggregate.saveImage(file);
                 for (ImageEntry entry : subEntries) {
                     if (verbose) System.out.println("generating output for "+entry.image.getName());
@@ -271,7 +287,7 @@ public class ImageMerger {
             printlnCss(entry);
         }
 
-    } // processMerge(File,File[],ImageFactory,Layout)
+    } // processMerge(File,File[],ImageFactory,ImageLayout)
 
     private void printlnCss(ImageEntry entry) {
         if (cssOut == null) return;
@@ -291,12 +307,13 @@ public class ImageMerger {
             print(cssOut, "background:url('%s') %dpx %dpx %s;", url, negative(entry.x), negative(entry.y), entry.layout.toCss());
             print(cssOut, "overflow:hidden;");
         }
-        if (!entry.layout.equals(Layout.TILE)) {
-            if (!entry.layout.equals(Layout.HORIZONTAL)) {
-                print(cssOut, "width:%dpx !important;", entry.image.getWidth());
-            }
-            if (!entry.layout.equals(Layout.VERTICAL)) {
+        if (!entry.layout.equals(ImageLayout.TILE)) {
+            //
+            if (!entry.layout.equals(ImageLayout.HORIZONTAL)) {
                 print(cssOut, "height:%dpx !important;", entry.image.getHeight());
+            }
+            if (!entry.layout.equals(ImageLayout.VERTICAL)) {
+                print(cssOut, "width:%dpx !important;", entry.image.getWidth());
             }
         }
         println(cssOut, "}");
@@ -350,7 +367,7 @@ public class ImageMerger {
                 System.err.println("error: unable to load image "+file);
                 continue;
             }
-            ImageEntry entry = new ImageEntry(dir, file, image, Layout.fromFile(file));
+            ImageEntry entry = new ImageEntry(dir, file, image, ImageLayout.fromFile(file));
             printlnJs(entry);
             printlnCss(entry);
         }
@@ -493,41 +510,6 @@ public class ImageMerger {
     }
 
     //
-    // Enums
-    //
-
-    static enum Layout {
-        // Values
-        NONE("no-repeat", ""), TILE("repeat", ".repeat"),
-        HORIZONTAL("repeat-x", ".repeatx"), VERTICAL("repeat-y", ".repeaty");
-        // Data
-        private String css;
-        private String ext;
-        // Constructors
-        Layout(String css, String ext) {
-            this.css = css;
-            this.ext = ext;
-        }
-        // Public methods
-        public String toCss() {
-            return css;
-        }
-        public String toExtension() {
-            return ext;
-        }
-        public static Layout fromFile(File file) {
-            String name = file.getName().toLowerCase();
-            for (Layout layout : Layout.values()) {
-                if (layout.equals(Layout.NONE)) continue;
-                if (name.contains(layout.toExtension())) {
-                    return layout;
-                }
-            }
-            return Layout.NONE;
-        }
-    }
-
-    //
     // Classes
     //
 
@@ -537,26 +519,30 @@ public class ImageMerger {
         public DecodedImage image;
         public int x;
         public int y;
-        public Layout layout;
+        public ImageLayout layout;
         // Constructors
-        public ImageEntry(File dir, File file, DecodedImage image, Layout layout) {
-            this.filename = dir.getName()+"/"+file.getName();
+        public ImageEntry(File dir, File file, DecodedImage image, ImageLayout layout) {
+            this.filename = dir.getName()+File.separator+file.getName();
             this.image = image;
             this.layout = layout;
+        }
+        // Object methods
+        public String toString() {
+            return image.getName();
         }
     } // class ImageEntry
 
     abstract static class ImageFactory {
         // Public methods
         public abstract DecodedImage loadImage(File file) throws IOException;
-        public abstract AggregateImage createAggregateImage(Layout layout);
+        public abstract AggregateImage createAggregateImage(ImageLayout layout);
     }
 
     static class GifImageFactory extends ImageFactory {
         // ImageFactory methods
         public DecodedImage loadImage(File file) throws IOException {
             try {
-                DecodedGifImage image = new DecodedGifImage(file.getAbsolutePath(), null, 0);
+                DecodedGifImage image = new DecodedGifImage(file.getAbsolutePath());
                 image.load();
                 return image;
             }
@@ -564,7 +550,7 @@ public class ImageMerger {
                 return null;
             }
         }
-        public AggregateImage createAggregateImage(Layout layout) {
+        public AggregateImage createAggregateImage(ImageLayout layout) {
             return new AggregateGifImage(layout);
         }
     }
@@ -573,10 +559,7 @@ public class ImageMerger {
         // ImageFactory methods
         public DecodedImage loadImage(File file) throws IOException {
             try {
-                String name = file.getName();
-                int index = name.lastIndexOf('.');
-                String suffix = index != -1 ? name.substring(index + 1) : "";
-                DecodedFullColorImage image = new DecodedFullColorImage(file.getAbsolutePath(), suffix, null, 0);
+                DecodedFullColorImage image = new DecodedFullColorImage(file.getAbsolutePath());
                 image.load();
                 return image;
             }
@@ -587,7 +570,7 @@ public class ImageMerger {
                 return null;
             }
         }
-        public AggregateImage createAggregateImage(Layout layout) {
+        public AggregateImage createAggregateImage(ImageLayout layout) {
             return new AggregateFullColorImage(layout);
         }
     }
@@ -598,7 +581,7 @@ public class ImageMerger {
         // Data
         //
         
-        protected Layout layout;
+        protected ImageLayout layout;
         protected Dimension size;
         protected List<ImageEntry> entries;
 
@@ -609,7 +592,7 @@ public class ImageMerger {
         /**
          * @param layout The layout of this aggregate image.
          */
-        public AggregateImage(Layout layout) {
+        public AggregateImage(ImageLayout layout) {
             this.layout = layout;
         }
 
@@ -636,13 +619,13 @@ public class ImageMerger {
          * @return True if the image is accepted (and thus added to the image entries).
          */
         public boolean acceptSubImage(ImageEntry entry) {
-            if (layout.equals(Layout.HORIZONTAL)) {
+            if (layout.equals(ImageLayout.HORIZONTAL)) {
                 return size.height == 0 || entry.image.getHeight() == size.height;
             }
-            if (layout.equals(Layout.VERTICAL)) {
+            if (layout.equals(ImageLayout.VERTICAL)) {
                 return size.width == 0 || entry.image.getWidth() == size.width;
             }
-            if (layout.equals(Layout.TILE)) return false;
+            if (layout.equals(ImageLayout.TILE)) return false;
             return true;
         }
 
@@ -677,8 +660,8 @@ public class ImageMerger {
             // TODO: layout.
 
             // add image
-            Layout layout = entry.layout;
-            boolean isHorizontal = layout.equals(Layout.HORIZONTAL);
+            ImageLayout layout = entry.layout;
+            boolean isHorizontal = layout.equals(ImageLayout.HORIZONTAL);
             boolean isVertical   = !isHorizontal;
 
             entry.x = isHorizontal ? size.width  : 0;
@@ -690,26 +673,13 @@ public class ImageMerger {
             int w = image.getWidth();
             int h = image.getHeight();
 
-            if (size.width  < w) size.width  = w;
-            if (size.height < h) size.height = h;
+            if (isVertical   && size.width  < w) size.width  = w;
+            if (isHorizontal && size.height < h) size.height = h;
 
             int dx = isHorizontal ? w : 0;
             int dy = isVertical   ? h : 0;
             size.width  += dx;
             size.height += dy;
-        }
-
-        /**
-         * @return The aggregated image comprised of the sub-images. 
-         */
-        protected BufferedImage generateImage() {
-            int count = entries.size();
-            BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_ARGB);
-            Graphics graphics = image.getGraphics();
-            for (ImageEntry entry : entries) {
-                graphics.drawImage(entry.image.getBufferedImage(), entry.x, entry.y, null);
-            }
-            return image;
         }
 
     } // class AggregateImage
@@ -720,7 +690,7 @@ public class ImageMerger {
         private Set<Integer> colors;
 
         // Constructors
-        public AggregateGifImage(Layout layout) {
+        public AggregateGifImage(ImageLayout layout) {
             super(layout);
         }
 
@@ -736,14 +706,17 @@ public class ImageMerger {
             DecodedGifImage gif = (DecodedGifImage)entry.image;
 
             // add this image's colors to color table
-            int[] rgbs = gif.getUniqueColorTable();
-            for (int i = 1; i < rgbs.length; i++) {
-                int rgb = rgbs[i];
-                if (colors.contains(rgb)) {
-                    rgbs[i] = -1;
+            // NOTE: We have to *copy* the color table because we mark ones
+            // NOTE: that are in-common and don't want to change and image's
+            // NOTE: original color table.
+            int[] argbs = copy(gif.getUniqueColorTable());
+            for (int i = 0; i < argbs.length; i++) {
+                int argb = argbs[i];
+                if ((argb & 0x0FF000000) == 0 || colors.contains(argb)) {
+                    argbs[i] = -1;
                     continue;
                 }
-                colors.add(rgb);
+                colors.add(argb);
             }
 
             // skip image if too many colors
@@ -752,7 +725,7 @@ public class ImageMerger {
             // NOTE: of "> 256 colors" error. So we chop off a few
             // NOTE: colors and that seems to work fine.
             if (colors.size() > 254) {
-                for (int rgb : rgbs) {
+                for (int rgb : argbs) {
                     if (rgb != -1) colors.remove(rgb);
                 }
                 return false;
@@ -763,19 +736,91 @@ public class ImageMerger {
             return true;
         }
 
-        public void saveImage(File file) throws IOException {
-            OutputStream out = new FileOutputStream(file);
-            Gif89Encoder encoder = new Gif89Encoder(generateImage());
-            encoder.encode(out);
-            out.close();
+        static String setAsHexString(Set<Integer> numbers) {
+            StringBuilder str = new StringBuilder("[ ");
+            for (int number : numbers) {
+                str.append("0x");
+                str.append(Integer.toHexString(number).toUpperCase());
+                str.append(' ');
+            }
+            str.append("]");
+            return str.toString();
         }
+
+        public void saveImage(File file) throws IOException {
+            OutputStream out = null;
+            try {
+                // build color table
+                Color[] colorArray = new Color[1 + colors.size()];
+                colorArray[0] = makeUniqueTransparentColor();
+                Map<Integer,Integer> colorMap = new HashMap<Integer,Integer>();
+                Iterator<Integer> iterator = colors.iterator();
+                for (int i = 1; iterator.hasNext(); i++) {
+                    int argb = iterator.next();
+                    colorArray[i] = new Color(argb);
+                    colorMap.put(argb, i);
+                }
+
+                // generate image
+                byte[] pixels = new byte[size.width * size.height];
+                for (ImageEntry entry : entries()) {
+                    BufferedImage subImage = entry.image.getBufferedImage();
+                    int width = entry.image.getWidth();
+                    int height = entry.image.getHeight();
+                    for (int y = 0; y < height; y++) {
+                        for (int x = 0; x < width; x++) {
+                            int argb = subImage.getRGB(x, y);
+                            int index = colorMap.get(argb) != null ? colorMap.get(argb) : 0;
+                            pixels[(entry.y + y) * size.width + entry.x + x] = (byte)index;
+                        }
+                    }
+                    subImage.flush();
+                }
+
+                // create encoder
+                Gif89Encoder encoder = new Gif89Encoder(colorArray, size.width, size.height, pixels);
+                encoder.setTransparentIndex(0);
+
+                // save image file
+                out = new FileOutputStream(file);
+                encoder.encode(out);
+            }
+            finally {
+                try {
+                    out.close();
+                }
+                catch (Exception e) {
+                    // ignore
+                }
+            }
+        }
+
+        // Protected methods
+        protected  Color makeUniqueTransparentColor() {
+            int[] rgb = { 255, 255, 255 };
+            int index = 0;
+            do {
+                int argb = (rgb[0] << 16) | (rgb[1] << 8) | rgb[2];
+                if (!this.colors.contains(argb)) return new Color(argb, true);
+                if (--rgb[index] == 0) index++;
+            } while (index < rgb.length);
+            return null;
+        }
+
+        protected static int[] copy(int[] source) {
+            if (source == null || source.length == 0) return source;
+            int[] dest = new int[source.length];
+            System.arraycopy(source, 0, dest, 0, source.length);
+            return dest;
+        }
+
 
     } // class AggregateGifImage
 
     static class AggregateFullColorImage extends AggregateImage {
 
         // Constructors
-        public AggregateFullColorImage(Layout layout) {
+        public AggregateFullColorImage(ImageLayout layout) {
             super(layout);
         }
 
@@ -790,9 +835,42 @@ public class ImageMerger {
             String type = file.getName().replaceAll("^.*\\.","");
             Iterator<ImageWriter> iter = ImageIO.getImageWritersBySuffix(type);
             ImageWriter writer = iter.next();
-            writer.setOutput(new FileImageOutputStream(file));
-            writer.write(generateImage());
-            writer.dispose();
+            BufferedImage image = null;
+            try {
+                writer.setOutput(new FileImageOutputStream(file));
+                writer.write(image = generateImage());
+            }
+            finally {
+                try {
+                    image.flush();
+                }
+                catch (Exception e) {
+                    // ignore
+                }
+                try {
+                    writer.dispose();
+                }
+                catch (Exception e) {
+                    // ignore
+                }
+            }
+        }
+
+        // Protected methods
+
+        /**
+         * @return The aggregated image comprised of the sub-images.
+         */
+        protected BufferedImage generateImage() {
+            BufferedImage image = new BufferedImage(size.width, size.height, BufferedImage.TYPE_INT_ARGB);
+            Graphics graphics = image.getGraphics();
+            for (ImageEntry entry : entries) {
+                BufferedImage subImage = entry.image.getBufferedImage();
+                graphics.drawImage(subImage, entry.x, entry.y, null);
+                subImage.flush();
+            }
+            graphics.dispose();
+            return image;
         }
 
     } // class AggregateFullColorImage
