@@ -94,9 +94,6 @@ public class ZimbraSeleniumProperties {
 			if (null == configProp)
 				configProp = new PropertiesConfiguration(file);
 			
-			// Set global properties, such as zimbraversion
-			createStandardProperties();
-
 		} catch (Exception ex) {
 			ZimbraSeleniumLogger.mLog.error("Exception : " + ex);
 		}
@@ -194,10 +191,8 @@ public class ZimbraSeleniumProperties {
 		}
 	}
 
-	private String zimbraGetVersionString() {
-		
+	public String zimbraGetVersionString() {		
 		try {
-		
 			ZimbraAdminAccount.GlobalAdmin().soapSend("<GetVersionInfoRequest xmlns='urn:zimbraAdmin'/>");
 			String version = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:info", "version");
 			if ( version == null )
