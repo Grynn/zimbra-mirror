@@ -25,7 +25,6 @@ public class SelNGBase {
 	
 	public static int maxRetryCount = 0;
 	public static int currentRetryCount = 0;
-	
 	public static String someting = " ";
 	public static String appType = "AJAX";
 	public static String suiteName = "";
@@ -189,16 +188,8 @@ public class SelNGBase {
 	
 	public static ThreadLocal<String> selfAccountName = new ThreadLocal<String>() {
 		protected synchronized String initialValue() {
-			String username = "invalid";
-			try {
-				username = ProvZCS.getRandomAccount(new HashMap<String, Object>());
-				return (new String(username));
-			} catch (ServiceException e) {
-				logger.error("Unable to create new account", e);
-			}
-			return (new String(username));
+			String username = "";
+			return new String(username);
 		}
 	};
-	
-
 }
