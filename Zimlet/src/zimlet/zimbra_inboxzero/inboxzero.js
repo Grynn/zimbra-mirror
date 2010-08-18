@@ -165,7 +165,8 @@ InboxZero.prototype.onSaveApptSuccess = function(controller, calItem, result) {
 
 // utility
 
-InboxZero.prototype._getActiveInbox = function() {
+InboxZero.prototype._getActiveInbox = function(account) {
+    if (account) return this._getAccountInbox(account); 
     return appCtxt.getById(ZmOrganizer.ID_INBOX) || this._getAccountInbox();
 };
 
@@ -183,7 +184,7 @@ InboxZero.prototype._getAccounts = function() {
 // operations
 
 InboxZero.prototype._archive = function(msg, callback) {
-    var inbox = this._getActiveInbox();
+    var inbox = this._getActiveInbox(msg.getAccount());
     var archive = inbox.getByName(this.getMessage("archiveFolder"));
     // HACK: needed to ensure current list updates to next message
     this.__selectNext();
