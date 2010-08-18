@@ -37,7 +37,7 @@ public class LoginPage extends CommonTest {
 	 * @return username of the random-user
 	 * @throws ServiceException
 	 */
-	public String zLoginToZimbraHTML(Map<String, Object> accntAttrs)
+	public synchronized String zLoginToZimbraHTML(Map<String, Object> accntAttrs)
 			throws ServiceException {
 		String username = "";
 		// if we are retrying the execution, then use the same account.
@@ -45,7 +45,6 @@ public class LoginPage extends CommonTest {
 			username = SelNGBase.selfAccountName.get();
 		else
 			username = ProvZCS.getRandomAccount(accntAttrs);
-
 		zLoginToZimbraHTML(username);
 		return username;
 	}
