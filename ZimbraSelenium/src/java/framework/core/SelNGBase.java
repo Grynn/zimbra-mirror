@@ -129,7 +129,7 @@ public class SelNGBase {
 					+ ZimbraSeleniumProperties.getStringProperty("server") + "/m/";
 		else if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) 
 			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-					+ ZimbraSeleniumProperties.getStringProperty("server") + "?dev=1";
+					+ ZimbraSeleniumProperties.getStringProperty("server") + "?dev=1&debug=0";
 			else
 				return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "";
