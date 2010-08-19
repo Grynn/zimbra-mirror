@@ -112,7 +112,7 @@ sub updateSyslogNG {
 
   my $flocal=0;
   while (<SYSFH>) {
-    if ($_ !~ /zimbra/) {
+    if ($_ !~ /zimbra/ || $_ =~ /not filter\(zimbra/) {
       if( $platform =~ "SLES" || $platform eq "SuSEES10" ) {
         if ($flocal) {
           $flocal=0;
