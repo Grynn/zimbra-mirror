@@ -10,12 +10,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.TimeZone;
 
 import net.freeutils.tnef.Attachment;
 import net.freeutils.tnef.Attr;
@@ -25,6 +28,7 @@ import net.freeutils.tnef.MAPIPropName;
 import net.freeutils.tnef.MAPIProps;
 import net.freeutils.tnef.MAPIValue;
 import net.freeutils.tnef.Message;
+import net.freeutils.tnef.RawInputStream;
 import net.freeutils.tnef.TNEFInputStream;
 import net.freeutils.tnef.TNEFUtils;
 
@@ -765,6 +769,8 @@ public class Main {
         myMap.put(0x0000851eL, "PidLidReminderPlaySound");
         myMap.put(0x0000851fL, "PidLidReminderFileParameter");
         myMap.put(0x00008524L, "PidLidVerbResponse");
+        myMap.put(0x00008530L, "PidLidFlagRequest");
+        myMap.put(0x00008534L, "PidLidMileage");    // Guessed name.
         myMap.put(0x00008535L, "PidLidBilling");
         myMap.put(0x00008536L, "PidLidNonSendableTo");
         myMap.put(0x00008537L, "PidLidNonSendableCc");
@@ -977,7 +983,7 @@ public class Main {
                         thisAtt.getLevel(),
                         thisAtt.getLength());
                 xmlIndentLevel++;
-                appendFormattedInfo(s, "<value>%s</value>\n", thisAtt.getValue());
+                appendValueXml(s, thisAtt.getValue(), thisAtt.getRawData());
                 xmlIndentLevel--;
                 appendFormattedInfo(s, "</tnef_attribute>\n");
             }
@@ -1008,7 +1014,7 @@ public class Main {
                         attAttrib.getLevel(),
                         attAttrib.getLength());
                 xmlIndentLevel++;
-                appendFormattedInfo(s, "<value>%s</value>\n", attAttrib.getValue());
+                appendValueXml(s, attAttrib.getValue(), attAttrib.getRawData());
                 xmlIndentLevel--;
                 appendFormattedInfo(s, "</tnef_attribute>\n");
             }
@@ -1099,64 +1105,76 @@ public class Main {
         if (mp.getLength() == 0) {
             appendFormattedInfo(s, "<value></value>\n");
         } else if (mp.getLength() == 1) {
-            StringBuffer valHex = null;
             Object theVal = mp.getValues()[0].getValue();
-            if (theVal instanceof Integer) {
-                Integer intVal = (Integer) theVal;
-                if ((intVal > 9) || (intVal < 0)) {
-                    valHex = new StringBuffer("0x");
-                    valHex.append(Integer.toHexString(intVal));
-                }
-            } else if (theVal instanceof Long) {
-                Long intVal = (Long) theVal;
-                if ((intVal > 9) || (intVal < 0)) {
-                    valHex = new StringBuffer("0x");
-                    valHex.append(Long.toHexString(intVal));
-                }
-            }
-            if (theVal instanceof TNEFInputStream) {
-                TNEFInputStream tnefSubStream = (TNEFInputStream) theVal;
-                Message subTnefView = new Message(tnefSubStream);
-                appendFormattedInfo(s, "<value>\n");
-                xmlIndentLevel++;
-                s.append(toXmlStringBuffer(subTnefView));
-                xmlIndentLevel--;
-                appendFormattedInfo(s, "</value>\n");
-            } else if (valHex == null) {
-                appendFormattedInfo(s, "<value>%s</value>\n", theVal);
-            } else {
-                appendFormattedInfo(s, "<value hex=\"%s\">%s</value>\n", valHex, theVal);
-            }
+            RawInputStream rawValRis = mp.getValues()[0].getRawData();
+            appendValueXml(s, theVal, rawValRis);
         } else {
             appendFormattedInfo(s, "<values>\n");
             xmlIndentLevel++;
             for (MAPIValue mapiVal : mp.getValues()) {
-                StringBuffer valHex = null;
                 Object theVal = mapiVal.getValue();
-                if (theVal instanceof Integer) {
-                    Integer intVal = (Integer) theVal;
-                    if ((intVal > 9) || (intVal < 0)) {
-                        valHex = new StringBuffer("0x");
-                        valHex.append(Integer.toHexString(intVal));
-                    }
-                } else if (theVal instanceof Long) {
-                    Long intVal = (Long) theVal;
-                    if ((intVal > 9) || (intVal < 0)) {
-                        valHex = new StringBuffer("0x");
-                        valHex.append(Long.toHexString(intVal));
-                    }
-                }
-                if (valHex == null) {
-                    appendFormattedInfo(s, "<value>%s</value>\n", theVal);
-                } else {
-                    appendFormattedInfo(s, "<value hex=\"%s\">%s</value>\n", valHex, theVal);
-                }
+                RawInputStream rawValRis = mapiVal.getRawData();
+                appendValueXml(s, theVal, rawValRis);
             }
             xmlIndentLevel--;
             appendFormattedInfo(s, "</values>\n");
         }
         xmlIndentLevel--;
         appendFormattedInfo(s, "</mapiprop>\n");
+    }
+
+    private static void appendValueXml(StringBuffer s, Object theVal, RawInputStream rawValRis) throws IOException {
+        if (theVal instanceof TNEFInputStream) {
+            TNEFInputStream tnefSubStream = (TNEFInputStream) theVal;
+            Message subTnefView = new Message(tnefSubStream);
+            appendFormattedInfo(s, "<value>\n");
+            xmlIndentLevel++;
+            s.append(toXmlStringBuffer(subTnefView));
+            xmlIndentLevel--;
+            appendFormattedInfo(s, "</value>\n");
+            return;
+        }
+        StringBuffer valHex = null;
+        if (theVal instanceof Integer) {
+            Integer intVal = (Integer) theVal;
+            if ((intVal > 9) || (intVal < 0)) {
+                valHex = new StringBuffer("0x");
+                valHex.append(Integer.toHexString(intVal));
+            }
+        } else if (theVal instanceof Long) {
+            Long intVal = (Long) theVal;
+            if ((intVal > 9) || (intVal < 0)) {
+                valHex = new StringBuffer("0x");
+                valHex.append(Long.toHexString(intVal));
+            }
+        } else if (theVal instanceof Date) {
+            Date dateVal = (Date) theVal;
+            valHex = new StringBuffer("0x");
+            long time = rawValRis.readU64();
+            valHex.append(Long.toHexString(time));
+            theVal = friendlyDateTreatedAsUtc(dateVal);
+        } else if (theVal instanceof long[]) {
+            // long[] Used for PT_CURRENCY and PT_INT8BYTE:
+            long [] longs = (long []) theVal;
+            valHex = new StringBuffer("0x");
+            StringBuffer newVal = new StringBuffer("{");
+            for (long aLong :longs) {
+                String simpleHex = Long.toHexString(aLong);
+                for (int cnt = 8 - simpleHex.length(); cnt > 0; cnt--) {
+                    valHex.append("0");
+                }
+                valHex.append(simpleHex);
+                newVal.append(" ").append(aLong);
+            }
+            newVal.append(" }");
+            theVal = newVal;
+        }
+        if (valHex == null) {
+            appendFormattedInfo(s, "<value>%s</value>\n", theVal);
+        } else {
+            appendFormattedInfo(s, "<value hex=\"%s\">%s</value>\n", valHex, theVal);
+        }
+        
     }
 
 	/**
@@ -1170,4 +1188,12 @@ public class Main {
         }
         s.append(String.format(format, objects));
     }
+ 
+    private static String friendlyDateTreatedAsUtc(Date theTime) {
+        SimpleDateFormat timeFmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        TimeZone tz = TimeZone.getTimeZone("UTC");
+        timeFmt.setTimeZone(tz);
+        return timeFmt.format(theTime);
+    }
+
 }
