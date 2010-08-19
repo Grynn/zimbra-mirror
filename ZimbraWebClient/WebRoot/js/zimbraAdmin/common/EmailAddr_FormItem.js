@@ -198,3 +198,20 @@ EmailAddr_XFormItem.prototype.getCurrentDomainPart = function () {
     return this._domainPart ;
 }
 
+/*bug 49662. reset the email-address error status when the _namePart from non-null to null
+ *when add alias name. We don't think this is a  error*/
+EmailAddr_XFormItem.prototype.clearNameNullError = function () {
+    if(this._namePart == ""){
+	if(this.hasError()){
+	    this.clearError();
+            this.setInstanceValue("");
+            var form = this.getForm();
+            var event = new DwtXFormsEvent(form, this, "");
+            form.notifyListeners(DwtEvent.XFORMS_VALUE_CHANGED, event);
+	    form.setIsDirty(true, this);
+	    return true;
+	}
+    }
+    
+    return false;
+}

@@ -43,9 +43,28 @@ ZaNewAccountXWizard.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_ac
 ZaNewAccountXWizard.prototype.handleXFormChange = 
 function () {
 	if(this._localXForm.hasErrors()) {
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+		var isNeeded = true;
+				
+/*
+ *Bug 49662 If it is alias step, we check the error'root. If the error is thrown
+ *for the username is null, we reset this error's status. For emailaddr item's 
+ *OnChange() function is called after item value validation. At the stage of
+ *value validation, an error is thrown and OnChange can't be called. If we
+ *modify the email-address's validation method, it will effect the first stage
+ *of account creatin. So we reset the error status here
+ */		
+        	if(this._containedObject[ZaModel.currentStep] == ZaNewAccountXWizard.ALIASES_STEP){
+			var args = arguments[0];
+			if(args && args.formItem && (args.formItem.type == "emailaddr")){
+				isNeeded = !args.formItem.clearNameNullError();
+			}
+		}
+
+		if(isNeeded){
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+		}
 	} else {
 		if(this._containedObject.attrs[ZaAccount.A_lastName]
                 && this._containedObject[ZaAccount.A_name].indexOf("@") > 0
