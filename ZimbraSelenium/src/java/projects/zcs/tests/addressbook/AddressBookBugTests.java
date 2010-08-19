@@ -107,7 +107,7 @@ public class AddressBookBugTests extends CommonTest {
 		Assert
 				.assertTrue(
 						SelNGBase.selenium.get()
-								.isElementPresent("xpath=//div[contains(@id,'DWT') and contains(@style,'display: block') and @class='ZmAutocompleteListView']/div"),
+								.isElementPresent("xpath=//div[contains(@id,'DWT') and contains(@style,'display: block') and @class='ZmAutocompleteListView']"),
 						"Auto complete not showing");
 
 		SelNGBase.needReset.set(false);
