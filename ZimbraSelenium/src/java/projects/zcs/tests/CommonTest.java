@@ -630,6 +630,16 @@ public class CommonTest extends SelNGBase {
 		} else if ((lCaseapplicationtab.equals("calendar"))
 				|| (applicationtab.equals(localize(locator.calendar)))) {
 			obj.zButton.zClick(localize(locator.calendar));
+			/**
+			 * This is very dirty code but we need to keep it until bug 49968 is fixed.
+			 * 
+			 */
+			if (ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no")
+					.equalsIgnoreCase("yes")) {
+			SelNGBase.selenium.get().refresh();
+			Thread.sleep(6000);
+			obj.zButton.zClick(localize(locator.calendar));
+			}
 			zWaitTillObjectExist("folder", page.zCalApp.zCalendarFolder);
 		} else if ((lCaseapplicationtab.equals("tasks"))
 				|| (applicationtab.equals(localize(locator.tasks)))) {
