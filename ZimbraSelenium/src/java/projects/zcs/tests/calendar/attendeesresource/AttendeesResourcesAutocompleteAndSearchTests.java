@@ -312,15 +312,24 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 						"//div//table[contains(@id, 'attendeesTable')]//td[contains(@id, 'select_container')]",
 						"");
 		obj.zMenuItem.zClick(localize(locator.location));
-		pressKeys("tab, l, o, c, a, t, i, o, n, 2, tab");
+        Thread.sleep(1000);
+				
+		obj.zEditField.zActivate("//input[contains(@id,'_INPUT_') and @class='ZmSchedulerInput']");        
+				
+		pressKeys("l, o, c, a, t, i, o, n, 2, tab");
 		Thread.sleep(1000);
+		
 		obj.zTab.zClick(localize(locator.apptDetails));
+		Thread.sleep(1000);
+
 		expectedValue = location;
 		actualValue = obj.zEditField
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport(expectedValue, actualValue,
-				"Verifying autocomplete for resource in schedule tab");
+				"Verifying autocomplete for location in schedule tab");
 		SelNGBase.selenium.get().click("link=" + location);
+		Thread.sleep(1000);
+		
 		obj.zButton.zIsDisabled(localize(locator.select));
 		obj.zButton.zIsEnabled(localize(locator.remove));
 		obj.zButton.zClick(page.zCalCompose.zApptCancelBtn);
@@ -361,10 +370,19 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 						"//div//table[contains(@id, 'attendeesTable')]//td[contains(@id, 'select_container')]",
 						"");
 		obj.zMenuItem.zClick(localize(locator.resourceAttendee));
+		Thread.sleep(1000);
+		
+		obj.zEditField.zActivate("//input[contains(@id,'_INPUT_') and @class='ZmSchedulerInput']");        
+				
 		pressKeys("tab, e, q, u, i, p, m, e, n, t, 1, enter");
 		Thread.sleep(1000);
+		
 		obj.zTab.zClick(localize(locator.apptDetails));
+		Thread.sleep(1000);
+		
 		SelNGBase.selenium.get().click("link=" + equipment);
+		Thread.sleep(1000);
+		
 		obj.zButton.zIsDisabled(localize(locator.add));
 		obj.zButton.zIsDisabled(localize(locator.addAll));
 		obj.zButton.zIsEnabled(localize(locator.remove));
