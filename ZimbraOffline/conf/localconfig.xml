@@ -202,4 +202,7 @@
   <key name="data_source_imap_reuse_connections">
     <value>true</value>
   </key>
+  <key name="zimbra_auth_provider">
+    <value>offline</value>
+  </key>
 </localconfig>

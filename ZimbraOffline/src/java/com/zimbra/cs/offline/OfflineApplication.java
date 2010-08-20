@@ -27,14 +27,15 @@ import java.util.Map;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ByteUtil;
-import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.FileUtil;
-import com.zimbra.common.util.SystemUtil;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.Db;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.DbUtil;
 import com.zimbra.cs.db.OfflineVersions;
+import com.zimbra.cs.service.AuthProvider;
+import com.zimbra.cs.service.offline.OfflineZimbraAuthProvider;
 import com.zimbra.cs.store.file.Volume;
 import com.zimbra.cs.util.ZimbraApplication;
 import com.zimbra.cs.zimlet.ZimletFile;
@@ -82,7 +83,8 @@ public class OfflineApplication extends ZimbraApplication {
     @Override
     public void initialize(boolean forMailboxd) {
         deployZimlets();
-        
+        AuthProvider.register(new OfflineZimbraAuthProvider());
+        AuthProvider.refresh();
         try {
             if (!forMailboxd)
                 return;
