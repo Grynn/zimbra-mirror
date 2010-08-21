@@ -25,6 +25,7 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.core.SeleniumService;
 import framework.util.HarnessException;
+import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -67,7 +68,7 @@ public class CommonTest extends SelNGBase {
 		i18Msg = ZimbraSeleniumProperties.getResourceBundleProperty("i18Msg");
 		zsMsg = ZimbraSeleniumProperties.getResourceBundleProperty("zsMsg");
 		obj = new CoreObjects();
-		page = new PageObjects();
+		page = new PageObjects();		
 	}
 
 	public static void resetSession() throws Exception {
@@ -148,12 +149,13 @@ public class CommonTest extends SelNGBase {
 
 	@BeforeSuite(groups = { "always" })
 	public void initTests() throws ServiceException, HarnessException {
+		String username = "";
 		initFramework();
 		ProvZCS.setupZCSTestBed();
 		SeleniumService.getInstance().startSeleniumServer();
-		ProvZCS.createAccount("ccuser@testdomain.com");
-		ProvZCS.createAccount("bccuser@testdomain.com");
-
+		ZimbraAccount account = new ZimbraAccount();
+		account.provisionAccount("ccuser@testdomain.com", "test123");	
+		account.provisionAccount("bccuser@testdomain.com", "test123");	
 	}
 
 	@AfterSuite(groups = { "always" })

@@ -1,16 +1,13 @@
 package projects.html.ui;
 
 import static org.testng.Assert.assertTrue;
-
 import java.util.Map;
-
-import com.zimbra.common.service.ServiceException;
-
 import projects.html.clients.ProvZCS;
+import com.zimbra.common.service.ServiceException;
 import projects.html.tests.CommonTest;
-
 import framework.core.SelNGBase;
 import framework.util.BrowserUtil;
+import framework.util.ZimbraAccount;
 
 @SuppressWarnings("static-access")
 public class LoginPage extends CommonTest {
@@ -39,12 +36,15 @@ public class LoginPage extends CommonTest {
 	 */
 	public synchronized String zLoginToZimbraHTML(Map<String, Object> accntAttrs)
 			throws ServiceException {
-		String username = "";
+		String username = "";		
 		// if we are retrying the execution, then use the same account.
 		if (SelNGBase.isExecutionARetry.get())
 			username = SelNGBase.selfAccountName.get();
-		else
-			username = ProvZCS.getRandomAccount(accntAttrs);
+		else{		
+			username = ProvZCS.randomizeAccntName("");
+			ZimbraAccount account = new ZimbraAccount();
+			username = account.provisionAccount(username, "test123");			
+		}
 		zLoginToZimbraHTML(username);
 		return username;
 	}

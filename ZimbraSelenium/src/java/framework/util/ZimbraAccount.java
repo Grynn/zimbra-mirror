@@ -149,6 +149,42 @@ public class ZimbraAccount {
 	}
 	
 	/**
+	 * Creates the account on the ZCS with provided username and password
+	 */
+	public String provisionAccount(String user , String password) {
+		String username = "";
+		String response = "";
+		String locale = ZimbraSeleniumProperties.getStringProperty("locale");
+		try {
+			ZimbraAdminAccount.GlobalAdmin().soapSend(
+					"<CreateAccountRequest xmlns='urn:zimbraAdmin'>" +
+						"<name>" + user + "</name>" +
+			        	"<password>" + password + "</password>" +
+			        	"<a n=\"zimbraPrefLocale\">" + locale + "</a>" +
+			        	"<a n=\"zimbraPrefAutoAddAddressEnabled\">FALSE</a>" +
+			        	"<a n=\"zimbraPrefCalendarInitialView\">workWeek</a>" +
+			        	"<a n=\"zimbraPrefCalendarApptReminderWarningTime\">0</a>" +
+			        	"<a n=\"zimbraPrefTimeZoneId\">(GMT-08.00) Pacific Time</a>" +
+			        	"<a n=\"zimbraFeatureReadReceiptsEnabled\">TRUE</a>" +
+			        	"<a n=\"zimbraPrefCalendarAlwaysShowMiniCal\">FALSE</a>" +
+			        	"<a n=\"zimbraPrefSkin\">beach</a>" +
+			        	"<a n=\"zimbraPrefReplyIncludeOriginalText\">includeBodyAndHeaders</a>" +
+			        	"<a n=\"zimbraPrefForwardIncludeOriginalText\">includeBodyAndHeaders</a>" +
+			        "</CreateAccountRequest>");
+			
+			response = ZimbraAdminAccount.GlobalAdmin().soapLastResponse();
+			if(!response.contains("AccountServiceException")){
+				username  = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "name");
+			}else{
+				logger.error("Error occured during account provisioning, perhaps account already exists: "+ user);	
+			}
+		} catch (Exception e) {
+			logger.error("Unable to provision account: "+ user, e);			
+		}			
+		return username;	
+	}
+	
+	/**
 	 * Authenticates the account (using SOAP client AuthRequest)
 	 * Sets the authToken
 	 */

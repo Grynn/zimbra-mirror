@@ -103,7 +103,7 @@ public class SeleniumService {
 					in.close();
 					
 				} catch (IOException e) {
-					logger.warn("Selenium server was already down.  Ignoring IOException", e);
+					logger.warn("Selenium server is stopped");
 				}
 
 			}

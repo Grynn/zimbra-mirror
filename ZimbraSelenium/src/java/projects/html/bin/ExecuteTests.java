@@ -76,7 +76,7 @@ public class ExecuteTests {
 		//cls.add("projects.html.tests.mail.MailFolderTests");
 		//cls.add("projects.html.tests.addressbook.AddressBookTestHtml");
 		//cls.add("projects.html.tests.compose.ComposeBtmToolBarTests");
-		//		cls.add("projects.html.tests.tasks.Tasks");
+		cls.add("projects.html.tests.tasks.Tasks");
 		//cls.add("projects.html.tests.preferences.ComposePref");
 		//cls.add("projects.html.tests.preferences.GeneralPref");
 		//cls.add("projects.html.tests.preferences.ABPreference");			
@@ -316,7 +316,7 @@ public class ExecuteTests {
 		//"classes","tests","methods"
 		//threadPoolSize = 3
 		suite.setThreadCount(4);
-		suite.setParallel("classes");		
+		suite.setParallel("none");		
 
 		// store suitename. used to ignore posting to report server and also to
 		// avoid trying to get zimbraVersion during startserver
