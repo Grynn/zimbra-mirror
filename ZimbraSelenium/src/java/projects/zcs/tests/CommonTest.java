@@ -5,6 +5,8 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
@@ -30,6 +32,8 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
+import com.zimbra.common.service.ServiceException;
+
 import projects.zcs.CoreObjects;
 import projects.zcs.Locators;
 import projects.zcs.PageObjects;
@@ -37,6 +41,7 @@ import projects.zcs.clients.ProvZCS;
 import framework.core.SelNGBase;
 import framework.core.SeleniumService;
 import framework.util.HarnessException;
+import framework.util.ZMailboxUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -158,7 +163,8 @@ public class CommonTest extends SelNGBase {
 
 			resetSession();
 			selfAccountAttrs = accntAttrs;
-			SelNGBase.selfAccountName.set(page.zLoginpage.zLoginToZimbraAjax(accntAttrs));
+			SelNGBase.selfAccountName.set(page.zLoginpage
+					.zLoginToZimbraAjax(accntAttrs));
 		}
 	}
 
@@ -261,6 +267,12 @@ public class CommonTest extends SelNGBase {
 		zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg", new Locale(
 				ZimbraSeleniumProperties.getStringProperty("locale")));
 
+	}
+
+	public void zmmailbox(String command) throws Exception {
+		System.out.println(command);
+		String commandArray[] = command.split(" ", 2)[1].split(" ");
+		ZMailboxUtil.main(commandArray);
 	}
 
 	public static String localize(String locatorKey) {
@@ -561,7 +573,8 @@ public class CommonTest extends SelNGBase {
 			} else if (objectType.equals("dialog")) {
 				retVal = obj.zDialog.zExistsDontWait(objectName);
 			} else if (objectType.equals("link")) {
-				if (SelNGBase.selenium.get().isElementPresent("link=" + objectName))
+				if (SelNGBase.selenium.get().isElementPresent(
+						"link=" + objectName))
 					retVal = "true";
 				else
 					retVal = "false";
@@ -572,8 +585,8 @@ public class CommonTest extends SelNGBase {
 				else
 					retVal = "false";
 			} else if (objectType.equals("class")) {
-				if (SelNGBase.selenium.get().isElementPresent("xpath=//td[contains(@class,'"
-						+ objectName + "')]")) {
+				if (SelNGBase.selenium.get().isElementPresent(
+						"xpath=//td[contains(@class,'" + objectName + "')]")) {
 					retVal = "true";
 				} else {
 					retVal = "false";
@@ -631,14 +644,15 @@ public class CommonTest extends SelNGBase {
 				|| (applicationtab.equals(localize(locator.calendar)))) {
 			obj.zButton.zClick(localize(locator.calendar));
 			/**
-			 * This is very dirty code but we need to keep it until bug 49968 is fixed.
+			 * This is very dirty code but we need to keep it until bug 49968 is
+			 * fixed.
 			 * 
 			 */
-			if (ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no")
-					.equalsIgnoreCase("yes")) {
-			SelNGBase.selenium.get().refresh();
-			Thread.sleep(6000);
-			obj.zButton.zClick(localize(locator.calendar));
+			if (ZimbraSeleniumProperties.getStringProperty("runCodeCoverage",
+					"no").equalsIgnoreCase("yes")) {
+				SelNGBase.selenium.get().refresh();
+				Thread.sleep(6000);
+				obj.zButton.zClick(localize(locator.calendar));
 			}
 			zWaitTillObjectExist("folder", page.zCalApp.zCalendarFolder);
 		} else if ((lCaseapplicationtab.equals("tasks"))
@@ -797,7 +811,8 @@ public class CommonTest extends SelNGBase {
 
 	public static void zCreateSavedSearchFolder(String savedSearchFolderName,
 			String searchString) throws Exception {
-		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", searchString);
+		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
+				searchString);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		Thread.sleep(1000);
 		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");
@@ -1057,16 +1072,11 @@ public class CommonTest extends SelNGBase {
 		if (wait == 1) {
 			Thread.sleep(1000);
 		}
-		Assert
-				.assertTrue(
-						SelNGBase.selenium.get()
-								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
-										+ (rank - 1)
-										+ "')]//td[contains(text(), '"
-										+ value
-										+ "')]"),
-						"Verifying autocomplete list rank " + rank + " for "
-								+ value);
+		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+				"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
+						+ (rank - 1) + "')]//td[contains(text(), '" + value
+						+ "')]"), "Verifying autocomplete list rank " + rank
+				+ " for " + value);
 	}
 
 	public static void zVerifyAutocompleteExistsForSearchBar(String value,
@@ -1076,12 +1086,13 @@ public class CommonTest extends SelNGBase {
 		}
 		Assert
 				.assertTrue(
-						SelNGBase.selenium.get()
-								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'DWT18_acRow_"
-										+ (rank - 1)
-										+ "')]//td[contains(text(), '"
-										+ value
-										+ "')]"),
+						SelNGBase.selenium
+								.get()
+								.isElementPresent(
+										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'DWT18_acRow_"
+												+ (rank - 1)
+												+ "')]//td[contains(text(), '"
+												+ value + "')]"),
 						"Verifying autocomplete list rank " + rank + " for "
 								+ value);
 	}
@@ -1091,16 +1102,11 @@ public class CommonTest extends SelNGBase {
 		if (wait == 1) {
 			Thread.sleep(1000);
 		}
-		Assert
-				.assertFalse(
-						SelNGBase.selenium.get()
-								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
-										+ (rank - 1)
-										+ "')]//td[contains(text(), '"
-										+ value
-										+ "')]"),
-						"Verifying autocomplete list rank " + rank + " for "
-								+ value);
+		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent(
+				"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
+						+ (rank - 1) + "')]//td[contains(text(), '" + value
+						+ "')]"), "Verifying autocomplete list rank " + rank
+				+ " for " + value);
 	}
 
 	public static void zVerifyAutocompleteNotExistsForSearchBar(String value,
@@ -1110,14 +1116,25 @@ public class CommonTest extends SelNGBase {
 		}
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get()
-								.isElementPresent("//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'DWT18_acRow_"
-										+ (rank - 1)
-										+ "')]//td[contains(text(), '"
-										+ value
-										+ "')]"),
+						SelNGBase.selenium
+								.get()
+								.isElementPresent(
+										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'DWT18_acRow_"
+												+ (rank - 1)
+												+ "')]//td[contains(text(), '"
+												+ value + "')]"),
 						"Verifying autocomplete list rank " + rank + " for "
 								+ value);
+	}
+
+	public static void zForgetAutocomplete(int rank) throws Exception {
+		SelNGBase.selenium
+				.get()
+				.clickAt(
+						"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, '_acRow_"
+								+ (rank - 1)
+								+ "')]//td[contains(@class, '" + localize(locator.forget) + "')]//a[contains(@id, '_acForget_"
+								+ (rank - 1) + "')]//div[contains(@class, 'ForgetText')]", "");
 	}
 
 	/**
@@ -1129,10 +1146,14 @@ public class CommonTest extends SelNGBase {
 	public static void zDragAndDrop(String source, String destination)
 			throws Exception {
 		Thread.sleep(2000);
-		Number x_coord1 = SelNGBase.selenium.get().getElementPositionLeft(destination);
-		Number y_coord1 = SelNGBase.selenium.get().getElementPositionTop(destination);
-		Number x_coord2 = SelNGBase.selenium.get().getElementPositionLeft(source);
-		Number y_coord2 = SelNGBase.selenium.get().getElementPositionTop(source);
+		Number x_coord1 = SelNGBase.selenium.get().getElementPositionLeft(
+				destination);
+		Number y_coord1 = SelNGBase.selenium.get().getElementPositionTop(
+				destination);
+		Number x_coord2 = SelNGBase.selenium.get().getElementPositionLeft(
+				source);
+		Number y_coord2 = SelNGBase.selenium.get()
+				.getElementPositionTop(source);
 		Number x_coord = (x_coord1.intValue() - x_coord2.intValue());
 		Number y_coord = (y_coord1.intValue() - y_coord2.intValue());
 
@@ -1157,7 +1178,8 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public static void calculateCoverage() throws Exception {
-		String coverage_string = SelNGBase.selenium.get().getEval(COVERAGE_SCRIPT);
+		String coverage_string = SelNGBase.selenium.get().getEval(
+				COVERAGE_SCRIPT);
 		JSONObject jsonCoverage = (JSONObject) JSONSerializer
 				.toJSON(coverage_string);
 		String individualFileInfo[] = coverage_string.split("},");

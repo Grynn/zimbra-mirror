@@ -68,6 +68,8 @@ public class Locators {
 			+ (char) 34 + "{2}" + (char) 34;
 	public static final String actionCopy = "actionCopy::{0} {1} copied to "
 			+ (char) 34 + "{2}" + (char) 34;
+	public static final String forget = "forget::Forget";
+	public static final String forgetSummary = "forgetSummary::The ranking of address {0} has been reset. Addresses are ranked based on how often you have sent to them.";
 
 	public static final String newFolderParent = "newFolderParent::Select where to place the new folder:";
 	public static final String AB_FIELD_workState = "AB_FIELD_workState::Work State/Province";
