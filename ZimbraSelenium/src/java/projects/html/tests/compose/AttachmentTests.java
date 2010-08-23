@@ -104,7 +104,7 @@ public class AttachmentTests extends CommonTest {
 	/**
 	 * Test adds attachment one by one and verifies accordingly
 	 */
-	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "composeDataProvider", groups = {"d", "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void addAttachmentOneByOneAndVerify(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
@@ -114,11 +114,8 @@ public class AttachmentTests extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
-		obj.zCheckbox.zVerifyIsChecked(attachments);
 		String newAttachment = "testsoundfile.wav";
 		page.zComposeView.zAddAttachments(newAttachment, false);
-		obj.zCheckbox.zVerifyIsChecked(attachments);
-		obj.zCheckbox.zVerifyIsChecked(newAttachment);
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
 		SleepUtil.sleepMedium();
 
