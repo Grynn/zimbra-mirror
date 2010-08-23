@@ -180,7 +180,7 @@ public class ZFieldObject extends ZObject {
 					robot.keyRelease(KeyEvent.VK_SHIFT);
 				} else
 					robot.keyPress(getKeyValue(chStr));
-				robot.delay(100);
+				robot.delay(150);
 
 			}
 			Thread.sleep(100);

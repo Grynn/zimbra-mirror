@@ -55,7 +55,7 @@ public class ComposeView extends CommonTest {
 	// Add Attachments page objects
 	public static final String zAddAttachDoneBtn = "name=actionAttachDone";
 	public static final String zAddAttachCancelBtn = "name=actionAttachCancel";
-
+	
 	// Add Receipients page objects
 	public static final String zAddReceipFindEditField = "id=findField";
 	public static final String zAddReceipContactsSrchWebList = "name=contactLocation";
@@ -286,17 +286,20 @@ public class ComposeView extends CommonTest {
 		for (int i = 0; i < attList.length; i++) {
 			File f = new File("src/java/projects/html/data/" + attList[i]);
 			String path = f.getAbsolutePath();
-			obj.zBrowseField.zTypeInDlgWithKeyboard((i + 1) + ".", path, "");
+			//obj.zBrowseField.zTypeInDlgWithKeyboard((i + 1) + ".", path, "");
+			//obj.zBrowseField.zTypeInDlgWithKeyboard("css=table.Compose tr:nth-child(" + (i + 2) + "):contains(" + (i + 1) + ".)", path, "");
+			obj.zBrowseField.zTypeInDlgWithKeyboard("css=table.Compose td:contains(" + (i+1) + ".)+td:contains[colspan=2]>input[name=fileUpload]", path, "");	
 		}
+		
 		obj.zButton.zClick(zAddAttachDoneBtn);
 		Thread.sleep(3000); // wait till main compose UI come
 		if (!attachments.equals("mail700.pst")) { /*
 												 * customization for big attach
 												 */
 			for (int i = 0; i < attList.length; i++) {
-				zWaitTillObjectExist("checkbox", attList[i]);// timing issue
-				obj.zCheckbox.zVerifyIsChecked(attList[i]);
+				zWaitTillObjectExist("text", attList[i]);// timing issue				
 			}
+			obj.zCheckbox.zVerifyIsChecked("css=[name=originalAttachment]");
 		}
 	}
 

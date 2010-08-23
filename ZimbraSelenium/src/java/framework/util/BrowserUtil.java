@@ -26,7 +26,16 @@ public class BrowserUtil extends SelNGBase {
 		    break;
 		}
 	    }
-	} else if (userAgent.indexOf("Safari") >= 0) {
+	} else if (userAgent.indexOf("Chrome") >= 0) {
+	    String[] arry = userAgent.split("/");
+	    for (int t = 0; t < arry.length; t++) {
+		if (arry[t].indexOf("Chrome") >= 0) {
+		    String [] tmp = arry[t].split(" ");
+		    browserName = tmp[1] + " " +tmp[0];
+		    break;
+		}
+	    }
+	}else if (userAgent.indexOf("Safari") >= 0) {
 	    String[] arry = userAgent.split("/");
 	    for (int t = 0; t < arry.length; t++) {
 		if (arry[t].indexOf("Safari") >= 0) {
