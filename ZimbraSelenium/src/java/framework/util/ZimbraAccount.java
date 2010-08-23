@@ -153,7 +153,6 @@ public class ZimbraAccount {
 	 */
 	public String provisionAccount(String user , String password) {
 		String username = "";
-		String response = "";
 		String locale = ZimbraSeleniumProperties.getStringProperty("locale");
 		try {
 			ZimbraAdminAccount.GlobalAdmin().soapSend(
@@ -171,17 +170,16 @@ public class ZimbraAccount {
 			        	"<a n=\"zimbraPrefReplyIncludeOriginalText\">includeBodyAndHeaders</a>" +
 			        	"<a n=\"zimbraPrefForwardIncludeOriginalText\">includeBodyAndHeaders</a>" +
 			        "</CreateAccountRequest>");
-			
-			response = ZimbraAdminAccount.GlobalAdmin().soapLastResponse();
-			if(!response.contains("AccountServiceException")){
-				username  = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "name");
-			}else{
-				logger.error("Error occured during account provisioning, perhaps account already exists: "+ user);	
-			}
+
+			Element[] nodes = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:CreateAccountResponse");
+	        if ( (nodes == null) || (nodes.length == 0)) {
+	        	logger.error("Error occured during account provisioning, perhaps account already exists: "+ user);  
+	        }
+	        username  = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "name");
 		} catch (Exception e) {
 			logger.error("Unable to provision account: "+ user, e);			
 		}			
-		return username;	
+		return username;		
 	}
 	
 	/**
