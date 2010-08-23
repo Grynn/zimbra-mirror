@@ -41,7 +41,6 @@ import projects.zcs.clients.ProvZCS;
 import framework.core.SelNGBase;
 import framework.core.SeleniumService;
 import framework.util.HarnessException;
-import framework.util.ZMailboxUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -267,12 +266,6 @@ public class CommonTest extends SelNGBase {
 		zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg", new Locale(
 				ZimbraSeleniumProperties.getStringProperty("locale")));
 
-	}
-
-	public void zmmailbox(String command) throws Exception {
-		System.out.println(command);
-		String commandArray[] = command.split(" ", 2)[1].split(" ");
-		ZMailboxUtil.main(commandArray);
 	}
 
 	public static String localize(String locatorKey) {
