@@ -790,7 +790,7 @@ function() {
  * @extends		DwtMenu
  */
 DwtSelectMenu = function(parent) {
-    DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu", cascade:parent._cascade});
+    DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu", layout:parent._cascade});
 };
 DwtSelectMenu.prototype = new DwtMenu;
 DwtSelectMenu.prototype.constructor = DwtSelectMenu;
