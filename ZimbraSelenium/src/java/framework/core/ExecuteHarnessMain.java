@@ -28,13 +28,15 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.testng.ITestContext;
+import org.testng.ITestListener;
+import org.testng.ITestResult;
 import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
 import framework.util.HarnessException;
-import framework.util.SkipTestClass;
 import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;
 import framework.util.ZimbraSeleniumProperties;
@@ -73,7 +75,7 @@ public class ExecuteHarnessMain {
 	 */
 	public List<String> groups = Arrays.asList("always", "sanity");
 
-
+		
 	/**
 	 * The suite verbosity
 	 */
@@ -93,8 +95,6 @@ public class ExecuteHarnessMain {
 	// A list of classes to execute using TestNG from the jarfile
 	protected List<String> classes = null;
 	
-	// A list of test methods to skip
-	protected List<SkipTestClass> skipClasses = null;
 
 	
 	/**
@@ -166,38 +166,13 @@ public class ExecuteHarnessMain {
 		return (testname);
 	}
 	
-	private static List<SkipTestClass> loadSkipTestsDetails(File skipFile) throws IOException {
-
-		List<SkipTestClass> skips = new ArrayList<SkipTestClass>();
-		BufferedReader br = null;
-		
-		try {
-			
-			br = new BufferedReader(new FileReader(skipFile));
-
-			String str = null;
-			while ((str = br.readLine()) != null) {
-				
-				if (str.indexOf("#") >= 0 || str.equals(""))
-					continue;
-				
-				// #className;methodName;locale;browser;bugnumber;remark
-				skips.add(new SkipTestClass(str));
-
-			}
-
-		} finally {
-			if ( br != null )
-				br.close();
-		}
-
-		return (skips);
-
-	}
 
 
-
-
+	/**
+	 * Based on the contents of the jarfile, build the list of TestNG test names
+	 * @return
+	 * @throws HarnessException
+	 */
 	protected List<String> getXmlTestNames() throws HarnessException {
 		
 		List<String> testnames = new ArrayList<String>();
@@ -224,7 +199,13 @@ public class ExecuteHarnessMain {
 		return (testnames);
 	}
 
+	/**
+	 * Based on the contents of the jarfile, build the list of XmlSuite to execute
+	 * @return
+	 * @throws HarnessException
+	 */
 	protected List<XmlSuite> getXmlSuiteList() throws HarnessException {
+
 		
 		// Only one suite per run in the zimbra process (subject to change)
 		XmlSuite suite = new XmlSuite();
@@ -243,9 +224,9 @@ public class ExecuteHarnessMain {
 			String testname = getTestName(c);
 			for (XmlTest test : suite.getTests()) {
 				if ( test.getName().equals(testname)) {
-					// TODO: process skipped methods
 
 					XmlClass x = new XmlClass(c);
+					SkipTest.updateExcluded(x);
 					test.getXmlClasses().add(x);
 					
 					break; // back to the classes list
@@ -263,21 +244,20 @@ public class ExecuteHarnessMain {
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 */
-	public void execute() throws FileNotFoundException, IOException {
+	public String execute() throws FileNotFoundException, IOException {
 		logger.info("Execute tests ...");
+		ResultListener listener = null;
 		
 		try
 		{
 
 			// Build the class list
 			classes = getClassesFromJar(new File(jarfilename), (classfilter == null ? null : Pattern.compile(classfilter)));
+			SkipTest.loadSkipTestsDetails(new File(workingfoldername + "/conf/skipTests.txt"));
 			
 			// Build the list of XmlSuites
 			List<XmlSuite> suites = getXmlSuiteList();
-			
-			// Determine which tests to skip
-			skipClasses = loadSkipTestsDetails(new File(workingfoldername + "/conf/skipTests.txt"));
-			
+						
 			// Create the TestNG test runner
 			TestNG ng = new TestNG();
 			
@@ -285,11 +265,12 @@ public class ExecuteHarnessMain {
 			ng.setXmlSuites(suites);
 			ng.addListener(new SummaryReporter("AJAX"));
 			ng.addListener(new TestStatusReporter("AJAX")); // TODO: This shouldn't throw Exception
+			ng.addListener(listener = new ResultListener());
 			ng.setOutputDirectory(testoutputfoldername);
 
 			// Run!
 			ng.run();
-					
+								
 		} catch (HarnessException e) {
 			logger.error("Unable to execute tests", e);
 		} catch (Exception e) {
@@ -297,6 +278,222 @@ public class ExecuteHarnessMain {
 		}
 		
 		logger.info("Execute tests ... completed");
+		
+		return ( listener == null ? "Done" : listener.getResults() );
+
+	}
+	
+	public static class ResultListener implements ITestListener {
+
+		private int testsTotal = 0;
+		private int testsPass = 0;
+		private int testsFailed = 0;
+		private int testsSkipped = 0;
+		private List<String> failedTests = new ArrayList<String>();
+		private List<String> skippedTests = new ArrayList<String>();
+		
+		public ResultListener() {
+		}
+		
+		public String getResults() {
+			StringBuilder sb = new StringBuilder();
+			sb.append("Total Tests:   ").append(testsTotal).append('\n');
+			sb.append("Total Passed:  ").append(testsPass).append('\n');
+			sb.append("Total Failed:  ").append(testsFailed).append('\n');
+			sb.append("Total Skipped: ").append(testsSkipped).append('\n');
+			if ( !failedTests.isEmpty() ) {
+				sb.append("\n\nFailed tests:\n");
+				for (String s : failedTests ) {
+					sb.append(s).append('\n');
+				}
+			}
+			if ( !skippedTests.isEmpty() ) {
+				sb.append("\n\nSkipped tests:\n");
+				for (String s : skippedTests ) {
+					sb.append(s).append('\n');
+				}
+			}
+			return (sb.toString());
+		}
+		
+		@Override
+		public void onFinish(ITestContext context) {
+		}
+
+		@Override
+		public void onStart(ITestContext context) {
+		}
+
+		@Override
+		public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+		}
+
+		@Override
+		public void onTestFailure(ITestResult result) {
+			testsFailed++;
+			failedTests.add(result.getName());
+		}
+
+		@Override
+		public void onTestSkipped(ITestResult result) {
+			testsSkipped++;	
+			skippedTests.add(result.getName());
+		}
+
+		@Override
+		public void onTestStart(ITestResult result) {
+			testsTotal++;
+		}
+
+		@Override
+		public void onTestSuccess(ITestResult result) {
+			testsPass++;
+		}
+		
+	}
+	
+	/**
+	 * This class reads skipTest.txt data to exclude certain methods from execution based on locale, browser, and test class
+	 * 
+	 * @author Matt Rhoades
+	 *
+	 */
+	public static class SkipTest {
+		private static Logger logger = LogManager.getLogger(SkipTest.class);
+
+	    // #className;methodName;locales;browsers;bugs;remark
+		
+	    protected String className;
+	    protected String methodToSkip;
+	    protected List<String> locales = new ArrayList<String>();
+	    protected List<String> browsers = new ArrayList<String>();
+	    protected List<String> bugs = new ArrayList<String>();
+	    protected String remark = "None";
+
+	    public static List<SkipTest> skips = null;
+	    
+	    public static void loadSkipTestsDetails(File skipfile) throws IOException {
+	    	skips = new ArrayList<SkipTest>();
+			BufferedReader br = null;
+			
+			try {
+				
+				br = new BufferedReader(new FileReader(skipfile));
+
+				String str = null;
+				while ((str = br.readLine()) != null) {
+					
+					if (str.indexOf("#") >= 0 || str.equals(""))
+						continue;
+					
+					// #className;methodName;locale;browser;bugnumber;remark
+					skips.add(new SkipTest(str));
+
+				}
+
+			} finally {
+				if ( br != null )
+					br.close();
+			}
+
+	    }
+	    
+	    public static void updateExcluded(XmlClass c) {
+	    	String locale = ZimbraSeleniumProperties.getStringProperty("locale", "en_US");
+	    	String browser = ZimbraSeleniumProperties.getStringProperty("browser", "firefox");
+	    	
+			List<String> excludedMethods = new ArrayList<String>();
+	    	for (SkipTest skiptest : skips) {
+	    		
+	    		if ( skiptest.isMatch(c.getName(), locale, browser) ) {
+
+	    			// add the method to be skipped
+	    			excludedMethods.add(skiptest.methodToSkip);
+	    			
+	    			// TODO: re-add this logging
+					// addToSkippedTableRowsHTML(s);// add to html-email row
+					// logSkippedMethodsToFile(s);// add to log file
+
+	    		}
+	    		
+	    	}
+	    	
+	    	// Update the object, if methods were found
+	    	if ( !excludedMethods.isEmpty() ) {
+	    		c.setExcludedMethods(excludedMethods);
+	    	}
+			
+		}
+
+	    protected boolean isMatch(String classname, String locale, String browser) {
+			return ( classMatch(classname) && localeMatch(locale) && browserMatch(browser) );
+		}
+
+		protected boolean classMatch(String c) {
+			return (className.equals(c));
+		}
+
+		protected boolean browserMatch(String b) {
+			if (b == null)
+				return (true);
+			
+			if ( browsers.contains("all") )
+				return (true);
+			
+			if ( browsers.contains("na") )
+				return (true);
+			
+			if ( browsers.contains(b) )
+				return (true);
+
+			// No match
+			return false;
+		}
+
+		protected boolean localeMatch(String l) {
+			if (l == null)
+				return (true);
+			
+			if ( locales.contains("all") )
+				return (true);
+			
+			if ( locales.contains("na") )
+				return (true);
+			
+			if ( locales.contains(l) )
+				return (true);
+
+			// No match
+			return false;
+		}
+
+		protected SkipTest(String skipTestInfo)  {
+
+	    	// skipTestInfo should be of the format:
+	    	// CLASS:projects.zcs.tests.tasks.Tasks;METHOD:createSimpleTaskInTaskList;LOCALE:all;BROWSERS:na;BUGS:1234;REMARK:script issue
+
+	    	for (String s : skipTestInfo.split(";")) {
+
+	    		if ( s.startsWith("CLASS:")) {
+	    			className = s.replace("CLASS:", "");
+	    		} else if(s.startsWith("METHOD:")) {
+	    			methodToSkip = s.replace("METHOD:", "");
+	    		} else if(s.startsWith("LOCALE:")) {
+	    			locales = Arrays.asList(s.replace("LOCALE:", "").split(","));		
+	    		} else if(s.startsWith("BROWSERS:")) {
+	    			browsers = Arrays.asList(s.replace("BROWSERS:", "").split(","));		
+	    		} else if(s.startsWith("BUGS:")) {
+	    			bugs = Arrays.asList(s.replace("BUGS:", "").split(","));		
+	    		} else if(s.startsWith("REMARK:")) {
+	    			remark = s.replace("REMARK:", "");		
+	    		} else {
+	    			logger.warn("Is this a valid SkipTest value: "+ s);
+	    		}
+	    		
+	    	}
+
+	    }
+
 	}
 	
 	/**
@@ -314,7 +511,7 @@ public class ExecuteHarnessMain {
         options.addOption(new Option("j", "jarfile", true, "jarfile containing test cases"));
         options.addOption(new Option("p", "pattern", true, "class filter regex, i.e. projects.zcs.tests."));
         options.addOption(new Option("g", "groups", true, "comma separated list of groups to execute (always, sanity, smoke, full)"));
-        options.addOption(new Option("v", "verbose", true, "set suite verbosity"));
+        options.addOption(new Option("v", "verbose", true, "set suite verbosity (default: "+ verbosity +")"));
         options.addOption(new Option("o", "output", true, "output foldername"));
         options.addOption(new Option("w", "working", true, "current working foldername"));
 
@@ -378,7 +575,6 @@ public class ExecuteHarnessMain {
 	        	workingfoldername = cmd.getOptionValue('w');
 	        }
 	        
-	        
         } catch (ParseException e) {
     		HelpFormatter formatter = new HelpFormatter();
     		formatter.printHelp("ExecuteTests", options);
@@ -389,23 +585,27 @@ public class ExecuteHarnessMain {
     }
     
 	/**
+	 * Main execution method
+	 * 
+	 * Use -h for help
+	 * 
 	 * @param args
-	 * @throws IOException 
-	 * @throws FileNotFoundException 
-	 * @throws ParseException 
 	 */
 	public static void main(String[] args) {
     	BasicConfigurator.configure();
 
+    	String result = "No results";
 		try {
 			ExecuteHarnessMain harness = new ExecuteHarnessMain();
 			if ( harness.parseArgs(args) ) {
-				harness.execute();
+				result = harness.execute();
 			}
 		} catch (Exception e) {
 			logger.error(e, e);
 		}
 		
+		logger.info(result);
+		System.out.println("*****\n"+ result);
 	}
 
 }
