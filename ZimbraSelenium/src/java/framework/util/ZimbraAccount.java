@@ -159,16 +159,16 @@ public class ZimbraAccount {
 					"<CreateAccountRequest xmlns='urn:zimbraAdmin'>" +
 						"<name>" + user + "</name>" +
 			        	"<password>" + password + "</password>" +
-			        	"<a n=\"zimbraPrefLocale\">" + locale + "</a>" +
-			        	"<a n=\"zimbraPrefAutoAddAddressEnabled\">FALSE</a>" +
-			        	"<a n=\"zimbraPrefCalendarInitialView\">workWeek</a>" +
-			        	"<a n=\"zimbraPrefCalendarApptReminderWarningTime\">0</a>" +
-			        	"<a n=\"zimbraPrefTimeZoneId\">(GMT-08.00) Pacific Time</a>" +
-			        	"<a n=\"zimbraFeatureReadReceiptsEnabled\">TRUE</a>" +
-			        	"<a n=\"zimbraPrefCalendarAlwaysShowMiniCal\">FALSE</a>" +
-			        	"<a n=\"zimbraPrefSkin\">beach</a>" +
-			        	"<a n=\"zimbraPrefReplyIncludeOriginalText\">includeBodyAndHeaders</a>" +
-			        	"<a n=\"zimbraPrefForwardIncludeOriginalText\">includeBodyAndHeaders</a>" +
+			        	"<a n='zimbraPrefLocale'>" + locale + "</a>" +
+			        	"<a n='zimbraPrefAutoAddAddressEnabled'>FALSE</a>" +
+			        	"<a n='zimbraPrefCalendarInitialView'>workWeek</a>" +
+			        	"<a n='zimbraPrefCalendarApptReminderWarningTime'>0</a>" +
+			        	"<a n='zimbraPrefTimeZoneId'>(GMT-08.00) Pacific Time</a>" +
+			        	"<a n='zimbraFeatureReadReceiptsEnabled'>TRUE</a>" +
+			        	"<a n='zimbraPrefCalendarAlwaysShowMiniCal'>FALSE</a>" +
+			        	"<a n='zimbraPrefSkin'>beach</a>" +
+			        	//"<a n='zimbraPrefReplyIncludeOriginalText'>includeBodyAndHeaders</a>" +
+			        	//"<a n='zimbraPrefForwardIncludeOriginalText'>includeBodyAndHeaders</a>" +
 			        "</CreateAccountRequest>");
 
 			Element[] nodes = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:CreateAccountResponse");
