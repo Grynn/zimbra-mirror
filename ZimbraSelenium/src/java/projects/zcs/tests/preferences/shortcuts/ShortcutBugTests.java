@@ -9,6 +9,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 
@@ -62,7 +63,7 @@ public class ShortcutBugTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefUseKeyboardShortcuts", "FALSE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
 		// mail
@@ -125,7 +126,7 @@ public class ShortcutBugTests extends CommonTest {
 		zGoToPreferences("Sharing");
 		obj.zRadioBtn.zExists("id=*_user");
 		obj.zButton.zExists(page.zMailApp.zZimletsPrefFolder);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		SelNGBase.needReset.set(false);
 	}

@@ -2,6 +2,8 @@ package projects.zcs.ui;
 
 import java.io.File;
 
+import framework.util.SleepUtil;
+
 /**
  * @author Jitesh Sojitra
  * 
@@ -53,7 +55,7 @@ public class BriefcaseApp extends AppPage {
 		for (int i = 0; i <= 20; i++) {
 			dlgExists = obj.zDialog
 					.zExistsDontWait(localize(locator.uploadFileToBriefcase));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			if (dlgExists.equals("true")) {
 				System.out.println(i);
 			} else {
@@ -72,13 +74,13 @@ public class BriefcaseApp extends AppPage {
 			throws Exception {
 		obj.zButton.zRtClick(zNewBriefcaseOverviewPaneIcon);
 		obj.zMenuItem.zClick(localize(locator.newBriefcase));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClickInDlgByName(localize(locator.folders),
 				localize(locator.createNewBriefcaseItem));
 		obj.zEditField.zTypeInDlgByName(localize(locator.name),
 				newBriefcaseFolder, localize(locator.createNewBriefcaseItem));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.createNewBriefcaseItem));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 }

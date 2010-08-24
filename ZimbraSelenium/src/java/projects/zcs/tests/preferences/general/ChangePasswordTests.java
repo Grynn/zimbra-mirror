@@ -9,6 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -53,7 +54,7 @@ public class ChangePasswordTests extends CommonTest {
 		String errorMessage;
 		page.zGenPrefUI.zNavigateToChangePasswordWindow();
 		SelNGBase.selenium.get().selectWindow("_blank");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		actualEnterNewPWMsg = SelNGBase.selenium.get().getText("class=errorText");
 
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
@@ -82,7 +83,7 @@ public class ChangePasswordTests extends CommonTest {
 		String errorMessage;
 		page.zGenPrefUI.zNavigateToChangePasswordWindow();
 		SelNGBase.selenium.get().selectWindow("_blank");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		actualEnterNewPWMsg = SelNGBase.selenium.get().getText("class=errorText");
 
 		page.zGenPrefUI.zVerifyChangePwdErrMsg("New&ConfirmPwdMismatch",
@@ -102,7 +103,7 @@ public class ChangePasswordTests extends CommonTest {
 
 		page.zGenPrefUI.zEnterChangePWData("test123", "test321", "test321");
 		obj.zButton.zClick("class=zLoginButton");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		resetSession();
 		page.zLoginpage

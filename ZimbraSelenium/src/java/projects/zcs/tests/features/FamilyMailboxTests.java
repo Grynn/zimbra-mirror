@@ -9,6 +9,7 @@ import projects.html.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 public class FamilyMailboxTests extends CommonTest {
 	// --------------
@@ -48,7 +49,7 @@ public class FamilyMailboxTests extends CommonTest {
 		ProvZCS.modifyAccount(parentAccount, "zimbraPrefChildVisibleAccount", childUserAccountId);
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("class", "ZmOverviewZimletHeader");
 
 		/**

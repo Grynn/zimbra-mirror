@@ -10,6 +10,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 /**
  * @author Jitesh Sojitra
@@ -71,17 +72,17 @@ public class TagTaskTests extends CommonTest {
 		newTag1 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		obj.zTaskItem.zClick(taskName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zTaskApp.zTasksTagBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zVerifyIsTagged(taskName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		zRenameTag(tag1, newTag1);
 		obj.zFolder.zNotExists(tag1);
 		obj.zFolder.zClick(newTag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zVerifyIsTagged(taskName);
 
 		zDeleteTag(newTag1);
@@ -111,32 +112,32 @@ public class TagTaskTests extends CommonTest {
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		obj.zTaskItem.zClick(taskName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zTaskApp.zTasksTagBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zVerifyIsTagged(taskName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zClick(taskName2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zTaskApp.zTasksTagBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zVerifyIsTagged(taskName2);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zExists(taskName);
 		assertReport("false", obj.zTaskItem.zExistsDontWait(taskName2),
 				"Verify task2 not exists");
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zExists(taskName2);
 		assertReport("false", obj.zTaskItem.zExistsDontWait(taskName),
 				"Verify task1 not exists");
 		obj.zFolder.zClick(localize(locator.tasks));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("true", obj.zTaskItem.zExistsDontWait(taskName),
 				"Verify task1 not exists");
 		assertReport("true", obj.zTaskItem.zExistsDontWait(taskName2),
@@ -146,7 +147,7 @@ public class TagTaskTests extends CommonTest {
 		obj.zTaskItem.zClick(taskName2);
 		obj.zButton.zClick(page.zTaskApp.zTasksTagBtn);
 		obj.zMenuItem.zClick(localize(locator.removeTag));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zTaskApp.zTasksTagBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
@@ -169,28 +170,28 @@ public class TagTaskTests extends CommonTest {
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
 		obj.zTaskItem.zClick(taskName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zTaskApp.zTasksTagBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag1);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zVerifyIsTagged(taskName);
 		obj.zButton.zClick(page.zTaskApp.zTasksTagBtn);
 		obj.zMenuItem.zNotExists(tag1);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zVerifyIsTagged(taskName);
 		obj.zButton.zClick(page.zTaskApp.zTasksTagBtn);
 		obj.zMenuItem.zNotExists(tag1);
 		obj.zMenuItem.zNotExists(tag2);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zExists(taskName);
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zExists(taskName);
 
 		SelNGBase.needReset.set(false);
@@ -220,9 +221,9 @@ public class TagTaskTests extends CommonTest {
 				"//td[contains(@id, 'zti__main_Tasks') and contains(text(), '"
 						+ tag1 + "')]");
 		obj.zTaskItem.zVerifyIsTagged(taskName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zExists(taskName);
 
 		obj.zFolder.zClick(localize(locator.tasks));
@@ -232,11 +233,11 @@ public class TagTaskTests extends CommonTest {
 				"//tr[contains(@id, 'zlif__TKL')]//td[contains(text(), '"
 						+ taskName2 + "')]");
 		obj.zTaskItem.zVerifyIsTagged(taskName2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(localize(locator.tasks));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zExists(taskName2);
 		assertReport("false", obj.zTaskItem.zExistsDontWait(taskName),
 				"Verify task1 not exists");

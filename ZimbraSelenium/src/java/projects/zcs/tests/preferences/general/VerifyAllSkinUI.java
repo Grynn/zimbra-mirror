@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.tests.CommonTest;
@@ -169,7 +170,7 @@ public class VerifyAllSkinUI extends CommonTest {
 			zGoToPreferences("Sharing");
 			obj.zRadioBtn.zExists("id=*_user");
 			obj.zButton.zExists(page.zMailApp.zZimletsPrefFolder);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 
 		SelNGBase.needReset.set(false);

@@ -8,6 +8,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import projects.zcs.tests.CommonTest;
 
 @SuppressWarnings( { "static-access" })
@@ -54,7 +55,7 @@ public class BasicTaskTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 

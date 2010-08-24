@@ -10,6 +10,7 @@ import com.thoughtworks.selenium.SeleniumException;
 
 import framework.core.SelNGBase;
 import framework.core.ZimbraSelenium;
+import framework.util.SleepUtil;
 
 public class ZObject extends SelNGBase {
 	protected String coreName;
@@ -285,7 +286,7 @@ public class ZObject extends SelNGBase {
 		try {
 			robot = new Robot();
 			robot.mouseRelease(InputEvent.BUTTON1_MASK);
-			// Thread.sleep(1000);
+			// SleepUtil.sleep(1000);
 			robot.mouseMove(x, y);
 			if (action.equals("click")) {
 				if (browserName.indexOf("Safari") >= 0) {
@@ -311,11 +312,8 @@ public class ZObject extends SelNGBase {
 					robot.mouseRelease(InputEvent.BUTTON1_MASK);
 				}
 			}
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		} catch (AWTException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

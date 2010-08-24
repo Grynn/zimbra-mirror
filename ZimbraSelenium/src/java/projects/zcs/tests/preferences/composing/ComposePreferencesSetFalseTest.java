@@ -20,6 +20,7 @@ import com.zimbra.cs.zclient.ZFolder;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -113,7 +114,7 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 //		selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -173,7 +174,7 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 //		selenium.refresh();
 		zReloginToAjax();
 		
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -192,7 +193,7 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 
 		page.zComposeView.zEnterComposeValues("", "", "", subject, body, "");
 
-		Thread.sleep(30000);
+		SleepUtil.sleep(30000);
 
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
@@ -223,7 +224,7 @@ public class ComposePreferencesSetFalseTest extends CommonTest {
 				"");
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		obj.zFolder.zClick(localize(locator.sent));
 

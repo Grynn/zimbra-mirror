@@ -25,6 +25,7 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.core.SeleniumService;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -101,11 +102,7 @@ public class CommonTest extends SelNGBase {
 		for (int i = 0; i < 10; i++) {
 			if (SelNGBase.selenium.get().isElementPresent(elementId))
 				return true;
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			SleepUtil.sleep(2000);
 		}
 		return false;
 	}
@@ -345,10 +342,10 @@ public class CommonTest extends SelNGBase {
 			String dlgExists = obj.zDialog.zExistsDontWait(dlgName);
 			if (dlgExists.equals("true")) {
 				obj.zFolder.zClickInDlgByName(folderToBeClicked, dlgName);
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				obj.zButton.zClickInDlgByName(dlgBtn, dlgName);
 			} else {
-				Thread.sleep(500);
+				SleepUtil.sleep(500);
 			}
 		}
 	}
@@ -366,7 +363,7 @@ public class CommonTest extends SelNGBase {
 		if ((lCaseapplicationtab.equals("mail"))
 				|| (applicationtab.equals("id=TAB_MAIL"))) {
 			obj.zButton.zClick("id=TAB_MAIL");
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 			zWaitTillObjectExist("button", page.zMailApp.zRefreshBtn);
 		} else if ((lCaseapplicationtab.equals("address book"))
 				|| (applicationtab.equals("id=TAB_ADDRESSBOOK"))) {
@@ -380,7 +377,7 @@ public class CommonTest extends SelNGBase {
 		} else if ((lCaseapplicationtab.equals("preferences"))
 				|| (applicationtab.equals("id=TAB_OPTIONS"))) {
 			obj.zButton.zClick("id=TAB_OPTIONS");
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 			zWaitTillObjectExist("radiobutton", "name=zimbraPrefClientType");
 		}
 	}
@@ -425,9 +422,9 @@ public class CommonTest extends SelNGBase {
 			}
 
 			if (retVal.equals("false")) {
-				Thread.sleep(2000);
+				SleepUtil.sleep(2000);
 			} else {
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				found = true;
 				break;
 			}
@@ -449,7 +446,7 @@ public class CommonTest extends SelNGBase {
 		String accountName = SelNGBase.selfAccountName.get();
 
 		resetSession();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraHTML(accountName);

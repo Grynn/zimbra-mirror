@@ -10,6 +10,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
@@ -99,10 +100,10 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"text");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref.zUsingSignature(localize(locator.aboveQuotedText));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
@@ -145,21 +146,21 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zRadioBtn.zClick(localize(locator.composeAsHTML));
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"html");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref.zUsingSignature(localize(locator.aboveQuotedText));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", "",
 				"", subject, body, "");
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		Assert.assertTrue(obj.zEditField.zGetInnerText(
 				ComposeView.zSubjectField).contains("Re: " + subject),
@@ -195,18 +196,18 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"text");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref
 				.zUsingSignature(localize(locator.atBottomOfMessage));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", "",
 				"", subject, body, "");
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		Assert.assertTrue(obj.zEditField.zGetInnerText(
 				ComposeView.zSubjectField).contains("Re: " + subject),
@@ -244,22 +245,22 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zRadioBtn.zClick(localize(locator.composeAsHTML));
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"html");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref
 				.zUsingSignature(localize(locator.atBottomOfMessage));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", "",
 				"", subject, body, "");
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		Assert.assertTrue(obj.zEditField.zGetInnerText(
 				ComposeView.zSubjectField).contains("Re: " + subject),
@@ -296,10 +297,10 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"text");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref.zUsingSignature(localize(locator.aboveQuotedText));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
@@ -343,21 +344,21 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zRadioBtn.zClick(localize(locator.composeAsHTML));
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"html");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref.zUsingSignature(localize(locator.aboveQuotedText));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", "",
 				"", subject, body, "");
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		Assert.assertTrue(obj.zEditField.zGetInnerText(
 				ComposeView.zSubjectField).contains("Fwd: " + subject),
@@ -393,18 +394,18 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"text");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref
 				.zUsingSignature(localize(locator.atBottomOfMessage));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", "",
 				"", subject, body, "");
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		Assert.assertTrue(obj.zEditField.zGetInnerText(
 				ComposeView.zSubjectField).contains("Fwd: " + subject),
@@ -442,22 +443,22 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zRadioBtn.zClick(localize(locator.composeAsHTML));
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"html");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref
 				.zUsingSignature(localize(locator.atBottomOfMessage));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", "",
 				"", subject, body, "");
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		Assert.assertTrue(obj.zEditField.zGetInnerText(
 				ComposeView.zSubjectField).contains("Fwd: " + subject),
@@ -493,10 +494,10 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"text");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref.zUsingSignature(localize(locator.aboveQuotedText));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
@@ -540,21 +541,21 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zRadioBtn.zClick(localize(locator.composeAsHTML));
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"html");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref.zUsingSignature(localize(locator.aboveQuotedText));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", "",
 				"", subject, body, "");
 		obj.zButton.zClick(page.zMailApp.zReplyAllIconBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		Assert.assertTrue(obj.zEditField.zGetInnerText(
 				ComposeView.zSubjectField).contains("Re: " + subject),
@@ -590,18 +591,18 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"text");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref
 				.zUsingSignature(localize(locator.atBottomOfMessage));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", "",
 				"", subject, body, "");
 		obj.zButton.zClick(page.zMailApp.zReplyAllIconBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		Assert.assertTrue(obj.zEditField.zGetInnerText(
 				ComposeView.zSubjectField).contains("Re: " + subject),
@@ -639,22 +640,22 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zRadioBtn.zClick(localize(locator.composeAsHTML));
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"html");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref
 				.zUsingSignature(localize(locator.atBottomOfMessage));
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", "",
 				"", subject, body, "");
 		obj.zButton.zClick(page.zMailApp.zReplyAllIconBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		Assert.assertTrue(obj.zEditField.zGetInnerText(
 				ComposeView.zSubjectField).contains("Re: " + subject),
@@ -690,7 +691,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		obj.zButton.zClick(localize(locator.formatAsText));
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().clickAt("//*[contains(@class,'ImgImageDoc')]", "");
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.addImg));
@@ -708,9 +709,9 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zSignaturePref.zCreateSignature(defaultSignature,
 				defaultSignatureBody, "TEXT");
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		/**
 		 * Create Signature 2
@@ -719,9 +720,9 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.addSignature));
 		page.zSignaturePref.zCreateSignature(signatureName,
 				nondefaultSignatureBody, "TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		/**
 		 * Make Signature 1 default
@@ -729,9 +730,9 @@ public class AboveBelowSignatureTests extends CommonTest {
 		page.zAccPref.zNavigateToPreferenceAccount();
 		obj.zButton.zClick(localize(locator.signatureDoNotAttach));
 		obj.zMenuItem.zClick(defaultSignature);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		/**
 		 * 1. Compose Mail. 2. Switch Signature to non-default. 3. Switch back
@@ -747,7 +748,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 		obj.zButton.zClick(ComposeView.zSignatureIconBtn);
 		obj.zMenuItem.zClick(defaultSignature);
 		obj.zButton.zClick(ComposeView.zSendIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		zGoToApplication("Mail");
 		obj.zFolder.zClick(localize(locator.inbox));
@@ -769,7 +770,7 @@ public class AboveBelowSignatureTests extends CommonTest {
 	private void waitForIE() throws Exception {
 		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 		if (browser.equals("IE"))
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 	}
 
 	private void handleRetry() throws Exception {

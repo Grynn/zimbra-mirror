@@ -5,6 +5,7 @@ import java.io.File;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
@@ -118,7 +119,7 @@ public class CalendarApp extends CommonTest {
 	 */
 	public static void zNavigateToCalendar() throws Exception {
 		obj.zButton.zClick(calendarTab);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 	}
 
 	/**
@@ -267,7 +268,7 @@ public class CalendarApp extends CommonTest {
 		zEnterSimpleApptDetails(subject, location, attendees, body);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -301,7 +302,7 @@ public class CalendarApp extends CommonTest {
 				markAs, allDayEvent, startDate, endDate, startTime, endTime);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -326,7 +327,7 @@ public class CalendarApp extends CommonTest {
 				"", "", "", "", "");
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -342,7 +343,7 @@ public class CalendarApp extends CommonTest {
 				startDate, endDate, "", "");
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 	}
 
 	/**
@@ -374,7 +375,7 @@ public class CalendarApp extends CommonTest {
 		zEnterSimpleApptDetails(subject, location, attendees, body);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -407,7 +408,7 @@ public class CalendarApp extends CommonTest {
 				markAs, allDayEvent, startDate, endDate, startTime, endTime);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -439,7 +440,7 @@ public class CalendarApp extends CommonTest {
 		zRepeatBasicNoEndDate(repeatType);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 	}
 
 	public static void zCreateApptRepeatEveryDay(String subject,
@@ -459,7 +460,7 @@ public class CalendarApp extends CommonTest {
 		zRepeatSetEndDate(noEndDate, endAfterNOccur, endByDate);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 	}
 
 	public static void zCreateApptRepeatEveryWeekDay(String subject,
@@ -479,7 +480,7 @@ public class CalendarApp extends CommonTest {
 		zRepeatSetEndDate(noEndDate, endAfterNOccur, endByDate);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 	}
 
 	public static void zCreateApptRepeatEveryDaysInterval(String subject,
@@ -500,7 +501,7 @@ public class CalendarApp extends CommonTest {
 		zRepeatSetEndDate(noEndDate, endAfterNOccur, endByDate);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -522,7 +523,7 @@ public class CalendarApp extends CommonTest {
 		zRepeatSetEndDate(noEndDate, endAfterNOccur, endByDate);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -545,7 +546,7 @@ public class CalendarApp extends CommonTest {
 		zRepeatSetEndDate(noEndDate, endAfterNOccur, endByDate);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -567,7 +568,7 @@ public class CalendarApp extends CommonTest {
 		zRepeatSetEndDate(noEndDate, endAfterNOccur, endByDate);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -590,7 +591,7 @@ public class CalendarApp extends CommonTest {
 		zRepeatSetEndDate(noEndDate, endAfterNOccur, endByDate);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -612,7 +613,7 @@ public class CalendarApp extends CommonTest {
 		zRepeatSetEndDate(noEndDate, endAfterNOccur, endByDate);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -635,7 +636,7 @@ public class CalendarApp extends CommonTest {
 		zRepeatSetEndDate(noEndDate, endAfterNOccur, endByDate);
 
 		obj.zButton.zClick(apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 	}
 
@@ -654,24 +655,24 @@ public class CalendarApp extends CommonTest {
 	private static void zRepeatBasicNoEndDate(String recurringType)
 			throws Exception {
 
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 		obj.zButton.zClick(apptComposeRepeatBtn);
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 		obj.zRadioBtn.zClick(apptRepeatRadioBtn, "2");
 
 		obj.zHtmlMenu.zClick(apptRepeatBasicDropdown, recurringType);
 
 		obj.zButton.zClick(apptRepeatDoneBtn);
 
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 	}
 
 	private static void zRepeatSetEveryDay() throws Exception {
 		// thread required
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zButton.zClick(apptComposeRepeatBtn);
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 		obj.zRadioBtn.zClick(apptRepeatRadioBtn, "3");
 	}
 
@@ -680,7 +681,7 @@ public class CalendarApp extends CommonTest {
 		waitForSF();
 
 		obj.zButton.zClick(apptComposeRepeatBtn);
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 		obj.zRadioBtn.zClick(apptRepeatRadioBtn, "4");
 	}
 
@@ -690,7 +691,7 @@ public class CalendarApp extends CommonTest {
 		waitForSF();
 
 		obj.zButton.zClick(apptComposeRepeatBtn);
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 		obj.zRadioBtn.zClick(apptRepeatRadioBtn, "5");
 
 		obj.zEditField.zType(apptRepeatEveryDayIntervalField, daysInterval);
@@ -701,7 +702,7 @@ public class CalendarApp extends CommonTest {
 		waitForSF();
 
 		obj.zButton.zClick(apptComposeRepeatBtn);
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 		obj.zRadioBtn.zClick(apptRepeatRadioBtn, "6");
 
 		obj.zHtmlMenu.zClick(apptRepeatWeeklyDayDropdown, day);
@@ -715,7 +716,7 @@ public class CalendarApp extends CommonTest {
 		String checkboxToClick = "repeatWeekly" + repeatDayInEnglishShort;
 
 		obj.zButton.zClick(apptComposeRepeatBtn);
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 		obj.zRadioBtn.zClick(apptRepeatRadioBtn, "7");
 
 		obj.zEditField.zType(apptRepeatWeeklyIntervalField, weekInterval);
@@ -730,7 +731,7 @@ public class CalendarApp extends CommonTest {
 		waitForSF();
 
 		obj.zButton.zClick(apptComposeRepeatBtn);
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 		obj.zRadioBtn.zClick(apptRepeatRadioBtn, "8");
 
 		obj.zEditField.zType(apptRepeatMonthlyDayEditField, dayNumber);
@@ -746,7 +747,7 @@ public class CalendarApp extends CommonTest {
 		waitForSF();
 
 		obj.zButton.zClick(apptComposeRepeatBtn);
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 		obj.zRadioBtn.zClick(apptRepeatRadioBtn, "9");
 
 		obj.zHtmlMenu.zClick(apptRepeatMonthlyNthDayDropdown, NthValue);
@@ -762,7 +763,7 @@ public class CalendarApp extends CommonTest {
 		waitForSF();
 
 		obj.zButton.zClick(apptComposeRepeatBtn);
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 		obj.zRadioBtn.zClick(apptRepeatRadioBtn, "10");
 
 		obj.zHtmlMenu.zClick(apptRepeatYearlyMonthDropdown, repeatMonth);
@@ -776,7 +777,7 @@ public class CalendarApp extends CommonTest {
 		waitForSF();
 
 		obj.zButton.zClick(apptComposeRepeatBtn);
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 		obj.zRadioBtn.zClick(apptRepeatRadioBtn, "11");
 
 		obj.zHtmlMenu.zClick(apptRepeatYearlyNthDayDropdown, nthDayOfMonth);
@@ -789,7 +790,7 @@ public class CalendarApp extends CommonTest {
 
 	public static void zRepeatSetEndDate(String noEndDate,
 			String endAfterNOccur, String endByDate) throws Exception {
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 		
 		if (!noEndDate.equals("")) {
 			obj.zRadioBtn.zClick(apptRepeatEndTypeRadioBtn, "1");
@@ -804,7 +805,7 @@ public class CalendarApp extends CommonTest {
 		}
 
 		obj.zButton.zClick(apptRepeatDoneBtn);
-		Thread.sleep(6000);
+		SleepUtil.sleep(6000);
 	}
 
 	//--------------------------------------------------------------------------
@@ -813,19 +814,19 @@ public class CalendarApp extends CommonTest {
 			throws Exception {
 
 		String[] temp = viewAndDateSeparatedByColon.split(":");
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		String url = "http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=" + temp[0] + "&date=" + temp[1];
 
 		SelNGBase.selenium.get().open(url);
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 	}
 
 	public static void zVerifyInviteContent(String firstLineSummary,
 			String itemsToVerify[]) throws Exception {
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		String msgBody;
 
 		int numberOfItemsToVerify;
@@ -865,9 +866,9 @@ public class CalendarApp extends CommonTest {
 	 */
 	public static void zNavigateToCalendarPreferences() throws Exception {
 		obj.zButton.zClick(preferencesTab);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTab.zClick(localize(locator.calendar), "2");
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 	}
 
 	/**
@@ -879,10 +880,10 @@ public class CalendarApp extends CommonTest {
 	public static void zSetCalPrefInitialView(String initialView)
 			throws Exception {
 		zNavigateToCalendarPreferences();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		obj.zHtmlMenu.zClick(calPrefInitialViewDropdown, initialView);
 		obj.zButton.zClick(page.zABComposeHTML.zPrefSaveButton);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -908,7 +909,7 @@ public class CalendarApp extends CommonTest {
 	public static void zCalPrefManageCalendars() throws Exception {
 		zNavigateToCalendarPreferences();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		if (SelNGBase.selenium.get().isElementPresent("link="
 				+ localize(locator.optionsManageCalendarsLink)))
@@ -950,7 +951,7 @@ public class CalendarApp extends CommonTest {
 
 	private static void waitForSF() throws Exception {
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("SF"))
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 	}
 
 	// ----------------------------------------------------------------

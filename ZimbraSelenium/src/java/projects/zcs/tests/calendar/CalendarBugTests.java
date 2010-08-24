@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -47,7 +48,7 @@ public class CalendarBugTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -77,9 +78,9 @@ public class CalendarBugTests extends CommonTest {
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject2, location,
 				currentLoggedInUser, body);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zDialog.zNotExists(localize(locator.infoMsg));
 
 		SelNGBase.needReset.set(false);
@@ -103,7 +104,7 @@ public class CalendarBugTests extends CommonTest {
 		obj.zTextAreaField.zType("id=CAL_INVITE_ACL_USERS*", user1_allowed
 				+ "," + user2_allowed);
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		// -ve test case
 		resetSession();
@@ -114,9 +115,9 @@ public class CalendarBugTests extends CommonTest {
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject1, location,
 				currentLoggedInUser, body);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		String expectedValue = localize(locator.invitePermissionDenied,
 				currentLoggedInUser, "").replace(
@@ -132,7 +133,7 @@ public class CalendarBugTests extends CommonTest {
 				"Verifying dialog for permission issue for sending invitation");
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.infoMsg));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		// positive test case
 		resetSession();
@@ -143,15 +144,15 @@ public class CalendarBugTests extends CommonTest {
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject2, location,
 				currentLoggedInUser, body);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zDialog.zNotExists(localize(locator.infoMsg));
 
 		// Verification for both case
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selfAccountName.set(currentLoggedInUser);
 		String msgExists = obj.zMessageItem.zExistsDontWait(subject1);
 		// already enhancement 43340 for this bug otherwise it would be false
@@ -185,7 +186,7 @@ public class CalendarBugTests extends CommonTest {
 		zGoToPreferences("Calendar");
 		obj.zRadioBtn.zClick(localize(locator.invitesAllowNone));
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(user1);
@@ -194,9 +195,9 @@ public class CalendarBugTests extends CommonTest {
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject, location,
 				currentLoggedInUser, body);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String expectedValue = localize(locator.invitePermissionDenied,
 				currentLoggedInUser, "").replace(
 				System.getProperty("line.separator"), " ");
@@ -212,13 +213,13 @@ public class CalendarBugTests extends CommonTest {
 				"Verifying dialog for permission issue for sending invitation");
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.infoMsg));
-		Thread.sleep(2000); // this wait is necessary, because zcs crashes
+		SleepUtil.sleep(2000); // this wait is necessary, because zcs crashes
 		// browser without sending email
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 		SelNGBase.selfAccountName.set(currentLoggedInUser);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String msgExists = obj.zMessageItem.zExistsDontWait(subject);
 		// already enhancement 43340 for this bug otherwise it would be false
 		assertReport(

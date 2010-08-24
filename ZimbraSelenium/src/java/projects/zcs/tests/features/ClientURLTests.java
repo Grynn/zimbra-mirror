@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -241,7 +242,7 @@ public class ClientURLTests extends CommonTest {
 			retVal = obj.zDialog.zExistsDontWait(localize(locator.warningMsg));
 			System.out.println(retVal);
 			if (retVal.equals("false")) {
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 			} else {
 				found = true;
 				break;

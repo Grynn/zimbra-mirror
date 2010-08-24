@@ -14,6 +14,7 @@ import projects.zcs.ui.ComposeView;
 import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -279,19 +280,19 @@ public class MailSharingTests extends CommonTest {
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn);
 		zWaitTillObjectExist("element", "zv__COMPOSE1_obo_checkbox");
 		obj.zButton.zClick(page.zMailApp.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zReplyAllIconBtn);
 		zWaitTillObjectExist("element", "zv__COMPOSE1_obo_checkbox");
 		obj.zButton.zClick(page.zMailApp.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
 		zWaitTillObjectExist("element", "zv__COMPOSE1_obo_checkbox");
 		obj.zButton.zClick(page.zMailApp.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -731,12 +732,12 @@ public class MailSharingTests extends CommonTest {
 					localize(locator.moveMessage));
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.moveMessage));
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 			obj.zFolder.zClick(mountingfoldername);
 			String msgExists = obj.zMessageItem.zExistsDontWait(subject);
 			assertReport("false", msgExists, "Moved message still exists");
 			obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			msgExists = obj.zMessageItem.zExistsDontWait(subject);
 			assertReport("true", msgExists, "Moved message not exists");
 
@@ -747,12 +748,12 @@ public class MailSharingTests extends CommonTest {
 					localize(locator.moveMessage));
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.moveMessage));
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 			obj.zFolder.zClick(page.zMailApp.zInboxFldr);
 			msgExists = obj.zMessageItem.zExistsDontWait(subject);
 			assertReport("false", msgExists, "Moved message still exists");
 			obj.zFolder.zClick(mountingfoldername);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			msgExists = obj.zMessageItem.zExistsDontWait(subject);
 			assertReport("true", msgExists, "Moved message not exists");
 		} else if (role.equals(localize(locator.shareRoleViewer))) {
@@ -819,7 +820,7 @@ public class MailSharingTests extends CommonTest {
 		page.zComposeView.zEnterComposeValues(currentloggedinuser, cc, bcc,
 				subject, body, attachments);
 		obj.zButton.zClick(ComposeView.zSendIconBtn);
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 
 		resetSession();
 		SelNGBase.selfAccountName.set(inviteduser2);
@@ -840,7 +841,7 @@ public class MailSharingTests extends CommonTest {
 		MailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),
 						subject);
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 
 		resetSession();
 		SelNGBase.selfAccountName.set(currentloggedinuser);
@@ -912,12 +913,12 @@ public class MailSharingTests extends CommonTest {
 				sharetype, inviteduser2, role, message, sharingnoteifany,
 				allowtoseeprivateappt);
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, inviteduser3, localize(locator.shareRoleManager),
 				message, sharingnoteifany, allowtoseeprivateappt);
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 
 		resetSession();
 		SelNGBase.selfAccountName.set(inviteduser2);
@@ -1056,7 +1057,7 @@ public class MailSharingTests extends CommonTest {
 		page.zSharing.zAcceptShare(mountingfoldername);
 		obj.zFolder.zRtClick(mountingfoldername);
 		obj.zMenuItem.zClick(localize(locator.del));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zRtClick(mountingfoldername);
 		obj.zMenuItem.zClick(localize(locator.del));
 		obj.zDialog.zExists(localize(locator.warningMsg));
@@ -1065,7 +1066,7 @@ public class MailSharingTests extends CommonTest {
 				mountingfoldername, "")), "Showing wrong warning msg");
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.warningMsg));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zFolder.zNotExists(mountingfoldername);
 
 		SelNGBase.needReset.set(false);
@@ -1110,7 +1111,7 @@ public class MailSharingTests extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(currentloggedinuser, cc,
 				bcc, subject, body, attachments);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(currentloggedinuser, cc,
 				bcc, "subj2", body, attachments);
@@ -1133,7 +1134,7 @@ public class MailSharingTests extends CommonTest {
 				"class=ImgInbox");
 		String toastmsg = localize(locator.actionMove, "2", localize(
 				locator.conversations).toLowerCase(), localize(locator.inbox));
-		Thread.sleep(900);
+		SleepUtil.sleep(900);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			obj.zToastAlertMessage
 					.zAlertMsgExists(toastmsg,

@@ -8,6 +8,7 @@ import org.testng.Assert;
 
 import projects.zcs.clients.ProvZCS;
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 
 /**
  * This Class have UI-level methods related Mail-app(conversation view). e.g:
@@ -170,26 +171,26 @@ public class MailApp extends AppPage {
 		boolean found = false;
 		for (int i = 0; i <= 15; i++) {
 			obj.zButton.zClick(zGetMailIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			if (!folderName.equals("")) {
 				obj.zFolder.zClick(folderName);
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 			}
 			String rc = obj.zMessageItem.zExistsDontWait(mailSubject);
 			if (rc.equals("false")) {
 				obj.zFolder.zClick(localize(locator.junk));
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				rc = obj.zMessageItem.zExistsDontWait(mailSubject);
 				if (rc.equals("false")) {
-					Thread.sleep(1000);
+					SleepUtil.sleep(1000);
 				} else {
 					found = true;
-					Thread.sleep(1000);
+					SleepUtil.sleep(1000);
 					break;
 				}
 			} else {
 				found = true;
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				break;
 			}
 		}
@@ -208,7 +209,7 @@ public class MailApp extends AppPage {
 
 	public static void zVerifyMailNotExists(String folderName,
 			String mailSubject) throws Exception {
-		Thread.sleep(1500); // required otherwise it will fail
+		SleepUtil.sleep(1500); // required otherwise it will fail
 		int i = 0;
 		boolean found = false;
 		for (i = 0; i < 5; i++) {
@@ -218,7 +219,7 @@ public class MailApp extends AppPage {
 			}
 			String rc = obj.zMessageItem.zNotExistsDontWait(mailSubject);
 			if (rc.equals("false")) {
-				Thread.sleep(500);
+				SleepUtil.sleep(500);
 			} else {
 				found = true;
 				break;
@@ -308,7 +309,7 @@ public class MailApp extends AppPage {
 	public void zDeleteFolder(String folderName) throws Exception {
 		obj.zFolder.zRtClick(folderName);
 		obj.zMenuItem.zClick(localize(locator.del));
-		Thread.sleep(2000); // deletion takes sometime
+		SleepUtil.sleep(2000); // deletion takes sometime
 	}
 
 	public void zMoveFolder(String folderName) throws Exception {
@@ -324,7 +325,7 @@ public class MailApp extends AppPage {
 	public void zCreateRssFeedFolder(String rssFeedFolderName, String rssFeedURL)
 			throws Exception {
 		zCreateRssFeedFolderCore(rssFeedFolderName, rssFeedURL);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		boolean dialogfound = false;
 		String dialogexistFlag = obj.zDialog
 				.zExistsDontWait(localize(locator.criticalMsg));
@@ -345,7 +346,7 @@ public class MailApp extends AppPage {
 		String existFlag = obj.zFolder.zExistsDontWait(rssFeedFolderName);
 		for (int i = 1; i <= 30; i++) {
 			if (existFlag.equals("false")) {
-				Thread.sleep(1000); // takes some time to load feed
+				SleepUtil.sleep(1000); // takes some time to load feed
 			} else {
 				found = true;
 				break;
@@ -415,7 +416,7 @@ public class MailApp extends AppPage {
 
 	public void zVerifyMailContentContains(String contentToVerify)
 			throws Exception {
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		String msgBody;
 		msgBody = obj.zMessageItem.zGetCurrentMsgBodyText();
 		Assert.assertTrue(msgBody.indexOf(contentToVerify) >= 0,

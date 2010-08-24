@@ -13,6 +13,7 @@ import org.openqa.selenium.server.SeleniumServer;
 
 import framework.util.CommandLine;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 public class SeleniumService {
@@ -65,7 +66,7 @@ public class SeleniumService {
 				}
 				
 				// TODO: any way to detect that the server is ready?
-				Thread.sleep(10000);
+				SleepUtil.sleep(10000);
 				
 				ss.boot();
 

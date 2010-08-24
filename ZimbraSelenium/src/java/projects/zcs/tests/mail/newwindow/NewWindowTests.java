@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -93,7 +94,7 @@ public class NewWindowTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		SelNGBase.selenium.get().selectWindow(null);
@@ -114,11 +115,11 @@ public class NewWindowTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
-		Thread.sleep(10000);
+		SleepUtil.sleep(10000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		
 		obj.zButton.zClick(page.zMailApp.zDeleteIconBtn_newWindow);
-		Thread.sleep(8000);
+		SleepUtil.sleep(8000);
 		SelNGBase.selenium.get().selectWindow(null);
 		obj.zMessageItem.zNotExists(subject);
 
@@ -138,14 +139,14 @@ public class NewWindowTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn_newWindow);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow(null);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Re: " + subject);
 
@@ -165,14 +166,14 @@ public class NewWindowTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zReplyAllIconBtn_newWindow);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow(null);
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zExists("Re: " + subject);
@@ -198,16 +199,16 @@ public class NewWindowTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn_newWindow);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zEditField.zType(page.zComposeView.zToField,
 				SelNGBase.selfAccountName.get());
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow(null);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Fwd: " + subject);
 
@@ -229,22 +230,22 @@ public class NewWindowTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn_newWindow);
 		obj.zMenuItem.zClick("testTag");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow(null);
 		obj.zMessageItem.zVerifyIsTagged(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn_newWindow);
 		obj.zMenuItem.zClick(localize(locator.removeTag));
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow(null);
 		obj.zMessageItem.zVerifyIsNotTagged(subject);
 
@@ -264,7 +265,7 @@ public class NewWindowTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		for (int i = 0; i <= 10; i++) {
 			String dlgExists = obj.zDialog
@@ -280,11 +281,11 @@ public class NewWindowTests extends CommonTest {
 				obj.zButton.zClickInDlgByName(localize(locator.ok),
 						localize(locator.zimbraTitle));
 			} else {
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 			}
 		}
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
@@ -303,19 +304,19 @@ public class NewWindowTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zReplyBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick("id=zb__COMPOSE1__DETACH_COMPOSE_left_icon");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zEditor.zType("Modifying body");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().selectWindow(null);
 		obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("false", obj.zMessageItem.zExistsDontWait(subject),
 				"Verifying drafted message");
 
@@ -335,19 +336,19 @@ public class NewWindowTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zReplyBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick("id=zb__COMPOSE1__DETACH_COMPOSE_left_icon");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zEditor.zType("Modifying body");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().selectWindow(null);
 		obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zExists(subject);
 
 		SelNGBase.needReset.set(false);

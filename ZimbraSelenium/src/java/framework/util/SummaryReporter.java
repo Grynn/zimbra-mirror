@@ -9,6 +9,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Writer;
+import java.util.Date;
 
 import org.testng.IReporter;
 import org.testng.ISuite;
@@ -23,13 +24,17 @@ public class SummaryReporter implements IReporter {
 	private String dynSkippedTestMethods = "";
 	private static String outputfolder ="";
 	private static String appType = "";
+    private Date startDate = new Date();
     
     public SummaryReporter(String atype){
     	appType = atype;
     	outputfolder = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")+"/"+atype;
+    	startDate = new Date();
     }	
 	public void generateReport(java.util.List<XmlSuite> xmlSuites,
 			java.util.List<ISuite> suites, java.lang.String outputDirectory) {
+		long duration = (new Date()).getTime() - startDate.getTime();
+		
 		System.out.println(ZimbraSeleniumProperties.getStringProperty("locale"));
 		int passed = 0;
 		int failed = 0;
@@ -50,15 +55,17 @@ public class SummaryReporter implements IReporter {
 		}
 
 		int dynamicallySkipped = getSkippedMethodsCount();
-		String testdetails = "ran:"
-				+ (passed + failed + skipped + dynamicallySkipped) + " passed:"
-				+ passed + " failed:" + failed + " skipped:"
-				+ (skipped + dynamicallySkipped) + " locale:"
-				+ ZimbraSeleniumProperties.getStringProperty("locale") + " browser:"
-				+ SelNGBase.currentBrowserName + " client:"
-				+ System.getenv("COMPUTERNAME") + " server:"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + " zimbra:"
-				+ ZimbraSeleniumProperties.zimbraGetVersionString();
+		String testdetails = 
+			"ran:" + (passed + failed + skipped + dynamicallySkipped) + 
+			" passed:" + passed + 
+			" failed:" + failed + 
+			" skipped:" + (skipped + dynamicallySkipped) + 
+			" locale:" + ZimbraSeleniumProperties.getStringProperty("locale") + 
+			" browser:" + SelNGBase.currentBrowserName + 
+			" client:" + System.getenv("COMPUTERNAME") + 
+			" server:" + ZimbraSeleniumProperties.getStringProperty("server") + 
+			" zimbra:" + ZimbraSeleniumProperties.zimbraGetVersionString() +
+			" duration:" + (duration/1000) + "s(" + (SleepUtil.TotalSleepMillis/1000) + ")";
 		String subject = "SelNG-" + appType.toLowerCase()+" "+testdetails;
 		String bodyfileXpPath = outputfolder;
 		String lines = "\n--------------------------------------------\n";

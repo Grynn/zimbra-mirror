@@ -15,6 +15,7 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 /**
  * @author Jitesh Sojitra
@@ -87,17 +88,17 @@ public class TagContactTests extends CommonTest {
 		newTag1 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		obj.zContactListItem.zClick(lastName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zVerifyIsTagged(lastName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		zRenameTag(tag1, newTag1);
 		obj.zFolder.zNotExists(tag1);
 		obj.zFolder.zClick(newTag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zVerifyIsTagged(lastName);
 
 		zDeleteTag(newTag1);
@@ -136,38 +137,38 @@ public class TagContactTests extends CommonTest {
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		obj.zContactListItem.zClick(lastName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zVerifyIsTagged(lastName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zClick(contact2.lastName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zVerifyIsTagged(contact2.lastName);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zExists(lastName);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(contact2.lastName),
 				"Verify contact2 not exists");
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zExists(contact2.lastName);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName),
 				"Verify contact1 not exists");
 		obj.zFolder.zClick(localize(locator.contacts));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("true", obj.zContactListItem.zExistsDontWait(lastName),
 				"Verify contact1 not exists");
 		assertReport("true", obj.zContactListItem.zExistsDontWait(contact2.lastName),
 				"Verify contact2 not exists");
 		obj.zFolder.zClick(localize(locator.emailedContacts));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName),
 				"Verify contact1 not exists");
 		assertReport("false", obj.zContactListItem.zExistsDontWait(contact2.lastName),
@@ -177,7 +178,7 @@ public class TagContactTests extends CommonTest {
 		obj.zContactListItem.zClick(contact2.lastName);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(localize(locator.removeTag));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
@@ -205,28 +206,28 @@ public class TagContactTests extends CommonTest {
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
 		obj.zContactListItem.zClick(lastName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag1);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zVerifyIsTagged(lastName);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zNotExists(tag1);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zVerifyIsTagged(lastName);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zNotExists(tag1);
 		obj.zMenuItem.zNotExists(tag2);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zExists(lastName);
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zExists(lastName);
 
 		SelNGBase.needReset.set(false);
@@ -251,23 +252,23 @@ public class TagContactTests extends CommonTest {
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		obj.zContactListItem.zClick(lastName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zVerifyIsTagged(lastName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zButton.zClick(page.zABApp.zEditContactIconBtn);
 		obj.zButton.zClick(page.zABApp.zTagContactBtn_EditContact);
 		obj.zMenuItem.zClick(localize(locator.removeTag));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactBtn_EditContact);
 		obj.zMenuItem.zExists(tag1);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactBtn_EditContact);
 		obj.zMenuItem.zExists(tag1);
 		obj.zMenuItem.zNotExists(tag2);
@@ -296,23 +297,23 @@ public class TagContactTests extends CommonTest {
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		obj.zContactListItem.zClick(groupName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zVerifyIsTagged(groupName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zButton.zClick(page.zABApp.zEditContactIconBtn);
 		obj.zButton.zClick(page.zABApp.zTagGroupBtn_EditGroup);
 		obj.zMenuItem.zClick(localize(locator.removeTag));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagGroupBtn_EditGroup);
 		obj.zMenuItem.zExists(tag1);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagGroupBtn_EditGroup);
 		obj.zMenuItem.zExists(tag1);
 		obj.zMenuItem.zNotExists(tag2);
@@ -344,38 +345,38 @@ public class TagContactTests extends CommonTest {
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		obj.zContactListItem.zClick(group1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zVerifyIsTagged(group1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zClick(group2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zVerifyIsTagged(group2);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zExists(group1);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(group2),
 				"Verify contact group2 not exists");
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zExists(group2);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(group1),
 				"Verify contact group1 not exists");
 		obj.zFolder.zClick(localize(locator.contacts));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("true", obj.zContactListItem.zExistsDontWait(group1),
 				"Verify contact group1 not exists");
 		assertReport("true", obj.zContactListItem.zExistsDontWait(group2),
 				"Verify contact group2 not exists");
 		obj.zFolder.zClick(localize(locator.emailedContacts));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(group1),
 				"Verify contact group1 not exists");
 		assertReport("false", obj.zContactListItem.zExistsDontWait(group2),
@@ -385,7 +386,7 @@ public class TagContactTests extends CommonTest {
 		obj.zContactListItem.zClick(group2);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(localize(locator.removeTag));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
@@ -424,15 +425,15 @@ public class TagContactTests extends CommonTest {
 				"//td[contains(@id, 'zti__main_Contacts') and contains(text(), '"
 						+ tag1 + "')]");
 		obj.zContactListItem.zVerifyIsTagged(lastName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(localize(locator.trash));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName),
 				"Verify contact1 not exists");
 		assertReport("false", obj.zContactListItem.zExistsDontWait(contact2.lastName),
 				"Verify contact2 not exists");
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zExists(lastName);
 
 		obj.zFolder.zClick(localize(locator.contacts));
@@ -442,11 +443,11 @@ public class TagContactTests extends CommonTest {
 				"//tr[contains(@id, 'zlif__CNS')]//td[contains(text(), '"
 						+ contact2.lastName + "')]");
 		obj.zContactListItem.zVerifyIsTagged(contact2.lastName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(localize(locator.contacts));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zExists(contact2.lastName);
 		assertReport("false", obj.zContactListItem.zExistsDontWait(lastName),
 				"Verify contact1 not exists");

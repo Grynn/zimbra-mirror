@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 
 public class ZFieldObject extends ZObject {
 	public ZFieldObject(String coreName, String objTypeName) {
@@ -112,15 +113,12 @@ public class ZFieldObject extends ZObject {
 			robot.keyPress(KeyEvent.VK_SHIFT);
 			robot.keyPress(KeyEvent.VK_ENTER);
 			robot.keyRelease(KeyEvent.VK_SHIFT);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			this.enterUsingKeys(data);
 			robot.keyPress(KeyEvent.VK_ENTER);
-			Thread.sleep(500);
+			SleepUtil.sleep(500);
 
 		} catch (AWTException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -141,18 +139,15 @@ public class ZFieldObject extends ZObject {
 				"");
 
 		try {
-			Thread.sleep(500);
+			SleepUtil.sleep(500);
 			moveMouseAndClick(xy);
 			enterUsingKeys(data);
 			Robot robot;
 			robot = new Robot();
-			Thread.sleep(500);
+			SleepUtil.sleep(500);
 			robot.keyPress(KeyEvent.VK_ENTER);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		} catch (AWTException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -183,11 +178,8 @@ public class ZFieldObject extends ZObject {
 				robot.delay(150);
 
 			}
-			Thread.sleep(100);
+			SleepUtil.sleep(100);
 		} catch (AWTException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

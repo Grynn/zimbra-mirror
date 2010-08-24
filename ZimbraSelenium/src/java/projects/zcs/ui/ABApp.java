@@ -1,5 +1,7 @@
 package projects.zcs.ui;
 
+import framework.util.SleepUtil;
+
 
 /**
  * This Class have UI-level methods related to Address book app. e.g:
@@ -136,10 +138,10 @@ public class ABApp extends AppPage {
 			obj.zEditField.zType(localize(locator.findLabel), membersArray[i]
 					.trim());
 			obj.zButton.zClick(localize(locator.search), "2");
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 			if (currentBrowserName.contains("Safari")) {
 				obj.zButton.zClick(localize(locator.search), "2");
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 			}
 			obj.zListItem.zDblClickItemInSpecificList(membersArray[i], "2");
 			obj.zButton.zClick(localize(locator.add));

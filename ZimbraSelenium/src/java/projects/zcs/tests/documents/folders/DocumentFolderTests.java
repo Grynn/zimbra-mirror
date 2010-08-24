@@ -9,6 +9,7 @@ import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentApp;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 /**
  * This covers some high priority test cases related to Documents
@@ -74,12 +75,12 @@ public class DocumentFolderTests extends CommonTest {
 
 		String newNotebookName = getLocalizedData_NoSpecialChar();
 		page.zDocumentCompose.zCreateNewNotebook(notebookName, "", "");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zRtClick(notebookName);
 		obj.zMenuItem.zClick(localize(locator.editProperties));
 		obj.zEditField.zTypeInDlg(localize(locator.nameLabel), newNotebookName);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zExists(newNotebookName);
 		obj.zFolder.zNotExists(notebookName);
 
@@ -93,7 +94,7 @@ public class DocumentFolderTests extends CommonTest {
 			handleRetry();
 
 		page.zDocumentCompose.zCreateNewNotebook(notebookName, "", "");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton
 				.zRtClick(replaceUserNameInStaticId(DocumentApp.zNewNotebookOverviewPaneIcon));
 		obj.zMenuItem.zClick(localize(locator.newNotebook));

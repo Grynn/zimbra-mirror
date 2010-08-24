@@ -3,6 +3,7 @@ package projects.zcs.ui;
 import org.testng.Assert;
 
 import projects.zcs.clients.ProvZCS;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -47,7 +48,7 @@ public class TaskApp extends AppPage {
 	 * Navigates to tasks from MailApp
 	 */
 	public static void zNavigateToTasks() throws Exception {
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(zTasksTab);
 	}
 
@@ -112,7 +113,7 @@ public class TaskApp extends AppPage {
 		}
 		if (!body.equals(""))
 			obj.zEditor.zType(body);
-		Thread.sleep(1000); // fails in SF because it doesn't find task list
+		SleepUtil.sleep(1000); // fails in SF because it doesn't find task list
 	}
 
 	/**
@@ -239,7 +240,7 @@ public class TaskApp extends AppPage {
 
 		obj.zButton.zClick(zTasksSaveBtn);
 
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 
 	}
 
@@ -351,7 +352,7 @@ public class TaskApp extends AppPage {
 
 		obj.zButton.zClick(zTasksSaveBtn);
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -611,7 +612,7 @@ public class TaskApp extends AppPage {
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.confirmTitle));
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	public static void zTaskVerifyPercentProgress(String taskName,

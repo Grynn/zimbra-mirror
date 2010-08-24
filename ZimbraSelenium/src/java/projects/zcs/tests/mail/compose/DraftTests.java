@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.tests.CommonTest;
@@ -156,7 +157,7 @@ public class DraftTests extends CommonTest {
 			goToDraftAndEdit_retry();
 		obj.zFolder.zClick(localize(locator.drafts));
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zClick(MailApp.zEditDraftIconBtn);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		page.zComposeView.zVerifyComposeFilledValues("Edit draft", to, cc, bcc,
@@ -175,7 +176,7 @@ public class DraftTests extends CommonTest {
 			String subject, String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			modifyDraftAndVerify_retry();
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zClick(MailApp.zEditDraftIconBtn);
 		obj.zButton.zWait(ComposeView.zSendIconBtn);
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc,
@@ -198,7 +199,7 @@ public class DraftTests extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
-		Thread.sleep(35000);// auto save happens every 30s
+		SleepUtil.sleep(35000);// auto save happens every 30s
 		// message has timestamp within it which is difficult to catch.
 		// and shows up at different places in different locale.
 		// so splitting the msg before & after and verifying them saperately
@@ -241,7 +242,7 @@ public class DraftTests extends CommonTest {
 
 		obj.zFolder.zClick(localize(locator.drafts));
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zClick(MailApp.zEditDraftIconBtn);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		page.zComposeView.zVerifyComposeFilledValues("Edit Auto-draft", to, cc,
@@ -267,7 +268,7 @@ public class DraftTests extends CommonTest {
 		page.zComposeView.zEnterComposeValues("", "", "",
 				"this subject will be replaced after 30 secs",
 				"this body will be replaced after 30 sec", attachments);
-		Thread.sleep(35000);// auto save happens every 30s
+		SleepUtil.sleep(35000);// auto save happens every 30s
 		String toastMsg = localize(locator.draftSaved);
 		obj.zToastAlertMessage.zAlertMsgExists(toastMsg,
 				"Draft saved- message not shown");
@@ -287,7 +288,7 @@ public class DraftTests extends CommonTest {
 		zGoToPreferences("Composing");
 		obj.zRadioBtn.zClick(localize(locator.composeAsHTML));
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneOff));
@@ -297,12 +298,12 @@ public class DraftTests extends CommonTest {
 				"Bug24431 save draft(html format) subject",
 				"Bug24431 save draft(html format) body", "");
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 		obj.zMessageItem.zRtClick("Bug24431 save draft(html format) subject");
 		obj.zMenuItem.zClick(localize(locator.showOrig));
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		String messageBody = SelNGBase.selenium.get().getBodyText();
 		Boolean htmlBodyExists = messageBody
@@ -325,7 +326,7 @@ public class DraftTests extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 		obj.zMessageItem.zRtClick("Bug24431 save draft(html format) subject");
 		obj.zMenuItem.zClick(localize(locator.showOrig));
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		messageBody = SelNGBase.selenium.get().getBodyText();
 		htmlBodyExists = messageBody
@@ -366,7 +367,7 @@ public class DraftTests extends CommonTest {
 		zGoToPreferences("Mail");
 		obj.zRadioBtn.zClick(localize(locator.composeAsText));
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues("to@testdomain.com",
@@ -374,12 +375,12 @@ public class DraftTests extends CommonTest {
 				"Bug34870 save draft(html format) subject",
 				"Bug34870 save draft(html format) body", "");
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 		obj.zMessageItem.zRtClick("Bug34870 save draft(html format) subject");
 		obj.zMenuItem.zClick(localize(locator.showOrig));
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		String messageBody = SelNGBase.selenium.get().getBodyText();
 		Boolean htmlBodyExists = messageBody

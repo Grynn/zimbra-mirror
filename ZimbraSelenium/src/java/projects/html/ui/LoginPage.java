@@ -7,6 +7,7 @@ import com.zimbra.common.service.ServiceException;
 import projects.html.tests.CommonTest;
 import framework.core.SelNGBase;
 import framework.util.BrowserUtil;
+import framework.util.SleepUtil;
 import framework.util.ZimbraAccount;
 
 @SuppressWarnings("static-access")
@@ -69,14 +70,14 @@ public class LoginPage extends CommonTest {
 	public void zLoginToZimbraHTML(String username, String password) {
 		try {
 			openZimbraHTML();
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 			currentBrowserName = BrowserUtil.getBrowserName();
 			obj.zEditField.zType("Username:", username);
 			obj.zPwdField.zType("Password:", password);
 			obj.zButton.zClick("class=zLoginButton");
-			Thread.sleep(2000);// without this we get permission denied error
+			SleepUtil.sleep(2000);// without this we get permission denied error
 			zWaitForElement("id=searchField");
-			Thread.sleep(2000);// wait another 2 secs after we see the search
+			SleepUtil.sleep(2000);// wait another 2 secs after we see the search
 			// icon
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
@@ -89,11 +90,7 @@ public class LoginPage extends CommonTest {
 		for (int i = 0; i < 10; i++) {
 			if (SelNGBase.selenium.get().isElementPresent(elementId))
 				return true;
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			SleepUtil.sleep(2000);
 		}
 		return false;
 	}
@@ -103,14 +100,14 @@ public class LoginPage extends CommonTest {
 			String username = ProvZCS.getRandomAccount();
 			SelNGBase.selfAccountName.set(username);
 			customLogin(parameter);
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 			currentBrowserName = BrowserUtil.getBrowserName();
 			obj.zEditField.zType("Username:", username);
 			obj.zPwdField.zType("Password:", "test123");
 			obj.zButton.zClick("class=zLoginButton");
-			Thread.sleep(2000);// without this we get permission denied error
+			SleepUtil.sleep(2000);// without this we get permission denied error
 			obj.zButton.zExists("id=zb__Search__MENU_left_icon");
-			Thread.sleep(2000);// wait another 2 secs after we see the search
+			SleepUtil.sleep(2000);// wait another 2 secs after we see the search
 			// icon
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
@@ -124,7 +121,7 @@ public class LoginPage extends CommonTest {
 	 */
 	public static void logoutOfZimbraAjax() throws Exception {
 		SelNGBase.selenium.get().click("link=" + localize("logOff"));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertTrue(true);
 	}
 }

@@ -197,25 +197,25 @@ public class CalendarMiscTests extends CommonTest {
 				
 		// Navigate To Preferences view 
 		obj.zButton.zClick(page.zCalendarApp.preferencesTab);
-		Thread.sleep(2000);	
+		SleepUtil.sleep(2000);	
 		//get initial time zone value
 		timezone = obj.zHtmlMenu.zGetSelectedItemName(page.zCalendarApp.apptComposeTimezoneDropdown);
 		//set time zone to some value on general tab under preferences
 		obj.zHtmlMenu.zClick(page.zCalendarApp.apptComposeTimezoneDropdown, obj.zHtmlMenu.zGetAllItemNames(page.zCalendarApp.apptComposeTimezoneDropdown).split("::")[0]);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABComposeHTML.zPrefSaveButton);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		//select calendar tab under preferences
 		obj.zTab.zClick("/zimbra/h/options?selected=calendar");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		//set option to show time zone list 
 		if(!obj.zCheckbox.zGetStatus(page.zCalendarApp.calPrefShowTimezoneCheckbox))
 		obj.zCheckbox.zClick(page.zCalendarApp.calPrefShowTimezoneCheckbox);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		//set initial view
 		obj.zHtmlMenu.zClick(page.zCalendarApp.calPrefInitialViewDropdown, localize(locator.calViewWeek));
 		obj.zButton.zClick(page.zABComposeHTML.zPrefSaveButton);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		//navigate to calendar compose view
 		page.zCalendarApp.zNavigateToCalendar();
@@ -223,32 +223,32 @@ public class CalendarMiscTests extends CommonTest {
 		page.zCalendarApp.zEnterSimpleApptDetails(subject, location, "", "");
 		
 		//set repeat options
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zButton.zClick(page.zCalendarApp.apptComposeRepeatBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		obj.zRadioBtn.zClick(page.zCalendarApp.apptRepeatRadioBtn, "3");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zRadioBtn.zClick(page.zCalendarApp.apptRepeatEndTypeRadioBtn, "2");
 		obj.zEditField.zType(page.zCalendarApp.apptRepeatEndAfterOccurrencesEditField, "7");
 		obj.zButton.zClick(page.zCalendarApp.apptRepeatDoneBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		obj.zButton.zClick(page.zCalendarApp.apptComposeSaveBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		
 		//change time zone for single appointment
 		obj.zAppointment.zClick(subject);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		obj.zHtmlMenu.zClick(page.zCalendarApp.apptComposeTimezoneDropdown, obj.zHtmlMenu.zGetAllItemNames(page.zCalendarApp.apptComposeTimezoneDropdown).split("::")[4]);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalendarApp.apptComposeSaveBtn);	
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		
 		//verify exception in a single appointment
 		obj.zAppointment.zExistsDontWait("exception");
 		
 		// Navigate To Calendar Preferences and set time zone back to initial value 
 		obj.zButton.zClick(page.zCalendarApp.preferencesTab);
-		Thread.sleep(1000);	
+		SleepUtil.sleep(1000);	
 		obj.zHtmlMenu.zClick(page.zCalendarApp.apptComposeTimezoneDropdown, timezone);
 
 		SelNGBase.needReset.set(false);

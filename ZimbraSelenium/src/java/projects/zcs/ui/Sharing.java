@@ -3,6 +3,7 @@ package projects.zcs.ui;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -240,7 +241,7 @@ public class Sharing extends AppPage {
 					&& Selectedmessage
 							.equals(localize(locator.sendStandardMailAboutShare))
 					|| !message.equals(localize(locator.sendNoMailAboutShare))) {
-				Thread.sleep(2000);
+				SleepUtil.sleep(2000);
 				/*
 				 * some time if you have selected to send a mail regarding share
 				 * and killing browser then it immediately kills browser without
@@ -254,7 +255,7 @@ public class Sharing extends AppPage {
 			obj.zDialog.zNotExists(currentDialog);
 			SelNGBase.selenium.get().selectWindow("_blank");
 			obj.zButton.zClick(localize(locator.send));
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 			/*
 			 * some time if you have selected to send a mail regarding share and
 			 * killing browser then it immediately kills browser without sending
@@ -379,7 +380,7 @@ public class Sharing extends AppPage {
 			String sharetype, String invitedusers, String role,
 			String sharingnoteifany) throws Exception {
 		obj.zMessageItem.zClick(messagetype);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		/*
 		 * sometime message body doesn't returns correct value if there is no
 		 * sleep
@@ -460,13 +461,13 @@ public class Sharing extends AppPage {
 		MailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
 		obj.zMessageItem.zClick(localize(locator.shareCreatedSubject));
-		Thread.sleep(2000); /*
+		SleepUtil.sleep(2000); /*
 							 * this is necessary because selenium suddenly
 							 * clicks to mail & presses to Accept Share button
 							 * but accept share dialog doesn't appears
 							 */
 		obj.zButton.zClick(zAcceptShareIconBtn);
-		Thread.sleep(1000); /*
+		SleepUtil.sleep(1000); /*
 							 * this is necessary because selenium suddenly
 							 * clicks to mail & presses to Accept Share button
 							 * but accept share dialog doesn't appears
@@ -475,7 +476,7 @@ public class Sharing extends AppPage {
 				mountingfoldername, localize(locator.acceptShare));
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.acceptShare));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		Assert.assertEquals(
 						obj.zMessageItem.zExistsDontWait(localize(locator.shareCreatedSubject)),
 						"false",
@@ -489,13 +490,13 @@ public class Sharing extends AppPage {
 		MailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
 		obj.zMessageItem.zClick(localize(locator.shareCreatedSubject));
-		Thread.sleep(1000); /*
+		SleepUtil.sleep(1000); /*
 							 * this is necessary because selenium suddenly
 							 * clicks to mail & presses to Accept Share button
 							 * but accept share dialog doesn't appears
 							 */
 		obj.zButton.zClick(zAcceptShareIconBtn);
-		Thread.sleep(1000); /*
+		SleepUtil.sleep(1000); /*
 							 * this is necessary because selenium suddenly
 							 * clicks to mail & presses to Accept Share button
 							 * but accept share dialog doesn't appears
@@ -519,13 +520,13 @@ public class Sharing extends AppPage {
 		MailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
 		obj.zMessageItem.zClick(localize(locator.shareCreatedSubject));
-		Thread.sleep(1000); /*
+		SleepUtil.sleep(1000); /*
 							 * this is necessary because selenium suddenly
 							 * clicks to mail & presses to Accept Share button
 							 * but accept share dialog doesn't appears
 							 */
 		obj.zButton.zClick(zAcceptShareIconBtn);
-		Thread.sleep(1000); /*
+		SleepUtil.sleep(1000); /*
 							 * this is necessary because selenium suddenly
 							 * clicks to mail & presses to Accept Share button
 							 * but accept share dialog doesn't appears
@@ -574,7 +575,7 @@ public class Sharing extends AppPage {
 		obj.zButton.zClick(localize(locator.declineShare));
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.declineShare));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		/*
 		 * some time if you have selected to send a mail regarding share and
 		 * killing browser then it immediately kills browser without sending

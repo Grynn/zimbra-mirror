@@ -3,6 +3,7 @@ package projects.html.ui;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 
 import projects.html.tests.CommonTest;
 import projects.zcs.clients.ProvZCS;
@@ -97,21 +98,21 @@ public class MailApp extends CommonTest {
 		int i = 0;
 		boolean found = false;
 		for (i = 0; i <= 15; i++) {
-			Thread.sleep(1000); // selenium failure here
+			SleepUtil.sleep(1000); // selenium failure here
 			if (!folderName.equals("")) {
 				obj.zFolder.zClick(folderName);
 			} else {
 				obj.zFolder.zClick(zInboxFldr);
 			}
-			Thread.sleep(1000); // timing issue
+			SleepUtil.sleep(1000); // timing issue
 			String rc = obj.zMessageItem.zExistsDontWait(mailSubject);
 			if (rc.equals("false")) {
 				// check in junk
 				obj.zFolder.zClick(zJunkFldr);
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				rc = obj.zMessageItem.zExistsDontWait(mailSubject);
 				if (rc.equals("false")) {
-					Thread.sleep(1000);
+					SleepUtil.sleep(1000);
 				} else {
 					found = true;
 					break;
@@ -131,7 +132,7 @@ public class MailApp extends CommonTest {
 
 	public static void zVerifyMailNotExists(String folderName,
 			String mailSubject) throws Exception {
-		Thread.sleep(3000); // required otherwise it will fail
+		SleepUtil.sleep(3000); // required otherwise it will fail
 		int i = 0;
 		boolean found = false;
 		for (i = 0; i < 5; i++) {
@@ -141,7 +142,7 @@ public class MailApp extends CommonTest {
 			}
 			String rc = obj.zMessageItem.zNotExistsDontWait(mailSubject);
 			if (rc.equals("false")) {
-				Thread.sleep(500);
+				SleepUtil.sleep(500);
 			} else {
 				found = true;
 				break;
@@ -174,7 +175,7 @@ public class MailApp extends CommonTest {
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		ProvZCS.injectMessage(from, recipients, cc, subject, body);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zClickCheckMailUntilMailShowsUp(page.zMailApp.zInboxFldr, subject);
 	}
 
@@ -182,7 +183,7 @@ public class MailApp extends CommonTest {
 			String parentFolder) throws Exception {
 		zGoToApplication("Mail");
 		obj.zButton.zClick(zEditLinkFldrOverviewPane);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zCreateFolderCore(folderName, parentFolder);
 	}
 
@@ -194,40 +195,40 @@ public class MailApp extends CommonTest {
 	private static void zCreateFolderCore(String folderName, String parentFolder)
 			throws Exception {
 		obj.zButton.zClick(zNewFolderBtn);
-		Thread.sleep(2000); // test fails here
+		SleepUtil.sleep(2000); // test fails here
 		obj.zEditField.zType(zNewFldrNameEditField, folderName);
 		if (!parentFolder.equals("")) {
 			obj.zHtmlMenu.zClick(zParentFolderWebList, parentFolder);
 		}
 		obj.zButton.zClick(zCreateFolderBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		zWaitTillObjectExist("folder", folderName);
 	}
 
 	public static void zNavigateToNewTagPage() throws Exception {
 		obj.zFolder.zEdit(localize(locator.tags));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zWaitTillObjectExist("button", zNewTagBtn);
 	}
 
 	public static void zCreateTag(String tagName) throws Exception {
 		zNavigateToNewTagPage();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(zNewTagBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zEditField.zType(zTagNameEditfield, tagName);
 		obj.zButton.zClick(zTagSaveBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	public static void zRenameTag(String currentTagName, String newTagName)
 			throws Exception {
 		zNavigateToNewTagPage();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		// obj.zFolder.zClick(currentTagName);
 		obj.zEditField.zType(zTagEditNameEditfield, newTagName);
 		obj.zButton.zClick(zTagSaveBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	public static void zDeleteTag(String tagName) throws Exception {
@@ -235,7 +236,7 @@ public class MailApp extends CommonTest {
 		// obj.zFolder.zClick(tagName);
 		obj.zCheckbox.zClick(zTagPermDelChkBox);
 		obj.zButton.zClick(zTagDeleteBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	public static void zMoveTo(String destinationFolder) throws Exception {
@@ -243,7 +244,7 @@ public class MailApp extends CommonTest {
 			destinationFolder = destinationFolder.substring(0, 7) + ".*";
 		}
 		obj.zHtmlMenu.zClick("name=folderId", destinationFolder);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 	}
 
 	public static void zMoveToBtmToolbar(String destinationFolder)
@@ -253,7 +254,7 @@ public class MailApp extends CommonTest {
 		}
 		obj.zHtmlMenu.zClickMenuByLocation("name=folderId", destinationFolder,
 				"2");
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 	}
 
 	public static void zMoreActions(String actionName) throws Exception {
@@ -261,7 +262,7 @@ public class MailApp extends CommonTest {
 			actionName = actionName.substring(0, 7) + ".*";
 		}
 		obj.zHtmlMenu.zClick("name=actionOp", actionName);
-		Thread.sleep(2000); /*
+		SleepUtil.sleep(2000); /*
 							 * this is necessary, selenium doesn't wait after
 							 * doing some action and fails on next statement
 							 */
@@ -273,6 +274,6 @@ public class MailApp extends CommonTest {
 			actionName = actionName.substring(0, 7) + ".*";
 		}
 		obj.zHtmlMenu.zClickMenuByLocation("name=actionOp", actionName, "2");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 }

@@ -3,6 +3,7 @@ package projects.zcs.ui;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 
 /**
  * @author Jitesh Sojitra
@@ -23,7 +24,7 @@ public class SignaturePref extends AppPage {
 				signatureName);
 		obj.zEditor.zType(signatureBody);
 		if (format.equals("html")) {
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			String isExists = obj.zButton
 					.zExistsDontWait(localize(locator.formatAsText));
 			if (isExists.equals("true")) {
@@ -46,7 +47,7 @@ public class SignaturePref extends AppPage {
 			obj.zEditor.zType(signatureBody);
 		}
 		if (format.equals("html")) {
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			String isExists = obj.zButton
 					.zExistsDontWait(localize(locator.formatAsText));
 			if (isExists.equals("true")) {
@@ -85,13 +86,13 @@ public class SignaturePref extends AppPage {
 		/*Robot zRobot = new Robot();
 		zRobot.keyPress(KeyEvent.VK_DOWN);
 		zRobot.keyRelease(KeyEvent.VK_DOWN);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zRobot.keyPress(KeyEvent.VK_DOWN);
 		zRobot.keyRelease(KeyEvent.VK_DOWN);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zRobot.keyPress(KeyEvent.VK_ENTER);
 		zRobot.keyRelease(KeyEvent.VK_ENTER);*/
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String actualSignature = obj.zEditor.zGetInnerText("");
 		Assert.assertTrue(actualSignature.contains(signatureBody),
 				"Signature not included in mail body");

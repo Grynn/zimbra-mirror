@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import projects.zcs.tests.CommonTest;
 
 @SuppressWarnings( { "static-access" })
@@ -29,7 +30,7 @@ public class TaskFolderTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zTaskApp.zNavigateToTasks();
 		SelNGBase.isExecutionARetry.set(false);
 	}
@@ -55,7 +56,7 @@ public class TaskFolderTests extends CommonTest {
 		String taskListBtn = getLocalizedData_NoSpecialChar();
 		String taskListRtClick = getLocalizedData_NoSpecialChar();
 		page.zTaskApp.zTaskListCreateNewBtn(taskListBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zTaskApp.zTaskListCreateRtClick(taskListRtClick);
 		obj.zTaskFolder.zExists(taskListBtn);
 		obj.zTaskFolder.zExists(taskListRtClick);
@@ -128,7 +129,7 @@ public class TaskFolderTests extends CommonTest {
 
 		String orgTaskList = getLocalizedData_NoSpecialChar();
 		page.zTaskApp.zTaskListCreateNewBtn(orgTaskList);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton
 				.zRtClick(replaceUserNameInStaticId(page.zTaskApp.zNewTasksOverviewPaneIcon));
 		obj.zMenuItem.zClick(localize(locator.newTaskFolder));

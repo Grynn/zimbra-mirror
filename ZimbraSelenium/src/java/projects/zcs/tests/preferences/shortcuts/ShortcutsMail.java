@@ -24,6 +24,7 @@ import com.zimbra.cs.zclient.ZFolder;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -69,7 +70,7 @@ public class ShortcutsMail extends CommonTest {
 	private void zLogin() throws Exception {
 
 		zLoginIfRequired();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		String[] recipients = { SelNGBase.selfAccountName.get() };
 		ProvZCS.injectMessage(ProvZCS.getRandomAccount(), recipients, ProvZCS
@@ -102,10 +103,10 @@ public class ShortcutsMail extends CommonTest {
 			handleRetry();
 
 		SelNGBase.selenium.get().windowFocus();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zMessageItem.zClick("test mail");
 
-		Thread.sleep(3000);		
+		SleepUtil.sleep(3000);		
 
 		Robot zRobot = new Robot();
 
@@ -113,7 +114,7 @@ public class ShortcutsMail extends CommonTest {
 
 		zRobot.keyRelease(keyToPress);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		if (actionType.equals("reply")) {
 			verifyTo = obj.zTextAreaField
@@ -151,7 +152,7 @@ public class ShortcutsMail extends CommonTest {
 
 		zRobot.keyPress(KeyEvent.VK_ESCAPE);
 		zRobot.keyRelease(KeyEvent.VK_ESCAPE);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -170,7 +171,7 @@ public class ShortcutsMail extends CommonTest {
 
 		obj.zMessageItem.zClick("mark as junk");
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		Robot zRobot = new Robot();
 
@@ -179,7 +180,7 @@ public class ShortcutsMail extends CommonTest {
 		zRobot.keyRelease(KeyEvent.VK_M);
 		zRobot.keyRelease(KeyEvent.VK_J);
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zNotExists("mark as junk");
 
 		obj.zFolder.zClick(localize(locator.junk));
@@ -205,13 +206,13 @@ public class ShortcutsMail extends CommonTest {
 
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("move message");
 		obj.zMessageItem.zClick("move message");
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		Robot zRobot = new Robot();
 		zRobot.keyPress(KeyEvent.VK_M);
 		zRobot.keyPress(KeyEvent.VK_M);
 		zRobot.keyRelease(KeyEvent.VK_M);
 		zRobot.keyRelease(KeyEvent.VK_M);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zFolder.zClickInDlgByName(localize(locator.trash),
 				localize(locator.moveMessage));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
@@ -221,17 +222,17 @@ public class ShortcutsMail extends CommonTest {
 		obj.zMessageItem.zExists("move message");
 		obj.zMessageItem.zClick("move message");
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		zRobot.keyPress(KeyEvent.VK_M);
 		zRobot.keyPress(KeyEvent.VK_M);
 		zRobot.keyRelease(KeyEvent.VK_M);
 		zRobot.keyRelease(KeyEvent.VK_M);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zFolder.zClickInDlgByName(localize(locator.inbox),
 				localize(locator.moveMessage));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.moveMessage));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zNotExists("move message");
 		obj.zFolder.zClick(localize(locator.inbox));
 		obj.zMessageItem.zExists("move message");
@@ -250,7 +251,7 @@ public class ShortcutsMail extends CommonTest {
 
 		obj.zMessageItem.zClick("flag message");
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		Robot zRobot = new Robot();
 
@@ -259,7 +260,7 @@ public class ShortcutsMail extends CommonTest {
 		zRobot.keyRelease(KeyEvent.VK_M);
 		zRobot.keyRelease(keyToPress);
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		if (actionType.equals("read"))
 			obj.zMessageItem.zVerifyIsRead("flag message");
@@ -303,7 +304,7 @@ public class ShortcutsMail extends CommonTest {
 		}
 		
 		
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		
 		Robot zRobot = new Robot();
 		
@@ -332,7 +333,7 @@ public class ShortcutsMail extends CommonTest {
 
 		obj.zMessageItem.zClick(subject);
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		Robot zRobot = new Robot();
 
@@ -341,7 +342,7 @@ public class ShortcutsMail extends CommonTest {
 		zRobot.keyRelease(KeyEvent.VK_PERIOD);
 		zRobot.keyRelease(KeyEvent.VK_T);
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zNotExists(subject);
 
 		obj.zFolder.zClick(localize(locator.trash));
@@ -352,7 +353,7 @@ public class ShortcutsMail extends CommonTest {
 		
 		obj.zMessageItem.zClick(subject);
 		
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		Robot zRobot1 = new Robot();
 
@@ -361,7 +362,7 @@ public class ShortcutsMail extends CommonTest {
 		zRobot1.keyRelease(KeyEvent.VK_PERIOD);
 		zRobot1.keyRelease(KeyEvent.VK_I);
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zNotExists(subject);
 
 		obj.zFolder.zClick(localize(locator.inbox));

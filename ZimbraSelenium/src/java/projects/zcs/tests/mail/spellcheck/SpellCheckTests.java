@@ -15,6 +15,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 /**
  * @author Amit Jagtap
@@ -116,11 +117,11 @@ public class SpellCheckTests extends CommonTest {
 		obj.zButton.zClick(ComposeView.zSaveDraftsIconBtn);
 		obj.zFolder.zClick(localize(locator.drafts));
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zClick(localize(locator.edit));
 		SelNGBase.selenium.get().mouseOver(DRAFT_NEW_WINDOW_BUTTON);
 		SelNGBase.selenium.get().clickAt(DRAFT_NEW_WINDOW_BUTTON, "");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		obj.zButton.zClick(localize(locator.spellCheck));
 		obj.zToastAlertMessage.zAlertMsgExists("2 Misspellings",
@@ -143,13 +144,13 @@ public class SpellCheckTests extends CommonTest {
 				"onee twoo", "");
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.reply));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().mouseOver(DRAFT_NEW_WINDOW_BUTTON);
 		SelNGBase.selenium.get().clickAt(DRAFT_NEW_WINDOW_BUTTON, "");
 		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", localize(locator.spellCheck));
 		obj.zButton.zClick(localize(locator.spellCheck));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zToastAlertMessage.zAlertMsgExists("6 Misspellings",
 				"Strings did not match.");
 		SelNGBase.selenium.get().selectWindow(null);
@@ -168,7 +169,7 @@ public class SpellCheckTests extends CommonTest {
 
 		page.zMailApp.zNavigateToComposingPreferences();
 		obj.zRadioBtn.zClick(localize(locator.composeAsHTML));
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -178,7 +179,7 @@ public class SpellCheckTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.reply));
 		obj.zEditor.zType("onee twoo  threee");
 		obj.zButton.zClick(localize(locator.spellCheck));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get()
 				.click("xpath=//span[contains(@class,'SpellCheckLink') and contains(text(),'"
 						+ localize(locator.checkAgain) + "')]");

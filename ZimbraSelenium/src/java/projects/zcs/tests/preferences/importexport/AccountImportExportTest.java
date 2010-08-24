@@ -19,6 +19,7 @@ import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -142,12 +143,12 @@ public class AccountImportExportTest extends CommonTest {
 		MailApp.ClickCheckMailUntilMailShowsUp(newFolderMsg);
 		obj.zMessageItem.zClick(newFolderMsg);
 		obj.zButton.zClick(page.zMailApp.zMoveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClickInDlgByName(newMailFolder,
 				localize(locator.moveMessage));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.moveMessage));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		// apply tag to mail
 		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
@@ -179,7 +180,7 @@ public class AccountImportExportTest extends CommonTest {
 		contact2.firstName = firstNameTagged;
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact2);
 		obj.zFolder.zClick(page.zABCompose.zContactsFolder);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zContactListItem.zClick(lastNameTagged);
 		obj.zButton.zClick(page.zABApp.zTagContactMenuIconBtn);
 		obj.zMenuItem.zClick(newTag);
@@ -223,7 +224,7 @@ public class AccountImportExportTest extends CommonTest {
 
 		// keep one appointment in new task folder
 		page.zTaskApp.zTaskListCreateNewBtn(newTaskFolder);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zTaskApp.zTaskCreateSimpleInTaskList(subjectNewTaskFolder, "", "",
 				"", newTaskFolder);
 
@@ -234,7 +235,7 @@ public class AccountImportExportTest extends CommonTest {
 		// apply tag to the page
 		page.zDocumentCompose.zCreateNewNotebook(newNotebookFolder, "", "");
 		obj.zFolder.zClick(newNotebookFolder);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		// page.zDocumentCompose.zCreateBasicPage(subjectTaggedPage,
 		// subjectTaggedPage);
 		// obj.zButton.zClick(page.zDocumentApp.zEditPageIconBtn);
@@ -251,13 +252,13 @@ public class AccountImportExportTest extends CommonTest {
 
 		// apply tag to the file
 		page.zBriefcaseApp.zBriefcaseFileUpload(fileTagged, "");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zClick(fileTagged);
 		obj.zButton.zClick(page.zBriefcaseApp.zTagItemIconBtn);
 		obj.zMenuItem.zClick(newTag);
 
 		// keep one file in new briefcase folder
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zBriefcaseApp.zCreateNewBriefcaseFolder(newBriefcaseFolder);
 		page.zBriefcaseApp.zBriefcaseFileUpload(fileNewBriefcaseFolder,
 				newBriefcaseFolder);
@@ -268,7 +269,7 @@ public class AccountImportExportTest extends CommonTest {
 		zGoToPreferences("Import/Export");
 		obj.zButton.zMouseOver(localize(locator._export));
 		obj.zButton.zClick(localize(locator._export));
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 		Robot zRobot = new Robot();
 		zRobot.keyPress(KeyEvent.VK_ALT);
 		zRobot.keyPress(KeyEvent.VK_S);
@@ -276,7 +277,7 @@ public class AccountImportExportTest extends CommonTest {
 		zRobot.keyRelease(KeyEvent.VK_S);
 		zRobot.keyPress(KeyEvent.VK_ENTER);
 		zRobot.keyRelease(KeyEvent.VK_ENTER);
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 
 		boolean foundFlag = false;
 		String currentDateTime, oneMinLessCurrentDateTime, twoMinLessCurrentDateTime, threeMinLessCurrentDateTime, currentMin, subFilename;

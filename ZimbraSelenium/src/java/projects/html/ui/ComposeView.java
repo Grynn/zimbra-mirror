@@ -6,6 +6,7 @@ import java.util.Map;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.clients.ProvZCS;
@@ -81,7 +82,7 @@ public class ComposeView extends CommonTest {
 	 */
 	public static void zNavigateToMailCompose() throws Exception {
 		obj.zTab.zClick(localize(locator.compose));
-		Thread.sleep(2000); // timing issues
+		SleepUtil.sleep(2000); // timing issues
 	}
 
 	/**
@@ -89,7 +90,7 @@ public class ComposeView extends CommonTest {
 	 */
 	public static void zNavigateToMailComposeBtmToolBar() throws Exception {
 		obj.zButton.zClick(localize(locator.compose), "1");
-		Thread.sleep(2000); // timing issues
+		SleepUtil.sleep(2000); // timing issues
 	}
 
 	/**
@@ -101,7 +102,7 @@ public class ComposeView extends CommonTest {
 		} else {
 			obj.zButton.zClick(localize(locator.compose), "2");
 		}
-		Thread.sleep(2000); // timing issues
+		SleepUtil.sleep(2000); // timing issues
 	}
 
 	/**
@@ -217,7 +218,7 @@ public class ComposeView extends CommonTest {
 		obj.zTextAreaField.zType(zCcField, cc);
 		// temporarily comment this out -- due to bug 32611
 		if (!bcc.equals("")) {
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 			if (SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.showBcc)))
 				SelNGBase.selenium.get().click("link=" + localize(locator.showBcc));
 			obj.zTextAreaField.zType(zBccField, bcc);
@@ -225,11 +226,7 @@ public class ComposeView extends CommonTest {
 		obj.zEditField.zType(zSubjectField, subject);
 		if (attachments != "")
 			zAddAttachments(attachments, inlineAttachment);
-		try {
-			Thread.sleep(3000);// allow loading html editor(if it is one) todo:
-			// need to wait only when it is html
-		} catch (InterruptedException e) {
-		}
+		SleepUtil.sleep(3000);// allow loading html editor(if it is one) todo:
 		obj.zEditor.zType(body);
 	}
 
@@ -278,9 +275,9 @@ public class ComposeView extends CommonTest {
 	 */
 	public static void zAddAttachments(String attachments,
 			boolean inlineAttachment) throws Exception {
-		Thread.sleep(1000); // selenium failure here
+		SleepUtil.sleep(1000); // selenium failure here
 		obj.zButton.zClick(ComposeView.zAddAttachmentBtn);
-		Thread.sleep(2000); // selenium failure here
+		SleepUtil.sleep(2000); // selenium failure here
 		zWaitTillObjectExist("button", zAddAttachDoneBtn);
 		String[] attList = attachments.split(",");
 		for (int i = 0; i < attList.length; i++) {
@@ -292,7 +289,7 @@ public class ComposeView extends CommonTest {
 		}
 		
 		obj.zButton.zClick(zAddAttachDoneBtn);
-		Thread.sleep(3000); // wait till main compose UI come
+		SleepUtil.sleep(3000); // wait till main compose UI come
 		if (!attachments.equals("mail700.pst")) { /*
 												 * customization for big attach
 												 */
@@ -356,7 +353,7 @@ public class ComposeView extends CommonTest {
 	 */
 	public static void zVerifyMsgHeaders(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		if (to.equals("_selfAccountName_"))
 			to = SelNGBase.selfAccountName.get();
 		if (cc.equals("_selfAccountName_"))
@@ -514,7 +511,7 @@ public class ComposeView extends CommonTest {
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
 		obj.zButton.zClick(localize(locator.send));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow(null);
 		try {
 			obj.zButton.zNotExists(localize(locator.send));
@@ -524,7 +521,7 @@ public class ComposeView extends CommonTest {
 		SelNGBase.selenium.get().selectWindow(null);
 		MailApp.zClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(2000); // takes some time to open message - test fails here
+		SleepUtil.sleep(2000); // takes some time to open message - test fails here
 	}
 
 	/**
@@ -683,10 +680,10 @@ public class ComposeView extends CommonTest {
 						findIn_DefaultGAL);
 				obj.zButton
 						.zClick(page.zComposeView.zAddReceipSearchContactsBtn);
-				Thread.sleep(1500);
+				SleepUtil.sleep(1500);
 				obj.zCheckbox.zClick(page.zComposeView.zAddReceipToChkBox);
 				obj.zButton.zClick(page.zComposeView.zAddReceipAddSelectedBtn);
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 			}
 		}
 
@@ -702,10 +699,10 @@ public class ComposeView extends CommonTest {
 						findIn_DefaultGAL);
 				obj.zButton
 						.zClick(page.zComposeView.zAddReceipSearchContactsBtn);
-				Thread.sleep(1500);
+				SleepUtil.sleep(1500);
 				obj.zCheckbox.zClick(page.zComposeView.zAddReceipCcChkBox);
 				obj.zButton.zClick(page.zComposeView.zAddReceipAddSelectedBtn);
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 			}
 		}
 
@@ -721,14 +718,14 @@ public class ComposeView extends CommonTest {
 						findIn_DefaultGAL);
 				obj.zButton
 						.zClick(page.zComposeView.zAddReceipSearchContactsBtn);
-				Thread.sleep(1500);
+				SleepUtil.sleep(1500);
 				obj.zCheckbox.zClick(page.zComposeView.zAddReceipBccChkBox);
 				obj.zButton.zClick(page.zComposeView.zAddReceipAddSelectedBtn);
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 			}
 		}
 
 		obj.zButton.zClick(page.zComposeView.zAddReceipDoneBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 }

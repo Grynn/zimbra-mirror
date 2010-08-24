@@ -10,6 +10,7 @@ import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentApp;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 /**
  * This covers some high priority test cases related to Documents
@@ -121,7 +122,7 @@ public class BasicDocumentTests extends CommonTest {
 				"Toolbar");
 		obj.zButton.zClick((page.zDocumentCompose.zRefreshIconBtn));
 		obj.zFolder.zClick(page.zDocumentApp.zNotebookFolder);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert.assertTrue(page.zDocumentCompose.zVerifyEditPage(
 				DocumentApp.zNotebookFolder, pageName, "", newBodyContent),
 				"Page Body Not Modified Successfully");
@@ -175,7 +176,7 @@ public class BasicDocumentTests extends CommonTest {
 
 		obj.zButton.zClick((page.zDocumentCompose.zRefreshIconBtn));
 		obj.zFolder.zClick(page.zDocumentApp.zNotebookFolder);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
 				"The page is not deleted");
 		SelNGBase.needReset.set(false);
@@ -200,7 +201,7 @@ public class BasicDocumentTests extends CommonTest {
 				pageName, "LinkDelete");
 		obj.zButton.zClick((page.zDocumentCompose.zRefreshIconBtn));
 		obj.zFolder.zClick(page.zDocumentApp.zNotebookFolder);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
 				"The page is not deleted");
 

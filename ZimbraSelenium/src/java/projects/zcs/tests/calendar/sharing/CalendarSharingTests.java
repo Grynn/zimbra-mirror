@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -306,7 +307,7 @@ public class CalendarSharingTests extends CommonTest {
 				"xpath=//input[contains(@id,'_CAL_INV_FORWARDING_ADDRESS')]",
 				userC);
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		zGoToApplication("Calendar");
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, userC, role, message, sharingnoteifany, "");
@@ -326,9 +327,9 @@ public class CalendarSharingTests extends CommonTest {
 				"xpath=//input[contains(@id,'_CAL_INV_FORWARDING_ADDRESS')]",
 				userC);
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zGoToApplication("Calendar");
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, userC, role, message, sharingnoteifany, "");
@@ -346,9 +347,9 @@ public class CalendarSharingTests extends CommonTest {
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(apptSubject, apptLocation,
 				Attendees, apptBody);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		resetSession();
 
@@ -408,7 +409,7 @@ public class CalendarSharingTests extends CommonTest {
 			}
 
 			obj.zButton.zClick(localize(locator.accept));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zDialog.zExists(localize(locator.zimbraTitle));
 
 			obj.zDialog.zVerifyAlertMessage(localize(locator.zimbraTitle),
@@ -458,7 +459,7 @@ public class CalendarSharingTests extends CommonTest {
 		 */
 
 		if (role.equals(localize(locator.shareRoleManager))) {
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 
 		resetSession();
@@ -466,10 +467,10 @@ public class CalendarSharingTests extends CommonTest {
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 		zGoToApplication(applicationtab);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolderCheckbox.zActivate(localize(locator.calendar));
 		obj.zButton.zClick(page.zCalApp.zCalRefreshBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zAppointment.zExists(apptSubject);
 		if (role.equals(localize(locator.shareRoleAdmin))
 				|| role.equals(localize(locator.shareRoleManager))) {
@@ -493,7 +494,7 @@ public class CalendarSharingTests extends CommonTest {
 			obj.zEditField.zType(
 					getNameWithoutSpace(localize(locator.subjectLabel)),
 					newSubject);
-			Thread.sleep(500);
+			SleepUtil.sleep(500);
 			obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 			zWaitTillObjectExist("button", page.zCalApp.zCalNewApptBtn);
 			obj.zButton.zClick(page.zCalApp.zCalRefreshBtn);
@@ -510,7 +511,7 @@ public class CalendarSharingTests extends CommonTest {
 					localize(locator.confirmTitle));
 			obj.zButton.zClick(page.zCalApp.zCalRefreshBtn);
 			obj.zAppointment.zNotExists(newSubject);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			page.zCalCompose.zCreateSimpleApptInCalendar(apptSubject,
 					apptLocation, apptAttendees, apptBody, mountingfoldername);
 

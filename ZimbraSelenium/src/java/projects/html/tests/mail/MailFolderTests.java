@@ -373,7 +373,7 @@ public class MailFolderTests extends CommonTest {
 				localize(locator.junk), localize(locator.trash) };
 		for (int i = 0; i <= sysFolders.length - 1; i++) {
 			obj.zFolder.zClick(sysFolders[i]);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("//*[contains(@id,'name') and contains(@disabled,'')]"));
 			if (!sysFolders[i].equals(localize(locator.junk))
 					&& !sysFolders[i].equals(localize(locator.trash))) {

@@ -3,6 +3,7 @@ package framework.core;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
 
+import framework.util.SleepUtil;
 import framework.util.ZimbraAccount;
 
 public class ZimbraSelenium extends DefaultSelenium {
@@ -62,12 +63,7 @@ public class ZimbraSelenium extends DefaultSelenium {
 		if (retryOnFalse){
 			Integer second = 0;
 			while(second < 10 && retval.equals("false")){
-			    try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				SleepUtil.sleep(1000);
 				retval = this.getEval(jsFunc);
 				second++;
 			}

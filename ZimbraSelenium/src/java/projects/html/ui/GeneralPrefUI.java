@@ -1,6 +1,7 @@
 package projects.html.ui;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import projects.html.tests.CommonTest;
 
 /**
@@ -37,9 +38,9 @@ public class GeneralPrefUI extends CommonTest {
 	public static void zNavigateToPrefGeneral() throws Exception {
 		obj.zButton.zClick("id=TAB_OPTIONS");
 		// obj.zTab.zClick(localize(locator.preferences));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zTab.zClick(localize(locator.general));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -69,9 +70,9 @@ public class GeneralPrefUI extends CommonTest {
 			throws Exception {
 		zNavigateToPrefGeneral();
 		obj.zCheckbox.zClick(zAlwaysShowSrchStrngChkBox);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zClick(page.zAccPref.zSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -82,9 +83,9 @@ public class GeneralPrefUI extends CommonTest {
 	public static void zNavigateToChangePasswordWindow() throws Exception {
 
 		zNavigateToPrefGeneral();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().click("link=" + localize(locator.changePassword));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	/**

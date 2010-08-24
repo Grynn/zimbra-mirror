@@ -11,6 +11,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -86,14 +87,14 @@ public class ReadReceiptTests extends CommonTest {
 		page.zComposeView.zEnterComposeValues(currentloggedinuser, cc, bcc,
 				subject, body, attachments);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		resetSession();
 		SelNGBase.selfAccountName.set(currentloggedinuser);
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
 
 		SelNGBase.needReset.set(false);
@@ -118,7 +119,7 @@ public class ReadReceiptTests extends CommonTest {
 		page.zComposeView.zEnterComposeValues(currentloggedinuser, cc, bcc,
 				subject, body, attachments);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		resetSession();
 		SelNGBase.selfAccountName.set(currentloggedinuser);
@@ -157,10 +158,10 @@ public class ReadReceiptTests extends CommonTest {
 		page.zComposeView.zEnterComposeValues(currentloggedinuser, cc, bcc,
 				subject, body, attachments);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
 
 		resetSession();
@@ -200,7 +201,7 @@ public class ReadReceiptTests extends CommonTest {
 		obj.zRadioBtn.zClick(localize(locator.messageReadNone));
 		obj.zRadioBtn.zClick(localize(locator.readReceiptAsk));
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zGoToApplication("Mail");
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { SelNGBase.selfAccountName.get() };
@@ -210,7 +211,7 @@ public class ReadReceiptTests extends CommonTest {
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject);
 		obj.zMessageItem.zRtClick(subject);
 		obj.zMenuItem.zClick(localize(locator.markAsRead));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
 		obj.zDialog.zNotExists(localize(locator.infoMsg));
 

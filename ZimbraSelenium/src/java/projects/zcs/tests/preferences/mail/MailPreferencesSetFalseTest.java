@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -52,7 +53,7 @@ public class MailPreferencesSetFalseTest extends CommonTest {
 //		selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 

@@ -3,6 +3,7 @@ package projects.html.ui;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.html.clients.ProvZCS;
 import projects.html.tests.CommonTest;
@@ -50,7 +51,7 @@ public class MailPrefUI extends CommonTest {
 	public static void zNavigateToPrefMail() throws Exception {
 		obj.zButton.zClick("id=TAB_OPTIONS");
 		// obj.zTab.zClick(localize(locator.preferences));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")
 				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("de")
 				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("ko")) {
@@ -58,7 +59,7 @@ public class MailPrefUI extends CommonTest {
 		} else {
 			obj.zTab.zClick(localize(locator.mail), "2");
 		}
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	/**
@@ -74,7 +75,7 @@ public class MailPrefUI extends CommonTest {
 				noOfEmailsToBeDisplayed);
 
 		obj.zButton.zClick(page.zAccPref.zSaveIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 	}
 
@@ -151,9 +152,9 @@ public class MailPrefUI extends CommonTest {
 			obj.zRadioBtn.zClick(zPlaceInInboxIfInToOrCCRadioBtn);
 		else if (whereToPlace.equals("IgnoreMsg"))
 			obj.zRadioBtn.zClick(zIgnoreMsgRadioBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zClick(page.zAccPref.zSaveIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	/**
@@ -193,10 +194,10 @@ public class MailPrefUI extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndSelectIt(selfAccName, "", "",
 				subject, "", "");
 		obj.zCheckbox.zClick(subject);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zMailApp.zMoreActions(localize(locator.actionSpam));
 		obj.zFolder.zClick(page.zMailApp.zJunkFldr);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zExists(subject);
 
 	}

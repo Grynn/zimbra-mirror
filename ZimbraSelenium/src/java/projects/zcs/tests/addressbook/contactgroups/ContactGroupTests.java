@@ -8,9 +8,9 @@ import org.testng.annotations.Test;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
-import framework.core.SelNGBase;
-import framework.items.ContactGroupItem;
-import framework.util.RetryFailedTests;
+import framework.core.*;
+import framework.items.*;
+import framework.util.*;
 
 /**
  * This covers some high priority test cases related to address book

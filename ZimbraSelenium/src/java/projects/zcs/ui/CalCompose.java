@@ -3,6 +3,7 @@ package projects.zcs.ui;
 
 import junit.framework.Assert;
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -519,7 +520,7 @@ public class CalCompose extends AppPage {
 		String minuteLoc = page.zCalCompose.getTimeMenuLocation("mm");
 		String ampmLoc = page.zCalCompose.getTimeMenuLocation("a");
 		if (time.equals("startTime")) {
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 			Assert
 					.assertTrue(SelNGBase.selenium.get()
 							.isElementPresent("//div[contains(@class, 'DwtDialog LightWindowOuterContainer')]//td[contains(@id, 'DWT') and contains(@id, 'startTime')]//td[contains(text(), '"
@@ -556,7 +557,7 @@ public class CalCompose extends AppPage {
 	public static void zVerifyStartEndTimeInQuickAddApptDlg(String hhmmss,
 			String time) throws Exception {
 		if (time.equals("startTime")) {
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 				Assert
 						.assertTrue(SelNGBase.selenium.get()
@@ -586,7 +587,7 @@ public class CalCompose extends AppPage {
 
 	public static void zVerifyStartEndTimeInQuickAddApptDlgNotExists()
 			throws Exception {
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		Assert
 				.assertFalse(SelNGBase.selenium.get()
 						.isElementPresent("//div[contains(@class, 'DwtDialog LightWindowOuterContainer')]//td[contains(@id, 'DWT') and contains(@id, 'startTime') and contains(@style, 'visibility: hidden')]"));
@@ -597,7 +598,7 @@ public class CalCompose extends AppPage {
 	}
 
 	public static void zVerifyStartEndTimeNotExists() throws Exception {
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zFeatureMenu.zNotExists(localize(locator.startLabel));
 		obj.zFeatureMenu.zNotExists(localize(locator.endLabel));
 	}

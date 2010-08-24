@@ -17,6 +17,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 @SuppressWarnings( { "static-access", "unused" })
@@ -51,7 +52,7 @@ public class ShortcutsCalendar extends CommonTest {
 	private void zLogin() throws Exception {
 
 		zLoginIfRequired();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		String[] recipients = { SelNGBase.selfAccountName.get() };
 		SelNGBase.isExecutionARetry.set(false);
@@ -79,16 +80,16 @@ public class ShortcutsCalendar extends CommonTest {
 			handleRetry();
 
 		SelNGBase.selenium.get().windowFocus();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zCalApp.zNavigateToCalendar();
 
-		Thread.sleep(3000);		
+		SleepUtil.sleep(3000);		
 		Robot zRobot = new Robot();
 
 		if (actionType.equals("Day") ) {
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 
 			Assert.assertTrue(getElementStatus(className,""));
 		} else if(actionType.equals("Today")){
@@ -100,12 +101,12 @@ public class ShortcutsCalendar extends CommonTest {
 			obj.zAppointment.zNotExists(subject);
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 			obj.zAppointment.zExists(subject);
 		} else if(actionType.equals("Week")){
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 
 
 			if(ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")) {
@@ -125,7 +126,7 @@ public class ShortcutsCalendar extends CommonTest {
 			zRobot.keyRelease(keyToPress);
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 
 			if(ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")) {
 				/**
@@ -142,7 +143,7 @@ public class ShortcutsCalendar extends CommonTest {
 		}else if(actionType.equals("Month")){
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 
 			if(ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")) {
 				/**
@@ -159,7 +160,7 @@ public class ShortcutsCalendar extends CommonTest {
 		}else if(actionType.equals("List")){
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 
 			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__se"));
 			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__tg"));
@@ -173,7 +174,7 @@ public class ShortcutsCalendar extends CommonTest {
 		}else if(actionType.equals("Schedule")){
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 
 			if(ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU") || ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")) {
 				/**
@@ -185,7 +186,7 @@ public class ShortcutsCalendar extends CommonTest {
 
 		zRobot.keyPress(KeyEvent.VK_ESCAPE);
 		zRobot.keyRelease(KeyEvent.VK_ESCAPE);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.needReset.set(false);
 	}
 
@@ -198,15 +199,15 @@ public class ShortcutsCalendar extends CommonTest {
 			handleRetry();
 
 		SelNGBase.selenium.get().windowFocus();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zCalApp.zNavigateToCalendar();
 
-		Thread.sleep(3000);		
+		SleepUtil.sleep(3000);		
 		Robot zRobot = new Robot();
 
 		zRobot.keyPress(KeyEvent.VK_Q);
 		zRobot.keyRelease(KeyEvent.VK_Q);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		
 		obj.zDialog.zExists(localize(locator.quickAddAppt));
 		SelNGBase.needReset.set(false);
@@ -226,10 +227,10 @@ public class ShortcutsCalendar extends CommonTest {
 			handleRetry();
 
 		SelNGBase.selenium.get().windowFocus();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zCalApp.zNavigateToCalendar();
 
-		Thread.sleep(3000);		
+		SleepUtil.sleep(3000);		
 		Robot zRobot = new Robot();
 
 		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
@@ -237,7 +238,7 @@ public class ShortcutsCalendar extends CommonTest {
 
 		zRobot.keyPress(KeyEvent.VK_E);
 		zRobot.keyRelease(KeyEvent.VK_E);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zEditField.zExists(localize(locator.subject));
 		SelNGBase.needReset.set(false);
 	}

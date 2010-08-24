@@ -11,6 +11,7 @@ import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -77,7 +78,7 @@ public class ContactActionTests extends CommonTest {
 			// Create a new account to be the destination
 			String emailAddress = "ac" + i + "@testdomain.com";
 			ProvZCS.createAccount(emailAddress);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			
 			// Search for the account
 			obj.zEditField.zTypeInDlg(localize(locator.search), emailAddress);
@@ -124,11 +125,11 @@ public class ContactActionTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.toLabel));
 
 		String infoDlgExist;
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		infoDlgExist = obj.zDialog.zExistsDontWait(localize(locator.infoMsg));
 		if (infoDlgExist.equals("true")) {
 			obj.zButton.zClickInDlg(localize(locator.ok), "2");
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 
 		obj.zDialog.zExists(localize(locator.selectAddresses));
@@ -155,23 +156,23 @@ public class ContactActionTests extends CommonTest {
 		obj.zTextAreaField.zType(localize(locator.toLabel),
 				"add@testdomain.com");
 		obj.zButton.zClick(localize(locator.toLabel));
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		infoDlgExist = obj.zDialog.zExistsDontWait(localize(locator.infoMsg));
 		if (infoDlgExist.equals("true")) {
 			obj.zButton.zClickInDlg(localize(locator.ok), "2");
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 
 		obj.zListItem.zClickItemInSpecificList(localize(locator.bcc), "2");
 		obj.zButton.zClickInDlg(localize(locator.remove));
 		obj.zListItem.zVerifyItemInSpecificListInDlgNotExist(
 				localize(locator.bcc), "", "2");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		infoDlgExist = obj.zDialog
 				.zExistsDontWait(localize(locator.selectAddresses));
 		if (infoDlgExist.equals("true")) {
 			obj.zButton.zClickInDlg(localize(locator.ok));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));
 

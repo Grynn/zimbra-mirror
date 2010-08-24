@@ -21,6 +21,7 @@ import com.zimbra.cs.zclient.ZInvite.ZRole;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -110,7 +111,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		// selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -164,11 +165,11 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		zReloginToAjax();
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zNewMenuIconBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 		obj.zTextAreaField.zType(page.zComposeView.zToField, "test@test.com");
@@ -182,7 +183,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		zReloginToAjax();
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -208,7 +209,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		int i = (autoSaveDraftTime * 1000) + 1000;
 
-		Thread.sleep(i);
+		SleepUtil.sleep(i);
 
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
@@ -243,7 +244,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 				"");
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		obj.zFolder.zClick(localize(locator.sent));
 
@@ -278,15 +279,15 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		// selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		page.zComposeView.zComposeAndSendMail(accountName, "", "", subject, body, "");
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		resetSession();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
@@ -294,13 +295,13 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		MailApp
 				.ClickCheckMailUntilMailShowsUp(subject);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		obj.zMessageItem.zClick(subject);
 
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		if (replyFwdInOriginalFormat.equals("TRUE")) {
 
@@ -351,7 +352,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		// selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(accountName, "", "",
@@ -360,17 +361,17 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		MailApp
 				.ClickCheckMailUntilMailShowsUp(subject);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		obj.zMessageItem.zClick(subject);
 
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		actualReplyMsg = obj.zEditor.zGetInnerText("");
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		if (includeMsg.equals("includeNone")) {
 			Assert
@@ -419,7 +420,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 			obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 
-			Thread.sleep(500);
+			SleepUtil.sleep(500);
 
 			obj.zFolder.zClick(localize(locator.sent));
 
@@ -454,13 +455,13 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		// selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(accountName, "", "",
 				subject, body, "");
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		MailApp
 				.ClickCheckMailUntilMailShowsUp(subject);
@@ -469,7 +470,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		actualFwdMsg = obj.zEditor.zGetInnerText("");
 

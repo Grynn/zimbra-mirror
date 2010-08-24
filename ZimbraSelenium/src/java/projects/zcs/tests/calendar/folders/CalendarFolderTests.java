@@ -13,6 +13,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -35,7 +36,7 @@ public class CalendarFolderTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zCalApp.zNavigateToCalendar();
 		SelNGBase.isExecutionARetry.set(false);
 	}
@@ -112,7 +113,7 @@ public class CalendarFolderTests extends CommonTest {
 
 		obj.zButton
 				.zRtClick(replaceUserNameInStaticId(page.zCalApp.zNewCalOverviewPaneIcon));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMenuItem.zClick(localize(locator.newCalendar));
 		obj.zEditField.zTypeInDlgByName(localize(locator.nameLabel),
 				calendarName, localize(locator.createNewCalendar));

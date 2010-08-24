@@ -12,6 +12,7 @@ import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 /**
  * @author Jitesh Sojitra
@@ -86,7 +87,7 @@ public class MailSavedSearchTests extends CommonTest {
 		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__TV__fg"));
 
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String msgExists = obj.zMessageItem.zExistsDontWait(subject);
 		assertReport("false", msgExists, "Sent folder doesn't refresh properly");
 		obj.zFolder.zClick("Srch" + subject);

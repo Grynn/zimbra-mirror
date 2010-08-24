@@ -16,6 +16,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -129,7 +130,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.quickAddAppt));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get()
 				.doubleClickAt(
 						"xpath=//div[contains(@class, 'ImgCalendarDayGrid')]/div[contains(@class, 'appt')]/div[contains(@class, 'appt_body')]/table/tbody/tr/td[contains(@class, appt_name) and contains(text(), '"
@@ -157,7 +158,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.viewDay));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton
 				.zClick("xpath=//div[contains(@class, 'calendar_heading_day_today')]");
 		obj.zButton
@@ -187,7 +188,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		// .zRtClick(
 		// "xpath=//div[contains(@class, 'calendar_time_selection') and contains(@style, 'display: block') and contains(@style, 'left: 2px')]"
 		// );
-		// Thread.sleep(1000);
+		// SleepUtil.sleep(1000);
 		// obj.zMenuItem.zClick(localize(locator.newAppt));
 		// time objects are changed
 		// if (ZimbraSeleniumProperties.getStringProperty("browser").contains("FF")) {
@@ -200,7 +201,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 				subject, localize(locator.quickAddAppt));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.quickAddAppt));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get()
 				.doubleClickAt(
 						"xpath=//div[contains(@class, 'ImgCalendarDayGrid')]/div[contains(@class, 'appt')]/div[contains(@class, 'appt_body')]/table/tbody/tr/td[contains(@class, appt_name) and contains(text(), '"
@@ -255,12 +256,12 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 				subject, localize(locator.quickAddAppt));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.quickAddAppt));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get()
 				.doubleClickAt(
 						"xpath=//div[contains(@class, 'appt')]/table/tbody/tr/td[contains (@class, 'appt_allday_name') and contains(text(), '"
 								+ subject + "')]", "");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zCalCompose.zVerifyStartEndTimeNotExists();
 		obj.zButton.zClick(page.zCalCompose.zApptCloseBtn);
 		closeWarningDlg();
@@ -310,7 +311,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.quickAddAppt));
 
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get()
 				.doubleClickAt(
 						"xpath=//div[contains(@class, 'ImgCalendarDayGrid')]/div[contains(@class, 'appt')]/div[contains(@class, 'appt_body')]/table/tbody/tr/td[contains(@class, appt_name) and contains(text(), '"
@@ -337,7 +338,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.viewDay));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton
 				.zClick("xpath=//div[contains(@class, 'calendar_heading_day_today')]");
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
@@ -363,12 +364,12 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		}
 		obj.zMenuItem.zClick(localize(locator.newAppt));
 
-		// Thread.sleep(1000);
+		// SleepUtil.sleep(1000);
 		// obj.zButton
 		// .zRtClick(
 		// "xpath=//div[contains(@class, 'calendar_time_selection') and contains(@style, 'display: block') and contains(@style, 'left: 2px')]"
 		// );
-		// Thread.sleep(1000);
+		// SleepUtil.sleep(1000);
 		// obj.zMenuItem.zClick(localize(locator.newAppt));
 		// time objects are changed
 		// if (ZimbraSeleniumProperties.getStringProperty("browser").contains("FF")) {
@@ -381,7 +382,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 				subject, localize(locator.quickAddAppt));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.quickAddAppt));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get()
 				.doubleClickAt(
 						"xpath=//div[contains(@class, 'ImgCalendarDayGrid')]/div[contains(@class, 'appt')]/div[contains(@class, 'appt_body')]/table/tbody/tr/td[contains(@class, appt_name) and contains(text(), '"
@@ -435,12 +436,12 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 				subject, localize(locator.quickAddAppt));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.quickAddAppt));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get()
 				.doubleClickAt(
 						"xpath=//div[contains(@class, 'appt')]/table/tbody/tr/td[contains (@class, 'appt_allday_name') and contains(text(), '"
 								+ subject + "')]", "");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zCalCompose.zVerifyStartEndTimeNotExists();
 		obj.zButton.zClick(page.zCalCompose.zApptCloseBtn);
 		closeWarningDlg();
@@ -463,7 +464,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		obj.zMenuItem.zClick(localize(locator.viewMonth));
 		obj.zButton
 				.zRtClick("xpath=//div[contains(@id, 'DWT')]/table/tbody/tr/td/div/table/tbody/tr/td[contains (@id,'DWT') and contains(@class, 'calendar_month_day_label') and contains(text(), '10')]");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zMenuItem.zClick(localize(locator.newAppt));
 		obj.zEditField.zTypeInDlgByName(localize(locator.subjectLabel),
 				subject, localize(locator.quickAddAppt));
@@ -471,7 +472,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		page.zCalCompose.zSetEndTimeInQuickAddApptDlg(endTime);
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.quickAddAppt));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get().doubleClickAt(
 				"xpath=//td[contains(@class, 'calendar_month_day_item') and contains(text(), "
 						+ subject + ")]", "");
@@ -505,12 +506,12 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 				subject, localize(locator.quickAddAppt));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.quickAddAppt));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get()
 				.doubleClickAt(
 						"xpath=//div[contains(@class, 'appt')]/table/tbody/tr/td[contains (@class, 'appt_allday_name') and contains(text(), '"
 								+ subject + "')]", "");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zCalCompose.zVerifyStartEndTimeNotExists();
 		obj.zButton.zClick(page.zCalCompose.zApptCloseBtn);
 		closeWarningDlg();
@@ -544,7 +545,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		page.zCalCompose.zSetEndTimeInQuickAddApptDlg(endTime);
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.quickAddAppt));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get()
 				.doubleClickAt(
 						"xpath=//div[contains(@class, 'appt_body')]//td[contains(@class, 'appt_name') and contains(text(), "
@@ -586,7 +587,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 				subject, localize(locator.quickAddAppt));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.quickAddAppt));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get()
 				.doubleClickAt(
 						"xpath=//div[contains(@class, 'appt_allday_body')]//td[contains(@class, 'appt_allday_name') and contains(text(), "
@@ -620,7 +621,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		for(int i=11;i<=17;i++) {
 			obj.zButton
 			.zClick("xpath=//div[contains(@id, 'DWT')]/table/tbody/tr/td/div/table/tbody/tr/td[contains (@id,'DWT') and contains(@class, 'calendar_month_day_label') and contains(text(), '"+ i +"')]");
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			if(SelNGBase.selenium.get().isElementPresent("//*[contains(text(), 'Monday') and contains(@class,'calendar_heading_day')]")) {
 				obj.zButton
 				.zRtClick("xpath=//div[contains(@class, 'calendar_grid_body_time_text') and contains(text(), 8)]");
@@ -636,7 +637,7 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		page.zCalCompose.zSetEndTimeInQuickAddApptDlg(endTime);
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.quickAddAppt));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get()
 		.doubleClickAt(
 				"xpath=//div[contains(@class, 'appt_body')]//td[contains(@class, 'appt_name') and contains(text(), "
@@ -657,13 +658,13 @@ public class CalendarQuickAddAndFishEyeViewTests extends CommonTest {
 		// if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 		String isDlgExists;
 		for (int i = 0; i <= 5; i++) {
-			Thread.sleep(500);
+			SleepUtil.sleep(500);
 			isDlgExists = obj.zDialog
 					.zExistsDontWait(localize(locator.warningMsg));
 			if (isDlgExists.equals("true")) {
 				obj.zButton.zClickInDlgByName(localize(locator.no),
 						localize(locator.warningMsg));
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				break;
 			}
 		}

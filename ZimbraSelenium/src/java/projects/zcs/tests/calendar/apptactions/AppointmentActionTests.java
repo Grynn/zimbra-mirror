@@ -12,6 +12,7 @@ import projects.zcs.ui.MailApp;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 /**
  * @author Jitesh Sojitra
@@ -75,7 +76,7 @@ public class AppointmentActionTests extends CommonTest {
 		if (!alias.equals("")) {
 			ProvZCS.addAlias(SelNGBase.selfAccountName.get(), alias);
 			resetSession();
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			page.zLoginpage.zLoginToZimbraAjax(SelNGBase.selfAccountName.get());
 		}
 		zGoToApplication("Preferences");
@@ -86,7 +87,7 @@ public class AppointmentActionTests extends CommonTest {
 		page.zAccPref.zCreatePersona(personaName, fromName, alias);
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
@@ -95,7 +96,7 @@ public class AppointmentActionTests extends CommonTest {
 						"//td[contains(@id, '_select_container')]//td[contains(text(), '"
 								+ SelNGBase.selfAccountName.get().toLowerCase()
 								+ "')]", "");
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		if (alias.equals("")) {
 			SelNGBase.selenium
 					.get()
@@ -117,17 +118,17 @@ public class AppointmentActionTests extends CommonTest {
 		obj.zAppointment.zExists(subject);
 
 		resetSession();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selfAccountName.set(user2);
 		page.zLoginpage.zLoginToZimbraAjax(user2);
 		MailApp.ClickCheckMailUntilMailShowsUp(fromName);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zMessageItem.zRtClick(subject);
 		obj.zMenuItem.zClick(page.zMailApp.zShowOriginalMenuIconBtn);
-		Thread.sleep(4000); // failed because of timing issue
+		SleepUtil.sleep(4000); // failed because of timing issue
 		SelNGBase.selenium.get().selectWindow("_blank");
 		String showOrigText = SelNGBase.selenium.get().getBodyText();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String expectedValue;
 		if (alias.equals("")) {
 			expectedValue = "From: " + fromName + " <" + user1.toLowerCase()

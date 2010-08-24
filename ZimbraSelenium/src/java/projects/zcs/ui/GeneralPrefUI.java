@@ -3,6 +3,7 @@ package projects.zcs.ui;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -20,7 +21,7 @@ public class GeneralPrefUI extends AppPage {
 	public static void zNavigateToChangePasswordWindow() throws Exception {
 		zGoToApplication("Preferences");
 		obj.zButton.zClick(localize(locator.changePassword));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	public static void zEnterChangePWData(String oldPwd, String newPwd,
@@ -36,7 +37,7 @@ public class GeneralPrefUI extends AppPage {
 		String errorMessage;
 		page.zGenPrefUI.zEnterChangePWData(oldPwd, newPwd, confirmPwd);
 		obj.zButton.zClick("class=zLoginButton");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		errorMessage = SelNGBase.selenium.get().getText("class=errorText");
 
 		String expectedMsg = localize(locator.loginError);

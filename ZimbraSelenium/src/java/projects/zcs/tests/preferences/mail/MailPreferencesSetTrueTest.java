@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -98,7 +99,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		// selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -156,15 +157,15 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(accountName, "", "",
 				subject, body, "");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zMessageItem.zDblClick(subject);
-		Thread.sleep(4000); // test continuously fails here
+		SleepUtil.sleep(4000); // test continuously fails here
 		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", "id=zb__MSG1__CLOSE_left_icon");
 		obj.zButton.zClick("id=zb__MSG1__CLOSE_left_icon");
 		SelNGBase.selenium.get().selectWindow(null);
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -185,11 +186,11 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		// selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		page.zComposeView.zNavigateToMailCompose();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		page.zComposeView.zSendMailToSelfAndVerify(accountName, "", "",
 				subject, body, "");
@@ -198,22 +199,22 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 		obj.zMenuItem.zClick(localize(locator.byMessage));
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		obj.zMessageItem.zClick(subject);
 
 		if (readTime.equals("0")) {
-			Thread.sleep(500);
+			SleepUtil.sleep(500);
 			obj.zMessageItem.zVerifyIsRead(subject);
 		} else if (readTime.equals("-1")) {
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zMessageItem.zVerifyIsUnRead(subject);
 		} else {
 			int i = Integer.parseInt(readTime);
 			i = (i * 1000) + 1000;
 
 			obj.zMessageItem.zVerifyIsUnRead(subject);
-			Thread.sleep(i);
+			SleepUtil.sleep(i);
 
 			obj.zMessageItem.zVerifyIsRead(subject);
 		}
@@ -242,7 +243,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		// selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		page.zComposeView.zNavigateToMailCompose();
 
@@ -257,7 +258,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		// selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -285,11 +286,11 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 				body, "");
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		resetSession();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
@@ -303,7 +304,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 		resetSession();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.selfAccountName.set(forwardingAddress);
 		page.zLoginpage.zLoginToZimbraAjax(forwardingAddress);
@@ -338,11 +339,11 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 				body, "");
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		resetSession();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.selfAccountName.set(notificationAddress);
 		page.zLoginpage.zLoginToZimbraAjax(notificationAddress);
@@ -354,7 +355,7 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 
 		if (browser.equals("IE"))
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 
 		page.zMailApp.zVerifyMailContentContains(subject);
 		page.zMailApp.zVerifyMailContentContains("New message received at");
@@ -397,12 +398,12 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 			String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 			if (browser.equals("IE"))
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 
 			page.zMailApp.zVerifyMailContentContains(oOOContent);
 		} else {
 
-			Thread.sleep(5000);
+			SleepUtil.sleep(5000);
 
 			obj.zButton.zClick(page.zMailApp.zGetMailIconBtn);
 

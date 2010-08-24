@@ -14,6 +14,7 @@ import framework.items.ContactItem;
 import framework.items.FolderItem;
 import framework.items.ContactItem.GenerateItemType;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 
 
@@ -78,7 +79,7 @@ public class BasicContactTests extends CommonTest {
 	 */
 	@Test(
 			description = "Enters some basic fields to create a contact in address book and verifies the contact exist or not",
-			groups = { "smoke", "full" },
+			groups = { "sanity", "smoke", "full" },
 			retryAnalyzer = RetryFailedTests.class)
 	public void createBasicContact() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
@@ -281,7 +282,7 @@ public class BasicContactTests extends CommonTest {
 		page.zABCompose.zEnterBasicABData(contact);
 		obj.zButton.zClick(page.zABCompose.zCancelContactMenuIconBtn);
 		obj.zButton.zClickInDlgByName(localize(locator.no), localize(locator.warningMsg));
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zContactListItem.zNotExists(contact.lastName);
 
 		SelNGBase.needReset.set(false);

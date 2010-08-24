@@ -14,6 +14,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 /**
  * @author Jitesh Sojitra
@@ -80,28 +81,28 @@ public class TagBriefcaseFileTests extends CommonTest {
 		String tag1, newTag1;
 		obj.zButton.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.columnBrowserView));
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		page.zBriefcaseApp.zBriefcaseFileUpload(fileName, "");
 		tag1 = getLocalizedData_NoSpecialChar();
 		newTag1 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		obj.zBriefcaseItem.zClick(fileName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zBriefcaseApp.zTagItemIconBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zVerifyIsTagged(fileName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		zRenameTag(tag1, newTag1);
 		obj.zFolder.zNotExists(tag1);
 		obj.zFolder.zClick(newTag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zVerifyIsTagged(fileName);
 
 		zDeleteTag(newTag1);
 		obj.zBriefcaseItem.zClick(fileName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zBriefcaseApp.zTagItemIconBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
@@ -123,45 +124,45 @@ public class TagBriefcaseFileTests extends CommonTest {
 		fileName2 = "testsoundfile.wav";
 		obj.zButton.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.detailView));
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		page.zBriefcaseApp.zBriefcaseFileUpload(fileName, "");
 		page.zBriefcaseApp.zBriefcaseFileUpload(fileName2, "");
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		obj.zBriefcaseItem.zClick(fileName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zBriefcaseApp.zTagItemIconBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zVerifyIsTagged(fileName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zClick(fileName2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zBriefcaseApp.zTagItemIconBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zVerifyIsTagged(fileName2);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zExists(fileName);
 		assertReport("false", obj.zBriefcaseItem.zExistsDontWait(fileName2),
 				"Verify file2 not exists");
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zExists(fileName2);
 		assertReport("false", obj.zBriefcaseItem.zExistsDontWait(fileName),
 				"Verify file1 not exists");
 		obj.zFolder.zClick(page.zBriefcaseApp.zBriefcaseFolder);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("true", obj.zBriefcaseItem.zExistsDontWait(fileName),
 				"Verify file1 not exists");
 		assertReport("true", obj.zBriefcaseItem.zExistsDontWait(fileName2),
 				"Verify file2 not exists");
 		obj.zFolder.zClick(page.zBriefcaseApp.zTrashFolder);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("false", obj.zBriefcaseItem.zExistsDontWait(fileName),
 				"Verify file1 not exists");
 		assertReport("false", obj.zBriefcaseItem.zExistsDontWait(fileName2),
@@ -171,7 +172,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 		obj.zBriefcaseItem.zClick(fileName2);
 		obj.zButton.zClick(page.zBriefcaseApp.zTagItemIconBtn);
 		obj.zMenuItem.zClick(localize(locator.removeTag));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zBriefcaseApp.zTagItemIconBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
@@ -192,34 +193,34 @@ public class TagBriefcaseFileTests extends CommonTest {
 		String tag1, tag2;
 		obj.zButton.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.columnBrowserView));
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		page.zBriefcaseApp.zBriefcaseFileUpload(fileName, "");
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zClick(fileName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zBriefcaseApp.zTagItemIconBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag1);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zVerifyIsTagged(fileName);
 		obj.zButton.zClick(page.zBriefcaseApp.zTagItemIconBtn);
 		obj.zMenuItem.zNotExists(tag1);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zVerifyIsTagged(fileName);
 		obj.zButton.zClick(page.zBriefcaseApp.zTagItemIconBtn);
 		obj.zMenuItem.zNotExists(tag1);
 		obj.zMenuItem.zNotExists(tag2);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zExists(fileName);
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zExists(fileName);
 
 		SelNGBase.needReset.set(false);
@@ -245,33 +246,33 @@ public class TagBriefcaseFileTests extends CommonTest {
 		String tag1;
 		obj.zButton.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.explorerView));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick("id=zb__BC__NEW_FILE_left_icon");
 		page.zBriefcaseApp.zBriefcaseFileUpload(fileName, "");
 		tag1 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get()
 				.clickAt(
 						"//div[contains(@id, 'zlif__BC') and contains(@class, 'ZmThumbnailItem')]",
 						"");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick("id=zb__BC__TAG_MENU_left_icon");
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert
 				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("//div[contains(@id, 'zv__BC')]//div[contains(@class, 'ImgTagOrange')]"));
 
 		obj.zButton.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.columnBrowserView));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zVerifyIsTagged(fileName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.explorerView));
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert
 				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("//div[contains(@id, 'zv__BC')]//div[contains(@class, 'ImgTagOrange')]"));
@@ -281,14 +282,14 @@ public class TagBriefcaseFileTests extends CommonTest {
 
 		obj.zButton.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.detailView));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert
 				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("//tr[contains(@id, 'zlif__BCD')]//td[contains(@class, 'Tag')]//div[contains(@class, 'ImgTagOrange')]"));
 
 		obj.zButton.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.columnBrowserView));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zVerifyIsTagged(fileName);
 
 		SelNGBase.needReset.set(false);
@@ -308,7 +309,7 @@ public class TagBriefcaseFileTests extends CommonTest {
 		fileName2 = "testpptfile.ppt";
 		obj.zButton.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.columnBrowserView));
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		page.zBriefcaseApp.zBriefcaseFileUpload(fileName, "");
 		page.zBriefcaseApp.zBriefcaseFileUpload(fileName2, "");
 		tag1 = getLocalizedData_NoSpecialChar();
@@ -321,15 +322,15 @@ public class TagBriefcaseFileTests extends CommonTest {
 				"//td[contains(@id, 'zti__main_Briefcase') and contains(text(), '"
 						+ tag1 + "')]");
 		obj.zBriefcaseItem.zVerifyIsTagged(fileName.toLowerCase());
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(page.zBriefcaseApp.zTrashFolder);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("false", obj.zBriefcaseItem.zExistsDontWait(fileName),
 				"Verify file1 not exists");
 		assertReport("false", obj.zBriefcaseItem.zExistsDontWait(fileName2),
 				"Verify file2 not exists");
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zExists(fileName.toLowerCase());
 
 		obj.zFolder.zClick(page.zBriefcaseApp.zBriefcaseFolder);
@@ -339,11 +340,11 @@ public class TagBriefcaseFileTests extends CommonTest {
 				"//td[contains(@id, 'zlif__BCC') and contains(text(), '"
 						+ fileName2.toLowerCase() + "')]");
 		obj.zBriefcaseItem.zVerifyIsTagged(fileName2.toLowerCase());
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(page.zBriefcaseApp.zBriefcaseFolder);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zBriefcaseItem.zExists(fileName2.toLowerCase());
 		assertReport("false", obj.zBriefcaseItem.zExistsDontWait(fileName),
 				"Verify message1 not exists");

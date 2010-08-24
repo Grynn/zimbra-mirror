@@ -10,6 +10,7 @@ import com.zimbra.cs.service.admin.GetAccount;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -39,9 +40,9 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 		ProvZCS.modifyAccount(currentloggedinuser,
 				"zimbraPrefShowSelectionCheckbox", "FALSE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3000);/* without this we get permission denied error */
+		SleepUtil.sleep(3000);/* without this we get permission denied error */
 		zWaitTillObjectExist("button", page.zLoginpage.zSearchFldr);
-		Thread.sleep(2000);/*
+		SleepUtil.sleep(2000);/*
 							 * wait another 3 secs after we see the search
 							 * button
 							 */
@@ -124,7 +125,7 @@ public class GeneralPreferencesSetFalseTests extends CommonTest {
 				obj.zMessageItem.zClick(message[0]);
 				obj.zButton.zClick(page.zMailApp.zDeleteIconBtn);
 				obj.zFolder.zClick(localize(locator.trash));
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				obj.zMessageItem.zExists(message[0]);
 				SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
 						SelNGBase.selfAccountName.get());

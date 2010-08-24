@@ -11,6 +11,7 @@ import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -90,12 +91,12 @@ public class CreateContactTests extends CommonTest {
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zABCompose.zContactsFolder));
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 		} else {
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 		obj.zButton.zClick(page.zABCompose.zNewContactMenuIconBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		Assert
 				.assertTrue(
 						SelNGBase.selenium.get()
@@ -107,20 +108,20 @@ public class CreateContactTests extends CommonTest {
 		obj.zEditField.zActivateAndType(page.zABCompose.zFirstEditField,
 				cnFirstname);
 		obj.zButton.zClick("id=editcontactform_IMAGE_badge");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		File f = new File("src/java/projects/zcs/data/" + filename);
 		String path = f.getAbsolutePath();
 		obj.zBrowseField.zTypeInDlgWithKeyboard(localize(locator.uploadImage),
 				path, "1");
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String dlgExists = obj.zDialog
 				.zExistsDontWait(localize(locator.uploadImage));
 		for (int i = 0; i <= 20; i++) {
 			if (dlgExists.equals("true")) {
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 			} else {
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				break;
 			}
 		}
@@ -128,9 +129,9 @@ public class CreateContactTests extends CommonTest {
 		obj.zContactListItem.zClick(cnLastName);
 		obj.zButton.zClick(page.zABCompose.zEditContactIconBtn);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 		} else {
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 		Assert
 				.assertTrue(
@@ -144,9 +145,9 @@ public class CreateContactTests extends CommonTest {
 		obj.zContactListItem.zClick(cnLastName);
 		obj.zButton.zClick(page.zABCompose.zEditContactIconBtn);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 		} else {
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 		viewLinkPresent = SelNGBase.selenium.get()
 				.isElementPresent("id=editcontactform_VIEW_IMAGE");
@@ -169,9 +170,9 @@ public class CreateContactTests extends CommonTest {
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zABCompose.zContactsFolder));
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 		} else {
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 		obj.zButton.zClick(page.zABCompose.zNewContactMenuIconBtn);
 		zWaitTillObjectExist("editfield", page.zABCompose.zLastEditField);
@@ -182,7 +183,7 @@ public class CreateContactTests extends CommonTest {
 		obj.zEditField.zActivateAndType(page.zABCompose.zCompanyEditField,
 				company);
 		obj.zButton.zClick(page.zABCompose.zSaveContactMenuIconBtn);
-		Thread.sleep(2500);
+		SleepUtil.sleep(2500);
 		editContactUpdateFileAsAndVerify(cnLastName, cnFirstname, company);
 
 		SelNGBase.needReset.set(false);
@@ -225,10 +226,10 @@ public class CreateContactTests extends CommonTest {
 		int totalFileAs = fileAsArray.length;
 		for (int i = 0; i < totalFileAs; i++) {
 			obj.zListItem.zClick(fileAsArray[i]);
-			Thread.sleep(2000); // required because selenium immediately clicks
+			SleepUtil.sleep(2000); // required because selenium immediately clicks
 			// new before previous action perform its action
 			obj.zButton.zClick(page.zABCompose.zEditContactIconBtn);
-			Thread.sleep(2000); // required because selenium immediately clicks
+			SleepUtil.sleep(2000); // required because selenium immediately clicks
 			// new before previous action perform its action
 			obj.zButton.zClick("id=editcontactform_FILE_AS_left_icon");
 			switch (i) {
@@ -259,7 +260,7 @@ public class CreateContactTests extends CommonTest {
 				break;
 			}
 			obj.zButton.zClick(page.zABCompose.zSaveContactMenuIconBtn);
-			Thread.sleep(2500); // give sufficient time after saving as it
+			SleepUtil.sleep(2500); // give sufficient time after saving as it
 			// fails because lot of time opening and saving same contact
 		}
 	}

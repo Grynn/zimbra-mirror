@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -73,7 +74,7 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 		zReloginToAjax();
 //		selenium.refresh();
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -115,11 +116,11 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 		page.zCalCompose
 				.zCreateSimpleAppt(subject, location, accountName, body);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		resetSession();
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
@@ -130,7 +131,7 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.replyAccept));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		if (deleteInvite.equals("TRUE"))
 			obj.zMessageItem.zNotExists(subject);
@@ -153,7 +154,7 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 		} else {
 			obj.zMiscObj.zDblClickXY("ZmCalViewMgr/ImgCalendarDayGrid", "50,50");
 		}
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zDialog.zExists(localize(locator.quickAddAppt));
 		
@@ -172,7 +173,7 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 
 		page.zCalApp.zNavigateToApptCompose();
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		// String timeZone =
 		// obj.zMiscObj.zExistsDontWait("ZmApptComposeView ZWidget/*tzoneSelect/ZSelectAutoSizingContainer ZHasDropDown");
@@ -197,7 +198,7 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 				getLocalizedData_NoSpecialChar(), "",
 				getLocalizedData_NoSpecialChar());
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		obj.zDialog.zExists(localize(locator.apptReminders));
 		

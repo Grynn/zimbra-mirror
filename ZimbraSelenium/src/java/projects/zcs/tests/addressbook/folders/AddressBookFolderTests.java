@@ -12,6 +12,7 @@ import projects.zcs.ui.ABCompose.ABComposeActionMethod;
 import framework.core.SelNGBase;
 import framework.items.FolderItem;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -139,7 +140,7 @@ public class AddressBookFolderTests extends CommonTest {
 		
 		obj.zButton .zRtClick(replaceUserNameInStaticId(replaceUserNameInStaticId(page.zABCompose.zNewABOverviewPaneIcon)));
 		obj.zMenuItem.zClick(localize(locator.newAddrBook));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zEditField.zTypeInDlgByName(localize(locator.nameLabel),
 				addressbook.name, localize(locator.createNewAddrBook));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),

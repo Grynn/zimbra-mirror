@@ -3,10 +3,11 @@ package projects.html.clients;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 
 public class ToastAlertMessage extends SelNGBase{
 	public String zGetMsg() throws Exception {
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		return SelNGBase.selenium.get().getText("id=app_st_msg_div");
 	}
 	
@@ -16,12 +17,7 @@ public class ToastAlertMessage extends SelNGBase{
 		    	actMsg = zGetMsg();
 			if(actMsg.indexOf(expectedMsg) >=0)
 				return true;
-			try {
-				Thread.sleep(2000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			SleepUtil.sleep(2000);
 		}
 		Assert.assertTrue(false, customMsg + "\nActual("+actMsg+") didnt contain Expected("+expectedMsg+")");
 		return false;

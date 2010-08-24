@@ -10,6 +10,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
 
@@ -70,9 +71,9 @@ public class SignatureBugTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		/**
 		 * Create Signature 2
@@ -81,9 +82,9 @@ public class SignatureBugTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.addSignature));
 		page.zSignaturePref.zCreateSignature(defaultSignature, signatureBody,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		/**
 		 * Make Signature 2 default
@@ -91,9 +92,9 @@ public class SignatureBugTests extends CommonTest {
 		page.zAccPref.zNavigateToPreferenceAccount();
 		obj.zButton.zClick(localize(locator.signatureDoNotAttach));
 		obj.zMenuItem.zClick(defaultSignature);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		/**
 		 * 1. Compose Mail. 2. Switch Signature. 3. Send Mail to self and click
@@ -106,7 +107,7 @@ public class SignatureBugTests extends CommonTest {
 		obj.zButton.zClick(ComposeView.zSignatureIconBtn);
 		obj.zMenuItem.zClick(signatureName);
 		obj.zButton.zClick(ComposeView.zSendIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		zGoToApplication("Mail");
 		obj.zFolder.zClick(localize(locator.inbox));
@@ -146,29 +147,29 @@ public class SignatureBugTests extends CommonTest {
 
 		page.zMailApp.zNavigateToComposingPreferences();
 		obj.zCheckbox.zClick(localize(locator.composeInNewWin));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Composing should be saved");
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zNewMenuIconBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 		obj.zButton.zClick(ComposeView.zOptionsDownArrowBtn);
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(ComposeView.zSignatureIconBtn);
 		obj.zMenuItem.zClick(signatureName);
 		String actualSignature = obj.zEditor.zGetInnerText("");
@@ -180,9 +181,9 @@ public class SignatureBugTests extends CommonTest {
 				getLocalizedData(5), "");
 
 		page.zSignaturePref.zNavigateToPreferenceSignature();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zGoToApplication("Mail");
 		obj.zFolder.zClick(localize(locator.inbox));
 		obj.zMessageItem.zExists(subject);

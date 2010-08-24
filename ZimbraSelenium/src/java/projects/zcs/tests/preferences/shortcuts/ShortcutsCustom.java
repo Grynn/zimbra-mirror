@@ -24,6 +24,7 @@ import com.zimbra.cs.zclient.ZFolder;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -69,7 +70,7 @@ public class ShortcutsCustom extends CommonTest {
 	private void zLogin() throws Exception {
 
 		zLoginIfRequired();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		SelNGBase.isExecutionARetry.set(false);
 	}
@@ -165,7 +166,7 @@ public class ShortcutsCustom extends CommonTest {
 		
 		obj.zFolder.zClick(localize(locator.trash));
 		
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		zRobot.keyPress(KeyEvent.VK_Y);
 		zRobot.keyPress(KeyEvent.VK_2);
@@ -194,7 +195,7 @@ public class ShortcutsCustom extends CommonTest {
 		obj.zTextAreaField.zType(localize(locator.search), subject);
 		
 		SelNGBase.fieldLabelIsAnObject = false;
-		Thread.sleep(200);
+		SleepUtil.sleep(200);
 		
 //		obj.zEditField.zType("id=ztb_search_inputField", subject);
 		

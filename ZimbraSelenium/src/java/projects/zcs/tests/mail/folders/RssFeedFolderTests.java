@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
@@ -90,9 +91,9 @@ public class RssFeedFolderTests extends CommonTest {
 		createData();
 		obj.zFolder.zClick(rssFeedFolderName);
 		obj.zFolder.zRtClick(rssFeedFolderName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMenuItem.zClick(localize(locator.renameFolder));
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zDialog.zExists(localize(locator.renameFolder) + ": "
 				+ rssFeedFolderName);
 		obj.zEditField.zTypeInDlgByName(localize(locator.newName),
@@ -100,9 +101,9 @@ public class RssFeedFolderTests extends CommonTest {
 						+ rssFeedFolderName);
 		obj.zButton.zClickInDlg(localize(locator.ok));
 		obj.zFolder.zRtClick(renameRssFeedFolderName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMenuItem.zClick(localize(locator.renameFolder));
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zEditField.zTypeInDlgByName(localize(locator.newName),
 				rssFeedFolderName, localize(locator.renameFolder) + ": "
 						+ renameRssFeedFolderName);
@@ -173,9 +174,9 @@ public class RssFeedFolderTests extends CommonTest {
 				obj.zButton.zClickInDlgByName(localize(locator.ok),
 						localize(locator.zimbraTitle));
 				obj.zButton.zExists(localize(locator.checkFeed));
-				Thread.sleep(2000);
+				SleepUtil.sleep(2000);
 				obj.zMessageItem.zClick("zimbra");
-				Thread.sleep(2000);
+				SleepUtil.sleep(2000);
 				dialogexistFlag = obj.zDialog
 						.zExistsDontWait(localize(locator.zimbraTitle));
 				dialogFound = true;
@@ -206,7 +207,7 @@ public class RssFeedFolderTests extends CommonTest {
 			rssFeedURL = "http://blogsearch.google.com/blogsearch_feeds?q=zimbra&oe=UTF-8&client=firefox-a&um=1&oi=property_suggestions&ct=property-revision&cd=2&ie=utf-8&num=10&output=rss";
 			page.zMailApp.zCreateRssFeedFolder(rssFeedFolderName, rssFeedURL);
 			i = i + 1;
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 	}
 
@@ -236,7 +237,7 @@ public class RssFeedFolderTests extends CommonTest {
 		obj.zFolder.zClick(folderName);
 		obj.zFolder.zClick(folderName);
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		obj.zFolder.zClick(folderName);
 

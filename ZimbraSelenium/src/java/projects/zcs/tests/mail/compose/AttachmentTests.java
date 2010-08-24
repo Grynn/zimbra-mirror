@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
@@ -132,7 +133,7 @@ public class AttachmentTests extends CommonTest {
 		obj.zButton.zClick(ComposeView.zOptionsDownArrowBtn);
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
 		page.zComposeView.zAddAttachments("structure.jpg", true);
-		// Thread.sleep(1000);
+		// SleepUtil.sleep(1000);
 		String html = obj.zEditor.zGetInnerHTML("");
 		boolean b = (html.toLowerCase().indexOf("dfsrc=") > 0);
 		Assert.assertTrue(b,
@@ -151,9 +152,9 @@ public class AttachmentTests extends CommonTest {
 			String subject, String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
 			detachRetainsAttachments_Retry();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zButton.zClick("id=zb__COMPOSE1__DETACH_COMPOSE_left_icon");
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zCancelIconBtn);
 		obj.zButton.zWait(ComposeView.zSendIconBtn);

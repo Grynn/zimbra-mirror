@@ -10,6 +10,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -101,14 +102,14 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		System.out
 				.println("Select autocomplete value using keyboard ENTER key");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		getKeyboardKeys(acc1);
 		typeKeyboardKeys();
 		pressKeys("2");
 		page.zMailApp.zVerifyAutocompleteExists(acc2.toLowerCase(), 1, 1);
 		pressKeys("enter");
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		assertReport(obj.zTextAreaField
 				.zGetInnerText(localize(locator.attendeesLabel)), acc2
 				.toLowerCase(),
@@ -116,7 +117,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		obj.zEditField.zType(
 				getNameWithoutSpace(localize(locator.subjectLabel)), subject);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		resetSession();
 		SelNGBase.selfAccountName.set(acc2);
 		page.zLoginpage.zLoginToZimbraAjax(acc2);
@@ -127,7 +128,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		pressKeys("1");
 		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
 		pressKeys("tab");
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		assertReport(obj.zTextAreaField
 				.zGetInnerText(localize(locator.attendeesLabel)), acc1
 				.toLowerCase(),
@@ -135,7 +136,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		obj.zEditField.zType(
 				getNameWithoutSpace(localize(locator.subjectLabel)), subject);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		resetSession();
 		SelNGBase.selfAccountName.set(acc1);
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
@@ -147,7 +148,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
 		page.zMailApp.zVerifyAutocompleteExists(acc2.toLowerCase(), 2, 0);
 		pressKeys("down, enter");
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		assertReport(obj.zTextAreaField
 				.zGetInnerText(localize(locator.attendeesLabel)), acc2
 				.toLowerCase(),
@@ -169,7 +170,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteExists(acc1.toLowerCase(), 1, 1);
 		page.zMailApp.zVerifyAutocompleteExists(acc2.toLowerCase(), 2, 0);
 		pressKeys("down, up, enter");
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		assertReport(obj.zTextAreaField
 				.zGetInnerText(localize(locator.attendeesLabel)), acc1
 				.toLowerCase(),
@@ -199,7 +200,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
 		zGoToApplication("Calendar");
@@ -207,7 +208,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		obj.zEditField
 				.zActivate(getNameWithoutSpace(localize(locator.locationLabel)));
 		pressKeys("l, o, c, a, t, i, o, n, 1, enter");
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		expectedValue = location + ";";
 		actualValue = obj.zEditField
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
@@ -245,13 +246,13 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
 		zGoToApplication("Calendar");
 		page.zCalApp.zNavigateToApptCompose();
 		obj.zTab.zClick(localize(locator.schedule));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
 				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
 				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_AU")
@@ -266,9 +267,9 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		}
 
 		pressKeys("enter");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTab.zClick(localize(locator.apptDetails));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		expectedValue = acc1.toLowerCase();
 		actualValue = obj.zTextAreaField
 				.zGetInnerText(getNameWithoutSpace(localize(locator.attendeesLabel)));
@@ -300,27 +301,27 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
 		zGoToApplication("Calendar");
 		page.zCalApp.zNavigateToApptCompose();
 		obj.zTab.zClick(localize(locator.schedule));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get()
 				.clickAt(
 						"//div//table[contains(@id, 'attendeesTable')]//td[contains(@id, 'select_container')]",
 						"");
 		obj.zMenuItem.zClick(localize(locator.location));
-        Thread.sleep(1000);
+        SleepUtil.sleep(1000);
 				
 		obj.zEditField.zActivate("//input[contains(@id,'_INPUT_') and @class='ZmSchedulerInput']");        
 				
 		pressKeys("l, o, c, a, t, i, o, n, 2, tab");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		
 		obj.zTab.zClick(localize(locator.apptDetails));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		expectedValue = location;
 		actualValue = obj.zEditField
@@ -328,7 +329,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		assertReport(expectedValue, actualValue,
 				"Verifying autocomplete for location in schedule tab");
 		SelNGBase.selenium.get().click("link=" + location);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		
 		obj.zButton.zIsDisabled(localize(locator.select));
 		obj.zButton.zIsEnabled(localize(locator.remove));
@@ -358,30 +359,30 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
 		zGoToApplication("Calendar");
 		page.zCalApp.zNavigateToApptCompose();
 		obj.zTab.zClick(localize(locator.schedule));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get()
 				.clickAt(
 						"//div//table[contains(@id, 'attendeesTable')]//td[contains(@id, 'select_container')]",
 						"");
 		obj.zMenuItem.zClick(localize(locator.resourceAttendee));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		
 		obj.zEditField.zActivate("//input[contains(@id,'_INPUT_') and @class='ZmSchedulerInput']");        
 				
 		pressKeys("tab, e, q, u, i, p, m, e, n, t, 1, enter");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		
 		obj.zTab.zClick(localize(locator.apptDetails));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		
 		SelNGBase.selenium.get().click("link=" + equipment);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		
 		obj.zButton.zIsDisabled(localize(locator.add));
 		obj.zButton.zIsDisabled(localize(locator.addAll));
@@ -413,26 +414,26 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
 		zGoToApplication("Calendar");
 		page.zCalApp.zNavigateToApptCompose();
 		obj.zTab.zClick(localize(locator.findLocations));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zIsDisabled(localize(locator.remove));
 		obj.zButton.zClick(localize(locator.search), "2");
 		obj.zButton.zIsEnabled(localize(locator.select));
 		obj.zButton.zIsDisabled(localize(locator.remove));
 		obj.zEditField.zType(getNameWithoutSpace(localize(locator.nameLabel)),
 				location.split("@")[0]);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(localize(locator.search), "2");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zButton.zClick(localize(locator.select));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zTab.zClick(localize(locator.apptDetails));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		expectedValue = location;
 		actualValue = obj.zEditField
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
@@ -467,13 +468,13 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
 		zGoToApplication("Calendar");
 		page.zCalApp.zNavigateToApptCompose();
 		obj.zTab.zClick(localize(locator.findResources));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zIsDisabled(localize(locator.add));
 		obj.zButton.zIsDisabled(localize(locator.addAll));
 		obj.zButton.zIsDisabled(localize(locator.remove));
@@ -532,7 +533,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
 		zGoToApplication("Calendar");
@@ -549,16 +550,16 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		assertReport(expectedValue, actualValue,
 				"Verifying autocomplete for location");
 		obj.zTab.zClick(localize(locator.findResources));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zEditField.zType(getNameWithoutSpace(localize(locator.nameLabel)),
 				equipment);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zButton.zClick(localize(locator.search), "2");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zButton.zClick(localize(locator.add));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTab.zClick(localize(locator.apptDetails));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert.assertEquals(true,
 				SelNGBase.selenium.get().isElementPresent("link=" + location),
 				"Verifying location link exists");
@@ -571,7 +572,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		assertReport(expectedValue, actualValue,
 				"Verifying autocomplete for location");
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String isDlgExists;
 		isDlgExists = obj.zDialog
 				.zExistsDontWait(localize(locator.resourceConflictLabel));
@@ -581,7 +582,7 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		}
 
 		obj.zAppointment.zDblClick(apptSubject);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		actualValue = obj.zEditField
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport(expectedValue, actualValue,
@@ -594,9 +595,9 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 				"Verifying resource link exists");
 		obj.zEditField
 				.zActivate(getNameWithoutSpace(localize(locator.locationLabel)));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		pressKeys("ctrl+a, backspace");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		actualValue = obj.zEditField
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport("<blank>", actualValue,
@@ -610,10 +611,10 @@ public class AttendeesResourcesAutocompleteAndSearchTests extends CommonTest {
 		SelNGBase.selenium.get().click("link=" + equipment);
 		obj.zButton.zClick(localize(locator.remove));
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zAppointment.zDblClick(apptSubject);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		actualValue = obj.zEditField
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport("<blank>", actualValue,

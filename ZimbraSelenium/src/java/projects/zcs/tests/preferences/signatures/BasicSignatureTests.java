@@ -11,6 +11,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -72,9 +73,9 @@ public class BasicSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 
@@ -93,15 +94,15 @@ public class BasicSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zEditSignature("",
 				getLocalizedData_NoSpecialChar(), "TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Edited Signature should be saved");
 
@@ -123,7 +124,7 @@ public class BasicSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zButton.zClick(localize(locator.clear));
 		obj.zEditor.zExists(signatureBody);
@@ -146,7 +147,7 @@ public class BasicSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"HTML");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zButton.zClick(localize(locator.clear));
 		obj.zEditor.zExists(signatureBody);
@@ -166,9 +167,9 @@ public class BasicSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -194,9 +195,9 @@ public class BasicSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -228,11 +229,11 @@ public class BasicSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(localize(locator.addSignature));
 		page.zSignaturePref.zCreateSignature(signatureName1, signatureBody1,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(localize(locator.addSignature));
 		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
@@ -264,11 +265,11 @@ public class BasicSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"HTML");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(localize(locator.addSignature));
 		page.zSignaturePref.zCreateSignature(signatureName1, signatureBody1,
 				"HTML");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(localize(locator.addSignature));
 		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
@@ -302,16 +303,16 @@ public class BasicSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(localize(locator.addSignature));
 		page.zSignaturePref.zCreateSignature(signatureName1, signatureBody1,
 				"TEXT");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
@@ -345,16 +346,16 @@ public class BasicSignatureTests extends CommonTest {
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				"HTML");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(localize(locator.addSignature));
 		page.zSignaturePref.zCreateSignature(signatureName1, signatureBody1,
 				"HTML");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		SelNGBase.selenium.get().clickAt("css=tr[id^=DWT]>td:contains("+ signatureName +")", "");
 		SelNGBase.selenium.get().clickAt("xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
@@ -363,7 +364,7 @@ public class BasicSignatureTests extends CommonTest {
 		for (int second = 0;; second++) {
 			if (second >= 60) fail("timeout");
 			try { if (!SelNGBase.selenium.get().isTextPresent(signatureName)) break; } catch (Exception e) {}
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		Assert.assertFalse(SelNGBase.selenium.get().isTextPresent(signatureBody));
 		

@@ -12,6 +12,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -56,7 +57,7 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -113,9 +114,9 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 		SelNGBase.selfAccountName.set(attendees);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(localize(locator.accept));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zNotExists(subject);
 
@@ -150,9 +151,9 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButtonMenu.zClick(localize(locator.accept));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zMenuItem.zClick(localize(locator.notifyOrganizerLabel));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zExists(localize(locator.accept) + ": " + subject);
 
@@ -187,11 +188,11 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		obj.zButtonMenu.zClick(localize(locator.replyTentative));
 		
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMenuItem.zClick(localize(locator.editReply));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zExists(localize(locator.replyTentative) + ": " + subject);
 
@@ -226,9 +227,9 @@ public class ApptRSRPAndNotificationTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButtonMenu.zClick(localize(locator.replyDecline));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMenuItem.zClick(localize(locator.dontNotifyOrganizerLabel));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zNotExists(subject);
 

@@ -5,6 +5,7 @@ import framework.items.ContactItem;
 import framework.items.FolderItem;
 import framework.items.ZimbraItem;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -141,7 +142,7 @@ public class ABCompose extends AppPage {
 		obj.zMenuItem.zClick(localize(locator.newAddrBook));
 		obj.zEditField.zTypeInDlg(localize(locator.nameLabel), NewAddBookName);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	public static void zCreateNewAddBook(String NewAddBookName, String subFolder)
@@ -155,7 +156,7 @@ public class ABCompose extends AppPage {
 		obj.zFolder.zClickInDlgByName(subFolder,
 				localize(locator.createNewAddrBook));
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -179,7 +180,7 @@ public class ABCompose extends AppPage {
 		
 		if ((c.AddressBook != null) && (!c.AddressBook.name.equals("")) && (c.AddressBook.name.equals(localize(locator.contacts))) ) {
 			obj.zButton.zClick(zContactsFolder_NewUI);
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 			obj.zFolder.zClickInDlgByName(c.AddressBook.name, localize(locator.chooseAddrBook));
 			obj.zButton.zClickInDlgByName(localize(locator.ok), localize(locator.chooseAddrBook));
 		}
@@ -213,11 +214,11 @@ public class ABCompose extends AppPage {
 			for (String member : g.dlist) {
 				obj.zEditField.zType(localize(locator.findLabel), member);
 				obj.zButton.zClick(localize(locator.search), "2");
-				Thread.sleep(2500);
+				SleepUtil.sleep(2500);
 				if (currentBrowserName.contains("Safari")) {
 					obj.zButton.zClick(localize(locator.search), "2");
 					obj.zButton.zClick(localize(locator.search), "2");
-					Thread.sleep(1000);
+					SleepUtil.sleep(1000);
 				}
 				obj.zListItem.zDblClickItemInSpecificList(member, "2");
 				obj.zButton.zClick(localize(locator.add));
@@ -249,7 +250,7 @@ public class ABCompose extends AppPage {
 			obj.zMenuItem.zClick(localize(locator.newAddrBook));
 			obj.zEditField.zTypeInDlg(localize(locator.nameLabel), f.name);
 			obj.zButton.zClickInDlg(localize(locator.ok));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			
 			return (f);	
 			
@@ -290,9 +291,9 @@ public class ABCompose extends AppPage {
 			obj.zFolder.zClick(replaceUserNameInStaticId(zContactsFolder));
 	
 			if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-				Thread.sleep(2500);
+				SleepUtil.sleep(2500);
 			} else {
-				Thread.sleep(2000);
+				SleepUtil.sleep(2000);
 			}
 			
 			// Click on "New" -> "Contact"
@@ -306,7 +307,7 @@ public class ABCompose extends AppPage {
 			obj.zButton.zClick(zSaveContactMenuIconBtn);
 	
 			// TODO: wait for page to return
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 			
 			// ??
 			obj.zFolder.zClick(localize(locator.contacts));
@@ -334,7 +335,7 @@ public class ABCompose extends AppPage {
 			if ((newContact.email != null) && (!newContact.email.equals("")) )
 				obj.zEditField.zActivateAndType(zEmail1EditField, newContact.email);
 			
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			
 			// Click Save
 			obj.zButton.zClick(zSaveContactMenuIconBtn);
@@ -371,9 +372,9 @@ public class ABCompose extends AppPage {
 			obj.zMenuItem.zClick(page.zABApp.zRtClickContactEditMenuIconBtn);
 		}
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 		} else {
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 	}
 
@@ -388,9 +389,9 @@ public class ABCompose extends AppPage {
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zABCompose.zContactsFolder));
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 		} else {
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 		obj.zButton.zClick(page.zABCompose.zNewContactMenuIconBtn);
 		zWaitTillObjectExist("editfield", page.zABCompose.zLastEditField);
@@ -436,7 +437,7 @@ public class ABCompose extends AppPage {
 				notes);
 
 		obj.zButton.zClick(page.zABCompose.zSaveContactMenuIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	public static void zVerifyContactWithAllFields(String prefix,

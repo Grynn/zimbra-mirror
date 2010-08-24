@@ -10,6 +10,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 /**
  * @author Jitesh Sojitra
@@ -77,17 +78,17 @@ public class TagAppointmentTests extends CommonTest {
 		newTag1 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		obj.zListItem.zClick(subject);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zVerifyIsTagged(subject);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		zRenameTag(tag1, newTag1);
 		obj.zFolder.zNotExists(tag1);
 		obj.zFolder.zClick(newTag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zVerifyIsTagged(subject);
 
 		zDeleteTag(newTag1);
@@ -122,7 +123,7 @@ public class TagAppointmentTests extends CommonTest {
 		zClickApptInMonthView(subject);
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zRtClickApptInDiffView(subject, "month");
 		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
 		obj.zMenuItem.zNotExists(tag1);
@@ -131,75 +132,75 @@ public class TagAppointmentTests extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.viewDay));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zRtClickApptInDiffView(subject, "day");
 		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
 		obj.zMenuItem.zNotExists(tag1);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.viewWorkWeek));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zRtClickApptInDiffView(subject, "workweek");
 		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
 		obj.zMenuItem.zNotExists(tag1);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.viewWeek));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zRtClickApptInDiffView(subject, "week");
 		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
 		obj.zMenuItem.zNotExists(tag1);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.list));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zVerifyIsTagged(subject);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.viewSchedule));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zVerifyIsTagged(subject);
 
 		// Verify renamed tagged appointment in all 6 view
 		zRenameTag(tag1, newTag1);
 		obj.zFolder.zNotExists(tag1);
 		obj.zFolder.zClick(newTag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.viewDay));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zRtClickApptInDiffView(subject, "day");
 		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
 		obj.zMenuItem.zNotExists(newTag1);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.viewWorkWeek));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zRtClickApptInDiffView(subject, "workweek");
 		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
 		obj.zMenuItem.zNotExists(newTag1);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.viewWeek));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zRtClickApptInDiffView(subject, "week");
 		obj.zMenuItem.zIsEnabled(localize(locator.removeTag));
 		obj.zMenuItem.zNotExists(newTag1);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.list));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zVerifyIsTagged(subject);
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.viewSchedule));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zVerifyIsTagged(subject);
 
 		// Verify tag is deleted from appointment in all 6 view
 		zDeleteTag(newTag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		SelNGBase.selenium.get()
 				.clickAt(
@@ -252,7 +253,7 @@ public class TagAppointmentTests extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.list));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().clickAt(
 				"//td[contains(@id,'zlif__CLL') and contains(text(), '"
 						+ subject + "')]", "");
@@ -284,32 +285,32 @@ public class TagAppointmentTests extends CommonTest {
 		tag2 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		obj.zListItem.zClick(subject);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zVerifyIsTagged(subject);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zClick(subject2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zVerifyIsTagged(subject2);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zExists(subject);
 		assertReport("false", obj.zListItem.zExistsDontWait(subject2),
 				"Verify contact2 not exists");
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zExists(subject2);
 		assertReport("false", obj.zListItem.zExistsDontWait(subject),
 				"Verify contact1 not exists");
 		obj.zButton.zClick(page.zCalApp.zCalRefreshBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("true", obj.zListItem.zExistsDontWait(subject),
 				"Verify appointment1 not exists");
 		assertReport("true", obj.zListItem.zExistsDontWait(subject2),
@@ -317,9 +318,9 @@ public class TagAppointmentTests extends CommonTest {
 		obj.zListItem.zClick(subject2);
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zClick(localize(locator.removeTag));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zClick(subject2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
@@ -344,12 +345,12 @@ public class TagAppointmentTests extends CommonTest {
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
 		obj.zListItem.zClick(subject);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag1);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zVerifyIsTagged(subject);
 		obj.zListItem.zClick(subject);
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
@@ -357,16 +358,16 @@ public class TagAppointmentTests extends CommonTest {
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zVerifyIsTagged(subject);
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
 		obj.zMenuItem.zNotExists(tag1);
 		obj.zMenuItem.zNotExists(tag2);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zExists(subject);
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zExists(subject);
 
 		SelNGBase.needReset.set(false);
@@ -400,7 +401,7 @@ public class TagAppointmentTests extends CommonTest {
 		obj.zListItem.zVerifyIsTagged(subject);
 
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zExists(subject);
 		obj.zButton.zClick(page.zCalApp.zCalRefreshBtn);
 		zDragAndDrop(
@@ -409,9 +410,9 @@ public class TagAppointmentTests extends CommonTest {
 				"//div[contains(@id, 'zli__CLL')]//td[contains(text(), '"
 						+ subject2 + "')]");
 		obj.zListItem.zVerifyIsTagged(subject2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zExists(subject2);
 		assertReport("false", obj.zListItem.zExistsDontWait(subject),
 				"Verify appointment1 not exists");
@@ -437,7 +438,7 @@ public class TagAppointmentTests extends CommonTest {
 	}
 
 	public static void zClickApptInMonthView(String subject) throws Exception {
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get()
 				.clickAt(
 						"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
@@ -446,7 +447,7 @@ public class TagAppointmentTests extends CommonTest {
 
 	public static void zRtClickApptInDiffView(String subject, String view)
 			throws Exception {
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		if (view.toLowerCase().equals("day")) {
 			SelNGBase.selenium.get()
 					.mouseDownRight("xpath=//div[contains(@id, 'zli__CLD')]//td[contains(@class, '_name') and contains(text(), "
@@ -465,13 +466,13 @@ public class TagAppointmentTests extends CommonTest {
 							+ subject + ")]");
 		}
 		obj.zMenuItem.zMouseOver(localize(locator.tagAppt));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 	}
 
 	public static void zClickApptInDiffView(String subject, String view)
 			throws Exception {
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		if (view.toLowerCase().equals("day")) {
 			SelNGBase.selenium.get()
 					.clickAt(
@@ -493,12 +494,12 @@ public class TagAppointmentTests extends CommonTest {
 							"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
 									+ subject + ")]", "");
 		}
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	public static void zDblClickApptInMonthView(String subject)
 			throws Exception {
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get()
 				.doubleClickAt(
 						"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "

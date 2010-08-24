@@ -8,6 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -232,7 +233,7 @@ public class BriefcaseSharingTests extends CommonTest {
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
 		obj.zBriefcaseItem.zClick(filename);
 		obj.zButton.zClick(localize(locator.send));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMenuItem.zClick(localize(locator.send));
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.confirmTitle));
@@ -243,7 +244,7 @@ public class BriefcaseSharingTests extends CommonTest {
 						"Subject edit field value mismatched while send link from briefcase");
 		obj.zTextAreaField.zType(page.zComposeView.zToField, invitedusers);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 
 		page.zBriefcaseApp.zGoToBriefcaseApp();
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
@@ -277,7 +278,7 @@ public class BriefcaseSharingTests extends CommonTest {
 				sharetype, invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt);
 		page.zLoginpage.logoutOfZimbraAjax();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/home/"
 				+ SelNGBase.selfAccountName.get().toLowerCase() + "/" + "Briefcase");

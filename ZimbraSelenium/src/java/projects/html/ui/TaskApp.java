@@ -3,6 +3,7 @@ package projects.html.ui;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 
 import projects.html.clients.ProvZCS;
 import projects.html.tests.CommonTest;
@@ -78,9 +79,9 @@ public class TaskApp extends CommonTest {
 	 * Navigates to tasks from MailApp
 	 */
 	public static void zNavigateToTasks() throws Exception {
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(zTasksTab);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		zWaitTillObjectExist("button", zTasksNewBtn);
 	}
 
@@ -218,10 +219,10 @@ public class TaskApp extends CommonTest {
 			String priority, String body) throws Exception {
 
 		obj.zButton.zClick(zTasksNewBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zTaskEnterSimpleDetails(subject, location, priority, body);
 		obj.zButton.zClick(zTaskComposeSaveBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 	}
 
 	/**
@@ -252,11 +253,11 @@ public class TaskApp extends CommonTest {
 			String progressPercent, String startDate, String endDate)
 			throws Exception {
 		obj.zButton.zClick(zTasksNewBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zTaskEnterDetails(subject, location, priority, taskList, progress,
 				progressPercent, startDate, endDate, body);
 		obj.zButton.zClick(zTaskComposeSaveBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 	}
 
 	/**
@@ -343,7 +344,7 @@ public class TaskApp extends CommonTest {
 
 		obj.zButton.zClick(zTaskComposeSaveBtn);
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -387,7 +388,7 @@ public class TaskApp extends CommonTest {
 			String taskList) throws Exception {
 		zNavigateToTasks();
 		obj.zFolder.zClick(taskList);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zExists(subject);
 	}
 
@@ -401,7 +402,7 @@ public class TaskApp extends CommonTest {
 	public static void zTaskVeriyNotExistsInTaskList(String subject,
 			String taskList) throws Exception {
 		obj.zFolder.zClick(taskList);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zMessageItem.zNotExists(subject);
 	}
 
@@ -417,14 +418,14 @@ public class TaskApp extends CommonTest {
 	public static void zTaskMoveToolbar(String taskname, String sourceTaskList,
 			String destinationTaskList) throws Exception {
 		obj.zFolder.zClick(sourceTaskList);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zExists(taskname);
 		obj.zMessageItem.zClickCheckBox(taskname);
-		Thread.sleep(1000); // test fails here
+		SleepUtil.sleep(1000); // test fails here
 		SelNGBase.selenium.get().select(zTaskMoveMenu, destinationTaskList);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(zTaskMoveBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -441,9 +442,9 @@ public class TaskApp extends CommonTest {
 		if (!taskListName.equals(""))
 			obj.zFolder.zClick(taskListName);
 		obj.zMessageItem.zClickCheckBox(taskName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zHtmlMenu.zClick(zTaskMoreActionsMenu, tagName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -496,10 +497,10 @@ public class TaskApp extends CommonTest {
 	public static void zTaskListCreate(String taskListName) throws Exception {
 		zNavigateToTaskListPage();
 		obj.zButton.zClick(zTaskNewListBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zEditField.zType(zTaskNewListNameField, taskListName);
 		obj.zButton.zClick(zTaskNewListCreateBtn);
-		Thread.sleep(1200);
+		SleepUtil.sleep(1200);
 	}
 
 	/**
@@ -518,11 +519,11 @@ public class TaskApp extends CommonTest {
 
 		// below sleep required
 
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 		obj.zFolder.zClick(oldTaskListName);
 
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 		obj.zEditField.zType(zTaskListNameField, newTaskListName);
 

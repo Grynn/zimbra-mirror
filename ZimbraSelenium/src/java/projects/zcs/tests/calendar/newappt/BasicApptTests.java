@@ -17,6 +17,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -84,7 +85,7 @@ public class BasicApptTests extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -175,16 +176,16 @@ public class BasicApptTests extends CommonTest {
 		obj.zEditField.zType(localize(locator.subject), subject);
 		obj.zEditor.zType(body);
 		obj.zButton.zClick(localize(locator.send));
-		Thread.sleep(10000);
+		SleepUtil.sleep(10000);
 
 		String[] itemsToVerify = { body };
 		resetSession();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selfAccountName.set(attendees);
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zCalApp.zVerifyInviteContent(firstLineSummary, itemsToVerify);
 
 		SelNGBase.needReset.set(false);
@@ -235,15 +236,15 @@ public class BasicApptTests extends CommonTest {
 
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zAppointment.zClick(subject);
 		Robot zRobot = new Robot();
 		zRobot.keyPress(KeyEvent.VK_DELETE);
 		zRobot.keyRelease(KeyEvent.VK_DELETE);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.confirmTitle));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zAppointment.zNotExists(subject);
 
 		SelNGBase.needReset.set(false);
@@ -363,7 +364,7 @@ public class BasicApptTests extends CommonTest {
 				"xpath=//input[contains(@id,'_CAL_INV_FORWARDING_ADDRESS')]",
 				user2 + "," + user3);
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		resetSession();
 		// login to user1 and send invitaion currentLoggeduser
 		String subject1 = getLocalizedData_NoSpecialChar();
@@ -373,9 +374,9 @@ public class BasicApptTests extends CommonTest {
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject1, location,
 				currentLoggedInUser, body);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		// login to currentLoggeduser and accept invitation
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
@@ -404,7 +405,7 @@ public class BasicApptTests extends CommonTest {
 									+ "') ]/b[contains(text(),'"
 									+ currentloggedInUser + "')]"));
 			obj.zButton.zClick(localize(locator.accept));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zDialog.zExists(localize(locator.zimbraTitle));
 
 			obj.zDialog.zVerifyAlertMessage(localize(locator.zimbraTitle),
@@ -434,7 +435,7 @@ public class BasicApptTests extends CommonTest {
 									+ "') ]/b[contains(text(),'"
 									+ currentloggedInUser + "')]"));
 			obj.zButton.zClick(localize(locator.accept));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zDialog.zExists(localize(locator.zimbraTitle));
 
 			obj.zDialog.zVerifyAlertMessage(localize(locator.zimbraTitle),
@@ -480,7 +481,7 @@ public class BasicApptTests extends CommonTest {
 				attendees, body);
 		obj.zFeatureMenu.zClick(localize(locator.repeatLabel));
 		obj.zMenuItem.zClick(localize(locator.custom));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zDialog.zExists(localize(locator.customRepeat));
 
 		String locale = ZimbraSeleniumProperties.getStringProperty("locale");
@@ -495,7 +496,7 @@ public class BasicApptTests extends CommonTest {
 			obj.zEditField.zTypeInDlg(localize(locator.end), "10");
 		obj.zButton.zClickInDlg(localize(locator.ok));
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zAppointment.zExists(subject);
 		SelNGBase.selenium.get().open(urlToNavigate);
 		obj.zAppointment.zExists(subject);

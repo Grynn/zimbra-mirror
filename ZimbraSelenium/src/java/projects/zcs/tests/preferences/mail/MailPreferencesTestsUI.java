@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -90,7 +91,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 		// selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -121,7 +122,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailPollingInterval");
@@ -130,7 +131,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 				"Polling interval value set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -152,7 +153,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMessageViewHtmlPreferred");
@@ -168,7 +169,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMessageViewHtmlPreferred");
@@ -177,7 +178,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 				"'Display mail as' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -199,7 +200,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefShowFragments");
@@ -215,7 +216,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefShowFragments");
@@ -224,7 +225,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 				"'Display mail snippets' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -246,7 +247,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefOpenMailInNewWindow");
@@ -265,7 +266,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefOpenMailInNewWindow");
@@ -277,7 +278,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 						"'Double click opens in new window' value set is not set in db. Actual value is "
 								+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -299,7 +300,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefDisplayExternalImages");
@@ -315,7 +316,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefDisplayExternalImages");
@@ -324,7 +325,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 				"'Download pictures in email' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -346,7 +347,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMarkMsgRead");
@@ -362,7 +363,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMarkMsgRead");
@@ -371,7 +372,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 				"'Mark message as read' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -395,7 +396,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailInitialSearch");
@@ -414,7 +415,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailInitialSearch");
@@ -423,7 +424,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 				"'Initial mail search' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -445,7 +446,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailSoundsEnabled");
@@ -465,7 +466,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailSoundsEnabled");
@@ -477,7 +478,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 						"'Play a sound when message arrives' value set is not set in db. Actual value is "
 								+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -499,7 +500,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailFlashTitle");
@@ -519,7 +520,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailFlashTitle");
@@ -531,7 +532,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 						"'Flash browser title when message arrives' value set is not set in db. Actual value is "
 								+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -557,7 +558,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailLocalDeliveryDisabled");
@@ -582,7 +583,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailFlashTitle");
@@ -598,7 +599,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 				"'Mail forwarding address' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -622,7 +623,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefNewMailNotificationEnabled");
@@ -648,7 +649,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefNewMailNotificationEnabled");
@@ -664,7 +665,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 				"'Notification address' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -690,7 +691,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		/**
 		 * Following check is added to test bug 44002
 		 */
@@ -719,7 +720,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefOutOfOfficeReplyEnabled");
@@ -728,7 +729,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 				"'Autoreply enabled check' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -737,7 +738,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 
 		if (browser.equals("IE"))
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 
 	}
 

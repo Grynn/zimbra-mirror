@@ -6,6 +6,7 @@ import java.util.Map;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 
@@ -56,7 +57,7 @@ public class ComposeView extends AppPage {
 	public static void zNavigateToComposeByShiftClick() throws Exception {
 		zGoToApplication("Mail");
 		obj.zButton.zShiftClick(MailApp.zNewMenuIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 	}
@@ -287,11 +288,11 @@ public class ComposeView extends AppPage {
 			obj.zCheckbox.zClickInDlg("name=inlineimages");
 		}
 		obj.zButton.zClickInDlg(localize(locator.attach));
-		Thread.sleep(1500); // test fails in safari
+		SleepUtil.sleep(1500); // test fails in safari
 		String dlgExists = obj.zDialog
 				.zExistsDontWait(localize(locator.attachFile));
 		for (int i = 0; i <= 20; i++) {
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			if (dlgExists.equals("true")) {
 			} else {
 				break;
@@ -352,7 +353,7 @@ public class ComposeView extends AppPage {
 	 */
 	public static void zVerifyMsgHeaders(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		if (to.equals("_selfAccountName_"))
 			to = SelNGBase.selfAccountName.get();
 		else if (cc.equals("_selfAccountName_"))
@@ -519,7 +520,7 @@ public class ComposeView extends AppPage {
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
 		obj.zButton.zClick(ComposeView.zSendIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().selectWindow(null);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);

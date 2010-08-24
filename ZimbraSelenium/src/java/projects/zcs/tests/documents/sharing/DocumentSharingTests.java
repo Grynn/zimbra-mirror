@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 
@@ -151,7 +152,7 @@ public class DocumentSharingTests extends CommonTest {
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zDocumentCompose.zNavigateToDocument();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zDblClick(mountFolderName);
 		obj.zFolder.zClick(mountFolderName);
 		zWaitTillObjectExist("button", localize(locator.send));
@@ -193,7 +194,7 @@ public class DocumentSharingTests extends CommonTest {
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zDocumentCompose.zNavigateToDocument();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zDblClick(mountFolderName);
 		obj.zFolder.zClick(mountFolderName);
 		zWaitTillObjectExist("button", localize(locator.send));
@@ -266,7 +267,7 @@ public class DocumentSharingTests extends CommonTest {
 		page.zSharing.zVerifyShareModifiedMail(currentloggedinuser, folderName,
 				"", attendee, localize(locator.shareRoleViewer), "");
 		page.zDocumentCompose.zNavigateToDocument();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.needReset.set(false);
 	}
 

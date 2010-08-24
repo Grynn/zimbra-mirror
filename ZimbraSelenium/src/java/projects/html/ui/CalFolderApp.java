@@ -5,6 +5,7 @@ import java.io.File;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 
 import projects.html.tests.CommonTest;
 
@@ -60,9 +61,9 @@ public class CalFolderApp extends CommonTest {
 	 */
 	public static void zNavigateToCalendarFoldersPage() throws Exception {
 		page.zCalendarApp.zNavigateToCalendar();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zFolder.zEdit(localize(locator.calendars));
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class CalFolderApp extends CommonTest {
 			throws Exception {
 		page.zCalFolderApp.zNavigateToCalendarFoldersPage();
 		obj.zCalendarFolder.zClick(calName);
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 	}
 
 	/**
@@ -89,11 +90,11 @@ public class CalFolderApp extends CommonTest {
 			throws Exception {
 		zNavigateToCalendarFoldersPage();
 		obj.zButton.zClick(calFoldersNewCalendarBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		obj.zEditField.zType(calNewNameField, calName);
 		obj.zHtmlMenu.zClick(calNewColorDropdown, color);
 		obj.zButton.zClick(calNewCreateCalendarBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 	}
 
 	/**
@@ -174,7 +175,7 @@ public class CalFolderApp extends CommonTest {
 
 		obj.zButton.zClick(calDeleteCalendarBtn);
 
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 	}
 
 	/**
@@ -196,7 +197,7 @@ public class CalFolderApp extends CommonTest {
 
 		obj.zButton.zClick(calImportBtn);
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 
 	}
 
@@ -220,12 +221,12 @@ public class CalFolderApp extends CommonTest {
 			throws Exception {
 		zNavigateToCalendarProperties(calName);
 		// below sleep required
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		obj.zFolder.zClick(calName);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		obj.zEditField.zType(calNameField, newCalName);
 		obj.zButton.zClick(calSaveChangesBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 	}
 
 }

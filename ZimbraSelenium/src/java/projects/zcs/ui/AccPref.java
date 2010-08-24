@@ -1,6 +1,7 @@
 package projects.zcs.ui;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 
 /**
  * This Class have UI-level methods related composing a contact and verifying
@@ -70,7 +71,7 @@ public class AccPref extends AppPage {
 						"//div[contains(@id, 'PERSONA')]//td[contains(@class, 'ZOptionsSectionMain')]/table/tbody/tr[6]//td[contains(@id, '_select_container')]//td[contains(text(), '"
 								+ SelNGBase.selfAccountName.get().toLowerCase()
 								+ "')]", "");
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		if (fromAddress.equals("")) {
 			SelNGBase.selenium
 					.get()
@@ -85,8 +86,8 @@ public class AccPref extends AppPage {
 							"//div[contains(@class, 'ZSelectMenuItem ZWidget ZHasText')]//td[contains(text(), '"
 									+ fromAddress.toLowerCase() + "')]", "");
 		}
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 }

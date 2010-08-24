@@ -5,6 +5,7 @@ import java.io.File;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
@@ -128,9 +129,9 @@ public class ABComposeHtml extends CommonTest {
 	 */
 	public static void zNavigateToContact() throws Exception {
 
-		Thread.sleep(1000);// FF breaks randomly if we dont wait
+		SleepUtil.sleep(1000);// FF breaks randomly if we dont wait
 		obj.zButton.zClick(zContactTabIcon);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		zWaitTillObjectExist("button", zNewContactIconBtn);
 	}
 
@@ -141,7 +142,7 @@ public class ABComposeHtml extends CommonTest {
 	 */
 	public static void zNavigateToNewABPage() throws Exception {
 		obj.zFolder.zEdit(localize(locator.addressBooks));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 	}
 
 	/**
@@ -152,7 +153,7 @@ public class ABComposeHtml extends CommonTest {
 	public static void zNavigateToPreferenceAB() throws Exception {
 		obj.zButton.zClick("id=TAB_OPTIONS");
 		// obj.zTab.zClick(localize(locator.preferences));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zTab.zClick(localize(locator.addressBook), "2");
 
 	}
@@ -174,7 +175,7 @@ public class ABComposeHtml extends CommonTest {
 	 * @throws Exception
 	 */
 	public static void zSelectABFolder(String folderName) throws Exception {
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("pl")) {
 			obj.zHtmlMenu.zClick(zABFolderId,
 					folderName.substring(0, 8) + ".*", "2");
@@ -192,9 +193,9 @@ public class ABComposeHtml extends CommonTest {
 	 * @param actionName
 	 */
 	public static void zSelectMoreActions(String actionName) throws Exception {
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zHtmlMenu.zClick("name=actionOp", actionName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -207,7 +208,7 @@ public class ABComposeHtml extends CommonTest {
 			throws Exception {
 		if (obj.zButton.zExistsDontWait(buttonName).equals("true")) {
 			obj.zButton.zClick(buttonName);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 	}
 
@@ -221,7 +222,7 @@ public class ABComposeHtml extends CommonTest {
 			throws Exception {
 		if (obj.zFolder.zExistsDontWait(folderName).equals("true")) {
 			obj.zFolder.zClick(folderName);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 	}
 
@@ -240,7 +241,7 @@ public class ABComposeHtml extends CommonTest {
 		} else if (type.equals("ContactGroup")) {
 			obj.zEditField.zExists(zGroupNameEditfield);
 			zVerifyBtnExistAndClick(zCancelNewContactIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 	}
 
@@ -252,21 +253,21 @@ public class ABComposeHtml extends CommonTest {
 	public static void zVerifyABUI() throws Exception {
 
 		obj.zButton.zClick(zNewContactIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zVerifyFieldExistAndClickCancel("NewContact");
 
 		// To click and verify bottom tool bar new contact button
 		obj.zButton.zClick(zNewContactIconBtn, "2");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zVerifyFieldExistAndClickCancel("NewContact");
 
 		obj.zButton.zClick(zNewGroupIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zVerifyFieldExistAndClickCancel("ContactGroup");
 
 		// To click and verify bottom tool bar new contact group button
 		obj.zButton.zClick(zNewGroupIconBtn, "2");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zVerifyFieldExistAndClickCancel("ContactGroup");
 
 		zVerifyBtnExistAndClick(zDeleteIconBtn);
@@ -276,11 +277,11 @@ public class ABComposeHtml extends CommonTest {
 		zSelectABFolder(localize(locator.emailedContacts));
 
 		zVerifyBtnExistAndClick(zMoveIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zEditField.zType(zFindContactEditfield, getLocalizedData(1));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(zSearchIconBtn, "1");
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 
 		String folderToBeClicked = localize(locator.emailedContacts);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
@@ -325,7 +326,7 @@ public class ABComposeHtml extends CommonTest {
 		String[] lastName = commaSeparatedContacts.split(",");
 		for (int i = 0; i < numberOfContacts; i++) {
 			zCreateBasicContact(lastName[i], "", "", "", "");
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 		}
 	}
 
@@ -343,7 +344,7 @@ public class ABComposeHtml extends CommonTest {
 		obj.zFolder.zClick(localize(locator.contacts));
 		zCreateContactInAB(localize(locator.contacts), lastName, MiddleName,
 				firstName, email, company);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -500,7 +501,7 @@ public class ABComposeHtml extends CommonTest {
 			throws Exception {
 		obj.zMessageItem.zClickCheckBox(contactName);
 		obj.zButton.zClick(zDeleteIconBtn, "2");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zCheckbox.zNotExists("link=" + contactName);
 	}
 
@@ -513,10 +514,10 @@ public class ABComposeHtml extends CommonTest {
 	public static void zCreateAB(String addressBookName) throws Exception {
 		zNavigateToNewABPage();
 		obj.zButton.zClick(zNewABIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zEditField.zType(zNewABNameEditField, addressBookName);
 		obj.zButton.zClick(zCreateNewABBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	/**
@@ -526,11 +527,11 @@ public class ABComposeHtml extends CommonTest {
 	 * @throws Exception
 	 */
 	public static void zDeleteAB(String addressBookName) throws Exception {
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		// obj.zFolder.zClick(addressBookName);
 		obj.zCheckbox.zClick(zDelABChckbox);
 		obj.zButton.zClick(zDeleteABBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -542,10 +543,10 @@ public class ABComposeHtml extends CommonTest {
 	 */
 	public static void zMoveContactAndVerify(String contactName, String targetAB)
 			throws Exception {
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zMessageItem.zClickCheckBox(contactName);
 		zSelectABFolder(targetAB);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
 				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")
@@ -565,7 +566,7 @@ public class ABComposeHtml extends CommonTest {
 		}
 
 		zClickOnContactFolder(targetAB);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zCheckbox.zExists("link=" + contactName);
 	}
 
@@ -591,7 +592,7 @@ public class ABComposeHtml extends CommonTest {
 	 */
 	public static void zChangeABColor(String color) throws Exception {
 		obj.zHtmlMenu.zClick(zABColorMenu, color);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(zCreateNewABBtn);
 	}
 
@@ -638,15 +639,15 @@ public class ABComposeHtml extends CommonTest {
 			obj.zEditField.zType(zFindEditfield, accTobeAdded[i], "2");
 			obj.zHtmlMenu.zClick(zInContactLocationEditfield,
 					localize(locator.GAL));
-			// Thread.sleep(1000);
+			// SleepUtil.sleep(1000);
 			obj.zButton.zClick(zSearchContacsBtn);
-			Thread.sleep(1000);// wait need as it takes time to search a contact
+			SleepUtil.sleep(1000);// wait need as it takes time to search a contact
 			obj.zCheckbox.zClick(zSearchedContactForGrp);
 			SelNGBase.selenium.get().click(zAddSelectedlink);
-			Thread.sleep(2000);// wait is added as it takes some time to click
+			SleepUtil.sleep(2000);// wait is added as it takes some time to click
 			// on Add Selected link
 		}
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zButton.zClick(zSaveNewContactIconBtn);
 
 	}
@@ -697,7 +698,7 @@ public class ABComposeHtml extends CommonTest {
 		obj.zTab.zClick(localize(locator.compose));// temporary using this as
 		// zNavigateToMailCompose is
 		// not working
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zButton.zClick(zAddRecipientsBtn);
 
 		// commented following 3 lines for time being
@@ -708,7 +709,7 @@ public class ABComposeHtml extends CommonTest {
 
 		obj.zCheckbox.zClick(zComposeAddToChkbox);
 		obj.zButton.zClick(zContactDoneBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String actualAccDisplayed = obj.zTextAreaField
 				.zGetInnerText(zComposeToTextarea);
 
@@ -766,13 +767,13 @@ public class ABComposeHtml extends CommonTest {
 	 */
 	public static void zClickArrowAndVerifyContactExist(String type,
 			String contactName) throws Exception {
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		if (type.equals("NextArrow")) {
 			obj.zButton.zClick(zNextPageArrowIcon);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		} else if (type.equals("PreviousArrow")) {
 			obj.zButton.zClick(zPrevPageArrowIcon);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 		obj.zCheckbox.zExists("link=" + contactName);
 	}
@@ -810,7 +811,7 @@ public class ABComposeHtml extends CommonTest {
 	 */
 	public static void zSearchContact(String searchType, String searchString)
 			throws Exception {
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		if (searchType.equals("UpperToolbar")) {
 			// obj.zEditField.zType(localize(locator.findLabel), searchString);
 			obj.zEditField.zType(zFindContactEditfield, searchString);
@@ -822,7 +823,7 @@ public class ABComposeHtml extends CommonTest {
 			obj.zButton.zClick(zSearchIconBtn, "2");
 			// zFindContactEditfield
 		}
-		Thread.sleep(2000);// to wait for search to complete
+		SleepUtil.sleep(2000);// to wait for search to complete
 	}
 
 	/**
@@ -870,7 +871,7 @@ public class ABComposeHtml extends CommonTest {
 				obj.zMessageItem.zIsUnChecked(contactLastname[i]);
 			}
 		}
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -880,9 +881,9 @@ public class ABComposeHtml extends CommonTest {
 	 */
 	public static void zSelectAllContactsAndDelete() throws Exception {
 		obj.zCheckbox.zClick(zAllItemsCheckbox);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zClick(zDeleteIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	/**
@@ -899,7 +900,7 @@ public class ABComposeHtml extends CommonTest {
 		} else {
 			obj.zFolder.zClick(localize(locator.trash));
 		}
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 0; i < contactName.length; i++) {
 			obj.zCheckbox.zExists("link=" + contactName[i]);
 		}
@@ -1022,7 +1023,7 @@ public class ABComposeHtml extends CommonTest {
 				getLocalizedData_NoSpecialChar(), "", "");
 		// page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName,
 		// "", "", getLocalizedData_NoSpecialChar(), "", "");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zABComposeHTML
 				.zNavigateToContactAndSelectABFolder(contactFolderName);
 
@@ -1063,7 +1064,7 @@ public class ABComposeHtml extends CommonTest {
 		}
 
 		obj.zButton.zClick(zSaveNewContactIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String actualContactDisplayed = obj.zMiscObj
 				.zGetInnerText("ZhAppViewContent");
 		for (int i = 0; i < composeContactArray.length; i++) {
@@ -1077,12 +1078,12 @@ public class ABComposeHtml extends CommonTest {
 	public static void zSelectFileAsAndSave(String contactName, String fileAs)
 			throws Exception {
 		obj.zCheckbox.zClick(contactName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(zEditIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zHtmlMenu.zClick("id=fileAs", fileAs);
 		obj.zButton.zClick(zSaveNewContactIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	public static void zVerifyDisplayedContactName(

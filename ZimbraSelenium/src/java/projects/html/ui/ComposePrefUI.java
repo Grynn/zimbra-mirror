@@ -2,6 +2,7 @@ package projects.html.ui;
 
 import org.testng.Assert;
 
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
@@ -50,7 +51,7 @@ public class ComposePrefUI extends CommonTest {
 	public static void zNavigateToPrefCompose() throws Exception {
 		zGoToApplication("Preferences");
 		// obj.zTab.zClick(localize(locator.preferences));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String currentLocale = ZimbraSeleniumProperties.getStringProperty("locale");
 		if (currentLocale.equals("zh_HK") || currentLocale.equals("ja")
 				|| currentLocale.equals("nl") || currentLocale.equals("zh_CN")
@@ -58,7 +59,7 @@ public class ComposePrefUI extends CommonTest {
 			obj.zTab.zClick(localize(locator.composing), "2");
 		else
 			obj.zTab.zClick(localize(locator.optionsComposing));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	/**
@@ -132,9 +133,9 @@ public class ComposePrefUI extends CommonTest {
 			obj.zCheckbox.zClick(zComposeAsHTMLRadioBtn);
 		else if (composeAs.equals("AsText"))
 			obj.zCheckbox.zClick(zComposeAsTextRadioBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zAccPref.zSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -151,7 +152,7 @@ public class ComposePrefUI extends CommonTest {
 		else if (composeAs.equals("AsText"))
 			zSelectComposeAs("AsText");
 		page.zComposeView.zNavigateToMailCompose();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		if (composeAs.equals("AsHTML"))
 			obj.zButton.zExists(zHtmlComposeBoldBtn);
 		else if (composeAs.equals("AsText"))
@@ -187,7 +188,7 @@ public class ComposePrefUI extends CommonTest {
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zMessageItem.zClick(page.zComposeView.zReplyBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 	}
 
 	/**
@@ -199,7 +200,7 @@ public class ComposePrefUI extends CommonTest {
 	 */
 	public static void zSelectPrefix(String prefix) throws Exception {
 		obj.zHtmlMenu.zClick(zPrefixCharMenu, prefix);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 	}
 
 	/**
@@ -269,7 +270,7 @@ public class ComposePrefUI extends CommonTest {
 			String includeAs, String prefix, String subject, String body)
 			throws Exception {
 		obj.zTab.zClick(localize(locator.mail));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String isMailExist = obj.zMessageItem.zExistsDontWait(subject);
 		if (isMailExist.equals("true")) {
 			obj.zMessageItem.zClick(subject);
@@ -277,7 +278,7 @@ public class ComposePrefUI extends CommonTest {
 			obj.zFolder.zClick(page.zMailApp.zJunkFldr);
 			obj.zMessageItem.zClick(subject);
 		}
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		if (isReplyOrFwd.equals("ReplyReplyAll"))
 			obj.zButton.zClick(page.zComposeView.zReplyBtn);
 		else if (isReplyOrFwd.equals("Forward"))
@@ -313,14 +314,14 @@ public class ComposePrefUI extends CommonTest {
 	 */
 	public static void zSelectFwdIncludeMsgAs(String includeAs)
 			throws Exception {
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		if (includeAs.equals("FullTextInline"))
 			obj.zRadioBtn.zClick(zFwdFullTextInlineRadioBtn);
 		else if (includeAs.equals("FullTextInlineWithPrefix"))
 			obj.zRadioBtn.zClick(zFwdFullTextInlineWIthPrefixRadioBtn);
 		else if (includeAs.equals("AnAttachment"))
 			obj.zRadioBtn.zClick(zFwdAnAttachmentRadioBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -336,7 +337,7 @@ public class ComposePrefUI extends CommonTest {
 		if (!prefix.equals(""))
 			zSelectPrefix(prefix);
 		obj.zButton.zClick(page.zAccPref.zSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**

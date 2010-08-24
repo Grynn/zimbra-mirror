@@ -1,5 +1,6 @@
 package projects.zcs.ui;
 
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -140,9 +141,9 @@ public class DocumentCompose extends AppPage {
 		zWaitTillObjectExist("button", zSavePageIconBtn);
 		zEnterBasicPageData(pageName, bodyContent);
 		obj.zButton.zClick(zSavePageIconBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(zClosePageIconBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		String isDlgExists = obj.zDialog
 				.zExistsDontWait(localize(locator.warningMsg));
 		if (isDlgExists.equals("true")) {
@@ -167,12 +168,12 @@ public class DocumentCompose extends AppPage {
 			throws Exception {
 		if (type.equals("Toolbar")) {
 			obj.zDocumentPage.zClick(pageName);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zButton.zClick(zEditPageIconBtn);
 		} else if (type.equals("LinkEdit")) {
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 			obj.zDocumentPage.zClick(pageName, localize(locator.edit));
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 		}
 	}
 
@@ -198,13 +199,13 @@ public class DocumentCompose extends AppPage {
 		else
 			zEnterBasicPageData(newPageName, newBodyContent);
 		obj.zButton.zClick(zSavePageIconBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.pageSaved),
 				"Page Saved message should be displayed");
 		obj.zButton.zClick(zClosePageIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick((page.zDocumentCompose.zRefreshIconBtn));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**

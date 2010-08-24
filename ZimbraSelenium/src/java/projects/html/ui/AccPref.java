@@ -3,6 +3,7 @@ package projects.html.ui;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.SleepUtil;
 import projects.html.tests.CommonTest;
 
 /**
@@ -48,9 +49,9 @@ public class AccPref extends CommonTest {
 	public static void zNavigateToPreferenceSignature() throws Exception {
 		obj.zButton.zClick("id=TAB_OPTIONS");
 		// obj.zTab.zClick(localize(locator.preferences));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zTab.zClick(localize(locator.signatures));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -60,9 +61,9 @@ public class AccPref extends CommonTest {
 	 */
 	public static void zNavigateToPreferenceAccounts() throws Exception {
 		obj.zButton.zClick("id=TAB_OPTIONS");
-		Thread.sleep(2000); // fails in safari
+		SleepUtil.sleep(2000); // fails in safari
 		obj.zTab.zClick(localize(locator.accounts));
-		Thread.sleep(2000); // fails in safari
+		SleepUtil.sleep(2000); // fails in safari
 	}
 
 	/**
@@ -103,12 +104,12 @@ public class AccPref extends CommonTest {
 	 */
 	public static void zCreateSignature(String signatureName,
 			String signatureBody, String place) throws Exception{
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zClick(zAddSignatureIconBtn);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zEditField.zType(zNewSignatureName, signatureName);
 		obj.zTextAreaField.zType(zNewSignatureValue, signatureBody);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		if (!place.equals("")) {
 			if (place.equals("Above")) {
 				obj.zCheckbox.zClick(zPlaceAboveChkBox);
@@ -117,7 +118,7 @@ public class AccPref extends CommonTest {
 			}
 		}
 		obj.zButton.zClick(zSaveIconBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 	}
 
 	/**
@@ -143,9 +144,9 @@ public class AccPref extends CommonTest {
 	public static void zVerifySignatureInAccTab(String signatureName)
 			throws Exception {
 		obj.zHtmlMenu.zClick(zSignatureSelectMenu, signatureName);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zButton.zClick(zSaveIconBtn);// added save button to avoid navigate
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		Assert.assertTrue(obj.zHtmlMenu.zGetSelectedItemName(
 				zSignatureSelectMenu).equals(signatureName), "The signature "
 				+ signatureName + " is not displayed in accounts tab");

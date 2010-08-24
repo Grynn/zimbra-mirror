@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -73,7 +74,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 //		selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -110,7 +111,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarInitialView");
@@ -127,7 +128,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarInitialView");
@@ -136,7 +137,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 				"Default view set to Month is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -158,7 +159,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarFirstDayOfWeek");
@@ -190,7 +191,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarAlwaysShowMiniCal");
@@ -212,7 +213,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarAlwaysShowMiniCal");
@@ -243,7 +244,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefDeleteInviteOnReply");
@@ -264,7 +265,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefDeleteInviteOnReply");
@@ -299,7 +300,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarUseQuickAdd");
@@ -317,7 +318,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarUseQuickAdd");
@@ -348,7 +349,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefUseTimeZoneListInCalendar");
@@ -368,7 +369,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefUseTimeZoneListInCalendar");
@@ -406,7 +407,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarApptReminderWarningTime");
@@ -441,7 +442,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarReminderSoundsEnabled");
@@ -482,11 +483,11 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		page.zCalCompose
 				.zCreateSimpleAppt(subject, location, accountName, body);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		resetSession();
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
@@ -497,7 +498,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.replyAccept));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		if (deleteInvite.equals("TRUE"))
 			obj.zMessageItem.zNotExists(subject);
@@ -511,7 +512,7 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 		
 		if (browser.equals("IE"))
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		
 	}
 	

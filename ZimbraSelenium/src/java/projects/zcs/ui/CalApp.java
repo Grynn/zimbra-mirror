@@ -3,6 +3,7 @@ package projects.zcs.ui;
 
 import org.testng.Assert;
 
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -179,7 +180,7 @@ public class CalApp extends AppPage {
 		} else {
 			obj.zButton.zClickInDlg(localize(locator.no));
 		}
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	/**
@@ -195,7 +196,7 @@ public class CalApp extends AppPage {
 		obj.zButton.zClick(zCalDeleteBtn);
 		obj.zDialog.zExists(localize(locator.deleteRecurringItem));
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	/**
@@ -212,7 +213,7 @@ public class CalApp extends AppPage {
 		obj.zDialog.zExists(localize(locator.deleteRecurringItem));
 		obj.zRadioBtn.zClickInDlg(localize(locator.deleteSeries));
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	/**
@@ -231,7 +232,7 @@ public class CalApp extends AppPage {
 		obj.zFeatureMenu.zClick(localize(locator.calendarLabel));
 		obj.zMenuItem.zClick(newCalendar);
 		obj.zButton.zClick(zApptSaveBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(zCalRefreshBtn);
 	}
 
@@ -253,7 +254,7 @@ public class CalApp extends AppPage {
 				calendarName, localize(locator.createNewCalendar));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.createNewCalendar));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	/**
@@ -320,7 +321,7 @@ public class CalApp extends AppPage {
 	public static void zAcceptInvite(String subject) throws Exception {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.replyAccept));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert
 				.assertEquals(
 						obj.zMessageItem.zExistsDontWait(subject),
@@ -339,7 +340,7 @@ public class CalApp extends AppPage {
 	public static void zDeclineInvite(String subject) throws Exception {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.replyDecline));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert
 				.assertEquals(
 						obj.zMessageItem.zExistsDontWait(subject),
@@ -358,7 +359,7 @@ public class CalApp extends AppPage {
 	public static void zTentativeInvite(String subject) throws Exception {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.replyTentative));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert
 				.assertEquals(
 						obj.zMessageItem.zExistsDontWait(subject),
@@ -381,7 +382,7 @@ public class CalApp extends AppPage {
 	public static void zRespondApptEditReply(String subject, String action,
 			String replyContent) throws Exception {
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		if (action.equals("accept"))
 			obj.zButtonMenu.zClick(localize(locator.replyAccept));
 		if (action.equals("decline"))
@@ -392,7 +393,7 @@ public class CalApp extends AppPage {
 		zWaitTillObjectExist("button", page.zComposeView.zSendIconBtn);
 		obj.zEditor.zType(replyContent);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 	}
 
 	/**
@@ -407,7 +408,7 @@ public class CalApp extends AppPage {
 	 */
 	public static void zVerifyInviteContent(String firstLineSummary,
 			String itemsToVerify[]) throws Exception {
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		String msgBody;
 		int numberOfItemsToVerify;
 		msgBody = obj.zMessageItem.zGetCurrentMsgBodyText();

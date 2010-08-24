@@ -12,6 +12,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -220,10 +221,10 @@ public class MessageRightClickMenuTests extends CommonTest {
 		obj.zFolder.zClickInDlgByName(
 				replaceUserNameInStaticId(page.zMailApp.zSentFldrMoveDlg),
 				localize(locator.moveMessage));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.moveMessage));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		// this method is just to discard dialog
 		zPressBtnIfDlgExists(localize(locator.moveMessage),
@@ -272,7 +273,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject);
 		rightClickOnContact(fromUserName);
 		obj.zMenuItem.zClick(page.zMailApp.zAdvancedSearchMenuIconBtn);
-		Thread.sleep(1000); /*
+		SleepUtil.sleep(1000); /*
 							 * selenium suddenly changes UI and starts executing
 							 * next statements
 							 */
@@ -437,7 +438,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		fromUserName = commonInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
 		clickMenuItemIfExists(subject, page.zMailApp.zReplyMenuIconBtn);
-		Thread.sleep(2000); /*
+		SleepUtil.sleep(2000); /*
 							 * Continuously test failing over here because it
 							 * tries to verify subject field before mail compose
 							 * UI appears
@@ -448,7 +449,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 				.zGetInnerText(page.zComposeView.zCcField);
 		String subjectValue = obj.zEditField
 				.zGetInnerText(page.zComposeView.zSubjectField);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String bodyValue = obj.zEditor.zGetInnerText(body);
 		assertReport(
 				toValue,
@@ -481,7 +482,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		fromUserName = commonInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
 		clickMenuItemIfExists(subject, page.zMailApp.zReplyAllMenuIconBtn);
-		Thread.sleep(2000); /*
+		SleepUtil.sleep(2000); /*
 							 * Continuously test failing over here because it
 							 * tries to verify subject field before mail compose
 							 * UI appears
@@ -492,7 +493,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 				.zGetInnerText(page.zComposeView.zCcField);
 		String subjectValue = obj.zEditField
 				.zGetInnerText(page.zComposeView.zSubjectField);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String bodyValue = obj.zEditor.zGetInnerText(body);
 		assertReport(
 				toValue,
@@ -527,7 +528,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		fromUserName = commonInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
 		clickMenuItemIfExists(subject, page.zMailApp.zForwardMenuIconBtn);
-		Thread.sleep(2000); /*
+		SleepUtil.sleep(2000); /*
 							 * Continuously test failing over here because it
 							 * tries to verify subject field before mail compose
 							 * UI appears
@@ -538,7 +539,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 				.zGetInnerText(page.zComposeView.zCcField);
 		String subjectValue = obj.zEditField
 				.zGetInnerText(page.zComposeView.zSubjectField);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String bodyValue = obj.zEditor.zGetInnerText(body);
 		Assert
 				.assertNotSame(
@@ -579,7 +580,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		fromUserName = commonInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);
 		clickMenuItemIfExists(subject, page.zMailApp.zEditAsNewMenuIconBtn);
-		Thread.sleep(2000); /*
+		SleepUtil.sleep(2000); /*
 							 * continously test failing over here because it
 							 * tries to verify subject field before mail compose
 							 * UI appears
@@ -590,7 +591,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 				.zGetInnerText(page.zComposeView.zCcField);
 		String subjectValue = obj.zEditField
 				.zGetInnerText(page.zComposeView.zSubjectField);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		String bodyValue = obj.zEditor.zGetInnerText(body);
 		assertReport(
 				toValue,
@@ -719,16 +720,16 @@ public class MessageRightClickMenuTests extends CommonTest {
 		rightClickOnSubject(subject);
 		obj.zMenuItem.zClick(page.zMailApp.zMoveMenuIconBtn);
 		obj.zFolder.zClickInDlgByName(newFolder, localize(locator.moveMessage));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.moveMessage));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		zPressBtnIfDlgExists(localize(locator.moveMessage),
 				localize(locator.ok), newFolder);
 		obj.zFolder.zClick(newFolder);
 		obj.zMessageItem.zExists(subject);
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zMessageItem.zNotExists(subject);
 
 		SelNGBase.needReset.set(false);
@@ -809,10 +810,10 @@ public class MessageRightClickMenuTests extends CommonTest {
 				attachments);
 		rightClickOnSubject(subject);
 		obj.zMenuItem.zClick(page.zMailApp.zShowOriginalMenuIconBtn);
-		Thread.sleep(4000); // failed because of timing issue
+		SleepUtil.sleep(4000); // failed because of timing issue
 		SelNGBase.selenium.get().selectWindow("_blank");
 		showOrigText = SelNGBase.selenium.get().getBodyText();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		verifyShowOriginalMsgBody(showOrigText, from, to, cc, bcc, subject,
 				body);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
@@ -849,7 +850,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 					"FilterFromMail");
 		}
 
-		Thread.sleep(4000); /*
+		SleepUtil.sleep(4000); /*
 							 * selenium immidiatly tries to verify values before
 							 * edit filter dialog appears so putting some wait
 							 */
@@ -886,7 +887,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.editFilter));
 		}
-		Thread.sleep(5000); /*
+		SleepUtil.sleep(5000); /*
 							 * selenium immediately goes to preferences and
 							 * verifies created filter but filter doesn't exist
 							 * there & it fails - not able to reproduce every
@@ -901,7 +902,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		zGoToApplication("Preferences");
 		zGoToPreferences("Filters");
 		obj.zButton.zClick(localize(locator.filterRemove));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		filterMessage = obj.zToastAlertMessage.zGetMsg();
 		Assert
 				.assertNotSame(filterMessage, localize(locator.filtersSaved),
@@ -930,7 +931,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 		obj.zMenuItem.zClick(page.zMailApp.zCreateApptMenuIconBtn);
 		zWaitTillObjectExist("button", page.zCalCompose.zApptSaveBtn);
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		zGoToApplication("Calendar");
 		obj.zAppointment.zExists(subject);
 		zGoToApplication("Mail");
@@ -986,22 +987,22 @@ public class MessageRightClickMenuTests extends CommonTest {
 
 	private void rightClickOnContact(String fromUserName) throws Exception {
 		SelNGBase.actOnLabel = true;
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zMessageItem.zRtClick(fromUserName);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		SelNGBase.actOnLabel = false;
 	}
 
 	private void rightClickOnSubject(String subject) throws Exception {
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zMessageItem.zRtClick(subject);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 	}
 
 	private void verifyCurrentMsgBody(String bodyValue, String from, String to,
 			String cc, String bcc, String subject, String body)
 			throws Exception {
-		Thread.sleep(2000); // failed because of timing issue
+		SleepUtil.sleep(2000); // failed because of timing issue
 
 		// due to composing preference change, below check fails
 		// if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
@@ -1038,7 +1039,7 @@ public class MessageRightClickMenuTests extends CommonTest {
 			String rc = obj.zMenuItem.zExistsDontWait(menuItem);
 			if (rc.equals("false")) {
 				rightClickOnSubject(subject);
-				Thread.sleep(2000);
+				SleepUtil.sleep(2000);
 			} else {
 				obj.zMenuItem.zClick(menuItem);
 				found = true;

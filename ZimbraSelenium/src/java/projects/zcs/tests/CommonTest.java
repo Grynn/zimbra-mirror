@@ -41,6 +41,7 @@ import projects.zcs.clients.ProvZCS;
 import framework.core.SelNGBase;
 import framework.core.SeleniumService;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -510,16 +511,16 @@ public class CommonTest extends SelNGBase {
 			String dlgExists = obj.zDialog.zExistsDontWait(dlgName);
 			if (dlgExists.equals("true")) {
 				obj.zFolder.zClickInDlgByName(folderToBeClicked, dlgName);
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				obj.zButton.zClickInDlgByName(dlgBtn, dlgName);
 			} else {
-				Thread.sleep(500);
+				SleepUtil.sleep(500);
 			}
 		}
 	}
 
 	public String zNavigateAgainIfRequired(String navURL) throws Exception {
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		String btnExists = "false";
 		for (int i = 0; i <= 2; i++) {
 			btnExists = obj.zButton
@@ -529,7 +530,7 @@ public class CommonTest extends SelNGBase {
 			} else {
 				zReloginToAjax();
 				SelNGBase.selenium.get().open(navURL);
-				Thread.sleep(5000);
+				SleepUtil.sleep(5000);
 			}
 		}
 		return btnExists;
@@ -592,9 +593,9 @@ public class CommonTest extends SelNGBase {
 			}
 
 			if (retVal.equals("false")) {
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 			} else {
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				found = true;
 				break;
 			}
@@ -644,7 +645,7 @@ public class CommonTest extends SelNGBase {
 			if (ZimbraSeleniumProperties.getStringProperty("runCodeCoverage",
 					"no").equalsIgnoreCase("yes")) {
 				SelNGBase.selenium.get().refresh();
-				Thread.sleep(6000);
+				SleepUtil.sleep(6000);
 				obj.zButton.zClick(localize(locator.calendar));
 			}
 			zWaitTillObjectExist("folder", page.zCalApp.zCalendarFolder);
@@ -722,7 +723,7 @@ public class CommonTest extends SelNGBase {
 	public static void zReloginToAjax() throws Exception {
 		String accountName = SelNGBase.selfAccountName.get();
 		resetSession();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 	}
@@ -757,13 +758,13 @@ public class CommonTest extends SelNGBase {
 
 	public void zCreateTag(String tagName) throws Exception {
 		obj.zFolder.zRtClick(page.zMailApp.zTagOverViewHeader);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlgByName(localize(locator.tagName), tagName,
 				localize(locator.createNewTag));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.createNewTag));
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 	}
 
 	public void zRenameTag(String oldTagName, String newTagName)
@@ -772,7 +773,7 @@ public class CommonTest extends SelNGBase {
 		obj.zMenuItem.zClick(localize(locator.renameTag));
 		obj.zEditField.zTypeInDlg(localize(locator.newTagName), newTagName);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 	}
 
 	public void zDeleteTag(String tagName) throws Exception {
@@ -780,7 +781,7 @@ public class CommonTest extends SelNGBase {
 		obj.zMenuItem.zClick(localize(locator.del));
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zNotExists(tagName);
 	}
 
@@ -798,7 +799,7 @@ public class CommonTest extends SelNGBase {
 				localize(locator.criticalMsg));
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewTag));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zNotExists(tagName);
 	}
 
@@ -807,7 +808,7 @@ public class CommonTest extends SelNGBase {
 		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
 				searchString);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");
 		obj.zEditField.zTypeInDlgByName(localize(locator.name),
 				savedSearchFolderName, localize(locator.saveSearch));
@@ -822,14 +823,14 @@ public class CommonTest extends SelNGBase {
 		obj.zEditField.zTypeInDlg(localize(locator.newName),
 				newSavedSearchFolderName);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 	}
 
 	public void zMoveFolderToTrash(String savedSearchFolderName)
 			throws Exception {
 		obj.zFolder.zRtClick(savedSearchFolderName);
 		obj.zMenuItem.zClick(localize(locator.del));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	public void zPermanentlyDeleteFolder(String savedSearchFolderName)
@@ -838,7 +839,7 @@ public class CommonTest extends SelNGBase {
 		obj.zMenuItem.zClick(localize(locator.del));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.warningMsg));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zNotExists(savedSearchFolderName);
 	}
 
@@ -848,7 +849,7 @@ public class CommonTest extends SelNGBase {
 		obj.zMenuItem.zClick(localize(locator.renameFolder));
 		obj.zEditField.zTypeInDlg(localize(locator.newName), newFolderName);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zExists(newFolderName);
 		obj.zFolder.zNotExists(folderName);
 	}
@@ -859,7 +860,7 @@ public class CommonTest extends SelNGBase {
 		String[] key = keys.split(",");
 		for (int i = 0; i <= key.length - 1; i++) {
 			individualKey = key[i].toLowerCase().trim();
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			if (individualKey.equals("_")) {
 				zRobot.keyPress(KeyEvent.VK_UNDERSCORE);
 				zRobot.keyRelease(KeyEvent.VK_UNDERSCORE);
@@ -1063,7 +1064,7 @@ public class CommonTest extends SelNGBase {
 	public static void zVerifyAutocompleteExists(String value, int rank,
 			int wait) throws Exception {
 		if (wait == 1) {
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
 				"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
@@ -1075,7 +1076,7 @@ public class CommonTest extends SelNGBase {
 	public static void zVerifyAutocompleteExistsForSearchBar(String value,
 			int rank, int wait) throws Exception {
 		if (wait == 1) {
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		Assert
 				.assertTrue(
@@ -1093,7 +1094,7 @@ public class CommonTest extends SelNGBase {
 	public static void zVerifyAutocompleteNotExists(String value, int rank,
 			int wait) throws Exception {
 		if (wait == 1) {
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent(
 				"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
@@ -1105,7 +1106,7 @@ public class CommonTest extends SelNGBase {
 	public static void zVerifyAutocompleteNotExistsForSearchBar(String value,
 			int rank, int wait) throws Exception {
 		if (wait == 1) {
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		Assert
 				.assertFalse(
@@ -1138,7 +1139,7 @@ public class CommonTest extends SelNGBase {
 	 */
 	public static void zDragAndDrop(String source, String destination)
 			throws Exception {
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		Number x_coord1 = SelNGBase.selenium.get().getElementPositionLeft(
 				destination);
 		Number y_coord1 = SelNGBase.selenium.get().getElementPositionTop(
@@ -1160,14 +1161,14 @@ public class CommonTest extends SelNGBase {
 						+ xy_coord);
 
 		SelNGBase.selenium.get().mouseDown(source);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().mouseMoveAt(source, xy_coord);
-		Thread.sleep(1000 * 2);
+		SleepUtil.sleep(1000 * 2);
 		SelNGBase.selenium.get().mouseMove(destination);
 		SelNGBase.selenium.get().mouseOver(destination);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().mouseUp(destination);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 	}
 
 	public static void calculateCoverage() throws Exception {

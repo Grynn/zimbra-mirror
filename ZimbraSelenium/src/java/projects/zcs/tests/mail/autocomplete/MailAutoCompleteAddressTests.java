@@ -15,6 +15,7 @@ import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -182,7 +183,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		obj.zTextAreaField.zActivate(page.zComposeView.zToField);
@@ -275,7 +276,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		getKeyboardKeys(acc1);
 		typeKeyboardKeys();
@@ -283,7 +284,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 
 		sendMailsUpdated();
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		verifyAutocompleteUpdated();
@@ -332,14 +333,14 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		verifyAutocomplete(true);
 
 		sendMailsUpdated();
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		verifyAutocompleteUpdated();
@@ -389,24 +390,24 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		verifyAutocomplete(true);
 
 		zGoToApplication("Address Book");
 		obj.zFolder.zClick(page.zABCompose.zEmailedContactsFolder);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		Robot zRobot = new Robot();
 		zRobot.keyPress(KeyEvent.VK_CONTROL);
 		zRobot.keyPress(KeyEvent.VK_A);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		zRobot.keyRelease(KeyEvent.VK_CONTROL);
 		zRobot.keyRelease(KeyEvent.VK_A);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		zRobot.keyPress(KeyEvent.VK_DELETE);
 		zRobot.keyRelease(KeyEvent.VK_DELETE);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		typeKeyboardKeys();
 		// verification
 		Assert
@@ -533,7 +534,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zComposeView.zComposeAndSendMail(acc2, "", "", "testSubject",
 				"testBody", "");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zTextAreaField.zActivate(page.zComposeView.zCcField);
@@ -677,11 +678,11 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		obj.zEditField.zType(localize(locator.findLabel),
 				"ccuser@testdomain.com");
 		obj.zButton.zClick(localize(locator.search), "2");
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		if (currentBrowserName.contains("Safari")) {
 			obj.zButton.zClick(localize(locator.search), "2");
 			obj.zButton.zClick(localize(locator.search), "2");
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		obj.zListItem.zDblClickItemInSpecificList("ccuser@testdomain.com", "2");
 		obj.zButton.zClick(localize(locator.add));
@@ -731,11 +732,11 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		obj.zEditField.zType(localize(locator.findLabel),
 				"ccuser@testdomain.com");
 		obj.zButton.zClick(localize(locator.search), "2");
-		Thread.sleep(2500);
+		SleepUtil.sleep(2500);
 		if (currentBrowserName.contains("Safari")) {
 			obj.zButton.zClick(localize(locator.search), "2");
 			obj.zButton.zClick(localize(locator.search), "2");
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		obj.zListItem.zDblClickItemInSpecificList("ccuser@testdomain.com", "2");
 		obj.zButton.zClick(localize(locator.add));
@@ -791,10 +792,10 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zComposeView.zComposeAndSendMail(acc2, "", "", "testSubject",
 				"testBody", "");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",
@@ -814,7 +815,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		Robot zRobot = new Robot();
 		zRobot.keyPress(KeyEvent.VK_COMMA);
 		zRobot.keyRelease(KeyEvent.VK_COMMA);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert.assertTrue("Expected value(" + acc2 + "), Actual Value("
 				+ obj.zTextAreaField.zGetInnerText(page.zComposeView.zToField)
 				+ ")", obj.zTextAreaField.zGetInnerText(
@@ -826,7 +827,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoCompleteQuickCompletionOnComma", "FALSE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		Assert
@@ -847,7 +848,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 												+ acc1.toLowerCase() + "')]"));
 		zRobot.keyPress(KeyEvent.VK_COMMA);
 		zRobot.keyRelease(KeyEvent.VK_COMMA);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		if (ZimbraSeleniumProperties.getStringProperty("locale")
 				.equals("en_US")
 				|| ZimbraSeleniumProperties.getStringProperty("locale").equals(
@@ -884,7 +885,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoCompleteQuickCompletionOnComma", "FALSE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zTextAreaField.zActivate(page.zComposeView.zToField);
@@ -909,7 +910,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 
 		// use of tab key
 		pressKeys("tab");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		System.out.println((char) 34 + displayName + (char) 34 + " <"
 				+ SelNGBase.selfAccountName.get().toLowerCase() + ">;".trim());
 		System.out.println(obj.zEditField
@@ -969,7 +970,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		obj.zTextAreaField.zActivate(page.zComposeView.zToField);
 		obj.zTextAreaField.zActivate(page.zComposeView.zToField);
 		pressKeys("z, i, m, b, r, a, ;");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert.assertTrue("Expected value(" + "zimbra@testdomain.com"
 				+ "), Actual Value("
 				+ obj.zTextAreaField.zGetInnerText(page.zComposeView.zToField)
@@ -1014,7 +1015,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		zGoToApplication("Address Book");
 		obj.zFolder.zClick(page.zABCompose.zEmailedContactsFolder);
 		Robot zRobot = new Robot();
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zRobot.keyPress(KeyEvent.VK_CONTROL);
 		zRobot.keyPress(KeyEvent.VK_A);
 		zRobot.keyRelease(KeyEvent.VK_CONTROL);
@@ -1027,7 +1028,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 
 		zGoToApplication("Address Book");
 		obj.zFolder.zClick(localize(locator.trash));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zRobot.keyPress(KeyEvent.VK_CONTROL);
 		zRobot.keyPress(KeyEvent.VK_A);
 		zRobot.keyRelease(KeyEvent.VK_CONTROL);
@@ -1039,7 +1040,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		page.zMailApp.zVerifyAutocompleteNotExists(acc1.toLowerCase(), 1, 1);
@@ -1075,7 +1076,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		zGoToPreferences("Address Book");
 		obj.zCheckbox.zClick(localize(locator.galAutocomplete));
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		getKeyboardKeys(acc1);
 		page.zComposeView.zNavigateToMailCompose();
@@ -1138,21 +1139,21 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		obj.zEditField.zType(
 				getNameWithoutSpace(localize(locator.groupNameLabel)),
 				groupName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zEditField.zType(localize(locator.findLabel), "grop");
 		obj.zButton.zClick(localize(locator.search), "2");
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		if (currentBrowserName.contains("Safari")) {
 			obj.zButton.zClick(localize(locator.search), "2");
 			obj.zButton.zClick(localize(locator.search), "2");
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		obj.zButton.zClick(localize(locator.addAll));
 		obj.zButton.zClick(localize(locator.save), "2");
 		obj.zContactListItem.zExists(groupName);
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		getKeyboardKeys(acc1);
 		typeKeyboardKeys();
@@ -1165,7 +1166,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		zGoToPreferences("Address Book");
 		obj.zCheckbox.zClick(localize(locator.autocompleteNoGroupMatch));
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		typeKeyboardKeys();
 		page.zMailApp.zVerifyAutocompleteNotExists(groupName, 1, 1);
@@ -1221,7 +1222,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		getKeyboardKeys(acc1);
 		typeKeyboardKeys();
@@ -1313,7 +1314,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		page.zMailApp.zVerifyAutocompleteNotExists(acc1, 1, 1);
@@ -1339,7 +1340,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
 		String subAddressBook, subSubAddressBook, sublastName, subSublastName;
@@ -1403,7 +1404,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		page.zMailApp.zVerifyAutocompleteNotExists(acc1, 1, 1);
@@ -1503,7 +1504,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		ProvZCS.modifyAccount(user2,
 				"zimbraPrefSharedAddrBookAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		page.zMailApp.zVerifyAutocompleteExists(acc1, 1, 1);
@@ -1533,7 +1534,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		page.zMailApp.zVerifyAutocompleteNotExists(acc1, 1, 1);
@@ -1570,11 +1571,11 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zTextAreaField.zActivate(page.zComposeView.zCcField);
 		pressKeys("1");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zMailApp.zVerifyAutocompleteExists("1@testdomain.com", 1, 1);
 		page.zMailApp.zVerifyAutocompleteExists("19@testdomain.com", 20, 0);
 		pressKeys("0");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zMailApp.zVerifyAutocompleteExists("10@testdomain.com", 1, 1);
 		page.zMailApp.zVerifyAutocompleteExists("100@testdomain.com", 2, 0);
 		page.zMailApp.zVerifyAutocompleteExists("1000@testdomain.com", 3, 0);
@@ -1588,15 +1589,15 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteExists("108@testdomain.com", 11, 0);
 		page.zMailApp.zVerifyAutocompleteExists("109@testdomain.com", 12, 0);
 		pressKeys("backspace, backspace, 2");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zMailApp.zVerifyAutocompleteExists("2@testdomain.com", 1, 1);
 		page.zMailApp.zVerifyAutocompleteExists("29@testdomain.com", 20, 0);
 		pressKeys("backspace, 7");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zMailApp.zVerifyAutocompleteExists("7@testdomain.com", 1, 1);
 		page.zMailApp.zVerifyAutocompleteExists("79@testdomain.com", 20, 0);
 		pressKeys("backspace, 9");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zMailApp.zVerifyAutocompleteExists("9@testdomain.com", 1, 1);
 		page.zMailApp.zVerifyAutocompleteExists("90@testdomain.com", 2, 0);
 		page.zMailApp.zVerifyAutocompleteExists("900@testdomain.com", 3, 0);
@@ -1618,7 +1619,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteExists("98@testdomain.com", 19, 0);
 		page.zMailApp.zVerifyAutocompleteExists("99@testdomain.com", 20, 0);
 		pressKeys("9");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zMailApp.zVerifyAutocompleteExists("99@testdomain.com", 1, 1);
 		page.zMailApp.zVerifyAutocompleteExists("990@testdomain.com", 2, 0);
 		page.zMailApp.zVerifyAutocompleteExists("991@testdomain.com", 3, 0);
@@ -1637,12 +1638,12 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 				"testSubject", "testBody", "");
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zTextAreaField.zActivate(page.zComposeView.zToField);
 		pressKeys("9, 9");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zMailApp.zVerifyAutocompleteExists("999@testdomain.com", 1, 1);
 		page.zMailApp.zVerifyAutocompleteExists("99@testdomain.com", 2, 0);
 		page.zMailApp.zVerifyAutocompleteExists("990@testdomain.com", 3, 0);
@@ -1709,7 +1710,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		}
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
 		ProvZCS.createAccount(acc1);
@@ -1745,9 +1746,9 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		zGoToApplication("Address Book");
 		if (ZimbraSeleniumProperties.getStringProperty("browser")
 				.contains("IE")) {
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 		} else {
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 		int lenAccounts = contacts.length;
 		for (int i = 0; i <= lenAccounts - 1; i++) {
@@ -1765,7 +1766,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 					contacts[i]);
 			obj.zButton.zClick(page.zABCompose.zSaveContactMenuIconBtn);
 		}
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 	}
 
 	private static void sendMails() throws Exception {
@@ -1794,13 +1795,13 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		page.zComposeView.zComposeAndSendMail(acc1 + "; " + acc2 + "; " + acc5,
 				"", "", "testSubject", "testBody", "");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 	}
 
 	private static void verifyAutocomplete(Boolean rankMatters)
 			throws Exception {
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		if (rankMatters.equals(true)) {
 			Assert
 					.assertTrue(
@@ -1901,7 +1902,7 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 	}
 
 	private static void verifyAutocompleteUpdated() throws Exception {
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",

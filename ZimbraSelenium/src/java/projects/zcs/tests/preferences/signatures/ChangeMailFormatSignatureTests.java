@@ -10,6 +10,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import projects.html.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
@@ -98,13 +99,13 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"text");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				signatureType);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		// setting default signature
 		setDefaultSignature(signatureName);
 		// verifying signature
@@ -125,7 +126,7 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"html");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		// keeping mail format as html and verifying signature
 		verifySignature(signatureBody, "", "");
@@ -161,13 +162,13 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"text");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				signatureType);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		// setting default signature
 		setDefaultSignature(signatureName);
 		// verifying signature
@@ -190,7 +191,7 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"html");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		// keeping mail format as html and verifying signature
 		verifySignature(signatureBody, "true", "");
@@ -227,13 +228,13 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"text");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				signatureType);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		// setting default signature
 		setDefaultSignature(signatureName);
 		// verifying signature
@@ -271,13 +272,13 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"html");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3500);
+		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		page.zSignaturePref.zCreateSignature(signatureName, signatureBody,
 				signatureType);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		// setting default signature
 		setDefaultSignature(signatureName);
 		// verifying signature
@@ -306,7 +307,7 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.signatureDoNotAttach));
 		obj.zMenuItem.zClick(signatureName);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 	}
 
 	private static void verifySignature(String signatureBody, String isDraft,
@@ -316,12 +317,12 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 			obj.zEditField
 					.zType(page.zComposeView.zSubjectField, signatureBody);
 			obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 			obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 			obj.zMessageItem.zClick(signatureBody);
 			obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		} else if (isRplyFwd.equals("true")) {
 			String to;
 			to = SelNGBase.selfAccountName.get();
@@ -334,7 +335,7 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		} else {
 			page.zComposeView.zNavigateToMailCompose();
 		}
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		bodyVal = obj.zEditor.zGetInnerText("");
 		Assert.assertTrue(bodyVal.indexOf(signatureBody) >= 0,
 				"On setting signature, body-field isnt getting filled");
@@ -345,24 +346,24 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 			throws Exception {
 		if (isDraft.equals("true")) {
 			obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 			obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 			obj.zMessageItem.zClick(signatureBody);
 			obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		} else if (isRplyFwd.equals("true")) {
 			obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 			obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 			obj.zMessageItem.zClick(rplyFwdSubject);
 			obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		obj.zButton.zClick(localize(locator.signature));
 		obj.zMenuItem.zClick(localize(locator.signatureDoNotAttach));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		bodyVal = obj.zEditor.zGetInnerText("");
 		Assert.assertFalse(bodyVal.indexOf(signatureBody) >= 0,
 				"On setting signature, body-field getting filled");
@@ -374,31 +375,31 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 			throws Exception {
 		if (isDraft.equals("true")) {
 			obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 			obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 			obj.zMessageItem.zClick(signatureBody);
 			obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		} else if (isRplyFwd.equals("true")) {
 			obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 			obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 			obj.zMessageItem.zClick(rplyFwdSubject);
 			obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		obj.zButton.zClick(localize(locator.options));
 		obj.zMenuItem.zClick(format);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		if (isWarnigDlgExists.equals("true")) {
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.warningMsg));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		bodyVal = obj.zEditor.zGetInnerText("");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		if (verifyMailBody.equals("true")) {
 			Assert.assertTrue(bodyVal.indexOf(signatureBody) >= 0,
 					"On setting signature, body-field isnt getting filled");
@@ -413,25 +414,25 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 			throws Exception {
 		if (isDraft.equals("true")) {
 			obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 			obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 			obj.zMessageItem.zClick(signatureBody);
 			obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		} else if (isRplyFwd.equals("true")) {
 			obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 			obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 			obj.zMessageItem.zClick(rplyFwdSubject);
 			obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		obj.zButton.zClick(localize(locator.signature));
 		obj.zMenuItem.zClick(signatureName);
 		bodyVal = obj.zEditor.zGetInnerText("");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert.assertTrue(bodyVal.indexOf(signatureBody) >= 0,
 				"On setting signature, body-field isnt getting filled");
 	}

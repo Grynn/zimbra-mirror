@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -36,9 +37,9 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 		ProvZCS.modifyAccount(currentloggedinuser,
 				"zimbraPrefShowSelectionCheckbox", "TRUE");
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3000);/* without this we get permission denied error */
+		SleepUtil.sleep(3000);/* without this we get permission denied error */
 		zWaitTillObjectExist("button", page.zLoginpage.zSearchFldr);
-		Thread.sleep(2000);/*
+		SleepUtil.sleep(2000);/*
 							 * wait another 3 secs after we see the search
 							 * button
 							 */
@@ -89,7 +90,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				obj.zMessageItem.zClick(message[0]);
 				obj.zButton.zClick(page.zMailApp.zJunkIconBtn);
 				obj.zFolder.zClick(localize(locator.junk));
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				obj.zMessageItem.zExists(message[0]);
 				SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
 						SelNGBase.selfAccountName.get());
@@ -99,7 +100,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 
 				// verification for bug 40528
 				obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-				Thread.sleep(2000);
+				SleepUtil.sleep(2000);
 				SelNGBase.selenium.get().windowFocus();
 				SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
 						SelNGBase.selfAccountName.get());
@@ -107,7 +108,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				Robot zRobot = new Robot();
 				zRobot.keyPress(KeyEvent.VK_ENTER);
 				zRobot.keyRelease(KeyEvent.VK_ENTER);
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				zRobot.keyPress(KeyEvent.VK_ENTER);
 				zRobot.keyRelease(KeyEvent.VK_ENTER);
 				obj.zMessageItem.zExists(message[0]);
@@ -135,7 +136,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				obj.zMessageItem.zClick(message[0]);
 				obj.zButton.zClick(page.zMailApp.zDeleteIconBtn);
 				obj.zFolder.zClick(localize(locator.trash));
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				obj.zMessageItem.zExists(message[0]);
 				SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
 						SelNGBase.selfAccountName.get());
@@ -145,7 +146,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 
 				// verification for bug 40528
 				obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-				Thread.sleep(2000);
+				SleepUtil.sleep(2000);
 				SelNGBase.selenium.get().windowFocus();
 				SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
 						SelNGBase.selfAccountName.get());
@@ -153,7 +154,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				Robot zRobot = new Robot();
 				zRobot.keyPress(KeyEvent.VK_ENTER);
 				zRobot.keyRelease(KeyEvent.VK_ENTER);
-				Thread.sleep(1000);
+				SleepUtil.sleep(1000);
 				zRobot.keyPress(KeyEvent.VK_ENTER);
 				zRobot.keyRelease(KeyEvent.VK_ENTER);
 				obj.zMessageItem.zExists(message[0]);
@@ -170,11 +171,11 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 			handleRetry();
 
 		String expectedSearchValue;
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		// Inbox folder
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String inboxSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("deDELETED")) {
@@ -195,7 +196,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 			expectedSearchValue = "in:" + (char) 34 + "sent" + (char) 34;
 		}
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zSentFldr));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String sentSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
@@ -211,7 +212,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 		}
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zMailApp.zDraftsFldr));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String draftsSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
@@ -226,7 +227,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 			expectedSearchValue = "in:" + (char) 34 + "junk" + (char) 34;
 		}
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zJunkFldr));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String junkSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
@@ -241,7 +242,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 			expectedSearchValue = "in:" + (char) 34 + "trash" + (char) 34;
 		}
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zTrashFldr));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String trashSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
@@ -253,7 +254,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 		String newFolder = getLocalizedData_NoSpecialChar();
 		page.zMailApp.zCreateFolder(newFolder);
 		obj.zFolder.zClick(newFolder);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String newFolderSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
@@ -272,7 +273,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 		obj.zMessageItem.zRtClick(SelNGBase.selfAccountName.get().split("@")[0]);
 		SelNGBase.actOnLabel = false;
 		obj.zMenuItem.zClick(page.zMailApp.zSearchMenuIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String userNameSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
@@ -285,7 +286,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 		obj.zMessageItem.zRtClick(SelNGBase.selfAccountName.get().split("@")[0]);
 		SelNGBase.actOnLabel = false;
 		obj.zMenuItem.zClick(page.zMailApp.zAdvancedSearchMenuIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport(
 				"from:(" + SelNGBase.selfAccountName.get() + ")",
 				userNameSearchValue,
@@ -308,7 +309,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 		zGoToApplication("Address Book");
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zABCompose.zContactsFolder));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String contactsSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		obj.zFolder.zClick(localize(locator.contacts));
@@ -328,7 +329,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 		}
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zABCompose.zEmailedContactsFolder));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String emailedContactsSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
@@ -344,7 +345,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 		}
 		zGoToApplication("Tasks");
 		zWaitTillObjectExist("folder", page.zTaskApp.zTasksFolder);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String tasksSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
@@ -353,7 +354,7 @@ public class GeneralPreferencesSetTrueTests extends CommonTest {
 				"Advanced search string not showing on search edit field while go to 'Tasks' application tab");
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zTaskApp.zTasksFolder));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		tasksSearchValue = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(

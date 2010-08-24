@@ -11,6 +11,7 @@ import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.items.ContactItem.GenerateItemType;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -74,9 +75,9 @@ public class AddressBookBugTests extends CommonTest {
 			handleRetry();
 
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(2500);
+			SleepUtil.sleep(2500);
 		} else {
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 		
 
@@ -85,14 +86,14 @@ public class AddressBookBugTests extends CommonTest {
 		
 		obj.zButton.zClick(page.zABCompose.zNewContactMenuIconBtn);
 		page.zABCompose.zEnterBasicABData(contact);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		
 		SelNGBase.selenium.get().clickAt("id=editcontactform_EMAIL_0_add", "");
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		
 		obj.zEditField.zActivateAndType(page.zABCompose.zWorkEmail1EditField, contact.email);
 		obj.zButton.zClick(localize(locator.save), "2");
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		
 		obj.zContactListItem.zExists(contact.lastName);
 		
@@ -103,7 +104,7 @@ public class AddressBookBugTests extends CommonTest {
 		SelNGBase.selenium.get().typeKeys("id=zv__COMPOSE1_to_control", contact.getCN());
 		SelNGBase.selenium.get().keyDown("id=zv__COMPOSE1_to_control", "\\13");
 		SelNGBase.selenium.get().keyUp("id=zv__COMPOSE1_to_control", "\\13");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert
 				.assertTrue(
 						SelNGBase.selenium.get()
@@ -161,7 +162,7 @@ public class AddressBookBugTests extends CommonTest {
 		SelNGBase.selenium.get().type("xpath=//td/input[contains(@id,'_nameField')]",
 				"savecontact");
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		Assert
 				.assertTrue(
 						SelNGBase.selenium.get()
@@ -179,7 +180,7 @@ public class AddressBookBugTests extends CommonTest {
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), "tagName");
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		Assert
 				.assertTrue(
 						SelNGBase.selenium.get()

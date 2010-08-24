@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.tests.CommonTest;
@@ -117,7 +118,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zTextAreaField.zExists(page.zComposeView.zToField);
 		obj.zTextAreaField.zExists(page.zComposeView.zSubjectField);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTextAreaField.zNotExists(page.zComposeView.zSubjectField);
 		obj.zButton.zNotExists(page.zComposeView.zCancelIconBtn);
 
@@ -125,7 +126,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zButtonMenu.zClick(page.zMailApp.zNewMenuDropDown);
 		obj.zMenuItem.zClick(menuItemArray[1]);
 		obj.zButton.zClick(page.zABCompose.zCancelContactMenuIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zNotExists(page.zABCompose.zCancelContactMenuIconBtn);
 		// add after new contact UI code get update
 
@@ -134,7 +135,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zMenuItem.zClick(menuItemArray[2]);
 		obj.zEditField.zExists(localize(locator.groupNameLabel));
 		obj.zButton.zClick(page.zABCompose.zCancelContactMenuIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zEditField.zNotExists(localize(locator.groupNameLabel));
 		obj.zButton.zNotExists(page.zABCompose.zCancelContactMenuIconBtn);
 
@@ -150,7 +151,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zButton.zClick(page.zCalCompose.zApptCancelBtn);
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTextAreaField.zNotExists(localize(locator.attendees));
 		obj.zButton.zNotExists(page.zCalCompose.zApptCancelBtn);
 
@@ -162,7 +163,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zButton.zClick(page.zTaskApp.zTasksCancelBtn);
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zEditField.zNotExists(localize(locator.subject));
 		obj.zButton.zNotExists(page.zTaskApp.zTasksCancelBtn);
 
@@ -175,7 +176,7 @@ public class NewDropdownMenuTests extends CommonTest {
 			obj.zEditField.zExists(localize(locator.page));
 		}
 		obj.zButton.zClick(page.zDocumentCompose.zClosePageIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zEditField.zNotExists(localize(locator.page));
 		obj.zButton.zNotExists(page.zDocumentCompose.zClosePageIconBtn);
 
@@ -184,7 +185,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zMenuItem.zClick(menuItemArray[6]);
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.uploadFileToBriefcase));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zDialog.zNotExists(localize(locator.uploadFileToBriefcase));
 
 		// Folder
@@ -192,7 +193,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zMenuItem.zClick(menuItemArray[7]);
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewFolder));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zDialog.zNotExists(localize(locator.createNewFolder));
 
 		// Tag
@@ -200,7 +201,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zMenuItem.zClick(menuItemArray[8]);
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewTag));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zDialog.zNotExists(localize(locator.createNewTag));
 
 		// Address book
@@ -208,7 +209,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zMenuItem.zClick(menuItemArray[9]);
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewAddrBook));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zDialog.zNotExists(localize(locator.createNewAddrBook));
 
 		// Calendar
@@ -216,7 +217,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zMenuItem.zClick(menuItemArray[10]);
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewCalendar));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zDialog.zNotExists(localize(locator.createNewCalendar));
 
 		// Task folder
@@ -224,7 +225,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zMenuItem.zClick(menuItemArray[11]);
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewTaskFolder));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zDialog.zNotExists(localize(locator.createNewTaskFolder));
 
 		// Notebook
@@ -232,7 +233,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zMenuItem.zClick(menuItemArray[12]);
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewNotebook));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zDialog.zNotExists(localize(locator.createNewNotebook));
 
 		// Briefcase
@@ -240,7 +241,7 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zMenuItem.zClick(menuItemArray[13]);
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.createNewBriefcaseItem));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zDialog.zNotExists(localize(locator.createNewBriefcaseItem));
 
 		SelNGBase.needReset.set(false);

@@ -26,6 +26,7 @@ import com.zimbra.cs.zclient.ZFolder;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -89,7 +90,7 @@ public class ShortcutsGeneral extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -120,7 +121,7 @@ public class ShortcutsGeneral extends CommonTest {
 		zRobot.keyRelease(KeyEvent.VK_G);
 		zRobot.keyRelease(keyToPress);
 
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 		if (toVerify.equals("")) {
 			obj.zButton.zExists(page.zCalApp.zPreferencesSaveIconBtn);
@@ -140,14 +141,14 @@ public class ShortcutsGeneral extends CommonTest {
 
 		if (!isFirst.equals("")) {
 			SelNGBase.selenium.get().refresh();
-			Thread.sleep(5000);
+			SleepUtil.sleep(5000);
 		}
 
 		SelNGBase.selenium.get().windowFocus();
 
 		Robot zRobot = new Robot();
 
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		System.out.println(keyToPress);
 		zRobot.keyPress(KeyEvent.VK_N);
 		zRobot.keyPress(keyToPress);
@@ -155,7 +156,7 @@ public class ShortcutsGeneral extends CommonTest {
 		zRobot.keyRelease(KeyEvent.VK_N);
 		zRobot.keyRelease(keyToPress);
 
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 
 		if (objType.equals("dialog"))
 			obj.zDialog.zExists(toVerify);
@@ -169,7 +170,7 @@ public class ShortcutsGeneral extends CommonTest {
 					localize(locator.warningMsg));
 		}
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -186,10 +187,10 @@ public class ShortcutsGeneral extends CommonTest {
 
 		Robot zRobot = new Robot();
 
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		zRobot.keyPress(KeyEvent.VK_N);
 		zRobot.keyRelease(KeyEvent.VK_N);
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 
 		if (tabName.equals(localize(locator.briefcase)))
 			obj.zDialog.zExists(localize(locator.uploadFileToBriefcase));
@@ -205,7 +206,7 @@ public class ShortcutsGeneral extends CommonTest {
 					localize(locator.warningMsg));
 		}
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -227,7 +228,7 @@ public class ShortcutsGeneral extends CommonTest {
 
 		zRobot.keyPress(KeyEvent.VK_V);
 		zRobot.keyRelease(KeyEvent.VK_V);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		obj.zFolder.zClickInDlg(localize(locator.sent));
 		obj.zButton.zClickInDlg(localize(locator.ok));
@@ -253,10 +254,10 @@ public class ShortcutsGeneral extends CommonTest {
 				subject, "test content", "");
 
 		Robot zRobot = new Robot();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		zRobot.keyPress(KeyEvent.VK_T);
 		zRobot.keyRelease(KeyEvent.VK_T);
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 		obj.zFolder.zClickInDlgByName(tagName, localize(locator.pickATag));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.pickATag));
@@ -267,13 +268,13 @@ public class ShortcutsGeneral extends CommonTest {
 
 		SelNGBase.selenium.get().windowFocus();
 		Robot zRobot2 = new Robot();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 		zRobot2.keyPress(KeyEvent.VK_V);
 		zRobot2.keyRelease(KeyEvent.VK_V);
 		zRobot2.keyPress(KeyEvent.VK_V);
 		zRobot2.keyRelease(KeyEvent.VK_V);
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 
 		obj.zFolder.zClickInDlgByName(tagName, localize(locator.pickATag));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
@@ -300,10 +301,10 @@ public class ShortcutsGeneral extends CommonTest {
 				subject, "test content", "");
 
 		Robot zRobot = new Robot();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		zRobot.keyPress(KeyEvent.VK_T);
 		zRobot.keyRelease(KeyEvent.VK_T);
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 		obj.zFolder.zClickInDlgByName(tagName, localize(locator.pickATag));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.pickATag));
@@ -314,22 +315,22 @@ public class ShortcutsGeneral extends CommonTest {
 
 		SelNGBase.selenium.get().windowFocus();
 		Robot zRobot3 = new Robot();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 		obj.zMessageItem.zClick(subject);
 		zRobot3.keyPress(KeyEvent.VK_U);
 		zRobot3.keyRelease(KeyEvent.VK_U);
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 
 		SelNGBase.selenium.get().windowFocus();
 		Robot zRobot4 = new Robot();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 		zRobot4.keyPress(KeyEvent.VK_V);
 		zRobot4.keyRelease(KeyEvent.VK_V);
 		zRobot4.keyPress(KeyEvent.VK_V);
 		zRobot4.keyRelease(KeyEvent.VK_V);
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 
 		obj.zFolder.zClickInDlgByName(tagName, localize(locator.pickATag));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
@@ -350,12 +351,12 @@ public class ShortcutsGeneral extends CommonTest {
 		String subject = getLocalizedData_NoSpecialChar();
 
 		Robot zRobot = new Robot();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		zRobot.keyPress(KeyEvent.VK_N);
 		zRobot.keyRelease(KeyEvent.VK_N);
 		zRobot.keyPress(KeyEvent.VK_F);
 		zRobot.keyRelease(KeyEvent.VK_F);
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 
 		obj.zEditField.zTypeInDlgByName(localize(locator.name), folderName,
 				localize(locator.createNewFolder));
@@ -405,10 +406,10 @@ public class ShortcutsGeneral extends CommonTest {
 				subject2, "test content", "");
 
 		Robot zRobot = new Robot();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		zRobot.keyPress(KeyEvent.VK_S);
 		zRobot.keyRelease(KeyEvent.VK_S);
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 		obj.zFolder.zClickInDlg(searchName);
 		obj.zButton.zClickInDlg(localize(locator.ok));
 
@@ -424,13 +425,13 @@ public class ShortcutsGeneral extends CommonTest {
 			handleRetry();
 
 		Robot zRobot = new Robot();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		SelNGBase.selenium.get().windowFocus();
 		zRobot.keyPress(KeyEvent.VK_SHIFT);
 		zRobot.keyPress(KeyEvent.VK_C);
 		zRobot.keyRelease(KeyEvent.VK_SHIFT);
 		zRobot.keyRelease(KeyEvent.VK_C);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 		obj.zButton.zClick(page.zMailApp.zCancelBtn_newWindow);
@@ -451,12 +452,12 @@ public class ShortcutsGeneral extends CommonTest {
 				subject, "test content", "");
 
 		Robot zRobot = new Robot();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		SelNGBase.selenium.get().windowFocus();
 
 		zRobot.keyPress(keyToPress);
 		zRobot.keyRelease(keyToPress);
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 
 		obj.zMessageItem.zNotExists(subject);
 		obj.zFolder.zClick(localize(locator.trash));
@@ -478,10 +479,10 @@ public class ShortcutsGeneral extends CommonTest {
 		 * Press L to switch to list view of appointments.
 		 */
 		Robot zRobot = new Robot();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		zRobot.keyPress(KeyEvent.VK_L);
 		zRobot.keyRelease(KeyEvent.VK_L);
-		Thread.sleep(4000);
+		SleepUtil.sleep(4000);
 		
 		/**
 		 * Verification : Check all the headers in list view of appointments are present.

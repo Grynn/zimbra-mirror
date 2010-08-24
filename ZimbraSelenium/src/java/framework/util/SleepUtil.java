@@ -18,13 +18,34 @@ public class SleepUtil {
 	private static Logger logger = LogManager.getLogger(SleepUtil.class);
 
 	/// Public methods
+	public static int TotalSleepMillis = 0;
+	public static int SleepGranularity = 1000;
 	
 	public static void sleep(long millis) {
+		long target = millis;
+		long total = 0; // The total milliseconds slept in this method
+		
 		try {
-			logger.info("Sleep: "+ millis +" milliseconds ...");
-			Thread.sleep(millis);
+			
+			while (millis > 0) {
+				
+				if ( millis >= SleepGranularity) {
+					logger.info("Sleep: "+ SleepGranularity +" milliseconds ... ("+ total +"/"+ target +")");
+					Thread.sleep(SleepGranularity);
+					total += SleepGranularity;
+				} else {
+					logger.info("Sleep: "+ millis +" milliseconds ... ("+ millis +"/"+ target +")");
+					Thread.sleep(millis);
+					total += millis;
+				}
+				
+				millis -= SleepGranularity;
+			}
+
 		} catch (InterruptedException e) {
 			logger.warn("Sleep was interuppted", e);
+		} finally {
+			TotalSleepMillis += total;
 		}
 	}
 	

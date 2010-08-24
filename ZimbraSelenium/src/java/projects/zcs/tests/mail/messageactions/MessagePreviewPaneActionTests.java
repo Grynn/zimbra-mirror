@@ -10,6 +10,7 @@ import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -119,12 +120,12 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 			obj.zCheckbox.zVerifyIsChecked(attachment[i].toLowerCase());
 		}
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 		// verification
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
@@ -141,7 +142,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 			obj.zCheckbox.zVerifyIsChecked(attachment[i].toLowerCase());
 		}
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -186,13 +187,13 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 			obj.zCheckbox.zVerifyIsChecked(attachment[i].toLowerCase());
 		}
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 		// verification
 		SelNGBase.selenium.get().selectWindow(null);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
@@ -209,7 +210,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 			obj.zCheckbox.zVerifyIsChecked(attachment[i].toLowerCase());
 		}
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -226,7 +227,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(),
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
@@ -265,7 +266,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(),
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
@@ -282,7 +283,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 				"Verifying dialog text for removing attachment from the message");
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		Boolean removeLink = SelNGBase.selenium.get()
 				.isElementPresent(localize(locator.remove));
 		assertReport("false", removeLink.toString(),
@@ -292,32 +293,32 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zCheckbox.zNotExists(attachments);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		// verify reply all
 		obj.zButton.zClick(page.zMailApp.zReplyAllIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zCheckbox.zNotExists(attachments);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		// verify forward
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zCheckbox.zNotExists(attachments);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		// verify edit as new
 		obj.zMessageItem.zRtClick(subject);
 		obj.zMenuItem.zClick(page.zMailApp.zEditAsNewMenuIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zCheckbox.zNotExists(attachments);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -335,15 +336,15 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 				cc, bcc, subject, body, attachments);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn);
-		Thread.sleep(2500);
+		SleepUtil.sleep(2500);
 		SelNGBase.selenium.get().selectWindow("_blank");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zWaitTillObjectExist("button", page.zMailApp.zCloseIconBtn_newWindow);
 		SelNGBase.selenium.get().click("link=" + localize(locator.remove));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport(localize(locator.attachmentConfirmRemove), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
 				"Verifying dialog text for removing attachment from the message");
@@ -355,7 +356,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		assertReport("false", removeLink.toString(),
 				"Verifying Remove link exist or not after removing attachment from message");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().selectWindow(null);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byConversation));
@@ -378,11 +379,11 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		obj.zMenuItem.zClick(localize(locator.byMessage));
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
-		Thread.sleep(2500);
+		SleepUtil.sleep(2500);
 		SelNGBase.selenium.get().selectWindow("_blank");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().click("link=" + localize(locator.removeAllAttachments));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().selectWindow(null);
 		assertReport(localize(locator.attachmentConfirmRemoveAll), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
@@ -397,7 +398,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 				removeLink.toString(),
 				"Verifying Remove All Attachments link exist or not after removing all attachments from message");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
@@ -417,7 +418,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(),
 				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
@@ -445,40 +446,40 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 0; i < attachment.length; i++) {
 			obj.zCheckbox.zNotExists(attachment[i].toLowerCase());
 		}
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		// verify reply all
 		obj.zButton.zClick(page.zMailApp.zReplyAllIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 0; i < attachment.length; i++) {
 			obj.zCheckbox.zNotExists(attachment[i].toLowerCase());
 		}
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		// verify forward
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 0; i < attachment.length; i++) {
 			obj.zCheckbox.zNotExists(attachment[i].toLowerCase());
 		}
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		// verify edit as new
 		obj.zMessageItem.zRtClick(subject);
 		obj.zMenuItem.zClick(page.zMailApp.zEditAsNewMenuIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 0; i < attachment.length; i++) {
 			obj.zCheckbox.zNotExists(attachment[i].toLowerCase());
 		}
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -498,7 +499,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(),
 				cc, bcc, subject, body, "putty.log");
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
@@ -529,7 +530,7 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 
 		// verify reply
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 0; i < attachment.length; i++) {
 			obj.zCheckbox.zVerifyIsNotChecked("putty.log");
 			obj.zCheckbox.zClick("putty.log");
@@ -553,18 +554,18 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		obj.zButton.zClickInDlgByName(localize(locator.attach),
 				localize(locator.attachFile));
 		zWaitTillObjectExist("button", page.zComposeView.zSendIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		for (int i = 0; i < attachment.length; i++) {
 			obj.zCheckbox.zVerifyIsChecked(attachment[i].toLowerCase());
 			obj.zCheckbox.zVerifyIsChecked("putty.log");
 		}
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		// verification
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Re: " + subject);
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
@@ -586,13 +587,13 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 
 		obj.zButton.zClick(page.zMailApp.zForwardBtn);
 		zWaitTillObjectExist("button", page.zComposeView.zSendIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		for (int i = 0; i < attachment.length; i++) {
 			obj.zCheckbox.zVerifyIsChecked(attachment[i].toLowerCase());
 			obj.zCheckbox.zVerifyIsChecked("putty.log");
 		}
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -615,13 +616,13 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject2);
 
 		obj.zMessageItem.zClick(subject1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().click("link=" + localize(locator.addToCalendar));
 		obj.zFolder.zClickInDlgByName(localize(locator.calendar),
 				localize(locator.addToCalendar));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.addToCalendar));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zGoToApplication("Calendar");
 		obj.zAppointment.zDblClick("Critical");
 		obj.zRadioBtn.zClickInDlgByName(localize(locator.openSeries),
@@ -632,13 +633,13 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 
 		zGoToApplication("Mail");
 		obj.zMessageItem.zClick(subject2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		SelNGBase.selenium.get().click("link=" + localize(locator.addToCalendar));
 		obj.zFolder.zClickInDlgByName(localize(locator.calendar),
 				localize(locator.addToCalendar));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.addToCalendar));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		zGoToApplication("Calendar");
 		obj.zAppointment.zDblClick("every week");
 		obj.zButton.zClickInDlgByName(localize(locator.ok),

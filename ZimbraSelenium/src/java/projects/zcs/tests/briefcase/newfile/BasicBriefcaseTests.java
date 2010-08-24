@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.tests.CommonTest;
@@ -64,7 +65,7 @@ public class BasicBriefcaseTests extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		page.zBriefcaseApp.zGoToBriefcaseApp();
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -127,16 +128,16 @@ public class BasicBriefcaseTests extends CommonTest {
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
 		obj.zBriefcaseItem.zClick(filename);
 		obj.zButton.zClick(page.zBriefcaseApp.zMoveItemIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zDialog.zExists(localize(locator.chooseFolder));
 		obj.zButton.zClickInDlgByName(localize(locator._new),
 				localize(locator.chooseFolder));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zEditField.zTypeInDlgByName(localize(locator.name), newBFFolder,
 				localize(locator.createNewBriefcaseItem));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.createNewBriefcaseItem));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClickInDlgByName(newBFFolder,
 				localize(locator.chooseFolder));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
@@ -168,9 +169,9 @@ public class BasicBriefcaseTests extends CommonTest {
 		obj.zBriefcaseItem.zExists(filename);
 		obj.zBriefcaseItem.zClick(filename);
 		SelNGBase.selenium.get().clickAt("id=zb__BCC__SEND_FILE_MENU_title", "");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMenuItem.zClick(localize(locator.sendAsAttachment));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTextAreaField.zWait(localize(locator.toLabel));
 		obj.zCheckbox.zVerifyIsChecked(filename);
 		obj.zButton.zClick(ComposeView.zCancelIconBtn);
@@ -178,9 +179,9 @@ public class BasicBriefcaseTests extends CommonTest {
 				localize(locator.warningMsg));
 		obj.zBriefcaseItem.zClick(filename);
 		obj.zBriefcaseItem.zRtClick(filename);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		obj.zMenuItem.zClick(localize(locator.sendAsAttachment));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTextAreaField.zWait(localize(locator.toLabel));
 		obj.zCheckbox.zVerifyIsChecked(filename);
 		obj.zButton.zClick(ComposeView.zCancelIconBtn);
@@ -206,20 +207,20 @@ public class BasicBriefcaseTests extends CommonTest {
 
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			obj.zButton.zClick(localize(locator.newDocument));
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 			SelNGBase.selenium.get().selectWindow(SelNGBase.selenium.get().getAllWindowTitles()[1]);
 			SelNGBase.selenium.get().windowFocus();
 			zWaitTillObjectExist("button", localize(locator.save));
 			SelNGBase.selenium.get().type("xpath=//input[@type='text']", filename);
 			obj.zButton.zClick(localize(locator.save));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			SelNGBase.selenium.get().close();
 			SelNGBase.selenium.get().selectWindow(null);
 			obj.zFolder.zClick(page.zBriefcaseApp.zBriefcaseFolder);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zBriefcaseItem.zClick(filename);
 			obj.zBriefcaseItem.zRtClick(filename);
-			Thread.sleep(500);
+			SleepUtil.sleep(500);
 			String download = SelNGBase.selenium.get()
 					.getEval("selenium.browserbot.getCurrentWindow().document.getElementById('zmi__Briefcase__SAVE_FILE').className");
 			Assert.assertTrue(download.contains("ZDisabled"),

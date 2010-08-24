@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
@@ -69,17 +70,17 @@ public class MultipleMessageActionTests extends CommonTest {
 		for (int i = 0; i <= 2; i++) {
 			commonInjectMessage(from, to, cc, bcc, subject[i], body[i]);
 		}
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zCheckbox.zClick(zMailListItemChkBox);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zMailApp.zJunkIconBtn);
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));
 		verifyInjectedMailsNotExists();
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zJunkFldr));
 		verifyInjectedMailsExists();
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zCheckbox.zClick(zMailListItemChkBox);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zMailApp.zJunkIconBtn);
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zJunkFldr));
 		verifyInjectedMailsNotExists();
@@ -106,17 +107,17 @@ public class MultipleMessageActionTests extends CommonTest {
 		for (int i = 0; i <= 2; i++) {
 			commonInjectMessage(from, to, cc, bcc, subject[i], body[i]);
 		}
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zCheckbox.zClick(zMailListItemChkBox);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zMailApp.zDeleteIconBtn);
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));
 		verifyInjectedMailsNotExists();
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zTrashFldr));
 		verifyInjectedMailsExists();
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zCheckbox.zClick(zMailListItemChkBox);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zMailApp.zDeleteIconBtn);
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zTrashFldr));
 		verifyInjectedMailsNotExists();
@@ -141,9 +142,9 @@ public class MultipleMessageActionTests extends CommonTest {
 		for (int i = 0; i <= 2; i++) {
 			commonInjectMessage(from, to, cc, bcc, subject[i], body[i]);
 		}
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zCheckbox.zClick(zMailListItemChkBox);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zMailApp.zMoveIconBtn);
 		String dlgName;
 		dlgName = localize(locator.moveMessages);
@@ -178,9 +179,9 @@ public class MultipleMessageActionTests extends CommonTest {
 		for (int i = 0; i <= 2; i++) {
 			commonInjectMessage(from, to, cc, bcc, subject[i], body[i]);
 		}
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zCheckbox.zClick(zMailListItemChkBox);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zMailApp.zMoveIconBtn);
 		obj.zButton.zClickInDlgByName(localize(locator._new),
 				localize(locator.moveMessages));
@@ -221,9 +222,9 @@ public class MultipleMessageActionTests extends CommonTest {
 		for (int i = 0; i <= 2; i++) {
 			obj.zMessageItem.zExists(subject[i]);
 		}
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zCheckbox.zClick(zMailListItemChkBox);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zButton.zIsDisabled(page.zMailApp.zMoveBtn);
 		obj.zButton.zIsDisabled(page.zMailApp.zReplyBtn);
 		obj.zButton.zIsDisabled(page.zMailApp.zReplyAllBtn);
@@ -259,9 +260,9 @@ public class MultipleMessageActionTests extends CommonTest {
 		for (int i = 0; i <= 1; i++) {
 			commonInjectMessage(from, to, cc, bcc, subject[i], body[i]);
 		}
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zCheckbox.zClick(zMailListItemChkBox);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zMessageItem.zRtClick("subject1");
 		String[] enabledMenuItemsArray = { page.zMailApp.zMarkReadMenuIconBtn,
 				page.zMailApp.zForwardMenuIconBtn,
@@ -300,9 +301,9 @@ public class MultipleMessageActionTests extends CommonTest {
 		for (int i = 0; i <= 1; i++) {
 			commonInjectMessage(from, to, cc, bcc, subject[i], body[i]);
 		}
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zCheckbox.zClick(zMailListItemChkBox);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		String[] enabledToolbarItemsArray = { page.zMailApp.zNewMenuBtn,
 				page.zMailApp.zGetMailBtn, page.zMailApp.zDeleteBtn,
 				page.zMailApp.zMoveBtn, page.zMailApp.zForwardBtn,
@@ -354,7 +355,7 @@ public class MultipleMessageActionTests extends CommonTest {
 		obj.zMessageItem.zExists(subject[2]);
 		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", "body2");
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zNotExists(subject[0]);
 		obj.zMessageItem.zExists(subject[1]);
 		obj.zMessageItem.zExists(subject[2]);
@@ -366,7 +367,7 @@ public class MultipleMessageActionTests extends CommonTest {
 				"TagFromMail", localize(locator.createNewTag));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.createNewTag));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		Assert
 				.assertTrue(
 						SelNGBase.selenium.get()
@@ -384,7 +385,7 @@ public class MultipleMessageActionTests extends CommonTest {
 						"2nd list item shows unchecked after clicking Select All check box");
 		// unchecked all
 		obj.zCheckbox.zClick(zMailListItemChkBox);
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 		Assert
 				.assertTrue(SelNGBase.selenium.get()
 						.isElementPresent("xpath=//div[contains(@id,'zlhi__CLV__se') and contains(@class,'ImgCheckboxUnchecked')]"));
@@ -423,25 +424,25 @@ public class MultipleMessageActionTests extends CommonTest {
 		for (int i = 0; i <= 1; i++) {
 			commonInjectMessage(from, to, cc, bcc, subject[i], body[i]);
 		}
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zMessageItem.zCtrlClick(subject1);
 		obj.zMessageItem.zCtrlClick(subject2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
 		obj.zTextAreaField.zType(page.zComposeView.zToField, acc2);
 		obj.zEditField.zType(page.zComposeView.zSubjectField, fwdSubject);
 		obj.zEditor.zType(fwdBody);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-		Thread.sleep(2500);
+		SleepUtil.sleep(2500);
 
 		resetSession();
 		SelNGBase.selfAccountName.set(acc2);
 		page.zLoginpage.zLoginToZimbraAjax(acc2);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(fwdSubject);
 		obj.zMessageItem.zClick(fwdSubject);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		SelNGBase.selenium.get().click("link=subject1");
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		String msgBody = null;
 		msgBody = SelNGBase.selenium.get().getBodyText();
@@ -472,7 +473,7 @@ public class MultipleMessageActionTests extends CommonTest {
 		SelNGBase.selenium.get().selectWindow(null);
 
 		SelNGBase.selenium.get().click("link=subject2");
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		SelNGBase.selenium.get().selectWindow("_blank");
 		msgBody = SelNGBase.selenium.get().getBodyText();
 		assertReport(msgBody, localize(locator.from), "Verifying From header");

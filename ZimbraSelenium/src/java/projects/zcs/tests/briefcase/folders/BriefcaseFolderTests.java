@@ -9,6 +9,7 @@ import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 /**
  * @author Jitesh Sojitra
@@ -71,12 +72,12 @@ public class BriefcaseFolderTests extends CommonTest {
 
 		String newBriefcase = getLocalizedData_NoSpecialChar();
 		page.zBriefcaseApp.zCreateNewBriefcaseFolder(briefcaseName);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zRtClick(briefcaseName);
 		obj.zMenuItem.zClick(localize(locator.editProperties));
 		obj.zEditField.zTypeInDlg(localize(locator.nameLabel), newBriefcase);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zExists(newBriefcase);
 		obj.zFolder.zNotExists(briefcaseName);
 
@@ -110,7 +111,7 @@ public class BriefcaseFolderTests extends CommonTest {
 		page.zBriefcaseApp.zCreateNewBriefcaseFolder(briefcaseName);
 		obj.zButton.zRtClick(page.zBriefcaseApp.zNewBriefcaseOverviewPaneIcon);
 		obj.zMenuItem.zClick(localize(locator.newBriefcase));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClickInDlgByName(localize(locator.folders),
 				localize(locator.createNewBriefcaseItem));
 		obj.zEditField.zTypeInDlgByName(localize(locator.name), briefcaseName,

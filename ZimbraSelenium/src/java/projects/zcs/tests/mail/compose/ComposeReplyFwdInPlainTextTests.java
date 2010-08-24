@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.tests.CommonTest;
@@ -286,7 +287,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 				attachments);
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn);
 		obj.zButton.zClick(ComposeView.zSendIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		MailApp.ClickCheckMailUntilMailShowsUp("Re: " + subject);
 		obj.zMessageItem.zClick("Re: " + subject);
 		obj.zMessageItem.zDblClick("Re: " + subject);
@@ -371,10 +372,10 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 		obj.zFeatureMenu.zClick(localize(locator.forwardingEmail), "3");
 		obj.zMenuItem.zClick(localize(locator.includeOriginalAsAttach));
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 		}
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
@@ -398,7 +399,7 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 				"Body Should not contains any msg but still shows some msg");
 
 		obj.zButton.zClick(ComposeView.zOptionsDownArrowBtn);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMenuItem.zClick(localize(locator.includeMenuBody));
 		obj.zTextAreaField.zWait(localize(locator.toLabel));
 		obj.zCheckbox.zVerifyIsChecked(attachments);

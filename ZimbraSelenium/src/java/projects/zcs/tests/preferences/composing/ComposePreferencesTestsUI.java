@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -75,7 +76,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		// selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -105,7 +106,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefComposeFormat");
@@ -121,7 +122,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefComposeFormat");
@@ -130,7 +131,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 				"Compose format set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -173,7 +174,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 			obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 
 			actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 					"zimbraPrefHtmlEditorDefaultFontFamily");
@@ -217,7 +218,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 			obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 
 			actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 					"zimbraPrefHtmlEditorDefaultFontFamily");
@@ -254,7 +255,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardReplyInOriginalFormat");
@@ -270,7 +271,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardReplyInOriginalFormat");
@@ -279,7 +280,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 				"Reply/fwd format set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -301,7 +302,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefComposeInNewWindow");
@@ -317,7 +318,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefComposeInNewWindow");
@@ -326,7 +327,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 				"Compose in new window set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -348,7 +349,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefAutoSaveDraftInterval");
@@ -364,7 +365,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefAutoSaveDraftInterval");
@@ -373,7 +374,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 				"Autosave draft value set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -396,7 +397,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefReplyIncludeOriginalText");
@@ -413,7 +414,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefReplyIncludeOriginalText");
@@ -422,7 +423,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 				"Reply/Reply All option set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -445,7 +446,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardIncludeOriginalText");
@@ -462,7 +463,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardIncludeOriginalText");
@@ -471,7 +472,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 				"Forward option set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -493,7 +494,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardReplyPrefixChar");
@@ -509,7 +510,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardReplyPrefixChar");
@@ -518,7 +519,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 				"Prefix option set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -541,7 +542,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefSaveToSent");
@@ -563,7 +564,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		waitForIE();
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
 				"zimbraPrefSaveToSent");
@@ -572,7 +573,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 				"'Save to Sent' option set is not set in db. Actual value is "
 						+ actualVal);
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -581,7 +582,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 
 		if (browser.equals("IE"))
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 
 	}
 
@@ -634,7 +635,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		obj.zMenuItem.zClick(fontSize);
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
 
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(accountName,
 				"ccuser@testdomain.com", "bccuser@testdomain.com", "sub",

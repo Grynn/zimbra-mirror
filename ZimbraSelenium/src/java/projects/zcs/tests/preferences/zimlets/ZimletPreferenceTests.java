@@ -6,6 +6,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 
@@ -51,7 +52,7 @@ public class ZimletPreferenceTests extends CommonTest {
 			handleRetry();
 
 		zWaitTillObjectExist("checkbox", zZimletDateChkBox);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		SelNGBase.selenium.get().clickAt(zZimletEmailChkBox,"");
 		SelNGBase.selenium.get().clickAt(zZimletURLChkBox,"");
 		SelNGBase.selenium.get().clickAt(zZimletEmoticonsChkBox,"");
@@ -66,10 +67,10 @@ public class ZimletPreferenceTests extends CommonTest {
 		obj.zCheckbox.zActivate(zZimletLocalChkBox);
 		obj.zCheckbox.zActivate(zZimletHighlightPhoneChkBox);*/
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 
 		zGoToApplication("Preferences");
 		zGoToPreferences("Zimlets");

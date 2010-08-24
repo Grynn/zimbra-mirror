@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -236,7 +237,7 @@ public class SharingPreferencesTests extends CommonTest {
 		obj.zButton.zClick(localize(locator.declineShare));
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.declineShare));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 
 		zGoToApplication("Preferences");
 		zGoToPreferences("Sharing");
@@ -285,7 +286,7 @@ public class SharingPreferencesTests extends CommonTest {
 				localize(locator.revoke));
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.revokeShare));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		// shared folder should not contain invitation
 		resetSession();
@@ -370,7 +371,7 @@ public class SharingPreferencesTests extends CommonTest {
 				invitedusers, localize(locator.shareRoleManager), message,
 				sharingnoteifany, allowtoseeprivateappt, tSubject);
 
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		obj.zListItem.zVerifyItemInSpecificList(invitedusers, "1", "3");
 
 		// verifying share related mail in preferences > sharing
@@ -390,13 +391,13 @@ public class SharingPreferencesTests extends CommonTest {
 				localize(locator.acceptShare));
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.acceptShare));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zListItem.zVerifyItemInSpecificList(currentLoggedinUser, "1", "2");
 
 		// verification
 		zGoToApplication("Tasks");
 		obj.zFolder.zClick(tSubject);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zExists(tSubject);
 
 		SelNGBase.needReset.set(false);
@@ -463,11 +464,11 @@ public class SharingPreferencesTests extends CommonTest {
 			page.zMailApp
 					.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
 			obj.zMessageItem.zClick(localize(locator.shareCreatedSubject));
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 			obj.zButton.zClick(page.zSharing.zAcceptShareIconBtn);
 			obj.zButton.zClickInDlgByName(localize(locator.yes),
 					localize(locator.acceptShare));
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 		}
 
 		zGoToApplication("Preferences");

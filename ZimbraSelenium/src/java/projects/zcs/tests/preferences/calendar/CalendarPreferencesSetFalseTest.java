@@ -19,6 +19,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -73,7 +74,7 @@ public class CalendarPreferencesSetFalseTest extends CommonTest {
 //		selenium.refresh();
 		zReloginToAjax();
 
-		Thread.sleep(5000);
+		SleepUtil.sleep(5000);
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -107,7 +108,7 @@ public class CalendarPreferencesSetFalseTest extends CommonTest {
 
 		obj.zMiscObj.zDblClickXY("ZmCalViewMgr/ImgCalendarDayGrid", "50,50");
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zDialog.zNotExists(localize(locator.quickAddAppt));
 
@@ -124,7 +125,7 @@ public class CalendarPreferencesSetFalseTest extends CommonTest {
 
 		page.zCalApp.zNavigateToApptCompose();
 
-		Thread.sleep(500);
+		SleepUtil.sleep(500);
 
 		obj.zMiscObj
 				.zNotExists("ZmApptComposeView ZWidget/*tzoneSelect/ZSelectAutoSizingContainer ZHasDropDown");
@@ -140,13 +141,13 @@ public class CalendarPreferencesSetFalseTest extends CommonTest {
 
 		page.zCalApp.zNavigateToCalendar();
 		
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		page.zCalCompose.zCreateSimpleAppt(getLocalizedData_NoSpecialChar(),
 				getLocalizedData_NoSpecialChar(), "",
 				getLocalizedData_NoSpecialChar());
 
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zDialog.zNotExists(localize(locator.apptReminders));
 		SelNGBase.needReset.set(false);

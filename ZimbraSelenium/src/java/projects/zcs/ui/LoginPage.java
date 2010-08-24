@@ -10,6 +10,7 @@ import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.BrowserUtil;
+import framework.util.SleepUtil;
 
 @SuppressWarnings("static-access")
 public class LoginPage extends AppPage {
@@ -71,7 +72,7 @@ public class LoginPage extends AppPage {
 	public void zLoginToZimbraAjax(String username, String password) {
 		try {
 			openApplication();
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 			currentBrowserName = BrowserUtil.getBrowserName();
 			obj.zEditField.zType("Username:", username);
 			obj.zPwdField.zType("Password:", password);
@@ -88,12 +89,12 @@ public class LoginPage extends AppPage {
 			String username = ProvZCS.getRandomAccount();
 			SelNGBase.selfAccountName.set(username);
 			customLogin(parameter);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			currentBrowserName = BrowserUtil.getBrowserName();
 			obj.zEditField.zType("Username:", username);
 			obj.zPwdField.zType("Password:", "test123");
 			obj.zButton.zClick("class=zLoginButton");
-			Thread.sleep(3000);
+			SleepUtil.sleep(3000);
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}
@@ -106,7 +107,7 @@ public class LoginPage extends AppPage {
 	 */
 	public static void logoutOfZimbraAjax() throws Exception {
 		SelNGBase.selenium.get().click("link=" + localize("logOff"));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertTrue(true);
 	}
 }

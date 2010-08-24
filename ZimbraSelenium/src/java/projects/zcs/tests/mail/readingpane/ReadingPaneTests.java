@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -121,7 +122,7 @@ public class ReadingPaneTests extends CommonTest {
 
 		if (method.equals("byKeyboardShortCut")) {
 			SelNGBase.selenium.get().windowFocus();
-			Thread.sleep(3000);
+			SleepUtil.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
 			zRobot.keyRelease(KeyEvent.VK_M);
@@ -129,7 +130,7 @@ public class ReadingPaneTests extends CommonTest {
 			zRobot.keyRelease(KeyEvent.VK_P);
 			zRobot.keyPress(KeyEvent.VK_R);
 			zRobot.keyRelease(KeyEvent.VK_R);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 
 		Boolean isVisible = SelNGBase.selenium.get().isVisible("id=DWT6");
@@ -144,7 +145,7 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		assertReport("true", isVisible.toString(),
 				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isNotVisible.toString(),
@@ -160,7 +161,7 @@ public class ReadingPaneTests extends CommonTest {
 		SelNGBase.selenium.get().click("link=" + localize(locator.logOff));
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		assertReport("true", isVisible.toString(),
 				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isNotVisible.toString(),
@@ -200,7 +201,7 @@ public class ReadingPaneTests extends CommonTest {
 
 		if (method.equals("byKeyboardShortCut")) {
 			SelNGBase.selenium.get().windowFocus();
-			Thread.sleep(3000);
+			SleepUtil.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
 			zRobot.keyRelease(KeyEvent.VK_M);
@@ -208,11 +209,11 @@ public class ReadingPaneTests extends CommonTest {
 			zRobot.keyRelease(KeyEvent.VK_P);
 			zRobot.keyPress(KeyEvent.VK_O);
 			zRobot.keyRelease(KeyEvent.VK_O);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zMessageItem.zVerifyIsUnRead(subject);
 		Boolean isNotVisible1 = SelNGBase.selenium.get().isVisible("id=DWT6");
 		Boolean isNotVisible2 = SelNGBase.selenium.get().isVisible("id=DWT7");
@@ -226,7 +227,7 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		assertReport("false", isNotVisible1.toString(),
 				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isNotVisible2.toString(),
@@ -242,7 +243,7 @@ public class ReadingPaneTests extends CommonTest {
 		SelNGBase.selenium.get().click("link=" + localize(locator.logOff));
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		assertReport("false", isNotVisible1.toString(),
 				"Verifying whether vertical scrollbar exists or not");
 		assertReport("false", isNotVisible2.toString(),
@@ -283,7 +284,7 @@ public class ReadingPaneTests extends CommonTest {
 
 		if (method.equals("byKeyboardShortCut")) {
 			SelNGBase.selenium.get().windowFocus();
-			Thread.sleep(3000);
+			SleepUtil.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
 			zRobot.keyRelease(KeyEvent.VK_M);
@@ -291,11 +292,11 @@ public class ReadingPaneTests extends CommonTest {
 			zRobot.keyRelease(KeyEvent.VK_P);
 			zRobot.keyPress(KeyEvent.VK_B);
 			zRobot.keyRelease(KeyEvent.VK_B);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 		}
 
 		obj.zMessageItem.zClick(subject);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zMessageItem.zVerifyIsRead(subject);
 		Boolean isNotVisible = SelNGBase.selenium.get().isVisible("id=DWT6");
 		Boolean isVisible = SelNGBase.selenium.get().isVisible("id=DWT7");
@@ -309,7 +310,7 @@ public class ReadingPaneTests extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 
 		SelNGBase.selenium.get().refresh();
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		assertReport("false", isNotVisible.toString(),
 				"Verifying whether horizontal scrollbar exists or not");
 		assertReport("true", isVisible.toString(),
@@ -325,7 +326,7 @@ public class ReadingPaneTests extends CommonTest {
 		SelNGBase.selenium.get().click("link=" + localize(locator.logOff));
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
-		Thread.sleep(3000);
+		SleepUtil.sleep(3000);
 		assertReport("false", isNotVisible.toString(),
 				"Verifying whether horizontal scrollbar exists or not");
 		assertReport("true", isVisible.toString(),

@@ -10,6 +10,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 
@@ -108,7 +109,7 @@ public class TaskSharingTests extends CommonTest {
 		zGoToApplication(applicationtab);
 		page.zTaskApp.zTaskCreateSimple(subject, "", "",
 				getLocalizedData_NoSpecialChar());
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zTaskItem.zExists(subject);
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, invitedusers, role, message, sharingnoteifany,

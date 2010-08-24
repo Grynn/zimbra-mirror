@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
@@ -110,17 +111,17 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 				"remote", "replied", "sent", "solo", "tofromccme", "tofromme",
 				"tome", "unflagged", "unforwarded", "unread", "unreplied" };
 		pressKeys("i");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			VerifyIsColonAutocompleteNotExists(autoComplete[i - 1], i);
 		}
 		pressKeys("s");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			VerifyIsColonAutocompleteNotExists(autoComplete[i - 1], i);
 		}
 		pressKeys(":");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			VerifyIsColonAutocompleteExists(autoComplete[i - 1], i);
 		}
@@ -150,29 +151,29 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 				"remote", "replied", "sent", "solo", "tofromccme", "tofromme",
 				"tome", "unflagged", "unforwarded", "unread", "unreplied" };
 		pressKeys("-");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			VerifyIsColonAutocompleteNotExists(autoComplete[i - 1], i);
 		}
 		pressKeys("i");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			VerifyIsColonAutocompleteNotExists(autoComplete[i - 1], i);
 		}
 		pressKeys("s");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			VerifyIsColonAutocompleteNotExists(autoComplete[i - 1], i);
 		}
 		pressKeys(":");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			VerifyIsColonAutocompleteExists(autoComplete[i - 1], i);
 		}
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		pressKeys("down");
 		pressKeys("enter");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String ccme = SelNGBase.selenium.get().getValue("xpath=//input[@class='search_input']");
 		assertReport(
 				"-is:ccme",
@@ -381,7 +382,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		zRobot.keyPress(KeyEvent.VK_A);
 		zRobot.keyRelease(KeyEvent.VK_CONTROL);
 		zRobot.keyRelease(KeyEvent.VK_A);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		pressKeys("-, i, s, :, r, e, a, d, enter");
 		obj.zButton.zClick("id=zb__Search__SEARCH_title");
 		VerifyMessageExists("Fwd: forwardedx, ccme, fromccmex, flagged, fromme, local, invite, remotex, received, sent, tofromccme, tofromme, solo, tome, unforwarded, unflagged, unreplied, unread");
@@ -413,29 +414,29 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 				"Trash", "parentfolder", "parentfolder/subfolder",
 				"parentfolder/subfolder/subsubxfolder", "remotefolder" };
 		pressKeys("i");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			page.zMailApp.zVerifyAutocompleteNotExistsForSearchBar(
 					autoComplete[i - 1], i, 1);
 		}
 		pressKeys("n");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			page.zMailApp.zVerifyAutocompleteNotExistsForSearchBar(
 					autoComplete[i - 1], i, 1);
 		}
 		pressKeys(":");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			page.zMailApp.zVerifyAutocompleteExistsForSearchBar(
 					autoComplete[i - 1], i, 1);
 		}
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		pressKeys("down");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		pressKeys("down");
 		pressKeys("enter");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String sent = SelNGBase.selenium.get().getValue("xpath=//input[@class='search_input']");
 		assertReport(
 				"in:" + (char) 34 + "sent" + (char) 34,
@@ -470,31 +471,31 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 				"Trash", "parentfolder", "parentfolder/subfolder",
 				"parentfolder/subfolder/subsubxfolder", "remotefolder" };
 		pressKeys("-");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			page.zMailApp.zVerifyAutocompleteNotExistsForSearchBar(
 					autoComplete[i - 1], i, 1);
 		}
 		pressKeys("i");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			page.zMailApp.zVerifyAutocompleteNotExistsForSearchBar(
 					autoComplete[i - 1], i, 1);
 		}
 		pressKeys("n");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			page.zMailApp.zVerifyAutocompleteNotExistsForSearchBar(
 					autoComplete[i - 1], i, 1);
 		}
 		pressKeys(":");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		for (int i = 1; i <= autoComplete.length; i++) {
 			page.zMailApp.zVerifyAutocompleteExistsForSearchBar(
 					autoComplete[i - 1], i, 1);
 		}
 		pressKeys("tab");
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		String inbox = SelNGBase.selenium.get()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
@@ -530,7 +531,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			obj.zEditField.zActivate("xpath=//input[@class='search_input']");
 			zRobot.keyPress(KeyEvent.VK_END);
 			zRobot.keyRelease(KeyEvent.VK_END);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 			pressKeys("u, n, *");
 			obj.zButton.zClick("id=zb__Search__SEARCH_title");
 			VerifyMessageExists("unread, unforwarded, unflagged, unreplied");
@@ -637,7 +638,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		zRobot.keyPress(KeyEvent.VK_A);
 		zRobot.keyRelease(KeyEvent.VK_CONTROL);
 		zRobot.keyRelease(KeyEvent.VK_A);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		pressKeys("-, i, n, :, i, n, b, tab");
 		obj.zButton.zClick("id=zb__Search__SEARCH_title");
 		VerifyMessageExists("drafts, "
@@ -667,7 +668,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		zRobot.keyPress(KeyEvent.VK_A);
 		zRobot.keyRelease(KeyEvent.VK_CONTROL);
 		zRobot.keyRelease(KeyEvent.VK_A);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		pressKeys("-, i, n, :, r, e, m, o, t, e, f, enter");
 		obj.zButton.zClick("id=zb__Search__SEARCH_title");
 		VerifyMessageNotExists("remotesubject, remotex");
@@ -713,13 +714,13 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 				|| value.contains("subsubxfolder")
 				|| value.contains("remotefolder")) {
 			pressKeys("i, n, :");
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			SelNGBase.selenium.get().clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
 					+ "')]//td[contains(text(), '" + value + "')]", "0,0");
 
 		} else {
 			pressKeys("i, s, :");
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			SelNGBase.selenium.get().clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
 					+ "')]//td[contains(text(), '" + value + "')]", "0,0");
 		}
@@ -815,7 +816,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 						ccArray1[0], subjectArray1[i], "commonBody");
 			}
 			obj.zButton.zClick(page.zMailApp.zGetMailIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 
 			// move junk message
 			obj.zMessageItem.zClick("junk");
@@ -824,7 +825,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 					localize(locator.moveMessage));
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.moveMessage));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			// Assert.assertEquals(
 			// "Message is not moved properly to different folder",
 			// obj.zMessageItem.zExistsDontWait("junk"), "false");
@@ -836,7 +837,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 					localize(locator.moveMessage));
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.moveMessage));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			// Assert.assertEquals(
 			// "Message is not moved properly to different folder",
 			// obj.zMessageItem.zExistsDontWait("parentfolder"), "false");
@@ -858,7 +859,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 					localize(locator.moveMessage));
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.moveMessage));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			// Assert.assertEquals(
 			// "Message is not moved properly to different folder",
 			// obj.zMessageItem.zExistsDontWait("subfolder"), "false");
@@ -877,7 +878,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 					localize(locator.moveMessage));
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.moveMessage));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			// Assert.assertEquals(
 			// "Message is not moved properly to different folder",
 			// obj.zMessageItem.zExistsDontWait("subsubxfolder"), "false");
@@ -906,7 +907,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			obj.zTextAreaField.zType(page.zComposeView.zToField,
 					SelNGBase.selfAccountName.get());
 			obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 
 			// readx
 			obj.zMessageItem.zClick("readx");
@@ -918,7 +919,7 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 					SelNGBase.selfAccountName.get());
 			obj.zEditField.zType(page.zComposeView.zSubjectField, "Repliedly");
 			obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 
 			// invite
 			zGoToApplication("Calendar");
@@ -928,14 +929,14 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 			pressKeys("delete");
 			obj.zButton.zClickInDlgByName(localize(locator.yes),
 					localize(locator.confirmTitle));
-			Thread.sleep(1500);
+			SleepUtil.sleep(1500);
 			obj.zButton.zClick(page.zComposeView.zSendIconBtn);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 
 			page.zComposeView.zNavigateToMailCompose();
 			obj.zEditField.zType(page.zComposeView.zSubjectField, "drafts");
 			obj.zButton.zClick(page.zComposeView.zSaveDraftsIconBtn);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 
 			// local (share folder)
 			ProvZCS.modifyAccount("remote@testdomain.com", "userPassword",

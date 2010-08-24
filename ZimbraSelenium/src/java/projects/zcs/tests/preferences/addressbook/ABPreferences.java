@@ -20,6 +20,7 @@ import projects.zcs.ui.ComposeView;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -142,7 +143,7 @@ public class ABPreferences extends CommonTest {
 				obj.zCheckbox.zClick(autoAddToEmailedContact[0]);
 		}
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"preferences should be saved");
 		actualValue = ProvZCS.getAccountPreferenceValue(accountName,
@@ -201,7 +202,7 @@ public class ABPreferences extends CommonTest {
 		obj.zButton.zClick(page.zABCompose.zMailTabIconBtn);
 		obj.zButton.zClick(page.zMailApp.zNewMenuIconBtn);
 		obj.zButton.zClick(localize(locator.toLabel));
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zFeatureMenu.zExistsDontWait(GAL);
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.selectAddresses));
@@ -220,7 +221,7 @@ public class ABPreferences extends CommonTest {
 		// keyToPress.keyRelease(KeyEvent.VK_ESCAPE);
 		// } else {
 		// String infoDlgExist;
-		// Thread.sleep(1000);
+		// SleepUtil.sleep(1000);
 		// infoDlgExist = obj.zDialog
 		// .zExistsDontWait(localize(locator.infoMsg));
 		// if (infoDlgExist.equals("true")) {

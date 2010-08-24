@@ -11,6 +11,7 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.zcs.clients.ProvZCS;
@@ -240,7 +241,7 @@ public class FilterTests extends CommonTest {
 			zGoToApplication("Preferences");
 			zGoToPreferences("Filters");
 			obj.zButton.zClick(zRunFilterButton);
-			Thread.sleep(2000);
+			SleepUtil.sleep(2000);
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.infoMsg));
 			obj.zButton.zClickInDlgByName(localize(locator.cancel),
@@ -379,7 +380,7 @@ public class FilterTests extends CommonTest {
 		obj.zListItem.zClick(filterName);
 		for (int i = 0; i < 3; i++) {
 			obj.zButton.zClick(localize(locator.filterMoveUp));
-			Thread.sleep(500);
+			SleepUtil.sleep(500);
 		}
 
 		/*
@@ -394,7 +395,7 @@ public class FilterTests extends CommonTest {
 		MailApp.ClickCheckMailUntilMailShowsUp(FolderName, conditionValue1);
 		obj.zButton.zClick(page.zMailApp.zGetMailIconBtn);
 		obj.zFolder.zClick(newFolderName);
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zMessageItem.zNotExists(conditionValue1);
 
 		SelNGBase.needReset.set(false);
@@ -487,19 +488,19 @@ public class FilterTests extends CommonTest {
 				localize(locator.stopFilterProcessing));
 
 		obj.zListItem.zClick(subject4);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zListItem.zShiftClick(subject1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		obj.zButton.zClick(zRunFilterButton);
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zCheckbox.zActivate(zInboxChkBoxInChooseFolderDlg);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("FF")
 				|| ZimbraSeleniumProperties.getStringProperty("browser").equals("FF3")) {
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.chooseFolder));
 		}
-		Thread.sleep(2000);
+		SleepUtil.sleep(2000);
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.infoMsg));
 
@@ -738,13 +739,13 @@ public class FilterTests extends CommonTest {
 				.assertNotSame(filterSavedToastMessage,
 						localize(locator.filtersSaved),
 						"Filter action related toast message not shown properly after creating filter");
-		Thread.sleep(2000); /*
+		SleepUtil.sleep(2000); /*
 							 * test fails, because it tries to verify filter
 							 * after pressing ok button
 							 */
 		zGoToApplication("Preferences");
 		obj.zTab.zClick(localize(locator.filterRules));
-		Thread.sleep(1500);
+		SleepUtil.sleep(1500);
 		obj.zCheckbox.zExists(filterName);
 		obj.zCheckbox.zVerifyIsChecked(filterName);
 	}
@@ -762,7 +763,7 @@ public class FilterTests extends CommonTest {
 
 			obj.zButton.zClickInDlgByName(localize(locator.ok),
 					localize(locator.createNewFolder));
-			Thread.sleep(1000);
+			SleepUtil.sleep(1000);
 			obj.zFolder.zExistsInDlgByName(fileIntoNewFolder,
 					localize(locator.chooseFolder));
 			obj.zFolder.zClickInDlgByName(fileIntoNewFolder,

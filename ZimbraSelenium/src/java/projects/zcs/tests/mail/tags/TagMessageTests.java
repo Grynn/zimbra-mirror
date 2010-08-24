@@ -11,6 +11,7 @@ import projects.zcs.ui.MailApp;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
 
 /**
  * @author Jitesh Sojitra
@@ -79,17 +80,17 @@ public class TagMessageTests extends CommonTest {
 		MailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		zCreateTag(tag1);
 		obj.zMessageItem.zClick(subject1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zVerifyIsTagged(subject1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 
 		zRenameTag(tag1, newTag1);
 		obj.zFolder.zNotExists(tag1);
 		obj.zFolder.zClick(newTag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zVerifyIsTagged(subject1);
 
 		zDeleteTag(newTag1);
@@ -125,38 +126,38 @@ public class TagMessageTests extends CommonTest {
 		MailApp.ClickCheckMailUntilMailShowsUp(subject2);
 		zCreateTag(tag1);
 		obj.zMessageItem.zClick(subject1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn);
 		obj.zMenuItem.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zVerifyIsTagged(subject1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zClick(subject2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zVerifyIsTagged(subject2);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zExists(subject1);
 		assertReport("false", obj.zMessageItem.zExistsDontWait(subject2),
 				"Verify message2 not exists");
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zExists(subject2);
 		assertReport("false", obj.zMessageItem.zExistsDontWait(subject1),
 				"Verify message1 not exists");
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("true", obj.zMessageItem.zExistsDontWait(subject1),
 				"Verify message1 not exists");
 		assertReport("true", obj.zMessageItem.zExistsDontWait(subject2),
 				"Verify message2 not exists");
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("false", obj.zMessageItem.zExistsDontWait(subject1),
 				"Verify message1 not exists");
 		assertReport("false", obj.zMessageItem.zExistsDontWait(subject2),
@@ -166,7 +167,7 @@ public class TagMessageTests extends CommonTest {
 		obj.zMessageItem.zClick(subject2);
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn);
 		obj.zMenuItem.zClick(localize(locator.removeTag));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn);
 		obj.zMenuItem.zIsEnabled(localize(locator.newTag));
 		obj.zMenuItem.zIsDisabled(localize(locator.removeTag));
@@ -194,28 +195,28 @@ public class TagMessageTests extends CommonTest {
 		ProvZCS.injectMessage(to, recipients, cc, subject1, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		obj.zMessageItem.zClick(subject1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag1);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zVerifyIsTagged(subject1);
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn);
 		obj.zMenuItem.zNotExists(tag1);
 		obj.zMenuItem.zClick(localize(locator.newTag));
 		obj.zEditField.zTypeInDlg(localize(locator.tagName), tag2);
 		obj.zButton.zClickInDlg(localize(locator.ok));
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zVerifyIsTagged(subject1);
 		obj.zButton.zClick(page.zMailApp.zTagIconBtn);
 		obj.zMenuItem.zNotExists(tag1);
 		obj.zMenuItem.zNotExists(tag2);
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zExists(subject1);
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zExists(subject1);
 
 		SelNGBase.needReset.set(false);
@@ -251,15 +252,15 @@ public class TagMessageTests extends CommonTest {
 				"//td[contains(@id, 'zti__main_Mail') and contains(text(), '"
 						+ tag1 + "')]");
 		obj.zMessageItem.zVerifyIsTagged(subject1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(page.zMailApp.zTrashFldr);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		assertReport("false", obj.zMessageItem.zExistsDontWait(subject1),
 				"Verify message1 not exists");
 		assertReport("false", obj.zMessageItem.zExistsDontWait(subject2),
 				"Verify message2 not exists");
 		obj.zFolder.zClick(tag1);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zExists(subject1);
 
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
@@ -269,11 +270,11 @@ public class TagMessageTests extends CommonTest {
 				"//td[contains(@id, 'zlif__CLV__') and contains(text(), '"
 						+ subject2 + "')]");
 		obj.zMessageItem.zVerifyIsTagged(subject2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zFolder.zClick(tag2);
-		Thread.sleep(1000);
+		SleepUtil.sleep(1000);
 		obj.zMessageItem.zExists(subject2);
 		assertReport("false", obj.zMessageItem.zExistsDontWait(subject1),
 				"Verify message1 not exists");
