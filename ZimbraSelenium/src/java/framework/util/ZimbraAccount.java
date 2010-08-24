@@ -167,6 +167,7 @@ public class ZimbraAccount {
 			        	"<a n='zimbraFeatureReadReceiptsEnabled'>TRUE</a>" +
 			        	"<a n='zimbraPrefCalendarAlwaysShowMiniCal'>FALSE</a>" +
 			        	"<a n='zimbraPrefSkin'>beach</a>" +
+			        	"<a n='zimbraPrefComposeFormat'>html</a>" +
 			        	//"<a n='zimbraPrefReplyIncludeOriginalText'>includeBodyAndHeaders</a>" +
 			        	//"<a n='zimbraPrefForwardIncludeOriginalText'>includeBodyAndHeaders</a>" +
 			        "</CreateAccountRequest>");
