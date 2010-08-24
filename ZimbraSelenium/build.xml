@@ -175,6 +175,14 @@
 	</target>
 
 
+	<target name="Run - ExecuteHarnessMain" depends="jar">
+		<property name="pattern" value="projects.zcs.tests"/>
+		<echo>STAF: Executing ${pattern}</echo>
+		<java classname="framework.core.ExecuteHarnessMain"          classpathref="class.path"          fork="true" failonerror="true">
+			<arg line="-j ${dist.lib.dir}/zimbraselenium.jar -p ${pattern} -l conf/log4j.properties"/>
+ 		</java>
+	</target>
+		
 	<!-- TARGETS FOR REMOTE MACHINES -->
 	
 	<target name="seleniumjar" depends="clean,copy-data,build-init" description="Creates the jar file">
