@@ -58,6 +58,14 @@ public class AppointmentActionTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
+	/**
+	 * Sending invitation from persona using just from address and from & alias
+	 * address. #Test1: Steps, 1.Create persona with ONLY from address 2.Compose
+	 * appointment and invite to user2 3.Login to user2 and verify received mail
+	 * with persona from address. #Test2: Steps, 1.Create persona with from &
+	 * alias address 2.Compose appointment and invite to user2 3.Login to user2
+	 * and verify received mail with persona from & alias address.
+	 */
 	@Test(dataProvider = "dataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void sendingInvitationFromPersona(String subject,
 			String personaName, String alias) throws Exception {
