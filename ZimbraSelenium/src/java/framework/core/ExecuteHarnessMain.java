@@ -3,9 +3,11 @@
  */
 package framework.core;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -32,6 +34,10 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
 import framework.util.HarnessException;
+import framework.util.SkipTestClass;
+import framework.util.SummaryReporter;
+import framework.util.TestStatusReporter;
+import framework.util.ZimbraSeleniumProperties;
 
 
 
@@ -42,6 +48,14 @@ import framework.util.HarnessException;
 public class ExecuteHarnessMain {
 	private static Logger logger = LogManager.getLogger(ExecuteHarnessMain.class);
 	
+	/**
+	 * This token must appear in the class package name.
+	 * The next subpackage after the token is the TestNG test name
+	 * All subsequent packages are assumed to be tests
+	 * Ex: com.zimbra.qa.seleneium.projects.zcs.tests.addressbook.CreateContact.java
+	 * addressbook will be the test name
+	 * CreateContact.java should contain TestNG test methods
+	 */
 	public static String TEST_TOKEN = ".tests.";
 	
 	/**
@@ -54,18 +68,44 @@ public class ExecuteHarnessMain {
 	 */
 	public String classfilter = null;
 
+	/**
+	 * The list of groups to execute
+	 */
+	public List<String> groups = Arrays.asList("always", "sanity");
+
+
+	/**
+	 * The suite verbosity
+	 */
+	public int verbosity = 10;
+	
+	/**
+	 * Where output is logged
+	 */
+	public String testoutputfoldername = null;
+	
+	/**
+	 * Where conf folder is located
+	 */
+	public String workingfoldername = ".";
+	
+	
 	// A list of classes to execute using TestNG from the jarfile
-	protected ArrayList<String> classes = null;
+	protected List<String> classes = null;
+	
+	// A list of test methods to skip
+	protected List<SkipTestClass> skipClasses = null;
+
 	
 	/**
 	 * Determine all the classes in the specified jarfile filtered by a regex
 	 * @param jarfile The jarfile to inspect
 	 * @param pattern A regex Pattern to match.  Use null for all classes
 	 */
-	private static ArrayList<String> getClassesFromJar(File jarfile, Pattern pattern) throws FileNotFoundException, IOException {
+	private static List<String> getClassesFromJar(File jarfile, Pattern pattern) throws FileNotFoundException, IOException {
 		logger.debug("getClassesFromJar "+ jarfile.getAbsolutePath());
 		
-		ArrayList<String> classes = new ArrayList<String>();
+		List<String> classes = new ArrayList<String>();
 		
 		JarInputStream jarFile = new JarInputStream(new FileInputStream(jarfile));
 		while (true) {
@@ -125,10 +165,42 @@ public class ExecuteHarnessMain {
 
 		return (testname);
 	}
+	
+	private static List<SkipTestClass> loadSkipTestsDetails(File skipFile) throws IOException {
 
-	protected ArrayList<String> getXmlTestNames() throws HarnessException {
+		List<SkipTestClass> skips = new ArrayList<SkipTestClass>();
+		BufferedReader br = null;
 		
-		ArrayList<String> testnames = new ArrayList<String>();
+		try {
+			
+			br = new BufferedReader(new FileReader(skipFile));
+
+			String str = null;
+			while ((str = br.readLine()) != null) {
+				
+				if (str.indexOf("#") >= 0 || str.equals(""))
+					continue;
+				
+				// #className;methodName;locale;browser;bugnumber;remark
+				skips.add(new SkipTestClass(str));
+
+			}
+
+		} finally {
+			if ( br != null )
+				br.close();
+		}
+
+		return (skips);
+
+	}
+
+
+
+
+	protected List<String> getXmlTestNames() throws HarnessException {
+		
+		List<String> testnames = new ArrayList<String>();
 		
 		// Split the test list into tests based on the 'next' package
 		// i.e. projects.zcs.tests.addressbook goes into the "addressbook" test
@@ -157,11 +229,13 @@ public class ExecuteHarnessMain {
 		// Only one suite per run in the zimbra process (subject to change)
 		XmlSuite suite = new XmlSuite();
 		suite.setName("zimbra");
+		suite.setVerbose(verbosity);
 		
 		// Add all the names per the list of classes
 		for (String testname : getXmlTestNames()) {
 			XmlTest test = new XmlTest(suite);
 			test.setName(testname);
+			test.setIncludedGroups(groups);
 		}
 		
 		// Add all the classes per the appropriate test name
@@ -169,14 +243,17 @@ public class ExecuteHarnessMain {
 			String testname = getTestName(c);
 			for (XmlTest test : suite.getTests()) {
 				if ( test.getName().equals(testname)) {
-					test.getXmlClasses().add(new XmlClass(c));
+					// TODO: process skipped methods
+
+					XmlClass x = new XmlClass(c);
+					test.getXmlClasses().add(x);
+					
 					break; // back to the classes list
 				}
 			}
 		}
 				
-		logger.debug("Suite:");
-		logger.debug(suite.toXml());
+		LogManager.getLogger("xmlsuite").info(suite.toXml());
 		
 		return (Arrays.asList(suite));
 	}
@@ -198,13 +275,25 @@ public class ExecuteHarnessMain {
 			// Build the list of XmlSuites
 			List<XmlSuite> suites = getXmlSuiteList();
 			
-			// Run!
+			// Determine which tests to skip
+			skipClasses = loadSkipTestsDetails(new File(workingfoldername + "/conf/skipTests.txt"));
+			
+			// Create the TestNG test runner
 			TestNG ng = new TestNG();
+			
+			// Configure the runner
 			ng.setXmlSuites(suites);
+			ng.addListener(new SummaryReporter("AJAX"));
+			ng.addListener(new TestStatusReporter("AJAX")); // TODO: This shouldn't throw Exception
+			ng.setOutputDirectory(testoutputfoldername);
+
+			// Run!
 			ng.run();
-		
+					
 		} catch (HarnessException e) {
 			logger.error("Unable to execute tests", e);
+		} catch (Exception e) {
+			logger.error("Fix TestStatusReporter constructor to not throw raw Exception", e);
 		}
 		
 		logger.info("Execute tests ... completed");
@@ -223,7 +312,11 @@ public class ExecuteHarnessMain {
         options.addOption(new Option("h", "help", false, "print usage"));
         options.addOption(new Option("l", "log4j", true, "log4j file containing log4j configuration"));
         options.addOption(new Option("j", "jarfile", true, "jarfile containing test cases"));
-        options.addOption(new Option("p", "pattern", true, "class filter, i.e. projects.project.tests.*"));
+        options.addOption(new Option("p", "pattern", true, "class filter regex, i.e. projects.zcs.tests."));
+        options.addOption(new Option("g", "groups", true, "comma separated list of groups to execute (always, sanity, smoke, full)"));
+        options.addOption(new Option("v", "verbose", true, "set suite verbosity"));
+        options.addOption(new Option("o", "output", true, "output foldername"));
+        options.addOption(new Option("w", "working", true, "current working foldername"));
 
         // Set required options
         options.getOption("j").setRequired(true);
@@ -239,6 +332,24 @@ public class ExecuteHarnessMain {
 	        	return false;
 	        }
 	        
+	        if ( cmd.hasOption('o') ) {
+	        	this.testoutputfoldername = cmd.getOptionValue('o');
+	        } else {
+	        	this.testoutputfoldername = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") + "/AJAX";
+	        }
+	        
+	        // Make sure the test output folder exists, create it if not
+	        File outputfolder = new File(testoutputfoldername);
+	        if ( !outputfolder.exists() ) {
+	        	outputfolder.mkdirs();
+	        }
+	        try {
+				this.testoutputfoldername = outputfolder.getCanonicalPath();
+			} catch (IOException e) {
+				logger.warn("Unable to get canonical path of the test output folder ("+ e.getMessage() +").  Using absolute path.");
+				this.testoutputfoldername = outputfolder.getAbsolutePath();
+			}
+	        	
 	        if ( cmd.hasOption('l') ) {
 	        	PropertyConfigurator.configure(cmd.getOptionValue('l'));
 	        } else {
@@ -252,6 +363,21 @@ public class ExecuteHarnessMain {
 	        if ( cmd.hasOption('p') ) {
 	        	this.classfilter = cmd.getOptionValue('p'); 
 	        }
+	        
+	        if ( cmd.hasOption('g') ) {
+	        	// Remove spaces and split on commas
+	        	String[] values = cmd.getOptionValue('g').replaceAll("\\s+", "").split(",");
+	        	this.groups = Arrays.asList(values);
+	        }
+	        
+	        if ( cmd.hasOption('v') ) {
+	        	this.verbosity = Integer.parseInt(cmd.getOptionValue('v'));
+	        }
+	        
+	        if ( cmd.hasOption('w') ) {
+	        	workingfoldername = cmd.getOptionValue('w');
+	        }
+	        
 	        
         } catch (ParseException e) {
     		HelpFormatter formatter = new HelpFormatter();
@@ -268,11 +394,16 @@ public class ExecuteHarnessMain {
 	 * @throws FileNotFoundException 
 	 * @throws ParseException 
 	 */
-	public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {
-		
-		ExecuteHarnessMain harness = new ExecuteHarnessMain();
-		if ( harness.parseArgs(args) ) {
-			harness.execute();
+	public static void main(String[] args) {
+    	BasicConfigurator.configure();
+
+		try {
+			ExecuteHarnessMain harness = new ExecuteHarnessMain();
+			if ( harness.parseArgs(args) ) {
+				harness.execute();
+			}
+		} catch (Exception e) {
+			logger.error(e, e);
 		}
 		
 	}

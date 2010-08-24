@@ -9,7 +9,7 @@ public class SkipTestClass {
     public String bugs = "";
     public String remark = "";
 
-    public SkipTestClass(String skipTestInfo) throws Exception {
+    public SkipTestClass(String skipTestInfo)  {
 	// skipTestInfo should be of the format:
 	//CLASS:projects.zcs.tests.tasks.Tasks;METHOD:createSimpleTaskInTaskList;LOCALE:all;BROWSERS:na;BUGS:1234;REMARK:script issue
 	String[] temp = skipTestInfo.split(";");
