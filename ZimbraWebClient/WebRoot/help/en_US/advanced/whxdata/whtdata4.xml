@@ -1,37 +1,13 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Sharing  folders" url="Sharing/Sharing_a_folder.htm" />
-<item name="Managing items you share" url="Sharing/Managing_items_you_share.htm" />
-<book name="Sharing Mail Folders" >
-  <item name="Sharing mail folders" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-  <item name="Sharing your mailbox" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="Revoking access to a shared folder" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-  <item name="Accepting access to the shared mailbox folder" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-  <item name="Working within a shared mail folder" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-</book>
-<book name="Sharing Calendars" >
-  <item name="Sharing your calendar" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="Giving admin rights for shared Calendars" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-  <item name="Giving manager rights for shared Calendars" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
-  <item name="Accepting access to shared calendar" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
-  <item name="Declining a calendar share request" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
-</book>
-<book name="Sharing Address Books" >
-  <item name="Sharing your address book" url="Contacts/Sharing_your_Address_Book.htm" />
-</book>
-<book name="Sharing Task Lists" >
-  <item name="Share your task list" url="Tasks/Share_your_Task_folder.htm" />
-  <item name="Accepting access to shared  task lists" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
-</book>
-<book name="Sharing Document Notebooks" >
-  <item name="Sharing Documents notebooks" url="Documents/Sharing_Notebooks.htm" />
-  <item name="Accepting access to a Documents notebook" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-  <item name="Linking to a shared notebook" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-  <item name="Changing or cancelling access to your Documents folder" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</book>
-<book name="Sharing Briefcase Folders" >
-  <item name="Sharing your Briefcase" url="Briefcase/Sharing_your_Briefcase.htm" />
-</book>
+<item name="Using tags to classify  messages and contacts" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+<item name="Assigning Tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+<item name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
+<item name="Flagging an email message" url="Tags_and_flags/Flagging_an_email_message.htm" />
+<item name="Using folders" url="Navigation_folders_and_tips/about_folders.htm" />
+<item name="Renaming folders" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<item name="Deleting folders" url="Navigation_folders_and_tips/deleting_folders.htm" />
+<item name="Creating custom folders" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
 
 </tocdata>

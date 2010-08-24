@@ -1,33 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Setting up your Zimbra Web Client account</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-ol.whs9 { list-style:decimal; }
-ul.whs10 { list-style:disc; }
-p.whs11 { margin-left:80px; }
-p.whs12 { margin-left:40px; }
-p.whs13 { margin-left:60px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -38,26 +18,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Setting Up Yahoo! Zimbra Desktop\nSetting up your Zimbra Web Client account");
+	addTocInfo("Setting Up  Zimbra Desktop\nSetting up a Zimbra Web Client account");
 addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
@@ -67,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up Yahoo! Zimbra Desktop</a> &gt; Setting up your Zimbra Web Client account</p>");
+document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up  Zimbra Desktop<\/a> &gt; Setting up a Zimbra Web Client account<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -89,98 +83,101 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
+
+
 <h1>Setting up your Zimbra Web Client 
  account</h1>
-<p>Before you can use Yahoo! Zimbra Desktop, 
- you must first enter settings for your existing account. &nbsp;The 
- first time you open Yahoo! Zimbra Desktop 
- you are asked to set up an account. &nbsp;You can set 
- up additional accounts at any time.</p>
+<p>Before you can use Zimbra Desktop 
+ , you must first enter settings for your existing account. &#160;The first 
+ time you open Zimbra Desktop 
+ you are asked to set up an account. &#160;You can set up additional accounts 
+ at any time.</p>
 <p>Before you begin to set up an account, make sure you are connected to 
  the Internet.</p>
-<ol type="1" class="whs9">
-	<li class=p><p>Open Yahoo! Zimbra Desktop 
- and in the right top corner, click <span style="font-weight: bold;"><B>Account 
- Setup</B></span>. &nbsp;</p></li>
-	<li class=p><p>Select Zimbra Account. The Zimbra Account 
- Setup page displays. Enter the following information.</p></li>
-	<ul type="disc" class="whs10">
-		<li class=p><p><span style="font-weight: bold;"><B>Account Name</B></span>. 
- This is the name that displays as the account name in Zimbra Desktop. 
- Each account must have a different name. For example, as this is a ZWC 
- account, you could call it <strong>Zimbra</strong>.</p></li>
-		<li class=p><p><strong style="font-weight: bold;">Email Address</strong>. 
- Enter your ZWC account email address</p></li>
-		<li class=p><p><strong style="font-weight: bold;">Password</strong>. 
- Enter the password that you enter to log into your ZWC account.</p></li>
-		<li class=p><p><strong style="font-weight: bold;"><span style="font-weight: bold;"><B>Incoming 
- Mail </B></span>Server</strong>. Enter the Zimbra server address. This is 
- typically in the form of <strong>mail.example.com</strong>. 
- This is the server that your account is on.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Security</B></span>. 
- Check <strong>Use SSL encryption when accessing this 
- server <span style="font-weight: normal;">&nbsp;if you 
- always should use an encrypted connection. &nbsp;If you 
- are uncertain about whether to select this option, contact your system 
- administrator.</span></strong></p></li>
-		<li class=p><p><strong><span style="font-weight: normal;">F</span></strong>rom 
- <strong>Synchronize Settings</strong>, select how often Yahoo! Zimbra Desktop should get data from 
- your account. The default is to synchronize every 15 minutes.</p></li>
-	</ul>
+<ol type="1">
+	<li class="p"><p>Open Zimbra Desktop 
+	 and in the right top corner, click <span style="font-weight: bold;"><b>Setup</b></span>. 
+	 &#160;</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>ADD NEW ACCOUNT</b></span>. 
+	 &#160;In the Account Type list, select Zimbra. The Zimbra Account 
+	 Setup page displays. Enter the following information.</p>
+	<ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>Account Name</b></span>. 
+		 This is the name that displays as the account name in Zimbra Desktop. 
+		 Each account must have a different name. For example, as this 
+		 is a ZWC account, you could call it <strong>Zimbra</strong>.</p></li>
+		<li class="p"><p><strong style="font-weight: bold;">Email Address</strong>. 
+		 Enter your ZWC account email address</p></li>
+		<li class="p"><p><strong style="font-weight: bold;">Password</strong>. 
+		 Enter the password that you enter to log into your ZWC account.</p></li>
+		<li class="p"><p><strong style="font-weight: bold;"><span style="font-weight: bold;"><b>Incoming 
+		 Mail</b></span> Server</strong>. Enter the Zimbra server address. 
+		 This is typically in the form of <strong>mail.example.com</strong>. 
+		 This is the server that your account is on.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Security</b></span>. 
+		 <span>I</span><strong><span style="font-weight: normal;">f you 
+		 always should use an encrypted connection, c</span></strong>heck 
+		 <strong>Use SSL encryption when accessing 
+		 this server<span style="font-weight: normal;">. If you are uncertain 
+		 about whether to select this option, contact your system administrator.</span></strong></p></li>
+		<li class="p"><p><strong><span style="font-weight: normal;">F</span></strong>rom 
+		 <strong>Synchronize Settings</strong>, select how often Zimbra Desktop should get 
+		 data from your account. The default is to check messages and sync 
+		 as new mail arrives. </p></li>
+	</ul></li>
 </ol>
-<p class="whs11">If you select <span style="font-weight: bold;"><B>manually</B></span>, 
- you must click <span style="font-weight: bold;"><B>Send/Receive</B></span> &nbsp;on 
- the Yahoo! Zimbra Desktop toolbar to synchronize 
- your account with the Zimbra server. </p>
-<p class="whs11">If you select too short of time, such as 
+<p style="margin-left: 80px;">If you select <span style="font-weight: bold;"><b>manually</b></span>, 
+ you must click <span style="font-weight: bold;"><b>Send/Receive</b></span> on 
+ the Zimbra Desktop 
+ toolbar to synchronize your account with the Zimbra 
+ server.</p>
+<p style="margin-left: 80px;">If you select too short of time, such as 
  1 minute, your computer’s performance could be impacted.</p>
-<p class="whs11">You can change this setting any time by clicking 
- Account Setup and editing the account.</p>
-<ol start="3" type="1" class="whs9">
-	<li style="margin-left: -20px;" class=p><p class="whs12">When 
- you are finished, click <span style="font-weight: bold;"><B>Test &amp; Save</B></span>.</p></li>
+<p style="margin-left: 80px;">You can change this setting any time by clicking 
+ Setup and editing the account.</p>
+<ol start="3" type="1">
+	<li class="p"><p style="margin-left: 0px;">When you are finished, click 
+	 <span style="font-weight: bold;"><b>Validate and Save</b></span>.</p></li>
 </ol>
-<p class="whs13">Yahoo! Zimbra Desktop 
+<p style="margin-left: 40px;">Zimbra Desktop 
  validates your account information. If your account is successfully validated, 
  you see the <strong>Service Created</strong> dialog. If your account is 
  not successfully validated, you are returned to the Account Setup dialog 
  so you can review and make corrections.</p>
-<ol start="4" type="1" class="whs9">
-	<li style="margin-left: -20px;" class=p><p class="whs12">To 
- open Desktop, click<span style="font-weight: bold;"><B> Launch Yahoo! Zimbra Desktop</B></span>. You can start 
- to work in Yahoo! Zimbra Desktop as your accounts are 
- being <a href="Synchronize_your_account_to_Zimbra_Desktop.htm">synchronized</a>.</p></li>
+<ol start="4" type="1">
+	<li class="p"><p style="margin-left: 0px;">To open Desktop, click <span 
+	 style="font-weight: bold;"><b>Launch Desktop</b></span>. You can start to 
+	 work in Zimbra Desktop 
+	 as your accounts are being <a href="Synchronize_your_account_to_Zimbra_Desktop.htm">synchronized</a>.</p></li>
 </ol>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up Yahoo! Zimbra Desktop</a> &gt; Setting up your Zimbra Web Client account</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

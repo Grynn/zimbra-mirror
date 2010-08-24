@@ -1,14 +1,62 @@
-<?xml version='1.0' encoding='utf-8' ?>
+﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
-<key name="overview pane" >
-  <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
+<key name="meetings" >
+  <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="menus, right-click" >
+  <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="message view" >
+  <topic name="Managing your email message view" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="message, return receipt" >
+  <topic name="Requesting a Return Receipt" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+</key>
+<key name="messages, vacation" >
+  <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Microsoft Exchange IMAP account setup" >
+  <topic name="Setting up POP/IMAP accounts" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
+<key name="mini calendar" >
+  <topic name="Viewing Calendar Week Numbers" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
+<key name="Moving" >
+  <topic name="Moving mail messages between folders" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="mail messages between folders" >
+    <topic name="Moving mail messages between folders" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="moving messages to a folder" >
+  <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
+</key>
+<key name="navigation, keyboard" >
+  <topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="new messages" >
+  <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="notebook" >
+  <topic name="Working in Notebooks" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="notebook pages" >
+  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="offline, working" >
+  <topic name="Working Offline" url="Zdesktop/z-Working_Offline.htm" />
+</key>
+<key name="option, vacation message" >
+  <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="optional attendance" >
+  <topic name="Using the Schedule tab when creating a appointment" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="options, new mail notification" >
+  <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
 </key>
 <key name="pages, Documents" >
   <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="password" >
-  <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
 </key>
 <key name="persona" >
   <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
@@ -47,6 +95,12 @@
 <key name="private appointments" >
   <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
+<key name="private calendar event" >
+  <topic name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="public/private calendar events" >
+  <topic name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
 <key name="Query language description" >
   <topic name="Query language description" url="Search/query_language_description.htm" />
 </key>
@@ -62,11 +116,20 @@
 <key name="reading pane" >
   <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
+<key name="reading pane view" >
+  <topic name="Managing your email message view" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="reading pane, turning off/on" >
+  <topic name="Managing your email message view" url="conversations/conversation_list_view.htm" />
+</key>
 <key name="reading pane, turning on or off" >
   <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="receiving mail" >
   <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="recipients, search" >
+  <topic name="Searching for Recipients " url="Search/Searching_for_Recipients_.htm" />
 </key>
 <key name="Recovering" >
   <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
@@ -76,9 +139,6 @@
 </key>
 <key name="recurring appointments, changing" >
   <topic name="Changing recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
-</key>
-<key name="remember me on this computer" >
-  <topic name="Logging on and off" url="Userspecific/logging_on_and_off.htm" />
 </key>
 <key name="reminders" >
   <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
@@ -92,11 +152,11 @@
 <key name="resend" >
   <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
-<key name="Restore Default Options" >
-  <topic name="Restore Default Options" url="Userspecific/the__restore_defaults__button.htm" />
+<key name="return receipt" >
+  <topic name="Requesting a Return Receipt" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
-<key name="restoring default options" >
-  <topic name="Restore Default Options" url="Userspecific/the__restore_defaults__button.htm" />
+<key name="revoke shared mail folders access" >
+  <topic name="Revoking a access to a shared folder" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </key>
 <key name="rich text editor for Document pages" >
   <topic name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
@@ -129,6 +189,9 @@
     <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
   </key>
 </key>
+<key name="search for recipients" >
+  <topic name="Searching for Recipients " url="Search/Searching_for_Recipients_.htm" />
+</key>
 <key name="search queries" >
   <topic name="Building search queries" url="Search/building_search_queries.htm" />
   <topic name="Saving search queries" url="Search/saving_search_queries.htm" />
@@ -149,13 +212,10 @@
   <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
 <key name="shortcut keys" >
-  <topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+  <topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="signature" >
   <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="sorting contents pane columns" >
-  <topic name="Sorting conversations" url="Navigation_folders_and_tips/sorting_conversations.htm" />
 </key>
 <key name="sorting incoming email" >
   <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
@@ -188,11 +248,11 @@
 <key name="Traditional View" >
   <topic name="Traditional View" url="Navigation_folders_and_tips/Traditional_View.htm" />
 </key>
-<key name="Trash folder" >
-  <topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
 <key name="Undeliverable mail" >
   <topic name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="URL in signatures" >
+  <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
 </key>
 <key name="User Interface Features" >
   <topic name="User Interface Features and Shortcuts" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
@@ -208,6 +268,12 @@
 </key>
 <key name="view reading pane" >
   <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="W in mini calendar" >
+  <topic name="Viewing Calendar Week Numbers" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
+<key name="week number" >
+  <topic name="Viewing Calendar Week Numbers" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="wildcard, using in search" >
   <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />

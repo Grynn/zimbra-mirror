@@ -64,6 +64,9 @@
 <key name="fonts" >
   <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
+<key name="forget" >
+  <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
 <key name="formatting with HTML" >
   <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
@@ -186,9 +189,6 @@
 </key>
 <key name="tags" >
   <topic name="Assigning Tags to messages and contacts" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
-</key>
-<key name="Trash folder" >
-  <topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="Undeliverable mail" >
   <topic name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />

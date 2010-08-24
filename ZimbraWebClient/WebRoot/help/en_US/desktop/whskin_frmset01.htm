@@ -2,6 +2,7 @@
 <html>
 <head>
 </head>
+
 <script type="text/javascript" language="javascript" src="whver.js"></script>
 <script type="text/javascript" language="javascript" src="whutils.js"></script>
 <script type="text/javascript" language="javascript" src="whmsg.js"></script>
@@ -49,7 +50,7 @@ if (gnType == 4)
 	strHTML += "</frameset>";
 }
 else
-	strHTML += "<frameset cols=\"220,*\" hostof=\"parent:minibar_navpane|topic!startpage:no\" frameborder=\"1\" id=\"whPfset\"><frame src=\"whskin_frmset010.htm\" id=\"minibar_navpane\" frameborder=\"0\" border=\"0\" scrolling=\"auto\" marginheight=\"0\" marginwidth=\"0\"></frame><frame src=\""+strDefaultTopic+"\" id=\"topic\" frameborder=\"1\" border=\"1\" scrolling=\"auto\" title=\"Topic\" name=\"bsscright\"></frame></frameset>";
+	strHTML += "<frameset cols=\"220,*\" hostof=\"parent:minibar_navpane|topic!startpage:no\" frameborder=\"1\" id=\"whPfset\"> <frame src=\"whskin_frmset010.htm\" id=\"minibar_navpane\" frameborder=\"0\" border=\"0\" scrolling=\"auto\" marginheight=\"0\" marginwidth=\"0\"></frame> <frame src=\""+strDefaultTopic+"\" id=\"topic\" frameborder=\"1\" border=\"1\" scrolling=\"auto\" title=\"Topic\" name=\"bsscright\"></frame></frameset>";
 document.write(strHTML);
 // handle show pane, hide pane and query pane status message.
 RegisterListener2(this, WH_MSG_RESIZEPANE);

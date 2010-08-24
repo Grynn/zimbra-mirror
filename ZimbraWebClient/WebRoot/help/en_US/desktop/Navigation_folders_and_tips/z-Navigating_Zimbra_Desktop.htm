@@ -1,54 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Navigating Zimbra Desktop</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-img_whs9 { border:none; width:552px; height:374px; float:none; border-style:none; }
-ul.whs10 { list-style:disc; }
-table.whs11 { width:100%; x-cell-content-align:Center; float:alignleft; margin-left:-8px; border-spacing:0px; }
-col.whs12 { width:76.193%; }
-col.whs13 { width:23.807%; }
-tr.whs14 { x-cell-content-align:center; }
-td.whs15 { width:76.193%; padding-right:10px; padding-left:10px; border-top-style:none; border-right-style:none; border-bottom-style:none; border-left-style:none; }
-p.whs16 { margin-left:0px; }
-td.whs17 { width:23.807%; padding-right:10px; padding-left:10px; border-top-style:none; border-right-style:none; border-bottom-style:none; }
-img_whs18 { border-left-style:Solid; border-left-width:1px; border-right-style:Solid; border-right-width:1px; border-top-style:Solid; border-top-width:1px; border-bottom-style:Solid; border-bottom-width:1px; width:149px; height:47px; float:none; }
-img_whs19 { border:none; width:159px; height:41px; float:none; border-style:none; }
-td.whs20 { width:76.193%; padding-right:10px; padding-left:10px; border-left-style:none; border-right-style:none; border-bottom-style:none; }
-td.whs21 { width:23.807%; padding-right:10px; padding-left:10px; border-right-style:none; border-bottom-style:none; }
-p.whs22 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "table.whs11 {margin-left:1pt; }";
-  strNSS += "p.whs16 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -59,26 +18,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Navigating Your Desktop Mailbox\nNavigating Yahoo! Zimbra Desktop");
+	addTocInfo("Navigating Your Desktop Mailbox\nNavigating Zimbra Desktop");
 addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
@@ -88,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"z-Navigating_Zimbra_Desktop.htm\">Navigating Your Desktop Mailbox</a> &gt; Navigating Yahoo! Zimbra Desktop</p>");
+document.write("<a href=\"z-Navigating_Zimbra_Desktop.htm\">Navigating Your Desktop Mailbox<\/a> &gt; Navigating Zimbra Desktop<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -110,153 +83,157 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
-<h1>Navigating Yahoo! Zimbra Desktop</h1>
-<p>When you open Yahoo! Zimbra Desktop, 
- you see a full screen view similar to the one shown below. </p>
-<p><img src="../ZD_Main_page.png" x-maintain-ratio="TRUE" width="552px" height="374px" border="0" class="img_whs9"></p>
-<p>The Yahoo! Zimbra Desktop main page includes the 
- following areas:</p>
-<ol><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Search 
- Bar row.</B></span> The Search, Advanced Search, Yahoo! Web search are displayed 
- in this area.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Application 
- Tabs</B></span>. The applications that you can access are listed in the tabs 
- at the top. The Account Setup link and Help link can be found at the end.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Toolbar.</B></span> 
- Shows actions available for the application you are currently using. In 
- this example, the <span style="font-weight: bold;"><B>Mail</B></span> application 
- toolbar is displayed. </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Content 
- Pane.</B></span> The content of this area changes depending on what application 
- is in use. In the Inbox view, it displays all messages or conversations 
- in your Inbox. The Reading Pane is the area below the messages in your 
- Inbox. When you click on an email message, the message displays in a reading 
- pane below the messages list. &nbsp;To adjust the size 
- of the Reading pane, click then drag the divider bar up or down. By default, 
- viewing messages in the Reading Pane is on. &nbsp;You 
- can turn it off from the toolbar View link.<span style="font-weight: bold;"> 
- <B></B></span></p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Overview 
- Pane</B></span>. Displays your different accounts. Each account name is displayed 
- with either a green or red icon. Green shows that you are working on-line. 
- &nbsp;Red shows that you are working off-line. Each account 
- includes the following:</p></li>
-	<ul type="disc" class="whs10">
-		<li class=p><p><span style="font-weight: bold;"><B>Folders</B></span>, 
- including the system folders <span style="font-weight: bold;"><B>Inbox</B></span>, 
- <span style="font-weight: bold;"><B>Sent</B></span>, <span style="font-weight: bold;"><B>Drafts</B></span>, 
- <span style="font-weight: bold;"><B>Junk</B></span>, and <span style="font-weight: bold;"><B>Trash</B></span>, 
- as well as any custom folders you may have created</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Searches</B></span> 
- you may have saved</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Tags</B></span> you 
- created</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Zimlet</B></span> links 
- that may have been created to integrate with third-party applications 
- from within your mailbox. </p></li>
-	</ul>
-	<li style="list-style: decimal;" type=1 class=p><p>A mini-calendar 
- can be displayed below the Overview pane. Displaying the mini-calendar 
- is optional and can be enabled in <span style="font-weight: bold;"><B>Options&gt;Calendar 
- tab</B></span>.</p></li>
+
+
+<h1>Navigating Zimbra Desktop 
+ </h1>
+<p>When you open Zimbra Desktop, 
+ you see a full screen view similar to the one shown below.</p>
+<p><img src="../ZD_Main_page.png" alt="ZD_Main_page.png" style="border: none;" width="579" height="347" border="0" /></p>
+<p>The Zimbra Desktop 
+ main page includes the following areas:</p>
+<ol>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Search Bar 
+	 Row.</b></span> The <a href="../Search/using_the_search_feature.htm">Search 
+	 and Advanced Search</a> are displayed in this area. The account Setup 
+	 and Help links are on the right.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Application 
+	 Tabs</b></span>. The applications that you can access are listed in the 
+	 tabs at the top. </p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Toolbar.</b></span> Shows actions available for the application 
+	 you are currently using. In this example, the <span style="font-weight: bold;"><b>Mail</b></span> 
+	 application toolbar is displayed.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Content 
+	 Pane.</b></span> The content of this area changes depending on what application 
+	 is in use. In the Inbox view, it displays all messages or conversations 
+	 in your Inbox. The Reading Pane is the area below the messages in 
+	 your Inbox. When you click on an email message, the message displays 
+	 in a reading pane below the messages list. &#160;To adjust the size 
+	 of the Reading Pane, click then drag the divider bar up or down. By 
+	 default, viewing messages in the Reading Pane is on. &#160;You can 
+	 turn it off from the toolbar View link.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Overview 
+	 Pane</b></span>. Displays your different accounts. Each account name is 
+	 displayed. This example shows the All Mailboxes layout. &#160;All 
+	 messages from each of your accounts for Inbox, Sent, and Drafts are 
+	 combined under this section. This preference can be set from the Preferences&gt;General 
+	 page.<br />
+	<br />
+	Each account includes the following folders:</p>
+	<ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>Folders</b></span>, 
+		 including the system folders <span style="font-weight: bold;"><b>Inbox</b></span>, 
+		 <span style="font-weight: bold;"><b>Sent</b></span>, <span style="font-weight: bold;"><b>Drafts</b></span>, 
+		 <span style="font-weight: bold;"><b>Junk</b></span>, and <span style="font-weight: bold;"><b>Trash</b></span>, 
+		 as well as any custom folders you may have created</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Searches</b></span> 
+		 you may have saved</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Tags</b></span> you 
+		 created</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Zimlet</b></span> 
+		 links that may have been created to integrate with third-party 
+		 applications from within your mailbox.</p></li>
+	</ul></li>
+	<li class="p" type="1"><p>A mini-calendar can be displayed below the 
+	 Overview pane. Displaying the mini-calendar is optional and can be 
+	 enabled in <span style="font-weight: bold;"><b>Preferences&gt;Calendar 
+	 </b></span>page.</p></li>
 </ol>
-<h2>Opening Yahoo! Zimbra Desktop</h2>
-<div align=left>
-<table x-use-null-cells cellspacing="0" width="100%" class="whs11">
-<col class="whs12">
-<col class="whs13">
-
-<tr valign="middle" class="whs14">
-<td width="76.193%" class="whs15">
-<p class="whs16">Whenever you access the internet, new email 
- messages are automatically downloaded to your Yahoo! Zimbra Desktop. 
- You do not need to open Desktop to make this happen. &nbsp;An 
- envelope icon displays in the Windows Tray (or in the Mac Dock row) that 
- shows the total number of unread messages across all of your accounts. 
- Click the envelope icon to open the desktop application.</td>
-<td width="23.807%" class="whs17">
-<p><script type="text/javascript" language="JavaScript"><!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) <= 4)) 
-{  if (parseInt(navigator.appVersion) != 2) document.write("<img src='../mailicon.png' x-maintain-ratio='TRUE' width='149px' height='47px' border='1' class='img_whs18'>");}
-else
-{   document.write("<img src='../mailicon.png' x-maintain-ratio='TRUE' style='border-left-style:Solid;border-left-width:1px;border-right-style:Solid;border-right-width:1px;border-top-style:Solid;border-top-width:1px;border-bottom-style:Solid;border-bottom-width:1px;' width='149px' height='47px' border='1' class='img_whs18'>");}
-//--></script><noscript><img src='../mailicon.png' x-maintain-ratio='TRUE' style='border-left-style:Solid;border-left-width:1px;border-right-style:Solid;border-right-width:1px;border-top-style:Solid;border-top-width:1px;border-bottom-style:Solid;border-bottom-width:1px;' width='149px' height='47px' border='1' class='img_whs18'></noscript></td></tr>
+<h2>Opening Zimbra Desktop 
+ </h2>
+<div align="left" >
+<table style="vertical-align: Center; margin-left: -8px;" cellspacing="0" 
+		 width="100%">
+	<col style="width: 76.193%;" />
+	<col style="width: 23.807%;" />
+	<tr style="vertical-align: center;">
+		<td style="width: 76.193%; padding-right: 10px; padding-left: 10px;"><p 
+			 style="margin-left: 0px;">Whenever you access the Internet, 
+		 if your account is set up for auto-sync, new email messages are 
+		 automatically downloaded to your Zimbra Desktop. 
+		 You do not need to open Desktop to make this happen. &#160;An 
+		 envelope icon displays in the Windows Tray (or in the Mac Dock 
+		 row) that shows the total number of new messages across all of 
+		 your accounts since the last time Zimbra Desktop 
+		 synced. Click the envelope icon to open the desktop application.</p></td>
+		<td style="width: 23.807%; padding-right: 10px; padding-left: 10px;"><p><img src="../mailicon.png" alt="mailicon.png" style="border-left-style: Solid; 
+		 border-left-width: 1px; border-right-style: Solid; border-right-width: 1px; 
+		 border-top-style: Solid; border-top-width: 1px; border-bottom-style: Solid; 
+		 border-bottom-width: 1px;" width="149" height="47" border="1" /></p></td>
+	</tr>
 </table>
 </div>
-<p>&nbsp;</p>
-<h2>Mail and Appointment Notification </h2>
-<div align=left>
-<table x-use-null-cells cellspacing="0" width="100%" class="whs11">
-<col class="whs12">
-<col class="whs13">
-
-<tr valign="middle" class="whs14">
-<td width="76.193%" class="whs15">
-<p class="whs16">Automatic mail and appointment notification 
- can be set up. Several different notification options are available. </p>
-<ul type="disc" class="whs10">
-	<li class=p><p class="whs16">For Windows, the notification 
- is displayed as a system tray balloon envelope icon. For Mac, you must 
- install Growl before mail and appointment notification will work. &nbsp;You 
- will also need to enable <span style="font-weight: bold;"><B>Show a popup 
- notification</B></span> in <span style="font-weight: bold;"><B>Options&gt;Mail</B></span> 
- and <span style="font-weight: bold;"><B>&gt;Calendar</B></span>. Note: This feature 
- is not available for Linux.</p></li>
-</ul>
-<p class="whs16">&nbsp;</td>
-<td width="23.807%" class="whs17">
-<p><img src="../ZD_toaster.png" x-maintain-ratio="TRUE" width="159px" height="41px" border="0" class="img_whs19"></td></tr>
-<tr valign="middle" class="whs14">
-<td colspan="1" rowspan="1" width="76.193%" class="whs20">
-<ul type="disc" class="whs10">
-	<li class=p><p class="whs16">In <span style="font-weight: bold;"><B>Options&gt;Mail</B></span> 
- and <span style="font-weight: bold;"><B>&gt;Calendar</B></span>, you can also 
- set up other notification actions including play a sound, highlight the 
- Mail or Calendar tab, or have the browser's title flash. The pop-up notifications 
- are per account settings. You can have some accounts on and some account 
- off.</p></li>
-</ul></td>
-<td colspan="1" rowspan="1" width="23.807%" class="whs21">
-<p>&nbsp;</td></tr>
+<p>&#160;</p>
+<h2>Mail and Appointment Notification</h2>
+<div align="left" >
+<table style="vertical-align: Center; margin-left: -8px;" cellspacing="0" 
+		 width="100%">
+	<col style="width: 76.193%;" />
+	<col style="width: 23.807%;" />
+	<tr style="vertical-align: center;">
+		<td style="width: 76.193%; padding-right: 10px; padding-left: 10px;"><p 
+			 style="margin-left: 0px;">Automatic mail and appointment notification 
+		 can be set up. Several different notification options are available.</p>
+		<ul type="disc">
+			<li class="p"><p style="margin-left: 0px;">For Windows, the 
+			 notification is displayed as a system tray balloon envelope 
+			 icon. For Mac, you must install Growl before mail and appointment 
+			 notification will work. &#160;You will also need to enable 
+			 <span style="font-weight: bold;"><b>Show a popup notification</b></span> 
+			 in <span style="font-weight: bold;"><b>Preferences&gt;Mail</b></span> 
+			 and <span style="font-weight: bold;"><b>&gt;Calendar</b></span>. 
+			 Note: This feature is not available for Linux.</p></li>
+		</ul>
+		<p style="margin-left: 0px;">&#160;</p></td>
+		<td style="width: 23.807%; padding-right: 10px; padding-left: 10px;"><p><img src="../ZD_toaster.png" alt="ZD_toaster.png" style="border: none;" width="159" height="41" border="0" /></p></td>
+	</tr>
+	<tr style="vertical-align: center;">
+		<td style="width: 76.193%; padding-right: 10px; padding-left: 10px;"><ul 
+				 type="disc">
+			<li class="p"><p style="margin-left: 0px;">In <span style="font-weight: bold;"><b>Preferences&gt;Mail</b></span> 
+			 and <span style="font-weight: bold;"><b>&gt;Calendar</b></span>, 
+			 you can also set up other notification actions including play 
+			 a sound, highlight the Mail or Calendar tab, or have the browser's 
+			 title flash. The pop-up notifications are per accounts settings. 
+			 You can have some accounts on and some accounts off.</p></li>
+		</ul></td>
+		<td style="width: 23.807%; padding-right: 10px; padding-left: 10px;"><p>&#160;</p></td>
+	</tr>
 </table>
 </div>
-<p class="whs22">&nbsp;</p>
+<p style="font-weight: bold;">&#160;</p>
 <p>
-
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'_self','Applying actions to multiple selections','applying_actions_to_multiple_selections.htm','Categorizing your mail messages','categorizing_your_mail_messages.htm','Moving mail messages between folders','moving_mail_messages_between_folders.htm','Right-click menus','right-click_menus.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border=0 height=20 width=96 alt="Related Topics"></a>
-
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'_self','Applying actions to multiple selections','applying_actions_to_multiple_selections.htm','Categorizing your mail messages','categorizing_your_mail_messages.htm','Moving mail messages between folders','moving_mail_messages_between_folders.htm','Right-click menus','right-click_menus.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  Related Topics </nobr></span></a>
 
  </p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"z-Navigating_Zimbra_Desktop.htm\">Navigating Your Desktop Mailbox</a> &gt; Navigating Yahoo! Zimbra Desktop</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

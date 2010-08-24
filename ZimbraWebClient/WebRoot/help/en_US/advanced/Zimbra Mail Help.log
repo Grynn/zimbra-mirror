@@ -196,6 +196,7 @@ conversations\conversations_can_span_folders.htm
 conversations\printing_a_conversation.htm
 Creating_Messages\attaching_files_to_a_mail_message.htm
 Creating_Messages\Attachment_File_Types_Supported.htm
+Creating_Messages\Composing_a_new_mail_message.htm
 Creating_Messages\Creating_a_new_mail_message.htm
 Creating_Messages\forwarding_a_mail_message.htm
 Creating_Messages\parts_of_an_email_message.htm
@@ -275,6 +276,7 @@ Search\query_language_description.htm
 Search\Quick_search.htm
 Search\saving_search_queries.htm
 Search\search_examples.htm
+Search\Searching_for_Recipients_.htm
 Search\using_the_search_feature.htm
 Search\Using_Wildcard_in_Search.htm
 Sharing\Managing_items_you_share.htm
@@ -283,6 +285,7 @@ Tags_and_flags\Assigning_tags_to_messages.htm
 Tags_and_flags\deleting_tags.htm
 Tags_and_flags\Flagging_an_email_message.htm
 Tags_and_flags\Using_tags_to_classify_mail_messages.htm
+Tasks\About_Tasks.htm
 Tasks\Add_a_task.htm
 Tasks\Change_a_task.htm
 Tasks\Create_tasks_folders.htm
@@ -329,7 +332,10 @@ fish-eye_view.png
 contacts2.png
 searchbutton75.png
 tables.png
+dndview.png
+View_icon.png
 rss.png
+Tasks_content_pane.png
 para_styles.png
 draganddrop.png
 cal_manatory_optionalpulldn.png
@@ -359,6 +365,7 @@ sharednotebook.png
 movable_sash.png
 image.png
 trash.png
+69_view.png
 onlineicon.png
 tag.png
 tradtional_view.png
@@ -387,14 +394,12 @@ calenarlistview.jpg
 spell.png
 paperclip.png
 CalendarWeek.png
-511view.png
 mailnotificationtab.png
 add_attachment_75.png
 logoffbutton.png
 tag-purple.gif
 contacts_add_right-click.png
 spreadsheet_icon.png
-rd_blue_right.jpg
 zimbra_logo_big.gif
 addbuddy.png
 briefcase_add_attachment.png
@@ -450,10 +455,6 @@ whxdata\whtdata5.xml
 whxdata\whtdata6.xml
 whxdata\whtdata7.xml
 whxdata\whtdata8.xml
-whxdata\whtdata9.xml
-whxdata\whtdata10.xml
-whxdata\whtdata11.xml
-whxdata\whtdata12.xml
 whxdata\whidata0.xml
 whxdata\whidata1.xml
 whxdata\whidata2.xml
@@ -467,10 +468,6 @@ whdata\whtdata5.htm
 whdata\whtdata6.htm
 whdata\whtdata7.htm
 whdata\whtdata8.htm
-whdata\whtdata9.htm
-whdata\whtdata10.htm
-whdata\whtdata11.htm
-whdata\whtdata12.htm
 whdata\whidata0.htm
 whdata\whidata1.htm
 whdata\whidata2.htm

@@ -1,12 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-<item name="Changing your user preferences" url="Userspecific/Changing_Your_User_Options.htm" />
-<item name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
-<item name="Defining addresses to block and to allow in your mailbox" url="filters/Filtering_Junk_Mail.htm" />
-<item name="Creating away messages" url="Userspecific/vacation_message.htm" />
-<item name="Creating personas" url="Userspecific/Creating_Personas.htm" />
-<item name="Changing your default time zone" url="Userspecific/Changing_your_default_timezone.htm" />
+<item name="About Zimlets" url="Zimlets/About_Zimlets.htm" />
+<item name="Managing your Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 
 </tocdata>

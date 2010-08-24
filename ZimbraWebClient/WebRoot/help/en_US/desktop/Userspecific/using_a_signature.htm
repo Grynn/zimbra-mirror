@@ -1,22 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Using a signature</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { font-style:italic; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +18,43 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
+	addTocInfo("Composing Email\nAdding your signature");
+addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -55,10 +63,11 @@ if (window.gbWhTopic)
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	document.write("<p style=\"text-align:right; background: silver\"> ");
+AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
+document.write("<a href=\"../Creating_Messages/Creating_a_new_mail_message.htm\">Composing Email<\/a> &gt; Adding your signature<\/p>");
+
 
 	if (window.setRelStartPage)
 	{
@@ -74,54 +83,61 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<p>&#160;</p>
+</div>
 <h1>Automatically add your signature</h1>
-<p>You can create signatures for your email messages. Your signature can 
- include your name and additional closing text to the maximum number of 
- characters that your account allows. </p>
-<p>For example, your signature could read:</p>
-<p>John Smith<br>
-Vice President of Engineering<br>
-Widgets Division<br>
-Acme Corporation, Inc.<br>
-303-555-1212 x111<br>
+<p>You can create different signatures and assign them to a specific address 
+ you have created. See <a href="Mail_Identities.htm">Mail Identities</a>.</p>
+<p>If you use HTML to format your signature, you can link your company 
+ name to the web site and you can add images, such as a logo, to your signature. 
+ </p>
+<h6>Example of a signature</h6>
+<p>John Smith<br />
+Vice President of Engineering<br />
+Widgets Division<br />
+Acme Corporation, Inc. &#160;<br />
+303-555-1212 x111 <br />
 john.smith@example.com</p>
-<p>If you create multiple identities, you can create different signatures 
- and assign them to specific addresses. See <a href="Mail_Identities.htm">Mail 
- Identities</a>. </p>
+<p><img src="../zimbra_bug_50x30.GIF" alt="zimbra_bug_50x30.GIF" style="border: none;" width="50" height="30" border="0" /></p>
+<p>&#160;</p>
 <h6>To create a signature:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Open <span style="font-weight: bold;"><B>Preferences </B></span>and 
- select the <span style="font-weight: bold;"><B>Signatures</B></span> tab. </p></li>
-	<li class=p><p>Because you can have more than one signature, in the 
- <span style="font-weight: bold;"><B>Signature Name</B></span> field give your 
- signature and identifiable name. </p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Signature</B></span> 
- text box, type the signature information exactly as you want it to appear 
- in your messages. </p></li>
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Using Signatures</B></span> 
- section, select where the signature should be placed in your messages. 
- Select <span style="font-weight: bold;"><B>Above included messages</B></span> 
- to add your signature at the end of the your composed, replied to, or 
- forwarded text. Select <span style="font-weight: bold;"><B>Below included 
- </B></span>messages to add the signature at the end of the message.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span>.</p></li>
-	<li class=p><p>To apply this signature to your account name, go to 
- the <span style="font-weight: bold;"><B>Accounts</B></span> tab and in the <span 
- style="font-weight: bold;"><B>Signature</B></span> field, select the <span style="font-weight: bold;"><B>Signature 
- Name</B></span> from the drop down.</p></li>
+<ol type="1">
+	<li class="p"><p>Open <span style="font-weight: bold;"><b>Preferences</b></span> 
+	 and select <span style="font-weight: bold;"><b>Signatures</b></span>.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Add Signature</b></span> 
+	 and type the name for this signature in the <span style="font-weight: bold;"><b>Signature 
+	 Name</b></span> field.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Format As HTML</b></span> 
+	 to customize your signature if you want to create a signature style. 
+	 </p></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Signature</b></span> 
+	 text box, type the signature information exactly as you want it to 
+	 appear in your messages. If you use HTML, you can select from fonts, 
+	 size, and color for text and add links and images to your signature. 
+	 Images can either be downloaded or you can link to an image URL.&#160;</p></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Using Signatures</b></span> 
+	 section, select where the signature should be placed in your messages. 
+	 Select <span style="font-weight: bold;"><b>Above included messages</b></span> 
+	 to add your signature at the end of the your composed, replied to, 
+	 or forwarded text. Select <span style="font-weight: bold;"><b>Below included</b></span> 
+	 messages to add the signature at the end of the message.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Save</b></span>.</p></li>
+	<li class="p"><p>To apply this signature to your account name, go to 
+	 the Personas folder, select the account persona name and in the 
+	 <span style="font-weight: bold;"><b>Signature</b></span> field, select the 
+	 signature name from the drop down.</p></li>
 </ol>
-<p class="whs2">&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="font-style: italic;">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

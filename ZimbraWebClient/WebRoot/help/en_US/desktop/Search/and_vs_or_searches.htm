@@ -1,33 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>AND vs OR Searches</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-ul.whs9 { list-style:disc; }
-p.whs10 { margin-left:40px; }
-p.whs11 { font-family:'Lucida Console' , monospace; color:#800080; margin-left:40px; }
-img_whs12 { border:none; width:144px; height:168px; float:none; border-style:none; }
-img_whs13 { border:none; width:483px; height:38px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -38,26 +18,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Searching for Items\nAND vs OR Searches");
+	addTocInfo("Searching for Items\nAND vs OR searches");
 addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
@@ -67,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"using_the_search_feature.htm\">Searching for Items</a> &gt; AND vs OR Searches</p>");
+document.write("<a href=\"using_the_search_feature.htm\">Searching for Items<\/a> &gt; AND vs OR searches<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -89,70 +83,67 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
+
+
 <h1>And versus Or type searches</h1>
 <p>For searches using multiple criteria, you can either find items that 
  match one of the specified criteria or all of them. You can perform both 
- types of searches using the Advanced search. </p>
+ types of searches using the Advanced search.</p>
 <p>For all search panes other than the Basic search, the rules are:</p>
-<ul type="disc" class="whs9">
-	<li class=p><p>Searching for messages that match any of the specified 
- criteria is called an <span style="font-style: italic;"><I>OR</I></span> search, 
- because if the message contains either X or Y, then 
- it is considered a match. For Advanced search panes with multiple check 
- boxes, making multiple selections within a single pane creates an <span 
- style="font-style: italic;"><I>OR </I></span>search for those items.</p></li>
-	<li class=p><p>Searching for messages that contain both X and Y 
- is called an <span style="font-style: italic;"><I>AND</I></span> search, because 
- the message must meet all the specified criteria in order to be considered 
- a match. For Advanced server &nbsp;panes with check boxes, 
- opening multiple instances of the same pane and making different check 
- box selections in each one causes the criteria to be specified as an <span 
- style="font-style: italic;"><I>AND</I></span> search.</p></li>
+<ul type="disc">
+	<li class="p"><p>Searching for messages that match any of the specified 
+	 criteria is called an <span style="font-style: italic;"><i>OR</i></span> 
+	 search, because if the message contains either X or Y, 
+	 then it is considered a match. For Advanced search panes with multiple 
+	 check boxes, making multiple selections within a single pane creates 
+	 an <span style="font-style: italic;"><i>OR</i></span> search for those items.</p></li>
+	<li class="p"><p>Searching for messages that contain both X and Y is called an <span style="font-style: italic;"><i>AND</i></span> 
+	 search, because the message must meet all the specified criteria in 
+	 order to be considered a match. For Advanced server panes with check 
+	 boxes, opening multiple instances of the same pane and making different 
+	 check box selections in each one causes the criteria to be specified 
+	 as an <span style="font-style: italic;"><i>AND</i></span> search.</p></li>
 </ul>
 <p>For example, suppose you are searching for messages that contain either 
- Adobe PDF files or JPEG images. 
- You would select both these check boxes within the same Attachments pane. 
- </p>
-<ul><li class=p-note><p class=note>Only &quot;OR&quot; appears in a query. 
- If you selected as an option to show the search query in the Search bar 
- as you make selections in the Advanced search, the Search text box updates 
- to show the resulting query. With the <span style="font-style: italic;"><I>AND</I></span> 
- type of search, the word <span style="font-style: italic;"><I>AND</I></span> 
- does not appear. The following example shows a search specifying that 
- the From: line must contain &quot;martin&quot;, and in addition to this, 
- the name &quot;boxman&quot; must appear in either the 
- To: or the Cc: line.</p></li>
-</ul>
-<p class="whs10">&nbsp;</p>
-<p class="whs11"><img src="../basic_search.gif" x-maintain-ratio="TRUE" width="144px" height="168px" border="0" class="img_whs12"> 
- &nbsp;<img src="../searchbar.gif" x-maintain-ratio="TRUE" width="483px" height="38px" border="0" class="img_whs13"></p>
-<script type="text/javascript" language="javascript1.2">
+ Adobe PDF files or JPEG 
+ images. You would select both these check boxes within the same Attachments 
+ pane.</p>
+<p class="note" style="margin-left: 0px;"><span style="font-weight: bold;"><b>Note</b></span>: 
+ Only &quot;OR&quot; appears in a query. If you selected as an option to 
+ show the search query in the Search bar as you make selections in the 
+ Advanced search, the Search text box updates to show the resulting query. 
+ With the <span style="font-style: italic;"><i>AND</i></span> type of search, 
+ the word <span style="font-style: italic;"><i>AND</i></span> does not appear. 
+ The following example shows a search specifying that the From: line must 
+ contain &quot;martin&quot;, and in addition to this, the name &quot; boxman&quot; must appear in either the To: or the 
+ Cc: line.</p>
+<p style="margin-left: 40px;">&#160;</p>
+<p style="font-family: 'Lucida Console', monospace; color: #800080; margin-left: 40px;"><img src="../basic_search.gif" alt="basic_search.gif" style="border: none;" width="144" height="168" border="0" /> &#160;<img src="../searchbar.gif" alt="searchbar.gif" style="border: none;" width="483" height="38" border="0" /></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"using_the_search_feature.htm\">Searching for Items</a> &gt; AND vs OR Searches</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

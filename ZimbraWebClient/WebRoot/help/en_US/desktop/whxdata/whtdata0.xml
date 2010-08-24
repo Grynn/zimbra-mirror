@@ -1,82 +1,80 @@
-<?xml version='1.0' encoding='utf-8' ?>
+﻿<?xml version='1.0' encoding='utf-8' ?>
 <tocdata>
 <book name="Getting Started" >
-  <item name="About Yahoo! Zimbra Desktop" url="Getting_Started/Zimbra_User_Help.htm" />
-  <item name="Overview of Yahoo! Zimbra Desktop Features" url="Zdesktop/Overview_of_Yahoo_Zimbra_Desktop_Features.htm" />
-  <item name="Working Offline" url="Zdesktop/z-Working_Offline.htm" />
-  <item name="Keyboard Shortcut Keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+  <item name="About  Zimbra Desktop" url="Getting_Started/Zimbra_User_Help.htm" />
+  <item name="Overview of Zimbra Desktop Features" url="Zdesktop/Overview_of_Zimbra_Desktop_Features.htm" />
+  <item name="Working offline" url="Zdesktop/z-Working_Offline.htm" />
+  <item name="Keyboard shortcut keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </book>
-<book name="Setting Up Yahoo! Zimbra Desktop" >
-  <item name="Setting up your Zimbra Web Client account" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
-  <item name="Setting up Yahoo! Mail Plus, Gmail, AOL account setup" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
+<book name="Setting Up  Zimbra Desktop" >
+  <item name="Setting up a Zimbra Web Client account" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
+  <item name="Setting up Yahoo! Mail and Gmail accounts" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
   <item name="Setting up POP/IMAP accounts" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
   <item name="Synchronize your accounts" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
-  <item name="Turning Off Automatic Sync" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
-  <item name="Changing account order on Desktop" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
+  <item name="Turning off automatic sync" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
+  <item name="Organize your Desktop view" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
   <item name="Deleting an account from Desktop" url="Zdesktop/z-Deleting_an_account_from_Desktop.htm" />
 </book>
 <book name="Navigating Your Desktop Mailbox" >
-  <item name="Navigating Yahoo! Zimbra Desktop" url="Navigation_folders_and_tips/z-Navigating_Zimbra_Desktop.htm" />
-  <item name="User Interface Features and Shortcuts" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-  <item name="Viewing the Overview pane" url="Navigation_folders_and_tips/Folders_area.htm" />
+  <item name="Navigating Zimbra Desktop" url="Navigation_folders_and_tips/z-Navigating_Zimbra_Desktop.htm" />
+  <item name="User interface features and shortcuts" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
   <item name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
-  <item name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
-  <item name="System Folders" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="System folders" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="Applying actions to multiple selections" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
 </book>
 <book name="Managing Your Mailbox" >
   <item name="Managing your email message view" url="conversations/conversation_list_view.htm" />
+  <item name="Setting Desktop behavior for getting mail" url="Zdesktop/z_Setting_Desktop_behavior_for_getting_mail.htm" />
+  <item name="Viewing Messages" url="Navigation_folders_and_tips/Traditional_View.htm" />
   <item name="How Conversations work" url="conversations/conversations_can_span_folders.htm" />
-  <item name="Traditional View" url="Navigation_folders_and_tips/Traditional_View.htm" />
-  <item name="Customizing your initial email page" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
   <item name="Categorizing your email messages" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-  <item name="Sorting messages in Content pane" url="Navigation_folders_and_tips/sorting_conversations.htm" />
   <item name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
   <item name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
-  <item name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+  <item name="Setting a forwarding address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </book>
 <book name="Composing Email" >
   <item name="Composing and sending email messages" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <item name="Parts of an Email Message" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <item name="Parts of an email message" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Using cc: and bcc: addresses" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="Adding your signature" url="Userspecific/using_a_signature.htm" />
   <item name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-  <item name="Attachment File Types Supported" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Attachment file types supported" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Saving a draft message" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Reading, Replying and Forwarding Messages" >
+  <item name="Reading mail" url="reading_mail/reading_mail.htm" />
   <item name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-  <item name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <item name="Viewing messages from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
   <item name="Marking mail as unread" url="reading_mail/marking_mail_as_unread.htm" />
   <item name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
-  <item name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
+  <item name="Printing individual mail messages" url="reading_mail/printing_a_mail_message.htm" />
   <item name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
   <item name="Forwarding a mail message" url="Creating_Messages/forwarding_a_mail_message.htm" />
   <book name="Using Filters" >
-    <item name="Using Filters to Sort Incoming Mail" url="filters/how_filtering_works.htm" />
+    <item name="Using filters to sort incoming mail" url="filters/how_filtering_works.htm" />
     <item name="Filtering your messages" url="filters/filtering_your_messages.htm" />
-    <item name="Filter Conditions and Actions Supported" url="filters/filter_conditions_and_actions_supported.htm" />
+    <item name="Filter conditions and actions supported" url="filters/filter_conditions_and_actions_supported.htm" />
     <item name="wildcards" url="filters/wildcards.htm" />
   </book>
 </book>
 <book name="Managing Your Contact Lists" >
-  <item name="Creating a new contact" url="Contacts/creating_a_new_contact.htm" />
-  <item name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="Adding new contacts" url="Contacts/creating_a_new_contact.htm" />
+  <item name="Creating group contact lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
   <item name="Editing a contact" url="Contacts/editing_a_contact.htm" />
   <item name="Deleting a contact" url="Contacts/deleting_a_contact.htm" />
-  <item name="Viewing contact information" url="Contacts/z-Viewing_contacts.htm" />
-  <item name="Printing Contacts" url="Contacts/Printing_Contacts.htm" />
-  <item name="Importing Contacts" url="Contacts/Importing_Contacts.htm" />
-  <item name="Exporting Address Books" url="Contacts/Exporting_Address_Books.htm" />
+  <item name="Printing contacts" url="Contacts/Printing_Contacts.htm" />
+  <item name="Importing contacts" url="Contacts/Importing_Contacts.htm" />
+  <item name="Exporting contacts" url="Contacts/Exporting_Address_Books.htm" />
 </book>
 <book name="Managing Your Calendars" >
   <item name="Using Calendars" url="Calendar/z-Using_Calendars.htm" />
-  <item name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
-  <item name="Adding_background_color_to_calendars" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="Printing_a_calendar" url="Calendar/Printing_a_calendar.htm" />
-  <item name="Deleting_Calendars" url="Calendar/Deleting_Calendars.htm" />
+  <item name="Calendar views" url="Calendar/Calendar_Views.htm" />
+  <item name="Color coding Calendars" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Printing a calendar" url="Calendar/Printing_a_calendar.htm" />
+  <item name="Deleting calendars" url="Calendar/Deleting_Calendars.htm" />
   <item name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
   <item name="Exporting your iCal calendar" url="Calendar/Exporting_your_iCal_calendar.htm" />
 </book>
@@ -84,33 +82,35 @@
   <item name="About scheduling appointments" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
   <item name="Planning an appointment" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Scheduling an appointment" url="Calendar/Scheduling_meetings.htm" />
-  <item name="Seeing Free/Busy Times" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="Seeing Free/Busy times" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
   <item name="Using QuickAdd to create an appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
   <item name="Turning messages and contacts into a meeting request" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
   <item name="Creating recurring appointments" url="Calendar/Creating_recurring_appointments.htm" />
   <item name="Changing recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
+  <item name="Responding to a meeting invite" url="Calendar/Responding_to_an_invitation.htm" />
 </book>
 <book name="Searching for Items" >
-  <item name="Using the search feature" url="Search/using_the_search_feature.htm" />
+  <item name="Using Search" url="Search/using_the_search_feature.htm" />
   <item name="Searching for messages" url="Search/_search__vs.__search_for_.htm" />
   <item name="Quick search" url="Search/Quick_search.htm" />
-  <item name="Building search queries" url="Search/building_search_queries.htm" />
+  <item name="Advanced search" url="Search/building_search_queries.htm" />
   <item name="Saving search queries" url="Search/saving_search_queries.htm" />
   <item name="Query language description" url="Search/query_language_description.htm" />
   <item name="Search examples" url="Search/search_examples.htm" />
   <item name="Contains vs Matches" url="Search/contains_vs_matches.htm" />
-  <item name="AND vs OR Searches" url="Search/and_vs_or_searches.htm" />
-  <item name="Using * as a wildcard in Search" url="Search/Using_Wildcard_in_Search.htm" />
+  <item name="AND vs OR searches" url="Search/and_vs_or_searches.htm" />
+  <item name="Using * as a wildcard in search" url="Search/Using_Wildcard_in_Search.htm" />
 </book>
-<book name="Setting Your Options" >
-  <item name="Setting your Desktop Options" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
+<book name="Setting Your Preferences" >
+  <item name="Setting your Desktop preferences" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
   <item name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
-  <item name="Email Notification to Another Address" url="Userspecific/New_mail_notifications.htm" />
+  <item name="Email notification to another address" url="Userspecific/New_mail_notifications.htm" />
   <item name="Vacation message" url="Userspecific/vacation_message.htm" />
+  <item name="Making Zimbra Desktop default email program" url="managing_your_account/Making_Zimbra_Desktop_Default_Mail_Client.htm" />
 </book>
 <book name="Organizing Your Accounts" >
-  <item name="Customizing your initial email page" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
-  <item name="Categorizing your mail messages" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="Categorizing your mail messages" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm#bc-1" />
   <item name="Accessing your folders" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
   <item name="Deleting folders" url="Navigation_folders_and_tips/deleting_folders.htm" />
   <item name="Creating custom folders" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
@@ -121,7 +121,7 @@
 </book>
 <book name="Managing Your Tasks" >
   <item name="About Tasks" url="Tasks/About_Tasks.htm" />
-  <item name="Create tasks folders" url="Tasks/Create_tasks_folders.htm" />
+  <item name="Create tasks lists" url="Tasks/Create_tasks_folders.htm" />
   <item name="Add a task" url="Tasks/Add_a_task.htm" />
   <item name="Change a task" url="Tasks/Change_a_task.htm" />
   <item name="Delete a task" url="Tasks/Delete_a_task.htm" />
@@ -129,9 +129,10 @@
   <item name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />
 </book>
 <book name="Sharing Folders (ZWC Accounts  Only)" >
-  <item name="Sharing Your Zimbra Folders" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
+  <item name="Sharing your Zimbra folders" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
   <item name="How to share your folders" url="Zdesktop/zd_Sharing_Folders_steps_.htm" />
   <item name="Accepting access to the shared mailbox folder" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+  <item name="Working in a Shared Folder" url="Zdesktop/zd_working_in_a_shared_folder.htm" />
   <item name="Working within a shared mail folder" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
   <item name="Revoking a access to a shared folder" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </book>

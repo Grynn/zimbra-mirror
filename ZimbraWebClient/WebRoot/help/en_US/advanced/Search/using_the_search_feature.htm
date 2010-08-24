@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -86,73 +86,82 @@ else
 	
 </div>
 
-<h1>Using the search feature</h1>
-<p>Searching lets you find messages, contacts appointments, Documents pages and files. &#160;You can search by specific words, by dates, time, URL, size, tag, whether or not a message has been read, whether it has file attachments or attachments of a particular file type and more.</p>
-<p>Zimbra Collaboration Suite
+
+<h1>Using Search</h1>
+<p>Searching lets you find messages, contacts, appointments, Documents 
+ pages, and files. &#160;You can search by specific words, by dates, time, 
+ URL, size, tag, whether or not a message has been read, whether it has 
+ file attachments or attachments of a particular file type and more.</p>
+<p>Zimbra Collaboration Suite 
  offers two search tools:</p>
 <ul type="disc">
-<li class="p">
-<p><span style="font-weight: bold;"><b>Search.</b></span> This is a quick search that executes whatever search query is currently displayed in the search text box. You can enter one of the ZWC search key words in the search field and a list of possible search arguments is automatically displayed. In addition, the drop-down arrow at the left of the search box allows you to select which type of items to search for. You can select to search within messages, your contacts, including company contact lists, tasks, appointments and pages and files. This is an aid to quick searches as described in <a href="Quick_search.htm">Quick-search settings</a>.</p>
-</li>
-<li class="p">
-<p><span style="font-weight: bold;"><b>Advanced</b></span> <span>search</span> opens a new pane and makes it easier to <a href="building_search_queries.htm">execute more complex searches</a>. &#160;You can save your advanced search queries and re-execute them at a later date.</p>
-</li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Search.</b></span> This 
+	 is a quick search that executes whatever search query is currently 
+	 displayed in the search text box. You can enter one of the search 
+	 key words in the search field and a list of possible search arguments 
+	 is automatically displayed. In addition, the drop-down arrow at the 
+	 left of the search box allows you to select which type of items to 
+	 search for. You can select to search within messages, your contacts, 
+	 including company contact lists, tasks, appointments and pages and 
+	 files. This is an aid to quick searches as described in <a href="Quick_search.htm">Quick-search 
+	 settings</a>.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Advanced</b></span> <span>search</span> 
+	 opens a new pane and makes it easier to <a href="building_search_queries.htm">execute 
+	 more complex searches</a>. &#160;You can save your advanced search 
+	 queries and re-execute them at a later date.</p></li>
 </ul>
 <h2>Searching with key words</h2>
-<p>If you know where to search for your item, you can enter one of the following <a href="query_language_description.htm">keywords</a> followed by a colon in the Search field and a list of possible options to select is displayed.</p>
+<p>If you know where to search for your item, you can enter one of the 
+ following <a href="query_language_description.htm">keywords</a> followed 
+ by a colon in the Search field and a list of possible options to select 
+ is displayed.</p>
 <ul type="disc">
-<li class="p">
-<p>tag:</p>
-</li>
-<li class="p">
-<p>in:</p>
-</li>
-<li class="p">
-<p>under:</p>
-</li>
-<li class="p">
-<p>is:</p>
-</li>
-<li class="p">
-<p>has:</p>
-</li>
-<li class="p">
-<p>type:</p>
-</li>
-<li class="p">
-<p>attachment:</p>
-</li>
+	<li class="p"><p>tag:</p></li>
+	<li class="p"><p>in:</p></li>
+	<li class="p"><p>under:</p></li>
+	<li class="p"><p>is:</p></li>
+	<li class="p"><p>has:</p></li>
+	<li class="p"><p>type:</p></li>
+	<li class="p"><p>attachment:</p></li>
 </ul>
 <h2>Searching for messages</h2>
-<p>If you are familiar with text-match searches or word-processing features such as the Find/Change in Microsoft Word, note that the content search in the Zimbra Web Client
+<p>If you are familiar with text-match searches or word-processing features 
+ such as the Find/Change in Microsoft Word, note that the content search 
+ in the Zimbra Web Client 
  is slightly different from performing a literal string match.</p>
-<p>ZCS
- search syntax works as follows:</p>
+<p>ZCS search 
+ syntax works as follows:</p>
 <ul type="disc">
-<li class="p">
-<p>You can search for phrases, but each word within that phrase is matched literally by whole-word only. Spelling variants are not allowed. For example, if you search for <span style="font-weight: bold;"><b>banana</b></span><span style="font-weight: bold; text-decoration: underline;"><u><b>s</b></u></span>, messages with <span style="font-weight: bold;"><b>banana</b></span> are not a match. You can search by domain name including the "." (period)</p>
-</li>
-<li class="p">
-<p>Search is not case sensitive; "South", "south", and "SOUTH" are all the same thing.</p>
-</li>
-<li class="p">
-<p>These special characters cannot be used in your search text. <span style="font-weight: bold;"><b>~ ' ! @ # $ % ^ &amp; * () _- + ? / { }[ ] ; : "</b></span></p>
-</li>
-<li class="p">
-<p>The asterisk <span style="font-weight: bold;"><b>*</b></span> as a 
-wildcard after a prefix is supported. That is search for 
-do* returns items with the word dog, door, etc.</p>
-</li>
-<li class="p">
-<p>Searching for content will search the body of a message plus any (system-readable) file attachments it may have. A system-readable file attachment is a type of file that can be converted to HTML-viewable text. These include Microsoft Office documents (Word, 
-PowerPoint, or Excel), as well as text files, but not image or audio files.</p>
-</li>
+	<li class="p"><p>You can search for phrases, but each word within that 
+	 phrase is matched literally by whole-word only. Spelling variants 
+	 are not allowed. For example, if you search for <span style="font-weight: bold;"><b>banana</b></span><span 
+	 style="font-weight: bold; text-decoration: underline; "><u><b>s</b></u></span>, 
+	 messages with <span style="font-weight: bold;"><b>banana</b></span> are not 
+	 a match. You can search by domain name including the &quot;.&quot; 
+	 (period)</p></li>
+	<li class="p"><p>Search is not case sensitive; <span style="font-style: italic;"><i>South</i></span>, 
+	 <span style="font-style: italic;"><i>south</i></span>, and <span style="font-style: italic;"><i>SOUTH</i></span> 
+	 are all the same thing.</p></li>
+	<li class="p"><p>These special characters cannot be used in your search 
+	 text. <span style="font-weight: bold;"><b>~ ' ! @ # $ % ^ &amp; * () 
+	 _- + ? / { }[ ] ; : &quot;</b></span></p></li>
+	<li class="p"><p>The asterisk <span style="font-weight: bold;"><b>*</b></span> 
+	 as a wildcard after a prefix is supported. 
+	 That is search for do* returns items with 
+	 the word dog, door, etc.</p></li>
+	<li class="p"><p>Searching for content will search the body of a message 
+	 plus any (system-readable) file attachments it may have. A system-readable 
+	 file attachment is a type of file that can be converted to HTML-viewable 
+	 text. These include Microsoft Office documents (Word, PowerPoint, or Excel), as well as text files, 
+	 but not image or audio files.</p></li>
 </ul>
 <h2>Learn how to create queries</h2>
-<p>Go to the following topics for descriptions of how to create complex queries.</p>
-<p><a href="query_language_description.htm">Query language description</a>. This describes a list of keywords to use in your search.</p>
-<p><a href="and_vs_or_searches.htm">AND versus OR Searches</a>. Explains how to use And 
-and Or in your search.</p>
+<p>Go to the following topics for descriptions of how to create complex 
+ queries.</p>
+<p><a href="query_language_description.htm">Query language description</a>. 
+ This describes a list of keywords to use in your search.</p>
+<p><a href="and_vs_or_searches.htm">AND versus OR Searches</a>. Explains 
+ how to use And and Or in your search.</p>
 <p>&#160;</p>
 <p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[

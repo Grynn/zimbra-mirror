@@ -1,25 +1,328 @@
-<?xml version='1.0' encoding='utf-8' ?>
+﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
-<key name="archiving" >
+<key name="account setup, IMAP" >
+  <topic name="Setting up POP/IMAP accounts" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
+<key name="account, export" >
+  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="account, import" >
+  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="add signature" >
+  <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="adding contacts" >
+  <topic name="Creating a new contact" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="address book, group contacts" >
+  <topic name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="address books, importing" >
+  <topic name="Importing Contacts" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="address completion in mail" >
+  <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="alerts" >
+  <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="appointment, quickadd" >
+  <topic name="Using QuickAdd to Create an Appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="appointments" >
+  <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="archiving mail" >
   <topic name="Archiving your email messages" url="Zdesktop/Archiving_your_email_messages.htm" />
 </key>
-<key name="destop overview" >
-  <topic name="About Zimbra Desktop" url="Getting_Started/Zimbra_User_Help.htm" />
+<key name="archiving messages" >
+  <topic name="purging messages" url="reading_mail/archiving_old_messages.htm" />
 </key>
-<key name="folders, sharing" >
-  <topic name="Sharing Your Zimbra Folders" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
+<key name="Atom feed" >
+  <topic name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
-<key name="overview Zimbra Desktop" >
-  <topic name="About Zimbra Desktop" url="Getting_Started/Zimbra_User_Help.htm" />
+<key name="Attaching" >
+  <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
-<key name="sharing your folders" >
-  <topic name="Sharing Your Zimbra Folders" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
+<key name="attaching files from Briefcase" >
+  <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
-<key name="sync, turning off" >
-  <topic name="Turning Off Automatic Sync" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
+<key name="Attachment File Types Supported" >
+  <topic name="Attachment File Types Supported" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
-<key name="turning sync off" >
-  <topic name="Turning Off Automatic Sync" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
+<key name="attachments" >
+  <topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="auto-complete addresses" >
+  <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="automatically adding signature" >
+  <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="automatically moving mail to a folder" >
+  <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
+</key>
+<key name="backup account data" >
+  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="Briefcase, attaching files to email" >
+  <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="calendar, free/busy" >
+  <topic name="Seeing free/busy times" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="calendar, printing" >
+  <topic name="Printing a calendar" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="changing an appointment" >
+  <topic name="Changing recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="check mail" >
+  <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="checking for new messages" >
+  <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="checking meeting response" >
+  <topic name="Using the Schedule tab when creating a appointment" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="contact" >
+  <topic name="Editing a contact" url="Contacts/editing_a_contact.htm" />
+  <topic name="Creating a new contact" url="Contacts/creating_a_new_contact.htm" />
+  <key name="Editing" >
+    <topic name="Editing a contact" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="contact, printing list" >
+  <topic name="Printing Contacts" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="contacts, adding deleted contact back to list" >
+  <topic name="Deleting a contact" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="contacts, creating custom fields on form" >
+  <topic name="Creating a new contact" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="contacts, importing" >
+  <topic name="Importing Contacts" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="content pane, changing column header" >
+  <topic name="Customize your view" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+</key>
+<key name="conversation view" >
+  <topic name="Managing your email message view" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="Conversations" >
+  <topic name="Conversations can span folders" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
+  <key name="Printing" >
+    <topic name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
+  </key>
+</key>
+<key name="Creating" >
+  <topic name="Creating a new mail message" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <key name="new mail message" >
+    <topic name="Creating a new mail message" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  </key>
+</key>
+<key name="creating Documents notebook" >
+  <topic name="Create new notebooks" url="Documents/Create_multiple_notebooks.htm" />
+</key>
+<key name="creating tags" >
+  <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="custom contact field" >
+  <topic name="Creating a new contact" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="custom folders" >
+  <topic name="Creating custom folders" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="customizing your view" >
+  <topic name="Customize your view" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+</key>
+<key name="Deleting" >
+  <topic name="Deleting folders" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="folders" >
+    <topic name="Deleting folders" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="deleting contacts" >
+  <topic name="Deleting a contact" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="deleting recurring appointments" >
+  <topic name="Changing recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="Documents, adding tables" >
+  <topic name="Adding a table to a Notebook Page" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="Documents, creating new pages" >
+  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="Documents, creating notebook" >
+  <topic name="Create new notebooks" url="Documents/Create_multiple_notebooks.htm" />
+</key>
+<key name="Documents, rich text editor" >
+  <topic name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="draft message" >
+  <topic name="Saving a draft message" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="edit as new" >
+  <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="Edit Contact" >
+  <topic name="Editing a contact" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="edit mail folder permissions" >
+  <topic name="Revoking a access to a shared folder" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="Email Message" >
+  <topic name="Parts of an Email Message" url="Creating_Messages/parts_of_an_email_message.htm" />
+</key>
+<key name="email message view" >
+  <topic name="Managing your email message view" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="email notification" >
+  <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="events" >
+  <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="export account data" >
+  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="export iCal calendars" >
+  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="files, attaching" >
+  <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="Filter Conditions" >
+  <topic name="Filter Conditions and Actions Supported" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
+</key>
+<key name="filter rules,  existing folders" >
+  <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
+</key>
+<key name="filter, how it works" >
+  <topic name="How Filtering Works" url="filters/how_filtering_works.htm" />
+</key>
+<key name="filtering messages" >
+  <topic name="Filtering your messages" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="Flagging" >
+  <topic name="Flagging an email message" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <key name="email message" >
+    <topic name="Flagging an email message" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  </key>
+</key>
+<key name="folders" >
+  <topic name="Renaming folders" url="Navigation_folders_and_tips/renaming_folders.htm" />
+</key>
+<key name="folders, synchronizing" >
+  <topic name="Accessing your folders" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
+</key>
+<key name="fonts" >
+  <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="forget" >
+  <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="formatting with HTML" >
+  <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="Forwarding" >
+  <topic name="Forwarding a mail message" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="forwarding your email" >
+  <topic name="Setting a Forwarding Address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="free/busy" >
+  <topic name="Seeing free/busy times" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="GAL vs Contacts" >
+  <topic name="GAL vs Contacts" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="getting started in notebooks" >
+  <topic name="Working in Notebooks" url="Documents/Working_in_Notebooks.htm" />
+</key>
+<key name="group contacts" >
+  <topic name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="how to create appointments" >
+  <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="HTML" >
+  <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="iCal Calendars, import or export" >
+  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="ics attachments, saving" >
+  <topic name="Responding_to_an_invitation" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="identities" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="IM notification" >
+  <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="images in signatures" >
+  <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="IMAP account setup" >
+  <topic name="Setting up POP/IMAP accounts" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
+<key name="IMAP addresses, adding" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="import account" >
+  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="import iCal calendars" >
+  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="importing address books" >
+  <topic name="Importing Contacts" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="importing contacts" >
+  <topic name="Importing Contacts" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="invitation moved to trash" >
+  <topic name="Responding to an invitation" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="invitation, responding" >
+  <topic name="Responding to an invitation" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="keyboard shortcuts" >
+  <topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="mail" >
+  <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
+  <key name="Reading" >
+    <topic name="Reading mail" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="mail identities" >
+  <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="mail identity when composing message" >
+  <topic name="Creating a new mail message" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
+<key name="mail notification" >
+  <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="mandatory attendance" >
+  <topic name="Using the Schedule tab when creating a appointment" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="mark appointment as private" >
+  <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="marking appointments as private" >
+  <topic name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="meeting reminders" >
+  <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 
 </indexdata>

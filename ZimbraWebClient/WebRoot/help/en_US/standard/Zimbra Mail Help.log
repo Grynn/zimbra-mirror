@@ -177,7 +177,6 @@ Navigation_folders_and_tips\Changing_my_default_client_type_for_log_in.htm
 Navigation_folders_and_tips\inbox_folder.htm
 Navigation_folders_and_tips\renaming_folders.htm
 Navigation_folders_and_tips\Subscribe_to_RSS_ATOM_feed_.htm
-Navigation_folders_and_tips\trash_folder.htm
 reading_mail\b_How_do_I_know_when_I_receive_new_messages.htm
 reading_mail\b_Marking_mail_as_unread.htm
 reading_mail\b_Printing_email_messages.htm
@@ -191,6 +190,7 @@ Search\b_Using_Search.htm
 Search\query_language_description.htm
 Tags_and_flags\b_Assigning_Tags_to_messages_and_contacts.htm
 Tags_and_flags\b_Flagging_an_email_message.htm
+Tasks\About_Tasks.htm
 Tasks\bc_Create_task_lists.htm
 Tasks\Change_a_task.htm
 Tasks\Sorting_tasks_.htm
@@ -205,6 +205,7 @@ RoboHHRE.lng
 Zimbra_User_Help.glo
 default.css
 basicsearchfolder.png
+Tasks_content_pane.png
 groupcontasticon.png
 conversationview.png
 newwindowbutton.png
@@ -214,7 +215,6 @@ spellcheckbasic.png
 ABedit.png
 add_recipients.png
 mail.png
-rd_blue_right.jpg
 zimbra_logo_big.gif
 calendarmultimgtview.gif
 ehlpdhtm.js

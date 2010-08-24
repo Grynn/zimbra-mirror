@@ -1,31 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Building search queries</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-ul.whs9 { list-style:disc; }
-p.whs10 { font-weight:bold; }
-p.whs11 { font-style:italic; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -36,26 +18,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Searching for Items\nBuilding search queries");
+	addTocInfo("Searching for Items\nAdvanced search");
 addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
@@ -65,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"using_the_search_feature.htm\">Searching for Items</a> &gt; Building search queries</p>");
+document.write("<a href=\"using_the_search_feature.htm\">Searching for Items<\/a> &gt; Advanced search<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -87,72 +83,72 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
+
+
 <h1>Using Advanced search</h1>
 <p>The Advanced search features opens separate mini-panes to perform different 
  types of searches. You can open multiple instances of each mini-pane. 
- You might want to do this if you are doing AND type searches. </p>
+ You might want to do this if you are &#160;going to run AND type searches.</p>
 <p>Advanced search allows you to search by the following criteria:</p>
-<ul type="disc" class="whs9">
-	<li class=p><p><span style="font-weight: bold;"><B>Attachment.</B></span> 
- No Attachment, Any Attachment, or Specific Attachment. If you select specific 
- attachment, a list of attachment types is displayed. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Basic.</B></span> Uses 
- header information such as From, To, Subject, and Content of the email 
- body. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Date.</B></span> Search 
- for messages received after, on, or before a selected date. Open two Date 
- panes to search between dates.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Domain.</B></span> Search 
- for messages where the address headers (From/To/Cc) contain addresses 
- from certain domains. The domains are pre-defined with check boxes.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Folder.</B></span> Limit 
- search to selected folders only.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Saved Search.</B></span> 
- Open a search query you have saved previously.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Size.</B></span> Search 
- for messages that are larger or smaller than a specified size (bytes, 
- KB, or MB).</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Zimlets.</B></span> Search 
- for messages or contacts containing URLs, phone numbers, 
- or other objects as defined by your Zimbra administrator.</p></li>
-	<li class=p><p class="whs10">Status.<span style="font-weight: normal;"> 
- Search for messages or contacts that are flagged or unflagged. 
- Search for messages that are read, unread, forwarded, or replied to.</span></p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Tag.</B></span> Search 
- for messages or contacts that have a specific tag or a specified set of 
- tags. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Time. </B></span><span>Search 
- for messages that arrived within a time-frame, such as the last hour, 
- this week, last month, etc.</span> </p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Attachment.</b></span> 
+	 No Attachment, Any Attachment, or Specific Attachment. If you select 
+	 specific attachment, a list of attachment types is displayed.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Basic.</b></span> Uses 
+	 header information such as From, To, Subject, and Content of the email 
+	 body.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Date.</b></span> Search 
+	 for messages received after, on, or before a selected date. Open two 
+	 Date panes to search between dates.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Domain.</b></span> Search 
+	 for messages where the address headers (From/To/Cc) contain addresses 
+	 from certain domains. The domains are pre-defined with check boxes.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Folder.</b></span> Limit 
+	 search to selected folders only.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Saved Search.</b></span> 
+	 Open a search query you have saved previously.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Size.</b></span> Search 
+	 for messages that are larger or smaller than a specified size (bytes, 
+	 KB, or MB).</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Zimlets.</b></span> Search 
+	 for messages or contacts containing URLs, 
+	 phone numbers, or other objects as defined by your Zimbra administrator.</p></li>
+	<li class="p"><p style="font-weight: bold;">Status. <span style="font-weight: normal;">Search 
+	 for messages or contacts that are flagged or unflagged. 
+	 Search for messages that are read, unread, forwarded, or replied to.</span></p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Tag.</b></span> Search 
+	 for messages or contacts that have a specific tag or a specified set 
+	 of tags.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Time.</b></span> <span>Search 
+	 for messages that arrived within a time-frame, such as the last hour, 
+	 this week, last month, etc.</span></p></li>
 </ul>
-<p class="whs11">&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="font-style: italic;">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"using_the_search_feature.htm\">Searching for Items</a> &gt; Building search queries</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

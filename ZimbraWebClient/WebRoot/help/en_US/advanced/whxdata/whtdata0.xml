@@ -43,7 +43,7 @@
     <item name="Reading mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
     <item name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
     <item name="Marking mail as unread" url="reading_mail/marking_mail_as_unread.htm" />
-    <item name="New messages" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+    <item name="Notification about new messages" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
     <item name="Displaying HTML in email messages" url="reading_mail/displaying_html_in_email_messages.htm" />
     <item name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
     <item name="Printing a mail message" url="reading_mail/printing_a_mail_message.htm" />
@@ -56,6 +56,7 @@
 </book>
 <book name="Composing Email" >
   <item name="Composing a new mail message" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="Composing a new mail message" url="Creating_Messages/Composing_a_new_mail_message.htm" />
   <item name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="Parts of an email message" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Add your signature automatically" url="Userspecific/using_a_signature.htm" />
@@ -101,61 +102,59 @@
   <item name="Printing a calendar" url="Calendar/Printing_a_calendar.htm" />
 </book>
 <book name="Scheduling Appointments, Meetings and Events" >
-  <item name="About appointments, meetings and events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="Planning a meeting" url="Calendar/About_the_Appointment_Page.htm" />
-  <item name="Creating an appointment" url="Calendar/Scheduling_meetings.htm" />
-  <item name="Seeing free/busy times" url="Calendar/Seeing_free_busy_times.htm" />
-  <item name="Setting permissions to see your free/busy information" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
-  <item name="Sending your free/busy status to others" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
-  <item name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
-  <item name="Scheduling resources" url="Calendar/Scheduling_Resources.htm" />
-  <item name="Turning a message into a meeting request" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
-  <item name="Using QuickAdd to create an appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-  <item name="Scheduling all-day events" url="Calendar/Scheduling_All_Day_events.htm" />
-  <item name="Creating recurring appointments" url="Calendar/Creating_recurring_appointments.htm" />
-  <item name="Change meeting details on your calendar" url="Calendar/editing_meetings_on_your_calendar.htm" />
-  <item name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
-  <item name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
-  <item name="Responding to a meeting invite" url="Calendar/Responding_to_an_invitation.htm" />
-  <item name="Changing a meeting you organized" url="Calendar/Changing_a_meeting_.htm" />
-  <item name="Deleting an appointment" url="Calendar/Deleting_an_appointment.htm" />
-  <item name="Deleting recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
+<chunk name="Scheduling Appointments, Meetings and Events" ref="whtdata1.xml" />
 </book>
 <book name="Using Task Lists" >
-<chunk name="Using Task Lists" ref="whtdata1.xml" />
+  <item name="About Tasks" url="Tasks/About_Tasks.htm" />
+  <item name="Create tasks lists" url="Tasks/Create_tasks_folders.htm" />
+  <item name="Add a task" url="Tasks/Add_a_task.htm" />
+  <item name="Change a task" url="Tasks/Change_a_task.htm" />
+  <item name="Moving tasks" url="Tasks/Moving_tasks.htm" />
+  <item name="Delete a task" url="Tasks/Delete_a_task.htm" />
+  <item name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />
 </book>
 <book name="Working in Documents " >
-<chunk name="Working in Documents " ref="whtdata2.xml" />
+  <item name="Working in Documents" url="Documents/Working_in_Notebooks.htm" />
+  <item name="Create new notebooks" url="Documents/Create_multiple_notebooks.htm" />
+  <item name="Create a new page" url="Documents/Create_a_new_page.htm" />
+  <item name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="Using HTML for format Documents pages" url="Documents/Using_HTML_for_format_pages.htm" />
+  <item name="Adding a table to a  notebook page" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </book>
 <book name="Using Briefcase" >
-<chunk name="Using Briefcase" ref="whtdata3.xml" />
+  <item name="Working in Briefcase" url="Briefcase/Working_in_Briefcase.htm" />
+  <item name="Working with files in Briefcase" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+  <item name="Creating Slide Presentations in Briefcase" url="Briefcase/Creating_Slide_Presentations_in_Briefcase.htm" />
+  <item name="Creating Spreadsheets in Briefcase" url="Briefcase/Creating_Spreadsheets_in_Briefcase.htm" />
+  <item name="Send Files from your Briefcase" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </book>
 <book name="Sharing Folders" >
-<chunk name="Sharing Folders" ref="whtdata4.xml" />
+<chunk name="Sharing Folders" ref="whtdata2.xml" />
 </book>
 <book name="Searching for Items" >
-<chunk name="Searching for Items" ref="whtdata5.xml" />
+<chunk name="Searching for Items" ref="whtdata3.xml" />
 </book>
 <book name="Using Tags and Folders to Organize Email" >
-<chunk name="Using Tags and Folders to Organize Email" ref="whtdata6.xml" />
+<chunk name="Using Tags and Folders to Organize Email" ref="whtdata4.xml" />
 </book>
 <book name="Using Mail Filters" >
-<chunk name="Using Mail Filters" ref="whtdata7.xml" />
+<chunk name="Using Mail Filters" ref="whtdata5.xml" />
 </book>
 <book name="Setting Your Preferences" >
-<chunk name="Setting Your Preferences" ref="whtdata8.xml" />
+<chunk name="Setting Your Preferences" ref="whtdata6.xml" />
 </book>
 <book name="Instant Messaging (Beta)" >
-<chunk name="Instant Messaging (Beta)" ref="whtdata9.xml" />
+<chunk name="Instant Messaging (Beta)" ref="whtdata7.xml" />
 </book>
 <book name="Managing your Mobile Device (ZCS Network Edition)" >
-<chunk name="Managing your Mobile Device (ZCS Network Edition)" ref="whtdata10.xml" />
+  <item name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
+  <item name="How to wipe your mobile device" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </book>
 <book name="Saving Your Account Folders" >
-<chunk name="Saving Your Account Folders" ref="whtdata11.xml" />
+  <item name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 <book name="Using Zimlets" >
-<chunk name="Using Zimlets" ref="whtdata12.xml" />
+<chunk name="Using Zimlets" ref="whtdata8.xml" />
 </book>
 
 </tocdata>

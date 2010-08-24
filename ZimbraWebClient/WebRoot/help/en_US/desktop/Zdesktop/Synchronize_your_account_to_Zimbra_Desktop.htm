@@ -1,21 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Synchronize your account to Zimbra Desktop</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -26,26 +18,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Setting Up Yahoo! Zimbra Desktop\nSynchronize your accounts");
+	addTocInfo("Setting Up  Zimbra Desktop\nSynchronize your accounts");
 addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
@@ -55,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up Yahoo! Zimbra Desktop</a> &gt; Synchronize your accounts</p>");
+document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up  Zimbra Desktop<\/a> &gt; Synchronize your accounts<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -77,61 +83,52 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Synchronize your account to Yahoo! Zimbra Desktop</h1>
-<p>When you account is set up, the initial synchronization from the account 
- to the Yahoo! Zimbra Desktop starts immediately. The 
- initial sync could take several hours if you have a large mailbox or use 
- a slow network connection. You can work in Yahoo! Zimbra Desktop 
- while your account is being synced.</p>
+//]]></script>
+<h1>Synchronize your accounts to Zimbra Desktop 
+ </h1>
+<p>When your account is set up, the initial synchronization from the account 
+ to Zimbra Desktop 
+ starts immediately. The initial sync could take several hours if you have 
+ a large mailbox or use a slow network connection. You can work in Zimbra Desktop while your account 
+ is being synced.</p>
 <p><em style="font-style: italic;"><strong style="font-weight: bold;">Important</strong>: 
  Before you start the sync to download your messages, make sure you have 
  enough disk space.</em></p>
-<ul type="disc" class="whs1">
-	<li class=p><p>For the Zimbra Web Client account, all email folders, 
- address book, and calendar, including those you created, are downloaded 
- to the Zimbra Desktop. Tags you have created and searched you have saved 
- are also synchronized.</p></li>
-	<li class=p><p>For Yahoo Mail accounts and Gmail accounts, the Inbox, 
- Sent, Draft, Contacts and Calendar are synchronized to the Zimbra Desktop. 
- &nbsp;Your Trash and Spam folders are not synchronized. 
- </p></li>
-	<li class=p><p>For &nbsp;AOL, Live Hotmail, 
- and other IMAP or POP accounts, the Inbox, Sent, Draft, folders are synchronized 
- to the Yahoo! Zimbra Desktop. Your Trash and Spam 
- folders &nbsp;are not synchronized. &nbsp;If 
- you created other email folders, they are not synchronized initially, 
- but you can sync these folders individually. Contact lists, and calendars 
- are not synced to Yahoo! Zimbra Desktop. 
- </p></li>
+<ul type="disc">
+	<li class="p"><p>For the Zimbra Web Client account, all email folders, 
+	 address books, and calendars, including those you created, are downloaded 
+	 to the Zimbra Desktop, as well as task lists and content from your 
+	 Briefcase folders. &#160;Tags you created and searches you saved are 
+	 also synchronized.</p></li>
+	<li class="p"><p>For Yahoo Mail accounts and Gmail accounts, the Inbox, 
+	 Sent, and Draft folders are synchronized to the desktop. &#160;If 
+	 you enabled the setting to synchronize calendars and contacts, these 
+	 folders are also synchronized to the desktop. &#160;Your Trash and 
+	 Spam folders are not synchronized.</p></li>
+	<li class="p"><p>For IMAP or POP accounts, the Inbox, Sent, Draft, 
+	 folders are synchronized to the Zimbra Desktop. 
+	 Your Trash and Spam folders are not synchronized. &#160;If you created 
+	 other email folders, they are not synchronized initially, but you 
+	 can sync these folders individually. Contact lists and calendars are 
+	 not synced to Zimbra Desktop.</p></li>
 </ul>
-<p>After the initial synchronization, Yahoo! Zimbra Desktop 
- runs in the background to always synchronize data with your remote accounts. 
- The schedule you set up determines how often Yahoo! Zimbra Desktop 
- syncs to your account. This background service continues to run after 
- you close the Yahoo! Zimbra Desktop window as long as you 
- have access to the internet. </p>
-<p>When you start your computer, Yahoo! Zimbra Desktop 
- automatically starts and the background service synchronizes your account 
- data. For accounts other than the Zimbra Web Client account, if you do 
- not want &nbsp;folders to automatically sync, you can 
- <a href="Turning_Off_Automatic_Sync.htm">turn off sync</a>. &nbsp;</p>
+<p>After the initial synch, when you are online, the synchronization settings 
+ you set for the account determines how often Zimbra Desktop 
+ syncs to your account. </p>
+<p>For accounts other than the Zimbra Web Client account, if you do not 
+ want folders to automatically sync, you can <a href="Turning_Off_Automatic_Sync.htm">turn 
+ off sync</a>. &#160;</p>
 <p>If the network connectivity is lost while the data is synchronized between 
  Zimbra Desktop and the server, when connectivity is restored, the sync 
  resumes where it was interrupted. No data is lost because of the disruption.</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up Yahoo! Zimbra Desktop</a> &gt; Synchronize your accounts</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

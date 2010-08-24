@@ -1,41 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Changing account order on Desktop</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-ol.whs9 { list-style:decimal; }
-p.whs10 { margin-left:0px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs10 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -46,26 +18,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Setting Up Yahoo! Zimbra Desktop\nChanging account order on Desktop");
+	addTocInfo("Setting Up  Zimbra Desktop\nOrganize your Desktop view");
 addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
@@ -75,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up Yahoo! Zimbra Desktop</a> &gt; Changing account order on Desktop</p>");
+document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up  Zimbra Desktop<\/a> &gt; Organize your Desktop view<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -97,55 +83,69 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
-<h1>Setting the default account on Yahoo! Zimbra Desktop</h1>
-<p>When you open Yahoo! Zimbra Desktop, 
- your accounts are displayed on the left in the order that you set them 
- up. The first account is the default account. This is the account that 
- is opened when you launch Yahoo! Zimbra Desktop. 
- You can change which account is the default. </p>
-<ol type="1" class="whs9">
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Account</B></span> 
- <strong>Setup</strong> on the Yahoo! Zimbra Desktop. 
- The <span style="font-weight: bold;"><B>My Accounts</B></span> page displays 
- a list of your accounts. The first account in the list is the default.</p></li>
-	<li class=p><p class="whs10">To change the default account, 
- click <span style="font-weight: bold;"><B>Default</B></span> under the account 
- name you want as the default. That &nbsp;account is moved 
- to the top. &nbsp;</p></li>
+
+
+<h1>Organizing your Desktop View</h1>
+<p>When you set up Desktop, your accounts are displayed separately in the 
+ Overview pane. If you prefer to have all your messages in one account, 
+ enable the general preference <span style="font-weight: bold;"><b>Show the 
+ &quot;All Mailboxes&quot; section with my other accounts</b></span><span>. 
+ </span>&#160;All messages from each of your accounts for Inbox, Sent, 
+ and Drafts are combined under this section. The number of unread items 
+ for all accounts is displayed. Your individual accounts are listed below 
+ All Mailboxes. You can click on an account to see only the&#160;items 
+ in that account.</p>
+<p>&#160;</p>
+<p><img src="../allmailboxview.png" alt="allmailboxview.png" style="border: none;" width="331" height="236" border="0" /></p>
+<p>&#160;</p>
+<p>When you view messages in the All Mailboxes view, an icon in the message 
+ list identifies which account the message is from.</p>
+<p><img src="../mailicons.png" alt="mailicons.png" style="border: none;" width="258" height="78" border="0" /></p>
+<p>&#160;</p>
+<h3>Default Account</h3>
+<p>When you open Zimbra Desktop, 
+ your accounts are displayed in the Overview pane in the order that you 
+ set them up. The first account is the default desktop account. This is 
+ the account that is opened when you launch Zimbra Desktop. 
+ You can change which account is the default.</p>
+<ol type="1">
+	<li class="p"><p>Click <strong>Setup</strong> on the Zimbra Desktop. The <span style="font-weight: bold;"><b>My 
+	 Accounts</b></span> page displays a list of your accounts. </p></li>
+	<li class="p"><p style="margin-left: 0px;">To change the default account, 
+	 click <img src="../defaulticonmove.png" alt="defaulticonmove.png" style="border: none;" width="17" height="26" border="0" /> next to the account 
+	 name. That &#160;account is moved to the top. &#160;</p></li>
 </ol>
-<p class="whs10">&nbsp;</p>
-<p class="whs10">Besides being the account that is opened when 
- Yahoo! Zimbra Desktop 
- is displayed, the default account is the account used if Yahoo! Zimbra Desktop 
- is configured as the <a href="../managing_your_account/Making_Zimbra_Desktop_Default_Mail_Client.htm">default 
- mail client</a>. </p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 0px;">&#160;</p>
+<p style="margin-left: 0px;">Besides being the account that is opened when 
+ Zimbra Desktop is 
+ displayed, the default account is the account used if Zimbra Desktop 
+ is configured as the default mail application. You can set this up from 
+ the Preferences&gt;General page in the System Defaults section.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up Yahoo! Zimbra Desktop</a> &gt; Changing account order on Desktop</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

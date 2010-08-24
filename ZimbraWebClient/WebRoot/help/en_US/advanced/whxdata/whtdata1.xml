@@ -1,11 +1,24 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Create tasks lists" url="Tasks/Create_tasks_folders.htm" />
-<item name="Add a task" url="Tasks/Add_a_task.htm" />
-<item name="Change a task" url="Tasks/Change_a_task.htm" />
-<item name="Moving tasks" url="Tasks/Moving_tasks.htm" />
-<item name="Delete a task" url="Tasks/Delete_a_task.htm" />
-<item name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />
+<item name="About appointments, meetings and events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<item name="Planning a meeting" url="Calendar/About_the_Appointment_Page.htm" />
+<item name="Creating an appointment" url="Calendar/Scheduling_meetings.htm" />
+<item name="Seeing free/busy times" url="Calendar/Seeing_free_busy_times.htm" />
+<item name="Setting permissions to see your free/busy information" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+<item name="Sending your free/busy status to others" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+<item name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
+<item name="Scheduling resources" url="Calendar/Scheduling_Resources.htm" />
+<item name="Turning a message into a meeting request" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+<item name="Using QuickAdd to create an appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<item name="Scheduling all-day events" url="Calendar/Scheduling_All_Day_events.htm" />
+<item name="Creating recurring appointments" url="Calendar/Creating_recurring_appointments.htm" />
+<item name="Change meeting details on your calendar" url="Calendar/editing_meetings_on_your_calendar.htm" />
+<item name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+<item name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
+<item name="Responding to a meeting invite" url="Calendar/Responding_to_an_invitation.htm" />
+<item name="Changing a meeting you organized" url="Calendar/Changing_a_meeting_.htm" />
+<item name="Deleting an appointment" url="Calendar/Deleting_an_appointment.htm" />
+<item name="Deleting recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
 
 </tocdata>

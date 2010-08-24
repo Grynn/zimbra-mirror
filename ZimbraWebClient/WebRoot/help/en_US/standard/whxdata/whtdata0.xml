@@ -62,6 +62,7 @@
   <item name="Deleting an appointment" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
 <book name="Using Task Lists" >
+  <item name="About Tasks" url="Tasks/About_Tasks.htm" />
   <item name="Create task lists" url="Tasks/bc_Create_task_lists.htm" />
   <item name="Change a task" url="Tasks/Change_a_task.htm" />
   <item name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />

@@ -1,30 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Deleting_recurring_appointments</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-ol.whs9 { list-style:decimal; }
-img_whs10 { border:none; width:20px; height:20px; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -35,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Scheduling Appointments\nChanging recurring appointments");
@@ -64,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"About_Appointments,_Meetings_and_Events.htm\">Scheduling Appointments</a> &gt; Changing recurring appointments</p>");
+document.write("<a href=\"About_Appointments,_Meetings_and_Events.htm\">Scheduling Appointments<\/a> &gt; Changing recurring appointments<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -86,60 +83,86 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
+
+
 <h1>Changing recurring appointments</h1>
-<p>If you created the recurring meetings, you can change and delete one 
- occurrence or the series of meetings. An email is sent to attendees.</p>
+<p>If you created the recurring meetings, you can change and delete one occurrence or the series of meetings. An email is sent to attendees.</p>
 <h2>To change a meeting</h2>
-<ol type="1" class="whs9">
-	<li class=p><p>Double-click on the meeting to change, or right-click 
- and select <span style="font-weight: bold;"><B>Delete</B></span>. </p></li>
-	<li class=p><p>Select whether to open only the selected date or to 
- open the series. The <span style="font-weight: bold;"><B>Appointment</B></span> 
- page opens.</p></li>
-	<li class=p><p>Make your changes. You can change the schedule, the 
- attendees, add an explanation in the <span style="font-weight: bold;"><B>Text 
- </B></span><span>field </span>and add an attachment.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>OK</B></span>. An 
- email is sent to the attendees.</p></li>
+<ol type="1">
+<li class="p">
+<p>Right-click on the meeting to change.</p>
+</li>
+<li class="p">
+<p>Select whether to open only the selected date, Instance, or to open the series. The <span style="font-weight: bold;"><b>Appointment</b></span> <span style="font-weight: bold;"><b>Details</b></span> page opens.</p>
+</li>
+<li class="p">
+<p>Make your changes. You can change the schedule, the attendees, add an explanation in the <span style="font-weight: bold;"><b>Text</b></span> field and add an attachment.</p>
+</li>
 </ol>
-<h2>To delete a recurring meeting</h2>
-<ol type="1" class="whs9">
-	<li class=p><p>Click on the appointment.</p></li>
-	<li class=p><p>Right-click and select <span style="font-weight: bold;"><B>Delete</B></span>, 
- or drag the item to<img src="../trash.png" x-maintain-ratio="TRUE" width="20px" height="20px" border="0" class="img_whs10">.</p></li>
-	<li class=p><p>Select whether to delete the instance or to delete the 
- series.</p></li>
-	<li class=p><p>An email is sent to the attendees and the appointment 
- is deleted from their calendars.</p></li>
+<p style="margin-left: 40px;">If the changes you made do not require notifying users, uncheck <span style="font-weight: bold;"><b>Send Notification Mail.</b></span> Send Notification Mail gives you the option to make changes to a meeting without notifying all the attendees of the change.</p>
+<ol start="4" type="1">
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>OK</b></span>. An email is sent to the attendees.</p>
+</li>
 </ol>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<h2>To delete one meeting in a series</h2>
+<ol type="1">
+<li class="p">
+<p>Right-click on the appointment to delete and select <span style="font-weight: bold;"><b>Instance&gt;Delete Instance</b></span> to delete this meeting only.</p>
+</li>
+<li class="p">
+<p>&#160;Click <span style="font-weight: bold;"><b>OK</b></span>.</p>
+</li>
+</ol>
+<h2>To delete recurring meetings in a series</h2>
+<ol type="1">
+<li class="p">
+<p>Right-click on the appointment to delete and select <span style="font-weight: bold;"><b>Series&gt;Delete Series</b></span> to delete the recurring meeting. &#160;</p>
+</li>
+<li class="p">
+<p>Select either:</p>
+<ul type="disc">
+<li class="p">
+<p><span style="font-weight: bold;"><b>Cancel the entire series</b></span> to remove all references to the meeting both past dates and future dates.</p>
+</li>
+<li class="p">
+<p><span style="font-weight: bold;"><b>Cancel only the selected instance and everything after</b></span> to delete all references to the meeting from this date to the recurring meeting end date. &#160;Prior meetings in this recurring series are still on your calendar.</p>
+</li>
+</ul>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>OK</b></span>.</p>
+</li>
+<li class="p">
+<p>An email is sent to the attendees and the recurring appointment is deleted from their calendars.</p>
+</li>
+</ol>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"About_Appointments,_Meetings_and_Events.htm\">Scheduling Appointments</a> &gt; Changing recurring appointments</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

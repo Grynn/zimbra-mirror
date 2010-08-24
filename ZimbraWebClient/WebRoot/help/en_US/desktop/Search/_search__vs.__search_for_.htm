@@ -1,32 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Searching for messsages</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-ul.whs9 { list-style:disc; }
-ol.whs10 { list-style:decimal; }
-img_whs11 { border:none; width:92px; height:18px; float:none; border-style:none; }
-p.whs12 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -37,23 +18,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Searching for Items\nSearching for messages");
@@ -66,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"using_the_search_feature.htm\">Searching for Items</a> &gt; Searching for messages</p>");
+document.write("<a href=\"using_the_search_feature.htm\">Searching for Items<\/a> &gt; Searching for messages<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -88,71 +83,70 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
+
+
 <h1>Searching for messages</h1>
 <p>You can search for messages, conversations, or contacts</p>
-<ul type="disc" class="whs9">
-	<li class=p><p>Using the <span style="font-weight: bold;"><B>Search text 
- box</B></span> to enter your query, as described in <a HREF="Quick_search.htm">Quick-search 
- settings</a>.</p></li>
-	<li class=p><p>Using the <span style="font-weight: bold;"><B>Advanced 
- </B></span>search<span style="font-weight: bold;"> <B></B></span>to specify more 
- detailed search criteria.</p></li>
+<ul type="disc">
+	<li class="p"><p>Using the <span style="font-weight: bold;"><b>Search 
+	 text box</b></span> to enter your query, as described in <a href="Quick_search.htm">Quick-search 
+	 settings</a>.</p></li>
+	<li class="p"><p>Using the <span style="font-weight: bold;"><b>Advanced</b></span> 
+	 search to specify more detailed search criteria.</p></li>
 </ul>
 <h6>To search for messages using the Search text box:</h6>
-<ol type="1" class="whs10">
-	<li class=p><p>Enter search criteria in the <span style="font-weight: bold;"><B>Search</B></span> 
- box such as <span style="font-family: 'Lucida Console', monospace; color: #800080; font-weight: bold;"><font color=purple ><B>has:attachment</B></font></span> 
- or perhaps the sender's name.</p></li>
-	<li class=p><p>Click the Search arrow, <img src="../searchbutton75.png" x-maintain-ratio="TRUE" width="92px" height="18px" border="0" class="img_whs11"> and select the type of search from the list. 
- </p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Search</B></span>.</p></li>
+<ol type="1">
+	<li class="p"><p>Enter search criteria in the <span style="font-weight: bold;"><b>Search</b></span> 
+	 box such as <span style="font-family: 'Lucida Console', monospace; 
+						 color: #800080; font-weight: bold;"><font color="purple" ><b>has:attachment</b></font></span> 
+	 or perhaps the sender's name.</p></li>
+	<li class="p"><p>Click the Search arrow, <img src="../searchbutton75.png" alt="searchbutton75.png" style="border: none;" width="92" height="18" border="0" /> and 
+	 select the type of search from the list.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Search</b></span>.</p></li>
 </ol>
 <h6>To search for a message using detailed criteria:</h6>
-<ol type="1" class="whs10">
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Advanced </B></span>to 
- open the Advanced search area.</p></li>
-	<li class=p><p>Click icons in the toolbar to open the pane for the 
- type of criteria you want to use for your search.</p></li>
-	<li class=p><p>Enter the search criteria.</p></li>
+<ol type="1">
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Advanced</b></span> 
+	 to open the Advanced search area.</p></li>
+	<li class="p"><p>Click icons in the toolbar to open the pane for the 
+	 type of criteria you want to use for your search.</p></li>
+	<li class="p"><p>Enter the search criteria.</p></li>
 </ol>
-<p class="whs12">As soon as you enter a criteria in a search 
+<p style="margin-left: 40px;">As soon as you enter a criteria in a search 
  pane, or as soon as you have made any selection change in any other search 
  pane, such as changing a radio button or a drop-down search option, the 
  search executes.</p>
-<p class="whs12">Items matching the search criteria are listed 
+<p style="margin-left: 40px;">Items matching the search criteria are listed 
  in the lower right. If the Conversation feature is enabled, conversations 
  containing messages that match the search criteria are listed.</p>
-<ul><li class=p-note><p class=note>To refresh the search results area, 
- click <span style="font-weight: bold;"><B>Search</B></span>.</p></li>
-</ul>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p class="note" style="margin-left: 40px;"><span style="font-weight: bold;"><b>Note</b></span>: 
+ To refresh the search results area, click <span style="font-weight: bold;"><b>Search</b></span>.</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"using_the_search_feature.htm\">Searching for Items</a> &gt; Searching for messages</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

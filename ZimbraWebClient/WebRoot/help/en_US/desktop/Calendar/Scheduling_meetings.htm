@@ -1,43 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Scheduling_meetings</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-ol.whs9 { list-style:decimal; }
-img_whs10 { border:none; width:44px; height:18px; float:none; border-style:none; }
-p.whs11 { margin-left:40px; }
-p.whs12 { margin-left:0px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs12 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -48,23 +18,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Scheduling Appointments\nScheduling an appointment");
@@ -77,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"About_Appointments,_Meetings_and_Events.htm\">Scheduling Appointments</a> &gt; Scheduling an appointment</p>");
+document.write("<a href=\"About_Appointments,_Meetings_and_Events.htm\">Scheduling Appointments<\/a> &gt; Scheduling an appointment<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -99,110 +83,135 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
+
+
 <h1>Scheduling an appointment</h1>
 <p>You can schedule meetings and appointments from any view except Preferences. 
  You can schedule an appointment for yourself, or you can schedule a meeting 
- and invite attendees. </p>
+ and invite attendees.</p>
 <h2>Scheduling a single meeting from the Appointment page</h2>
-<ol type="1" class="whs9">
-	<li class=p><p>In any view except Preferences, on the toolbar click 
- the arrow on <img src="../newandarrow.gif" x-maintain-ratio="TRUE" width="44px" height="18px" border="0" class="img_whs10"> and select <span style="font-weight: bold;"><B>Appointment</B></span>.</p></li>
-	<li class=p-note><p class=note>For other ways to start an appointment 
- click <a href="About_Appointments,_Meetings_and_Events.htm">here</a>.</p></li>
+<ol type="1">
+	<li class="p"><p>In any view except Preferences, on the toolbar click 
+	 the arrow on <img src="../newandarrow.gif" alt="newandarrow.gif" style="border: none;" width="44" height="18" border="0" /> and select 
+	 <span style="font-weight: bold;"><b>Appointment</b></span>.</p></li>
 </ol>
-<ol start="2" type="1" class="whs9">
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Details</B></span> 
- sections, enter the Subject, Location, Free/busy status, and whether it 
- is a private meeting or not and what calendar this meeting should be saved 
- to. </p></li>
+<p class="note" style="margin-left: 40px;"><span style="font-weight: bold;"><b>Note</b></span>: 
+ For other ways to start an appointment click <a href="About_Appointments,_Meetings_and_Events.htm">here</a>.</p>
+<ol start="2" type="1">
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Details</b></span> 
+	 sections, enter the following:.</p></li>
 </ol>
-<p class="whs11">The subject becomes the description in the 
- calendar and is required.</p>
-<p class="whs11">You can use this field to describe the location 
- of the meeting, such as giving an address, building number, floor number. 
+<p style="margin-left: 40px;">The <span style="font-weight: bold;"><b>From</b></span> 
+ field displays if you created more than one <a href="../Userspecific/Mail_Identities.htm">persona</a> 
+ for your account. Select the identity to use when creating this appointment. 
  </p>
-<p class="whs11">The <span style="font-weight: bold;"><B>Show 
- as</B></span> selection determines if this appointment displays as free or 
- busy on the Schedule Attendees page. </p>
-<p class="whs11"><span style="font-weight: bold;"><B>Mark as</B></span> 
- lets you mark the message as private or public. </p>
-<p class="whs11">If you have multiple calendars, select which 
- calendar is setting up the event from the <span style="font-weight: bold;"><B>Calendar</B></span> 
+<p style="margin-left: 40px;">The <span style="font-weight: bold;"><b>Subject</b></span> 
+ field is required. This becomes the description in the calendar.</p>
+<p style="margin-left: 40px;">The <span style="font-weight: bold;"><b>Location</b></span> 
+ field can be used to describe the location of the meeting, such as giving 
+ an address, building number, floor number. Open the Find Location tab 
+ to find and reserve a room that is listed in your company's directory. 
+ &#160;These locations have been created as resource accounts by your system 
+ administrator and can be reserved. </p>
+<p style="margin-left: 40px;">The <span style="font-weight: bold;"><b>Show 
+ as</b></span> selection determines if this appointment displays as free, tentative, 
+ busy, or out of office on the Schedule Attendees page.</p>
+<p style="margin-left: 40px;"><span style="font-weight: bold;"><b>Mark as</b></span> 
+ lets you mark the message as <a href="Marking_an_appointment_as_private.htm">private 
+ or public</a>.</p>
+<p style="margin-left: 40px;">If you have multiple calendars, select which 
+ calendar is setting up the event from the <span style="font-weight: bold;"><b>Calendar</b></span> 
  menu</p>
-<ol start="3" type="1" class="whs9">
-	<li class=p><p>In the <span style="font-weight: bold;"><B>Time</B></span> 
- section, set the meeting date and time. Enter the <span style="font-weight: bold;"><B>Start</B></span> 
- date or click the down arrow to display a calendar and pick a date. Select 
- the <span style="font-weight: bold;"><B>End</B></span> date. Select the reminder 
- notification. Attendees will be reminded of this meeting based on the 
- time you set here.</p></li>
+<ol start="3" type="1">
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Time</b></span> 
+	 section, set the meeting date and time. Enter the <span style="font-weight: bold;"><b>Start</b></span> 
+	 date or click the down arrow to display a calendar and pick a date. 
+	 Select the <span style="font-weight: bold;"><b>End</b></span> date. Select 
+	 the reminder notification. Attendees will be reminded of this meeting 
+	 based on the time you set here.</p></li>
 </ol>
-<ol start="4" type="1" class="whs9">
-	</ol>
-<ol start="4" type="1" class="whs9">
-	<li class=p><p>Enter the names of the attendees. You can enter attendee 
- names in any of the following ways:</p></li>
-	<ul><li style="list-style: disc;" type=disc class=p><p class="whs12">Go 
- to the <span style="font-weight: bold;"><B>Find</B></span> <span style="font-weight: bold;"><B>Attendees</B></span> 
- tab. In the <span style="font-weight: bold;"><B>Find</B></span> field type a 
- name. Select the names and click 
- <span style="font-weight: bold;"><B>Add</B></span>. &nbsp;When 
- all names have been added, click <span style="font-weight: bold;"><B>OK</B></span>. 
- </p></li>
-		<li style="list-style: disc;" type=disc class=p><p>In the <span 
- style="font-weight: bold;"><B>Attendees</B></span> text field, type the email 
- addresses, separating addresses by a semicolon (;). Names in your Contact 
- list matching what you type are displayed as you type.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p>To see the free/busy 
- schedules for attendees, click the <span style="font-weight: bold;"><B>Schedule 
- </B></span>tab. As you enter attendees' names and email addresses, if attendees' 
- schedules are known, availability appears in horizontal bars next to the 
- names. Return to the <span style="font-weight: bold;"><B>Appointment</B></span> 
- tab when the attendee's list is complete. &nbsp;</p></li>
-	</ul>
-	<li class=p><p class="whs12">Use the <span style="font-weight: bold;"><B>Text</B></span> 
- field to add additional information to include in the email. To add attachments, 
- click<span style="font-weight: bold;"><B> Add Attachments</B></span> on the tool 
- bar.</p></li>
-	<li class=p><p class="whs12">Click <span style="font-weight: bold;"><B>Save</B></span>. 
- An email invitation is sent to all attendees and the appointment is displayed 
- in their calendars.</p></li>
+
+<ol start="4" type="1">
+	<li class="p"><p>Add resources. 
+	 Use the <span style="font-weight: bold;"><b>Find Resources</b></span> tab 
+	 to find and reserve a resource, such as a projector. This information 
+	 is listed as a Resource under the Attendees field.</p></li>
 </ol>
-<p class="whs11">&nbsp;</p>
-<p class="whs11">&nbsp;</p>
-<h2>&nbsp;</h2>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<ol start="4" type="1">
+	<li class="p"><p>Enter the names of the attendees. You can enter attendee 
+	 names in any of the following ways:</p>
+	<ul>
+		<li class="p" type="disc"><p style="margin-left: 0px;">Go to the 
+		 <span style="font-weight: bold;"><b>Find</b></span> <span style="font-weight: bold;"><b>Attendees</b></span> 
+		 tab. In the <span style="font-weight: bold;"><b>Find</b></span> field 
+		 type a name. 
+		 Select the names and click <span style="font-weight: bold;"><b>Add</b></span>. 
+		 &#160;When all names have been added, click <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
+		<li class="p" type="disc"><p>In the <span style="font-weight: bold;"><b>Attendees</b></span> 
+		 text field, type the email addresses, separating addresses by 
+		 a semicolon (;). Names in your Contact list matching what you 
+		 type are displayed as you type.</p></li>
+		<li class="p" type="disc"><p>To see the free/busy schedules for 
+		 attendees, click the <a href="Using_the_Schedule_tab_when_creating_a_appointment.htm"><span 
+		 style="font-weight: bold;"><b>Schedule</b></span> tab</a>. As you enter 
+		 attendees' names and email addresses, if attendees' schedules 
+		 are known, availability appears in horizontal bars next to the 
+		 names. Return to the <span style="font-weight: bold;"><b>Appointment</b></span> 
+		 tab when the attendee's list is complete. &#160;</p></li>
+	</ul></li>
+</ol>
+<p style="margin-left: 40px;">When <span style="font-weight: bold;"><b>Request 
+ Responses</b></span> is checked, you will receive email notification when 
+ attendees accept or decline your meeting request. &#160;If you do not 
+ want to receive the responses, click the checkbox to remove the check.</p>
+<p style="margin-left: 40px;">When <span style="font-weight: bold;"><b>Send 
+ Notification Mail</b></span> is checked, when you click save, an email is 
+ sent to the attendees list. Send Notification Mail gives you the option 
+ to make changes to a meeting without notifying all the attendees of the 
+ change.</p>
+<ol start="5" type="1">
+	<li class="p"><p style="margin-left: 0px;">Use the <span style="font-weight: bold;"><b>Text</b></span> 
+	 field to add additional information to include in the email. To add 
+	 attachments, click <span style="font-weight: bold;"><b>Add Attachments</b></span> 
+	 on the tool bar.</p></li>
+	<li class="p"><p style="margin-left: 0px;">Click <span style="font-weight: bold;"><b>Save</b></span>. 
+	 An email invitation is sent to all attendees and the appointment is 
+	 displayed in their calendars.</p></li>
+</ol>
+
+<p style="margin-left: 40px;">&#160;</p>
+<p style="margin-left: 40px;">&#160;</p>
+<h2>&#160;</h2>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"About_Appointments,_Meetings_and_Events.htm\">Scheduling Appointments</a> &gt; Scheduling an appointment</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

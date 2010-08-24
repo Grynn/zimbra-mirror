@@ -1,29 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Working Offline</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-ul.whs9 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -34,26 +18,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Getting Started\nWorking Offline");
+	addTocInfo("Getting Started\nWorking offline");
 addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
@@ -63,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"../Getting_Started/Zimbra_User_Help.htm\">Getting Started</a> &gt; Working Offline</p>");
+document.write("<a href=\"../Getting_Started/Zimbra_User_Help.htm\">Getting Started<\/a> &gt; Working offline<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -85,78 +83,95 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
+
+
 <h1>Working Offline</h1>
-<p><span class=Body>Email messages that are downloaded from your accounts 
- are always accessible in Yahoo! Zimbra Desktop, 
- even when you are not connected to the Internet. Working in Yahoo! Zimbra Desktop when not connected to 
- the Internet is called &quot;working offline&quot;.</span></p>
-<p>When you work offline, Yahoo! Zimbra Desktop 
- cannot access your email accounts, but you can work in Yahoo! Zimbra Desktop 
- as if you were connected to the Internet. You can review your messages, 
- create new messages, clean up folders and make other changes that are 
- synchronized back to your account when you access the Internet the next 
- time.</p>
-<p>You can tell if you are working offline if the circle next to your account 
- name is red. </p>
-<ul><li class=p-note><p class=note>You may be offline before the icon turns 
- red as the network’s status updates when Yahoo! Zimbra Desktop 
- attempts to sync to the server. If the attempt fails, the icon turns red. 
- If your mailbox sync schedule is infrequent or set to check manually, 
- a visual update of the status (green or red), will not be quickly apparent. 
- </p></li>
+<p><span class="Body">Email messages that are downloaded from your accounts 
+ are always accessible in Zimbra Desktop, 
+ even when you are not connected to the Internet. Working in Zimbra Desktop when not connected 
+ to the Internet is called &quot;working offline&quot;.</span></p>
+<p>When you work offline, Zimbra Desktop 
+ cannot access your email accounts, but you can work in Zimbra Desktop as if you were 
+ connected to the Internet. You can review your messages, create new messages, 
+ clean up folders and make other changes that are synchronized back to 
+ your account when you access the Internet the next time.</p>
+<table style="left: 0px; top: 189px; height: 95px; border-collapse: separate;" 
+		 cellspacing="0" width="648" border="1">
+	<col style="width: 78.064%;" />
+	<col style="width: 21.936%;" />
+	<tr>
+		<td><p>You can tell if you are working offline if a red square 
+		 is next to your account name</p></td>
+		<td><img src="../red_notonline.png" alt="red_notonline.png" style="border: none;" width="111" height="78" border="0" /></td>
+	</tr>
+</table>
+<p>&#160;</p>
+<p class="note"><span style="font-weight: bold;"><b>Note: </b></span>You may be 
+ offline before the icon turns red as the network’s status updates when 
+ Zimbra Desktop attempts 
+ to sync to the server. If the attempt fails, the icon turns red. </p>
+<table style="left: 0px; top: 326px; height: 80px; border-collapse: separate;" 
+		 cellspacing="0" width="762" border="1">
+	<col style="width: 78.064%;" />
+	<col style="width: 21.936%;" />
+	<tr>
+		<td><p>&#160;</p>
+		<p>You can force all accounts to go offline by clicking the small 
+		 icon next to Accounts on the Overview pane. </p>
+		<p>Click the icon again to go back online. &#160;</p></td>
+		<td><img src="../disconnect.png" alt="disconnect.png" style="border: none;" width="151" height="64" border="0" /></td>
+	</tr>
+</table>
+<h2>What can you do while working offline?</h2>
+<ul type="disc">
+	<li class="p-style2"><p class="style2">You can read your email messages, 
+	 move them to folders, and tag them for follow up.</p></li>
+	<li class="p"><p>You can type a reply to a message and send it, forward 
+	 a message, or create a new message. The messages are saved to the 
+	 Outbox and when you connect to the Internet 
+	 the next time, they are automatically sent.</p></li>
+	<li class="p"><p>You can delete messages. They are put in the Trash 
+	 folder. &#160;For Zimbra 
+	 account when you connect to the Internet the next time, the messages 
+	 are moved to the Trash folder in your account. If you emptied your 
+	 Trash folder, messages are deleted.</p></li>
+	<li class="p"><p>You can use the Search and Advanced Search features 
+	 to find messages and attachments that are in your Zimbra Desktop 
+	 account.</p></li>
+	<li class="p"><p>You can create a search and save it.</p></li>
+	<li class="p"><p>You can change your Zimbra Desktop 
+	 Preference. 
+	 These options affect how you work within Zimbra Desktop. 
+	 Changing preferences in the Zimbra Web Client Desktop changes your 
+	 Zimbra Web Client account preferences as well. Changes made in Preferences 
+	 for other email accounts affect the Zimbra Desktop 
+	 settings only. &#160;They do not change your account settings.</p></li>
 </ul>
-<h2>What can you do while working offline? </h2>
-<ul type="disc" class="whs9">
-	<li class=p-style2><p class=style2>You can read your email messages, 
- move them to folders and tag them for follow up.</p></li>
-	<li class=p><p>You can type a reply to a message and send it, forward 
- a message, or create a new message. The messages are saved to the Outbox 
- and when you connect to the Internet the next time, they are automatically 
- sent.</p></li>
-	<li class=p><p>You can delete messages. They are put in the Trash folder 
- and when you connect to the Internet the next time, the messages are moved 
- to the Trash folder in your account. If you emptied your Trash folder, 
- messages are deleted.</p></li>
-	<li class=p><p>You can use the Search and Advanced Search features 
- to find messages and attachments that are in your Yahoo! Zimbra Desktop 
- account.</p></li>
-	<li class=p><p>You can create a search and save it.</p></li>
-	<li class=p><p>You can change your Yahoo! Zimbra Desktop 
- <a href="../Userspecific/z-Setting_your_Desktop_Preferences.htm">Options</a>. 
- These options affect how you work within Yahoo! Zimbra Desktop. 
- Changing Options in the Zimbra Web Client Desktop, changes your Zimbra 
- Web Client account options (Preferences) as well. <br>
-	Changes made in Options for other email accounts affect the Yahoo! Zimbra Desktop 
- settings only. &nbsp;They do not change your account 
- settings.</p></li>
-</ul>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"../Getting_Started/Zimbra_User_Help.htm\">Getting Started</a> &gt; Working Offline</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

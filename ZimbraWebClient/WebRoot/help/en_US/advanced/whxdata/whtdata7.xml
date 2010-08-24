@@ -1,10 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Setting up filter rules" url="filters/how_filtering_works.htm" />
-<item name="Filtering your messages" url="filters/filtering_your_messages.htm" />
-<item name="Filter conditions and actions supported" url="filters/filter_conditions_and_actions_supported.htm" />
-<item name="Filtering using CONTAINS, MATCHES, and IS options" url="Search/contains_vs_matches.htm" />
-<item name="Filter wildcards" url="filters/wildcards.htm" />
+<item name="Instant Messaging Basics" url="instant_messaging/Instant_Messaging_Basics.htm" />
+<item name="Accessing Instant Messaging" url="instant_messaging/Accessing_Instant_Messaging.htm" />
+<item name="Starting an IM chat" url="instant_messaging/Starting_an_IM_chat.htm" />
+<item name="Changing status and availability" url="instant_messaging/Changing_status_and_availability.htm" />
+<item name="Log into other IM clients" url="instant_messaging/Log_into_other_IM_clients.htm" />
+<item name="Setting IM preferences" url="instant_messaging/Setting_IM_preferences.htm" />
+<item name="IM Chat Options to customize your chat experience" url="instant_messaging/IM_Chat_Options_to_customize_your_chat_experience.htm" />
 
 </tocdata>

@@ -1,47 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Setting up POP/IMAP accounts</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-ol.whs9 { list-style:decimal; }
-p.whs10 { margin-left:0px; }
-ul.whs11 { list-style:circle; }
-p.whs12 { text-align:left; }
-ul.whs13 { list-style:disc; }
-p.whs14 { margin-left:80px; }
-p.whs15 { margin-left:40px; }
-p.whs16 { margin-left:48px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs10 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -52,26 +18,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Setting Up Yahoo! Zimbra Desktop\nSetting up POP/IMAP accounts");
+	addTocInfo("Setting Up  Zimbra Desktop\nSetting up POP/IMAP accounts");
 addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
@@ -81,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up Yahoo! Zimbra Desktop</a> &gt; Setting up POP/IMAP accounts</p>");
+document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up  Zimbra Desktop<\/a> &gt; Setting up POP/IMAP accounts<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -103,21 +83,26 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
-<h1>Setting up POP/IMAP accounts, including Microsoft Exchange IMAP </h1>
+
+
+<h1>Setting up POP/IMAP accounts, including Microsoft Exchange IMAP</h1>
 <p>To set up the account you need your information about your account settings, 
  including incoming and outgoing mail server details. Your system administrator 
  or Internet Service Provider can give you this information.</p>
@@ -125,123 +110,112 @@ else
  only messages in your Inbox are synchronized.</p>
 <h3>To set up your account</h3>
 <p>Before you begin, make sure you are connected to the Internet.</p>
-<ol type="1" class="whs9">
-	<li class=p><p>Open Yahoo! Zimbra Desktop 
- and in the right top corner, click <span style="font-weight: bold;"><B>Account</B></span> 
- <span style="font-weight: bold;"><B>Setup</B></span>. If you already have an 
- account on Desktop, click <span style="font-weight: bold;"><B>Set Up Another 
- Account</B></span>. </p></li>
-	<li class=p><p>Select the type of account to set up, either <span style="font-weight: bold;"><B>Microsoft 
- Exchange IMAP</B></span>, <span style="font-weight: bold;"><B>IMAP</B></span>, or 
- <span style="font-weight: bold;"><B>POP</B></span>. Enter the following information.</p></li>
+<ol type="1">
+	<li><p style="margin-left: 0px;">Open Zimbra Desktop 
+	 and in the right top corner, click <span style="font-weight: bold;"><b>Setup</b></span>. 
+	 &#160;</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>ADD NEW ACCOUNT</b></span>. 
+	 &#160;In the Account Type list, select the account type. The Zimbra 
+	 Account Setup page displays. Enter the following information.</p></li>
 </ol>
-<ol><ul><li style="list-style: disc;" type=disc class=p><p class="whs10"><span 
- style="font-weight: bold;"><B>Account Name</B></span>. This is the name you use 
- to identify the account. This account name displays in Zimbra Desktop. 
- If you are setting up multiple accounts, be sure to create a name to easily 
- identify each account. </p></li>
-		<li style="list-style: disc;" type=disc class=p><p class="whs10"><strong 
- style="font-weight: bold;">Your Full Name</strong>. Enter your name. This 
- is not required. </p></li>
-		<li style="list-style: disc;" type=disc class=p><p class="whs10"><strong 
- style="font-weight: bold;">Email Address</strong>. Required. Enter your 
- email address for this account.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p class="whs10">In 
- the <span style="font-weight: bold;"><B>Receiving Mail</B></span> section, enter 
- the following</p></li>
-		<ul type="circle" class="whs11">
-			<li class=p><p class="whs10"><strong style="font-weight: bold;">User 
- Name</strong>. Enter the user name that you use to check your email. This 
- is typically in the form of username@example.com.</p></li>
-			<li class=p><p class="whs10"><strong style="font-weight: bold;">Password</strong>. 
- Enter the password you use to log into this account.</p></li>
-			<li class=p><p class="whs10"><strong style="font-weight: bold;">Incoming 
- Mail Server</strong>. Enter the address of your incoming mail server. 
- This is typically in the form of mail.example.com.</p></li>
-			<li class=p><p class="whs10"><span style="font-weight: bold;"><B>Security</B></span>. 
- Select whether to <span style="font-weight: bold;"><B>Use</B></span> <strong>SSL 
- encryption when accessing this server</strong>. &nbsp;If 
- your incoming mail server uses a different port, click <span style="font-weight: bold;"><B>Edit</B></span> 
- to change the port number. If you are uncertain what port your incoming 
- mail server uses, contact your system administrator.</p></li>
-		</ul>
-		<li style="list-style: disc;" type=disc class=p><p align="left" class="whs12"><strong style="font-weight: normal;">In the <span style="font-weight: bold;"><B>Sending 
- Mail</B></span> section, enter the following:</strong></p></li>
-		<ul type="circle" class="whs11">
-			<li class=p><p align="left" class="whs12"><strong 
- style="font-weight: bold;">SMTP Mail Server</strong>. 
- Enter the address of your outgoing mail server. This is typically in the 
- form of smtp.example.com.</p></li>
-			<li class=p><p align="left" class="whs12"><span style="font-weight: bold;"><B>Security</B></span>. 
- Select whether to <span style="font-weight: bold;"><B>Use</B></span> <strong>SSL 
- encryption when accessing this server</strong>. &nbsp;If 
- your incoming mail server uses a different port, click <span style="font-weight: bold;"><B>Edit</B></span> 
- to change the port number. If you are uncertain what port your incoming 
- mail server uses, contact your system administrator.</p></li>
-			<li class=p><p align="left" class="whs12">Select<span 
- style="font-weight: bold;"><B> Authentication</B></span> if <span>u</span><strong 
- style="font-weight: normal;">ser name and password are required for sending 
- email</strong>. If this option is selected, provide your<strong> User 
- Name</strong> and <strong>Password</strong>.</p></li>
-			<li class=p><p align="left" class="whs12"><strong 
- style="font-weight: bold;">Reply-to</strong>. If you want your Reply-to 
- name and email address to be different than your outgoing name and email 
- address, enter the <strong>Name</strong> and <strong>Email Address</strong> 
- you want to use.</p></li>
-		</ul>
-	</ul>
-</ol>
-<ol start="3" type="1" class="whs9">
-	<li class=p><p class="whs10">In the <span style="font-weight: bold;"><B>Synchronization 
- Settings </B></span>&nbsp;section, </p></li>
-	<ul type="disc" class="whs13">
-		<li class=p><p class="whs10">Set the <span style="font-weight: bold;"><B>Schedule 
- </B></span>to sync with your server<strong>.</strong></p></li>
-	</ul>
-</ol>
-<p class="whs14">If you select <span style="font-weight: bold;"><B>manually</B></span>, 
- you must click <span style="font-weight: bold;"><B>Send/Receive</B></span> &nbsp;on 
- the Yahoo! Zimbra Desktop toolbar to synchronize 
- your account with the Zimbra server.</p>
-<p class="whs14">If you select too short of time, such as 
- 1 minute, your computer’s performance could be impacted.</p>
-<p class="whs14">You can change this setting any time by clicking 
- <span style="font-weight: bold;"><B>Setup</B></span> and selecting the account 
- and modifying the setting.</p>
-<ul type="disc" class="whs13">
-	<li class=p><p class="whs15">Select in <span style="font-weight: bold;"><B>Messages 
- In</B></span> whether to sync all your folders or only your Inbox folder in 
- your email account to Yahoo! Zimbra Desktop.</p></li>
+<ul type="disc">
+	<li><p style="margin-left: 60px;"><span style="font-weight: bold;"><b>Account 
+	 Name.</b></span> This is the name that displays as the account name in 
+	 Zimbra Desktop 
+	 . If you are setting up multiple accounts, be sure to create a name 
+	 you can easily recognize to identify each account. For example, for 
+	 your Yahoo! account, you could use Yahoo.</p></li>
+	<li><p style="margin-left: 60px;"><strong style="font-weight: bold;">Your 
+	 full name</strong>. Enter your name. (optional)</p></li>
+	<li><p style="margin-left: 60px;"><strong style="font-weight: bold;">Email 
+	 Address</strong>. Enter your email address for this account.</p></li>
 </ul>
-<ol start="4" type="1" class="whs9">
-	<li class=p><p class="whs10">When you are finished, click 
- <span style="font-weight: bold;"><B>Test and Save</B></span>.</p></li>
+<ol start="3" type="1">
+	<li><p style="margin-left: 0px;">In the <span style="font-weight: bold;"><b>Receiving 
+	 Mail</b></span> section, enter the following:</p></li>
 </ol>
-<p class="whs16">Yahoo! Zimbra Desktop 
+<ul type="circle">
+	<ul type="circle">
+		<li type="disc"><p style="margin-left: 0px;"><strong style="font-weight: bold;">User 
+		 Name</strong>. Enter the user name that you use to check your 
+		 email. This is typically in the form of username@example.com.</p></li>
+		<li type="disc"><p style="margin-left: 0px;"><strong style="font-weight: bold;">Password</strong>. 
+		 Enter the password you use to log into this account.</p></li>
+		<li type="disc"><p style="margin-left: 0px;"><strong style="font-weight: bold;">Incoming 
+		 Mail Server</strong>. Enter the address of your incoming mail 
+		 server. This is typically in the form of mail.example.com.</p></li>
+		<li type="disc"><p style="margin-left: 0px;"><span style="font-weight: bold;"><b>Security</b></span>. 
+		 Select whether to <span style="font-weight: bold;"><b>Use</b></span> 
+		 <strong>SSL encryption when accessing 
+		 this server</strong>. &#160;If your incoming mail server uses 
+		 a different port, click <span style="font-weight: bold;"><b>Edit</b></span> 
+		 to change the port number. If you are uncertain what port your 
+		 incoming mail server uses, contact your system administrator.</p></li>
+	</ul>
+</ul>
+<ol start="4" type="1">
+	<li><p align="left"><strong style="font-weight: normal;">In the <span 
+	 style="font-weight: bold;"><b>Sending Mail</b></span> section, enter the 
+	 following:</strong></p></li>
+</ol>
+<ul type="disc">
+	<ul type="disc">
+		<li><p align="left"><strong style="font-weight: bold;">SMTP Mail Server</strong>. Enter the address of 
+		 your outgoing mail server. This is typically in the form of smtp.example.com.</p></li>
+		<li><p align="left"><span style="font-weight: bold;"><b>Security</b></span>. 
+		 Select whether to <span style="font-weight: bold;"><b>Use</b></span> 
+		 <strong>SSL encryption when accessing 
+		 this server</strong>. &#160;If your incoming mail server uses 
+		 a different port, click <span style="font-weight: bold;"><b>Edit</b></span> 
+		 to change the port number. If you are uncertain what port your 
+		 incoming mail server uses, contact your system administrator.</p></li>
+		<li><p align="left">Select <span style="font-weight: bold;"><b>Authentication</b></span> 
+		 if a <span>u</span><strong style="font-weight: normal;">ser name 
+		 and password are required for sending email</strong>. If this 
+		 option is selected, provide your <strong>User Name</strong> and 
+		 <strong>Password</strong>.</p></li>
+		<li><p align="left"><strong style="font-weight: bold;">Reply-to</strong>. 
+		 If you want your Reply-to name and email address to be different 
+		 than your outgoing name and email address, enter the <strong>Name</strong> 
+		 and <strong>Email Address</strong> you want to use.</p></li>
+	</ul>
+</ul>
+<ol start="5" type="1">
+	<li class="p"><p style="margin-left: 0px;">In the <span style="font-weight: bold;"><b>Synchronization 
+	 Settings</b></span> section, set the schedule to sync with your server. 
+	 The default is every 15 minutes. If you select <span style="font-weight: bold;"><b>manually</b></span>, 
+	 you must click Send/Receive on the Zimbra Desktop 
+	 toolbar to synchronize your account with the Zimbra server. If you 
+	 select too short of time, such as 1 minute, your computer's performance 
+	 could be impacted.</p></li>
+</ol>
+<p style="margin-left: 40px;">You can change this setting any time by clicking 
+ <span style="font-weight: bold;"><b>Setup</b></span> and selecting the account 
+ and modifying the setting.</p>
+<ol start="6" type="1">
+	<li class="p"><p style="margin-left: 0px;">When you are finished, click 
+	 <span style="font-weight: bold;"><b>Validate and Save</b></span>.</p></li>
+</ol>
+<p style="margin-left: 48px;">Zimbra Desktop 
  validates your account information. If your account is successfully validated, 
  you see the <strong>Service Created</strong> dialog. If your account is 
- not successfully validated, you are returned to the Account Setup dialog 
- so you can review you input and correct the information.</p>
-<ol start="5" type="1" class="whs9">
-	<li class=p><p class="whs10">Click <span style="font-weight: bold;"><B>Launch</B></span><strong> 
- Zimbra Desktop</strong> to open Yahoo! Zimbra Desktop. 
- You can work in Yahoo! Zimbra Desktop 
- as your account is being <a href="Synchronize_your_account_to_Zimbra_Desktop.htm">synchronized</a>.</p></li>
+ not successfully validated, you are returned to the Setup dialog so you 
+ can review you input and correct the information.</p>
+<ol start="7" type="1">
+	<li class="p"><p style="margin-left: 0px;">Click <span style="font-weight: bold;"><b>Launch</b></span> 
+	 <strong>Desktop</strong> to open Zimbra Desktop.You 
+	 can work in Zimbra Desktop 
+	 as your account is being <a href="Synchronize_your_account_to_Zimbra_Desktop.htm">synchronized</a>.</p></li>
 </ol>
-<p align="left" class="whs12">&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p align="left">&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">Setting Up Yahoo! Zimbra Desktop</a> &gt; Setting up POP/IMAP accounts</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

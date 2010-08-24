@@ -1,17 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>About Zimlets</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -22,23 +18,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
@@ -50,10 +62,11 @@ if (window.gbWhTopic)
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	document.write("<p style=\"text-align:right; background: silver\"> ");
+AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
+document.write("About Zimlets<\/p>");
+
 
 	if (window.setRelStartPage)
 	{
@@ -69,36 +82,38 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>About Zimlets</h1>
 <p>Zimlets are small programs created as a mechanism to integrate third-party 
  information and content with the Zimbra Web Client 
  features. Zimlets let you interact with different content types in your 
- email messages. &nbsp;</p>
-<ul class=whs1 style="list-style: disc;" type=disc>
-	<li class=p><p>Click on the URL in a message to launch a browser window 
- to go to that URL. Hover of the URL to see a preview of the site.</p></li>
-	<li class=p><p>Right-click on a phone number to make a call from your 
- computer softphone, such as Skype 
- or a Cisco VOIP phone.</p></li>
-	<li class=p><p>Right-click on a date within a message to see your calendar 
- and to schedule a meeting without leaving the message.</p></li>
-	<li class=p><p>Right-click on a name, address, or phone number to update 
- your address book.</p></li>
+ email messages. &#160;</p>
+<ul class="whs1" type="disc">
+	<li class="p"><p>Click on the URL in a message to launch a browser 
+	 window to go to that URL. Hover of the URL to see a preview of the 
+	 site.</p></li>
+	<li class="p"><p>Right-click on a phone number to make a call from 
+	 your computer softphone, such as Skype or a Cisco VOIP phone.</p></li>
+	<li class="p"><p>Right-click on a date within a message to see your 
+	 calendar and to schedule a meeting without leaving the message.</p></li>
+	<li class="p"><p>Right-click on a name, address, or phone number to 
+	 update your address book.</p></li>
 </ul>
-<p>Other Zimlets may be available from the Overview pane. </p>
-<p><span style="font-weight: bold;"><B>Note</B></span>: If you do not see Zimlets 
- listed in your Overview pane, your system administrator has disabled them.</p>
-<script type="text/javascript" language="javascript1.2">
+<p>Other Zimlets may be available in your Overview pane. You can manage 
+ which Zimlets are displayed in your account from <span style="font-weight: bold;"><b>Preferences 
+ Zimlets</b></span>. </p>
+<p class="note">Note: If you do not see a Zimlets section in your Overview 
+ pane, your system administrator has disabled the Zimlets feature in your 
+ account.</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

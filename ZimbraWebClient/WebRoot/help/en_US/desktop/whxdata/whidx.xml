@@ -1,5 +1,6 @@
-<?xml version='1.0' encoding='utf-8' ?>
+﻿<?xml version='1.0' encoding='utf-8' ?>
 <index>
-<chunkinfo url="whidata0.xml" first="archiving" last="turning sync off" num="7" />
+<chunkinfo url="whidata0.xml" first="account setup, IMAP" last="meeting reminders" num="107" />
+<chunkinfo url="whidata1.xml" first="meetings" last="Zimlets" num="94" />
 
 </index>

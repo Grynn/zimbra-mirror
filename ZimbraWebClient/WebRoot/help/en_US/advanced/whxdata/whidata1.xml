@@ -58,6 +58,9 @@
 <key name="fonts" >
   <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
+<key name="forget" >
+  <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
 <key name="formatting with HTML" >
   <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
@@ -251,6 +254,7 @@
 </key>
 <key name="mini calendar" >
   <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="Viewing Calendar Week Numbers" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="mobile device" >
   <topic name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
@@ -299,12 +303,6 @@
 </key>
 <key name="optional attendance" >
   <topic name="Using the Schedule tab when creating a appointment" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="options" >
-  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="options, Calendar" >
-  <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
 </key>
 
 </indexdata>

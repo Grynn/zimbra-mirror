@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="options" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="options, Calendar" >
+  <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+</key>
 <key name="options, changing" >
   <topic name="Changing Your User Options" url="Userspecific/Changing_Your_User_Options.htm" />
 </key>
@@ -127,6 +133,9 @@
 <key name="receiving mail" >
   <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
+<key name="recipients, search" >
+  <topic name="Searching for Recipients " url="Search/Searching_for_Recipients_.htm" />
+</key>
 <key name="Recovering" >
   <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <key name="deleted mail messages" >
@@ -218,6 +227,9 @@
     <topic name="Using the search feature" url="Search/using_the_search_feature.htm" />
   </key>
 </key>
+<key name="search for recipients" >
+  <topic name="Searching for Recipients " url="Search/Searching_for_Recipients_.htm" />
+</key>
 <key name="search queries" >
   <topic name="Building search queries" url="Search/building_search_queries.htm" />
   <topic name="Saving search queries" url="Search/saving_search_queries.htm" />
@@ -300,19 +312,6 @@
 </key>
 <key name="tag, drag and drop" >
   <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-</key>
-<key name="tags" >
-  <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-  <topic name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
-  <key name="Assigning" >
-    <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-  </key>
-  <key name="Deleting" >
-    <topic name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
-  </key>
-</key>
-<key name="tags, creating" >
-  <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
 
 </indexdata>

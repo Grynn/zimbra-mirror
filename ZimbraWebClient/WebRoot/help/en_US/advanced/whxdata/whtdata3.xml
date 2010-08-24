@@ -1,10 +1,15 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Working in Briefcase" url="Briefcase/Working_in_Briefcase.htm" />
-<item name="Working with files in Briefcase" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-<item name="Creating Slide Presentations in Briefcase" url="Briefcase/Creating_Slide_Presentations_in_Briefcase.htm" />
-<item name="Creating Spreadsheets in Briefcase" url="Briefcase/Creating_Spreadsheets_in_Briefcase.htm" />
-<item name="Send Files from your Briefcase" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
+<item name="Using the Search feature" url="Search/using_the_search_feature.htm" />
+<item name="Quick search" url="Search/Quick_search.htm" />
+<item name="Using Advanced Search" url="Search/building_search_queries.htm" />
+<item name="Searching for messages" url="Search/_search__vs.__search_for_.htm" />
+<item name="Searching for Recipients" url="Search/Searching_for_Recipients_.htm" />
+<item name="Using * as a wildcard in Search" url="Search/Using_Wildcard_in_Search.htm" />
+<item name="Saving search queries" url="Search/saving_search_queries.htm" />
+<item name="Query language description" url="Search/query_language_description.htm" />
+<item name="And vs. Or type searches" url="Search/and_vs_or_searches.htm" />
+<item name="Search examples" url="Search/search_examples.htm" />
 
 </tocdata>

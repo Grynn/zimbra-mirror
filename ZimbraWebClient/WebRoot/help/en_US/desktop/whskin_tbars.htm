@@ -2,8 +2,8 @@
 <head>
 <title> WebHelp Navigation Toolbar </title>
 
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<meta name="description" content="WebHelp 5.50">
+<meta name="generator" content="Adobe RoboHelp 8" />
+<meta name="description" content="WebHelp 5.50" />
 <style>
 <!--
 body {margin:0;}
@@ -18,20 +18,20 @@ body {margin:0;}
 
 
 </head>
-<body marginheight="0"  marginwidth="0"  bgcolor="#0000a0"    background="blueback.gif"  scroll="no">
+<body marginheight="0"  marginwidth="0"  bgcolor="Black"    background="toolbar_bg_m.jpg"  scroll="no">
 <script language="javascript1.2">
 <!--
 if (window.gbWhTBar)
 {
-	setButtonFont("toc","Tahoma","8pt","White","Normal","Normal","none");
-setButtonFont("toc","Tahoma","8pt","White","Normal","Normal","none", true);
-setButtonFont("idx","Tahoma","8pt","White","Normal","Normal","none");
-setButtonFont("idx","Tahoma","8pt","White","Normal","Normal","none", true);
-setButtonFont("fts","Tahoma","8pt","White","Normal","Normal","none");
-setButtonFont("fts","Tahoma","8pt","White","Normal","Normal","none", true);
-setButtonFont("glo","Tahoma","8pt","White","Normal","Normal","none");
-setButtonFont("glo","Tahoma","8pt","White","Normal","Normal","none", true);
-setButtonFont("searchform","Tahoma","8pt","White","Normal","Normal","none");
+	setButtonFont("toc","Arial","9pt","White","Normal","Normal","none");
+setButtonFont("toc","Arial","9pt","Black","Normal","Normal","none", true);
+setButtonFont("idx","Arial","9pt","White","Normal","Normal","none");
+setButtonFont("idx","Arial","9pt","Black","Normal","Normal","none", true);
+setButtonFont("fts","Arial","9pt","White","Normal","Normal","none");
+setButtonFont("fts","Arial","9pt","Black","Normal","Normal","none", true);
+setButtonFont("glo","Arial","9pt","White","Normal","Normal","none");
+setButtonFont("glo","Arial","9pt","Black","Normal","Normal","none", true);
+setButtonFont("searchform","Arial","9pt","White","Normal","Normal","none");
 setButtonFont("searchform","","","","","","", true);
 setButtonFont("banner","","","","","","");
 setButtonFont("banner","","","","","","", true);
@@ -48,10 +48,10 @@ setButtonFont("banner","","","","","","", true);
 	gsIWebSearchD = "wht_ws_g.gif";
 	gsIBanner = "wht_logo1.gif";
 	gsIGo = "wht_go.gif";
-	setBackgroundcolor("#0000a0");
-	setBackground("blueback.gif");
+	setBackgroundcolor("Black");
+	setBackground("toolbar_bg_m.jpg");
 	setAlignment("left");
-	setGoImage("go.gif");
+	setGoImage("toolbar_searchbtn.gif");
 	
 	if (!gsBgImage)
 	{
@@ -63,26 +63,26 @@ setButtonFont("banner","","","","","","", true);
 	setButtonBgColor("idx", gsTBSelectedBgColor, true);
 	setButtonBgColor("fts", gsTBSelectedBgColor, true);
 	setButtonBgColor("glo", gsTBSelectedBgColor, true);
-	setButtonBgColor("toc","#0000a0");
-setButtonBgColor("idx","#0000a0");
-setButtonBgColor("fts","#0000a0");
-setButtonBgColor("glo","#0000a0");
+	setButtonBgColor("toc","Black");
+setButtonBgColor("idx","Black");
+setButtonBgColor("fts","Black");
+setButtonBgColor("glo","Black");
 setButtonBgColor("searchform","");
 setButtonBgColor("banner","");
 
 	}
-	setButtonBgColor("toc","#639ace", true);
-setButtonBgColor("idx","#639ace", true);
-setButtonBgColor("fts","#639ace", true);
-setButtonBgColor("glo","#639ace", true);
+	setButtonBgColor("toc","#d1d1d1", true);
+setButtonBgColor("idx","#d1d1d1", true);
+setButtonBgColor("fts","#d1d1d1", true);
+setButtonBgColor("glo","#d1d1d1", true);
 setButtonBgColor("searchform","", true);
 setButtonBgColor("banner","", true);
 
-	addButton("toc",BTN_TEXT|BTN_IMG,"Contents","","","","",0,0,"content.gif","content.gif","","content.gif","","");
-addButton("idx",BTN_TEXT|BTN_IMG,"Index","","","","",0,0,"index.gif","index.gif","","index.gif","","");
-addButton("fts",BTN_TEXT|BTN_IMG,"Search","","","","",0,0,"search.gif","search.gif","","search.gif","","");
+	addButton("toc",BTN_TEXT|BTN_IMG,"","","","","",0,0,"toolbarnav_toc.gif","toolbarnav_toc_sel.gif","","toolbarnav_toc_sel.gif","","");
+addButton("idx",BTN_TEXT|BTN_IMG,"","","","","",0,0,"toolbarnav_index.gif","toolbarnav_index_sel.gif","","toolbarnav_index_sel.gif","","");
+addButton("fts",BTN_TEXT|BTN_IMG,"","","","","",0,0,"toolbarnav_search.gif","toolbarnav_search_sel.gif","","toolbarnav_search_sel.gif","","");
 addButton("searchform",BTN_TEXT,"","","","","",0,0,"","","","","","");
-addButton("banner",BTN_IMG,"","","","","",0,0,"desktop_icon_small.png","","","","","");
+addButton("banner",BTN_IMG,"","","","","",0,0,"zimbra_desktop_icons_32x32.png","","","","","");
 
 	addButton("blankblock");
 	writeStyle(false);

@@ -1,29 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Sharing Your Zimbra Folders</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-ul.whs9 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -34,26 +18,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Sharing Folders (ZWC Accounts  Only)\nSharing Your Zimbra Folders");
+	addTocInfo("Sharing Folders (ZWC Accounts  Only)\nSharing your Zimbra folders");
 addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
@@ -63,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"zd_Sharing_Your_Zimbra_Folders.htm\">Sharing Folders (ZWC Accounts  Only)</a> &gt; Sharing Your Zimbra Folders</p>");
+document.write("<a href=\"zd_Sharing_Your_Zimbra_Folders.htm\">Sharing Folders (ZWC Accounts  Only)<\/a> &gt; Sharing your Zimbra folders<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -85,81 +83,109 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
-<h1>Sharing Your Zimbra 
- Folders</h1>
-<ul><li class=p-note><p class=note>Available for Zimbra Web Client 
- accounts only.</p></li>
-</ul>
+
+
+<h1>Sharing your &#160;Zimbra 
+ folders</h1>
+<p class="note"><span style="font-weight: bold;"><b>Note</b></span>: Available 
+ for Zimbra Web Client 
+ accounts only.</p>
 <p>You can set up sharing the your Zimbra Web Client folders with other 
- internal users &nbsp;from Yahoo! Zimbra Desktop. 
+ internal and external users from Zimbra Desktop. 
  The following can be shared:</p>
-<ul type="disc" class="whs9">
-	<li class=p><p>Mail folders, including Inbox folder and sub-folders 
- </p></li>
-	<li class=p><p>Contacts </p></li>
-	<li class=p><p>Calendars</p></li>
-	<li class=p><p>Task Lists</p></li>
-	<li class=p><p>Document Notebooks</p></li>
-	<li class=p><p>Briefcase folders</p></li>
+<ul type="disc">
+	<li class="p"><p>Mail folders, including Inbox folder and sub-folders</p></li>
+	<li class="p"><p>Contacts</p></li>
+	<li class="p"><p>Calendars</p></li>
+	<li class="p"><p>Task Lists</p></li>
+	<li class="p"><p>Briefcase folders</p></li>
 </ul>
-<p>You specify the type of access permissions to give the Grantee:</p>
-<ul type="disc" class="whs9">
-	<li class=p><p><span style="font-weight: bold;"><B>Viewer</B></span>. The 
- Grantee can read the contents of the folder, but cannot make changes to 
- the content.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Manager</B></span>. The 
- Grantee has permission to view, edit the contents of a folder, create 
- new sub folders, present items on your behalf, and delete items from the 
- folder.</p></li>
-	<li class=p><p>&nbsp;<span style="font-weight: bold;"><B>Admin</B></span>. 
- The Grantee has full permission to view, edit the content of &nbsp;a 
- shared folder, create new sub folders, present on your behalf, delete 
- items from the shared folder, and share the &nbsp;folder 
- with others. </p></li>
-	<li class=p-note><p class=note><span style="font-weight: bold;"><B>None</B></span> 
- is an option to temporarily disable access to a mail folder without revoking 
+<p>You right-click a folder and in the dialog that appears specify the 
+ type of access permissions to give the Grantee. &#160;You can share with 
+ internal users who can be given complete manager access to the folder, 
+ external guests that must use a password to view the folder content, and 
+ public access so that anyone who has the URL can view the content of the 
+ folder.</p>
+<p>When internal users share a folder, a copy of the shared folder is put 
+ in the Grantee's Folder list on the Overview pane. When the folder is 
+ selected, the content displays in the Content pane.</p>
+<p>Go to the Preferences Sharing folder to see a list of folders you shared 
+ with others and find folders that are shared with you.</p>
+<h2>Granting access to your folders</h2>
+<p>You can share folders with internal users or groups, external guests 
+ and the public.</p>
+<p>For internal users or groups, you specify the type of access permissions 
+ to give the Grantee:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Viewer</b></span>. The 
+	 Grantee can read the contents of the folder but cannot make changes 
+	 to the content.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Manager</b></span>. The 
+	 Grantee has permission to view and edit the contents of a folder, 
+	 create new sub folders, present items on your behalf, and delete items 
+	 from the folder.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Admin</b></span>. The 
+	 Grantee has full permission to view and edit the content of a shared 
+	 folder, create new sub folders, present on your behalf, delete items 
+	 from the shared folder, and share the &#160;folder with others.</p></li>
+</ul>
+<p class="note"><span style="font-weight: bold;"><b>Note: None</b></span> is an 
+ option to temporarily disable access to a mail folder without revoking 
  the share privileges. The Grantee still has the mail folder in his mailbox 
- but cannot view or manage activities on the grantor's mail folder. </p></li>
-</ul>
-<p>&nbsp;</p>
+ but cannot view or manage activities on the grantor's mail folder.</p>
 <p>When internal users accept to share a mail folder, a copy of the shared 
- folder is put in the Grantee's Folder list on the Yahoo! Zimbra Desktop. 
+ folder is put in the Grantee's Folder list on the Zimbra Desktop. 
  When the Grantee is using Zimbra Desktop online and selects the shared 
  folder, the content of the folder displays in the Content pane. The Grantee 
  does not need to log on to the Grantor's mailbox. The content of the shared 
  folder is not downloaded to the Grantee's computer and is not accessible 
- if the Grantee are not online.</p>
+ if the Grantee is not online.</p>
+<h3>External guests</h3>
+<p>You can share external guests that must use a password to view the folder 
+ content. External guides cannot make changes to your folder. You create 
+ the password</p>
+<h3>Public URL</h3>
+<p>Anyone who knows the URL to the folder can view the folder content. 
+ The public cannot make any changes to the folder. When you select to share 
+ with Public, the URL for that displays in the Share Properties dialog 
+ is made accessible to the public.</p>
+<h2>Revoking access to shared folders</h2>
+<p>You can edit the access rights and revoke permissions at any time from 
+ the folder's Edit Properties page or from the Preferences, Sharing folder.</p>
+<h2>Accessing a folder shared with you</h2>
+<p>When a folder is shared with you, you receive an email notification. 
+ When you select Accept in the email, the folder link is added to the Overview 
+ pane in your mailbox. When you click on the folder, you can see the contents 
+ of the Grantor's folder.</p>
 <p>Also see <a href="zd_working_in_a_shared_folder.htm">Working in a shared 
  folder</a></p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"zd_Sharing_Your_Zimbra_Folders.htm\">Sharing Folders (ZWC Accounts  Only)</a> &gt; Sharing Your Zimbra Folders</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -86,86 +86,103 @@ else
 	
 </div>
 
+
 <h1>Using filters to sort incoming mail</h1>
-<p>Email filtering allows you to define rules to manage incoming email. &#160;Filters automatically sort your incoming messages according to the rules you set up.</p>
+<p>Email filtering allows you to define rules to manage incoming email. 
+ &#160;Filters automatically sort your incoming messages according to the 
+ rules you set up.</p>
 <p>You can filter your incoming email messages to:</p>
 <ul type="disc">
-<li class="p">
-<p>Sort incoming messages into folders</p>
-</li>
-<li class="p">
-<p>Automatically tag messages</p>
-</li>
-<li class="p">
-<p>Forward messages</p>
-</li>
-<li class="p">
-<p>Discard messages</p>
-</li>
+	<li class="p"><p>Sort incoming messages into folders</p></li>
+	<li class="p"><p>Automatically tag messages</p></li>
+	<li class="p"><p>Forward messages</p></li>
+	<li class="p"><p>Discard messages</p></li>
 </ul>
-<p>For example, you could define a filter rule to identify mail coming from your immediate supervisor and move it to a folder called "From My Boss" or to automatically move messages from a specific address to the Trash folder.</p>
+<p>For example, you could define a filter rule to identify mail coming 
+ from your immediate supervisor and move it to a folder called &quot;From 
+ My Boss&quot; or to automatically move messages from a specific address 
+ to the Trash folder.</p>
 <h3>Filter conditions</h3>
-<p>Each filter is a rule with one or more conditions and a destination. Each filter rule can contain several conditions. For example, if your supervisor sends you emails from more than one address, such as 
-jane.smith@company.com or from jane-smith23@yahoo.com, you could create one filter called "Supervisor" which has two conditions, one for each email address.</p>
+<p>Each filter is a rule with one or more conditions and a destination. 
+ Each filter rule can contain several conditions. For example, if your 
+ supervisor sends you emails from more than one address, such as jane.smith@company.com or from jane-smith23@yahoo.com, 
+ you can create one filter called &quot;Supervisor&quot; which has two 
+ conditions, one for each email address.</p>
 <p>Conditions include:</p>
 <ul type="disc">
-<li class="p">
-<p>Specific addresses in the From:, To:, Cc: addresses in the email header</p>
-</li>
-<li class="p">
-<p>Words or character strings in the subject or body of the mail message</p>
-</li>
-<li class="p">
-<p>The presence or absence of file attachments</p>
-</li>
+	<li class="p"><p>Specific addresses in the From:, To:, Cc: addresses 
+	 in the email header</p></li>
+	<li class="p"><p>Words or character strings in the subject or body 
+	 of the mail message</p></li>
+	<li class="p"><p>The presence or absence of file attachments</p></li>
 </ul>
-<p>All the conditions allow you to specify "not" as a negative condition. For example, you can specify mail that does not contain a particular word.</p>
+<p>All the conditions allow you to specify &quot;not&quot; as a negative 
+ condition. For example, you can specify mail that does not contain a particular 
+ word.</p>
 <p>You can combine conditions to search for mail with more complex characteristics.</p>
 <h3>Any versus All</h3>
-<p>Conditions within a filter rule can be grouped using <span style="font-weight: bold;"><b>Any</b></span> or <span style="font-weight: bold;"><b>All</b></span> . The use of these terms is similar to the <a href="../Search/and_vs_or_searches.htm">"AND" versus. "OR"</a> type searches described under the Search feature, with <span style="font-weight: bold;"><b>Any</b></span> being OR and <span style="font-weight: bold;"><b>All</b></span> being AND.</p>
-<p>If you choose <span style="font-weight: bold;"><b>Any</b></span> when defining conditions for a new filter rule, then a message that meets any one of the conditions is considered a match. However, if you choose <span style="font-weight: bold;"><b>All</b></span>, every condition specified in that filter rule must apply in order for that message to match the filter.</p>
+<p>Conditions within a filter rule can be grouped using <span style="font-weight: bold;"><b>Any</b></span> 
+ or <span style="font-weight: bold;"><b>All</b></span>. The use of these terms 
+ is similar to the <a href="../Search/and_vs_or_searches.htm">&quot;AND&quot; 
+ versus. &quot;OR&quot;</a> type searches described under the Search feature, 
+ with <span style="font-weight: bold;"><b>Any</b></span> being OR and <span style="font-weight: bold;"><b>All</b></span> 
+ being AND.</p>
+<p>If you choose <span style="font-weight: bold;"><b>Any</b></span> when defining 
+ conditions for a new filter rule, then a message that meets any one of 
+ the conditions is considered a match. However, if you choose <span style="font-weight: bold;"><b>All</b></span>, 
+ every condition specified in that filter rule must apply in order for 
+ that message to match the filter.</p>
 <h3>Filter rule actions</h3>
 <p>Each filter rule can specify one or more actions. Actions include:</p>
 <ul type="disc">
-<li class="p">
-<p>Leave the message in the Inbox (no action).</p>
-</li>
-<li class="p">
-<p>Move the message to another specified folder.</p>
-</li>
-<li class="p">
-<p>Tag the message</p>
-</li>
-<li class="p">
-<p>Mark the message as read or as flagged.</p>
-</li>
-<li class="p">
-<p>Discard the message. This action drops the email message silently. It is not the same as the Delete action on your menu. Deleting an item moves it to the Trash folder. The Discard action prevents the message from ever reaching your mailbox.</p>
-</li>
-<li class="p">
-<p>Forward the message to another address.</p>
-</li>
+	<li class="p"><p>Leave the message in the Inbox (no action)</p></li>
+	<li class="p"><p>Move the message to another specified folder</p></li>
+	<li class="p"><p>Tag the message</p></li>
+	<li class="p"><p>Mark the message as read or as flagged</p></li>
+	<li class="p"><p>Discard the message. This action drops the email message 
+	 silently. It is not the same as the Delete action on your menu. Deleting 
+	 an item moves it to the Trash folder. The Discard action prevents 
+	 the message from ever reaching your mailbox</p></li>
+	<li class="p"><p>Forward the message to another address</p></li>
 </ul>
-<p>The <span style="font-weight: bold;"><b>Do not process additional filters</b></span> &#160;action should be the last action within each filter rule. This prevents the application of any additional filter rules to email messages that match the current rule. &#160;If it is not specified, subsequent filter rules are evaluated for the mail message, even if the current filter is a match. You probably do not want to have the same message match more than one filter rule and undergo multiple, perhaps contradictory actions.</p>
+<p>The <span style="font-weight: bold;"><b>Do not process additional filters</b></span> 
+ &#160;action should be the last action within each filter rule. This prevents 
+ the application of any additional filter rules to email messages that 
+ match the current rule. &#160;If it is not specified, subsequent filter 
+ rules are evaluated for the mail message, even if the current filter is 
+ a match. You probably do not want to have the same message match more 
+ than one filter rule and undergo multiple, perhaps contradictory actions.</p>
 <h3>When filters are applied</h3>
-<p>Each incoming message is tested against your filter rules at the time that the mail is delivered and the filter actions are applied to matching messages at that time.</p>
-<p>You can also run the filter rules over an existing set of mail items. In the Mail Filer tab, the &#160;<span style="font-weight: bold;"><b>Run Filter</b></span> button allows you to select multiple filters to run against selected mail folders.</p>
+<p>Each incoming message is tested against your filter rules at the time 
+ that the mail is delivered and the filter actions are applied to matching 
+ messages at that time.</p>
+<p>You can also run the filter rules over an existing set of mail items. 
+ In Mail Filter Preferences, the&#160;<span style="font-weight: bold;"><b>Run 
+ Filter</b></span> button allows you to select multiple filters to run against 
+ selected mail folders.</p>
 <h3>Filter Order</h3>
-<p>The filters are applied in the order they are listed on the Mail Filter tab. You can change that order.</p>
-<p>Within each filter, the conditions are used to test each mail message. If the message meets the conditions collectively (using the <span style="font-weight: bold;"><b>Any</b></span> or <span style="font-weight: bold;"><b>All</b></span> designation as specified in the filter rule), it is considered a match. The order of the conditions within each filter is not important.</p>
-<p>If the message matches the conditions, all actions associated with that filter rule are applied, in the order in which they appear in the filter.</p>
-<h3>Active versus. inactive filters</h3>
+<p>The filters are applied in the order they are listed on Mail Filter 
+ Preferences. You can change that order.</p>
+<p>Within each filter, the conditions are used to test each mail message. 
+ If the message meets the conditions collectively (using the <span style="font-weight: bold;"><b>Any</b></span> 
+ or <span style="font-weight: bold;"><b>All</b></span> designation as specified 
+ in the filter rule), it is considered a match. The order of the conditions 
+ within each filter is not important.</p>
+<p>If the message matches the conditions, all actions associated with that 
+ filter rule are applied, in the order in which they appear in the filter.</p>
+<h3>Active versus: inactive filters</h3>
+
+<p>All filters currently 
+ defined are listed on the Options, Mail Filter page. The <span 
+	 style="font-weight: bold;"><b>Active</b></span> check box 
+ allows you to turn filters on or off without having to delete the filter 
+ rules.</p>
+<p>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Filter Conditions and Actions Supported','filter_conditions_and_actions_supported.htm','Filtering your messages','filtering_your_messages.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  Related Topics </nobr></span></a>
 
 
-<p>All filters currently defined are listed on the Options, Mail Filter page. The 
-<span style="font-weight: bold;"><b>Active</b></span>
- check box allows you to turn filters on or off without having to delete the filter rules. .</p>
-
-
-<p><a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Filter Conditions and Actions Supported','filter_conditions_and_actions_supported.htm','Filtering your messages','filtering_your_messages.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  Related Topics </nobr></span></a> 
-
-</p>
-
+ </p>
 <p>&#160;</p>
 <script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")

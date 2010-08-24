@@ -1,30 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Query language description</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-p.whs9 { font-weight:bold; }
-p.whs10 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -35,23 +18,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Searching for Items\nQuery language description");
@@ -64,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"using_the_search_feature.htm\">Searching for Items</a> &gt; Query language description</p>");
+document.write("<a href=\"using_the_search_feature.htm\">Searching for Items<\/a> &gt; Query language description<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -86,200 +83,204 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
+
+
 <h1>Query language description</h1>
 <p>This advanced topic describes in detail the search grammar used for 
- Zimbra's 
- Search feature. Some type of query is always applied to produce the view 
- that you see in the interface. </p>
+ Zimbra 's Search feature. 
+ Some type of query is always applied to produce the view that you see 
+ in the interface.</p>
 <h2>Search Language Structure</h2>
 <p>Simple searches can be done by just entering a word into the search 
  field. Bare words (words without a search operator) are interpreted to 
- search in the 'content:' operator -- this matches any text in the message. 
- </p>
+ search in the 'content:' operator -- this matches any text in the message.</p>
 <p>More advanced searches can be done by specifying a <b>search operator</b>. 
  A search operator is a special keyword followed by a colon, followed by 
- some other parameter specific to that operator. For example: </p>
-<ul><li class=p><p><b style="font-weight: bold;">in:inbox</b> 
- the operator is &quot;in&quot; and the parameter is &quot;inbox&quot; 
- - this returns messages which are in the folder named &quot;inbox&quot; 
- </p></li>
+ some other parameter specific to that operator. For example:</p>
+<ul>
+	<li class="p"><p><b style="font-weight: bold;">in: 
+	 inbox</b> the operator is &quot;in&quot; 
+	 and the parameter is &quot; inbox&quot; - this returns messages which are in the 
+	 folder named &quot; inbox&quot;</p></li>
 </ul>
-<ul><li class=p><p><b style="font-weight: bold;">from:someone</b> the operator 
- is &quot;from&quot; and the parameter is &quot;someone&quot; - this returns 
- messages which have the word &quot;someone&quot; in their email address 
- </p></li>
+<ul>
+	<li class="p"><p><b style="font-weight: bold;">from:someone</b> the 
+	 operator is &quot;from&quot; and the parameter is &quot;someone&quot; 
+	 - this returns messages which have the word &quot;someone&quot; in 
+	 their email address</p></li>
 </ul>
 <p>You can prefix any keyword with the word &quot;not&quot; to specify 
- items that do not have that criterion, for example <b>not in:inbox</b>. 
- Search is not case sensitive, meaning that &quot;in:inbox&quot; is the 
- same as &quot;in:Inbox&quot;. The minus sign (<b>-</b>) is a synonym for 
- <b>NOT</b> So: <b>not in:inbox</b> is the same as <b>-in:inbox</b> </p>
+ items that do not have that criterion, for example <b>not in: inbox</b>. Search is not 
+ case sensitive, meaning that &quot;in:inbox&quot; 
+ is the same as &quot;in:Inbox&quot;. The minus sign (<b>-</b>) is a synonym 
+ for <b>NOT</b> So: <b>not in:inbox</b> is 
+ the same as <b>-in:inbox</b></p>
 <p>In most cases, it is not necessary to include punctuation-type characters 
  in your search string, as these are ignored by the search code. There 
  are certain times where this is not true (for example, searching for a 
  time '9:30' in a message) and in those cases you should enclose the search 
  parameter in quotation marks. For example: <b>subject:&quot;9:30&quot;</b> 
- will return messages which have the string 9:30 in the subject. </p>
-<p>Allowable characters in the search parameter: </p>
-<ul><li class=p><p>The following characters cannot be anywhere in a search 
- parameter unless it is enclosed by quotes: ~ '&nbsp;! # $ % ^ &amp; * 
- ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;: </p></li>
-	<li class=p><p>The following characters are allowed in a search parameter 
- as long as they are not the first character: - + &lt; &gt; </p></li>
+ will return messages which have the string 9:30 in the subject.</p>
+<p>Allowable characters in the search parameter:</p>
+<ul>
+	<li class="p"><p>The following characters cannot be anywhere in a search 
+	 parameter unless it is enclosed by quotes: ~ '&#160;! # $ % ^ &amp; 
+	 * ( ) _&#160;? / { }[ ]&#160;;&#160;:</p></li>
+	<li class="p"><p>The following characters are allowed in a search parameter 
+	 as long as they are not the first character: - + &lt; &gt;</p></li>
 </ul>
-<h2>Multiple Search Terms </h2>
+<h2>Multiple Search Terms</h2>
 <p>If multiple search terms are entered (separated by spaces), they are 
- &quot;ANDed&quot; together by default. <b>in:inbox 
- tim</b> means &quot;return me messages which are in 
- the inbox AND which have the word tim in them&quot;. 
- For searches using multiple criteria, you can either find items that match 
- one of the specified criteria or all of them. You can perform both types 
- of searches using the Advanced search builder. </p>
-<p>For all search panes other than the Basic search, the rules are: </p>
-<ul><li class=p><p>Searching for messages that match any of the specified 
- criteria is called an '<b>OR'</b> search, because if the message contains 
- either X or Y, then it is considered a match. For Advanced search panes 
- with multiple check boxes, making multiple selections within a single 
- pane creates an '<b>OR '</b>search for those items. </p></li>
-	<li class=p><p>Searching for messages that contain both X and Y is 
- called an '<b>AND'</b> search, because the message must meet all the specified 
- criteria in order to be considered a match. For Advanced server panes 
- with check boxes, opening multiple instances of the same pane and making 
- different check box selections in each one causes the criteria to be specified 
- as an '<b>AND'</b> search. </p></li>
+ &quot; ANDed&quot; 
+ together by default. <b>in:inbox tim</b> means &quot;return me messages which are in the 
+ inbox AND which have the word tim in them&quot;. For searches using multiple criteria, 
+ you can either find items that match one of the specified criteria or 
+ all of them. You can perform both types of searches using the Advanced 
+ search builder.</p>
+<p>For all search panes other than the Basic search, the rules are:</p>
+<ul>
+	<li class="p"><p>Searching for messages that match any of the specified 
+	 criteria is called an '<b>OR'</b> search, because if the message contains 
+	 either X or Y, then it is considered a match. For Advanced search 
+	 panes with multiple check boxes, making multiple selections within 
+	 a single pane creates an '<b>OR '</b>search for those items.</p></li>
+	<li class="p"><p>Searching for messages that contain both X and Y is 
+	 called an '<b>AND'</b> search, because the message must meet all the 
+	 specified criteria in order to be considered a match. For Advanced 
+	 server panes with check boxes, opening multiple instances of the same 
+	 pane and making different check box selections in each one causes 
+	 the criteria to be specified as an '<b>AND'</b> search.</p></li>
 </ul>
 <p>Only &quot;OR&quot; appears in a query. If you selected as an option 
  to show the search query in the Search bar as you make selections in the 
  Advanced search, the Search text box updates to show the resulting query. 
- With the '<b>AND'</b> type of search, the word '<b>AND'</b> does not appear. 
- </p>
-<p><b style="font-weight: bold;">Tip</b>: Using parenthesis with AND and 
- OR. Words within parentheses are considered as a unit. For example <b>from: 
- (john thomas)</b> is equivalent to <b>from:john AND 
- from:thomas</b>. If you use OR in the parenthesis, 
- <b>from:(john or smith)</b>, the search is for results <b>from:john OR 
- from:thomas</b>. </p>
-<h3>Using <b>*</b> as a wildcard in Search </h3>
+ With the '<b>AND'</b> type of search, the word '<b>AND'</b> does not appear.</p>
+<p><b style="font-weight: bold;">Tip</b>: Using parenthesis with AND and OR. Words within parentheses are considered as a 
+ unit. For example <b>from: (john thomas)</b> 
+ is equivalent to <b>from:john AND from: thomas</b>. If you use OR in the parenthesis, <b>from:(john 
+ or smith)</b>, the search is for results <b>from:john OR from: thomas</b>.</p>
+<h3>Using <b>*</b> as a wildcard in Search</h3>
 <p>The asterisk (<b>*</b>) can be used as a wildcard in a search to find 
- content that contains words that have similar spellings. </p>
+ content that contains words that have similar spellings.</p>
 <p>Use the asterisk <b>*</b> as a wildcard after a prefix. For example, 
- the search string <b>do*</b> returns items such as 
- <i>do</i>, <i>dog</i>, <i>door</i>, etc. </p>
+ the search string <b>do*</b> returns items such 
+ as <i>do</i>, <i>dog</i>, <i>door</i>, etc.</p>
 <h2>Keyword Descriptions and Examples</h2>
-<p class="whs9">content:</p>
-<p class="whs10">Specifies text that the message must contain. 
- For example, <span class=code>content:bananas</span> finds all items containing 
- the word &quot;bananas&quot;.</p>
-<p class="whs9">from:</p>
-<p class="whs10">Specifies a sender name or email address 
+<p style="font-weight: bold;">content:</p>
+<p style="margin-left: 40px;">Specifies text that the message must contain. 
+ For example, <span class="code">content:bananas</span> finds all items 
+ containing the word &quot;bananas&quot;.</p>
+<p style="font-weight: bold;">from:</p>
+<p style="margin-left: 40px;">Specifies a sender name or email address 
  that is in the From header. This can be text, as in &quot;John Smith III&quot;, 
- an email address such as &quot;joe@acme.com&quot;, 
- or a domain such as &quot;zimbra.com&quot;.</p>
-<p class="whs9">to:</p>
-<p class="whs10">Same as from: except that it specifies one 
+ an email address such as &quot; joe@acme.com&quot;, 
+ or a domain such as &quot; zimbra.com&quot;.</p>
+<p style="font-weight: bold;">to:</p>
+<p style="margin-left: 40px;">Same as from: except that it specifies one 
  of the people to whom the email was addressed in the To: header.</p>
-<p class="whs9">cc:</p>
-<p class="whs10">Same as from: except that it specifies a 
+<p style="font-weight: bold;">cc:</p>
+<p style="margin-left: 40px;">Same as from: except that it specifies a 
  recipient in the Cc: header of the message.</p>
-<p class="whs9">subject:</p>
-<p class="whs10">Specifies text that must appear in the subject 
- header of the message. An example might be <span class=code>subject:&quot;new 
- vacation policy&quot;</span>. Use quotes to search for an exact match.</p>
-<p class="whs9">in:</p>
-<p class="whs10">Specifies a folder. For example, <span class=code>in:sent</span> 
- would show all items in your <span style="font-weight: bold;"><B>Sent</B></span> 
+<p style="font-weight: bold;">subject:</p>
+<p style="margin-left: 40px;">Specifies text that must appear in the subject 
+ header of the message. An example might be <span class="code">subject:new 
+ vacation policy.</span> </p>
+<p style="font-weight: bold;">in:</p>
+<p style="margin-left: 40px;">Specifies a folder. For example, <span class="code">in:sent</span> 
+ would show all items in your <span style="font-weight: bold;"><b>Sent</b></span> 
  folder.</p>
-<p class="whs9">has:</p>
-<p class="whs10">Specifies an attribute that the message must 
+<p style="font-weight: bold;">has:</p>
+<p style="margin-left: 40px;">Specifies an attribute that the message must 
  have. The types of object you can specify are &quot;attachment&quot;, 
- &quot;phone&quot;, or &quot;url&quot;. For example, 
- <span class=code>has:attachment</span> would find all messages which contain 
- one or more attachments of any type.</p>
-<p class="whs9">filename:</p>
-<p class="whs10">Specifies an attachment file name. For example,<span 
- class=code> filename:query.tx</span>t would find messages 
- with a file attachment named &quot;query.txt&quot;.</p>
-<p class="whs9">type:</p>
-<p class="whs10">Specifies a search within attachments of 
+ &quot;phone&quot;, or &quot; url&quot;. 
+ For example, <span class="code">has:attachment</span> would find all messages 
+ which contain one or more attachments of any type.</p>
+<p style="font-weight: bold;">filename:</p>
+<p style="margin-left: 40px;">Specifies an attachment file name. For example, 
+ <span class="code">filename: query.tx</span>t would find messages with a file 
+ attachment named &quot; query.txt&quot;.</p>
+<p style="font-weight: bold;">type:</p>
+<p style="margin-left: 40px;">Specifies a search within attachments of 
  a specified type. The types of attachment you can specify are &quot;text&quot;, 
- &quot;word&quot;, &quot;excel&quot;, and &quot;pdf&quot;. 
- For example, <span class=code>type:word &quot;hello&quot;</span> finds 
- messages with attachments that are Microsoft Word documents and searches 
- within those attachments for the word &quot;hello&quot;.</p>
-<p class="whs9">attachment:</p>
-<p class="whs10">Specifies any item with a certain type of 
- attachment. For example, <span class=code>attachment:word</span> would 
+ &quot;word&quot;, &quot;excel&quot;, and &quot; 
+ pdf&quot;. For example, <span class="code">type:word 
+ &quot;hello&quot;</span> finds messages with attachments that are Microsoft 
+ Word documents and searches within those attachments for the word &quot;hello&quot;.</p>
+<p style="font-weight: bold;">attachment:</p>
+<p style="margin-left: 40px;">Specifies any item with a certain type of 
+ attachment. For example, <span class="code">attachment:word</span> would 
  find all messages with Word attachments.</p>
-<p class="whs9">is:</p>
-<p class="whs10">Searches for messages with a certain status. 
+<p style="font-weight: bold;">is:</p>
+<p style="margin-left: 40px;">Searches for messages with a certain status. 
  Allowable values are &quot;unread&quot;, &quot;read&quot;, &quot;flagged&quot;, 
- &quot;unflagged&quot;, &quot;sent&quot;, &quot;draft&quot;, 
- &quot;received&quot;, &quot;replied&quot;, &quot;unreplied&quot;, 
- &quot;forwarded&quot;, unforwarded&quot;, &quot;anywhere&quot;, 
- &quot;remote&quot; (in a shared folder), &quot;local&quot;, &quot;sent&quot;. 
- For example, <span class=code>is: unread</span> will find all unread messages.</p>
-<p class="whs9">date:</p>
-<p class="whs10">Use this keyword to specify a date, using 
+ &quot; unflagged&quot;, &quot;sent&quot;, 
+ &quot;draft&quot;, &quot;received&quot;, &quot;replied&quot;, &quot; unreplied&quot;, 
+ &quot;forwarded&quot;, unforwarded&quot;, 
+ &quot;anywhere&quot;, &quot;remote&quot; (in a shared folder), &quot;local&quot;, 
+ &quot;sent&quot;. For example, <span class="code">is: unread</span> will 
+ find all unread messages.</p>
+<p style="font-weight: bold;">date:</p>
+<p style="margin-left: 40px;">Use this keyword to specify a date, using 
  the format that is default for your browser's locale (for US English the 
- format is mm/dd/yyyy). For example, 
- <span class=code>date:2/1/2007</span> would find messages dated February 
- 1, 2007. The greater than (&gt;) or less than (&lt;) symbols can be used 
- instead of <i>after</i> or <i>before</i>. &gt;= and &lt;= are also allowed. 
- </p>
-<p class="whs9">after:</p>
-<p class="whs10">Specifies mail sent after a certain date. 
- For example, <span class=code>after:2/1/2007</span><span class=code style="font-weight: normal; font-family: Arial, sans-serif; font-size: 10pt;"><font size=2 style="font-size:10pt;"> 
- specify mail sent after February 1, 2007</font></span><span class=code style="font-weight: normal;">.</span></p>
-<p class="whs9">before:</p>
-<p class="whs10">Same as <span class=code>after:</span> except 
- specifies mail sent before the specified date.</p>
-<p class="whs9">size:</p>
-<p class="whs10">Specifies messages whose total size, including 
- attachments, is a specified number of bytes, kilobytes, or megabytes &nbsp;For 
- example, <span class=code>size:12 kb</span> would find 
- messages that are exactly 12K in size. The greater than (&gt;) or less 
- than (&lt;) symbols can be used instead of bigger or smaller.</p>
-<p class="whs9">larger:</p>
-<p class="whs10">Similar to size: except specifies greater 
+ format is mm/ dd/ yyyy). For example, <span 
+	 class="code">date:2/1/2010</span> would find messages dated February 
+ 1, 2010. The greater than (&gt;) or less than (&lt;) symbols can be used 
+ instead of <i>after</i> or <i>before</i>. &gt;= and &lt;= are also allowed.</p>
+<p style="font-weight: bold;">after:</p>
+<p style="margin-left: 40px;">Specifies mail sent after a certain date. 
+ For example, <span class="code">after:2/1/2010</span> <span class="code" 
+															 style="font-weight: normal; 
+															 font-family: Arial, sans-serif; 
+															 font-size: 10pt;"><font size="2" style="font-size:10pt;">specify 
+ mail sent after February 1, 2010</font></span><span class="code" style="font-weight: normal;">.</span></p>
+<p style="font-weight: bold;">before:</p>
+<p style="margin-left: 40px;">Same as <span class="code">after:</span> 
+ except specifies mail sent before the specified date.</p>
+<p style="font-weight: bold;">size:</p>
+<p style="margin-left: 40px;">Specifies messages whose total size, including 
+ attachments, is a specified number of bytes, kilobytes, or megabytes &#160;For 
+ example, <span class="code">size:12 kb</span> 
+ would find messages that are exactly 12K in size. The greater than (&gt;) 
+ or less than (&lt;) symbols can be used instead of bigger or smaller.</p>
+<p style="font-weight: bold;">larger:</p>
+<p style="margin-left: 40px;">Similar to size: except specifies greater 
  than the specified size.</p>
-<p class="whs9">smaller:</p>
-<p class="whs10">Similar to size: except specifies smaller 
+<p style="font-weight: bold;">smaller:</p>
+<p style="margin-left: 40px;">Similar to size: except specifies smaller 
  than the specified size.</p>
-<p class="whs9"><span><B>solo:</B></span></p>
-<p class="whs10">Finds email messages that do not have a reply 
+<p style="font-weight: bold;"><span><b>solo:</b></span></p>
+<p style="margin-left: 40px;">Finds email messages that do not have a reply 
  to them yet.</p>
-<p class="whs9">tag:</p>
-<p class="whs10">Finds messages which have been tagged with 
- a specified tag. For example,<span class=code> tag:amber</span> will find 
- message that have a tag called &quot;amber&quot; applied.</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="font-weight: bold;">tag:</p>
+<p style="margin-left: 40px;">Finds messages which have been tagged with 
+ a specified tag. For example, <span class="code">tag:amber</span> will 
+ find message that have a tag called &quot;amber&quot; applied.</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"using_the_search_feature.htm\">Searching for Items</a> &gt; Query language description</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

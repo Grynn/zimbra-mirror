@@ -1,21 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Setting a Forwarding Address</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -26,26 +18,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Managing Your Mailbox\nSetting a Forwarding Address");
+	addTocInfo("Managing Your Mailbox\nSetting a forwarding address");
 addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
@@ -55,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"../conversations/conversation_list_view.htm\">Managing Your Mailbox</a> &gt; Setting a Forwarding Address</p>");
+document.write("<a href=\"../conversations/conversation_list_view.htm\">Managing Your Mailbox<\/a> &gt; Setting a forwarding address<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -77,38 +83,34 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Setting a forwarding address</h1>
+<p class="note"><span style="font-weight: bold;"><b>Note</b></span>: Available 
+ only in Zimbra Web Client </p>
 <p>You can identify an email address to forward your messages and choose 
  to retain the message in your mailbox or automatically delete the message 
  when forwarded.</p>
 <h6>To forward your email</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Open the <span style="font-weight: bold;"><B>Preferences 
- </B></span>tab and select the &nbsp;<span style="font-weight: bold;"><B>Mail</B></span> 
- tab.</p></li>
-	<li class=p><p>Scroll down to the Receiving Messages section and in 
- <span style="font-weight: bold;"><B>When a message arrives:Forward a copy 
- to, </B></span>add the complete forwarding address.</p></li>
-	<li class=p><p>If you want to automatically delete the email from your 
- account, enable <span style="font-weight: bold;"><B>Don't keep a local copy 
- of messages</B></span>.</p></li>
-	<li class=p><p>Click <span style="font-weight: bold;"><B>Save</B></span>. 
- </p></li>
+<ol type="1">
+	<li class="p"><p>Open the <span style="font-weight: bold;"><b>Preferences</b></span> 
+	 tab and select the &#160;<span style="font-weight: bold;"><b>Mail</b></span> 
+	 tab.</p></li>
+	<li class="p"><p>In the Receiving Messages section and in <span style="font-weight: bold;"><b>When 
+	 a message arrives, Forward a copy to,</b></span> add the complete forwarding 
+	 address.</p></li>
+	<li class="p"><p>If you want to automatically delete the email from 
+	 your account, enable <span style="font-weight: bold;"><b>Don't keep a 
+	 local copy of messages</b></span>.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Save</b></span>.</p></li>
 </ol>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"../conversations/conversation_list_view.htm\">Managing Your Mailbox</a> &gt; Setting a Forwarding Address</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

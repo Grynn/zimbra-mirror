@@ -1,6 +1,19 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="tags" >
+  <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
+  <key name="Assigning" >
+    <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  </key>
+  <key name="Deleting" >
+    <topic name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
+  </key>
+</key>
+<key name="tags, creating" >
+  <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
 <key name="three-pane view" >
   <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
@@ -39,6 +52,9 @@
 </key>
 <key name="view, calendars by lists" >
   <topic name="Calendar List View" url="Calendar/Calendar_List_View.htm" />
+</key>
+<key name="W in mini calendar" >
+  <topic name="Viewing Calendar Week Numbers" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="week number" >
   <topic name="Viewing Calendar Week Numbers" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />

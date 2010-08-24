@@ -1,15 +1,40 @@
-<?xml version='1.0' encoding='utf-8' ?>
-<fts>
-<chunkinfo url="whfwdata0.xml" first="!" last="busy"/>
-<chunkinfo url="whfwdata1.xml" first="button" last="develop"/>
-<chunkinfo url="whfwdata2.xml" first="dialog" last="gmail"/>
-<chunkinfo url="whfwdata3.xml" first="go" last="megabyt"/>
-<chunkinfo url="whfwdata4.xml" first="member" last="privileg"/>
-<chunkinfo url="whfwdata5.xml" first="probab" last="smal"/>
-<chunkinfo url="whfwdata6.xml" first="small" last="virus"/>
-<chunkinfo url="whfwdata7.xml" first="visibl" last="|"/>
-
-<tchunkinfo first="0" last="103" url="whftdata0.xml" />
-<tchunkinfo first="104" last="125" url="whftdata1.xml" />
-
-</fts>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<odb>
+	<odbtype type="WebHelp"/>
+	<language name="en_US"/>
+	<index type="TopicIndex" url="topictableindex.xml"/>
+	<index type="PackageIndex" url="packageindex.xml"/>
+	<index type="Synonym" url="synonym.xml"/>
+	<files>
+		<file url="whxdata\package_0.xml"/>
+		<file url="whxdata\package_1.xml"/>
+		<file url="whxdata\package_2.xml"/>
+		<file url="whxdata\package_3.xml"/>
+		<file url="whxdata\package_4.xml"/>
+		<file url="whxdata\package_5.xml"/>
+		<file url="whxdata\package_6.xml"/>
+		<file url="whxdata\package_7.xml"/>
+		<file url="whxdata\package_8.xml"/>
+		<file url="whxdata\package_9.xml"/>
+		<file url="whxdata\package_10.xml"/>
+		<file url="whxdata\package_11.xml"/>
+		<file url="whxdata\package_12.xml"/>
+		<file url="whxdata\package_13.xml"/>
+		<file url="whxdata\package_14.xml"/>
+		<file url="whxdata\package_15.xml"/>
+		<file url="whxdata\package_16.xml"/>
+		<file url="whxdata\package_17.xml"/>
+		<file url="whxdata\package_18.xml"/>
+		<file url="whxdata\package_19.xml"/>
+		<file url="whxdata\package_20.xml"/>
+		<file url="whxdata\package_21.xml"/>
+		<file url="whxdata\package_22.xml"/>
+		<file url="whxdata\package_23.xml"/>
+		<file url="whxdata\packageindex.xml"/>
+		<file url="whxdata\synonym.xml"/>
+		<file url="whxdata\topictable_0.xml"/>
+		<file url="whxdata\topictable_1.xml"/>
+		<file url="whxdata\topictableindex.xml"/>
+		<file url="whxdata\whfts.xml"/>
+	</files>
+</odb>

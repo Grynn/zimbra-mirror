@@ -1,31 +1,13 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
-<html>
- <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>How Conversations work</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-div.whs1 { width:100%; }
-table.whs2 { x-cell-content-align:top; width:100%; border-spacing:0px; }
-col.whs3 { width:50%; }
-tr.whs4 { x-cell-content-align:top; }
-td.whs5 { width:50%; padding-right:10px; padding-left:10px; border-right-style:none; border-left-style:none; border-top-style:none; border-bottom-style:none; }
-p.whs6 { font-weight:bold; x-condition:Zdesktop; }
-td.whs7 { width:50%; padding-right:10px; padding-left:10px; border-top-style:none; border-bottom-style:none; border-right-style:none; }
-p.whs8 { font-size:8pt; color:#ff0000; x-condition:Zdesktop; text-align:right; }
-p.whs9 { margin-left:40px; color:#800080; font-family:'Courier New' , monospace; }
-ul.whs10 { list-style:disc; }
-p.whs11 { x-condition:Advanced_WC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -36,23 +18,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Managing Your Mailbox\nHow Conversations work");
@@ -65,13 +63,11 @@ addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
-	document.write("<p style=\"text-align:right; background: #99ccff\"> ");
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"conversation_list_view.htm\">Managing Your Mailbox</a> &gt; How Conversations work</p>");
+document.write("<a href=\"conversation_list_view.htm\">Managing Your Mailbox<\/a> &gt; How Conversations work<\/p>");
 
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -87,39 +83,50 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<div placeholder id="header" class="whs1">
- <table x-use-null-cells cellspacing="0" width="100%" class="whs2">
-  <col class="whs3">
-  <col class="whs3">
-
-  <tr valign="top" class="whs4">
-  <td width="50%" class="whs5">
-  <p class="whs6">&nbsp;</td>
-  <td width="50%" class="whs7">
-  <p align="right" class="whs8"><a href="http://wiki.zimbra.com/index.php?title=Yahoo!_Zimbra_Desktop_FAQS" 
- target=_blank>See Zimbra Desktop FAQ for general and troubleshooting questions</a></td></tr>
- </table>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_FAQS" target="_blank">See 
+			 Zimbra Desktop FAQ for general and troubleshooting questions</a></p></td>
+		</tr>
+	</table>
 </div>
+
+
 <h1>How Conversations work</h1>
-<p>The conversation view displays your messages grouped by subject. Because 
+<p>The Conversation view displays your messages grouped by subject. Because 
  all messages in a conversation have the same subject, the subject displays 
  only once in the conversation view pane. All messages related to the conversation 
- are displayed, even if they are stored in different folders. </p>
+ are displayed, even if they are stored in different folders.</p>
 <h2>Grouping messages into Conversations</h2>
 <p>You can read messages grouped together in context and ordered by date, 
- including replies and forwarded messages. In order for a message to be 
- grouped in a conversation, the subject of the message must be the same.</p>
+ including replies and forwarded messages. The conversations can be ordered 
+ either from new &#160;to old or from old to new. The default is to view 
+ conversations form new to old. If you prefer to have the messages in a 
+ conversation listed from the oldest to the most recent, click <span style="font-weight: bold;"><b>View</b></span> 
+ and select <span style="font-weight: bold;"><b>Expand conversations from 
+ old to new</b></span>. </p>
+<p>In order for a message to be grouped in a conversation, the subject 
+ of the message must be the same.</p>
 <p>For example, the following subject lines would be considered part of 
  the same conversation.</p>
-<p class="whs9"><span 
- class=expandtext><font color=purple >Who's in charge of the project? </font></span></p>
-<p class="whs9"><span 
- class=expandtext style="font-weight: bold;"><B>Re:</B></span><span class=expandtext> 
- Who's in charge of the project? </span></p>
-<p class="whs9"><span 
- class=expandtext style="font-weight: bold;"><B>Fwd:</B></span><span class=expandtext> 
- Who's in charge of the project? </span></p>
+<p style="margin-left: 40px; color: #800080; font-family: 'Courier New', monospace;"><span 
+	 class="expandtext"><font color="purple" >Who's in charge of the project?</font></span></p>
+<p style="margin-left: 40px; color: #800080; font-family: 'Courier New', monospace;"><span 
+	 class="expandtext" style="font-weight: bold;"><b>Re:</b></span> <span class="expandtext">Who's 
+ in charge of the project?</span></p>
+<p style="margin-left: 40px; color: #800080; font-family: 'Courier New', monospace;"><span 
+	 class="expandtext" style="font-weight: bold;"><b>Fwd:</b></span> <span class="expandtext">Who's 
+ in charge of the project?</span></p>
 <p>However, if you change the title to &quot;who's in charge of the project? 
  - ask Mike,&quot; the message would not be included in the conversation. 
  It would be part of a different conversation.</p>
@@ -128,46 +135,43 @@ else
  begin a new conversation.</p>
 <h2>Conversations can span folders</h2>
 <p>If a conversation includes three mail messages, one of those messages 
- could be in your <span style="font-weight: bold;"><B>Inbox</B></span>, your reply 
+ could be in your <span style="font-weight: bold;"><b>Inbox</b></span>, your reply 
  (which is also part of the conversation) will most likely be in your <span 
- style="font-weight: bold;"><B>Sent</B></span> folder, and another message could 
- be in a custom folder.</p>
+	 style="font-weight: bold;"><b>Sent</b></span> folder, and another message 
+ could be in a custom folder.</p>
 <p>What this means:</p>
-<ul type="disc" class="whs10">
-	<li class=p><p>If you search for mail messages and one message is found 
- that matches your search, but that message is in a conversation with several 
- other messages that do not match your search, the entire conversation 
- and all messages within it are listed under the search results. When you 
- open the conversation, only messages that match your search criteria are 
- highlighted.</p></li>
-	<li class=p><p>The same conversation may appear to exist in more than 
- one folder. This can happen if the mail messages are in different folders, 
- either because you moved them there, or you applied a filtering rule that 
- put them there when they were received.</p></li>
+<ul type="disc">
+	<li class="p"><p>If you search for mail messages and one message is 
+	 found that matches your search, but that message is in a conversation 
+	 with several other messages that do not match your search, the entire 
+	 conversation and all messages within it are listed under the search 
+	 results. When you open the conversation, only messages that match 
+	 your search criteria are highlighted.</p></li>
+	<li class="p"><p>The same conversation may appear to exist in more 
+	 than one folder. This can happen if the mail messages are in different 
+	 folders, either because you moved them there, or you applied a filtering 
+	 rule that put them there when they were received.</p></li>
 </ul>
 <p>Because a conversation is a group of related messages, if you move a 
  conversation from one folder to another, all messages within that conversation 
  are also moved to that folder.</p>
-<p class="whs11">
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Managing your email message view','conversation_list_view.htm','Printing a conversation','printing_a_conversation.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border=0 height=20 width=96 alt="Related Topics"></a>
+<p>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Managing your email message view','conversation_list_view.htm','Printing a conversation','printing_a_conversation.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:none"><nobr>  Related Topics </nobr></span></a>
+
 
  </p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
-document.write("<p style=\"text-align:right; background: #99ccff\"> ");
-AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"conversation_list_view.htm\">Managing Your Mailbox</a> &gt; How Conversations work</p>");
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,6 +1,4 @@
-﻿/*Created with Adobe RoboHelp.*/
-/*Created with Adobe RoboHelp.*/
-/*Created with Adobe RoboHelp.*/
+﻿/*Created with Adobe RoboHelp 8.*/
 BODY {
 	font-family: Arial;
 	background-color: #ffffff;
@@ -75,10 +73,6 @@ P {
 	margin-top: 0pt;
 	font-size: 10pt;
 	margin-bottom: 6pt;
-	border-left-style: None;
-	border-right-style: None;
-	border-top-style: None;
-	border-bottom-style: None;
 }
 LI.P {
 	font-size: 10pt;
@@ -158,10 +152,10 @@ SPAN.attribute {
 	font-style: normal;
 }
 P.note {
-	list-style: url(rd_blue_right.jpg);
-	background-color: #dbdbdb;
+	background-color: #cccccc;
 }
 LI.P-note {
-	list-style: url(rd_blue_right.jpg);
 }
 
+li.Style1 {
+}
