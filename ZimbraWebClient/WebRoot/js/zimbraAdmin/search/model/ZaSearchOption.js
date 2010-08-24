@@ -28,6 +28,8 @@ ZaSearchOption.OBJECT_TYPE_ID = ZaSearchOption.ID ++ ;
 ZaSearchOption.DOMAIN_ID = ZaSearchOption.ID ++ ;
 ZaSearchOption.SERVER_ID = ZaSearchOption.ID ++ ;
 ZaSearchOption.ADVANCED_ID = ZaSearchOption.ID ++ ;
+ZaSearchOption.COS_ID = ZaSearchOption.ID ++ ;
+
 //ZaSearchOption.REMOVE_ID = ZaSearchOption.ID ++ ;
 
 //ZaSearchOption.A_basic_query = ZaSearch.A_query ;
@@ -64,6 +66,10 @@ ZaSearchOption.A_domainListChecked = "option_domain_list_checked";
 ZaSearchOption.A_serverList = "option_server_list" ;
 ZaSearchOption.A_serverListChecked = "option_server_list_checked";
 
+// COS setting
+ZaSearchOption.A_cosFilter = "option_cos_filter";
+ZaSearchOption.A_cosList = "option_cos_list" ;
+ZaSearchOption.A_cosListChecked = "option_cos_list_checked";
 
 	
 ZaSearchOption.getObjectTypeXModel = 
@@ -128,7 +134,13 @@ function (optionId){
 			{id: ZaSearchOption.A_accountLastLoginTime_To, ref: "options/" + ZaSearchOption.A_accountLastLoginTime_To, type:_DATETIME_},
             {id: ZaSearchOption.A_zimbraMailForwardingAddress, ref: "options/" + ZaSearchOption.A_zimbraMailForwardingAddress, type:_STRING_}
 	];
-	
+
+        var cosItems = [
+                        {id: ZaSearchOption.A_cosFilter, ref: "options/" + ZaSearchOption.A_cosFilter, type: _STRING_},
+                        {id: ZaSearchOption.A_cosListChecked, ref: "options/" + ZaSearchOption.A_cosListChecked, type:_LIST_},
+                        {id: ZaSearchOption.A_cosList, ref: "options/" + ZaSearchOption.A_cosList, type:_LIST_}
+        ];
+
 	if (optionId == ZaSearchOption.OBJECT_TYPE_ID) { 
 		xmodel.items = objTypeItems ; 
 	}else if (optionId == ZaSearchOption.DOMAIN_ID) {
@@ -139,7 +151,9 @@ function (optionId){
 		xmodel.items = basicItems ;
 	}else if (optionId == ZaSearchOption.ADVANCED_ID) {
 		xmodel.items = advancedItems ;
-	}
+	}else if (optionId == ZaSearchOption.COS_ID) {
+                xmodel.items = cosItems ;
+        }
 	
 	return xmodel ;
 }
@@ -280,7 +294,7 @@ function (optionId, height){
 		{ type: _SEPARATOR_ , width: 150 },*/
 		{ type: _TEXTFIELD_, ref:  ZaSearchOption.A_domainFilter,
 			label: ZaMsg.search_option_filter, align: _LEFT_, width: ZaSearchOptionView.WIDTH - 50, 
-			inputHelp: ZaMsg.search_option_filter_input_help,
+			inputHelp: ZaMsg.search_option_filter_input_help_domain,
 		  	toolTipContent: ZaMsg.tt_domain_search_option_filter,
 			onChange: ZaSearchBuilderController.filterDomains,
 			enableDisableChecks:[],visibilityChecks:[]
@@ -304,6 +318,7 @@ function (optionId, height){
 	];
 		
 	var serverItems = [
+
 		 {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30, 
 		 	cssStyle: "overflow:auto; position:absolute;",
 		 	items :[
@@ -315,6 +330,35 @@ function (optionId, height){
 		 	]
 		 }
 	];
+
+	//COS
+
+        var cosItems = [
+
+                { type: _TEXTFIELD_, ref:  ZaSearchOption.A_cosFilter,
+                        label: ZaMsg.search_option_filter, align: _LEFT_, width: ZaSearchOptionView.WIDTH - 50,
+                        inputHelp: ZaMsg.search_option_filter_input_help_cos,
+                        toolTipContent: ZaMsg.tt_cos_search_option_filter,
+                        onChange: ZaSearchBuilderController.filterCOSES,
+                        enableDisableChecks:[],visibilityChecks:[]
+                 },
+
+                 {type: _OUTPUT_, value: ZaMsg.no_cos_found_msg, colSpan: "*",
+                        visibilityChecks:[[XForm.checkInstanceValueEmty,ZaSearchOption.A_cosList]]
+                 },
+                 {type: _GROUP_, width: ZaSearchOptionView.WIDTH, colSpan: "*", height: height - 30 - 25 - 5,
+                        cssStyle: "overflow:auto; position:absolute;margin-top: 5px;",
+                        visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaSearchOption.A_cosList]],
+                        items :[
+
+                                 {type: _DWT_LIST_, ref: ZaSearchOption.A_cosList,  width: ZaSearchOptionView.WIDTH - 2, height: height - 30 - 25,
+                                         forceUpdate: true, widgetClass: ZaOptionList,
+                                         multiselect: true, preserveSelection: true,
+                                         onSelection: ZaSearchBuilderController.filterSelectionListener
+                                 }
+                        ]
+                 }
+        ];
 	
 	var advancedItems = [
 		{ type: _GROUP_,  numCols: 2, items:[
@@ -389,6 +433,8 @@ function (optionId, height){
 	}else if (optionId == ZaSearchOption.ADVANCED_ID) {
 		xform.items = advancedItems ;
 		xform.width = ZaSearchOptionView.ADVANCED_OPTION_WIDTH ;
+	}else if (optionId == ZaSearchOption.COS_ID) {
+		xform.items = cosItems;
 	}
 	
 	return xform ;
@@ -412,6 +458,8 @@ function (optionId) {
 		//optionInstance["options"][ZaSearchOption.A_serverAll] = "TRUE" ;
 	}else if (optionId == ZaSearchOption.BASIC_TYPE_ID) {
 		//no default value
+	}else if (optionId == ZaSearchOption.COS_ID) {
+		// no default value
 	}else if (optionId == ZaSearchOption.ADVANCED_ID) {
 		optionInstance[ZaSearchOption.A_enableAccountLastLoginTime_From] = "FALSE" ;
 		optionInstance[ZaSearchOption.A_enableAccountLastLoginTime_To] = "FALSE" ;

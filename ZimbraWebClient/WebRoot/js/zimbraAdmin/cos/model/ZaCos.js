@@ -558,8 +558,6 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraMailIdleSessionTimeout, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraMailIdleSessionTimeout},
         {id:ZaCos.A_zimbraContactMaxNumEntries, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraContactMaxNumEntries, maxInclusive:2147483647, minInclusive:0},
         {id:ZaCos.A_zimbraMailForwardingAddressMaxLength, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMailForwardingAddressMaxLength, maxInclusive:2147483647, minInclusive:0},
-//qin@zimbra.com
-//        {id:ZaCos.A_zimbraDataSourcePollingInterval, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraDataSourcePollingInterval, maxInclusive:2147483647, minInclusive:0},
         {id:ZaCos.A_zimbraMailForwardingAddressMaxNumAddrs, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraMailForwardingAddressMaxNumAddrs, maxInclusive:2147483647, minInclusive:0},
         {id:ZaCos.A_zimbraMailMinPollingInterval, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraMailMinPollingInterval},
         {id:ZaCos.A_zimbraMailMessageLifetime, type:_MLIFETIME_, ref:"attrs/"+ZaCos.A_zimbraMailMessageLifetime},

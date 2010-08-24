@@ -84,7 +84,7 @@ function() {
 	
 	ZaApp.getInstance().getSearchListController()._currentQuery = params.query ;
 	searchListController._currentQuery = params.query ;
-	
+
 	this._isSearchButtonClicked = false ;
 	
 	if (this._callbackFunc != null) {
@@ -137,6 +137,12 @@ function () {
 					objList.push(ZaSearch.DOMAINS);
 				}	
 			}
+
+            if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+                                if(this._containedObject[ZaSearch.A_fCoses] == "TRUE") {
+                                        objList.push(ZaSearch.COSES);
+                                }
+            }
 		}
 		
 		return objList;
@@ -361,7 +367,7 @@ function () {
 		var n = ZaSearch.SAVED_SEARCHES[i].name ;
 		var q = ZaSearch.SAVED_SEARCHES[i].query ;
 		var mItem =  new DwtMenuItem (this._savedSearchMenu) ;
-		mItem.setText(n + " .......... " + q) ;
+		mItem.setText(n) ;
 		mItem.setSize(b.width) ;
 		mItem.addSelectionListener(new AjxListener(this, ZaSearchField.prototype.selectSavedSearch, [n, q]));
 		mItem.addListener(DwtEvent.ONMOUSEUP, new AjxListener(this, this._savedSearchItemMouseUpListener, [n, q] ));
@@ -436,7 +442,8 @@ ZaSearchField.prototype.resetSearchFilter = function () {
 	this._containedObject[ZaSearch.A_fdistributionlists] = "FALSE";	
 	this._containedObject[ZaSearch.A_fAliases] = "FALSE";
 	this._containedObject[ZaSearch.A_fResources] = "FALSE";
-	this._containedObject[ZaSearch.A_fDomains] = "FALSE";		
+	this._containedObject[ZaSearch.A_fDomains] = "FALSE";
+	this._containedObject[ZaSearch.A_fCoses] = "FALSE";	
 }
 
 ZaSearchField.prototype.allFilterSelected = function (ev) {
@@ -448,6 +455,7 @@ ZaSearchField.prototype.allFilterSelected = function (ev) {
 	//if(ZaSettings.DOMAINS_ENABLED) {
 	this._containedObject[ZaSearch.A_fDomains] = "TRUE";	
 	//}
+	this._containedObject[ZaSearch.A_fCoses] = "TRUE";
 	this.setTooltipForSearchButton (ZaMsg.searchForAll);	
 }
 
@@ -493,6 +501,15 @@ ZaSearchField.prototype.domainFilterSelected = function (ev) {
 	//}
 }
 
+
+ZaSearchField.prototype.cosFilterSelected = function (ev) {
+                this.resetSearchFilter();
+                this.setIconForSearchMenuButton ("COS");
+                this._containedObject[ZaSearch.A_fCoses] = "TRUE";
+                this.setTooltipForSearchButton (ZaMsg.searchForCOSES);
+}
+
+
 ZaSearchField.searchChoices = new XFormChoices([],XFormChoices.OBJECT_REFERENCE_LIST, null, "labelId");
 ZaSearchField.prototype._getMyXForm = function() {	
 	var newMenuOpList = new Array();
@@ -517,6 +534,9 @@ ZaSearchField.prototype._getMyXForm = function() {
         newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_DOMAINS, ZaMsg.SearchFilter_Domains, ZaMsg.searchForDomains, "Domain", "DomainDis", new AjxListener(this, this.domainFilterSelected)));
     }
 
+    if (ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.COS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+        newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_COSES, ZaMsg.SearchFilter_COSES, ZaMsg.searchForCOSES, "COS", "COS", new AjxListener(this, this.cosFilterSelected)));
+    }
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEP));				
 	newMenuOpList.push(new ZaOperation(ZaOperation.SEARCH_ALL, ZaMsg.SearchFilter_All, ZaMsg.searchForAll, "SearchAll", "SearchAll", new AjxListener(this, this.allFilterSelected)));		
 	ZaSearchField.searchChoices.setChoices(newMenuOpList);

@@ -25,11 +25,12 @@ ZaSearchListView = function(parent) {
 	var className = null;
 	var posStyle = DwtControl.ABSOLUTE_STYLE;
 	
-	var headerList = this._getHeaderList();
+	var headerList = this._getHeaderList(); 
 	
 	ZaListView.call(this, parent, className, posStyle, headerList);
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
+	
 	
 }
 
@@ -86,7 +87,7 @@ function(account, now, isDragProxy) {
 	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
 
 	html[idx++] = "<tr>";
-	
+
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var field = this._headerList[i]._field;
@@ -126,7 +127,10 @@ function(account, now, isDragProxy) {
 				break;	
 				case ZaItem.DOMAIN:
 					html[idx++] = AjxImg.getImageHtml("Domain");		
-				break;									
+				break;								
+                                case ZaItem.COS: 
+                                        html[idx++] = AjxImg.getImageHtml("COS");
+                                break;	
 				default:
 					html[idx++] = account.type;
 				break;
@@ -183,13 +187,14 @@ function() {
 	var headerList = new Array();
 	var sortable = 1;
 	var i = 0
+
 	headerList[i++] = new ZaListHeaderItem("type", ZaMsg.ALV_Type_col, null, "40px", null, null, true, true);
 	this._defaultColumnSortable = sortable ;
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_name, ZaMsg.CLV_Name_col, null, "220px", null,  null, true, true);
 	
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible	
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_displayname, ZaMsg.ALV_DspName_col, null, "220px",  null, null, true, true);
-
+	
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_accountStatus, ZaMsg.ALV_Status_col, null, "120px",  null, null, true, true);
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_zimbraLastLogonTimestamp, ZaMsg.ALV_Last_Login, null, Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.ALV_Last_Login, false, 0), null, null, true, true);
 	headerList[i++] = new ZaListHeaderItem(ZaAccount.A_description, ZaMsg.ALV_Description_col, null, "auto", null, null,true, true );

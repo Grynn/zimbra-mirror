@@ -32,7 +32,7 @@ ZaSearchListController = function(appCtxt, container) {
 	this._currentQuery = null;
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = "1";
-	this.searchTypes = [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES, ZaSearch.DOMAINS];
+	this.searchTypes = [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES, ZaSearch.DOMAINS, ZaSearch.COSES];
 	this.pages = new Object();
 	this._searchPanel = null;
 	this._searchField = null;
@@ -425,7 +425,9 @@ ZaSearchListController.prototype._editItem = function (item) {
 		ZaApp.getInstance().getResourceController().show(item);
 	} else if (type==ZaItem.DOMAIN) {
 		ZaApp.getInstance().getDomainController().show(item);
-	}
+	}else if (type==ZaItem.COS) {
+                ZaApp.getInstance().getCosController().show(item);
+        }
 };
 
 

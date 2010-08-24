@@ -27,6 +27,7 @@ ZaSearch = function() {
 	this[ZaSearch.A_fdistributionlists] = "TRUE";
 	this[ZaSearch.A_fResources] = "TRUE";
 	this[ZaSearch.A_fDomains] = "TRUE";
+	this[ZaSearch.A_fCoses] = "TRUE";
 	this[ZaSearch.A_pagenum]=1;	
 }
 ZaSearch.ALIASES = "aliases";
@@ -51,6 +52,7 @@ ZaSearch.A_pagenum = "pagenum";
 ZaSearch.A_fAliases = "f_aliases";
 ZaSearch.A_fAccounts = "f_accounts";
 ZaSearch.A_fDomains = "f_domains";
+ZaSearch.A_fCoses = "f_coses";
 ZaSearch.A_fdistributionlists = "f_distributionlists";
 ZaSearch.A_fResources = "f_resources";
 ZaSearch.A_ResultMsg = "resultMsg";
@@ -82,7 +84,7 @@ ZaSearch.getPredefinedSavedSearches =  function () {
 
 ZaSearch.getAll =
 function() {
-	return ZaSearch.search("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES,ZaSearch.DOMAINS], 1, ZaAccount.A_uid, true);
+	return ZaSearch.search("", [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES,ZaSearch.DOMAINS, ZaSearch.COSES], 1, ZaAccount.A_uid, true);
 }
 
 
@@ -516,14 +518,16 @@ function(n, types,excludeClosed) {
 	if (!AjxUtil.isEmpty(n)) {
 		query.push("(|");
 		n = String(n).replace(/([\\\\\\*\\(\\)])/g, "\\$1");
-        if (!types) types = [ZaSearch.ALIASES, ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.RESOURCES, ZaSearch.DOMAINS] ;
+        if (!types) types = [ZaSearch.ALIASES, ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.RESOURCES, ZaSearch.DOMAINS, ZaSearch.COSES] ;
         var addedAddrFields = false;
         var addedAccResFields = false;
         var addedDLAliasFields = false;
         for (var i = 0 ; i < types.length; i ++) {
             if (types[i] == "domains") {
                 query.push ("(zimbraDomainName=*"+n+"*)") ;
-            } else {
+            } else if(types[i] == ZaSearch.COSES) {
+		query.push("(cn=*" + n + "*)");
+	    }else {
             	if(!addedAddrFields) {
             		query.push("(mail=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)") ;
             		addedAddrFields = true;
@@ -579,6 +583,7 @@ ZaSearch.getSearchFromQuery = function (query) {
 	searchObj[ZaSearch.A_fdistributionlists] = "FALSE";
 	searchObj[ZaSearch.A_fResources] = "FALSE";
 	searchObj[ZaSearch.A_fDomains] = "FALSE" ;
+	searchObj[ZaSearch.A_fCoses] = "FALSE" ;
 	
 	if (query.types != null) {
 		for (var i = 0; i < query.types.length; ++i) {
@@ -597,6 +602,9 @@ ZaSearch.getSearchFromQuery = function (query) {
 			if(query.types[i]==ZaSearch.DOMAINS) {
 				searchObj[ZaSearch.A_fDomains] = "TRUE";
 			}
+                        if(query.types[i]==ZaSearch.COSES) {
+                                searchObj[ZaSearch.A_fCoses] = "TRUE";
+                        }
 		}
 	}
 	return searchObj;

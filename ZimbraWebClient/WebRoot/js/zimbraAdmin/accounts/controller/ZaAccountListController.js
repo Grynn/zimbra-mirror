@@ -680,6 +680,7 @@ function(ev) {
 	this._haveAccounts = false;
 	this._haveDls = false;
 	this._haveDomains = false;	
+	this._haveCoses = false;
 	if(this._contentView.getSelectionCount()>0) {
 		var arrItems = this._contentView.getSelection();
 		var cnt = arrItems.length;
@@ -697,9 +698,13 @@ function(ev) {
 						this._haveAccounts = true;
 					} else if(!this._haveDls && item.type == ZaItem.DL) {
 						this._haveDls = true;
-					}  else if(!this._haveDomains && item.type == ZaItem.DOMAIN) {
+					} else if(!this._haveDomains && item.type == ZaItem.DOMAIN) {
 						this._haveDomains = true;
-					}
+					} else if(!this._haveCoses && item.type == ZaItem.COS) {
+                                                this._haveCoses = true;
+                                        }
+
+
 				}
 			}
 		}
@@ -750,14 +755,16 @@ function () {
 	}
 	if(this._removeList.length > 0) {
 		var dlgMsg;
-		if(this._haveDls && !(this._haveAccounts || this._haveAliases ||this._haveDomains)) {
+		if(this._haveDls && !(this._haveAccounts || this._haveAliases ||this._haveDomains || this._haveCoses)) {
 			dlgMsg = ZaMsg.Q_DELETE_DLS;
-		} else if(this._haveAccounts && !(this._haveDls || this._haveAliases || this._haveDomains)) {
+		} else if(this._haveAccounts && !(this._haveDls || this._haveAliases || this._haveDomains || this._haveCoses)) {
 			dlgMsg = ZaMsg.Q_DELETE_ACCOUNTS;
-		} else if(this._haveAliases && !(this._haveDls || this._haveAccounts || this._haveDomains)) {
+		} else if(this._haveAliases && !(this._haveDls || this._haveAccounts || this._haveDomains || this._haveCoses)) {
 			dlgMsg = ZaMsg.Q_DELETE_ALIASES;
-		} else if(this._haveDomains && !(this._haveAliases || this._haveAccounts || this._haveDomains)) {
+		} else if(this._haveDomains && !(this._haveAliases || this._haveAccounts || this._haveDls || this._haveCoses)) {
 			dlgMsg = ZaMsg.Q_DELETE_DOMAINS;
+                } else if(this._haveCoses && !(this._haveAliases || this._haveAccounts || this._haveDomains || this._haveDls)) {
+                        dlgMsg = ZaMsg.Q_DELETE_COSES;
 		} else {
 			dlgMsg = ZaMsg.Q_DELETE_OBJECTS;
 		}
@@ -825,6 +832,11 @@ function () {
 	ZaApp.getInstance().dialogs["removeProgressDlg"].setObject(this._removeList);
 	ZaApp.getInstance().dialogs["removeProgressDlg"].startDeletingAccounts();
 
+	//update cos list tree
+	if(this._haveCoses){
+		var overviewPanelCtrl = ZaApp.getInstance()._appCtxt.getAppController().getOverviewPanelController();
+		overviewPanelCtrl.removeCosTreeItems(this._removeList);
+	}
 }
 
 

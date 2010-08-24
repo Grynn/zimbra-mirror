@@ -51,7 +51,9 @@ ZaSearchOptionView = function(parent,optionId, width, position){
 		this._label = new ZaOperation (ZaOperation.LABEL, ZaMsg.searchByBasic, null, "SearchAll", "SearchAll");
 	}else if (optionId == ZaSearchOption.ADVANCED_ID) {
 		this._label = new ZaOperation (ZaOperation.LABEL, ZaMsg.searchByAdvanced, null, "SearchAll", "SearchAll") ;
-	}
+	}else if (optionId == ZaSearchOption.COS_ID) {
+                this._label = new ZaOperation (ZaOperation.LABEL, ZaMsg.searchByCOS, null, "COS", "COS");
+        }
 	
 	var tb_items = [];
 	tb_items.push(this._label);	

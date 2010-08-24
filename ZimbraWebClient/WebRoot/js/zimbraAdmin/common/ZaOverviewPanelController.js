@@ -96,21 +96,31 @@ function (ev) {
 	if(ev) {
 		//add the new ZaDomain to the controlled list
 		var detls = ev.getDetails();		
-		if(detls) {
-			if(detls && (detls instanceof Array)) {
-				for (var key in detls) {
-					if((detls[key] instanceof ZaCos) && this._cosMap[detls[key].id]) {
-						this._cosTi.removeChild(this._cosMap[detls[key].id]);		
-					}
+		this.removeCosTreeItems(detls);
+	}
+}
+
+
+ZaOverviewPanelController.prototype.removeCosTreeItems = 
+function(detls) {
+	if(detls) {
+		if(detls && (detls instanceof Array)) {
+			for (var key in detls) {
+				if((detls[key] instanceof ZaCos) && this._cosMap[detls[key].id]) {
+				        this._cosTi.removeChild(this._cosMap[detls[key].id]);
 				}
-			} else if(detls && (detls instanceof ZaCos)) {
-				if(this._cosMap[detls.id]) {
-					this._cosTi.removeChild(this._cosMap[detls.id]);		
-				}
+			}
+		} else if(detls && (detls instanceof ZaCos)) {
+			if(this._cosMap[detls.id]) {
+				this._cosTi.removeChild(this._cosMap[detls.id]);
 			}
 		}
 	}
+	//TODO: must close the opened tab when tab owner is removed
+	//Currently, all opened tabs do not be closed although owners are deleted
+	
 }
+
 
 
 ZaOverviewPanelController.prototype.searchDomains = function() {
@@ -209,6 +219,7 @@ function (list) {
 	list.loadEffectiveRights();
 	ZaApp.getInstance()._domainList = list;
 }
+
 
 ZaOverviewPanelController.prototype.setCurrentDomain = 
 function (newDomain) {
@@ -816,6 +827,7 @@ ZaOverviewPanelController.cosListTreeListener = function (ev) {
 	} else {
 		ZaApp.getInstance().getCosListController().show(true);
 	}
+	this._modifySearchMenuButton(ZaItem.COS) ;
 }
 
 ZaOverviewPanelController.postqTreeListener = function (ev) {
@@ -851,6 +863,8 @@ function (itemType) {
 				searchListController._searchField.resFilterSelected(); break ;
 			case ZaItem.DOMAIN:
 				searchListController._searchField.domainFilterSelected(); break ;
+                        case ZaItem.COS:
+                                searchListController._searchField.cosFilterSelected(); break ;
 		}
 	}
 } 

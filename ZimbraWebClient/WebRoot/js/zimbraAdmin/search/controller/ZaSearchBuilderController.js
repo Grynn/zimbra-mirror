@@ -30,6 +30,7 @@ ZaSearchBuilderController = function(appCtxt, container) {
 	this._objTypeOptionViewPosition = -1; //indicate the whether objTypeOptionView is visible or not by its position
 	this._serverOptionViewPosition = -1 ;
 	this._numberOfDomainOptions = 0; //how many domainOptions are visible
+	this._cosids = null;
 }
 
 ZaSearchBuilderController.prototype = new ZaController();
@@ -153,6 +154,28 @@ function (value, event, form) {
 	ZaSearch.searchDirectory(searchParams);
 }
 
+ZaSearchBuilderController.filterCOSES =
+function (value, event, form) {
+        this.setInstanceValue (value);
+        var busyId = Dwt.getNextId();
+        var callback = new AjxCallback(this, ZaSearchBuilderController.optionCosFilterCallback, {busyId:busyId});
+        var searchParams = {
+                        query: "(" + ZaCos.A_name + "=*" + value + "*)",
+                        types: [ZaSearch.COSES],
+                        sortBy: ZaCos.A_name,
+                        attrs: [ZaCos.A_name],
+                        applyCos: "0",
+                        callback:callback,
+                        controller: ZaApp.getInstance().getCurrentController(),
+                        showBusy:true,
+                        busyId:busyId,
+                        busyMsg:ZaMsg.BUSY_SEARCHING_COSES,
+                        skipCallbackIfCancelled:false
+        }
+        ZaSearch.searchDirectory(searchParams);
+}
+
+
 ZaSearchBuilderController.prototype.listAllServers =
 function () {
 	var serverView = this._option_views[this._option_views.length -1];
@@ -190,7 +213,10 @@ function (value) {
 			checkedFiltersVector = instance["options"][ZaSearchOption.A_domainListChecked];
 		}else if (ref == ZaSearchOption.A_serverList) {
 			checkedFiltersVector = instance["options"][ZaSearchOption.A_serverListChecked];
-		}
+		}else if (ref == ZaSearchOption.A_cosList) {
+                        checkedFiltersVector = instance["options"][ZaSearchOption.A_cosListChecked];
+                }
+
 		var controller = form.parent._controller ;
 		DBG.println(AjxDebug.DBG3, item + " is selected ... ");
 		if (targetEl.checked) { //after the selection it will be uncheck
@@ -251,6 +277,52 @@ function (params,resp) {
 	}
 }
 
+
+ZaSearchBuilderController.optionCosFilterCallback =
+function (params,resp) {
+        if(params.busyId)
+                        ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+
+        var form = this.getForm ();
+	var controller = ZaApp.getInstance().getSearchBuilderController();
+        try {
+                if(!resp) {
+                        throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaListViewController.prototype.searchCallback"));
+                }
+                if(resp.isException()) {
+                        throw(resp.getException());
+                } else {
+                        var response = resp.getResponse().Body.SearchDirectoryResponse;
+                        if (response.cos && response.cos.length > 0) {
+                                var coses = new Array (response.cos.length);
+				controller._cosids = new Array (response.cos.length);
+                                for (var i =0; i < coses.length; i ++) {
+                                        coses[i] = response.cos[i].name ;
+					controller._cosids[coses[i]] = response.cos[i].id;
+
+                                }
+                                
+                                this.setInstanceValue (coses, "/options/" + ZaSearchOption.A_cosList);
+
+                                this.setInstanceValue (new AjxVector (), "/options/" + ZaSearchOption.A_cosListChecked);
+                                form.refresh () ;
+                        }else{
+                                this.setInstanceValue ([], "/options/" + ZaSearchOption.A_cosList);
+                                this.setInstanceValue (new AjxVector (), "/options/" + ZaSearchOption.A_cosListChecked);
+                                form.refresh () ;
+                        }
+                }
+        } catch (ex) {
+                if (ex.code != ZmCsfeException.MAIL_QUERY_PARSE_ERROR) {
+                        form.parent._controller._handleException(ex, "ZaSearchBuilderController.optionCosFilterCallback");
+                } else {
+                        form.parent._controller.popupErrorDialog(ZaMsg.queryParseError, ex);
+                }
+        }
+}
+
+
+
 ZaSearchBuilderController.prototype.handleSpecialQueries = 
 function () {
 	var optionViews = this.getOptionViews () ;
@@ -287,6 +359,7 @@ function () {
 	this._filterObj [ZaSearchOption.DOMAIN_ID] = [] ;
 	this._filterObj [ZaSearchOption.SERVER_ID] = [] ;
 	this._filterObj [ZaSearchOption.ADVANCED_ID] = [] ;
+	this._filterObj [ZaSearchOption.COS_ID] = [] ;
 	
 	for (var i =0 ; i < optionViews.length; i++) {
 		var optionId = optionViews[i]._optionId ;
@@ -357,7 +430,9 @@ function (filter, key, value, op) {
 	if (key == ZaSearchOption.A_domainFilter 
 		//|| key == ZaSearchOption.A_domainAll
 		|| key == ZaSearchOption.A_domainList 
-		|| key == ZaSearchOption.A_serverList) {
+		|| key == ZaSearchOption.A_serverList
+		|| key == ZaSearchOption.A_cosFilter
+		|| key == ZaSearchOption.A_cosList) {
 		//ignored 			
 					
 	}else if (key == ZaSearchOption.A_objTypeAccount) {
@@ -388,7 +463,11 @@ function (filter, key, value, op) {
 						ZaSearchOption.SERVER_ID
 						);
 		}
-	}else if (key == ZaAccount.A_zimbraLastLogonTimestamp){
+	}else if (key == ZaSearchOption.A_cosListChecked) {
+		if (value.size () > 0) {
+			entry = ZaSearchBuilderController.getCosFilter4ListArray(value.getArray());
+		}
+        }else if (key == ZaAccount.A_zimbraLastLogonTimestamp){
 		entry = "("	+ key + op + value + ")";
 	}else {
 		entry = "(" + key + "=*" + value + "*)" ;
@@ -519,6 +598,24 @@ function (arr, optionId) {
 	
 	return query ;
 }
+
+ZaSearchBuilderController.getCosFilter4ListArray = 
+function (arr) {
+	var query = "";
+	var controller = ZaApp.getInstance().getSearchBuilderController();
+	var cosids = controller._cosids;
+
+	if(cosids && cosids.length  > 0) {
+		for(var i = 0; i < arr.length && i < cosids.length; i++) {
+			query += "(" + ZaAccount.A_COSId  + "=" + cosids[arr[i]] + ")";
+		}
+	}
+        if (cosids.length > 1) {
+                query = "(|" + query + ")";
+        }
+	return query;
+}
+
 
 ZaSearchBuilderController.prototype.getQuery =
 function () {

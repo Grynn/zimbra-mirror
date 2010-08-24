@@ -33,6 +33,7 @@ ZaSearchBuilderToolbarView = function(parent){
 	this._toolbarOperations [ZaOperation.SEARCH_BY_ADVANCED] = new ZaOperation(ZaOperation.SEARCH_BY_ADVANCED, ZaMsg.searchByAdvanced, ZaMsg.tt_searchByAdvanced, "SearchAll", "SearchAll", new AjxListener(this, this.advancedSelectHndlr));
 	this._toolbarOperations [ZaOperation.SEP] = new ZaOperation(ZaOperation.SEP);
 	this._toolbarOperations [ZaOperation.SEARCH_BY_REMOVE_ALL] = new ZaOperation(ZaOperation.SEARCH_BY_REMOVE_ALL, ZaMsg.searchByRemoveAll, ZaMsg.tt_searchByRemoveAll, null, null, new AjxListener(this, this.removeSelectHndlr), null, null, "ZaSearchBuilderOptionRemoveAll");
+	this._toolbarOperations[ZaOperation.SEARCH_BY_COS] = new ZaOperation(ZaOperation.SEARCH_BY_COS, ZaMsg.searchByCOS, ZaMsg.tt_searchByCOS, "COS", "COS", new AjxListener(this, this.cosSelectHndlr));
 	this._toolbarOperations [ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
 	this._toolbarOperations [ZaOperation.CLOSE] = new ZaOperation (ZaOperation.CLOSE, ZaMsg.TBB_Close, ZaMsg.tt_advanced_search_close, "Close", "CloseDis", new AjxListener(this, this.closeHndlr));
 	
@@ -52,6 +53,7 @@ ZaSearchBuilderToolbarView = function(parent){
 		this._toolbarOrder.push(ZaOperation.SEARCH_BY_SERVER);
 		
 	this._toolbarOrder.push(ZaOperation.SEARCH_BY_ADVANCED);
+        this._toolbarOrder.push(ZaOperation.SEARCH_BY_COS);
 	this._toolbarOrder.push(ZaOperation.SEP);
 	this._toolbarOrder.push(ZaOperation.SEARCH_BY_REMOVE_ALL);
 	this._toolbarOrder.push(ZaOperation.NONE);
@@ -112,6 +114,11 @@ function (event) {
 	//if (AjxEnv.hasFirebug) console.log("Advanced Attributes search builder button is clicked.") ;
 	this._controller.addOptionView (ZaSearchOption.ADVANCED_ID) ;
 	//this._controller.listAll
+}
+
+ZaSearchBuilderToolbarView.prototype.cosSelectHndlr =
+function (event) {
+        this._controller.addOptionView(ZaSearchOption.COS_ID);
 }
 
 ZaSearchBuilderToolbarView.prototype.removeSelectHndlr =
