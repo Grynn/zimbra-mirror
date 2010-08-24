@@ -2,7 +2,6 @@ package projects.zcs.ui;
 
 import framework.core.SelNGBase;
 
-
 /**
  * This Class have UI-level methods related composing a contact and verifying
  * the mail's contents. e.g: zNavigateToContact,
@@ -40,7 +39,8 @@ public class AccPref extends AppPage {
 			obj.zRadioBtn.zClick(localize(locator.accountTypeImap));
 		}
 		if (!password.equals("")) {
-			SelNGBase.selenium.get().type("xpath=//input[@type='password']", password);
+			SelNGBase.selenium.get().type("xpath=//input[@type='password']",
+					password);
 		}
 		if (ssl.equals("SSL")) {
 			obj.zCheckbox.zClick(localize(locator.accountUseSSL));
@@ -55,5 +55,38 @@ public class AccPref extends AppPage {
 			obj.zButton.zClickInDlg(localize(locator.cancel));
 
 		}
+	}
+
+	public static void zCreatePersona(String personaName, String fromName,
+			String fromAddress) throws Exception {
+		obj.zButton.zClick(localize(locator.addPersona));
+		obj.zEditField.zType(
+				getNameWithoutSpace(localize(locator.accountPersonaLabel)),
+				personaName);
+		obj.zEditField.zActivateAndType("id=DWT41_PERSONA_FROM_NAME", fromName);
+		SelNGBase.selenium
+				.get()
+				.clickAt(
+						"//div[contains(@id, 'PERSONA')]//td[contains(@class, 'ZOptionsSectionMain')]/table/tbody/tr[6]//td[contains(@id, '_select_container')]//td[contains(text(), '"
+								+ SelNGBase.selfAccountName.get().toLowerCase()
+								+ "')]", "");
+		Thread.sleep(500);
+		if (fromAddress.equals("")) {
+			SelNGBase.selenium
+					.get()
+					.clickAt(
+							"//div[contains(@class, 'ZSelectMenuItem ZWidget ZHasText')]//td[contains(text(), '"
+									+ SelNGBase.selfAccountName.get()
+											.toLowerCase() + "')]", "");
+		} else {
+			SelNGBase.selenium
+					.get()
+					.clickAt(
+							"//div[contains(@class, 'ZSelectMenuItem ZWidget ZHasText')]//td[contains(text(), '"
+									+ fromAddress.toLowerCase() + "')]", "");
+		}
+		Thread.sleep(1000);
+		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
+		Thread.sleep(1000);
 	}
 }
