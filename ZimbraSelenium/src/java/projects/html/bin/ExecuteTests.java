@@ -326,7 +326,7 @@ public class ExecuteTests {
 		suites.add(suite);
 		System.out.println(suite.toXml());
 		SummaryReporter createSummary = new SummaryReporter(appType);
-		TestStatusReporter testReporter = new TestStatusReporter();
+		TestStatusReporter testReporter = new TestStatusReporter(appType);
 		TestNG tng = new TestNG();
 		tng.setXmlSuites(suites);
 		tng.addListener(createSummary);
