@@ -9,6 +9,7 @@ import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 
 /**
@@ -58,7 +59,9 @@ public class PrintCalendarTests extends CommonTest {
 			handleRetry();
 
 		SelNGBase.needReset.set(false);
-	}
+
+		throw new HarnessException("implement me!");
+}
 
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
