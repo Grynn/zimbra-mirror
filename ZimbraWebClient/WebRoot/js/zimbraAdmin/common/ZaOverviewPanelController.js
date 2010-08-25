@@ -116,9 +116,6 @@ function(detls) {
 			}
 		}
 	}
-	//TODO: must close the opened tab when tab owner is removed
-	//Currently, all opened tabs do not be closed although owners are deleted
-	
 }
 
 

@@ -924,6 +924,7 @@ function (){
 		//add the item to the _removeList
 		this._removeList.push(item);
 	}
+	tabGroup.resetTabSizes(true);
 }
 
 

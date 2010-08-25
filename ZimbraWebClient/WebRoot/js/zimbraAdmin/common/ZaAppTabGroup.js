@@ -546,7 +546,7 @@ function (itemId, tabConstructor) {
 		var tab = ZaAppTabGroup._TABS.get(i) ;
 		var v = tab.getAppView() ;
 		if (v && v._containedObject && v._containedObject.id && v.constructor) {
-			if (itemId == v._containedObject.id && v.constructor==tabConstructor) {
+			if (itemId == v._containedObject.id && (v.constructor==tabConstructor || !tabConstructor)) {
 				return tab ;
 			}
 		}
