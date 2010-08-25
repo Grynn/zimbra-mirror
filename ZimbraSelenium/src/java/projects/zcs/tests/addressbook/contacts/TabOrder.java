@@ -1,4 +1,4 @@
-package projects.zcs.tests.addressbook.taborder;
+package projects.zcs.tests.addressbook.contacts;
 
 import java.lang.reflect.Method;
 import org.testng.annotations.BeforeClass;
@@ -9,13 +9,14 @@ import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 
 /**
  * @author Jitesh Sojitra
  */
 
-public class AddressBookTabOrderTests extends CommonTest {
+public class TabOrder extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
@@ -52,12 +53,15 @@ public class AddressBookTabOrderTests extends CommonTest {
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void test1(String to, String cc, String bcc, String subject,
+	public void tabOrderContacts01(String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
 		SelNGBase.needReset.set(false);
+		
+		
+		throw new HarnessException("implement me!");
 	}
 
 	//--------------------------------------------------------------------------

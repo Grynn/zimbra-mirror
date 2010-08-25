@@ -19,7 +19,7 @@ import framework.util.*;
  * 
  */
 @SuppressWarnings("static-access")
-public class ContactGroupTests extends CommonTest {
+public class CreateContactGroup extends CommonTest {
 	
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS

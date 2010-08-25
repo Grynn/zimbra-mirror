@@ -1,29 +1,36 @@
-package projects.zcs.tests.addressbook.newcontact;
+package projects.zcs.tests.addressbook.contacts;
 
 import java.io.File;
 import java.lang.reflect.Method;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import projects.zcs.Locators;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import framework.core.SelNGBase;
+import framework.items.ContactItem;
+import framework.items.FolderItem;
+import framework.items.ContactItem.GenerateItemType;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
-/**
- * This covers some high priority test cases related to address book
- * 
- * @written by Prashant Jaiswal
- * 
- */
-@SuppressWarnings("static-access")
-public class CreateContactTests extends CommonTest {
-	protected boolean isCheckbox = false;
-
+public class CreateContact extends CommonTest {
+	
+	private FolderItem EmailedContacts;
+	
+	public CreateContact() {
+		
+		EmailedContacts = new FolderItem();
+		EmailedContacts.name = localize(Locators.emailedContacts);
+		
+	}
+	
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
@@ -79,6 +86,76 @@ public class CreateContactTests extends CommonTest {
 			zLogin();
 		}
 		SelNGBase.needReset.set(true);
+	}
+
+	/**
+	 * Enters some basic fields to create a contact in address book and verifies
+	 * the contact exist or not
+	 */
+	@Test(
+			description = "Enters some basic fields to create a contact in address book and verifies the contact exist or not",
+			groups = { "sanity", "smoke", "full" },
+			retryAnalyzer = RetryFailedTests.class)
+	public void createBasicContact() throws Exception {
+		if (SelNGBase.isExecutionARetry.get())
+			handleRetry();
+
+		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
+
+		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
+		obj.zContactListItem.zExists(contact.lastName);
+
+		SelNGBase.needReset.set(false);
+	}
+
+	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void createContactWithAllFieldsAndVerify(String prefix,
+			String firstName, String middleName, String maidenName,
+			String lastName, String suffix, String nickName, String jobTitle,
+			String department, String company, String email, String phone,
+			String iM, String street, String city, String state,
+			String postalCode, String country, String uRL, String other,
+			String notes) throws Exception {
+		if (SelNGBase.isExecutionARetry.get())
+			handleRetry();
+
+		page.zABCompose.zCreateContactWithAllFields(prefix, firstName,
+				middleName, maidenName, lastName, suffix, nickName, jobTitle,
+				department, company, email, phone, iM, street, city, state,
+				postalCode, country, uRL, other, notes);
+		obj.zListItem.zClick(lastName);
+		obj.zButton.zClick(page.zABCompose.zEditContactIconBtn);
+		page.zABCompose.zVerifyContactWithAllFields(prefix, firstName,
+				middleName, maidenName, lastName, suffix, nickName, jobTitle,
+				department, company, email, phone, iM, street, city, state,
+				postalCode, country, uRL, other, notes);
+		obj.zButton.zClick(localize(locator._close));
+
+		SelNGBase.needReset.set(false);
+	}
+
+	/**
+	 *Test to verify the contact right click menus exits and are enabled or not
+	 */
+	@Test(
+			description = "Create new contact, but cancel before saving",
+			groups = { "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void cancelCreateContact() throws Exception {
+		if (SelNGBase.isExecutionARetry.get())
+			handleRetry();
+
+		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
+		
+		obj.zFolder.zClick(replaceUserNameInStaticId(page.zABCompose.zContactsFolder));
+		obj.zButton.zClick(page.zABCompose.zNewContactMenuIconBtn);
+		page.zABCompose.zEnterBasicABData(contact);
+		obj.zButton.zClick(page.zABCompose.zCancelContactMenuIconBtn);
+		obj.zButton.zClickInDlgByName(localize(locator.no), localize(locator.warningMsg));
+		SleepUtil.sleep(500);
+		obj.zContactListItem.zNotExists(contact.lastName);
+
+		SelNGBase.needReset.set(false);
 	}
 
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -189,32 +266,6 @@ public class CreateContactTests extends CommonTest {
 		SelNGBase.needReset.set(false);
 	}
 
-	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void createContactWithAllFieldsAndVerify(String prefix,
-			String firstName, String middleName, String maidenName,
-			String lastName, String suffix, String nickName, String jobTitle,
-			String department, String company, String email, String phone,
-			String iM, String street, String city, String state,
-			String postalCode, String country, String uRL, String other,
-			String notes) throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
-
-		page.zABCompose.zCreateContactWithAllFields(prefix, firstName,
-				middleName, maidenName, lastName, suffix, nickName, jobTitle,
-				department, company, email, phone, iM, street, city, state,
-				postalCode, country, uRL, other, notes);
-		obj.zListItem.zClick(lastName);
-		obj.zButton.zClick(page.zABCompose.zEditContactIconBtn);
-		page.zABCompose.zVerifyContactWithAllFields(prefix, firstName,
-				middleName, maidenName, lastName, suffix, nickName, jobTitle,
-				department, company, email, phone, iM, street, city, state,
-				postalCode, country, uRL, other, notes);
-		obj.zButton.zClick(localize(locator._close));
-
-		SelNGBase.needReset.set(false);
-	}
-
 	private void editContactUpdateFileAsAndVerify(String cnLastName,
 			String cnFirstname, String company) throws Exception {
 		String[] fileAsArray = { cnLastName + ", " + cnFirstname,
@@ -264,6 +315,7 @@ public class CreateContactTests extends CommonTest {
 			// fails because lot of time opening and saving same contact
 		}
 	}
+
 
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
