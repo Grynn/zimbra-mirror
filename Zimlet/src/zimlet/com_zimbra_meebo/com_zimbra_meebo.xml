@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_meebo" version="0.6" label="Meebo" description="Displays Meebo control bar at the bottom of the Zimbra interface.">
+<zimlet name="com_zimbra_meebo" version="0.7" label="Meebo" description="Displays Meebo control bar at the bottom of the Zimbra interface.">
   <include>meebo.js</include>
   <handlerObject>com_zimbra_meebo_HandlerObject</handlerObject>
 	<zimletPanelItem label="${msg.MeeboZimlet_panel_label}" icon="zimbraIcon">
