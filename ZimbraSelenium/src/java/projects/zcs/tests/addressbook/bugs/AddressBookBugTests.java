@@ -1,4 +1,4 @@
-package projects.zcs.tests.addressbook;
+package projects.zcs.tests.addressbook.bugs;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
