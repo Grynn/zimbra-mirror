@@ -247,6 +247,8 @@ CLASS:projects.zcs.tests.preferences.signatures.ChangeMailFormatSignatureTests;M
 CLASS:projects.zcs.tests.mail.tags.TagMessageTests;METHOD:applyMutlipleTagToMessageAndVerify;LOCALE:all;BROWSERS:na;BUGS:49957;REMARK:Message is not tagged after creating new tag from toolbar button
 CLASS:projects.zcs.tests.mail.tags.TagMessageTests;METHOD:verifyTagFunctionalityFor2MessageAndRemoveTag;LOCALE:all;BROWSERS:na;BUGS:49957;REMARK:Message is not tagged after creating new tag from toolbar button
 
+#bug 50116
+CLASS:projects.zcs.tests.mail.messageactions.MessagePreviewPaneActionTests;METHOD:jsErrorOnClickingAddToCalendarInNewWindow_Bug49734;LOCALE:all;BROWSERS:na;BUGS:50116;REMARK:Attachment links are not removed from same window if removed from new window
 
 
 #------------------------HTML tests to be skipped ------------------
