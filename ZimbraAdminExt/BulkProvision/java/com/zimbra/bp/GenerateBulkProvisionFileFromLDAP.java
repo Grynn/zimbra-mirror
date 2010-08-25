@@ -114,8 +114,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 		GalParams.ExternalGalParams galParams = new GalParams.ExternalGalParams(attrs, GalOp.search);
 		Element response = zsc.createElement(ZimbraBulkProvisionService.GENERATE_BULK_PROV_FROM_LDAP_RESPONSE);
 		String fileToken = Double.toString(Math.random()*100);
-        String[] galAttrs = Provisioning.getInstance().getConfig().getMultiAttr(Provisioning.A_zimbraGalLdapAttrMap);
-        LdapGalMapRules rules = new LdapGalMapRules(galAttrs);
+        LdapGalMapRules rules = new LdapGalMapRules(Provisioning.getInstance().getConfig());
 		try {
 			SearchGalResult result = LdapUtil.searchLdapGal(galParams, GalOp.search, "*", maxResults, rules, null, null);
 			List<GalContact> entries = result.getMatches();

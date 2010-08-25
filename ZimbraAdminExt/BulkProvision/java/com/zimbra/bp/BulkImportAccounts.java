@@ -264,8 +264,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 				}
 			} else if(sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_BULK_LDAP)) {
 				GalParams.ExternalGalParams galParams = new GalParams.ExternalGalParams(attrs, GalOp.search);
-		        String[] galAttrs = Provisioning.getInstance().getConfig().getMultiAttr(Provisioning.A_zimbraGalLdapAttrMap);
-		        LdapGalMapRules rules = new LdapGalMapRules(galAttrs);
+		        LdapGalMapRules rules = new LdapGalMapRules(Provisioning.getInstance().getConfig());
 				
 				Element elPassword = request.getOptionalElement(ZimbraBulkProvisionExt.A_password);
 				Element elPasswordLength = request.getOptionalElement(ZimbraBulkProvisionExt.A_genPasswordLength);
