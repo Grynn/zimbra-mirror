@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_gtranslator" version="3.0" label="Google Translator" description="Translates Emails into more than 2500 combination of languages using Google(TM)'s language translation service" target="main compose-window">
+<zimlet name="com_zimbra_gtranslator" version="3.0.1" label="Google Translator" description="Translates Emails into more than 2500 combination of languages using Google(TM)'s language translation service" target="main compose-window">
 	<include>gtranslator.js</include>
 	<include>http://www.google.com/jsapi</include>
 	<includeCSS>gtranslator.css</includeCSS>

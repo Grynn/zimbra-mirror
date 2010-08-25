@@ -30,6 +30,15 @@ com_zimbra_gtranslator_HandlerObject.prototype.constructor = com_zimbra_gtransla
  */
 var GTranslatorZimlet = com_zimbra_gtranslator_HandlerObject;
 
+
+GTranslatorZimlet.prototype.init =
+function() {
+	if(this._zimletContext._isToolbarClosed == undefined) {
+		this._zimletContext._isToolbarClosed = true;
+		this._zimletContext._alreadyUsed = false;
+	}
+};
+
 /**
  * Called by Framework. Adds a toolbar
  * @see ZmZimletBase
