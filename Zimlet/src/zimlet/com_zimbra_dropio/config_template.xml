@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_dropio" version="2.0.1">
+<zimletConfig name="com_zimbra_dropio" version="2.0.2">
   <global>
     <property name="allowedDomains">*.drop.io</property>
   </global>

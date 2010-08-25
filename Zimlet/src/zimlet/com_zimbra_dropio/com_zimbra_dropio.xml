@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_dropio" label="Drop.io" version="2.0.1" description="Allows you to upload and attach large files via drop.io" target="main compose-window">
+<zimlet name="com_zimbra_dropio" label="Drop.io" version="2.0.2" description="Allows you to upload and attach large files via drop.io" target="main compose-window">
 	<include>dropio.js</include>
 	<include>prefDialog.js</include>
 	<include>dropioTabView.js</include>
@@ -9,7 +9,7 @@
 	</zimletPanelItem>
 
 	<userProperties>
-		<property type="string" name="dropioZimlet_apiKey" value="4115e41d17052650b88ea353c201b544c8d50fe4"/>
+		<property type="string" name="dropioZimlet_apiKey" value=""/>
 		<property type="string" name="dropioZimlet_dropName" value=""/>
 		<property type="string" name="dropioZimlet_dropAdminPwd" value=""/>
 		<property type="string" name="dropioZimlet_dropGuestPwd" value=""/>

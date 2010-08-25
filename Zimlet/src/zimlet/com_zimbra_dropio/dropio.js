@@ -31,38 +31,39 @@ com_zimbra_dropio_HandlerObject.prototype.constructor = com_zimbra_dropio_Handle
 var DropioZimlet = com_zimbra_dropio_HandlerObject;
 
 
-/**
- * Initializes the zimlet.
- * 
- */
-DropioZimlet.prototype.init =
-function() {
-	if (appCtxt.isChildWindow) {
-		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
-	}
-};
+var DropioZimletTabKey = "dropio";
 
+/**
+ * Called by framework when compose toolbar is being initialized
+ */
 DropioZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("COMPOSE") >= 0 && !appCtxt.isChildWindow && !this._addedToMainWindow) {
-		this._addedToMainWindow = true;
-		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
+	if (viewId.indexOf("COMPOSE") >= 0 && !this._addedToMainWindow) {
+		var btn = toolbar.getOp("ATTACHMENT");
+		btn.addSelectionListener(new AjxListener(this, this._addTab));	
 	}
 };
 
-DropioZimlet.prototype._delayedAddTab =
+/**
+ * Adds Drop.io tab
+ */
+DropioZimlet.prototype._addTab =
 function() {
+	if(this._addedToMainWindow) {
+		return;
+	}
 	this.metaData = appCtxt.getActiveAccount().metaData;
 	this._allDropioFileMetaData = null;
 	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
 	var tabview = attachDialog ? attachDialog.getTabView() : null;
 	this.dropioView = new DropioTabView(tabview, this);
 	var tabLabel = this.getMessage("DropioZimlet_label");
-	var tabkey = attachDialog.addTab("dropio", tabLabel, this.dropioView);
+	var tabkey = attachDialog.addTab(DropioZimletTabKey, tabLabel, this.dropioView);
 	this.dropioView.attachDialog = attachDialog;
 
 	var callback = new AjxCallback(this.dropioView, this.dropioView.uploadFiles);
 	attachDialog.addOkListener(tabkey, callback);
+	this._addedToMainWindow = true;
 };
 
 /**
