@@ -184,63 +184,37 @@ public class ExecuteTests {
 		// ---------------------------------------------------
 		testName = "Address Book";
 		cls = new ArrayList<String>();
-		cls.add("projects.zcs.tests.addressbook.newcontact.BasicContactTests");
-		cls.add("projects.zcs.tests.addressbook.newcontact.CreateContactTests");
-		addTests(testName, cls);
+		cls.add("projects.zcs.tests.addressbook.bugs.AddressBookBugTests");
+		
+		cls.add("projects.zcs.tests.addressbook.contactgroups.ContactGroupContextMenu");
+		cls.add("projects.zcs.tests.addressbook.contactgroups.CreateContactGroup");
+		cls.add("projects.zcs.tests.addressbook.contactgroups.DeleteContactGroup");
+		cls.add("projects.zcs.tests.addressbook.contactgroups.EditContactGroup");
+		cls.add("projects.zcs.tests.addressbook.contactgroups.MoveContactGroup");
+		cls.add("projects.zcs.tests.addressbook.contactgroups.TagContactGroup");
+		
+		cls.add("projects.zcs.tests.addressbook.contacts.ContactContextMenu");
+		cls.add("projects.zcs.tests.addressbook.contacts.CreateContact");
+		cls.add("projects.zcs.tests.addressbook.contacts.DeleteContact");
+		cls.add("projects.zcs.tests.addressbook.contacts.EditContact");
+		cls.add("projects.zcs.tests.addressbook.contacts.MoveContact");
+		cls.add("projects.zcs.tests.addressbook.contacts.TabOrder");
+		cls.add("projects.zcs.tests.addressbook.contacts.TagContact");
 
-		// ---------------------------------------------------
-		testName = "Address Book Actions";
-		cls = new ArrayList<String>();
-		cls.add("projects.zcs.tests.addressbook.contactactions.ContactActionTests");
-		addTests(testName, cls);
+		cls.add("projects.zcs.tests.addressbook.folders.AddressbookActions");
+		cls.add("projects.zcs.tests.addressbook.folders.AddressbookContextMenu");
+		cls.add("projects.zcs.tests.addressbook.folders.AddressbookCreateAddressbook");
+		cls.add("projects.zcs.tests.addressbook.folders.AddressbookDeleteAddressbook");
+		cls.add("projects.zcs.tests.addressbook.folders.AddressbookMoveAddressbook");
 
-		// ---------------------------------------------------
-		testName = "Address Book Folders";
-		cls = new ArrayList<String>();
-		cls.add("projects.zcs.tests.addressbook.folders.AddressBookFolderTests");
-		addTests(testName, cls);
-
-		// ---------------------------------------------------
-		testName = "Contact Groups";
-		cls = new ArrayList<String>();
-		cls.add("projects.zcs.tests.addressbook.contactgroups.ContactGroupTests");
-		addTests(testName, cls);
-
-		// ---------------------------------------------------
-		testName = "Tag Contact";
-		cls = new ArrayList<String>();
-		cls.add("projects.zcs.tests.addressbook.tags.TagContactTests");
-		addTests(testName, cls);
-
-		// ---------------------------------------------------
-		testName = "Address Book Folder Sharing";
-		cls = new ArrayList<String>();
-		cls.add("projects.zcs.tests.addressbook.sharing.AddressBookSharingTests");
-		addTests(testName, cls);
-
-		// ---------------------------------------------------
-		testName = "Address Book Saved Searches";
-		cls = new ArrayList<String>();
-		cls.add("projects.zcs.tests.addressbook.savedsearches.AddressBookSavedSearchTests");
-		addTests(testName, cls);
-
-		// ---------------------------------------------------
-		testName = "Address Book Print";
-		cls = new ArrayList<String>();
 		cls.add("projects.zcs.tests.addressbook.print.PrintAddressBookTests");
-		addTests(testName, cls);
+		cls.add("projects.zcs.tests.addressbook.print.PrintContact");
+		cls.add("projects.zcs.tests.addressbook.print.PrintContactGroup");
 
-		// ---------------------------------------------------
-		testName = "Address Book Tab Order";
-		cls = new ArrayList<String>();
-		cls
-				.add("projects.zcs.tests.addressbook.taborder.AddressBookTabOrderTests");
-		addTests(testName, cls);
+		cls.add("projects.zcs.tests.addressbook.savedsearches.AddressBookSavedSearchTests");
 
-		// ---------------------------------------------------
-		testName = "Address Book Bugs";
-		cls = new ArrayList<String>();
-		cls.add("projects.zcs.tests.addressbook.AddressBookBugTests");
+		cls.add("projects.zcs.tests.addressbook.sharing.AddressBookSharingTests");
+
 		addTests(testName, cls);
 
 		// ------------ CALENDAR -----------------------------
