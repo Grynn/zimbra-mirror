@@ -1,4 +1,4 @@
-package projects.zcs.tests.addressbook.contactactions;
+package projects.zcs.tests.mail.addresspicker;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
