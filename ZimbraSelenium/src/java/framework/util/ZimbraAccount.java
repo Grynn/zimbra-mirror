@@ -42,6 +42,7 @@ import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.SoapUtil;
 import com.zimbra.common.util.ByteUtil;
 
+@SuppressWarnings("deprecation")
 public class ZimbraAccount {
 	private static Logger logger = LogManager.getLogger(ZimbraAccount.class);
 
@@ -214,15 +215,7 @@ public class ZimbraAccount {
 		// as ModifyPrefsRequest, which could trigger a client reload
 		//
 		
-		try {
-			return (soapClient.sendSOAP(ZimbraMailHost, request));
-		} catch (DocumentException e) {
-			throw new HarnessException(e);
-		} catch (IOException e) {
-			throw new HarnessException(e);
-		} catch (ServiceException e) {
-			throw new HarnessException(e);
-		}
+		return (soapClient.sendSOAP(ZimbraMailHost, request));
 	}
 
 	/**
@@ -399,14 +392,16 @@ public class ZimbraAccount {
          * @param host
          * @param request
          * @return
-         * @throws DocumentException
-         * @throws IOException
-         * @throws ServiceException
          * @throws HarnessException
          */
-		public Element sendSOAP(String host, String request) throws DocumentException, IOException, ServiceException, HarnessException {        	
-        	setContext(AuthToken, SessionId, SequenceNum);
-        	return (sendSOAP(host, requestContext, Element.parseXML(request)));
+        public Element sendSOAP(String host, String request) throws HarnessException {        	
+        	try
+        	{
+        		setContext(AuthToken, SessionId, SequenceNum);
+        		return (sendSOAP(host, requestContext, Element.parseXML(request)));
+        	} catch (DocumentException e) {
+				throw new HarnessException("Unable to parse request "+ request, e);
+        	}
         }
         
 		/**
@@ -415,11 +410,9 @@ public class ZimbraAccount {
 		 * @param context
 		 * @param request
 		 * @return
-		 * @throws IOException
-		 * @throws ServiceException
 		 * @throws HarnessException
 		 */
-        public Element sendSOAP(String host, Element context, Element request) throws IOException, ServiceException, HarnessException {
+        public Element sendSOAP(String host, Element context, Element request) throws HarnessException {
         	
         	setTransport(host, request);
         	
@@ -427,7 +420,13 @@ public class ZimbraAccount {
         	requestBody = request;
         	requestEnvelope = mSoapProto.soapEnvelope(requestBody, context);
 
-			responseEnvelope = mTransport.invokeRaw(requestEnvelope);
+			try {
+				responseEnvelope = mTransport.invokeRaw(requestEnvelope);
+			} catch (IOException e) {
+				throw new HarnessException("Unable to send SOAP to "+ this.mURI.toString(), e);
+			} catch (ServiceException e) {
+				throw new HarnessException("Unable to send SOAP to "+ this.mURI.toString(), e);
+			}
 			
 			// Log the request/response
         	logger.debug("\n" + new Date() +" "+ mURI.toString() +"\n---\n"+ requestEnvelope.prettyPrint() +"\n---\n"+ responseEnvelope.prettyPrint() +"\n---\n");
@@ -677,7 +676,8 @@ public class ZimbraAccount {
 */    	
         
         private static Map<String, String> mURIs = null;
-    	private static Map getURIs() {
+    	@SuppressWarnings("unchecked")
+		private static Map getURIs() {
     		if (mURIs == null) {
     			mURIs = new HashMap<String, String>();
     			mURIs.put("zimbra", "urn:zimbra");
