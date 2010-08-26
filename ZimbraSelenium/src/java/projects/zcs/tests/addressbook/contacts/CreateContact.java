@@ -188,12 +188,12 @@ public class CreateContact extends CommonTest {
 		SleepUtil.sleep(2000);
 		File f = new File("src/java/projects/zcs/data/" + filename);
 		String path = f.getAbsolutePath();
-		obj.zBrowseField.zTypeInDlgWithKeyboard(localize(locator.uploadImage),
+		obj.zBrowseField.zTypeInDlgWithKeyboard(localize(locator.fileLabel),
 				path, "1");
 		obj.zButton.zClickInDlg(localize(locator.ok));
 		SleepUtil.sleep(2000);
 		String dlgExists = obj.zDialog
-				.zExistsDontWait(localize(locator.uploadImage));
+				.zExistsDontWait(localize(locator.fileLabel));
 		for (int i = 0; i <= 20; i++) {
 			if (dlgExists.equals("true")) {
 				SleepUtil.sleep(1000);
@@ -203,7 +203,9 @@ public class CreateContact extends CommonTest {
 			}
 		}
 		obj.zButton.zClick(page.zABCompose.zSaveContactMenuIconBtn);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zClick(cnLastName);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zEditContactIconBtn);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			SleepUtil.sleep(2500);
@@ -218,18 +220,22 @@ public class CreateContact extends CommonTest {
 
 		// Remove photo and re verify
 		SelNGBase.selenium.get().click("id=editcontactform_REMOVE_IMAGE");
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zSaveContactMenuIconBtn);
+		SleepUtil.sleep(1000);
 		obj.zContactListItem.zClick(cnLastName);
+		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zEditContactIconBtn);
+		
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			SleepUtil.sleep(2500);
 		} else {
 			SleepUtil.sleep(2000);
 		}
 		viewLinkPresent = SelNGBase.selenium.get()
-				.isElementPresent("id=editcontactform_VIEW_IMAGE");
+				.isVisible("id=editcontactform_VIEW_IMAGE");
 		removeLinkPresent = SelNGBase.selenium.get()
-				.isElementPresent("id=editcontactform_REMOVE_IMAGE");
+				.isVisible("id=editcontactform_REMOVE_IMAGE");
 		assertReport("false", viewLinkPresent.toString(),
 				"View link exist after uploading contact photo");
 		assertReport("false", removeLinkPresent.toString(),
