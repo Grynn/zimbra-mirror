@@ -325,7 +325,7 @@ function() {
 	this.treeView.setSelected("7");
 	this._treeListener();
 
-}
+};
 /**
  * Called by Framework
  * @param {Object} params Object with Overview information
@@ -362,7 +362,7 @@ function(params) {
 AttachContactsTabView.prototype._treeListener =
 function() {
 	var item = this.treeView.getSelected();
-	document.getElementById(AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD).value = "in:" + item.getSearchPath();
+	document.getElementById(AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD).value = "in:\"" + item.getSearchPath()+"\"";
 	var query = this._getQueryFromFolder(item.id);
 	this.executeQuery(query);
 };

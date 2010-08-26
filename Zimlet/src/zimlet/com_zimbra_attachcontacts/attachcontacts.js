@@ -31,25 +31,25 @@ com_zimbra_attachcontacts_HandlerObject.prototype.constructor = com_zimbra_attac
  */
 var AttachContactsZimlet = com_zimbra_attachcontacts_HandlerObject;
 
-AttachContactsZimlet.prototype.init =
-function() {
-	if (appCtxt.isChildWindow) {
-		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
-	}
-};
 
+/**
+ * Called by framework when compose toolbar is being initialized
+ */
 AttachContactsZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("COMPOSE") >= 0 && !appCtxt.isChildWindow && !this._addedToMainWindow) {
-		this._addedToMainWindow = true;
-		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
+	if (viewId.indexOf("COMPOSE") >= 0 && !this._addedToMainWindow) {
+		var btn = toolbar.getOp("ATTACHMENT");
+		btn.addSelectionListener(new AjxListener(this, this._addTab));	
 	} else	if (viewId == "CNS") {
 		this._initContactsReminderToolbar(toolbar, controller);
 	}
 };
 
-AttachContactsZimlet.prototype._delayedAddTab =
+AttachContactsZimlet.prototype._addTab =
 function() {
+	if(this._addedToMainWindow) {
+		return;
+	}
 	var tabLabel = this.getMessage("ACZ_tab_label");
 	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
 
@@ -67,6 +67,7 @@ function() {
 
 	var callback = new AjxCallback(this.AttachContactsView, this.AttachContactsView.uploadFiles);
 	attachDialog.addOkListener(this._tabkey, callback);
+	this._addedToMainWindow = true;
 };
 
 /**
