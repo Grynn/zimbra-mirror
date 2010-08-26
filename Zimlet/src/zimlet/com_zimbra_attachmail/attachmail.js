@@ -30,27 +30,24 @@ com_zimbra_attachmail_HandlerObject.prototype.constructor = com_zimbra_attachmai
  */
 var AttachMailZimlet = com_zimbra_attachmail_HandlerObject;
 
-/**
- * Initializes the zimlet.
- * 
- */
-AttachMailZimlet.prototype.init =
-function() {
-	if (appCtxt.isChildWindow) {
-		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
-	}
-};
 
+
+/**
+ * Called by framework when compose toolbar is being initialized
+ */
 AttachMailZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
-	if (viewId.indexOf("COMPOSE") >= 0 && !appCtxt.isChildWindow && !this._addedToMainWindow) {
-		this._addedToMainWindow = true;
-		setTimeout(AjxCallback.simpleClosure(this._delayedAddTab, this), 1000);
-	}
+	if (viewId.indexOf("COMPOSE") >= 0 && !this._addedToMainWindow) {
+		var btn = toolbar.getOp("ATTACHMENT");
+		btn.addSelectionListener(new AjxListener(this, this._addTab));	
+	} 
 };
 
-AttachMailZimlet.prototype._delayedAddTab =
+AttachMailZimlet.prototype._addTab =
 function() {
+	if(this._addedToMainWindow){
+		return;
+	}
 	var attachDialog = this._attachDialog = appCtxt.getAttachDialog();
 	var tabview = attachDialog ? attachDialog.getTabView() : null;
 	
@@ -62,6 +59,7 @@ function() {
 	
 	var callback = new AjxCallback(this.AMV, this.AMV.uploadFiles);
 	attachDialog.addOkListener(tabkey, callback);
+	this._addedToMainWindow = true;
 };
 
 /**
@@ -527,7 +525,7 @@ function(params) {
 AttachMailTabView.prototype._treeListener =
 function(ev) {
 	var item = this.treeView.getSelected();
-	document.getElementById(AttachMailTabView.ELEMENT_ID_SEARCH_FIELD).value = "in:" + item.getSearchPath();
+	document.getElementById(AttachMailTabView.ELEMENT_ID_SEARCH_FIELD).value = ["in:\"", item.getSearchPath(),"\""].join("");
 	var query = this._getQueryFromFolder(item.id);
 	this.executeQuery(query);
 };
