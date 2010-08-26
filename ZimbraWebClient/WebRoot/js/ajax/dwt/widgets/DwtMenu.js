@@ -579,13 +579,13 @@ function() {
 DwtMenu.prototype._handleScroll =
 function(divID, ev) {
 	if (!ev) ev = window.event;
-	var div = document.getElementById(divID);
+	var div = Dwt.byId(divID);
 	if (div && ev) {
 	 	ev = ev ? ev : window.event;
 	  	var wheelData = ev.detail ? ev.detail * -1 : ev.wheelDelta / 40;
 		var rows = div.rows;
 		var step = Dwt.getSize(rows[0]).y || 10;
-		if (wheelData >0) { //scroll up
+		if (wheelData > 0) { //scroll up
 			this._doScroll(div, +step)
 		} else if (wheelData < 0) { //scroll down
 			this._doScroll(div, -step)
@@ -596,13 +596,13 @@ function(divID, ev) {
 DwtMenu.prototype._handleMouseOut = 
 function(divID, tableID, ev) {
 	if (divID && ev.type && ev.type == "mouseout" && !AjxEnv.isIE) {
-		var div = divID ? document.getElementById(divID) : null;
+		var div = divID ? Dwt.byId(divID) : null;
 		fromEl = ev.target;
 		if (fromEl != div) {
 			return;
 		}
 		toEl = ev.relatedTarget;
-		while (toEl ) {
+		while (toEl) {
 			toEl = toEl.parentNode;
 			if (toEl == div) {
 				return;
@@ -646,17 +646,17 @@ DwtMenu.prototype._doScroll =
 function(div, step) {
 	if (div && step && div.parentNode.style.height) {
 		var old = parseInt(div.style.top) || 0;
-		if (step < 0 ) { //scroll down
+		if (step < 0) { //scroll down
 			var rows = this._table.rows || null;
 			var height = Dwt.getSize(rows[0]).y;
-			var max = div.scrollHeight - ( parseInt(div.parentNode.style.height || rows.length*height ) || 0 );
-			if ( Math.abs(old+step) <= max ) {
+			var max = div.scrollHeight - (parseInt(div.parentNode.style.height || rows.length*height) || 0);
+			if (Math.abs(old+step) <= max) {
 				div.style.top = (old+step)+"px";
 			} else {
 				div.style.top = (-max) +"px";
 			}
 		} else { //scroll up
-			if ( (step+old) <0) {
+			if ((step+old) < 0) {
 				div.style.top = (step+old)+"px";
 			} else {
 				div.style.top = "0px";
@@ -674,16 +674,15 @@ function(index) {
 	var height = 0;
 	for (var i = 0; i <= maxRows; i++) {
 		height += Dwt.getSize(rows[i]).y;
-		
 	}
-	this._table.parentNode.style.height = height +"px";
+	this._table.parentNode.style.height = height + "px";
 	var isScroll = this._layoutStyle == DwtMenu.LAYOUT_SCROLL;
-	if( this._created && isScroll && index !=null ) {
+	if(this._created && isScroll && index !== null) {
 		var rows = this._table.rows || null;
 		var old = parseInt(this._table.style.top) || 0;
-		if (rows && index <rows.length) {
+		if (rows && index < rows.length) {
 			var height = Dwt.getSize(rows[0]).y;
-			step = (-(index * height) -(old));
+			step = -(index * height) - (old);
 			this._doScroll(this._table, step);
 		}
 	}
