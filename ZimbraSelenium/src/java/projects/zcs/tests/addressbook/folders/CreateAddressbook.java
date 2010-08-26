@@ -1,16 +1,11 @@
 package projects.zcs.tests.addressbook.folders;
 
-import java.io.File;
-
-
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
-import projects.zcs.ui.ABCompose.ABComposeActionMethod;
 import framework.core.SelNGBase;
 import framework.items.FolderItem;
 import framework.util.RetryFailedTests;
@@ -51,7 +46,7 @@ public class CreateAddressbook extends CommonTest {
 	 */
 	@Test(
 			description = "Test to create a addressbook folder",
-			groups = { "smoke", "full" }, 
+			groups = { "sanity", "smoke", "full" },
 			retryAnalyzer = RetryFailedTests.class)
 	public void createAddressbookFolder() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())

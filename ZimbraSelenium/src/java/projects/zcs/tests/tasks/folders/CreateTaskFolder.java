@@ -45,7 +45,10 @@ public class CreateTaskFolder extends CommonTest {
 	 * successfully
 	 * 
 	 */
-	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			dataProvider = "taskCreateDataProvider", 
+			groups = { "sanity", "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
 	public void createTaskFolder() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();

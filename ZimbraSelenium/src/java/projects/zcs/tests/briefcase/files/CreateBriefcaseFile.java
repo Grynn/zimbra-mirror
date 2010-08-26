@@ -69,7 +69,10 @@ public class CreateBriefcaseFile extends CommonTest {
 	/**
 	 * This test uploads files in briefcase folder and verifies file exist
 	 */
-	@Test(dataProvider = "BriefcaseFileUpload", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			dataProvider = "BriefcaseFileUpload", 
+			groups = { "sanity", "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
 	public void newBriefcaseFileUpload(String filename, String newBFFolder)
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())

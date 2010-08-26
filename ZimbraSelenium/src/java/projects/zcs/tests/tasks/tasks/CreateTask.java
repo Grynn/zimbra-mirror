@@ -66,7 +66,10 @@ public class CreateTask extends CommonTest {
 	 * Creates simple task with sujbect, location, priority and body only
 	 * 
 	 */
-	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			dataProvider = "taskCreateDataProvider", 
+			groups = { "sanity", "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
 	public void createSimpleTask(String subject, String location,
 			String priority, String body) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())

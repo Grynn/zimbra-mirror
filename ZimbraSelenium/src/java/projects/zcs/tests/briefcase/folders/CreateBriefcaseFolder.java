@@ -48,7 +48,10 @@ public class CreateBriefcaseFolder extends CommonTest {
 		SelNGBase.needReset.set(true);
 	}
 
-	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			dataProvider = "briefcaseDataProvider", 
+			groups = { "sanity", "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
 	public void createBriefcaseFolder(String briefcaseName) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();

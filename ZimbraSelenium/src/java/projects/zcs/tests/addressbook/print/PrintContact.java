@@ -36,7 +36,7 @@ public class PrintContact extends CommonTest {
 	
 	@Test(
 			description = "Print a contact",
-			groups = { "sanity", "smoke", "full" }
+			groups = { "smoke", "full" }
 		)
 	public void printContact01() throws HarnessException {
 		throw new HarnessException("implement me!");

@@ -48,7 +48,7 @@ public class CreateContactGroup extends CommonTest {
 	 */
 	@Test(
 			description = "Test to create Contact Group and to verify",
-			groups = { "smoke", "full" },
+			groups = { "sanity", "smoke", "full" },
 			retryAnalyzer = RetryFailedTests.class)
 	public void createContactGroupAndVerify() throws Exception {
 		
