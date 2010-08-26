@@ -20,7 +20,7 @@ public class BriefcaseSavedSearch extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
-	@DataProvider(name = "mailDataProvider")
+	@DataProvider(name = "dataProvider")
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
 		if (test.equals("test1")) {
@@ -52,7 +52,7 @@ public class BriefcaseSavedSearch extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
-	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "dataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void test1(String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
