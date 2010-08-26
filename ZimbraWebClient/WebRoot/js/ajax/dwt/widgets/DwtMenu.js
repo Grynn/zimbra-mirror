@@ -104,8 +104,6 @@ DwtMenu = function(params) {
 		this._table = document.createElement("table");
 		this._table.border = this._table.cellPadding = this._table.cellSpacing = 0;
 		this._table.className = "DwtMenuTable";
-		if (!AjxEnv.isIE)
-			this._table.style.width = "100%";
 		this._table.id = Dwt.getNextId();
 		if(this._layoutStyle == DwtMenu.LAYOUT_SCROLL) {
 			this._table.style.position = "relative";
@@ -123,11 +121,10 @@ DwtMenu = function(params) {
 
 			this._tableContainer = document.createElement("div");
 			this._tableContainer.appendChild(this._table);
-			//this._tableContainer.style.width = "100%";
 			htmlElement.appendChild(this._tableContainer);
 
 			this._bottomScroller = document.createElement("div");
-			this._bottomScroller.className = "DwtMenuScrollTop";
+			this._bottomScroller.className = "DwtMenuScrollBottom";
 			this._bottomScroller.id = Dwt.getNextId();
 			
 			this._imgDivBottom = document.createElement("div");
@@ -510,14 +507,14 @@ function(x, y) {
 		newH = windowSize.y - y - 5; 
 	}
 
-	if (AjxEnv.isIE)
-		this._table.style.width = mySize.x;
+	this._table.style.width = mySize.x;
 
 	// NOTE: This hack is needed for FF/Moz because the containing div
 	//	   allows the inner table to overflow. When the menu cascades
 	//	   and the menu items get pushed off of the visible area, the
 	//	   div's border doesn't surround the menu items. This hack
 	//	   forces the outer div's width to surround the table.
+
 	if ((AjxEnv.isGeckoBased || AjxEnv.isSafari || (this._origStyle == DwtMenu.CALENDAR_PICKER_STYLE)) && this._table && !isScroll) {
 		htmlEl.style.width = (mySize.x + (isPopup && !isCascade ? 10 : 0)) + "px";
 	} else {
