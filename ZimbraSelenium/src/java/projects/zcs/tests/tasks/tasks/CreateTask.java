@@ -18,6 +18,10 @@ public class CreateTask extends CommonTest {
 		String test = method.getName();
 		if (test.equals("createSimpleTask")) {
 			return new Object[][] {
+					{ getLocalizedData_NoSpecialChar()} 
+					};
+		} else if (test.equals("createSimpleTaskWithPriority")) {
+			return new Object[][] {
 					{ getLocalizedData_NoSpecialChar(), getLocalizedData(1),
 							localize(locator.low), getLocalizedData(3) },
 					{ getLocalizedData_NoSpecialChar(), getLocalizedData(1),
@@ -63,14 +67,33 @@ public class CreateTask extends CommonTest {
 	}
 
 	/**
-	 * Creates simple task with sujbect, location, priority and body only
+	 * Creates simple task with minimal required information
 	 * 
 	 */
 	@Test(
 			dataProvider = "taskCreateDataProvider", 
 			groups = { "sanity", "smoke", "full" }, 
 			retryAnalyzer = RetryFailedTests.class)
-	public void createSimpleTask(String subject, String location,
+	public void createSimpleTask(String subject) throws Exception {
+		if (SelNGBase.isExecutionARetry.get())
+			handleRetry();
+
+		page.zTaskApp.zNavigateToTasks();
+		page.zTaskApp.zTaskCreateSimple(subject, "", "", "");
+		obj.zTaskItem.zExists(subject);
+
+		SelNGBase.needReset.set(false);
+	}
+
+	/**
+	 * Creates simple task with high, normal, and low priority
+	 * 
+	 */
+	@Test(
+			dataProvider = "taskCreateDataProvider", 
+			groups = { "sanity", "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
+	public void createSimpleTaskWithPriority(String subject, String location,
 			String priority, String body) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
