@@ -1304,6 +1304,7 @@ public class InitialSync {
         String itemIdStr = doc.getAttribute(MailConstants.A_ID);
         String name = doc.getAttribute(MailConstants.A_NAME);
         String contentType = doc.getAttribute(MailConstants.A_CONTENT_TYPE, "text/html");
+        String description = doc.getAttribute(MailConstants.A_DESC, null);
         int flags = Flag.flagsToBitmask(doc.getAttribute(MailConstants.A_FLAGS, null));
         //String tags = doc.getAttribute(MailConstants.A_TAGS, null);
         int version = (int) doc.getAttributeLong(MailConstants.A_VERSION);
@@ -1334,7 +1335,7 @@ public class InitialSync {
                 return;
             }
             SaveDocument player = new SaveDocument();
-            ParsedDocument pd = new ParsedDocument(rs, name, contentType, modifiedDate, lastEditedBy);
+            ParsedDocument pd = new ParsedDocument(rs, name, contentType, modifiedDate, lastEditedBy, description);
             player.setDocument(pd);
             player.setItemType(type);
             player.setMessageId(id);
@@ -1419,7 +1420,7 @@ public class InitialSync {
 
                 Document doc = (Document)item;
                 SaveDocument player = new SaveDocument();
-                ParsedDocument pd = new ParsedDocument(eofIn, doc.getName(), doc.getContentType(), doc.getDate(), doc.getCreator());
+                ParsedDocument pd = new ParsedDocument(eofIn, doc.getName(), doc.getContentType(), doc.getDate(), doc.getCreator(), doc.getDescription());
                 player.setDocument(pd);
                 player.setItemType(doc.getType());
                 player.setMessageId(doc.getId());
