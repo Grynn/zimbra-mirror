@@ -1,4 +1,4 @@
-package projects.zcs.tests.tasks;
+package projects.zcs.tests.tasks.bugs;
 
 import java.lang.reflect.Method;
 import org.testng.annotations.BeforeClass;
