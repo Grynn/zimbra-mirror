@@ -91,7 +91,7 @@ public class CreateTask extends CommonTest {
 	 */
 	@Test(
 			dataProvider = "taskCreateDataProvider", 
-			groups = { "sanity", "smoke", "full" }, 
+			groups = { "smoke", "full" }, 
 			retryAnalyzer = RetryFailedTests.class)
 	public void createSimpleTaskWithPriority(String subject, String location,
 			String priority, String body) throws Exception {
