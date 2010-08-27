@@ -21,7 +21,7 @@ public class ZimletPreferenceTests extends CommonTest {
 	public static final String zZimletEmailChkBox = "id=com_zimbra_email_zimletCheckbox";
 	public static final String zZimletEmoticonsChkBox = "id=com_zimbra_ymemoticons_zimletCheckbox";
 	public static final String zZimletLocalChkBox = "id=com_zimbra_local_zimletCheckbox";
-
+	public static final String zZimletDnDChkBox = "id=com_zimbra_dnd_zimletCheckbox";
 	//--------------------------------------------------------------------------
 	// SECTION 1: SETUP
 	//--------------------------------------------------------------------------
@@ -58,7 +58,7 @@ public class ZimletPreferenceTests extends CommonTest {
 		SelNGBase.selenium.get().clickAt(zZimletEmoticonsChkBox,"");
 		SelNGBase.selenium.get().clickAt(zZimletDateChkBox,"");
 		SelNGBase.selenium.get().clickAt(zZimletHighlightPhoneChkBox,"");
-		
+		SelNGBase.selenium.get().clickAt(zZimletDnDChkBox,"");
 		//Some times zActivate  and selenium.uncheck method is not working for IE so added above code
 		/*obj.zCheckbox.zActivate(zZimletEmailChkBox);
 		obj.zCheckbox.zActivate(zZimletURLChkBox);
@@ -80,7 +80,7 @@ public class ZimletPreferenceTests extends CommonTest {
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletURLChkBox);
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletEmoticonsChkBox);
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletDateChkBox);
-	//	obj.zCheckbox.zVerifyIsNotChecked(zZimletLocalChkBox);
+		obj.zCheckbox.zVerifyIsNotChecked(zZimletDnDChkBox);
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletHighlightPhoneChkBox);
 		
 		// verify zimlets stuff if possible

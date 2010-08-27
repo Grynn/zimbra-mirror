@@ -199,13 +199,13 @@ public class ShortcutsGeneral extends CommonTest {
 
 		zRobot.keyPress(KeyEvent.VK_ESCAPE);
 		zRobot.keyRelease(KeyEvent.VK_ESCAPE);
-
+/*
 		if (tabName.equals(localize(locator.calendar))
 				|| tabName.equals(localize(locator.tasks))) {
 			obj.zButton.zClickInDlgByName(localize(locator.no),
 					localize(locator.warningMsg));
 		}
-
+*/
 		SleepUtil.sleep(2000);
 
 		SelNGBase.needReset.set(false);
