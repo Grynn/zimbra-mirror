@@ -5,6 +5,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import com.zimbra.common.service.ServiceException;
+
 import projects.zcs.tests.CommonTest;
 import framework.core.SelNGBase;
 import framework.util.HarnessException;
@@ -15,7 +17,7 @@ public class TypeMenu extends CommonTest {
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
 	@DataProvider(name = "dataProvider")
-	public Object[][] createData(Method method) {
+	public Object[][] createData(Method method) throws ServiceException{
 		String test = method.getName();
 		if (test.equals("test1")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar() } };
