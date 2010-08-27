@@ -45,7 +45,7 @@ public class SearchTasks extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
-	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "dataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void test1(String name) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
