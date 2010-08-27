@@ -185,6 +185,10 @@
  		</java>
 	</target>
 		
+	<target name="Run - TMS" depends="jar">
+		<echo>Just a stub for now ...</echo>
+	</target>
+
 	<!-- TARGETS FOR REMOTE MACHINES -->
 	
 	<target name="seleniumjar" depends="clean,copy-data,build-init" description="Creates the jar file">
