@@ -3,11 +3,9 @@
  */
 package framework.core;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -37,6 +35,7 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
 import framework.util.HarnessException;
+import framework.util.SkippedTestListener;
 import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;
 import framework.util.ZimbraSeleniumProperties;
@@ -226,7 +225,6 @@ public class ExecuteHarnessMain {
 				if ( test.getName().equals(testname)) {
 
 					XmlClass x = new XmlClass(c);
-					SkipTest.updateExcluded(x);
 					test.getXmlClasses().add(x);
 					
 					break; // back to the classes list
@@ -253,7 +251,6 @@ public class ExecuteHarnessMain {
 
 			// Build the class list
 			classes = getClassesFromJar(new File(jarfilename), (classfilter == null ? null : Pattern.compile(classfilter)));
-			SkipTest.loadSkipTestsDetails(new File(workingfoldername + "/conf/skipTests.txt"));
 			
 			// Build the list of XmlSuites
 			List<XmlSuite> suites = getXmlSuiteList();
@@ -265,6 +262,7 @@ public class ExecuteHarnessMain {
 			ng.setXmlSuites(suites);
 			ng.addListener(new SummaryReporter("AJAX"));
 			ng.addListener(new TestStatusReporter("AJAX")); // TODO: This shouldn't throw Exception
+			ng.addListener(new SkippedTestListener(new File(testoutputfoldername)));
 			ng.addListener(listener = new ResultListener());
 			ng.setOutputDirectory(testoutputfoldername);
 
@@ -352,149 +350,6 @@ public class ExecuteHarnessMain {
 		
 	}
 	
-	/**
-	 * This class reads skipTest.txt data to exclude certain methods from execution based on locale, browser, and test class
-	 * 
-	 * @author Matt Rhoades
-	 *
-	 */
-	public static class SkipTest {
-		private static Logger logger = LogManager.getLogger(SkipTest.class);
-
-	    // #className;methodName;locales;browsers;bugs;remark
-		
-	    protected String className;
-	    protected String methodToSkip;
-	    protected List<String> locales = new ArrayList<String>();
-	    protected List<String> browsers = new ArrayList<String>();
-	    protected List<String> bugs = new ArrayList<String>();
-	    protected String remark = "None";
-
-	    public static List<SkipTest> skips = null;
-	    
-	    public static void loadSkipTestsDetails(File skipfile) throws IOException {
-	    	skips = new ArrayList<SkipTest>();
-			BufferedReader br = null;
-			
-			try {
-				
-				br = new BufferedReader(new FileReader(skipfile));
-
-				String str = null;
-				while ((str = br.readLine()) != null) {
-					
-					if (str.indexOf("#") >= 0 || str.equals(""))
-						continue;
-					
-					// #className;methodName;locale;browser;bugnumber;remark
-					skips.add(new SkipTest(str));
-
-				}
-
-			} finally {
-				if ( br != null )
-					br.close();
-			}
-
-	    }
-	    
-	    public static void updateExcluded(XmlClass c) {
-	    	String locale = ZimbraSeleniumProperties.getStringProperty("locale", "en_US");
-	    	String browser = ZimbraSeleniumProperties.getStringProperty("browser", "firefox");
-	    	
-			List<String> excludedMethods = new ArrayList<String>();
-	    	for (SkipTest skiptest : skips) {
-	    		
-	    		if ( skiptest.isMatch(c.getName(), locale, browser) ) {
-
-	    			// add the method to be skipped
-	    			excludedMethods.add(skiptest.methodToSkip);
-	    			
-	    			// TODO: re-add this logging
-					// addToSkippedTableRowsHTML(s);// add to html-email row
-					// logSkippedMethodsToFile(s);// add to log file
-
-	    		}
-	    		
-	    	}
-	    	
-	    	// Update the object, if methods were found
-	    	if ( !excludedMethods.isEmpty() ) {
-	    		c.setExcludedMethods(excludedMethods);
-	    	}
-			
-		}
-
-	    protected boolean isMatch(String classname, String locale, String browser) {
-			return ( classMatch(classname) && localeMatch(locale) && browserMatch(browser) );
-		}
-
-		protected boolean classMatch(String c) {
-			return (className.equals(c));
-		}
-
-		protected boolean browserMatch(String b) {
-			if (b == null)
-				return (true);
-			
-			if ( browsers.contains("all") )
-				return (true);
-			
-			if ( browsers.contains("na") )
-				return (true);
-			
-			if ( browsers.contains(b) )
-				return (true);
-
-			// No match
-			return false;
-		}
-
-		protected boolean localeMatch(String l) {
-			if (l == null)
-				return (true);
-			
-			if ( locales.contains("all") )
-				return (true);
-			
-			if ( locales.contains("na") )
-				return (true);
-			
-			if ( locales.contains(l) )
-				return (true);
-
-			// No match
-			return false;
-		}
-
-		protected SkipTest(String skipTestInfo)  {
-
-	    	// skipTestInfo should be of the format:
-	    	// CLASS:projects.zcs.tests.tasks.Tasks;METHOD:createSimpleTaskInTaskList;LOCALE:all;BROWSERS:na;BUGS:1234;REMARK:script issue
-
-	    	for (String s : skipTestInfo.split(";")) {
-
-	    		if ( s.startsWith("CLASS:")) {
-	    			className = s.replace("CLASS:", "");
-	    		} else if(s.startsWith("METHOD:")) {
-	    			methodToSkip = s.replace("METHOD:", "");
-	    		} else if(s.startsWith("LOCALE:")) {
-	    			locales = Arrays.asList(s.replace("LOCALE:", "").split(","));		
-	    		} else if(s.startsWith("BROWSERS:")) {
-	    			browsers = Arrays.asList(s.replace("BROWSERS:", "").split(","));		
-	    		} else if(s.startsWith("BUGS:")) {
-	    			bugs = Arrays.asList(s.replace("BUGS:", "").split(","));		
-	    		} else if(s.startsWith("REMARK:")) {
-	    			remark = s.replace("REMARK:", "");		
-	    		} else {
-	    			logger.warn("Is this a valid SkipTest value: "+ s);
-	    		}
-	    		
-	    	}
-
-	    }
-
-	}
 	
 	/**
 	 * Parse command line arguments

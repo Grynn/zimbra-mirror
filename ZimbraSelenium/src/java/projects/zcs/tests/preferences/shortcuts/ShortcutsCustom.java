@@ -91,6 +91,9 @@ public class ShortcutsCustom extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "SF", "na", "shortcuts dont work with Selenium on Safari");
+		
+
 		String folderName = getLocalizedData_NoSpecialChar();
 		String shortcut = "1";
 		String[] recipients = { SelNGBase.selfAccountName.get() };
@@ -135,6 +138,8 @@ public class ShortcutsCustom extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "SF", "na", "shortcuts dont work with Selenium on Safari");
 
 		String tagName = getLocalizedData_NoSpecialChar();
 		String shortcut = "2";

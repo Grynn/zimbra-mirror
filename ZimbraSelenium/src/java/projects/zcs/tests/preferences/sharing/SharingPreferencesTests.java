@@ -97,7 +97,9 @@ public class SharingPreferencesTests extends CommonTest {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
-
+		
+		checkForSkipException("na", "IE", "42591", "Accepted share entry not showing immediately after accepting share in Preferences > Sharing");
+		
 		// injecting mail
 		zGoToApplication("Mail");
 		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
@@ -155,6 +157,8 @@ public class SharingPreferencesTests extends CommonTest {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("all", "IE", "na", "Contact can't be saved via java script in new AB UI");
 
 		// address book folder share
 		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
@@ -354,6 +358,7 @@ public class SharingPreferencesTests extends CommonTest {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		checkForSkipException("all", "na", "na", "zTaskItem fails to find item from list item");
 
 		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
 

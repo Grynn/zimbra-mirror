@@ -78,6 +78,8 @@ public class ABPreferences extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("ar", "na", "", "not able to click on Contacts radio button (selenium bug)");
+
 		page.zABCompose.zNavigateToPrefImportExport();
 		obj.zRadioBtn.zClick(localize(locator.contacts));
 		File f = new File("src/java/projects/zcs/data/" + csvFile);

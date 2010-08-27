@@ -3,11 +3,9 @@ package framework.util;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Writer;
 import java.util.Date;
 
@@ -54,7 +52,8 @@ public class SummaryReporter implements IReporter {
 
 		}
 
-		int dynamicallySkipped = getSkippedMethodsCount();
+		int dynamicallySkipped = SkippedTestListener.skippedCount;
+		
 		String testdetails = 
 			"ran:" + (passed + failed + skipped + dynamicallySkipped) + 
 			" passed:" + passed + 
@@ -110,29 +109,6 @@ public class SummaryReporter implements IReporter {
 
 	}
 
-	// returns the number of methods that were dynamically skipped due to
-	// bugs/or script issues
-	private int getSkippedMethodsCount() {
-		int count = 0;
-		File skippedMethodsFile = new File(outputfolder+ "/skippedMethodsDueToConfig.txt");
-		try {
-			BufferedReader br = new BufferedReader(new BufferedReader(
-					new InputStreamReader(new FileInputStream(
-							skippedMethodsFile), "UTF8")));
-
-			String str = null;
-			while ((str = br.readLine()) != null) {
-				dynSkippedTestMethods = dynSkippedTestMethods + "\n" + str;
-				count++;
-			}
-
-			br.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return count;
-	}
 
 	private String getRetriedTestsInfo() {
 		String tmpstr = "";

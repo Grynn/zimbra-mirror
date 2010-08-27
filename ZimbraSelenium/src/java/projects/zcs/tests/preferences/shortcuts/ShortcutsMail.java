@@ -102,6 +102,8 @@ public class ShortcutsMail extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "SF", "na", "shortcuts dont work with Selenium on Safari");
+
 		SelNGBase.selenium.get().windowFocus();
 		SleepUtil.sleep(2000);
 		obj.zMessageItem.zClick("test mail");
@@ -164,6 +166,8 @@ public class ShortcutsMail extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "SF", "na", "shortcuts dont work with Selenium on Safari");
+
 		ProvZCS.injectMessage(ProvZCS.getRandomAccount(), recipients, ProvZCS
 				.getRandomAccount(), "mark as junk", "test content");
 
@@ -199,6 +203,8 @@ public class ShortcutsMail extends CommonTest {
 		// String[] recipients = { selfAccountName };
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "SF", "na", "shortcuts dont work with Selenium on Safari");
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
@@ -248,6 +254,8 @@ public class ShortcutsMail extends CommonTest {
 		String[] recipients = { SelNGBase.selfAccountName.get() };
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "SF", "na", "shortcuts dont work with Selenium on Safari");
 
 		obj.zMessageItem.zClick("flag message");
 

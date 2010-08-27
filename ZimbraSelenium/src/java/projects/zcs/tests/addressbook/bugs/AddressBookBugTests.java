@@ -74,6 +74,8 @@ public class AddressBookBugTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			SleepUtil.sleep(2500);
 		} else {
@@ -136,6 +138,9 @@ public class AddressBookBugTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+		
+		
 		ContactItem contact1 = new ContactItem();
 		contact1.lastName = "LN" + getLocalizedData_NoSpecialChar();
 		contact1.middleName = "MN" + getLocalizedData_NoSpecialChar();

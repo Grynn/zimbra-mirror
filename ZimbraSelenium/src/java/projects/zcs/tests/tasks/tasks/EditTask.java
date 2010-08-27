@@ -50,6 +50,8 @@ public class EditTask extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("da,ar", "na", "na", "Percentage special character different in da, ar locale");
+
 		String subject = getLocalizedData_NoSpecialChar();
 		String newSubject = getLocalizedData_NoSpecialChar();
 		String location = getLocalizedData(2);

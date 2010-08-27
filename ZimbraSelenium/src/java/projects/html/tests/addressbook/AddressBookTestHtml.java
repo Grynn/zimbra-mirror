@@ -378,6 +378,8 @@ public class AddressBookTestHtml extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "22626", "Some important fields are populated when Yahoo csv is imported");
+		
 		page.zABComposeHTML.zNavigateToContact();
 
 		page.zABComposeHTML.zNavigateToNewABPageAndImportContact(zimbraCSV);

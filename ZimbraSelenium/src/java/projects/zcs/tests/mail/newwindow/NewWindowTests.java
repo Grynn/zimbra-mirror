@@ -87,6 +87,9 @@ public class NewWindowTests extends CommonTest {
 			String subject, String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
@@ -108,6 +111,9 @@ public class NewWindowTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
@@ -132,6 +138,9 @@ public class NewWindowTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
@@ -159,6 +168,9 @@ public class NewWindowTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
@@ -192,6 +204,9 @@ public class NewWindowTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
@@ -221,6 +236,9 @@ public class NewWindowTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
@@ -258,6 +276,9 @@ public class NewWindowTests extends CommonTest {
 			String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };

@@ -101,6 +101,8 @@ public class DocumentSharingTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "47183", "'permission denied: you do not have sufficient permissions' exception while accessing shared notebook folder");
+
 		obj.zFolder.zClick(localize(locator.notebook));
 		page.zDocumentCompose.zCreateBasicPage(pageName, bodyContent);
 		page.zSharing.zShareFolder("Documents", folderName, "", attendee, role,
@@ -183,6 +185,8 @@ public class DocumentSharingTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "47183", "'permission denied: you do not have sufficient permissions' exception while accessing shared notebook folder");
+
 		obj.zFolder.zClick(localize(locator.notebook));
 		page.zDocumentCompose.zCreateBasicPage(pageName, bodyContent);
 
@@ -249,6 +253,8 @@ public class DocumentSharingTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
+
 		obj.zFolder.zClick(localize(locator.notebook));
 		page.zDocumentCompose.zCreateBasicPage(pageName, bodyContent);
 
@@ -288,6 +294,8 @@ public class DocumentSharingTests extends CommonTest {
 			String mountFolderName) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
 
 		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		obj.zFolder.zClick(localize(locator.notebook));

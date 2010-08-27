@@ -113,6 +113,8 @@ public class TagMessageTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "49957", "Message is not tagged after creating new tag from toolbar button");
+
 		String subject1, subject2, tag1, tag2;
 		subject1 = "tagSubject2";
 		subject2 = "tagSubject3";
@@ -185,6 +187,8 @@ public class TagMessageTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "49957", "Message is not tagged after creating new tag from toolbar button");
 
 		String subject1, tag1, tag2;
 		subject1 = "tagSubject4";

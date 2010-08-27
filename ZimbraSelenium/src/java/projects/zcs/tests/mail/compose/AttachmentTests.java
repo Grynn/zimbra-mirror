@@ -150,6 +150,9 @@ public class AttachmentTests extends CommonTest {
 			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void detachRetainsAttachments(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 		if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
 			detachRetainsAttachments_Retry();
 		SleepUtil.sleep(2000);
@@ -180,6 +183,9 @@ public class AttachmentTests extends CommonTest {
 	public void sendAttachmentsFromNewWindow() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
 			sendAttachmentsFromNewWindow_Retry();
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 		page.zComposeView.zSendMailToSelfAndVerify("_selfAccountName_", "", "",
 				"somesubject", "", "");
 		// verify if messagebody has image...

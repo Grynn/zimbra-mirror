@@ -473,6 +473,8 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace(
 				"_", "")
 				+ "cont1@testdomain.com";
@@ -596,6 +598,8 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 			String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace(
 				"_", "")
@@ -721,6 +725,9 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 			String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "46718", "Need to be able to search for the terms defined in Lucene stop words depending on context of the search");
+
 
 		String groupName = "IT Department";
 		zGoToApplication("Address Book");
@@ -936,6 +943,8 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace(
 				"_", "")
 				+ "-" + "chr1@testdomain.com";
@@ -997,6 +1006,8 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 			String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "47044", "Autocomplete shows contact from deleted(Trashed) address book folders");
 
 		acc1 = ZimbraSeleniumProperties.getStringProperty("locale").replace(
 				"_", "")
@@ -1267,6 +1278,8 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "47044", "Autocomplete shows contact from deleted(Trashed) address book folders");
+
 		String newAddressBook, lastName, firstName;
 		newAddressBook = getLocalizedData_NoSpecialChar();
 		lastName = getLocalizedData_NoSpecialChar();
@@ -1336,6 +1349,8 @@ public class MailAutoCompleteAddressTests extends CommonTest {
 			String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "47044", "Autocomplete shows contact from deleted(Trashed) address book folders");
 
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");

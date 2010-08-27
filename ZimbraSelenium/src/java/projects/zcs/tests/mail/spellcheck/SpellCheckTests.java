@@ -62,6 +62,8 @@ public class SpellCheckTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("ar,da,de,el,es,fr,he,hi,it,id,ja,ko,nl,pl,pt_BR,ru,sv,tr,zh_CN,zh_HK", "na", "na", "Skipped for all charset other than english");
+
 		page.zMailApp.zNavigateToComposingPreferences();
 		obj.zCheckbox.zClick(localize(locator.mandatorySpellcheck));
 		obj.zButton.zClick(page.zCalApp.zPreferencesSaveIconBtn);
@@ -78,6 +80,9 @@ public class SpellCheckTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("ar,da,de,el,es,fr,he,hi,it,id,ja,ko,nl,pl,pt_BR,ru,sv,tr,zh_CN,zh_HK", "na", "na", "Skipped for all charset other than english");
+
 
 		page.zMailApp.zNavigateToComposingPreferences();
 		obj.zRadioBtn.zClick(localize(locator.composeAsText));
@@ -138,6 +143,9 @@ public class SpellCheckTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("ar,da,de,el,es,fr,he,hi,it,id,ja,ko,nl,pl,pt_BR,ru,sv,tr,zh_CN,zh_HK", "na", "na", "Skipped for all charset other than english");
+
+
 		subject = "anoother mostake";
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject,
@@ -164,6 +172,8 @@ public class SpellCheckTests extends CommonTest {
 			String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("ar,da,de,el,es,fr,he,hi,it,id,ja,ko,nl,pl,pt_BR,ru,sv,tr,zh_CN,zh_HK", "na", "na", "Skipped for all charset other than english");
 
 		subject = "anoother mostake";
 

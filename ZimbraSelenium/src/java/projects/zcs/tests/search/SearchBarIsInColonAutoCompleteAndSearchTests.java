@@ -661,6 +661,8 @@ public class SearchBarIsInColonAutoCompleteAndSearchTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "47017", "-in:remotefolder doesn't show messages from local folder");
+
 		commonData();
 		Robot zRobot = new Robot();
 		obj.zEditField.zActivate("xpath=//input[@class='search_input']");

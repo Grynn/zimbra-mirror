@@ -411,6 +411,9 @@ public class FilterTests extends CommonTest {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("na", "IE", "na", "not able to mark ON to inbox folder using zactivate method in IE (selenium bug)");
+
 
 		/* Preparing for test data to run filter */
 		zGoToApplication("Mail");

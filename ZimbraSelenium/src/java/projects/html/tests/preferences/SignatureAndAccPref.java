@@ -94,6 +94,8 @@ public class SignatureAndAccPref extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "na", "Need to find out a way to write in html signatures : Still not working.");
+
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				signatureBody, "");
 		SleepUtil.sleepSmall();
@@ -121,6 +123,9 @@ public class SignatureAndAccPref extends CommonTest {
 			String signatureBody) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			createSignatureAndVerify();
+
+		checkForSkipException("all", "na", "na", "Need to find out a way to write in html signatures : Still not working.");
+
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				signatureBody, "");
 		page.zAccPref.zNavigateToAccPrefAndVerifySignature(signatureName);
@@ -158,6 +163,9 @@ public class SignatureAndAccPref extends CommonTest {
 	public void verifyAccountsOptionsLink() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "na", "Need to find out a way to write in html signatures : Still not working.");
+
 		page.zAccPref.zNavigateToPreferenceSignature();
 		SleepUtil.sleepSmall();//this wait is req for some locales
 		SelNGBase.selenium.get().click("link=" + localize(locator.optionsManageAccountsLink));
@@ -177,6 +185,9 @@ public class SignatureAndAccPref extends CommonTest {
 			String signatureBody) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "na", "Need to find out a way to write in html signatures : Still not working.");
+
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				signatureBody, "");
 		SleepUtil.sleepMedium();
@@ -203,6 +214,9 @@ public class SignatureAndAccPref extends CommonTest {
 			String signatureBody) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "na", "Need to find out a way to write in html signatures : Still not working.");
+
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				constantSignatureBody, "Above");
 		SleepUtil.sleepSmall();
@@ -229,6 +243,9 @@ public class SignatureAndAccPref extends CommonTest {
 			String signatureBody) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			verifyAboveBelowSignature();
+
+		checkForSkipException("all", "na", "na", "Need to find out a way to write in html signatures : Still not working.");
+
 		page.zAccPref.zNavigateToPreferenceSignature();
 		page.zAccPref.zChangeSignaturePlacment("Below");
 		obj.zTab.zClick(localize(locator.mail));
@@ -260,6 +277,9 @@ public class SignatureAndAccPref extends CommonTest {
 			String replyToAcc) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "na", "Need to find out a way to write in html signatures : Still not working.");
+
 		page.zAccPref.zNavigateToPrefSignatureAndCreateSignature(signatureName,
 				signatureBody, "");
 		page.zAccPref.zNavigateToPreferenceAccounts();

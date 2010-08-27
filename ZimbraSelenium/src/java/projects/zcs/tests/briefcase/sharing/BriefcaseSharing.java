@@ -226,6 +226,8 @@ public class BriefcaseSharing extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "34080", "not able to write password in password edit field in FF & SF - works fine only in IE (selenium bug)");
+
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
 		obj.zBriefcaseItem.zClick(filename);
 		obj.zButton.zClick(localize(locator.send));

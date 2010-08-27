@@ -57,6 +57,8 @@ public class ContactActionTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("zh_HK,zh_CN", "na", "", "zClickInDlg method clicks to button in wrong dialog");
+				
 		// Get the 'select addresses dialog'
 		obj.zButton.zClick(page.zABCompose.zMailTabIconBtn);
 		page.zComposeView.zNavigateToMailCompose();
@@ -119,6 +121,8 @@ public class ContactActionTests extends CommonTest {
 	public void addressPicker_Bug20969() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("zh_HK,zh_CN", "na", "", "zClickInDlg method clicks to button in wrong dialog");
 
 		obj.zButton.zClick(page.zABCompose.zMailTabIconBtn);
 		page.zComposeView.zNavigateToMailCompose();

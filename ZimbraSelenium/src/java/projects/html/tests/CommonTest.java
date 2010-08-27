@@ -1,9 +1,11 @@
 package projects.html.tests;
 
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -12,6 +14,7 @@ import java.util.ResourceBundle;
 
 import org.clapper.util.text.HTMLUtil;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
 
@@ -154,6 +157,83 @@ public class CommonTest extends SelNGBase {
 		account.provisionAccount("ccuser@testdomain.com", "test123");	
 		account.provisionAccount("bccuser@testdomain.com", "test123");	
 	}
+
+	/**
+	 * Check whether the current test method should be skipped due to locale/browser combination being tested<p>
+	 * <p>
+	 * all: when used for locales or browsers, skip for all locales or browsers<p>
+	 * <p>
+	 * na: when used for locales, then the locale being tested does not matter in determining if
+	 * the test should be skipped.  When used for browsers, then the browser being tested does not
+	 * matter in determining whether the test should be skipped. <p>
+	 * <p>
+	 * <p>
+	 * Example: <p>
+	 * <p>
+	 * public void TestMethod() { <p>
+	 * <p>
+	 *     // Check for current client config against skipped configs <p>
+	 *     checkForSkipException("ru,en_GB", "na", "3452,15232", "TestMethod feature not implemented for russian or britsh locales"); <p>
+	 * <p>
+	 *     // ... continue with test <p>
+	 * } <p>
+	 * <p>
+	 * @param locales a comma separated list of locales, or na, or all
+	 * @param browsers a comma separated list of browsers, or na, or all
+	 * @param bugs a comma separated list of bug numbers for reference
+	 * @param remark a short description why the method is skipped
+	 * @throws SkipException
+	 */
+	public void checkForSkipException(String locales, String browsers, String bugs, String remark) throws SkipException {
+		
+		// Build a string with the remark and bug list
+		// to be used at the end of any SkipExceptions
+		String data = " remark(" + remark +") bugs("+ bugs +")";
+		
+		// Check for null
+		if (locales == null)
+			locales = "";
+		if (browsers == null)
+			browsers = "";
+
+		// Convert the comma separated lists to List<String> objects
+		List<String> localeList = Arrays.asList(locales.trim().toLowerCase().split(","));
+		List<String> browserList = Arrays.asList(browsers.toLowerCase().split(","));
+		
+		// If either locales or browsers contains "all", then skip
+		// TODO: confirm this is what is meant by "all"
+		if ( localeList.contains("all") )
+			throw new SkipException(locales + " contains all" + data);
+
+		if ( browserList.contains("all") )
+			throw new SkipException(browsers + " contains all" + data);
+		
+		// Determine which browser is being used during this test
+		String myLocale = ZimbraSeleniumProperties.getStringProperty("locale").trim().toLowerCase();
+		String myBrowser = ZimbraSeleniumProperties.getStringProperty("browser").trim().toLowerCase();
+		
+		// If locales contains "na", then just check the browser
+		if ( localeList.contains("na") ) {
+			// Locale does no matter, just check the browser
+			if (browserList.contains(myBrowser))
+				throw new SkipException(browsers + " contains "+ myBrowser + data);
+		}
+		
+		// If browsers contains "na", then just check the locale
+		if ( browserList.contains("na") ) {
+			// Browser does not matter, just check the locale
+			if ( localeList.contains(myLocale) )
+				throw new SkipException(locales + " contains " + myLocale + data);	
+		}
+		
+		// Check the locale and browser combination.  Skip if both match.
+		if ( localeList.contains(myLocale) && browserList.contains(myBrowser) )
+			throw new SkipException(locales + " contains " + myLocale + " and " + browsers + " contains " + myBrowser + data);
+	
+		// Done.  Test should not be skipped.
+		
+	}
+	
 
 	@AfterSuite(groups = { "always" })
 	public void cleanup() throws HarnessException {

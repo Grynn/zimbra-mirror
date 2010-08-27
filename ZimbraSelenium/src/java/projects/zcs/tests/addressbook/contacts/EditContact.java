@@ -64,6 +64,8 @@ public class EditContact extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+		
 		ContactItem oldContact = ContactItem.generateContactItem(GenerateItemType.Basic);
 		
 		ContactItem newContact = ContactItem.generateContactItem(GenerateItemType.Basic);
@@ -90,7 +92,8 @@ public class EditContact extends CommonTest {
 			retryAnalyzer = RetryFailedTests.class)
 	public void rghtClickEditNameAndVerify() throws Exception {
 		
-		
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		

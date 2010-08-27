@@ -111,6 +111,8 @@ public class ShortcutsGeneral extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "SF", "na", "shortcuts dont work with Selenium on Safari");
+
 		Robot zRobot = new Robot();
 
 		SelNGBase.selenium.get().windowFocus();
@@ -138,6 +140,9 @@ public class ShortcutsGeneral extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "SF", "na", "shortcuts dont work with Selenium on Safari");
+		checkForSkipException("na", "IE", "na", "Opening calendar fails some times on IE, happens only with selenium.");
 
 		if (!isFirst.equals("")) {
 			SelNGBase.selenium.get().refresh();

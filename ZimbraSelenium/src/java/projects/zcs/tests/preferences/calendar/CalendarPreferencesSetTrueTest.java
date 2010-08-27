@@ -192,6 +192,8 @@ public class CalendarPreferencesSetTrueTest extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "34080", " Timezone options changed in mainline so reminder doesn't popluates. Need proper method to get current timezone.");
+
 		page.zCalApp.zNavigateToCalendar();
 
 		page.zCalCompose.zCreateSimpleAppt(getLocalizedData_NoSpecialChar(),

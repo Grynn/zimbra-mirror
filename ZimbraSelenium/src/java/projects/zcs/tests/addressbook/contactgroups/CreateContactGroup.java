@@ -55,6 +55,8 @@ public class CreateContactGroup extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+
 		ContactGroupItem group = new ContactGroupItem();
 		group.nickname = getLocalizedData_NoSpecialChar();
 		for (int i = 1; i <= 2; i++) {

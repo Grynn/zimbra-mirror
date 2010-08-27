@@ -155,6 +155,10 @@ public class RssFeedFolderTests extends CommonTest {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("all", "na", "na", "zExistsDontWait method directly throws exception for zDialog (expected - should return string value if dialog not present)");
+
+		
 		createData();
 		obj.zFolder.zRtClick(rssFeedFolderName);
 		obj.zMenuItem.zExists(localize(locator.checkFeed));

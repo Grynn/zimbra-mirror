@@ -43,6 +43,8 @@ public class ClientURLTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "44367", "Client URL for composing appointment broken");
+
 		resetSession();
 		page.zLoginpage.zCustomLoginToZimbraAjax("?app=calendar");
 		obj.zFolder.zExists(localize(locator.calendar));
@@ -110,6 +112,9 @@ public class ClientURLTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("hi", "SF", "na", "compose related fields replaced by ???? in the URL (selenium bug)");
+
+		
 		String toField = ProvZCS.getRandomAccount();
 		String subjectField;
 		String bodyField;
@@ -182,6 +187,10 @@ public class ClientURLTests extends CommonTest {
 	public void calendarViewURL() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("ko", "na", "na", "start/end date contains UTF8 char in new appt page so not able to compare with expected value (selenium bug)");
+		checkForSkipException("zh_CN,zh_HK,ko", "na", "na", "Need to convert date");
+		checkForSkipException("all", "na", "44367", "Client URL for composing appointment broken");
 
 		// day|workWeek|week|month
 		String startDate = "20090310";

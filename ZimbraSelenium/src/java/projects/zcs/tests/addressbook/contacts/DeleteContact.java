@@ -62,6 +62,8 @@ public class DeleteContact extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+
 		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
 
 		// Create the contact
@@ -87,6 +89,8 @@ public class DeleteContact extends CommonTest {
 	public void rghtClkDeleteContactAndVerify() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
 
 		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
 

@@ -162,6 +162,9 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 
 		String[] attachment = attachments.split(",");
 		uploadFile(attachments);
@@ -232,6 +235,9 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("all", "na", "46702", "can not move attachment to briefcase folder");
+
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
@@ -452,6 +458,10 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "na", "'Invalid key code' exception while upload file");
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
+
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName
@@ -492,6 +502,8 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "na", "'Invalid key code' exception while upload file");
 
 		String[] attachment = attachments.split(",");
 
@@ -751,6 +763,8 @@ public class MessagePreviewPaneActionTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "50116", "Attachment links are not removed from same window if removed from new window");
 
 		String subject;
 		subject = page.zMailApp

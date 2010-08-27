@@ -95,6 +95,8 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "na", "Not able to identify 'compose as html' radio button (tried localize key as well)");
+		 
 		String actualVal;
 		String accountName = SelNGBase.selfAccountName.get();
 
@@ -337,6 +339,8 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
 
 		String actualVal;
 		String accountName = SelNGBase.selfAccountName.get();

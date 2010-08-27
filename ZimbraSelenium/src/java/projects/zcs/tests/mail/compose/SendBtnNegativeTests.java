@@ -56,6 +56,9 @@ public class SendBtnNegativeTests extends CommonTest {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("fr", "na", "na", "Expected and actual message do not match though message are same (frech char. issue) - need to update wrapper for fr");
+
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zVerifySendThrowsError(to, cc, bcc, subject, body,
 				attachments, errDlgName, errMsg);
@@ -74,6 +77,11 @@ public class SendBtnNegativeTests extends CommonTest {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("fr", "na", "na", "Expected and actual message do not match though message are same (frech char. issue) - need to update wrapper for fr");
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
+
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		page.zComposeView.zVerifySendThrowsError(to, cc, bcc, subject, body,
 				attachments, errDlgName, errMsg);

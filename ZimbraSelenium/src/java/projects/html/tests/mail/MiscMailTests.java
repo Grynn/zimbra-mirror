@@ -338,6 +338,9 @@ public class MiscMailTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "na", "As we put reading pane feature in html client, so button remains disabled : Still not working.");
+
+
 		String[] subjectArray = { "verifyNextPrevPage1", "verifyNextPrevPage2",
 				"verifyNextPrevPage3" };
 		for (int i = 0; i <= subjectArray.length - 1; i++) {
@@ -390,6 +393,8 @@ public class MiscMailTests extends CommonTest {
 			String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("ar", "na", "34114", "Searched keyword replaced by question marks");
 
 		page.zMailApp.zInjectMessage(from, SelNGBase.selfAccountName.get(), cc, bcc,
 				subject, subject + "body", "");

@@ -142,6 +142,7 @@ public class CreateTask extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		checkForSkipException("da,ar", "na", "na", "Percentage special character different in da, ar locale");
 
 		page.zTaskApp.zNavigateToTasks();
 		page.zTaskApp.zTaskCreate(subject, location, priority, body, taskList,

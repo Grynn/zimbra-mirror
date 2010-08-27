@@ -57,6 +57,9 @@ public class TagActionTestsForAllAppTab extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "48696", "Js error (appCtxt.getById(this.tagId) is undefined) while navigate Mail tab");
+		
+
 		String tag = getLocalizedData_NoSpecialChar();
 		String renameTag = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag);

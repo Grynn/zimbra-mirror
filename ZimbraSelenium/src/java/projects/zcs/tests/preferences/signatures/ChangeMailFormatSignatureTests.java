@@ -95,6 +95,8 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "49898", "Signature is not removed on selecting 'Do not attach signature' for html saved draft");
+
 		// format as text
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"text");
@@ -267,6 +269,8 @@ public class ChangeMailFormatSignatureTests extends CommonTest {
 			String signatureType) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "49898", "Signature is not removed on selecting 'Do not attach signature' for html saved draft");
 
 		// change compose format as html
 		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",

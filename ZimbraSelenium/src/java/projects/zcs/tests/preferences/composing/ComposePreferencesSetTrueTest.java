@@ -157,6 +157,9 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 
 		String accountName = SelNGBase.selfAccountName.get();
 
@@ -190,6 +193,8 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void composePrefAutoSaveDraft() throws Exception {
+
+		checkForSkipException("fr", "na", "na", "Expected and actual value are same though throwing error (because of some UTF-8 character)");
 
 		zReloginToAjax();
 
@@ -340,6 +345,8 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "na", "UI change for prefix while reply/forward message");
+
 		String accountName = SelNGBase.selfAccountName.get();
 
 		ProvZCS.modifyAccount(accountName, "zimbraPrefForwardReplyPrefixChar",
@@ -442,6 +449,7 @@ public class ComposePreferencesSetTrueTest extends CommonTest {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		checkForSkipException("all", "na", "na", "UI change for prefix while reply/forward message");
 
 		String accountName = SelNGBase.selfAccountName.get();
 

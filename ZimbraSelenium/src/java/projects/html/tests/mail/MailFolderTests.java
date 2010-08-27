@@ -440,6 +440,8 @@ public class MailFolderTests extends CommonTest {
 			String parentFolder) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("da", "na", "38405", "'Unmatched braces in the pattern' exception while clicking to saved search folder (da locale)");
 
 		String subject = "testSavedSearch";
 		folderName = "fldr_" + folderName;

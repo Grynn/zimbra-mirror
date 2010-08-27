@@ -103,6 +103,8 @@ public class TaskSharingTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
+
 		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		String subject = getLocalizedData_NoSpecialChar();
 

@@ -132,6 +132,9 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 			String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("all", "na", "45662", "Message body wrapped up on Reply/Forward");
+
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
 				bcc, subject, body, attachments);
@@ -153,6 +156,9 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 			String subject, String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "na", "Message body wrapped up on Reply/Forward");
+
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
 				bcc, subject, body, attachments);
@@ -175,6 +181,9 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 			String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("all", "na", "45662", "Message body wrapped up on Reply/Forward");
+
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
 				bcc, subject, body, attachments);
@@ -197,6 +206,9 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 			String subject, String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("all", "na", "45662", "Message body wrapped up on Reply/Forward");
+
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
 				bcc, subject, body, attachments);
@@ -219,6 +231,9 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 			String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("all", "na", "45662", "Message body wrapped up on Reply/Forward");
+
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
 				bcc, subject, body, attachments);
@@ -240,6 +255,9 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("all", "na", "45662", "Message body wrapped up on Reply/Forward");
+
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,
 				bcc, subject, body, attachments);
@@ -276,6 +294,9 @@ public class ComposeReplyFwdInPlainTextTests extends CommonTest {
 			String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("all", "na", "45662", "Message body wrapped up on Reply/Forward");
+
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndSelectIt("_selfAccountName_", cc,

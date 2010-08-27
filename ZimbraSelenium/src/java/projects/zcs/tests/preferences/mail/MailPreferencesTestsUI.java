@@ -435,6 +435,8 @@ public class MailPreferencesTestsUI extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("hi", "na", "na", "localization problems with hi locale");
+
 		String actualVal;
 		String accountName = SelNGBase.selfAccountName.get();
 
@@ -543,6 +545,8 @@ public class MailPreferencesTestsUI extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "na", "Not able to type values in 'Forward a copy to:' edit field");
+
 		String actualVal;
 		String accountName = SelNGBase.selfAccountName.get();
 
@@ -609,6 +613,8 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "na", "Not able to type values in 'Send a notification message to:' edit field");
 
 		String actualVal;
 		String accountName = SelNGBase.selfAccountName.get();

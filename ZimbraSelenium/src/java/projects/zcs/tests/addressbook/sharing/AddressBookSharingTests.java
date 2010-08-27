@@ -97,6 +97,8 @@ public class AddressBookSharingTests extends CommonTest {
 			String attendee, String role, String mountFolderName)
 			throws Exception {
 		
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+
 		ContactItem contact = new ContactItem();
 		contact.firstName = cnFirstName;
 		contact.middleName = cnMiddleName;
@@ -138,6 +140,8 @@ public class AddressBookSharingTests extends CommonTest {
 			String cnMiddleName, String cnFirstName, String folderName,
 			String attendee, String role, String mountFolderName)
 			throws Exception {
+
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
 
 		ContactItem contact = new ContactItem();
 		contact.firstName = cnFirstName;
@@ -189,6 +193,8 @@ public class AddressBookSharingTests extends CommonTest {
 			String attendee, String role, String mountFolderName)
 			throws Exception {
 
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+
 		ContactItem contact = new ContactItem();
 		contact.firstName = cnFirstName;
 		contact.middleName = cnMiddleName;
@@ -232,6 +238,8 @@ public class AddressBookSharingTests extends CommonTest {
 			String cnFirstName, String folderName, String attendee,
 			String role, String mountFolderName) throws Exception {
 
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+
 		ContactItem contact = new ContactItem();
 		contact.firstName = cnFirstName;
 		contact.middleName = cnMiddleName;
@@ -268,6 +276,11 @@ public class AddressBookSharingTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+
+		checkForSkipException("hi", "na", "34080", "Share Accepted & Share Modified mail body missing sharing details");
+		
+		
 		ContactItem contact = new ContactItem();
 		contact.firstName = cnFirstName;
 		contact.middleName = cnMiddleName;
@@ -316,6 +329,9 @@ public class AddressBookSharingTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("hi", "na", "34084", "Share Created mail body missing external guest url informations");
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+
 		String currentloggedinuser = SelNGBase.selfAccountName.get();
 
 		ContactItem contact = new ContactItem();
@@ -363,6 +379,8 @@ public class AddressBookSharingTests extends CommonTest {
 			String role, String mountFolderName) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
 
 		ContactItem contact = new ContactItem();
 		contact.firstName = cnFirstName;

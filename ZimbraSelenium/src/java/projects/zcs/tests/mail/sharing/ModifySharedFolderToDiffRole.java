@@ -160,6 +160,8 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
+
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
 				applicationtab, sharingfoldername, sharetype, invitedusers,
 				role, message, sharingnoteifany, allowtoseeprivateappt,
@@ -188,6 +190,8 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
 
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
 				applicationtab, sharingfoldername, sharetype, invitedusers,
@@ -219,6 +223,8 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
 
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
 				applicationtab, sharingfoldername, sharetype, invitedusers,
@@ -252,6 +258,8 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
+
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
 				applicationtab, sharingfoldername, sharetype, invitedusers,
 				role, message, sharingnoteifany, allowtoseeprivateappt,
@@ -284,6 +292,8 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
+
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
 				applicationtab, sharingfoldername, sharetype, invitedusers,
 				role, message, sharingnoteifany, allowtoseeprivateappt,
@@ -315,6 +325,8 @@ public class ModifySharedFolderToDiffRole extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
 
 		changeRoletoDiff(to, cc, bcc, subject, body, attachments,
 				applicationtab, sharingfoldername, sharetype, invitedusers,

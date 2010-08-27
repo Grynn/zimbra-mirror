@@ -1,17 +1,11 @@
 package projects.zcs.bin;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
-
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
-
-import java.io.Writer;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,9 +16,8 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
 import framework.core.SelNGBase;
-import framework.util.MakeResultUTF8;
 import framework.util.SendEmail;
-import framework.util.SkipTestClass;
+import framework.util.SkippedTestListener;
 import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;
 import framework.util.ZimbraSeleniumProperties;
@@ -42,13 +35,9 @@ public class ExecuteTests {
 	private static String suiteName = "debugSuite";
 	private static XmlSuite suite = new XmlSuite();
 	private static ArrayList<String> cls = new ArrayList<String>();
-	private static ArrayList<SkipTestClass> skipClasses = new ArrayList<SkipTestClass>();
 	private static String testName = "";
 	private static String includedGrps = "";
 	private static String testoutputfolder = "test-output";
-	private static String locale = "en_US";
-	private static String browser = "";
-	private static String skippedTableRows = "";
 	public static String WorkingDirectory = ".";
 
 	/**
@@ -593,7 +582,6 @@ public class ExecuteTests {
 	public static void main(String[] args) throws Exception {
 
 		loadConfig();
-		loadSkipTestsDetails();
 
 		// first argument can be suite name fullSuite|debugSuite
 		if (args.length == 1) {
@@ -623,11 +611,9 @@ public class ExecuteTests {
 		tng.setXmlSuites(suites);
 		tng.addListener(createSummary);
 		tng.addListener(testReporter);
+		tng.addListener(new SkippedTestListener(new File(testoutputfolder)));
 		tng.setOutputDirectory(testoutputfolder);
 		tng.run();
-
-		// convert result to utf8
-		MakeResultUTF8.makeUTF8(testoutputfolder, getSkippedTestsTable());
 
 		// send email if fullsuite...
 		if (suiteName.equals("fullSuite")) {
@@ -665,9 +651,7 @@ public class ExecuteTests {
 	}
 
 	public static void loadConfig() {
-		locale = ZimbraSeleniumProperties.getStringProperty("locale");
 		testoutputfolder = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") + "/" + appType;
-		browser = ZimbraSeleniumProperties.getStringProperty("browser");
 		createResultFolders();
 	}
 
@@ -715,88 +699,15 @@ public class ExecuteTests {
 		List<XmlClass> classes = new ArrayList<XmlClass>();
 		for (String el : testClassNames) {
 			XmlClass c = new XmlClass(el);
-			c = addExcludeMethodsInfo(c);// check if any methods needs to be
-			// excluded
 			classes.add(c);
 		}
 		test.setXmlClasses(classes);
 
 	}
 
-	public static void loadSkipTestsDetails() throws Exception {
-		File file = new File(WorkingDirectory + "/conf/skipTests.txt");
 
-		BufferedReader br = new BufferedReader(new BufferedReader(
-				new InputStreamReader(new FileInputStream(file), "UTF8")));
 
-		String str = null;
-		while ((str = br.readLine()) != null) {
-			if (str.indexOf("#") >= 0 || str.equals(""))
-				continue;
-			// #className;methodName;locale;browser;bugnumber;remark
-			skipClasses.add(new SkipTestClass(str));
 
-		}
-
-		br.close();
-
-	}
-
-	public static ArrayList<SkipTestClass> getSkipTestClassByName(
-			String reqClass) {
-		ArrayList<SkipTestClass> matchedSkipClasses = new ArrayList<SkipTestClass>();
-		for (SkipTestClass el : skipClasses) {
-			if (el.className.equals(reqClass))
-				matchedSkipClasses.add(el);
-		}
-		return matchedSkipClasses;
-	}
-
-	public static XmlClass addExcludeMethodsInfo(XmlClass c) {
-		String reqClass = c.getName();
-
-		ArrayList<SkipTestClass> matchedSkipClassesList = getSkipTestClassByName(reqClass);
-		ArrayList<String> matchedMethods = new ArrayList<String>();
-		for (SkipTestClass s : matchedSkipClassesList) {
-			boolean dontSkipBecauseOfAndCombination = false;
-			if ((s.locales.indexOf(locale) >= 0)
-					|| (s.browsers.indexOf(browser) >= 0)
-					|| (s.locales.indexOf("all") >= 0)
-					|| (s.browsers.indexOf("all") >= 0)) {
-
-				// perform Browser AND locale test to skip
-				if (s.browsers.indexOf("na") < 0
-						&& s.browsers.indexOf("all") < 0
-						&& s.locales.indexOf("na") < 0
-						&& s.locales.indexOf("all") < 0) {
-					if (s.browsers.indexOf(browser) < 0
-							|| s.locales.indexOf(locale) < 0) {
-						dontSkipBecauseOfAndCombination = true;// either browser
-						// or locale
-						// didnt match
-					}
-				}
-				if (!dontSkipBecauseOfAndCombination) {
-					matchedMethods.add(s.methodToSkip);// add the method to be
-					addToSkippedTableRowsHTML(s);// add to html-email row
-					logSkippedMethodsToFile(s);// add to log file
-				}
-			}
-		}
-		c.setExcludedMethods(matchedMethods);
-
-		return c;
-
-	}
-
-	public static void addToSkippedTableRowsHTML(SkipTestClass s) {
-		String bugLinks = createLinksFromBugNumbers(s.bugs);
-		skippedTableRows = skippedTableRows + "<tr><td>" + s.className
-				+ "</td><td class=\"numi\">" + s.methodToSkip.toString()
-				+ "</td>" + "<td>" + s.locales + "</td><td class=\"numi\">"
-				+ s.browsers + "</td>" + "<td>" + bugLinks
-				+ "</td><td class=\"numi\">" + s.remark + "</td>" + "</tr>";
-	}
 
 	public static String createLinksFromBugNumbers(String b) {
 		String retStr = "";
@@ -819,29 +730,7 @@ public class ExecuteTests {
 
 	}
 
-	public static String getSkippedTestsTable() {
-		String str = "<h1>Dynamically Skipped TestMethods</h1><table cellspacing=0 cellpadding=0 class=\"param\">"
-				+ "<tr><th>Class</th><th class=\"numi\">Methods</th><th>locales</th><th class=\"numi\">browsers</th><th>Bugs</th><th class=\"numi\">Remarks</th></tr>"
-				+ skippedTableRows + "</table>";
-		return str;
-	}
 
-	private static void logSkippedMethodsToFile(SkipTestClass s) {
-		File retriedTestFile = new File(testoutputfolder
-				+ "\\skippedMethodsDueToConfig.txt");
-		String str = "Class: " + s.className + " Methods:"
-				+ s.methodToSkip.toString() + " Locales:" + s.locales
-				+ " Browsers:" + s.browsers + " Bugs:" + s.bugs + " Remarks:"
-				+ s.remark;
-		try {
-			Writer output = new BufferedWriter(new FileWriter(retriedTestFile,
-					true));
-			output.write(str + "\n");
-			output.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
 
 	private static void createResultFolders() {
 		try {

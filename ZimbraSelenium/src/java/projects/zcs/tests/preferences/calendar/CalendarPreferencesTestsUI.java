@@ -179,6 +179,8 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
+
 		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
@@ -233,6 +235,8 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
 
 		String accountName = SelNGBase.selfAccountName.get();
 
@@ -289,6 +293,8 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
+
 		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
@@ -338,6 +344,8 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
 
 		String accountName = SelNGBase.selfAccountName.get();
 
@@ -392,6 +400,8 @@ public class CalendarPreferencesTestsUI extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
 
 		String accountName = SelNGBase.selfAccountName.get();
 

@@ -264,6 +264,9 @@ public class DraftTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		page.zComposeView.zEnterComposeValues("", "", "",
 				"this subject will be replaced after 30 secs",

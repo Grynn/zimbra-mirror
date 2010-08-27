@@ -100,6 +100,8 @@ public class CreateContact extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+		
 		ContactItem contact = ContactItem.generateContactItem(GenerateItemType.Basic);
 
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
@@ -118,6 +120,8 @@ public class CreateContact extends CommonTest {
 			String notes) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
 
 		page.zABCompose.zCreateContactWithAllFields(prefix, firstName,
 				middleName, maidenName, lastName, suffix, nickName, jobTitle,
@@ -163,6 +167,8 @@ public class CreateContact extends CommonTest {
 			String cnFirstname, String filename) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
 
 		Boolean viewLinkPresent, removeLinkPresent;
 		obj.zFolder
@@ -249,6 +255,10 @@ public class CreateContact extends CommonTest {
 			String cnFirstname, String company) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
+		checkForSkipException("all", "na", "47184", "'Contact must have at least one field set.' exception while changing File as:");
+		
 
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zABCompose.zContactsFolder));

@@ -5,15 +5,15 @@ import java.awt.event.KeyEvent;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.FileWriter;
-import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.MissingResourceException;
@@ -27,12 +27,11 @@ import net.sf.json.JSONSerializer;
 
 import org.clapper.util.text.HTMLUtil;
 import org.testng.Assert;
+import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeSuite;
-
-import com.zimbra.common.service.ServiceException;
 
 import projects.zcs.CoreObjects;
 import projects.zcs.Locators;
@@ -217,6 +216,88 @@ public class CommonTest extends SelNGBase {
 		// out.close();
 	}
 
+	/**
+	 * Check whether the current test method should be skipped due to locale/browser combination being tested<p>
+	 * <p>
+	 * all: when used for locales or browsers, skip for all locales or browsers<p>
+	 * <p>
+	 * na: when used for locales, then the locale being tested does not matter in determining if
+	 * the test should be skipped.  When used for browsers, then the browser being tested does not
+	 * matter in determining whether the test should be skipped. <p>
+	 * <p>
+	 * <p>
+	 * Example: <p>
+	 * <p>
+	 * public void TestMethod() { <p>
+	 * <p>
+	 *     // Check for current client config against skipped configs <p>
+	 *     checkForSkipException("ru,en_GB", "na", "3452,15232", "TestMethod feature not implemented for russian or britsh locales"); <p>
+	 * <p>
+	 *     // ... continue with test <p>
+	 * } <p>
+	 * <p>
+	 * @param locales a comma separated list of locales, or na, or all
+	 * @param browsers a comma separated list of browsers, or na, or all
+	 * @param bugs a comma separated list of bug numbers for reference
+	 * @param remark a short description why the method is skipped
+	 * @throws SkipException
+	 */
+	public void checkForSkipException(String locales, String browsers, String bugs, String remark) throws SkipException {
+		
+		// Check for null
+		if (locales == null)
+			locales = "";
+		if (browsers == null)
+			browsers = "";
+
+		// Convert the comma separated lists to List<String> objects
+		List<String> localeList = Arrays.asList(locales.trim().toLowerCase().split(","));
+		List<String> browserList = Arrays.asList(browsers.toLowerCase().split(","));
+		
+		// If either locales or browsers contains "all", then skip
+		// TODO: confirm this is what is meant by "all"
+		if ( localeList.contains("all") )
+			throw new SkipException(SkipReason("locales " + locales + " contains all", remark, bugs));
+
+		if ( browserList.contains("all") )
+			throw new SkipException(SkipReason("browsers " + browsers + " contains all", remark, bugs));
+		
+		// Determine which browser is being used during this test
+		String myLocale = ZimbraSeleniumProperties.getStringProperty("locale").trim().toLowerCase();
+		String myBrowser = ZimbraSeleniumProperties.getStringProperty("browser").trim().toLowerCase();
+		
+		// If locales contains "na", then just check the browser
+		if ( localeList.contains("na") ) {
+			// Locale does no matter, just check the browser
+			if (browserList.contains(myBrowser))
+				throw new SkipException(SkipReason("browsers " + browsers + " contains "+ myBrowser, remark, bugs));
+		}
+		
+		// If browsers contains "na", then just check the locale
+		if ( browserList.contains("na") ) {
+			// Browser does not matter, just check the locale
+			if ( localeList.contains(myLocale) )
+				throw new SkipException(SkipReason("locales " + locales + " contains " + myLocale, remark, bugs));	
+		}
+		
+		// Check the locale and browser combination.  Skip if both match.
+		if ( localeList.contains(myLocale) && browserList.contains(myBrowser) )
+			throw new SkipException(SkipReason("locales " + locales + " contains " + myLocale + " and browsers " + browsers + " contains " + myBrowser, remark, bugs));
+	
+		// Done.  Test should not be skipped.
+		
+	}
+	
+	// Format the SkipException message using the cause, remark and bugs
+	private String SkipReason(String reason, String remark, String bugs) {
+		StringBuilder sb = new StringBuilder();
+		sb.append(" Reason(").append(reason).append(")");
+		sb.append(" Remark(").append(remark).append(")");
+		sb.append(" Bugs(").append(bugs).append(")");
+		return (sb.toString());
+	}
+	
+	
 	public static void writeCoverage() throws Exception {
 		System.out
 				.println("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");

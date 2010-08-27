@@ -141,6 +141,9 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void mailPrefDoubleClickOpensInNewWindow() throws Exception {
+		
+		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
+
 
 		zLogin();
 
@@ -178,6 +181,8 @@ public class MailPreferencesSetTrueTest extends CommonTest {
 		// if we are retrying the test, run cleanup and re-login etc
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("all", "na", "na", "provzcs method 'zimbraPrefMarkMsgRead' method doesn't sets corresponding value in database");
 
 		String accountName = SelNGBase.selfAccountName.get();
 

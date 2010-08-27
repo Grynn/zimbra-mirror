@@ -625,6 +625,8 @@ public class MessageRightClickMenuTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("na", "IE,SF", "na", "zMouseOver method doesn't work for IE & SF (FF works fine), while zClick discards tag sub menu (selenium bug)");
+
 		// Tag message
 		fromUserName = commonInjectMessage(from, to, cc, bcc, subject, body,
 				attachments);

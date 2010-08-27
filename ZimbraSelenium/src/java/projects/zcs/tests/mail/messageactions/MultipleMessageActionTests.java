@@ -215,6 +215,8 @@ public class MultipleMessageActionTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "34080", "not able to create multiple drafts - first drafted message just hides its UI so while creating new draft it updates value in hidden draft message (selenium bug)");
+
 		String subject[] = { "subject1", "subject2", "subject3" };
 		saveDrafts();
 		obj.zFolder

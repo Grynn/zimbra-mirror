@@ -196,6 +196,8 @@ public class MailSharingTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
+
 		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, invitedusers, role, message, sharingnoteifany,
@@ -434,6 +436,9 @@ public class MailSharingTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
+		checkForSkipException("all", "na", "34080", "'Share folder' menu item remains disabled for administer rights");
+
 		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
@@ -488,6 +493,9 @@ public class MailSharingTests extends CommonTest {
 			String mountingfoldername) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
+		
 
 		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zComposeView.zNavigateToMailCompose();
@@ -649,6 +657,8 @@ public class MailSharingTests extends CommonTest {
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
+
+		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
 
 		String currentloggedinuser = SelNGBase.selfAccountName.get();
 		page.zComposeView.zNavigateToMailCompose();

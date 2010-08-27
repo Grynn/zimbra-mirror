@@ -453,6 +453,8 @@ public class ApptInviteTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
+		checkForSkipException("all", "na", "47189", "Updating attendees broken (doesn't send invite to newly added attendees)");
+
 		String itemsToVerify[] = { subject };
 		String firstLineSummary;
 		String firstLineSummaryNewAttendee;
