@@ -21,7 +21,7 @@ import projects.zcs.ui.MailApp;
  * @author Jitesh Sojitra
  */
 @SuppressWarnings( { "static-access" })
-public class SharingPreferencesTests extends CommonTest {
+public class SharingPreferences extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------

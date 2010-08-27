@@ -16,7 +16,7 @@ import framework.util.RetryFailedTests;
  * @author Jitesh Sojitra
  */
 
-public class PreferencesBugTests extends CommonTest {
+public class PreferencesBug extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------

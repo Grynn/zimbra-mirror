@@ -1,4 +1,4 @@
-package projects.zcs.tests.calendar.GUI;
+package projects.zcs.tests.calendar.gui;
 
 import java.lang.reflect.Method;
 import org.testng.annotations.BeforeClass;

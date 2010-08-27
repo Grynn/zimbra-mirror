@@ -13,7 +13,7 @@ import projects.zcs.tests.CommonTest;
 /**
  * @author Jitesh Sojitra
  */
-public class ZimletPreferenceTests extends CommonTest {
+public class ZimletPreference extends CommonTest {
 
 	public static final String zZimletDateChkBox = "id=com_zimbra_date_zimletCheckbox";
 	public static final String zZimletURLChkBox = "id=com_zimbra_url_zimletCheckbox";

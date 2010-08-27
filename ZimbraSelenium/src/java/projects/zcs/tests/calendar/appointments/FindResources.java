@@ -16,7 +16,7 @@ import framework.util.RetryFailedTests;
  * @author Girish
  */
 
-public class FindLocations extends CommonTest {
+public class FindResources extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------

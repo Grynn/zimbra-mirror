@@ -16,7 +16,7 @@ import projects.zcs.tests.CommonTest;
 /**
  * @author Jitesh Sojitra
  */
-public class ShortcutBugTests extends CommonTest {
+public class ShortcutBug extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
