@@ -9,10 +9,6 @@ import framework.core.SelNGBase;
 import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 
-/**
- * @author Jitesh Sojitra
- * 
- */
 public class AddressBook extends CommonTest {
 	// --------------
 	// section 2 BeforeClass
@@ -20,7 +16,7 @@ public class AddressBook extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
-		zGoToApplication("Briefcase");
+		//zGoToApplication("Briefcase");
 		SelNGBase.isExecutionARetry.set(false);
 	}
 
@@ -32,8 +28,8 @@ public class AddressBook extends CommonTest {
 		SelNGBase.needReset.set(true);
 	}
 
-	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void familyMailbox_1() throws Exception {
+	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void familyAddressBook_1() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
