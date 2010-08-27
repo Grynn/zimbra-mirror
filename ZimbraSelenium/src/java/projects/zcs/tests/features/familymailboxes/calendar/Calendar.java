@@ -9,10 +9,6 @@ import framework.core.SelNGBase;
 import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 
-/**
- * @author Jitesh Sojitra
- * 
- */
 public class Calendar extends CommonTest {
 	// --------------
 	// section 2 BeforeClass
@@ -32,8 +28,8 @@ public class Calendar extends CommonTest {
 		SelNGBase.needReset.set(true);
 	}
 
-	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void familyMailbox_1() throws Exception {
+	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	public void familyCalendar_1() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
