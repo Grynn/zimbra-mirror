@@ -351,10 +351,17 @@ ZaZimbraAdmin.reload_msg = function () {
     //if (AjxEnv.hasFirebug) console.log("Reload the message file: " + includes.toString()) ;
 
     //reinitialize the AjxFormat after the message files are loaded
-    var callback = new AjxCallback (AjxFormat.initialize); 
+    var callback = new AjxCallback (ZaZimbraAdmin.reinit_func); 
 
     AjxInclude(includes, null, callback);
     ZaZimbraAdmin._LOCALE_MSG_RELOADED = true ;
+}
+
+ZaZimbraAdmin.reinit_func = function() {
+    AjxFormat.initialize();
+    ZaItem.initDescriptionItem(); 
+    ZaSettings.initConst();
+    ZaDomain.initDomainStatus();    
 }
 
 ZaZimbraAdmin.initInfo =

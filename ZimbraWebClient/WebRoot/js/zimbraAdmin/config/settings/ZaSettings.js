@@ -292,8 +292,9 @@ ZaSettings.SKIN_LOGIN_MSG_ID            = ZaSettings.SKIN_IDX++;
 //carte blanche - gives access to any UI element
 ZaSettings.CARTE_BLANCHE_UI = "cartBlancheUI";
 
+ZaSettings.initConst = function() {
+//*init List View *
 ZaSettings.ALL_UI_COMPONENTS = [] ;
-
 //List views
 ZaSettings.ACCOUNT_LIST_VIEW = "accountListView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.ACCOUNT_LIST_VIEW, label: ZaMsg.UI_Comp_AccountListView });
@@ -325,6 +326,57 @@ ZaSettings.MAILQ_VIEW = "mailQueue";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.MAILQ_VIEW, label: ZaMsg.UI_Comp_mailQueueView });
 ZaSettings.SERVER_STATS_VIEW = "perServerStatisticsView";
 ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.SERVER_STATS_VIEW, label: ZaMsg.UI_Comp_ServerStatsView });
+}
+ZaSettings.initConst();
+
+ZaSettings.getCalendarViewChoinces = function(){
+   return  [
+    {value:"day",label:ZaMsg.CalViewDay},
+    {value:"week",label:ZaMsg.CalViewWeek},
+    {value:"workWeek",label:ZaMsg.CalViewWorkWeek},
+    {value:"month",label:ZaMsg.CalViewMonth},
+    {value:"schedule",label:ZaMsg.CalViewSchedule},
+    {value:"list",label:ZaMsg.CalViewList}
+    ];
+}
+ZaSettings.calendarViewChoinces = ZaSettings.getCalendarViewChoinces; 
+
+ZaSettings.getDayOfWeekChoices = function(){
+   return [
+    {value:0,label:ZaMsg.Sunday},
+    {value:1,label:ZaMsg.Monday},
+    {value:2,label:ZaMsg.Tuesday},
+    {value:3,label:ZaMsg.Wednesday},
+    {value:4,label:ZaMsg.Thursday},
+    {value:5,label:ZaMsg.Friday},
+    {value:6,label:ZaMsg.Saturday}
+    ];
+}
+ZaSettings.dayOfWeekChoices = ZaSettings.getDayOfWeekChoices; 
+
+ZaSettings.getApptVisibilityChoices = function(){
+  return [
+    {value:"public",label:ZaMsg.AptVisibilityPublic},
+    {value:"private",label:ZaMsg.AptVisibilityPrivate}
+];
+}
+ZaSettings.apptVisibilityChoices = ZaSettings.getApptVisibilityChoices; 
+
+ZaSettings.getClientTypeChoices = function(){
+  return [
+    {value:"advanced", label:ZaMsg.clientAdvanced},
+    {value:"standard", label:ZaMsg.clientStandard}
+    ];
+}
+ZaSettings.clientTypeChoices = ZaSettings.getClientTypeChoices;
+
+ZaSettings.getAuthorizationScheme = function(){
+  return [
+    {value: "basic", label: ZaMsg.choice_basic},
+    {value: "form", label: ZaMsg.choice_form}
+    ];
+}
+ZaSettings.authorizationScheme  = ZaSettings.getAuthorizationScheme;
 
 
 //List view groups
@@ -461,38 +513,9 @@ ZaSettings.timeZoneChoices = ZaSettings.getTimeZoneChoices  ;
 
 ZaSettings.INIT[ZaSettings.SKIN_APP_TABS_ID] = [null, ZaSettings.T_CONFIG, ZaSettings.D_STRING, "skin_container_app_tabs"];
 
-
 //ZaSettings.SKIN_TABS_DOM_ID = "skin_container_app_tabs" ;
 //ZaSettings.SKIN_LOGIN_MSG_ID = "skin_td_login_msg" ;
 
-ZaSettings.calendarViewChoinces = [
-	{value:"day",label:ZaMsg.CalViewDay},
-	{value:"week",label:ZaMsg.CalViewWeek},
-	{value:"workWeek",label:ZaMsg.CalViewWorkWeek},
-	{value:"month",label:ZaMsg.CalViewMonth},
-	{value:"schedule",label:ZaMsg.CalViewSchedule},
-	{value:"list",label:ZaMsg.CalViewList}
-];
-
-ZaSettings.dayOfWeekChoices = [
-	{value:0,label:ZaMsg.Sunday},
-	{value:1,label:ZaMsg.Monday},
-	{value:2,label:ZaMsg.Tuesday},
-	{value:3,label:ZaMsg.Wednesday},
-	{value:4,label:ZaMsg.Thursday},
-	{value:5,label:ZaMsg.Friday},
-	{value:6,label:ZaMsg.Saturday}
-];
-
-ZaSettings.apptVisibilityChoices = [
-	{value:"public",label:ZaMsg.AptVisibilityPublic},
-	{value:"private",label:ZaMsg.AptVisibilityPrivate}
-];
-
-ZaSettings.clientTypeChoices = [
-	{value:"advanced", label:ZaMsg.clientAdvanced},
-	{value:"standard", label:ZaMsg.clientStandard}
-];
 ZaSettings.mailCharsetChoices = [
 	{ value: "Big5" , label: "Big5" } ,
 	{ value: "Big5-HKSCS" , label: "Big5-HKSCS" } ,

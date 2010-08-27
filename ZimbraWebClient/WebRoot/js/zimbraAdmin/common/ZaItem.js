@@ -795,29 +795,33 @@ function () {
  *
  * @param desp
  */
-ZaItem.descriptionModelItem =  {id:"description", type: _LIST_, ref:"attrs/description",
+ZaItem.initDescriptionItem = function () { 
+    ZaItem.descriptionModelItem =  {id:"description", type: _LIST_, ref:"attrs/description",
             listItem:{type:_STRING_}
         } ;
 
-ZaItem.descriptionXFormItem = {
-    ref:"description",  msgName:ZaMsg.NAD_Description,
-    label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
-    labelCssStyle:"vertical-align:top",
-    type:_REPEAT_,
-    align:_LEFT_,
-    repeatInstance:"",
-    showAddButton:false,
-    showRemoveButton:false,
-    showAddOnNextRow:false,
-//    enableDisableChecks:[ZaItem.hasWritePermission] ,
-//    visibilityChecks:[ZaItem.hasReadPermission],
-    items: [
-        {ref:".", type:_TEXTFIELD_,
-            enableDisableChecks:[ZaItem.hasWritePermission] ,
-            visibilityChecks:[ZaItem.hasReadPermission],
-            width:"30em"}
-    ]
-} ;
+    ZaItem.descriptionXFormItem = {
+        ref:"description",  msgName:ZaMsg.NAD_Description,
+        label:ZaMsg.NAD_Description, labelLocation:_LEFT_, //cssClass:"admin_xform_name_input" ,
+        labelCssStyle:"vertical-align:top",
+        type:_REPEAT_,
+        align:_LEFT_,
+        repeatInstance:"",
+        showAddButton:false,
+        showRemoveButton:false,
+        showAddOnNextRow:false,
+       //    enableDisableChecks:[ZaItem.hasWritePermission] ,
+       //    visibilityChecks:[ZaItem.hasReadPermission],
+        items: [
+            {ref:".", type:_TEXTFIELD_,
+                enableDisableChecks:[ZaItem.hasWritePermission] ,
+                visibilityChecks:[ZaItem.hasReadPermission],
+                width:"30em"}
+        ]
+    } ;
+}
+
+ZaItem.initDescriptionItem();
 
 ZaItem.getDescriptionValue = function (desp) {
     if ( !desp)  desp = "";

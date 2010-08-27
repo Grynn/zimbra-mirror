@@ -3,11 +3,14 @@
 **/
 ZaZimletSelect_XFormItem = function() {}
 XFormItemFactory.createItemType("_ZA_ZIMLET_SELECT_", "za_zimlet_select", ZaZimletSelect_XFormItem, OSelect_Check_XFormItem)
-ZaZimletSelect_XFormItem.prototype.choicePrefixes=[
+ZaZimletSelect_XFormItem.prototype.initializeItems = function() {
+    ZaZimletSelect_XFormItem.prototype.choicePrefixes=[
 	{value:"!",label:ZaMsg.mandatory},
 	{value:"-",label:ZaMsg.disabled},
 	{value:"+",label:ZaMsg.enabled}
-];
+    ];
+    OSelect_Check_XFormItem.prototype.initializeItems.call(this);     
+}
 
 ZaZimletSelect_XFormItem.prototype.onSubChoiceClick = function (itemNum, event, prefix) {
 	event = event || window.event;
