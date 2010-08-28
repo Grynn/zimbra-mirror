@@ -30,14 +30,10 @@ if [ ! -d ${zimbra_java_home} ]; then
 fi
 
 #
-# Memory for use by JVM.  Defaults should come from local config, but
-# just in case...
+# Memory for use by JVM.
 #
-mailboxd_java_heap_memory_percent=${mailboxd_java_heap_memory_percent:=30}
+javaXmx=${mailboxd_java_heap_size}
 mailboxd_java_heap_new_size_percent=${mailboxd_java_heap_new_size_percent:=25}
-memkb=$(zmsysmemkb)
-javaXmx=$(expr ${memkb} '*' ${mailboxd_java_heap_memory_percent} / 100 / 1024)
-javaXms=${javaXmx}
 javaXmn=$(expr ${javaXmx} '*' ${mailboxd_java_heap_new_size_percent} / 100)
 
 #
@@ -107,7 +103,7 @@ case "$1" in
       fi
       echo -n "Starting mailboxd..."
       sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
-        ${mailboxd_java_options} -Xms${javaXms}m -Xmx${javaXmx}m \
+        ${mailboxd_java_options} -Xms512m -Xmx${javaXmx}m \
         -Xmn${javaXmn}m < /dev/null > /dev/null 2>&1
       status=$?
       if [ $status = 0 ]; then
