@@ -96,7 +96,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:2,
 						items: [
 							{type:_OUTPUT_,  value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_4, href:(location.pathname + "adminhelp/pdf/Zimbra_Release_Note.pdf")}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_4, href:(location.pathname + "adminhelp/pdf/Zimbra_Release_Note.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
@@ -130,15 +130,15 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:2,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_8,href:(location.pathname + "adminhelp/pdf/admin.pdf")}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_8,href:(location.pathname + "adminhelp/pdf/admin.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
 						]
 					},
 					{type:_GROUP_,numCols:4,
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_EXCHANGE,href:(location.pathname + "adminhelp/pdf/MigrationWizard.pdf")},
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_EXCHANGE,href:(location.pathname + "adminhelp/pdf/MigrationWizard.pdf?locid="+AjxEnv.DEFAULT_LOCALE)},
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_DOMINO,href:(location.pathname + "adminhelp/pdf/MigrationWizard_Domino.pdf")}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_PAGE_10_DOMINO,href:(location.pathname + "adminhelp/pdf/MigrationWizard_Domino.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
 						]
 					},
 					{type:_SPACER_, colSpan:"*"},					
@@ -152,7 +152,7 @@ ZaHelpView.myXFormModifier = function(xFormObject) {
 					{type:_GROUP_,numCols:2, id: "HelpOtherGuides",
 						items: [
 							{type:_OUTPUT_, value:AjxImg.getImageHtml("PDFDoc")},
-							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_OTHER_GUIDES_IMPORT,href:(location.pathname + "adminhelp/pdf/Import_Wizard_Outlook.pdf")}
+							{type:_ANCHOR_, cssStyle:"font-size:12px;", showInNewWindow:true, labelLocation:_NONE_, label:ZaMsg.HELP_OTHER_GUIDES_IMPORT,href:(location.pathname + "adminhelp/pdf/Import_Wizard_Outlook.pdf?locid="+AjxEnv.DEFAULT_LOCALE)}
 						]
 					},
                     {type:_GROUP_,numCols:2, id: "iCalMigDoc",

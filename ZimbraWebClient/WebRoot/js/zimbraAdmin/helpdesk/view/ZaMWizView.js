@@ -128,7 +128,7 @@ ZaMigrationWizView.myXFormModifier = function(xFormObject) {
                                 value: ZaMigrationWizView.getDownloadLink(ZaMsg.IMPORT_WIZ_DOWNLOAD_LINK, ZaMsg.IMPORT_WIZ_DOWNLOAD_LINK_MSG)
                             },
 							{type:_OUTPUT_, cssStyle:"font-size:12px;", labelLocation:_NONE_, label:null,
-                                value:["(<A target='_blank' onclick='ZaZimbraAdmin.unloadHackCallback();' HREF='",location.pathname,"adminhelp/pdf/User Instructions for ZCS Import Wizard.pdf'>",ZaMsg.IMPORT_WIZ_DOWNLOAD_HELP,"</a>)"].join("")}
+                                value:["(<A target='_blank' onclick='ZaZimbraAdmin.unloadHackCallback();' HREF='",location.pathname,"adminhelp/pdf/User Instructions for ZCS Import Wizard.pdf?locid=",AjxEnv.DEFAULT_LOCALE,"'>",ZaMsg.IMPORT_WIZ_DOWNLOAD_HELP,"</a>)"].join("")}
 						]
 					},
 					{type:_OUTPUT_, cssClass:"ZaDownloadText", label: null, value:ZaMsg.IMPORT_WIZ_DOWNLOAD_TEXT}/*,
