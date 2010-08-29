@@ -46,52 +46,49 @@ import com.zimbra.soap.ZimbraSoapContext;
 import com.zimbra.cs.service.admin.AdminFileDownload;
 public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	
-	private static final String E_fileToken = "fileToken";
-	private static final String E_Options = "Options";
-	private static final String E_ZimbraServer = "ZimbraServer";
-	private static final String E_MapiProfile = "MapiProfile";
-	private static final String E_profile = "profile";
-	private static final String E_server = "server";
-	private static final String E_serverName = "serverName";
-	private static final String E_port = "port";
-	private static final String E_adminUserName = "adminUserName";
-	private static final String E_UserProvision = "UserProvision";
-	private static final String E_TargetDomainName = "TargetDomainName";
-	private static final String E_ZimbraAdminLogin = "ZimbraAdminLogin";
-	private static final String E_ZimbraAdminPassword = "ZimbraAdminPassword";
-	private static final String E_domain = "domain";
-	private static final String E_logonUserDN = "logonUserDN";
-	private static final String E_provisionUsers = "provisionUsers";
-	private static final String E_password = "password";
-	private static final String E_MapiServer = "MapiServer";
-	private static final String E_MapiLogonUserDN = "MapiLogonUserDN";
-	private static final String E_importMails = "importMails";
-	private static final String E_importContacts = "importContacts";
-	private static final String E_importTasks = "importTasks";
-	private static final String E_importCalendar = "importCalendar";
-	private static final String E_importDeletedItems = "importDeletedItems";
-	private static final String E_importJunk = "importJunk";
-	private static final String E_ignorePreviouslyImported = "ignorePreviouslyImported";
-	private static final String E_InvalidSSLOk = "InvalidSSLOk";
-	private static final String E_mustChangePassword = "mustChangePassword";
-	private static final String FILE_FORMAT_PREVIEW = "preview";
-	private static final String E_totalCount = "totalCount";
-	private static final String E_domainCount = "domainCount";
-	private static final String E_skippedAccountCount = "skippedAccountCount";
-	private static final String E_skippedDomainCount = "skippedDomainCount";
-	private static final int DEFAULT_PWD_LENGTH = 8;
-	public Element handle(Element request, Map<String, Object> context) throws ServiceException {
-		ZimbraSoapContext zsc = getZimbraSoapContext(context);
-		Map attrs = AdminService.getAttrs(request, true);
-		String password = null;
-		Element elPassword = request.getOptionalElement(ZimbraBulkProvisionExt.A_password);
-		if(elPassword != null) {
-			password = elPassword.getTextTrim();
-		}
-		String generatePwd = request.getElement(ZimbraBulkProvisionExt.A_generatePassword).getTextTrim();
-		Element elPasswordLength = request.getOptionalElement(ZimbraBulkProvisionExt.A_genPasswordLength);
-		String fileFormat = request.getElement(ZimbraBulkProvisionExt.A_fileFormat).getTextTrim();
-		String mustChangePassword = request.getElement(E_mustChangePassword).getTextTrim();
+    private static final String E_fileToken = "fileToken";
+    private static final String E_Options = "Options";
+    private static final String E_ZimbraServer = "ZimbraServer";
+    private static final String E_MapiProfile = "MapiProfile";
+    private static final String E_profile = "profile";
+    private static final String E_server = "server";
+    private static final String E_UserProvision = "UserProvision";
+    private static final String E_TargetDomainName = "TargetDomainName";
+    private static final String E_ZimbraAdminLogin = "ZimbraAdminLogin";
+    private static final String E_ZimbraAdminPassword = "ZimbraAdminPassword";
+    private static final String E_domain = "domain";
+    private static final String E_logonUserDN = "logonUserDN";
+    private static final String E_provisionUsers = "provisionUsers";
+    private static final String E_password = "password";
+    private static final String E_MapiServer = "MapiServer";
+    private static final String E_MapiLogonUserDN = "MapiLogonUserDN";
+    private static final String E_importMails = "importMails";
+    private static final String E_importContacts = "importContacts";
+    private static final String E_importTasks = "importTasks";
+    private static final String E_importCalendar = "importCalendar";
+    private static final String E_importDeletedItems = "importDeletedItems";
+    private static final String E_importJunk = "importJunk";
+    private static final String E_ignorePreviouslyImported = "ignorePreviouslyImported";
+    private static final String E_InvalidSSLOk = "InvalidSSLOk";
+    private static final String E_mustChangePassword = "mustChangePassword";
+    private static final String FILE_FORMAT_PREVIEW = "preview";
+    private static final String E_domainCount = "domainCount";
+    private static final String E_skippedDomainCount = "skippedDomainCount";
+    private static final int DEFAULT_PWD_LENGTH = 8;
+
+    public Element handle(Element request, Map<String, Object> context) throws ServiceException {
+	ZimbraSoapContext zsc = getZimbraSoapContext(context);
+	Map attrs = AdminService.getAttrs(request, true);
+	String password = null;
+	Element elPassword = request
+		.getOptionalElement(ZimbraBulkProvisionExt.A_password);
+	if (elPassword != null) {
+	    password = elPassword.getTextTrim();
+	}
+	String generatePwd = request.getElement(ZimbraBulkProvisionExt.A_generatePassword).getTextTrim();
+	Element elPasswordLength = request.getOptionalElement(ZimbraBulkProvisionExt.A_genPasswordLength);
+	String fileFormat = request.getElement(ZimbraBulkProvisionExt.A_fileFormat).getTextTrim();
+	String mustChangePassword = request.getElement(E_mustChangePassword).getTextTrim();
 		
 		int genPwdLength = 0;
 		if(generatePwd == null) {
@@ -124,36 +121,35 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 			int totalExistingAccounts = 0;
 			List<String> domainList = new ArrayList<String>();
             if (entries != null) {
-            	String outFileName = null;
+        	String outFileName = null;
             	if(FILE_FORMAT_PREVIEW.equalsIgnoreCase(fileFormat)) {
 	                for (GalContact entry : entries) {	
-	                	String mail = entry.getSingleAttr(ContactConstants.A_email);
-	                	if(mail == null)
-	                		continue;
+	                    String mail = entry.getSingleAttr(ContactConstants.A_email);
+	                    if(mail == null)
+	                	continue;
 	                	
 	                    String parts[] = EmailUtil.getLocalPartAndDomain(mail);
 	                    if (parts == null)
 	                        continue;
 
-                    	if(!domainList.contains(parts[1])) {
+	                    if(!domainList.contains(parts[1])) {
                     		totalDomains++;
                     		//Check if this domain is in Zimbra
-    	                    Domain domain = Provisioning.getInstance().getDomainByName(parts[1]);
-    	                    if(domain != null) {
-    	                    	totalExistingDomains++;
-    	                    }
-    	                    domainList.add(parts[1]);
-                    	}
+                    		Domain domain = Provisioning.getInstance().getDomainByName(parts[1]);
+                    		if(domain != null) {
+                    		    totalExistingDomains++;
+                    		}
+                    		domainList.add(parts[1]);
+	                    }
 	                    totalAccounts++;
-	                  	Account acct = Provisioning.getInstance().getAccountByName(mail);
-		            	if(acct!=null) {
-		            		totalExistingAccounts++;
-		            	}	
-	                	
+	                    Account acct = Provisioning.getInstance().getAccountByName(mail);
+	                    if(acct!=null) {
+	                	totalExistingAccounts++;
+	                    }	
 	            	}
-	                response.addElement(E_totalCount).setText(Integer.toString(totalAccounts));
+	                response.addElement(ZimbraBulkProvisionExt.E_totalCount).setText(Integer.toString(totalAccounts));
 	                response.addElement(E_domainCount).setText(Integer.toString(totalDomains));
-	                response.addElement(E_skippedAccountCount).setText(Integer.toString(totalExistingAccounts));
+	                response.addElement(ZimbraBulkProvisionExt.E_skippedAccountCount).setText(Integer.toString(totalExistingAccounts));
 	                response.addElement(E_skippedDomainCount).setText(Integer.toString(totalExistingDomains));
 	                return response;
             	} else if(AdminFileDownload.FILE_FORMAT_BULK_CSV.equalsIgnoreCase(fileFormat)) {
@@ -330,11 +326,11 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
                     org.dom4j.Element zimbraSererEl = DocumentHelper.createElement(E_ZimbraServer);
                     rootEl.add(zimbraSererEl);                    
                    
-                    org.dom4j.Element serverNameEl = DocumentHelper.createElement(E_serverName);
+                    org.dom4j.Element serverNameEl = DocumentHelper.createElement(ZimbraBulkProvisionExt.E_serverName);
                     serverNameEl.setText(Provisioning.getInstance().getLocalServer().getName());
                     zimbraSererEl.add(serverNameEl); 
                     
-                    org.dom4j.Element adminUserNameEl = DocumentHelper.createElement(E_adminUserName);
+                    org.dom4j.Element adminUserNameEl = DocumentHelper.createElement(ZimbraBulkProvisionExt.E_adminUserName);
                     adminUserNameEl.setText(request.getElement(E_ZimbraAdminLogin).getTextTrim());
                     zimbraSererEl.add(adminUserNameEl);                     
                     

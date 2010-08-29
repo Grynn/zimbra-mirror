@@ -14,6 +14,7 @@
  */
 package com.zimbra.bp;
 
+import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.soap.DocumentService;
 import com.zimbra.soap.DocumentDispatcher;
 
@@ -43,10 +44,14 @@ public class ZimbraBulkProvisionService  implements DocumentService {
     public static final QName GENERATE_BULK_PROV_FROM_LDAP_REQUEST = QName.get("GenerateBulkProvisionFileFromLDAPRequest", NAMESPACE) ;
     public static final QName GENERATE_BULK_PROV_FROM_LDAP_RESPONSE = QName.get("GenerateBulkProvisionFileFromLDAPResponse", NAMESPACE) ;
 	
+    public static final QName BULK_IMAP_DATA_IMPORT_REQUEST = QName.get("BulkIMAPDataImportRequest", AdminConstants.NAMESPACE) ;
+    public static final QName BULK_IMAP_DATA_IMPORT_RESPONSE = QName.get("BulkIMAPDataImportResponse", AdminConstants.NAMESPACE) ;
+    
     public void registerHandlers(DocumentDispatcher dispatcher) {
         dispatcher.registerHandler(GET_BULK_PROVISION_ACCOUNTS_REQUEST, new GetBulkProvisionAccounts());
         dispatcher.registerHandler(UPDATE_BULK_PROVISION_STATUS_REQUEST, new UpdateBulkProvisionStatus());
         dispatcher.registerHandler(BULK_IMPORT_ACCOUNTS_REQUEST, new BulkImportAccounts());
         dispatcher.registerHandler(GENERATE_BULK_PROV_FROM_LDAP_REQUEST, new GenerateBulkProvisionFileFromLDAP());
+        dispatcher.registerHandler(BULK_IMAP_DATA_IMPORT_REQUEST, new BulkIMAPDataImport());
     }
 }

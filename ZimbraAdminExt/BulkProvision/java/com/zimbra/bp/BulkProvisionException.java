@@ -32,6 +32,10 @@ public class BulkProvisionException extends ServiceException {
     public static final String BP_IMPORT_TOO_MANY_FAILURES = "bulkprovision.BP_IMPORT_TOO_MANY_FAILURES";
     public static final String BP_INVALID_SEARCH_FILTER = "bulkprovision.BP_INVALID_SEARCH_FILTER";
     public static final String BP_NAMING_EXCEPTION = "bulkprovision.BP_NAMING_EXCEPTION";
+    public static final String EMPTY_ACCOUNT_ID = "bulkprovision.EMPTY_ACCOUNT_ID";
+    public static final String EMPTY_DATASOURCE_ID = "bulkprovision.EMPTY_DATASOURCE_ID";
+    public static final String IMPORT_QUEUE_NOT_INITIALIZED = "bulkprovision.IMPORT_QUEUE_NOT_INITIALIZED";
+    public static final String EMPTY_IMPORT_QUEUE = "bulkprovision.EMPTY_IMPORT_QUEUE";
 
     private BulkProvisionException(String message, String code, boolean isReceiversFault) {
         super(message, code, isReceiversFault);
@@ -71,5 +75,21 @@ public class BulkProvisionException extends ServiceException {
     
     public static BulkProvisionException BP_NAMING_EXCEPTION (Throwable cause) {
         return new BulkProvisionException(cause.getMessage(), BP_NAMING_EXCEPTION, SENDERS_FAULT, cause);
+    }
+    
+    public static BulkProvisionException EMPTY_ACCOUNT_ID () {
+        return new BulkProvisionException("Empty account ID in the task", EMPTY_ACCOUNT_ID, SENDERS_FAULT);
     }    
+    public static BulkProvisionException EMPTY_DATASOURCE_ID () {
+        return new BulkProvisionException("Empty datasource ID in the task", EMPTY_DATASOURCE_ID, SENDERS_FAULT);
+    }        
+    
+    public static BulkProvisionException IMPORT_QUEUE_NOT_INITIALIZED () {
+        return new BulkProvisionException("Import queue is not initialized", IMPORT_QUEUE_NOT_INITIALIZED, SENDERS_FAULT);
+    }   
+    
+    public static BulkProvisionException EMPTY_IMPORT_QUEUE () {
+        return new BulkProvisionException("Import queue is empty", EMPTY_IMPORT_QUEUE, SENDERS_FAULT);
+    }       
 }
+
