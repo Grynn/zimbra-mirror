@@ -7,6 +7,7 @@
     <include>ZaMigrationXWizard.js</include>
     <include>ZaBulkProvision.js</include>
     <include>ZaBulkProvisionAccountsListView.js</include>
-    <include>ZaBulkProvisionStatusDialog.js</include>    
+    <include>ZaBulkProvisionStatusDialog.js</include>  
+    <include>ZaBulkDataImportXWizard.js</include>  
 <disableUIUndeploy>TRUE</disableUIUndeploy>
 </zimlet>

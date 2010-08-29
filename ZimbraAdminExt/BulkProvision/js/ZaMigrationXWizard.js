@@ -575,7 +575,7 @@ ZaMigrationXWizard.myXFormModifier = function(xFormObject,entry) {
 	
 
 	
-    var contentW = 630 ;
+    var contentW = 630;
     xFormObject.items = [
 			{type:_OUTPUT_, colSpan:2, align:_CENTER_, valign:_TOP_, ref:ZaModel.currentStep,
                 choices:this.stepChoices, valueChangeEventSources:[ZaModel.currentStep]},
