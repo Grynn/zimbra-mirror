@@ -122,17 +122,17 @@ ZaBulkProvision.SOURCE_TYPE_CSV = "csv";
 ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP = "IMAP";
 ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE = "EXCHANGE";
 
-ZaBilkProvision.OP_PREVIEW = "preview";
-ZaBilkProvision.OP_GET_STATUS = "getStatus";
-ZaBilkProvision.OP_PREVIEW_ACTIVE_IMPORTS = "previewActiveImports";
-ZaBilkProvision.OP_START_IMPORT = "startImport";
-ZaBilkProvision.OP_ABORT_IMPORT = "abortImport";
-ZaBilkProvision.OP_DISMISS_IMPORT = "dismissImport";
+ZaBulkProvision.OP_PREVIEW = "preview";
+ZaBulkProvision.OP_GET_STATUS = "getStatus";
+ZaBulkProvision.OP_PREVIEW_ACTIVE_IMPORTS = "previewActiveImports";
+ZaBulkProvision.OP_START_IMPORT = "startImport";
+ZaBulkProvision.OP_ABORT_IMPORT = "abortImport";
+ZaBulkProvision.OP_DISMISS_IMPORT = "dismissImport";
 
-ZaBilkProvision.CONNECTION_SSL = "ssl";
-ZaBilkProvision.CONNECTION_CLEARTEXT = "cleartext";
-ZaBilkProvision.CONNECTION_TLS = "tls";
-ZaBilkProvision.CONNECTION_TLS_IF_AVAILABLE = "tls_if_available";
+ZaBulkProvision.CONNECTION_SSL = "ssl";
+ZaBulkProvision.CONNECTION_CLEARTEXT = "cleartext";
+ZaBulkProvision.CONNECTION_TLS = "tls";
+ZaBulkProvision.CONNECTION_TLS_IF_AVAILABLE = "tls_if_available";
 
 ZaBulkProvision.TOO_MANY_ACCOUNTS = "bulkprovision.BP_TOO_MANY_ACCOUNTS";
 ZaBulkProvision.BP_INVALID_SEARCH_FILTER = "bulkprovision.BP_INVALID_SEARCH_FILTER";
@@ -236,7 +236,7 @@ ZaBulkProvision.getMyXModel = function () {
 }
 
 ZaBulkProvision.bulkDataIMport = function(obj, callback) {
-	var soapDoc - AjxSoapDoc.create("BulkIMAPDataImportRequest", ZaBulkProvision.URN, null);
+	var soapDoc = AjxSoapDoc.create("BulkIMAPDataImportRequest", ZaBulkProvision.URN, null);
 	var aid = obj [ZaBulkProvision.A_csv_aid] ;
 	soapDoc.set(ZaBulkProvision.A2_op, obj[ZaBulkProvision.A2_op]);
 
@@ -380,7 +380,7 @@ ZaBulkProvision.initProvisionAccounts = function (accounts) {
 
 ZaBulkProvision.abortImportThread = function(callback) {
 	var soapDoc = AjxSoapDoc.create("BulkImportAccountsRequest",ZaBulkProvision.URN, null);
-	soapDoc.getMethod().setAttribute(ZaBulkProvision.A2_op, ZaBilkProvision.OP_ABORT_IMPORT);
+	soapDoc.getMethod().setAttribute(ZaBulkProvision.A2_op, ZaBulkProvision.OP_ABORT_IMPORT);
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;
 	csfeParams.asyncMode = true;
@@ -394,7 +394,7 @@ ZaBulkProvision.abortImportThread = function(callback) {
 
 ZaBulkProvision.getImportStatus = function(callback) {
 	var soapDoc = AjxSoapDoc.create("BulkImportAccountsRequest",ZaBulkProvision.URN, null);
-	soapDoc.getMethod().setAttribute(ZaBulkProvision.A2_op, ZaBilkProvision.OP_GET_STATUS);
+	soapDoc.getMethod().setAttribute(ZaBulkProvision.A2_op, ZaBulkProvision.OP_GET_STATUS);
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;
 	if(callback) {
@@ -409,7 +409,7 @@ ZaBulkProvision.getImportStatus = function(callback) {
 
 ZaBulkProvision.importAccountsFromFile = function (obj, callback) {
 	var soapDoc = AjxSoapDoc.create("BulkImportAccountsRequest",ZaBulkProvision.URN, null);
-	soapDoc.getMethod().setAttribute(ZaBulkProvision.A2_op, ZaBilkProvision.OP_START_IMPORT);
+	soapDoc.getMethod().setAttribute(ZaBulkProvision.A2_op, ZaBulkProvision.OP_START_IMPORT);
 
 	if(obj[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_XML) {
 		attr = soapDoc.set(ZaBulkProvision.A2_sourceType, ZaBulkProvision.SOURCE_TYPE_XML);
@@ -440,7 +440,7 @@ ZaBulkProvision.importAccountsFromFile = function (obj, callback) {
 
 ZaBulkProvision.importAccountsFromLDAP = function (obj, callback) {
 	var soapDoc = AjxSoapDoc.create("BulkImportAccountsRequest",ZaBulkProvision.URN, null);
-	soapDoc.getMethod().setAttribute(ZaBulkProvision.A2_op, ZaBilkProvision.OP_START_IMPORT);
+	soapDoc.getMethod().setAttribute(ZaBulkProvision.A2_op, ZaBulkProvision.OP_START_IMPORT);
 
 	var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external);
 	attr.setAttribute("n", ZaDomain.A_zimbraGalMode);

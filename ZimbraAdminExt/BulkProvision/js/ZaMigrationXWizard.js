@@ -185,7 +185,7 @@ function() {
 			return;
 		}		
 		/**
-		 * exch mig wizard requires <domaion> in <ZimbraServer>
+		 * exch mig wizard requires <domain> in <ZimbraServer>
 		 */
 		if(!this._containedObject[ZaBulkProvision.A2_TargetDomainName]) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.MUST_SELECT_TARGET_DOMAIN);

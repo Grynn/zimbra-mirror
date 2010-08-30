@@ -8,6 +8,8 @@
     <include>ZaBulkProvision.js</include>
     <include>ZaBulkProvisionAccountsListView.js</include>
     <include>ZaBulkProvisionStatusDialog.js</include>  
+    <include>ZaBulkProvisionTasksView.js</include>
+    <include>ZaBulkProvisionTasksController.js</include>
     <include>ZaBulkDataImportXWizard.js</include>  
 <disableUIUndeploy>TRUE</disableUIUndeploy>
 </zimlet>

@@ -115,7 +115,7 @@ ZaBulkDataImportXWizard.prototype.previewCallback = function(params, resp) {
 		} else {
 			this._localXForm.setInstanceValue(0,ZaBulkProvision.A2_useAdminLogin);
 		}
-		this.goPage(ZaMigrationXWizard.STEP_REVIEW);
+		this.goPage(ZaBulkDataImportXWizard.STEP_REVIEW);
 	}
 }
 
@@ -164,8 +164,8 @@ function(uploadManager) {
 ZaBulkDataImportXWizard.prototype.goNext = function() {
 	var cStep = this._containedObject[ZaModel.currentStep];
 	if(cStep == ZaBulkDataImportXWizard.STEP_1) {
-		this.goPage(ZaMigrationXWizard.STEP_ACCOUNT_SOURCE);
-	} else if(cStep == ZaMigrationXWizard.STEP_ACCOUNT_SOURCE) {
+		this.goPage(ZaBulkDataImportXWizard.STEP_ACCOUNT_SOURCE);
+	} else if(cStep == ZaBulkDataImportXWizard.STEP_ACCOUNT_SOURCE) {
 		//if using a bulk file - upload the file, the callbacks will move to the next step
 		if(this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_XML) {
 	        //1. check if the file name are valid and exists
@@ -202,12 +202,58 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 	        }catch (err) {
 	            this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_no_bulk_file_specified) ;
 	        }
-
 			
 		} else if(this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_LDAP ||
 				this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_AD) {
-			//move on to entering IMAP options
+			//check LDAP fields and move on to entering IMAP options
+			/**
+			 * Check that LDAP URL is not empty
+			 */
+			if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapURL])) {
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_URL_REQUIRED);
+				return;
+			}		
+
+			/**
+			 * Check that Bind DN is not empty
+			 */
+			if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapBindDn])) {
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_BIND_DN_REQUIRED);
+				return;
+			}		
+			
+			
+			/**
+			 * Check that passwords match
+			 */
+			if(this._containedObject[ZaBulkProvision.A2_GalLdapBindPassword] != this._containedObject[ZaBulkProvision.A2_GalLdapConfirmBindPassword]) {
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PASSWORDS_DONT_MATCH);
+				return;
+			}		
+			
+			/**
+			 * Check that LDAP filter is not empty
+			 */
+			if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapFilter])) {
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_FILTER_REQUIRED);
+				return;
+			}
+			
+			/**
+			 * Check that LDAP search base is not empty
+			 */
+			if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapSearchBase])) {
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_BASE_REQUIRED);
+				return;
+			}		
+			
+			this.goPage(ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS);
 		}
+	} else if(cStep == ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS) {
+    	//generate a preview of options, skip STEP_IMAP_OPTIONS, because these options should be in the XML
+    	this._containedObject[ZaBulkProvision.A2_op] = ZaBulkProvision.OP_PREVIEW;
+		var callback = new AjxCallback(this, ZaBulkDataImportXWizard.prototype.previewCallback,{});
+    	ZaBulkProvision.bulkDataIMport(this._containedObject,callback);		
 	}
 }
 
@@ -228,7 +274,7 @@ ZaBulkDataImportXWizard.prototype._uploadCallback = function (status, uploadResu
             var resp = ZaBulkProvision.getBulkProvisionAccounts(this._app, this._containedObject );
             if (resp.aid == this._containedObject[ZaBulkProvision.A_csv_aid]) {
             	//generate a preview of options, skip STEP_IMAP_OPTIONS, because these options should be in the XML
-            	this._containedObject[ZaBulkProvision.A2_op] = ZaBilkProvision.OP_PREVIEW;
+            	this._containedObject[ZaBulkProvision.A2_op] = ZaBulkProvision.OP_PREVIEW;
             	this._containedObject[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
         		var callback = new AjxCallback(this, ZaBulkDataImportXWizard.prototype.previewCallback,{});
             	ZaBulkProvision.bulkDataIMport(this._containedObject,callback);
@@ -271,7 +317,7 @@ ZaBulkDataImportXWizard.getUploadFormHtml = function (){
 ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 	var cases = new Array();
 	var case1 = {type:_CASE_,numCols:2,colSizes:["250px","380px"],
-		tabGroupKey:ZaBulkDataImportXWizard.STEP_1,caseKey:ZaBulkImportXWizard.STEP_1,
+		tabGroupKey:ZaBulkDataImportXWizard.STEP_1,caseKey:ZaBulkDataImportXWizard.STEP_1,
 		items:[
 		       {type:_DWT_ALERT_,colSpan:2,style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.DataImportWizardOverview,visibilityChecks:[]},
 		       {ref:ZaBulkProvision.A2_sourceServerType, type:_OSELECT1_, label:com_zimbra_bulkprovision.SourceServerType,labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]},
@@ -282,12 +328,12 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 	cases.push(case1);
 	
 	var case_account_source = {type:_CASE_,numCols:2,colSizes:["250px","380px"],tabGroupKey:ZaBulkDataImportXWizard.STEP_ACCOUNT_SOURCE,
-		caseKey:ZaBulkImportXWizard.STEP_ACCOUNT_SOURCE,
+		caseKey:ZaBulkDataImportXWizard.STEP_ACCOUNT_SOURCE,
 		items:[
 		       {type:_GROUP_,useParentTable:true,visibilityChecks:[ZaBulkDataImportXWizard.isAccountSourceLDAP], visibilityChangeEventSources:[ZaBulkProvision.A2_sourceType],
 		    	   items:[
 		  		       	{type:_GROUP_, numCols:6, colSpan:2,label:"   ",labelLocation:_LEFT_,
-							visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_sourceType,ZaBulkProvision.SOURCE_TYPE_LDA]],
+							visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_sourceType,ZaBulkProvision.SOURCE_TYPE_LDAP]],
 							visibilityChangeEventSources:[ZaBulkProvision.A2_sourceType],
 							items: [
 								{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
@@ -331,8 +377,9 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		       },
 		       {type:_GROUP_,useParentTable:true,visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_sourceType,ZaBulkProvision.SOURCE_TYPE_XML]], 
 		    	   visibilityChangeEventSources:[ZaBulkProvision.A2_sourceType],
-                    {type:_OUTPUT_, value: ZaBulkDataImportXWizard.getUploadFormHtml(), colSpan:2}
+		    	   items:[{type:_OUTPUT_, value: ZaBulkDataImportXWizard.getUploadFormHtml(), colSpan:2}]
 		       }
+		       
 		]
 	};
 	cases.push(case_account_source);
@@ -410,3 +457,4 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		];
 	
 }
+ZaXDialog.XFormModifiers["ZaBulkDataImportXWizard"].push(ZaBulkDataImportXWizard.myXFormModifier);
