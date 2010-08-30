@@ -648,7 +648,7 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 						  	  label: ZaMsg.LBL_zimbraFreebusyExchangeUserOrg, width: "20em"
 						  	},
                               {type: _SPACER_, height: 10 },
-                              {type: _GROUP_, colSpan:2, numCols:5, colSizes: ["120px", "*", "50px", "*", "auto" ], items :[
+                              {type: _GROUP_, colSpan:2, numCols:5, colSizes: ["120px", "10px", "100px", "20px", "120px" ], items :[
                                   {   type:_CELLSPACER_ },
                                   {
                                       type: _DWT_BUTTON_ , colSpan: 2, label: ZaMsg.Check_Settings, width: "15em",
