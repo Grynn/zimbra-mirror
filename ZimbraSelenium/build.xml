@@ -175,7 +175,7 @@
 	</target>
 
 
-	<target name="Run - ExecuteHarnessMain" depends="jar">
+	<target name="Run-ExecuteHarnessMain" depends="jar">
 		<property name="jarfile" value="${dist.lib.dir}/zimbraselenium.jar"/>
 		<property name="pattern" value="projects.zcs.tests"/>
 		<property name="groups" value="always,sanity"/>
@@ -185,7 +185,7 @@
  		</java>
 	</target>
 		
-	<target name="Run - TMS" depends="jar">
+	<target name="Run-TMS" depends="jar">
 		<echo>Just a stub for now ...</echo>
 	</target>
 
