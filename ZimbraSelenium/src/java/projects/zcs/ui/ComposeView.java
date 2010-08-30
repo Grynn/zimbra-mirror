@@ -1,5 +1,7 @@
 package projects.zcs.ui;
 
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
 import java.io.File;
 import java.util.Map;
 
@@ -220,7 +222,8 @@ public class ComposeView extends AppPage {
 			bcc = SelNGBase.selfAccountName.get();
 		obj.zTextAreaField.zType(zToField, to);
 		obj.zTextAreaField.zType(zCcField, cc);
-		if (SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.showBCC)))
+		if (SelNGBase.selenium.get().isElementPresent(
+				"link=" + localize(locator.showBCC)))
 			SelNGBase.selenium.get().click("link=" + localize(locator.showBCC));
 		obj.zTextAreaField.zType(zBccField, bcc);
 		obj.zEditField.zType(zSubjectField, subject);
@@ -312,7 +315,8 @@ public class ComposeView extends AppPage {
 	public static void zVerifyAttachmentsExists(String attachmentList) {
 		String[] attList = attachmentList.split(",");
 		for (int i = 0; i < attList.length; i++) {
-			boolean b = SelNGBase.selenium.get().isElementPresent("link=" + attList[0]);
+			boolean b = SelNGBase.selenium.get().isElementPresent(
+					"link=" + attList[0]);
 			Assert.assertTrue(b, "Attachment link for: (" + attList[0]
 					+ ") doesnt exist");
 		}
@@ -454,9 +458,10 @@ public class ComposeView extends AppPage {
 				+ ", Body-field isnt getting filled"
 				+ formatExpActValues(body, bodyVal));
 		obj.zButton.zClick(zmMsg.getString("cancel"));
-		if (obj.zButton.zExistsInDlgDontWait(localize("no")).equals("true")) {
-			obj.zButton.zClickInDlg(localize("no"));
-		}
+		SleepUtil.sleep(3000);
+		Robot zRobot = new Robot();
+		zRobot.keyPress(KeyEvent.VK_N);
+		zRobot.keyRelease(KeyEvent.VK_N);
 	}
 
 	/**

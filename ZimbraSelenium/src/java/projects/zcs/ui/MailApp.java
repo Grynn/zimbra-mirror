@@ -66,6 +66,7 @@ public class MailApp extends AppPage {
 	public static final String zDetachBtn = "id=zb__TV__DETACH";
 	public static final String zDetachIconBtn2 = "id=zb__CLV__DETACH_left_icon";
 	public static final String zDetachBtn2 = "id=zb__CLV__DETACH";
+	public static final String zDetachBtn_ComposedMessage = "id=zb__COMPOSE1__DETACH_COMPOSE";
 	public static final String zViewIconBtn = "id=zb__CLV__VIEW_MENU_left_icon";
 	public static final String zViewBtn = "id=zb__CLV__VIEW_MENU";
 
