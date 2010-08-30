@@ -1,4 +1,4 @@
-package projects.zcs.tests.mail.messages.gui;
+package projects.zcs.tests.mail.gui;
 
 import java.lang.reflect.Method;
 import org.testng.annotations.BeforeClass;
