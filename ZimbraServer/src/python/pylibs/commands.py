@@ -58,7 +58,7 @@ class Command:
 	@classmethod
 	def resetProvisioning(cls, type):
 		if type == "local":
-			LC.readConfig()
+			LC.reload()
 		else:
 			cls.P.flushCache(Provisioning.CacheEntryType.fromString(type), None)
 
