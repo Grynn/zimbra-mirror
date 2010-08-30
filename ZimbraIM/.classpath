@@ -1,69 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry excluding="com/zimbra/cs/im/interop/yahoo/UnixMD5Crypt.java|com/zimbra/cs/im/interop/yahoo/SHA1.java|com/zimbra/cs/im/interop/yahoo/ChallengeResponseV10Tables.java|com/zimbra/cs/im/interop/yahoo/ChallengeResponseV10.java|com/zimbra/cs/im/interop/yahoo/ChallengeResponseUtility.java" kind="src" path="src/java"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry exported="true" kind="lib" path="jars/whack.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-charset.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl-2.9.1.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/nekohtml.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mysql-connector-java-5.0.8-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.0.8/src"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.15.jar" sourcepath="/ThirdParty/jakarta-log4j"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/jzlib.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.4.jar" sourcepath="/ThirdParty/junit-4.4">
-		<attributes>
-			<attribute name="javadoc_location" value="http://junit.sourceforge.net/javadoc/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/ical4j-0.9.16-patched.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/ganymed-ssh2-build210.jar" sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2/src"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/dom4j-1.5.2.jar" sourcepath="/ThirdParty/dom4j-1.5.2/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-pool-1.5.3.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://commons.apache.org/pool/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.2.1.jar" sourcepath="/ThirdParty/commons-fileupload-1.2.1/src/java">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.0.jar" sourcepath="/ThirdParty/commons-httpclient-3.0/src">
-		<attributes>
-			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/httpclient/apidocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-dbcp-1.2.2.jar" sourcepath="/ThirdParty/commons-dbcp-1.1/src"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.4.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/catalina-ant.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/bouncycastle.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/ant-contrib-1.0b1.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/activation.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="http://java.sun.com/products/javabeans/glasgow/javadocs/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-log4j12-1.5.8.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-api-1.5.8.jar"/>
-	<classpathentry kind="lib" path="jars/xpp3.jar"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-1.1.7-zimbra.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/mina-filter-ssl-1.1.7.jar"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-1.2.jar" sourcepath="/ZimbraCommon/jars-src/commons-cli-1.2-src.zip">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="output" path="build/classes"/>
+  <classpathentry excluding="com/zimbra/cs/im/interop/yahoo/UnixMD5Crypt.java|com/zimbra/cs/im/interop/yahoo/SHA1.java|com/zimbra/cs/im/interop/yahoo/ChallengeResponseV10Tables.java|com/zimbra/cs/im/interop/yahoo/ChallengeResponseV10.java|com/zimbra/cs/im/interop/yahoo/ChallengeResponseUtility.java" kind="src" path="src/java"/>
+  <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+  <classpathentry exported="true" kind="lib" path="jars/whack.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-charset.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/xercesImpl-2.9.1.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/servlet-api.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="http://jakarta.apache.org/tomcat/tomcat-5.5-doc/servletapi/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/nekohtml.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/mysql-connector-java-5.0.8-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.0.8/src"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/mail.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.15.jar" sourcepath="/ThirdParty/jakarta-log4j"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/jzlib.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/junit-4.4.jar" sourcepath="/ThirdParty/junit-4.4">
+    <attributes>
+      <attribute name="javadoc_location" value="http://junit.sourceforge.net/javadoc/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/ical4j-0.9.16-patched.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/ganymed-ssh2-build210.jar" sourcepath="/ThirdParty/ganymed-ssh2/ganymed-ssh2/src"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/dom4j-1.5.2.jar" sourcepath="/ThirdParty/dom4j-1.5.2/src/java">
+    <attributes>
+      <attribute name="javadoc_location" value="http://www.dom4j.org/dom4j-1.5.2/apidocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-pool-1.5.3.jar">
+    <attributes>
+      <attribute name="javadoc_location" value="http://commons.apache.org/pool/apidocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-logging.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-fileupload-1.2.1.jar" sourcepath="/ThirdParty/commons-fileupload-1.2.1/src/java">
+    <attributes>
+      <attribute name="javadoc_location" value="http://jakarta.apache.org/commons/fileupload/apidocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-httpclient-3.0.jar" sourcepath="/ThirdParty/commons-httpclient-3.0/src">
+    <attributes>
+      <attribute name="javadoc_location" value="http://jakarta.apache.org/commons/httpclient/apidocs/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-dbcp-1.2.2.jar" sourcepath="/ThirdParty/commons-dbcp-1.1/src"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-codec-1.4.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/catalina-ant.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/bouncycastle.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/ant-contrib-1.0b1.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-log4j12-1.5.8.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/slf4j-api-1.5.8.jar"/>
+  <classpathentry kind="lib" path="jars/xpp3.jar"/>
+  <classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/mina-core-1.1.7-zimbra.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/mina-filter-ssl-1.1.7.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-1.2.jar" sourcepath="/ZimbraCommon/jars-src/commons-cli-1.2-src.zip">
+    <attributes>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
+    </attributes>
+  </classpathentry>
+  <classpathentry kind="output" path="build/classes"/>
 </classpath>

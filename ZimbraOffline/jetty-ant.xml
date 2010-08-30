@@ -8,7 +8,7 @@
 	<property name="jars.dir" location="jars" />
 	<property name="service.dir" location="${jetty_webapps}/service" />
 	<property name="lib.dir" location="${service.dir}/WEB-INF/lib" />
-	<property name="war.exclude" value="ical4j*.jar,servlet-api.jar,jsp-api.jar,mail.jar,activation.jar,zimbra-native.jar,ldap.jar,jetty-util-*.jar" />
+	<property name="war.exclude" value="ical4j*.jar,servlet-api.jar,jsp-api.jar,mail.jar,zimbra-native.jar,ldap.jar,jetty-util-*.jar" />
 
 	<target name="jetty.webinf">
 		<mkdir dir="${jetty_webapps}" />

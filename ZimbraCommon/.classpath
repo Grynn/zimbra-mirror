@@ -3,11 +3,6 @@
   <classpathentry kind="src" path="src/java"/>
   <classpathentry kind="src" output="build/test-classes" path="src/java-test"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-  <classpathentry kind="lib" path="jars/activation.jar">
-    <attributes>
-      <attribute name="javadoc_location" value="http://java.sun.com/products/javabeans/glasgow/javadocs/"/>
-    </attributes>
-  </classpathentry>
   <classpathentry kind="lib" path="jars/ant-contrib-1.0b1.jar"/>
   <classpathentry kind="lib" path="jars/bouncycastle.jar"/>
   <classpathentry kind="lib" path="jars/catalina-ant.jar"/>
@@ -55,9 +50,9 @@
       <attribute name="javadoc_location" value="http://logging.apache.org/log4j/1.2/apidocs/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="jars/mail.jar" sourcepath="jars-src/javamail-1.4.2-src.zip">
+  <classpathentry kind="lib" path="jars/mail.jar" sourcepath="jars-src/javamail-1.4.3-src.jar">
     <attributes>
-      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.2-javadoc.zip!/"/>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/javamail-1.4.3-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="lib" path="jars/mysql-connector-java-5.0.8-bin.jar" sourcepath="/ThirdParty/connector-j/mysql-connector-java-5.0.8/src"/>
