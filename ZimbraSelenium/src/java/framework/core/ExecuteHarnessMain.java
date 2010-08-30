@@ -3,10 +3,14 @@
  */
 package framework.core;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -35,6 +39,7 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
 import framework.util.HarnessException;
+import framework.util.SendEmail;
 import framework.util.SkippedTestListener;
 import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;
@@ -268,7 +273,12 @@ public class ExecuteHarnessMain {
 
 			// Run!
 			ng.run();
-								
+				
+			// TODO: remove the email logic.  just let tms send the email.
+			// email results
+			copyCommandLineOutputFile();
+			sendEmail();
+
 		} catch (HarnessException e) {
 			logger.error("Unable to execute tests", e);
 		} catch (Exception e) {
@@ -281,6 +291,56 @@ public class ExecuteHarnessMain {
 
 	}
 	
+	public String getFileContents(String filePath) {
+		String str = "";
+		String tmpStr = "";
+		try {
+			BufferedReader in = new BufferedReader(new FileReader(filePath));
+
+			while ((tmpStr = in.readLine()) != null) {
+				str = str + "\n" + tmpStr;
+			}
+			in.close();
+		} catch (IOException e) {
+		}
+		return str;
+	}
+
+	public void sendEmail() throws Exception {
+		String subject = getFileContents(testoutputfoldername + "/subject.txt");
+		String body = getFileContents(testoutputfoldername + "/body.txt");
+		SendEmail se = new SendEmail(subject, body);
+		se.send();
+	}
+
+
+	public void copyCommandLineOutputFile() {
+		File f = new File(testoutputfoldername + "/testresult.txt");
+		if (!f.exists())
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		try {
+
+			// Create channel on the source
+			FileChannel srcChannel = new FileInputStream(ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")
+					+ "/testresult.txt").getChannel();
+
+			// Create channel on the destination
+			FileChannel dstChannel = new FileOutputStream(testoutputfoldername + "/testresult.txt").getChannel();
+
+			// Copy file contents from source to destination
+			dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
+			// Close the channels
+			srcChannel.close();
+			dstChannel.close();
+		} catch (IOException e) {
+		}
+
+	}
+
 	public static class ResultListener implements ITestListener {
 
 		private int testsTotal = 0;
