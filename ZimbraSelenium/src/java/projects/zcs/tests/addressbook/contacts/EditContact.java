@@ -38,20 +38,11 @@ public class EditContact extends CommonTest {
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		PageObjects.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="address book";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	/**
 	 * Creates a contact with basic fields,edits the contacts using the ToolBar
 	 * delete last name and verifies the change
@@ -110,15 +101,4 @@ public class EditContact extends CommonTest {
 
 		SelNGBase.needReset.set(false);
 	}
-
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// for those tests that just needs relogin..
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		zLogin();
-	}
-
 }

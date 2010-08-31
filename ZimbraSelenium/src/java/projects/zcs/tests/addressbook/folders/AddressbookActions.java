@@ -26,20 +26,11 @@ public class AddressbookActions extends CommonTest {
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="address book";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	/**
 	 * Rename an addressbook
 	 * 
@@ -62,16 +53,4 @@ public class AddressbookActions extends CommonTest {
 		throw new HarnessException("implement me!");
 
 	}
-
-
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// for those tests that just needs relogin..
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		zLogin();
-	}
-
 }

@@ -62,21 +62,11 @@ public class AddressBookSharingTests extends CommonTest {
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		// page.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		//super.NAVIGATION_TAB="address book";
+		super.zLogin();
 	}
-
-	@SuppressWarnings("unused")
-	@BeforeMethod(groups = { "always" })
-	private void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	/**
 	 * 
 	 * Test to Share Address Book with Manager Rights and to verify shared
@@ -394,14 +384,5 @@ public class AddressBookSharingTests extends CommonTest {
 				localize(locator.shareWithPublicLong), "", "", "", "", "");
 
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

@@ -20,18 +20,9 @@ public class PrintContactGroup extends CommonTest {
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		PageObjects.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="address book";
+		super.zLogin();
 	}
 	
 	@Test(
@@ -57,15 +48,5 @@ public class PrintContactGroup extends CommonTest {
 	public void printContactGroup03() throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// for those tests that just needs relogin..
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		zLogin();
-	}
-
 
 }

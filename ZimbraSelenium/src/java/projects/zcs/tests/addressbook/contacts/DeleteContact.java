@@ -1,11 +1,9 @@
 package projects.zcs.tests.addressbook.contacts;
 
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import projects.zcs.Locators;
-import projects.zcs.PageObjects;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import framework.core.SelNGBase;
@@ -36,20 +34,11 @@ public class DeleteContact extends CommonTest {
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		PageObjects.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="address book";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	/**
 	 * Creates a contact with basic fields,deletes the contact and verifies the
 	 * contact does not exist after ToolBar delete
@@ -101,15 +90,4 @@ public class DeleteContact extends CommonTest {
 
 		SelNGBase.needReset.set(false);
 	}
-
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// for those tests that just needs relogin..
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		zLogin();
-	}
-
 }

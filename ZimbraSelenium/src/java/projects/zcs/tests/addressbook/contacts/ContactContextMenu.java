@@ -1,17 +1,15 @@
 package projects.zcs.tests.addressbook.contacts;
 
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
+import projects.zcs.Locators;
+import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.ActionMethod;
 import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.items.ContactItem.GenerateItemType;
 import framework.util.RetryFailedTests;
-import projects.zcs.Locators;
-import projects.zcs.PageObjects;
-import projects.zcs.tests.CommonTest;
-import projects.zcs.ui.ActionMethod;
 
 public class ContactContextMenu extends CommonTest {
 
@@ -44,20 +42,10 @@ public class ContactContextMenu extends CommonTest {
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		PageObjects.zABCompose.navigateTo(ActionMethod.DEFAULT);
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="address book";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
 
 	/**
 	 *Test to verify the contact right click menus exits and are enabled or not
@@ -79,15 +67,6 @@ public class ContactContextMenu extends CommonTest {
 		page.zABApp.zVerifyAllMenuItems(itemsEnabled, itemsDisabled, "false");
 
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// for those tests that just needs relogin..
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		zLogin();
 	}
 
 }
