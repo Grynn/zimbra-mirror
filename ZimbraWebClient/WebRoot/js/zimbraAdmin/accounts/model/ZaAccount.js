@@ -1665,7 +1665,45 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefGroupMailBy, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefGroupMailBy, choices:ZaModel.GROUP_MAIL_BY_CHOICES},
         {id:ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefMessageViewHtmlPreferred, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefNewMailNotificationAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefNewMailNotificationAddress},
-        {id:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailForwardingAddress},
+        {id:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailForwardingAddress,
+         constraints: {type:"method", value:
+	     function (value, form, formItem, instance) {				   	 
+                 if (value){
+		      var i;
+                      var startIndex = 0;
+                      var endIndex = 0;
+                      var currentEmailAddress;
+                      var ret;
+                      var isThrown = false;
+                      value = value.replace(/\s/g,""); //delete all the white space
+                      for(i = 0; i < value.length; i++){
+                         endIndex = value.indexOf(",", startIndex);
+                         if(endIndex == -1){
+                            currentEmailAddress = value.substring(startIndex);
+                    
+                            if(!AjxUtil.isEmailAddress(currentEmailAddress, false)){
+                                   isThrown = true;
+                            }
+                            
+                            break;
+                         }   
+                         currentEmailAddress = value.substring(startIndex, endIndex);
+                         
+                         if(!AjxUtil.isEmailAddress(currentEmailAddress, false)){ 
+                             isThrown = true;
+                             break;
+                         }
+                      
+                         startIndex = endIndex + 1;
+                    }
+                    if(isThrown){
+                       throw  ZaMsg.ErrorInvalidEmailAddressList;
+                    } 	
+	         }
+                return value;
+	   }
+	 } 
+        },
         {id:ZaAccount.A_zimbraPrefNewMailNotificationEnabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefNewMailNotificationEnabled},
         {id:ZaAccount.A_zimbraPrefOutOfOfficeReply, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefOutOfOfficeReply},
         {id:ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraPrefMailLocalDeliveryDisabled},

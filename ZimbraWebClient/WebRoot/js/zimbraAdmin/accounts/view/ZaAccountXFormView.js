@@ -2474,9 +2474,13 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 										trueValue:"TRUE", falseValue:"FALSE"
 									},	
 									{type:_SPACER_},						
-									{ref:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_TEXTAREA_,width:"350px",
+									{ref:ZaAccount.A_zimbraPrefMailForwardingAddress, type:_TEXTFIELD_,width:"350px",
+
+labelCssClass:"xform_label", cssClass:"admin_xform_name_input",
 										label:ZaMsg.LBL_zimbraPrefMailForwardingAddress, 
 										msgName:ZaMsg.LBL_zimbraPrefMailForwardingAddressMsg,
+
+nowrap:false, labelWrap:true,
 										labelLocation:_LEFT_,
 										align:_LEFT_,
 										visibilityChecks:[ZaItem.hasReadPermission],

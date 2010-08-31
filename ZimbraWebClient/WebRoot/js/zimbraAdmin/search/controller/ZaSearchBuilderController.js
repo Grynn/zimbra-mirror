@@ -469,7 +469,11 @@ function (filter, key, value, op) {
 		}
         }else if (key == ZaAccount.A_zimbraLastLogonTimestamp){
 		entry = "("	+ key + op + value + ")";
-	}else {
+	}else if (key == ZaSearchOption.A_zimbraMailForwardingAddress ){
+		entry = "(" + key + "=*" + value + "*)" ;
+                entry += "(" + ZaSearchOption.A_zimbraPrefMailForwardingAddress + "=*" + value + "*)" ;
+                entry = "(|" + entry + ")";
+        }else {
 		entry = "(" + key + "=*" + value + "*)" ;
 	}
 	

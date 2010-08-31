@@ -50,6 +50,7 @@ ZaSearchOption.A_accountLastLoginTime_From = ZaAccount.A_zimbraLastLogonTimestam
 ZaSearchOption.A_accountLastLoginTime_To = ZaAccount.A_zimbraLastLogonTimestamp + "_To" ;
 ZaSearchOption.A_accountLastLoginTime = ZaAccount.A_zimbraLastLogonTimestamp ;
 ZaSearchOption.A_zimbraMailForwardingAddress = ZaAccount.A_zimbraMailForwardingAddress ;
+ZaSearchOption.A_zimbraPrefMailForwardingAddress = ZaAccount.A_zimbraPrefMailForwardingAddress ;
 //ZaSearchOption.A_objTypeAccountRegular = "option_" + ZaSearch.ACCOUNTS + "_regular" ;
 ZaSearchOption.A_objTypeDl = "option_" + ZaSearch.DLS ;
 ZaSearchOption.A_objTypeAlias = "option_" + ZaSearch.ALIASES;
