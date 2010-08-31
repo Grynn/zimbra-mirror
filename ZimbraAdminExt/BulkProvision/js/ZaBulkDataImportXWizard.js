@@ -243,13 +243,18 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 				{obj:this._containedObject,hideWiz:"importAccountsWizard"});
 		ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog.call(this._app.getCurrentController(),{prevCallback:prevCallback,finishCallback:finishCallback,hideWiz:"bulkDataImportWizard"},null);
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_INTRODUCTION && this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP &&
-			this._containedObject[ZaBulkProvision.A2_provisionUsers] == "FALSE") {
+			this._containedObject[ZaBulkProvision.A2_provisionUsers] == "FALSE" && this._containedObject[ZaBulkProvision.A2_importEmail] == "TRUE") {
 		this._containedObject[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_ZIMBRA;
 		this.goPage(ZaBulkDataImportXWizard.STEP_OPTIONS);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
+	} else if(cStep == ZaBulkDataImportXWizard.STEP_INTRODUCTION &&  this._containedObject[ZaBulkProvision.A2_provisionUsers] == "FALSE" &&
+			this._containedObject[ZaBulkProvision.A2_importEmail] == "FALSE") {
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PLEASE_SELECT_YES);
+		return;
+		
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_FILE_UPLOAD) {
 		//if using a bulk file - upload the file, the callbacks will move to the next step
         //1. check if the file name are valid and exists
@@ -296,6 +301,7 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_MUST_SELECT_ACCOUNTS);
 			return;
 		}		
+		this._containedObject[ZaBulkProvision.A2_useAdminLogin] = 1;
 		this.goPage(ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS);
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_LDAP_INFO) {
 			//check LDAP fields and move on to entering IMAP options
@@ -342,10 +348,47 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
     		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
     		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
     		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-    		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);			
+    		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);		
+    		this._containedObject[ZaBulkProvision.A2_useAdminLogin] = 1;
 			this.goPage(ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS);
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS) {
     	//generate a preview of options, skip STEP_IMAP_OPTIONS, because these options should be in the XML
+		if(this._containedObject[ZaBulkProvision.A2_sourceType] != ZaBulkProvision.SOURCE_TYPE_XML &&
+			this._containedObject[ZaBulkProvision.A2_useAdminLogin] !=1 ) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.REQUIRED_TO_USE_ADMIN_CREDENTIALS);
+			return;
+		}
+		
+		if(this._containedObject[ZaBulkProvision.A2_useAdminLogin]==1) {
+			if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_IMAPAdminLogin])) {
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_IMAP_ADMIN_LOGIN_REQUIRED);
+				return;
+			}
+			if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_IMAPAdminPassword])) {
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_IMAP_ADMIN_PASSWORD_REQUIRED);
+				return;
+			}
+			/**
+			 * Check that passwords match
+			 */
+			if(this._containedObject[ZaBulkProvision.A2_IMAPAdminPassword] != this._containedObject[ZaBulkProvision.A2_IMAPAdminPasswordConfirm]) {
+				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PASSWORDS_DONT_MATCH);
+				return;
+			}		
+		}
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_IMAPHost])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_IMAP_HOST_REQUIRED);
+			return;
+		}
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_IMAPPort])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_IMAP_PORT_REQUIRED);
+			return;
+		}		
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_connectionType])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_IMAP_CONNECTION_TYPE_REQUIRED);
+			return;
+		}		
+		
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);

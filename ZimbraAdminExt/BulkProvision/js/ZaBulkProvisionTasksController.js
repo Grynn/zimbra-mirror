@@ -97,6 +97,7 @@ ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog = function (par
 		obj[ZaBulkProvision.A2_genPasswordLength] = 8;
 		obj[ZaBulkProvision.A2_ZimbraAdminLogin] = ZaZimbraAdmin.currentUserLogin;
 		obj[ZaBulkProvision.A2_createDomains] = "TRUE";
+		obj[ZaBulkProvision.A2_connectionType] = ZaBulkProvision.CONNECTION_SSL;
 		ZaApp.getInstance().dialogs["importAccountsWizard"] = new ZaBulkImportXWizard(DwtShell.getShell(window),obj);
 		if(params && params.prevCallback) {
 			ZaApp.getInstance().dialogs["importAccountsWizard"].prevCallback = params.prevCallback;
@@ -143,6 +144,7 @@ ZaBulkProvisionTasksController.prototype.openMigrationWizard = function (params,
 		obj[ZaBulkProvision.A2_genPasswordLength] = 8;
 		obj[ZaBulkProvision.A2_ZimbraAdminLogin] = ZaZimbraAdmin.currentUserLogin;
 		obj[ZaBulkProvision.A2_createDomains] = "TRUE";
+		obj[ZaBulkProvision.A2_connectionType] = ZaBulkProvision.CONNECTION_SSL;
 		
 		ZaApp.getInstance().dialogs["migrationWizard"] = new ZaMigrationXWizard(DwtShell.getShell(window),obj);
 		
@@ -174,6 +176,7 @@ function (params,ev) {
 			obj[ZaBulkProvision.A2_importEmail] = "TRUE";
 			obj[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
 			obj[ZaBulkProvision.A2_sourceServerType] = ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP;
+			obj[ZaBulkProvision.A2_connectionType] = ZaBulkProvision.CONNECTION_SSL;
 		}
 		if(params && params.hideWiz) {
 			if(ZaApp.getInstance().dialogs[params.hideWiz]) {
