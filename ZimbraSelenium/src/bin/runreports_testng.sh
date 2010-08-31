@@ -155,7 +155,7 @@ sub CREATE_RESULTS_EMAIL_TEXT
 
 sub CREATE_RESULTS_EMAIL_TEXT2
 {
-	my $text = "Hello world!";
+	my $text = "Hello world\n";
 	$text;
 }
 
@@ -168,7 +168,7 @@ sub CREATE_TEXT_FILE
 	open FH, "> $bugsTextFile";
 
 	#Create the plain text version
-	print FH &CREATE_RESULTS_EMAIL_TEXT;
+	print FH &CREATE_RESULTS_EMAIL_TEXT2;
 
 
 	close FH;

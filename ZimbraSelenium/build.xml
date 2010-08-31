@@ -186,7 +186,16 @@
 	</target>
 		
 	<target name="Run-TMS" depends="jar">
-		<echo>Just a stub for now ...</echo>
+		<property name="jarfile" value="${dist.lib.dir}/zimbraselenium.jar"/>
+		<property name="pattern" value="projects.zcs.tests"/>
+		<property name="groups" value="always,sanity"/>
+		<echo>Executing ...</echo>
+		<java classname="framework.core.ExecuteHarnessMain"          classpathref="class.path"          fork="true" failonerror="true">
+			<arg line="-h"/>
+ 		</java>
+		<exec executable="/usr/bin/perl" dir="." vmlauncher="false">
+			<arg line="src/bin/runreports_testng.sh"/>
+		</exec>
 	</target>
 
 	<!-- TARGETS FOR REMOTE MACHINES -->
