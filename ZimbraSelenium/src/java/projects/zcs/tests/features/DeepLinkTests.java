@@ -36,20 +36,15 @@ public class DeepLinkTests extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
+
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
+		//super.NAVIGATION_TAB="documents";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
@@ -92,14 +87,5 @@ public class DeepLinkTests extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

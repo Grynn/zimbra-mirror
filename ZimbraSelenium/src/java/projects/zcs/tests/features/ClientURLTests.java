@@ -21,22 +21,15 @@ import projects.zcs.ui.CalApp;
  */
 @SuppressWarnings("static-access")
 public class ClientURLTests extends CommonTest {
-	// Before Class
+
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		//super.NAVIGATION_TAB="documents";
+		super.zLogin();
 	}
-
-	// Before method
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
 	// Tests
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void customLoginToCalendarApp() throws Exception {
@@ -313,11 +306,5 @@ public class ClientURLTests extends CommonTest {
 
 		// something has gone wrong
 		return "-1";
-	}
-
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

@@ -9,22 +9,14 @@ import framework.core.SelNGBase;
 import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 public class Mail extends CommonTest {
+
 	// --------------
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		//zGoToApplication("Briefcase");
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		//super.NAVIGATION_TAB="documents";
+		super.zLogin();
 	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -37,13 +29,5 @@ public class Mail extends CommonTest {
 		SelNGBase.needReset.set(false);
 		
 		throw new HarnessException("implement me!");
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

@@ -10,23 +10,16 @@ import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 
 public class AddressBook extends CommonTest {
+
 	// --------------
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		//zGoToApplication("Briefcase");
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		//super.NAVIGATION_TAB="documents";
+		super.zLogin();
 	}
 
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void familyAddressBook_1() throws Exception {
@@ -38,13 +31,5 @@ public class AddressBook extends CommonTest {
 		SelNGBase.needReset.set(false);
 		
 		throw new HarnessException("implement me!");
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }
