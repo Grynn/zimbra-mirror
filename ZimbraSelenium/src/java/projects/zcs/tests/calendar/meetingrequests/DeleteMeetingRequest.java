@@ -27,7 +27,7 @@ import projects.zcs.ui.MailApp;
 
 @SuppressWarnings({ "static-access", "unused" })
 public class DeleteMeetingRequest extends CommonTest {
-	@DataProvider(name = "apptCreateDataProvider")
+	@DataProvider(name = "dataProvider")
 	private Object[][] createData(Method method) throws Exception {
 		String test = method.getName();
 		if (test.equals("deleteAppt_Bug38150")) {
@@ -97,7 +97,7 @@ public class DeleteMeetingRequest extends CommonTest {
 		SelNGBase.needReset.set(false);
 	}
 
-	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "dataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteAppt_Bug38359(String subject, String location,
 			String showAs, String markAs, String calendar, String allDayEvent,
 			String startDate, String endDate, String startTime, String endTime,
@@ -114,7 +114,7 @@ public class DeleteMeetingRequest extends CommonTest {
 			obj.zAppointment.zExists(subject);
 		}
 		page.zCalApp.zCalViewSwitch("list");
-		SelNGBase.selenium.get().clickAt(("//*[@id=\"zlhi__CLL__se\"]"), "");
+		SelNGBase.selenium.get().clickAt(("//div[@id=\"zlhi__CLL__se\"]"), "");
 		obj.zButton.zClick(page.zCalApp.zCalDeleteBtn);
 		obj.zRadioBtn.zClickInDlgByName(localize(locator.deleteSeries),
 				localize(locator.deleteRecurringItem));
