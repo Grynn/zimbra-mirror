@@ -48,7 +48,10 @@ public class CreateMail extends CommonTest {
 	 * several ways(to-only,cc-only, etc) and verify if the received mail has
 	 * all the information
 	 */
-	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			dataProvider = "composeDataProvider", 
+			groups = { "sanity", "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
 	public void sendPlainTextMailToSelfAndVerify_NewWindow(String to,
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
@@ -73,7 +76,10 @@ public class CreateMail extends CommonTest {
 	 * ways(to-only,cc-only, etc) and verify if the received mail has all the
 	 * information
 	 */
-	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			dataProvider = "composeDataProvider", 
+			groups = { "sanity", "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
 	public void sendHtmlMailToSelfAndVerify_NewWindow(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {

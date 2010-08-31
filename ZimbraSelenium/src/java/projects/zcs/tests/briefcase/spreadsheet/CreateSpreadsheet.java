@@ -36,7 +36,10 @@ public class CreateSpreadsheet extends CommonTest {
 		super.zLogin();
 	}
 
-	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			dataProvider = "briefcaseDataProvider", 
+			groups = { "sanity", "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
 	public void test1(String briefcaseName) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();

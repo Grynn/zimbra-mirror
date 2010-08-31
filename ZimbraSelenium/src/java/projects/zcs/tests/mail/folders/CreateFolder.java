@@ -64,7 +64,10 @@ public class CreateFolder extends CommonTest {
 	/**
 	 * This test creates folder and verifies whether properly created or not
 	 */
-	@Test(dataProvider = "FolderDataProvider", groups = { "smoke", "test" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			dataProvider = "FolderDataProvider", 
+			groups = { "sanity", "smoke", "test" }, 
+			retryAnalyzer = RetryFailedTests.class)
 	public void createAndVerifyFolder(String folderName,
 			String renameFolderName, String errDlgName, String errMsg)
 			throws Exception {

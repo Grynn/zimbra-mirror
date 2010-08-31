@@ -53,7 +53,10 @@ public class CreateAppointment extends CommonTest {
 	 * Enters different invalid email address types and checks if alert/warning
 	 * dialog is thrown
 	 */
-	@Test(dataProvider = "dataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			dataProvider = "dataProvider", 
+			groups = { "sanity", "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
 	public void createSimpleAppt(String subject, String location,
 			String attendees, String body) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())

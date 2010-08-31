@@ -57,7 +57,10 @@ public class CreateMeetingRequest extends CommonTest {
 		super.zLogin();
 	}
 
-	@Test(dataProvider = "dataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			dataProvider = "dataProvider", 
+			groups = { "sanity", "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
 	public void createAppt(String subject, String location, String showAs,
 			String markAs, String calendar, String allDayEvent,
 			String startDate, String endDate, String startTime, String endTime,

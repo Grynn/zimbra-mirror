@@ -43,7 +43,10 @@ public class CreateCalendar extends CommonTest {
 	/**
 	 * Creates a calendar folder using the overview button and right click menu
 	 */
-	@Test(dataProvider = "dataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(
+			dataProvider = "dataProvider", 
+			groups = { "sanity", "smoke", "full" }, 
+			retryAnalyzer = RetryFailedTests.class)
 	public void createCalendarFolder() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
