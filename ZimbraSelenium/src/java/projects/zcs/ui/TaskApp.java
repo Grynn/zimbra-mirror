@@ -3,6 +3,7 @@ package projects.zcs.ui;
 import org.testng.Assert;
 
 import projects.zcs.clients.ProvZCS;
+import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -158,10 +159,14 @@ public class TaskApp extends AppPage {
 		}
 
 		if (!progressPercent.equals("")) {
-			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
-					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("sv")
-					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("da")
-					|| ZimbraSeleniumProperties.getStringProperty("locale").equals("de")) {
+			if (ZimbraSeleniumProperties.getStringProperty("locale").equals(
+					"fr")
+					|| ZimbraSeleniumProperties.getStringProperty("locale")
+							.equals("sv")
+					|| ZimbraSeleniumProperties.getStringProperty("locale")
+							.equals("da")
+					|| ZimbraSeleniumProperties.getStringProperty("locale")
+							.equals("de")) {
 				obj.zButton.zClick("0 %");
 				progressPercent = progressPercent + " %";
 			} else {
@@ -200,7 +205,13 @@ public class TaskApp extends AppPage {
 
 		zTaskEnterSimpleDetails(subject, location, priority, body);
 
-		obj.zButton.zClick(zTasksSaveBtn);
+		// obj.zButton.zClick(zTasksSaveBtn);
+
+		SelNGBase.selenium
+				.get()
+				.clickAt(
+						"Xpath=//td[contains(@id,'zb__TKE')]/div[contains(@class,'ImgSave')]",
+						"");
 
 		zWaitTillObjectExist("button", zTasksNewBtn);
 	}
@@ -384,7 +395,7 @@ public class TaskApp extends AppPage {
 
 		obj.zButton.zClick(zTasksDeleteBtn);
 
-		//obj.zDialog.zVerifyAlertMessage(localize(locator.confirmTitle),localize
+		// obj.zDialog.zVerifyAlertMessage(localize(locator.confirmTitle),localize
 		// (locator.confirmCancelTask));
 
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
