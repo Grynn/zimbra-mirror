@@ -54,6 +54,13 @@ ZaBulkProvision.A2_skippedDomainCount = "skippedDomainCount";
 ZaBulkProvision.A2_SMTPHost = "SMTPHost";
 ZaBulkProvision.A2_SMTPPort = "SMTPPort";
 ZaBulkProvision.A2_sourceType = "sourceType";
+ZaBulkProvision.A2_account = "account";
+ZaBulkProvision.A2_accountPool = "accountPool";
+ZaBulkProvision.A2_activateSearch = "activateSearch";
+ZaBulkProvision.A2_poolNumPages = "poolNumPages";
+ZaBulkProvision.A2_poolPagenum = "poolPagenum";
+ZaBulkProvision.A2_src_acct_selection_pool = "src_acct_selection_pool";
+ZaBulkProvision.A2_tgt_acct_selection_pool = "tgt_acct_selection_pool";
 
 //LDAP import options
 ZaBulkProvision.A2_maxResults = "maxResults";
@@ -90,6 +97,7 @@ ZaBulkProvision.A2_ZimbraAdminPassword = "ZimbraAdminPassword";
 ZaBulkProvision.A2_ZimbraAdminLogin = "ZimbraAdminLogin";
 ZaBulkProvision.A2_ZimbraAdminPasswordConfirm = "ZimbraAdminPasswordConfirm";
 ZaBulkProvision.A2_provisionUsers = "provisionUsers";
+ZaBulkProvision.A2_importEmail = "importEmail";
 
 ZaBulkProvision.iSTATUS_NOT_RUNNING = -1;
 ZaBulkProvision.iSTATUS_IDLE = 0;
@@ -114,6 +122,7 @@ ZaBulkProvision.FILE_FORMAT_MIGRATION_XML = "migrationxml";
 ZaBulkProvision.FILE_FORMAT_BULK_XML = "bulkxml";
 ZaBulkProvision.FILE_FORMAT_BULK_CSV = "csv";
 
+ZaBulkProvision.SOURCE_TYPE_ZIMBRA = "zimbra";
 ZaBulkProvision.SOURCE_TYPE_LDAP = "ldap";
 ZaBulkProvision.SOURCE_TYPE_AD = "ad";
 ZaBulkProvision.SOURCE_TYPE_XML = "bulkxml";
@@ -169,6 +178,11 @@ ZaBulkProvision.getMyXModel = function () {
 
 	var xmodel = {
         items: [
+            {id:ZaBulkProvision.A2_activateSearch,ref:ZaBulkProvision.A2_activateSearch, type:_NUMBER_,defaultValue:1},
+            {id:ZaBulkProvision.A2_poolNumPages,ref:ZaBulkProvision.A2_poolNumPages, type:_NUMBER_,defaultValue:1},
+            {id:ZaBulkProvision.A2_poolPagenum,ref:ZaBulkProvision.A2_poolPagenum, type:_NUMBER_,defaultValue:1},
+    		{id:ZaBulkProvision.A2_src_acct_selection_pool, ref:ZaBulkProvision.A2_src_acct_selection_pool, type:_LIST_},
+    		{id:ZaBulkProvision.A2_tgt_acct_selection_pool, ref:ZaBulkProvision.A2_tgt_acct_selection_pool, type:_LIST_},
             {id:ZaBulkProvision.A_csv_aid, type: _STRING_, ref: ZaBulkProvision.A_csv_aid},
 	        {id:ZaBulkProvision.A_aid, type: _STRING_, ref: ZaBulkProvision.A_aid},
 	        {id:ZaBulkProvision.A_provision_accounts, ref: ZaBulkProvision.A_provision_accounts,type:_LIST_ , dataType: _STRING_ ,outputType:_LIST_ } ,
@@ -210,6 +224,8 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_sourceType, type:_ENUM_, ref:ZaBulkProvision.A2_sourceType, choices:ZaBulkProvision.AccountListSourceTypeChoices},
 	        {id:ZaBulkProvision.A2_connectionType, type:_ENUM_, ref:ZaBulkProvision.A2_connectionType, choices:ZaBulkProvision.IMAPConnectionTypeChoices},
 	        {id:ZaBulkProvision.A2_op, type:_STRING_, ref:ZaBulkProvision.A2_op},
+	        {id:ZaBulkProvision.A2_account,type:_LIST_,ref:ZaBulkProvision.A2_account,listItem:{type:_OBJECT_, items:ZaAccount.myXModel.items}},
+	        {id:ZaBulkProvision.A2_accountPool,type:_LIST_,ref:ZaBulkProvision.A2_account,listItem:{type:_OBJECT_, items:ZaAccount.myXModel.items}},
 	        //exchange migration wizard
 	        {id:ZaBulkProvision.A2_TargetDomainName, type:_STRING_, ref:ZaBulkProvision.A2_TargetDomainName},
 	        {id:ZaBulkProvision.A2_importMails, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_importMails},
@@ -227,6 +243,7 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_ZimbraAdminPasswordConfirm, type:_STRING_, ref:ZaBulkProvision.A2_ZimbraAdminPasswordConfirm},
 	        {id:ZaBulkProvision.A2_ZimbraAdminLogin, type:_STRING_, ref:ZaBulkProvision.A2_ZimbraAdminLogin},
 	        {id:ZaBulkProvision.A2_provisionUsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_provisionUsers},
+	        {id:ZaBulkProvision.A2_importEmail, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_importEmail},
 	        //direct import from LDAP
 	        {id:ZaBulkProvision.A2_createDomains, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_createDomains}
         ]
@@ -267,7 +284,13 @@ ZaBulkProvision.bulkDataIMport = function(obj, callback) {
 		attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapBindPassword]);
 		attr.setAttribute("n", ZaBulkProvision.A2_GalLdapBindPassword);
 	}
-	
+	if(obj[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_ZIMBRA) {
+		var cnt = obj[ZaBulkProvision.A2_account].length;
+		for(var i = 0; i < cnt; i ++) {
+			var accEl = soapDoc.set(ZaBulkProvision.A2_account, "");
+			accEl.setAttribute("name", obj[ZaBulkProvision.A2_account][i]);
+		}
+	}
 	attr = soapDoc.set(ZaBulkProvision.A2_sourceType, obj[ZaBulkProvision.A2_sourceType]);
 	attr = soapDoc.set(ZaBulkProvision.A2_useAdminLogin,obj[ZaBulkProvision.A2_IMAPPort]);
 	if(obj[ZaBulkProvision.A2_IMAPAdminPassword])

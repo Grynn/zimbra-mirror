@@ -44,8 +44,8 @@ public class ZimbraBulkProvisionService  implements DocumentService {
     public static final QName GENERATE_BULK_PROV_FROM_LDAP_REQUEST = QName.get("GenerateBulkProvisionFileFromLDAPRequest", NAMESPACE) ;
     public static final QName GENERATE_BULK_PROV_FROM_LDAP_RESPONSE = QName.get("GenerateBulkProvisionFileFromLDAPResponse", NAMESPACE) ;
 	
-    public static final QName BULK_IMAP_DATA_IMPORT_REQUEST = QName.get("BulkIMAPDataImportRequest", AdminConstants.NAMESPACE) ;
-    public static final QName BULK_IMAP_DATA_IMPORT_RESPONSE = QName.get("BulkIMAPDataImportResponse", AdminConstants.NAMESPACE) ;
+    public static final QName BULK_IMAP_DATA_IMPORT_REQUEST = QName.get("BulkIMAPDataImportRequest", NAMESPACE) ;
+    public static final QName BULK_IMAP_DATA_IMPORT_RESPONSE = QName.get("BulkIMAPDataImportResponse", NAMESPACE) ;
     
     public void registerHandlers(DocumentDispatcher dispatcher) {
         dispatcher.registerHandler(GET_BULK_PROVISION_ACCOUNTS_REQUEST, new GetBulkProvisionAccounts());

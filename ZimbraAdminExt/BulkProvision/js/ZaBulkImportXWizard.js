@@ -105,8 +105,11 @@ function (loc) {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
 	}
-    
-    this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+    if(this.prevCallback) {
+    	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+    } else {
+    	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
+    }
 }
 
 ZaBulkImportXWizard.prototype.goNext =
@@ -219,6 +222,8 @@ function() {
     } else if(cStep == ZaBulkImportXWizard.STEP_PROVISION) {
    		prevStep = ZaBulkImportXWizard.STEP_REVIEW;
     	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+    } else if(this.prevCallback && cStep == ZaBulkImportXWizard.STEP_CHOOSE_ACTION) {
+    	this.prevCallback.run(null);
     }
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);

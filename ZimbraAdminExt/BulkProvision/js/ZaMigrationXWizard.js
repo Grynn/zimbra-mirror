@@ -137,7 +137,11 @@ ZaMigrationXWizard.prototype.previewCallback = function(params,resp) {
 ZaMigrationXWizard.prototype.popup =
 function (loc) {
 	ZaXWizardDialog.prototype.popup.call(this, loc);
-    this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+    if(this.prevCallback) {
+    	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+    } else {
+    	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);	
+    }
     this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 }
 
@@ -282,7 +286,9 @@ function() {
 	
 	if (cStep == ZaMigrationXWizard.STEP_PROV_OPTIONS) {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);			
+		if(!this.prevCallback) {
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+		}
 		prevStep = ZaMigrationXWizard.STEP_INTRODUCTION ;
     } else if (cStep == ZaMigrationXWizard.STEP_LDAP_INFO) {
 		prevStep = ZaMigrationXWizard.STEP_EXCHANGE_INFO;
@@ -296,6 +302,9 @@ function() {
     } else if(cStep == ZaMigrationXWizard.STEP_REVIEW) {
 		prevStep = ZaMigrationXWizard.STEP_LDAP_INFO;
     	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+    } else if(this.prevCallback && cStep == ZaMigrationXWizard.STEP_INTRODUCTION) {
+    	this.prevCallback.run(null);
+    	return;
     }
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);

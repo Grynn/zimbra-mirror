@@ -397,7 +397,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 							if (domain != null) {
 								checkDomainRight(zsc, domain,Admin.R_createAccount);
 							} else if (createDomains) {
-								if (ZimbraBulkProvisionExt.OP_PREVIEW.equalsIgnoreCase(op)) {
+								if (ZimbraBulkProvisionExt.OP_START_IMPORT.equalsIgnoreCase(op)) {
 									domain = createMissingDomain(parts[1], zsc,
 											context);
 								}
@@ -405,7 +405,11 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 							} else {
 								throw AccountServiceException.NO_SUCH_DOMAIN(parts[1]);
 							}
-
+							if (domain != null) {
+                                checkDomainRight(zsc, domain,Admin.R_createAccount);
+                            } else {
+                                throw AccountServiceException.NO_SUCH_DOMAIN(parts[1]);
+                            }
 							Account acct = Provisioning.getInstance().getAccountByName(emailAddress);
 							if (acct != null) {
 								totalExistingAccounts++;

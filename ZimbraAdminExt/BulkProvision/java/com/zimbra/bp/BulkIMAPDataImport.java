@@ -133,7 +133,9 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
     		}
 		} else if (sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_BULK_LDAP)) {
 		    IMAPAccounts = getExternalIMAPAccounts(request, zsc);
-		}
+		}  else if (sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_ZIMBRA)) {
+		    IMAPAccounts = getZimbraAccounts(request, zsc);   
+        }
 		
 		/*
 		 * Process the list of accounts. Find existing datasources and check their states.
@@ -288,6 +290,74 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 		return response;
 	}
 
+	private Map<accountState,List<ExternalIMAPAccount>> getZimbraAccounts(Element request, ZimbraSoapContext zsc) throws ServiceException {
+	    List<Element> acctElems = request.listElements(AdminConstants.E_ACCOUNT);
+        Map attrs = AdminService.getAttrs(request, true);
+        GalParams.ExternalGalParams galParams = new GalParams.ExternalGalParams(attrs, GalOp.search);
+        LdapGalMapRules rules = new LdapGalMapRules(Provisioning.getInstance().getConfig());
+        Provisioning prov = Provisioning.getInstance();
+        List<ExternalIMAPAccount> idleAccts = new ArrayList<ExternalIMAPAccount>();
+        List<ExternalIMAPAccount> runningAccts = new ArrayList<ExternalIMAPAccount>();
+        List<ExternalIMAPAccount> finishedAccts = new ArrayList<ExternalIMAPAccount>();
+        Map<accountState, List<ExternalIMAPAccount>> accts = new HashMap<accountState, List<ExternalIMAPAccount>>();
+        if(acctElems != null && acctElems.size()>0) {
+            for(Element elem : acctElems) {
+                String emailAddress = elem.getAttribute(AdminConstants.A_NAME);
+                Account localAccount = null;
+                try {
+                    localAccount = prov.get(AccountBy.name, emailAddress);
+                } catch (ServiceException se) {
+                    ZimbraLog.gal.warn("error looking up account", se);
+                }
+    
+                if (localAccount == null) {
+                    throw AccountServiceException.NO_SUCH_ACCOUNT(emailAddress);
+                }
+                checkAdminLoginAsRight(zsc, prov, localAccount);
+                // Check if an import is running on this account already
+                boolean isRunning = false;
+                boolean hasRun = false;
+                List<DataSource> sources = Provisioning.getInstance().getAllDataSources(localAccount);
+                for (DataSource ds : sources) {
+                    if (ZimbraBulkProvisionExt.IMAP_IMPORT_DS_NAME.equalsIgnoreCase(ds.getName())
+                            && ds.getType() == DataSource.Type.imap
+                            && ds.isImportOnly()
+                            && "1".equalsIgnoreCase(ds.getAttr(Provisioning.A_zimbraDataSourceFolderId))) {
+                        ImportStatus importStatus = DataSourceManager.getImportStatus(localAccount, ds);
+                        if (!isRunning) {
+                            synchronized (importStatus) {
+                                isRunning = importStatus.isRunning();
+                                hasRun = importStatus.hasRun();
+                            }
+                        }
+    
+                        if (!hasRun) {
+                            synchronized (importStatus) {
+                                hasRun = importStatus.hasRun();
+                            }
+                        }
+    
+                        if (!isRunning) {
+                            runningAccts.add(new ExternalIMAPAccount(emailAddress, emailAddress, "", localAccount));
+                            break;
+                        } else if (hasRun) {
+                            finishedAccts.add(new ExternalIMAPAccount(emailAddress, emailAddress, "", localAccount));
+                            break;
+                        }
+                    }
+                }
+                if (!isRunning && !hasRun) {
+                    idleAccts.add(new ExternalIMAPAccount(emailAddress, emailAddress, "", localAccount));
+                }
+                
+            }
+        }
+        accts.put(accountState.idle, idleAccts);
+        accts.put(accountState.running, runningAccts);
+        accts.put(accountState.finished, finishedAccts);
+        return accts;
+	    
+	}
 	/**
 	 * Collects data about external IMAP accounts from LDAP directory
 	 * @param request

@@ -33,6 +33,9 @@ ZaController.initToolbarMethods["ZaBulkProvisionTasksController"] = new Array();
 ZaController.initPopupMenuMethods["ZaBulkProvisionTasksController"] = new Array();
 ZaController.changeActionsStateMethods["ZaBulkProvisionTasksController"] = new Array(); 
 ZaOperation.BULK_DATA_IMPORT = ++ ZA_OP_INDEX;
+ZaOperation.ACCOUNT_IMPORT_WIZARD =  ++ZA_OP_INDEX;
+ZaOperation.MIGRATION_WIZARD =  ++ZA_OP_INDEX;
+
 ZaBulkProvisionTasksController.prototype.show = 
 function(list, openInNewTab) {
     if (!this._UICreated) {
@@ -43,25 +46,146 @@ function(list, openInNewTab) {
 
 ZaBulkProvisionTasksController.initToolbarMethod =
 function () {
-	this._toolbarOperations[ZaOperation.BULK_DATA_IMPORT]=new ZaOperation(ZaOperation.BULK_DATA_IMPORT,com_zimbra_bulkprovision.TB_IMAP_Import, com_zimbra_bulkprovision.TB_IMAP_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.bulkDataImportListener));				
+	var showBulkProvision = false;
+	if(ZaSettings.HAVE_MORE_DOMAINS || ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
+		showBulkProvision = true;
+	} else {
+		var domainList = ZaApp.getInstance().getDomainList().getArray();
+		var cnt = domainList.length;
+		for(var i = 0; i < cnt; i++) {
+			if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_ACCOUNT,domainList[i])) {
+				showBulkProvision = true;
+				break;
+			}	
+		}
+	}	
+	if(showBulkProvision) {    	
+		this._toolbarOperations[ZaOperation.ACCOUNT_IMPORT_WIZARD] = new ZaOperation(ZaOperation.ACCOUNT_IMPORT_WIZARD, com_zimbra_bulkprovision.NewButton_Import, com_zimbra_bulkprovision.NewButton_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openBulkProvisionDialog,{}));        
+		this._toolbarOperations[ZaOperation.MIGRATION_WIZARD] = new ZaOperation(ZaOperation.MIGRATION_WIZARD, com_zimbra_bulkprovision.TBB_migration_wizard, com_zimbra_bulkprovision.TBB_migration_wizard_tt, "ApplianceMigration", "ApplianceMigration", new AjxListener(this, this.openMigrationWizard,{}));
+		this._toolbarOrder.push(ZaOperation.ACCOUNT_IMPORT_WIZARD) ;
+		this._toolbarOrder.push(ZaOperation.MIGRATION_WIZARD) ;
+	}
+	
+	this._toolbarOperations[ZaOperation.BULK_DATA_IMPORT]=new ZaOperation(ZaOperation.BULK_DATA_IMPORT,com_zimbra_bulkprovision.TB_IMAP_Import, com_zimbra_bulkprovision.TB_IMAP_Import_tt, "ApplianceMigration", "ApplianceMigration", new AjxListener(this, this.bulkDataImportListener,{}));				
 	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
 	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
-	
+
 	this._toolbarOrder.push(ZaOperation.BULK_DATA_IMPORT);
 	this._toolbarOrder.push(ZaOperation.NONE);	
 	this._toolbarOrder.push(ZaOperation.HELP);					
 }
 ZaController.initToolbarMethods["ZaBulkProvisionTasksController"].push(ZaBulkProvisionTasksController.initToolbarMethod);
 
-ZaController.initPopupMenuMethods["ZaBulkProvisionTasksController"].push(ZaBulkProvisionTasksController.initPopupMenuMethod);
+ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog = function (params,ev) {
+    try {
+		var obj = null;
+		if (params && params.obj) {
+			obj = params.obj;
+		} else {
+			obj = new ZaBulkProvision();
+		}
+		if(params && params.hideWiz) {
+			if(ZaApp.getInstance().dialogs[params.hideWiz]) {
+				ZaApp.getInstance().dialogs[params.hideWiz].popdown();
+			}
+		}    	
+		obj[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_IMPORT_LDAP;
+		obj[ZaBulkProvision.A2_generatedFileLink] = null;
+		obj[ZaBulkProvision.A2_maxResults] = "0";
+		obj[ZaBulkProvision.A2_GalLdapFilter] = "(objectClass=organizationalPerson)";
+		obj[ZaBulkProvision.A2_generatePassword] = "TRUE";
+		obj[ZaBulkProvision.A2_genPasswordLength] = 8;
+		obj[ZaBulkProvision.A2_ZimbraAdminLogin] = ZaZimbraAdmin.currentUserLogin;
+		obj[ZaBulkProvision.A2_createDomains] = "TRUE";
+		ZaApp.getInstance().dialogs["importAccountsWizard"] = new ZaBulkImportXWizard(DwtShell.getShell(window),obj);
+		if(params && params.prevCallback) {
+			ZaApp.getInstance().dialogs["importAccountsWizard"].prevCallback = params.prevCallback;
+		} else {
+			ZaApp.getInstance().dialogs["importAccountsWizard"].prevCallback = null;
+		}
+
+		if(params && params.finishCallback) {
+			ZaApp.getInstance().dialogs["importAccountsWizard"].registerCallback(DwtWizardDialog.FINISH_BUTTON, params.finishCallback);
+		} 
+
+		ZaApp.getInstance().dialogs["importAccountsWizard"].setObject(obj);
+		ZaApp.getInstance().dialogs["importAccountsWizard"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog", null, false);
+	}
+};
+
+ZaBulkProvisionTasksController.prototype.openMigrationWizard = function (params,ev) {
+    try {
+		var obj = null;
+		if (params && params.obj) {
+			obj = params.obj;
+		} else {
+			obj = new ZaBulkProvision();
+		}
+		if(params && params.hideWiz) {
+			if(ZaApp.getInstance().dialogs[params.hideWiz]) {
+				ZaApp.getInstance().dialogs[params.hideWiz].popdown();
+			}
+		}
+    	
+		obj[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_GENERATE_MIG_XML;
+		obj[ZaBulkProvision.A2_generatedFileLink] = null;
+		obj[ZaBulkProvision.A2_maxResults] = "0";
+		obj[ZaBulkProvision.A2_GalLdapFilter] = "(objectClass=organizationalPerson)";
+		obj[ZaBulkProvision.A2_generatePassword] = "TRUE";
+		obj[ZaBulkProvision.A2_provisionUsers] = "TRUE";
+		obj[ZaBulkProvision.A2_importMails] = "TRUE";
+		obj[ZaBulkProvision.A2_importContacts] = "TRUE";
+		obj[ZaBulkProvision.A2_importTasks] = "TRUE";
+		obj[ZaBulkProvision.A2_importCalendar] = "TRUE";
+		obj[ZaBulkProvision.A2_InvalidSSLOk] = "TRUE";
+		obj[ZaBulkProvision.A2_genPasswordLength] = 8;
+		obj[ZaBulkProvision.A2_ZimbraAdminLogin] = ZaZimbraAdmin.currentUserLogin;
+		obj[ZaBulkProvision.A2_createDomains] = "TRUE";
+		
+		ZaApp.getInstance().dialogs["migrationWizard"] = new ZaMigrationXWizard(DwtShell.getShell(window),obj);
+		
+		if(params && params.prevCallback) {
+			ZaApp.getInstance().dialogs["migrationWizard"].prevCallback = params.prevCallback;
+		} else {
+			ZaApp.getInstance().dialogs["migrationWizard"].prevCallback = null;
+		}
+		ZaApp.getInstance().dialogs["migrationWizard"].setObject(obj);
+		ZaApp.getInstance().dialogs["migrationWizard"].popup();
+	} catch (ex) {
+		this._handleException(ex, "ZaBulkProvisionTasksController.prototype.openMigrationWizard", null, false);
+	}
+};
 
 ZaBulkProvisionTasksController.prototype.bulkDataImportListener = 
-function (ev) {
+function (params,ev) {
     try {
 		if(!ZaApp.getInstance().dialogs["bulkDataImportWizard"]) {
 			ZaApp.getInstance().dialogs["bulkDataImportWizard"] = new ZaBulkDataImportXWizard(this._container);
 		}
-		ZaApp.getInstance().dialogs["bulkDataImportWizard"].setObject(new ZaBulkProvision());
+		var obj = null;
+		if (params && params.obj) {
+			obj = params.obj;
+		} else {
+			obj = new ZaBulkProvision();
+			obj[ZaModel.currentStep] = ZaBulkDataImportXWizard.STEP_INTRODUCTION;
+			obj[ZaBulkProvision.A2_provisionUsers] = "TRUE";
+			obj[ZaBulkProvision.A2_importEmail] = "TRUE";
+			obj[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
+			obj[ZaBulkProvision.A2_sourceServerType] = ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP;
+		}
+		if(params && params.hideWiz) {
+			if(ZaApp.getInstance().dialogs[params.hideWiz]) {
+				ZaApp.getInstance().dialogs[params.hideWiz].popdown();
+			}
+		}
+		if(params && params.prevCallback) {
+			ZaApp.getInstance().dialogs["bulkDataImportWizard"].prevCallback = params.prevCallback;
+		} else {
+			ZaApp.getInstance().dialogs["bulkDataImportWizard"].prevCallback = null;
+		}
+		ZaApp.getInstance().dialogs["bulkDataImportWizard"].setObject(obj);
 		ZaApp.getInstance().dialogs["bulkDataImportWizard"].popup();
 	} catch (ex) {
 		this._handleException(ex, "ZaBulkProvisionTasksController.prototype.bulkDataImportListener", null, false);
