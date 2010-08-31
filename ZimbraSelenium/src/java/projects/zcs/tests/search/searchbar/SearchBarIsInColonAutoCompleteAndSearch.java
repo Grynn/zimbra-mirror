@@ -98,7 +98,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public void verifyAutocompleteUIWithIsColonInTopSearchBox(
 			String isColonString, int no) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		Robot zRobot = new Robot();
 		obj.zEditField.zActivate("xpath=//input[@class='search_input']");
@@ -138,7 +138,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public void verifyAutocompleteUIWithIsColonNegativeInTopSearchBox(
 			String isColonString, int no) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		Robot zRobot = new Robot();
 		obj.zEditField.zActivate("xpath=//input[@class='search_input']");
@@ -193,7 +193,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public void verifyAll_IsColon_AutocompleteOptions(String isColonString,
 			int no) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		commonData();
 		Robot zRobot = new Robot();
@@ -373,7 +373,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public void verifyAutocompleteNegativeIsColonRead(String isColonString,
 			int no) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		commonData();
 		Robot zRobot = new Robot();
@@ -401,7 +401,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public void verifyAutocompleteUIWithInColonInTopSearchBox(
 			String isColonString, int no) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		commonData();
 		Robot zRobot = new Robot();
@@ -458,7 +458,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public void verifyAutocompleteUIWithInColonNegativeInTopSearchBox(
 			String isColonString, int no) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		commonData();
 		Robot zRobot = new Robot();
@@ -516,7 +516,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public void verifyAll_InColon_AutocompleteOptions(String inColonString,
 			int no) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		commonData();
 		System.out
@@ -629,7 +629,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public void verifyAutocompleteNegativeInColonInbox(String inColonString,
 			int no) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		commonData();
 		Robot zRobot = new Robot();
@@ -659,7 +659,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public void verifyAutocompleteNegativeInColonRemoteFolder(
 			String inColonString, int no) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		checkForSkipException("all", "na", "47017", "-in:remotefolder doesn't show messages from local folder");
 
@@ -972,7 +972,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
+	private void handleRetry1() throws Exception {
 		SelNGBase.isExecutionARetry.set(false);
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
