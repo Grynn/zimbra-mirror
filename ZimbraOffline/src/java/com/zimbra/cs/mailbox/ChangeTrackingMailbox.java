@@ -49,12 +49,23 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
         return true;
     }
     
+    private long lastChangeTime = -1; 
+    
+    public boolean anyChangesSince(long since) {
+        if (lastChangeTime == -1) {
+            //even if no changes since startup there might be some in db
+            //do this only first pass; otherwise we try to push on each loop until a local change occurs
+            lastChangeTime = 0;
+            return true;
+        }
+        return (lastChangeTime >= since);  
+    }
     
     @Override
     void trackChangeNew(MailItem item) throws ServiceException {
         if (!isTrackingSync() || !isPushType(item.getType()))
             return;
-
+        lastChangeTime = System.currentTimeMillis();
         DbOfflineMailbox.updateChangeRecord(item, Change.MODIFIED_CONFLICT);
     }
     
@@ -62,7 +73,7 @@ public abstract class ChangeTrackingMailbox extends SyncMailbox {
     void trackChangeModified(MailItem item, int changeMask) throws ServiceException {
         if (!isTrackingSync() || !isPushType(item.getType()))
             return;
-
+        lastChangeTime = System.currentTimeMillis();
         int filter = getChangeMaskFilter(item.getType());
         if ((changeMask & filter) != 0)
             DbOfflineMailbox.updateChangeRecord(item, changeMask & filter);
