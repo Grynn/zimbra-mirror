@@ -25,19 +25,9 @@ public class CreateTaskFolder extends CommonTest {
 	}
 
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SleepUtil.sleep(2000);
-		page.zTaskApp.zNavigateToTasks();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="tasks";
+		super.zLogin();
 	}
 
 	/**
@@ -64,9 +54,4 @@ public class CreateTaskFolder extends CommonTest {
 		SelNGBase.needReset.set(false);
 	}
 
-
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
-	}
 }

@@ -25,19 +25,11 @@ public class MoveTask extends CommonTest {
 	}
 
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SleepUtil.sleep(2000);
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="tasks";
+		super.zLogin();
 	}
 
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
 
 
 	/**
@@ -71,11 +63,4 @@ public class MoveTask extends CommonTest {
 	}
 
 
-	/**
-	 * retry handler function
-	 */
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
-	}
 }

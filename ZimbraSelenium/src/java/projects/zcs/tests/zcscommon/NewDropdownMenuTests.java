@@ -22,19 +22,11 @@ public class NewDropdownMenuTests extends CommonTest {
 	// SECTION 1: SETUP
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		page.zMailApp.zNavigateToMailApp();
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
 
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
 
 	//--------------------------------------------------------------------------
 	// SECTION 2: TEST-METHODS
@@ -245,14 +237,5 @@ public class NewDropdownMenuTests extends CommonTest {
 		obj.zDialog.zNotExists(localize(locator.createNewBriefcaseItem));
 
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 3: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

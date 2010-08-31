@@ -35,17 +35,8 @@ public class SavedSearchActionTestsForAllAppTab extends CommonTest {
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		zGoToApplication("Mail");
-		SelNGBase.isExecutionARetry.set(false);
-	}
-	
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
 
 	//--------------------------------------------------------------------------
@@ -122,13 +113,5 @@ public class SavedSearchActionTestsForAllAppTab extends CommonTest {
 		// obj.zFolder.zNotExists(renameSavedSearchFolder);
 
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

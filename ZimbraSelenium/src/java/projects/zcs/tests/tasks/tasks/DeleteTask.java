@@ -23,20 +23,10 @@ public class DeleteTask extends CommonTest {
 			return new Object[][] { { "" } };
 		}
 	}
-
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SleepUtil.sleep(2000);
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="tasks";
+		super.zLogin();
 	}
 
 
@@ -63,13 +53,5 @@ public class DeleteTask extends CommonTest {
 		obj.zTaskItem.zNotExists(subject);
 
 		SelNGBase.needReset.set(false);
-	}
-
-	/**
-	 * retry handler function
-	 */
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

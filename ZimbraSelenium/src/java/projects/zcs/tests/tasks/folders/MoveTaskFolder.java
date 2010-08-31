@@ -25,21 +25,10 @@ public class MoveTaskFolder extends CommonTest {
 	}
 
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SleepUtil.sleep(2000);
-		page.zTaskApp.zNavigateToTasks();
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="tasks";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
 
 	@Test(dataProvider = "taskCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void moveTaskFolder() throws Exception {
@@ -59,9 +48,4 @@ public class MoveTaskFolder extends CommonTest {
 		SelNGBase.needReset.set(false);
 	}
 
-
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
-	}
 }
