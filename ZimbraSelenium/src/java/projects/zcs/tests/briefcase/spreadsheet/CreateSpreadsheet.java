@@ -27,23 +27,13 @@ public class CreateSpreadsheet extends CommonTest {
 			return new Object[][] { { "" } };
 		}
 	}
-
 	// --------------
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		zGoToApplication("Briefcase");
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="briefcase";
+		super.zLogin();
 	}
 
 	@Test(dataProvider = "briefcaseDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -56,13 +46,5 @@ public class CreateSpreadsheet extends CommonTest {
 		SelNGBase.needReset.set(false);
 		
 		throw new HarnessException("implement me!");
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

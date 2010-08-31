@@ -1,10 +1,11 @@
 package projects.zcs.tests.briefcase.document;
 
 import java.lang.reflect.Method;
+
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import projects.zcs.tests.CommonTest;
 import framework.core.SelNGBase;
 import framework.util.HarnessException;
@@ -32,18 +33,9 @@ public class CreateDocument extends CommonTest {
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		zGoToApplication("Briefcase");
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="briefcase";
+		super.zLogin();
 	}
 
 	@Test(
@@ -59,13 +51,5 @@ public class CreateDocument extends CommonTest {
 		SelNGBase.needReset.set(false);
 		
 		throw new HarnessException("implement me!");
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

@@ -47,20 +47,13 @@ public class CreateBriefcaseFile extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		page.zBriefcaseApp.zGoToBriefcaseApp();
-		SleepUtil.sleep(2000);
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+		super.NAVIGATION_TAB="briefcase";
+		super.zLogin();
 	}
 
 	//--------------------------------------------------------------------------
@@ -123,14 +116,5 @@ public class CreateBriefcaseFile extends CommonTest {
 				localize(locator.warningMsg));
 
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

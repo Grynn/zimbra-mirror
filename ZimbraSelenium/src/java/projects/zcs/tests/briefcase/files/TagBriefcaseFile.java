@@ -46,22 +46,13 @@ public class TagBriefcaseFile extends CommonTest {
 		}
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 2: SETUP
-	//--------------------------------------------------------------------------
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		zGoToApplication("Briefcase");
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+		super.NAVIGATION_TAB="briefcase";
+		super.zLogin();
 	}
 
 	//--------------------------------------------------------------------------
@@ -367,14 +358,5 @@ public class TagBriefcaseFile extends CommonTest {
 		zDuplicateTag(tag1);
 
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }
