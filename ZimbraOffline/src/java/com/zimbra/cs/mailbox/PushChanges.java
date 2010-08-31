@@ -55,6 +55,7 @@ import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
+import com.zimbra.cs.offline.util.OfflineErrorUtil;
 import com.zimbra.cs.service.mail.ItemAction;
 import com.zimbra.cs.service.mail.Sync;
 import com.zimbra.cs.service.mail.ToXML;
@@ -634,8 +635,9 @@ public class PushChanges {
         byte color;
         String name, url;
         boolean create = false;
+        Folder folder = null;
         synchronized (ombx) {
-            Folder folder = ombx.getFolderById(sContext, id);
+            folder = ombx.getFolderById(sContext, id);
             name = folder.getName();  parentId = folder.getFolderId();  flags = folder.getInternalFlagBitmask();
             url = folder.getUrl();    color = folder.getColor();
 
@@ -668,13 +670,17 @@ public class PushChanges {
                 id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
-            if (!sfe.getCode().equals(MailServiceException.NO_SUCH_FOLDER))
+            if (folder.getUrl() != null) {
+                OfflineErrorUtil.reportError(ombx, folder.getId(), "failed to sync rss url ["+folder.getUrl()+"]", sfe);
+                return true;
+            } else if (!sfe.getCode().equals(MailServiceException.NO_SUCH_FOLDER)) {
                 throw sfe;
+            }
             OfflineLog.offline.info("push: remote folder " + id + " has been deleted; skipping");
         }
 
         synchronized (ombx) {
-            Folder folder = ombx.getFolderById(sContext, id);
+            folder = ombx.getFolderById(sContext, id);
             // check to see if the folder was changed while we were pushing the update...
             int mask = 0;
             if (flags != folder.getInternalFlagBitmask())  mask |= Change.MODIFIED_FLAGS;
