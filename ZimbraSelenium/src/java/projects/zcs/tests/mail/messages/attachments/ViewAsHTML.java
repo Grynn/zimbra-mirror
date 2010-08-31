@@ -39,18 +39,10 @@ public class ViewAsHTML extends CommonTest {
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
@@ -58,7 +50,7 @@ public class ViewAsHTML extends CommonTest {
 	public void test1(String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		// dummy test
 
@@ -71,7 +63,7 @@ public class ViewAsHTML extends CommonTest {
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
+	private void handleRetry1() throws Exception {
 		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 		j = 0;

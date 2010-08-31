@@ -52,18 +52,8 @@ public class CreateMail extends CommonTest {
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@SuppressWarnings("unused")
-	@BeforeMethod(groups = { "always" })
-	private void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.zLogin();
 	}
 
 	//--------------------------------------------------------------------------
@@ -257,11 +247,6 @@ public class CreateMail extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
-	// for those that needs just relogin
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		zLogin();
-	}
 
 	private void fwdAMailWithAttachment_Retry() throws Exception {
 		handleRetry();// relogin

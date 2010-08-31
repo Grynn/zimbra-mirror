@@ -34,24 +34,16 @@ public class AddToCalendar extends CommonTest {
 			return new Object[][] { { "" } };
 		}
 	}
-
+	
 	//--------------------------------------------------------------------------
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
@@ -61,7 +53,7 @@ public class AddToCalendar extends CommonTest {
 	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void addToCalendarFromICSAttachmentMail_Bug27959() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		String subject1, subject2;
 		subject1 = page.zMailApp
@@ -116,7 +108,7 @@ public class AddToCalendar extends CommonTest {
 	public void jsErrorOnClickingAddToCalendarInNewWindow_Bug49734()
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		checkForSkipException("all", "na", "50116",
 				"Attachment links are not removed from same window if removed from new window");
@@ -163,7 +155,7 @@ public class AddToCalendar extends CommonTest {
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
+	private void handleRetry1() throws Exception {
 		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 		j = 0;

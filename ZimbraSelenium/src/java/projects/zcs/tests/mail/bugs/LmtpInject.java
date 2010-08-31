@@ -55,16 +55,7 @@ public class LmtpInject extends CommonTest {
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+		super.zLogin();
 	}
 
 	// SECTION 3: TEST-METHODS
@@ -566,14 +557,5 @@ public class LmtpInject extends CommonTest {
 				msgBody,
 				"support-team@zimbra.com; calendar-team@zimbra.com; support@zimbra.com",
 				"Verifying cc field values");
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

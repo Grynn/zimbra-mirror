@@ -30,25 +30,16 @@ public class JunkMessage extends CommonTest {
 				"bccuser@testdomain.com" } };
 	}
 
+
 	//--------------------------------------------------------------------------
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		page.zMailApp.zNavigateToMailApp();
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
-
-	@SuppressWarnings("unused")
-	@BeforeMethod(groups = { "always" })
-	private void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
@@ -113,14 +104,5 @@ public class JunkMessage extends CommonTest {
 		for (int i = 0; i <= 2; i++) {
 			obj.zMessageItem.zExists(subject[i]);
 		}
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

@@ -47,16 +47,7 @@ public class AttachBriefcaseFile extends CommonTest {
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+		super.zLogin();
 	}
 
 	//--------------------------------------------------------------------------
@@ -66,7 +57,7 @@ public class AttachBriefcaseFile extends CommonTest {
 	public void attachBriefcaseFileInMail(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		String[] attachment = attachments.split(",");
 		uploadFile(attachments);
@@ -136,7 +127,7 @@ public class AttachBriefcaseFile extends CommonTest {
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		String[] attachment = attachments.split(",");
 		uploadFile(attachments);
@@ -266,7 +257,7 @@ public class AttachBriefcaseFile extends CommonTest {
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
+	private void handleRetry1() throws Exception {
 		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 		j = 0;

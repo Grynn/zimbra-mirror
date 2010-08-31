@@ -33,25 +33,15 @@ public class ReplyAllMail extends CommonTest {
 		}
 
 	}
-
 	//--------------------------------------------------------------------------
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		zGoToApplication("Mail");
-		SelNGBase.isExecutionARetry.set(false);
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
@@ -110,14 +100,5 @@ public class ReplyAllMail extends CommonTest {
 				attachments);
 
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

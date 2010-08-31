@@ -65,24 +65,13 @@ public class Drafts extends CommonTest {
 		return new Object[][] { { "_selfAccountName_", "ccuser@testdomain.com",
 				"bccuser@testdomain.com", draftSubject, draftBody, "" } };
 	}
-
 	//--------------------------------------------------------------------------
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		page.zMailApp.zNavigateToMailApp();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
 
 	//--------------------------------------------------------------------------
@@ -418,12 +407,6 @@ public class Drafts extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
-	// for those tests that just needs relogin..
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		zLogin();
-	}
 
 	private void saveDraftNoAlertOnCancel_retry() throws Exception {
 		SelNGBase.isExecutionARetry.set(false);

@@ -113,21 +113,11 @@ public class ModifySharedFolderRole extends CommonTest {
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		obj.zButton.zClick(page.zMailApp.zMailTabIconBtn);
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
-
-	@SuppressWarnings("unused")
-	@BeforeMethod(groups = { "always" })
-	private void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
@@ -388,14 +378,5 @@ public class ModifySharedFolderRole extends CommonTest {
 			obj.zFolder.zRtClick(mountingfoldername);
 			obj.zMenuItem.zIsEnabled(localize(locator.shareFolder));
 		}
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

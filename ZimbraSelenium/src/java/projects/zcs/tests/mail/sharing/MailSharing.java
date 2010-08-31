@@ -151,24 +151,16 @@ public class MailSharing extends CommonTest {
 		}
 	}
 
+
 	//--------------------------------------------------------------------------
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		obj.zButton.zClick(page.zMailApp.zMailTabIconBtn);
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
@@ -1133,14 +1125,5 @@ public class MailSharing extends CommonTest {
 		obj.zMessageItem.zExists(subject);
 
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

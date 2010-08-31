@@ -30,20 +30,15 @@ public class SendBtnNegativeTests extends CommonTest {
 						localize(locator.compSubjectMissing) } };
 	}
 
+	//--------------------------------------------------------------------------
+	// SECTION 2: SETUP
+	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	private void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	/**
 	 * Enters different invalid email address types and checks if alert/warning
 	 * dialog is thrown
@@ -99,13 +94,6 @@ public class SendBtnNegativeTests extends CommonTest {
 		page.zComposeView.zGoToMailAppFromCompose();
 		SelNGBase.needReset.set(false);// indicates no need to login for the
 										// next test
-	}
-
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		page.zComposeView.zGoToMailAppFromCompose();
-		zLogin();
 	}
 
 }

@@ -42,24 +42,16 @@ public class RemoveAttachment extends CommonTest {
 			return new Object[][] { { "" } };
 		}
 	}
-
+	
 	//--------------------------------------------------------------------------
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
+	
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
@@ -67,7 +59,7 @@ public class RemoveAttachment extends CommonTest {
 	public void removingAttachmentFromMessage(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
@@ -146,7 +138,7 @@ public class RemoveAttachment extends CommonTest {
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
@@ -244,7 +236,7 @@ public class RemoveAttachment extends CommonTest {
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		checkForSkipException("all", "na", "na",
 				"'Invalid key code' exception while upload file");
@@ -293,7 +285,7 @@ public class RemoveAttachment extends CommonTest {
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
+			handleRetry1();
 
 		checkForSkipException("all", "na", "na",
 				"'Invalid key code' exception while upload file");
@@ -378,7 +370,7 @@ public class RemoveAttachment extends CommonTest {
 	// SECTION 4: RETRY-METHODS
 	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
+	private void handleRetry1() throws Exception {
 		SelNGBase.isExecutionARetry.set(false);
 		zLogin();
 		j = 0;
