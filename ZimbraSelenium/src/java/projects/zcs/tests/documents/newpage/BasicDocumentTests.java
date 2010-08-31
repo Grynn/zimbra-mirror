@@ -53,18 +53,9 @@ public class BasicDocumentTests extends CommonTest {
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		page.zDocumentCompose.zNavigateToDocument();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="documents";
+		super.zLogin();
 	}
 
 	/**
@@ -231,15 +222,5 @@ public class BasicDocumentTests extends CommonTest {
 				"The page is Saved.However it should not");
 
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// for those tests that just needs relogin..
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		// page.zCalendarView.zCancelAptInBtw();
-		zLogin();
 	}
 }

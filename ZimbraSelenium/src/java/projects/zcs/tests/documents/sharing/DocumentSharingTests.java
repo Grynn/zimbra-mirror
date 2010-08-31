@@ -63,23 +63,14 @@ public class DocumentSharingTests extends CommonTest {
 		}
 	}
 
+
 	// --------------
 	// section 2 BeforeClass
 	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		page.zDocumentCompose.zNavigateToDocument();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@SuppressWarnings("unused")
-	@BeforeMethod(groups = { "always" })
-	private void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="documents";
+		super.zLogin();
 	}
 
 	/**
@@ -347,14 +338,5 @@ public class DocumentSharingTests extends CommonTest {
 				localize(locator.shareWithPublic), "", role, "", "", "");
 		obj.zButton.zClickInDlg(localize(locator.ok));
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }
