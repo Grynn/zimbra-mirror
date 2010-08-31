@@ -46,12 +46,15 @@ public class Autocomplete extends CommonTest {
 	// --------------------------------------------------------------------------
 	// SECTION 2: SETUP
 	// --------------------------------------------------------------------------
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		zGoToApplication("Mail");
-		SelNGBase.isExecutionARetry.set(false);
+		super.NAVIGATION_TAB="calendar";
+		super.zLogin();
 	}
+
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
@@ -296,14 +299,5 @@ public class Autocomplete extends CommonTest {
 			pressKeys(first + "," + second + "," + third + "," + fourth + ","
 					+ fifth + "," + sixth);
 		}
-	}
-
-	// --------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	// --------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

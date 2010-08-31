@@ -35,19 +35,13 @@ public class CalendarBugs extends CommonTest {
 		}
 	}
 
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SleepUtil.sleep(2000);
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="calendar";
+		super.zLogin();
 	}
 
 	@Test(dataProvider = "apptCreateDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -220,10 +214,5 @@ public class CalendarBugs extends CommonTest {
 		obj.zAppointment.zNotExists(subject);
 
 		SelNGBase.needReset.set(false);
-	}
-
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

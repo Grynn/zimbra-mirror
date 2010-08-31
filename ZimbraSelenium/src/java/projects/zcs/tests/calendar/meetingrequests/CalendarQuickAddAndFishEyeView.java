@@ -70,20 +70,13 @@ public class CalendarQuickAddAndFishEyeView extends CommonTest {
 					getLocalizedData(3) } };
 		}
 	}
-
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		page.zCalApp.zNavigateToCalendar();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="calendar";
+		super.zLogin();
 	}
 
 	/**
@@ -697,10 +690,5 @@ public class CalendarQuickAddAndFishEyeView extends CommonTest {
 			}
 		}
 		// }
-	}
-
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

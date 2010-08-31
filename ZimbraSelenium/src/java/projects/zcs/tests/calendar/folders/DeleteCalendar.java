@@ -30,20 +30,13 @@ public class DeleteCalendar extends CommonTest {
 		}
 	}
 
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SleepUtil.sleep(2000);
-		page.zCalApp.zNavigateToCalendar();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="calendar";
+		super.zLogin();
 	}
 
 	/**
@@ -63,10 +56,4 @@ public class DeleteCalendar extends CommonTest {
 		SelNGBase.needReset.set(false);
 	}
 
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		page.zComposeView.zGoToMailAppFromCompose();
-		zLogin();
-	}
 }

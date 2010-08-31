@@ -42,19 +42,13 @@ public class EditMeetingRequest extends CommonTest {
 		}
 	}
 
+	// --------------
+	// section 2 BeforeClass
+	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SleepUtil.sleep(2000);
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="calendar";
+		super.zLogin();
 	}
 
 	/**
@@ -270,10 +264,5 @@ public class EditMeetingRequest extends CommonTest {
 		String browser = ZimbraSeleniumProperties.getStringProperty("browser");
 		if (browser.equals("SF"))
 			SleepUtil.sleep(2000);
-	}
-
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

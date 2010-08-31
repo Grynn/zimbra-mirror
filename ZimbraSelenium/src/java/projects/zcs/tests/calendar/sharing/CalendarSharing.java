@@ -100,19 +100,9 @@ public class CalendarSharing extends CommonTest {
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		page.zCalApp.zNavigateToCalendar();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@SuppressWarnings("unused")
-	@BeforeMethod(groups = { "always" })
-	private void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="calendar";
+		super.zLogin();
 	}
 
 	//--------------------------------------------------------------------------
@@ -607,14 +597,5 @@ public class CalendarSharing extends CommonTest {
 				obj.zAppointment.zNotExists(apptSubject);
 			}
 		}
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }
