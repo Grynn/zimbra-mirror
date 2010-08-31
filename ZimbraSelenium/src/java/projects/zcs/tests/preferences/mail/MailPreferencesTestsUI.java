@@ -40,7 +40,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 	// Before Class
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
+	public void zLogin() throws Exception {
 		zLoginIfRequired();
 
 		String accountName = SelNGBase.selfAccountName.get();
@@ -88,11 +88,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 		ProvZCS.modifyAccount(accountName, "zimbraPrefOutOfOfficeReplyEnabled",
 				"FALSE");
 
-		// selenium.refresh();
-		zReloginToAjax();
-
-		SleepUtil.sleep(5000);
-		SelNGBase.isExecutionARetry.set(false);
+		super.zLogin();
 	}
 
 	// Before method
@@ -754,11 +750,4 @@ public class MailPreferencesTestsUI extends CommonTest {
 	// else
 	// return key;
 	// }
-
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
-	}
-
 }

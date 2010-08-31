@@ -28,7 +28,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 
 	// Before Class
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
+	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		currentloggedinuser = SelNGBase.selfAccountName.get();
 		ProvZCS.modifyAccount(currentloggedinuser,
@@ -46,8 +46,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 							 * wait another 3 secs after we see the search
 							 * button
 							 */
-		zGoToApplication("Mail");
-		SelNGBase.isExecutionARetry.set(false);
+		super.zLogin();
 	}
 
 	// Before method
@@ -366,11 +365,5 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 		obj.zButton.zClick(zPrefSaveIconBtn);
 
 		SelNGBase.needReset.set(false);
-	}
-
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

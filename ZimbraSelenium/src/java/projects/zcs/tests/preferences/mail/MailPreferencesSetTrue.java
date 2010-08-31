@@ -87,7 +87,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 
 	// Before Class
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
+	public void zLogin() throws Exception {
 		zLoginIfRequired();
 
 		String accountName = SelNGBase.selfAccountName.get();
@@ -96,11 +96,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 		ProvZCS.modifyAccount(accountName, "zimbraPrefOpenMailInNewWindow",
 				"TRUE");
 
-		// selenium.refresh();
-		zReloginToAjax();
-
-		SleepUtil.sleep(5000);
-		SelNGBase.isExecutionARetry.set(false);
+		super.zLogin();
 	}
 
 	// Before method
@@ -416,12 +412,6 @@ public class MailPreferencesSetTrue extends CommonTest {
 		}
 
 		SelNGBase.needReset.set(false);
-	}
-
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 
 }

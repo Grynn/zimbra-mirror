@@ -36,22 +36,10 @@ public class SignatureBug extends CommonTest {
 		}
 	}
 
-	// --------------
-	// section 2 BeforeClass
-	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@SuppressWarnings("unused")
-	@BeforeMethod(groups = { "always" })
-	private void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
 
 	// Tests
@@ -189,12 +177,6 @@ public class SignatureBug extends CommonTest {
 		obj.zMessageItem.zExists(subject);
 
 		SelNGBase.needReset.set(false);
-	}
-
-	private void handleRetry() throws Exception {
-		// TODO Auto-generated method stub
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		zLogin();
 	}
 
 }

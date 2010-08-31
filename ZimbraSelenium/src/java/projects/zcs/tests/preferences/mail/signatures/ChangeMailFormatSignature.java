@@ -63,22 +63,10 @@ public class ChangeMailFormatSignature extends CommonTest {
 			return new Object[][] { {} };
 	}
 
-	// --------------
-	// section 2 BeforeClass
-	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@SuppressWarnings("unused")
-	@BeforeMethod(groups = { "always" })
-	private void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
 
 	// Tests
@@ -445,12 +433,6 @@ public class ChangeMailFormatSignature extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
-	}
-
-	private void handleRetry() throws Exception {
-		// TODO Auto-generated method stub
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		zLogin();
 	}
 
 }

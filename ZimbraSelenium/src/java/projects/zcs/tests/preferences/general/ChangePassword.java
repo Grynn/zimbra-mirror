@@ -28,22 +28,16 @@ public class ChangePassword extends CommonTest {
 
 	}
 
-	// --------------
-	// section 2 BeforeClass
-	// --------------
-	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
-	}
 
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	//--------------------------------------------------------------------------
+	// SECTION 2: SETUP
+	//--------------------------------------------------------------------------
+	@BeforeClass(groups = { "always" })
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
+	
 
 	@Test(dataProvider = "GeneralPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void WrongOldPassword() throws Exception {
@@ -117,11 +111,5 @@ public class ChangePassword extends CommonTest {
 
 		SelNGBase.needReset.set(false);
 
-	}
-
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

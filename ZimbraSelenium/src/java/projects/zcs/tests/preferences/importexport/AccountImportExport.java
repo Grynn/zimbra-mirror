@@ -71,20 +71,12 @@ public class AccountImportExport extends CommonTest {
 	// Section 1 : BeforeClass
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
+	public void zLogin() throws Exception {
 		resetSession();
 		String acc1 = ProvZCS.getRandomAccount();
 		SelNGBase.selfAccountName.set(acc1);
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
 		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
 	}
 
 	//--------------------------------------------------------------------------
@@ -399,14 +391,5 @@ public class AccountImportExport extends CommonTest {
 		// verify file in new briefcase folder
 		obj.zFolder.zClick(newBriefcaseFolder);
 		obj.zBriefcaseItem.zExists(fileNewBriefcaseFolder);
-	}
-
-	//--------------------------------------------------------------------------
-	// Section 3: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// for those tests that just needs re login..
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		zLogin();
 	}
 }

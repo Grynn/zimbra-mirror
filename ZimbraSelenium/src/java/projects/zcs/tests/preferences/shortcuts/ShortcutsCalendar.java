@@ -47,24 +47,12 @@ public class ShortcutsCalendar extends CommonTest {
 		}
 	}
 
-	// Before Class
+
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-
-		zLoginIfRequired();
-		SleepUtil.sleep(2000);
-
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 		String[] recipients = { SelNGBase.selfAccountName.get() };
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	// Before method
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -246,13 +234,6 @@ public class ShortcutsCalendar extends CommonTest {
 	
 	public Boolean getElementStatus(String className, String day) throws Exception{
 		return(SelNGBase.selenium.get().isElementPresent("//*[contains(@class,'"+className+"') and contains(text(),'"+day+"')]"));
-	}
-
-
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 
 }

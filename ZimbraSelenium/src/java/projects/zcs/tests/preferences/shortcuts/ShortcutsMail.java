@@ -67,7 +67,7 @@ public class ShortcutsMail extends CommonTest {
 
 	// Before Class
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
+	public void zLogin() throws Exception {
 
 		zLoginIfRequired();
 		SleepUtil.sleep(2000);
@@ -82,15 +82,6 @@ public class ShortcutsMail extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("flag message");
 
 		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	// Before method
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
@@ -383,12 +374,4 @@ public class ShortcutsMail extends CommonTest {
 
 	
 	
-	
-	
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
-	}
-
 }

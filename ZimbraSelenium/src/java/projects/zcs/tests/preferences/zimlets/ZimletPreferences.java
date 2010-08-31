@@ -25,20 +25,12 @@ public class ZimletPreferences extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 1: SETUP
 	//--------------------------------------------------------------------------
-	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		zGoToApplication("Preferences");
-		zGoToPreferences("Zimlets");
-		SelNGBase.isExecutionARetry.set(false);
-	}
 
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
+	@BeforeClass(groups = { "always" })
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="preferences";
+		super.zLogin();
+		zGoToPreferences("Zimlets");
 	}
 
 	//--------------------------------------------------------------------------
@@ -90,14 +82,5 @@ public class ZimletPreferences extends CommonTest {
 		
 
 		SelNGBase.needReset.set(false);
-	}
-
-	//--------------------------------------------------------------------------
-	// SECTION 3: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

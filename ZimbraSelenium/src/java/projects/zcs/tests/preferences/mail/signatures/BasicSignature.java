@@ -41,24 +41,11 @@ public class BasicSignature extends CommonTest {
 		}
 	}
 
-	// --------------
-	// section 2 BeforeClass
-	// --------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
 	}
-
-	@SuppressWarnings("unused")
-	@BeforeMethod(groups = { "always" })
-	private void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
 	// Tests
 
 	/**
@@ -369,11 +356,5 @@ public class BasicSignature extends CommonTest {
 		Assert.assertFalse(SelNGBase.selenium.get().isTextPresent(signatureBody));
 		
 		SelNGBase.needReset.set(false);
-	}
-
-	private void handleRetry() throws Exception {
-		// TODO Auto-generated method stub
-		SelNGBase.isExecutionARetry.set(false);// reset this to false
-		zLogin();
 	}
 }

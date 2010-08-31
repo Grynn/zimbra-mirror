@@ -119,12 +119,12 @@ public class Filter extends CommonTest {
 	// SECTION 2: SETUP
 	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		zGoToApplication("Preferences");
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="Preferences";
+		super.zLogin();
 		obj.zTab.zClick(localize(locator.filterRules));
-		SelNGBase.isExecutionARetry.set(false);
 	}
+
 
 	@BeforeMethod(groups = { "always" })
 	public void zResetIfRequired() throws Exception {
@@ -783,12 +783,4 @@ public class Filter extends CommonTest {
 		}
 	}
 
-	//--------------------------------------------------------------------------
-	// SECTION 4: RETRY-METHODS
-	//--------------------------------------------------------------------------
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
-	}
 }

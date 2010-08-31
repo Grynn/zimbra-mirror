@@ -25,7 +25,7 @@ public class GeneralPreferencesSetTrue extends CommonTest {
 
 	// Before Class
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
+	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		currentloggedinuser = SelNGBase.selfAccountName.get();
 		ProvZCS.modifyAccount(currentloggedinuser,
@@ -407,11 +407,5 @@ public class GeneralPreferencesSetTrue extends CommonTest {
 				"Briefcase list item check box still showing though 'Display checkboxes to quickly select items in lists' general preference is TRUE");
 
 		SelNGBase.needReset.set(false);
-	}
-
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 }

@@ -86,22 +86,14 @@ public class ShortcutsGeneral extends CommonTest {
 		}
 	}
 
-	// Before Class
+
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
-		zLoginIfRequired();
-		SleepUtil.sleep(2000);
-		SelNGBase.isExecutionARetry.set(false);
+	public void zLogin() throws Exception {
+		super.NAVIGATION_TAB="mail";
+		super.zLogin();
+		String[] recipients = { SelNGBase.selfAccountName.get() };
 	}
 
-	// Before method
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void shortcutsGoToApp(int keyToPress, String toVerify)
@@ -505,9 +497,4 @@ public class ShortcutsGeneral extends CommonTest {
 		SelNGBase.needReset.set(false);
 	}
 
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
-	}
 }

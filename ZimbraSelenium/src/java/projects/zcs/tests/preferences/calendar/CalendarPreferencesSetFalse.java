@@ -51,7 +51,7 @@ public class CalendarPreferencesSetFalse extends CommonTest {
 
 	// Before Class
 	@BeforeClass(groups = { "always" })
-	private void zLogin() throws Exception {
+	public void zLogin() throws Exception {
 		zLoginIfRequired();
 
 		String accountName = SelNGBase.selfAccountName.get();
@@ -72,20 +72,9 @@ public class CalendarPreferencesSetFalse extends CommonTest {
 				"zimbraPrefCalendarApptReminderWarningTime", "0");
 
 //		selenium.refresh();
-		zReloginToAjax();
-
-		SleepUtil.sleep(5000);
-		SelNGBase.isExecutionARetry.set(false);
+		super.zLogin();
 	}
 
-	// Before method
-	@BeforeMethod(groups = { "always" })
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
 
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void zCalendarPrefShowMiniCal() throws Exception {
@@ -151,12 +140,6 @@ public class CalendarPreferencesSetFalse extends CommonTest {
 
 		obj.zDialog.zNotExists(localize(locator.apptReminders));
 		SelNGBase.needReset.set(false);
-	}
-
-	// since all the tests are independent, retry is simply kill and re-login
-	private void handleRetry() throws Exception {
-		SelNGBase.isExecutionARetry.set(false);
-		zLogin();
 	}
 
 }
