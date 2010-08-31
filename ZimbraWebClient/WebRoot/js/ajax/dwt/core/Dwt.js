@@ -1244,12 +1244,18 @@ function(tagName) {
 
 Dwt.show =
 function(it) {
-	Dwt.setVisible(Dwt.byId(it),true);
+	var el = Dwt.byId(it);
+	if (el) {
+		Dwt.setVisible(el,true);
+	}
 };
 
 Dwt.hide =
 function(it) {
-	Dwt.setVisible(Dwt.byId(it),false);
+	var el = Dwt.byId(it);
+	if (el) {
+		Dwt.setVisible(el,false);
+	}
 };
 
 Dwt.toggle =
