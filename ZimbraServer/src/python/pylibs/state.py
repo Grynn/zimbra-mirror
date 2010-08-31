@@ -46,6 +46,7 @@ class State:
 		"imapproxy" : 50,
 		"antispam"  : 60,
 		"antivirus" : 70,
+    "cbpolicyd" : 72,
 		"amavis"    : 75,
 		"archiving" : 80,
 		"snmp"      : 90,
@@ -788,7 +789,7 @@ class State:
 				replace = ""
 			fields = st.split(' ',2)
 			(type,key) = fields[1].split(':')
-			val = self.lookUpConfig(type, key)
+			val = str(self.lookUpConfig(type, key))
 			replace = replace or fields[2]
 			if fields[2] in val:
 				val = replace

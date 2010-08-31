@@ -1,0 +1,101 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# 
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005, 2006, 2007 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Yahoo! Public License
+# Version 1.0 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# 
+# ***** END LICENSE BLOCK *****
+# 
+
+if [ x`whoami` != xzimbra ]; then
+  echo Error: must be run as zimbra user
+  exit 1
+fi
+
+source `dirname $0`/../bin/zmshutil || exit 1
+zmsetvars \
+  zimbra_home \
+  zimbra_log_directory \
+  cbpolicyd_pid_file \
+  cbpolicyd_db_file
+
+pidfile=${cbpolicyd_pid_file:=${zimbra_log_directory}/cbpolicyd.pid}
+dbfile=${cbpolicyd_db_file:=${zimbra_home}/data/cbpolicyd/db/cbpolicyd.sqlitedb}
+dbdir=$(dirname $dbfile)
+cbpolicyDir=${zimbra_home}/cbpolicyd
+sqlite3=$(which sqlite3)
+
+if [ x${sqlite3} = "x" ]; then
+  echo "cbpolicyd requires sqlite3 to be installed."
+  exit 1
+fi
+
+if [ ! -d $dbdir ]; then
+  mkdir -p $dbdir
+  if [ $? = 0 ]; then
+    exit 1
+  fi 
+fi
+
+initCBPolicyd() {
+  if [ -f ${dbfile} ]; then
+    if [ x"$force" = "x" ]; then
+      echo "Must use -force to overwrite existing database."
+      exit 1;
+    else
+      rm -f $dbfile
+    fi
+  fi
+  echo -n "Converting policyd database templates to sqlite..."
+  for i in core.tsql access_control.tsql quotas.tsql checkhelo.tsql checkspf.tsql greylisting.tsql; do
+    ${cbpolicyDir}/share/database/convert-tsql sqlite ${cbpolicyDir}/share/database/$i | sed -e '/^#/d'
+  done > ${dbfile}.sq3
+  if [ $? != 0 ]; then
+    echo "failed."
+    exit 1
+  else 
+    echo "done."
+  fi
+ 
+  echo -n "Creating sqlite database..."  
+  ${sqlite3} ${dbfile} < ${dbfile}.sq3
+  if [ $? != 0 ]; then
+    echo "failed."
+    exit 1
+  else
+    echo "done."
+  fi
+}
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -f|--force|-force)
+      force=1
+      shift
+      ;;
+    -h|-help|--help|help)
+      echo "$0 initializes the sqlite database for cbpolicyd"
+      echo "Usage: $0 [-force]"
+      exit
+      ;;
+    *)
+      echo "Unknown option $1"
+      echo "Usage: $0 [-force]"
+      exit 1
+      ;;
+  esac
+done
+
+initCBPolicyd
+exit 0
+  
+

@@ -47,6 +47,7 @@ exe = {
 	'SNMP'          : "bin/zmswatchctl",
 	'LOGGER'        : "bin/zmloggerctl",
 	'MAILBOX'       : "bin/zmstorectl",
+  'CBPOLICYD'     : "bin/zmcbpolicydctl",
 	'PROXYGEN'      : "bin/zmproxyconfgen",
 	'CONVERTD'      : "bin/zmconvertctl",
 	'LDAPHELPER'    : "bin/ldapHelper.pl",
@@ -384,6 +385,11 @@ commands = {
 		desc = "amavis",
 		name = "amavis",
 		cmd  = exe["AMAVIS"] + " %s",
+	),
+	"cbpolicyd" : Command(
+		desc = "cbpolicyd",
+		name = "cbpolicyd",
+		cmd  = exe["CBPOLICYD"] + " %s",
 	),
 	"sasl" : Command(
 		desc = "sasl",

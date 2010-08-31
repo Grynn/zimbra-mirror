@@ -57,6 +57,7 @@ my %startorder = (
 	"antispam" 	=> 60,
 	"antivirus"	=> 70,
 	"archiving"	=> 80,
+  "cbpolicyd" => 85,
 	"snmp" 		=> 90,
 	"spell" 	=> 100,
 	"mta" 		=> 110,
@@ -78,6 +79,7 @@ my %allservices = (
 	"imapproxy" => "/opt/zimbra/bin/zmproxyctl",
 	"stats" => "/opt/zimbra/bin/zmstatctl",
 	"zmconfigd" => "/opt/zimbra/bin/zmconfigdctl",
+  "cbpolicyd" => "/opt/zimbra/bin/zmcbpolicydctl",
 );
 
 my %rewrites = ( 

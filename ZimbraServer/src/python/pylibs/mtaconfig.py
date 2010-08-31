@@ -185,7 +185,8 @@ class MtaConfig():
 							Log.logMsg(5, "Adding to postconf commands: \'%s\' %s=\'%s\'" % (ln, fields[1], val))
 							section.postconf(fields[1],val)
 						else:
-							section.postconf(fields[1],fields[2])
+							value = " ".join(fields[2:len(fields)]);
+							section.postconf(fields[1],value)
 					else:
 						section.postconf(fields[1],"")
 				elif re.match(r"PROXYGEN", ln):
@@ -214,7 +215,8 @@ class MtaConfig():
 										Log.logMsg(5, "Adding to postconf commands: \'%s\' %s=\'%s\'" % (ln, fields[1], val))
 										section.postconf(fields[1],val)
 									else:
-										section.postconf(fields[1],fields[2])
+										value = " ".join(fields[2:len(fields)]);
+										section.postconf(fields[1],value)
 								else:
 									section.postconf(fields[1],"")
 							elif re.match(r"VAR|LOCAL", ln):

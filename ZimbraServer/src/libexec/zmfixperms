@@ -46,6 +46,7 @@ components="\
   amavisd \
   aspell \
   bdb \
+  cbpolicyd \
   clamav \
   curl \
   cyrus-sasl \
@@ -334,6 +335,21 @@ if [ -d ${zimbra_home}/db ]; then
   fi
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/db
   chmod 444 ${zimbra_home}/db/*.sql ${zimbra_home}/db/*.sql.in
+fi
+
+if [ -L ${zimbra_home}/cbpolicyd ]; then
+  if [ -d ${zimbra_home}/cbpolicyd/bin ]; then
+    for i in ${zimbra_home}/cbpolicyd/bin/*; do
+      chmod 755 ${i}
+    done
+  fi
+    
+  for i in data/cbpolicyd data/cbpolicyd/db; do
+    if [ ! -d "${zimbra_home}/${i}" ]; then
+      mkdir -p ${zimbra_home}/${i}
+    fi
+  done
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/cbpolicyd
 fi
 
 if [ -L ${zimbra_home}/cyrus-sasl ]; then

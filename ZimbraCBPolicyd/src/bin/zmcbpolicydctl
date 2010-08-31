@@ -24,15 +24,16 @@ fi
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
   zimbra_home \
-  zimbra_log_directory
-  cbpolicyd_pid_file
+  zimbra_log_directory \
+  cbpolicyd_pid_file \
   cbpolicyd_db_file
 
-pidfile=$(cbpolicyd_pid_file:=${zimbra_log_directory}/cbpolicyd.pid)
-dbfile=$(cbpolicyd_db_file:=${zimbra_home}/data/cbpolicyd/db/cbpolicyd.sqlitedb)
+pidfile=${cbpolicyd_pid_file:=${zimbra_log_directory}/cbpolicyd.pid}
+dbfile=${cbpolicyd_db_file:=${zimbra_home}/data/cbpolicyd/db/cbpolicyd.sqlitedb}
+
 
 rewriteconfig() {
-  /opt/zimbra/libexec/zmmtaconfig cbpolicyd > /dev/null 2>&1
+  /opt/zimbra/libexec/configrewrite cbpolicyd > /dev/null 2>&1
 }
 
 getpid() {
@@ -74,14 +75,14 @@ case "$1" in
     else
       if [ ! -d /opt/zimbra/data/cbpolicyd/db ]; then
         mkdir /opt/zimbra/data/cbpolicyd/db
-        if [ ! -f ${dbfile} ]; then
-          ${zimbra_home}/libexec/zmcbpolicydinit
-        fi
+      fi
+      if [ ! -f ${dbfile} ]; then
+        ${zimbra_home}/libexec/zmcbpolicydinit
       fi
       if [ x$2 = "x" ]; then
         rewriteconfig
       fi
-      ${zimbra_home}/cluebringer/bin/cbpolicyd --config ${zimbra_home}/conf/cbpolicyd 2> /dev/null
+      ${zimbra_home}/cbpolicyd/bin/cbpolicyd --config ${zimbra_home}/conf/cbpolicyd.conf 2> /dev/null
       for ((i=0; i < 30; i++)); do
         checkrunning
         if [ $RUNNING = 1 ]; then 
