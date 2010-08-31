@@ -31,8 +31,6 @@ import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
 import projects.zcs.CoreObjects;
@@ -74,7 +72,6 @@ public class CommonTest extends SelNGBase {
 	public static CoreObjects obj;
 	public static PageObjects page;
 	public static Locators locator;
-	public String NAVIGATION_TAB="mail";
 	public static String CODE_COVERAGE_DIRECTORY_PATH = "CODECOVERAGE\\jscoverage.json";
 	public static String COVERAGE_SCRIPT = "if (! window.jscoverage_report) {\n"
 			+ "  window.jscoverage_report = function jscoverage_report(dir) {\n"
@@ -319,21 +316,6 @@ public class CommonTest extends SelNGBase {
 		out.close();
 	}
 
-	public void zLogin() throws Exception {
-		zLoginIfRequired();
-		zGoToApplication(NAVIGATION_TAB);
-		SelNGBase.isExecutionARetry.set(false);
-	}
-
-	@BeforeMethod
-	public void zResetIfRequired() throws Exception {
-		if (SelNGBase.needReset.get() && !SelNGBase.isExecutionARetry.get()) {
-			zLogin();
-		}
-		SelNGBase.needReset.set(true);
-	}
-
-	
 	@AfterSuite(groups = { "always" })
 	public void cleanup() throws HarnessException {
 		SeleniumService.getInstance().stopSeleniumServer();
