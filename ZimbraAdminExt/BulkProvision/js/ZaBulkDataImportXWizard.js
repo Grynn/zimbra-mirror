@@ -291,6 +291,12 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
             this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_no_bulk_file_specified) ;
         }
         this.goPage(ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS);
+	} else if (cStep == ZaBulkDataImportXWizard.STEP_ACCT_PICKER) {
+		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_account])) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_MUST_SELECT_ACCOUNTS);
+			return;
+		}		
+		this.goPage(ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS);
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_LDAP_INFO) {
 			//check LDAP fields and move on to entering IMAP options
 			/**
@@ -361,8 +367,11 @@ ZaBulkDataImportXWizard.prototype.goPrev =
 	    } else if (cStep == ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS) {
 	    	if(this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_XML) {
 				prevStep = ZaBulkDataImportXWizard.STEP_FILE_UPLOAD;	    		
-	    	} else if(this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_LDAP || this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_AD) {
+	    	} else if(this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_LDAP 
+	    			|| this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_AD) {
 	    		prevStep = ZaBulkDataImportXWizard.STEP_LDAP_INFO;
+	    	} else if(this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_ZIMBRA) {
+	    		prevStep = ZaBulkDataImportXWizard.STEP_ACCT_PICKER;
 	    	}
 	    	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	    	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
@@ -515,17 +524,17 @@ ZaBulkDataImportXWizard.srchAccountsClbck = function (resp) {
 			var response = resp.getResponse().Body.SearchDirectoryResponse;
 			var list = new ZaItemList(null);	
 			list.loadFromJS(response);
-			this._localXForm.getModel().setInstanceValue(this._localXForm.getInstance(),ZaBulkProvision.A2_accountPool,list.getArray());
+			this._localXForm.setInstanceValue(list.getArray(),ZaBulkProvision.A2_accountPool);
 			//instance[ZaBulkProvision.A2_accountPool] = list.getArray();
 			var poolNumPages = Math.ceil(response.searchTotal/ZaSettings.RESULTSPERPAGE);
-			this._localXForm.getModel().setInstanceValue(this._localXForm.getInstance(),ZaBulkProvision.A2_poolNumPages,poolNumPages);
+			this._localXForm.setInstanceValue(poolNumPages,ZaBulkProvision.A2_poolNumPages);
 			//instance.poolNumPages = poolNumPages;
 		}
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaBulkDataImportXWizard.srchAccountsClbck");	
 	}	
 	
-	this._localXForm.getModel().setInstanceValue(this._localXForm.getInstance(),ZaBulkProvision.A2_activateSearch,1);
+	this._localXForm.setInstanceValue(1,ZaBulkProvision.A2_activateSearch);
 	//this._localXForm.setInstance(instance);	
 }
 
@@ -848,8 +857,8 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 							enableDisableChangeEventSources:[ZaBulkProvision.A2_activateSearch]					   
 						},
 						{type:_OUTPUT_, value:com_zimbra_bulkprovision.AccountsForDataImport,visibilityChecks:[]},
-	 				    {ref: ZaBulkDataImportXWizard.A2_accountPool, type:_DWT_LIST_, height:"200px", width:"170px", 
-	 				    	cssClass: "DLSource", bmosnr:true,
+	 				    {ref:ZaBulkProvision.A2_accountPool, type:_DWT_LIST_, height:"200px", width:"170px", 
+	 				    	cssClass: "DLSource", bmolsnr:true,
 	 				    	widgetClass:ZaAccMiniListView, headerList:sourceHeaderList,
 	 				    	rowSpan:4,hideHeader:true,
 	 				    	onSelection:ZaBulkDataImportXWizard.accPoolSelectionListener,
@@ -861,7 +870,7 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 							enableDisableChangeEventSources:[ZaBulkProvision.A2_accountPool]						   
 						},
 	 				    {ref: ZaBulkProvision.A2_account, type:_DWT_LIST_, height:"200px", width:"170px", 
-	 				    	cssClass: "DLSource", 
+	 				    	cssClass: "DLSource", bmolsnr:true,
 	 				    	widgetClass:ZaAccMiniListView, headerList:sourceHeaderList,
 	 				    	rowSpan:5,hideHeader:true,
 	 				    	onSelection:ZaBulkDataImportXWizard.accTargetSelectionListener,
@@ -873,7 +882,7 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 						   enableDisableChangeEventSources:[ZaBulkProvision.A2_src_acct_selection_pool]
 						}, 
 						{type:_DWT_BUTTON_, label:AjxMsg.remove, width:"80px",
-						   onActivate:ZaBulkDataImportXWizard.removeButtonHndlr,bmosnr:true,
+						   onActivate:ZaBulkDataImportXWizard.removeButtonHndlr,bmolsnr:true,
 						   enableDisableChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_tgt_acct_selection_pool]],
 						   enableDisableChangeEventSources:[ZaBulkProvision.A2_tgt_acct_selection_pool]
 						}, 

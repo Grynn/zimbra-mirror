@@ -224,8 +224,8 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_sourceType, type:_ENUM_, ref:ZaBulkProvision.A2_sourceType, choices:ZaBulkProvision.AccountListSourceTypeChoices},
 	        {id:ZaBulkProvision.A2_connectionType, type:_ENUM_, ref:ZaBulkProvision.A2_connectionType, choices:ZaBulkProvision.IMAPConnectionTypeChoices},
 	        {id:ZaBulkProvision.A2_op, type:_STRING_, ref:ZaBulkProvision.A2_op},
-	        {id:ZaBulkProvision.A2_account,type:_LIST_,ref:ZaBulkProvision.A2_account,listItem:{type:_OBJECT_, items:ZaAccount.myXModel.items}},
-	        {id:ZaBulkProvision.A2_accountPool,type:_LIST_,ref:ZaBulkProvision.A2_account,listItem:{type:_OBJECT_, items:ZaAccount.myXModel.items}},
+	        {id:ZaBulkProvision.A2_account,type:_LIST_,ref:ZaBulkProvision.A2_account},
+	        {id:ZaBulkProvision.A2_accountPool,type:_LIST_,ref:ZaBulkProvision.A2_accountPool},
 	        //exchange migration wizard
 	        {id:ZaBulkProvision.A2_TargetDomainName, type:_STRING_, ref:ZaBulkProvision.A2_TargetDomainName},
 	        {id:ZaBulkProvision.A2_importMails, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_importMails},
