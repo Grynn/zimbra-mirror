@@ -8,6 +8,7 @@ import org.apache.log4j.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PatternLayout;
+import org.testng.IClass;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -45,7 +46,20 @@ public class SkippedTestListener implements ITestListener {
 	@Override
 	public void onTestSkipped(ITestResult result) {
 		skippedCount++;
-		resultsLog.info("Skipped: " + result.getTestClass().getName() + "." + result.getName() + " -- " + result.getThrowable().getMessage());
+		StringBuffer sb = new StringBuffer("Skipped: ");
+		if(result!=null){
+			IClass clazz = result.getTestClass();
+			if (clazz != null) {
+				sb.append(clazz.getName() + "." + result.getName() + " -- ");
+			}
+		
+			Throwable t = result.getThrowable();
+			if (t != null)
+			{
+				sb.append(t.getMessage());	
+			}			
+		}
+		resultsLog.info(sb);
 	}
 
 
