@@ -20,21 +20,17 @@ import java.util.MissingResourceException;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Set;
-
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
-
 import org.clapper.util.text.HTMLUtil;
 import org.testng.Assert;
 import org.testng.SkipException;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
-
 import projects.zcs.CoreObjects;
 import projects.zcs.Locators;
 import projects.zcs.PageObjects;
@@ -43,6 +39,7 @@ import framework.core.SelNGBase;
 import framework.core.SeleniumService;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
+import framework.util.ZMailboxUtil;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -74,7 +71,7 @@ public class CommonTest extends SelNGBase {
 	public static CoreObjects obj;
 	public static PageObjects page;
 	public static Locators locator;
-	public String NAVIGATION_TAB="mail";
+	public String NAVIGATION_TAB = "mail";
 	public static String CODE_COVERAGE_DIRECTORY_PATH = "CODECOVERAGE\\jscoverage.json";
 	public static String COVERAGE_SCRIPT = "if (! window.jscoverage_report) {\n"
 			+ "  window.jscoverage_report = function jscoverage_report(dir) {\n"
@@ -220,33 +217,51 @@ public class CommonTest extends SelNGBase {
 	}
 
 	/**
-	 * Check whether the current test method should be skipped due to locale/browser combination being tested<p>
-	 * <p>
-	 * all: when used for locales or browsers, skip for all locales or browsers<p>
-	 * <p>
-	 * na: when used for locales, then the locale being tested does not matter in determining if
-	 * the test should be skipped.  When used for browsers, then the browser being tested does not
-	 * matter in determining whether the test should be skipped. <p>
+	 * Check whether the current test method should be skipped due to
+	 * locale/browser combination being tested
 	 * <p>
 	 * <p>
-	 * Example: <p>
+	 * all: when used for locales or browsers, skip for all locales or browsers
 	 * <p>
-	 * public void TestMethod() { <p>
 	 * <p>
-	 *     // Check for current client config against skipped configs <p>
-	 *     checkForSkipException("ru,en_GB", "na", "3452,15232", "TestMethod feature not implemented for russian or britsh locales"); <p>
+	 * na: when used for locales, then the locale being tested does not matter
+	 * in determining if the test should be skipped. When used for browsers,
+	 * then the browser being tested does not matter in determining whether the
+	 * test should be skipped.
 	 * <p>
-	 *     // ... continue with test <p>
-	 * } <p>
 	 * <p>
-	 * @param locales a comma separated list of locales, or na, or all
-	 * @param browsers a comma separated list of browsers, or na, or all
-	 * @param bugs a comma separated list of bug numbers for reference
-	 * @param remark a short description why the method is skipped
+	 * <p>
+	 * Example:
+	 * <p>
+	 * <p>
+	 * public void TestMethod() {
+	 * <p>
+	 * <p>
+	 * // Check for current client config against skipped configs
+	 * <p>
+	 * checkForSkipException("ru,en_GB", "na", "3452,15232",
+	 * "TestMethod feature not implemented for russian or britsh locales");
+	 * <p>
+	 * <p>
+	 * // ... continue with test
+	 * <p>
+	 * }
+	 * <p>
+	 * <p>
+	 * 
+	 * @param locales
+	 *            a comma separated list of locales, or na, or all
+	 * @param browsers
+	 *            a comma separated list of browsers, or na, or all
+	 * @param bugs
+	 *            a comma separated list of bug numbers for reference
+	 * @param remark
+	 *            a short description why the method is skipped
 	 * @throws SkipException
 	 */
-	public void checkForSkipException(String locales, String browsers, String bugs, String remark) throws SkipException {
-		
+	public void checkForSkipException(String locales, String browsers,
+			String bugs, String remark) throws SkipException {
+
 		// Check for null
 		if (locales == null)
 			locales = "";
@@ -254,43 +269,53 @@ public class CommonTest extends SelNGBase {
 			browsers = "";
 
 		// Convert the comma separated lists to List<String> objects
-		List<String> localeList = Arrays.asList(locales.trim().toLowerCase().split(","));
-		List<String> browserList = Arrays.asList(browsers.toLowerCase().split(","));
-		
+		List<String> localeList = Arrays.asList(locales.trim().toLowerCase()
+				.split(","));
+		List<String> browserList = Arrays.asList(browsers.toLowerCase().split(
+				","));
+
 		// If either locales or browsers contains "all", then skip
 		// TODO: confirm this is what is meant by "all"
-		if ( localeList.contains("all") )
-			throw new SkipException(SkipReason("locales " + locales + " contains all", remark, bugs));
+		if (localeList.contains("all"))
+			throw new SkipException(SkipReason("locales " + locales
+					+ " contains all", remark, bugs));
 
-		if ( browserList.contains("all") )
-			throw new SkipException(SkipReason("browsers " + browsers + " contains all", remark, bugs));
-		
+		if (browserList.contains("all"))
+			throw new SkipException(SkipReason("browsers " + browsers
+					+ " contains all", remark, bugs));
+
 		// Determine which browser is being used during this test
-		String myLocale = ZimbraSeleniumProperties.getStringProperty("locale").trim().toLowerCase();
-		String myBrowser = ZimbraSeleniumProperties.getStringProperty("browser").trim().toLowerCase();
-		
+		String myLocale = ZimbraSeleniumProperties.getStringProperty("locale")
+				.trim().toLowerCase();
+		String myBrowser = ZimbraSeleniumProperties
+				.getStringProperty("browser").trim().toLowerCase();
+
 		// If locales contains "na", then just check the browser
-		if ( localeList.contains("na") ) {
+		if (localeList.contains("na")) {
 			// Locale does no matter, just check the browser
 			if (browserList.contains(myBrowser))
-				throw new SkipException(SkipReason("browsers " + browsers + " contains "+ myBrowser, remark, bugs));
+				throw new SkipException(SkipReason("browsers " + browsers
+						+ " contains " + myBrowser, remark, bugs));
 		}
-		
+
 		// If browsers contains "na", then just check the locale
-		if ( browserList.contains("na") ) {
+		if (browserList.contains("na")) {
 			// Browser does not matter, just check the locale
-			if ( localeList.contains(myLocale) )
-				throw new SkipException(SkipReason("locales " + locales + " contains " + myLocale, remark, bugs));	
+			if (localeList.contains(myLocale))
+				throw new SkipException(SkipReason("locales " + locales
+						+ " contains " + myLocale, remark, bugs));
 		}
-		
-		// Check the locale and browser combination.  Skip if both match.
-		if ( localeList.contains(myLocale) && browserList.contains(myBrowser) )
-			throw new SkipException(SkipReason("locales " + locales + " contains " + myLocale + " and browsers " + browsers + " contains " + myBrowser, remark, bugs));
-	
-		// Done.  Test should not be skipped.
-		
+
+		// Check the locale and browser combination. Skip if both match.
+		if (localeList.contains(myLocale) && browserList.contains(myBrowser))
+			throw new SkipException(SkipReason("locales " + locales
+					+ " contains " + myLocale + " and browsers " + browsers
+					+ " contains " + myBrowser, remark, bugs));
+
+		// Done. Test should not be skipped.
+
 	}
-	
+
 	// Format the SkipException message using the cause, remark and bugs
 	private String SkipReason(String reason, String remark, String bugs) {
 		StringBuilder sb = new StringBuilder();
@@ -299,8 +324,8 @@ public class CommonTest extends SelNGBase {
 		sb.append(" Bugs(").append(bugs).append(")");
 		return (sb.toString());
 	}
-	
-	
+
+	@SuppressWarnings("unchecked")
 	public static void writeCoverage() throws Exception {
 		System.out
 				.println("<=======><=======><=== Writing Coverage to json file ===><=======><=======>");
@@ -338,7 +363,6 @@ public class CommonTest extends SelNGBase {
 		SelNGBase.needReset.set(true);
 	}
 
-	
 	@AfterSuite(groups = { "always" })
 	public void cleanup() throws HarnessException {
 		SeleniumService.getInstance().stopSeleniumServer();
@@ -371,6 +395,12 @@ public class CommonTest extends SelNGBase {
 		zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg", new Locale(
 				ZimbraSeleniumProperties.getStringProperty("locale")));
 
+	}
+
+	public void zmmailbox(String command) throws Exception {
+		System.out.println(command);
+		String commandArray[] = command.split(" ", 2)[1].split(" ");
+		ZMailboxUtil.main(commandArray);
 	}
 
 	public static String localize(String locatorKey) {
@@ -1226,13 +1256,12 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public static void zForgetAutocomplete(int rank) throws Exception {
-		SelNGBase.selenium
-				.get()
-				.clickAt(
-						"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, '_acRow_"
-								+ (rank - 1)
-								+ "')]//td[contains(@class, '" + localize(locator.forget) + "')]//a[contains(@id, '_acForget_"
-								+ (rank - 1) + "')]//div[contains(@class, 'ForgetText')]", "");
+		SelNGBase.selenium.get().clickAt(
+				"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, '_acRow_"
+						+ (rank - 1) + "')]//td[contains(@class, '"
+						+ localize(locator.forget)
+						+ "')]//a[contains(@id, '_acForget_" + (rank - 1)
+						+ "')]//div[contains(@class, 'ForgetText')]", "");
 	}
 
 	/**
