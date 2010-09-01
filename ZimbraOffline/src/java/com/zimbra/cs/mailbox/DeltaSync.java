@@ -695,6 +695,9 @@ public class DeltaSync {
 
     static Tag getTag(Mailbox mbox, int id) throws ServiceException {
         try {
+            if (mbox instanceof ZcsMailbox) {
+                return ((ZcsMailbox) mbox).getTagById(sContext, id, false);
+            }
             return mbox.getTagById(sContext, id);
         } catch (MailServiceException.NoSuchItemException nsie) {
             return null;

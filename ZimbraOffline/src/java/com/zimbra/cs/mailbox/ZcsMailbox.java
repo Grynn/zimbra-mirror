@@ -198,8 +198,45 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         // locally-generated items must be differentiable from authentic, server-blessed ones
         return FIRST_OFFLINE_ITEM_ID;
     }
+    
+    /**
+     * Get a tag from persistence. If useRenumbered = false, we check only the db
+     * @param octxt
+     * @param id
+     * @param useRenumbered
+     * @return
+     * @throws ServiceException
+     */
+    public synchronized Tag getTagById(OperationContext octxt, int id, boolean useRenumbered)
+            throws ServiceException {
+        if (useRenumbered) {
+            return (Tag) getItemById(octxt, id, MailItem.TYPE_TAG);
+        } else {
+            boolean success = false;
+            try {
+                beginTransaction("getItemById", octxt);
+                MailItem item = checkAccess(getItemById(id, MailItem.TYPE_TAG, false));
+                success = true;
+                return (Tag) item;
+            } finally {
+                endTransaction(success);
+            }
+        }
+    }
 
     @Override MailItem getItemById(int id, byte type) throws ServiceException {
+        return getItemById(id, type, true);
+    }
+
+    /**
+     * Get a MailItem. Optionally use renumbered item cache
+     * @param id
+     * @param type
+     * @param useRenumbered
+     * @return
+     * @throws ServiceException
+     */
+    MailItem getItemById(int id, byte type, boolean useRenumbered) throws ServiceException {
         NoSuchItemException trappedExcept = null;
         try { 
             MailItem item = super.getItemById(id, type);
@@ -209,9 +246,11 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         catch (NoSuchItemException nsie) {
             trappedExcept = nsie;
         }
-        Integer renumbered = mRenumbers.get(id < -FIRST_USER_ID ? -id : id);
-        if (renumbered != null)
-            return super.getItemById(id < 0 ? -renumbered : renumbered, type);
+        if (useRenumbered) {
+            Integer renumbered = mRenumbers.get(id < -FIRST_USER_ID ? -id : id);
+            if (renumbered != null)
+                return super.getItemById(id < 0 ? -renumbered : renumbered, type);
+        }
         if (trappedExcept != null)
             throw trappedExcept;
         return null;
