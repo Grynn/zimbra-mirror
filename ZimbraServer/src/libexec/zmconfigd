@@ -206,6 +206,10 @@ while True:
 		if myState.forced and myState.forced < 100:
 			Log.logMsg(0, "Configuration inconsistency detected (%s)" % (e,))
 		Log.logMsg(1, "Sleeping...Configuration inconsistency detected (%s)" % (e,));
+		if myState.forced >= 100: # Handle a rewrite request
+			myState.forced = 0;
+			myState.forcedconfig = {}
+			myState.lAction.notifyAll()
 		time.sleep(5)
 		continue
 	finally:
