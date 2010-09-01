@@ -305,12 +305,101 @@ sub updateSyslog {
   print "done.\n";
 }
 
+sub updateRsyslogd {
+  my $conf;
+  if (-f "/etc/rsyslog.d/50-default") {
+    $conf="/etc/rsyslog.d/50-default";
+  } else {
+     print "Error: No default configuration found, exiting...\n";
+     exit(1);
+  }
+
+  # create a safe temp file and make sure we have enough space to fill it
+  my (undef, $tmpfile) = tempfile("syslog.conf.XXXX", DIR=>"$zimbra_tmp_directory",  OPEN=>0);
+  cp($conf,$tmpfile);
+  if ( -s $tmpfile ) {
+    print "updateRsyslogd: Updating $conf...";
+  } else  {
+    print "updateRsyslogd: Unable to create temp file: $tmpfile\n";
+    exit 1;
+  }
+
+  open (TMPFH, ">$tmpfile");
+  open (SYSFH, "<$conf");
+  # Remove existing entries that we may have added.
+  while (<SYSFH>) {
+    if ($_ !~ /^local0\.\*/ && $_ !~ /^local1\.\*/) {
+      if ( $_ =~ /^\tlocal0,local1.none;\\/ ) {
+        next;
+      }
+      if ( $_ =~ /^auth\.\* / ) {
+        next;
+      }
+      s/;local0.none//g;
+      s/;local1.none//g;
+      s/;auth.none//g;
+      s/^\*\.\*;auth,authpriv.none/\*\.\*;auth,authpriv.none;local0.none;local1.none;mail.none/;
+      s/^\*\.=debug;\\/\*.=debug;\\\n\tlocal0,local1.none;\\/;
+      s/^\*\.=info;\*\.=notice;\*\.=warn;\\/\*.=info;\*.=notice;\*.=warn;\\\n\tlocal0,local1.none;\\/;
+      print TMPFH $_;
+    }
+  }
+  close(SYSFH);
+  close (TMPFH);
+  cp($tmpfile,$conf);
+
+  if (-f "/etc/rsyslog.d/60-zimbra.conf") {
+    unlink("/etc/rsyslog.d/60-zimbra.conf");
+  }
+  open(ZFH, ">/etc/rsyslog.d/60-zimbra.conf");
+  if ( $TYPE eq "remote" ) {
+    print ZFH "local0.*                @".$LOGHOST."\n";
+    print ZFH "local1.*                @".$LOGHOST."\n";
+    print ZFH "auth.*                  @".$LOGHOST."\n";
+  }
+  print ZFH "local0.*                $logfile\n";
+  print ZFH "local1.*                $statsfile\n";
+  print ZFH "auth.*                  $logfile\n";
+
+  if ($TYPE eq "remote" ) {
+    print ZFH "mail.*                @".$LOGHOST."\n";
+  }
+  print ZFH "mail.*                $logfile\n";
+  close(ZFH);
+
+
+  if ( !-f "/var/log/zimbra.log") {
+    open(my $tlog, ">/var/log/zimbra.log");
+  }
+  if ( !-f "/var/log/zimbra-stats.log") {
+    open(my $tlog, ">/var/log/zimbra-stats.log");
+  }
+  chown $uid,$gid,"/var/log/zimbra.log";
+  chown $uid,$gid,"/var/log/zimbra-stats.log";
+  chmod 0644,"/var/log/zimbra.log","/var/log/zimbra-stats.log";
+
+  if ( -f "/etc/logrotate.d/zimbra" ) {
+    local $^I="~";
+    local @ARGV=("/etc/logrotate.d/zimbra");
+    while (<>) {
+      s/\-HUP\s+syslog/-HUP rsyslog/g;
+      print;
+    }
+  }
+  print "done.\n";
+}
+
 my $edited=0;
 
 if ( -f "/etc/syslog-ng/syslog-ng.conf" ||
      -f "/etc/syslog-ng/syslog-ng.conf.in" ||
      -f "/etc/syslog-ng.conf" ) {
   &updateSyslogNG;
+  $edited=1;
+}
+
+if ( (-f "/etc/rsyslog.conf" && -d "/etc/rsyslog.d") && $edited == 0 ) {
+  &updateRsyslogd;
   $edited=1;
 }
 
@@ -339,6 +428,15 @@ if ( $platform eq "SLES11_64" ) {
   exit 0;
 }
 
+if ( $platform =~ /UBUNTU10/ && -f "/etc/rsyslog.conf" ) {
+  if ( -e "/usr/sbin/service" ) {
+    `/usr/sbin/service rsyslog restart`;
+    exit 0;
+  } else {
+    print "Unable to restart syslog.  Please do it manually.\n";
+    exit 1;
+  }
+}
 if ( $platform =~ /UBUNTU/ || $platform =~ /DEBIAN4/ ) {
   if ( -e "/etc/init.d/sysklogd" ) {
     `/etc/init.d/sysklogd restart > /dev/null 2>&1`;
