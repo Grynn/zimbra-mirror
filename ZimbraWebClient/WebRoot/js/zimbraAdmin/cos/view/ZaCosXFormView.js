@@ -296,7 +296,6 @@ ZaCosXFormView.ADVANCED_TAB_RIGHTS = [];
 
 ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {	
     this.tabChoices = new Array();
-	
 	var _tab1 = ++this.TAB_INDEX;
 	var _tab2, _tab3, _tab4, _tab5, _tab6, _tab7;
 	
@@ -1082,29 +1081,66 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 
             {type:_ZA_TOP_GROUPER_,id:"cos_password_settings",
                 label:ZaMsg.NAD_PasswordGrouper,
-                items: [
+                items: [ 
                     { type: _DWT_ALERT_,
                       containerCssStyle: "padding-bottom:0px",
                       style: DwtAlert.WARNING,
-                      iconVisible: false,
-                      content: ZaMsg.Alert_InternalPassword
+                      iconVisible:  (!ZaAccountXFormView.isAuthfromInternal(ZaSettings.myDomainName)),
+                      content: ((ZaAccountXFormView.isAuthfromInternal(ZaSettings.myDomainName))?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
                     },
                     {ref:ZaCos.A_zimbraPasswordLocked, type:_CHECKBOX_,
                         msgName:ZaMsg.NAD_PwdLocked,
                         label:ZaMsg.NAD_PwdLocked,
-                        trueValue:"TRUE", falseValue:"FALSE"
+                        trueValue:"TRUE", falseValue:"FALSE",
+			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
                     },
-                    {ref:ZaCos.A_zimbraMinPwdLength, type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraMinPwdLength,label:ZaMsg.LBL_zimbraMinPwdLength, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
-                    {ref:ZaCos.A_zimbraMaxPwdLength, type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraMaxPwdLength,label:ZaMsg.LBL_zimbraMaxPwdLength, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
+                    {ref:ZaCos.A_zimbraMinPwdLength, 
+			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraMinPwdLength,
+			label:ZaMsg.LBL_zimbraMinPwdLength, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
+			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+		    },
+                    {ref:ZaCos.A_zimbraMaxPwdLength, 
+			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraMaxPwdLength,
+			label:ZaMsg.LBL_zimbraMaxPwdLength, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
+			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+		    },
 
-                    {ref:ZaCos.A_zimbraPasswordMinUpperCaseChars, type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinUpperCaseChars,label:ZaMsg.LBL_zimbraPasswordMinUpperCaseChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
-                    {ref:ZaCos.A_zimbraPasswordMinLowerCaseChars, type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinLowerCaseChars,label:ZaMsg.LBL_zimbraPasswordMinLowerCaseChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
-                    {ref:ZaCos.A_zimbraPasswordMinPunctuationChars, type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinPunctuationChars,label:ZaMsg.LBL_zimbraPasswordMinPunctuationChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
-                    {ref:ZaCos.A_zimbraPasswordMinNumericChars, type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinNumericChars,label:ZaMsg.LBL_zimbraPasswordMinNumericChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
+                    {ref:ZaCos.A_zimbraPasswordMinUpperCaseChars, 
+			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinUpperCaseChars,
+			label:ZaMsg.LBL_zimbraPasswordMinUpperCaseChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
+			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+		    },
+                    {ref:ZaCos.A_zimbraPasswordMinLowerCaseChars, 
+			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinLowerCaseChars,
+			label:ZaMsg.LBL_zimbraPasswordMinLowerCaseChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
+			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+		    },
+                    {ref:ZaCos.A_zimbraPasswordMinPunctuationChars, 
+			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinPunctuationChars,
+			label:ZaMsg.LBL_zimbraPasswordMinPunctuationChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
+			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+	 	    },
+                    {ref:ZaCos.A_zimbraPasswordMinNumericChars, 
+			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraPasswordMinNumericChars,
+			label:ZaMsg.LBL_zimbraPasswordMinNumericChars, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
+			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+		    },
 
-                    {ref:ZaCos.A_zimbraMinPwdAge, type:_TEXTFIELD_, msgName:ZaMsg.MSG_passMinAge,label:ZaMsg.LBL_passMinAge, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
-                    {ref:ZaCos.A_zimbraMaxPwdAge, type:_TEXTFIELD_, msgName:ZaMsg.MSG_passMaxAge,label:ZaMsg.LBL_passMaxAge, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
-                    {ref:ZaCos.A_zimbraEnforcePwdHistory, type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraEnforcePwdHistory,label:ZaMsg.LBL_zimbraEnforcePwdHistory, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"}
+                    {ref:ZaCos.A_zimbraMinPwdAge, 
+			type:_TEXTFIELD_, msgName:ZaMsg.MSG_passMinAge,
+			label:ZaMsg.LBL_passMinAge, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
+			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+		    },
+                    {ref:ZaCos.A_zimbraMaxPwdAge, 
+			type:_TEXTFIELD_, msgName:ZaMsg.MSG_passMaxAge,
+			label:ZaMsg.LBL_passMaxAge, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
+			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+		    },
+                    {ref:ZaCos.A_zimbraEnforcePwdHistory, 
+			type:_TEXTFIELD_, msgName:ZaMsg.MSG_zimbraEnforcePwdHistory,
+			label:ZaMsg.LBL_zimbraEnforcePwdHistory, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",
+			visibilityChecks:[],enableDisableChecks:[[ZaAccountXFormView.isAuthfromInternal, ZaSettings.myDomainName]]
+		    }
                 ]
             },
             {type:_ZA_TOP_GROUPER_, id:"cos_password_lockout_settings",
