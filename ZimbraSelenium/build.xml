@@ -2,37 +2,34 @@
 <project name="testng" default="jar" basedir=".">
 
 	<property name="build.version" value="6.0.0" />
-	<property name="dist.version.dir" value="zimbra-${build.version}" />
+	
 	<property name="build.dir" location="build" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
-	<property name="deployDir" location="${build.dir}/dist" />
-	<!-- pass in by Anthill -->
-	<property name="dist.dir.root" location="${deployDir}" />
-	<property name="dist.dir" location="${dist.dir.root}/${dist.version.dir}" />
-	<property name="dist.lib.dir" location="${dist.dir}/lib" />
-	<property name="conf.dir" location="conf" />
 	<property name="generated.dir" location="${build.dir}/generated" />
-	<property name="generated.java.dir" location="${generated.dir}/src/java" />
+	<property name="generated.java.dir" location="${generated.dir}/java" />
 	<property name="generated.javadocs.dir" location="${generated.dir}/javadocs" />
+	<property name="dist.dir" location="${build.dir}/dist/zimbra-${build.version}" />
+	<property name="dist.lib.dir" location="${dist.dir}/lib" />
+	<property name="tms.dir" location="${build.dir}/tms"/>
+	<property name="tms.jars.dir" location="${tms.dir}/jars"/>
+	<property name="tms.bin.dir" location="${tms.dir}/src/bin"/>
+	<property name="tms.tgz.file" location="${dist.dir}/selng.tgz"/>
+	
+	<property name="conf.dir" location="conf" />
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="${src.dir}/java" />
-	<property name="test.log.dir" location="/tmp" />
+
 	<property name="webclient.dir" location="../ZimbraWebClient" />
 	<property name="server.dir" location="../ZimbraServer" />
 	<property name="common.dir" location="../ZimbraCommon" />
-	<property name="common.classes.dir" location="${common.dir}/build/classes" />
 
 
-	<!-- property file="${basedir}/conf/config.properties" /-->
-	<!-- COMPILE TESTS-->
 	<path id="class.path">
 		<pathelement location="${build.classes.dir}" />
 
 		<fileset dir="jars">
 			<include name="**/*.jar" />
 		</fileset>
-
-		<pathelement location="${common.classes.dir}" />
 
 		<fileset dir="../ZimbraCommon/jars">
 			<include name="**/*.jar" />
@@ -51,31 +48,38 @@
 		<pathelement location="${generated.java.dir}" />
 	</path>
 
-	<target name="clean" description="Removes class files">
+	<target name="clean" description="Removes all built files">
 		<delete dir="${build.dir}" />
 	</target>
 
-	<target name="build-init">
-		<mkdir dir="${test.log.dir}" />
-		<mkdir dir="${build.classes.dir}" />
-		<mkdir dir="${dist.dir.root}" />
+	<target name="build-init" description="Create folders as required">
+		<mkdir dir="${build.dir}" />
 		<mkdir dir="${dist.dir}" />
 		<mkdir dir="${dist.lib.dir}" />
 		<mkdir dir="${generated.java.dir}" />
+		<mkdir dir="${generated.javadocs.dir}" />
 	</target>
-	<target name="compile" depends="build-init" description="Compiles the source code">
-		<echo message="compiling framework..." />
-		<ant dir="${common.dir}" target="jar" inheritAll="false" />
+	
+	<target name="compile-ZimbraServer" description="Builds ZimbraServer">
 		<ant dir="${server.dir}" target="jar" inheritAll="false" />
-		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
+	</target>
+	
+	<target name="compile-ZimbraCommon" description="Builds ZimbraCommon">
+		<ant dir="${common.dir}" target="jar" inheritAll="false" />
+	</target>
+	
+	<target name="compile" depends="build-init,compile-ZimbraCommon,compile-ZimbraServer" description="Compiles the source code">
+		<echo message="compiling framework..." />
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path" nowarn="on">
 			<src refid="all.java.path" />
 		</javac>
 	</target>
+	
 	<target name="jar" depends="copy-data,compile" description="Creates the jar file">
 		<jar destfile="${dist.lib.dir}/zimbraselenium.jar" basedir="${build.classes.dir}" />
 	</target>
 
-	<target name="javadocs">
+	<target name="javadocs" description="Build javadocs">
 		<javadoc destdir="${generated.javadocs.dir}" classpathref="class.path" access="public">
 			<link offline="true" href="http://java.sun.com/j2se/1.5.0/docs/api package-list" packagelistLoc="." />
 			<fileset dir="${src.java.dir}/projects/html/tests">
@@ -89,45 +93,8 @@
 		</javadoc>
 	</target>
 
-	<target name="jar-staf-selenium" depends="compile" description="Creates the selenium service jar file">
-		<property name="build.staf.selenium.classes.dir" location="${build.dir}/staf/selenium/STAF-INF/classes" />
-		<property name="build.staf.selenium.jars.dir" location="${build.dir}/staf/selenium/STAF-INF/jars" />
-		<copy todir="${build.staf.selenium.classes.dir}">
-			<fileset dir="${build.classes.dir}" />
-		</copy>
-		<copy todir="${build.staf.selenium.jars.dir}">
-			<fileset dir="jars">
-				<include name="**/*.jar" />
-			</fileset>
-		</copy>
-		<copy todir="${build.staf.selenium.jars.dir}">
-			<fileset dir="../ZimbraCommon/jars">
-				<include name="**/*.jar" />
-			</fileset>
-		</copy>
-		<copy todir="${build.staf.selenium.jars.dir}">
-			<fileset dir="../ZimbraServer/build">
-				<include name="zimbrastore.jar" />
-			</fileset>
-		</copy>
-		<copy todir="${build.staf.selenium.jars.dir}">
-			<fileset dir="../ZimbraCommon/build">
-				<include name="zimbracommon.jar" />
-			</fileset>
-		</copy>
-		<jar destfile="${dist.lib.dir}/zstafselenium.jar" basedir="${build.dir}/staf/selenium">
-			<manifest>
-				<attribute name="Main-Class" value="projects.zcs.bin.ExecuteTests" />
-				<section name="staf/service/info">
-					<attribute name="Service-Class" value="staf.StafIntegration" />
-					<attribute name="Packaged-Jars" value="commons-configuration-1.5 commons-lang-2.4 ocutil-2.4.2 selenium-java-client-driver-1.0-SNAPSHOT
-						selenium-server-1.0-SNAPSHOT-standalone testng-5.8-jdk15 xalan commons-cli-1.2 commons-codec-1.4 commons-collections-3.2.1 commons-digester-2.0 commons-httpclient-3.0 commons-logging dom4j-1.5.2 log4j-1.2.15 mail libidn-1.15 zimbracommon zimbrastore" />
-				</section>
-			</manifest>
-		</jar>
-	</target>
-
-	<target name="jar-staf" depends="jar-staf-selenium" description="Creates the STAF jar file">
+	<target name="jar-staf" description="Creates the STAF jar file">
+		<echo message="not ipmlemented." />
 	</target>
 
 	<target name="generate.locale.files.ZimbraWebClient" description="Grab I18N message files from ZimbraWebClient project">
@@ -175,7 +142,7 @@
 	</target>
 
 
-	<target name="Run-ExecuteHarnessMain" depends="jar">
+	<target name="Run-ExecuteHarnessMain" depends="jar" description="Run all tests per specified arguments">
 		<property name="jarfile" value="${dist.lib.dir}/zimbraselenium.jar"/>
 		<property name="pattern" value="projects.zcs.tests"/>
 		<property name="groups" value="always,sanity"/>
@@ -185,37 +152,27 @@
  		</java>
 	</target>
 		
-	<target name="Run-TMS" depends="jar">
-		<property name="jarfile" value="${dist.lib.dir}/zimbraselenium.jar"/>
-		<property name="pattern" value="projects.zcs.tests"/>
-		<property name="groups" value="always,sanity"/>
-		<echo>Executing ...</echo>
-		<java classname="framework.core.ExecuteHarnessMain"          classpathref="class.path"          fork="true" failonerror="true">
-			<arg line="-h"/>
- 		</java>
-		<exec executable="/usr/bin/perl" dir="." vmlauncher="false">
-			<arg line="src/bin/runreports_testng.sh"/>
-		</exec>
-	</target>
-
-	<!-- TARGETS FOR REMOTE MACHINES -->
-	
-	<target name="seleniumjar" depends="clean,copy-data,build-init" description="Creates the jar file">
-		<echo message="compiling framework..." />
-		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
-			<src refid="all.java.path" />
-		</javac>
-		<jar destfile="${dist.lib.dir}/zimbraselenium.jar" basedir="${build.classes.dir}" />
-	</target>
-	
-	<target name="build-selng" depends="seleniumjar">
-		<echo message="coping jars..." />
-		<copy todir="../ZimbraSelenium/jars">
+	<target name="build-selng" depends="jar" description="Creates the TMS package">
+		<echo message="coping project jars..." />
+		<copy file="${dist.lib.dir}/zimbraselenium.jar" todir="${tms.jars.dir}"/>
+		<copy todir="${tms.bin.dir}">
+			<fileset dir="src/bin">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+		
+		<echo message="coping external files..." />
+		<copy todir="${tms.jars.dir}">
 			<fileset dir="../ZimbraServer/build">
 				<include name="zimbrastore.jar"/>
 			</fileset>
 		</copy>			
-		<copy todir="../ZimbraSelenium/jars">
+		<copy todir="${tms.jars.dir}">
+			<fileset dir="../ZimbraServer/build">
+				<include name="zimbrastore.jar"/>
+			</fileset>
+		</copy>			
+		<copy todir="${tms.jars.dir}">
 			<fileset dir="../ZimbraCommon/build">
 				<include name="zimbracommon.jar"/>
 			</fileset>
@@ -225,72 +182,14 @@
 				<exclude name = "**/jetty-util-6.1.22.z6.jar"/>
 			</fileset>
 		</copy>
-		<tar destfile="${build.dir}/selng.tgz" compression="gzip">
-			<tarfileset dir="../ZimbraSelenium" prefix="SelNG" mode="777">
+		
+		<echo message="zipping package ..." />
+		<tar destfile="${tms.tgz.file}" compression="gzip">
+			<tarfileset dir="${tms.dir}" prefix="SelNG" mode="777">
 				<include name="**/*"/>
-				<exclude name = "build/**"/>	
-				<exclude name = "bin/**"/>
-				<exclude name = "test-output/**"/>
-				<exclude name = "docs/**"/>
-				<exclude name = "zmBrowserPerf/**"/>	
 			</tarfileset>	  
 		</tar>		
-			<copy file="${build.dir}/selng.tgz" todir="${dist.dir.root}"/>
-			<checksum file="${dist.dir.root}/selng.tgz" forceOverwrite="yes"/>		  
-	</target>	
-	
-	<target name="compile-zcs" description="compiles classes on remote machines">
-		<delete dir="build/classes" />
-		<mkdir dir="${test.log.dir}" />
-		<mkdir dir="build/classes" />
-		<echo message="copies i18n and test data" />
-		<copy todir="build/classes/projects/zcs/data">
-			<fileset dir="src/java/projects/zcs/data" />
-		</copy>
-		<copy todir="build/classes/framework/locale">
-			<fileset dir="src/java/framework/locale" />
-		</copy>
-		<echo message="compiling framework..." />
-		<javac debug="true" source="1.5" classpathref="cpath" srcdir="." destdir="build/classes" />
-	</target>
-	
-	<path id="cpath">
-		<pathelement location="build/classes}" />
-		<fileset dir="jars">
-			<include name="**/*.jar" />
-		</fileset>
-	</path>
-	
-	<!-- RUN TESTS ON REMOTE MACHINES-->
-	
-	<taskdef name="testng" classname="com.beust.testng.TestNGAntTask" classpathref="cpath" />
-
-	<path id="runpath">
-		<path refid="cpath" />
-		<pathelement location="build/classes" />
-		<pathelement location="src/java/projects/zcs/data/zmMsg.properties" />
-	</path>
-
-	<target name="run-html-zcs">
-		<echo message="running  html tests..." />
-		<java classname="projects.html.bin.ExecuteTests" classpathref="runpath" fork="true">
-			<arg value="fullSuite" />
-			<jvmarg value="-ea" />
-			<jvmarg value="-Dfile.encoding=UTF-8" />
-		</java>
-	</target>
-	
-	<target name="run-ajax-zcs">
-		<echo message="running ajax tests..." />
-		<java classname="projects.zcs.bin.ExecuteTests" classpathref="runpath" fork="true">
-			<arg value="fullSuite" />
-			<jvmarg value="-ea" />
-			<jvmarg value="-Dfile.encoding=UTF-8" />
-		</java>
-	</target>
-	
-	<target name="test-html-zcs" depends="compile-zcs, run-html-zcs"/>
-	<target name="test-ajax-zcs" depends="compile-zcs, run-ajax-zcs"/>
-	<target name="test-zcs" depends="compile-zcs, run-html-zcs, run-ajax-zcs"/>
+		<checksum file="${tms.tgz.file}" forceOverwrite="yes"/>		  
+	</target>		
 	
 </project>
