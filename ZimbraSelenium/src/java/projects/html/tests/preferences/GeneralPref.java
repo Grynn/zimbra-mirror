@@ -131,11 +131,10 @@ public class GeneralPref extends CommonTest {
 	/**
 	 * Negative test to include junk folder in search
 	 */
-	@Test(dataProvider = "GeneralPrefDataProvider", dependsOnMethods = "verifyIncludeJunkFolderInSearch", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "GeneralPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void NegativeTestIncludeJunkFolderInSearch() throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			IncludeJunkFolderInSearch();
+		//if (SelNGBase.isExecutionARetry.get())
+		IncludeJunkFolderInSearch();
 		// This test works on the message which is in junk folder from test
 		// verifyIncludeJunkFolderInSearch
 		page.zGeneralPrefUI.zNavigateToPrefGenralAndSelectSearchFolder("Junk");
@@ -185,11 +184,10 @@ public class GeneralPref extends CommonTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test(dataProvider = "GeneralPrefDataProvider", dependsOnMethods = "verifyIncludeTrashFolderInSearch", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "GeneralPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void NegativeTestIncludeTrashFolderInSearch() throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			IncludeTrashFolderInSearch();
+		//if (SelNGBase.isExecutionARetry.get())
+		IncludeTrashFolderInSearch();
 		// This test works on the message which is in junk folder from test
 		// verifyIncludeJunkFolderInSearch
 		page.zGeneralPrefUI.zNavigateToPrefGenralAndSelectSearchFolder("Trash");
@@ -230,11 +228,10 @@ public class GeneralPref extends CommonTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test(dataProvider = "GeneralPrefDataProvider", dependsOnMethods = "verifyAlwaysShowSrchString", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "GeneralPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void NegativeTestAlwaysShowSrchString() throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			AlwaysShowSrchString();
+		//if (SelNGBase.isExecutionARetry.get())
+		AlwaysShowSrchString();
 
 		page.zGeneralPrefUI
 				.zNavigateToPrefGenralAndSelectAlwaysShowSrchString();

@@ -95,12 +95,11 @@ public class CreateMail extends CommonTest {
 	 * with attachments-checkboxes checked/selected by-default dependsOn:
 	 * attachMultipleTest
 	 */
-	@Test(dataProvider = "composeDataProvider", dependsOnMethods = "attachMultipleTest", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "composeDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void fwdAMailWithAttachment(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
-			fwdAMailWithAttachment_Retry();
+		//if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
+		fwdAMailWithAttachment_Retry();
 		obj.zButton.zClick(MailApp.zForwardIconBtn);
 		obj.zTextAreaField.zWait(localize(locator.toLabel));
 		String[] att = attachments.split(",");
@@ -115,11 +114,10 @@ public class CreateMail extends CommonTest {
 	 * compose-format to HTML, attach another attachment-inline Verify if the
 	 * inlined-attachment is displayed. dependsOn: fwdAMailWithAttachment
 	 */
-	@Test(dependsOnMethods = "fwdAMailWithAttachment", groups = { "smoke",
-			"full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void changeToHTMLAndAttachInline() throws Exception {
-		if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
-			changeToHTMLAndAttachInline_Retry();
+		//if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
+		changeToHTMLAndAttachInline_Retry();
 		obj.zButton.zClick(ComposeView.zOptionsDownArrowBtn);
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
 		page.zComposeView.zAddAttachments("structure.jpg", true);
@@ -136,15 +134,14 @@ public class CreateMail extends CommonTest {
 	 * detach button Verify if all the attachments are intact in new-window
 	 * dependsOn: changeToHTMLAndAttachInline
 	 */
-	@Test(dataProvider = "composeDataProvider", dependsOnMethods = "changeToHTMLAndAttachInline", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "composeDataProvider", groups = {	"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void detachRetainsAttachments(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
 		
 		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
 
-		if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
-			detachRetainsAttachments_Retry();
+		//if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
+		detachRetainsAttachments_Retry();
 		SleepUtil.sleep(2000);
 		obj.zButton.zClick("id=zb__COMPOSE1__DETACH_COMPOSE_left_icon");
 		SleepUtil.sleep(4000);
@@ -168,11 +165,10 @@ public class CreateMail extends CommonTest {
 	 * attachment Verify if the mail has all these attachment intact dependsOn:
 	 * detachRetainsAttachments
 	 */
-	@Test(dependsOnMethods = "detachRetainsAttachments", groups = { "smoke",
-			"full" })
+	@Test(groups = { "smoke", "full" })
 	public void sendAttachmentsFromNewWindow() throws Exception {
-		if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
-			sendAttachmentsFromNewWindow_Retry();
+		//if (SelNGBase.isExecutionARetry.get())// relogin and call all the dependsOnmethods
+		sendAttachmentsFromNewWindow_Retry();
 		
 		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
 

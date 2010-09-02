@@ -122,12 +122,11 @@ public class Drafts extends CommonTest {
 	 * Test: After draft was saved, cancel shouldn't ask
 	 * "do you want to save"-again dependsOn: saveDraftSaysDraftSaved
 	 */
-	@Test(dependsOnMethods = "saveDraftSaysDraftSaved", dataProvider = "draftsDataProvider", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "draftsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void saveDraftNoAlertOnCancel(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			saveDraftNoAlertOnCancel_retry();
+		//if (SelNGBase.isExecutionARetry.get())
+		saveDraftNoAlertOnCancel_retry();
 		obj.zButton.zClick(ComposeView.zCancelIconBtn);
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
 		SelNGBase.needReset.set(false);
@@ -138,12 +137,11 @@ public class Drafts extends CommonTest {
 	 * values that were entered earlier(during compose) are intact dependsOn:
 	 * saveDraftNoAlertOnCancel
 	 */
-	@Test(dependsOnMethods = "saveDraftNoAlertOnCancel", dataProvider = "draftsDataProvider", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "draftsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void goToDraftAndEdit(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			goToDraftAndEdit_retry();
+		//if (SelNGBase.isExecutionARetry.get())
+		goToDraftAndEdit_retry();
 		obj.zFolder.zClick(localize(locator.drafts));
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(500);
@@ -159,12 +157,11 @@ public class Drafts extends CommonTest {
 	 * send the mail Verify if the mail has the new-content(and not the
 	 * old-drafted content) dependsOn: goToDraftAndEdit
 	 */
-	@Test(dependsOnMethods = "goToDraftAndEdit", dataProvider = "draftsDataProvider", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "draftsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void modifyDraftAndVerify(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			modifyDraftAndVerify_retry();
+		//if (SelNGBase.isExecutionARetry.get())
+		modifyDraftAndVerify_retry();
 		SleepUtil.sleep(500);
 		obj.zButton.zClick(MailApp.zEditDraftIconBtn);
 		obj.zButton.zWait(ComposeView.zSendIconBtn);
@@ -207,11 +204,10 @@ public class Drafts extends CommonTest {
 	 * verify if "Message was auto-saved, do you wish to keep it?"-dialog is
 	 * thrown
 	 */
-	@Test(dependsOnMethods = "autoSaveDraftAfter30Sec", groups = { "smoke",
-			"full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void askSaveAutosavedDraftWhenInboxIsClicked() throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			askSaveAutosavedDraftWhenInboxIsClicked_retry();
+		//if (SelNGBase.isExecutionARetry.get())
+		askSaveAutosavedDraftWhenInboxIsClicked_retry();
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
 		SelNGBase.needReset.set(false);
@@ -221,13 +217,12 @@ public class Drafts extends CommonTest {
 	 * Test: After an auto-draft was saved, verify it really exists in
 	 * drafts-folder dependsOn: askSaveAutosavedDraftWhenInboxIsClicked
 	 */
-	@Test(dependsOnMethods = "askSaveAutosavedDraftWhenInboxIsClicked", dataProvider = "draftsDataProvider", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "draftsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void goToDraftAndVerifyAutodraftMsg(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			goToDraftAndVerifyAutodraftMsg_retry();
+		//if (SelNGBase.isExecutionARetry.get())
+		goToDraftAndVerifyAutodraftMsg_retry();
 
 		obj.zFolder.zClick(localize(locator.drafts));
 		obj.zMessageItem.zClick(subject);

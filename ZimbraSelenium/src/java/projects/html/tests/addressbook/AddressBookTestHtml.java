@@ -127,12 +127,12 @@ public class AddressBookTestHtml extends CommonTest {
 	 * @throws Exception
 	 */
 
-	@Test(dataProvider = "ABDataProvider", dependsOnMethods = "createContactInHtml", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void editAndVerifyContactInHtml() throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			createContactInHtmlReusable();
-
+		//if (SelNGBase.isExecutionARetry.get())
+		createContactInHtmlReusable();
+	
+		SleepUtil.sleepSmall();		
 		obj.zButton.zClick(page.zABComposeHTML.zEditIconBtn);
 		SleepUtil.sleepSmall();
 		//page.zABComposeHTML.zSelectAndClickEdit("oldlastName","upperToolbar");
@@ -481,11 +481,10 @@ public class AddressBookTestHtml extends CommonTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test(dataProvider = "ABDataProvider", dependsOnMethods = "negativeTestSaveEmptypContactGroup", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "ABDataProvider", groups = {"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void negativeTestGroupWithoutMember() throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			negativeTestContactGroup();
+		//if (SelNGBase.isExecutionARetry.get())
+		negativeTestContactGroup();
 
 		obj.zEditField.zType(page.zABComposeHTML.zGroupNameEditfield,
 				getLocalizedData(1));

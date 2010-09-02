@@ -117,12 +117,11 @@ public class SignatureAndAccPref extends CommonTest {
 	 * @param signatureBody
 	 * @throws Exception
 	 */
-	@Test(dataProvider = "AccPrefDataProvider", dependsOnMethods = "createSignatureAndVerifyInAccTab", groups = {
-			"smoke", "full", "enabled" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "AccPrefDataProvider", groups = { "smoke", "full", "enabled" }, retryAnalyzer = RetryFailedTests.class)
 	public void create2ndSignatureAndVerifyInAccTab(String signatureName,
 			String signatureBody) throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			createSignatureAndVerify();
+		//if (SelNGBase.isExecutionARetry.get())
+		createSignatureAndVerify();
 
 		checkForSkipException("all", "na", "na", "Need to find out a way to write in html signatures : Still not working.");
 
@@ -144,12 +143,11 @@ public class SignatureAndAccPref extends CommonTest {
 	 * @param signatureBody
 	 *@throws Exception
 
-	@Test(dataProvider = "AccPrefDataProvider", dependsOnMethods = "create2ndSignatureAndVerifyInAccTab", groups = {
-			"smoke11", "full", "enabled" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "AccPrefDataProvider", groups = { "smoke", "full", "enabled" }, retryAnalyzer = RetryFailedTests.class)
 	public void deleteSignatureAndVerifyInAccTab(String signatureName,
 			String signatureBody) throws Exception {
-		if (isExecutionARetry)
-			create2ndSignatureAndVerify();
+		//if (isExecutionARetry)
+		create2ndSignatureAndVerify();
 		obj.zButton.zClick(localize(locator.del));
 		needReset = false;
 	}*/
@@ -237,12 +235,11 @@ public class SignatureAndAccPref extends CommonTest {
 	 * @param signatureBody
 	 * @throws Exception
 	 */
-	@Test(dataProvider = "AccPrefDataProvider", dependsOnMethods = "verifySignatureAboveIncludedMsg", groups = {
-			"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "AccPrefDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifySignatureBelowIncludedMsg(String signatureName,
 			String signatureBody) throws Exception {
-		if (SelNGBase.isExecutionARetry.get())
-			verifyAboveBelowSignature();
+		//if (SelNGBase.isExecutionARetry.get())
+		verifyAboveBelowSignature();
 
 		checkForSkipException("all", "na", "na", "Need to find out a way to write in html signatures : Still not working.");
 
