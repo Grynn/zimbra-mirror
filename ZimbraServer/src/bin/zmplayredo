@@ -72,8 +72,7 @@ done
 #
 # Memory for use by JVM
 #
-memkb=$(zmsysmemkb)
-jm=`expr $memkb '*' ${mailboxd_java_heap_memory_percent} / 100 / 1024`
+jm=${mailboxd_java_heap_size}
 
 java_version=$(${zimbra_java_home}/bin/java -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
 if [ x"$java_version" = "x1.6.0" ]; then
