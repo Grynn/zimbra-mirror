@@ -13,6 +13,7 @@
 	<property name="tms.dir" location="${build.dir}/tms"/>
 	<property name="tms.jars.dir" location="${tms.dir}/jars"/>
 	<property name="tms.bin.dir" location="${tms.dir}/src/bin"/>
+	<property name="tms.conf.dir" location="${tms.dir}/conf"/>
 	<property name="tms.tgz.file" location="${dist.dir}/selng.tgz"/>
 	
 	<property name="conf.dir" location="conf" />
@@ -155,12 +156,21 @@
 	<target name="build-selng" depends="jar" description="Creates the TMS package">
 		<echo message="coping project jars..." />
 		<copy file="${dist.lib.dir}/zimbraselenium.jar" todir="${tms.jars.dir}"/>
+		<copy todir="${tms.jars.dir}">
+			<fileset dir="jars">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
 		<copy todir="${tms.bin.dir}">
 			<fileset dir="src/bin">
 				<include name="**/*"/>
 			</fileset>
 		</copy>
-		
+		<copy todir="${tms.conf.dir}">
+			<fileset dir="conf">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
 		<echo message="coping external files..." />
 		<copy todir="${tms.jars.dir}">
 			<fileset dir="../ZimbraServer/build">
