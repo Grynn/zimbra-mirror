@@ -259,6 +259,10 @@ class tarMigrator implements Runnable
     {
         boolean retval=false;
         String url="https://"+destServer+":"+destPort+"/service/home/"+destmailbox+"?fmt=tgz";
+        if (!isEmpty(tarMigparams.ZMResolve))
+        {
+            url+="&resolve="+tarMigparams.ZMResolve;    
+        }
         String ContentType="application/octet-stream";
         utmbLog.log(Level.INFO,"Starting upload ("+tarfile+")");
         retval=zmtrgtsession.Upload_FileToZCS_2(url,tarfile,ContentType,utmbLog,
@@ -420,7 +424,7 @@ class tarMigrator implements Runnable
 public class tarFormatter implements EventNotifier
 {
     private static final String ztozlogFile="ztozlog";
-    private static final String tarMigVersion="1.3";
+    private static final String tarMigVersion="1.4";
     private static final String ztozconfigFile="zmztozmig.conf";
     private static final String ztoz_default_configpath="/opt/zimbra/conf/";
     private String configFile="";
@@ -715,6 +719,15 @@ public class tarFormatter implements EventNotifier
         else if (attr[0].trim().compareToIgnoreCase("ZimbraMailTransport")==0)
         {
             tarfmtparams.ZimbraMailTransport = attr[1].trim();
+            ztozparamcounter++;
+        }
+        else if (attr[0].trim().compareToIgnoreCase("resolve")==0)
+        {
+            tarfmtparams.ZMResolve =attr[1].trim();
+            for(int i=1;i<params.length;i++)
+            {
+                tarfmtparams.ZMResolve+=","+params[i].trim();
+            }
             ztozparamcounter++;
         }
         else if (attr[0].trim().compareToIgnoreCase("DomainMap")==0)

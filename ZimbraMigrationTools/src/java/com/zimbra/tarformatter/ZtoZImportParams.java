@@ -30,6 +30,7 @@ public class ZtoZImportParams
     public String SrcAdminPwd;
     public String TrgtAdminPwd;
     public String ZimbraMailTransport;
+    public String ZMResolve;
     public int Threads;
     public String cfgfile;
     public String WorkingDirectory;
@@ -57,6 +58,7 @@ public class ZtoZImportParams
         SrcAdminPwd="";
         TrgtAdminPwd="";
         ZimbraMailTransport="";
+        ZMResolve="";
         Threads=1;
         WorkingDirectory="";
         FailedDirectory="";
