@@ -10,7 +10,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 
 import com.zimbra.common.service.ServiceException;
@@ -18,6 +18,7 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 @SuppressWarnings( { "static-access", "unused" })
@@ -61,7 +62,7 @@ public class ShortcutsCalendar extends CommonTest {
 
 		String subject = getLocalizedData_NoSpecialChar();
 		String location = getLocalizedData(1);
-		String attendees = ProvZCS.getRandomAccount();
+		String attendees = Stafzmprov.getRandomAccount();
 		String body = getLocalizedData(3);
 
 		if (SelNGBase.isExecutionARetry.get())
@@ -208,7 +209,7 @@ public class ShortcutsCalendar extends CommonTest {
 
 		String subject = getLocalizedData_NoSpecialChar();
 		String location = getLocalizedData(1);
-		String attendees = ProvZCS.getRandomAccount();
+		String attendees = Stafzmprov.getRandomAccount();
 		String body = getLocalizedData(3);
 
 		if (SelNGBase.isExecutionARetry.get())

@@ -4,15 +4,18 @@ import java.lang.reflect.Method;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import com.zimbra.common.service.ServiceException;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
+
+import com.zimbra.common.service.ServiceException;
+
 import framework.core.SelNGBase;
+import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
 /**
  * This covers some high priority test cases related to address book
@@ -26,7 +29,7 @@ public class AccountsPref extends CommonTest {
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
 	@DataProvider(name = "AccPrefDataProvider")
-	public Object[][] createData(Method method) throws ServiceException {
+	public Object[][] createData(Method method) throws ServiceException, HarnessException {
 		String test = method.getName();
 		if (test.equals("addBasicPersona")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar() } };
@@ -37,14 +40,14 @@ public class AccountsPref extends CommonTest {
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("addBasicPOP3ExternalAcc")
 				|| test.equals("addBasicIMAPExternalAcc")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"accName" + getLocalizedData_NoSpecialChar(),
 					"PW" + getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("addBasicPOP3ExternalAccWithTextSignature")
 				|| test.equals("addBasicIMAPExternalAccWithTextSignature")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					"accName" + getLocalizedData_NoSpecialChar(),
 					"PW" + getLocalizedData_NoSpecialChar() } };
 		} else {

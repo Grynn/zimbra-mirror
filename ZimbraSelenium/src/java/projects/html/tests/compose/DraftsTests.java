@@ -15,9 +15,10 @@ import com.zimbra.cs.account.Provisioning;
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
+import framework.util.Stafzmprov;
 
 import projects.html.tests.CommonTest;
-import projects.zcs.clients.ProvZCS;
+
 
 /**
  * This class file contains drafts tests (saves draft, modify it, sending
@@ -93,9 +94,9 @@ public class DraftsTests extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		zVerifyDraftFilledValues("save draft", to, cc, bcc, subject, body,
 				attachments);
-		to = ProvZCS.getRandomAccount();
-		cc = ProvZCS.getRandomAccount();
-		bcc = ProvZCS.getRandomAccount();
+		to = Stafzmprov.getRandomAccount();
+		cc = Stafzmprov.getRandomAccount();
+		bcc = Stafzmprov.getRandomAccount();
 		subject = getLocalizedData_NoSpecialChar();
 		body = getLocalizedData_NoSpecialChar();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
@@ -147,8 +148,8 @@ public class DraftsTests extends CommonTest {
 		zVerifyDraftFilledValues("save draft", to, cc, bcc, subject, body,
 				attachments);
 		to = "_selfAccountName_";
-		cc = ProvZCS.getRandomAccount();
-		bcc = ProvZCS.getRandomAccount();
+		cc = Stafzmprov.getRandomAccount();
+		bcc = Stafzmprov.getRandomAccount();
 		subject = getLocalizedData_NoSpecialChar();
 		body = getLocalizedData_NoSpecialChar();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,

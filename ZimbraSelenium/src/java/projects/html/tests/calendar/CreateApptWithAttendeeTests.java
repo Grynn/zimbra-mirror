@@ -3,29 +3,19 @@
 
 package projects.html.tests.calendar;
 
-import java.io.File;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.HttpUtil.Browser;
-
-import framework.core.SelNGBase;
-import framework.util.BrowserUtil;
-import framework.util.SleepUtil;
-import framework.util.RetryFailedTests;
-
 import projects.html.tests.CommonTest;
-import projects.html.clients.MiscObject;
-import projects.html.clients.ProvZCS;
+import framework.core.SelNGBase;
+import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
 @SuppressWarnings( { "static-access", "unused" })
 public class CreateApptWithAttendeeTests extends CommonTest {
@@ -38,12 +28,12 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		if (test.equals("zVerifyApptTimeInAttendeesCalendar")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(), getLocalizedData(3), "9:00:AM",
+					Stafzmprov.getRandomAccount(), getLocalizedData(3), "9:00:AM",
 					"11:00:AM", "12/01/2008", "12/01/2008", "day:20081201", "2" } };
 		} else if (test.equals("zVerifyRecurringApptTimeInAttendeesCalendar")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					getLocalizedData_NoSpecialChar(), "7:00:AM", "9:00:AM",
 					"07/01/2006", "07/01/2006",
 					localize(locator.weekdayWedLong), "1", "", "",
@@ -51,33 +41,33 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		} else if (test.equals("zVerifyAllDayApptInAttendeesCalendar")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(), getLocalizedData(3),
+					Stafzmprov.getRandomAccount(), getLocalizedData(3),
 					"01/01/2008", "01/01/2008", "day:20080101" } };
 		} else if (test.equals("zVerifyOpenInstanceMessage")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					getLocalizedData_NoSpecialChar(), "03/03/2007",
 					"03/03/2007", "10:00:AM", "11:00:AM", "day:20070309" } };
 		} else if (test.equals("zModifyApptInstanceAndVerify")
 				|| test.equals("zCancelApptInstanceAndVerify")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					getLocalizedData_NoSpecialChar(), "6:00:AM", "8:00:AM",
 					"01/01/2008", "01/01/2008", "", "20", "", "8:00:AM",
 					"11:00:AM", "day:20080102", "3" } };
 		} else if (test.equals("zAddAttendeesToInstanceAndVerify")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					getLocalizedData_NoSpecialChar(), "1:00:PM", "3:00:PM",
 					"01/01/2008", "01/01/2008", "1", "", "",
-					ProvZCS.getRandomAccount(), "day:20080102" } };
+					Stafzmprov.getRandomAccount(), "day:20080102" } };
 		} else if (test.equals("zModifyApptSeriesAndVerify")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					getLocalizedData_NoSpecialChar(), "8:00:AM", "9:00:AM",
 					"01/01/2009", "01/01/2009",
 					localize(locator.weekdayMonLong), "1", "", "",

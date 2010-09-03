@@ -12,8 +12,9 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -38,7 +39,7 @@ import projects.zcs.tests.CommonTest;
  *            - Either Internal, External or public
  * @param invitedusers
  *            - Email id to whom folder to be shared - as of now it is random
- *            account created by ProvZCS.getRandomAccount() method
+ *            account created by Stafzmprov.getRandomAccount() method
  * @param role
  *            - Either None, Viewer, Manager or Admin
  * @param message
@@ -68,29 +69,29 @@ public class CalendarSharing extends CommonTest {
 				|| test
 						.equals("markCalInviteMoreClearForDelegatedAdmin_Bug44409")) {
 			return new Object[][] { { "Calendar", localize(locator.calendar),
-					"", ProvZCS.getRandomAccount(),
+					"", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("shareAsManagerAndCreateUpdateDelApptVerify")) {
 			return new Object[][] { { "Calendar", localize(locator.calendar),
-					"", ProvZCS.getRandomAccount(),
+					"", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleManager), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("shareAsAdminAndCreateUpdateDelApptVerify")) {
 			return new Object[][] { { "Calendar", localize(locator.calendar),
-					"", ProvZCS.getRandomAccount(),
+					"", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleAdmin), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("allowToSeePrivateApptWithManagerRights")) {
 			return new Object[][] { { "Calendar",
 					getLocalizedData_NoSpecialChar(), "",
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "",
 					localize(locator.privatePermission),
 					getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { { "Calendar", localize(locator.calendar),
-					"", ProvZCS.getRandomAccount(),
+					"", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		}
@@ -233,7 +234,7 @@ public class CalendarSharing extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String account = ProvZCS.getRandomAccount();
+		String account = Stafzmprov.getRandomAccount();
 		String calendarName = getLocalizedData_NoSpecialChar();
 
 		page.zCalApp.zCreateNewCalendarFolder(calendarName);
@@ -281,10 +282,10 @@ public class CalendarSharing extends CommonTest {
 			handleRetry();
 
 		String currentLoggedInUser = SelNGBase.selfAccountName.get();
-		String userB = ProvZCS.getRandomAccount();
-		String userC = ProvZCS.getRandomAccount();
-		String userD = ProvZCS.getRandomAccount();
-		// String userE = ProvZCS.getRandomAccount();
+		String userB = Stafzmprov.getRandomAccount();
+		String userC = Stafzmprov.getRandomAccount();
+		String userD = Stafzmprov.getRandomAccount();
+		// String userE = Stafzmprov.getRandomAccount();
 		String currentloggedInUser = currentLoggedInUser.toLowerCase();
 		String luserB = userB.toLowerCase();
 		String Attendees = currentLoggedInUser + "," + userB;

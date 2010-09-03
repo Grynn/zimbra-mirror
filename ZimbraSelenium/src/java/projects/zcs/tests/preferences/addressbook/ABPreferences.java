@@ -7,20 +7,20 @@ import java.lang.reflect.Method;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.zimbra.common.service.ServiceException;
-
-import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.ComposeView;
 
+import com.zimbra.common.service.ServiceException;
+
 import framework.core.SelNGBase;
+import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -36,10 +36,10 @@ public class ABPreferences extends CommonTest {
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
 	@DataProvider(name = "ABPrefDataProvider")
-	public Object[][] createData(Method method) throws ServiceException {
+	public Object[][] createData(Method method) throws ServiceException, HarnessException {
 		String test = method.getName();
 		if (test.equals("verifyNewMailedContactAddsToEmailedContact")) {
-			return new Object[][] { { ProvZCS.getRandomAccount() } };
+			return new Object[][] { { Stafzmprov.getRandomAccount() } };
 		} else if (test.equals("importContact")) {
 			return new Object[][] { { "MultiLingualContact.csv", "lastName" } };
 		} else {
@@ -127,7 +127,7 @@ public class ABPreferences extends CommonTest {
 		String accountName = SelNGBase.selfAccountName.get();
 		page.zABCompose.zNavigateToPreferenceAB();
 
-		String actualValue = ProvZCS.getAccountPreferenceValue(accountName,
+		String actualValue = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefAutoAddAddressEnabled");
 		if (actualValue.equals("FALSE")) {
 			String[] autoAddToEmailedContact = localize(locator.autoAddContacts)
@@ -142,7 +142,7 @@ public class ABPreferences extends CommonTest {
 		SleepUtil.sleep(2000);
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"preferences should be saved");
-		actualValue = ProvZCS.getAccountPreferenceValue(accountName,
+		actualValue = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefAutoAddAddressEnabled");
 
 		Assert.assertEquals(actualValue, "TRUE",
@@ -163,7 +163,7 @@ public class ABPreferences extends CommonTest {
 		obj.zFolder.zClick(page.zABCompose.zEmailedContactsFolder);
 		obj.zContactListItem.zExists(toContactSplit[0]);
 		// reset auto-add contact to false
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoAddAddressEnabled", "FALSE");
 		SelNGBase.needReset.set(false);
 
@@ -182,12 +182,12 @@ public class ABPreferences extends CommonTest {
 			handleRetry();
 
 		page.zABCompose.zNavigateToPreferenceAB();
-		String actualValue = ProvZCS.getAccountPreferenceValue(
+		String actualValue = Stafzmprov.getAccountPreferenceValue(
 				SelNGBase.selfAccountName.get(), "zimbraPrefGalSearchEnabled");
 		if (actualValue.equals("FALSE")) {
 			obj.zCheckbox.zClick(localize(locator.initiallySearchGal));
 			obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
-			actualValue = ProvZCS.getAccountPreferenceValue(
+			actualValue = Stafzmprov.getAccountPreferenceValue(
 					SelNGBase.selfAccountName.get(), "zimbraPrefGalSearchEnabled");
 
 			Assert

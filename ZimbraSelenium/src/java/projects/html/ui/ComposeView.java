@@ -2,15 +2,13 @@ package projects.html.ui;
 
 import java.io.File;
 
-import java.util.Map;
 import org.testng.Assert;
 
+import projects.html.tests.CommonTest;
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-
-import projects.html.clients.ProvZCS;
-import projects.html.tests.CommonTest;
 
 /**
  * This Class have UI-level methods related composing a mail and verifying the
@@ -151,25 +149,11 @@ public class ComposeView extends CommonTest {
 	 * @throws Exception
 	 */
 	public static String zLoginAndNavigateToCompose() throws Exception {
-		String user1 = ProvZCS.getRandomAccount();
+		String user1 = Stafzmprov.getRandomAccount();
 		return zLoginAndNavigateToCompose(user1);
 
 	}
 
-	/**
-	 * dynamically creates account. You can also pass preferences(like: html
-	 * editor, readingpane ON etc)
-	 * 
-	 * @param accntAttrs
-	 * @return
-	 * @throws Exception
-	 */
-	public static String zLoginAndNavigateToCompose(
-			Map<String, Object> accntAttrs) throws Exception {
-		String user1 = ProvZCS.getRandomAccount(accntAttrs);
-		return zLoginAndNavigateToCompose(user1);
-
-	}
 
 	// ===========================
 	// ENTER VALUES

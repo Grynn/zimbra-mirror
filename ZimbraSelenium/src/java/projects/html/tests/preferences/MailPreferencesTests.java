@@ -17,13 +17,14 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.service.ServiceException;
 
-import projects.html.clients.ProvZCS;
+import framework.util.Stafzmprov;
 import projects.html.tests.CommonTest;
 import projects.html.ui.ComposeView;
 
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
+import framework.util.Stafzmprov;
 
 @SuppressWarnings( { "static-access", "unused" })
 public class MailPreferencesTests extends CommonTest {
@@ -82,7 +83,7 @@ public class MailPreferencesTests extends CommonTest {
 		page.zMailPrefUI
 				.zNavigatePrefMailAndSelectEmailsPerPage(noOfEmailsToBeDisplayed);
 		// to verify the no got saved properly in database
-		// actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		// actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 		// "zimbraPrefMailItemsPerPage");
 		// Assert.assertEquals(actualVal, "10",
 		// "Number of mails value set is not set in db. Actual value is "
@@ -113,7 +114,7 @@ public class MailPreferencesTests extends CommonTest {
 	// if (isExecutionARetry)
 	// handleRetry();
 	//
-	// String actualVal = ProvZCS.getAccountPreferenceValue(
+	// String actualVal = Stafzmprov.getAccountPreferenceValue(
 	// ProvZCS.selfAccountName, "zimbraPrefShowFragments");
 	//
 	// if (!actualVal.equals("TRUE")) {
@@ -171,7 +172,7 @@ public class MailPreferencesTests extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
-		String fwdToAcc = ProvZCS.getRandomAccount();
+		String fwdToAcc = Stafzmprov.getRandomAccount();
 		String subject = getLocalizedData_NoSpecialChar();
 
 		page.zMailPrefUI.zNavigateToPrefMailAndSetFwdCopyTo(fwdToAcc);
@@ -201,7 +202,7 @@ public class MailPreferencesTests extends CommonTest {
 			handleRetry();
 		String selfAcc = SelNGBase.selfAccountName.get().toLowerCase();
 		String notificationSubject = "New message received at " + selfAcc;
-		String notificationToAcc = ProvZCS.getRandomAccount();
+		String notificationToAcc = Stafzmprov.getRandomAccount();
 		String subject = getLocalizedData_NoSpecialChar();
 
 		page.zMailPrefUI
@@ -233,8 +234,8 @@ public class MailPreferencesTests extends CommonTest {
 			handleRetry();
 
 		String currentAccount = SelNGBase.selfAccountName.get();
-		String randomAccount = ProvZCS.getRandomAccount();
-		String randomAccount2 = ProvZCS.getRandomAccount();
+		String randomAccount = Stafzmprov.getRandomAccount();
+		String randomAccount2 = Stafzmprov.getRandomAccount();
 		String autoReplyMsg = localize(locator.auto);
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData_NoSpecialChar();

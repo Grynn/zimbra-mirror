@@ -5,10 +5,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -56,7 +57,7 @@ public class DeepLinkTests extends CommonTest {
 
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
-		ProvZCS.injectMessage(to, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/h");

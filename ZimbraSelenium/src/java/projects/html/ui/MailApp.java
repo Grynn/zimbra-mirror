@@ -3,10 +3,11 @@ package projects.html.ui;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.SleepUtil;
 
 import projects.html.tests.CommonTest;
-import projects.zcs.clients.ProvZCS;
+
 
 /**
  * This Class have UI-level methods related Mail-app(conversation view). e.g:
@@ -174,7 +175,7 @@ public class MailApp extends CommonTest {
 			throws Exception {
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
-		ProvZCS.injectMessage(from, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		SleepUtil.sleep(1000);
 		zClickCheckMailUntilMailShowsUp(page.zMailApp.zInboxFldr, subject);
 	}

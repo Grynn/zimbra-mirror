@@ -6,14 +6,16 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
 import projects.zcs.ui.MailApp;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -213,7 +215,7 @@ public class MailBugs extends CommonTest {
 			obj.zMenuItem.zClick(localize(locator.byConversation));
 
 			resetSession();
-			String newUser = ProvZCS.getRandomAccount();
+			String newUser = Stafzmprov.getRandomAccount();
 			SelNGBase.selfAccountName.set(newUser);
 			page.zLoginpage.zLoginToZimbraAjax(newUser);
 		}
@@ -473,7 +475,7 @@ public class MailBugs extends CommonTest {
 			handleRetry();
 
 		String accountName = SelNGBase.selfAccountName.get();
-		ProvZCS.modifyAccount(accountName, "zimbraPrefFromAddress", accountName
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefFromAddress", accountName
 				.toUpperCase());
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
@@ -516,7 +518,7 @@ public class MailBugs extends CommonTest {
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
-		ProvZCS.injectMessage(from, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
@@ -671,7 +673,7 @@ public class MailBugs extends CommonTest {
 			String bcc, String subject, String body) throws Exception {
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
-		ProvZCS.injectMessage(from, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject);
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));

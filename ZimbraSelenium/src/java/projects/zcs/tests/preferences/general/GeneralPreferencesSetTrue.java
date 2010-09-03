@@ -7,10 +7,12 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentApp;
 import projects.zcs.ui.MailApp;
@@ -28,13 +30,13 @@ public class GeneralPreferencesSetTrue extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		currentloggedinuser = SelNGBase.selfAccountName.get();
-		ProvZCS.modifyAccount(currentloggedinuser,
+		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefIncludeSpamInSearch", "TRUE");
-		ProvZCS.modifyAccount(currentloggedinuser,
+		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefIncludeTrashInSearch", "TRUE");
-		ProvZCS.modifyAccount(currentloggedinuser,
+		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefShowSearchString", "TRUE");
-		ProvZCS.modifyAccount(currentloggedinuser,
+		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefShowSelectionCheckbox", "TRUE");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3000);/* without this we get permission denied error */
@@ -82,7 +84,7 @@ public class GeneralPreferencesSetTrue extends CommonTest {
 		String[] recipients = { SelNGBase.selfAccountName.get() };
 		String[] message = { "junksubject11", "junksubject12" };
 		for (int i = 0; i <= 1; i++) {
-			ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+			LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 					"ccuser@testdomain.com", message[i], "generalbody");
 			MailApp.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),
 					message[i]);
@@ -128,7 +130,7 @@ public class GeneralPreferencesSetTrue extends CommonTest {
 		String[] recipients = { SelNGBase.selfAccountName.get() };
 		String[] message = { "trashsubject11", "trashsubject12" };
 		for (int i = 0; i <= 1; i++) {
-			ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+			LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 					"ccuser@testdomain.com", message[i], "generalbody");
 			MailApp.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),
 					message[i]);
@@ -265,7 +267,7 @@ public class GeneralPreferencesSetTrue extends CommonTest {
 
 		// Right click menu Search on username
 		String[] recipients = { SelNGBase.selfAccountName.get() };
-		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 				"ccuser@testdomain.com", "generalmail", "generalbody");
 		MailApp.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),
 				"generalmail");
@@ -372,7 +374,7 @@ public class GeneralPreferencesSetTrue extends CommonTest {
 
 		// Verify mail list item check box
 		String[] recipients = { SelNGBase.selfAccountName.get() };
-		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 				"ccuser@testdomain.com", "checkboxinlistitem",
 				"checkboxinlistitemmailbody");
 		MailApp.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),

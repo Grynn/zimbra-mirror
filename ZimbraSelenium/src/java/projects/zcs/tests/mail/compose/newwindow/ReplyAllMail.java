@@ -8,7 +8,8 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
-import projects.zcs.clients.ProvZCS;
+import framework.util.Stafzmprov;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
 import projects.zcs.ui.MailApp;
@@ -54,7 +55,7 @@ public class ReplyAllMail extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefComposeFormat", "html");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(2500);
@@ -92,7 +93,7 @@ public class ReplyAllMail extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefComposeFormat", "text");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(2500);

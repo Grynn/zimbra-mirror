@@ -10,7 +10,8 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
-import projects.zcs.clients.ProvZCS;
+import framework.util.Stafzmprov;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -54,7 +55,7 @@ public class ShortcutBugs extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefUseKeyboardShortcuts", "FALSE");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3500);

@@ -9,9 +9,10 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
+import framework.util.Stafzmprov;
 
 import projects.html.tests.CommonTest;
-import projects.zcs.clients.ProvZCS;
+
 
 /**
  * This class file contains tests for compose To, Cc and Bcc buttons using GAL
@@ -30,7 +31,7 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 	public Object[][] createData(Method method) throws Exception {
 		// String test = method.getName();
 		return new Object[][] { { "_selfAccountName_",
-				ProvZCS.getRandomAccount(), ProvZCS.getRandomAccount(),
+				Stafzmprov.getRandomAccount(), Stafzmprov.getRandomAccount(),
 				getLocalizedData_NoSpecialChar(),
 				getLocalizedData_NoSpecialChar(), "" } };
 	}
@@ -68,9 +69,9 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String firstAcc = ProvZCS.getRandomAccount();
-		String secondAcc = ProvZCS.getRandomAccount();
-		String thirdAcc = ProvZCS.getRandomAccount();
+		String firstAcc = Stafzmprov.getRandomAccount();
+		String secondAcc = Stafzmprov.getRandomAccount();
+		String thirdAcc = Stafzmprov.getRandomAccount();
 		String addReceipAcc = firstAcc + "," + secondAcc + "," + thirdAcc;
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -98,9 +99,9 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String firstAcc = ProvZCS.getRandomAccount();
-		String secondAcc = ProvZCS.getRandomAccount();
-		String thirdAcc = ProvZCS.getRandomAccount();
+		String firstAcc = Stafzmprov.getRandomAccount();
+		String secondAcc = Stafzmprov.getRandomAccount();
+		String thirdAcc = Stafzmprov.getRandomAccount();
 		String addReceipAcc = firstAcc + "," + secondAcc + "," + thirdAcc;
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -130,9 +131,9 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String firstAcc = ProvZCS.getRandomAccount();
-		String secondAcc = ProvZCS.getRandomAccount();
-		String thirdAcc = ProvZCS.getRandomAccount();
+		String firstAcc = Stafzmprov.getRandomAccount();
+		String secondAcc = Stafzmprov.getRandomAccount();
+		String thirdAcc = Stafzmprov.getRandomAccount();
 		String addReceipAcc = firstAcc + "," + secondAcc + "," + thirdAcc;
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -160,9 +161,9 @@ public class ComposeToCcBccBtnTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String firstAcc = ProvZCS.getRandomAccount();
-		String secondAcc = ProvZCS.getRandomAccount();
-		String thirdAcc = ProvZCS.getRandomAccount();
+		String firstAcc = Stafzmprov.getRandomAccount();
+		String secondAcc = Stafzmprov.getRandomAccount();
+		String thirdAcc = Stafzmprov.getRandomAccount();
 		String addReceipAcc = firstAcc + "," + secondAcc + "," + thirdAcc;
 
 		page.zComposeView.zNavigateToMailCompose();

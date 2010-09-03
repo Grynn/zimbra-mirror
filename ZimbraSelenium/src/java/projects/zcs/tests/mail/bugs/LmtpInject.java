@@ -6,13 +6,15 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -155,7 +157,7 @@ public class LmtpInject extends CommonTest {
 		SelNGBase.selenium.get().selectWindow(null);
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
 		SleepUtil.sleep(1500);
-		String newUser = ProvZCS.getRandomAccount();
+		String newUser = Stafzmprov.getRandomAccount();
 		obj.zEditField.zType(page.zComposeView.zToField, newUser);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 		SleepUtil.sleep(2000);
@@ -235,7 +237,7 @@ public class LmtpInject extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
 		SleepUtil.sleep(1500);
-		String newUser = ProvZCS.getRandomAccount();
+		String newUser = Stafzmprov.getRandomAccount();
 		obj.zEditField.zType(page.zComposeView.zToField, newUser);
 		obj.zCheckbox
 				.zVerifyIsChecked("Broadsoft zimlet for demo account on dogfood");
@@ -452,7 +454,7 @@ public class LmtpInject extends CommonTest {
 		String actual;
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
-		ProvZCS.injectMessage(to, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(to, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(1000);
@@ -473,7 +475,7 @@ public class LmtpInject extends CommonTest {
 		Assert.assertTrue(actual.indexOf(body) >= 0,
 				"Body-field value mismatched");
 
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefComposeFormat", "html");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3500);

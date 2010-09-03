@@ -11,18 +11,18 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Set;
+
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JSONSerializer;
+
 import org.clapper.util.text.HTMLUtil;
 import org.testng.Assert;
 import org.testng.SkipException;
@@ -31,14 +31,15 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
+
 import projects.zcs.CoreObjects;
 import projects.zcs.Locators;
 import projects.zcs.PageObjects;
-import projects.zcs.clients.ProvZCS;
 import framework.core.SelNGBase;
 import framework.core.SeleniumService;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -119,7 +120,6 @@ public class CommonTest extends SelNGBase {
 			+ "    return json;\n"
 			+ "  };\n" + "}; \n" + "window.jscoverage_report()\n";
 
-	protected static Map<String, Object> selfAccountAttrs = new HashMap<String, Object>();
 
 	public CommonTest() {
 		zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg", new Locale(
@@ -151,54 +151,20 @@ public class CommonTest extends SelNGBase {
 		// set retry to false so that newtests and dependsOn methods would work
 		// like fresh-test
 		// isExecutionARetry = false;
-		Map<String, Object> accntAttrs = new HashMap<String, Object>();
-		zLoginIfRequired(accntAttrs);
-	}
-
-	public static void zLoginIfRequired(Map<String, Object> accntAttrs)
-			throws Exception {
-		if (needsReLogin(accntAttrs) || SelNGBase.needReset.get()) {
+		if (needsReLogin() || SelNGBase.needReset.get()) {
 
 			resetSession();
-			selfAccountAttrs = accntAttrs;
-			SelNGBase.selfAccountName.set(page.zLoginpage
-					.zLoginToZimbraAjax(accntAttrs));
+			SelNGBase.selfAccountName.set(page.zLoginpage.zLoginToZimbraAjax());
+			
 		}
 	}
 
-	private static boolean needsReLogin(Map<String, Object> accntAttrs) {
-		int currentAccntAttrsSize = selfAccountAttrs.size() - 4;// -4 is to
-		// remove default settings
+	private static boolean needsReLogin() {
+		
 		// none has logged in yet
 		if (SelNGBase.selfAccountName.get().equals(""))
 			return true;
-		// a user has already logged in with default settings
-		// and test needs to use default-settings as well.
-		if (currentAccntAttrsSize == 0 && accntAttrs.size() == 0)
-			return false;
-		// we have a default user, but need user with some prefs(s)
-		// or, we have user with some pref, but need default user
-		if ((currentAccntAttrsSize == 0 && accntAttrs.size() > 0)
-				|| (selfAccountAttrs.size() > 0) && (accntAttrs.size() == 0))
-			return true;
-
-		if ((currentAccntAttrsSize > 0) && (accntAttrs.size() > 0)) {
-			Iterator<String> keys = accntAttrs.keySet().iterator();
-			while (keys.hasNext()) {
-				String reqkey = keys.next();
-				// if the key doesnt exist return true
-				if (!selfAccountAttrs.containsKey(reqkey)) {
-					return true;
-				}
-				// if the value doesnt match return true
-				String key1 = selfAccountAttrs.get(reqkey).toString();
-				String key2 = accntAttrs.get(reqkey).toString();
-				if (!key1.equals(key2)) {
-					return true;
-				}
-			}
-
-		}
+		
 
 		return false;
 	}
@@ -206,10 +172,13 @@ public class CommonTest extends SelNGBase {
 	@BeforeSuite(groups = { "always" })
 	public void initTests() throws Exception {
 		initFramework();
-		ProvZCS.setupZCSTestBed();
+		
+		// Create the test domain
+		Stafzmprov.zmprov(String.format("zmprov createDomain %s", ZimbraSeleniumProperties.getStringProperty("testdomain")));
+		
 		SeleniumService.getInstance().startSeleniumServer();
-		ProvZCS.createAccount("ccuser@testdomain.com");
-		ProvZCS.createAccount("bccuser@testdomain.com");
+		Stafzmprov.createAccount("ccuser@testdomain.com");
+		Stafzmprov.createAccount("bccuser@testdomain.com");
 		// BufferedWriter out = new BufferedWriter(new
 		// FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt"));
 		// out.close();

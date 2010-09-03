@@ -2,12 +2,14 @@ package projects.html.ui;
 
 import static org.testng.Assert.assertTrue;
 import java.util.Map;
-import projects.html.clients.ProvZCS;
+import framework.util.Stafzmprov;
 import com.zimbra.common.service.ServiceException;
 import projects.html.tests.CommonTest;
 import framework.core.SelNGBase;
 import framework.util.BrowserUtil;
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraAccount;
 
 @SuppressWarnings("static-access")
@@ -18,9 +20,10 @@ public class LoginPage extends CommonTest {
 	 * 
 	 * @return random-user that was created
 	 * @throws ServiceException
+	 * @throws HarnessException 
 	 */
-	public String zLoginToZimbraAjax() throws ServiceException {
-		String username = ProvZCS.getRandomAccount();
+	public String zLoginToZimbraAjax() throws ServiceException, HarnessException {
+		String username = Stafzmprov.getRandomAccount();
 		zLoginToZimbraHTML(username);
 		return username;
 	}
@@ -34,17 +37,16 @@ public class LoginPage extends CommonTest {
 	 *            value
 	 * @return username of the random-user
 	 * @throws ServiceException
+	 * @throws HarnessException 
 	 */
 	public synchronized String zLoginToZimbraHTML(Map<String, Object> accntAttrs)
-			throws ServiceException {
+			throws ServiceException, HarnessException {
 		String username = "";		
 		// if we are retrying the execution, then use the same account.
 		if (SelNGBase.isExecutionARetry.get())
 			username = SelNGBase.selfAccountName.get();
 		else{		
-			username = ProvZCS.randomizeAccntName("");
-			ZimbraAccount account = new ZimbraAccount();
-			username = account.provisionAccount(username, "test123");			
+			username = Stafzmprov.getRandomAccount();			
 		}
 		zLoginToZimbraHTML(username);
 		return username;
@@ -97,7 +99,7 @@ public class LoginPage extends CommonTest {
 
 	public static void zCustomLoginToZimbraAjax(String parameter) {
 		try {
-			String username = ProvZCS.getRandomAccount();
+			String username = Stafzmprov.getRandomAccount();
 			SelNGBase.selfAccountName.set(username);
 			customLogin(parameter);
 			SleepUtil.sleep(1500);

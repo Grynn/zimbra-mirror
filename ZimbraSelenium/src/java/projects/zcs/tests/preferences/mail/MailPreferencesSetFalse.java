@@ -20,8 +20,9 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -46,8 +47,8 @@ public class MailPreferencesSetFalse extends CommonTest {
 
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefShowFragments", "FALSE");
-		ProvZCS.modifyAccount(accountName, "zimbraPrefOpenMailInNewWindow",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefShowFragments", "FALSE");
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefOpenMailInNewWindow",
 				"FALSE");
 
 //		selenium.refresh();

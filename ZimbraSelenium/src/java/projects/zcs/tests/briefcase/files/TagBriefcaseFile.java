@@ -8,13 +8,14 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import projects.html.clients.ProvZCS;
+import framework.util.Stafzmprov;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
 /**
  * @author Jitesh Sojitra
@@ -230,7 +231,7 @@ public class TagBriefcaseFile extends CommonTest {
 		// temporary work around for proper object identification
 		resetSession();
 		String acc1;
-		acc1 = ProvZCS.getRandomAccount();
+		acc1 = Stafzmprov.getRandomAccount();
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
 		zGoToApplication("Briefcase");
 

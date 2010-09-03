@@ -21,9 +21,10 @@ import com.zimbra.cs.service.admin.GetConfig;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -35,12 +36,12 @@ public class CreateMeetingRequest extends CommonTest {
 		if (test.equals("apptRecurringInviteContentVerify")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData(1), localize(locator.everyWeek),
-					ProvZCS.getRandomAccount(), getLocalizedData(3) } };
+					Stafzmprov.getRandomAccount(), getLocalizedData(3) } };
 		} else if (test.equals("apptModifyRecurringCheckContent")) {
 			return new Object[][] {
 					{ "instance", getLocalizedData_NoSpecialChar(),
 							getLocalizedData_NoSpecialChar(),
-							ProvZCS.getRandomAccount(), getLocalizedData(3),
+							Stafzmprov.getRandomAccount(), getLocalizedData(3),
 							localize(locator.everyWeek),
 							"10:00:" + localize(locator.periodAm),
 							"11:00:" + localize(locator.periodAm),
@@ -49,7 +50,7 @@ public class CreateMeetingRequest extends CommonTest {
 							"12:00:" + localize(locator.periodPm) },
 					{ "series", getLocalizedData_NoSpecialChar(),
 							getLocalizedData_NoSpecialChar(),
-							ProvZCS.getRandomAccount(), getLocalizedData(3),
+							Stafzmprov.getRandomAccount(), getLocalizedData(3),
 							localize(locator.everyWeek),
 							"10:00:" + localize(locator.periodAm),
 							"11:00:" + localize(locator.periodAm),

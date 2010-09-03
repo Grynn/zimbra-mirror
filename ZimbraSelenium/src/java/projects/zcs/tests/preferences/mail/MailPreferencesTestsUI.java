@@ -20,9 +20,10 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -45,47 +46,47 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefMailPollingInterval",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefMailPollingInterval",
 				"5m");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefMessageViewHtmlPreferred", "TRUE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefShowFragments", "TRUE");
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefShowFragments", "TRUE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefOpenMailInNewWindow",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefOpenMailInNewWindow",
 				"FALSE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefDisplayExternalImages",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefDisplayExternalImages",
 				"FALSE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefMarkMsgRead", "0");
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefMarkMsgRead", "0");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefMailInitialSearch",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefMailInitialSearch",
 				"in:inbox");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefMailSoundsEnabled",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefMailSoundsEnabled",
 				"FALSE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefMailFlashIcon", "FALSE");
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefMailFlashIcon", "FALSE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefMailFlashTitle", "FALSE");
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefMailFlashTitle", "FALSE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefMailForwardingAddress",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefMailForwardingAddress",
 				"");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefMailLocalDeliveryDisabled", "FALSE");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefNewMailNotificationAddress", "");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefNewMailNotificationEnabled", "FALSE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefOutOfOfficeReply", "");
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefOutOfOfficeReply", "");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefOutOfOfficeReplyEnabled",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefOutOfOfficeReplyEnabled",
 				"FALSE");
 
 		super.zLogin();
@@ -120,7 +121,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailPollingInterval");
 
 		Assert.assertEquals(actualVal, "31536000",
@@ -151,7 +152,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMessageViewHtmlPreferred");
 
 		Assert.assertEquals(actualVal, "FALSE",
@@ -167,7 +168,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMessageViewHtmlPreferred");
 
 		Assert.assertEquals(actualVal, "TRUE",
@@ -198,7 +199,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefShowFragments");
 
 		Assert.assertEquals(actualVal, "FALSE",
@@ -214,7 +215,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefShowFragments");
 
 		Assert.assertEquals(actualVal, "TRUE",
@@ -245,7 +246,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefOpenMailInNewWindow");
 
 		Assert
@@ -264,7 +265,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefOpenMailInNewWindow");
 
 		Assert
@@ -298,7 +299,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefDisplayExternalImages");
 
 		Assert.assertEquals(actualVal, "TRUE",
@@ -314,7 +315,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefDisplayExternalImages");
 
 		Assert.assertEquals(actualVal, "FALSE",
@@ -345,7 +346,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMarkMsgRead");
 
 		Assert.assertEquals(actualVal, "-1",
@@ -361,7 +362,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMarkMsgRead");
 
 		Assert.assertEquals(actualVal, "0",
@@ -394,7 +395,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailInitialSearch");
 
 		Assert.assertEquals(actualVal, "in:sent",
@@ -413,7 +414,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailInitialSearch");
 
 		Assert.assertEquals(actualVal, "in:inbox",
@@ -446,7 +447,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailSoundsEnabled");
 
 		Assert
@@ -466,7 +467,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailSoundsEnabled");
 
 		Assert
@@ -500,7 +501,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailFlashTitle");
 
 		Assert
@@ -520,7 +521,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailFlashTitle");
 
 		Assert
@@ -560,14 +561,14 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailLocalDeliveryDisabled");
 
 		Assert.assertEquals(actualVal, "TRUE",
 				"'Mail forwarding check' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailForwardingAddress");
 
 		Assert.assertEquals(actualVal, "test@testdomain.com",
@@ -585,14 +586,14 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailFlashTitle");
 
 		Assert.assertEquals(actualVal, "FALSE",
 				"'Mail forwarding check' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefMailForwardingAddress");
 
 		Assert.assertEquals(actualVal, "",
@@ -627,14 +628,14 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefNewMailNotificationEnabled");
 
 		Assert.assertEquals(actualVal, "TRUE",
 				"'Send mail notification check' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefNewMailNotificationAddress");
 
 		Assert.assertEquals(actualVal, "notification@testdomain.com",
@@ -653,14 +654,14 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefNewMailNotificationEnabled");
 
 		Assert.assertEquals(actualVal, "FALSE",
 				"'Send mail notification check' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefNewMailNotificationAddress");
 
 		Assert.assertEquals(actualVal, "",
@@ -699,14 +700,14 @@ public class MailPreferencesTestsUI extends CommonTest {
 		 */
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved), "Valid toast message is present");
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefOutOfOfficeReplyEnabled");
 
 		Assert.assertEquals(actualVal, "TRUE",
 				"'Autoreply enabled check' value set is not set in db. Actual value is "
 						+ actualVal);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefOutOfOfficeReply");
 
 		Assert.assertEquals(actualVal, "message",
@@ -724,7 +725,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefOutOfOfficeReplyEnabled");
 
 		Assert.assertEquals(actualVal, "FALSE",

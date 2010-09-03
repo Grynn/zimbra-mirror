@@ -18,9 +18,10 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.CalCompose;
 import projects.zcs.ui.MailApp;
@@ -33,7 +34,7 @@ public class ForwardAppointment extends CommonTest {
 		if (test.equals("forwardAppt")
 				|| test.equals("forwardApptInviteForMultivalue")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3) } };
 		} else {
 			return new Object[][] { { "" } };
@@ -56,7 +57,7 @@ public class ForwardAppointment extends CommonTest {
 			handleRetry();
 
 		String newBody = "ForwardAppt_BodyUpdated";
-		String thirdUser = ProvZCS.getRandomAccount();
+		String thirdUser = Stafzmprov.getRandomAccount();
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
 		obj.zAppointment.zExists(subject);
@@ -115,9 +116,9 @@ public class ForwardAppointment extends CommonTest {
 			handleRetry();
 
 		String currentLoggedInUser = SelNGBase.selfAccountName.get();
-		String user1 = ProvZCS.getRandomAccount();
-		String user2 = ProvZCS.getRandomAccount();
-		String user3 = ProvZCS.getRandomAccount();
+		String user1 = Stafzmprov.getRandomAccount();
+		String user2 = Stafzmprov.getRandomAccount();
+		String user3 = Stafzmprov.getRandomAccount();
 		String currentloggedInUser = currentLoggedInUser.toLowerCase();
 
 		zGoToApplication("Preferences");

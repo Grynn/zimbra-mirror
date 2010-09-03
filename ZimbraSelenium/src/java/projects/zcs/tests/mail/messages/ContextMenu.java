@@ -11,11 +11,14 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.util.HarnessException;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -36,9 +39,9 @@ public class ContextMenu extends CommonTest {
 	//--------------------------------------------------------------------------
 	@SuppressWarnings("unused")
 	@DataProvider(name = "lmtpDataProvider")
-	private Object[][] createData(Method method) throws ServiceException {
+	private Object[][] createData(Method method) throws ServiceException, HarnessException {
 		if (i == 0) {
-			commonAccount = ProvZCS.getRandomAccount();
+			commonAccount = Stafzmprov.getRandomAccount();
 			i = i + 1;
 		}
 		String test = method.getName();
@@ -61,20 +64,20 @@ public class ContextMenu extends CommonTest {
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					"commonsubject", "commonbody", "" } };
 		} else if (test.equals("rtClickToContactAndSubject_MarkAsReadUnread")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "subjectmarkasreadunread",
 					"bodymarkasreadunread", "" } };
 		} else if (test.equals("rtClickToContactAndSubject_Delete")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "subjectdelete", "bodydelete", "" } };
 		} else if (test.equals("rtClickToContactAndSubject_Move")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "subjectmove", "bodymove", "" } };
 		} else if (test.equals("rtClickToContactAndSubject_Junk")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "subjectjunk", "bodyjunk", "" } };
 		} else {
@@ -173,7 +176,7 @@ public class ContextMenu extends CommonTest {
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 
-		ProvZCS.injectMessage(commonAccount, recipients, cc, newSubject,
+		LmtpUtil.injectMessage(commonAccount, recipients, cc, newSubject,
 				newBody);
 
 		MailApp.ClickCheckMailUntilMailShowsUp(
@@ -229,7 +232,7 @@ public class ContextMenu extends CommonTest {
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 
-		ProvZCS.injectMessage(commonAccount, recipients, cc, newSubject,
+		LmtpUtil.injectMessage(commonAccount, recipients, cc, newSubject,
 				newBody);
 
 		MailApp.ClickCheckMailUntilMailShowsUp(
@@ -949,14 +952,14 @@ public class ContextMenu extends CommonTest {
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
 		if (from.equals(commonAccount) && randomAcctCreatedFlag == false) {
-			ProvZCS.injectMessage(from, recipients, cc, subject, body);
+			LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 			MailApp.ClickCheckMailUntilMailShowsUp(
 					replaceUserNameInStaticId(page.zMailApp.zInboxFldr),
 					subject);
 			randomAcctCreatedFlag = true;
 		} else if ((!from.equals(commonAccount))
 				&& (randomAcctCreatedFlag == true || randomAcctCreatedFlag == false)) {
-			ProvZCS.injectMessage(from, recipients, cc, subject, body);
+			LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 			MailApp.ClickCheckMailUntilMailShowsUp(
 					replaceUserNameInStaticId(page.zMailApp.zInboxFldr),
 					subject);

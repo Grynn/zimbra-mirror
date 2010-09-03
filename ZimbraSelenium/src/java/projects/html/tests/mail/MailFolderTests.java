@@ -11,10 +11,11 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
-import projects.zcs.clients.ProvZCS;
+
 
 /**
  * This class file contains mail folders related tests
@@ -446,7 +447,7 @@ public class MailFolderTests extends CommonTest {
 		String subject = "testSavedSearch";
 		folderName = "fldr_" + folderName;
 		zGoToApplication("Mail");
-		page.zMailApp.zInjectMessage(ProvZCS.getRandomAccount(),
+		page.zMailApp.zInjectMessage(Stafzmprov.getRandomAccount(),
 				SelNGBase.selfAccountName.get(), "ccuser@testdomain.com", "",
 				subject, subject + "body", "");
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {

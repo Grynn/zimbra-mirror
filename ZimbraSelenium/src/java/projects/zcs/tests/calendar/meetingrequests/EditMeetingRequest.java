@@ -21,9 +21,10 @@ import com.zimbra.cs.service.admin.GetConfig;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -35,7 +36,7 @@ public class EditMeetingRequest extends CommonTest {
 		if (test.equals("editReplyAppt_Bug37186")
 				|| test.equals("editReplyApptAsAnAlias_Bug12301")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3) } };
 		} else {
 			return new Object[][] { { "" } };
@@ -74,7 +75,7 @@ public class EditMeetingRequest extends CommonTest {
 		String acceptEditedReplyContent = getLocalizedData_NoSpecialChar();
 		String declineEditedReplyContent = getLocalizedData_NoSpecialChar();
 		String tentativeEditedReplyContent = getLocalizedData_NoSpecialChar();
-		String attendees = ProvZCS.getRandomAccount();
+		String attendees = Stafzmprov.getRandomAccount();
 		String organizer = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendar();
@@ -195,15 +196,15 @@ public class EditMeetingRequest extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String acc1 = ProvZCS.getRandomAccount();
+		String acc1 = Stafzmprov.getRandomAccount();
 		GregorianCalendar thisday = new GregorianCalendar();
 		Date d = thisday.getTime();
 		DateFormat df = new SimpleDateFormat("yyMMddHHmmss");
 		String s = df.format(d);
 		String alias = s + "@testdomain.com";
 
-		ProvZCS.addAlias(acc1, alias);
-		ProvZCS.modifyAccount(acc1, "zimbraPrefFromAddress", alias);
+		Stafzmprov.zmprov(String.format("zmprov addAccountAlias %s %s", acc1, alias));
+		Stafzmprov.modifyAccount(acc1, "zimbraPrefFromAddress", alias);
 		String loggeduser = SelNGBase.selfAccountName.get();
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateSimpleAppt(subject, location, alias, body);

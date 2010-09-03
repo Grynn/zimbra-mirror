@@ -6,9 +6,11 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
-import projects.zcs.clients.ProvZCS;
+import framework.util.Stafzmprov;
+
 import projects.zcs.tests.CommonTest;
 
 @SuppressWarnings("static-access")
@@ -22,13 +24,13 @@ public class CancelCompose extends CommonTest {
 		if (test.equals("cancelingComposeInNewWindowSavesDraft_Bug43560")) {
 			return new Object[][] { { SelNGBase.selfAccountName.get(),
 					SelNGBase.selfAccountName.get(),
-					ProvZCS.getRandomAccount(), "bccuser@testdomain.com",
+					Stafzmprov.getRandomAccount(), "bccuser@testdomain.com",
 					"subject_cancelingComposeInNewWindowSavesDraft_Bug43560",
 					"body_cancelingComposeInNewWindowSavesDraft_Bug43560", "" } };
 		} else if (test.equals("cancelingComposeInNewWindowAndSavingDraft")) {
 			return new Object[][] { { SelNGBase.selfAccountName.get(),
 					SelNGBase.selfAccountName.get(),
-					ProvZCS.getRandomAccount(), "bccuser@testdomain.com",
+					Stafzmprov.getRandomAccount(), "bccuser@testdomain.com",
 					"subject_cancelingComposeInNewWindowSavingDraft",
 					"body_cancelingComposeInNewWindowSavingDraft", "" } };
 
@@ -59,7 +61,7 @@ public class CancelCompose extends CommonTest {
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
-		ProvZCS.injectMessage(from, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zReplyBtn);
@@ -91,7 +93,7 @@ public class CancelCompose extends CommonTest {
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
-		ProvZCS.injectMessage(from, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zReplyBtn);

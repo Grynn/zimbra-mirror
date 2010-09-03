@@ -7,10 +7,11 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 
@@ -63,7 +64,7 @@ public class MailSavedSearch extends CommonTest {
 		obj.zMenuItem.zClick(localize(locator.byConversation));
 		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLV__ex"));
 
-		ProvZCS.injectMessage(to, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", subject);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
@@ -104,7 +105,7 @@ public class MailSavedSearch extends CommonTest {
 		 * Send mail and verify that is:flagged search is not returning
 		 * anything.
 		 */
-		ProvZCS.injectMessage(to, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", "is:flagged");
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
@@ -123,7 +124,7 @@ public class MailSavedSearch extends CommonTest {
 		 * Send another mail and keep it unflagged.
 		 */
 		String new_subject = "New" + subject;
-		ProvZCS.injectMessage(to, recipients, cc, new_subject, body);
+		LmtpUtil.injectMessage(to, recipients, cc, new_subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(new_subject);
 
 		/**

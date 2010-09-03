@@ -17,9 +17,10 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 
 @SuppressWarnings({ "static-access", "unused" })
@@ -35,38 +36,38 @@ public class CalendarQuickAddAndFishEyeView extends CommonTest {
 				|| test.equals("quickAddAllDayApptFishEyeMonthView")
 				|| test.equals("fishEyeOpensWrongDayOnMonday_Bug45184")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "", "",
 					"10:00:" + localize(locator.periodAm),
 					"11:00:" + localize(locator.periodAm) } };
 		} else if (test.equals("quickAddApptDayView2")
 				|| test.equals("quickAddApptWeekView2")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "", "",
 					"12:00:" + localize(locator.periodAm),
 					"1:00:" + localize(locator.periodAm) } };
 		} else if (test.equals("quickAddApptWeekView1")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "", "",
 					"11:00:" + localize(locator.periodPm),
 					"12:00:" + localize(locator.periodPm) } };
 		} else if (test.equals("quickAddApptMonthView")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "", "",
 					"11:00:" + localize(locator.periodPm),
 					"12:00:" + localize(locator.periodPm) } };
 		} else if (test.equals("quickAddApptFishEyeMonthView")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "", "",
 					"3:00:" + localize(locator.periodAm),
 					"4:00:" + localize(locator.periodAm) } };
 		} else {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3) } };
 		}
 	}

@@ -10,10 +10,12 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -101,7 +103,7 @@ public class ReadingPane extends CommonTest {
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
-		ProvZCS.injectMessage(from, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
@@ -146,7 +148,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"right",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
@@ -162,7 +164,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"right",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
@@ -179,7 +181,7 @@ public class ReadingPane extends CommonTest {
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
-		ProvZCS.injectMessage(from, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject);
 
@@ -228,7 +230,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"off",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
@@ -244,7 +246,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"off",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
@@ -262,7 +264,7 @@ public class ReadingPane extends CommonTest {
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
-		ProvZCS.injectMessage(from, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject);
 
@@ -311,7 +313,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"bottom",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
@@ -327,7 +329,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"bottom",
-				ProvZCS.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);

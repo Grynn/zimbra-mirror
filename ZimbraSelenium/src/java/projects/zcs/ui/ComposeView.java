@@ -9,8 +9,9 @@ import org.testng.Assert;
 
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
-import projects.zcs.clients.ProvZCS;
+
 
 /**
  * This Class have UI-level methods related composing a mail and verifying the
@@ -110,38 +111,11 @@ public class ComposeView extends AppPage {
 	 * @throws Exception
 	 */
 	public static String zLoginAndNavigateToCompose() throws Exception {
-		String user1 = ProvZCS.getRandomAccount();
+		String user1 = Stafzmprov.getRandomAccount();
 		return zLoginAndNavigateToCompose(user1);
 	}
 
-	/**
-	 * dynamically creates account. You can also pass preferences(like: html
-	 * editor, readingpane ON etc)
-	 * 
-	 * @param accntAttrs
-	 * @return
-	 * @throws Exception
-	 */
-	public static String zLoginAndNavigateToCompose(
-			Map<String, Object> accntAttrs) throws Exception {
-		String user1 = ProvZCS.getRandomAccount(accntAttrs);
-		return zLoginAndNavigateToCompose(user1);
-	}
 
-	/**
-	 * Logs into Zimbra-ajax using a user with and opens compose in new-window
-	 * by shift-clicking on New-button
-	 * 
-	 * @param accntAttrs
-	 * @return
-	 * @throws Exception
-	 */
-	public static String zLoginAndOpenMailComposeInNewWindowByShiftClick(
-			Map<String, Object> accntAttrs) throws Exception {
-		String user1 = ProvZCS.getRandomAccount(accntAttrs);
-		return zLoginAndOpenMailComposeInNewWindowByShiftClick(user1);
-
-	}
 
 	/**
 	 * Logs into Zimbra-ajax using the random-name and opens compose in
@@ -167,7 +141,7 @@ public class ComposeView extends AppPage {
 	public static String zLoginAndOpenMailComposeInNewWindowByShiftClick(
 			String username) throws Exception {
 		if (username.equals(""))
-			username = ProvZCS.getRandomAccount();
+			username = Stafzmprov.getRandomAccount();
 
 		page.zLoginpage.zLoginToZimbraAjax(username);
 		zNavigateToComposeByShiftClick();

@@ -4,12 +4,13 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import framework.core.SelNGBase;
 import framework.items.ContactGroupItem;
 import framework.util.RetryFailedTests;
+import framework.util.Stafzmprov;
 
 /**
  * This covers some high priority test cases related to address book
@@ -52,7 +53,7 @@ public class CreateContactGroup extends CommonTest {
 		group.nickname = getLocalizedData_NoSpecialChar();
 		for (int i = 1; i <= 2; i++) {
 			String email = "acc" + i + "@testdomain.com";
-			ProvZCS.createAccount(email);
+			Stafzmprov.createAccount(email);
 			group.addDListMember(email);
 			
 		}
@@ -80,7 +81,7 @@ public class CreateContactGroup extends CommonTest {
 		group.nickname = getLocalizedData_NoSpecialChar();
 		for (int i = 1; i <= 2; i++) {
 			String email = "acc" + i + "@testdomain.com";
-			ProvZCS.createAccount(email);
+			Stafzmprov.createAccount(email);
 			group.addDListMember(email);
 			
 		}

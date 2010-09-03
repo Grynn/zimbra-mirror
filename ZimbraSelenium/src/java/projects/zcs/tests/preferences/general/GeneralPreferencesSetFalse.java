@@ -9,10 +9,12 @@ import com.zimbra.cs.service.account.GetPrefs;
 import com.zimbra.cs.service.admin.GetAccount;
 
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentApp;
 import projects.zcs.ui.MailApp;
@@ -31,13 +33,13 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 		currentloggedinuser = SelNGBase.selfAccountName.get();
-		ProvZCS.modifyAccount(currentloggedinuser,
+		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefIncludeSpamInSearch", "FALSE");
-		ProvZCS.modifyAccount(currentloggedinuser,
+		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefIncludeTrashInSearch", "FALSE");
-		ProvZCS.modifyAccount(currentloggedinuser,
+		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefShowSearchString", "FALSE");
-		ProvZCS.modifyAccount(currentloggedinuser,
+		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefShowSelectionCheckbox", "FALSE");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3000);/* without this we get permission denied error */
@@ -85,7 +87,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 		String[] recipients = { SelNGBase.selfAccountName.get() };
 		String[] message = { "junksubject21", "junksubject22" };
 		for (int i = 0; i <= 1; i++) {
-			ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+			LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 					"ccuser@testdomain.com", message[i], "generalbody");
 			MailApp.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),
 					message[i]);
@@ -116,7 +118,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 		String[] recipients = { SelNGBase.selfAccountName.get() };
 		String[] message = { "trashsubject21", "trashsubject22" };
 		for (int i = 0; i <= 1; i++) {
-			ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+			LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 					"ccuser@testdomain.com", message[i], "generalbody");
 			MailApp.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),
 					message[i]);
@@ -240,7 +242,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 
 		// Verify mail list item check box
 		String[] recipients = { SelNGBase.selfAccountName.get() };
-		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 				"ccuser@testdomain.com", "checkboxinlistitem",
 				"checkboxinlistitemmailbody");
 		MailApp.ClickCheckMailUntilMailShowsUp(
@@ -288,33 +290,33 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 		zGoToApplication("Preferences");
 
 		// Verify database values by setting check box ON / OFF
-		String getJunkStatus = ProvZCS.getAccountPreferenceValue(
+		String getJunkStatus = Stafzmprov.getAccountPreferenceValue(
 				currentloggedinuser, "zimbraPrefIncludeSpamInSearch");
-		String getTrashStatus = ProvZCS.getAccountPreferenceValue(
+		String getTrashStatus = Stafzmprov.getAccountPreferenceValue(
 				currentloggedinuser, "zimbraPrefIncludeTrashInSearch");
-		String getSearchyStringStatus = ProvZCS.getAccountPreferenceValue(
+		String getSearchyStringStatus = Stafzmprov.getAccountPreferenceValue(
 				currentloggedinuser, "zimbraPrefShowSearchString");
-		String getShowChkboxStatus = ProvZCS.getAccountPreferenceValue(
+		String getShowChkboxStatus = Stafzmprov.getAccountPreferenceValue(
 				currentloggedinuser, "zimbraPrefShowSelectionCheckbox");
 
 		assertReport(
 				"FALSE",
-				ProvZCS.getAccountPreferenceValue(currentloggedinuser,
+				Stafzmprov.getAccountPreferenceValue(currentloggedinuser,
 						"zimbraPrefIncludeSpamInSearch"),
 				"'Include Junk Folder in Searches' general preference not marked FALSE in database");
 		assertReport(
 				"FALSE",
-				ProvZCS.getAccountPreferenceValue(currentloggedinuser,
+				Stafzmprov.getAccountPreferenceValue(currentloggedinuser,
 						"zimbraPrefIncludeTrashInSearch"),
 				"'Include Trash Folder in Searches' general preference not marked FALSE in database");
 		assertReport(
 				"FALSE",
-				ProvZCS.getAccountPreferenceValue(currentloggedinuser,
+				Stafzmprov.getAccountPreferenceValue(currentloggedinuser,
 						"zimbraPrefShowSearchString"),
 				"'Show advanced search language in search toolbar' general preference not marked FALSE in database");
 		assertReport(
 				"FALSE",
-				ProvZCS.getAccountPreferenceValue(currentloggedinuser,
+				Stafzmprov.getAccountPreferenceValue(currentloggedinuser,
 						"zimbraPrefShowSelectionCheckbox"),
 				"'Display checkboxes to quickly select items in lists' general preference not marked FALSE in database");
 
@@ -335,23 +337,23 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 		if (!ZimbraSeleniumProperties.getStringProperty("locale").equals("ru")) {
 			assertReport(
 					"TRUE",
-					ProvZCS.getAccountPreferenceValue(currentloggedinuser,
+					Stafzmprov.getAccountPreferenceValue(currentloggedinuser,
 							"zimbraPrefIncludeSpamInSearch"),
 					"'Include Junk Folder in Searches' general preference not marked TRUE in database");
 		}
 		assertReport(
 				"TRUE",
-				ProvZCS.getAccountPreferenceValue(currentloggedinuser,
+				Stafzmprov.getAccountPreferenceValue(currentloggedinuser,
 						"zimbraPrefIncludeTrashInSearch"),
 				"'Include Trash Folder in Searches' general preference not marked TRUE in database");
 		assertReport(
 				"TRUE",
-				ProvZCS.getAccountPreferenceValue(currentloggedinuser,
+				Stafzmprov.getAccountPreferenceValue(currentloggedinuser,
 						"zimbraPrefShowSearchString"),
 				"'Show advanced search language in search toolbar' general preference not marked TRUE in database");
 		assertReport(
 				"TRUE",
-				ProvZCS.getAccountPreferenceValue(currentloggedinuser,
+				Stafzmprov.getAccountPreferenceValue(currentloggedinuser,
 						"zimbraPrefShowSelectionCheckbox"),
 				"'Display checkboxes to quickly select items in lists' general preference not marked TRUE in database");
 

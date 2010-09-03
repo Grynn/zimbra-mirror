@@ -6,9 +6,10 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -60,7 +61,7 @@ public class ForwardMail extends CommonTest {
 
 		to = SelNGBase.selfAccountName.get();
 		String recipients[] = { to };
-		ProvZCS.injectMessage(from, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);

@@ -15,7 +15,7 @@ import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 
 @SuppressWarnings({ "static-access", "unused" })

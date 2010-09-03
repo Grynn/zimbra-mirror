@@ -1,17 +1,18 @@
 package projects.zcs.tests.mail.compose.newwindow;
 
 import java.lang.reflect.Method;
+
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import framework.core.SelNGBase;
-import framework.util.RetryFailedTests;
-import framework.util.SleepUtil;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
 import projects.zcs.ui.MailApp;
+import framework.core.SelNGBase;
+import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
 @SuppressWarnings("static-access")
 public class AttachmentMail extends CommonTest {
@@ -62,7 +63,7 @@ public class AttachmentMail extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefComposeFormat", "html");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(2500);
@@ -102,7 +103,7 @@ public class AttachmentMail extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefComposeFormat", "text");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(2500);

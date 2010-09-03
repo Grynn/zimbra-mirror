@@ -18,9 +18,10 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.CalCompose;
 import projects.zcs.ui.MailApp;
@@ -37,7 +38,7 @@ public class DeleteAppointment extends CommonTest {
 					getLocalizedData(3) } };
 		} else if (test.equals("deleteApptByKeyBoard_Bug35866")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3) } };
 		} else {
 			return new Object[][] { { "" } };

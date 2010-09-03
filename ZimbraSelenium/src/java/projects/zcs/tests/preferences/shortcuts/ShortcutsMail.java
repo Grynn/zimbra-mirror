@@ -23,10 +23,13 @@ import com.zimbra.cs.service.admin.GetConfig;
 import com.zimbra.cs.zclient.ZFolder;
 
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
-import projects.zcs.clients.ProvZCS;
+
+import framework.util.Stafzmprov;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -73,10 +76,10 @@ public class ShortcutsMail extends CommonTest {
 		SleepUtil.sleep(2000);
 
 		String[] recipients = { SelNGBase.selfAccountName.get() };
-		ProvZCS.injectMessage(ProvZCS.getRandomAccount(), recipients, ProvZCS
+		LmtpUtil.injectMessage(Stafzmprov.getRandomAccount(), recipients, Stafzmprov
 				.getRandomAccount(), "test mail", "test content");
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("test mail");
-		ProvZCS.injectMessage(ProvZCS.getRandomAccount(), recipients, ProvZCS
+		LmtpUtil.injectMessage(Stafzmprov.getRandomAccount(), recipients, Stafzmprov
 				.getRandomAccount(), "flag message", "test content");
 
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("flag message");
@@ -159,7 +162,7 @@ public class ShortcutsMail extends CommonTest {
 
 		checkForSkipException("na", "SF", "na", "shortcuts dont work with Selenium on Safari");
 
-		ProvZCS.injectMessage(ProvZCS.getRandomAccount(), recipients, ProvZCS
+		LmtpUtil.injectMessage(Stafzmprov.getRandomAccount(), recipients, Stafzmprov
 				.getRandomAccount(), "mark as junk", "test content");
 
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("mark as junk");
@@ -284,7 +287,7 @@ public class ShortcutsMail extends CommonTest {
 		
 		String subject="This is test for GoTo Folder Shortcuts";
 
-		ProvZCS.injectMessage(ProvZCS.getRandomAccount(), recipients, ProvZCS
+		LmtpUtil.injectMessage(Stafzmprov.getRandomAccount(), recipients, Stafzmprov
 				.getRandomAccount(), subject, "test content");
 
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -325,7 +328,7 @@ public class ShortcutsMail extends CommonTest {
 		
 		String subject = "Move to Trash";
 
-		ProvZCS.injectMessage(ProvZCS.getRandomAccount(), recipients, ProvZCS
+		LmtpUtil.injectMessage(Stafzmprov.getRandomAccount(), recipients, Stafzmprov
 				.getRandomAccount(), subject, "test content");
 
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);

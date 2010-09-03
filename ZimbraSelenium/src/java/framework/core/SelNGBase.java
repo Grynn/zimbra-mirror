@@ -11,10 +11,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.testng.Assert;
 
-import com.zimbra.common.service.ServiceException;
-
-import projects.html.clients.ProvZCS;
-
 import framework.util.ZimbraSeleniumProperties;
 
 public class SelNGBase {

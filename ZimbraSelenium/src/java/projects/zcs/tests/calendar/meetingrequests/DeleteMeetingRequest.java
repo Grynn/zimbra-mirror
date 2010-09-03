@@ -18,9 +18,10 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.CalCompose;
 import projects.zcs.ui.MailApp;
@@ -34,7 +35,7 @@ public class DeleteMeetingRequest extends CommonTest {
 			return new Object[][] { { "single",
 					getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(), getLocalizedData(3), "" } };
+					Stafzmprov.getRandomAccount(), getLocalizedData(3), "" } };
 		} else if (test.equals("deleteAppt_Bug38359")) {
 			return new Object[][] { { getLocalizedData(1), getLocalizedData(1),
 					localize(locator.busy), localize(locator._public), "", "1",

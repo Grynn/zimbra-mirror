@@ -21,9 +21,10 @@ import com.zimbra.cs.service.admin.GetConfig;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -34,7 +35,7 @@ public class DeclineMeetingRequest extends CommonTest {
 		String test = method.getName();
 		if (test.equals("declineAppt")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "decline" } };
 		} else {
 			return new Object[][] { { "" } };

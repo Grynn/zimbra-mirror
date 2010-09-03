@@ -5,11 +5,12 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import projects.html.clients.ProvZCS;
+import framework.util.Stafzmprov;
 import projects.zcs.tests.CommonTest;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
 public class TabViews extends CommonTest {
 
@@ -34,11 +35,11 @@ public class TabViews extends CommonTest {
 		 * Add child Account
 		 */
 		String parentAccount=SelNGBase.selfAccountName.get().toLowerCase();
-		String childAccount=ProvZCS.getRandomAccount().toLowerCase();
-		String childUserAccountId=ProvZCS.getAccount(childAccount).getId();
+		String childAccount=Stafzmprov.getRandomAccount().toLowerCase();
+		String childUserAccountId=Stafzmprov.getAccountPreferenceValue(childAccount, "zimbraId");
 
-		ProvZCS.modifyAccount(parentAccount, "zimbraChildAccount", childUserAccountId);
-		ProvZCS.modifyAccount(parentAccount, "zimbraPrefChildVisibleAccount", childUserAccountId);
+		Stafzmprov.modifyAccount(parentAccount, "zimbraChildAccount", childUserAccountId);
+		Stafzmprov.modifyAccount(parentAccount, "zimbraPrefChildVisibleAccount", childUserAccountId);
 
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3500);

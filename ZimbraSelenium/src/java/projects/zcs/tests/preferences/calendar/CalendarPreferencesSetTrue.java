@@ -20,8 +20,9 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -55,19 +56,19 @@ public class CalendarPreferencesSetTrue extends CommonTest {
 		zLoginIfRequired();
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefCalendarInitialView",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefCalendarInitialView",
 				"week");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefCalendarAlwaysShowMiniCal", "TRUE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefCalendarUseQuickAdd",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefCalendarUseQuickAdd",
 				"TRUE");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefUseTimeZoneListInCalendar", "TRUE");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefCalendarApptReminderWarningTime", "60");
 
 		super.zLogin();
@@ -93,9 +94,9 @@ public class CalendarPreferencesSetTrue extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = ProvZCS.getRandomAccount();
+		String accountName = Stafzmprov.getRandomAccount();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefDeleteInviteOnReply",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefDeleteInviteOnReply",
 				deleteInvite);
 		
 		page.zCalApp.zNavigateToCalendar();

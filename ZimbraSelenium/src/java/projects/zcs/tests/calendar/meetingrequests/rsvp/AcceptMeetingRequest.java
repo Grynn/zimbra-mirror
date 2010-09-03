@@ -1,31 +1,18 @@
 package projects.zcs.tests.calendar.meetingrequests.rsvp;
 
 import java.lang.reflect.Method;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
-import org.apache.tools.ant.taskdefs.WaitFor;
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.service.admin.GetConfig;
-
+import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-
-import projects.zcs.clients.ProvZCS;
-import projects.zcs.tests.CommonTest;
-import projects.zcs.ui.MailApp;
 
 @SuppressWarnings({ "static-access", "unused" })
 public class AcceptMeetingRequest extends CommonTest {
@@ -34,7 +21,7 @@ public class AcceptMeetingRequest extends CommonTest {
 		String test = method.getName();
 		if (test.equals("acceptAppt")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "accept" } };
 		} else {
 			return new Object[][] { { "" } };

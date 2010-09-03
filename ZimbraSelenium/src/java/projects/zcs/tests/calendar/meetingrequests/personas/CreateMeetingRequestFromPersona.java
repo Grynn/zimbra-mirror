@@ -6,13 +6,14 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
 /**
  * @author Jitesh Sojitra
@@ -63,7 +64,7 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 		zGoToApplication("Preferences");
 		zGoToPreferences("Accounts");
 		String user1 = SelNGBase.selfAccountName.get().toLowerCase();
-		String user2 = ProvZCS.getRandomAccount();
+		String user2 = Stafzmprov.getRandomAccount();
 		String fromName = getLocalizedData_NoSpecialChar();
 		page.zAccPref.zCreatePersona(personaName, fromName, alias);
 
@@ -125,14 +126,14 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		ProvZCS.addAlias(SelNGBase.selfAccountName.get(), alias);
+		Stafzmprov.zmprov(String.format("zmprov addAccountAliax %s %s", SelNGBase.selfAccountName.get(), alias));
 		resetSession();
 		SleepUtil.sleep(1000);
 		page.zLoginpage.zLoginToZimbraAjax(SelNGBase.selfAccountName.get());
 
 		zGoToApplication("Preferences");
 		zGoToPreferences("Accounts");
-		String user2 = ProvZCS.getRandomAccount();
+		String user2 = Stafzmprov.getRandomAccount();
 		String fromName = getLocalizedData_NoSpecialChar();
 		page.zAccPref.zCreatePersona(personaName, fromName, alias);
 

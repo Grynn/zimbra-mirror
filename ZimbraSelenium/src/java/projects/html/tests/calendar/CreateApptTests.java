@@ -3,27 +3,20 @@
 
 package projects.html.tests.calendar;
 
-import java.io.File;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.zimbra.common.service.ServiceException;
-
-import framework.core.SelNGBase;
-import framework.util.SleepUtil;
-import framework.util.RetryFailedTests;
-import framework.util.ZimbraSeleniumProperties;
-
 import projects.html.tests.CommonTest;
-import projects.html.clients.ProvZCS;
+import framework.core.SelNGBase;
+import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
+import framework.util.ZimbraSeleniumProperties;
 
 @SuppressWarnings( { "static-access", "unused" })
 public class CreateApptTests extends CommonTest {
@@ -36,7 +29,7 @@ public class CreateApptTests extends CommonTest {
 		if (test.equals("createSimpleApptAndVerify")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(), getLocalizedData(3), "8:00:AM",
+					Stafzmprov.getRandomAccount(), getLocalizedData(3), "8:00:AM",
 					"9:00:AM", "1" } };
 		} else if (test.equals("verifyApptTimeInAllViews")) {
 			return new Object[][] {

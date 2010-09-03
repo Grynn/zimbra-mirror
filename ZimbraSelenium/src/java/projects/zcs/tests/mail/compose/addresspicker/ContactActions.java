@@ -5,13 +5,14 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -66,7 +67,7 @@ public class ContactActions extends CommonTest {
 
 			// Create a new account to be the destination
 			String emailAddress = "ac" + i + "@testdomain.com";
-			ProvZCS.createAccount(emailAddress);
+			Stafzmprov.createAccount(emailAddress);
 			SleepUtil.sleep(1000);
 
 			// Search for the account
@@ -140,7 +141,7 @@ public class ContactActions extends CommonTest {
 		obj.zDialog.zExists(localize(locator.selectAddresses));
 		obj.zEditField.zActivateInDlg(localize(locator.search), "");
 		for (int i = 1; i <= 3; i++) {
-			ProvZCS.createAccount("ab" + i + "@testdomain.com");
+			Stafzmprov.createAccount("ab" + i + "@testdomain.com");
 			obj.zEditField.zTypeInDlg(localize(locator.search), "ab" + i
 					+ "@testdomain.com");
 			obj.zButton.zClickInDlg(localize(locator.search));

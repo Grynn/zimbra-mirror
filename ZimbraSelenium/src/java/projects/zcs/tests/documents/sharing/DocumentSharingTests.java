@@ -12,7 +12,8 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
-import projects.zcs.clients.ProvZCS;
+import framework.util.Stafzmprov;
+
 import projects.zcs.tests.CommonTest;
 
 //written by Prashant Jaiswal
@@ -31,7 +32,7 @@ public class DocumentSharingTests extends CommonTest {
 			return new Object[][] { {
 					"pageName" + getLocalizedData_NoSpecialChar(),
 					"bodyContent:" + getLocalizedData(3),
-					localize(locator.notebook), ProvZCS.getRandomAccount(),
+					localize(locator.notebook), Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleManager),
 					getLocalizedData_NoSpecialChar() } };
 		}
@@ -39,7 +40,7 @@ public class DocumentSharingTests extends CommonTest {
 			return new Object[][] { {
 					"pageName" + getLocalizedData_NoSpecialChar(),
 					"bodyContent:" + getLocalizedData(3),
-					localize(locator.notebook), ProvZCS.getRandomAccount(),
+					localize(locator.notebook), Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer),
 					getLocalizedData_NoSpecialChar() } };
 		}
@@ -48,7 +49,7 @@ public class DocumentSharingTests extends CommonTest {
 			return new Object[][] { {
 					"pageName" + getLocalizedData_NoSpecialChar(),
 					"bodyContent:" + getLocalizedData(3),
-					localize(locator.notebook), ProvZCS.getRandomAccount(),
+					localize(locator.notebook), Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleAdmin),
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("sharingDocToExternalGuest")
@@ -56,7 +57,7 @@ public class DocumentSharingTests extends CommonTest {
 			return new Object[][] { {
 					"pageName" + getLocalizedData_NoSpecialChar(),
 					"bodyContent:" + getLocalizedData(3),
-					localize(locator.notebook), ProvZCS.getRandomAccount(), "",
+					localize(locator.notebook), Stafzmprov.getRandomAccount(), "",
 					getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { {} };

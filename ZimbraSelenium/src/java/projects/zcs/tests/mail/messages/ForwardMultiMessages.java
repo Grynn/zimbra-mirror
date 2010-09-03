@@ -8,9 +8,12 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
+import framework.util.HarnessException;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
-import projects.zcs.clients.ProvZCS;
+import framework.util.Stafzmprov;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -25,8 +28,8 @@ public class ForwardMultiMessages extends CommonTest {
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
 	@DataProvider(name = "MailDataProvider")
-	protected Object[][] createData(Method method) throws ServiceException {
-		return new Object[][] { { ProvZCS.getRandomAccount(),
+	protected Object[][] createData(Method method) throws ServiceException, HarnessException {
+		return new Object[][] { { Stafzmprov.getRandomAccount(),
 				"_selfAccountName_", "ccuser@testdomain.com",
 				"bccuser@testdomain.com" } };
 	}
@@ -58,7 +61,7 @@ public class ForwardMultiMessages extends CommonTest {
 		subject2 = "subject2";
 		fwdSubject = "fwdSubject";
 		fwdBody = "fwdBody";
-		acc2 = ProvZCS.getRandomAccount();
+		acc2 = Stafzmprov.getRandomAccount();
 		String subject[] = { subject1, subject2 };
 		String body[] = { "body1", "body2" };
 		for (int i = 0; i <= 1; i++) {
@@ -149,7 +152,7 @@ public class ForwardMultiMessages extends CommonTest {
 			String bcc, String subject, String body) throws Exception {
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
-		ProvZCS.injectMessage(from, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject);
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));

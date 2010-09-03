@@ -3,16 +3,15 @@ package projects.zcs.tests.addressbook.sharing;
 import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
+import framework.util.Stafzmprov;
 
 //written by Prashant Jaiswal
 
@@ -29,14 +28,14 @@ public class AddressBookSharingTests extends CommonTest {
 				|| test.equals("revokeShareAB")) {
 			return new Object[][] { { "lastName:" + getLocalizedData(1),
 					"middleName:" + getLocalizedData(1), "",
-					localize(locator.contacts), ProvZCS.getRandomAccount(),
+					localize(locator.contacts), Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleManager),
 					getLocalizedData_NoSpecialChar() } };
 		}
 		if (test.equals("shareABViewerRghtsAndVerifyRtClckContactMenu")) {
 			return new Object[][] { { "lastName:" + getLocalizedData(1),
 					"middleName:" + getLocalizedData(1), "",
-					localize(locator.contacts), ProvZCS.getRandomAccount(),
+					localize(locator.contacts), Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer),
 					getLocalizedData_NoSpecialChar() } };
 		}
@@ -44,14 +43,14 @@ public class AddressBookSharingTests extends CommonTest {
 				|| test.equals("modifyABShare")) {
 			return new Object[][] { { "lastName:" + getLocalizedData(1),
 					"middleName:" + getLocalizedData(1), "",
-					localize(locator.contacts), ProvZCS.getRandomAccount(),
+					localize(locator.contacts), Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleAdmin),
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("sharingABToExternalGuest")
 				|| test.equals("publicShareAB")) {
 			return new Object[][] { { "lastName:" + getLocalizedData(1),
 					"middleName:" + getLocalizedData(1), "",
-					localize(locator.contacts), ProvZCS.getRandomAccount(), "",
+					localize(locator.contacts), Stafzmprov.getRandomAccount(), "",
 					getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { {} };

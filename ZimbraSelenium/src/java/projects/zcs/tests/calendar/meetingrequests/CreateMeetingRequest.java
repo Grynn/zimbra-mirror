@@ -20,7 +20,7 @@ import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.CalCompose;
 import projects.zcs.ui.MailApp;

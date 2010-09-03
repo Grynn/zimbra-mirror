@@ -3,25 +3,19 @@
 
 package projects.html.tests.addressbook;
 
-import java.io.File;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
-import framework.util.SleepUtil;
-import framework.util.RetryFailedTests;
-
 import projects.html.tests.CommonTest;
-import projects.zcs.clients.ProvZCS;
-import sun.misc.GC.LatencyRequest;
+import framework.core.SelNGBase;
+import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
 @SuppressWarnings( { "static-access", "unused" })
 public class AddressBookTestHtml extends CommonTest {
@@ -335,7 +329,7 @@ public class AddressBookTestHtml extends CommonTest {
 		obj.zButton.zClick(localize(locator.refresh), "2");
 		SleepUtil.sleepLong();
 		lastName = getLocalizedData_NoSpecialChar();
-		String email1 = ProvZCS.getRandomAccount();
+		String email1 = Stafzmprov.getRandomAccount();
 		page.zABComposeHTML.zCreateContactAndSearch(lastName, "", "", email1,
 				"", "BottomToolbar");
 		obj.zCheckbox.zExists("link=" + lastName);
@@ -427,7 +421,7 @@ public class AddressBookTestHtml extends CommonTest {
 		// in comma separated string which is passed to create contact
 		// group function
 		for (int i = 0; i < noOfAcc; i++) {
-			acc = ProvZCS.getRandomAccount();
+			acc = Stafzmprov.getRandomAccount();
 			if (i == noOfAcc - 1) {
 				commaSeparatedAccForGroup = commaSeparatedAccForGroup + acc;
 			} else {

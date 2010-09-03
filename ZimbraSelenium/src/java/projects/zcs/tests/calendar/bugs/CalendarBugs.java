@@ -8,11 +8,12 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -51,8 +52,8 @@ public class CalendarBugs extends CommonTest {
 			handleRetry();
 
 		String currentLoggedInUser = SelNGBase.selfAccountName.get();
-		String user1 = ProvZCS.getRandomAccount();
-		String user2 = ProvZCS.getRandomAccount();
+		String user1 = Stafzmprov.getRandomAccount();
+		String user2 = Stafzmprov.getRandomAccount();
 
 		resetSession();
 		String subject2 = getLocalizedData_NoSpecialChar();
@@ -79,9 +80,9 @@ public class CalendarBugs extends CommonTest {
 		String currentLoggedInUser;
 		currentLoggedInUser = SelNGBase.selfAccountName.get();
 
-		String user1_allowed = ProvZCS.getRandomAccount();
-		String user2_allowed = ProvZCS.getRandomAccount();
-		String user3_Notallowed = ProvZCS.getRandomAccount();
+		String user1_allowed = Stafzmprov.getRandomAccount();
+		String user2_allowed = Stafzmprov.getRandomAccount();
+		String user3_Notallowed = Stafzmprov.getRandomAccount();
 		zGoToApplication("Preferences");
 		zGoToPreferences("Calendar");
 		obj.zRadioBtn.zClick(localize(locator.invitesAllowSome));
@@ -165,7 +166,7 @@ public class CalendarBugs extends CommonTest {
 		String currentLoggedInUser;
 		currentLoggedInUser = SelNGBase.selfAccountName.get();
 
-		String user1 = ProvZCS.getRandomAccount();
+		String user1 = Stafzmprov.getRandomAccount();
 		zGoToApplication("Preferences");
 		zGoToPreferences("Calendar");
 		obj.zRadioBtn.zClick(localize(locator.invitesAllowNone));

@@ -1,31 +1,18 @@
 package projects.zcs.tests.calendar.meetingrequests;
 
 import java.lang.reflect.Method;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
-import org.apache.tools.ant.taskdefs.WaitFor;
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.service.admin.GetConfig;
-
+import projects.zcs.tests.CommonTest;
+import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-
-import projects.zcs.clients.ProvZCS;
-import projects.zcs.tests.CommonTest;
-import projects.zcs.ui.MailApp;
 
 @SuppressWarnings({ "static-access", "unused" })
 public class ApptInvite extends CommonTest {
@@ -34,20 +21,20 @@ public class ApptInvite extends CommonTest {
 		String test = method.getName();
 		 if (test.equals("apptInviteContentVerify")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3) } };
 		} else if (test.equals("apptModifyInviteCheckContent")) {
 			return new Object[][] {
 					{ getLocalizedData_NoSpecialChar(),
 							getLocalizedData_NoSpecialChar(),
-							ProvZCS.getRandomAccount(), getLocalizedData(3),
+							Stafzmprov.getRandomAccount(), getLocalizedData(3),
 							"10:00:" + localize(locator.periodAm),
 							"11:00:" + localize(locator.periodAm),
 							getLocalizedData_NoSpecialChar(),
 							getLocalizedData_NoSpecialChar(), "", "" },
 					{ getLocalizedData_NoSpecialChar(),
 							getLocalizedData_NoSpecialChar(),
-							ProvZCS.getRandomAccount(), getLocalizedData(3),
+							Stafzmprov.getRandomAccount(), getLocalizedData(3),
 							"10:00:" + localize(locator.periodAm),
 							"11:00:" + localize(locator.periodAm), "", "",
 							"11:00:" + localize(locator.periodAm),
@@ -56,31 +43,31 @@ public class ApptInvite extends CommonTest {
 			return new Object[][] {
 					{ "single", getLocalizedData_NoSpecialChar(),
 							getLocalizedData_NoSpecialChar(),
-							ProvZCS.getRandomAccount(), getLocalizedData(3), "" },
+							Stafzmprov.getRandomAccount(), getLocalizedData(3), "" },
 					{ "instance", getLocalizedData_NoSpecialChar(),
 							getLocalizedData_NoSpecialChar(),
-							ProvZCS.getRandomAccount(), getLocalizedData(3),
+							Stafzmprov.getRandomAccount(), getLocalizedData(3),
 							localize(locator.everyDay) },
 					{ "series", getLocalizedData_NoSpecialChar(),
 							getLocalizedData_NoSpecialChar(),
-							ProvZCS.getRandomAccount(), getLocalizedData(3),
+							Stafzmprov.getRandomAccount(), getLocalizedData(3),
 							localize(locator.everyWeek) } };
 		} else if (test.equals("apptAddRemoveAttendeeCheckContent")) {
 			return new Object[][] {
 					{ "single", getLocalizedData_NoSpecialChar(),
 							getLocalizedData_NoSpecialChar(),
-							ProvZCS.getRandomAccount(), getLocalizedData(3),
-							"", ProvZCS.getRandomAccount() },
+							Stafzmprov.getRandomAccount(), getLocalizedData(3),
+							"", Stafzmprov.getRandomAccount() },
 					{ "instance", getLocalizedData_NoSpecialChar(),
 							getLocalizedData_NoSpecialChar(),
-							ProvZCS.getRandomAccount(), getLocalizedData(3),
+							Stafzmprov.getRandomAccount(), getLocalizedData(3),
 							localize(locator.everyDay),
-							ProvZCS.getRandomAccount() },
+							Stafzmprov.getRandomAccount() },
 					{ "series", getLocalizedData_NoSpecialChar(),
 							getLocalizedData_NoSpecialChar(),
-							ProvZCS.getRandomAccount(), getLocalizedData(3),
+							Stafzmprov.getRandomAccount(), getLocalizedData(3),
 							localize(locator.everyWeek),
-							ProvZCS.getRandomAccount() } };
+							Stafzmprov.getRandomAccount() } };
 		} else {
 			return new Object[][] { { "" } };
 		}

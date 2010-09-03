@@ -6,8 +6,8 @@ import java.io.FileReader;
 
 import org.testng.Assert;
 
-import projects.zcs.clients.ProvZCS;
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.SleepUtil;
 
 /**
@@ -399,7 +399,7 @@ public class MailApp extends AppPage {
 			}
 		}
 		String[] accounts = { SelNGBase.selfAccountName.get() };
-		ProvZCS.addMessageLmtp(accounts, SelNGBase.selfAccountName.get(), contents
+		LmtpUtil.addMessageLmtp(accounts, SelNGBase.selfAccountName.get(), contents
 				.toString());
 		zGoToApplication("Mail");
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);

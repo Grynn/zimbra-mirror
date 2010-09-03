@@ -11,8 +11,9 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -65,8 +66,8 @@ public class Autocomplete extends CommonTest {
 
 		String equipment;
 		equipment = "equipment2@testdomain.com";
-		ProvZCS.createResource(equipment, "equipment");
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.createEquipment(equipment);
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3500);

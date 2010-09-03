@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
-import projects.html.clients.ProvZCS;
+import framework.util.Stafzmprov;
 import projects.html.tests.CommonTest;
 
 @SuppressWarnings( { "static-access", "unused" })

@@ -7,8 +7,9 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.CalApp;
 
@@ -108,7 +109,7 @@ public class ClientURLTests extends CommonTest {
 		checkForSkipException("hi", "SF", "na", "compose related fields replaced by ???? in the URL (selenium bug)");
 
 		
-		String toField = ProvZCS.getRandomAccount();
+		String toField = Stafzmprov.getRandomAccount();
 		String subjectField;
 		String bodyField;
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("zh_CN")

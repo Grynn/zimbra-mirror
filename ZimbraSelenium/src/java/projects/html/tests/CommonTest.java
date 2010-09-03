@@ -21,7 +21,7 @@ import org.testng.annotations.BeforeSuite;
 import projects.html.CoreObjects;
 import projects.html.Locators;
 import projects.html.PageObjects;
-import projects.html.clients.ProvZCS;
+import framework.util.Stafzmprov;
 
 import com.zimbra.common.service.ServiceException;
 
@@ -29,6 +29,7 @@ import framework.core.SelNGBase;
 import framework.core.SeleniumService;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -151,7 +152,10 @@ public class CommonTest extends SelNGBase {
 	public void initTests() throws ServiceException, HarnessException {
 		String username = "";
 		initFramework();
-		ProvZCS.setupZCSTestBed();
+		
+		// Create the test domain
+		Stafzmprov.zmprov(String.format("zmprov createDomain %s", ZimbraSeleniumProperties.getStringProperty("testdomain")));
+		
 		SeleniumService.getInstance().startSeleniumServer();
 		ZimbraAccount account = new ZimbraAccount();
 		account.provisionAccount("ccuser@testdomain.com", "test123");	

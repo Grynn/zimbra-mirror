@@ -3,19 +3,14 @@ package projects.zcs.tests.calendar.meetingrequests;
 import java.lang.reflect.Method;
 
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.zimbra.common.service.ServiceException;
-
+import projects.zcs.tests.CommonTest;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
-
-import projects.zcs.clients.ProvZCS;
-import projects.zcs.tests.CommonTest;
+import framework.util.Stafzmprov;
 
 /**
  * @author Jitesh Sojitra
@@ -28,27 +23,27 @@ public class ApptRSRPAndNotification extends CommonTest {
 		String test = method.getName();
 		if (test.equals("apptRSRPNo_NotifictionNo")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "0", "0" } };
 		} else if (test.equals("apptRSRPNo_NotifictionYes")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "0", "1" } };
 		} else if (test.equals("apptRSRPNoWithNotifyingOrg")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "0", "1" } };
 		} else if (test.equals("apptRSRPNoWithTentativeEdit")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "0", "1" } };
 		} else if (test.equals("apptRSRPNoWithDecline")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "0", "1" } };
 		} else {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData(1), ProvZCS.getRandomAccount(),
+					getLocalizedData(1), Stafzmprov.getRandomAccount(),
 					getLocalizedData(3), "0", "1" } };
 		}
 

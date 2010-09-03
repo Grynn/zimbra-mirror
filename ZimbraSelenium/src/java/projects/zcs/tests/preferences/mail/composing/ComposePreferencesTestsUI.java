@@ -20,9 +20,10 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -45,33 +46,33 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeFormat", "text");
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeFormat", "text");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefHtmlEditorDefaultFontFamily", "Times New Roman");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefHtmlEditorDefaultFontSize", "12pt");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefForwardReplyInOriginalFormat", "FALSE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
 				"FALSE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefAutoSaveDraftInterval",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefAutoSaveDraftInterval",
 				"30s");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefReplyIncludeOriginalText", "includeBody");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefForwardIncludeOriginalText", "includeBody");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefForwardReplyPrefixChar",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefForwardReplyPrefixChar",
 				">");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefSaveToSent", "TRUE");
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefSaveToSent", "TRUE");
 
 		super.zLogin();
 	}
@@ -106,7 +107,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(3000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefComposeFormat");
 
 		Assert.assertEquals(actualVal, "html",
@@ -122,7 +123,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefComposeFormat");
 
 		Assert.assertEquals(actualVal, "text",
@@ -174,14 +175,14 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 			SleepUtil.sleep(2000);
 
-			actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+			actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 					"zimbraPrefHtmlEditorDefaultFontFamily");
 
 			Assert.assertEquals(actualVal, "Arial",
 					"Font face set is not set in db. Actual value is "
 							+ actualVal);
 
-			actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+			actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 					"zimbraPrefHtmlEditorDefaultFontSize");
 
 			Assert.assertTrue(actualVal.indexOf(currentFont) >= 0,
@@ -218,14 +219,14 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 			SleepUtil.sleep(2000);
 
-			actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+			actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 					"zimbraPrefHtmlEditorDefaultFontFamily");
 
 			Assert.assertEquals(actualVal, "Times New Roman",
 					"Font face set is not set in db. Actual value is "
 							+ actualVal);
 
-			actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+			actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 					"zimbraPrefHtmlEditorDefaultFontSize");
 
 			Assert.assertTrue(actualVal.indexOf(currentFont) >= 0,
@@ -255,7 +256,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardReplyInOriginalFormat");
 
 		Assert.assertEquals(actualVal, "TRUE",
@@ -271,7 +272,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardReplyInOriginalFormat");
 
 		Assert.assertEquals(actualVal, "FALSE",
@@ -302,7 +303,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefComposeInNewWindow");
 
 		Assert.assertEquals(actualVal, "TRUE",
@@ -318,7 +319,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefComposeInNewWindow");
 
 		Assert.assertEquals(actualVal, "FALSE",
@@ -351,7 +352,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefAutoSaveDraftInterval");
 
 		Assert.assertEquals(actualVal, "0",
@@ -367,7 +368,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefAutoSaveDraftInterval");
 
 		Assert.assertEquals(actualVal, "30",
@@ -399,7 +400,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefReplyIncludeOriginalText");
 
 		Assert.assertEquals(actualVal, "includeNone",
@@ -416,7 +417,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefReplyIncludeOriginalText");
 
 		Assert.assertEquals(actualVal, "includeBodyAndHeaders",
@@ -448,7 +449,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardIncludeOriginalText");
 
 		Assert.assertEquals(actualVal, "includeAsAttachment",
@@ -465,7 +466,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardIncludeOriginalText");
 
 		Assert.assertEquals(actualVal, "includeBodyAndHeaders",
@@ -496,7 +497,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardReplyPrefixChar");
 
 		Assert.assertEquals(actualVal, "|",
@@ -512,7 +513,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefForwardReplyPrefixChar");
 
 		Assert.assertEquals(actualVal, ">",
@@ -544,7 +545,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefSaveToSent");
 
 		Assert.assertEquals(actualVal, "FALSE",
@@ -566,7 +567,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefSaveToSent");
 
 		Assert.assertEquals(actualVal, "TRUE",

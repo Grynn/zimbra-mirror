@@ -10,10 +10,11 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
-import projects.zcs.clients.ProvZCS;
+
 
 /**
  * Class file contains all miscellaneous compose related tests
@@ -31,12 +32,12 @@ public class MiscMailTests extends CommonTest {
 	public Object[][] createData(Method method) throws Exception {
 		String test = method.getName();
 		if (test.equals("verifyShowOriginal")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData_NoSpecialChar(),
 					"", "" } };
 		} else {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData_NoSpecialChar(),
 					"", "" } };
@@ -293,7 +294,7 @@ public class MiscMailTests extends CommonTest {
 			handleRetry();
 
 		// set mail items per page to 10
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefMailItemsPerPage", "10");
 		resetSession();
 		page.zLoginpage.zLoginToZimbraHTML(SelNGBase.selfAccountName.get());

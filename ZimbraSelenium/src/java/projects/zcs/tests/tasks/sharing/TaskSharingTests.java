@@ -11,7 +11,8 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
-import projects.zcs.clients.ProvZCS;
+import framework.util.Stafzmprov;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -28,7 +29,7 @@ import projects.zcs.tests.CommonTest;
  *            - Either Internal, External or public
  * @param invitedusers
  *            - Email id to whom folder to be shared - as of now it is random
- *            account created by ProvZCS.getRandomAccount() method
+ *            account created by Stafzmprov.getRandomAccount() method
  * @param role
  *            - Either None, Viewer, Manager or Admin
  * @param message
@@ -56,12 +57,12 @@ public class TaskSharingTests extends CommonTest {
 		if (test.equals("sharingFolderToExternalGuest")) {
 			return new Object[][] { { "Tasks", localize(locator.tasks),
 					localize(locator.shareWithGuest),
-					ProvZCS.getRandomAccount(), "", "", "", "",
+					Stafzmprov.getRandomAccount(), "", "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { { "Tasks", localize(locator.tasks),
 					localize(locator.shareWithGuest),
-					ProvZCS.getRandomAccount(), "", "", "", "",
+					Stafzmprov.getRandomAccount(), "", "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		}
 	}

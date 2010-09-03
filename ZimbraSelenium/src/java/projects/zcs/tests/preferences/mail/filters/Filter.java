@@ -10,11 +10,13 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -327,7 +329,7 @@ public class Filter extends CommonTest {
 		zGoToApplication("Mail");
 
 		// Cc user as discard
-		String to = ProvZCS.getRandomAccount();
+		String to = Stafzmprov.getRandomAccount();
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData_NoSpecialChar();
 		page.zComposeView.zComposeAndSendMail(to, SelNGBase.selfAccountName.get(),
@@ -417,8 +419,8 @@ public class Filter extends CommonTest {
 
 		/* Preparing for test data to run filter */
 		zGoToApplication("Mail");
-		randomAccount1 = ProvZCS.getRandomAccount();
-		randomAccount2 = ProvZCS.getRandomAccount();
+		randomAccount1 = Stafzmprov.getRandomAccount();
+		randomAccount2 = Stafzmprov.getRandomAccount();
 
 		// 1. subject contains(subjectcontains_filetofolder) file to
 		// folder
@@ -426,7 +428,7 @@ public class Filter extends CommonTest {
 		String subject1 = "subjectcontains_filetofolder";
 		String body1 = "body_subjectcontains_filetofolder";
 		String[] recipients = { to };
-		ProvZCS.injectMessage(to, recipients, "ccuser@testdomain.com",
+		LmtpUtil.injectMessage(to, recipients, "ccuser@testdomain.com",
 				subject1, body1);
 		MailApp.ClickCheckMailUntilMailShowsUp(
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject1);
@@ -434,7 +436,7 @@ public class Filter extends CommonTest {
 		// 2. from contains (randomaccount1) file to folder
 		String subject2 = "fromcontains_filetofolder";
 		String body2 = "body_fromcontains_filetofolder";
-		ProvZCS.injectMessage(randomAccount1, recipients,
+		LmtpUtil.injectMessage(randomAccount1, recipients,
 				"ccuser@testdomain.com", subject2, body2);
 		MailApp.ClickCheckMailUntilMailShowsUp(
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject2);
@@ -443,7 +445,7 @@ public class Filter extends CommonTest {
 		// contains(subjectandtocontains_filetofolder) file to folder
 		String subject3 = "subjectandtocontains_filetofolder";
 		String body3 = "body_subjectandtocontains_filetofolder";
-		ProvZCS.injectMessage(to, recipients, "ccuser@testdomain.com",
+		LmtpUtil.injectMessage(to, recipients, "ccuser@testdomain.com",
 				subject3, body3);
 		MailApp.ClickCheckMailUntilMailShowsUp(
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject3);
@@ -451,7 +453,7 @@ public class Filter extends CommonTest {
 		// 4. subject contains(subjectcontains_discard) discard
 		String subject4 = "subjectcontains_discard";
 		String body4 = "body_subjectcontains_discard";
-		ProvZCS.injectMessage(to, recipients, "ccuser@testdomain.com",
+		LmtpUtil.injectMessage(to, recipients, "ccuser@testdomain.com",
 				subject4, body4);
 		MailApp.ClickCheckMailUntilMailShowsUp(
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject4);
@@ -775,7 +777,7 @@ public class Filter extends CommonTest {
 					localize(locator.chooseFolder));
 			obj.zButton.zExistsInDlgByName(fileIntoNewFolder, dialogName);
 		} else if (currentAction.equals(localize(locator.forwardToAddress))) {
-			forwardtoUser = ProvZCS.getRandomAccount();
+			forwardtoUser = Stafzmprov.getRandomAccount();
 			SelNGBase.fieldLabelIsAnObject = true;
 			obj.zEditField.zTypeInDlgByName(localize(locator.forwardTo),
 					forwardtoUser, dialogName);

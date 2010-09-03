@@ -7,9 +7,11 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
+import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
-import projects.zcs.clients.ProvZCS;
+import framework.util.Stafzmprov;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -23,8 +25,8 @@ public class DeleteDrafts extends CommonTest {
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
 	@DataProvider(name = "MailDataProvider")
-	protected Object[][] createData(Method method) throws ServiceException {
-		return new Object[][] { { ProvZCS.getRandomAccount(),
+	protected Object[][] createData(Method method) throws ServiceException, HarnessException {
+		return new Object[][] { { Stafzmprov.getRandomAccount(),
 				"_selfAccountName_", "ccuser@testdomain.com",
 				"bccuser@testdomain.com" } };
 	}

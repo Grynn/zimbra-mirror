@@ -11,8 +11,9 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -83,8 +84,8 @@ public class Autocomplete extends CommonTest {
 				+ "sche1@testdomain.com";
 		acc1 = acc1.toLowerCase();
 		getKeyboardKeys(acc1);
-		ProvZCS.createAccount(acc1);
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.createAccount(acc1);
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3500);
@@ -144,8 +145,8 @@ public class Autocomplete extends CommonTest {
 
 		String location, actualValue, expectedValue;
 		location = "location2@testdomain.com";
-		ProvZCS.createResource(location, "location");
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.createLocation(location);
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3500);
@@ -204,8 +205,8 @@ public class Autocomplete extends CommonTest {
 
 		String equipment;
 		equipment = "equipment1@testdomain.com";
-		ProvZCS.createResource(equipment, "equipment");
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.createEquipment(equipment);
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3500);

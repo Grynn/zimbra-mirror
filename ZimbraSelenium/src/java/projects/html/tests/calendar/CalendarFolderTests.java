@@ -3,30 +3,20 @@
 
 package projects.html.tests.calendar;
 
-import java.io.File;
 import java.lang.reflect.Method;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Calendar;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.zimbra.common.service.ServiceException;
-
-import framework.core.SelNGBase;
-import framework.util.SleepUtil;
-import framework.util.RetryFailedTests;
-import framework.util.ZimbraSeleniumProperties;
-
 import projects.html.tests.CommonTest;
-import projects.html.clients.ProvZCS;
+import framework.core.SelNGBase;
+import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
+import framework.util.ZimbraSeleniumProperties;
 
 @SuppressWarnings( { "static-access", "unused" })
 public class CalendarFolderTests extends CommonTest {
@@ -44,7 +34,7 @@ public class CalendarFolderTests extends CommonTest {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					localize(locator.blue), getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(), getLocalizedData(3) } };
+					Stafzmprov.getRandomAccount(), getLocalizedData(3) } };
 		} else if (test.equals("subscribeCalendar")) {
 			return new Object[][] { {
 					"webcal://ical.mac.com/ical/US32Holidays.ics",
@@ -55,7 +45,7 @@ public class CalendarFolderTests extends CommonTest {
 				|| test.equals("verifyDeleteAllAppts")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount(), getLocalizedData(3) } };
+					Stafzmprov.getRandomAccount(), getLocalizedData(3) } };
 		} else
 			return new Object[][] { {} };
 	}

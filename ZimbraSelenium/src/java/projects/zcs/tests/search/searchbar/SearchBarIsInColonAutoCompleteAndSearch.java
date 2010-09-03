@@ -10,10 +10,12 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -70,9 +72,9 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		resetSession();
-		currentLoggedInUser = ProvZCS.getRandomAccount();
+		currentLoggedInUser = Stafzmprov.getRandomAccount();
 		SelNGBase.selfAccountName.set(currentLoggedInUser);
-		ProvZCS.modifyAccount(currentLoggedInUser, "userPassword", "test123");
+		Stafzmprov.modifyAccount(currentLoggedInUser, "userPassword", "test123");
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 		zGoToApplication("Mail");
 		SelNGBase.isExecutionARetry.set(false);
@@ -795,26 +797,26 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 			page.zMailApp.zCreateFolder("subfolder", "parentfolder");
 			page.zMailApp.zCreateFolder("subsubxfolder", "subfolder");
 
-			ProvZCS.createAccount("ccme@testdomain.com");
-			ProvZCS.createAccount("flagged@testdomain.com");
-			ProvZCS.createAccount("forwardedx@testdomain.com");
-			ProvZCS.createAccount("invite@testdomain.com");
-			ProvZCS.createAccount("readx@testdomain.com");
-			ProvZCS.createAccount("received@testdomain.com");
-			ProvZCS.createAccount("remote@testdomain.com");
-			ProvZCS.createAccount("repliedx@testdomain.com");
-			ProvZCS.createAccount("sent@testdomain.com");
-			ProvZCS.createAccount("unflagged@testdomain.com");
-			ProvZCS.createAccount("unforwarded@testdomain.com");
-			ProvZCS.createAccount("unread@testdomain.com");
-			ProvZCS.createAccount("unreplied@testdomain.com");
-			ProvZCS.createAccount("solo@testdomain.com");
+			Stafzmprov.createAccount("ccme@testdomain.com");
+			Stafzmprov.createAccount("flagged@testdomain.com");
+			Stafzmprov.createAccount("forwardedx@testdomain.com");
+			Stafzmprov.createAccount("invite@testdomain.com");
+			Stafzmprov.createAccount("readx@testdomain.com");
+			Stafzmprov.createAccount("received@testdomain.com");
+			Stafzmprov.createAccount("remote@testdomain.com");
+			Stafzmprov.createAccount("repliedx@testdomain.com");
+			Stafzmprov.createAccount("sent@testdomain.com");
+			Stafzmprov.createAccount("unflagged@testdomain.com");
+			Stafzmprov.createAccount("unforwarded@testdomain.com");
+			Stafzmprov.createAccount("unread@testdomain.com");
+			Stafzmprov.createAccount("unreplied@testdomain.com");
+			Stafzmprov.createAccount("solo@testdomain.com");
 			for (i = 20; i >= 0; i--) {
-				ProvZCS.injectMessage(fromArray[i], recipientsArray,
+				LmtpUtil.injectMessage(fromArray[i], recipientsArray,
 						ccArray[i], subjectArray[i], "commonBody");
 			}
 			for (i = 3; i >= 0; i--) {
-				ProvZCS.injectMessage(fromArray1[0], recipientsArray1,
+				LmtpUtil.injectMessage(fromArray1[0], recipientsArray1,
 						ccArray1[0], subjectArray1[i], "commonBody");
 			}
 			obj.zButton.zClick(page.zMailApp.zGetMailIconBtn);
@@ -941,15 +943,15 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 			SleepUtil.sleep(2000);
 
 			// local (share folder)
-			ProvZCS.modifyAccount("remote@testdomain.com", "userPassword",
+			Stafzmprov.modifyAccount("remote@testdomain.com", "userPassword",
 					"test123");
-			ProvZCS.modifyAccount("remote@testdomain.com", "zimbraPrefLocale",
+			Stafzmprov.modifyAccount("remote@testdomain.com", "zimbraPrefLocale",
 					ZimbraSeleniumProperties.getStringProperty("locale"));
 
 			resetSession();
 			String[] recipientsArray2 = { "remote@testdomain.com" };
 			page.zLoginpage.zLoginToZimbraAjax("remote@testdomain.com");
-			ProvZCS.injectMessage("invite@testdomain.com", recipientsArray2,
+			LmtpUtil.injectMessage("invite@testdomain.com", recipientsArray2,
 					"invite@testdomain.com", "remotesubject", "remotebody");
 			page.zSharing.zShareFolder("Mail", localize(locator.inbox), "",
 					currentLoggedInUser, "", "", "", "");

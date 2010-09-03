@@ -10,11 +10,14 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.util.HarnessException;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -28,20 +31,20 @@ public class ReadReceipt extends CommonTest {
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
 	@DataProvider(name = "mailDataProvider")
-	public Object[][] createData(Method method) throws ServiceException {
+	public Object[][] createData(Method method) throws ServiceException, HarnessException {
 		String test = method.getName();
 		if (test.equals("neverSendReadReceipt")
 				|| test.equals("alwaysSendReadReceipt")
 				|| test.equals("askMeForReadReceipt")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5), "" } };
 		} else if (test.equals("unwantedReadReceiptDlgWhileMarkRead_Bug41499")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(1), getLocalizedData(5), "" } };
 		} else {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5), "" } };
 		}
@@ -65,7 +68,7 @@ public class ReadReceipt extends CommonTest {
 			handleRetry();
 
 		String currentloggedinuser = SelNGBase.selfAccountName.get();
-		ProvZCS.modifyAccount(currentloggedinuser,
+		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "never");
 
 		resetSession();
@@ -97,7 +100,7 @@ public class ReadReceipt extends CommonTest {
 			handleRetry();
 
 		String currentloggedinuser = SelNGBase.selfAccountName.get();
-		ProvZCS.modifyAccount(currentloggedinuser,
+		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "always");
 
 		resetSession();
@@ -136,7 +139,7 @@ public class ReadReceipt extends CommonTest {
 			handleRetry();
 
 		String currentloggedinuser = SelNGBase.selfAccountName.get();
-		ProvZCS.modifyAccount(currentloggedinuser,
+		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "prompt");
 
 		resetSession();
@@ -195,7 +198,7 @@ public class ReadReceipt extends CommonTest {
 		zGoToApplication("Mail");
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { SelNGBase.selfAccountName.get() };
-		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients, cc,
+		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients, cc,
 				subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject);

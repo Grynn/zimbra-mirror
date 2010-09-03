@@ -11,8 +11,9 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -77,12 +78,12 @@ public class Autocomplete extends CommonTest {
 		acc2 = ZimbraSeleniumProperties.getStringProperty("locale").replace(
 				"_", "")
 				+ "atte2@testdomain.com";
-		ProvZCS.createAccount(acc1);
-		ProvZCS.createAccount(acc2);
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.createAccount(acc1);
+		Stafzmprov.createAccount(acc2);
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		ProvZCS.modifyAccount(acc1, "zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		ProvZCS.modifyAccount(acc2, "zimbraPrefGalAutoCompleteEnabled", "TRUE");
+		Stafzmprov.modifyAccount(acc1, "zimbraPrefGalAutoCompleteEnabled", "TRUE");
+		Stafzmprov.modifyAccount(acc2, "zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
 		System.out
 				.println("Select autocomplete value using keyboard ENTER key");

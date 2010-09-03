@@ -11,10 +11,11 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
-import projects.zcs.clients.ProvZCS;
+
 
 /**
  * Class file contains all mail top & bottom toolbar related 10*2 tests
@@ -34,83 +35,83 @@ public class MailTopBtmToolBarTests extends CommonTest {
 		String test = method.getName();
 		if (test.equals("doActionWithoutSelectingMail")) {
 			return new Object[][] {
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"TTdoActionWithoutSelectingMail", "", "" },
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"BTdoActionWithoutSelectingMail", "", "" } };
 		} else if (test.equals("deleteMultipleMailsAndVerify")) {
 			return new Object[][] {
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"TTdeleteMultipleMailsAndVerify", "", "" },
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"BTdeleteMultipleMailsAndVerify", "", "" } };
 		} else if (test.equals("moveSingleMailAndVerify")) {
 			return new Object[][] {
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"TTmoveSingleMailAndVerify", "", "" },
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"BTmoveSingleMailAndVerify", "", "" } };
 		} else if (test.equals("moveMultipleMailsAndVerify")) {
 			return new Object[][] {
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"TTmoveMultipleMailsAndVerify", "", "" },
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"BTmoveMultipleMailsAndVerify", "", "" } };
 		} else if (test.equals("markMailJunkNotJunkAndVerify")) {
 			return new Object[][] {
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"TTmarkMailJunkNotJunkAndVerify", "", "" },
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"BTmarkMailJunkNotJunkAndVerify", "", "" } };
 		} else if (test.equals("verifyEmptyJunkMail")) {
 			return new Object[][] {
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"TTverifyEmptyJunkMail", "", "" },
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"BTverifyEmptyJunkMail", "", "" } };
 		} else if (test.equals("verifyMarkAsReadUnreadToMail")) {
 			return new Object[][] {
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"TTverifyMarkAsReadUnreadToMail", "", "" },
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"BTverifyMarkAsReadUnreadToMail", "", "" } };
 		} else if (test.equals("verifyAddRemoveFlagToMail")) {
 			return new Object[][] {
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"TTverifyAddRemoveFlagToMail", "", "" },
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"BTverifyAddRemoveFlagToMail", "", "" } };
 		} else if (test.equals("verifyPermanentDeleteMail")) {
 			return new Object[][] {
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"TTverifyPermanentDeleteMail", "", "" },
-					{ ProvZCS.getRandomAccount(), "_selfAccountName_",
+					{ Stafzmprov.getRandomAccount(), "_selfAccountName_",
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"BTverifyPermanentDeleteMail", "", "" } };
 		} else if (test.equals("verifyMultipleSelectedMailActions")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com",
 					"verifyMultipleSelectedMailActions", "", "" } };
 		} else {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "topbottomtoolbartestmail", "",
 					"" } };

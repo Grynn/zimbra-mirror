@@ -4,8 +4,9 @@ import org.testng.Assert;
 
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
-import projects.html.clients.ProvZCS;
+import framework.util.Stafzmprov;
 import projects.html.tests.CommonTest;
 
 /**
@@ -117,7 +118,7 @@ public class TaskApp extends CommonTest {
 	 * @throws Exception
 	 */
 	public static String zLoginAndNavigateToTasks() throws Exception {
-		String user1 = ProvZCS.getRandomAccount();
+		String user1 = Stafzmprov.getRandomAccount();
 		return zLoginAndNavigateToTasks(user1);
 
 	}

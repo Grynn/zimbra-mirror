@@ -20,8 +20,9 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -56,19 +57,19 @@ public class CalendarPreferencesSetFalse extends CommonTest {
 
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefCalendarInitialView",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefCalendarInitialView",
 				"workWeek");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefCalendarAlwaysShowMiniCal", "FALSE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefCalendarUseQuickAdd",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefCalendarUseQuickAdd",
 				"FALSE");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefUseTimeZoneListInCalendar", "FALSE");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefCalendarApptReminderWarningTime", "0");
 
 //		selenium.refresh();

@@ -4,25 +4,21 @@
 
 package projects.html.tests.preferences;
 
-import java.io.File;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
-import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import projects.html.tests.CommonTest;
+
 import com.zimbra.common.service.ServiceException;
 
-import projects.html.clients.ProvZCS;
-import projects.html.tests.CommonTest;
-import projects.html.ui.ComposeView;
-
 import framework.core.SelNGBase;
-import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
 @SuppressWarnings( { "static-access", "unused" })
 public class ComposePref extends CommonTest {
@@ -81,7 +77,7 @@ public class ComposePref extends CommonTest {
 			handleRetry();
 
 		String currentUser = SelNGBase.selfAccountName.get();
-		String randomAcc = ProvZCS.getRandomAccount();
+		String randomAcc = Stafzmprov.getRandomAccount();
 		String textSubject = getLocalizedData_NoSpecialChar();
 		String htmlSubject = getLocalizedData_NoSpecialChar();
 

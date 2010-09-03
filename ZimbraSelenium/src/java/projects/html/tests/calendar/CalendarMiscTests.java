@@ -3,31 +3,21 @@
 
 package projects.html.tests.calendar;
 
-import java.io.File;
 import java.lang.reflect.Method;
-import java.sql.Date;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 
-import org.apache.tools.ant.taskdefs.WaitFor;
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import com.zimbra.common.service.ServiceException;
-
-import framework.core.SelNGBase;
-import framework.util.SleepUtil;
-import framework.util.RetryFailedTests;
-import framework.util.ZimbraSeleniumProperties;
-
 import projects.html.tests.CommonTest;
-import projects.html.clients.ProvZCS;
+import framework.core.SelNGBase;
+import framework.util.RetryFailedTests;
+import framework.util.SleepUtil;
+import framework.util.ZimbraSeleniumProperties;
 
 @SuppressWarnings( { "static-access", "unused" })
 public class CalendarMiscTests extends CommonTest {

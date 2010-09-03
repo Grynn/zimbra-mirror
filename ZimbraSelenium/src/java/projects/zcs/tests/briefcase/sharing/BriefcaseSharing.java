@@ -9,8 +9,9 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -29,7 +30,7 @@ import projects.zcs.tests.CommonTest;
  *            - Either Internal, External or public
  * @param invitedusers
  *            - Email id to whom folder to be shared - as of now it is random
- *            account created by ProvZCS.getRandomAccount() method
+ *            account created by Stafzmprov.getRandomAccount() method
  * @param role
  *            - Either None, Viewer, Manager or Admin
  * @param message
@@ -58,31 +59,31 @@ public class BriefcaseSharing extends CommonTest {
 		if (test.equals("shareAsViewerAndVerifyFileUpload"))
 			return new Object[][] { { "testsoundfile.wav", "Briefcase",
 					localize(locator.briefcase), "",
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		else if (test.equals("shareAsManagerAndVerifyFileUpload"))
 			return new Object[][] { { "testwordfile.doc", "Briefcase",
 					localize(locator.briefcase), "",
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleManager), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		else if (test.equals("verifyBriefcaseSendLinkFunctionality"))
 			return new Object[][] { { "testtextfile.txt", "Briefcase",
 					localize(locator.briefcase), "",
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleManager), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		else if (test.equals("publicBriefcaseSharing"))
 			return new Object[][] { { "structure.jpg", "Briefcase",
 					localize(locator.briefcase),
 					localize(locator.shareWithPublicLong),
-					ProvZCS.getRandomAccount(), "", "", "", "",
+					Stafzmprov.getRandomAccount(), "", "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		else
 			return new Object[][] { { "samlejpg.jpg", "Briefcase",
 					localize(locator.briefcase), "",
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 	}

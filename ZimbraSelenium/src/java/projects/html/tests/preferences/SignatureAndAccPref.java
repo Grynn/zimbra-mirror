@@ -23,11 +23,13 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
+import framework.util.Stafzmprov;
 
 import projects.html.tests.CommonTest;
-import projects.zcs.clients.ProvZCS;
+
 
 /**
  * @author VICKY JAISWAL
@@ -43,7 +45,7 @@ public class SignatureAndAccPref extends CommonTest {
 	private String constantSignatureBody = getLocalizedData_NoSpecialChar();
 
 	@DataProvider(name = "AccPrefDataProvider")
-	private Object[][] createData(Method method) throws ServiceException {
+	private Object[][] createData(Method method) throws ServiceException, HarnessException {
 		String test = method.getName();
 		if (test.equals("createSignatureAndVerifyInAccTab")
 				|| test.equals("create2ndSignatureAndVerifyInAccTab")
@@ -58,7 +60,7 @@ public class SignatureAndAccPref extends CommonTest {
 					getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),
-					ProvZCS.getRandomAccount() } };
+					Stafzmprov.getRandomAccount() } };
 		}
 
 		else

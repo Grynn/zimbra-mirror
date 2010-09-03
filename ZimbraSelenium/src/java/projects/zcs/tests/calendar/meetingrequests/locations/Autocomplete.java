@@ -1,19 +1,21 @@
 package projects.zcs.tests.calendar.meetingrequests.locations;
 
 import java.lang.reflect.Method;
+
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import projects.zcs.tests.CommonTest;
+
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.clients.ProvZCS;
-import projects.zcs.tests.CommonTest;
 
 /**
  * @author Jitesh Sojitra
@@ -66,8 +68,8 @@ public class Autocomplete extends CommonTest {
 
 		String location, actualValue, expectedValue;
 		location = "location1@testdomain.com";
-		ProvZCS.createResource(location, "location");
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.createLocation(location);
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3500);
@@ -109,8 +111,8 @@ public class Autocomplete extends CommonTest {
 
 		String location, actualValue, expectedValue;
 		location = "location3@testdomain.com";
-		ProvZCS.createResource(location, "location");
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.createLocation(location);
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3500);
@@ -169,9 +171,9 @@ public class Autocomplete extends CommonTest {
 		apptSubject = getLocalizedData_NoSpecialChar();
 		location = "location4@testdomain.com";
 		equipment = "equipment3@testdomain.com";
-		ProvZCS.createResource(location, "location");
-		ProvZCS.createResource(equipment, "equipment");
-		ProvZCS.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.createLocation(location);
+		Stafzmprov.createEquipment(equipment);
+		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		SelNGBase.selenium.get().refresh();
 		SleepUtil.sleep(3500);

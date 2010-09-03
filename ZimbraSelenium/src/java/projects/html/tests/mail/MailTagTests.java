@@ -10,9 +10,10 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
+import framework.util.Stafzmprov;
 
 import projects.html.tests.CommonTest;
-import projects.zcs.clients.ProvZCS;
+
 
 /**
  * Class file contains mail tag related tests
@@ -30,19 +31,19 @@ public class MailTagTests extends CommonTest {
 	public Object[][] createData(Method method) throws Exception {
 		String test = method.getName();
 		if (test.equals("applyRemoveTagToMultipleMails")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "applyRemoveTagtest", "", "" } };
 		} else if (test.equals("renameTagAndVerifyTaggedUnTaggedMail")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "renameTagtest", "", "" } };
 		} else if (test.equals("deleteTagAndVerifyTaggedUnTaggedMail")) {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "deleteTagtest", "", "" } };
 		} else {
-			return new Object[][] { { ProvZCS.getRandomAccount(),
+			return new Object[][] { { Stafzmprov.getRandomAccount(),
 					"_selfAccountName_", "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "testtagmail", "", "" } };
 		}

@@ -9,11 +9,13 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -30,37 +32,37 @@ public class SharingPreferences extends CommonTest {
 		String test = method.getName();
 		if (test.equals("shareMailFolderAndAccept")) {
 			return new Object[][] { { "Mail Folder", localize(locator.inbox),
-					"", ProvZCS.getRandomAccount().toLowerCase(),
+					"", Stafzmprov.getRandomAccount().toLowerCase(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("editABShareAndModifyRights")) {
 			return new Object[][] { { "Address Book",
 					localize(locator.contacts), "",
-					ProvZCS.getRandomAccount().toLowerCase(),
+					Stafzmprov.getRandomAccount().toLowerCase(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("declineCalendarFolderShare")) {
 			return new Object[][] { { "Calendar", localize(locator.calendar),
-					"", ProvZCS.getRandomAccount().toLowerCase(),
+					"", Stafzmprov.getRandomAccount().toLowerCase(),
 					localize(locator.shareRoleManager), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("revokeCalFolderShareFromPref")) {
 			return new Object[][] { { "Calendar", localize(locator.calendar),
-					"", ProvZCS.getRandomAccount().toLowerCase(),
+					"", Stafzmprov.getRandomAccount().toLowerCase(),
 					localize(locator.shareRoleManager), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("resendMailFolderShareFromPref")) {
 			return new Object[][] { { "Mail Folder", localize(locator.inbox),
-					"", ProvZCS.getRandomAccount().toLowerCase(),
+					"", Stafzmprov.getRandomAccount().toLowerCase(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("shareFldrsFromAppTabAndVerifyinPref")) {
 			return new Object[][] { { "", "", "",
-					ProvZCS.getRandomAccount().toLowerCase(),
+					Stafzmprov.getRandomAccount().toLowerCase(),
 					localize(locator.shareRoleViewer), "", "", "", "" } };
 		} else {
 			return new Object[][] { { "Mail Folder", localize(locator.inbox),
-					"", ProvZCS.getRandomAccount().toLowerCase(),
+					"", Stafzmprov.getRandomAccount().toLowerCase(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		}
@@ -98,7 +100,7 @@ public class SharingPreferences extends CommonTest {
 		String subject = "subject_shareMailFolderAndAccept";
 		String body = "body_shareMailFolderAndAccept";
 		String recipients[] = { currentLoggedinUser };
-		ProvZCS.injectMessage(currentLoggedinUser, recipients,
+		LmtpUtil.injectMessage(currentLoggedinUser, recipients,
 				"ccuser@testdomain.com", subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 
@@ -312,7 +314,7 @@ public class SharingPreferences extends CommonTest {
 		String subject = "subject_resendMailFolderShareFromPref";
 		String body = "body_resendMailFolderShareFromPref";
 		String recipients[] = { currentLoggedinUser };
-		ProvZCS.injectMessage(currentLoggedinUser, recipients,
+		LmtpUtil.injectMessage(currentLoggedinUser, recipients,
 				"ccuser@testdomain.com", subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 

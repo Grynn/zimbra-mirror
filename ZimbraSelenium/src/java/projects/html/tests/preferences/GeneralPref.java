@@ -7,27 +7,22 @@
 
 package projects.html.tests.preferences;
 
-import java.io.File;
-import java.lang.reflect.Array;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 
-import org.omg.CORBA.PUBLIC_MEMBER;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
-
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
+import projects.html.tests.CommonTest;
 
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
-import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
-
-import projects.html.tests.CommonTest;
-import projects.html.clients.ProvZCS;
+import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
 /**
  * @author VICKY JAISWAL
@@ -86,7 +81,7 @@ public class GeneralPref extends CommonTest {
 
 		resetSession();
 
-		String accountName = ProvZCS.getRandomAccount();
+		String accountName = Stafzmprov.getRandomAccount();
 		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraHTML(accountName);
 

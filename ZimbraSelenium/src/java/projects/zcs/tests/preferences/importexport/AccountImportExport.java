@@ -8,18 +8,18 @@ import java.text.SimpleDateFormat;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import projects.zcs.clients.ProvZCS;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -73,7 +73,7 @@ public class AccountImportExport extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		resetSession();
-		String acc1 = ProvZCS.getRandomAccount();
+		String acc1 = Stafzmprov.getRandomAccount();
 		SelNGBase.selfAccountName.set(acc1);
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
 		SelNGBase.isExecutionARetry.set(false);
@@ -93,7 +93,7 @@ public class AccountImportExport extends CommonTest {
 			exportAccount();
 
 			resetSession();
-			String acc2 = ProvZCS.getRandomAccount();
+			String acc2 = Stafzmprov.getRandomAccount();
 			SelNGBase.selfAccountName.set(acc2);
 			page.zLoginpage.zLoginToZimbraAjax(acc2);
 			importAccount();
@@ -124,13 +124,13 @@ public class AccountImportExport extends CommonTest {
 
 		// ------------------------- Mail -------------------------
 		String[] recipients = { SelNGBase.selfAccountName.get() };
-		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 				"ccuser@testdomain.com", inboxMsg, inboxMsg);
 		MailApp.ClickCheckMailUntilMailShowsUp(inboxMsg);
 
 		// create folder and keep one mail
 		page.zMailApp.zCreateFolder(newMailFolder);
-		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 				"ccuser@testdomain.com", newFolderMsg, newFolderMsg);
 		MailApp.ClickCheckMailUntilMailShowsUp(newFolderMsg);
 		obj.zMessageItem.zClick(newFolderMsg);
@@ -143,7 +143,7 @@ public class AccountImportExport extends CommonTest {
 		SleepUtil.sleep(1000);
 
 		// apply tag to mail
-		ProvZCS.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
 				"ccuser@testdomain.com", taggedMsg, taggedMsg);
 		MailApp.ClickCheckMailUntilMailShowsUp(taggedMsg);
 		obj.zMessageItem.zClick(taggedMsg);

@@ -18,7 +18,9 @@ public class StafAbstract {
 	public int StafTimeoutMillis = 30000;
 	
 	// STAF response
+	public STAFResult StafResult = null;
 	public String StafResponse = null;
+	
 	
 	public StafAbstract() {
 		logger.info("new StafAbstract");
@@ -58,7 +60,6 @@ public class StafAbstract {
 	 */
 	public boolean execute() throws HarnessException {
 		
-		STAFResult StafResult = null;
 		STAFHandle handle = null;
 		
 		try
@@ -78,7 +79,10 @@ public class StafAbstract {
 	            	if ( STAFMarshallingContext.isMarshalledData(StafResult.result) )
 	            	{
 	            		STAFMarshallingContext mc = STAFMarshallingContext.unmarshall(StafResult.result);
+	            		
+	            		// Get the entire response
 	            		StafResponse = STAFMarshallingContext.formatObject(mc);
+	            		
 	            	}
 	            	else
 	            	{
@@ -86,7 +90,7 @@ public class StafAbstract {
 	            	}
 	            }
 	
-	            return (StafResult.rc != STAFResult.Ok);
+	            return (StafResult.rc == STAFResult.Ok);
  
 			} finally {
 	        	

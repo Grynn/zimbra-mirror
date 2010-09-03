@@ -10,8 +10,9 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -105,7 +106,7 @@ public class ChangePassword extends CommonTest {
 
 		resetSession();
 
-		String accountName = ProvZCS.getRandomAccount();
+		String accountName = Stafzmprov.getRandomAccount();
 		SelNGBase.selfAccountName.set(accountName);
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 

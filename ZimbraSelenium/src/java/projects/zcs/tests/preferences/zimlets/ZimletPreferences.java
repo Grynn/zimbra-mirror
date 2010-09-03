@@ -7,7 +7,8 @@ import org.testng.annotations.Test;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
-import projects.zcs.clients.ProvZCS;
+import framework.util.Stafzmprov;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -66,7 +67,7 @@ public class ZimletPreferences extends CommonTest {
 
 		zGoToApplication("Preferences");
 		zGoToPreferences("Zimlets");
-		System.out.println(ProvZCS.getAccountPreferenceValue(
+		System.out.println(Stafzmprov.getAccountPreferenceValue(
 				SelNGBase.selfAccountName.get(), "zimbraPrefZimlets"));
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletEmailChkBox);
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletURLChkBox);

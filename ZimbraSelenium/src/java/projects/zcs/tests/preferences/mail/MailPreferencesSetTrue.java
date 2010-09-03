@@ -18,11 +18,13 @@ import com.thoughtworks.selenium.Selenium;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
+import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -33,7 +35,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 	// SECTION 1: DATA-PROVIDERS
 	//--------------------------------------------------------------------------
 	@DataProvider(name = "mailPreferencesDataProvider")
-	public Object[][] createData(Method method) throws ServiceException {
+	public Object[][] createData(Method method) throws ServiceException, HarnessException {
 		String test = method.getName();
 
 		if (test.equals("mailPrefDisplaySnippets")
@@ -60,9 +62,9 @@ public class MailPreferencesSetTrue extends CommonTest {
 
 			return new Object[][] {
 					{ getLocalizedData_NoSpecialChar(), getLocalizedData(3),
-							ProvZCS.getRandomAccount(), "TRUE" },
+							Stafzmprov.getRandomAccount(), "TRUE" },
 					{ getLocalizedData_NoSpecialChar(), getLocalizedData(3),
-							ProvZCS.getRandomAccount(), "FALSE" } };
+							Stafzmprov.getRandomAccount(), "FALSE" } };
 
 		} else if (test.equals("mailPrefOutOfOfficeReply")) {
 
@@ -92,8 +94,8 @@ public class MailPreferencesSetTrue extends CommonTest {
 
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefShowFragments", "TRUE");
-		ProvZCS.modifyAccount(accountName, "zimbraPrefOpenMailInNewWindow",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefShowFragments", "TRUE");
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefOpenMailInNewWindow",
 				"TRUE");
 
 		super.zLogin();
@@ -182,7 +184,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefMarkMsgRead", readTime);
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefMarkMsgRead", readTime);
 
 		// selenium.refresh();
 		zReloginToAjax();
@@ -238,7 +240,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 		String body = getLocalizedData(3);
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefMailInitialSearch",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefMailInitialSearch",
 				"in:sent");
 
 		// selenium.refresh();
@@ -248,12 +250,12 @@ public class MailPreferencesSetTrue extends CommonTest {
 
 		page.zComposeView.zNavigateToMailCompose();
 
-		page.zComposeView.zSendMailToSelfAndVerify(ProvZCS.getRandomAccount(),
+		page.zComposeView.zSendMailToSelfAndVerify(Stafzmprov.getRandomAccount(),
 				"", "", subject, body, "");
 
 		obj.zMessageItem.zExists(subject);
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefMailInitialSearch",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefMailInitialSearch",
 				"in:inbox");
 
 		// selenium.refresh();
@@ -274,12 +276,12 @@ public class MailPreferencesSetTrue extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = ProvZCS.getRandomAccount();
+		String accountName = Stafzmprov.getRandomAccount();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefMailForwardingAddress",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefMailForwardingAddress",
 				forwardingAddress);
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefMailLocalDeliveryDisabled", donotKeepLocalCopy);
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -325,14 +327,14 @@ public class MailPreferencesSetTrue extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = ProvZCS.getRandomAccount();
+		String accountName = Stafzmprov.getRandomAccount();
 		accountName = accountName.toLowerCase();
 
-		String notificationAddress = ProvZCS.getRandomAccount();
+		String notificationAddress = Stafzmprov.getRandomAccount();
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefNewMailNotificationAddress", notificationAddress);
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefNewMailNotificationEnabled", "TRUE");
 
 		page.zComposeView.zNavigateToMailCompose();
@@ -375,16 +377,16 @@ public class MailPreferencesSetTrue extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = ProvZCS.getRandomAccount();
+		String accountName = Stafzmprov.getRandomAccount();
 		accountName = accountName.toLowerCase();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefOutOfOfficeFromDate",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefOutOfOfficeFromDate",
 				startDate);
-		ProvZCS.modifyAccount(accountName, "zimbraPrefOutOfOfficeReply",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefOutOfOfficeReply",
 				oOOContent);
-		ProvZCS.modifyAccount(accountName, "zimbraPrefOutOfOfficeReplyEnabled",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefOutOfOfficeReplyEnabled",
 				"TRUE");
-		ProvZCS.modifyAccount(accountName, "zimbraPrefOutOfOfficeUntilDate",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefOutOfOfficeUntilDate",
 				endDate);
 
 		page.zComposeView.zNavigateToMailCompose();

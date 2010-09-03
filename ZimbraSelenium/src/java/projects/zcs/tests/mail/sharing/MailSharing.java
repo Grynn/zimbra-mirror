@@ -8,13 +8,15 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
 import projects.zcs.ui.MailApp;
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -67,31 +69,31 @@ public class MailSharing extends CommonTest {
 		String test = method.getName();
 		if (test.equals("declineShare")) {
 			return new Object[][] { { "Mail", localize(locator.inbox), "",
-					ProvZCS.getRandomAccount(),
+					Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("shareAsViewerAndVerifyMailDeletion")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("shareAsManagerAndVerifyMailDeletion_Bug40954")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleManager), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("shareAsAdminAndVerifyMailDeletion_Bug40954")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleAdmin), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("shareAsAdminAndAdminSharesFolderto3rduser")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleAdmin),
 					localize(locator.sendStandardMailAboutSharePlusNote),
 					getLocalizedData_NoSpecialChar(), "",
@@ -99,13 +101,13 @@ public class MailSharing extends CommonTest {
 		} else if (test.equals("shareAsViewerAndRevoke")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleAdmin), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("resendShareInvite")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleAdmin), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("shareAsViewerToMultipleUsers")) {
@@ -145,7 +147,7 @@ public class MailSharing extends CommonTest {
 			return new Object[][] { { "_selfAccountName_",
 					"ccuser@testdomain.com", "", "testOBOSubject",
 					"testOBOBody", "putty.log", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		}
@@ -250,7 +252,7 @@ public class MailSharing extends CommonTest {
 		zGoToApplication("Mail");
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
-		ProvZCS.injectMessage(to, recipients, cc, subject, body);
+		LmtpUtil.injectMessage(to, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, invitedusers, role, message, sharingnoteifany,
@@ -444,7 +446,7 @@ public class MailSharing extends CommonTest {
 		obj.zFolder.zClick(page.zMailApp.zInboxFldr);
 		obj.zMessageItem.zNotExists(localize(locator.shareCreatedSubject));
 
-		String thirdUser = ProvZCS.getRandomAccount();
+		String thirdUser = Stafzmprov.getRandomAccount();
 		page.zSharing.zShareFolder(applicationtab, mountingfoldername,
 				sharetype, thirdUser, localize(locator.shareRoleViewer),
 				message, sharingnoteifany, allowtoseeprivateappt);
@@ -599,8 +601,8 @@ public class MailSharing extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
-		String inviteduser1 = ProvZCS.getRandomAccount();
-		String inviteduser2 = ProvZCS.getRandomAccount();
+		String inviteduser1 = Stafzmprov.getRandomAccount();
+		String inviteduser2 = Stafzmprov.getRandomAccount();
 		invitedusers = inviteduser1 + ";" + inviteduser2;
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, invitedusers, role, message, sharingnoteifany,
@@ -652,8 +654,8 @@ public class MailSharing extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
-		String inviteduser1 = ProvZCS.getRandomAccount();
-		String inviteduser2 = ProvZCS.getRandomAccount();
+		String inviteduser1 = Stafzmprov.getRandomAccount();
+		String inviteduser2 = Stafzmprov.getRandomAccount();
 		invitedusers = inviteduser1 + ";" + inviteduser2;
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, invitedusers, role, message, sharingnoteifany,
@@ -803,8 +805,8 @@ public class MailSharing extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
-		String inviteduser2 = ProvZCS.getRandomAccount();
-		String inviteduser3 = ProvZCS.getRandomAccount();
+		String inviteduser2 = Stafzmprov.getRandomAccount();
+		String inviteduser3 = Stafzmprov.getRandomAccount();
 
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, inviteduser2, role, message, sharingnoteifany,
@@ -904,8 +906,8 @@ public class MailSharing extends CommonTest {
 
 		page.zCalApp.zNavigateToCalendar();
 		obj.zCalendarFolder.zExists(localize(locator.calendar));
-		String inviteduser2 = ProvZCS.getRandomAccount();
-		String inviteduser3 = ProvZCS.getRandomAccount();
+		String inviteduser2 = Stafzmprov.getRandomAccount();
+		String inviteduser3 = Stafzmprov.getRandomAccount();
 
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, inviteduser2, role, message, sharingnoteifany,
@@ -1022,7 +1024,7 @@ public class MailSharing extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndVerify(currentloggedinuser, cc,
 				bcc, subject, body, attachments);
 
-		String inviteduser2 = ProvZCS.getRandomAccount();
+		String inviteduser2 = Stafzmprov.getRandomAccount();
 
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, inviteduser2, role, message, sharingnoteifany,
@@ -1095,7 +1097,7 @@ public class MailSharing extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(currentloggedinuser, cc,
 				bcc, "subj2", body, attachments);
-		String inviteduser2 = ProvZCS.getRandomAccount();
+		String inviteduser2 = Stafzmprov.getRandomAccount();
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, inviteduser2, role, message, sharingnoteifany,
 				allowtoseeprivateappt);

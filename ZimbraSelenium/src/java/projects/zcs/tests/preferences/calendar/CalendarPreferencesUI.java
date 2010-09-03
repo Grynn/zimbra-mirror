@@ -20,9 +20,10 @@ import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -54,20 +55,20 @@ public class CalendarPreferencesUI extends CommonTest {
 		zLoginIfRequired();
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefCalendarAlwaysShowMiniCal", "TRUE");
-		ProvZCS.modifyAccount(accountName, "zimbraPrefDeleteInviteOnReply",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefDeleteInviteOnReply",
 				"TRUE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefCalendarUseQuickAdd",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefCalendarUseQuickAdd",
 				"TRUE");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefUseTimeZoneListInCalendar", "TRUE");
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefCalendarReminderSoundsEnabled", "TRUE");
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefCalendarReminderFlashTitle", "TRUE");
 
 		super.zLogin();
@@ -109,7 +110,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarInitialView");
 
 		Assert.assertEquals(actualVal, "month",
@@ -126,7 +127,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarInitialView");
 
 		Assert.assertEquals(actualVal, "week",
@@ -157,7 +158,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarFirstDayOfWeek");
 
 		Assert.assertEquals(actualVal, "4",
@@ -191,7 +192,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(1000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarAlwaysShowMiniCal");
 
 		Assert
@@ -213,7 +214,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(1000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarAlwaysShowMiniCal");
 
 		Assert.assertEquals(actualVal, "TRUE",
@@ -246,7 +247,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(1000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefDeleteInviteOnReply");
 
 		Assert
@@ -267,7 +268,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(1000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefDeleteInviteOnReply");
 
 		Assert
@@ -304,7 +305,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarUseQuickAdd");
 
 		Assert.assertEquals(actualVal, "FALSE",
@@ -322,7 +323,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarUseQuickAdd");
 
 		Assert.assertEquals(actualVal, "TRUE",
@@ -355,7 +356,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefUseTimeZoneListInCalendar");
 
 		Assert
@@ -375,7 +376,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefUseTimeZoneListInCalendar");
 
 		Assert
@@ -415,21 +416,21 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarApptReminderWarningTime");
 
 		Assert.assertEquals(actualVal, "0",
 				"Show Reminders is not set to 0 in db when selected Never. Actual value is "
 						+ actualVal);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarReminderSoundsEnabled");
 
 		Assert.assertEquals(actualVal, "FALSE",
 				"Play a sound is not set to FALSE in db when unchecked. Actual value is "
 						+ actualVal);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarReminderFlashTitle");
 
 		Assert
@@ -450,14 +451,14 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(2000);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarReminderSoundsEnabled");
 
 		Assert.assertEquals(actualVal, "TRUE",
 				"Play a sound is not set to TRUE in db when checked. Actual value is "
 						+ actualVal);
 
-		actualVal = ProvZCS.getAccountPreferenceValue(accountName,
+		actualVal = Stafzmprov.getAccountPreferenceValue(accountName,
 				"zimbraPrefCalendarReminderFlashTitle");
 
 		Assert
@@ -479,9 +480,9 @@ public class CalendarPreferencesUI extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = ProvZCS.getRandomAccount();
+		String accountName = Stafzmprov.getRandomAccount();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefDeleteInviteOnReply",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefDeleteInviteOnReply",
 				deleteInvite);
 
 		page.zCalApp.zNavigateToCalendar();

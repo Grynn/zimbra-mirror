@@ -10,7 +10,8 @@ import org.testng.annotations.Test;
 
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
-import projects.zcs.clients.ProvZCS;
+import framework.util.Stafzmprov;
+
 import projects.zcs.tests.CommonTest;
 
 /**
@@ -37,7 +38,7 @@ import projects.zcs.tests.CommonTest;
  *            - Either Internal, External or public
  * @param invitedusers
  *            - Email id to whom folder to be shared - as of now it is random
- *            account created by ProvZCS.getRandomAccount() method
+ *            account created by Stafzmprov.getRandomAccount() method
  * @param role
  *            - Either None, Viewer, Manager or Admin
  * @param message
@@ -65,13 +66,13 @@ public class ModifySharedFolderRole extends CommonTest {
 		if (test.equals("changingSharedFolderViewertoNone")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("changingSharedFolderManagertoNone")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.sent), "", ProvZCS.getRandomAccount(),
+					localize(locator.sent), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleManager),
 					localize(locator.sendStandardMailAboutSharePlusNote),
 					getLocalizedData_NoSpecialChar(), "",
@@ -79,31 +80,31 @@ public class ModifySharedFolderRole extends CommonTest {
 		} else if (test.equals("changingSharedFolderAdmintoNone")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleAdmin), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("changingSharedFolderViewertoManager")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("changingSharedFolderManagertoViewer")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleManager), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else if (test.equals("changingSharedFolderViewertoAdmin")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		} else {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData(2), getLocalizedData(5), "", "Mail",
-					localize(locator.inbox), "", ProvZCS.getRandomAccount(),
+					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleAdmin), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		}

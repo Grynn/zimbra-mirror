@@ -2,9 +2,10 @@ package projects.zcs.ui;
 
 import org.testng.Assert;
 
-import projects.zcs.clients.ProvZCS;
+
 import framework.core.SelNGBase;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -83,7 +84,7 @@ public class TaskApp extends AppPage {
 	 * @throws Exception
 	 */
 	public static String zLoginAndNavigateToTasks() throws Exception {
-		String user1 = ProvZCS.getRandomAccount();
+		String user1 = Stafzmprov.getRandomAccount();
 		return zLoginAndNavigateToTasks(user1);
 	}
 

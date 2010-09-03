@@ -22,9 +22,10 @@ import com.zimbra.cs.zclient.ZInvite.ZRole;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -99,14 +100,14 @@ public class ComposePreferencesSetTrue extends CommonTest {
 
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeFormat", "html");
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeFormat", "html");
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefHtmlEditorDefaultFontFamily", "Times New Roman");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefAutoSaveDraftInterval",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefAutoSaveDraftInterval",
 				"10");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefSaveToSent", "TRUE");
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefSaveToSent", "TRUE");
 
 		// selenium.refresh();
 		super.zLogin();
@@ -160,7 +161,7 @@ public class ComposePreferencesSetTrue extends CommonTest {
 
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
 				"TRUE");
 
 		zReloginToAjax();
@@ -178,7 +179,7 @@ public class ComposePreferencesSetTrue extends CommonTest {
 		// localize(locator.warningMsg));
 		SelNGBase.selenium.get().selectWindow(null);
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
 				"FALSE");
 
 		zReloginToAjax();
@@ -239,7 +240,7 @@ public class ComposePreferencesSetTrue extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String recepient = ProvZCS.getRandomAccount();
+		String recepient = Stafzmprov.getRandomAccount();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(recepient, "", "", subject, body,
@@ -266,16 +267,16 @@ public class ComposePreferencesSetTrue extends CommonTest {
 			handleRetry();
 
 		String currentAccount = SelNGBase.selfAccountName.get();
-		String accountName = ProvZCS.getRandomAccount();
+		String accountName = Stafzmprov.getRandomAccount();
 
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefForwardReplyInOriginalFormat",
 				replyFwdInOriginalFormat);
-		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeFormat", "text");
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeFormat", "text");
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefHtmlEditorDefaultFontFamily", "Times New Roman");
 
-		ProvZCS.modifyAccount(currentAccount, "zimbraPrefComposeFormat",
+		Stafzmprov.modifyAccount(currentAccount, "zimbraPrefComposeFormat",
 				composeFormat);
 
 		// selenium.refresh();
@@ -346,12 +347,12 @@ public class ComposePreferencesSetTrue extends CommonTest {
 
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefForwardReplyPrefixChar",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefForwardReplyPrefixChar",
 				replyPrefix);
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefReplyIncludeOriginalText", includeMsg);
 
-		// ProvZCS.modifyAccount(accountName, "zimbraPrefGroupMailBy",
+		// Stafzmprov.modifyAccount(accountName, "zimbraPrefGroupMailBy",
 		// "message");
 		// selenium.refresh();
 		zReloginToAjax();
@@ -450,12 +451,12 @@ public class ComposePreferencesSetTrue extends CommonTest {
 
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefForwardReplyPrefixChar",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefForwardReplyPrefixChar",
 				fwdPrefix);
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefForwardIncludeOriginalText", includeMsg);
 
-		// ProvZCS.modifyAccount(accountName, "zimbraPrefGroupMailBy",
+		// Stafzmprov.modifyAccount(accountName, "zimbraPrefGroupMailBy",
 		// "message");
 		// selenium.refresh();
 		zReloginToAjax();

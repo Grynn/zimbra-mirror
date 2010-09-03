@@ -21,8 +21,9 @@ import com.zimbra.cs.zclient.ZFolder;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 
@@ -100,16 +101,16 @@ public class ComposePreferencesSetFalse extends CommonTest {
 
 		String accountName = SelNGBase.selfAccountName.get();
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeFormat", "text");
-		ProvZCS.modifyAccount(accountName,
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeFormat", "text");
+		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefHtmlEditorDefaultFontFamily", "Times New Roman");
-		ProvZCS.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
 				"FALSE");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefAutoSaveDraftInterval",
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefAutoSaveDraftInterval",
 				"0");
 
-		ProvZCS.modifyAccount(accountName, "zimbraPrefSaveToSent", "FALSE");
+		Stafzmprov.modifyAccount(accountName, "zimbraPrefSaveToSent", "FALSE");
 
 //		selenium.refresh();
 		super.zLogin();
@@ -214,7 +215,7 @@ public class ComposePreferencesSetFalse extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String recepient = ProvZCS.getRandomAccount();
+		String recepient = Stafzmprov.getRandomAccount();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(recepient, "", "", subject, body,

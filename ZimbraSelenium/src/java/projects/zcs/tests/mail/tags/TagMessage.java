@@ -5,11 +5,12 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import projects.zcs.clients.ProvZCS;
+
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 import com.zimbra.common.service.ServiceException;
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 
@@ -67,7 +68,7 @@ public class TagMessage extends CommonTest {
 		newTag1 = getLocalizedData_NoSpecialChar();
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
-		ProvZCS.injectMessage(to, recipients, cc, subject1, body);
+		LmtpUtil.injectMessage(to, recipients, cc, subject1, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		zCreateTag(tag1);
 		obj.zMessageItem.zClick(subject1);
@@ -113,8 +114,8 @@ public class TagMessage extends CommonTest {
 		tag2 = getLocalizedData_NoSpecialChar();
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
-		ProvZCS.injectMessage(to, recipients, cc, subject1, body);
-		ProvZCS.injectMessage(to, recipients, cc, subject2, body);
+		LmtpUtil.injectMessage(to, recipients, cc, subject1, body);
+		LmtpUtil.injectMessage(to, recipients, cc, subject2, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject2);
 		zCreateTag(tag1);
@@ -187,7 +188,7 @@ public class TagMessage extends CommonTest {
 		tag2 = getLocalizedData_NoSpecialChar();
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
-		ProvZCS.injectMessage(to, recipients, cc, subject1, body);
+		LmtpUtil.injectMessage(to, recipients, cc, subject1, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		obj.zMessageItem.zClick(subject1);
 		SleepUtil.sleep(1000);
@@ -236,8 +237,8 @@ public class TagMessage extends CommonTest {
 		tag2 = getLocalizedData_NoSpecialChar();
 		to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
-		ProvZCS.injectMessage(to, recipients, cc, subject1, body);
-		ProvZCS.injectMessage(to, recipients, cc, subject2, body);
+		LmtpUtil.injectMessage(to, recipients, cc, subject1, body);
+		LmtpUtil.injectMessage(to, recipients, cc, subject2, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject2);
 		zCreateTag(tag1);

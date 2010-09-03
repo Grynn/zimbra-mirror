@@ -3,9 +3,11 @@ package projects.html.ui;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
+import framework.util.LmtpUtil;
 import framework.util.SleepUtil;
+import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
-import projects.html.clients.ProvZCS;
+import framework.util.Stafzmprov;
 import projects.html.tests.CommonTest;
 
 /**
@@ -169,11 +171,11 @@ public class MailPrefUI extends CommonTest {
 		String mailBody = getLocalizedData_NoSpecialChar();
 		String to = SelNGBase.selfAccountName.get();
 		String[] recipients = { to };
-		String sender = ProvZCS.getRandomAccount();
+		String sender = Stafzmprov.getRandomAccount();
 
 		for (int i = 0; i < numberOfMails; i++) {
 
-			ProvZCS.injectMessage(sender, recipients, ProvZCS
+			LmtpUtil.injectMessage(sender, recipients, Stafzmprov
 					.getRandomAccount(), mailSubject[i], mailBody);
 		}
 
