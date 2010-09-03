@@ -9,7 +9,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 public class ZimbraSeleniumProperties {
-
+	private static final Logger logger = LogManager.getLogger(ZimbraSeleniumProperties.class);
+	
 	// Use these strings as arguments for some standard properties, e.g. ZimbraSeleniumProperties.getStringProperty(PropZimbraServer, "default");
 	public static final String PropZimbraVersion = "zimbraserverversion"; 
 	
@@ -62,6 +63,7 @@ public class ZimbraSeleniumProperties {
 	}
 
 	private ZimbraSeleniumProperties() {
+		logger.debug("new ZimbraSeleniumProperties");
 		init();
 	}
 
@@ -114,11 +116,6 @@ public class ZimbraSeleniumProperties {
 		configProp.setProperty("zsMsg", ResourceBundle.getBundle(
 				"framework.locale.ZsMsg", new Locale(locale)));
 
-	}
-
-	private void createStandardProperties() {
-		if ( !configProp.containsKey(PropZimbraVersion) )
-			configProp.setProperty(PropZimbraVersion, zimbraGetVersionString());
 	}
 
 	private PropertiesConfiguration createDefaultProperties() {
@@ -208,7 +205,7 @@ public class ZimbraSeleniumProperties {
 
 
 	// for unit test need to change access to public
-	private static void main(String[] args) {
+	public static void main(String[] args) {
 		ZimbraSeleniumLogger.setmLog(new CurClassGetter().getCurrentClass());
 
 		System

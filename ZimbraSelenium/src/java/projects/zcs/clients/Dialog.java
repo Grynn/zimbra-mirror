@@ -3,7 +3,6 @@ package projects.zcs.clients;
 import org.testng.Assert;
 
 import framework.core.SelNGBase;
-import framework.util.ZimbraUtil;
 
 public class Dialog extends SelNGBase{
 	//note: this doesnt extend from ZObject since click,rtclick, indlg etc doesnt make sense
@@ -46,7 +45,7 @@ public class Dialog extends SelNGBase{
 			actual = actual.replace("\r\n", "");
 
 		expectedMessage = expectedMessage.replace((char)160, (char)32);
-		Assert.assertEquals(actual.trim(), expectedMessage.trim(), ZimbraUtil.printUnMatchedTextWithIndex(actual.trim(),expectedMessage.trim()));
+		Assert.assertEquals(actual.trim(), expectedMessage.trim(), printUnMatchedTextWithIndex(actual.trim(),expectedMessage.trim()));
 	}
 	public void zVerifyContainsText(String dialogNameOrId, String expectedText) {
 		String actual = dialogCore(dialogNameOrId, "getalltxt");
@@ -65,5 +64,26 @@ public class Dialog extends SelNGBase{
 
 	}
 	
+	protected String printUnMatchedTextWithIndex(String actual,
+			String expected) {
+		if (actual.length() != expected.length()) {
+			return "actual(" + actual + ") expected(" + expected + ")";
+		}
+
+		char[] arr = new char[actual.length()];
+		actual.getChars(0, actual.length(), arr, 0);
+		char[] arr2 = new char[expected.length()];
+		expected.getChars(0, expected.length(), arr2, 0);
+		String retval = "";
+		for (int i = 0; i < arr.length; i++) {
+			int t = (int) arr[i];
+			int t2 = (int) arr2[i];
+			if (t != t2) {
+				retval = retval + " index=" + i + " ('" + arr[i] + "' != '"
+						+ arr2[i] + "'    '" + t + "' != '" + t2 + "')\n";
+			}
+		}
+		return retval;
+	}
 
 }

@@ -7,7 +7,6 @@ import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
-import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.lmtpserver.utils.LmtpClient;
 
 public class LmtpUtil {
