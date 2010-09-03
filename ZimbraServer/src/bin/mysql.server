@@ -20,6 +20,7 @@ zmsetvars \
   mysql_pidfile \
   mysql_mycnf \
   mysql_errlogfile \
+  zimbra_home \
   zimbra_tmp_directory 
 
 if [ ! -d ${mysql_directory}/bin ]; then
@@ -92,10 +93,20 @@ case "$1" in
       --external-locking \
       --log-error=${mysql_errlogfile} \
       --ledir=${mysql_directory}/libexec < /dev/null > /dev/null 2>&1 &
-    if [ $? = 0 ]; then
-      echo "done."
-    else 
+    SQLSTARTED=0
+    for (i = 0; i < 60; i++)
+    do
+      su - zimbra -c "${zimbra_home}/bin/mysqladmin -s ping" 2>&1 > /dev/null
+      if [ $? = 0 ]; then
+        SQLSTARTED=1
+        break
+      fi
+      sleep 2
+    done
+    if [ ${SQLSTARTED} -ne 1 ]; then
       echo "failed."
+    else 
+      echo "done."
     fi
     ;;
     
