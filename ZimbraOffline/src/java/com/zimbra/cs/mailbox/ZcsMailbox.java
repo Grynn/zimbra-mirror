@@ -19,6 +19,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -37,6 +38,10 @@ import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
+import com.zimbra.cs.account.AuthToken;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Server;
+import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
@@ -50,11 +55,16 @@ import com.zimbra.cs.offline.OfflineLC;
 import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.offline.OfflineSyncManager;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.UserServlet;
 import com.zimbra.cs.service.UserServlet.HttpInputStream;
+import com.zimbra.cs.session.Session;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.store.MailboxBlob;
 import com.zimbra.cs.store.StoreManager;
+import com.zimbra.soap.DocumentHandler;
+import com.zimbra.soap.ProxyTarget;
+import com.zimbra.soap.ZimbraSoapContext;
 
 public class ZcsMailbox extends ChangeTrackingMailbox {
 
@@ -525,6 +535,40 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }            
     }
     
+    public Element sendRequestWithNotification(Element request) throws ServiceException {
+        Server server = Provisioning.getInstance().get(ServerBy.name,OfflineConstants.SYNC_SERVER_PREFIX+getAccountId());
+        if (server != null) {
+            //when we first add an account, server is still null
+            List<Session> soapSessions = getListeners(Session.Type.SOAP);
+            Session session = null;
+            if (soapSessions.size() == 1) {
+                session = soapSessions.get(0);
+            } else if (soapSessions.size() > 1) {
+                //this occurs if user refreshes web browser (or opens ZD in two different browsers); older session does not time out so there are now two listening
+                //only the most recent is 'active'
+                for (Session ses:soapSessions) {
+                    if (session == null || ses.accessedAfter(session.getLastAccessTime())) {
+                        session = ses;
+                    }
+                }
+            }
+            if (session != null) {
+                ZAuthToken zat = getAuthToken(false);
+                if (zat != null) {
+                    AuthToken at = AuthProvider.getAuthToken(OfflineProvisioning.getOfflineInstance().getLocalAccount());
+                    at.setProxyAuthToken(zat.getValue());
+                    ProxyTarget proxy = new ProxyTarget(server, at, getSoapUri());
+                    //zscProxy needs to be for the 'ffffff-' account, but with target of *this* mailbox's acct
+                    //currently UI receives SoapJS in its responses, we ask for that protocol so notifications are handled correctly
+                    ZimbraSoapContext zscIn = new ZimbraSoapContext(at, at.getAccountId(), SoapProtocol.Soap12, SoapProtocol.SoapJS);
+                    ZimbraSoapContext zscProxy = new ZimbraSoapContext(zscIn, getAccountId(), session);
+                    return DocumentHandler.proxyWithNotification(request, proxy, zscProxy, session);
+                }
+            } 
+        }
+        return sendRequest(request);
+    }
+
     public Element sendRequest(Element request) throws ServiceException {
         return sendRequest(request, true);
     }

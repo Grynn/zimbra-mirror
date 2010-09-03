@@ -82,7 +82,7 @@ public class DeltaSync {
         // keep delta sync'ing until the server tells us the delta sync is complete ("more=0")
         do {
             Element request = new Element.XMLElement(MailConstants.SYNC_REQUEST).addAttribute(MailConstants.A_TOKEN, oldToken).addAttribute(MailConstants.A_TYPED_DELETES, true);
-            response = ombx.sendRequest(request);
+            response = ombx.sendRequestWithNotification(request);
             newToken = response.getAttribute(MailConstants.A_TOKEN);
     
             OfflineLog.offline.debug("starting delta sync [token " + oldToken + ']');
