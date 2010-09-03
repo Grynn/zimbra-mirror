@@ -106,7 +106,7 @@ ZaAccount.A_zimbraAvailableSkin = "zimbraAvailableSkin";
 ZaAccount.A_zimbraZimletAvailableZimlets = "zimbraZimletAvailableZimlets";
 
 ZaAccount.A_zimbraDataSourcePollingInterval = "zimbraDataSourcePollingInterval";
-
+ZaAccount.A_zimbraProxyAllowedDomains = "zimbraProxyAllowedDomains";
 //prefs
 ZaAccount.A_zimbraPrefAppleIcalDelegationEnabled = "zimbraPrefAppleIcalDelegationEnabled";
 ZaAccount.A_zimbraPrefCalendarShowPastDueReminders = "zimbraPrefCalendarShowPastDueReminders";
@@ -1602,6 +1602,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraMailForwardingAddressMaxLength, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMailForwardingAddressMaxLength, maxInclusive:2147483647, minInclusive:0},
 	{id:ZaAccount.A_zimbraDataSourcePollingInterval, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraDataSourcePollingInterval},
         {id:ZaAccount.A_zimbraPrefAutoSaveDraftInterval, type:_COS_MLIFETIME_, ref:"attrs/"+ZaAccount.A_zimbraPrefAutoSaveDraftInterval},
+        {id:ZaAccount.A_zimbraProxyAllowedDomains, type: _LIST_, ref:"attrs/"+ZaAccount.A_zimbraProxyAllowedDomains, listItem:{ type: _STRING_}},
         {id:ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs, type:_COS_NUMBER_, ref:"attrs/"+ZaAccount.A_zimbraMailForwardingAddressMaxNumAddrs, maxInclusive:2147483647, minInclusive:0},
         {id:ZaAccount.A_zimbraAttachmentsBlocked, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraAttachmentsBlocked, choices:ZaModel.BOOLEAN_CHOICES},
 

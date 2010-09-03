@@ -2778,6 +2778,33 @@ nowrap:false, labelWrap:true,
 
 							]
 						},
+                                                
+                                                {type:_ZA_TOP_GROUPER_, id:"account_proxyalloweddomain_settings",
+               					 	label: ZaMsg.NAD_ProxyAllowedDomains,
+               						items:[
+                   					{
+                       						ref: ZaAccount.A_zimbraProxyAllowedDomains,
+                       						msgName:ZaMsg.MSG_zimbraProxyAllowedDomains,
+                       						label:ZaMsg.LBL_zimbraProxyAllowedDomains, labelLocation:_LEFT_,
+                       						labelCssStyle:"vertical-align:top",
+                       						type:_REPEAT_,
+                       						align:_LEFT_,
+                       						repeatInstance:"",
+                       						addButtonLabel:ZaMsg.NAD_ProxyAddAllowedDomain ,
+                       						removeButtonLabel: ZaMsg.NAD_ProxyRemoveAllowedDomain,
+                       						showAddButton:true,
+                       						showRemoveButton:true,
+                       						showAddOnNextRow:true,
+                       						items: [
+                               					{ref:".", type:_TEXTFIELD_,
+                                				enableDisableChecks:[ZaItem.hasWritePermission] ,
+                                  				visibilityChecks:[ZaItem.hasReadPermission],
+                                  				width: "15em"}
+                                				]			
+                     					},
+               						]				
+             					},
+
 						{type:_ZA_TOP_GROUPER_,id:"account_password_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_PasswordGrouper,
 							visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,

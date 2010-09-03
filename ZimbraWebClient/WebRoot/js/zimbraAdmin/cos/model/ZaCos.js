@@ -70,6 +70,7 @@ ZaCos.A_zimbraMailForwardingAddressMaxLength = "zimbraMailForwardingAddressMaxLe
 ZaCos.A_zimbraMailForwardingAddressMaxNumAddrs = "zimbraMailForwardingAddressMaxNumAddrs";
 
 ZaCos.A_zimbraDataSourcePollingInterval = "zimbraDataSourcePollingInterval";
+ZaCos.A_zimbraProxyAllowedDomains = "zimbraProxyAllowedDomains";
 //prefs
 ZaCos.A_zimbraPrefMandatorySpellCheckEnabled = "zimbraPrefMandatorySpellCheckEnabled";
 ZaCos.A_zimbraPrefAppleIcalDelegationEnabled = "zimbraPrefAppleIcalDelegationEnabled";
@@ -610,7 +611,8 @@ ZaCos.myXModel = {
         {id:ZaCos.A_zimbraPrefUseTimeZoneListInCalendar, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefUseTimeZoneListInCalendar, type:_ENUM_},
         {id:ZaCos.A_zimbraPrefMailPollingInterval, ref:"attrs/"+ZaCos.A_zimbraPrefMailPollingInterval, type:_MLIFETIME_},
 	{id:ZaCos.A_zimbraPrefAutoSaveDraftInterval, ref:"attrs/"+ZaCos.A_zimbraPrefAutoSaveDraftInterval, type:_MLIFETIME_},
-        {id:ZaCos.A_zimbraDataSourcePollingInterval, ref:"attrs/"+ZaCos.A_zimbraDataSourcePollingInterval, type:_MLIFETIME_}, 
+        {id:ZaCos.A_zimbraDataSourcePollingInterval, ref:"attrs/"+ZaCos.A_zimbraDataSourcePollingInterval, type:_MLIFETIME_},
+	{id:ZaCos.A_zimbraProxyAllowedDomains, type: _LIST_, ref:"attrs/"+ZaCos.A_zimbraProxyAllowedDomains, listItem:{ type: _STRING_}}, 
         {id:ZaCos.A_zimbraPrefMailFlashIcon, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefMailFlashIcon, type:_ENUM_},
         {id:ZaCos.A_zimbraPrefMailFlashTitle, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefMailFlashTitle, type:_ENUM_},
         {id:ZaCos.A_zimbraPrefMailSoundsEnabled, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaCos.A_zimbraPrefMailSoundsEnabled, type:_ENUM_},
