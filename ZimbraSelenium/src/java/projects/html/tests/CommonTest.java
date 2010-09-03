@@ -150,16 +150,22 @@ public class CommonTest extends SelNGBase {
 
 	@BeforeSuite(groups = { "always" })
 	public void initTests() throws ServiceException, HarnessException {
-		String username = "";
+
 		initFramework();
 		
 		// Create the test domain
 		Stafzmprov.zmprov(String.format("zmprov createDomain %s", ZimbraSeleniumProperties.getStringProperty("testdomain")));
 		
 		SeleniumService.getInstance().startSeleniumServer();
-		ZimbraAccount account = new ZimbraAccount();
-		account.provisionAccount("ccuser@testdomain.com", "test123");	
-		account.provisionAccount("bccuser@testdomain.com", "test123");	
+		
+		// Provision the default users
+		ZimbraAccount ccuser = new ZimbraAccount("ccuser@testdomain.com", "test123");
+		ccuser.provision();
+		ccuser.authenticate();
+		ZimbraAccount bccuser = new ZimbraAccount("bccuser@testdomain.com", "test123");
+		ccuser.provision();
+		ccuser.authenticate();
+
 	}
 
 	/**

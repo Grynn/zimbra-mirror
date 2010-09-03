@@ -32,6 +32,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.dom4j.DocumentException;
 
+import bsh.This;
+
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.net.SocketFactories;
 import com.zimbra.common.service.ServiceException;
@@ -47,16 +49,16 @@ public class ZimbraAccount {
 	private static Logger logger = LogManager.getLogger(ZimbraAccount.class);
 
 	protected SoapClient soapClient = new SoapClient();
-    public String DisplayName = null;
     public String ZimbraSoapClientHost = null;
     public String ZimbraSoapAdminHost = null;
     public String ZimbraMailHost = null;
     public String ZimbraId = null;
-    public String CN = null;
     public String EmailAddress = null;
     public String Password = null;
-    public String Alias = null;
-    public String DomainName = null;
+    public Map<String, String> preferences = null;
+    
+    
+
 
     /*
      * Create an account with the email address account<num>@<testdomain>
@@ -67,28 +69,21 @@ public class ZimbraAccount {
 	}
 	
     /*
-     * Create an account on the specified domain with the email address account<num>@<domain>
-     * The password is set to config property "adminPwd"
-     */
-	public ZimbraAccount(String domain) {
-		this(null, domain);
-	}
-	
-    /*
      * Create an account with the email address <name>@<domain>
      * The password is set to config property "adminPwd"
      */
-	public ZimbraAccount(String name, String domain) {
+	public ZimbraAccount(String email, String password) {
 		
-        CN = (name != null ? name : "account" + System.currentTimeMillis());
-        DisplayName = CN;
-
-        DomainName = (domain != null ? domain : ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com"));
-        ZimbraMailHost = DomainName;
-        EmailAddress = CN + "@" + DomainName;
-        
-        // TODO: Add a default password to the config.properties
-        Password = ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123");
+		if ( email == null ) {
+			email = ZimbraSeleniumProperties.getStringProperty("locale") + "_account_" + System.currentTimeMillis();
+		}
+		EmailAddress = email;
+		
+		if ( password == null ) {
+			password = ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123");
+		}
+		Password = password;
+		        
         
 	}
 	
@@ -109,7 +104,7 @@ public class ZimbraAccount {
 	public static synchronized ZimbraAccount AccountA() {
 		if ( _AccountA == null ) {
 			_AccountA = new ZimbraAccount();
-			_AccountA.provisionAccount();
+			_AccountA.provision();
 			_AccountA.authenticate();
 		}
 		return (_AccountA);
@@ -123,25 +118,49 @@ public class ZimbraAccount {
 	public static synchronized ZimbraAccount AccountB() {
 		if ( _AccountB == null ) {
 			_AccountB = new ZimbraAccount();
-			_AccountB.provisionAccount();
+			_AccountB.provision();
 			_AccountB.authenticate();
 		}	
 		return (_AccountB);
 	}
 	private static ZimbraAccount _AccountB = null;
 	
+	
+	// Set the default account settings
+	@SuppressWarnings("serial")
+	private static final Map<String, String> accountAttrs = new HashMap<String, String>() {{
+		put("zimbraPrefLocale", ZimbraSeleniumProperties.getStringProperty("locale"));
+		put("zimbraPrefAutoAddAddressEnabled", "FALSE");
+		put("zimbraPrefCalendarInitialView", "workWeek");
+		put("zimbraPrefCalendarApptReminderWarningTime", "0");
+		put("zimbraPrefTimeZoneId", "(GMT-08.00) Pacific Time");
+		put("zimbraFeatureReadReceiptsEnabled", "TRUE");
+		put("zimbraPrefCalendarAlwaysShowMiniCal", "FALSE");
+		put("zimbraPrefSkin", "beach");
+		put("zimbraPrefComposeFormat", "html");
+ 	}};
+
 	/**
 	 * Creates the account on the ZCS using CreateAccountRequest
 	 */
-	public void provisionAccount() {
+	public void provision() {
 		try {
+			
+			// Build the list of default preferences
+			StringBuilder prefs = new StringBuilder();
+    		for (Map.Entry<String, String> entry : accountAttrs.entrySet()) {
+    			prefs.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
+    		}
+
 			ZimbraAdminAccount.GlobalAdmin().soapSend(
 					"<CreateAccountRequest xmlns='urn:zimbraAdmin'>" +
 			        	"<name>"+ EmailAddress +"</name>" +
 			        	"<password>"+ Password +"</password>" +
+			        	prefs.toString() + 
 			        "</CreateAccountRequest>");
 			ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
 			ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+			
 		} catch (HarnessException e) {
 			logger.error("Unable to provision account: "+ EmailAddress, e);
 			ZimbraId = null;
@@ -149,40 +168,6 @@ public class ZimbraAccount {
 		}
 	}
 	
-	/**
-	 * Creates the account on the ZCS with provided username and password
-	 */
-	public String provisionAccount(String user , String password) {
-		String username = "";
-		String locale = ZimbraSeleniumProperties.getStringProperty("locale");
-		try {
-			ZimbraAdminAccount.GlobalAdmin().soapSend(
-					"<CreateAccountRequest xmlns='urn:zimbraAdmin'>" +
-						"<name>" + user + "</name>" +
-			        	"<password>" + password + "</password>" +
-			        	"<a n='zimbraPrefLocale'>" + locale + "</a>" +
-			        	"<a n='zimbraPrefAutoAddAddressEnabled'>FALSE</a>" +
-			        	"<a n='zimbraPrefCalendarInitialView'>workWeek</a>" +
-			        	"<a n='zimbraPrefCalendarApptReminderWarningTime'>0</a>" +
-			        	"<a n='zimbraPrefTimeZoneId'>(GMT-08.00) Pacific Time</a>" +
-			        	"<a n='zimbraFeatureReadReceiptsEnabled'>TRUE</a>" +
-			        	"<a n='zimbraPrefCalendarAlwaysShowMiniCal'>FALSE</a>" +
-			        	"<a n='zimbraPrefSkin'>beach</a>" +
-			        	"<a n='zimbraPrefComposeFormat'>html</a>" +
-			        	//"<a n='zimbraPrefReplyIncludeOriginalText'>includeBodyAndHeaders</a>" +
-			        	//"<a n='zimbraPrefForwardIncludeOriginalText'>includeBodyAndHeaders</a>" +
-			        "</CreateAccountRequest>");
-
-			Element[] nodes = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:CreateAccountResponse");
-	        if ( (nodes == null) || (nodes.length == 0)) {
-	        	logger.error("Error occured during account provisioning, perhaps account already exists: "+ user);  
-	        }
-	        username  = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "name");
-		} catch (Exception e) {
-			logger.error("Unable to provision account: "+ user, e);			
-		}			
-		return username;		
-	}
 	
 	/**
 	 * Authenticates the account (using SOAP client AuthRequest)
@@ -201,6 +186,37 @@ public class ZimbraAccount {
 			logger.error("Unable to authenticate "+ EmailAddress, e);
 			soapClient.setAuthToken(null);
 		}
+	}
+	
+	/**
+	 * Modify a user prefence using ModifyPrefsRequest
+	 * @throws HarnessException 
+	 */
+	public void modifyPreference(String pref, String value) throws HarnessException {
+		
+		soapSend(
+				"<ModifyPrefsRequest xmlns='urn:zimbraAccount'>" +
+					"<pref name='"+ pref +"'>"+ value +"</pref>" +
+				"</ModifyPrefsRequest>");
+		
+		Element[] response = soapSelectNodes("//acct:ModifyPrefsResponse");
+		if ( response == null || response.length != 1 )
+			throw new HarnessException("Unable to modify preference "+ soapLastResponse());
+		
+	}
+	
+	/**
+	 * Get a user preference value
+	 */
+	public String getPreference(String pref) throws HarnessException {
+		
+		soapSend(
+				"<GetPrefsRequest xmlns='urn:zimbraAccount'>" +
+                	"<pref name='"+ pref +"'/>" +
+                "</GetPrefsRequest>");
+		
+		String value = soapSelectValue("//acct:pref[@name='"+ pref +"']", null);
+		return (value);
 	}
 	
 	/**
@@ -969,7 +985,7 @@ public class ZimbraAccount {
 		ZimbraAccount account = new ZimbraAccount("foo"+System.currentTimeMillis(), domain);
 		
 		// Provision it on the server
-		account.provisionAccount();
+		account.provision();
 		
 		// Get the SOAP authToken
 		account.authenticate();

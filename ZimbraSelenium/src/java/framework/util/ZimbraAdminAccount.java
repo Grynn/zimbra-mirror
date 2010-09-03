@@ -9,28 +9,14 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 
 	public ZimbraAdminAccount(String email) {
 		EmailAddress = email;
-		
-		CN = EmailAddress.split("@")[0];
-        DisplayName = CN;
-
-        DomainName = EmailAddress.split("@")[1];
-		
-		// Need to get the ZimbraMailHost using GetAccountRequest
-		// But, that is chicken and egg - need the host to send SOAP
-		
-		// TODO: determine this from config.properties
-        ZimbraMailHost = DomainName;
-        
-        // TODO: Add a default password to the config.properties
-        Password = ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123");
-        		
+		Password = ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123");
 	}
 	
 	/**
 	 * Creates the account on the ZCS using CreateAccountRequest
 	 * zimbraIsAdminAccount is set to TRUE
 	 */
-	public void provisionAccount() {
+	public void provision() {
 		try {
 			ZimbraAdminAccount.GlobalAdmin().soapSend(
 					"<CreateAccountRequest xmlns='urn:zimbraAdmin'>" +
@@ -104,7 +90,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 		// Create a new global admin account
 		String domain = ZimbraSeleniumProperties.getStringProperty("server","qa60.lab.zimbra.com");
 		ZimbraAdminAccount admin = new ZimbraAdminAccount("admin"+ System.currentTimeMillis() +"@"+ domain);
-		admin.provisionAccount();	// Create the account (CreateAccountRequest)
+		admin.provision();	// Create the account (CreateAccountRequest)
 		admin.authenticate();		// Authenticate the account (AuthRequest)
 		
 		// Send a basic request as the new admin account
