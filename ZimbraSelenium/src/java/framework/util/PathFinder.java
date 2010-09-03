@@ -114,7 +114,7 @@ public class PathFinder {
 	}
 
 	// for unit test need to change access to public
-	private static void main(String[] args) {
+	public static void main(String[] args) {
 		ZimbraSeleniumLogger.setmLog(new CurClassGetter().getCurrentClass());
 
 		File dir = new File("."), f = new File(".");
