@@ -32,8 +32,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.dom4j.DocumentException;
 
-import bsh.This;
-
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.net.SocketFactories;
 import com.zimbra.common.service.ServiceException;
@@ -58,8 +56,6 @@ public class ZimbraAccount {
     public Map<String, String> preferences = null;
     
     
-
-
     /*
      * Create an account with the email address account<num>@<testdomain>
      * The password is set to config property "adminPwd"
@@ -158,8 +154,25 @@ public class ZimbraAccount {
 			        	"<password>"+ Password +"</password>" +
 			        	prefs.toString() + 
 			        "</CreateAccountRequest>");
-			ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
-			ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+			
+			Element[] createAccountResponse = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:CreateAccountResponse");
+			if ( (createAccountResponse == null) || (createAccountResponse.length == 0)) {
+				logger.error("Error occured during account provisioning, perhaps account already exists: "+ EmailAddress);
+				ZimbraAdminAccount.GlobalAdmin().soapSend(
+						"<GetAccountRequest xmlns='urn:zimbraAdmin'>" +
+							"<account by='name'>"+ EmailAddress + "</account>" +
+						"</GetAccountRequest>");
+				Element[] getAccountResponse = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:GetAccountResponse");
+				if ( (getAccountResponse == null) || (getAccountResponse.length == 0)) {
+					logger.error("Error occured during get account provisioning.  Now I'm really confused");
+				} else {
+					ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
+					ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+				}
+			} else {
+				ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
+				ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+			}
 			
 		} catch (HarnessException e) {
 			logger.error("Unable to provision account: "+ EmailAddress, e);

@@ -10,6 +10,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 	public ZimbraAdminAccount(String email) {
 		EmailAddress = email;
 		Password = ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123");
+		ZimbraMailHost = EmailAddress.split("@")[1];
 	}
 	
 	/**
