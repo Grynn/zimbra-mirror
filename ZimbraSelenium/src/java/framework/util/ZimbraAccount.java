@@ -139,7 +139,7 @@ public class ZimbraAccount {
 	/**
 	 * Creates the account on the ZCS using CreateAccountRequest
 	 */
-	public void provision() {
+	public ZimbraAccount provision() {
 		try {
 			
 			// Build the list of default preferences
@@ -179,6 +179,7 @@ public class ZimbraAccount {
 			ZimbraId = null;
 			ZimbraMailHost = null;
 		}
+		return (this);
 	}
 	
 	
@@ -186,7 +187,7 @@ public class ZimbraAccount {
 	 * Authenticates the account (using SOAP client AuthRequest)
 	 * Sets the authToken
 	 */
-	public void authenticate() {
+	public ZimbraAccount authenticate() {
 		try {
 			soapSend(
 					"<AuthRequest xmlns='urn:zimbraAccount'>" +
@@ -199,23 +200,29 @@ public class ZimbraAccount {
 			logger.error("Unable to authenticate "+ EmailAddress, e);
 			soapClient.setAuthToken(null);
 		}
+		return (this);
 	}
 	
 	/**
 	 * Modify a user prefence using ModifyPrefsRequest
 	 * @throws HarnessException 
 	 */
-	public void modifyPreference(String pref, String value) throws HarnessException {
-		
-		soapSend(
-				"<ModifyPrefsRequest xmlns='urn:zimbraAccount'>" +
+	public ZimbraAccount modifyPreference(String pref, String value) {
+		try
+		{
+			soapSend(
+					"<ModifyPrefsRequest xmlns='urn:zimbraAccount'>" +
 					"<pref name='"+ pref +"'>"+ value +"</pref>" +
-				"</ModifyPrefsRequest>");
-		
-		Element[] response = soapSelectNodes("//acct:ModifyPrefsResponse");
-		if ( response == null || response.length != 1 )
-			throw new HarnessException("Unable to modify preference "+ soapLastResponse());
-		
+			"</ModifyPrefsRequest>");
+
+			Element[] response = soapSelectNodes("//acct:ModifyPrefsResponse");
+			if ( response == null || response.length != 1 )
+				throw new HarnessException("Unable to modify preference "+ soapLastResponse());
+		} catch (HarnessException e) {
+			logger.error("Unable to modify preference", e);
+		}
+		return (this);
+
 	}
 	
 	/**

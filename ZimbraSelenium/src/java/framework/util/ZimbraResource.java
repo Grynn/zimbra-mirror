@@ -61,7 +61,7 @@ public class ZimbraResource extends ZimbraAccount {
 	}};
 
 
-	public void provision() {
+	public ZimbraAccount provision() {
 		try {
 			
 			Map<String, String> attrs = null;
@@ -96,6 +96,7 @@ public class ZimbraResource extends ZimbraAccount {
 			ZimbraId = null;
 			ZimbraMailHost = null;
 		}
+		return (this);
 	}
 	
 }

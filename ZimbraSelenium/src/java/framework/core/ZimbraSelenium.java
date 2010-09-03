@@ -4,22 +4,16 @@ import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
 
 import framework.util.SleepUtil;
-import framework.util.ZimbraAccount;
 
 public class ZimbraSelenium extends DefaultSelenium {
 
 	public String doubleQuote = "\"";
-	private ZimbraAccount currentAccount = null;
 
 	public ZimbraSelenium(String serverHost, int serverPort,
 			String browserStartCommand, String browserURL) {
 		super(serverHost, serverPort, browserStartCommand, browserURL);
-		currentAccount = new ZimbraAccount();
 	}
 	
-	public ZimbraAccount getAccount() {
-		return (currentAccount);
-	}
 	public String call(String coreFunction, String locator, String action, Boolean retryOnFalse) {
 		return this.call(coreFunction, locator, action, retryOnFalse, "", "");
 	}

@@ -1,10 +1,13 @@
 package projects.html.ui;
 
 import static org.testng.Assert.assertTrue;
+
 import java.util.Map;
-import framework.util.Stafzmprov;
-import com.zimbra.common.service.ServiceException;
+
 import projects.html.tests.CommonTest;
+
+import com.zimbra.common.service.ServiceException;
+
 import framework.core.SelNGBase;
 import framework.util.BrowserUtil;
 import framework.util.HarnessException;
@@ -14,19 +17,7 @@ import framework.util.ZimbraAccount;
 
 @SuppressWarnings("static-access")
 public class LoginPage extends CommonTest {
-	/**
-	 * Creates a random-user(user's locale is set to locale thats in the
-	 * config.properties. And logs into Zimbra using this random-user
-	 * 
-	 * @return random-user that was created
-	 * @throws ServiceException
-	 * @throws HarnessException 
-	 */
-	public String zLoginToZimbraAjax() throws ServiceException, HarnessException {
-		String username = Stafzmprov.getRandomAccount();
-		zLoginToZimbraHTML(username);
-		return username;
-	}
+
 
 	/**
 	 * Creates a random-user with the preferences passed in as Map. PS: user's
@@ -97,33 +88,30 @@ public class LoginPage extends CommonTest {
 		return false;
 	}
 
-	public static void zCustomLoginToZimbraAjax(String parameter) {
-		try {
-			String username = Stafzmprov.getRandomAccount();
-			SelNGBase.selfAccountName.set(username);
-			customLogin(parameter);
-			SleepUtil.sleep(1500);
-			currentBrowserName = BrowserUtil.getBrowserName();
-			obj.zEditField.zType("Username:", username);
-			obj.zPwdField.zType("Password:", "test123");
-			obj.zButton.zClick("class=zLoginButton");
-			SleepUtil.sleep(2000);// without this we get permission denied error
-			obj.zButton.zExists("id=zb__Search__MENU_left_icon");
-			SleepUtil.sleep(2000);// wait another 2 secs after we see the search
-			// icon
-		} catch (Exception e) {
-			e.printStackTrace(System.out);
-		}
-	}
 
 	/**
 	 * clicks logoff link
 	 * 
 	 * @throws Exception
 	 */
-	public static void logoutOfZimbraAjax() throws Exception {
+	public void logoutOfZimbraAjax() throws Exception {
 		SelNGBase.selenium.get().click("link=" + localize("logOff"));
 		SleepUtil.sleep(1000);
 		assertTrue(true);
+	}
+	
+	
+	private static ZimbraAccount currentAccount = null;
+	private static ZimbraAccount setCurrentAccount(ZimbraAccount account) {
+		currentAccount = account;
+		return (currentAccount);
+	}
+	
+	/**
+	 * Get the currently logged in account
+	 * @return
+	 */
+	public static ZimbraAccount getCurrentAccount() {
+		return (currentAccount);
 	}
 }

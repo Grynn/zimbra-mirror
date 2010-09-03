@@ -17,7 +17,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 	 * Creates the account on the ZCS using CreateAccountRequest
 	 * zimbraIsAdminAccount is set to TRUE
 	 */
-	public void provision() {
+	public ZimbraAccount provision() {
 		try {
 			ZimbraAdminAccount.GlobalAdmin().soapSend(
 					"<CreateAccountRequest xmlns='urn:zimbraAdmin'>" +
@@ -32,13 +32,14 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 			ZimbraId = null;
 			ZimbraMailHost = null;
 		}
+		return (this);
 	}
 	
 	/**
 	 * Authenticates the admin account (using SOAP admin AuthRequest)
 	 * Sets the authToken
 	 */
-	public void authenticate() {
+	public ZimbraAccount authenticate() {
 		try {
 			soapSend(
 					"<AuthRequest xmlns='urn:zimbraAdmin'>" +
@@ -51,6 +52,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 			logger.error("Unable to authenticate "+ EmailAddress, e);
 			soapClient.setAuthToken(null);
 		}
+		return (this);
 	}
 
 	/**
