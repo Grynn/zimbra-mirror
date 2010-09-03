@@ -46,6 +46,7 @@ my $localHostName = getHostName();
 my $ldapHere = isLdapLocal();
 my $services;
 my %devicesChecked;
+my %serviceStatusList;
 my %startorder = ( 
 	"ldap" 		=> 0,
 	"zmconfigd"	=> 5,
@@ -169,6 +170,7 @@ sub runRemoteCommand {
 
 sub doStatus {
 	$services = getEnabledServices();
+  getServiceStatusList();
   alarm($timeout);
   my (undef, $statusfile) = tempfile("zmcontrol.status.XXXXX", DIR=>"$zimbra_tmp_directory",  OPEN=>0);
   my (undef, $errfile) = tempfile("zmcontrol.error.XXXXX", DIR=>"$zimbra_tmp_directory",  OPEN=>0);
@@ -183,7 +185,7 @@ sub doStatus {
 		$rc = $rc >> 8;
 		if ($rc) {
       # this is an any ugly hack for 11266
-			$status = 1 unless (/logger|spell|snmp|stats/);
+      $status = 1 if ($serviceStatusList{$_});
         
 		}
 		my $stat = sprintf "\t%-20s %10s\n",$_,($rc)?"Stopped":"Running";
@@ -324,6 +326,18 @@ sub doShutdown {
 sub setMaintenanceMode {
 	my $mode = shift;
 }
+
+sub getServiceStatusList {
+  my @services = split(/\s+/, getLocalConfig("zmcontrol_service_status_list"));
+  @services = grep(!/stats|snmp|logger|spell/, keys %allservices) if (scalar @services < 1);
+  if (scalar @services > 1) {
+    foreach my $service (@services) {
+      $serviceStatusList{$service} = 1
+        if (defined($allservices{$service}));
+    }
+  }
+}
+    
 
 sub getLocalConfig {
 	my $key = shift;
