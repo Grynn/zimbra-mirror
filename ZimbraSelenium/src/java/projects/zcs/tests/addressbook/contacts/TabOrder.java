@@ -1,11 +1,13 @@
 package projects.zcs.tests.addressbook.contacts;
 
 import java.lang.reflect.Method;
+
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+
 import projects.zcs.tests.CommonTest;
+
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.SelNGBase;
@@ -44,7 +46,7 @@ public class TabOrder extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
-	@Test(dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(description = "verify the tab order within the contacts app", dataProvider = "mailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void tabOrderContacts01(String to, String cc, String bcc, String subject,
 			String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())

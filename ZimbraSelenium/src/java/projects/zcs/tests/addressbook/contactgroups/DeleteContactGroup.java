@@ -11,7 +11,7 @@ public class DeleteContactGroup extends CommonTest {
 	}
 
 	@Test(
-			description = "Rename a contact group",
+			description = "Delete a contact group - Delete button",
 			groups = { "smoke", "full" }
 		)
 	public void deleteContactGroup01() throws HarnessException {
@@ -19,7 +19,7 @@ public class DeleteContactGroup extends CommonTest {
 	}
 
 	@Test(
-			description = "Add another contact to an existing contact group",
+			description = "Delete a contact group - Right click",
 			groups = { "smoke", "full" }
 		)
 	public void deleteContactGroup02() throws HarnessException {
@@ -27,7 +27,7 @@ public class DeleteContactGroup extends CommonTest {
 	}
 
 	@Test(
-			description = "Remove a contact from an existing contact group",
+			description = "Delete a contact group - Delete key",
 			groups = { "smoke", "full" }
 		)
 	public void deleteContactGroup03() throws HarnessException {
