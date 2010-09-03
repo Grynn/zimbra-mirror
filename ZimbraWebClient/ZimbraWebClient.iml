@@ -264,8 +264,8 @@
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
-      <attribute name="URI" value="/WEB-INF/lib/apache-jsieve-0.3-zimbra.jar" />
-      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/apache-jsieve-0.3-zimbra.jar!/</url>
+      <attribute name="URI" value="/WEB-INF/lib/apache-jsieve-0.4.jar" />
+      <url>jar://$MODULE_DIR$/../ZimbraCommon/jars/apache-jsieve-0.4.jar!/</url>
     </containerElement>
     <containerElement type="library" level="module">
       <attribute name="method" value="1" />
