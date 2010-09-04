@@ -21,7 +21,6 @@ import org.testng.annotations.BeforeSuite;
 import projects.html.CoreObjects;
 import projects.html.Locators;
 import projects.html.PageObjects;
-import framework.util.Stafzmprov;
 
 import com.zimbra.common.service.ServiceException;
 
@@ -102,15 +101,6 @@ public class CommonTest extends SelNGBase {
 		}
 	}
 
-	public static boolean zWaitForElement(String elementId) {
-		for (int i = 0; i < 10; i++) {
-			if (SelNGBase.selenium.get().isElementPresent(elementId))
-				return true;
-			SleepUtil.sleep(2000);
-		}
-		return false;
-	}
-
 	private static boolean needsReLogin(Map<String, Object> accntAttrs) {
 		int currentAccntAttrsSize = selfAccountAttrs.size() - 4;// -4 is to
 		// remove default settings
@@ -159,12 +149,10 @@ public class CommonTest extends SelNGBase {
 		SeleniumService.getInstance().startSeleniumServer();
 		
 		// Provision the default users
-		ZimbraAccount ccuser = new ZimbraAccount("ccuser@testdomain.com", "test123");
-		ccuser.provision();
-		ccuser.authenticate();
-		ZimbraAccount bccuser = new ZimbraAccount("bccuser@testdomain.com", "test123");
-		ccuser.provision();
-		ccuser.authenticate();
+		@SuppressWarnings("unused")
+		ZimbraAccount ccuser = new ZimbraAccount("ccuser@testdomain.com", "test123").provision().authenticate();
+		@SuppressWarnings("unused")
+		ZimbraAccount bccuser = new ZimbraAccount("bccuser@testdomain.com", "test123").provision().authenticate();
 
 	}
 

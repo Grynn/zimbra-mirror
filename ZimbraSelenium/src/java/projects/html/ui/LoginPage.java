@@ -61,31 +61,26 @@ public class LoginPage extends CommonTest {
 	 * @param password
 	 */
 	public void zLoginToZimbraHTML(String username, String password) {
-		try {
-			openZimbraHTML();
-			SleepUtil.sleep(1500);
-			currentBrowserName = BrowserUtil.getBrowserName();
-			obj.zEditField.zType("Username:", username);
-			obj.zPwdField.zType("Password:", password);
-			obj.zButton.zClick("class=zLoginButton");
-			SleepUtil.sleep(2000);// without this we get permission denied error
-			zWaitForElement("id=searchField");
-			SleepUtil.sleep(2000);// wait another 2 secs after we see the search
-			// icon
-		} catch (Exception e) {
-			e.printStackTrace(System.out);
-
-		}
-
-	}
-
-	public static boolean zWaitForElement(String elementId) {
+		
+		openZimbraHTML();
+		SleepUtil.sleep(1500);
+		
+		currentBrowserName = BrowserUtil.getBrowserName();
+		obj.zEditField.zType("Username:", username);
+		obj.zPwdField.zType("Password:", password);
+		obj.zButton.zClick("class=zLoginButton");
+		
+		SleepUtil.sleep(2000);// without this we get permission denied error
+		
 		for (int i = 0; i < 10; i++) {
-			if (SelNGBase.selenium.get().isElementPresent(elementId))
-				return true;
+			if (SelNGBase.selenium.get().isElementPresent("id=searchField"))
+				break;
 			SleepUtil.sleep(2000);
 		}
-		return false;
+		// TODO: What happens when the id=searchField never shows up?
+		// We should throw an exception
+
+		SleepUtil.sleep(2000);// wait another 2 secs after we see the search
 	}
 
 
@@ -101,8 +96,8 @@ public class LoginPage extends CommonTest {
 	}
 	
 	
-	private static ZimbraAccount currentAccount = null;
-	private static ZimbraAccount setCurrentAccount(ZimbraAccount account) {
+	private ZimbraAccount currentAccount = null;
+	private ZimbraAccount setCurrentAccount(ZimbraAccount account) {
 		currentAccount = account;
 		return (currentAccount);
 	}
@@ -111,7 +106,7 @@ public class LoginPage extends CommonTest {
 	 * Get the currently logged in account
 	 * @return
 	 */
-	public static ZimbraAccount getCurrentAccount() {
+	public ZimbraAccount getCurrentAccount() {
 		return (currentAccount);
 	}
 }

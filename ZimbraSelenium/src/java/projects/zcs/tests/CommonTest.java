@@ -40,6 +40,7 @@ import framework.core.SeleniumService;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
+import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
@@ -177,11 +178,12 @@ public class CommonTest extends SelNGBase {
 		Stafzmprov.zmprov(String.format("zmprov createDomain %s", ZimbraSeleniumProperties.getStringProperty("testdomain")));
 		
 		SeleniumService.getInstance().startSeleniumServer();
-		Stafzmprov.createAccount("ccuser@testdomain.com");
-		Stafzmprov.createAccount("bccuser@testdomain.com");
-		// BufferedWriter out = new BufferedWriter(new
-		// FileWriter("test-output\\CODECOVERAGE\\coveredClasses.txt"));
-		// out.close();
+
+		// Provision the default users
+		@SuppressWarnings("unused")
+		ZimbraAccount ccuser = new ZimbraAccount("ccuser@testdomain.com", "test123").provision().authenticate();
+		@SuppressWarnings("unused")
+		ZimbraAccount bccuser = new ZimbraAccount("bccuser@testdomain.com", "test123").provision().authenticate();
 	}
 
 	/**
