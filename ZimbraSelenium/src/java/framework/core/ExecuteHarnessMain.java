@@ -486,7 +486,12 @@ public class ExecuteHarnessMain {
 	        if ( cmd.hasOption('o') ) {
 	        	this.testoutputfoldername = cmd.getOptionValue('o');
 	        } else {
-	        	this.testoutputfoldername = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") + "/AJAX";
+				if ( cmd.hasOption('p') && cmd.getOptionValue('p').contains("html")) {
+					this.testoutputfoldername = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") 
+					+ "/HTML";		        		
+		       	}else
+		        this.testoutputfoldername = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") 
+		        + "/AJAX";
 	        }
 	        
 	        // Make sure the test output folder exists, create it if not
