@@ -157,7 +157,7 @@ function (params) {
 		soapDoc.getMethod().setAttribute("applyConfig", params.applyConfig);
 	else
 		soapDoc.getMethod().setAttribute("applyConfig", "false");
-		
+	
 	if(params.domain)  {
 		soapDoc.getMethod().setAttribute("domain", params.domain);
         ZaSearch._domain = params.domain;
@@ -175,9 +175,8 @@ function (params) {
 	//params.maxResults = 2;
 	if(params.maxResults) {
 		soapDoc.getMethod().setAttribute("maxResults", params.maxResults.toString());
-	}	
-	
-	//var command = new ZmCsfeCommand();
+	}
+
 	var cmdParams = new Object();
 	cmdParams.soapDoc = soapDoc;	
 	if(params.callback) {
@@ -527,6 +526,9 @@ function(n, types,excludeClosed) {
                 query.push ("(zimbraDomainName=*"+n+"*)") ;
             } else if(types[i] == ZaSearch.COSES) {
 		query.push("(cn=*" + n + "*)");
+	    } else if(types[i] == ZaSearch.ALIASES) {
+		query.push("(zimbraDomainName=*" + n + "*)(uid=*"+n+"*)");
+
 	    }else {
             	if(!addedAddrFields) {
             		query.push("(mail=*"+n+"*)(cn=*"+n+"*)(sn=*"+n+"*)(gn=*"+n+"*)(displayName=*"+n+"*)") ;

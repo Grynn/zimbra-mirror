@@ -82,7 +82,7 @@ function(list, openInNewTab, openInSearchTab) {
 		}
 		//add the default column sortable
 		this._contentView._bSortAsc = (this._currentSortOrder=="1");
-		this._contentView.set(AjxVector.fromArray(tmpArr), this._contentView._defaultColumnSortable);	
+		this._contentView.set(AjxVector.fromArray(tmpArr), this._contentView._defaultColumnSortable);
 	}
 	this._removeList = new Array();
 	this.changeActionsState();
@@ -138,6 +138,130 @@ function(ev, noPopView, func, obj, params) {
 	this._popupOperations = [];
 	this._toolbarOrder = [];	
 }
+
+ZaListViewController.prototype.multipleSearchCallback =
+function(preParams, paramsArr) {
+	var sortBy, limit, offset, sortAscending, soapDoc, cnt;
+	var paramList = null;
+	if(!paramsArr) return;
+	if(paramsArr instanceof Array && paramsArr.length > 0)
+		paramList = paramsArr;
+	else {
+		paramList = new Array();
+		paramList.push(paramsArr);
+	}
+	
+	cnt = paramList.length;
+	soapDoc = AjxSoapDoc.create("BatchRequest", "urn:zimbra");
+	soapDoc.setMethodAttribute("onerror", "continue");
+	
+	for(var i = 0; i < cnt; i++) {
+		var getSearchDirDoc = soapDoc.set("SearchDirectoryRequest", null, null, ZaZimbraAdmin.URN);
+		var squery = soapDoc.set("query", paramList[i].query, getSearchDirDoc);	
+
+                sortBy = (paramList[i].sortBy != undefined)? paramList[i].sortBy: ZaAccount.A_name;
+                limit = (paramList[i].limit != undefined)? paramList[i].limit: ZaAccount.RESULTSPERPAGE;
+                offset = (paramList[i].offset != undefined) ? paramList[i].offset : "0";
+                sortAscending = (paramList[i].sortAscending != null)? paramList[i].sortAscending : "1";
+
+
+                getSearchDirDoc.setAttribute("offset", offset);
+                getSearchDirDoc.setAttribute("limit", limit);
+                getSearchDirDoc.setAttribute("sortBy", sortBy);
+                getSearchDirDoc.setAttribute("sortAscending", sortAscending);
+
+                if(paramList[i].applyCos)
+                        getSearchDirDoc.setAttribute("applyCos", paramList[i].applyCos);
+                else
+                        getSearchDirDoc.setAttribute("applyCos", false);
+
+
+                if(paramList[i].applyConfig)
+                        getSearchDirDoc.setAttribute("applyConfig", paramList[i].applyConfig);
+                else
+                        getSearchDirDoc.setAttribute("applyConfig", "false");
+
+                if(paramList[i].domain)  {
+                        getSearchDirDoc.setAttribute("domain", paramList[i].domain);
+
+                } 
+                if(paramList[i].attrs && paramList[i].attrs.length>0)
+                        getSearchDirDoc.setAttribute("attrs", paramList[i].attrs.toString());
+
+                if(paramList[i].types && paramList[i].types.length>0)
+                        getSearchDirDoc.setAttribute("types", paramList[i].types.toString());
+
+                if(paramList[i].maxResults) {
+                        getSearchDirDoc.setAttribute("maxResults", paramList[i].maxResults.toString());
+                }
+
+
+	}
+
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	var reqMgrParams ={
+		controller:this,
+		busyMsg:ZaMsg.BUSY_REQUESTING_ACCESS_RIGHTS
+	}
+	
+	var respObj = ZaRequestMgr.invoke(params, reqMgrParams);
+	if(respObj.isException && respObj.isException()) {
+		ZaApp.getInstance().getCurrentController()._handleException(respObj.getException(), "ZaListViewController.prototype.multipleSearchCallback", null, false);
+	} else if(respObj.Body.BatchResponse.Fault) {
+		var fault = respObj.Body.BatchResponse.Fault;
+		if(fault instanceof Array)
+			fault = fault[0];
+	
+		if (fault) {
+			var ex = ZmCsfeCommand.faultToEx(fault);
+			ZaApp.getInstance().getCurrentController()._handleException(ex,"ZaListViewController.prototype.multipleSearchCallback", null, false);
+		}
+	} else {
+		var batchResp = respObj.Body.BatchResponse;
+		if(batchResp.SearchDirectoryResponse && batchResp.SearchDirectoryResponse instanceof Array) {
+			var cnt2 = batchResp.SearchDirectoryResponse.length;
+			ZaSearch.TOO_MANY_RESULTS_FLAG = false;
+			this._searchTotal = 0;
+			this._list = null;
+			for(var i = 0; i < cnt2; i++) {
+				resp = batchResp.SearchDirectoryResponse[i];
+				var subList = new ZaItemList(preParams.CONS);
+
+		                subList.loadFromJS(resp);
+				//combine the search results
+				if(!this._list) this._list = subList;
+				else {
+					if(this._list instanceof ZaItemList && subList.size() > 0) {
+						var listVec = subList.getVector();
+						for(var j = 0; j < listVec.size(); j++) {
+							var item = listVec.get(j);
+							if(!this._list.getVector().contains(item))
+								this._list.add(item);
+						}
+					}
+				}
+	
+				this._searchTotal += resp.searchTotal;
+			}
+		        if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] != 'TRUE') {
+		                var act = new AjxTimedAction(this._list, ZaItemList.prototype.loadEffectiveRights, null);
+		                AjxTimedAction.scheduleAction(act, 150)
+		        }
+
+		        var limit = preParams.limit ? preParams.limit : this.RESULTSPERPAGE;
+		        this.numPages = Math.ceil(this._searchTotal/preParams.limit);
+
+                        if(preParams.show)
+                                this._show(this._list, preParams.openInNewTab, preParams.openInSearchTab);
+                        else
+                                this._updateUI(this._list, preParams.openInNewTab, preParams.openInSearchTab);
+
+		}
+	}
+}
+
+
 
 ZaListViewController.prototype.searchCallback =
 function(params, resp) {

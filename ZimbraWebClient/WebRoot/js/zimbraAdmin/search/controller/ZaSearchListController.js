@@ -57,7 +57,6 @@ ZaSearchListController.prototype.show = function (doPush) {
 	if (this._currentQuery == null) {
 		this._currentQuery =  (ZaSearch._currentQuery ? ZaSearch._currentQuery : "");
 	}*/
-	
 	var searchParams = {
 			query: this._currentQuery, 
 			types:this.searchTypes,
@@ -172,32 +171,150 @@ function () {
 	return this._currentSortField;
 }
 
+ZaSearchListController.prototype._batchSearchforDomain =
+function (domainArr, searchQueryList) {
+	var paramsArr;
+        var searchTypes = ZaSearch.ALIASES;
+        var searchQuery = "(uid=*)";
+        var controller = ZaApp.getInstance().getSearchListController();
+        if(controller.setSearchTypes)
+                controller.setSearchTypes(searchTypes);
+
+	if(searchQueryList && searchQueryList instanceof Array)
+		paramsArr = searchQueryList;
+	else paramsArr = new Array();
+        controller._currentQuery = searchQuery;
+        var busyId = Dwt.getNextId();
+	var inParams = {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId};
+        var callback = new AjxCallback(controller, controller.searchCallback, inParams);
+	for(var i =0; i < domainArr.length; i++) {
+	        var searchParams = {
+        	                query:searchQuery,
+                	        types:searchTypes,
+	                        showBusy:true,
+        	                busyId:busyId,
+	                        busyMsg:ZaMsg.BUSY_SEARCHING,
+        	                skipCallbackIfCancelled:false,
+	                        sortBy:params.sortBy,
+        	                attrs:ZaSearch.standardAttributes,
+                	        callback:callback,
+	                        controller: controller,
+        	                domain: domainArr[i]
+	        }
+		paramsArr.push(searchParams);
+	}
+	controller.multipleSearchCallback(inParams, paramsArr);
+
+}
+
+
+ZaSearchListController.searchAliasDomainCallback = 
+function(params,resp) {
+
+        if(params.busyId)
+                        ZaApp.getInstance().getAppCtxt().getShell().setBusy(false, params.busyId);
+        try {
+                if(!resp) {
+                        throw(new AjxException(ZaMsg.ERROR_EMPTY_RESPONSE_ARG, AjxException.UNKNOWN, "ZaSearchListController.searchAliasDomainCallback"));
+                }
+                if(resp.isException()) {
+                        throw(resp.getException());
+                } else {
+                        var response = resp.getResponse().Body.SearchDirectoryResponse;
+			var domainArr = new Array(); 
+                        if (response.domain && response.domain.length > 0) {
+                                for (var i =0; i < response.domain.length; i ++) {
+                                       var domain = response.domain[i].name ;
+						domainArr.push(domain);
+                                }
+				
+				ZaSearchListController.prototype._batchSearchforDomain(domainArr,params.searchQueryList);
+                        }
+                }
+        } catch (ex) {
+		this._handleException(ex, "ZaSearchListController.searchAliasDomainCallback", null, false); 
+	}
+
+}
+
+ZaSearchListController.searchAliasDomain =
+function (value, searchCtl,searchQueryList) {
+        var busyId = Dwt.getNextId();
+	var controller = searchCtl? searchCtl:this;
+        var callback = new AjxCallback(controller, ZaSearchListController.searchAliasDomainCallback, {busyId:busyId, searchQueryList:searchQueryList});
+        var searchParams = {
+
+                        query: "(" + ZaDomain.A_domainName + "=*" + value + "*)",
+                        types: [ZaSearch.DOMAINS],
+                        sortBy: ZaDomain.A_domainName,
+                        attrs: [ZaDomain.A_domainName],
+                        callback:callback,
+                        controller: controller, 
+                        showBusy:true,
+                        busyId:busyId,
+                        busyMsg:ZaMsg.BUSY_SEARCHING_DOMAINS,
+			skipCallbackIfCancelled:false
+        }
+        ZaSearch.searchDirectory(searchParams);
+
+}
+
+ZaSearchListController._getSearchKeyWord =
+function(query) {
+	var keyword = "";
+	var sw = "zimbraDomainName=*";
+	var ew = "*";
+	if(!query) return keyword;
+	var start = query.indexOf(sw);
+	if(start < 0 || start > query.length-1)
+		return keyword;
+	var end = query.indexOf(ew,start+sw.length);
+	if(end > query.length-1)
+		return keyword;
+	return query.substr(start+sw.length,end-start-sw.length);
+	
+}
+
 /*********** Search Field Callback */
 ZaSearchListController.prototype._searchFieldCallback =
 function(params) {
 	var controller = this;
+	var searchQueryList = new Array();
 	if(controller.setSearchTypes)
 		controller.setSearchTypes(params.types);
-	
+
 	controller._currentQuery = params.query ;
 	var busyId = Dwt.getNextId();	
 	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId});
-	var searchParams = {
-			query:params.query, 
-			types:params.types,
-			showBusy:true,
-			busyId:busyId,
-			busyMsg:ZaMsg.BUSY_SEARCHING,
-			skipCallbackIfCancelled:false,
-			sortBy:params.sortBy,
-			offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
-			sortAscending:this._currentSortOrder,
-			limit:this.RESULTSPERPAGE,
-			attrs:ZaSearch.standardAttributes,
-			callback:callback,
-			controller: controller
+
+        var searchParams = {
+                        query:params.query,
+                        types:params.types,
+                        showBusy:true,
+                        busyId:busyId,
+                        busyMsg:ZaMsg.BUSY_SEARCHING,
+                        skipCallbackIfCancelled:false,
+                        sortBy:params.sortBy,
+                        offset:this.RESULTSPERPAGE*(this._currentPageNum-1),
+                        sortAscending:this._currentSortOrder,
+                        limit:this.RESULTSPERPAGE,
+                        attrs:ZaSearch.standardAttributes,
+                        callback:callback,
+                        controller: controller
+        }
+
+
+	var isAliasSpec = false;
+	for(var i = 0; i < params.types.length; i++) {
+		if(params.types[i] == ZaSearch.ALIASES)
+			isAliasSpec = true;
 	}
-	ZaSearch.searchDirectory(searchParams);
+	if(isAliasSpec) {
+		if(params.types.length > 1) searchQueryList.push(searchParams);
+		var keyword = ZaSearchListController._getSearchKeyWord(params.query);
+		ZaSearchListController.searchAliasDomain(keyword,controller,searchQueryList);
+	}else
+		ZaSearch.searchDirectory(searchParams);
 }
 
 
