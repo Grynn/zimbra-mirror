@@ -105,7 +105,10 @@ public class ExecuteHarnessMain {
 	// A list of classes to execute using TestNG from the jarfile
 	protected List<String> classes = null;
 	
-
+	/**
+	 * App type
+	 */
+	private String apptype = "AJAX";
 	
 	/**
 	 * Determine all the classes in the specified jarfile filtered by a regex
@@ -271,8 +274,8 @@ public class ExecuteHarnessMain {
 			
 			// Configure the runner
 			ng.setXmlSuites(suites);
-			ng.addListener(new SummaryReporter("AJAX"));
-			ng.addListener(new TestStatusReporter("AJAX")); // TODO: This shouldn't throw Exception
+			ng.addListener(new SummaryReporter(this.apptype));
+			ng.addListener(new TestStatusReporter(this.apptype)); // TODO: This shouldn't throw Exception
 			ng.addListener(new SkippedTestListener(new File(testoutputfoldername)));
 			ng.addListener(listener = new ResultListener());
 			ng.setOutputDirectory(testoutputfoldername);
@@ -486,12 +489,11 @@ public class ExecuteHarnessMain {
 	        if ( cmd.hasOption('o') ) {
 	        	this.testoutputfoldername = cmd.getOptionValue('o');
 	        } else {
-				if ( cmd.hasOption('p') && cmd.getOptionValue('p').contains("html")) {
-					this.testoutputfoldername = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") 
-					+ "/HTML";		        		
-		       	}else
-		        this.testoutputfoldername = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") 
-		        + "/AJAX";
+	        	if ( cmd.hasOption('p') && cmd.getOptionValue('p').contains("projects.html.tests"))
+	        		this.apptype = "HTML";		        		
+				
+	        	this.testoutputfoldername = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") 
+		        + "/" + apptype;
 	        }
 	        
 	        // Make sure the test output folder exists, create it if not
