@@ -493,7 +493,7 @@ public class ExecuteHarnessMain {
 	        		this.apptype = "HTML";		        		
 				
 	        	this.testoutputfoldername = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") 
-		        + "/" + apptype;
+		        + "/" + this.apptype;
 	        }
 	        
 	        // Make sure the test output folder exists, create it if not
@@ -519,7 +519,10 @@ public class ExecuteHarnessMain {
 	        }
 	        
 	        if ( cmd.hasOption('p') ) {
-	        	this.classfilter = cmd.getOptionValue('p'); 
+	        	String filter = cmd.getOptionValue('p');
+	        	this.classfilter = filter;
+	        	if ( filter.contains("projects.html.tests"))
+	        		this.apptype = "HTML";		        		
 	        }
 	        
 	        if ( cmd.hasOption('g') ) {
