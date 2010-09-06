@@ -2,15 +2,11 @@ package projects.zcs.tests.features.familymailboxes.gui;
 
 
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import framework.util.Stafzmprov;
 import projects.zcs.tests.CommonTest;
 import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
-import framework.util.SleepUtil;
-import framework.util.Stafzmprov;
 
 public class TabViews extends CommonTest {
 
@@ -30,13 +26,13 @@ public class TabViews extends CommonTest {
 	public void familyMailbox_UIverification() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
-
+		
+		String childAccount=addChildAccount();
 		
 		/**
 		 * UI Verification starts here
 		 * Check Mail Tab
 		 */
-		String childAccount=addChildAccount();
 		
 		obj.zButton.zClick(localize(locator.mail));
 		zWaitTillObjectExist("xpath", createXpath(parentAccount, localize(locator.inbox)));
