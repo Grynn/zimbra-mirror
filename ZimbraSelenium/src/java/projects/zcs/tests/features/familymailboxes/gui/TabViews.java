@@ -19,7 +19,7 @@ public class TabViews extends CommonTest {
 	// --------------
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
-		//super.NAVIGATION_TAB="documents";
+		super.NAVIGATION_TAB="mail";
 		super.zLogin();
 	}
 	/**
@@ -31,24 +31,13 @@ public class TabViews extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		/**
-		 * Add child Account
-		 */
-		String parentAccount=SelNGBase.selfAccountName.get().toLowerCase();
-		String childAccount=Stafzmprov.getRandomAccount().toLowerCase();
-		String childUserAccountId=Stafzmprov.getAccountPreferenceValue(childAccount, "zimbraId");
-
-		Stafzmprov.modifyAccount(parentAccount, "zimbraChildAccount", childUserAccountId);
-		Stafzmprov.modifyAccount(parentAccount, "zimbraPrefChildVisibleAccount", childUserAccountId);
-
-		SelNGBase.selenium.get().refresh();
-		SleepUtil.sleep(3500);
-		zWaitTillObjectExist("class", "ZmOverviewZimletHeader");
-
+		
 		/**
 		 * UI Verification starts here
 		 * Check Mail Tab
 		 */
+		String childAccount=addChildAccount();
+		
 		obj.zButton.zClick(localize(locator.mail));
 		zWaitTillObjectExist("xpath", createXpath(parentAccount, localize(locator.inbox)));
 

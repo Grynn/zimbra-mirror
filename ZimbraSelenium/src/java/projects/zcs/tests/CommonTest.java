@@ -72,6 +72,7 @@ public class CommonTest extends SelNGBase {
 	public static CoreObjects obj;
 	public static PageObjects page;
 	public static Locators locator;
+	public static String parentAccount = "admin@testdomain.com";
 	public String NAVIGATION_TAB = "mail";
 	public static String CODE_COVERAGE_DIRECTORY_PATH = "CODECOVERAGE\\jscoverage.json";
 	public static String COVERAGE_SCRIPT = "if (! window.jscoverage_report) {\n"
@@ -1349,6 +1350,23 @@ public class CommonTest extends SelNGBase {
 		} else {
 			FILENAME_TO_COVERAGE.put(file, data);
 		}
+	}
+	
+	public static String addChildAccount() throws Exception {
+		/**
+		 * Add child Account
+		 */
+		parentAccount=SelNGBase.selfAccountName.get().toLowerCase();
+		String childAccount=Stafzmprov.getRandomAccount().toLowerCase();
+		String childUserAccountId=Stafzmprov.getAccountPreferenceValue(childAccount, "zimbraId");
+
+		Stafzmprov.modifyAccount(parentAccount, "zimbraChildAccount", childUserAccountId);
+		Stafzmprov.modifyAccount(parentAccount, "zimbraPrefChildVisibleAccount", childUserAccountId);
+
+		SelNGBase.selenium.get().refresh();
+		SleepUtil.sleep(3500);
+		zWaitTillObjectExist("class", "ZmOverviewZimletHeader");
+		return childAccount;
 	}
 
 }
