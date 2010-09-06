@@ -44,6 +44,12 @@ endif
 ifeq ($(BUILD_PLATFORM), CentOS5_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
+ifeq ($(BUILD_PLATFORM), RHEL6_64)
+	ENVMOD := env LIBS="-L/usr/lib64"
+endif
+ifeq ($(BUILD_PLATFORM), CentOS6_64)
+	ENVMOD := env LIBS="-L/usr/lib64"
+endif
 ifeq ($(BUILD_PLATFORM), F11_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif

@@ -55,6 +55,13 @@ ifeq ($(BUILD_PLATFORM), RHEL5_64)
 		CPPFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0 -I$(INSTALL_PREFIX)/include/freetype2"
 endif
 
+ifeq ($(BUILD_PLATFORM), RHEL6_64)
+	ENVMOD := env CFLAGS="-fPIC -I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0" \
+		LDFLAGS="-fPIC -L$(INSTALL_PREFIX)/lib" \
+		LD_RUN_PATH=$(INSTALL_PREFIX)/lib \
+		CPPFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0 -I$(INSTALL_PREFIX)/include/freetype2"
+endif
+
 ifeq ($(ENVMOD), )
 	ENVMOD := env CFLAGS="-I$(INSTALL_PREFIX)/include -I$(INSTALL_PREFIX)/include/libart-2.0" \
 		LDFLAGS="-L$(INSTALL_PREFIX)/lib" \

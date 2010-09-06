@@ -40,6 +40,14 @@ ifeq ($(BUILD_PLATFORM), CentOS5_64)
 	LIB_DIR := /usr/lib64
 endif
 
+ifeq ($(BUILD_PLATFORM), RHEL6_64)
+	LIB_DIR := /usr/lib64
+endif
+
+ifeq ($(BUILD_PLATFORM), CentOS6_64)
+	LIB_DIR := /usr/lib64
+endif
+
 ifeq ($(BUILD_PLATFORM), SLES10_64)
 	LIB_DIR := /usr/lib64
 endif
