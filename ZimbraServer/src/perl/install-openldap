@@ -103,7 +103,13 @@ sub getPlatformDirName() {
     } else {
 	if (-f "/etc/redhat-release") {
 	    my $uname = `uname -a`;
-	    if ($uname =~ /release 5/) {
+            if ($uname =~ /release 6/) {
+                if ($uname =~ /64/) {
+                    $dirName = "RHEL6_64";
+                } else {
+                    $dirName = "RHEL6";
+               }
+            } elsif ($uname =~ /release 5/) {
 		if ($uname =~ /64/) {
 		    $dirName = "RHEL5_64";
 		} else {
