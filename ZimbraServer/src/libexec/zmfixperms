@@ -69,6 +69,7 @@ components="\
   zimbramon/bin \
   zimbramon/crontabs \
   zimbramon/rrdtool \
+  zimbramon/pylibs \
 "
   
 
