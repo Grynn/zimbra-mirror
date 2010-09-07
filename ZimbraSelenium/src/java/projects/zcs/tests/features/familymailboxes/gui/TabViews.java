@@ -27,7 +27,7 @@ public class TabViews extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		
-		String childAccount=addChildAccount();
+		childAccount=addChildAccount();
 		
 		/**
 		 * UI Verification starts here
@@ -106,14 +106,16 @@ public class TabViews extends CommonTest {
 		 */
 		obj.zButton.zClick(localize(locator.briefcase));
 		zWaitTillObjectExist("xpath", createXpath(parentAccount, localize(locator.briefcase)));
+		
+		obj.zButton.zExists(page.zBriefcaseApp.zNewMenuIconBtn);
+		obj.zButton.zExists(page.zBriefcaseApp.zViewIconBtn);
+
 
 		clickAt(parentAccount, localize(locator.briefcase));
 		clickAt(parentAccount, localize(locator.trash));
 		clickAt(childAccount, localize(locator.briefcase));
 		clickAt(childAccount, localize(locator.trash));
 
-		obj.zButton.zExists(page.zBriefcaseApp.zNewMenuIconBtn);
-		obj.zButton.zExists(page.zBriefcaseApp.zViewIconBtn);
 
 		/**
 		 * Check Preferences Tab
