@@ -94,7 +94,7 @@ case "$1" in
       --log-error=${mysql_errlogfile} \
       --ledir=${mysql_directory}/libexec < /dev/null > /dev/null 2>&1 &
     SQLSTARTED=0
-    for (i = 0; i < 60; i++)
+    for ((i = 0; i < 60; i++))
     do
       su - zimbra -c "${zimbra_home}/bin/mysqladmin -s ping" 2>&1 > /dev/null
       if [ $? = 0 ]; then
