@@ -14,6 +14,11 @@
 # ***** END LICENSE BLOCK *****
 # 
 
+if [ x`whoami` != xzimbra ]; then
+    echo Error: must be run as zimbra user
+  exit 1
+fi
+
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
   mysql_directory \
@@ -96,7 +101,7 @@ case "$1" in
     SQLSTARTED=0
     for ((i = 0; i < 60; i++))
     do
-      su - zimbra -c "${zimbra_home}/bin/mysqladmin -s ping" 2>&1 > /dev/null
+      ${zimbra_home}/bin/mysqladmin -s ping 2>&1 > /dev/null
       if [ $? = 0 ]; then
         SQLSTARTED=1
         break
