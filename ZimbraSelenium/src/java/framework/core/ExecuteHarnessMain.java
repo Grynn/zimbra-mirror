@@ -19,13 +19,11 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -44,7 +42,6 @@ import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
-
 import framework.util.HarnessException;
 import framework.util.SkippedTestListener;
 import framework.util.SummaryReporter;
@@ -108,7 +105,11 @@ public class ExecuteHarnessMain {
 	/**
 	 * App type
 	 */
-	private String apptype = "AJAX";
+	private enum AppType {
+		AJAX, HTML
+	}
+	
+	private AppType appType = AppType.AJAX;
 	
 	/**
 	 * Determine all the classes in the specified jarfile filtered by a regex
@@ -274,11 +275,11 @@ public class ExecuteHarnessMain {
 			
 			// Configure the runner
 			ng.setXmlSuites(suites);
-			ng.addListener(new SummaryReporter(this.apptype));
-			ng.addListener(new TestStatusReporter(this.apptype)); // TODO: This shouldn't throw Exception
-			ng.addListener(new SkippedTestListener(new File(testoutputfoldername)));
+			ng.addListener(new SummaryReporter(this.appType.toString()));
+			ng.addListener(new TestStatusReporter(this.appType.toString())); // TODO: This shouldn't throw Exception
+			ng.addListener(new SkippedTestListener(new File(this.testoutputfoldername)));
 			ng.addListener(listener = new ResultListener());
-			ng.setOutputDirectory(testoutputfoldername);
+			ng.setOutputDirectory(this.testoutputfoldername);
 
 			// Run!
 			ng.run();
@@ -486,14 +487,24 @@ public class ExecuteHarnessMain {
 	        	return false;
 	        }
 	        
+	        if ( cmd.hasOption('p') ) {
+	        	String filter = cmd.getOptionValue('p');
+	        	this.classfilter = filter;
+	        	Matcher m = Pattern.compile("projects.(.*).tests.*").matcher(filter);
+	        	if (m.find()){
+	        		if(m.group(1).equalsIgnoreCase("html"))
+	        			this.appType = AppType.HTML;
+	        		else if(m.group(1).equalsIgnoreCase("zcs"))
+	        			this.appType = AppType.AJAX;	        	
+	        	}
+	        }
+	        
+	        //'o' check should be after 'p' check to avoid code redundancy
 	        if ( cmd.hasOption('o') ) {
 	        	this.testoutputfoldername = cmd.getOptionValue('o');
 	        } else {
-	        	if ( cmd.hasOption('p') && cmd.getOptionValue('p').contains("projects.html.tests"))
-	        		this.apptype = "HTML";		        		
-				
 	        	this.testoutputfoldername = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") 
-		        + "/" + this.apptype;
+		        + "/" + this.appType;
 	        }
 	        
 	        // Make sure the test output folder exists, create it if not
@@ -517,14 +528,7 @@ public class ExecuteHarnessMain {
 	        if ( cmd.hasOption('j') ) {
 	        	this.jarfilename = cmd.getOptionValue('j'); 
 	        }
-	        
-	        if ( cmd.hasOption('p') ) {
-	        	String filter = cmd.getOptionValue('p');
-	        	this.classfilter = filter;
-	        	if ( filter.contains("projects.html.tests"))
-	        		this.apptype = "HTML";		        		
-	        }
-	        
+	       	        
 	        if ( cmd.hasOption('g') ) {
 	        	// Remove spaces and split on commas
 	        	String[] values = cmd.getOptionValue('g').replaceAll("\\s+", "").split(",");
