@@ -59,7 +59,7 @@ WGET    := $(shell which wget)
 MAKE    := $(shell which make)
 SED     := $(shell which sed)
 UNZIP	:= $(shell which unzip)
-CMIRROR	?= http://zre-vm030.eng.zimbra.com/cpan/
+CMIRROR	?= http://zre-vm030.eng.vmware.com/cpan/
 
 BDB_INCLUDE	:= $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/include
 MYSQL_INCLUDE	:= $(ZIMBRA_HOME)/mysql/include/mysql
