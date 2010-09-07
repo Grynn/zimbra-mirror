@@ -173,7 +173,7 @@ InboxZero.prototype._getActiveInbox = function(account) {
 InboxZero.prototype._getAccountInbox = function(account) {
     account = account || appCtxt.getActiveAccount();
     var inboxId = [account.id,ZmOrganizer.ID_INBOX].join(":");
-    return appCtxt.getById(inboxId);
+    return appCtxt.getById(inboxId) || appCtxt.getById(ZmOrganizer.ID_INBOX);
 }
 
 InboxZero.prototype._getAccounts = function() {
