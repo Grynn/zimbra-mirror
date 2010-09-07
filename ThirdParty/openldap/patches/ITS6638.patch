@@ -1,0 +1,21 @@
+--- openldap-2.4.23/clients/tools/ldapsearch.c	13 Apr 2010 20:17:32 -0000	1.268
++++ openldap-2.4.23/clients/tools/ldapsearch.c	6 Sep 2010 01:09:54 -0000	1.270
+@@ -594,7 +594,7 @@ handle_private_option( int i )
+ 				exit( EXIT_FAILURE );
+ 			}
+ 			for ( ispecs = 0; specs[ ispecs ] != NULL; ispecs++ )
+-				/* count'em */
++				/* count'em */ ;
+ 
+ 			ds = ldap_memcalloc( ispecs + 1, sizeof( LDAPDerefSpec ) );
+ 			if ( ds == NULL ) {
+@@ -1344,6 +1344,9 @@ getNextPage:
+ 	if ( derefval.bv_val != NULL ) {
+ 		ldap_memfree( derefval.bv_val );
+ 	}
++	if ( def_urlpre != NULL ) {
++		ber_memfree( def_urlpre );
++	}
+ 
+ 	if ( c ) {
+ 		for ( ; save_nctrls-- > 0; ) {
