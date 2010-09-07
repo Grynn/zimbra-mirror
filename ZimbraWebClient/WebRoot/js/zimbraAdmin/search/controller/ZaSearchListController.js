@@ -228,8 +228,8 @@ function(params,resp) {
 						domainArr.push(domain);
                                 }
 				
-				ZaSearchListController.prototype._batchSearchforDomain(domainArr,params.searchQueryList);
                         }
+			ZaSearchListController.prototype._batchSearchforDomain(domainArr,params.searchQueryList);
                 }
         } catch (ex) {
 		this._handleException(ex, "ZaSearchListController.searchAliasDomainCallback", null, false); 
@@ -286,7 +286,6 @@ function(params) {
 	controller._currentQuery = params.query ;
 	var busyId = Dwt.getNextId();	
 	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId});
-
         var searchParams = {
                         query:params.query,
                         types:params.types,
@@ -310,7 +309,7 @@ function(params) {
 			isAliasSpec = true;
 	}
 	if(isAliasSpec) {
-		if(params.types.length > 1) searchQueryList.push(searchParams);
+		searchQueryList.push(searchParams);
 		var keyword = ZaSearchListController._getSearchKeyWord(params.query);
 		ZaSearchListController.searchAliasDomain(keyword,controller,searchQueryList);
 	}else
