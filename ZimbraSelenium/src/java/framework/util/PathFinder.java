@@ -62,9 +62,11 @@ public class PathFinder {
 					if (clname.contains("ExecuteTests"))
 						break;
 				}
-				Field field = Class.forName(clname).getDeclaredField(
+				if (clname.contains("ExecuteTests")){
+					Field field = Class.forName(clname).getDeclaredField(
 						"WorkingDirectory");
-				value = (String) field.get("WorkingDirectory");
+					value = (String) field.get("WorkingDirectory");
+				}
 			}
 		} catch (Exception e) {
 			ZimbraSeleniumLogger.mLog.error("Exception :" + e);
