@@ -73,6 +73,7 @@ public class CommonTest extends SelNGBase {
 	public static PageObjects page;
 	public static Locators locator;
 	public static String parentAccount = "admin@testdomain.com";
+	public static String childAccount = "child@testdomain.com";
 	public String NAVIGATION_TAB = "mail";
 	public static String CODE_COVERAGE_DIRECTORY_PATH = "CODECOVERAGE\\jscoverage.json";
 	public static String COVERAGE_SCRIPT = "if (! window.jscoverage_report) {\n"
