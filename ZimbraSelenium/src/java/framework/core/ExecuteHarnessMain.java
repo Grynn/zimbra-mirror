@@ -492,10 +492,10 @@ public class ExecuteHarnessMain {
 	        	this.classfilter = filter;
 	        	Matcher m = Pattern.compile("projects.(.*).tests.*").matcher(filter);
 	        	if (m.find()){
-	        		if(m.group(1).equalsIgnoreCase("html"))
-	        			this.appType = AppType.HTML;
-	        		else if(m.group(1).equalsIgnoreCase("zcs"))
-	        			this.appType = AppType.AJAX;	        	
+	        		if(m.group(1).equalsIgnoreCase("zcs"))
+	        			this.appType = AppType.AJAX;	
+	        		else
+	        			this.appType = Enum.valueOf(AppType.class, m.group(1).toUpperCase());	        			 	
 	        	}
 	        }
 	        
