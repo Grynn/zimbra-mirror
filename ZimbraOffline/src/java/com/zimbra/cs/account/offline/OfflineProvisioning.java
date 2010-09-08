@@ -1630,12 +1630,12 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     @Override
-    public synchronized SearchGalResult searchGal(Domain d, String query, GAL_SEARCH_TYPE type, String token) throws ServiceException {
+    public synchronized SearchGalResult searchGal(Domain d, String query, GalSearchType type, String token) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public synchronized SearchGalResult autoCompleteGal(Domain d, String query, GAL_SEARCH_TYPE type, int limit) throws ServiceException {
+    public synchronized SearchGalResult autoCompleteGal(Domain d, String query, GalSearchType type, int limit) throws ServiceException {
         throw new UnsupportedOperationException();
     }
 
