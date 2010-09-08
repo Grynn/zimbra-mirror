@@ -29,6 +29,28 @@ ifeq ($(BUILD_PLATFORM), MACOSXx86_10.5)
 	DEST_BIN_DIR  :=	$(DEST_DIR)/bin
 endif
 
+MODULE_BUILD	:= D/DA/DAGOLDEN/Module-Build-0.3607.tar.gz
+
+ifeq (RHEL4,$(findstring RHEL4,$(BUILD_PLATFORM)))
+	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+endif
+
+ifeq (RHEL5,$(findstring RHEL4,$(BUILD_PLATFORM)))
+	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+endif
+
+ifeq (SuSEES10,$(findstring SuSEES10,$(BUILD_PLATFORM)))
+	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+endif
+
+ifeq (SLES10_64,$(findstring SLES10_64,$(BUILD_PLATFORM)))
+	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+endif
+
+ifeq (UBUNTU8,$(findstring UBUNTU8,$(BUILD_PLATFORM)))
+	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+endif
+
 LOGFILE ?= ThirdParty-Perllibs.log
 
 PERL_VERSION :=	$(shell /usr/bin/perl -e 'print "$$]"')
@@ -101,7 +123,7 @@ PERL_LIBS 	:= \
 	HTTP::Parser \
 	IO::Stringy \
 	E/ER/ERYQ/MIME-Lite-2.117.tar.gz \
-	K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz \
+	$(MODULE_BUILD) \
 	Mail::Mailer \
 	Convert::BinHex \
 	D/DO/DONEILL/MIME-tools-5.427.tar.gz \
