@@ -11,7 +11,7 @@ import projects.zcs.tests.CommonTest;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -411,7 +411,7 @@ public class AccountsPref extends CommonTest {
 						+ "'" + localize(locator.dataSourceTestSuccess) + "')"
 						+ "]");
 		Assert
-				.assertTrue(SelNGBase.selenium.get()
+				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent("xpath=//td[contains(@id, '_test_status') and  contains(text(),"
 								+ "'"
 								+ localize(locator.dataSourceTestSuccess)
@@ -424,7 +424,7 @@ public class AccountsPref extends CommonTest {
 						+ "'" + localize(locator.dataSourceTestSuccess) + "')"
 						+ "]");
 		Assert
-				.assertTrue(SelNGBase.selenium.get()
+				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent("xpath=//td[contains(@id, '_test_status') and  contains(text(),"
 								+ "'"
 								+ localize(locator.dataSourceTestSuccess)
@@ -435,7 +435,7 @@ public class AccountsPref extends CommonTest {
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zNewMenuIconBtn);
 		SleepUtil.sleep(1500);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 		obj.zButton.zIsEnabled(page.zMailApp.zSendBtn_newWindow);
 		obj.zButton.zIsEnabled(page.zMailApp.zCancelBtn_newWindow);
@@ -444,7 +444,7 @@ public class AccountsPref extends CommonTest {
 		obj.zButton.zIsEnabled(page.zMailApp.zAddAttachmentBtn_newWindow);
 		obj.zButton.zIsEnabled(page.zMailApp.zOptionsBtn_newWindow);
 		obj.zButton.zClick(page.zMailApp.zCancelBtn_newWindow);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}

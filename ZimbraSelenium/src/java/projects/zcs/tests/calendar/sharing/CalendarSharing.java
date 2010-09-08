@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -319,7 +319,7 @@ public class CalendarSharing extends CommonTest {
 				userC);
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(1000);
 		zGoToApplication("Calendar");
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
@@ -354,20 +354,20 @@ public class CalendarSharing extends CommonTest {
 			obj.zButton.zExists(localize(locator.replyAccept));
 			obj.zButton.zExists(localize(locator.replyDecline));
 			obj.zButton.zExists(localize(locator.replyTentative));
-			String onbehalfofuser = SelNGBase.selenium.get()
+			String onbehalfofuser = ClientSessionFactory.session().selenium()
 					.getText("xpath=//td[contains(@id,'ztb__TV__Inv_item')]/b");
 			String onbehalfof = localize(locator.onBehalfOf).toLowerCase();
 			if (onbehalfofuser.equals(currentloggedInUser)) {
 
 				Assert
-						.assertTrue(SelNGBase.selenium.get()
+						.assertTrue(ClientSessionFactory.session().selenium()
 								.isElementPresent("xpath=//td[contains(@id,'ztb__TV__Inv_item') and contains(text(),'"
 										+ onbehalfof
 										+ "') ]/b[contains(text(),'"
 										+ currentloggedInUser + "')]"));
 			} else {
 				Assert
-						.assertTrue(SelNGBase.selenium.get()
+						.assertTrue(ClientSessionFactory.session().selenium()
 								.isElementPresent("xpath=//td[contains(@id,'ztb__TV__Inv_item') and contains(text(),'"
 										+ onbehalfof
 										+ "') ]/b[contains(text(),'"
@@ -379,19 +379,19 @@ public class CalendarSharing extends CommonTest {
 			obj.zButton.zExists(localize(locator.replyAccept));
 			obj.zButton.zExists(localize(locator.replyDecline));
 			obj.zButton.zExists(localize(locator.replyTentative));
-			String onbehalfofuser1 = SelNGBase.selenium.get()
+			String onbehalfofuser1 = ClientSessionFactory.session().selenium()
 					.getText("xpath=//td[contains(@id,'ztb__TV__Inv_item')]/b");
 			if (onbehalfofuser1.equals(currentloggedInUser)) {
 
 				Assert
-						.assertTrue(SelNGBase.selenium.get()
+						.assertTrue(ClientSessionFactory.session().selenium()
 								.isElementPresent("xpath=//td[contains(@id,'ztb__TV__Inv_item') and contains(text(),'"
 										+ onbehalfof
 										+ "') ]/b[contains(text(),'"
 										+ currentloggedInUser + "')]"));
 			} else {
 				Assert
-						.assertTrue(SelNGBase.selenium.get()
+						.assertTrue(ClientSessionFactory.session().selenium()
 								.isElementPresent("xpath=//td[contains(@id,'ztb__TV__Inv_item') and contains(text(),'"
 										+ onbehalfof
 										+ "') ]/b[contains(text(),'"

@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 import com.thoughtworks.selenium.Selenium;
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -161,11 +161,11 @@ public class MailPreferencesSetTrue extends CommonTest {
 		SleepUtil.sleep(2000);
 		obj.zMessageItem.zDblClick(subject);
 		SleepUtil.sleep(4000); // test continuously fails here
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		zWaitTillObjectExist("button", "id=zb__MSG1__CLOSE_left_icon");
 		obj.zButton.zClick("id=zb__MSG1__CLOSE_left_icon");
-		SelNGBase.selenium.get().selectWindow(null);
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().selectWindow(null);
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3000);
 
 		SelNGBase.needReset.set(false);

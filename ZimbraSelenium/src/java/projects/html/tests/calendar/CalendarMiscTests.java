@@ -14,7 +14,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import projects.html.tests.CommonTest;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -128,7 +128,7 @@ public class CalendarMiscTests extends CommonTest {
 			someting = getLocalizedData_NoSpecialChar();
 		
 		//open calendar tab
-		SelNGBase.selenium.get().open(urlInitial);
+		ClientSessionFactory.session().selenium().open(urlInitial);
 		
 		SleepUtil.sleepMedium();
 		
@@ -137,7 +137,7 @@ public class CalendarMiscTests extends CommonTest {
 			page.zCalendarApp.zCreateSimpleAppt(someting, "", "", "");
 				
 		//open rest url
-		SelNGBase.selenium.get().open(urlToNavigate);
+		ClientSessionFactory.session().selenium().open(urlToNavigate);
 
 		SleepUtil.sleepMedium();
 
@@ -160,7 +160,7 @@ public class CalendarMiscTests extends CommonTest {
 		obj.zAppointment.zExists("Busy");
 		
 		//return to initial page
-		SelNGBase.selenium.get().open(urlInitial);
+		ClientSessionFactory.session().selenium().open(urlInitial);
 		
 		SelNGBase.needReset.set(false);
 	}
@@ -182,7 +182,7 @@ public class CalendarMiscTests extends CommonTest {
 		String timezone;
 		
 		//open calendar view
-		SelNGBase.selenium.get().open(url);
+		ClientSessionFactory.session().selenium().open(url);
 		SleepUtil.sleepMedium();
 				
 		// Navigate To Preferences view 
@@ -304,7 +304,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		page.zCalendarApp.zCreateSimpleAppt(subject, "", "", "");
 
-		SelNGBase.selenium.get().open(urlToNavigate);
+		ClientSessionFactory.session().selenium().open(urlToNavigate);
 
 		SleepUtil.sleepMedium();
 
@@ -336,37 +336,37 @@ public class CalendarMiscTests extends CommonTest {
 		String browserTitle;
 		String browserTitle2;
 
-		SelNGBase.selenium.get().open(url);
+		ClientSessionFactory.session().selenium().open(url);
 		SleepUtil.sleepMedium();
 
 		obj.zButton.zClick(page.zCalendarApp.calNextPageBtn);
 
 		SleepUtil.sleepMedium();
 
-		browserTitle = SelNGBase.selenium.get().getTitle();
+		browserTitle = ClientSessionFactory.session().selenium().getTitle();
 
-		SelNGBase.selenium.get().open(nextUrl);
+		ClientSessionFactory.session().selenium().open(nextUrl);
 
 		SleepUtil.sleepMedium();
 
-		browserTitle2 = SelNGBase.selenium.get().getTitle();
+		browserTitle2 = ClientSessionFactory.session().selenium().getTitle();
 
 		Assert.assertTrue(browserTitle.equals(browserTitle2),
 				"Next pagination button works fine");
 
-		SelNGBase.selenium.get().open(url);
+		ClientSessionFactory.session().selenium().open(url);
 		SleepUtil.sleepMedium();
 		obj.zButton.zClick(page.zCalendarApp.calPrevPageBtn);
 
 		SleepUtil.sleepMedium();
 
-		browserTitle = SelNGBase.selenium.get().getTitle();
+		browserTitle = ClientSessionFactory.session().selenium().getTitle();
 
-		SelNGBase.selenium.get().open(prevUrl);
+		ClientSessionFactory.session().selenium().open(prevUrl);
 
 		SleepUtil.sleepMedium();
 
-		browserTitle2 = SelNGBase.selenium.get().getTitle();
+		browserTitle2 = ClientSessionFactory.session().selenium().getTitle();
 
 		Assert.assertTrue(browserTitle.equals(browserTitle2),
 				"Prev pagination button works fine");
@@ -469,7 +469,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		SleepUtil.sleepSmall();
 
-		browserTitle1 = SelNGBase.selenium.get().getTitle();
+		browserTitle1 = ClientSessionFactory.session().selenium().getTitle();
 
 		if (initialView.equals(localize(locator.calViewDay)))
 			obj.zButton.zClick(page.zCalendarApp.calDayViewBtn);
@@ -482,7 +482,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		SleepUtil.sleepMedium();
 
-		browserTitle2 = SelNGBase.selenium.get().getTitle();
+		browserTitle2 = ClientSessionFactory.session().selenium().getTitle();
 
 		Assert.assertTrue(browserTitle1.equals(browserTitle2),
 				"Initial view calendar preference doesn't work");

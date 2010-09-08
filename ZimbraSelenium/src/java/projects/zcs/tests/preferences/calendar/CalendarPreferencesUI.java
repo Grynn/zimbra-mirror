@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -99,7 +99,7 @@ public class CalendarPreferencesUI extends CommonTest {
 		 * Added following check for bug 36480 : Support calenar invite forwarding address preference
 		 *
 		 */
-		SelNGBase.selenium.get().isElementPresent("DWT43_CAL_INV_FORWARDING_ADDRESS");
+		ClientSessionFactory.session().selenium().isElementPresent("DWT43_CAL_INV_FORWARDING_ADDRESS");
 		
 		obj.zFeatureMenu.zClick(localize(locator.defaultViewLabel));
 		obj.zMenuItem.zClick(localize(locator.calViewMonth));
@@ -295,7 +295,7 @@ public class CalendarPreferencesUI extends CommonTest {
 		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
-		SelNGBase.selenium.get().uncheck("//input[contains(@id,'_CAL_USE_QUICK_ADD')]");
+		ClientSessionFactory.session().selenium().uncheck("//input[contains(@id,'_CAL_USE_QUICK_ADD')]");
 
 	//	obj.zCheckbox.zClick(localize(locator.useQuickAdd));
 
@@ -315,7 +315,7 @@ public class CalendarPreferencesUI extends CommonTest {
 		page.zCalApp.zNavigateToCalendarPreferences();
 
 		//obj.zCheckbox.zClick(localize(locator.useQuickAdd));
-		SelNGBase.selenium.get().check("//input[contains(@id,'_CAL_USE_QUICK_ADD')]");
+		ClientSessionFactory.session().selenium().check("//input[contains(@id,'_CAL_USE_QUICK_ADD')]");
 		
 		waitForIE();
 		

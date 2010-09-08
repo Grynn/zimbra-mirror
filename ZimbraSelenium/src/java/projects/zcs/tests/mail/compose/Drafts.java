@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -295,13 +295,13 @@ public class Drafts extends CommonTest {
 		obj.zMessageItem.zRtClick("Bug24431 save draft(html format) subject");
 		obj.zMenuItem.zClick(localize(locator.showOrig));
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().selectWindow("_blank");
-		String messageBody = SelNGBase.selenium.get().getBodyText();
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
+		String messageBody = ClientSessionFactory.session().selenium().getBodyText();
 		Boolean htmlBodyExists = messageBody
 				.contains("<html><head><style type='text/css'>");
 		assertReport("true", htmlBodyExists.toString(),
 				"Verifying html formatting in show original");
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			// IE 8 requires this click event that is why we again wrote same
@@ -318,13 +318,13 @@ public class Drafts extends CommonTest {
 		obj.zMessageItem.zRtClick("Bug24431 save draft(html format) subject");
 		obj.zMenuItem.zClick(localize(locator.showOrig));
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().selectWindow("_blank");
-		messageBody = SelNGBase.selenium.get().getBodyText();
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
+		messageBody = ClientSessionFactory.session().selenium().getBodyText();
 		htmlBodyExists = messageBody
 				.contains("<html><head><style type='text/css'>");
 		assertReport("true", htmlBodyExists.toString(),
 				"Verifying html formatting in show original");
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		obj.zMessageItem.zClick("Bug24431 save draft(html format) subject");
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			// IE 8 requires this click event that is why we again wrote same
@@ -372,25 +372,25 @@ public class Drafts extends CommonTest {
 		obj.zMessageItem.zRtClick("Bug34870 save draft(html format) subject");
 		obj.zMenuItem.zClick(localize(locator.showOrig));
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().selectWindow("_blank");
-		String messageBody = SelNGBase.selenium.get().getBodyText();
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
+		String messageBody = ClientSessionFactory.session().selenium().getBodyText();
 		Boolean htmlBodyExists = messageBody
 				.contains("<html><head><style type='text/css'>");
 		assertReport("true", htmlBodyExists.toString(),
 				"Verifying html formatting in show original");
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		obj.zMessageItem.zClick("Bug34870 save draft(html format) subject");
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			// IE 8 requires this is click event that is why we again wrote same
 			// line here
 			obj.zMessageItem.zClick("Bug34870 save draft(html format) subject");
 		}
-		SelNGBase.selenium.get().selectFrame(
+		ClientSessionFactory.session().selenium().selectFrame(
 				"css=iframe[id*='zv__CLV__MSG_body__iframe']");
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 				"xpath=/html/body[contains(@class,'MsgBody MsgBody-text')]"),
 				"Reading pane still shows in Html formate");
-		SelNGBase.selenium.get().selectFrame("relative=top");
+		ClientSessionFactory.session().selenium().selectFrame("relative=top");
 		obj.zMessageItem.zClick("Bug34870 save draft(html format) subject");
 		obj.zButton.zClick(page.zMailApp.zEditDraftIconBtn);
 		obj.zButton.zExists("ImgBold");

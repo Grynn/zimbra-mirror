@@ -8,7 +8,7 @@ import org.testng.Assert;
 
 import com.thoughtworks.selenium.SeleniumException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 
 public class ZObject extends SelNGBase {
@@ -166,7 +166,7 @@ public class ZObject extends SelNGBase {
 	public void zWait(String objNameOrId, String panel, String param1) {
 		// don't call core(since it could go one of the core might be calling
 		// this(chicken and egg)
-		SelNGBase.selenium.get().call(coreName, objNameOrId, "wait", true, panel, param1);
+		ClientSessionFactory.session().selenium().call(coreName, objNameOrId, "wait", true, panel, param1);
 	}
 
 	public void zExists(String objNameOrId) {
@@ -229,13 +229,13 @@ public class ZObject extends SelNGBase {
 
 	protected String ZObjectCore(String objNameOrId, String action, Boolean wait,
 			String panel, String param1, String param2, String param3) {
-		return SelNGBase.selenium.get().call(coreName, objNameOrId, action, wait, panel, param1, param2, param3);
+		return ClientSessionFactory.session().selenium().call(coreName, objNameOrId, action, wait, panel, param1, param2, param3);
 	}
 
 	public static String zVerifyObjDisplayed(String nameOrIdWithZIndex) {
 		// action "get" is mentioned just to indicate to selenium.call that its
 		// a getMethod
-		return SelNGBase.selenium.get().call("verifyZObjectDisplayed", nameOrIdWithZIndex,
+		return ClientSessionFactory.session().selenium().call("verifyZObjectDisplayed", nameOrIdWithZIndex,
 				"get", false, null, null, null, null);
 	}
 

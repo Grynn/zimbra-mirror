@@ -19,7 +19,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZFolder;
 import com.zimbra.cs.zclient.ZInvite.ZRole;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -171,13 +171,13 @@ public class ComposePreferencesSetTrue extends CommonTest {
 		zGoToApplication("Mail");
 		obj.zButton.zClick(page.zMailApp.zNewMenuIconBtn);
 		SleepUtil.sleep(1500);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 		obj.zTextAreaField.zType(page.zComposeView.zToField, "test@test.com");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		// obj.zButton.zClickInDlgByName(localize(locator.no),
 		// localize(locator.warningMsg));
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
 				"FALSE");
@@ -431,7 +431,7 @@ public class ComposePreferencesSetTrue extends CommonTest {
 
 			obj.zMessageItem.zClick(subject);
 
-			SelNGBase.selenium.get().isElementPresent("link=" + subject);
+			ClientSessionFactory.session().selenium().isElementPresent("link=" + subject);
 
 		}
 
@@ -524,7 +524,7 @@ public class ComposePreferencesSetTrue extends CommonTest {
 
 			obj.zMessageItem.zClick(subject);
 
-			SelNGBase.selenium.get().isElementPresent("link=" + subject);
+			ClientSessionFactory.session().selenium().isElementPresent("link=" + subject);
 
 		}
 

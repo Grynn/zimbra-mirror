@@ -6,7 +6,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 

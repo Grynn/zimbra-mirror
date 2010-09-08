@@ -7,7 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import projects.zcs.tests.CommonTest;
@@ -105,7 +105,7 @@ public class TaskFolderTests extends CommonTest {
 				"//td[contains(@id, 'zti__main_Tasks') and contains(text(), '"
 						+ orgTaskList + "')]", page.zTaskApp.zTasksFolder);
 		Assert
-				.assertTrue(SelNGBase.selenium.get()
+				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent("//div[@id='zti__main_Tasks__15']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
 								+ orgTaskList + "')]"));
 

@@ -11,7 +11,7 @@ import projects.zcs.tests.CommonTest;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -71,7 +71,7 @@ public class Autocomplete extends CommonTest {
 		Stafzmprov.createLocation(location);
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -86,7 +86,7 @@ public class Autocomplete extends CommonTest {
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport(expectedValue.trim(), actualValue.trim(),
 				"Verifying autocomplete for location");
-		SelNGBase.selenium.get().click("link=" + location);
+		ClientSessionFactory.session().selenium().click("link=" + location);
 		obj.zButton.zIsDisabled(localize(locator.select));
 		obj.zButton.zIsEnabled(localize(locator.remove));
 		obj.zButton.zClick(page.zCalCompose.zApptCancelBtn);
@@ -114,7 +114,7 @@ public class Autocomplete extends CommonTest {
 		Stafzmprov.createLocation(location);
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -140,7 +140,7 @@ public class Autocomplete extends CommonTest {
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport(expectedValue, actualValue,
 				"Verifying autocomplete for location");
-		SelNGBase.selenium.get().click("link=" + location);
+		ClientSessionFactory.session().selenium().click("link=" + location);
 		obj.zButton.zIsDisabled(localize(locator.select));
 		obj.zButton.zIsEnabled(localize(locator.remove));
 		obj.zButton.zClick(page.zCalCompose.zApptCancelBtn);
@@ -175,7 +175,7 @@ public class Autocomplete extends CommonTest {
 		Stafzmprov.createEquipment(equipment);
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -204,10 +204,10 @@ public class Autocomplete extends CommonTest {
 		obj.zTab.zClick(localize(locator.apptDetails));
 		SleepUtil.sleep(1000);
 		Assert.assertEquals(true,
-				SelNGBase.selenium.get().isElementPresent("link=" + location),
+				ClientSessionFactory.session().selenium().isElementPresent("link=" + location),
 				"Verifying location link exists");
 		Assert.assertEquals(true,
-				SelNGBase.selenium.get().isElementPresent("link=" + equipment),
+				ClientSessionFactory.session().selenium().isElementPresent("link=" + equipment),
 				"Verifying resource link exists");
 		expectedValue = location;
 		actualValue = obj.zEditField
@@ -231,10 +231,10 @@ public class Autocomplete extends CommonTest {
 		assertReport(expectedValue, actualValue,
 				"Verifying autocomplete for location");
 		Assert.assertEquals(true,
-				SelNGBase.selenium.get().isElementPresent("link=" + location),
+				ClientSessionFactory.session().selenium().isElementPresent("link=" + location),
 				"Verifying location link exists");
 		Assert.assertEquals(true,
-				SelNGBase.selenium.get().isElementPresent("link=" + equipment),
+				ClientSessionFactory.session().selenium().isElementPresent("link=" + equipment),
 				"Verifying resource link exists");
 		obj.zEditField
 				.zActivate(getNameWithoutSpace(localize(locator.locationLabel)));
@@ -246,12 +246,12 @@ public class Autocomplete extends CommonTest {
 		assertReport("<blank>", actualValue,
 				"Verifying autocomplete for location");
 		Assert.assertEquals(false,
-				SelNGBase.selenium.get().isElementPresent("link=" + location),
+				ClientSessionFactory.session().selenium().isElementPresent("link=" + location),
 				"Verifying location link not exists");
 		Assert.assertEquals(true,
-				SelNGBase.selenium.get().isElementPresent("link=" + equipment),
+				ClientSessionFactory.session().selenium().isElementPresent("link=" + equipment),
 				"Verifying resource link exists");
-		SelNGBase.selenium.get().click("link=" + equipment);
+		ClientSessionFactory.session().selenium().click("link=" + equipment);
 		obj.zButton.zClick(localize(locator.remove));
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 		SleepUtil.sleep(1000);
@@ -263,10 +263,10 @@ public class Autocomplete extends CommonTest {
 		assertReport("<blank>", actualValue,
 				"Verifying autocomplete for location");
 		Assert.assertEquals(false,
-				SelNGBase.selenium.get().isElementPresent("link=" + location),
+				ClientSessionFactory.session().selenium().isElementPresent("link=" + location),
 				"Verifying location link not exists");
 		Assert.assertEquals(false,
-				SelNGBase.selenium.get().isElementPresent("link=" + equipment),
+				ClientSessionFactory.session().selenium().isElementPresent("link=" + equipment),
 				"Verifying resource link not exists");
 		obj.zButton.zClick(page.zCalCompose.zApptCloseBtn);
 

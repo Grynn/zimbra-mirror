@@ -1,6 +1,6 @@
 package projects.html.ui;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 import projects.html.tests.CommonTest;
 
@@ -84,7 +84,7 @@ public class GeneralPrefUI extends CommonTest {
 
 		zNavigateToPrefGeneral();
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().click("link=" + localize(locator.changePassword));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.changePassword));
 		SleepUtil.sleep(2000);
 	}
 
@@ -98,7 +98,7 @@ public class GeneralPrefUI extends CommonTest {
 	public static void zEnterChangePWData(String oldPwd, String newPwd,
 			String confirmPwd) {
 
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zPwdField.zType(zOldPassword, oldPwd);
 		obj.zPwdField.zType(zNewPassword, newPwd);
 		obj.zPwdField.zType(zConfirm, confirmPwd);

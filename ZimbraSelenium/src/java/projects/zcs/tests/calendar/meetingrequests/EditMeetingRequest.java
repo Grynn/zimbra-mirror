@@ -18,7 +18,7 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.service.admin.GetConfig;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -162,7 +162,7 @@ public class EditMeetingRequest extends CommonTest {
 		page.zCalApp.zNavigateToCalendar();
 		obj.zAppointment.zRtClick(subject);
 		obj.zMenuItem.zMouseOver(localize(locator.editReply));
-		SelNGBase.selenium.get().clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 				"xpath=//td[contains(@id,'DW') and contains(text(),'"
 						+ localize(locator.accept) + "')][1]", "");
 		zWaitTillObjectExist("editfield", localize(locator.subjectLabel));
@@ -218,7 +218,7 @@ public class EditMeetingRequest extends CommonTest {
 		page.zCalApp.zNavigateToCalendar();
 		obj.zAppointment.zRtClick(subject);
 		obj.zMenuItem.zMouseOver(localize(locator.editReply));
-		SelNGBase.selenium.get().clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 				"xpath=//td[contains(@id,'DW') and contains(text(),'"
 						+ localize(locator.accept) + "')][1]", "");
 		zWaitTillObjectExist("editfield", localize(locator.subjectLabel));
@@ -244,12 +244,12 @@ public class EditMeetingRequest extends CommonTest {
 		obj.zMessageItem.zRtClick(subject);
 		obj.zMenuItem.zClick(localize(locator.showOrig));
 		SleepUtil.sleep(4000);
-		SelNGBase.selenium.get().selectWindow("_blank");
-		String showOrigText = SelNGBase.selenium.get().getBodyText();
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
+		String showOrigText = ClientSessionFactory.session().selenium().getBodyText();
 		SleepUtil.sleep(1000);
 		Assert.assertTrue(showOrigText.contains("From: " + alias));
 		Assert.assertFalse(showOrigText.contains("From: " + acc1));
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}

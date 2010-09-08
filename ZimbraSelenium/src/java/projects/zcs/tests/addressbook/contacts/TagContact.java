@@ -12,7 +12,7 @@ import projects.zcs.ui.ActionMethod;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;

@@ -22,7 +22,7 @@ import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SkippedTestListener;
 import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;

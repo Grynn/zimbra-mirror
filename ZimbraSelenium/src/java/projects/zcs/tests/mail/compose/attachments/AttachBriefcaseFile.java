@@ -8,7 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -102,9 +102,7 @@ public class AttachBriefcaseFile extends CommonTest {
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							SelNGBase.selenium
-									.get()
-									.isElementPresent(
+							ClientSessionFactory.session().selenium().isElementPresent(
 											"xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
 		} else {
@@ -141,26 +139,24 @@ public class AttachBriefcaseFile extends CommonTest {
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							SelNGBase.selenium
-									.get()
-									.isElementPresent(
+							ClientSessionFactory.session().selenium().isElementPresent(
 											"xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
 		} else {
 			obj.zMessageItem.zVerifyHasAttachment(subject);
 		}
 		// obj.zMessageItem.zVerifyHasAttachment(subject);
-		Boolean downloadLink = SelNGBase.selenium.get().isElementPresent(
+		Boolean downloadLink = ClientSessionFactory.session().selenium().isElementPresent(
 				"Link=" + localize(locator.download));
 		Boolean briefcaseLink;
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")) {
-			briefcaseLink = SelNGBase.selenium.get().isElementPresent(
+			briefcaseLink = ClientSessionFactory.session().selenium().isElementPresent(
 					"Link=Aktetas");
 		} else {
-			briefcaseLink = SelNGBase.selenium.get().isElementPresent(
+			briefcaseLink = ClientSessionFactory.session().selenium().isElementPresent(
 					"Link=" + localize(locator.briefcase));
 		}
-		Boolean removeLink = SelNGBase.selenium.get().isElementPresent(
+		Boolean removeLink = ClientSessionFactory.session().selenium().isElementPresent(
 				"Link=" + localize(locator.remove));
 		assertReport("true", downloadLink.toString(),
 				"Verify Download link exists for message");
@@ -210,18 +206,16 @@ public class AttachBriefcaseFile extends CommonTest {
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							SelNGBase.selenium
-									.get()
-									.isElementPresent(
+							ClientSessionFactory.session().selenium().isElementPresent(
 											"xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
 		} else {
 			obj.zMessageItem.zVerifyHasAttachment(subject);
 		}
 		// obj.zMessageItem.zVerifyHasAttachment(subject);
-		Boolean downloadAllAttachmentsLink = SelNGBase.selenium.get()
+		Boolean downloadAllAttachmentsLink = ClientSessionFactory.session().selenium()
 				.isElementPresent("link=" + localize(locator.downloadAll));
-		Boolean removeAllAttachmentsLink = SelNGBase.selenium.get()
+		Boolean removeAllAttachmentsLink = ClientSessionFactory.session().selenium()
 				.isElementPresent(
 						"link=" + localize(locator.removeAllAttachments));
 		assertReport("true", downloadAllAttachmentsLink.toString(),

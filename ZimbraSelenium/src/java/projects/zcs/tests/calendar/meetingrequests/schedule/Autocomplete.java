@@ -8,7 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -87,7 +87,7 @@ public class Autocomplete extends CommonTest {
 		Stafzmprov.createAccount(acc1);
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -148,7 +148,7 @@ public class Autocomplete extends CommonTest {
 		Stafzmprov.createLocation(location);
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -156,9 +156,7 @@ public class Autocomplete extends CommonTest {
 		page.zCalApp.zNavigateToApptCompose();
 		obj.zTab.zClick(localize(locator.schedule));
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium
-				.get()
-				.clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 						"//div//table[contains(@id, 'attendeesTable')]//td[contains(@id, 'select_container')]",
 						"");
 		obj.zMenuItem.zClick(localize(locator.location));
@@ -178,7 +176,7 @@ public class Autocomplete extends CommonTest {
 				.zGetInnerText(getNameWithoutSpace(localize(locator.locationLabel)));
 		assertReport(expectedValue, actualValue,
 				"Verifying autocomplete for location in schedule tab");
-		SelNGBase.selenium.get().click("link=" + location);
+		ClientSessionFactory.session().selenium().click("link=" + location);
 		SleepUtil.sleep(1000);
 
 		obj.zButton.zIsDisabled(localize(locator.select));
@@ -208,7 +206,7 @@ public class Autocomplete extends CommonTest {
 		Stafzmprov.createEquipment(equipment);
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -216,9 +214,7 @@ public class Autocomplete extends CommonTest {
 		page.zCalApp.zNavigateToApptCompose();
 		obj.zTab.zClick(localize(locator.schedule));
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium
-				.get()
-				.clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 						"//div//table[contains(@id, 'attendeesTable')]//td[contains(@id, 'select_container')]",
 						"");
 		obj.zMenuItem.zClick(localize(locator.resourceAttendee));
@@ -233,7 +229,7 @@ public class Autocomplete extends CommonTest {
 		obj.zTab.zClick(localize(locator.apptDetails));
 		SleepUtil.sleep(1000);
 
-		SelNGBase.selenium.get().click("link=" + equipment);
+		ClientSessionFactory.session().selenium().click("link=" + equipment);
 		SleepUtil.sleep(1000);
 
 		obj.zButton.zIsDisabled(localize(locator.add));

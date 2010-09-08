@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -162,7 +162,7 @@ public class ForwardAppointment extends CommonTest {
 				.equals("en_US")) {
 
 			String onbehalfof = localize(locator.onBehalfOf).toLowerCase();
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 					"xpath=//td[contains(@id,'ztb__CLV__Inv_item') and contains(text(),'"
 							+ onbehalfof + "') ]/b[contains(text(),'"
 							+ currentloggedInUser + "')]"));
@@ -191,7 +191,7 @@ public class ForwardAppointment extends CommonTest {
 		if (ZimbraSeleniumProperties.getStringProperty("locale")
 				.equals("en_US")) {
 			String onbehalfof = localize(locator.onBehalfOf).toLowerCase();
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 					"xpath=//td[contains(@id,'ztb__CLV__Inv_item') and contains(text(),'"
 							+ onbehalfof + "') ]/b[contains(text(),'"
 							+ currentloggedInUser + "')]"));

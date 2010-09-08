@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 
 public class ZFieldObject extends ZObject {
@@ -20,11 +20,11 @@ public class ZFieldObject extends ZObject {
 	}
 
 	public void zActivateAndType(String objNameOrId, String data) {
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 		zActivate(objNameOrId);
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 		enterSpaceUsingRobot();
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 		zType(objNameOrId, data);
 	}
 

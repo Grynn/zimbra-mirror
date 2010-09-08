@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -535,7 +535,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		String accountName = SelNGBase.selfAccountName.get();
 
 		page.zMailApp.zNavigateToComposingPreferences();
-		SelNGBase.selenium.get().uncheck("//input[contains(@id,'_SAVE_TO_SENT')]");
+		ClientSessionFactory.session().selenium().uncheck("//input[contains(@id,'_SAVE_TO_SENT')]");
 		
 		//obj.zRadioBtn.zClick(localize(locator.saveToSentNOT));
 
@@ -554,7 +554,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
-		SelNGBase.selenium.get().check("//input[contains(@id,'_SAVE_TO_SENT')]");
+		ClientSessionFactory.session().selenium().check("//input[contains(@id,'_SAVE_TO_SENT')]");
 	/*	if (ZimbraSeleniumProperties.getStringProperty("locale").equals("de")) {
 			obj.zRadioBtn.zClick("Kopie im Ordner");
 		} else {
@@ -609,7 +609,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
-		SelNGBase.selenium.get().clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 				"xpath=//label[contains(@id,'_text_right') and contains(text(),'"
 						+ localize(locator.composeAsHTML) + "')]", "");
 
@@ -642,14 +642,14 @@ public class ComposePreferencesTestsUI extends CommonTest {
 				"ccuser@testdomain.com", "bccuser@testdomain.com", "sub",
 				"hello", "");
 
-		SelNGBase.selenium.get().selectFrame("css=iframe[id*='zv__CLV__MSG_body__iframe']");
-		String messageBodyText = SelNGBase.selenium.get().getText("xpath=/html/body/div");
+		ClientSessionFactory.session().selenium().selectFrame("css=iframe[id*='zv__CLV__MSG_body__iframe']");
+		String messageBodyText = ClientSessionFactory.session().selenium().getText("xpath=/html/body/div");
 		Assert.assertTrue(messageBodyText.contains("hello"));
 		Assert
-				.assertTrue(SelNGBase.selenium.get()
+				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent("xpath=/html/body/div[contains(@style,'font-size: "
 								+ fontSize + "')]"));
-		SelNGBase.selenium.get().selectFrame("relative=top");
+		ClientSessionFactory.session().selenium().selectFrame("relative=top");
 
 		SelNGBase.needReset.set(false);
 	}

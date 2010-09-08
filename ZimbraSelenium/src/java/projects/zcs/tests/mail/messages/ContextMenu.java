@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.HarnessException;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
@@ -791,8 +791,8 @@ public class ContextMenu extends CommonTest {
 		rightClickOnSubject(subject);
 		obj.zMenuItem.zClick(page.zMailApp.zShowOriginalMenuIconBtn);
 		SleepUtil.sleep(4000); // failed because of timing issue
-		SelNGBase.selenium.get().selectWindow("_blank");
-		showOrigText = SelNGBase.selenium.get().getBodyText();
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
+		showOrigText = ClientSessionFactory.session().selenium().getBodyText();
 		SleepUtil.sleep(1000);
 		verifyShowOriginalMsgBody(showOrigText, from, to, cc, bcc, subject,
 				body);
@@ -801,7 +801,7 @@ public class ContextMenu extends CommonTest {
 			assertReport(showOrigText, localize(locator.received),
 					"Received: text mismatched in show original body");
 		}
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}

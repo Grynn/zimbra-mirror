@@ -13,7 +13,7 @@ import projects.zcs.ui.ComposeView;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 
@@ -119,14 +119,14 @@ public class SpellCheck extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(500);
 		obj.zButton.zClick(localize(locator.edit));
-		SelNGBase.selenium.get().mouseOver(DRAFT_NEW_WINDOW_BUTTON);
-		SelNGBase.selenium.get().clickAt(DRAFT_NEW_WINDOW_BUTTON, "");
+		ClientSessionFactory.session().selenium().mouseOver(DRAFT_NEW_WINDOW_BUTTON);
+		ClientSessionFactory.session().selenium().clickAt(DRAFT_NEW_WINDOW_BUTTON, "");
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zButton.zClick(localize(locator.spellCheck));
 		obj.zToastAlertMessage.zAlertMsgExists("2 Misspellings",
 				"Strings did not match.");
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -149,15 +149,15 @@ public class SpellCheck extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.reply));
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().mouseOver(DRAFT_NEW_WINDOW_BUTTON);
-		SelNGBase.selenium.get().clickAt(DRAFT_NEW_WINDOW_BUTTON, "");
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().mouseOver(DRAFT_NEW_WINDOW_BUTTON);
+		ClientSessionFactory.session().selenium().clickAt(DRAFT_NEW_WINDOW_BUTTON, "");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		zWaitTillObjectExist("button", localize(locator.spellCheck));
 		obj.zButton.zClick(localize(locator.spellCheck));
 		SleepUtil.sleep(2000);
 		obj.zToastAlertMessage.zAlertMsgExists("6 Misspellings",
 				"Strings did not match.");
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -188,7 +188,7 @@ public class SpellCheck extends CommonTest {
 		obj.zEditor.zType("onee twoo  threee");
 		obj.zButton.zClick(localize(locator.spellCheck));
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().click(
+		ClientSessionFactory.session().selenium().click(
 				"xpath=//span[contains(@class,'SpellCheckLink') and contains(text(),'"
 						+ localize(locator.checkAgain) + "')]");
 		obj.zToastAlertMessage.zAlertMsgExists("3 Misspellings",
@@ -203,7 +203,7 @@ public class SpellCheck extends CommonTest {
 			Assert.assertTrue(obj.zMessageItem.zGetCurrentMsgBodyText()
 					.contains("onee twoo  threee"));
 		}
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}

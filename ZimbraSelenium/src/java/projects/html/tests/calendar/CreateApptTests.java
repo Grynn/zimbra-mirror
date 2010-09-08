@@ -12,7 +12,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import projects.html.tests.CommonTest;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -326,14 +326,14 @@ public class CreateApptTests extends CommonTest {
 				"", body, apptStartDate, apptEndDate, startTime, endTime,
 				localize(locator.recurBasicSelectDaily));
 
-		SelNGBase.selenium.get().open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
+		ClientSessionFactory.session().selenium().open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=day&date=20090601");
 
 		SleepUtil.sleepMedium();
 
 		obj.zAppointment.zExists(subject);
 
-		SelNGBase.selenium.get().open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
+		ClientSessionFactory.session().selenium().open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=day&date=20090702");
 
 		SleepUtil.sleepMedium();

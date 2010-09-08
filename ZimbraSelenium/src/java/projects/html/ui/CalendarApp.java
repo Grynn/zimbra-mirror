@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -818,7 +818,7 @@ public class CalendarApp extends CommonTest {
 		String url = "http://" + ZimbraSeleniumProperties.getStringProperty("server")
 				+ "/zimbra/h/calendar?view=" + temp[0] + "&date=" + temp[1];
 
-		SelNGBase.selenium.get().open(url);
+		ClientSessionFactory.session().selenium().open(url);
 
 		SleepUtil.sleep(5000);
 	}
@@ -911,9 +911,9 @@ public class CalendarApp extends CommonTest {
 
 		SleepUtil.sleep(500);
 
-		if (SelNGBase.selenium.get().isElementPresent("link="
+		if (ClientSessionFactory.session().selenium().isElementPresent("link="
 				+ localize(locator.optionsManageCalendarsLink)))
-			SelNGBase.selenium.get().click("link="
+			ClientSessionFactory.session().selenium().click("link="
 					+ localize(locator.optionsManageCalendarsLink));
 
 	}

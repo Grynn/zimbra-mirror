@@ -6,7 +6,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import projects.zcs.tests.CommonTest;
 
@@ -66,8 +66,7 @@ public class MoveFolder extends CommonTest {
 				"//td[contains(@id, 'zti__main_Mail') and contains(text(), '"
 						+ folderName + "')]", page.zMailApp.zTrashFldr);
 		Assert
-				.assertTrue(SelNGBase.selenium
-						.get()
+				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent(
 								"//div[@id='zti__main_Mail__3']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
 										+ folderName + "')]"));

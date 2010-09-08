@@ -225,6 +225,8 @@ public class ExecuteHarnessMain {
 		XmlSuite suite = new XmlSuite();
 		suite.setName("zimbra");
 		suite.setVerbose(verbosity);
+		suite.setThreadCount(4);
+		suite.setParallel("classes");
 		
 		// Add all the names per the list of classes
 		for (String testname : getXmlTestNames()) {

@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
 import projects.zcs.ui.MailApp;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -65,7 +65,7 @@ public class AttachmentMail extends CommonTest {
 
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefComposeFormat", "html");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(2500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -78,11 +78,11 @@ public class AttachmentMail extends CommonTest {
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zDetachBtn_ComposedMessage);
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zAddAttachmentBtn_newWindow);
 		page.zComposeView.zAddAttachments(attachments, false);
 		obj.zButton.zClick(ComposeView.zSendIconBtn);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Re: " + subject);
 		obj.zMessageItem.zVerifyHasAttachment(subject);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
@@ -105,7 +105,7 @@ public class AttachmentMail extends CommonTest {
 
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefComposeFormat", "text");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(2500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 

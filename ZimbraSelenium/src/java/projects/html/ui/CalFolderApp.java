@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 
 import projects.html.tests.CommonTest;

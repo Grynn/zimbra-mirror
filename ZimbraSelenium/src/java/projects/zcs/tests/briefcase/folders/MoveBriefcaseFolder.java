@@ -7,7 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 
 /**
@@ -49,8 +49,7 @@ public class MoveBriefcaseFolder extends CommonTest {
 						+ briefcaseName + "')]",
 				page.zBriefcaseApp.zTrashFolder);
 		Assert
-				.assertTrue(SelNGBase.selenium
-						.get()
+				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent(
 								"//div[@id='zti__main_Briefcase__3']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
 										+ briefcaseName + "')]"));

@@ -2,7 +2,7 @@ package projects.zcs.ui;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -88,8 +88,8 @@ public class Sharing extends AppPage {
 		obj.zFolder.zRtClick(sharingfoldername);
 		obj.zMenuItem.zClick(localize(locator.editProperties));
 		zWaitTillObjectExist("dialog", localize(locator.folderProperties));
-		if (SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.edit)))
-			SelNGBase.selenium.get().click("link=" + localize(locator.edit));
+		if (ClientSessionFactory.session().selenium().isElementPresent("link=" + localize(locator.edit)))
+			ClientSessionFactory.session().selenium().click("link=" + localize(locator.edit));
 	}
 
 	public void zEnterValuesInShareDialog(String sharetype,
@@ -167,7 +167,7 @@ public class Sharing extends AppPage {
 				&& (!sharetype.equals(localize(locator.shareWithPublic)))) {
 			
 			if(ZimbraSeleniumProperties.getStringProperty("locale").equals("es")){
-				SelNGBase.selenium.get().type("xpath=//div[contains(@id,'DWT')]/div[contains(@id,'DWT') and contains(@class,'DwtInputField')]/input", "test123");
+				ClientSessionFactory.session().selenium().type("xpath=//div[contains(@id,'DWT')]/div[contains(@id,'DWT') and contains(@class,'DwtInputField')]/input", "test123");
 				
 			}else{
 			obj.zEditField.zTypeInDlgByName(localize(locator.passwordLabel),
@@ -253,7 +253,7 @@ public class Sharing extends AppPage {
 			obj.zMenuItem.zClick(message);
 			obj.zButton.zClickInDlgByName(actionButtonName, currentDialog);
 			obj.zDialog.zNotExists(currentDialog);
-			SelNGBase.selenium.get().selectWindow("_blank");
+			ClientSessionFactory.session().selenium().selectWindow("_blank");
 			obj.zButton.zClick(localize(locator.send));
 			SleepUtil.sleep(2000);
 			/*
@@ -607,8 +607,8 @@ public class Sharing extends AppPage {
 		obj.zFolder.zRtClick(sharingfoldername);
 		obj.zMenuItem.zClick(localize(locator.editProperties));
 		zWaitTillObjectExist("dialog", localize(locator.folderProperties));
-		if (SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.revoke)))
-			SelNGBase.selenium.get().click("link=" + localize(locator.revoke));
+		if (ClientSessionFactory.session().selenium().isElementPresent("link=" + localize(locator.revoke)))
+			ClientSessionFactory.session().selenium().click("link=" + localize(locator.revoke));
 		zShareMessageAction(message, sharingnoteifany,
 				localize(locator.revokeShare), localize(locator.yes));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
@@ -620,8 +620,8 @@ public class Sharing extends AppPage {
 		obj.zFolder.zRtClick(sharingfoldername);
 		obj.zMenuItem.zClick(localize(locator.editProperties));
 		zWaitTillObjectExist("dialog", localize(locator.folderProperties));
-		if (SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.resend)))
-			SelNGBase.selenium.get().click("link=" + localize(locator.resend));
+		if (ClientSessionFactory.session().selenium().isElementPresent("link=" + localize(locator.resend)))
+			ClientSessionFactory.session().selenium().click("link=" + localize(locator.resend));
 		String resendmessage = obj.zToastAlertMessage.zGetMsg();
 		Assert.assertTrue(resendmessage
 				.indexOf((localize(locator.resentShareMessage))) >= 0,

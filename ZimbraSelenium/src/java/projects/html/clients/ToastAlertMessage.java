@@ -2,13 +2,13 @@ package projects.html.clients;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 
 public class ToastAlertMessage extends SelNGBase{
 	public String zGetMsg() throws Exception {
 		SleepUtil.sleep(1500);
-		return SelNGBase.selenium.get().getText("id=app_st_msg_div");
+		return ClientSessionFactory.session().selenium().getText("id=app_st_msg_div");
 	}
 	
 	public boolean zAlertMsgExists(String expectedMsg, String customMsg) throws Exception {

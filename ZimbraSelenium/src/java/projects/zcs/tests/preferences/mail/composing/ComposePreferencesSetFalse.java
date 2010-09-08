@@ -18,7 +18,7 @@ import com.thoughtworks.selenium.Selenium;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.zclient.ZFolder;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -159,7 +159,7 @@ public class ComposePreferencesSetFalse extends CommonTest {
 
 		page.zComposeView.zNavigateToMailCompose();
 
-		browserWindowTitle = SelNGBase.selenium.get().getTitle();
+		browserWindowTitle = ClientSessionFactory.session().selenium().getTitle();
 
 		Assert
 		.assertTrue(

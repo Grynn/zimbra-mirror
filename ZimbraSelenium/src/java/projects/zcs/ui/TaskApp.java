@@ -3,7 +3,7 @@ package projects.zcs.ui;
 import org.testng.Assert;
 
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
@@ -208,9 +208,7 @@ public class TaskApp extends AppPage {
 
 		// obj.zButton.zClick(zTasksSaveBtn);
 
-		SelNGBase.selenium
-				.get()
-				.clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 						"Xpath=//td[contains(@id,'zb__TKE')]/div[contains(@class,'ImgSave')]",
 						"");
 

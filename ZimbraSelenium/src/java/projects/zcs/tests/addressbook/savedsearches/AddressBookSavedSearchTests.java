@@ -12,7 +12,7 @@ import projects.zcs.ui.ActionMethod;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.items.ContactItem;
 import framework.util.RetryFailedTests;
 
@@ -57,7 +57,7 @@ public class AddressBookSavedSearchTests extends CommonTest {
 
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
-		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", lastName);
+		ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']", lastName);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zContactListItem.zExists(lastName);
 		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");

@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.ABCompose.ABComposeActionMethod;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.items.FolderItem;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -52,7 +52,7 @@ public class MoveAddressbook extends CommonTest {
 				page.zABCompose.zEmailedContactsFolder);
 		
 		Assert
-				.assertTrue(SelNGBase.selenium.get()
+				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent("//div[@id='zti__main_Contacts__13']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
 								+ addressbook.name + "')]"));
 

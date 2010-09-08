@@ -5,7 +5,7 @@ import org.testng.annotations.Test;
 
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.Stafzmmailbox;
 import framework.util.ZimbraSeleniumProperties;
 

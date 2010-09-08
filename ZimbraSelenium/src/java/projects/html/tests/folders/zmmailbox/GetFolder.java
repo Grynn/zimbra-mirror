@@ -3,7 +3,7 @@ package projects.html.tests.folders.zmmailbox;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.Stafzmmailbox;
 import framework.util.ZimbraSeleniumProperties;
 import projects.html.tests.CommonTest;

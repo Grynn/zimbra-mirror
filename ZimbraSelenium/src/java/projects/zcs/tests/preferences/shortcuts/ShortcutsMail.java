@@ -22,7 +22,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.service.admin.GetConfig;
 import com.zimbra.cs.zclient.ZFolder;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -98,7 +98,7 @@ public class ShortcutsMail extends CommonTest {
 
 		checkForSkipException("na", "SF", "na", "shortcuts dont work with Selenium on Safari");
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 		SleepUtil.sleep(2000);
 		obj.zMessageItem.zClick("test mail");
 

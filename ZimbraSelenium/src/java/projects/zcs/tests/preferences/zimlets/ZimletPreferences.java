@@ -4,7 +4,8 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.ClientSessionFactory;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -46,12 +47,12 @@ public class ZimletPreferences extends CommonTest {
 
 		zWaitTillObjectExist("checkbox", zZimletDateChkBox);
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().clickAt(zZimletEmailChkBox,"");
-		SelNGBase.selenium.get().clickAt(zZimletURLChkBox,"");
-		SelNGBase.selenium.get().clickAt(zZimletEmoticonsChkBox,"");
-		SelNGBase.selenium.get().clickAt(zZimletDateChkBox,"");
-		SelNGBase.selenium.get().clickAt(zZimletHighlightPhoneChkBox,"");
-		SelNGBase.selenium.get().clickAt(zZimletDnDChkBox,"");
+		ClientSessionFactory.session().selenium().clickAt(zZimletEmailChkBox,"");
+		ClientSessionFactory.session().selenium().clickAt(zZimletURLChkBox,"");
+		ClientSessionFactory.session().selenium().clickAt(zZimletEmoticonsChkBox,"");
+		ClientSessionFactory.session().selenium().clickAt(zZimletDateChkBox,"");
+		ClientSessionFactory.session().selenium().clickAt(zZimletHighlightPhoneChkBox,"");
+		ClientSessionFactory.session().selenium().clickAt(zZimletDnDChkBox,"");
 		//Some times zActivate  and selenium.uncheck method is not working for IE so added above code
 		/*obj.zCheckbox.zActivate(zZimletEmailChkBox);
 		obj.zCheckbox.zActivate(zZimletURLChkBox);

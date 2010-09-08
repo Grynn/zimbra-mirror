@@ -2,7 +2,7 @@ package projects.zcs.ui;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -26,7 +26,7 @@ public class GeneralPrefUI extends AppPage {
 
 	public static void zEnterChangePWData(String oldPwd, String newPwd,
 			String confirmPwd) {
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zPwdField.zType(zOldPassword, oldPwd);
 		obj.zPwdField.zType(zNewPassword, newPwd);
 		obj.zPwdField.zType(zConfirm, confirmPwd);
@@ -38,7 +38,7 @@ public class GeneralPrefUI extends AppPage {
 		page.zGenPrefUI.zEnterChangePWData(oldPwd, newPwd, confirmPwd);
 		obj.zButton.zClick("class=zLoginButton");
 		SleepUtil.sleep(2000);
-		errorMessage = SelNGBase.selenium.get().getText("class=errorText");
+		errorMessage = ClientSessionFactory.session().selenium().getText("class=errorText");
 
 		String expectedMsg = localize(locator.loginError);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")

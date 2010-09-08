@@ -8,7 +8,7 @@ import com.zimbra.cs.service.account.GetAccountInfo;
 import com.zimbra.cs.service.account.GetPrefs;
 import com.zimbra.cs.service.admin.GetAccount;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -41,7 +41,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 				"zimbraPrefShowSearchString", "FALSE");
 		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefShowSelectionCheckbox", "FALSE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3000);/* without this we get permission denied error */
 		zWaitTillObjectExist("button", page.zLoginpage.zSearchFldr);
 		SleepUtil.sleep(2000);/*
@@ -99,7 +99,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 				obj.zFolder.zClick(localize(locator.junk));
 				obj.zMessageItem.zExists(message[0]);
 				obj.zFolder.zClick(localize(locator.inbox));
-				SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
+				ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']",
 						SelNGBase.selfAccountName.get());
 				obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 				obj.zMessageItem.zNotExists(message[0]);
@@ -128,7 +128,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 				obj.zFolder.zClick(localize(locator.trash));
 				SleepUtil.sleep(1000);
 				obj.zMessageItem.zExists(message[0]);
-				SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
+				ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']",
 						SelNGBase.selfAccountName.get());
 				obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 				obj.zMessageItem.zNotExists(message[0]);
@@ -146,14 +146,14 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 
 		// Inbox folder
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));
-		String inboxSearchValue = SelNGBase.selenium.get()
+		String inboxSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), inboxSearchValue,
 				"Advanced search string not showing blank while click on folder (Inbox)");
 
 		// Sent folder
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zSentFldr));
-		String sentSearchValue = SelNGBase.selenium.get()
+		String sentSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), sentSearchValue,
 				"Advanced search string not showing blank while click on folder (Sent)");
@@ -161,21 +161,21 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 		// Drafts folder
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zMailApp.zDraftsFldr));
-		String draftsSearchValue = SelNGBase.selenium.get()
+		String draftsSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), draftsSearchValue,
 				"Advanced search string not showing blank while click on folder (Drafts)");
 
 		// Junk folder
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zJunkFldr));
-		String junkSearchValue = SelNGBase.selenium.get()
+		String junkSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), junkSearchValue,
 				"Advanced search string not showing blank while click on folder (Junk)");
 
 		// Trash folder
 		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zTrashFldr));
-		String trashSearchValue = SelNGBase.selenium.get()
+		String trashSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), trashSearchValue,
 				"Advanced search string not showing blank while click on folder (Trash)");
@@ -184,7 +184,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 		String newFolder = getLocalizedData_NoSpecialChar();
 		page.zMailApp.zCreateFolder(newFolder);
 		obj.zFolder.zClick(newFolder);
-		String newFolderSearchValue = SelNGBase.selenium.get()
+		String newFolderSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), newFolderSearchValue,
 				"Advanced search string not showing blank while click on new folder ("
@@ -192,11 +192,11 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 
 		// Address Book - Contacts folder
 		zGoToApplication("Address Book");
-		String contactsSearchValue = SelNGBase.selenium.get()
+		String contactsSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zABCompose.zContactsFolder));
-		contactsSearchValue = SelNGBase.selenium.get()
+		contactsSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), contactsSearchValue,
 				"Advanced search string not showing blank while click on folder (Contacts)");
@@ -204,7 +204,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 		// Address Book - 'Emailed Contacts' folder
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zABCompose.zEmailedContactsFolder));
-		String emailedContactsSearchValue = SelNGBase.selenium.get()
+		String emailedContactsSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
 				localize(locator.search),
@@ -213,13 +213,13 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 
 		// Tasks - Tasks folder
 		zGoToApplication("Tasks");
-		String tasksSearchValue = SelNGBase.selenium.get()
+		String tasksSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), tasksSearchValue,
 				"Advanced search string not showing blank while go to 'Tasks' application tab");
 		obj.zFolder
 				.zClick(replaceUserNameInStaticId(page.zTaskApp.zTasksFolder));
-		tasksSearchValue = SelNGBase.selenium.get()
+		tasksSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), tasksSearchValue,
 				"Advanced search string not showing blank while click on folder (Tasks)");
@@ -227,7 +227,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 		// Documents - Notebook folder
 		zGoToApplication("Documents");
 		obj.zFolder.zClick(DocumentApp.zNotebookFolder);
-		String notebookSearchValue = SelNGBase.selenium.get()
+		String notebookSearchValue = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(localize(locator.search), notebookSearchValue,
 				"Advanced search string not showing blank while click on folder (Notebook)");

@@ -5,7 +5,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -58,7 +58,7 @@ public class ForwardMail extends CommonTest {
 
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefComposeFormat", "html");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(2500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -71,11 +71,11 @@ public class ForwardMail extends CommonTest {
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zDetachBtn_ComposedMessage);
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		page.zComposeView.zVerifyComposeFilledValues("Forward", "", "", "",
 				"Fwd: " + subject, body, attachments);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byConversation));
 
@@ -96,7 +96,7 @@ public class ForwardMail extends CommonTest {
 
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefComposeFormat", "text");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(2500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -109,11 +109,11 @@ public class ForwardMail extends CommonTest {
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zDetachBtn_ComposedMessage);
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 		page.zComposeView.zVerifyComposeFilledValues("Forward", "", "", "",
 				"Fwd: " + subject, body, attachments);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byConversation));
 

@@ -4,7 +4,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -54,7 +54,7 @@ public class ClientURLTests extends CommonTest {
 			handleRetry();
 
 		// Address book
-		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=contacts");
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=contacts");
@@ -63,7 +63,7 @@ public class ClientURLTests extends CommonTest {
 		obj.zButton.zExists(page.zABCompose.zNewContactMenuIconBtn);
 
 		// Calendar
-		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar");
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar");
@@ -72,7 +72,7 @@ public class ClientURLTests extends CommonTest {
 		obj.zButton.zExists(page.zCalApp.zCalNewApptBtn);
 
 		// Tasks
-		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=tasks");
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=tasks");
@@ -81,7 +81,7 @@ public class ClientURLTests extends CommonTest {
 		obj.zButton.zExists(page.zTaskApp.zTasksNewBtn);
 
 		// Documents
-		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=documents");
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=documents");
@@ -90,7 +90,7 @@ public class ClientURLTests extends CommonTest {
 		obj.zButton.zExists(page.zDocumentCompose.zNewPageIconBtn);
 
 		// Briefcase
-		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=briefcase");
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=briefcase");
@@ -123,7 +123,7 @@ public class ClientURLTests extends CommonTest {
 			subjectField = getLocalizedData_NoSpecialChar();
 			bodyField = getLocalizedData_NoSpecialChar();
 		}
-		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?view=compose" + "&to="
 				+ toField + "&subject=" + subjectField + "&body=" + bodyField);
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
@@ -220,7 +220,7 @@ public class ClientURLTests extends CommonTest {
 			expectedDate = "2009-3-10";
 		}
 		String calView = "workWeek";
-		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar&view=" + calView
 				+ "&date=" + startDate);
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"

@@ -2,12 +2,12 @@ package projects.zcs.clients;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 
 public class ToastAlertMessage extends SelNGBase{
 	public String zGetMsg() {
-		return SelNGBase.selenium.get().getText("id=z_toast");
+		return ClientSessionFactory.session().selenium().getText("id=z_toast");
 	}
 	
 	public boolean zAlertMsgExists(String expectedMsg, String customMsg) {

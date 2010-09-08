@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
 
@@ -61,7 +61,7 @@ public class ComposeView extends AppPage {
 		zGoToApplication("Mail");
 		obj.zButton.zShiftClick(MailApp.zNewMenuIconBtn);
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 	}
 
@@ -85,7 +85,7 @@ public class ComposeView extends AppPage {
 		if (obj.zButton.zExistsDontWait(localize("cancel")).equals("true")) {
 			obj.zButton.zClick(zmMsg.getString("cancel"));
 		}
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 	}
 
 	/**
@@ -196,9 +196,9 @@ public class ComposeView extends AppPage {
 			bcc = SelNGBase.selfAccountName.get();
 		obj.zTextAreaField.zType(zToField, to);
 		obj.zTextAreaField.zType(zCcField, cc);
-		if (SelNGBase.selenium.get().isElementPresent(
+		if (ClientSessionFactory.session().selenium().isElementPresent(
 				"link=" + localize(locator.showBCC)))
-			SelNGBase.selenium.get().click("link=" + localize(locator.showBCC));
+			ClientSessionFactory.session().selenium().click("link=" + localize(locator.showBCC));
 		obj.zTextAreaField.zType(zBccField, bcc);
 		obj.zEditField.zType(zSubjectField, subject);
 		if (attachments != "")
@@ -289,7 +289,7 @@ public class ComposeView extends AppPage {
 	public static void zVerifyAttachmentsExists(String attachmentList) {
 		String[] attList = attachmentList.split(",");
 		for (int i = 0; i < attList.length; i++) {
-			boolean b = SelNGBase.selenium.get().isElementPresent(
+			boolean b = ClientSessionFactory.session().selenium().isElementPresent(
 					"link=" + attList[0]);
 			Assert.assertTrue(b, "Attachment link for: (" + attList[0]
 					+ ") doesnt exist");
@@ -500,7 +500,7 @@ public class ComposeView extends AppPage {
 				attachments);
 		obj.zButton.zClick(ComposeView.zSendIconBtn);
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 	}

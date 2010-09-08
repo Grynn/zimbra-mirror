@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 
 /**
@@ -50,7 +50,7 @@ public class TaskSavedSearch extends CommonTest {
 
 		page.zTaskApp.zTaskCreateSimple(subject, "", "", "");
 		page.zTaskApp.zTaskListCreateNewBtn("newTaskFolder");
-		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", subject);
+		ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']", subject);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zTaskItem.zExists(subject);
 		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");

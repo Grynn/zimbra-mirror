@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.soap.SoapTestHarness.HarnessException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import projects.zcs.tests.CommonTest;
 

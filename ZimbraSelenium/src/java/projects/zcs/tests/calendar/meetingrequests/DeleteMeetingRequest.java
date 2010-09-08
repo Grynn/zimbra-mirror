@@ -15,7 +15,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -115,7 +115,7 @@ public class DeleteMeetingRequest extends CommonTest {
 			obj.zAppointment.zExists(subject);
 		}
 		page.zCalApp.zCalViewSwitch("list");
-		SelNGBase.selenium.get().clickAt(("//div[@id=\"zlhi__CLL__se\"]"), "");
+		ClientSessionFactory.session().selenium().clickAt(("//div[@id=\"zlhi__CLL__se\"]"), "");
 		obj.zButton.zClick(page.zCalApp.zCalDeleteBtn);
 		obj.zRadioBtn.zClickInDlgByName(localize(locator.deleteSeries),
 				localize(locator.deleteRecurringItem));

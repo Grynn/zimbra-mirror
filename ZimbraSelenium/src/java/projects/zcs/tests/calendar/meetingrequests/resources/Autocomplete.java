@@ -8,7 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -69,7 +69,7 @@ public class Autocomplete extends CommonTest {
 		Stafzmprov.createEquipment(equipment);
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -100,7 +100,7 @@ public class Autocomplete extends CommonTest {
 		obj.zButton.zIsEnabled(localize(locator.removeAll));
 
 		obj.zTab.zClick(localize(locator.apptDetails));
-		SelNGBase.selenium.get().click("link=" + equipment);
+		ClientSessionFactory.session().selenium().click("link=" + equipment);
 		obj.zButton.zIsEnabled(localize(locator.remove));
 		obj.zButton.zIsEnabled(localize(locator.removeAll));
 		obj.zButton.zClick(page.zCalCompose.zApptCancelBtn);

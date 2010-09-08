@@ -22,7 +22,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
@@ -168,7 +168,7 @@ public class SignatureAndAccPref extends CommonTest {
 
 		page.zAccPref.zNavigateToPreferenceSignature();
 		SleepUtil.sleepSmall();//this wait is req for some locales
-		SelNGBase.selenium.get().click("link=" + localize(locator.optionsManageAccountsLink));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.optionsManageAccountsLink));
 		obj.zEditField.zExists(page.zAccPref.zAccNameEditField);
 		SelNGBase.needReset.set(false);
 	}

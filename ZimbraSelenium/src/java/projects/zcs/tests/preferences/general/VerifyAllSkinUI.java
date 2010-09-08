@@ -8,7 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -59,7 +59,7 @@ public class VerifyAllSkinUI extends CommonTest {
 		for (int i = 0; i <= skin.length - 1; i++) {
 			System.out.println("---------- Verifying skin UI(" + skin[i]
 					+ ") ----------");
-			SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+			ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 					+ ZimbraSeleniumProperties.getStringProperty("server") + "/?skin="
 					+ skin[i].toLowerCase());
 			zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"

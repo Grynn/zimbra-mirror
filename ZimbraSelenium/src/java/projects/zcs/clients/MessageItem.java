@@ -2,7 +2,7 @@ package projects.zcs.clients;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 
 public class MessageItem extends ListItem{
 	public MessageItem() {
@@ -29,29 +29,29 @@ public class MessageItem extends ListItem{
 	}	
 
 	public void zVerifyCurrentMsgHeaderText(String requiredTxt) {
-		String actual = SelNGBase.selenium.get().call("msgHeaderCore", "", "gettext", true, "", "");
+		String actual = ClientSessionFactory.session().selenium().call("msgHeaderCore", "", "gettext", true, "", "");
 		Assert.assertTrue(actual.indexOf(requiredTxt)>=0);
 	}
 	public String zGetCurrentMsgHeaderText() {
-		return SelNGBase.selenium.get().call("msgHeaderCore", "", "gettext", true, "", "");
+		return ClientSessionFactory.session().selenium().call("msgHeaderCore", "", "gettext", true, "", "");
 	}
 	public void zVerifyCurrentMsgBodyText(String requiredTxt) {
-		String actual =  SelNGBase.selenium.get().call("msgBodyCore", "", "gettext", true, "", "");
+		String actual =  ClientSessionFactory.session().selenium().call("msgBodyCore", "", "gettext", true, "", "");
 		Assert.assertTrue(actual.indexOf(requiredTxt)>=0);
 	}
 	public void zVerifyCurrentMsgBodyDoesNotHaveText(String requiredTxt) {
-		String actual =  SelNGBase.selenium.get().call("msgBodyCore", "", "gettext", true, "", "");
+		String actual =  ClientSessionFactory.session().selenium().call("msgBodyCore", "", "gettext", true, "", "");
 		Assert.assertFalse(actual.indexOf(requiredTxt)>=0);
 	}
 	public String zGetCurrentMsgBodyText() {
-		return SelNGBase.selenium.get().call("msgBodyCore", "", "gettext", true, "", "");
+		return ClientSessionFactory.session().selenium().call("msgBodyCore", "", "gettext", true, "", "");
 	}
 	public void zVerifyCurrentMsgBodyHasImage() {
-		String actual =  SelNGBase.selenium.get().call("msgBodyCore", "", "gethtml", true, "", "");		
+		String actual =  ClientSessionFactory.session().selenium().call("msgBodyCore", "", "gethtml", true, "", "");		
 		Assert.assertTrue(actual.indexOf("dfsrc=")>=0);
 	}	
 	public String zGetMsgBodyHTML() {
-		return SelNGBase.selenium.get().call("msgBodyCore", "", "gethtml", true, "", "");		
+		return ClientSessionFactory.session().selenium().call("msgBodyCore", "", "gethtml", true, "", "");		
 	}
 }
 

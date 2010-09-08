@@ -2,7 +2,7 @@ package projects.zcs.ui;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 
 /**
@@ -63,12 +63,12 @@ public class SignaturePref extends AppPage {
 			throws Exception {
 		if (placeOfSignature.equals(localize(locator.aboveQuotedText))) {
 			// obj.zCheckbox.zClick(localize(locator.aboveQuotedText));
-			SelNGBase.selenium.get()
+			ClientSessionFactory.session().selenium()
 					.check("xpath=//input[contains(@id,'_input') and @type='radio' and @value='outlook']");
 		} else {
-			SelNGBase.selenium.get()
+			ClientSessionFactory.session().selenium()
 					.mouseOver("xpath=//input[contains(@id,'_input') and @type='radio' and @value='internet']");
-			SelNGBase.selenium.get()
+			ClientSessionFactory.session().selenium()
 					.clickAt(
 							"xpath=//input[contains(@id,'_input') and @type='radio' and @value='internet']",
 							"");
@@ -81,8 +81,8 @@ public class SignaturePref extends AppPage {
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zFeatureMenu.zClick(localize(locator.fromLabel));
 		//selenium.windowFocus();
-		SelNGBase.selenium.get().mouseOver("xpath=//td[contains(@id,'_title') and contains(text(),'"+personaName+"')]");
-		SelNGBase.selenium.get().clickAt("xpath=//td[contains(@id,'_title') and contains(text(),'"+personaName+"')]", "");
+		ClientSessionFactory.session().selenium().mouseOver("xpath=//td[contains(@id,'_title') and contains(text(),'"+personaName+"')]");
+		ClientSessionFactory.session().selenium().clickAt("xpath=//td[contains(@id,'_title') and contains(text(),'"+personaName+"')]", "");
 		/*Robot zRobot = new Robot();
 		zRobot.keyPress(KeyEvent.VK_DOWN);
 		zRobot.keyRelease(KeyEvent.VK_DOWN);

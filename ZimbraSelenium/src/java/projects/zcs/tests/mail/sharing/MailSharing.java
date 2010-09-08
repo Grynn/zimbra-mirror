@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
 import projects.zcs.ui.MailApp;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -315,9 +315,9 @@ public class MailSharing extends CommonTest {
 
 		obj.zEditField
 				.zType(localize(locator.accountPersonaLabel), "MyPersona");
-		SelNGBase.selenium.get().check(
+		ClientSessionFactory.session().selenium().check(
 				"//input[contains(@id, '_PERSONA_WHEN_SENT_TO')]");
-		SelNGBase.selenium.get().type(
+		ClientSessionFactory.session().selenium().type(
 				"//input[contains(@id, '_PERSONA_WHEN_SENT_TO_LIST')]", User1);
 		obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
 
@@ -327,7 +327,7 @@ public class MailSharing extends CommonTest {
 		obj.zFolder.zClick(mountingfoldername);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.reply));
-		SelNGBase.selenium.get().isElementPresent("zv__COMPOSE1_obo_checkbox");
+		ClientSessionFactory.session().selenium().isElementPresent("zv__COMPOSE1_obo_checkbox");
 		page.zComposeView.zAddAttachments(attachments, false);
 		obj.zButton.zClick(localize(locator.send));
 
@@ -336,8 +336,8 @@ public class MailSharing extends CommonTest {
 		subject = "Re: " + subject;
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
-		SelNGBase.selenium.get().isTextPresent(User1);
-		SelNGBase.selenium.get().isTextPresent(invitedusers);
+		ClientSessionFactory.session().selenium().isTextPresent(User1);
+		ClientSessionFactory.session().selenium().isTextPresent(invitedusers);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -934,11 +934,11 @@ public class MailSharing extends CommonTest {
 		String admin = localize(locator.shareActionWorkflow);
 		String admins[] = admin.split(",");
 		// use tokinize here to seperate accept and ecline
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 				"xpath=//td[contains(@class,'Label') and contains(text(),'"
 						+ localize(locator.permissions) + "')]"));
 
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 				"xpath=//td[contains(@class,'Field')]/div[contains(text(),'"
 						+ localize(locator.shareActionRead) + ", "
 						+ localize(locator.shareActionWrite) + ", "
@@ -961,7 +961,7 @@ public class MailSharing extends CommonTest {
 		String mgr = localize(locator.shareActionWorkflow);
 		String mangr[] = mgr.split(",");
 		// use tokinize here to seperate accept and decline
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 				"xpath=//td[contains(@class,'Label') and contains(text(),'"
 						+ localize(locator.permissions) + "')]"),
 				"Permission Label doesn't present for Admin Rights");
@@ -969,7 +969,7 @@ public class MailSharing extends CommonTest {
 		// "xpath=//td[contains(@class,'Label') and contains(text(),'"
 		// +localize(locator.permissions)+"')]"));
 		Assert
-				.assertTrue(SelNGBase.selenium.get().isElementPresent(
+				.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 						"xpath=//td[contains(@class,'Field')]/div[contains(text(),'"
 								+ localize(locator.shareActionRead) + ", "
 								+ localize(locator.shareActionWrite) + ", "

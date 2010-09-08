@@ -7,7 +7,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -48,9 +48,9 @@ public class ChangePassword extends CommonTest {
 		String actualEnterNewPWMsg;
 		String errorMessage;
 		page.zGenPrefUI.zNavigateToChangePasswordWindow();
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		SleepUtil.sleep(2000);
-		actualEnterNewPWMsg = SelNGBase.selenium.get().getText("class=errorText");
+		actualEnterNewPWMsg = ClientSessionFactory.session().selenium().getText("class=errorText");
 
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")
 				|| ZimbraSeleniumProperties.getStringProperty("locale").equals("en_GB")
@@ -64,7 +64,7 @@ public class ChangePassword extends CommonTest {
 		page.zGenPrefUI.zVerifyChangePwdErrMsg("WrongOldPassword", "test321",
 				"testtest", "testtest");
 
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -77,14 +77,14 @@ public class ChangePassword extends CommonTest {
 		String actualEnterNewPWMsg;
 		String errorMessage;
 		page.zGenPrefUI.zNavigateToChangePasswordWindow();
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		SleepUtil.sleep(2000);
-		actualEnterNewPWMsg = SelNGBase.selenium.get().getText("class=errorText");
+		actualEnterNewPWMsg = ClientSessionFactory.session().selenium().getText("class=errorText");
 
 		page.zGenPrefUI.zVerifyChangePwdErrMsg("New&ConfirmPwdMismatch",
 				"test123", "testtest", "test321");
 
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}

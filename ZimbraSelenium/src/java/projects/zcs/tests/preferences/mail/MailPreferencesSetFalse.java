@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 import com.thoughtworks.selenium.Selenium;
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -111,14 +111,14 @@ public class MailPreferencesSetFalse extends CommonTest {
 
 		obj.zMessageItem.zDblClick(subject);
 
-		browserWindowTitle = SelNGBase.selenium.get().getTitle();
+		browserWindowTitle = ClientSessionFactory.session().selenium().getTitle();
 
 		Assert
 				.assertTrue(
 						browserWindowTitle.indexOf(subject) >= 0,
 						"Double clicking a mail opens in new window when 'zimbraPrefOpenMailInNewWindow' is set to FALSE");
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 
 		SelNGBase.needReset.set(false);
 	}

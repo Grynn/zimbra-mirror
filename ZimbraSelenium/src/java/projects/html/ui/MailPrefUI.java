@@ -2,7 +2,7 @@ package projects.html.ui;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;

@@ -13,7 +13,7 @@ import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.MailApp;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
 import framework.util.LmtpUtil;
@@ -151,7 +151,7 @@ public class AccountImportExport extends CommonTest {
 		obj.zMenuItem.zClick(newTag);
 
 		// create search folder
-		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", newFolderMsg);
+		ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']", newFolderMsg);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");
 		obj.zEditField.zTypeInDlgByName("id=*nameField", newSearchFolder,

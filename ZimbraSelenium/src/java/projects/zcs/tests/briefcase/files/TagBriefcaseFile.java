@@ -12,7 +12,7 @@ import framework.util.Stafzmprov;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -244,7 +244,7 @@ public class TagBriefcaseFile extends CommonTest {
 		tag1 = getLocalizedData_NoSpecialChar();
 		zCreateTag(tag1);
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get()
+		ClientSessionFactory.session().selenium()
 				.clickAt(
 						"//div[contains(@id, 'zlif__BC') and contains(@class, 'ZmThumbnailItem')]",
 						"");
@@ -253,7 +253,7 @@ public class TagBriefcaseFile extends CommonTest {
 		obj.zMenuItem.zClick(tag1);
 		SleepUtil.sleep(1000);
 		Assert
-				.assertTrue(SelNGBase.selenium.get()
+				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent("//div[contains(@id, 'zv__BC')]//div[contains(@class, 'ImgTagOrange')]"));
 
 		obj.zButton.zClick(localize(locator.view));
@@ -266,9 +266,9 @@ public class TagBriefcaseFile extends CommonTest {
 		obj.zFolder.zClick(tag1);
 		SleepUtil.sleep(1000);
 		Assert
-				.assertTrue(SelNGBase.selenium.get()
+				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent("//div[contains(@id, 'zv__BC')]//div[contains(@class, 'ImgTagOrange')]"));
-		assertReport(fileName, SelNGBase.selenium.get().getText(
+		assertReport(fileName, ClientSessionFactory.session().selenium().getText(
 				"//div[contains(@id, 'zli__BC')]").trim(),
 				"Verify clicking to tag returns proper file in explorer view");
 
@@ -276,7 +276,7 @@ public class TagBriefcaseFile extends CommonTest {
 		obj.zMenuItem.zClick(localize(locator.detailView));
 		SleepUtil.sleep(1000);
 		Assert
-				.assertTrue(SelNGBase.selenium.get()
+				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent("//tr[contains(@id, 'zlif__BCD')]//td[contains(@class, 'Tag')]//div[contains(@class, 'ImgTagOrange')]"));
 
 		obj.zButton.zClick(localize(locator.view));

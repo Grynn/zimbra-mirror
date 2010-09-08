@@ -2,7 +2,7 @@ package projects.html.clients;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 
 public class TaskItem extends ListItem{
 	public TaskItem() {
@@ -24,15 +24,15 @@ public class TaskItem extends ListItem{
 	}
 	
 	public void zVerifyCurrentTaskBodyText(String requiredTxt) {
-		String actual =  SelNGBase.selenium.get().call("msgBodyCore", "", "gettext", true, "", "");
+		String actual =  ClientSessionFactory.session().selenium().call("msgBodyCore", "", "gettext", true, "", "");
 		Assert.assertTrue(actual.indexOf(requiredTxt)>=0);
 	}
 	public void zVerifyCurrentTaskBodyHasImage() {
-		String actual =  SelNGBase.selenium.get().call("msgBodyCore", "", "gethtml", true, "", "");		
+		String actual =  ClientSessionFactory.session().selenium().call("msgBodyCore", "", "gethtml", true, "", "");		
 		Assert.assertTrue(actual.indexOf("dfsrc=")>=0);
 	}	
 	public String zGetTaskBodyHTML() {
-		return SelNGBase.selenium.get().call("msgBodyCore", "", "gethtml", true, "", "");		
+		return ClientSessionFactory.session().selenium().call("msgBodyCore", "", "gethtml", true, "", "");		
 	}	
 
 

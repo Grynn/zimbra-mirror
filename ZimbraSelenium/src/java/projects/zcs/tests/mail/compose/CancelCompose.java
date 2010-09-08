@@ -5,7 +5,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -68,14 +68,14 @@ public class CancelCompose extends CommonTest {
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick("id=zb__COMPOSE1__DETACH_COMPOSE_left_icon");
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zEditor.zType("Modifying body");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		SleepUtil.sleep(1000);
 		obj.zButton.zClickInDlgByName(localize(locator.no),
 				localize(locator.warningMsg));
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 		SleepUtil.sleep(1000);
 		assertReport("false", obj.zMessageItem.zExistsDontWait(subject),
@@ -100,14 +100,14 @@ public class CancelCompose extends CommonTest {
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick("id=zb__COMPOSE1__DETACH_COMPOSE_left_icon");
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zEditor.zType("Modifying body");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 		SleepUtil.sleep(1000);
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		obj.zFolder.zClick(page.zMailApp.zDraftsFldr);
 		SleepUtil.sleep(1000);
 		obj.zMessageItem.zExists(subject);

@@ -35,8 +35,7 @@ import org.testng.annotations.BeforeSuite;
 import projects.zcs.CoreObjects;
 import projects.zcs.Locators;
 import projects.zcs.PageObjects;
-import framework.core.SelNGBase;
-import framework.core.SeleniumService;
+import framework.core.*;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -351,7 +350,7 @@ public class CommonTest extends SelNGBase {
 		if (ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no")
 				.equalsIgnoreCase("yes")) {
 			writeCoverage();
-			SelNGBase.selenium.get().stop();
+			ClientSessionFactory.session().selenium().stop();
 		}
 	}
 
@@ -629,7 +628,7 @@ public class CommonTest extends SelNGBase {
 				break;
 			} else {
 				zReloginToAjax();
-				SelNGBase.selenium.get().open(navURL);
+				ClientSessionFactory.session().selenium().open(navURL);
 				SleepUtil.sleep(5000);
 			}
 		}
@@ -667,26 +666,26 @@ public class CommonTest extends SelNGBase {
 			} else if (objectType.equals("dialog")) {
 				retVal = obj.zDialog.zExistsDontWait(objectName);
 			} else if (objectType.equals("link")) {
-				if (SelNGBase.selenium.get().isElementPresent(
+				if (ClientSessionFactory.session().selenium().isElementPresent(
 						"link=" + objectName))
 					retVal = "true";
 				else
 					retVal = "false";
 			} else if (objectType.equals("element")
 					|| objectType.equals("xpath")) {
-				if (SelNGBase.selenium.get().isElementPresent(objectName))
+				if (ClientSessionFactory.session().selenium().isElementPresent(objectName))
 					retVal = "true";
 				else
 					retVal = "false";
 			} else if (objectType.equals("class")) {
-				if (SelNGBase.selenium.get().isElementPresent(
+				if (ClientSessionFactory.session().selenium().isElementPresent(
 						"xpath=//td[contains(@class,'" + objectName + "')]")) {
 					retVal = "true";
 				} else {
 					retVal = "false";
 				}
 			} else if (objectType.equals("text")) {
-				if (SelNGBase.selenium.get().isTextPresent(objectName))
+				if (ClientSessionFactory.session().selenium().isTextPresent(objectName))
 					retVal = "true";
 				else
 					retVal = "false";
@@ -744,7 +743,7 @@ public class CommonTest extends SelNGBase {
 			 */
 			if (ZimbraSeleniumProperties.getStringProperty("runCodeCoverage",
 					"no").equalsIgnoreCase("yes")) {
-				SelNGBase.selenium.get().refresh();
+				ClientSessionFactory.session().selenium().refresh();
 				SleepUtil.sleep(6000);
 				obj.zButton.zClick(localize(locator.calendar));
 			}
@@ -905,7 +904,7 @@ public class CommonTest extends SelNGBase {
 
 	public static void zCreateSavedSearchFolder(String savedSearchFolderName,
 			String searchString) throws Exception {
-		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
+		ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']",
 				searchString);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		SleepUtil.sleep(1000);
@@ -1166,7 +1165,7 @@ public class CommonTest extends SelNGBase {
 		if (wait == 1) {
 			SleepUtil.sleep(1000);
 		}
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 				"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
 						+ (rank - 1) + "')]//td[contains(text(), '" + value
 						+ "')]"), "Verifying autocomplete list rank " + rank
@@ -1180,9 +1179,7 @@ public class CommonTest extends SelNGBase {
 		}
 		Assert
 				.assertTrue(
-						SelNGBase.selenium
-								.get()
-								.isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'DWT18_acRow_"
 												+ (rank - 1)
 												+ "')]//td[contains(text(), '"
@@ -1196,7 +1193,7 @@ public class CommonTest extends SelNGBase {
 		if (wait == 1) {
 			SleepUtil.sleep(1000);
 		}
-		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertFalse(ClientSessionFactory.session().selenium().isElementPresent(
 				"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_"
 						+ (rank - 1) + "')]//td[contains(text(), '" + value
 						+ "')]"), "Verifying autocomplete list rank " + rank
@@ -1210,9 +1207,7 @@ public class CommonTest extends SelNGBase {
 		}
 		Assert
 				.assertFalse(
-						SelNGBase.selenium
-								.get()
-								.isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'DWT18_acRow_"
 												+ (rank - 1)
 												+ "')]//td[contains(text(), '"
@@ -1222,7 +1217,7 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public static void zForgetAutocomplete(int rank) throws Exception {
-		SelNGBase.selenium.get().clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 				"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, '_acRow_"
 						+ (rank - 1) + "')]//td[contains(@class, '"
 						+ localize(locator.forget)
@@ -1239,13 +1234,13 @@ public class CommonTest extends SelNGBase {
 	public static void zDragAndDrop(String source, String destination)
 			throws Exception {
 		SleepUtil.sleep(2000);
-		Number x_coord1 = SelNGBase.selenium.get().getElementPositionLeft(
+		Number x_coord1 = ClientSessionFactory.session().selenium().getElementPositionLeft(
 				destination);
-		Number y_coord1 = SelNGBase.selenium.get().getElementPositionTop(
+		Number y_coord1 = ClientSessionFactory.session().selenium().getElementPositionTop(
 				destination);
-		Number x_coord2 = SelNGBase.selenium.get().getElementPositionLeft(
+		Number x_coord2 = ClientSessionFactory.session().selenium().getElementPositionLeft(
 				source);
-		Number y_coord2 = SelNGBase.selenium.get()
+		Number y_coord2 = ClientSessionFactory.session().selenium()
 				.getElementPositionTop(source);
 		Number x_coord = (x_coord1.intValue() - x_coord2.intValue());
 		Number y_coord = (y_coord1.intValue() - y_coord2.intValue());
@@ -1259,19 +1254,19 @@ public class CommonTest extends SelNGBase {
 				.println("x,y coordinate of the objectToBeDroppedInto relative to objectToBeDragged = "
 						+ xy_coord);
 
-		SelNGBase.selenium.get().mouseDown(source);
+		ClientSessionFactory.session().selenium().mouseDown(source);
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().mouseMoveAt(source, xy_coord);
+		ClientSessionFactory.session().selenium().mouseMoveAt(source, xy_coord);
 		SleepUtil.sleep(1000 * 2);
-		SelNGBase.selenium.get().mouseMove(destination);
-		SelNGBase.selenium.get().mouseOver(destination);
+		ClientSessionFactory.session().selenium().mouseMove(destination);
+		ClientSessionFactory.session().selenium().mouseOver(destination);
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().mouseUp(destination);
+		ClientSessionFactory.session().selenium().mouseUp(destination);
 		SleepUtil.sleep(2000);
 	}
 
 	public static void calculateCoverage() throws Exception {
-		String coverage_string = SelNGBase.selenium.get().getEval(
+		String coverage_string = ClientSessionFactory.session().selenium().getEval(
 				COVERAGE_SCRIPT);
 		JSONObject jsonCoverage = (JSONObject) JSONSerializer
 				.toJSON(coverage_string);
@@ -1364,7 +1359,7 @@ public class CommonTest extends SelNGBase {
 		Stafzmprov.modifyAccount(parentAccount, "zimbraChildAccount", childUserAccountId);
 		Stafzmprov.modifyAccount(parentAccount, "zimbraPrefChildVisibleAccount", childUserAccountId);
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("class", "ZmOverviewZimletHeader");
 		return childAccount;

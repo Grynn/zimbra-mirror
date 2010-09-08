@@ -22,7 +22,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.service.admin.GetConfig;
 import com.zimbra.cs.zclient.ZFolder;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -103,7 +103,7 @@ public class ShortcutsCustom extends CommonTest {
 
 		obj.zMessageItem.zClick(subject);
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 
 		Robot zRobot = new Robot();
 
@@ -150,7 +150,7 @@ public class ShortcutsCustom extends CommonTest {
 
 		obj.zMessageItem.zClick(subject);
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 
 		Robot zRobot = new Robot();
 
@@ -218,7 +218,7 @@ public class ShortcutsCustom extends CommonTest {
 
 		obj.zFolder.zClick(localize(locator.trash));
 		
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 
 		Robot zRobot = new Robot();
 

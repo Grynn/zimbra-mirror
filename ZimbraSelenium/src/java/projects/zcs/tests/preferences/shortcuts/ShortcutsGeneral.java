@@ -24,7 +24,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.redolog.op.CreateTag;
 import com.zimbra.cs.zclient.ZFolder;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 
@@ -107,7 +107,7 @@ public class ShortcutsGeneral extends CommonTest {
 
 		Robot zRobot = new Robot();
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 
 		zRobot.keyPress(KeyEvent.VK_G);
 		zRobot.keyPress(keyToPress);
@@ -137,11 +137,11 @@ public class ShortcutsGeneral extends CommonTest {
 		checkForSkipException("na", "IE", "na", "Opening calendar fails some times on IE, happens only with selenium.");
 
 		if (!isFirst.equals("")) {
-			SelNGBase.selenium.get().refresh();
+			ClientSessionFactory.session().selenium().refresh();
 			SleepUtil.sleep(5000);
 		}
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 
 		Robot zRobot = new Robot();
 
@@ -178,7 +178,7 @@ public class ShortcutsGeneral extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 
 		obj.zTab.zClick(tabName);
 
@@ -221,7 +221,7 @@ public class ShortcutsGeneral extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
 				subject, "test content", "");
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 
 		zRobot.keyPress(KeyEvent.VK_V);
 		zRobot.keyRelease(KeyEvent.VK_V);
@@ -263,7 +263,7 @@ public class ShortcutsGeneral extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
 				subject2, "test content", "");
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 		Robot zRobot2 = new Robot();
 		SleepUtil.sleep(3000);
 
@@ -310,7 +310,7 @@ public class ShortcutsGeneral extends CommonTest {
 		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
 				subject2, "test content", "");
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 		Robot zRobot3 = new Robot();
 		SleepUtil.sleep(3000);
 
@@ -319,7 +319,7 @@ public class ShortcutsGeneral extends CommonTest {
 		zRobot3.keyRelease(KeyEvent.VK_U);
 		SleepUtil.sleep(4000);
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 		Robot zRobot4 = new Robot();
 		SleepUtil.sleep(3000);
 
@@ -383,7 +383,7 @@ public class ShortcutsGeneral extends CommonTest {
 
 		String searchName = getLocalizedData_NoSpecialChar();
 
-		SelNGBase.selenium.get().type("//input[@type='text']", "asdfg");
+		ClientSessionFactory.session().selenium().type("//input[@type='text']", "asdfg");
 		obj.zButton.zClick(localize(locator.save));
 		obj.zEditField.zTypeInDlgByName(localize(locator.name), searchName,
 				localize(locator.saveSearch));
@@ -423,16 +423,16 @@ public class ShortcutsGeneral extends CommonTest {
 
 		Robot zRobot = new Robot();
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 		zRobot.keyPress(KeyEvent.VK_SHIFT);
 		zRobot.keyPress(KeyEvent.VK_C);
 		zRobot.keyRelease(KeyEvent.VK_SHIFT);
 		zRobot.keyRelease(KeyEvent.VK_C);
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zSendBtn_newWindow);
 		obj.zButton.zClick(page.zMailApp.zCancelBtn_newWindow);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -450,7 +450,7 @@ public class ShortcutsGeneral extends CommonTest {
 
 		Robot zRobot = new Robot();
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 
 		zRobot.keyPress(keyToPress);
 		zRobot.keyRelease(keyToPress);
@@ -484,15 +484,15 @@ public class ShortcutsGeneral extends CommonTest {
 		/**
 		 * Verification : Check all the headers in list view of appointments are present.
 		 */
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__se"));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__tg"));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__at"));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__su"));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__lo"));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__st"));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__fo"));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__re"));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__dt"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhi__CLL__se"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhi__CLL__tg"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhi__CLL__at"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhl__CLL__su"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhl__CLL__lo"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhl__CLL__st"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhl__CLL__fo"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhi__CLL__re"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhl__CLL__dt"));
 		
 		SelNGBase.needReset.set(false);
 	}

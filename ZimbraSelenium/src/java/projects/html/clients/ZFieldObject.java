@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 
 public class ZFieldObject extends ZObject {

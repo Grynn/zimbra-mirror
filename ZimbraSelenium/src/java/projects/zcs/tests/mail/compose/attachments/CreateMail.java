@@ -8,7 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 
@@ -145,7 +145,7 @@ public class CreateMail extends CommonTest {
 		SleepUtil.sleep(2000);
 		obj.zButton.zClick("id=zb__COMPOSE1__DETACH_COMPOSE_left_icon");
 		SleepUtil.sleep(4000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zCancelIconBtn);
 		obj.zButton.zWait(ComposeView.zSendIconBtn);
 		String[] att = attachments.split(",");
@@ -206,12 +206,12 @@ public class CreateMail extends CommonTest {
 
 		Assert
 				.assertTrue(
-						SelNGBase.selenium.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent("xpath=//div[@id='zv__COMPOSE1_attachments_div']/table/tbody/tr/td/div[contains(@class,'ImgAttachment')]"),
 						"orignal msg doesn't contains attachment");
 		Assert
 				.assertTrue(
-						SelNGBase.selenium.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent("xpath=//div[@id='zv__COMPOSE1_attachments_div']/table/tbody/tr/td[3]/a[contains(text(),'"
 										+ attachment + "')]"),
 						"orignal msg doesn't contains attachment with subject");
@@ -224,12 +224,12 @@ public class CreateMail extends CommonTest {
 
 		Assert
 				.assertTrue(
-						SelNGBase.selenium.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent("xpath=//div[@id='zv__COMPOSE1_attachments_div']/table/tbody/tr/td/div[contains(@class,'ImgAttachment')]"),
 						"orignal msg doesn't contains attachment");
 		Assert
 				.assertTrue(
-						SelNGBase.selenium.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent("xpath=//div[@id='zv__COMPOSE1_attachments_div']/table/tbody/tr/td[3]/a[contains(text(),'"
 										+ attachment + "')]"),
 						"orignal msg doesn't contains attachment with subject");

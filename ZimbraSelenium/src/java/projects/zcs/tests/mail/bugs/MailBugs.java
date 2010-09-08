@@ -11,7 +11,7 @@ import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ComposeView;
 import projects.zcs.ui.MailApp;
 import com.zimbra.common.service.ServiceException;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -157,8 +157,8 @@ public class MailBugs extends CommonTest {
 			obj.zMessageItem.zRtClick(subject);
 			obj.zMenuItem.zClick("id=zmi__CLV__Dra__SHOW_ORIG_left_icon");
 			SleepUtil.sleep(4000);
-			SelNGBase.selenium.get().selectWindow("_blank");
-			String showOrigText = SelNGBase.selenium.get().getBodyText();
+			ClientSessionFactory.session().selenium().selectWindow("_blank");
+			String showOrigText = ClientSessionFactory.session().selenium().getBodyText();
 			SleepUtil.sleep(1000);
 			Assert
 					.assertFalse(showOrigText.contains("Sender: root@"
@@ -173,12 +173,12 @@ public class MailBugs extends CommonTest {
 					"Cc: ccuser@testdomain.com", "Bcc: bcc@"
 							+ ZimbraSeleniumProperties
 									.getStringProperty("server"), subject, body);
-			System.out.println(SelNGBase.selenium.get().getAllWindowTitles());
+			System.out.println(ClientSessionFactory.session().selenium().getAllWindowTitles());
 			if (!ZimbraSeleniumProperties.getStringProperty("browser").equals(
 					"IE")) {
-				SelNGBase.selenium.get().close();
+				ClientSessionFactory.session().selenium().close();
 			}
-			SelNGBase.selenium.get().selectWindow(null);
+			ClientSessionFactory.session().selenium().selectWindow(null);
 			obj.zMessageItem.zClick(subject);
 			obj.zButton.zClick("id=zb__CLV__EDIT_left_icon");
 			SleepUtil.sleep(1000);
@@ -190,8 +190,8 @@ public class MailBugs extends CommonTest {
 			obj.zMessageItem.zRtClick(subject);
 			obj.zMenuItem.zClick(localize(locator.showOrig));
 			SleepUtil.sleep(1000);
-			SelNGBase.selenium.get().selectWindow("_blank");
-			showOrigText = SelNGBase.selenium.get().getBodyText();
+			ClientSessionFactory.session().selenium().selectWindow("_blank");
+			showOrigText = ClientSessionFactory.session().selenium().getBodyText();
 			SleepUtil.sleep(1000);
 			Assert
 					.assertFalse(showOrigText.contains("Sender: root@"
@@ -208,9 +208,9 @@ public class MailBugs extends CommonTest {
 									.getStringProperty("server"), subject, body);
 			if (!ZimbraSeleniumProperties.getStringProperty("browser").equals(
 					"IE")) {
-				SelNGBase.selenium.get().close();
+				ClientSessionFactory.session().selenium().close();
 			}
-			SelNGBase.selenium.get().selectWindow(null);
+			ClientSessionFactory.session().selenium().selectWindow(null);
 			obj.zButton.zClick(localize(locator.view));
 			obj.zMenuItem.zClick(localize(locator.byConversation));
 
@@ -281,14 +281,14 @@ public class MailBugs extends CommonTest {
 		obj.zButton.zClick(ComposeView.zSendIconBtn);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zFolder.zClick(localize(locator.inbox));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 				"xpath=//div[@id='zv__CLV__MSG']/table/tbody/tr/td"),
 				"To view a message, click on it.Msg does not present");
-		String BodyText = SelNGBase.selenium.get().getText(
+		String BodyText = ClientSessionFactory.session().selenium().getText(
 				"xpath=//div[@id='zv__CLV__MSG']/table/tbody/tr/td");
 		Assert.assertTrue(BodyText.contains(localize(locator.viewMessage)));
 		obj.zFolder.zClick(localize(locator.sent));
-		Assert.assertTrue(SelNGBase.selenium.get().getText(
+		Assert.assertTrue(ClientSessionFactory.session().selenium().getText(
 				"xpath=//div[@id='zv__CLV__MSG']/table/tbody/tr/td").contains(
 				localize(locator.viewMessage)));
 
@@ -306,14 +306,14 @@ public class MailBugs extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zButton.zClick("id=zb__COMPOSE1__DETACH_COMPOSE_left_icon");
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zTextAreaField.zType(page.zComposeView.zToField, to);
 		obj.zTextAreaField.zType(page.zComposeView.zCcField, cc);
 		obj.zTextAreaField.zType(page.zComposeView.zBccField, bcc);
 		obj.zEditField.zType(page.zComposeView.zSubjectField, subject);
 		obj.zEditor.zType(body);
 		obj.zButton.zClick(localize(locator.send));
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 
 		SelNGBase.needReset.set(false);
@@ -341,8 +341,7 @@ public class MailBugs extends CommonTest {
 		zGoToPreferences("Signatures");
 		Assert
 				.assertTrue(
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"xpath=//td[contains(@class,'ZOptionsHeader ImgPrefsHeader') and contains(text(),'"
 												+ localize(locator.signatures)
@@ -356,7 +355,7 @@ public class MailBugs extends CommonTest {
 		String[] signatureValueMissingRequired = localize(
 				locator.signatureValueMissingRequired).split("'");
 		Assert
-				.assertFalse(SelNGBase.selenium.get().isElementPresent(
+				.assertFalse(ClientSessionFactory.session().selenium().isElementPresent(
 						"xpath=//div[contains(@id,'z_toast_text') and contains(text(),'"
 								+ signatureValueMissingRequired[0] + "')]"),
 						"Signature value is empty. It's required. this msg still present");
@@ -417,7 +416,7 @@ public class MailBugs extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				"");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		obj.zMessageItem.zClick(subject);
@@ -448,7 +447,7 @@ public class MailBugs extends CommonTest {
 			handleRetry();
 
 		page.zComposeView.zNavigateToMailCompose();
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 				"id=zb__App__tab_COMPOSE1"), "Compose Tab is not present");
 		obj.zButton.zClick(localize(locator.cancel));
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
@@ -456,10 +455,10 @@ public class MailBugs extends CommonTest {
 					localize(locator.askSaveDraft));
 			obj.zButton.zClickInDlg(localize(locator.no));
 		}
-		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertFalse(ClientSessionFactory.session().selenium().isElementPresent(
 				"id=zb__App__tab_COMPOSE1"), "Compose Tab is present");
 		page.zComposeView.zNavigateToMailCompose();
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 				"id=zb__App__tab_COMPOSE1"),
 				" 2nd Attempt Compose Tab is not present");
 		obj.zButton.zClick(localize(locator.cancel));
@@ -523,7 +522,7 @@ public class MailBugs extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		for (int i = 0; i <= 10; i++) {
 			String dlgExists = obj.zDialog
 					.zExistsDontWait(localize(locator.zimbraTitle));
@@ -543,7 +542,7 @@ public class MailBugs extends CommonTest {
 		}
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -574,7 +573,7 @@ public class MailBugs extends CommonTest {
 		obj.zMessageItem.zExists(subject[0]);
 		obj.zMessageItem.zExists(subject[1]);
 		obj.zMessageItem.zExists(subject[2]);
-		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']",
+		ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']",
 				"body2");
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		SleepUtil.sleep(1000);
@@ -592,22 +591,19 @@ public class MailBugs extends CommonTest {
 		SleepUtil.sleep(1000);
 		Assert
 				.assertTrue(
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"xpath=//div[contains(@id,'zlhi__CLV__se') and contains(@class,'ImgCheckboxChecked')]"),
 						"Select All check box is unchecked");
 		Assert
 				.assertTrue(
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"xpath=//div[contains(@id,'zl__CLV__rows')]/div[contains(@class,'Row RowEven')]/table//tr/td/div[contains(@id,'zlif__CLV') and contains (@class,'ImgCheckboxChecked')]"),
 						"1st list item shows unchecked after clicking Select All check box");
 		Assert
 				.assertTrue(
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"xpath=//div[contains(@id,'zl__CLV__rows')]/div[contains(@class,'Row RowOdd Row-selected')]/table//tr/td/div[contains(@id,'zlif__CLV') and contains (@class,'ImgCheckboxChecked')]"),
 						"2nd list item shows unchecked after clicking Select All check box");
@@ -615,21 +611,18 @@ public class MailBugs extends CommonTest {
 		obj.zCheckbox.zClick(zMailListItemChkBox);
 		SleepUtil.sleep(500);
 		Assert
-				.assertTrue(SelNGBase.selenium
-						.get()
-						.isElementPresent(
+				.assertTrue(ClientSessionFactory.session().selenium()
+								.isElementPresent(
 								"xpath=//div[contains(@id,'zlhi__CLV__se') and contains(@class,'ImgCheckboxUnchecked')]"));
 		Assert
 				.assertTrue(
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"xpath=//div[contains(@id,'zl__CLV__rows')]/div[contains(@class,'Row RowEven')]/table//tr/td/div[contains(@id,'zlif__CLV') and contains (@class,'ImgCheckboxUnchecked')]"),
 						"1st list item shows checked after doing unchecked on 'Select All' check box");
 		Assert
 				.assertTrue(
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"xpath=//div[contains(@id,'zl__CLV__rows')]/div[contains(@class,'Row RowOdd')]/table//tr/td/div[contains(@id,'zlif__CLV') and contains (@class,'ImgCheckboxUnchecked')]"),
 						"2nd list item shows checked after doing unchecked on 'Select All' check box");

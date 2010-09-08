@@ -7,7 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.Stafzmprov;
@@ -85,7 +85,7 @@ public class MiscMailTests extends CommonTest {
 		obj.zButton.zExists(page.zComposeView.zSendBtn);
 		obj.zTextAreaField.zExists(page.zComposeView.zToField);
 		obj.zTextAreaField.zExists(page.zComposeView.zCcField);
-		SelNGBase.selenium.get().click("link=" + localize(locator.showBcc));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.showBcc));
 		SleepUtil.sleepSmall();
 		obj.zTextAreaField.zExists(page.zComposeView.zBccField);
 		obj.zEditField.zExists(page.zComposeView.zSubjectField);
@@ -106,11 +106,11 @@ public class MiscMailTests extends CommonTest {
 
 		page.zComposeView.zNavigateToMailCompose();
 		SleepUtil.sleepLong(); // required because composing takes some time
-		SelNGBase.selenium.get().click("link=" + localize(locator.showBcc));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.showBcc));
 		obj.zButton.zExists(page.zComposeView.zBccBtn);
 		obj.zTextAreaField.zExists(page.zComposeView.zBccField);
 
-		SelNGBase.selenium.get().click("link=" + localize(locator.hideBcc));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.hideBcc));
 		obj.zButton.zNotExists(page.zComposeView.zBccBtn);
 		obj.zTextAreaField.zNotExists(page.zComposeView.zBccField);
 		obj.zButton.zClick(page.zComposeView.zCancelBtn);
@@ -220,9 +220,9 @@ public class MiscMailTests extends CommonTest {
 		SleepUtil.sleepSmall();
 		obj.zButton.zClick(page.zMailApp.zShowOrigIconBtn);
 		SleepUtil.sleepVeryLong();
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		SleepUtil.sleepMedium();
-		String bodyValue = SelNGBase.selenium.get().getBodyText();
+		String bodyValue = ClientSessionFactory.session().selenium().getBodyText();
 		String[] columnToVerify = { "Return-Path:", "Received:", "Date:",
 				"From:", "To:", "Cc:", "Message-ID:", "Subject:",
 				"MIME-Version:", "Content-Type:", "Content-Transfer-Encoding:",
@@ -243,7 +243,7 @@ public class MiscMailTests extends CommonTest {
 						+ localizedToVerify[i] + " in show original body");
 			}
 		}
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -263,8 +263,8 @@ public class MiscMailTests extends CommonTest {
 				attachments);
 		obj.zButton.zClick(page.zMailApp.zOpenInNewWindowIconBtn);
 		SleepUtil.sleepLong(); // test fails here
-		SelNGBase.selenium.get().selectWindow("_blank");
-		String bodyValue = SelNGBase.selenium.get().getBodyText();
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
+		String bodyValue = ClientSessionFactory.session().selenium().getBodyText();
 		String[] columnToVerify = { localize(locator.from),
 				localize(locator.to), localize(locator.cc),
 				localize(locator.subject) };
@@ -277,7 +277,7 @@ public class MiscMailTests extends CommonTest {
 			assertReport(bodyValue, dataToVerify[i], "Verifying - "
 					+ dataToVerify[i] + " in show original body");
 		}
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}

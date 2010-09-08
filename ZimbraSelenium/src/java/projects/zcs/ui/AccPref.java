@@ -1,6 +1,6 @@
 package projects.zcs.ui;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 
 /**
@@ -40,7 +40,7 @@ public class AccPref extends AppPage {
 			obj.zRadioBtn.zClick(localize(locator.accountTypeImap));
 		}
 		if (!password.equals("")) {
-			SelNGBase.selenium.get().type("xpath=//input[@type='password']",
+			ClientSessionFactory.session().selenium().type("xpath=//input[@type='password']",
 					password);
 		}
 		if (ssl.equals("SSL")) {
@@ -65,24 +65,18 @@ public class AccPref extends AppPage {
 				getNameWithoutSpace(localize(locator.accountPersonaLabel)),
 				personaName);
 		obj.zEditField.zActivateAndType("id=DWT41_PERSONA_FROM_NAME", fromName);
-		SelNGBase.selenium
-				.get()
-				.clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 						"//div[contains(@id, 'PERSONA')]//td[contains(@class, 'ZOptionsSectionMain')]/table/tbody/tr[6]//td[contains(@id, '_select_container')]//td[contains(text(), '"
 								+ SelNGBase.selfAccountName.get().toLowerCase()
 								+ "')]", "");
 		SleepUtil.sleep(500);
 		if (fromAddress.equals("")) {
-			SelNGBase.selenium
-					.get()
-					.clickAt(
+			ClientSessionFactory.session().selenium().clickAt(
 							"//div[contains(@class, 'ZSelectMenuItem ZWidget ZHasText')]//td[contains(text(), '"
 									+ SelNGBase.selfAccountName.get()
 											.toLowerCase() + "')]", "");
 		} else {
-			SelNGBase.selenium
-					.get()
-					.clickAt(
+			ClientSessionFactory.session().selenium().clickAt(
 							"//div[contains(@class, 'ZSelectMenuItem ZWidget ZHasText')]//td[contains(text(), '"
 									+ fromAddress.toLowerCase() + "')]", "");
 		}

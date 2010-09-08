@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -115,7 +115,7 @@ public class ReadingPane extends CommonTest {
 		}
 
 		if (method.equals("byKeyboardShortCut")) {
-			SelNGBase.selenium.get().windowFocus();
+			ClientSessionFactory.session().selenium().windowFocus();
 			SleepUtil.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
@@ -127,9 +127,9 @@ public class ReadingPane extends CommonTest {
 			SleepUtil.sleep(2000);
 		}
 
-		Boolean isVisible = SelNGBase.selenium.get().isVisible("id=DWT6");
-		Boolean isNotVisible = SelNGBase.selenium.get().isVisible("id=DWT7");
-		Boolean isSubDblRowClassExists = SelNGBase.selenium.get()
+		Boolean isVisible = ClientSessionFactory.session().selenium().isVisible("id=DWT6");
+		Boolean isNotVisible = ClientSessionFactory.session().selenium().isVisible("id=DWT7");
+		Boolean isSubDblRowClassExists = ClientSessionFactory.session().selenium()
 				.isElementPresent("class=SubjectDoubleRow");
 		assertReport("true", isVisible.toString(),
 				"Verifying whether vertical scrollbar exists or not");
@@ -138,7 +138,7 @@ public class ReadingPane extends CommonTest {
 		assertReport("true", isSubDblRowClassExists.toString(),
 				"Verifying subject double row view for reading pane on right");
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3000);
 		assertReport("true", isVisible.toString(),
 				"Verifying whether vertical scrollbar exists or not");
@@ -152,7 +152,7 @@ public class ReadingPane extends CommonTest {
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
-		SelNGBase.selenium.get().click("link=" + localize(locator.logOff));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.logOff));
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		SleepUtil.sleep(3000);
@@ -194,7 +194,7 @@ public class ReadingPane extends CommonTest {
 		}
 
 		if (method.equals("byKeyboardShortCut")) {
-			SelNGBase.selenium.get().windowFocus();
+			ClientSessionFactory.session().selenium().windowFocus();
 			SleepUtil.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
@@ -209,9 +209,9 @@ public class ReadingPane extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(1500);
 		obj.zMessageItem.zVerifyIsUnRead(subject);
-		Boolean isNotVisible1 = SelNGBase.selenium.get().isVisible("id=DWT6");
-		Boolean isNotVisible2 = SelNGBase.selenium.get().isVisible("id=DWT7");
-		Boolean isSubDblRowClassExists = SelNGBase.selenium.get()
+		Boolean isNotVisible1 = ClientSessionFactory.session().selenium().isVisible("id=DWT6");
+		Boolean isNotVisible2 = ClientSessionFactory.session().selenium().isVisible("id=DWT7");
+		Boolean isSubDblRowClassExists = ClientSessionFactory.session().selenium()
 				.isElementPresent("class=SubjectDoubleRow");
 		assertReport("false", isNotVisible1.toString(),
 				"Verifying whether vertical scrollbar exists or not");
@@ -220,7 +220,7 @@ public class ReadingPane extends CommonTest {
 		assertReport("false", isSubDblRowClassExists.toString(),
 				"Verifying subject double row view for reading pane on right");
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3000);
 		assertReport("false", isNotVisible1.toString(),
 				"Verifying whether vertical scrollbar exists or not");
@@ -234,7 +234,7 @@ public class ReadingPane extends CommonTest {
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
-		SelNGBase.selenium.get().click("link=" + localize(locator.logOff));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.logOff));
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		SleepUtil.sleep(3000);
@@ -277,7 +277,7 @@ public class ReadingPane extends CommonTest {
 		}
 
 		if (method.equals("byKeyboardShortCut")) {
-			SelNGBase.selenium.get().windowFocus();
+			ClientSessionFactory.session().selenium().windowFocus();
 			SleepUtil.sleep(3000);
 			Robot zRobot = new Robot();
 			zRobot.keyPress(KeyEvent.VK_M);
@@ -292,9 +292,9 @@ public class ReadingPane extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(1500);
 		obj.zMessageItem.zVerifyIsRead(subject);
-		Boolean isNotVisible = SelNGBase.selenium.get().isVisible("id=DWT6");
-		Boolean isVisible = SelNGBase.selenium.get().isVisible("id=DWT7");
-		Boolean isSubDblRowClassExists = SelNGBase.selenium.get()
+		Boolean isNotVisible = ClientSessionFactory.session().selenium().isVisible("id=DWT6");
+		Boolean isVisible = ClientSessionFactory.session().selenium().isVisible("id=DWT7");
+		Boolean isSubDblRowClassExists = ClientSessionFactory.session().selenium()
 				.isElementPresent("class=SubjectDoubleRow");
 		assertReport("false", isNotVisible.toString(),
 				"Verifying whether horizontal scrollbar exists or not");
@@ -303,7 +303,7 @@ public class ReadingPane extends CommonTest {
 		assertReport("false", isSubDblRowClassExists.toString(),
 				"Verifying subject double row view for reading pane on right");
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3000);
 		assertReport("false", isNotVisible.toString(),
 				"Verifying whether horizontal scrollbar exists or not");
@@ -317,7 +317,7 @@ public class ReadingPane extends CommonTest {
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
-		SelNGBase.selenium.get().click("link=" + localize(locator.logOff));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.logOff));
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		SleepUtil.sleep(3000);

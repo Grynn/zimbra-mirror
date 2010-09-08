@@ -12,7 +12,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import projects.html.tests.CommonTest;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -183,7 +183,7 @@ public class CalendarFolderTests extends CommonTest {
 
 		page.zCalFolderApp.zSubscribeToCalendar(calName, url);
 
-		SelNGBase.selenium.get().open(urlToNavigate);
+		ClientSessionFactory.session().selenium().open(urlToNavigate);
 
 		obj.zButton.zClick(page.zCalendarApp.calRefresh);
 

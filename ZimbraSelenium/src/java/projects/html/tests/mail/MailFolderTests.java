@@ -8,7 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.Stafzmprov;
@@ -375,7 +375,7 @@ public class MailFolderTests extends CommonTest {
 		for (int i = 0; i <= sysFolders.length - 1; i++) {
 			obj.zFolder.zClick(sysFolders[i]);
 			SleepUtil.sleep(2000);
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("//*[contains(@id,'name') and contains(@disabled,'')]"));
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@id,'name') and contains(@disabled,'')]"));
 			if (!sysFolders[i].equals(localize(locator.junk))
 					&& !sysFolders[i].equals(localize(locator.trash))) {
 				obj.zCheckbox.zExists(page.zMailApp.zPermDelMailItemChkBox);

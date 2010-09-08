@@ -11,7 +11,8 @@ import org.testng.annotations.Test;
 import projects.zcs.Locators;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
-import framework.core.SelNGBase;
+import framework.core.ClientSessionFactory;
+import framework.core.*;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
 import framework.items.ContactItem.GenerateItemType;
@@ -172,7 +173,7 @@ public class CreateContact extends CommonTest {
 		SleepUtil.sleep(1500);
 		Assert
 				.assertTrue(
-						SelNGBase.selenium.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent("xpath=//div[contains(@id,'editcontactform_REMOVE_IMAGE_row') and contains(@style,'display: none')]"),
 						"View/Remove image link exist even photo is not uploaded");
 
@@ -210,12 +211,12 @@ public class CreateContact extends CommonTest {
 		}
 		Assert
 				.assertTrue(
-						SelNGBase.selenium.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent("xpath=//div[contains(@id,'editcontactform_REMOVE_IMAGE_row') and contains(@style,'display: block')]"),
 						"View/Remove image link not exist after uploading photo");
 
 		// Remove photo and re verify
-		SelNGBase.selenium.get().click("id=editcontactform_REMOVE_IMAGE");
+		ClientSessionFactory.session().selenium().click("id=editcontactform_REMOVE_IMAGE");
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zABCompose.zSaveContactMenuIconBtn);
 		SleepUtil.sleep(1000);
@@ -228,9 +229,9 @@ public class CreateContact extends CommonTest {
 		} else {
 			SleepUtil.sleep(2000);
 		}
-		viewLinkPresent = SelNGBase.selenium.get()
+		viewLinkPresent = ClientSessionFactory.session().selenium()
 				.isVisible("id=editcontactform_VIEW_IMAGE");
-		removeLinkPresent = SelNGBase.selenium.get()
+		removeLinkPresent = ClientSessionFactory.session().selenium()
 				.isVisible("id=editcontactform_REMOVE_IMAGE");
 		assertReport("false", viewLinkPresent.toString(),
 				"View link exist after uploading contact photo");

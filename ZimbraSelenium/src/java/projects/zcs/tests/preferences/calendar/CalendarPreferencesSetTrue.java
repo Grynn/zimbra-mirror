@@ -17,7 +17,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -169,7 +169,7 @@ public class CalendarPreferencesSetTrue extends CommonTest {
 		// Assert.assertEquals(timeZone, "true",
 		// "Timezone menu doesn't exist on setting the ShowTimeZone pref to True");
 		Assert
-				.assertTrue(SelNGBase.selenium.get()
+				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent("xpath=//td[contains(@id,'_tzoneSelect')]/div[contains(@class,'ZSelectAutoSizingContainer')]"));
 		SelNGBase.needReset.set(false);
 	}

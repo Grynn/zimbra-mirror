@@ -8,7 +8,7 @@ import projects.html.tests.CommonTest;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.BrowserUtil;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
@@ -73,7 +73,7 @@ public class LoginPage extends CommonTest {
 		SleepUtil.sleep(2000);// without this we get permission denied error
 		
 		for (int i = 0; i < 10; i++) {
-			if (SelNGBase.selenium.get().isElementPresent("id=searchField"))
+			if (ClientSessionFactory.session().selenium().isElementPresent("id=searchField"))
 				break;
 			SleepUtil.sleep(2000);
 		}
@@ -90,7 +90,7 @@ public class LoginPage extends CommonTest {
 	 * @throws Exception
 	 */
 	public void logoutOfZimbraAjax() throws Exception {
-		SelNGBase.selenium.get().click("link=" + localize("logOff"));
+		ClientSessionFactory.session().selenium().click("link=" + localize("logOff"));
 		SleepUtil.sleep(1000);
 		assertTrue(true);
 	}

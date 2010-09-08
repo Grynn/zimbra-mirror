@@ -8,7 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -70,8 +70,7 @@ public class RemoveAttachment extends CommonTest {
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
@@ -79,7 +78,7 @@ public class RemoveAttachment extends CommonTest {
 			obj.zMessageItem.zVerifyHasAttachment(subject);
 		}
 		// obj.zMessageItem.zVerifyHasAttachment(subject);
-		SelNGBase.selenium.get().click("link=" + localize(locator.remove));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.remove));
 		assertReport(localize(locator.attachmentConfirmRemove), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
 				"Verifying dialog text for removing attachment from the message");
@@ -87,15 +86,15 @@ public class RemoveAttachment extends CommonTest {
 				localize(locator.warningMsg));
 		SleepUtil.sleep(3000);
 		Assert
-				.assertFalse(SelNGBase.selenium.get().isElementPresent(
+				.assertFalse(ClientSessionFactory.session().selenium().isElementPresent(
 						"link=" + localize(locator.download)),
 						"Download link is not removed from message after removing attachment");
 		Assert
-				.assertFalse(SelNGBase.selenium.get().isElementPresent(
+				.assertFalse(ClientSessionFactory.session().selenium().isElementPresent(
 						"link=" + localize(locator.briefcase)),
 						"Briefcase link is not removed from message after removing attachment");
 		Assert
-				.assertFalse(SelNGBase.selenium.get().isElementPresent(
+				.assertFalse(ClientSessionFactory.session().selenium().isElementPresent(
 						"link=" + localize(locator.remove)),
 						"Remove link is not removed from message after removing attachment");
 
@@ -150,10 +149,10 @@ public class RemoveAttachment extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn);
 		SleepUtil.sleep(2500);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		SleepUtil.sleep(1000);
 		zWaitTillObjectExist("button", page.zMailApp.zCloseIconBtn_newWindow);
-		SelNGBase.selenium.get().click("link=" + localize(locator.remove));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.remove));
 		SleepUtil.sleep(1000);
 		assertReport(localize(locator.attachmentConfirmRemove), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
@@ -163,45 +162,45 @@ public class RemoveAttachment extends CommonTest {
 		SleepUtil.sleep(1000);
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.download)),
 						"Download link is not removed from new window after removing attachment from message");
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.briefcase)),
 						"Briefcase link is not removed from new window after removing attachment from message");
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.addToCalendar)),
 						"Add to Calendar link is not removed from new window after removing attachment from message");
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.remove)),
 						"Remove link is not removed from new window after removing attachment from message");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.download)),
 						"Download link is not removed from same window after removing attachment from new window");
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.briefcase)),
 						"Briefcase link is not removed from same window after removing attachment from new window");
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.addToCalendar)),
 						"Add to Calendar link is not removed from same window after removing attachment from new window");
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.remove)),
 						"Remove link is not removed from same window after removing attachment from new window");
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
@@ -209,22 +208,22 @@ public class RemoveAttachment extends CommonTest {
 		SleepUtil.sleep(1000);
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.download)),
 						"Download link is not removed from same window after removing attachment from new window");
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.briefcase)),
 						"Briefcase link is not removed from same window after removing attachment from new window");
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.addToCalendar)),
 						"Add to Calendar link is not removed from same window after removing attachment from new window");
 		Assert
 				.assertFalse(
-						SelNGBase.selenium.get().isElementPresent(
+						ClientSessionFactory.session().selenium().isElementPresent(
 								"link=" + localize(locator.remove)),
 						"Remove link is not removed from same window after removing attachment from new window");
 
@@ -255,19 +254,19 @@ public class RemoveAttachment extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		SleepUtil.sleep(2500);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().click(
+		ClientSessionFactory.session().selenium().click(
 				"link=" + localize(locator.removeAllAttachments));
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		assertReport(localize(locator.attachmentConfirmRemoveAll), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
 				"Verifying dialog text for removing attachments from the message");
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
-		SelNGBase.selenium.get().selectWindow("_blank");
-		Boolean removeLink = SelNGBase.selenium.get().isElementPresent(
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
+		Boolean removeLink = ClientSessionFactory.session().selenium().isElementPresent(
 				localize(locator.removeAllAttachments));
 		assertReport(
 				"false",
@@ -275,7 +274,7 @@ public class RemoveAttachment extends CommonTest {
 				"Verifying Remove All Attachments link exist or not after removing all attachments from message");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -301,8 +300,7 @@ public class RemoveAttachment extends CommonTest {
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
@@ -310,14 +308,14 @@ public class RemoveAttachment extends CommonTest {
 			obj.zMessageItem.zVerifyHasAttachment(subject);
 		}
 		// obj.zMessageItem.zVerifyHasAttachment(subject);
-		SelNGBase.selenium.get().click(
+		ClientSessionFactory.session().selenium().click(
 				"link=" + localize(locator.removeAllAttachments));
 		assertReport(localize(locator.attachmentConfirmRemoveAll), obj.zDialog
 				.zGetMessage(localize(locator.warningMsg)),
 				"Verifying dialog text for removing attachments from the message");
 		obj.zButton.zClickInDlgByName(localize(locator.yes),
 				localize(locator.warningMsg));
-		Boolean removeLink = SelNGBase.selenium.get().isElementPresent(
+		Boolean removeLink = ClientSessionFactory.session().selenium().isElementPresent(
 				localize(locator.removeAllAttachments));
 		assertReport(
 				"false",

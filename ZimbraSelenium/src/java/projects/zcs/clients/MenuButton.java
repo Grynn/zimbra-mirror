@@ -1,6 +1,6 @@
 package projects.zcs.clients;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import org.testng.Assert;
 
 public class MenuButton extends SelNGBase {
@@ -29,7 +29,7 @@ public class MenuButton extends SelNGBase {
 	}	
 	private static String MenuButtonCore(String menuBtnNameOrId, String action, String param1, String param2) {
 		String rc = "false";
-		rc = SelNGBase.selenium.get().call("buttonMenuCore",  menuBtnNameOrId, action, true, param1, param2);
+		rc = ClientSessionFactory.session().selenium().call("buttonMenuCore",  menuBtnNameOrId, action, true, param1, param2);
 		return rc;
 	}
 	private static String MenuButtonCore(String menuBtnNameOrId, String action) {

@@ -10,7 +10,7 @@ import projects.zcs.PageObjects;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
 import projects.zcs.ui.ABCompose.ABComposeActionMethod;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
 import framework.items.ContactItem.GenerateItemType;

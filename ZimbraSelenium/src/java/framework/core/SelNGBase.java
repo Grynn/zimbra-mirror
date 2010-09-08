@@ -61,8 +61,8 @@ public class SelNGBase {
 	
 	// can be used as @aftermethod
 	public static void stopSeleniumSession() {
-		if (SelNGBase.selenium.get() != null){
-			SelNGBase.selenium.get().stop();
+		if (ClientSessionFactory.session().selenium() != null){
+			ClientSessionFactory.session().selenium().stop();
 		}
 	}
 
@@ -85,16 +85,16 @@ public class SelNGBase {
 
 	public void openApplication(String app_type) {
 		appType = app_type;
-
-
 		
-		SelNGBase.selenium.get().start();
-		SelNGBase.selenium.get().windowMaximize();
-		SelNGBase.selenium.get().windowFocus();
-		SelNGBase.selenium.get().setupZVariables();
-		SelNGBase.selenium.get().allowNativeXpath("true");
-		SelNGBase.selenium.get().open(getBaseURL());
-
+		ClientSession session = ClientSessionFactory.session();
+		ZimbraSelenium selenium = session.selenium();
+		selenium.start();
+		selenium.windowMaximize();
+		selenium.windowFocus();
+		selenium.setupZVariables();
+		selenium.allowNativeXpath("true");
+		selenium.open(getBaseURL());
+		
 	}
 
 	public static void customLogin(String parameter) {
@@ -106,12 +106,15 @@ public class SelNGBase {
 			browser = "*" + browser;
 		}
 
+		ClientSession session = ClientSessionFactory.session();
+		ZimbraSelenium selenium = session.selenium();
 		
-		SelNGBase.selenium.get().start();
-		SelNGBase.selenium.get().windowMaximize();
-		SelNGBase.selenium.get().windowFocus();
-		SelNGBase.selenium.get().allowNativeXpath("true");
-		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"	+ ZimbraSeleniumProperties.getStringProperty("server") + "/" + parameter);
+		selenium.start();
+		selenium.windowMaximize();
+		selenium.windowFocus();
+		selenium.allowNativeXpath("true");
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"	+ ZimbraSeleniumProperties.getStringProperty("server") + "/" + parameter);
+		
 	}
 
 	public static String getBaseURL() {
@@ -133,11 +136,11 @@ public class SelNGBase {
 
 	// can be used as @aftermethod
 	public void deleteCookie(String name, String path) {
-		SelNGBase.selenium.get().deleteCookie(name, path);
+		ClientSessionFactory.session().selenium().deleteCookie(name, path);
 	}
 
 	public static void stopClient() {
-		SelNGBase.selenium.get().close();
+		ClientSessionFactory.session().selenium().close();
 	}
 
 
@@ -156,16 +159,6 @@ public class SelNGBase {
 
 
 	
-	protected static ThreadLocal<ZimbraSelenium> selenium = new ThreadLocal<ZimbraSelenium>() {
-		protected synchronized ZimbraSelenium initialValue() {
-			// return new ZimbraSelenium instance per thread
-			return new ZimbraSelenium(SeleniumService.getInstance()
-					.getSeleniumServer(), SeleniumService.getInstance()
-					.getSeleniumPort(), SeleniumService.getInstance()
-					.getSeleniumBrowser(), getBaseURL());
-		}
-	};
-
 	public static ThreadLocal<Boolean> isExecutionARetry = new ThreadLocal<Boolean>() {
 		protected synchronized Boolean initialValue() {
 			// return Boolean value per thread

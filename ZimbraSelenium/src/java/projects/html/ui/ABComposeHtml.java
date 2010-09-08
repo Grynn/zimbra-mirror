@@ -4,7 +4,7 @@ import java.io.File;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -601,7 +601,7 @@ public class ABComposeHtml extends CommonTest {
 	 */
 	public static void zPermanentDelAllContact() {
 		obj.zCheckbox.zClick(zPermanentlyDelAllContact);
-		SelNGBase.selenium.get().click(zDeleteAllContactsBtn);
+		ClientSessionFactory.session().selenium().click(zDeleteAllContactsBtn);
 		// obj.zButton.zClick(localize(locator.folderEmptyAddressBook));
 	}
 
@@ -643,7 +643,7 @@ public class ABComposeHtml extends CommonTest {
 			obj.zButton.zClick(zSearchContacsBtn);
 			SleepUtil.sleep(1000);// wait need as it takes time to search a contact
 			obj.zCheckbox.zClick(zSearchedContactForGrp);
-			SelNGBase.selenium.get().click(zAddSelectedlink);
+			ClientSessionFactory.session().selenium().click(zAddSelectedlink);
 			SleepUtil.sleep(2000);// wait is added as it takes some time to click
 			// on Add Selected link
 		}

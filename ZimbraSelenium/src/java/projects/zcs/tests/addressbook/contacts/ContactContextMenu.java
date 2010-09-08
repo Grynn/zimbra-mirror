@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 import projects.zcs.Locators;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.items.ContactItem;
 import framework.items.ContactItem.GenerateItemType;
 import framework.util.RetryFailedTests;

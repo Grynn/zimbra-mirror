@@ -1,6 +1,6 @@
 package framework.util;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 
 public class BrowserUtil extends SelNGBase {
 	private static String userAgent = null;
@@ -8,7 +8,7 @@ public class BrowserUtil extends SelNGBase {
 	private static void setBrowserAgent() {
 		//ps: getZimbraVersion is being passed just to trick selenium.call to return string(because of get*)
 		if (userAgent == null) {
-			userAgent = SelNGBase.selenium.get().getEval("navigator.userAgent;");
+			userAgent = ClientSessionFactory.session().selenium().getEval("navigator.userAgent;");
 			if ( userAgent.equals("") ) {
 				userAgent = null;
 			}

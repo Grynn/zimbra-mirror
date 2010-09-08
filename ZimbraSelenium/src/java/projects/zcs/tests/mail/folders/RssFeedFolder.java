@@ -9,7 +9,7 @@ import org.testng.annotations.DataProvider;
 
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -224,7 +224,7 @@ public class RssFeedFolder extends CommonTest {
 		// "http://xkcd.com/rss.xml");
 		obj.zFolder.zClick(folderName);
 		obj.zMessageItem.zClick(fromName, "1");
-		String latestFeedSubject = SelNGBase.selenium.get().getText(
+		String latestFeedSubject = ClientSessionFactory.session().selenium().getText(
 				"//*[contains(@class,'LabelColValue SubjectCol')]");
 
 		/**
@@ -234,7 +234,7 @@ public class RssFeedFolder extends CommonTest {
 		obj.zFolder.zClick(folderName);
 		obj.zFolder.zClick(folderName);
 		obj.zFolder.zClick(folderName);
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3000);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		obj.zFolder.zClick(folderName);
@@ -243,10 +243,10 @@ public class RssFeedFolder extends CommonTest {
 		 * 1. After refreshment again get subject of first and second message.
 		 */
 		obj.zMessageItem.zClick(fromName, "1");
-		String latestFeedSubject_2 = SelNGBase.selenium.get().getText(
+		String latestFeedSubject_2 = ClientSessionFactory.session().selenium().getText(
 				"//*[contains(@class,'LabelColValue SubjectCol')]");
 		obj.zMessageItem.zClick(fromName, "2");
-		String penultimate_latestFeed_Subject = SelNGBase.selenium.get()
+		String penultimate_latestFeed_Subject = ClientSessionFactory.session().selenium()
 				.getText("//*[contains(@class,'LabelColValue SubjectCol')]");
 
 		/**

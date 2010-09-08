@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -107,7 +107,7 @@ public class DocumentSharingTests extends CommonTest {
 		zGoToApplication("Documents");
 		obj.zFolder.zClick(mountFolderName);
 		zWaitTillObjectExist("button", localize(locator.send));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("link=" + pageName),
 				"The shared page is not displayed");
 		page.zDocumentApp.zDeleteNotebookPage(mountFolderName, pageName,
 				"ToolbarDelete");
@@ -153,7 +153,7 @@ public class DocumentSharingTests extends CommonTest {
 
 		boolean bisExists = false;
 		String sIsExists = new Boolean(bisExists).toString();
-		bisExists = SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.edit));
+		bisExists = ClientSessionFactory.session().selenium().isElementPresent("link=" + localize(locator.edit));
 		assertReport("false", sIsExists, "Edit link exists for viewer rights");
 
 		SelNGBase.needReset.set(false);
@@ -194,7 +194,7 @@ public class DocumentSharingTests extends CommonTest {
 		obj.zFolder.zDblClick(mountFolderName);
 		obj.zFolder.zClick(mountFolderName);
 		zWaitTillObjectExist("button", localize(locator.send));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("link="
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("link="
 				+ localize(locator.del)),
 				"The shared page's delete link should be displayed");
 
@@ -311,7 +311,7 @@ public class DocumentSharingTests extends CommonTest {
 
 		boolean bisExists = false;
 		String sIsExists = new Boolean(bisExists).toString();
-		bisExists = SelNGBase.selenium.get().isElementPresent("link=" + localize(locator.del));
+		bisExists = ClientSessionFactory.session().selenium().isElementPresent("link=" + localize(locator.del));
 		assertReport("false", sIsExists, "Edit link exists for viewer rights");
 
 		SelNGBase.needReset.set(false);

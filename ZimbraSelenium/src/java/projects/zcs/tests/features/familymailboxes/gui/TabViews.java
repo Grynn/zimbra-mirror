@@ -5,7 +5,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import projects.zcs.tests.CommonTest;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 
 public class TabViews extends CommonTest {
@@ -133,19 +133,19 @@ public class TabViews extends CommonTest {
 		checkHeaders(localize(locator.messagesReceiving));		
 		obj.zRadioBtn.zExists(localize(locator.displayAsHTML));
 		obj.zEditField.zExists(localize(locator.forwardCopyTo));
-		SelNGBase.selenium.get().isElementPresent("//*[contains(@class, 'DwtListView ZmWhiteBlackList')]");
+		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@class, 'DwtListView ZmWhiteBlackList')]");
 
 		clickAt(parentAccount, localize(locator.composing));
 		checkHeaders(localize(locator.composingMessages));
 		checkLabels("Compose:");
 		checkLabels("Prefix:");
-		SelNGBase.selenium.get().isElementPresent("link=Accounts Page");
+		ClientSessionFactory.session().selenium().isElementPresent("link=Accounts Page");
 
 		clickAt(parentAccount, localize(locator.signatures));
 		checkHeaders(localize(locator.signatures));
 		checkHeaders(localize(locator.signaturesUsing));
 		obj.zButton.zExists(localize(locator.addSignature));
-		SelNGBase.selenium.get().isElementPresent("link=Accounts Page");
+		ClientSessionFactory.session().selenium().isElementPresent("link=Accounts Page");
 
 		clickAt(parentAccount, localize(locator.accounts));
 		checkHeaders(localize(locator.accounts));
@@ -159,8 +159,8 @@ public class TabViews extends CommonTest {
 
 		clickAt(parentAccount, localize(locator.addressBook));
 		checkHeaders(localize(locator.options));
-		SelNGBase.selenium.get().isElementPresent("//*[contains(@id, 'AUTOCOMPLETE_NO_GROUP_MATCH')]");
-		SelNGBase.selenium.get().isElementPresent("//*[contains(@id, 'AUTO_ADD_ADDRESS')]");
+		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@id, 'AUTOCOMPLETE_NO_GROUP_MATCH')]");
+		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@id, 'AUTO_ADD_ADDRESS')]");
 
 		clickAt(parentAccount, localize(locator.calendar));
 		checkHeaders(localize(locator.general));
@@ -183,13 +183,13 @@ public class TabViews extends CommonTest {
 		 */
 		clickAt(childAccount, localize(locator.mail));
 		checkHeaders(localize(locator.messagesReceiving));		
-		SelNGBase.selenium.get().isElementPresent("//*[contains(@class, 'DwtListView ZmWhiteBlackList')]");
+		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@class, 'DwtListView ZmWhiteBlackList')]");
 
 		clickAt(childAccount, localize(locator.signature));
 		checkHeaders(localize(locator.signatures));
 		checkHeaders(localize(locator.signaturesUsing));
 		obj.zButton.zExists(localize(locator.addSignature));
-		SelNGBase.selenium.get().isElementPresent("link=Accounts Page");
+		ClientSessionFactory.session().selenium().isElementPresent("link=Accounts Page");
 
 		clickAt(childAccount, localize(locator.accounts));
 		checkHeaders(localize(locator.accounts));
@@ -203,8 +203,8 @@ public class TabViews extends CommonTest {
 
 		clickAt(childAccount, localize(locator.addressBook));
 		checkHeaders(localize(locator.options));
-		SelNGBase.selenium.get().isElementPresent("//*[contains(@id, 'AUTOCOMPLETE_NO_GROUP_MATCH')]");
-		SelNGBase.selenium.get().isElementPresent("//*[contains(@id, 'AUTO_ADD_ADDRESS')]");
+		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@id, 'AUTOCOMPLETE_NO_GROUP_MATCH')]");
+		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@id, 'AUTO_ADD_ADDRESS')]");
 
 		clickAt(childAccount, localize(locator.calendar));
 		checkHeaders(localize(locator.general));
@@ -222,7 +222,7 @@ public class TabViews extends CommonTest {
 
 
 	public void clickAt(String accountName, String tabName) throws Exception{
-		SelNGBase.selenium.get().clickAt("//*[contains(@id,'"+accountName+"') and contains(text(),'"+tabName+"')]","");
+		ClientSessionFactory.session().selenium().clickAt("//*[contains(@id,'"+accountName+"') and contains(text(),'"+tabName+"')]","");
 	}
 
 	public String createXpath(String accountName, String tabName) throws Exception{
@@ -230,11 +230,11 @@ public class TabViews extends CommonTest {
 	}
 
 	public void checkHeaders(String headerText) throws Exception {
-		SelNGBase.selenium.get().isElementPresent("//*[contains(@class, 'ZOptionsHeader ImgPrefsHeader') and contains(text(), '"+headerText+"')]");
+		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@class, 'ZOptionsHeader ImgPrefsHeader') and contains(text(), '"+headerText+"')]");
 	}
 
 	public void checkLabels(String labelText) throws Exception {
-		SelNGBase.selenium.get().isElementPresent("//*[contains(@class, 'ZOptionsLabel') and contains(text(), '"+labelText+"')]");
+		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@class, 'ZOptionsLabel') and contains(text(), '"+labelText+"')]");
 	}
 
 }

@@ -6,7 +6,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -271,7 +271,7 @@ public class BriefcaseSharing extends CommonTest {
 				allowtoseeprivateappt);
 		page.zLoginpage.logoutOfZimbraAjax();
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().open(
+		ClientSessionFactory.session().selenium().open(
 				ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 						+ ZimbraSeleniumProperties.getStringProperty("server")
 						+ "/home/"

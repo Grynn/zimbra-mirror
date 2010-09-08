@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 
@@ -196,7 +196,7 @@ public class TagAppointment extends CommonTest {
 		zDeleteTag(newTag1);
 		SleepUtil.sleep(1000);
 
-		SelNGBase.selenium.get()
+		ClientSessionFactory.session().selenium()
 				.clickAt(
 						"//div[contains(@id,'zli__CLS')]//td[contains(@class,'_name') and contains(text(), '"
 								+ subject + "')]", "");
@@ -248,7 +248,7 @@ public class TagAppointment extends CommonTest {
 		obj.zButton.zClick(page.zCalApp.zViewBtn);
 		obj.zMenuItem.zClick(localize(locator.list));
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 				"//td[contains(@id,'zlif__CLL') and contains(text(), '"
 						+ subject + "')]", "");
 		obj.zButton.zClick(page.zCalApp.zCalTagBtn);
@@ -433,7 +433,7 @@ public class TagAppointment extends CommonTest {
 
 	public static void zClickApptInMonthView(String subject) throws Exception {
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get()
+		ClientSessionFactory.session().selenium()
 				.clickAt(
 						"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
 								+ subject + ")]", "");
@@ -443,19 +443,19 @@ public class TagAppointment extends CommonTest {
 			throws Exception {
 		SleepUtil.sleep(1000);
 		if (view.toLowerCase().equals("day")) {
-			SelNGBase.selenium.get()
+			ClientSessionFactory.session().selenium()
 					.mouseDownRight("xpath=//div[contains(@id, 'zli__CLD')]//td[contains(@class, '_name') and contains(text(), "
 							+ subject + ")]");
 		} else if (view.toLowerCase().equals("workweek")) {
-			SelNGBase.selenium.get()
+			ClientSessionFactory.session().selenium()
 					.mouseDownRight("xpath=//div[contains(@id, 'zli__CLWW')]//td[contains(@class, '_name') and contains(text(), "
 							+ subject + ")]");
 		} else if (view.toLowerCase().equals("week")) {
-			SelNGBase.selenium.get()
+			ClientSessionFactory.session().selenium()
 					.mouseDownRight("xpath=//div[contains(@id, 'zli__CLW')]//td[contains(@class, '_name') and contains(text(), "
 							+ subject + ")]");
 		} else if (view.toLowerCase().equals("month")) {
-			SelNGBase.selenium.get()
+			ClientSessionFactory.session().selenium()
 					.mouseDownRight("xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
 							+ subject + ")]");
 		}
@@ -468,22 +468,22 @@ public class TagAppointment extends CommonTest {
 			throws Exception {
 		SleepUtil.sleep(1000);
 		if (view.toLowerCase().equals("day")) {
-			SelNGBase.selenium.get()
+			ClientSessionFactory.session().selenium()
 					.clickAt(
 							"xpath=//div[contains(@id, 'zli__CLD')]//td[contains(@class, '_name') and contains(text(), "
 									+ subject + ")]", "");
 		} else if (view.toLowerCase().equals("workweek")) {
-			SelNGBase.selenium.get()
+			ClientSessionFactory.session().selenium()
 					.clickAt(
 							"xpath=//div[contains(@id, 'zli__CLWW')]//td[contains(@class, '_name') and contains(text(), "
 									+ subject + ")]", "");
 		} else if (view.toLowerCase().equals("week")) {
-			SelNGBase.selenium.get()
+			ClientSessionFactory.session().selenium()
 					.clickAt(
 							"xpath=//div[contains(@id, 'zli__CLW')]//td[contains(@class, '_name') and contains(text(), "
 									+ subject + ")]", "");
 		} else if (view.toLowerCase().equals("month")) {
-			SelNGBase.selenium.get()
+			ClientSessionFactory.session().selenium()
 					.clickAt(
 							"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
 									+ subject + ")]", "");
@@ -494,7 +494,7 @@ public class TagAppointment extends CommonTest {
 	public static void zDblClickApptInMonthView(String subject)
 			throws Exception {
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get()
+		ClientSessionFactory.session().selenium()
 				.doubleClickAt(
 						"xpath=//td[contains(@class, 'calendar_month_day_item')]//div[contains(text(), "
 								+ subject + ")]", "");

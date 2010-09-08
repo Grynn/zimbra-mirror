@@ -24,7 +24,7 @@ import projects.html.PageObjects;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.core.SeleniumService;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
@@ -488,12 +488,12 @@ public class CommonTest extends SelNGBase {
 			} else if (objectType.equals("textarea")) {
 				retVal = obj.zTextAreaField.zExistsDontWait(objectName);
 			} else if (objectType.equals("link")) {
-				if (SelNGBase.selenium.get().isElementPresent("link=" + objectName))
+				if (ClientSessionFactory.session().selenium().isElementPresent("link=" + objectName))
 					retVal = "true";
 				else
 					retVal = "false";
 			} else if (objectType.equals("text")) {
-				if (SelNGBase.selenium.get().isTextPresent(objectName))
+				if (ClientSessionFactory.session().selenium().isTextPresent(objectName))
 					retVal = "true";
 				else
 					retVal = "false";

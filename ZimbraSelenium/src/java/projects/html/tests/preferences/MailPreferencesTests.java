@@ -21,7 +21,7 @@ import framework.util.Stafzmprov;
 import projects.html.tests.CommonTest;
 import projects.html.ui.ComposeView;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.Stafzmprov;

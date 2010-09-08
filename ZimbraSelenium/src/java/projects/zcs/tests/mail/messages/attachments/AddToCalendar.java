@@ -7,7 +7,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -66,7 +66,7 @@ public class AddToCalendar extends CommonTest {
 
 		obj.zMessageItem.zClick(subject1);
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().click(
+		ClientSessionFactory.session().selenium().click(
 				"link=" + localize(locator.addToCalendar));
 		obj.zFolder.zClickInDlgByName(localize(locator.calendar),
 				localize(locator.addToCalendar));
@@ -84,7 +84,7 @@ public class AddToCalendar extends CommonTest {
 		zGoToApplication("Mail");
 		obj.zMessageItem.zClick(subject2);
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().click(
+		ClientSessionFactory.session().selenium().click(
 				"link=" + localize(locator.addToCalendar));
 		obj.zFolder.zClickInDlgByName(localize(locator.calendar),
 				localize(locator.addToCalendar));
@@ -121,9 +121,9 @@ public class AddToCalendar extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		SleepUtil.sleep(3000);
-		SelNGBase.selenium.get().click(
+		ClientSessionFactory.session().selenium().click(
 				"link=" + localize(locator.addToCalendar));
 		obj.zFolder.zClickInDlgByName(localize(locator.calendar),
 				localize(locator.addToCalendar));
@@ -131,11 +131,11 @@ public class AddToCalendar extends CommonTest {
 				localize(locator.addToCalendar));
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		String startDate = "20060119";
 		String calView = "workWeek";
-		SelNGBase.selenium.get().open(
+		ClientSessionFactory.session().selenium().open(
 				ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 						+ ZimbraSeleniumProperties.getStringProperty("server")
 						+ "/?app=calendar&view=" + calView + "&date="

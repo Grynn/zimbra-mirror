@@ -17,7 +17,7 @@ import projects.zcs.ui.MailApp;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
 import framework.util.RetryFailedTests;
@@ -176,7 +176,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToComposeByShiftClick();
@@ -269,7 +269,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		getKeyboardKeys(acc1);
@@ -277,7 +277,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		verifyAutocomplete(true);
 
 		sendMailsUpdated();
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -326,14 +326,14 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		verifyAutocomplete(true);
 
 		sendMailsUpdated();
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -383,7 +383,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -407,8 +407,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 												+ acc3.toLowerCase() + "')]"));
@@ -416,8 +415,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying second autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 												+ acc5.toLowerCase() + "')]"));
@@ -425,8 +423,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying third autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_2')]//td[contains(text(), '"
 												+ acc1.toLowerCase() + "')]"));
@@ -434,8 +431,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying fourth autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_3')]//td[contains(text(), '"
 												+ acc4.toLowerCase() + "')]"));
@@ -443,8 +439,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying fifth autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_4')]//td[contains(text(), '"
 												+ acc2.toLowerCase() + "')]"));
@@ -527,7 +522,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 
 		page.zComposeView.zComposeAndSendMail(acc2, "", "", "testSubject",
 				"testBody", "");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToMailCompose();
@@ -557,8 +552,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 												+ acc2.toLowerCase() + "')]"));
@@ -566,8 +560,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying second autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 												+ acc1.toLowerCase() + "')]"));
@@ -785,7 +778,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 				"testSubject", "testBody", "");
 		page.zComposeView.zComposeAndSendMail(acc2, "", "", "testSubject",
 				"testBody", "");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -793,16 +786,14 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 												+ acc2.toLowerCase() + "')]"));
 		Assert
 				.assertTrue(
 						"Verifying second autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 												+ acc1.toLowerCase() + "')]"));
@@ -820,23 +811,21 @@ public class MailAutoCompleteAddress extends CommonTest {
 				.println("verify2 : Set zimbraPrefAutoCompleteQuickCompletionOnComma to FALSE");
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoCompleteQuickCompletionOnComma", "FALSE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 												+ acc2.toLowerCase() + "')]"));
 		Assert
 				.assertTrue(
 						"Verifying second autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 												+ acc1.toLowerCase() + "')]"));
@@ -878,7 +867,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 				displayName);
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefAutoCompleteQuickCompletionOnComma", "FALSE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToMailCompose();
@@ -1033,7 +1022,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc1.toLowerCase(), 1, 1);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -1074,7 +1063,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 
 		getKeyboardKeys(acc1);
 		page.zComposeView.zNavigateToMailCompose();
-		SelNGBase.selenium.get().click("link=" + localize(locator.showBCC));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.showBCC));
 		obj.zTextAreaField.zActivate(page.zComposeView.zBccField);
 		if (ZimbraSeleniumProperties.getStringProperty("locale")
 				.equals("en_US")
@@ -1146,7 +1135,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		obj.zButton.zClick(localize(locator.save), "2");
 		obj.zContactListItem.zExists(groupName);
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		getKeyboardKeys(acc1);
@@ -1215,7 +1204,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		getKeyboardKeys(acc1);
@@ -1307,7 +1296,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc1, 1, 1);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -1333,7 +1322,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -1397,7 +1386,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc2, 2, 0);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -1496,7 +1485,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 
 		Stafzmprov.modifyAccount(user2,
 				"zimbraPrefSharedAddrBookAutoCompleteEnabled", "TRUE");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -1526,7 +1515,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		page.zMailApp.zVerifyAutocompleteNotExists(acc3, 3, 0);
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		typeKeyboardKeys();
@@ -1630,7 +1619,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		page.zComposeView.zComposeAndSendMail("999@testdomain.com", "", "",
 				"testSubject", "testBody", "");
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zComposeView.zNavigateToMailCompose();
@@ -1702,7 +1691,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 					"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		}
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 
@@ -1787,7 +1776,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 				+ "; " + acc5, "", "", "testSubject", "testBody", "");
 		page.zComposeView.zComposeAndSendMail(acc1 + "; " + acc2 + "; " + acc5,
 				"", "", "testSubject", "testBody", "");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 	}
@@ -1799,8 +1788,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying first autocomplete list rank",
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 													+ acc3.toLowerCase()
@@ -1809,8 +1797,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying second autocomplete list rank",
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 													+ acc5.toLowerCase()
@@ -1819,8 +1806,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying third autocomplete list rank",
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_2')]//td[contains(text(), '"
 													+ acc1.toLowerCase()
@@ -1829,8 +1815,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying fourth autocomplete list rank",
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_3')]//td[contains(text(), '"
 													+ acc4.toLowerCase()
@@ -1839,8 +1824,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying fifth autocomplete list rank",
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_4')]//td[contains(text(), '"
 													+ acc2.toLowerCase()
@@ -1850,8 +1834,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying first autocomplete list rank",
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 													+ acc1 + "')]"));
@@ -1859,8 +1842,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying second autocomplete list rank",
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 													+ acc2 + "')]"));
@@ -1868,8 +1850,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying third autocomplete list rank",
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_2')]//td[contains(text(), '"
 													+ acc3 + "')]"));
@@ -1877,8 +1858,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying fourth autocomplete list rank",
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_3')]//td[contains(text(), '"
 													+ acc4 + "')]"));
@@ -1886,8 +1866,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 			Assert
 					.assertTrue(
 							"Verifying fifth autocomplete list rank",
-							SelNGBase.selenium
-									.get()
+							ClientSessionFactory.session().selenium()
 									.isElementPresent(
 											"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_4')]//td[contains(text(), '"
 													+ acc5 + "')]"));
@@ -1899,8 +1878,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying first autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_0')]//td[contains(text(), '"
 												+ acc5.toLowerCase() + "')]"));
@@ -1908,8 +1886,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying second autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_1')]//td[contains(text(), '"
 												+ acc1.toLowerCase() + "')]"));
@@ -1917,8 +1894,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying third autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_2')]//td[contains(text(), '"
 												+ acc2.toLowerCase() + "')]"));
@@ -1926,8 +1902,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying fourth autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_3')]//td[contains(text(), '"
 												+ acc3.toLowerCase() + "')]"));
@@ -1935,8 +1910,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Assert
 				.assertTrue(
 						"Verifying fifth autocomplete list rank",
-						SelNGBase.selenium
-								.get()
+						ClientSessionFactory.session().selenium()
 								.isElementPresent(
 										"//div[contains(@class, 'ZmAutocompleteListView')]//tr[contains(@id, 'acRow_4')]//td[contains(text(), '"
 												+ acc4.toLowerCase() + "')]"));
@@ -2033,7 +2007,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 	public static void zVerifyIsColonAutocompleteExists(String value, int rank)
 			throws Exception {
 		Assert.assertTrue("Verifying is: autocomplete list rank " + rank
-				+ " for " + value, SelNGBase.selenium.get().isElementPresent(
+				+ " for " + value, ClientSessionFactory.session().selenium().isElementPresent(
 				"//div[contains(@id, 'acRow_" + (rank - 1)
 						+ "') and contains(text(), '" + value + "')]"));
 	}

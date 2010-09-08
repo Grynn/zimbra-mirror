@@ -6,7 +6,7 @@ import java.awt.event.KeyEvent;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.items.ContactGroupItem;
 import framework.util.RetryFailedTests;
 import framework.util.Stafzmprov;

@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.ActionMethod;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.items.ContactGroupItem;
 import framework.util.RetryFailedTests;
 import framework.util.Stafzmprov;
@@ -90,12 +90,12 @@ public class CreateContactGroup extends CommonTest {
 		obj.zContactListItem.zExists(group.nickname);
 		
 
-		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", "abc");
+		ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']", "abc");
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zContactListItem.zNotExists(group.nickname);
 		
 		Assert.assertFalse(
-				SelNGBase.selenium.get().isElementPresent("xpath=//div[contains(@class,'contactHeader') and contains(text(),'" + group.nickname + "')]"),
+				ClientSessionFactory.session().selenium().isElementPresent("xpath=//div[contains(@class,'contactHeader') and contains(text(),'" + group.nickname + "')]"),
 				"Verify that the group does not display if no search results are found");
 
 		SelNGBase.needReset.set(false);

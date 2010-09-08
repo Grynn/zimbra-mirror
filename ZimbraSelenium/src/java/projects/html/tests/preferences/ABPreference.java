@@ -11,7 +11,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import projects.html.tests.CommonTest;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -135,7 +135,7 @@ public class ABPreference extends CommonTest {
 		page.zABComposeHTML.zNavigateToPreferenceAB();
 		SleepUtil.sleepSmall();// wait because it takes some time to load page after
 		// cliking on Pref-AB
-		SelNGBase.selenium.get().click("link="
+		ClientSessionFactory.session().selenium().click("link="
 				+ localize(locator.optionsManageAddressBooksLink));
 		obj.zButton.zExists(page.zABComposeHTML.zNewABIconBtn);
 		SelNGBase.needReset.set(false);

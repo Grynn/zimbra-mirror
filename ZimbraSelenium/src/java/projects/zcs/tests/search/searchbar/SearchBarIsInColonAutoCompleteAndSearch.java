@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -176,7 +176,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 		pressKeys("down");
 		pressKeys("enter");
 		SleepUtil.sleep(1000);
-		String ccme = SelNGBase.selenium.get().getValue("xpath=//input[@class='search_input']");
+		String ccme = ClientSessionFactory.session().selenium().getValue("xpath=//input[@class='search_input']");
 		assertReport(
 				"-is:ccme",
 				ccme,
@@ -439,7 +439,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 		pressKeys("down");
 		pressKeys("enter");
 		SleepUtil.sleep(1000);
-		String sent = SelNGBase.selenium.get().getValue("xpath=//input[@class='search_input']");
+		String sent = ClientSessionFactory.session().selenium().getValue("xpath=//input[@class='search_input']");
 		assertReport(
 				"in:" + (char) 34 + "sent" + (char) 34,
 				sent,
@@ -498,7 +498,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 		}
 		pressKeys("tab");
 		SleepUtil.sleep(1000);
-		String inbox = SelNGBase.selenium.get()
+		String inbox = ClientSessionFactory.session().selenium()
 				.getValue("xpath=//input[@class='search_input']");
 		assertReport(
 				"-in:" + (char) 34 + "inbox" + (char) 34,
@@ -688,7 +688,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public static void VerifyIsColonAutocompleteExists(String value, int rank)
 			throws Exception {
 		Assert.assertTrue("Verifying is: autocomplete list rank " + rank
-				+ " for " + value, SelNGBase.selenium.get()
+				+ " for " + value, ClientSessionFactory.session().selenium()
 				.isElementPresent("//tr[contains(@id, 'DWT18_acRow_"
 						+ (rank - 1) + "')]//td[contains(text(), '" + value
 						+ "')]"));
@@ -697,7 +697,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public static void VerifyIsColonAutocompleteNotExists(String value, int rank)
 			throws Exception {
 		Assert.assertFalse("Verifying is: autocomplete list rank " + rank
-				+ " for " + value, SelNGBase.selenium.get()
+				+ " for " + value, ClientSessionFactory.session().selenium()
 				.isElementPresent("//tr[contains(@id, 'DWT18_acRow_"
 						+ (rank - 1) + "')]//td[contains(text(), '" + value
 						+ "')]"));
@@ -719,13 +719,13 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 				|| value.contains("remotefolder")) {
 			pressKeys("i, n, :");
 			SleepUtil.sleep(1000);
-			SelNGBase.selenium.get().clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
+			ClientSessionFactory.session().selenium().clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
 					+ "')]//td[contains(text(), '" + value + "')]", "0,0");
 
 		} else {
 			pressKeys("i, s, :");
 			SleepUtil.sleep(1000);
-			SelNGBase.selenium.get().clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
+			ClientSessionFactory.session().selenium().clickAt("//tr[contains(@id, 'DWT18_acRow_" + rank
 					+ "')]//td[contains(text(), '" + value + "')]", "0,0");
 		}
 	}
@@ -851,10 +851,10 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 			obj.zButton.zClick(page.zMailApp.zMoveIconBtn);
 			zWaitTillObjectExist("dialog", localize(locator.moveMessage));
 			Boolean isElementPresent;
-			isElementPresent = SelNGBase.selenium.get()
+			isElementPresent = ClientSessionFactory.session().selenium()
 					.isElementPresent("//div[contains(@id, 'zti__ZmChooseFolderDialog_Mail')]//div[contains(@class, 'ImgNodeCollapsed')]");
 			if (isElementPresent == true) {
-				SelNGBase.selenium.get()
+				ClientSessionFactory.session().selenium()
 						.clickAt(
 								"//div[contains(@id, 'zti__ZmChooseFolderDialog_Mail')]//div[contains(@class, 'ImgNodeCollapsed')]",
 								"");
@@ -873,7 +873,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 			obj.zButton.zClick(page.zMailApp.zMoveIconBtn);
 			zWaitTillObjectExist("dialog", localize(locator.moveMessage));
 			if (isElementPresent == true) {
-				SelNGBase.selenium.get()
+				ClientSessionFactory.session().selenium()
 						.click("//div[contains(@id, 'zti__ZmChooseFolderDialog_Mail')]//div[contains(@class, 'ImgNodeCollapsed')]");
 			}
 			pressKeys("right");
@@ -965,7 +965,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	}
 
 	protected String GetInnerHtml(String ElemId) throws Exception {
-		return SelNGBase.selenium.get()
+		return ClientSessionFactory.session().selenium()
 				.getEval("this.browserbot.getCurrentWindow().document.getElementById('"
 						+ ElemId + "').innerHTML");
 	}

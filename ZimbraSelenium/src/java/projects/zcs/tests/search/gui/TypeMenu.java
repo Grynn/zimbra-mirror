@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
 import projects.zcs.tests.CommonTest;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.HarnessException;
 import framework.util.RetryFailedTests;
 

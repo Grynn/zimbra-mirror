@@ -7,7 +7,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.HarnessException;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
@@ -84,11 +84,11 @@ public class ForwardMultiMessages extends CommonTest {
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(fwdSubject);
 		obj.zMessageItem.zClick(fwdSubject);
 		SleepUtil.sleep(1500);
-		SelNGBase.selenium.get().click("link=subject1");
+		ClientSessionFactory.session().selenium().click("link=subject1");
 		SleepUtil.sleep(5000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		String msgBody = null;
-		msgBody = SelNGBase.selenium.get().getBodyText();
+		msgBody = ClientSessionFactory.session().selenium().getBodyText();
 		assertReport(msgBody, localize(locator.from), "Verifying From header");
 		assertReport(msgBody, localize(locator.to), "Verifying To header");
 		assertReport(msgBody, localize(locator.cc), "Verifying Cc header");
@@ -99,7 +99,7 @@ public class ForwardMultiMessages extends CommonTest {
 		assertReport(msgBody.toLowerCase(), "ccuser@testdomain.com",
 				"Verifying Cc field value");
 		assertReport(msgBody, subject1, "Verifying Subject field value");
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 				"//html/body[contains(text(), 'body1')]"));
 		Assert
 				.assertFalse(msgBody.contains("HTTP ERROR: 404"),
@@ -113,12 +113,12 @@ public class ForwardMultiMessages extends CommonTest {
 				.assertFalse(msgBody.contains("Internal Server Error"),
 						"Verifying message data after clicking to 'View entire message' link");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
-		SelNGBase.selenium.get().click("link=subject2");
+		ClientSessionFactory.session().selenium().click("link=subject2");
 		SleepUtil.sleep(5000);
-		SelNGBase.selenium.get().selectWindow("_blank");
-		msgBody = SelNGBase.selenium.get().getBodyText();
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
+		msgBody = ClientSessionFactory.session().selenium().getBodyText();
 		assertReport(msgBody, localize(locator.from), "Verifying From header");
 		assertReport(msgBody, localize(locator.to), "Verifying To header");
 		assertReport(msgBody, localize(locator.cc), "Verifying Cc header");
@@ -129,7 +129,7 @@ public class ForwardMultiMessages extends CommonTest {
 		assertReport(msgBody.toLowerCase(), "ccuser@testdomain.com",
 				"Verifying Cc field value");
 		assertReport(msgBody, subject2, "Verifying Subject field value");
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent(
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
 				"//html/body[contains(text(), 'body2')]"));
 		Assert
 				.assertFalse(msgBody.contains("HTTP ERROR: 404"),
@@ -143,7 +143,7 @@ public class ForwardMultiMessages extends CommonTest {
 				.assertFalse(msgBody.contains("Internal Server Error"),
 						"Verifying message data after clicking to 'View entire message' link");
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}

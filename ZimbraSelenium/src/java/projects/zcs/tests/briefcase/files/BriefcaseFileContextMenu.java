@@ -6,7 +6,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -63,29 +63,27 @@ public class BriefcaseFileContextMenu extends CommonTest {
 				.equals("en_US")) {
 			obj.zButton.zClick(localize(locator.newDocument));
 			SleepUtil.sleep(1500);
-			SelNGBase.selenium.get().selectWindow(
-					SelNGBase.selenium.get().getAllWindowTitles()[1]);
-			SelNGBase.selenium.get().windowFocus();
+			ClientSessionFactory.session().selenium().selectWindow(
+					ClientSessionFactory.session().selenium().getAllWindowTitles()[1]);
+			ClientSessionFactory.session().selenium().windowFocus();
 			zWaitTillObjectExist("button", localize(locator.save));
-			SelNGBase.selenium.get().type("xpath=//input[@type='text']",
+			ClientSessionFactory.session().selenium().type("xpath=//input[@type='text']",
 					filename);
 			obj.zButton.zClick(localize(locator.save));
 			SleepUtil.sleep(1000);
-			SelNGBase.selenium.get().close();
-			SelNGBase.selenium.get().selectWindow(null);
+			ClientSessionFactory.session().selenium().close();
+			ClientSessionFactory.session().selenium().selectWindow(null);
 			obj.zFolder.zClick(page.zBriefcaseApp.zBriefcaseFolder);
 			SleepUtil.sleep(1000);
 			obj.zBriefcaseItem.zClick(filename);
 			obj.zBriefcaseItem.zRtClick(filename);
 			SleepUtil.sleep(500);
-			String download = SelNGBase.selenium
-					.get()
-					.getEval(
+			String download = ClientSessionFactory.session().selenium().getEval(
 							"selenium.browserbot.getCurrentWindow().document.getElementById('zmi__Briefcase__SAVE_FILE').className");
 			Assert.assertTrue(download.contains("ZDisabled"),
 					"Download is in enable state");
 
-			Boolean downloadLink = SelNGBase.selenium.get().isElementPresent(
+			Boolean downloadLink = ClientSessionFactory.session().selenium().isElementPresent(
 					"Link=" + localize(locator.saveFile));
 			assertReport("false", downloadLink.toString(),
 					"Verifying Download link exist");

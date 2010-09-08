@@ -6,7 +6,7 @@ import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.BrowserUtil;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
@@ -96,7 +96,7 @@ public class LoginPage extends AppPage {
 	 * @throws Exception
 	 */
 	public static void logoutOfZimbraAjax() throws Exception {
-		SelNGBase.selenium.get().click("link=" + localize("logOff"));
+		ClientSessionFactory.session().selenium().click("link=" + localize("logOff"));
 		SleepUtil.sleep(1000);
 		assertTrue(true);
 	}

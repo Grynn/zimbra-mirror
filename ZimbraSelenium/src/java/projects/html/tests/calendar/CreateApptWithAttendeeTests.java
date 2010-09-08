@@ -12,7 +12,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import projects.html.tests.CommonTest;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -244,8 +244,8 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		SleepUtil.sleepMedium();
 		
-		SelNGBase.selenium.get().isElementPresent(localize(locator.apptInstEditSeries));
-		SelNGBase.selenium.get().isElementPresent(localize(locator.apptInstNote));
+		ClientSessionFactory.session().selenium().isElementPresent(localize(locator.apptInstEditSeries));
+		ClientSessionFactory.session().selenium().isElementPresent(localize(locator.apptInstNote));
 
 		SelNGBase.needReset.set(false);
 	}
@@ -429,7 +429,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		SleepUtil.sleepVeryLong(); // for below statement. Earlier wait was 6 seconds.
 
-		SelNGBase.selenium.get().click("link=" + localize(locator.apptInstEditSeries));
+		ClientSessionFactory.session().selenium().click("link=" + localize(locator.apptInstEditSeries));
 
 		SleepUtil.sleepLong(); // for below statement
 

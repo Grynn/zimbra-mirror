@@ -8,7 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.DocumentApp;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 
@@ -69,7 +69,7 @@ public class BasicDocumentTests extends CommonTest {
 
 		// page.zDocumentCompose.zNavigateToDocument();
 		page.zDocumentCompose.zCreateBasicPage(pageName, bodyContent);
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("link=" + pageName),
 				"The page is not created");
 
 		SelNGBase.needReset.set(false);
@@ -89,7 +89,7 @@ public class BasicDocumentTests extends CommonTest {
 		obj.zFolder.zExistsDontWait(newNotebookName);
 		page.zDocumentCompose.zCreatePageInSpecificNotebook(newNotebookName,
 				pageName, bodyContent);
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("link=" + pageName),
 				"The page is not created");
 
 		SelNGBase.needReset.set(false);
@@ -168,7 +168,7 @@ public class BasicDocumentTests extends CommonTest {
 		obj.zButton.zClick((page.zDocumentCompose.zRefreshIconBtn));
 		obj.zFolder.zClick(page.zDocumentApp.zNotebookFolder);
 		SleepUtil.sleep(1000);
-		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
+		Assert.assertFalse(ClientSessionFactory.session().selenium().isElementPresent("link=" + pageName),
 				"The page is not deleted");
 		SelNGBase.needReset.set(false);
 
@@ -193,7 +193,7 @@ public class BasicDocumentTests extends CommonTest {
 		obj.zButton.zClick((page.zDocumentCompose.zRefreshIconBtn));
 		obj.zFolder.zClick(page.zDocumentApp.zNotebookFolder);
 		SleepUtil.sleep(3000);
-		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
+		Assert.assertFalse(ClientSessionFactory.session().selenium().isElementPresent("link=" + pageName),
 				"The page is not deleted");
 
 		SelNGBase.needReset.set(false);
@@ -218,7 +218,7 @@ public class BasicDocumentTests extends CommonTest {
 		Assert.assertTrue(warningMsg.equals(localize(locator.askToSave)),
 				"Warning message for save page is not correct");
 		obj.zButton.zClickInDlg(localize(locator.no));
-		Assert.assertFalse(SelNGBase.selenium.get().isElementPresent("link=" + pageName),
+		Assert.assertFalse(ClientSessionFactory.session().selenium().isElementPresent("link=" + pageName),
 				"The page is Saved.However it should not");
 
 		SelNGBase.needReset.set(false);

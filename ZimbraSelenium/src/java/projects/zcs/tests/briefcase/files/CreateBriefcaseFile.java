@@ -5,7 +5,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import projects.zcs.tests.CommonTest;
@@ -94,7 +94,7 @@ public class CreateBriefcaseFile extends CommonTest {
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
 		obj.zBriefcaseItem.zExists(filename);
 		obj.zBriefcaseItem.zClick(filename);
-		SelNGBase.selenium.get()
+		ClientSessionFactory.session().selenium()
 				.clickAt("id=zb__BCC__SEND_FILE_MENU_title", "");
 		SleepUtil.sleep(1000);
 		obj.zMenuItem.zClick(localize(locator.sendAsAttachment));

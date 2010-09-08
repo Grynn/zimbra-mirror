@@ -12,7 +12,7 @@ import org.testng.annotations.Test;
 
 import com.zimbra.cs.account.Provisioning;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.SleepUtil;
 import framework.util.RetryFailedTests;
 import framework.util.Stafzmprov;
@@ -84,7 +84,7 @@ public class DraftsTests extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
-		SelNGBase.selenium.get().select("name=priority", localize(locator.low));
+		ClientSessionFactory.session().selenium().select("name=priority", localize(locator.low));
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
 		obj.zButton.zClick(page.zComposeView.zCancelBtn);
 		zWaitTillObjectExist("folder", page.zMailApp.zDraftFldr);
@@ -101,7 +101,7 @@ public class DraftsTests extends CommonTest {
 		body = getLocalizedData_NoSpecialChar();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
-		SelNGBase.selenium.get().select("name=priority", localize(locator.high));
+		ClientSessionFactory.session().selenium().select("name=priority", localize(locator.high));
 		SleepUtil.sleepSmall();// to avoid navigate away dialog
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtn);
 		SleepUtil.sleepMedium();// to avoid navigate away dialog

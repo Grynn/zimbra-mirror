@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -62,11 +62,11 @@ public class MailSavedSearch extends CommonTest {
 
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byConversation));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLV__ex"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhi__CLV__ex"));
 
 		LmtpUtil.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
-		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", subject);
+		ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']", subject);
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zMessageItem.zExists(subject);
 		obj.zButton.zClick("id=zb__Search__SAVE_left_icon");
@@ -77,7 +77,7 @@ public class MailSavedSearch extends CommonTest {
 
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__TV__fg"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhi__TV__fg"));
 
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		SleepUtil.sleep(1000);
@@ -88,7 +88,7 @@ public class MailSavedSearch extends CommonTest {
 
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
-		Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__TV__fg"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhi__TV__fg"));
 
 		SelNGBase.needReset.set(false);
 	}
@@ -107,7 +107,7 @@ public class MailSavedSearch extends CommonTest {
 		 */
 		LmtpUtil.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
-		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", "is:flagged");
+		ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']", "is:flagged");
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zMessageItem.zNotExists(subject);
 
@@ -116,7 +116,7 @@ public class MailSavedSearch extends CommonTest {
 		 */
 		obj.zFolder.zClick(localize(locator.inbox));
 		obj.zMessageItem.zClick(subject);
-		SelNGBase.selenium.get().clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 				"//*[contains(@id, '__fg')  and contains(@class, 'ImgBlank')]",
 				"");
 
@@ -131,7 +131,7 @@ public class MailSavedSearch extends CommonTest {
 		 * is:flagged search should return only first mail. Second mail should
 		 * not be present after hitting search button.
 		 */
-		SelNGBase.selenium.get().type("xpath=//input[@class='search_input']", "is:flagged");
+		ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']", "is:flagged");
 		obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 		obj.zMessageItem.zNotExists(new_subject);
 		obj.zMessageItem.zExists(subject);

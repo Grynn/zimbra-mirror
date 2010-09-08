@@ -8,7 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -68,9 +68,7 @@ public class AddToBriefcase extends CommonTest {
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							SelNGBase.selenium
-									.get()
-									.isElementPresent(
+							ClientSessionFactory.session().selenium().isElementPresent(
 											"xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
 		} else {
@@ -78,9 +76,9 @@ public class AddToBriefcase extends CommonTest {
 		}
 		// obj.zMessageItem.zVerifyHasAttachment(subject);
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")) {
-			SelNGBase.selenium.get().click("link=Aktetas");
+			ClientSessionFactory.session().selenium().click("link=Aktetas");
 		} else {
-			SelNGBase.selenium.get().click(
+			ClientSessionFactory.session().selenium().click(
 					"link=" + localize(locator.briefcase));
 		}
 		obj.zFolder.zClickInDlgByName(localize(locator.briefcase),

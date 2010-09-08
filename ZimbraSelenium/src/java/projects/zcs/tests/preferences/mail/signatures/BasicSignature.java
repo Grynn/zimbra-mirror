@@ -9,7 +9,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import projects.zcs.tests.CommonTest;
@@ -161,7 +161,7 @@ public class BasicSignature extends CommonTest {
 				"Signature should be saved");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
 		// obj.zMenuItem.zClick(signatureName);
-		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
+		ClientSessionFactory.session().selenium().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
 		obj.zButton.zClick(localize(locator.clear));
 		obj.zEditor.zExists(signatureBody);
@@ -188,7 +188,7 @@ public class BasicSignature extends CommonTest {
 		obj.zToastAlertMessage.zAlertMsgExists(localize(locator.optionsSaved),
 				"Signature should be saved");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
-		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
+		ClientSessionFactory.session().selenium().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
 		obj.zButton.zClick(localize(locator.clear));
 		obj.zEditor.zExists(signatureBody);
@@ -222,9 +222,9 @@ public class BasicSignature extends CommonTest {
 				"TEXT");
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick(localize(locator.addSignature));
-		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
+		ClientSessionFactory.session().selenium().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
-		SelNGBase.selenium.get()
+		ClientSessionFactory.session().selenium()
 				.clickAt(
 						"xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
 								+ localize(locator.del) + "')]", "");
@@ -258,9 +258,9 @@ public class BasicSignature extends CommonTest {
 				"HTML");
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick(localize(locator.addSignature));
-		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
+		ClientSessionFactory.session().selenium().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
-		SelNGBase.selenium.get()
+		ClientSessionFactory.session().selenium()
 				.clickAt(
 						"xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
 								+ localize(locator.del) + "')]", "");
@@ -301,9 +301,9 @@ public class BasicSignature extends CommonTest {
 				"Signature should be saved");
 		SleepUtil.sleep(500);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
-		SelNGBase.selenium.get().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
+		ClientSessionFactory.session().selenium().clickAt("xpath=//tr[contains(@id,'DWT')]/td[contains(text(),'"
 				+ signatureName + "')]", "");
-		SelNGBase.selenium.get()
+		ClientSessionFactory.session().selenium()
 				.clickAt(
 						"xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
 								+ localize(locator.del) + "')]", "");
@@ -344,16 +344,16 @@ public class BasicSignature extends CommonTest {
 				"Signature should be saved");
 		SleepUtil.sleep(500);
 		page.zSignaturePref.zNavigateToPreferenceSignature();
-		SelNGBase.selenium.get().clickAt("css=tr[id^=DWT]>td:contains("+ signatureName +")", "");
-		SelNGBase.selenium.get().clickAt("xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
+		ClientSessionFactory.session().selenium().clickAt("css=tr[id^=DWT]>td:contains("+ signatureName +")", "");
+		ClientSessionFactory.session().selenium().clickAt("xpath=//td[contains(@class,'ZOptionsField')]//table//tr/td[contains(@id,'_title') and contains(text(),'"
 								+ localize(locator.del) + "')]", "");
 
 		for (int second = 0;; second++) {
 			if (second >= 60) fail("timeout");
-			try { if (!SelNGBase.selenium.get().isTextPresent(signatureName)) break; } catch (Exception e) {}
+			try { if (!ClientSessionFactory.session().selenium().isTextPresent(signatureName)) break; } catch (Exception e) {}
 			SleepUtil.sleep(1000);
 		}
-		Assert.assertFalse(SelNGBase.selenium.get().isTextPresent(signatureBody));
+		Assert.assertFalse(ClientSessionFactory.session().selenium().isTextPresent(signatureBody));
 		
 		SelNGBase.needReset.set(false);
 	}

@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -679,7 +679,7 @@ public class Filter extends CommonTest {
 
 		// Condition value1
 		SelNGBase.fieldLabelIsAnObject = true;
-		SelNGBase.selenium.get()
+		ClientSessionFactory.session().selenium()
 				.type(
 						"xpath=//table[contains(@id,'_conditions')]/tbody/tr[contains(@id,'DWT')]/td/div[contains(@id,'DWT')]/input",
 						conditionValue1);

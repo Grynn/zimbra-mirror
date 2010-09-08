@@ -8,7 +8,7 @@ import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -680,10 +680,10 @@ public class AboveBelowSignature extends CommonTest {
 		obj.zButton.zClick(localize(locator.formatAsText));
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
 		SleepUtil.sleep(1000);
-		SelNGBase.selenium.get().clickAt("//*[contains(@class,'ImgImageDoc')]", "");
+		ClientSessionFactory.session().selenium().clickAt("//*[contains(@class,'ImgImageDoc')]", "");
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.addImg));
-		SelNGBase.selenium.get().clickAt("//*[contains(@class,'ImgInsertImage')]", "");
+		ClientSessionFactory.session().selenium().clickAt("//*[contains(@class,'ImgInsertImage')]", "");
 		obj.zButton.zClickInDlgByName(localize(locator.cancel),
 				localize(locator.uploadImage));
 		/**

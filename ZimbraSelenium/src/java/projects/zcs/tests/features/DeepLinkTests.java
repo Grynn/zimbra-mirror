@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 
 import projects.zcs.tests.CommonTest;
 import com.zimbra.common.service.ServiceException;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -59,19 +59,19 @@ public class DeepLinkTests extends CommonTest {
 		String[] recipients = { to };
 		LmtpUtil.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
-		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "/h");
 		SleepUtil.sleep(5000);
-		SelNGBase.selenium.get().click("xpath=id('R0')/td[2]");
+		ClientSessionFactory.session().selenium().click("xpath=id('R0')/td[2]");
 		SleepUtil.sleep(2000);
 		String currentURL, msgLocation;
 		int msgId;
-		currentURL = SelNGBase.selenium.get().getLocation();
+		currentURL = ClientSessionFactory.session().selenium().getLocation();
 		msgId = currentURL.indexOf("&cid=");
 		msgLocation = currentURL.substring(msgId).replaceAll("&cid=-", "");
 		System.out.println(msgLocation);
 
-		SelNGBase.selenium.get().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "?app=mails&id=" + msgLocation);
 		SleepUtil.sleep(5000);
 

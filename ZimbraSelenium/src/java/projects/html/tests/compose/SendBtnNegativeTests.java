@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 
 import projects.html.tests.CommonTest;
@@ -58,22 +58,22 @@ public class SendBtnNegativeTests extends CommonTest {
 		obj.zButton.zClick("Compose");
 		obj.zTextAreaField.zType(page.zComposeView.zToField, "admin@jitesh.com");
 		obj.zButton.zClick("Send");
-		SelNGBase.selenium.get().selectWindow("The page at http://jitesh.com says:");
-		SelNGBase.selenium.get().click("OK");
+		ClientSessionFactory.session().selenium().selectWindow("The page at http://jitesh.com says:");
+		ClientSessionFactory.session().selenium().click("OK");
 		
 		obj.zTab.zClick("Calendar");
 	
 		obj.zAppointment.zClick("test me", "2"); //clicks second appointment(we can use this to count)
 		String str3 = obj.zMiscObj.zGetInnerText("ZhApptRecurrInfo", "2"); //gets some text from some object with classname ZhApptRecurrInfo
 		String str4 = obj.zMiscObj.zGetInnerText("ZhCalDaySEP ZhCalDayHeaderToday");//get the text from Today's header (in week view)
-		SelNGBase.selenium.get().click("link=Edit the series.");//click on edit the series link
+		ClientSessionFactory.session().selenium().click("link=Edit the series.");//click on edit the series link
 		obj.zFolder.zClick("first");
 		//menus
-		SelNGBase.selenium.get().select("name=actionOp", "Mark as read");//html menu that selects mark as read
+		ClientSessionFactory.session().selenium().select("name=actionOp", "Mark as read");//html menu that selects mark as read
 		String message = obj.zToastAlertMessage.zGetMsg();//Toast message
 	
 		//folders
-		SelNGBase.selenium.get().select("name=folderId", "Sent");
+		ClientSessionFactory.session().selenium().select("name=folderId", "Sent");
 		obj.zFolder.zEdit("Folders");
 		obj.zFolder.zClick("Sent");
 		obj.zFolder.zExpand("Inbox");

@@ -5,7 +5,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -73,14 +73,14 @@ public class ReplyMail extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zReplyIconBtn_newWindow);
 		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Re: " + subject);
 
 		SelNGBase.needReset.set(false);
@@ -106,14 +106,14 @@ public class ReplyMail extends CommonTest {
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().selectWindow("_blank");
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zButton.zClick(page.zMailApp.zReplyAllIconBtn_newWindow);
 		SleepUtil.sleep(1500);
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
 		SleepUtil.sleep(2000);
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);
 		obj.zMessageItem.zExists("Re: " + subject);
 

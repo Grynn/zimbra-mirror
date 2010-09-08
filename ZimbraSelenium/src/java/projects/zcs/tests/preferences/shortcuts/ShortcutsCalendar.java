@@ -15,7 +15,7 @@ import projects.zcs.tests.CommonTest;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -68,7 +68,7 @@ public class ShortcutsCalendar extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 		SleepUtil.sleep(2000);
 		page.zCalApp.zNavigateToCalendar();
 
@@ -84,9 +84,9 @@ public class ShortcutsCalendar extends CommonTest {
 		} else if(actionType.equals("Today")){
 			page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
 			obj.zAppointment.zExists(subject);
-			SelNGBase.selenium.get().clickAt("//*[contains(@class,'ImgRightArrow')]", "");
-			SelNGBase.selenium.get().clickAt("//*[contains(@class,'ImgRightArrow')]", "");
-			SelNGBase.selenium.get().clickAt("//*[contains(@class,'ImgRightArrow')]", "");
+			ClientSessionFactory.session().selenium().clickAt("//*[contains(@class,'ImgRightArrow')]", "");
+			ClientSessionFactory.session().selenium().clickAt("//*[contains(@class,'ImgRightArrow')]", "");
+			ClientSessionFactory.session().selenium().clickAt("//*[contains(@class,'ImgRightArrow')]", "");
 			obj.zAppointment.zNotExists(subject);
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
@@ -151,15 +151,15 @@ public class ShortcutsCalendar extends CommonTest {
 			zRobot.keyRelease(keyToPress);
 			SleepUtil.sleep(2000);
 
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__se"));
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__tg"));
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__at"));
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__su"));
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__lo"));
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__st"));
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__fo"));
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhi__CLL__re"));
-			Assert.assertTrue(SelNGBase.selenium.get().isElementPresent("zlhl__CLL__dt"));
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhi__CLL__se"));
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhi__CLL__tg"));
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhi__CLL__at"));
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhl__CLL__su"));
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhl__CLL__lo"));
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhl__CLL__st"));
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhl__CLL__fo"));
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhi__CLL__re"));
+			Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent("zlhl__CLL__dt"));
 		}else if(actionType.equals("Schedule")){
 			zRobot.keyPress(keyToPress);
 			zRobot.keyRelease(keyToPress);
@@ -187,7 +187,7 @@ public class ShortcutsCalendar extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 		SleepUtil.sleep(2000);
 		page.zCalApp.zNavigateToCalendar();
 
@@ -215,7 +215,7 @@ public class ShortcutsCalendar extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		SelNGBase.selenium.get().windowFocus();
+		ClientSessionFactory.session().selenium().windowFocus();
 		SleepUtil.sleep(2000);
 		page.zCalApp.zNavigateToCalendar();
 
@@ -234,7 +234,7 @@ public class ShortcutsCalendar extends CommonTest {
 	
 	
 	public Boolean getElementStatus(String className, String day) throws Exception{
-		return(SelNGBase.selenium.get().isElementPresent("//*[contains(@class,'"+className+"') and contains(text(),'"+day+"')]"));
+		return(ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@class,'"+className+"') and contains(text(),'"+day+"')]"));
 	}
 
 }

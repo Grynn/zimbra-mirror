@@ -1,6 +1,6 @@
 package projects.html.clients;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 
 
 
@@ -18,14 +18,14 @@ public class CalendarFolder extends Folder {
 	 * @param folder
 	 */
 	public  void zCheck(String folder) {
-		SelNGBase.selenium.get().call("folderCore_html",  folder+"_check", "click", true, "", "");
+		ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_check", "click", true, "", "");
 	}	
 	/**
 	 * unchecks Calendar folder
 	 * @param folder
 	 */
 	public  void zUnCheck(String folder) {
-		SelNGBase.selenium.get().call("folderCore_html",  folder+"_uncheck", "click", true, "", "");
+		ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_uncheck", "click", true, "", "");
 	}		
 
 	/**
@@ -33,7 +33,7 @@ public class CalendarFolder extends Folder {
 	 * @param folder
 	 */
 	public  String zIsUnChecked(String folder) {
-		return SelNGBase.selenium.get().call("folderCore_html",  folder+"_uncheck", "exists", true, "", "");
+		return ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_uncheck", "exists", true, "", "");
 	}
 
 	/**
@@ -41,6 +41,6 @@ public class CalendarFolder extends Folder {
 	 * @param folder
 	 */
 	public  String zIsChecked(String folder) {
-		return SelNGBase.selenium.get().call("folderCore_html",  folder+"_check", "exists", true, "", "");
+		return ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_check", "exists", true, "", "");
 	}	
 }

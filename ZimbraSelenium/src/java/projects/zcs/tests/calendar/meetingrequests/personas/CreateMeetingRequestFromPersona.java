@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 import com.zimbra.common.service.ServiceException;
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -68,20 +68,18 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 		String fromName = getLocalizedData_NoSpecialChar();
 		page.zAccPref.zCreatePersona(personaName, fromName, alias);
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
-		SelNGBase.selenium.get()
+		ClientSessionFactory.session().selenium()
 				.clickAt(
 						"//td[contains(@id, '_select_container')]//td[contains(text(), '"
 								+ SelNGBase.selfAccountName.get().toLowerCase()
 								+ "')]", "");
 		SleepUtil.sleep(500);
-		SelNGBase.selenium
-				.get()
-				.clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 						"//div[contains(@class, 'ZSelectMenuItem ZWidget ZHasText')]//td[contains(text(), '"
 								+ SelNGBase.selfAccountName.get().toLowerCase()
 								+ "')]", "");
@@ -101,15 +99,15 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 		obj.zMessageItem.zRtClick(subject);
 		obj.zMenuItem.zClick(page.zMailApp.zShowOriginalMenuIconBtn);
 		SleepUtil.sleep(4000); // failed because of timing issue
-		SelNGBase.selenium.get().selectWindow("_blank");
-		String showOrigText = SelNGBase.selenium.get().getBodyText();
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
+		String showOrigText = ClientSessionFactory.session().selenium().getBodyText();
 		SleepUtil.sleep(1000);
 		String expectedValue;
 		expectedValue = "From: " + fromName + " <" + user1.toLowerCase() + ">";
 		Assert.assertTrue(showOrigText.indexOf(expectedValue) >= 0,
 				"Expected value(" + expectedValue + "), Actual Value("
 						+ showOrigText + ")");
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}
@@ -137,20 +135,18 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 		String fromName = getLocalizedData_NoSpecialChar();
 		page.zAccPref.zCreatePersona(personaName, fromName, alias);
 
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
-		SelNGBase.selenium.get()
+		ClientSessionFactory.session().selenium()
 				.clickAt(
 						"//td[contains(@id, '_select_container')]//td[contains(text(), '"
 								+ SelNGBase.selfAccountName.get().toLowerCase()
 								+ "')]", "");
 		SleepUtil.sleep(500);
-		SelNGBase.selenium
-				.get()
-				.clickAt(
+		ClientSessionFactory.session().selenium().clickAt(
 						"//div[contains(@class, 'ZSelectMenuItem ZWidget ZHasText')]//td[contains(text(), '"
 								+ alias.toLowerCase() + "')]", "");
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject, "", user2,
@@ -168,15 +164,15 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 		obj.zMessageItem.zRtClick(subject);
 		obj.zMenuItem.zClick(page.zMailApp.zShowOriginalMenuIconBtn);
 		SleepUtil.sleep(4000); // failed because of timing issue
-		SelNGBase.selenium.get().selectWindow("_blank");
-		String showOrigText = SelNGBase.selenium.get().getBodyText();
+		ClientSessionFactory.session().selenium().selectWindow("_blank");
+		String showOrigText = ClientSessionFactory.session().selenium().getBodyText();
 		SleepUtil.sleep(1000);
 		String expectedValue;
 		expectedValue = "From: " + fromName + " <" + alias.toLowerCase() + ">";
 		Assert.assertTrue(showOrigText.indexOf(expectedValue) >= 0,
 				"Expected value(" + expectedValue + "), Actual Value("
 						+ showOrigText + ")");
-		SelNGBase.selenium.get().selectWindow(null);
+		ClientSessionFactory.session().selenium().selectWindow(null);
 
 		SelNGBase.needReset.set(false);
 	}

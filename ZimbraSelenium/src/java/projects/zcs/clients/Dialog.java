@@ -2,7 +2,7 @@ package projects.zcs.clients;
 
 import org.testng.Assert;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 
 public class Dialog extends SelNGBase{
 	//note: this doesnt extend from ZObject since click,rtclick, indlg etc doesnt make sense
@@ -31,7 +31,7 @@ public class Dialog extends SelNGBase{
 	}
 	public void zWait(String dialogNameOrId, String panel, String param1) {
 		//don't call core(since it could go one of the core might be calling this(chicken and egg)
-		SelNGBase.selenium.get().call(coreName,  dialogNameOrId, "wait", true, panel, param1);
+		ClientSessionFactory.session().selenium().call(coreName,  dialogNameOrId, "wait", true, panel, param1);
 	}	
 	public void zExists(String dialogNameOrId) {
 		String actual = dialogCore(dialogNameOrId, "exists");
@@ -60,7 +60,7 @@ public class Dialog extends SelNGBase{
 	}
 	protected String dialogCore(String dialogNameOrId, String action, Boolean retryOnFalse,
 			String panel, String param1) {
-		return SelNGBase.selenium.get().call(coreName, dialogNameOrId, action, retryOnFalse, panel, param1);
+		return ClientSessionFactory.session().selenium().call(coreName, dialogNameOrId, action, retryOnFalse, panel, param1);
 
 	}
 	

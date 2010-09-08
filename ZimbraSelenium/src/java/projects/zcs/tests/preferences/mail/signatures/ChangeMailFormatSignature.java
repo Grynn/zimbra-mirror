@@ -12,7 +12,7 @@ import projects.zcs.ui.MailApp;
 
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.SelNGBase;
+import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.RetryFailedTests;
 import framework.util.SleepUtil;
@@ -91,7 +91,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 		// format as text
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"text");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -118,7 +118,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 		// change compose format as html
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"html");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		// keeping mail format as html and verifying signature
@@ -154,7 +154,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 		// format as text
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"text");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -183,7 +183,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 		// change compose format as html
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"html");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		// keeping mail format as html and verifying signature
@@ -220,7 +220,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 		// format as text
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"text");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
@@ -266,7 +266,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 		// change compose format as html
 		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
 				"html");
-		SelNGBase.selenium.get().refresh();
+		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 		page.zSignaturePref.zNavigateToPreferenceSignature();
