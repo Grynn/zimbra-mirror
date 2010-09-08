@@ -97,6 +97,8 @@ ZaDomain.domainStatusChoices = ZaDomain.getDomainStatusChoices;
 }
 ZaDomain.initDomainStatus();
 
+ZaDomain.domainTypes = {alias: "alias", local: "local"} ;
+
 //attribute name constants, this values are taken from zimbra.schema
 ZaDomain.A_description = "description";
 ZaDomain.A_notes = "zimbraNotes";
@@ -141,6 +143,8 @@ ZaDomain.A_AuthLdapSearchBindPassword="zimbraAuthLdapSearchBindPassword";
 
 ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled = "zimbraAdminConsoleDNSCheckEnabled";
 ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled = "zimbraAdminConsoleCatchAllAddressEnabled";
+ZaDomain.A_zimbraMailCatchAllAddress = "zimbraMailCatchAllAddress" ;
+ZaDomain.A_zimbraMailCatchAllForwardingAddress = "zimbraMailCatchAllForwardingAddress" ;
 ZaDomain.A_zimbraAdminConsoleSkinEnabled = "zimbraAdminConsoleSkinEnabled";
 ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled = "zimbraAdminConsoleLDAPAuthEnabled" ;
 ZaDomain.A_zimbraAuthLdapStartTlsEnabled = "zimbraAuthLdapStartTlsEnabled";
@@ -226,6 +230,8 @@ ZaDomain.A_zimbraSkinLogoURL ="zimbraSkinLogoURL" ;
 ZaDomain.A_zimbraSkinLogoLoginBanner = "zimbraSkinLogoLoginBanner" ;
 ZaDomain.A_zimbraSkinLogoAppBanner = "zimbraSkinLogoAppBanner" ;
 
+ZaDomain.A_zimbraDomainAliasTargetId = "zimbraDomainAliasTargetId" ;
+ZaDomain.A2_zimbraDomainAliasTarget = "zimbraDomainAliasTargetName" ;
 ZaDomain.A_zimbraPrefTimeZoneId = "zimbraPrefTimeZoneId" ;
 ZaDomain.A_zimbraAdminConsoleLoginMessage = "zimbraAdminConsoleLoginMessage" ;
 ZaDomain.A2_allowClearTextLDAPAuth = "allowClearTextLdapAuth" ;
@@ -327,11 +333,12 @@ ZaDomain.compareACLs = function (val1, val2) {
 ZaDomain.getAll =
 function() {
 	var params = {
-		query: ZaDomain.LOCAL_DOMAIN_QUERY, 
+//		query: ZaDomain.LOCAL_DOMAIN_QUERY,
+        query: "",
 		types:[ZaSearch.DOMAINS],
 		sortBy:ZaDomain.A_domainName,
 		offset:"0",
-		attrs:[ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId],
+		attrs:[ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType],
 		sortAscending:"1",
 		limit:ZaDomain.MAXSEARCHRESULTS,
 		ignoreTooManyResultsException: true,
@@ -1675,6 +1682,7 @@ ZaDomain.myXModel = {
     	{id:"rights",type:_LIST_},	
 		{id:"name", type:_STRING_, ref:"name"},
 		{id:ZaItem.A_zimbraId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraId},
+        {id:ZaItem.A_zimbraDomainAliasTargetId, type:_STRING_, ref:"attrs/" + ZaItem.A_zimbraDomainAliasTargetId},                
 		{id:ZaItem.A_zimbraCreateTimestamp, ref:"attrs/" + ZaItem.A_zimbraCreateTimestamp},
 		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, maxLength:255},
 		{id:ZaDomain.A_zimbraPublicServiceHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPublicServiceHostname, maxLength:255},
@@ -2073,3 +2081,127 @@ function (domainName) {
     }
 }
 
+ZaDomain.prototype.createDomainAlias = function (form) {
+    var instance = form.getInstance() ;
+	var newAlias = instance.attrs [ZaDomain.A_domainName] ;
+	var targetName = instance [ZaDomain.A2_zimbraDomainAliasTarget] ;
+
+	try {
+		var targetObj = ZaDomain.getTargetDomainByName(targetName) ;
+        if (targetObj == null) {
+            ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(
+                    ZaMsg.ERROR_TARGET_DOMAIN_NOT_EXIST, [targetName]));
+            return ;
+        } else if (targetObj.attrs [ZaDomain.A_domainType] != ZaDomain.domainTypes.local){
+            ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(
+                    ZaMsg.ERROR_TARGET_DOMAIN_IS_ALIAS, [targetName]));
+            return ;
+        } else if (newAlias == null) {
+            ZaApp.getInstance().getCurrentController().popupErrorDialog(
+                    ZaMsg.ERROR_DOMAIN_ALIAS_NOT_EXIST);
+            return ;
+        }
+
+        if (!this.attrs)  this.attrs = {};
+		this.attrs [ZaDomain.A_domainName] = newAlias ;
+        this.attrs [ZaDomain.A_domainType] = ZaDomain.domainTypes.alias ;
+        this.attrs [ZaDomain.A_zimbraDomainAliasTargetId] = targetObj.id ;
+        this.attrs [ZaDomain.A_description] = AjxMessageFormat.format(
+                ZaMsg.DESC_targetDomain, [targetName]) ;
+        this.attrs [ZaDomain.A_zimbraMailCatchAllAddress] = "@" + newAlias ;
+        this.attrs [ZaDomain.A_zimbraMailCatchAllForwardingAddress] = "@" + targetName ;
+
+        var soapDoc = AjxSoapDoc.create("CreateDomainRequest", ZaZimbraAdmin.URN, null);
+        soapDoc.set("name", this.attrs[ZaDomain.A_domainName]);
+
+        var attrNames = [ ZaDomain.A_domainType, ZaDomain.A_zimbraDomainAliasTargetId,
+                    ZaDomain.A_description, ZaDomain.A_zimbraMailCatchAllAddress,
+                    ZaDomain.A_zimbraMailCatchAllForwardingAddress] ;
+        for (var i=0; i < attrNames.length; i ++) {
+            var aname = attrNames [i] ;
+            if (this.attrs [aname] != null) {
+                var attr = soapDoc.set("a", this.attrs[aname]);
+		        attr.setAttribute("n", aname);
+            }
+        }
+
+        var params = new Object();
+	    params.soapDoc = soapDoc;
+        var reqMgrParams = {
+            controller : ZaApp.getInstance().getCurrentController(),
+            busyMsg : ZaMsg.BUSY_CREATE_DOMAIN
+        }
+        var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.CreateDomainResponse;
+        ZaApp.getInstance().getDomainListController().fireCreationEvent(this);
+        form.parent.popdown();
+	} catch (ex) {
+		if(ex.code == ZmCsfeException.DOMAIN_EXISTS ) {
+			ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(
+                    ZaMsg.ERROR_DOMAIN_ALIAS_EXIST, [newAlias]));
+		}else{
+			//if failed for another reason - jump out
+			ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaDomain.prototype.createDomainAlias", null, false);
+		}
+	}   
+
+}
+
+ZaDomain.prototype.modifyDomainAlias = function (form) {
+    var instance = form.getInstance() ;
+	var targetName =  instance [ZaDomain.A2_zimbraDomainAliasTarget] ;
+    if (targetName != null && (("@" + targetName) != this.attrs [ZaDomain.A_zimbraMailCatchAllForwardingAddress])) {
+        //changed
+        var targetObj = ZaDomain.getTargetDomainByName(targetName) ;
+        if (targetObj == null) {
+            ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(
+                    ZaMsg.ERROR_TARGET_DOMAIN_NOT_EXIST, [targetName]));
+            return ;
+        } else if (targetObj.attrs [ZaDomain.A_domainType] != ZaDomain.domainTypes.local){
+            ZaApp.getInstance().getCurrentController().popupErrorDialog(AjxMessageFormat.format(
+                    ZaMsg.ERROR_TARGET_DOMAIN_IS_ALIAS, [targetName]));
+            return ;
+        }
+
+        if (!this.attrs)  this.attrs = {};
+		this.attrs [ZaDomain.A_zimbraDomainAliasTargetId] = targetObj.id ;
+        this.attrs [ZaDomain.A_description] = AjxMessageFormat.format(
+                ZaMsg.DESC_targetDomain, [targetName]) ;
+        this.attrs [ZaDomain.A_zimbraMailCatchAllForwardingAddress] = "@" + targetName ;
+
+        var soapDoc = AjxSoapDoc.create("ModifyDomainRequest", ZaZimbraAdmin.URN, null);
+        soapDoc.set("id", this.id);
+
+        var attrNames = [ZaDomain.A_zimbraDomainAliasTargetId,
+                            ZaDomain.A_description,  ZaDomain.A_zimbraMailCatchAllForwardingAddress] ;
+        for (var i=0; i < attrNames.length; i ++) {
+            var aname = attrNames [i] ;
+            if (this.attrs [aname] != null) {
+                var attr = soapDoc.set("a", this.attrs[aname]);
+                attr.setAttribute("n", aname);
+            }
+        }
+
+        var params = new Object();
+	    params.soapDoc = soapDoc;
+        var reqMgrParams = {
+            controller : ZaApp.getInstance().getCurrentController(),
+            busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
+        }
+        var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;
+        ZaApp.getInstance().getDomainListController().fireChangeEvent(this);
+    }
+
+    form.parent.popdown();
+}
+
+
+ZaDomain.getTargetDomainByName = function (targetName) {
+    var domainList = ZaApp.getInstance().getDomainList ().getArray () ;
+    for (var i = 0; i < domainList.length; i ++) {
+        var domain = domainList [i] ;
+        if (targetName == domain.name)  {
+            return domain ;
+        }
+    }
+    return null ;
+}

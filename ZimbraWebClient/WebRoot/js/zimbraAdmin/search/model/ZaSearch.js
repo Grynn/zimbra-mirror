@@ -360,7 +360,8 @@ ZaSearch.prototype.dynSelectSearchDomains = function (callArgs) {
 		params.showBusy = true;
 		params.busyId = busyId;
 		params.busyMsg = ZaMsg.BUSY_SEARCHING_DOMAINS;
-		params.skipCallbackIfCancelled = false; 		
+		params.skipCallbackIfCancelled = false;
+        params.attrs = [ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType];
 		ZaSearch.searchDirectory(params);
 	} catch (ex) {
 		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaSearch.prototype.dynSelectSearchDomains");		

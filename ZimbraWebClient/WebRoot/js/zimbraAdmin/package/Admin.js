@@ -139,6 +139,7 @@ AjxPackage.require("zimbraAdmin.zimlets.view.ZaZimletDeployXWizard");
 AjxPackage.require("zimbraAdmin.domains.view.ZaDomainListView");
 AjxPackage.require("zimbraAdmin.domains.view.ZaDomainXFormView");
 AjxPackage.require("zimbraAdmin.domains.view.ZaNewDomainXWizard");
+AjxPackage.require("zimbraAdmin.domains.view.ZaDomainAliasWizard");
 AjxPackage.require("zimbraAdmin.domains.view.ZaGALConfigXWizard");
 AjxPackage.require("zimbraAdmin.domains.view.ZaAuthConfigXWizard");
 AjxPackage.require("zimbraAdmin.domains.view.ZaDomainNotebookXWizard");

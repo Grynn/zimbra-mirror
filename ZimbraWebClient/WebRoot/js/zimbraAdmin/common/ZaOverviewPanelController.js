@@ -125,7 +125,8 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 	//var callback = new AjxCallback(this, this.domainSearchCallback,{busyId:busyId});
 	var domainListController = ZaApp.getInstance().getDomainListController ();
 	
-	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
+//	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
+    domainListController._currentQuery = "";
 	var searchParams = {
 			query: domainListController._currentQuery, 
 			types:[ZaSearch.DOMAINS],
@@ -133,7 +134,7 @@ ZaOverviewPanelController.prototype.searchDomains = function() {
 			offset:"0",
 			sortAscending:"1",
 			limit:ZaDomain.MAXSEARCHRESULTS,
-			attrs:[ZaDomain.A_domainName,ZaItem.A_zimbraId]			
+			attrs:[ZaDomain.A_description, ZaDomain.A_domainName,ZaDomain.A_zimbraDomainStatus,ZaItem.A_zimbraId, ZaDomain.A_domainType]			
 	}
 	var resp = ZaSearch.searchDirectory(searchParams);
 	this.domainSearchCallback(searchParams, resp);
@@ -681,13 +682,25 @@ ZaOverviewPanelController.domainTreeListener = function (ev) {
 	var domain = new ZaDomain();
 	domain.id = ev.item.getData(ZaOverviewPanelController._OBJ_ID);	
 	domain.attrs[ZaItem.A_zimbraId] = ev.item.getData(ZaOverviewPanelController._OBJ_ID);
+    domain.load ("id", domain.id) ;
+
+    var isLocal = (domain.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.local) ;
+    var isAlias = (domain.attrs [ZaDomain.A_domainType] == ZaDomain.domainTypes.alias) ;
+
 	if(ZaApp.getInstance().getCurrentController()) {
-		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getDomainController(),
-		 ZaDomainController.prototype.show, 
-		 domain /*ZaApp.getInstance().getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID))*/);
-	} else {	
-						
-		ZaApp.getInstance().getDomainController().show(domain);
+        if (isLocal) {
+            ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getDomainController(),
+             ZaDomainController.prototype.show,
+             domain /*ZaApp.getInstance().getDomainList(true).getItemById(ev.item.getData(ZaOverviewPanelController._OBJ_ID))*/);
+        } else if (isAlias) {
+            ZaApp.getInstance().getDomainAliasWizard(true).editDomainAlias (domain, false) ;
+        }
+	} else {
+        if (isLocal) {
+		    ZaApp.getInstance().getDomainController().show(domain);
+        } else if (isAlias) {
+            ZaApp.getInstance().getDomainAliasWizard(true).editDomainAlias (domain, false) ;
+        }
 	}
 }
 
@@ -757,8 +770,9 @@ ZaOverviewPanelController.domainListTreeListener = function (ev) {
 	var domainListController = ZaApp.getInstance().getDomainListController ();
 	
 	//if we do not have access to domains we will only get our own domain in response anyway, so no need to add a query
-	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
-			
+//	domainListController._currentQuery = ZaDomain.LOCAL_DOMAIN_QUERY;
+	domainListController._currentQuery = "";
+
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(domainListController, ZaDomainListController.prototype.show, true);
 	} else {					

@@ -205,9 +205,10 @@ function(resp) {
 				item.initFromJS(arr[i]);
 				
 				//special cases
+                /*
 				if (item instanceof ZaDomain && item.attrs[ZaDomain.A_domainType] == "alias"){
 					continue ;
-				}
+				} */
 				if (item instanceof ZaAlias) {
 					item.attrs[ZaAlias.A_targetType] = arr[i][ZaAlias.A_targetType] ;
 					item.attrs[ZaAlias.A_targetAccount] = arr[i][ZaAlias.A_targetAccount] ;
