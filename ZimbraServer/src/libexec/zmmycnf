@@ -65,7 +65,8 @@ tmpdir       = ${zimbra_tmp_directory}
 external-locking
 
 ignore-builtin-innodb
-plugin-load=innodb=ha_innodb_plugin.so
+plugin-load=innodb=ha_innodb_plugin.so;innodb_trx=ha_innodb_plugin.so;innodb_locks=ha_innodb_plugin.so;innodb_lock_waits=ha_innodb_plugin.so;innodb_cmp=ha_innodb_plugin.so;innodb_cmp_reset=ha_innodb_plugin.so;innodb_cmpmem=ha_innodb_plugin.so;innodb_cmpmem_reset=ha_innodb_plugin.so
+#plugin-load=innodb=ha_innodb_plugin.so
 
 log-slow-queries = ${zimbra_log_directory}/myslow.log
 long-query-time  = 1
