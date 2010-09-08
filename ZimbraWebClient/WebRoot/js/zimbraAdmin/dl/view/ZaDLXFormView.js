@@ -44,7 +44,13 @@ function () {
 
 ZaDLXFormView.prototype.getTabIcon =
 function () {
-	return "DistributionList" ;
+	if (this._containedObject && this._containedObject.attrs && this._containedObject.attrs[ZaDistributionList.A_isAdminGroup]=="TRUE" ) {
+                return "DistributionListGroup";
+             
+        } else {
+                return "DistributionList" ;
+        }
+
 }
 
 ZaDLXFormView.prototype.handleXFormChange = function (ev) {

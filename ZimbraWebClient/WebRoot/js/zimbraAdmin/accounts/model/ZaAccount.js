@@ -1249,7 +1249,15 @@ function() {
 		html[idx++] = "<tr valign='center'>";
 		html[idx++] = "<td><b>" + AjxStringUtil.htmlEncode(this.name) + "</b></td>";
 		html[idx++] = "<td align='right'>";
-		html[idx++] = AjxImg.getImageHtml("Account");		
+		if( this.attrs[ZaAccount.A_zimbraIsAdminAccount]=="TRUE" ) {
+			html[idx++] = AjxImg.getImageHtml("AdminUser");
+		} else if (this.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE") {
+			html[idx++] = AjxImg.getImageHtml("DomainAdminUser");
+		} else if (this.attrs[ZaAccount.A_zimbraIsSystemResource] == "TRUE") {
+			html[idx++] = AjxImg.getImageHtml("SystemResource");
+		} else {
+			html[idx++] = AjxImg.getImageHtml("Account");
+		}		
 		html[idx++] = "</td>";
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";

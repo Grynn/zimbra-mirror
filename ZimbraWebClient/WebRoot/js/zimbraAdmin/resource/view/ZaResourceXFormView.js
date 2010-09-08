@@ -46,7 +46,11 @@ ZaResourceXFormView.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_ac
 
 ZaResourceXFormView.prototype.getTabIcon =
 function () {
-	return "Resource" ;
+	if (this._containedObject && this._containedObject.attrs && this._containedObject.attrs[ZaResource.A_zimbraCalResType] == ZaResource.RESOURCE_TYPE_LOCATION){
+		return "Location" ;	
+	}else {
+		return "Resource" ;
+	}
 }
 
 /**

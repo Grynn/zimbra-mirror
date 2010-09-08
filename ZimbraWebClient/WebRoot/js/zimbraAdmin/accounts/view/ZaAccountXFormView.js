@@ -49,6 +49,29 @@ ZaAccountXFormView.zimletChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST
 ZaAccountXFormView.themeChoices = new XFormChoices([], XFormChoices.SIMPLE_LIST);
 
 /**
+ * * Get Tab's Icon according to different account's type
+ * **/
+ZaAccountXFormView.prototype.getTabIcon = 
+function () {
+	if (this._containedObject && this._containedObject.attrs) {
+		var resultType;
+                var account = this._containedObject;
+		if(account.attrs[ZaAccount.A_zimbraIsAdminAccount]=="TRUE" ) {
+                       resultType = "AdminUser";
+                } else if (account.attrs[ZaAccount.A_zimbraIsDelegatedAdminAccount] == "TRUE") {
+                       resultType = "DomainAdminUser";
+                } else if (account.attrs[ZaAccount.A_zimbraIsSystemResource] == "TRUE") {
+                       resultType = "SystemResource";
+                } else {
+                       resultType = "Account";
+                }
+		return resultType;	
+	}else{
+		return "Account" ;
+	}
+}
+
+/**
 * Sets the object contained in the view
 * @param entry - {ZaAccount} object to display
 **/
