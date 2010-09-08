@@ -26,14 +26,14 @@ my $CACHE_DIR = "$BASE_DIR/third-party-cache";
 my $P4_ROOT = "//depot/$ARGV[0]/ThirdPartyBuilds/" . getPlatformDirName();
 my %BINARIES = (
                 "bdb" => "4.7.25.4",
-                "curl" => "7.21.0",
+                "curl" => "7.21.1",
                 "cyrus-sasl" => "2.1.23.3z",
                 "heimdal" => "1.3.3",
                 "libtool" => "2.2.6b",
-                "openldap" => "2.4.23.3z",
-                "openldap-libs" => "2.4.23.3z",
+                "openldap" => "2.4.23.4z",
+                "openldap-libs" => "2.4.23.4z",
                 "openssl" => "1.0.0a",
-                "tcmalloc" => "1.5"
+                "tcmalloc" => "1.6"
                );
 my $P4_CMD = "p4";
 
