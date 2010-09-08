@@ -206,7 +206,7 @@ BDB_PERL_LIBS := \
 	BerkeleyDB-0.41
 
 MAIL_SPF := \
-	Mail-SPF-v2.007
+	Mail-SPF-v2.008
 
 SA_PERL_LIBS := \
 	Mail-SpamAssassin-$(SA_VERSION)
