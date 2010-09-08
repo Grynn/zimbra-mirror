@@ -101,6 +101,7 @@ PERL_LIBS 	:= \
 	HTTP::Parser \
 	IO::Stringy \
 	E/ER/ERYQ/MIME-Lite-2.117.tar.gz \
+	K/KW/KWILLIAMS/Module-Build-0.2805.tar.gz \
 	Mail::Mailer \
 	Convert::BinHex \
 	D/DO/DONEILL/MIME-tools-5.427.tar.gz \
@@ -147,7 +148,6 @@ PERL_LIBS 	:= \
 	XML::Simple \
 	IO::Socket::INET6 \
 	NetAddr::IP \
-	K/KW/KWILLIAMS/Module-Build-0.2805.tar.gz \
 	Net::DNS::Resolver::Programmable \
 	version \
 	Geography::Countries \
