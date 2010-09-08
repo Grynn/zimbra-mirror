@@ -307,15 +307,26 @@ public class CalendarParserImpl implements CalendarParser {
         StringBuilder paramValue = new StringBuilder();
 
         // preserve quote chars..
-        if (tokeniser.nextToken() == '"') {
+        int token = tokeniser.nextToken();
+        String val = tokeniser.sval;
+        if (token == '"') {
             paramValue.append('"');
-            paramValue.append(tokeniser.sval);
+            if (val != null)
+                paramValue.append(val);
             paramValue.append('"');
+        } else if (token == ';' || token == ':') {
+            // Last parsed token may be ";" or ":" if the parameter was missing
+            // a value.  The semi-colon/colon char must be put back to the
+            // tokenizer to avoid trouble parsing the next parameter or
+            // property value.
+            tokeniser.pushBack();
+            val = null;
         } else {
-            paramValue.append(tokeniser.sval);
+            if (val != null)
+                paramValue.append(val);
         }
 
-        handler.parameter(paramName, paramValue.toString());
+        handler.parameter(paramName, val != null ? paramValue.toString() : null);
     }
 
     /**
