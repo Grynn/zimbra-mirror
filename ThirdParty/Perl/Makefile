@@ -100,7 +100,7 @@ PERL_LIBS 	:= \
 	Proc::ProcessTable \
 	HTTP::Parser \
 	IO::Stringy \
-	MIME::Lite \
+	E/ER/ERYQ/MIME-Lite-2.117.tar.gz \
 	Mail::Mailer \
 	Convert::BinHex \
 	D/DO/DONEILL/MIME-tools-5.427.tar.gz \
