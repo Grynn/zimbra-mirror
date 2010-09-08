@@ -16,7 +16,6 @@ public class SelNGBase {
 	private static Logger logger = LogManager.getLogger(SelNGBase.class);
 	
 
-	public static String currentBrowserName = "";
 	
 	public static int maxRetryCount = 0;
 	public static String someting = " ";

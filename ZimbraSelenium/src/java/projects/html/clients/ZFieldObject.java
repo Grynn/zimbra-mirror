@@ -87,7 +87,7 @@ public class ZFieldObject extends ZObject {
 	// Internal methods...
 	private void zEnterValueInFileUpload(String objNameOrId, String data,
 			String dialog, String objNumber) {
-		String browserName = SelNGBase.currentBrowserName;
+		String browserName = ClientSessionFactory.session().currentBrowserName();
 		if ((browserName.indexOf("MSIE") >= 0)
 				&& !(browserName.indexOf("MSIE 8") >= 0)) {
 			handleFileUploadIE(objNameOrId, data, dialog, objNumber);

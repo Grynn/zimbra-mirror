@@ -196,7 +196,7 @@ public class SpellCheck extends CommonTest {
 		obj.zButton.zClick(ComposeView.zSaveDraftsIconBtn);
 		obj.zFolder.zClick(localize(locator.drafts));
 		obj.zMessageItem.zClick(subject);
-		if ((SelNGBase.currentBrowserName.indexOf("MSIE 8") >= 0)) {
+		if ((ClientSessionFactory.session().currentBrowserName().indexOf("MSIE 8") >= 0)) {
 			Assert.assertTrue(obj.zMessageItem.zGetCurrentMsgBodyText()
 					.contains("onee twoo threee"));
 		} else {

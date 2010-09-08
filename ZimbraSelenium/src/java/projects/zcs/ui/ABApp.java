@@ -1,5 +1,6 @@
 package projects.zcs.ui;
 
+import framework.core.ClientSessionFactory;
 import framework.util.SleepUtil;
 
 
@@ -139,7 +140,7 @@ public class ABApp extends AppPage {
 					.trim());
 			obj.zButton.zClick(localize(locator.search), "2");
 			SleepUtil.sleep(2500);
-			if (currentBrowserName.contains("Safari")) {
+			if (ClientSessionFactory.session().currentBrowserName().contains("Safari")) {
 				obj.zButton.zClick(localize(locator.search), "2");
 				SleepUtil.sleep(1000);
 			}

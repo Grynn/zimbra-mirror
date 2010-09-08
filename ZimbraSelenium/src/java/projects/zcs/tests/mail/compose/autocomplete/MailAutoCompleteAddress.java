@@ -666,7 +666,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 				"ccuser@testdomain.com");
 		obj.zButton.zClick(localize(locator.search), "2");
 		SleepUtil.sleep(1500);
-		if (currentBrowserName.contains("Safari")) {
+		if (ClientSessionFactory.session().currentBrowserName().contains("Safari")) {
 			obj.zButton.zClick(localize(locator.search), "2");
 			obj.zButton.zClick(localize(locator.search), "2");
 			SleepUtil.sleep(1000);
@@ -720,7 +720,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 				"ccuser@testdomain.com");
 		obj.zButton.zClick(localize(locator.search), "2");
 		SleepUtil.sleep(2500);
-		if (currentBrowserName.contains("Safari")) {
+		if (ClientSessionFactory.session().currentBrowserName().contains("Safari")) {
 			obj.zButton.zClick(localize(locator.search), "2");
 			obj.zButton.zClick(localize(locator.search), "2");
 			SleepUtil.sleep(1000);
@@ -1126,7 +1126,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		obj.zEditField.zType(localize(locator.findLabel), "grop");
 		obj.zButton.zClick(localize(locator.search), "2");
 		SleepUtil.sleep(1500);
-		if (currentBrowserName.contains("Safari")) {
+		if (ClientSessionFactory.session().currentBrowserName().contains("Safari")) {
 			obj.zButton.zClick(localize(locator.search), "2");
 			obj.zButton.zClick(localize(locator.search), "2");
 			SleepUtil.sleep(1000);

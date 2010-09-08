@@ -2,12 +2,10 @@ package projects.zcs.ui;
 
 import static org.testng.Assert.assertTrue;
 
-import java.util.Map;
-
 import com.zimbra.common.service.ServiceException;
 
-import framework.core.*;
-import framework.util.BrowserUtil;
+import framework.core.ClientSessionFactory;
+import framework.core.SelNGBase;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -63,7 +61,6 @@ public class LoginPage extends AppPage {
 		try {
 			openApplication();
 			SleepUtil.sleep(1500);
-			currentBrowserName = BrowserUtil.getBrowserName();
 			obj.zEditField.zType("Username:", username);
 			obj.zPwdField.zType("Password:", password);
 			obj.zButton.zClick("class=zLoginButton");
@@ -80,7 +77,6 @@ public class LoginPage extends AppPage {
 			SelNGBase.selfAccountName.set(username);
 			customLogin(parameter);
 			SleepUtil.sleep(1000);
-			currentBrowserName = BrowserUtil.getBrowserName();
 			obj.zEditField.zType("Username:", username);
 			obj.zPwdField.zType("Password:", "test123");
 			obj.zButton.zClick("class=zLoginButton");

@@ -15,6 +15,7 @@ import org.testng.ISuiteResult;
 import org.testng.ITestContext;
 import org.testng.xml.XmlSuite;
 
+import framework.core.ClientSessionFactory;
 import framework.core.SelNGBase;
 
 public class SummaryReporter implements IReporter {
@@ -60,7 +61,7 @@ public class SummaryReporter implements IReporter {
 			" failed:" + failed + 
 			" skipped:" + (skipped + dynamicallySkipped) + 
 			" locale:" + ZimbraSeleniumProperties.getStringProperty("locale") + 
-			" browser:" + SelNGBase.currentBrowserName + 
+			" browser:" + ClientSessionFactory.session().currentBrowserName() + 
 			" client:" + System.getenv("COMPUTERNAME") + 
 			" server:" + ZimbraSeleniumProperties.getStringProperty("server") + 
 			" zimbra:" + ZimbraSeleniumProperties.zimbraGetVersionString() +

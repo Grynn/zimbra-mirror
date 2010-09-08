@@ -145,7 +145,7 @@ public class ContactActions extends CommonTest {
 			obj.zEditField.zTypeInDlg(localize(locator.search), "ab" + i
 					+ "@testdomain.com");
 			obj.zButton.zClickInDlg(localize(locator.search));
-			if (currentBrowserName.contains("Safari")) {
+			if (ClientSessionFactory.session().currentBrowserName().contains("Safari")) {
 				obj.zButton.zClickInDlg(localize(locator.search));
 			}
 			if (i == 1) {

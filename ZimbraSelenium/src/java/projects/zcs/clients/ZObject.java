@@ -271,7 +271,7 @@ public class ZObject extends SelNGBase {
 		String[] tmp = xy.split(",");
 		int x = Integer.parseInt(tmp[0]);
 		int y = Integer.parseInt(tmp[1]);
-		String browserName = SelNGBase.currentBrowserName;
+		String browserName = ClientSessionFactory.session().currentBrowserName();
 		Robot robot;
 		try {
 			robot = new Robot();

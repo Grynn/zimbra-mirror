@@ -137,7 +137,7 @@ public class CalendarPreferencesSetTrue extends CommonTest {
 
 		page.zCalApp.zNavigateToCalendar();
 
-		if(currentBrowserName.indexOf("FF 3")>=0){
+		if(ClientSessionFactory.session().currentBrowserName().indexOf("FF 3")>=0){
 			obj.zMiscObj.zActivateByDoubleClick("ZmCalViewMgr/ImgCalendarDayGrid");
 		} else {
 			obj.zMiscObj.zDblClickXY("ZmCalViewMgr/ImgCalendarDayGrid", "50,50");

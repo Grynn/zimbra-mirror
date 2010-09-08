@@ -96,7 +96,7 @@ public class ZFieldObject extends ZObject {
 	// Internal methods...
 	private void zEnterValueInFileUpload(String objNameOrId, String data,
 			String dialog, String objNumber) {
-		String browserName = SelNGBase.currentBrowserName;
+		String browserName = ClientSessionFactory.session().currentBrowserName();
 		if ((browserName.indexOf("MSIE") >= 0)
 				&& !(browserName.indexOf("MSIE 8") >= 0)) {
 			handleFileUploadIE(objNameOrId, data, dialog, objNumber);
@@ -147,7 +147,7 @@ public class ZFieldObject extends ZObject {
 
 		try {
 			SleepUtil.sleep(500);
-			if ((SelNGBase.currentBrowserName.indexOf("MSIE 8") >= 0)) {
+			if ((ClientSessionFactory.session().currentBrowserName().indexOf("MSIE 8") >= 0)) {
 				moveMouseAndDblClick(xy);
 			} else {
 				moveMouseAndClick(xy);

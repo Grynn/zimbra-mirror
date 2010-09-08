@@ -1,5 +1,6 @@
 package projects.zcs.ui;
 
+import framework.core.ClientSessionFactory;
 import framework.items.ContactGroupItem;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
@@ -215,7 +216,7 @@ public class ABCompose extends AppPage {
 				obj.zEditField.zType(localize(locator.findLabel), member);
 				obj.zButton.zClick(localize(locator.search), "2");
 				SleepUtil.sleep(2500);
-				if (currentBrowserName.contains("Safari")) {
+				if (ClientSessionFactory.session().currentBrowserName().contains("Safari")) {
 					obj.zButton.zClick(localize(locator.search), "2");
 					obj.zButton.zClick(localize(locator.search), "2");
 					SleepUtil.sleep(1000);
