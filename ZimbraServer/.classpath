@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-  <classpathentry kind="lib" path="jars/javacc-5.0.jar"/>
+  <classpathentry kind="lib" path="jars/javacc.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/bouncycastle.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/ant-1.7.0-ziputil-patched.jar" sourcepath="/ThirdParty/ant-1.7.0-ziputil-patched/src/java"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/ant-contrib-1.0b1.jar"/>
