@@ -101,7 +101,7 @@ PERL_LIBS 	:= \
 	HTTP::Parser \
 	IO::Stringy \
 	E/ER/ERYQ/MIME-Lite-2.117.tar.gz \
-	K/KW/KWILLIAMS/Module-Build-0.2805.tar.gz \
+	K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz \
 	Mail::Mailer \
 	Convert::BinHex \
 	D/DO/DONEILL/MIME-tools-5.427.tar.gz \
