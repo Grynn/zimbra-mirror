@@ -6,6 +6,9 @@ import java.util.Map;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.zimbra.common.soap.Element;
+
+
 public class ZimbraResource extends ZimbraAccount {
 	private static Logger logger = LogManager.getLogger(ZimbraResource.class);
 
@@ -14,11 +17,7 @@ public class ZimbraResource extends ZimbraAccount {
 		EQUIPMENT
 	};
 	
-	public String EmailAddress;
-	public String Password;
 	public Type ResourceType;
-    public String ZimbraMailHost = null;
-    public String ZimbraId = null;
 
 	public ZimbraResource(Type type) {
 		this(type, null, null);
@@ -85,11 +84,29 @@ public class ZimbraResource extends ZimbraAccount {
 					"<CreateCalendarResourceRequest xmlns='urn:zimbraAdmin'>" +
 						"<name>" + EmailAddress + "</name>" +
 						"<password>" + Password + "</password>" +
+						"<a n='displayName'>"+ EmailAddress +"</a>" +
 						prefs.toString() +
 					"</CreateCalendarResourceRequest>");
 			
-			ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:calresource", "id");
-			ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+			Element[] createCalendarResourceResponse = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:CreateCalendarResourceResponse");
+			if ( (createCalendarResourceResponse == null) || (createCalendarResourceResponse.length == 0) ) {
+				logger.error("Error occured during resource provisioning, perhaps resource already exists: "+ EmailAddress);
+				ZimbraAdminAccount.GlobalAdmin().soapSend(
+						"<GetCalendarResourceRequest xmlns='urn:zimbraAdmin'>" +
+							"<calresource by='name'>"+ EmailAddress +"</calresource>" +
+						"</GetCalendarResourceRequest>");
+				Element[] getCalendarResourceResponse = ZimbraAdminAccount.GlobalAdmin().soapSelectNodes("//admin:GetCalendarResourceResponse");
+				if ( (getCalendarResourceResponse == null) || (getCalendarResourceResponse.length == 0)) {
+					logger.error("Error occured during get account provisioning.  Now I'm really confused");
+				} else {
+					ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:calresource", "id");
+					ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:calresource/admin:a[@n='zimbraMailHost']", null);
+				}
+				
+			} else {
+				ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:calresource", "id");
+				ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+			}
 			
 		} catch (HarnessException e) {
 			logger.error("Unable to provision account: "+ EmailAddress, e);

@@ -465,7 +465,7 @@ public class ZimbraAccount {
 			}
 			
 			// Log the request/response
-        	logger.debug("\n" + new Date() +" "+ mURI.toString() +"\n---\n"+ requestEnvelope.prettyPrint() +"\n---\n"+ responseEnvelope.prettyPrint() +"\n---\n");
+        	logger.info("\n" + new Date() +" "+ mURI.toString() +"\n---\n"+ requestEnvelope.prettyPrint() +"\n---\n"+ responseEnvelope.prettyPrint() +"\n---\n");
         	
 			
 			return (responseEnvelope);

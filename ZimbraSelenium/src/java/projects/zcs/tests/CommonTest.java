@@ -177,7 +177,7 @@ public class CommonTest extends SelNGBase {
 		initFramework();
 		
 		// Create the test domain
-		Stafzmprov.zmprov(String.format("zmprov createDomain %s", ZimbraSeleniumProperties.getStringProperty("testdomain")));
+		Stafzmprov.createDomain(ZimbraSeleniumProperties.getStringProperty("testdomain"));
 		
 		SeleniumService.getInstance().startSeleniumServer();
 

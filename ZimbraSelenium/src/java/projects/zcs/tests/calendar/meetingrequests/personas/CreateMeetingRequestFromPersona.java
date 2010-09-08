@@ -126,7 +126,7 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		Stafzmprov.zmprov(String.format("zmprov addAccountAliax %s %s", SelNGBase.selfAccountName.get(), alias));
+		Stafzmprov.addAccountAlias(SelNGBase.selfAccountName.get(), alias);
 		resetSession();
 		SleepUtil.sleep(1000);
 		page.zLoginpage.zLoginToZimbraAjax(SelNGBase.selfAccountName.get());

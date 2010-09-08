@@ -203,7 +203,7 @@ public class EditMeetingRequest extends CommonTest {
 		String s = df.format(d);
 		String alias = s + "@testdomain.com";
 
-		Stafzmprov.zmprov(String.format("zmprov addAccountAlias %s %s", acc1, alias));
+		Stafzmprov.addAccountAlias(acc1, alias);
 		Stafzmprov.modifyAccount(acc1, "zimbraPrefFromAddress", alias);
 		String loggeduser = SelNGBase.selfAccountName.get();
 		page.zCalApp.zNavigateToCalendar();
