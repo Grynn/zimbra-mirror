@@ -76,7 +76,7 @@ ZaBulkProvision.A2_sourceServerType = "sourceServerType";
 ZaBulkProvision.A2_IMAPHost = "IMAPHost";
 ZaBulkProvision.A2_IMAPPort = "IMAPPort";
 ZaBulkProvision.A2_useAdminLogin = "UseAdminLogin";
-ZaBulkProvision.A2_IMAPAdminLogin = "E_IMAPAdminLogin";
+ZaBulkProvision.A2_IMAPAdminLogin = "IMAPAdminLogin";
 ZaBulkProvision.A2_IMAPAdminPassword = "IMAPAdminPassword";
 ZaBulkProvision.A2_IMAPAdminPasswordConfirm = "IMAPAdminPasswordConfirm";
 ZaBulkProvision.A2_connectionType = "ConnectionType";
@@ -256,16 +256,16 @@ ZaBulkProvision.bulkDataIMport = function(obj, callback) {
 	var soapDoc = AjxSoapDoc.create("BulkIMAPDataImportRequest", ZaBulkProvision.URN, null);
 	var aid = obj [ZaBulkProvision.A_csv_aid] ;
 	soapDoc.set(ZaBulkProvision.A2_op, obj[ZaBulkProvision.A2_op]);
-
+	var controller = ZaApp.getInstance().getCurrentController();
 	if(obj[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_XML) {
-		if (aid != null) {
-	    	soapDoc.set("aid", aid) ;
+		if (obj[ZaBulkProvision.A_aid] != null) {
+	    	soapDoc.set("aid", obj[ZaBulkProvision.A_aid]) ;
 	    } else{
 	    	controller.popupErrorDialog(com_zimbra_bulkprovision.error_no_aid) ;
 	    	return ;
 	    }
 	}
-	if(obj[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_LDAP) {
+	if(obj[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_LDAP || obj[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_AD) {
 		var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external);
 		attr.setAttribute("n", ZaDomain.A_zimbraGalMode);
 	
@@ -292,16 +292,22 @@ ZaBulkProvision.bulkDataIMport = function(obj, callback) {
 		}
 	}
 	attr = soapDoc.set(ZaBulkProvision.A2_sourceType, obj[ZaBulkProvision.A2_sourceType]);
-	attr = soapDoc.set(ZaBulkProvision.A2_useAdminLogin,obj[ZaBulkProvision.A2_IMAPPort]);
+	attr = soapDoc.set(ZaBulkProvision.A2_useAdminLogin,obj[ZaBulkProvision.A2_useAdminLogin]);
 	if(obj[ZaBulkProvision.A2_IMAPAdminPassword])
 		attr = soapDoc.set(ZaBulkProvision.A2_IMAPAdminPassword,obj[ZaBulkProvision.A2_IMAPAdminPassword]);
 	
-	if(obj[ZaBulkProvision.A2_IMAPAdminLogin])
+	if(obj[ZaBulkProvision.A2_IMAPAdminLogin]) {
 		attr = soapDoc.set(ZaBulkProvision.A2_IMAPAdminLogin,obj[ZaBulkProvision.A2_IMAPAdminLogin]);
-	
-	attr = soapDoc.set(ZaBulkProvision.A2_IMAPHost,obj[ZaBulkProvision.A2_IMAPHost]);
-	attr = soapDoc.set(ZaBulkProvision.A2_IMAPPort,obj[ZaBulkProvision.A2_IMAPPort]);
-	attr = soapDoc.set(ZaBulkProvision.A2_connectionType,obj[ZaBulkProvision.A2_connectionType]);
+	}
+	if(obj[ZaBulkProvision.A2_IMAPHost]) {
+		attr = soapDoc.set(ZaBulkProvision.A2_IMAPHost,obj[ZaBulkProvision.A2_IMAPHost]);
+	}
+	if(obj[ZaBulkProvision.A2_IMAPPort]) {
+		attr = soapDoc.set(ZaBulkProvision.A2_IMAPPort,obj[ZaBulkProvision.A2_IMAPPort]);
+	}
+	if(obj[ZaBulkProvision.A2_connectionType]) {
+		attr = soapDoc.set(ZaBulkProvision.A2_connectionType,obj[ZaBulkProvision.A2_connectionType]);
+	}
 	                                                   	
 	var csfeParams = new Object();
 	csfeParams.soapDoc = soapDoc;
@@ -309,7 +315,7 @@ ZaBulkProvision.bulkDataIMport = function(obj, callback) {
 	csfeParams.callback = callback;
 
 	var reqMgrParams = {} ;
-	reqMgrParams.controller = ZaApp.getInstance().getCurrentController();
+	reqMgrParams.controller = controller;
 	reqMgrParams.busyMsg = com_zimbra_bulkprovision.BUSY_START_PROVISION_ACCOUNTS;
 	ZaRequestMgr.invoke(csfeParams, reqMgrParams);	
 }
@@ -432,14 +438,9 @@ ZaBulkProvision.getImportStatus = function(callback) {
 
 ZaBulkProvision.importAccountsFromFile = function (obj, callback) {
 	var soapDoc = AjxSoapDoc.create("BulkImportAccountsRequest",ZaBulkProvision.URN, null);
-	soapDoc.getMethod().setAttribute(ZaBulkProvision.A2_op, ZaBulkProvision.OP_START_IMPORT);
-
-	if(obj[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_XML) {
-		attr = soapDoc.set(ZaBulkProvision.A2_sourceType, ZaBulkProvision.SOURCE_TYPE_XML);
-	} else {
-		attr = soapDoc.set(ZaBulkProvision.A2_sourceType, ZaBulkProvision.SOURCE_TYPE_CSV);
-	}
 	
+	soapDoc.getMethod().setAttribute(ZaBulkProvision.A2_op, obj[ZaBulkProvision.A2_op]);
+	var attr = soapDoc.set(ZaBulkProvision.A2_sourceType,obj[ZaBulkProvision.A2_sourceType]);
 	attr = soapDoc.set(ZaBulkProvision.A2_createDomains,obj[ZaBulkProvision.A2_createDomains]);
 	attr = soapDoc.set(ZaBulkProvision.A_aid,obj[ZaBulkProvision.A_aid]);
 	

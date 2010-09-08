@@ -228,16 +228,16 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		             * Settings from SOAP request take preference over settings in the XML file
 		             */
 					if(SMTPHost.length()==0) {
-    					iter = root.elementIterator(ZimbraBulkProvisionExt.E_SMTPHost);
-    					if (iter.hasNext()) {
-    						org.dom4j.Element elSMTPHost = (org.dom4j.Element) iter.next();
+					    Iterator iterMTPHost  = root.elementIterator(ZimbraBulkProvisionExt.E_SMTPHost);
+    					if (iterMTPHost.hasNext()) {
+    						org.dom4j.Element elSMTPHost = (org.dom4j.Element) iterMTPHost.next();
     						SMTPHost = elSMTPHost.getTextTrim();
     					}
 					}
 					if(SMTPPort.length() == 0) {
-                        iter = root.elementIterator(ZimbraBulkProvisionExt.E_SMTPPort);
-                        if (iter.hasNext()) {
-                            org.dom4j.Element elSMTPPort = (org.dom4j.Element) iter.next();
+					    Iterator iterSMTPort = root.elementIterator(ZimbraBulkProvisionExt.E_SMTPPort);
+                        if (iterSMTPort.hasNext()) {
+                            org.dom4j.Element elSMTPPort = (org.dom4j.Element) iterSMTPort.next();
                             SMTPPort = elSMTPPort.getTextTrim();
                         }
 					}
@@ -254,7 +254,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 						String userLN = "";
 						String userDN = "";
 						String userPassword = "";
-						String userPwdMustChange = "";
+						String userPwdMustChange = "FALSE";
 						for (Iterator userPropsIter = elUser.elementIterator(); userPropsIter.hasNext();) {
 							org.dom4j.Element el = (org.dom4j.Element) userPropsIter.next();
 							/*

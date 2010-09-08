@@ -60,17 +60,17 @@ function () {
 		}
 	}	
 	if(showBulkProvision) {    	
-		this._toolbarOperations[ZaOperation.ACCOUNT_IMPORT_WIZARD] = new ZaOperation(ZaOperation.ACCOUNT_IMPORT_WIZARD, com_zimbra_bulkprovision.NewButton_Import, com_zimbra_bulkprovision.NewButton_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openBulkProvisionDialog,{}));        
+		/*this._toolbarOperations[ZaOperation.ACCOUNT_IMPORT_WIZARD] = new ZaOperation(ZaOperation.ACCOUNT_IMPORT_WIZARD, com_zimbra_bulkprovision.NewButton_Import, com_zimbra_bulkprovision.NewButton_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openBulkProvisionDialog,{}));        
 		this._toolbarOperations[ZaOperation.MIGRATION_WIZARD] = new ZaOperation(ZaOperation.MIGRATION_WIZARD, com_zimbra_bulkprovision.TBB_migration_wizard, com_zimbra_bulkprovision.TBB_migration_wizard_tt, "ApplianceMigration", "ApplianceMigration", new AjxListener(this, this.openMigrationWizard,{}));
 		this._toolbarOrder.push(ZaOperation.ACCOUNT_IMPORT_WIZARD) ;
-		this._toolbarOrder.push(ZaOperation.MIGRATION_WIZARD) ;
+		this._toolbarOrder.push(ZaOperation.MIGRATION_WIZARD) ;*/
+		this._toolbarOperations[ZaOperation.BULK_DATA_IMPORT]=new ZaOperation(ZaOperation.BULK_DATA_IMPORT,com_zimbra_bulkprovision.TB_IMAP_Import, com_zimbra_bulkprovision.TB_IMAP_Import_tt, "ApplianceMigration", "ApplianceMigration", new AjxListener(this, this.bulkDataImportListener));
+		this._toolbarOrder.push(ZaOperation.BULK_DATA_IMPORT);
 	}
-	
-	this._toolbarOperations[ZaOperation.BULK_DATA_IMPORT]=new ZaOperation(ZaOperation.BULK_DATA_IMPORT,com_zimbra_bulkprovision.TB_IMAP_Import, com_zimbra_bulkprovision.TB_IMAP_Import_tt, "ApplianceMigration", "ApplianceMigration", new AjxListener(this, this.bulkDataImportListener,{}));				
+				
 	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
 	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));
 
-	this._toolbarOrder.push(ZaOperation.BULK_DATA_IMPORT);
 	this._toolbarOrder.push(ZaOperation.NONE);	
 	this._toolbarOrder.push(ZaOperation.HELP);					
 }
@@ -106,8 +106,11 @@ ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog = function (par
 		}
 
 		if(params && params.finishCallback) {
-			ZaApp.getInstance().dialogs["importAccountsWizard"].registerCallback(DwtWizardDialog.FINISH_BUTTON, params.finishCallback);
-		} 
+			//ZaApp.getInstance().dialogs["importAccountsWizard"].registerCallback(DwtWizardDialog.FINISH_BUTTON, params.finishCallback);
+			ZaApp.getInstance().dialogs["importAccountsWizard"].finishCallback = params.finishCallback;
+		} else {
+			ZaApp.getInstance().dialogs["importAccountsWizard"].finishCallback = null;	
+		}
 
 		ZaApp.getInstance().dialogs["importAccountsWizard"].setObject(obj);
 		ZaApp.getInstance().dialogs["importAccountsWizard"].popup();
@@ -161,14 +164,14 @@ ZaBulkProvisionTasksController.prototype.openMigrationWizard = function (params,
 };
 
 ZaBulkProvisionTasksController.prototype.bulkDataImportListener = 
-function (params,ev) {
+function (hideWiz,auxObj,passedObj,ev) {
     try {
 		if(!ZaApp.getInstance().dialogs["bulkDataImportWizard"]) {
 			ZaApp.getInstance().dialogs["bulkDataImportWizard"] = new ZaBulkDataImportXWizard(this._container);
 		}
 		var obj = null;
-		if (params && params.obj) {
-			obj = params.obj;
+		if (passedObj && typeof passedObj == "object") {
+			obj = passedObj;
 		} else {
 			obj = new ZaBulkProvision();
 			obj[ZaModel.currentStep] = ZaBulkDataImportXWizard.STEP_INTRODUCTION;
@@ -178,15 +181,16 @@ function (params,ev) {
 			obj[ZaBulkProvision.A2_sourceServerType] = ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP;
 			obj[ZaBulkProvision.A2_connectionType] = ZaBulkProvision.CONNECTION_SSL;
 		}
-		if(params && params.hideWiz) {
-			if(ZaApp.getInstance().dialogs[params.hideWiz]) {
-				ZaApp.getInstance().dialogs[params.hideWiz].popdown();
+		if(auxObj) {
+			for(var attr in auxObj) {
+				obj[attr] = auxObj[attr];
 			}
 		}
-		if(params && params.prevCallback) {
-			ZaApp.getInstance().dialogs["bulkDataImportWizard"].prevCallback = params.prevCallback;
-		} else {
-			ZaApp.getInstance().dialogs["bulkDataImportWizard"].prevCallback = null;
+		
+		if(hideWiz && typeof hideWiz == "string") {
+			if(ZaApp.getInstance().dialogs[hideWiz]) {
+				ZaApp.getInstance().dialogs[hideWiz].popdown();
+			}
 		}
 		ZaApp.getInstance().dialogs["bulkDataImportWizard"].setObject(obj);
 		ZaApp.getInstance().dialogs["bulkDataImportWizard"].popup();

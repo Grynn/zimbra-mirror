@@ -303,7 +303,7 @@ function() {
 		prevStep = ZaMigrationXWizard.STEP_LDAP_INFO;
     	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
     } else if(this.prevCallback && cStep == ZaMigrationXWizard.STEP_INTRODUCTION) {
-    	this.prevCallback.run(null);
+    	this.prevCallback.run(this._containedObject);
     	return;
     }
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);

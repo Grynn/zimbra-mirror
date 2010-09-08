@@ -69,6 +69,22 @@ function(entry) {
     this._localXForm.setInstance(this._containedObject);
 }
 
+ZaBulkDataImportXWizard.prototype.startImportCallback = function(params, resp) {
+	if(resp && resp.isException()) {
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);			
+		ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkDataImportXWizard.prototype.previewCallback");
+	} else {
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
+		this.goPage(ZaBulkDataImportXWizard.STEP_FINISH);
+	}	
+}
+
 ZaBulkDataImportXWizard.prototype.previewCallback = function(params, resp) {
 	if(resp && resp.isException()) {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
@@ -136,7 +152,7 @@ ZaBulkDataImportXWizard.prototype.previewCallback = function(params, resp) {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);			
-		this.goPage(ZaBulkDataImportXWizard.STEP_REVIEW);
+		this.goPage(params.nextStep);
 	}
 }
 
@@ -223,24 +239,31 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		//open Exchange Migration wizard
 		var prevCallback = new AjxCallback(this._app.getCurrentController(), 
 					ZaBulkProvisionTasksController.prototype.bulkDataImportListener,
-					{obj:this._containedObject,hideWiz:"migrationWizard"});
+					["migrationWizard"]);
 		ZaBulkProvisionTasksController.prototype.openMigrationWizard.call(this._app.getCurrentController(),{prevCallback:prevCallback,hideWiz:"bulkDataImportWizard"},null);
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_INTRODUCTION && this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP &&
 			this._containedObject[ZaBulkProvision.A2_provisionUsers] == "TRUE") {
 		//open Account Import wizard
-		var obj = new ZaBulkProvision ();
-		obj[ZaModel.currentStep] = ZaBulkDataImportXWizard.STEP_OPTIONS;
-		obj[ZaBulkProvision.A2_sourceServerType] = this._containedObject[ZaBulkProvision.A2_sourceServerType];
-		obj[ZaBulkProvision.A2_provisionUsers] = "FALSE";
-		obj[ZaBulkProvision.A2_importEmail] = "TRUE";
-		obj[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_ZIMBRA;
-		obj[ZaBulkProvision.A2_activateSearch] = 1;
+		var auxObj1 = new ZaBulkProvision ();
+		auxObj1[ZaModel.currentStep] = ZaBulkDataImportXWizard.STEP_OPTIONS;
+		auxObj1[ZaBulkProvision.A2_sourceServerType] = this._containedObject[ZaBulkProvision.A2_sourceServerType];
+		auxObj1[ZaBulkProvision.A2_provisionUsers] = "FALSE";
+		auxObj1[ZaBulkProvision.A2_importEmail] = "TRUE";
+		auxObj1[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_ZIMBRA;
+		auxObj1[ZaBulkProvision.A2_activateSearch] = 1;
 		var finishCallback = new AjxCallback(this._app.getCurrentController(), 
 					ZaBulkProvisionTasksController.prototype.bulkDataImportListener,
-					{obj:obj,hideWiz:"importAccountsWizard"});
+					["importAccountsWizard", auxObj1]);
+		
+		var auxObj2 = new ZaBulkProvision ();
+		auxObj2[ZaModel.currentStep] = cStep;
+		auxObj2[ZaBulkProvision.A2_sourceServerType] = this._containedObject[ZaBulkProvision.A2_sourceServerType];
+		auxObj2[ZaBulkProvision.A2_provisionUsers] = this._containedObject[ZaBulkProvision.A2_provisionUsers];
+		auxObj2[ZaBulkProvision.A2_importEmail] = this._containedObject[ZaBulkProvision.A2_importEmail];
+		auxObj2[ZaBulkProvision.A2_sourceType] = this._containedObject[ZaBulkProvision.A2_sourceType];
 		var prevCallback = new AjxCallback(this._app.getCurrentController(), 
 				ZaBulkProvisionTasksController.prototype.bulkDataImportListener,
-				{obj:this._containedObject,hideWiz:"importAccountsWizard"});
+				["importAccountsWizard",auxObj2]);
 		ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog.call(this._app.getCurrentController(),{prevCallback:prevCallback,finishCallback:finishCallback,hideWiz:"bulkDataImportWizard"},null);
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_INTRODUCTION && this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP &&
 			this._containedObject[ZaBulkProvision.A2_provisionUsers] == "FALSE" && this._containedObject[ZaBulkProvision.A2_importEmail] == "TRUE") {
@@ -295,7 +318,6 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
         }catch (err) {
             this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_no_bulk_file_specified) ;
         }
-        this.goPage(ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS);
 	} else if (cStep == ZaBulkDataImportXWizard.STEP_ACCT_PICKER) {
 		if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_account])) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_MUST_SELECT_ACCOUNTS);
@@ -394,8 +416,12 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);			
     	this._containedObject[ZaBulkProvision.A2_op] = ZaBulkProvision.OP_PREVIEW;
-		var callback = new AjxCallback(this, ZaBulkDataImportXWizard.prototype.previewCallback,{});
+		var callback = new AjxCallback(this, ZaBulkDataImportXWizard.prototype.previewCallback,{nextStep:ZaBulkDataImportXWizard.STEP_REVIEW});
     	ZaBulkProvision.bulkDataIMport(this._containedObject,callback);		
+	} else if(cStep == ZaBulkDataImportXWizard.STEP_REVIEW) {
+		var callback = new AjxCallback(this, ZaBulkDataImportXWizard.prototype.startImportCallback,{});
+		this._containedObject[ZaBulkProvision.A2_op] = ZaBulkProvision.OP_START_IMPORT;
+		ZaBulkProvision.bulkDataIMport(this._containedObject,callback);
 	}
 }
 
@@ -452,30 +478,22 @@ ZaBulkDataImportXWizard.prototype.goPrev =
 	}
 
 
-ZaBulkDataImportXWizard.prototype._uploadCallback = function (status, uploadResults) {
+ZaBulkDataImportXWizard.prototype._uploadCallback = function (status, attId) {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
-	if (AjxEnv.hasFirebug)
-		console.log("Provisioning File Upload: status = " + status);
-	if ((status == AjxPost.SC_OK) && (uploadResults != null) && (uploadResults.length > 0)) {
-    	var v = uploadResults[0] ;
-        if (v.aid != null && v.aid.length > 0) {
-           this._containedObject [ZaBulkProvision.A_csv_aid] =  v.aid ;
+	if (status == AjxPost.SC_OK) {
+    	if (attId != null && attId.length > 0) {
+           this._containedObject [ZaBulkProvision.A_aid] =  attId;
         } else {
-           this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_upload_csv_no_aid);
+           this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_upload_bulk_no_aid);
            return ;
         }
         //File is uploaded successfully
         try {
-            var resp = ZaBulkProvision.getBulkProvisionAccounts(this._app, this._containedObject );
-            if (resp.aid == this._containedObject[ZaBulkProvision.A_csv_aid]) {
-            	//generate a preview of options, skip STEP_IMAP_OPTIONS, because these options should be in the XML
-            	this._containedObject[ZaBulkProvision.A2_op] = ZaBulkProvision.OP_PREVIEW;
-            	this._containedObject[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
-        		var callback = new AjxCallback(this, ZaBulkDataImportXWizard.prototype.previewCallback,{});
-            	ZaBulkProvision.bulkDataIMport(this._containedObject,callback);
-            }else{
-                throw new AjxException(com_zimbra_bulkprovision.error_unmatching_aid) ;
-            }
+        	//generate a preview of options, skip STEP_IMAP_OPTIONS, because these options should be in the XML
+        	this._containedObject[ZaBulkProvision.A2_op] = ZaBulkProvision.OP_PREVIEW;
+        	this._containedObject[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
+    		var callback = new AjxCallback(this, ZaBulkDataImportXWizard.prototype.previewCallback,{nextStep:ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS});
+        	ZaBulkProvision.bulkDataIMport(this._containedObject,callback);
         } catch (ex) {
             this._app.getCurrentController()._handleException(ex) ;
             return ;
@@ -493,7 +511,7 @@ ZaBulkDataImportXWizard.isAccountSourceLDAP = function() {
 }
 
 ZaBulkDataImportXWizard.getUploadFormHtml = function (){
-	var uri = appContextPath + "/../service/upload?fmt=extended";
+	var uri = appContextPath + "/../service/upload";
 	var html = [];
 	var idx = 0;
 	html[idx++] = "<div style='height:50px;width: 500px; overflow:auto;'><form method='POST' action='";
@@ -1008,7 +1026,7 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 			       },
 			       {type:_OUTPUT_,label:com_zimbra_bulkprovision.IMAPHost, ref:ZaBulkProvision.A2_IMAPHost, visibilityChecls:[],enableDisableChecks:[]},
 			       {type:_OUTPUT_,label:com_zimbra_bulkprovision.IMAPPort, ref:ZaBulkProvision.A2_IMAPPort, visibilityChecls:[],enableDisableChecks:[]},
-			       {ref:ZaBulkProvision.A2_connectionType, type:_OSELECT1_, label:com_zimbra_bulkprovision.IMAPConnectionType,labelLocation:_LEFT_,
+			       {ref:ZaBulkProvision.A2_connectionType, type:_OUTPUT_, label:com_zimbra_bulkprovision.IMAPConnectionType,labelLocation:_LEFT_,
 			    	   visibilityChecks:[],enableDisableChecks:[]
 			       },
 			       {ref:ZaBulkProvision.A2_useAdminLogin, type:_OUTPUT_,  
@@ -1018,7 +1036,8 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 			       {type:_OUTPUT_,label:com_zimbra_bulkprovision.IMAPAdminLogin, ref:ZaBulkProvision.A2_IMAPAdminLogin, visibilityChecls:[],
 			    	   enableDisableChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_useAdminLogin,"1"]],
 			    	   enableDisableChangeEventSources:[ZaBulkProvision.A2_useAdminLogin]
-			       }
+			       },
+			       {type:_DWT_ALERT_,colSpan:2,style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.ClickNextToStartImport,visibilityChecks:[]}
 			]
 	};
 	cases.push(case_review);
