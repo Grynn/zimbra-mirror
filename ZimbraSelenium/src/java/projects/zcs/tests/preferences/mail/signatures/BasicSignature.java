@@ -349,7 +349,7 @@ public class BasicSignature extends CommonTest {
 								+ localize(locator.del) + "')]", "");
 
 		for (int second = 0;; second++) {
-			if (second >= 60) fail("timeout");
+			if (second >= 60) Assert.fail("timeout");
 			try { if (!ClientSessionFactory.session().selenium().isTextPresent(signatureName)) break; } catch (Exception e) {}
 			SleepUtil.sleep(1000);
 		}

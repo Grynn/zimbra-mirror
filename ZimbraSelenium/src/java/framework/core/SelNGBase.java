@@ -9,7 +9,6 @@ import net.sf.json.JSONArray;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
-import org.testng.Assert;
 
 import framework.util.ZimbraSeleniumProperties;
 
@@ -20,7 +19,6 @@ public class SelNGBase {
 	public static String currentBrowserName = "";
 	
 	public static int maxRetryCount = 0;
-	public static int currentRetryCount = 0;
 	public static String someting = " ";
 	public static String appType = "AJAX";
 	public static String suiteName = "";
@@ -59,12 +57,17 @@ public class SelNGBase {
 		logger.debug("New SelNGBase");
 	}
 	
-	// can be used as @aftermethod
-	public static void stopSeleniumSession() {
+	public static void resetSession() {
+		// reset all the selngbase settings, since they might have been set to
+		// true by the failing test
+		SelNGBase.labelStartsWith = false;
+		SelNGBase.fieldLabelIsAnObject = false;
+		SelNGBase.actOnLabel = false;
 		if (ClientSessionFactory.session().selenium() != null){
 			ClientSessionFactory.session().selenium().stop();
 		}
 	}
+
 
 
 	public void openApplication() {
@@ -143,19 +146,6 @@ public class SelNGBase {
 		ClientSessionFactory.session().selenium().close();
 	}
 
-
-	protected void fail(String name) {
-		Assert.fail(name);
-	}
-
-	protected void fail(String name, Throwable t) {
-		if (t instanceof RuntimeException) {
-			throw (RuntimeException) t;
-		} else {
-			throw new RuntimeException(t);
-		}
-
-	}
 
 
 	

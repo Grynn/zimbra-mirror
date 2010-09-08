@@ -140,15 +140,6 @@ public class CommonTest extends SelNGBase {
 
 	}
 
-	public static void resetSession() throws Exception {
-		// reset all the selngbase settings, since they might have been set to
-		// true by the failing test
-		SelNGBase.labelStartsWith = false;
-		SelNGBase.fieldLabelIsAnObject = false;
-		SelNGBase.actOnLabel = false;
-		SelNGBase.stopSeleniumSession();
-	}
-
 	public static void zLoginIfRequired() throws Exception {
 		// set retry to false so that newtests and dependsOn methods would work
 		// like fresh-test
