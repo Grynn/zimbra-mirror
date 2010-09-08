@@ -190,6 +190,14 @@ function (params) {
 		return;
 	}	
 	var obj = this._view.getObject();
+        /*  if the user never edit the MTA Text field, the attribute doesn't exist. In this case
+	 *  we don't use to check the value. Otherwise, if we continue to check, it will report 
+ 	 *  a error even the user never edit this item.  
+	 */
+	if(!obj.attrs.hasOwnProperty(ZaServer.A_zimbraMtaMyNetworks)) {
+                this.runValidationStack(params);
+                return;        
+        }
 	//find local networks
 	var locals = [];
 	var locals2 = [];
