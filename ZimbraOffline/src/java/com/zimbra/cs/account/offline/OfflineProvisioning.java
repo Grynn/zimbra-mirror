@@ -134,6 +134,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     private final NamedEntryCache<Account> mAccountCache;
     private final NamedEntryCache<Account> mGranterCache;
     private final Map<String, Server> mSyncServerCache; 
+    private Account zimbraAdminAccount;
 
     private boolean mHasDirtyAccounts = true;
 
@@ -1170,10 +1171,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         DbOfflineDirectory.GranterEntry granter = null;
         if (keyType == AccountBy.id) {
             if ((acct = mAccountCache.getById(key)) == null) {
-                attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_zimbraId, key);
-
-                if (attrs == null && (acct = mGranterCache.getById(key)) == null)
-                    granter = lookupGranter("id", key);
+                if (zimbraAdminAccount != null && key.equals(zimbraAdminAccount.getId())) {
+                    acct = zimbraAdminAccount;
+                } else {
+                    attrs = DbOfflineDirectory.readDirectoryEntry(EntryType.ACCOUNT, A_zimbraId, key);
+    
+                    if (attrs == null && (acct = mGranterCache.getById(key)) == null)
+                        granter = lookupGranter("id", key);
+                }
             }
         } else if (keyType == AccountBy.name) {
             if (key.equals(LOCAL_ACCOUNT_NAME))
@@ -1185,7 +1190,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                     granter = lookupGranter("name", key);
             }
         } else if (keyType == AccountBy.adminName) {
-            if ((acct = mAccountCache.getByName(key)) == null && key.equals(LC.zimbra_ldap_user.value())) {
+            if ((acct = mAccountCache.getByName(key)) == null && key.equals(LC.zimbra_ldap_user.value()) && (acct = zimbraAdminAccount) == null) {
                 attrs = new HashMap<String,Object>(7);
                 attrs.put(A_mail, key);
                 attrs.put(A_cn, key);
@@ -1240,6 +1245,9 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 attrs, mDefaultCos.getAccountDefaults(),
                 keyType == AccountBy.id && key.equals(LOCAL_ACCOUNT_ID) ? null :
                 getLocalAccount(), this);
+            if (keyType == AccountBy.adminName && key.equals(LC.zimbra_ldap_user.value())) {
+                zimbraAdminAccount = acct;
+            }
             mAccountCache.put(acct);
         }
 
