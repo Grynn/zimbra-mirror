@@ -887,7 +887,7 @@ function(mods) {
 						var attr = soapDoc.set("a", mods[aname][ix].toString());
 					else if(mods[aname][ix] instanceof Object)
 						var attr = soapDoc.set("a", mods[aname][ix].toString());
-					else if(mods[aname][ix])
+					else
 						var attr = soapDoc.set("a", mods[aname][ix]);
 	
 					if(attr)
