@@ -55,6 +55,10 @@ ifeq (UBUNTU6,$(findstring UBUNTU6,$(BUILD_PLATFORM)))
 	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 endif
 
+ifeq (DEBIAN4.0,$(findstring DEBIAN4.0,$(BUILD_PLATFORM)))
+	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+endif
+
 LOGFILE ?= ThirdParty-Perllibs.log
 
 PERL_VERSION :=	$(shell /usr/bin/perl -e 'print "$$]"')
