@@ -336,10 +336,9 @@ build:
 		echo -n "Compiling perl lib $$lib ..."; \
 		cp $(PERL_ROOT)/$$lib.tar.gz $(TMPDIR); \
 		(cd $(TMPDIR); tar xfz $$lib.tar.gz; cd $$lib; \
-		mv Build.PL Build.PL.orig; \
-		sed -e "s|'/usr/sbin'|'$(DEST_DIR)/sbin'|g" Build.PL.orig >Build.PL; \
-		$(PERL) -I$(DEST_LIB_DIR) Makefile.PL PREFIX=$(DEST_DIR) LIB=$(DEST_LIB_DIR); \
-		$(MAKE); $(MAKE) install;) >> $(LOGFILE) 2>&1; \
+		$(PERL) -I$(DEST_LIB_DIR) Build.PL --prefix $(DEST_DIR) --install_path lib=$(DEST_LIB_DIR) --install_path sbin=$(DEST_DIR)/sbin; \
+		./Build test; \
+		./Build install --uninst 1;) >> $(LOGFILE) 2>&1; \
 		if [ $$? -ne 0 ]; then  echo "FAILED.";  else  echo "done.";  fi \
 	done
 
