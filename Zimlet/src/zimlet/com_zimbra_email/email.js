@@ -24,6 +24,8 @@ Com_Zimbra_Email.IM_NEW_IM = "im new im";
 Com_Zimbra_Email.IM_NEW_BUDDY = "im new buddy";
 Com_Zimbra_Email.NEW_FILTER = "__new__";
 Com_Zimbra_Email.MAILTO_RE = /^mailto:[\x27\x22]?([^@?&\x22\x27]+@[^@?&]+\.[^@?&\x22\x27]+)[\x27\x22]?/;
+Com_Zimbra_Email.tooltipWidth = 270;
+Com_Zimbra_Email.tooltipHeight = 300;
 
 Com_Zimbra_Email.prototype.init =
 function() {
@@ -38,8 +40,26 @@ function() {
 	} else {
 		this._newTooltipHint = ZmMsg.leftClickComposeHint + "<br>" + ZmMsg.rightClickHint;
 	}
+	this._prefDialog = new EmailToolTipPrefDialog(this);
 
-	this._yahooSocialEnabled = this.getBoolConfig("yahooSocialEnabled");
+	this._subscriberZimlets = [];
+	this._preLoadBusyImg();
+};
+
+/**
+ * This method is called when the panel item is double-clicked.
+ *
+ */
+Com_Zimbra_Email.prototype.doubleClicked = function() {
+	this.singleClicked();
+};
+
+/**
+ * This method is called when the panel item is single-clicked.
+ *
+ */
+Com_Zimbra_Email.prototype.singleClicked = function() {
+	this._prefDialog.popup();
 };
 
 Com_Zimbra_Email.prototype._getRoster =
@@ -184,9 +204,42 @@ function(contact, address) {
 	return buddy;
 };
 
+Com_Zimbra_Email.prototype.hoverOut =
+function(object, context, x, y, span) {
+	//override to ignore hoverout. 
+}
+
+Com_Zimbra_Email.prototype.addSubscriberZimlet =
+function(subscriberZimlet, isPrimary) {
+	this._subscriberZimlets.push(subscriberZimlet);	
+	if(isPrimary) {
+		this.primarySubscriberZimlet = subscriberZimlet;
+	}
+};
+
+Com_Zimbra_Email.prototype.hoverOver =
+function(object, context, x, y, span) {
+	this._initializeProps(object, context, x, y, span);
+	appCtxt.notifyZimlets("onEmailHoverOver", [this], {waitUntilLoaded:true});
+	if(this.primarySubscriberZimlet) {
+		this.primarySubscriberZimlet.showTooltip();
+	} else {//if no subscribers..
+		this._showTooltip(object, context, x, y, span);
+	}
+};
+
+Com_Zimbra_Email.prototype._showTooltip =
+function(object, context, x, y, span) {
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.setContent('<div id="zimletTooltipDiv"/>', true);
+	this.toolTipPoppedUp(span, object, context, document.getElementById("zimletTooltipDiv"));
+	tooltip.popup(x, y, true, new AjxCallback(this, this.hoverOut, object, context, span));
+};
+
+
 Com_Zimbra_Email.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
-
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
 
@@ -196,22 +249,13 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	}
 
 	var toolTip;
-
-	// @yahoo.com love
-	var isYahoo = false;
-	if (this._yahooSocialEnabled) {
-		var parts = addr.split("@");
-		var domain = (parts.length > 0) ? parts[1] : null;
-		isYahoo = (domain && domain == "yahoo.com");
-	}
-
 	var contactList = AjxDispatcher.run("GetContacts");
 	var contact = contactList ? contactList.getContactByEmail(addr) : null;
 	if (contact) {
-		var hint = isYahoo ? this._getYahooHint() : this._composeTooltipHint;
+		var hint = this._composeTooltipHint;
 		toolTip = contact.getToolTip(addr, false, hint);
 	} else {
-		var hint = isYahoo ? this._getYahooHint() : this._newTooltipHint;
+		var hint = this._newTooltipHint;
         if(isMailTo){
             hint = this._composeTooltipHint;
         }
@@ -221,9 +265,69 @@ function(spanElement, contentObjText, matchContext, canvas) {
 		};
 		toolTip = AjxTemplate.expand("abook.Contacts#TooltipNotInAddrBook", subs);
 	}
-
 	canvas.innerHTML = toolTip;
 };
+
+Com_Zimbra_Email.prototype._initializeProps =
+function(object, context, x, y, span) {
+	if(!this.seriesAnimation) {
+		this.seriesAnimation = new SeriesAnimation();
+	}
+	this.seriesAnimation.reset();
+	var shell = DwtShell.getShell(window);
+	var tooltip = shell.getToolTip();
+	tooltip.setContent("<div id=\"zimletTooltipDiv\"></div>", true);
+	this.x = x;
+	this.y = y;
+	this.tooltip = tooltip;
+	var addr = (object instanceof AjxEmailAddress) ? object.address : object;
+    var isMailTo = this.isMailToLink(addr);
+	if (isMailTo) {
+		addr = (this.parseMailToLink(addr)).to || addr;
+	}
+	this.emailAddress = addr;
+	this.fullName = (object instanceof AjxEmailAddress) ? object.name : "";
+	this.canvas =   document.getElementById("zimletTooltipDiv");
+	this.slideShow = new EmailToolTipSlideShow(this, this.canvas);
+};
+
+Com_Zimbra_Email.prototype._preLoadBusyImg =
+function() {
+	this._busyImg = new Image();
+	this._busyImg.src = this.getResource("img/EmailZimlet_busy.gif");
+	this.getShell().getHtmlElement().appendChild(this._busyImg);
+};
+Com_Zimbra_Email.prototype.showBusyImg =
+function(timeoutCallback, xOffset, yOffset) {
+	var top = yOffset ? this.y + yOffset : this.y;
+	var left = xOffset ? this.x + xOffset : this.x;
+
+	this._busyImg.style.top = top;
+	this._busyImg.style.left = left;
+	this._busyImg.style.display = "block";
+	this._busyImg.style.position = "absolute";
+	this._busyImg.style.zIndex = "500";
+	this._busyImgTimer = setTimeout(AjxCallback.simpleClosure(this._handleNoImg, this, timeoutCallback), 5000);//hide busyImg after 5 secs
+};
+
+Com_Zimbra_Email.prototype._handleNoImg =
+function(timeoutCallback) {
+	clearTimeout(this._busyImgTimer);
+	this._busyImg.style.zIndex = "100";
+	this._busyImg.style.display = "none";
+	if(timeoutCallback) {
+		timeoutCallback.run();
+	}
+};
+
+Com_Zimbra_Email.prototype.hideBusyImg =
+function() {
+	clearTimeout(this._busyImgTimer);
+	this._busyImg.style.zIndex = "100";
+	this._busyImg.style.display = "none";
+};
+
+
 
 Com_Zimbra_Email.prototype.createFilterMenu =
 function(actionMenu) {
@@ -404,16 +508,6 @@ function(spanElement, contentObjText, matchContext, ev) {
 
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
-
-	if (this._yahooSocialEnabled){
-		var parts = addr.split("@");
-		var domain = (parts.length > 0) ? parts[1] : null;
-		if (domain && domain == "yahoo.com") {
-			var yProfileUrl = "http://profiles.yahoo.com/" + parts[0];
-			window.open(yProfileUrl, "_blank");
-			return;
-		}
-	}
 
     var contact = addr;
     var isMailTo = this.isMailToLink(addr);
@@ -603,3 +697,41 @@ function() {
 		this.displayStatusMessage(ZmMsg.errorCreateUrl);
 	}
 };
+
+/**
+ * Helper function
+ */
+Com_Zimbra_Email.prototype.animateOpacity =
+function(id, opacStart, opacEnd, millisec) {
+	this.changeOpac(opacStart, document.getElementById(id).style);//create a starting point
+	//speed for each frame
+	var speed = Math.round(millisec / 100);
+	var timer = 0;
+	var styleObj = document.getElementById(id).style;
+	//determine the direction for the blending, if start and end are the same nothing happens
+	if (opacStart > opacEnd) {
+		for (i = opacStart; i >= opacEnd; i--) {
+			setTimeout(AjxCallback.simpleClosure(this.changeOpac, this, i, styleObj), (timer * speed));
+			timer++;
+		}
+	} else if (opacStart < opacEnd) {
+		for (i = opacStart; i <= opacEnd; i++)
+		{
+			setTimeout(AjxCallback.simpleClosure(this.changeOpac, this, i, styleObj), (timer * speed));
+			timer++;
+		}
+	}
+};
+
+/**
+ * Change the opacity for different browsers
+ */
+Com_Zimbra_Email.prototype.changeOpac =
+function(opacity, styleObj) {
+	styleObj.opacity = (opacity / 100);
+	styleObj.MozOpacity = (opacity / 100);
+	styleObj.KhtmlOpacity = (opacity / 100);
+	styleObj.zoom = 1;
+	styleObj.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=" + opacity + ")";
+};
+

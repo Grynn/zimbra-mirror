@@ -1,5 +1,10 @@
-<zimlet name="com_zimbra_email" version="2.0" target="main view-window" description="Highlights and previews associated contact for an email address.">
+<zimlet name="com_zimbra_email" version="11" target="main view-window" description="Highlights and previews associated contact for an email address.">
 	<include>email.js</include>
+	<include>EmailToolTipSlideShow.js</include>
+	<include>EmailToolTipslide.js</include>
+	<include>EmailToolTipPrefDialog.js</include>
+	<include>SeriesAnimation.js</include>
+	<includeCSS>email.css</includeCSS>
 	<handlerObject>Com_Zimbra_Email</handlerObject>
 	<contentObject type="email">
 		<matchOn>
@@ -15,4 +20,7 @@
 			<menuItem label="${msg.goToUrl}" icon="URL" id="GOTOURL"/>
 		</contextMenu>
 	</contentObject>
+	<zimletPanelItem label="${msg.label}" icon="MsgStatusUnread">
+		<toolTipText>${msg.tooltip}</toolTipText>
+	</zimletPanelItem>
 </zimlet>
