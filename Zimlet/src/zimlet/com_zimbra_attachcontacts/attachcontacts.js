@@ -31,6 +31,7 @@ com_zimbra_attachcontacts_HandlerObject.prototype.constructor = com_zimbra_attac
  */
 var AttachContactsZimlet = com_zimbra_attachcontacts_HandlerObject;
 
+AttachContactsZimlet.SEND_CONTACTS = "SEND_CONTACTS_IN_EMAIL";
 
 /**
  * Called by framework when compose toolbar is being initialized
@@ -65,10 +66,15 @@ function() {
 	this._tabkey = attachDialog.addTab("AttachContacts", tabLabel, this.AttachContactsView);
 	this.AttachContactsView.attachDialog = attachDialog;
 
-	var callback = new AjxCallback(this.AttachContactsView, this.AttachContactsView.uploadFiles);
-	attachDialog.addOkListener(this._tabkey, callback);
+	attachDialog.addOkListener(this._tabkey, new AjxCallback(this, this._okListener));
 	this._addedToMainWindow = true;
 };
+
+AttachContactsZimlet.prototype._okListener =
+function() {
+	this.AttachContactsView.uploadFiles();
+	this.AttachContactsView.setClosed(true);
+}
 
 /**
  * Called by Framework when an email is about to be sent
@@ -102,7 +108,7 @@ function(request, isDraft) {
  *  Called by Framework and adds toolbar button
  */
 AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, controller) {
-	if (!toolbar.getButton("SEND_CONTACTS_IN_EMAIL")) {
+	if (!toolbar.getButton(AttachContactsZimlet.SEND_CONTACTS)) {
 		var opList = toolbar.opList;
 		for (var i = 0; i < opList.length; i++) {
 			if (opList[i] == "TAG_MENU") {
@@ -110,9 +116,8 @@ AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, 
 				break;
 			}
 		}
-		var btn = toolbar.createOp("SEND_CONTACTS_IN_EMAIL", {image:"MsgStatusSent", text:this.getMessage("ACZ_Send"), tooltip:this.getMessage("ACZ_SendContactsAsAttachments"), index:buttonIndex});
+		var btn = toolbar.createOp(AttachContactsZimlet.SEND_CONTACTS, {image:"MsgStatusSent", text:this.getMessage("ACZ_Send"), tooltip:this.getMessage("ACZ_SendContactsAsAttachments"), index:buttonIndex});
 		var buttonIndex = 0;
-
 
 		this._composerCtrl = controller;
 		this._composerCtrl._AttachContactsZimlet = this;

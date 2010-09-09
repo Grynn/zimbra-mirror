@@ -26,6 +26,7 @@ function(parent, zimlet, className) {
 	this.zimlet = zimlet;
 	DwtTabViewPage.call(this, parent, className, Dwt.STATIC_STYLE);
 	this.setScrollStyle(Dwt.SCROLL);
+	this.closed = true;
 };
 
 AttachContactsTabView.prototype = new DwtTabViewPage;
@@ -46,6 +47,16 @@ AttachContactsTabView.ELEMENT_ID_SEARCH_BUTTON = "attDlg_attMsg_SearchBtn";
 AttachContactsTabView.ELEMENT_ID_NAV_BUTTON_CELL = "attDlg_attMsg_NavBtnCell";
 
 /**
+ * Defines the id of the folder to search initially
+ */
+AttachContactsTabView.DEFAULT_CONTACTS_FOLDER = "7";
+
+/**
+ * Defines the max number of rows in a group entry. If the group has this many entries, they will all be shown. If it has more, cutoff-1 entries will be shown and an "(x more)" message will be displayed as the last row
+ */
+AttachContactsTabView.GROUP_CUTOFF = 6;
+
+/**
  * Returns a string representation of the object.
  *
  */
@@ -62,11 +73,21 @@ function() {
 	DwtTabViewPage.prototype.showMe.call(this);
 	if(this._isLoaded) {
 		this.setSize(Dwt.DEFAULT, "255");
-		return;
+	} else {
+		this._createHtml1();
+		Dwt.byId(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
+		this._isLoaded = true;
 	}
-	this._createHtml1();
-	document.getElementById(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
-	this._isLoaded = true;
+
+	if (this._closed) {
+		this.reset();
+		this._closed = false;
+	}
+};
+
+AttachContactsTabView.prototype.setClosed =
+function(closed) {
+	this._closed = (closed!==false);
 };
 
 /**
@@ -121,7 +142,7 @@ function() {
 	"<td  valign='top'><div  id='", this._folderListId, "' ></div>",
 	"</td></tr></table>");
 
-	this._contentEl.innerHTML = html.join("");
+	Dwt.setInnerHtml(this._contentEl, html.join(""));
 
 	var searchButton = new DwtButton({parent:this});
 	var searchButtonLabel = this.zimlet.getMessage("ACZ_tab_button_search");
@@ -129,14 +150,14 @@ function() {
 	searchButton.setImage("Contact");
 	searchButton.setSize("140");
 	searchButton.addSelectionListener(new AjxListener(this, this._searchButtonListener));
-	document.getElementById(AttachContactsTabView.ELEMENT_ID_SEARCH_BUTTON).appendChild(searchButton.getHtmlElement());
+	Dwt.byId(AttachContactsTabView.ELEMENT_ID_SEARCH_BUTTON).appendChild(searchButton.getHtmlElement());
 
 	this._navigationContainer = new DwtComposite(appCtxt.getShell());
 	this._navTB = new ACZimletNavToolBar({parent:this._navigationContainer});
 	var navBarListener = new AjxListener(this, this._navBarListener);
 	this._navTB.addSelectionListener(ZmOperation.PAGE_BACK, navBarListener);
 	this._navTB.addSelectionListener(ZmOperation.PAGE_FORWARD, navBarListener);
-	document.getElementById(AttachContactsTabView.ELEMENT_ID_NAV_BUTTON_CELL).appendChild(this._navTB.getHtmlElement());
+	Dwt.byId(AttachContactsTabView.ELEMENT_ID_NAV_BUTTON_CELL).appendChild(this._navTB.getHtmlElement());
 
 	this.showAttachContactsTreeView();
 };
@@ -148,7 +169,7 @@ function() {
 AttachContactsTabView.prototype._searchButtonListener =
 function(ev) {
 	this.treeView.deselectAll();
-	var val = document.getElementById(AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD).value;
+	var val = Dwt.byId(AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD).value;
 	if (val == "")
 		return;
 
@@ -206,50 +227,100 @@ function(params) {
 AttachContactsTabView.prototype._setListView =
 function(items) {
 	var html = [];
-	var isRowOdd = true;
-	for(var i=0; i < items.length; i++) {
-		var item = items[i];
-		var attr = item._attrs ? item._attrs : (item.attr ? item.attr : "");
-		if(attr == "") {
-			continue;
-		}
-		var rowClass = "RowOdd";
-		if(isRowOdd) {
-			rowClass = "RowOdd";
-		} else {
-			rowClass = "RowEven";
-		}
-		var fn = attr.firstName;
-		var ln = attr.lastName;
-		var e = attr.email ? attr.email : "";
-		var c = attr.company;
-		var name = "";
-		if(fn && ln && c) {
-			name = [fn, " ", ln, " (", c, ")"].join("");
-		} else if(fn && ln) {
-			name = [fn, " ", ln].join("");
-		} else if(fn) {
-			name = fn;
-		} else if(ln) {
-			name = ln;
-		}
-		var chkId = "attachContactsZimlet_"+Dwt.getNextId();
-		this._checkboxIdAndItemIdMap[chkId] = item.id;
-		html.push("<div  class='",rowClass,"'>",
-			"<table width=100%><tr><td width=16px><input id='",chkId,"' type='checkbox'></input></td>",
-			"<td><span style=\"font-weight:bold;font-size:14px;\">", name,"</span></td>",
-			"</tr><tr><td colspan=2><span style=\"color:gray\">", e, "</span></td></tr></table></div>");
-
-		isRowOdd = !isRowOdd;
-	}
-	if(items.length == 0) {
-		if(!this._noContactsFoundStr) {
+	var idx = 0;
+	
+	if (items.length == 0) {
+		if (!this._noContactsFoundStr) {
 			this._noContactsFoundStr = ["<div padding=5px>", this.zimlet.getMessage("ACZ_NoContactsFound"), "</div>"].join("");
 		}
-		html.push(this._noContactsFoundStr);
+		html[idx++] = this._noContactsFoundStr;
+	} else {
+		var desiredAttrs = [ZmContact.EMAIL_FIELDS, ZmContact.PHONE_FIELDS, ZmContact.IM_FIELDS];
+		var isRowOdd = true;
+		for (var i=0; i < items.length; i++) {
+			var item = items[i];
+			var contact;
+			try {
+				contact = ZmContact.createFromDom(item, {});
+			} catch (e) {
+				continue;
+			}
+			if (!contact) {
+				continue;
+			}
+
+			var rowClass = (isRowOdd) ? "RowOdd" : "RowEven";
+			isRowOdd = !isRowOdd;
+
+			var primary = [contact.getAttr(ZmContact.F_firstName), contact.getAttr(ZmContact.F_middleName), contact.getAttr(ZmContact.F_lastName), contact.getAttr(ZmContact.F_company) ? "("+contact.getAttr(ZmContact.F_company)+")" : null];
+			var name = AjxUtil.collapseList(primary).join(" ") || ZmContact.computeFileAs(contact);
+
+			var fields;
+
+			if (contact.isGroup()) {
+				members = contact.getGroupMembers().good;
+				fields = members.map(function(member) {return member.toString()}).getArray() || [];
+				if (AttachContactsTabView.GROUP_CUTOFF > 0 && fields.length > AttachContactsTabView.GROUP_CUTOFF) {
+					// TODO: Do we want to ensure that entries containing this._currentQuery are put in the top of the array before slicing it?
+					var moreMsg = AjxMessageFormat.format(this.zimlet.getMessage("ACZ_more"), fields.length - AttachContactsTabView.GROUP_CUTOFF + 1);
+					fields = fields.slice(0, AttachContactsTabView.GROUP_CUTOFF - 1);
+					fields.push(moreMsg);
+				}
+			} else {
+				fields = [];
+				for (var j=0; j<desiredAttrs.length; j++) {
+					var wattr = this._getFirstWorkingAttr(contact.getAttrs(), desiredAttrs[j]);
+					if (wattr)
+						fields.push(wattr);
+				}
+			}
+
+			var chkId = "attachContactsZimlet_"+Dwt.getNextId();
+			this._checkboxIdAndItemIdMap[chkId] = item.id;
+			html[idx++] = "<div class='";
+			html[idx++] = rowClass;
+			html[idx++] = "'>";
+
+			html[idx++] = "<table width=100%>";
+			html[idx++] = "<tr><td width=16px><input id='";
+			html[idx++] = chkId;
+			html[idx++] = "' type='checkbox'/></td>";
+
+			html[idx++] = "<td width=16px>";
+			html[idx++] = AjxImg.getImageHtml(contact.getIcon());
+			html[idx++] = "</td>";
+
+			html[idx++] = "<td><span style=\"font-weight:bold;font-size:14px;\">";
+			html[idx++] = AjxStringUtil.htmlEncode(name);
+			html[idx++] = "</span></td></tr>";
+
+			for (var j=0; j<fields.length; j++) {
+				html[idx++] = "<tr><td colspan=3><span style=\"color:gray\">";
+				html[idx++] = AjxStringUtil.htmlEncode(fields[j]);
+				html[idx++] = "</span></td></tr>";
+			}
+
+			html[idx++] = "</table></div>";
+		}
 	}
-	document.getElementById(this._folderListId).innerHTML = html.join("");
+	
+	Dwt.setInnerHtml(Dwt.byId(this._folderListId), html.join(""));
 };
+
+AttachContactsTabView.prototype._getFirstWorkingAttr =
+function(item, desiredAttrs) {
+	var attrs = [];
+	if (AjxUtil.isArray(desiredAttrs)) {
+		for (var i=0; i<desiredAttrs.length; i++) {
+			var attr = this._getFirstWorkingAttr(item, desiredAttrs[i]);
+			if (attr)
+				return attr;
+		}
+	} else if (AjxUtil.isString(desiredAttrs)) {
+		if (item[desiredAttrs])
+			return item[desiredAttrs];
+	}
+}
 
 /**
  * Handles the view keys events.
@@ -274,8 +345,8 @@ function() {
 AttachContactsTabView.prototype._getSelectedItems =
 function() {
 	var selectedIds = [];
-	for(var chkboxId in this._checkboxIdAndItemIdMap) {
-		if(document.getElementById(chkboxId).checked) {
+	for (var chkboxId in this._checkboxIdAndItemIdMap) {
+		if (Dwt.byId(chkboxId).checked) {
 			selectedIds.push(this._checkboxIdAndItemIdMap[chkboxId]);
 		}
 	}
@@ -303,9 +374,23 @@ function() {
 	AjxPackage.require({name:["ContactsCore","Contacts"], forceReload:true, callback:callback});
 };
 
+AttachContactsTabView.prototype.reset =
+function() {
+	Dwt.byId(AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD).value = "";
+	for (var chkboxId in this._checkboxIdAndItemIdMap) {
+		var input = Dwt.byId(chkboxId);
+		input.checked = false;
+	}
+
+	var folderId = AttachContactsTabView.DEFAULT_CONTACTS_FOLDER;
+	this._currentQuery = this._getQueryFromFolder(folderId);
+	this.treeView.setSelected(folderId);
+	this._treeListener();
+};
+
 AttachContactsTabView.prototype._showTreeView =
 function() {
-	if( appCtxt.isChildWindow) {
+	if (appCtxt.isChildWindow) {
 		ZmOverviewController.CONTROLLER["ADDRBOOK"] = "ZmAddrBookTreeController";
 	}
 	var app = appCtxt.getApp(ZmApp.CONTACTS);
@@ -321,10 +406,7 @@ function() {
 	this._setOverview(params);
 
 	this.setSize(Dwt.DEFAULT, "255");
-	this._currentQuery = this._getQueryFromFolder("7");
-	this.treeView.setSelected("7");
-	this._treeListener();
-
+	this.reset();
 };
 /**
  * Called by Framework
@@ -350,9 +432,9 @@ function(params) {
 		//overview.account = params.account;
 	}
 	this._overview = overview;
-	document.getElementById(this._folderTreeCellId).appendChild(overview.getHtmlElement());
+	Dwt.byId(this._folderTreeCellId).appendChild(overview.getHtmlElement());
 	this.treeView = overview.getTreeView("ADDRBOOK");
-	document.getElementById(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
+	Dwt.byId(this._folderTreeCellId).onclick = AjxCallback.simpleClosure(this._treeListener, this);
 	this._hideRoot(this.treeView);
 };
 
@@ -362,9 +444,11 @@ function(params) {
 AttachContactsTabView.prototype._treeListener =
 function() {
 	var item = this.treeView.getSelected();
-	document.getElementById(AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD).value = "in:\"" + item.getSearchPath()+"\"";
-	var query = this._getQueryFromFolder(item.id);
-	this.executeQuery(query);
+	if (item) {
+		//Dwt.byId(AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD).value = "in:\"" + item.getSearchPath()+"\"";
+		var query = this._getQueryFromFolder(item.id);
+		this.executeQuery(query);
+	}
 };
 
 AttachContactsTabView.prototype._hideRoot =
@@ -395,7 +479,7 @@ function(width, height) {
 	var listWidth = size.x - treeWidth - 15;
 	var newHeight = height - 55;
 	this._overview.setSize(treeWidth, newHeight);
-	var listEl = document.getElementById(this._folderListId);
+	var listEl = Dwt.byId(this._folderListId);
 	listEl.style.width = (listWidth - 5) + "px";
 	listEl.style.height = newHeight + "px";
 	listEl.style.overflow = "auto";
