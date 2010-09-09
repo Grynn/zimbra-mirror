@@ -263,6 +263,10 @@ function(now, dateMSec) {
 	return AjxDateUtil.simpleComputeDateStr(date);
 };
 
+AjxDateUtil.computeDateStrNoYear =
+function(date) {
+    return AjxDateUtil._dateFormatNoYear.format(date);
+};
 
 // Example output: "Today, 9:44 AM" "Yesterday, 12:22 PM" "Sun, 1/11/01 1:11 PM"
 AjxDateUtil.computeWordyDateStr =
