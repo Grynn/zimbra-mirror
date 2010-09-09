@@ -39,7 +39,11 @@ public class ZimbraBulkProvisionExt implements ZimbraExtension {
     public static final String A_setMustChangePwd = "setMustChangePwd";
     public static final String A_op = "op";
     public static final String A_sourceType = "sourceType";
+    public static final String A_owner = "owner";
+    public static final String A_totalTasks = "totalTasks";
+    public static final String A_finishedTasks = "finishedTasks";
     
+    public static final String E_Task = "task";
     public static final String E_User = "User";
     public static final String E_ExchangeMail = "ExchangeMail";
     public static final String E_remoteEmail = "RemoteEmailAddress";

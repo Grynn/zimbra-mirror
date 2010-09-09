@@ -41,6 +41,9 @@ function(list, openInNewTab) {
     if (!this._UICreated) {
 		this._createUI();
 	} 	
+	if (list != null)
+		this._contentView.set(list.getVector());
+    
 	ZaApp.getInstance().pushView(this.getContentViewId());
 }
 
@@ -60,10 +63,6 @@ function () {
 		}
 	}	
 	if(showBulkProvision) {    	
-		/*this._toolbarOperations[ZaOperation.ACCOUNT_IMPORT_WIZARD] = new ZaOperation(ZaOperation.ACCOUNT_IMPORT_WIZARD, com_zimbra_bulkprovision.NewButton_Import, com_zimbra_bulkprovision.NewButton_Import_tt, "BulkProvision", "BulkProvision", new AjxListener(this, this.openBulkProvisionDialog,{}));        
-		this._toolbarOperations[ZaOperation.MIGRATION_WIZARD] = new ZaOperation(ZaOperation.MIGRATION_WIZARD, com_zimbra_bulkprovision.TBB_migration_wizard, com_zimbra_bulkprovision.TBB_migration_wizard_tt, "ApplianceMigration", "ApplianceMigration", new AjxListener(this, this.openMigrationWizard,{}));
-		this._toolbarOrder.push(ZaOperation.ACCOUNT_IMPORT_WIZARD) ;
-		this._toolbarOrder.push(ZaOperation.MIGRATION_WIZARD) ;*/
 		this._toolbarOperations[ZaOperation.BULK_DATA_IMPORT]=new ZaOperation(ZaOperation.BULK_DATA_IMPORT,com_zimbra_bulkprovision.TB_IMAP_Import, com_zimbra_bulkprovision.TB_IMAP_Import_tt, "ApplianceMigration", "ApplianceMigration", new AjxListener(this, this.bulkDataImportListener));
 		this._toolbarOrder.push(ZaOperation.BULK_DATA_IMPORT);
 	}
@@ -106,7 +105,6 @@ ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog = function (par
 		}
 
 		if(params && params.finishCallback) {
-			//ZaApp.getInstance().dialogs["importAccountsWizard"].registerCallback(DwtWizardDialog.FINISH_BUTTON, params.finishCallback);
 			ZaApp.getInstance().dialogs["importAccountsWizard"].finishCallback = params.finishCallback;
 		} else {
 			ZaApp.getInstance().dialogs["importAccountsWizard"].finishCallback = null;	
@@ -228,6 +226,6 @@ ZaBulkProvisionTasksController.prototype._createUI = function () {
 }
 
 ZaBulkProvisionTasksController.prototype.set = 
-function(serverList) {
-	this.show(serverList);
+function(taskList) {
+	this.show(taskList);
 }

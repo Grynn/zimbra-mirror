@@ -258,28 +258,35 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 			 * Create the import queue
 			 */
 			Queue<HashMap<taskKeys, String>> queue = BulkIMAPImportTaskManager.getQueue(zsc.getAuthtokenAccountId());
+			Queue<HashMap<taskKeys, String>> runningQ = BulkIMAPImportTaskManager.getRunningQueue(zsc.getAuthtokenAccountId());
 			Iterator<ExternalIMAPAccount> idleAccIter = idleAccounts.iterator();
-			synchronized (queue) {
-				while (idleAccIter.hasNext()) {
-					ExternalIMAPAccount acct = idleAccIter.next();
-					HashMap<taskKeys, String> task = new HashMap<taskKeys, String>();
-					task.put(taskKeys.accountID, acct.getAccount().getId());
-					task.put(taskKeys.dataSourceID,
-							createIMAPDataSource(
-									acct.getAccount(),
-									IMAPhost,
-									IMAPport,
-									connectionType,
-									acct.getUserEmail(),
-									useAdminLogin ? adminLogin
-											: acct.getUserLogin(),
-									useAdminLogin ? adminPassword
-											: acct.getUserPassword(),
-									useAdminLogin).getId());
-
-					queue.add(task);
-				}
-			}
+			
+			while (idleAccIter.hasNext()) {
+				ExternalIMAPAccount acct = idleAccIter.next();
+				HashMap<taskKeys, String> task = new HashMap<taskKeys, String>();
+				String dataSourceID = createIMAPDataSource(
+                        acct.getAccount(),
+                        IMAPhost,
+                        IMAPport,
+                        connectionType,
+                        acct.getUserEmail(),
+                        useAdminLogin ? adminLogin
+                                : acct.getUserLogin(),
+                        useAdminLogin ? adminPassword
+                                : acct.getUserPassword(),
+                        useAdminLogin).getId(); 
+				String acctID = acct.getAccount().getId();
+				task.put(taskKeys.accountID, acctID);
+				task.put(taskKeys.dataSourceID,dataSourceID);
+				
+				synchronized (queue) {
+				   queue.add(task);
+			    }
+                synchronized (runningQ) {
+                    runningQ.add(task);
+                }
+				
+		     }
 			/*
 			 * Start the import process
 			 */

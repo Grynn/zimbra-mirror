@@ -5,7 +5,8 @@ function ZaBulkProvision () {
 	this.type = ZaItem.BULK_PROVISION;
 }
 
-ZaItem.BULK_PROVISION = "BulkProvsion" ;
+ZaItem.BULK_PROVISION = "BulkProvsion";
+ZaItem.BULK_PROVISION_TASK = "BulkProvsionTask";
 ZaBulkProvision.URN = "urn:zimbraAdminExt" ;
 
 ZaBulkProvision.prototype = new ZaItem;
@@ -613,3 +614,33 @@ ZaBulkProvision.generateBulkProvisionFile = function(obj, callback) {
 	reqMgrParams.busyMsg = com_zimbra_bulkprovision.BUSY_GENERATING_BULK_FILE;
 	ZaRequestMgr.invoke(csfeParams, reqMgrParams );
 };
+
+ZaBulkProvision.getBulkDataImportTasks = function() {
+	var soapDoc = AjxSoapDoc.create("GetBulkIMAPImportTaskListRequest",ZaBulkProvision.URN, null);	
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	params.asyncMode=false;
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : com_zimbra_bulkprovision.BUSY_GET_BULK_TASKS
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetBulkIMAPImportTaskListResponse;	
+	var list = new ZaItemList(ZaBulkProvisionTask);
+	list.loadFromJS(resp);	
+	return list;
+}
+
+ZaBulkProvisionTask = function () {
+	ZaItem.call(this, "ZaBulkProvisionTask");
+	this._init();
+	//The type is required. The application tab uses it to show the right icon
+	this.type = ZaItem.BULK_PROVISION_TASK; 
+}
+
+ZaBulkProvisionTask.prototype = new ZaItem;
+ZaBulkProvisionTask.prototype.constructor = ZaBulkProvisionTask;
+
+ZaBulkProvisionTask.A_owner = "owner";
+ZaBulkProvisionTask.A_totalTasks = "totalTasks";
+ZaBulkProvisionTask.A_finishedTasks = "finishedTasks";
+ZaBulkProvisionTask.A_status = "status";

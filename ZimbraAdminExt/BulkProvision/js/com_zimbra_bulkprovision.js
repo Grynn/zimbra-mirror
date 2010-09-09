@@ -22,15 +22,11 @@ function(viewId) {
 }
 
 bulkprovision.bulkprovOvTreeListener = function (ev) {
-	var serverList = ZaApp.getInstance().getServerList();
-	var servers = [];
-	if(serverList) {
-		servers = serverList.getArray();
-	}
+	var taskList = ZaBulkProvision.getBulkDataImportTasks();
 	if(ZaApp.getInstance().getCurrentController()) {
-		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getBulkProvisionTasksController(),ZaBulkProvisionTasksController.prototype.show, [servers]);
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getBulkProvisionTasksController(),ZaBulkProvisionTasksController.prototype.show, [taskList]);
 	} else {					
-		ZaApp.getInstance().getBulkProvisionTasksController().show(servers);
+		ZaApp.getInstance().getBulkProvisionTasksController().show(taskList);
 	}
 }
 

@@ -54,13 +54,13 @@ function () {
 * Renders a single item as a DIV element.
 */
 ZaBulkProvisionTasksView.prototype._createItemHtml =
-function(zimlet, now, isDragProxy) {
+function(task, now, isDragProxy) {
 	var html = new Array(50);
 	var	div = document.createElement("div");
 	div[DwtListView._STYLE_CLASS] = "Row";
 	div[DwtListView._SELECTED_STYLE_CLASS] = div[DwtListView._STYLE_CLASS] + "-" + DwtCssStyle.SELECTED;
 	div.className = div[DwtListView._STYLE_CLASS];
-	this.associateItemWithElement(zimlet, div, DwtListView.TYPE_LIST_ITEM);
+	this.associateItemWithElement(task, div, DwtListView.TYPE_LIST_ITEM);
 	
 	var idx = 0;
 	html[idx++] = "<table width='100%' cellspacing='0' cellpadding='0'>";
@@ -68,20 +68,30 @@ function(zimlet, now, isDragProxy) {
 	var cnt = this._headerList.length;
 	for(var i = 0; i < cnt; i++) {
 		var field = this._headerList[i]._field;
-		if(field == ZaZimlet.A_name) {	
+		if(field == ZaBulkProvisionTask.A_totalTasks) {	
 			// name
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
-			html[idx++] = AjxStringUtil.htmlEncode(zimlet[ZaZimlet.A_name]);
+			html[idx++] = AjxStringUtil.htmlEncode(task.attrs[ZaBulkProvisionTask.A_totalTasks]);
 			html[idx++] = "</td>";
-		} else if(field == ZaZimlet.A_zimbraZimletDescription) {	
+		} else if(field == ZaBulkProvisionTask.A_finishedTasks) {	
 			// description
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
-			html[idx++] = AjxStringUtil.htmlEncode(zimlet.attrs[ZaZimlet.A_zimbraZimletDescription ]);
+			html[idx++] = AjxStringUtil.htmlEncode(task.attrs[ZaBulkProvisionTask.A_finishedTasks]);
 			html[idx++] = "</td>";
-		} else if(field == ZaZimlet.A_zimbraZimletEnabled) {	
+		} else if(field == ZaBulkProvisionTask.A_owner) {	
 			// description
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
-			html[idx++] = (zimlet.attrs[ZaZimlet.A_zimbraZimletEnabled] == "TRUE") ?  AjxStringUtil.htmlEncode(ZaMsg.NAD_Enabled) :AjxStringUtil.htmlEncode(ZaMsg.NAD_Disabled) ;
+			html[idx++] = AjxStringUtil.htmlEncode(task.attrs[ZaBulkProvisionTask.A_owner]);
+			html[idx++] = "</td>";
+		} else if(field == ZaBulkProvisionTask.A_status) {	
+			// description
+			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
+			if(task.attrs[ZaBulkProvisionTask.A_finishedTasks] == task.attrs[ZaBulkProvisionTask.A_totalTasks]) {
+				html[idx++] = AjxStringUtil.htmlEncode(com_zimbra_bulkprovision.TaskComplete);	
+			} else {
+				html[idx++] = AjxStringUtil.htmlEncode(com_zimbra_bulkprovision.TaskInProgress);
+			}
+			
 			html[idx++] = "</td>";
 		}
 	}
@@ -96,12 +106,10 @@ function() {
 	var headerList = new Array();
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 	var sortable=1;
-	headerList[0] = new ZaListHeaderItem(ZaZimlet.A_name, ZaMsg.CLV_Name_col, null, "200px", sortable++, "name", true, true);
-
-	headerList[1] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletDescription, ZaMsg.DLV_Description_col, null, "auto", null, ZaZimlet.A_zimbraZimletDescription, true, true);
-
-	headerList[2] = new ZaListHeaderItem(ZaZimlet.A_zimbraZimletEnabled, ZaMsg.ALV_Status_col, null, "120px", null, ZaZimlet.A_zimbraZimletEnabled, true, true);	
-		
+	headerList[0] = new ZaListHeaderItem(ZaBulkProvisionTask.A_totalTasks, com_zimbra_bulkprovision.NumTotalAccts, null, "120px", null, null, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaBulkProvisionTask.A_finishedTasks, com_zimbra_bulkprovision.NumCompletedAccts, null, "120px", null, null, true, true);
+	headerList[2] = new ZaListHeaderItem(ZaBulkProvisionTask.A_status, com_zimbra_bulkprovision.TaskStatus, null, "120px", null, null, true, true);
+	headerList[3] = new ZaListHeaderItem(ZaBulkProvisionTask.A_owner, com_zimbra_bulkprovision.TaskOwner, null, "auto", null, null, true, true);
 	return headerList;
 }
 

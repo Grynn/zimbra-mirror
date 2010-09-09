@@ -18,12 +18,19 @@ public class BulkIMAPImportTaskManager {
      * consists of an account ID and a Resource ID.
      */
     private static HashMap<String, Queue<HashMap<taskKeys, String>>> importQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
+    private static HashMap<String, Queue<HashMap<taskKeys, String>>> runningQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
+    private static HashMap<String, Queue<HashMap<taskKeys, String>>> finishedQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
+
     private static int MAX_THREADS = 10;
 
     public static enum taskKeys {
         accountID, dataSourceID
     }
 
+    public static HashMap<String, Queue<HashMap<taskKeys, String>>> getImportQueues() {
+        return importQueues;
+    }
+    
     public static Queue<HashMap<taskKeys, String>> getQueue(String adminID) {
         synchronized (importQueues) {
             if (importQueues == null) {
@@ -39,8 +46,37 @@ public class BulkIMAPImportTaskManager {
         }
     }
 
-    public static void startImport(String adminID)
-            throws BulkProvisionException {
+    public static Queue<HashMap<taskKeys, String>> getRunningQueue(String adminID) {
+        synchronized (runningQueues) {
+            if (runningQueues == null) {
+                runningQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
+            }
+            if (runningQueues.containsKey(adminID)) {
+                return runningQueues.get(adminID);
+            } else {
+                Queue<HashMap<taskKeys, String>> lst = new LinkedList<HashMap<taskKeys, String>>();
+                runningQueues.put(adminID, lst);
+                return lst;
+            }
+        }
+    }
+       
+    public static Queue<HashMap<taskKeys, String>> getFinishedQueue(String adminID) {
+        synchronized (finishedQueues) {
+            if (finishedQueues == null) {
+                finishedQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
+            }
+            if (finishedQueues.containsKey(adminID)) {
+                return finishedQueues.get(adminID);
+            } else {
+                Queue<HashMap<taskKeys, String>> lst = new LinkedList<HashMap<taskKeys, String>>();
+                finishedQueues.put(adminID, lst);
+                return lst;
+            }
+        }
+    }    
+    
+    public static void startImport(String adminID) throws BulkProvisionException {
         Queue<HashMap<taskKeys, String>> queue = null;
         synchronized (importQueues) {
             if (importQueues == null) {
@@ -54,8 +90,7 @@ public class BulkIMAPImportTaskManager {
         if (queue.size() == 0) {
             throw BulkProvisionException.EMPTY_IMPORT_QUEUE();
         }
-        int numThreads = queue.size() > MAX_THREADS ? MAX_THREADS
-                : queue.size();
+        int numThreads = queue.size() > MAX_THREADS ? MAX_THREADS : queue.size();
         for (int i = 0; i < numThreads; i++) {
             SingleIMAPIMportThread thread = new SingleIMAPIMportThread(adminID);
             thread.start();
@@ -76,6 +111,13 @@ public class BulkIMAPImportTaskManager {
                     lst = importQueues.get(queueKey);
                 }
             }
+            
+            Queue<HashMap<taskKeys, String>> finishedLst = null;
+            synchronized (finishedQueues) {
+                if (finishedQueues.containsKey(queueKey)) {
+                    finishedLst = finishedQueues.get(queueKey);
+                }
+            }            
             if (lst == null) {
                 return;
             }
@@ -108,6 +150,12 @@ public class BulkIMAPImportTaskManager {
                         }
                     }
                     DataSourceManager.importData(importDS, true);
+                    HashMap<taskKeys, String> finishedTask = new HashMap<taskKeys, String>();
+                    finishedTask.put(taskKeys.accountID, accountID);
+                    finishedTask.put(taskKeys.dataSourceID,dataSourceID);
+                    synchronized(finishedLst) {
+                        finishedLst.add(finishedTask);
+                    }
                     return;
                 } catch (ServiceException e) {
                     ZimbraLog.extensions.error("Error in IMAP import task", e);
