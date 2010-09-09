@@ -12,8 +12,15 @@ import org.testng.TestListenerAdapter;
 public class TestStatusReporter extends TestListenerAdapter {  
    private PrintWriter    output=null;
    private ArrayList<String> failArray = new ArrayList<String>();
+   private String path="";
    
-   public TestStatusReporter(String atype) throws Exception{     
+   public TestStatusReporter(String atype) throws Exception{  
+	     path   = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")+"/"+atype + "/images";
+	     
+	     if (!new File(path).mkdir()) {
+	    	 log("cannot create " + path);
+	     }
+	     
 		 output = new PrintWriter(new FileWriter(new File(ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")+"/"+atype+ "/zimbraSelenium-failed.xml")));       
 	  }	
 	  
@@ -83,8 +90,12 @@ public class TestStatusReporter extends TestListenerAdapter {
   @Override
   public void onTestFailure(ITestResult tr) {
 	  String testName = tr.getName();
+	  String fullTestName = tr.getTestClass().getName() + "." + tr.getName();
+		
 	  log("----------------------------- " + testName + " failed ----------------------------------------");
- 	  failArray.add(tr.getTestClass().getName()+ "." + tr.getName()); 
+ 	  failArray.add(tr.getTestClass().getName()+ "." + tr.getName());
+ 	  ScreenCapture.capture(path + "/" + fullTestName + ".jpg");
+
   }
 
   @Override
