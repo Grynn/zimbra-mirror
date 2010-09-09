@@ -644,27 +644,36 @@ function(htmlArr, idx, item, field, colIdx, params) {
 	}
 	var attachCell = "";
 	if (item.hasAttach){
-		attachCell = "<td width='16px'><div class='ImgAttachment' /></td>";
+		attachCell = "<td width='16px'><div class='ImgAttachment'/></td>";
 	}
-	htmlArr[idx++] = "<DIV style=\"height:70px;border-style:solid;border-width:1px 0;cursor:pointer;border-color:#E0E0E0;\">";
-	htmlArr[idx++] = "<TABLE width=100%><tr> "; 
-	htmlArr[idx++] = attachCell;
-	htmlArr[idx++] = "<td  align=left><span style=\"font-weight:bold;font-size:14px;\"> ";
-	htmlArr[idx++] = from;
-	htmlArr[idx++] = "</SPAN></td><td align=right>";
-	htmlArr[idx++] = AjxDateUtil.computeDateStr(params.now || new Date(), item.date);
-	htmlArr[idx++] = "</td></tr></TABLE>";
+
+	var cols = attachCell ? 3 : 2;
+	htmlArr[idx++] = "<div style=\"height:70px;border-style:solid;border-width:1px 0;cursor:pointer;border-color:#E0E0E0;\">";
+	htmlArr[idx++] = "<table width=100%>"; 
+	
 	var subject = item.subject;
 	if (subject == undefined)
 		subject = "<no subject>";
 	else  if (subject.length > 35) {
 		subject = subject.substring(0, 32) + "...";
 	}
+	htmlArr[idx++] = "<tr>";
+	htmlArr[idx++] = attachCell;
+	htmlArr[idx++] = "<td align=left><span style=\"font-weight:bold;\"> " + AjxStringUtil.htmlEncode(subject) + "</span></td>";
 
-	htmlArr[idx++] = "<span style=\"font-weight:bold;\"> " + subject + "</SPAN>";
+	htmlArr[idx++] = "<td align=right>";
+	htmlArr[idx++] = AjxDateUtil.computeDateStr(params.now || new Date(), item.date);
+	htmlArr[idx++] = "</td></tr>";
+
+	htmlArr[idx++] = "<tr><td align=left colspan="+cols+"><span style=\"font-weight:bold;font-size:14px;\"> ";
+	htmlArr[idx++] = from;
+	htmlArr[idx++] = "</span></td></tr>";
+	
 	if (fragment != "") {
-		htmlArr[idx++] = "<span style=\"color:gray\"> - " + fragment + "</SPAN></DIV>";
+		htmlArr[idx++] = "<tr><td align=left colspan="+cols+"><span style=\"color:gray\"> - " + fragment + "</span></td></tr>";
 	}
+	htmlArr[idx++] = "</table></div>";
+	
 	return idx;
 };
 
