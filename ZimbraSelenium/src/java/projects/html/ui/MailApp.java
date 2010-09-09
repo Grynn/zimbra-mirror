@@ -5,6 +5,7 @@ import org.testng.Assert;
 import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.SleepUtil;
+import framework.util.Stafpostqueue;
 
 import projects.html.tests.CommonTest;
 
@@ -95,34 +96,31 @@ public class MailApp extends CommonTest {
 	 * @throws Exception
 	 */
 	public static void zClickCheckMailUntilMailShowsUp(String folderName,
-			String mailSubject) throws Exception {
+		String mailSubject) throws Exception {
 		int i = 0;
 		boolean found = false;
-		for (i = 0; i <= 15; i++) {
-			SleepUtil.sleep(1000); // selenium failure here
-			if (!folderName.equals("")) {
-				obj.zFolder.zClick(folderName);
-			} else {
-				obj.zFolder.zClick(zInboxFldr);
-			}
-			SleepUtil.sleep(1000); // timing issue
-			String rc = obj.zMessageItem.zExistsDontWait(mailSubject);
-			if (rc.equals("false")) {
-				// check in junk
-				obj.zFolder.zClick(zJunkFldr);
-				SleepUtil.sleep(1000);
-				rc = obj.zMessageItem.zExistsDontWait(mailSubject);
-				if (rc.equals("false")) {
-					SleepUtil.sleep(1000);
-				} else {
-					found = true;
-					break;
-				}
-			} else {
-				found = true;
-				break;
-			}
+		
+		Stafpostqueue sp = new Stafpostqueue();
+		sp.waitForPostqueue();
+		
+		if (!folderName.equals("")) {
+			obj.zFolder.zClick(folderName);
+		} else {
+			obj.zFolder.zClick(zInboxFldr);
 		}
+		SleepUtil.sleep(1000); // timing issue
+		String rc = obj.zMessageItem.zExistsDontWait(mailSubject);
+		if (rc.equals("false")) {
+		// check in junk
+			obj.zFolder.zClick(zJunkFldr);
+			SleepUtil.sleep(1000);
+			rc = obj.zMessageItem.zExistsDontWait(mailSubject);
+			if (!rc.equals("false")) 
+				found = true;				
+		} else {
+			found = true;
+		}
+
 		if (!found) {
 			if (folderName == "")
 				folderName = "Inbox";
