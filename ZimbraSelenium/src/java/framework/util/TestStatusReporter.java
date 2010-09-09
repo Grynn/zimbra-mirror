@@ -9,6 +9,8 @@ import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
 
+import framework.core.ClientSessionFactory;
+
 public class TestStatusReporter extends TestListenerAdapter {  
    private PrintWriter    output=null;
    private ArrayList<String> failArray = new ArrayList<String>();
@@ -94,8 +96,8 @@ public class TestStatusReporter extends TestListenerAdapter {
 		
 	  log("----------------------------- " + testName + " failed ----------------------------------------");
  	  failArray.add(tr.getTestClass().getName()+ "." + tr.getName());
- 	  ScreenCapture.capture(path + "/" + fullTestName + ".jpg");
-
+ 	 	  
+ 	  ClientSessionFactory.session().selenium().captureScreenshot(path + "/" + fullTestName + ".png");
   }
 
   @Override
