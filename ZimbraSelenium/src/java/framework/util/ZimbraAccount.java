@@ -71,7 +71,7 @@ public class ZimbraAccount {
 	public ZimbraAccount(String email, String password) {
 		
 		if ( email == null ) {
-			email = ZimbraSeleniumProperties.getStringProperty("locale") + "_account_" + System.currentTimeMillis();
+			email = ZimbraSeleniumProperties.getStringProperty("locale").toLowerCase() + "_account_" + System.currentTimeMillis();
 		}
 		EmailAddress = email;
 		
