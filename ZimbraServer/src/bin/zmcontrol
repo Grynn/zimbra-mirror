@@ -426,7 +426,7 @@ sub displayVersion {
 	if ($platform =~ /MACOSX/) {
     my $release;
     if (-x "/usr/sbin/pkgutil") {
-      $release=`/usr/sbin/pkgutil --pkg-info com.zimbra.zcs.core  | grep ^version | awk '{print \$NF}'`;
+      $release=`/usr/sbin/pkgutil --pkg-info com.zimbra.zcs.core  2> /dev/null | grep ^version | awk '{print \$NF}'`;
     } else {
 		  $release=`grep -C1 CFBundleGetInfoString /Library/Receipts/zimbra-core.pkg/Contents/Info.plist | tail -1 | sed -e 's/\<[^>]*\>//g' -e 's/^ *//g' | awk -F, '{print $1}'`;
     }
