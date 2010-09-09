@@ -32,7 +32,7 @@ fi
 #
 # Memory for use by JVM.
 #
-javaXmx=${mailboxd_java_heap_size}
+javaXmx=${mailboxd_java_heap_size:512}
 javaXms=${javaXmx}
 mailboxd_java_heap_new_size_percent=${mailboxd_java_heap_new_size_percent:=25}
 javaXmn=$(expr ${javaXmx} '*' ${mailboxd_java_heap_new_size_percent} / 100)
