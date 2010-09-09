@@ -63,9 +63,6 @@ public class BulkIMAPImportTaskManager {
        
     public static Queue<HashMap<taskKeys, String>> getFinishedQueue(String adminID) {
         synchronized (finishedQueues) {
-            if (finishedQueues == null) {
-                finishedQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
-            }
             if (finishedQueues.containsKey(adminID)) {
                 return finishedQueues.get(adminID);
             } else {
@@ -113,11 +110,7 @@ public class BulkIMAPImportTaskManager {
             }
             
             Queue<HashMap<taskKeys, String>> finishedLst = null;
-            synchronized (finishedQueues) {
-                if (finishedQueues.containsKey(queueKey)) {
-                    finishedLst = finishedQueues.get(queueKey);
-                }
-            }            
+            finishedLst = getFinishedQueue(queueKey);
             if (lst == null) {
                 return;
             }
