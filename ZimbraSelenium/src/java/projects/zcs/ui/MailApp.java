@@ -9,6 +9,7 @@ import org.testng.Assert;
 import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.SleepUtil;
+import framework.util.Stafpostqueue;
 
 /**
  * This Class have UI-level methods related Mail-app(conversation view). e.g:
@@ -170,31 +171,28 @@ public class MailApp extends AppPage {
 	public static void ClickCheckMailUntilMailShowsUp(String folderName,
 			String mailSubject) throws Exception {
 		boolean found = false;
-		for (int i = 0; i <= 15; i++) {
-			obj.zButton.zClick(zGetMailIconBtn);
-			SleepUtil.sleep(1000);
-			if (!folderName.equals("")) {
-				obj.zFolder.zClick(folderName);
-				SleepUtil.sleep(1000);
-			}
-			String rc = obj.zMessageItem.zExistsDontWait(mailSubject);
-			if (rc.equals("false")) {
-				obj.zFolder.zClick(localize(locator.junk));
-				SleepUtil.sleep(1000);
-				rc = obj.zMessageItem.zExistsDontWait(mailSubject);
-				if (rc.equals("false")) {
-					SleepUtil.sleep(1000);
-				} else {
-					found = true;
-					SleepUtil.sleep(1000);
-					break;
-				}
-			} else {
-				found = true;
-				SleepUtil.sleep(1000);
-				break;
-			}
+		
+		Stafpostqueue sp = new Stafpostqueue();
+		sp.waitForPostqueue();
+		
+		if (!folderName.equals("")) {
+			obj.zFolder.zClick(folderName);
+		} else {
+			obj.zFolder.zClick(zInboxFldr);
 		}
+		SleepUtil.sleep(1000); // timing issue
+		String rc = obj.zMessageItem.zExistsDontWait(mailSubject);
+		if (rc.equals("false")) {
+		// check in junk
+			obj.zFolder.zClick(localize(locator.junk));
+			SleepUtil.sleep(1000);
+			rc = obj.zMessageItem.zExistsDontWait(mailSubject);
+			if (!rc.equals("false")) 
+				found = true;				
+		} else {
+			found = true;
+		}
+
 		if (!found) {
 			if (folderName == "")
 				folderName = "Inbox";
