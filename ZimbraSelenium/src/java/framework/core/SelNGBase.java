@@ -68,24 +68,8 @@ public class SelNGBase {
 
 
 
-	public void openApplication() {
-		openApplication("AJAX");
-	}
+	public static void openApplication() {
 
-	public void openZimbraHTML() {
-		openApplication("HTML");
-	}
-
-	public void openZimbraMobile() {
-		openApplication("MOBILE");
-	}
-
-	public void openZimbraDesktop() {
-		openApplication("DESKTOP");
-	}
-
-	public void openApplication(String app_type) {
-		
 		ClientSession session = ClientSessionFactory.session();
 		ZimbraSelenium selenium = session.selenium();
 		selenium.start();
@@ -94,8 +78,9 @@ public class SelNGBase {
 		selenium.setupZVariables();
 		selenium.allowNativeXpath("true");
 		selenium.open(ZimbraSeleniumProperties.getBaseURL());
-		
+
 	}
+
 
 	public static void customLogin(String parameter) {
 

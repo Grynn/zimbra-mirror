@@ -63,7 +63,7 @@ public class LoginPage extends CommonTest {
 	public void zLoginToZimbraHTML(String username, String password) {
 		
 		ClientSessionFactory.session().setCurrentUser(null);
-		openZimbraHTML();
+		SelNGBase.openApplication();
 		SleepUtil.sleep(1500);
 		
 		obj.zEditField.zType("Username:", username);
