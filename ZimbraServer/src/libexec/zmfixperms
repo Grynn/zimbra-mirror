@@ -432,6 +432,10 @@ if [ -L ${zimbra_home}/jetty ]; then
     chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/etc/zimbraAdmin.web.xml.in
     chmod 640 ${zimbra_home}/jetty/etc/zimbraAdmin.web.xml.in
   fi
+  if [ -f ${zimbra_home}/jetty/etc/zimlet.web.xml.in ]; then
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/etc/zimlet.web.xml.in
+    chmod 640 ${zimbra_home}/jetty/etc/zimlet.web.xml.in
+  fi
 
   if [ ! -d ${zimbra_home}/fbqueue ]; then
     mkdir -p ${zimbra_home}/fbqueue
