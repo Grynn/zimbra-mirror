@@ -2,6 +2,8 @@ package framework.util;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import framework.core.ClientSessionFactory;
 import framework.core.SelNGBase;
 
 public class Stafpostqueue extends StafAbstract {
@@ -15,7 +17,7 @@ public class Stafpostqueue extends StafAbstract {
 		for (int i = 0 ; i < 15; i ++) {
 			if(execute(command)){
 				response = this.StafResponse;
-				if (!response.contains(SelNGBase.selfAccountName.get())){
+				if (!response.contains(ClientSessionFactory.session().currentUserName())){
 					success = true;	
 					return success;
 				}
