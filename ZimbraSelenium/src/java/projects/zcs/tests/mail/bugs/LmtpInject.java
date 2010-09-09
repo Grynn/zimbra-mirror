@@ -41,7 +41,7 @@ public class LmtpInject extends CommonTest {
 			return new Object[][] { {} };
 		} else if (test.equals("fixLineWrapping_Bug425")) {
 			return new Object[][] { {
-					SelNGBase.selfAccountName.get(),
+					ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com",
 					"bccuser@testdomain.com",
 					"fixLineWrapping_Bug425",
@@ -161,7 +161,7 @@ public class LmtpInject extends CommonTest {
 		SleepUtil.sleep(2000);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(newUser);
+		
 		page.zLoginpage.zLoginToZimbraAjax(newUser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Fwd: attached messages");
 		obj.zMessageItem.zClick("Fwd: attached messages");
@@ -241,7 +241,7 @@ public class LmtpInject extends CommonTest {
 		SleepUtil.sleep(2000);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(newUser);
+		
 		page.zLoginpage.zLoginToZimbraAjax(newUser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Fwd: **CORP UPGRADE");
 		obj.zMessageItem.zClick("Fwd: **CORP UPGRADE");
@@ -447,7 +447,7 @@ public class LmtpInject extends CommonTest {
 			handleRetry();
 
 		String actual;
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String recipients[] = { to };
 		LmtpUtil.injectMessage(to, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -470,7 +470,7 @@ public class LmtpInject extends CommonTest {
 		Assert.assertTrue(actual.indexOf(body) >= 0,
 				"Body-field value mismatched");
 
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefComposeFormat", "html");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -483,7 +483,7 @@ public class LmtpInject extends CommonTest {
 		Assert.assertTrue(actual.indexOf(body) >= 0,
 				"Body-field value mismatched");
 		obj.zTextAreaField.zType(page.zComposeView.zToField,
-				SelNGBase.selfAccountName.get());
+				ClientSessionFactory.session().currentUserName());
 		obj.zEditField.zType(page.zComposeView.zSubjectField, "verifyForward");
 		obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 		MailApp.ClickCheckMailUntilMailShowsUp("verifyForward");

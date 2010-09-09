@@ -28,12 +28,12 @@ public class AttachBriefcaseFile extends CommonTest {
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
 		if (test.equals("attachBriefcaseFileInMail")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5),
 					"testexcelfile.xls,testwordfile.doc" } };
 		} else if (test.equals("attachingFilesFromBothWayAndVerifyAllLinks")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5),
 					"MultiLingualContact.csv" } };
@@ -66,7 +66,7 @@ public class AttachBriefcaseFile extends CommonTest {
 
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zTextAreaField.zType(page.zComposeView.zToField,
-				SelNGBase.selfAccountName.get());
+				ClientSessionFactory.session().currentUserName());
 		obj.zTextAreaField.zType(page.zComposeView.zCcField, cc);
 		obj.zEditField.zType(page.zComposeView.zSubjectField, subject);
 		obj.zEditor.zType(body);
@@ -132,8 +132,9 @@ public class AttachBriefcaseFile extends CommonTest {
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName
-				.get(), cc, bcc, subject, body, "putty.log");
+		page.zComposeView.zSendMailToSelfAndVerify(
+				ClientSessionFactory.session().currentUserName(),
+				cc, bcc, subject, body, "putty.log");
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {

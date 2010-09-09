@@ -31,7 +31,7 @@ public class TagMessage extends CommonTest {
 				|| test.equals("applyMutlipleTagToMessageAndVerify")
 				|| test.equals("applyTagByDnDTagToMessageAndViceVersa")
 				|| test.equals("tryToCreateDuplicateTagInMail")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "tagMessageSubject",
 					"tagMessageBody", "" } };
 		} else {
@@ -66,7 +66,7 @@ public class TagMessage extends CommonTest {
 		subject1 = "tagSubject1";
 		tag1 = getLocalizedData_NoSpecialChar();
 		newTag1 = getLocalizedData_NoSpecialChar();
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 		LmtpUtil.injectMessage(to, recipients, cc, subject1, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject1);
@@ -112,7 +112,7 @@ public class TagMessage extends CommonTest {
 		subject2 = "tagSubject3";
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 		LmtpUtil.injectMessage(to, recipients, cc, subject1, body);
 		LmtpUtil.injectMessage(to, recipients, cc, subject2, body);
@@ -186,7 +186,7 @@ public class TagMessage extends CommonTest {
 		subject1 = "tagSubject4";
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 		LmtpUtil.injectMessage(to, recipients, cc, subject1, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject1);
@@ -235,7 +235,7 @@ public class TagMessage extends CommonTest {
 		subject2 = "tagSubject6";
 		tag1 = getLocalizedData_NoSpecialChar();
 		tag2 = getLocalizedData_NoSpecialChar();
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 		LmtpUtil.injectMessage(to, recipients, cc, subject1, body);
 		LmtpUtil.injectMessage(to, recipients, cc, subject2, body);

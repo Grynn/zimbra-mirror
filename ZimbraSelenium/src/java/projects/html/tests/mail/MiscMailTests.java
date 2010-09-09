@@ -294,15 +294,15 @@ public class MiscMailTests extends CommonTest {
 			handleRetry();
 
 		// set mail items per page to 10
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefMailItemsPerPage", "10");
 		resetSession();
-		page.zLoginpage.zLoginToZimbraHTML(SelNGBase.selfAccountName.get());
+		page.zLoginpage.zLoginToZimbraHTML(ClientSessionFactory.session().currentUserName());
 		String[] subjectArray = { "subject1", "subject2", "subject3",
 				"subject4", "subject5", "subject6", "subject7", "subject8",
 				"subject9", "subject10", "subject11", "subject12" };
 		for (int i = 0; i <= subjectArray.length - 1; i++) {
-			page.zMailApp.zInjectMessage(from, SelNGBase.selfAccountName.get(), cc,
+			page.zMailApp.zInjectMessage(from, ClientSessionFactory.session().currentUserName(), cc,
 					bcc, subjectArray[i], subjectArray[i] + "body", "");
 		}
 		for (int i = 2; i <= 11; i++) {
@@ -345,7 +345,7 @@ public class MiscMailTests extends CommonTest {
 		String[] subjectArray = { "verifyNextPrevPage1", "verifyNextPrevPage2",
 				"verifyNextPrevPage3" };
 		for (int i = 0; i <= subjectArray.length - 1; i++) {
-			page.zMailApp.zInjectMessage(from, SelNGBase.selfAccountName.get(), cc,
+			page.zMailApp.zInjectMessage(from, ClientSessionFactory.session().currentUserName(), cc,
 					bcc, subjectArray[i], subjectArray[i] + "body", "");
 		}
 		obj.zMessageItem.zClick(subjectArray[2]);
@@ -397,14 +397,14 @@ public class MiscMailTests extends CommonTest {
 
 		checkForSkipException("ar", "na", "34114", "Searched keyword replaced by question marks");
 
-		page.zMailApp.zInjectMessage(from, SelNGBase.selfAccountName.get(), cc, bcc,
+		page.zMailApp.zInjectMessage(from, ClientSessionFactory.session().currentUserName(), cc, bcc,
 				subject, subject + "body", "");
 		SleepUtil.sleepSmall();
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zComposeView.zReplyBtn);
 		SleepUtil.sleepSmall();
 		obj.zTextAreaField.zType(page.zComposeView.zToField,
-				SelNGBase.selfAccountName.get());
+				ClientSessionFactory.session().currentUserName());
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
 		page.zMailApp.zClickCheckMailUntilMailShowsUp("Re: " + subject);
 		obj.zMessageItem.zClick("Re: " + subject);

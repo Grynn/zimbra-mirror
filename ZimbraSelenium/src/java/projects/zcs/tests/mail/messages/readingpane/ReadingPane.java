@@ -32,37 +32,37 @@ public class ReadingPane extends CommonTest {
 		String test = method.getName();
 		if (test.equals("readingPaneOnRight")) {
 			return new Object[][] {
-					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
+					{ ClientSessionFactory.session().currentUserName(), ClientSessionFactory.session().currentUserName(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOnRight",
 							"body_readingPaneOnRight", "byNormalMethod" },
-					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
+					{ ClientSessionFactory.session().currentUserName(), ClientSessionFactory.session().currentUserName(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOnRight",
 							"body_readingPaneOnRight", "byKeyboardShortCut" } };
 		} else if (test.equals("readingPaneOnBottom")) {
 			return new Object[][] {
-					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
+					{ ClientSessionFactory.session().currentUserName(), ClientSessionFactory.session().currentUserName(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOnBottom",
 							"body_readingPaneOnBottom", "byNormalMethod" },
-					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
+					{ ClientSessionFactory.session().currentUserName(), ClientSessionFactory.session().currentUserName(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOnBottom",
 							"body_readingPaneOnBottom", "byKeyboardShortCut" } };
 		} else if (test.equals("readingPaneOff")) {
 			return new Object[][] {
-					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
+					{ ClientSessionFactory.session().currentUserName(), ClientSessionFactory.session().currentUserName(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOff", "body_readingPaneOff",
 							"byNormalMethod" },
-					{ SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
+					{ ClientSessionFactory.session().currentUserName(), ClientSessionFactory.session().currentUserName(),
 							"ccuser@testdomain.com", "bccuser@testdomain.com",
 							"subject_readingPaneOff", "body_readingPaneOff",
 							"byKeyboardShortCut" } };
 		} else {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
-					SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
+					ClientSessionFactory.session().currentUserName(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "testsubject", "testbody", "" } };
 		}
 	}
@@ -101,7 +101,7 @@ public class ReadingPane extends CommonTest {
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.readingPaneAtBottom));
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String recipients[] = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -148,7 +148,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"right",
-				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(ClientSessionFactory.session().currentUserName(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
@@ -164,7 +164,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"right",
-				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(ClientSessionFactory.session().currentUserName(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
@@ -179,7 +179,7 @@ public class ReadingPane extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String recipients[] = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
@@ -230,7 +230,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"off",
-				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(ClientSessionFactory.session().currentUserName(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
@@ -246,7 +246,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"off",
-				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(ClientSessionFactory.session().currentUserName(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
@@ -262,7 +262,7 @@ public class ReadingPane extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String recipients[] = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
@@ -313,7 +313,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"bottom",
-				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(ClientSessionFactory.session().currentUserName(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 
@@ -329,7 +329,7 @@ public class ReadingPane extends CommonTest {
 				"Verifying subject double row view for reading pane on right");
 		assertReport(
 				"bottom",
-				Stafzmprov.getAccountPreferenceValue(SelNGBase.selfAccountName.get(),
+				Stafzmprov.getAccountPreferenceValue(ClientSessionFactory.session().currentUserName(),
 						"zimbraPrefReadingPaneLocation"),
 				"Verifying whether db value set properly or not for this account (zimbraPrefReadingPaneLocation)");
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);

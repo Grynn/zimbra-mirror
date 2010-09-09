@@ -74,7 +74,7 @@ public class AccountImportExport extends CommonTest {
 	public void zLogin() throws Exception {
 		resetSession();
 		String acc1 = Stafzmprov.getRandomAccount();
-		SelNGBase.selfAccountName.set(acc1);
+		
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
 		SelNGBase.isExecutionARetry.set(false);
 	}
@@ -94,7 +94,7 @@ public class AccountImportExport extends CommonTest {
 
 			resetSession();
 			String acc2 = Stafzmprov.getRandomAccount();
-			SelNGBase.selfAccountName.set(acc2);
+			
 			page.zLoginpage.zLoginToZimbraAjax(acc2);
 			importAccount();
 			verifyTestData();
@@ -123,14 +123,14 @@ public class AccountImportExport extends CommonTest {
 		page.zMailApp.zCreateTag(newTag);
 
 		// ------------------------- Mail -------------------------
-		String[] recipients = { SelNGBase.selfAccountName.get() };
-		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
+		LmtpUtil.injectMessage(ClientSessionFactory.session().currentUserName(), recipients,
 				"ccuser@testdomain.com", inboxMsg, inboxMsg);
 		MailApp.ClickCheckMailUntilMailShowsUp(inboxMsg);
 
 		// create folder and keep one mail
 		page.zMailApp.zCreateFolder(newMailFolder);
-		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+		LmtpUtil.injectMessage(ClientSessionFactory.session().currentUserName(), recipients,
 				"ccuser@testdomain.com", newFolderMsg, newFolderMsg);
 		MailApp.ClickCheckMailUntilMailShowsUp(newFolderMsg);
 		obj.zMessageItem.zClick(newFolderMsg);
@@ -143,7 +143,7 @@ public class AccountImportExport extends CommonTest {
 		SleepUtil.sleep(1000);
 
 		// apply tag to mail
-		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+		LmtpUtil.injectMessage(ClientSessionFactory.session().currentUserName(), recipients,
 				"ccuser@testdomain.com", taggedMsg, taggedMsg);
 		MailApp.ClickCheckMailUntilMailShowsUp(taggedMsg);
 		obj.zMessageItem.zClick(taggedMsg);

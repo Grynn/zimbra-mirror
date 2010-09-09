@@ -76,7 +76,7 @@ public class ComposePref extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentUser = SelNGBase.selfAccountName.get();
+		String currentUser = ClientSessionFactory.session().currentUserName();
 		String randomAcc = Stafzmprov.getRandomAccount();
 		String textSubject = getLocalizedData_NoSpecialChar();
 		String htmlSubject = getLocalizedData_NoSpecialChar();
@@ -129,7 +129,7 @@ public class ComposePref extends CommonTest {
 			handleRetry();
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData_NoSpecialChar();
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "", subject,
+		page.zComposeView.zSendMail(ClientSessionFactory.session().currentUserName(), "", "", subject,
 				body, "");
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(page.zMailApp.zInboxFldr,
 				subject);
@@ -181,7 +181,7 @@ public class ComposePref extends CommonTest {
 			handleRetry();
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData_NoSpecialChar();
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "", subject,
+		page.zComposeView.zSendMail(ClientSessionFactory.session().currentUserName(), "", "", subject,
 				body, "");
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject);
 
@@ -226,7 +226,7 @@ public class ComposePref extends CommonTest {
 		page.zComposePrefUI
 				.zNavigateToPrefComposeAndSelectSentMsgOption("SaveInSent");
 
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMail(ClientSessionFactory.session().currentUserName(), "", "",
 				subject1, body, "");
 
 		zWaitTillObjectExist("folder", page.zMailApp.zSentFldr);
@@ -239,7 +239,7 @@ public class ComposePref extends CommonTest {
 		.zNavigateToPrefComposeAndSelectSentMsgOption("DoNotSaveInSent");
 
 		
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMail(ClientSessionFactory.session().currentUserName(), "", "",
 				subject2, body, "");
 
 		obj.zFolder.zClick(page.zMailApp.zSentFldr);

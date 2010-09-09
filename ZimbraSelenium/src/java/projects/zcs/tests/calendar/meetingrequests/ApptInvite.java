@@ -94,7 +94,7 @@ public class ApptInvite extends CommonTest {
 
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		/*
 		 * MailApp.ClickCheckMailUntilMailShowsUp(subject); if
@@ -125,7 +125,7 @@ public class ApptInvite extends CommonTest {
 			handleRetry();
 
 		String organizer;
-		organizer = SelNGBase.selfAccountName.get();
+		organizer = ClientSessionFactory.session().currentUserName();
 		page.zCalApp.zNavigateToCalendar();
 		// obj.zButton.zClick(page.zCalApp.zCalWeekBtn);
 		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
@@ -133,7 +133,7 @@ public class ApptInvite extends CommonTest {
 
 		resetSession();
 		SleepUtil.sleep(500);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
@@ -188,7 +188,7 @@ public class ApptInvite extends CommonTest {
 
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		String[] itemsToVerify = { verifySubject, verifyLocation, verifyTime };
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -236,7 +236,7 @@ public class ApptInvite extends CommonTest {
 		String[] itemsToVerify = { subject };
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		MailApp.ClickCheckMailUntilMailShowsUp(localize(locator.cancelled));
 		obj.zMessageItem.zClick(localize(locator.cancelled));
@@ -290,7 +290,7 @@ public class ApptInvite extends CommonTest {
 
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		// obj.zMessageItem.zClick(localize(locator.calendarSubjectCancelled));
@@ -299,7 +299,7 @@ public class ApptInvite extends CommonTest {
 
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(newAttendees);
+		
 		page.zLoginpage.zLoginToZimbraAjax(newAttendees);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);

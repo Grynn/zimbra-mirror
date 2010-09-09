@@ -44,7 +44,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeFormat", "text");
 
@@ -95,7 +95,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		checkForSkipException("all", "na", "na", "Not able to identify 'compose as html' radio button (tried localize key as well)");
 		 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -142,7 +142,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
 			String actualVal;
-			String accountName = SelNGBase.selfAccountName.get();
+			String accountName = ClientSessionFactory.session().currentUserName();
 			String fontSize;
 
 			page.zMailApp.zNavigateToComposingPreferences();
@@ -244,7 +244,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -291,7 +291,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -340,7 +340,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -387,7 +387,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -436,7 +436,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -485,7 +485,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 
@@ -532,7 +532,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 		ClientSessionFactory.session().selenium().uncheck("//input[contains(@id,'_SAVE_TO_SENT')]");
@@ -605,7 +605,7 @@ public class ComposePreferencesTestsUI extends CommonTest {
 		String fontSize;
 		String currentFont;
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToComposingPreferences();
 

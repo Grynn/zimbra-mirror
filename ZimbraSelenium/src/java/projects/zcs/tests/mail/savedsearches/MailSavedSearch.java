@@ -57,7 +57,7 @@ public class MailSavedSearch extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 
 		obj.zButtonMenu.zClick(page.zMailApp.zViewIconBtn);
@@ -99,7 +99,7 @@ public class MailSavedSearch extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 		/**
 		 * Send mail and verify that is:flagged search is not returning

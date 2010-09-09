@@ -51,14 +51,14 @@ public class CalendarBugs extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentLoggedInUser = SelNGBase.selfAccountName.get();
+		String currentLoggedInUser = ClientSessionFactory.session().currentUserName();
 		String user1 = Stafzmprov.getRandomAccount();
 		String user2 = Stafzmprov.getRandomAccount();
 
 		resetSession();
 		String subject2 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user1);
-		SelNGBase.selfAccountName.set(user1);
+		
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject2, location,
@@ -78,7 +78,7 @@ public class CalendarBugs extends CommonTest {
 			handleRetry();
 
 		String currentLoggedInUser;
-		currentLoggedInUser = SelNGBase.selfAccountName.get();
+		currentLoggedInUser = ClientSessionFactory.session().currentUserName();
 
 		String user1_allowed = Stafzmprov.getRandomAccount();
 		String user2_allowed = Stafzmprov.getRandomAccount();
@@ -95,7 +95,7 @@ public class CalendarBugs extends CommonTest {
 		resetSession();
 		String subject1 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user3_Notallowed);
-		SelNGBase.selfAccountName.set(user3_Notallowed);
+		
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject1, location,
@@ -124,7 +124,7 @@ public class CalendarBugs extends CommonTest {
 		resetSession();
 		String subject2 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user1_allowed);
-		SelNGBase.selfAccountName.set(user1_allowed);
+		
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject2, location,
@@ -138,7 +138,7 @@ public class CalendarBugs extends CommonTest {
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 		SleepUtil.sleep(2000);
-		SelNGBase.selfAccountName.set(currentLoggedInUser);
+		
 		String msgExists = obj.zMessageItem.zExistsDontWait(subject1);
 		// already enhancement 43340 for this bug otherwise it would be false
 		assertReport(
@@ -164,7 +164,7 @@ public class CalendarBugs extends CommonTest {
 			handleRetry();
 
 		String currentLoggedInUser;
-		currentLoggedInUser = SelNGBase.selfAccountName.get();
+		currentLoggedInUser = ClientSessionFactory.session().currentUserName();
 
 		String user1 = Stafzmprov.getRandomAccount();
 		zGoToApplication("Preferences");
@@ -175,7 +175,7 @@ public class CalendarBugs extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(user1);
-		SelNGBase.selfAccountName.set(user1);
+		
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject, location,
@@ -203,7 +203,7 @@ public class CalendarBugs extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
-		SelNGBase.selfAccountName.set(currentLoggedInUser);
+		
 		SleepUtil.sleep(2000);
 		String msgExists = obj.zMessageItem.zExistsDontWait(subject);
 		// already enhancement 43340 for this bug otherwise it would be false

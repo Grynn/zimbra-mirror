@@ -26,7 +26,7 @@ public class DeepLinkTests extends CommonTest {
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
 		if (test.equals("simpleDeepLinkTest")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", "deepLinkTestSubject",
 					"deepLinkTestBody", "" } };
 		} else {
@@ -55,7 +55,7 @@ public class DeepLinkTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 		LmtpUtil.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);

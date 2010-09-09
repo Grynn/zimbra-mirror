@@ -53,7 +53,7 @@ public class CalendarPreferencesUI extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName,
 				"zimbraPrefCalendarAlwaysShowMiniCal", "TRUE");
@@ -91,7 +91,7 @@ public class CalendarPreferencesUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 
@@ -146,7 +146,7 @@ public class CalendarPreferencesUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 
@@ -178,7 +178,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 
@@ -235,7 +235,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 		
@@ -292,7 +292,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 		ClientSessionFactory.session().selenium().uncheck("//input[contains(@id,'_CAL_USE_QUICK_ADD')]");
@@ -344,7 +344,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 
@@ -400,7 +400,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		checkForSkipException("na", "all", "33551", "unchecking checkboxes doesn't show up correctly");
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zCalApp.zNavigateToCalendarPreferences();
 
@@ -496,7 +496,7 @@ public class CalendarPreferencesUI extends CommonTest {
 
 		SleepUtil.sleep(1000);
 
-		SelNGBase.selfAccountName.set(accountName);
+		
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 
 		MailApp

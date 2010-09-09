@@ -173,7 +173,7 @@ public class MailApp extends CommonTest {
 	public static void zInjectMessage(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		SleepUtil.sleep(1000);

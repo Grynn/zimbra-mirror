@@ -101,7 +101,7 @@ public class DocumentSharingTests extends CommonTest {
 				"", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(attendee);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		zGoToApplication("Documents");
@@ -142,7 +142,7 @@ public class DocumentSharingTests extends CommonTest {
 				"", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(attendee);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zDocumentCompose.zNavigateToDocument();
@@ -186,7 +186,7 @@ public class DocumentSharingTests extends CommonTest {
 				"", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(attendee);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zDocumentCompose.zNavigateToDocument();
@@ -256,10 +256,10 @@ public class DocumentSharingTests extends CommonTest {
 		page.zSharing.zModifySharedFolder(localize(locator.documents),
 				folderName, localize(locator.shareRoleViewer), "", "", "");
 
-		String currentloggedinuser = SelNGBase.selfAccountName.get();
+		String currentloggedinuser = ClientSessionFactory.session().currentUserName();
 
 		resetSession();
-		SelNGBase.selfAccountName.set(attendee);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 
 		page.zSharing.zVerifyShareModifiedMail(currentloggedinuser, folderName,
@@ -289,7 +289,7 @@ public class DocumentSharingTests extends CommonTest {
 
 		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
 
-		String currentloggedinuser = SelNGBase.selfAccountName.get();
+		String currentloggedinuser = ClientSessionFactory.session().currentUserName();
 		obj.zFolder.zClick(localize(locator.notebook));
 		page.zDocumentCompose.zCreateBasicPage(pageName, bodyContent);
 
@@ -297,7 +297,7 @@ public class DocumentSharingTests extends CommonTest {
 				localize(locator.shareWithGuest), attendee, role, "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(attendee);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				folderName, localize(locator.shareWithGuest), attendee, role,

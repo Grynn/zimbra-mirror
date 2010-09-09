@@ -52,7 +52,7 @@ public class Filter extends CommonTest {
 		if (test.equals("FromContains_FileToFolder")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					localize(locator.active), "any", localize(locator.from),
-					localize(locator.contains), SelNGBase.selfAccountName.get(), "",
+					localize(locator.contains), ClientSessionFactory.session().currentUserName(), "",
 					"", "", "", "", "", localize(locator.fileIntoFolder), "",
 					"", localize(locator.stopFilterProcessing) } };
 		} else if (test.equals("SubjectContains_FileToFolder")) {
@@ -72,13 +72,13 @@ public class Filter extends CommonTest {
 		} else if (test.equals("FromContains_Discard")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					localize(locator.active), "any", localize(locator.from),
-					localize(locator.contains), SelNGBase.selfAccountName.get(), "",
+					localize(locator.contains), ClientSessionFactory.session().currentUserName(), "",
 					"", "", "", "", "", localize(locator.discard), "", "",
 					localize(locator.stopFilterProcessing) } };
 		} else if (test.equals("CCContains_Discard")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					localize(locator.active), "any", localize(locator.cc),
-					localize(locator.contains), SelNGBase.selfAccountName.get(), "",
+					localize(locator.contains), ClientSessionFactory.session().currentUserName(), "",
 					"", "", "", "", "", localize(locator.discard), "", "",
 					localize(locator.stopFilterProcessing) } };
 		} else if (test.equals("SubjectContains_FileToFolder_PriorityTest")) {
@@ -91,7 +91,7 @@ public class Filter extends CommonTest {
 		} else if (test.equals("RunFilter")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					localize(locator.active), "any", localize(locator.cc),
-					localize(locator.contains), SelNGBase.selfAccountName.get(), "",
+					localize(locator.contains), ClientSessionFactory.session().currentUserName(), "",
 					"", "", "", "", "", localize(locator.discard), "", "",
 					localize(locator.stopFilterProcessing) } };
 		} else if (test.equals("MsgBodyShouldNotBeCaseSensitive_Bug36905")) {
@@ -206,7 +206,7 @@ public class Filter extends CommonTest {
 
 		// Send mail and verify filter
 		String body = getLocalizedData_NoSpecialChar();
-		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName.get(), "",
+		page.zComposeView.zComposeAndSendMail(ClientSessionFactory.session().currentUserName(), "",
 				"", conditionValue1, body, "");
 		MailApp.ClickCheckMailUntilMailShowsUp(fileIntoNewFolder,
 				conditionValue1);
@@ -255,12 +255,12 @@ public class Filter extends CommonTest {
 			 */
 			zGoToApplication("Mail");
 			String body = getLocalizedData_NoSpecialChar();
-			page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName.get(),
+			page.zComposeView.zComposeAndSendMail(ClientSessionFactory.session().currentUserName(),
 					"", "", conditionValue1, body, "");
 
 			// log off, login to that user to whom forwarded mail & verify mail
 			resetSession();
-			SelNGBase.selfAccountName.set(forwardtoUser);
+			
 			page.zLoginpage.zLoginToZimbraAjax(forwardtoUser);
 			MailApp.ClickCheckMailUntilMailShowsUp(conditionValue1);
 		}
@@ -332,7 +332,7 @@ public class Filter extends CommonTest {
 		String to = Stafzmprov.getRandomAccount();
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData_NoSpecialChar();
-		page.zComposeView.zComposeAndSendMail(to, SelNGBase.selfAccountName.get(),
+		page.zComposeView.zComposeAndSendMail(to, ClientSessionFactory.session().currentUserName(),
 				"", subject, body, "");
 		obj.zButton.zClick(page.zMailApp.zGetMailIconBtn);
 		obj.zFolder.zClick(localize(locator.inbox));
@@ -392,7 +392,7 @@ public class Filter extends CommonTest {
 		zGoToApplication("mail");
 		obj.zFolder.zExists(FolderName);
 		obj.zFolder.zExists(newFolderName);
-		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName.get(), "",
+		page.zComposeView.zComposeAndSendMail(ClientSessionFactory.session().currentUserName(), "",
 				"", conditionValue1, getLocalizedData_NoSpecialChar(), "");
 		MailApp.ClickCheckMailUntilMailShowsUp(FolderName, conditionValue1);
 		obj.zButton.zClick(page.zMailApp.zGetMailIconBtn);
@@ -424,7 +424,7 @@ public class Filter extends CommonTest {
 
 		// 1. subject contains(subjectcontains_filetofolder) file to
 		// folder
-		String to = SelNGBase.selfAccountName.get();
+		String to = ClientSessionFactory.session().currentUserName();
 		String subject1 = "subjectcontains_filetofolder";
 		String body1 = "body_subjectcontains_filetofolder";
 		String[] recipients = { to };
@@ -480,7 +480,7 @@ public class Filter extends CommonTest {
 		setFilterConditionsActions(subject3, localize(locator.active), "all",
 				localize(locator.subject), localize(locator.contains),
 				"subjectandtocontains_filetofolder", localize(locator.to),
-				localize(locator.contains), SelNGBase.selfAccountName.get(), "", "",
+				localize(locator.contains), ClientSessionFactory.session().currentUserName(), "", "",
 				"", localize(locator.fileIntoFolder), "", "",
 				localize(locator.stopFilterProcessing));
 		String folder3 = fileIntoNewFolder;
@@ -566,7 +566,7 @@ public class Filter extends CommonTest {
 		zGoToApplication("Mail");
 
 		// Send mail and verify filter
-		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName.get(), "",
+		page.zComposeView.zComposeAndSendMail(ClientSessionFactory.session().currentUserName(), "",
 				"", conditionValue1, conditionValue1.toLowerCase(), "");
 		MailApp.ClickCheckMailUntilMailShowsUp(fileIntoNewFolder,
 				conditionValue1);
@@ -597,7 +597,7 @@ public class Filter extends CommonTest {
 
 		// Send mail and verify filter
 		String body = getLocalizedData_NoSpecialChar();
-		page.zComposeView.zComposeAndSendMail(SelNGBase.selfAccountName.get(), "",
+		page.zComposeView.zComposeAndSendMail(ClientSessionFactory.session().currentUserName(), "",
 				"", "testing doesn't contains", body, "");
 		MailApp.ClickCheckMailUntilMailShowsUp(fileIntoNewFolder,
 				"testing doesn't contains");

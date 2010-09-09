@@ -32,7 +32,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
-		currentloggedinuser = SelNGBase.selfAccountName.get();
+		currentloggedinuser = ClientSessionFactory.session().currentUserName();
 		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefIncludeSpamInSearch", "FALSE");
 		Stafzmprov.modifyAccount(currentloggedinuser,
@@ -84,10 +84,10 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 		String[] message = { "junksubject21", "junksubject22" };
 		for (int i = 0; i <= 1; i++) {
-			LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+			LmtpUtil.injectMessage(ClientSessionFactory.session().currentUserName(), recipients,
 					"ccuser@testdomain.com", message[i], "generalbody");
 			MailApp.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),
 					message[i]);
@@ -100,7 +100,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 				obj.zMessageItem.zExists(message[0]);
 				obj.zFolder.zClick(localize(locator.inbox));
 				ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']",
-						SelNGBase.selfAccountName.get());
+						ClientSessionFactory.session().currentUserName());
 				obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 				obj.zMessageItem.zNotExists(message[0]);
 				obj.zMessageItem.zExists(message[1]);
@@ -115,10 +115,10 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 		String[] message = { "trashsubject21", "trashsubject22" };
 		for (int i = 0; i <= 1; i++) {
-			LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+			LmtpUtil.injectMessage(ClientSessionFactory.session().currentUserName(), recipients,
 					"ccuser@testdomain.com", message[i], "generalbody");
 			MailApp.ClickCheckMailUntilMailShowsUp(localize(locator.inbox),
 					message[i]);
@@ -129,7 +129,7 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 				SleepUtil.sleep(1000);
 				obj.zMessageItem.zExists(message[0]);
 				ClientSessionFactory.session().selenium().type("xpath=//input[@class='search_input']",
-						SelNGBase.selfAccountName.get());
+						ClientSessionFactory.session().currentUserName());
 				obj.zButton.zClick(page.zMailApp.zSearchIconBtn);
 				obj.zMessageItem.zNotExists(message[0]);
 				obj.zMessageItem.zExists(message[1]);
@@ -241,8 +241,8 @@ public class GeneralPreferencesSetFalse extends CommonTest {
 			handleRetry();
 
 		// Verify mail list item check box
-		String[] recipients = { SelNGBase.selfAccountName.get() };
-		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients,
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
+		LmtpUtil.injectMessage(ClientSessionFactory.session().currentUserName(), recipients,
 				"ccuser@testdomain.com", "checkboxinlistitem",
 				"checkboxinlistitemmailbody");
 		MailApp.ClickCheckMailUntilMailShowsUp(

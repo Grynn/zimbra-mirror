@@ -25,14 +25,14 @@ public class ReplyMail extends CommonTest {
 	public Object[][] createData(Method method) throws Exception {
 		String test = method.getName();
 		if (test.equals("replyMsgFromNewWindow")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
-					SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
+					ClientSessionFactory.session().currentUserName(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com",
 					getOnlyEnglishAlphabetCharAndNumber(),
 					getOnlyEnglishAlphabetCharAndNumber(), "" } };
 		} else if (test.equals("replyAllMsgFromNewWindow")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
-					SelNGBase.selfAccountName.get(),
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
+					ClientSessionFactory.session().currentUserName(),
 					Stafzmprov.getRandomAccount(), "bccuser@testdomain.com",
 					"subject_replyAllMsgFromNewWindow",
 					"body_replyAllMsgFromNewWindow", "" } };
@@ -66,7 +66,7 @@ public class ReplyMail extends CommonTest {
 				"39446",
 				"New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String recipients[] = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -99,7 +99,7 @@ public class ReplyMail extends CommonTest {
 				"39446",
 				"New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String recipients[] = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -118,7 +118,7 @@ public class ReplyMail extends CommonTest {
 		obj.zMessageItem.zExists("Re: " + subject);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(cc);
+		
 		page.zLoginpage.zLoginToZimbraAjax(cc);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Re: " + subject);
 

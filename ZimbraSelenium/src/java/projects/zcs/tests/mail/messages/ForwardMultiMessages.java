@@ -56,7 +56,7 @@ public class ForwardMultiMessages extends CommonTest {
 			handleRetry();
 
 		String subject1, subject2, acc1, acc2, fwdSubject, fwdBody;
-		acc1 = SelNGBase.selfAccountName.get();
+		acc1 = ClientSessionFactory.session().currentUserName();
 		subject1 = "subject1";
 		subject2 = "subject2";
 		fwdSubject = "fwdSubject";
@@ -79,7 +79,7 @@ public class ForwardMultiMessages extends CommonTest {
 		SleepUtil.sleep(2500);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(acc2);
+		
 		page.zLoginpage.zLoginToZimbraAjax(acc2);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(fwdSubject);
 		obj.zMessageItem.zClick(fwdSubject);
@@ -150,7 +150,7 @@ public class ForwardMultiMessages extends CommonTest {
 
 	private void commonInjectMessage(String from, String to, String cc,
 			String bcc, String subject, String body) throws Exception {
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(

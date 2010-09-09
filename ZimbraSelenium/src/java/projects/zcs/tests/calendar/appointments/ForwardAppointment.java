@@ -64,7 +64,7 @@ public class ForwardAppointment extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.accept));
@@ -91,7 +91,7 @@ public class ForwardAppointment extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(thirdUser);
-		SelNGBase.selfAccountName.set(thirdUser);
+		
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(localize(locator.accept));
@@ -115,7 +115,7 @@ public class ForwardAppointment extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentLoggedInUser = SelNGBase.selfAccountName.get();
+		String currentLoggedInUser = ClientSessionFactory.session().currentUserName();
 		String user1 = Stafzmprov.getRandomAccount();
 		String user2 = Stafzmprov.getRandomAccount();
 		String user3 = Stafzmprov.getRandomAccount();
@@ -132,7 +132,7 @@ public class ForwardAppointment extends CommonTest {
 		// login to user1 and send invitaion currentLoggeduser
 		String subject1 = getLocalizedData_NoSpecialChar();
 		page.zLoginpage.zLoginToZimbraAjax(user1);
-		SelNGBase.selfAccountName.set(user1);
+		
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject1, location,
@@ -143,7 +143,7 @@ public class ForwardAppointment extends CommonTest {
 		// login to currentLoggeduser and accept invitation
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
-		SelNGBase.selfAccountName.set(currentLoggedInUser);
+		
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		obj.zMessageItem.zClick(subject1);
 		obj.zButton.zClick(localize(locator.accept));
@@ -152,7 +152,7 @@ public class ForwardAppointment extends CommonTest {
 		resetSession();
 		// login to user2 and check fwd'ed invitation
 		page.zLoginpage.zLoginToZimbraAjax(user2);
-		SelNGBase.selfAccountName.set(user2);
+		
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		obj.zMessageItem.zClick(subject1);
 		obj.zButton.zExists(localize(locator.replyAccept));
@@ -180,7 +180,7 @@ public class ForwardAppointment extends CommonTest {
 		obj.zAppointment.zNotExists(subject1);
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(user3);
-		SelNGBase.selfAccountName.set(user3);
+		
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		obj.zMessageItem.zClick(subject1);
 

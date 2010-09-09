@@ -28,7 +28,7 @@ public class AttachBriefcaseFile extends CommonTest {
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
 		if (test.equals("attachBriefcaseFileInMail_NewWindow")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5),
 					"testexcelfile.xls,testwordfile.doc" } };
@@ -68,7 +68,7 @@ public class AttachBriefcaseFile extends CommonTest {
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToComposeByShiftClick();
 		obj.zTextAreaField.zType(page.zComposeView.zToField,
-				SelNGBase.selfAccountName.get());
+				ClientSessionFactory.session().currentUserName());
 		obj.zTextAreaField.zType(page.zComposeView.zCcField, cc);
 		obj.zEditField.zType(page.zComposeView.zSubjectField, subject);
 		obj.zEditor.zType(body);

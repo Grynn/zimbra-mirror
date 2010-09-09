@@ -80,7 +80,7 @@ public class Autocomplete extends CommonTest {
 				+ "atte2@testdomain.com";
 		Stafzmprov.createAccount(acc1);
 		Stafzmprov.createAccount(acc2);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		Stafzmprov.modifyAccount(acc1, "zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		Stafzmprov.modifyAccount(acc2, "zimbraPrefGalAutoCompleteEnabled", "TRUE");
@@ -106,7 +106,7 @@ public class Autocomplete extends CommonTest {
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 		SleepUtil.sleep(2000);
 		resetSession();
-		SelNGBase.selfAccountName.set(acc2);
+		
 		page.zLoginpage.zLoginToZimbraAjax(acc2);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 
@@ -126,7 +126,7 @@ public class Autocomplete extends CommonTest {
 		obj.zButton.zClick(page.zCalCompose.zApptSaveBtn);
 		SleepUtil.sleep(2000);
 		resetSession();
-		SelNGBase.selfAccountName.set(acc1);
+		
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 

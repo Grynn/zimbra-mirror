@@ -89,7 +89,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 		checkForSkipException("all", "na", "49898", "Signature is not removed on selecting 'Do not attach signature' for html saved draft");
 
 		// format as text
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(), "zimbraPrefComposeFormat",
 				"text");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -116,7 +116,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 		cancelMailCompose();
 
 		// change compose format as html
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(), "zimbraPrefComposeFormat",
 				"html");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -152,7 +152,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 			handleRetry();
 
 		// format as text
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(), "zimbraPrefComposeFormat",
 				"text");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -181,7 +181,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
 		// change compose format as html
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(), "zimbraPrefComposeFormat",
 				"html");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -218,7 +218,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 			handleRetry();
 
 		// format as text
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(), "zimbraPrefComposeFormat",
 				"text");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -264,7 +264,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 		checkForSkipException("all", "na", "49898", "Signature is not removed on selecting 'Do not attach signature' for html saved draft");
 
 		// change compose format as html
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "zimbraPrefComposeFormat",
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(), "zimbraPrefComposeFormat",
 				"html");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -320,7 +320,7 @@ public class ChangeMailFormatSignature extends CommonTest {
 			SleepUtil.sleep(1000);
 		} else if (isRplyFwd.equals("true")) {
 			String to;
-			to = SelNGBase.selfAccountName.get();
+			to = ClientSessionFactory.session().currentUserName();
 			String[] recipients = { to };
 			LmtpUtil.injectMessage(to, recipients, "ccuser@testdomain.com",
 					rplyFwdSubject, "");

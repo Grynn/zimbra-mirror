@@ -91,7 +91,7 @@ public class ShortcutsGeneral extends CommonTest {
 	public void zLogin() throws Exception {
 		super.NAVIGATION_TAB="mail";
 		super.zLogin();
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 	}
 
 
@@ -218,7 +218,7 @@ public class ShortcutsGeneral extends CommonTest {
 
 		String subject = "Test For visit Folder";
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(ClientSessionFactory.session().currentUserName(), "", "",
 				subject, "test content", "");
 
 		ClientSessionFactory.session().selenium().windowFocus();
@@ -247,7 +247,7 @@ public class ShortcutsGeneral extends CommonTest {
 		page.zMailApp.zCreateTag(tagName);
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(ClientSessionFactory.session().currentUserName(), "", "",
 				subject, "test content", "");
 
 		Robot zRobot = new Robot();
@@ -260,7 +260,7 @@ public class ShortcutsGeneral extends CommonTest {
 				localize(locator.pickATag));
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(ClientSessionFactory.session().currentUserName(), "", "",
 				subject2, "test content", "");
 
 		ClientSessionFactory.session().selenium().windowFocus();
@@ -294,7 +294,7 @@ public class ShortcutsGeneral extends CommonTest {
 		String subject2 = getLocalizedData_NoSpecialChar();
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(ClientSessionFactory.session().currentUserName(), "", "",
 				subject, "test content", "");
 
 		Robot zRobot = new Robot();
@@ -307,7 +307,7 @@ public class ShortcutsGeneral extends CommonTest {
 				localize(locator.pickATag));
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(ClientSessionFactory.session().currentUserName(), "", "",
 				subject2, "test content", "");
 
 		ClientSessionFactory.session().selenium().windowFocus();
@@ -361,7 +361,7 @@ public class ShortcutsGeneral extends CommonTest {
 				localize(locator.createNewFolder));
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMailToSelfAndSelectIt(ClientSessionFactory.session().currentUserName(), "", "",
 				subject, "test content", "");
 
 		obj.zButton.zClick(page.zMailApp.zMoveBtn);
@@ -395,11 +395,11 @@ public class ShortcutsGeneral extends CommonTest {
 		String subject2 = getLocalizedData_NoSpecialChar();
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(ClientSessionFactory.session().currentUserName(), "", "",
 				subject, "test content", "");
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(ClientSessionFactory.session().currentUserName(), "", "",
 				subject2, "test content", "");
 
 		Robot zRobot = new Robot();
@@ -445,7 +445,7 @@ public class ShortcutsGeneral extends CommonTest {
 
 		String subject = "Test For Delete Item";
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMailToSelfAndSelectIt(ClientSessionFactory.session().currentUserName(), "", "",
 				subject, "test content", "");
 
 		Robot zRobot = new Robot();

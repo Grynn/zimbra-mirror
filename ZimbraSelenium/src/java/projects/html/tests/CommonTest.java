@@ -88,7 +88,7 @@ public class CommonTest extends SelNGBase {
 		if (needsReLogin(accntAttrs) || SelNGBase.needReset.get()) {
 			resetSession();
 			selfAccountAttrs = accntAttrs;
-			SelNGBase.selfAccountName.set(page.zLoginpage.zLoginToZimbraHTML(accntAttrs));
+			page.zLoginpage.zLoginToZimbraHTML(accntAttrs);
 		}
 	}
 
@@ -96,7 +96,7 @@ public class CommonTest extends SelNGBase {
 		int currentAccntAttrsSize = selfAccountAttrs.size() - 4;// -4 is to
 		// remove default settings
 		// none has logged in yet
-		if (SelNGBase.selfAccountName.get().equals(""))
+		if (ClientSessionFactory.session().currentUserName().equals(""))
 			return true;
 		// a user has already logged in with default settings
 		// and test needs to use default-settings as well.
@@ -397,9 +397,9 @@ public class CommonTest extends SelNGBase {
 	public static void assertReport(String expectedFullBody,
 			String dataToVerify, String reportSummary) throws Exception {
 		if (expectedFullBody.equals("_selfAccountName_"))
-			expectedFullBody = SelNGBase.selfAccountName.get();
+			expectedFullBody = ClientSessionFactory.session().currentUserName();
 		if (dataToVerify.equals("_selfAccountName_"))
-			dataToVerify = SelNGBase.selfAccountName.get();
+			dataToVerify = ClientSessionFactory.session().currentUserName();
 		Assert.assertTrue(expectedFullBody.indexOf(dataToVerify) >= 0,
 				"Expected value(" + expectedFullBody + "), Actual Value("
 						+ dataToVerify + ")");
@@ -512,12 +512,12 @@ public class CommonTest extends SelNGBase {
 
 	public static void zReloginToAjax() throws Exception {
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		resetSession();
 		SleepUtil.sleep(2000);
 
-		SelNGBase.selfAccountName.set(accountName);
+		
 		page.zLoginpage.zLoginToZimbraHTML(accountName);
 
 	}

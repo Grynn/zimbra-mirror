@@ -67,13 +67,13 @@ public class AccPref extends AppPage {
 		obj.zEditField.zActivateAndType("id=DWT41_PERSONA_FROM_NAME", fromName);
 		ClientSessionFactory.session().selenium().clickAt(
 						"//div[contains(@id, 'PERSONA')]//td[contains(@class, 'ZOptionsSectionMain')]/table/tbody/tr[6]//td[contains(@id, '_select_container')]//td[contains(text(), '"
-								+ SelNGBase.selfAccountName.get().toLowerCase()
+								+ ClientSessionFactory.session().currentUserName().toLowerCase()
 								+ "')]", "");
 		SleepUtil.sleep(500);
 		if (fromAddress.equals("")) {
 			ClientSessionFactory.session().selenium().clickAt(
 							"//div[contains(@class, 'ZSelectMenuItem ZWidget ZHasText')]//td[contains(text(), '"
-									+ SelNGBase.selfAccountName.get()
+									+ ClientSessionFactory.session().currentUserName()
 											.toLowerCase() + "')]", "");
 		} else {
 			ClientSessionFactory.session().selenium().clickAt(

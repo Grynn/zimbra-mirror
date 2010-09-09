@@ -88,7 +88,7 @@ public class DeleteMeetingRequest extends CommonTest {
 		String[] itemsToVerify = { body };
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);

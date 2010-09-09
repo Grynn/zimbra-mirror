@@ -69,7 +69,7 @@ public class ZimletPreferences extends CommonTest {
 		zGoToApplication("Preferences");
 		zGoToPreferences("Zimlets");
 		System.out.println(Stafzmprov.getAccountPreferenceValue(
-				SelNGBase.selfAccountName.get(), "zimbraPrefZimlets"));
+				ClientSessionFactory.session().currentUserName(), "zimbraPrefZimlets"));
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletEmailChkBox);
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletURLChkBox);
 		obj.zCheckbox.zVerifyIsNotChecked(zZimletEmoticonsChkBox);

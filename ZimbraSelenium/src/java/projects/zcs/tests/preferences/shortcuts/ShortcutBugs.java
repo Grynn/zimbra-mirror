@@ -55,7 +55,7 @@ public class ShortcutBugs extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefUseKeyboardShortcuts", "FALSE");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);

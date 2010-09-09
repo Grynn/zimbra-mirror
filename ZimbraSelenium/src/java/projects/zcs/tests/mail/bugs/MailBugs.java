@@ -51,18 +51,18 @@ public class MailBugs extends CommonTest {
 				|| test
 						.equals("UserCanAbleToSavePrefWithEmptySignatureField_Bug44607")
 				|| test.equals("emptyTrash_Bug41209")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5), "" } };
 		} else if (test.equals("ajaxCrashesIfMailBodyContainsScript_Bug36391")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					"<script ></script >", "<script ></script >", "" } };
 		} else if (test.equals("networkServiceErrorInNewWindow_Bug41205")
 				|| test
 						.equals("checkStatusOfSelectCheckboxAfterSearch_Bug43116")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
-					SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
+					ClientSessionFactory.session().currentUserName(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com",
 					getOnlyEnglishAlphabetCharAndNumber(),
 					getOnlyEnglishAlphabetCharAndNumber(), "" } };
@@ -216,7 +216,7 @@ public class MailBugs extends CommonTest {
 
 			resetSession();
 			String newUser = Stafzmprov.getRandomAccount();
-			SelNGBase.selfAccountName.set(newUser);
+			
 			page.zLoginpage.zLoginToZimbraAjax(newUser);
 		}
 
@@ -375,8 +375,9 @@ public class MailBugs extends CommonTest {
 		 * 1. Send Mail to self. 2. Select it. 3. Delete it. Move to Trash. *
 		 */
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName
-				.get(), "", "", subject, body, "");
+		page.zComposeView.zSendMailToSelfAndVerify(
+				ClientSessionFactory.session().currentUserName(),
+				"", "", subject, body, "");
 
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
@@ -473,7 +474,7 @@ public class MailBugs extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefFromAddress", accountName
 				.toUpperCase());
 		page.zComposeView.zNavigateToMailCompose();
@@ -515,7 +516,7 @@ public class MailBugs extends CommonTest {
 				"39446",
 				"New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String recipients[] = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -664,7 +665,7 @@ public class MailBugs extends CommonTest {
 
 	private void commonInjectMessage(String from, String to, String cc,
 			String bcc, String subject, String body) throws Exception {
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(

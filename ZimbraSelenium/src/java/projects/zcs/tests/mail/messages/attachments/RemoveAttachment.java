@@ -29,12 +29,12 @@ public class RemoveAttachment extends CommonTest {
 		String test = method.getName();
 		if (test.equals("removingAttachmentFromMessage")
 				|| test.equals("removingAttachmentFromMessage_NewWindow")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5), "bug22417.ics" } };
 		} else if (test.equals("removingAllAttachmentFromMessage")
 				|| test.equals("removingAllAttachmentFromMessage_NewWindow")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5),
 					"structure.jpg, contact25.pst" } };
@@ -63,8 +63,9 @@ public class RemoveAttachment extends CommonTest {
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName
-				.get(), cc, bcc, subject, body, attachments);
+		page.zComposeView.zSendMailToSelfAndVerify(
+					ClientSessionFactory.session().currentUserName(),
+					cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
@@ -141,8 +142,9 @@ public class RemoveAttachment extends CommonTest {
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName
-				.get(), cc, bcc, subject, body, attachments);
+		page.zComposeView.zSendMailToSelfAndVerify(
+				ClientSessionFactory.session().currentUserName(),
+				cc, bcc, subject, body, attachments);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
 		SleepUtil.sleep(1000);
@@ -247,8 +249,9 @@ public class RemoveAttachment extends CommonTest {
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName
-				.get(), cc, bcc, subject, body, attachments);
+		page.zComposeView.zSendMailToSelfAndVerify(
+				ClientSessionFactory.session().currentUserName(),
+				cc, bcc, subject, body, attachments);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
 		obj.zMessageItem.zClick(subject);
@@ -293,8 +296,9 @@ public class RemoveAttachment extends CommonTest {
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName
-				.get(), cc, bcc, subject, body, attachments);
+		page.zComposeView.zSendMailToSelfAndVerify(
+				ClientSessionFactory.session().currentUserName(),
+				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {

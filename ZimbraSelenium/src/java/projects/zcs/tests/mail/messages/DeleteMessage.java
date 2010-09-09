@@ -81,7 +81,7 @@ public class DeleteMessage extends CommonTest {
 
 	private void commonInjectMessage(String from, String to, String cc,
 			String bcc, String subject, String body) throws Exception {
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(

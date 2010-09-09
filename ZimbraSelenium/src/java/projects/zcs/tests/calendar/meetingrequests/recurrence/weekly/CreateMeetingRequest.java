@@ -86,7 +86,7 @@ public class CreateMeetingRequest extends CommonTest {
 			handleRetry();
 
 		String organizer;
-		organizer = SelNGBase.selfAccountName.get();
+		organizer = ClientSessionFactory.session().currentUserName();
 		page.zCalApp.zNavigateToCalendar();
 		// obj.zButton.zClick(page.zCalApp.zCalWeekBtn);
 		page.zCalCompose.zCreateAppt(subject, location, "", "", "", "", "", "",
@@ -95,7 +95,7 @@ public class CreateMeetingRequest extends CommonTest {
 
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
@@ -163,7 +163,7 @@ public class CreateMeetingRequest extends CommonTest {
 		String[] itemsToVerify = { verifySubject, verifyLocation, verifyTime };
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);

@@ -54,7 +54,7 @@ public class CalendarPreferencesSetTrue extends CommonTest {
 	@BeforeClass(groups = { "always" })
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefCalendarInitialView",
 				"week");
@@ -110,7 +110,7 @@ public class CalendarPreferencesSetTrue extends CommonTest {
 
 		SleepUtil.sleep(1000);
 
-		SelNGBase.selfAccountName.set(accountName);
+		
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 
 		MailApp

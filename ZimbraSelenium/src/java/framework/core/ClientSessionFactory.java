@@ -9,6 +9,10 @@ import org.apache.log4j.Logger;
 public class ClientSessionFactory {
 	private static Logger logger = LogManager.getLogger(ClientSessionFactory.class);
 	
+	/**
+	 * Get the current client session for this test case
+	 * @return
+	 */
 	public static ClientSession session() {
 		long threadID = Thread.currentThread().getId();
 		ClientSession session = getSingleton().getClientSession(Long.toString(threadID));

@@ -99,7 +99,7 @@ public class ComposePreferencesSetFalse extends CommonTest {
 
 		// Setup
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeFormat", "text");
 		Stafzmprov.modifyAccount(accountName,
@@ -155,7 +155,7 @@ public class ComposePreferencesSetFalse extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zComposeView.zNavigateToMailCompose();
 

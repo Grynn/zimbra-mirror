@@ -28,7 +28,7 @@ public class AddToBriefcase extends CommonTest {
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
 		if (test.equals("addingAttachFromMsgToBriefcaseFolder")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5),
 					"testtextfile.txt" } };
@@ -61,8 +61,9 @@ public class AddToBriefcase extends CommonTest {
 
 		zGoToApplication("Mail");
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName
-				.get(), cc, bcc, subject, body, attachments);
+		page.zComposeView.zSendMailToSelfAndVerify(
+				ClientSessionFactory.session().currentUserName(),
+				cc, bcc, subject, body, attachments);
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(2000);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {

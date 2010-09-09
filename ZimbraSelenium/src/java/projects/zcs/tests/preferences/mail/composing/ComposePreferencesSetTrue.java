@@ -98,7 +98,7 @@ public class ComposePreferencesSetTrue extends CommonTest {
 
 		// Setup
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeFormat", "html");
 		Stafzmprov.modifyAccount(accountName,
@@ -159,7 +159,7 @@ public class ComposePreferencesSetTrue extends CommonTest {
 		checkForSkipException("na", "SF", "39446", "New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
 
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefComposeInNewWindow",
 				"TRUE");
@@ -266,7 +266,7 @@ public class ComposePreferencesSetTrue extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentAccount = SelNGBase.selfAccountName.get();
+		String currentAccount = ClientSessionFactory.session().currentUserName();
 		String accountName = Stafzmprov.getRandomAccount();
 
 		Stafzmprov.modifyAccount(accountName,
@@ -292,7 +292,7 @@ public class ComposePreferencesSetTrue extends CommonTest {
 
 		SleepUtil.sleep(500);
 
-		SelNGBase.selfAccountName.set(accountName);
+		
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 
 		MailApp
@@ -345,7 +345,7 @@ public class ComposePreferencesSetTrue extends CommonTest {
 
 		checkForSkipException("all", "na", "na", "UI change for prefix while reply/forward message");
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefForwardReplyPrefixChar",
 				replyPrefix);
@@ -449,7 +449,7 @@ public class ComposePreferencesSetTrue extends CommonTest {
 			handleRetry();
 		checkForSkipException("all", "na", "na", "UI change for prefix while reply/forward message");
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefForwardReplyPrefixChar",
 				fwdPrefix);

@@ -63,7 +63,7 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 
 		zGoToApplication("Preferences");
 		zGoToPreferences("Accounts");
-		String user1 = SelNGBase.selfAccountName.get().toLowerCase();
+		String user1 = ClientSessionFactory.session().currentUserName().toLowerCase();
 		String user2 = Stafzmprov.getRandomAccount();
 		String fromName = getLocalizedData_NoSpecialChar();
 		page.zAccPref.zCreatePersona(personaName, fromName, alias);
@@ -76,12 +76,12 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 		ClientSessionFactory.session().selenium()
 				.clickAt(
 						"//td[contains(@id, '_select_container')]//td[contains(text(), '"
-								+ SelNGBase.selfAccountName.get().toLowerCase()
+								+ ClientSessionFactory.session().currentUserName().toLowerCase()
 								+ "')]", "");
 		SleepUtil.sleep(500);
 		ClientSessionFactory.session().selenium().clickAt(
 						"//div[contains(@class, 'ZSelectMenuItem ZWidget ZHasText')]//td[contains(text(), '"
-								+ SelNGBase.selfAccountName.get().toLowerCase()
+								+ ClientSessionFactory.session().currentUserName().toLowerCase()
 								+ "')]", "");
 
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject, "", user2,
@@ -92,7 +92,7 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(user2);
+		
 		page.zLoginpage.zLoginToZimbraAjax(user2);
 		MailApp.ClickCheckMailUntilMailShowsUp(fromName);
 		SleepUtil.sleep(500);
@@ -124,10 +124,10 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		Stafzmprov.addAccountAlias(SelNGBase.selfAccountName.get(), alias);
+		Stafzmprov.addAccountAlias(ClientSessionFactory.session().currentUserName(), alias);
 		resetSession();
 		SleepUtil.sleep(1000);
-		page.zLoginpage.zLoginToZimbraAjax(SelNGBase.selfAccountName.get());
+		page.zLoginpage.zLoginToZimbraAjax(ClientSessionFactory.session().currentUserName());
 
 		zGoToApplication("Preferences");
 		zGoToPreferences("Accounts");
@@ -143,7 +143,7 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 		ClientSessionFactory.session().selenium()
 				.clickAt(
 						"//td[contains(@id, '_select_container')]//td[contains(text(), '"
-								+ SelNGBase.selfAccountName.get().toLowerCase()
+								+ ClientSessionFactory.session().currentUserName().toLowerCase()
 								+ "')]", "");
 		SleepUtil.sleep(500);
 		ClientSessionFactory.session().selenium().clickAt(
@@ -157,7 +157,7 @@ public class CreateMeetingRequestFromPersona extends CommonTest {
 
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(user2);
+		
 		page.zLoginpage.zLoginToZimbraAjax(user2);
 		MailApp.ClickCheckMailUntilMailShowsUp(fromName);
 		SleepUtil.sleep(500);

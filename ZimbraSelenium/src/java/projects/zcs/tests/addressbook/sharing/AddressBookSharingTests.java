@@ -100,7 +100,7 @@ public class AddressBookSharingTests extends CommonTest {
 				role, "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(attendee);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
@@ -144,7 +144,7 @@ public class AddressBookSharingTests extends CommonTest {
 				role, "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(attendee);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
@@ -196,7 +196,7 @@ public class AddressBookSharingTests extends CommonTest {
 				role, "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(attendee);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zAcceptShare(mountFolderName);
 		page.zABCompose.navigateTo(ActionMethod.DEFAULT);
@@ -284,8 +284,8 @@ public class AddressBookSharingTests extends CommonTest {
 				localize(locator.shareRoleManager), "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(attendee);
-		String currentloggedinuser = SelNGBase.selfAccountName.get();
+		
+		String currentloggedinuser = ClientSessionFactory.session().currentUserName();
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing
 				.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
@@ -321,7 +321,7 @@ public class AddressBookSharingTests extends CommonTest {
 		checkForSkipException("hi", "na", "34084", "Share Created mail body missing external guest url informations");
 		checkForSkipException("na", "IE", "44288", "Java script entered data Or right click & copy paste data into edit fields are not recognized by new AB UI");
 
-		String currentloggedinuser = SelNGBase.selfAccountName.get();
+		String currentloggedinuser = ClientSessionFactory.session().currentUserName();
 
 		ContactItem contact = new ContactItem();
 		contact.firstName = cnFirstName;
@@ -335,7 +335,7 @@ public class AddressBookSharingTests extends CommonTest {
 				localize(locator.shareWithGuest), attendee, role, "", "", "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(attendee);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendee);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				folderName, localize(locator.shareWithGuest), attendee, role,

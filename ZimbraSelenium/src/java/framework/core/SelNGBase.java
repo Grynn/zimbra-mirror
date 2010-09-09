@@ -164,10 +164,4 @@ public class SelNGBase {
 		}
 	};
 	
-	public static ThreadLocal<String> selfAccountName = new ThreadLocal<String>() {
-		protected synchronized String initialValue() {
-			String username = "";
-			return new String(username);
-		}
-	};
 }

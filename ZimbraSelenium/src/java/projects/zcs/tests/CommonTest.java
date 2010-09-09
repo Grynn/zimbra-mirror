@@ -147,7 +147,8 @@ public class CommonTest extends SelNGBase {
 		if (needsReLogin() || SelNGBase.needReset.get()) {
 
 			resetSession();
-			SelNGBase.selfAccountName.set(page.zLoginpage.zLoginToZimbraAjax());
+			page.zLoginpage.zLoginToZimbraAjax();
+
 			
 		}
 	}
@@ -155,7 +156,7 @@ public class CommonTest extends SelNGBase {
 	private static boolean needsReLogin() {
 		
 		// none has logged in yet
-		if (SelNGBase.selfAccountName.get().equals(""))
+		if (ClientSessionFactory.session().currentUserName().equals(""))
 			return true;
 		
 
@@ -580,9 +581,9 @@ public class CommonTest extends SelNGBase {
 	public static void assertReport(String expectedValue, String actualValue,
 			String reportSummary) throws Exception {
 		if (expectedValue.equals("_selfAccountName_"))
-			expectedValue = SelNGBase.selfAccountName.get();
+			expectedValue = ClientSessionFactory.session().currentUserName();
 		if (actualValue.equals("_selfAccountName_"))
-			actualValue = SelNGBase.selfAccountName.get();
+			actualValue = ClientSessionFactory.session().currentUserName();
 		Assert.assertTrue(expectedValue.indexOf(actualValue) >= 0,
 				"Expected value(" + expectedValue + "), Actual Value("
 						+ actualValue + ")");
@@ -590,7 +591,7 @@ public class CommonTest extends SelNGBase {
 
 	public static String replaceUserNameInStaticId(String staticID) {
 		String actualID = null;
-		actualID = staticID.replace("USERNAME", SelNGBase.selfAccountName.get()
+		actualID = staticID.replace("USERNAME", ClientSessionFactory.session().currentUserName()
 				.toLowerCase());
 		return actualID;
 	}
@@ -811,10 +812,10 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public static void zReloginToAjax() throws Exception {
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(accountName);
+		
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 	}
 
@@ -1343,7 +1344,7 @@ public class CommonTest extends SelNGBase {
 		/**
 		 * Add child Account
 		 */
-		parentAccount=SelNGBase.selfAccountName.get().toLowerCase();
+		parentAccount=ClientSessionFactory.session().currentUserName().toLowerCase();
 		String childAccount=Stafzmprov.getRandomAccount().toLowerCase();
 		String childUserAccountId=Stafzmprov.getAccountPreferenceValue(childAccount, "zimbraId");
 

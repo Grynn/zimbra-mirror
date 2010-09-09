@@ -89,7 +89,7 @@ public class ShortcutsCustom extends CommonTest {
 
 		String folderName = getLocalizedData_NoSpecialChar();
 		String shortcut = "1";
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 		String subject = "test subject mail folder";
 
 		page.zMailApp.zCreateFolder(folderName);
@@ -136,7 +136,7 @@ public class ShortcutsCustom extends CommonTest {
 
 		String tagName = getLocalizedData_NoSpecialChar();
 		String shortcut = "2";
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 		String subject = "test subject shortcutsTag";
 
 		page.zMailApp.zCreateTag(tagName);
@@ -185,7 +185,7 @@ public class ShortcutsCustom extends CommonTest {
 
 		String searchName = getLocalizedData_NoSpecialChar();
 		String shortcut = "3";
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 		String subject = "test subject shortcutsSearches";
 
 		

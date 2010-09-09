@@ -202,7 +202,7 @@ public class ContactActions extends CommonTest {
 		String mailBody = getLocalizedData_NoSpecialChar();
 
 		String contactName = null;
-		String[] fromAccount = SelNGBase.selfAccountName.get().split("@");
+		String[] fromAccount = ClientSessionFactory.session().currentUserName().split("@");
 		String[] firstAndLastName = fromAccount[0].split("_");
 		String contactFirstName = firstAndLastName[0];
 		String contactLastName = firstAndLastName[firstAndLastName.length - 1];
@@ -211,8 +211,9 @@ public class ContactActions extends CommonTest {
 		fromAccount[0] = fromAccount[0].toLowerCase();
 		obj.zButton.zClick(page.zABCompose.zMailTabIconBtn);
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName
-				.get(), "", "", subject, mailBody, "");
+		page.zComposeView.zSendMailToSelfAndSelectIt(
+				ClientSessionFactory.session().currentUserName(),
+				"", "", subject, mailBody, "");
 
 		MailApp.ClickCheckMailUntilMailShowsUp("", subject);
 		obj.zMessageItem.zClick(subject);

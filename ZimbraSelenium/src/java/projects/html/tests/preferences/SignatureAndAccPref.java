@@ -221,7 +221,7 @@ public class SignatureAndAccPref extends CommonTest {
 				constantSignatureBody, "Above");
 		SleepUtil.sleepSmall();
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
+		page.zComposeView.zSendMailToSelfAndSelectIt(ClientSessionFactory.session().currentUserName(),
 				"", "", constantSubject, "", "");
 
 		page.zAccPref.zClickReplyToAMailAndVerifySignaturePlace("Above",

@@ -71,7 +71,7 @@ public class MailPreferencesTests extends CommonTest {
 		int numberOfMails = 11;
 		String noOfEmailsToBeDisplayed = "10";
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 		String subject = "subject";
 		String[] mailSubject = new String[numberOfMails];
 		for (int i = 0; i < numberOfMails; i++) {
@@ -148,7 +148,7 @@ public class MailPreferencesTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		String subject = getLocalizedData_NoSpecialChar();
-		String selfAccName = SelNGBase.selfAccountName.get();
+		String selfAccName = ClientSessionFactory.session().currentUserName();
 		page.zMailPrefUI.zSendMailToSelfAndMoveItToJunkAndVerify(subject);
 
 		page.zMailPrefUI.zNavigateToPrefAndEditDefaultMailSearch("in:junk");
@@ -179,7 +179,7 @@ public class MailPreferencesTests extends CommonTest {
 		SleepUtil.sleepSmall();
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
+		page.zComposeView.zSendMailToSelfAndSelectIt(ClientSessionFactory.session().currentUserName(),
 				"", "", subject, getLocalizedData_NoSpecialChar(), "");
 
 		resetSession();
@@ -200,7 +200,7 @@ public class MailPreferencesTests extends CommonTest {
 
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
-		String selfAcc = SelNGBase.selfAccountName.get().toLowerCase();
+		String selfAcc = ClientSessionFactory.session().currentUserName().toLowerCase();
 		String notificationSubject = "New message received at " + selfAcc;
 		String notificationToAcc = Stafzmprov.getRandomAccount();
 		String subject = getLocalizedData_NoSpecialChar();
@@ -211,11 +211,11 @@ public class MailPreferencesTests extends CommonTest {
 
 		page.zComposeView.zNavigateToMailCompose();
 		SleepUtil.sleepSmall();
-		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
+		page.zComposeView.zSendMailToSelfAndSelectIt(ClientSessionFactory.session().currentUserName(),
 				"", "", subject, getLocalizedData_NoSpecialChar(), "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(notificationToAcc);
+		
 		page.zLoginpage.zLoginToZimbraHTML(notificationToAcc);
 		page.zMailApp.zClickCheckMailUntilMailShowsUp("New message received");
 		obj.zMessageItem.zExists("New message received");
@@ -233,7 +233,7 @@ public class MailPreferencesTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentAccount = SelNGBase.selfAccountName.get();
+		String currentAccount = ClientSessionFactory.session().currentUserName();
 		String randomAccount = Stafzmprov.getRandomAccount();
 		String randomAccount2 = Stafzmprov.getRandomAccount();
 		String autoReplyMsg = localize(locator.auto);
@@ -258,7 +258,7 @@ public class MailPreferencesTests extends CommonTest {
 		SleepUtil.sleepSmall();
 		resetSession();
 		page.zLoginpage.zLoginToZimbraHTML(randomAccount2);
-		SelNGBase.selfAccountName.set(randomAccount2);
+		
 		page.zComposeView.zSendMail(currentAccount, "", "", subject, body, "");
 		String replyMsgSubject = localize(locator.ZM_replySubjectPrefix) + " "
 				+ subject;
@@ -290,13 +290,13 @@ public class MailPreferencesTests extends CommonTest {
 				.zNavigateToPrefMailAndSelectMsgFrmMe("PlaceInInboxIfInToOrCc");
 		// to verify cc mail is received in Inbox
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMail("", SelNGBase.selfAccountName.get(), "",
+		page.zComposeView.zSendMail("", ClientSessionFactory.session().currentUserName(), "",
 				subject1, "", "");
 		page.zMailApp.zClickCheckMailUntilMailShowsUp(subject1);
 
 		// to verify bcc mail is not received
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMail("", "", SelNGBase.selfAccountName.get(),
+		page.zComposeView.zSendMail("", "", ClientSessionFactory.session().currentUserName(),
 				subject2, "", "");
 
 		// little change here
@@ -324,7 +324,7 @@ public class MailPreferencesTests extends CommonTest {
 		page.zMailPrefUI.zNavigateToPrefMailAndSelectMsgFrmMe("IgnoreMsg");
 		// to verify the mail sent to self is not received
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "", subject,
+		page.zComposeView.zSendMail(ClientSessionFactory.session().currentUserName(), "", "", subject,
 				"", "");
 		SleepUtil.sleepLong();
 		// little change here

@@ -76,7 +76,7 @@ public class EditMeetingRequest extends CommonTest {
 		String declineEditedReplyContent = getLocalizedData_NoSpecialChar();
 		String tentativeEditedReplyContent = getLocalizedData_NoSpecialChar();
 		String attendees = Stafzmprov.getRandomAccount();
-		String organizer = SelNGBase.selfAccountName.get();
+		String organizer = ClientSessionFactory.session().currentUserName();
 
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateSimpleAppt(acceptSubject, acceptLocation,
@@ -94,7 +94,7 @@ public class EditMeetingRequest extends CommonTest {
 
 		resetSession();
 		SleepUtil.sleep(500);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		// obj.zButton.zClick(page.zMailApp.zMailViewIconBtn);
 		// obj.zMenuItem.zClick(localize(locator.byMessage));
@@ -111,7 +111,7 @@ public class EditMeetingRequest extends CommonTest {
 
 		resetSession();
 		SleepUtil.sleep(500);
-		SelNGBase.selfAccountName.set(organizer);
+		
 		page.zLoginpage.zLoginToZimbraAjax(organizer);
 		obj.zButton.zClick(page.zMailApp.zMailViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
@@ -149,14 +149,14 @@ public class EditMeetingRequest extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String loggeduser = SelNGBase.selfAccountName.get();
+		String loggeduser = ClientSessionFactory.session().currentUserName();
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateSimpleAppt(subject, location, attendees, body);
 		obj.zAppointment.zExists(subject);
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		page.zCalApp.zNavigateToCalendar();
@@ -205,14 +205,14 @@ public class EditMeetingRequest extends CommonTest {
 
 		Stafzmprov.addAccountAlias(acc1, alias);
 		Stafzmprov.modifyAccount(acc1, "zimbraPrefFromAddress", alias);
-		String loggeduser = SelNGBase.selfAccountName.get();
+		String loggeduser = ClientSessionFactory.session().currentUserName();
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalCompose.zCreateSimpleAppt(subject, location, alias, body);
 		obj.zAppointment.zExists(subject);
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(acc1);
-		SelNGBase.selfAccountName.set(acc1);
+		
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		page.zCalApp.zNavigateToCalendar();
@@ -235,7 +235,7 @@ public class EditMeetingRequest extends CommonTest {
 
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(loggeduser);
-		SelNGBase.selfAccountName.set(loggeduser);
+		
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);

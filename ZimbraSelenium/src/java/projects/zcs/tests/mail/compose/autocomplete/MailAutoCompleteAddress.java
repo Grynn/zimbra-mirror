@@ -132,7 +132,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		acc3 = Stafzmprov.getRandomAccount();
 		acc4 = Stafzmprov.getRandomAccount();
 		acc5 = Stafzmprov.getRandomAccount();
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		sendMails();
 		page.zComposeView.zNavigateToMailCompose();
@@ -173,7 +173,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		acc1 = acc1.toLowerCase();
 		getKeyboardKeys(acc1);
 		Stafzmprov.createAccount(acc1);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
 		ClientSessionFactory.session().selenium().refresh();
@@ -266,7 +266,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Stafzmprov.createAccount(acc4);
 		Stafzmprov.createAccount(acc5);
 		getKeyboardKeys(acc1);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
 		ClientSessionFactory.session().selenium().refresh();
@@ -321,9 +321,9 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Stafzmprov.createAccount(acc4);
 		Stafzmprov.createAccount(acc5);
 		getKeyboardKeys(acc1);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
 		ClientSessionFactory.session().selenium().refresh();
@@ -378,9 +378,9 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Stafzmprov.createAccount(acc4);
 		Stafzmprov.createAccount(acc5);
 		getKeyboardKeys(acc1);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		sendMails();
 		ClientSessionFactory.session().selenium().refresh();
@@ -480,7 +480,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		String[] contacts = { acc1, acc2, acc3, acc4, acc5 };
 		createContacts(contacts, false);
 		getKeyboardKeys(acc1);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		typeKeyboardKeys();
 		verifyAutocomplete(false);
@@ -512,9 +512,9 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Stafzmprov.createAccount(acc1);
 		Stafzmprov.createAccount(acc2);
 		getKeyboardKeys(acc1);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
 		page.zComposeView.zComposeAndSendMail(acc1 + ";" + acc2, "", "",
@@ -602,7 +602,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		String[] contacts = { acc1, acc2, acc3, acc4, acc5 };
 		createContacts(contacts, true);
 		getKeyboardKeys(acc1);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		typeKeyboardKeys();
 		verifyAutocomplete(false);
@@ -770,9 +770,9 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Stafzmprov.createAccount(acc1);
 		Stafzmprov.createAccount(acc2);
 		getKeyboardKeys(acc1);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoCompleteQuickCompletionOnComma", "TRUE");
 		page.zComposeView.zComposeAndSendMail(acc1 + ";" + acc2, "", "",
 				"testSubject", "testBody", "");
@@ -809,7 +809,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		// verify2
 		System.out
 				.println("verify2 : Set zimbraPrefAutoCompleteQuickCompletionOnComma to FALSE");
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoCompleteQuickCompletionOnComma", "FALSE");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -863,9 +863,9 @@ public class MailAutoCompleteAddress extends CommonTest {
 		displayName1 = char1 + char2 + char3 + char4 + char5;
 		displayName2 = char6 + char7 + char8 + char9 + char10;
 		displayName = displayName1 + ", " + displayName2;
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(), "displayName",
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(), "displayName",
 				displayName);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoCompleteQuickCompletionOnComma", "FALSE");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -874,33 +874,33 @@ public class MailAutoCompleteAddress extends CommonTest {
 		obj.zTextAreaField.zActivate(page.zComposeView.zToField);
 		pressKeys(char1 + "," + char2 + "," + char3 + "," + char4 + "," + char5);
 		page.zMailApp.zVerifyAutocompleteExists(displayName, 1, 1);
-		page.zMailApp.zVerifyAutocompleteExists(SelNGBase.selfAccountName.get()
+		page.zMailApp.zVerifyAutocompleteExists(ClientSessionFactory.session().currentUserName()
 				.toLowerCase(), 1, 1);
 		zRobot.keyPress(KeyEvent.VK_COMMA);
 		zRobot.keyRelease(KeyEvent.VK_COMMA);
 		page.zMailApp.zVerifyAutocompleteExists(displayName, 1, 1);
-		page.zMailApp.zVerifyAutocompleteExists(SelNGBase.selfAccountName.get()
+		page.zMailApp.zVerifyAutocompleteExists(ClientSessionFactory.session().currentUserName()
 				.toLowerCase(), 1, 1);
 		pressKeys("space");
 		page.zMailApp.zVerifyAutocompleteExists(displayName, 1, 1);
-		page.zMailApp.zVerifyAutocompleteExists(SelNGBase.selfAccountName.get()
+		page.zMailApp.zVerifyAutocompleteExists(ClientSessionFactory.session().currentUserName()
 				.toLowerCase(), 1, 1);
 		pressKeys(char6 + "," + char7 + "," + char8 + "," + char9 + ","
 				+ char10);
 		page.zMailApp.zVerifyAutocompleteExists(displayName, 1, 1);
-		page.zMailApp.zVerifyAutocompleteExists(SelNGBase.selfAccountName.get()
+		page.zMailApp.zVerifyAutocompleteExists(ClientSessionFactory.session().currentUserName()
 				.toLowerCase(), 1, 1);
 
 		// use of tab key
 		pressKeys("tab");
 		SleepUtil.sleep(1000);
 		System.out.println((char) 34 + displayName + (char) 34 + " <"
-				+ SelNGBase.selfAccountName.get().toLowerCase() + ">;".trim());
+				+ ClientSessionFactory.session().currentUserName().toLowerCase() + ">;".trim());
 		System.out.println(obj.zEditField
 				.zGetInnerText(page.zComposeView.zToField.trim()));
 		assertReport(obj.zEditField.zGetInnerText(page.zComposeView.zToField
 				.trim()), (char) 34 + displayName + (char) 34 + " <"
-				+ SelNGBase.selfAccountName.get().toLowerCase() + ">;".trim(),
+				+ ClientSessionFactory.session().currentUserName().toLowerCase() + ">;".trim(),
 				"Verifying To field autocomplete value");
 		obj.zButton.zClick(page.zComposeView.zCancelIconBtn);
 
@@ -927,7 +927,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 				+ "." + "chr2@testdomain.com";
 		String[] contacts = { acc1, acc2 };
 		createContacts(contacts, true);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		getKeyboardKeys(acc1);
 		typeKeyboardKeys();
@@ -985,7 +985,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 				"_", "")
 				+ "ridc1@testdomain.com";
 		Stafzmprov.createAccount(acc1);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		zGoToApplication("Mail");
 		page.zComposeView.zComposeAndSendMail(acc1, "", "", "testSubject",
@@ -1112,7 +1112,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 				+ "grop2@testdomain.com";
 		Stafzmprov.createAccount(acc1);
 		Stafzmprov.createAccount(acc2);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
 		String groupName = "1ABc 2DeF";
@@ -1201,7 +1201,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 				"_", "")
 				+ "peri@testdomain.com";
 		Stafzmprov.createAccount(acc1);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 
 		ClientSessionFactory.session().selenium().refresh();
@@ -1320,7 +1320,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -1661,33 +1661,33 @@ public class MailAutoCompleteAddress extends CommonTest {
 			acc1 = ZimbraSeleniumProperties.getStringProperty("locale")
 					.replace("_", "")
 					+ "forg1@testdomain.com";
-			Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+			Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 					"zimbraPrefGalAutoCompleteEnabled", "FALSE");
-			Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+			Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 					"zimbraPrefAutoAddAddressEnabled", "FALSE");
 		} else if (settings.equals("GALOFFAndEmailedContactsON")) {
 			acc1 = ZimbraSeleniumProperties.getStringProperty("locale")
 					.replace("_", "")
 					+ "gorg1@testdomain.com";
-			Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+			Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 					"zimbraPrefGalAutoCompleteEnabled", "FALSE");
-			Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+			Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 					"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		} else if (settings.equals("GALONAndEmailedContactsOFF")) {
 			acc1 = ZimbraSeleniumProperties.getStringProperty("locale")
 					.replace("_", "")
 					+ "horg1@testdomain.com";
-			Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+			Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 					"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-			Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+			Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 					"zimbraPrefAutoAddAddressEnabled", "FALSE");
 		} else if (settings.equals("GALONAndEmailedContactsON")) {
 			acc1 = ZimbraSeleniumProperties.getStringProperty("locale")
 					.replace("_", "")
 					+ "jorg1@testdomain.com";
-			Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+			Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 					"zimbraPrefGalAutoCompleteEnabled", "TRUE");
-			Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+			Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 					"zimbraPrefAutoAddAddressEnabled", "TRUE");
 		}
 

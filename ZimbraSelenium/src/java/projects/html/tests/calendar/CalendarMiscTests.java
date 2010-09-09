@@ -122,7 +122,7 @@ public class CalendarMiscTests extends CommonTest {
 		String urlInitial =  "http://" + ZimbraSeleniumProperties.getStringProperty("server") + "/zimbra/h/calendar";
 		
 		String urlToNavigate = "http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":80/home/"
-		+ SelNGBase.selfAccountName.get() + "?fmt=freebusy";
+		+ ClientSessionFactory.session().currentUserName() + "?fmt=freebusy";
 		
 		if(null == someting || someting.trim().length() == 0)
 			someting = getLocalizedData_NoSpecialChar();
@@ -258,7 +258,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		String expectedMsg;
 		expectedMsg = "http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":80/home/"
-				+ SelNGBase.selfAccountName.get() + "?fmt=freebusy";
+				+ ClientSessionFactory.session().currentUserName() + "?fmt=freebusy";
 
 		page.zCalFolderApp.zNavigateToCalendarFoldersPage();
 

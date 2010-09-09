@@ -291,7 +291,7 @@ public class AccPref extends CommonTest {
 	public static void zSendMailToSelfAndVerifyAccSettings(String fromField,
 			String replyToName, String replyToAcc) throws Exception {
 
-		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
+		page.zComposeView.zSendMailToSelfAndSelectIt(ClientSessionFactory.session().currentUserName(),
 				"", "", getLocalizedData_NoSpecialChar(), "", "");
 		String actualMsgHeader = obj.zMessageItem.zGetCurrentMsgHeaderText();
 		Assert.assertTrue(actualMsgHeader.contains(fromField),

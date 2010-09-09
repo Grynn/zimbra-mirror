@@ -243,7 +243,7 @@ public class CalendarSharing extends CommonTest {
 
 		resetSession();
 
-		SelNGBase.selfAccountName.set(account);
+		
 		page.zLoginpage.zLoginToZimbraAjax(account);
 		page.zSharing.zAcceptShare(calendarName);
 
@@ -281,7 +281,7 @@ public class CalendarSharing extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentLoggedInUser = SelNGBase.selfAccountName.get();
+		String currentLoggedInUser = ClientSessionFactory.session().currentUserName();
 		String userB = Stafzmprov.getRandomAccount();
 		String userC = Stafzmprov.getRandomAccount();
 		String userD = Stafzmprov.getRandomAccount();
@@ -304,12 +304,12 @@ public class CalendarSharing extends CommonTest {
 				sharetype, userC, role, message, sharingnoteifany, "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(userC);
+		
 		page.zLoginpage.zLoginToZimbraAjax(userC);
 		page.zSharing.zAcceptShare(mountingfoldername);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(userB);
+		
 		page.zLoginpage.zLoginToZimbraAjax(userB);
 
 		zGoToApplication("Preferences");
@@ -326,13 +326,13 @@ public class CalendarSharing extends CommonTest {
 				sharetype, userC, role, message, sharingnoteifany, "");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(userC);
+		
 		page.zLoginpage.zLoginToZimbraAjax(userC);
 		String mountingfoldername1 = getLocalizedData_NoSpecialChar();
 		page.zSharing.zAcceptShare(mountingfoldername1);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(userD);
+		
 		page.zLoginpage.zLoginToZimbraAjax(userD);
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
@@ -345,7 +345,7 @@ public class CalendarSharing extends CommonTest {
 		resetSession();
 
 		page.zLoginpage.zLoginToZimbraAjax(userC);
-		SelNGBase.selfAccountName.set(userC);
+		
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(apptSubject);
 		obj.zButtonMenu.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.byMessage));
@@ -423,7 +423,7 @@ public class CalendarSharing extends CommonTest {
 		String apptBody = getLocalizedData_NoSpecialChar();
 		String newSubject = getLocalizedData_NoSpecialChar();
 
-		String currentloggedinuser = SelNGBase.selfAccountName.get();
+		String currentloggedinuser = ClientSessionFactory.session().currentUserName();
 		if (allowtoseeprivateappt.equals(localize(locator.privatePermission))) {
 			page.zCalApp.zCreateNewCalendarFolder(sharingfoldername);
 			zWaitTillObjectExist("folder", sharingfoldername);
@@ -454,7 +454,7 @@ public class CalendarSharing extends CommonTest {
 		}
 
 		resetSession();
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 		zGoToApplication(applicationtab);
@@ -509,7 +509,7 @@ public class CalendarSharing extends CommonTest {
 			obj.zAppointment.zExists(apptSubject);
 
 			resetSession();
-			SelNGBase.selfAccountName.set(currentloggedinuser);
+			
 			page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 			zGoToApplication(applicationtab);
 			obj.zAppointment.zNotExists(newSubject);
@@ -542,7 +542,7 @@ public class CalendarSharing extends CommonTest {
 				 * its corresponding UI
 				 */
 				resetSession();
-				SelNGBase.selfAccountName.set(currentloggedinuser);
+				
 				page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 				zGoToApplication(applicationtab);
 				page.zSharing.zModifySharedFolder(applicationtab,
@@ -550,7 +550,7 @@ public class CalendarSharing extends CommonTest {
 						message, sharingnoteifany, "");
 
 				resetSession();
-				SelNGBase.selfAccountName.set(invitedusers);
+				
 				page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 				zGoToApplication(applicationtab);
 				obj.zAppointment.zClick("11");
@@ -584,7 +584,7 @@ public class CalendarSharing extends CommonTest {
 				 * share to none and check appointment doesn't exist
 				 */
 				resetSession();
-				SelNGBase.selfAccountName.set(currentloggedinuser);
+				
 				page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 				zGoToApplication(applicationtab);
 				page.zSharing.zModifySharedFolder(applicationtab,
@@ -592,7 +592,7 @@ public class CalendarSharing extends CommonTest {
 						message, sharingnoteifany, allowtoseeprivateappt);
 
 				resetSession();
-				SelNGBase.selfAccountName.set(invitedusers);
+				
 				page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 				zGoToApplication(applicationtab);
 				obj.zAppointment.zNotExists(apptSubject);

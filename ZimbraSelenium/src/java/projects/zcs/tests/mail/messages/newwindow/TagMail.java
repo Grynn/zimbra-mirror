@@ -24,8 +24,8 @@ public class TagMail extends CommonTest {
 	public Object[][] createData(Method method) throws Exception {
 		String test = method.getName();
 		if (test.equals("tagUntagMsgFromNewWindow")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
-					SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
+					ClientSessionFactory.session().currentUserName(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com",
 					getOnlyEnglishAlphabetCharAndNumber(),
 					getOnlyEnglishAlphabetCharAndNumber(), "" } };
@@ -59,7 +59,7 @@ public class TagMail extends CommonTest {
 				"39446",
 				"New window goes blank while typing SHIFT C suddenly after login to web client (SF only)");
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String recipients[] = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);

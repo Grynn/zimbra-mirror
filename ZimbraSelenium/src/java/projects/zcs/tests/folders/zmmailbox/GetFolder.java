@@ -30,7 +30,7 @@ public class GetFolder extends CommonTest {
 	)
 	public void BasicGetFolder() throws Exception {
 		
-		String myMailbox = SelNGBase.selfAccountName.get();
+		String myMailbox = ClientSessionFactory.session().currentUserName();
 		String folderName = "folder" + ZimbraSeleniumProperties.getUniqueString();
 		
 		Stafzmmailbox zmmailbox = new Stafzmmailbox();

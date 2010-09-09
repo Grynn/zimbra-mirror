@@ -96,7 +96,7 @@ public class SharingPreferences extends CommonTest {
 		
 		// injecting mail
 		zGoToApplication("Mail");
-		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
+		String currentLoggedinUser = ClientSessionFactory.session().currentUserName().toLowerCase();
 		String subject = "subject_shareMailFolderAndAccept";
 		String body = "body_shareMailFolderAndAccept";
 		String recipients[] = { currentLoggedinUser };
@@ -116,7 +116,7 @@ public class SharingPreferences extends CommonTest {
 		// verifying share related mail in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		zGoToApplication("Preferences");
 		zGoToPreferences("Sharing");
 		obj.zRadioBtn.zClick("id=*_user");
@@ -155,7 +155,7 @@ public class SharingPreferences extends CommonTest {
 		checkForSkipException("all", "IE", "na", "Contact can't be saved via java script in new AB UI");
 
 		// address book folder share
-		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
+		String currentLoggedinUser = ClientSessionFactory.session().currentUserName().toLowerCase();
 		String aSubject = getLocalizedData_NoSpecialChar();
 		String aBody = getLocalizedData_NoSpecialChar();
 		zGoToApplication("Address Book");
@@ -183,7 +183,7 @@ public class SharingPreferences extends CommonTest {
 		// Decline share and verify in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		page.zSharing.zDeclineShare();
 		zGoToApplication("Preferences");
 		zGoToPreferences("Sharing");
@@ -207,7 +207,7 @@ public class SharingPreferences extends CommonTest {
 			handleRetry();
 
 		// calendar
-		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
+		String currentLoggedinUser = ClientSessionFactory.session().currentUserName().toLowerCase();
 		String cSubject = getLocalizedData_NoSpecialChar();
 		String cBody = getLocalizedData_NoSpecialChar();
 		zGoToApplication("Calendar");
@@ -228,7 +228,7 @@ public class SharingPreferences extends CommonTest {
 		// Decline share and verify in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		MailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));
 		obj.zMessageItem.zClick(localize(locator.shareCreatedSubject));
@@ -259,7 +259,7 @@ public class SharingPreferences extends CommonTest {
 			handleRetry();
 
 		// calendar
-		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
+		String currentLoggedinUser = ClientSessionFactory.session().currentUserName().toLowerCase();
 		String cSubject = getLocalizedData_NoSpecialChar();
 		String cBody = getLocalizedData_NoSpecialChar();
 		zGoToApplication("Calendar");
@@ -271,13 +271,13 @@ public class SharingPreferences extends CommonTest {
 		// Decline share and verify in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		page.zSharing.zAcceptShare(mountingfoldername);
 
 		// sharing calendar folder via preferences
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedinUser);
-		SelNGBase.selfAccountName.set(currentLoggedinUser);
+		
 		zGoToApplication("Preferences");
 		zGoToPreferences("Sharing");
 		obj.zListItem.zClickLinkWithInListItemInSpecificList(invitedusers, "3",
@@ -289,7 +289,7 @@ public class SharingPreferences extends CommonTest {
 		// shared folder should not contain invitation
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		page.zMailApp
 				.ClickCheckMailUntilMailShowsUp(localize(locator.shareRevokedSubject));
 		zGoToApplication("Calendar");
@@ -310,7 +310,7 @@ public class SharingPreferences extends CommonTest {
 
 		// injecting mail
 		zGoToApplication("Mail");
-		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
+		String currentLoggedinUser = ClientSessionFactory.session().currentUserName().toLowerCase();
 		String subject = "subject_resendMailFolderShareFromPref";
 		String body = "body_resendMailFolderShareFromPref";
 		String recipients[] = { currentLoggedinUser };
@@ -330,7 +330,7 @@ public class SharingPreferences extends CommonTest {
 		// verify in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		obj.zButton.zClick(page.zMailApp.zViewIconBtn);
 		obj.zMenuItem.zClick(localize(locator.byMessage));
 		page.zMailApp
@@ -354,7 +354,7 @@ public class SharingPreferences extends CommonTest {
 			handleRetry();
 		checkForSkipException("all", "na", "na", "zTaskItem fails to find item from list item");
 
-		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
+		String currentLoggedinUser = ClientSessionFactory.session().currentUserName().toLowerCase();
 
 		// tasks
 		String tSubject = getLocalizedData_NoSpecialChar();
@@ -376,7 +376,7 @@ public class SharingPreferences extends CommonTest {
 		// verifying share related mail in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		zGoToApplication("Preferences");
 		zGoToPreferences("Sharing");
 		obj.zRadioBtn.zClick("id=*_user");
@@ -412,7 +412,7 @@ public class SharingPreferences extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentLoggedinUser = SelNGBase.selfAccountName.get().toLowerCase();
+		String currentLoggedinUser = ClientSessionFactory.session().currentUserName().toLowerCase();
 
 		// mail
 		zGoToApplication("Mail");
@@ -458,7 +458,7 @@ public class SharingPreferences extends CommonTest {
 		// verifying share related mail in preferences > sharing
 		resetSession();
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		for (int i = 0; i <= 5; i++) {
 			page.zMailApp
 					.ClickCheckMailUntilMailShowsUp(localize(locator.shareCreatedSubject));

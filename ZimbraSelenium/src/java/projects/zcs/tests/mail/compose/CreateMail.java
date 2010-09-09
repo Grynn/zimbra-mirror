@@ -60,7 +60,7 @@ public class CreateMail extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefComposeFormat", "text");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(2500);
@@ -87,7 +87,7 @@ public class CreateMail extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefComposeFormat", "html");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(2500);

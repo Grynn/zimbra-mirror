@@ -75,7 +75,7 @@ public class ShortcutsMail extends CommonTest {
 		zLoginIfRequired();
 		SleepUtil.sleep(2000);
 
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 		LmtpUtil.injectMessage(Stafzmprov.getRandomAccount(), recipients, Stafzmprov
 				.getRandomAccount(), "test mail", "test content");
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("test mail");
@@ -156,7 +156,7 @@ public class ShortcutsMail extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void shortcutsJunkMessage() throws Exception {
 
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
@@ -201,7 +201,7 @@ public class ShortcutsMail extends CommonTest {
 		checkForSkipException("na", "SF", "na", "shortcuts dont work with Selenium on Safari");
 
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMailToSelfAndVerify(ClientSessionFactory.session().currentUserName(), "", "",
 				"move message", "test content", "");
 
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("move message");
@@ -245,7 +245,7 @@ public class ShortcutsMail extends CommonTest {
 	public void shortcutsFlagMessage(int keyToPress, String actionType)
 			throws Exception {
 
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
@@ -281,7 +281,7 @@ public class ShortcutsMail extends CommonTest {
 	public void shortcutsGoToMailFolders(int keyToPress, String folderName)
 			throws Exception {
 
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		
@@ -322,7 +322,7 @@ public class ShortcutsMail extends CommonTest {
 	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void shortcutsMoveToTrash_And_MoveToInbox() throws Exception {
 
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		

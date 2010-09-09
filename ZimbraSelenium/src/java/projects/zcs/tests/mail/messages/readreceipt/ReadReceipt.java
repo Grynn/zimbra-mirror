@@ -67,12 +67,12 @@ public class ReadReceipt extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName.get();
+		String currentloggedinuser = ClientSessionFactory.session().currentUserName();
 		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "never");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(to);
+		
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zButtonMenu.zClick(page.zComposeView.zOptionsDownArrowBtn);
@@ -83,7 +83,7 @@ public class ReadReceipt extends CommonTest {
 		SleepUtil.sleep(2000);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(currentloggedinuser);
+		
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
@@ -99,12 +99,12 @@ public class ReadReceipt extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName.get();
+		String currentloggedinuser = ClientSessionFactory.session().currentUserName();
 		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "always");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(to);
+		
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zButtonMenu.zClick(page.zComposeView.zOptionsDownArrowBtn);
@@ -115,7 +115,7 @@ public class ReadReceipt extends CommonTest {
 		SleepUtil.sleep(2000);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(currentloggedinuser);
+		
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
@@ -123,7 +123,7 @@ public class ReadReceipt extends CommonTest {
 				.zGetMsg(), "Verifying toast message for sending read receipt");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(to);
+		
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zMailApp
 				.ClickCheckMailUntilMailShowsUp("Read-Receipt: " + subject);
@@ -138,12 +138,12 @@ public class ReadReceipt extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName.get();
+		String currentloggedinuser = ClientSessionFactory.session().currentUserName();
 		Stafzmprov.modifyAccount(currentloggedinuser,
 				"zimbraPrefMailSendReadReceipts", "prompt");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(to);
+		
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zButtonMenu.zClick(page.zComposeView.zOptionsDownArrowBtn);
@@ -158,7 +158,7 @@ public class ReadReceipt extends CommonTest {
 		obj.zDialog.zNotExists(localize(locator.warningMsg));
 
 		resetSession();
-		SelNGBase.selfAccountName.set(currentloggedinuser);
+		
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
@@ -174,7 +174,7 @@ public class ReadReceipt extends CommonTest {
 				.zGetMsg(), "Verifying toast message for sending read receipt");
 
 		resetSession();
-		SelNGBase.selfAccountName.set(to);
+		
 		page.zLoginpage.zLoginToZimbraAjax(to);
 		page.zMailApp
 				.ClickCheckMailUntilMailShowsUp("Read-Receipt: " + subject);
@@ -196,9 +196,9 @@ public class ReadReceipt extends CommonTest {
 		obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
 		SleepUtil.sleep(1000);
 		zGoToApplication("Mail");
-		to = SelNGBase.selfAccountName.get();
-		String[] recipients = { SelNGBase.selfAccountName.get() };
-		LmtpUtil.injectMessage(SelNGBase.selfAccountName.get(), recipients, cc,
+		to = ClientSessionFactory.session().currentUserName();
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
+		LmtpUtil.injectMessage(ClientSessionFactory.session().currentUserName(), recipients, cc,
 				subject, body);
 		MailApp.ClickCheckMailUntilMailShowsUp(
 				replaceUserNameInStaticId(page.zMailApp.zInboxFldr), subject);

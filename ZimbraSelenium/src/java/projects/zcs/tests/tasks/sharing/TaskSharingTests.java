@@ -98,7 +98,7 @@ public class TaskSharingTests extends CommonTest {
 
 		checkForSkipException("hi", "na", "34080", "'Share Accepted' & 'Share Modified' mail body missing sharing details");
 
-		String currentloggedinuser = SelNGBase.selfAccountName.get();
+		String currentloggedinuser = ClientSessionFactory.session().currentUserName();
 		String subject = getLocalizedData_NoSpecialChar();
 
 		zGoToApplication(applicationtab);
@@ -114,7 +114,6 @@ public class TaskSharingTests extends CommonTest {
 				sharingnoteifany);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(invitedusers);
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zVerifyShareCreatedMailInInboxFolder(currentloggedinuser,
 				sharingfoldername, sharetype, invitedusers, role,

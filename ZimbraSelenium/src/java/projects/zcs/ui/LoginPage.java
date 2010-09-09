@@ -9,6 +9,7 @@ import framework.core.SelNGBase;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
+import framework.util.ZimbraAccount;
 
 @SuppressWarnings("static-access")
 public class LoginPage extends AppPage {
@@ -30,11 +31,11 @@ public class LoginPage extends AppPage {
 		String username = "";
 		// if we are retrying the execution, then use the same account.
 		if (SelNGBase.isExecutionARetry.get()) {
-			username = SelNGBase.selfAccountName.get();
+			username = ClientSessionFactory.session().currentUserName();
 		} else {
 			username = Stafzmprov.getRandomAccount();
 		}
-		SelNGBase.selfAccountName.set(username);
+		
 		zLoginToZimbraAjax(username);
 		
 		return username;
@@ -59,12 +60,14 @@ public class LoginPage extends AppPage {
 	 */
 	public void zLoginToZimbraAjax(String username, String password) {
 		try {
+			ClientSessionFactory.session().setCurrentUser(null);
 			openApplication();
 			SleepUtil.sleep(1500);
 			obj.zEditField.zType("Username:", username);
 			obj.zPwdField.zType("Password:", password);
 			obj.zButton.zClick("class=zLoginButton");
 			zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
+			ClientSessionFactory.session().setCurrentUser(new ZimbraAccount(username, password));
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}
@@ -73,14 +76,15 @@ public class LoginPage extends AppPage {
 	public static void zCustomLoginToZimbraAjax(String parameter)
 			throws Exception {
 		try {
-			String username = Stafzmprov.getRandomAccount();
-			SelNGBase.selfAccountName.set(username);
+			ClientSessionFactory.session().setCurrentUser(null);
+			ZimbraAccount account = new ZimbraAccount();			
 			customLogin(parameter);
 			SleepUtil.sleep(1000);
-			obj.zEditField.zType("Username:", username);
-			obj.zPwdField.zType("Password:", "test123");
+			obj.zEditField.zType("Username:", account.EmailAddress);
+			obj.zPwdField.zType("Password:", account.Password);
 			obj.zButton.zClick("class=zLoginButton");
 			SleepUtil.sleep(3000);
+			ClientSessionFactory.session().setCurrentUser(account);
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}

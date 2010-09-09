@@ -45,7 +45,7 @@ public class MailPreferencesSetFalse extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefShowFragments", "FALSE");
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefOpenMailInNewWindow",
@@ -77,7 +77,7 @@ public class MailPreferencesSetFalse extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData(3);
 
@@ -100,7 +100,7 @@ public class MailPreferencesSetFalse extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData(3);
 

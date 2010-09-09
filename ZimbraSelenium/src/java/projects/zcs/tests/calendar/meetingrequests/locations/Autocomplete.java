@@ -69,7 +69,7 @@ public class Autocomplete extends CommonTest {
 		String location, actualValue, expectedValue;
 		location = "location1@testdomain.com";
 		Stafzmprov.createLocation(location);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -112,7 +112,7 @@ public class Autocomplete extends CommonTest {
 		String location, actualValue, expectedValue;
 		location = "location3@testdomain.com";
 		Stafzmprov.createLocation(location);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
@@ -173,7 +173,7 @@ public class Autocomplete extends CommonTest {
 		equipment = "equipment3@testdomain.com";
 		Stafzmprov.createLocation(location);
 		Stafzmprov.createEquipment(equipment);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);

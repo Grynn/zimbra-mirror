@@ -189,11 +189,11 @@ public class ComposeView extends AppPage {
 			String bcc, String subject, String body, String attachments,
 			boolean inlineAttachment) throws Exception {
 		if (to.equals("_selfAccountName_"))
-			to = SelNGBase.selfAccountName.get();
+			to = ClientSessionFactory.session().currentUserName();
 		else if (cc.equals("_selfAccountName_"))
-			cc = SelNGBase.selfAccountName.get();
+			cc = ClientSessionFactory.session().currentUserName();
 		else if (bcc.equals("_selfAccountName_"))
-			bcc = SelNGBase.selfAccountName.get();
+			bcc = ClientSessionFactory.session().currentUserName();
 		obj.zTextAreaField.zType(zToField, to);
 		obj.zTextAreaField.zType(zCcField, cc);
 		if (ClientSessionFactory.session().selenium().isElementPresent(
@@ -333,11 +333,11 @@ public class ComposeView extends AppPage {
 			String subject, String body, String attachments) throws Exception {
 		SleepUtil.sleep(1500);
 		if (to.equals("_selfAccountName_"))
-			to = SelNGBase.selfAccountName.get();
+			to = ClientSessionFactory.session().currentUserName();
 		else if (cc.equals("_selfAccountName_"))
-			cc = SelNGBase.selfAccountName.get();
+			cc = ClientSessionFactory.session().currentUserName();
 		else if (bcc.equals("_selfAccountName_"))
-			bcc = SelNGBase.selfAccountName.get();
+			bcc = ClientSessionFactory.session().currentUserName();
 		String headerTxt = obj.zMessageItem.zGetCurrentMsgHeaderText();
 		Assert.assertTrue(
 				headerTxt.indexOf(MailApp.zGetNameFromEmail(to)) >= 0,
@@ -406,11 +406,11 @@ public class ComposeView extends AppPage {
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
 		if (to.equals("_selfAccountName_"))
-			to = SelNGBase.selfAccountName.get();
+			to = ClientSessionFactory.session().currentUserName();
 		else if (cc.equals("_selfAccountName_"))
-			cc = SelNGBase.selfAccountName.get();
+			cc = ClientSessionFactory.session().currentUserName();
 		else if (bcc.equals("_selfAccountName_"))
-			bcc = SelNGBase.selfAccountName.get();
+			bcc = ClientSessionFactory.session().currentUserName();
 		String actualToVal = obj.zTextAreaField.zGetInnerText(zToField);
 		String actualccVal = obj.zTextAreaField.zGetInnerText(zCcField);
 		String actualbccVal = obj.zTextAreaField.zGetInnerText(zBccField);

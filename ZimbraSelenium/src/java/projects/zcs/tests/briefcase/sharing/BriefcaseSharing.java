@@ -130,7 +130,7 @@ public class BriefcaseSharing extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 		page.zBriefcaseApp.zGoToBriefcaseApp();
@@ -166,14 +166,14 @@ public class BriefcaseSharing extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String currentloggedinuser = SelNGBase.selfAccountName.get();
+		String currentloggedinuser = ClientSessionFactory.session().currentUserName();
 		page.zBriefcaseApp.zBriefcaseFileUpload(filename, "");
 		page.zSharing.zShareFolder(applicationtab, sharingfoldername,
 				sharetype, invitedusers, role, message, sharingnoteifany,
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 		page.zBriefcaseApp.zGoToBriefcaseApp();
@@ -190,7 +190,7 @@ public class BriefcaseSharing extends CommonTest {
 		obj.zMenuItem.zNotExists(filename);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(currentloggedinuser);
+		
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zBriefcaseApp.zGoToBriefcaseApp();
 		obj.zFolder.zClick(sharingfoldername);
@@ -244,7 +244,7 @@ public class BriefcaseSharing extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(filename);
@@ -275,16 +275,16 @@ public class BriefcaseSharing extends CommonTest {
 				ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 						+ ZimbraSeleniumProperties.getStringProperty("server")
 						+ "/home/"
-						+ SelNGBase.selfAccountName.get().toLowerCase() + "/"
+						+ ClientSessionFactory.session().currentUserName().toLowerCase() + "/"
 						+ "Briefcase");
 		zWaitTillObjectExist(
 				"xpath",
 				"//td[contains(@class, 'zmwiki-pageLink')]//a[contains(text(), 'structure.jpg')]");
 		zWaitTillObjectExist("xpath",
 				"//td[contains(@class, 'zmwiki-author') and contains(text(), '"
-						+ SelNGBase.selfAccountName.get().toLowerCase() + "')]");
+						+ ClientSessionFactory.session().currentUserName().toLowerCase() + "')]");
 		resetSession();
-		page.zLoginpage.zLoginToZimbraAjax(SelNGBase.selfAccountName.get());
+		page.zLoginpage.zLoginToZimbraAjax(ClientSessionFactory.session().currentUserName());
 
 		SelNGBase.needReset.set(false);
 	}

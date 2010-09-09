@@ -173,7 +173,7 @@ public class ContextMenu extends CommonTest {
 
 		String newSubject = "searchsubject";
 		String newBody = "searchsubject";
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 
 		LmtpUtil.injectMessage(commonAccount, recipients, cc, newSubject,
@@ -229,7 +229,7 @@ public class ContextMenu extends CommonTest {
 
 		String newSubject = "advancedsearchsubject";
 		String newBody = "advancedsearchbody";
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 
 		LmtpUtil.injectMessage(commonAccount, recipients, cc, newSubject,
@@ -949,7 +949,7 @@ public class ContextMenu extends CommonTest {
 	private String commonInjectMessage(String from, String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String[] recipients = { to };
 		if (from.equals(commonAccount) && randomAcctCreatedFlag == false) {
 			LmtpUtil.injectMessage(from, recipients, cc, subject, body);

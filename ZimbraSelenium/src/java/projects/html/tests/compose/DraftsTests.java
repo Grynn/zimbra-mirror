@@ -172,11 +172,11 @@ public class DraftsTests extends CommonTest {
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
 		if (to.equals("_selfAccountName_"))
-			to = SelNGBase.selfAccountName.get();
+			to = ClientSessionFactory.session().currentUserName();
 		if (cc.equals("_selfAccountName_"))
-			cc = SelNGBase.selfAccountName.get();
+			cc = ClientSessionFactory.session().currentUserName();
 		if (bcc.equals("_selfAccountName_"))
-			bcc = SelNGBase.selfAccountName.get();
+			bcc = ClientSessionFactory.session().currentUserName();
 		String actualToVal = obj.zTextAreaField
 				.zGetInnerText(page.zComposeView.zToField);
 		String actualccVal = obj.zTextAreaField

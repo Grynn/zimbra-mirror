@@ -109,7 +109,7 @@ public class ABPreference extends CommonTest {
 
 		page.zABComposeHTML
 				.zSendMailToSelfAndNavigateToSpecificContactsFolder(contactFoldername);
-		obj.zCheckbox.zNotExists("link=" + SelNGBase.selfAccountName.get());
+		obj.zCheckbox.zNotExists("link=" + ClientSessionFactory.session().currentUserName());
 
 		// commented for time being because of bug 32738
 		// to verify enabled auto add to contacts selected

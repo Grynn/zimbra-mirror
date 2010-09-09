@@ -263,8 +263,8 @@ public class MailFolderTests extends CommonTest {
 
 		String subject = "perDelAllMail";
 		zGoToApplication("Mail");
-		page.zMailApp.zInjectMessage(SelNGBase.selfAccountName.get(),
-				SelNGBase.selfAccountName.get(), "ccuser@testdomain.com", "",
+		page.zMailApp.zInjectMessage(ClientSessionFactory.session().currentUserName(),
+				ClientSessionFactory.session().currentUserName(), "ccuser@testdomain.com", "",
 				subject, subject + " body", "");
 		obj.zButton.zClick(page.zMailApp.zEditLinkFldrOverviewPane);
 		SleepUtil.sleepLong(); // required
@@ -448,7 +448,7 @@ public class MailFolderTests extends CommonTest {
 		folderName = "fldr_" + folderName;
 		zGoToApplication("Mail");
 		page.zMailApp.zInjectMessage(Stafzmprov.getRandomAccount(),
-				SelNGBase.selfAccountName.get(), "ccuser@testdomain.com", "",
+				ClientSessionFactory.session().currentUserName(), "ccuser@testdomain.com", "",
 				subject, subject + "body", "");
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			SleepUtil.sleepMedium(); // selenium failure in IE

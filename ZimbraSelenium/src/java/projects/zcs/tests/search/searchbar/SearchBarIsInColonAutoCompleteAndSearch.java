@@ -73,7 +73,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 	public void zLogin() throws Exception {
 		resetSession();
 		currentLoggedInUser = Stafzmprov.getRandomAccount();
-		SelNGBase.selfAccountName.set(currentLoggedInUser);
+		
 		Stafzmprov.modifyAccount(currentLoggedInUser, "userPassword", "test123");
 		page.zLoginpage.zLoginToZimbraAjax(currentLoggedInUser);
 		zGoToApplication("Mail");
@@ -756,27 +756,27 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 
 	public void commonData() throws Exception {
 		int i = 0;
-		String[] fromArray = { SelNGBase.selfAccountName.get(),
+		String[] fromArray = { ClientSessionFactory.session().currentUserName(),
 				"ccme@testdomain.com", "flagged@testdomain.com",
-				"forwardedx@testdomain.com", SelNGBase.selfAccountName.get(),
-				SelNGBase.selfAccountName.get(), "invite@testdomain.com",
-				SelNGBase.selfAccountName.get(), "readx@testdomain.com",
+				"forwardedx@testdomain.com", ClientSessionFactory.session().currentUserName(),
+				ClientSessionFactory.session().currentUserName(), "invite@testdomain.com",
+				ClientSessionFactory.session().currentUserName(), "readx@testdomain.com",
 				"received@testdomain.com", "remote@testdomain.com",
 				"repliedx@testdomain.com", "sent@testdomain.com",
-				"solo@testdomain.com", SelNGBase.selfAccountName.get(),
-				SelNGBase.selfAccountName.get(), SelNGBase.selfAccountName.get(),
+				"solo@testdomain.com", ClientSessionFactory.session().currentUserName(),
+				ClientSessionFactory.session().currentUserName(), ClientSessionFactory.session().currentUserName(),
 				"unflagged@testdomain.com", "unforwarded@testdomain.com",
 				"unread@testdomain.com", "unreplied@testdomain.com" };
-		String[] recipientsArray = { SelNGBase.selfAccountName.get() };
-		String[] ccArray = { SelNGBase.selfAccountName.get(),
-				SelNGBase.selfAccountName.get(), "flagged@testdomain.com",
+		String[] recipientsArray = { ClientSessionFactory.session().currentUserName() };
+		String[] ccArray = { ClientSessionFactory.session().currentUserName(),
+				ClientSessionFactory.session().currentUserName(), "flagged@testdomain.com",
 				"forwardedx@testdomain.com", "ccuser@testdomain.com",
-				SelNGBase.selfAccountName.get(), "invite@testdomain.com",
-				SelNGBase.selfAccountName.get(), "readx@testdomain.com",
+				ClientSessionFactory.session().currentUserName(), "invite@testdomain.com",
+				ClientSessionFactory.session().currentUserName(), "readx@testdomain.com",
 				"received@testdomain.com", "remote@testdomain.com",
 				"repliedx@testdomain.com", "sent@testdomain.com",
-				"solo@testdomain.com", SelNGBase.selfAccountName.get(),
-				"ccuser@testdomain.com", SelNGBase.selfAccountName.get(),
+				"solo@testdomain.com", ClientSessionFactory.session().currentUserName(),
+				"ccuser@testdomain.com", ClientSessionFactory.session().currentUserName(),
 				"unflagged@testdomain.com", "unforwarded@testdomain.com",
 				"unread@testdomain.com", "unreplied@testdomain.com" };
 		String[] subjectArray = { "anywhere", "ccme", "flagged", "forwardedx",
@@ -785,9 +785,9 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 				"tofromme", "tome", "unflagged", "unforwarded", "unread",
 				"unreplied" };
 
-		String[] fromArray1 = { SelNGBase.selfAccountName.get() };
-		String[] recipientsArray1 = { SelNGBase.selfAccountName.get() };
-		String[] ccArray1 = { SelNGBase.selfAccountName.get() };
+		String[] fromArray1 = { ClientSessionFactory.session().currentUserName() };
+		String[] recipientsArray1 = { ClientSessionFactory.session().currentUserName() };
+		String[] ccArray1 = { ClientSessionFactory.session().currentUserName() };
 		String[] subjectArray1 = { "junk", "parentfolder", "subfolder",
 				"subsubxfolder" };
 
@@ -909,7 +909,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 			obj.zMessageItem.zClick("forwardedx");
 			obj.zButton.zClick(page.zMailApp.zForwardIconBtn);
 			obj.zTextAreaField.zType(page.zComposeView.zToField,
-					SelNGBase.selfAccountName.get());
+					ClientSessionFactory.session().currentUserName());
 			obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 			SleepUtil.sleep(1000);
 
@@ -920,7 +920,7 @@ public class SearchBarIsInColonAutoCompleteAndSearch extends CommonTest {
 			obj.zMessageItem.zClick("repliedx");
 			obj.zButton.zClick(page.zMailApp.zReplyAllBtn);
 			obj.zTextAreaField.zType(page.zComposeView.zToField,
-					SelNGBase.selfAccountName.get());
+					ClientSessionFactory.session().currentUserName());
 			obj.zEditField.zType(page.zComposeView.zSubjectField, "Repliedly");
 			obj.zButton.zClick(page.zComposeView.zSendIconBtn);
 			SleepUtil.sleep(1000);

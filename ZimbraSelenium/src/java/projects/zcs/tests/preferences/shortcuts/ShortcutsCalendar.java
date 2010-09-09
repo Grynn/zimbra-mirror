@@ -53,7 +53,7 @@ public class ShortcutsCalendar extends CommonTest {
 	public void zLogin() throws Exception {
 		super.NAVIGATION_TAB="mail";
 		super.zLogin();
-		String[] recipients = { SelNGBase.selfAccountName.get() };
+		String[] recipients = { ClientSessionFactory.session().currentUserName() };
 	}
 
 	@Test(dataProvider = "shortcutsDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)

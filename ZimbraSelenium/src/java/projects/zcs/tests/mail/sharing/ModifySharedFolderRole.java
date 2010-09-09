@@ -332,7 +332,7 @@ public class ModifySharedFolderRole extends CommonTest {
 			String sharingnoteifany, String allowtoseeprivateappt,
 			String mountingfoldername, String newRole) throws Exception {
 
-		String currentloggedinuser = SelNGBase.selfAccountName.get();
+		String currentloggedinuser = ClientSessionFactory.session().currentUserName();
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
@@ -341,18 +341,18 @@ public class ModifySharedFolderRole extends CommonTest {
 				allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zAcceptShare(mountingfoldername);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(currentloggedinuser);
+		
 		page.zLoginpage.zLoginToZimbraAjax(currentloggedinuser);
 		page.zSharing.zModifySharedFolder(applicationtab, sharingfoldername,
 				newRole, message, sharingnoteifany, allowtoseeprivateappt);
 
 		resetSession();
-		SelNGBase.selfAccountName.set(invitedusers);
+		
 		page.zLoginpage.zLoginToZimbraAjax(invitedusers);
 		page.zSharing.zVerifyShareModifiedMail(currentloggedinuser,
 				sharingfoldername, sharetype, invitedusers, newRole,

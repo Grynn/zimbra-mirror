@@ -86,7 +86,7 @@ public class SpellCheck extends CommonTest {
 		page.zCalApp.zNavigateToCalendar();
 		page.zCalApp.zNavigateToApptCompose();
 		page.zCalCompose.zCalendarEnterSimpleDetails(subject, subject,
-				SelNGBase.selfAccountName.get(), "onee twoo");
+				ClientSessionFactory.session().currentUserName(), "onee twoo");
 		obj.zButton.zClick(localize(locator.spellCheck));
 
 		obj.zToastAlertMessage.zAlertMsgExists("2 Misspellings",

@@ -92,7 +92,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefShowFragments", "TRUE");
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefOpenMailInNewWindow",
@@ -125,7 +125,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zComposeView.zNavigateToMailCompose();
 
@@ -153,7 +153,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zSendMailToSelfAndVerify(accountName, "", "",
@@ -182,7 +182,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 
 		checkForSkipException("all", "na", "na", "provzcs method 'zimbraPrefMarkMsgRead' method doesn't sets corresponding value in database");
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefMarkMsgRead", readTime);
 
@@ -238,7 +238,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 
 		String subject = getLocalizedData_NoSpecialChar();
 		String body = getLocalizedData(3);
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefMailInitialSearch",
 				"in:sent");
@@ -295,7 +295,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 
 		SleepUtil.sleep(500);
 
-		SelNGBase.selfAccountName.set(accountName);
+		
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 
 		if (donotKeepLocalCopy.equals("TRUE")) {
@@ -309,7 +309,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 
 		SleepUtil.sleep(500);
 
-		SelNGBase.selfAccountName.set(forwardingAddress);
+		
 		page.zLoginpage.zLoginToZimbraAjax(forwardingAddress);
 
 		MailApp
@@ -348,7 +348,7 @@ public class MailPreferencesSetTrue extends CommonTest {
 
 		SleepUtil.sleep(500);
 
-		SelNGBase.selfAccountName.set(notificationAddress);
+		
 		page.zLoginpage.zLoginToZimbraAjax(notificationAddress);
 
 		MailApp.ClickCheckMailUntilMailShowsUp("Postmaster");

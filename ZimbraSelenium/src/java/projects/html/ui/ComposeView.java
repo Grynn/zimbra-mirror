@@ -193,11 +193,11 @@ public class ComposeView extends CommonTest {
 			String bcc, String subject, String body, String attachments,
 			boolean inlineAttachment) throws Exception {
 		if (to.equals("_selfAccountName_"))
-			to = SelNGBase.selfAccountName.get();
+			to = ClientSessionFactory.session().currentUserName();
 		if (cc.equals("_selfAccountName_"))
-			cc = SelNGBase.selfAccountName.get();
+			cc = ClientSessionFactory.session().currentUserName();
 		if (bcc.equals("_selfAccountName_"))
-			bcc = SelNGBase.selfAccountName.get();
+			bcc = ClientSessionFactory.session().currentUserName();
 		obj.zTextAreaField.zType(zToField, to);
 		obj.zTextAreaField.zType(zCcField, cc);
 		// temporarily comment this out -- due to bug 32611
@@ -339,11 +339,11 @@ public class ComposeView extends CommonTest {
 			String subject, String body, String attachments) throws Exception {
 		SleepUtil.sleep(1500);
 		if (to.equals("_selfAccountName_"))
-			to = SelNGBase.selfAccountName.get();
+			to = ClientSessionFactory.session().currentUserName();
 		if (cc.equals("_selfAccountName_"))
-			cc = SelNGBase.selfAccountName.get();
+			cc = ClientSessionFactory.session().currentUserName();
 		if (bcc.equals("_selfAccountName_"))
-			bcc = SelNGBase.selfAccountName.get();
+			bcc = ClientSessionFactory.session().currentUserName();
 		String headerTxt = obj.zMessageItem.zGetCurrentMsgHeaderText();
 		Assert.assertTrue(
 				headerTxt.indexOf(MailApp.zGetNameFromEmail(to)) >= 0,
@@ -404,13 +404,13 @@ public class ComposeView extends CommonTest {
 			String cc, String bcc, String subject, String body,
 			String attachments) throws Exception {
 		if (to.equals("_selfAccountName_"))
-			to = SelNGBase.selfAccountName.get();
+			to = ClientSessionFactory.session().currentUserName();
 		to = to.toLowerCase();
 		if (cc.equals("_selfAccountName_"))
-			cc = SelNGBase.selfAccountName.get();
+			cc = ClientSessionFactory.session().currentUserName();
 		cc = cc.toLowerCase();
 		if (bcc.equals("_selfAccountName_"))
-			bcc = SelNGBase.selfAccountName.get();
+			bcc = ClientSessionFactory.session().currentUserName();
 		bcc = bcc.toLowerCase();
 		String actualToVal = obj.zTextAreaField.zGetInnerText(zToField);
 		String actualccVal = obj.zTextAreaField.zGetInnerText(zCcField);
@@ -552,7 +552,7 @@ public class ComposeView extends CommonTest {
 		if (fieldToVerify.toLowerCase().equals("to")
 				|| fieldToVerify.toLowerCase().equals("toccbcc")) {
 			if (toCommaSeparated.equals("_selfAccountName_"))
-				toCommaSeparated = SelNGBase.selfAccountName.get();
+				toCommaSeparated = ClientSessionFactory.session().currentUserName();
 
 			toCommaSeparated = toCommaSeparated.trim();
 			if (!toCommaSeparated.equals("")) {
@@ -578,7 +578,7 @@ public class ComposeView extends CommonTest {
 		if (fieldToVerify.toLowerCase().equals("cc")
 				|| fieldToVerify.toLowerCase().equals("toccbcc")) {
 			if (ccCommaSeparated.equals("_selfAccountName_"))
-				ccCommaSeparated = SelNGBase.selfAccountName.get();
+				ccCommaSeparated = ClientSessionFactory.session().currentUserName();
 
 			ccCommaSeparated = ccCommaSeparated.trim();
 			if (!ccCommaSeparated.equals("")) {
@@ -604,7 +604,7 @@ public class ComposeView extends CommonTest {
 		if (fieldToVerify.toLowerCase().equals("bcc")
 				|| fieldToVerify.toLowerCase().equals("toccbcc")) {
 			if (bccCommaSeparated.equals("_selfAccountName_"))
-				bccCommaSeparated = SelNGBase.selfAccountName.get();
+				bccCommaSeparated = ClientSessionFactory.session().currentUserName();
 
 			bccCommaSeparated = bccCommaSeparated.trim();
 			if (!bccCommaSeparated.equals("")) {

@@ -22,14 +22,14 @@ public class CancelCompose extends CommonTest {
 	public Object[][] createData(Method method) throws Exception {
 		String test = method.getName();
 		if (test.equals("cancelingComposeInNewWindowSavesDraft_Bug43560")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
-					SelNGBase.selfAccountName.get(),
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
+					ClientSessionFactory.session().currentUserName(),
 					Stafzmprov.getRandomAccount(), "bccuser@testdomain.com",
 					"subject_cancelingComposeInNewWindowSavesDraft_Bug43560",
 					"body_cancelingComposeInNewWindowSavesDraft_Bug43560", "" } };
 		} else if (test.equals("cancelingComposeInNewWindowAndSavingDraft")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(),
-					SelNGBase.selfAccountName.get(),
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
+					ClientSessionFactory.session().currentUserName(),
 					Stafzmprov.getRandomAccount(), "bccuser@testdomain.com",
 					"subject_cancelingComposeInNewWindowSavingDraft",
 					"body_cancelingComposeInNewWindowSavingDraft", "" } };
@@ -59,7 +59,7 @@ public class CancelCompose extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String recipients[] = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -91,7 +91,7 @@ public class CancelCompose extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		to = SelNGBase.selfAccountName.get();
+		to = ClientSessionFactory.session().currentUserName();
 		String recipients[] = { to };
 		LmtpUtil.injectMessage(from, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);

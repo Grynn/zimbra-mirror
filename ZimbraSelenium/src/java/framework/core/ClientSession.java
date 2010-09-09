@@ -3,6 +3,16 @@ package framework.core;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import framework.util.ZimbraAccount;
+
+/**
+ * This class defines all stateful information for test methods
+ *  
+ * Save information here to ensure thread-safe execution
+ * 
+ * @author Matt Rhoades
+ *
+ */
 public class ClientSession {
 	private static Logger logger = LogManager.getLogger(ClientSession.class);
 	
@@ -11,6 +21,7 @@ public class ClientSession {
 	private ZimbraSelenium selenium = null;
 	private String applicationURL = "http://qa60.lab.zimbra.com"; // TODO: Get this from properties?
 	private String currentBrowserName = null;
+	private ZimbraAccount currentAccount = null;
 
 	public ClientSession() {
 		logger.info("New ClientSession");
@@ -19,6 +30,10 @@ public class ClientSession {
 		
 	}
 	
+	/**
+	 * Get the current ZimbraSelenium (DefaultSelenium) object
+	 * @return
+	 */
 	public ZimbraSelenium selenium() {
 		if ( selenium == null ) {
 			selenium = new ZimbraSelenium(
@@ -29,7 +44,11 @@ public class ClientSession {
 		}
 		return (selenium);
 	}
-		
+	
+	/**
+	 * Get the current Browser Name
+	 * @return
+	 */
 	public String currentBrowserName() {
 		if ( currentBrowserName == null ) {
 			BrowserUtil util = new BrowserUtil();
@@ -38,6 +57,33 @@ public class ClientSession {
 		return (currentBrowserName);
 	}
 	
+	/**
+	 * Get the currently logged in user name
+	 * @return
+	 */
+	public String currentUserName() {
+		if ( currentAccount == null ) {
+			return ("");
+		}
+		return (currentAccount.EmailAddress);
+	}
+	
+	/**
+	 * NOT FOR TEST CASE USE.  Set the currently logged in user name.
+	 * 
+	 * This method should only be used by the AppPage LoginPage object.
+	 * 
+	 * @param account
+	 * @return
+	 */
+	public String setCurrentUser(ZimbraAccount account) {
+		currentAccount = account;
+		return (currentUserName());
+	}
+	
+	/**
+	 * A unique string ID for this ClientSession object
+	 */
 	public String toString() {
 		logger.debug("ClientSession.toString()="+ name);
 		return (name);

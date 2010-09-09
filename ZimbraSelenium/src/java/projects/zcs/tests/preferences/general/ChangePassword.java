@@ -102,12 +102,12 @@ public class ChangePassword extends CommonTest {
 
 		resetSession();
 		page.zLoginpage
-				.zLoginToZimbraAjax(SelNGBase.selfAccountName.get(), "test321");
+				.zLoginToZimbraAjax(ClientSessionFactory.session().currentUserName(), "test321");
 
 		resetSession();
 
 		String accountName = Stafzmprov.getRandomAccount();
-		SelNGBase.selfAccountName.set(accountName);
+		
 		page.zLoginpage.zLoginToZimbraAjax(accountName);
 
 		SelNGBase.needReset.set(false);

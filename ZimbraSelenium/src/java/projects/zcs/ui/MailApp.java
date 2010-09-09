@@ -398,8 +398,8 @@ public class MailApp extends AppPage {
 				}
 			}
 		}
-		String[] accounts = { SelNGBase.selfAccountName.get() };
-		LmtpUtil.addMessageLmtp(accounts, SelNGBase.selfAccountName.get(), contents
+		String[] accounts = { ClientSessionFactory.session().currentUserName() };
+		LmtpUtil.addMessageLmtp(accounts, ClientSessionFactory.session().currentUserName(), contents
 				.toString());
 		zGoToApplication("Mail");
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);

@@ -69,7 +69,7 @@ public class TentativeMeetingRequest extends CommonTest {
 
 		resetSession();
 		SleepUtil.sleep(1000);
-		SelNGBase.selfAccountName.set(attendees);
+		
 		page.zLoginpage.zLoginToZimbraAjax(attendees);
 		MailApp.ClickCheckMailUntilMailShowsUp(subject);
 		if (action.equals("accept"))

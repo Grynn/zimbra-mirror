@@ -35,7 +35,7 @@ public class LoginPage extends CommonTest {
 		String username = "";		
 		// if we are retrying the execution, then use the same account.
 		if (SelNGBase.isExecutionARetry.get())
-			username = SelNGBase.selfAccountName.get();
+			username = ClientSessionFactory.session().currentUserName();
 		else{		
 			username = Stafzmprov.getRandomAccount();			
 		}
@@ -62,6 +62,7 @@ public class LoginPage extends CommonTest {
 	 */
 	public void zLoginToZimbraHTML(String username, String password) {
 		
+		ClientSessionFactory.session().setCurrentUser(null);
 		openZimbraHTML();
 		SleepUtil.sleep(1500);
 		
@@ -80,6 +81,9 @@ public class LoginPage extends CommonTest {
 		// We should throw an exception
 
 		SleepUtil.sleep(2000);// wait another 2 secs after we see the search
+		
+		ClientSessionFactory.session().setCurrentUser(new ZimbraAccount(username, password));
+
 	}
 
 
@@ -95,17 +99,4 @@ public class LoginPage extends CommonTest {
 	}
 	
 	
-	private ZimbraAccount currentAccount = null;
-	private ZimbraAccount setCurrentAccount(ZimbraAccount account) {
-		currentAccount = account;
-		return (currentAccount);
-	}
-	
-	/**
-	 * Get the currently logged in account
-	 * @return
-	 */
-	public ZimbraAccount getCurrentAccount() {
-		return (currentAccount);
-	}
 }

@@ -118,7 +118,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		SleepUtil.sleepSmall();
 
-		SelNGBase.selfAccountName.set(attendees);
+		
 
 		page.zLoginpage.zLoginToZimbraHTML(attendees);
 
@@ -160,7 +160,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		SleepUtil.sleepSmall();
 
-		SelNGBase.selfAccountName.set(attendees);
+		
 
 		page.zLoginpage.zLoginToZimbraHTML(attendees);
 
@@ -191,7 +191,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String organizer = SelNGBase.selfAccountName.get();
+		String organizer = ClientSessionFactory.session().currentUserName();
 
 		page.zCalendarApp.zCreateAllDayAppt(subject, location, attendees, body,
 				startDate, endDate);
@@ -200,7 +200,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		SleepUtil.sleepSmall();
 
-		SelNGBase.selfAccountName.set(attendees);
+		
 
 		page.zLoginpage.zLoginToZimbraHTML(attendees);
 
@@ -262,7 +262,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String organizer = SelNGBase.selfAccountName.get();
+		String organizer = ClientSessionFactory.session().currentUserName();
 
 		page.zCalendarApp.zCreateApptRepeatEveryDay(subject, location,
 				attendees, body, startTime, endTime, startDate, endDate,
@@ -287,7 +287,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 						apptDetailsToVerify.replace(" ", "")),
 						"Single instance modified for time shows the appointment at incorrect time");
 
-		SelNGBase.selfAccountName.set(attendees);
+		
 
 		resetSession();
 
@@ -322,7 +322,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String organizer = SelNGBase.selfAccountName.get();
+		String organizer = ClientSessionFactory.session().currentUserName();
 
 		page.zCalendarApp.zCreateApptRepeatEveryDay(subject, location,
 				attendees, body, startTime, endTime, startDate, endDate,
@@ -334,7 +334,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 
 		obj.zButton.zClick(page.zCalendarApp.apptCancelButton);
 
-		SelNGBase.selfAccountName.set(attendees);
+		
 
 		resetSession();
 
@@ -367,7 +367,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String organizer = SelNGBase.selfAccountName.get();
+		String organizer = ClientSessionFactory.session().currentUserName();
 
 		page.zCalendarApp.zCreateApptRepeatEveryDay(subject, location,
 				attendees, body, startTime, endTime, startDate, endDate,
@@ -378,7 +378,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		page.zCalendarApp.zEditAppointment(subject, "", "", attendees + ","
 				+ newAttendees, "", "", "", "", "", "", "", "", "");
 
-		SelNGBase.selfAccountName.set(attendees);
+		
 
 		resetSession();
 
@@ -414,7 +414,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String organizer = SelNGBase.selfAccountName.get();
+		String organizer = ClientSessionFactory.session().currentUserName();
 
 		page.zCalendarApp.zCreateApptRepeatDayOfWeek(subject, location,
 				attendees, body, startTime, endTime, startDate, endDate, day,
@@ -456,7 +456,7 @@ public class CreateApptWithAttendeeTests extends CommonTest {
 				apptDetailsToVerify.replace(" ", "")),
 				"Modified series time shows incorrect time details");
 
-		SelNGBase.selfAccountName.set(attendees);
+		
 
 		resetSession();
 

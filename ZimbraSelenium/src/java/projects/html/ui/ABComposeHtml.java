@@ -1019,7 +1019,7 @@ public class ABComposeHtml extends CommonTest {
 	public static void zSendMailToSelfAndNavigateToSpecificContactsFolder(
 			String contactFolderName) throws Exception {
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMail(SelNGBase.selfAccountName.get(), "", "",
+		page.zComposeView.zSendMail(ClientSessionFactory.session().currentUserName(), "", "",
 				getLocalizedData_NoSpecialChar(), "", "");
 		// page.zComposeView.zSendMailToSelfAndVerify(SelNGBase.selfAccountName,
 		// "", "", getLocalizedData_NoSpecialChar(), "", "");

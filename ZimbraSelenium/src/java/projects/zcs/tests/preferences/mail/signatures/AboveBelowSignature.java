@@ -50,7 +50,7 @@ public class AboveBelowSignature extends CommonTest {
 						.equals("verifyHtmlSignatureBelowIncludedMsgInReplyAll_Bug45880")
 				|| test.equals("twoSignaturesOnSwitching_Bug41404")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData_NoSpecialChar(), SelNGBase.selfAccountName.get(),
+					getLocalizedData_NoSpecialChar(), ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(), "" } };

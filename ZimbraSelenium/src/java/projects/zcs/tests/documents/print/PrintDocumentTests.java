@@ -24,7 +24,7 @@ public class PrintDocumentTests extends CommonTest {
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
 		if (test.equals("test1")) {
-			return new Object[][] { { SelNGBase.selfAccountName.get(), "ccuser@testdomain.com",
+			return new Object[][] { { ClientSessionFactory.session().currentUserName(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
 					getLocalizedData(5), "testexcelfile.xls" } };
 		} else {

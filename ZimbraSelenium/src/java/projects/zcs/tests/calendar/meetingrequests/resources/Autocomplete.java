@@ -67,7 +67,7 @@ public class Autocomplete extends CommonTest {
 		String equipment;
 		equipment = "equipment2@testdomain.com";
 		Stafzmprov.createEquipment(equipment);
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefGalAutoCompleteEnabled", "TRUE");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);

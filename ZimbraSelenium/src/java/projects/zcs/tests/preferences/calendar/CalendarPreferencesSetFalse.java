@@ -55,7 +55,7 @@ public class CalendarPreferencesSetFalse extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefCalendarInitialView",
 				"workWeek");

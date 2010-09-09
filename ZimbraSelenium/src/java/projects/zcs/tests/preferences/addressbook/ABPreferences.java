@@ -124,7 +124,7 @@ public class ABPreferences extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 		page.zABCompose.zNavigateToPreferenceAB();
 
 		String actualValue = Stafzmprov.getAccountPreferenceValue(accountName,
@@ -163,7 +163,7 @@ public class ABPreferences extends CommonTest {
 		obj.zFolder.zClick(page.zABCompose.zEmailedContactsFolder);
 		obj.zContactListItem.zExists(toContactSplit[0]);
 		// reset auto-add contact to false
-		Stafzmprov.modifyAccount(SelNGBase.selfAccountName.get(),
+		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
 				"zimbraPrefAutoAddAddressEnabled", "FALSE");
 		SelNGBase.needReset.set(false);
 
@@ -183,12 +183,12 @@ public class ABPreferences extends CommonTest {
 
 		page.zABCompose.zNavigateToPreferenceAB();
 		String actualValue = Stafzmprov.getAccountPreferenceValue(
-				SelNGBase.selfAccountName.get(), "zimbraPrefGalSearchEnabled");
+				ClientSessionFactory.session().currentUserName(), "zimbraPrefGalSearchEnabled");
 		if (actualValue.equals("FALSE")) {
 			obj.zCheckbox.zClick(localize(locator.initiallySearchGal));
 			obj.zButton.zClick(page.zABCompose.zPreferencesSaveIconBtn);
 			actualValue = Stafzmprov.getAccountPreferenceValue(
-					SelNGBase.selfAccountName.get(), "zimbraPrefGalSearchEnabled");
+					ClientSessionFactory.session().currentUserName(), "zimbraPrefGalSearchEnabled");
 
 			Assert
 					.assertEquals(actualValue, "TRUE",

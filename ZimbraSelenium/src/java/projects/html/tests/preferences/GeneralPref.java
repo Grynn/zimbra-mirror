@@ -77,12 +77,12 @@ public class GeneralPref extends CommonTest {
 
 		resetSession();
 		page.zLoginpage
-				.zLoginToZimbraHTML(SelNGBase.selfAccountName.get(), "test321");
+				.zLoginToZimbraHTML(ClientSessionFactory.session().currentUserName(), "test321");
 
 		resetSession();
 
 		String accountName = Stafzmprov.getRandomAccount();
-		SelNGBase.selfAccountName.set(accountName);
+		
 		page.zLoginpage.zLoginToZimbraHTML(accountName);
 
 		SelNGBase.needReset.set(false);
@@ -104,7 +104,7 @@ public class GeneralPref extends CommonTest {
 
 		// to have a mail in Junk folder
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
+		page.zComposeView.zSendMailToSelfAndSelectIt(ClientSessionFactory.session().currentUserName(),
 				"", "", constantSubjectForJunk, body, "");
 		obj.zCheckbox.zClick(constantSubjectForJunk);
 		SleepUtil.sleepSmall();
@@ -116,7 +116,7 @@ public class GeneralPref extends CommonTest {
 		obj.zMessageItem.zExists(constantSubjectForJunk);
 
 		page.zGeneralPrefUI
-				.zSearchUsingMainSearchField(SelNGBase.selfAccountName.get());
+				.zSearchUsingMainSearchField(ClientSessionFactory.session().currentUserName());
 
 		obj.zMessageItem.zExists(constantSubjectForJunk);
 
@@ -135,7 +135,7 @@ public class GeneralPref extends CommonTest {
 		page.zGeneralPrefUI.zNavigateToPrefGenralAndSelectSearchFolder("Junk");
 
 		page.zGeneralPrefUI
-				.zSearchUsingMainSearchField(SelNGBase.selfAccountName.get());
+				.zSearchUsingMainSearchField(ClientSessionFactory.session().currentUserName());
 		obj.zMessageItem.zNotExists(constantSubjectForJunk);
 
 		SelNGBase.needReset.set(false);
@@ -156,7 +156,7 @@ public class GeneralPref extends CommonTest {
 
 		// to have a mail in Junk folder
 		page.zComposeView.zNavigateToMailCompose();
-		page.zComposeView.zSendMailToSelfAndSelectIt(SelNGBase.selfAccountName.get(),
+		page.zComposeView.zSendMailToSelfAndSelectIt(ClientSessionFactory.session().currentUserName(),
 				"", "", constantSubjectForTrash, body, "");
 		obj.zCheckbox.zClick(constantSubjectForTrash);
 		obj.zButton.zClick(localize(locator.del));
@@ -167,7 +167,7 @@ public class GeneralPref extends CommonTest {
 		obj.zMessageItem.zExists(constantSubjectForTrash);
 
 		page.zGeneralPrefUI
-				.zSearchUsingMainSearchField(SelNGBase.selfAccountName.get());
+				.zSearchUsingMainSearchField(ClientSessionFactory.session().currentUserName());
 
 		obj.zMessageItem.zExists(constantSubjectForTrash);
 
@@ -188,7 +188,7 @@ public class GeneralPref extends CommonTest {
 		page.zGeneralPrefUI.zNavigateToPrefGenralAndSelectSearchFolder("Trash");
 
 		page.zGeneralPrefUI
-				.zSearchUsingMainSearchField(SelNGBase.selfAccountName.get());
+				.zSearchUsingMainSearchField(ClientSessionFactory.session().currentUserName());
 		obj.zMessageItem.zNotExists(constantSubjectForTrash);
 
 		SelNGBase.needReset.set(false);

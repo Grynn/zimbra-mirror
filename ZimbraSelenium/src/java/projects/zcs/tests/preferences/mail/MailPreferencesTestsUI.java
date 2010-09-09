@@ -44,7 +44,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 	public void zLogin() throws Exception {
 		zLoginIfRequired();
 
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		Stafzmprov.modifyAccount(accountName, "zimbraPrefMailPollingInterval",
 				"5m");
@@ -108,7 +108,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -140,7 +140,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -187,7 +187,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -234,7 +234,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -287,7 +287,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -334,7 +334,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -381,7 +381,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -435,7 +435,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 		checkForSkipException("hi", "na", "na", "localization problems with hi locale");
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -489,7 +489,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -545,7 +545,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 		checkForSkipException("all", "na", "na", "Not able to type values in 'Forward a copy to:' edit field");
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -614,7 +614,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 		checkForSkipException("all", "na", "na", "Not able to type values in 'Send a notification message to:' edit field");
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 
@@ -680,7 +680,7 @@ public class MailPreferencesTestsUI extends CommonTest {
 			handleRetry();
 
 		String actualVal;
-		String accountName = SelNGBase.selfAccountName.get();
+		String accountName = ClientSessionFactory.session().currentUserName();
 
 		page.zMailApp.zNavigateToMailPreferences();
 

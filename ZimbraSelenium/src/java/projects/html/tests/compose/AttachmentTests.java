@@ -163,7 +163,7 @@ public class AttachmentTests extends CommonTest {
 
 		page.zComposeView.zNavigateToMailCompose();
 		if (to.equals("_selfAccountName_"))
-			to = SelNGBase.selfAccountName.get();
+			to = ClientSessionFactory.session().currentUserName();
 		obj.zTextAreaField.zType(page.zComposeView.zToField, to);
 		obj.zEditField.zType(page.zComposeView.zSubjectField, subject);
 		page.zComposeView.zAddAttachments(attachments, false);
@@ -200,7 +200,7 @@ public class AttachmentTests extends CommonTest {
 
 		page.zComposeView.zNavigateToMailCompose();
 		if (to.equals("_selfAccountName_"))
-			to = SelNGBase.selfAccountName.get();
+			to = ClientSessionFactory.session().currentUserName();
 		obj.zTextAreaField.zType(page.zComposeView.zToField, to);
 		obj.zEditField.zType(page.zComposeView.zSubjectField, subject);
 		obj.zButton.zClick(ComposeView.zAddAttachmentBtn);
