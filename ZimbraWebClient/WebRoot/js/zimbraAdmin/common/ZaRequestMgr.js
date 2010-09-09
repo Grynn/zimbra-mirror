@@ -42,7 +42,8 @@ ZaRequestMgr.invoke = function (csfeParams, params) {
 	}catch (ex) {
 		if(ex && ex.code && !(ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || 
 				ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || 
-				ex.code == ZmCsfeException.NO_AUTH_TOKEN
+				ex.code == ZmCsfeException.NO_AUTH_TOKEN ||
+                                ex.code == ZmCsfeException.AUTH_TOKEN_CHANGED
 			 )) {
 			ZaZimbraAdmin.getInstance().scheduleNoOp();
 		}

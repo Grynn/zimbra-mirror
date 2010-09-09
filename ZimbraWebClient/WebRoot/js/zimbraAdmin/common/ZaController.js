@@ -345,13 +345,16 @@ function(ex, method, params, restartOnError, obj) {
 	if (ex.code && 
 			(ex.code == ZmCsfeException.SVC_AUTH_EXPIRED || 
 				ex.code == ZmCsfeException.SVC_AUTH_REQUIRED || 
-				ex.code == ZmCsfeException.NO_AUTH_TOKEN
+				ex.code == ZmCsfeException.NO_AUTH_TOKEN ||
+				ex.code == ZmCsfeException.AUTH_TOKEN_CHANGED
 			 )
 		) 
 	{
 		try {
 			var bReloginMode = true;
-			if (ZaApp.getInstance() != null && ex.code == ZmCsfeException.SVC_AUTH_EXPIRED) 
+			if (ZaApp.getInstance() != null && (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED ||
+							    ex.code == ZmCsfeException.AUTH_TOKEN_CHANGED
+							   )) 
 			{
 				ZmCsfeCommand._curAuthToken = null;
 
