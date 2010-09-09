@@ -524,10 +524,12 @@ function(params) {
 
 AttachMailTabView.prototype._treeListener =
 function(ev) {
-	var item = this.treeView.getSelected();
-	document.getElementById(AttachMailTabView.ELEMENT_ID_SEARCH_FIELD).value = ["in:\"", item.getSearchPath(),"\""].join("");
-	var query = this._getQueryFromFolder(item.id);
-	this.executeQuery(query);
+	if (ev.detail == DwtTree.ITEM_SELECTED) {
+		var item = this.treeView.getSelected();
+		document.getElementById(AttachMailTabView.ELEMENT_ID_SEARCH_FIELD).value = ["in:\"", item.getSearchPath(),"\""].join("");
+		var query = this._getQueryFromFolder(item.id);
+		this.executeQuery(query);
+	}
 };
 
 AttachMailTabView.prototype._hideRoot =
