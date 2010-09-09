@@ -105,11 +105,11 @@ public class ExecuteHarnessMain {
 	/**
 	 * App type
 	 */
-	private enum AppType {
-		AJAX, HTML
+	public enum AppType {
+		AJAX, HTML, MOBILE, DESKTOP, ADMIN, APPLIANCE
 	}
 	
-	private AppType appType = AppType.AJAX;
+	public static AppType appType = AppType.AJAX;
 	
 	/**
 	 * Determine all the classes in the specified jarfile filtered by a regex

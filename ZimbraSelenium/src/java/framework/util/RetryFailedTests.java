@@ -9,6 +9,7 @@ import java.io.Writer;
 import org.testng.ITestResult;
 import org.testng.util.RetryAnalyzerCount;
 
+import framework.core.ExecuteHarnessMain;
 import framework.core.SelNGBase;
 
 public class RetryFailedTests extends RetryAnalyzerCount {
@@ -24,9 +25,10 @@ public class RetryFailedTests extends RetryAnalyzerCount {
 	}
 
 	private void logRetriedTests(String testName) {
-		File retriedTestFile = new File(
+		File retriedTestFile = 
+			new File(
 				ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")
-				+ "/" + SelNGBase.appType + "/retriedTests.txt");
+				+ "/" + ExecuteHarnessMain.appType.toString() + "/retriedTests.txt");
 	    if(!retriedTestFile.exists())
 			try {
 				retriedTestFile.createNewFile();

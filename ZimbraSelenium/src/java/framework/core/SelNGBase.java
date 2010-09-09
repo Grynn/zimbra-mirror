@@ -10,6 +10,7 @@ import net.sf.json.JSONArray;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import framework.core.ExecuteHarnessMain.AppType;
 import framework.util.ZimbraSeleniumProperties;
 
 public class SelNGBase {
@@ -19,7 +20,6 @@ public class SelNGBase {
 	
 	public static int maxRetryCount = 0;
 	public static String someting = " ";
-	public static String appType = "AJAX";
 	public static String suiteName = "";
 	
     public static Map<String, ArrayList<Integer>> FILENAME_TO_COVERAGE = new HashMap<String, ArrayList<Integer>>();
@@ -86,7 +86,6 @@ public class SelNGBase {
 	}
 
 	public void openApplication(String app_type) {
-		appType = app_type;
 		
 		ClientSession session = ClientSessionFactory.session();
 		ZimbraSelenium selenium = session.selenium();
@@ -120,19 +119,24 @@ public class SelNGBase {
 	}
 
 	public static String getBaseURL() {
-		if (appType.equals("DESKTOP"))
+		
+		if ( ExecuteHarnessMain.appType == AppType.DESKTOP )
 			return "http://localhost:7633/zimbra/desktop/zmail.jsp";
-		else if (appType.equals("HTML"))
+		
+		if ( ExecuteHarnessMain.appType == AppType.HTML )
 			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 					+ ZimbraSeleniumProperties.getStringProperty("server") + "/h/";
-		else if (appType.equals("MOBILE"))
+
+		if ( ExecuteHarnessMain.appType == AppType.MOBILE )
 			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 					+ ZimbraSeleniumProperties.getStringProperty("server") + "/m/";
-		else if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) 
+
+		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) 
 			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 					+ ZimbraSeleniumProperties.getStringProperty("server") + "?dev=1&debug=0";
-			else
-				return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+
+		// Default
+		return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "";
 	}
 
