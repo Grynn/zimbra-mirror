@@ -63,6 +63,14 @@ ifeq (F7,$(findstring F7,$(BUILD_PLATFORM)))
 	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
 endif
 
+ifeq ($(BUILD_PLATFORM), MACOSX)
+	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+endif
+
+ifeq ($(BUILD_PLATFORM), MACOSXx86)
+	MODULE_BUILD	:= K/KW/KWILLIAMS/Module-Build-0.2808.tar.gz
+endif
+
 LOGFILE ?= ThirdParty-Perllibs.log
 
 PERL_VERSION :=	$(shell /usr/bin/perl -e 'print "$$]"')
