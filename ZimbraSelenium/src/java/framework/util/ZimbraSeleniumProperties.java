@@ -4,6 +4,7 @@ package framework.util;
 import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
+
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -185,6 +186,43 @@ public class ZimbraSeleniumProperties {
 		private Class<?> getCurrentClass() {
 			return getClassContext()[1];
 		}
+	}
+
+	/**
+	 * App type
+	 */
+	public enum AppType {
+		AJAX, HTML, MOBILE, DESKTOP, ADMIN, APPLIANCE
+	}
+	
+	private static AppType appType = AppType.AJAX;
+	public static void setAppType(AppType type) {
+		appType = type;
+	}
+	public static AppType getAppType() {
+		return (appType);
+	}
+	
+	public static String getBaseURL() {
+		
+		if ( appType == AppType.DESKTOP )
+			return "http://localhost:7633/zimbra/desktop/zmail.jsp";
+		
+		if ( appType == AppType.HTML )
+			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+					+ ZimbraSeleniumProperties.getStringProperty("server") + "/h/";
+
+		if ( appType == AppType.MOBILE )
+			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+					+ ZimbraSeleniumProperties.getStringProperty("server") + "/m/";
+
+		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) 
+			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+					+ ZimbraSeleniumProperties.getStringProperty("server") + "?dev=1&debug=0";
+
+		// Default
+		return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "";
 	}
 
 	public static String zimbraGetVersionString() {		

@@ -10,7 +10,6 @@ import net.sf.json.JSONArray;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import framework.core.ExecuteHarnessMain.AppType;
 import framework.util.ZimbraSeleniumProperties;
 
 public class SelNGBase {
@@ -94,7 +93,7 @@ public class SelNGBase {
 		selenium.windowFocus();
 		selenium.setupZVariables();
 		selenium.allowNativeXpath("true");
-		selenium.open(getBaseURL());
+		selenium.open(ZimbraSeleniumProperties.getBaseURL());
 		
 	}
 
@@ -118,27 +117,6 @@ public class SelNGBase {
 		
 	}
 
-	public static String getBaseURL() {
-		
-		if ( ExecuteHarnessMain.appType == AppType.DESKTOP )
-			return "http://localhost:7633/zimbra/desktop/zmail.jsp";
-		
-		if ( ExecuteHarnessMain.appType == AppType.HTML )
-			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-					+ ZimbraSeleniumProperties.getStringProperty("server") + "/h/";
-
-		if ( ExecuteHarnessMain.appType == AppType.MOBILE )
-			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-					+ ZimbraSeleniumProperties.getStringProperty("server") + "/m/";
-
-		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) 
-			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-					+ ZimbraSeleniumProperties.getStringProperty("server") + "?dev=1&debug=0";
-
-		// Default
-		return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "";
-	}
 
 	// can be used as @aftermethod
 	public void deleteCookie(String name, String path) {

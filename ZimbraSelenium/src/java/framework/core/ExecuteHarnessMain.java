@@ -47,6 +47,7 @@ import framework.util.SkippedTestListener;
 import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;
 import framework.util.ZimbraSeleniumProperties;
+import framework.util.ZimbraSeleniumProperties.AppType;
 
 
 
@@ -102,14 +103,6 @@ public class ExecuteHarnessMain {
 	// A list of classes to execute using TestNG from the jarfile
 	protected List<String> classes = null;
 	
-	/**
-	 * App type
-	 */
-	public enum AppType {
-		AJAX, HTML, MOBILE, DESKTOP, ADMIN, APPLIANCE
-	}
-	
-	public static AppType appType = AppType.AJAX;
 	
 	/**
 	 * Determine all the classes in the specified jarfile filtered by a regex
@@ -277,8 +270,8 @@ public class ExecuteHarnessMain {
 			
 			// Configure the runner
 			ng.setXmlSuites(suites);
-			ng.addListener(new SummaryReporter(this.appType.toString()));
-			ng.addListener(new TestStatusReporter(this.appType.toString())); // TODO: This shouldn't throw Exception
+			ng.addListener(new SummaryReporter(ZimbraSeleniumProperties.getAppType().toString()));
+			ng.addListener(new TestStatusReporter(ZimbraSeleniumProperties.getAppType().toString())); // TODO: This shouldn't throw Exception
 			ng.addListener(new SkippedTestListener(new File(this.testoutputfoldername)));
 			ng.addListener(listener = new ResultListener());
 			ng.setOutputDirectory(this.testoutputfoldername);
@@ -495,9 +488,9 @@ public class ExecuteHarnessMain {
 	        	Matcher m = Pattern.compile("projects.(.*).tests.*").matcher(filter);
 	        	if (m.find()){
 	        		if(m.group(1).equalsIgnoreCase("zcs"))
-	        			this.appType = AppType.AJAX;	
+	        			ZimbraSeleniumProperties.setAppType(AppType.AJAX);
 	        		else
-	        			this.appType = Enum.valueOf(AppType.class, m.group(1).toUpperCase());	        			 	
+	        			ZimbraSeleniumProperties.setAppType(Enum.valueOf(AppType.class, m.group(1).toUpperCase()));	        			 	
 	        	}
 	        }
 	        
@@ -506,7 +499,7 @@ public class ExecuteHarnessMain {
 	        	this.testoutputfoldername = cmd.getOptionValue('o');
 	        } else {
 	        	this.testoutputfoldername = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") 
-		        + "/" + this.appType;
+		        + "/" + ZimbraSeleniumProperties.getAppType();
 	        }
 	        
 	        // Make sure the test output folder exists, create it if not
