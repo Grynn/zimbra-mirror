@@ -14,11 +14,6 @@
 # ***** END LICENSE BLOCK *****
 # 
 
-if [ x`whoami` != xzimbra ]; then
-    echo Error: must be run as zimbra user
-  exit 1
-fi
-
 source `dirname $0`/zmshutil || exit 1
 zmsetvars \
   mysql_directory \
@@ -26,7 +21,13 @@ zmsetvars \
   mysql_mycnf \
   mysql_errlogfile \
   zimbra_home \
+  zimbra_user \
   zimbra_tmp_directory 
+
+if [ x`whoami` != "x${zimbra_user}" ]; then
+  echo Error: must be run as zimbra user
+  exit 1
+fi
 
 if [ ! -d ${mysql_directory}/bin ]; then
   exit 0
