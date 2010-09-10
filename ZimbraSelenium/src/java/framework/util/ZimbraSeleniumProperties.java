@@ -208,6 +208,10 @@ public class ZimbraSeleniumProperties {
 		if ( appType == AppType.DESKTOP )
 			return "http://localhost:7633/zimbra/desktop/zmail.jsp";
 		
+		if ( appType == AppType.AJAX )
+			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server") + "";
+
 		if ( appType == AppType.HTML )
 			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 					+ ZimbraSeleniumProperties.getStringProperty("server") + "/h/";
@@ -220,7 +224,13 @@ public class ZimbraSeleniumProperties {
 			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 					+ ZimbraSeleniumProperties.getStringProperty("server") + "?dev=1&debug=0";
 
+		if ( appType == AppType.ADMIN )
+			return "https://" +
+				ZimbraSeleniumProperties.getStringProperty("server") + ":7071";
+
+
 		// Default
+		logger.warn("Using default URL");
 		return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "";
 	}
