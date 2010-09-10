@@ -60,6 +60,10 @@ ifeq ($(BUILD_PLATFORM), F11_64)
 	LIB_DIR := /usr/lib64
 endif
 
+ifeq ($(BUILD_PLATFORM), F13_64)
+	LIB_DIR := /usr/lib64
+endif
+
 files	:= $(wildcard src/curl-$(CURL_VERSION).tar.gz)
 
 all: checksrc allclean build check tar
