@@ -1049,7 +1049,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 										{type:_CELLSPACER_}
 									]
 								},
-								{type:_GROUP_, numCols:3, colSizes:[40, "auto",75], width:"98%", 
+								{type:_GROUP_, numCols:3, width:"98%", 
 								   items:[
 										{ref:"query", type:_TEXTFIELD_, width:"100%", cssClass:"admin_xform_name_input",  
 											nowrap:false,labelWrap:true,
