@@ -28,7 +28,6 @@ function ZaBulkDataImportXWizard (parent,entry) {
 	    {label:com_zimbra_bulkprovision.DataImport_Wizard_Intro, value:ZaBulkDataImportXWizard.STEP_INTRODUCTION},
 	    {label:com_zimbra_bulkprovision.DataImport_Wizard_Options, value:ZaBulkDataImportXWizard.STEP_OPTIONS},
 	    {label:com_zimbra_bulkprovision.DataImport_File_Upload, value:ZaBulkDataImportXWizard.STEP_FILE_UPLOAD},
-	    {label:com_zimbra_bulkprovision.DataImport_LDAP_Info, value:ZaBulkDataImportXWizard.STEP_LDAP_INFO},
 	    {label:com_zimbra_bulkprovision.DataImport_Wizard_AcctPicker, value:ZaBulkDataImportXWizard.STEP_ACCT_PICKER},
 	    {label:com_zimbra_bulkprovision.DataImport_IMAP_Info, value:ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS},
 	    {label:com_zimbra_bulkprovision.DataImport_Review, value:ZaBulkDataImportXWizard.STEP_REVIEW},
@@ -46,7 +45,6 @@ ZaBulkDataImportXWizard.STEP_INDEX = 1;
 ZaBulkDataImportXWizard.STEP_INTRODUCTION = ZaBulkDataImportXWizard.STEP_INDEX++;
 ZaBulkDataImportXWizard.STEP_OPTIONS = ZaBulkDataImportXWizard.STEP_INDEX++;
 ZaBulkDataImportXWizard.STEP_FILE_UPLOAD = ZaBulkDataImportXWizard.STEP_INDEX++;
-ZaBulkDataImportXWizard.STEP_LDAP_INFO = ZaBulkDataImportXWizard.STEP_INDEX++;
 ZaBulkDataImportXWizard.STEP_ACCT_PICKER = ZaBulkDataImportXWizard.STEP_INDEX++;
 ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS = ZaBulkDataImportXWizard.STEP_INDEX++;
 ZaBulkDataImportXWizard.STEP_REVIEW = ZaBulkDataImportXWizard.STEP_INDEX++;
@@ -218,15 +216,6 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_OPTIONS && 
-			(this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_LDAP 
-					|| this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_AD) &&
-			this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP) {
-		this.goPage(ZaBulkDataImportXWizard.STEP_LDAP_INFO);
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
-	}  else if(cStep == ZaBulkDataImportXWizard.STEP_OPTIONS && 
 			this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_ZIMBRA &&
 			this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP) {
 		this._containedObject[ZaBulkProvision.A2_activateSearch] = 1;
@@ -235,6 +224,20 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
+	} else if (cStep == ZaBulkDataImportXWizard.STEP_OPTIONS && this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_REUSE_XML &&
+			this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP) {
+		
+        try {
+        	//generate a preview of options, skip STEP_IMAP_OPTIONS, because these options should be in the XML
+        	this._containedObject[ZaBulkProvision.A2_op] = ZaBulkProvision.OP_PREVIEW;
+        	this._containedObject[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
+    		var callback = new AjxCallback(this, ZaBulkDataImportXWizard.prototype.previewCallback,{nextStep:ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS});
+        	ZaBulkProvision.bulkDataIMport(this._containedObject,callback);
+        } catch (ex) {
+            this._app.getCurrentController()._handleException(ex) ;
+            return ;
+        }
+		
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_INTRODUCTION && this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE) {  
 		//open Exchange Migration wizard
 		var prevCallback = new AjxCallback(this._app.getCurrentController(), 
@@ -325,54 +328,6 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		}		
 		this._containedObject[ZaBulkProvision.A2_useAdminLogin] = 1;
 		this.goPage(ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS);
-	} else if(cStep == ZaBulkDataImportXWizard.STEP_LDAP_INFO) {
-			//check LDAP fields and move on to entering IMAP options
-			/**
-			 * Check that LDAP URL is not empty
-			 */
-			if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapURL])) {
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_URL_REQUIRED);
-				return;
-			}		
-
-			/**
-			 * Check that Bind DN is not empty
-			 */
-			if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapBindDn])) {
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_BIND_DN_REQUIRED);
-				return;
-			}		
-			
-			
-			/**
-			 * Check that passwords match
-			 */
-			if(this._containedObject[ZaBulkProvision.A2_GalLdapBindPassword] != this._containedObject[ZaBulkProvision.A2_GalLdapConfirmBindPassword]) {
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PASSWORDS_DONT_MATCH);
-				return;
-			}		
-			
-			/**
-			 * Check that LDAP filter is not empty
-			 */
-			if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapFilter])) {
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_FILTER_REQUIRED);
-				return;
-			}
-			
-			/**
-			 * Check that LDAP search base is not empty
-			 */
-			if(AjxUtil.isEmpty(this._containedObject[ZaBulkProvision.A2_GalLdapSearchBase])) {
-				ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_LDAP_BASE_REQUIRED);
-				return;
-			}		
-    		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-    		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-    		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-    		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);		
-    		this._containedObject[ZaBulkProvision.A2_useAdminLogin] = 1;
-			this.goPage(ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS);
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS) {
     	//generate a preview of options, skip STEP_IMAP_OPTIONS, because these options should be in the XML
 		if(this._containedObject[ZaBulkProvision.A2_sourceType] != ZaBulkProvision.SOURCE_TYPE_XML &&
@@ -436,16 +391,9 @@ ZaBulkDataImportXWizard.prototype.goPrev =
 	    } else if (cStep == ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS) {
 	    	if(this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_XML) {
 				prevStep = ZaBulkDataImportXWizard.STEP_FILE_UPLOAD;	    		
-	    	} else if(this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_LDAP 
-	    			|| this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_AD) {
-	    		prevStep = ZaBulkDataImportXWizard.STEP_LDAP_INFO;
 	    	} else if(this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_ZIMBRA) {
 	    		prevStep = ZaBulkDataImportXWizard.STEP_ACCT_PICKER;
 	    	}
-	    	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-	    	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-	    } else if (cStep == ZaBulkDataImportXWizard.STEP_LDAP_INFO) {
-	    	prevStep = ZaBulkDataImportXWizard.STEP_OPTIONS;
 	    	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 	    	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 	    } else if(cStep == ZaBulkDataImportXWizard.STEP_FILE_UPLOAD) {
@@ -817,76 +765,19 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 					elementChanged: function(elementValue,instanceValue, event) {
 						this.setInstanceValue(ZaBulkProvision.SOURCE_TYPE_XML,ZaBulkProvision.A2_sourceType);
 					},visibilityChecks:[],enableDisableChecks:[]
-		    	},
-		    	{type:_RADIO_, groupname:"source_selection_group",ref:ZaBulkProvision.A2_sourceType,bmolsnr:true,
-					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.RetrieveAccountsFromLDAP,
+		       },		       
+		       {type:_RADIO_, groupname:"source_selection_group",ref:ZaBulkProvision.A2_sourceType,bmolsnr:true,
+					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.ReuseAccountsXML,
 					updateElement:function (newValue) {
-						this.getElement().checked = (newValue == ZaBulkProvision.SOURCE_TYPE_LDAP);
+						this.getElement().checked = (newValue == ZaBulkProvision.SOURCE_TYPE_REUSE_XML);
 					},
 					elementChanged: function(elementValue,instanceValue, event) {
-						this.setInstanceValue(ZaBulkProvision.SOURCE_TYPE_LDAP,ZaBulkProvision.A2_sourceType);
-					},visibilityChecks:[],enableDisableChecks:[]
-		    	},
-		    	{type:_RADIO_, groupname:"source_selection_group",ref:ZaBulkProvision.A2_sourceType,bmolsnr:true,
-					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.RetrieveAccountsFromLAD,
-					updateElement:function (newValue) {
-						this.getElement().checked = (newValue == ZaBulkProvision.SOURCE_TYPE_AD);
-					},
-					elementChanged: function(elementValue,instanceValue, event) {
-						this.setInstanceValue(ZaBulkProvision.SOURCE_TYPE_AD,ZaBulkProvision.A2_sourceType);
-					},visibilityChecks:[],enableDisableChecks:[]
+						this.setInstanceValue(ZaBulkProvision.SOURCE_TYPE_REUSE_XML,ZaBulkProvision.A2_sourceType);
+					},visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A_aid]],enableDisableChecks:[], visibilityChangeEventSources:[ZaBulkProvision.A_aid]
 		    	}
 	       ]
 		};
 		cases.push(case_options);
-
-	var case_ldap_info = {type:_CASE_,numCols:2,colSizes:["250px","380px"],tabGroupKey:ZaBulkDataImportXWizard.STEP_LDAP_INFO,
-		caseKey:ZaBulkDataImportXWizard.STEP_LDAP_INFO,
-		items:[
-	       	{type:_GROUP_, numCols:6, colSpan:2,label:"   ",labelLocation:_LEFT_,
-				visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_sourceType,ZaBulkProvision.SOURCE_TYPE_LDAP]],
-				visibilityChangeEventSources:[ZaBulkProvision.A2_sourceType],
-				items: [
-					{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
-					{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:com_zimbra_bulkprovision.ADServerName, width:"200px"},
-					{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},									
-					{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:com_zimbra_bulkprovision.ADServerPort,  width:"40px"},	
-					{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:com_zimbra_bulkprovision.ADUseSSL, width:"*"}									
-				]
-			},	
-			{type:_GROUP_, numCols:6, colSpan:2,label:"   ",labelLocation:_LEFT_,
-				visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_sourceType,ZaBulkProvision.SOURCE_TYPE_AD]],
-				visibilityChangeEventSources:[ZaBulkProvision.A2_sourceType],
-				items: [	
-				        {type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"35px"},
-						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:com_zimbra_bulkprovision.LDAP_GALServerName, width:"200px"},
-						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:" ", width:"5px"},									
-						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:com_zimbra_bulkprovision.LDAP_GALServerPort,  width:"40px"},	
-						{type:_OUTPUT_, label:null, labelLocation:_NONE_, value:com_zimbra_bulkprovision.LDAP_GALUseSSL, width:"*"}									
-					]
-			},		       
-			{ref:ZaBulkProvision.A2_GalLdapURL, type:_LDAPURL_, label:com_zimbra_bulkprovision.LDAPUrl,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_LEFT_,
-				visibilityChecks:[],enableDisableChecks:[]
-			},
-			{ref:ZaBulkProvision.A2_GalLdapBindDn, type:_TEXTFIELD_, width:"380px", label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, 
-				enableDisableChecks:[],visibilityChecks:[],bmolsnr:true				
-			},
-			{ref:ZaBulkProvision.A2_GalLdapBindPassword, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPassword, labelLocation:_LEFT_, 
-				enableDisableChecks:[],visibilityChecks:[]				
-			},
-			{ref:ZaBulkProvision.A2_GalLdapConfirmBindPassword, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPasswordConfirm, labelLocation:_LEFT_, 
-				enableDisableChecks:[],visibilityChecks:[]				
-			},				
-			{ref:ZaBulkProvision.A2_GalLdapFilter, type:_TEXTAREA_, width:380, height:40, 
-				label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, 
-				enableDisableChecks:[],visibilityChecks:[]
-			},
-			{ref:ZaBulkProvision.A2_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, 
-				labelLocation:_LEFT_, enableDisableChecks:[],visibilityChecks:[],bmolsnr:true
-			}
-		]
-	};
-	cases.push(case_ldap_info);
 	
 	var case_file_upload = {type:_CASE_,numCols:2,colSizes:["250px","380px"],tabGroupKey:ZaBulkDataImportXWizard.STEP_FILE_UPLOAD,
 			caseKey:ZaBulkDataImportXWizard.STEP_FILE_UPLOAD,

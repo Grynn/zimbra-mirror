@@ -131,9 +131,9 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
     		} catch (IOException e) {
     			throw ServiceException.FAILURE("Bulk provisioning failed to read uploaded XML document.",e);
     		}
-		} else if (sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_BULK_LDAP) || sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_BULK_AD)) {
+		} /*else if (sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_BULK_LDAP) || sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_BULK_AD)) {
 		    IMAPAccounts = getExternalIMAPAccounts(request, zsc);
-		}  else if (sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_ZIMBRA)) {
+		} */ else if (sourceType.equalsIgnoreCase(ZimbraBulkProvisionExt.FILE_FORMAT_ZIMBRA)) {
 		    IMAPAccounts = getZimbraAccounts(request, zsc);   
         }
 		
@@ -369,6 +369,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 	 * @return Map<accountState,List<ExternalIMAPAccount>>
 	 * @throws ServiceException
 	 */
+	/*
 	private Map<accountState,List<ExternalIMAPAccount>> getExternalIMAPAccounts(Element request, ZimbraSoapContext zsc) throws ServiceException {
 	    Map attrs = AdminService.getAttrs(request, true);
         GalParams.ExternalGalParams galParams = new GalParams.ExternalGalParams(attrs, GalOp.search);
@@ -448,7 +449,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
         accts.put(accountState.running, runningAccts);
         accts.put(accountState.finished, finishedAccts);
         return accts;
-	}
+	}*/
 	/**
 	 * Collects data about external IMAP accounts from XML
 	 * @param is

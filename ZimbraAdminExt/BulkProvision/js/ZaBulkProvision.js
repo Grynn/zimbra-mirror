@@ -127,6 +127,7 @@ ZaBulkProvision.SOURCE_TYPE_ZIMBRA = "zimbra";
 ZaBulkProvision.SOURCE_TYPE_LDAP = "ldap";
 ZaBulkProvision.SOURCE_TYPE_AD = "ad";
 ZaBulkProvision.SOURCE_TYPE_XML = "bulkxml";
+ZaBulkProvision.SOURCE_TYPE_REUSE_XML = "reusebulkxml";
 ZaBulkProvision.SOURCE_TYPE_CSV = "csv";
 
 ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP = "IMAP";
@@ -265,25 +266,6 @@ ZaBulkProvision.bulkDataIMport = function(obj, callback) {
 	    	controller.popupErrorDialog(com_zimbra_bulkprovision.error_no_aid) ;
 	    	return ;
 	    }
-	}
-	if(obj[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_LDAP || obj[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_AD) {
-		var attr = soapDoc.set("a", ZaDomain.GAL_Mode_external);
-		attr.setAttribute("n", ZaDomain.A_zimbraGalMode);
-	
-		attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapURL]);
-		attr.setAttribute("n", ZaBulkProvision.A2_GalLdapURL);	
-		
-		attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapSearchBase]);
-		attr.setAttribute("n", ZaBulkProvision.A2_GalLdapSearchBase);	
-	
-		attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapFilter]);
-		attr.setAttribute("n", ZaBulkProvision.A2_GalLdapFilter);	
-	
-		attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapBindDn]);
-		attr.setAttribute("n", ZaBulkProvision.A2_GalLdapBindDn);
-	
-		attr = soapDoc.set("a", obj[ZaBulkProvision.A2_GalLdapBindPassword]);
-		attr.setAttribute("n", ZaBulkProvision.A2_GalLdapBindPassword);
 	}
 	if(obj[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_ZIMBRA) {
 		var cnt = obj[ZaBulkProvision.A2_account].length;
