@@ -112,7 +112,6 @@ EmailToolTipPrefDialog.prototype._getTooltipMenuHtml =
 function() {
 	var html = new Array();
 	var i = 0;
-	debugger;
 	html[i++] = "<select id='emailZimlet_tooltipSize'>";
 	for (var el in EmailToolTipPrefDialog.DIMENSIONS) {
 		var dimension = EmailToolTipPrefDialog.DIMENSIONS[el];

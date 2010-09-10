@@ -21,6 +21,7 @@ function EmailToolTipSlide(html, visible, iconName, selectCallback) {
 	this.iconDivId = Dwt.getNextId();
 	this.selectIconDivId = Dwt.getNextId();
 	this.slideShow = null;
+	this.canvasElement = null;
 	this._selectCallback = selectCallback;
 };
 
@@ -31,8 +32,8 @@ function() {
 	}
 	document.getElementById(this.id).style.height = document.getElementById(EmailToolTipSlideShow.mainDivId).offsetHeight;
 	document.getElementById(this.id).style.display = "block";
+
 	this.slideShow.currentSlideId = this.id;
-	
 	if(this.slideShow.currentSelectIconDivId) {
 		document.getElementById(this.slideShow.currentSelectIconDivId).style.display = "none";
 	}
@@ -41,5 +42,41 @@ function() {
 
 	if(this._selectCallback) {
 		this._selectCallback.run();
+	}
+};
+
+/**
+*Sets main div element that can be used to show info/error-msgs inline
+*/
+EmailToolTipSlide.prototype.setCanvasElement =
+function(el) {
+	this.canvasElement = el;
+};
+
+
+
+EmailToolTipSlide.prototype.setInfoMessage =
+function(msg) {
+	this._appendMsg2Slide(msg, "EmailToolTipSlideMsgColor");
+};
+
+
+EmailToolTipSlide.prototype.setErrorMessage =
+function(msg) {
+	this._appendMsg2Slide(msg, "EmailToolTipSlideErrorColor");
+};
+
+EmailToolTipSlide.prototype._appendMsg2Slide =
+function(msg, colorClass) {
+	var html = ["<div class='EmailToolTipSlideText ",colorClass,"'>",msg,"</div>"].join("");
+	if(this.canvasElement) {
+		this.canvasElement.innerHTML = html;
+	}
+};
+
+EmailToolTipSlide.prototype.clearSlideMessage =
+function(msg, colorClass) {
+	if(this.canvasElement) {
+		this.canvasElement.innerHTML = "";
 	}
 };

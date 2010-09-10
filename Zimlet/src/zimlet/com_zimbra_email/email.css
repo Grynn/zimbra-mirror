@@ -8,3 +8,17 @@
 .ImgEmailZimletNavBarBG {
   background: url("img/EmailZimletNavBar.png") repeat;
 }
+
+.EmailToolTipSlideText {
+	position:relative;
+	top:40%;
+	font-size:12px;
+	font-weight:bold;
+}
+
+.EmailToolTipSlideErrorColor {
+	color:#8C0000;
+}
+.EmailToolTipSlideMsgColor {
+	color:#666666;
+}
