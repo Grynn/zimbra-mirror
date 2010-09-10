@@ -1,0 +1,66 @@
+#!/bin/bash
+#
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.3 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+
+if [ x`whoami` != xzimbra ]; then
+    echo Error: must be run as zimbra user
+    exit 1
+fi
+
+source `dirname $0`/../bin/zmshutil || exit 1
+zmsetvars
+
+download_dir=${mailboxd_directory}/webapps/zimbra/downloads
+
+client_file=$1
+
+if [ x${client_file} = "x" ]; then
+    echo 'Usage: $0 <filename>'
+    exit 1
+fi
+
+client_file_basename=`basename $client_file`
+
+# sed RE
+version_re='[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.*\(_BETA[^_]*_\)*\(_GA_\)*[0-9][0-9]*'
+client_file_appglob=`echo $client_file_basename | sed -e "s/$version_re/*/"`
+
+if [ ! -r ${client_file} ]; then
+    echo Error: ${client_file} does not exist or is unreadable
+    exit 1
+fi
+
+if [ ! -d ${download_dir} ]; then
+    echo Error: ${download_dir} does not exist
+    exit 1
+fi
+
+cp -f ${client_file} ${download_dir}
+
+if [ $? -ne 0 ]; then
+	echo Error: copy failed
+	exit 1
+fi
+
+for file in `ls ${download_dir}/${client_file_appglob}`; do
+	if [ ${file} = ${download_dir}/${client_file_basename} ]; then
+		continue
+	fi
+	echo Removing ${file}
+	/bin/rm -f ${file}
+done
+
+
+${zimbra_home}/bin/zmmailboxdctl update

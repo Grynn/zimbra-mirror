@@ -45,11 +45,7 @@ mk_download_dir() {
     cat >${mailboxd_directory}/webapps/zimbra/downloads/index.html<<EOF
 <HTML><BODY>
 EOF
-    for i in ${mailboxd_directory}/webapps/zimbra/downloads/*; do
-      filename=`basename $i`
-      if [ x$filename = "xindex.html" ]; then
-        continue
-      fi
+    for filename in `ls -r ${mailboxd_directory}/webapps/zimbra/downloads/ | grep -v html`; do
       cat >>${mailboxd_directory}/webapps/zimbra/downloads/index.html<<EOF
 <BR>
 <A HREF="/downloads/${filename}">${filename}</A>
@@ -150,8 +146,12 @@ case "$1" in
       fi
     ;;
 
+	'update')
+		mk_download_dir
+	;;
+
     *)
-      echo "Usage: $0 start|stop|kill|restart|reload|status"
+      echo "Usage: $0 start|stop|kill|restart|reload|status|update"
       exit 1
     ;;
 esac
