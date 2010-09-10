@@ -314,12 +314,15 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             beginTransaction("setConversationId", octxt);
 
             Message msg = getMessageById(msgId);
+            Conversation oldConv = (Conversation) msg.getParent();
             if (convId == msg.getConversationId()) {
                 success = true;
+                if (oldConv != null && (oldConv.getSize() < 1 || oldConv.getUnreadCount() < msg.getUnreadCount())) {
+                    OfflineLog.offline.error("Conversation size/unread inconsistent for conversation "+oldConv);
+                }
                 return;
             }
 
-            Conversation oldConv = (Conversation) msg.getParent();
 
             try {
                 Conversation newConv;
@@ -329,9 +332,11 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 } else {
                     // moving to an existing real conversation
                     newConv = getConversationById(convId);
-                    newConv.addChild(msg);
                 }
                 DbMailItem.setParent(msg, newConv);
+                if (convId > 0) {
+                    newConv.addChild(msg);
+                }
                 msg.markItemModified(Change.MODIFIED_PARENT);
                 msg.mData.parentId = convId;
                 msg.mData.metadataChanged(this);
