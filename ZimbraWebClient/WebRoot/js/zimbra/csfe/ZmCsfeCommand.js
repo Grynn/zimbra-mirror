@@ -385,7 +385,7 @@ function(params) {
 
 	if (window.DBG) {
 		var ts = DBG._getTimeStamp();
-		DBG.println(["<b>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</b>"].join(""), params.methodNameStr);
+		DBG.println(AjxDebug.DBG1, ["<b>", params.methodNameStr, params.asyncMode ? "" : " (SYNCHRONOUS)" , " - ", ts, "</b>"].join(""), params.methodNameStr);
 		DBG.dumpObj(AjxDebug.DBG1, obj);
 	}
 
@@ -491,7 +491,7 @@ function(params) {
 
 	if (window.DBG) {
 		var ts = DBG._getTimeStamp();
-		DBG.println(["<b>", params.methodNameStr, params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</b>"].join(""), params.methodNameStr);
+		DBG.println(AjxDebug.DBG1, ["<b>", params.methodNameStr, params.asyncMode ? "" : " (SYNCHRONOUS)" , " - ", ts, "</b>"].join(""), params.methodNameStr);
 		DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
 	}
 
@@ -614,7 +614,7 @@ function(response, params) {
 	if (window.DBG) {
 		var ts = DBG._getTimeStamp();
 		var method = ZmCsfeCommand.getMethodName(obj.Body);
-		DBG.println(["<b>" + method, params.asyncMode ? " (asynchronous)" : "" , " - ", ts, "</b>"].join(""), method);
+		DBG.println(AjxDebug.DBG1, ["<b>" + method, params.asyncMode ? "" : " (SYNCHRONOUS)" , " - ", ts, "</b>"].join(""), method);
 	}
 	DBG.dumpObj(AjxDebug.DBG1, obj, -1);
 
