@@ -304,7 +304,7 @@ function(params) {
 
 
 	var isAliasSpec = false;
-	for(var i = 0; i < params.types.length; i++) {
+	for(var i = 0; params.types && i < params.types.length; i++) {
 		if(params.types[i] == ZaSearch.ALIASES)
 			isAliasSpec = true;
 	}
