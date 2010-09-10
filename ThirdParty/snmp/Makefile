@@ -53,6 +53,9 @@ endif
 ifeq ($(BUILD_PLATFORM), F11_64)
 	ENVMOD := env LIBS="-L/usr/lib64"
 endif
+ifeq ($(BUILD_PLATFORM), F13_64)
+	ENVMOD := env LIBS="-L/usr/lib64"
+endif
 
 files   := $(wildcard src/$(SNMP_NAME)-$(SNMP_VERSION).tar.gz)
 
