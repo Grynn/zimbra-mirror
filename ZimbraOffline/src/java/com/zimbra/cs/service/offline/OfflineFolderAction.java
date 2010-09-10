@@ -76,12 +76,12 @@ public class OfflineFolderAction extends FolderAction {
             ombx.sync(true, traceOn);
         }
         
-        // if it's a newly created folder, id must have been re-numbered after the sync. so we need to fix it in this request
-        if (isNew) {
-            String newId = Integer.toString(ombx.getFolderByName(octxt, folder.getParentId(), folder.getName()).getId());
-            action.addAttribute(MailConstants.A_ID, zid.equals("") ? newId : zid + ":" + newId);
+        //even if folder is not new, it might have been renumbered by a background sync. getFolderById() checks renumbered so we are covered in either case
+        folder = mbox.getFolderById(octxt, id);
+        String renumFolderId = Integer.toString(folder.getId());
+        if (!folderId.equals(renumFolderId)) {
+            action.addAttribute(MailConstants.A_ID, zid.equals("") ? renumFolderId : zid + ":" + renumFolderId);
         }
-        
         // proxy this operation to the remote server
         Element response = ombx.proxyRequest(request, zsc.getResponseProtocol(), quietWhenOffline, operation);
         if (response != null)
