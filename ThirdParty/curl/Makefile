@@ -13,17 +13,16 @@ ZIMBRA_HOME ?= /opt/zimbra
 
 ifdef BETA
 	include $(CURL_ROOT)/../beta_versions.def
-	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch; patch -N -g0 -p1 < ../patches/proxy.patch;
+	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch; patch -N -g0 -p1 < ../patches/proxy.patch; patch -N -g0 -p1 < ../patches/f13-lrt.patch;
 else
 	include $(CURL_ROOT)/../versions.def
-	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch; patch -N -g0 -p1 < ../patches/proxy.patch;
+	PATCH	:= patch -N -g0 -p1 < ../patches/krb5-7200.patch; patch -N -g0 -p1 < ../patches/proxy.patch; patch -N -g0 -p1 < ../patches/f13-lrt.patch;
 endif
 
 
 CURL_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/curl/curl-$(CURL_VERSION).tgz
 
 LIB_DIR := /usr/lib
-SEDC	:=
 
 ifeq ($(BUILD_PLATFORM), RHEL4_64)
 	LIB_DIR := /usr/lib64
@@ -63,7 +62,6 @@ endif
 
 ifeq ($(BUILD_PLATFORM), F13_64)
 	LIB_DIR := /usr/lib64
-	SEDC := (cd curl-$(CURL_VERSION); sed -i.bak -e 's|S\["CURL_LIBS"\]="-lz"|S\["CURL_LIBS"\]="-lz -lrt"|' config.status;./config.status)
 endif
 
 files	:= $(wildcard src/curl-$(CURL_VERSION).tar.gz)
@@ -81,6 +79,7 @@ build:
 	tar xzf src/curl-$(CURL_VERSION).tar.gz
 	(cd curl-$(CURL_VERSION); \
 	$(PATCH) \
+	./buildconf; \
 	DYLD_LIBRARY_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) \
 	LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) \
 	LDFLAGS="-L$(OPENSSL_LIB_DIR) -L$(HEIMDAL_LIB_DIR) -L$(CURL_LIB_DIR) \
@@ -92,7 +91,6 @@ build:
 		--with-ca-bundle=/opt/zimbra/curl-$(CURL_VERSION)/share/curl/ca-bundle.crt \
 		--with-zlib=$(LIB_DIR) \
 		--with-libidn=$(LIB_DIR))
-	$(SEDC)
 	(cd curl-$(CURL_VERSION);  LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) $(MAKE) $(MAKEARGS))
 	(cd curl-$(CURL_VERSION); LD_RUN_PATH=$(OPENSSL_LIB_DIR):$(HEIMDAL_LIB_DIR):$(CURL_LIB_DIR) $(MAKE) $(MAKEARGS) install)
 	(cd curl-$(CURL_VERSION); $(MAKE) ca-bundle)
