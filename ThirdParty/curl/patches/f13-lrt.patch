@@ -8,3 +8,14 @@
          AC_MSG_RESULT([$curl_cv_gclk_LIBS])
          ac_cv_func_clock_gettime="yes"
          ;;
+--- tests/libtest/Makefile.am.orig	2010-09-11 12:09:08.563708601 -0700
++++ tests/libtest/Makefile.am	2010-09-11 12:09:27.713709446 -0700
+@@ -54,7 +54,7 @@
+ test1022.pl Makefile.inc
+ 
+ # Dependencies (may need to be overriden)
+-LDADD = $(top_builddir)/lib/libcurl.la
++LDADD = $(top_builddir)/lib/libcurl.la @CURL_LIBS@
+ DEPENDENCIES = $(top_builddir)/lib/libcurl.la
+ 
+ # Makefile.inc provides the source defines (TESTUTIL, SUPPORTFILES,
