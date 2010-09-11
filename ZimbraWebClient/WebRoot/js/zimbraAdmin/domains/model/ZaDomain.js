@@ -110,6 +110,7 @@ ZaDomain.A_zimbraPublicServiceHostname = "zimbraPublicServiceHostname";
 ZaDomain.A_zimbraPublicServicePort = "zimbraPublicServicePort";
 ZaDomain.A_zimbraPublicServiceProtocol = "zimbraPublicServiceProtocol";
 ZaDomain.A_zimbraDNSCheckHostname = "zimbraDNSCheckHostname";
+ZaDomain.A_zimbraBasicAuthRealm = "zimbraBasicAuthRealm";
 
 //GAL search
 ZaDomain.A_zimbraGalMaxResults = "zimbraGalMaxResults";
@@ -453,6 +454,11 @@ function(tmpObj, newDomain) {
 	
 	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_description]);
 	attr.setAttribute("n", ZaDomain.A_description);		
+    
+	if(tmpObj.attrs[ZaDomain.A_zimbraBasicAuthRealm]){
+		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraBasicAuthRealm]);
+        	attr.setAttribute("n", ZaDomain.A_zimbraBasicAuthRealm);
+	}
 
 	if(tmpObj.attrs[ZaDomain.A_zimbraGalMode] != ZaDomain.GAL_Mode_internal) {
 		temp = tmpObj.attrs[ZaDomain.A_GalLdapURL].join(" ");
@@ -1686,7 +1692,8 @@ ZaDomain.myXModel = {
 		{id:ZaItem.A_zimbraCreateTimestamp, ref:"attrs/" + ZaItem.A_zimbraCreateTimestamp},
 		{id:ZaDomain.A_domainName, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainName, maxLength:255},
 		{id:ZaDomain.A_zimbraPublicServiceHostname, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraPublicServiceHostname, maxLength:255},
-		{id:ZaDomain.A_zimbraDNSCheckHostname, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraDNSCheckHostname, maxLength:255},		
+		{id:ZaDomain.A_zimbraDNSCheckHostname, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraDNSCheckHostname, maxLength:255},
+		{id:ZaDomain.A_zimbraBasicAuthRealm, type:_COS_STRING_, ref:"attrs/" + ZaDomain.A_zimbraBasicAuthRealm, maxLength:255},		
 		{id:ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleDNSCheckEnabled},
         {id:ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleCatchAllAddressEnabled},
         {id:ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled},    

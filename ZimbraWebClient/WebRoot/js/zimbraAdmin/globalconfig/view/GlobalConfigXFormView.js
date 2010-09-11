@@ -378,7 +378,10 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 									 		onMouseout: "ZaController.hideTooltip"
 										}
 									]
-						  		},
+						  		},							                                                                      { ref: ZaGlobalConfig.A_zimbraBasicAuthRealm, type: _TEXTFIELD_,
+                                                                  label:ZaMsg.Domain_zimbraBasicAuthRealm,
+                                                                  toolTipContent: ZaMsg.Domain_zimbraBasicAuthRealm
+                                                                },
 								{ type: _DWT_ALERT_,
 									containerCssStyle: "padding-bottom:0px",
 									style: DwtAlert.INFO,

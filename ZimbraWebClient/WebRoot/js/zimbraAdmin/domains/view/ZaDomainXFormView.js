@@ -704,6 +704,13 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 	  label:ZaMsg.Domain_zimbraPublicServiceHostname, width:250,
 	  onChange:ZaDomainXFormView.onFormFieldChanged
   	});
+        
+	case1.items.push({ ref: ZaDomain.A_zimbraBasicAuthRealm,
+                             type: _SUPER_TEXTFIELD_, width: 250 ,
+                             resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                             onChange: ZaDomainXFormView.onFormFieldChanged ,
+                             txtBoxLabel: ZaMsg.Domain_zimbraBasicAuthRealm					
+	});
 
 	var group = {type:_GROUP_,colSpan:"2", id:"dns_check_group",items: [], width:"100%"};
 	case1.items.push({ type: _DWT_ALERT_,
