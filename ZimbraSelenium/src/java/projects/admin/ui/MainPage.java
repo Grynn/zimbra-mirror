@@ -9,7 +9,7 @@ import framework.util.HarnessException;
  */
 public class MainPage extends AbsPage {
 
-	public static final String PageName = "MainPage";
+	private static final String MyPageName = "MainPage";
 
 	public static final String Zskin_td_logo			= "xpath=//*[@id='skin_td_logo']";
 	public static final String Zskin_container_username	= "xpath=//*[@id='skin_container_username']";
@@ -23,6 +23,11 @@ public class MainPage extends AbsPage {
 		logger.info("new " + MainPage.class.getCanonicalName());
 	}
 	
+	@Override
+	public String myPageName() {
+		return (MyPageName);
+	}
+
 	/**
 	 * If the "Logout" button is visible, assume the MainPage is active
 	 */
@@ -32,6 +37,25 @@ public class MainPage extends AbsPage {
 		boolean active = super.isVisible(Zskin_td_logo);
 		logger.debug("isActive() = "+ active);
 		return (active);
+	}
+
+	@Override
+	public void navigateTo() throws HarnessException {
+
+		if ( isActive() ) {
+			// This page is already active
+			return;
+		}
+		
+		// 1. Logout
+		// 2. Login as the default account
+		if ( !MyApplication.zLoginPage.isActive() ) {
+			MyApplication.zLoginPage.navigateTo();
+		}
+		MyApplication.zLoginPage.login();
+
+		waitForActive(30000);
+		
 	}
 
 	/**
@@ -45,6 +69,10 @@ public class MainPage extends AbsPage {
 			throw new HarnessException("MainPage is not active");
 
 		super.click(Zskin_container_logoff);
+		
+		MyApplication.zLoginPage.waitForActive(30000);
+		
+		MyApplication.setActiveAcount(null);
 
 	}
 	
@@ -58,5 +86,7 @@ public class MainPage extends AbsPage {
 		return (username);
 		
 	}
+
+
 
 }

@@ -2,6 +2,9 @@ package projects.admin.ui;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.dom4j.DocumentException;
+
+import com.zimbra.common.soap.Element;
 
 import framework.core.ClientSessionFactory;
 import framework.util.HarnessException;
@@ -15,7 +18,6 @@ import framework.util.SleepUtil;
 public abstract class AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsPage.class);
 	
-	public static final String PageName = "AbsPage";
 	protected AppAdminConsole MyApplication = null;
 
 	public AbsPage(AbsApplication application) {
@@ -24,13 +26,17 @@ public abstract class AbsPage {
 	}
 	
 	/**
+	 * Return the unique name for this page
+	 * @return
+	 */
+	public abstract String myPageName();
+	
+	/**
 	 * Determines if this page is active
 	 * @return true if active.  false if not.
 	 * @throws HarnessException
 	 */
-	public boolean isActive() throws HarnessException {
-		throw new HarnessException("isActive() not defined for this page");
-	}
+	public abstract boolean isActive() throws HarnessException;
 
 	public void waitForActive(long millis) throws HarnessException {
 		
@@ -54,19 +60,49 @@ public abstract class AbsPage {
 		throw new HarnessException("Page never became active");
 	}
 	
+	/**
+	 * Navigate to this page
+	 * @throws HarnessException
+	 */
+	public abstract void navigateTo() throws HarnessException;
+	
+
 	//// ***
 	// Start: Selenium methods
 	//// ***
 	
+	protected final String getHtmlSource() throws HarnessException {
+		String htmlString = ClientSessionFactory.session().selenium().getHtmlSource();
+		return (htmlString);
+	}
+	
+	protected final String getSelectedId(String locator) {
+		String id = ClientSessionFactory.session().selenium().getSelectedId(locator);
+		logger.info("getSelectedId(" + locator + ") = "+ id);
+		return (id);
+	}
+	
+
 	protected final void click(String locator) {
 		ClientSessionFactory.session().selenium().click(locator);
 		logger.info("click(" + locator + ")");
 	}
 	
+	protected final void focus(String locator) {
+		ClientSessionFactory.session().selenium().focus(locator);
+		logger.info("focus(" + locator + ")");
+	}
+	
+	protected final boolean isElementPresent(String locator) {
+		boolean present = ClientSessionFactory.session().selenium().isElementPresent(locator);
+		logger.info("isElementPresent(" + locator + ") = " + present);
+		return (present);
+	}
+
 	protected final boolean isVisible(String locator) {
-		boolean active = ClientSessionFactory.session().selenium().isVisible(locator);
-		logger.info("isVisible(" + locator + ") = " + active);
-		return (active);
+		boolean visible = ClientSessionFactory.session().selenium().isVisible(locator);
+		logger.info("isVisible(" + locator + ") = " + visible);
+		return (visible);
 	}
 
 
@@ -80,7 +116,7 @@ public abstract class AbsPage {
 		ClientSessionFactory.session().selenium().type(locator, text);
 		logger.info("type(" + locator + ", " + text + ")");
 	}
-	
+
 	//// ***
 	// End: Selenium methods
 	//// ***

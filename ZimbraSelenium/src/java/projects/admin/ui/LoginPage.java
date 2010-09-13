@@ -1,5 +1,7 @@
 package projects.admin.ui;
 
+import com.zimbra.common.soap.Element;
+
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraAdminAccount;
@@ -11,11 +13,13 @@ import framework.util.ZimbraAdminAccount;
  */
 public class LoginPage extends AbsPage {
 	
-	public static final String PageName = "LoginPage";
+	private static final String MyPageName = "LoginPage";
 
+	public static final String ZLoginDialog = "xpath=//div[@class='ZaLoginDialog']";
 	public static final String ZLoginUserName = "xpath=//*[@id='ZLoginUserName']";
 	public static final String ZLoginPassword = "xpath=//*[@id='ZLoginPassword']";
 	public static final String ZLoginButtonContainer = "xpath=//*[@id='ZLoginButton']";
+	public static final String ZLoginLicenseContainer = "xpath=//*[@id='ZLoginLicenseContainer']";
 
 	/**
 	 * An object that controls the Admin Console Login Page
@@ -26,18 +30,54 @@ public class LoginPage extends AbsPage {
 		logger.info("new " + LoginPage.class.getCanonicalName());
 	}
 	
+	@Override
+	public String myPageName() {
+		return (MyPageName);
+	}
+
 	/**
 	 * If the "Login" button is visible, assume the LoginPage is active
 	 */
 	public boolean isActive() throws HarnessException {
+		String id = super.getSelectedId(ZLoginDialog);
+		logger.info("id = "+ id);
 		
 		// Look for the login button. 
-		boolean active = isVisible(ZLoginButtonContainer);
+		boolean present = super.isElementPresent(ZLoginButtonContainer);
+		if ( !present ) {
+			logger.debug("isActive() present = "+ present);
+			return (false);
+		}
 		
-		logger.debug("isActive() = "+ active);
-		return (active);
+		// is it visible? 
+		super.focus(ZLoginButtonContainer);
+		boolean visible = isVisible(ZLoginButtonContainer);
+		if ( !visible ) {
+			logger.debug("isActive() visible = "+ visible);
+			return (false);
+		}
+		
+		logger.debug("isActive() = "+ true);
+		return (true);
 	}
 		
+	@Override
+	public void navigateTo() throws HarnessException {
+		
+		if ( isActive() ) {
+			// This page is already active.
+			return;
+		}
+		
+		// Logout
+		if ( MyApplication.zMainPage.isActive() ) {
+			MyApplication.zMainPage.logout();
+		}
+		
+		waitForActive(30000);
+	}
+
+
 	/**
 	 * Login as the GlobalAdmin
 	 * @throws HarnessException
@@ -68,6 +108,8 @@ public class LoginPage extends AbsPage {
 		// Wait for the app to load
 		MyApplication.zMainPage.waitForActive(30000);
 		
+		MyApplication.setActiveAcount(account);
+		
 	}
 	
 	/**
@@ -83,6 +125,7 @@ public class LoginPage extends AbsPage {
 		super.type(ZLoginUserName, account.EmailAddress);
 		super.type(ZLoginPassword, account.Password);
 	}
+
 
 
 }

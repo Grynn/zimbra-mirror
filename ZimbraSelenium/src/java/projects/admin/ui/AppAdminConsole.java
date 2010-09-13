@@ -26,10 +26,10 @@ public class AppAdminConsole extends AbsApplication {
 		pages = new HashMap<String, AbsPage>();
 		
 		zLoginPage = new LoginPage(this);
-		pages.put(LoginPage.PageName, zLoginPage);
+		pages.put(zLoginPage.myPageName(), zLoginPage);
 		
 		zMainPage = new MainPage(this);
-		pages.put(MainPage.PageName, zMainPage);
+		pages.put(zLoginPage.myPageName(), zMainPage);
 
 	}
 

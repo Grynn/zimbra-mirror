@@ -9,6 +9,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
+import projects.admin.ui.AbsPage;
 import projects.admin.ui.AppAdminConsole;
 
 import com.thoughtworks.selenium.SeleniumException;
@@ -32,14 +33,29 @@ public class CommonTest {
 	/**
 	 * Helper field.  admin = ZimbraAdminAccount.GlobalAdmin()
 	 */
-	protected ZimbraAdminAccount admin = null;
+	protected final ZimbraAdminAccount gAdmin = ZimbraAdminAccount.GlobalAdmin();
+	
+
+	/**
+	 * The AdminConsole application object
+	 */
 	protected AppAdminConsole app = null;
+
+	/**
+	 * BeforeMethod variables
+	 * startingPage = the starting page before the test method starts
+	 * startingAccount = the account to log in as
+	 */
+	protected AbsPage startingPage = null;
+	protected ZimbraAdminAccount startingAccount = null;
 	
 	protected CommonTest() {
 		logger.info("New "+ CommonTest.class.getCanonicalName());
 		
-		admin = ZimbraAdminAccount.GlobalAdmin();
 		app = new AppAdminConsole();
+		
+		startingPage = app.zMainPage;
+		startingAccount = gAdmin;
 		
 	}
 	
@@ -89,9 +105,8 @@ public class CommonTest {
 	/**
 	 * Global BeforeMethod
 	 * 
-	 * 1. For all tests, make sure the global admin is logged in
-	 * If the global admin should not be logged in for the test, then
-	 * the individual test case should log out
+	 * 1. For all tests, make sure the CommonTest.startingPage is active
+	 * 2. For all tests, make sure the logged in user is 
 	 * 
 	 * @throws HarnessException
 	 */
@@ -99,9 +114,40 @@ public class CommonTest {
 	public void commonTestBeforeMethod() throws HarnessException {
 		logger.info("commonTestBeforeMethod: start");
 		
-		if ( !app.zMainPage.isActive() ) {
+		// If a startinAccount is defined, then make sure we are authenticated as that user
+		if ( startingAccount != null ) {
+			logger.debug("commonTestBeforeMethod: startingAccount is defined");
+			
+			if ( !startingAccount.equals(app.getActiveAccount())) {
+				
+				if ( app.zMainPage.isActive() )
+					app.zMainPage.logout();
+				app.zLoginPage.login(startingAccount);
+				
+			}
+			
+			// Confirm
+			if ( !startingAccount.equals(app.getActiveAccount())) {
+				throw new HarnessException("Unable to authenticate as "+ startingAccount.EmailAddress);
+			}
+		}
+
+		// If a startingPage is defined, then make sure we are on that page
+		if ( startingPage != null ) {
+			logger.debug("commonTestBeforeMethod: startingPage is defined");
+			
+			// If the starting page is not active, navigate to it
+			if ( !startingPage.isActive() ) {
+				startingPage.navigateTo();
+			}
+			
+			// Confirm that the page is active
+			if ( !startingPage.isActive() ) {
+				throw new HarnessException("Unable to navigate to "+ startingPage.myPageName());
+			}
 			
 		}
+		
 
 		logger.info("commonTestBeforeMethod: finish");
 
