@@ -71,7 +71,7 @@ DwtMenuItem = function(params) {
 	}
 };
 
-DwtMenuItem.PARAMS = ["parent", "style", "radioGroupId", "index", "className", "posStyle"];
+DwtMenuItem.PARAMS = ["parent", "style", "radioGroupId", "index", "className", "posStyle", "id"];
 
 DwtMenuItem.prototype = new DwtButton;
 DwtMenuItem.prototype.constructor = DwtMenuItem;

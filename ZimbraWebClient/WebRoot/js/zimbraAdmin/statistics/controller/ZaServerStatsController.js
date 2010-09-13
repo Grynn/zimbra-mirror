@@ -75,7 +75,7 @@ function(item,openInNewTab) {
 		this._toolbarOrder.push(ZaOperation.PAGE_FORWARD);
 		this._toolbarOrder.push(ZaOperation.HELP);
 			
-		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder);    		
+		this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_STATIS);    		
 		
 		//disable the page_forward and page_back at the beginning
 		this._toolbar.enable([ZaOperation.PAGE_FORWARD, ZaOperation.PAGE_BACK, ZaOperation.LABEL], false);

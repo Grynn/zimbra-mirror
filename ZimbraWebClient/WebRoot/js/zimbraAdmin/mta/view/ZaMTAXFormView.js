@@ -448,7 +448,7 @@ ZaMTAXFormView.createPopupMenu = function (listWidget) {
 	} else {
 		popupOperations.push(new ZaOperation(ZaOperation.HOLD, ZaMsg.TBB_Hold, ZaMsg.PQ_Hold_tt, null, null, new AjxListener(listWidget, ZaMTAXFormView.popupMenuListener,ZaMTA.ActionHold )));
 	}
-	listWidget.actionMenu = new ZaPopupMenu(listWidget, "ActionMenu", null, popupOperations);
+	listWidget.actionMenu = new ZaPopupMenu(listWidget, "ActionMenu", null, popupOperations, ZaId.VIEW_MTA, ZaId.MENU_POP);
 	listWidget.addActionListener(new AjxListener(listWidget, ZaMTAXFormView.listActionListener));		
 	listWidget.xFormItem = this;
 }

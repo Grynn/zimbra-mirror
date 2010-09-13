@@ -139,6 +139,13 @@ function () {
 	   	this._toolbarOperations[ZaOperation.CHECK_MX_RECORD]=new ZaOperation(ZaOperation.CHECK_MX_RECORD,ZaMsg.DTBB_CheckMX, ZaMsg.DTBB_CheckMX_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaDomainController.prototype._checkMXButtonListener));
 		this._toolbarOrder.push(ZaOperation.CHECK_MX_RECORD);	   	
 	}
+	//qin@zimbra.com
+
+	this._toolbarOperations[ZaOperation.INSTALL_DOMAIN_CERT] = new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_launch_cert_wizard, 
+        	ZaMsg.TBB_launch_cert_wizard_tt, "InstallCertificate", "InstallCertificate", 
+        	new AjxListener(this, ZaDomainController.prototype._newCertListener));
+	this._toolbarOrder.push(ZaOperation.INSTALL_DOMAIN_CERT);
+
 }
 ZaController.initToolbarMethods["ZaDomainController"].push(ZaDomainController.initToolbarMethod);
 
@@ -171,7 +178,7 @@ function (entry) {
 	this._toolbarOperations[ZaOperation.HELP]=new ZaOperation(ZaOperation.HELP,ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));							
 	this._toolbarOrder.push(ZaOperation.NONE);
 	this._toolbarOrder.push(ZaOperation.HELP);	
-	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder);		
+	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,this._toolbarOrder, null, null, ZaId.VIEW_DOMAIN);		
 	
 	var elements = new Object();
 	elements[ZaAppViewMgr.C_APP_CONTENT] = this._view;
@@ -582,6 +589,18 @@ function (ev) {
 	var callback = new AjxCallback(this, this.checkMXCallback);
 	ZaDomain.checkDomainMXRecord(this._currentObject, callback);
 }
+
+//qin@zimbra.com
+ZaDomainController.prototype._newCertListener = 
+function (ev) {
+        if(!this._currentDomainName) {
+                this._currentDomainName = this._currentObject.attrs[ZaDomain.A_domainName];
+        }
+
+        ZaCert.launchNewCertWizard.call (this, this._currentDomainName) ;
+
+}
+
 
 ZaDomainController.prototype.checkMXCallback = 
 function (resp) {

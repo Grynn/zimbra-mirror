@@ -13,12 +13,21 @@
  * ***** END LICENSE BLOCK *****
  */
 
-ZaOverviewPanel = function(parent, className, posStyle) {
-	DwtComposite.call(this, parent, className, posStyle);
+
+ZaOverviewPanel = function(params) {
+        if (arguments.length == 0) { return; }
+	this.overviewId = params.id;
+	params.id = ZaId.getOverviewId(ZaId.PANEL_APP);	
+        params = Dwt.getParams(arguments, ZaOverviewPanel.PARAMS);
+        params.className = params.className || "ZaOverviewPanel";
+        DwtComposite.call(this, params);
+
 	this.addControlListener(new AjxListener(this, this._panelControlListener));
 	this._createFolderTree();
 	this._layout();
 }
+
+ZaOverviewPanel.PARAMS = ["parent", "className", "posStyle", "id"];
 
 ZaOverviewPanel.prototype = new DwtComposite();
 ZaOverviewPanel.constructor = ZaOverviewPanel;
@@ -37,8 +46,21 @@ function() {
 
 ZaOverviewPanel.prototype._createFolderTree =
 function() {
-	this._treePanel = new DwtComposite(this, "OverviewTreePanel", DwtControl.ABSOLUTE_STYLE);
-	this._tree = new DwtTree(this._treePanel, DwtTree.SINGLE_STYLE, "OverviewTree" , DwtControl.ABSOLUTE_STYLE);
+        this._treePanel = new DwtComposite({
+		parent:		this, 
+		className:	"OverviewTreePanel", 
+		posStyle:	DwtControl.ABSOLUTE_STYLE,
+		id:		ZaId.getTreeId(this.overviewId, this.type)
+	});
+        this._tree = new DwtTree({
+		parent:		this._treePanel, 
+		style:		DwtTree.SINGLE_STYLE, 
+		className:	"OverviewTree" , 
+		posStyle:	DwtControl.ABSOLUTE_STYLE,
+		id:		ZaId.getTreeId(this.overviewId, DwtTree.SINGLE_STYLE)
+	});
+
+
 }
 	
 ZaOverviewPanel.prototype._layout =

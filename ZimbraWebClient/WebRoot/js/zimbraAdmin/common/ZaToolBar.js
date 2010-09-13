@@ -20,12 +20,13 @@
 * @param parent parent object
 * @param opList array of ZaOperation objects
 **/
-ZaToolBar = function(parent, opList,btnOrder,posStyle,className) {
+ZaToolBar = function(parent, opList,btnOrder,posStyle,className, contextId) { 
 	if (arguments.length == 0) return;
 	className = className || "ZaToolBar";
 	posStyle = posStyle || DwtControl.ABSOLUTE_STYLE;
 
-	DwtToolBar.call(this, parent, className, posStyle);
+	this._barViewId = contextId;
+	DwtToolBar.call(this, {parent:parent, className:className, posStyle:posStyle, id: ZaId.getToolbarId(this._barViewId)});
 	this._opList = opList ;
     this._btnOrder = btnOrder ;
     this._buttons = new Object(); //all the buttons on the toolbar
@@ -213,7 +214,11 @@ ZaToolBar.prototype._createButton =
 function(buttonId, imageId, text, disImageId, toolTip, enabled, className, type, menuOpList) {
 	if (!className)
 		className = "DwtToolbarButton"
-	var b = this._buttons[buttonId] = new ZaToolBarButton(this, null, className);
+	var b = this._buttons[buttonId] = new ZaToolBarButton({
+			parent:this, 
+			className:className, 
+			id:ZaId.getButtonId(this._barViewId,ZaOperation.getStringName(buttonId))
+	});
 	if (imageId)
 		b.setImage(imageId);
 	if (text)
@@ -224,7 +229,7 @@ function(buttonId, imageId, text, disImageId, toolTip, enabled, className, type,
 	b.setData("_buttonId", buttonId);
 
 	if (type == ZaOperation.TYPE_MENU) {
-		var menu = new ZaPopupMenu(b, null,null, menuOpList);
+		var menu = new ZaPopupMenu(b, null,null, menuOpList, this._barViewId, ZaId.MENU_DROP);
 		b.setMenu(menu,true);
 	}
 	return b;

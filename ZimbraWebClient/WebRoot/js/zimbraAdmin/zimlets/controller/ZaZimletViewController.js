@@ -82,7 +82,7 @@ function () {
     //always add Help button at the end of the toolbar
 	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
 	this._toolbarOperations[ZaOperation.HELP] = new ZaOperation(ZaOperation.HELP, ZaMsg.TBB_Help, ZaMsg.TBB_Help_tt, "Help", "Help", new AjxListener(this, this._helpButtonListener));							
-	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,  this._toolbarOrder);		
+	this._toolbar = new ZaToolBar(this._container, this._toolbarOperations,  this._toolbarOrder, null, null, ZaId.VIEW_ZIMLET);		
 
 
     var elements = new Object();

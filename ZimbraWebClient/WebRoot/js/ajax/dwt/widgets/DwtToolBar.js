@@ -67,7 +67,7 @@ DwtToolBar = function(params) {
 	this._keyMapName = ["DwtToolBar", suffix].join("-");
 };
 
-DwtToolBar.PARAMS = ["parent", "className", "posStyle", "style", "index"];
+DwtToolBar.PARAMS = ["parent", "className", "posStyle", "style", "index", "id"];
 
 DwtToolBar.prototype = new DwtComposite;
 DwtToolBar.prototype.constructor = DwtToolBar;

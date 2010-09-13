@@ -13,13 +13,14 @@
  * ***** END LICENSE BLOCK *****
  */
 
-ZaSearchField = function(parent, className, size, posStyle) {
+ZaSearchField = function(parent, className, size, posStyle, id) {
 
-	DwtComposite.call(this, parent, className, posStyle);
+	DwtComposite.call(this, parent, className, posStyle, null, ZaId.getViewId(ZaId.SEARCH_VIEW,null,id));
 	this._containedObject = new ZaSearch();
 	this._initForm(ZaSearch.myXModel,this._getMyXForm());
 	this._localXForm.setInstance(this._containedObject);
 	this._app = ZaApp.getInstance();
+	this._searchFieldId = id;
 }
 
 ZaSearchField.prototype = new DwtComposite;
@@ -286,7 +287,7 @@ function () {
 		this._popupOperations[ZaOperation.DELETE] = new ZaOperation(ZaOperation.DELETE, ZaMsg.TBB_Delete, ZaMsg.ACTBB_Delete_tt, "Delete", "DeleteDis", 
 				new AjxListener(this, this._deleteSavedSearchListener));
 		this._savedSearchActionMenu = 
-			new ZaPopupMenu(this, "ActionMenu", null, this._popupOperations);
+			new ZaPopupMenu(this, "ActionMenu", null, this._popupOperations, this._searchFieldId, ZaId.MENU_POP);
 	}
 	
 	return this._savedSearchActionMenu ;
@@ -360,13 +361,13 @@ function () {
 		this._savedSearchMenu.dispose();	
 	}
 	
-	this._savedSearchMenu = new DwtMenu(this);
+	this._savedSearchMenu = new DwtMenu({parent:this,id:ZaId.getMenuId(ZaId.PANEL_APPSEARCH,ZaId.MENU_DROP)});
 	
 	//add the menu items
 	for (var i=0; i < ZaSearch.SAVED_SEARCHES.length; i ++) {
 		var n = ZaSearch.SAVED_SEARCHES[i].name ;
 		var q = ZaSearch.SAVED_SEARCHES[i].query ;
-		var mItem =  new DwtMenuItem (this._savedSearchMenu) ;
+		var mItem =  new DwtMenuItem ({parent:this._savedSearchMenu, id: (ZaId.getMenuItemId(ZaId.SEARCH_QUERY) + "_" + (i+1))}) ;
 		mItem.setText(n) ;
 		mItem.setSize(b.width) ;
 		mItem.addSelectionListener(new AjxListener(this, ZaSearchField.prototype.selectSavedSearch, [n, q]));
@@ -566,7 +567,8 @@ ZaSearchField.prototype._getMyXForm = function() {
 			{type:_MENU_BUTTON_, label:null, choices:ZaSearchField.searchChoices, 
 				name: "searchMenuButton",
 				toolTipContent:ZaMsg.searchToolTip, 
-				icon:"SearchAll", cssClass:"DwtToolbarButton"},
+				icon:"SearchAll", cssClass:"DwtToolbarButton"
+			},
 			
 			{type: _GROUP_,  numCols: 2, width: "100%", cssClass: "oselect",
 				//cssStyle:"margin-left: 5px; height: 22px; border: 1px solid; ",

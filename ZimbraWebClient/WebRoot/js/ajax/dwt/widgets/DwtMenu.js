@@ -213,7 +213,7 @@ DwtMenu = function(params) {
 	this._created = true;
 };
 
-DwtMenu.PARAMS = ["parent", "style", "className", "posStyle", "cascade"];
+DwtMenu.PARAMS = ["parent", "style", "className", "posStyle", "cascade", "id"];
 
 DwtMenu.prototype = new DwtComposite;
 DwtMenu.prototype.constructor = DwtMenu;

@@ -16,6 +16,7 @@ AjxPackage.require("zimbraAdmin.common.ZaUtil");
 AjxPackage.require("zimbraAdmin.common.ZaEvent");
 AjxPackage.require("zimbraAdmin.common.ZaModel");
 AjxPackage.require("zimbraAdmin.common.ZaItem");
+AjxPackage.require("zimbraAdmin.common.ZaId");
 AjxPackage.require("zimbraAdmin.common.Lifetime_XFormItem");
 AjxPackage.require("zimbraAdmin.config.settings.ZaSettings");
 AjxPackage.require("zimbraAdmin.common.ZaAppCtxt");
