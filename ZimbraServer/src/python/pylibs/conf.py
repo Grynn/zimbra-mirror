@@ -64,7 +64,7 @@ class Config:
 		if state.localconfig["zmmtaconfig_log_level"] is not None:
 			self.loglevel 	= int(state.localconfig["zmmtaconfig_log_level"])
 		self.interval 	= 60
-		if state.localconfig["zmmtaconfig_interval"] is not None:
+		if state.localconfig["zmmtaconfig_interval"] is not None and state.localconfig["zmmtaconfig_interval"] != "":
 			self.interval 	= int(state.localconfig["zmmtaconfig_interval"])
 		self.debug 		= False
 		if state.localconfig["zmmtaconfig_debug"] is not None:
