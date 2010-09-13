@@ -4,11 +4,12 @@ package projects.zcs.tests.features.familymailboxes.gui;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import projects.zcs.tests.CommonTest;
-import framework.core.*;
+import projects.zcs.tests.features.familymailboxes.FamilyMailboxCommonTest;
+import framework.core.ClientSessionFactory;
+import framework.core.SelNGBase;
 import framework.util.RetryFailedTests;
 
-public class TabViews extends CommonTest {
+public class TabViews extends FamilyMailboxCommonTest {
 
 	// --------------
 	// section 2 BeforeClass
@@ -22,12 +23,12 @@ public class TabViews extends CommonTest {
 	 * Test to create Parent/Child configuration and UI verification
 	 */
 	@SuppressWarnings("static-access")
-	@Test(groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(groups = { "smoke", "test" }, retryAnalyzer = RetryFailedTests.class)
 	public void familyMailbox_UIverification() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 		
-		childAccount=addChildAccount();
+		addChildAccount();
 		
 		/**
 		 * UI Verification starts here
@@ -35,18 +36,18 @@ public class TabViews extends CommonTest {
 		 */
 		
 		obj.zButton.zClick(localize(locator.mail));
-		zWaitTillObjectExist("xpath", createXpath(parentAccount, localize(locator.inbox)));
+		zWaitTillObjectExist("xpath", createXpath(PARENT_ACCOUNT, localize(locator.inbox)));
 
-		clickAt(parentAccount, localize(locator.inbox));
-		clickAt(parentAccount, localize(locator.sent));
-		clickAt(parentAccount, localize(locator.drafts));
-		clickAt(parentAccount, localize(locator.junk));
-		clickAt(parentAccount, localize(locator.trash));
-		clickAt(childAccount, localize(locator.inbox));
-		clickAt(childAccount, localize(locator.sent));
-		clickAt(childAccount, localize(locator.drafts));
-		clickAt(childAccount, localize(locator.junk));
-		clickAt(childAccount, localize(locator.trash));
+		clickAt(PARENT_ACCOUNT, localize(locator.inbox));
+		clickAt(PARENT_ACCOUNT, localize(locator.sent));
+		clickAt(PARENT_ACCOUNT, localize(locator.drafts));
+		clickAt(PARENT_ACCOUNT, localize(locator.junk));
+		clickAt(PARENT_ACCOUNT, localize(locator.trash));
+		clickAt(CHILD_ACCOUNT, localize(locator.inbox));
+		clickAt(CHILD_ACCOUNT, localize(locator.sent));
+		clickAt(CHILD_ACCOUNT, localize(locator.drafts));
+		clickAt(CHILD_ACCOUNT, localize(locator.junk));
+		clickAt(CHILD_ACCOUNT, localize(locator.trash));
 
 		obj.zButton.zExists(page.zMailApp.zNewMenuIconBtn);
 		obj.zButton.zExists(page.zMailApp.zViewIconBtn);
@@ -55,14 +56,14 @@ public class TabViews extends CommonTest {
 		 * Check Address Book Tab
 		 */
 		obj.zButton.zClick(localize(locator.addressBook));
-		zWaitTillObjectExist("xpath", createXpath(parentAccount, localize(locator.addressBook)));
+		zWaitTillObjectExist("xpath", createXpath(PARENT_ACCOUNT, localize(locator.addressBook)));
 
-		clickAt(parentAccount, localize(locator.contacts));
-		clickAt(parentAccount, localize(locator.emailedContacts));
-		clickAt(parentAccount, localize(locator.trash));
-		clickAt(childAccount, localize(locator.contacts));
-		clickAt(childAccount, localize(locator.emailedContacts));
-		clickAt(childAccount, localize(locator.trash));
+		clickAt(PARENT_ACCOUNT, localize(locator.contacts));
+		clickAt(PARENT_ACCOUNT, localize(locator.emailedContacts));
+		clickAt(PARENT_ACCOUNT, localize(locator.trash));
+		clickAt(CHILD_ACCOUNT, localize(locator.contacts));
+		clickAt(CHILD_ACCOUNT, localize(locator.emailedContacts));
+		clickAt(CHILD_ACCOUNT, localize(locator.trash));
 
 		obj.zButton.zExists(page.zABApp.zNewContactMenuIconBtn);
 
@@ -70,10 +71,10 @@ public class TabViews extends CommonTest {
 		 * Check Calendar Tab
 		 */
 		obj.zButton.zClick(localize(locator.calendar));
-		zWaitTillObjectExist("xpath", createXpath(parentAccount, localize(locator.calendar)));
+		zWaitTillObjectExist("xpath", createXpath(PARENT_ACCOUNT, localize(locator.calendar)));
 
-		clickAt(parentAccount, localize(locator.calendar));
-		clickAt(childAccount, localize(locator.calendar));
+		clickAt(PARENT_ACCOUNT, localize(locator.calendar));
+		clickAt(CHILD_ACCOUNT, localize(locator.calendar));
 
 		obj.zButton.zExists(page.zCalApp.zCalNewApptBtn);
 		obj.zButton.zExists(page.zCalApp.zCalTodayBtn);
@@ -82,10 +83,10 @@ public class TabViews extends CommonTest {
 		 * Check Tasks Tab
 		 */
 		obj.zButton.zClick(localize(locator.tasks));
-		zWaitTillObjectExist("xpath", createXpath(parentAccount, localize(locator.tasks)));
+		zWaitTillObjectExist("xpath", createXpath(PARENT_ACCOUNT, localize(locator.tasks)));
 
-		clickAt(parentAccount, localize(locator.tasks));
-		clickAt(childAccount, localize(locator.tasks));
+		clickAt(PARENT_ACCOUNT, localize(locator.tasks));
+		clickAt(CHILD_ACCOUNT, localize(locator.tasks));
 
 		obj.zButton.zExists(page.zTaskApp.zTasksNewBtn);
 		obj.zButton.zExists(page.zTaskApp.zTasksViewBtn);
@@ -94,10 +95,10 @@ public class TabViews extends CommonTest {
 		 * Check Documents Tab
 		 */
 		obj.zButton.zClick(localize(locator.documents));
-		zWaitTillObjectExist("xpath", createXpath(parentAccount, localize(locator.notebook)));
+		zWaitTillObjectExist("xpath", createXpath(PARENT_ACCOUNT, localize(locator.notebook)));
 
-		clickAt(parentAccount, localize(locator.notebook));
-		clickAt(childAccount, localize(locator.notebook));
+		clickAt(PARENT_ACCOUNT, localize(locator.notebook));
+		clickAt(CHILD_ACCOUNT, localize(locator.notebook));
 
 		obj.zButton.zExists(page.zDocumentCompose.zNewPageIconBtn);
 
@@ -105,16 +106,16 @@ public class TabViews extends CommonTest {
 		 * Check Briefcase Tab
 		 */
 		obj.zButton.zClick(localize(locator.briefcase));
-		zWaitTillObjectExist("xpath", createXpath(parentAccount, localize(locator.briefcase)));
+		zWaitTillObjectExist("xpath", createXpath(PARENT_ACCOUNT, localize(locator.briefcase)));
 		
 		obj.zButton.zExists(page.zBriefcaseApp.zNewMenuIconBtn);
 		obj.zButton.zExists(page.zBriefcaseApp.zViewIconBtn);
 
 
-		clickAt(parentAccount, localize(locator.briefcase));
-		clickAt(parentAccount, localize(locator.trash));
-		clickAt(childAccount, localize(locator.briefcase));
-		clickAt(childAccount, localize(locator.trash));
+		clickAt(PARENT_ACCOUNT, localize(locator.briefcase));
+		clickAt(PARENT_ACCOUNT, localize(locator.trash));
+		clickAt(CHILD_ACCOUNT, localize(locator.briefcase));
+		clickAt(CHILD_ACCOUNT, localize(locator.trash));
 
 
 		/**
@@ -122,119 +123,102 @@ public class TabViews extends CommonTest {
 		 * Parent Preferences
 		 */
 		obj.zButton.zClick(localize(locator.preferences));
-		zWaitTillObjectExist("xpath", createXpath(parentAccount, localize(locator.preferences)));
+		zWaitTillObjectExist("xpath", createXpath(PARENT_ACCOUNT, localize(locator.preferences)));
 		obj.zButton.zExists(localize(locator.changePassword));
 		checkHeaders(localize(locator.loginOptions));
 		checkHeaders(localize(locator.searches));
 		checkHeaders(localize(locator.other));
 
-		clickAt(parentAccount, localize(locator.mail));
+		clickAt(PARENT_ACCOUNT, localize(locator.mail));
 		checkHeaders(localize(locator.displayMessages));
 		checkHeaders(localize(locator.messagesReceiving));		
 		obj.zRadioBtn.zExists(localize(locator.displayAsHTML));
 		obj.zEditField.zExists(localize(locator.forwardCopyTo));
 		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@class, 'DwtListView ZmWhiteBlackList')]");
 
-		clickAt(parentAccount, localize(locator.composing));
+		clickAt(PARENT_ACCOUNT, localize(locator.composing));
 		checkHeaders(localize(locator.composingMessages));
 		checkLabels("Compose:");
 		checkLabels("Prefix:");
 		ClientSessionFactory.session().selenium().isElementPresent("link=Accounts Page");
 
-		clickAt(parentAccount, localize(locator.signatures));
+		clickAt(PARENT_ACCOUNT, localize(locator.signatures));
 		checkHeaders(localize(locator.signatures));
 		checkHeaders(localize(locator.signaturesUsing));
 		obj.zButton.zExists(localize(locator.addSignature));
 		ClientSessionFactory.session().selenium().isElementPresent("link=Accounts Page");
 
-		clickAt(parentAccount, localize(locator.accounts));
+		clickAt(PARENT_ACCOUNT, localize(locator.accounts));
 		checkHeaders(localize(locator.accounts));
 		checkHeaders(localize(locator.accountHeaderPrimary));
 		obj.zButton.zExists(localize(locator.addExternalAccount));
 		obj.zButton.zExists(localize(locator.signatureDoNotAttach));		
 
-		clickAt(parentAccount, localize(locator.filterRules));
+		clickAt(PARENT_ACCOUNT, localize(locator.filterRules));
 		checkHeaders(localize(locator.filterRules));
 		obj.zButton.zExists(localize(locator.newFilter));
 
-		clickAt(parentAccount, localize(locator.addressBook));
+		clickAt(PARENT_ACCOUNT, localize(locator.addressBook));
 		checkHeaders(localize(locator.options));
 		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@id, 'AUTOCOMPLETE_NO_GROUP_MATCH')]");
 		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@id, 'AUTO_ADD_ADDRESS')]");
 
-		clickAt(parentAccount, localize(locator.calendar));
+		clickAt(PARENT_ACCOUNT, localize(locator.calendar));
 		checkHeaders(localize(locator.general));
 		checkHeaders(localize(locator.apptCreating));
 
-		clickAt(parentAccount, localize(locator.sharing));
+		clickAt(PARENT_ACCOUNT, localize(locator.sharing));
 		obj.zButton.zExists(localize(locator.share));
 
-		clickAt(parentAccount, localize(locator.importExport));
+		clickAt(PARENT_ACCOUNT, localize(locator.importExport));
 		checkHeaders(localize(locator.importLabel));
 		checkHeaders(localize(locator.importLabel));		
 
-		clickAt(parentAccount, localize(locator.shortcuts));
-		clickAt(parentAccount, localize(locator.zimlets));
+		clickAt(PARENT_ACCOUNT, localize(locator.shortcuts));
+		clickAt(PARENT_ACCOUNT, localize(locator.zimlets));
 		checkHeaders(localize(locator.zimlets));
 
 		/**
 		 * Check Preferences Tab
 		 * Child Preferences
 		 */
-		clickAt(childAccount, localize(locator.mail));
+		clickAt(CHILD_ACCOUNT, localize(locator.mail));
 		checkHeaders(localize(locator.messagesReceiving));		
 		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@class, 'DwtListView ZmWhiteBlackList')]");
 
-		clickAt(childAccount, localize(locator.signature));
+		clickAt(CHILD_ACCOUNT, localize(locator.signature));
 		checkHeaders(localize(locator.signatures));
 		checkHeaders(localize(locator.signaturesUsing));
 		obj.zButton.zExists(localize(locator.addSignature));
 		ClientSessionFactory.session().selenium().isElementPresent("link=Accounts Page");
 
-		clickAt(childAccount, localize(locator.accounts));
+		clickAt(CHILD_ACCOUNT, localize(locator.accounts));
 		checkHeaders(localize(locator.accounts));
 		checkHeaders(localize(locator.accountHeaderPrimary));
 		obj.zButton.zExists(localize(locator.addExternalAccount));
 		obj.zButton.zExists(localize(locator.signatureDoNotAttach));		
 
-		clickAt(childAccount, localize(locator.filterRules));
+		clickAt(CHILD_ACCOUNT, localize(locator.filterRules));
 		checkHeaders(localize(locator.filterRules));
 		obj.zButton.zExists(localize(locator.newFilter));
 
-		clickAt(childAccount, localize(locator.addressBook));
+		clickAt(CHILD_ACCOUNT, localize(locator.addressBook));
 		checkHeaders(localize(locator.options));
 		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@id, 'AUTOCOMPLETE_NO_GROUP_MATCH')]");
 		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@id, 'AUTO_ADD_ADDRESS')]");
 
-		clickAt(childAccount, localize(locator.calendar));
+		clickAt(CHILD_ACCOUNT, localize(locator.calendar));
 		checkHeaders(localize(locator.general));
 		checkHeaders(localize(locator.permissions));
 
-		clickAt(childAccount, localize(locator.sharing));
+		clickAt(CHILD_ACCOUNT, localize(locator.sharing));
 		obj.zButton.zExists(localize(locator.share));
 
-		clickAt(childAccount, localize(locator.importExport));
+		clickAt(CHILD_ACCOUNT, localize(locator.importExport));
 		checkHeaders(localize(locator.importLabel));
 		checkHeaders(localize(locator.importLabel));		
 
 		SelNGBase.needReset.set(false);
-	}
-
-
-	public void clickAt(String accountName, String tabName) throws Exception{
-		ClientSessionFactory.session().selenium().clickAt("//*[contains(@id,'"+accountName+"') and contains(text(),'"+tabName+"')]","");
-	}
-
-	public String createXpath(String accountName, String tabName) throws Exception{
-		return "//*[contains(@id,'"+accountName+"') and contains(text(),'"+tabName+"')]";
-	}
-
-	public void checkHeaders(String headerText) throws Exception {
-		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@class, 'ZOptionsHeader ImgPrefsHeader') and contains(text(), '"+headerText+"')]");
-	}
-
-	public void checkLabels(String labelText) throws Exception {
-		ClientSessionFactory.session().selenium().isElementPresent("//*[contains(@class, 'ZOptionsLabel') and contains(text(), '"+labelText+"')]");
 	}
 
 }
