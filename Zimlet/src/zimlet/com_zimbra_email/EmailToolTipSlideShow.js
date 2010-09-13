@@ -37,8 +37,8 @@ function EmailToolTipSlideShow(zimlet, canvas) {
 
 EmailToolTipSlideShow.prototype._createFrame =
 function(canvas) {
-	canvas.innerHTML = ["<div id='", EmailToolTipSlideShow.mainDivId, "' height='", Com_Zimbra_Email.height, "'   width='",Com_Zimbra_Email.width , 
-						"'  style='height:",Com_Zimbra_Email.height,"px;width:",Com_Zimbra_Email.width ,"px;'></div><div class='ImgEmailZimletNavBarBG' id='", 
+	canvas.innerHTML = ["<div id='", EmailToolTipSlideShow.mainDivId, "' height='", EmailTooltipZimlet.height, "'   width='",EmailTooltipZimlet.width , 
+						"'  style='height:",EmailTooltipZimlet.height,"px;width:",EmailTooltipZimlet.width ,"px;'></div><div class='ImgEmailZimletNavBarBG' id='", 
 						EmailToolTipSlideShow.navDivId, "'><table cellpadding=0 cellspacing=0><tr id='",EmailToolTipSlideShow.navTableRowId,"'></tr>",
 						"<tr id='",EmailToolTipSlideShow.navTableSelectRowId,"'></tr></table></div>"].join("");
 };
@@ -75,16 +75,20 @@ function(slide, index) {
 	this.mainDiv.appendChild(div);
 	div.innerHTML = slide.html;
 
-	this._insertSlideIcon(slide.iconName, slide.iconDivId, slide.selectIconDivId);
+	this._insertSlideIcon(slide);
 	this.numberOfSlides++;
 };
 
 EmailToolTipSlideShow.prototype._insertSlideIcon =
-function(iconName, iconDivId, selectIconDivId) {
+function(slide) {
+	var iconName = slide.iconName;
+	var iconDivId = slide.iconDivId;
+	var selectIconDivId = slide.selectIconDivId;
+	var name = slide.name;
 	var iconCell = this.navTableRow.insertCell(0);
 	iconCell.width= '25px';
 	iconCell.align="center";
-	iconCell.innerHTML = ["<div id='",iconDivId,"' class='Img", iconName, "' style='cursor:pointer;'></div>"].join("");
+	iconCell.innerHTML = ["<div title='",name,"' id='",iconDivId,"' class='Img", iconName, "' style='cursor:pointer;'></div>"].join("");
 
 	var selectIconCell = this.navTableSelectRow.insertCell(0);
 	selectIconCell.width= '25px';

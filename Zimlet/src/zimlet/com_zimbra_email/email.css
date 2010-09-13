@@ -22,3 +22,10 @@
 .EmailToolTipSlideMsgColor {
 	color:#666666;
 }
+
+.ImgUnknownPerson_contact {
+  background: url("img/UnknownPerson_contact.gif") no-repeat center center;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}

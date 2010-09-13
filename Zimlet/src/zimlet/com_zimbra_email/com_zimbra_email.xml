@@ -1,11 +1,13 @@
 <zimlet name="com_zimbra_email" version="11" target="main view-window" description="Highlights and previews associated contact for an email address.">
+	<include>templates/Email.template.js</include>
 	<include>email.js</include>
 	<include>EmailToolTipSlideShow.js</include>
 	<include>EmailToolTipslide.js</include>
 	<include>EmailToolTipPrefDialog.js</include>
 	<include>SeriesAnimation.js</include>
+	<include>UnknownPersonSlide.js</include>
 	<includeCSS>email.css</includeCSS>
-	<handlerObject>Com_Zimbra_Email</handlerObject>
+	<handlerObject>com_zimbra_email_handlerObject</handlerObject>
 	<contentObject type="email">
 		<matchOn>
 			<regex attrs="ig">\b(mailto:[ ]*)?([0-9a-zA-Z]+[.&amp;#!$%'*+-/=?^_`{}|~])*[0-9a-zA-Z]+@([-0-9a-zA-Z]+[.])+[a-zA-Z]{2,6}([\w/_\.]*(\?\S+)?)\b</regex>

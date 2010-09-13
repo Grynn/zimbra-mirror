@@ -13,7 +13,7 @@
  * ***** END LICENSE BLOCK *****
  */
 
-function EmailToolTipSlide(html, visible, iconName, selectCallback) {
+function EmailToolTipSlide(html, visible, iconName, selectCallback, name) {
 	this.html = html;
 	this.visible = visible;
 	this.iconName = iconName;
@@ -23,6 +23,7 @@ function EmailToolTipSlide(html, visible, iconName, selectCallback) {
 	this.slideShow = null;
 	this.canvasElement = null;
 	this._selectCallback = selectCallback;
+	this.name = name;
 };
 
 EmailToolTipSlide.prototype.select =

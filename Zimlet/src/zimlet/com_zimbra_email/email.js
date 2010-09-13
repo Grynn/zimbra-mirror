@@ -12,22 +12,25 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
+function com_zimbra_email_handlerObject() {
+	this.isPrimaryEmailTooltip = true;
+}
 
-function Com_Zimbra_Email() {
-};
+com_zimbra_email_handlerObject.prototype = new ZmZimletBase();
+com_zimbra_email_handlerObject.prototype.constructor = com_zimbra_email_handlerObject;
 
-Com_Zimbra_Email.prototype = new ZmZimletBase();
-Com_Zimbra_Email.prototype.constructor = Com_Zimbra_Email;
+var EmailTooltipZimlet = com_zimbra_email_handlerObject;
+
 
 // static Contst
-Com_Zimbra_Email.IM_NEW_IM = "im new im";
-Com_Zimbra_Email.IM_NEW_BUDDY = "im new buddy";
-Com_Zimbra_Email.NEW_FILTER = "__new__";
-Com_Zimbra_Email.MAILTO_RE = /^mailto:[\x27\x22]?([^@?&\x22\x27]+@[^@?&]+\.[^@?&\x22\x27]+)[\x27\x22]?/;
-Com_Zimbra_Email.tooltipWidth = 270;
-Com_Zimbra_Email.tooltipHeight = 300;
+EmailTooltipZimlet.IM_NEW_IM = "im new im";
+EmailTooltipZimlet.IM_NEW_BUDDY = "im new buddy";
+EmailTooltipZimlet.NEW_FILTER = "__new__";
+EmailTooltipZimlet.MAILTO_RE = /^mailto:[\x27\x22]?([^@?&\x22\x27]+@[^@?&]+\.[^@?&\x22\x27]+)[\x27\x22]?/;
+EmailTooltipZimlet.tooltipWidth = 270;
+EmailTooltipZimlet.tooltipHeight = 300;
 
-Com_Zimbra_Email.prototype.init =
+EmailTooltipZimlet.prototype.init =
 function() {
 	if (appCtxt.get(ZmSetting.CONTACTS_ENABLED)) {
 		AjxDispatcher.require(["ContactsCore", "Contacts"]);
@@ -50,7 +53,7 @@ function() {
  * This method is called when the panel item is double-clicked.
  *
  */
-Com_Zimbra_Email.prototype.doubleClicked = function() {
+EmailTooltipZimlet.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
 
@@ -58,11 +61,11 @@ Com_Zimbra_Email.prototype.doubleClicked = function() {
  * This method is called when the panel item is single-clicked.
  *
  */
-Com_Zimbra_Email.prototype.singleClicked = function() {
+EmailTooltipZimlet.prototype.singleClicked = function() {
 	this._prefDialog.popup();
 };
 
-Com_Zimbra_Email.prototype._getRoster =
+EmailTooltipZimlet.prototype._getRoster =
 function() {
 	if (!this._roster && appCtxt.get(ZmSetting.IM_ENABLED) &&
 		!(!appCtxt.get(ZmSetting.IM_PREF_AUTO_LOGIN) &&
@@ -75,7 +78,7 @@ function() {
 	return this._roster;
 };
 
-Com_Zimbra_Email.prototype._rosterChangeListener =
+EmailTooltipZimlet.prototype._rosterChangeListener =
 function(ev) {
 	if (ev.event != ZmEvent.E_MODIFY) { return; }
 
@@ -107,7 +110,7 @@ function(ev) {
 	}
 };
 
-Com_Zimbra_Email.prototype._getHtmlContent =
+EmailTooltipZimlet.prototype._getHtmlContent =
 function(html, idx, obj, context, spanId) {
 
 	if (obj instanceof AjxEmailAddress) {
@@ -133,7 +136,7 @@ function(html, idx, obj, context, spanId) {
  * If given a spanId, it will instead replace the content of the <span>, for example,
  * with the results of a search.
  */
-Com_Zimbra_Email.prototype._updateHtmlContent =
+EmailTooltipZimlet.prototype._updateHtmlContent =
 function(html, idx, obj, contact, buddy, spanId) {
 
 	var content;
@@ -179,7 +182,7 @@ function(html, idx, obj, contact, buddy, spanId) {
 	}
 };
 
-Com_Zimbra_Email.prototype._handleResponseGetContact =
+EmailTooltipZimlet.prototype._handleResponseGetContact =
 function(html, idx, obj, spanId, contact) {
 	if (contact) {
 		var buddy = this._getBuddy(contact, obj.address);
@@ -187,7 +190,7 @@ function(html, idx, obj, spanId, contact) {
 	}
 };
 
-Com_Zimbra_Email.prototype._getBuddy =
+EmailTooltipZimlet.prototype._getBuddy =
 function(contact, address) {
 
 	if (appCtxt.isChildWindow) { return; }
@@ -204,12 +207,12 @@ function(contact, address) {
 	return buddy;
 };
 
-Com_Zimbra_Email.prototype.hoverOut =
+EmailTooltipZimlet.prototype.hoverOut =
 function(object, context, x, y, span) {
 	//override to ignore hoverout. 
 }
 
-Com_Zimbra_Email.prototype.addSubscriberZimlet =
+EmailTooltipZimlet.prototype.addSubscriberZimlet =
 function(subscriberZimlet, isPrimary) {
 	this._subscriberZimlets.push(subscriberZimlet);	
 	if(isPrimary) {
@@ -217,18 +220,22 @@ function(subscriberZimlet, isPrimary) {
 	}
 };
 
-Com_Zimbra_Email.prototype.hoverOver =
+EmailTooltipZimlet.prototype.hoverOver =
 function(object, context, x, y, span) {
 	this._initializeProps(object, context, x, y, span);
 	appCtxt.notifyZimlets("onEmailHoverOver", [this], {waitUntilLoaded:true});
 	if(this.primarySubscriberZimlet) {
 		this.primarySubscriberZimlet.showTooltip();
-	} else {//if no subscribers..
+	} else if(this._subscriberZimlets.length > 0 && !this.primarySubscriberZimlet) {
+		this._unknownPersonSlide = new UnknownPersonSlide();
+		this._unknownPersonSlide.onEmailHoverOver(this);
+		this._unknownPersonSlide.showTooltip();
+	}else {//if no subscribers..
 		this._showTooltip(object, context, x, y, span);
 	}
 };
 
-Com_Zimbra_Email.prototype._showTooltip =
+EmailTooltipZimlet.prototype._showTooltip =
 function(object, context, x, y, span) {
 	var shell = DwtShell.getShell(window);
 	var tooltip = shell.getToolTip();
@@ -238,7 +245,7 @@ function(object, context, x, y, span) {
 };
 
 
-Com_Zimbra_Email.prototype.toolTipPoppedUp =
+EmailTooltipZimlet.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
@@ -268,7 +275,7 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	canvas.innerHTML = toolTip;
 };
 
-Com_Zimbra_Email.prototype._initializeProps =
+EmailTooltipZimlet.prototype._initializeProps =
 function(object, context, x, y, span) {
 	if(!this.seriesAnimation) {
 		this.seriesAnimation = new SeriesAnimation();
@@ -291,13 +298,13 @@ function(object, context, x, y, span) {
 	this.slideShow = new EmailToolTipSlideShow(this, this.canvas);
 };
 
-Com_Zimbra_Email.prototype._preLoadBusyImg =
+EmailTooltipZimlet.prototype._preLoadBusyImg =
 function() {
 	this._busyImg = new Image();
 	this._busyImg.src = this.getResource("img/EmailZimlet_busy.gif");
 	this.getShell().getHtmlElement().appendChild(this._busyImg);
 };
-Com_Zimbra_Email.prototype.showBusyImg =
+EmailTooltipZimlet.prototype.showBusyImg =
 function(timeoutCallback, xOffset, yOffset) {
 	var top = yOffset ? this.y + yOffset : this.y;
 	var left = xOffset ? this.x + xOffset : this.x;
@@ -310,7 +317,7 @@ function(timeoutCallback, xOffset, yOffset) {
 	this._busyImgTimer = setTimeout(AjxCallback.simpleClosure(this._handleNoImg, this, timeoutCallback), 5000);//hide busyImg after 5 secs
 };
 
-Com_Zimbra_Email.prototype._handleNoImg =
+EmailTooltipZimlet.prototype._handleNoImg =
 function(timeoutCallback) {
 	clearTimeout(this._busyImgTimer);
 	this._busyImg.style.zIndex = "100";
@@ -320,7 +327,7 @@ function(timeoutCallback) {
 	}
 };
 
-Com_Zimbra_Email.prototype.hideBusyImg =
+EmailTooltipZimlet.prototype.hideBusyImg =
 function() {
 	clearTimeout(this._busyImgTimer);
 	this._busyImg.style.zIndex = "100";
@@ -329,7 +336,7 @@ function() {
 
 
 
-Com_Zimbra_Email.prototype.createFilterMenu =
+EmailTooltipZimlet.prototype.createFilterMenu =
 function(actionMenu) {
 	if (this._filterMenu) { return; }
 
@@ -342,7 +349,7 @@ function(actionMenu) {
 	this._resetFilterMenu();
 };
 
-Com_Zimbra_Email.prototype._resetFilterMenu =
+EmailTooltipZimlet.prototype._resetFilterMenu =
 function(){
 	var filterItems = this._filterMenu.getItems();
 	while (filterItems.length > 0) {
@@ -351,7 +358,7 @@ function(){
 	this._rules.loadRules(false, new AjxCallback(this, this._populateFiltersMenu));
 };
 
-Com_Zimbra_Email.prototype._populateFiltersMenu =
+EmailTooltipZimlet.prototype._populateFiltersMenu =
 function(results){
 	var filters = results.getResponse();
 	var menu = this._filterMenu;
@@ -359,7 +366,7 @@ function(results){
 	var miNew = new DwtMenuItem({parent:menu});
 	miNew.setText(this.getMessage("newFilter"));
 	miNew.setImage("Plus");
-	miNew.setData(Dwt.KEY_OBJECT, Com_Zimbra_Email.NEW_FILTER);
+	miNew.setData(Dwt.KEY_OBJECT, EmailTooltipZimlet.NEW_FILTER);
 	miNew.addSelectionListener(new AjxListener(this, this._filterItemSelectionListener));
 
 	if (filters.size()) {
@@ -371,7 +378,7 @@ function(results){
 	}
 };
 
-Com_Zimbra_Email.prototype._rulesChangeListener =
+EmailTooltipZimlet.prototype._rulesChangeListener =
 function(ev){
 	if (ev.type != ZmEvent.S_FILTER) { return; }
 
@@ -381,14 +388,14 @@ function(ev){
 	}
 };
 
-Com_Zimbra_Email.prototype._filterItemSelectionListener =
+EmailTooltipZimlet.prototype._filterItemSelectionListener =
 function(ev){
 	var filterMenuItem = ev.item;
 	var editMode = true;
 
 	var rule = filterMenuItem.getData(Dwt.KEY_OBJECT);
 
-	if (rule == Com_Zimbra_Email.NEW_FILTER) {
+	if (rule == EmailTooltipZimlet.NEW_FILTER) {
 		editMode = false;
 		rule = new ZmFilterRule();
 		rule.addAction(ZmFilterRule.A_KEEP);
@@ -404,7 +411,7 @@ function(ev){
 	appCtxt.getFilterRuleDialog().popup(rule, editMode);
 };
 
-Com_Zimbra_Email.prototype._addFilter =
+EmailTooltipZimlet.prototype._addFilter =
 function(menu, rule, index) {
 	var mi = new DwtMenuItem({parent:menu, index:index});
 	mi.setText(AjxStringUtil.clipByLength(rule.name, 20));
@@ -412,7 +419,7 @@ function(menu, rule, index) {
 	mi.addSelectionListener(new AjxListener(this, this._filterItemSelectionListener));
 };
 
-Com_Zimbra_Email.prototype.getActionMenu =
+EmailTooltipZimlet.prototype.getActionMenu =
 function(obj, span, context) {
 	// call base class first to get the action menu
 	var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
@@ -475,19 +482,19 @@ function(obj, span, context) {
 	return actionMenu;
 };
 
-Com_Zimbra_Email.prototype._handleResponseGetContact1 =
+EmailTooltipZimlet.prototype._handleResponseGetContact1 =
 function(actionMenu, contact) {
 	var newOp = contact ? ZmOperation.EDIT_CONTACT : ZmOperation.NEW_CONTACT;
 	var newText = contact ? null : ZmMsg.AB_ADD_CONTACT;
 	ZmOperation.setOperation(actionMenu, "NEWCONTACT", newOp, newText);
 };
 
-Com_Zimbra_Email.prototype.isMailToLink =
+EmailTooltipZimlet.prototype.isMailToLink =
 function (str){
 	return (!!(str.search(/mailto/i) != -1));
 };
 
-Com_Zimbra_Email.prototype.parseMailToLink =
+EmailTooltipZimlet.prototype.parseMailToLink =
 function(str){
 	var parts = {};
 	var match = str.match(/\bsubject=([^&]+)/i);
@@ -503,7 +510,7 @@ function(str){
 	return parts;
 };
 
-Com_Zimbra_Email.prototype.clicked =
+EmailTooltipZimlet.prototype.clicked =
 function(spanElement, contentObjText, matchContext, ev) {
 
 	var addr = (contentObjText instanceof AjxEmailAddress)
@@ -512,7 +519,7 @@ function(spanElement, contentObjText, matchContext, ev) {
     var contact = addr;
     var isMailTo = this.isMailToLink(addr);
     //extract mailid from mailto:mailid?params 
-    if(isMailTo && Com_Zimbra_Email.MAILTO_RE.test(addr)){
+    if(isMailTo && EmailTooltipZimlet.MAILTO_RE.test(addr)){
         contact = RegExp.$1;
     }
 
@@ -532,7 +539,7 @@ function(spanElement, contentObjText, matchContext, ev) {
 	}
 };
 
-Com_Zimbra_Email.prototype.menuItemSelected =
+EmailTooltipZimlet.prototype.menuItemSelected =
 function(itemId, item, ev) {
 	switch (itemId) {
 		case "SEARCH":			this._searchListener();		break;
@@ -545,7 +552,7 @@ function(itemId, item, ev) {
 	}
 };
 
-Com_Zimbra_Email.prototype._getYahooHint =
+EmailTooltipZimlet.prototype._getYahooHint =
 function() {
 	var html = [];
 	var idx = 0;
@@ -557,23 +564,23 @@ function() {
 	return html.join("");
 };
 
-Com_Zimbra_Email.prototype._getAddress =
+EmailTooltipZimlet.prototype._getAddress =
 function(obj) {
 	return (obj.constructor == AjxEmailAddress) ? obj.address : obj;
 };
 
-Com_Zimbra_Email.prototype._contactListener =
+EmailTooltipZimlet.prototype._contactListener =
 function(isDirty) {
 	var loadCallback = new AjxCallback(this, this._handleLoadContact, [isDirty]);
 	AjxDispatcher.require(["ContactsCore", "Contacts"], false, loadCallback, null, true);
 };
 
-Com_Zimbra_Email.prototype._newImListener =
+EmailTooltipZimlet.prototype._newImListener =
 function(ev) {
 	ZmImApp.getImMenuItemListener().handleEvent(ev);
 };
 
-Com_Zimbra_Email.prototype._getActionedContact =
+EmailTooltipZimlet.prototype._getActionedContact =
 function(create) {
 	// actionObject can be a ZmContact, a String, or a generic Object (phew!)
 	var contact;
@@ -598,7 +605,7 @@ function(create) {
 	return contact;
 };
 
-Com_Zimbra_Email.prototype._handleLoadContact =
+EmailTooltipZimlet.prototype._handleLoadContact =
 function(isDirty) {
 	var contact = this._getActionedContact(true);
 
@@ -610,7 +617,7 @@ function(isDirty) {
 	}
 };
 
-Com_Zimbra_Email.prototype._composeListener =
+EmailTooltipZimlet.prototype._composeListener =
 function(ev, addr) {
 
 	addr = (this._actionObject) ? this._getAddress(this._actionObject) : addr ;
@@ -637,7 +644,7 @@ function(ev, addr) {
 	AjxDispatcher.run("Compose", params );
 };
 
-Com_Zimbra_Email.prototype._browseListener =
+EmailTooltipZimlet.prototype._browseListener =
 function() {
 	var addr = this._getAddress(this._actionObject);
 	if (this.isMailToLink(addr)) {
@@ -646,7 +653,7 @@ function() {
 	appCtxt.getSearchController().fromBrowse(addr);
 };
 
-Com_Zimbra_Email.prototype._searchListener =
+EmailTooltipZimlet.prototype._searchListener =
 function() {
 	var addr = this._getAddress(this._actionObject);
 	if (this.isMailToLink(addr)) {
@@ -655,13 +662,13 @@ function() {
 	appCtxt.getSearchController().fromSearch(this._getAddress(addr));
 };
 
-Com_Zimbra_Email.prototype._filterListener =
+EmailTooltipZimlet.prototype._filterListener =
 function() {
 	var loadCallback = new AjxCallback(this, this._handleLoadFilter);
 	AjxDispatcher.require(["PreferencesCore", "Preferences"], false, loadCallback, null, true);
 };
 
-Com_Zimbra_Email.prototype._handleLoadFilter =
+EmailTooltipZimlet.prototype._handleLoadFilter =
 function() {
 	appCtxt.getAppViewMgr().popView(true, ZmId.VIEW_LOADING);	// pop "Loading..." page
 	var rule = new ZmFilterRule();
@@ -677,7 +684,7 @@ function() {
 	appCtxt.getFilterRuleDialog().popup(rule);
 };
 
-Com_Zimbra_Email.prototype._goToUrlListener =
+EmailTooltipZimlet.prototype._goToUrlListener =
 function() {
 	var addr  = this._getAddress(this._actionObject);
 	if (AjxUtil.isString(addr) && this.isMailToLink(addr)) {
@@ -701,7 +708,7 @@ function() {
 /**
  * Helper function
  */
-Com_Zimbra_Email.prototype.animateOpacity =
+EmailTooltipZimlet.prototype.animateOpacity =
 function(id, opacStart, opacEnd, millisec) {
 	this.changeOpac(opacStart, document.getElementById(id).style);//create a starting point
 	//speed for each frame
@@ -726,7 +733,7 @@ function(id, opacStart, opacEnd, millisec) {
 /**
  * Change the opacity for different browsers
  */
-Com_Zimbra_Email.prototype.changeOpac =
+EmailTooltipZimlet.prototype.changeOpac =
 function(opacity, styleObj) {
 	styleObj.opacity = (opacity / 100);
 	styleObj.MozOpacity = (opacity / 100);

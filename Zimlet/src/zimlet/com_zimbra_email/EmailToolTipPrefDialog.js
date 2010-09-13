@@ -27,24 +27,20 @@ function EmailToolTipPrefDialog(zimlet) {
 	this.updateEmailTooltipSize();
 }
 
-EmailToolTipPrefDialog.SIZE_VERYSMALL = "verysmall";
+EmailToolTipPrefDialog.SIZE_VERYSMALL = "verySmall";
 EmailToolTipPrefDialog.SIZE_SMALL = "small";
 EmailToolTipPrefDialog.SIZE_MEDIUM = "medium";
 EmailToolTipPrefDialog.SIZE_LARGE = "large";
-EmailToolTipPrefDialog.SIZE_XL = "xl";
-EmailToolTipPrefDialog.SIZE_2XL = "2xl";
-
+EmailToolTipPrefDialog.SIZE_XL = "XL";
+EmailToolTipPrefDialog.SIZE_2XL = "2XL";
 
 EmailToolTipPrefDialog.DIMENSIONS = [];
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_VERYSMALL] = "270px x 320px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_SMALL]  = "300px x 350px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_MEDIUM]  = "320px x 360px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_LARGE]  = "330px x 370px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_XL]  = "340px x 380px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_2XL]  = "350px x 390px";
-
-
-
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_VERYSMALL]  = "220px x 270px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_SMALL]  = "230px x 290px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_MEDIUM]  = "250px x 310px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_LARGE]  = "270px x 320px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_XL]  = "290px x 330px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_2XL]  = "300px x 340px";
 
 /**
  * Updates Email Tooltip's tooltipWidth and tooltipHeight
@@ -53,8 +49,8 @@ EmailToolTipPrefDialog.prototype.updateEmailTooltipSize =
 function() {
 	var size = this.emailZimlet_tooltipSize.replace(/px/ig, "");
 	var arry = size.split(" x ");
-	Com_Zimbra_Email.tooltipWidth = arry[0];
-	Com_Zimbra_Email.tooltipHeight = arry[1];
+	EmailTooltipZimlet.tooltipWidth = arry[0];
+	EmailTooltipZimlet.tooltipHeight = arry[1];
 };
 
 /**
