@@ -1,0 +1,11 @@
+<zimlet name="com_zimbra_linkedin" version="0.1" target="main view-window" description="Hooks on to email Zimlet; shows LinkedIn search reault for a given email">
+	<include>linkedin.js</include>
+	<include>LinkedInOauth.js</include>
+	<include>LinkedInPrefDialog.js</include>
+	<include>templates/LinkedIn.template.js</include>
+	<includeCSS>linkedin.css</includeCSS>
+	<handlerObject>com_zimbra_linkedin_handlerObject</handlerObject>
+	<zimletPanelItem label="${msg.label}" icon="LinkedinZimletIcon">
+		<toolTipText>${msg.tooltip}</toolTipText>
+	</zimletPanelItem>
+</zimlet>

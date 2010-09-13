@@ -1,0 +1,15 @@
+.ImgLinkedinZimletIcon {
+  background: url("img/linkedin_linkedinIcon.png") no-repeat center center;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}
+.LinkedInText {
+	color:blue;
+	font-size:12px;
+	font-weight:bold;
+}
+
+.LinkedInHeader {
+	border-right: gray solid 1px;
+}

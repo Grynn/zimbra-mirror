@@ -1,0 +1,45 @@
+<template id='Frame'>
+	<div align=center  style='display:block;width:100%;height:100%;overflow:auto'  id='linkedInZimlet_MainDiv'>
+		<div class='overviewHeader LinkedInHeader' id='linkedInZimlet_searchBarDiv'>
+			<table cellspacing=0 cellpadding=0 align="center">
+			<tr><td><input id='linkdeInZimlet_seachField' type='text'></input></td>
+			<td id='linkdeInZimlet_seachBtnCell'></td></tr></table>
+		</div>
+		<div id='linkedInZimlet_searchResultsDiv'>
+		</div>
+	</div>
+</template>
+
+<template id='RowItem'>
+	<div style='border-bottom:1px solid gray;background:white;'>
+	<table width=100% ><tr>
+	<td wdth=48px style='width:48px'><img style='width:48px;height:48px;' src='${pUrl}'></img></td>
+	<td><label style='font-size:12px;font-weight:bold;'>${fName} ${lName}</label>
+		<br/>${headline}<br/><br/><div align='right'><a  href='${profileUrl}' target='_blank' style='text-decoration:underline;color:gray'>${viewStr}</a>  <a  href='#' id='${inviteLnkId}' style='text-decoration:underline;color:gray'>${inviteStr}</a></div></td>
+	</tr></table></div>
+</template>
+
+
+
+<template id='PreferenceView'>
+	<div>
+		<table>
+		<tr><td id='linkedInZimlet_AddAccntBtn'></td><td><label class='LinkedInText' id='linkedInZimlet_accountName'></label></td></tr>
+		</table>
+	</div>
+</template>
+
+<template id='OAuthDialogView'>
+	<DIV class='linkedin_yellow'>
+		<b>${stepsToAddLinkedInAccount}</b><br/>
+		${step1}<div id='linkedin_goToLinkedInPage'> </div><br/>
+		${step2}<br/>
+		${step3}<br/>
+		${step4}<br/>
+		${step5}<br/>
+		<B>${step6}<input id='com_zimbra_linkedin_pin_field'  type='text'/></B><br/>
+		${step7}<BR/><BR/>
+		${stepNotes} 
+	</DIV>
+</template>
+
