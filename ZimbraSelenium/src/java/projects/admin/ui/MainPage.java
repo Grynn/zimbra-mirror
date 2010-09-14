@@ -9,9 +9,9 @@ import framework.util.HarnessException;
  */
 public class MainPage extends AbsPage {
 
-	public static final String Zskin_td_logo			= "xpath=//*[@id='skin_td_logo']";
+	public static final String skin_container_logo		= "xpath=//*[@id='skin_container_logo']";
 	public static final String Zskin_container_username	= "xpath=//*[@id='skin_container_username']";
-	public static final String Zskin_container_logoff	= "xpath=//*[@id='skin_container_logoff']";
+	public static final String Zskin_container_logoff	= "css=table[class=skin_table] span[onclick=ZaZimbraAdmin.logOff();]"; 
 	public static final String Zskin_container_help		= "xpath=//*[@id='skin_container_help']";
 	public static final String Zskin_container_dw		= "xpath=//*[@id='skin_container_dw']";
 
@@ -32,7 +32,7 @@ public class MainPage extends AbsPage {
 	public boolean isActive() throws HarnessException {
 		
 		// Look for the Logo 
-		boolean present = isElementPresent(Zskin_td_logo);
+		boolean present = isElementPresent(skin_container_logo);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
@@ -40,7 +40,7 @@ public class MainPage extends AbsPage {
 		
 
 		// Look for the Logout button. 
-		boolean visible = isVisiblePerPosition(Zskin_td_logo);
+		boolean visible = isVisiblePerPosition(skin_container_logo, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -83,9 +83,15 @@ public class MainPage extends AbsPage {
 		
 		navigateTo();
 
-		if ( !isElementPresent(Zskin_container_logoff) || !isVisiblePerPosition(Zskin_container_logoff) ) {
-			throw new HarnessException("Unable to find the logoff button" + Zskin_container_logoff);
+		if ( !isElementPresent(Zskin_container_logoff) ) {
+			throw new HarnessException("The logoff button is not present " + Zskin_container_logoff);
 		}
+		
+		if ( !isVisiblePerPosition(Zskin_container_logoff, 10, 10) ) {
+			throw new HarnessException("The logoff button is not visible " + Zskin_container_logoff);
+		}
+		
+		
 		click(Zskin_container_logoff);
 		
 		MyApplication.zLoginPage.waitForActive();
