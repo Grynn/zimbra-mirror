@@ -291,7 +291,7 @@ for i in ${components}; do
     for l in ${zimbra_home}/${i}-*; do
       chown ${root_user}:${root_group} ${l} 2> /dev/null
     done
-    for l in ${zimbra_home}/${i}/*; do
+    for l in ${zimbra_home}/${i}/* ${zimbra_home}/${i}/.???*; do
       chown -R ${root_user}:${root_group} ${l} 2> /dev/null
     done
   elif [ -d ${zimbra_home}/${i} ]; then
