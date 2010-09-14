@@ -1,7 +1,5 @@
 package projects.admin.ui;
 
-import com.zimbra.common.soap.Element;
-
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraAdminAccount;
@@ -13,8 +11,6 @@ import framework.util.ZimbraAdminAccount;
  */
 public class LoginPage extends AbsPage {
 	
-	private static final String MyPageName = "LoginPage";
-
 	public static final String ZLoginDialog = "xpath=//div[@class='ZaLoginDialog']";
 	public static final String ZLoginUserName = "xpath=//*[@id='ZLoginUserName']";
 	public static final String ZLoginPassword = "xpath=//*[@id='ZLoginPassword']";
@@ -27,20 +23,18 @@ public class LoginPage extends AbsPage {
 	public LoginPage(AbsApplication application) {
 		super(application);
 		
-		logger.info("new " + LoginPage.class.getCanonicalName());
+		logger.info("new " + myPageName());
 	}
 	
 	@Override
 	public String myPageName() {
-		return (MyPageName);
+		return (this.getClass().getName());
 	}
 
 	/**
 	 * If the "Login" button is visible, assume the LoginPage is active
 	 */
 	public boolean isActive() throws HarnessException {
-		String id = super.getSelectedId(ZLoginDialog);
-		logger.info("id = "+ id);
 		
 		// Look for the login button. 
 		boolean present = super.isElementPresent(ZLoginButtonContainer);
@@ -69,6 +63,10 @@ public class LoginPage extends AbsPage {
 			return;
 		}
 		
+		if ( MyApplication.isLoaded() )
+			throw new HarnessException("Admin Console application is not active!");
+
+		
 		// Logout
 		if ( MyApplication.zMainPage.isActive() ) {
 			MyApplication.zMainPage.logout();
@@ -96,11 +94,10 @@ public class LoginPage extends AbsPage {
 	public void login(ZimbraAccount account) throws HarnessException {
 		logger.debug("login(ZimbraAccount account)" + account.EmailAddress);
 
-		if ( !isActive() )
-			throw new HarnessException("LoginPage is not active");
+		navigateTo();
 		
 		// Fill out the form
-		fillFields(account);
+		fillLoginFormFields(account);
 		
 		// Click the Login button
 		super.click(ZLoginButtonContainer);
@@ -116,7 +113,7 @@ public class LoginPage extends AbsPage {
 	 * Fill the form with the specified user
 	 * @throws HarnessException
 	 */
-	public void fillFields(ZimbraAccount account) throws HarnessException {
+	public void fillLoginFormFields(ZimbraAccount account) throws HarnessException {
 		logger.debug("fillFields(ZimbraAccount account)" + account.EmailAddress);
 		
 		if ( !isActive() )

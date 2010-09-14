@@ -9,8 +9,6 @@ import framework.util.HarnessException;
  */
 public class MainPage extends AbsPage {
 
-	private static final String MyPageName = "MainPage";
-
 	public static final String Zskin_td_logo			= "xpath=//*[@id='skin_td_logo']";
 	public static final String Zskin_container_username	= "xpath=//*[@id='skin_container_username']";
 	public static final String Zskin_container_logoff	= "xpath=//*[@id='skin_container_logoff']";
@@ -20,12 +18,12 @@ public class MainPage extends AbsPage {
 	public MainPage(AbsApplication application) {
 		super(application);
 		
-		logger.info("new " + MainPage.class.getCanonicalName());
+		logger.info("new " + myPageName());
 	}
 	
 	@Override
 	public String myPageName() {
-		return (MyPageName);
+		return (this.getClass().getName());
 	}
 
 	/**
@@ -47,6 +45,11 @@ public class MainPage extends AbsPage {
 			return;
 		}
 		
+		// Make sure the Admin Console is loaded in the browser
+		if ( MyApplication.isLoaded() )
+			throw new HarnessException("Admin Console application is not active!");
+		
+		
 		// 1. Logout
 		// 2. Login as the default account
 		if ( !MyApplication.zLoginPage.isActive() ) {
@@ -65,8 +68,7 @@ public class MainPage extends AbsPage {
 	public void logout() throws HarnessException {
 		logger.debug("logout()");
 		
-		if ( !isActive() )
-			throw new HarnessException("MainPage is not active");
+		navigateTo();
 
 		super.click(Zskin_container_logoff);
 		

@@ -14,9 +14,14 @@ import framework.util.HarnessException;
  */
 public class AppAdminConsole extends AbsApplication {
 
-	public Map<String, AbsPage> pages = null;
-	public LoginPage	zLoginPage = null;
-	public MainPage		zMainPage = null;
+	public Map<String, AbsPage>		pages = null;
+	public LoginPage				zLoginPage = null;
+	public MainPage					zMainPage = null;
+	public SearchResultsPage		zSearchResultsPage = null;
+
+	public ManageAccountsPage				zAccountsPage = null;
+
+	
 	
 	public AppAdminConsole() {
 		super();
@@ -29,7 +34,13 @@ public class AppAdminConsole extends AbsApplication {
 		pages.put(zLoginPage.myPageName(), zLoginPage);
 		
 		zMainPage = new MainPage(this);
-		pages.put(zLoginPage.myPageName(), zMainPage);
+		pages.put(zMainPage.myPageName(), zMainPage);
+
+		zSearchResultsPage = new SearchResultsPage(this);
+		pages.put(zSearchResultsPage.myPageName(), zSearchResultsPage);
+
+		zAccountsPage = new ManageAccountsPage(this);
+		pages.put(zAccountsPage.myPageName(), zAccountsPage);
 
 	}
 
@@ -46,5 +57,11 @@ public class AppAdminConsole extends AbsApplication {
 			}
 		}
 		return (actives);
+	}
+
+	public boolean isLoaded() {
+		// TODO: how to determine if the current browser app is the AdminConsole
+		// Maybe check the current URL?
+		return (true);
 	}
 }
