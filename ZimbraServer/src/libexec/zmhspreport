@@ -59,17 +59,13 @@ $FORMAT_FORMFEED = "\n";
 
 my $ldappass = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_password`;
 my $ldapdn  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey zimbra_ldap_userdn`;
-my $ldaphost  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey ldap_host`;
+my $ldapurl  = `/opt/zimbra/bin/zmlocalconfig -s -m nokey ldap_url`;
 chop($ldappass);
 chop($ldapdn);
-chop($ldaphost);
-
-if ($ldaphost eq '') {
-  $ldaphost = "localhost";
-}
+chop($ldapurl);
 
 
-my $ldap = Net::LDAP->new( $ldaphost ) or die "Error connecting to LDAP server: $@";
+my $ldap = Net::LDAP->new( $ldapurl ) or die "Error connecting to LDAP server: $ldapurl";
 my $mesg = $ldap->bind( $ldapdn, password => $ldappass );
 
 $mesg->code && die "Error binding to LDAP server: $mesg->error";
