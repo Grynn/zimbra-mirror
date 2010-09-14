@@ -43,9 +43,7 @@ public class LoginPage extends AbsPage {
 			return (false);
 		}
 		
-		// is it visible? 
-		super.focus(ZLoginButtonContainer);
-		boolean visible = isVisible(ZLoginButtonContainer);
+		boolean visible = isVisiblePerPosition(ZLoginButtonContainer);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -72,7 +70,7 @@ public class LoginPage extends AbsPage {
 			MyApplication.zMainPage.logout();
 		}
 		
-		waitForActive(30000);
+		waitForActive();
 	}
 
 
@@ -103,7 +101,7 @@ public class LoginPage extends AbsPage {
 		super.click(ZLoginButtonContainer);
 
 		// Wait for the app to load
-		MyApplication.zMainPage.waitForActive(30000);
+		MyApplication.zMainPage.waitForActive();
 		
 		MyApplication.setActiveAcount(account);
 		

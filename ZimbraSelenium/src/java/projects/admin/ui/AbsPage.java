@@ -14,7 +14,9 @@ import framework.util.SleepUtil;
  */
 public abstract class AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsPage.class);
-	
+
+	protected static final int PageLoadDelay = 30000; // wait 30 seconds for pages to load
+
 	protected AppAdminConsole MyApplication = null;
 
 	public AbsPage(AbsApplication application) {
@@ -35,6 +37,18 @@ public abstract class AbsPage {
 	 */
 	public abstract boolean isActive() throws HarnessException;
 
+	/**
+	 * Wait for this page to become active (default PageLoadDelay)
+	 * @throws HarnessException
+	 */
+	public void waitForActive() throws HarnessException {
+		waitForActive(PageLoadDelay);
+	}
+	
+	/**
+	 * Wait for this page to become active (default PageLoadDelay)
+	 * @throws HarnessException
+	 */
 	public void waitForActive(long millis) throws HarnessException {
 		
 		if ( isActive() ) {
@@ -151,8 +165,16 @@ public abstract class AbsPage {
 		logger.info("type(" + locator + ", " + text + ")");
 	}
 
+
 	//// ***
 	// End: Selenium methods
 	//// ***
 
+	public boolean isVisiblePerPosition(String locator) {
+		Number left = ClientSessionFactory.session().selenium().getElementPositionLeft(locator);
+		Number top = ClientSessionFactory.session().selenium().getElementPositionTop(locator);
+		boolean hidden = ( (left.intValue() < 0) && (top.intValue() < 0) );
+		logger.info("isVisiblePerPosition("+ locator +") - (left, top) = ("+ left.intValue() +", "+ top.intValue() +") "+ (!hidden));
+		return (!hidden);
+	}
 }

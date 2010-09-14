@@ -31,10 +31,23 @@ public class MainPage extends AbsPage {
 	 */
 	public boolean isActive() throws HarnessException {
 		
+		// Look for the Logo 
+		boolean present = isElementPresent(Zskin_td_logo);
+		if ( !present ) {
+			logger.debug("isActive() present = "+ present);
+			return (false);
+		}
+		
+
 		// Look for the Logout button. 
-		boolean active = super.isVisible(Zskin_td_logo);
-		logger.debug("isActive() = "+ active);
-		return (active);
+		boolean visible = isVisiblePerPosition(Zskin_td_logo);
+		if ( !visible ) {
+			logger.debug("isActive() visible = "+ visible);
+			return (false);
+		}
+		
+		logger.debug("isActive() = "+ true);
+		return (true);
 	}
 
 	@Override
@@ -57,7 +70,7 @@ public class MainPage extends AbsPage {
 		}
 		MyApplication.zLoginPage.login();
 
-		waitForActive(30000);
+		waitForActive();
 		
 	}
 
@@ -70,9 +83,12 @@ public class MainPage extends AbsPage {
 		
 		navigateTo();
 
-		super.click(Zskin_container_logoff);
+		if ( !isElementPresent(Zskin_container_logoff) || !isVisiblePerPosition(Zskin_container_logoff) ) {
+			throw new HarnessException("Unable to find the logoff button" + Zskin_container_logoff);
+		}
+		click(Zskin_container_logoff);
 		
-		MyApplication.zLoginPage.waitForActive(30000);
+		MyApplication.zLoginPage.waitForActive();
 		
 		MyApplication.setActiveAcount(null);
 

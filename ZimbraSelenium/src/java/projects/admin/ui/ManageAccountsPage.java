@@ -95,7 +95,7 @@ public class ManageAccountsPage extends AbsPage {
 		// Click on Addresses -> Accounts
 		super.click(zti__AppAdmin__ADDRESS__ACCOUNT_textCell);
 		
-		waitForActive(30000);
+		waitForActive();
 
 	}
 
