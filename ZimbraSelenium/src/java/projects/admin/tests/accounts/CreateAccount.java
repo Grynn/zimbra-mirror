@@ -21,7 +21,7 @@ public class CreateAccount extends CommonTest {
 		logger.info("New "+ CreateAccount.class.getCanonicalName());
 		
 		// All tests start at the "Accounts" page
-		super.startingPage = app.zAccountsPage;
+		super.startingPage = app.zManageAccountsPage;
 
 	}
 	
@@ -32,7 +32,7 @@ public class CreateAccount extends CommonTest {
 		// Create a new account in the Admin Console
 		AccountItem account = new AccountItem();
 		
-		app.zAccountsPage.createAccount(account);
+		app.zManageAccountsPage.createAccount(account);
 		
 		// Verify the account exists in the ZCS
 		ZimbraAdminAccount.GlobalAdmin().soapSend(
@@ -55,8 +55,8 @@ public class CreateAccount extends CommonTest {
 		// Create a new account in the Admin Console
 		AccountItem account = new AccountItem();
 				
-		app.zAccountsPage.click(ManageAccountsPage.zb__ACLV__NEW_MENU_title);
-		app.zAccountsPage.completeNewAccountWizard(account);
+		app.zManageAccountsPage.click(ManageAccountsPage.zb__ACLV__NEW_MENU_title);
+		app.zManageAccountsPage.completeNewAccountWizard(account);
 		
 		// Verify the account exists in the ZCS
 		ZimbraAdminAccount.GlobalAdmin().soapSend(
@@ -79,8 +79,8 @@ public class CreateAccount extends CommonTest {
 		// Create a new account in the Admin Console
 		AccountItem account = new AccountItem();
 				
-		app.zAccountsPage.click(ManageAccountsPage.zmi__ACLV__NEW_WIZARD_title);
-		app.zAccountsPage.completeNewAccountWizard(account);
+		app.zManageAccountsPage.click(ManageAccountsPage.zmi__ACLV__NEW_WIZARD_title);
+		app.zManageAccountsPage.completeNewAccountWizard(account);
 		
 		// Verify the account exists in the ZCS
 		ZimbraAdminAccount.GlobalAdmin().soapSend(

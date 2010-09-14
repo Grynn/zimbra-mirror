@@ -17,7 +17,8 @@ public class ManageAccountsPage extends AbsPage {
 	public static final String zti__AppAdmin__ADDRESS__ACCOUNT_textCell = "xpath=//*[@id='zti__AppAdmin__ADDRESS__ACCOUNT_textCell']";
 	
 	// ** "Manage Accounts" Title
-	public static final String DWT93_title = "xpath=//*[@id='DWT93_title']";
+	public static final String DWT93 = "xpath=//*[@id='DWT93']";
+	public static final String DWT93_classAttr = "xpath=(//*[@id='DWT93'])@class";
 	
 	// ** Menus
 	// NEW Menu
@@ -56,24 +57,21 @@ public class ManageAccountsPage extends AbsPage {
 	@Override
 	public boolean isActive() throws HarnessException {
 		
-		// If "Manage Accounts" tab is active, then the Accounts Pane is active
+		// If "Manage Accounts" tab is active
 		//
-		// *The tab must be _active_, i.e. not a hidden tab
-		//
-		// TODO: Need to figure out how to make sure this tab is active
-		// TODO: I suppose the DWT93 ID will be changing as part of bug 46006
-		//
-//		boolean present = isElementPresent(DWT93);
-//		if ( !present ) {
-//			return (false);
-//		}
-//		
-//		boolean visible = super.isVisible(DWT93);
-//		if ( !visible ) {
-//			return (false);
-//		}
+		
+		boolean present = isElementPresent(DWT93);
+		if ( !present ) {
+			return (false);
+		}
+		
+		String attrs = getAttribute(DWT93_classAttr);
+		if ( !attrs.contains("ZSelected") ) {
+			return (false);
+		}
 		
 		return (true);
+		
 	}
 
 	/* (non-Javadoc)

@@ -32,7 +32,7 @@ public class MainPage extends AbsPage {
 	public boolean isActive() throws HarnessException {
 		
 		// Look for the Logo 
-		boolean present = isElementPresent(skin_container_logo);
+		boolean present = isElementPresent(Zskin_container_logoff);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
@@ -40,7 +40,7 @@ public class MainPage extends AbsPage {
 		
 
 		// Look for the Logout button. 
-		boolean visible = isVisiblePerPosition(skin_container_logo, 0, 0);
+		boolean visible = isVisiblePerPosition(Zskin_container_logoff, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -91,8 +91,10 @@ public class MainPage extends AbsPage {
 			throw new HarnessException("The logoff button is not visible " + Zskin_container_logoff);
 		}
 		
-		
+		// Click on logout
 		click(Zskin_container_logoff);
+		
+		// TODO: Sometimes there is a popup.  Can it be disabled?
 		
 		MyApplication.zLoginPage.waitForActive();
 		

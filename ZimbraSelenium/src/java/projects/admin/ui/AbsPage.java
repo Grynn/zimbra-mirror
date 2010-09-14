@@ -102,7 +102,11 @@ public abstract class AbsPage {
 		return (id);
 	}
 	
-
+	public void chooseOkOnNextConfirmation() {
+		ClientSessionFactory.session().selenium().chooseOkOnNextConfirmation();
+		logger.info("chooseOkOnNextConfirmation()");
+	}
+	
 	/**
 	 * Left-Click on element
 	 * @param locator
@@ -130,6 +134,12 @@ public abstract class AbsPage {
 		boolean present = ClientSessionFactory.session().selenium().isElementPresent(locator);
 		logger.info("isElementPresent(" + locator + ") = " + present);
 		return (present);
+	}
+
+	public String getAttribute(String locator) {
+		String attrs = ClientSessionFactory.session().selenium().getAttribute(locator);
+		logger.info("getAttribute(" + locator + ") = " + attrs);
+		return (attrs);
 	}
 
 	/**
@@ -170,11 +180,15 @@ public abstract class AbsPage {
 	// End: Selenium methods
 	//// ***
 
-	public boolean isVisiblePerPosition(String locator) {
+	public boolean isVisiblePerPosition(String locator, int leftLimit, int topLimit) {
+		
+		// Find the current position
 		Number left = ClientSessionFactory.session().selenium().getElementPositionLeft(locator);
 		Number top = ClientSessionFactory.session().selenium().getElementPositionTop(locator);
-		boolean hidden = ( (left.intValue() < 0) && (top.intValue() < 0) );
-		logger.info("isVisiblePerPosition("+ locator +") - (left, top) = ("+ left.intValue() +", "+ top.intValue() +") "+ (!hidden));
+		
+		// If the position is less than the limits, then it is hidden
+		boolean hidden = ( (left.intValue() < leftLimit) && (top.intValue() < topLimit) );
+		logger.info("isVisiblePerPosition("+ locator +") - (left, top) = ("+ left.intValue() +", "+ top.intValue() +") (limit, limit) = ("+ leftLimit +", "+ topLimit +") "+ (!hidden));
 		return (!hidden);
 	}
 }

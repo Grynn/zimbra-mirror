@@ -43,7 +43,7 @@ public class LoginPage extends AbsPage {
 			return (false);
 		}
 		
-		boolean visible = isVisiblePerPosition(ZLoginButtonContainer);
+		boolean visible = isVisiblePerPosition(ZLoginButtonContainer, 0 , 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);

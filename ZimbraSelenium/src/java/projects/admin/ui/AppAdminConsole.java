@@ -19,7 +19,8 @@ public class AppAdminConsole extends AbsApplication {
 	public MainPage					zMainPage = null;
 	public SearchResultsPage		zSearchResultsPage = null;
 
-	public ManageAccountsPage				zAccountsPage = null;
+	public ManageAccountsPage		zManageAccountsPage = null;
+	public EditAccountPage			zEditAccountPage = null;
 
 	
 	
@@ -39,9 +40,12 @@ public class AppAdminConsole extends AbsApplication {
 		zSearchResultsPage = new SearchResultsPage(this);
 		pages.put(zSearchResultsPage.myPageName(), zSearchResultsPage);
 
-		zAccountsPage = new ManageAccountsPage(this);
-		pages.put(zAccountsPage.myPageName(), zAccountsPage);
+		zManageAccountsPage = new ManageAccountsPage(this);
+		pages.put(zManageAccountsPage.myPageName(), zManageAccountsPage);
 
+		zEditAccountPage = new EditAccountPage(this);
+		pages.put(zEditAccountPage.myPageName(), zEditAccountPage);
+		
 	}
 
 	/**
