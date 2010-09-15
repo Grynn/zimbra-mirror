@@ -262,7 +262,7 @@ function () {
 	if (this._containedObject && this._containedObject.name) {
 		return this._containedObject.name ;
 	}else{
-		return "" ;
+		return ZaMsg.TBB_New;
 	}
 }
 

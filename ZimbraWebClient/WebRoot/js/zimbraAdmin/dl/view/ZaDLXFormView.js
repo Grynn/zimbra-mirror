@@ -471,6 +471,7 @@ function (entry) {
 		this._containedObject._defaultValues = entry._defaultValues;
 		
 	this._containedObject.name = entry.name;
+        if(entry.name == ""){this._containedObject.name = ZaMsg.TBB_New;}
 	this._containedObject.type = entry.type;
 	this._containedObject.id = entry.id;
 	
