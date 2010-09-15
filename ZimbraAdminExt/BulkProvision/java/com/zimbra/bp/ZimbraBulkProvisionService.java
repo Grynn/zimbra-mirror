@@ -53,8 +53,8 @@ public class ZimbraBulkProvisionService  implements DocumentService {
     public static final QName GET_BULK_IMAP_IMPORT_TASKLIST_REQUEST = QName.get("GetBulkIMAPImportTaskListRequest", NAMESPACE) ;
     public static final QName GET_BULK_IMAP_IMPORT_TASKLIST_RESPONSE = QName.get("GetBulkIMAPImportTaskListResponse", NAMESPACE) ;
 
-    public static final QName PURGE_BULK_IMAP_IMPORT_TASK_REQUEST = QName.get("PurgeBulkIMAPImportTaskRequest", NAMESPACE) ;
-    public static final QName PURGE_BULK_IMAP_IMPORT_TASK_RESPONSE = QName.get("PurgeBulkIMAPImportTaskResponse", NAMESPACE) ;
+    public static final QName PURGE_BULK_IMAP_IMPORT_TASKS_REQUEST = QName.get("PurgeBulkIMAPImportTasksRequest", NAMESPACE) ;
+    public static final QName PURGE_BULK_IMAP_IMPORT_TASKS_RESPONSE = QName.get("PurgeBulkIMAPImportTasksResponse", NAMESPACE) ;
     
     public void registerHandlers(DocumentDispatcher dispatcher) {
         dispatcher.registerHandler(GET_BULK_PROVISION_ACCOUNTS_REQUEST, new GetBulkProvisionAccounts());
@@ -63,5 +63,6 @@ public class ZimbraBulkProvisionService  implements DocumentService {
         dispatcher.registerHandler(GENERATE_BULK_PROV_FROM_LDAP_REQUEST, new GenerateBulkProvisionFileFromLDAP());
         dispatcher.registerHandler(BULK_IMAP_DATA_IMPORT_REQUEST, new BulkIMAPDataImport());
         dispatcher.registerHandler(GET_BULK_IMAP_IMPORT_TASKLIST_REQUEST, new GetBulkIMAPImportTaskList());
+        dispatcher.registerHandler(PURGE_BULK_IMAP_IMPORT_TASKS_REQUEST, new PurgeIMAPImportTasks());
     }
 }

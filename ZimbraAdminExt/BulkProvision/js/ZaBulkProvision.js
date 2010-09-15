@@ -612,6 +612,18 @@ ZaBulkProvision.getBulkDataImportTasks = function() {
 	return list;
 }
 
+ZaBulkProvision.deleteBulkDataImportTasks = function () {
+	var soapDoc = AjxSoapDoc.create("PurgeBulkIMAPImportTasksRequest",ZaBulkProvision.URN, null);	
+	var params = new Object();
+	params.soapDoc = soapDoc;
+	params.asyncMode=false;
+	var reqMgrParams = {
+		controller : ZaApp.getInstance().getCurrentController(),
+		busyMsg : com_zimbra_bulkprovision.BUSY_GET_BULK_TASKS
+	}
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.PurgeBulkIMAPImportTasksResponse;	
+}
+
 ZaBulkProvisionTask = function () {
 	ZaItem.call(this, "ZaBulkProvisionTask");
 	this._init();

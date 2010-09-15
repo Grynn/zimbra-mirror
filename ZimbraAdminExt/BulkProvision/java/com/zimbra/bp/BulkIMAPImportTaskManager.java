@@ -1,6 +1,7 @@
 package com.zimbra.bp;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -33,9 +34,6 @@ public class BulkIMAPImportTaskManager {
     
     public static Queue<HashMap<taskKeys, String>> getQueue(String adminID) {
         synchronized (importQueues) {
-            if (importQueues == null) {
-                importQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
-            }
             if (importQueues.containsKey(adminID)) {
                 return importQueues.get(adminID);
             } else {
@@ -48,9 +46,6 @@ public class BulkIMAPImportTaskManager {
 
     public static Queue<HashMap<taskKeys, String>> getRunningQueue(String adminID) {
         synchronized (runningQueues) {
-            if (runningQueues == null) {
-                runningQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
-            }
             if (runningQueues.containsKey(adminID)) {
                 return runningQueues.get(adminID);
             } else {
@@ -73,18 +68,58 @@ public class BulkIMAPImportTaskManager {
         }
     }    
     
+    public static void purgeQueue(String adminID) throws BulkProvisionException, ServiceException {
+        synchronized (importQueues) {
+            if (!importQueues.containsKey(adminID)) {
+                throw BulkProvisionException.EMPTY_IMPORT_QUEUE();
+            }
+            cleanTaskQueue(importQueues.get(adminID));
+            importQueues.remove(adminID);            
+        }   
+        synchronized (finishedQueues) {
+            if (importQueues.containsKey(adminID)) {
+                cleanTaskQueue(finishedQueues.get(adminID));
+                finishedQueues.remove(adminID);
+            }
+        }        
+    }
+    
+    /**
+     * TODO: abort running imports. Currently if we delete a task from the queue active data import continues to run
+     * @param taskQueue
+     * @throws ServiceException
+     */
+    private static void cleanTaskQueue ( Queue<HashMap<taskKeys, String>> taskQueue) throws ServiceException {
+        synchronized(taskQueue) {
+            if(!taskQueue.isEmpty()) {
+                for(HashMap<taskKeys, String> task : taskQueue) {
+                    String accountID = task.get(taskKeys.accountID);
+                    String dataSourceID = task.get(taskKeys.dataSourceID);
+                    if (accountID == null) {
+                        ZimbraLog.extensions.error("Error in IMAP import task", BulkProvisionException.EMPTY_ACCOUNT_ID());
+                        continue;
+                    }
+                    if (dataSourceID == null) {
+                        ZimbraLog.extensions.error("Error in IMAP import task", BulkProvisionException.EMPTY_DATASOURCE_ID());
+                        continue;
+                    }   
+                    Account acct = Provisioning.getInstance().getAccountById(accountID);
+                    DataSourceManager.deleteManaged(accountID, dataSourceID);
+                    Provisioning.getInstance().deleteDataSource(acct, dataSourceID);
+                }
+            }
+        } 
+    }
+    
     public static void startImport(String adminID) throws BulkProvisionException {
         Queue<HashMap<taskKeys, String>> queue = null;
         synchronized (importQueues) {
-            if (importQueues == null) {
-                throw BulkProvisionException.IMPORT_QUEUE_NOT_INITIALIZED();
-            }
             if (!importQueues.containsKey(adminID)) {
                 throw BulkProvisionException.EMPTY_IMPORT_QUEUE();
             }
             queue = importQueues.get(adminID);
         }
-        if (queue.size() == 0) {
+        if (queue.isEmpty()) {
             throw BulkProvisionException.EMPTY_IMPORT_QUEUE();
         }
         int numThreads = queue.size() > MAX_THREADS ? MAX_THREADS : queue.size();
@@ -109,14 +144,17 @@ public class BulkIMAPImportTaskManager {
                 }
             }
             
-            Queue<HashMap<taskKeys, String>> finishedLst = null;
-            finishedLst = getFinishedQueue(queueKey);
+            Queue<HashMap<taskKeys, String>> finishedList = getFinishedQueue(queueKey);
             if (lst == null) {
                 return;
             }
             while (true) {
                 HashMap<taskKeys, String> task = null;
+
                 synchronized (lst) {
+                    if(lst.isEmpty()) {
+                        return;
+                    }
                     task = lst.remove();
                 }
                 if (task == null) {
@@ -146,10 +184,9 @@ public class BulkIMAPImportTaskManager {
                     HashMap<taskKeys, String> finishedTask = new HashMap<taskKeys, String>();
                     finishedTask.put(taskKeys.accountID, accountID);
                     finishedTask.put(taskKeys.dataSourceID,dataSourceID);
-                    synchronized(finishedLst) {
-                        finishedLst.add(finishedTask);
+                    synchronized(finishedList) {
+                        finishedList.add(finishedTask);
                     }
-                    return;
                 } catch (ServiceException e) {
                     ZimbraLog.extensions.error("Error in IMAP import task", e);
                     return;

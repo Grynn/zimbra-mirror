@@ -67,6 +67,11 @@ function(entry) {
     this._localXForm.setInstance(this._containedObject);
 }
 
+ZaBulkDataImportXWizard.prototype.finishWizard = function() {
+	this.popdown();	
+	ZaApp.getInstance().getBulkProvisionTasksController().show(ZaBulkProvision.getBulkDataImportTasks());
+}
+
 ZaBulkDataImportXWizard.prototype.startImportCallback = function(params, resp) {
 	if(resp && resp.isException()) {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);

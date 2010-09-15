@@ -33,8 +33,6 @@ ZaController.initToolbarMethods["ZaBulkProvisionTasksController"] = new Array();
 ZaController.initPopupMenuMethods["ZaBulkProvisionTasksController"] = new Array();
 ZaController.changeActionsStateMethods["ZaBulkProvisionTasksController"] = new Array(); 
 ZaOperation.BULK_DATA_IMPORT = ++ ZA_OP_INDEX;
-ZaOperation.ACCOUNT_IMPORT_WIZARD =  ++ZA_OP_INDEX;
-ZaOperation.MIGRATION_WIZARD =  ++ZA_OP_INDEX;
 
 ZaBulkProvisionTasksController.prototype.show = 
 function(list, openInNewTab) {
@@ -45,6 +43,7 @@ function(list, openInNewTab) {
 		this._contentView.set(list.getVector());
     
 	ZaApp.getInstance().pushView(this.getContentViewId());
+	this.changeActionsState();	
 }
 
 ZaBulkProvisionTasksController.initToolbarMethod =
@@ -64,7 +63,9 @@ function () {
 	}	
 	if(showBulkProvision) {    	
 		this._toolbarOperations[ZaOperation.BULK_DATA_IMPORT]=new ZaOperation(ZaOperation.BULK_DATA_IMPORT,com_zimbra_bulkprovision.TB_IMAP_Import, com_zimbra_bulkprovision.TB_IMAP_Import_tt, "ApplianceMigration", "ApplianceMigration", new AjxListener(this, this.bulkDataImportListener));
+		this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,com_zimbra_bulkprovision.DeleteTask, com_zimbra_bulkprovision.DeleteTask_tt, "Delete", "Delete", new AjxListener(this, this.deleteButtonListener));
 		this._toolbarOrder.push(ZaOperation.BULK_DATA_IMPORT);
+		this._toolbarOrder.push(ZaOperation.DELETE);
 	}
 				
 	this._toolbarOperations[ZaOperation.NONE] = new ZaOperation(ZaOperation.NONE);
@@ -74,6 +75,23 @@ function () {
 	this._toolbarOrder.push(ZaOperation.HELP);					
 }
 ZaController.initToolbarMethods["ZaBulkProvisionTasksController"].push(ZaBulkProvisionTasksController.initToolbarMethod);
+
+ZaBulkProvisionTasksController.prototype.deleteButtonListener = function(ev) {
+	ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(com_zimbra_bulkprovision.ConfirmDeleteTask, DwtMessageDialog.INFO_STYLE);
+	ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, this.deleteAndGoAway, this, null);		
+    ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.NO_BUTTON, this.closeCnfrmDlg, this, null);				
+	ZaApp.getInstance().dialogs["confirmMessageDialog"].popup();
+}
+
+ZaBulkProvisionTasksController.prototype.deleteAndGoAway = function () {
+	try {
+		ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
+		ZaBulkProvision.deleteBulkDataImportTasks();
+		this.show(ZaBulkProvision.getBulkDataImportTasks());
+	} catch (ex) {
+		this._handleException(ex, "ZaBulkProvisionTasksController.prototype.deleteAndGoAway", null, false);
+	}	
+}
 
 ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog = function (params,ev) {
     try {
@@ -219,6 +237,9 @@ ZaBulkProvisionTasksController.prototype._createUI = function () {
 		
 		this._UICreated = true;
 		ZaApp.getInstance()._controllers[this.getContentViewId ()] = this ;
+		this._contentView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
+		this._contentView.addActionListener(new AjxListener(this, this._listActionListener));			
+		
 	} catch (ex) {
 		this._handleException(ex, "ZaBulkProvisionTasksController.prototype._createUI", null, false);
 		return;
@@ -229,3 +250,59 @@ ZaBulkProvisionTasksController.prototype.set =
 function(taskList) {
 	this.show(taskList);
 }
+
+/**
+* This listener is called when the item in the list is double clicked. It call ZaCosController.show method
+* in order to display the Cos View
+**/
+ZaBulkProvisionTasksController.prototype._listSelectionListener =
+function(ev) {
+	this.changeActionsState();	
+}
+
+
+ZaBulkProvisionTasksController.prototype._listActionListener =
+function (ev) {
+	this.changeActionsState();
+	this._actionMenu.popup(0, ev.docX, ev.docY);
+}
+
+ZaBulkProvisionTasksController.changeActionsStateMethod = 
+	function (enableArray,disableArray) {
+		if(!this._contentView)
+			return;
+		
+		var cnt = this._contentView.getSelectionCount();
+		var hasDefault = false;
+		if(cnt >= 1) {
+			var arrDivs = this._contentView.getSelectedItems().getArray();
+			for(var key in arrDivs) {
+				var item = this._contentView.getItemFromElement(arrDivs[key]);
+				if(item) {
+					if(item.name == "default") {
+						hasDefault = true;
+						break;
+					}		
+				}
+			}
+		}
+		if(cnt == 1) {
+			var item = this._contentView.getSelection()[0];
+			if(!item) {
+				if(this._toolbarOperations[ZaOperation.DELETE]) {
+					this._toolbarOperations[ZaOperation.DELETE].enabled=false;
+				}	
+				if(this._popupOperations[ZaOperation.DELETE]) {
+					this._popupOperations[ZaOperation.DELETE].enabled=false;
+				}	
+			}
+		} else if (cnt < 1){
+			if(this._toolbarOperations[ZaOperation.DELETE]) {
+				this._toolbarOperations[ZaOperation.DELETE].enabled=false;
+			}	
+			if(this._popupOperations[ZaOperation.DELETE]) {
+				this._popupOperations[ZaOperation.DELETE].enabled=false;
+			}	
+		}
+	}
+	ZaController.changeActionsStateMethods["ZaBulkProvisionTasksController"].push(ZaBulkProvisionTasksController.changeActionsStateMethod);
