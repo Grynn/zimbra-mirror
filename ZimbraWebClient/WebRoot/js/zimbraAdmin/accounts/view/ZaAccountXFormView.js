@@ -1496,7 +1496,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								{type:_ZALEFT_GROUPER_, numCols:1, width: "100%", 
 									label:ZaMsg.Account_DirectGroupLabel,
 									items:[
-										{ref: ZaAccount.A2_directMemberList, type: _S_DWT_LIST_, width: "100%", height: 200,
+										{ref: ZaAccount.A2_directMemberList, type: _S_DWT_LIST_, width: "98%", height: 200,
 											cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
 											headerList: directMemberOfHeaderList, defaultColumnSortable: 0,
                                             onSelection:ZaAccountXFormView.directMemberOfSelectionListener,
@@ -1536,7 +1536,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								//indirect member group
 								{type:_ZALEFT_GROUPER_, numCols:1,  width: "100%", label:ZaMsg.Account_IndirectGroupLabel,
 									items:[
-										{ref: ZaAccount.A2_indirectMemberList, type: _S_DWT_LIST_, width: "100%", height: 200,
+										{ref: ZaAccount.A2_indirectMemberList, type: _S_DWT_LIST_, width: "98%", height: 200,
 											cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
 											headerList: indirectMemberOfHeaderList, defaultColumnSortable: 0,
                                             onSelection:ZaAccountXFormView.indirectMemberOfSelectionListener,
@@ -1600,7 +1600,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						         },
 						        {type:_SPACER_, height:"5"},
 								
-								{ref: ZaAccount.A2_nonMemberList, type: _S_DWT_LIST_, width: "100%", height: 455,
+								{ref: ZaAccount.A2_nonMemberList, type: _S_DWT_LIST_, width: "98%", height: 455,
 									cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
 									headerList: nonMemberOfHeaderList, defaultColumnSortable: 0,
                                     onSelection:ZaAccountXFormView.nonMemberOfSelectionListener,
