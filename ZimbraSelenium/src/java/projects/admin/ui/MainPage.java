@@ -31,6 +31,11 @@ public class MainPage extends AbsPage {
 	 */
 	public boolean isActive() throws HarnessException {
 		
+		// Make sure the Admin Console is loaded in the browser
+		if ( !MyApplication.isLoaded() )
+			throw new HarnessException("Admin Console application is not active!");
+		
+
 		// Look for the Logo 
 		boolean present = isElementPresent(Zskin_container_logoff);
 		if ( !present ) {
@@ -57,10 +62,6 @@ public class MainPage extends AbsPage {
 			// This page is already active
 			return;
 		}
-		
-		// Make sure the Admin Console is loaded in the browser
-		if ( MyApplication.isLoaded() )
-			throw new HarnessException("Admin Console application is not active!");
 		
 		
 		// 1. Logout

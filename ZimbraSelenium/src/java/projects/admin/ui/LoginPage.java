@@ -35,9 +35,14 @@ public class LoginPage extends AbsPage {
 	 * If the "Login" button is visible, assume the LoginPage is active
 	 */
 	public boolean isActive() throws HarnessException {
-		
+
+		// Make sure the application is loaded first
+		if ( !MyApplication.isLoaded() )
+			throw new HarnessException("Admin Console application is not active!");
+
+
 		// Look for the login button. 
-		boolean present = super.isElementPresent(ZLoginButtonContainer);
+		boolean present = isElementPresent(ZLoginButtonContainer);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
@@ -61,9 +66,6 @@ public class LoginPage extends AbsPage {
 			return;
 		}
 		
-		if ( MyApplication.isLoaded() )
-			throw new HarnessException("Admin Console application is not active!");
-
 		
 		// Logout
 		if ( MyApplication.zMainPage.isActive() ) {
@@ -81,7 +83,7 @@ public class LoginPage extends AbsPage {
 	public void login() throws HarnessException {
 		logger.debug("login()");
 
-		login(ZimbraAdminAccount.GlobalAdmin());
+		login(ZimbraAdminAccount.AdminConsoleAdmin());
 	}
 	
 	/**
@@ -98,7 +100,7 @@ public class LoginPage extends AbsPage {
 		fillLoginFormFields(account);
 		
 		// Click the Login button
-		super.click(ZLoginButtonContainer);
+		click(ZLoginButtonContainer);
 
 		// Wait for the app to load
 		MyApplication.zMainPage.waitForActive();
@@ -117,8 +119,8 @@ public class LoginPage extends AbsPage {
 		if ( !isActive() )
 			throw new HarnessException("LoginPage is not active");
 		
-		super.type(ZLoginUserName, account.EmailAddress);
-		super.type(ZLoginPassword, account.Password);
+		type(ZLoginUserName, account.EmailAddress);
+		type(ZLoginPassword, account.Password);
 	}
 
 

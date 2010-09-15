@@ -37,11 +37,11 @@ public class CreateAccount extends CommonTest {
 		app.zManageAccountsPage.createAccount(account);
 		
 		// Verify the account exists in the ZCS
-		ZimbraAdminAccount.GlobalAdmin().soapSend(
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
 				"<GetAccountRequest xmlns='urn:zimbraAdmin'>" +
 					"<account by='name'>"+ account.EmailAddress +"</account>" +
 				"</GetAccountRequest>");
-		Element response = ZimbraAdminAccount.GlobalAdmin().soapSelectNode("//admin:GetAccountResponse", 1);
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse", 1);
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 		
 		// Verify the account exists in the Account list
@@ -62,11 +62,11 @@ public class CreateAccount extends CommonTest {
 		wizard.completeWizard(account);
 		
 		// Verify the account exists in the ZCS
-		ZimbraAdminAccount.GlobalAdmin().soapSend(
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
 				"<GetAccountRequest xmlns='urn:zimbraAdmin'>" +
 					"<account by='name'>"+ account.EmailAddress +"</account>" +
 				"</GetAccountRequest>");
-		Element response = ZimbraAdminAccount.GlobalAdmin().soapSelectNode("//admin:GetAccountResponse", 1);
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse", 1);
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 
 		// Verify the account exists in the Account list
@@ -87,11 +87,11 @@ public class CreateAccount extends CommonTest {
 		wizard.completeWizard(account);
 
 		// Verify the account exists in the ZCS
-		ZimbraAdminAccount.GlobalAdmin().soapSend(
+		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
 				"<GetAccountRequest xmlns='urn:zimbraAdmin'>" +
 					"<account by='name'>"+ account.EmailAddress +"</account>" +
 				"</GetAccountRequest>");
-		Element response = ZimbraAdminAccount.GlobalAdmin().soapSelectNode("//admin:GetAccountResponse", 1);
+		Element response = ZimbraAdminAccount.AdminConsoleAdmin().soapSelectNode("//admin:GetAccountResponse", 1);
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 
 		// Verify the account exists in the Account list

@@ -45,6 +45,19 @@ public class AppAdminConsole extends AbsApplication {
 
 	}
 
+
+	@Override
+	public boolean isLoaded() throws HarnessException {
+		// TODO: how to determine if the current browser app is the AdminConsole
+		// Maybe check the current URL?
+		return (true);
+	}
+
+	@Override
+	public String myApplicationName() {
+		return ("Admin Console");
+	}
+
 	/**
 	 * Return a list of active pages
 	 * @return
@@ -60,9 +73,6 @@ public class AppAdminConsole extends AbsApplication {
 		return (actives);
 	}
 
-	public boolean isLoaded() {
-		// TODO: how to determine if the current browser app is the AdminConsole
-		// Maybe check the current URL?
-		return (true);
-	}
+
+	
 }

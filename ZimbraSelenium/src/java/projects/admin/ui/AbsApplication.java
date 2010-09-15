@@ -3,6 +3,7 @@ package projects.admin.ui;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 
 /**
@@ -23,6 +24,10 @@ public abstract class AbsApplication {
 
 	}
 	
+	public abstract String myApplicationName();
+
+	public abstract boolean isLoaded() throws HarnessException;
+
 	protected ZimbraAccount setActiveAcount(ZimbraAccount account) {
 		authenticatedAccount = account;
 		return (authenticatedAccount);

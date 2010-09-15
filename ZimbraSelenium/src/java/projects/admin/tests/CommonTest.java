@@ -33,7 +33,7 @@ public class CommonTest {
 	/**
 	 * Helper field.  admin = ZimbraAdminAccount.GlobalAdmin()
 	 */
-	protected final ZimbraAdminAccount gAdmin = ZimbraAdminAccount.GlobalAdmin();
+	protected final ZimbraAdminAccount gAdmin = ZimbraAdminAccount.AdminConsoleAdmin();
 	
 
 	/**

@@ -57,8 +57,10 @@ public class ManageAccountsPage extends AbsPage {
 	@Override
 	public boolean isActive() throws HarnessException {
 		
-		// If "Manage Accounts" tab is active
-		//
+		// Make sure the Admin Console is loaded in the browser
+		if ( !MyApplication.isLoaded() )
+			throw new HarnessException("Admin Console application is not active!");
+
 		
 		boolean present = isElementPresent(DWT93);
 		if ( !present ) {
@@ -85,13 +87,8 @@ public class ManageAccountsPage extends AbsPage {
 			return;
 		}
 		
-		// Make sure the Admin Console is loaded in the browser
-		if ( MyApplication.isLoaded() )
-			throw new HarnessException("Admin Console application is not active!");
-
-		
 		// Click on Addresses -> Accounts
-		super.click(zti__AppAdmin__ADDRESS__ACCOUNT_textCell);
+		click(zti__AppAdmin__ADDRESS__ACCOUNT_textCell);
 		
 		waitForActive();
 
