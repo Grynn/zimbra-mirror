@@ -35,16 +35,16 @@ AttachContactsTabView.prototype.constructor = AttachContactsTabView;
 /**
  * Defines the "search field" element id.
  */
-AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD = "attDlg_attMsg_SearchField";
+AttachContactsTabView.ELEMENT_ID_SEARCH_FIELD = "attDlg_attContact_SearchField";
 /**
  * Defines the "search button" element id.
  */
-AttachContactsTabView.ELEMENT_ID_SEARCH_BUTTON = "attDlg_attMsg_SearchBtn";
+AttachContactsTabView.ELEMENT_ID_SEARCH_BUTTON = "attDlg_attContact_SearchBtn";
 
 /**
  * Defines the "nav button cell" element id.
  */
-AttachContactsTabView.ELEMENT_ID_NAV_BUTTON_CELL = "attDlg_attMsg_NavBtnCell";
+AttachContactsTabView.ELEMENT_ID_NAV_BUTTON_CELL = "attDlg_attContact_NavBtnCell";
 
 /**
  * Defines the id of the folder to search initially
