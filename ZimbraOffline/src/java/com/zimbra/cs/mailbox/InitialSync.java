@@ -1267,7 +1267,7 @@ public class InitialSync {
 
         // use this data to generate the XML entry used in message delta sync
         Element sync = new Element.XMLElement(Sync.elementNameForType(type)).addAttribute(MailConstants.A_ID, id);
-        sync.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags)).addAttribute(MailConstants.A_TAGS, tags).addAttribute(MailConstants.A_CONV_ID, convId);
+        sync.addAttribute(MailConstants.A_FLAGS, Flag.bitmaskToFlags(flags)).addAttribute(MailConstants.A_TAGS, tagStr).addAttribute(MailConstants.A_CONV_ID, convId);
         sync.addAttribute(MailConstants.A_DATE, received * 1000L);
         getDeltaSync().syncMessage(sync, folderId, type);
     }
