@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -28,7 +28,7 @@ import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.offline.OfflineLog;
-import com.zimbra.cs.datasource.TlsSocketFactory;
+import com.zimbra.cs.util.JMSession;
 
 /**
  * @author jjzhuang
@@ -50,36 +50,37 @@ public class LocalJMSession {
             return new PasswordAuthentication(username, password);
         }
     }
-	
+
     static {
         // Assume that most malformed base64 errors occur due to incorrect delimiters,
         // as opposed to errors in the data itself.  See bug 11213 for more details.
         System.setProperty("mail.mime.base64.ignoreerrors", "true");
     }
-    
-    public static Session getSession(String smtpHost, int smtpPort, boolean isAuthRequired, String smtpUser, String smtpPass,
-    		                         boolean useSSL, boolean useProxy, String proxyHost, int proxyPort, boolean isDebugTraceEnabled) throws ServiceException {
-    	long timeout = LC.javamail_smtp_timeout.longValue() * Constants.MILLIS_PER_SECOND;
-    	
-    	String localhost = LC.zimbra_server_hostname.value();
-    	if (smtpHost == null || smtpHost.length() == 0)
-    		ServiceException.FAILURE("null smtp host", null);
-    	if (smtpPort <= 0)
-    		ServiceException.FAILURE("invalid smtp port", null);
-    	if (isAuthRequired && (smtpUser == null || smtpUser.length() == 0 || smtpPass == null || smtpPass.length() == 0))
-    		ServiceException.FAILURE("missing smtp username or password", null);
-    	if (useProxy && (proxyHost == null || proxyHost.length() == 0 || proxyPort <= 0))
-    		ServiceException.FAILURE("invalid proxy settings", null);
-    	
+
+    public static Session getSession(String smtpHost, int smtpPort,
+            boolean isAuthRequired, String smtpUser, String smtpPass, boolean useSSL,
+            boolean useProxy, String proxyHost, int proxyPort, boolean isDebugTraceEnabled) {
+        long timeout = LC.javamail_smtp_timeout.longValue() * Constants.MILLIS_PER_SECOND;
+
+        String localhost = LC.zimbra_server_hostname.value();
+        if (smtpHost == null || smtpHost.length() == 0)
+            ServiceException.FAILURE("null smtp host", null);
+        if (smtpPort <= 0)
+            ServiceException.FAILURE("invalid smtp port", null);
+        if (isAuthRequired && (smtpUser == null || smtpUser.length() == 0 || smtpPass == null || smtpPass.length() == 0))
+            ServiceException.FAILURE("missing smtp username or password", null);
+        if (useProxy && (proxyHost == null || proxyHost.length() == 0 || proxyPort <= 0))
+            ServiceException.FAILURE("invalid proxy settings", null);
+
         Properties props = new Properties();
         Session session = null;
         props.setProperty("mail.mime.address.strict", "false");
-    	
-    	if (useProxy) {
-    	    props.setProperty("proxySet", "true");
+
+        if (useProxy) {
+            props.setProperty("proxySet", "true");
             props.setProperty("socksProxyHost", proxyHost);
             props.setProperty("socksProxyPort", proxyPort + "");
-    	}
+        }
 
         props.put("mail.smtp.socketFactory", SocketFactories.defaultSocketFactory());
         props.setProperty("mail.smtp.socketFactory.fallback", "false");
@@ -102,10 +103,10 @@ public class LocalJMSession {
                 props.setProperty("mail.smtps.password", smtpPass);
                 session = Session.getInstance(props, new SMTPAuthenticator(smtpUser, smtpPass));
             } else {
-            	session = Session.getInstance(props);
+                session = Session.getInstance(props);
             }
             session.setProtocolForAddress("rfc822", "smtps");
-    	} else {
+        } else {
             props.setProperty("mail.transport.protocol", "smtp");
             props.setProperty("mail.smtp.connectiontimeout", Long.toString(timeout));
             props.setProperty("mail.smtp.timeout", Long.toString(timeout));
@@ -114,7 +115,7 @@ public class LocalJMSession {
             props.setProperty("mail.smtp.host", smtpHost);
             props.setProperty("mail.smtp.port",  smtpPort + "");
             if (LC.javamail_smtp_enable_starttls.booleanValue()) {
-            	props.setProperty("mail.smtp.starttls.enable","true");
+                props.setProperty("mail.smtp.starttls.enable","true");
                 // props.put("mail.smtp.socketFactory.class", TlsSocketFactory.getInstance());
             }
             if (isAuthRequired) {
@@ -123,14 +124,15 @@ public class LocalJMSession {
                 props.setProperty("mail.smtp.password", smtpPass);
                 session = Session.getInstance(props, new SMTPAuthenticator(smtpUser, smtpPass));
             } else {
-            	session = Session.getInstance(props);
+                session = Session.getInstance(props);
             }
             session.setProtocolForAddress("rfc822", "smtp");
-    	}
+        }
 
-        if (LC.javamail_smtp_debug.booleanValue() || isDebugTraceEnabled)
+        if (LC.javamail_smtp_debug.booleanValue() || isDebugTraceEnabled) {
             session.setDebug(true);
-        
+        }
+        JMSession.setProviders(session);
         return session;
     }
 
