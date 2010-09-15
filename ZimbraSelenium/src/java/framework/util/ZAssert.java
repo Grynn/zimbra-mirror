@@ -1,5 +1,8 @@
 package framework.util;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.testng.Assert;
@@ -76,4 +79,50 @@ public class ZAssert {
         CountPass++; TotalCountPass++;
 		
 	}
+
+	public static void assertContains(String sequence, String actual, String message) {
+
+		TotalCountTests++;
+		CountTests++;
+		
+		logger.info(String.format("%s -- (%s contains %s) [%s]", "assertContains", actual, sequence, message));
+        try
+        {
+        	Assert.assertTrue(actual.contains(sequence), message);
+        }
+        catch (AssertionError e)
+        {
+        	logger.error(e);
+            throw e;
+        }
+        
+        CountPass++; TotalCountPass++;
+		
+	}
+
+	public static void assertMatches(String regex, String input, String message) {
+		assertMatches(Pattern.compile(regex), input, message);
+	}
+	
+	public static void assertMatches(Pattern pattern, String input, String message) {
+
+		TotalCountTests++;
+		CountTests++;
+		
+		logger.info(String.format("%s -- (%s matches %s) [%s]", "assertMatches", pattern.toString(), input, message));
+        try
+        {
+        	Matcher m = pattern.matcher(input);
+        	Assert.assertTrue(m.matches(), message);
+        }
+        catch (AssertionError e)
+        {
+        	logger.error(e);
+            throw e;
+        }
+        
+        CountPass++; TotalCountPass++;
+		
+	}
+
 }

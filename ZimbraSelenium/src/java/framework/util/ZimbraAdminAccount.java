@@ -56,6 +56,24 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 	}
 
 	/**
+	 * Get the global admin account used for Admin Console testing
+	 * This global admin has the zimbraPrefAdminConsoleWarnOnExit set to false
+	 */
+	public static synchronized ZimbraAdminAccount AdminConsoleAdmin() {
+		if ( _AdminConsoleAdmin == null ) {
+			String name = "globaladmin"+ ZimbraSeleniumProperties.getUniqueString();
+			String domain = ZimbraSeleniumProperties.getStringProperty("server","qa60.lab.zimbra.com");
+			_AdminConsoleAdmin = new ZimbraAdminAccount(name +"@"+ domain);
+			_AdminConsoleAdmin.provision();
+			_AdminConsoleAdmin.authenticate();
+			_AdminConsoleAdmin.modifyPreference("zimbraPrefAdminConsoleWarnOnExit", "FALSE");
+		}
+		return (_AdminConsoleAdmin);
+	}
+	private static ZimbraAdminAccount _AdminConsoleAdmin = null;
+
+	
+	/**
 	 * Get the global admin account
 	 * This account is defined in config.properties as <adminName>@<server>
 	 * @return The global admin account
