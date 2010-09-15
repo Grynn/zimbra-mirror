@@ -587,6 +587,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 		StringUtil.addToMultiMap(dsAttrs,Provisioning.A_zimbraDataSourceConnectionType, connectionType);
 		StringUtil.addToMultiMap(dsAttrs,Provisioning.A_zimbraDataSourceFolderId, "1");
 		StringUtil.addToMultiMap(dsAttrs,Provisioning.A_zimbraDataSourceImportOnly, "TRUE");
+		StringUtil.addToMultiMap(dsAttrs, Provisioning.A_zimbraDataSourceIsInternal, "TRUE");
 		StringUtil.addToMultiMap(dsAttrs, Provisioning.A_zimbraDataSourceName,ZimbraBulkProvisionExt.IMAP_IMPORT_DS_NAME);
 		StringUtil.addToMultiMap(dsAttrs,Provisioning.A_zimbraDataSourceEnabled, "TRUE");
 		DataSource importDS = Provisioning.getInstance().createDataSource(account, DataSource.Type.imap,ZimbraBulkProvisionExt.IMAP_IMPORT_DS_NAME, dsAttrs);
