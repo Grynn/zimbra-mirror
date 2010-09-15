@@ -133,9 +133,10 @@ ZaDomainListController.initToolbarMethod =
 function () {
 	// first button in the toolbar is a menu.
 	if(ZaItem.hasRight(ZaDomain.RIGHT_CREATE_TOP_DOMAIN, ZaZimbraAdmin.currentAdminAccount)) {	
+	
 		this._toolbarOperations[ZaOperation.NEW]=new ZaOperation(ZaOperation.NEW,ZaMsg.TBB_New, ZaMsg.DTBB_New_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._newButtonListener));
-        this._toolbarOperations[ZaOperation.ADD_DOMAIN_ALIAS]=new ZaOperation(ZaOperation.ADD_DOMAIN_ALIAS,ZaMsg.TBB_AddDomainAlias,
-                ZaMsg.DTBB_addDomainAlias_tt, "Domain", "DomainDis", new AjxListener(this, ZaDomainListController.prototype._addDomainAliasListener));
+		this._toolbarOperations[ZaOperation.ADD_DOMAIN_ALIAS]=new ZaOperation(ZaOperation.ADD_DOMAIN_ALIAS,ZaMsg.TBB_AddDomainAlias,
+                ZaMsg.DTBB_addDomainAlias_tt, "DomainAlias", "DomainAliasDis", new AjxListener(this, ZaDomainListController.prototype._addDomainAliasListener));
 	}
   	this._toolbarOperations[ZaOperation.EDIT]=new ZaOperation(ZaOperation.EDIT,ZaMsg.TBB_Edit, ZaMsg.DTBB_Edit_tt, "Properties", "PropertiesDis",  new AjxListener(this, ZaDomainListController.prototype._editButtonListener));    	
    	this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,ZaMsg.TBB_Delete, ZaMsg.DTBB_Delete_tt, "Delete", "DeleteDis", new AjxListener(this, ZaDomainListController.prototype._deleteButtonListener));    	    	

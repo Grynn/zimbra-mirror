@@ -208,7 +208,19 @@ function (list) {
 		for(var ix=0; ix< cnt; ix++) {
 			var ti1 = new DwtTreeItem({parent:this._domainsTi,className:"AdminTreeItem",id:ZaId.getTreeItemId(ZaId.PANEL_CONFIGURATION,ZaId.TREEITEM_DOMAINS,null,ix+1)});
 			ti1.setText(domainList[ix].name);	
-			ti1.setImage("Domain");
+
+			var itemType = ( domainList[ix].attrs [ZaDomain.A_domainType] );
+			
+			if( itemType == ZaDomain.domainTypes.alias ) {
+				
+					ti1.setImage("DomainAlias"); //Domain Alias
+			
+			}else { //itemType == ZaDomain.domainTypes.local
+				
+					ti1.setImage("Domain"); //Real Domain
+				
+			}
+			
 			ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAIN_VIEW);
 			ti1.setData(ZaOverviewPanelController._OBJ_ID, domainList[ix].id);
 			this._domainsMap[domainList[ix].id] = ti1;
@@ -420,7 +432,7 @@ function() {
 			this._domainsTi = new DwtTreeItem({parent:this._configTi,className:"AdminTreeItem",id:ZaId.getTreeItemId(ZaId.PANEL_APP,ZaId.PANEL_CONFIGURATION,null, ZaId.TREEITEM_DOMAINS)});
 			this._domainsTi.setText(ZaMsg.OVP_domains);
 			this._domainsTi.setImage("Domain");
-			this._domainsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAINS_LIST_VIEW);
+  		this._domainsTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._DOMAINS_LIST_VIEW);
 	
 			try {
 			//add domain nodes
