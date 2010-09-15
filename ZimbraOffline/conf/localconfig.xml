@@ -133,6 +133,9 @@
   <key name="zimbra_class_attrmanager">
     <value>com.zimbra.cs.account.offline.OfflineAttributeManager</value>
   </key>
+  <key name="zimbra_class_soapsessionfactory">
+    <value>com.zimbra.cs.session.OfflineSoapSessionFactory</value>  
+  </key>
   <key name="zimbra_disk_cache_servlet_flush">
     <value>false</value>
   </key>
