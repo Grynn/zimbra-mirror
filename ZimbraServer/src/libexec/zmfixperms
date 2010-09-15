@@ -353,6 +353,12 @@ if [ -L ${zimbra_home}/cbpolicyd ]; then
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/cbpolicyd
 fi
 
+if [ -d ${zimbra_home}/mta ]; then
+  printMsg "Fixing ownership and permissions on ${zimbra_home}/mta"
+  chown -R ${root_user}:${root_group} ${zimbra_home}/mta
+  chmod 755 ${zimbra_home}/mta
+fi
+
 if [ -L ${zimbra_home}/cyrus-sasl ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/cyrus-sasl"
   if [ ! -d ${zimbra_home}/cyrus-sasl/state ]; then  
