@@ -501,6 +501,9 @@ createCA() {
       # recreate the commercial_ca_crt from the concatenated commercial cert stored in ldap.
       perl -e 'open(C, "$ARGV[0]"); while (<C>) { open(N, ">>$ARGV[1]") if (/BEGIN CERTIFICATE/); print N if ($f>0); if (/END CERTIFICATE/) { close(N); $f++; } }' ${tmpfile} ${commercial_ca_crt}
       echo "done."
+      if [ -z "${commercial_ca_crt}" ]; then
+        rm -rf ${commercial_ca_crt}
+      fi
     elif [ -z "${tmpfile}" ]; then
       echo "not present."
     else
