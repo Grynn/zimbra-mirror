@@ -43,9 +43,6 @@ public class AppAdminConsole extends AbsApplication {
 		zManageAccountsPage = new ManageAccountsPage(this);
 		pages.put(zManageAccountsPage.myPageName(), zManageAccountsPage);
 
-		zEditAccountPage = new EditAccountPage(this);
-		pages.put(zEditAccountPage.myPageName(), zEditAccountPage);
-		
 	}
 
 	/**

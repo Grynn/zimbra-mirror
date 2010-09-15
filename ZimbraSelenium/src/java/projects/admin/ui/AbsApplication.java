@@ -7,6 +7,9 @@ import framework.util.ZimbraAccount;
 
 /**
  * This class defines an abstract Zimbra "Application"
+ * 
+ * Example, Admin Console, Ajax Client, HTML Client
+ * 
  * @author Matt Rhoades
  *
  */

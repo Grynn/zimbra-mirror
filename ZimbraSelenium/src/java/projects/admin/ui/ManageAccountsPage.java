@@ -97,45 +97,42 @@ public class ManageAccountsPage extends AbsPage {
 
 	}
 
+	/**
+	 * Create the specified account using the Admin Console
+	 * @param account
+	 * @return
+	 * @throws HarnessException
+	 */
 	public AccountItem createAccount(AccountItem account) throws HarnessException {
 		logger.debug("createAccount(AccountItem account)" + account.EmailAddress);
 
-		navigateTo();
-		
-		// Click on "New -> Account"
-		click(zmi__ACLV__NEW_WIZARD_title);
-		completeNewAccountWizard(account);
-		
-		// TODO: add any additional AccountItem fields as necessary
+		// Get the New Account Wizard
+		CreateAccountWizard wizard = getNewAccountWizard(zb__ACLV__NEW_MENU_title);
+		AccountItem a = (AccountItem)wizard.completeWizard(account);
 		
 		// Return the account
-		return (account);
+		return (a);
 	}
 
+	/**
+	 * Get the "New Account" wizard by clicking on the specified locator
+	 * @param locator
+	 * @return
+	 * @throws HarnessException
+	 */
+	public CreateAccountWizard getNewAccountWizard(String locator) throws HarnessException {
+		
+		// Make sure the Manage Accounts page is showing
+		navigateTo();
 
-	/**
-	 * Fill out all the fields in the new account wizard, but don't
-	 * "Finish" the wizard
-	 * 
-	 * @param account
-	 * @throws HarnessException
-	 */
-	public AccountItem fillNewAccountWizard(AccountItem account) throws HarnessException {
-		throw new HarnessException("implement me");
-	}
-	
-	/**
-	 * Fill out all the fields in the new account wizard, and complete
-	 * the wizard by clicking "Finish" 
-	 * @param account
-	 * @throws HarnessException
-	 */
-	public AccountItem completeNewAccountWizard(AccountItem account) throws HarnessException {
+		// Click on "New"
+		click(zmi__ACLV__NEW_WIZARD_title);
+
+		CreateAccountWizard wizard = new CreateAccountWizard(this);
+		if ( !wizard.isOpen() )
+			throw new HarnessException("Clicking on locator "+ locator +" did not open wizard");
 		
-		fillNewAccountWizard(account);
-		
-		click(DWT283_title);
-		
-		return (account);
+		// Return the Wizard object
+		return (wizard);
 	}
 }

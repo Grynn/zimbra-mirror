@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 import projects.admin.clients.AccountItem;
 import projects.admin.clients.Item;
 import projects.admin.tests.CommonTest;
+import projects.admin.ui.CreateAccountWizard;
 import projects.admin.ui.ManageAccountsPage;
 
 import com.zimbra.common.soap.Element;
@@ -32,6 +33,7 @@ public class CreateAccount extends CommonTest {
 		// Create a new account in the Admin Console
 		AccountItem account = new AccountItem();
 		
+		// Use the default Create Account method
 		app.zManageAccountsPage.createAccount(account);
 		
 		// Verify the account exists in the ZCS
@@ -55,8 +57,9 @@ public class CreateAccount extends CommonTest {
 		// Create a new account in the Admin Console
 		AccountItem account = new AccountItem();
 				
-		app.zManageAccountsPage.click(ManageAccountsPage.zb__ACLV__NEW_MENU_title);
-		app.zManageAccountsPage.completeNewAccountWizard(account);
+		CreateAccountWizard wizard = 
+			app.zManageAccountsPage.getNewAccountWizard(ManageAccountsPage.zb__ACLV__NEW_MENU_title);
+		wizard.completeWizard(account);
 		
 		// Verify the account exists in the ZCS
 		ZimbraAdminAccount.GlobalAdmin().soapSend(
@@ -79,9 +82,10 @@ public class CreateAccount extends CommonTest {
 		// Create a new account in the Admin Console
 		AccountItem account = new AccountItem();
 				
-		app.zManageAccountsPage.click(ManageAccountsPage.zmi__ACLV__NEW_WIZARD_title);
-		app.zManageAccountsPage.completeNewAccountWizard(account);
-		
+		CreateAccountWizard wizard = 
+			app.zManageAccountsPage.getNewAccountWizard(ManageAccountsPage.zmi__ACLV__NEW_WIZARD_title);
+		wizard.completeWizard(account);
+
 		// Verify the account exists in the ZCS
 		ZimbraAdminAccount.GlobalAdmin().soapSend(
 				"<GetAccountRequest xmlns='urn:zimbraAdmin'>" +
