@@ -145,8 +145,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         mMimeTypes    = OfflineMimeType.instantiateAll();
         mZimlets      = OfflineZimlet.instantiateAll(this);
         mSyncServerCache = new HashMap<String, Server>();
-        mAccountCache = new NamedEntryCache<Account>(16, LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
-        mGranterCache = new NamedEntryCache<Account>(16, LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
+        mAccountCache = new NamedEntryCache<Account>(64, LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
+        mGranterCache = new NamedEntryCache<Account>(64, LC.ldap_cache_account_maxage.intValue() * Constants.MILLIS_PER_MINUTE);
         DbPool.disableUsageWarning();
     }
     
