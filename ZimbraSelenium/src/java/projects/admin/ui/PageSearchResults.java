@@ -6,9 +6,9 @@ import framework.util.HarnessException;
 import projects.admin.clients.Item;
 
 
-public class SearchResultsPage extends AbsPage {
+public class PageSearchResults extends AbsPage {
 
-	public SearchResultsPage(AbsApplication application) {
+	public PageSearchResults(AbsApplication application) {
 		super(application);
 	}
 

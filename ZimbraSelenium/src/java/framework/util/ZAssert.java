@@ -100,8 +100,8 @@ public class ZAssert {
 		
 	}
 
-	public static void assertMatches(String regex, String input, String message) {
-		assertMatches(Pattern.compile(regex), input, message);
+	public static void assertMatches(String pattern, String input, String message) {
+		assertMatches(Pattern.compile(pattern), input, message);
 	}
 	
 	public static void assertMatches(Pattern pattern, String input, String message) {

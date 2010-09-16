@@ -7,8 +7,8 @@ import org.testng.annotations.Test;
 import projects.admin.clients.AccountItem;
 import projects.admin.clients.Item;
 import projects.admin.tests.CommonTest;
-import projects.admin.ui.CreateAccountWizard;
-import projects.admin.ui.ManageAccountsPage;
+import projects.admin.ui.WizardCreateAccount;
+import projects.admin.ui.PageManageAccounts;
 
 import com.zimbra.common.soap.Element;
 
@@ -22,7 +22,7 @@ public class CreateAccount extends CommonTest {
 		logger.info("New "+ CreateAccount.class.getCanonicalName());
 		
 		// All tests start at the "Accounts" page
-		super.startingPage = app.zManageAccountsPage;
+		super.startingPage = app.zPageManageAccounts;
 
 	}
 	
@@ -34,7 +34,7 @@ public class CreateAccount extends CommonTest {
 		AccountItem account = new AccountItem();
 		
 		// Use the default Create Account method
-		app.zManageAccountsPage.createAccount(account);
+		app.zPageManageAccounts.createAccount(account);
 		
 		// Verify the account exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
@@ -45,7 +45,7 @@ public class CreateAccount extends CommonTest {
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 		
 		// Verify the account exists in the Account list
-		List<Item> accounts = app.zSearchResultsPage.getSearchResults(account.EmailAddress);
+		List<Item> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
 		ZAssert.assertTrue(accounts.contains(account), "Verify the new account appears in the list");
 
 	}
@@ -57,8 +57,8 @@ public class CreateAccount extends CommonTest {
 		// Create a new account in the Admin Console
 		AccountItem account = new AccountItem();
 				
-		CreateAccountWizard wizard = 
-			app.zManageAccountsPage.getNewAccountWizard(ManageAccountsPage.zb__ACLV__NEW_MENU_title);
+		WizardCreateAccount wizard = 
+			app.zPageManageAccounts.getNewAccountWizard(PageManageAccounts.zb__ACLV__NEW_MENU_title);
 		wizard.completeWizard(account);
 		
 		// Verify the account exists in the ZCS
@@ -70,7 +70,7 @@ public class CreateAccount extends CommonTest {
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 
 		// Verify the account exists in the Account list
-		List<Item> accounts = app.zSearchResultsPage.getSearchResults(account.EmailAddress);
+		List<Item> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
 		ZAssert.assertTrue(accounts.contains(account), "Verify the new account appears in the list");
 
 	}
@@ -82,8 +82,8 @@ public class CreateAccount extends CommonTest {
 		// Create a new account in the Admin Console
 		AccountItem account = new AccountItem();
 				
-		CreateAccountWizard wizard = 
-			app.zManageAccountsPage.getNewAccountWizard(ManageAccountsPage.zmi__ACLV__NEW_WIZARD_title);
+		WizardCreateAccount wizard = 
+			app.zPageManageAccounts.getNewAccountWizard(PageManageAccounts.zmi__ACLV__NEW_WIZARD_title);
 		wizard.completeWizard(account);
 
 		// Verify the account exists in the ZCS
@@ -95,7 +95,7 @@ public class CreateAccount extends CommonTest {
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 
 		// Verify the account exists in the Account list
-		List<Item> accounts = app.zSearchResultsPage.getSearchResults(account.EmailAddress);
+		List<Item> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
 		ZAssert.assertTrue(accounts.contains(account), "Verify the new account appears in the list");
 
 	}

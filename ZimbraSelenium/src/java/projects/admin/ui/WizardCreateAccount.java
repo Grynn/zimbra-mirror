@@ -10,11 +10,11 @@ import framework.util.HarnessException;
  * @author zimbra
  *
  */
-public class CreateAccountWizard extends AbsWizard {
+public class WizardCreateAccount extends AbsWizard {
 
-	public CreateAccountWizard(AbsPage page) {
+	public WizardCreateAccount(AbsPage page) {
 		super(page);
-		logger.info("New "+ CreateAccountWizard.class.getName());
+		logger.info("New "+ WizardCreateAccount.class.getName());
 	}
 
 	/* (non-Javadoc)

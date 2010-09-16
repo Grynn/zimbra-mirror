@@ -11,7 +11,7 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public class ManageAccountsPage extends AbsPage {
+public class PageManageAccounts extends AbsPage {
 
 	// ** OverviewTreePanel -> Addresses -> Accounts
 	public static final String zti__AppAdmin__ADDRESS__ACCOUNT_textCell = "xpath=//*[@id='zti__AppAdmin__ADDRESS__ACCOUNT_textCell']";
@@ -36,7 +36,7 @@ public class ManageAccountsPage extends AbsPage {
 	
 	
 	
-	public ManageAccountsPage(AbsApplication application) {
+	public PageManageAccounts(AbsApplication application) {
 		super(application);
 
 		logger.info("new " + myPageName());
@@ -104,7 +104,7 @@ public class ManageAccountsPage extends AbsPage {
 		logger.debug("createAccount(AccountItem account)" + account.EmailAddress);
 
 		// Get the New Account Wizard
-		CreateAccountWizard wizard = getNewAccountWizard(zb__ACLV__NEW_MENU_title);
+		WizardCreateAccount wizard = getNewAccountWizard(zb__ACLV__NEW_MENU_title);
 		AccountItem a = (AccountItem)wizard.completeWizard(account);
 		
 		// Return the account
@@ -117,7 +117,7 @@ public class ManageAccountsPage extends AbsPage {
 	 * @return
 	 * @throws HarnessException
 	 */
-	public CreateAccountWizard getNewAccountWizard(String locator) throws HarnessException {
+	public WizardCreateAccount getNewAccountWizard(String locator) throws HarnessException {
 		
 		// Make sure the Manage Accounts page is showing
 		navigateTo();
@@ -125,7 +125,7 @@ public class ManageAccountsPage extends AbsPage {
 		// Click on "New"
 		click(zmi__ACLV__NEW_WIZARD_title);
 
-		CreateAccountWizard wizard = new CreateAccountWizard(this);
+		WizardCreateAccount wizard = new WizardCreateAccount(this);
 		if ( !wizard.isOpen() )
 			throw new HarnessException("Clicking on locator "+ locator +" did not open wizard");
 		

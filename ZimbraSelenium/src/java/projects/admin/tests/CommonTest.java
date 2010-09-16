@@ -54,7 +54,7 @@ public class CommonTest {
 		
 		app = new AppAdminConsole();
 		
-		startingPage = app.zMainPage;
+		startingPage = app.zPageMain;
 		startingAccount = gAdmin;
 		
 	}
@@ -120,9 +120,9 @@ public class CommonTest {
 			
 			if ( !startingAccount.equals(app.getActiveAccount())) {
 				
-				if ( app.zMainPage.isActive() )
-					app.zMainPage.logout();
-				app.zLoginPage.login(startingAccount);
+				if ( app.zPageMain.isActive() )
+					app.zPageMain.logout();
+				app.zPageLogin.login(startingAccount);
 				
 			}
 			

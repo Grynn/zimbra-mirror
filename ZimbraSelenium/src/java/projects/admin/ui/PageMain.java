@@ -7,7 +7,7 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public class MainPage extends AbsPage {
+public class PageMain extends AbsPage {
 
 	public static final String skin_container_logo		= "xpath=//*[@id='skin_container_logo']";
 	public static final String Zskin_container_username	= "xpath=//*[@id='skin_container_username']";
@@ -15,7 +15,7 @@ public class MainPage extends AbsPage {
 	public static final String Zskin_container_help		= "xpath=//*[@id='skin_container_help']";
 	public static final String Zskin_container_dw		= "xpath=//*[@id='skin_container_dw']";
 
-	public MainPage(AbsApplication application) {
+	public PageMain(AbsApplication application) {
 		super(application);
 		
 		logger.info("new " + myPageName());
@@ -66,10 +66,10 @@ public class MainPage extends AbsPage {
 		
 		// 1. Logout
 		// 2. Login as the default account
-		if ( !MyApplication.zLoginPage.isActive() ) {
-			MyApplication.zLoginPage.navigateTo();
+		if ( !MyApplication.zPageLogin.isActive() ) {
+			MyApplication.zPageLogin.navigateTo();
 		}
-		MyApplication.zLoginPage.login();
+		MyApplication.zPageLogin.login();
 
 		waitForActive();
 		
@@ -97,7 +97,7 @@ public class MainPage extends AbsPage {
 		
 		// TODO: Sometimes there is a popup.  Can it be disabled?
 		
-		MyApplication.zLoginPage.waitForActive();
+		MyApplication.zPageLogin.waitForActive();
 		
 		MyApplication.setActiveAcount(null);
 

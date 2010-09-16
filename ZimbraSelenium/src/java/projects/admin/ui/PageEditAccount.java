@@ -2,9 +2,9 @@ package projects.admin.ui;
 
 import framework.util.HarnessException;
 
-public class EditAccountPage extends AbsPage {
+public class PageEditAccount extends AbsPage {
 
-	public EditAccountPage(AbsApplication application) {
+	public PageEditAccount(AbsApplication application) {
 		super(application);
 		
 		logger.info("new " + myPageName());

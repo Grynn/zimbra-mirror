@@ -9,7 +9,7 @@ import framework.util.ZimbraAdminAccount;
  * @author Matt Rhoades
  *
  */
-public class LoginPage extends AbsPage {
+public class PageLogin extends AbsPage {
 	
 	public static final String ZLoginDialog = "xpath=//div[@class='ZaLoginDialog']";
 	public static final String ZLoginUserName = "xpath=//*[@id='ZLoginUserName']";
@@ -20,7 +20,7 @@ public class LoginPage extends AbsPage {
 	/**
 	 * An object that controls the Admin Console Login Page
 	 */
-	public LoginPage(AbsApplication application) {
+	public PageLogin(AbsApplication application) {
 		super(application);
 		
 		logger.info("new " + myPageName());
@@ -68,8 +68,8 @@ public class LoginPage extends AbsPage {
 		
 		
 		// Logout
-		if ( MyApplication.zMainPage.isActive() ) {
-			MyApplication.zMainPage.logout();
+		if ( MyApplication.zPageMain.isActive() ) {
+			MyApplication.zPageMain.logout();
 		}
 		
 		waitForActive();
@@ -103,7 +103,7 @@ public class LoginPage extends AbsPage {
 		click(ZLoginButtonContainer);
 
 		// Wait for the app to load
-		MyApplication.zMainPage.waitForActive();
+		MyApplication.zPageMain.waitForActive();
 		
 		MyApplication.setActiveAcount(account);
 		

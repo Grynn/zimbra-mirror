@@ -14,7 +14,7 @@ public class BasicLogin extends CommonTest {
 		logger.info("New "+ BasicLogin.class.getCanonicalName());
 		
 		// All tests start at the login page
-		super.startingPage = app.zLoginPage;
+		super.startingPage = app.zPageLogin;
 		super.startingAccount = null;
 		
 	}
@@ -24,10 +24,10 @@ public class BasicLogin extends CommonTest {
 	public void BasicLogin01() throws HarnessException {
 		
 		// Login
-		app.zLoginPage.login(gAdmin);
+		app.zPageLogin.login(gAdmin);
 		
 		// Verify main page becomes active
-		ZAssert.assertTrue(app.zMainPage.isActive(), "Verify that the account is logged in");
+		ZAssert.assertTrue(app.zPageMain.isActive(), "Verify that the account is logged in");
 		
 	}
 
@@ -41,10 +41,10 @@ public class BasicLogin extends CommonTest {
 		account.authenticate();
 		
 		// Login
-		app.zLoginPage.login(account);
+		app.zPageLogin.login(account);
 		
 		// Verify main page becomes active
-		ZAssert.assertTrue(app.zMainPage.isActive(), "Verify that the account is logged in");
+		ZAssert.assertTrue(app.zPageMain.isActive(), "Verify that the account is logged in");
 		
 	}
 

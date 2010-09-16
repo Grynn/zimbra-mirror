@@ -15,33 +15,33 @@ import framework.util.HarnessException;
 public class AppAdminConsole extends AbsApplication {
 
 	public Map<String, AbsPage>		pages = null;
-	public LoginPage				zLoginPage = null;
-	public MainPage					zMainPage = null;
-	public SearchResultsPage		zSearchResultsPage = null;
+	public PageLogin				zPageLogin = null;
+	public PageMain					zPageMain = null;
+	public PageSearchResults		zPageSearchResults = null;
 
-	public ManageAccountsPage		zManageAccountsPage = null;
-	public EditAccountPage			zEditAccountPage = null;
+	public PageManageAccounts		zPageManageAccounts = null;
+	public PageEditAccount			zPageEditAccount = null;
 
 	
 	
 	public AppAdminConsole() {
 		super();
 		
-		logger.info("new " + MainPage.class.getCanonicalName());
+		logger.info("new " + PageMain.class.getCanonicalName());
 
 		pages = new HashMap<String, AbsPage>();
 		
-		zLoginPage = new LoginPage(this);
-		pages.put(zLoginPage.myPageName(), zLoginPage);
+		zPageLogin = new PageLogin(this);
+		pages.put(zPageLogin.myPageName(), zPageLogin);
 		
-		zMainPage = new MainPage(this);
-		pages.put(zMainPage.myPageName(), zMainPage);
+		zPageMain = new PageMain(this);
+		pages.put(zPageMain.myPageName(), zPageMain);
 
-		zSearchResultsPage = new SearchResultsPage(this);
-		pages.put(zSearchResultsPage.myPageName(), zSearchResultsPage);
+		zPageSearchResults = new PageSearchResults(this);
+		pages.put(zPageSearchResults.myPageName(), zPageSearchResults);
 
-		zManageAccountsPage = new ManageAccountsPage(this);
-		pages.put(zManageAccountsPage.myPageName(), zManageAccountsPage);
+		zPageManageAccounts = new PageManageAccounts(this);
+		pages.put(zPageManageAccounts.myPageName(), zPageManageAccounts);
 
 	}
 

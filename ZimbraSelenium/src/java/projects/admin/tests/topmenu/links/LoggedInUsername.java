@@ -3,7 +3,7 @@ package projects.admin.tests.topmenu.links;
 import org.testng.annotations.Test;
 
 import projects.admin.tests.CommonTest;
-import projects.admin.ui.MainPage;
+import projects.admin.ui.PageMain;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 
@@ -26,7 +26,7 @@ public class LoggedInUsername extends CommonTest {
 		//
 
 		// Check that the displayed name is contained in the email
-		String displayed = app.zMainPage.getText(MainPage.Zskin_container_username);	
+		String displayed = app.zPageMain.getText(PageMain.Zskin_container_username);	
 		ZAssert.assertContains(displayed, gAdmin.EmailAddress, "Verify the correct account display name is shown");
 		
 	}
