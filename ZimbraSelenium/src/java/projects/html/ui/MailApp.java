@@ -6,6 +6,7 @@ import framework.core.*;
 import framework.util.LmtpUtil;
 import framework.util.SleepUtil;
 import framework.util.Stafpostqueue;
+import framework.util.ZimbraSeleniumLogger;
 
 import projects.html.tests.CommonTest;
 
@@ -100,8 +101,12 @@ public class MailApp extends CommonTest {
 		int i = 0;
 		boolean found = false;
 		
-		Stafpostqueue sp = new Stafpostqueue();
-		sp.waitForPostqueue();
+		try{
+			Stafpostqueue sp = new Stafpostqueue();
+			sp.waitForPostqueue();
+		}catch(Exception ex){
+			ZimbraSeleniumLogger.mLog.error("Error occured using STAF service");
+		}
 		
 		if (!folderName.equals("")) {
 			obj.zFolder.zClick(folderName);
