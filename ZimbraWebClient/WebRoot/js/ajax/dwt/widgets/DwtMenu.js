@@ -440,59 +440,61 @@ function(x, y) {
 	var isScroll = this._layoutStyle == DwtMenu.LAYOUT_SCROLL;
 	var isPopup = (this._style == DwtMenu.POPUP_STYLE || this._style == DwtMenu.DROPDOWN_STYLE);
 	var isCascade = this._layoutStyle == DwtMenu.LAYOUT_CASCADE;
-	if (isPopup && isCascade) {
-		var space = windowSize.y;
-		var newY = null;
-		var rows = this._table.rows;
-		var numRows = rows.length;
-		var maxRows = this._maxRows;
-		var height = mySize.y;
-		var requiredSpace = space - 25; // Account for space on top & bottom of menu.
-		for (var i = numRows - 1; i >= 0; i--) {
-			height -= Dwt.getSize(rows[i]).y;
-			if (height < requiredSpace) {
-				break;
+	if (this._table) {
+		if (isPopup && isCascade) {
+			var space = windowSize.y;
+			var newY = null;
+			var rows = this._table.rows;
+			var numRows = rows.length;
+			var maxRows = this._maxRows;
+			var height = mySize.y;
+			var requiredSpace = space - 25; // Account for space on top & bottom of menu.
+			for (var i = numRows - 1; i >= 0; i--) {
+				height -= Dwt.getSize(rows[i]).y;
+				if (height < requiredSpace) {
+					break;
+				}
 			}
-		}
-		var count = maxRows ? Math.min(i + 1, maxRows) : (i + 1);
-		for (var j = count; j < numRows; j++) {
-			var row = rows[(j - count) % count];
-			var cell = row.insertCell(-1);
-			cell.className = "DwtMenuCascadeCell";
-			var child = rows[j].cells[0].firstChild;
-			while (child != null) {
-				cell.appendChild(child);
-				child = child.nextSibling;
-			}
-		}
-		for (j = rows.length - 1; j >= count; j--) {
-			this._table.deleteRow(count);
-		}
-		var offset = numRows % count;
-		if (offset > 0) {
-			for (var j = offset; j < count; j++) {
-				var row = rows[j];
+			var count = maxRows ? Math.min(i + 1, maxRows) : (i + 1);
+			for (var j = count; j < numRows; j++) {
+				var row = rows[(j - count) % count];
 				var cell = row.insertCell(-1);
 				cell.className = "DwtMenuCascadeCell";
-				cell.empty = true;
-				cell.innerHTML = "&nbsp;";
+				var child = rows[j].cells[0].firstChild;
+				while (child != null) {
+					cell.appendChild(child);
+					child = child.nextSibling;
+				}
 			}
-		}
+			for (j = rows.length - 1; j >= count; j--) {
+				this._table.deleteRow(count);
+			}
+			var offset = numRows % count;
+			if (offset > 0) {
+				for (var j = offset; j < count; j++) {
+					var row = rows[j];
+					var cell = row.insertCell(-1);
+					cell.className = "DwtMenuCascadeCell";
+					cell.empty = true;
+					cell.innerHTML = "&nbsp;";
+				}
+			}
 
-		mySize = this.getSize();
-		if (newY) {
-			y = newY - mySize.y;
-		}
-	} else if (isPopup && isScroll) {
-		var rows = this._table.rows;
-		var numRows = rows.length;
-		var maxRows = this._maxRows;
-		var height = 20; //for scroll buttons
-		for (var i = 0; i <= maxRows; i++) {
-			height += Dwt.getSize(rows[i]).y;
+			mySize = this.getSize();
+			if (newY) {
+				y = newY - mySize.y;
+			}
+		} else if (isPopup && isScroll) {
+			var rows = this._table.rows;
+			var numRows = rows.length;
+			var maxRows = this._maxRows;
+			var height = 20; //for scroll buttons
+			for (var i = 0; i <= maxRows; i++) {
+				height += Dwt.getSize(rows[i]).y;
 			
+			}
+			mySize.y = height;
 		}
-		mySize.y = height;
 	}
 
 
@@ -500,14 +502,15 @@ function(x, y) {
 	var newH = "auto";
 	if (isPopup && isScroll) {
 		newH = mySize.y;
-		this._tableContainer.style.height = (newH - 20) +"px";
+		if (this._tableContainer)
+			this._tableContainer.style.height = (newH - 20) +"px";
 	} else if ((isPopup && isCascade) || y + mySize.y < windowSize.y - 5 ) {
 		newH = "auto"; 
 	} else { 
 		newH = windowSize.y - y - 5; 
 	}
-
-	this._table.style.width = mySize.x;
+	if (this._table)
+		this._table.style.width = mySize.x;
 
 	// NOTE: This hack is needed for FF/Moz because the containing div
 	//	   allows the inner table to overflow. When the menu cascades
