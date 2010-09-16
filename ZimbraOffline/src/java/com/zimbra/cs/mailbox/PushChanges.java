@@ -43,7 +43,9 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.mime.MimeConstants;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
+import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
 import com.zimbra.cs.mailbox.Contact.Attachment;
 import com.zimbra.cs.mailbox.InitialSync.InviteMimeLocator;
@@ -362,7 +364,10 @@ public class PushChanges {
                     Element m = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ATTACHMENT_ID, uploadId);
                     if (!msg.getDraftOrigId().equals(""))
                         m.addAttribute(MailConstants.A_ORIG_ID, msg.getDraftOrigId()).addAttribute(MailConstants.A_REPLY_TYPE, msg.getDraftReplyType());
-                	
+                    String saveToSent = OfflineProvisioning.getOfflineInstance().getLocalAccount().getAttr(Provisioning.A_zimbraPrefSaveToSent);
+                    if (!Boolean.valueOf(saveToSent)) {
+                        request.addAttribute(MailConstants.A_NO_SAVE_TO_SENT,1);
+                    }
                     //run one more time to make sure it's still in outbox after we finished uploading the message
                     msg = ombx.getMessageById(sContext, id);
                     if (msg.getFolderId() != DesktopMailbox.ID_FOLDER_OUTBOX) {
