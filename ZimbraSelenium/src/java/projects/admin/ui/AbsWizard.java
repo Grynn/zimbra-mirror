@@ -19,7 +19,7 @@ import framework.util.HarnessException;
 public abstract class AbsWizard extends AbsSeleniumObject {
 	protected static Logger logger = LogManager.getLogger(AbsWizard.class);
 
-	public enum NavButton {
+	public enum WizardButton {
 		Help, Cancel, Next, Previous, Finish
 	}
 	
@@ -50,26 +50,26 @@ public abstract class AbsWizard extends AbsSeleniumObject {
 	public abstract Item completeWizard(Item item) throws HarnessException;
 	
 	public void clickHelp() throws HarnessException {
-		clickWizardButton(NavButton.Help);
+		clickWizardButton(WizardButton.Help);
 	}
 	
 	public void clickCancel() throws HarnessException {
-		clickWizardButton(NavButton.Cancel);
+		clickWizardButton(WizardButton.Cancel);
 	}
 	
 	public void clickPrevious() throws HarnessException {
-		clickWizardButton(NavButton.Previous);
+		clickWizardButton(WizardButton.Previous);
 	}
 
 	public void clickNext() throws HarnessException {
-		clickWizardButton(NavButton.Next);
+		clickWizardButton(WizardButton.Next);
 	}
 
 	public void clickFinish() throws HarnessException {
-		clickWizardButton(NavButton.Finish);
+		clickWizardButton(WizardButton.Finish);
 	}
 	
-	protected void clickWizardButton(NavButton button) throws HarnessException {
+	protected void clickWizardButton(WizardButton button) throws HarnessException {
 		throw new HarnessException("implement me");
 
 		// TODO: If possible, define in the abstract class

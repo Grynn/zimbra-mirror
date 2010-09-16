@@ -81,4 +81,22 @@ public abstract class AbsPage extends AbsSeleniumObject {
 	public abstract void navigateTo() throws HarnessException;
 	
 
+	/**
+	 * Click Previous/Next in the list
+	 * @param button
+	 * @throws HarnessException If the button is not active, throw Exception
+	 */
+	public void clickNavigation(ListNavButton button) throws HarnessException {
+		// This method is not applicable to all pages, so throw exception if not defined
+		throw new HarnessException("clickNavigation() not defined for this page type");
+	}
+	
+	/**
+	 * Click Help button in this page
+	 * @throws HarnessException If the button is not available
+	 */
+	public void clickHelp() throws HarnessException {
+		// This method is not applicable to all pages, so throw exception if not defined
+		throw new HarnessException("clickHelp() not defined for this page type");
+	}
 }

@@ -18,6 +18,14 @@ import framework.util.HarnessException;
 public abstract class AbsSeleniumObject {
 	protected static Logger logger = LogManager.getLogger(AbsSeleniumObject.class);
 
+	public enum PopupButton {
+		Yes, No, Cancel, Help
+	}
+	
+	public enum ListNavButton {
+		Previous, Next
+	}
+		
 	public AbsSeleniumObject() {
 		logger.info("new AbsSeleniumObject");
 	}

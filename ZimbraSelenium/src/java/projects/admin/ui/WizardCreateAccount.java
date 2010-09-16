@@ -12,6 +12,13 @@ import framework.util.HarnessException;
  */
 public class WizardCreateAccount extends AbsWizard {
 
+	// Wizard Navigation Buttons
+	public static final String DWT279_title = "xpath=//*[@id='DWT279_title']"; // "Cancel" button
+	public static final String DWT280_title = "xpath=//*[@id='DWT280_title']"; // "Help" button
+	public static final String DWT281_title = "xpath=//*[@id='DWT281_title']"; // "Previous" button
+	public static final String DWT282_title = "xpath=//*[@id='DWT282_title']"; // "Next" button
+	public static final String DWT283_title = "xpath=//*[@id='DWT283_title']"; // "Finish" button
+
 	public WizardCreateAccount(AbsPage page) {
 		super(page);
 		logger.info("New "+ WizardCreateAccount.class.getName());

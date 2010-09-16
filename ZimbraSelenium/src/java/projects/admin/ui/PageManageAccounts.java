@@ -16,22 +16,30 @@ public class PageManageAccounts extends AbsPage {
 	// ** OverviewTreePanel -> Addresses -> Accounts
 	public static final String zti__AppAdmin__ADDRESS__ACCOUNT_textCell = "xpath=//*[@id='zti__AppAdmin__ADDRESS__ACCOUNT_textCell']";
 	
-	// ** "Manage Accounts" Title
+	// ** "Manage Accounts" Tab Title
 	public static final String DWT93 = "xpath=//*[@id='DWT93']";
 	public static final String DWT93_classAttr = "xpath=(//*[@id='DWT93'])@class";
 	
 	// ** Menus
-	// NEW Menu
 	public static final String zb__ACLV__NEW_MENU_title = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";		// New Button
-	public static final String zmi__ACLV__NEW_WIZARD_title = "xpath=//*[@id='zmi__ACLV__NEW_WIZARD_title']";	// New -> Account
+	public static final String zb__ACLV__EDIT_title = "xpath=//*[@id='zb__ACLV__EDIT_title']";
+	public static final String zb__ACLV__DELETE_title = "xpath=//*[@id='zb__ACLV__DELETE_title']";
+	public static final String zb__ACLV__CHNG_PWD_title = "xpath=//*[@id='zb__ACLV__CHNG_PWD_title']";
+	public static final String zb__ACLV__EXPIRE_SESSION_title = "xpath=//*[@id='zb__ACLV__EXPIRE_SESSION_title']";
+	public static final String zb__ACLV__VIEW_MAIL_title = "xpath=//*[@id='zb__ACLV__VIEW_MAIL_title']";
+	public static final String zb__ACLV__UNKNOWN_66_title = "xpath=//*[@id='zb__ACLV__UNKNOWN_66_title']"; // Search Mail
+	public static final String zb__ACLV__UNKNOWN_72_title = "xpath=//*[@id='zb__ACLV__UNKNOWN_72_title']"; // Move Mailbox
+	public static final String zb__ACLV__MORE_ACTIONS_title = "xpath=//*[@id='zb__ACLV__MORE_ACTIONS_title']";
+	public static final String zb__ACLV__PAGE_BACK_title = "xpath=//*[@id='zb__ACLV__PAGE_BACK_title']";
+	public static final String zb__ACLV__PAGE_FORWARD_title = "xpath=//*[@id='zb__ACLV__PAGE_FORWARD_title']";
+	public static final String zb__ACLV__HELP_title = "xpath=//*[@id='zb__ACLV__HELP_title']";
+
+	
+	// NEW Menu
+	// TODO: define these locators
+	public static final String zmi__ACLV__NEW_WIZARD_title = "xpath=//*[@id='zmi__ACLV__NEW_WIZARD_title']";	// New -> Account (<td class="ZWidgetTitle" id="zmi__ACLV__NEW_WIZARD_title">Account</td>)
 	
 
-	// New Account Wizard
-	public static final String DWT279_title = "xpath=//*[@id='DWT279_title']"; // "Cancel" button
-	public static final String DWT280_title = "xpath=//*[@id='DWT280_title']"; // "Help" button
-	public static final String DWT281_title = "xpath=//*[@id='DWT281_title']"; // "Previous" button
-	public static final String DWT282_title = "xpath=//*[@id='DWT282_title']"; // "Next" button
-	public static final String DWT283_title = "xpath=//*[@id='DWT283_title']"; // "Finish" button
 	
 	
 	
@@ -93,6 +101,19 @@ public class PageManageAccounts extends AbsPage {
 		waitForActive();
 
 	}
+	
+	/**
+	 * Click Previous/Next in the list
+	 * @param button
+	 * @throws HarnessException If the button is not active, throw Exception
+	 */
+	public void clickNavigation(ListNavButton button) throws HarnessException {
+		// TODO: If button is not enabled, thrown HarnessException
+		
+		// TODO: click on the button
+		
+		throw new HarnessException("implement me");
+	}
 
 	/**
 	 * Create the specified account using the Admin Console
@@ -113,7 +134,7 @@ public class PageManageAccounts extends AbsPage {
 
 	/**
 	 * Get the "New Account" wizard by clicking on the specified locator
-	 * @param locator
+	 * @param locator "New" or "New -> Account"
 	 * @return
 	 * @throws HarnessException
 	 */
@@ -123,7 +144,7 @@ public class PageManageAccounts extends AbsPage {
 		navigateTo();
 
 		// Click on "New"
-		click(zmi__ACLV__NEW_WIZARD_title);
+		click(locator);
 
 		WizardCreateAccount wizard = new WizardCreateAccount(this);
 		if ( !wizard.isOpen() )
@@ -132,4 +153,67 @@ public class PageManageAccounts extends AbsPage {
 		// Return the Wizard object
 		return (wizard);
 	}
+
+	/**
+	 * Edit the specified account by selecting the account in the list and clicking "Edit"
+	 * @param emailaddress
+	 * @throws HarnessException
+	 */
+	public void editAccount(String emailaddress) throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+
+	/**
+	 * Delete the specified account by selecting the account in the list and clicking "Delete"
+	 * @param emailaddress
+	 * @param button Click on this button in the dialog
+	 * @throws HarnessException
+	 */
+	public void deleteAccount(String emailaddress, PopupButton button) throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+
+	/**
+	 * Change the password for the specified account by selecting the account in the list and clicking "Change Password"
+	 * @param emailaddress
+	 * @param password
+	 * @param confirm
+	 * @param mustChangePassword
+	 * @param button Click on this button in the dialog
+	 * @throws HarnessException
+	 */
+	public void changePasswordAccount(String emailaddress, String password, String confirm, boolean mustChangePassword, PopupButton button) throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+
+	/**
+	 * Expire the account sessions for the specified account by selecting the account in the list and clicking "Expire Sessions"
+	 * @param emailaddress
+	 * @param button Click on this button in the dialog
+	 * @throws HarnessException
+	 */
+	public void expireSessionsAccount(String emailaddress, PopupButton button) throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+
+
+	/**
+	 * View the mailbox for the specified account by selecting the account in the list and clicking "View Mail"
+	 * @param emailaddress
+	 * @throws HarnessException
+	 */
+	public void viewMailAccount(String emailaddress) throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+
+	/**
+	 * Search Mail (opens PageEditSearch object)
+	 * @param emailaddress
+	 * @throws HarnessException
+	 */
+	public void searchMailAccount(String emailaddress) throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+
+
 }
