@@ -382,7 +382,7 @@ sub updateRsyslogd {
     local $^I="~";
     local @ARGV=("/etc/logrotate.d/zimbra");
     while (<>) {
-      s/killall\s+\-HUP\s+syslog/\/sbin\/reload rsyslog >\/dev\/null/g;
+      s/killall\s+\-HUP\s+syslog/\/usr\/sbin\/service rsyslog restart >\/dev\/null/g;
       print;
     }
   }
