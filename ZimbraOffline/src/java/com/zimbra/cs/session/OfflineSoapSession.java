@@ -19,9 +19,6 @@ import java.util.List;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.soap.HeaderConstants;
-import com.zimbra.common.soap.ZimbraNamespace;
-import com.zimbra.cs.account.Server;
 import com.zimbra.cs.service.util.ItemId;
 import com.zimbra.cs.service.util.ItemIdFormatter;
 
@@ -32,35 +29,11 @@ public class OfflineSoapSession extends SoapSession {
     }
 
     @Override
-    protected void handleRemoteNotifications(Server server, Element context, boolean ignoreRefresh, boolean isPing) {
-        if (context == null)
-            return;
-
-        boolean refreshExpected = true;
-
-        // remember the remote session ID for the server
-        Element eSession = context.getOptionalElement(HeaderConstants.E_SESSION);
-        boolean isSoap = eSession != null && eSession.getAttribute(HeaderConstants.A_TYPE, null) == null;
-        String sessionId = eSession == null ? null : eSession.getAttribute(HeaderConstants.A_ID, null);
-        if (isSoap && sessionId != null && !sessionId.equals(""))
-            refreshExpected = registerRemoteSessionId(server, sessionId);
-
-        // remote refresh should cause overall refresh
-        if (!ignoreRefresh && !refreshExpected && context.getOptionalElement(ZimbraNamespace.E_REFRESH) != null)
-            mForceRefresh = getCurrentNotificationSequence();
-
-        Element eNotify = context.getOptionalElement(ZimbraNamespace.E_NOTIFY);
-        if (eNotify != null) {
-            RemoteNotifications rns = new RemoteNotifications(eNotify);
-            synchronized (mSentChanges) {
-                if (!skipNotifications(rns.getNotificationCount(), !isPing)) {
-                    removeUnqualifiedRemoteNotifications(rns);
-                    mChanges.addNotification(rns);
-                }
-            }
-        }
+    protected void addRemoteNotifications(RemoteNotifications rns) {
+        removeUnqualifiedRemoteNotifications(rns);
+        super.addRemoteNotifications(rns);
     }
-    
+
     private void removeUnqualifiedRemoteNotifications(RemoteNotifications rns) {
         if (rns == null || rns.count == 0) {
             return;
