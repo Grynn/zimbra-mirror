@@ -8,8 +8,6 @@ import java.util.Map;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import projects.admin.ui.AbsAdminPage;
-
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 
@@ -22,7 +20,7 @@ import framework.util.ZimbraAccount;
  *
  */
 public abstract class AbsApplication {
-	protected static Logger logger = LogManager.getLogger(AbsAdminPage.class);
+	protected static Logger logger = LogManager.getLogger(AbsApplication.class);
 	
 	// A map of the pages in this app
 	protected Map<String, AbsPage>			pages = null;
