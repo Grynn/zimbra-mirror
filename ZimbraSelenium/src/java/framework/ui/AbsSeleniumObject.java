@@ -1,4 +1,4 @@
-package projects.admin.ui;
+package framework.ui;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;

@@ -4,6 +4,7 @@
 package projects.admin.ui;
 
 import projects.admin.items.Item;
+import framework.ui.AbsWizard;
 import framework.util.HarnessException;
 
 /**
@@ -12,7 +13,7 @@ import framework.util.HarnessException;
  */
 public class WizardDeployZimlet extends AbsWizard {
 
-	public WizardDeployZimlet(AbsPage page) {
+	public WizardDeployZimlet(AbsAdminPage page) {
 		super(page);
 	}
 

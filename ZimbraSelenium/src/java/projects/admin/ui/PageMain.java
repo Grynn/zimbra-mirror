@@ -1,5 +1,6 @@
 package projects.admin.ui;
 
+import framework.ui.AbsApplication;
 import framework.util.HarnessException;
 
 /**
@@ -7,7 +8,7 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public class PageMain extends AbsPage {
+public class PageMain extends AbsAdminPage {
 
 	public static final String skin_container_logo		= "xpath=//*[@id='skin_container_logo']";
 	public static final String Zskin_container_username	= "xpath=//*[@id='skin_container_username']";
@@ -95,7 +96,10 @@ public class PageMain extends AbsPage {
 		// Click on logout
 		click(Zskin_container_logoff);
 		
-		// TODO: Sometimes there is a popup.  Can it be disabled?
+		// Sometimes there is a "confirm" popup.
+		// Disable it using zimbraPrefAdminConsoleWarnOnExit=FALSE
+		// This is the default configureation for the AdminConsoleAdmin() account
+		
 		
 		MyApplication.zPageLogin.waitForActive();
 		

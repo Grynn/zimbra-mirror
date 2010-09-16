@@ -1,11 +1,8 @@
 package projects.admin.ui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import framework.ui.AbsApplication;
 import framework.util.HarnessException;
+import framework.util.ZimbraAccount;
 
 /**
  * This class defines the Admin Console application
@@ -14,7 +11,6 @@ import framework.util.HarnessException;
  */
 public class AppAdminConsole extends AbsApplication {
 
-	public Map<String, AbsPage>			pages = null;
 	
 	// Login page
 	public PageLogin					zPageLogin = null;
@@ -70,9 +66,8 @@ public class AppAdminConsole extends AbsApplication {
 	public AppAdminConsole() {
 		super();
 		
-		logger.info("new " + PageMain.class.getCanonicalName());
+		logger.info("new " + AppAdminConsole.class.getCanonicalName());
 
-		pages = new HashMap<String, AbsPage>();
 		
 		// Login page
 		
@@ -224,19 +219,9 @@ public class AppAdminConsole extends AbsApplication {
 		return ("Admin Console");
 	}
 
-	/**
-	 * Return a list of active pages
-	 * @return
-	 * @throws HarnessException
-	 */
-	public List<AbsPage> getActivePages() throws HarnessException {
-		List<AbsPage> actives = new ArrayList<AbsPage>();
-		for (AbsPage p : pages.values()) {
-			if ( p.isActive() ) {
-				actives.add(p);
-			}
-		}
-		return (actives);
+	protected ZimbraAccount setActiveAcount(ZimbraAccount account) {
+		// Should we throw an exception if the account is not a ZimbraAdminAccount?
+		return (super.setActiveAcount(account));
 	}
 
 

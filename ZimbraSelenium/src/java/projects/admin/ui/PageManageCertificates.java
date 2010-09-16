@@ -3,20 +3,21 @@
  */
 package projects.admin.ui;
 
+import framework.ui.AbsApplication;
 import framework.util.HarnessException;
 
 /**
  * @author Matt Rhoades
  *
  */
-public class PageManageCertificates extends AbsPage {
+public class PageManageCertificates extends AbsAdminPage {
 
 	public PageManageCertificates(AbsApplication application) {
 		super(application);
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#isActive()
+	 * @see projects.admin.ui.AbsAdminPage#isActive()
 	 */
 	@Override
 	public boolean isActive() throws HarnessException {
@@ -24,7 +25,7 @@ public class PageManageCertificates extends AbsPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#myPageName()
+	 * @see projects.admin.ui.AbsAdminPage#myPageName()
 	 */
 	@Override
 	public String myPageName() {
@@ -32,7 +33,7 @@ public class PageManageCertificates extends AbsPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#navigateTo()
+	 * @see projects.admin.ui.AbsAdminPage#navigateTo()
 	 */
 	@Override
 	public void navigateTo() throws HarnessException {

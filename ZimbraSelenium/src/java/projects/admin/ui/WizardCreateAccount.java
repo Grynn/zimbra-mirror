@@ -4,6 +4,7 @@
 package projects.admin.ui;
 
 import projects.admin.items.Item;
+import framework.ui.AbsWizard;
 import framework.util.HarnessException;
 
 /**
@@ -19,7 +20,7 @@ public class WizardCreateAccount extends AbsWizard {
 	public static final String DWT282_title = "xpath=//*[@id='DWT282_title']"; // "Next" button
 	public static final String DWT283_title = "xpath=//*[@id='DWT283_title']"; // "Finish" button
 
-	public WizardCreateAccount(AbsPage page) {
+	public WizardCreateAccount(AbsAdminPage page) {
 		super(page);
 		logger.info("New "+ WizardCreateAccount.class.getName());
 	}

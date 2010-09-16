@@ -3,13 +3,14 @@
  */
 package projects.admin.ui;
 
+import framework.ui.AbsApplication;
 import framework.util.HarnessException;
 
 /**
  * @author Matt Rhoades
  *
  */
-public class PageEditDomain extends AbsPage {
+public class PageEditDomain extends AbsAdminPage {
 
 	public PageEditDomain(AbsApplication application) {
 		super(application);
@@ -17,7 +18,7 @@ public class PageEditDomain extends AbsPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#isActive()
+	 * @see projects.admin.ui.AbsAdminPage#isActive()
 	 */
 	@Override
 	public boolean isActive() throws HarnessException {
@@ -25,7 +26,7 @@ public class PageEditDomain extends AbsPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#myPageName()
+	 * @see projects.admin.ui.AbsAdminPage#myPageName()
 	 */
 	@Override
 	public String myPageName() {
@@ -33,7 +34,7 @@ public class PageEditDomain extends AbsPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#navigateTo()
+	 * @see projects.admin.ui.AbsAdminPage#navigateTo()
 	 */
 	@Override
 	public void navigateTo() throws HarnessException {

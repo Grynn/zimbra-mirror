@@ -3,6 +3,7 @@
  */
 package projects.admin.ui;
 
+import framework.ui.AbsApplication;
 import framework.util.HarnessException;
 
 /**
@@ -10,7 +11,7 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public class PageEditSearchTask extends AbsPage {
+public class PageEditSearchTask extends AbsAdminPage {
 
 	public PageEditSearchTask(AbsApplication application) {
 		super(application);
@@ -18,7 +19,7 @@ public class PageEditSearchTask extends AbsPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#isActive()
+	 * @see projects.admin.ui.AbsAdminPage#isActive()
 	 */
 	@Override
 	public boolean isActive() throws HarnessException {
@@ -26,7 +27,7 @@ public class PageEditSearchTask extends AbsPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#myPageName()
+	 * @see projects.admin.ui.AbsAdminPage#myPageName()
 	 */
 	@Override
 	public String myPageName() {
@@ -34,7 +35,7 @@ public class PageEditSearchTask extends AbsPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#navigateTo()
+	 * @see projects.admin.ui.AbsAdminPage#navigateTo()
 	 */
 	@Override
 	public void navigateTo() throws HarnessException {

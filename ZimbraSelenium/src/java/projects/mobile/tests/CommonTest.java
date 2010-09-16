@@ -1,4 +1,4 @@
-package projects.admin.tests;
+package projects.mobile.tests;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -9,7 +9,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
-import projects.admin.ui.AppAdminConsole;
+import projects.mobile.ui.AppMobileClient;
 
 import com.thoughtworks.selenium.SeleniumException;
 
@@ -19,27 +19,22 @@ import framework.core.SeleniumService;
 import framework.core.ZimbraSelenium;
 import framework.ui.AbsPage;
 import framework.util.HarnessException;
-import framework.util.ZimbraAdminAccount;
+import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
- * Common definitions for all Admin Console test cases
+ * Common definitions for all Mobile Client test cases
  * @author Matt Rhoades
  *
  */
 public class CommonTest {
 	protected static Logger logger = LogManager.getLogger(CommonTest.class);
-	
-	/**
-	 * Helper field.  admin = ZimbraAdminAccount.GlobalAdmin()
-	 */
-	protected final ZimbraAdminAccount gAdmin = ZimbraAdminAccount.AdminConsoleAdmin();
-	
+		
 
 	/**
 	 * The AdminConsole application object
 	 */
-	protected AppAdminConsole app = null;
+	protected AppMobileClient app = null;
 
 	/**
 	 * BeforeMethod variables
@@ -47,15 +42,17 @@ public class CommonTest {
 	 * startingAccount = the account to log in as
 	 */
 	protected AbsPage startingPage = null;
-	protected ZimbraAdminAccount startingAccount = null;
+	protected ZimbraAccount startingAccount = null;
 	
 	protected CommonTest() {
 		logger.info("New "+ CommonTest.class.getCanonicalName());
 		
-		app = new AppAdminConsole();
+		app = new AppMobileClient();
 		
 		startingPage = app.zPageMain;
-		startingAccount = gAdmin;
+		startingAccount = ZimbraAccount.AccountZMC();
+		
+		app.zPageLogin.DefaultLoginAccount = startingAccount;
 		
 	}
 	
@@ -68,8 +65,8 @@ public class CommonTest {
 	 */
 	@BeforeSuite( groups = { "always" } )
 	public void commonTestBeforeSuite() throws HarnessException {
+		logger.info("commonTestBeforeSuite: start");
 		
-		logger.info("commonTestBeforeSuite");
 		
 		SeleniumService.getInstance().startSeleniumServer();
 		
@@ -88,7 +85,7 @@ public class CommonTest {
 			throw e;
 		}
 
-		
+		logger.info("commonTestBeforeSuite: finish");		
 	}
 	
 	/**
@@ -98,7 +95,9 @@ public class CommonTest {
 	 */
 	@BeforeClass( groups = { "always" } )
 	public void commonTestBeforeClass() throws HarnessException {
-		logger.info("commonTestBeforeClass");
+		logger.info("commonTestBeforeClass: start");
+
+		logger.info("commonTestBeforeClass: finish");
 
 	}
 

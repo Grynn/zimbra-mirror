@@ -1,7 +1,14 @@
-package projects.admin.ui;
+package framework.ui;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+
+import projects.admin.ui.AbsAdminPage;
 
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
@@ -15,18 +22,40 @@ import framework.util.ZimbraAccount;
  *
  */
 public abstract class AbsApplication {
-	protected static Logger logger = LogManager.getLogger(AbsPage.class);
+	protected static Logger logger = LogManager.getLogger(AbsAdminPage.class);
 	
+	// A map of the pages in this app
+	protected Map<String, AbsPage>			pages = null;
+	
+	// A pointer to the currently logged in user
 	private ZimbraAccount authenticatedAccount = null;
 
-	public AbsApplication() {
+	protected AbsApplication() {
 		logger.info("new " + AbsApplication.class.getCanonicalName());
+		
+		pages = new HashMap<String, AbsPage>();
 
 	}
 	
 	public abstract String myApplicationName();
 
 	public abstract boolean isLoaded() throws HarnessException;
+
+	/**
+	 * Return a list of active pages
+	 * @return
+	 * @throws HarnessException
+	 */
+	public List<AbsPage> getActivePages() throws HarnessException {
+		List<AbsPage> actives = new ArrayList<AbsPage>();
+		for (AbsPage p : pages.values()) {
+			if ( p.isActive() ) {
+				actives.add(p);
+			}
+		}
+		return (actives);
+	}
+
 
 	protected ZimbraAccount setActiveAcount(ZimbraAccount account) {
 		authenticatedAccount = account;

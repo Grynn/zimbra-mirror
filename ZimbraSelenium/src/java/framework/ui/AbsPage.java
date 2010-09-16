@@ -1,4 +1,4 @@
-package projects.admin.ui;
+package framework.ui;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -16,15 +16,15 @@ public abstract class AbsPage extends AbsSeleniumObject {
 
 	protected static final int PageLoadDelay = 30000; // wait 30 seconds for pages to load
 
-	protected AppAdminConsole MyApplication = null;
+	protected AbsApplication MyAbsApplication = null;
 
 	/**
 	 * Create this page object that exists in the specified application
 	 * @param application
 	 */
 	public AbsPage(AbsApplication application) {
-		logger.info("new AbsPage");
-		MyApplication = (AppAdminConsole)application;
+		logger.info("new AbsAdminPage");
+		MyAbsApplication = application;
 	}
 	
 	/**

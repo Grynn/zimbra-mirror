@@ -3,6 +3,8 @@
  */
 package projects.admin.ui;
 
+import framework.ui.AbsApplication;
+
 /**
  * The "Edit Alias" page opens the "Edit Account" page
  * @author Matt Rhoades
@@ -15,7 +17,7 @@ public class PageEditAlias extends PageEditAccount {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#myPageName()
+	 * @see projects.admin.ui.AbsAdminPage#myPageName()
 	 */
 	@Override
 	public String myPageName() {

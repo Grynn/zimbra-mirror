@@ -2,11 +2,12 @@ package projects.admin.ui;
 
 import java.util.List;
 
+import framework.ui.AbsApplication;
 import framework.util.HarnessException;
 import projects.admin.items.Item;
 
 
-public class PageSearchResults extends AbsPage {
+public class PageSearchResults extends AbsAdminPage {
 
 	public PageSearchResults(AbsApplication application) {
 		super(application);

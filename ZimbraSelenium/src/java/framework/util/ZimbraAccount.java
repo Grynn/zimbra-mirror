@@ -71,7 +71,7 @@ public class ZimbraAccount {
 	public ZimbraAccount(String email, String password) {
 		
 		if ( email == null ) {
-			email = ZimbraSeleniumProperties.getStringProperty("locale").toLowerCase() + "_account_" + System.currentTimeMillis();
+			email = ZimbraSeleniumProperties.getStringProperty("locale").toLowerCase() + "_account_" + System.currentTimeMillis() + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
 		}
 		EmailAddress = email;
 		
@@ -93,6 +93,16 @@ public class ZimbraAccount {
 		return(null);
 	}
 	
+	public static synchronized ZimbraAccount AccountZMC() {
+		if ( _AccountZMC == null ) {
+			_AccountZMC = new ZimbraAccount();
+			_AccountZMC.provision();
+			_AccountZMC.authenticate();
+		}
+		return (_AccountZMC);
+	}
+	private static ZimbraAccount _AccountZMC = null;
+
 	/**
 	 * Get a general use account for interacting with the test account
 	 * @return a general use ZimbraAccount

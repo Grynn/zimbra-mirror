@@ -4,6 +4,7 @@
 package projects.admin.ui;
 
 import projects.admin.items.Item;
+import framework.ui.AbsWizard;
 import framework.util.HarnessException;
 
 /**
@@ -12,7 +13,7 @@ import framework.util.HarnessException;
  */
 public class WizardCreateResource extends AbsWizard {
 
-	public WizardCreateResource(AbsPage page) {
+	public WizardCreateResource(AbsAdminPage page) {
 		super(page);
 	}
 

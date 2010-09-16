@@ -1,9 +1,10 @@
-package projects.admin.ui;
+package framework.ui;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import projects.admin.items.Item;
+import projects.admin.ui.AbsAdminPage;
 
 import framework.util.HarnessException;
 
@@ -26,13 +27,13 @@ public abstract class AbsWizard extends AbsSeleniumObject {
 	/**
 	 * The Page that creates this wizard
 	 */
-	protected AbsPage MyPage = null;
+	protected AbsAdminPage MyPage = null;
 	
 	/**
 	 * Create a new wizard from the specified page
 	 * @param page
 	 */
-	public AbsWizard(AbsPage page) {
+	public AbsWizard(AbsAdminPage page) {
 		logger.info("new "+ AbsWizard.class.getName());
 		MyPage = page;
 	}

@@ -1,5 +1,7 @@
 package projects.admin.ui;
 
+import framework.ui.AbsApplication;
+
 
 /**
  * The "Manage Zimlets" has the same functionality as "Manage Admin Extensions"
@@ -13,7 +15,7 @@ public class PageManageZimlets extends PageManageAdminExtensions {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#myPageName()
+	 * @see projects.admin.ui.AbsAdminPage#myPageName()
 	 */
 	@Override
 	public String myPageName() {

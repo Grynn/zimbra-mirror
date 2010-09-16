@@ -4,6 +4,7 @@
 package projects.admin.ui;
 
 import projects.admin.items.AccountItem;
+import framework.ui.AbsApplication;
 import framework.util.HarnessException;
 
 /**
@@ -11,7 +12,7 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public class PageManageAccounts extends AbsPage {
+public class PageManageAccounts extends AbsAdminPage {
 
 	// ** OverviewTreePanel -> Addresses -> Accounts
 	public static final String zti__AppAdmin__ADDRESS__ACCOUNT_textCell = "xpath=//*[@id='zti__AppAdmin__ADDRESS__ACCOUNT_textCell']";
@@ -52,7 +53,7 @@ public class PageManageAccounts extends AbsPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#myPageName()
+	 * @see projects.admin.ui.AbsAdminPage#myPageName()
 	 */
 	@Override
 	public String myPageName() {
@@ -60,7 +61,7 @@ public class PageManageAccounts extends AbsPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#isActive()
+	 * @see projects.admin.ui.AbsAdminPage#isActive()
 	 */
 	@Override
 	public boolean isActive() throws HarnessException {
@@ -85,7 +86,7 @@ public class PageManageAccounts extends AbsPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsPage#navigateTo()
+	 * @see projects.admin.ui.AbsAdminPage#navigateTo()
 	 */
 	@Override
 	public void navigateTo() throws HarnessException {
