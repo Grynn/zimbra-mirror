@@ -5,7 +5,7 @@ zmsetvars zmmtaconfig_listen_port
 
 NC=`which nc 2>/dev/null`; NC=${NC:-`which netcat 2>/dev/null`}
 
-echo REWRITE $@ | $NC localhost ${zmmtaconfig_listen_port} > /dev/null 2>&1
+echo REWRITE $@ | $NC -w 120 localhost ${zmmtaconfig_listen_port} > /dev/null 2>&1
 rc=$?
 
 # If nc fails to connect, run zmconfigd directly

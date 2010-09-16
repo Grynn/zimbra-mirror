@@ -51,9 +51,10 @@ class ThreadedRequestHandler(SocketServer.BaseRequestHandler):
 				while state.State.mState.forced:
 					Log.logMsg (5, "LOCK myState.lAction wait()")
 					state.State.mState.lAction.wait()
-					state.State.mState.lAction.release()
 					Log.logMsg (5, "LOCK myState.lAction released")
-				response = "SUCCESS REWRITES COMPLETE"
+					state.State.mState.lAction.release()
+					response = "SUCCESS REWRITES COMPLETE"
+					break
 		else:
 			response = "ERROR UNKNOWN COMMAND"
 

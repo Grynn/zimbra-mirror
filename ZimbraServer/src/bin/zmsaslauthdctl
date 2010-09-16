@@ -110,7 +110,7 @@ case "$1" in
 
   'restart'|'reload')
     $0 stop
-    $0 start
+    $0 start $2
     ;;
   
   'status')

@@ -25,12 +25,12 @@ case "$1" in
 	;;
 	stop)
 		for i in $SCRIPTS; do
-			/opt/zimbra/bin/$i stop
+			/opt/zimbra/bin/$i stop $2
 		done
 	;;
 	restart|reload)
 		for i in $SCRIPTS; do
-			/opt/zimbra/bin/$i $1
+			/opt/zimbra/bin/$i $1 $2
 		done
 	;;
 	status)

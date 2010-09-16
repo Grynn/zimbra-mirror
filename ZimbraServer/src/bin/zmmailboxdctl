@@ -90,7 +90,9 @@ case "$1" in
         mkdir -p ${mailboxd_directory}/work/zimbraAdmin/jsp
         if [ ! -d ${mailboxd_directory}/webapps/zimlet/WEB-INF ]; then
           mkdir -p ${mailboxd_directory}/webapps/zimlet/WEB-INF
-          rewriteWebXml
+		  if [ "x$2" = "x" ]; then
+			  rewriteWebXml
+          fi
         fi
       fi
 
@@ -131,7 +133,7 @@ case "$1" in
     
     'restart'|'reload')
         $0 stop
-        $0 start
+        $0 start $2
     ;;
     
     'status')

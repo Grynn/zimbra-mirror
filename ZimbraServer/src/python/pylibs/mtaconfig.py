@@ -97,7 +97,9 @@ class MtaConfig():
 				}
 
 	def getSection(self,name):
-		return self.sections[name]
+		if (self.sections and name in self.sections):
+			return self.sections[name]
+		return None
 
 	def getSections(self):
 		return self.sections
@@ -146,7 +148,8 @@ class MtaConfig():
 				continue
 
 			if len(fields) > 2 and fields[2] == "DEPENDS":
-				for f in fields[2:]:
+				for f in fields[3:]:
+					Log.logMsg(5, "Adding dependency %s to section %s" % (f, section.name))
 					section.depends(f, True)
 				
 			# Process the entire section

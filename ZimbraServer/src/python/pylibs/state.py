@@ -587,13 +587,11 @@ class State:
 		if action in ["stop", "restart"] and self.getWatchdog(process):
 			self.delWatchdog(process)
 
+		rewrite = "norewrite"
+
 		# Postfix, unique to the end.
 		if process == "mta" and action == "restart":
 			action = "reload"
-
-		rewrite = ""
-		if action in ["stop","status"]:
-			rewrite = "norewrite"
 
 		Log.logMsg(lvl,"CONTROL %s: %s %s %s" % (process, commands.exe[process.upper()], action, rewrite) )
 		if action != "status":
@@ -852,7 +850,8 @@ class State:
 
 	def compileDependencyRestarts(self, name):
 		section = self.mtaconfig.getSection(name)
-		for depend in section.depends():
-			if self.lookUpConfig("SERVICE", depend) or depend == "amavis":
-				Log.logMsg(3, "Adding restart for dependency %s" % (depend,));
-				self.curRestarts(depend, -1)
+		if (section is not None):
+			for depend in section.depends():
+				if self.lookUpConfig("SERVICE", depend) or depend == "amavis":
+					Log.logMsg(3, "Adding restart for dependency %s" % (depend,));
+					self.curRestarts(depend, -1)
