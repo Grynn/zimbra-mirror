@@ -7,14 +7,13 @@ import projects.admin.items.Item;
 import framework.util.HarnessException;
 
 /**
- * @author zimbra
+ * @author Matt Rhoades
  *
  */
-public class WizardCreateAccount extends AbsWizard {
+public class WizardAccountMigration extends AbsWizard {
 
-	public WizardCreateAccount(AbsPage page) {
+	public WizardAccountMigration(AbsPage page) {
 		super(page);
-		logger.info("New "+ WizardCreateAccount.class.getName());
 	}
 
 	/* (non-Javadoc)
@@ -22,12 +21,15 @@ public class WizardCreateAccount extends AbsWizard {
 	 */
 	@Override
 	public Item completeWizard(Item item) throws HarnessException {
-		throw new HarnessException("implement me!");
+		throw new HarnessException("implement me");
 	}
 
+	/* (non-Javadoc)
+	 * @see projects.admin.ui.AbsWizard#isOpen()
+	 */
 	@Override
 	public boolean isOpen() throws HarnessException {
-		throw new HarnessException("implement me!");
+		throw new HarnessException("implement me");
 	}
 
 }

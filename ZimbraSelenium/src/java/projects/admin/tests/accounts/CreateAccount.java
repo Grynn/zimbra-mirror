@@ -4,8 +4,8 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import projects.admin.clients.AccountItem;
-import projects.admin.clients.Item;
+import projects.admin.items.AccountItem;
+import projects.admin.items.Item;
 import projects.admin.tests.CommonTest;
 import projects.admin.ui.WizardCreateAccount;
 import projects.admin.ui.PageManageAccounts;

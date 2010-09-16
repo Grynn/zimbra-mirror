@@ -14,4 +14,13 @@ public class PageEditAlias extends PageEditAccount {
 		super(application);
 	}
 
+	/* (non-Javadoc)
+	 * @see projects.admin.ui.AbsPage#myPageName()
+	 */
+	@Override
+	public String myPageName() {
+		return (this.getClass().getName());
+	}
+
+
 }

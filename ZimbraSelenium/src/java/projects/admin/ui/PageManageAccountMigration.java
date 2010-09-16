@@ -1,33 +1,41 @@
+/**
+ * 
+ */
 package projects.admin.ui;
 
-import java.util.List;
-
 import framework.util.HarnessException;
-import projects.admin.items.Item;
 
+/**
+ * @author Matt Rhoades
+ *
+ */
+public class PageManageAccountMigration extends AbsPage {
 
-public class PageSearchResults extends AbsPage {
-
-	public PageSearchResults(AbsApplication application) {
+	public PageManageAccountMigration(AbsApplication application) {
 		super(application);
 	}
 
+	/* (non-Javadoc)
+	 * @see projects.admin.ui.AbsPage#isActive()
+	 */
 	@Override
 	public boolean isActive() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 
+	/* (non-Javadoc)
+	 * @see projects.admin.ui.AbsPage#myPageName()
+	 */
 	@Override
 	public String myPageName() {
 		return (this.getClass().getName());
 	}
 
+	/* (non-Javadoc)
+	 * @see projects.admin.ui.AbsPage#navigateTo()
+	 */
 	@Override
 	public void navigateTo() throws HarnessException {
-		throw new HarnessException("implement me");
-	}
-	
-	public List<Item> getSearchResults(String query) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 

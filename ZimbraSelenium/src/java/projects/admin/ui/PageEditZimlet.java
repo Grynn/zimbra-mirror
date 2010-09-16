@@ -9,7 +9,15 @@ public class PageEditZimlet extends PageEditAdminExtension {
 
 	public PageEditZimlet(AbsApplication application) {
 		super(application);
-		// TODO Auto-generated constructor stub
 	}
+
+	/* (non-Javadoc)
+	 * @see projects.admin.ui.AbsPage#myPageName()
+	 */
+	@Override
+	public String myPageName() {
+		return (this.getClass().getName());
+	}
+
 
 }

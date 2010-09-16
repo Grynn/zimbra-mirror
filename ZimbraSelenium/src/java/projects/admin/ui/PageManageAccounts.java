@@ -3,7 +3,7 @@
  */
 package projects.admin.ui;
 
-import projects.admin.clients.AccountItem;
+import projects.admin.items.AccountItem;
 import framework.util.HarnessException;
 
 /**
