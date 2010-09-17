@@ -302,7 +302,7 @@ function(ev) {
 		/*domain.setAttrs = {all:true};
 		domain.rights = {};
 		domain._defaultValues = {attrs:{}};*/
-		domain.loadNewObjectDefaults();
+		domain.loadNewObjectDefaults("name","domain.tld");
 		this._newDomainWizard = ZaApp.getInstance().dialogs["newDomainWizard"] = new ZaNewDomainXWizard(this._container, domain);	
 		this._newDomainWizard.registerCallback(DwtWizardDialog.FINISH_BUTTON, ZaDomainListController.prototype._finishNewButtonListener, this, null);			
 		this._newDomainWizard.setObject(domain);

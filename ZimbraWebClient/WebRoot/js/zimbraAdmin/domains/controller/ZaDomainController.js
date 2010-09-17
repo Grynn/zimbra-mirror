@@ -396,7 +396,7 @@ function () {
 	this._currentObject = new ZaDomain();
 	
 	this._currentObject.getAttrs = {all:true};
-	this._currentObject.loadNewObjectDefaults();
+	this._currentObject.loadNewObjectDefaults("name","foo"+newName);
 	this._currentObject.attrs[ZaDomain.A_domainName] = newName;
 	this._showNewDomainWizard();
 }
