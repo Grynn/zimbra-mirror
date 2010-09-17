@@ -3,6 +3,7 @@ package framework.ui;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import org.apache.log4j.LogManager;
@@ -27,6 +28,9 @@ public abstract class AbsApplication {
 	
 	// A pointer to the currently logged in user
 	private ZimbraAccount authenticatedAccount = null;
+	
+	// Localization bundles for the currently logged in user
+	protected I18N L10N = null;
 
 	protected AbsApplication() {
 		logger.info("new " + AbsApplication.class.getCanonicalName());
@@ -55,12 +59,43 @@ public abstract class AbsApplication {
 	}
 
 
-	protected ZimbraAccount setActiveAcount(ZimbraAccount account) {
-		authenticatedAccount = account;
+	protected ZimbraAccount setActiveAcount(ZimbraAccount account) throws HarnessException {
+		
+		if ( !account.equals(authenticatedAccount) ) {
+			
+			logger.info("New authenticated account = "+ account.EmailAddress);
+			
+			// Remember who is logged in
+			authenticatedAccount = account;
+			
+			// Based on account settings, the localization strings will change
+			L10N = new I18N(authenticatedAccount.getPreference("zimbraPrefLocale"));
+			
+		}
+		
 		return (authenticatedAccount);
 	}
 	
 	public ZimbraAccount getActiveAccount() {
 		return (authenticatedAccount);
 	}
+
+	/**
+	 * Get the Localized string for the specified key
+	 * @param key
+	 * @return
+	 * @throws HarnessException
+	 */
+	public String getLocaleString(String key) throws HarnessException {
+		
+		if ( L10N == null ) {
+			// If we are on a non-authenticated page, return the default L10N values
+			return (defaultL10N.getString(key));
+		}
+		return (L10N.getString(key));
+	}
+	// Use the default java locale for non-authenticated screens
+	// Most of the time, this will be English
+	private static I18N defaultL10N = new I18N(Locale.getDefault()); 
+
 }

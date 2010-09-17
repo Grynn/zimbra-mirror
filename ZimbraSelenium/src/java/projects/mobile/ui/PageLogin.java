@@ -6,11 +6,23 @@ import framework.util.ZimbraAccount;
 
 public class PageLogin extends AbsMobilePage {
 
+	// Buttons
 	public static final String zLoginButton = "xpath=//input[@class='zLoginButton']";
+	
+	// Text Input
 	public static final String username = "xpath=//*[@id='username']";
 	public static final String password = "xpath=//*[@id='password']";
-
-
+	public static final String remember = "xpath=//*[@id='remember']";
+	
+	// Displayed text
+	public static final String displayedZLoginAppName = "xpath=//*[@id='ZLoginAppName']";
+	public static final String displayedusername = "xpath=//td[@class='zLoginLabelContainer']//label[@for='username']";
+	public static final String displayedpassword = "xpath=//td[@class='zLoginLabelContainer']//label[@for='password']";
+	public static final String displayedremember = "xpath=//td[@class='zLoginCheckboxLabelContainer']//label[@for='remember']";
+	public static final String displayedwhatsthis = "xpath=//*[@id='ZLoginWhatsThisAnchor']";
+	public static final String displayedcopyright = "xpath=//*[@id='ZloginLicenseContainer']";
+	
+	
 	public ZimbraAccount DefaultLoginAccount = null;
 	
 	public PageLogin(AbsApplication application) {

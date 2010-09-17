@@ -49,7 +49,7 @@ public class AppMobileClient extends AbsApplication {
 		return ("Mobile Client");
 	}
 
-	protected ZimbraAccount setActiveAcount(ZimbraAccount account) {
+	protected ZimbraAccount setActiveAcount(ZimbraAccount account) throws HarnessException {
 		return (super.setActiveAcount(account));
 	}
 

@@ -219,7 +219,7 @@ public class AppAdminConsole extends AbsApplication {
 		return ("Admin Console");
 	}
 
-	protected ZimbraAccount setActiveAcount(ZimbraAccount account) {
+	protected ZimbraAccount setActiveAcount(ZimbraAccount account) throws HarnessException {
 		// Should we throw an exception if the account is not a ZimbraAdminAccount?
 		return (super.setActiveAcount(account));
 	}
