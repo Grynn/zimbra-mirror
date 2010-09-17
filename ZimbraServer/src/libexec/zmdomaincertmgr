@@ -1,0 +1,515 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.3 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+
+if [ x`whoami` != "xroot" ]; then
+  echo "$0 must be run as user root"
+  exit 1
+fi
+umask 027
+
+platform=$(/opt/zimbra/libexec/get_plat_tag.sh 2> /dev/null := UNKNOWN)
+source /opt/zimbra/bin/zmshutil || exit 1
+zmsetvars -f \
+  zimbra_home \
+  zimbra_log_directory \
+  zimbra_server_hostname \
+  zimbra_tmp_directory \
+  zimbra_java_home \
+  zimbra_uid \
+  zimbra_gid \
+  zimbra_zmcertmgr_expiration_threshold \
+  ldap_is_master \
+  ldap_host \
+  mailboxd_directory \
+  mailboxd_server \
+  mailboxd_keystore \
+  mailboxd_keystore_password \
+  mailboxd_truststore_password \
+  postfix_smtpd_tls_cert_file \
+  postfix_smtpd_tls_key_file
+  
+export JAVA_HOME=${zimbra_java_home}
+
+java_version=$(${zimbra_java_home}/bin/java -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
+if [ x"$java_version" = "x1.6.0" ]; then
+  java_options="-XX:ErrorFile=${zimbra_home}/log"
+else
+  java_options=""
+fi
+
+zimbra_home=${zimbra_home:=/opt/zimbra}
+zimbra_conf_directory=${zimbra_home}/conf
+exp_thres_days=${zimbra_zmcertmgr_expiration_threshold:=30}
+exp_thres_secs=$(($exp_thres_days*24*60*60))
+
+zimbra_domain_cert_directory=${zimbra_conf_directory}/domaincerts
+
+if [ -x "${zimbra_home}/openssl/bin/openssl" ]; then
+  openssl=${zimbra_home}/openssl/bin/openssl
+else
+  openssl=openssl
+fi
+
+# this avoid "unable to write 'random state' errors from openssl
+export RANDFILE=${zimbra_home}/ssl/.rnd
+
+#OUTPUT_PREFIX="##### OUTPUT:"
+ERROR_PREFIX="XXXXX ERROR:"
+
+if [ -f "${zimbra_java_home}/lib/security/cacerts" ]; then
+  CACERTS=${zimbra_java_home}/lib/security/cacerts
+else
+  CACERTS=${zimbra_java_home}/jre/lib/security/cacerts
+fi
+
+isLdapRunning() {
+
+  su - zimbra -c "/opt/zimbra/bin/ldap status > /dev/null 2>&1"
+  LDAP_IS_RUNNING=$?
+  
+}
+
+saveConfigKey() {
+  local key=$1
+  local file=$2
+  local location=$3
+  local content=`cat ${file}`
+  if [ $location = "global" ]; then
+    local zmprov_opts="mcf"
+  elif [ $location = "server" ]; then
+    local zmprov_opts="ms ${zimbra_server_hostname}"
+  elif [ $location = "domain" ]; then
+    local domain=$4
+    local zmprov_opts="md ${domain}"
+  else 
+    echo "Unknown config section $location"
+    return
+  fi
+
+  echo -n "** Saving $location config key $key..."
+  su - zimbra -c "${zimbra_home}/bin/zmprov -m -l -- ${zmprov_opts} ${key} \"$content\" 2> /dev/null"
+  if [ $? = 0 ]; then
+    echo "done."
+  else
+    echo "failed."
+  fi
+}
+
+loadConfigKey() {
+  local key=$1
+  local file=$2
+  local location=$3
+  if [ $location = "global" ]; then
+    local zmprov_opts="gacf"
+  elif [ $location = "server" ]; then
+    local server=$4
+    if [ x"${server}" = "x" ]; then
+      server=${zimbra_server_hostname}
+    fi
+    local zmprov_opts="gs ${server}"
+  elif [ $location = "domain" ]; then
+    local domain=$4
+    local zmprov_opts="gd ${domain}"
+  else 
+    echo "Unknown config section $location"
+    return
+  fi
+  TMPDIR=${zimbra_tmp_directory}
+  local tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "Failed to create tmpfile" && exit 1)
+  chown ${zimbra_uid} ${tmpfile}
+  if [ ! -s ${file} ]; then
+    echo -n "** Retrieving $location config key $key..."
+    su - zimbra -c "${zimbra_home}/bin/zmprov -m -l -- ${zmprov_opts} ${key} | sed  -e 's/^${key}: //' > ${tmpfile} 2> /dev/null" 2>/dev/null && mv -f ${tmpfile} ${file} 2> /dev/null
+    if [ $? = 0 -a -s "${file}" ]; then
+      echo "done."
+    else
+      echo "failed."
+    fi
+  fi
+  rm -f ${tmpfile} 2> /dev/null
+}
+
+deployCerts() {
+
+  if [ "x$1" = "x-force" ]; then
+    rm -rf ${zimbra_home}/conf/domaincerts > /dev/null 2>&1
+  fi
+  
+  DOMAINS=$(su - zimbra -c "${zimbra_home}/bin/zmprov -m -l -- garpd | awk '{print \$1}'")
+  
+  for i in ${DOMAINS}; do
+    echo -n "** Deploying cert for ${i}..."
+    getDomainCertFromLdap $i > /dev/null 2>&1
+    if [ $? = 0 ]; then
+      echo "done."
+    else
+      echo "failed."
+    fi
+    
+  done
+}
+
+saveDomainCertToLdap() {
+  domain=$1
+  current_crt=$2
+  current_key=$3
+  if [ x"$domain" = "x" ]; then
+    echo "$ERROR_PREFIX Domain must be specified."
+    return
+  fi
+  if [ ! -e ${current_crt} ]; then
+    echo "$ERROR_PREFIX Certificate file ${current_crt} does not exist."
+    return
+  fi
+  if [ ! -e ${current_key} ]; then
+    echo "$ERROR_PREFIX Private key file ${current_key} does not exist."
+    return
+  fi
+
+  saveConfigKey "zimbraSSLCertificate" ${current_crt} "domain" ${domain}
+  saveConfigKey "zimbraSSLPrivateKey" ${current_key} "domain" ${domain}
+}
+
+getDomainCertFromLdap() {
+  domain=$1
+  if [ x"$domain" = "x" ]; then
+    echo "$ERROR_PREFIX Domain must be specified"
+  fi
+  if [ ! -d ${zimbra_domain_cert_directory} ]; then
+    mkdir -p ${zimbra_domain_cert_directory}
+  fi
+  current_crt=${zimbra_domain_cert_directory}/${domain}.crt
+  current_key=${zimbra_domain_cert_directory}/${domain}.key
+
+  loadConfigKey "zimbraSSLCertificate" ${current_crt} "domain" ${domain}
+  loadConfigKey "zimbraSSLPrivateKey" ${current_key} "domain" ${domain}
+}
+
+viewstagedcrt() {
+  if [ x"${1}" = "x" ]; then
+    if [ -f "${commercial_crt}" ]; then
+      current_crt=${commercial_crt}
+    elif [ -f "${server_crt}" ]; then
+      current_crt=${server_crt}
+    else
+      usage
+    fi
+  elif [  x"${1}" != "xself" -a x"${1}" != "xcomm" ]; then
+    usage
+  else  
+    type=$1 
+    if [ x"$type" = "xself" ]; then
+      current_crt=${server_crt}
+    else 
+      current_crt=${commercial_crt} 
+    fi
+  fi
+
+  if [ x"$2" != "x" ]; then
+    current_crt=${2}
+  fi
+ 
+  if [ ! -f "${current_crt}" ]; then
+    echo "$ERROR_PREFIX Certificate file ${current_crt} does not exist."
+    usage
+  fi 
+  ${openssl} x509  -in ${current_crt} -dates -subject -issuer -noout
+  getsubjectaltnames ${current_crt} crt
+}
+
+getsubjectaltnames() {
+  cert=$1
+  if [ ! -f "$cert" ]; then
+    return
+  fi
+  case "${2}" in
+    "crt") 
+      req=x509
+      ;;
+    "csr")
+      req="req"
+      ;;
+    *)
+      return
+  esac
+
+  names=`${openssl} $req -in ${cert} -text | sed -n '/Subject Alternative Name/{n;p;}' | sed 's/^[ \t]*//' | sed 's/DNS://g'`
+  echo "SubjectAltName= $names"
+}
+
+checkCertExpiration() {
+
+  if [ "x$1" = "x-days" ]; then
+    shift
+    exp_thres_days=$1
+    shift
+    exp_thres_secs=$((exp_thres_days*24*60*60))
+  fi 
+
+  if [ "x$1" = "x" ]; then
+    VIEW="all"
+  elif [ "x$1" = "xall" -o "x$1" = "xmta" -o "x$1" = "xproxy" -o "x$1" = "xmailboxd" -o "x$1" = "xldap" ]; then
+    VIEW="$1"
+  else
+    echo "${ERROR_PREFIX} Can't verify cert expiration for $1.  Unknown service."
+    return
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "mta" ]; then
+    service_crt=/opt/zimbra/conf/smtpd.crt
+    #echo "::service mta::"
+    if [ -f "${service_crt}" ]; then
+      ${openssl} x509  -in ${service_crt} -noout -checkend ${exp_thres_secs}
+      if [ $? != 0 ]; then
+        status=1
+        echo "${service_crt} is expiring within ${exp_thres_days} days."
+        ${openssl} x509  -in ${service_crt} -enddate -noout 
+      fi
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "proxy" ]; then
+    service_crt=/opt/zimbra/conf/nginx.crt
+    #echo "::service proxy::"
+    if [ -f "${service_crt}" ]; then
+      ${openssl} x509  -in ${service_crt} -noout -checkend ${exp_thres_secs}
+      if [ $? != 0 ]; then
+        status=1
+        echo "${service_crt} is expiring within ${exp_thres_days} days."
+        ${openssl} x509  -in ${service_crt} -enddate -noout 
+      fi
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+  
+  if [ $VIEW = "all" -o $VIEW = "mailboxd" ]; then
+    service_der=/opt/zimbra/mailboxd/etc/mailboxd.der
+    service_crt=/opt/zimbra/mailboxd/etc/mailboxd.pem
+    #echo "::service mailboxd::"
+    tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "${ERROR_PREFIX} Failed to create tmpfile" && exit 1)
+    ${zimbra_java_home}/bin/keytool -export -file ${service_der} -alias ${mailboxd_server} \
+      -keystore ${mailboxd_keystore} -storepass ${mailboxd_keystore_password} > ${tmpfile} 2>&1
+    if [ $? != 0 ]; then
+      echo "${ERROR_PREFIX} failed to export ${service_crt} from keystore."
+      echo
+      cat $tmpfile
+      echo
+    fi
+    rm -f $tmpfile 2>/dev/null
+    if [ -f "${service_der}" ]; then
+      ${openssl} x509  -inform DER -outform PEM -in ${service_der} -out ${service_crt}
+      ${openssl} x509  -in ${service_crt} -noout -checkend ${exp_thres_secs}
+      if [ $? != 0 ]; then
+        status=1
+        echo "${service_crt} is expiring within ${exp_thres_days} days."
+        ${openssl} x509  -in ${service_crt} -enddate -noout 
+      fi
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "ldap" ]; then
+    service_crt=/opt/zimbra/conf/slapd.crt
+    #echo "::service ldap::"
+    if [ -f "${service_crt}" ]; then
+      ${openssl} x509  -in ${service_crt} -noout -checkend ${exp_thres_secs}
+      if [ $? != 0 ]; then
+        status=1
+        echo "${service_crt} is expiring within ${exp_thres_days} days."
+        ${openssl} x509  -in ${service_crt} -enddate -noout 
+      fi
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+
+  exit $status
+}
+
+viewdeployedcrt() {
+  if [ "x$1" = "x" ]; then
+    VIEW="all"
+  elif [ "x$1" = "xall" -o "x$1" = "xmta" -o "x$1" = "xproxy" -o "x$1" = "xmailboxd" -o "x$1" = "xldap" ]; then
+    VIEW="$1"
+  else
+    echo "${ERROR_PREFIX} Can't view cert for $1.  Unknown service."
+    return
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "mta" ]; then
+    service_crt=/opt/zimbra/conf/smtpd.crt
+    echo "::service mta::"
+    if [ -f "${service_crt}" ]; then
+      ${openssl} x509  -in ${service_crt} -dates -subject -issuer -noout
+      getsubjectaltnames $service_crt crt
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "proxy" ]; then
+    service_crt=/opt/zimbra/conf/nginx.crt
+    echo "::service proxy::"
+    if [ -f "${service_crt}" ]; then
+      ${openssl} x509  -in ${service_crt} -dates -subject -issuer -noout
+      getsubjectaltnames $service_crt crt
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+  
+  if [ $VIEW = "all" -o $VIEW = "mailboxd" ]; then
+    service_der=/opt/zimbra/mailboxd/etc/mailboxd.der
+    service_crt=/opt/zimbra/mailboxd/etc/mailboxd.pem
+    echo "::service mailboxd::"
+    tmpfile=`mktemp -t zmcertmgr.XXXXXX 2> /dev/null` || (echo "${ERROR_PREFIX} Failed to create tmpfile" && exit 1)
+    ${zimbra_java_home}/bin/keytool -export -file ${service_der} -alias ${mailboxd_server} \
+      -keystore ${mailboxd_keystore} -storepass ${mailboxd_keystore_password} > ${tmpfile} 2>&1
+    if [ $? != 0 ]; then
+      echo "${ERROR_PREFIX} failed to export ${service_crt} from keystore."
+      echo
+      cat $tmpfile
+      echo
+    fi
+    rm -f $tmpfile 2>/dev/null
+    if [ -f "${service_der}" ]; then
+      ${openssl} x509  -inform DER -outform PEM -in ${service_der} -out ${service_crt}
+      ${openssl} x509  -in ${service_crt} -dates -subject -issuer -noout
+      getsubjectaltnames $service_crt crt
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+
+  if [ $VIEW = "all" -o $VIEW = "ldap" ]; then
+    service_crt=/opt/zimbra/conf/slapd.crt
+    echo "::service ldap::"
+    if [ -f "${service_crt}" ]; then
+      ${openssl} x509  -in ${service_crt} -dates -subject -issuer -noout
+      getsubjectaltnames $service_crt crt
+    else 
+      echo "${ERROR_PREFIX} ${service_crt} does not exist"
+    fi
+  fi
+}
+
+
+verifycrtkey() {
+  if [ x"${1}" = "x" ] || [  x"${1}" != "xself" -a x"${1}" != "xcomm" ]; then
+    usage
+  else  
+    type=$1 
+    shift
+    key=$1
+    crt=$2
+    if [ x"${key}" = "x" ] ; then
+      if [ "$type" = "self" ]; then
+          key=${server_key}
+      elif [ "$type" = "comm" ]; then
+          key=${commercial_key}
+        fi
+    fi
+  
+   if [ x"${crt}" = "x" ] ; then
+      if [ "$type" = "self" ]; then
+          crt=${server_crt}
+      elif [ "$type" = "comm" ]; then
+          crt=${commercial_crt}
+        fi
+    fi
+
+  fi  
+
+  echo "** Verifying $crt against $key"
+  
+  if [ ! -f $key ]; then
+    echo "${ERROR_PREFIX} Can't find private key  ${key}  "
+    exit 1
+  elif [ ! -f $crt ]; then
+    echo "${ERROR_PREFIX} Can't find certificate ${crt} "
+    exit 1
+  else
+    key_md5=`${openssl} rsa -noout -modulus -in ${key} | ${openssl} md5`
+    crt_md5=`${openssl} x509 -noout -modulus -in ${crt} | ${openssl} md5`
+  
+    #echo "key_md5=${key_md5}"
+    #echo "crt_md5=${crt_md5}"  
+  fi
+  
+  if [ x"${key_md5}" != "x"  -a  x"${key_md5}" = x"${crt_md5}" ] ; then
+    echo "Certificate (${crt}) and private key (${key}) match."
+  else
+    echo "${ERROR_PREFIX} Unmatching certificate (${crt}) and private key (${key}) pair."
+    exit 1 
+  fi
+}
+
+verifycrtchain () {
+    cafile=$1 
+    crt=$2
+   
+     result=`${openssl} verify -purpose sslserver -CAfile $cafile $crt`
+    
+    if [ x"${result}" = x"${crt}: OK" ]; then
+        echo "Valid Certificate Chain: $result"
+    else
+      echo "${ERROR_PREFIX} Invalid Certificate Chain: $result"
+      exit 1
+    fi
+}
+
+
+###Main Execution###
+
+usage () {
+  echo "Usage: "
+  echo "  $0 -help"
+  echo "  $0 deploycrt"
+  echo "  $0 savecrt <domain> <cert file> <private key file>"
+  echo
+  echo "Comments:  "
+  echo "-  deploycrt" 
+  echo "-  savecrt" 
+  echo
+  
+  exit 1;
+}
+
+
+if [ $# = 0 ]; then
+  usage
+fi
+
+ACTION=$1
+shift
+
+# check for valid usage
+if [ x"$ACTION" = "xdeploycrts" ]; then
+  deployCerts $@
+elif [ x"$ACTION" = "xsavecrt" ]; then
+  saveDomainCertToLdap $@
+elif [ x"$ACTION" = "x-help" -o x"$ACTION" = "xhelp" -o x"$ACTION" = "x-h" -o x"$ACTION" = "x--help" ]; then
+  usage 
+else
+  usage
+fi
+
+exit 0 
+
