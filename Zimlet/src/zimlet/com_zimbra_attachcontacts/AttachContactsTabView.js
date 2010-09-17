@@ -290,14 +290,14 @@ function(items) {
 			html[idx++] = AjxImg.getImageHtml(contact.getIcon());
 			html[idx++] = "</td>";
 
-			html[idx++] = "<td><span style=\"font-weight:bold;font-size:14px;\">";
+			html[idx++] = "<td><span style=\"font-weight:bold;\">";
 			html[idx++] = AjxStringUtil.htmlEncode(name);
 			html[idx++] = "</span></td></tr>";
 
 			for (var j=0; j<fields.length; j++) {
-				html[idx++] = "<tr><td colspan=3><span style=\"color:gray\">";
+				html[idx++] = "<tr><td></td><td colspan=2>";
 				html[idx++] = AjxStringUtil.htmlEncode(fields[j]);
-				html[idx++] = "</span></td></tr>";
+				html[idx++] = "</td></tr>";
 			}
 
 			html[idx++] = "</table></div>";
