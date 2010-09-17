@@ -491,27 +491,31 @@ function(x, y) {
 			var height = 20; //for scroll buttons
 			for (var i = 0; i <= maxRows; i++) {
 				height += Dwt.getSize(rows[i]).y;
-			
+
 			}
 			mySize.y = height;
 		}
 	}
 
 
-	var newW = mySize.x;
+	var newW = "auto";
 	var newH = "auto";
 	if (isPopup && isScroll) {
 		newH = mySize.y;
 		if (this._tableContainer)
 			this._tableContainer.style.height = (newH - 20) +"px";
 	} else if ((isPopup && isCascade) || y + mySize.y < windowSize.y - 5 ) {
-		newH = "auto"; 
-	} else { 
-		newH = windowSize.y - y - 5; 
+		newH = "auto";
+	} else {
+		newH = windowSize.y - y - 5;
 	}
-	if (this._table)
-		this._table.style.width = mySize.x;
-
+    if(this._menuHasSubmenus()) {
+	    if (this._table) {
+		    this._table.style.width = mySize.x;
+        }
+        newW = mySize.x;
+    }
+    this.setSize(newW, newH);
 	// NOTE: This hack is needed for FF/Moz because the containing div
 	//	   allows the inner table to overflow. When the menu cascades
 	//	   and the menu items get pushed off of the visible area, the
@@ -520,8 +524,6 @@ function(x, y) {
 
 	if ((AjxEnv.isGeckoBased || AjxEnv.isSafari || (this._origStyle == DwtMenu.CALENDAR_PICKER_STYLE)) && this._table && !isScroll) {
 		htmlEl.style.width = (mySize.x + (isPopup && !isCascade ? 10 : 0)) + "px";
-	} else {
-		htmlEl.style.width = newW +"px";
 	}
 
 	// Popup menu type
