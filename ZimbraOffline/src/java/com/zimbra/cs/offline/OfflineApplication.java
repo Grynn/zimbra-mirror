@@ -33,6 +33,7 @@ import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.Db;
 import com.zimbra.cs.db.DbPool;
 import com.zimbra.cs.db.DbUtil;
+import com.zimbra.cs.db.OfflineDbPool;
 import com.zimbra.cs.db.OfflineVersions;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.offline.OfflineZimbraAuthProvider;
@@ -162,6 +163,10 @@ public class OfflineApplication extends ZimbraApplication {
     @Override
     public void shutdown() {
         super.shutdown();
+        try {
+            OfflineDbPool.shutdown();
+        } catch (Exception e) {
+        }
         OfflineSyncManager.getInstance().shutdown();
     }
       
