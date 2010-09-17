@@ -61,18 +61,28 @@ public abstract class AbsApplication {
 
 	protected ZimbraAccount setActiveAcount(ZimbraAccount account) throws HarnessException {
 		
-		if ( !account.equals(authenticatedAccount) ) {
-			
-			logger.info("New authenticated account = "+ account.EmailAddress);
-			
-			// Remember who is logged in
-			authenticatedAccount = account;
-			
-			// Based on account settings, the localization strings will change
-			L10N = new I18N(authenticatedAccount.getPreference("zimbraPrefLocale"));
-			
+		// Check if we are setting the active account to nobody
+		if ( account == null ) {
+			logger.info("Set authenticated account to null");
+			authenticatedAccount = null;
+			L10N = null;
+			return (null);
 		}
 		
+		// Check if we are setting the active account to the already set account
+		if ( account.equals(authenticatedAccount)) {
+			logger.info("Same authenticated account = "+ account.EmailAddress);
+			return (authenticatedAccount);
+		}
+							
+		logger.info("New authenticated account = "+ account.EmailAddress);
+		
+		// Remember who is logged in
+		authenticatedAccount = account;
+		
+		// Based on account settings, the localization strings will change
+		L10N = new I18N(authenticatedAccount.getPreference("zimbraPrefLocale"));
+					
 		return (authenticatedAccount);
 	}
 	
