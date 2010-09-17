@@ -53,7 +53,8 @@ function() {
  * This method is called when the panel item is double-clicked.
  *
  */
-EmailTooltipZimlet.prototype.doubleClicked = function() {
+EmailTooltipZimlet.prototype.doubleClicked =
+function() {
 	this.singleClicked();
 };
 
@@ -61,7 +62,8 @@ EmailTooltipZimlet.prototype.doubleClicked = function() {
  * This method is called when the panel item is single-clicked.
  *
  */
-EmailTooltipZimlet.prototype.singleClicked = function() {
+EmailTooltipZimlet.prototype.singleClicked =
+function() {
 	this._prefDialog.popup();
 };
 
@@ -98,8 +100,8 @@ function(ev) {
 			if (b) {
 				// try to update presence state
 				var img = document.getElementById(el.img_id);
-				if (img) {
-					AjxImg.setImage(img, b.getPresence().getIcon(), true);
+				if (img && b.getPresence().getShow() == ZmRosterPresence.SHOW_ONLINE) {
+					AjxImg.setImage(img, b.getPresence().getIcon(true), true);
 				} else {
 					// no longer visible, remove from cache?
 					// cache.splice(i, 1);
@@ -112,7 +114,6 @@ function(ev) {
 
 EmailTooltipZimlet.prototype._getHtmlContent =
 function(html, idx, obj, context, spanId) {
-
 	if (obj instanceof AjxEmailAddress) {
 		var context = window.parentAppCtxt || window.appCtxt;
 		var contactsApp = context.getApp(ZmApp.CONTACTS);
@@ -140,14 +141,15 @@ EmailTooltipZimlet.prototype._updateHtmlContent =
 function(html, idx, obj, contact, buddy, spanId) {
 
 	var content;
-	if (buddy) {
-		var pres = buddy.getPresence();
+	var pres = buddy && buddy.getPresence();
+	if (pres && pres.getShow() == ZmRosterPresence.SHOW_ONLINE) {
 		var pres_id = Dwt.getNextId();
-		var tmp = [
-			AjxStringUtil.htmlEncode(buddy.getDisplayName()), " ",
-			AjxImg.getImageHtml(pres.getIcon(), "display: inline; padding: 1px 8px;", "id=" + pres_id)
-		];
-		content = tmp.join("");
+
+		content = [
+			AjxStringUtil.htmlEncode(buddy.getDisplayName()),
+			AjxImg.getImageHtml(pres.getIcon(true), "display:inline; padding-left:13px", "id=" + pres_id)
+		].join("");
+
 		var params = {
 			contact : contact,
 			buddy   : buddy,
@@ -210,7 +212,7 @@ function(contact, address) {
 EmailTooltipZimlet.prototype.hoverOut =
 function(object, context, x, y, span) {
 	//override to ignore hoverout. 
-}
+};
 
 EmailTooltipZimlet.prototype.addSubscriberZimlet =
 function(subscriberZimlet, isPrimary) {
@@ -224,13 +226,15 @@ EmailTooltipZimlet.prototype.hoverOver =
 function(object, context, x, y, span) {
 	this._initializeProps(object, context, x, y, span);
 	appCtxt.notifyZimlets("onEmailHoverOver", [this], {waitUntilLoaded:true});
-	if(this.primarySubscriberZimlet) {
+	if (this.primarySubscriberZimlet) {
 		this.primarySubscriberZimlet.showTooltip();
-	} else if(this._subscriberZimlets.length > 0 && !this.primarySubscriberZimlet) {
+	}
+	else if (this._subscriberZimlets.length > 0 && !this.primarySubscriberZimlet) {
 		this._unknownPersonSlide = new UnknownPersonSlide();
 		this._unknownPersonSlide.onEmailHoverOver(this);
 		this._unknownPersonSlide.showTooltip();
-	}else {//if no subscribers..
+	}
+	else { // if no subscribers..
 		this._showTooltip(object, context, x, y, span);
 	}
 };
@@ -250,7 +254,7 @@ function(spanElement, contentObjText, matchContext, canvas) {
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
 
-    var isMailTo = this.isMailToLink(addr);
+	var isMailTo = this.isMailToLink(addr);
 	if (isMailTo) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
@@ -263,9 +267,9 @@ function(spanElement, contentObjText, matchContext, canvas) {
 		toolTip = contact.getToolTip(addr, false, hint);
 	} else {
 		var hint = this._newTooltipHint;
-        if(isMailTo){
-            hint = this._composeTooltipHint;
-        }
+		if (isMailTo) {
+			hint = this._composeTooltipHint;
+		}
 		var subs = {
 			addrstr: addr.toString(),
 			hint: hint
@@ -277,7 +281,7 @@ function(spanElement, contentObjText, matchContext, canvas) {
 
 EmailTooltipZimlet.prototype._initializeProps =
 function(object, context, x, y, span) {
-	if(!this.seriesAnimation) {
+	if (!this.seriesAnimation) {
 		this.seriesAnimation = new SeriesAnimation();
 	}
 	this.seriesAnimation.reset();
@@ -288,7 +292,7 @@ function(object, context, x, y, span) {
 	this.y = y;
 	this.tooltip = tooltip;
 	var addr = (object instanceof AjxEmailAddress) ? object.address : object;
-    var isMailTo = this.isMailToLink(addr);
+	var isMailTo = this.isMailToLink(addr);
 	if (isMailTo) {
 		addr = (this.parseMailToLink(addr)).to || addr;
 	}
@@ -322,7 +326,7 @@ function(timeoutCallback) {
 	clearTimeout(this._busyImgTimer);
 	this._busyImg.style.zIndex = "100";
 	this._busyImg.style.display = "none";
-	if(timeoutCallback) {
+	if (timeoutCallback) {
 		timeoutCallback.run();
 	}
 };
@@ -350,7 +354,7 @@ function(actionMenu) {
 };
 
 EmailTooltipZimlet.prototype._resetFilterMenu =
-function(){
+function() {
 	var filterItems = this._filterMenu.getItems();
 	while (filterItems.length > 0) {
 		this._filterMenu.removeChild(filterItems[0]);
@@ -423,7 +427,7 @@ EmailTooltipZimlet.prototype.getActionMenu =
 function(obj, span, context) {
 	// call base class first to get the action menu
 	var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
-    var isDetachWindow = appCtxt.isChildWindow;
+	var isDetachWindow = appCtxt.isChildWindow;
 
 	if (!isDetachWindow && appCtxt.get(ZmSetting.FILTERS_ENABLED) && actionMenu.getOp("ADDTOFILTER") ) {
 		this.createFilterMenu(actionMenu);
@@ -516,17 +520,17 @@ function(spanElement, contentObjText, matchContext, ev) {
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
 
-    var contact = addr;
-    var isMailTo = this.isMailToLink(addr);
-    //extract mailid from mailto:mailid?params 
-    if(isMailTo && EmailTooltipZimlet.MAILTO_RE.test(addr)){
-        contact = RegExp.$1;
-    }
+	var contact = addr;
+	var isMailTo = this.isMailToLink(addr);
+	//extract mailid from mailto:mailid?params
+	if (isMailTo && EmailTooltipZimlet.MAILTO_RE.test(addr)) {
+		contact = RegExp.$1;
+	}
 
 	var contactList = AjxDispatcher.run("GetContacts");
 	var addrContact = contactList ? contactList.getContactByEmail(contact) : null;
 	// if contact found or there is no contact list (i.e. contacts app is disabled), go to compose view
-	if ( isMailTo || addrContact || contactList == null )
+	if (isMailTo || addrContact || contactList == null)
 	{
 		this._actionObject = null;
 		this._composeListener(ev, addr);
@@ -710,12 +714,15 @@ function() {
  */
 EmailTooltipZimlet.prototype.animateOpacity =
 function(id, opacStart, opacEnd, millisec) {
-	this.changeOpac(opacStart, document.getElementById(id).style);//create a starting point
+	// create a starting point
+	this.changeOpac(opacStart, document.getElementById(id).style);
+
 	//speed for each frame
 	var speed = Math.round(millisec / 100);
 	var timer = 0;
 	var styleObj = document.getElementById(id).style;
-	//determine the direction for the blending, if start and end are the same nothing happens
+
+	// determine the direction for the blending, if start and end are the same nothing happens
 	if (opacStart > opacEnd) {
 		for (i = opacStart; i >= opacEnd; i--) {
 			setTimeout(AjxCallback.simpleClosure(this.changeOpac, this, i, styleObj), (timer * speed));
@@ -741,4 +748,3 @@ function(opacity, styleObj) {
 	styleObj.zoom = 1;
 	styleObj.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=" + opacity + ")";
 };
-
