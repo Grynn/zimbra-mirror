@@ -275,7 +275,7 @@ function() {
 		AjxTimezone._PREF_ZONE_OPTIONS = [];
 		AjxTimezone.getAbbreviatedZoneChoices();
 		for (var i = 0; i < AjxTimezone._ABBR_ZONE_OPTIONS.length; i++) {
-			AjxTimezone._PREF_ZONE_OPTIONS.push(AjxTimezone._ABBR_ZONE_OPTIONS[i].serverid);
+			AjxTimezone._PREF_ZONE_OPTIONS.push(AjxTimezone._ABBR_ZONE_OPTIONS[i].value); //use value is better, serverID is usd by compare operator.
 		}
 	}
 	return AjxTimezone._PREF_ZONE_OPTIONS;
@@ -415,7 +415,7 @@ AjxTimezone.getAbbreviatedZoneChoices = function() {
 				value: serverId,
 				// these props used by sort comparator
 				standard: rule.standard,
-				serverid: serverId,
+				serverId: serverId, //In _BY_OFFSET, the attribute name is serverId.
                 clientId: clientId
 			};
 			AjxTimezone._ABBR_ZONE_OPTIONS.push(option);
@@ -445,7 +445,7 @@ AjxTimezone.getMatchingTimezoneChoices = function() {
 				value: serverId,
 				// these props used by sort comparator
 				standard: rule.standard,
-				serverid: serverId,
+				serverId: serverId, //In _BY_OFFSET, the attribute name is serverId.
                 clientId: clientId
 			};
 			AjxTimezone._MATCHING_ZONE_OPTIONS.push(option);
