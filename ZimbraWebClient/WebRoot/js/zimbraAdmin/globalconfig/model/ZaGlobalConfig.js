@@ -111,6 +111,12 @@ ZaGlobalConfig.A_zimbraImapCleartextLoginEnabled = "zimbraImapCleartextLoginEnab
 ZaGlobalConfig.A_zimbraSpamKillPercent = "zimbraSpamKillPercent";
 ZaGlobalConfig.A_zimbraSpamTagPercent = "zimbraSpamTagPercent";
 ZaGlobalConfig.A_zimbraSpamSubjectTag = "zimbraSpamSubjectTag";
+ZaGlobalConfig.A_zimbraSpamAccount = "zimbraSpamIsSpamAccount";
+ZaGlobalConfig.A_zimbraHamAccount = "zimbraSpamIsNotSpamAccount";
+//wiki account
+ZaGlobalConfig.A_zimbraWikiAccount = "zimbraNotebookAccount";
+//Amavis account
+ZaGlobalConfig.A_zimbraAmavisQAccount = "zimbraAmavisQuarantineAccount";
 // anti-virus
 ZaGlobalConfig.A_zimbraVirusWarnRecipient = "zimbraVirusWarnRecipient";
 ZaGlobalConfig.A_zimbraVirusWarnAdmin = "zimbraVirusWarnAdmin";

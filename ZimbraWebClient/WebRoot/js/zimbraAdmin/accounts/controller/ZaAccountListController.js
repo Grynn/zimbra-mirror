@@ -1232,6 +1232,41 @@ function () {
 			this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
 		}	
 	}
+ 	for(var i=0;i<cnt;i++) {
+        var myitem = this._contentView.getSelection()[i];
+        if(myitem && myitem.type==ZaItem.ACCOUNT){
+                myitem = this._contentView.getSelection()[i].toString();
+                var mydomain = ZaAccount.getDomain(myitem);
+                var domainObj =  ZaDomain.getDomainByName(mydomain);
+                if (myitem == "admin@"+mydomain || myitem == "root@"+mydomain || myitem == "postmaster@"+mydomain || myitem == "domainadmin@"+mydomain) {
+                         this._toolbarOperations[ZaOperation.DELETE].enabled=false;
+                }
+                if (domainObj.attrs[ZaDomain.A_zimbraGalAccountId]){
+                        if (myitem == domainObj.attrs[ZaDomain.A_zimbraGalAccountId]){
+                                this._toolbarOperations[ZaOperation.DELETE].enabled=false;}
+                }
+                if (ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraSpamAccount]){
+                        if (myitem == ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraSpamAccount].toString()){
+                                this._toolbarOperations[ZaOperation.DELETE].enabled=false;}
+                }
+                if (ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraHamAccount]){
+                        if (myitem == ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraHamAccount].toString()){
+                                this._toolbarOperations[ZaOperation.DELETE].enabled=false;}
+                }
+                if (ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraAmavisQAccount]){
+                        if (myitem == ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraAmavisQAccount].toString()){
+                                this._toolbarOperations[ZaOperation.DELETE].enabled=false;}
+                }
+                if (ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraWikiAccount]){
+                        if (myitem == ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraWikiAccount].toString()){
+                                this._toolbarOperations[ZaOperation.DELETE].enabled=false;}
+                }
+                if (this._contentView.getSelection()[i].attrs[ZaAccount.A_isCCAccount]){
+                        this._toolbarOperations[ZaOperation.DELETE].enabled=false;
+                }
+
+        }
+        }
 }
 ZaController.changeActionsStateMethods["ZaAccountListController"].push(ZaAccountListController.changeActionsStateMethod);
 

@@ -201,6 +201,38 @@ ZaAccountViewController.changeActionsStateMethod = function () {
 	if(!ZaItem.hasRight(ZaAccount.DELETE_ACCOUNT_RIGHT,this._currentObject))	{
 		this._toolbarOperations[ZaOperation.DELETE].enabled = false;
 	}
+   	var tmpObj = this._view.getObject();
+        if(tmpObj.attrs != null && tmpObj.attrs[ZaAccount.A_mail] != null ) {
+                var myitem = tmpObj.attrs[ZaAccount.A_mail];
+                var mydomain = ZaAccount.getDomain(myitem);
+                var domainObj =  ZaDomain.getDomainByName(mydomain);
+                if (myitem == "admin@"+mydomain || myitem == "root@"+mydomain || myitem == "postmaster@"+mydomain || myitem == "domainadmin@"+mydomain) {
+                 this._toolbarOperations[ZaOperation.DELETE].enabled=false;
+                }
+                if (domainObj.attrs[ZaDomain.A_zimbraGalAccountId]){
+                 if (myitem == domainObj.attrs[ZaDomain.A_zimbraGalAccountId]){
+                        this._toolbarOperations[ZaOperation.DELETE].enabled=false;}
+                }
+                if (ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraSpamAccount]){
+                        if (myitem == ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraSpamAccount].toString()){
+                                this._toolbarOperations[ZaOperation.DELETE].enabled=false;}
+                }
+                if (ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraHamAccount]){
+                        if (myitem == ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraHamAccount].toString()){
+                                this._toolbarOperations[ZaOperation.DELETE].enabled=false;}
+                }
+                if (ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraAmavisQAccount]){
+                        if (myitem == ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraAmavisQAccount].toString()){
+                                this._toolbarOperations[ZaOperation.DELETE].enabled=false;}
+                }
+                if (ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraWikiAccount]){
+                        if (myitem == ZaApp.getInstance().getGlobalConfig().attrs[ZaGlobalConfig.A_zimbraWikiAccount].toString()){
+                                this._toolbarOperations[ZaOperation.DELETE].enabled=false;}
+                }
+                if (tmpObj.attrs[ZaAccount.A_isCCAccount]){
+                        this._toolbarOperations[ZaOperation.DELETE].enabled=false;
+                }
+        }
 
 	if(!ZaItem.hasRight(ZaAccount.REINDEX_MBX_RIGHT,this._currentObject))	{
 		this._toolbarOperations[ZaOperation.REINDEX_MAILBOX].enabled = false;
