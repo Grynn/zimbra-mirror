@@ -36,162 +36,123 @@ MeeboZimlet.LOAD_INTERVAL = 5000;
 /**
  * Defines the "load" timeout (milliseconds).
  */
-MeeboZimlet.LOAD_TIMEOUT = 60000;
+MeeboZimlet.LOAD_TIMEOUT = 20000;
 
 /**
- * Meebo class
+ * Static ids
  */
- 
-var Meebo = {exec:function() {
-	Meebo._.push(arguments)
-},_:[]};
-Meebo.disableSharePageButton = true;
+MeeboZimlet.SKIN_ROW_ID = "meeboZimlet_bar_rowId";
+
 
 /**
  * Initializes the zimlet.
  */
 MeeboZimlet.prototype.init =
 function() {
+	this._makeSpaceForMeeboBar();
+	this._initializeMeebo();
+	//todo Need info from Meebo folks about how we can know if Meebo-bar is actually loaded. i.e. something like: Meebo.isLoaded API
+	//this._callCount = 0;
+	//this.timer = setInterval(AjxCallback.simpleClosure(this._checkMeeboExists, this), MeeboZimlet.LOAD_INTERVAL);
+};
 
 
-	this._addResizeHandler();
-	this.callCount = 0;
-	this._createMeeboFrame();
+/**
+ * Makes space for Meebo bar in the skin
+ */
+MeeboZimlet.prototype._makeSpaceForMeeboBar =
+function() {
+	var tbl = document.getElementById("skin_table_outer");
+	var newRow = tbl.insertRow(tbl.rows.length);
+	newRow.style.display = "block";
+	newRow.id = MeeboZimlet.SKIN_ROW_ID;
 
-	this.timer = setInterval(AjxCallback.simpleClosure(this._showMeebo, this), MeeboZimlet.LOAD_INTERVAL);
+	var cell = newRow.insertCell(0);
+	if (AjxEnv.isIE) {
+		cell.height = "24px";
+	} else {
+		cell.height = "26px";
+	}
+	cell.innerHTML = "<label style='font-size:12px;font-weight:bold;'>Space reserved for Meebo Bar Zimlet</label>";
 };
 
 /**
- * Creates the Meebo iframe.
- *
+ * [Code is from Meebo] - Loads Meebo Bar
  */
-MeeboZimlet.prototype._createMeeboFrame =
+MeeboZimlet.prototype._initializeMeebo =
 function() {
-	var network = "zimbra";
-	var el = document.createElement("div");
-	el.id = "meebo";
-	el.style.display = "none";
-	var frame = document.createElement("iframe");
-	frame.id = "meebo-iframe";
-	frame.src = this.getResource("/meebo.html?network=" + network);
-	el.appendChild(frame);
-	this.getShell().getHtmlElement().appendChild(el);
+	window.Meebo || function(b) {
+		function p() {
+			return["<",i,' onload="var d=',g,";d.getElementsByTagName('head')[0].",
+				j,"(d.",h,"('script')).",k,"='//",b.stage ? "stage-" : "","cim.meebo.com/cim?iv=",a.v,
+				"&",q,"=",b[q],b[l] ? "&" + l + "=" + b[l] : "",b[e] ? "&" + e + "=" + b[e] : "","'\"></",i,">"].join("")
+		}
 
-	this._taskBar = appCtxt.getAppViewMgr().getCurrentViewComponent(ZmAppViewMgr.C_TASKBAR);
-	this.meeboBarEl = el;
+		var f = window,a = f.Meebo = f.Meebo || function() {
+			(a._ = a._ || []).push(arguments)
+		},d = document,
+		i = "body",m = d[i],r;
+		if (!m) {
+			r = arguments.callee;
+			return setTimeout(function() {
+				r(b)
+			},
+			100)
+		}
+		a.$ = {0:+new Date};
+		a.T = function(u) {
+			a.$[u] = new Date - a.$[0]
+		};
+		a.v = 4;
+		var j = "appendChild",
+		h = "createElement",k = "src",l = "lang",q = "network",e = "domain",n = d[h]("div"),v = n[j](d[h]("m")),
+		c = d[h]("iframe"),g = "document",o,s = function() {
+			a.T("load");
+			a("load")
+		};
+		f.addEventListener ?
+		f.addEventListener("load", s, false) : f.attachEvent("onload", s);
+		n.style.display = "none";
+		m.insertBefore(n, m.firstChild).id = "meebo";
+		c.frameBorder = "0";
+		c.id = "meebo-iframe";
+		c.allowTransparency = "true";
+		v[j](c);
+		try {
+			c.contentWindow[g].open()
+		} catch(w) {
+			b[e] =
+			d[e];
+			o = "javascript:var d=" + g + ".open();d.domain='" + d.domain + "';";
+			c[k] = o + "void(0);"
+		}
+		try {
+			var t =
+			c.contentWindow[g];
+			t.write(p());
+			t.close()
+		} catch(x) {
+			c[k] = o + 'd.write("' + p().replace(/"/g,
+			'\\"') + '");d.close();'
+		}
+		a.T(1)
+	}({network:"zimbra"});
+	Meebo.disableSharePageButton = true;
 };
+
 
 /**
  * Shows the meebo iframe.
  *
  */
-MeeboZimlet.prototype._showMeebo =
+MeeboZimlet.prototype._checkMeeboExists =
 function() {
-	this.callCount++;
-
-	if (this.callCount == (MeeboZimlet.LOAD_TIMEOUT / MeeboZimlet.LOAD_INTERVAL)) { //after 60 seconds, stop checking
+	this._callCount++;
+	if (this._callCount == (MeeboZimlet.LOAD_TIMEOUT / MeeboZimlet.LOAD_INTERVAL)) { //after 60 seconds, stop checking
 		clearInterval(this.timer);
+		document.getElementById(MeeboZimlet.SKIN_ROW_ID).style.display = "none";
 		var errMsg = AjxMessageFormat.format(this.getMessage("MeeboZimlet_error_loadBar"), MeeboZimlet.LOAD_TIMEOUT / 1000);
 		appCtxt.getAppController().setStatusMsg(errMsg, ZmStatusView.LEVEL_WARNING);
-		if (!this._taskBar) {//remove space
-			document.getElementById("skin_container_taskbar").innerHTML = "";
-			document.getElementById("skin_container_taskbar").style.display = "none";
-		}
 		return;
 	}
-	if (typeof Meebo == 'undefined') {
-		return;
-	}
-
-	if (Meebo) {
-		try {
-			Meebo.unhide(1);
-		} catch(e) {
-			clearInterval(this.timer);
-			appCtxt.setStatusMsg(this.getMessage("MeeboZimlet_couldNotUnhide"), ZmStatusView.LEVEL_WARNING);
-			if (!this._taskBar) {//remove space
-				document.getElementById("skin_container_taskbar").innerHTML = "";
-				document.getElementById("skin_container_taskbar").style.display = "none";
-			}
-			return;
-		}
-		clearInterval(this.timer);
-		if (this._taskBar) {
-			this._taskBar.getHtmlElement().style.display = "none";
-		} else {//add space so the rest of the widgets think something will occupy this space
-			document.getElementById("skin_container_taskbar").innerHTML = "<br/><br/>";
-		}
-		this.meeboBarEl.style.display = "block";
-		this._resizeHandler();
-		this._meeboBarShown = true;
-	}
 };
-
-/**
- * Adds the resize handler.
- *
- */
-MeeboZimlet.prototype._addResizeHandler =
-function() {
-	this.getShell().addControlListener(new AjxListener(this, this._resizeHandler));
-};
-
-/**
- * Resize handler.
- *
- */
-MeeboZimlet.prototype._resizeHandler =
-function() {
-	var treeWidth = (document.getElementById("skin_container_tree").clientWidth + 5);
-	var shellWidth = this.getShell().getHtmlElement().clientWidth;
-	this.meeboBarEl.style.left = treeWidth + "px";//move the bar to the left
-	this.meeboBarEl.style.width = (shellWidth - treeWidth) + "px"; //resize the width of the bar
-	if (!this._meeboBarShown) {//hide if its not supposed to be shown
-		this._meeboBarOldLeft = document.getElementById("meebo").style.left;
-		this.menuItemSelected();
-	}
-};
-
-/**
- * Called by framework upon single click
- *
- */
-MeeboZimlet.prototype.singleClicked = function() {
-	this.menuItemSelected();
-};
-
-/**
- * Called by framework upon double click
- *
- */
-MeeboZimlet.prototype.doubleClicked = function() {
-	this.menuItemSelected();
-};
-
-
-/**
- * Called by framework when context menu was clicked
- *
- */
-MeeboZimlet.prototype.menuItemSelected = function() {
-	if (this._meeboBarShown) {//hide
-		document.getElementById("meebo").style.display = "none";
-		this._meeboBarOldLeft = document.getElementById("meebo").style.left;
-		document.getElementById("meebo").style.left = "-9999px";
-		if (this._taskBar) {
-			this._taskBar.getHtmlElement().style.display = "block";
-		} else {
-			document.getElementById("skin_container_taskbar").innerHTML = "";
-		}
-		this._meeboBarShown = false;
-	} else {
-		document.getElementById("meebo").style.display = "block";
-		document.getElementById("meebo").style.left = this._meeboBarOldLeft;
-		if (this._taskBar) {
-			this._taskBar.getHtmlElement().style.display = "none";
-		} else {
-			document.getElementById("skin_container_taskbar").innerHTML = "<br/><br/>";
-		}
-		this._meeboBarShown = true;
-	}
-}
