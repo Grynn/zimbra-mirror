@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_undosend" version="1.0" description="Provides option to cancel or undo mail send for few seconds" target="main compose-window">
+<zimlet name="com_zimbra_undosend" version="1.1" description="Provides option to cancel or undo mail send for few seconds" target="main compose-window">
 	<include>undosend.js</include>
 	<includeCSS>undosend.css</includeCSS>
 	<handlerObject>com_zimbra_undosend_HandlerObject</handlerObject>
