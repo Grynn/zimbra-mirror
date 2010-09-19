@@ -3,6 +3,7 @@
  */
 package projects.admin.ui;
 
+import projects.admin.items.AccountItem;
 import projects.admin.items.Item;
 import framework.ui.AbsWizard;
 import framework.util.HarnessException;
@@ -12,6 +13,8 @@ import framework.util.HarnessException;
  *
  */
 public class WizardCreateAccount extends AbsWizard {
+
+	public static final String zdlg__NEW_ACCT = "xpath=//*[@id='zdlg__NEW_ACCT']";
 
 	// Wizard Navigation Buttons
 	public static final String DWT279_title = "xpath=//*[@id='DWT279_title']"; // "Cancel" button
@@ -30,12 +33,49 @@ public class WizardCreateAccount extends AbsWizard {
 	 */
 	@Override
 	public Item completeWizard(Item item) throws HarnessException {
-		throw new HarnessException("implement me!");
+		
+		AccountItem account = (AccountItem)item;
+		
+		String CN = account.EmailAddress.split("@")[0];
+		String domain = account.EmailAddress.split("@")[1];
+		
+		type("xpath=//@[@id='_XForm_3_name_2']", CN);
+		type("xpath=//@[@id='_XForm_3_name_3_display']", domain);
+		
+		for (String key : account.AccountAttrs.keySet()) {
+			
+			// TODO: Handle Previous/Next to find the input field, if necessary
+			
+			if ( key.equals("givenName")) {
+				type("xpath=//@[@id='_XForm_3_givenName']", account.AccountAttrs.get(key));
+				continue;
+			}
+
+			// TODO: add all account keys
+			
+			throw new HarnessException("Unknown account attribute key "+ key);
+			
+		}
+		
+		
+		return (account);
+		
 	}
 
 	@Override
 	public boolean isOpen() throws HarnessException {
-		throw new HarnessException("implement me!");
+		
+		boolean present = isElementPresent(zdlg__NEW_ACCT);
+		if ( !present ) {
+			return (false);
+		}
+		
+		boolean visible = this.isVisiblePerPosition(zdlg__NEW_ACCT, 0, 0);
+		if ( !visible ) {
+			return (false);
+		}
+
+		return (true);
 	}
 
 }
