@@ -14,9 +14,9 @@
  */
 
 /**
-* A Email tooltip class that adds a blank slide when VMPersonZimlet is not loaded. 
+* A Email tooltip class that adds a blank slide when UnknownPersonSlide is not loaded. 
 * Usually this is for customers outside of VMWare where they dont have access to 
-* VMPersonZimlet but can still use LinkedIn, TwitterSearch etc Zimlets
+* UnknownPersonSlide but can still use LinkedIn, TwitterSearch etc Zimlets
 */
 function UnknownPersonSlide() {
 }
@@ -27,7 +27,8 @@ UnknownPersonSlide.PHOTO_PARENT_ID = "unkownPerson_photoBGDiv";
 UnknownPersonSlide.TEXT_DIV_ID = "unkownPerson_TextDiv";
 UnknownPersonSlide.PHOTO_BASE_URL =  "https://people.vmware.com/webapp/htdocs/ServeJPG.php?imgurl=https://people.vmware.com/employees/";
 UnknownPersonSlide.EMPLOYEE_PROFILE_BASE_URL = "https://people.vmware.com/webapp/htdocs/PersonalProfile.php?guid=";
-
+UnknownPersonSlide.SLIDE_PX_20 =  20;//height when Full name of the email is present
+UnknownPersonSlide.SLIDE_PX_15 =  15;//height when full name of the is absent
 /**
 * Implement onEmailHoverOver to get notified by Email tooltip zimlet.
 * This function registers UnkownPerson Zimlet as a subscriber Zimlet
@@ -204,14 +205,22 @@ function(ev) {
 	if (relTarg && (relTarg.parentNode.id == UnknownPersonSlide.TEXT_DIV_ID || relTarg.id == UnknownPersonSlide.TEXT_DIV_ID)) {
 		return;
 	}
-	this.emailZimlet.seriesAnimation.addslideDown(UnknownPersonSlide.TEXT_DIV_ID, 20);
+	if(this.emailZimlet.fullName != "") {
+		this.emailZimlet.seriesAnimation.addslideDown(UnknownPersonSlide.TEXT_DIV_ID, UnknownPersonSlide.SLIDE_PX_20);
+	} else {
+		this.emailZimlet.seriesAnimation.addslideDown(UnknownPersonSlide.TEXT_DIV_ID, UnknownPersonSlide.SLIDE_PX_15);
+	}
 	this.emailZimlet.seriesAnimation.startAnimation();
 };
 
 UnknownPersonSlide.prototype._slideTextDownIfMouseNotOver =
 function() {
 	if (!this._hoverOnPhoto) {
-		this.emailZimlet.seriesAnimation.addslideDown(UnknownPersonSlide.TEXT_DIV_ID, 20);
+		if(this.emailZimlet.fullName != "") {
+			this.emailZimlet.seriesAnimation.addslideDown(UnknownPersonSlide.TEXT_DIV_ID, UnknownPersonSlide.SLIDE_PX_20);
+		} else {
+			this.emailZimlet.seriesAnimation.addslideDown(UnknownPersonSlide.TEXT_DIV_ID, UnknownPersonSlide.SLIDE_PX_15);
+		}
 		this.emailZimlet.seriesAnimation.startAnimation();
 	}
 };
