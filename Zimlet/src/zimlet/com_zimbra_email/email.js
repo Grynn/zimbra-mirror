@@ -516,7 +516,9 @@ function(str){
 
 EmailTooltipZimlet.prototype.clicked =
 function(spanElement, contentObjText, matchContext, ev) {
-
+	if(this.tooltip) {
+		this.tooltip.popdown();
+	}
 	var addr = (contentObjText instanceof AjxEmailAddress)
 		? contentObjText.address : contentObjText;
 
