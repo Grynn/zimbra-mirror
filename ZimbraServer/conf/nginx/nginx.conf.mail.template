@@ -210,8 +210,8 @@ mail
     # TLS configuration
     # 
     ssl_prefer_server_ciphers   ${mail.ssl.preferserverciphers};
-    ssl_certificate             ${mail.ssl.cert};
-    ssl_certificate_key         ${mail.ssl.key};
+    ssl_certificate     ${ssl.crt.default};
+    ssl_certificate_key ${ssl.key.default};
     
     # Ciphers configuration
     # Permitted ciphers. Ciphers are assigned in the formats supported by OpenSSL

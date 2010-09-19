@@ -1,12 +1,15 @@
+!{explode vhn_ssl}
 # IMAP proxy configuration
 # 
 server
 {
+    ${server_name.enabled}server_name         ${vhn}; 
     listen                  ${mail.imap.port};
     protocol                imap;
     proxy                   on;
     sasl_service_name       "imap";
     starttls                ${mail.imap.tls};
+    ssl_certificate         ${ssl.crt};
+    ssl_certificate_key     ${ssl.key};
 }
-
 

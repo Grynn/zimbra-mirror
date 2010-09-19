@@ -1,11 +1,15 @@
+!{explode vhn_ssl}
 # POP3S proxy configuration
 #
 server
 {
+    ${server_name.enabled}server_name         ${vhn};    
     listen              ${mail.pop3s.port};
     protocol            pop3;
     proxy               on;
     ssl                 on;
+    ssl_certificate     ${ssl.crt};
+    ssl_certificate_key ${ssl.key};
     sasl_service_name   "pop";
 }
 
