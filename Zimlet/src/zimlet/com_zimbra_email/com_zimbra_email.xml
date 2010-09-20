@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_email" version="11" target="main view-window" description="Highlights and previews associated contact for an email address.">
+<zimlet name="com_zimbra_email" version="11.0.1" target="main view-window" label="Email" description="Highlights and previews associated contact for an email address.">
 	<include>templates/Email.template.js</include>
 	<include>email.js</include>
 	<include>EmailToolTipSlideShow.js</include>

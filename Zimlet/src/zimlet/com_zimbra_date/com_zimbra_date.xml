@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_date" version="2.0" target="main view-window" description="Highlights dates, previews associated appointments and creates a link to the calendar.">
+<zimlet name="com_zimbra_date" version="2.0.1" target="main view-window" label="Date" description="Highlights dates, previews associated appointments and creates a link to the calendar.">
 	<include>date.js</include>
 	<include>formats.js</include>
 	<handlerObject>Com_Zimbra_Date</handlerObject>

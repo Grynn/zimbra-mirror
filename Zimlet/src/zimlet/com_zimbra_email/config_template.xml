@@ -1,5 +1,0 @@
-<zimletConfig name="com_zimbra_email" version="1.0">
-  <global>
-    <property name="yahooSocialEnabled">false</property>
-  </global>
-</zimletConfig>

@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_dnd" version="1.0">
+<zimletConfig name="com_zimbra_dnd" version="1.0.1">
     <global>
 
     <property name="dnd-uploadform"><![CDATA[

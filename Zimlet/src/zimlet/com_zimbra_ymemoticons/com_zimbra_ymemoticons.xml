@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ymemoticons" version="2.7" description="Displays Yahoo! Emoticons in email messages." target="main compose-window view-window">
+<zimlet name="com_zimbra_ymemoticons" version="2.7.1" label="Yahoo! Emoticons" description="Displays Yahoo! Emoticons in email messages." target="main compose-window view-window">
   <!-- note: since we probably can't bundle the Yahoo icons with
        Zimbra, this Zimlet links to them directly on the Yahoo
        website.  See http://messenger.yahoo.com/emoticons.php -->
