@@ -429,6 +429,7 @@ public class DataSourceMailbox extends SyncMailbox {
                 syncMan.syncStart(ds);
                 DataSourceManager.importData(ds, isOnRequest);
                 syncMan.syncComplete(ds);
+                syncMan.setConnectionDown(false);
                 OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(
                     ds, OfflineConstants.A_zimbraDataSourceLastSync,
                     Long.toString(System.currentTimeMillis()));
@@ -445,7 +446,7 @@ public class DataSourceMailbox extends SyncMailbox {
     }
 
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
-        if (!OfflineSyncManager.getInstance().isServiceActive()) {
+        if (!OfflineSyncManager.getInstance().isServiceActive(isOnRequest)) {
             if (isOnRequest)
                 OfflineLog.offline.debug("offline sync request ignored");
         } else if (lockMailboxToSync()) {

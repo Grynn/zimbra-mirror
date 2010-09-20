@@ -573,7 +573,11 @@ public class OfflineSyncManager {
     }
 
     public synchronized boolean isServiceActive() {
-        return isServiceUp && !isConnectionDown &&
+        return isServiceActive(false);
+    }
+    
+    public synchronized boolean isServiceActive(boolean isOnRequest) {
+        return isServiceUp && (isOnRequest || !isConnectionDown) &&
             !ZimbraApplication.getInstance().isShutdown() && !isUiLoading;
     }
 
