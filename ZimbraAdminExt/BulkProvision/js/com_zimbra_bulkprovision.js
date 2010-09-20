@@ -53,7 +53,7 @@ if(ZaOverviewPanelController.treeModifiers)
 	ZaOverviewPanelController.treeModifiers.push(bulkprovision.bulkprovOvTreeModifier);
 
 //add the bulk provision account toolbar button
-if (ZaController.initToolbarMethods["ZaAccountListController"]) {
+/*if (ZaController.initToolbarMethods["ZaAccountListController"]) {
     ZaOperation.BULK_PROVISION = ++ ZA_OP_INDEX;
     ZaAccountListController.initExtraToolbarMethod = function () {
 		var showBulkProvision = false;
@@ -83,7 +83,7 @@ if (ZaController.initToolbarMethods["ZaAccountListController"]) {
 	    }
 	}
     ZaController.initToolbarMethods["ZaAccountListController"].push(ZaAccountListController.initExtraToolbarMethod);
-}
+}*/
 
  ZaAccountListController.prototype._bulkProvisionListener =
  function (ev) {

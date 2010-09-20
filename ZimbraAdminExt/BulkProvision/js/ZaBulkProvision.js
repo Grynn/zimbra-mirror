@@ -117,6 +117,7 @@ ZaBulkProvision.ACTION_GENERATE_MIG_XML = 4;
 ZaBulkProvision.ACTION_GENERATE_BULK_XML = 5;
 ZaBulkProvision.ACTION_GENERATE_BULK_CSV = 6;
 ZaBulkProvision.ACTION_IMPORT_AD = 7;
+ZaBulkProvision.ACTION_IMPORT_ZIMBRA = 8;
 
 ZaBulkProvision.FILE_FORMAT_PREVIEW = "preview";
 ZaBulkProvision.FILE_FORMAT_MIGRATION_XML = "migrationxml";
@@ -132,7 +133,7 @@ ZaBulkProvision.SOURCE_TYPE_CSV = "csv";
 
 ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP = "IMAP";
 ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE = "EXCHANGE";
-
+ZaBulkProvision.MAIL_SOURCE_TYPE_ZIMBRA = "ZIMBRA";
 ZaBulkProvision.OP_PREVIEW = "preview";
 ZaBulkProvision.OP_GET_STATUS = "getStatus";
 ZaBulkProvision.OP_PREVIEW_ACTIVE_IMPORTS = "previewActiveImports";
@@ -162,7 +163,8 @@ ZaBulkProvision.getMyXModel = function () {
 	
 	ZaBulkProvision.SourceServerTypeChoices = [
         {label:com_zimbra_bulkprovision.SourceServerTypeIMAP, value:ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP},
-        {label:com_zimbra_bulkprovision.SourceServerTypeExchange, value:ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE} 
+        {label:com_zimbra_bulkprovision.SourceServerTypeExchange, value:ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE},
+        {label:com_zimbra_bulkprovision.SourceServerTypeZimbra, value:ZaBulkProvision.MAIL_SOURCE_TYPE_ZIMBRA}
 	];
 
 	ZaBulkProvision.AccountListSourceTypeChoices = [

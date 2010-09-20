@@ -214,7 +214,7 @@ ZaBulkDataImportXWizard.prototype.popup = function (loc) {
 ZaBulkDataImportXWizard.prototype.goNext = function() {
 	var cStep = this._containedObject[ZaModel.currentStep];
 	if(cStep == ZaBulkDataImportXWizard.STEP_OPTIONS && this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_XML &&
-			this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP) {
+			(this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP || this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_ZIMBRA)) {
 		this.goPage(ZaBulkDataImportXWizard.STEP_FILE_UPLOAD);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
@@ -222,7 +222,7 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_OPTIONS && 
 			this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_ZIMBRA &&
-			this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP) {
+			(this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP || this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_ZIMBRA)) {
 		this._containedObject[ZaBulkProvision.A2_activateSearch] = 1;
 		this.goPage(ZaBulkDataImportXWizard.STEP_ACCT_PICKER);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
@@ -230,7 +230,7 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 	} else if (cStep == ZaBulkDataImportXWizard.STEP_OPTIONS && this._containedObject[ZaBulkProvision.A2_sourceType] == ZaBulkProvision.SOURCE_TYPE_REUSE_XML &&
-			this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP) {
+			(this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP || this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_ZIMBRA)) {
 		
         try {
         	//generate a preview of options, skip STEP_IMAP_OPTIONS, because these options should be in the XML
@@ -273,7 +273,34 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 				ZaBulkProvisionTasksController.prototype.bulkDataImportListener,
 				["importAccountsWizard",auxObj2]);
 		ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog.call(this._app.getCurrentController(),{prevCallback:prevCallback,finishCallback:finishCallback,hideWiz:"bulkDataImportWizard"},null);
-	} else if(cStep == ZaBulkDataImportXWizard.STEP_INTRODUCTION && this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP &&
+	} else if(cStep == ZaBulkDataImportXWizard.STEP_INTRODUCTION && this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_ZIMBRA &&
+			this._containedObject[ZaBulkProvision.A2_provisionUsers] == "TRUE") {
+		//open Account Import wizard
+		var auxObj1 = new ZaBulkProvision ();
+		auxObj1[ZaModel.currentStep] = ZaBulkDataImportXWizard.STEP_OPTIONS;
+		auxObj1[ZaBulkProvision.A2_sourceServerType] = this._containedObject[ZaBulkProvision.A2_sourceServerType];
+		auxObj1[ZaBulkProvision.A2_provisionUsers] = "FALSE";
+		auxObj1[ZaBulkProvision.A2_importEmail] = "TRUE";
+		auxObj1[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_ZIMBRA;
+		auxObj1[ZaBulkProvision.A2_activateSearch] = 1;
+		var finishCallback = new AjxCallback(this._app.getCurrentController(), 
+					ZaBulkProvisionTasksController.prototype.bulkDataImportListener,
+					["importAccountsWizard", auxObj1]);
+		
+		var auxObj2 = new ZaBulkProvision ();
+		auxObj2[ZaModel.currentStep] = cStep;
+		auxObj2[ZaBulkProvision.A2_sourceServerType] = this._containedObject[ZaBulkProvision.A2_sourceServerType];
+		auxObj2[ZaBulkProvision.A2_provisionUsers] = this._containedObject[ZaBulkProvision.A2_provisionUsers];
+		auxObj2[ZaBulkProvision.A2_importEmail] = this._containedObject[ZaBulkProvision.A2_importEmail];
+		auxObj2[ZaBulkProvision.A2_sourceType] = this._containedObject[ZaBulkProvision.A2_sourceType];
+		var prevCallback = new AjxCallback(this._app.getCurrentController(), 
+				ZaBulkProvisionTasksController.prototype.bulkDataImportListener,
+				["importAccountsWizard",auxObj2]);
+		var obj = new ZaBulkProvision();
+		obj[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_IMPORT_ZIMBRA;
+		ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog.call(this._app.getCurrentController(),{prevCallback:prevCallback,finishCallback:finishCallback,hideWiz:"bulkDataImportWizard", obj:obj},null);
+	} else if(cStep == ZaBulkDataImportXWizard.STEP_INTRODUCTION &&
+			(this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP || this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_ZIMBRA) &&
 			this._containedObject[ZaBulkProvision.A2_provisionUsers] == "FALSE" && this._containedObject[ZaBulkProvision.A2_importEmail] == "TRUE") {
 		this._containedObject[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_ZIMBRA;
 		this.goPage(ZaBulkDataImportXWizard.STEP_OPTIONS);

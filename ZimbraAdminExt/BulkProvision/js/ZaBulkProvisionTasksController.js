@@ -106,7 +106,9 @@ ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog = function (par
 				ZaApp.getInstance().dialogs[params.hideWiz].popdown();
 			}
 		}    	
-		obj[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_IMPORT_LDAP;
+		if(!obj[ZaBulkProvision.A2_provAction])
+			obj[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_IMPORT_LDAP;
+		
 		obj[ZaBulkProvision.A2_generatedFileLink] = null;
 		obj[ZaBulkProvision.A2_maxResults] = "0";
 		obj[ZaBulkProvision.A2_GalLdapFilter] = "(objectClass=organizationalPerson)";

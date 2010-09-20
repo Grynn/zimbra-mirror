@@ -128,6 +128,10 @@ function() {
 		} else if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_AD
 				|| this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_LDAP) {
 			this.goPage(ZaBulkImportXWizard.STEP_PROV_OPTIONS);
+		} else if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_ZIMBRA) {
+			this._containedObject[ZaBulkProvision.A2_GalLdapBindDn] = "uid=zimbra,cn=admins,cn=zimbra";
+			this._containedObject[ZaBulkProvision.A2_GalLdapFilter] = "(objectclass=zimbraAccount)";
+			this.goPage(ZaBulkImportXWizard.STEP_PROV_OPTIONS);
 		}
 	} else if(cStep == ZaBulkImportXWizard.STEP_PROV_OPTIONS) {
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
@@ -277,7 +281,9 @@ function() {
 	
 	if (cStep == ZaBulkImportXWizard.STEP_PROV_OPTIONS ) {
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);			
+		if(!this.prevCallback) {
+			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+		}
 		prevStep = ZaBulkImportXWizard.STEP_CHOOSE_ACTION ;
     } else if (cStep == ZaBulkImportXWizard.STEP_LDAP_INFO) {
     	prevStep = ZaBulkImportXWizard.STEP_PROV_OPTIONS;
@@ -290,6 +296,7 @@ function() {
     	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
     } else if(this.prevCallback && cStep == ZaBulkImportXWizard.STEP_CHOOSE_ACTION) {
     	this.prevCallback.run(this._containedObject);
+    	return;
     }
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
@@ -644,7 +651,7 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 	var case_choose_action = {type:_CASE_,numCols:2,colSizes:["100px","*"],
 		tabGroupKey:ZaBulkImportXWizard.STEP_CHOOSE_ACTION,caseKey:ZaBulkImportXWizard.STEP_CHOOSE_ACTION,
 		items:[
-		       {type:_DWT_ALERT_,colSpan:2,style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.ImportWizardOverview,visibilityChecks:[]},
+		       {type:_DWT_ALERT_,colSpan:2,style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.AccountImportWizardOverview,visibilityChecks:[]},
 		       {type:_RADIO_, groupname:"action_selection_group",ref:ZaBulkProvision.A2_provAction,bmolsnr:true,
 					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.ActionImportAccountsFromAD,
 					updateElement:function (newValue) {
@@ -664,6 +671,15 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 					},visibilityChecks:[],enableDisableChecks:[]
 		    	},
 			    {type:_RADIO_, groupname:"action_selection_group",ref:ZaBulkProvision.A2_provAction,bmolsnr:true,
+					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.ActionImportFromZimbra,
+					updateElement:function (newValue) {
+						this.getElement().checked = (newValue == ZaBulkProvision.ACTION_IMPORT_ZIMBRA);
+					},
+					elementChanged: function(elementValue,instanceValue, event) {
+						this.setInstanceValue(ZaBulkProvision.ACTION_IMPORT_ZIMBRA,ZaBulkProvision.A2_provAction);
+					},visibilityChecks:[],enableDisableChecks:[]
+		       },		    	
+			   {type:_RADIO_, groupname:"action_selection_group",ref:ZaBulkProvision.A2_provAction,bmolsnr:true,
 					labelLocation:_RIGHT_,label:com_zimbra_bulkprovision.ActionImportFromXML,
 					updateElement:function (newValue) {
 						this.getElement().checked = (newValue == ZaBulkProvision.ACTION_IMPORT_XML);
@@ -756,8 +772,17 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 					]
 				},		       
 				{ref:ZaBulkProvision.A2_GalLdapURL, type:_LDAPURL_, label:com_zimbra_bulkprovision.LDAPUrl,ldapSSLPort:"3269",ldapPort:"3268",  labelLocation:_LEFT_,
-					visibilityChecks:[],enableDisableChecks:[]
+					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_provAction,ZaBulkProvision.ACTION_IMPORT_AD]],enableDisableChecks:[],
+					visibilityChangeEventSources:[ZaBulkProvision.A2_provAction]
 				},
+				{ref:ZaBulkProvision.A2_GalLdapURL, type:_LDAPURL_, label:com_zimbra_bulkprovision.LDAPUrl,ldapSSLPort:"636",ldapPort:"389",  labelLocation:_LEFT_,
+					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_provAction,ZaBulkProvision.ACTION_IMPORT_LDAP]],enableDisableChecks:[],
+					visibilityChangeEventSources:[ZaBulkProvision.A2_provAction]
+				},				
+				{ref:ZaBulkProvision.A2_GalLdapURL, type:_LDAPURL_, label:com_zimbra_bulkprovision.LDAPUrl,ldapSSLPort:"636",ldapPort:"389",  labelLocation:_LEFT_,
+					visibilityChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_provAction,ZaBulkProvision.ACTION_IMPORT_ZIMBRA]],enableDisableChecks:[],
+					visibilityChangeEventSources:[ZaBulkProvision.A2_provAction]
+				},				
 				{ref:ZaBulkProvision.A2_GalLdapBindDn, type:_TEXTFIELD_, width:"380px", label:ZaMsg.Domain_GalLdapBindDn, labelLocation:_LEFT_, 
 					enableDisableChecks:[],visibilityChecks:[],bmolsnr:true				
 				},
