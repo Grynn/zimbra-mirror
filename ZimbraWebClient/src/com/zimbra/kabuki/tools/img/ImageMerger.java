@@ -294,28 +294,34 @@ public class ImageMerger {
         String selector = toSelector(entry.image.getName());
         String url = cssPath+"/"+entry.filename+"?v=@jsVersion@";
         print(cssOut, "%s {", selector);
+
+        // conditional properties for PNGs
         boolean isPng = entry.filename.toLowerCase().endsWith(".png");
         if (isPng) {
             println(cssOut);
-            println(cssOut, "#IFDEF MSIE");
-            println(cssOut, "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='%s',sizingMethod='image');", url);
+            println(cssOut, "#IFDEF MSIE_LOWER_THAN_7");
+            println(cssOut, "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='%s',sizingMethod='crop');", url);
+            println(cssOut, "background-repeat:%s;", entry.layout.toCss());
+            println(cssOut, "position:relative;");
+            println(cssOut, "top:%dpx;left:%dpx;", negative(entry.y), negative(entry.x));
             println(cssOut, "#ELSE");
             println(cssOut, "background:url('%s') %dpx %dpx %s;", url, negative(entry.x), negative(entry.y), entry.layout.toCss());
-            println(cssOut, "#END");
+            println(cssOut, "#ENDIF");
         }
+
+        // background image properties for non-PNGs
         else {
             print(cssOut, "background:url('%s') %dpx %dpx %s;", url, negative(entry.x), negative(entry.y), entry.layout.toCss());
-            print(cssOut, "overflow:hidden;");
         }
-        if (!entry.layout.equals(ImageLayout.TILE)) {
-            //
-            if (!entry.layout.equals(ImageLayout.HORIZONTAL)) {
-                print(cssOut, "height:%dpx !important;", entry.image.getHeight());
-            }
-            if (!entry.layout.equals(ImageLayout.VERTICAL)) {
-                print(cssOut, "width:%dpx !important;", entry.image.getWidth());
-            }
-        }
+
+        // common properties
+        boolean isTile = entry.layout.equals(ImageLayout.TILE);
+        boolean widthImportant = !isTile && !entry.layout.equals(ImageLayout.VERTICAL);
+        boolean heightImportant = !isTile && !entry.layout.equals(ImageLayout.HORIZONTAL);
+        print(cssOut, "width:%dpx%s;", entry.image.getWidth(), widthImportant ? " !important" : "");
+        print(cssOut, "height:%dpx%s;", entry.image.getHeight(), heightImportant ? " !important" : "");
+        print(cssOut, "overflow:hidden;");
+
         println(cssOut, "}");
     }
 
