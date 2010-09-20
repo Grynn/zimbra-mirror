@@ -307,8 +307,8 @@ sub updateSyslog {
 
 sub updateRsyslogd {
   my $conf;
-  if (-f "/etc/rsyslog.d/50-default") {
-    $conf="/etc/rsyslog.d/50-default";
+  if (-f "/etc/rsyslog.d/50-default.conf") {
+    $conf="/etc/rsyslog.d/50-default.conf";
   } else {
      print "Error: No default configuration found, exiting...\n";
      exit(1);
