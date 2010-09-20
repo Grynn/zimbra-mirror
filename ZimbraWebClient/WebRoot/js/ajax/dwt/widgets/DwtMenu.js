@@ -211,6 +211,11 @@ DwtMenu = function(params) {
 	this._tabGroup = new DwtTabGroup(this.toString(), true);
 	this._tabGroup.addMember(this);
 	this._created = true;
+
+    // When items are added, the menu listens to selection events
+    // and will propagate the event to listeners that are registered
+    // on the menu itself.
+    this._itemSelectionListener = new AjxListener(this, this._propagateItemSelection);
 };
 
 DwtMenu.PARAMS = ["parent", "style", "className", "posStyle", "cascade", "id"];
@@ -269,6 +274,22 @@ function() {
 	if (!(this.parent instanceof DwtShell)) {
 		this.shell.removeChild(this);	
 	}
+};
+
+/**
+ * Adds a selection listener.
+ * @param {AjxListener} listener The listener.
+ */
+DwtMenu.prototype.addSelectionListener = function(listener) {
+    this.addListener(DwtEvent.SELECTION, listener);
+};
+
+/**
+ * Removes a selection listener.
+ * @param {AjxListener} listener The listener.
+ */
+DwtMenu.prototype.removeSelectionListener = function(listener) {
+    this.removeListener(DwtEvent.SELECTION, listener);
 };
 
 /**
@@ -858,6 +879,10 @@ function(child) {
 		}
 	}
 	this._children.remove(child);
+
+    if (child.removeSelectionListener) {
+        child.removeSelectionListener(this._itemSelectionListener);
+    }
 };
 
 DwtMenu.prototype.addChild = 
@@ -868,6 +893,10 @@ function(child) {
 	if (Dwt.instanceOf(child, "DwtColorPicker") || Dwt.instanceOf(child, "DwtCalendar") ||
 	    (this._style == DwtMenu.GENERIC_WIDGET_STYLE))
 		this._addItem(child);
+
+    if (child.addSelectionListener) {
+        child.addSelectionListener(this._itemSelectionListener);
+    }
 };
 
 // All children are added now, including menu items. Previously, it wasn't
@@ -928,6 +957,12 @@ function(child, skipNotify) {
 	}
 };
 
+DwtMenu.prototype._propagateItemSelection = function(evt) {
+    if (this.isListenerRegistered(DwtEvent.SELECTION)) {
+        this.notifyListeners(DwtEvent.SELECTION, evt);
+    }
+};
+
 DwtMenu.prototype._menuHasCheckedItems =
 function() {
 	return this._menuItemsHaveChecks;
@@ -982,7 +1017,7 @@ DwtMenu.prototype._popdownSubmenus = function() {
 	var sz = this._children.size();
 	var a = this._children.getArray();
 	for (var i = 0; i < sz; i++) {
-		a[i]._popdownMenu();
+		if (a[i]._popdownMenu) a[i]._popdownMenu();
 	}
 };
 

@@ -1029,6 +1029,12 @@ function(el, condition, a, b) {
 	}
 };
 
+/** Returns true if the specified element has the given class. */
+Dwt.hasClass = function(el, className) {
+    if (!el || !className) return false;
+    return el.className.match(new RegExp("\\b"+className+"\\b"));
+};
+
 /**
  * Sets the selection range.
  *
