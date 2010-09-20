@@ -15,7 +15,11 @@
 	<table width=100% ><tr>
 	<td wdth=48px style='width:48px'><img style='width:48px;height:48px;' src='${pUrl}'></img></td>
 	<td><label style='font-size:12px;font-weight:bold;'>${fName} ${lName}</label>
-		<br/>${headline}<br/><br/><div align='right'><a  href='${profileUrl}' target='_blank' style='text-decoration:underline;color:gray'>${viewStr}</a>  <a  href='#' id='${inviteLnkId}' style='text-decoration:underline;color:gray'>${inviteStr}</a></div></td>
+		<br/>${headline}<br/><br/><div align='right'><a  href='${profileUrl}' target='_blank' style='text-decoration:underline;color:gray'>${viewStr}</a>&nbsp;
+		<$ if (data.allowInvite) { $>
+		<a  href='#' id='${inviteLnkId}' style='text-decoration:underline;color:gray'>${inviteStr}</a>
+		<$ } $>
+		</div></td>
 	</tr></table></div>
 </template>
 

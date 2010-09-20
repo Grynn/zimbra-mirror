@@ -26,7 +26,7 @@ com_zimbra_linkedin_handlerObject.prototype.constructor = com_zimbra_linkedin_ha
 var LinkedInZimlet = com_zimbra_linkedin_handlerObject;
 
 //static variables
-LinkedInZimlet.SEARCH_BASE_QUERY = "https://api.linkedin.com/v1/people-search:(people:(id,first-name,last-name,picture-url,public-profile-url,headline,api-standard-profile-request))";
+LinkedInZimlet.SEARCH_BASE_QUERY = "https://api.linkedin.com/v1/people-search:(people:(relation-to-viewer,id,first-name,last-name,picture-url,public-profile-url,headline,api-standard-profile-request))";
 LinkedInZimlet.PEOPLE_BASE_QUERY = "http://api.linkedin.com/v1/people/~/mailbox";
 
 /**
@@ -134,6 +134,7 @@ function(firstName, lastName, companyName, keywords) {
 	if(keywords) {
 		components["keywords"] = keywords;
 	}
+	//components["facets"] = "network";
 	this._oauth.makeHTTPGet({url: LinkedInZimlet.SEARCH_BASE_QUERY, components: components, callback: callback});
 };
 
@@ -195,6 +196,15 @@ function(person) {
 	var headline = person["headline"];
 	var inviteLnkId = person["id"];
 	var profileUrl = person["public-profile-url"];
+	var relationToViewer = person["relation-to-viewer"];
+	var relationDistance = -1;
+	var allowInvite = true;
+	if(relationToViewer) {
+		relationDistance = relationToViewer["distance"] ? relationToViewer["distance"].toString() : -1;
+		if(relationDistance == "1") {
+			allowInvite = false;
+		}
+	}
 	if(inviteLnkId) {
 		inviteLnkId = inviteLnkId.toString();
 	}
@@ -226,6 +236,7 @@ function(person) {
 		headline: headline,
 		inviteLnkId: inviteLnkId,
 		profileUrl: profileUrl,
+		allowInvite: allowInvite, 
 		viewStr: this._viewStr,
 		inviteStr: this._inviteStr
 	};
