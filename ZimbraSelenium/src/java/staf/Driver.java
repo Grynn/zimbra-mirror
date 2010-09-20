@@ -1,15 +1,32 @@
 package staf;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
+
+import framework.core.ExecuteHarnessMain;
+
 public class Driver {
 
 	/**
 	 * @param args
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
 	 */
-	public static void main(String[] args) {
-		projects.html.bin.ExecuteTests.WorkingDirectory = "/p4/matt/main/ZimbraSelenium";
-		projects.zcs.bin.ExecuteTests.WorkingDirectory = "/p4/matt/main/ZimbraSelenium";
-		StafIntegration staf = new StafIntegration();
-		staf.invokeHarnessMethod("html", "debugSuite".split(","));
+	public static void main(String[] args) throws FileNotFoundException, IOException {
+
+        // Create the execution object
+        ExecuteHarnessMain harness = new ExecuteHarnessMain();
+        
+        harness.jarfilename = "jarfile.jar";
+        harness.classfilter = "projects.mobile.tests";
+        harness.groups = Arrays.asList("always", "sanity");
+        
+        // Execute!
+		String response = harness.execute();
+		
+		System.out.println(response);
+		
 	}
 
 }

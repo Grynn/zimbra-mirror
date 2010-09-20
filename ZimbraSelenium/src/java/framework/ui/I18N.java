@@ -27,14 +27,14 @@ public class I18N {
 	//
 	
 	
-	protected final String ResourceBundleAjxMsg 	= "framework.locale.AjxMsg";
-	protected final String ResourceBundleI18nMsg	= "framework.locale.I18nMsg";
-	protected final String ResourceBundleZaMsg 		= "framework.locale.ZaMsg";
-	protected final String ResourceBundleZbMsg 		= "framework.locale.ZbMsg";
-	protected final String ResourceBundleZhMsg 		= "framework.locale.ZhMsg";
-	protected final String ResourceBundleZmMsg 		= "framework.locale.ZmMsg";
-	protected final String ResourceBundleZsMsg 		= "framework.locale.ZsMsg";
-	protected final String ResourceBundleZMsg 		= "framework.locale.ZMsg";
+	protected final String ResourceBundleAjxMsg 	= "AjxMsg";
+	protected final String ResourceBundleI18nMsg	= "I18nMsg";
+	protected final String ResourceBundleZaMsg 		= "ZaMsg";
+	protected final String ResourceBundleZbMsg 		= "ZbMsg";
+	protected final String ResourceBundleZhMsg 		= "ZhMsg";
+	protected final String ResourceBundleZmMsg 		= "ZmMsg";
+	protected final String ResourceBundleZsMsg 		= "ZsMsg";
+	protected final String ResourceBundleZMsg 		= "ZMsg";
 	
 	/**
 	 * A mapping of msg filename to resource bundles

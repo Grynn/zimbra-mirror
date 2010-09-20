@@ -1,8 +1,13 @@
 package staf;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import java.util.StringTokenizer;
 
 import org.apache.log4j.BasicConfigurator;
@@ -16,6 +21,8 @@ import com.ibm.staf.STAFUtil;
 import com.ibm.staf.service.STAFCommandParseResult;
 import com.ibm.staf.service.STAFCommandParser;
 import com.ibm.staf.service.STAFServiceInterfaceLevel30;
+
+import framework.core.ExecuteHarnessMain;
 
 public class StafIntegration implements STAFServiceInterfaceLevel30 {
     static private Logger mLog = Logger.getLogger(StafIntegration.class);
@@ -33,9 +40,10 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     private STAFCommandParser stafParserHalt;
 
     private String optionExecute = "execute";
-    private String argDirectory = "seleniumroot";
-    private String argSuite = "suite";
-    private String argClient = "client";
+    private String argRoot = "zimbraseleniumroot";
+    private String argJarfile = "jarfile";
+    private String argPattern = "pattern";
+    private String argGroup = "group";
     
     private String optionQuery= "query";
     private String optionHelp = "help";
@@ -106,53 +114,56 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
      
         if (parsedRequest.rc != STAFResult.Ok)
         {
-        	
-            return new STAFResult(STAFResult.InvalidRequestString,
-                                  parsedRequest.errorBuffer);
-            
+            return new STAFResult(STAFResult.InvalidRequestString, parsedRequest.errorBuffer);   
         }
-
-        // Initialize the return result
-        StringBuffer resultString = new StringBuffer();
         
 
         if (serviceIsRunning) {
         	return (new STAFResult(STAFResult.Ok, "already running"));
         }
         
+        StringBuilder resultString = new StringBuilder();
+        
 		try {
 			
 			serviceIsRunning = true;
 		
 			// Parse Arguments
-	        if (parsedRequest.optionTimes(argDirectory) != 1 ) {
-	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argDirectory +" can be specified"));	        		        	
+//	        if (parsedRequest.optionTimes(argRoot) == 1 ) {
+//	        	ZimbraSeleniumProperties.workingDir = parsedRequest.optionValue(argRoot);
+//	        } else {
+//	        	ZimbraSeleniumProperties.workingDir = ".";
+//	        }
+	        if (parsedRequest.optionTimes(argJarfile) != 1 ) {
+	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argJarfile +" can be specified"));	        		        	
 	        }
-			if ( parsedRequest.optionTimes(argClient) != 1 ) {
-	        	return (new STAFResult(STAFResult.JavaError, "Must specify one "+ argClient +", either zcs or html"));	        					
+			if ( parsedRequest.optionTimes(argPattern) != 1 ) {
+	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argPattern +" can be specified"));	        					
 			}
-	        if ( parsedRequest.optionTimes(argSuite) != 1 ) {
-	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argSuite +" can be specified"));	        	
+	        if ( parsedRequest.optionTimes(argGroup) < 1 ) {
+	        	return (new STAFResult(STAFResult.JavaError, "Must specify at least one "+ argGroup));
 	        }
 	        
-	        // Set ZimbraSelenium root
-	        String root = parsedRequest.optionValue(argDirectory);
-	        projects.html.bin.ExecuteTests.WorkingDirectory = root;
-	        projects.zcs.bin.ExecuteTests.WorkingDirectory = root;
+	        // Create the execution object
+	        ExecuteHarnessMain harness = new ExecuteHarnessMain();
 	        
-	        // Which client, zcs or html or other?
-	        String client = parsedRequest.optionValue(argClient).toLowerCase();
+	        harness.jarfilename = parsedRequest.optionValue(argJarfile);
+	        harness.classfilter = parsedRequest.optionValue(argPattern);
+	        // TODO: Parse the GROUP args
+	        harness.groups = Arrays.asList("always", "sanity");
 	        
-	        // Which suite, fullsuite or debugsuite or other?
-	        String suite = parsedRequest.optionValue(argSuite);
-	        String[] args = suite.split(",");
-	        resultString.append("Running ExecuteTests.main(args) for client "+ argClient +", where args is:\n");
-	        for (String a : args) {
-	        	resultString.append("\t"+ a +"\n");
-	        }
+	        // Execute!
+			try {
+				
+				String response = harness.execute();
+		        resultString.append(response);
+		        
+			} catch (FileNotFoundException e) {
+	        	return (new STAFResult(STAFResult.JavaError, e.getMessage()));
+			} catch (IOException e) {
+	        	return (new STAFResult(STAFResult.JavaError, e.getMessage()));
+			}
 	        
-	        String result = invokeHarnessMethod(client, args);
-	        resultString.append(result).append('\n');
 
 		} finally {
 			serviceIsRunning = false;
@@ -161,32 +172,6 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 		// Return ok code with the parsable return string
 		return (new STAFResult(STAFResult.Ok, resultString.toString()));
 
-	}
-	
-	public String invokeHarnessMethod(String client, String[] args) {
-		String classname = "projects."+ client +".bin.ExecuteTests";
-		mLog.info("getHarnessMethod: classname = "+ classname);
-		try {
-			Class<?> c = Class.forName(classname);
-			Method[] methods = c.getDeclaredMethods();
-			for (Method m : methods) {
-				if (m.getName().equals("main")) {
-					Object[] objects = new Object[1];
-					objects[0] = args;
-					m.invoke(null, objects);
-					return ("done");
-				}
-			}
-		} catch (ClassNotFoundException e) {
-			mLog.error("Unable to instantiate class: "+ classname, e);
-		} catch (IllegalAccessException e) {
-			mLog.error("Unable to instantiate class: "+ classname, e);
-		} catch (IllegalArgumentException e) {
-			mLog.error("Unable to invoke class main method: "+ classname, e);
-		} catch (InvocationTargetException e) {
-			mLog.error("Unable to invoke class main method: "+ classname, e);
-		}
-		return ("failed");
 	}
 	
 	private STAFResult handleQuery(RequestInfo info) {
@@ -204,12 +189,38 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     	// TODO: Need to convert the help command into the variables, aEXECUTE, aHELP, etc.
         return new STAFResult(STAFResult.Ok,
          "StafTest Service Help\n\n" + 
-         "EXECUTE SeleniumRoot <path> client [ zcs|html ] suite [ fullSuite|debugSuite ] -- execute tests \n\n" +
+         "EXECUTE ZIMBRASELENIUMROOT <path> JARFILE <path> PATTERN <projects.zcs.tests> [ GROUP <always|sanity|smoke|full> ]*\n\n" +
          "QUERY -- TBD: should return statistics on active jobs \n\n" +
          "HALT <TBD> -- TBD: should stop any executing tests\n\n" +
          "HELP\n\n");
 	}
+
 	
+	private void createBundles(String jarfilename) {
+		List<String> names = Arrays.asList("AjxMsg", "I18nMsg", "ZaMsg", "ZbMsg", "ZhMsg", "ZmMsg", "ZsMsg", "ZMsg");
+		Locale locale = Locale.ENGLISH;
+		for (String name : names) {
+			try {
+				ResourceBundle rb = ResourceBundle.getBundle(name, locale, this.getClass().getClassLoader());
+				if ( rb == null ) {
+					mLog.error("Unable to load resource bundle: "+ name);
+					continue;
+				}
+				mLog.info("Loaded resource bundle: "+ name);
+			} catch (MissingResourceException e) {
+				mLog.error("Unable to load resource bundle: "+ name, e);
+			}
+		}
+//		try {
+//			ResourceBundle rb1 = ResourceBundle.getBundle("ZaMsg", Locale.ENGLISH, this.getClass().getClassLoader());
+//			for (Enumeration<String> e = rb1.getKeys(); e.hasMoreElements(); ) {
+//				mLog.info("key: "+ e.nextElement());
+//			}
+//		} catch (MissingResourceException e) {
+//			mLog.error("unable to load resource bundle", e);
+//		}
+		
+	}
 
 	public STAFResult init(InitInfo info) {
         mLog.info("StafIntegration: init ...");
@@ -239,17 +250,18 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         // EXECUTE parser
         stafParserExecute = new STAFCommandParser();
         stafParserExecute.addOption(optionExecute, 1, STAFCommandParser.VALUENOTALLOWED);
-        stafParserExecute.addOption(argDirectory, 1, STAFCommandParser.VALUEREQUIRED);
-        stafParserExecute.addOption(argClient, 1, STAFCommandParser.VALUEREQUIRED);
-        stafParserExecute.addOption(argSuite, 1, STAFCommandParser.VALUEREQUIRED);
-        stafParserExecute.addOptionNeed(optionExecute, argDirectory);
-        stafParserExecute.addOptionNeed(optionExecute, argClient);
-        stafParserExecute.addOptionNeed(optionExecute, argSuite);
+        stafParserExecute.addOption(argRoot, 1, STAFCommandParser.VALUEREQUIRED);
+        stafParserExecute.addOption(argJarfile, 1, STAFCommandParser.VALUEREQUIRED);
+        stafParserExecute.addOption(argPattern, 1, STAFCommandParser.VALUEREQUIRED);
+        stafParserExecute.addOption(argGroup, 1, STAFCommandParser.VALUEREQUIRED);
+        stafParserExecute.addOptionNeed(optionExecute, argRoot);
+        stafParserExecute.addOptionNeed(argRoot, argJarfile);
+        stafParserExecute.addOptionNeed(argJarfile, argPattern);
+        stafParserExecute.addOptionNeed(argPattern, argGroup);
 
         // QUERY parser
         stafParserQuery = new STAFCommandParser();
         stafParserQuery.addOption(optionQuery, 1, STAFCommandParser.VALUENOTALLOWED);
-        // TODO: Create any query options here
         
         // HELP parser
         stafParserHelp = new STAFCommandParser();
@@ -259,7 +271,9 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         stafParserHalt = new STAFCommandParser();
         stafParserHalt.addOption(optionHalt, 1, STAFCommandParser.VALUENOTALLOWED);
 
-                                       
+
+        createBundles(info.serviceJar.getName());
+        
 
         // Register Help Data
         registerHelpData(
