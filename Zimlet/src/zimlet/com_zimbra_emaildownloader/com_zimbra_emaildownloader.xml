@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_emaildownloader" version="0.3" label="Email Downloader" description="Download an email message as a single file.">
+<zimlet name="com_zimbra_emaildownloader" version="1.0" label="Downloader" description="Drag-n-Drop to download one or more Emails(.eml), Contacts(.vcf) or Appointments(.ics) to your computer">
 	<include>emaildownloader.js</include>
 	<includeCSS>emaildownloader.css</includeCSS>
 	<resource>emaildownloader-icon.gif</resource>
@@ -7,6 +7,9 @@
 		<toolTipText>${msg.EmailDownloader_panel_tooltip}</toolTipText>
 		<dragSource type="ZmConv" />
 	    <dragSource type="ZmMailMsg"/>
+		<dragSource type="ZmContact" />
+		<dragSource type="ZmAppt" />
+
 	</zimletPanelItem>
 </zimlet>
 

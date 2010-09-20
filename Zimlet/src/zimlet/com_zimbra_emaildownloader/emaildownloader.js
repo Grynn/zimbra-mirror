@@ -31,16 +31,43 @@ com_zimbra_emaildownloader_HandlerObject.prototype.constructor = com_zimbra_emai
 var EmailDownloaderZimlet = com_zimbra_emaildownloader_HandlerObject;
 
 /**
- * Called by the framework on an item drop.
+ * Called by the framework on an droppedItem drop.
  * 
- * @param	{ZmConv|ZmMailMsg}	msgObj		the dropped message object
+ * @param	{ZmConv|ZmMailMsg}	droppedItem		the dropped message object
  */
 EmailDownloaderZimlet.prototype.doDrop =
-function(msgObj) {
-	this.srcMsgObj = msgObj.srcObj;
-	if (this.srcMsgObj.type == "CONV"){
-		this.srcMsgObj = this.srcMsgObj.getFirstHotMsg();
+function(droppedItem) {
+	var ids = [];
+	var msgObjs = [];
+	var fmt = "zip";
+	if(droppedItem instanceof Array) {
+		for(var i =0; i < droppedItem.length; i++) {
+			var obj = droppedItem[i].srcObj ?  droppedItem[i].srcObj :  droppedItem[i];
+			if(obj.type == "CONV") {
+				ids = ids.concat(this._getMsgIdsFromConv(obj));
+			} else if(obj.type == "MSG") {
+				ids.push(obj.id);
+			} else if(obj.TYPE == "ZmContact") {
+				ids.push(obj.id);
+			} else if(obj.TYPE == "ZmAppt" || obj.type == "APPT") {
+				ids.push(obj.id);
+			}
+		}
+	} else {
+		var obj = droppedItem.srcObj ? droppedItem.srcObj : droppedItem;
+		if (obj.type == "CONV"){
+			ids = this._getMsgIdsFromConv(obj);
+		} else if(obj.type == "MSG") {
+			ids.push(obj.id);
+		} else if(obj.TYPE == "ZmContact") {
+			ids.push(obj.id);
+			fmt = "vcf";
+		} else if(obj.TYPE == "ZmAppt" || obj.type == "APPT") {
+			ids.push(obj.id);
+			fmt = "ics";
+		}
 	}
+
 	var url = [];
 	var i = 0;
 	var proto = location.protocol;
@@ -55,16 +82,18 @@ function(msgObj) {
 	}
 	url[i++] = "/home/";
 	url[i++]= AjxStringUtil.urlComponentEncode(appCtxt.getActiveAccount().name);
-	url[i++] = "/message.txt?fmt=tgz&id=";
-	url[i++] = this.srcMsgObj.id;
-	try{
-		var subject = this.srcMsgObj.subject.replace(/\*/g, "").replace(/\[/g, "").replace(/\]/g, "").replace(/\</g, "").replace(/\>/g, "").replace(/\=/g, "").replace(/\+/g, "").replace(/\'/g, "").replace(/\"/g, "").replace(/\\/g, "").replace(/\//g, "").replace(/\,/g, "").replace(/\./g, "").replace(/\:/g, "").replace(/\;/g, "").replace(/ /g, "").replace(/!/g, ""); 
-		if(subject.length > 16){
-			subject = subject.substring(0,15);
-        }
-		url[i++] = "&filename=" + subject;
-	} catch(e) {
-	}
+	url[i++] = "/?fmt=";
+	url[i++] = fmt;
+	url[i++] = "&list=";
+	url[i++] = ids.join(",");
+	url[i++] = "&filename=ZimbraItems";
+	
 	var getUrl = url.join(""); 
 	window.open(getUrl, "_blank");
+};
+
+EmailDownloaderZimlet.prototype._getMsgIdsFromConv =
+function(convSrcObj) {
+	convSrcObj.load();
+	return  convSrcObj.msgIds;
 };
