@@ -152,6 +152,14 @@ public class ZimbraAccount {
 	public ZimbraAccount provision() {
 		try {
 			
+			// Make sure domain exists
+			String domain = EmailAddress.split("@")[1];
+			ZimbraAdminAccount.GlobalAdmin().soapSend(
+					"<CreateDomainRequest xmlns='urn:zimbraAdmin'>" +
+	                	"<name>"+ domain +"</name>" +
+	                "</CreateDomainRequest>");
+			
+
 			// Build the list of default preferences
 			StringBuilder prefs = new StringBuilder();
     		for (Map.Entry<String, String> entry : accountAttrs.entrySet()) {
