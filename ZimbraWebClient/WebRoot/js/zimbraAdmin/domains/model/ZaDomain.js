@@ -201,6 +201,11 @@ ZaDomain.A_AuthUseBindPassword = "authusebindpassword";
 ZaDomain.A_AuthLdapSearchBindPasswordConfirm = "authldapsearchBindpasswordconfirm";
 ZaDomain.A_GalSyncLdapBindPasswordConfirm = "syncldappasswordconfirm";
 ZaDomain.A_zimbraVirtualHostname = "zimbraVirtualHostname";
+
+ZaDomain.A_zimbraSSLCertificate = "zimbraSSLCertificate";
+ZaDomain.A_zimbraSSLPrivateKey = "zimbraSSLPrivateKey";
+
+
 //server value constants
 ZaDomain.AuthMech_ad = "ad";
 ZaDomain.AuthMech_ldap = "ldap";
@@ -433,6 +438,13 @@ function(tmpObj, newDomain) {
 
 	attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_notes]);
 	attr.setAttribute("n", ZaDomain.A_notes);	
+
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraSSLCertificate]);
+        attr.setAttribute("n", ZaDomain.A_zimbraSSLCertificate);
+
+        attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraSSLPrivateKey]);
+        attr.setAttribute("n", ZaDomain.A_zimbraSSLPrivateKey);
+
 	
 	if(tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]) {
 		attr = soapDoc.set("a", tmpObj.attrs[ZaDomain.A_zimbraAuthLdapStartTlsEnabled]);
@@ -1699,7 +1711,9 @@ ZaDomain.myXModel = {
         {id:ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminConsoleLDAPAuthEnabled},    
         {id:ZaDomain.A_zimbraAdminConsoleSkinEnabled, type:_COS_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_zimbraAdminSkinAddressEnabled},
         {id:ZaDomain.A_zimbraVirtualHostname, type:_LIST_, listItem:{type:_STRING_, maxLength:255}, ref:"attrs/" + ZaDomain.A_zimbraVirtualHostname},
-         ZaItem.descriptionModelItem,   
+         ZaItem.descriptionModelItem,  
+	{id:ZaDomain.A_zimbraSSLCertificate, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraSSLCertificate},
+	{id:ZaDomain.A_zimbraSSLPrivateKey, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraSSLPrivateKey}, 
         {id:ZaDomain.A_notes, type:_STRING_, ref:"attrs/" + ZaDomain.A_notes},
 		{id:ZaDomain.A_domainDefaultCOSId, type:_STRING_, ref:"attrs/" + ZaDomain.A_domainDefaultCOSId},		
 		{id:ZaDomain.A_zimbraGalMode, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalMode},

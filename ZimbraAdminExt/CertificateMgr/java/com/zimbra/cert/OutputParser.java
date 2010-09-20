@@ -143,7 +143,26 @@ public class OutputParser {
         }
         
     }
-    
+   
+    // parse verification result
+     public static boolean parseVerifyResult (byte[] in) throws IOException, ServiceException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(
+                                     new ByteArrayInputStream(in))) ;
+        String line ;
+	String ERROR_CERT_OUTPUT = "error:";
+        while ((line = br.readLine())!=null) {
+           	if (line.startsWith("STARTCMD:") || line.startsWith("ENDCMD:")){
+               		continue ;
+           	}else if (line.startsWith(ERROR_PREFIX) || line.contains(ERROR_PREFIX)
+			|| line.contains(ERROR_CERT_OUTPUT) ) {
+               		//throw ServiceException.FAILURE(line, null);
+               		return false;
+           	}
+        }
+        
+        return true;
+    }
+ 
     /*
    
     public static void main (String [] args) {

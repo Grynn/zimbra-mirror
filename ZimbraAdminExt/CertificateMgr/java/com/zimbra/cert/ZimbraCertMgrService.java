@@ -36,6 +36,9 @@ public class ZimbraCertMgrService implements DocumentService {
    
     public static final QName GET_CSR_REQUEST = QName.get("GetCSRRequest", NAMESPACE);
     public static final QName GET_CSR_RESPONSE = QName.get("GetCSRResponse", NAMESPACE);
+
+    public static final QName VERIFY_CERTKEY_REQUEST = QName.get("VerifyCertKeyRequest", NAMESPACE);
+    public static final QName VERIFY_CERTKEY_RESPONSE = QName.get("VerifyCertKeyResponse", NAMESPACE);
    
       
     public void registerHandlers(DocumentDispatcher dispatcher) {
@@ -43,5 +46,6 @@ public class ZimbraCertMgrService implements DocumentService {
         dispatcher.registerHandler(GET_CERT_REQUEST, new GetCert());
         dispatcher.registerHandler(GEN_CSR_REQUEST, new GenerateCSR());
         dispatcher.registerHandler(GET_CSR_REQUEST, new GetCSR());
+	dispatcher.registerHandler(VERIFY_CERTKEY_REQUEST, new VerifyCertKey());
     }
 }

@@ -373,6 +373,35 @@ ZaCert.installCert = function (app, params, serverId) {
 	ZaRequestMgr.invoke(csfeParams, reqMgrParams ) ;
 }
 
+
+ZaCert.verifyCertKey = function (app, params) {
+	var cert = params.cert;
+	var prvkey = params.prvkey;
+	var controller = app.getCurrentController();
+	var callback = params.callback;
+	var type = params.type;
+
+	var soapDoc = AjxSoapDoc.create("VerifyCertKeyRequest", "urn:zimbraAdmin", null);
+        soapDoc.getMethod().setAttribute("type", type);
+        soapDoc.getMethod().setAttribute("cert", cert);
+        soapDoc.getMethod().setAttribute("privkey", prvkey);
+        
+        var csfeParams = new Object();
+        csfeParams.soapDoc = soapDoc;
+        try {
+                var reqMgrParams = {} ;
+                reqMgrParams.controller = controller;
+                reqMgrParams.busyMsg = com_zimbra_cert_manager.BUSY_VERIFY_CERTKEY;
+                resp = ZaRequestMgr.invoke(csfeParams, reqMgrParams ).Body.VerifyCertKeyResponse;
+                return resp;
+        }catch (ex) {
+                app.getCurrentController()._handleException(ex, "ZaCert.verifyCertKey", null, false);
+        }
+
+
+}
+
+
 ZaCert.prototype.setTargetServer = function (serverId) {
 		this[ZaCert.A_target_server] = serverId ;
 }

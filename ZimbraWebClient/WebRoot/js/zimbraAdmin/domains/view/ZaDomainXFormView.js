@@ -568,6 +568,9 @@ ZaDomainXFormView.AUTH_TAB_RIGHTS = [];
 ZaDomainXFormView.VH_TAB_ATTRS = [ZaDomain.A_zimbraVirtualHostname];
 ZaDomainXFormView.VH_TAB_RIGHTS = [];
 
+ZaDomainXFormView.CERT_TAB_ATTRS = [ZaDomain.A_zimbraSSLCertificate];
+ZaDomainXFormView.CERT_TAB_RIGHTS = [];
+
 ZaDomainXFormView.WIKI_TAB_ATTRS = [ZaDomain.A_zimbraNotebookAccount];
 ZaDomainXFormView.WIKI_TAB_RIGHTS = [];
 
@@ -1150,7 +1153,43 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 		};
     	switchGroup.items.push(case8);
 	}
-    
+ 
+        if(ZaTabView.isTAB_ENABLED(entry,ZaDomainXFormView.CERT_TAB_ATTRS, ZaDomainXFormView.CERT_TAB_RIGHTS)) {
+                tabIx = ++this.TAB_INDEX;
+                tabBar.choices.push({value:tabIx, label:ZaMsg.TABT_Certificate});
+		var case9a = {type:_ZATABCASE_, numCols:1, caseKey:tabIx, colSizes: ["100%"],
+			items: [
+
+                                {type: _DWT_ALERT_,
+                                  containerCssStyle: "padding-bottom:0px",
+                                  style: DwtAlert.WARNING,
+                                  iconVisible: true,
+                                  content: ZaMsg.MSG_DOMAIN_CERT_KEY
+                                },
+				{type:_SPACER_, height:"10"},
+				{type: _GROUP_, width: "100%", numCols: 2, colSizes: ["50%","50%"], items: [
+					{type:_SPACER_, height:"10"},
+					{type:_ZALEFT_GROUPER_, numCols:1, width: "100%",label:ZaMsg.NAD_DomainSSLCertificate, items: [
+	                                        {ref: ZaDomain.A_zimbraSSLCertificate, type:_TEXTAREA_, width: "100%", height: 450,
+        	                                label:"", labelCssStyle:"vertical-align:top",
+                	                        onChange:ZaDomainXFormView.onFormFieldChanged}
+					]}
+				
+					,
+					{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.NAD_DomainSSLPrivateKey, items: [
+	                                        {ref: ZaDomain.A_zimbraSSLPrivateKey, type:_TEXTAREA_, width: "100%", height: 450,
+        	                                label:"", labelCssStyle:"vertical-align:top",
+                	                        onChange:ZaDomainXFormView.onFormFieldChanged}
+
+					]}
+				]}
+
+			]
+		};
+                switchGroup.items.push(case9a);
+        }
+
+ 
     xFormObject.items.push(tabBar);
 	xFormObject.items.push(switchGroup);
 }
@@ -1351,3 +1390,4 @@ ZaDomainFeatureMaxAccountsListView.prototype._setNoResultsHtml = function() {
 	div.innerHTML = buffer.toString();
 	this._addRow(div);
 };
+

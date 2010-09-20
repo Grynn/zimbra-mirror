@@ -45,11 +45,17 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
     public static final String DEPLOY_CERT_CMD = "zmcertmgr deploycrt" ;
     public static final String GET_CSR_CMD = "zmcertmgr viewcsr" ;
     public static final String VERIFY_CRTKEY_CMD = "zmcertmgr verifycrtkey" ;
+    public static final String VERIFY_COMM_CRTKEY_CMD = "zmcertmgr verifycrt" ;
     public static final String VERIFY_CRTCHAIN_CMD = "zmcertmgr verifycrtchain" ;
     public static final String UPLOADED_CRT_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/current.crt" ;
     public static final String UPLOADED_CRT_CHAIN_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/current_chain.crt" ;
     public static final String SAVED_COMM_KEY_FROM_LDAP = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/current_comm.key" ;
-   // public static final String COMM_CRT_KEY_FILE = LC.zimbra_home.value() + "/ssl/zimbra/commercial/commercial.key" ;
+    //public static final String COMM_CRT_KEY_FILE = LC.zimbra_home.value() + "/ssl/zimbra/commercial/commercial.key" ;
+    // put vefified certificate and key to tempoaray dir
+    public static final String COMM_CRT_KEY_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/commercial.key" ;
+    public static final String COMM_CRT_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/commercial.crt" ;
+    public static final String COMM_CRT_CA_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/commercial_ca.crt" ;
+
     public static final String ALL_SERVERS = "--- All Servers ---" ;
     public static final String A_zimbraSSLPrivateKey = "zimbraSSLPrivateKey" ;
     public static final String A_zimbraSSLCertificate = "zimbraSSLCertificate" ;

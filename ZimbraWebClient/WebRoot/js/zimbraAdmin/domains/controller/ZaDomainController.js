@@ -139,12 +139,6 @@ function () {
 	   	this._toolbarOperations[ZaOperation.CHECK_MX_RECORD]=new ZaOperation(ZaOperation.CHECK_MX_RECORD,ZaMsg.DTBB_CheckMX, ZaMsg.DTBB_CheckMX_tt, "ReindexMailboxes", "ReindexMailboxes", new AjxListener(this, ZaDomainController.prototype._checkMXButtonListener));
 		this._toolbarOrder.push(ZaOperation.CHECK_MX_RECORD);	   	
 	}
-	//qin@zimbra.com
-
-	this._toolbarOperations[ZaOperation.INSTALL_DOMAIN_CERT] = new ZaOperation(ZaOperation.NEW, ZaMsg.TBB_launch_cert_wizard, 
-        	ZaMsg.TBB_launch_cert_wizard_tt, "InstallCertificate", "InstallCertificate", 
-        	new AjxListener(this, ZaDomainController.prototype._newCertListener));
-	this._toolbarOrder.push(ZaOperation.INSTALL_DOMAIN_CERT);
 
 }
 ZaController.initToolbarMethods["ZaDomainController"].push(ZaDomainController.initToolbarMethod);
@@ -216,7 +210,7 @@ function () {
 		this._errorDialog.popup();		
 		return false;	
 	}
-	
+
 	var mods = new Object();
 	var haveSmth = false; //what is this variable for?
     var renameNotebookAccount = false;
@@ -259,9 +253,12 @@ function () {
 					skinChanged = true;
 				}				
 			}
-		}                                       
+		}
 	}
-	
+
+	if(!this.checkCertKeyValid(tmpObj.attrs[ZaDomain.A_zimbraSSLCertificate],tmpObj.attrs[ZaDomain.A_zimbraSSLPrivateKey]))
+		return false;
+
 	if(!haveSmth) {
 		if(tmpObj[ZaDomain.A2_gal_sync_accounts] && tmpObj[ZaDomain.A2_gal_sync_accounts][0]) { 
 			if(tmpObj[ZaDomain.A2_gal_sync_accounts][0][ZaAccount.A2_zimbra_ds] 
@@ -590,17 +587,6 @@ function (ev) {
 	ZaDomain.checkDomainMXRecord(this._currentObject, callback);
 }
 
-//qin@zimbra.com
-ZaDomainController.prototype._newCertListener = 
-function (ev) {
-        if(!this._currentDomainName) {
-                this._currentDomainName = this._currentObject.attrs[ZaDomain.A_domainName];
-        }
-
-        ZaCert.launchNewCertWizard.call (this, this._currentDomainName) ;
-
-}
-
 
 ZaDomainController.prototype.checkMXCallback = 
 function (resp) {
@@ -656,4 +642,33 @@ function (ex, method, params, restartOnError, obj) {
 	} else {
 		ZaController.prototype._handleException.call(this, ex, method, params, restartOnError, obj);				
 	}	
+}
+
+ZaDomainController.prototype.checkCertKeyValid = 
+function(cert, prvkey) {
+	if(cert && prvkey) {
+		var params = {
+			type: "comm",
+			cert: cert,
+			prvkey: prvkey
+		};
+		resp = ZaCert.verifyCertKey(ZaApp.getInstance(), params);
+
+		var verifyResult = resp.verifyResult;
+		if(verifyResult == "false") {
+	                this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_CERT_KEY_VERIFY, ZaMsg.ALERT_DOMAIN_CERT_KEY, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+        	        this._errorDialog.popup();
+			return false;
+		 }
+
+	} else if(!cert && prvkey) {
+                        this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_CERT_MISSING, null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+                        this._errorDialog.popup();
+			return false;
+	} else if(cert && !prvkey) {
+                        this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_KEY_MISSING, null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+                        this._errorDialog.popup();
+                        return false;
+	}
+	return true;
 }
