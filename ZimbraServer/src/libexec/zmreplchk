@@ -85,14 +85,14 @@ foreach my $replica (@replicas) {
                  ) or die "start_tls: $@";
         if($mesgr->code) {
           $status{$replica}[0]=3;
-		  $status{$replica}[1]="Could not execute StartTLS";
+          $status{$replica}[1]="Could not execute StartTLS";
         }
       }
     }
   }
   if (!defined($ldapr)) {
     $status{$replica}[0]=4;
-	$status{$replica}[1]="Server down";
+    $status{$replica}[1]="Server down";
     next;
   }
   $mesgr=$ldapr->bind;
@@ -104,7 +104,7 @@ foreach my $replica (@replicas) {
            );
   if ($mesgr->code) {
     $status{$replica}[0]=5;
-	$status{$replica}[1]="Unable to search";
+    $status{$replica}[1]="Unable to search";
     next;
   }
   $entry = $mesgr->entry(0);
@@ -122,23 +122,23 @@ foreach my $replica (@replicas) {
 
   if ($rcsn eq $pcsn) {
     $status{$replica}[0]=0;
-	$status{$replica}[1]="In Sync";
+    $status{$replica}[1]="In Sync";
   } else {
     my $rtime = $rcsn;
-	my $ptime = $pcsn;
-	$rtime =~ s/#.*//g;
-	$ptime =~ s/#.*//g;
-	$rtime =~ s/\..*//g;
-	$ptime =~ s/\..*//g;
-	$rtime =~ s/$/Z/;
-	$ptime =~ s/$/Z/;
-	my $tdelta = DateCalc($ptime,$rtime);
-	$tdelta =~ s/^(.)0:0:/$1/;
-	$tdelta =~ s/^\+(.*)$/$1s ahead/g;
-	$tdelta =~ s/^\-(.*)$/$1s behind/g;
-	foreach ("w","d", "h", "m") { $tdelta =~ s/:/$_ /;}
-	$status{$replica}[0]=6;
-	$status{$replica}[1]="$tdelta";
+    my $ptime = $pcsn;
+    $rtime =~ s/#.*//g;
+    $ptime =~ s/#.*//g;
+    $rtime =~ s/\..*//g;
+    $ptime =~ s/\..*//g;
+    $rtime =~ s/$/Z/;
+    $ptime =~ s/$/Z/;
+    my $tdelta = DateCalc($ptime,$rtime);
+    $tdelta =~ s/^(.)0:0:/$1/;
+    $tdelta =~ s/^\+(.*)$/$1s ahead/g;
+    $tdelta =~ s/^\-(.*)$/$1s behind/g;
+    foreach ("w","d", "h", "m") { $tdelta =~ s/:/$_ /;}
+    $status{$replica}[0]=6;
+    $status{$replica}[1]="$tdelta";
   }
 }
 
