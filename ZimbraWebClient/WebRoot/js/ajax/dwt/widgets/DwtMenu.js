@@ -578,7 +578,7 @@ function(x, y) {
 		} else { // Cascade to the right
 			newX = (parseInt(pmstyle.left) + parseInt(pmstyle.width) || (pbound.x + pbound.width));
 			if (this._congruent) {
-				var offset = parseInt(pmstyle.paddingRight) + parseInt(tstyle.paddingLeft) + parseInt(tstyle.borderLeftWidth); // 0 0 1
+				var offset = parseInt(pmstyle.paddingRight) + parseInt(tstyle.paddingLeft) + parseInt(tstyle.borderLeftWidth);
 				if (!isNaN(offset)) {
 					newX += offset;
 					Dwt.addClass(htmlEl, "DwtMenu-congruentRight");
