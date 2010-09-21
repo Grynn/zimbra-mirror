@@ -1,0 +1,46 @@
+<template id='CardSection1'>
+	<div><img width=100% src='${imageUrl}'></img></div>
+	<br/>
+	<div style='font-size:1.1em;font-weight:bold;padding:3px;text-align:center;'>The Deal:</div>
+	<div  style='font-size:12px;padding:3px;text-align:center;font-weight:bold;'>
+	<label style='color:darkBlue;'>${divisionName}:</label> ${title}
+	</div><br/>
+	<table align=center>
+		<tr><td style='font-size:0.8em;font-weight:bold'>Original Price: </td><td style='font-size:0.8em;color:gray;font-weight:bold'>${value}</td></tr>
+		<tr><td style='font-size:0.8em;font-weight:bold'>Discount: </td><td style='font-size:0.8em;color:#B73B3B;font-weight:bold'>-${discount_amount} (${discount_percent}% off)</td></tr>
+		<tr><td style='font-size:0.8em;font-weight:bold'>Your Price: </td><td style='font-size:16px;color:green;font-weight:bold'>${price}</td></tr>
+	</table>
+</template>
+
+<template id='CardSection2'>
+		<div align=center><a  align=center style='color:white;' href='${dealUrl}' target='_blank'><img src='${buyImg}'></a></div>
+		<br/>
+		<div style='font-size:1.1em;font-weight:bold;padding:3px;text-align:center'>Coupons Details:</div>
+		<table align=center>
+		<tr><td style='font-size:0.8em;font-weight:bold'>Coupons bought: </td><td style='font-size:0.8em;color:#191919;font-weight:bold'>${quantity_sold}</td></tr>
+		<tr><td style='font-size:0.8em;font-weight:bold'>Coupons remaining: </td><td style='font-size:0.8em;color:#191919;font-weight:bold'>${itemsRemaining}</td></tr>
+		<tr><td style='font-size:0.8em;font-weight:bold'>Coupons must sell: </td><td style='font-size:0.8em;color:#191919;font-weight:bold'>${tipping_point}</td></tr>
+		</table><br/>
+</template>
+
+
+<template id='Frame'>
+	<DIV class='overviewHeader' id='groupon_topSxn'></DIV>
+	<DIV id='groupon_twitterCardsDiv'>
+		<table id='groupon_cardsMainTable' cellspacing=10px>
+		</table>
+	</DIV>
+</template>
+
+<template id='CardFrame'>
+	<div  class='groupon_cardDiv' id='groupon_cardsDiv${cardIndex}'>
+	<DIV ${elStyle} class='${hdrClass}' >
+	<table width='100%'>
+	<tr><td  vtext-align='middle'>${iconName}</td><td width=100% vtext-align='middle'><table><tr><td ${hdrCellStyle} > ${prettyName}</td></tr></table></td>
+	<TD width='5%'><DIV style='display:block;' id='groupon_cardButtonsDiv${cardIndex}'>
+	<table><tr><td width='5%' vtext-align='middle'></td><td width='5%' vtext-align='middle'>
+	<img style='cursor:pointer;' title='Close this feed' src='${closeBtnImg}' id='groupon_closeBtn${cardIndex}'/></td></tr>
+	</table></DIV></TD></tr></table></DIV>
+	<DIV id='${cardInfoSectionId}' style='overflow:auto;height:${mainCardHeight};width:${cardWidth}' class='groupon_individualCardClass'></DIV>
+	</div>
+</template>

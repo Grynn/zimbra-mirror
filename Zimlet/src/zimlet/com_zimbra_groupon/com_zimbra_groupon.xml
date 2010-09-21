@@ -1,0 +1,14 @@
+<zimlet name="com_zimbra_groupon" label="${msg.label}" version="0.1" description="Displays amazing daily deals from Groupon">	
+	<include>groupon.js</include>
+	<include>model/grouponCardProps.js</include>
+	<include>widgets/grouponApp.js</include>
+	<include>templates/Groupon.template.js</include>
+	<includeCSS>groupon.css</includeCSS>
+	<handlerObject>com_zimbra_groupon_handlerObject</handlerObject>
+	<zimletPanelItem label="${msg.label}" icon="GrouponIcon">
+	</zimletPanelItem>
+	<userProperties>
+		<property type="string" name="grouponZimlet_myCityCode" value="san-francisco"/>	
+		<property type="string" name="grouponZimlet_showPopupOnceADay" value="true" />	
+	</userProperties>
+</zimlet>

@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_groupon" version="0.1">
+    <global>
+        <property name="allowedDomains">*.groupon.com</property>
+    </global>
+</zimletConfig>

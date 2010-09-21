@@ -1,0 +1,53 @@
+.ImgGrouponIcon {
+	background: url("img/grouponIcon.png") no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
+}
+
+.ImgGrouponFeaturedIcon {
+	background: url("img/groupon_starBg.gif") no-repeat 0 0;
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
+}
+
+.groupon_individualCardClass {
+    font-size: 16px;
+    font-family: 'Lucida Grande', sans-serif;
+    overflow: auto;
+    border-top: 1px solid #B2B2B2;
+    border-left: 1px solid #B2B2B2;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+    display: block;
+    z-index: 9000;
+    position: relative;
+}
+
+.groupon_cardDiv {
+    background: #FFFFFC;
+    border-bottom: 1px solid #6E6E6E;
+    border-right: 1px solid #6E6E6E;
+}
+
+.groupon_axnClass {
+    font-size: 16px;
+    font-family: 'Lucida Grande', sans-serif;
+    overflow: auto;
+    border-top: 1px solid #B2B2B2;
+    border-bottom: 2px solid #6E6E6E;
+    border-left: 1px solid #B2B2B2;
+    border-right: 2px solid #6E6E6E;
+    display: block;
+    z-index: 9001;
+}
+
+.groupon_normalDealsBgColor {
+    background-image: url(img/groupon_normalBg.gif);
+}
+
+.groupon_featuredDealsBgColor {
+    background-image: url(img/groupon_featuredBg.png);
+}
+
