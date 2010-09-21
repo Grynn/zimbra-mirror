@@ -81,7 +81,7 @@ GrouponZimlet.prototype._handleGetDivisions = function(response) {
 		return;
 	}
 	if (!response.success) {
-		this._showErrorMessage(jsonObj.status.message);
+		appCtxt.getAppController().setStatusMsg("Could not load Groupon Divisions:  HTTP "+response.status, ZmStatusView.LEVEL_WARNING);
 		return;
 	}
 	this.grouponDivisions = jsonObj;
@@ -112,8 +112,8 @@ GrouponZimlet.prototype._handleGetDeals = function(mode, response) {
 	try {
 		jsonObj = eval("(" + response.text + ")");
 	} catch(ex) {
-		this._showErrorMessage(ex);
-		return;
+			appCtxt.getAppController().setStatusMsg("Could not load Deals HTTP "+response.status, ZmStatusView.LEVEL_WARNING);
+			return;
 	}
 	if (!response.success) {
 		this._showErrorMessage(jsonObj.status.message);

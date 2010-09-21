@@ -91,7 +91,10 @@ function() {
 Com_Zimbra_GrouponApp.prototype._addToolbarWidgets =
 function() {
 	var html = new Array();
-	var divisions = this.zimlet.grouponDivisions.divisions;
+	var divisions = [];
+	if(this.zimlet.grouponDivisions) {
+		divisions = this.zimlet.grouponDivisions.divisions;
+	}
 	var len = divisions.length;
 	html.push("<DIV style='padding:3px' >Display coupons for area: ");
 	html.push("<select id=\"grouponZimlet_divisionsMenuId\" >");
