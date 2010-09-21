@@ -139,9 +139,12 @@ function(domain) {
 
 	if(resp.GetDomainInfoResponse && resp.GetDomainInfoResponse[0]) {
 		var domainInfoResponse = resp.GetDomainInfoResponse[0];
-    	var obj = {};
-    	ZaItem.prototype.initFromJS.call(obj, domainInfoResponse.domain[0]);
-    	ZaZimbraAdmin.zimbraAdminLoginURL = obj.attrs["zimbraAdminConsoleLoginURL"] ;
+    		var obj = {};
+    		ZaItem.prototype.initFromJS.call(obj, domainInfoResponse.domain[0]);
+    		ZaZimbraAdmin.zimbraAdminLoginURL = obj.attrs["zimbraAdminConsoleLoginURL"] ;
+		if(obj.attrs["zimbraSkinLogoURL"]){
+			ZaSettings.LOGO_URI = obj.attrs["zimbraSkinLogoURL"];
+		}	
 	}
 	// Create the global app context
 	var appCtxt = new ZaAppCtxt();
