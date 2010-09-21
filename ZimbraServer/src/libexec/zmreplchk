@@ -14,6 +14,7 @@
 # ***** END LICENSE BLOCK *****
 #
 use strict;
+use lib '/opt/zimbra/zimbramon/lib';
 use Net::LDAP;
 use Date::Manip;
 
@@ -108,6 +109,7 @@ foreach my $replica (@replicas) {
   }
   $entry = $mesgr->entry(0);
   $rcsn=$entry->get_value('contextCSN');
+  $ldapr->unbind;
 
   $mesgp = $ldapp->search(
              base    =>  "",
@@ -139,6 +141,8 @@ foreach my $replica (@replicas) {
 	$status{$replica}[1]="$tdelta";
   }
 }
+
+$ldapp->unbind;
 
 foreach my $replica (@replicas) {
   print "Replica: $replica";
