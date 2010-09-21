@@ -769,41 +769,45 @@ public class DeltaSync {
     }
 
     void syncMessage(Element elt, int folderId, byte type) throws ServiceException {
-   		int id = (int) elt.getAttributeLong(MailConstants.A_ID);
-    	try {
-	        Message msg = null;
-	        try {
-	            // make sure that the message we're delta-syncing actually exists
-	            msg = ombx.getMessageById(sContext, id);
-	        } catch (MailServiceException.NoSuchItemException nsie) {
-	            // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
-	            if (!ombx.isPendingDelete(sContext, id, type))
-	                getInitialSync().syncMessage(id, folderId, type);
-	            return;
-	        }
-	
-	        byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
-	        int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
-	        long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
-	        int convId = (int) elt.getAttributeLong(MailConstants.A_CONV_ID);
-	
-	        int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
-	
-	        synchronized (ombx) {
-	            ombx.setConversationId(sContext, id, convId <= 0 ? -id : convId);
-	            ombx.syncMetadata(sContext, id, type, folderId, flags, tags, color);
-	            ombx.syncDate(sContext, id, type, date);
-	        }
-	        OfflineLog.offline.debug("delta: updated " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
-    	} catch (Exception x) {
-    		if (x instanceof ServiceException && ((ServiceException)x).getCode().equals(MailServiceException.NO_SUCH_FOLDER)) {
-    			//message could be moved during
-    			OfflineLog.offline.debug("delta: moved" + MailItem.getNameForType(type) + " (" + id + ")");
-    		} else {
-    			SyncExceptionHandler.checkRecoverableException("DeltaSync.syncMessage", x);
-    			SyncExceptionHandler.syncMessageFailed(ombx, id, x);
-    		}
-    	}
+        int id = (int) elt.getAttributeLong(MailConstants.A_ID);
+        try {
+            Message msg = null;
+            try {
+                // make sure that the message we're delta-syncing actually exists
+                msg = ombx.getMessageById(sContext, id);
+            } catch (MailServiceException.NoSuchItemException nsie) {
+                // if it's been locally deleted but not pushed to the server yet, just return and let the delete happen later
+                if (!ombx.isPendingDelete(sContext, id, type))
+                    getInitialSync().syncMessage(id, folderId, type);
+                return;
+            }
+
+            byte color = (byte) elt.getAttributeLong(MailConstants.A_COLOR, MailItem.DEFAULT_COLOR);
+            int flags = Flag.flagsToBitmask(elt.getAttribute(MailConstants.A_FLAGS, null));
+            long tags = Tag.tagsToBitmask(elt.getAttribute(MailConstants.A_TAGS, null));
+            int convId = (int) elt.getAttributeLong(MailConstants.A_CONV_ID);
+        
+            int date = (int) (elt.getAttributeLong(MailConstants.A_DATE) / 1000);
+            synchronized (ombx) {
+                try {
+                    ombx.setConversationId(sContext, id, convId <= 0 ? -id : convId);
+                    ombx.syncMetadata(sContext, id, type, folderId, flags, tags, color);
+                    ombx.syncDate(sContext, id, type, date);
+                } catch (MailServiceException.NoSuchItemException nsie) {
+                    OfflineLog.offline.warn("NoSuchItemException in delta sync. Item ["+id+"] must have been deleted while sync was in progress");
+                    return;
+                }
+            }
+            OfflineLog.offline.debug("delta: updated " + MailItem.getNameForType(type) + " (" + id + "): " + msg.getSubject());
+        } catch (Exception x) {
+            if (x instanceof ServiceException && ((ServiceException)x).getCode().equals(MailServiceException.NO_SUCH_FOLDER)) {
+                //message could be moved during
+                OfflineLog.offline.debug("delta: moved" + MailItem.getNameForType(type) + " (" + id + ")");
+            } else {
+                SyncExceptionHandler.checkRecoverableException("DeltaSync.syncMessage", x);
+                SyncExceptionHandler.syncMessageFailed(ombx, id, x);
+            }
+        }
     }
     
     void syncDocuments(List<Integer> documents) throws ServiceException {
