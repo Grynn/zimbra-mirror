@@ -1,0 +1,144 @@
+#!/usr/bin/perl
+use strict;
+use Net::LDAP;
+use Date::Manip;
+
+my (%c,%loaded,%status);
+$c{zmlocalconfig}="/opt/zimbra/bin/zmlocalconfig";
+
+my $ldap_starttls_supported=getLocalConfig("ldap_starttls_supported");
+my $zimbra_home=getLocalConfig("zimbra_home");
+my $ldap_master=getLocalConfig("ldap_master_url");
+my $ldap_urls=getLocalConfig("ldap_url");
+my ($mesgp, $ldapp, $entry,$pcsn);
+
+chomp($ldap_master);
+my @replicas = split / /, $ldap_urls;
+
+my $index=0;
+for my $rep (@replicas) {
+  chomp($rep);
+  if ($ldap_master eq $rep) {
+    splice @replicas,$index,1;
+  }
+  $index++;
+}
+
+if ($ldapp = Net::LDAP->new( $ldap_master, async=> 1 ) ) { 
+  if ($ldap_master !~ /^ldaps/i) {
+    if ($ldap_starttls_supported) {
+      $mesgp = $ldapp->start_tls(
+                 verify => 'none',
+                 capath => "${zimbra_home}/conf/ca",
+               ) or die "start_tls: $@";
+      $mesgp->code && die "TLS: " . $mesgp->error . "\n";
+    }
+  }
+}
+if (!defined($ldapp)) {
+  print "Error: Master is not online\n";
+  exit 1;
+}
+
+$mesgp=$ldapp->bind;
+$mesgp->code && die "Unable to bind to master\n";
+
+$mesgp = $ldapp->search(
+           base    =>  '',
+           scope   =>  'base',
+           filter  =>  '(objectclass=*)',
+           attrs   =>  ['contextCSN']
+         );
+$entry = $mesgp->entry(0);
+$pcsn = $entry->get_value('contextCSN');
+
+if (!$pcsn) {
+  print "Error: Not a replicated master\n";
+  exit 2;
+} 
+
+foreach my $replica (@replicas) {
+  my ($rcsn, $mesgr, $ldapr);
+  chomp($replica);
+
+  if ($ldapr = Net::LDAP->new( $replica, async=> 1 ) ) {
+    if ($replica !~ /^ldaps/i) {
+      if ($ldap_starttls_supported) {
+        $mesgr = $ldapr->start_tls(
+                   verify => 'none',
+                   capath => "${zimbra_home}/conf/ca",
+                 ) or die "start_tls: $@";
+        if($mesgr->code) {
+          $status{$replica}[0]=3;
+		  $status{$replica}[1]="Could not execute StartTLS";
+        }
+      }
+    }
+  }
+  if (!defined($ldapr)) {
+    $status{$replica}[0]=4;
+	$status{$replica}[1]="Server down";
+    next;
+  }
+  $mesgr=$ldapr->bind;
+  $mesgr = $ldapr->search(
+             base    =>  "",
+             scope   =>  'base',
+             filter  =>  '(objectclass=*)',
+             attrs   =>  ['contextCSN']
+           );
+  if ($mesgr->code) {
+    $status{$replica}[0]=5;
+	$status{$replica}[1]="Unable to search";
+    next;
+  }
+  $entry = $mesgr->entry(0);
+  $rcsn=$entry->get_value('contextCSN');
+
+  $mesgp = $ldapp->search(
+             base    =>  "",
+             scope   =>  'base',
+             filter  =>  '(objectclass=*)',
+             attrs   =>  ['contextCSN']
+           );
+  $entry = $mesgp->entry(0);
+  $pcsn=$entry->get_value('contextCSN');
+
+  if ($rcsn eq $pcsn) {
+    $status{$replica}[0]=0;
+	$status{$replica}[1]="In Sync";
+  } else {
+    my $rtime = $rcsn;
+	my $ptime = $pcsn;
+	$rtime =~ s/#.*//g;
+	$ptime =~ s/#.*//g;
+	$rtime =~ s/\..*//g;
+	$ptime =~ s/\..*//g;
+	$rtime =~ s/$/Z/;
+	$ptime =~ s/$/Z/;
+	my $tdelta = DateCalc($ptime,$rtime);
+	$tdelta =~ s/^(.)0:0:/$1/;
+	$tdelta =~ s/^\+(.*)$/$1s ahead/g;
+	$tdelta =~ s/^\-(.*)$/$1s behind/g;
+	foreach ("w","d", "h", "m") { $tdelta =~ s/:/$_ /;}
+	$status{$replica}[0]=6;
+	$status{$replica}[1]="$tdelta";
+  }
+}
+
+foreach my $replica (@replicas) {
+  print "Replica: $replica";
+  print " Code: ".$status{$replica}[0];
+  print " Status: ".$status{$replica}[1];
+  print "\n";
+}
+
+sub getLocalConfig {
+  my ($key,$force) = @_;
+
+  return $loaded{lc}{$key}
+    if (exists $loaded{lc}{$key} && !$force);
+  my $val=`$c{zmlocalconfig} -x -s -m nokey ${key} 2> /dev/null`;
+  $loaded{lc}{$key} = $val;
+  return $val;
+}
