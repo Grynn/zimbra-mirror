@@ -443,6 +443,12 @@ if [ -L ${zimbra_home}/jetty ]; then
     chmod 640 ${zimbra_home}/jetty/etc/zimlet.web.xml.in
   fi
 
+  if [ ! -d ${zimbra_home}/jetty/webapps/zimlet/WEB-INF ]; then
+    mkdir -p ${zimbra_home}/jetty/webapps/zimlet/WEB-INF
+  fi
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/webapps/zimlet
+  chmod 755 ${zimbra_home}/jetty/webapps/zimlet ${zimbra_home}/jetty/webapps/zimlet/WEB-INF
+
   if [ ! -d ${zimbra_home}/fbqueue ]; then
     mkdir -p ${zimbra_home}/fbqueue
   fi
