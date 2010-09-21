@@ -276,7 +276,6 @@ public class GalSync {
                 OfflineLog.offline.info("Offline GAL sync started for " + user);
                 syncGal(ombx, galAccount, lastFullSync, traceOn);
                 syncMan.syncComplete(galAccount);
-                syncMan.setConnectionDown(false);
                 OfflineLog.offline.info("Offline GAL sync completed successfully for " + user);
             } catch (Exception e) {
                 syncMan.processSyncException(galAccount, "", e, traceOn);

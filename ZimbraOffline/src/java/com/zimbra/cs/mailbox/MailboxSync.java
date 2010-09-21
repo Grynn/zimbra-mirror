@@ -122,7 +122,7 @@ public class MailboxSync {
     void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
        	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
        	
-        if (!syncMan.isServiceActive(isOnRequest)) {
+        if (!syncMan.isServiceActive()) {
             if (isOnRequest)
                 OfflineLog.offline.debug("offline sync request ignored");
         } else if (ombx.lockMailboxToSync()) {
@@ -183,7 +183,6 @@ public class MailboxSync {
                         ombx.getAccount(), OfflineConstants.A_offlineLastSync,
                         Long.toString(System.currentTimeMillis()));
                     GalSync.sync(ombx, isOnRequest);
-                    syncMan.setConnectionDown(false);
                 } catch (Exception e) {
                     if (!syncMan.isServiceActive()) {
                         return;

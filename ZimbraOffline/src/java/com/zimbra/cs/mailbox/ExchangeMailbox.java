@@ -241,7 +241,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         if (!isXsyncEnabled())
             return;
         
-        if (!OfflineSyncManager.getInstance().isServiceActive(isOnRequest)) {
+        if (!OfflineSyncManager.getInstance().isServiceActive()) {
             if (isOnRequest)
                 OfflineLog.offline.debug("offline sync request ignored");
         } else if (lockMailboxToSync()) {
@@ -300,7 +300,6 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
             syncMan.syncStart(ds);
             DataSourceManager.importData(ds, null, true);
             syncMan.syncComplete(ds);
-            syncMan.setConnectionDown(false);
             OfflineProvisioning.getOfflineInstance().setDataSourceAttribute(ds, OfflineConstants.A_zimbraDataSourceLastSync, Long.toString(System.currentTimeMillis()));
         } catch (Exception x) {
             if (isDeleting())
