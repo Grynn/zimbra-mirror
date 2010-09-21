@@ -23,19 +23,23 @@
 * Abstract class list views. All the List views in the Admin panel extend this class.
 * @author Greg Solovyev
 **/
-ZaListView = function(parent, className, posStyle, headerList, view) {
+
+ZaListView = function(params) {
 	if (arguments.length == 0) return;
-	var id = view ? DwtId.getListViewId(view) : null;
-	DwtListView.call(this, {parent:parent, className:className, posStyle:posStyle,
-							headerList:headerList, view:view, id:id});
+	params = Dwt.getParams(arguments, ZaListView.PARAMS);
+	var id = (params.view) ? DwtId.getListViewId(params.view,params.id) : DwtId.getListViewId(params.id);
+	params.id = id;
+	DwtListView.call(this, params);
 
 	//bug: 18787
 	//Set the ListView Div DwtControl.SCROLL(overflow: auto) And the Rows Dwt.VISIBLE
     //In this way, the view of lists can be controlled by the scroll of the list view 
-    // At the same time, no list row content will be hidden 
+    // At the same time, no list row content will be hidden 	
 	this.setScrollStyle(DwtControl.SCROLL);
 	if (this._listDiv) this._listDiv.style.overflow = "visible";  
 }
+
+ZaListView.PARAMS = ["parent", "className", "posStyle", "headerList", "view", "id"];
 
 ZaListView.prototype = new DwtListView;
 ZaListView.prototype.constructor = ZaListView;

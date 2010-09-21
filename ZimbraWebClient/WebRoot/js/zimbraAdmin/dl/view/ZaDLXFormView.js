@@ -21,7 +21,11 @@
 * @author Greg Solovyev
 **/
 ZaDLXFormView = function(parent, entry) {
-	ZaTabView.call(this, parent, "ZaDLXFormView");
+	ZaTabView.call(this, {
+		parent:parent, 
+		iKeyName:"ZaDLXFormView",
+		contextId:ZaId.TAB_DL_EDIT
+	});
 	this.dlStatusChoices = [
 		{value:"enabled", label:ZaMsg.DL_Status_enabled}, 
 		{value:"disabled", label:ZaMsg.DL_Status_disabled}

@@ -21,7 +21,11 @@
 * @author Greg Solovyev
 **/
 ZaDomainXFormView = function(parent, entry) {
-	ZaTabView.call(this, parent,"ZaDomainXFormView");	
+	ZaTabView.call(this, {
+		parent:parent,
+		iKeyName:"ZaDomainXFormView",
+		contextId: ZaId.TAB_DOMAIN_EDIT
+	}); //qin@	
 	this.GALModes = [
 		{label:ZaMsg.GALMode_internal, value:ZaDomain.GAL_Mode_internal},
 		{label:ZaMsg.GALMode_external, value:ZaDomain.GAL_Mode_external}, 

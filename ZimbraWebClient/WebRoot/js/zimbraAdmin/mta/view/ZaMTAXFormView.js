@@ -21,7 +21,11 @@
 * @author Greg Solovyev
 **/
 ZaMTAXFormView = function(parent) {
-	ZaTabView.call(this, parent, "ZaMTAXFormView");	
+	ZaTabView.call(this, {
+		parent:parent, 
+		iKeyName:"ZaMTAXFormView",
+		contextId:ZaId.TAB_MTX_EDIT
+	});	
 
 	this.TAB_INDEX = 0;
 	ZaMTAXFormView._tab1 = ++this.TAB_INDEX;

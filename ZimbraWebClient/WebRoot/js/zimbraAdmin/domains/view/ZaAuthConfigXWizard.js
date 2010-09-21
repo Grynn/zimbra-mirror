@@ -22,7 +22,7 @@
 **/
 ZaAuthConfigXWizard = function(parent) {
 
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_AuthConfigTitle,"700px", "350px","ZaAuthConfigXWizard");
+	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_AuthConfigTitle,"700px", "350px","ZaAuthConfigXWizard", null, ZaId.DLG_AUTH_CONFIG);
 	
 	this.AuthMechs = [
 		{label:ZaMsg.AuthMech_zimbra, value:ZaDomain.AuthMech_zimbra},

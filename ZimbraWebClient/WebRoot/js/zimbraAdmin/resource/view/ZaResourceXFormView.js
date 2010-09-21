@@ -22,7 +22,11 @@
 * @author Greg Solovyev
 **/
 ZaResourceXFormView = function(parent, entry) {
-	ZaTabView.call(this, parent,"ZaResourceXFormView");	
+	ZaTabView.call(this, {
+		parent:parent,
+		iKeyName:"ZaResourceXFormView",
+		contextId:ZaId.TAB_RES_EDIT
+	});	
 	this.TAB_INDEX = 0;		
 	if(!ZaResource.accountStatusChoices) {
 		ZaResource.accountStatusChoices = [

@@ -25,7 +25,7 @@
 ZaEditAliasXDialog = function(parent,   w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
-	ZaXDialog.call(this, parent, null, title, w, h);
+	ZaXDialog.call(this, parent, null, title, w, h, null, ZaId.DLG_EDIT_ALIAS);
 	this._containedObject = {};
 	this.initForm(ZaAlias.myXModel,this.getMyXForm());
 	this._helpURL = ZaEditAliasXDialog.helpURL;
@@ -63,7 +63,7 @@ function() {
 ZaNewAliasXDialog = function(parent,   w, h, title) {
 	if (arguments.length == 0) return;
 	this._standardButtons = [DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON];	
-	ZaXDialog.call(this, parent, null, title, w, h);
+	ZaXDialog.call(this, parent, null, title, w, h,null,ZaId.DLG_NEW_ALIAS);
 	this._containedObject = {};
 	this.initForm(ZaAlias.myXModel,this.getMyXForm());
     this._helpURL = ZaNewAliasXDialog.helpURL;

@@ -23,17 +23,27 @@
 * @extends DwtComposite
 * @author Greg Solovyev
 **/
-ZaTabView = function(parent,iKeyName, cssClassName) {
+
+ZaTabView = function(params) {
 	if (arguments.length == 0) return;
-	var className = cssClassName ? cssClassName : "DwtTabView";
-	DwtComposite.call(this, parent, className, Dwt.ABSOLUTE_STYLE);	
-	this._iKeyName = iKeyName;
+	params = Dwt.getParams(arguments, ZaTabView.PARAMS);
+	var className = params.cssClassName ? params.cssClassName : "DwtTabView";
+	this._contextId = params.contextId? params.contextId:ZaId.TAB_UNDEF;
+	DwtComposite.call(this, {
+		parent:params.parent, 
+		className:className, 
+		posStyle:Dwt.ABSOLUTE_STYLE,
+		id: ZaId.getTabId(this._contextId)
+	});	
+	this._iKeyName = params.iKeyName;
 	this._drawn = false;	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	this._containedObject = null;
 	this.setScrollStyle(Dwt.VISIBLE);
 	this._currentSubTab = [];
 }
+
+ZaTabView.PARAMS = ["parent","iKeyName", "cssClassName", "contextId"];
 
 ZaTabView.prototype = new DwtComposite();
 ZaTabView.prototype.constructor = ZaTabView;
@@ -69,7 +79,7 @@ function (xModelMetaData, xFormMetaData, entry) {
 		throw new AjxException(ZaMsg.ERROR_METADATA_NOT_DEFINED, AjxException.INVALID_PARAM, "ZaTabView.prototype._initForm");
 
 	this._localXModel = new XModel(xModelMetaData);
-	this._localXForm = new XForm(xFormMetaData, this._localXModel, entry, this);
+	this._localXForm = new XForm(xFormMetaData, this._localXModel, entry, this, ZaId.getTabViewId(this._contextId));
 	this._localXForm.setController(ZaApp.getInstance());
 	this._localXForm.draw();
 	this.formChangeListener = new AjxListener(this, ZaTabView.prototype.setDirty,[true]) ;

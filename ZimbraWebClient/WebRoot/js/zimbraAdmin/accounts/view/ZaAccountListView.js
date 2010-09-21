@@ -27,7 +27,24 @@ ZaAccountListView = function(parent,listType) {
 	this._listType = listType ;
 	var headerList = this._getHeaderList();
 	
-	ZaListView.call(this, parent, className, posStyle, headerList);
+	var listViewId;
+	if(!this._listType || this._listType == ZaItem.ACCOUNT)
+		listViewId = ZaId.TAB_ACCT_MANAGE;
+	else if(this._listType == ZaItem.ALIAS)
+		listViewId = ZaId.TAB_ALIAS_MANAGE;
+	else if(this._listType == ZaItem.DL)
+		listViewId = ZaId.TAB_DL_MANAGE;
+	else if(this._listType == ZaItem.RESOURCE)
+		listViewId = ZaId.TAB_RES_MANAGE;
+	else listViewId = ZaId.TAB_UNDEF;
+
+	ZaListView.call(this, {
+		parent:parent, 
+		className:className, 
+		posStyle:posStyle, 
+		headerList:headerList, 
+		id:listViewId
+	});
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	

@@ -12,12 +12,17 @@
  * 		toolTip - the tooltip of the tab
 */
 
-//ZaAppTab = function(parent,ZaApp.getInstance().label, icon, width, height, closable, selected, id) {
 ZaAppTab = function(parent, params) {
 	if (arguments.length == 0) return ;
 	
 //	this._origClassName = "ImgAppTab" ;
-	DwtButton.call(this, parent, null, "ZaAppTabButton" , Dwt.ABSOLUTE_STYLE);	
+	
+	DwtButton.call(this,{
+		parent:parent, 
+		className:"ZaAppTabButton" , 
+		posStyle:Dwt.ABSOLUTE_STYLE,
+		id: params.mainId ? ZaId.getTabId(params.mainId,params.id):params.id
+	});
 	//clean the DwtButton event listeners
 	this.removeListener(DwtEvent.ONMOUSEOVER, this._mouseOverListenerObj);
 	

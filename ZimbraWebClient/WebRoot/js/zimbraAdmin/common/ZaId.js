@@ -87,6 +87,32 @@ ZaId.WIDGET_TREE_ITEM			= "zti";		// tree item (node)
  * Defines the "tab button" widget type prefix.
  */
 ZaId.WIDGET_TAB				= "ztab";		// tab button
+/**
+ *  * Defines the "tab view" widget type prefix.
+ *   */
+ZaId.WIDGET_TAB_VIEW                    = "ztabv";               // tab view
+
+/**
+ *  * Defines the "dialog" widget type prefix.
+ *   */
+ZaId.WIDGET_DLG                         = "zdlg";               //  dialog
+
+/**
+ *  * Defines the "dialog view " widget type prefix.
+ *   */
+ZaId.WIDGET_DLG_VIEW                    = "zdlgv";               // dialog view
+
+/**
+ * Defines the "dialog button" widget type prefix.
+ */
+ZaId.WIDGET_DLG_BUTTON			= "zdlgb";		//  dialog button
+
+
+/**
+ * Defines the "search panel view" widget type prefix.
+ */
+ZaId.WIDGET_SEARCH_VIEW			= "zschv";		// view within search panel
+
 
 
 /* Preset IDs */
@@ -274,6 +300,45 @@ function(viewId, component, context) {
 };
 
 /**
+ * Generates an ID for a dialog
+ * 
+ * @param       {constant}      component       the component identifier
+ * @param       {constant}      context         the ID of owning view
+ * @return      {String}        the id
+ */
+ZaId.getDialogId =
+function(component, context) {
+	return DwtId._makeId(ZaId.WIDGET_DLG, component, context);
+};
+
+/**
+ * Generates an ID for a dialog view
+ * 
+ * @param       {constant}      component       the component identifier
+ * @param       {constant}      context         the ID of owning view
+ * @return      {String}        the id
+ */
+ZaId.getDialogViewId =
+function(component, context) {
+	return DwtId._makeId(ZaId.WIDGET_DLG_VIEW, component, context);
+};
+
+
+/**
+ * Generates an ID for a dialog button
+ * 
+ * @param       {constant}      component       the component identifier
+ * @param       {constant}      context         the ID of owning view
+ * @return      {String}        the id
+ */
+ZaId.getDialogButtonId =
+function(component, context) {
+	return DwtId._makeId(ZaId.WIDGET_DLG_BUTTON, component, context);
+};
+
+
+
+/**
  * Generates an ID for the compose view
  * 
  * @param 	{constant}	component	component identifier 
@@ -297,6 +362,20 @@ function(context, tabName) {
 	return DwtId._makeId(ZaId.WIDGET_TAB, context, tabName);
 };
 
+
+/**
+ * Generates an ID for a tab view.
+ * 
+ * @param 	{constant}	context		the owning view identifier 
+ * @param 	{String}	tabName		[string]name of tab
+ * @return	{String}	the id
+ */
+ZaId.getTabViewId =
+function(context, tabName) {
+	return DwtId._makeId(ZaId.WIDGET_TAB_VIEW, context, tabName);
+};
+
+
 /**
  * Generates an ID for a pref page tab.
  *
@@ -306,6 +385,21 @@ function(context, tabName) {
 ZaId.getPrefPageId = function(tabKey) {
 	return "PREF_PAGE_"+tabKey;
 };
+
+
+/**
+ * Generates an ID for a search view.
+ * 
+ * @param 	{constant}	context		the owning view identifier 
+ * @param 	{String}	tabName		[string]name of tab
+ * @return	{String}	the id
+ */
+ZaId.getSearchViewId =
+function(context, tabName) {
+	return DwtId._makeId(ZaId.WIDGET_SEARCH_VIEW, context, tabName);
+};
+
+
 
 /*
  * 
@@ -459,3 +553,68 @@ ZaId.OP_CLICK_DBLEFT 		= "DBLEFT_CLICK";
 ZaId.MENU_DROP			= "MENU_DROP";
 ZaId.MENU_POP			= "MENU_POP";
 
+
+/* tab */
+ZaId.TAB_GROUP			= "TAB_GROUP";
+
+ZaId.TAB_MAIN			= "MAIN_TAB";
+ZaId.TAB_ACCT_MANAGE		= "ACCT_MANAGE";
+ZaId.TAB_ACCT_EDIT		= "ACCT_EDIT";
+ZaId.TAB_ALIAS_MANAGE           = "ALIAS_MANAGE";
+ZaId.TAB_ALIAS_EDIT             = "ALIAS_EDIT";
+ZaId.TAB_DL_MANAGE            	= "DL_MANAGE";
+ZaId.TAB_DL_EDIT              	= "DL_EDIT";
+ZaId.TAB_RES_MANAGE            	= "RES_MANAGE";
+ZaId.TAB_RES_EDIT              	= "RES_EDIT";
+
+ZaId.TAB_COS_MANAGE		= "COS_MANAGE";
+ZaId.TAB_COS_EDIT		= "COS_EDIT";
+ZaId.TAB_DOMAIN_MANAGE          = "DOMAIN_MANAGE";
+ZaId.TAB_DOMAIN_EDIT            = "DOAMIN_EDIT";
+ZaId.TAB_SERVER_MANAGE          = "SERVER_MANAGE";
+ZaId.TAB_SERVER_EDIT            = "SERVER_EDIT";
+ZaId.TAB_ZIM_MANAGE             = "ZIMLET_MANAGE";
+ZaId.TAB_ZIM_EDIT               = "ZIMLET_EDIT";
+ZaId.TAB_AE_MANAGE              = "ADMEXT_MANAGE";
+ZaId.TAB_AE_EDIT                = "ADMEXT_EDIT";
+ZaId.TAB_STATUS_MANAGE          = "STATUS_MANAGE";
+ZaId.TAB_STATUS_EDIT            = "STATUS_EDIT";
+ZaId.TAB_MTX_MANAGE             = "MTX_MANAGE";
+ZaId.TAB_MTX_EDIT               = "MTX_EDIT";
+ZaId.TAB_SEARCH_MANAGE          = "SEARCH_MANAGE";
+ZaId.TAB_SEARCH_EDIT            = "SEARCH_EDIT";
+ZaId.TAB_GSET_EDIT              = "GSET_EDIT";
+
+
+ZaId.TAB_UNDEF			= "UNDEFINE";
+
+
+/* tab view */
+/*
+ZaId.TABV_ACCT_EDIT              = "V_ACCT_EDIT";
+ZaId.TABV_DL_EDIT                = "V_DL_EDIT";
+ZaId.TABV_RES_EDIT               = "V_RES_EDIT";
+ZaId.TABV_COS_EDIT               = "V_COS_EDIT";
+ZaId.TABV_DOMAIN_EDIT            = "V_DOAMIN_EDIT";
+ZaId.TABV_SERVER_EDIT            = "V_SERVER_EDIT";
+ZaId.TABV_ZIM_EDIT               = "V_ZIMLET_EDIT";
+ZaId.TABV_AE_EDIT                = "V_ADMEXT_EDIT";
+ZaId.TABV_STATUS_EDIT            = "V_STATUS_EDIT";
+ZaId.TABV_MTX_EDIT               = "V_MTX_EDIT";
+ZaId.TABV_GSET_EDIT              = "V_GSET_EDIT";
+*/
+
+
+
+/* Dialog */
+ZaId.DLG_NEW_ACCT		= "NEW_ACCT";
+ZaId.DLG_NEW_ALIAS              = "NEW_ALIAS";
+ZaId.DLG_EDIT_ALIAS             = "EDIT_ALIAS";
+ZaId.DLG_NEW_RES               	= "NEW_RES";
+ZaId.DLG_NEW_ADMIN              = "NEW_ADMIN";
+ZaId.DLG_NEW_DOMAIN             = "NEW_DOMAIN";
+ZaId.DLG_ZIM_DEPLOY             = "ZIM_DEPLOY";
+ZaId.DLG_AUTH_CONFIG            = "AUTH_CONFIG";
+
+
+ZaId.DLG_UNDEF			= "UNDEFINE";

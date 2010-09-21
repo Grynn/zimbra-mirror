@@ -106,7 +106,9 @@ DwtDialog = function(params) {
 	// get button IDs
 	this._buttonElementId = {};
 	for (var i = 0; i < this._buttonList.length; i++) {
-		this._buttonElementId[this._buttonList[i]] = Dwt.getNextId();
+		var buttonId = this._buttonList[i];
+		this._buttonElementId[buttonId] = ZaId.getDialogButtonId(this._buttonDesc[buttonId].label,Dwt.getNextId());
+		//this._buttonElementId[this._buttonList[i]] = Dwt.getNextId(); 
 	}
 
 	DwtBaseDialog.call(this, params);
@@ -132,7 +134,7 @@ DwtDialog = function(params) {
 	}
 };
 
-DwtDialog.PARAMS = ["parent", "className", "title", "standardButtons", "extraButtons", "zIndex", "mode", "loc"];
+DwtDialog.PARAMS = ["parent", "className", "title", "standardButtons", "extraButtons", "zIndex", "mode", "loc", "id"];
 
 DwtDialog.prototype = new DwtBaseDialog;
 DwtDialog.prototype.constructor = DwtDialog;

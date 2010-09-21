@@ -14,7 +14,7 @@
  */
 
 ZaNewAccountXWizard = function(parent, entry) {
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_NewAccTitle, "700px", "300px","ZaNewAccountXWizard");
+	ZaXWizardDialog.call(this, parent, null, ZaMsg.NCD_NewAccTitle, "700px", "300px","ZaNewAccountXWizard",null,ZaId.DLG_NEW_ACCT);
 	this.accountStatusChoices = [
 		{value:ZaAccount.ACCOUNT_STATUS_ACTIVE, label:ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_ACTIVE)},
 		{value:ZaAccount.ACCOUNT_STATUS_CLOSED, label:ZaAccount.getAccountStatusMsg (ZaAccount.ACCOUNT_STATUS_CLOSED)},
@@ -1548,25 +1548,90 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						});
 		}
 
-		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraDataSourcePollingInterval],[])) {						
-			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_datasourcepolling_settings",colSizes:["260px","190px","150px"],numCols:3,
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraDataSourcePollingInterval, 
+								ZaAccount.A_zimbraDataSourceMinPollingInterval,
+								ZaAccount.A_zimbraDataSourcePop3PollingInterval,
+								ZaAccount.A_zimbraDataSourceImapPollingInterval,
+								ZaAccount.A_zimbraDataSourceCalendarPollingInterval,
+								ZaAccount.A_zimbraDataSourceGalPollingInterval,
+								ZaAccount.A_zimbraDataSourceLivePollingInterval,
+								ZaAccount.A_zimbraDataSourceRssPollingInterval,
+								ZaAccount.A_zimbraDataSourceCaldavPollingInterval,
+								ZaAccount.A_zimbraDataSourceYabPollingInterval],[])) {						
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_datasourcepolling_settings",colSizes:["auto"],numCols:1,
 							label:ZaMsg.NAD_DataSourcePolling,						
 							items: [
-/*
-                                                                {ref:ZaAccount.A_zimbraDataSourcePollingInterval, type:_LIFETIME_,
-                                                                    msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
-                                                                    label:ZaMsg.LBL_zimbraDataSourcePollingInterval, labelLocation:_LEFT_,
-                                                                    onChange:ZaCosXFormView.validatePollingInterval,
-                                                                    labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
-                                                                }
-*/
                                                                 {ref:ZaAccount.A_zimbraDataSourcePollingInterval, type:_SUPER_LIFETIME_,
                                                                         colSizes:["195px","80px","295px","190px"],
                                                                         msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
                                                                         txtBoxLabel:ZaMsg.LBL_zimbraDataSourcePollingInterval,
                                                                         resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
                                                                         nowrap:false,labelWrap:true
+                                                                },
+                                                                {ref:ZaAccount.A_zimbraDataSourceMinPollingInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraDataSourceMinPollingInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraDataSourceMinPollingInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true
+                                                                },
+                                                                {ref:ZaAccount.A_zimbraDataSourcePop3PollingInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraDataSourcePop3PollingInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraDataSourcePop3PollingInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true
+                                                                },
+                                                                {ref:ZaAccount.A_zimbraDataSourceImapPollingInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraDataSourceImapPollingInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraDataSourceImapPollingInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true
+                                                                },
+                                                                {ref:ZaAccount.A_zimbraDataSourceCalendarPollingInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraDataSourceCalendarPollingInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraDataSourceCalendarPollingInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true
+                                                                },
+                                                                {ref:ZaAccount.A_zimbraDataSourceGalPollingInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraDataSourceGalPollingInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraDataSourceGalPollingInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true
+                                                                },
+                                                                {ref:ZaAccount.A_zimbraDataSourceLivePollingInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraDataSourceLivePollingInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraDataSourceLivePollingInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true
+                                                                },
+                                                                {ref:ZaAccount.A_zimbraDataSourceRssPollingInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraDataSourceRssPollingInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraDataSourceRssPollingInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true
+                                                                },
+                                                                {ref:ZaAccount.A_zimbraDataSourceCaldavPollingInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraDataSourceCaldavPollingInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraDataSourceCaldavPollingInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true
+                                                                },
+                                                                {ref:ZaAccount.A_zimbraDataSourceYabPollingInterval, type:_SUPER_LIFETIME_,
+                                                                        colSizes:["195px","80px","295px","190px"],
+                                                                        msgName:ZaMsg.MSG_zimbraDataSourceYabPollingInterval,
+                                                                        txtBoxLabel:ZaMsg.LBL_zimbraDataSourceYabPollingInterval,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,colSpan:2,
+                                                                        nowrap:false,labelWrap:true
                                                                 }
+
 
 							]
 						});

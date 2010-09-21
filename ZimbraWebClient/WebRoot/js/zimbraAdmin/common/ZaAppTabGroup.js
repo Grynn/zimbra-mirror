@@ -8,7 +8,12 @@
 
 ZaAppTabGroup = function(parent,parentElId) {
 	if (arguments.length == 0) return;
-	DwtComposite.call(this, parent, "ZaAppTabGroup", Dwt.ABSOLUTE_STYLE);	
+	DwtComposite.call(this,{
+		parent:parent, 
+		className:"ZaAppTabGroup", 
+		posStyle:Dwt.ABSOLUTE_STYLE, 
+		id:ZaId.getTabId(ZaId.TAB_GROUP,parentElId)
+	});
 	this._created = false ;
 
 	this._mainTab = null;
@@ -63,6 +68,7 @@ function (parentElId) {
 		//create the main tab
 		var tabParams = {
 			closable: false,
+			mainId: ZaId.TAB_MAIN,
 			selected: true
 		}
 		//this._mainTab = new ZaAppTab (this,  null, null,	null, null, false, true);

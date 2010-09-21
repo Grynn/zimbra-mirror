@@ -28,7 +28,13 @@ ZaServicesListView = function(parent,clsName) {
 	
 	var headerList = this._getHeaderList();
 	
-	ZaListView.call(this, parent, className, posStyle, headerList);
+	ZaListView.call(this, {
+		parent:parent, 
+		className:className, 
+		posStyle:posStyle, 
+		headerList:headerList,
+		id:ZaId.TAB_STATUS_MANAGE
+	});
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
 	

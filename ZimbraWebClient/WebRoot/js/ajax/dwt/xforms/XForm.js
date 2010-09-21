@@ -25,7 +25,7 @@
  * 
  * @private
  */
-XForm = function(attributes, model, instance, dwtContainer) {
+XForm = function(attributes, model, instance, dwtContainer, contextId) {
 	if (attributes) {
 		for (var prop in attributes) {
 			this[prop] = attributes[prop];	
@@ -33,7 +33,7 @@ XForm = function(attributes, model, instance, dwtContainer) {
 	}
 
 	// get a unique id for this form
-	this.assignGlobalId(this, this.id || "_XForm");
+	this.assignGlobalId(this, this.id || contextId ||  "_XForm");
 	DwtComposite.call(this, dwtContainer, "DWTXForm");
 	
 	if (this.itemDefaults) {

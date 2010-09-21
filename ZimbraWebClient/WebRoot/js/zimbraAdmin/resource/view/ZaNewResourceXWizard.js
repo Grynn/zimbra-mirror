@@ -22,7 +22,7 @@
 * @author Charles Cao
 **/
 ZaNewResourceXWizard = function(parent) {
-	ZaXWizardDialog.call(this, parent,null, ZaMsg.NCD_NewResTitle, "700px", "300px","ZaNewResourceXWizard");
+	ZaXWizardDialog.call(this, parent,null, ZaMsg.NCD_NewResTitle, "700px", "300px","ZaNewResourceXWizard", null, ZaId.DLG_NEW_RES);
 	
 
 

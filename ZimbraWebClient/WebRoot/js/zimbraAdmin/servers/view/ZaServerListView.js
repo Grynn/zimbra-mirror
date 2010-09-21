@@ -26,7 +26,13 @@ ZaServerListView = function(parent) {
 	var posStyle = DwtControl.ABSOLUTE_STYLE;	
 	var headerList = ZaServerListView._getHeaderList();
 	
-	ZaListView.call(this, parent, className, posStyle, headerList);
+	ZaListView.call(this, {
+		parent:parent, 
+		className:className, 
+		posStyle:posStyle, 
+		headerList:headerList,
+		id:ZaId.TAB_SERVER_MANAGE
+	});
 
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);	
 }  

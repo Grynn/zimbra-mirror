@@ -21,7 +21,11 @@
 * @author Greg Solovyev
 **/
 ZaCosXFormView = function(parent, entry) {
-	ZaTabView.call(this, parent,"ZaCosXFormView");
+	ZaTabView.call(this, {
+		parent:parent,
+		iKeyName:"ZaCosXFormView",
+		contextId:ZaId.TAB_COS_EDIT
+	});
 	this.TAB_INDEX = 0;	
 	this.initForm(ZaCos.myXModel,this.getMyXForm(entry), null);
 }
@@ -227,7 +231,7 @@ ZaCosXFormView.PREFERENCES_TAB_ATTRS = [
 	ZaCos.A_zimbraAllowAnyFromAddress,
 	ZaCos.A_zimbraMailMinPollingInterval,
 	ZaCos.A_zimbraPrefMailPollingInterval,
-	ZaAccount.A_zimbraPrefAutoSaveDraftInterval,
+	ZaCos.A_zimbraPrefAutoSaveDraftInterval,
 	ZaCos.A_zimbraPrefMailDefaultCharset,
 	ZaCos.A_zimbraMaxMailItemsPerPage,
 	ZaCos.A_zimbraPrefMailItemsPerPage,
@@ -291,7 +295,19 @@ ZaCosXFormView.ADVANCED_TAB_ATTRS = [ZaCos.A_zimbraAttachmentsBlocked,
 	ZaCos.A_zimbraMailMessageLifetime,
 	ZaCos.A_zimbraMailTrashLifetime,
 	ZaCos.A_zimbraMailSpamLifetime,
-	ZaCos.A_zimbraFreebusyExchangeUserOrg];
+	ZaCos.A_zimbraFreebusyExchangeUserOrg,
+        ZaCos.A_zimbraDataSourcePollingInterval,
+        ZaCos.A_zimbraDataSourcePop3PollingInterval,
+        ZaCos.A_zimbraDataSourceImapPollingInterval,
+        ZaCos.A_zimbraDataSourceCalendarPollingInterval,
+        ZaCos.A_zimbraDataSourceGalPollingInterval,
+        ZaCos.A_zimbraDataSourceLivePollingInterval,
+        ZaCos.A_zimbraDataSourceRssPollingInterval,
+        ZaCos.A_zimbraDataSourceCaldavPollingInterval,
+        ZaCos.A_zimbraDataSourceYabPollingInterval,
+	ZaCos.A_zimbraDataSourceMinPollingInterval
+
+];
 ZaCosXFormView.ADVANCED_TAB_RIGHTS = [];
 
 ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {	
@@ -1070,12 +1086,66 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
             {type:_ZA_TOP_GROUPER_, id:"cos_datasourcepolling_settings",
                 label:ZaMsg.NAD_DataSourcePolling,
                 items: [
-                    {ref:ZaCos.A_zimbraDataSourcePollingInterval, type:_LIFETIME_,
+                    {ref:ZaCos.A_zimbraDataSourcePollingInterval, type:_LIFETIME1_,
                         msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
                         label:ZaMsg.LBL_zimbraDataSourcePollingInterval, labelLocation:_LEFT_,
                         onChange:ZaCosXFormView.validatePollingInterval,
                         labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
                     },
+                    {ref:ZaCos.A_zimbraDataSourceMinPollingInterval, type:_LIFETIME1_,
+                        msgName:ZaMsg.MSG_zimbraDataSourceMinPollingInterval,
+                        label:ZaMsg.LBL_zimbraDataSourceMinPollingInterval, labelLocation:_LEFT_,
+                        onChange:ZaCosXFormView.validatePollingInterval,
+                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                    },
+                    {ref:ZaCos.A_zimbraDataSourcePop3PollingInterval, type:_LIFETIME1_,
+                        msgName:ZaMsg.MSG_zimbraDataSourcePop3PollingInterval,
+                        label:ZaMsg.LBL_zimbraDataSourcePop3PollingInterval, labelLocation:_LEFT_,
+                        onChange:ZaCosXFormView.validatePollingInterval,
+                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                    },
+                    {ref:ZaCos.A_zimbraDataSourceImapPollingInterval, type:_LIFETIME1_,
+                        msgName:ZaMsg.MSG_zimbraDataSourceImapPollingInterval,
+                        label:ZaMsg.LBL_zimbraDataSourceImapPollingInterval, labelLocation:_LEFT_,
+                        onChange:ZaCosXFormView.validatePollingInterval,
+                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                    },
+                    {ref:ZaCos.A_zimbraDataSourceCalendarPollingInterval, type:_LIFETIME1_,
+                        msgName:ZaMsg.MSG_zimbraDataSourceCalendarPollingInterval,
+                        label:ZaMsg.LBL_zimbraDataSourceCalendarPollingInterval, labelLocation:_LEFT_,
+                        onChange:ZaCosXFormView.validatePollingInterval,
+                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                    },
+                    {ref:ZaCos.A_zimbraDataSourceGalPollingInterval, type:_LIFETIME1_,
+                        msgName:ZaMsg.MSG_zimbraDataSourceGalPollingInterval,
+                        label:ZaMsg.LBL_zimbraDataSourceGalPollingInterval, labelLocation:_LEFT_,
+                        onChange:ZaCosXFormView.validatePollingInterval,
+                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                    },
+                    {ref:ZaCos.A_zimbraDataSourceLivePollingInterval, type:_LIFETIME1_,
+                        msgName:ZaMsg.MSG_zimbraDataSourceLivePollingInterval,
+                        label:ZaMsg.LBL_zimbraDataSourceLivePollingInterval, labelLocation:_LEFT_,
+                        onChange:ZaCosXFormView.validatePollingInterval,
+                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                    },
+                    {ref:ZaCos.A_zimbraDataSourceRssPollingInterval, type:_LIFETIME1_,
+                        msgName:ZaMsg.MSG_zimbraDataSourceRssPollingInterval,
+                        label:ZaMsg.LBL_zimbraDataSourceRssPollingInterval, labelLocation:_LEFT_,
+                        onChange:ZaCosXFormView.validatePollingInterval,
+                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                    },
+                    {ref:ZaCos.A_zimbraDataSourceCaldavPollingInterval, type:_LIFETIME1_,
+                        msgName:ZaMsg.MSG_zimbraDataSourceCaldavPollingInterval,
+                        label:ZaMsg.LBL_zimbraDataSourceCaldavPollingInterval, labelLocation:_LEFT_,
+                        onChange:ZaCosXFormView.validatePollingInterval,
+                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                    },
+                    {ref:ZaCos.A_zimbraDataSourceYabPollingInterval, type:_LIFETIME1_,
+                        msgName:ZaMsg.MSG_zimbraDataSourceYabPollingInterval,
+                        label:ZaMsg.LBL_zimbraDataSourceYabPollingInterval, labelLocation:_LEFT_,
+                        onChange:ZaCosXFormView.validatePollingInterval,
+                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                    }
                 ]
             },
             

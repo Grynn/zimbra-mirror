@@ -21,7 +21,7 @@
 * @author Greg Solovyev
 **/
 ZaNewDomainXWizard = function(parent, entry) {
-	ZaXWizardDialog.call(this, parent, null, ZaMsg.NDD_Title, "700px", "350px","ZaNewDomainXWizard");
+	ZaXWizardDialog.call(this, parent, null, ZaMsg.NDD_Title, "700px", "350px","ZaNewDomainXWizard", null, ZaId.DLG_NEW_DOMAIN);
 	
 	this.TAB_INDEX = 0;
 	

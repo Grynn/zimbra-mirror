@@ -21,7 +21,7 @@
 * @author Greg Solovyev
 **/
 ZaZimletDeployXWizard = function(parent) {
-	ZaXWizardDialog.call(this, parent,null, ZaMsg.ZMLT_DeployZimletWizardTitle, "550px", "300px","ZaZimletDeployXWizard");
+	ZaXWizardDialog.call(this, parent,null, ZaMsg.ZMLT_DeployZimletWizardTitle, "550px", "300px","ZaZimletDeployXWizard", null, ZaId.DLG_ZIM_DEPLOY);
 	this._app = ZaApp.getInstance();
 	this.stepChoices = [
 		{label:ZaMsg.ZMLT_UploadFileStep_Title, value:1},

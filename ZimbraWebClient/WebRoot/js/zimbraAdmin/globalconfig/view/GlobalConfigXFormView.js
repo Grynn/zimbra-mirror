@@ -21,7 +21,11 @@
 * @author Greg Solovyev
 **/
 GlobalConfigXFormView = function(parent, entry) {
-	ZaTabView.call(this, parent, "GlobalConfigXFormView");
+	ZaTabView.call(this, {
+		parent:parent, 
+		iKeyName:"GlobalConfigXFormView",
+		contextId:ZaId.TAB_GSET_EDIT
+	});
 	this.TAB_INDEX = 0;	
 	this.initForm(ZaGlobalConfig.myXModel,this.getMyXForm(entry), null);
 }

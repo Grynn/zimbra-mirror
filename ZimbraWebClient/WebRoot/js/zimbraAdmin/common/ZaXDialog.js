@@ -23,7 +23,7 @@
 * @param h (height)
 **/
 
-ZaXDialog = function(parent,className, title, w, h,iKeyName) {
+ZaXDialog = function(parent,className, title, w, h,iKeyName, contextId) {
 	if (arguments.length == 0) return;
 	this._iKeyName = iKeyName;	
 	var clsName = className || "DwtDialog";
@@ -33,7 +33,17 @@ ZaXDialog = function(parent,className, title, w, h,iKeyName) {
 		var helpButton = new DwtDialog_ButtonDescriptor(ZaXDialog.HELP_BUTTON, ZaMsg.TBB_Help, DwtDialog.ALIGN_LEFT, new AjxCallback(this, this._helpButtonListener));
 		this._extraButtons = [helpButton];
 	}
-	DwtDialog.call(this, parent, clsName, title, this._standardButtons,this._extraButtons);
+	
+	this._contextId = contextId? contextId:ZaId.DLG_UNDEF
+	
+	DwtDialog.call(this, {
+		parent:parent, 
+		className:clsName, 
+		title:title, 
+		standardButtons:this._standardButtons,
+		extraButtons:this._extraButtons,
+		id:ZaId.getDialogId(this._contextId)
+	});
 	this._app = ZaApp.getInstance();
 	this._localXForm = null;
 	this._localXModel = null;
@@ -101,7 +111,7 @@ function (xModelMetaData, xFormMetaData, defaultInstance) {
 		throw new AjxException("Metadata for XForm and/or XModel are not defined", AjxException.INVALID_PARAM, "ZaXWizardDialog.prototype.initForm");
 		
 	this._localXModel = new XModel(xModelMetaData);
-	this._localXForm = new XForm(xFormMetaData, this._localXModel, defaultInstance, this);
+	this._localXForm = new XForm(xFormMetaData, this._localXModel, defaultInstance, this, ZaId.getDialogViewId(this._contextId));
 	this._localXForm.setController(ZaApp.getInstance());
 	this._localXForm.draw(this._pageDiv);	
 	this._drawn = true;
