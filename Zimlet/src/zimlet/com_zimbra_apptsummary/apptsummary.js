@@ -439,7 +439,7 @@ function(bodyHtml, bodyText, hasError) {
 	partNodes.push(partNode);
 	var callback = new AjxCallback(this, this._sendEmailCallack);
 	var errCallback = new AjxCallback(this, this._sendEmailErrCallback);
-	return appCtxt.getAppController().sendRequest({jsonObj:jsonObj, asyncMode:true, errorCallback:errCallback, callback:callback});
+	return appCtxt.getAppController().sendRequest({jsonObj:jsonObj, asyncMode:true, noBusyOverlay:true, errorCallback:errCallback, callback:callback});
 };
 
 /**
