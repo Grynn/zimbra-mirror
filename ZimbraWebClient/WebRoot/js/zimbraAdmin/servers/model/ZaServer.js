@@ -365,7 +365,7 @@ ZaServer.myXModel = {
 		// MTA
 		{id:ZaServer.A_zimbraMtaAuthEnabled, ref:"attrs/" +  ZaServer.A_zimbraMtaAuthEnabled, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		{id:ZaServer.A_zimbraMtaTlsAuthOnly, ref:"attrs/" +  ZaServer.A_zimbraMtaTlsAuthOnly, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
-		{id:ZaServer.A_zimbraMtaRelayHost, ref:"attrs/" +  ZaServer.A_zimbraMtaRelayHost,  type:_COS_LIST_, listItem:{type: _HOSTNAME_OR_IP_, maxLength: 256 }},
+		{id:ZaServer.A_zimbraMtaRelayHost, ref:"attrs/" +  ZaServer.A_zimbraMtaRelayHost,  type: _COS_HOSTNAME_OR_IP_, maxLength: 256 },
 		{id:ZaServer.A_zimbraMtaMyNetworks, ref:"attrs/" +  ZaServer.A_zimbraMtaMyNetworks, type:_STRING_, maxLength: 256 },
 		{id:ZaServer.A_zimbraMtaDnsLookupsEnabled, ref:"attrs/" +  ZaServer.A_zimbraMtaDnsLookupsEnabled, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
 		// ...other...
@@ -837,15 +837,7 @@ ZaServer.prototype.initFromJS = function(server) {
 	
 	if(this._defaultValues && this._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname] && !(this._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname]  instanceof Array)) {
 		this._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname]  = [this._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname]];
-	}
-	
-	if(this.attrs[ZaServer.A_zimbraMtaRelayHost] && !(this.attrs[ZaServer.A_zimbraMtaRelayHost] instanceof Array)) {
-		this.attrs[ZaServer.A_zimbraMtaRelayHost] = [this.attrs[ZaServer.A_zimbraMtaRelayHost]];
-	}
-	
-	if(this._defaultValues && this._defaultValues.attrs[ZaServer.A_zimbraMtaRelayHost] && !(this._defaultValues.attrs[ZaServer.A_zimbraMtaRelayHost]  instanceof Array)) {
-		this._defaultValues.attrs[ZaServer.A_zimbraMtaRelayHost]  = [this._defaultValues.attrs[ZaServer.A_zimbraMtaRelayHost]];
-	}		
+	}	
 }
 
 ZaServer.prototype.parseCurrentVolumesResponse =
