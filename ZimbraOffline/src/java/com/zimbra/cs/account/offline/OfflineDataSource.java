@@ -14,8 +14,6 @@
  */
 package com.zimbra.cs.account.offline;
 
-import java.io.IOException;
-import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +22,7 @@ import javax.mail.Session;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.DataSourceConfig;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.imap.ImapSync;
@@ -57,7 +56,7 @@ public class OfflineDataSource extends DataSource {
     }
 
     void setServiceName(String serviceName) {
-    	knownService = serviceName == null ? null : config.getService(serviceName);
+    	knownService = serviceName == null ? null : DataSourceManager.getConfig().getService(serviceName);
     }
 
     public OfflineDataSource getContactSyncDataSource() throws ServiceException {
@@ -92,64 +91,17 @@ public class OfflineDataSource extends DataSource {
         return knownService;
     }
 
-    public static DataSourceConfig getDataSourceConfig() {
-        return config;
-    }
-    
     private static final String SERVICE_NAME_LIVE = "hotmail.com";
     private static final String SERVICE_NAME_YAHOO = "yahoo.com";
     private static final String SERVICE_NAME_GMAIL = "gmail.com";
-
-    private static DataSourceConfig config;
-
-    public static void init() throws IOException {
-        File file = new File(OfflineLC.zdesktop_datasource_config.value());
-        
-        config = DataSourceConfig.read(file);
-        for (DataSourceConfig.Service service : config.getServices()) {
-            OfflineLog.offline.debug(
-                "Loaded %d folder mappings for service '%s'",
-                service.getFolders().size(), service.getName());
-        }
-        OfflineLog.offline.info("Loaded datasource configuration from '%s'", file);
-    }
-
-    private DataSourceConfig.Folder getKnownFolderByRemotePath(String remotePath) {
-        return knownService != null ? knownService.getFolderByRemotePath(remotePath) : null;
-    }
-
-    private DataSourceConfig.Folder getKnownFolderByLocalPath(String localPath) {
-        return knownService != null ? knownService.getFolderByLocalPath(localPath) : null;
-    }
 
     public boolean isSyncEnabledByDefault(String localPath) {
         if (localPath.equalsIgnoreCase("/Inbox"))
             return true;
         DataSourceConfig.Folder kf = getKnownFolderByLocalPath(localPath);
         if (kf != null) return kf.isSync();
-        return config.isSyncAllFolders() ||
+        return DataSourceManager.getConfig().isSyncAllFolders() ||
             getBooleanAttr(OfflineConstants.A_zimbraDataSourceSyncAllServerFolders, false);
-    }
-
-    @Override
-    public String mapRemoteToLocalPath(String remotePath) {
-        DataSourceConfig.Folder kf = getKnownFolderByRemotePath(remotePath);
-        return kf != null ? kf.getLocalPath() : null;
-    }
-
-    @Override
-    public String mapLocalToRemotePath(String localPath) {
-        DataSourceConfig.Folder kf = getKnownFolderByLocalPath(localPath);
-        return kf != null ? kf.getRemotePath() : null;
-    }
-
-    @Override
-    public boolean ignoreRemotePath(String remotePath) {
-        DataSourceConfig.Folder kf = getKnownFolderByRemotePath(remotePath);
-        if (kf != null) return kf.isIgnore();
-        // Also ignore remote path that would conflict with known local path
-        String localPath = "/" + remotePath;
-        return getKnownFolderByLocalPath(localPath) != null;
     }
 
     @Override

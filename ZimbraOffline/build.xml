@@ -404,7 +404,7 @@
 			<param name="param.production" value="${param.production}" />
 		</antcall>
 		<antcall target="offline-zimlet-war" />
-		<copy tofile="${dist.dir}/conf/datasource.xml" file="${config.dir}/datasource.xml" overwrite="true" />
+		<copy todir="${dist.dir}/conf" file="${server.config.dir}/datasource.xml" overwrite="true" />
 		<copy todir="${dist.dir}/conf" file="${config.dir}/derby.properties" overwrite="true"/>
 		<copy tofile="${dist.dir}/conf/localconfig.xml" file="${config.dir}/localconfig.xml" overwrite="true" />
 		<copy tofile="${dist.dir}/conf/log4j.properties" file="${config.dir}/log4j.properties" overwrite="true" />

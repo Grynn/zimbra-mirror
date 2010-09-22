@@ -14,8 +14,6 @@
  */
 package com.zimbra.cs.offline;
 
-import java.io.File;
-
 import com.zimbra.common.localconfig.KnownKey;
 import com.zimbra.common.util.Constants;
 
@@ -66,9 +64,7 @@ public class OfflineLC {
     public static final KnownKey dns_cache_ttl;
     
     public static final KnownKey auth_token_lifetime;
-    
-    public static final KnownKey zdesktop_datasource_config;
-    
+
     public static final KnownKey zdesktop_upload_size_limit;
     
     public static final KnownKey zdesktop_yauth_appid;
@@ -279,10 +275,6 @@ public class OfflineLC {
         http_connection_timeout = new KnownKey("http_connection_timeout");
         http_connection_timeout.setDefault("30000");
         http_connection_timeout.setDoc("Timeout in milliseconds while waiting for connection to establish. A value of zero means no timeout. Default 30000 (30 seconds).");
-
-        zdesktop_datasource_config = new KnownKey("zimbra desktop datasource configuration");
-        zdesktop_datasource_config.setDefault("${zimbra_home}" + File.separator + "conf" + File.separator + "datasource.xml");
-        zdesktop_datasource_config.setDoc("Path to datasource configuration file.");
 
         zdesktop_upload_size_limit = new KnownKey("zdesktop_upload_size_limit");
         zdesktop_upload_size_limit.setDefault("1073741824"); // 1024 * 1024 * 1024

@@ -22,8 +22,9 @@ import com.zimbra.common.util.SystemUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.offline.OfflineDataSource;
-import com.zimbra.cs.account.offline.DataSourceConfig;
+import com.zimbra.cs.account.DataSourceConfig;
 import com.zimbra.cs.datasource.CalDavDataImport;
+import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.dav.DavException;
 import com.zimbra.cs.dav.client.CalDavClient;
 import com.zimbra.cs.mailbox.OfflineServiceException;
@@ -42,7 +43,7 @@ public class OfflineCalDavDataImport extends CalDavDataImport {
     public void test() throws ServiceException {
         try {
             DataSourceConfig.Service ks =
-                OfflineDataSource.getDataSourceConfig().getService(serviceName);
+                DataSourceManager.getConfig().getService(serviceName);
             String url, path;
             if (ks != null && ((url = ks.getCalDavTargetUrl()) != null &&
                               ((path = ks.getCalDavPrincipalPath()) != null))) {
