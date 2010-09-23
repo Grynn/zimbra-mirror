@@ -21,11 +21,7 @@
 * @author Greg Solovyev
 **/
 ZaDLXFormView = function(parent, entry) {
-	ZaTabView.call(this, {
-		parent:parent, 
-		iKeyName:"ZaDLXFormView",
-		contextId:ZaId.TAB_DL_EDIT
-	});
+	ZaTabView.call(this, parent, "ZaDLXFormView");
 	this.dlStatusChoices = [
 		{value:"enabled", label:ZaMsg.DL_Status_enabled}, 
 		{value:"disabled", label:ZaMsg.DL_Status_disabled}
@@ -1176,13 +1172,13 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 							forceUpdate: true, preserveSelection:false, multiselect:true,cssClass: "DLSource", 
 							headerList:null,onSelection:ZaDLXFormView.aliasSelectionListener
 						},
- 				{type:_GROUP_, numCols:5, width:"100px", colSizes:["80px","2px","80px","2px","80px"],
+ 				{type:_GROUP_, numCols:5, width:"100px", colSizes:["60px","60px","60px"],
                                               cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
 							items: [
 								deleteAliasButton,
-								{type:_CELLSPACER_},
+								//{type:_CELLSPACER_},
 								editAliasButton,
-								{type:_CELLSPACER_},
+								//{type:_CELLSPACER_},
 								addAliasButton
 							]
 						}
@@ -1215,22 +1211,22 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 				]
 			},
 			
-			{type:_SPACER_, height:"5"},  
+			{type:_SPACER_, height:"15"},
 			{type:_ZAALLSCREEN_GROUPER_, numCols:1, width:"98%", label:ZaMsg.Shares_ListTitle,  
 			items: [
 		    	{ref:ZaDistributionList.A2_publishedShares, bmolsnr:true,
-		    		type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource",onSelection:ZaDLXFormView.shareSelectionListener,
+		    		type:_DWT_LIST_, height:"200", width:"120%", cssClass: "DLSource",onSelection:ZaDLXFormView.shareSelectionListener,
 				   	multiselect:true, widgetClass:ZaSharesListView, headerList:shareHeaderList
 				},
-				{type:_GROUP_, numCols:4, width:"350px", colSizes:["150px","5px","150px","auto"], 
+				{type:_GROUP_, numCols:3, width:"350px", colSizes:["150px","150px","auto"], 
 					cssStyle:"margin-bottom:10px;padding-bottom:0px;margin-top:10px;pxmargin-left:10px;margin-right:10px;",
 					items: [
-						{type:_DWT_BUTTON_, label:ZaMsg.Shares_PublishNew,width:"150px",
+						{type:_DWT_BUTTON_, label:ZaMsg.Shares_PublishNew,width:"100px",
 							id:"deleteShareButton",onActivate:"ZaDLXFormView.publishNewShareButtonListener.call(this,event)",
 							enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.PUBLISH_SHARE_RIGHT]]
 						},
-						{type:_CELLSPACER_},
-						{type:_DWT_BUTTON_, label:ZaMsg.Shares_UnPublish,width:"210px",
+						//{type:_CELLSPACER_},
+						{type:_DWT_BUTTON_, label:ZaMsg.Shares_UnPublish,width:"120px",
 							id:"deleteShareButton",onActivate:"ZaDLXFormView.upublishShareButtonListener.call(this,event)",
 							enableDisableChangeEventSources:[ZaDistributionList.A2_published_share_selection_cache],
 							enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.PUBLISH_SHARE_RIGHT],[XForm.checkInstanceValueNotEmty,ZaDistributionList.A2_published_share_selection_cache]]
