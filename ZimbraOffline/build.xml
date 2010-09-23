@@ -104,8 +104,6 @@
 	<property name="server.jarfile" location="${server.build.dir}/zimbrastore.jar" />
 	<property name="common.jarfile" location="${common.dir}/build/zimbracommon.jar" />
 
-	<property name="server.wiki.dir" location="${server.build.dir}/dist/wiki" />
-
 	<property name="ical4j.jar" value="ical4j-0.9.16-patched.jar" />
 
 	<property name="jetty.home.dir" location="${zimbra.offline.app.dir}/jetty" />
@@ -496,11 +494,6 @@
 		<copy todir="${dist.dir}/lib" file="${build.dir}/zdesktop.jar" overwrite="true" />
 		<copy todir="${jetty.dir}/lib" file="${build.dir}/offlinecfgtool.jar" overwrite="true" />
 
-		<!-- wikis -->
-		<mkdir dir="${dist.dir}/wiki/Templates" />
-		<copy todir="${dist.dir}/wiki/Templates" overwrite="true">
-			<fileset dir="${server.wiki.dir}/Template" />
-		</copy>
 	</target>
 
 	<target name="offline-redeploy-zimlets">
@@ -760,7 +753,6 @@
 		<move file="${dist.dir}/conf" tofile="${dist.data.dir}/conf" />
 		<move file="${dist.dir}/lib" tofile="${dist.app.dir}/lib"/>
 		<move file="${dist.dir}/jetty" tofile="${dist.app.dir}/jetty"/>
-		<move file="${dist.dir}/wiki" tofile="${dist.data.dir}/wiki"/>
 					
 		<!-- create user folders -->
 		<mkdir dir="${dist.data.dir}/bin"/>
