@@ -908,25 +908,25 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 	cases.push(case_acct_picker);
 	var case_imap_options = {type:_CASE_, numCols:2, colSizes:["250px","380px"],tablGroupKey:ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS,caseKey:ZaBulkDataImportXWizard.STEP_IMAP_OPTIONS,
 			items:[
-			       {type:_TEXTFIELD_,label:com_zimbra_bulkprovision.IMAPHost, ref:ZaBulkProvision.A2_IMAPHost, visibilityChecls:[],enableDisableChecks:[]},
-			       {type:_TEXTFIELD_,label:com_zimbra_bulkprovision.IMAPPort, ref:ZaBulkProvision.A2_IMAPPort, visibilityChecls:[],enableDisableChecks:[]},
+			       {type:_TEXTFIELD_,label:com_zimbra_bulkprovision.IMAPHost, ref:ZaBulkProvision.A2_IMAPHost, visibilityChecks:[],enableDisableChecks:[]},
+			       {type:_TEXTFIELD_,label:com_zimbra_bulkprovision.IMAPPort, ref:ZaBulkProvision.A2_IMAPPort, visibilityChecks:[],enableDisableChecks:[]},
 			       {ref:ZaBulkProvision.A2_connectionType, type:_OSELECT1_, label:com_zimbra_bulkprovision.IMAPConnectionType,labelLocation:_LEFT_,
 			    	   visibilityChecks:[],enableDisableChecks:[]
 			       },
 			       {ref:ZaBulkProvision.A2_useAdminLogin,  type:_CHECKBOX_,  
 			    	   label:com_zimbra_bulkprovision.UseIMAPAdminCredentialsChkBx,trueValue:"1", falseValue:"0",visibilityChecks:[],enableDisableChecks:[]
 			       },			       
-			       {type:_TEXTFIELD_,label:com_zimbra_bulkprovision.IMAPAdminLogin, ref:ZaBulkProvision.A2_IMAPAdminLogin, visibilityChecls:[],
+			       {type:_TEXTFIELD_,label:com_zimbra_bulkprovision.IMAPAdminLogin, ref:ZaBulkProvision.A2_IMAPAdminLogin, 
 			    	   enableDisableChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_useAdminLogin,"1"]],
-			    	   enableDisableChangeEventSources:[ZaBulkProvision.A2_useAdminLogin]
+			    	   enableDisableChangeEventSources:[ZaBulkProvision.A2_useAdminLogin],visibilityChecks:[]
 			       },
-			       {type:_SECRET_,label:com_zimbra_bulkprovision.IMAPAdminPassword, ref:ZaBulkProvision.A2_IMAPAdminPassword, visibilityChecls:[],
+			       {type:_SECRET_,label:com_zimbra_bulkprovision.IMAPAdminPassword, ref:ZaBulkProvision.A2_IMAPAdminPassword, 
 			    	   enableDisableChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_useAdminLogin,"1"]],
-			    	   enableDisableChangeEventSources:[ZaBulkProvision.A2_useAdminLogin]
+			    	   enableDisableChangeEventSources:[ZaBulkProvision.A2_useAdminLogin],visibilityChecks:[]
 			       },
-			       {type:_SECRET_,label:com_zimbra_bulkprovision.IMAPAdminPasswordConfirm, ref:ZaBulkProvision.A2_IMAPAdminPasswordConfirm, visibilityChecls:[],
+			       {type:_SECRET_,label:com_zimbra_bulkprovision.IMAPAdminPasswordConfirm, ref:ZaBulkProvision.A2_IMAPAdminPasswordConfirm,
 			    	   enableDisableChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_useAdminLogin,"1"]],
-			    	   enableDisableChangeEventSources:[ZaBulkProvision.A2_useAdminLogin]
+			    	   enableDisableChangeEventSources:[ZaBulkProvision.A2_useAdminLogin],visibilityChecks:[]
 			       }
 			]
 	};
@@ -947,8 +947,8 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 			       {type:_OUTPUT_,label:com_zimbra_bulkprovision.FinishedMaiboxes, ref:ZaBulkProvision.A2_finishedCount, visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_finishedCount]],
 			    	   visibilityChangeEventSources:[ZaBulkProvision.A2_finishedCount]
 			       },
-			       {type:_OUTPUT_,label:com_zimbra_bulkprovision.IMAPHost, ref:ZaBulkProvision.A2_IMAPHost, visibilityChecls:[],enableDisableChecks:[]},
-			       {type:_OUTPUT_,label:com_zimbra_bulkprovision.IMAPPort, ref:ZaBulkProvision.A2_IMAPPort, visibilityChecls:[],enableDisableChecks:[]},
+			       {type:_OUTPUT_,label:com_zimbra_bulkprovision.IMAPHost, ref:ZaBulkProvision.A2_IMAPHost, visibilityChecks:[],enableDisableChecks:[]},
+			       {type:_OUTPUT_,label:com_zimbra_bulkprovision.IMAPPort, ref:ZaBulkProvision.A2_IMAPPort, visibilityChecks:[],enableDisableChecks:[]},
 			       {ref:ZaBulkProvision.A2_connectionType, type:_OUTPUT_, label:com_zimbra_bulkprovision.IMAPConnectionType,labelLocation:_LEFT_,
 			    	   visibilityChecks:[],enableDisableChecks:[]
 			       },
@@ -956,7 +956,7 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 			    	   label:com_zimbra_bulkprovision.UseIMAPAdminCredentials,
 			    	   getDisplayValue:function(val) {	return val=="1" ? ZaMsg.Yes : ZaMsg.No; 	}
 			       },			       
-			       {type:_OUTPUT_,label:com_zimbra_bulkprovision.IMAPAdminLogin, ref:ZaBulkProvision.A2_IMAPAdminLogin, visibilityChecls:[],
+			       {type:_OUTPUT_,label:com_zimbra_bulkprovision.IMAPAdminLogin, ref:ZaBulkProvision.A2_IMAPAdminLogin, visibilityChecks:[],
 			    	   enableDisableChecks:[[XForm.checkInstanceValue,ZaBulkProvision.A2_useAdminLogin,"1"]],
 			    	   enableDisableChangeEventSources:[ZaBulkProvision.A2_useAdminLogin]
 			       },

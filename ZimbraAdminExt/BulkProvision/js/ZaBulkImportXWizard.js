@@ -312,6 +312,9 @@ ZaBulkImportXWizard.prototype.previewCallback = function(params,resp) {
 			throw(resp.getException());
 		} else {
 			var response = resp.getResponse().Body.BulkImportAccountsResponse;
+			if(!response) {
+				response = resp.getResponse().Body.GenerateBulkProvisionFileFromLDAPResponse;
+			}
 			var accountCount = "0";
 			var domainCount = "0";
 			var skippedDomainCount = "0";
