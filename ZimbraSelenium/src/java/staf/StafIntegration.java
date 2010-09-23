@@ -23,6 +23,7 @@ import com.ibm.staf.service.STAFCommandParser;
 import com.ibm.staf.service.STAFServiceInterfaceLevel30;
 
 import framework.core.ExecuteHarnessMain;
+import framework.util.ZimbraSeleniumProperties;
 
 public class StafIntegration implements STAFServiceInterfaceLevel30 {
     static private Logger mLog = Logger.getLogger(StafIntegration.class);
@@ -40,10 +41,12 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     private STAFCommandParser stafParserHalt;
 
     private String optionExecute = "execute";
-    private String argRoot = "zimbraseleniumroot";
+    private String argServer = "server";
+    private String argRoot = "root";
     private String argJarfile = "jarfile";
     private String argPattern = "pattern";
     private String argGroup = "group";
+    private String argLog = "log";
     
     private String optionQuery= "query";
     private String optionHelp = "help";
@@ -129,11 +132,9 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			serviceIsRunning = true;
 		
 			// Parse Arguments
-//	        if (parsedRequest.optionTimes(argRoot) == 1 ) {
-//	        	ZimbraSeleniumProperties.workingDir = parsedRequest.optionValue(argRoot);
-//	        } else {
-//	        	ZimbraSeleniumProperties.workingDir = ".";
-//	        }
+	        if (parsedRequest.optionTimes(argRoot) != 1 ) {
+	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argRoot +" can be specified"));	        		        	
+	        }
 	        if (parsedRequest.optionTimes(argJarfile) != 1 ) {
 	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argJarfile +" can be specified"));	        		        	
 	        }
@@ -143,6 +144,17 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	        if ( parsedRequest.optionTimes(argGroup) < 1 ) {
 	        	return (new STAFResult(STAFResult.JavaError, "Must specify at least one "+ argGroup));
 	        }
+	        if ( parsedRequest.optionTimes(argLog) != 1 ) {
+	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argLog +" can be specified"));
+	        }
+	        
+	        ZimbraSeleniumProperties.configPropFile = new File(parsedRequest.optionValue(argRoot) + "/conf/config.properties");
+	        try {
+				mLog.info("Using "+ ZimbraSeleniumProperties.configPropFile.getCanonicalPath() + ", which exists? "+ ZimbraSeleniumProperties.configPropFile.exists());
+			} catch (IOException e1) {
+				mLog.error(e1);
+			}
+	        
 	        
 	        // Create the execution object
 	        ExecuteHarnessMain harness = new ExecuteHarnessMain();
@@ -151,6 +163,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	        harness.classfilter = parsedRequest.optionValue(argPattern);
 	        // TODO: Parse the GROUP args
 	        harness.groups = Arrays.asList("always", "sanity");
+	        harness.testoutputfoldername = parsedRequest.optionValue(argLog);
 	        
 	        // Execute!
 			try {
@@ -189,7 +202,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     	// TODO: Need to convert the help command into the variables, aEXECUTE, aHELP, etc.
         return new STAFResult(STAFResult.Ok,
          "StafTest Service Help\n\n" + 
-         "EXECUTE ZIMBRASELENIUMROOT <path> JARFILE <path> PATTERN <projects.zcs.tests> [ GROUP <always|sanity|smoke|full> ]*\n\n" +
+         "EXECUTE SERVER <servername|IP address> ROOT <ZimbraSelenium path> JARFILE <path> PATTERN <projects.zcs.tests> [ GROUP <always|sanity|smoke|full> ]*\n\n" +
          "QUERY -- TBD: should return statistics on active jobs \n\n" +
          "HALT <TBD> -- TBD: should stop any executing tests\n\n" +
          "HELP\n\n");
@@ -250,14 +263,18 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         // EXECUTE parser
         stafParserExecute = new STAFCommandParser();
         stafParserExecute.addOption(optionExecute, 1, STAFCommandParser.VALUENOTALLOWED);
+        stafParserExecute.addOption(argServer, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argRoot, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argJarfile, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argPattern, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argGroup, 1, STAFCommandParser.VALUEREQUIRED);
-        stafParserExecute.addOptionNeed(optionExecute, argRoot);
+        stafParserExecute.addOption(argLog, 1, STAFCommandParser.VALUEREQUIRED);
+        stafParserExecute.addOptionNeed(optionExecute, argServer);
+        stafParserExecute.addOptionNeed(argServer, argRoot);
         stafParserExecute.addOptionNeed(argRoot, argJarfile);
         stafParserExecute.addOptionNeed(argJarfile, argPattern);
         stafParserExecute.addOptionNeed(argPattern, argGroup);
+        stafParserExecute.addOptionNeed(argGroup, argLog);
 
         // QUERY parser
         stafParserQuery = new STAFCommandParser();

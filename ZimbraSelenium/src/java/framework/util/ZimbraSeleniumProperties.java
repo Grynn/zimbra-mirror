@@ -5,6 +5,7 @@ import java.io.File;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.PropertiesConfiguration;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -15,11 +16,18 @@ public class ZimbraSeleniumProperties {
 	// Use these strings as arguments for some standard properties, e.g. ZimbraSeleniumProperties.getStringProperty(PropZimbraServer, "default");
 	public static final String PropZimbraVersion = "zimbraserverversion"; 
 	
-	private static ZimbraSeleniumProperties instance = new ZimbraSeleniumProperties();
+	private static ZimbraSeleniumProperties instance = null;
+	
+	/**
+	 * Set configPropFile before initializing ZimbraSeleniumProperties to hard code
+	 * the path to your config file
+	 */
+	public static File configPropFile = null;
+	
 	private final String configPropName = "config.properties";
-	private PropertiesConfiguration configProp;
 	private File dir;
 	private String workingDir = ".";
+	private PropertiesConfiguration configProp;
 
 	public static String getStringProperty(String key, String defaultValue) {
 		return (ZimbraSeleniumProperties.getInstance().getConfigProp()
@@ -60,6 +68,13 @@ public class ZimbraSeleniumProperties {
 	}
 
 	private static ZimbraSeleniumProperties getInstance() {
+		if ( instance == null ) {
+			synchronized(ZimbraSeleniumProperties.class) {
+				if ( instance == null ) {
+					instance = new ZimbraSeleniumProperties();
+				}
+			}
+		}
 		return instance;
 	}
 
@@ -69,53 +84,69 @@ public class ZimbraSeleniumProperties {
 	}
 
 	private void init() {
-		String wd = PathFinder.findWorkingDir();
-
-		if (wd != null)
-			workingDir = wd;
-
-		dir = new File(workingDir);
-
-		try {
-			File file = new File(dir.getCanonicalPath() + File.separator
-					+ "conf" + File.separator + configPropName);
-
-			if (!file.exists()) {
-				File[] files = PathFinder.listFilesAsArray(dir, configPropName,
-						true);
-				if (files != null && files.length > 0) {
-					file = files[0];
-				}
-				if (!file.exists() || !file.getName().contains(configPropName)) {
-					ZimbraSeleniumLogger.mLog.error(configPropName
-							+ " does not exist!");
-					configProp = createDefaultProperties();
-				}
-			}
-
-			if (null == configProp)
-				configProp = new PropertiesConfiguration(file);
+		
+		if ( configPropFile != null ) {
 			
-		} catch (Exception ex) {
-			ZimbraSeleniumLogger.mLog.error("Exception : " + ex);
+			try {
+				
+				logger.info("config.properties is "+ configPropFile.getAbsolutePath());
+				configProp = new PropertiesConfiguration(configPropFile);
+
+			} catch (ConfigurationException e) {
+				ZimbraSeleniumLogger.mLog.error("Unable to open config file: " + configPropFile.getAbsolutePath(), e);
+				logger.info("config.properties is default");
+				configProp = createDefaultProperties();
+			}
+			
+		} else {
+			
+			// Use defaults to find the config.properties file
+			String wd = PathFinder.findWorkingDir();
+	
+			if (wd != null)
+				workingDir = wd;
+	
+			dir = new File(workingDir);
+	
+			try {
+				File file = new File(dir.getCanonicalPath() + File.separator
+						+ "conf" + File.separator + configPropName);
+	
+				if (!file.exists()) {
+					File[] files = PathFinder.listFilesAsArray(dir, configPropName,
+							true);
+					if (files != null && files.length > 0) {
+						file = files[0];
+					}
+					if (!file.exists() || !file.getName().contains(configPropName)) {
+						ZimbraSeleniumLogger.mLog.error(configPropName
+								+ " does not exist!");
+						logger.info("config.properties is default");
+						configProp = createDefaultProperties();
+					}
+				}
+	
+				if (null == configProp) {
+					logger.info("config.properties is " + file);
+					configProp = new PropertiesConfiguration(file);
+				}
+				
+			} catch (Exception ex) {
+				ZimbraSeleniumLogger.mLog.error("Exception : " + ex);
+			}
 		}
 
 		String locale = configProp.getString("locale");
 
-		configProp.setProperty("zmMsg", ResourceBundle.getBundle(
-				"framework.locale.ZmMsg", new Locale(locale)));
+		configProp.setProperty("zmMsg", ResourceBundle.getBundle("ZmMsg", new Locale(locale)));
 
-		configProp.setProperty("zhMsg", ResourceBundle.getBundle(
-				"framework.locale.ZhMsg", new Locale(locale)));
+		configProp.setProperty("zhMsg", ResourceBundle.getBundle("ZhMsg", new Locale(locale)));
 
-		configProp.setProperty("ajxMsg", ResourceBundle.getBundle(
-				"framework.locale.AjxMsg", new Locale(locale)));
+		configProp.setProperty("ajxMsg", ResourceBundle.getBundle("AjxMsg", new Locale(locale)));
 
-		configProp.setProperty("i18Msg", ResourceBundle.getBundle(
-				"framework.locale.I18nMsg", new Locale(locale)));
+		configProp.setProperty("i18Msg", ResourceBundle.getBundle("I18nMsg", new Locale(locale)));
 
-		configProp.setProperty("zsMsg", ResourceBundle.getBundle(
-				"framework.locale.ZsMsg", new Locale(locale)));
+		configProp.setProperty("zsMsg", ResourceBundle.getBundle("ZsMsg", new Locale(locale)));
 
 	}
 
