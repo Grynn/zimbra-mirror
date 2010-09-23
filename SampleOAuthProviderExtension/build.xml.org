@@ -1,0 +1,58 @@
+<project name="SampleOAuthProvider" default="jar"> <!-- default="jar" -->
+	<property name="jar.file" value="sampleoauthprov.jar" />
+	<property name="src.dir" location="src" />
+	<property name="src.java.dir" location="${src.dir}/java" />
+	<property name="build.dir" location="build" />
+	<property name="build.classes.dir" location="${build.dir}/classes" />
+	<property name="common.dir" location="../ZimbraCommon" />
+	<property name="common.classes.dir" location="${common.dir}/build/classes" />
+
+	<path id="all.java.path">
+		<pathelement location="${src.java.dir}" />
+	</path>
+
+	<target name="build-init">
+		<mkdir dir="${build.classes.dir}" />
+	</target>
+
+
+	<property environment="env"/>
+	
+	<!-- set up dependency on ZimbraServer -->
+	<condition property="zimbraServer.dir" value="${env.ZIMBRASERVER_DIR}">
+	    <isset property="env.ZIMBRASERVER_DIR" />
+	</condition>	
+	<condition property="zimbraServer.dir" value="../ZimbraServer">
+	    <not><isset property="env.ZIMBRASERVER_DIR"/></not>
+	</condition>	
+
+	<path id="class.path">
+		<pathelement location="${common.classes.dir}" />
+		<pathelement location="${build.classes.dir}" />
+		<pathelement location="${zimbraServer.dir}/build/classes"/>
+		<fileset dir="${common.dir}/jars">
+			<include name="**/*.jar"/>
+		</fileset>
+		<fileset dir="jars">
+			<include name="**/*.jar"/>
+		</fileset>
+		<fileset dir="../ZimbraOffline/build">
+			<include name="**/*.jar"/>
+		</fileset>
+	</path>
+
+	<target name="compile" depends="build-init" description="Compiles the source code">
+		<ant dir="${common.dir}" target="jar" inheritAll="false" />
+		<javac destdir="${build.classes.dir}" debug="true" classpathref="class.path">
+			<src refid="all.java.path" />
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile" description="Creates the jar file">
+		<jar manifest="conf/MANIFEST.MF" destfile="${build.dir}/${jar.file}" basedir="${build.classes.dir}" />
+	</target>
+
+	<target name="clean" description="Removes any temporary files">
+		<delete dir="${build.dir}" />
+	</target>
+</project>

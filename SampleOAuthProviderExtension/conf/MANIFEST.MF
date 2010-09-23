@@ -1,0 +1,1 @@
+Zimbra-Extension-Class: sample.oauth.provider.OAuthProvExt
