@@ -10,6 +10,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Server;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.ImportStatus;
 
@@ -111,7 +112,7 @@ public class BulkIMAPImportTaskManager {
         } 
     }
     
-    public static void startImport(String adminID) throws BulkProvisionException {
+    public static void startImport(String adminID) throws ServiceException {
         Queue<HashMap<taskKeys, String>> queue = null;
         synchronized (importQueues) {
             if (!importQueues.containsKey(adminID)) {
@@ -122,7 +123,11 @@ public class BulkIMAPImportTaskManager {
         if (queue.isEmpty()) {
             throw BulkProvisionException.EMPTY_IMPORT_QUEUE();
         }
-        int numThreads = queue.size() > MAX_THREADS ? MAX_THREADS : queue.size();
+        Server server = Provisioning.getInstance().getLocalServer();
+        int numThreads = server.getAdminImapImportNumThreads();
+        if(numThreads == 0) { //unlimited
+            numThreads = queue.size();
+        }
         for (int i = 0; i < numThreads; i++) {
             SingleIMAPIMportThread thread = new SingleIMAPIMportThread(adminID);
             thread.start();
