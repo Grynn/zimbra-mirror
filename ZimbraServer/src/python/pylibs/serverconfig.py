@@ -61,5 +61,16 @@ class ServerConfig(config.Config):
 				elif (v == "mta"):
 					self.serviceconfig["sasl"] = "zimbraServiceEnabled"
 
+		milter = None
+		if (self["zimbraMilterServerEnabled"] == "TRUE"):
+			if self["zimbraMilterBindAddress"] is None:
+				self["zimbraMilterBindAddress"] = "127.0.0.1"
+			milter = "inet:%s:%s" % (self["zimbraMilterBindAddress"],self["zimbraMilterBindPort"])
+
+		if self["zimbraMtaSmtpdMilters"] is not None and milter is not None:
+			self["zimbraMtaSmtpdMilters"] = "%s, %s" % (self["zimbraMtaSmtpdMilters"], milter)
+		elif self["zimbraMtaSmtpdMilters"] is None and milter is not None:
+			self["zimbraMtaSmtpdMilters"] = milter
+
 		dt = time.clock()-t1
 		Log.logMsg(5,"Serverconfig loaded in %.2f seconds" % dt)

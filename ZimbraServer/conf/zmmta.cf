@@ -52,6 +52,9 @@ SECTION mta
 	VAR zimbraMtaMyOrigin
 	VAR zimbraMtaMyDestination
 	VAR zimbraMtaMyHostname
+	VAR zimbraMilterServerEnabled
+	VAR zimbraMilterServerBindAddress
+	VAR zimbraMilterServerBindPort
 	VAR zimbraMtaSmtpdMilters
 	VAR zimbraMtaNonSmtpdMilters
 	if VAR zimbraMtaMyNetworks
@@ -66,9 +69,11 @@ SECTION mta
 	if VAR zimbraMtaMyOrigin
 		POSTCONF myorigin VAR zimbraMtaMyOrigin
 	fi
+	POSTCONF smtpd_milters
 	if VAR zimbraMtaSmtpdMilters
 		POSTCONF smtpd_milters VAR zimbraMtaSmtpdMilters
 	fi
+	POSTCONF non_smtpd_milters
 	if VAR zimbraMtaNonSmtpdMilters
 		POSTCONF non_smtpd_milters VAR zimbraMtaNonSmtpdMilters
 	fi

@@ -21,7 +21,7 @@ zmsetvars \
 	zimbra_server_hostname 
 
 BASE=${zimbra_home:=/opt/zimbra}
-SCRIPTS="postfix zmsaslauthdctl"
+SCRIPTS="postfix zmsaslauthdctl zmmilterctl"
 
 rewriteconfig() {
   echo -n "Rewriting configuration files..."
