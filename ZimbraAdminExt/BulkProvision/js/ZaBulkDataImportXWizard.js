@@ -770,8 +770,8 @@ ZaBulkDataImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		items:[
 		       {type:_DWT_ALERT_,colSpan:2,style:DwtAlert.INFO, iconVisible:false, content:com_zimbra_bulkprovision.DataImportWizardOverview,visibilityChecks:[]},
 		       {ref:ZaBulkProvision.A2_sourceServerType, type:_OSELECT1_, label:com_zimbra_bulkprovision.SourceServerType,labelLocation:_LEFT_,visibilityChecks:[],enableDisableChecks:[]},
-		       {type:_OSELECT1_,label:com_zimbra_bulkprovision.ImportAccountRecordsQ,ref:ZaBulkProvision.A2_provisionUsers,choices:this.yesNoChoices},
-		       {type:_OSELECT1_,label:com_zimbra_bulkprovision.ImportAccountMailQ,ref:ZaBulkProvision.A2_importEmail,choices:this.yesNoChoices}
+		       {type:_OSELECT1_,label:com_zimbra_bulkprovision.ImportAccountRecordsQ,ref:ZaBulkProvision.A2_provisionUsers,choices:this.yesNoChoices,visibilityChecks:[],enableDisableChecks:[]},
+		       {type:_OSELECT1_,label:com_zimbra_bulkprovision.ImportAccountMailQ,ref:ZaBulkProvision.A2_importEmail,choices:this.yesNoChoices,visibilityChecks:[],enableDisableChecks:[]}
        ]
 	};
 	cases.push(case_intro);
