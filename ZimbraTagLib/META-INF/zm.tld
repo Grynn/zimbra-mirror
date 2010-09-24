@@ -5070,6 +5070,50 @@
     </tag>
 
     <tag>
+        <description>get briefcase info</description>
+        <name>getBriefcase</name>
+        <tag-class>com.zimbra.cs.taglib.tag.briefcase.GetBriefcaseTag</tag-class>
+        <body-content>empty</body-content>
+        <variable>
+            <name-from-attribute>varSearch</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZSearchResultBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <variable>
+            <name-from-attribute>varFolder</name-from-attribute>
+            <variable-class>com.zimbra.cs.taglib.bean.ZFolderBean</variable-class>
+            <scope>AT_END</scope>
+        </variable>
+        <attribute>
+            <description>ZMailboxBean object to use</description>
+            <name>box</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>com.zimbra.cs.taglib.bean.ZMailboxBean</type>
+        </attribute>
+        <attribute>
+        <description>
+                Name of the exported scoped variable for the search result.
+            </description>
+            <name>varSearch</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+        <description>
+                Name of the exported scoped variable for the briefcase folder details.
+            </description>
+            <name>varFolder</name>
+            <required>true</required>
+        </attribute>
+        <attribute>
+            <description>briefcase folder id</description>
+            <name>id</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+      </tag>
+
+    <tag>
         <description>get document info</description>
         <name>getDocument</name>
         <tag-class>com.zimbra.cs.taglib.tag.briefcase.GetDocumentTag</tag-class>
