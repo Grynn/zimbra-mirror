@@ -154,8 +154,9 @@ function(option, selected, value) {
 	}
 
 	this._options.add(opt);
-	if (this._options.size() == 1 || selected)
+	if (this._options.size() == 1 || selected) {
 		this._setSelectedOption(opt);
+	}
 
 	// Insert the option into the table that's below the button.
 	// This is what gives the button the same size as the select menu.
@@ -175,6 +176,18 @@ function(option, selected, value) {
     // return the index of the option.
     this._optionValuesToIndices[opt.getValue()] = this._options.size() - 1;
     return (this._options.size() - 1);
+};
+
+DwtSelect.prototype.removeOption =
+function(value) {
+
+	var option = this.getOptionWithValue(value);
+	if (!option) { return; }
+	this._options.remove(option);
+	var index = this._optionValuesToIndices[value];
+	if (index != null) {
+		this._pseudoItemsEl.deleteRow(index);
+	}
 };
 
 DwtSelect.prototype.popup =
@@ -205,6 +218,7 @@ function() {
 DwtSelect.prototype.rename =
 function(value, newValue) {
 	var option = this.getOptionWithValue(value);
+	if (!option) { return; }
 	option._displayValue = newValue;
 
 	if (this.__selectedOption && (this.__selectedOption._value == value))	{
@@ -224,6 +238,7 @@ function(value, newValue) {
 DwtSelect.prototype.enableOption =
 function(value, enabled) {
 	var option = this.getOptionWithValue(value);
+	if (!option) { return; }
 	if (option.enabled != enabled) {
 		option.enabled = enabled;
 		var item = option.getItem();
@@ -671,6 +686,11 @@ DwtSelectOption = function(value, selected, displayValue, owner, optionalDOMId, 
 
 	this._internalObjectId = DwtSelect._assignId(this);
 	this.enabled = true;
+};
+
+DwtSelectOption.prototype.toString =
+function() {
+    return "DwtSelectOption";
 };
 
 /**
