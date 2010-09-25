@@ -53,7 +53,7 @@ Lifetime_XFormItem.prototype.visibilityChecks = [ZaItem.hasReadPermission];
 Lifetime_XFormItem.prototype.enableDisableChecks = [ZaItem.hasWritePermission];
 Lifetime_XFormItem.prototype.nowrap = false;
 Lifetime_XFormItem.prototype.labelWrap = true;
-Lifetime_XFormItem.initializeItems = function(){
+Lifetime_XFormItem.prototype.initializeItems = function(){
 	this.items = [
 	{type:_TEXTFIELD_, ref:".", labelLocation:_NONE_, cssClass:"admin_xform_number_input", 
 	 	visibilityChecks:[],
