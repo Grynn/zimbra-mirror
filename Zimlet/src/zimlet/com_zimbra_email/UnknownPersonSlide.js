@@ -25,8 +25,6 @@ function UnknownPersonSlide() {
 UnknownPersonSlide.PHOTO_ID = "unkownPerson_photoBG";
 UnknownPersonSlide.PHOTO_PARENT_ID = "unkownPerson_photoBGDiv";
 UnknownPersonSlide.TEXT_DIV_ID = "unkownPerson_TextDiv";
-UnknownPersonSlide.PHOTO_BASE_URL =  "https://people.vmware.com/webapp/htdocs/ServeJPG.php?imgurl=https://people.vmware.com/employees/";
-UnknownPersonSlide.EMPLOYEE_PROFILE_BASE_URL = "https://people.vmware.com/webapp/htdocs/PersonalProfile.php?guid=";
 UnknownPersonSlide.SLIDE_PX_20 =  20;//height when Full name of the email is present
 UnknownPersonSlide.SLIDE_PX_15 =  15;//height when full name of the is absent
 /**
@@ -37,6 +35,16 @@ UnknownPersonSlide.prototype.onEmailHoverOver =
 function(emailZimlet) {
 	emailZimlet.addSubscriberZimlet(this, false);
 	this.emailZimlet = emailZimlet;
+	this._alwaysSetTooltipToSmall();
+};
+
+UnknownPersonSlide.prototype._alwaysSetTooltipToSmall =
+function() {
+	var tooltipSize = EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_VERYSMALL];
+	var size = tooltipSize.replace(/px/ig, "");
+	var arry = size.split(" x ");
+	this._tooltipWidth = arry[0];
+	this._tooltipHeight = arry[1];
 };
 
 /**
@@ -45,52 +53,7 @@ function(emailZimlet) {
 UnknownPersonSlide.prototype.showTooltip =
 function() {
 	var emailAddress = this.emailZimlet.emailAddress.toLowerCase();	
-	if (emailAddress.indexOf("vmware.com") == -1) {
-		this._handleImgLoadFailure();
-		return;
-	}
-	var timeoutCallback = new AjxCallback(this, this._handleImgLoadFailure);
-	this.emailZimlet.tooltip.popdown();
-	this.emailZimlet.showBusyImg(timeoutCallback, -20, -15);
-	var url = ZmZimletBase.PROXY + UnknownPersonSlide.EMPLOYEE_PROFILE_BASE_URL + emailAddress;
-	AjxRpc.invoke(null, url, null, new AjxCallback(this, this._handleProfilePageResponse), true);
-};
-
-UnknownPersonSlide.prototype._handleProfilePageResponse =
-function(response) {
-	if(!response.success) {
-		this._handleImgLoadFailure();
-		return;
-	}
-	var imageURL = this._getImageUrlFromProfileHTML(response.text);
-	var img = new Image();
-	img.onload = AjxCallback.simpleClosure(this._handleImageLoad, this, img);
-	img.id = UnknownPersonSlide.PHOTO_ID;
-	img.src = ZmZimletBase.PROXY + imageURL;
-};
-
-/**
-* Walks Profile page DOM and grabs the url
-*/
-UnknownPersonSlide.prototype._getImageUrlFromProfileHTML =
-function(html) {
-	var div  =  document.createElement("div");
-	div.style.display = "none";
-	div.innerHTML = html;
-	var imgs = div.getElementsByTagName("img");
-	for(var i =0; i< imgs.length; i++) {
-		var img = imgs[i];
-		if(img.className == "pic") {
-			var src = img.src;
-			var tmpArry = src.split("/");
-			if(tmpArry && tmpArry.length > 0) {
-				var imageName = tmpArry[tmpArry.length-1];
-				return UnknownPersonSlide.PHOTO_BASE_URL + imageName;
-			}
-			break;
-		}
-	}
-	return UnknownPersonSlide.PHOTO_BASE_URL + "noname.jpg";
+	this._handleImgLoadFailure();
 };
 
 UnknownPersonSlide.prototype._handleImgLoadFailure =
@@ -109,6 +72,31 @@ function(img) {
 	this._slide = new EmailToolTipSlide(tthtml, true, "UnknownPerson_contact", selectCallback, this.emailZimlet.getMessage("contact"));
 	this.emailZimlet.slideShow.addSlide(this._slide);
 	this._slide.select();
+	this._addClickHandlers();
+};
+
+UnknownPersonSlide.prototype._addClickHandlers =
+function() {
+	document.getElementById(UnknownPersonSlide.TEXT_DIV_ID).onmouseup = AjxCallback.simpleClosure(this._handleRightClick, this);
+	document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID).onmouseup = AjxCallback.simpleClosure(this._handleRightClick, this);
+};
+
+UnknownPersonSlide.prototype._handleRightClick =
+function(ev) {
+	var rightclick;
+	if (!ev) {
+		var ev = window.event;
+	}
+	if (ev.which){
+		rightclick = (ev.which == 3);
+	} else if (ev.button) {
+		rightclick = (ev.button == 2);
+	}
+	if(!rightclick) {
+		return;
+	}
+	this.emailZimlet.contextMenu.popup(null, this.emailZimlet.x, this.emailZimlet.y);
+	setTimeout(AjxCallback.simpleClosure(this.emailZimlet.slideShow.hideTooltipVeil, this.emailZimlet.slideShow), 200);
 };
 
 UnknownPersonSlide.prototype._handleSlideSelect =
@@ -166,7 +154,6 @@ function(img, response) {
 UnknownPersonSlide.prototype._popupToolTip =
 function() {
 	this.emailZimlet.tooltip.popup(this.emailZimlet.x, this.emailZimlet.y, true, null);
-	this.emailZimlet.tooltip._poppedUp = false;
 	this.emailZimlet.seriesAnimation.addFadeIn(EmailToolTipSlideShow.mainDivId);
 	this.emailZimlet.seriesAnimation.addPause(500);
 	this.emailZimlet.seriesAnimation.addslideUp(UnknownPersonSlide.TEXT_DIV_ID, this._textDivOffsetHeight);
@@ -225,21 +212,7 @@ function() {
 	}
 };
 
-UnknownPersonSlide.prototype.showTooltipVeil =
-function() {
-	if (this._toolTipVeil) {
-		this._toolTipVeil.style.display = "block";
-		return;
-	}
-	this._toolTipVeil = this.emailZimlet.getShell().getHtmlElement().appendChild(document.createElement('div'));
-	this._toolTipVeil.style.position = "absolute";
-	this._toolTipVeil.style.display = "block";
-	this._toolTipVeil.style.width = "100%";
-	this._toolTipVeil.style.height = "100%";
-	this._toolTipVeil.style.zIndex = "700";
-	this._toolTipVeil.style.background = "black";
-	this._toolTipVeil.style.opacity = 0.2;
-};
+
 
 UnknownPersonSlide.prototype._adjustTextDivAspects =
 function() {
@@ -253,6 +226,8 @@ function() {
 	styleObj.opacity = 0.5;
 };
 
+
+
 UnknownPersonSlide.prototype._adjustBGPhotoSize =
 function() {
 	var el = document.getElementById(UnknownPersonSlide.PHOTO_ID);
@@ -260,24 +235,24 @@ function() {
 	var height = el.height;
 	var changed = false;
 	var keepAspectRatio = false;
-	if (height > EmailTooltipZimlet.tooltipHeight) {
-		var percent = parseInt((EmailTooltipZimlet.tooltipHeight / height) * 10) / 10;
+	if (height > this._tooltipHeight) {
+		var percent = parseInt((this._tooltipHeight / height) * 10) / 10;
 		height = height * percent;
 		changed = true;
-		if (width > EmailTooltipZimlet.tooltipWidth) {//if both height & width are larger then we can shrink them w/ aspectRatio intact
+		if (width > this._tooltipWidth) {//if both height & width are larger then we can shrink them w/ aspectRatio intact
 			width = width * percent;
 			keepAspectRatio = true;
 		}
 	}
-	if (width > EmailTooltipZimlet.tooltipWidth && !keepAspectRatio) {
-		var percent = parseInt((EmailTooltipZimlet.tooltipWidth / width) * 10) / 10;
+	if (width > this._tooltipWidth && !keepAspectRatio) {
+		var percent = parseInt((this._tooltipWidth / width) * 10) / 10;
 		width = width * percent;
 		changed = true;
 
 	}
 	if (!changed) {
-		width = EmailTooltipZimlet.tooltipWidth;
-		height = EmailTooltipZimlet.tooltipHeight;
+		width = this._tooltipWidth;
+		height = this._tooltipHeight;
 	}
 	el.width = width;
 	el.height = height;
@@ -330,7 +305,7 @@ function(html) {
 		this.emailZimlet.getShell().getHtmlElement().appendChild(this._tempdiv);
 	}
 	this._tempdiv.innerHTML = html;
-	this._textDivOffsetHeight = this._tempdiv.offsetHeight + 5;
+	this._textDivOffsetHeight = this._tempdiv.offsetHeight + this._tempdiv.offsetHeight*0.25;
 	this._tempdiv.innerHTML = "";
 };
 

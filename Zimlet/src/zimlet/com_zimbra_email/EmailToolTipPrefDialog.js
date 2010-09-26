@@ -35,9 +35,9 @@ EmailToolTipPrefDialog.SIZE_XL = "XL";
 EmailToolTipPrefDialog.SIZE_2XL = "2XL";
 
 EmailToolTipPrefDialog.DIMENSIONS = [];
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_VERYSMALL]  = "220px x 270px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_SMALL]  = "230px x 290px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_MEDIUM]  = "250px x 295px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_VERYSMALL]  = "200px x 220px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_SMALL]  = "230px x 250px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_MEDIUM]  = "250px x 285px";
 EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_LARGE]  = "270px x 320px";
 EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_XL]  = "290px x 330px";
 EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_2XL]  = "300px x 340px";

@@ -17,10 +17,10 @@
 		<label style='font-size:12px;color:white;'><$= AjxStringUtil.htmlEncode(data.mobilePhone) $> (cell)</label><br/>
 	<$ } $>
 	<$ if (data.workPhone) { $>
-		<label style='font-size:12px;color:white;'><$= AjxStringUtil.htmlEncode(data.workPhone) $> (work)</label><br/>");
+		<label style='font-size:12px;color:white;'><$= AjxStringUtil.htmlEncode(data.workPhone) $> (work)</label><br/>
 	<$ } $>
 	<$ if (data.address) { $>
-		<label style='font-size:12px;color:white;'><$= AjxStringUtil.htmlEncode(data.address) $> (work)</label><br/>");
+		<label style='font-size:12px;color:white;'><$= AjxStringUtil.htmlEncode(data.address) $> (work)</label><br/>
 	<$ } $>
 	<label style='font-size:12px;color:white;font-weight:bold'><$= AjxStringUtil.htmlEncode(data.rightClickForMoreOptions) $></label><br/>
 </template>

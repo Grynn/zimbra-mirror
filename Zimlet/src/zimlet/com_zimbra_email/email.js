@@ -211,7 +211,17 @@ function(contact, address) {
 
 EmailTooltipZimlet.prototype.hoverOut =
 function(object, context, x, y, span) {
+	setTimeout(AjxCallback.simpleClosure(this._popDownIfMouseNotOnSlide, this), 300);
 	//override to ignore hoverout. 
+};
+
+EmailTooltipZimlet.prototype._popDownIfMouseNotOnSlide =
+function() {
+	if(this.slideShow && this.slideShow.isVeilShown) {
+		return;
+	} else if(this.tooltip) {
+		this.tooltip.popdown();
+	}
 };
 
 EmailTooltipZimlet.prototype.addSubscriberZimlet =
@@ -300,6 +310,7 @@ function(object, context, x, y, span) {
 	this.fullName = (object instanceof AjxEmailAddress) ? object.name : "";
 	this.canvas =   document.getElementById("zimletTooltipDiv");
 	this.slideShow = new EmailToolTipSlideShow(this, this.canvas);
+	this.contextMenu = this.getActionMenu(object, span, context, false);
 };
 
 EmailTooltipZimlet.prototype._preLoadBusyImg =
@@ -482,7 +493,6 @@ function(obj, span, context) {
 			ZmOperation.setOperation(actionMenu, "NEWCONTACT", ZmOperation.NEW_CONTACT, ZmMsg.AB_ADD_CONTACT);
 		}
 	}
-
 	return actionMenu;
 };
 

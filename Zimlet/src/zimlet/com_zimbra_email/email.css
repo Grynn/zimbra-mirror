@@ -29,3 +29,9 @@
     height: 16px;
     overflow: hidden;
 }
+.ImgEmailZimlet_closeBtn {
+  background: url("img/EmailZimlet_closeBtn.png") no-repeat center center;
+    width: 16px;
+    height: 16px;
+    overflow: hidden;
+}

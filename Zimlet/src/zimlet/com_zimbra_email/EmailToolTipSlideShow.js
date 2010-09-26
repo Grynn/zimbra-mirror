@@ -21,8 +21,9 @@ EmailToolTipSlideShow.navTableSelectRowId =  "EmailZimlet_navTableSelectRow";
 function EmailToolTipSlideShow(zimlet, canvas) {
 	this.slidesIconAndSlideMap = [];
 	this.numberOfSlides = 0;
-	this.zimlet = zimlet;
+	this.emailZimlet = zimlet;
 	this.canvas = canvas;
+	this.isVeilShown = false;
 	this._createFrame(canvas);
 	this.mainDiv = document.getElementById(EmailToolTipSlideShow.mainDivId);
 	this.navDiv = document.getElementById(EmailToolTipSlideShow.navDivId);
@@ -33,6 +34,9 @@ function EmailToolTipSlideShow(zimlet, canvas) {
 	this.currentSelectIconDivId = null;
 	this.currentSlideId = null;
 	this.navDiv.onclick = AjxCallback.simpleClosure(this._handleClick, this);
+	canvas.onmouseover =  AjxCallback.simpleClosure(this.showTooltipVeil, this);
+	//this.mainDiv.onmouseout =  AjxCallback.simpleClosure(this.hideTooltipVeil, this);
+
 };
 
 EmailToolTipSlideShow.prototype._createFrame =
@@ -94,4 +98,49 @@ function(slide) {
 	selectIconCell.width= '25px';
 	selectIconCell.align="center";
 	selectIconCell.innerHTML = ["<div id='",selectIconDivId,"' class='ImgEmailZimletRadio' style='width:16px;padding-top:2px;display:none'></div>"].join("");
+};
+
+EmailToolTipSlideShow.prototype.showTooltipVeil =
+function() {
+	var veilId = "EmailTooltipSlideShow_veil"+Dwt.getNextId();
+
+	if (this._toolTipVeil) {
+		this._toolTipVeil.style.display = "block";
+		return;
+	}
+	this._toolTipVeil = this.emailZimlet.getShell().getHtmlElement().appendChild(document.createElement('div'));
+	var styleObj = this._toolTipVeil.style;
+	styleObj.position = "absolute";
+	styleObj.id =veilId;
+	styleObj.display = "block";
+	styleObj.width = "100%";
+	styleObj.height = "100%";
+	styleObj.zIndex = "700";
+	styleObj.background = "black";
+	styleObj.opacity = 0.2;
+	styleObj.zoom = 1;
+	styleObj.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=20)";
+	styleObj.cursor = "pointer";
+	this.emailZimlet.seriesAnimation.addFadeIn(veilId);
+	this.emailZimlet.seriesAnimation.startAnimation();
+	this._toolTipVeil.onclick =  AjxCallback.simpleClosure(this.hideTooltipVeil, this);
+	this._autoHideVeilIfTooltipIsPoppedDownTimer = setInterval(AjxCallback.simpleClosure(this._hideVeilIfToolTipIsDown, this), 2000);
+	this.isVeilShown = true;
+};
+
+EmailToolTipSlideShow.prototype.hideTooltipVeil =
+function() {
+	if (this._toolTipVeil) {
+		this._toolTipVeil.style.display = "none";
+	}
+	this.emailZimlet.tooltip.popdown();
+	clearInterval(this._autoHideVeilIfTooltipIsPoppedDownTimer);
+	this.isVeilShown = false;
+};
+
+EmailToolTipSlideShow.prototype._hideVeilIfToolTipIsDown =
+function() {
+	if(this.emailZimlet.tooltip && !this.emailZimlet.tooltip._poppedUp && this.isVeilShown) {
+		this.hideTooltipVeil();
+	}
 };
