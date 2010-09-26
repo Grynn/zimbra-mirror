@@ -33,7 +33,7 @@ var GrouponZimlet = com_zimbra_groupon_handlerObject;
 
 //static variables
 GrouponZimlet.API_KEY = "da764d22a837b923b4ff39fa4f2383edcf3d1a8e";
-GrouponZimlet.PROP_SHOW_POPUP_ONCE_A_DAY = "grouponZimlet_showPopupOnceADay";
+GrouponZimlet.PROP_SHOW_POPUP_ONCE_A_DAY = "grouponZimlet_showPopupOnceADay1";
 
 GrouponZimlet.SHOW_FEATURED_AS_POPUP = "showDealAsPopup";
 GrouponZimlet.SHOW_IN_CARD_VIEW = "showInCardView";
@@ -61,7 +61,7 @@ function() {
 	this._todayStr = this._getTodayStr();
 	if (emailLastUpdateDate != this._todayStr) {
 		this.getDeals(this._dealAreaCode, GrouponZimlet.SHOW_FEATURED_AS_POPUP);
-		this.setUserProperty(GrouponZimlet.USER_PROP_LAST_UPDATE, this._todayStr, true);
+		//saving current date is done only if valid response is returned
 	}
 };
 
@@ -77,14 +77,15 @@ GrouponZimlet.prototype._handleGetDivisions = function(response) {
 	try {
 		jsonObj = eval("(" + response.text + ")");
 	} catch(ex) {
-		this._showErrorMessage(ex);
+		appCtxt.getAppController().setStatusMsg(this.getMessage("grouponError")+response.status, ZmStatusView.LEVEL_WARNING);
 		return;
 	}
 	if (!response.success) {
-		appCtxt.getAppController().setStatusMsg("Could not load Groupon Divisions:  HTTP "+response.status, ZmStatusView.LEVEL_WARNING);
+		appCtxt.getAppController().setStatusMsg(this.getMessage("grouponError")+response.status, ZmStatusView.LEVEL_WARNING);
 		return;
 	}
 	this.grouponDivisions = jsonObj;
+	this.setUserProperty(GrouponZimlet.USER_PROP_LAST_UPDATE, this._todayStr, true);//save current date upon valid response
 };
 
 //is called only once and after appActive
@@ -102,7 +103,6 @@ GrouponZimlet.prototype.appLaunch = function(appName) {
 GrouponZimlet.prototype.getDeals = function(areaCode, mode) {
 	var callback = new AjxCallback(this, this._handleGetDeals, mode);
 	var url = ["http://www.groupon.com/api/v1/",areaCode,"/deals?format=json"].join("");
-	//var url = "http://www.groupon.com/api/v1/deals.json";
 	url = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 	AjxRpc.invoke(null, url, {"X-GrouponToken":GrouponZimlet.API_KEY}, callback, true);
 };
@@ -112,11 +112,11 @@ GrouponZimlet.prototype._handleGetDeals = function(mode, response) {
 	try {
 		jsonObj = eval("(" + response.text + ")");
 	} catch(ex) {
-			appCtxt.getAppController().setStatusMsg("Could not load Deals HTTP "+response.status, ZmStatusView.LEVEL_WARNING);
+			appCtxt.getAppController().setStatusMsg(this.getMessage("grouponError")+response.status, ZmStatusView.LEVEL_WARNING);
 			return;
 	}
 	if (!response.success) {
-		this._showErrorMessage(jsonObj.status.message);
+			appCtxt.getAppController().setStatusMsg(this.getMessage("grouponError")+response.status, ZmStatusView.LEVEL_WARNING);
 		return;
 	}
 	var deals = jsonObj.deals;
@@ -168,25 +168,6 @@ GrouponZimlet.prototype._openNewsFeedCard = function(deal) {
 	cardProps.feedPostParentId = this.userId;
 	this.grouponApp._allCardsProps[tableId] = cardProps;
 	this.grouponApp.createCardView(cardProps.tableId, cardProps.deal);
-};
-
-/**
- * Displays error message.
- *
- * @param {string} expnMsg Exception message string
- */
-GrouponZimlet.prototype._showErrorMessage =
-function(expnMsg) {
-	var msg = "";
-	if (expnMsg instanceof AjxException) {
-		msg = expnMsg.msg;
-	} else {
-		msg = expnMsg;
-	}
-	var dlg = appCtxt.getMsgDialog();
-	dlg.reset();
-	dlg.setMessage(msg, DwtMessageDialog.WARNING_STYLE);
-	dlg.popup();
 };
 
 /*

@@ -1,5 +1,5 @@
 <template id='CardSection1'>
-	<div><img width=100% src='${imageUrl}'></img></div>
+	<div><img ${imageWidth} src='${imageUrl}'></img></div>
 	<br/>
 	<div style='font-size:1.1em;font-weight:bold;padding:3px;text-align:center;'>The Deal:</div>
 	<div  style='font-size:12px;padding:3px;text-align:center;font-weight:bold;'>

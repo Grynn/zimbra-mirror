@@ -250,8 +250,15 @@ function(deal, mode) {
 	if(soldOut) {
 		buyImg = this.zimlet.getResource("img/groupon_soldOut.png");		
 	}
+	var imageUrl = deal.large_image_url;
+	var imageWidth = " width=100% ";
+	if(mode == GrouponZimlet.SHOW_FEATURED_AS_POPUP) {
+		imageUrl = deal.medium_image_url;
+		imageWidth = "";
+	}
 	var subs = {
-		imageUrl: deal.large_image_url,
+		imageUrl: imageUrl,
+		imageWidth: imageWidth,
 		divisionName: deal.division_name,
 		title: deal.title,
 		value: value,
