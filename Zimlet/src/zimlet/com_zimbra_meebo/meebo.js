@@ -36,7 +36,7 @@ MeeboZimlet.LOAD_INTERVAL = 5000;
 /**
  * Defines the "load" timeout (milliseconds).
  */
-MeeboZimlet.LOAD_TIMEOUT = 20000;
+MeeboZimlet.LOAD_TIMEOUT = 15000;
 
 /**
  * Static ids
@@ -51,9 +51,8 @@ MeeboZimlet.prototype.init =
 function() {
 	this._makeSpaceForMeeboBar();
 	this._initializeMeebo();
-	//todo Need info from Meebo folks about how we can know if Meebo-bar is actually loaded. i.e. something like: Meebo.isLoaded API
-	//this._callCount = 0;
-	//this.timer = setInterval(AjxCallback.simpleClosure(this._checkMeeboExists, this), MeeboZimlet.LOAD_INTERVAL);
+	this._callCount = 0;
+	this.timer = setInterval(AjxCallback.simpleClosure(this._checkMeeboExists, this), MeeboZimlet.LOAD_INTERVAL);
 };
 
 
@@ -69,11 +68,12 @@ function() {
 
 	var cell = newRow.insertCell(0);
 	if (AjxEnv.isIE) {
-		cell.height = "24px";
+		cell.height = "22px";
 	} else {
 		cell.height = "26px";
 	}
-	cell.innerHTML = "<label style='font-size:12px;font-weight:bold;'>Space reserved for Meebo Bar Zimlet</label>";
+	cell.innerHTML = ["<label style='font-size:12px;font-weight:bold;'>",this.getMessage("MeeboZimlet_loadingMeebo"),"</label>"].join("");
+	appCtxt.getAppViewMgr().fitAll();
 };
 
 /**
@@ -148,11 +148,17 @@ function() {
 MeeboZimlet.prototype._checkMeeboExists =
 function() {
 	this._callCount++;
+	var meeboDiv = document.getElementById("meebo");
+	if(meeboDiv.className.indexOf("meebo") != -1 || meeboDiv.style.display == "block") {
+		clearInterval(this.timer);
+		return;
+	}
 	if (this._callCount == (MeeboZimlet.LOAD_TIMEOUT / MeeboZimlet.LOAD_INTERVAL)) { //after 60 seconds, stop checking
 		clearInterval(this.timer);
 		document.getElementById(MeeboZimlet.SKIN_ROW_ID).style.display = "none";
 		var errMsg = AjxMessageFormat.format(this.getMessage("MeeboZimlet_error_loadBar"), MeeboZimlet.LOAD_TIMEOUT / 1000);
 		appCtxt.getAppController().setStatusMsg(errMsg, ZmStatusView.LEVEL_WARNING);
+		appCtxt.getAppViewMgr().fitAll();
 		return;
 	}
 };
