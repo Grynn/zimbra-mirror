@@ -439,7 +439,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraPrefCalendarToasterEnabled,
             A_zimbraPrefShareContactsInAutoComplete,
             A_zimbraMailQuota,
-            A_zimbraCreateTimestamp
+            A_zimbraCreateTimestamp,
+            A_zimbraDumpsterEnabled
     ));
 
     @Override
@@ -917,6 +918,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         attrs.put(A_offlineAccountFlavor, flavor);
         attrs.put(A_zimbraPrefSearchTreeOpen, FALSE);
         attrs.put(A_zimbraPrefTagTreeOpen , FALSE);
+        attrs.put(A_zimbraDumpsterEnabled, FALSE);
 
         // create account entry in database
         DbOfflineDirectory.createDirectoryEntry(EntryType.ACCOUNT, emailAddress, attrs, false);
