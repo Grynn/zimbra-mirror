@@ -1,0 +1,18 @@
+<template id='Frame'>
+	<div align=center  style='display:block;overflow:auto;'  id='twitterSearchZimlet_MainDiv'>
+		<div class='overviewHeader LinkedInHeader' id='twitterSearchZimlet_searchBarDiv'>
+			<table cellspacing=0 cellpadding=0 align="center">
+			<tr><td><input id='twitterSearchZimlet_seachField' type='text' style='width:110px'></input></td>
+			<td id='twitterSearchZimlet_seachBtnCell'></td></tr></table>
+		</div>
+		<div id='twitterSearchZimlet_searchResultsDiv'>
+		</div>
+	</div>
+</template>
+
+<template id='RowItem'>
+	<div style='border-bottom:1px solid gray;background:white;'><table width=100%>
+	<TD width=48px height=48px align='center' valign='top'>
+	<div style='background;white'><img height="48" width="48" src='${imgUrl}' /></div>
+	</td><TD>${tweet}<br/><br/><div align='right'><a href='http://twitter.com/${fromUser}' target='_blank' style='text-decoration:underline;color:gray'>follow</a></div></td></tr></TABLE></div>
+</template>

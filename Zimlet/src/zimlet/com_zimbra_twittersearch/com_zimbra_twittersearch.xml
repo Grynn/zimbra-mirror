@@ -1,0 +1,6 @@
+<zimlet name="com_zimbra_twittersearch" version="0.1" label="Twitter Search" target="main view-window" description="Hooks on to email Zimlet; shows Twitter search reault for a given email">
+	<include>twittersearch.js</include>
+	<include>templates/TwitterSearch.template.js</include>
+	<includeCSS>twittersearch.css</includeCSS>
+	<handlerObject>com_zimbra_twittersearch_handlerObject</handlerObject>
+</zimlet>

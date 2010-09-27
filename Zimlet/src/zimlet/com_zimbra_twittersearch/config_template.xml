@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_twittersearch" version="0.1">
+  <global>
+    <property name="allowedDomains">*.twitter.com,twitter.com</property>
+  </global>
+</zimletConfig>
