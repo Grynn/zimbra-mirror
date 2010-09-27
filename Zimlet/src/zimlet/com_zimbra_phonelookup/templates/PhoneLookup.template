@@ -1,0 +1,24 @@
+<template id='Frame'>
+	<div align=center  style='display:block;overflow:auto;'  id='phoneLookupZimlet_MainDiv'>
+		<div class='overviewHeader LinkedInHeader' id='phoneLookupZimlet_searchBarDiv'>
+			<table cellspacing=0 cellpadding=0 align="center">
+			<tr><td><input id='phoneLookupZimlet_seachField' type='text' style='width:110px'></input></td>
+			<td id='phoneLookupZimlet_seachBtnCell'></td></tr></table>
+		</div>
+		<div id='phoneLookupZimlet_searchResultsDiv'>
+		</div>
+	</div>
+</template>
+
+<template id='RowItem'>
+	<div style='border-bottom:1px solid gray;background:white;'>
+	<table width=100%>
+	<tr><td style='font-weight:bold;font-size:12px'>Owner: </td><td>${displayName}</td></tr>
+	<tr><td style='font-weight:bold;font-size:12px'>Street: </td><td>${fullStreet}</td></tr>
+	<tr><td style='font-weight:bold;font-size:12px'>City: </td><td>${city}</td></tr>
+	<tr><td style='font-weight:bold;font-size:12px'>State: </td><td>${state}</td></tr>
+	<tr><td style='font-weight:bold;font-size:12px'>zip: </td><td>${zip}</td></tr>
+	<tr><td style='font-weight:bold;font-size:12px'>Country: </td><td>${country}</td></tr>
+	</table>
+	</div>
+</template>

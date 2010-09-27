@@ -1,0 +1,5 @@
+<zimletConfig name="com_zimbra_phonelookup" version="0.1">
+  <global>
+    <property name="allowedDomains">*.whitepages.com</property>
+  </global>
+</zimletConfig>

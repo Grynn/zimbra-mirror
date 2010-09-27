@@ -1,0 +1,6 @@
+<zimlet name="com_zimbra_phonelookup" version="0.1" label="Phone (Reverse) Lookup" target="main view-window" description="Hooks on to email Zimlet; Does a Reverse-lookup of a Voicemail email address">
+	<include>phonelookup.js</include>
+	<include>templates/PhoneLookup.template.js</include>
+	<includeCSS>phonelookup.css</includeCSS>
+	<handlerObject>com_zimbra_phonelookup_handlerObject</handlerObject>
+</zimlet>
