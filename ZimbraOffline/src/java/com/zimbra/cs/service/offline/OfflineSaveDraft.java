@@ -25,5 +25,10 @@ public class OfflineSaveDraft extends SaveDraft {
     public void preProxy(Element request, Map<String, Object> context) throws ServiceException {        
         OfflineProxyHelper.uploadAttachments(request, getZimbraSoapContext(context).getRequestedAccountId());
     }
+
+    @Override
+    protected boolean scheduleAutoSendTask() {
+        return false;
+    }
 }
 

@@ -1079,6 +1079,8 @@ public class PushChanges {
                 action.addAttribute(MailConstants.A_FOLDER, folderId);
             if (create || (mask & Change.MODIFIED_COLOR) != 0)
                 action.addAttribute(MailConstants.A_COLOR, color);
+            if (msg.isDraft() && (create || (mask & Change.MODIFIED_METADATA) != 0) && msg.getDraftAutoSendTime() != 0)
+                action.addAttribute(MailConstants.A_AUTO_SEND_TIME, msg.getDraftAutoSendTime());
         }
 
         try {
