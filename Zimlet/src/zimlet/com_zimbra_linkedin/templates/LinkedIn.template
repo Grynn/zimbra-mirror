@@ -1,8 +1,8 @@
 <template id='Frame'>
-	<div align=center  style='display:block;width:100%;height:100%;overflow:auto'  id='linkedInZimlet_MainDiv'>
+	<div align=center  style='display:block;overflow:auto'  id='linkedInZimlet_MainDiv'>
 		<div class='overviewHeader LinkedInHeader' id='linkedInZimlet_searchBarDiv'>
 			<table cellspacing=0 cellpadding=0 align="center">
-			<tr><td><input id='linkdeInZimlet_seachField' type='text'></input></td>
+			<tr><td><input id='linkdeInZimlet_seachField' type='text' style='width:110px'></input></td>
 			<td id='linkdeInZimlet_seachBtnCell'></td></tr></table>
 		</div>
 		<div id='linkedInZimlet_searchResultsDiv'>

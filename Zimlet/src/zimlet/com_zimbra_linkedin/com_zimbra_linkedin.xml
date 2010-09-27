@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_linkedin" version="0.2" label="LinkedIn" target="main view-window" description="Hooks on to email Zimlet; shows LinkedIn search reault for a given email">
+<zimlet name="com_zimbra_linkedin" version="0.3" label="LinkedIn" target="main view-window" description="Hooks on to email Zimlet; shows LinkedIn search reault for a given email">
 	<include>linkedin.js</include>
 	<include>LinkedInOauth.js</include>
 	<include>LinkedInPrefDialog.js</include>

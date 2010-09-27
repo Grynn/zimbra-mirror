@@ -59,6 +59,7 @@ function() {
 	this._slide = new EmailToolTipSlide(tthtml, true, "LinkedinZimletIcon", selectCallback, this.getMessage("label"));
 	this.emailZimlet.slideShow.addSlide(this._slide);
 	this._slide.setCanvasElement(document.getElementById("linkedInZimlet_searchResultsDiv"));
+
 	this._addSearchHandlers();
 };
 
@@ -67,6 +68,7 @@ function() {
 	if(this._slide.loaded) {
 		return;
 	}
+	document.getElementById("linkedInZimlet_MainDiv").style.height = document.getElementById(this._slide.id).offsetHeight;
 	if(!this.linkedInZimlet_oauth_token || !this.linkedInZimlet_oauth_token_secret || !this.linkedInZimlet_account_name) {
 		this._slide.setErrorMessage(this.getMessage("noAccount"));
 		return;
@@ -360,6 +362,9 @@ function() {
 };
 
 LinkedInZimlet.prototype.showWarningMsg = function(message) {
+	if(message.length > 1000) {
+		message = message.substring(0, 999) + "...";
+	}
 	var style = DwtMessageDialog.WARNING_STYLE;
 	var dialog = appCtxt.getMsgDialog();
 	this.warningDialog = dialog;
