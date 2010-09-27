@@ -32,7 +32,7 @@ public class ContactGroup {
     private final Set<String> emails;
 
     public static boolean isContactGroup(Contact contact) {
-        return ContactConstants.TYPE_GROUP.equals(contact.get(ContactConstants.A_type));
+        return contact.isGroup();
     }
 
     public ContactGroup(String name) {
