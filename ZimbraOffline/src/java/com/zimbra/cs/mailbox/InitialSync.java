@@ -1172,16 +1172,16 @@ public class InitialSync {
         if (convId < 0)
             convId = Mailbox.ID_AUTO_INCREMENT;
         try {
-            blob = StoreManager.getInstance().storeIncoming(cs, sizeHint, null);
+            blob = StoreManager.getInstance().storeIncoming(cs, null);
             data = bs.isPartial() ? null : bs.getBuffer();
             OfflineLog.offline.debug("message id=%d streamed to %s", id,
                 data == null ? blob.getPath() : "memory" );
+            size = (int) blob.getRawSize();
         } catch (Exception e) {
             throw ServiceException.FAILURE("Unable to read/write message id=" + id, e);
         }
         try {
             digest = blob.getDigest();
-            size = (int)blob.getRawSize();
             pm = new ParsedMessage(new ParsedMessageOptions(blob, data,
                 received * 1000L, false));
             
@@ -1213,7 +1213,7 @@ public class InitialSync {
         } catch (IOException e) {
             StoreManager.getInstance().quietDelete(blob);
             if (e.getMessage() != null && e.getMessage().startsWith("Unable to rename")) {
-                SyncExceptionHandler.syncMessageFailed(ombx, id, pm, e);
+                SyncExceptionHandler.syncMessageFailed(ombx, id, pm, size, e);
                 return;
             }
             throw ServiceException.FAILURE("storing " + MailItem.getNameForType(type) + " " + id, e);
@@ -1223,7 +1223,7 @@ public class InitialSync {
                 StoreManager.getInstance().quietDelete(blob);
                 return; //message moved on server; we'll get that when we do delta
             } else if (!(e instanceof ServiceException) || !((ServiceException)e).getCode().equals(MailServiceException.ALREADY_EXISTS)) {
-                SyncExceptionHandler.syncMessageFailed(ombx, id, pm, e);
+                SyncExceptionHandler.syncMessageFailed(ombx, id, pm, size, e);
                 StoreManager.getInstance().quietDelete(blob);
                 return;
             }
