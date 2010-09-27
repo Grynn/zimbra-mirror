@@ -4,7 +4,7 @@
     notifempty
     create 0644 zimbra zimbra
     postrotate
-      kill -HUP `cat /var/run/syslog.pid 2> /dev/null` 2> /dev/null || true
+      kill -HUP `cat /var/run/syslog*.pid 2> /dev/null` 2> /dev/null || true
       su - zimbra -c "/opt/zimbra/bin/zmswatchctl restart" > /dev/null 2>&1 || true
     endscript
     compress
@@ -16,7 +16,7 @@
     notifempty
     create 0644 zimbra zimbra
     postrotate
-      kill -HUP `cat /var/run/syslog.pid 2> /dev/null` 2> /dev/null || true
+      kill -HUP `cat /var/run/syslog*.pid 2> /dev/null` 2> /dev/null || true
       su - zimbra -c "/opt/zimbra/bin/zmlogswatchctl restart" > /dev/null 2>&1 || true
     endscript
     rotate 0

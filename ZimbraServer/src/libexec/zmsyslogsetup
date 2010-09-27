@@ -297,7 +297,7 @@ sub updateSyslog {
       local $^I="~";
       local @ARGV=("/etc/logrotate.d/zimbra");
       while (<>) {
-        s/\-HUP\s+syslog/-HUP rsyslog/g;
+        s/syslogd.pid/rsyslogd.pid/g;
         print;
       }
     }
@@ -382,7 +382,7 @@ sub updateRsyslogd {
     local $^I="~";
     local @ARGV=("/etc/logrotate.d/zimbra");
     while (<>) {
-      s/killall\s+\-HUP\s+syslog/\/usr\/sbin\/service rsyslog restart >\/dev\/null/g;
+      s/kill\s+\-HUP\s+.+syslog\.pid.+\/dev\/null/\/usr\/sbin\/service rsyslog restart >\/dev\/null/g;
       print;
     }
   }
@@ -457,7 +457,8 @@ if ( $platform =~ /UBUNTU/ || $platform =~ /DEBIAN4/ ) {
     exit 1;
   }
 } else {
-  `killall -HUP syslogd`;
+  my $syslog_PID=`cat /var/run/syslogd.pid`;
+  `kill -HUP $syslog_PID`;
 }
 
 sub getLocalConfig {
