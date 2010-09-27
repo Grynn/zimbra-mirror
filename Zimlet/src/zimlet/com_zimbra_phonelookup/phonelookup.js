@@ -63,6 +63,13 @@ function() {
 };
 
 PhoneLookupTooltipZimlet.prototype._getDefaultQuery = function() {
+	//Sometimes phonenumber appears in Name-part, like: "6501231234" <message@att.com> and we should pick that up
+	var fullName = this.emailZimlet.fullName;
+	var reg = new RegExp("^\\d*$"); 
+	if(fullName && reg.test(fullName)) {
+		return fullName;
+	}
+
 	var tmpArry = this.emailZimlet.emailAddress.split("@");
 	var part1 = tmpArry[0] ?  tmpArry[0] : "";
 	part1  = part1.replace("+", "").replace(/ /g, "").replace(/-/, "").replace(/\(/, "").replace(/\)/, "");
