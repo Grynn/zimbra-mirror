@@ -2,6 +2,7 @@ package com.zimbra.cs.account.offline;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.SystemUtil;
+import com.zimbra.common.util.Version;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.AttributeCallback;
 import com.zimbra.cs.account.AttributeCardinality;
@@ -25,11 +26,11 @@ public class OfflineAttributeInfo extends AttributeInfo {
 
     public OfflineAttributeInfo(String attrName, int id, String parentId, int groupId, AttributeCallback callback,
                                 AttributeType type, AttributeOrder order, String value, boolean immutable, String min,
-                                String max, AttributeCardinality cardinality, Set<AttributeClass> requiredIn, 
+                                String max, AttributeCardinality cardinality, Set<AttributeClass> requiredIn,
                                 Set<AttributeClass> optionalIn, Set<AttributeFlag> flags, List<String> globalConfigValues,
                                 List<String> defaultCOSValues, List<String> globalConfigValuesUpgrade,
                                 List<String> defaultCOSValuesUpgrade, String description, List<AttributeServerType> requiresRestart,
-                                BuildInfo.Version since, BuildInfo.Version deprecatedSince) {
+                                Version since, Version deprecatedSince) {
         super(attrName, id, parentId, groupId, callback, type, order, value, immutable, min, max, cardinality,
               requiredIn, optionalIn, flags, globalConfigValues, defaultCOSValues, globalConfigValuesUpgrade,
               defaultCOSValuesUpgrade, description, requiresRestart, since, deprecatedSince);
