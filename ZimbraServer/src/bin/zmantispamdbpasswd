@@ -1,0 +1,110 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005, 2007, 2010 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.3 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+#
+# Change password for zimbra_mysql_password, and optionally for
+# mysql_root_password.  Updates both the Zimbra local config file and
+# MySQL.
+#
+source `dirname $0`/zmshutil || exit 1
+zmsetvars zimbra_home antispam_mysql_user antispam_mysql_root_password
+
+#
+# Usage.
+#
+usage() {
+    cat<<EOF
+Usage: $ zmantispamdbpasswd [ --root ] newpassword
+
+By default, this script changes antispam_mysql_password.  If the --root
+option is specified, then antispam_mysql_root_password is changed.  In both
+cases, MySQL is updated with the new passwords.  This script can not bail
+you out of a situation where you have lost your mysql root password -
+consult MySQL documentation to see how you can start the server
+temporarily to skip grant tables, so you can override the root
+password.
+
+EOF
+}
+
+#
+# Parse command line
+#
+if [ "x$1" = "x--root" ]; then
+    password_key="antispam_mysql_root_password"
+    shift # lose --root option
+else
+    password_key="antispam_mysql_password"
+fi
+
+if [ $# -ne 1 ]; then
+    usage
+    exit 1
+fi
+newpassword="$1"
+
+#
+# For antispam_mysql_password
+#
+if [ ${password_key} = antispam_mysql_password ]; then 
+    # Change the password in mysql.
+    cat <<EOF | ${zimbra_home}/bin/antispam-mysql -u root --password="${antispam_mysql_root_password}"
+SET PASSWORD FOR '${antispam_mysql_user}' = PASSWORD('${newpassword}');
+SET PASSWORD FOR '${antispam_mysql_user}'@'localhost' = PASSWORD('${newpassword}');
+SET PASSWORD FOR '${antispam_mysql_user}'@'localhost.localdomain' = PASSWORD('${newpassword}');
+SET PASSWORD FOR '${antispam_mysql_user}'@'${antispam_mysql_host}' = PASSWORD('${newpassword}');
+EOF
+    if [ $? = 0 ]; then
+        echo '*' Changed antispam mysql user password
+    else
+        echo '****' PASSWORD CHANGE FAILED
+        exit 1
+    fi
+fi
+
+#
+# For mysql_root_password
+#
+if [ ${password_key} = antispam_mysql_root_password ]; then
+    echo ${zimbra_home}/bin/antispammysqladmin -u root --password="${antispam_mysql_root_password}" password "${newpassword}"
+    ${zimbra_home}/bin/antispammysqladmin -u root --password="${antispam_mysql_root_password}" password "${newpassword}"
+    if [ $? = 0 ]; then
+        echo '*' Changed antispam mysql root user password
+    else
+        echo '****' PASSWORD CHANGE FAILED
+        exit 1
+    fi
+    # Change for localhost socket clients also - useful for dev.
+    cat <<EOF | ${zimbra_home}/bin/antispam-mysql -u root --password="${newpassword}"
+SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${newpassword}');
+SET PASSWORD FOR 'root'@'localhost.localdomain' = PASSWORD('${newpassword}');
+EOF
+    if [ $? = 0 ]; then
+        echo '*' Changed antispam mysql root user password root@localhost
+    else
+        echo '****' PASSWORD CHANGE FAILED FOR root@localhost
+        exit 1
+    fi
+fi
+
+#
+# Change the password in local config.  TODO: notify app server that
+# the password has changed, for now you will have to restart mailboxd
+#
+if ! ${zimbra_home}/bin/zmlocalconfig -f -e "${password_key}=${newpassword}"; then
+    echo Error: command failed: ${zimbra_home}/bin/zmlocalconfig -f -e ${password_key}='#'
+    exit 1
+fi
+

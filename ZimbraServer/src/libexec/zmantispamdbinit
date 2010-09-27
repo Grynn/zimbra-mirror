@@ -1,0 +1,118 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2005, 2006, 2007, 2010 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.3 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+
+source `dirname $0`/../bin/zmshutil || exit 1
+zmsetvars \
+    zimbra_home \
+    zimbra_log_directory \
+    zimbra_db_directory \
+    antispam_mysql_mycnf \
+    antispam_mysql_data_directory \
+    antispam_mysql_directory \
+	mysql_directory
+
+sql_root_pw=$1
+
+#
+# Sanity checks
+#
+zmassert -x ${zimbra_home}/bin/antispam-mysqladmin
+zmassert -x ${zimbra_home}/bin/antispam-mysql
+zmassert -x ${zimbra_home}/bin/zmlocalconfig
+zmassert -x ${zimbra_home}/bin/zmantispamdbpasswd
+zmassert -x ${antispam_mysql_directory}/bin/mysql_install_db
+zmassert -r ${zimbra_db_directory}/antispamdb.sql
+#zmassert -r ${zimbra_db_directory}/versions-init.sql
+
+#
+# Create necessary directories
+#
+echo '*' Creating required directories
+mkdir -p ${antispam_mysql_data_directory}
+# Check if log directory exists.  If not, create.
+if [ ! -d ${zimbra_log_directory} ]
+then
+	mkdir -p ${zimbra_log_directory}
+fi
+
+#
+# Create database
+#
+echo '*' Creating database in ${antispam_mysql_data_directory}
+(cd ${antispam_mysql_directory}; ./bin/mysql_install_db \
+    --defaults-file=${antispam_mysql_mycnf} \
+    --plugin_dir=${mysql_directory}/lib/mysql/plugin) \
+    >> ${zimbra_log_directory}/zmantispamdbinit.log 2>&1
+
+#
+# Start mysql server for antispam db
+#
+echo '*' Starting antispam mysql server
+${zimbra_home}/bin/antispam-mysql.server start \
+    >> ${zimbra_log_directory}/antispam-mysql.log 2>&1
+sleep 15
+
+#
+# Load zimbra sql files
+#
+echo '*' Loading schema ${zimbra_db_directory}/antispamdb.sql 
+${zimbra_home}/bin/antispam-mysql -u root --password= < \
+    ${zimbra_db_directory}/antispamdb.sql
+
+#cat > /tmp/antispam.sql.$$ <<EOF
+#use zimbra_logger;
+#INSERT INTO zimbra_logger.config(name, value, description) VALUES
+#        ('db.version', '5', 'db schema version');
+#commit;
+#EOF
+
+#${zimbra_home}/bin/antispam-mysql -u root --password= < \
+#        /tmp/antispam.sql.$$
+#
+#rm -f /tmp/antispam.sql.$$
+
+#echo '*' Loading version from ${zimbra_db_directory}/versions-init.sql
+#${zimbra_home}/bin/logmysql -u root --password= < \
+#    ${zimbra_db_directory}/versions-init.sql
+
+#
+# Generate passwords for mysql into local config
+#
+if [ x$sql_root_pw = "x" ]; then
+        echo '*' Setting random password for antispam mysql root user in zimbra local config
+        ${zimbra_home}/bin/zmlocalconfig -r -f -e antispam_mysql_root_password
+
+        echo '*' Setting random password for antispam mysql zimbra user in zimbra local config
+        ${zimbra_home}/bin/zmlocalconfig -r -f -e antispam_mysql_password
+else
+        echo '*' Setting password for antispam mysql root user in zimbra local config
+        ${zimbra_home}/bin/zmlocalconfig -f -e antispam_mysql_root_password=$sql_root_pw
+        echo '*' Setting password for antispam mysql zimbra user in zimbra local config
+        ${zimbra_home}/bin/zmlocalconfig -f -e antispam_mysql_password=$sql_root_pw
+fi
+
+#
+# Change mysql root user password, but first read back the passwords 
+# zimbra local config - they was generated above.  Note that we can not
+# use 'zmmypasswd --root' here because of bootstrapping problems - at
+# this stage we know that the root password is empty.
+#
+zmsetvars -f antispam_mysql_root_password antispam_mysql_password
+echo '*' Changing antispam mysql root user password
+${zimbra_home}/bin/antispam-mysqladmin -u root --password= password ${antispam_mysql_root_password}
+
+echo '*' Changing antispam mysql user password
+${zimbra_home}/bin/zmantispamdbpasswd ${antispam_mysql_password}

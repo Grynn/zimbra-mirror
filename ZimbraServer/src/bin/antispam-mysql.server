@@ -1,0 +1,191 @@
+#!/bin/bash
+# 
+# ***** BEGIN LICENSE BLOCK *****
+# Zimbra Collaboration Suite Server
+# Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
+# 
+# The contents of this file are subject to the Zimbra Public License
+# Version 1.3 ("License"); you may not use this file except in
+# compliance with the License.  You may obtain a copy of the License at
+# http://www.zimbra.com/license.
+# 
+# Software distributed under the License is distributed on an "AS IS"
+# basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+# ***** END LICENSE BLOCK *****
+# 
+
+source `dirname $0`/zmshutil || exit 1
+zmsetvars \
+  antispam_mysql_directory \
+  antispam_mysql_pidfile \
+  antispam_mysql_mycnf \
+  antispam_mysql_errlogfile \
+  antispam_mysql_enabled \
+  antispam_mysql_data_directory \
+  zimbra_home \
+  zimbra_user \
+  zimbra_tmp_directory \
+  mysql_directory
+
+if [ x`whoami` != "x${zimbra_user}" ]; then
+  echo Error: must be run as zimbra user
+  exit 1
+fi
+
+if [ x${antispam_mysql_enabled} != x"TRUE" ]
+then
+	# antispam is not configured to use mysql db
+	exit 0
+fi
+
+# If antispam_mysql_host is set to the local host then setup and use local MySQL db.
+# Otherwise, reconfigure the salocal.cf file to point to a remote MySQL db.
+if [ x${antispam_mysql_host} != x`zmhostname` -a x${antispam_mysql_host} = "xlocalhost" ]
+then
+	# antispam is not configured to use DB on this (local) host
+	exit 0
+fi
+
+if [ ! -d ${antispam_mysql_directory}/bin ]; then
+  exit 0
+fi
+
+if [ ! -d ${zimbra_tmp_directory}/antispam-mysql ]; then
+  mkdir -p ${zimbra_tmp_directory}/antispam-mysql > /dev/null 2>&1
+fi
+
+zmassert -d ${antispam_mysql_directory}
+zmassert -d ${zimbra_tmp_directory}
+zmassert -x ${antispam_mysql_directory}/bin/mysqld_safe
+zmassert -r ${antispam_mysql_mycnf}
+zmassert -d `dirname ${antispam_mysql_pidfile}`
+
+
+# innodb will open the database before binding and writing out the pid
+# potentially corrupting the files
+# prevent multiple init scripts from running at the same time.
+initlockfile=${zimbra_tmp_directory}/antispam-mysql/antispam-mysql.server.lock
+checkInitLock() {
+  if [ -f "$initlockfile" ]; then
+    initpid=$(cat $initlockfile)
+    if [ x"$initpid" != "x" ]; then
+      kill -0 $initpid 2> /dev/null
+      if [ $? = 0 ]; then
+        echo "$0 already running with pid $initpid"
+        exit 1
+      fi
+    fi
+  fi
+  echo $$ > $initlockfile
+}
+
+trap "quit 1" SIGINT SIGQUIT
+trap "quit 1" SIGKILL SIGTERM
+quit() {
+  RC=$1
+  rc=${RC:=0}
+  cleanup
+  exit $rc
+}
+
+cleanup() {
+  [ -f $initlockfile ] && rm -f $initlockfile
+}
+
+
+#
+# If PID file for mysqld for antispam exists, grab the recorded PID
+#
+if [ -f ${antispam_mysql_pidfile} ]; then
+  pid=`cat ${antispam_mysql_pidfile}`
+fi
+
+case "$1" in
+  'start')
+    checkInitLock
+	if [ ! -d ${antispam_mysql_data_directory} ]; then
+	  # The antispam mysql data directory does not appear to exist, assuming that db has not been initialized
+      ${zimbra_home}/libexec/zmantispamdbinit
+	fi
+    if [ "x$pid" != "x" ]; then
+      kill -0 $pid 2> /dev/null
+      if [ $? = 0 ]; then
+        echo "mysqld_safe for anti-spam already running with pid $pid"
+        quit 0
+      fi
+    fi
+    # --defaults-file must be first argument
+    echo -n "Starting mysqld for anti-spam..."
+    cd ${antispam_mysql_directory}; \
+      ${antispam_mysql_directory}/bin/mysqld_safe \
+      --defaults-file=${antispam_mysql_mycnf} \
+      --external-locking \
+      --log-error=${antispam_mysql_errlogfile} \
+      --plugin_dir=${mysql_directory}/lib/mysql/plugin \
+      --ledir=${antispam_mysql_directory}/libexec < /dev/null > /dev/null 2>&1 &
+    SQLSTARTED=0
+    for ((i = 0; i < 60; i++))
+    do
+      ${zimbra_home}/bin/mysqladmin -s ping 2>&1 > /dev/null
+      if [ $? = 0 ]; then
+        SQLSTARTED=1
+        break
+      fi
+      sleep 2
+    done
+    if [ ${SQLSTARTED} -ne 1 ]; then
+      echo "failed."
+    else 
+      echo "done."
+    fi
+    ;;
+    
+  'stop')
+    checkInitLock
+    if [ "x${pid}" = "x" ]; then
+      echo "mysqld for anti-spam not running: no pid in '${antispam_mysql_pidfile}'"
+      quit 0
+    else
+      echo -n "Stopping mysqld for anti-spam..."
+      kill $pid>> ${antispam_mysql_errlogfile} 2>&1
+      # wait for mysqld pid file to be removed
+      for ((i = 0; i < 30; i++)); do
+        sleep 2;
+        kill -0 $pid 2> /dev/null
+        if [ $? != 0 ]; then
+          rm -f ${antispam_mysql_pidfile}
+          break
+        fi
+        kill $pid >> ${antispam_mysql_errlogfile} 2>&1
+      done 
+      if [ -s ${antispam_mysql_pidfile} ]; then 
+        echo "failed."
+        quit 1
+      else
+        echo " done."
+      fi
+    fi
+    quit 0
+    ;;
+    
+  'restart'|'reload')
+    $0 stop
+    $0 start
+    ;;
+
+  'status')
+    kill -0 $pid 2> /dev/null
+    mysqlstatus=$?
+    if [ $mysqlstatus = 0 ]; then
+      echo "mysql is running with pid $pid"
+    else
+      echo "mysql is not running"
+    fi
+    quit $mysqlstatus
+    ;;
+
+  *)
+    echo "Usage: $0 start|stop|restart|reload|status"
+    quit 1
+    ;;
+esac

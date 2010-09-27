@@ -15,7 +15,7 @@
 # 
 
 BASE=/opt/zimbra
-SCRIPTS="zmamavisdctl"
+SCRIPTS="zmamavisdctl antispam-mysql.server"
 
 source /opt/zimbra/.bashrc
 
