@@ -14,7 +14,12 @@
  */
 package com.zimbra.cs.nginx;
 
+import com.zimbra.cs.account.ldap.LdapUtil;
+
 public class DomainExternalRouteInfo extends LookupEntry {
+    
+    private boolean mUseExternalRoute;
+    private boolean mUseExternalRouteIfAccountNotExist;
     
     private String mPop3Port;
     private String mPop3SSLPort;
@@ -26,6 +31,8 @@ public class DomainExternalRouteInfo extends LookupEntry {
     private String mImapSSLHostname;
     
     DomainExternalRouteInfo(String domainName,
+                            String useExternalRoute,
+                            String useExternalRouteIfAccountNotExist,
                             String pop3Port,
                             String pop3SSLPort,
                             String imapPort,
@@ -36,6 +43,9 @@ public class DomainExternalRouteInfo extends LookupEntry {
                             String imapSSLHostname) {
         super(domainName);
         
+        mUseExternalRoute = LdapUtil.LDAP_TRUE.equals(useExternalRoute);
+        mUseExternalRouteIfAccountNotExist = LdapUtil.LDAP_TRUE.equals(useExternalRouteIfAccountNotExist);
+        
         mPop3Port        = pop3Port;
         mPop3SSLPort     = pop3SSLPort;
         mImapPort        = imapPort;
@@ -45,7 +55,19 @@ public class DomainExternalRouteInfo extends LookupEntry {
         mImapHostname    = imapHostname;
         mImapSSLHostname = imapSSLHostname;
     }
+    
+    String getDomainName() {
+        return getKey();
+    }
 
+    boolean useExternalRoute() {
+        return mUseExternalRoute;
+    }
+    
+    boolean useExternalRouteIfAccountNotExist() {
+        return mUseExternalRouteIfAccountNotExist;
+    }
+    
     String getHostname(String proto) {
         if (NginxLookupExtension.NginxLookupHandler.POP3.equalsIgnoreCase(proto))
             return mPop3Hostname;
