@@ -72,6 +72,11 @@ ZaServer.A_zimbraMtaDnsLookupsEnabled = "zimbraMtaDnsLookupsEnabled";
 ZaServer.A_zimbraMtaRelayHost = "zimbraMtaRelayHost";
 ZaServer.A_zimbraMtaTlsAuthOnly = "zimbraMtaTlsAuthOnly";
 ZaServer.A_zimbraMtaMyNetworks = "zimbraMtaMyNetworks";
+//milter server
+ZaServer.A_zimbraMilterBindPort = "zimbraMilterBindPort";
+ZaServer.A_zimbraMilterBindAddress = "zimbraMilterBindAddress";
+ZaServer.A_zimbraMilterServerEnabled = "zimbraMilterServerEnabled";
+
 //smtp
 ZaServer.A_zimbraSmtpHostname  = "zimbraSmtpHostname";
 ZaServer.A_SmtpPort = "zimbraSmtpPort";
@@ -368,6 +373,11 @@ ZaServer.myXModel = {
 		{id:ZaServer.A_zimbraMtaRelayHost, ref:"attrs/" +  ZaServer.A_zimbraMtaRelayHost,  type: _COS_HOSTNAME_OR_IP_, maxLength: 256 },
 		{id:ZaServer.A_zimbraMtaMyNetworks, ref:"attrs/" +  ZaServer.A_zimbraMtaMyNetworks, type:_STRING_, maxLength: 256 },
 		{id:ZaServer.A_zimbraMtaDnsLookupsEnabled, ref:"attrs/" +  ZaServer.A_zimbraMtaDnsLookupsEnabled, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+		//milter server
+		{id:ZaServer.A_zimbraMilterBindAddress, ref:"attrs/" +  ZaServer.A_zimbraMilterBindAddress, type:_LIST_, listItem:{type:_HOSTNAME_OR_IP_, maxLength: 128} },
+		{id:ZaServer.A_zimbraMilterBindPort, ref:"attrs/" +  ZaServer.A_zimbraMilterBindPort, type:_COS_PORT_},
+		{id:ZaServer.A_zimbraMilterServerEnabled, ref:"attrs/" +  ZaServer.A_zimbraMilterServerEnabled, type: _COS_ENUM_, choices: ZaModel.BOOLEAN_CHOICES },
+
 		// ...other...
 		{id:ZaServer.A_zimbraSmtpHostname, ref:"attrs/" +  ZaServer.A_zimbraSmtpHostname, type:_COS_LIST_, listItem:{type:_HOSTNAME_OR_IP_, maxLength: 256} },
 		{id:ZaServer.A_SmtpPort, ref:"attrs/" +  ZaServer.A_SmtpPort, type:_COS_PORT_},
@@ -837,7 +847,17 @@ ZaServer.prototype.initFromJS = function(server) {
 	
 	if(this._defaultValues && this._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname] && !(this._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname]  instanceof Array)) {
 		this._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname]  = [this._defaultValues.attrs[ZaServer.A_zimbraSmtpHostname]];
-	}	
+	}
+	
+	if(this.attrs[ZaServer.A_zimbraMilterBindAddress] && !(this.attrs[ZaServer.A_zimbraMilterBindAddress] instanceof Array)) {
+                this.attrs[ZaServer.A_zimbraMilterBindAddress] = [this.attrs[ZaServer.A_zimbraMilterBindAddress]];
+        }
+
+        if(this._defaultValues && this._defaultValues.attrs[ZaServer.A_zimbraMilterBindAddress] && !(this._defaultValues.attrs[ZaServer.A_zimbraMilterBindAddress]  instanceof Array)) {
+                this._defaultValues.attrs[ZaServer.A_zimbraMilterBindAddress]  = [this._defaultValues.attrs[ZaServer.A_zimbraMilterBindAddress]];
+        }
+	
+
 }
 
 ZaServer.prototype.parseCurrentVolumesResponse =

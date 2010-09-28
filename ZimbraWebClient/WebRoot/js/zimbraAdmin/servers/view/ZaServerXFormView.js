@@ -741,7 +741,45 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					      	  resetToSuperLabel:ZaMsg.NAD_ResetToGlobal
 				      	    }
 						]
-				      }
+				      },
+				  
+				     	{type:_ZA_TOP_GROUPER_, colSizes:["275px","*"], numCols:2, label:ZaMsg.Global_MTA_MilterServer,
+                                              items: [
+                                                        { ref:ZaServer.A_zimbraMilterServerEnabled, type: _SUPER_CHECKBOX_,
+                                                          trueValue: "TRUE", falseValue: "FALSE",
+                                                          onChange: ZaServerXFormView.onFormFieldChanged,
+                                                          resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+                                                          checkBoxLabel:ZaMsg.NAD_MTA_MilterServerEnabled 
+                                                    	},
+							
+							{type:_REPEAT_, ref:ZaServer.A_zimbraMilterBindAddress, 
+					      			label:ZaMsg.NAD_MTA_MilterBindAddress,
+								resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
+								repeatInstance:"", 
+								showAddButton:true, 
+								showRemoveButton:true, 
+								showAddOnNextRow:true,
+								addButtonLabel:ZaMsg.NAD_MTA_AddBindAddress , 
+								removeButtonLabel:ZaMsg.NAD_MTA_RemoveBindAddress ,
+								removeButtonCSSStyle: "margin-left: 50px",
+								bnolsnr:true,
+					      			items:[
+								{	 
+								   type:_TEXTFIELD_,ref:".",
+								   enableDisableChecks:[],
+								   visibilityChecks:[],
+								   bnolsnr:true,
+								   elementChanged: function(elementValue,instanceValue, event) {
+									this.getForm().itemChanged(this, elementValue, event);
+									this.getForm().itemChanged(this.getParentItem(), elementValue, event);
+								   }
+								}
+								]
+					      		},
+						
+							{ref:ZaServer.A_zimbraMilterBindPort, type:_OUTPUT_, label:ZaMsg.NAD_MTA_MilterBindPort}
+                                            	]
+                                     	}	
 				    ]
 				};
         switchItems.push (case3) ;
