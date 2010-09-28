@@ -241,103 +241,16 @@ public class InitialSync {
             }
             
             if (OfflineLC.zdesktop_sync_appointments.booleanValue()) {
-                int counter = 0;
-                int lastItem = mMailboxSync.getLastSyncedItem();
-                Element eCals = elt.getOptionalElement(MailConstants.E_APPOINTMENT);
-                if (eCals != null) {
-                    for (String calId : eCals.getAttribute(MailConstants.A_IDS).split(",")) {
-                        int id = Integer.parseInt(calId);
-                        if (OfflineSyncManager.getInstance().isInSkipList(id)) {
-                            OfflineLog.offline.warn("Skipped appointment id=%d per zdesktop_sync_skip_idlist", id);
-                            continue;
-                        }
-                            
-                        if (interrupted && lastItem > 0) {
-                            if (id != lastItem) {
-                                continue;
-                            } else {
-                                lastItem = 0;
-                            }
-                        }
-                        if (isAlreadySynced(id, MailItem.TYPE_APPOINTMENT)) {
-                            continue;
-                        }
-                        
-                        try {
-                            syncCalendarItem(id, folderId, true);
-                            if (++counter % 100 == 0)
-                                checkpoint(id);
-                        } catch (Exception t) {
-                            OfflineLog.offline.warn("failed to sync appointment id=" + id, t);
-                        }
-                    }
-                }
+                syncCalendarItems(folderId, elt.getOptionalElement(MailConstants.E_APPOINTMENT), MailItem.TYPE_APPOINTMENT);
             }
-            
             if (OfflineLC.zdesktop_sync_tasks.booleanValue()) {
-                int counter = 0;
-                int lastItem = mMailboxSync.getLastSyncedItem();
-                Element eTasks = elt.getOptionalElement(MailConstants.E_TASK);
-                if (eTasks != null) {
-                    for (String taskId : eTasks.getAttribute(MailConstants.A_IDS).split(",")) {
-                        int id = Integer.parseInt(taskId);
-                        if (OfflineSyncManager.getInstance().isInSkipList(id)) {
-                            OfflineLog.offline.warn("Skipped task id=%d per zdesktop_sync_skip_idlist", id);
-                            continue;
-                        }
-                            
-                        if (interrupted && lastItem > 0) {
-                            if (id != lastItem) {
-                                continue;
-                            } else {
-                                lastItem = 0;
-                            }
-                        }
-                        if (isAlreadySynced(id, MailItem.TYPE_TASK)) {
-                            continue;
-                        }
-                        
-                        try {
-                            syncCalendarItem(id, folderId, false);
-                            if (++counter % 100 == 0)
-                                checkpoint(id);
-                        } catch (Exception t) {
-                            OfflineLog.offline.warn("failed to sync task id=" + id, t);
-                        }
-                    }
-                }
+                syncCalendarItems(folderId, elt.getOptionalElement(MailConstants.E_TASK), MailItem.TYPE_TASK);
             }
-            
             if (OfflineLC.zdesktop_sync_messages.booleanValue()) {
-                Element eMessageIds = elt.getOptionalElement(MailConstants.E_MSG);
-                if (eMessageIds != null) {
-                    String[] msgIds = eMessageIds.getAttribute(MailConstants.A_IDS).split(",");
-                    List<Integer> ids = new ArrayList<Integer>();
-                    for (String msgId : msgIds) {
-                        if (OfflineSyncManager.getInstance().isInSkipList(Integer.parseInt(msgId))) {
-                            OfflineLog.offline.warn("Skipped message id=%s per zdesktop_sync_skip_idlist", msgId);
-                            continue;
-                        }
-                        ids.add(Integer.parseInt(msgId));
-                    }
-                    syncMessagelikeItems(ids, folderId, MailItem.TYPE_MESSAGE, false, false);
-                }
+                syncMessagelikeItems(folderId, elt.getOptionalElement(MailConstants.E_MSG), MailItem.TYPE_MESSAGE);
             }
-
             if (OfflineLC.zdesktop_sync_chats.booleanValue()) {
-                Element eChatIds = elt.getOptionalElement(MailConstants.E_CHAT);
-                if (eChatIds != null) {
-                    String[] chatIds = eChatIds.getAttribute(MailConstants.A_IDS).split(",");
-                    List<Integer> ids = new ArrayList<Integer>();
-                    for (String chatId : chatIds) {
-                        if (OfflineSyncManager.getInstance().isInSkipList(Integer.parseInt(chatId))) {
-                            OfflineLog.offline.warn("Skipped chat id=%s per zdesktop_sync_skip_idlist", chatId);
-                            continue;
-                        }
-                        ids.add(Integer.parseInt(chatId));
-                    }
-                    syncMessagelikeItems(ids, folderId, MailItem.TYPE_CHAT, false, false);
-                }
+                syncMessagelikeItems(folderId, elt.getOptionalElement(MailConstants.E_CHAT), MailItem.TYPE_CHAT);
             }
 
             if (OfflineLC.zdesktop_sync_contacts.booleanValue()) {
@@ -389,6 +302,57 @@ public class InitialSync {
 
         mMailboxSync.checkpointFolder(folderId);
         peekForward();
+    }
+    
+    private void syncCalendarItems(int folderId, Element idsElem, byte mailItemType) throws ServiceException {
+        if (idsElem == null) {
+            return;
+        }
+        int counter = 0;
+        int lastItem = mMailboxSync.getLastSyncedItem();
+        String itemIds = idsElem.getAttribute(MailConstants.A_IDS);
+        for (String calId : itemIds.split(",")) {
+            int id = Integer.parseInt(calId);
+            if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                OfflineLog.offline.warn("Skipped "+MailItem.getNameForType(mailItemType)+" id=%d per zdesktop_sync_skip_idlist", id);
+                continue;
+            }
+                
+            if (interrupted && lastItem > 0) {
+                if (id != lastItem) {
+                    continue;
+                } else {
+                    lastItem = 0;
+                }
+            }
+            if (isAlreadySynced(id, mailItemType)) {
+                continue;
+            }
+            try {
+                syncCalendarItem(id, folderId, true);
+                if (++counter % 100 == 0) {
+                    checkpoint(id);
+                }
+            } catch (Exception t) {
+                OfflineLog.offline.warn("failed to sync "+MailItem.getNameForType(mailItemType)+" id=" + id, t);
+            }
+        }
+    }
+    
+    private void syncMessagelikeItems(int folderId, Element idsElem, byte mailItemType) throws ServiceException {
+        if (idsElem != null) {
+            String[] itemIds = idsElem.getAttribute(MailConstants.A_IDS).split(",");
+            List<Integer> ids = new ArrayList<Integer>();
+            for (String idStr : itemIds) {
+                int id = Integer.parseInt(idStr);
+                if (OfflineSyncManager.getInstance().isInSkipList(id)) {
+                    OfflineLog.offline.warn("Skipped "+MailItem.getNameForType(mailItemType)+" id=%s per zdesktop_sync_skip_idlist", id);
+                    continue;
+                }
+                ids.add(id);
+            }
+            syncMessagelikeItems(ids, folderId, mailItemType, false, false);
+        }
     }
     
     private void prioritySync(Element elt, int priorityFolderId) throws ServiceException {
@@ -655,12 +619,22 @@ public class InitialSync {
             }
         } catch (MailServiceException.NoSuchItemException nsie) {
             OfflineLog.offline.info("initial: %s %d has been deleted; skipping", isAppointment ? "appoitment" : "task", id);
+        } catch (SoapFaultException sfe) {
+            if (!(sfe.getCode().equals(MailServiceException.NO_SUCH_ITEM) || sfe.getCode().equals(MailServiceException.NO_SUCH_CALITEM))) {
+                handleCalendarSyncException(sfe, id);
+            } else {
+                OfflineLog.offline.warn("NO_SUCH_ITEM while syncing item [%d] in folder [%d]. Must have been deleted from server while sync in progress.", id, folderId);
+            }
         } catch (Exception x) {
-            SyncExceptionHandler.checkRecoverableException("InitialSync.syncCalendarItem", x);
-            SyncExceptionHandler.syncCalendarFailed(ombx, id, x);
+            handleCalendarSyncException(x, id);
         }
     }
     
+    private void handleCalendarSyncException(Exception x, int id) throws ServiceException {
+        SyncExceptionHandler.checkRecoverableException("InitialSync.syncCalendarItem", x);
+        SyncExceptionHandler.syncCalendarFailed(ombx, id, x);
+    }
+
     //Massage the GetAppointmentResponse/GetTaskResponse into a SetAppointmentReqeust/SetTaskRequest
     static Element makeSetCalRequest(Element resp, InviteMimeLocator imLocator, ZMailbox remoteZMailbox, Account account, boolean isAppointment) throws ServiceException {
         String calId = resp.getAttribute(MailConstants.A_ID);
@@ -867,8 +841,8 @@ public class InitialSync {
 
         Map<String, String> fields = new HashMap<String, String>();
         for (Element eField : elt.listElements())
-        	if (!eField.getName().equals(MailConstants.E_METADATA)) //we should deal with metadata sync when there's api to set them
-        		fields.put(eField.getAttribute(Element.XMLElement.A_ATTR_NAME), eField.getText());
+            if (!eField.getName().equals(MailConstants.E_METADATA)) //we should deal with metadata sync when there's api to set them
+                fields.put(eField.getAttribute(Element.XMLElement.A_ATTR_NAME), eField.getText());
 
         long timestamp = elt.getAttributeLong(MailConstants.A_DATE, -1000);
 
@@ -1036,7 +1010,7 @@ public class InitialSync {
                             throw new RuntimeException("missing blob entry reading tgz stream");
                         }
                     } else if (te.getName().endsWith(".err")) {
-                    	OfflineLog.offline.warn("server returned error on message %d", msgId);
+                        OfflineLog.offline.warn("server returned error on message %d", msgId);
                     } else {
                         OfflineLog.offline.warn("failed to sync message due to missing meta entry reading tgz stream");
                     }
