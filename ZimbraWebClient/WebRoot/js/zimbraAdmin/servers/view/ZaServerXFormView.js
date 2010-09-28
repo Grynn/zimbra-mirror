@@ -674,10 +674,11 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 					      	    }
 				      	    ]
 						},
-				      {type:_ZA_TOP_GROUPER_, colSizes:["275px","425px"], numCols:2,label:ZaMsg.Global_MTA_NetworkGrp,
+				      {type:_ZA_TOP_GROUPER_, colSizes:["275px","490"], numCols:2,label:ZaMsg.Global_MTA_NetworkGrp,
 					      items: [
 					      	{type:_SUPER_REPEAT_, ref:ZaServer.A_zimbraSmtpHostname, 
 					      		label:ZaMsg.LBL_zimbraSmtpHostname,
+					      colSizes:["305px"],
 								resetToSuperLabel:ZaMsg.NAD_ResetToGlobal,
 								repeatInstance:"", 
 								showAddButton:true, 
@@ -685,7 +686,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 								showAddOnNextRow:true,
 								addButtonLabel:ZaMsg.Add_zimbraSmtpHostname, 
 								removeButtonLabel:ZaMsg.Remove_zimbraSmtpHostname,
-								removeButtonCSSStyle: "margin-left: 50px",
+								removeButtonCSSStyle: "margin-left: 5px",
 								bnolsnr:true,
 					      		repeatItems:[
 								{ 
