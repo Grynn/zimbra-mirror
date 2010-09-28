@@ -917,7 +917,8 @@ ZaAccountXFormView.FEATURE_TAB_ATTRS = [ZaAccount.A_zimbraFeatureManageZimlets,
 	ZaAccount.A_zimbraFeatureIdentitiesEnabled,
 	ZaAccount.A_zimbraFeatureGroupCalendarEnabled,
 	ZaAccount.A_zimbraFeatureInstantNotify,
-	ZaAccount.A_zimbraFeatureAdvancedSearchEnabled,
+  ZaAccount.A_zimbraFeaturePeopleSearchEnabled,
+  ZaAccount.A_zimbraFeatureAdvancedSearchEnabled,
 	ZaAccount.A_zimbraFeatureSavedSearchesEnabled,
 	ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled,
 	ZaAccount.A_zimbraFeatureImportExportFolderEnabled
@@ -1835,19 +1836,22 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								 trueValue:"TRUE",
 								 falseValue:"FALSE",
 								 resetToSuperLabel:ZaMsg.NAD_ResetToCOS
-							}											
+							}
 						]
 					},
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraSearchFeature, id:"account_form_features_search", colSizes:["auto"],numCols:1,
-						visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
-							[ZaAccount.A_zimbraFeatureAdvancedSearchEnabled, 
+						visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+							[ZaAccount.A_zimbraFeatureAdvancedSearchEnabled,
 							ZaAccount.A_zimbraFeatureSavedSearchesEnabled,
-							ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled]]
+							ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled,
+							ZaAccount.A_zimbraFeaturePeopleSearchEnabled
+							]]
 						],
-						items:[						
+						items:[
 							{ref:ZaAccount.A_zimbraFeatureAdvancedSearchEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureAdvancedSearchEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureAdvancedSearchEnabled, trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureSavedSearchesEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureSavedSearchesEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureSavedSearchesEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
-							{ref:ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureInitialSearchPreferenceEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureInitialSearchPreferenceEnabled, trueValue:"TRUE", falseValue:"FALSE"}
+							{ref:ZaAccount.A_zimbraFeatureInitialSearchPreferenceEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureInitialSearchPreferenceEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureInitialSearchPreferenceEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+						  {ref:ZaAccount.A_zimbraFeaturePeopleSearchEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeaturePeopleSearchEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeaturePeopleSearchEnabled, trueValue:"TRUE", falseValue:"FALSE"}
 						]
 					}
 				]

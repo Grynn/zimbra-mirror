@@ -203,6 +203,7 @@ ZaCosXFormView.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
 	ZaCos.A_zimbraFeatureIdentitiesEnabled,
 	ZaCos.A_zimbraFeatureGroupCalendarEnabled,
 	ZaCos.A_zimbraFeatureInstantNotify,
+	ZaCos.A_zimbraFeaturePeopleSearchEnabled,
 	ZaCos.A_zimbraFeatureAdvancedSearchEnabled,
 	ZaCos.A_zimbraFeatureSavedSearchesEnabled,
 	ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled,
@@ -522,17 +523,19 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 ]
             },
             {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraSearchFeature, id:"cos_form_features_search",
-                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
+                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
 					[
 						ZaCos.A_zimbraFeatureAdvancedSearchEnabled,
 						ZaCos.A_zimbraFeatureSavedSearchesEnabled,
-						ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled
+						ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled,
+						ZaCos.A_zimbraFeaturePeopleSearchEnabled
 					]]
-				],                 
+				],
                 items:[
                     {ref:ZaCos.A_zimbraFeatureAdvancedSearchEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureAdvancedSearchEnabled,label:ZaMsg.LBL_zimbraFeatureAdvancedSearchEnabled,trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureSavedSearchesEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureSavedSearchesEnabled,label:ZaMsg.LBL_zimbraFeatureSavedSearchesEnabled,trueValue:"TRUE", falseValue:"FALSE"},
-                    {ref:ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureInitialSearchPreferenceEnabled,label:ZaMsg.LBL_zimbraFeatureInitialSearchPreferenceEnabled, trueValue:"TRUE", falseValue:"FALSE"}
+                    {ref:ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureInitialSearchPreferenceEnabled,label:ZaMsg.LBL_zimbraFeatureInitialSearchPreferenceEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+                    {ref:ZaCos.A_zimbraFeaturePeopleSearchEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeaturePeopleSearchEnabled,label:ZaMsg.LBL_zimbraFeaturePeopleSearchEnabled, trueValue:"TRUE", falseValue:"FALSE"}
                 ]
             }
 
