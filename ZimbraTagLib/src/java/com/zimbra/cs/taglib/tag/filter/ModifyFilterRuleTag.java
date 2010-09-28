@@ -41,7 +41,7 @@ public class ModifyFilterRuleTag extends ZimbraSimpleTag {
                 mOriginalName = mRule.getName();
 
             ZMailbox mbox = getMailbox();
-            ZFilterRules rules = mbox.getFilterRules(true);
+            ZFilterRules rules = mbox.getIncomingFilterRules(true);
             List<ZFilterRule> newRules = new ArrayList<ZFilterRule>();
             boolean origFound = false;
 
@@ -59,7 +59,7 @@ public class ModifyFilterRuleTag extends ZimbraSimpleTag {
             if (!origFound) {
                 throw ZTagLibException.NO_SUCH_FILTER_EXISTS("filter with name "+mRule.getName()+" doesn't exist", null);                
             }
-            mbox.saveFilterRules(new ZFilterRules(newRules));
+            mbox.saveIncomingFilterRules(new ZFilterRules(newRules));
         } catch (ServiceException e) {
             throw new JspTagException(e);
         }

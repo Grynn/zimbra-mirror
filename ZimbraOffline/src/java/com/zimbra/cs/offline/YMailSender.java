@@ -14,13 +14,13 @@
  */
 package com.zimbra.cs.offline;
 
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.cs.account.offline.OfflineDataSource;
 import com.zimbra.cs.mailbox.MailSender;
 import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.util.ymail.YMailClient;
 import com.zimbra.cs.offline.util.ymail.YMailException;
-import com.zimbra.cs.offline.util.OfflineYAuth;
-import com.zimbra.cs.account.offline.OfflineDataSource;
-import com.zimbra.common.service.ServiceException;
 
 import javax.mail.Address;
 import javax.mail.MessagingException;
@@ -57,7 +57,7 @@ public class YMailSender extends MailSender {
     protected Collection<Address> sendMessage(Mailbox mbox,
                                MimeMessage mm,
                                boolean ignoreFailedAddresses,
-                               RollbackData[] rollback) throws IOException {
+                               Collection<RollbackData> rollbacks) throws IOException {
         try {
         	Address[] rcpts = mm.getAllRecipients();
             ymc.sendMessage(mm, saveCopy);

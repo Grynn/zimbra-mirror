@@ -257,20 +257,37 @@ public class DirectorySync {
     private void syncFilterRules(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
         Set<String> modified = acct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         if (modified.contains(Provisioning.A_zimbraMailSieveScript)) {
-            Element xmlRules = RuleManager.getRulesAsXML(XMLElement.mFactory, acct, true);
+            Element xmlRules = RuleManager.getIncomingRulesAsXML(XMLElement.mFactory, acct, true);
             ZFilterRules rules = new ZFilterRules(xmlRules);
-            zmbx.saveFilterRules(rules);
-            OfflineLog.offline.debug("dsync: pushed %d filter rules: %s", rules.getRules().size(), acct.getName());
+            zmbx.saveIncomingFilterRules(rules);
+            OfflineLog.offline.debug("dsync: pushed %d incoming filter rules: %s", rules.getRules().size(), acct.getName());
         } else {
-            ZFilterRules rules = zmbx.getFilterRules(true);
+            ZFilterRules rules = zmbx.getIncomingFilterRules(true);
             Element e = new XMLElement(MailConstants.SAVE_RULES_REQUEST); //dummy element
             rules.toElement(e);
             try {
-                RuleManager.setXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES), true);
-                OfflineLog.offline.debug("dsync: pulled %d filter rules: %s", rules.getRules().size(), acct.getName());
+                RuleManager.setIncomingXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES), true);
+                OfflineLog.offline.debug("dsync: pulled %d incoming filter rules: %s", rules.getRules().size(), acct.getName());
             } catch (ServiceException x) {
                 //bug 37422
-                OfflineLog.offline.warn("dsync: pulled %d filter rules:\n%s", rules.getRules().size(), e.prettyPrint(), x);
+                OfflineLog.offline.warn("dsync: pulled %d incoming filter rules:\n%s", rules.getRules().size(), e.prettyPrint(), x);
+            }
+        }
+        if (modified.contains(Provisioning.A_zimbraMailOutgoingSieveScript)) {
+            Element xmlRules = RuleManager.getOutgoingRulesAsXML(XMLElement.mFactory, acct);
+            ZFilterRules rules = new ZFilterRules(xmlRules);
+            zmbx.saveOutgoingFilterRules(rules);
+            OfflineLog.offline.debug("dsync: pushed %d outgoing filter rules: %s", rules.getRules().size(), acct.getName());
+        } else {
+            ZFilterRules rules = zmbx.getOutgoingFilterRules(true);
+            Element e = new XMLElement(MailConstants.SAVE_RULES_REQUEST); //dummy element
+            rules.toElement(e);
+            try {
+                RuleManager.setOutgoingXMLRules(acct, e.getElement(MailConstants.E_FILTER_RULES));
+                OfflineLog.offline.debug("dsync: pulled %d outgoing filter rules: %s", rules.getRules().size(), acct.getName());
+            } catch (ServiceException x) {
+                //bug 37422
+                OfflineLog.offline.warn("dsync: pulled %d outgoing filter rules:\n%s", rules.getRules().size(), e.prettyPrint(), x);
             }
         }
     }
@@ -278,7 +295,7 @@ public class DirectorySync {
     private void syncRules5xx(OfflineProvisioning prov, Account acct, ZMailbox zmbx) throws ServiceException {
         Set<String> modified = acct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         if (modified.contains(Provisioning.A_zimbraMailSieveScript)) {
-            Element xmlRules = RuleManager.getRulesAsXML(XMLElement.mFactory, acct, false);
+            Element xmlRules = RuleManager.getIncomingRulesAsXML(XMLElement.mFactory, acct, false);
             RuleRewriter.sanitizeRules(xmlRules);
             saveRulesTo5xxServer(zmbx, xmlRules);
             OfflineLog.offline.debug("dsync: pushed %d filter rules: %s", xmlRules.listElements().size(), acct.getName());
@@ -286,7 +303,7 @@ public class DirectorySync {
             Element xmlRules = getRulesFrom5xxServer(zmbx);
             RuleRewriter.sanitizeRules(xmlRules);
             try {
-                RuleManager.setXMLRules(acct, xmlRules, false);
+                RuleManager.setIncomingXMLRules(acct, xmlRules, false);
                 OfflineLog.offline.debug("dsync: pulled %d filter rules: %s", xmlRules.listElements().size(), acct.getName());
             } catch (ServiceException x) {
                 //bug 37422
@@ -403,7 +420,7 @@ public class DirectorySync {
         Map<String, Object> changes = new HashMap<String, Object>();
         for (Map.Entry<String, Object> zattr : attrs.entrySet()) {
             String key = zattr.getKey();
-            if (modified.contains(key) || key.equals(Provisioning.A_zimbraMailHost) || key.equals(Provisioning.A_zimbraMailSieveScript) ||
+            if (modified.contains(key) || key.equals(Provisioning.A_zimbraMailHost) || key.equals(Provisioning.A_zimbraMailSieveScript) || key.equals(Provisioning.A_zimbraMailOutgoingSieveScript) ||
                     OfflineProvisioning.sOfflineAttributes.contains(key))
                 continue;
             Object value = zattr.getValue();
@@ -426,7 +443,7 @@ public class DirectorySync {
         existing.removeAll(modified);
         existing.removeAll(changes.keySet());
         for (String key : existing)
-            if (!key.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(key) && !key.equals(Provisioning.A_zimbraMailSieveScript))
+            if (!key.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(key) && !key.equals(Provisioning.A_zimbraMailSieveScript) && !key.equals(Provisioning.A_zimbraMailOutgoingSieveScript))
                 changes.put(key, null);
 
         return changes;
@@ -567,7 +584,7 @@ public class DirectorySync {
                         val = "";
                     }
                     changes.put(pref, val);
-                } else if (!pref.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(pref) && !pref.equals(Provisioning.A_zimbraMailSieveScript))
+                } else if (!pref.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(pref) && !pref.equals(Provisioning.A_zimbraMailSieveScript) && !pref.equals(Provisioning.A_zimbraMailOutgoingSieveScript))
                     OfflineLog.offline.warn("dpush: could not push non-preference attribute: " + pref);
             }
             if (!changes.isEmpty()) {

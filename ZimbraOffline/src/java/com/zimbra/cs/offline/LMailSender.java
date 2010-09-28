@@ -14,23 +14,22 @@
  */
 package com.zimbra.cs.offline;
 
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Properties;
+import com.zimbra.common.localconfig.LC;
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.Constants;
+import com.zimbra.cs.account.offline.OfflineDataSource;
+import com.zimbra.cs.mailbox.MailSender;
+import com.zimbra.cs.mailbox.Mailbox;
 
 import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
-
-import com.zimbra.cs.mailbox.MailSender;
-import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.account.offline.OfflineDataSource;
-import com.zimbra.common.localconfig.LC;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.Constants;
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Properties;
 
 public class LMailSender extends MailSender {
     private Transport transport;
@@ -63,18 +62,18 @@ public class LMailSender extends MailSender {
 
     @Override
     protected Collection<Address> sendMessage(Mailbox mbox, MimeMessage mm, boolean ignoreFailedAddresses,
-        RollbackData[] rollback) throws IOException, SafeMessagingException {
+        Collection<RollbackData> rollbacks) throws IOException, SafeMessagingException {
         try {
         	Address[] rcpts = mm.getAllRecipients();
             transport.sendMessage(mm, rcpts);
             return Arrays.asList(rcpts);
         } catch (MessagingException e) {
-            for (RollbackData rdata : rollback)
+            for (RollbackData rdata : rollbacks)
                 if (rdata != null)
                     rdata.rollback();
             throw new SafeMessagingException(e);
         } catch (Exception e) {
-            for (RollbackData rdata : rollback)
+            for (RollbackData rdata : rollbacks)
                 if (rdata != null)
                     rdata.rollback();
             throw new IOException(e.toString());

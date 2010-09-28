@@ -90,9 +90,9 @@ public class ZMailboxBean {
 
     public List<ZIdentity> getIdentities()  throws ServiceException { return mMbox.getIdentities(); }
 
-    public List<ZFilterRule> getFilterRules() throws ServiceException { return mMbox.getFilterRules().getRules(); }
+    public List<ZFilterRule> getFilterRules() throws ServiceException { return mMbox.getIncomingFilterRules().getRules(); }
 
-    public List<ZFilterRule> getFilterRulesReload() throws ServiceException { return mMbox.getFilterRules(true).getRules(); }
+    public List<ZFilterRule> getFilterRulesReload() throws ServiceException { return mMbox.getIncomingFilterRules(true).getRules(); }
 
     public URI getRestURI(String relativePath) throws ServiceException { return mMbox.getRestURI(relativePath); } 
 
