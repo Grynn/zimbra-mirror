@@ -36,37 +36,25 @@
 
 package sample.oauth.provider.core;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.commons.codec.digest.DigestUtils;
-
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Provisioning;
+import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 import net.oauth.OAuthException;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthProblemException;
 import net.oauth.server.OAuthServlet;
-import net.oauth.OAuth;
-
-import com.zimbra.common.localconfig.LC;
-import com.zimbra.common.util.ZimbraLog;
-
-
-import sample.oauth.provider.core.SimpleOAuthRevAValidator;
+import org.apache.commons.codec.digest.DigestUtils;
 import sample.oauth.provider.OAuthTokenCache;
-import sample.oauth.provider.OAuthTokenCacheKey;
-import com.zimbra.common.service.ServiceException;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Utility methods for providers that store consumers, tokens and secrets in 
@@ -89,49 +77,37 @@ public class SampleZmOAuthProvider {
             OAuthMessage requestMessage)
             throws IOException, OAuthProblemException {
         
-        OAuthConsumer consumer = null;
-        // try to load from local cache if not throw exception
-        String consumer_key = requestMessage.getConsumerKey();
-        
-        //get the Consumer Key, Secret ,Callback URL from localconfig
-        if(LC.get("oauth_consumerKey_"+consumer_key) == null) {
-            OAuthProblemException problem = new OAuthProblemException("token_rejected");
-            throw problem;
-        }
-        consumer = new OAuthConsumer(
-        		null, 
-                LC.get("oauth_consumerKey_"+consumer_key), 
-                LC.get("oauth_consumerSecret_"+consumer_key), 
-                null);
-        consumer.setProperty("name", consumer_key);
-        consumer.setProperty("description", LC.get("oauth_consumerDescription_"+consumer_key));
-        
-        
-        return consumer;
+        return getConsumer(requestMessage.getConsumerKey());
     }
     
     public static synchronized OAuthConsumer getConsumer(
             String consumer_key)
             throws IOException, OAuthProblemException {
-        
-        OAuthConsumer consumer = null;
-        // try to load from local cache if not throw exception
-        
-        //get the Consumer Key, Secret ,Callback URL from localconfig
-        if(LC.get("oauth_consumerKey_"+consumer_key) == null) {
-            OAuthProblemException problem = new OAuthProblemException("token_rejected");
-            throw problem;
+
+        String[] registeredConsumers;
+        try {
+            // TODO - need to lookup the domain first
+            registeredConsumers = Provisioning.getInstance().getConfig().getMultiAttr(Provisioning.A_zimbraOAuthConsumerCredentials);
+        } catch (ServiceException e) {
+            throw new OAuthProblemException("token_rejected");
         }
-        consumer = new OAuthConsumer(
-        		null, 
-                LC.get("oauth_consumerKey_"+consumer_key), 
-                LC.get("oauth_consumerSecret_"+consumer_key), 
-                null);
-        consumer.setProperty("name", consumer_key);
-        consumer.setProperty("description", LC.get("oauth_consumerDescription_"+consumer_key));
+
+        OAuthConsumer oAuthConsumer = null;
+        for (String consumer : registeredConsumers) {
+            String s[] = consumer.split(":");
+            if (s.length >= 2 && s[0].equals(consumer_key)) {
+                oAuthConsumer = new OAuthConsumer(null, consumer_key, s[1], null);
+                oAuthConsumer.setProperty("name", consumer_key);
+                oAuthConsumer.setProperty("description", s.length > 2 ? s[2] : "");
+                break;
+            }
+        }
+
+        if (oAuthConsumer == null) {
+            throw new OAuthProblemException("token_rejected");
+        }
         
-        
-        return consumer;
+        return oAuthConsumer;
     }
     
     /**

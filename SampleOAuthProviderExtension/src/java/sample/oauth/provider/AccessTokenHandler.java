@@ -36,28 +36,29 @@
 
 package sample.oauth.provider;
 
-import java.io.IOException;
-import java.io.OutputStream;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.AuthToken;
+import com.zimbra.cs.account.AuthTokenException;
+import com.zimbra.cs.account.ZimbraAuthToken;
+import com.zimbra.cs.extension.ExtensionHttpHandler;
+import com.zimbra.cs.extension.ZimbraExtension;
+import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.MailboxManager;
+import com.zimbra.cs.mailbox.Metadata;
+import com.zimbra.cs.mailbox.MetadataList;
 import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthMessage;
 import net.oauth.OAuthProblemException;
 import net.oauth.server.OAuthServlet;
-
 import sample.oauth.provider.core.SampleZmOAuthProvider;
 
-import com.zimbra.cs.extension.ExtensionHttpHandler;
-import com.zimbra.cs.extension.ZimbraExtension;
-import com.zimbra.cs.extension.ExtensionDispatcherServlet;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.ZimbraLog;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Access Token request handler for zimbra extension
@@ -90,10 +91,10 @@ public class AccessTokenHandler extends ExtensionHttpHandler {
     public void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws IOException, ServletException {
         try{
-            OAuthMessage requestMessage = OAuthServlet.getMessage(request, null);
+            OAuthMessage oAuthMessage = OAuthServlet.getMessage(request, null);
             
-            OAuthAccessor accessor = SampleZmOAuthProvider.getAccessor(requestMessage);
-            SampleZmOAuthProvider.VALIDATOR.validateAccTokenMessage(requestMessage, accessor);
+            OAuthAccessor accessor = SampleZmOAuthProvider.getAccessor(oAuthMessage);
+            SampleZmOAuthProvider.VALIDATOR.validateAccTokenMessage(oAuthMessage, accessor);
             
             // make sure token is authorized
             if (!Boolean.TRUE.equals(accessor.getProperty("authorized"))) {
@@ -110,10 +111,30 @@ public class AccessTokenHandler extends ExtensionHttpHandler {
                                            "oauth_token_secret", accessor.tokenSecret),
                              out);
             out.close();
-            
+
+            persistConsumerKeyInMbox(accessor);
+
         } catch (Exception e){
             SampleZmOAuthProvider.handleException(e, request, response, true);
         }
+    }
+
+    private static void persistConsumerKeyInMbox(OAuthAccessor accessor) throws AuthTokenException, ServiceException {
+        AuthToken userAuthToken = ZimbraAuthToken.getAuthToken((String) accessor.getProperty("ZM_AUTH_TOKEN"));
+        Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(userAuthToken.getAccountId());
+        Metadata oAuthConfig = mbox.getConfig(null, "zwc:oauth");
+        if (oAuthConfig == null)
+            oAuthConfig = new Metadata();
+        MetadataList authzedConsumers = oAuthConfig.getList("authorized_consumers", true);
+        if (authzedConsumers == null) {
+            authzedConsumers = new MetadataList();
+        } else if (authzedConsumers.asList().contains(accessor.consumer.consumerKey)) {
+            // consumer is already present in the list of authzed consumers
+            return;
+        }
+        authzedConsumers.add(accessor.consumer.consumerKey);
+        oAuthConfig.put("authorized_consumers", authzedConsumers);
+        mbox.setConfig(null, "zwc:oauth", oAuthConfig);
     }
 
     private static final long serialVersionUID = 1L;

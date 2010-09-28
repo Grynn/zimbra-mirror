@@ -16,33 +16,15 @@
 
 package sample.oauth.provider;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import java.io.IOException;
-
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.common.util.memcached.MemcachedMapPlusPutWithExtraParam;
 import com.zimbra.common.util.memcached.MemcachedSerializer;
 import com.zimbra.common.util.memcached.ZimbraMemcachedClient;
-import com.zimbra.cs.index.SortBy;
-import com.zimbra.cs.mailbox.ACL;
-import com.zimbra.cs.mailbox.Folder;
-import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.MetadataList;
 import com.zimbra.cs.memcached.MemcachedConnector;
-import com.zimbra.cs.session.PendingModifications;
-import com.zimbra.cs.session.PendingModifications.Change;
-import com.zimbra.cs.session.PendingModifications.ModificationKey;
-
 import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
-
 import sample.oauth.provider.core.SampleZmOAuthProvider;
 
 public class OAuthTokenCache {
@@ -105,7 +87,6 @@ public class OAuthTokenCache {
             String verifier = value.substring(value.indexOf(",verifier")).substring(10);
         	
             ZimbraLog.extensions.debug("consumer_key:"+consumer_key);
-            ZimbraLog.extensions.debug("token_secret:"+token_secret);
             ZimbraLog.extensions.debug("callback:"+callback);
             ZimbraLog.extensions.debug("user:"+user);
             ZimbraLog.extensions.debug("authorized:"+authorized);

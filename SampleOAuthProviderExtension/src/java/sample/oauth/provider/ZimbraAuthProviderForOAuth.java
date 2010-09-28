@@ -34,31 +34,28 @@
 
 package sample.oauth.provider;
 
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.soap.HeaderConstants;
 import com.zimbra.common.util.StringUtil;
-import com.zimbra.cs.account.Account;
+import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.AuthTokenException;
 import com.zimbra.cs.account.ZimbraAuthToken;
-import com.zimbra.cs.servlet.ZimbraServlet;
-import com.zimbra.soap.SoapServlet;
-
+import com.zimbra.cs.mailbox.Mailbox;
+import com.zimbra.cs.mailbox.MailboxManager;
+import com.zimbra.cs.mailbox.Metadata;
+import com.zimbra.cs.mailbox.MetadataList;
 import com.zimbra.cs.service.AuthProvider;
 import com.zimbra.cs.service.AuthProviderException;
-import com.zimbra.common.util.ZimbraLog;
-
-import net.oauth.OAuth;
+import com.zimbra.soap.SoapServlet;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthMessage;
-import net.oauth.OAuthProblemException;
 import net.oauth.server.OAuthServlet;
-
 import sample.oauth.provider.core.SampleZmOAuthProvider;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
+import java.util.Map;
 
 public class ZimbraAuthProviderForOAuth extends AuthProvider{
 
@@ -90,33 +87,56 @@ public class ZimbraAuthProviderForOAuth extends AuthProvider{
         //        }
         //    }
         //}
-        try{
-        OAuthMessage requestMessage = OAuthServlet.getMessage(req, null);
-        
-        if(requestMessage.getToken() == null){
-        	ZimbraLog.extensions.debug("no need for further oauth procesing");
-        	return null;
+        OAuthMessage oAuthMessage = OAuthServlet.getMessage(req, null);
+
+        try {
+            if(oAuthMessage.getToken() == null){
+                ZimbraLog.extensions.debug("no need for further oauth procesing");
+                throw new AuthTokenException("Request does not contain an OAuth token");
+            }
+        } catch (IOException e) {
+            throw new AuthTokenException("Error in getting OAuth token from request", e);
         }
-        OAuthAccessor accessor = SampleZmOAuthProvider.getAccessor(requestMessage);
-        SampleZmOAuthProvider.VALIDATOR.validateMessage(requestMessage, accessor);
-        
+
+        OAuthAccessor accessor = null;
+        try {
+            accessor = SampleZmOAuthProvider.getAccessor(oAuthMessage);
+            SampleZmOAuthProvider.VALIDATOR.validateMessage(oAuthMessage, accessor);
+        } catch (Exception e) {
+            ZimbraLog.extensions.info("Error in validating OAuth token", e);
+            throw AuthProviderException.FAILURE(e.getMessage());
+        }
+
         // make sure token is authorized
         if (!Boolean.TRUE.equals(accessor.getProperty("authorized"))) {
-             OAuthProblemException problem = new OAuthProblemException("permission_denied");
-            throw problem;
+            throw AuthProviderException.FAILURE("permission_denied");
         }
         
         encodedAuthToken = (String) accessor.getProperty("ZM_AUTH_TOKEN");
-        
+
+        checkConsumerKeyinMbox(accessor);
+
         ZimbraLog.extensions.debug("[oauth_token]"+accessor.accessToken+",[ZM_AUTH_TOKEN]"+encodedAuthToken);
 
-        }catch (Exception e){
-            //SampleZmOAuthProvider.handleException(e, request, response, true);
-        }
-        
-        
-        
         return genAuthToken(encodedAuthToken);
+    }
+
+    private static void checkConsumerKeyinMbox(OAuthAccessor accessor) throws AuthTokenException, AuthProviderException {
+        AuthToken userAuthToken = ZimbraAuthToken.getAuthToken((String) accessor.getProperty("ZM_AUTH_TOKEN"));
+        try {
+            Mailbox mbox = MailboxManager.getInstance().getMailboxByAccountId(userAuthToken.getAccountId());
+            Metadata oAuthConfig = mbox.getConfig(null, "zwc:oauth");
+            if (oAuthConfig != null) {
+                MetadataList authzedConsumers = oAuthConfig.getList("authorized_consumers", true);
+                if (authzedConsumers != null && authzedConsumers.asList().contains(accessor.consumer.consumerKey)) {
+                    return;
+                }
+            }
+        } catch (ServiceException e) {
+            ZimbraLog.extensions.warn("Error in reading mailbox metadata", e);
+            throw AuthProviderException.FAILURE(e.getMessage());
+        }
+        throw AuthProviderException.FAILURE("permission_denied");
     }
 
     protected AuthToken authToken(Element soapCtxt, Map engineCtxt) throws AuthProviderException, AuthTokenException  {

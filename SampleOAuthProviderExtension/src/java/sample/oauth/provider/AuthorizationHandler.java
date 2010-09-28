@@ -36,45 +36,23 @@
 
 package sample.oauth.provider;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.extension.ExtensionHttpHandler;
+import com.zimbra.cs.extension.ZimbraExtension;
+import com.zimbra.cs.servlet.ZimbraServlet;
 import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthMessage;
 import net.oauth.server.OAuthServlet;
-
 import sample.oauth.provider.core.SampleZmOAuthProvider;
 
-import com.zimbra.cs.extension.ExtensionHttpHandler;
-import com.zimbra.cs.extension.ZimbraExtension;
-import com.zimbra.cs.extension.ExtensionDispatcherServlet;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.cs.servlet.ZimbraServlet;
-
-import com.zimbra.cs.zclient.ZAuthResult;
-
-import com.zimbra.cs.account.Account;
-import com.zimbra.cs.account.Provisioning;
-import com.zimbra.cs.service.AuthProvider;
-import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.account.AccountServiceException.AuthFailedServiceException;
-import com.zimbra.soap.SoapEngine;
-import com.zimbra.cs.account.AuthToken;
-import com.zimbra.common.soap.AccountConstants;
-
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Set;
-
-import com.zimbra.common.util.ZimbraLog;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
  * Autherization request handler for zimbra extension.
@@ -98,9 +76,9 @@ public class AuthorizationHandler extends ExtensionHttpHandler {
     	ZimbraLog.extensions.debug("Authorization Hndler doGet requested!");
         
         try{
-            OAuthMessage requestMessage = OAuthServlet.getMessage(request, null);
+            OAuthMessage oAuthMessage = OAuthServlet.getMessage(request, null);
             
-            OAuthAccessor accessor = SampleZmOAuthProvider.getAccessor(requestMessage);
+            OAuthAccessor accessor = SampleZmOAuthProvider.getAccessor(oAuthMessage);
            
             if (Boolean.TRUE.equals(accessor.getProperty("authorized"))) {
                 // already authorized send the user back

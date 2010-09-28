@@ -36,28 +36,22 @@
 
 package sample.oauth.provider;
 
-import java.io.IOException;
-import java.io.OutputStream;
-import java.util.Map;
-
-import javax.servlet.ServletConfig;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.extension.ExtensionHttpHandler;
+import com.zimbra.cs.extension.ZimbraExtension;
 import net.oauth.OAuth;
 import net.oauth.OAuthAccessor;
 import net.oauth.OAuthConsumer;
 import net.oauth.OAuthMessage;
 import net.oauth.server.OAuthServlet;
-
 import sample.oauth.provider.core.SampleZmOAuthProvider;
 
-import com.zimbra.cs.extension.ExtensionHttpHandler;
-import com.zimbra.cs.extension.ZimbraExtension;
-import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.ZimbraLog;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 
 /**
  * Request token request handler for zimbra extension
@@ -92,12 +86,12 @@ public class RequestTokenHandler extends ExtensionHttpHandler {
             throws IOException, ServletException {
 
         try {
-            OAuthMessage requestMessage = OAuthServlet.getMessage(request, null);
+            OAuthMessage oAuthMessage = OAuthServlet.getMessage(request, null);
             
-            OAuthConsumer consumer = SampleZmOAuthProvider.getConsumer(requestMessage);
+            OAuthConsumer consumer = SampleZmOAuthProvider.getConsumer(oAuthMessage);
             
             OAuthAccessor accessor = new OAuthAccessor(consumer);
-            SampleZmOAuthProvider.VALIDATOR.validateReqTokenMessage(requestMessage, accessor);
+            SampleZmOAuthProvider.VALIDATOR.validateReqTokenMessage(oAuthMessage, accessor);
             
             
             // generate request_token and secret
