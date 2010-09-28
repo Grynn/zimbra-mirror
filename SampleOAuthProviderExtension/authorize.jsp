@@ -18,13 +18,12 @@
 
 <%
     String appDesc = (String)request.getAttribute("CONS_DESC");
-	if(appDesc==null){
-	        appDesc = request.getParameter("CONS_DESC");
-			        }
+    if(appDesc==null)
+        appDesc = request.getParameter("CONS_DESC");
+    appDesc = "Application " + appDesc + " would like the ability to access and update your data. Login to allow access.";
     String token = (String)request.getAttribute("TOKEN");
-	if(token==null){
-		token = request.getParameter("oauth_token");
-		}
+    if(token==null)
+        token = request.getParameter("oauth_token");
 %>
 
 <c:catch var="loginException">
@@ -158,7 +157,7 @@
 									<table width="100%" cellpadding="4">
 										<tr>
 						                   <td align="center">
-						                     <% out.println(appDesc); %>
+						                     <b><% out.println(appDesc); %></b>
 					                       </td>
 						               </tr>
 									</table>

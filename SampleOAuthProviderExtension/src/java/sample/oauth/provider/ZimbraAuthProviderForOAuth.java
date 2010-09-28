@@ -112,13 +112,25 @@ public class ZimbraAuthProviderForOAuth extends AuthProvider{
             throw AuthProviderException.FAILURE("permission_denied");
         }
         
-        encodedAuthToken = (String) accessor.getProperty("ZM_AUTH_TOKEN");
-
         checkConsumerKeyinMbox(accessor);
+
+        encodedAuthToken = (String) accessor.getProperty("ZM_AUTH_TOKEN");
 
         ZimbraLog.extensions.debug("[oauth_token]"+accessor.accessToken+",[ZM_AUTH_TOKEN]"+encodedAuthToken);
 
-        return genAuthToken(encodedAuthToken);
+        AuthToken authToken = genAuthToken(encodedAuthToken);
+        if (authToken.isExpired()) {
+            // renew the auth token
+            try {
+                authToken = AuthProvider.getAuthToken(authToken.getAccount());
+            } catch (ServiceException e) {
+                ZimbraLog.extensions.warn("Error in generating auth token", e);
+                throw AuthProviderException.FAILURE(e.getMessage());
+            }
+            accessor.setProperty("ZM_AUTH_TOKEN", authToken.getEncoded());
+        }
+
+        return authToken;
     }
 
     private static void checkConsumerKeyinMbox(OAuthAccessor accessor) throws AuthTokenException, AuthProviderException {
