@@ -139,6 +139,10 @@ case "$1" in
     $0 stop
     $0 start
   ;;
+  reload)
+    $0 stop
+    $0 start
+  ;;
   status)
     echo -n "Milter server is "
     checkrunning
@@ -151,7 +155,7 @@ case "$1" in
     fi
   ;;
   *)
-    echo "$0 start|stop|restart|status"
+    echo "$0 start|stop|restart|reload|status"
     exit 1
   ;;
 esac
