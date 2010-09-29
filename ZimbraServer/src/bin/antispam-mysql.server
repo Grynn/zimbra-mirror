@@ -40,7 +40,7 @@ fi
 
 # If antispam_mysql_host is set to the local host then setup and use local MySQL db.
 # Otherwise, reconfigure the salocal.cf file to point to a remote MySQL db.
-if [ x${antispam_mysql_host} != x`zmhostname` -a x${antispam_mysql_host} = "xlocalhost" ]
+if [ x${antispam_mysql_host} != x`zmhostname` -a x${antispam_mysql_host} != "xlocalhost" ]
 then
 	# antispam is not configured to use DB on this (local) host
 	exit 0
