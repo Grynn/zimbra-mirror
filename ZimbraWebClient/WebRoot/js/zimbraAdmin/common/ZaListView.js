@@ -93,7 +93,7 @@ function(ev, div) {
 		if (item && item.getToolTip) {
 			var tt_content = "" ;
 			try {	
-				 //if (AjxEnv.hasFirebug) console.log("Item: " + item.name) ;
+				 //if(console && console.log) console.log("Item: " + item.name) ;
 				 tt_content = item.getToolTip() ;
 			}catch (e) {
 				 tt_content = e.msg ;

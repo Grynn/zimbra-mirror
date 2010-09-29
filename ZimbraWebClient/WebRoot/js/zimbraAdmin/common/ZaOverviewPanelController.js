@@ -673,7 +673,7 @@ function(ev) {
 				
 			}else if (ev.detail == DwtTree.ITEM_ACTIONED) {
 				if (treeItemType == ZaZimbraAdmin._SEARCH_LIST_VIEW) { //saved search item is actioned.
-					//if (AjxEnv.hasFirebug) console.debug("Saved Search tree Item is actioned.") ;
+					//if(console && console.log) console.debug("Saved Search tree Item is actioned.") ;
 					eventHandler.call(this, ev) ;
 				}	
 			}
@@ -827,7 +827,7 @@ ZaOverviewPanelController.searchListTreeListener = function (ev) {
 	var name = ev.item.getData("name") ;
 	var query = ev.item.getData("query");
 	if (ev.detail == DwtTree.ITEM_SELECTED) {
-		//if (AjxEnv.hasFirebug) console.debug("Run the saved search ...") ;
+		//if(console && console.log) console.debug("Run the saved search ...") ;
 		searchField.selectSavedSearch(name, query);
 	}else if (ev.detail == DwtTree.ITEM_ACTIONED){
 		searchField._currentSavedSearch = {name: name, query: query};

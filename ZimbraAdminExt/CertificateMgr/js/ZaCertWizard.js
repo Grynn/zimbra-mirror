@@ -215,7 +215,7 @@ function (resp){
 ZaCertWizard.prototype._uploadCallback =
 function (status, uploadResults) {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
-	if (AjxEnv.hasFirebug) 
+	if(console && console.log) 
 		console.log("Cert File Upload: status = " + status);
 	if ((status == AjxPost.SC_OK) && (uploadResults != null) && (uploadResults.length > 0)) {
 		this.uploadResults = {
@@ -317,7 +317,7 @@ function(uploadManager) {
 ZaCertWizard.prototype.goNext = 
 function() {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
-	if (AjxEnv.hasFirebug) 
+	if(console && console.log) 
 		console.log("Current Step: " + cStep + ", Now Go Next ...");
 	var type ; //type of the self| comm
 	if (this._containedObject[ZaCert.A_type_csr] || this._containedObject[ZaCert.A_type_comm] ) {
@@ -376,10 +376,10 @@ function() {
                     ZaCert.genCSR (ZaApp.getInstance(), this._containedObject.attrs, type, true,
                             this._containedObject[ZaCert.A_target_server], this._containedObject[ZaCert.A_keysize]) ;
                 } else {
-                    if (AjxEnv.hasFirebug) console.log("Self-Signed certificate, skip the CSR generation.") ;                    
+                    if(console && console.log) console.log("Self-Signed certificate, skip the CSR generation.") ;                    
                 }
 			}else{
-				if (AjxEnv.hasFirebug) console.log("Previous CSR exists, skip the CSR generation.") ;
+				if(console && console.log) console.log("Previous CSR exists, skip the CSR generation.") ;
 			}
 		}catch (ex) {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_cert_manager.genCSRError, ex, true) ;		
@@ -484,7 +484,7 @@ ZaCertWizard.getFileName = function (fullPath) {
 ZaCertWizard.prototype.goPrev = 
 function() {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
-	if (AjxEnv.hasFirebug) 
+	if(console && console.log) 
 		console.log("Current Step: " + cStep + ", Now Go Previous ...");
 	var prevStep ;
 	if (cStep == ZaCertWizard.STEP_DOWNLOAD_CSR) {
@@ -677,13 +677,13 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						//TODO: Change it on the XFormItem level
 						onChange: function (value, event, form) {
 							value = true ;
-							if (AjxEnv.hasFirebug) console.log("Self Install - onChange value = " + value) ;
+							if(console && console.log) console.log("Self Install - onChange value = " + value) ;
 							this.setInstanceValue (value) ;
 							this.setInstanceValue (!value, ZaCert.A_type_comm ) ;
 							this.setInstanceValue (!value, ZaCert.A_type_csr) ;
 						},
 						updateElement:function (newValue) {
-							if (AjxEnv.hasFirebug) console.log("Self Install - UpdateElement newValue = " + newValue) ;
+							if(console && console.log) console.log("Self Install - UpdateElement newValue = " + newValue) ;
 							this.getElement().checked = (newValue == true);
 						}
 					},
@@ -695,13 +695,13 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 						//TODO: Change it on the XFormItem level
 						onChange: function (value, event, form) {
 							value = true ;
-							if (AjxEnv.hasFirebug) console.log("Gen CSR - onChange value = " + value) ;
+							if(console && console.log) console.log("Gen CSR - onChange value = " + value) ;
 							this.setInstanceValue (value) ;
 							this.setInstanceValue (!value, ZaCert.A_type_self ) ;
 							this.setInstanceValue (!value, ZaCert.A_type_comm ) ;
 						},
 						updateElement:function (newValue) {
-							if (AjxEnv.hasFirebug) console.log("Gen CSR Install - UpdateElement newValue = " + newValue) ;
+							if(console && console.log) console.log("Gen CSR Install - UpdateElement newValue = " + newValue) ;
 							this.getElement().checked = (newValue == true);
 						}
 					},	
@@ -709,12 +709,12 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
                     visibilityChecks:[],
                     enableDisableChecks:[],
                     updateElement:function (newValue) {
-						if (AjxEnv.hasFirebug) console.log("Comm Install - UpdateElement newValue = " + newValue) ;
+						if(console && console.log) console.log("Comm Install - UpdateElement newValue = " + newValue) ;
 						this.getElement().checked = (newValue == true);
 					},
 					onChange: function (value, event, form) {
 						value = true ;
-						if (AjxEnv.hasFirebug) console.log("Comm Install - onChange value = " + value) ;
+						if(console && console.log) console.log("Comm Install - onChange value = " + value) ;
 						this.setInstanceValue (value) ;
 						this.setInstanceValue (!value, ZaCert.A_type_self ) ;
 						this.setInstanceValue (!value, ZaCert.A_type_csr) ;
@@ -783,10 +783,10 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 				        enableDisableChangeEventSources:[ZaCert.A_csr_exists, ZaCert.A_force_new_csr],
                         label: com_zimbra_cert_manager.Use_Wildcard_Server_Name,
 						onChange: function (value, event, form) {
-							if (AjxEnv.hasFirebug) console.log("use wildcard: " + value) ;
+							if(console && console.log) console.log("use wildcard: " + value) ;
 							this.setInstanceValue (value) ;
 							if (value) {
-								if (AjxEnv.hasFirebug) console.log("Set the wildcard server name") ;
+								if(console && console.log) console.log("Set the wildcard server name") ;
                                 var wildCardSN = ZaCert.getWildCardServerName(this.getInstanceValue(ZaCert.A_commonName)) ;
 								this.setInstanceValue( wildCardSN,	ZaCert.A_commonName ) ;
 							}

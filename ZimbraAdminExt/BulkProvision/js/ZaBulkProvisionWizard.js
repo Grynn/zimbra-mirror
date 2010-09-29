@@ -65,7 +65,7 @@ function (loc) {
 ZaBulkProvisionWizard.prototype._uploadCallback =
 function (status, uploadResults) {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
-	if (AjxEnv.hasFirebug)
+	if (console && console.log)
 		console.log("Provisioning File Upload: status = " + status);
 	if ((status == AjxPost.SC_OK) && (uploadResults != null) && (uploadResults.length > 0)) {
     	var v = uploadResults[0] ;
@@ -269,9 +269,9 @@ ZaBulkProvisionWizard.prototype.createAccounts = function () {
         }
         
         this._endTime = new Date ();
-        if (AjxEnv.hasFirebug) console.log("End provision accounts: " + this._endTime.toUTCString());
+        if (console && console.log) console.log("End provision accounts: " + this._endTime.toUTCString());
         var total = this._endTime.getTime () - this._startTime.getTime () ;
-        if (AjxEnv.hasFirebug) console.log("Total Time (ms): "  + total) ;
+        if (console && console.log) console.log("Total Time (ms): "  + total) ;
         //update the status now
         ZaBulkProvision.updateBulkProvisionStatus (this._app, this._containedObject) ;
         var nextStep = ZaBulkProvisionWizard.STEP_SUMMARY ;
@@ -284,7 +284,7 @@ ZaBulkProvisionWizard.prototype.createAccounts = function () {
 
 ZaBulkProvisionWizard.prototype.statusDialogPopupListener = function (ev) {
     this._startTime = new Date ();
-    if (AjxEnv.hasFirebug) console.log("Start provisiong accounts: " + this._startTime.toUTCString());
+    if (console && console.log) console.log("Start provisiong accounts: " + this._startTime.toUTCString());
 
     var statusDialogCreatedAccounts =  this._provisionStatusObject [ZaBulkProvisionStatusDialog.A_createdAccounts] ;
     var statusDialog = this.getProvisionStatusDialog() ;
@@ -325,7 +325,7 @@ ZaBulkProvisionWizard.prototype.updateLicenseAccountLimit = function (resp) {
 ZaBulkProvisionWizard.prototype.goNext =
 function() {
 	var cStep = this._containedObject[ZaModel.currentStep] ;
-	if (AjxEnv.hasFirebug)
+	if (console && console.log)
 		console.log("Current Step: " + cStep + ", Now Go Next ...");
 
 	var nextStep;

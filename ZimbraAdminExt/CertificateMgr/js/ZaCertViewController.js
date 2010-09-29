@@ -1,4 +1,4 @@
-if (AjxEnv.hasFirebug) console.debug("Loaded ZaCertViewController.js");
+if(console && console.log) console.debug("Loaded ZaCertViewController.js");
 
 function ZaCertViewController(appCtxt, container) {
 	ZaController.call(this, appCtxt, container, "ZaCertViewController");
@@ -81,18 +81,18 @@ ZaCertViewController.prototype._createUI = function () {
 
 
 ZaCertViewController.prototype._newCertListener = function (ev) {
-	if (AjxEnv.hasFirebug) console.log("ZaCertViewController.prototype._newCertListener: Launch the new certificates wizard ... ") ;
+	if(console && console.log) console.log("ZaCertViewController.prototype._newCertListener: Launch the new certificates wizard ... ") ;
 	ZaCert.launchNewCertWizard.call (this, this._contentView.getTargetServerId()) ;
 }
 
 
 ZaCertViewController.prototype._editCertListener = function (ev) {
-	if (AjxEnv.hasFirebug) console.log("Launch the certificate modifications wizard ... ") ;
+	if(console && console.log) console.log("Launch the certificate modifications wizard ... ") ;
 	
 }
 
 ZaCertViewController.prototype.refreshListener = function (ev) {
-	if (AjxEnv.hasFirebug) console.log("Refresh the certificates ... ") ;
+	if(console && console.log) console.log("Refresh the certificates ... ") ;
 	this.show(ZaCert.getCerts(this._app, this._contentView.getTargetServerId ()), this._contentView.getTargetServerId ()) ;
 }
 

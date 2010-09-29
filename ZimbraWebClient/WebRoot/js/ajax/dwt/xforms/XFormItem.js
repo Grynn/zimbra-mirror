@@ -4282,7 +4282,7 @@ Dwt_ColorPicker_XFormItem.prototype.updateWidget = function (newValue) {
 	if(!this.widget)
 		return;
 		
-	//if (AjxEnv.hasFirebug) console.log ("new color = " + newValue) ;
+	//if(console && console.log) console.log ("new color = " + newValue) ;
 	if (newValue != null) {
 		this.widget.setColor(newValue);
 	}else { //ensure the empty color can be set in the UI

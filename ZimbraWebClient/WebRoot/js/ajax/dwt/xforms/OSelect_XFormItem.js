@@ -56,7 +56,7 @@ OSelect1_XFormItem.prototype.checkHTML = "&radic;";
 OSelect1_XFormItem.MENU_DIR_DOWN=1;
 OSelect1_XFormItem.MENU_DIR_UP=2;
 OSelect1_XFormItem.MENU_DIR_UNKNOWN=0;
-OSelect1_XFormItem.NOTE_HEIGHT=40;
+OSelect1_XFormItem.NOTE_HEIGHT=22;
 OSelect1_XFormItem.prototype.menuDirection = OSelect1_XFormItem.MENU_DIR_UNKNOWN;
 OSelect1_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
 OSelect1_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
@@ -137,11 +137,22 @@ OSelect1_XFormItem.prototype.getNoteElement = function () {
 	}
 	return el;
 }
+OSelect1_XFormItem.prototype.setError = function (message, childError) {
+	if(console && console.log) console.log("Showing error note");
+	this.showNote(message, this.getErrorNoteCssClass());
+	this.__errorState = XFormItem.ERROR_STATE_ERROR;
+}
+
+OSelect1_XFormItem.prototype.clearError = function () {
+	if(console && console.log) console.log("Hiding error note");
+	this.hideNote();
+	this.__errorState = XFormItem.ERROR_STATE_VALID;
+}
 
 OSelect1_XFormItem.prototype.showMenu = function() {
 	if(!this._enabled)
 		return;
-	
+	if(console && console.log) console.log("Showing menu");
 	this.hideInputTooltip();
 	
 	if (AjxEnv.isIE && !OSelect1_XFormItem._mouseWheelEventAttached) {
@@ -274,6 +285,7 @@ OSelect1_XFormItem.prototype.hideMenu = function () {
 	if(!this.menuUp) {
 		return;
 	}	
+	if(console && console.log) console.log("Hiding menu");
 	// hide the menu on a timer so we don't have to deal with wierd selection bugs
 	setTimeout(this.getFormGlobalRef()+".getElement('" + this.getMenuElementId() + "').style.display = 'none'", 10);
 
@@ -313,26 +325,28 @@ OSelect1_XFormItem.prototype.moveMenuY = function (y, shorten, lengthen) {
 	
 }
 
-OSelect1_XFormItem.prototype.showNote = function(noteText) {
+OSelect1_XFormItem.prototype.showNote = function(noteText, noteClass) {
 	var note = this.getNoteElement();
 	if(!note == null) return;
-	note.className = this.getNoteCssClass();
+	note.className = noteClass ? noteClass : this.getNoteCssClass();
 	note.innerHTML = noteText;	
 	note.style.display = "block";
-	var menu = this.getMenuElement();
-	var mBounds = this.getBounds(menu);
-	var menuHeight = mBounds.height;
-	var menuTop = mBounds.top;
-	note.style.width = menu.style.width;
-	note.style.left = menu.style.left;
-	if(this.menuDirection == OSelect1_XFormItem.MENU_DIR_UP) {
-		note.style.top = menuTop - OSelect1_XFormItem.NOTE_HEIGHT + menuHeight;
-		this.moveMenuY((-1)*OSelect1_XFormItem.NOTE_HEIGHT,true,false);
+	var bounds;
+	if(this.getInheritedProperty("editable")) {
+		bounds = this.getBounds(this.getDisplayElement());
 	} else {
-		note.style.top = menu.style.top;
-		this.moveMenuY(OSelect1_XFormItem.NOTE_HEIGHT,true,false);
+		bounds = this.getBounds(this.getElement());
 	}
-	note.style.zIndex = menu.style.zIndex+1;
+	//note.style.width = menu.style.width;
+	note.style.left = bounds.left;
+	if(this.menuDirection == OSelect1_XFormItem.MENU_DIR_UP) {
+		note.style.top = bounds.top + bounds.height;
+		//this.moveMenuY((-1)*OSelect1_XFormItem.NOTE_HEIGHT,true,false);
+	} else {
+		note.style.top = bounds.top - OSelect1_XFormItem.NOTE_HEIGHT;
+		//this.moveMenuY(OSelect1_XFormItem.NOTE_HEIGHT,true,false);
+	}
+	note.style.zIndex = 1000000;
 	this.noteUp = true;
 }
 
@@ -341,12 +355,7 @@ OSelect1_XFormItem.prototype.hideNote = function() {
 	var note = this.getNoteElement();
 	if(!note == null) return;
 	note.innerHTML = "";	
-	note.style.display = "none";
-	if(this.menuDirection == OSelect1_XFormItem.MENU_DIR_UP) {
-		this.moveMenuY(OSelect1_XFormItem.NOTE_HEIGHT,false,true);
-	} else {
-		this.moveMenuY((-1)*OSelect1_XFormItem.NOTE_HEIGHT,false,true);
-	}	
+	note.style.display = "none";	
 	note.style.zIndex = Dwt.Z_HIDDEN;
 	this.noteUp = false;
 }
@@ -473,8 +482,9 @@ OSelect1_XFormItem.prototype.onChoiceDoubleClick = function (itemNum, event) {
 	this.choiceSelected(itemNum, true, event);
 }
 
-OSelect1_XFormItem.prototype.onValueTyped = function(label, event) {
+OSelect1_XFormItem.prototype.onValueTyped = function(label, event) {	
 	var value = this.getChoiceValue(label);
+	if(console && console.log) console.log("onValueTyped called value: " + value);
 	this.setValue(value, false, event);
 }
 
@@ -522,6 +532,10 @@ OSelect1_XFormItem.prototype.choiceSelected = function (itemNum, clearOldValues,
 	//DBG.println(AjxDebug.DBG1, "OSelect1_XFormItem.choiceSelected hiding menu "+  (new Date()).getTime());
 	this.hideMenu();
 	var value = this.getNormalizedValues()[itemNum];
+	var editable = this.getInheritedProperty("editable");
+	if(editable) {
+		this.getDisplayElement().value = this.getNormalizedLabels()[itemNum];
+	}
 	this.setValue(value, clearOldValues, event);
 }
 
@@ -566,6 +580,7 @@ OSelect1_XFormItem.prototype.hilitePreviousChoice = function() {
 
 
 OSelect1_XFormItem.prototype.setValue = function (newValue, clearOldValues, event) {
+	if(console && console.log) console.log("setValue called + " + newValue);
 	var method = this.getElementChangedMethod();
 	method.call(this, newValue, this.getInstanceValue(), event);
 }
@@ -739,6 +754,10 @@ OSelect1_XFormItem.prototype.getChoiceSelectedCssClass = function () {
 
 OSelect1_XFormItem.prototype.getNoteCssClass = function () {
 	return this.cssClass + "_note";
+}
+
+OSelect1_XFormItem.prototype.getErrorNoteCssClass = function () {
+	return this.cssClass + "_error_note";
 }
 
 OSelect1_XFormItem.prototype.outputChoicesHTMLStart = function(html) {

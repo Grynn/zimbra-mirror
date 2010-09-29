@@ -1956,6 +1956,7 @@ ZaAccount.isAutoMailServer = function () {
 
 ZaAccount.setCosChanged = function (value, event, form) {
 	var oldVal = this.getInstanceValue();
+	if (console && console.log) console.log("ZaAccount.setCosChanged " + value + "/" + oldVal);
 	if(oldVal == value)
 		return;
 			
@@ -1964,10 +1965,14 @@ ZaAccount.setCosChanged = function (value, event, form) {
 	if(ZaItem.ID_PATTERN.test(value)) {
 		this._defaultValues = ZaCos.getCosById(value);
 	} else {
-		this.setError(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[value]));
-		var event = new DwtXFormsEvent(form, this, value);
-		form.notifyListeners(DwtEvent.XFORMS_VALUE_ERROR, event);
-		return;
+		var cos = ZaCos.getCosByName(value);
+		if(cos) {
+			this._defaultValues = cos;
+		} else {
+			this.setError(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[value]));
+			var event = new DwtXFormsEvent(form, this, value);
+			form.notifyListeners(DwtEvent.XFORMS_VALUE_ERROR, event);
+		}
 	}
 } 
 
@@ -2261,7 +2266,7 @@ ZaAccount.isEmailRetentionPolicyEnabled = function () {
     	var s_mailpurge = sc.attrs[ZaServer.A_zimbraMailPurgeSleepInterval] ;    //always end with [s,m,h,d]
     	var g_mailpurge = gc.attrs[ZaGlobalConfig.A_zimbraMailPurgeSleepInterval] ;
     	if (s_mailpurge === _UNDEFINED_ || s_mailpurge === null)  {
-        	if (AjxEnv.hasFirebug) console.log("server setting A_zimbraMailPurgeSleepInterval is NOT set.")
+        	if(console && console.log) console.log("server setting A_zimbraMailPurgeSleepInterval is NOT set.")
         	if (g_mailpurge != null && ZaUtil.getLifeTimeInSeconds(g_mailpurge) == 0) {
             	return false ;
         	}

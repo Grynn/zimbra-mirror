@@ -33,6 +33,7 @@ DynSelect_XFormItem.prototype.dataFetcherObject = null;
 DynSelect_XFormItem.prototype.dataFetcherTypes = null;
 DynSelect_XFormItem.prototype.dataFetcherAttrs = null;
 DynSelect_XFormItem.prototype.dataFetcherDomain = null;
+DynSelect_XFormItem.prototype.bmolsnr = false;
 DynSelect_XFormItem.prototype.emptyText = "";
 DynSelect_XFormItem.prototype.cssClass = "dynselect";
 DynSelect_XFormItem.prototype.edited = false;
@@ -88,8 +89,9 @@ DynSelect_XFormItem.fetchDataDefault = function (callArgs) {
 }
 
 DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
-	//console.log("onKeyUp " + value);
 	var lastTypeTime = new Date().getTime();
+	this._lastTypeTime = lastTypeTime;
+	if (console && console.log) console.log("onKeyUp " + value + " @ "+lastTypeTime);
 	this.edited = true;
 	this.hideNote();
 	if(event.keyCode==XFG.ARROW_UP) {
@@ -119,7 +121,10 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 			this.hideMenu();
 			return;
 		}
-	} 
+	} else if (this.menuUp && event.keyCode==DwtKeyEvent.KEY_ENTER) {
+		this.hideMenu();
+		return;
+	}
 	this.isSelecting = false;	
 	
 	var method = this.getKeyUpMethod();
@@ -141,8 +146,7 @@ DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 		if (key == DwtKeyEvent.KEY_TAB) {
 			DwtUiEvent.setBehaviour(event, true, false);
 			return false;
-		} else if(!(event.keyCode==XFG.ARROW_RIGHT || event.keyCode==XFG.ARROW_LEFT || event.keyCode == DwtKeyEvent.KEY_ESCAPE)) {  
-			this._lastTypeTime = lastTypeTime;
+		} else if(!(event.keyCode==XFG.ARROW_RIGHT || event.keyCode==XFG.ARROW_LEFT || event.keyCode == DwtKeyEvent.KEY_ESCAPE)) {  			
 			var action = new AjxTimedAction(this, this.handleKeyPressDelay, [evt, value,lastTypeTime]);
 			this.keyPressDelayHdlr = AjxTimedAction.scheduleAction(action, DynSelect_XFormItem.LOAD_PAUSE);
 		}		
@@ -164,14 +168,15 @@ DynSelect_XFormItem.prototype.resetChoices = function () {
 
 
 DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value,lastTypeTime) {
-	//console.log("handleKeyPressDelay " + value);
+	var currTime = new Date().getTime();
+	if (console && console.log) console.log("handleKeyPressDelay " + value + " @ " + currTime);
 	this.keyPressDelayHdlr = null;
 	var val = this.preProcessInput(value);
 	
 	if(lastTypeTime == this._lastTypeTime) {
 		this.getForm().itemChanged(this, val, event);
 	} else {
-		//if (AjxEnv.hasFirebug) console.log("typing faster than retreiving data");
+		if (console && console.log) console.log("typing faster than retreiving data");
 		return;
 	}		
 	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {
@@ -293,6 +298,7 @@ DynSelect_XFormItem.prototype.updateElement = function (newValue) {
 		} else if(this._enabled) {
 			el.className = this.getDisplayCssClass();
 		}
+		if(console && console.log) console.log("updating element with value: " + newValue + " over " + el.value);
 		el.value = newValue;
 	}
 	
