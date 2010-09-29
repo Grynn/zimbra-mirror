@@ -14,6 +14,8 @@
     <property name="common.build.classes.dir" location="${common.build.dir}/classes"/>
     <property name="common.jars.dir" location="${common.dir}/jars"/>
 
+    <property name="soap.dir" location="../ZimbraSoap"/>
+    <property name="soap.classes.dir" location="${soap.dir}/build/classes"/>
 
     <property name="webinf.dir" location="WEB-INF"/>
 
@@ -46,6 +48,8 @@
 
     <path id="class.path">
         <pathelement location="${server.build.classes.dir}"/>
+    	<pathelement location="${soap.classes.dir}"/>
+    	
         <fileset dir="${jars.dir}">
             <include name="**/*.jar"/>
         </fileset>

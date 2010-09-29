@@ -26,6 +26,7 @@ import com.zimbra.cs.zclient.ZPrefs;
 import com.zimbra.cs.zclient.ZSignature;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 

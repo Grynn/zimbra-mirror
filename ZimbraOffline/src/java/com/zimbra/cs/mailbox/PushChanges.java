@@ -169,8 +169,6 @@ public class PushChanges {
     private ZMailbox getZMailbox() throws ServiceException {
         if (mZMailbox == null) {
             ZMailbox.Options options = new ZMailbox.Options(ombx.getAuthToken(), ombx.getSoapUri());
-        	options.setRequestProtocol(SoapProtocol.Soap12);
-        	options.setResponseProtocol(SoapProtocol.Soap12);
             options.setNoSession(true);
             options.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
             options.setTimeout(OfflineLC.zdesktop_request_timeout.intValue());

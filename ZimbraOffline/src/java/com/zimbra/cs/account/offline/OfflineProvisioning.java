@@ -173,8 +173,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     private ZMailbox newZMailbox(ZMailbox.Options options) throws ServiceException {
-        options.setRequestProtocol(SoapProtocol.Soap12);
-        options.setResponseProtocol(SoapProtocol.Soap12);
         options.setNoSession(true);
         options.setUserAgent(OfflineLC.zdesktop_name.value(), OfflineLC.getFullVersion());
         options.setTimeout(OfflineLC.zdesktop_request_timeout.intValue());

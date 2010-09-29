@@ -13,6 +13,10 @@
     <property name="common.build.classes.dir" location="${common.build.dir}/classes"/>
     <property name="common.jars.dir" location="${common.dir}/jars"/>
 
+    <property name="soap.dir" location="../ZimbraSoap"/>
+    <property name="soap.build.dir" location="${soap.dir}/build"/>
+    <property name="soap.build.classes.dir" location="${soap.build.dir}/classes"/>
+
     <property name="zimbratl.dir" location="../ZimbraTagLib"/>
     <property name="zimbratl.build.dir" location="${zimbratl.dir}/build"/>
     <property name="zimbratl.build.classes.dir" location="${zimbratl.build.dir}/classes"/>
@@ -48,6 +52,7 @@
 
     <path id="class.path">
         <pathelement location="${server.build.classes.dir}"/>
+        <pathelement location="${soap.build.classes.dir}"/>
         <fileset dir="${jars.dir}">
             <include name="**/*.jar"/>
         </fileset>
@@ -98,6 +103,7 @@
         <war warfile="${warfile}" webxml="WEB-INF/web.xml">
             <lib dir="${server.build.dir}" includes="zimbrastore.jar"/>
             <lib dir="${common.build.dir}" includes="zimbracommon.jar"/>
+            <lib dir="${soap.build.dir}" includes="zimbrasoap.jar"/>
             <lib dir="${zimbratl.build.dir}" includes="zimbrataglib.jar"/>
             <lib dir="${common.jars.dir}" includes="**.jar" excludes="${war.exclude}"/>
             <lib dir="${jars.dir}" includes="**.jar" excludes="${war.exclude}"/>

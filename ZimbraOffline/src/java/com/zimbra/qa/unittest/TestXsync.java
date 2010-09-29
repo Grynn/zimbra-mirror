@@ -375,8 +375,6 @@ public class TestXsync extends TestCase {
         options.setAccountBy(AccountBy.name);
         options.setPassword(PASSWORD);
         options.setUri(LOCAL_SOAP_URL);
-        options.setRequestProtocol(SoapProtocol.Soap12);
-        options.setResponseProtocol(SoapProtocol.Soap12);
         localMailbox = ZMailbox.getMailbox(options);
     }
     
