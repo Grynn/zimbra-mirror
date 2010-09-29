@@ -440,6 +440,7 @@
 		</delete>
 		<copy todir="${dist.dir}/jetty/lib" overwrite="true">
 			<fileset file="${common.jars.dir}/log4j*.jar"/>
+			<fileset file="${common.jars.dir}/apache-log4j-extras-1.0.jar"/>
 			<fileset file="${common.jars.dir}/slf4j*.jar"/>
 		</copy>
 		<copy tofile="${dist.dir}/jetty/resources/log4j.properties" file="${server.config.dir}/jetty-6.1/log4j.properties.production" overwrite="true" />

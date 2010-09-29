@@ -27,9 +27,14 @@
 			<attribute name="javadoc_location" value="http://junit.sourceforge.net/javadoc/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.15.jar" sourcepath="/ThirdParty/jakarta-log4j">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/log4j-1.2.16.jar" sourcepath="/ZimbraCommon/jars-src/log4j-1.2.16-sources.jar">
 		<attributes>
-			<attribute name="javadoc_location" value="http://logging.apache.org/log4j/1.2/apidocs/"/>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/log4j-1.2.16-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/apache-log4j-extras-1.0.jar" sourcepath="/ZimbraCommon/jars-src/apache-log4j-extras-1.0-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-log4j-extras-1.0-javadoc.jar!/"/>
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/ZimbraCommon/jars/jdom.jar" sourcepath="/ThirdParty/jdom-1.1/src"/>

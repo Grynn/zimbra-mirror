@@ -45,10 +45,15 @@
     </attributes>
   </classpathentry>
   <classpathentry kind="lib" path="jars/jzlib.jar"/>
-  <classpathentry kind="lib" path="jars/log4j-1.2.15.jar" sourcepath="/ThirdParty/jakarta-log4j">
+  <classpathentry kind="lib" path="jars/log4j-1.2.16.jar" sourcepath="jars-src/log4j-1.2.16-sources.jar">
     <attributes>
-      <attribute name="javadoc_location" value="http://logging.apache.org/log4j/1.2/apidocs/"/>
+	    <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/log4j-1.2.16-javadoc.jar!/"/>
     </attributes>
+  </classpathentry>
+  <classpathentry kind="lib" path="jars/apache-log4j-extras-1.0.jar" sourcepath="jars-src/apache-log4j-extras-1.0-sources.jar">
+	  <attributes>
+		  <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-log4j-extras-1.0-javadoc.jar!/"/>
+	  </attributes>
   </classpathentry>
   <classpathentry kind="lib" path="jars/mail.jar" sourcepath="jars-src/javamail-1.4.3-src.jar">
     <attributes>
