@@ -111,6 +111,8 @@ public class ZComposeUploaderBean {
     public static final String F_actionCancel = "actionCancel";
     public static final String F_actionCancelConfirm = "actionCancelConfirm";
     public static final String F_actionDraft = "actionDraft";
+    public static final String F_actionAutoSave = "actionAutoSave";
+
     public static final String F_actionApptCancel = "actionApptCancel";
     public static final String F_actionApptDelete = "actionApptDelete";
 
@@ -496,6 +498,8 @@ public class ZComposeUploaderBean {
     public boolean getIsApptDelete() { return hasParam(F_actionApptDelete); }    
 
     public boolean getIsDraft() { return hasParam(F_actionDraft); }
+
+    public boolean getIsAutoSave() { return hasParam(F_actionAutoSave); }
 
     public boolean getIsSend() { return hasParam(F_actionSend); }
 
