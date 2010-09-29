@@ -33,39 +33,37 @@ public class BulkIMAPImportTaskManager {
         return importQueues;
     }
     
-    public static Queue<HashMap<taskKeys, String>> getQueue(String adminID) {
+    public static Queue<HashMap<taskKeys, String>> createQueue(String adminID) {
         synchronized (importQueues) {
-            if (importQueues.containsKey(adminID)) {
-                return importQueues.get(adminID);
-            } else {
-                Queue<HashMap<taskKeys, String>> lst = new LinkedList<HashMap<taskKeys, String>>();
+            Queue<HashMap<taskKeys, String>> lst = importQueues.get(adminID);
+            if(lst == null) {
+                lst = new LinkedList<HashMap<taskKeys, String>>();
                 importQueues.put(adminID, lst);
-                return lst;
             }
+            return lst;
         }
     }
 
-    public static Queue<HashMap<taskKeys, String>> getRunningQueue(String adminID) {
+    public static Queue<HashMap<taskKeys, String>> createRunningQueue(String adminID) {
         synchronized (runningQueues) {
-            if (runningQueues.containsKey(adminID)) {
-                return runningQueues.get(adminID);
-            } else {
-                Queue<HashMap<taskKeys, String>> lst = new LinkedList<HashMap<taskKeys, String>>();
+            Queue<HashMap<taskKeys, String>> lst =  runningQueues.get(adminID);
+            if(lst == null) {
+                lst = new LinkedList<HashMap<taskKeys, String>>();
                 runningQueues.put(adminID, lst);
-                return lst;
             }
+            return lst;             
         }
     }
-       
+      
+    public static Queue<HashMap<taskKeys, String>> getRunningQueue(String adminID) {
+        synchronized (runningQueues) {
+            return runningQueues.get(adminID);
+        }
+    }
+    
     public static Queue<HashMap<taskKeys, String>> getFinishedQueue(String adminID) {
         synchronized (finishedQueues) {
-            if (finishedQueues.containsKey(adminID)) {
-                return finishedQueues.get(adminID);
-            } else {
-                Queue<HashMap<taskKeys, String>> lst = new LinkedList<HashMap<taskKeys, String>>();
-                finishedQueues.put(adminID, lst);
-                return lst;
-            }
+            return finishedQueues.get(adminID);
         }
     }    
     
@@ -149,7 +147,14 @@ public class BulkIMAPImportTaskManager {
                 }
             }
             
-            Queue<HashMap<taskKeys, String>> finishedList = getFinishedQueue(queueKey);
+            Queue<HashMap<taskKeys, String>> finishedList;
+            synchronized (finishedQueues) {
+                finishedList = finishedQueues.get(queueKey);
+                if(finishedList == null) {
+                    finishedList = new LinkedList<HashMap<taskKeys, String>>();
+                    finishedQueues.put(queueKey, lst);
+                }
+            }
             if (lst == null) {
                 return;
             }

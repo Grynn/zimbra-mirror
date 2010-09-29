@@ -257,8 +257,8 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 			/*
 			 * Create the import queue
 			 */
-			Queue<HashMap<taskKeys, String>> queue = BulkIMAPImportTaskManager.getQueue(zsc.getAuthtokenAccountId());
-			Queue<HashMap<taskKeys, String>> runningQ = BulkIMAPImportTaskManager.getRunningQueue(zsc.getAuthtokenAccountId());
+			Queue<HashMap<taskKeys, String>> queue = BulkIMAPImportTaskManager.createQueue(zsc.getAuthtokenAccountId());
+			Queue<HashMap<taskKeys, String>> runningQ = BulkIMAPImportTaskManager.createRunningQueue(zsc.getAuthtokenAccountId());
 			Iterator<ExternalIMAPAccount> idleAccIter = idleAccounts.iterator();
 			
 			while (idleAccIter.hasNext()) {

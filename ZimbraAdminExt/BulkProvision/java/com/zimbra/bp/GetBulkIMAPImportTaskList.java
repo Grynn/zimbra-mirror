@@ -25,8 +25,8 @@ public class GetBulkIMAPImportTaskList extends AdminDocumentHandler  {
         ZimbraSoapContext zsc = getZimbraSoapContext(context);
         Account authedAcct = DocumentHandler.getAuthenticatedAccount(zsc);
         Element response = zsc.createElement(ZimbraBulkProvisionService.GET_BULK_IMAP_IMPORT_TASKLIST_RESPONSE);
+        HashMap<String, Queue<HashMap<taskKeys, String>>> importQueues = BulkIMAPImportTaskManager.getImportQueues();
         if(AccessControlUtil.isGlobalAdmin(authedAcct, true)) {
-            HashMap<String, Queue<HashMap<taskKeys, String>>> importQueues = BulkIMAPImportTaskManager.getImportQueues();
             synchronized(importQueues) {
                Iterator<String> keyIter = importQueues.keySet().iterator();
                while(keyIter.hasNext()) {
@@ -34,7 +34,10 @@ public class GetBulkIMAPImportTaskList extends AdminDocumentHandler  {
                }
             }
         } else {
-            encodeTask(response,authedAcct.getId());
+            String adminID = zsc.getAuthtokenAccountId();
+            if(importQueues.containsKey(adminID)) {
+                encodeTask(response,adminID);
+            }
         }
         return response;
     }
