@@ -31,7 +31,7 @@ bulkprovision.bulkprovOvTreeListener = function (ev) {
 }
 
 bulkprovision.bulkprovOvTreeModifier = function (tree) {
-
+	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.BULK_PROVISION_TASKS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		if(!this._toolsTi) {
 			this._toolsTi = new DwtTreeItem(tree, null, null, null, null, "overviewHeader");
 			this._toolsTi.enableSelection(false);	
@@ -47,6 +47,7 @@ bulkprovision.bulkprovOvTreeModifier = function (tree) {
 		if(ZaOverviewPanelController.overviewTreeListeners) {
 			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._BULK_PROVISION_TASKS_LIST] = bulkprovision.bulkprovOvTreeListener;
 		}
+	}
 }
 
 if(ZaOverviewPanelController.treeModifiers)
