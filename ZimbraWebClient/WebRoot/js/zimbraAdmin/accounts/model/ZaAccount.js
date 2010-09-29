@@ -1995,6 +1995,11 @@ function (value, event, form){
         	}
         	
         }
+		
+	if (instance [ZaAccount.A2_autoCos] == "TRUE"){
+		ZaAccount.setDefaultCos(instance);
+	}
+	
         if ((newDomainName != oldDomainName)
 				//set the right default cos at the account creation time
 				|| (instance [ZaAccount.A_name].indexOf("@") == 0)) 
