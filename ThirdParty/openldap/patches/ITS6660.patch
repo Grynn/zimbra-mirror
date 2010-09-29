@@ -1,0 +1,14 @@
+--- openldap-2.4.23/servers/slapd/operation.c.orig	2010-09-28 15:39:57.825257979 -0700
++++ openldap-2.4.23/servers/slapd/operation.c	2010-09-28 15:40:21.845256280 -0700
+@@ -116,6 +116,11 @@
+ 		BER_BVZERO( &op->o_csn );
+ 	}
+ 
++	if ( op->o_pagedresults_state != NULL ) {
++		op->o_tmpfree( op->o_pagedresults_state, op->o_tmpmemctx );
++		op->o_pagedresults_state = NULL;
++	}
++
+ 	opbuf = (OperationBuffer *) op;
+ 	memset( opbuf, 0, sizeof(*opbuf) );
+ 	op->o_hdr = &opbuf->ob_hdr;
