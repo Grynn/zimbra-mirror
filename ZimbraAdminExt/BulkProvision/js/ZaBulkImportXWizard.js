@@ -238,7 +238,11 @@ function() {
     		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
     		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
             um.execute(xmlUploadCallback, document.getElementById (ZaBulkImportXWizard.xmlUploadFormId));
-        }catch (err) {
+        } catch (err) {
+    		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+    		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+    		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+    		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
             this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_no_bulk_file_specified) ;
         }
 		
@@ -289,7 +293,11 @@ function() {
     	prevStep = ZaBulkImportXWizard.STEP_PROV_OPTIONS;
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
     } else if(cStep == ZaBulkImportXWizard.STEP_REVIEW) {
-   		prevStep = ZaBulkImportXWizard.STEP_LDAP_INFO;
+    	if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_XML) {
+    		prevStep = ZaBulkImportXWizard.STEP_FILE_UPLOAD;
+    	} else {
+    		prevStep = ZaBulkImportXWizard.STEP_LDAP_INFO;
+    	}
     	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
     } else if(cStep == ZaBulkImportXWizard.STEP_PROVISION) {
    		prevStep = ZaBulkImportXWizard.STEP_REVIEW;
@@ -385,6 +393,10 @@ function (status, attId) {
 		var msg = AjxMessageFormat.format(com_zimbra_bulkprovision.error_upload_bulk, [status]);
 		this._app.getCurrentController().popupErrorDialog(msg);
 	}
+	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);	
 };
 
 
@@ -601,9 +613,8 @@ function (fileType){
 	var idx = 0;
 	html[idx++] = "<div style='height:50px;width: 500px; overflow:auto;'>";
 	html[idx++] = "<table border=0 cellspacing=0 cellpadding=2 style='table-layout: fixed;'> " ;
-	//html[idx++] = "<colgroup><col width=50 /><col width='*' /><col width=50 /></colgroup>";
 
-	html[idx++] = "<tbody><tr><td width=65>" + ((fileType == ZaBulkProvision.ACTION_IMPORT_XML) ? com_zimbra_bulkprovision.XML_Upload_file : com_zimbra_bulkprovision.CSV_Upload_file) + "</td>";
+	html[idx++] = "<tbody><tr><td width=65>" + com_zimbra_bulkprovision.XML_Upload_file + "</td>";
 	html[idx++] = "<td>";
 	html[idx++] = "<form method='POST' action='";
 	html[idx++] = uri;
