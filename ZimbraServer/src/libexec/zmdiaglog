@@ -220,7 +220,7 @@ sub HELP_MESSAGE {
 Usage: zmdiaglog [-dthazj]
 
     -a    - Do everything: also gather JVM heapdump/coredump
-    -d    - Log destination (Default $zimbra_tmp_directory/zmdiaglog.PID)
+    -d    - Log destination (Default $DEFAULT_DEST)
     -t    - Timeout in seconds for hanging commands (Default $DEFAULT_TIMEOUT)
     -j    - Also include the output of /opt/zimbra/libexec/zmjavawatch
     -z    - Zip output
@@ -375,6 +375,11 @@ sub run() {
     if (-f $systemlogfile) {
       logmsg "Copying system log $systemlogfile\n";
       system("cp $systemlogfile $destination/logs/");
+    }
+
+    if (-f "/opt/zimbra/log/nginx.log") {
+      logmsg "Copying nginx log /opt/zimbra/log/nginx.log\n";
+      system("cp /opt/zimbra/log/nginx.log $destination/logs/");
     }
    
     if (-f "/etc/ld.so.conf") { 
