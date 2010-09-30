@@ -73,7 +73,7 @@ done
 # Memory for use by JVM
 #
 jm=${mailboxd_java_heap_size}
-if [ "X${jm}" != "X" ]; then
+if [ -n "$jm" ] ; then
     xms_xmx_options="-Xms${jm}m -Xmx${jm}m"
 fi
 
