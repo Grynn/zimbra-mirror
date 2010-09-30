@@ -631,10 +631,14 @@ function(htmlArr, idx, item, field, colIdx, params) {
 		if (fragment.length > 100) {
 			fragment = fragment.substring(0, 96) + "...";
 		}
+		var width = this.getHtmlElement().clientWidth - 10;
+		if (!isNaN(width))
+			fragment = AjxStringUtil.clip(fragment, width);
+
+		fragment = AjxStringUtil.htmlEncode(fragment, true);
 	} else {
 		fragment = "";
 	}
-	fragment = AjxStringUtil.htmlEncode(fragment, true);
 
 	var from = "";
 	if (item.getAddress("FROM").name != "") {
@@ -670,7 +674,7 @@ function(htmlArr, idx, item, field, colIdx, params) {
 	htmlArr[idx++] = "</span></td></tr>";
 	
 	if (fragment != "") {
-		htmlArr[idx++] = "<tr><td align=left colspan="+cols+"><span style=\"color:gray\"> - " + fragment + "</span></td></tr>";
+		htmlArr[idx++] = "<tr><td align=left colspan="+cols+"><span style=\"color:gray;overflow:hidden\"> - " + fragment + "</span></td></tr>";
 	}
 	htmlArr[idx++] = "</table></div>";
 	
