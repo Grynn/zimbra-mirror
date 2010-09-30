@@ -154,7 +154,7 @@
 				<attribute name="Main-Class" value="staf.Driver" />
 				<section name="staf/service/info">
 					<attribute name="Service-Class" value="staf.StafIntegration" />
-					<attribute name="Packaged-Jars" value="activation commons-beanutils-1.7 commons-cli-2.0 commons-codec-1.4 commons-collections-3.2.1 commons-configuration-1.5 commons-httpclient-3.0 commons-lang-2.4 commons-logging dom4j-1.5.2 ezmorph-1.0.6 guava-r06 jaxen-1.1.1 json-lib-2.3-jdk15 log4j-1.2.15 mail ocutil-2.4.2 servlet-api xalan  selenium-java-client-driver-1.0-SNAPSHOT selenium-server testng-5.12.1 zimbraselngstaf zimbracommon zimbra-native zimbrastore resources" />
+					<attribute name="Packaged-Jars" value="activation commons-beanutils-1.7 commons-cli-2.0 commons-codec-1.4 commons-collections-3.2.1 commons-configuration-1.5 commons-httpclient-3.0 commons-lang-2.4 commons-logging dom4j-1.5.2 ezmorph-1.0.6 guava-r06 jaxen-1.1.1 json-lib-2.3-jdk15 log4j-1.2.16 apache-log4j-extras-1.0 mail ocutil-2.4.2 servlet-api xalan  selenium-java-client-driver-1.0-SNAPSHOT selenium-server testng-5.12.1 zimbraselngstaf zimbracommon zimbra-native zimbrastore resources" />
 				</section>
 			</manifest>
 		</jar>
