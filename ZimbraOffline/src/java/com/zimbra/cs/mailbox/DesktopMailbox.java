@@ -126,4 +126,9 @@ public abstract class DesktopMailbox extends Mailbox {
                 MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR_RGB, null);
         }
     }
+
+    @Override
+    public boolean dumpsterEnabled() {
+        return false;
+    }
 }
