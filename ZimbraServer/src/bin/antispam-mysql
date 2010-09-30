@@ -19,12 +19,20 @@ zmsetvars \
     antispam_mysql_directory \
     antispam_mysql_host \
     antispam_mysql_port \
+    antispam_mysql_socket \
     antispam_mysql_user \
     antispam_mysql_password
-		
-exec ${antispam_mysql_directory}/bin/mysql \
+
+if [ x"${antispam_mysql_host}" = x`zmhostname` -o x"${antispam_mysql_host}" = "xlocalhost" ]; then
+    exec ${antispam_mysql_directory}/bin/mysql \
+        --socket=${antispam_mysql_socket} \
+        --user=${antispam_mysql_user} \
+        --password=${antispam_mysql_password} "$@"
+else
+    exec ${antispam_mysql_directory}/bin/mysql \
         --host=${antispam_mysql_host} \
         --port=${antispam_mysql_port} \
         --user=${antispam_mysql_user} \
         --password=${antispam_mysql_password} "$@"
+fi
 
