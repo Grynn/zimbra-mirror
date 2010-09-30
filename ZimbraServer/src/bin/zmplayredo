@@ -84,10 +84,22 @@ else
   java_options=""
 fi
 
+# Remove "-verbose:gc" and all options that start with "-XX:+PrintGC".  These pollute stdout/stderr.
+for opt in $mailboxd_java_options ; do
+    if [ "$opt" = "-verbose:gc" ] || [[ "$opt" == "-XX:+PrintGC"* ]] ; then
+        continue
+    fi
+    if [ -z "$sanitized_options" ] ; then
+      sanitized_options="$opt"
+    else
+      sanitized_options="$sanitized_options $opt"
+    fi
+done
+
 echo $$ > $ropid
 ${zimbra_java_home}/bin/java \
     ${java_options} \
-    ${xms_xmx_options} ${mailboxd_java_options} \
+    ${xms_xmx_options} ${sanitized_options} \
     -Dzimbra.config=${zimbra_home}/conf/localconfig.xml \
     -Djava.library.path=${zimbra_home}/lib \
     -Djava.ext.dirs=${jardirs} \
