@@ -55,7 +55,7 @@ fi
 if [ -d ${zimbra_java_home}/jre ]; then
     JRE_EXT_DIR=${zimbra_java_home}/jre/lib/ext
 else
-    JRE_EXT_DIR=/System/Library/Frameworks/JavaVM.framework/Versions/1.5/Home/lib/ext
+    JRE_EXT_DIR=/System/Library/Frameworks/JavaVM.framework/Versions/CurrentJDK/Home/lib/ext
     #JRE_EXT_DIR=${zimbra_java_home}/lib/ext
 fi
 
@@ -73,6 +73,9 @@ done
 # Memory for use by JVM
 #
 jm=${mailboxd_java_heap_size}
+if [ "X${jm}" != "X" ]; then
+    xms_xmx_options="-Xms${jm}m -Xmx${jm}m"
+fi
 
 java_version=$(${zimbra_java_home}/bin/java -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
 if [ x"$java_version" = "x1.6.0" ]; then
@@ -84,7 +87,7 @@ fi
 echo $$ > $ropid
 ${zimbra_java_home}/bin/java \
     ${java_options} \
-    -Xms${jm}m -Xmx${jm}m ${mailboxd_java_options} \
+    ${xms_xmx_options} ${mailboxd_java_options} \
     -Dzimbra.config=${zimbra_home}/conf/localconfig.xml \
     -Djava.library.path=${zimbra_home}/lib \
     -Djava.ext.dirs=${jardirs} \
