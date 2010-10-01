@@ -114,7 +114,7 @@ function(params, response) {
 	var text = response.text;
 	if (!response.success) {
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg("Twitter Error: " + text, ZmStatusView.LEVEL_WARNING, null, transitions);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("twitterError") + " " + text, ZmStatusView.LEVEL_WARNING, null, transitions);
 		return;
 	}
 	var jsonObj = eval("(" + text + ")");
@@ -394,7 +394,7 @@ com_zimbra_socialTwitter.prototype._deletePostCallback =
 function(origParams, response) {
 	if (!response.success) {
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg("Twitter Error: " + response.text, ZmStatusView.LEVEL_WARNING, null, transitions);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("twitterError") + response.text, ZmStatusView.LEVEL_WARNING, null, transitions);
 		return;
 	}
 	setTimeout(AjxCallback.simpleClosure(this._updateAccountStream, this, origParams.tableId, origParams.account), 3000);//refresh table after 3 secs
@@ -697,15 +697,14 @@ function(emailContentObj) {
 		totalUnreadCount = totalUnreadCount + accnt.DIRECT_MSGS.unReadCount;
 		totalUnreadCount = totalUnreadCount + accnt.MENTIONS.unReadCount;
 		summary[j++] = "----------------------------\n";
-		summary[j++] = "Account: " + accntName + "\n";
+		summary[j++] = this.zimlet.getMessage("account") + " " + accntName + "\n";
 		summary[j++] = "----------------------------\n";
-		summary[j++] = "Messages: " + accnt.ACCOUNT.unReadCount + "\n";
-		summary[j++] = "Direct Messages: " + accnt.DIRECT_MSGS.unReadCount + "\n";
-		summary[j++] = "Mentions: " + accnt.MENTIONS.unReadCount + "\n";
+		summary[j++] = this.zimlet.getMessage("messages") + " "  + accnt.ACCOUNT.unReadCount + "\n";
+		summary[j++] = this.zimlet.getMessage("directMessages") + " "  + accnt.DIRECT_MSGS.unReadCount + "\n";
+		summary[j++] = this.zimlet.getMessage("mentions") + accnt.MENTIONS.unReadCount + "\n";
 		summary[j++] = "\n\n";
 	}
-	html[i++] = "Subject: You have " + totalUnreadCount + " new tweets\n\n";
-
+	html[i++] = AjxMessageFormat.format(this.getMessage("tweetSubject"), totalUnreadCount);
 	var body = new Array();
 	var m = 0;
 	for (var accntName in emailContentObj) {
@@ -715,7 +714,7 @@ function(emailContentObj) {
 			var prop = props[j];
 			var propStr = "";
 			if (prop == "ACCOUNT")
-				propStr = accntName + ": " + "new messages" + "(" + accnt[prop].unReadCount + ")";
+				propStr = accntName + ": " + this.zimlet.getMessage("newMsgs") + "(" + accnt[prop].unReadCount + ")";
 			else
 				propStr = accntName + ": " + prop + "(" + accnt[prop].unReadCount + ")";
 			body[m++] = "----------------------------------------------------\n";
@@ -727,10 +726,6 @@ function(emailContentObj) {
 				body[m++] = items[k].text;
 				body[m++] = "\n\n";
 			}
-			if (items.length < accnt[prop].unReadCount) {
-				body[m++] = "[Check social for " + (accnt[prop].unReadCount - items.length) + " more]\n";
-			}
-
 		}
 	}
 	html[i++] = summary.join("") + body.join("");
@@ -831,11 +826,11 @@ com_zimbra_socialTwitter.prototype._showGetPinDlg = function() {
 	this._getPinView = new DwtComposite(this.zimlet.getShell());
 	this._getPinView.getHtmlElement().style.overflow = "auto";
 	this._getPinView.getHtmlElement().innerHTML = this._createPINView();
-	this._getPinDialog = this.zimlet._createDialog({title:"Enter Twitter PIN", view:this._getPinView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this._getPinDialog = this.zimlet._createDialog({title:this.zimlet.getMessage("enterTwitterPin"), view:this._getPinView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this._getPinDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okgetPinBtnListener));
 
 	this.goButton = new DwtButton({parent:this.zimlet.getShell()});
-	this.goButton.setText("Go to Twitter");
+	this.goButton.setText(this.zimlet.getMessage("goToTwitter"));
 	this.goButton.setImage("social_twitterIcon");
 	this.goButton.addSelectionListener(new AjxListener(this, this._openOauthAuthorizeURL));
 	document.getElementById("social_goToTwitterPage").appendChild(this.goButton.getHtmlElement());
@@ -848,12 +843,15 @@ function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV class='social_yellow'>";
-	html[i++] = "<b>Steps to add twitter account:</b><BR/>1.Click on 'Go to Twitter' button to open Twitter's authorize page<div id='social_goToTwitterPage'> </div><br/>2. Enter your twitter account information over there.<br/>";
-	html[i++] = "3. Press 'Allow' button <br>4. Twitter will give you a 7 digit PIN code, like: <b>1234567</b><BR/>5.  Copy that and paste that PIN below";
-	html[i++] = "<BR/><B>6. Enter Twitter PIN:<input id='com_zimbra_twitter_pin_field'  type='text'/></B>";
-	html[i++] = "<BR/>7.Click OK button<BR/>";
-
-	html[i++] = "<BR/>*If you don't see Twitter.com page opened as mentioned in step 1, please check browser's popup blocker";
+	html[i++] = "<b>"+this.zimlet.getMessage("twitterSignInLine0")+"</b><BR/>";
+	html[i++] = this.zimlet.getMessage("twitterSignInLine1") +"<div id='social_goToTwitterPage'> </div><br/>";
+	html[i++] = this.zimlet.getMessage("twitterSignInLine2") + "<br/>";
+	html[i++] =  this.zimlet.getMessage("twitterSignInLine3") +  "<br/>";
+	html[i++] =  this.zimlet.getMessage("twitterSignInLine4") + "<br/>";
+	html[i++] =  this.zimlet.getMessage("twitterSignInLine5") + "<br/>";
+	html[i++] = "<B>"+ this.zimlet.getMessage("twitterSignInLine6")+"</B><input id='com_zimbra_twitter_pin_field'  type='text'/><br/>";
+	html[i++] = this.zimlet.getMessage("twitterSignInLine7") + "<BR/>";
+	html[i++] = "<BR/>"+ this.zimlet.getMessage("popupBlockerMsg");
 	html[i++] = "</DIV>";
 	return html.join("");
 };
@@ -865,15 +863,13 @@ function() {
 	pin = AjxStringUtil.trim(pin);
 	if (pin == "" || pin.length != 7) {
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg("Please enter 7 digit twitter PIN (Step 5)", ZmStatusView.LEVEL_WARNING, null, transitions);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("enter7DigitPin"), ZmStatusView.LEVEL_WARNING, null, transitions);
 		return;
 	}
 	var url = this.getAccessTokenUrl(pin);
 	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._twitterAccessTokenCallbackHandler), false);
-
 	this._getPinDialog.popdown();
-
 };
 
 com_zimbra_socialTwitter.prototype._twitterAccessTokenCallbackHandler =
@@ -910,7 +906,7 @@ com_zimbra_socialTwitter.prototype.manageTwitterAccounts = function(text) {
 	tObj.type = tObj["__type"];
 	if (tObj.name == undefined) {//pin is invalid or something else is wrong
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE, ZmToast.PAUSE,ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg("Twitter PIN is INVALID, please try again", ZmStatusView.LEVEL_WARNING, null, transitions);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("twitterPinInvalid"), ZmStatusView.LEVEL_WARNING, null, transitions);
 		return;
 	} else {
 		this.zimlet.allAccounts[tObj.user_id + tObj.screen_name] = tObj;

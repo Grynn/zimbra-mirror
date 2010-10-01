@@ -73,7 +73,7 @@ function(params, response) {
 	var jsonObj = eval("(" + text + ")");
 	if (jsonObj.status != "success") {
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg("Tweetmeme Error: " + response.text, ZmStatusView.LEVEL_WARNING, null, transitions);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("tweetMemeError") + " " + response.text, ZmStatusView.LEVEL_WARNING, null, transitions);
 		return;
 	}
 	this.zimlet.createCardView(params.tableId, jsonObj.stories, "TWEETMEME");

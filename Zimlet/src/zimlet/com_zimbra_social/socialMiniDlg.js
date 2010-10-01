@@ -76,7 +76,7 @@ function(params, response) {
 		}
 		content = subject + " " + shortUrl;
 	} else if(!response.success) {
-		appCtxt.getAppController().setStatusMsg("Could Not automatically Shorten URL", ZmStatusView.LEVEL_WARNING);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("couldNotShortenUrl"), ZmStatusView.LEVEL_WARNING);
 	} 
 	this.zimlet.updateField.value = content;
 	this.zimlet.showNumberOfLetters();
@@ -96,9 +96,9 @@ com_zimbra_socialMiniDlg.prototype._showSocialMiniDlg = function(controller) {
 	this._socialMiniDlgView.getHtmlElement().innerHTML = this._createSocialMiniView();
 
 	var _socialMiniUpdateBtnId = Dwt.getNextId();
-	var socialMiniUpdateBtn = new DwtDialog_ButtonDescriptor(_socialMiniUpdateBtnId, ("Update"), DwtDialog.ALIGN_RIGHT);
+	var socialMiniUpdateBtn = new DwtDialog_ButtonDescriptor(_socialMiniUpdateBtnId, (this.zimlet.getMessage("update")), DwtDialog.ALIGN_RIGHT);
 
-	this.socialMiniDialog = this.zimlet._createDialog({title:"What are you doing?", view:this._socialMiniDlgView,  standardButtons:[DwtDialog.CANCEL_BUTTON], extraButtons:[socialMiniUpdateBtn]});
+	this.socialMiniDialog = this.zimlet._createDialog({title:this.zimlet.getMessage("whatAreYouDoing"), view:this._socialMiniDlgView,  standardButtons:[DwtDialog.CANCEL_BUTTON], extraButtons:[socialMiniUpdateBtn]});
 	this.socialMiniDialog.setButtonListener(_socialMiniUpdateBtnId, new AjxListener(this.zimlet, this.zimlet._postToTweetOrFB));
 	this.socialMiniDialog.setButtonListener(DwtDialog.CANCEL_BUTTON, new AjxListener(this, this._SocialMiniCancelBtnListener));
 	this.updateButton_miniDlg = this.socialMiniDialog.getButton(_socialMiniUpdateBtnId);
@@ -132,7 +132,7 @@ function() {
 com_zimbra_socialMiniDlg.prototype._addUrlShortenButton_miniDlg =
 function() {
 	var shortenButton = new DwtButton({parent:this.zimlet.getShell()});
-	shortenButton.setText("Shorten URL");
+	shortenButton.setText(this.getMessage("shortenUrl"));
 	shortenButton.addSelectionListener(new AjxListener(this.zimlet, this.zimlet._shortenUrlButtonListener));
 	document.getElementById("social_shortenUrlButtonDIV_miniDlg").appendChild(shortenButton.getHtmlElement());
 };
@@ -152,18 +152,17 @@ function() {
 	html[idx++] = "<table width=100%><tr><td align=center>";
 	html[idx++] = "<label style=\"font-size:18px;color:green;font-weight:bold\" id='social_numberOfLettersAllowed_miniDlg'>140</label>";
 	html[idx++] = "</td></tr><tr><td align=center>";
-	html[idx++] = "<label>Characters Left</label></td></tr></table>";
+	html[idx++] = "<label>"+this.zimlet.getMessage("charactersLeft")+"</label></td></tr></table>";
 	html[idx++] = "</TD>";
 	html[idx++] = "</TR>";
 
 	html[idx++] = "<TR><TD>";
 	html[idx++] = "<table width=100%><tr>";
 	html[idx++] = "<td align=left> <div id='social_shortenUrlButtonDIV_miniDlg' /></td>";
-	html[idx++] = "<td align=left><input type='checkbox'  id='social_autoShortenCheckbox_miniDlg'></input></td><td  nowrap=''><label style='color:#252525'>Auto Shorten URL</label></td>";
-	html[idx++] = "<td align=left width=90%><div id='social_undoShortenURLDIV_miniDlg' style='display:none'><a  href='#' id='social_undoShortenURLLink_miniDlg' style='text-decoration:underline;font-weight:bold'>undo</a></div></td>";
+	html[idx++] = "<td align=left><input type='checkbox'  id='social_autoShortenCheckbox_miniDlg'></input></td><td  nowrap=''><label style='color:#252525'>"+this.zimlet.getMessage("autoShortenUrl")+"</label></td>";
+	html[idx++] = "<td align=left width=90%><div id='social_undoShortenURLDIV_miniDlg' style='display:none'><a  href='#' id='social_undoShortenURLLink_miniDlg' style='text-decoration:underline;font-weight:bold'>"+this.zimlet.getMessage("undo")+"</a></div></td>";
 	html[idx++] = "</tr></table>";
 	html[idx++] = "</TD></TR>";
-
 	html[idx++] = "</TABLE>";
 	html[idx++] = "</DIV>";
 	return html.join("");
@@ -198,6 +197,6 @@ function() {
 	if (hasAccounts)
 		return html.join("");
 	else {
-		return "<label style=\"font-size:12px;color:#555555;font-style:italic\">No accounts have been added. Go to 'Social' Zimlet Tab > Click on 'Add/Remove Accounts' to add one </label>";
+		return "<label style=\"font-size:12px;color:#555555;font-style:italic\">"+this.zimlet.getMessage("goToSocialTabAndAddAccounts")+"</label>";
 	}
 };

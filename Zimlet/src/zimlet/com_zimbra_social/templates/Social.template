@@ -1,0 +1,66 @@
+<template id='Skin'>
+	<DIV class='overviewHeader' id='social_topSxn'>
+	<TABLE width=100%>
+	<TR><TD style='width:90%;' >
+	<input  style='width:100%;height:25px' autocomplete='off' id='social_statusTextArea' ></input>
+	</TD>
+
+	<TD rowspan=2 align=center valign='middle'>
+	<table width=100%><tr><td align=center>
+	<label style='font-size:18px;color:green;font-weight:bold' id='social_numberOfLettersAllowed'>140</label>
+	</td></tr><tr><td align=center>
+	<label>${charactersLeft}</label></td></tr></table>
+	</TD>
+	</TR>
+
+	<TR><TD>
+	<table width=100%><tr>
+	<td align=left> <div id='social_shortenUrlButtonDIV' /></td>
+	<td align=left><input type='checkbox'  id='social_autoShortenCheckbox'></input></td><td  nowrap=''><label style='color:#252525'>${autoShortenUrl}</label></td>
+	<td align=left width=90%><div id='social_undoShortenURLDIV' style='display:none'>
+	<a  href='#' id='social_undoShortenURLLink' style='text-decoration:underline;font-weight:bold'>${undo}</a></div></td>
+	<td align=right><div id='social_cancelPostButton' />
+	</td><td align=right><div id='social_updateStatusButton' /></td></tr></table>
+	</TD></TR>
+	</TABLE>
+	</DIV>
+	<DIV id='social_twitterCardsDiv' class='social_twitterCardsDiv DwtPropertyPage'>
+	<table id='social_twitterCardsParentTable' cellspacing=10px>
+	</table>
+	</DIV>
+</template>
+
+
+<template id='CardHeader'>
+	<div  class='overviewHeader'>
+	<TABLE cellpadding='0' cellspacing='0'>
+	<TR>
+	<TD style='width:16px;height:16px' align='center'><div class='ImgNodeExpanded' id= '${expandIconId}'/></TD>
+	<td class='imageCell' />
+	<TD  class='overviewHeader-Text'>${treeName}</TD>
+	<TD style='width:16px;height:16px;'><$= AjxImg.getImageHtml("Blank_16") $></TD>
+	</TR>
+	</TABLE>
+	</div>
+</template>
+
+<template id='TwitterSearchWidget'>
+	<DIV>
+	<TABLE width=100% cellpadding=0 cellspacing=0 valign='middle'><TR>
+	<TD width=16px valign='middle'>
+	<$= AjxImg.getImageHtml("Blank_16") $>
+	</TD>
+	<TD  nowrap='' width=220px  valign='left'>
+	<label  valign='middle'  style='font-size:14px;color:black;font-weight:bold' id='social_whatareyoudoingLabel' >${whatAreYouDoingMsg}
+	</label>
+	</TD>
+	<TD width=16px valign='middle'>
+	<$= AjxImg.getImageHtml("Blank_16") $>
+	</TD>
+	<td  width=70% nowrap='' id='social_updateToCell'>${updateCheckBoxesHtml}</TD>
+	<TD valign='middle' align='right'><input   style='width:150px;' type='text' autocomplete='off' id='social_searchField'></input></TD><TD valign='middle'>
+	<div  valign='middle' id='social_searchButton' />
+	</TD>
+	</TR></TABLE>
+	</DIV>
+</template>

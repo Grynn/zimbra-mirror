@@ -50,9 +50,9 @@ com_zimbra_socialFacebook.prototype._addFBCommentCallback =
 function (params, response) {
 	if (response.success) {
 		var field = document.getElementById(params.commentFieldId);
-		field.value = "write a comment...";
+		field.value = this.zimlet.getMessage("writeAComment");
 		field.style.color = "gray";
-		appCtxt.getAppController().setStatusMsg("Comment added", ZmStatusView.LEVEL_INFO);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("commentAdded"), ZmStatusView.LEVEL_INFO);
 		document.getElementById(params.commentBoxId).style.display = "none";
 		//resetar timer
 		var timer = setInterval(AjxCallback.simpleClosure(this._updateFacebookStream, this, params.tableId, params.account), 400000);
@@ -60,7 +60,7 @@ function (params, response) {
 		setTimeout(AjxCallback.simpleClosure(this._updateFacebookStream, this, params.tableId, params.account), 3000);//refresh table after 3 secs
 	} else {
 		var msgDialog = appCtxt.getMsgDialog();
-		msgDialog.setMessage("Could Not Add Comment to facebook <br/>" + response.text, DwtMessageDialog.WARNING_STYLE);
+		msgDialog.setMessage(this.zimlet.getMessage("couldNotAddCommentTofb")+"<br/>" + response.text, DwtMessageDialog.WARNING_STYLE);
 		msgDialog.popup();
 	}
 };
@@ -90,7 +90,7 @@ function (params, response) {
 			this.zimlet.showNumberOfLetters();
 		}
 
-		appCtxt.getAppController().setStatusMsg("Updates Sent", ZmStatusView.LEVEL_INFO);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("updatesSent"), ZmStatusView.LEVEL_INFO);
 		var tableId = this.zimlet._getTableIdFromAccount(params.account);
 		if (tableId) {
 			setTimeout(AjxCallback.simpleClosure(this._updateFacebookStream, this, tableId, params.account), 3000);//refresh table after 3 secs
@@ -98,7 +98,7 @@ function (params, response) {
 	} else {
 		var msgDialog = appCtxt.getMsgDialog();
 		var msg = jsonObj.error;
-		msgDialog.setMessage("Could Not Post to facebook.", DwtMessageDialog.WARNING_STYLE);
+		msgDialog.setMessage(this.zimlet.getMessage("couldNotPostToFacebook"), DwtMessageDialog.WARNING_STYLE);
 		msgDialog.popup();
 	}
 };
@@ -138,10 +138,7 @@ function(params) {
 	var url = "https://www.facebook.com/authorize.php?";
 	var params = "version=1.0&ext_perm=" + permission + "&api_key=" + this.apiKey;
 	this.openCenteredWindow(AjxStringUtil.urlComponentEncode(url + params));
-	//var newWin = window.open(AjxStringUtil.urlComponentEncode(url + params), "Authorize facebook", "width=750,height=500");
-	//if (!newWin) {
-	//	appCtxt.getAppController().setStatusMsg(ZmMsg.popupBlocker, ZmStatusView.LEVEL_CRITICAL);
-	//}
+
 };
 
 com_zimbra_socialFacebook.prototype.getExtendedPermForRead =
@@ -149,10 +146,6 @@ function () {
 	var url = "https://www.facebook.com/authorize.php?";
 	var params = "version=1.0&ext_perm=read_stream&api_key=" + this.apiKey;
 	this.zimlet.openCenteredWindow(url + params);
-	//var newWin = window.Open = window.open(url + params, "tfbOpen", "width=750,height=500");
-	//if (!newWin) {
-	//		appCtxt.getAppController().setStatusMsg(ZmMsg.popupBlocker, ZmStatusView.LEVEL_CRITICAL);
-	//	}
 };
 
 com_zimbra_socialFacebook.prototype._fbGetStream =
@@ -189,7 +182,7 @@ function (params, response) {
 		setTimeout(AjxCallback.simpleClosure(this._updateFacebookStream, this, params.tableId, params.account), 3000);//refresh table after 3 secs
 	} else {
 		var msgDialog = appCtxt.getMsgDialog();
-		msgDialog.setMessage("Could Not Add 'Like' to facebook <br/>" + response.text, DwtMessageDialog.WARNING_STYLE);
+		msgDialog.setMessage(this.zimlet.getMessage("couldNotAddLikeToFb") +" <br/>" + response.text, DwtMessageDialog.WARNING_STYLE);
 		msgDialog.popup();
 	}
 };
@@ -214,7 +207,7 @@ function (obj, response) {
 		var activeApp = appCtxt.getCurrentApp();
 		if (activeApp.getName() == this.zimlet._socialAppName) {
 			var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-			appCtxt.getAppController().setStatusMsg("Could not get comments", ZmStatusView.LEVEL_WARNING, null, transitions);
+			appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("couldNotGetComments"), ZmStatusView.LEVEL_WARNING, null, transitions);
 		}
 	} else {
 		obj["moreComments"] = eval("(" + text + ")");
@@ -253,7 +246,7 @@ function (obj, response) {
 		var activeApp = appCtxt.getCurrentApp();
 		if (activeApp.getName() == this.zimlet._socialAppName) {
 			var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-			appCtxt.getAppController().setStatusMsg("Could not get facebook stream,  try again by clicking on the Refresh button on the facebook-card", ZmStatusView.LEVEL_WARNING, null, transitions);
+			appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("tryRefreshingFBCard"), ZmStatusView.LEVEL_WARNING, null, transitions);
 		}
 	} else {
 		var moreprofiles = eval("(" + text + ")");
@@ -273,7 +266,7 @@ function (tableId, response) {
 		var activeApp = appCtxt.getCurrentApp();
 		if (activeApp.getName() == this.zimlet._socialAppName) {
 			var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-			appCtxt.getAppController().setStatusMsg("Could not get facebook stream,  try again by clicking on the Refresh button on the facebook-card", ZmStatusView.LEVEL_WARNING, null, transitions);
+			appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("tryRefreshingFBCard"), ZmStatusView.LEVEL_WARNING, null, transitions);
 		}
 	} else {
 		var jsonObj = eval("(" + text + ")");
@@ -363,7 +356,7 @@ function (response) {
 	if (text.indexOf("session_key") >= 0 && text.indexOf("secret") >= 0) {
 		var fbStr = this._convertFB_JsonStrToUrlEncodedStr(text);
 		this.manageFacebookAccounts(fbStr);
-		var authStr = "STEP2. Facebook Authorization Recieved. Press 'Authorize' buttons to authorize other permissions.<br/>PS: You need to click each 'Authorize' Button explicitely(up to 3 times)";
+		var authStr = this.zimlet.getMessage("fbSignInLine3");
 		this.zimlet.preferences._setAccountPrefDlgAuthMessage(authStr, "blue");
 		this.zimlet.preferences._updateAccountsTable({message:authStr, color:"blue"});
 		this.zimlet.preferences._updateAllFBPermissions({message:authStr, color:"blue",askForPermissions:false});

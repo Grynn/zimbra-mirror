@@ -42,7 +42,7 @@ com_zimbra_socialPreferences.prototype._showManageAccntsDlg = function() {
 	this._manageAccntsView.setSize(550, 300);
 	this._manageAccntsView.getHtmlElement().style.overflow = "auto";
 	this._manageAccntsView.getHtmlElement().innerHTML = this._createManageeAccntsView();
-	this._manageAccntsDlg = this.zimlet._createDialog({title:"Add/Remove Accounts", view:this._manageAccntsView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this._manageAccntsDlg = this.zimlet._createDialog({title:this.zimlet.getMessage("addRemoveAccounts"), view:this._manageAccntsView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this._manageAccntsDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._manageAccntsOKBtnListener));
 	this._addPrefButtons();
 	this._updateAccountsTable();
@@ -53,25 +53,25 @@ com_zimbra_socialPreferences.prototype._showManageAccntsDlg = function() {
 com_zimbra_socialPreferences.prototype._addPrefButtons =
 function() {
 	var addTwitterBtn = new DwtButton({parent:this.zimlet.getShell()});
-	addTwitterBtn.setText("Add Twitter Account");
+	addTwitterBtn.setText(this.zimlet.getMessage("addTwitterAcc"));
 	addTwitterBtn.setImage("social_twitterIcon");
 	addTwitterBtn.addSelectionListener(new AjxListener(this, this._addTwitterBtnListener));
 	document.getElementById("social_pref_addTwitterButtonCell").appendChild(addTwitterBtn.getHtmlElement());
 
 	var addFacebookBtn = new DwtButton({parent:this.zimlet.getShell()});
-	addFacebookBtn.setText("Add Facebook Account");
+	addFacebookBtn.setText(this.zimlet.getMessage("addFacebookAcc"));
 	addFacebookBtn.setImage("social_facebookIcon");
 	addFacebookBtn.addSelectionListener(new AjxListener(this, this._addFacebookBtnListener));
 	document.getElementById("social_pref_addFaceBookButtonCell").appendChild(addFacebookBtn.getHtmlElement());
 
 	var deleteAccountBtn = new DwtButton({parent:this.zimlet.getShell()});
-	deleteAccountBtn.setText("Delete Account");
+	deleteAccountBtn.setText(this.zimlet.getMessage("deleteAcc"));
 	deleteAccountBtn.setImage("Trash");
 	deleteAccountBtn.addSelectionListener(new AjxListener(this, this._deleteAccountBtnListener));
 	document.getElementById("social_pref_deleteAccountCell").appendChild(deleteAccountBtn.getHtmlElement());
 
 	var refreshTableBtn = new DwtButton({parent:this.zimlet.getShell()});
-	refreshTableBtn.setText("Refresh Accounts");
+	refreshTableBtn.setText( this.zimlet.getMessage("refreshAcc"));
 	refreshTableBtn.setImage("Refresh");
 	refreshTableBtn.addSelectionListener(new AjxListener(this, this._refreshTableBtnListener));
 	document.getElementById("social_pref_refreshTableCell").appendChild(refreshTableBtn.getHtmlElement());
@@ -124,7 +124,7 @@ function() {
 	html[i++] = "<table width=400px cellpadding=2 cellspacing=2>";
 	html[i++] = "<TR>";
 	html[i++] = "<TD>";
-	html[i++] = "<label style=\"font-size:12px;color:black;font-weight:bold\">Manage Accounts";
+	html[i++] = "<label style=\"font-size:12px;color:black;font-weight:bold\">"+ this.zimlet.getMessage("manageAccounts");
 	html[i++] = "</label>";
 	html[i++] = "</TD>";
 	html[i++] = "</TR>";
@@ -169,9 +169,9 @@ function(additionalMsgParams) {
 		document.getElementById(map.divId).appendChild(authBtn.getHtmlElement());
 	}
 	if (this._fbNeedPermCount != 0) {
-		this._setAccountPrefDlgAuthMessage("Please login to Facebook and Authorize each of '" + this._fbNeedPermCount + "' Permission(s). You need to click 'Authorize' button for each permission explicitely(" + this._fbNeedPermCount + " times)", "blue");
+		this._setAccountPrefDlgAuthMessage(this.zimlet.getMessage("authorizeZimbraToAccessFacebook"), "blue");
 	} else {
-		this._setAccountPrefDlgAuthMessage("Accounts have been updated successfully", "green");
+		this._setAccountPrefDlgAuthMessage(this.zimlet.getMessage("accountsUpdated"), "green");
 	}
 	if (additionalMsgParams != undefined
 			&& additionalMsgParams.askForPermissions != undefined
@@ -222,7 +222,13 @@ function() {
 	this._fbNeedPermCount = 0;
 	this._fbNeedPermissions = "";
 	html[i++] = "<table cellspacing=1>";
-	html[i++] = "<TR><TH>Select</TH><TH>Account Type</TH><TH>Account Name</TH><TH>Read Permission</TH><TH>Write/Publish Permission</TH><TH>Offline/RememberMe Permission</TH>";
+	html[i++] = "<TR><TH>Select</TH><TH>"
+		+this.zimlet.getMessage("accountType")+
+		"</TH><TH>"+this.zimlet.getMessage("accountName")+
+		"</TH><TH>"+this.zimlet.getMessage("readPermission")+
+		"</TH><TH>"+this.zimlet.getMessage("writePermission")+
+		"</TH><TH>"+this.zimlet.getMessage("rememberMePermission")+"</TH>";
+
 	for (var id in this.zimlet.allAccounts) {
 		var account = this.zimlet.allAccounts[id];
 		html[i++] = "<TR>";
@@ -293,7 +299,7 @@ function() {
 	if (noAccountsFound) {
 		html[i++] = "<TR>";
 		html[i++] = "<TD colspan=6 align='center' style='font-weight:bold;font-size:12px;color:blue'>";
-		html[i++] = "No Accounts Found.";
+		html[i++] = this.zimlet.getMessage("noAccountsFound");
 		html[i++] = "</TD>";
 		html[i++] = "</TR>";
 	}
@@ -319,7 +325,7 @@ com_zimbra_socialPreferences.prototype.showAddFBInfoDlg = function(obj) {
 	//if zimlet dialog already exists...
 	var permStr = "";
 	if (obj) {
-		permStr = "Please press 'Allow Access' button on facebook to grant " + this._fbNeedPermissions + " (" + obj.permCount + ") permission(s). Then press 'OK'";
+		permStr = this.zimlet.getMessage("pressAllowAccessThenOKToGrandFacebookPerm");
 	}
 	if (this._getFbInfoDialog) {
 		this._getFbInfoDialog.popup();
@@ -332,17 +338,17 @@ com_zimbra_socialPreferences.prototype.showAddFBInfoDlg = function(obj) {
 	this._getFbInfoView.getHtmlElement().innerHTML = this._createFbInfoView();
 	var addFBAccntButtonId = Dwt.getNextId();
 	var addFBAccntButton = new DwtDialog_ButtonDescriptor(addFBAccntButtonId, ("Authorized"), DwtDialog.ALIGN_RIGHT);
-	this._getFbInfoDialog = this.zimlet._createDialog({title:"Add Facebook Account", view:this._getFbInfoView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this._getFbInfoDialog = this.zimlet._createDialog({title:this.zimlet.getMessage("addFacebookAcc"), view:this._getFbInfoView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this._getFbInfoDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._getFbInfoOKBtnListener));
 
 	this.goButton = new DwtButton({parent:this.zimlet.getShell()});
-	this.goButton.setText("Go to Facebook");
+	this.goButton.setText(this.zimlet.getMessage("goToFacebook"));
 	this.goButton.setImage("social_facebookIcon");
 	this.goButton.addSelectionListener(new AjxListener(this.zimlet.facebook, this.zimlet.facebook.loginToFB, null));
 	document.getElementById("social_goToFacebookPage").appendChild(this.goButton.getHtmlElement());
 
 	this.loadFbPermBtn = new DwtButton({parent:this.zimlet.getShell()});
-	this.loadFbPermBtn.setText("Load Permissions");
+	this.loadFbPermBtn.setText(this.zimlet.getMessage("loadPermissions"));
 	this.loadFbPermBtn.setImage("social_facebookIcon");
 	this.loadFbPermBtn.addSelectionListener(new AjxListener(this, this._getFbInfoOKBtnListener, null));
 	document.getElementById("social_loadFBAccountPermissions").appendChild(this.loadFbPermBtn.getHtmlElement());
@@ -370,28 +376,26 @@ function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV  class='social_yellow'>";
-	html[i++] = "<H3>Steps to adding facebook account:</H3>";
-	html[i++] = "<b><u><i><label style='color:blue'>Please complete BOTH Part1 and Part2</label></i></u></b><br/><br/>";
+	html[i++] = "<H3>"+this.zimlet.getMessage("fbSigninSteps")+"</H3>";
+	html[i++] = "<b><u><i><label style='color:blue'>"+this.zimlet.getMessage("pleaseCompleteBothParts")+"</label></i></u></b><br/><br/>";
 
-	html[i++] = "<B>PART 1: Login and Grant Permissions</B><br/>";
-	html[i++] = "1. Click on 'Go To Facebook' to open facebook's authorize page. <div id='social_goToFacebookPage'> </div>";
-	html[i++] = "2. Login to facebook <br/>";
-	html[i++] = "3: After logging in, Facebook will ask you grant or deny 'constant access(Remember Me)', 'Read' and 'Publish/write' permissions in a 3-step wizard<br/>";
-	html[i++] = "4. Please Grant all 3 permissions by pressing Allow buttons<br/>";
-	html[i++] = "5. After permissions are granted, Facebook will show a page with 'success' written on it, close that page. <br/>";
-	//html[i++] = "6. Press 'Done' button. <div id='social_doneAuthorizingAccount'> </div>";
-	html[i++] = "<br/> <B>PART 2: Load Permissions to Zimbra</B><br/>";
-	html[i++] = "6. Click on 'Load Permissions' to load permissions you granted in Step 4<div id='social_loadFBAccountPermissions'></div>";
-	html[i++] = "7. If you see: 'You may now close this window and return to the application.', close that page";
-	html[i++] = " or else please re-login to facebook<br/>";
-	html[i++] = "8. Please Click 'OK' in this dialog box";
+	html[i++] = "<B>"+this.zimlet.getMessage("fbSignInPart1")+"</B><br/>";
+	html[i++] = this.zimlet.getMessage("fbSignInLine1") + " <div id='social_goToFacebookPage'> </div>";
+	html[i++] = this.zimlet.getMessage("fbSignInLine2") + " <br/>";
+	html[i++] = this.zimlet.getMessage("fbSignInLine3") + "<br/>";
+	html[i++] = this.zimlet.getMessage("fbSignInLine4") + "<br/>";
+	html[i++] = this.zimlet.getMessage("fbSignInLine5") + "<br/>";
+	html[i++] = "<br/> <B>"+this.zimlet.getMessage("fbSignInPart2")+"</B><br/>";
+	html[i++] = this.zimlet.getMessage("fbSignInLine6") + "<div id='social_loadFBAccountPermissions'></div>";
+	html[i++] = this.zimlet.getMessage("fbSignInLine7");
+	html[i++] = this.zimlet.getMessage("fbSignInLine8");
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
-	html[i++] = "<H3>Permissions:</H3>";
-	html[i++] = "<b>Read Permission:</b> Allows us to display facebook information";
-	html[i++] = "<br/><b>Publish Permission:</b> Allows us to publish or write back to facebook";
-	html[i++] = "<br/><b>Remember Me / Constant Access Permission:</b> By default, Facebook authorizes expires after 24 hours of authorization. ";
-	html[i++] = "With this, we get permanent access. <br><br>PS: You can always revoke all Facebook/Twitter permissions by logging on to Facebook/Twitter";
+	html[i++] = "<H3>"+this.zimlet.getMessage("permissions")+"</H3>";
+	html[i++] = this.zimlet.getMessage("fbReadPermission") + "<br/>";
+	html[i++] = this.zimlet.getMessage("fbWritePermission") + "<br/>";
+	html[i++] =  this.zimlet.getMessage("fbRememberMePermission") + "<br/>";
+	html[i++] = "<br>" + this.zimlet.getMessage("fbRevokeInfoMsg");
 	html[i++] = "</DIV>";
 	return html.join("");
 };
@@ -478,7 +482,7 @@ function() {
 	var dlg = appCtxt.getYesNoMsgDialog();
 	dlg.registerCallback(DwtDialog.YES_BUTTON, this._yesButtonClicked, this, dlg);
 	dlg.registerCallback(DwtDialog.NO_BUTTON, this._NoButtonClicked, this, dlg);
-	dlg.setMessage("The browser must be refreshed for the changes to take effect.  Continue?", DwtMessageDialog.WARNING_STYLE);
+	dlg.setMessage(this.zimlet.getMessage("browserMustBeRefreshed"), DwtMessageDialog.WARNING_STYLE);
 	dlg.popup();
 };
 
@@ -550,24 +554,24 @@ function() {
 	html[i++] = "<label style='font-weight:bold'>Social App Preferences:</label>";
 	html[i++] = "<BR/>";
 	html[i++] = "<table>";
-	html[i++] = "<tr><td><input type='checkbox' id='social_pref_tweetmemePopularIsOn' /></td><td width=100%> Show TweetMeme's Most Popular by default</td></tr>";
-	html[i++] = "<tr><td><input type='checkbox' id='social_pref_trendsPopularIsOn' /></td><td width=100%> Show top Twitter Trend by default</td></tr>";
-	html[i++] = "<tr><td><input type='checkbox' id='social_pref_diggPopularIsOn' /></td><td width=100%> Show digg's 'Popular in 24 hours' by default</td></tr>";
+	html[i++] = "<tr><td><input type='checkbox' id='social_pref_tweetmemePopularIsOn' /></td><td width=100%>"+this.zimlet.getMessage("showTweetmemeByDefault")+"</td></tr>";
+	html[i++] = "<tr><td><input type='checkbox' id='social_pref_trendsPopularIsOn' /></td><td width=100%>"+this.zimlet.getMessage("showTopTwitterTrendsByDefault")+"</td></tr>";
+	html[i++] = "<tr><td><input type='checkbox' id='social_pref_diggPopularIsOn' /></td><td width=100%> "+this.zimlet.getMessage("showDiggsPopularByDefault")+"</td></tr>";
 	html[i++] = "</table>";
 	html[i++] = "<table>";
-	html[i++] = "<tr><td>Feed Card width:</td><td>" + this._createCardWidthList() + "</td></tr>";
-	html[i++] = "<tr><td ># Tweets to return:</td><td>" + this._createNumberOfTweetsToReturnList() + "</td></tr>";
-	html[i++] = "<tr><td># Twitter searches to return:</td><td>" + this._createNumberOfTweetSearchesToReturnList() + "</td></tr>";
+	html[i++] = "<tr><td>"+this.zimlet.getMessage("feedCardWidth") +"</td><td>" + this._createCardWidthList() + "</td></tr>";
+	html[i++] = "<tr><td >"+this.zimlet.getMessage("numberOfTweetsToReturn")+"</td><td>" + this._createNumberOfTweetsToReturnList() + "</td></tr>";
+	html[i++] = "<tr><td>"+this.zimlet.getMessage("numberOfTwitterSearchesToReturn")+"</td><td>" + this._createNumberOfTweetSearchesToReturnList() + "</td></tr>";
 	html[i++] = "</table>";
 
 	html[i++] = "<BR/>";
 	html[i++] = "<BR/>";
-	html[i++] = "<label style='font-weight:bold'>Social-Zimbra Integration Preferences:</label>";
+	html[i++] = "<label style='font-weight:bold'>"+this.zimlet.getMessage("socialZimlbraIntegrationPref")+"</label>";
 	html[i++] = "<BR/>";
 	html[i++] = "<table>";
-	html[i++] = "<tr><td><input type='checkbox' id='social_pref_SocialMailUpdateOn' /></td><td width=100%> Send Social mail with twitter updates (once a day)</td></tr>";
-	html[i++] = "<tr><td><input type='checkbox' id='social_pref_showTweetAlertsOn' /></td><td width=100%>Show Tweet Alerts (every 30 minutes)</td></tr>";
-	html[i++] = "<tr><td><input type='checkbox' id='social_pref_toolbarButtonOn' /></td><td width=100%>Show 'Socialize' Toolbar Button in Mail app</td></tr>";
+	html[i++] = "<tr><td><input type='checkbox' id='social_pref_SocialMailUpdateOn' /></td><td width=100%>"+this.zimlet.getMessage("sendSocialMail")+"</td></tr>";
+	html[i++] = "<tr><td><input type='checkbox' id='social_pref_showTweetAlertsOn' /></td><td width=100%>"+this.zimlet.getMessage("showTweetAlert")+"</td></tr>";
+	html[i++] = "<tr><td><input type='checkbox' id='social_pref_toolbarButtonOn' /></td><td width=100%>"+this.zimlet.getMessage("showSocializeBtn")+"</td></tr>";
 	html[i++] = "</table>";
 	return html.join("");
 };
@@ -684,7 +688,7 @@ function() {
 	}
 	if (save) {
 		this.zimlet.saveUserProperties();
-		appCtxt.getAppController().setStatusMsg("Preferences Saved", ZmStatusView.LEVEL_INFO);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("preferencesSaved"), ZmStatusView.LEVEL_INFO);
 	}
 	this._getwelDialog.popdown();
 };
@@ -697,7 +701,7 @@ com_zimbra_socialPreferences.prototype._showWelcomeDlg = function() {
 	this._getWelView = new DwtComposite(this.zimlet.getShell());
 	this._getWelView.getHtmlElement().style.overflow = "auto";
 	this._getWelView.getHtmlElement().innerHTML = this._createWelView();
-	this._getwelDialog = this.zimlet._createDialog({title:"Zimbra Social", view:this._getWelView, standardButtons:[DwtDialog.OK_BUTTON]});
+	this._getwelDialog = this.zimlet._createDialog({title:this.zimlet.getMessage("zimbraSocial"), view:this._getWelView, standardButtons:[DwtDialog.OK_BUTTON]});
 	this._getwelDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okWelBtnListener));
 	this._getwelDialog.popup();
 	this._setWelCheckboxes();
@@ -708,20 +712,22 @@ function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV  class='social_yellow'>";
-	html[i++] = " <h3 align=center>Welcome to Zimbra Social!</h3>";
-	html[i++] = "<b>Getting Started:</b><br/>";
+	html[i++] = " <h3 align=center>"+this.zimlet.getMessage("welcome")+"</h3>";
+	html[i++] = "<b>"+this.zimlet.getMessage("gettingStarted")+"</b><br/>";
 	html[i++] = "<ul>";
-	html[i++] = "<li>Add your Twitter and Facebook accounts by clicking on 'Add/Remove Accounts'</li>";
-	html[i++] = "</ul><b>Things to do:</b>";
+	html[i++] = "<li>"+this.zimlet.getMessage("welDlgLine1")+"</li>";
+	html[i++] = "</ul><b>"+this.zimlet.getMessage("thingsToDo")+"</b>";
 	html[i++] = "<ul>";
-	html[i++] = "<li>Follow and Send updates to Facebook and Twitter accounts</li>";
-	html[i++] = "<li>Check out Digg for some hot topics in your favourite area and forward them to your friends</li>";
-	html[i++] = "<li>Twitter Search for any topic and see what people are saying on a daily basis(since its auto-saved)</li>";
-	html[i++] = "<li>Use Twitter Trends to always be on top of latest news in Twitter world</li>";
-	html[i++] = "<li>Check out TweetMeme to see what urls people are forwarding(retweeting) each other on Twitter</li>";
+	html[i++] = "<li>"+this.zimlet.getMessage("thingsToDo1")+"</li>";
+	html[i++] = "<li>"+this.zimlet.getMessage("thingsToDo2")+"</li>";
+	html[i++] = "<li>"+this.zimlet.getMessage("thingsToDo3")+"</li>";
+	html[i++] = "<li>"+this.zimlet.getMessage("thingsToDo4")+"</li>";
+
+	html[i++] = "<li>"+this.zimlet.getMessage("thingsToDo5")+"</li>";
 	html[i++] = "</ul>";
-	html[i++] = "Take a <label l style=\"color:blue;text-decoration: underline;font-weight:bold\"><a href='http://wiki.zimbra.com/index.php?title=Social' target=\"_blank\">quick tour</a></label> for extra help";
-	html[i++] = "<br/><br/><input type='checkbox' id='social_pref_dontShowWelcomeScreenOn' /> Don't show me this again";
+	html[i++] = this.zimlet.getMessage("takeA")+" <label style=\"color:blue;text-decoration: underline;font-weight:bold\"><a href='http://wiki.zimbra.com/index.php?title=Social' target=\"_blank\">"+
+		this.zimlet.getMessage("quickTour")+"</a></label> "+this.zimlet.getMessage("forExtraHelp");
+	html[i++] = "<br/><br/><input type='checkbox' id='social_pref_dontShowWelcomeScreenOn' /><b/>"+ this.zimlet.getMessage("dontShowMeThisAgain");
 	html[i++] = "</DIV>";
 	return html.join("");
 };

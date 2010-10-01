@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_social" version="2.1.7.7" description="Social Zimlet: Access social services like Twitter, Facebook, Digg and TweetMeme from Zimbra.">
+<zimlet name="com_zimbra_social" version="2.1.7.8" label="Zimbra Social" description="Social Zimlet: Access social services like Twitter, Facebook, Digg and TweetMeme from Zimbra.">
     <include>socialTwitter.js</include>
     <include>socialFacebook.js</include>
     <include>socialTweetMeme.js</include>
@@ -7,9 +7,11 @@
     <include>socialMiniDlg.js</include>
     <include>oauth.js</include>
     <include>social.js</include>
+	<include>templates/Social.template.js</include>
+
     <includeCSS>social.css</includeCSS>
     <resource>social-icon.gif</resource>
-    <handlerObject>com_zimbra_social</handlerObject>
+    <handlerObject>com_zimbra_social_handlerObject</handlerObject>
 
     <userProperties>
         <property type="string" name="social_pref_tweetmemePopularIsOn" value="true"/>
@@ -25,5 +27,3 @@
         <property type="string" name="social_pref_numberofTweetsSearchesToReturn" value="50"/>
     </userProperties>
 </zimlet>
-
-

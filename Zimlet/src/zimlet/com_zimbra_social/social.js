@@ -15,20 +15,22 @@
 
 //Author: Raja Rao DV (rrao@zimbra.com)
 
-function com_zimbra_social() {
+function com_zimbra_social_handlerObject() {
 }
 
-com_zimbra_social.prototype = new ZmZimletBase();
-com_zimbra_social.prototype.constructor = com_zimbra_social;
+com_zimbra_social_handlerObject.prototype = new ZmZimletBase();
+com_zimbra_social_handlerObject.prototype.constructor = com_zimbra_social_handlerObject;
 
-com_zimbra_social.prototype.init =
+var SocialZimlet = com_zimbra_social_handlerObject;
+
+SocialZimlet.prototype.init =
 function() {
 	this.initializeVariables();
 
 	this._createsocialApp();
 };
 
-com_zimbra_social.prototype.initializeToolbar =
+SocialZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, view) {
 
 	if (!this.preferences.social_pref_toolbarButtonOn)
@@ -45,10 +47,10 @@ function(app, toolbar, controller, view) {
 				break;
 			}
 		}
-		ZmMsg.socialBtnLabel = "Socialize";
+		ZmMsg.socialBtnLabel = this.getMessage("socialize");
 		var buttonArgs = {
 			text    : ZmMsg.socialBtnLabel,
-			tooltip: "Allows you to share email or RSS contents via twitter or facebook",
+			tooltip: this.getMessage("socializeTooltip"),
 			index: buttonIndex,
 			image: "social_greenAppIcon"
 		};
@@ -57,7 +59,7 @@ function(app, toolbar, controller, view) {
 	}
 };
 
-com_zimbra_social.prototype.toggleFields =
+SocialZimlet.prototype.toggleFields =
 function() {
 	if (this.miniDlg.miniDlgON) {
 		this.updateField = document.getElementById("social_statusTextArea_miniDlg");
@@ -83,7 +85,7 @@ function() {
 
 //------------
 
-com_zimbra_social.prototype.updateUIWidgets =
+SocialZimlet.prototype.updateUIWidgets =
 function() {
 	this.autoShortenCheckbox.checked = this.preferences.social_pref_autoShortenURLOn;
 	if (this.autoShortenCheckbox.checked) {
@@ -99,7 +101,7 @@ function() {
 	this.undoShortenURLLink.onclick = callback;
 };
 
-com_zimbra_social.prototype.initializeVariables =
+SocialZimlet.prototype.initializeVariables =
 function() {
 	if (this._variablesInitialized != undefined)//initialize only once
 		return;
@@ -138,7 +140,7 @@ function() {
 	this._objectManager = new ZmObjectManager(new DwtComposite(this.getShell()));
 
 	this.shortnersRegex = /bit.ly|tinyurl.com|is.gd|tr.im|ow.ly|cli.gs|u.mavrev.com|twurl.nl|tiny.cc|digg.com|su.pr|snipr.com|short.to|budurl.com|snipurl.com|just.as|alturl.com|om.ly|snurl.com|adjix.com|redirx.com|doiop.com|easyurl.net|u.nu|myurl.in|rubyurl.com|kl.am|sn.im/i;
-	this.urlRegEx = /((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www.[\w\.\_\-]+))[^\s\<\>\[\]\{\}\'\"]*/gi;
+	this.urlRegEx = /((telnet:)|((https?|ftp|gopher|news|file):\/\/)|(www.[\w\.\_\-]+))[^\s\<\>\[\]\{\}\'']*/gi;
 
 	//scan for tweets..
 	this.social_emailLastUpdateDate = this.getUserProperty("social_emailLastUpdateDate");
@@ -151,12 +153,10 @@ function() {
 	if (this.preferences.social_pref_showTweetAlertsOn) {
 		this._displayTwitterAlert();
 	}
-
 	this._variablesInitialized = true;
-
 };
 
-com_zimbra_social.prototype._displayTwitterAlert =
+SocialZimlet.prototype._displayTwitterAlert =
 function() {
 	var showAlert = false;
 	var currTime = (new Date()).getTime();
@@ -178,7 +178,7 @@ function() {
 	}
 };
 
-com_zimbra_social.prototype._migrateOldPropsNames =
+SocialZimlet.prototype._migrateOldPropsNames =
 function() {
 	var props = new Array();
 	var propsToEmpty = new Array();
@@ -202,7 +202,7 @@ function() {
 		this.saveUserProperties();
 };
 
-com_zimbra_social.prototype.getPropValueFromSettings =
+SocialZimlet.prototype.getPropValueFromSettings =
 function(name) {
 	try {
 		if (this._propsInSettings == undefined) {
@@ -221,25 +221,25 @@ function(name) {
 	return (new Array());
 };
 
-com_zimbra_social.prototype._addTweetButtons =
+SocialZimlet.prototype._addTweetButtons =
 function() {
 	this.updateButton_main = new DwtButton({parent:this.getShell()});
-	this.updateButton_main.setText("Update");
+	this.updateButton_main.setText(this.getMessage("update"));
 	this.updateButton_main.addSelectionListener(new AjxListener(this, this._postToTweetOrFB));
 	document.getElementById("social_updateStatusButton").appendChild(this.updateButton_main.getHtmlElement());
 
 	var cancelButton = new DwtButton({parent:this.getShell()});
-	cancelButton.setText("Cancel");
+	cancelButton.setText(this.getMessage("cancel"));
 	cancelButton.addSelectionListener(new AjxListener(this, this._cancelPost));
 	document.getElementById("social_cancelPostButton").appendChild(cancelButton.getHtmlElement());
 
 	var shortenButton = new DwtButton({parent:this.getShell()});
-	shortenButton.setText("Shorten URL");
+	shortenButton.setText(this.getMessage("shortenUrl"));
 	shortenButton.addSelectionListener(new AjxListener(this, this._shortenUrlButtonListener));
 	document.getElementById("social_shortenUrlButtonDIV").appendChild(shortenButton.getHtmlElement());
 
 	var searchButton = new DwtButton({parent:this.getShell()});
-	searchButton.setText("twitter search");
+	searchButton.setText(this.getMessage("twitterSearch"));
 	searchButton.addSelectionListener(new AjxListener(this, this._twitterSearchBtnListener));
 	document.getElementById("social_searchButton").appendChild(searchButton.getHtmlElement());
 
@@ -248,7 +248,7 @@ function() {
 	Dwt.setHandler(document.getElementById("social_statusTextArea"), DwtEvent.ONKEYPRESS, AjxCallback.simpleClosure(this._postToTweetOrFB, this));
 };
 
-com_zimbra_social.prototype._addAccountCheckBoxListeners =
+SocialZimlet.prototype._addAccountCheckBoxListeners =
 function() {
 	for (var accntId in this.allAccounts) {
 		var callback = AjxCallback.simpleClosure(this._saveToAccountCheckboxesPref, this, accntId);
@@ -256,7 +256,7 @@ function() {
 	}
 };
 
-com_zimbra_social.prototype._cancelPost =
+SocialZimlet.prototype._cancelPost =
 function() {
 	var statusField = this.updateField;
 	statusField.value = "";
@@ -264,7 +264,7 @@ function() {
 	this.showNumberOfLetters();
 };
 
-com_zimbra_social.prototype._shortenUrlButtonListener =
+SocialZimlet.prototype._shortenUrlButtonListener =
 function() {
 	var selectedTxt = this._getStatusFieldSelectedText();
 	//if zimlet dialog already exists...
@@ -280,8 +280,8 @@ function() {
 	this._shortenUrlView.getHtmlElement().style.overflow = "auto";
 	this._shortenUrlView.getHtmlElement().innerHTML = this._createShortenURLView();
 	var suBtnId = Dwt.getNextId();
-	var suButton = new DwtDialog_ButtonDescriptor(suBtnId, "Shorten URL", DwtDialog.ALIGN_RIGHT);
-	this._shortenUrlDialog = this._createDialog({title:"Shorten URL (bit.ly)", view:this._shortenUrlView, standardButtons:[DwtDialog.CANCEL_BUTTON], extraButtons:[suButton]});
+	var suButton = new DwtDialog_ButtonDescriptor(suBtnId, this.getMessage("shortenUrl"), DwtDialog.ALIGN_RIGHT);
+	this._shortenUrlDialog = this._createDialog({title:this.getMessage("shortenUrlDlgLabel"), view:this._shortenUrlView, standardButtons:[DwtDialog.CANCEL_BUTTON], extraButtons:[suButton]});
 
 	this._shortenUrlDialog.setButtonListener(suBtnId, new AjxListener(this, this._postToUrlShortner, {}));
 	if (selectedTxt.indexOf("http:") == 0) {
@@ -290,7 +290,7 @@ function() {
 	this._shortenUrlDialog.popup();
 };
 
-com_zimbra_social.prototype._postToUrlShortner =
+SocialZimlet.prototype._postToUrlShortner =
 function(params) {
 	var longUrl = params.longUrl;
 	var callback = params.callback;
@@ -318,29 +318,29 @@ function(params) {
 	AjxRpc.invoke(null, entireurl, null, callback, false);
 };
 
-com_zimbra_social.prototype._getStatusFieldSelectedText =
+SocialZimlet.prototype._getStatusFieldSelectedText =
 function() {
 	var statusField = this.updateField;
 	return  AjxStringUtil.trim(statusField.value.substring(statusField.selectionStart, statusField.selectionEnd));
 };
 
-com_zimbra_social.prototype._replaceStatusFieldSelectedTxt =
+SocialZimlet.prototype._replaceStatusFieldSelectedTxt =
 function(selectedTxt, newTxt) {
 	var statusField = this.updateField;
 	statusField.value = statusField.value.replace(selectedTxt, newTxt);
 };
 
-com_zimbra_social.prototype._postToUrlShortnerCallback =
+SocialZimlet.prototype._postToUrlShortnerCallback =
 function(longUrl, response) {
 	if (!response.success) {
-		appCtxt.getAppController().setStatusMsg("Could Not Shorten", ZmStatusView.LEVEL_WARNING);
+		appCtxt.getAppController().setStatusMsg(this.getMessage("couldNotShorten"), ZmStatusView.LEVEL_WARNING);
 		return;
 	}
 	try {
 		var text = eval("(" + response.text + ")");
 		var shortUrl = text.results[longUrl].shortUrl;
 		if (!shortUrl) {
-			appCtxt.getAppController().setStatusMsg("Could Not Shorten", ZmStatusView.LEVEL_WARNING);
+			appCtxt.getAppController().setStatusMsg(this.getMessage("couldNotShorten"), ZmStatusView.LEVEL_WARNING);
 			return;
 		} else {
 			if (this.updateField.value.indexOf(longUrl) >= 0) {
@@ -352,7 +352,7 @@ function(longUrl, response) {
 			this.undoShortenUrlDiv.style.display = "block";
 		}
 	} catch(e) {
-		appCtxt.getAppController().setStatusMsg("Could Not Shorten", ZmStatusView.LEVEL_WARNING);
+		appCtxt.getAppController().setStatusMsg(this.getMessage("couldNotShorten"), ZmStatusView.LEVEL_WARNING);
 	}
 	this._autoShorten = false;
 	this.showNumberOfLetters();
@@ -363,7 +363,7 @@ function(longUrl, response) {
 	}
 };
 
-com_zimbra_social.prototype._createShortenURLView =
+SocialZimlet.prototype._createShortenURLView =
 function() {
 	var html = new Array();
 	var i = 0;
@@ -374,7 +374,7 @@ function() {
 	return html.join("");
 };
 
-com_zimbra_social.prototype._getTableIdFromAccount =
+SocialZimlet.prototype._getTableIdFromAccount =
 function(reqAccount) {
 	for (var id in this.tableIdAndAccountMap) {
 		var actAccnt = this.tableIdAndAccountMap[id];
@@ -384,7 +384,7 @@ function(reqAccount) {
 	return "";
 };
 
-com_zimbra_social.prototype._saveToAccountCheckboxesPref =
+SocialZimlet.prototype._saveToAccountCheckboxesPref =
 function(accntId, ev) {
 	if (this.allAccounts[accntId].__on == "true")
 		this.allAccounts[accntId].__on = "false";
@@ -394,7 +394,7 @@ function(accntId, ev) {
 	this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
 };
 
-com_zimbra_social.prototype._saveAutoShortenUrlPref =
+SocialZimlet.prototype._saveAutoShortenUrlPref =
 function(ev) {
 	if (this.autoShortenCheckbox.checked) {
 		this.shortenUrlButtonDiv.style.display = "none";
@@ -404,7 +404,7 @@ function(ev) {
 	this.setUserProperty("social_pref_autoShortenURLOn", this.autoShortenCheckbox.checked, true);
 };
 
-com_zimbra_social.prototype.showNumberOfLetters =
+SocialZimlet.prototype.showNumberOfLetters =
 function(ev) {
 
 	var event = ev || window.event;
@@ -428,10 +428,10 @@ function(ev) {
 	}
 	if (this.whatAreYouDoingField != "NOT_PRESENT") {
 		if (val.toLowerCase().indexOf("d @") == 0) {
-			this.whatAreYouDoingField.innerHTML = "Send Direct/private Message:";
+			this.whatAreYouDoingField.innerHTML = this.getMessage("sendDirectMsg");
 			this.whatAreYouDoingField.style.color = "yellow";
 		} else {
-			this.whatAreYouDoingField.innerHTML = "What are you doing?";
+			this.whatAreYouDoingField.innerHTML = this.getMessage("whatAreYouDoing");
 			this.whatAreYouDoingField.style.color = "black";
 		}
 	}
@@ -441,7 +441,7 @@ function(ev) {
 	}
 };
 
-com_zimbra_social.prototype._updateNumberOfLettersField =
+SocialZimlet.prototype._updateNumberOfLettersField =
 function(count) {
 	var clr = "";
 	var left = 140 - count;
@@ -454,7 +454,7 @@ function(count) {
 	this.nuLettersAllowedField.style.color = clr;
 };
 
-com_zimbra_social.prototype.autoShortenURL =
+SocialZimlet.prototype.autoShortenURL =
 function(text) {
 	var matches = new Array();
 
@@ -490,7 +490,7 @@ function(text) {
 	this.isTextPasted = false;
 };
 
-com_zimbra_social.prototype.twitterSearchKeyHdlr =
+SocialZimlet.prototype.twitterSearchKeyHdlr =
 function(ev) {
 	var event = ev || window.event;
 	if (event.keyCode == 13) {
@@ -498,7 +498,7 @@ function(ev) {
 	}
 };
 
-com_zimbra_social.prototype._twitterSearchBtnListener =
+SocialZimlet.prototype._twitterSearchBtnListener =
 function() {
 	var val = document.getElementById("social_searchField").value;
 	var tableId = this._showCard({headerName:val, type:"SEARCH", autoScroll:true});
@@ -514,50 +514,24 @@ function() {
 	this.twitter._updateAllSearches(val, "on");
 };
 
-com_zimbra_social.prototype._loadInformation =
+SocialZimlet.prototype._loadInformation =
 function() {
 	this.twitter.getTwitterTrends();
 	this.tweetmeme.getTweetmemeCategories();
 	this.digg.getDiggCategories();
 };
 
-com_zimbra_social.prototype._constructSkin =
+SocialZimlet.prototype._constructSkin =
 function() {
-	var html = [];
-	var idx = 0;
-	html[idx++] = "<DIV class='overviewHeader' id='social_topSxn'>";
-	html[idx++] = "<TABLE width=100%>";
-	html[idx++] = "<TR><TD style=\"width:90%;\" >";
-	html[idx++] = "<input  style=\"width:100%;height:25px\" autocomplete=\"off\" id=\"social_statusTextArea\" ></input>";
-	html[idx++] = "</TD>";
-
-	html[idx++] = "<TD rowspan=2 align=center valign='middle'>";
-	html[idx++] = "<table width=100%><tr><td align=center>";
-	html[idx++] = "<label style=\"font-size:18px;color:green;font-weight:bold\" id='social_numberOfLettersAllowed'>140</label>";
-	html[idx++] = "</td></tr><tr><td align=center>";
-	html[idx++] = "<label>Characters Left</label></td></tr></table>";
-	html[idx++] = "</TD>";
-	html[idx++] = "</TR>";
-
-	html[idx++] = "<TR><TD>";
-	html[idx++] = "<table width=100%><tr>";
-	html[idx++] = "<td align=left> <div id='social_shortenUrlButtonDIV' /></td>";
-	html[idx++] = "<td align=left><input type='checkbox'  id='social_autoShortenCheckbox'></input></td><td  nowrap=''><label style='color:#252525'>Auto Shorten URL</label></td>";
-	html[idx++] = "<td align=left width=90%><div id='social_undoShortenURLDIV' style='display:none'><a  href='#' id='social_undoShortenURLLink' style='text-decoration:underline;font-weight:bold'>undo</a></div></td>";
-	html[idx++] = "<td align=right><div id='social_cancelPostButton' />";
-	html[idx++] = "</td><td align=right><div id='social_updateStatusButton' /></td></tr></table>";
-	html[idx++] = "</TD></TR>";
-
-	html[idx++] = "</TABLE>";
-	html[idx++] = "</DIV>";
-	html[idx++] = "<DIV id='social_twitterCardsDiv' class='social_twitterCardsDiv DwtPropertyPage'>";
-	html[idx++] = "<table id='social_twitterCardsParentTable' cellspacing=10px>";
-	html[idx++] = "</table>";
-	html[idx++] = "</DIV>";
-	return html.join("");
+	var subs = {
+		undo: this.getMessage("undo"),
+		autoShortenUrl: this.getMessage("autoShortenUrl"),
+		charactersLeft: this.getMessage("charactersLeft")
+	};
+	return AjxTemplate.expand("com_zimbra_social.templates.Social#Skin", subs);
 };
 
-com_zimbra_social.prototype._setMainCardHeight =
+SocialZimlet.prototype._setMainCardHeight =
 function() {
 	var mainCardsDiv = document.getElementById('social_twitterCardsDiv');
 	mainCardsDiv.style.overflow = "auto";
@@ -575,19 +549,19 @@ function() {
 	}
 };
 
-com_zimbra_social.prototype._resizeHandler =
+SocialZimlet.prototype._resizeHandler =
 function(ev) {
 	this._setMainCardHeight();
 }
 
-com_zimbra_social.prototype._addUpdateToCheckboxes =
+SocialZimlet.prototype._addUpdateToCheckboxes =
 function() {
 	var html = [];
 	var idx = 0;
 	var hasAccounts = false;
 	html[idx++] = "<TABLE>";
 	html[idx++] = "<TR><td>";
-	html[idx++] = "<label style=\"font-size:12px;color:black;font-weight:bold\">update to: ";
+	html[idx++] = "<label style='font-size:12px;color:black;font-weight:bold'>" + this.getMessage("updateTo");
 	html[idx++] = "</label>";
 	html[idx++] = "</TD>";
 	for (var id in this.allAccounts) {
@@ -609,10 +583,11 @@ function() {
 	if (hasAccounts)
 		return html.join("");
 	else {
-		return "<label style=\"font-size:12px;color:#555555;font-style:italic\">No accounts have been added yet! Click on 'Add/Remove Accounts' to add one </label>";
+		return ["<label style='font-size:12px;color:#555555;font-style:italic'>",this.getMessage("noAccountsMsg"),"</label>"].join("");
 	}
 };
-com_zimbra_social.prototype._getMaxHeaderTextLength =
+
+SocialZimlet.prototype._getMaxHeaderTextLength =
 function() {
 	if(!this.maxHeaderTextLength) {
 		var cardWidth = parseInt(this.preferences.social_pref_cardWidthList.replace("px", ""));
@@ -622,7 +597,7 @@ function() {
 };
 
 
-com_zimbra_social.prototype._showCard =
+SocialZimlet.prototype._showCard =
 function(params) {
 	var headerName = params.headerName;
 	var type = params.type;
@@ -672,7 +647,7 @@ function(params) {
 	} else if (type == "TREND") {
 		iconName = "social_trendIcon";
 	}
-	var hdrCellStyle = "style=\"font-size:12px;color:" + hdrCellColor + ";font-weight:bold;font-family:'Lucida Grande',sans-serif;\"";
+	var hdrCellStyle = "style='font-size:12px;color:" + hdrCellColor + ";font-weight:bold;font-family:'Lucida Grande',sans-serif;'";
 	var card = "";
 	var sDistance = "";
 	if (type == "PROFILE") { //inset profile card right-next to the from-card
@@ -697,31 +672,6 @@ function(params) {
 		card = row.insertCell(0);
 		sDistance = 0;
 	}
-	/*
-	 if (type == "ACCOUNT" || type == "FACEBOOK") {
-	 card = row.insertCell(-1);
-	 sDistance =  row.cells.length;
-	 } else if (type == "PROFILE") { //inset profile card right-next to the from-card
-	 tweetTableId = tweetTableId.replace("social_cardInfoSectionId", "social_card");
-	 var cells = row.childNodes;
-	 for (var i = 0; i < cells.length; i++) {
-	 if (tweetTableId.indexOf(cells[i].id) == 0) {
-	 card = row.insertCell(i + 1);
-	 break;
-	 }
-	 }
-	 sDistance = i;
-	 } else {
-	 var _indx = 0;
-	 for (var id in this.allAccounts) {
-	 if (this.allAccounts[id].isDisplayed) {
-	 _indx++;
-	 }
-	 }
-	 card = row.insertCell(_indx);
-	 sDistance =  _indx;
-	 }
-	 */
 
 	card.id = "social_card" + this.cardIndex;
 	var cardInfoSectionId = "social_cardInfoSectionId" + this.cardIndex;
@@ -749,31 +699,25 @@ function(params) {
 	html[i++] = "<tr>";
 	if (type == "ACCOUNT" || type == "FACEBOOK" || type == "SEARCH") {
 		html[i++] = "<td width='5%' valign='middle' align='right'>";
-		html[i++] = "<img  title=\"Move this feed left\" src=\"" + this.getResource("social_leftArrow.png") + "\" id='social_leftArrow" + this.cardIndex + "'/></td>";
+		html[i++] = "<img  title='"+this.getMessage("moveLeft")+"' src='" + this.getResource("social_leftArrow.png") + "' id='social_leftArrow" + this.cardIndex + "'/></td>";
 		html[i++] = "<td width='5%' valign='middle' align='left'>";
-		html[i++] = "<img  title=\"Move this feed right\" src=\"" + this.getResource("social_rightArrow.png") + "\" id='social_rightArrow" + this.cardIndex + "'/></td>";
+		html[i++] = "<img  title='"+this.getMessage("moveRight")+"' src='" + this.getResource("social_rightArrow.png") + "' id='social_rightArrow" + this.cardIndex + "'/></td>";
 	}
 
 	if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
 		html[i++] = "<td width='5%'valign='middle'>";
-		html[i++] = "<img    title=\"Clear contents (aka mark as read)\" src=\"" + this.getResource("social_markread.gif") + "\" id='social_markAsReadBtn" + this.cardIndex + "' />";
+		html[i++] = "<img    title='"+this.getMessage("markAsRead")+"' src='" + this.getResource("social_markread.gif") + "' id='social_markAsReadBtn" + this.cardIndex + "' />";
 		html[i++] = "</td>";
 	}
-
-	//	if (type == "SEARCH") {
-	//		html[i++] = "<td width='5%' valign='middle'>";
-	//		html[i++] = "<img  title=\"Delete this search permanently from overview panel\" src=\"" + this.getResource("social_deleteBtn.gif") + "\" id='social_deleteBtn" + this.cardIndex + "' />";
-	//		html[i++] = "</td>";
-	//	}
 
 	html[i++] = "<td width='5%' valign='middle'></td>";
 	if (type != "PROFILE") {
 		html[i++] = "<td width='5%' valign='middle'>";
-		html[i++] = "<img  title=\"Refresh this feed\" src=\"" + this.getResource("social_refreshBtn.gif") + "\" id='social_refreshBtn" + this.cardIndex + "'/></td>";
+		html[i++] = "<img  title='Refresh this feed' src='" + this.getResource("social_refreshBtn.gif") + "' id='social_refreshBtn" + this.cardIndex + "'/></td>";
 	}
 
 	html[i++] = "<td width='5%' valign='middle'></td><td width='5%' valign='middle'>";
-	html[i++] = "<img  title=\"Close this feed\" src=\"" + this.getResource("social_closeBtn.png") + "\" id='social_closeBtn" + this.cardIndex + "'/></td>";
+	html[i++] = "<img  title='Close this feed' src='" + this.getResource("social_closeBtn.png") + "' id='social_closeBtn" + this.cardIndex + "'/></td>";
 
 	html[i++] = "</tr>";
 	html[i++] = "</table>";
@@ -784,16 +728,12 @@ function(params) {
 	html[i++] = "</table>";
 	html[i++] = "</DIV>";
 
-	html[i++] = "<DIV id='" + cardInfoSectionId + "' style=\"overflow:auto;height:" + this._mainCardsHeight + ";width:" + this.preferences.social_pref_cardWidthList + "\" class='social_individualCardClass'>";
+	html[i++] = "<DIV id='" + cardInfoSectionId + "' style='overflow:auto;height:" + this._mainCardsHeight + ";width:" + this.preferences.social_pref_cardWidthList + "' class='social_individualCardClass'>";
 	html[i++] = "</DIV>";
 	html[i++] = "</div>";
 	card.innerHTML = html.join("");
 
 	var params = {row:row, cellId:card.id, tableId:cardInfoSectionId, headerName:origHeaderName, type:type}
-	//	if (type == "SEARCH") {
-	//		var callback = AjxCallback.simpleClosure(this._handleDeleteButton, this, params);
-	//		document.getElementById("social_deleteBtn" + this.cardIndex).onclick = callback;
-	//	}
 	var params = {row:row, cellId:card.id, tableId:cardInfoSectionId, headerName:origHeaderName, type:type}
 	var callback = AjxCallback.simpleClosure(this._handleCloseButton, this, params);
 	document.getElementById("social_closeBtn" + this.cardIndex).onclick = callback;
@@ -816,11 +756,6 @@ function(params) {
 		var callback = AjxCallback.simpleClosure(this._swapColumns, this, "social_card" + this.cardIndex, -1);
 		document.getElementById("social_leftArrow" + this.cardIndex).onclick = callback;
 	}
-	// var callback = AjxCallback.simpleClosure(this._handleCardMouseOver, this, "social_cardButtonsDiv"+this.cardIndex);
-	//document.getElementById("social_cardsDiv"+this.cardIndex).onmouseover = callback;
-	//var callback = AjxCallback.simpleClosure(this._handleCardMouseOut, this, "social_cardButtonsDiv"+this.cardIndex);
-	//document.getElementById("social_cardsDiv"+this.cardIndex).onmouseout = callback;
-
 	if (autoScroll) {
 		document.getElementById('social_twitterCardsDiv').scrollLeft =
 		(parseInt(this.preferences.social_pref_cardWidthList.replace("px", "")) + 10) * sDistance;
@@ -828,7 +763,7 @@ function(params) {
 	return cardInfoSectionId;
 };
 
-com_zimbra_social.prototype._swapColumns =
+SocialZimlet.prototype._swapColumns =
 function  (cellId, colIndex2) {
 	var table = document.getElementById('social_twitterCardsParentTable');
 	var cells = table.rows[0].cells;
@@ -912,10 +847,10 @@ function  (cellId, colIndex2) {
 		}
 	}
 	this.setUserProperty("social_AllTwitterSearches", this.twitter.getAllSearchesAsJSON(), true);
-	appCtxt.getAppController().setStatusMsg("Feed Position Saved", ZmStatusView.LEVEL_INFO);
+	appCtxt.getAppController().setStatusMsg(this.getMessage("feedPositionSaved"), ZmStatusView.LEVEL_INFO);
 };
 
-com_zimbra_social.prototype._setCardUnreadCount =
+SocialZimlet.prototype._setCardUnreadCount =
 function(tableId, unReadCount) {
 	var cellId = tableId.replace("social_cardInfoSectionId", "social_unreadCountCell");
 	var cell = document.getElementById(cellId);
@@ -931,7 +866,7 @@ function(tableId, unReadCount) {
 	}
 };
 
-com_zimbra_social.prototype._handleUndoShortenLink =
+SocialZimlet.prototype._handleUndoShortenLink =
 function() {
 	if (this.latestShortenedUrl) {
 		this.updateField.value = this.updateField.value.replace(this.latestShortenedUrl.shortUrl, this.latestShortenedUrl.longUrl);
@@ -939,7 +874,7 @@ function() {
 	this.undoShortenUrlDiv.style.display = "none";
 };
 
-com_zimbra_social.prototype._handleRefreshButton =
+SocialZimlet.prototype._handleRefreshButton =
 function(params) {
 	if (params.type == "SEARCH" || params.type == "TREND") {
 		this.twitter.twitterSearch({query:params.headerName, tableId:params.tableId, type:params.type});
@@ -960,17 +895,17 @@ function(params) {
 	}
 };
 
-com_zimbra_social.prototype._handleCardMouseOver =
+SocialZimlet.prototype._handleCardMouseOver =
 function(id) {
 	document.getElementById(id).style.display = "block";
 };
 
-com_zimbra_social.prototype._handleCardMouseOut =
+SocialZimlet.prototype._handleCardMouseOut =
 function(id) {
 	document.getElementById(id).style.display = "none";
 };
 
-com_zimbra_social.prototype._handleMarkAsReadButton =
+SocialZimlet.prototype._handleMarkAsReadButton =
 function(params) {
 	if (params.type == "SEARCH") {
 		var search = this.tableIdAndSearchMap[params.tableId];
@@ -1001,7 +936,7 @@ function(params) {
 	this.createCardView(params.tableId, this.tableIdAndResultsMap[params.tableId], params.type);
 };
 
-com_zimbra_social.prototype._handleDeleteButton =
+SocialZimlet.prototype._handleDeleteButton =
 function(params) {
 	var headerName = params.headerName;
 	for (var i = 0; i < this.tSearchFolders.length; i++) {
@@ -1023,7 +958,7 @@ function(params) {
 
 };
 
-com_zimbra_social.prototype._handleCloseButton =
+SocialZimlet.prototype._handleCloseButton =
 function(params) {
 	params.row.deleteCell(document.getElementById(params.cellId).cellIndex);
 	this.twitter._updateAllSearches(params.headerName, "off");
@@ -1044,22 +979,22 @@ function(params) {
 //---------------------------------------------------------------------------------
 // OVERRIDE ZIMLET FRAMEWORK FUNCTIONS AND CREATE APP
 //---------------------------------------------------------------------------------
-com_zimbra_social.prototype.doubleClicked =
+SocialZimlet.prototype.doubleClicked =
 function() {
 	this.singleClicked();
 };
 
-com_zimbra_social.prototype.singleClicked =
+SocialZimlet.prototype.singleClicked =
 function() {
 	//DO NOTHING
 };
 
-com_zimbra_social.prototype._createsocialApp =
+SocialZimlet.prototype._createsocialApp =
 function() {
-	this._socialAppName = this.createApp("Social", "social_greenAppIcon", "Socialize with your friends and family via Facebook & Twitter");
+	this._socialAppName = this.createApp(this.getMessage("social"), "social_greenAppIcon", this.getMessage("socalAppTooltip"));
 };
 
-com_zimbra_social.prototype.appActive = function(appName, active) {
+SocialZimlet.prototype.appActive = function(appName, active) {
 	if (active) {
 		this.appName = appName;
 		this._sociallistViews = [];
@@ -1068,18 +1003,17 @@ com_zimbra_social.prototype.appActive = function(appName, active) {
 		if (this.getUserProperty("social_pref_dontShowWelcomeScreenOn") == "false") {
 			this.preferences._showWelcomeDlg();
 		}
-
 	}
 	else {
 		this._hideApp(appName);
 	}
 };
 
-com_zimbra_social.prototype._hideApp = function(appName) {
+SocialZimlet.prototype._hideApp = function(appName) {
 	//dont do anything
 };
 
-com_zimbra_social.prototype.appLaunch = function(appName, params) {
+SocialZimlet.prototype.appLaunch = function(appName, params) {
 	if (this._socialAppName != appName)
 		return;
 
@@ -1088,12 +1022,12 @@ com_zimbra_social.prototype.appLaunch = function(appName, params) {
 	this.showAppView();
 };
 
-com_zimbra_social.prototype._selectDefaultFolder =
+SocialZimlet.prototype._selectDefaultFolder =
 function() {
 	this._treeView.setSelected(this._getIdFromName("Missed Calls"));
 };
 
-com_zimbra_social.prototype._createTreeView =
+SocialZimlet.prototype._createTreeView =
 function() {
 	var html = new Array();
 	var i = 0;
@@ -1108,8 +1042,8 @@ function() {
 	//-----------------------
 	var expandIconId = "social_expandIcon_" + Dwt.getNextId();
 	this.expandIconAndFolderTreeMap[expandIconId] = new Array();
-	html[i++] = this._getTreeHeaderHTML("Accounts", expandIconId);	//header
-	html[i++] = "<div class=\"DwtTreeItemLevel1ChildDiv\" style=\"display: block;\">";
+	html[i++] = this._getTreeHeaderHTML(this.getMessage("accounts"), expandIconId);	//header
+	html[i++] = "<div class='DwtTreeItemLevel1ChildDiv' style='display: block;'>";
 
 	for (var j = 0; j < this.systemFolders.length; j++) {
 		var folder = this.systemFolders[j];
@@ -1117,10 +1051,9 @@ function() {
 			var childExpandIconId = "social_expandIcon_" + Dwt.getNextId();
 			this.expandIconAndFolderTreeMap[childExpandIconId] = new Array();
 			html[i++] = this._getFolderHTML(folder, expandIconId, childExpandIconId);
-			html[i++] = this._getFolderHTML({name:"@" + folder.account.name + " (mentions)", icon:"social_twitterIcon", account: folder.account, type:"MENTIONS"}, expandIconId, childExpandIconId, true);
-			html[i++] = this._getFolderHTML({name:"direct messages", icon:"social_twitterIcon", account: folder.account, type:"DIRECT_MSGS"}, expandIconId, childExpandIconId, true);
-			html[i++] = this._getFolderHTML({name:"sent messages", icon:"social_twitterIcon", account: folder.account, type:"SENT_MSGS"}, expandIconId, childExpandIconId, true);
-
+			html[i++] = this._getFolderHTML({name:"@" + folder.account.name + " "+this.getMessage("mentions"), icon:"social_twitterIcon", account: folder.account, type:"MENTIONS"}, expandIconId, childExpandIconId, true);
+			html[i++] = this._getFolderHTML({name:this.getMessage("directMsgs"), icon:"social_twitterIcon", account: folder.account, type:"DIRECT_MSGS"}, expandIconId, childExpandIconId, true);
+			html[i++] = this._getFolderHTML({name:this.getMessage("sentMsgs"), icon:"social_twitterIcon", account: folder.account, type:"SENT_MSGS"}, expandIconId, childExpandIconId, true);
 		} else {
 			html[i++] = this._getFolderHTML(folder, expandIconId);
 		}
@@ -1131,8 +1064,8 @@ function() {
 	//-----------------------
 	var expandIconId = "social_expandIcon_" + Dwt.getNextId();
 	this.expandIconAndFolderTreeMap[expandIconId] = new Array();
-	html[i++] = this._getTreeHeaderHTML("Twitter Searches", expandIconId);	//header
-	html[i++] = "<div class=\"DwtTreeItemLevel1ChildDiv\" style=\"display: block;\">";
+	html[i++] = this._getTreeHeaderHTML(this.getMessage("twitterSearches"), expandIconId);	//header
+	html[i++] = "<div class='DwtTreeItemLevel1ChildDiv' style='display: block;'>";
 	for (var j = 0; j < this.tSearchFolders.length; j++) {
 		var folder = this.tSearchFolders[j];
 		html[i++] = this._getFolderHTML(folder, expandIconId);
@@ -1144,8 +1077,8 @@ function() {
 	if (this.tTrendsFolders) {
 		var expandIconId = "social_expandIcon_" + Dwt.getNextId();
 		this.expandIconAndFolderTreeMap[expandIconId] = new Array();
-		html[i++] = this._getTreeHeaderHTML("Twitter Trends", expandIconId);	//header
-		html[i++] = "<div class=\"DwtTreeItemLevel1ChildDiv\" style=\"display: block;\">";
+		html[i++] = this._getTreeHeaderHTML(this.getMessage("twitterTrends"), expandIconId);	//header
+		html[i++] = "<div class='DwtTreeItemLevel1ChildDiv' style='display: block;'>";
 		for (var j = 0; j < this.tTrendsFolders.length; j++) {
 			var trend = this.tTrendsFolders[j];
 			html[i++] = this._getFolderHTML(trend, expandIconId);
@@ -1159,7 +1092,7 @@ function() {
 		var expandIconId = "social_expandIcon_" + Dwt.getNextId();
 		this.expandIconAndFolderTreeMap[expandIconId] = new Array();
 		html[i++] = this._getTreeHeaderHTML("Digg", expandIconId);	//header
-		html[i++] = "<div class=\"DwtTreeItemLevel1ChildDiv\" style=\"display: block;\">";
+		html[i++] = "<div class='DwtTreeItemLevel1ChildDiv' style='display: block;'>";
 		for (var j = 0; j < this.tDiggFolders.length; j++) {
 			var folder = this.tDiggFolders[j];
 			html[i++] = this._getFolderHTML(folder, expandIconId);
@@ -1173,7 +1106,7 @@ function() {
 		var expandIconId = "social_expandIcon_" + Dwt.getNextId();
 		this.expandIconAndFolderTreeMap[expandIconId] = new Array();
 		html[i++] = this._getTreeHeaderHTML("TweetMeme", expandIconId);	//header
-		html[i++] = "<div class=\"DwtTreeItemLevel1ChildDiv\" style=\"display: block;\">";
+		html[i++] = "<div class='DwtTreeItemLevel1ChildDiv' style='display: block;'>";
 		for (var j = 0; j < this.tTweetMemeFolders.length; j++) {
 			var folder = this.tTweetMemeFolders[j];
 			html[i++] = this._getFolderHTML(folder, expandIconId);
@@ -1187,13 +1120,13 @@ function() {
 	if (this.prefFolder == undefined) {
 		this.prefFolders = new Array();
 		//this.prefFolders.push({name:"Add/Remove Accounts", icon:"Group", account:"", type:"MANAGE_ACCOUNTS"});
-		this.prefFolders.push({name:"Preferences", icon:"Preferences", account:"", type:"PREFERENCES"});
+		this.prefFolders.push({name:this.getMessage("preferences"), icon:"Preferences", account:"", type:"PREFERENCES"});
 		this.prefFolders.push({name:"Help", icon:"Help", account:"", type:"HELP"});
 
 	}
 	this.expandIconAndFolderTreeMap[expandIconId] = new Array();
 	html[i++] = this._getTreeHeaderHTML("Settings", expandIconId);	//header
-	html[i++] = "<div class=\"DwtTreeItemLevel1ChildDiv\" style=\"display: block;\">";
+	html[i++] = "<div class='DwtTreeItemLevel1ChildDiv' style='display: block;'>";
 	for (var j = 0; j < this.prefFolders.length; j++) {
 		var folder = this.prefFolders[j];
 		html[i++] = this._getFolderHTML(folder, expandIconId);
@@ -1206,34 +1139,16 @@ function() {
 
 };
 
-com_zimbra_social.prototype._getTreeHeaderHTML =
+SocialZimlet.prototype._getTreeHeaderHTML =
 function(treeName, expandIconId) {
-	var html = new Array();
-	var i = 0;
-	if (expandIconId) {
-		html[i++] = "<div  class='overviewHeader'>";
-	} else {
-		html[i++] = "<div  class='overviewHeader'>";
-	}
-	html[i++] = "<TABLE cellpadding=\"0\" cellspacing=\"0\">";
-	html[i++] = "<TR>";
-	html[i++] = "<TD style=\"width:16px;height:16px\" align='center'>";
-	html[i++] = "<div class=\"ImgNodeExpanded\" id= '" + expandIconId + "'/>";
-	html[i++] = "</TD>";
-	html[i++] = "<td class=\"imageCell\" />";
-	html[i++] = "<TD  class='overviewHeader-Text'>";
-	html[i++] = treeName;
-	html[i++] = "</TD>";
-	html[i++] = "<TD style=\"width:16px;height:16px\">";
-	html[i++] = AjxImg.getImageHtml("Blank_16");
-	html[i++] = "</TD>";
-	html[i++] = "</TR>";
-	html[i++] = "</TABLE>";
-	html[i++] = "</div>";
-	return html.join("");
+	var subs = {
+		treeName: treeName,
+		expandIconId: expandIconId
+	};
+	return AjxTemplate.expand("com_zimbra_social.templates.Social#CardHeader", subs);
 };
 
-com_zimbra_social.prototype._getFolderHTML =
+SocialZimlet.prototype._getFolderHTML =
 function(folder, expandIconId, childExpandIconId, isSubFolder) {
 	var html = new Array();
 	var i = 0;
@@ -1260,32 +1175,32 @@ function(folder, expandIconId, childExpandIconId, isSubFolder) {
 	}
 	html[i++] = "<div class='DwtTreeItem' id='" + id + "'>";
 
-	html[i++] = "<TABLE width=100% cellpadding=\"0\" cellspacing=\"0\">";
+	html[i++] = "<TABLE width=100% cellpadding='0' cellspacing='0'>";
 	html[i++] = "<TR>";
-	html[i++] = "<TD style=\"width:16px;height:16px\" align='center'>";
+	html[i++] = "<TD style='width:16px;height:16px' align='center'>";
 	if (folder.account.type == "twitter" && folder.type == "ACCOUNT") {
-		html[i++] = "<div class=\"ImgNodeExpanded\" id= '" + childExpandIconId + "'/>";
+		html[i++] = "<div class='ImgNodeExpanded' id= '" + childExpandIconId + "'/>";
 	} else {
 		html[i++] = AjxImg.getImageHtml("Blank_16");
 	}
 	html[i++] = "</TD>";
 	if (isSubFolder) {
-		html[i++] = "<TD style=\"width:16px;height:16px\" align='center'>";
+		html[i++] = "<TD style='width:16px;height:16px' align='center'>";
 		html[i++] = AjxImg.getImageHtml("Blank_16");
 		html[i++] = "</TD>";
 	}
-	html[i++] = "<TD style=\"width:16px;height:16px;padding-right:5px\">";
+	html[i++] = "<TD style='width:16px;height:16px;padding-right:5px'>";
 	html[i++] = AjxImg.getImageHtml(folder.icon);
 	html[i++] = "</TD>";
 	html[i++] = "<TD class='DwtTreeItem-Text' nowrap=''>";
 	html[i++] = folder.name;
 	html[i++] = "</TD>";
-	html[i++] = "<TD style=\"width:16px;height:16px;padding-right:5px\">";
+	html[i++] = "<TD style='width:16px;height:16px;padding-right:5px'>";
 	html[i++] = AjxImg.getImageHtml("Blank_16");
 	html[i++] = "</TD>";
 	if (folder.type == "SEARCH") {
-		html[i++] = "<TD style=\"width:16px;height:16px;padding-right:5px\">";
-		html[i++] = "<div class=\"ImgClearSearch\"/>";
+		html[i++] = "<TD style='width:16px;height:16px;padding-right:5px'>";
+		html[i++] = "<div class='ImgClearSearch'/>";
 		html[i++] = "</TD>";
 	}
 	html[i++] = "</TR>";
@@ -1295,7 +1210,7 @@ function(folder, expandIconId, childExpandIconId, isSubFolder) {
 	return html.join("");
 };
 
-com_zimbra_social.prototype._handleTreeClick =
+SocialZimlet.prototype._handleTreeClick =
 function(ev) {
 	if (AjxEnv.isIE) {
 		ev = window.event;
@@ -1423,7 +1338,7 @@ function(ev) {
 	}
 };
 
-com_zimbra_social.prototype._treeListener =
+SocialZimlet.prototype._treeListener =
 function(ev) {
 	var txt = ev.item._text;
 	if (ev.detail == 1)
@@ -1432,10 +1347,10 @@ function(ev) {
 	this._showStream();
 };
 
-com_zimbra_social.prototype._getShortNameFromName =
+SocialZimlet.prototype._getShortNameFromName =
 function(name) {
-	for (var i = 0; i < com_zimbra_social.folders.length; i++) {
-		var fldr = com_zimbra_social.folders[i];
+	for (var i = 0; i < SocialZimlet.folders.length; i++) {
+		var fldr = SocialZimlet.folders[i];
 		if (fldr.n == name) {
 			return fldr.sn;
 		}
@@ -1443,10 +1358,10 @@ function(name) {
 	return "";
 };
 
-com_zimbra_social.prototype._getIdFromName =
+SocialZimlet.prototype._getIdFromName =
 function(name) {
-	for (var i = 0; i < com_zimbra_social.folders.length; i++) {
-		var fldr = com_zimbra_social.folders[i];
+	for (var i = 0; i < SocialZimlet.folders.length; i++) {
+		var fldr = SocialZimlet.folders[i];
 		if (fldr.n == name) {
 			return fldr.id;
 		}
@@ -1454,7 +1369,7 @@ function(name) {
 	return "";
 };
 
-com_zimbra_social.prototype.showAppView =
+SocialZimlet.prototype.showAppView =
 function() {
 	this.addTwitterSearchWidget();
 	this.app.setContent(this._constructSkin());
@@ -1473,37 +1388,17 @@ function() {
 	this.updateUIWidgets();
 };
 
-com_zimbra_social.prototype.addTwitterSearchWidget =
+SocialZimlet.prototype.addTwitterSearchWidget =
 function() {
-	var html = new Array();
-	var idx = 0;
-	html[idx++] = "<DIV >";
-	html[idx++] = "<TABLE width=100% cellpadding=0 cellspacing=0 valign='middle'><TR>";
-	html[idx++] = "<TD width=16px valign='middle'>";
-	html[idx++] = AjxImg.getImageHtml("Blank_16");
-	html[idx++] = "</TD>";
-	html[idx++] = "<TD  nowrap='' width=220px  valign='left'>";
-	html[idx++] = "<label  valign='middle'  style=\"font-size:14px;color:black;font-weight:bold\" id='social_whatareyoudoingLabel' >What are you doing?";
-	html[idx++] = "</label>";
-	html[idx++] = "</TD>";
-	html[idx++] = "<TD width=16px valign='middle'>";
-	html[idx++] = AjxImg.getImageHtml("Blank_16");
-	html[idx++] = "</TD>";
-	html[idx++] = "<td  width=70% nowrap='' id='social_updateToCell'>";
-	html[idx++] = this._addUpdateToCheckboxes();
-	html[idx++] = "</TD>";
-	html[idx++] = "<TD valign='middle' align='right'>";
-	html[idx++] = "<input   style=\"width:150px;\" type=\"text\" autocomplete=\"off\" id=\"social_searchField\"></input>";
-	html[idx++] = "</TD><TD valign='middle'>";
-	html[idx++] = "<div  valign='middle' id='social_searchButton' />";
-	html[idx++] = "</TD>";
-	html[idx++] = "</TR></TABLE>";
-	html[idx++] = "</DIV>";
+	var subs = {
+		updateCheckBoxesHtml:  this._addUpdateToCheckboxes(),
+		whatAreYouDoingMsg: this.getMessage("whatAreYouDoing")
+	};
 	var toolbar = this.app.getToolbar();
-	toolbar.getHtmlElement().innerHTML = html.join("");
+	toolbar.getHtmlElement().innerHTML =  AjxTemplate.expand("com_zimbra_social.templates.Social#TwitterSearchWidget", subs);
 };
 
-com_zimbra_social.prototype._postToTweetOrFB =
+SocialZimlet.prototype._postToTweetOrFB =
 function(ev) {
 	var event = ev || window.event;
 	if (event.keyCode != undefined && event.keyCode != 13) {//if not enter key
@@ -1521,7 +1416,7 @@ function(ev) {
 		return;
 	}
 	if (message.length > 140) {
-		appCtxt.getAppController().setStatusMsg("More than 140 Characters is not allowed", ZmStatusView.LEVEL_WARNING);
+		appCtxt.getAppController().setStatusMsg(this.getMessage("moreThan140Chars"), ZmStatusView.LEVEL_WARNING);
 		return;
 	}
 
@@ -1536,7 +1431,7 @@ function(ev) {
 		}
 	}
 	if (noAccountSelected) {
-		appCtxt.getAppController().setStatusMsg("Please Select an account to send", ZmStatusView.LEVEL_WARNING);
+		appCtxt.getAppController().setStatusMsg(this.getMessage("pleaseSelectAnAccount"), ZmStatusView.LEVEL_WARNING);
 		return;
 	}
 	if (this.miniDlg.socialMiniDialog && this.miniDlg.socialMiniDialog.isPoppedUp()) {
@@ -1544,10 +1439,9 @@ function(ev) {
 		this.miniDlg.miniDlgON = false;//set this first
 		this.toggleFields();
 	}
-
 };
 
-com_zimbra_social.prototype.createCardView =
+SocialZimlet.prototype.createCardView =
 function(tableId, jsonObj, type) {
 	if (this.miniDlg.miniDlgON)//return if its from miniDlg view
 		return;
@@ -1566,7 +1460,7 @@ function(tableId, jsonObj, type) {
 		return;
 
 	if (jsonObj.length == 0) {
-		document.getElementById(tableId).innerHTML = "<br/><br/><div width=90% align=center><label style=\"color:#0000FF;font-weight:bold;font-size:12px\">No data found</label></div>";
+		document.getElementById(tableId).innerHTML = "<br/><br/><div width=90% align=center><label style='color:#0000FF;font-weight:bold;font-size:12px'>"+this.getMessage("noDataFound")+"</label></div>";
 		return;
 	}
 	for (var k = 0; k < jsonObj.length; k++) {
@@ -1616,10 +1510,10 @@ function(tableId, jsonObj, type) {
 			created_at = obj.created_at;
 			text = " " + obj.text;
 			userId = obj.from_user_id;
-			source = AjxStringUtil.htmlDecode(obj.source).replace(/&quot;/g, "\"");
+			source = AjxStringUtil.htmlDecode(obj.source).replace(/&quot;/g, "'");
 			imageAnchor = "<TD width=48px height=48px align='center' valign='top'> ";
-			imageAnchor = imageAnchor + "<div class='social_accountBg'><a  href=\"http://twitter.com/" + screen_name + "\" target=\"_blank\" style=\"color:white\">";
-			imageAnchor = imageAnchor + "<img height=\"48\" width=\"48\" src=\"" + obj.profile_image_url + "\" />";
+			imageAnchor = imageAnchor + "<div class='social_accountBg'><a  href='http://twitter.com/" + screen_name + "' target='_blank' style='color:white'>";
+			imageAnchor = imageAnchor + "<img height='48' width='48' src='" + obj.profile_image_url + "' />";
 			imageAnchor = imageAnchor + "</a></div>";
 			imageAnchor = imageAnchor + "</td>";
 		} else     if (type == "TWEETMEME") {
@@ -1629,7 +1523,7 @@ function(tableId, jsonObj, type) {
 			source = "tweetmeme";
 			tweetcount = obj.url_count;
 			imageAnchor = "<TD > ";
-			imageAnchor = imageAnchor + "<a  href=\"" + obj.url + "\" target=\"_blank\" style=\"color:gray\">";
+			imageAnchor = imageAnchor + "<a  href='" + obj.url + "' target='_blank' style='color:gray'>";
 			imageAnchor = imageAnchor + "<table><tr>";
 			imageAnchor = imageAnchor + "<td class='social_tweetMemeBg' width=48px height=48px align='center'  valign='middle'>";
 			imageAnchor = imageAnchor + tweetcount + "</td></tr><tr><td class='social_tweetMemeRetweetBg'>retweets</td></tr></table>";
@@ -1642,7 +1536,7 @@ function(tableId, jsonObj, type) {
 			source = "digg";
 			created_at = obj.promote_date;
 			imageAnchor = "<TD  valign='top'>";
-			imageAnchor = imageAnchor + "<a  href=\"" + obj.href + "\" target=\"_blank\" style=\"color:gray\">";
+			imageAnchor = imageAnchor + "<a  href='" + obj.href + "' target='_blank' style='color:gray'>";
 			imageAnchor = imageAnchor + "<div class='social_diggBg'>";
 			imageAnchor = imageAnchor + "<table width=100% cellpadding=0 cellspacing=0><tr><td style='font-size:14px;font-weight:bold' align=center width=100%>" + diggCount + "</td></tr><tr><td align=center valign='middle'  width=100%>diggs</td></tr></tablee></td></tr></table>";
 			imageAnchor = imageAnchor + "</div>";
@@ -1656,14 +1550,14 @@ function(tableId, jsonObj, type) {
 			created_at = obj.created_at;
 			text = " " + obj.text;
 			if (obj.source)
-				source = AjxStringUtil.htmlDecode(obj.source).replace(/&quot;/g, "\"");
+				source = AjxStringUtil.htmlDecode(obj.source).replace(/&quot;/g, "'");
 			else
 				source = "web";
 
 			imageAnchor = "<TD width=48px height=48px align='center'  valign='top'> ";
 			imageAnchor = imageAnchor + "<div class='social_accountBg'>";
-			imageAnchor = imageAnchor + "<a id='" + this._getAccountLinkId(screen_name, tableId) + "' class='FakeAnchor' style=\"color:white\">";
-			imageAnchor = imageAnchor + "<img height=\"48\" width=\"48\" src=\"" + user.profile_image_url + "\" />";
+			imageAnchor = imageAnchor + "<a id='" + this._getAccountLinkId(screen_name, tableId) + "' class='FakeAnchor' style='color:white'>";
+			imageAnchor = imageAnchor + "<img height='48' width='48' src='" + user.profile_image_url + "' />";
 			imageAnchor = imageAnchor + "</a></div>";
 			imageAnchor = imageAnchor + "</td>";
 			notFollowing = user.following == null;
@@ -1689,8 +1583,8 @@ function(tableId, jsonObj, type) {
 			}
 			text = " " + text;
 			imageAnchor = "<TD width=48px height=48px align='center'  valign='top'> ";
-			imageAnchor = imageAnchor + "<div class='social_accountBg'><a href='" + user.url + "' target='_blank' style=\"color:white\">";
-			imageAnchor = imageAnchor + "<img height=\"48\" width=\"48\" src=\"" + user.pic_square + "\" />";
+			imageAnchor = imageAnchor + "<div class='social_accountBg'><a href='" + user.url + "' target='_blank' style='color:white'>";
+			imageAnchor = imageAnchor + "<img height='48' width='48' src='" + user.pic_square + "' />";
 			imageAnchor = imageAnchor + "</a></div>";
 			imageAnchor = imageAnchor + "</td>";
 			notFollowing = user.following == null;
@@ -1699,7 +1593,7 @@ function(tableId, jsonObj, type) {
 			return;
 		}
 		if (source.indexOf("<a ") >= 0) {
-			source = source.replace("<a ", "<a target=\"_blank\" style='font-size:11px;'");
+			source = source.replace("<a ", "<a target='_blank' style='font-size:11px;'");
 		}
 		var parsedDate = "";
 		if (type != "FACEBOOK" && type != "DIGG") {
@@ -1747,10 +1641,10 @@ function(tableId, jsonObj, type) {
 		html[i++] = imageAnchor;
 		html[i++] = "<TD class='social_feedText' width=90%>";
 		if (type != "TWEETMEME" && type != "FACEBOOK") {
-			html[i++] = [" <a href=\"#\" style=\"color:darkblue;font-size:12px;font-weight:bold\" id='", this._getAccountLinkId(screen_name, tableId),
+			html[i++] = [" <a href='#' style='color:darkblue;font-size:12px;font-weight:bold' id='", this._getAccountLinkId(screen_name, tableId),
 				"'>", screen_name, ":</a> "].join("");
 		} else {
-			html[i++] = "<label style=\"color:#262626;font-size:12px;font-weight:bold\">" + screen_name + ": </label>";
+			html[i++] = "<label style='color:#262626;font-size:12px;font-weight:bold'>" + screen_name + ": </label>";
 		}
 		html[i++] = zimletyFiedTxt;
 		html[i++] = "<br/><label style='color:gray;font-size:11px'>&nbsp;" + created_at + "</label><br/>";
@@ -1776,16 +1670,16 @@ function(tableId, jsonObj, type) {
 		}
 
 		html[i++] = "<TR>";
-		html[i++] = "<TD colspan=2 style=\"color:gray\">";
+		html[i++] = "<TD colspan=2 style='color:gray'>";
 		html[i++] = "<table width=100%>";
 		html[i++] = "<TR>";
 		//if(type == "ACCOUNT" && notFollowing){
-		//	html[i++] = "<TD width=85% style=\"color:gray\">";
+		//	html[i++] = "<TD width=85% style='color:gray'>";
 		//}
 		if (type == "TWEETMEME" || type == "DIGG") {
-			html[i++] = "<TD width=95% style=\"color:gray;font-size:11px\">";
+			html[i++] = "<TD width=95% style='color:gray;font-size:11px'>";
 		} else {
-			html[i++] = "<TD width=90% style=\"color:gray;font-size:11px\">";
+			html[i++] = "<TD width=90% style='color:gray;font-size:11px'>";
 		}
 		html[i++] = source.indexOf("via") != -1 ? source : "via " + source;
 		html[i++] = "</td>";
@@ -1804,23 +1698,23 @@ function(tableId, jsonObj, type) {
 			}
 
 			if (this.twitterAccountNames[screen_name]) {
-				html[i++] = "<a href=\"#\" style=\"color:gray;font-size:11px\" id='" + this._gettwitterDeleteLinkId(obj.id, tableId) + "'>delete</a>&nbsp;&nbsp;";
+				html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._gettwitterDeleteLinkId(obj.id, tableId) + "'>delete</a>&nbsp;&nbsp;";
 			}
 		}
 
 		if (type == "ACCOUNT" || type == "SEARCH" || type == "TREND") {
-			html[i++] = "<a href=\"#\" style=\"color:gray;font-size:11px\" id='" + this._gettwitterDMLinkId("d @" + screen_name) + "'>dm</a>&nbsp;&nbsp;";
+			html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._gettwitterDMLinkId("d @" + screen_name) + "'>dm</a>&nbsp;&nbsp;";
 		}
 
-		html[i++] = "<a href=\"#\" style=\"color:gray;font-size:11px\" id='" + this._gettwitterRetweetLinkId("RT @" + screen_name + text) + "'>retweet</a>&nbsp;&nbsp;";
+		html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._gettwitterRetweetLinkId("RT @" + screen_name + text) + "'>retweet</a>&nbsp;&nbsp;";
 
 		if (type != "TWEETMEME" && type != "FACEBOOK" && type != "DIGG") {
-			html[i++] = "<a href=\"#\" style=\"color:gray;font-size:11px\" id='" + this._gettwitterReplyLinkId("@" + screen_name) + "'>reply</a>";
+			html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._gettwitterReplyLinkId("@" + screen_name) + "'>reply</a>";
 		}
 		if (type == "FACEBOOK") {
-			html[i++] = "<a href=\"#\" style=\"color:gray;font-size:11px\" id='" + this._getFBLikeLinkId(obj.post_id, tableId) + "'>like</a>&nbsp;&nbsp;";
+			html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._getFBLikeLinkId(obj.post_id, tableId) + "'>like</a>&nbsp;&nbsp;";
 
-			html[i++] = "<a href=\"#\" style=\"color:gray;font-size:11px\" id='" + this._getFacebookCommentLinkId(obj.post_id, tableId) + "'>comment</a>";
+			html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._getFacebookCommentLinkId(obj.post_id, tableId) + "'>comment</a>";
 		}
 		html[i++] = "</td>";
 		html[i++] = "</TR>";
@@ -1831,8 +1725,8 @@ function(tableId, jsonObj, type) {
 		html[i++] = "</DIV>";
 	}
 	var showOlderMsgsId = Dwt.getNextId();
-	html[i++] = "<br/><div width=80% align=center><a id='" + showOlderMsgsId + "' href=\"#\" style=\"color:#0000FF;font-weight:bold;font-size:12px;display:none\" >";
-	html[i++] = "Click here to see older messages";
+	html[i++] = "<br/><div width=80% align=center><a id='" + showOlderMsgsId + "' href='#' style='color:#0000FF;font-weight:bold;font-size:12px;display:none' >";
+	html[i++] = this.getMessage("clickForOlderMsgs");
 	html[i++] = "</a></div>";
 	document.getElementById(tableId).innerHTML = html.join("");
 	if (type == "SEARCH" || type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
@@ -1856,7 +1750,7 @@ function(tableId, jsonObj, type) {
 };
 
 
-com_zimbra_social.prototype._setCardRowsAsRead =
+SocialZimlet.prototype._setCardRowsAsRead =
 function(rowIdsToMarkAsRead, showOlderMsgsId) {
 	for (var i = 0; i < rowIdsToMarkAsRead.length; i++) {
 		var row = document.getElementById(rowIdsToMarkAsRead[i]);
@@ -1864,7 +1758,7 @@ function(rowIdsToMarkAsRead, showOlderMsgsId) {
 	}
 };
 
-com_zimbra_social.prototype._showCardOlderMsgs =
+SocialZimlet.prototype._showCardOlderMsgs =
 function(rowIdsToMarkAsRead, showOlderItemsLink) {
 	for (var i = 0; i < rowIdsToMarkAsRead.length; i++) {
 		var row = document.getElementById(rowIdsToMarkAsRead[i]);
@@ -1874,7 +1768,7 @@ function(rowIdsToMarkAsRead, showOlderItemsLink) {
 	showOlderItemsLink.style.display = "none";
 };
 
-com_zimbra_social.prototype._getAdditionalFBMessageInfo =
+SocialZimlet.prototype._getAdditionalFBMessageInfo =
 function(obj, account) {
 	var html = new Array();
 	var i = 0;
@@ -1934,20 +1828,20 @@ function(obj, account) {
 					html[i++] = "<object type='application/x-shockwave-flash' style='width:100%; height:350px;' data='" + media.src + "'><param name='movie' value='" + media.src + "' /></object>";
 				} else {
 					if(media.type == "link"){
-						html[i++] = "<a  href=\"" + media.href + "\" target=\"_blank\" >Open external link</a>";
+						html[i++] = "<a  href='" + media.href + "' target='_blank' >Open external link</a>";
 					} else if(media.type == "video" && vid!=""){
-						html[i++] = "<object width=\"100%\" height=\"224\" >";
-						html[i++] = "<param name=\"allowfullscreen\" value=\"true\" />";
-						html[i++] = "<param name=\"allowscriptaccess\" value=\"always\" />";
-						html[i++] = "<param name=\"movie\" value=\"http://www.facebook.com/v/"+vid+"\" />";
-						html[i++] = "<embed src=\"http://www.facebook.com/v/"+vid+"\" type=\"application/x-shockwave-flash\"";
-						html[i++] = "allowscriptaccess=\"always\" allowfullscreen=\"true\" width=\"100%\" height=\"224\">";
+						html[i++] = "<object width='100%' height='224' >";
+						html[i++] = "<param name='allowfullscreen' value='true' />";
+						html[i++] = "<param name='allowscriptaccess' value='always' />";
+						html[i++] = "<param name='movie' value='http://www.facebook.com/v/"+vid+"' />";
+						html[i++] = "<embed src='http://www.facebook.com/v/"+vid+"' type='application/x-shockwave-flash'";
+						html[i++] = "allowscriptaccess='always' allowfullscreen='true' width='100%' height='224'>";
 						html[i++] = "</embed>";
 						html[i++] = "</object>";
 					} else if(media.type == "video" && vid==""){
-						html[i++] = "<a  href=\"" + media.href + "\" target=\"_blank\" >Open external link</a>";					
+						html[i++] = "<a  href='" + media.href + "' target='_blank' >"+this.getMessage("openExternalLink")+"</a>";					
 					} else {
-						html[i++] = "<img width='100px' height='100px' SRC=\""+media.src+"\" />";
+						html[i++] = "<img width='100px' height='100px' SRC='"+media.src+"' />";
 					}
 
 				}
@@ -1971,7 +1865,7 @@ function(obj, account) {
 
 			html[i++] = "<TD valign='top'>";
 			if (attachment.name && attachment.href && media.type == "link" && medias.length == 1) {
-				html[i++] = "<a  href=\"" + attachment.href + "\" target='_blank'>";
+				html[i++] = "<a  href='" + attachment.href + "' target='_blank'>";
 				html[i++] = attachment.name;
 				html[i++] = "</a>";
 				html[i++] = "<br/>";
@@ -1997,19 +1891,19 @@ function(obj, account) {
 	if (obj.likes.count > 0) {
 		html[i++] = "<table width=100% cellpadding=1 cellspacing=1><tr><td align='center'>";
 		html[i++] = "<tr>";
-		html[i++] = "<TD style=\"width:16px;height:16px\" align='center'>";
+		html[i++] = "<TD style='width:16px;height:16px' align='center'>";
 		html[i++] = AjxImg.getImageHtml("Blank_16");
 		html[i++] = "</TD>";
 		html[i++] = "<TD>";
 		html[i++] = "<DIV class='social_FBCommentRow'>";
 		if (obj.likes.count == 1) {
-			html[i++] = "<a  href=\"" + obj.likes.href + "\" target=\"_blank\">1 person</a> likes this";
+			html[i++] = "<a  href='" + obj.likes.href + "' target='_blank'>1 person</a> likes this";
 		} else {
-			html[i++] = "<a  href=\"" + obj.likes.href + "\" target=\"_blank\">" + obj.likes.count + " people</a> like this";
+			html[i++] = "<a  href='" + obj.likes.href + "' target='_blank'>" + obj.likes.count + " people</a> like this";
 		}
 		html[i++] = "</div>";
 		html[i++] = "</td>";
-		html[i++] = "<TD style=\"width:16px;height:16px\" align='center'>";
+		html[i++] = "<TD style='width:16px;height:16px' align='center'>";
 		html[i++] = AjxImg.getImageHtml("Blank_16");
 		html[i++] = "</TD>";
 		html[i++] = "</tr></table>";
@@ -2030,7 +1924,7 @@ function(obj, account) {
 		return {html:"<BR/>" + str, commentBoxId:commentBoxId};
 };
 
-com_zimbra_social.prototype._getCommentsHtml =
+SocialZimlet.prototype._getCommentsHtml =
 function(comments, totlCmnts, postId, divId, account) {
 	var html = new Array();
 	var i = 0;
@@ -2047,7 +1941,7 @@ function(comments, totlCmnts, postId, divId, account) {
 		var profile = this.facebook._getFacebookProfile(comment.fromid);
 		html[i++] = "<table width=100% cellpadding=1 cellspacing=1>";
 		html[i++] = "<tr>";
-		html[i++] = "<TD style=\"width:16px;height:16px\" align='center'>";
+		html[i++] = "<TD style='width:16px;height:16px' align='center'>";
 		html[i++] = AjxImg.getImageHtml("Blank_16");
 		html[i++] = "</TD>";
 		html[i++] = "<TD>";
@@ -2057,20 +1951,20 @@ function(comments, totlCmnts, postId, divId, account) {
 		html[i++] = "<TD width=32px valign='top'>";
 		html[i++] = "<div width=32px height=32px  align='center' class='social_accountBg'> ";
 		var pUrl = profile.url ? profile.url : profile.profile_url;
-		html[i++] = "<a  href=\"" + pUrl + "\" target=\"_blank\" style='color: white;'>";
-		html[i++] = "<img height=\"32\" width=\"32\" src=\"" + profile.pic_square + "\" />";
+		html[i++] = "<a  href='" + pUrl + "' target='_blank' style='color: white;'>";
+		html[i++] = "<img height='32' width='32' src='" + profile.pic_square + "' />";
 		html[i++] = "</a>";
 		html[i++] = "</div>";
 		html[i++] = "</TD><TD class='social_fbcommentText'>";
 		//pass it through zimlets to get url, phone, emoticons etc
 		this._zimletDiv.innerHTML = comment.text;
 		this._objectManager.findObjectsInNode(this._zimletDiv);
-		html[i++] = this._zimletDiv.innerHTML + "<br><label  style=\"color:gray;font-size:11px\"> - " + profile.name + "</label>";
+		html[i++] = this._zimletDiv.innerHTML + "<br><label  style='color:gray;font-size:11px'> - " + profile.name + "</label>";
 		html[i++] = "</TD></TR>";
 		html[i++] = "</TABLE>";
 		html[i++] = "</DIV>";
 		html[i++] = "</TD>";
-		html[i++] = "<TD style=\"width:16px;height:16px\" align='center'>";
+		html[i++] = "<TD style='width:16px;height:16px' align='center'>";
 		html[i++] = AjxImg.getImageHtml("Blank_16");
 		html[i++] = "</TD>";
 		html[i++] = "</TR>";
@@ -2080,15 +1974,15 @@ function(comments, totlCmnts, postId, divId, account) {
 		var moreCommentsLinkId = this._getFacebookMoreCommentsLinkId(postId, divId, account);
 		html[i++] = "<table width=100% cellpadding=1 cellspacing=1><tr><td>";
 		html[i++] = "<tr>";
-		html[i++] = "<TD style=\"width:16px;height:16px\" align='center'>";
+		html[i++] = "<TD style='width:16px;height:16px' align='center'>";
 		html[i++] = AjxImg.getImageHtml("Blank_16");
 		html[i++] = "</TD>";
 		html[i++] = "<TD>";
 		html[i++] = "<DIV class='social_FBCommentRow'>";
-		html[i++] = ["<a  href=\"#\" id='", moreCommentsLinkId, "'>See all ", totlCmnts, " comments</a>"].join("");
+		html[i++] = ["<a  href='#' id='", moreCommentsLinkId, "'>See all ", totlCmnts, " comments</a>"].join("");
 		html[i++] = "</div>";
 		html[i++] = "</td>";
-		html[i++] = "<TD style=\"width:16px;height:16px\" align='center'>";
+		html[i++] = "<TD style='width:16px;height:16px' align='center'>";
 		html[i++] = AjxImg.getImageHtml("Blank_16");
 		html[i++] = "</TD>";
 		html[i++] = "</tr></table>";
@@ -2097,69 +1991,69 @@ function(comments, totlCmnts, postId, divId, account) {
 
 };
 
-com_zimbra_social.prototype._gettwitterRetweetLinkId =
+SocialZimlet.prototype._gettwitterRetweetLinkId =
 function(rt) {
 	var id = "social_retweetLink_" + Dwt.getNextId();
 	this._allReweetLinks[id] = {hasHandler:false, rt:rt};
 	return id;
 };
 
-com_zimbra_social.prototype._gettwitterDMLinkId =
+SocialZimlet.prototype._gettwitterDMLinkId =
 function(dm) {
 	var id = "social_DMLink_" + Dwt.getNextId();
 	this._allDMLinks[id] = {hasHandler:false, dm:dm};
 	return id;
 };
 
-com_zimbra_social.prototype._gettwitterDeleteLinkId =
+SocialZimlet.prototype._gettwitterDeleteLinkId =
 function(postId, tableId) {
 	var id = "social_twitterDeleteLink_" + Dwt.getNextId();
 	this._allTwitterDeleteLinks[id] = {hasHandler:false, account:this.tableIdAndAccountMap[tableId], tableId:tableId, postId:postId};
 	return id;
 };
-com_zimbra_social.prototype._getAccountLinkId =
+SocialZimlet.prototype._getAccountLinkId =
 function(screen_name, tableId) {
 	var id = "social_accountsLink_" + Dwt.getNextId();
 	this._allAccountsLinks[id] = {hasHandler:false, tableId:tableId, screen_name:screen_name};
 	return id;
 };
 
-com_zimbra_social.prototype._getFacebookCommentLinkId =
+SocialZimlet.prototype._getFacebookCommentLinkId =
 function(postId, tableId) {
 	var id = "social_FaceBookCommentLink_" + Dwt.getNextId();
 	this._allFacebookCommentsLinks[id] = {hasHandler:false, tableId:tableId, postId:postId};
 	return id;
 };
 
-com_zimbra_social.prototype._getFBLikeLinkId =
+SocialZimlet.prototype._getFBLikeLinkId =
 function(postId, tableId) {
 	var id = "social_FBLikeLink_" + Dwt.getNextId();
 	this._allFBLikeLinks[id] = {hasHandler:false, tableId:tableId, account:this.tableIdAndAccountMap[tableId], postId:postId};
 	return id;
 };
 
-com_zimbra_social.prototype._getFacebookMoreCommentsLinkId =
+SocialZimlet.prototype._getFacebookMoreCommentsLinkId =
 function(postId, divId, account) {
 	var id = "social_FBMoreCommentsLink_" + Dwt.getNextId();
 	this._allFBMoreCommentsLinks[id] = {hasHandler:false, postId:postId, divId:divId, account:account};
 	return id;
 };
 
-com_zimbra_social.prototype._gettwitterReplyLinkId =
+SocialZimlet.prototype._gettwitterReplyLinkId =
 function(reply) {
 	var id = "social_replyLink_" + Dwt.getNextId();
 	this._allReplyLinks[id] = {hasHandler:false, reply:reply};
 	return id;
 };
 
-com_zimbra_social.prototype._gettwitterFollowLinkId =
+SocialZimlet.prototype._gettwitterFollowLinkId =
 function(userId, tableId) {
 	var id = "social_followLink_" + Dwt.getNextId();
 	this._allFollowLinks[id] = {hasHandler:false, userId:userId, tableId:tableId};
 	return id;
 };
 
-com_zimbra_social.prototype._addRetweetLinkHandlers =
+SocialZimlet.prototype._addRetweetLinkHandlers =
 function() {
 	for (var id in this._allReweetLinks) {
 		var obj = this._allReweetLinks[id];
@@ -2169,7 +2063,7 @@ function() {
 		}
 	}
 };
-com_zimbra_social.prototype._addDMLinkHandlers =
+SocialZimlet.prototype._addDMLinkHandlers =
 function() {
 	for (var id in this._allDMLinks) {
 		var obj = this._allDMLinks[id];
@@ -2179,7 +2073,7 @@ function() {
 		}
 	}
 };
-com_zimbra_social.prototype._addTwitterDeleteLinkHandlers =
+SocialZimlet.prototype._addTwitterDeleteLinkHandlers =
 function() {
 	for (var id in this._allTwitterDeleteLinks) {
 		var obj = this._allTwitterDeleteLinks[id];
@@ -2190,7 +2084,7 @@ function() {
 	}
 };
 
-com_zimbra_social.prototype._addFbCommentLinkHandlers =
+SocialZimlet.prototype._addFbCommentLinkHandlers =
 function() {
 	for (var id in this._allFacebookCommentsLinks) {
 		var obj = this._allFacebookCommentsLinks[id];
@@ -2201,7 +2095,7 @@ function() {
 	}
 };
 
-com_zimbra_social.prototype._addFbPostLikeLinkHandlers =
+SocialZimlet.prototype._addFbPostLikeLinkHandlers =
 function() {
 	for (var id in this._allFBLikeLinks) {
 		var obj = this._allFBLikeLinks[id];
@@ -2212,7 +2106,7 @@ function() {
 	}
 };
 
-com_zimbra_social.prototype._addFbMoreCommentLinkHandlers =
+SocialZimlet.prototype._addFbMoreCommentLinkHandlers =
 function() {
 	for (var id in this._allFBMoreCommentsLinks) {
 		var obj = this._allFBMoreCommentsLinks[id];
@@ -2223,7 +2117,7 @@ function() {
 	}
 };
 
-com_zimbra_social.prototype._addReplyLinkHandlers =
+SocialZimlet.prototype._addReplyLinkHandlers =
 function() {
 	for (var id in this._allReplyLinks) {
 		var obj = this._allReplyLinks[id];
@@ -2234,7 +2128,7 @@ function() {
 	}
 };
 
-com_zimbra_social.prototype._addAccountLinkHandlers =
+SocialZimlet.prototype._addAccountLinkHandlers =
 function() {
 	for (var id in this._allAccountsLinks) {
 		var obj = this._allAccountsLinks[id];
@@ -2245,7 +2139,7 @@ function() {
 	}
 };
 
-com_zimbra_social.prototype._addHashHandlers =
+SocialZimlet.prototype._addHashHandlers =
 function() {
 	for (var id in this._allHashLinks) {
 		var obj = this._allHashLinks[id];
@@ -2256,13 +2150,13 @@ function() {
 	}
 };
 
-com_zimbra_social.prototype._handleHashLinks =
+SocialZimlet.prototype._handleHashLinks =
 function(query) {
 	document.getElementById("social_searchField").value = query;
 	this._twitterSearchBtnListener();
 };
 
-com_zimbra_social.prototype._replaceHash =
+SocialZimlet.prototype._replaceHash =
 function(text) {
 	var re = /([^a-zA-Z0-9_-]#[a-zA-Z0-9_-]+)/gm;
 	var newStr = "";
@@ -2272,7 +2166,7 @@ function(text) {
 		var end = re.lastIndex;
 		var part = text.substring(start, end);
 		var id = "social_hashlink_" + Dwt.getNextId();
-		var url = ["<a  href=\"#\" id='", id, "'>", word, "</a>"].join("");
+		var url = ["<a  href='#' id='", id, "'>", word, "</a>"].join("");
 		newStr = newStr + part.replace(word, url);
 		this._allHashLinks[id] = {hasHandler:false, word:word};
 		start = end;
@@ -2285,7 +2179,7 @@ function(text) {
 
 };
 
-com_zimbra_social.prototype._replaceAt =
+SocialZimlet.prototype._replaceAt =
 function(text, userId, tableId, screen_name) {
 	var re = /([^a-zA-Z0-9_-]@[a-zA-Z0-9_-]+)/gm;
 	var newStr = "";
@@ -2295,7 +2189,7 @@ function(text, userId, tableId, screen_name) {
 		var end = re.lastIndex;
 		var part = text.substring(start, end);
 		var id = this._getAccountLinkId(AjxStringUtil.trim(word.replace("@", "")), tableId);
-		var url = ["<a  href=\"#\" id='", id, "'>", word, "</a>"].join("");
+		var url = ["<a  href='#' id='", id, "'>", word, "</a>"].join("");
 		newStr = newStr + part.replace(word, url);
 		start = end;
 	}
@@ -2306,23 +2200,23 @@ function(text, userId, tableId, screen_name) {
 	return newStr + extraStr;
 };
 
-com_zimbra_social.prototype.addRetweetText = function(rt) {
+SocialZimlet.prototype.addRetweetText = function(rt) {
 	this.isTextPasted = true;
 	this.addReplyText(rt);
 	this.isTextPasted = false;
 };
-com_zimbra_social.prototype.addDMText = function(dm) {
+SocialZimlet.prototype.addDMText = function(dm) {
 	this.addReplyText(dm);
 };
 
-com_zimbra_social.prototype.displayFbCommentWidget = function(params) {
+SocialZimlet.prototype.displayFbCommentWidget = function(params) {
 
 	var html = new Array();
 	var i = 0;
 	var commentBtnId = "social_fbcommentbtn_" + Dwt.getNextId();
 	var commentFieldId = "social_fbcommentField_" + Dwt.getNextId();
 	var commentBoxId = this._FBPostIdAndCommentboxMap[params.postId];
-	html[i++] = "<Textarea column=40 rows=\"5\" cols=\"20\" id='" + commentFieldId + "' style=\"width: 90%;height:30px;border:1px solid #BDC7D8;color:gray\">write a comment...</TextArea><BR/>";
+	html[i++] = "<Textarea column=40 rows='5' cols='20' id='" + commentFieldId + "' style='width: 90%;height:30px;border:1px solid #BDC7D8;color:gray'>"+this.getMessage("writeAComment")+"</TextArea><BR/>";
 	html[i++] = "<div  align=center id='" + commentBtnId + "' />";
 
 	var div = document.getElementById(commentBoxId);
@@ -2335,7 +2229,7 @@ com_zimbra_social.prototype.displayFbCommentWidget = function(params) {
 	this.addFbCommentsHandlers(params);
 };
 
-com_zimbra_social.prototype.addFbCommentsHandlers = function(params) {
+SocialZimlet.prototype.addFbCommentsHandlers = function(params) {
 	var btn = new DwtButton({parent:this.getShell()});
 	btn.setText("comment");
 	btn.setImage("social_facebookIcon");
@@ -2347,27 +2241,27 @@ com_zimbra_social.prototype.addFbCommentsHandlers = function(params) {
 	field.onblur = AjxCallback.simpleClosure(this._handleAddCommentField, this, params);
 };
 
-com_zimbra_social.prototype._handleAddCommentField = function(params, ev) {
+SocialZimlet.prototype._handleAddCommentField = function(params, ev) {
 	var event = ev || window.event;
 
 	var field = params.field;
-	if (field.value == "write a comment...") {
+	if (field.value == this.getMessage("writeAComment")) {
 		field.value = "";
 		field.style.color = "black";
 	}
-	if (event.type == "blur" && field.value == "" || field.value == "write a comment...") {
+	if (event.type == "blur" && field.value == "" || field.value == this.getMessage("writeAComment")) {
 		document.getElementById(params.commentBoxId).style.display = "none";
 	}
 };
 
-com_zimbra_social.prototype.addReplyText = function(val) {
+SocialZimlet.prototype.addReplyText = function(val) {
 	var statusField = this.updateField;
 	statusField.value = val + " ";//allow a space
 	statusField.focus();
 	this.showNumberOfLetters();
 };
 
-com_zimbra_social.prototype.getAllAccountsAsString = function() {
+SocialZimlet.prototype.getAllAccountsAsString = function() {
 	var str = "";
 	for (var accntId in this.allAccounts) {
 		var accnt = this.allAccounts[accntId];
@@ -2392,7 +2286,7 @@ com_zimbra_social.prototype.getAllAccountsAsString = function() {
 	return str;
 };
 
-com_zimbra_social.prototype.loadAllAccountsFromDB = function() {
+SocialZimlet.prototype.loadAllAccountsFromDB = function() {
 	var allAccnts = this.getUserProperty("social_AllTwitterAccounts");
 	if (allAccnts == "" || allAccnts == undefined) {
 		return;
@@ -2408,7 +2302,7 @@ com_zimbra_social.prototype.loadAllAccountsFromDB = function() {
 	}
 };
 
-com_zimbra_social.prototype._updateAllWidgetItems =
+SocialZimlet.prototype._updateAllWidgetItems =
 function(params) {
 	if (params.updateSearchTree) {
 		this.tSearchFolders = new Array();
@@ -2448,7 +2342,7 @@ function(params) {
 				this.systemFolders.push({name:account.name, icon:"social_facebookIcon",  account:account, type:"FACEBOOK"});
 			}
 		}
-		this.systemFolders.push({name:"Add/Remove Accounts", icon:"Group", account:"", type:"MANAGE_ACCOUNTS"});
+		this.systemFolders.push({name:this.getMessage("addRemoveAccounts", icon:"Group", account:"", type:"MANAGE_ACCOUNTS"});
 		//this.systemFolders.push({name:"Zimlet Preferences", icon:"Preferences", account:"", type:"PREFERENCES"});
 	}
 	if (params.updateSearchTree || params.updateSystemTree || params.updateTrendsTree || params.updateTweetMemeTree || params.updateDiggTree) {
@@ -2504,7 +2398,7 @@ function(params) {
 	}
 };
 
-com_zimbra_social.prototype._sortAndMergeAccountsAndSearches =
+SocialZimlet.prototype._sortAndMergeAccountsAndSearches =
 function() {
 	var simpleArry = [];
 	if (!this.accountsWithPositions) {
@@ -2534,7 +2428,7 @@ function social_sortAccounts(a, b) {
 	return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 }
 
-com_zimbra_social.prototype._showWarningMsg = function(message) {
+SocialZimlet.prototype._showWarningMsg = function(message) {
 	var style = DwtMessageDialog.WARNING_STYLE;
 	var dialog = appCtxt.getMsgDialog();
 	this.warningDialog = dialog;
@@ -2542,7 +2436,7 @@ com_zimbra_social.prototype._showWarningMsg = function(message) {
 	dialog.popup();
 };
 
-com_zimbra_social.prototype.openCenteredWindow =
+SocialZimlet.prototype.openCenteredWindow =
 function (url) {
 	var width = 800;
 	var height = 600;

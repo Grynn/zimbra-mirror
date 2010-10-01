@@ -62,7 +62,7 @@ function(params, response) {
 	var text = response.text;
 	if (!response.success) {
 		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg("Digg Error: " + text, ZmStatusView.LEVEL_WARNING, null, transitions);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("diggError") + text, ZmStatusView.LEVEL_WARNING, null, transitions);
 		return;
 	}
 	var jsonObj = eval("(" + text + ")");
