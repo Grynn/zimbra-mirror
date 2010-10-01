@@ -34,9 +34,11 @@ var AttachContactsZimlet = com_zimbra_attachcontacts_HandlerObject;
 AttachContactsZimlet.SEND_CONTACTS = "SEND_CONTACTS_IN_EMAIL";
 
 AttachContactsZimlet.prototype.init = function() {
-	this._op = ZmOperation.registerOp(AttachContactsZimlet.SEND_CONTACTS, {image:"MsgStatusSent", textKey:"forward", tooltip:this.getMessage("ACZ_SendContactsAsAttachments")});
+	this._op = ZmOperation.registerOp(AttachContactsZimlet.SEND_CONTACTS, {image:"MsgStatusSent", text:this.getMessage("ACZ_Send"), tooltip:this.getMessage("ACZ_SendContactsAsAttachments")});
 	this._contactSendListener = new AjxListener(this, this._contactListSendListener);
 	this.overrideAPI(ZmListController.prototype, "_setContactText", this._setContactText);
+
+	this.setEmailActionMenu();
 };
 
 /**
@@ -134,7 +136,7 @@ AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, 
 		var op = AttachContactsZimlet.SEND_CONTACTS;
 		var opData = AjxUtil.hashCopy(ZmOperation.SETUP[op]);
 		opData.index = buttonIndex;
-		opData.text = ZmMsg[ZmOperation.getProp(op, "textKey")];
+		opData.text = this.getMessage("ACZ_Send");
 		var btn = toolbar.createOp(op, opData);
 		btn.addSelectionListener(this._contactSendListener);
 	}
@@ -159,7 +161,7 @@ AttachContactsZimlet.prototype._openCompose = function() {
 	var msg = new ZmMailMsg();
 	AjxDispatcher.run("Compose", {action: action, inNewWindow: false, msg: msg});
 	var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
-	this._isDraftInitiatedByThisZimlet = true;   //set this to true
+	this._isDraftInitiatedByThisZimlet = true;
 	controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL);
 };
 
@@ -169,7 +171,7 @@ AttachContactsZimlet.prototype._openCompose = function() {
 AttachContactsZimlet.prototype._setContactText =
 function(isContact) {
 	if (this._participantActionMenu) {
-		this._participantActionMenu.enable(AttachContactsZimlet.SEND_CONTACTS, isContact);
+		this._participantActionMenu.enable(AttachContactsZimlet.SEND_CONTACTS, isContact); // Set enabled/disabled depending on whether we have a contact for the participant
 	}
 	arguments.callee.func.apply(this, arguments); // Call overridden function
 };
@@ -190,13 +192,18 @@ function(controller, menu) {
  */
 AttachContactsZimlet.prototype.onActionMenuInitialized =
 function(controller, menu) {
-	this.addMenuButton(controller, menu, ZmOperation.CONTACT);
+	this.addMenuButton(new AjxCallback(this, this._getContactFromController, [controller]), menu, ZmOperation.CONTACT);
 };
 
 AttachContactsZimlet.prototype._addContactActionMenuItem =
 function() {
 	var controller = appCtxt.getApp(ZmApp.CONTACTS).getContactListController();
-	this.addMenuButton(controller, controller.getActionMenu(), ZmOperation.CONTACT);
+	this.addMenuButton(new AjxCallback(this, this._getContactFromController, [controller]), controller.getActionMenu(), ZmOperation.CONTACT);
+};
+
+AttachContactsZimlet.prototype._getContactFromController =
+function(controller) {
+	return (controller && controller._actionEv && controller._actionEv.contact) || null;
 };
 
 /**
@@ -204,8 +211,8 @@ function() {
  * @param {ZmMsgController} controller
  * @param {object} menu  Menu object
  */
-AttachContactsZimlet.prototype.addMenuButton = function(controller, menu, after) {
-	if (!menu.getMenuItem(AttachContactsZimlet.SEND_CONTACTS)) {
+AttachContactsZimlet.prototype.addMenuButton = function(contactCallback, menu, after) {
+	if (contactCallback && menu && !menu.getMenuItem(AttachContactsZimlet.SEND_CONTACTS)) {
 		var index = null;
 		if (AjxUtil.isString(after)) {
 			var afterItem = menu.getMenuItem(after);
@@ -215,26 +222,23 @@ AttachContactsZimlet.prototype.addMenuButton = function(controller, menu, after)
 		} else if (AjxUtil.isNumber(after)) {
 			index = after;
 		}
-		if (index !== null) {
+		if (!after || index !== null) {
 			var op = {
 				id:			AttachContactsZimlet.SEND_CONTACTS,
 				text:		this.getMessage("ACZ_SendContact"),
-				image:		"MsgStatusSent",
-				index:		index+1
+				image:		"MsgStatusSent"
 			};
+			if (index!==null)
+				op.index = index+1;
 			var opDesc = ZmOperation.defineOperation(null, op);
 			menu.addOp(AttachContactsZimlet.SEND_CONTACTS);
-			menu.addSelectionListener(AttachContactsZimlet.SEND_CONTACTS, new AjxListener(this, this._contactActionMenuListener, controller));
+			menu.addSelectionListener(AttachContactsZimlet.SEND_CONTACTS, new AjxListener(this, this._contactActionMenuListener, contactCallback));
 		}
 	}
 };
 
-ZmZimletBase.prototype.onMsgView = function(msg, oldMsg) {
-console.log("ZmZimletBase.prototype.onMsgView",arguments);
-};
-
-AttachContactsZimlet.prototype._contactActionMenuListener = function(controller, ev) {
-	var contact = controller._actionEv.contact;
+AttachContactsZimlet.prototype._contactActionMenuListener = function(contactCallback, ev) {
+	var contact = contactCallback.run();
 	if (contact) {
 		this.contactIdsToAttach = [contact.id];
 		this._openCompose();
@@ -252,3 +256,26 @@ AttachContactsZimlet.prototype.overrideAPI = function(object, funcname, newfunc)
         object[funcname].func = oldfunc;
     }
 };
+
+//---------------------------------------------------
+
+/**
+ * Try to add to add to the actionmenu provided by com_zimbra_email
+ */
+AttachContactsZimlet.prototype.setEmailActionMenu = function() {
+	if (window.com_zimbra_email_handlerObject) { // Other zimlet exists
+		this.overrideAPI(com_zimbra_email_handlerObject.prototype, "getActionMenu", AjxCallback.simpleClosure(AttachContactsZimlet._getEmailActionMenu, null, this));
+	}
+};
+
+/**
+ * Will override EmailTooltipZimlet.prototype.getActionMenu in com_zimbra_email
+ */
+AttachContactsZimlet._getEmailActionMenu = function(attachContactsZimlet) {
+	var args = Array.prototype.slice.call(arguments, 1); // Cut off our own argument
+	var menu = this.getActionMenu.func.apply(this, args); // Call overridden function
+	var contactCallback = new AjxCallback(this, this._getActionedContact, [false]); // Callback to method in com_zimbra_email
+	attachContactsZimlet.addMenuButton(contactCallback, menu, "NEWCONTACT");
+	return menu;
+};
+
