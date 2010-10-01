@@ -46,6 +46,10 @@
 	<property name="common.classes.dir" location="${common.dir}/build/classes" />
 	<property name="common.jars.dir" location="${common.dir}/jars" />
 
+    <property name="soap.dir" location="../ZimbraSoap"/>
+    <property name="soap.build.dir" location="${soap.dir}/build"/>
+    <property name="soap.classes.dir" location="${soap.build.dir}/classes"/>
+
 	<property name="im.dir" location="../ZimbraIM" />
 	<property name="im.jars.dir" location="${im.dir}/jars" />
 	<property name="im.classes.dir" location="${im.dir}/build/classes" />
@@ -153,6 +157,7 @@
 
 	<path id="offline.class.path">
 		<pathelement location="${common.classes.dir}" />
+		<pathelement location="${soap.classes.dir}" />
 		<pathelement location="${build.classes.dir}" />
 		<pathelement location="${server.classes.dir}" />
 		<fileset dir="${common.jars.dir}">
@@ -1089,6 +1094,7 @@
 		<pathelement path="${dist.dir}/jetty/resources" />
 		<fileset dir="${common.jars.dir}" includes="*.jar"/>
 		<fileset dir="${common.build.dir}" includes="zimbracommon.jar"/>
+		<fileset dir="${soap.build.dir}" includes="zimbrasoap.jar"/>
 		<fileset dir="${server.build.dir}" includes="zimbrastore.jar"/>
 		<fileset dir="${taglib.build.dir}" includes="zimbrataglib.jar"/>
 		<fileset dir="${webclient.jars.dir}" includes="standard.jar,servlet-api.jar"/>
