@@ -11,6 +11,7 @@ import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
+import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.ImportStatus;
 
@@ -22,6 +23,7 @@ public class BulkIMAPImportTaskManager {
     private static HashMap<String, Queue<HashMap<taskKeys, String>>> importQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
     private static HashMap<String, Queue<HashMap<taskKeys, String>>> runningQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
     private static HashMap<String, Queue<HashMap<taskKeys, String>>> finishedQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
+    private static HashMap<String, Queue<HashMap<taskKeys, String>>> failedQueues = new HashMap<String, Queue<HashMap<taskKeys, String>>>();
 
     private static int MAX_THREADS = 10;
 
@@ -66,7 +68,13 @@ public class BulkIMAPImportTaskManager {
             return finishedQueues.get(adminID);
         }
     }    
-    
+
+    public static Queue<HashMap<taskKeys, String>> getFailedQueue(String adminID) {
+        synchronized (failedQueues) {
+            return failedQueues.get(adminID);
+        }
+    }        
+
     public static void purgeQueue(String adminID) throws BulkProvisionException, ServiceException {
         synchronized (importQueues) {
             if (!importQueues.containsKey(adminID)) {
@@ -76,11 +84,23 @@ public class BulkIMAPImportTaskManager {
             importQueues.remove(adminID);            
         }   
         synchronized (finishedQueues) {
-            if (importQueues.containsKey(adminID)) {
+            if (finishedQueues.containsKey(adminID)) {
                 cleanTaskQueue(finishedQueues.get(adminID));
                 finishedQueues.remove(adminID);
             }
-        }        
+        }
+        synchronized (runningQueues) {
+            if (runningQueues.containsKey(adminID)) {
+                cleanTaskQueue(runningQueues.get(adminID));
+                runningQueues.remove(adminID);
+            }
+        }
+        synchronized (failedQueues) {
+            if (failedQueues.containsKey(adminID)) {
+                cleanTaskQueue(failedQueues.get(adminID));
+                failedQueues.remove(adminID);
+            }
+        }          
     }
     
     /**
@@ -95,16 +115,22 @@ public class BulkIMAPImportTaskManager {
                     String accountID = task.get(taskKeys.accountID);
                     String dataSourceID = task.get(taskKeys.dataSourceID);
                     if (accountID == null) {
-                        ZimbraLog.extensions.error("Error in IMAP import task", BulkProvisionException.EMPTY_ACCOUNT_ID());
+                        ZimbraLog.extensions.error("Error while cleaning IMAP import task queue.", BulkProvisionException.EMPTY_ACCOUNT_ID());
                         continue;
                     }
                     if (dataSourceID == null) {
-                        ZimbraLog.extensions.error("Error in IMAP import task", BulkProvisionException.EMPTY_DATASOURCE_ID());
+                        ZimbraLog.extensions.error("Error while cleaning IMAP import task queue.", BulkProvisionException.EMPTY_DATASOURCE_ID());
                         continue;
                     }   
                     Account acct = Provisioning.getInstance().getAccountById(accountID);
-                    DataSourceManager.deleteManaged(accountID, dataSourceID);
-                    Provisioning.getInstance().deleteDataSource(acct, dataSourceID);
+                    try {
+                        DataSourceManager.deleteManaged(accountID, dataSourceID);
+                        Provisioning.getInstance().deleteDataSource(acct, dataSourceID);
+                    } catch (AccountServiceException ex) {
+                        if(!AccountServiceException.NO_SUCH_DATA_SOURCE.equalsIgnoreCase(ex.getCode())) {
+                            ZimbraLog.extensions.error("Error while cleaning IMAP import task queue.", ex);
+                        }
+                    }
                 }
             }
         } 
@@ -152,7 +178,7 @@ public class BulkIMAPImportTaskManager {
                 finishedList = finishedQueues.get(queueKey);
                 if(finishedList == null) {
                     finishedList = new LinkedList<HashMap<taskKeys, String>>();
-                    finishedQueues.put(queueKey, lst);
+                    finishedQueues.put(queueKey, finishedList);
                 }
             }
             if (lst == null) {
@@ -196,11 +222,22 @@ public class BulkIMAPImportTaskManager {
                     finishedTask.put(taskKeys.dataSourceID,dataSourceID);
                     synchronized(finishedList) {
                         finishedList.add(finishedTask);
-                    }
+                    }                    
                 } catch (ServiceException e) {
                     ZimbraLog.extensions.error("Error in IMAP import task", e);
-                    return;
-                }
+                    synchronized (failedQueues) {
+                        Queue<HashMap<taskKeys, String>> failedList = failedQueues.get(queueKey);
+                        if(failedList == null) {
+                            failedList = new LinkedList<HashMap<taskKeys, String>>();
+                            failedQueues.put(queueKey, failedList);
+                        }
+                        HashMap<taskKeys, String> failedTask = new HashMap<taskKeys, String>();
+                        failedTask.put(taskKeys.accountID, accountID);
+                        failedTask.put(taskKeys.dataSourceID,dataSourceID);
+                        failedList.add(failedTask);
+                    }                                      
+                    continue;
+                } 
             }
         }
     }

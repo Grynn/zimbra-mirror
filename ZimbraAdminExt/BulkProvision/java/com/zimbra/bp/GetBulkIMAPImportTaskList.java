@@ -45,12 +45,19 @@ public class GetBulkIMAPImportTaskList extends AdminDocumentHandler  {
     private void encodeTask (Element response, String adminID) throws ServiceException {
         Account acct = Provisioning.getInstance().getAccountById(adminID);
         Queue<HashMap<taskKeys, String>> fq =  BulkIMAPImportTaskManager.getFinishedQueue(adminID);
+        Queue<HashMap<taskKeys, String>> eq =  BulkIMAPImportTaskManager.getFailedQueue(adminID);
         int numFinished = 0;
         if(fq!=null) {
             synchronized(fq) {
                 numFinished = fq.size();
             }
         }
+        int numFailed = 0;
+        if(eq!=null) {
+            synchronized(eq) {
+                numFailed = eq.size();
+            }
+        }        
         int numTotal = 0;
         Queue<HashMap<taskKeys, String>> rq =  BulkIMAPImportTaskManager.getRunningQueue(adminID);
         if(rq!=null) {
@@ -62,5 +69,6 @@ public class GetBulkIMAPImportTaskList extends AdminDocumentHandler  {
         ToXML.encodeAttr(elTask,ZimbraBulkProvisionExt.A_owner,acct.getName(),AdminConstants.E_A,AdminConstants.A_N,IDNType.none, true);
         ToXML.encodeAttr(elTask,ZimbraBulkProvisionExt.A_totalTasks,Integer.toString(numTotal),AdminConstants.E_A,AdminConstants.A_N,IDNType.none, true);
         ToXML.encodeAttr(elTask,ZimbraBulkProvisionExt.A_finishedTasks,Integer.toString(numFinished),AdminConstants.E_A,AdminConstants.A_N,IDNType.none, true);
+        ToXML.encodeAttr(elTask,ZimbraBulkProvisionExt.A_failedTasks,Integer.toString(numFailed),AdminConstants.E_A,AdminConstants.A_N,IDNType.none, true);
     }
 }

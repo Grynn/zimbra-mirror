@@ -78,6 +78,11 @@ function(task, now, isDragProxy) {
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
 			html[idx++] = AjxStringUtil.htmlEncode(task.attrs[ZaBulkProvisionTask.A_finishedTasks]);
 			html[idx++] = "</td>";
+		} else if(field == ZaBulkProvisionTask.A_failedTasks) {	
+			// description
+			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
+			html[idx++] = AjxStringUtil.htmlEncode(task.attrs[ZaBulkProvisionTask.A_failedTasks]);
+			html[idx++] = "</td>";
 		} else if(field == ZaBulkProvisionTask.A_owner) {	
 			// description
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
@@ -107,9 +112,10 @@ function() {
 //idPrefix, label, iconInfo, width, sortable, sortField, resizeable, visible
 	var sortable=1;
 	headerList[0] = new ZaListHeaderItem(ZaBulkProvisionTask.A_totalTasks, com_zimbra_bulkprovision.NumTotalAccts, null, "120px", null, null, true, true);
-	headerList[1] = new ZaListHeaderItem(ZaBulkProvisionTask.A_finishedTasks, com_zimbra_bulkprovision.NumCompletedAccts, null, "120px", null, null, true, true);
-	headerList[2] = new ZaListHeaderItem(ZaBulkProvisionTask.A_status, com_zimbra_bulkprovision.TaskStatus, null, "120px", null, null, true, true);
-	headerList[3] = new ZaListHeaderItem(ZaBulkProvisionTask.A_owner, com_zimbra_bulkprovision.TaskOwner, null, "auto", null, null, true, true);
+	headerList[1] = new ZaListHeaderItem(ZaBulkProvisionTask.A_finishedTasks, com_zimbra_bulkprovision.NumCompletedAccts, null, "80px", null, null, true, true);
+	headerList[2] = new ZaListHeaderItem(ZaBulkProvisionTask.A_failedTasks, com_zimbra_bulkprovision.NumFailedAccts, null, "80px", null, null, true, true);
+	headerList[3] = new ZaListHeaderItem(ZaBulkProvisionTask.A_status, com_zimbra_bulkprovision.TaskStatus, null, "120px", null, null, true, true);
+	headerList[4] = new ZaListHeaderItem(ZaBulkProvisionTask.A_owner, com_zimbra_bulkprovision.TaskOwner, null, "auto", null, null, true, true);
 	return headerList;
 }
 
