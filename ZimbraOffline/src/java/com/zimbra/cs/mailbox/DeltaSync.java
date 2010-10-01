@@ -529,31 +529,42 @@ public class DeltaSync {
         }
 
         Folder conflict = parent.findSubfolder(name);
-        if (conflict != null && conflict.getId() != id) {
-            int conflict_mask = ombx.getChangeMask(sContext, conflict.getId(), conflict.getType());
-
-            String uuid = '{' + UUID.randomUUID().toString() + '}', newName;
-            if (name.length() + uuid.length() > MailItem.MAX_NAME_LENGTH)
-                newName = name.substring(0, MailItem.MAX_NAME_LENGTH - uuid.length()) + uuid;
-            else
-                newName = name + uuid;
-
-            if (local == null && (conflict_mask & Change.MODIFIED_CONFLICT) != 0 && isCompatibleFolder(conflict, elt, type)) {
-                // if the new and existing folders are identical and being created, try to merge them
-                ombx.renumberItem(sContext, conflict.getId(), type, id);
-                ombx.setChangeMask(sContext, id, type, conflict_mask & ~Change.MODIFIED_CONFLICT);
-                return false;
-            } else if (!conflict.isMutable() || (conflict_mask & Change.MODIFIED_NAME) != 0) {
-                // either the local user also renamed the folder or the folder's immutable, so the local client wins
-                name = newName;
-                elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
+        if (conflict != null) {
+            if (conflict.getId() != id) {
+                int conflict_mask = ombx.getChangeMask(sContext, conflict.getId(), conflict.getType());
+    
+                String uuid = '{' + UUID.randomUUID().toString() + '}', newName;
+                if (name.length() + uuid.length() > MailItem.MAX_NAME_LENGTH)
+                    newName = name.substring(0, MailItem.MAX_NAME_LENGTH - uuid.length()) + uuid;
+                else
+                    newName = name + uuid;
+    
+                if (local == null && (conflict_mask & Change.MODIFIED_CONFLICT) != 0 && isCompatibleFolder(conflict, elt, type)) {
+                    // if the new and existing folders are identical and being created, try to merge them
+                    ombx.renumberItem(sContext, conflict.getId(), type, id);
+                    ombx.setChangeMask(sContext, id, type, conflict_mask & ~Change.MODIFIED_CONFLICT);
+                    return false;
+                } else if (!conflict.isMutable() || (conflict_mask & Change.MODIFIED_NAME) != 0) {
+                    // either the local user also renamed the folder or the folder's immutable, so the local client wins
+                    name = newName;
+                    elt.addAttribute(MailConstants.A_NAME, name).addAttribute(InitialSync.A_RELOCATED, true);
+                } else {
+                    // if there's a folder naming conflict within the target folder, usually push the local folder out of the way
+                    ombx.rename(null, conflict.getId(), conflict.getType(), newName);
+                    if ((conflict_mask & Change.MODIFIED_NAME) == 0)
+                        mSyncRenames.add(conflict.getId());
+                }
             } else {
-                // if there's a folder naming conflict within the target folder, usually push the local folder out of the way
-                ombx.rename(null, conflict.getId(), conflict.getType(), newName);
-                if ((conflict_mask & Change.MODIFIED_NAME) == 0)
-                    mSyncRenames.add(conflict.getId());
+                String viewStr = elt.getAttribute(MailConstants.A_DEFAULT_VIEW, null);
+                if (viewStr != null) {
+                    byte defaultView = MailItem.getTypeForName(viewStr);
+                    if (conflict.getDefaultView() != defaultView) {
+                        ombx.syncFolderDefaultView(sContext, id, type, defaultView);
+                    }
+                }
             }
         }
+        
 
         // if conflicts have forced us to deviate from the specified sync, update the local store such that these changes are pushed during the next sync
         if (local != null && elt.getAttributeBool(InitialSync.A_RELOCATED, false))

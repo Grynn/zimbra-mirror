@@ -501,6 +501,26 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
+    synchronized void syncFolderDefaultView(OperationContext octxt, int itemId, byte type, byte defaultView) throws ServiceException {
+        boolean success = false;
+        try {
+            beginTransaction("syncFolderDefaultView", octxt);
+            MailItem item = getItemById(itemId, type);
+            if (item instanceof Folder) {
+                Folder folder = (Folder) item;
+                if (folder.getDefaultView() != defaultView) {
+                    //use only the relevant parts of Folder.migrateDefaultView(); avoid immutable check in Folder.setDefaultView()
+                    //UI will not see change until next time it is refreshed; if ZD was open during ZCS upgrade it must be closed and reopened
+                    folder.mDefaultView = defaultView;
+                    folder.saveMetadata();
+                }
+            }
+            success = true;
+        } finally {
+            endTransaction(success);
+        }
+    }
+
     @Override
     boolean isPushType(byte type) {
         return PushChanges.PUSH_TYPES_SET.contains(type);
