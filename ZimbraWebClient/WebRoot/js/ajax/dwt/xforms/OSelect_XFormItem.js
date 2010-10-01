@@ -138,13 +138,13 @@ OSelect1_XFormItem.prototype.getNoteElement = function () {
 	return el;
 }
 OSelect1_XFormItem.prototype.setError = function (message, childError) {
-	if(console && console.log) console.log("Showing error note");
+	if(window.console && window.console.log) console.log("Showing error note");
 	this.showNote(message, this.getErrorNoteCssClass());
 	this.__errorState = XFormItem.ERROR_STATE_ERROR;
 }
 
 OSelect1_XFormItem.prototype.clearError = function () {
-	if(console && console.log) console.log("Hiding error note");
+	if(window.console && window.console.log) console.log("Hiding error note");
 	this.hideNote();
 	this.__errorState = XFormItem.ERROR_STATE_VALID;
 }
@@ -152,7 +152,7 @@ OSelect1_XFormItem.prototype.clearError = function () {
 OSelect1_XFormItem.prototype.showMenu = function() {
 	if(!this._enabled)
 		return;
-	if(console && console.log) console.log("Showing menu");
+	if(window.console && window.console.log) console.log("Showing menu");
 	this.hideInputTooltip();
 	
 	if (AjxEnv.isIE && !OSelect1_XFormItem._mouseWheelEventAttached) {
@@ -285,7 +285,7 @@ OSelect1_XFormItem.prototype.hideMenu = function () {
 	if(!this.menuUp) {
 		return;
 	}	
-	if(console && console.log) console.log("Hiding menu");
+	if(window.console && window.console.log) console.log("Hiding menu");
 	// hide the menu on a timer so we don't have to deal with wierd selection bugs
 	setTimeout(this.getFormGlobalRef()+".getElement('" + this.getMenuElementId() + "').style.display = 'none'", 10);
 
@@ -484,7 +484,7 @@ OSelect1_XFormItem.prototype.onChoiceDoubleClick = function (itemNum, event) {
 
 OSelect1_XFormItem.prototype.onValueTyped = function(label, event) {	
 	var value = this.getChoiceValue(label);
-	if(console && console.log) console.log("onValueTyped called value: " + value);
+	if(window.console && window.console.log) console.log("onValueTyped called value: " + value);
 	this.setValue(value, false, event);
 }
 
@@ -580,7 +580,7 @@ OSelect1_XFormItem.prototype.hilitePreviousChoice = function() {
 
 
 OSelect1_XFormItem.prototype.setValue = function (newValue, clearOldValues, event) {
-	if(console && console.log) console.log("setValue called + " + newValue);
+	if(window.console && window.console.log) console.log("setValue called + " + newValue);
 	var method = this.getElementChangedMethod();
 	method.call(this, newValue, this.getInstanceValue(), event);
 }

@@ -110,12 +110,12 @@ ZaCert.prototype.initCSR = function (getCSRResp) {
 
 //this function should be called when the CSR creation wizard is changed or shown
 ZaCert.prototype.modifySubjectAltNames = function () {
-	if(console && console.log) console.log("Enter ZaCert.prototype.modifySubjectAltNames ");
+	if(window.console && window.console.log) console.log("Enter ZaCert.prototype.modifySubjectAltNames ");
 	
 	var currentSubjAltNames = this.attrs[ZaCert.A_subject_alt] ;
 	// only modify when a new CSR should be created.
 	if ((!this[ZaCert.A_csr_exists]) || (this[ZaCert.A_force_new_csr] == 'TRUE')) { 
-		if(console && console.log) console.log("Modifying SubjectAltNames ");
+		if(window.console && window.console.log) console.log("Modifying SubjectAltNames ");
 		if (this[ZaCert.A_target_server] == ZaCert.ALL_SERVERS) {
 			for (var i=0; i < ZaCert.TARGET_SERVER_CHOICES.length; i ++) {
 				if ((ZaCert.TARGET_SERVER_CHOICES[i].value != ZaCert.ALL_SERVERS) && //Not All Servers Value
@@ -123,7 +123,7 @@ ZaCert.prototype.modifySubjectAltNames = function () {
 				   (ZaUtil.findValueInArray(currentSubjAltNames, ZaCert.TARGET_SERVER_CHOICES[i].label) == -1)){
 					
 					//add this target server value to subject alt names
-					if(console && console.log) console.log("Adding " + ZaCert.TARGET_SERVER_CHOICES[i].label);
+					if(window.console && window.console.log) console.log("Adding " + ZaCert.TARGET_SERVER_CHOICES[i].label);
 					currentSubjAltNames.push(ZaCert.TARGET_SERVER_CHOICES[i].label);
 				}			
 			}
@@ -139,7 +139,7 @@ ZaCert.prototype.modifySubjectAltNames = function () {
 			if ((targetServerName != null) && 
 				//the target server name doesn't exist in the current subjectAltName
 				 (ZaUtil.findValueInArray(currentSubjAltNames, targetServerName) == -1)){
-				if(console && console.log) console.log("Adding " + targetServerName);
+				if(window.console && window.console.log) console.log("Adding " + targetServerName);
 				currentSubjAltNames.push(targetServerName);
 			}
 		}
@@ -185,7 +185,7 @@ ZaCert.certOvTreeModifier = function (tree) {
                          
 //When the certs tree item is clicked
 ZaCert.certsServerListTreeListener = function (ev) {
-	if(console && console.log) console.log("Show the server lists ...") ;
+	if(window.console && window.console.log) console.log("Show the server lists ...") ;
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(
 			ZaApp.getInstance().getCertsServerListController(),ZaCertsServerListController.prototype.show, ZaServer.getAll());
@@ -197,7 +197,7 @@ ZaCert.certsServerListTreeListener = function (ev) {
 //When the individul server node under the certs tree item is clicked
 ZaCert.certsServerNodeTreeListener = function (ev) {
 	var serverNodeId = ev.item.getData(ZaOverviewPanelController._OBJ_ID) ;
-	if(console && console.log) console.log("Click the server node: " + serverNodeId) ;
+	if(window.console && window.console.log) console.log("Click the server node: " + serverNodeId) ;
 	
 	if(ZaApp.getInstance().getCurrentController()) {
 		ZaApp.getInstance().getCurrentController().switchToNextView(
@@ -212,7 +212,7 @@ ZaCert.certsServerNodeTreeListener = function (ev) {
 }
 
 ZaCert.getCerts = function (app, serverId) {
-	if(console && console.log) console.log("Getting certificates for server " + serverId) ;
+	if(window.console && window.console.log) console.log("Getting certificates for server " + serverId) ;
 	
 	var soapDoc = AjxSoapDoc.create("GetCertRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", "all");
@@ -221,7 +221,7 @@ ZaCert.getCerts = function (app, serverId) {
 	if (serverId != null) {
 		soapDoc.getMethod().setAttribute("server", serverId);
 	}else{
-		if(console && console.log) console.log("Warning: serverId is missing for ZaCert.getCerts.") ;
+		if(window.console && window.console.log) console.log("Warning: serverId is missing for ZaCert.getCerts.") ;
 	}
 	
 	try {
@@ -236,7 +236,7 @@ ZaCert.getCerts = function (app, serverId) {
 }
 
 ZaCert.getCSR = function (app, serverId, type) {
-	if(console && console.log) console.log("ZaCert.getCSR: Getting CSR for server: " + serverId) ;
+	if(window.console && window.console.log) console.log("ZaCert.getCSR: Getting CSR for server: " + serverId) ;
 	
 	var soapDoc = AjxSoapDoc.create("GetCSRRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", type);
@@ -247,7 +247,7 @@ ZaCert.getCSR = function (app, serverId, type) {
 	if (serverId != null){
 		soapDoc.getMethod().setAttribute("server", serverId);
 	}else{
-		if(console && console.log) console.log("Warning: serverId is missing for ZaCert.getCSR.") ;
+		if(window.console && window.console.log) console.log("Warning: serverId is missing for ZaCert.getCSR.") ;
 	}
 	
 	try {
@@ -262,7 +262,7 @@ ZaCert.getCSR = function (app, serverId, type) {
 }
 
 ZaCert.genCSR = function (app, subject_attrs,  type, newCSR, serverId, keysize) {
-	if(console && console.log) console.log("Generating certificates") ;
+	if(window.console && window.console.log) console.log("Generating certificates") ;
 	var soapDoc = AjxSoapDoc.create("GenCSRRequest", "urn:zimbraAdmin", null);
 	soapDoc.getMethod().setAttribute("type", type);
 	soapDoc.getMethod().setAttribute("keysize", keysize) ;
@@ -275,7 +275,7 @@ ZaCert.genCSR = function (app, subject_attrs,  type, newCSR, serverId, keysize) 
 	if (serverId != null) {
 		soapDoc.getMethod().setAttribute("server", serverId);
 	}else{
-		if(console && console.log) console.log("Warning: serverId is missing for ZaCert.genCSR.") ;
+		if(window.console && window.console.log) console.log("Warning: serverId is missing for ZaCert.genCSR.") ;
 	}
 	
 	for (var n in subject_attrs) {
@@ -305,7 +305,7 @@ ZaCert.genCSR = function (app, subject_attrs,  type, newCSR, serverId, keysize) 
 }
 
 ZaCert.installCert = function (app, params, serverId) {
-	if(console && console.log) console.log("Installing certificates") ;
+	if(window.console && window.console.log) console.log("Installing certificates") ;
 	var type = params.type ;
 	var comm_cert = params.comm_cert ;
 	var validation_days = params.validation_days ;
@@ -313,7 +313,7 @@ ZaCert.installCert = function (app, params, serverId) {
     var subject = params.subject ;
     var keysize = params.keysize ;
     //var allserver = 0 || params.allserver ;
-	//if(console && console.log) console.log("allserver = " + allserver) ;
+	//if(window.console && window.console.log) console.log("allserver = " + allserver) ;
 	
 	var controller = app.getCurrentController();
 	
@@ -327,7 +327,7 @@ ZaCert.installCert = function (app, params, serverId) {
 	if (serverId != null) {
 		soapDoc.getMethod().setAttribute("server", serverId);
 	}else{
-		if(console && console.log) console.log("Warning: serverId is missing for ZaCert.installCert.") ;
+		if(window.console && window.console.log) console.log("Warning: serverId is missing for ZaCert.installCert.") ;
 	}
 	
 	if (type == ZaCert.A_type_self || type == ZaCert.A_type_comm) {

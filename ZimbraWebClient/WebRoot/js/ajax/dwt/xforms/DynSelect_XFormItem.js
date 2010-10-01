@@ -298,7 +298,7 @@ DynSelect_XFormItem.prototype.updateElement = function (newValue) {
 		} else if(this._enabled) {
 			el.className = this.getDisplayCssClass();
 		}
-		if(console && console.log) console.log("updating element with value: " + newValue + " over " + el.value);
+		if(window.console && window.console.log) console.log("updating element with value: " + newValue + " over " + el.value);
 		el.value = newValue;
 	}
 	

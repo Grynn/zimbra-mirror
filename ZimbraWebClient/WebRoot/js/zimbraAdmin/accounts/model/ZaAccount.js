@@ -2271,7 +2271,7 @@ ZaAccount.isEmailRetentionPolicyEnabled = function () {
     	var s_mailpurge = sc.attrs[ZaServer.A_zimbraMailPurgeSleepInterval] ;    //always end with [s,m,h,d]
     	var g_mailpurge = gc.attrs[ZaGlobalConfig.A_zimbraMailPurgeSleepInterval] ;
     	if (s_mailpurge === _UNDEFINED_ || s_mailpurge === null)  {
-        	if(console && console.log) console.log("server setting A_zimbraMailPurgeSleepInterval is NOT set.")
+        	if(window.console && window.console.log) console.log("server setting A_zimbraMailPurgeSleepInterval is NOT set.")
         	if (g_mailpurge != null && ZaUtil.getLifeTimeInSeconds(g_mailpurge) == 0) {
             	return false ;
         	}

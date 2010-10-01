@@ -1,4 +1,4 @@
-if(console && console.log) console.debug("Loaded ZaCertView.js");
+if(window.console && window.console.log) console.debug("Loaded ZaCertView.js");
 
 function ZaCertView (parent,className) {
 	if (arguments.length == 0) return ;
@@ -104,7 +104,7 @@ ZaCertView.prototype.getCertTable = function (cert) {
 }                             
 
 ZaCertView.prototype.set = function (certs, targetServerId) {
-	if(console && console.log) console.log ("Set the certs") ;
+	if(window.console && window.console.log) console.log ("Set the certs") ;
     //this._containedObject is used to check if the item tab exists already
     if (!this._containedObject) this._containedObject = {} ;
     this._containedObject.certs = certs ;

@@ -345,13 +345,13 @@ function() {
 }
 
 ZaZimbraAdmin.reload_msg = function () {
-    //if(console && console.log) console.log("Reloading the message ...") ;
+    //if(window.console && window.console.log) console.log("Reloading the message ...") ;
     var includes = [] ;
     includes.push ( [appContextPath , "/res/" , "I18nMsg,AjxMsg,ZMsg,ZaMsg,AjxKeys" , ".js?v=" ,
                         appVers , ZaZimbraAdmin.LOCALE_QS].join("") );
 
     //the dynamic script load is asynchronous, may need a callback to make sure all the messages are actually loaded
-    //if(console && console.log) console.log("Reload the message file: " + includes.toString()) ;
+    //if(window.console && window.console.log) console.log("Reload the message file: " + includes.toString()) ;
 
     //reinitialize the AjxFormat after the message files are loaded
     var callback = new AjxCallback (ZaZimbraAdmin.reinit_func); 
@@ -664,7 +664,7 @@ function(staticFunc, icon, lbl, max_lbl_length) {
 
 ZaZimbraAdmin._killSplash =
 function() {
-    //if(console && console.log) console.log("Killing splash window now ...") ;
+    //if(window.console && window.console.log) console.log("Killing splash window now ...") ;
     if(ZaZimbraAdmin._splashScreen)
 		ZaZimbraAdmin._splashScreen.setVisible(false);
 }

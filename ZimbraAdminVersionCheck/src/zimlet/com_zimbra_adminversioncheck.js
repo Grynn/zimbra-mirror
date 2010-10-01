@@ -1,4 +1,4 @@
-if(console && console.log) console.log("Start loading com_zimbra_adminversioncheck.js");
+if(window.console && window.console.log) console.log("Start loading com_zimbra_adminversioncheck.js");
 function ZaVersionCheck() {
 	ZaItem.call(this,"ZaVersionCheck");
 	this.attrs = new Object();

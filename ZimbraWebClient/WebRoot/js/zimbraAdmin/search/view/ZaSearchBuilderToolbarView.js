@@ -111,7 +111,7 @@ function (event) {
 
 ZaSearchBuilderToolbarView.prototype.advancedSelectHndlr =
 function (event) {
-	//if(console && console.log) console.log("Advanced Attributes search builder button is clicked.") ;
+	//if(window.console && window.console.log) console.log("Advanced Attributes search builder button is clicked.") ;
 	this._controller.addOptionView (ZaSearchOption.ADVANCED_ID) ;
 	//this._controller.listAll
 }

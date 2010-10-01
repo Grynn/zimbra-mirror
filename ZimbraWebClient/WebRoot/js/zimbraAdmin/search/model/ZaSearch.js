@@ -204,7 +204,7 @@ ZaSearch.TOO_MANY_RESULTS_FLAG = false ; //control the no result text of the lis
 ZaSearch.handleTooManyResultsException = function (ex, from) {
 	if (ex.code == ZmCsfeException.TOO_MANY_SEARCH_RESULTS) {
 		//supress the result
-		/*if(console && console.log) {
+		/*if(window.console && window.console.log) {
 			console.log("Suppressed Exception: " + ex.msg + " from: " + from );
 		}*/
 		ZaSearch.TOO_MANY_RESULTS_FLAG = true ;
@@ -765,7 +765,7 @@ function (searchNameArr, callback) {
 ZaSearch.updateSavedSearch =
 function (resp) {
 
-	//if(console && console.log) console.debug("Update Saved Search ... ");
+	//if(window.console && window.console.log) console.debug("Update Saved Search ... ");
 	ZaSearch.SAVED_SEARCHES = [] ;
 	if (resp != null) {
         var respObj = resp._data || resp ;
@@ -815,7 +815,7 @@ function () {
         }
         
         if ((! currentSavedSearches) && (ZaSearchField.canSaveSearch())){//load the predefined searches
-            //if(console && console.log) console.log("Load the predefined saved searches ...") ;
+            //if(window.console && window.console.log) console.log("Load the predefined saved searches ...") ;
             var savedSearchArr = [] ;
             //if (!ZaSettings.isDomainAdmin) { //admin only searches
                 for (var m=0; m < ZaSearch.getPredefinedSavedSearchesForAdminOnly().length; m++){
@@ -850,7 +850,7 @@ function () {
 ZaSearch.parseSavedSearchQuery =
 function (query) {
 	if (query == null || query.length <= 0) return ;
-	//if(console && console.log) console.log("Original Saved Search query: " + query) ;
+	//if(window.console && window.console.log) console.log("Original Saved Search query: " + query) ;
 	var regEx = /^(.+)#{3}JSON:(.+)#{3}(.+)$/ ;
 	var results = query.match(regEx) ;
 	if (results != null) {
@@ -860,7 +860,7 @@ function (query) {
 		query += jsonObj.func(jsonObj.args) ;
 		query += results[3];
 	}
-	//if(console && console.log) console.log("Parsed Saved Search query: " + query) ;
+	//if(window.console && window.console.log) console.log("Parsed Saved Search query: " + query) ;
 	return query ;
 }
 
@@ -870,7 +870,7 @@ function (query) {
  */
 ZaSearch.getTimestampByDays =
 function (days) {
-	//if(console && console.log) console.log("Get the timestamp of " + days + " days.");	
+	//if(window.console && window.console.log) console.log("Get the timestamp of " + days + " days.");	
 	var d = parseInt(days)	;
 	var dateObj = new Date();
 	var now = dateObj.getTime();

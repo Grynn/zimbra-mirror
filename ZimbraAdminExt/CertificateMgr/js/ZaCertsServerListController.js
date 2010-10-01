@@ -111,7 +111,7 @@ function(serverList) {
 // new button was pressed
 ZaCertsServerListController.prototype._newCertListener =
 function(ev) {
-	if(console && console.log) console.log("ZaCertsServerListController.prototype._newCertListener: Launch the new certificates wizard ... ") ;
+	if(window.console && window.console.log) console.log("ZaCertsServerListController.prototype._newCertListener: Launch the new certificates wizard ... ") ;
 	var serverId = null;
 	//TODO: the selectedItem might be from the previous selection
 	if (this._selectedItem && this._selectedItem.id) {
@@ -121,7 +121,7 @@ function(ev) {
 }
                                     
 ZaCertsServerListController.prototype.viewCertListener = function (ev) {
-	if(console && console.log) console.log("View the certificates ... ") ;
+	if(window.console && window.console.log) console.log("View the certificates ... ") ;
 	ZaApp.getInstance().getCertViewController().show(
 		ZaCert.getCerts(ZaApp.getInstance(), this._selectedItem.id),
 		this._selectedItem.id) ;
