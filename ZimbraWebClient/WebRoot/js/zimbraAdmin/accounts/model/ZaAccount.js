@@ -1212,36 +1212,41 @@ function (respObj, instance, form) {
 			resp = respObj;
 		}
 		if(resp && resp.Body.ReIndexResponse) {
-			form.setInstanceValue(resp.Body.ReIndexResponse.status, ZaReindexMailbox.A_status);
-
-			if(instance.status == "started") {
-				form.setInstanceValue(0, ZaReindexMailbox.A_numDone);
-				form.setInstanceValue(ZaMsg.NAD_ACC_ReindexingStarted, ZaReindexMailbox.A_progressMsg);
-			}
-			if(resp.Body.ReIndexResponse.progress && resp.Body.ReIndexResponse.progress[0]) {
-				var progress = resp.Body.ReIndexResponse.progress[0];
-				
-				form.setInstanceValue(progress.numFailed, ZaReindexMailbox.A_numFailed);
-				form.setInstanceValue(progress.numSucceeded, ZaReindexMailbox.A_numSucceeded);
-				form.setInstanceValue(progress.numRemaining, ZaReindexMailbox.A_numRemaining);
-				form.setInstanceValue(progress.numSucceeded + progress.numFailed + progress.numRemaining, ZaReindexMailbox.A_numTotal);
-				form.setInstanceValue(progress.numFailed + progress.numSucceeded, ZaReindexMailbox.A_numDone);
-				form.setInstanceValue(AjxMessageFormat.format(ZaMsg.NAD_ACC_ReindexingStatus,[progress.numSucceeded,progress.numRemaining,progress.numFailed]), ZaReindexMailbox.A_progressMsg);
-				
-				//instance.numFailed = progress.numFailed;
-				//instance.numSucceeded = progress.numSucceeded;				
-				//instance.numRemaining = progress.numRemaining;	
-				//instance.numTotal = instance.numSucceeded + instance.numFailed + instance.numRemaining;
-				//instance.numDone  = instance.numFailed + instance.numSucceeded;					
-				//instance.progressMsg = String(ZaMsg.NAD_ACC_ReindexingStatus).replace("{0}", instance.numSucceeded).replace("{1}",instance.numRemaining).replace("{2}", instance.numFailed);				
-				if(instance.status == "cancelled") {
-					form.setInstanceValue((instance.progressMsg + "<br>" + ZaMsg.NAD_ACC_ReindexingCancelled), ZaReindexMailbox.A_progressMsg);
-					//instance.progressMsg = instance.progressMsg + "<br>" + ZaMsg.NAD_ACC_ReindexingCancelled;
-				}			
-				if(instance.numRemaining == 0) {
+			if(resp.Body.ReIndexResponse.status == "idle") {
+				form.setInstanceValue("", ZaReindexMailbox.A_errorDetail);
+				form.setInstanceValue("", ZaReindexMailbox.A_resultMsg);
+				form.setInstanceValue(ZaMsg.NAD_ACC_ReindexingNotRunning, ZaReindexMailbox.A_progressMsg);
+				if(instance.numRemaining > 0 || instance.status == "started") {
 					form.setInstanceValue(instance.numTotal, ZaReindexMailbox.A_numDone);
-					//instance.numDone = instance.numTotal;
-				}					
+					form.setInstanceValue(ZaMsg.NAD_ACC_ReindexingComplete, ZaReindexMailbox.A_progressMsg);
+					form.setInstanceValue("complete", ZaReindexMailbox.A_status);
+				} else {
+					form.setInstanceValue(null, ZaReindexMailbox.A_status);
+				}				
+				form.setInstanceValue(resp.Body.ReIndexResponse.status, ZaReindexMailbox.A_status);
+			} else {
+				form.setInstanceValue(resp.Body.ReIndexResponse.status, ZaReindexMailbox.A_status);
+				if(resp.Body.ReIndexResponse.status == "started") {
+					form.setInstanceValue(0, ZaReindexMailbox.A_numDone);
+					form.setInstanceValue(ZaMsg.NAD_ACC_ReindexingStarted, ZaReindexMailbox.A_progressMsg);
+				}
+				if(resp.Body.ReIndexResponse.progress && resp.Body.ReIndexResponse.progress[0]) {
+					var progress = resp.Body.ReIndexResponse.progress[0];
+					
+					form.setInstanceValue(progress.numFailed, ZaReindexMailbox.A_numFailed);
+					form.setInstanceValue(progress.numSucceeded, ZaReindexMailbox.A_numSucceeded);
+					form.setInstanceValue(progress.numRemaining, ZaReindexMailbox.A_numRemaining);
+					form.setInstanceValue(progress.numSucceeded + progress.numFailed + progress.numRemaining, ZaReindexMailbox.A_numTotal);
+					form.setInstanceValue(progress.numFailed + progress.numSucceeded, ZaReindexMailbox.A_numDone);
+					form.setInstanceValue(AjxMessageFormat.format(ZaMsg.NAD_ACC_ReindexingStatus,[progress.numSucceeded,progress.numRemaining,progress.numFailed]), ZaReindexMailbox.A_progressMsg);
+					
+					if(instance.status == "cancelled") {
+						form.setInstanceValue((instance.progressMsg + "<br>" + ZaMsg.NAD_ACC_ReindexingCancelled), ZaReindexMailbox.A_progressMsg);
+					}			
+					if(instance.numRemaining == 0) {
+						form.setInstanceValue(instance.numTotal, ZaReindexMailbox.A_numDone);
+					}					
+				}
 			}
 		}
 	}
