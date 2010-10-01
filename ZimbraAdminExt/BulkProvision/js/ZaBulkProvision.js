@@ -134,6 +134,7 @@ ZaBulkProvision.SOURCE_TYPE_CSV = "csv";
 ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP = "IMAP";
 ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE = "EXCHANGE";
 ZaBulkProvision.MAIL_SOURCE_TYPE_ZIMBRA = "ZIMBRA";
+ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE_IMAP = "EXCHANGE_IMAP";
 ZaBulkProvision.OP_PREVIEW = "preview";
 ZaBulkProvision.OP_GET_STATUS = "getStatus";
 ZaBulkProvision.OP_PREVIEW_ACTIVE_IMPORTS = "previewActiveImports";
@@ -164,6 +165,7 @@ ZaBulkProvision.getMyXModel = function () {
 	ZaBulkProvision.SourceServerTypeChoices = [
         {label:com_zimbra_bulkprovision.SourceServerTypeIMAP, value:ZaBulkProvision.MAIL_SOURCE_TYPE_IMAP},
         {label:com_zimbra_bulkprovision.SourceServerTypeExchange, value:ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE},
+        {label:com_zimbra_bulkprovision.SourceServerTypeExchangeIMAP, value:ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE_IMAP},
         {label:com_zimbra_bulkprovision.SourceServerTypeZimbra, value:ZaBulkProvision.MAIL_SOURCE_TYPE_ZIMBRA}
 	];
 
@@ -292,6 +294,9 @@ ZaBulkProvision.bulkDataIMport = function(obj, callback) {
 	}
 	if(obj[ZaBulkProvision.A2_connectionType]) {
 		attr = soapDoc.set(ZaBulkProvision.A2_connectionType,obj[ZaBulkProvision.A2_connectionType]);
+	}
+	if(obj[ZaBulkProvision.A2_sourceServerType]) {
+		attr = soapDoc.set(ZaBulkProvision.A2_sourceServerType,obj[ZaBulkProvision.A2_sourceServerType]);
 	}
 	                                                   	
 	var csfeParams = new Object();
@@ -639,4 +644,5 @@ ZaBulkProvisionTask.prototype.constructor = ZaBulkProvisionTask;
 ZaBulkProvisionTask.A_owner = "owner";
 ZaBulkProvisionTask.A_totalTasks = "totalTasks";
 ZaBulkProvisionTask.A_finishedTasks = "finishedTasks";
+ZaBulkProvisionTask.A_failedTasks = "failedTasks";
 ZaBulkProvisionTask.A_status = "status";

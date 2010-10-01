@@ -386,17 +386,21 @@ function (status, attId) {
     		ZaBulkProvision.importAccountsFromFile(this._containedObject,callback);
         } catch (ex) {
             this._app.getCurrentController()._handleException(ex) ;
+        	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+        	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+        	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+        	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);            
             return ;
         }
 	} else {
 		// handle errors during attachment upload.
 		var msg = AjxMessageFormat.format(com_zimbra_bulkprovision.error_upload_bulk, [status]);
 		this._app.getCurrentController().popupErrorDialog(msg);
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);		
 	}
-	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
-	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);	
 };
 
 

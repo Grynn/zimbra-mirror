@@ -62,7 +62,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 		String op = request.getAttribute(ZimbraBulkProvisionExt.A_op);
 		Element response = zsc.createElement(ZimbraBulkProvisionService.BULK_IMAP_DATA_IMPORT_RESPONSE);
 		Map<accountState, List<ExternalIMAPAccount>> IMAPAccounts = null;
-		String IMAPhost = null, IMAPport = null, adminLogin = null, adminPassword = null, connectionType = null;
+		String IMAPhost = null, IMAPport = null, adminLogin = null, adminPassword = null, connectionType = null, sourceServerType = null;
 		String sourceType = request.getElement(ZimbraBulkProvisionExt.A_sourceType).getTextTrim();
 		boolean useAdminLogin = false;
 		if (sourceType.equalsIgnoreCase(AdminFileDownload.FILE_FORMAT_BULK_XML)) {
@@ -94,7 +94,11 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
     				org.dom4j.Element elConnectionType = (org.dom4j.Element) connectionTypeIter.next();
     				connectionType = elConnectionType.getTextTrim();
     			}
-    
+    			Iterator sourceServerTypeIter = root.elementIterator(ZimbraBulkProvisionExt.E_sourceServerType);
+                if (sourceServerTypeIter.hasNext()) {
+                    org.dom4j.Element elSourceServerType = (org.dom4j.Element) connectionTypeIter.next();
+                    sourceServerType = elSourceServerType.getTextTrim();
+                }
     			Iterator IMAPHostIter = root.elementIterator(ZimbraBulkProvisionExt.E_IMAPHost);
     			if (IMAPHostIter.hasNext()) {
     				org.dom4j.Element elIMAPHost = (org.dom4j.Element) IMAPHostIter.next();
@@ -180,7 +184,10 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
         if (elConnectionType != null) {
             connectionType = elConnectionType.getTextTrim();
         }
-
+        Element elSourceServerType = request.getOptionalElement(ZimbraBulkProvisionExt.E_sourceServerType);
+        if (elSourceServerType != null) {
+            sourceServerType = elSourceServerType.getTextTrim();
+        }
         Element elIMAPHost = request.getOptionalElement(ZimbraBulkProvisionExt.E_IMAPHost);
         if (elIMAPHost != null) {
             IMAPhost = elIMAPHost.getTextTrim();
@@ -269,6 +276,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
                         IMAPhost,
                         IMAPport,
                         connectionType,
+                        sourceServerType,
                         acct.getUserEmail(),
                         useAdminLogin ? adminLogin
                                 : acct.getUserLogin(),
@@ -565,7 +573,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
  * @throws ServiceException
  */
 	public static DataSource createIMAPDataSource(Account account, String host,
-			String port, String connectionType, String accName, String login,
+			String port, String connectionType, String sourceServerType, String accName, String login,
 			String password, boolean useAdminAuth) throws ServiceException {
 		Map<String, Object> dsAttrs = new HashMap<String, Object>();
 		/*
@@ -578,7 +586,9 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 			// this is the account name for the mailbox. If authorizing as admin, this is the user's login/mailbox name
 			StringUtil.addToMultiMap(dsAttrs,Provisioning.A_zimbraDataSourceAuthorizationId, accName); 
 		}
-
+        if(ZimbraBulkProvisionExt.EXCHANGE_IMAP.equalsIgnoreCase(sourceServerType)) {
+            StringUtil.addToMultiMap(dsAttrs, Provisioning.A_zimbraDataSourceDomain,".msexchange");
+        }
 		StringUtil.addToMultiMap(dsAttrs, Provisioning.A_zimbraDataSourceHost,host);
 		StringUtil.addToMultiMap(dsAttrs, Provisioning.A_zimbraDataSourcePort,port);
 		//this is the login name used for authorization. If authorizing as admin, this is the admin's username
