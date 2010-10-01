@@ -29,6 +29,7 @@ if [ ! -d ${zimbra_java_home} ]; then
   exit 0
 fi
 
+
 #
 # Memory for use by JVM.
 #
@@ -36,6 +37,12 @@ javaXmx=${mailboxd_java_heap_size:=512}
 javaXms=${javaXmx}
 mailboxd_java_heap_new_size_percent=${mailboxd_java_heap_new_size_percent:=25}
 javaXmn=$(expr ${javaXmx} '*' ${mailboxd_java_heap_new_size_percent} / 100)
+
+#
+# Spnego - the spnego_options_file is written by zmconfigd to avoid a zmprov call here.
+#
+spnego_options_file=${zimbra_home}/conf/spnego_java_options
+spnegoJavaOptions=$(cat $spnego_options_file)
 
 #
 # Expand war files.
@@ -102,7 +109,7 @@ case "$1" in
       fi
       echo -n "Starting mailboxd..."
       sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
-        ${mailboxd_java_options} -Xms${javaXms}m -Xmx${javaXmx}m \
+        ${mailboxd_java_options} $spnegoJavaOptions -Xms${javaXms}m -Xmx${javaXmx}m \
         -Xmn${javaXmn}m < /dev/null > /dev/null 2>&1
       status=$?
       if [ $status = 0 ]; then
