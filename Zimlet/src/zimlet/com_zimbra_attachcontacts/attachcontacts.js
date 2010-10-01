@@ -33,6 +33,12 @@ var AttachContactsZimlet = com_zimbra_attachcontacts_HandlerObject;
 
 AttachContactsZimlet.SEND_CONTACTS = "SEND_CONTACTS_IN_EMAIL";
 
+AttachContactsZimlet.prototype.init = function() {
+	this._op = ZmOperation.registerOp(AttachContactsZimlet.SEND_CONTACTS, {image:"MsgStatusSent", textKey:"forward", tooltip:this.getMessage("ACZ_SendContactsAsAttachments")});
+	this._contactSendListener = new AjxListener(this, this._contactListSendListener);
+	this.overrideAPI(ZmListController.prototype, "_setContactText", this._setContactText);
+};
+
 /**
  * Called by framework when compose toolbar is being initialized
  */
@@ -41,8 +47,15 @@ function(app, toolbar, controller, viewId) {
 	if (viewId.indexOf("COMPOSE") >= 0 && !this._addedToMainWindow) {
 		var btn = toolbar.getOp("ATTACHMENT");
 		btn.addSelectionListener(new AjxListener(this, this._addTab));	
-	} else	if (viewId == "CNS") {
+	} else if (viewId == "CNS" || viewId == "CN") {
 		this._initContactsReminderToolbar(toolbar, controller);
+	}
+};
+
+AttachContactsZimlet.prototype.onShowView =
+function(viewId)  {
+	if (viewId == "CNS") {
+		this._addContactActionMenuItem();
 	}
 };
 
@@ -56,8 +69,8 @@ function() {
 
 	var tabview = attachDialog ? attachDialog.getTabView() : null;
 	var tabs = attachDialog.getTabView()._tabs;
-	for (var indx in tabs) {
-		if (tabs[indx].title == tabLabel) {
+	for (var index in tabs) {
+		if (tabs[index].title == tabLabel) {
 			return;
 		}
 	}
@@ -83,7 +96,7 @@ function() {
  */
 AttachContactsZimlet.prototype.addExtraMsgParts =
 function(request, isDraft) {
-	if (!isDraft || !this._isDrafInitiatedByThisZimlet) {
+	if (!isDraft || !this._isDraftInitiatedByThisZimlet) {
 		return;
 	}
 	if (request && request.m) {
@@ -100,7 +113,7 @@ function(request, isDraft) {
 			}
 		}
 	}
-	this._isDrafInitiatedByThisZimlet = false;
+	this._isDraftInitiatedByThisZimlet = false;
 };
 
 
@@ -110,35 +123,132 @@ function(request, isDraft) {
 AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, controller) {
 	if (!toolbar.getButton(AttachContactsZimlet.SEND_CONTACTS)) {
 		var opList = toolbar.opList;
+		var buttonIndex = 0;
 		for (var i = 0; i < opList.length; i++) {
 			if (opList[i] == "TAG_MENU") {
 				buttonIndex = i + 1;
 				break;
 			}
 		}
-		var btn = toolbar.createOp(AttachContactsZimlet.SEND_CONTACTS, {image:"MsgStatusSent", text:this.getMessage("ACZ_Send"), tooltip:this.getMessage("ACZ_SendContactsAsAttachments"), index:buttonIndex});
-		var buttonIndex = 0;
 
-		this._composerCtrl = controller;
-		this._composerCtrl._AttachContactsZimlet = this;
-		btn.addSelectionListener(new AjxListener(this._composerCtrl, this._getIdsAndOpenCompose));
+		var op = AttachContactsZimlet.SEND_CONTACTS;
+		var opData = AjxUtil.hashCopy(ZmOperation.SETUP[op]);
+		opData.index = buttonIndex;
+		opData.text = ZmMsg[ZmOperation.getProp(op, "textKey")];
+		var btn = toolbar.createOp(op, opData);
+		btn.addSelectionListener(this._contactSendListener);
 	}
 };
 
-/**
- * Fethes Contacts information(if any), save the contact and shows Contacts Reminder dialog w/ this Contacts information
- */
-AttachContactsZimlet.prototype._getIdsAndOpenCompose = function() {
-	var items = this.getCurrentView().getSelection();
-	 this._AttachContactsZimlet.contactIdsToAttach = [];
-	 for(var i=0; i < items.length; i++) {
-		 this._AttachContactsZimlet.contactIdsToAttach.push(items[i].id);
-	 }
+AttachContactsZimlet.prototype._contactListSendListener = function() {
+	this._getContactListIds();	
+	this._openCompose();
+};
 
+AttachContactsZimlet.prototype._getContactListIds = function() {
+	var controller = appCtxt.getApp(ZmApp.CONTACTS).getContactListController();
+	var items = controller.getCurrentView().getSelection();
+	this.contactIdsToAttach = [];
+	for (var i=0; i<items.length; i++) {
+		this.contactIdsToAttach.push(items[i].id);
+	}
+};
+
+AttachContactsZimlet.prototype._openCompose = function() {
 	var action = ZmOperation.NEW_MESSAGE;
 	var msg = new ZmMailMsg();
 	AjxDispatcher.run("Compose", {action: action, inNewWindow: false, msg: msg});
-    var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
-	this._AttachContactsZimlet._isDrafInitiatedByThisZimlet = true;   //set this to true
+	var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
+	this._isDraftInitiatedByThisZimlet = true;   //set this to true
 	controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL);
+};
+
+/**
+ * Overrides method in ZmListController
+ */
+AttachContactsZimlet.prototype._setContactText =
+function(isContact) {
+	if (this._participantActionMenu) {
+		this._participantActionMenu.enable(AttachContactsZimlet.SEND_CONTACTS, isContact);
+	}
+	arguments.callee.func.apply(this, arguments); // Call overridden function
+};
+
+//------------------------------------------------
+// Context menu / clear highlight related
+//------------------------------------------------
+/**
+ *  Called by Framework to add a context-menu item for emails
+ */
+AttachContactsZimlet.prototype.onParticipantActionMenuInitialized =
+function(controller, menu) {
+	this.onActionMenuInitialized(controller, menu);
+};
+
+/**
+ *  Called by Framework to add a context-menu item for emails
+ */
+AttachContactsZimlet.prototype.onActionMenuInitialized =
+function(controller, menu) {
+	this.addMenuButton(controller, menu, ZmOperation.CONTACT);
+};
+
+AttachContactsZimlet.prototype._addContactActionMenuItem =
+function() {
+	var controller = appCtxt.getApp(ZmApp.CONTACTS).getContactListController();
+	this.addMenuButton(controller, controller.getActionMenu(), ZmOperation.CONTACT);
+};
+
+/**
+ * Adds a menu item for emails
+ * @param {ZmMsgController} controller
+ * @param {object} menu  Menu object
+ */
+AttachContactsZimlet.prototype.addMenuButton = function(controller, menu, after) {
+	if (!menu.getMenuItem(AttachContactsZimlet.SEND_CONTACTS)) {
+		var index = null;
+		if (AjxUtil.isString(after)) {
+			var afterItem = menu.getMenuItem(after);
+			if (afterItem) {
+				for (index = 0, c = menu.getChildren(); index < c.length && c[index] !== afterItem; index++) ; // Find index of the afterItem
+			}
+		} else if (AjxUtil.isNumber(after)) {
+			index = after;
+		}
+		if (index !== null) {
+			var op = {
+				id:			AttachContactsZimlet.SEND_CONTACTS,
+				text:		this.getMessage("ACZ_SendContact"),
+				image:		"MsgStatusSent",
+				index:		index+1
+			};
+			var opDesc = ZmOperation.defineOperation(null, op);
+			menu.addOp(AttachContactsZimlet.SEND_CONTACTS);
+			menu.addSelectionListener(AttachContactsZimlet.SEND_CONTACTS, new AjxListener(this, this._contactActionMenuListener, controller));
+		}
+	}
+};
+
+ZmZimletBase.prototype.onMsgView = function(msg, oldMsg) {
+console.log("ZmZimletBase.prototype.onMsgView",arguments);
+};
+
+AttachContactsZimlet.prototype._contactActionMenuListener = function(controller, ev) {
+	var contact = controller._actionEv.contact;
+	if (contact) {
+		this.contactIdsToAttach = [contact.id];
+		this._openCompose();
+	}
+};
+
+AttachContactsZimlet.prototype.overrideAPI = function(object, funcname, newfunc) {
+    newfunc = newfunc || this[funcname];
+    if (newfunc) {
+        var oldfunc = object[funcname];
+        object[funcname] = function() {
+            newfunc.func = oldfunc; 
+            return newfunc.apply(this, arguments);
+        }
+        object[funcname].func = oldfunc;
+    }
 };
