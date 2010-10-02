@@ -26,7 +26,7 @@ import framework.util.Stafzmprov;
  */
 @SuppressWarnings("static-access")
 public class ComposeView extends AppPage {
-	public static final String zSendIconBtn = "css=[id^=zb__COMPOSE][id$=__SEND_left_icon]";
+	public static final String zSendIconBtn = "css=[id^=zb__COMPOSE][id$=__SEND_MENU_left_icon]";
 	public static final String zCancelIconBtn = "css=[id^=zb__COMPOSE][id$=__CANCEL_left_icon]";
 	public static final String zSaveDraftsIconBtn = "css=[id^=zb__COMPOSE][id$=__SAVE_DRAFT_left_icon]";
 	public static final String zAddAttachmentIconBtn = "css=[id^=zb__COMPOSE][id$=__ATTACHMENT_left_icon]";
