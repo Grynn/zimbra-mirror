@@ -16,18 +16,21 @@ public class BriefcaseApp extends AppPage {
 	public static String zBriefcaseFolder = "id=zti__main_Briefcase__16_textCell";
 	public static String zTrashFolder = "id=zti__main_Briefcase__3_textCell";
 	public static final String zBriefcaseAppIconBtn = "id=zb__App__Briefcase_left_icon";
-	public static final String zNewMenuIconBtn = "id=zb__BCC__NEW_MENU_left_icon";
-	public static final String zUploadFileIconBtn = "id=zb__BCC__NEW_FILE_left_icon";
-	public static final String zDeleteIconBtn = "id=zb__BCC__DELETE_left_icon";
-	public static final String zDeleteBtn = "id=zb__BCC__DELETE";
-	public static final String zMoveItemIconBtn = "id=zb__BCC__MOVE_left_icon";
-	public static final String zTagItemIconBtn = "id=zb__BCC__TAG_MENU_left_icon";
-	public static final String zViewIconBtn = "id=zb__BCC__VIEW_MENU_left_icon";
-	public static final String zSendBtnIconBtn = "id=zb__BCC__SEND_FILE_left_icon";
+	public static final String zNewMenuIconBtn = "id=zb__BCD__NEW_FILE_left_icon";
+	
+	//THIS PARAMETER NOT USED ANYWHERE
+	public static final String zUploadFileIconBtn = "id=zb__BCD__NEW_FILE_left_icon";
+	
+	public static final String zDeleteIconBtn = "id=zb__BCD__DELETE_left_icon";
+	public static final String zDeleteBtn = "id=zb__BCD__DELETE";
+	public static final String zMoveItemIconBtn = "id=zb__BCD__MOVE_left_icon";
+	public static final String zTagItemIconBtn = "id=zb__BCD__TAG_MENU_left_icon";
+	public static final String zViewIconBtn = "id=zb__BCD__VIEW_MENU_left_icon";
+	public static final String zSendBtnIconBtn = "id=zb__BCD__SEND_FILE_left_icon";
 
-	public static final String zNewDocumentIconBtn = "id=zb__BCC__NEW_DOC_left_icon";
-	public static final String zNewSpreadsheetIconBtn = "id=zb__BCC__NEW_SPREADSHEET_left_icon";
-	public static final String zNewPresentationIconBtn = "id=zb__BCC__NEW_PRESENTATION_left_icon";
+	public static final String zNewDocumentIconBtn = "id=zb__BCD__NEW_DOC_left_icon";
+	public static final String zNewSpreadsheetIconBtn = "id=zb__BCD__NEW_SPREADSHEET_left_icon";
+	public static final String zNewPresentationIconBtn = "id=zb__BCD__NEW_PRESENTATION_left_icon";
 
 	/**
 	 * This method navigates to briefcase application
