@@ -530,7 +530,7 @@ function(x, y) {
 	} else {
 		newH = windowSize.y - y - 5;
 	}
-    if(this._menuHasSubmenus()) {
+    if(isScroll) {
 	    if (this._table) {
 		    this._table.style.width = mySize.x;
         }
