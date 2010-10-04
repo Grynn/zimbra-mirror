@@ -30,5 +30,6 @@
 	<classpathentry kind="src" path="src/java"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraSoap"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
