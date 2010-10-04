@@ -2342,7 +2342,7 @@ function(params) {
 				this.systemFolders.push({name:account.name, icon:"social_facebookIcon",  account:account, type:"FACEBOOK"});
 			}
 		}
-		this.systemFolders.push({name:this.getMessage("addRemoveAccounts", icon:"Group", account:"", type:"MANAGE_ACCOUNTS"});
+		this.systemFolders.push({name:this.getMessage("addRemoveAccounts"), icon:"Group", account:"", type:"MANAGE_ACCOUNTS"});
 		//this.systemFolders.push({name:"Zimlet Preferences", icon:"Preferences", account:"", type:"PREFERENCES"});
 	}
 	if (params.updateSearchTree || params.updateSystemTree || params.updateTrendsTree || params.updateTweetMemeTree || params.updateDiggTree) {
