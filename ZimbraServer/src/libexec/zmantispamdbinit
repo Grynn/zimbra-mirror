@@ -34,7 +34,7 @@ zmassert -x ${zimbra_home}/bin/antispam-mysql
 zmassert -x ${zimbra_home}/bin/zmlocalconfig
 zmassert -x ${zimbra_home}/bin/zmantispamdbpasswd
 zmassert -x ${antispam_mysql_directory}/bin/mysql_install_db
-zmassert -r ${zimbra_home}/amavisd/mysql/antispamdb.sql
+zmassert -r ${zimbra_home}/amavisd/conf/mysql/antispamdb.sql
 
 #
 # Create necessary directories
@@ -113,9 +113,9 @@ fi
 #
 # Load zimbra sql files
 #
-echo '*' Loading schema ${zimbra_home}/amavisd/mysql/antispamdb.sql 
+echo '*' Loading schema ${zimbra_home}/amavisd/conf/mysql/antispamdb.sql 
 ${zimbra_home}/bin/antispam-mysql -u root --password= < \
-    ${zimbra_home}/amavisd/mysql/antispamdb.sql
+    ${zimbra_home}/amavisd/conf/mysql/antispamdb.sql
 
 
 #
