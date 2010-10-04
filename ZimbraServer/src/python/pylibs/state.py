@@ -648,7 +648,7 @@ class State:
 		except Exception, e:
 			[Log.logMsg(1,t) for t in traceback.format_tb(sys.exc_info()[2])]
 			Log.logMsg(1, "Rewrite failed: %s (%s)" % (e))
-			raise e
+			return True
 
 		return False
 
