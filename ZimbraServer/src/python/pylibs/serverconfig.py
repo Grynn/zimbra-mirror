@@ -23,6 +23,8 @@ import time
 class ServerConfig(config.Config):
 	def getServices(self, key=None):
 		if key is not None:
+			if key == "mailboxd":
+				key = "mailbox"
 			Log.logMsg(5, "Checking service %s in services %s (%s)" % (key, self["zimbraServiceEnabled"], key in self["zimbraServiceEnabled"]))
 			return key in self["zimbraServiceEnabled"]
 		return self["zimbraServiceEnabled"].split(' ')

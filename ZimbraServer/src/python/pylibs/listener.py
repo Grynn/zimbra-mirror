@@ -44,17 +44,14 @@ class ThreadedRequestHandler(SocketServer.BaseRequestHandler):
 				state.State.mState.lAction.acquire() # Don't interrupt the rewrite process
 				Log.logMsg (5, "LOCK myState.lAction acquired")
 				for arg in args[1:]:
-					state.State.mState.forced += 100
 					Log.logMsg(3, "Processing rewrite request for %s" % arg)
-					state.State.mState.forcedconfig[arg] = arg
+					state.State.mState.requestedconfig[arg] = arg
 				os.kill(os.getpid(),signal.SIGUSR2) # wake up the main thread if it's sleeping
-				while state.State.mState.forced:
-					Log.logMsg (5, "LOCK myState.lAction wait()")
-					state.State.mState.lAction.wait()
-					Log.logMsg (5, "LOCK myState.lAction released")
-					state.State.mState.lAction.release()
-					response = "SUCCESS REWRITES COMPLETE"
-					break
+				Log.logMsg (5, "LOCK myState.lAction wait()")
+				state.State.mState.lAction.wait()
+				Log.logMsg (5, "LOCK myState.lAction released")
+				state.State.mState.lAction.release()
+				response = "SUCCESS REWRITES COMPLETE"
 		else:
 			response = "ERROR UNKNOWN COMMAND"
 

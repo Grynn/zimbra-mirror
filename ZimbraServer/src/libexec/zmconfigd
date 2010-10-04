@@ -171,9 +171,6 @@ else:
 while True:
 
 	t1 = time.clock()
-	Log.logMsg (5, "LOCK myState.lAction requested")
-	myState.lAction.acquire()
-	Log.logMsg (5, "LOCK myState.lAction acquired")
 
 	try:
 		# read all the configs 
@@ -196,28 +193,26 @@ while True:
 		# check for config changes
 		myState.compareKeys()
 
+		Log.logMsg (5, "LOCK myState.lAction requested")
+		myState.lAction.acquire()
+		Log.logMsg (5, "LOCK myState.lAction acquired")
 		myState.compileActions()
+		myState.requestedconfig = {}
+		myState.doConfigRewrites()
+		myState.lAction.notifyAll()
+		myState.lAction.release()
+		Log.logMsg (5, "LOCK myState.lAction released")
 
 		# executes rewrites/postconf/restarts
 		if myConfig.restartconfig:
-			myState.doActions()
+			myState.doRestarts()
 	except Exception, e:
 		[Log.logMsg(1,t) for t in traceback.format_tb(sys.exc_info()[2])]
 		if myState.forced and myState.forced < 100:
 			Log.logMsg(0, "Configuration inconsistency detected (%s)" % (e,))
 		Log.logMsg(1, "Sleeping...Configuration inconsistency detected (%s)" % (e,));
-		if myState.forced >= 100: # Handle a rewrite request
-			myState.forced = 0;
-			myState.forcedconfig = {}
-			myState.lAction.notifyAll()
 		time.sleep(5)
 		continue
-	finally:
-		if myState.forced >= 100: # Handle a rewrite request
-			myState.forced = 0;
-			myState.forcedconfig = {}
-			myState.lAction.notifyAll()
-			Log.logMsg (3, "notifying rewrite clients")
 
 	if myState.forced:
 		break
@@ -227,7 +222,6 @@ while True:
 	if myState.firstRun and not myState.forced:
 		requestListener()
 
-	myState.lAction.release()
 	Log.logMsg (5, "LOCK myState.lAction released")
 	myState.firstRun = False
 	lt = time.clock()-t1

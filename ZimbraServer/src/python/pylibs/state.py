@@ -42,11 +42,12 @@ class State:
 		"logger"    : 10,
 		"convertd"  : 20,
 		"mailbox"   : 30,
+		"mailboxd"  : 35,
 		"memcached" : 40,
 		"imapproxy" : 50,
 		"antispam"  : 60,
 		"antivirus" : 70,
-    "cbpolicyd" : 72,
+    	"cbpolicyd" : 72,
 		"amavis"    : 75,
 		"archiving" : 80,
 		"snmp"      : 90,
@@ -66,6 +67,7 @@ class State:
 		self.miscconfig       = miscconfig.MiscConfig()
 		self.serverconfig     = serverconfig.ServerConfig()
 		self.forcedconfig     = {}
+		self.requestedconfig     = {}
 		self.fileCache 		  = {}
 		self.watchdog         = {
 							  }
@@ -437,12 +439,12 @@ class State:
 		for sn in self.mtaconfig.getSections():
 			section = self.mtaconfig.getSection(sn)
 			Log.logMsg(5, "compiling actions for %s" % (section.name,))
-			if len(self.forcedconfig):
+			if len(self.forcedconfig) or len(self.requestedconfig):
 				Log.logMsg(4, "Checking for forced keys %s" % (section.name,))
-				if not section.name in self.forcedconfig:
+				if not section.name in self.forcedconfig and not section.name in self.requestedconfig:
 					continue
 			
-			if self.firstRun or section.changed or section.name in self.forcedconfig:
+			if self.firstRun or section.changed or section.name in self.forcedconfig or section.name in self.requestedconfig:
 				Log.logMsg(5, "Section %s changed compiling rewrites" % (section.name,))
 				for rewrite in section.rewrites():
 					self.curRewrites(rewrite, section.rewrites(rewrite))
@@ -459,7 +461,7 @@ class State:
 				for ldap in section.ldap():
 					self.curLdap(ldap, section.ldap(ldap))
 
-				if not self.forced and not self.firstRun: # no restarts on forced rewrites
+				if not self.forced and not self.firstRun and not len(self.requestedconfig): # no restarts on forced rewrites
 					Log.logMsg(5, "Section %s changed compiling restarts" % (section.name,))
 					for restart in section.restarts():
 						if self.lookUpConfig("SERVICE", restart):
@@ -516,8 +518,7 @@ class State:
 			if not self.doLdap(ldap, val, master, pw):
 				self.delLdap(ldap)
 
-	def doActions(self):
-
+	def doConfigRewrites(self):
 		t1 = time.clock()
 		th = []
 		# Proxygen takes longest, do it first
@@ -528,7 +529,11 @@ class State:
 
 		[t.start() for t in th]
 		[t.join() for t in th]
+		dt = time.clock()-t1
+		Log.logMsg(3, "All rewrite threads completed in %.2f sec" % dt)
 
+	def doRestarts(self):
+		t1 = time.clock()
 		# Don't thread these
 		while self.curRestarts().items():	# Loop to pick up any dependencies.
 			for (restart, val) in sorted (self.curRestarts().items(), key=lambda x: State.startorder[x[0]]):
@@ -536,7 +541,7 @@ class State:
 					self.delRestart(restart)
 
 		dt = time.clock()-t1
-		Log.logMsg(3, "All action threads completed in %.2f sec" % dt)
+		Log.logMsg(3, "All restarts completed in %.2f sec" % dt)
 
 	def doLdap(self, key, val, master, pw):
 		Log.logMsg(4, "Setting ldap %s=%s" % (key, val))
