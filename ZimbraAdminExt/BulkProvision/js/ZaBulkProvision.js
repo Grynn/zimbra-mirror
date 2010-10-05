@@ -69,7 +69,6 @@ ZaBulkProvision.A2_GalLdapURL = "zimbraGalLdapURL";
 ZaBulkProvision.A2_GalLdapSearchBase = "zimbraGalLdapSearchBase";
 ZaBulkProvision.A2_GalLdapBindDn = "zimbraGalLdapBindDn";
 ZaBulkProvision.A2_GalLdapBindPassword = "zimbraGalLdapBindPassword";
-ZaBulkProvision.A2_GalLdapConfirmBindPassword = "zimbraGalLdapConfirmBindPassword";
 ZaBulkProvision.A2_GalLdapFilter = "zimbraGalLdapFilter";
 
 //IMAP Migration options
@@ -216,7 +215,6 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_GalLdapSearchBase, type:_STRING_, ref:ZaBulkProvision.A2_GalLdapSearchBase},
 	        {id:ZaBulkProvision.A2_GalLdapBindDn, type:_STRING_, ref:ZaBulkProvision.A2_GalLdapBindDn},
 	        {id:ZaBulkProvision.A2_GalLdapBindPassword, type:_STRING_, ref:ZaBulkProvision.A2_GalLdapBindPassword},
-	        {id:ZaBulkProvision.A2_GalLdapConfirmBindPassword, type:_STRING_, ref:ZaBulkProvision.A2_GalLdapConfirmBindPassword},
 	        {id:ZaBulkProvision.A2_GalLdapFilter, type:_STRING_, ref:ZaBulkProvision.A2_GalLdapFilter},
 	        {id:ZaBulkProvision.A2_password, type:_STRING_, ref:ZaBulkProvision.A2_password},
 	        {id:ZaBulkProvision.A2_confirmPassword, type:_STRING_, ref:ZaBulkProvision.A2_confirmPassword},

@@ -167,15 +167,6 @@ function() {
 			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_BIND_DN_REQUIRED);
 			return;
 		}		
-
-
-		/**
-		 * Check that passwords match
-		 */
-		if(this._containedObject[ZaBulkProvision.A2_GalLdapBindPassword] != this._containedObject[ZaBulkProvision.A2_GalLdapConfirmBindPassword]) {
-			ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_PASSWORDS_DONT_MATCH);
-			return;
-		}		
 		
 
 		/**
@@ -795,9 +786,6 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 				{ref:ZaBulkProvision.A2_GalLdapBindPassword, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPassword, labelLocation:_LEFT_, 
 					enableDisableChecks:[],visibilityChecks:[]				
 				},
-				{ref:ZaBulkProvision.A2_GalLdapConfirmBindPassword, type:_SECRET_, label:ZaMsg.Domain_GalLdapBindPasswordConfirm, labelLocation:_LEFT_, 
-					enableDisableChecks:[],visibilityChecks:[]				
-				},				
 				{ref:ZaBulkProvision.A2_GalLdapFilter, type:_TEXTAREA_, width:380, height:40, 
 					label:ZaMsg.Domain_GalLdapFilter, labelLocation:_LEFT_, 
 					enableDisableChecks:[],visibilityChecks:[]
