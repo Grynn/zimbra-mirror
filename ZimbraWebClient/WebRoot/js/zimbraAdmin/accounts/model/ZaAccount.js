@@ -440,7 +440,7 @@ function(tmpObj) {
 	}
 	//if there is a password - validate it
 	if(ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT,tmpObj)) {
-		if(tmpObj.attrs[ZaAccount.A_password]!=null || tmpObj[ZaAccount.A2_confirmPassword]!=null) {
+		if(!AjxUtil.isEmpty(tmpObj.attrs[ZaAccount.A_password]) || !AjxUtil.isEmpty(tmpObj[ZaAccount.A2_confirmPassword])) {
 			if(tmpObj.attrs[ZaAccount.A_password] != tmpObj[ZaAccount.A2_confirmPassword]) {
 				//show error msg
 				ZaApp.getInstance().getCurrentController().popupErrorDialog(ZaMsg.ERROR_PASSWORD_MISMATCH);
@@ -1969,7 +1969,7 @@ ZaAccount.setCosChanged = function (value, event, form) {
 	
 	if(ZaItem.ID_PATTERN.test(value)) {
 		this._defaultValues = ZaCos.getCosById(value);
-	} else {
+	} else if(!AjxUtil.isEmpty(value)) {
 		var cos = ZaCos.getCosByName(value);
 		if(cos) {
 			this._defaultValues = cos;
