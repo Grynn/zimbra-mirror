@@ -799,6 +799,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		Map<String, Object> dsAttrs = new HashMap<String, Object>();
 		try {
 			dsAttrs.put(Provisioning.A_zimbraGalType, GalMode.zimbra.name());
+			dsAttrs.put(Provisioning.A_zimbraDataSourcePollingInterval, "1d");
 			dsAttrs.put(Provisioning.A_zimbraDataSourceFolderId, "" + folderId);
 			dsAttrs.put(Provisioning.A_zimbraDataSourceEnabled,
 					LdapUtil.LDAP_TRUE);
