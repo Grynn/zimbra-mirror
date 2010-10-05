@@ -295,7 +295,18 @@ function () {
 	}
 		
 	var mods = new Object();
-
+    
+	if(!AjxUtil.isEmpty(tmpObj.attrs[ZaAccount.A_COSId]) && !ZaItem.ID_PATTERN.test(tmpObj.attrs[ZaAccount.A_COSId]))  {
+    	var cos = ZaCos.getCosByName(tmpObj.attrs[ZaAccount.A_COSId]);
+    	if(cos) {
+    		tmpObj.attrs[ZaAccount.A_COSId] = cos.id;
+    		tmpObj._defaultValues = cos;
+    	} else {
+    		this.popupErrorDialog(AjxMessageFormat.format(ZaMsg.ERROR_NO_SUCH_COS,[tmpObj.attrs[ZaAccount.A_COSId]]));
+    		return false;
+    	}
+    } 
+	
 	if(!ZaAccount.checkValues(tmpObj))
 		return false;
 	
@@ -321,7 +332,7 @@ function () {
 		if(a == ZaAccount.A_password || a==ZaAccount.A_zimbraMailAlias || a == ZaItem.A_objectClass
                 || a==ZaAccount.A2_mbxsize || a==ZaAccount.A_mail || a == ZaItem.A_zimbraId
                 || a == ZaAccount.A_zimbraAvailableSkin || a == ZaAccount.A_zimbraZimletAvailableZimlets
-                || a == ZaItem.A_zimbraACE) {
+                || a == ZaItem.A_zimbraACE || a == ZaAccount.A_uid) {
 			continue;
 		}	
 		if(!ZaItem.hasWritePermission(a,tmpObj)) {
@@ -329,9 +340,6 @@ function () {
 		}		
 		//check if the value has been modified
 		if ((this._currentObject.attrs[a] != tmpObj.attrs[a]) && !(this._currentObject.attrs[a] == undefined && tmpObj.attrs[a] === "")) {
-			if(a==ZaAccount.A_uid) {
-				continue; //skip uid, it is changed throw a separate request
-			}
 			if(tmpObj.attrs[a] instanceof Array) {
                 if (!this._currentObject.attrs[a]) this._currentObject.attrs[a] = [] ;
                 if(!this._currentObject.attrs[a] instanceof Array) {
