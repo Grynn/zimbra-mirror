@@ -419,6 +419,10 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		var callback = new AjxCallback(this, ZaBulkDataImportXWizard.prototype.previewCallback,{nextStep:ZaBulkDataImportXWizard.STEP_REVIEW});
     	ZaBulkProvision.bulkDataIMport(this._containedObject,callback);		
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_REVIEW) {
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);	
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		var callback = new AjxCallback(this, ZaBulkDataImportXWizard.prototype.startImportCallback,{});
 		this._containedObject[ZaBulkProvision.A2_op] = ZaBulkProvision.OP_START_IMPORT;
 		ZaBulkProvision.bulkDataIMport(this._containedObject,callback);
