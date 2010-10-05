@@ -1,8 +1,7 @@
-<zimlet name="com_zimbra_bulkprovision" version="6.0.7"
+<zimlet name="com_zimbra_bulkprovision" version="7.0"
 	description="Bulk Provisioning Account Extension for Admin UI"
 	extension="true">
 	<include>com_zimbra_bulkprovision.js</include>
-    <include>ZaBulkProvisionWizard.js</include>
     <include>ZaBulkImportXWizard.js</include>
     <include>ZaMigrationXWizard.js</include>
     <include>ZaBulkProvision.js</include>

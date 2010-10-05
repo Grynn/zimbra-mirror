@@ -251,11 +251,7 @@ function() {
 		 * Start import
 		 */
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-		if(this.finishCallback) {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-		} else {
-			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-		}
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 		this._localXForm.setInstanceValue(ZaBulkProvision.iSTATUS_STARTING,ZaBulkProvision.A2_status);
@@ -305,6 +301,8 @@ function() {
     } else if(this.prevCallback && cStep == ZaBulkImportXWizard.STEP_CHOOSE_ACTION) {
     	this.prevCallback.run(this._containedObject);
     	return;
+    } else if(cStep == ZaBulkImportXWizard.STEP_FILE_UPLOAD) {
+    	prevStep = ZaBulkImportXWizard.STEP_CHOOSE_ACTION;
     }
 	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
@@ -444,16 +442,10 @@ function(params,resp) {
 };
 
 ZaBulkImportXWizard.prototype.importFromFileCallback = function(params,resp) {
-	if(this.finishCallback) {
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-	} else {
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-	}
-	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
 	try {
 		if(resp && resp.isException()) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkImportXWizard.prototype.importFromFileCallback");
 		} else {
 			var response = resp.getResponse().Body.BulkImportAccountsResponse;
@@ -465,17 +457,10 @@ ZaBulkImportXWizard.prototype.importFromFileCallback = function(params,resp) {
 };
 
 ZaBulkImportXWizard.prototype.importCallback = function(params,resp) {
-	if(this.finishCallback) {
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
-	} else {
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(false);
-	}
-
-	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
-	this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
 	try {
 		if(resp && resp.isException()) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
 			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkImportXWizard.prototype.importCallback");
 		} else {
 			var response = resp.getResponse().Body.BulkImportAccountsResponse;
@@ -492,9 +477,7 @@ ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
 		status = parseInt(response[ZaBulkProvision.A2_status][0]._content);
 		if(status == ZaBulkProvision.iSTATUS_STARTED || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS || status == ZaBulkProvision.iSTATUS_ABORT) {	
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(false);
-		} else {
-			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
-		}
+		} 
 		this._localXForm.setInstanceValue(status,ZaBulkProvision.A2_status);
 	}
 	var totalCount = 0;
@@ -532,9 +515,14 @@ ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);
 	}
 	
-	if(status == ZaBulkProvision.iSTATUS_STARTING || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS || status == ZaBulkProvision.iSTATUS_FINISHED || status == ZaBulkProvision.iSTATUS_ABORTED || status == ZaBulkProvision.iSTATUS_ERROR) {
-		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+	if(status == ZaBulkProvision.iSTATUS_STARTING || status == ZaBulkProvision.iSTATUS_CREATING_ACCOUNTS) {
+		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(false);		
+	}
+	if(status == ZaBulkProvision.iSTATUS_FINISHED || status == ZaBulkProvision.iSTATUS_ABORTED || status == ZaBulkProvision.iSTATUS_ERROR) {
+		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);	
+		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);	
+		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 	}
 	var errorsFileLink = null;
 	var sucessFileLink = null;
