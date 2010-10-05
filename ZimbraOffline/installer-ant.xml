@@ -165,8 +165,6 @@
 				<arg value="sign" />
 				<arg value="/f" />
 				<arg value="${sign.cert}" />
-				<arg value="/p" />
-				<arg value="zimbra" />
 				<arg value="${build.dir}\${media_win32}" />
 			</exec>
 		</then></if>
