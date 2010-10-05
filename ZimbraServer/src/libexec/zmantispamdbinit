@@ -34,14 +34,14 @@ zmassert -x ${zimbra_home}/bin/antispam-mysql
 zmassert -x ${zimbra_home}/bin/zmlocalconfig
 zmassert -x ${zimbra_home}/bin/zmantispamdbpasswd
 zmassert -x ${antispam_mysql_directory}/bin/mysql_install_db
-zmassert -r ${zimbra_home}/amavisd/conf/mysql/antispamdb.sql
+zmassert -r ${zimbra_home}/data/amavisd/mysql/antispamdb.sql
 
 #
 # Create necessary directories
 #
-echo '*' Creating required directories
-mkdir -p ${antispam_mysql_data_directory}
-chmod -R 755 /opt/zimbra/data/amavisd/mysql
+#echo '*' Creating required directories
+#mkdir -p ${antispam_mysql_data_directory}
+#chmod -R 755 /opt/zimbra/data/amavisd/mysql
 
 # Check if log directory exists.  If not, create.
 if [ ! -d ${zimbra_log_directory} ]; then
@@ -113,9 +113,9 @@ fi
 #
 # Load zimbra sql files
 #
-echo '*' Loading schema ${zimbra_home}/amavisd/conf/mysql/antispamdb.sql 
+echo '*' Loading schema ${zimbra_home}/data/amavisd/mysql/antispamdb.sql 
 ${zimbra_home}/bin/antispam-mysql -u root --password= < \
-    ${zimbra_home}/amavisd/conf/mysql/antispamdb.sql
+    ${zimbra_home}/data/amavisd/mysql/antispamdb.sql
 
 
 #
