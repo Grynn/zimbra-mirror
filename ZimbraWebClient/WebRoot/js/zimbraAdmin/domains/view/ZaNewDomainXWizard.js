@@ -170,6 +170,8 @@ function(entry) {
 	this._containedObject[ZaDomain.A2_new_gal_sync_account_name]=entry[ZaDomain.A2_new_gal_sync_account_name];
 	this._containedObject[ZaDomain.A2_new_internal_gal_ds_name]=entry[ZaDomain.A2_new_internal_gal_ds_name];
 	this._containedObject[ZaDomain.A2_new_external_gal_ds_name]=entry[ZaDomain.A2_new_external_gal_ds_name];
+	this._containedObject[ZaDomain.A2_new_internal_gal_polling_interval] = "1d";
+	this._containedObject[ZaDomain.A2_new_external_gal_polling_interval] = "1d";
 	this._containedObject[ZaDomain.A2_create_gal_acc] = "TRUE";
 	this._containedObject.notebookAcls = {};
 
