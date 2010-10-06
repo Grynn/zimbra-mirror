@@ -343,18 +343,28 @@ function(text, select) {
 
 DwtHtmlEditor.prototype.insertImage =
 function(src, dontExecCommand, width, height) {
-    if(dontExecCommand){
+    if (dontExecCommand) {
         var doc = this._getIframeDoc();
 	    var img = doc.createElement("img");
         img.src = src;
-        if(width) img.width = width;
-        else img.removeAttribute('width');
-        if(height) img.height = height;
-        else img.removeAttribute('height');
-        var df = doc.createDocumentFragment();
+		if (width) {
+			img.width = width;
+		}
+		else {
+			img.removeAttribute('width');
+		}
+		if (height) {
+			img.height = height;
+		}
+		else {
+			img.removeAttribute('height');
+		}
+		img.style.border = "0"; // set border explicitly to 0, since otherwise a border is added implicitly in case it's wrapped with a link 
+		var df = doc.createDocumentFragment();
 	    df.appendChild(img);
 	    this._insertNodeAtSelection(df);
-    }else{
+    }
+    else {
         this._execCommand(DwtHtmlEditor.IMAGE, src);
     }
 };
