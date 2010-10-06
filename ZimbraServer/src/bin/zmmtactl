@@ -21,7 +21,17 @@ zmsetvars \
 	zimbra_server_hostname 
 
 BASE=${zimbra_home:=/opt/zimbra}
-SCRIPTS="postfix zmsaslauthdctl zmmilterctl"
+
+if [ -f "${zimbra_home}/conf/mta_milter_options" ]; then
+  source ${zimbra_home}/conf/mta_milter_options
+fi
+zimbraMilterServerEnabled=${zimbraMilterServerEnabled:=FALSE}
+
+if [ x"$zimbraMilterServerEnabled" = "xTRUE" ]; then
+  SCRIPTS="postfix zmsaslauthdctl zmmilterctl"
+else 
+  SCRIPTS="postfix zmsaslauthdctl"
+fi
 
 rewriteconfig() {
   echo -n "Rewriting configuration files..."
