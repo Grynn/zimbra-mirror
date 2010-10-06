@@ -275,7 +275,13 @@ AttachContactsZimlet._getEmailActionMenu = function(attachContactsZimlet) {
 	var args = Array.prototype.slice.call(arguments, 1); // Cut off our own argument
 	var menu = this.getActionMenu.func.apply(this, args); // Call overridden function
 	var contactCallback = new AjxCallback(this, this._getActionedContact, [false]); // Callback to method in com_zimbra_email
-	attachContactsZimlet.addMenuButton(contactCallback, menu, "NEWCONTACT");
+	var contact = contactCallback.run();
+	if (contact) {
+		attachContactsZimlet.addMenuButton(contactCallback, menu, "NEWCONTACT");
+	} else {
+		if (menu.getOp(AttachContactsZimlet.SEND_CONTACTS))
+			menu.removeOp(AttachContactsZimlet.SEND_CONTACTS);
+	}
 	return menu;
 };
 
