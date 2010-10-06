@@ -1,4 +1,4 @@
-if (console && console.log) console.debug("Loaded ZaCert.js");
+if (window.console && window.console.log) window.console.debug("Loaded ZaCert.js");
 
 function ZaCert () {
 	ZaItem.call(this,  "ZaCert");

@@ -817,8 +817,8 @@ function() {
 	var now = new Date();
 	for (var i = 0, len = this._msgQueue.length; i < len; ++i ) {
 		var msg = this._msgQueue[i];
-		if (console && console.log) {
-			console.log(AjxStringUtil.stripTags(msg.message + msg.eHtml));
+		if (window.console && window.console.log) {
+			window.console.log(AjxStringUtil.stripTags(msg.message + msg.eHtml));
 		}
 	}
 };

@@ -139,7 +139,7 @@ function (ev) {
 
 ZaAppTab.prototype._tabMouseupListener =
 function (ev) {
-	//if (console) console.debug("Tab Mouse Up") ;
+	//if (window.console) console.debug("Tab Mouse Up") ;
 	if (ev.button == DwtMouseEvent.RIGHT) {
 		if (this.isListenerRegistered(DwtEvent.ACTION)) {				
 				this.notifyListeners(DwtEvent.ACTION, ev);
@@ -149,7 +149,7 @@ function (ev) {
 
 ZaAppTab.prototype._mouseRightClickListener =
 function (ev) {
-	//if (console) console.debug("This is a right mouse action") ;
+	//if (window.console) console.debug("This is a right mouse action") ;
 	var tabGroup = this.parent ;
 	var tabs = tabGroup.getTabs() ;
 	var n = tabs.size() ;

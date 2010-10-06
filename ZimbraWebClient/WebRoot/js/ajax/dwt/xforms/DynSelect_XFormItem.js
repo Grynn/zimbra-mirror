@@ -91,7 +91,7 @@ DynSelect_XFormItem.fetchDataDefault = function (callArgs) {
 DynSelect_XFormItem.prototype.onKeyUp = function(value, event) {
 	var lastTypeTime = new Date().getTime();
 	this._lastTypeTime = lastTypeTime;
-	if (console && console.log) console.log("onKeyUp " + value + " @ "+lastTypeTime);
+	if (window.console && window.console.log) window.console.log("onKeyUp " + value + " @ "+lastTypeTime);
 	this.edited = true;
 	this.hideNote();
 	if(event.keyCode==XFG.ARROW_UP) {
@@ -169,14 +169,14 @@ DynSelect_XFormItem.prototype.resetChoices = function () {
 
 DynSelect_XFormItem.prototype.handleKeyPressDelay = function (event,value,lastTypeTime) {
 	var currTime = new Date().getTime();
-	if (console && console.log) console.log("handleKeyPressDelay " + value + " @ " + currTime);
+	if (window.console && window.console.log) window.console.log("handleKeyPressDelay " + value + " @ " + currTime);
 	this.keyPressDelayHdlr = null;
 	var val = this.preProcessInput(value);
 	
 	if(lastTypeTime == this._lastTypeTime) {
 		this.getForm().itemChanged(this, val, event);
 	} else {
-		if (console && console.log) console.log("typing faster than retreiving data");
+		if (window.console && window.console.log) window.console.log("typing faster than retreiving data");
 		return;
 	}		
 	if(!this.dataFetcherObject && this.dataFetcherClass !=null && this.dataFetcherMethod !=null) {

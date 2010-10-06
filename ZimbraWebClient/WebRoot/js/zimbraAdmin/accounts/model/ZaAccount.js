@@ -1961,7 +1961,6 @@ ZaAccount.isAutoMailServer = function () {
 
 ZaAccount.setCosChanged = function (value, event, form) {
 	var oldVal = this.getInstanceValue();
-	if (console && console.log) console.log("ZaAccount.setCosChanged " + value + "/" + oldVal);
 	if(oldVal == value)
 		return;
 			
