@@ -281,7 +281,16 @@ sub run() {
         my $TS = strftime("%H-%M-%S", localtime());
     
         invoke_thread_dump($i, $TS);
-        system("top -bc -n1 > top.$i.$TS 2>&1");
+        my $top_cmd = "top -bc -n1 > top.$i.$TS 2>&1";
+        if ($isMac) {
+            $top_cmd = "top -o cpu -l 2 | \
+                        awk 'BEGIN { sample = 0 } \
+                            { \
+                                if ( \$0 ~ /^Processes: / ) { sample++; } \
+                                if ( sample ==2 ) { print \$0 } \
+                            }' > top.$i.$TS 2>&1";
+        }
+        system($top_cmd);
         system("/bin/ps -auxw > ps.$i.$TS 2>&1");
         my $netstat = "netstat -anp > netstat.$i.$TS 2>&1";
         $netstat = "netstat -an > netstat.$i.$TS 2>&1" if ($isMac);
