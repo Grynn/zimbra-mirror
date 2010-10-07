@@ -35,7 +35,6 @@ import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
-import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.AuthToken;
@@ -485,9 +484,9 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             boolean unread = (flags & Flag.BITMASK_UNREAD) > 0;
             flags &= ~Flag.BITMASK_UNREAD;
 
-            String prevIndexId = item.getIndexId();
+            int prevIndexId = item.getIndexId();
             item.move(getFolderById(folderId));
-            if (!StringUtil.equal(prevIndexId, item.getIndexId())) {
+            if (prevIndexId != item.getIndexId()) {
                 queueForIndexing(item, false, null);
             }
             
