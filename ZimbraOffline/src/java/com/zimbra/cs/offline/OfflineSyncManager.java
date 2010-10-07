@@ -614,9 +614,9 @@ public class OfflineSyncManager {
         }
     }
 
-    public void init() throws ServiceException {
+    public void init() {
         new Thread(new Runnable() {
-            public void run() {
+            @Override public void run() {
                 backgroundInit();
             }
         }, "sync-manager-init").start();
@@ -715,9 +715,9 @@ public class OfflineSyncManager {
             }
             DirectorySync.getInstance();
 
-            //deal with left over mailboxes from interrupted delete/reset
-            long[] mids = MailboxManager.getInstance().getMailboxIds();
-            for (long mid : mids) {
+            // deal with left over mailboxes from interrupted delete/reset
+            int[] mids = MailboxManager.getInstance().getMailboxIds();
+            for (int mid : mids) {
                 try {
                     MailboxManager.getInstance().getMailboxById(mid, true);
                 } catch (ServiceException x) {

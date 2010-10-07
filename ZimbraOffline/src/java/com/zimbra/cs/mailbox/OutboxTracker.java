@@ -31,7 +31,7 @@ class OutboxTracker {
      * key: mailbox id
      * value: a map of item-id -> last time triesd and failed (0 means never tried)
      */
-    private static final Map<Long, Map<Integer, Long>> sOutboxMessageMap = Collections.synchronizedMap(new HashMap<Long, Map<Integer, Long>>());
+    private static final Map<Integer, Map<Integer, Long>> sOutboxMessageMap = Collections.synchronizedMap(new HashMap<Integer, Map<Integer, Long>>());
 
     static void invalidate(Mailbox mbox) {
         synchronized (sOutboxMessageMap) {
@@ -55,7 +55,7 @@ class OutboxTracker {
                 msgList.add(e.getKey());
         }
         Collections.sort(msgList, new Comparator<Integer>() {
-            public int compare(Integer o1, Integer o2) {
+            @Override public int compare(Integer o1, Integer o2) {
                 return o2 - o1;
             }
         });
@@ -79,7 +79,7 @@ class OutboxTracker {
     }
 
     private static void refresh(Mailbox mbox) throws ServiceException {
-        List<Integer> pendingSends = mbox.listItemIds(new OperationContext(mbox), MailItem.TYPE_MESSAGE, ZcsMailbox.ID_FOLDER_OUTBOX);
+        List<Integer> pendingSends = mbox.listItemIds(new OperationContext(mbox), MailItem.TYPE_MESSAGE, DesktopMailbox.ID_FOLDER_OUTBOX);
         synchronized (sOutboxMessageMap) {
             Map<Integer, Long> oldMap = sOutboxMessageMap.get(mbox.getId());
             Map<Integer, Long> newMap = new HashMap<Integer, Long>();

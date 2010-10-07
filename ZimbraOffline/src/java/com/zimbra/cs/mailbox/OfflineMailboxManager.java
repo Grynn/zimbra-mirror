@@ -14,7 +14,6 @@
  */
 package com.zimbra.cs.mailbox;
 
-
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
@@ -30,7 +29,7 @@ public class OfflineMailboxManager extends MailboxManager {
     public static OfflineMailboxManager getOfflineInstance() throws ServiceException {
         return (OfflineMailboxManager)MailboxManager.getInstance();
     }
-	
+
     public OfflineMailboxManager() throws ServiceException  {
         super();
     }
@@ -38,9 +37,9 @@ public class OfflineMailboxManager extends MailboxManager {
     /** Returns a new {@link ZcsMailbox} object to wrap the given data. */
     @Override
     protected Mailbox instantiateMailbox(MailboxData data) throws ServiceException {
-    	return DesktopMailbox.newMailbox(data);
+        return DesktopMailbox.newMailbox(data);
     }
-    
+
 //    public void syncAllMailboxes(boolean isOnRequest) throws ServiceException {
 //        for (Account account : OfflineProvisioning.getOfflineInstance().getAllSyncAccounts()) {
 //            try {
@@ -57,56 +56,55 @@ public class OfflineMailboxManager extends MailboxManager {
 //            }
 //        }
 //    }
-    
+
     public void notifyAllMailboxes() throws ServiceException {
         for (String acctId : getAccountIds()) {
             OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
             Account acct = prov.get(Provisioning.AccountBy.id, acctId);
             if (acct == null || prov.isGalAccount(acct) || prov.isMountpointAccount(acct))
                 continue;
-                
+
             try {
                 Mailbox mbox = getMailboxByAccountId(acctId);
-            	//loop through mailbox sessions and signal hanging NoOps
-            	List<Session> sessions = mbox.getListeners(Session.Type.SOAP);
-            	for (Session session : sessions) {
-            		if (session instanceof SoapSession)
-            			((SoapSession)session).forcePush();
-            	}
+                //loop through mailbox sessions and signal hanging NoOps
+                List<Session> sessions = mbox.getListeners(Session.Type.SOAP);
+                for (Session session : sessions) {
+                    if (session instanceof SoapSession)
+                        ((SoapSession)session).forcePush();
+                }
             } catch (ServiceException e) {
                 OfflineLog.offline.warn("failed to notify mailbox account_id=" + acctId, e);
             } catch (Exception t) {
-            	OfflineLog.offline.error("unexpected exception notifying mailbox account_id" + acctId, t);
+                OfflineLog.offline.error("unexpected exception notifying mailbox account_id" + acctId, t);
             }
         }
     }
 
     private final Object getMailboxMonitor = new Object();
+
     @Override
-    protected Mailbox getMailboxById(long mailboxId, FetchMode fetchMode,
-            boolean skipMailHostCheck) throws ServiceException {
-        synchronized(getMailboxMonitor) {
-            //have to fake MailboxMonitor out, it does not want us to hold it's lock since it will serialize mb instantiation
-            //but w/ SQLite we need to do just that to avoid reading db when another thread might have progressed on to sync
+    protected Mailbox getMailboxById(int mailboxId, FetchMode fetchMode, boolean skipMailHostCheck)
+    throws ServiceException {
+        synchronized (getMailboxMonitor) {
+            // have to fake MailboxMonitor out, it does not want us to hold it's lock since it will serialize mb instantiation
+            // but w/ SQLite we need to do just that to avoid reading db when another thread might have progressed on to sync
             return super.getMailboxById(mailboxId, fetchMode, skipMailHostCheck);
         }
     }
 
-    public synchronized void purgeBadMailboxByAccountId(String accountId) throws ServiceException {
-        long mailboxId = lookupMailboxId(accountId);
+    public synchronized void purgeBadMailboxByAccountId(String accountId) {
+        int mailboxId = lookupMailboxId(accountId);
         try {
             MailboxData mbData = new MailboxData();
             mbData.accountId = accountId;
             mbData.id = mailboxId;
             mbData.schemaGroupId = mailboxId;
             Mailbox tempMb = new Mailbox(mbData);
-            LocalMailbox mbox = (LocalMailbox) OfflineMailboxManager.getInstance().getMailboxByAccount(
-                    ((OfflineProvisioning)Provisioning.getInstance()).getLocalAccount());
+            Account acct = ((OfflineProvisioning) Provisioning.getInstance()).getLocalAccount();
+            LocalMailbox mbox = (LocalMailbox) MailboxManager.getInstance().getMailboxByAccount(acct);
             mbox.forceDeleteMailbox(tempMb);
         } catch (Exception e) {
             OfflineLog.offline.error("failed to purge bad mailbox due to exception",e);
         }
     }
-    
-    
 }

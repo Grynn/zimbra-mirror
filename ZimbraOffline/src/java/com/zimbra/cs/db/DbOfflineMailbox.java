@@ -693,7 +693,7 @@ public class DbOfflineMailbox {
             stmt = conn.prepareStatement("UPDATE mailbox SET account_id = ? WHERE id = ?");
             int pos = 1;
             stmt.setString(pos++, newAccountId);
-            stmt.setLong(pos++, mbox.getId());
+            stmt.setInt(pos++, mbox.getId());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw ServiceException.FAILURE("failed to replace account ID on mailbox " + mbox.getId() , e);
@@ -702,14 +702,14 @@ public class DbOfflineMailbox {
         }
     }
     
-    public static void forceDeleteMailbox(Connection conn, long id) throws ServiceException {
+    public static void forceDeleteMailbox(Connection conn, int id) throws ServiceException {
         assert(Db.supports(Db.Capability.ROW_LEVEL_LOCKING) || Thread.holdsLock(MailboxManager.getInstance()));
         PreparedStatement stmt = null;
         try {
             // remove entry from mailbox table
             if (!DebugConfig.externalMailboxDirectory) {
                 stmt = conn.prepareStatement("DELETE FROM mailbox WHERE id = ?");
-                stmt.setLong(1, id);
+                stmt.setInt(1, id);
                 stmt.executeUpdate();
             }
         } catch (SQLException e) {
