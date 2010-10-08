@@ -13,6 +13,9 @@
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 # ***** END LICENSE BLOCK *****
 #
+# Must be run on a system where the ldap_url key is set to contain all of the
+# replicas, as that is how the script determines what replicas exist.
+
 use strict;
 use lib '/opt/zimbra/zimbramon/lib';
 use Net::LDAP;
