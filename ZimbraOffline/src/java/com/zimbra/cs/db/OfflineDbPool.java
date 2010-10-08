@@ -28,7 +28,7 @@ import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.db.Db.Capability;
 import com.zimbra.cs.db.DbPool.Connection;
 import com.zimbra.cs.db.DbPool.PoolConfig;
-import com.zimbra.cs.db.DbPool.ZimbraConnectionFactory;
+
 
 /**
  * Connection pool for Offline DB operations. Assumes DbPool has been started prior to first access. Application must call shutdown() to exit cleanly.
@@ -81,7 +81,7 @@ public class OfflineDbPool {
         //if no row lock, we need serial access to the underlying db file
         //still need external synchronization for now since other connections to zimbra.db can occur through DbPool
         mConnectionPool = new GenericObjectPool(null, poolSize, GenericObjectPool.WHEN_EXHAUSTED_BLOCK, -1, poolSize);
-        ConnectionFactory cfac = new ZimbraConnectionFactory(pconfig.mConnectionUrl, pconfig.mDatabaseProperties);
+        ConnectionFactory cfac = ZimbraConnectionFactory.getConnectionFactory(pconfig);
         boolean defAutoCommit = false, defReadOnly = false;
         new PoolableConnectionFactory(cfac, mConnectionPool, null, null, defReadOnly, defAutoCommit);
         try {
