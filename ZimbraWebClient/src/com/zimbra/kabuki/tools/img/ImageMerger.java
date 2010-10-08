@@ -315,11 +315,11 @@ public class ImageMerger {
         }
 
         // common properties
-        boolean isTile = entry.layout.equals(ImageLayout.TILE);
-        boolean widthImportant = !isTile && !entry.layout.equals(ImageLayout.VERTICAL);
-        boolean heightImportant = !isTile && !entry.layout.equals(ImageLayout.HORIZONTAL);
-        print(cssOut, "width:%dpx%s;", entry.image.getWidth(), widthImportant ? " !important" : "");
-        print(cssOut, "height:%dpx%s;", entry.image.getHeight(), heightImportant ? " !important" : "");
+        boolean isNone = entry.layout.equals(ImageLayout.NONE);
+        if (isNone) {
+            print(cssOut, "width:%dpx !important;", entry.image.getWidth());
+            print(cssOut, "height:%dpx !important;", entry.image.getHeight());
+        }
         print(cssOut, "overflow:hidden;");
 
         println(cssOut, "}");
