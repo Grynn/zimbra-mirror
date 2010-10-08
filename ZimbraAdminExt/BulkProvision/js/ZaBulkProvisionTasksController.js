@@ -64,7 +64,9 @@ function () {
 	if(showBulkProvision) {    	
 		this._toolbarOperations[ZaOperation.BULK_DATA_IMPORT]=new ZaOperation(ZaOperation.BULK_DATA_IMPORT,com_zimbra_bulkprovision.TB_IMAP_Import, com_zimbra_bulkprovision.TB_IMAP_Import_tt, "ApplianceMigration", "ApplianceMigration", new AjxListener(this, this.bulkDataImportListener));
 		this._toolbarOperations[ZaOperation.DELETE]=new ZaOperation(ZaOperation.DELETE,com_zimbra_bulkprovision.DeleteTask, com_zimbra_bulkprovision.DeleteTask_tt, "Delete", "Delete", new AjxListener(this, this.deleteButtonListener));
+		this._toolbarOperations[ZaOperation.REFRESH]=new ZaOperation(ZaOperation.REFRESH,ZaMsg.TBB_Refresh, ZaMsg.TBB_Refresh_tt, "Refresh", "Refresh", new AjxListener(this, this.refreshButtonListener));
 		this._toolbarOrder.push(ZaOperation.BULK_DATA_IMPORT);
+		this._toolbarOrder.push(ZaOperation.REFRESH);
 		this._toolbarOrder.push(ZaOperation.DELETE);
 	}
 				
@@ -75,6 +77,13 @@ function () {
 	this._toolbarOrder.push(ZaOperation.HELP);					
 }
 ZaController.initToolbarMethods["ZaBulkProvisionTasksController"].push(ZaBulkProvisionTasksController.initToolbarMethod);
+
+ZaBulkProvisionTasksController.prototype.refreshButtonListener = function(ev) {
+	var list = ZaBulkProvision.getBulkDataImportTasks();
+	if (list != null)
+		this._contentView.set(list.getVector());
+	this.changeActionsState();	
+}
 
 ZaBulkProvisionTasksController.prototype.deleteButtonListener = function(ev) {
 	ZaApp.getInstance().dialogs["confirmMessageDialog"].setMessage(com_zimbra_bulkprovision.ConfirmDeleteTask, DwtMessageDialog.INFO_STYLE);

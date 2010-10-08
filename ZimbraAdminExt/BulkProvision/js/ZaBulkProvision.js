@@ -603,18 +603,27 @@ ZaBulkProvision.generateBulkProvisionFile = function(obj, callback) {
 };
 
 ZaBulkProvision.getBulkDataImportTasks = function() {
-	var soapDoc = AjxSoapDoc.create("GetBulkIMAPImportTaskListRequest",ZaBulkProvision.URN, null);	
-	var params = new Object();
-	params.soapDoc = soapDoc;
-	params.asyncMode=false;
-	var reqMgrParams = {
-		controller : ZaApp.getInstance().getCurrentController(),
-		busyMsg : com_zimbra_bulkprovision.BUSY_GET_BULK_TASKS
+	var servers = ZaApp.getInstance().getMailServers(true);
+	var taskList = new ZaItemList(ZaBulkProvisionTask);
+	for(var j=0;j<servers.length;j++) {
+		var soapDoc = AjxSoapDoc.create("GetBulkIMAPImportTaskListRequest",ZaBulkProvision.URN, null);	
+		var params = new Object();
+		params.soapDoc = soapDoc;
+		params.asyncMode=false;
+		params.targetServer = servers[j].id;
+		var reqMgrParams = {
+			controller : ZaApp.getInstance().getCurrentController(),
+			busyMsg : com_zimbra_bulkprovision.BUSY_GET_BULK_TASKS
+		}
+		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetBulkIMAPImportTaskListResponse;	
+		var list = new ZaItemList(ZaBulkProvisionTask);
+		list.loadFromJS(resp);
+		var arr = list.getArray();
+		for(var i=0;i<arr.length;i++) {
+			taskList.add(arr[i]);
+		}
 	}
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetBulkIMAPImportTaskListResponse;	
-	var list = new ZaItemList(ZaBulkProvisionTask);
-	list.loadFromJS(resp);	
-	return list;
+	return taskList;
 }
 
 ZaBulkProvision.deleteBulkDataImportTasks = function () {
