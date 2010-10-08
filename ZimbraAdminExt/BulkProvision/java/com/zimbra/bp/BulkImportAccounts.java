@@ -1,10 +1,6 @@
 package com.zimbra.bp;
 
 import java.io.File;
-import org.dom4j.io.SAXReader;
-import org.dom4j.Document;
-import org.dom4j.DocumentException;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,16 +8,19 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Iterator;
 
 import javax.naming.NamingException;
+
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 
 import au.com.bytecode.opencsv.CSVReader;
 import au.com.bytecode.opencsv.CSVWriter;
@@ -58,8 +57,8 @@ import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.service.FileUploadServlet;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
-import com.zimbra.cs.service.admin.AdminService;
 import com.zimbra.cs.service.admin.AdminFileDownload;
+import com.zimbra.cs.service.admin.AdminService;
 import com.zimbra.soap.ZimbraSoapContext;
 
 /**
@@ -441,7 +440,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
     								StringUtil.addToMultiMap(accAttrs,Provisioning.A_userPassword, password);
     							} else if (generatePwd.equalsIgnoreCase("true")) {
     								StringUtil.addToMultiMap(accAttrs,Provisioning.A_userPassword,
-    								        String.valueOf(GetBulkProvisionAccounts.generateStrongPassword(genPwdLength)));
+    								        String.valueOf(generateStrongPassword(genPwdLength)));
     							}
     
     							sourceEntries.add(accAttrs);
@@ -554,8 +553,7 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 						for (String completedAccount : thread.getCompletedAccounts().keySet()) {
 							String[] line = new String[2];
 							line[0] = completedAccount; // account name
-							line[1] = thread.getCompletedAccounts().get(
-									completedAccount); // account password
+							line[1] = thread.getCompletedAccounts().get(completedAccount); // account password
 							reportWriter.writeNext(line);
 						}
 						reportWriter.close();
@@ -610,6 +608,39 @@ public class BulkImportAccounts extends AdminDocumentHandler {
 		return response;
 	}
 
+	private static char[] pwdChars = "abcdefghijklmnopqrstuvqxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890~!@#$%^&*().,;:`<>?-+|}{[]'\"".toCharArray();
+    private static int getIntFromByte(byte[] bytes) {
+        int returnNumber = 0;
+        int pos = 0;
+        returnNumber += byteToInt(bytes[pos++]) << 24;
+        returnNumber += byteToInt(bytes[pos++]) << 16;
+        returnNumber += byteToInt(bytes[pos++]) << 8;
+        returnNumber += byteToInt(bytes[pos++]) << 0;
+        return returnNumber;
+    }
+
+    private static int byteToInt(byte b) {
+        return (int) b & 0xFF;
+    }
+      
+    public static char[] generateStrongPassword(int length) {
+        char[] pwd = new char[length];
+        try {
+          java.security.SecureRandom random = java.security.SecureRandom.
+              getInstance("SHA1PRNG");
+
+          byte[] intbytes = new byte[4];
+
+          for (int i = 0; i < length; i++) {
+            random.nextBytes(intbytes);
+            pwd[i] = pwdChars[Math.abs(getIntFromByte(intbytes) % pwdChars.length)];
+          }
+        }
+        catch (Exception ex) {
+          // Don't really worry, we won't be using this if we can't use securerandom anyway
+        }
+        return pwd;
+      }
 	/**
 	 * The account limits are decided by the following factors: 1) Hard limit:
 	 * MAX_ACCOUNTS_LIMIT or accountLimit - License Account Limit (whichever is

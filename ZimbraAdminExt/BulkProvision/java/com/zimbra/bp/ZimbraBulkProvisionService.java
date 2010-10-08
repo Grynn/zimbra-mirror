@@ -31,12 +31,6 @@ import org.dom4j.QName;
 public class ZimbraBulkProvisionService  implements DocumentService {
     public static final String NAMESPACE_STR = "urn:zimbraAdminExt";
     public static final Namespace NAMESPACE = Namespace.get(NAMESPACE_STR);
-
-    public static final QName GET_BULK_PROVISION_ACCOUNTS_REQUEST = QName.get("GetBulkProvisionAccountsRequest", NAMESPACE) ;
-    public static final QName GET_BULK_PROVISION_ACCOUNTS_RESPONSE = QName.get("GetBulkProvisionAccountsResponse", NAMESPACE) ;
-
-    public static final QName UPDATE_BULK_PROVISION_STATUS_REQUEST = QName.get("UpdateBulkProvisionStatusRequest", NAMESPACE) ;
-    public static final QName UPDATE_BULK_PROVISION_STATUS_RESPONSE = QName.get("UpdateBulkProvisionStatusResponse", NAMESPACE) ;
     
     public static final QName BULK_IMPORT_ACCOUNTS_REQUEST = QName.get("BulkImportAccountsRequest", NAMESPACE) ;
     public static final QName BULK_IMPORT_ACCOUNTS_RESPONSE = QName.get("BulkImportAccountsResponse", NAMESPACE) ;
@@ -57,8 +51,6 @@ public class ZimbraBulkProvisionService  implements DocumentService {
     public static final QName PURGE_BULK_IMAP_IMPORT_TASKS_RESPONSE = QName.get("PurgeBulkIMAPImportTasksResponse", NAMESPACE) ;
     
     public void registerHandlers(DocumentDispatcher dispatcher) {
-        dispatcher.registerHandler(GET_BULK_PROVISION_ACCOUNTS_REQUEST, new GetBulkProvisionAccounts());
-        dispatcher.registerHandler(UPDATE_BULK_PROVISION_STATUS_REQUEST, new UpdateBulkProvisionStatus());
         dispatcher.registerHandler(BULK_IMPORT_ACCOUNTS_REQUEST, new BulkImportAccounts());
         dispatcher.registerHandler(GENERATE_BULK_PROV_FROM_LDAP_REQUEST, new GenerateBulkProvisionFileFromLDAP());
         dispatcher.registerHandler(BULK_IMAP_DATA_IMPORT_REQUEST, new BulkIMAPDataImport());

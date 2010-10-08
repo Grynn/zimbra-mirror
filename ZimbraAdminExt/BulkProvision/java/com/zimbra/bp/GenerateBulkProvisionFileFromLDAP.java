@@ -169,7 +169,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	                	if(password != null) {
 	                		line[4] = password;
 	                	} else if(generatePwd.equalsIgnoreCase("true")) {
-	                		line[4] = String.valueOf(GetBulkProvisionAccounts.generateStrongPassword(genPwdLength));
+	                		line[4] = String.valueOf(BulkImportAccounts.generateStrongPassword(genPwdLength));
 	                	}
 	                	
 	                	line[5] = mustChangePassword;
@@ -222,7 +222,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	                	if(password != null) {
 	                    	ePassword.setText(password);
 	                	} else if(generatePwd.equalsIgnoreCase("true")) {
-	                    	ePassword.setText(String.valueOf(GetBulkProvisionAccounts.generateStrongPassword(genPwdLength)));
+	                    	ePassword.setText(String.valueOf(BulkImportAccounts.generateStrongPassword(genPwdLength)));
 	                	}   
 	                	eUser.add(ePassword);
 	                	
@@ -375,7 +375,7 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	                	if(password != null) {
 	                    	ePassword.setText(password);
 	                	} else if(generatePwd.equalsIgnoreCase("true")) {
-	                    	ePassword.setText(String.valueOf(GetBulkProvisionAccounts.generateStrongPassword(genPwdLength)));
+	                    	ePassword.setText(String.valueOf(BulkImportAccounts.generateStrongPassword(genPwdLength)));
 	                	}   
 	                	eUser.add(ePassword);                        
 	                	org.dom4j.Element elMustChangePassword = DocumentHelper.createElement(Provisioning.A_zimbraPasswordMustChange);
