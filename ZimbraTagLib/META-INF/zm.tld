@@ -5092,6 +5092,21 @@
             <type>com.zimbra.cs.taglib.bean.ZMailboxBean</type>
         </attribute>
         <attribute>
+            <description>
+                target account id for use with REST HTML rendering.
+            </description>
+            <name>resttargetaccountid</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>timezone to compute correct start/end time for all day appts</description>
+            <name>timezone</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.TimeZone</type>
+        </attribute>
+        <attribute>
         <description>
                 Name of the exported scoped variable for the search result.
             </description>
