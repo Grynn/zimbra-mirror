@@ -223,7 +223,7 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_IMAPAdminLogin,type:_STRING_,ref:ZaBulkProvision.A2_IMAPAdminLogin},
 	        {id:ZaBulkProvision.A2_IMAPAdminPassword,type:_STRING_,ref:ZaBulkProvision.A2_IMAPAdminPassword},
 	        {id:ZaBulkProvision.A2_IMAPAdminPasswordConfirm,type:_STRING_,ref:ZaBulkProvision.A2_IMAPAdminPasswordConfirm},
-	        {id:ZaBulkProvision.A2_genPasswordLength, type:_NUMBER_, ref:ZaBulkProvision.A2_genPasswordLength},
+	        {id:ZaBulkProvision.A2_genPasswordLength, type:_NUMBER_, ref:ZaBulkProvision.A2_genPasswordLength, maxInclusive:64},
 	        {id:ZaBulkProvision.A2_sourceServerType, type:_ENUM_, ref:ZaBulkProvision.A2_sourceServerType, choices:ZaBulkProvision.SourceServerTypeChoices},
 	        {id:ZaBulkProvision.A2_sourceType, type:_ENUM_, ref:ZaBulkProvision.A2_sourceType, choices:ZaBulkProvision.AccountListSourceTypeChoices},
 	        {id:ZaBulkProvision.A2_connectionType, type:_ENUM_, ref:ZaBulkProvision.A2_connectionType, choices:ZaBulkProvision.IMAPConnectionTypeChoices},
