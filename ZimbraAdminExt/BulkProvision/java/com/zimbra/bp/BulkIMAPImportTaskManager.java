@@ -1,17 +1,18 @@
 package com.zimbra.bp;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 
 import com.zimbra.common.service.ServiceException;
+import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
-import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.ImportStatus;
 
@@ -217,6 +218,13 @@ public class BulkIMAPImportTaskManager {
                         }
                     }
                     DataSourceManager.importData(importDS, true);
+                    
+                    //revert batch index size
+                    Map<String, Object> accAttrs = new HashMap<String, Object>();
+                    StringUtil.addToMultiMap(accAttrs,Provisioning.A_zimbraBatchedIndexingSize, null);
+                    Provisioning.getInstance().modifyAttrs(acct, accAttrs, true);
+                    
+                    //report finished task
                     HashMap<taskKeys, String> finishedTask = new HashMap<taskKeys, String>();
                     finishedTask.put(taskKeys.accountID, accountID);
                     finishedTask.put(taskKeys.dataSourceID,dataSourceID);
@@ -224,7 +232,7 @@ public class BulkIMAPImportTaskManager {
                         finishedList.add(finishedTask);
                     }                    
                 } catch (ServiceException e) {
-                    ZimbraLog.extensions.error("Error in IMAP import task", e);
+                    ZimbraLog.extensions.error(String.format("Error in IMAP import task for account %s, datasource %s",accountID,dataSourceID), e);
                     synchronized (failedQueues) {
                         Queue<HashMap<taskKeys, String>> failedList = failedQueues.get(queueKey);
                         if(failedList == null) {

@@ -32,6 +32,8 @@ public class ZimbraBulkProvisionExt implements ZimbraExtension {
     public static final String FILE_FORMAT_BULK_AD = "ad";
     public static final String FILE_FORMAT_ZIMBRA = "zimbra";
     public static final String EXCHANGE_IMAP = "EXCHANGE_IMAP";
+    public static final String DEFAULT_INDEX_BATCH_SIZE = "40";
+    
     public static final String A_password = "password";
     public static final String A_generatePassword = "generatePassword";
     public static final String A_genPasswordLength = "genPasswordLength";
@@ -71,6 +73,7 @@ public class ZimbraBulkProvisionExt implements ZimbraExtension {
     public static final String E_serverName = "serverName";
     public static final String E_port = "port";
     public static final String E_adminUserName = "adminUserName";
+    public static final String E_indexBatchSize = "indexBatchSize";
     
     public static final String OP_GET_STATUS = "getStatus";
     public static final String OP_PREVIEW = "preview";
@@ -81,7 +84,6 @@ public class ZimbraBulkProvisionExt implements ZimbraExtension {
     public static final String IMAP_IMPORT_DS_NAME = "__imap_import__";
 	public static final String E_skippedAccountCount = "skippedAccountCount";
     public static final String E_sourceServerType = "sourceServerType";
-    
 
     public void destroy() {
     }

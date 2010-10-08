@@ -1,49 +1,33 @@
 package com.zimbra.bp;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.BlockingQueue;
-
-import javax.naming.NamingException;
 
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.io.SAXReader;
 
 import com.zimbra.bp.BulkIMAPImportTaskManager.taskKeys;
-import com.zimbra.common.mailbox.ContactConstants;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.Element;
-import com.zimbra.common.util.EmailUtil;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
-import com.zimbra.cs.account.Domain;
-import com.zimbra.cs.account.GalContact;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
-import com.zimbra.cs.account.Provisioning.SearchGalResult;
-import com.zimbra.cs.account.accesscontrol.TargetType;
-import com.zimbra.cs.account.accesscontrol.Rights.Admin;
-import com.zimbra.cs.account.gal.GalOp;
-import com.zimbra.cs.account.gal.GalParams;
-import com.zimbra.cs.account.ldap.LdapGalMapRules;
-import com.zimbra.cs.account.ldap.LdapUtil;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.ImportStatus;
 import com.zimbra.cs.service.FileUploadServlet;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.service.admin.AdminFileDownload;
-import com.zimbra.cs.service.admin.AdminService;
 import com.zimbra.soap.ZimbraSoapContext;
 
 /**
@@ -64,6 +48,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 		Map<accountState, List<ExternalIMAPAccount>> IMAPAccounts = null;
 		String IMAPhost = null, IMAPport = null, adminLogin = null, adminPassword = null, connectionType = null, sourceServerType = null;
 		String sourceType = request.getElement(ZimbraBulkProvisionExt.A_sourceType).getTextTrim();
+		String indexBatchSize = ZimbraBulkProvisionExt.DEFAULT_INDEX_BATCH_SIZE;
 		boolean useAdminLogin = false;
 		if (sourceType.equalsIgnoreCase(AdminFileDownload.FILE_FORMAT_BULK_XML)) {
 	        String aid = request.getElement(ZimbraBulkProvisionExt.E_attachmentID).getTextTrim();
@@ -110,7 +95,13 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
     				org.dom4j.Element elIMAPPort = (org.dom4j.Element) IMAPPortIter.next();
     				IMAPport = elIMAPPort.getTextTrim();
     			}
-    
+    			
+                Iterator IndexBatchSizeIter  = root.elementIterator(ZimbraBulkProvisionExt.E_indexBatchSize);
+                if (IndexBatchSizeIter.hasNext()) {
+                    org.dom4j.Element elIxBatchSize = (org.dom4j.Element) IndexBatchSizeIter.next();
+                    indexBatchSize = elIxBatchSize.getTextTrim();
+                }
+
     			Iterator useAdminLoginIter = root.elementIterator(ZimbraBulkProvisionExt.E_useAdminLogin);
     			if (useAdminLoginIter.hasNext()) {
     				org.dom4j.Element elUseAdminLogin = (org.dom4j.Element) useAdminLoginIter.next();
@@ -197,6 +188,11 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
         if (elIMAPPort != null) {
             IMAPport = elIMAPPort.getTextTrim();
         }
+        
+        Element elBatchSize = request.getOptionalElement(ZimbraBulkProvisionExt.E_indexBatchSize);
+        if (elBatchSize != null) {
+            indexBatchSize = elBatchSize.getTextTrim();
+        }        
 
         Element elUseAdminLogin = request.getOptionalElement(ZimbraBulkProvisionExt.E_useAdminLogin);
         if (elUseAdminLogin != null) {
@@ -227,6 +223,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 			response.addElement(ZimbraBulkProvisionExt.E_connectionType).setText(connectionType);
 			response.addElement(ZimbraBulkProvisionExt.E_IMAPHost).setText(IMAPhost);
 			response.addElement(ZimbraBulkProvisionExt.E_IMAPPort).setText(IMAPport);
+			response.addElement(ZimbraBulkProvisionExt.E_indexBatchSize).setText(indexBatchSize);
 			if(useAdminLogin) {
                 response.addElement(ZimbraBulkProvisionExt.E_useAdminLogin).setText("1");
                 response.addElement(ZimbraBulkProvisionExt.E_IMAPAdminLogin).setText(adminLogin);
@@ -267,7 +264,13 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 			Queue<HashMap<taskKeys, String>> queue = BulkIMAPImportTaskManager.createQueue(zsc.getAuthtokenAccountId());
 			Queue<HashMap<taskKeys, String>> runningQ = BulkIMAPImportTaskManager.createRunningQueue(zsc.getAuthtokenAccountId());
 			Iterator<ExternalIMAPAccount> idleAccIter = idleAccounts.iterator();
-			
+			try {
+			    int size = Integer.parseInt(indexBatchSize);
+			    if(size <=0) 
+			        indexBatchSize = ZimbraBulkProvisionExt.DEFAULT_INDEX_BATCH_SIZE;
+			} catch (Exception e) {
+			    indexBatchSize = ZimbraBulkProvisionExt.DEFAULT_INDEX_BATCH_SIZE;
+			}
 			while (idleAccIter.hasNext()) {
 				ExternalIMAPAccount acct = idleAccIter.next();
 				HashMap<taskKeys, String> task = new HashMap<taskKeys, String>();
@@ -282,7 +285,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
                                 : acct.getUserLogin(),
                         useAdminLogin ? adminPassword
                                 : acct.getUserPassword(),
-                        useAdminLogin).getId(); 
+                                indexBatchSize,useAdminLogin).getId(); 
 				String acctID = acct.getAccount().getId();
 				task.put(taskKeys.accountID, acctID);
 				task.put(taskKeys.dataSourceID,dataSourceID);
@@ -574,7 +577,7 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
  */
 	public static DataSource createIMAPDataSource(Account account, String host,
 			String port, String connectionType, String sourceServerType, String accName, String login,
-			String password, boolean useAdminAuth) throws ServiceException {
+			String password, String batchSize, boolean useAdminAuth) throws ServiceException {
 		Map<String, Object> dsAttrs = new HashMap<String, Object>();
 		/*
 		 * Right now we support only plain authorization mechanism which uses either AUTHORIZE PLAIN and LOGIN commands
@@ -601,6 +604,9 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 		StringUtil.addToMultiMap(dsAttrs, Provisioning.A_zimbraDataSourceName,ZimbraBulkProvisionExt.IMAP_IMPORT_DS_NAME);
 		StringUtil.addToMultiMap(dsAttrs,Provisioning.A_zimbraDataSourceEnabled, "TRUE");
 		DataSource importDS = Provisioning.getInstance().createDataSource(account, DataSource.Type.imap,ZimbraBulkProvisionExt.IMAP_IMPORT_DS_NAME, dsAttrs);
+		Map<String, Object> accAttrs = new HashMap<String, Object>();
+		StringUtil.addToMultiMap(accAttrs,Provisioning.A_zimbraBatchedIndexingSize, batchSize);
+		Provisioning.getInstance().modifyAttrs(account, accAttrs, true);
 		return importDS;
 	}
 
