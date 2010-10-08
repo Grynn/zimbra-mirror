@@ -45,8 +45,8 @@ DwtShell = function(params) {
 	var className = params.className || "DwtShell";
 	DwtComposite.call(this, {className:className});
 
-    // HACK! This is a hack to make sure that the control methods work 
-    // with DwtShell since the parent of DwtShell is null. 
+	// HACK! This is a hack to make sure that the control methods work 
+	// with DwtShell since the parent of DwtShell is null. 
 	this.__ctrlInited = true;
 
 	document.body.style.margin = 0;
@@ -57,12 +57,12 @@ DwtShell = function(params) {
 		document.body.style.overflow = "hidden";
 	}
 
-    document.body.onselect = DwtShell._preventDefaultSelectPrt;
+	document.body.onselect = DwtShell._preventDefaultSelectPrt;
 	document.body.onselectstart = DwtShell._preventDefaultSelectPrt;
-    document.body.oncontextmenu = DwtShell._preventDefaultPrt;
-    window.onresize = DwtShell._resizeHdlr;
+	document.body.oncontextmenu = DwtShell._preventDefaultPrt;
+	window.onresize = DwtShell._resizeHdlr;
 
-    var htmlElement = document.createElement("div");
+	var htmlElement = document.createElement("div");
 	this._htmlElId = window._dwtShellId = htmlElement.id = params.id || Dwt.getNextId();
 	DwtControl.ALL_BY_ID[this._htmlElId] = this;
 
@@ -86,10 +86,10 @@ DwtShell = function(params) {
 		userShellContainer.setSize("100%", "100%");
 		userShellContainer.zShow(true);
 	}
-    this.shell = this;
+	this.shell = this;
 
-    // Busy overlay - used when we want to enforce a modal busy state
-    this._createBusyOverlay(htmlElement);
+	// Busy overlay - used when we want to enforce a modal busy state
+	this._createBusyOverlay(htmlElement);
 
 	// Veil overlay - used by DwtDialog to disable underlying app
 	this._veilOverlay = document.createElement("div");
@@ -97,7 +97,7 @@ DwtShell = function(params) {
 	this._veilOverlay.style.position = "absolute";
 	this._veilOverlay.style.cursor = AjxEnv.isIE6up ? "not-allowed" : "wait";
 	Dwt.setBounds(this._veilOverlay, 0, 0, "100%", "100%");
-    Dwt.setZIndex(this._veilOverlay, Dwt.Z_HIDDEN);
+	Dwt.setZIndex(this._veilOverlay, Dwt.Z_HIDDEN);
 	this._veilOverlay.veilZ = new Array();
 	this._veilOverlay.veilZ.push(Dwt.Z_HIDDEN);
 	this._veilOverlay.dialogZ = new Array();
@@ -116,7 +116,7 @@ DwtShell = function(params) {
 		htmlElement.appendChild(this._curtainOverlay);
 	}
 
-    this._uiEvent = new DwtUiEvent(true);
+	this._uiEvent = new DwtUiEvent(true);
 	this._currWinSize = Dwt.getWindowSize();
 
 	// tooltip singleton used by all controls in shell
@@ -124,6 +124,7 @@ DwtShell = function(params) {
 	this._hoverMgr = new DwtHoverMgr();
 	
 	this._keyboardMgr = new DwtKeyboardMgr(this);
+	this._setMouseEventHdlrs();
 }
 
 DwtShell.prototype = new DwtComposite;
