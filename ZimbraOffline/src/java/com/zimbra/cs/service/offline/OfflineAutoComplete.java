@@ -84,7 +84,10 @@ public class OfflineAutoComplete extends AutoComplete {
 
         if (result.entries.size() < limit)
             autoCompleteFromOtherAccounts(request, ctxt, account, name, limit, stype, result);
-            
+        
+        if (result.entries.size() >= limit)
+        	result.canBeCached = false;
+        
         Element response = ctxt.createElement(MailConstants.AUTO_COMPLETE_RESPONSE);
         toXML(response, result, ctxt.getAuthtokenAccountId());
         return response;        
