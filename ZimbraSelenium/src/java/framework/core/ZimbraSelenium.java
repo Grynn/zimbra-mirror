@@ -62,6 +62,10 @@ public class ZimbraSelenium extends DefaultSelenium {
 				second++;
 			}
 		}
+		System.out.println("js >> " + jsFunc);
+		System.out.println("js >> " + retval);
+		System.out.println();
+		
 		return retval;
 	}
 

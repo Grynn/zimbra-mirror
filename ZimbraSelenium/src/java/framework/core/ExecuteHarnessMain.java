@@ -2,17 +2,20 @@
  * 
  */
 package framework.core;
-
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.channels.FileChannel;
+import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 import java.util.jar.JarEntry;
@@ -35,6 +38,8 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
+import org.testng.IReporter;
+import org.testng.ISuite;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -44,6 +49,8 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 import framework.util.HarnessException;
 import framework.util.SkippedTestListener;
+
+import framework.util.SleepUtil;
 import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;
 import framework.util.ZimbraSeleniumProperties;
@@ -57,7 +64,14 @@ import framework.util.ZimbraSeleniumProperties.AppType;
  */
 public class ExecuteHarnessMain {
 	private static Logger logger = LogManager.getLogger(ExecuteHarnessMain.class);
+	private static PrintStream ps=null;
+	private static ByteArrayOutputStream baos; 
+	private static HashMap<String, String> configMap= new HashMap<String,String>();
 	
+	
+	public ExecuteHarnessMain() {
+		
+	}
 	/**
 	 * This token must appear in the class package name.
 	 * The next subpackage after the token is the TestNG test name
@@ -78,11 +92,19 @@ public class ExecuteHarnessMain {
 	 */
 	public String classfilter = null;
 
+	
 	/**
-	 * The list of groups to execute
+	 * The regex pattern used to exclude search for tests, i.e. projects.zcs.tests
+	 */
+	public String excludefilter = null;
+
+	/**
+	 * The list of groups to include execute
 	 */
 	public List<String> groups = Arrays.asList("always", "sanity");
 
+	
+	public List<String> excludeGroups = Arrays.asList("skip");
 		
 	/**
 	 * The suite verbosity
@@ -108,8 +130,8 @@ public class ExecuteHarnessMain {
 	 * Determine all the classes in the specified jarfile filtered by a regex
 	 * @param jarfile The jarfile to inspect
 	 * @param pattern A regex Pattern to match.  Use null for all classes
-	 */
-	private static List<String> getClassesFromJar(File jarfile, Pattern pattern) throws FileNotFoundException, IOException {
+	 */ 
+	private static List<String> getClassesFromJar(File jarfile, Pattern pattern, String excludeStr) throws FileNotFoundException, IOException {
 		logger.debug("getClassesFromJar "+ jarfile.getAbsolutePath());
 		
 		List<String> classes = new ArrayList<String>();
@@ -137,13 +159,17 @@ public class ExecuteHarnessMain {
 				if (matcher.find()) {
 					
 					// Class name matched the filter.  add it.
-					classes.add(name);
+					if (!isExcluded(name,excludeStr)) {
+					  classes.add(name);
+					}
 				}
 				
 			} else {
 				
 				// No filter.  add all.
-				classes.add(name);
+				if (!isExcluded(name,excludeStr)) {
+				  classes.add(name);
+				}
 				
 			}
 			
@@ -151,7 +177,27 @@ public class ExecuteHarnessMain {
 
 		return (classes);
 	}
-	
+
+	private static boolean isExcluded(String name, String excludeStr) {
+		boolean result=false;
+		
+		if (excludeStr == null) {
+			return result;
+		}
+		
+		if (excludeStr.indexOf(";") == -1) {
+			result = (name.indexOf(excludeStr) != -1);
+		}
+		else {
+			String[] splitStr= excludeStr.split(";");
+			for (int j=0; j< splitStr.length; j++){
+			   if (result = (name.indexOf(splitStr[j]) != -1)) {
+				   break;
+			   }
+			}			
+		}
+		return result;
+	}
 	/**
 	 * Get the testname for a given class, per Zimbra standard formatting
 	 * The test name is the package part after .tests.
@@ -226,6 +272,7 @@ public class ExecuteHarnessMain {
 			XmlTest test = new XmlTest(suite);
 			test.setName(testname);
 			test.setIncludedGroups(groups);
+	        test.setExcludedGroups(excludeGroups);
 		}
 		
 		// Add all the classes per the appropriate test name
@@ -254,13 +301,18 @@ public class ExecuteHarnessMain {
 	 */
 	public String execute() throws FileNotFoundException, IOException {
 		logger.info("Execute tests ...");
+		
 		ResultListener listener = null;
 		
 		try
 		{
-
+			baos= new ByteArrayOutputStream();
+			ps=new PrintStream(baos,true); //autoflush
+			
+			System.setOut(ps); 
+			System.setErr(ps);	
 			// Build the class list
-			classes = getClassesFromJar(new File(jarfilename), (classfilter == null ? null : Pattern.compile(classfilter)));
+			classes = getClassesFromJar(new File(jarfilename), (classfilter == null ? null : Pattern.compile(classfilter)),excludefilter);
 			
 			// Build the list of XmlSuites
 			List<XmlSuite> suites = getXmlSuiteList();
@@ -268,21 +320,44 @@ public class ExecuteHarnessMain {
 			// Create the TestNG test runner
 			TestNG ng = new TestNG();
 			
+			for (String st : configMap.keySet()) {
+				ZimbraSeleniumProperties.setStringProperty(st,configMap.get(st));
+			}
+			
+			
+			// keep checking for server down
+			while (ZimbraSeleniumProperties.zimbraGetVersionString().indexOf("unknown") != -1) {
+			  Thread.sleep(100000);
+			}
+			
+			String subject = "ZimbraSelenium-" +ZimbraSeleniumProperties.getAppType() +
+					" browser:" +ZimbraSeleniumProperties.getStringProperty("browser") + 			
+					" locale:" + ZimbraSeleniumProperties.getStringProperty("locale") ;			
+			SendEmail se = new SendEmail(subject);
+			se.sendFirstEmail();
+	
+    
 			// Configure the runner
 			ng.setXmlSuites(suites);
+			
 			ng.addListener(new SummaryReporter(ZimbraSeleniumProperties.getAppType().toString()));
-			ng.addListener(new TestStatusReporter(ZimbraSeleniumProperties.getAppType().toString())); // TODO: This shouldn't throw Exception
+			
+			//ng.addListener(new SummaryReporter(ZimbraSeleniumProperties.getAppType().toString()));
+			ng.addListener(new TestStatusReporter(ZimbraSeleniumProperties.getAppType().toString(),baos,ps)); // TODO: This shouldn't throw Exception
 			ng.addListener(new SkippedTestListener(new File(this.testoutputfoldername)));
 			ng.addListener(listener = new ResultListener());
 			ng.setOutputDirectory(this.testoutputfoldername);
 
 			// Run!
 			ng.run();
-				
+			
+			// finish inProgress - overwrite inProgress/index.html		
+			TestStatusReporter.copyFile(testoutputfoldername + "\\inProgress\\result.txt" , testoutputfoldername + "\\inProgress\\index.html");
+			
 			// TODO: remove the email logic.  just let tms send the email.
 			// email results
 			copyCommandLineOutputFile();
-			sendEmail();
+			se.send(getFileContents(testoutputfoldername + "\\ebody.txt"));
 
 		} catch (HarnessException e) {
 			logger.error("Unable to execute tests", e);
@@ -296,6 +371,7 @@ public class ExecuteHarnessMain {
 
 	}
 	
+
 	public String getFileContents(String filePath) {
 		String str = "";
 		String tmpStr = "";
@@ -309,13 +385,6 @@ public class ExecuteHarnessMain {
 		} catch (IOException e) {
 		}
 		return str;
-	}
-
-	public void sendEmail() throws Exception {
-		String subject = getFileContents(testoutputfoldername + "/subject.txt");
-		String body = getFileContents(testoutputfoldername + "/body.txt");
-		SendEmail se = new SendEmail(subject, body);
-		se.send();
 	}
 
 
@@ -354,8 +423,60 @@ public class ExecuteHarnessMain {
 			subject = sub;
 			body = bd;
 		}
+		
+		public SendEmail(String sub){
+			subject = sub;			
+		}
 
-	   public void send() throws Exception{
+
+		public void sendFirstEmail() throws Exception {
+				
+			String bodyfileXpPath =  ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")+"\\"  +
+			ZimbraSeleniumProperties.zimbraGetVersionString()  + "\\"  + 
+            ZimbraSeleniumProperties.getAppType().toString() +"\\" + 
+            ZimbraSeleniumProperties.getStringProperty("browser") + "\\" +  
+            ZimbraSeleniumProperties.getStringProperty("locale") ;
+			
+			String lines = "\n--------------------------------------------\n";
+			String uri = (bodyfileXpPath.replace("T:/",
+					"http://tms.lab.zimbra.com/testlogs/")).replace("\\", "/");
+		    uri = ZimbraSeleniumProperties.getStringProperty("TestURL") + uri;
+			
+			StringBuffer body = new StringBuffer( "");
+		
+			body.append(ZimbraSeleniumProperties.zimbraGetVersionString());			
+		    body.append("\n\nserver: " +ZimbraSeleniumProperties.getStringProperty("server"));
+		    body.append("\nclient: " + System.getenv("COMPUTERNAME")) ;
+		    	   
+			
+			body.append("\n\n" + lines + "IN PROGRESS: " + lines + uri+ "/" + TestStatusReporter.inProgressDir );
+			
+			body.append("\n\n" + lines + "LOGS: " + lines );
+			body.append("\n" + "Initialization: \n" + uri+ "/start.txt");
+			body.append("\n" + "All Results: \n" + uri+ "/finish.txt");
+
+			body.append("\n\n" + lines + "CATEGORIES: " + lines + uri+ "/" + TestStatusReporter.categoryDir );	
+			
+			body.append("\n\n" + lines + "Configuration FAIL: " + lines + uri + "/" + TestStatusReporter.confFailDir );
+			body.append("\n\n" + lines + "Configuration SKIP: " + lines   + uri + "/" +  TestStatusReporter.confSkipDir);
+			body.append("\n\n" + lines + "FAIL: " + lines  + uri + "/" +  TestStatusReporter.failDir );
+			
+			body.append("\n\n" + lines + "SKIP: "  + lines  + uri + "/" +  TestStatusReporter.skipDir);
+			body.append("\n\n" + lines + "PASS: "  + lines  + uri + "/" +  TestStatusReporter.passDir);
+
+			
+			body.append("\n\n" + lines + "TestNG REPORTS: " + lines);		
+		    body.append("\n" + uri );
+			body.append("\n" + uri + "/emailable-report.html");
+			
+			body.append("\n\n" + lines + "SKIP TESTS INFO: " + lines+ "\n" + uri + "/SkippedTests.txt");
+
+			
+            send(body.toString());
+
+		}
+
+	   public void send(String body) throws Exception{
 	      Properties props = new Properties();
 	      props.setProperty("mail.transport.protocol", "smtp");
 	      props.setProperty("mail.host", "mail.zimbra.com");
@@ -370,7 +491,7 @@ public class ExecuteHarnessMain {
 	      message.setContent(body, "text/plain");
 	      message.setFrom(new InternetAddress("qa-tms@zimbra.com"));
 	      message.addRecipient(Message.RecipientType.TO,
-	           new InternetAddress("qa-automation@zimbra.com"));
+	    		 new InternetAddress("qa-automation@zimbra.com"));
 
 	      transport.connect();
 	      transport.sendMessage(message,
@@ -378,7 +499,20 @@ public class ExecuteHarnessMain {
 	      transport.close();
 	    }
 	}
-	
+	public class mySummaryReporter implements IReporter {
+
+	    
+	    public mySummaryReporter(String atype){
+	    	System.out.println("\nmySummaryReporter" );
+	    }	
+		public void generateReport(java.util.List<XmlSuite> xmlSuites,
+				java.util.List<ISuite> suites, java.lang.String outputDirectory) {
+			//long duration = (new Date()).getTime() - startDate.getTime();
+			
+			
+			System.out.println("+++++++++++++++All test ran generateReport" + ZimbraSeleniumProperties.getStringProperty("locale"));
+				}
+	}
 	public static class ResultListener implements ITestListener {
 
 		private int testsTotal = 0;
@@ -467,7 +601,11 @@ public class ExecuteHarnessMain {
         options.addOption(new Option("v", "verbose", true, "set suite verbosity (default: "+ verbosity +")"));
         options.addOption(new Option("o", "output", true, "output foldername"));
         options.addOption(new Option("w", "working", true, "current working foldername"));
+        options.addOption(new Option("c", "config", true, "dynamic setting config properties i.e browser, server, locale... ( -c 'locale=en_US;browser=firefox' "));
 
+        options.addOption(new Option("e", "exclude", true, "exclude pattern  "));
+        options.addOption(new Option("eg", "exclude groups", true, "comma separated list of groups to exclude when execute (skip)"));
+        
         // Set required options
         options.getOption("j").setRequired(true);
         
@@ -476,10 +614,34 @@ public class ExecuteHarnessMain {
 	        CommandLineParser parser = new GnuParser();
 	        CommandLine cmd = parser.parse(options, arguments);
 	        
+	        
 	        if ( cmd.hasOption('h') ) {
 	    		HelpFormatter formatter = new HelpFormatter();
 	    		formatter.printHelp("ExecuteTests", options);
 	        	return false;
+	        }
+
+	     
+	        
+	        
+	        if ( cmd.hasOption('c') ) {
+	        	
+	           String[] confArray= cmd.getOptionValues('c');
+	           
+	           for (int i=0; i <confArray.length; i++) {
+	        	   //could have form: 'browser=firefox;locale=en_US'
+	        	   String[] confItems= confArray[i].split(";");
+	        	   
+	        	   for (int j=0; j < confItems.length; j++) {
+	        		 String[] confItem= confItems[j].split("=");
+		        	   
+	        		 //check  form config=value and if a valid config name
+	        	     if ((confItem.length >1) && (ZimbraSeleniumProperties.getStringProperty(confItem[0]) != null)) {
+	        			configMap.put(confItem[0], confItem[1]);
+	        		   
+	        	     }
+	        	   }
+	           }
 	        }
 	        
 	        if ( cmd.hasOption('p') ) {
@@ -493,13 +655,23 @@ public class ExecuteHarnessMain {
 	        			ZimbraSeleniumProperties.setAppType(Enum.valueOf(AppType.class, m.group(1).toUpperCase()));	        			 	
 	        	}
 	        }
-	        
+
+	        if ( cmd.hasOption('e') ) {	        	
+	        	if (cmd.getOptionValue('e').length() >0) { 
+	        	   this.excludefilter = cmd.getOptionValue('e');	
+	        	}
+	        }
+
 	        //'o' check should be after 'p' check to avoid code redundancy
 	        if ( cmd.hasOption('o') ) {
-	        	this.testoutputfoldername = cmd.getOptionValue('o');
+	        	 this.testoutputfoldername = cmd.getOptionValue('o');
 	        } else {
-	        	this.testoutputfoldername = ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") 
-		        + "/" + ZimbraSeleniumProperties.getAppType();
+	             this.testoutputfoldername = 
+	       		 ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")+"\\"  +
+			     ZimbraSeleniumProperties.zimbraGetVersionString() + "\\"  + 
+	             ZimbraSeleniumProperties.getAppType() +"\\" + 
+	             ZimbraSeleniumProperties.getStringProperty("browser") + "\\" +  
+	             ZimbraSeleniumProperties.getStringProperty("locale") ;  		
 	        }
 	        
 	        // Make sure the test output folder exists, create it if not
@@ -529,6 +701,12 @@ public class ExecuteHarnessMain {
 	        	String[] values = cmd.getOptionValue('g').replaceAll("\\s+", "").split(",");
 	        	this.groups = Arrays.asList(values);
 	        }
+	      
+	        if ( cmd.hasOption("eg") ) {
+	        	// Remove spaces and split on commas
+	        	String[] values = cmd.getOptionValue("eg").replaceAll("\\s+", "").split(",");
+	        	this.excludeGroups = Arrays.asList(values);
+	        }
 	        
 	        if ( cmd.hasOption('v') ) {
 	        	this.verbosity = Integer.parseInt(cmd.getOptionValue('v'));
@@ -557,10 +735,14 @@ public class ExecuteHarnessMain {
 	public static void main(String[] args) {
     	BasicConfigurator.configure();
 
+    	
     	String result = "No results";
 		try {
 			ExecuteHarnessMain harness = new ExecuteHarnessMain();
+			
 			if ( harness.parseArgs(args) ) {
+				 
+				
 				result = harness.execute();
 			}
 		} catch (Exception e) {
@@ -569,6 +751,7 @@ public class ExecuteHarnessMain {
 		
 		logger.info(result);
 		System.out.println("*****\n"+ result);
+        ps.close();
 	}
 
 }
