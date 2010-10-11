@@ -493,6 +493,20 @@ function (entry) {
 	this.updateTab();
 }
 
+ZaDLXFormView.prototype.srchResWithoutSelf =
+function(resList, selfName) {
+	var resArr = new Array();
+	var tmpArr = resList.getArray();
+	for(var i = 0; i < tmpArr.length; i++) {
+		if(tmpArr[i].type == ZaItem.DL && tmpArr[i] == selfName) {
+			continue;
+		}else if(tmpArr[i].type == ZaItem.ALIAS && tmpArr[i].getAliasTargetObj() == selfName) {
+			continue;
+		}else resArr.push(tmpArr[i]);
+	}
+	return resArr;
+}
+
 ZaDLXFormView.prototype.searchAccounts = 
 function (orderby, isascending) {
 	try {
@@ -502,7 +516,7 @@ function (orderby, isascending) {
                                 types , false, "",null,10);
 		var result = ZaSearch.searchByQueryHolder(searchQueryHolder, this._containedObject["poolPagenum"], orderby, isascending);
 		if(result.list) {
-			this._containedObject.memberPool = result.list.getArray();
+			this._containedObject.memberPool = this.srchResWithoutSelf(result.list, this._containedObject[ZaAccount.A_name]);
 		}
 		this._containedObject.poolNumPages = result.numPages;
 		this._localXForm.setInstance(this._containedObject);
