@@ -29,6 +29,10 @@ public class ZimbraSeleniumProperties {
 	private String workingDir = ".";
 	private PropertiesConfiguration configProp;
 
+	public static void setStringProperty(String key,String value) {
+		ZimbraSeleniumProperties.getInstance().getConfigProp().setProperty(key, value);
+	}
+	
 	public static String getStringProperty(String key, String defaultValue) {
 		return (ZimbraSeleniumProperties.getInstance().getConfigProp()
 				.getString(key, defaultValue));

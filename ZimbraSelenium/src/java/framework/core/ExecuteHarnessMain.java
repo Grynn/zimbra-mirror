@@ -601,7 +601,7 @@ public class ExecuteHarnessMain {
         options.addOption(new Option("v", "verbose", true, "set suite verbosity (default: "+ verbosity +")"));
         options.addOption(new Option("o", "output", true, "output foldername"));
         options.addOption(new Option("w", "working", true, "current working foldername"));
-        options.addOption(new Option("c", "config", true, "dynamic setting config properties i.e browser, server, locale... ( -c 'locale=en_US;browser=firefox' "));
+        options.addOption(new Option("c", "config", true, "dynamic setting config properties i.e browser, server, locale... ( -c 'locale=en_US,browser=firefox' "));
 
         options.addOption(new Option("e", "exclude", true, "exclude pattern  "));
         options.addOption(new Option("eg", "exclude groups", true, "comma separated list of groups to exclude when execute (skip)"));
@@ -630,7 +630,7 @@ public class ExecuteHarnessMain {
 	           
 	           for (int i=0; i <confArray.length; i++) {
 	        	   //could have form: 'browser=firefox;locale=en_US'
-	        	   String[] confItems= confArray[i].split(";");
+	        	   String[] confItems= confArray[i].split(",");
 	        	   
 	        	   for (int j=0; j < confItems.length; j++) {
 	        		 String[] confItem= confItems[j].split("=");
