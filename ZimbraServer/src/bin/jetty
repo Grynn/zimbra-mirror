@@ -299,9 +299,11 @@ JAVA_OPTIONS="$MAILBOXD_JAVA_OPTIONS $JAVA_OPTIONS -Djetty.home=$JETTY_HOME"
 #       In production, the jetty startup script (zmmailboxdctl) uses
 #       zmconfigd config rewrite to avoid a zmprov call.
 #
-# SPNEGO_ENABLED=`/opt/zimbra/bin/zmprov -l gcf zimbraSpnegoAuthEnabled`
-SPNEGO_ENABLED="zimbraSpnegoAuthEnabled: FALSE"
-if [ "$SPNEGO_ENABLED" == "zimbraSpnegoAuthEnabled: TRUE" ] 
+# SPNEGO_ENABLED_CONFIG =`/opt/zimbra/bin/zmprov -l gcf zimbraSpnegoAuthEnabled`
+SPNEGO_ENABLED_CONFIG="zimbraSpnegoAuthEnabled: FALSE"
+SPNEGO_ENABLED=`echo $SPNEGO_ENABLED_CONFIG | sed -e 's/zimbraSpnegoAuthEnabled: //g'`
+
+if [ "$SPNEGO_ENABLED" = "TRUE" ] 
 then
   SPNEGO_JAVA_OPTIONS=`/opt/zimbra/bin/zmlocalconfig -x -m nokey spnego_java_options`
   JAVA_OPTIONS="$JAVA_OPTIONS $SPNEGO_JAVA_OPTIONS"
