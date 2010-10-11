@@ -1,4 +1,4 @@
-#!/bin/sh  
+#!/bin/sh
 # 
 # ***** BEGIN LICENSE BLOCK *****
 # Zimbra Collaboration Suite Server
@@ -290,6 +290,22 @@ fi
 #####################################################
 MAILBOXD_JAVA_OPTIONS=`/opt/zimbra/bin/zmlocalconfig -x -m nokey mailboxd_java_options`
 JAVA_OPTIONS="$MAILBOXD_JAVA_OPTIONS $JAVA_OPTIONS -Djetty.home=$JETTY_HOME"
+
+#####################################################
+# Add spnego properties to Java VM options.
+#####################################################
+#
+# Note: This script is *only* used in dev environment.
+#       In production, the jetty startup script (zmmailboxdctl) uses
+#       zmconfigd config rewrite to avoid a zmprov call.
+#
+# SPNEGO_ENABLED=`/opt/zimbra/bin/zmprov -l gcf zimbraSpnegoAuthEnabled`
+SPNEGO_ENABLED="zimbraSpnegoAuthEnabled: FALSE"
+if [ "$SPNEGO_ENABLED" == "zimbraSpnegoAuthEnabled: TRUE" ] 
+then
+  SPNEGO_JAVA_OPTIONS=`/opt/zimbra/bin/zmlocalconfig -x -m nokey spnego_java_options`
+  JAVA_OPTIONS="$JAVA_OPTIONS $SPNEGO_JAVA_OPTIONS"
+fi
 
 #####################################################
 # This is how the Jetty server will be started
