@@ -476,6 +476,12 @@ ZaAccountXFormView.addAlias  = function () {
 ZaAccountXFormView.isAuthfromInternal =
 function(domainName) {
 
+	var currDomainName = null;
+	if(ZaApp.getInstance().getDomainList().size() > 0)
+		currDomainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
+	if(currDomainName != null && currDomainName != domainName)
+		domainName = currDomainName;
+
 	if(domainName) {
 		var domainObj = new ZaDomain();
 	        try {
