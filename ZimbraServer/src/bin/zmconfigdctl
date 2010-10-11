@@ -100,9 +100,16 @@ startzmconfigd()
 	  err=1
 	  return
 	fi
-	# Grab the pid here, so we don't have to wait for the jvm to write the pid file
+	rm -rf ${pidfile}
 	${zimbra_home}/libexec/zmconfigd >> ${zimbra_log_directory}/zmconfigd.log 2>&1 &
-	ppid=$!
+	# Bug 51682 wait for the pid file to be created, then wait 30 seconds for rewrites
+	for ((i = 0; i < 30; i++)) do
+		if [ -f ${pidfile} ]; then
+			break
+		fi
+		sleep 1
+	done
+	sleep 30
 	for ((i = 0; i < 30; i++)) do
 	  checkrunning
 	  if [ $running = 1 ]; then
