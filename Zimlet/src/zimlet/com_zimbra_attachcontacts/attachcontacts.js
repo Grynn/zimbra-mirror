@@ -139,12 +139,26 @@ AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, 
 		opData.text = this.getMessage("ACZ_Send");
 		var btn = toolbar.createOp(op, opData);
 		btn.addSelectionListener(this._contactSendListener);
+
+		this.overrideAPI(controller, "_resetOperations", AttachContactsZimlet._resetOperations);
+	}
+};
+
+AttachContactsZimlet._resetOperations = function() {
+	arguments.callee.func.apply(this, arguments);
+	var controller = appCtxt.getApp(ZmApp.CONTACTS).getContactListController();
+	var enabled = controller.getCurrentView().getSelectedItems().size() > 0; // ignore right-click selection
+	for (var viewId in controller._toolbar) {
+		var toolbar = controller._toolbar[viewId];
+		if (toolbar.getButton(AttachContactsZimlet.SEND_CONTACTS))
+			toolbar.enable(AttachContactsZimlet.SEND_CONTACTS, enabled);
 	}
 };
 
 AttachContactsZimlet.prototype._contactListSendListener = function() {
-	this._getContactListIds();	
-	this._openCompose();
+	this._getContactListIds();
+	if (this.contactIdsToAttach && this.contactIdsToAttach.length)
+		this._openCompose();
 };
 
 AttachContactsZimlet.prototype._getContactListIds = function() {
@@ -154,6 +168,7 @@ AttachContactsZimlet.prototype._getContactListIds = function() {
 	for (var i=0; i<items.length; i++) {
 		this.contactIdsToAttach.push(items[i].id);
 	}
+	return this.contactIdsToAttach;
 };
 
 AttachContactsZimlet.prototype._openCompose = function() {
@@ -203,7 +218,17 @@ function() {
 
 AttachContactsZimlet.prototype._getContactFromController =
 function(controller) {
-	return (controller && controller._actionEv && controller._actionEv.contact) || null;
+	if (controller) {
+		if (controller instanceof ZmContactListController) {
+			var view = controller.getCurrentView();
+			if (view) {
+				var selection = view.getSelection();
+				if (selection && selection.length>1)
+					return selection;
+			}
+		}
+		return (controller && controller._actionEv && controller._actionEv.contact) || null;
+	}
 };
 
 /**
@@ -240,8 +265,14 @@ AttachContactsZimlet.prototype.addMenuButton = function(contactCallback, menu, a
 AttachContactsZimlet.prototype._contactActionMenuListener = function(contactCallback, ev) {
 	var contact = contactCallback.run();
 	if (contact) {
-		this.contactIdsToAttach = [contact.id];
-		this._openCompose();
+		var contacts = AjxUtil.toArray(contact);
+		if (contacts.length) {
+			this.contactIdsToAttach = [];
+			for (var i=0; i<contacts.length; i++) {
+				this.contactIdsToAttach[i] = contacts[i].id;
+			}
+			this._openCompose();
+		}
 	}
 };
 
