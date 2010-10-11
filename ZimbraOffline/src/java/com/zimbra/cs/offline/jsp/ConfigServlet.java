@@ -17,7 +17,6 @@ package com.zimbra.cs.offline.jsp;
 import javax.servlet.http.HttpServlet;
 
 import com.zimbra.common.localconfig.LC;
-import com.zimbra.cs.datasource.DataSourceManager;
 
 public class ConfigServlet extends HttpServlet {
 
@@ -35,11 +34,5 @@ public class ConfigServlet extends HttpServlet {
         //setting static variables
         LOCALHOST_SOAP_URL = LOCALHOST_URL_PREFIX + port + "/service/soap/";
         LOCALHOST_ADMIN_URL = LOCALHOST_URL_PREFIX + port + "/service/admin/soap/";
-
-        try {
-            DataSourceManager.init();
-        } catch (Exception x) {
-            throw new RuntimeException(x);
-        }
     }
 }
