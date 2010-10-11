@@ -57,6 +57,17 @@ system("mv \"${updater_app}_noreloc\" \"$updater_app\"");
 system("mv \"$app_root/macos/Zimbra Desktop.app_noreloc\" \"$app_root/Zimbra Desktop.app\"");
 system("chown -R root:admin \"$app_root\"");
 
+# set current user as the owner of update dirs so that auto-update can work
+my $cuser = $ENV{USER};
+system("mkdir -p \"$app_root/macos/prism/Prism.app/Contents/Resources/updates/0\"");
+system("chown $cuser \"$app_root\"");
+system("chown $cuser \"$app_root/macos\"");
+system("chown $cuser \"$app_root/macos/prism\"");
+system("chown $cuser \"$app_root/macos/prism/Prism.app\"");
+system("chown $cuser \"$app_root/macos/prism/Prism.app/Contents\"");
+system("chown $cuser \"$app_root/macos/prism/Prism.app/Contents/Resources\"");
+system("chown -R $cuser \"$app_root/macos/prism/Prism.app/Contents/Resources/updates\"");
+
 my $tokens = {
     '@INSTALL.APP.ROOT@' => $app_root,
     '@INSTALL.APP.TIMESTAMP@' => time()

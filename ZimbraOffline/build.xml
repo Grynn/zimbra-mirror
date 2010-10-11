@@ -969,12 +969,9 @@
     </copy>
 
     <!-- patch xulrunner with our update service mod -->
-    <copy tofile="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/components/nsUpdateService.js" file="src/installer/updater/macos/nsUpdateService.js" overwrite="true"/>
     <copy tofile="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app/Contents/MacOS/updater" file="src/installer/updater/macos/updater" overwrite="true"/>
     <chmod file="${dist.app.dir}/macos/prism/Prism.app/Contents/Frameworks/XUL.framework/updater.app/Contents/MacOS/updater" perm="ugo+x"/>
-    <copy tofile="${dist.app.dir}/win32/prism/xulrunner/components/nsUpdateService.js" file="src/installer/updater/win32/nsUpdateService.js" overwrite="true"/>
     <copy tofile="${dist.app.dir}/win32/prism/xulrunner/updater.exe" file="src/installer/updater/win32/updater.exe" overwrite="true"/>
-    <copy tofile="${dist.app.dir}/linux/prism/xulrunner/components/nsUpdateService.js" file="src/installer/updater/linux/nsUpdateService.js" overwrite="true"/>
     <copy tofile="${dist.app.dir}/linux/prism/xulrunner/updater" file="src/installer/updater/linux/updater" overwrite="true"/>
     <chmod file="${dist.app.dir}/linux/prism/xulrunner/updater" perm="ugo+x"/>
 

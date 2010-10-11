@@ -197,9 +197,9 @@
 		<copy file="src/installer/update.php" todir="${build.dir}" overwrite="true"/>
 		<replace file="${build.dir}/update.php" token="@version@" value="${offline.version}"/>
 		<replace file="${build.dir}/update.php" token="@buildid@" value="${offline.buildid}"/>
-		<replace file="${build.dir}/update.php" token="@suffix_win32@" value="${offline.suffix_win32}"/>
-		<replace file="${build.dir}/update.php" token="@suffix_macos@" value="${offline.suffix_macos}"/>
-		<replace file="${build.dir}/update.php" token="@suffix_linux@" value="${offline.suffix_linux}"/>
+		<replace file="${build.dir}/update.php" token="@media_win32@" value="${media_win32}"/>
+		<replace file="${build.dir}/update.php" token="@media_macos@" value="${media_macos}.dmg"/>
+		<replace file="${build.dir}/update.php" token="@media_linux@" value="${media_linux}"/>
 	
 		<if><available file="${build.dir}/${media_win32}" type="file"/><then>
 			<checksum file="${build.dir}/${media_win32}" property="hash_win32"/>
