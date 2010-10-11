@@ -139,20 +139,21 @@ AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, 
 		opData.text = this.getMessage("ACZ_Send");
 		var btn = toolbar.createOp(op, opData);
 		btn.addSelectionListener(this._contactSendListener);
-
-		this.overrideAPI(controller, "_resetOperations", AttachContactsZimlet._resetOperations);
 	}
 };
 
-AttachContactsZimlet._resetOperations = function() {
-	arguments.callee.func.apply(this, arguments);
-	var controller = appCtxt.getApp(ZmApp.CONTACTS).getContactListController();
-	var enabled = controller.getCurrentView().getSelectedItems().size() > 0; // ignore right-click selection
-	for (var viewId in controller._toolbar) {
-		var toolbar = controller._toolbar[viewId];
-		if (toolbar.getButton(AttachContactsZimlet.SEND_CONTACTS))
-			toolbar.enable(AttachContactsZimlet.SEND_CONTACTS, enabled);
-	}
+
+/**
+ * Reset the toolbar
+ *
+ * @param	{ZmButtonToolBar}	toolbar			the toolbar
+ * @param	{int}			    num		        number of items selected
+ */
+AttachContactsZimlet.prototype.resetToolbarOperations =
+function(parent, num){
+  if (parent.getOp(AttachContactsZimlet.SEND_CONTACTS)){
+      parent.enable(AttachContactsZimlet.SEND_CONTACTS, num > 0);
+  }
 };
 
 AttachContactsZimlet.prototype._contactListSendListener = function() {
