@@ -1,11 +1,13 @@
 package projects.zcs.bin;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.List;
@@ -586,9 +588,14 @@ public class ExecuteTests {
 	}
 
 	public static void main(String[] args) throws Exception {
-
+		
 		loadConfig();
-
+		ByteArrayOutputStream baos= new ByteArrayOutputStream();
+		PrintStream ps=new PrintStream(baos,true); //autoflush
+		
+		System.setOut(ps); 
+		System.setErr(ps);	
+		
 		// first argument can be suite name fullSuite|debugSuite
 		if (args.length == 1) {
 			suiteName = args[0];
@@ -612,7 +619,7 @@ public class ExecuteTests {
 		suites.add(suite);
 		System.out.println(suite.toXml());
 		SummaryReporter createSummary = new SummaryReporter(appType);
-		TestStatusReporter testReporter = new TestStatusReporter(appType);
+		TestStatusReporter testReporter = new TestStatusReporter(appType,baos,ps);
 		TestNG tng = new TestNG();
 		tng.setXmlSuites(suites);
 		tng.addListener(createSummary);

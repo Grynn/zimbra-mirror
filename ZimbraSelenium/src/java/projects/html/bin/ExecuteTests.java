@@ -1,11 +1,13 @@
 package projects.html.bin;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -297,7 +299,12 @@ public class ExecuteTests {
 	public static void main(String[] args) throws Exception {
 
 		loadConfig();
-
+		ByteArrayOutputStream baos= new ByteArrayOutputStream();
+		PrintStream ps=new PrintStream(baos,true); //autoflush
+		
+		System.setOut(ps); 
+		System.setErr(ps);	
+	
 		if (args.length == 0) {
 			usage();
 			throw new Exception("Empty program arguments");
@@ -320,7 +327,7 @@ public class ExecuteTests {
 		suites.add(suite);
 		System.out.println(suite.toXml());
 		SummaryReporter createSummary = new SummaryReporter(appType);
-		TestStatusReporter testReporter = new TestStatusReporter(appType);
+		TestStatusReporter testReporter = new TestStatusReporter(appType,baos,ps);
 		TestNG tng = new TestNG();
 		tng.setXmlSuites(suites);
 		tng.addListener(createSummary);
