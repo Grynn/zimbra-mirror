@@ -26,7 +26,7 @@ public class LoginPage extends AppPage {
 	 * @throws ServiceException
 	 * @throws HarnessException 
 	 */
-	public String zLoginToZimbraAjax() throws ServiceException, HarnessException {
+	public String zLoginToZimbraAjax() throws Exception {
 		
 		String username = "";
 		// if we are retrying the execution, then use the same account.
@@ -47,7 +47,7 @@ public class LoginPage extends AppPage {
 	 * 
 	 * @param username
 	 */
-	public void zLoginToZimbraAjax(String username) {
+	public void zLoginToZimbraAjax(String username) throws Exception {
 		zLoginToZimbraAjax(username, "test123");
 	}
 
@@ -58,8 +58,8 @@ public class LoginPage extends AppPage {
 	 * @param username
 	 * @param password
 	 */
-	public void zLoginToZimbraAjax(String username, String password) {
-		try {
+	public void zLoginToZimbraAjax(String username, String password) throws Exception{
+		
 			ClientSessionFactory.session().setCurrentUser(null);
 			openApplication();
 			SleepUtil.sleep(1500);
@@ -68,14 +68,11 @@ public class LoginPage extends AppPage {
 			obj.zButton.zClick("class=zLoginButton");
 			zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
 			ClientSessionFactory.session().setCurrentUser(new ZimbraAccount(username, password));
-		} catch (Exception e) {
-			e.printStackTrace(System.out);
-		}
+		
 	}
 
 	public static void zCustomLoginToZimbraAjax(String parameter)
 			throws Exception {
-		try {
 			ClientSessionFactory.session().setCurrentUser(null);
 			ZimbraAccount account = new ZimbraAccount();			
 			customLogin(parameter);
@@ -85,9 +82,7 @@ public class LoginPage extends AppPage {
 			obj.zButton.zClick("class=zLoginButton");
 			SleepUtil.sleep(3000);
 			ClientSessionFactory.session().setCurrentUser(account);
-		} catch (Exception e) {
-			e.printStackTrace(System.out);
-		}
+		
 	}
 
 	/**
