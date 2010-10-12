@@ -51,6 +51,9 @@ public class ContactData implements Serializable {
         A_imAddress1, A_imAddress2, A_imAddress3, A_fileAs, A_fullName
     );
 
+    private static final Map<String, String> MULTI_VALUE_ATTR_NAMES = new HashMap<String, String>();
+    private static final String IM_PREFIX = "imAddress";
+
     // All Zimbra fields that are synchronized with Yahoo address book
     private static final List<String> ALL_FIELDS = new ArrayList<String>();
     static {
@@ -58,6 +61,15 @@ public class ContactData implements Serializable {
         ALL_FIELDS.addAll(Ab.WORK_ADDRESS_FIELDS);
         ALL_FIELDS.addAll(Ab.HOME_ADDRESS_FIELDS);
         ALL_FIELDS.addAll(OTHER_FIELDS);
+        MULTI_VALUE_ATTR_NAMES.put(A_email, A_email);
+        MULTI_VALUE_ATTR_NAMES.put(IM_PREFIX, A_imAddress1);
+        MULTI_VALUE_ATTR_NAMES.put(A_workPhone, A_workPhone);
+        MULTI_VALUE_ATTR_NAMES.put(A_homePhone, A_homePhone);
+        MULTI_VALUE_ATTR_NAMES.put(A_mobilePhone, A_mobilePhone);
+        MULTI_VALUE_ATTR_NAMES.put(A_pager, A_pager);
+        MULTI_VALUE_ATTR_NAMES.put(A_otherPhone, A_otherPhone);
+        MULTI_VALUE_ATTR_NAMES.put(A_workFax, A_workFax);
+        MULTI_VALUE_ATTR_NAMES.put(A_homeFax, A_homeFax);
     }
 
     // Zimbra IM service names
@@ -84,7 +96,11 @@ public class ContactData implements Serializable {
         for (Map.Entry<String, String> entry : zfields.entrySet()) {
             String name = entry.getKey();
             if (name.startsWith("anniversary")) continue;
-            importField(name, getSimple(name, entry.getValue()));
+            try {
+                importField(name, getSimple(name, entry.getValue()));
+            } catch (IllegalArgumentException iae) {
+                OfflineLog.yab.warn("Omitting unknown field ["+name+"]");
+            }
         }
     }
 
@@ -247,9 +263,9 @@ public class ContactData implements Serializable {
         } else if (simple.isJobtitle()) {
             return A_jobTitle;
         } else if (simple.isEmail()) {
-            return getFirst(A_email, A_email2, A_email3);
+            return getFirst(A_email, true);
         } else if (simple.isYahooid() || simple.isOtherid()) {
-            return getFirst(A_imAddress1, A_imAddress2, A_imAddress3);
+            return getFirst(IM_PREFIX, false);
         } else if (simple.isLink()) {
             if (simple.isPersonal()) {
                 return A_homeURL;
@@ -260,24 +276,28 @@ public class ContactData implements Serializable {
             return A_notes;
         } else if (simple.isPhone()) {
             if (simple.isFlag(Flag.FAX)) {
-                return simple.isWork() ? A_workFax : A_homeFax;
+                return simple.isWork() ? getFirst(A_workFax, true) : getFirst(A_homeFax, true);
             } else if (simple.isFlag(Flag.MOBILE)) {
-                return simple.isWork() ? A_workMobile : A_mobilePhone;
+                return simple.isWork() ? getFirst(A_workMobile, true): getFirst(A_mobilePhone, true);
             } else if (simple.isFlag(Flag.PAGER)) {
-                return A_pager;
+                return getFirst(A_pager, true);
             } else if (simple.isFlag(Flag.EXTERNAL)) {
-                return A_otherPhone;
+                return getFirst(A_otherPhone, true);
             } else if (simple.isHome()) {
-                return getFirst(A_homePhone, A_homePhone2);
+                return getFirst(A_homePhone, true);
             } else if (simple.isWork()) {
-                return getFirst(A_workPhone, A_workPhone2);
+                return getFirst(A_workPhone, true);
             }
         }
         return null;
     }
 
-    private String getFirst(String... names) {
-        for (String name : names) {
+    private String getFirst(String prefix, boolean usePrefixForBase) {
+        if (usePrefixForBase && !fields.containsKey(prefix)) {
+            return prefix;
+        }
+        for (int i = (usePrefixForBase ? 2 : 1); i < Integer.MAX_VALUE; i++) {
+            String name = prefix+i;
             if (!fields.containsKey(name)) {
                 return name;
             }
@@ -460,11 +480,28 @@ public class ContactData implements Serializable {
         }
         return simple;
     }
+    
+    private static String getMatchingPrefix(String name) {
+        for (String prefix: MULTI_VALUE_ATTR_NAMES.keySet()) {
+            if (name.matches(prefix+"\\d+")) {
+                return MULTI_VALUE_ATTR_NAMES.get(prefix);
+            }
+        }
+        return null;
+    }
 
     private static Attr getAttribute(String name) {
         try {
             return Attr.fromString(name);
         } catch (ServiceException e) {
+            //also check if the attribute is in the multi-value map
+            String prefix = null;
+            if ((prefix = getMatchingPrefix(name)) != null) {
+                try {
+                    return Attr.fromString(prefix);
+                } catch (ServiceException se) {
+                }
+            }
             throw new IllegalArgumentException("Unknown attribute: " + name);
         }
     }
