@@ -95,6 +95,7 @@ ZaNewDomainXWizard = function(parent, entry) {
 	this.initForm(ZaDomain.myXModel,this.getMyXForm(entry), null);		
 	this._localXForm.addListener(DwtEvent.XFORMS_FORM_DIRTY_CHANGE, new AjxListener(this, ZaNewDomainXWizard.prototype.handleXFormChange));
 	this._localXForm.addListener(DwtEvent.XFORMS_VALUE_ERROR, new AjxListener(this, ZaNewDomainXWizard.prototype.handleXFormChange));	
+	 this._localXForm.addListener(DwtEvent.XFORMS_VALUE_CHANGED, new AjxListener(this, ZaNewDomainXWizard.prototype.handleXFormChange));
 	this.lastErrorStep=0;
 	this._helpURL = location.pathname + ZaUtil.HELP_URL + "managing_domains/creating_a_domain.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 }
@@ -129,6 +130,7 @@ function(stepNum) {
 		} else if (stepNum == ZaNewDomainXWizard.GALMODE_STEP) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
 		} else if(stepNum == ZaNewDomainXWizard.GAL_CONFIG_SUM_STEP) {
 			//change next button to "test"
 			//this._button[DwtWizardDialog.NEXT_BUTTON].setText(ZaMsg.Domain_GALTestSettings);
