@@ -419,10 +419,17 @@ AjxUtil.values = function(object, acceptFunc) {
     return values;
 };
 
+AjxUtil.foreach = function(array, func) {
+    if (!func) return;
+    for (var i = 0; i < array.length; i++) {
+        func(array[i], i);
+    }
+};
+
 AjxUtil.map = function(array, func) {
 	var narray = new Array(array.length);
 	for (var i = 0; i < array.length; i++) {
-		narray[i] = func ? func(array[i]) : array[i];
+		narray[i] = func ? func(array[i], i) : array[i];
 	}
 	return narray;
 };
@@ -528,6 +535,19 @@ function(params) {
 
 AjxUtil.byNumber = function(a, b) {
 	return Number(a) - Number(b);
+};
+
+/**
+ * <strong>Note:</strong>
+ * This function <em>must</em> be wrapped in a closure that passes
+ * the property name as the first argument.
+ *
+ * @param {string}  prop    Property name.
+ * @param {object}  a       Object A.
+ * @param {object}  b       Object B.
+ */
+AjxUtil.byStringProp = function(prop, a, b) {
+    return a[prop].localeCompare(b[prop]);
 };
 
 AjxUtil.LOG = {};
@@ -763,4 +783,28 @@ function(arg) {
 	// can get lost in new window
 	var isArray = Boolean(arg && (arg.length != null) && arg.splice && arg.slice);
 	return isArray ? arg : (arg === undefined) ? [] : [arg];
+};
+
+/**
+ * Returns a sub-property of an object. This is useful to avoid code like
+ * the following:
+ * <pre>
+ * resp = resp && resp.BatchResponse;
+ * resp = resp && resp.GetShareInfoResponse;
+ * resp = resp && resp[0];
+ * </pre>
+ * <p>
+ * The first argument to this function is the source object while the
+ * remaining arguments are the property names of the path to follow.
+ * This is done instead of as a path string (e.g. "foo/bar[0]") to
+ * avoid unnecessary parsing.
+ *
+ * @param {object}          object  The source object.
+ * @param {string|number}   ...     The property of the current context object.
+ */
+AjxUtil.get = function(object /* , propName1, ... */) {
+    for (var i = 1; object && i < arguments.length; i++) {
+        object = object[arguments[i]];
+    }
+    return object;
 };

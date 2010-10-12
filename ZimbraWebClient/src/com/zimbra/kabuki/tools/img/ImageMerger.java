@@ -368,7 +368,7 @@ public class ImageMerger {
         if (files.length == 0) return;
 
         for (File file : files) {
-            DecodedImage image = factory.loadImage(file);
+            DecodedImage image = factory.loadImage(file, true);
             if (image == null) {
                 System.err.println("error: unable to load image "+file);
                 continue;
@@ -541,16 +541,23 @@ public class ImageMerger {
     abstract static class ImageFactory {
         // Public methods
         public abstract DecodedImage loadImage(File file) throws IOException;
+        public abstract DecodedImage loadImage(File file, boolean allowMultipleFrames) throws IOException;
         public abstract AggregateImage createAggregateImage(ImageLayout layout);
     }
 
     static class GifImageFactory extends ImageFactory {
         // ImageFactory methods
         public DecodedImage loadImage(File file) throws IOException {
+            return loadImage(file, false);
+        }
+        public DecodedImage loadImage(File file, boolean allowMultipleFrames) throws IOException {
             try {
                 DecodedGifImage image = new DecodedGifImage(file.getAbsolutePath());
-                image.load();
+                image.load(allowMultipleFrames);
                 return image;
+            }
+            catch (IOException e) {
+                throw e;
             }
             catch (Exception e) {
                 return null;
@@ -564,6 +571,9 @@ public class ImageMerger {
     static class FullColorImageFactory extends ImageFactory {
         // ImageFactory methods
         public DecodedImage loadImage(File file) throws IOException {
+            return loadImage(file, false);
+        }
+        public DecodedImage loadImage(File file, boolean allowMultipleFrames) throws IOException {
             try {
                 DecodedFullColorImage image = new DecodedFullColorImage(file.getAbsolutePath());
                 image.load();

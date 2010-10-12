@@ -75,6 +75,15 @@ public class DecodedGifImage extends DecodedImage {
      * etc.  It will also determine the unique colors in this image.
      */
     public void load() throws IOException {
+        load(false);
+    }
+
+    /*
+     * Load the image.  This includes parsing out the color table, transparency,
+     * etc.  It will also determine the unique colors in this image.
+     * @param allowMultipleFrames True to allow multiple frames; else throw exception.
+     */
+    public void load(boolean allowMultipleFrames) throws IOException {
         FileInputStream in = null;
         try {
             in = new FileInputStream(new File(mFilename));
@@ -94,7 +103,7 @@ public class DecodedGifImage extends DecodedImage {
         }
 
         int n = d.getFrameCount();
-        if (n != 1) {
+        if (n != 1 && !allowMultipleFrames) {
             System.err.println("ERROR: There are " + n + " frames in " + mFilename);
             throw new ImageMergeException("ERROR: There are " + n + " frames in " + mFilename);
         }

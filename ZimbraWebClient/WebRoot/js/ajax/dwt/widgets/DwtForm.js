@@ -831,6 +831,11 @@ DwtForm.prototype._createControl = function(itemDef, parentDef,
 		delete itemDef.template;
 	}
 
+    var isTree = Dwt.instanceOf(type, "DwtTree");
+    if (isTree) {
+        params.style = itemDef.style;
+    }
+
 	// add extra params
 	params.formItemDef = itemDef;
 	if (itemDef.params) {

@@ -48,7 +48,7 @@ AjxImg.RE_COLOR = /^(.*?),color=(.*)$/;
 AjxImg.setImage =
 function(parentEl, imageName, useParentEl, _disabled) {
 	var origImageName = imageName;
-    var color, m = imageName.match(AjxImg.RE_COLOR);
+    var color, m = imageName && imageName.match(AjxImg.RE_COLOR);
 	if (m) {
 		imageName = m && m[1];
 		color = m && m[2];
@@ -84,7 +84,7 @@ AjxImg.setDisabledImage = function(parentEl, imageName, useParentEl) {
 
 AjxImg.getClassForImage =
 function(imageName, disabled) {
-	var className = "Img" + imageName;
+	var className = imageName ? "Img" + imageName : "";
 	if (disabled) className += " ZDisabledImage";
 	return className;
 };

@@ -1,4 +1,4 @@
-/*
+    /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Web Client
  * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
@@ -148,7 +148,7 @@ function(listener) {
  */
 DwtTree.prototype.getItemCount =
 function() {
-	return this._children.size();
+	return this.getItems().length;
 };
 
 /**
@@ -160,6 +160,16 @@ DwtTree.prototype.getItems =
 function() {
 	return this._children.getArray();
 };
+
+/** Clears the tree items. */
+DwtTree.prototype.clearItems = function() {
+    var items = this.getItems();
+    for (var i = 0; i < items.length; i++) {
+        this.removeChild(items[i]);
+    }
+    this._getContainerElement().innerHTML = "";
+};
+
 
 /**
  * De-selects all items.
@@ -233,8 +243,13 @@ function() {
 	return this._selectedItems.size();
 };
 
-DwtTree.prototype.addChild =
-function(child) {};
+DwtTree.prototype.addChild = function(child) {
+    // HACK: Tree items are added via _addItem. But we need to keep
+    // HACK: the original addChild behavior for other controls that
+    // HACK: may be added to the tree view.
+    if (child instanceof DwtTreeItem) return;
+    DwtComposite.prototype.addChild.apply(this, arguments);
+};
 
 /**
  * Adds a separator.
@@ -244,7 +259,7 @@ DwtTree.prototype.addSeparator =
 function() {
 	var sep = document.createElement("div");
 	sep.className = "vSpace";
-	this.getHtmlElement().appendChild(sep);
+	this._getContainerElement().appendChild(sep);
 };
 
 // Expand parent chain from given item up to root
@@ -261,7 +276,7 @@ function(item) {
 DwtTree.prototype._addItem =
 function(item, index) {
 	this._children.add(item, index);
-	var thisHtmlElement = this.getHtmlElement();
+	var thisHtmlElement = this._getContainerElement();
 	var numChildren = thisHtmlElement.childNodes.length;
 	if (index == null || index > numChildren) {
 		thisHtmlElement.appendChild(item.getHtmlElement());
@@ -270,22 +285,28 @@ function(item, index) {
 	}
 };
 
+DwtTree.prototype._getContainerElement = DwtTree.prototype.getHtmlElement;
+
 DwtTree.prototype.sort =
 function(cmp) {
-        this._children.sort(cmp);
-        var df = document.createDocumentFragment();
-        this._children.foreach(function(item, i){
-                df.appendChild(item.getHtmlElement());
-                item._index = i;
-        });
-        this.getHtmlElement().appendChild(df);
+    var children = this.getItems();
+    children.sort(cmp);
+    var fragment = document.createDocumentFragment();
+    AjxUtil.foreach(children, function(item, i){
+        fragment.appendChild(item.getHtmlElement());
+        item._index = i;
+    });
+    this._getContainerElement().appendChild(fragment);
 };
 
 DwtTree.prototype.removeChild =
 function(child) {
 	this._children.remove(child);
 	this._selectedItems.remove(child);
-	this.getHtmlElement().removeChild(child.getHtmlElement());
+    var childEl = child.getHtmlElement();
+    if (childEl.parentNode) {
+        childEl.parentNode.removeChild(childEl);
+    }
 };
 
 /**
