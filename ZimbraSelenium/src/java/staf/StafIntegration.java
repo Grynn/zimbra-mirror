@@ -47,11 +47,13 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     private String argPattern = "pattern";
     private String argGroup = "group";
     private String argLog = "log";
-    
+    private String argLog4j = "log4j";
+
     private String optionQuery= "query";
     private String optionHelp = "help";
     private String optionHalt = "halt";
     
+    private static final String defaultLog4jProperties = "/tmp/log4j.properties";
     // 
     private boolean serviceIsRunning = false;
     
@@ -111,6 +113,13 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         }    
 
         
+        File props = new File(defaultLog4jProperties);
+        if ( props.exists() ) {
+        	PropertyConfigurator.configure(defaultLog4jProperties);
+        }
+        
+
+        
         
         // Make sure the request is valid
         STAFCommandParseResult parsedRequest = stafParserExecute.parse(info.request);
@@ -132,6 +141,15 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			serviceIsRunning = true;
 		
 			// Parse Arguments
+			if (parsedRequest.optionTimes(argLog4j) > 0 ) {
+				String n = parsedRequest.optionValue(argLog4j);
+				File f = new File(n);
+				if ( !f.exists() ) {
+					return (new STAFResult(STAFResult.JavaError, "filename does not exist: "+ n));
+				}
+	        	PropertyConfigurator.configure(n);
+			}
+			
 	        if (parsedRequest.optionTimes(argRoot) != 1 ) {
 	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argRoot +" can be specified"));	        		        	
 	        }
@@ -197,12 +215,18 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	
 	private STAFResult handleHelp() {
 
+        File props = new File(defaultLog4jProperties);
+        if ( props.exists() ) {
+        	PropertyConfigurator.configure(defaultLog4jProperties);
+        }
+        
+
         mLog.info("StafTestStaf: handleHelp ...");
 
     	// TODO: Need to convert the help command into the variables, aEXECUTE, aHELP, etc.
         return new STAFResult(STAFResult.Ok,
          "StafTest Service Help\n\n" + 
-         "EXECUTE SERVER <servername|IP address> ROOT <ZimbraSelenium path> JARFILE <path> PATTERN <projects.zcs.tests> [ GROUP <always|sanity|smoke|full> ]*\n\n" +
+         "EXECUTE SERVER <servername|IP address> ROOT <ZimbraSelenium path> JARFILE <path> PATTERN <projects.zcs.tests> [ GROUP <always|sanity|smoke|full> ]* [ LOG <folder> ] [ LOG4J <properties file> ]\n\n" +
          "QUERY -- TBD: should return statistics on active jobs \n\n" +
          "HALT <TBD> -- TBD: should stop any executing tests\n\n" +
          "HELP\n\n");
@@ -269,6 +293,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         stafParserExecute.addOption(argPattern, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argGroup, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argLog, 1, STAFCommandParser.VALUEREQUIRED);
+        stafParserExecute.addOption(argLog4j, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOptionNeed(optionExecute, argServer);
         stafParserExecute.addOptionNeed(argServer, argRoot);
         stafParserExecute.addOptionNeed(argRoot, argJarfile);
@@ -301,14 +326,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         
         
 		// Now, do the Selenium specific setup ...
-        
-		// Set up Log4j
-        // PropertyConfigurator.configure(mDefaultConfiguratorFile);
-		
-        // Set up SSL
-		// Always accept self-signed SSL certificates.
-		// SocketFactories.registerProtocols(true);
-        
+        BasicConfigurator.configure();
 
 		
 		// Now, the service is ready ...
