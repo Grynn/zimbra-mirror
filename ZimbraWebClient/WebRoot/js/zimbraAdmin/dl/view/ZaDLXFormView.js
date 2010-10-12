@@ -803,6 +803,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                                                 {ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.MSG_LabelListName, label: ZaMsg.LBL_LabelListName,
                                                         forceUpdate:true, tableCssStyle: "width:89", inputWidth:"100",
                                                                 id:"dl_name_field",
+                                                                visibilityChecks:[],
                                                                 enableDisableChecks:[[XFormItem.prototype.hasRight,ZaDistributionList.RENAME_DL_RIGHT]]
                                                         },
                                                     {ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:ZaMsg.NAD_DisplayName, msgName:ZaMsg.NAD_DisplayName,width:"100%",
