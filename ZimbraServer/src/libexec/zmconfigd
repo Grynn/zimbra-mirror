@@ -230,11 +230,13 @@ while True:
 
 	# Jython won't wake up from time.sleep() when a signal is received and caught.
 	# Uncaught signals seem to cause the JVM to exit
+	Log.logMsg (5, "Sleeping for %d" % myState.sleepTimer)
 	myState.sleepTimer = myConfig.interval
 	while myState.sleepTimer > 0:
 		time.sleep(sleepinterval) 
 		myState.sleepTimer -= sleepinterval
-
+	Log.logMsg (5, "Waking up")
+	
 dt = time.clock()-t0
 Log.logMsg(5, "%s completed in %.2f seconds" % (myConfig.progname,dt));
 sys.exit(0)

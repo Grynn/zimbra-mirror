@@ -220,6 +220,7 @@ class State:
 	def getAllConfigs(self, cf=None):
 		t1 = time.clock()
 
+		Log.logMsg(3, "Fetching All configs")
 		# These loading commands really aren't reentrant safe, so we'll need to make sure
 		# we only access them from here.  Any rewrite request via interrupt shouldn't require
 		# a config reload, anyway.
@@ -234,14 +235,49 @@ class State:
 		gc = threading.Thread(target=State.getGlobalConfig,args=(self,),name="gc")
 		mc = threading.Thread(target=State.getMiscConfig,args=(self,),name="mc")
 		sc = threading.Thread(target=State.getServerConfig,args=(self,),name="sc")
+		lc.daemon = True;
+		gc.daemon = True;
+		mc.daemon = True;
+		sc.daemon = True;
 		lc.start()
 		gc.start()
 		mc.start()
 		sc.start()
-		lc.join()
-		gc.join()
-		mc.join()
-		sc.join()
+		lc.join(120)
+		gc.join(120)
+		mc.join(120)
+		sc.join(120)
+		try:
+			if (lc.isAlive()):
+				Log.logMsg(1, "Thread %s still alive, waiting 120" %lc.name)
+				lc.join(120)
+				if (lc.isAlive()):
+					Log.logMsg(1, "Thread %s still alive, aborting" % lc.name)
+					raise Exception, "Thread %s still alive, aborting" % lc.name
+			if (gc.isAlive()):
+				Log.logMsg(1, "Thread %s still alive, waiting 120" %gc.name)
+				gc.join(120)
+				if (gc.isAlive()):
+					Log.logMsg(1, "Thread %s still alive, aborting" % gc.name)
+					raise Exception, "Thread %s still alive, aborting" % gc.name
+			if (mc.isAlive()):
+				Log.logMsg(1, "Thread %s still alive, waiting 120" %mc.name)
+				mc.join(120)
+				if (gc.isAlive()):
+					Log.logMsg(1, "Thread %s still alive, aborting" % gc.name)
+					raise Exception, "Thread %s still alive, aborting" % gc.name
+			if (sc.isAlive()):
+				Log.logMsg(1, "Thread %s still alive, waiting 120" %sc.name)
+				sc.join(120)
+				if (gc.isAlive()):
+					Log.logMsg(1, "Thread %s still alive, aborting" % gc.name)
+					raise Exception, "Thread %s still alive, aborting" % gc.name
+
+		except Exception, e:
+			State.lConfig.release()
+			Log.logMsg (3, "LOCK myState.lConfig released")
+			raise e
+
 		State.lConfig.release()
 		Log.logMsg (5, "LOCK myState.lConfig released")
 
