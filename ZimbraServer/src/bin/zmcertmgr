@@ -535,7 +535,8 @@ deployCA() {
   fi  
 
   updateCACERTS
-
+  
+  ldap_is_master="$(echo ${ldap_is_master} | tr 'A-Z' 'a-z')"
   if [ x"$ldap_is_master" = "xtrue" -a x"$SKIP_LDAP" != "x1" ]; then
     saveConfigKey "zimbraCertAuthorityCertSelfSigned" ${zimbra_ca_crt} "global"
     saveConfigKey "zimbraCertAuthorityKeySelfSigned" ${zimbra_ca_key} "global"
