@@ -475,9 +475,9 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 								{type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_LocationDisplayName,label:ZaMsg.NAD_LocationDisplayName, labelLocation:_LEFT_, 
 									items: [
 										{ref:ZaResource.A_locationDisplayName, type:_TEXTFIELD_, 
-											label:null,	width:defaultWidth,  
-											enableDisableChecks:[ [XForm.checkInstanceValue,ZaAccount.A2_autodisplayname,"FALSE"] ],
-											enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname]
+											label:null,	width:defaultWidth,
+											enableDisableChecks:[ZaNewResourceXWizard.isAutoDisplayname],
+                                                                                        enableDisableChangeEventSources:[ZaResource.A2_autoLocationName],bmolsnr:true
 										},
 										{ref:ZaResource.A2_autoLocationName, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
 											elementChanged: ZaResource.setAutoLocationName
@@ -525,3 +525,6 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 		];
 };
 ZaXDialog.XFormModifiers["ZaNewResourceXWizard"].push(ZaNewResourceXWizard.myXFormModifier);
+ZaNewResourceXWizard.isAutoDisplayname = function () {
+        return(this.getInstanceValue(ZaResource.A2_autoLocationName)=="FALSE");
+}

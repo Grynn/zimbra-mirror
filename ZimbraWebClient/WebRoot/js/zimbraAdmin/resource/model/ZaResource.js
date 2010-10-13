@@ -662,8 +662,8 @@ function (elementValue,instanceValue, event){
 	this.getForm().itemChanged(this, elementValue, event);	
 	if(curInstance[ZaResource.A2_autoLocationName]=="TRUE") {
 		curInstance.attrs [ZaResource.A_locationDisplayName] = ZaResource.prototype.getAutoLocationName.call (curInstance);
+		this.getForm().refresh();
 	}		
-	this.getForm().refresh();	
 }
 
 ZaResource.isLocation = function () {
