@@ -2,6 +2,8 @@ package projects.html.clients;
 
 import org.testng.Assert;
 
+import framework.core.ClientSessionFactory;
+
 public class CheckBox extends ZObject{
 	protected boolean isCheckbox = true;//if true then moveMouse's xy is adjusted differently for zActivate
 
@@ -68,9 +70,12 @@ public class CheckBox extends ZObject{
 	}
 	
 	public void zExists(String objNameOrId) {
-		String actual =ZObjectCore(objNameOrId, "exists", true, "",  "",  "",  "");
-		Assert.assertEquals("true", actual, objTypeName+"(" + objNameOrId
-				+ ") Not Found.");
+		//String actual =ZObjectCore(objNameOrId, "exists", true, "",  "",  "",  "");
+		//Assert.assertEquals("true", actual, objTypeName+"(" + objNameOrId
+		//		+ ") Not Found.");
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(objNameOrId),
+				"checkbox : " +  objNameOrId + " not existed"); 
+		
 	}	
 	public void zExistsInDlg(String objNameOrId) {
 		String actual =ZObjectCore(objNameOrId, "exists", true, "",  "dialog",  "",  "");
