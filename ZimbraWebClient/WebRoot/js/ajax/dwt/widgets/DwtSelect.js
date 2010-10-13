@@ -49,6 +49,7 @@ DwtSelect = function(params) {
     this._optionValuesToIndices = {};
     this._selectedValue = this._selectedOption = null;
 	this._cascade = params.cascade == null || params.cascade;
+	this._maxRows = params.maxRows || 0;
 
     // add options
     var options = params.options;
@@ -810,7 +811,7 @@ function() {
  * @extends		DwtMenu
  */
 DwtSelectMenu = function(parent) {
-    DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu", layout:parent._cascade});
+    DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu", layout:parent._cascade, maxRows:parent._maxRows});
 };
 DwtSelectMenu.prototype = new DwtMenu;
 DwtSelectMenu.prototype.constructor = DwtSelectMenu;
