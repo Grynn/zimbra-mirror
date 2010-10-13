@@ -650,6 +650,32 @@ function(ev) {
 	return;
 }
 
+ZaDomainListController.prototype._notifyAllOpenTabs =
+function() {
+        var warningMsg = "<br><ul>";
+        var hasItem = false;
+        for (var i=0; i < ZaAppTabGroup._TABS.size(); i++) {
+                var tab = ZaAppTabGroup._TABS.get(i) ;
+                var v = tab.getAppView() ;
+                if (v && v._containedObject && v._containedObject.name) {
+                        var acctName = v._containedObject.name;
+                        var l = acctName.indexOf('@');
+                        var domain = null;
+                        if(l > 0) domain = acctName.substring(l+1);
+                        if((domain != null && domain == this._currentObject.attrs[ZaDomain.A_domainName])
+				|| (domain == null && acctName == this._currentObject.attrs[ZaDomain.A_domainName]))
+			{
+                                warningMsg += "<li>" + acctName + "</li>";
+                                hasItem = true;
+                        }
+                }
+        }
+        warningMsg += "</ul></br>";
+        if(hasItem)
+                ZaApp.getInstance().getCurrentController().popupWarningDialog(ZaMsg.WARN_CHANGE_AUTH_METH + warningMsg);
+
+}
+
 ZaDomainListController.prototype._finishAuthButtonListener =
 function(ev) {
 	try {
@@ -659,6 +685,7 @@ function(ev) {
 		//changeDetails["obj"] = this._currentObject;
 		this._fireDomainChangeEvent(this._currentObject);
 		this._authWizard.popdown();
+		this._notifyAllOpenTabs();
 	} catch (ex) {
 		this._handleException(ex, "ZaDomainListController.prototype._finishAuthButtonListener", null, false);
 	}

@@ -478,6 +478,30 @@ function(ev) {
 	return;
 }
 
+ZaDomainController.prototype._notifyAllOpenTabs =
+function() {
+	var warningMsg = "<br><ul>";
+	var hasItem = false;
+        for (var i=0; i < ZaAppTabGroup._TABS.size(); i++) {
+                var tab = ZaAppTabGroup._TABS.get(i) ;
+                var v = tab.getAppView() ;
+                if (v && v._containedObject && v._containedObject.name) {
+			var acctName = v._containedObject.name;
+			var l = acctName.indexOf('@');
+			var domain = null;
+			if(l > 0) domain = acctName.substring(l+1);
+			if(domain != null && domain == this._currentObject.attrs[ZaDomain.A_domainName]) {
+				warningMsg += "<li>" + acctName + "</li>";
+				hasItem = true;
+			}
+                }
+        }
+	warningMsg += "</ul></br>";
+	if(hasItem)
+		ZaApp.getInstance().getCurrentController().popupWarningDialog(ZaMsg.WARN_CHANGE_AUTH_METH + warningMsg);	
+}
+
+
 ZaDomainController.prototype._finishAuthButtonListener =
 function(ev) {
 	try {
@@ -489,6 +513,7 @@ function(ev) {
 		this.fireChangeEvent(this._currentObject);
 		this._view.setObject(this._currentObject);
 		this._authWizard.popdown();
+		this._notifyAllOpenTabs();
 	} catch (ex) {
 		this._handleException(ex, "ZaDomainController.prototype._finishAuthButtonListener", null, false);
 	}
