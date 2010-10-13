@@ -122,15 +122,15 @@ public class CommonTest extends SelNGBase {
 
 
 	public CommonTest() {
-		zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg", new Locale(
+		zmMsg = ResourceBundle.getBundle("ZmMsg", new Locale(
 				ZimbraSeleniumProperties.getStringProperty("locale")));
 		ajxMsg = ResourceBundle
-				.getBundle("framework.locale.AjxMsg", new Locale(
+				.getBundle("AjxMsg", new Locale(
 						ZimbraSeleniumProperties.getStringProperty("locale")));
 		i18Msg = ResourceBundle
-				.getBundle("framework.locale.I18nMsg", new Locale(
+				.getBundle("I18nMsg", new Locale(
 						ZimbraSeleniumProperties.getStringProperty("locale")));
-		zsMsg = ResourceBundle.getBundle("framework.locale.ZsMsg", new Locale(
+		zsMsg = ResourceBundle.getBundle("ZsMsg", new Locale(
 				ZimbraSeleniumProperties.getStringProperty("locale")));
 
 		obj = new CoreObjects();
@@ -353,7 +353,7 @@ public class CommonTest extends SelNGBase {
 	}
 
 	public void initFramework() {
-		zmMsg = ResourceBundle.getBundle("framework.locale.ZmMsg", new Locale(
+		zmMsg = ResourceBundle.getBundle("ZmMsg", new Locale(
 				ZimbraSeleniumProperties.getStringProperty("locale")));
 
 	}
