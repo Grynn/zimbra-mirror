@@ -80,7 +80,7 @@ $mesg->code && die "Bind: ". $mesg->error . "\n";
 
 my $dn="olcDatabase={2}hdb,cn=config";
 
-if($ldap_is_master eq "true") {
+if(lc($ldap_is_master) eq "true") {
   $mesg = $ldap->search(
                         base=> "cn=accesslog",
                         filter=>"(objectClass=*)",

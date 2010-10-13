@@ -112,7 +112,7 @@ if ( -f "/opt/zimbra/.enable_replica" ) {
   $rc=`${zimbra_home}/bin/ldap start`;
 }
 
-if ($ldap_is_master ne "true" ) {
+if (lc($ldap_is_master) ne "true" ) {
     exit 0;
 }
 

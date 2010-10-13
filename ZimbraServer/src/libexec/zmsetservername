@@ -163,7 +163,7 @@ if (!$usersonly) {
 
   # Regenerate Self-signed certs
   if (!-f "$c{zimbra_home}/ssl/zimbra/commercial/commercial.crt") {
-    if($c{ldap_is_master}) {
+    if(lc($c{ldap_is_master}) eq "true") {
       runCommand("sudo $c{zmcertmgr} createca -new");
     }
     runCommand("sudo $c{zmcertmgr} createcrt self -new");
