@@ -1047,11 +1047,13 @@ function(view, item) {
 
 DwtChooser.prototype._getEmailFromText =
 function() {
-	var text = this._textField.getValue();
-	var email = AjxEmailAddress.parse(text);
-	if (email) {
-		email.id = Dwt.getNextId();
-		return email;
+	if (this._hasTextField) {
+		var text = this._textField.getValue();
+		var email = AjxEmailAddress.parse(text);
+		if (email) {
+			email.id = Dwt.getNextId();
+			return email;
+		}
 	}
 };
 
