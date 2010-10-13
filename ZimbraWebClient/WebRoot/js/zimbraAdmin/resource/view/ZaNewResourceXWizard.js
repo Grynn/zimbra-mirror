@@ -388,7 +388,7 @@ ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 	setupGroup.items.push({ref:ZaResource.A2_schedulePolicy, type:_OSELECT1_, msgName:ZaMsg.NAD_ResType,
 						visibilityChecks:[[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoAcceptDecline],[ZaItem.hasWritePermission,ZaResource.A_zimbraCalResAutoDeclineIfBusy]],
 						enableDisableChecks:[],
-						label:ZaMsg.NAD_SchedulePolicy, labelLocation:_LEFT_, width: "300px", 
+						label:ZaMsg.NAD_SchedulePolicy, labelLocation:_LEFT_, width: "400px", 
 						choices:ZaResource.schedulePolicyChoices});	
 						
 	setupGroup.items.push({ref:ZaResource.A_zimbraCalResMaxNumConflictsAllowed, type:_TEXTFIELD_,
