@@ -224,7 +224,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             boolean success = false;
             try {
                 beginTransaction("getItemById", octxt);
-                MailItem item = checkAccess(getItemById(id, MailItem.TYPE_TAG, false));
+                MailItem item = checkAccess(getRenumberedItemById(id, MailItem.TYPE_TAG, false));
                 success = true;
                 return (Tag) item;
             } finally {
@@ -234,7 +234,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
 
     @Override MailItem getItemById(int id, byte type) throws ServiceException {
-        return getItemById(id, type, true);
+        return getRenumberedItemById(id, type, true);
     }
 
     /**
@@ -245,7 +245,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
      * @return
      * @throws ServiceException
      */
-    MailItem getItemById(int id, byte type, boolean useRenumbered) throws ServiceException {
+    MailItem getRenumberedItemById(int id, byte type, boolean useRenumbered) throws ServiceException {
         NoSuchItemException trappedExcept = null;
         try { 
             MailItem item = super.getItemById(id, type);
