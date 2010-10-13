@@ -41,7 +41,7 @@ my $zimbra_tmp_directory = getLocalConfig("zimbra_tmp_directory");
 my $isLdapMaster = getLocalConfig("ldap_is_master");
 
 chomp($isLdapMaster);
-if ($isLdapMaster eq "true" ) {
+if (lc($isLdapMaster) eq "true" ) {
    $isLdapMaster = 1;
 } else {
    $isLdapMaster = 0;
