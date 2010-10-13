@@ -208,6 +208,9 @@ sub updateSyslogNG {
   chown $uid,$gid,"/var/log/zimbra.log";
   chown $uid,$gid,"/var/log/zimbra-stats.log";
   chmod 0644, "/var/log/zimbra.log", "/var/log/zimbra-stats.log";
+  if ( -f "/etc/logrotate.d/zimbra~" ){
+    unlink("/etc/logrotate.d/zimbra~" );
+  }
   print "done.\n"
 }
 
@@ -302,6 +305,9 @@ sub updateSyslog {
       }
     }
   }
+  if ( -f "/etc/logrotate.d/zimbra~" ){
+    unlink("/etc/logrotate.d/zimbra~" );
+  }
   print "done.\n";
 }
 
@@ -385,6 +391,9 @@ sub updateRsyslogd {
       s/kill\s+\-HUP\s+.+syslog\*\.pid.+\/dev\/null/\/usr\/sbin\/service rsyslog restart >\/dev\/null/g;
       print;
     }
+  }
+  if ( -f "/etc/logrotate.d/zimbra~" ){
+    unlink("/etc/logrotate.d/zimbra~" );
   }
   print "done.\n";
 }
