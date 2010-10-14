@@ -409,6 +409,10 @@ function(ex, method, params, restartOnError, obj) {
                     ex, true);
         } else if(ex.code == ZmCsfeException.VOLUME_NO_SUCH_PATH) {
 			this.popupErrorDialog(ZaMsg.ERROR_INVALID_VOLUME_PATH, ex);
+		} else if(ex.code == ZmCsfeException.NO_SUCH_VOLUME) {
+			this.popupErrorDialog(ZaMsg.ERROR_NO_SUCH_VOLUME, ex);
+		} else if(ex.code == ZmCsfeException.ALREADY_EXISTS) {
+			this.popupErrorDialog(ZaMsg.ERROR_VOLUME_ALREADY_EXISTS, ex);
 		} else if(ex.code == ZmCsfeException.LICENSE_ERROR) {
 			this.popupErrorDialog(ZaMsg.ERROR_LICENSE, ex);
 		} else if (ex.code == ZmCsfeException.SVC_INVALID_REQUEST) {
@@ -531,7 +535,17 @@ function (resp) {
 			this._loginDialog.setError(ZaMsg.ERROR_ACC_IN_MAINTENANCE_MODE);
 			this._loginDialog.clearPassword();
 		} else {
-			this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex); 
+			if(this._msgDialog) {
+				this.popupMsgDialog(ZaMsg.SERVER_ERROR, ex);
+			} else {
+				this._showLoginDialog(true);
+				//check for a more informative message
+				if(ex && ex.msg) {
+					this._loginDialog.setError(ex.msg);
+				} else {
+					this._loginDialog.setError(ZaMsg.SERVER_ERROR);
+				}
+			}
 		}
 	} else {
 		//if login succesful hide splash screen, start application
