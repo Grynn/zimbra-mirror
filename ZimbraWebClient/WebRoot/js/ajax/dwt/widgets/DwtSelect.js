@@ -27,7 +27,7 @@
  * @param {array}      params.options 		a list of options. This can be either an array of {@link DwtSelectOption} or {String} objects.
  * @param {string}      params.className		the CSS class
  * @param {constant}      params.posStyle		the positioning style (see {@link DwtControl})
- * @param {boolean}      [cascade=true]		if <code>true</code>, menu should cascade (i.e. multiple columns).
+ * @param {boolean}      [layout=true]		layout to use: DwtMenu.LAYOUT_STACK, DwtMenu.LAYOUT_CASCADE or DwtMenu.LAYOUT_SCROLL. A value of [true] defaults to DwtMenu.LAYOUT_CASCADE and a value of [false] defaults to DwtMenu.LAYOUT_STACK.
  *        
  * @extends		DwtButton
  */
@@ -48,8 +48,8 @@ DwtSelect = function(params) {
     this._options = new AjxVector();
     this._optionValuesToIndices = {};
     this._selectedValue = this._selectedOption = null;
-	this._cascade = params.cascade == null || params.cascade;
 	this._maxRows = params.maxRows || 0;
+	this._layout = params.layout;
 
     // add options
     var options = params.options;
@@ -70,7 +70,7 @@ DwtSelect = function(params) {
     this.setMenu(this._menuCallback, true);
 };
 
-DwtSelect.PARAMS = ["parent", "options", "style", "className"];
+DwtSelect.PARAMS = ["parent", "options", "style", "className", "layout"];
 
 DwtSelect.prototype = new DwtButton;
 DwtSelect.prototype.constructor = DwtSelect;
@@ -811,7 +811,7 @@ function() {
  * @extends		DwtMenu
  */
 DwtSelectMenu = function(parent) {
-    DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu", layout:parent._cascade, maxRows:parent._maxRows});
+    DwtMenu.call(this, {parent:parent, style:DwtMenu.DROPDOWN_STYLE, className:"DwtMenu", layout:parent._layout, maxRows:parent._maxRows});
 };
 DwtSelectMenu.prototype = new DwtMenu;
 DwtSelectMenu.prototype.constructor = DwtSelectMenu;

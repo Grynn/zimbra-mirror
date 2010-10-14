@@ -35,7 +35,7 @@
  * @param {constant}      params.style			the menu style
  * @param {string}        params.className		the CSS class
  * @param {constant}      params.posStyle		the positioning style (see {@link DwtControl})
- * @param {constant}      params.layout			layout to use: DwtMenu.LAYOUT_STACK, DwtMenu.LAYOUT_CASCADE or DwtMenu.LAYOUT_SCROLL	
+ * @param {constant}      params.layout			layout to use: DwtMenu.LAYOUT_STACK, DwtMenu.LAYOUT_CASCADE or DwtMenu.LAYOUT_SCROLL. A value of [true] defaults to DwtMenu.LAYOUT_CASCADE and a value of [false] defaults to DwtMenu.LAYOUT_STACK.
  * @param {int}		  params.maxRows=0	    	if >0 and layout = LAYOUT_CASCADE or DwtMenu.LAYOUT_SCROLL, define how many rows are allowed before cascading/scrolling
  * @param {boolean}		params.congruent		if the parent is a DwtMenuItem, align so that the submenu "merges" with the parent menu
  * 
@@ -65,9 +65,9 @@ DwtMenu = function(params) {
 	params.className = params.className || "DwtMenu";
 
 	this._layoutStyle = params.layout == null || params.layout;
-	if (params.layout == true) {
+	if (this._layoutStyle === true) {
 		this._layoutStyle = DwtMenu.LAYOUT_CASCADE;
-	} else if (params.layout == false) {
+	} else if (this._layoutStyle === false) {
 		this._layoutStyle = DwtMenu.LAYOUT_STACK;
 	}
 	this._maxRows = this._layoutStyle && params.maxRows || 0;
@@ -509,16 +509,20 @@ function(x, y) {
 			var rows = this._table.rows;
 			var numRows = rows.length;
 			var maxRows = this._maxRows;
-			var height = 20; //for scroll buttons
-			for (var i = 0; i <= maxRows; i++) {
-				height += Dwt.getSize(rows[i]).y;
+			var limRows = maxRows ? Math.min(maxRows, numRows) : numRows;
+			var availableSpace = windowSize.y - 25; // Account for space on top & bottom of menu.
 
+			var height = 20; //for scroll buttons
+			for (var i = 0; i < limRows; i++) {
+				var rowSize = Dwt.getSize(rows[i]).y;
+				if (height + rowSize <= availableSpace)
+					height += rowSize;
+				else
+					break;
 			}
 			mySize.y = height;
 		}
 	}
-
-
 	var newW = "auto";
 	var newH = "auto";
 	if (isPopup && isScroll) {
