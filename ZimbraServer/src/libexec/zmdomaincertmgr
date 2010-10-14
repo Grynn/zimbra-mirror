@@ -481,11 +481,11 @@ verifycrtchain () {
 usage () {
   echo "Usage: "
   echo "  $0 -help"
-  echo "  $0 deploycrt"
+  echo "  $0 deploycrts"
   echo "  $0 savecrt <domain> <cert file> <private key file>"
   echo
   echo "Comments:  "
-  echo "-  deploycrt" 
+  echo "-  deploycrts" 
   echo "-  savecrt" 
   echo
   
