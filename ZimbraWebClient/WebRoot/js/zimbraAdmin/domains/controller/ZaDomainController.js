@@ -679,6 +679,13 @@ function(cert, prvkey) {
 		};
 		resp = ZaCert.verifyCertKey(ZaApp.getInstance(), params);
 
+		if(!resp){
+                        this._errorDialog.setMessage(ZaMsg.SERVER_ERROR, ZaMsg.ERROR_DOMAIN_CERT_VERIFY, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
+                        this._errorDialog.popup();
+                        return false;
+                 
+		}
+
 		var verifyResult = resp.verifyResult;
 		if(verifyResult == "false") {
 	                this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_CERT_KEY_VERIFY, ZaMsg.ALERT_DOMAIN_CERT_KEY, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
