@@ -798,9 +798,9 @@ OSelect1_XFormItem.prototype.setElementEnabled = function(enabled) {
 	} else {
 		this.getDisplayElement().className = this.getDisplayCssClass() + "_disabled";
 		var el = this.getArrowElement();
-		if(el)
+		/*if(el)
 			AjxImg.setImage(el, "SelectPullDownArrowDis");
-			
+		*/	
 		this.getForm().getElement(this.getId()).className = this.cssClass + "_disabled";
 		table.className = this.getTableCssClass()+"_disabled";
 		if(this.getInheritedProperty("editable")) {
