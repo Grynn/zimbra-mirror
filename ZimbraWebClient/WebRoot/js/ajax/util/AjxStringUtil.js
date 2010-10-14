@@ -1078,6 +1078,10 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor) {
 		idx = this._traverse(tmp, text, idx, listType, listLevel, bulletNum, ctxt, convertor);
 	}
 
+	if (convertor && convertor["/"+nodeName]) {
+		text[idx++] = convertor["/"+nodeName](el);
+	}
+
 	if (nodeName == "h1" || nodeName == "h2" || nodeName == "h3" || nodeName == "h4"
 		|| nodeName == "h5" || nodeName == "h6") {
 			text[idx++] = "\n";
