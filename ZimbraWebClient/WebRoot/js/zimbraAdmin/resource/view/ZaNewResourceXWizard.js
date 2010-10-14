@@ -265,6 +265,8 @@ function(value, event, form) {
     return value;
 }
 
+ZaNewResourceXWizard.isAutoDisplayname = ZaResourceXFormView.isAutoDisplayname;
+
 ZaNewResourceXWizard.myXFormModifier = function(xFormObject) {
 	ZaResource.resTypeChoices = [
 		{value:ZaResource.RESOURCE_TYPE_LOCATION, label:ZaMsg.resType_location}, 
