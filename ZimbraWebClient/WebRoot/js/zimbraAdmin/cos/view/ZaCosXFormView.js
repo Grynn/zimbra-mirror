@@ -175,8 +175,8 @@ ZaCosXFormView.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
 	ZaCos.A_zimbraFeatureTasksEnabled,
 	//ZaCos.A_zimbraFeatureNotebookEnabled,
 	ZaCos.A_zimbraFeatureBriefcasesEnabled,
-	//ZaCos.A_zimbraFeatureBriefcaseSpreadsheetEnabled,
-	//ZaCos.A_zimbraFeatureBriefcaseSlidesEnabled,
+	ZaCos.A_zimbraFeatureBriefcaseSpreadsheetEnabled,
+	ZaCos.A_zimbraFeatureBriefcaseSlidesEnabled,
 	ZaCos.A_zimbraFeatureBriefcaseDocsEnabled,
 	ZaCos.A_zimbraFeatureIMEnabled,
 	ZaCos.A_zimbraFeatureOptionsEnabled,
@@ -493,15 +493,15 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 enableDisableChangeEventSources:[ZaCos.A_zimbraFeatureBriefcasesEnabled],
 				visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 					[
-						//ZaCos.A_zimbraFeatureBriefcaseSpreadsheetEnabled,
-						//ZaCos.A_zimbraFeatureBriefcaseSlidesEnabled,
+						ZaCos.A_zimbraFeatureBriefcaseSpreadsheetEnabled,
+						ZaCos.A_zimbraFeatureBriefcaseSlidesEnabled,
 						ZaCos.A_zimbraFeatureBriefcaseDocsEnabled
 					]]
 				],                
                 items:[
-  				//	{ref:ZaCos.A_zimbraFeatureBriefcaseSpreadsheetEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseSpreadsheetEnabled,label:ZaMsg.LBL_zimbraFeatureBriefcaseSpreadsheetEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
-          //  		{ref:ZaCos.A_zimbraFeatureBriefcaseSlidesEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseSlidesEnabled,label:ZaMsg.LBL_zimbraFeatureBriefcaseSlidesEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
-					{ref:ZaCos.A_zimbraFeatureBriefcaseDocsEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,label:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
+                    {ref:ZaCos.A_zimbraFeatureBriefcaseDocsEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,label:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
+  					{ref:ZaCos.A_zimbraFeatureBriefcaseSpreadsheetEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseSpreadsheetEnabled,label:ZaMsg.LBL_zimbraFeatureBriefcaseSpreadsheetEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
+            		{ref:ZaCos.A_zimbraFeatureBriefcaseSlidesEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseSlidesEnabled,label:ZaMsg.LBL_zimbraFeatureBriefcaseSlidesEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
                 ]
             },            
             {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraIMFeature, id:"cos_form_features_im",
