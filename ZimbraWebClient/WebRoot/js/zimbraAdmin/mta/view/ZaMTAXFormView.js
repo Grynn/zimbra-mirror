@@ -514,7 +514,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 				{type:_ZATABCASE_, numCols:1, caseKey:ZaMTAXFormView._tab1, 
 					items:[	
 						{type:_SPACER_, height:"15"},
-						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "18%", "12%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "15%", "15%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 							{type:_OUTPUT_, label:ZaMsg.TBB_LastUpdated, ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_refreshTime},
 							{type:_OUTPUT_, label:ZaMsg.PQ_AnalyzerStatus, ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_Status,choices:ZaMTA.SCANNER_STATUS_CHOICES},
 							{type:_DWT_PROGRESS_BAR_,label:ZaMsg.PQ_ParsingProgress,
@@ -597,7 +597,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 				{type:_ZATABCASE_, numCols:1,  caseKey:ZaMTAXFormView._tab2, 
 					items:[	
 						{type:_SPACER_, height:"15"},
-						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "18%", "12%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "15%", "15%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 							{type:_OUTPUT_, label:ZaMsg.TBB_LastUpdated, ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_refreshTime},
 							{type:_OUTPUT_, label:ZaMsg.PQ_AnalyzerStatus, ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_Status,choices:ZaMTA.SCANNER_STATUS_CHOICES},
 							{type:_DWT_PROGRESS_BAR_,label:ZaMsg.PQ_ParsingProgress,
@@ -675,7 +675,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 					caseKey:ZaMTAXFormView._tab3, 
 					items:[	
 						{type:_SPACER_, height:"15"},
-						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "18%", "12%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "15%", "15%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 							{type:_OUTPUT_, label:ZaMsg.TBB_LastUpdated, ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_refreshTime},
 							{type:_OUTPUT_, label:ZaMsg.PQ_AnalyzerStatus, ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_Status,choices:ZaMTA.SCANNER_STATUS_CHOICES},							
 							{type:_DWT_PROGRESS_BAR_,label:ZaMsg.PQ_ParsingProgress,
@@ -751,7 +751,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 					caseKey:ZaMTAXFormView._tab4, 
 					items:[	
 						{type:_SPACER_, height:"15"},
-						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "18%", "12%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "15%", "15%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 							{type:_OUTPUT_, label:ZaMsg.TBB_LastUpdated, ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_refreshTime},
 							{type:_OUTPUT_, label:ZaMsg.PQ_AnalyzerStatus, ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_Status,choices:ZaMTA.SCANNER_STATUS_CHOICES},							
 							{type:_DWT_PROGRESS_BAR_,label:ZaMsg.PQ_ParsingProgress,
@@ -831,7 +831,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 					items:[	
 						{type:_SPACER_, height:"15"},
 						
-						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "18%", "12%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
+						{type:_GROUP_,numCols:8, colSizes:["10%", "10%","10%", "15%", "15%", "25%", "auto", "10%"],tableCssClass:"search_field_tableCssClass", cssClass:"qsearch_field_bar", width:"95%", items: [
 							{type:_OUTPUT_, label:ZaMsg.TBB_LastUpdated, ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_refreshTime},
 							{type:_OUTPUT_, label:ZaMsg.PQ_AnalyzerStatus, ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_Status,choices:ZaMTA.SCANNER_STATUS_CHOICES},							
 							{type:_DWT_PROGRESS_BAR_,label:ZaMsg.PQ_ParsingProgress,
