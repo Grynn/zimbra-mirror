@@ -96,7 +96,7 @@ function (loc) {
 			}			
 		}
 	} catch (ex) {
-		this._app.getCurrentController()._handleException(ex);
+		ZaApp.getInstance().getCurrentController()._handleException(ex);
 	}
 	if(status == ZaBulkProvision.iSTATUS_NOT_RUNNING) {
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
@@ -206,7 +206,7 @@ function() {
                 var v = ZaBulkImportXWizard.getFileName(inputEls[i].value) ;
                 if ( n == "xmlFile") {
                     if (v == null || v.length <= 0) {
-                        this._app.getCurrentController().popupErrorDialog (
+                    	ZaApp.getInstance().getCurrentController().popupErrorDialog (
                             com_zimbra_bulkprovision.error_no_bulk_file_specified
                         );
                         return ;
@@ -235,7 +235,7 @@ function() {
     		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
     		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
     		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
-            this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_no_bulk_file_specified) ;
+    		ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_no_bulk_file_specified) ;
         }
 		
 	} else if(cStep == ZaBulkImportXWizard.STEP_REVIEW) {
@@ -252,7 +252,7 @@ function() {
         	this._containedObject[ZaBulkProvision.A2_op] = ZaBulkProvision.OP_START_IMPORT;
         	this._containedObject[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;			
     		var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.importFromFileCallback,{});
-    		ZaBulkProvision.importAccountsFromFile(this._containedObject,callback);
+   			ZaBulkProvision.importAccountsFromFile(this._containedObject,callback);
 		} else if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_AD
 				|| this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_LDAP) {
 			
@@ -375,7 +375,7 @@ function (status, attId) {
         if (attId != null && attId.length > 0) {
            this._containedObject [ZaBulkProvision.A_aid] =  attId;
         } else {
-           this._app.getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_upload_bulk_no_aid);
+        	ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.error_upload_bulk_no_aid);
            return ;
         }
         //File is uploaded successfully
@@ -388,7 +388,11 @@ function (status, attId) {
     		var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.previewCallback,{});
     		ZaBulkProvision.importAccountsFromFile(this._containedObject,callback);
         } catch (ex) {
-            this._app.getCurrentController()._handleException(ex) ;
+        	if (ex.code == ZaBulkProvision.BP_NO_ACCOUNTS_TO_IMPORT) {
+    			this.popupErrorDialog(com_zimbra_bulkprovision.ERROR_NO_ACCOUNTS_TO_IMPORT, ex);
+    		} else {
+    			ZaApp.getInstance().getCurrentController()._handleException(ex) ;
+    		}
         	this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
         	this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
         	this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
@@ -398,7 +402,7 @@ function (status, attId) {
 	} else {
 		// handle errors during attachment upload.
 		var msg = AjxMessageFormat.format(com_zimbra_bulkprovision.error_upload_bulk, [status]);
-		this._app.getCurrentController().popupErrorDialog(msg);
+		ZaApp.getInstance().getCurrentController().popupErrorDialog(msg);
 		this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
@@ -451,7 +455,12 @@ ZaBulkImportXWizard.prototype.importFromFileCallback = function(params,resp) {
 		if(resp && resp.isException()) {
 			this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 			this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);
-			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkImportXWizard.prototype.importFromFileCallback");
+            if(resp.getException().code == ZaBulkProvision.BP_NO_ACCOUNTS_TO_IMPORT) {
+            	ZaApp.getInstance().getCurrentController().popupErrorDialog(com_zimbra_bulkprovision.ERROR_NO_ACCOUNTS_TO_IMPORT, resp.getException());
+        	}  else {
+       			ZaApp.getInstance().getCurrentController()._handleException(resp.getException(), "ZaBulkImportXWizard.prototype.importFromFileCallback");
+    		}			
+			
 		} else {
 			var response = resp.getResponse().Body.BulkImportAccountsResponse;
 			this.processBulkImportResponse(response);

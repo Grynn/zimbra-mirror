@@ -149,6 +149,7 @@ ZaBulkProvision.CONNECTION_TLS_IF_AVAILABLE = "tls_if_available";
 ZaBulkProvision.TOO_MANY_ACCOUNTS = "bulkprovision.BP_TOO_MANY_ACCOUNTS";
 ZaBulkProvision.BP_INVALID_SEARCH_FILTER = "bulkprovision.BP_INVALID_SEARCH_FILTER";
 ZaBulkProvision.BP_NAMING_EXCEPTION = "bulkprovision.BP_NAMING_EXCEPTION";
+ZaBulkProvision.BP_NO_ACCOUNTS_TO_IMPORT =  "bulkprovision.BP_NO_ACCOUNTS_TO_IMPORT";
 
 ZaBulkProvision.getMyXModel = function () {
 	ZaBulkProvision.ProvActionChoices = [
