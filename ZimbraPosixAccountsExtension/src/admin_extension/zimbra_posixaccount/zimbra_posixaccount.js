@@ -89,7 +89,7 @@ if(ZaTabView.XFormModifiers["ZaAccountXFormView"]) {
 						{type:_ZAGROUP_, 
 							items:[
 								{ref:ZaPosixAccount.A_gidNumber, type:_OSELECT1_, editable:false,choices:ZaApp.getInstance().getPosixGroupIdListChoices(true), msgName:zimbra_posixaccount.PosixGroup,label:zimbra_posixaccount.PosixGroup, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged},														
-								{ref:ZaPosixAccount.A_gidNumber, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_gidNumber,label:ZaPosixAccount.A_gidNumber, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged, cssClass:"admin_xform_number_input"},
+								{ref:ZaPosixAccount.A_gidNumber, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_gidNumber,label:ZaPosixAccount.A_gidNumber, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged, cssClass:"admin_xform_number_input",bmolsnr:true},
 								{ref:ZaPosixAccount.A_uidNumber, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_uidNumber,label:ZaPosixAccount.A_uidNumber, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged, cssClass:"admin_xform_number_input"},
 								{ref:ZaPosixAccount.A_homeDirectory, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_homeDirectory,label:ZaPosixAccount.A_homeDirectory, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged, width:250},
 								{ref:ZaPosixAccount.A_loginShell, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_loginShell,label:ZaPosixAccount.A_loginShell, labelLocation:_LEFT_, onChange:ZaTabView.onFormFieldChanged, width:250}
@@ -108,7 +108,7 @@ zimbra_posixaccount_ext.ACC_WIZ_GROUP =
 	{type:_ZAWIZGROUP_, 
 		items:[
 			{ref:ZaPosixAccount.A_gidNumber, type:_OSELECT1_, editable:false,choices:ZaApp.PosixGroupIdChoices, msgName:zimbra_posixaccount.PosixGroup,label:zimbra_posixaccount.PosixGroup, labelLocation:_LEFT_},							
-			{ref:ZaPosixAccount.A_gidNumber, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_gidNumber,label:ZaPosixAccount.A_gidNumber, labelLocation:_LEFT_, cssClass:"admin_xform_number_input"},
+			{ref:ZaPosixAccount.A_gidNumber, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_gidNumber,label:ZaPosixAccount.A_gidNumber, labelLocation:_LEFT_, cssClass:"admin_xform_number_input",bmolsnr:true},
 			{ref:ZaPosixAccount.A_uidNumber, type:_TEXTFIELD_, msgName:ZaPosixAccount.A_uidNumber,label:ZaPosixAccount.A_uidNumber, labelLocation:_LEFT_, width:250,
 				getDisplayValue:function () {
 					var val = this.getInstanceValue();

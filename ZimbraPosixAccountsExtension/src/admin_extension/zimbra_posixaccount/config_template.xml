@@ -4,7 +4,7 @@
     	<property name="homePath">/home/%u</property>        
    		<property name="gidBase">10000</property>        
    		<property name="uidBase">10000</property>   
-		<property name="ldapSuffix">dc=test,dc=com</property>
+		<property name="ldapSuffix">dc=ubuntu,dc=local</property>
 		<property name="ldapGroupSuffix">ou=groups</property>
     </global>
 </zimletConfig>

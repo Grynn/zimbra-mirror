@@ -199,10 +199,10 @@ function () {
 		if(isNew) {
 			this._currentObject = ZaItem.create(obj, ZaPosixGroup, "ZaPosixGroup");
 			this.fireCreationEvent(this._currentObject);
-			this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);	
+			//this._toolbar.getButton(ZaOperation.DELETE).setEnabled(true);	
 		} else {
 			this._currentObject.modify(mods);
-			this.fireChangeEvent(this._currentObject);
+			//this.fireChangeEvent(this._currentObject);
 		}
 	} catch (ex) {
 		var detailStr = "";
