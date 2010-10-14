@@ -182,7 +182,8 @@ public class  ZFolderBean {
         return view == null || view == ZFolder.View.message || view == ZFolder.View.conversation;
     }
     
-    public boolean getIsNullView() { return mFolder.getDefaultView() == null; }    
+    public boolean getIsNullView() { return mFolder.getDefaultView() == null; }
+    public boolean getIsUnknownView() { return mFolder.getDefaultView() == ZFolder.View.unknown; }
     public boolean getIsMessageView() { return mFolder.getDefaultView() == ZFolder.View.message; }
     public boolean getIsContactView() { return mFolder.getDefaultView() == ZFolder.View.contact; }    
     public boolean getIsConversationView() { return mFolder.getDefaultView() == ZFolder.View.conversation; }        
