@@ -5,7 +5,6 @@ server
 {
     ${server_name.enabled}server_name         ${vhn}; 
     listen ${web.http.port};
-    client_max_body_size ${web.http.maxbody};
 
     location /
     {

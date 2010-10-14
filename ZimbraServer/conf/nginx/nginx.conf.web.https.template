@@ -5,7 +5,6 @@ server
 {
     ${server_name.enabled}server_name         ${vhn}; 
     listen                  ${web.https.port};
-    client_max_body_size    ${web.https.maxbody};
     ssl                     on;
     ssl_prefer_server_ciphers ${web.ssl.preferserverciphers};
     ssl_ciphers             ${web.ssl.ciphers};
