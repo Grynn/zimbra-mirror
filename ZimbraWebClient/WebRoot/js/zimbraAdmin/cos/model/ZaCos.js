@@ -592,6 +592,7 @@ ZaCos.myXModel = {
 		{id:ZaCos.A_zimbraPrefCalendarReminderFlashTitle, type:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarReminderFlashTitle, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaCos.A_zimbraPrefCalendarReminderSoundsEnabled, type:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarReminderSoundsEnabled, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaCos.A_zimbraPrefCalendarAutoAddInvites, type:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarAutoAddInvites, choices:ZaModel.BOOLEAN_CHOICES},
+		{id:ZaCos.A_zimbraPrefCalendarNotifyDelegatedChanges, type:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarNotifyDelegatedChanges, choices:ZaModel.BOOLEAN_CHOICES},
 		{id:ZaCos.A_zimbraPrefCalendarApptVisibility, type:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarApptVisibility, choices:ZaSettings.apptVisibilityChoices},
 		{id:ZaCos.A_zimbraPrefCalendarFirstDayOfWeek, type:_NUMBER_, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarFirstDayOfWeek, choices:ZaSettings.dayOfWeekChoices},
 		{id:ZaCos.A_zimbraPrefCalendarInitialView, type:_ENUM_, ref:"attrs/"+ZaCos.A_zimbraPrefCalendarInitialView, choices:ZaSettings.calendarViewChoinces},
