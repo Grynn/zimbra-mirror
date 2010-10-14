@@ -81,7 +81,7 @@ public class CommonTest {
 			selenium.allowNativeXpath("true");
 			selenium.open(ZimbraSeleniumProperties.getBaseURL());
 		} catch (SeleniumException e) {
-			logger.error("Unable to open admin app.  Is a valid cert installed?", e);
+			logger.error("Unable to mobile app.", e);
 			throw e;
 		}
 
