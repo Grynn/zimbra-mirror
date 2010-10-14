@@ -218,6 +218,7 @@ function() {
             }
         }
 
+        
         //2. Upload the files
         this.setUploadManager(new AjxPost(this.getUploadFrameId()));
         var xmlUploadCallback = new AjxCallback(this, this._uploadCallback);
@@ -254,7 +255,8 @@ function() {
     		ZaBulkProvision.importAccountsFromFile(this._containedObject,callback);
 		} else if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_AD
 				|| this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_LDAP) {
-			this.goPage(ZaBulkImportXWizard.STEP_FILE_UPLOAD);
+			
+			this.goPage(ZaBulkImportXWizard.STEP_PROVISION);
 			var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.importCallback,{action:this._containedObject[ZaBulkProvision.A2_provAction]});
 			ZaBulkProvision.importAccountsFromLDAP(this._containedObject,callback);
 		}
@@ -316,6 +318,8 @@ ZaBulkImportXWizard.prototype.previewCallback = function(params,resp) {
 			var domainCount = "0";
 			var skippedDomainCount = "0";
 			var skippedCount = "0";
+			var smtpHost = "";
+			var smtpPort = "";
 			if(response[ZaBulkProvision.A2_domainCount] && response[ZaBulkProvision.A2_domainCount][0] && response[ZaBulkProvision.A2_domainCount][0]._content) {
 				domainCount = parseInt(response[ZaBulkProvision.A2_domainCount][0]._content);
 			}				
@@ -328,6 +332,12 @@ ZaBulkImportXWizard.prototype.previewCallback = function(params,resp) {
 			if(response[ZaBulkProvision.A2_skippedAccountCount] && response[ZaBulkProvision.A2_skippedAccountCount][0] && response[ZaBulkProvision.A2_skippedAccountCount][0]._content) {
 				skippedCount = parseInt(response[ZaBulkProvision.A2_skippedAccountCount][0]._content);
 			}	
+			if(response[ZaBulkProvision.A2_SMTPHost] && response[ZaBulkProvision.A2_SMTPHost][0] && response[ZaBulkProvision.A2_SMTPHost][0]._content) {
+				smtpHost = response[ZaBulkProvision.A2_SMTPHost][0]._content;
+			} 
+			if(response[ZaBulkProvision.A2_SMTPPort] && response[ZaBulkProvision.A2_SMTPPort][0] && response[ZaBulkProvision.A2_SMTPPort][0]._content) {
+				smtpPort = parseInt(response[ZaBulkProvision.A2_SMTPPort][0]._content);
+			} 
 			
 			this.goPage(ZaBulkImportXWizard.STEP_REVIEW);
 			
@@ -340,6 +350,8 @@ ZaBulkImportXWizard.prototype.previewCallback = function(params,resp) {
 			this._localXForm.setInstanceValue(skippedDomainCount,ZaBulkProvision.A2_skippedDomainCount);
 			this._localXForm.setInstanceValue(totalCount,ZaBulkProvision.A2_totalCount);
 			this._localXForm.setInstanceValue(skippedCount,ZaBulkProvision.A2_skippedAccountCount);
+			this._localXForm.setInstanceValue(smtpHost,ZaBulkProvision.A2_SMTPHost);
+			this._localXForm.setInstanceValue(smtpPort,ZaBulkProvision.A2_SMTPPort);
 		}
 	} catch (ex) {
 		if(ex.code == ZaBulkProvision.BP_INVALID_SEARCH_FILTER) {
@@ -371,6 +383,8 @@ function (status, attId) {
         	//generate a preview of options, skip STEP_IMAP_OPTIONS, because these options should be in the XML
         	this._containedObject[ZaBulkProvision.A2_op] = ZaBulkProvision.OP_PREVIEW;
         	this._containedObject[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
+        	this._containedObject[ZaBulkProvision.A2_SMTPHost] = "";
+        	this._containedObject[ZaBulkProvision.A2_SMTPPort] = "";        	
     		var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.previewCallback,{});
     		ZaBulkProvision.importAccountsFromFile(this._containedObject,callback);
         } catch (ex) {
@@ -737,7 +751,15 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 				},
 				{ref:ZaBulkProvision.A_mustChangePassword,  type:_CHECKBOX_,  
 					label:com_zimbra_bulkprovision.RequireChangePassword,trueValue:"TRUE", falseValue:"FALSE",visibilityChecks:[],enableDisableChecks:[]
-				}
+				},
+			 	{type:_DWT_ALERT_, style:DwtAlert.WARNING,iconVisible:false,content:com_zimbra_bulkprovision.SplitDomainOptionsNote,
+					visibilityChecks:[],enableDisableChecks:[],
+					visibilityChangeEventSources:[]
+		       	},
+				{ref:ZaBulkProvision.A2_SMTPHost, type:_TEXTFIELD_,label:com_zimbra_bulkprovision.SMTPHost,
+					visibilityChecks:[],enableDisableChecks:[],cssClass:"admin_xform_name_input"},
+				{ref:ZaBulkProvision.A2_SMTPPort, type:_TEXTFIELD_,label:com_zimbra_bulkprovision.SMTPPort,
+						visibilityChecks:[],enableDisableChecks:[],cssClass:"admin_xform_number_input"}	
 
 		]
 	};
@@ -830,7 +852,13 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		       {ref:ZaBulkProvision.A_mustChangePassword,  type:_OUTPUT_,  
 		    	   label:com_zimbra_bulkprovision.RevRequireChangePassword,visibilityChecks:[],enableDisableChecks:[],
 		    	   getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
-		       }
+		       },
+		       {ref:ZaBulkProvision.A2_SMTPHost, type:_OUTPUT_,label:com_zimbra_bulkprovision.SMTPHost,
+		    	   visibilityChangeEventSources:[ZaBulkProvision.A2_SMTPHost],visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_SMTPHost]],bmolsnr:true,
+		       },
+			   {ref:ZaBulkProvision.A2_SMTPPort, type:_OUTPUT_,label:com_zimbra_bulkprovision.SMTPPort,
+		    	   visibilityChangeEventSources:[ZaBulkProvision.A2_SMTPPort],visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_SMTPPort]],bmolsnr:true,
+			   }	
 
 		]
 	};

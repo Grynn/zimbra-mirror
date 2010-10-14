@@ -270,6 +270,13 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		auxObj1[ZaBulkProvision.A2_importEmail] = "TRUE";
 		auxObj1[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_ZIMBRA;
 		auxObj1[ZaBulkProvision.A2_activateSearch] = 1;
+		
+		var obj = new ZaBulkProvision();
+		if(this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE_IMAP) {
+			obj[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_IMPORT_AD;
+		} else {
+			obj[ZaBulkProvision.A2_provAction] = ZaBulkProvision.ACTION_IMPORT_LDAP;
+		}
 		var finishCallback = new AjxCallback(this._app.getCurrentController(), 
 					ZaBulkProvisionTasksController.prototype.bulkDataImportListener,
 					["importAccountsWizard", auxObj1]);
@@ -283,7 +290,9 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		var prevCallback = new AjxCallback(this._app.getCurrentController(), 
 				ZaBulkProvisionTasksController.prototype.bulkDataImportListener,
 				["importAccountsWizard",auxObj2]);
-		ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog.call(this._app.getCurrentController(),{prevCallback:prevCallback,finishCallback:finishCallback,hideWiz:"bulkDataImportWizard"},null);
+		
+		
+		ZaBulkProvisionTasksController.prototype.openBulkProvisionDialog.call(this._app.getCurrentController(),{obj:obj,prevCallback:prevCallback,finishCallback:finishCallback,hideWiz:"bulkDataImportWizard"},null);
 	} else if(cStep == ZaBulkDataImportXWizard.STEP_INTRODUCTION && this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_ZIMBRA &&
 			this._containedObject[ZaBulkProvision.A2_provisionUsers] == "TRUE") {
 		//open Account Import wizard
