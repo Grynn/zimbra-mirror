@@ -13,6 +13,7 @@ import com.zimbra.cs.account.AccountServiceException;
 import com.zimbra.cs.account.DataSource;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Server;
+import com.zimbra.cs.account.Provisioning.ServerBy;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.ImportStatus;
 
@@ -161,7 +162,6 @@ public class BulkIMAPImportTaskManager {
 
     static class SingleIMAPIMportThread extends Thread {
         private String queueKey;
-
         public SingleIMAPIMportThread(String adminID) {
             queueKey = adminID;
         }
@@ -217,11 +217,23 @@ public class BulkIMAPImportTaskManager {
                             return;
                         }
                     }
+
+                    //set mail transport to local (for split domain)
+                    String mailHostName = acct.getAttr(Provisioning.A_zimbraMailHost);
+                    if(mailHostName == null) {
+                        Map<String, Object> accAttrs = new HashMap<String, Object>();
+                        Server server = Provisioning.getInstance().getLocalServer();
+                        mailHostName = server.getAttr(Provisioning.A_zimbraServiceHostname);
+                        StringUtil.addToMultiMap(accAttrs,Provisioning.A_zimbraMailHost,mailHostName);
+                        StringUtil.addToMultiMap(accAttrs,Provisioning.A_zimbraMailTransport,"");
+                        Provisioning.getInstance().modifyAttrs(acct, accAttrs, true);
+                    }
+
                     DataSourceManager.importData(importDS, true);
                     
                     //revert batch index size
                     Map<String, Object> accAttrs = new HashMap<String, Object>();
-                    StringUtil.addToMultiMap(accAttrs,Provisioning.A_zimbraBatchedIndexingSize, null);
+                    StringUtil.addToMultiMap(accAttrs,Provisioning.A_zimbraBatchedIndexingSize, null);                    
                     Provisioning.getInstance().modifyAttrs(acct, accAttrs, true);
                     
                     //report finished task
