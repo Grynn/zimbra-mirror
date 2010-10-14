@@ -15,7 +15,9 @@
 package com.zimbra.cs.nginx;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.InetAddress;
+import java.net.URLDecoder;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -306,9 +308,12 @@ public class NginxLookupExtension implements ZimbraExtension {
             /* NGINX will never pass any suffixes to the lookup servlet
                So no need to look for /tb|/wm|/ni in req.user
              */
-
-            req.user            = httpReq.getHeader(AUTH_USER);             /* User whose route is to be looked up */
-            req.pass            = httpReq.getHeader(AUTH_PASS);             /* Password */
+            try { //bug 51672, username and password need unescape
+                req.user     = unescapeAuthUserAndPass(httpReq.getHeader(AUTH_USER)); /* User whose route is to be looked up */
+                req.pass     = unescapeAuthUserAndPass(httpReq.getHeader(AUTH_PASS)); /* Password */
+            } catch (IllegalArgumentException e) {
+                throw new NginxLookupException(e);
+            }
             req.proto           = httpReq.getHeader(AUTH_PROTOCOL);         /* Protocol {imap|imaps|pop3|pop3s|http} */
             req.authMethod      = httpReq.getHeader(AUTH_METHOD);           /* Auth Method {passwd|plain|gssapi|other|zimbraId} */
             req.cuser           = httpReq.getHeader(AUTH_ID);               /* (GSSAPI) Authenticating Principal */
@@ -360,6 +365,47 @@ public class NginxLookupExtension implements ZimbraExtension {
             }
 
             return req;
+        }
+        
+        /**
+         * Unescape all the '%xy' combinations in <code>src</code> to their
+         * normal form, where 'xy' must be a valid hex value.
+         * @param src the string to be unescaped
+         * @return the escape result
+         * @throws IllegalArgumentException throw when trailing escape (%)
+         *         pattern is incomplete
+         */
+        private static String unescapeAuthUserAndPass(String src) {
+            int len = src.length();
+            StringBuffer sb = new StringBuffer(src.length());
+            int last = 0;
+            int pos = src.indexOf("%");
+            while (true) {
+                if (pos == -1) {
+                    sb.append(src.substring(last, len));
+                    break;
+                } else {
+                    sb.append(src.substring(last, pos));
+                    if (pos >= len - 2)
+                        throw new IllegalArgumentException(
+                            "Incomplete trailing escape (%) pattern");
+                    char d1 = src.charAt(pos + 1);
+                    char d2 = src.charAt(pos + 2);
+                    //judge valid hex value
+                    if (!(((d1 >= '0' && d1 <= '9') || (d1 >= 'A' && d1 <= 'F') || (d1 >= 'a' && d1 <= 'f')) &&
+                          ((d2 >= '0' && d2 <= '9') || (d2 >= 'A' && d2 <= 'F') || (d2 >= 'a' && d2 <= 'f')))) {
+                        throw new IllegalArgumentException(
+                        "Incomplete trailing escape (%) pattern");
+                    }
+                        
+                    char r = (char)((d1 - '0') * 16 + (d2 - '0'));
+                    sb.append(r);
+                    last = pos + 3;
+                    pos = src.indexOf("%", last);
+                }
+            }
+
+            return sb.toString();
         }
         
         private void lookupAttrs(Map<String, String> vals, Config config, SearchResult sr, Map<String, Boolean> keys) throws NginxLookupException, NamingException {
