@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="testng" default="jar" basedir=".">
-
+	
 	<property name="build.version" value="6.0.0" />
 
 	<property name="build.dir" location="build" />
@@ -65,8 +65,12 @@
 		<mkdir dir="${generated.javadocs.dir}" />
 	</target>
 
-	<target name="compile-ZimbraServer" description="Builds ZimbraServer">
+	<target name="compile-ZimbraServer" depends="compile-ZimbraNative" description="Builds ZimbraServer">
 		<ant dir="${server.dir}" target="jar" inheritAll="false" />
+	</target>
+
+	<target name="compile-ZimbraNative" description="Builds ZimbraNative">
+		<ant dir="${native.dir}" target="jar" inheritAll="false" />		
 	</target>
 
 	<target name="compile-ZimbraCommon" description="Builds ZimbraCommon">
@@ -231,7 +235,7 @@
 		<property name="groups" value="always,sanity"/>
 		<echo>Executing ...</echo>
 		<java classname="framework.core.ExecuteHarnessMain"          classpathref="class.path"          fork="true" failonerror="true">
-			<arg line="-j ${jarfile} -p ${pattern} -g ${groups} -l conf/log4j.properties"/>
+			<arg line="-j '${jarfile}' -p ${pattern} -g ${groups} -l conf/log4j.properties  "/>				
 		</java>
 	</target>
 
