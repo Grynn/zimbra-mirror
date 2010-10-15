@@ -739,7 +739,29 @@ function () {
 						 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
 					}		
 				}				
-			}
+			}	else if ( item.type == ZaItem.DOMAIN ){
+				
+					if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
+						this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+					}		
+					if(this._toolbarOperations[ZaOperation.CHNG_PWD]) {
+						this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;
+					}		
+					if(this._toolbarOperations[ZaOperation.VIEW_MAIL]) {
+						this._toolbarOperations[ZaOperation.VIEW_MAIL].enabled = false;
+					}	
+					
+					if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {	
+						this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+					}		
+					if(this._popupOperations[ZaOperation.CHNG_PWD]) {
+						this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+					}		
+					if(this._popupOperations[ZaOperation.VIEW_MAIL]) {
+						this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
+					}	
+					
+      }
         } else {
 			if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
 				this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
