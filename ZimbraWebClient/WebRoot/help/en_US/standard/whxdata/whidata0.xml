@@ -103,6 +103,9 @@
 <key name="mark appointment as private" >
   <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
+<key name="mark task complete" >
+  <topic name="Change a task" url="Tasks/Change_a_task.htm" />
+</key>
 <key name="meetings" >
   <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
@@ -129,6 +132,9 @@
 </key>
 <key name="preferences" >
   <topic name="Setting your Options" url="Userspecific/b_Setting_your_Options.htm" />
+</key>
+<key name="print tasks" >
+  <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="private appointments" >
   <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
@@ -181,14 +187,17 @@
 <key name="signature, automatically add" >
   <topic name="Automatically adding your signature" url="Userspecific/b_Automatically_adding_your_signature.htm" />
 </key>
-<key name="sorting tasks" >
-  <topic name="Sorting tasks " url="Tasks/Sorting_tasks_.htm" />
-</key>
 <key name="sync to another calendar" >
   <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="tags" >
   <topic name="Assigning Tags to messages and contacts" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+</key>
+<key name="task, mark as complete" >
+  <topic name="Change a task" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="tasks, print" >
+  <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="Undeliverable mail" >
   <topic name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />

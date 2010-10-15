@@ -193,7 +193,6 @@ Tags_and_flags\b_Flagging_an_email_message.htm
 Tasks\About_Tasks.htm
 Tasks\bc_Create_task_lists.htm
 Tasks\Change_a_task.htm
-Tasks\Sorting_tasks_.htm
 Userspecific\b_Automatically_adding_your_signature.htm
 Userspecific\b_Setting_your_Options.htm
 Userspecific\logging_on_and_off.htm
@@ -230,6 +229,7 @@ whxdata\package_7.xml
 whxdata\package_8.xml
 whxdata\package_9.xml
 whxdata\package_10.xml
+whxdata\package_11.xml
 whxdata\packageindex.xml
 whxdata\synonym.xml
 whxdata\topictable_0.xml
