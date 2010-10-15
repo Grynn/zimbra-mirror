@@ -12,7 +12,7 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.webClient.filters;
+package com.zimbra.cs.servlet;
 
 import java.io.IOException;
 import java.util.concurrent.ConcurrentHashMap;
@@ -34,7 +34,6 @@ import javax.servlet.http.HttpSessionBindingListener;
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.util.RemoteIP;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.servlet.ZimbraServlet;
 
 /**
  * This Servlet {@link Filter} limits the number of concurrent HTTP requests per
@@ -65,19 +64,16 @@ public final class ThrottlingFilter implements Filter {
         HttpServletRequest hreq = (HttpServletRequest) req;
         HttpServletResponse hresp = (HttpServletResponse) resp;
         HttpSession session = hreq.getSession(false);
-        if (session == null) { // don't throttle if no session
+        // always get the latest value from LC
+        int max = LC.servlet_max_concurrent_requests_per_session.intValue();
+        if (session == null || max <= 0) {
+            // don't throttle if no session or disabled
             chain.doFilter(req, resp);
             return;
         }
 
         Semaphore tracker = sid2tracker.get(session.getId());
         if (tracker == null) {
-            // always get the latest value from LC
-            int max = LC.servlet_max_concurrent_requests_per_session.intValue();
-            if (max <= 0) { // disabled
-                chain.doFilter(req, resp);
-                return;
-            }
             tracker = new Semaphore(max);
             Semaphore exist = sid2tracker.putIfAbsent(session.getId(), tracker);
             if (exist == null) { // absent
@@ -97,7 +93,7 @@ public final class ThrottlingFilter implements Filter {
         } else {
             new RemoteIP(hreq, ZimbraServlet.getTrustedIPs()).addToLoggingContext();
             ZimbraLog.addToContext("jsessionid", session.getId());
-            ZimbraLog.webclient.warn("too many concurrent HTTP requests");
+            ZimbraLog.misc.warn("too many concurrent HTTP requests");
             ZimbraLog.clearContext();
             hresp.sendError(HttpServletResponse.SC_SERVICE_UNAVAILABLE,
                     "too many concurrent HTTP requests");
