@@ -196,7 +196,7 @@ sub updateSyslogNG {
     local @ARGV="/etc/logrotate.d/zimbra";
     while (<>) {
       s/syslogd/syslog-ng/;
-      s/USER/$user/;
+      s/USER/$uid/;
       s/GROUP/$gid/;
       print;
     }
@@ -303,7 +303,7 @@ sub updateSyslog {
       local @ARGV=("/etc/logrotate.d/zimbra");
       while (<>) {
         s/syslogd.pid/rsyslogd.pid/g;
-        s/USER/$user/;
+        s/USER/$uid/;
         s/GROUP/$gid/;
         print;
       }
@@ -402,7 +402,7 @@ sub updateRsyslogd {
         s/USER/syslog/;
         s/GROUP/adm/;
       } else {
-        s/USER/$user/;
+        s/USER/$uid/;
         s/GROUP/$gid/;
       }
       print;
