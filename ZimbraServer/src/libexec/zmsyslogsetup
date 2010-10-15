@@ -196,6 +196,8 @@ sub updateSyslogNG {
     local @ARGV="/etc/logrotate.d/zimbra";
     while (<>) {
       s/syslogd/syslog-ng/;
+      s/USER/$user/;
+      s/GROUP/$gid/;
       print;
     }
   }
@@ -301,6 +303,8 @@ sub updateSyslog {
       local @ARGV=("/etc/logrotate.d/zimbra");
       while (<>) {
         s/syslogd.pid/rsyslogd.pid/g;
+        s/USER/$user/;
+        s/GROUP/$gid/;
         print;
       }
     }
@@ -380,8 +384,13 @@ sub updateRsyslogd {
   if ( !-f "/var/log/zimbra-stats.log") {
     open(my $tlog, ">/var/log/zimbra-stats.log");
   }
-  chown $uid,$gid,"/var/log/zimbra.log";
-  chown $uid,$gid,"/var/log/zimbra-stats.log";
+  if ($platform eq "UBUNTU10_64") {
+    chown "syslog","adm","/var/log/zimbra.log";
+    chown "syslog","adm","/var/log/zimbra-stats.log";
+  } else {
+    chown $uid,$gid,"/var/log/zimbra.log";
+    chown $uid,$gid,"/var/log/zimbra-stats.log";
+  }
   chmod 0644,"/var/log/zimbra.log","/var/log/zimbra-stats.log";
 
   if ( -f "/etc/logrotate.d/zimbra" ) {
@@ -389,6 +398,13 @@ sub updateRsyslogd {
     local @ARGV=("/etc/logrotate.d/zimbra");
     while (<>) {
       s/kill\s+\-HUP\s+.+syslog\*\.pid.+\/dev\/null/\/usr\/sbin\/service rsyslog restart >\/dev\/null/g;
+      if ($platform eq "UBUNTU10_64") {
+        s/USER/syslog/;
+        s/GROUP/adm/;
+      } else {
+        s/USER/$user/;
+        s/GROUP/$gid/;
+      }
       print;
     }
   }
