@@ -9,7 +9,6 @@ import org.testng.Assert;
 import com.thoughtworks.selenium.SeleniumException;
 
 import framework.core.*;
-import framework.core.ZimbraSelenium;
 import framework.util.SleepUtil;
 
 public class ZObject extends SelNGBase {
@@ -173,6 +172,8 @@ public class ZObject extends SelNGBase {
 	}
 
 	public void zExists(String objNameOrId) {
+		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(objNameOrId),
+				objNameOrId + " not existed"); 
 	}
 
 	public String zExistsDontWait(String objNameOrId) {

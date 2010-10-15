@@ -69,14 +69,7 @@ public class CheckBox extends ZObject{
 			return false;
 	}
 	
-	public void zExists(String objNameOrId) {
-		//String actual =ZObjectCore(objNameOrId, "exists", true, "",  "",  "",  "");
-		//Assert.assertEquals("true", actual, objTypeName+"(" + objNameOrId
-		//		+ ") Not Found.");
-		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(objNameOrId),
-				"checkbox : " +  objNameOrId + " not existed"); 
-		
-	}	
+
 	public void zExistsInDlg(String objNameOrId) {
 		String actual =ZObjectCore(objNameOrId, "exists", true, "",  "dialog",  "",  "");
 		Assert.assertEquals(actual, "true", objTypeName+"(" + objNameOrId
