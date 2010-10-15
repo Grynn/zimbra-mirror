@@ -78,11 +78,18 @@ function(actionId) {
 
 AjxTimedAction._exec =
 function(actionId) {
+
+	try {
+
 	var action = AjxTimedAction._pendingActions[actionId];
 	if (action) {
 		delete AjxTimedAction._pendingActions[actionId];
 		delete action._tid;
 	    action._runResult = action.run();
+	}
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
 	}
 };
 

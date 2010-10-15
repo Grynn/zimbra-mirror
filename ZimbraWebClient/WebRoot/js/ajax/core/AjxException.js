@@ -27,7 +27,8 @@
  * @param {string} 		[detail]		any additional detail
  */
 AjxException = function(msg, code, method, detail) {
-	if (arguments.length == 0) return;
+
+	if (arguments.length == 0) { return; }
 	
 	/** 
 	 * Human readable message, if applicable.
@@ -48,7 +49,7 @@ AjxException = function(msg, code, method, detail) {
 	 * Any additional detail.
 	 */
 	this.detail = detail;
-}
+};
 
 /**
  * Returns a string representation of the object.
@@ -58,7 +59,7 @@ AjxException = function(msg, code, method, detail) {
 AjxException.prototype.toString = 
 function() {
 	return "AjxException";
-}
+};
 
 /**
  * Dumps the exception.
@@ -67,8 +68,8 @@ function() {
  */
 AjxException.prototype.dump = 
 function() {
-	return "AjxException: msg="+this.msg+" code="+this.code+" method="+this.method+" detail="+this.detail;
-}
+	return "AjxException: msg=" + this.msg + " code=" + this.code + " method=" + this.method + " detail=" + this.detail;
+};
 
 /**
  * Invalid parent exception code.
@@ -119,3 +120,24 @@ AjxException.UNKNOWN_ERROR 			= "AjxException.UNKNOWN_ERROR";
  * Operation canceled exception code.
  */
 AjxException.CANCELED				= "AjxException.CANCELED";
+
+AjxException.defaultScriptErrorHandler =
+function(ex) {
+	alert(ex);
+};
+
+AjxException.setScriptErrorHandler =
+function(func) {
+	AjxException.scriptErrorHandler = func;
+};
+
+AjxException.reportScriptError =
+function(ex) {
+	if (AjxException.reportScriptErrors && AjxException.scriptErrorHandler && !(ex instanceof AjxException)) {
+		AjxException.scriptErrorHandler(ex);
+	}
+	throw ex;
+};
+
+AjxException.reportScriptErrors = false;
+AjxException.scriptErrorHandler = AjxException.defaultScriptErrorHandler;

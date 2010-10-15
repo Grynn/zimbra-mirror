@@ -2492,12 +2492,19 @@ function() {
  */
 DwtControl.__dblClickHdlr =
 function(ev) {
+
+	try {
+
 	var obj = DwtControl.getTargetControl(ev);
 	if (obj && obj._dblClickIsolation) {
 		obj._clickPending = false;
 		AjxTimedAction.cancelAction(obj._dblClickActionId);
 	}
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONDBLCLICK);
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
+	}
 };
 
 /**
@@ -2505,6 +2512,9 @@ function(ev) {
  */
 DwtControl.__mouseOverHdlr =
 function(ev, evType) {
+
+	try {
+
 	// Check to see if a drag is occurring. If so, don't process the mouse
 	// over events.
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
@@ -2548,6 +2558,10 @@ function(ev, evType) {
 	mouseEv._returnValue = false;
 	mouseEv.setToDhtmlEvent(ev);
 	return false;
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
+	}
 };
 
 /**
@@ -2563,6 +2577,9 @@ function(ev) {
  */
 DwtControl.__mouseDownHdlr =
 function(ev) {
+
+	try {
+
 	var obj = DwtControl.getTargetControl(ev);
 	if (!obj) { return false; }
 
@@ -2595,6 +2612,10 @@ function(ev) {
 	}
 
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEDOWN, obj, mouseEv);
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
+	}
 };
 
 /**
@@ -2602,6 +2623,9 @@ function(ev) {
  */
 DwtControl.__mouseMoveHdlr =
 function(ev) {
+
+	try {
+
 	// If captureObj == null, then we are not a Draggable control or a
 	// mousedown event has not occurred , so do the default behaviour,
 	// else do the draggable behaviour
@@ -2742,6 +2766,10 @@ function(ev) {
 		mouseEv.setToDhtmlEvent(ev);
 		return false;
 	}
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
+	}
 };
 
 /**
@@ -2749,6 +2777,9 @@ function(ev) {
  */
 DwtControl.__mouseUpHdlr =
 function(ev) {
+
+	try {
+
 	// See if are doing a drag n drop operation
 	var captureObj = (DwtMouseEventCapture.getId() == "DwtControl") ? DwtMouseEventCapture.getCaptureObj() : null;
 	var obj = captureObj ? captureObj.targetObj : DwtControl.getTargetControl(ev);
@@ -2789,6 +2820,10 @@ function(ev) {
 			mouseEv.setToDhtmlEvent(ev);
 			return false;
 		}
+	}
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
 	}
 };
 
@@ -2857,6 +2892,9 @@ function(ev, obj, mouseEv) {
  */
 DwtControl.__mouseOutHdlr =
 function(ev, evType) {
+
+	try {
+
 	var obj = DwtControl.getTargetControl(ev);
 	if (!obj) { return false; }
 	evType = evType || DwtEvent.ONMOUSEOUT;
@@ -2875,6 +2913,10 @@ function(ev, evType) {
 			obj.__tooltipClosed = false;
 	}
 	return DwtControl.__mouseEvent(ev, evType || DwtEvent.ONMOUSEOUT, obj);
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
+	}
 };
 
 /**
@@ -2890,9 +2932,16 @@ function(ev) {
  */
 DwtControl.__mouseWheelHdlr =
 function(ev) {
+
+	try {
+
 	var obj = DwtControl.getTargetControl(ev);
 	if (!obj) return false;
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONMOUSEWHEEL, obj);
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
+	}
 };
 
 /**
@@ -2900,7 +2949,14 @@ function(ev) {
  */
 DwtControl.__selectStartHdlr =
 function(ev) {
+
+	try {
+
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONSELECTSTART);
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
+	}
 };
 
 /**
@@ -2908,6 +2964,9 @@ function(ev) {
  */
 DwtControl.__contextMenuHdlr =
 function(ev) {
+
+	try {
+
 	// for Safari, we have to fake a right click
 	if (AjxEnv.isSafari) {
 		var obj = DwtControl.getTargetControl(ev);
@@ -2918,6 +2977,10 @@ function(ev) {
 		}
 	}
 	return DwtControl.__mouseEvent(ev, DwtEvent.ONCONTEXTMENU);
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
+	}
 };
 
 /**

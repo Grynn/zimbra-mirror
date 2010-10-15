@@ -176,6 +176,9 @@ function(callback) {
  */
 AjxRpcRequest.__handleResponse =
 function(req, callback) {
+
+	try {
+
 	if (!req || !req.__httpReq) {
 
 		req.cancel();
@@ -206,6 +209,10 @@ function(req, callback) {
 
 		// ALWAYS cancel *LAST* otherwise bad things happen.
 		req.cancel();
+	}
+
+	} catch (ex) {
+		AjxException.reportScriptError(ex);
 	}
 };
 
