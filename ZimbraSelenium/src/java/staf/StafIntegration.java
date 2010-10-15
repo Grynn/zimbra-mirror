@@ -155,6 +155,10 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	        }
 	        if (parsedRequest.optionTimes(argJarfile) != 1 ) {
 	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argJarfile +" can be specified"));	        		        	
+	        } else {
+	        	File f = new File(parsedRequest.optionValue(argJarfile));
+	        	if ( !f.exists() )
+		        	return (new STAFResult(STAFResult.JavaError, "jarfile does not exist "+ f.getAbsolutePath()));
 	        }
 			if ( parsedRequest.optionTimes(argPattern) != 1 ) {
 	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argPattern +" can be specified"));	        					

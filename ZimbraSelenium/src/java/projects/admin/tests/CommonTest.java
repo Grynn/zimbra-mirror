@@ -80,7 +80,7 @@ public class CommonTest {
 			selenium.start();
 			selenium.windowMaximize();
 			selenium.windowFocus();
-			selenium.setupZVariables();
+			// selenium.setupZVariables(); // admin doesn't use any of the JS code
 			selenium.allowNativeXpath("true");
 			selenium.open(ZimbraSeleniumProperties.getBaseURL());
 		} catch (SeleniumException e) {
