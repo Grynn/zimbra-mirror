@@ -1,22 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="events" >
-  <topic name="Scheduling All Day events" url="Calendar/Scheduling_All_Day_events.htm" />
-  <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-</key>
-<key name="export account data" >
-  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="export iCal calendars" >
-  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="external accounts" >
-  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="external accounts, how to add" >
-  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
-</key>
 <key name="external user" >
   <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
@@ -93,9 +77,6 @@
 </key>
 <key name="general tab" >
   <topic name="Setting your general preferences" url="Userspecific/Setting_your_general_preferences.htm" />
-</key>
-<key name="getting started in notebooks" >
-  <topic name="Working in Notebooks" url="Documents/Working_in_Notebooks.htm" />
 </key>
 <key name="group contacts" >
   <topic name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
@@ -227,6 +208,9 @@
 <key name="mark appointment as private" >
   <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
+<key name="mark task complete" >
+  <topic name="Change a task" url="Tasks/Change_a_task.htm" />
+</key>
 <key name="marking appointments as private" >
   <topic name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
@@ -289,9 +273,6 @@
 <key name="new messages" >
   <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
-<key name="notebook" >
-  <topic name="Working in Notebooks" url="Documents/Working_in_Notebooks.htm" />
-</key>
 <key name="notebook pages" >
   <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
 </key>
@@ -303,6 +284,28 @@
 </key>
 <key name="optional attendance" >
   <topic name="Using the Schedule tab when creating a appointment" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="options" >
+  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="options, Calendar" >
+  <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+</key>
+<key name="options, changing" >
+  <topic name="Changing Your User Options" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="options, new mail notification" >
+  <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="overview pane" >
+  <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="pages, Documents" >
+  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="password" >
+  <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
 </key>
 
 </indexdata>

@@ -1,9 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="accepting access to notebooks" last="equipment, reserving" num="104" />
-<chunkinfo url="whidata1.xml" first="events" last="optional attendance" num="98" />
-<chunkinfo url="whidata2.xml" first="options" last="tag, drag and drop" num="102" />
-<chunkinfo url="whidata3.xml" first="tags" last="Zimlets" num="25" />
+<chunkinfo url="whidata0.xml" first="accessing external accounts" last="external accounts, how to add" num="105" />
+<chunkinfo url="whidata1.xml" first="external user" last="password" num="99" />
+<chunkinfo url="whidata2.xml" first="permission denied with meeting invite" last="Trash folder" num="104" />
+<chunkinfo url="whidata3.xml" first="Undeliverable mail" last="Zimlets, disable" num="19" />
 
 </index>

@@ -2,18 +2,18 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="Getting Started" >
-  <item name="Welcome to Zimbra Web Client" url="Getting_Started/about_liquid_mail.htm" />
-  <item name="New ZWC Features in 6.0" url="New_in_6.0.htm" />
+  <item name="Welcome to the @ClientNameLong@, Advanced Edition" url="Getting_Started/about_liquid_mail.htm" />
+  <item name="New @ClientNameShort@ Features in 7.0" url="New_in_6.0.htm" />
   <item name="Logging in and out" url="Userspecific/logging_on_and_off.htm" />
   <item name="Changing my default client type for log in" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Keyboard Shortcut keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <item name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <item name="@CompanyName@ Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="Changing your password" url="Userspecific/chaning_your_password.htm" />
   <item name="Forget your password?" url="Userspecific/if_you_forget_your_password.htm" />
   <item name="If your session expires" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="Navigating Your Mailbox" >
-  <item name="Navigating Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="Navigating @ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <item name="Setting your general preferences" url="Userspecific/Setting_your_general_preferences.htm" />
   <item name="Customize your view" url="Navigation_folders_and_tips/Customize_your_view.htm" />
   <item name="User interface features and shortcuts" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
@@ -35,7 +35,7 @@
   <item name="Setting a forwarding address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
   <item name="Managing different identities within your account" url="Userspecific/Mail_Identities.htm" />
-  <item name="Managing your Junk Folder" url="filters/Managing_your_Junk_Folder.htm" />
+  <item name="Managing your Spam Folder" url="filters/Managing_your_Junk_Folder.htm" />
   <item name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Purging email messages" url="reading_mail/archiving_old_messages.htm" />
   <book name="Reading Messages" >
@@ -61,6 +61,7 @@
   <item name="Parts of an email message" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Add your signature automatically" url="Userspecific/using_a_signature.htm" />
   <item name="Automatic address completion" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Schedule Emails for Future Delivery" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Requesting a Return Receipt" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Attaching files to your message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Attachment file types" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
@@ -78,6 +79,7 @@
   <item name="Types of address books available" url="Contacts/gal_vs_contacts.htm" />
   <item name="Setting your address book preferences" url="Userspecific/Setting_your_address_book_preferences.htm" />
   <item name="Adding new contacts" url="Contacts/creating_a_new_contact.htm" />
+  <item name="Forwarding Contact Information" url="Contacts/Forwarding_Contact_Information.htm" />
   <item name="Using company address book" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="Adding contacts automatically" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
   <item name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
@@ -88,7 +90,7 @@
   <item name="Deleting contacts" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="Managing Your  Calendar" >
-  <item name="About Zimbra Calendar" url="Calendar/About_Calendar.htm" />
+  <item name="About @CompanyName@ Calendar" url="Calendar/About_Calendar.htm" />
   <item name="Create calendars" url="Calendar/Create_Calendars.htm" />
   <item name="Color coding your calendars" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
@@ -109,23 +111,17 @@
   <item name="Create tasks lists" url="Tasks/Create_tasks_folders.htm" />
   <item name="Add a task" url="Tasks/Add_a_task.htm" />
   <item name="Change a task" url="Tasks/Change_a_task.htm" />
+  <item name="Setting a Reminder in Tasks" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
   <item name="Moving tasks" url="Tasks/Moving_tasks.htm" />
   <item name="Delete a task" url="Tasks/Delete_a_task.htm" />
   <item name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />
 </book>
-<book name="Working in Documents " >
-  <item name="Working in Documents" url="Documents/Working_in_Notebooks.htm" />
-  <item name="Create new notebooks" url="Documents/Create_multiple_notebooks.htm" />
-  <item name="Create a new page" url="Documents/Create_a_new_page.htm" />
-  <item name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="Using HTML for format Documents pages" url="Documents/Using_HTML_for_format_pages.htm" />
-  <item name="Adding a table to a  notebook page" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</book>
-<book name="Using Briefcase" >
+<book name="Working in Briefcase" >
   <item name="Working in Briefcase" url="Briefcase/Working_in_Briefcase.htm" />
   <item name="Working with files in Briefcase" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-  <item name="Creating Slide Presentations in Briefcase" url="Briefcase/Creating_Slide_Presentations_in_Briefcase.htm" />
-  <item name="Creating Spreadsheets in Briefcase" url="Briefcase/Creating_Spreadsheets_in_Briefcase.htm" />
+  <item name="Create a new page" url="Documents/Create_a_new_page.htm" />
+  <item name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="Adding a table to a  notebook page" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
   <item name="Send Files from your Briefcase" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </book>
 <book name="Sharing Folders" >
@@ -138,23 +134,23 @@
 <chunk name="Using Tags and Folders to Organize Email" ref="whtdata4.xml" />
 </book>
 <book name="Using Mail Filters" >
-<chunk name="Using Mail Filters" ref="whtdata5.xml" />
+  <item name="Setting up filter rules" url="filters/how_filtering_works.htm" />
+  <item name="Filtering your messages" url="filters/filtering_your_messages.htm" />
+  <item name="Filter conditions and actions supported" url="filters/filter_conditions_and_actions_supported.htm" />
+  <item name="Filtering using CONTAINS, MATCHES, and IS options" url="Search/contains_vs_matches.htm" />
+  <item name="Filter wildcards" url="filters/wildcards.htm" />
 </book>
 <book name="Setting Your Preferences" >
-<chunk name="Setting Your Preferences" ref="whtdata6.xml" />
+<chunk name="Setting Your Preferences" ref="whtdata5.xml" />
 </book>
-<book name="Instant Messaging (Beta)" >
-<chunk name="Instant Messaging (Beta)" ref="whtdata7.xml" />
-</book>
-<book name="Managing your Mobile Device (ZCS Network Edition)" >
-  <item name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
-  <item name="How to wipe your mobile device" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+<book name="Managing your Mobile Device (Network Edition Only)" >
+<chunk name="Managing your Mobile Device (Network Edition Only)" ref="whtdata6.xml" />
 </book>
 <book name="Saving Your Account Folders" >
-  <item name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <item name="Backing up the content of your account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 <book name="Using Zimlets" >
-<chunk name="Using Zimlets" ref="whtdata8.xml" />
+<chunk name="Using Zimlets" ref="whtdata7.xml" />
 </book>
 
 </tocdata>

@@ -1,9 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="accepting access to notebooks" >
-  <topic name="Accepting Access to a Documents Notebook" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-</key>
 <key name="accessing external accounts" >
   <topic name="Accessing your external accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
 </key>
@@ -230,9 +227,6 @@
     <topic name="Creating a new mail message" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   </key>
 </key>
-<key name="creating Documents notebook" >
-  <topic name="Create new notebooks" url="Documents/Create_multiple_notebooks.htm" />
-</key>
 <key name="creating tags" >
   <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
@@ -269,26 +263,20 @@
 <key name="dictionary, adding words to" >
   <topic name="Using Spell Check" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
+<key name="disable Zimlets" >
+  <topic name="Managing your Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
 <key name="display heading information in reply messages" >
   <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="Documents, adding tables" >
   <topic name="Adding a table to a Notebook Page" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
-<key name="Documents, change access permissions" >
-  <topic name="Cancelling access to your Documents wiki folder" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</key>
 <key name="Documents, creating new pages" >
   <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
 </key>
-<key name="Documents, creating notebook" >
-  <topic name="Create new notebooks" url="Documents/Create_multiple_notebooks.htm" />
-</key>
 <key name="Documents, rich text editor" >
   <topic name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
-<key name="Documents, sharing" >
-  <topic name="Sharing wiki folders" url="Documents/Sharing_Notebooks.htm" />
 </key>
 <key name="draft message" >
   <topic name="Saving a draft message" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -316,6 +304,22 @@
 </key>
 <key name="equipment, reserving" >
   <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="events" >
+  <topic name="Scheduling All Day events" url="Calendar/Scheduling_All_Day_events.htm" />
+  <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="export account data" >
+  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="export iCal calendars" >
+  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="external accounts" >
+  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="external accounts, how to add" >
+  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
 </key>
 
 </indexdata>

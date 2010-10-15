@@ -1,30 +1,11 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="tags" >
-  <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-  <topic name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
-  <key name="Assigning" >
-    <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-  </key>
-  <key name="Deleting" >
-    <topic name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
-  </key>
-</key>
-<key name="tags, creating" >
-  <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
-</key>
-<key name="three-pane view" >
-  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="tool tips" >
-  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="Trash folder" >
-  <topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
 <key name="Undeliverable mail" >
   <topic name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="upload new Zimlets" >
+  <topic name="Managing your Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
 <key name="URL in signatures" >
   <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
@@ -71,11 +52,11 @@
 <key name="wipe mobile device" >
   <topic name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
-<key name="Zimbra assistant" >
-  <topic name="Zimbra Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
-</key>
 <key name="Zimlets" >
   <topic name="About Zimlets" url="Zimlets/About_Zimlets.htm" />
+  <topic name="Managing your Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
+<key name="Zimlets, disable" >
   <topic name="Managing your Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
 

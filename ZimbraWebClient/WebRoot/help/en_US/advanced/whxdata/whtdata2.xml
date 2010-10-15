@@ -3,6 +3,7 @@
 <tocdata>
 <item name="Sharing  folders" url="Sharing/Sharing_a_folder.htm" />
 <item name="Managing items you share" url="Sharing/Managing_items_you_share.htm" />
+<item name="Sharing with a Distribution List" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="Sharing Mail Folders" >
   <item name="Sharing mail folders" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
   <item name="Sharing your mailbox" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
@@ -23,12 +24,6 @@
 <book name="Sharing Task Lists" >
   <item name="Share your task list" url="Tasks/Share_your_Task_folder.htm" />
   <item name="Accepting access to shared  task lists" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
-</book>
-<book name="Sharing Document Notebooks" >
-  <item name="Sharing Documents notebooks" url="Documents/Sharing_Notebooks.htm" />
-  <item name="Accepting access to a Documents notebook" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-  <item name="Linking to a shared notebook" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-  <item name="Changing or cancelling access to your Documents folder" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
 </book>
 <book name="Sharing Briefcase Folders" >
   <item name="Sharing your Briefcase" url="Briefcase/Sharing_your_Briefcase.htm" />

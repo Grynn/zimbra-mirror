@@ -1,33 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="options" >
-  <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="options, Calendar" >
-  <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-</key>
-<key name="options, changing" >
-  <topic name="Changing Your User Options" url="Userspecific/Changing_Your_User_Options.htm" />
-</key>
-<key name="options, new mail notification" >
-  <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
-</key>
-<key name="overview pane" >
-  <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
-<key name="pages, Documents" >
-  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="password" >
-  <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
-</key>
 <key name="permission denied with meeting invite" >
   <topic name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
-</key>
-<key name="permissions, changing access to notebooks" >
-  <topic name="Cancelling access to your Documents wiki folder" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
 </key>
 <key name="persona" >
   <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
@@ -77,6 +52,9 @@
 </key>
 <key name="preview pane, turning on or off" >
   <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="print tasks" >
+  <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="Printing" >
   <topic name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
@@ -273,8 +251,8 @@
 <key name="sharing folders" >
   <topic name="Sharing a folder" url="Sharing/Sharing_a_folder.htm" />
 </key>
-<key name="sharing wiki folders" >
-  <topic name="Sharing wiki folders" url="Documents/Sharing_Notebooks.htm" />
+<key name="sharing with a distribution list" >
+  <topic name="Sharing with a Distribution List" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 </key>
 <key name="shortcut keys" >
   <topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
@@ -312,6 +290,34 @@
 </key>
 <key name="tag, drag and drop" >
   <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+</key>
+<key name="tags" >
+  <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
+  <key name="Assigning" >
+    <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  </key>
+  <key name="Deleting" >
+    <topic name="Deleting tags" url="Tags_and_flags/deleting_tags.htm" />
+  </key>
+</key>
+<key name="tags, creating" >
+  <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="task, mark as complete" >
+  <topic name="Change a task" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="tasks, print" >
+  <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="three-pane view" >
+  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="tool tips" >
+  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="Trash folder" >
+  <topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 
 </indexdata>
