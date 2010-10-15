@@ -292,7 +292,7 @@ public class ImageMerger {
     private void printlnCss(ImageEntry entry) {
         if (cssOut == null) return;
         String selector = toSelector(entry.image.getName());
-        String url = cssPath+"/"+entry.filename+"?v=@jsVersion@";
+        String url = cssPath+"/"+entry.filename.replace(File.separatorChar,'/')+"?v=@jsVersion@";
         print(cssOut, "%s {", selector);
 
         // conditional properties for PNGs
@@ -350,13 +350,17 @@ public class ImageMerger {
                 "AjxImgData[\"%s\"]={t:%d,l:%d,w:%d,h:%d,f:\"%s/%s\"};",
                 name, -entry.y, -entry.x,
                 entry.image.getWidth(), entry.image.getHeight(),
-                cssPath, entry.filename
+                cssPath, entry.filename.replace(File.separatorChar,'/')
             );
         }
     }
 
     private void printlnCache(ImageEntry entry) {
-        println(cacheOut, "<img alt=\"\" src='%s/%s?v=@jsVersion@'>", cssPath, entry.filename);
+        println(
+            cacheOut,
+            "<img alt=\"\" src='%s/%s?v=@jsVersion@'>", 
+            cssPath, entry.filename.replace(File.separatorChar,'/')
+        );
     }
 
     private void processCopy(File dir) throws IOException {
