@@ -158,7 +158,7 @@ function(account, now, isDragProxy) {
 			// name
 			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
 			if(account.isExternal) {
-				html[idx++] = "<span class='asterix'>*</span>";	
+				html[idx++] = "<span class='asterisk'>*</span>";	
 			}
 			html[idx++] = AjxStringUtil.htmlEncode(account.name);
 			html[idx++] = "</nobr></td>";
