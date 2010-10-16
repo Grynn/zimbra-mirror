@@ -132,6 +132,9 @@ body						{	@ChromeBg@	}
 	height:11px;
 }
 
+.asterix {
+@Text-error@	
+}
 /* Hack the AppChiclets to do them with CSS instead of images */
 
 #IFNDEF MSIE

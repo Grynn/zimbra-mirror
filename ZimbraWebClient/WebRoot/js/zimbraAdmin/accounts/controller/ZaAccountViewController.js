@@ -140,8 +140,9 @@ function(entry) {
 
 		try {		  		
 			if(!AjxUtil.isEmpty(entry.id)) {
-				//console.log("loading the entry for the form");
+				var isExternal = entry.isExternal;
 				entry.refresh(false,true);
+				entry.isExternal = isExternal;
 			}
 	  		this._contentView = this._view = new this.tabConstructor(this._container,entry);
 			var elements = new Object();

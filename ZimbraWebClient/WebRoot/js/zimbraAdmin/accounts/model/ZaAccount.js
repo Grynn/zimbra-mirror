@@ -67,6 +67,7 @@ ZaAccount.A_accountStatus = "zimbraAccountStatus";
 ZaAccount.A_notes = "zimbraNotes";
 ZaAccount.A_zimbraMailQuota = "zimbraMailQuota";
 ZaAccount.A_mailHost = "zimbraMailHost";
+ZaAccount.A_zimbraMailTransport = "zimbraMailTransport";
 ZaAccount.A_COSId = "zimbraCOSId";
 
 ZaAccount.A_zimbraIsAdminAccount = "zimbraIsAdminAccount";
@@ -1210,6 +1211,7 @@ function (account) {
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 	this.name = account.name;
 	this.id = account.id;
+	this.isExternal = account.isExternal;
 	var len = account.a.length;
 	this.attrs[ZaAccount.A_zimbraMailAlias] = new Array();
 	this.attrs[ZaAccount.A_zimbraMailForwardingAddress] = new Array();	
@@ -1264,7 +1266,16 @@ function() {
 		html[idx++] = "</table></div></td></tr>";
 		html[idx++] = "<tr></tr>";
 		idx = this._addRow(ZaMsg.NAD_ZimbraID, this.id, html, idx);
-		idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
+		
+		if(this.isExternal) {
+			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_zimbraMailTransport], html, idx);
+			html[idx++] = "<tr valign='top'><td align='left' style='padding-right: 5px;' colspan='2'><b>";
+			html[idx++] = AjxStringUtil.htmlEncode(ZaMsg.externalAccountNote);
+			html[idx++] = "</b></td>";
+			html[idx++] = "</td></tr>";
+		} else {
+			idx = this._addRow(ZaMsg.NAD_MailServer, this.attrs[ZaAccount.A_mailHost], html, idx);
+		}
 		html[idx++] = "</table>";
 		this._toolTip = html.join("");
 	}
@@ -1586,6 +1597,7 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_notes, type:_STRING_, ref:"attrs/"+ZaAccount.A_notes},
         {id:ZaAccount.A_zimbraMailQuota, type:_COS_MAILQUOTA_, ref:"attrs/"+ZaAccount.A_zimbraMailQuota},
         {id:ZaAccount.A_mailHost, type:_STRING_, ref:"attrs/"+ZaAccount.A_mailHost},
+        {id:ZaAccount.A_zimbraMailTransport, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraMailTransport},
         {id:ZaAccount.A_COSId, type:_STRING_, ref:"attrs/" + ZaAccount.A_COSId},
         {id:ZaAccount.A_zimbraIsAdminAccount, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraIsAdminAccount},
         {id:ZaAccount.A_zimbraIsSystemResource, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/"+ZaAccount.A_zimbraIsSystemResource},

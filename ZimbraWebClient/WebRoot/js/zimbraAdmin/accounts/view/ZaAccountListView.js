@@ -157,6 +157,9 @@ function(account, now, isDragProxy) {
 		} else if(field == ZaAccount.A_name) {
 			// name
 			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
+			if(account.isExternal) {
+				html[idx++] = "<span class='asterix'>*</span>";	
+			}
 			html[idx++] = AjxStringUtil.htmlEncode(account.name);
 			html[idx++] = "</nobr></td>";
 		} else if (field == ZaAccount.A_displayname) {
