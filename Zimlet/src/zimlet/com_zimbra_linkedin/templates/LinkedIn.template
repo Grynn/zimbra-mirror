@@ -1,5 +1,5 @@
 <template id='Frame'>
-	<div align=center  style='display:block;overflow:auto'  id='linkedInZimlet_MainDiv'>
+	<div align=center  style='display:block;overflow:auto;background:white;'  id='linkedInZimlet_MainDiv'>
 		<div class='overviewHeader LinkedInHeader' id='linkedInZimlet_searchBarDiv'>
 			<table cellspacing=0 cellpadding=0 align="center">
 			<tr><td><input id='linkdeInZimlet_seachField' type='text' style='width:110px'></input></td>

@@ -70,7 +70,7 @@ function() {
 	}
 	document.getElementById("linkedInZimlet_MainDiv").style.height = document.getElementById(this._slide.id).offsetHeight;
 	if(!this.linkedInZimlet_oauth_token || !this.linkedInZimlet_oauth_token_secret || !this.linkedInZimlet_account_name) {
-		this._slide.setErrorMessage(this.getMessage("noAccount"));
+		this._showJoinLinkedInAccount();
 		return;
 	}
 	var q = this._getDefaultQuery();
@@ -174,6 +174,20 @@ LinkedInZimlet.prototype._appendToSlide =
 function(html) {
 	document.getElementById("linkedInZimlet_searchResultsDiv").innerHTML = html;
 	document.getElementById("linkedInZimlet_searchResultsDiv").onclick =  AjxCallback.simpleClosure(this._handleClickInSearchResults, this);
+};
+
+LinkedInZimlet.prototype._showJoinLinkedInAccount =
+function() {
+	var html = [];
+	html.push("<br/><br/>", this.getMessage("noAccount"), " <a href='#' id='LinkedInZimlet_ShowPreferences'>",this.getMessage("clickHere"),"</a>");
+	document.getElementById("linkedInZimlet_searchResultsDiv").innerHTML = html.join("");
+	document.getElementById("LinkedInZimlet_ShowPreferences").onclick = AjxCallback.simpleClosure(this._showLinkedInPrefFromTooltip, this); 
+};
+LinkedInZimlet.prototype._showLinkedInPrefFromTooltip =
+function() {
+	this._setTooltipSticky(false);
+	this.emailZimlet.slideShow.hideTooltipVeil();
+	this.singleClicked();
 };
 
 LinkedInZimlet.prototype._handleClickInSearchResults =
@@ -291,7 +305,7 @@ function(authParams, profileId) {
 		this._inviteFriendsDlg = this.emailZimlet._linkedInZimlet_inviteFriendDlg;
 	}
 	this._setTooltipSticky(false);
-	this.emailZimlet.tooltip.popdown();
+	this.emailZimlet.slideShow.hideTooltipVeil();
 	if (this._inviteFriendsDlg) {
 		this._inviteFriendsDlg.authParams = authParams;
 		this._inviteFriendsDlg.profileId = profileId;

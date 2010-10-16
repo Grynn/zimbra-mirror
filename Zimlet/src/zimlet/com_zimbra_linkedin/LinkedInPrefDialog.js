@@ -37,7 +37,7 @@ function() {
 	document.getElementById("linkedInZimlet_accountName").innerHTML = accntName;
 
 	var btn = new DwtButton({parent:this._shell});
-	btn.setText("Add LinkedIn Account");
+	btn.setText(this.zimlet.getMessage("addLinkedInAccount"));
 	btn.setImage("LinkedinZimletIcon");
 	btn.addSelectionListener(new AjxListener(this, this._makeOAuthCall));
 	document.getElementById("linkedInZimlet_AddAccntBtn").appendChild(btn.getHtmlElement());
