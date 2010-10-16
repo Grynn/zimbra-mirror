@@ -56,11 +56,11 @@ function() {
 };
 
 UnknownPersonSlide.prototype._handleImgLoadFailure =
-function() {//onfailure to load img w/in 5 secs, load an dataNotFound.png
+function() {//onfailure to load img w/in 5 secs, load an dataNotFound image
 	var img = new Image();
 	img.onload = AjxCallback.simpleClosure(this._handleImageLoad, this, img);
 	img.id = UnknownPersonSlide.PHOTO_ID;
-	img.src = this.emailZimlet.getResource("img/UnknownPerson_dataNotFound.png");
+	img.src = this.emailZimlet.getResource("img/UnknownPerson_dataNotFound.jpg");
 };
 
 UnknownPersonSlide.prototype._handleImageLoad =
@@ -168,8 +168,8 @@ function() {
 UnknownPersonSlide.prototype._setHeightAndWidthOfImage =
 function() {
 	var el = document.getElementById(UnknownPersonSlide.PHOTO_ID);
-	el.height = 90;
-	el.width = 70;
+	el.height = 80;
+	el.width = 65;
 };
 
 
