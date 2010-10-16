@@ -73,7 +73,7 @@ function(e) {
 	if(targ.id) {
 		if(targ.id == EmailToolTipSlideShow.closeBtnId) {
 			this.hideTooltipVeil();
-		} else {
+		} else if(this.slidesIconAndSlideMap[targ.id]){
 			this.slidesIconAndSlideMap[targ.id].select();
 		}
 	}

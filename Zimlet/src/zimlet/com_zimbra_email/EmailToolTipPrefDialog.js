@@ -20,9 +20,9 @@
  */
 function EmailToolTipPrefDialog(zimlet) {
 	this.zimlet = zimlet;
-	this.emailZimlet_tooltipSize = this.zimlet.getUserProperty("emailZimlet_tooltipSize");
-	if(!this.emailZimlet_tooltipSize) {
-		this.emailZimlet_tooltipSize = EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_MEDIUM];
+	this.emailZimlet_tooltipArea = this.zimlet.getUserProperty("emailZimlet_tooltipArea");
+	if(!this.emailZimlet_tooltipArea) {
+		this.emailZimlet_tooltipArea = EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_MEDIUM];
 	}
 	this.updateEmailTooltipSize();
 }
@@ -36,7 +36,7 @@ EmailToolTipPrefDialog.SIZE_XL = "XL";
 EmailToolTipPrefDialog.DIMENSIONS = [];
 EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_VERYSMALL]  = "220px x 130px";
 EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_SMALL]  = "230px x 140px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_MEDIUM]  = "250px x 150px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_MEDIUM]  = "250px x 140px";
 EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_LARGE]  = "260px x 200px";
 EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_XL]  = "270px x 210px";
 
@@ -45,7 +45,7 @@ EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_XL]  = "270px x 21
  */
 EmailToolTipPrefDialog.prototype.updateEmailTooltipSize =
 function() {
-	var size = this.emailZimlet_tooltipSize.replace(/px/ig, "");
+	var size = this.emailZimlet_tooltipArea.replace(/px/ig, "");
 	var arry = size.split(" x ");
 	EmailTooltipZimlet.tooltipWidth = arry[0];
 	EmailTooltipZimlet.tooltipHeight = arry[1];
@@ -86,7 +86,7 @@ function() {
  */
 EmailToolTipPrefDialog.prototype._setPreferences =
 function() {
-	document.getElementById("emailZimlet_tooltipSize").value = this.emailZimlet_tooltipSize;
+	document.getElementById("emailZimlet_tooltipArea").value = this.emailZimlet_tooltipArea;
 };
 
 /**
@@ -106,7 +106,7 @@ EmailToolTipPrefDialog.prototype._getTooltipMenuHtml =
 function() {
 	var html = new Array();
 	var i = 0;
-	html[i++] = "<select id='emailZimlet_tooltipSize'>";
+	html[i++] = "<select id='emailZimlet_tooltipArea'>";
 	for (var el in EmailToolTipPrefDialog.DIMENSIONS) {
 		var dimension = EmailToolTipPrefDialog.DIMENSIONS[el];
 		var name = this.zimlet.getMessage(el);
@@ -121,10 +121,10 @@ function() {
  */
 EmailToolTipPrefDialog.prototype._okBtnListner =
 function() {
-	var emailZimlet_tooltipSize = document.getElementById("emailZimlet_tooltipSize").value;
-	if (emailZimlet_tooltipSize != this.emailZimlet_tooltipSize) {
-		this.zimlet.setUserProperty("emailZimlet_tooltipSize", emailZimlet_tooltipSize);
-		this.emailZimlet_tooltipSize = emailZimlet_tooltipSize;
+	var emailZimlet_tooltipArea = document.getElementById("emailZimlet_tooltipArea").value;
+	if (emailZimlet_tooltipArea != this.emailZimlet_tooltipArea) {
+		this.zimlet.setUserProperty("emailZimlet_tooltipArea", emailZimlet_tooltipArea);
+		this.emailZimlet_tooltipArea = emailZimlet_tooltipArea;
 	}
 	this.updateEmailTooltipSize();
 	var callback = new AjxCallback(this, this._propertiesSaved);
