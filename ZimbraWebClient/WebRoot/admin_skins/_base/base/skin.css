@@ -109,7 +109,7 @@ body						{	@ChromeBg@	}
 #skin_td_tree							{ height:100%;	padding-bottom:2px; width:@TreeStartWidth@; }
 #skin_container_tree						{	@SkinBorderTree@	height:100%;	}
 
-#skin_tr_tree_footer					{	display:none;			}
+#skin_tr_tree_footer					{	display:table-row;	  	}
 #skin_td_tree_footer					{	vertical-align:top;		}
 
 #skin_container_tree_footer				{	@SkinBorderMiniCal@  height:135;	margin:2 -4 0 4;  }
@@ -124,7 +124,7 @@ body						{	@ChromeBg@	}
 
 #skin_tr_status	{	}
 #skin_td_status {	
-		padding:5 0 5 6;
+		padding:0;
 }
 #skin_container_status 					{	@SkinBorderStatus@	height:30;		}
 

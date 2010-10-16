@@ -165,6 +165,11 @@ function(msg, ex, style)  {
 		}
 	}
 	// popup alert
+
+    if (!this._errorDialog) {
+        this._errorDialog = ZaApp.getInstance().dialogs["errorDialog"];
+    }
+
 	if (this._errorDialog) {
         this._errorDialog.setMessage(msg, detailStr, style, ZaMsg.zimbraAdminTitle);
 
