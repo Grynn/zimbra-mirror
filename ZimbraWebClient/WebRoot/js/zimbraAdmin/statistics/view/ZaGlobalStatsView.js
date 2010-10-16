@@ -45,6 +45,8 @@ ZaGlobalStatsView = function(parent) {
         this._advancedPage = new ZaGlobalAdvancedStatsPage(this);
         this.addTab(ZaMsg.TABT_Advanced_Stats, this._advancedPage);
     }
+        this._mobileSyncPage = new ZaGlobalMobileSyncPage(this);
+        this.addTab(ZaMsg.TABT_MobileSync_Stats, this._mobileSyncPage);
 }
 
 ZaGlobalStatsView.prototype = new DwtTabView;
@@ -61,6 +63,7 @@ ZaGlobalStatsView.prototype.setObject = function (entry) {
 	this._msgsVolumePage.setObject(entry);
 	this._spamPage.setObject(entry);
 	this._advancedPage.setObject(entry);
+	this._mobileSyncPage.setObject(entry);
 }
 
 ZaGlobalStatsView.prototype.getTitle = 
