@@ -27,20 +27,18 @@ function EmailToolTipPrefDialog(zimlet) {
 	this.updateEmailTooltipSize();
 }
 
-EmailToolTipPrefDialog.SIZE_VERYSMALL = "verySmall";
-EmailToolTipPrefDialog.SIZE_SMALL = "small";
-EmailToolTipPrefDialog.SIZE_MEDIUM = "medium";
-EmailToolTipPrefDialog.SIZE_LARGE = "large";
+EmailToolTipPrefDialog.SIZE_VERYSMALL = "VERYSMALL";
+EmailToolTipPrefDialog.SIZE_SMALL = "SMALL";
+EmailToolTipPrefDialog.SIZE_MEDIUM = "MEDIUM";
+EmailToolTipPrefDialog.SIZE_LARGE = "LARGE";
 EmailToolTipPrefDialog.SIZE_XL = "XL";
-EmailToolTipPrefDialog.SIZE_2XL = "2XL";
 
 EmailToolTipPrefDialog.DIMENSIONS = [];
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_VERYSMALL]  = "200px x 220px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_SMALL]  = "230px x 250px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_MEDIUM]  = "250px x 285px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_LARGE]  = "270px x 320px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_XL]  = "290px x 330px";
-EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_2XL]  = "300px x 340px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_VERYSMALL]  = "220px x 130px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_SMALL]  = "230px x 140px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_MEDIUM]  = "250px x 150px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_LARGE]  = "260px x 200px";
+EmailToolTipPrefDialog.DIMENSIONS[EmailToolTipPrefDialog.SIZE_XL]  = "270px x 210px";
 
 /**
  * Updates Email Tooltip's tooltipWidth and tooltipHeight

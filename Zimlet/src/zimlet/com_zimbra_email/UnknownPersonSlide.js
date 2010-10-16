@@ -25,8 +25,7 @@ function UnknownPersonSlide() {
 UnknownPersonSlide.PHOTO_ID = "unkownPerson_photoBG";
 UnknownPersonSlide.PHOTO_PARENT_ID = "unkownPerson_photoBGDiv";
 UnknownPersonSlide.TEXT_DIV_ID = "unkownPerson_TextDiv";
-UnknownPersonSlide.SLIDE_PX_20 =  20;//height when Full name of the email is present
-UnknownPersonSlide.SLIDE_PX_15 =  15;//height when full name of the is absent
+
 /**
 * Implement onEmailHoverOver to get notified by Email tooltip zimlet.
 * This function registers UnkownPerson Zimlet as a subscriber Zimlet
@@ -106,10 +105,21 @@ function(img) {
 	}
 	if (img) {
 		var div = document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID);
-		div.insertBefore(img, document.getElementById(UnknownPersonSlide.TEXT_DIV_ID));
+		div.appendChild(img);
+		if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) != -1) {
+			img.onclick =  AjxCallback.simpleClosure(this._handleProfileImageClick, this); 
+			img.style.cursor = "pointer";
+		}
 	}
-	if(this.emailZimlet.emailAddress.indexOf("@vmware.com")  == -1) {
-		this._GALRequestCallback(img, null);
+
+	if(this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN)  == -1) {
+		var contactList = AjxDispatcher.run("GetContacts");
+		var contact = contactList ? contactList.getContactByEmail(this.emailZimlet.emailAddress) : null;
+		if (contact) {
+			this._GALRequestCallback(img, null, contact.attr);
+		} else {
+			this._GALRequestCallback(img, null);
+		}		
 	} else {//make gal search request
 		var jsonObj, request, soapDoc;
 		jsonObj = {SearchGalRequest:{_jsns:"urn:zimbraAccount"}};
@@ -146,121 +156,22 @@ function(img, response) {
 		}
 	}
 	this._setContactDetails(attrs);
-	this._adjustBGPhotoSize();
-	this._adjustTextDivAspects();
+	this._setHeightAndWidthOfImage();
 	this._popupToolTip();
 };
 
 UnknownPersonSlide.prototype._popupToolTip =
 function() {
 	this.emailZimlet.tooltip.popup(this.emailZimlet.x, this.emailZimlet.y, true, null);
-	this.emailZimlet.seriesAnimation.addFadeIn(EmailToolTipSlideShow.mainDivId);
-	this.emailZimlet.seriesAnimation.addPause(500);
-	this.emailZimlet.seriesAnimation.addslideUp(UnknownPersonSlide.TEXT_DIV_ID, this._textDivOffsetHeight);
-	this.emailZimlet.seriesAnimation.startAnimation();
-	setTimeout(AjxCallback.simpleClosure(this._slideTextDownIfMouseNotOver, this), 5000);
-	this.addListeners();
 };
 
-UnknownPersonSlide.prototype.addListeners =
-function() {
-	document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID).onmouseover = AjxCallback.simpleClosure(this._slideTextDivUp, this);
-	document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID).onmouseout = AjxCallback.simpleClosure(this._slideTextDivDown, this);
-};
-
-UnknownPersonSlide.prototype._slideTextDivUp =
-function(ev) {
-	this._hoverOnPhoto = true;
-	if (!ev) {
-		var ev = window.event;
-	}
-	var relTarg = ev.relatedTarget || ev.toElement;
-	if (relTarg && (relTarg.parentNode.id == UnknownPersonSlide.TEXT_DIV_ID || relTarg.id == UnknownPersonSlide.TEXT_DIV_ID)) {
-		return;
-	}
-	this.emailZimlet.seriesAnimation.addslideUp(UnknownPersonSlide.TEXT_DIV_ID, this._textDivOffsetHeight);
-	this.emailZimlet.seriesAnimation.startAnimation();
-};
-
-UnknownPersonSlide.prototype._slideTextDivDown =
-function(ev) {
-	this._hoverOnPhoto = false;
-	if (!ev) {
-		var ev = window.event;
-	}
-	var relTarg = ev.relatedTarget || ev.toElement;
-	if (relTarg && (relTarg.parentNode.id == UnknownPersonSlide.TEXT_DIV_ID || relTarg.id == UnknownPersonSlide.TEXT_DIV_ID)) {
-		return;
-	}
-	if(this.emailZimlet.fullName != "") {
-		this.emailZimlet.seriesAnimation.addslideDown(UnknownPersonSlide.TEXT_DIV_ID, UnknownPersonSlide.SLIDE_PX_20);
-	} else {
-		this.emailZimlet.seriesAnimation.addslideDown(UnknownPersonSlide.TEXT_DIV_ID, UnknownPersonSlide.SLIDE_PX_15);
-	}
-	this.emailZimlet.seriesAnimation.startAnimation();
-};
-
-UnknownPersonSlide.prototype._slideTextDownIfMouseNotOver =
-function() {
-	if (!this._hoverOnPhoto) {
-		if(this.emailZimlet.fullName != "") {
-			this.emailZimlet.seriesAnimation.addslideDown(UnknownPersonSlide.TEXT_DIV_ID, UnknownPersonSlide.SLIDE_PX_20);
-		} else {
-			this.emailZimlet.seriesAnimation.addslideDown(UnknownPersonSlide.TEXT_DIV_ID, UnknownPersonSlide.SLIDE_PX_15);
-		}
-		this.emailZimlet.seriesAnimation.startAnimation();
-	}
-};
-
-
-
-UnknownPersonSlide.prototype._adjustTextDivAspects =
-function() {
-	var styleObj = document.getElementById(UnknownPersonSlide.TEXT_DIV_ID).style;
-	var height = document.getElementById(EmailToolTipSlideShow.navDivId).offsetHeight;
-	var width = document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID).offsetWidth;
-	styleObj.bottom = height + 8;
-	styleObj.width = width;
-	styleObj.zoom = 1;
-	styleObj.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=50)";
-	styleObj.opacity = 0.5;
-};
-
-
-
-UnknownPersonSlide.prototype._adjustBGPhotoSize =
+UnknownPersonSlide.prototype._setHeightAndWidthOfImage =
 function() {
 	var el = document.getElementById(UnknownPersonSlide.PHOTO_ID);
-	var width = el.width;
-	var height = el.height;
-	var changed = false;
-	var keepAspectRatio = false;
-	if (height > this._tooltipHeight) {
-		var percent = parseInt((this._tooltipHeight / height) * 10) / 10;
-		height = height * percent;
-		changed = true;
-		if (width > this._tooltipWidth) {//if both height & width are larger then we can shrink them w/ aspectRatio intact
-			width = width * percent;
-			keepAspectRatio = true;
-		}
-	}
-	if (width > this._tooltipWidth && !keepAspectRatio) {
-		var percent = parseInt((this._tooltipWidth / width) * 10) / 10;
-		width = width * percent;
-		changed = true;
-
-	}
-	if (!changed) {
-		width = this._tooltipWidth;
-		height = this._tooltipHeight;
-	}
-	el.width = width;
-	el.height = height;
-
-	document.getElementById(EmailToolTipSlideShow.mainDivId).style.width = width + "px";
-	document.getElementById(EmailToolTipSlideShow.mainDivId).style.height = height + "px";
-	document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID).style.display = "block";
+	el.height = 90;
+	el.width = 70;
 };
+
 
 UnknownPersonSlide.prototype._getTooltipBGHtml =
 function(email) {
@@ -276,7 +187,7 @@ function(email) {
 		width: width,
 		left: left
 	};
-	return AjxTemplate.expand("com_zimbra_email.templates.Email#Frame", subs);
+	return AjxTemplate.expand("com_zimbra_email.templates.Email1#Frame", subs);
 };
 
 UnknownPersonSlide.prototype._setContactDetails =
@@ -291,10 +202,10 @@ function(attrs) {
 	}
 
 	attrs["rightClickForMoreOptions"] = this.emailZimlet.getMessage("rightClickForMoreOptions");
-	var iHtml = AjxTemplate.expand("com_zimbra_email.templates.Email#ContactDetails", attrs);
+	var iHtml = AjxTemplate.expand("com_zimbra_email.templates.Email1#ContactDetails", attrs);
 	this._setTextDivHeight(iHtml);
 	document.getElementById(UnknownPersonSlide.TEXT_DIV_ID).innerHTML = iHtml;
-	document.getElementById(UnknownPersonSlide.TEXT_DIV_ID).style.height = "0px"; //set it to 0 to basically hide it so we can slideUp
+	document.getElementById("UnknownPersonSlide_EmailAnchorId").onclick =  AjxCallback.simpleClosure(this._openCompose, this); 
 };
 
 UnknownPersonSlide.prototype._setTextDivHeight =

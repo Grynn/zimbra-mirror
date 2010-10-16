@@ -1,0 +1,29 @@
+<template id='Frame'>
+	<div style='display:block;width:100%;height:100%;background:white' width=100% height=100%>
+		<table><tr><td>
+		<div align=center id="${photoParentId}"></div></td><td>
+		<div align=center id="${textDivId}"></div></td></tr></table>
+	</div>
+</template>
+<template id='ContactDetails'>
+	<$ if (data.fullName) { $>
+		<a style='font-size:15px;font-weight:bold;text-decoration:none;' target='_blank' href=''><$= AjxStringUtil.htmlEncode(data.fullName) $></a><br/>
+	<$ } $>
+	<$ if (data.jobTitle) { $>
+		<label ><$= AjxStringUtil.htmlEncode(data.jobTitle) $></label><br/>
+	<$ } $>
+	<$ if (data.email) { $>
+		<a  id='UnknownPersonSlide_EmailAnchorId' href='#' style='text-decoration:underline;'><$= AjxStringUtil.htmlEncode(data.email) $></a><br/>
+	<$ } $>
+	<$ if (data.mobilePhone) { $>
+		<label ><$= AjxStringUtil.htmlEncode(data.mobilePhone) $> (cell)</label><br/>
+	<$ } $>
+	<$ if (data.workPhone) { $>
+		<label ><$= AjxStringUtil.htmlEncode(data.workPhone) $> (work)</label><br/>
+	<$ } $>
+	<$ if (data.address) { $>
+		<label ><$= AjxStringUtil.htmlEncode(data.address) $> (work)</label><br/>
+	<$ } $>
+	<br/>
+	<label style='font-size:11px;color:white;font-weight:bold;color:gray'><$= AjxStringUtil.htmlEncode(data.rightClickForMoreOptions) $></label><br/>
+</template>

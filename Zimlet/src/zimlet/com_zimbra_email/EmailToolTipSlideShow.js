@@ -16,7 +16,7 @@
 EmailToolTipSlideShow.mainDivId = "EmailZimlet_slidesMainDiv";
 EmailToolTipSlideShow.navDivId = "EmailZimlet_slidesNavDiv";
 EmailToolTipSlideShow.navTableRowId = "EmailZimlet_slidesNavTableRow";
-EmailToolTipSlideShow.navTableSelectRowId =  "EmailZimlet_navTableSelectRow";
+EmailToolTipSlideShow.closeBtnId = "emailTooltip_CloseTooltipBtnId";
 
 function EmailToolTipSlideShow(zimlet, canvas) {
 	this.slidesIconAndSlideMap = [];
@@ -28,23 +28,32 @@ function EmailToolTipSlideShow(zimlet, canvas) {
 	this.mainDiv = document.getElementById(EmailToolTipSlideShow.mainDivId);
 	this.navDiv = document.getElementById(EmailToolTipSlideShow.navDivId);
 	this.navTableRow = document.getElementById(EmailToolTipSlideShow.navTableRowId);
-	this.navTableSelectRow = document.getElementById(	EmailToolTipSlideShow.navTableSelectRowId);
+	this._addCloseBtn();
 
-
-	this.currentSelectIconDivId = null;
+	this.currentSelectCellId = null;
 	this.currentSlideId = null;
 	this.navDiv.onclick = AjxCallback.simpleClosure(this._handleClick, this);
 	canvas.onmouseover =  AjxCallback.simpleClosure(this.showTooltipVeil, this);
-	//this.mainDiv.onmouseout =  AjxCallback.simpleClosure(this.hideTooltipVeil, this);
+	//set height and width to make it work in IE
+	this.mainDiv.style.width = EmailTooltipZimlet.tooltipWidth + "px";
+	this.mainDiv.style.height =  EmailTooltipZimlet.tooltipHeight + "px";
+	this.navDiv.style.width = EmailTooltipZimlet.tooltipWidth + "px";
+};
 
+EmailToolTipSlideShow.prototype._addCloseBtn =
+function(canvas) {
+	var iconCell = document.getElementById(EmailToolTipSlideShow.closeBtnId);
+	this._insertIconHtml(iconCell, Dwt.getNextId(), this.emailZimlet.getMessage("close"), EmailToolTipSlideShow.closeBtnId, "Cancel");
+	iconCell.align="right";
+	iconCell.width="90%";
 };
 
 EmailToolTipSlideShow.prototype._createFrame =
 function(canvas) {
 	canvas.innerHTML = ["<div id='", EmailToolTipSlideShow.mainDivId, "' height='", EmailTooltipZimlet.height, "'   width='",EmailTooltipZimlet.width , 
-						"'  style='height:",EmailTooltipZimlet.height,"px;width:",EmailTooltipZimlet.width ,"px;'></div><div class='ImgEmailZimletNavBarBG' id='", 
-						EmailToolTipSlideShow.navDivId, "'><table cellpadding=0 cellspacing=0><tr id='",EmailToolTipSlideShow.navTableRowId,"'></tr>",
-						"<tr id='",EmailToolTipSlideShow.navTableSelectRowId,"'></tr></table></div>"].join("");
+						"'  style='height:",EmailTooltipZimlet.height,"px;width:",EmailTooltipZimlet.width ,"px;'></div><div  id='", 
+						EmailToolTipSlideShow.navDivId, "'><table  cellpadding=0 cellspacing=0><tr><td><table width=100% cellpadding=0 cellspacing=0><tr id='",
+						EmailToolTipSlideShow.navTableRowId,"'></tr></table></td><td width=90% id='emailTooltip_CloseTooltipBtnId'></td></tr></table></div>"].join("");
 };
 
 EmailToolTipSlideShow.prototype._handleClick =
@@ -62,7 +71,11 @@ function(e) {
 		targ = targ.parentNode;
 	}
 	if(targ.id) {
-		this.slidesIconAndSlideMap[targ.id].select();
+		if(targ.id == EmailToolTipSlideShow.closeBtnId) {
+			this.hideTooltipVeil();
+		} else {
+			this.slidesIconAndSlideMap[targ.id].select();
+		}
 	}
 };
 
@@ -87,17 +100,21 @@ EmailToolTipSlideShow.prototype._insertSlideIcon =
 function(slide) {
 	var iconName = slide.iconName;
 	var iconDivId = slide.iconDivId;
-	var selectIconDivId = slide.selectIconDivId;
+	var selectCellId = slide.selectCellId;
 	var name = slide.name;
 	var iconCell = this.navTableRow.insertCell(0);
+	this._insertIconHtml(iconCell, selectCellId, name, iconDivId, iconName);
+};
+
+EmailToolTipSlideShow.prototype._insertIconHtml =
+function(iconCell, selectCellId, name, iconDivId, iconName) {
 	iconCell.width= '25px';
 	iconCell.align="center";
-	iconCell.innerHTML = ["<div title='",name,"' id='",iconDivId,"' class='Img", iconName, "' style='cursor:pointer;'></div>"].join("");
+	iconCell.id = selectCellId;
+	iconCell.style.padding = "3px";
+	iconCell.style.paddingTop = "0px";
 
-	var selectIconCell = this.navTableSelectRow.insertCell(0);
-	selectIconCell.width= '25px';
-	selectIconCell.align="center";
-	selectIconCell.innerHTML = ["<div id='",selectIconDivId,"' class='ImgEmailZimletRadio' style='width:16px;padding-top:2px;display:none'></div>"].join("");
+	iconCell.innerHTML = ["<div title='",name,"' id='",iconDivId,"' class='Img", iconName, "' style='cursor:pointer;'></div>"].join("");
 };
 
 EmailToolTipSlideShow.prototype.showTooltipVeil =

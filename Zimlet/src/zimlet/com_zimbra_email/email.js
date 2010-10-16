@@ -760,3 +760,16 @@ function(opacity, styleObj) {
 	styleObj.zoom = 1;
 	styleObj.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=" + opacity + ")";
 };
+
+EmailTooltipZimlet.prototype.openCenteredWindow =
+function (url) {
+	var width = 800;
+	var height = 600;
+	var left = parseInt((screen.availWidth / 2) - (width / 2));
+	var top = parseInt((screen.availHeight / 2) - (height / 2));
+	var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + "screenX=" + left + ",screenY=" + top;
+	var win = window.open(url, "subWind", windowFeatures);
+	if (!win) {
+		this._showWarningMsg(ZmMsg.popupBlocker);
+	}
+};
