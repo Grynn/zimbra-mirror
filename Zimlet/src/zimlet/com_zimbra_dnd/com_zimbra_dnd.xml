@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_dnd" version="1.0.1" label="Drag-n-Drop Attachments" target="main compose-window view-window" description="Illustrates drag-and-drop functionality.">
+<zimlet name="com_zimbra_dnd" version="1.0.2" label="Drag-n-Drop Attachments" target="main compose-window view-window" description="Provides ability to drag-n-drop file attachments when composing an email message.">
 	<include>dnd.js</include>
 	<handlerObject>Com_Zimbra_DnD</handlerObject>
 </zimlet>
