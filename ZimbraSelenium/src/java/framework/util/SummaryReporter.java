@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Date;
 
+import org.apache.log4j.LogManager;
 import org.testng.IReporter;
 import org.testng.ISuite;
 import org.testng.ISuiteResult;
@@ -33,6 +34,14 @@ public class SummaryReporter implements IReporter {
 	public void generateReport(java.util.List<XmlSuite> xmlSuites,
 			java.util.List<ISuite> suites, java.lang.String outputDirectory) {
 		long duration = (new Date()).getTime() - startDate.getTime();
+		
+		String version = "unknown";
+		try {
+			version = ZimbraSeleniumProperties.zimbraGetVersionString();
+		} catch (HarnessException ex) {
+			LogManager.getLogger(SummaryReporter.class).error("unable to get version", ex);
+		}
+		
 		
 		System.out.println(ZimbraSeleniumProperties.getStringProperty("locale"));
 		int passed = 0;
@@ -64,7 +73,7 @@ public class SummaryReporter implements IReporter {
 			" browser:" + ClientSessionFactory.session().currentBrowserName() + 
 			" client:" + System.getenv("COMPUTERNAME") + 
 			" server:" + ZimbraSeleniumProperties.getStringProperty("server") + 
-			" zimbra:" + ZimbraSeleniumProperties.zimbraGetVersionString() +
+			" zimbra:" + version +
 			" duration:" + (duration/1000) + "s(" + (SleepUtil.TotalSleepMillis/1000) + ")";
 		String subject = "SelNG-" + appType.toLowerCase()+" "+testdetails;
 		String bodyfileXpPath = outputfolder;

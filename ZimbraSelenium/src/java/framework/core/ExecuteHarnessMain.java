@@ -588,8 +588,9 @@ public class ExecuteHarnessMain {
 	 * @param arguments
 	 * @return
 	 * @throws ParseException
+	 * @throws HarnessException 
 	 */
-    public boolean parseArgs(String arguments[]) throws ParseException {
+    public boolean parseArgs(String arguments[]) throws ParseException, HarnessException {
 
     	// Build option list
     	Options options = new Options();

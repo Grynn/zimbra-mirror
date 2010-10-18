@@ -244,20 +244,14 @@ public class ZimbraSeleniumProperties {
 				+ ZimbraSeleniumProperties.getStringProperty("server") + "";
 	}
 
-	public static String zimbraGetVersionString() {		
-		try {
-			ZimbraAdminAccount.GlobalAdmin().soapSend("<GetVersionInfoRequest xmlns='urn:zimbraAdmin'/>");
-			String version = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:info", "version");
-			if ( version == null )
-				throw new HarnessException("Unable to determine version from GetVersionInfoResponse "+ ZimbraAdminAccount.GlobalAdmin().soapLastResponse());
-			
-			// The version string looks like 6.0.7_GA_2470.UBUNTU8.NETWORK
-			return (version);
-			
-		} catch (HarnessException e) {
-			ZimbraSeleniumLogger.mLog.error("Unable to send GetVersionInfoRequest", e);
-			return ("unknown");
-		}
+	public static String zimbraGetVersionString() throws HarnessException {		
+		ZimbraAdminAccount.GlobalAdmin().soapSend("<GetVersionInfoRequest xmlns='urn:zimbraAdmin'/>");
+		String version = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:info", "version");
+		if ( version == null )
+			throw new HarnessException("Unable to determine version from GetVersionInfoResponse "+ ZimbraAdminAccount.GlobalAdmin().soapLastResponse());
+		
+		// The version string looks like 6.0.7_GA_2470.UBUNTU8.NETWORK
+		return (version);
 	}
 
 

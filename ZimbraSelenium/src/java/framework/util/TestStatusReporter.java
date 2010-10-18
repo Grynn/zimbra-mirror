@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.log4j.LogManager;
 import org.testng.ISuite;
 import org.testng.ISuiteResult;
 import org.testng.ITestContext;
@@ -498,6 +499,14 @@ public class TestStatusReporter extends TestListenerAdapter {
  private void generateReport() {
 		long duration = ((new Date()).getTime() - startDate.getTime())/1000;
 		
+		String version = "unknown";
+		try {
+			version = ZimbraSeleniumProperties.zimbraGetVersionString();
+		} catch (HarnessException ex) {
+			LogManager.getLogger(TestStatusReporter.class).error("unable to get version", ex);
+		}
+		
+
 		int passed = passArray.size();
 		int failed = failArray.size();
 		int skipped =skipArray.size(); 
@@ -513,7 +522,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 	    uri = ZimbraSeleniumProperties.getStringProperty("TestURL") + uri;
 	    
 		StringBuffer body = new StringBuffer( "");
-		body.append("\n" + ZimbraSeleniumProperties.zimbraGetVersionString());			
+		body.append("\n" + version);			
 		
 		body.append("\n\n" + lines + "FINISHED : "  +  lines);
 		
