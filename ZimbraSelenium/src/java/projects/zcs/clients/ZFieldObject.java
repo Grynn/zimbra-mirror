@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import org.testng.Assert;
 
 import framework.core.*;
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
 public class ZFieldObject extends ZObject {
@@ -14,12 +15,12 @@ public class ZFieldObject extends ZObject {
 		super(coreName, objTypeName);
 	}
 
-	public void zType(String objNameOrId, String data) {
-		if (data != "")
+	public void zType(String objNameOrId, String data)  throws HarnessException {
+		if (data.length() != 0)
 			ZObjectCore(objNameOrId, "type", true, data, "", "1", "");
 	}
 
-	public void zActivateAndType(String objNameOrId, String data) {
+	public void zActivateAndType(String objNameOrId, String data)  throws HarnessException {
 		ClientSessionFactory.session().selenium().windowFocus();
 		zActivate(objNameOrId);
 		ClientSessionFactory.session().selenium().windowFocus();
@@ -28,66 +29,66 @@ public class ZFieldObject extends ZObject {
 		zType(objNameOrId, data);
 	}
 
-	public void zType(String objNameOrId, String data, String objectNumber) {
-		if (data != "")
+	public void zType(String objNameOrId, String data, String objectNumber)  throws HarnessException {
+		if (data.length() != 0)
 			ZObjectCore(objNameOrId, "type", true, data, "", objectNumber, "");
 	}
 
-	public void zTypeWithKeyboard(String objNameOrId, String data) {
+	public void zTypeWithKeyboard(String objNameOrId, String data)  throws HarnessException {
 		this.zEnterValueInFileUpload(objNameOrId, data, "", "1");
 	}
 
 	public void zTypeWithKeyboard(String objNameOrId, String data,
-			String objNumber) {
+			String objNumber)  throws HarnessException {
 		this.zEnterValueInFileUpload(objNameOrId, data, "", objNumber);
 	}
 
-	public void zTypeInDlg(String objNameOrId, String data) {
+	public void zTypeInDlg(String objNameOrId, String data)  throws HarnessException {
 		ZObjectCore(objNameOrId, "type", true, data, "dialog", "", "");
 	}
 
-	public void zTypeInDlg(String objNameOrId, String data, String objNumber) {
+	public void zTypeInDlg(String objNameOrId, String data, String objNumber)  throws HarnessException {
 		ZObjectCore(objNameOrId, "type", true, data, "dialog", objNumber, "");
 	}
 
 	public void zTypeInDlgWithKeyboard(String objNameOrId, String data,
-			String objNumber) {
+			String objNumber)  throws HarnessException {
 		this.zEnterValueInFileUpload(objNameOrId, data, "dialog", objNumber);
 	}
 
 	public void zTypeInDlgByName(String objNameOrId, String data,
-			String dialogName) {
+			String dialogName)  throws HarnessException {
 		ZObjectCore(objNameOrId, "type", true, data, "__dialogByName__" + dialogName,
 				"1", "");
 	}
 
 	public void zTypeInDlgByName(String objNameOrId, String data,
-			String dialogName, String objNumber) {
+			String dialogName, String objNumber)  throws HarnessException {
 		ZObjectCore(objNameOrId, "type", true, data, "__dialogByName__" + dialogName,
 				objNumber, "");
 	}
 
-	public String zGetCoordinatesInDlg(String objNameOrId) {
+	public String zGetCoordinatesInDlg(String objNameOrId)  throws HarnessException {
 		return ZObjectCore(objNameOrId, "getcoord", true, "", "dialog", "1", "");
 	}
 
-	public String zGetCoordinates(String objNameOrId) {
+	public String zGetCoordinates(String objNameOrId) throws HarnessException  {
 		return ZObjectCore(objNameOrId, "getcoord");
 	}
 
-	public void zExists(String objNameOrId) {
+	public void zExists(String objNameOrId) throws HarnessException  {
 		String actual = ZObjectCore(objNameOrId, "exists");
 		Assert.assertEquals("true", actual, objTypeName + "(" + objNameOrId
 				+ ") Not Found.");
 	}
 
-	public void zExistsInDlg(String objNameOrId) {
+	public void zExistsInDlg(String objNameOrId)  throws HarnessException {
 		String actual = ZObjectCore(objNameOrId, "exists", true, "", "dialog", "", "");
 		Assert.assertEquals(actual, "true", objTypeName + "(" + objNameOrId
 				+ ") doesn't exist in dialog or no dialog was found");
 	}
 
-	public void zExistsInDlgByName(String objNameOrId, String dialogName) {
+	public void zExistsInDlgByName(String objNameOrId, String dialogName) throws HarnessException  {
 		String actual = ZObjectCore(objNameOrId, "exists", true, "", "__dialogByName__" + dialogName, "", "");
 		Assert.assertEquals(actual, "true",
 							objTypeName + "(" + objNameOrId	+ ") doesn't exist in dialog(" + dialogName + ")");
@@ -95,7 +96,7 @@ public class ZFieldObject extends ZObject {
 
 	// Internal methods...
 	private void zEnterValueInFileUpload(String objNameOrId, String data,
-			String dialog, String objNumber) {
+			String dialog, String objNumber)  throws HarnessException {
 		String browserName = ClientSessionFactory.session().currentBrowserName();
 		if ((browserName.indexOf("MSIE") >= 0)
 				&& !(browserName.indexOf("MSIE 8") >= 0)) {
@@ -110,7 +111,7 @@ public class ZFieldObject extends ZObject {
 	}
 
 	private void handleFileUploadGeneral(String objNameOrId, String data,
-			String dialog, String objNumber) {
+			String dialog, String objNumber)  throws HarnessException {
 
 		ZObjectCore(objNameOrId, "click", true, "", dialog, objNumber, "");
 		Robot robot;
@@ -134,14 +135,14 @@ public class ZFieldObject extends ZObject {
 	}
 
 	private void handleFileUploadIE(String objNameOrId, String data,
-			String dialog, String objNumber) {
+			String dialog, String objNumber) throws HarnessException  {
 
 		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", dialog, objNumber, "");
 		moveMouseAndTypeDirectlyInBrowser(xy, data);
 	}
 
 	private void handleFileUploadSafariOrFF3(String objNameOrId, String data,
-			String dialog, String objNumber) {
+			String dialog, String objNumber) throws HarnessException  {
 
 		String xy = ZObjectCore(objNameOrId, "getcoord", true, "", dialog, objNumber, "");
 
@@ -199,7 +200,14 @@ public class ZFieldObject extends ZObject {
 					robot.keyPress(KeyEvent.VK_SEMICOLON);
 					robot.keyRelease(KeyEvent.VK_SEMICOLON);
 					robot.keyRelease(KeyEvent.VK_SHIFT);
-				} else
+				}
+				else if (chStr.equals("_")) {
+					robot.keyPress(KeyEvent.VK_SHIFT);
+					robot.keyPress(KeyEvent.VK_MINUS);
+					robot.keyRelease(KeyEvent.VK_MINUS);
+					robot.keyRelease(KeyEvent.VK_SHIFT);
+				}				
+				else
 					robot.keyPress(getKeyValue(chStr));
 				robot.delay(100);
 
@@ -292,8 +300,8 @@ public class ZFieldObject extends ZObject {
 			return KeyEvent.VK_COLON;
 		else if (ch.equals("."))
 			return KeyEvent.VK_PERIOD;
-		else if (ch.equals("-"))
-			return KeyEvent.VK_MINUS;
+		else if (ch.equals(" "))
+			return KeyEvent.VK_SPACE;
 
 		return 0;
 	}

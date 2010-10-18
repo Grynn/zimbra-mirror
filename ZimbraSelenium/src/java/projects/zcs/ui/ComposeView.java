@@ -8,6 +8,7 @@ import java.util.Map;
 import org.testng.Assert;
 
 import framework.core.*;
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
 import framework.util.ZimbraSeleniumProperties;
@@ -70,7 +71,7 @@ public class ComposeView extends AppPage {
 	 * This tries to go back from compose-to mailapp. Tries to cancel all the
 	 * dialogs that might showup while doing so.
 	 */
-	public static void zGoToMailAppFromCompose() {
+	public static void zGoToMailAppFromCompose()  throws HarnessException  {
 		if (obj.zButton.zExistsInDlgDontWait(localize("no")).equals("true")) {
 			obj.zButton.zClickInDlg(localize("no"));
 			// note in some intl, ajxMsg cancel(used in dlg btns) is different
@@ -303,7 +304,7 @@ public class ComposeView extends AppPage {
 	 * @param attachmentList
 	 *            comma separated attachment names
 	 */
-	public static void zVerifyAttachmentsSelected(String attachmentList) {
+	public static void zVerifyAttachmentsSelected(String attachmentList)  throws HarnessException  {
 		String[] attList = attachmentList.split(",");
 		for (int i = 0; i < attList.length; i++) {
 			obj.zCheckbox.zVerifyIsChecked(attList[0]);

@@ -1,5 +1,7 @@
 package projects.zcs.ui;
 
+import framework.util.HarnessException;
+
 
 /**
  * This Class have UI-level methods related to Documents app like
@@ -68,7 +70,7 @@ public class DocumentApp extends AppPage {
 	 * 
 	 * @param noteBookName
 	 */
-	public static void zDeleteNotebookFolder(String noteBookName) {
+	public static void zDeleteNotebookFolder(String noteBookName)  throws HarnessException  {
 		obj.zFolder.zRtClick(noteBookName);
 		obj.zMenuItem.zClick(localize(locator.del));
 		obj.zButton.zClickInDlg(localize(locator.yes));

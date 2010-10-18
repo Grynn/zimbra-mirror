@@ -1,6 +1,7 @@
 package projects.zcs.clients;
 
 import framework.core.*;
+import framework.util.HarnessException;
 
 
 
@@ -14,7 +15,7 @@ public class Folder extends ZObject {
 
 	
 	public  String ZObjectCore(String folderNameseparatedBySlash, String action, Boolean retryOnFalse,
-			String panel, String param1) {
+			String panel, String param1)  throws HarnessException  {
 		String rc = "false";
 		String[] fldrs = folderNameseparatedBySlash.split("/");
 
@@ -32,15 +33,15 @@ public class Folder extends ZObject {
 		return rc;		
 	}	
 	
-	public  void zExpand(String folder) {
+	public  void zExpand(String folder) throws HarnessException   {
 		ClientSessionFactory.session().selenium().call("folderExpandBtnCore",  folder, "click", true, "", "");
 	}
 
-	public  void zCollapse(String folder) {
+	public  void zCollapse(String folder)  throws HarnessException  {
 		ClientSessionFactory.session().selenium().call("folderCollapseBtnCore",  folder, "click", true, "", "");
 	}
 
-	private  void _expndFldrIfRequired(String folder, String panel, String param1) {
+	private  void _expndFldrIfRequired(String folder, String panel, String param1)  throws HarnessException  {
 
 	//	String rc = selenium.call("this.doZfolderExpandBtnExists("
 	//			+ doubleQuote + folder + doubleQuote + ")");

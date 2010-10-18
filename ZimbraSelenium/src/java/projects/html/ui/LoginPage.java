@@ -49,7 +49,7 @@ public class LoginPage extends CommonTest {
 	 * 
 	 * @param username
 	 */
-	public void zLoginToZimbraHTML(String username) {
+	public void zLoginToZimbraHTML(String username)  throws HarnessException  {
 		zLoginToZimbraHTML(username, "test123");
 	}
 
@@ -60,7 +60,7 @@ public class LoginPage extends CommonTest {
 	 * @param username
 	 * @param password
 	 */
-	public void zLoginToZimbraHTML(String username, String password) {
+	public void zLoginToZimbraHTML(String username, String password)  throws HarnessException  {
 		
 		ClientSessionFactory.session().setCurrentUser(null);
 		SelNGBase.openApplication();

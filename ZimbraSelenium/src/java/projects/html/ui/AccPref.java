@@ -3,6 +3,7 @@ package projects.html.ui;
 import org.testng.Assert;
 
 import framework.core.*;
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import projects.html.tests.CommonTest;
 
@@ -190,7 +191,7 @@ public class AccPref extends CommonTest {
 	 * @param place
 	 *            ="Above/Below"
 	 */
-	public static void zChangeSignaturePlacment(String place) {
+	public static void zChangeSignaturePlacment(String place)  throws HarnessException  {
 		if (place.equals("Above")) {
 			obj.zCheckbox.zClick(zPlaceAboveChkBox);
 		} else if (place.equals("Below")) {
@@ -205,7 +206,7 @@ public class AccPref extends CommonTest {
 	 * 
 	 * @param signatureName
 	 */
-	public static void zSelectSignatureInAccounts(String signatureName) {
+	public static void zSelectSignatureInAccounts(String signatureName) throws HarnessException   {
 		obj.zHtmlMenu.zClick(zSignatureSelectMenu, signatureName);
 	}
 
@@ -221,7 +222,7 @@ public class AccPref extends CommonTest {
 	 */
 	public static void zEnterAccountDetails(String accName, String fromField,
 			String setReplyTo, String replyToDisplay, String replyToAddress,
-			String signatureName) {
+			String signatureName) throws HarnessException   {
 		if (!accName.equals("")) {
 			obj.zEditField.zType(zAccNameEditField, accName);
 		}
@@ -258,7 +259,7 @@ public class AccPref extends CommonTest {
 	 */
 	public static void zMakeAccSettings(String accName, String fromField,
 			String setReplyTo, String replyToDisplay, String replyToAddress,
-			String signatureName) {
+			String signatureName)  throws HarnessException  {
 		zEnterAccountDetails(accName, fromField, setReplyTo, replyToDisplay,
 				replyToAddress, signatureName);
 		obj.zButton.zClick(zSaveIconBtn);
@@ -269,7 +270,7 @@ public class AccPref extends CommonTest {
 	 * 
 	 * @param signatureBody
 	 */
-	public static void zVerifySignatureInMailCompose(String signatureBody) {
+	public static void zVerifySignatureInMailCompose(String signatureBody) throws HarnessException   {
 		String displayedBody = obj.zTextAreaField
 				.zGetInnerText(page.zComposeView.zBodyTextAreaField);
 

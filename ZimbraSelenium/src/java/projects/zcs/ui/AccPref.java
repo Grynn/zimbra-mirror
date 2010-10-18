@@ -1,6 +1,7 @@
 package projects.zcs.ui;
 
 import framework.core.*;
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
 /**
@@ -29,7 +30,7 @@ public class AccPref extends AppPage {
 
 	public static void zEnterExternalAccData(String emailAddress,
 			String accountName, String accountType, String password,
-			String ssl, String downloadMsgTo) {
+			String ssl, String downloadMsgTo) throws HarnessException   {
 		obj.zEditField.zActivate(localize(locator.emailAddrLabel), "2");
 		obj.zEditField.zType(localize(locator.emailAddrLabel), emailAddress,
 				"2");
@@ -51,7 +52,7 @@ public class AccPref extends AppPage {
 		}
 	}
 
-	public static void zClickOnTestSettingsDlgBox(String dlgStatus) {
+	public static void zClickOnTestSettingsDlgBox(String dlgStatus) throws HarnessException   {
 		if (dlgStatus.equals("true")) {
 			obj.zButton.zClickInDlg(localize(locator.cancel));
 

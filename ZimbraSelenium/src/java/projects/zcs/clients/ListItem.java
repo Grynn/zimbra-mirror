@@ -2,6 +2,8 @@ package projects.zcs.clients;
 
 import org.testng.Assert;
 
+import framework.util.HarnessException;
+
 public class ListItem extends ZObject{
 	public ListItem() {
 		super("listItemCore", "ListItem");
@@ -14,7 +16,7 @@ public class ListItem extends ZObject{
 	 * @param objNameOrId listItemName or listItemId
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */
-	public void zClickItemInSpecificList(String objNameOrId, String listNumber) {
+	public void zClickItemInSpecificList(String objNameOrId, String listNumber) throws HarnessException   {
 		ZObjectCore(objNameOrId, "click", true, "", "", listNumber, "");
 	}
 	/**
@@ -23,7 +25,7 @@ public class ListItem extends ZObject{
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 * @param linkName name of the link to click
 	 */
-	public void zClickLinkWithInListItemInSpecificList(String listItemName, String listNumber, String linkName) {
+	public void zClickLinkWithInListItemInSpecificList(String listItemName, String listNumber, String linkName) throws HarnessException   {
 		ZObjectCore(listItemName, "clickLink="+linkName, true, "", "", listNumber, "");
 	}
 	
@@ -32,7 +34,7 @@ public class ListItem extends ZObject{
 	 * @param objNameOrId listItemName or listItemId
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
-	public void zDblClickItemInSpecificList(String objNameOrId,  String listNumber) {
+	public void zDblClickItemInSpecificList(String objNameOrId,  String listNumber)  throws HarnessException  {
 	    ZObjectCore(objNameOrId, "dblclick", true, "", "", listNumber, ""); 
 	}
 	/**
@@ -40,7 +42,7 @@ public class ListItem extends ZObject{
  	 * @param objNumber If there are multiple items with same name, pass "1" to select 1st item, "2" to select 2nd etc 
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */
-	public void zClickItemInSpecificList(String objNameOrId, String objNumber, String listNumber) {
+	public void zClickItemInSpecificList(String objNameOrId, String objNumber, String listNumber)  throws HarnessException  {
 		ZObjectCore(objNameOrId, "click", true, "", objNumber, listNumber, "");
 	}
 	
@@ -50,7 +52,7 @@ public class ListItem extends ZObject{
  	 * @param objNumber If there are multiple items with same name, pass "1" to select 1st item, "2" to select 2nd etc 
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
-	public void zClickItemInSpecificListInDlg(String objNameOrId, String objNumber, String listNumber) {
+	public void zClickItemInSpecificListInDlg(String objNameOrId, String objNumber, String listNumber)  throws HarnessException  {
 		ZObjectCore(objNameOrId, "click", true, "dialog", objNumber, listNumber, "");
 	}
 	/**
@@ -59,7 +61,7 @@ public class ListItem extends ZObject{
  	 * @param objNumber If there are multiple items with same name, pass "1" to select 1st item, "2" to select 2nd etc 
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
-	public void zVerifyItemInSpecificListInDlg(String objNameOrId, String objNumber, String listNumber) {
+	public void zVerifyItemInSpecificListInDlg(String objNameOrId, String objNumber, String listNumber)  throws HarnessException  {
 	    	String actual = ZObjectCore(objNameOrId, "exists", true, "dialog", objNumber, listNumber, "");
 		if(actual.indexOf("false") == -1)//convert OK to true and OK,false to false
 			actual = "true";
@@ -74,7 +76,7 @@ public class ListItem extends ZObject{
  	 * @param objNumber If there are multiple items with same name, pass "1" to select 1st item, "2" to select 2nd etc 
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
-	public void zVerifyItemInSpecificList(String objNameOrId, String objNumber, String listNumber) {
+	public void zVerifyItemInSpecificList(String objNameOrId, String objNumber, String listNumber) throws HarnessException   {
 	    	String actual = ZObjectCore(objNameOrId, "exists", true, "", objNumber, listNumber, "");
 		if(actual.indexOf("false") == -1)//convert OK to true and OK,false to false
 			actual = "true";
@@ -89,7 +91,7 @@ public class ListItem extends ZObject{
  	 * @param objNumber If there are multiple items with same name, pass "1" to select 1st item, "2" to select 2nd etc 
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
-	public void zVerifyItemInSpecificListInDlgNotExist(String objNameOrId, String objNumber, String listNumber) {
+	public void zVerifyItemInSpecificListInDlgNotExist(String objNameOrId, String objNumber, String listNumber)  throws HarnessException  {
 	    	String actual = ZObjectCore(objNameOrId, "notexists", false, "dialog", objNumber, listNumber, "");
 		if(actual.indexOf("false") == -1)//convert OK to true and OK,false to false
 			actual = "true";
@@ -104,7 +106,7 @@ public class ListItem extends ZObject{
  	 * @param objNumber If there are multiple items with same name, pass "1" to select 1st item, "2" to select 2nd etc 
 	 * @param listNumber if there are two lists, enter "1" for list1 and "2" for list2
 	 */	
-	public void zVerifyItemInSpecificListNotExist(String objNameOrId, String objNumber, String listNumber) {
+	public void zVerifyItemInSpecificListNotExist(String objNameOrId, String objNumber, String listNumber)  throws HarnessException  {
 		String actual = ZObjectCore(objNameOrId, "notexists", false, "", objNumber, listNumber, "");
 		if(actual.indexOf("false") == -1)//convert OK to true and OK,false to false
 			actual = "true";
@@ -114,31 +116,31 @@ public class ListItem extends ZObject{
 			+ ") Found, which should not be present.");		
 	}	
 	
-	public void zVerifyIsTagged(String objNameOrId) {
+	public void zVerifyIsTagged(String objNameOrId) throws HarnessException   {
 		String actual = ZObjectCore(objNameOrId, "isTagged");
 		Assert.assertEquals("true", actual);
 	}
-	public void zVerifyIsNotTagged(String objNameOrId) {
+	public void zVerifyIsNotTagged(String objNameOrId)  throws HarnessException  {
 		String actual = ZObjectCore(objNameOrId, "isNotTagged");
 		Assert.assertEquals("true", actual);
 	}
-	public void zVerifyHasAttachment(String objNameOrId) {
+	public void zVerifyHasAttachment(String objNameOrId)  throws HarnessException  {
 		String actual = ZObjectCore(objNameOrId, "hasAttachment");
 		Assert.assertEquals("true", actual);
 	}
-	public void zVerifyHasNoAttachment(String objNameOrId) {
+	public void zVerifyHasNoAttachment(String objNameOrId) throws HarnessException   {
 		String actual = ZObjectCore(objNameOrId, "hasNoAttachment");
 		Assert.assertEquals("true", actual);
 	}		
-	public void zVerifyHasHighPriority(String objNameOrId) {
+	public void zVerifyHasHighPriority(String objNameOrId) throws HarnessException   {
 		String actual = ZObjectCore(objNameOrId, "hasHighPriority");
 		Assert.assertEquals("true", actual);
 	}	
-	public void zVerifyHasLowPriority(String objNameOrId) {
+	public void zVerifyHasLowPriority(String objNameOrId) throws HarnessException   {
 		String actual = ZObjectCore(objNameOrId, "hasLowPriority");
 		Assert.assertEquals("true", actual);
 	}	
-	public void zVerifyIsSelected(String objNameOrId) {
+	public void zVerifyIsSelected(String objNameOrId) throws HarnessException   {
 		String actual = ZObjectCore(objNameOrId, "isSelected");
 		Assert.assertEquals("true", actual);
 	}	

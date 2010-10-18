@@ -1,5 +1,6 @@
 package projects.zcs.ui;
 
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -98,7 +99,7 @@ public class DocumentCompose extends AppPage {
 	 * @param bodyContent
 	 *            : content of the page body
 	 */
-	public static void zEnterBasicPageData(String pageName, String bodyContent) {
+	public static void zEnterBasicPageData(String pageName, String bodyContent)  throws HarnessException  {
 		if (pageName != "")
 			if (ZimbraSeleniumProperties.getStringProperty("locale").equals("fr")
 					&& ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {

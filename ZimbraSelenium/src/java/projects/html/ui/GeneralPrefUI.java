@@ -1,6 +1,7 @@
 package projects.html.ui;
 
 import framework.core.*;
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import projects.html.tests.CommonTest;
 
@@ -96,7 +97,7 @@ public class GeneralPrefUI extends CommonTest {
 	 * @param confirmPwd
 	 */
 	public static void zEnterChangePWData(String oldPwd, String newPwd,
-			String confirmPwd) {
+			String confirmPwd)  throws HarnessException  {
 
 		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zPwdField.zType(zOldPassword, oldPwd);
@@ -110,7 +111,7 @@ public class GeneralPrefUI extends CommonTest {
 	 * 
 	 * @param itemToBeSearched
 	 */
-	public static void zSearchUsingMainSearchField(String itemToBeSearched) {
+	public static void zSearchUsingMainSearchField(String itemToBeSearched)  throws HarnessException  {
 		obj.zEditField.zType(zFindEditFiled, itemToBeSearched);
 		obj.zButton.zClick(zSearchBtn);
 

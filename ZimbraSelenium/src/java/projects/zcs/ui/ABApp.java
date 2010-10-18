@@ -1,6 +1,7 @@
 package projects.zcs.ui;
 
 import framework.core.ClientSessionFactory;
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
 
@@ -74,7 +75,7 @@ public class ABApp extends AppPage {
 	 *            check for menu item is enable or not
 	 */
 	public static void zVerifyAllMenuItems(String enabledItemsSeparatedByComma,
-			String disabledItemsSeparatedByComma, String ignoreContext) {
+			String disabledItemsSeparatedByComma, String ignoreContext) throws HarnessException   {
 		String[] enabledArray = enabledItemsSeparatedByComma.split(",");
 		for (int i = 0; i < enabledArray.length; i++) {
 			if (ignoreContext == "false") {

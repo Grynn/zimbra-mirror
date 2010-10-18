@@ -1,6 +1,7 @@
 package projects.html.clients;
 
 import framework.core.*;
+import framework.util.HarnessException;
 
 
 
@@ -15,7 +16,7 @@ public class Folder extends ZObject {
 	} 
 
 	public  String ZObjectCore(String folderNameseparatedBySlash, String action, Boolean retryOnFalse,
-			String panel, String param1) {
+			String panel, String param1)  throws HarnessException  {
 		String rc = "false";
 		String[] fldrs = folderNameseparatedBySlash.split("/");
 
@@ -33,11 +34,11 @@ public class Folder extends ZObject {
 		return rc;		
 	}	
 	
-	public  void zExpand(String folder) {
+	public  void zExpand(String folder)  throws HarnessException  {
 		ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_expand", "click", true, "", "");
 	}
 
-	public  void zCollapse(String folder) {
+	public  void zCollapse(String folder) throws HarnessException   {
 		ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_collapse", "click", true, "", "");
 	}
 
@@ -45,14 +46,14 @@ public class Folder extends ZObject {
 	 * Clicks on the edit-link on folder-headers
 	 * @param folder
 	 */
-	public  void zEdit(String folder) {
+	public  void zEdit(String folder)  throws HarnessException  {
 		ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_edit", "click", true, "", "");
 	}	
 
 
 	
 	
-	private  void _expndFldrIfRequired(String folder, String panel, String param1) {
+	private  void _expndFldrIfRequired(String folder, String panel, String param1) throws HarnessException   {
 	//	String rc = selenium.call("this.doZfolderExpandBtnExists("
 	//			+ doubleQuote + folder + doubleQuote + ")");
 		String rc = ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_expand", "exists", true, panel, param1);

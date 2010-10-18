@@ -3,6 +3,7 @@ package projects.zcs.ui;
 
 import junit.framework.Assert;
 import framework.core.*;
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -437,7 +438,7 @@ public class CalCompose extends AppPage {
 	 */
 	@SuppressWarnings("unused")
 	private static void zSetTimeCore(String startOrEnd,
-			String hrColonMinColonAmPm) {
+			String hrColonMinColonAmPm) throws HarnessException  {
 		String[] tmp = hrColonMinColonAmPm.split(":");
 		String hourLoc = getTimeMenuLocation("h");
 		String minuteLoc = getTimeMenuLocation("mm");

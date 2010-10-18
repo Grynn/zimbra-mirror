@@ -3,6 +3,7 @@ package projects.html.clients;
 import org.testng.Assert;
 
 import framework.core.*;
+import framework.util.HarnessException;
 
 public class TaskItem extends ListItem{
 	public TaskItem() {
@@ -10,28 +11,28 @@ public class TaskItem extends ListItem{
 	} 
 			
 	
-	public void zVerifyHasHighPriority(String messageOrId) {
+	public void zVerifyHasHighPriority(String messageOrId)  throws HarnessException  {
 		String actual = ZObjectCore(messageOrId, "hasHighPriority");
 		Assert.assertEquals("true", actual);
 	}	
-	public void zVerifyHasLowPriority(String messageOrId) {
+	public void zVerifyHasLowPriority(String messageOrId)  throws HarnessException  {
 		String actual = ZObjectCore(messageOrId, "hasLowPriority");
 		Assert.assertEquals("true", actual);
 	}	
-	public void zVerifyIsSelected(String messageOrId) {
+	public void zVerifyIsSelected(String messageOrId)  throws HarnessException  {
 		String actual = ZObjectCore(messageOrId, "isSelected");
 		Assert.assertEquals("true", actual);
 	}
 	
-	public void zVerifyCurrentTaskBodyText(String requiredTxt) {
+	public void zVerifyCurrentTaskBodyText(String requiredTxt)  throws HarnessException  {
 		String actual =  ClientSessionFactory.session().selenium().call("msgBodyCore", "", "gettext", true, "", "");
 		Assert.assertTrue(actual.indexOf(requiredTxt)>=0);
 	}
-	public void zVerifyCurrentTaskBodyHasImage() {
+	public void zVerifyCurrentTaskBodyHasImage()  throws HarnessException  {
 		String actual =  ClientSessionFactory.session().selenium().call("msgBodyCore", "", "gethtml", true, "", "");		
 		Assert.assertTrue(actual.indexOf("dfsrc=")>=0);
 	}	
-	public String zGetTaskBodyHTML() {
+	public String zGetTaskBodyHTML()  throws HarnessException  {
 		return ClientSessionFactory.session().selenium().call("msgBodyCore", "", "gethtml", true, "", "");		
 	}	
 

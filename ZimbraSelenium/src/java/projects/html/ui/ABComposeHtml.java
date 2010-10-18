@@ -5,6 +5,7 @@ import java.io.File;
 import org.testng.Assert;
 
 import framework.core.*;
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -162,7 +163,7 @@ public class ABComposeHtml extends CommonTest {
 	 * 
 	 * @param cancelIcon
 	 */
-	public static void zVerifyCancelBtnAndClick(String cancelIcon) {
+	public static void zVerifyCancelBtnAndClick(String cancelIcon) throws HarnessException   {
 		if (obj.zButton.zExistsDontWait(cancelIcon).equals("true")) {
 			obj.zButton.zClick(cancelIcon);
 		}
@@ -377,7 +378,7 @@ public class ABComposeHtml extends CommonTest {
 	 * @param firstName
 	 */
 	public static void zEnterBasicABData(String AddBook, String lastName,
-			String MiddleName, String firstName, String email, String company) {
+			String MiddleName, String firstName, String email, String company)  throws HarnessException  {
 		if (lastName != "")
 			obj.zEditField.zType(zLastNameEditField, lastName);
 		if (MiddleName != "")
@@ -599,7 +600,7 @@ public class ABComposeHtml extends CommonTest {
 	/**
 	 * To permanently delete all the contacts
 	 */
-	public static void zPermanentDelAllContact() {
+	public static void zPermanentDelAllContact()  throws HarnessException   {
 		obj.zCheckbox.zClick(zPermanentlyDelAllContact);
 		ClientSessionFactory.session().selenium().click(zDeleteAllContactsBtn);
 		// obj.zButton.zClick(localize(locator.folderEmptyAddressBook));
@@ -611,7 +612,7 @@ public class ABComposeHtml extends CommonTest {
 	 * 
 	 * @param csvFileName
 	 */
-	public static void zImportContact(String csvFileName) {
+	public static void zImportContact(String csvFileName) throws HarnessException   {
 
 		File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/projects/html/data/" + csvFileName);
 		String path = f.getAbsolutePath();
@@ -752,7 +753,7 @@ public class ABComposeHtml extends CommonTest {
 	 * 
 	 * @param noOfContactsPerPage
 	 */
-	public static void zSelectContactPerPage(String noOfContactsPerPage) {
+	public static void zSelectContactPerPage(String noOfContactsPerPage) throws HarnessException   {
 		obj.zHtmlMenu.zClick(zContactsPerPage, noOfContactsPerPage);
 	}
 
@@ -928,7 +929,7 @@ public class ABComposeHtml extends CommonTest {
 	 * @param commaSeparatedContacts
 	 */
 	public static void zSelectContactAndRemoveTag(String tagName,
-			String commaSeparatedContacts) {
+			String commaSeparatedContacts)  throws HarnessException  {
 		String[] contactName = commaSeparatedContacts.split(",");
 		for (int i = 0; i < contactName.length; i++) {
 			obj.zMessageItem.zClickCheckBox(contactName[i]);
@@ -942,7 +943,7 @@ public class ABComposeHtml extends CommonTest {
 	 * 
 	 * @param commaSeparatedContacts
 	 */
-	public static void zVerifyContactHasTag(String commaSeparatedContacts) {
+	public static void zVerifyContactHasTag(String commaSeparatedContacts)  throws HarnessException  {
 		String[] contactName = commaSeparatedContacts.split(",");
 
 		for (int i = 0; i < contactName.length; i++) {
@@ -956,7 +957,7 @@ public class ABComposeHtml extends CommonTest {
 	 * 
 	 * @param commaSeparatedContacts
 	 */
-	public static void zVerifyContactHasNoTag(String commaSeparatedContacts) {
+	public static void zVerifyContactHasNoTag(String commaSeparatedContacts)  throws HarnessException  {
 		String[] contactName = commaSeparatedContacts.split(",");
 
 		for (int i = 0; i < contactName.length; i++) {
@@ -1087,7 +1088,7 @@ public class ABComposeHtml extends CommonTest {
 	}
 
 	public static void zVerifyDisplayedContactName(
-			String expectedContactToBeDisplayed) {
+			String expectedContactToBeDisplayed)  throws HarnessException  {
 
 		String actualContactDisplayed = obj.zMiscObj.zGetInnerText("List");
 

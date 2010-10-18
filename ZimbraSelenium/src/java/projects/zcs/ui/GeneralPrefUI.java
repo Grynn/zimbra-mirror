@@ -3,6 +3,7 @@ package projects.zcs.ui;
 import org.testng.Assert;
 
 import framework.core.*;
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -25,7 +26,7 @@ public class GeneralPrefUI extends AppPage {
 	}
 
 	public static void zEnterChangePWData(String oldPwd, String newPwd,
-			String confirmPwd) {
+			String confirmPwd)  throws HarnessException  {
 		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		obj.zPwdField.zType(zOldPassword, oldPwd);
 		obj.zPwdField.zType(zNewPassword, newPwd);

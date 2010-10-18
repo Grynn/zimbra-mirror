@@ -2,6 +2,7 @@ package projects.html.ui;
 
 import org.testng.Assert;
 
+import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -165,7 +166,7 @@ public class ComposePrefUI extends CommonTest {
 	 * @param includeAs
 	 *            =FullTextInline/FullTextInlineWithPrefix/AnAttachment/DoNotInclude
 	 */
-	public static void zSelectReplyReplyAllIncludeMsgAs(String includeAs) {
+	public static void zSelectReplyReplyAllIncludeMsgAs(String includeAs) throws HarnessException   {
 		if (includeAs.equals("FullTextInline"))
 			obj.zRadioBtn.zClick(zReplyReplyAllFullTextInlineRadioBtn);
 		else if (includeAs.equals("FullTextInlineWithPrefix"))
@@ -345,7 +346,7 @@ public class ComposePrefUI extends CommonTest {
 	 * 
 	 * @param action
 	 */
-	public static void zSetSentMsgSaveNotSaveOption(String action) {
+	public static void zSetSentMsgSaveNotSaveOption(String action)  throws HarnessException  {
 		if (action.equals("SaveInSent"))
 			obj.zRadioBtn.zClick(page.zComposePrefUI.zSaveACopyToSent);
 		else if (action.equals("DoNotSaveInSent"))

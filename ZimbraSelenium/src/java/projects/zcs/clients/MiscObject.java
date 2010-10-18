@@ -1,5 +1,7 @@
 package projects.zcs.clients;
 
+import framework.util.HarnessException;
+
 /**
  * Special class that can be used to work with unique objects like: miniCal,
  * timeZoneMenu,CalendarGrid, Toolbar etc. The objects are identified by a
@@ -50,7 +52,7 @@ public class MiscObject extends ZObject {
      * @param XCommaY
      *            "50,50"
      */
-    public void zClickXY(String classNameOridWithZIndx, String XCommaY) {
+    public void zClickXY(String classNameOridWithZIndx, String XCommaY)  throws HarnessException  {
 	ZObjectCore(classNameOridWithZIndx, "click", true, "", "true", XCommaY, "");
     }
 
@@ -65,7 +67,7 @@ public class MiscObject extends ZObject {
      * @param XCommaY
      *            "50,50"
      */
-    public void zDblClickXY(String classNameOridWithZIndx, String XCommaY) {
+    public void zDblClickXY(String classNameOridWithZIndx, String XCommaY)  throws HarnessException  {
 	ZObjectCore(classNameOridWithZIndx, "dblclick", true, "", "true", XCommaY, "");
     }
 
@@ -78,11 +80,11 @@ public class MiscObject extends ZObject {
      * @param XCommaY
      *            "50,50"
      */
-    public void zRtClickXY(String classNameOridWithZIndx, String XCommaY) {
+    public void zRtClickXY(String classNameOridWithZIndx, String XCommaY)  throws HarnessException  {
 	ZObjectCore(classNameOridWithZIndx, "rtclick", true, "", "true", XCommaY, "");
     }
 
-	public void zType(String objNameOrId, String data) {
+	public void zType(String objNameOrId, String data) throws HarnessException   {
 		if (data != "")
 			ZObjectCore(objNameOrId, "type", true, data, "", "1", "");
 	}

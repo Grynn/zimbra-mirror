@@ -1,5 +1,7 @@
 package projects.html.clients;
 
+import framework.util.HarnessException;
+
 /**
  * @author raodv
  *
@@ -14,7 +16,7 @@ public class DocumentPage extends ZObject {
 	/* Clicks on a document  page in Documents's Table Of Contents
 	 * @pageName pageName
 	 */	
-	public void zClick(String pageName) {
+	public void zClick(String pageName)  throws HarnessException  {
 		ZObjectCore(pageName, "click");
 	}
 
@@ -22,7 +24,7 @@ public class DocumentPage extends ZObject {
 	 * @pageName pageName
 	 * @linkNameInPage link(Edit, History, Delete etc links)
 	 */
-	public void zClick(String pageName, String linkNameInPage) {
+	public void zClick(String pageName, String linkNameInPage)  throws HarnessException  {
 		ZObjectCore(pageName, "click", true, linkNameInPage);
 	}
 	

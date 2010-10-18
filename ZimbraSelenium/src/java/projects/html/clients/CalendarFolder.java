@@ -1,6 +1,7 @@
 package projects.html.clients;
 
 import framework.core.*;
+import framework.util.HarnessException;
 
 
 
@@ -17,14 +18,14 @@ public class CalendarFolder extends Folder {
 	 * Check Calendar folder
 	 * @param folder
 	 */
-	public  void zCheck(String folder) {
+	public  void zCheck(String folder) throws HarnessException   {
 		ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_check", "click", true, "", "");
 	}	
 	/**
 	 * unchecks Calendar folder
 	 * @param folder
 	 */
-	public  void zUnCheck(String folder) {
+	public  void zUnCheck(String folder) throws HarnessException   {
 		ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_uncheck", "click", true, "", "");
 	}		
 
@@ -32,7 +33,7 @@ public class CalendarFolder extends Folder {
 	 * Checks if Calendar folder's checkbox is unchecked
 	 * @param folder
 	 */
-	public  String zIsUnChecked(String folder) {
+	public  String zIsUnChecked(String folder)  throws HarnessException  {
 		return ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_uncheck", "exists", true, "", "");
 	}
 
@@ -40,7 +41,7 @@ public class CalendarFolder extends Folder {
 	 * Checks if Calendar folder's checkbox is checked
 	 * @param folder
 	 */
-	public  String zIsChecked(String folder) {
+	public  String zIsChecked(String folder)  throws HarnessException  {
 		return ClientSessionFactory.session().selenium().call("folderCore_html",  folder+"_check", "exists", true, "", "");
 	}	
 }
