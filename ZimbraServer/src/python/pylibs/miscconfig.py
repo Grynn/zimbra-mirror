@@ -54,7 +54,7 @@ class MiscConfig(config.Config):
 			return
 
 		self[c.name] = ' '.join(c.output)
-		Log.logMsg(5, "%s=%s" % (cm, self[cm]));
+		Log.logMsg(5, "%s=%s" % (c.name, self[c.name]));
 		# v = ' '.join(lines)
 		# self[cm] = self[cm] and (self[cm] + " " + v) or v
 
