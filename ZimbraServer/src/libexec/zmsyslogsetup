@@ -482,7 +482,7 @@ if ( $platform =~ /UBUNTU/ || $platform =~ /DEBIAN4/ ) {
     exit 1;
   }
 } else {
-  my $syslog_PID=`cat /var/run/syslogd.pid`;
+  my $syslog_PID=`cat /var/run/syslog*.pid`;
   `kill -HUP $syslog_PID`;
 }
 
