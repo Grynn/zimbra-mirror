@@ -1797,8 +1797,8 @@ da body
 
         String timeBlurb = BeanUtils.getApptDateBlurb(pc,
                 tz,
-                getApptStartCalendar().getTimeInMillis(),
-                getApptEndCalendar().getTimeInMillis(),
+                html ? appt.getStart().getDate().getTime() : getApptStartCalendar().getTimeInMillis(),
+                html ? appt.getEnd().getDate().getTime() : getApptEndCalendar().getTimeInMillis(),
                 getAllDay());
 
         String oldTimeBlurb = oldAppt == null ? null :
