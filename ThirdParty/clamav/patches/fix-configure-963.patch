@@ -1,0 +1,46 @@
+--- clamav-0.96.3/configure.orig	2010-09-20 08:02:20.000000000 -0700
++++ clamav-0.96.3/configure	2010-10-18 09:57:09.000000000 -0700
+@@ -13120,7 +13120,7 @@
+   conftest.$ac_objext conftest.beam conftest.$ac_ext
+ fi
+ 
+-
++if test "$gcc_check" = "yes"; then
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gcc bug PR28045" >&5
+ $as_echo_n "checking for gcc bug PR28045... " >&6; }
+ if test "$cross_compiling" = yes; then :
+@@ -13162,7 +13162,6 @@
+   conftest.$ac_objext conftest.beam conftest.$ac_ext
+ fi
+ 
+-
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for gcc bug PR37573" >&5
+ $as_echo_n "checking for gcc bug PR37573... " >&6; }
+ if test "$cross_compiling" = yes; then :
+@@ -13257,7 +13256,7 @@
+ rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+   conftest.$ac_objext conftest.beam conftest.$ac_ext
+ fi
+-
++fi
+ 
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for ld --version-script" >&5
+ $as_echo_n "checking for ld --version-script... " >&6; }
+@@ -15909,6 +15908,7 @@
+ 	esac
+     fi
+ 
++if test "$gcc_check" = "yes"; then
+     if test "$HAVE_LIBBZ2" = "yes"; then
+ 	{ $as_echo "$as_me:${as_lineno-$LINENO}: checking for CVE-2010-0405" >&5
+ $as_echo_n "checking for CVE-2010-0405... " >&6; }
+@@ -16041,6 +16041,9 @@
+ $as_echo "$as_me: WARNING: ****** bzip2 support disabled" >&2;}
+     fi
+ fi
++fi
++
++LIBCLAMAV_LIBS="$LIBCLAMAV_LIBS $LTLIBBZ2"
+ 
+ # Check whether --enable-unrar was given.
+ if test "${enable_unrar+set}" = set; then :
