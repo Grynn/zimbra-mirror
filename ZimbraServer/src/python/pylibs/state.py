@@ -249,29 +249,29 @@ class State:
 		sc.join(120)
 		try:
 			if (lc.isAlive()):
-				Log.logMsg(1, "Thread %s still alive, waiting 120" %lc.name)
+				Log.logMsg(1, "Thread %s still alive, waiting 120" %lc.getName())
 				lc.join(120)
 				if (lc.isAlive()):
-					Log.logMsg(1, "Thread %s still alive, aborting" % lc.name)
-					raise Exception, "Thread %s still alive, aborting" % lc.name
+					Log.logMsg(1, "Thread %s still alive, aborting" % lc.getName())
+					raise Exception, "Thread %s still alive, aborting" % lc.getName()
 			if (gc.isAlive()):
-				Log.logMsg(1, "Thread %s still alive, waiting 120" %gc.name)
+				Log.logMsg(1, "Thread %s still alive, waiting 120" %gc.getName())
 				gc.join(120)
 				if (gc.isAlive()):
-					Log.logMsg(1, "Thread %s still alive, aborting" % gc.name)
-					raise Exception, "Thread %s still alive, aborting" % gc.name
+					Log.logMsg(1, "Thread %s still alive, aborting" % gc.getName())
+					raise Exception, "Thread %s still alive, aborting" % gc.getName()
 			if (mc.isAlive()):
-				Log.logMsg(1, "Thread %s still alive, waiting 120" %mc.name)
+				Log.logMsg(1, "Thread %s still alive, waiting 120" %mc.getName())
 				mc.join(120)
 				if (gc.isAlive()):
-					Log.logMsg(1, "Thread %s still alive, aborting" % gc.name)
-					raise Exception, "Thread %s still alive, aborting" % gc.name
+					Log.logMsg(1, "Thread %s still alive, aborting" % gc.getName())
+					raise Exception, "Thread %s still alive, aborting" % gc.getName()
 			if (sc.isAlive()):
-				Log.logMsg(1, "Thread %s still alive, waiting 120" %sc.name)
+				Log.logMsg(1, "Thread %s still alive, waiting 120" %sc.getName())
 				sc.join(120)
 				if (gc.isAlive()):
-					Log.logMsg(1, "Thread %s still alive, aborting" % gc.name)
-					raise Exception, "Thread %s still alive, aborting" % gc.name
+					Log.logMsg(1, "Thread %s still alive, aborting" % gc.getName())
+					raise Exception, "Thread %s still alive, aborting" % gc.getName()
 
 		except Exception, e:
 			State.lConfig.release()
