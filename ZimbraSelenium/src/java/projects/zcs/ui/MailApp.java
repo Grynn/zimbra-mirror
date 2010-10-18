@@ -11,6 +11,7 @@ import framework.util.LmtpUtil;
 import framework.util.SleepUtil;
 import framework.util.Stafpostqueue;
 import framework.util.ZimbraSeleniumLogger;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * This Class have UI-level methods related Mail-app(conversation view). e.g:
@@ -383,7 +384,7 @@ public class MailApp extends AppPage {
 	public static String zInjectMessage(String fileName) throws Exception {
 		String subject = null;
 		Boolean foundFlag = false;
-		File dir = new File("src/java/projects/zcs/data/lmtpInject");
+		File dir = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/projects/zcs/data/lmtpInject");
 		StringBuffer contents = new StringBuffer();
 		File file = new File(dir.getAbsolutePath() + "/" + fileName + ".txt");
 		BufferedReader reader = null;

@@ -17,18 +17,10 @@ public class ZimbraSeleniumProperties {
 	public static final String PropZimbraVersion = "zimbraserverversion"; 
 	
 	private static ZimbraSeleniumProperties instance = null;
-	
-	/**
-	 * Set configPropFile before initializing ZimbraSeleniumProperties to hard code
-	 * the path to your config file
-	 */
-	public static File configPropFile = null;
-	
-	private final String configPropName = "config.properties";
-	private File dir;
-	private String workingDir = ".";
+	private File BaseDirectory = null;
+	private File PropertiesConfigurationFilename = null;	
 	private PropertiesConfiguration configProp;
-
+	
 	public static void setStringProperty(String key,String value) {
 		ZimbraSeleniumProperties.getInstance().getConfigProp().setProperty(key, value);
 	}
@@ -66,7 +58,26 @@ public class ZimbraSeleniumProperties {
 	public static PropertiesConfiguration getConfigProperties() {
 		return ZimbraSeleniumProperties.getInstance().getConfigProp();
 	}
+	
+	public static PropertiesConfiguration setConfigProperties(String filename) {
+		logger.info("setConfigProperties using: "+ filename);
+		ZimbraSeleniumProperties.getInstance().PropertiesConfigurationFilename = new File(filename);
+		ZimbraSeleniumProperties.getInstance().init();
+		return (ZimbraSeleniumProperties.getInstance().getConfigProp());
+	}
 
+	public static String getBaseDirectory() {
+		if (ZimbraSeleniumProperties.getInstance().BaseDirectory == null)
+			return (".");
+		return (ZimbraSeleniumProperties.getInstance().BaseDirectory.getAbsolutePath());
+	}
+	
+	public static File setBaseDirectory(String directory) {
+		logger.info("setWorkingDirectory using: "+ directory);
+		ZimbraSeleniumProperties.getInstance().BaseDirectory = new File(directory);
+		return (ZimbraSeleniumProperties.getInstance().BaseDirectory);
+	}
+	
 	private PropertiesConfiguration getConfigProp() {
 		return configProp;
 	}
@@ -76,6 +87,7 @@ public class ZimbraSeleniumProperties {
 			synchronized(ZimbraSeleniumProperties.class) {
 				if ( instance == null ) {
 					instance = new ZimbraSeleniumProperties();
+					instance.init();
 				}
 			}
 		}
@@ -84,62 +96,27 @@ public class ZimbraSeleniumProperties {
 
 	private ZimbraSeleniumProperties() {
 		logger.debug("new ZimbraSeleniumProperties");
-		init();
 	}
 
 	private void init() {
-		
-		if ( configPropFile != null ) {
-			
-			try {
-				
-				logger.info("config.properties is "+ configPropFile.getAbsolutePath());
-				configProp = new PropertiesConfiguration(configPropFile);
 
+		// Load the config.properties values
+		if ( PropertiesConfigurationFilename == null ) {
+			logger.info("config.properties is default");
+			configProp = createDefaultProperties();
+		} else {
+			try {
+				logger.info("config.properties is "+ PropertiesConfigurationFilename.getAbsolutePath());
+				configProp = new PropertiesConfiguration(PropertiesConfigurationFilename);
 			} catch (ConfigurationException e) {
-				ZimbraSeleniumLogger.mLog.error("Unable to open config file: " + configPropFile.getAbsolutePath(), e);
+				ZimbraSeleniumLogger.mLog.error("Unable to open config file: " + PropertiesConfigurationFilename.getAbsolutePath(), e);
 				logger.info("config.properties is default");
 				configProp = createDefaultProperties();
 			}
-			
-		} else {
-			
-			// Use defaults to find the config.properties file
-			String wd = PathFinder.findWorkingDir();
-	
-			if (wd != null)
-				workingDir = wd;
-	
-			dir = new File(workingDir);
-	
-			try {
-				File file = new File(dir.getCanonicalPath() + File.separator
-						+ "conf" + File.separator + configPropName);
-	
-				if (!file.exists()) {
-					File[] files = PathFinder.listFilesAsArray(dir, configPropName,
-							true);
-					if (files != null && files.length > 0) {
-						file = files[0];
-					}
-					if (!file.exists() || !file.getName().contains(configPropName)) {
-						ZimbraSeleniumLogger.mLog.error(configPropName
-								+ " does not exist!");
-						logger.info("config.properties is default");
-						configProp = createDefaultProperties();
-					}
-				}
-	
-				if (null == configProp) {
-					logger.info("config.properties is " + file);
-					configProp = new PropertiesConfiguration(file);
-				}
-				
-			} catch (Exception ex) {
-				ZimbraSeleniumLogger.mLog.error("Exception : " + ex);
-			}
 		}
 
+
+		// Load the locale information
 		String locale = configProp.getString("locale");
 
 		configProp.setProperty("zmMsg", ResourceBundle.getBundle("ZmMsg", new Locale(locale)));
@@ -199,20 +176,17 @@ public class ZimbraSeleniumProperties {
 
 		defaultProp.setProperty("very_long_wait", "10000");
 
-		defaultProp.setProperty("zmMsg", ResourceBundle.getBundle(
-				"framework.locale.ZhMsg", new Locale("en_US")));
+		String locale = defaultProp.getString("locale");
 
-		defaultProp.setProperty("zhMsg", ResourceBundle.getBundle(
-				"framework.locale.ZhMsg", new Locale("en_US")));
+		defaultProp.setProperty("zmMsg", ResourceBundle.getBundle("ZmMsg", new Locale(locale)));
 
-		defaultProp.setProperty("ajxMsg", ResourceBundle.getBundle(
-				"framework.locale.AjxMsg", new Locale("en_US")));
+		defaultProp.setProperty("zhMsg", ResourceBundle.getBundle("ZhMsg", new Locale(locale)));
 
-		defaultProp.setProperty("i18Msg", ResourceBundle.getBundle(
-				"framework.locale.I18nMsg", new Locale("en_US")));
+		defaultProp.setProperty("ajxMsg", ResourceBundle.getBundle("AjxMsg", new Locale(locale)));
 
-		defaultProp.setProperty("zsMsg", ResourceBundle.getBundle(
-				"framework.locale.ZsMsg", new Locale("en_US")));
+		defaultProp.setProperty("i18Msg", ResourceBundle.getBundle("I18nMsg", new Locale(locale)));
+
+		defaultProp.setProperty("zsMsg", ResourceBundle.getBundle("ZsMsg", new Locale(locale)));
 
 		return defaultProp;
 	}

@@ -183,7 +183,7 @@ public class CreateContact extends CommonTest {
 				cnFirstname);
 		obj.zButton.zClick("id=editcontactform_IMAGE_badge");
 		SleepUtil.sleep(2000);
-		File f = new File("src/java/projects/zcs/data/" + filename);
+		File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/projects/zcs/data/" + filename);
 		String path = f.getAbsolutePath();
 		obj.zBrowseField.zTypeInDlgWithKeyboard(localize(locator.fileLabel),
 				path, "1");

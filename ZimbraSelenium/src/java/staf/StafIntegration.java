@@ -170,12 +170,9 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argLog +" can be specified"));
 	        }
 	        
-	        ZimbraSeleniumProperties.configPropFile = new File(parsedRequest.optionValue(argRoot) + "/conf/config.properties");
-	        try {
-				mLog.info("Using "+ ZimbraSeleniumProperties.configPropFile.getCanonicalPath() + ", which exists? "+ ZimbraSeleniumProperties.configPropFile.exists());
-			} catch (IOException e1) {
-				mLog.error(e1);
-			}
+	        String zimbraSeleniumDirectory = parsedRequest.optionValue(argRoot);
+	        ZimbraSeleniumProperties.setBaseDirectory(zimbraSeleniumDirectory);
+	        ZimbraSeleniumProperties.setConfigProperties(zimbraSeleniumDirectory + "/conf/config.properties");
 	        
 	        
 	        // Create the execution object

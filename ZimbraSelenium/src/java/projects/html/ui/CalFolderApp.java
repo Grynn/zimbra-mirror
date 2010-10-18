@@ -6,6 +6,7 @@ import org.testng.Assert;
 
 import framework.core.*;
 import framework.util.SleepUtil;
+import framework.util.ZimbraSeleniumProperties;
 
 import projects.html.tests.CommonTest;
 
@@ -188,7 +189,7 @@ public class CalFolderApp extends CommonTest {
 	public static void zImportFromICSToCalendar(String calName, String fileName)
 			throws Exception {
 
-		File f = new File("src/java/projects/html/data/" + fileName);
+		File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/projects/html/data/" + fileName);
 		String path = f.getAbsolutePath();
 
 		zNavigateToCalendarProperties(calName);

@@ -738,13 +738,17 @@ public class ExecuteHarnessMain {
     	
     	String result = "No results";
 		try {
-			ExecuteHarnessMain harness = new ExecuteHarnessMain();
 			
-			if ( harness.parseArgs(args) ) {
-				 
-				
+			// Set the working conditions
+			ZimbraSeleniumProperties.setBaseDirectory(".");
+			ZimbraSeleniumProperties.setConfigProperties("conf/config.properties");
+			
+			// Create the harness object and execute it
+			ExecuteHarnessMain harness = new ExecuteHarnessMain();
+			if ( harness.parseArgs(args) ) { 
 				result = harness.execute();
 			}
+			
 		} catch (Exception e) {
 			logger.error(e, e);
 		}

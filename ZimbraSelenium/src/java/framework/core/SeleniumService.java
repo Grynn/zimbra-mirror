@@ -41,7 +41,7 @@ public class SeleniumService {
 				
 				RemoteControlConfiguration rcConfig = new RemoteControlConfiguration();
 				rcConfig.setPort(SeleniumPort);
-				rcConfig.setUserExtensions(new File("src/java/framework/lib/user-extensions.js"));
+				rcConfig.setUserExtensions(new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/framework/lib/user-extensions.js"));
 				ss = new SeleniumServer(false, rcConfig);
 				
 				BufferedReader in = null;

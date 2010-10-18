@@ -62,7 +62,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 	    		currentFileName=fileName;
 	    		try {
 	    		  if (raf != null)  raf.close();
-	    		  raf = new RandomAccessFile("src/java/" + fileName,"r");
+	    		  raf = new RandomAccessFile(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/" + fileName,"r");
 	    		  longArray.clear();
 	    		  furthestReadLong=0;
 	    		}

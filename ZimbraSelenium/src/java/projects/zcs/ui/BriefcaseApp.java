@@ -3,6 +3,7 @@ package projects.zcs.ui;
 import java.io.File;
 
 import framework.util.SleepUtil;
+import framework.util.ZimbraSeleniumProperties;
 
 /**
  * @author Jitesh Sojitra
@@ -49,7 +50,7 @@ public class BriefcaseApp extends AppPage {
 		}
 		obj.zButton.zClick(zNewMenuIconBtn);
 		zWaitTillObjectExist("dialog", localize(locator.uploadFileToBriefcase));
-		File f = new File("src/java/projects/zcs/data/" + filename);
+		File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/projects/zcs/data/" + filename);
 		String path = f.getAbsolutePath();
 		obj.zBrowseField.zTypeInDlgWithKeyboard(localize(locator.uploadChoose),
 				path, "1");
