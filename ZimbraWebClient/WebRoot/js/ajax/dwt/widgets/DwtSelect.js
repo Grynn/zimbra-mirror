@@ -128,17 +128,19 @@ function(element) {
  * @param {string|DwtSelectOption}		option			a {String} for the option value or the {@link DwtSelectOption} object
  * @param {boolean}	[selected]		indicates whether option should be the selected option
  * @param {Object}	value			if the option parameter is a {@link DwtSelectOption}, this will override the value already set in the option.
+ * @param {String}  image	(optional)
  * @return 	{number} a handle to the newly added option
  */
 DwtSelect.prototype.addOption =
-function(option, selected, value) {
+function(option, selected, value, image) {
 	if (!option) { return -1; }
+	image = image || null;
 
 	var opt = null;
 	var val = null;
 	if (typeof(option) == 'string') {
 		val = value != null ? value : option;
-		opt = new DwtSelectOption(val, selected, option, this, null, null);
+		opt = new DwtSelectOption(val, selected, option, this, null, image);
 	} else {
 		if (option instanceof DwtSelectOption) {
 			opt = option;
@@ -516,7 +518,7 @@ function(templateId, data) {
     DwtButton.prototype._createHtmlFromTemplate.call(this, containerTemplateId, containerData);
     this._selectEl = document.getElementById(data.id+"_select_container");
     this._pseudoItemsEl = document.getElementById(data.id+"_pseudoitems_container");
-    this._pseudoItemsEl.style.display="none";
+	this._pseudoItemsEl.style.display="block"; /* this has to be block for it to affect the layout. it is not seen because it's visibility hidden for the TDs inside, and also "overflow:hidden" (so mouse over the hidden stuff does not highlight) */
     // set classes
     var el = this.getHtmlElement();
     this._containerEl = el;
