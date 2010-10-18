@@ -477,7 +477,7 @@ public class DataSourceMailbox extends SyncMailbox {
                 }
             }
         } else if (isOnRequest) {
-            OfflineLog.offline.debug("sync already in progress");
+            OfflineLog.offline.debug("[" + getAccount().getName() + "] sync already in progress");
         }
     }
     

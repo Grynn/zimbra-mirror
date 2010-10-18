@@ -205,7 +205,7 @@ public class MailboxSync {
                 }
             }
         } else if (isOnRequest) {
-            OfflineLog.offline.info("sync already in progress");
+            OfflineLog.offline.info("[" + ombx.getAccount().getName() + "] sync already in progress");
         }
     }
     
