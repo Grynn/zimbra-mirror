@@ -1,10 +1,8 @@
-!{explode vhn_vip_ssl}
-# HTTP Proxy Configuration
+# HTTP Proxy Default Configuration
 # 
 server
 {
-    server_name         ${vhn}; 
-    listen              ${vip}:${web.http.port};
+    listen    ${web.http.port} default;
 
     location /
     {

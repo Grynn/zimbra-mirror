@@ -1,0 +1,13 @@
+# IMAPS proxy default configuration
+# 
+server
+{
+    listen              ${mail.imaps.port};
+    protocol            imap;
+    proxy               on;
+    ssl                 on;
+    ssl_certificate     ${ssl.crt.default};
+    ssl_certificate_key ${ssl.key.default};
+    sasl_service_name   "imap";
+}
+

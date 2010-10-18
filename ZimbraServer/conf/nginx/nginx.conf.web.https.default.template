@@ -1,14 +1,17 @@
-!{explode vhn_vip_ssl}
-# HTTP Proxy Configuration
+# HTTPS Proxy Default Configuration
 # 
 server
 {
-    server_name         ${vhn}; 
-    listen              ${vip}:${web.http.port};
+    listen                  ${web.https.port} default;
+    ssl                     on;
+    ssl_prefer_server_ciphers ${web.ssl.preferserverciphers};
+    ssl_ciphers             ${web.ssl.ciphers};
+    ssl_certificate         ${ssl.crt.default};
+    ssl_certificate_key     ${ssl.key.default};
 
     location /
     {
-        include             conf/${core.includes}/${core.cprefix}.web.http.mode-${web.mailmode};
+        include             conf/${core.includes}/${core.cprefix}.web.https.mode-${web.mailmode};
 
         # Begin stray redirect hack
         # 
@@ -37,7 +40,7 @@ server
         # End stray redirect hack
 
         # Proxy to Zimbra Upstream
-        proxy_pass http://${web.upstream.name};
+        proxy_pass          http://${web.upstream.name};
 
         # For audit
         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
@@ -45,7 +48,14 @@ server
         # For Virtual Hosting
         proxy_set_header Host            $http_host;
 
+        # Location header fudging
+        # Because NGINX SSL speaks plain HTTP to upstream, therefore any
+        # redirects to http:// coming from the upstream need to be fudged
+        # to https://
+        # 
+        proxy_redirect http://$http_host/ https://$http_host/;
+
         # Fudge inter-mailbox redirects (kludge)
-        proxy_redirect http://$relhost/ http://$http_host/;
+        proxy_redirect http://$relhost/ https://$http_host/;
     }
 }

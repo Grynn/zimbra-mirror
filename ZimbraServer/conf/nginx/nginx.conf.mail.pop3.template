@@ -1,10 +1,10 @@
-!{explode vhn_ssl}
+!{explode vhn_vip_ssl}
 # POP3 proxy configuration
 # 
 server
 {
-    ${server_name.enabled}server_name         ${vhn}; 
-    listen                  ${mail.pop3.port};
+    server_name             ${vhn}; 
+    listen                  ${vip}:${mail.pop3.port};
     protocol                pop3;
     proxy                   on;
     sasl_service_name       "pop";

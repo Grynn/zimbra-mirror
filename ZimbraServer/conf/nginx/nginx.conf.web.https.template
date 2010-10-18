@@ -1,10 +1,10 @@
-!{explode vhn_ssl}
+!{explode vhn_vip_ssl}
 # HTTPS Proxy Configuration
 # 
 server
 {
-    ${server_name.enabled}server_name         ${vhn}; 
-    listen                  ${web.https.port};
+    server_name             ${vhn}; 
+    listen                  ${vip}:${web.https.port};
     ssl                     on;
     ssl_prefer_server_ciphers ${web.ssl.preferserverciphers};
     ssl_ciphers             ${web.ssl.ciphers};
