@@ -102,29 +102,29 @@ function(itemId) {
 	}
 };
 
-Com_Zimbra_Phone.prototype.onPeopleSearchToolbarShow =
-function(toolbar, contact) {
-	var button = toolbar && toolbar.getButton(Com_Zimbra_Phone.PEOPLE_SEARCH_TOOLBAR_ID);
+Com_Zimbra_Phone.prototype.onPeopleSearchShow =
+function(peopleSearch, contact, rowId) {
+    peopleSearch._clearText(rowId+"-phone");
+	var phone = contact && contact.getAttr(ZmContact.F_workPhone);
+    if(phone){
+        var phoneTxt = new DwtText({parent:appCtxt.getShell(), parentElement:rowId+"-phone", index:0, id:"NewCall", className:"FakeAnchor"});
+        phoneTxt.isLinkText = true;
+        phoneTxt.setText(phone);
+        phoneTxt.addListener(DwtEvent.ONMOUSEDOWN, new AjxListener(this, this._peopleSearchItemListener));
+        phoneTxt.addListener(DwtEvent.ONMOUSEOVER, new AjxListener(this, peopleSearch.peopleItemMouseOverListener));
+        phoneTxt.addListener(DwtEvent.ONMOUSEOUT, new AjxListener(this, peopleSearch.peopleItemMouseOutListener));
+    }
 
-	// Add button if we haven't yet. Only called once.
-	if (!button) {
-		var listener = new AjxListener(this, this._peopleSearchButtonListener);
-		button = toolbar.createButton(Com_Zimbra_Phone.PEOPLE_SEARCH_TOOLBAR_ID, {image:"NewCall"});
-		toolbar.addSelectionListener(Com_Zimbra_Phone.PEOPLE_SEARCH_TOOLBAR_ID, listener);
-	}
-
-	var workPhone = contact && contact.getAttr(ZmContact.F_workPhone);
-	button.setVisible(workPhone != null);
-	button.setData(Dwt.KEY_OBJECT, workPhone);
 };
 
-Com_Zimbra_Phone.prototype._peopleSearchButtonListener =
+Com_Zimbra_Phone.prototype._peopleSearchItemListener =
 function(ev) {
-	var workPhone = ev.item && ev.item.getData(Dwt.KEY_OBJECT);
+	var workPhone = ev.target.innerHTML;
 	var phone = Com_Zimbra_Phone.getCallToLink(workPhone);
 	Com_Zimbra_Phone.unsetOnbeforeunload();
 	window.location = phone;
 };
+
 
 Com_Zimbra_Phone.prototype._searchListener =
 function() {
