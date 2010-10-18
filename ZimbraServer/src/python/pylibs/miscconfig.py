@@ -32,7 +32,7 @@ class MiscConfig(config.Config):
 			th.append(threading.Thread(target=MiscConfig.doCommand,args=(self,cm),name=cm))
 		
 		[t.start() for t in th]
-		[t.join() for t in th]
+		[t.join(120) for t in th]
 		dt = time.clock()-t1
 		Log.logMsg(5,"Miscconfig loaded in %.2f seconds" % dt)
 
