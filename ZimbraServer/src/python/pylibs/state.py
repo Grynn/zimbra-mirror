@@ -35,8 +35,6 @@ class State:
 	lAction = threading.Condition()
 	mState = None
 
-	falseSet = (None,"no",0,"")
-
 	startorder = {
 		"ldap"      : 0,
 		"logger"    : 10,
@@ -95,7 +93,7 @@ class State:
 		self.mtaconfig         = mtaconfig.MtaConfig()
 
 	def isFalseValue(self,val):
-		return val in self.falseSet
+		return (not val or re.match(r"no|false|0+",str(val),re.I))
 
 	def isTrueValue(self,val):
 		return not self.isFalseValue(val)
@@ -347,7 +345,7 @@ class State:
 		value = self.lookUpConfig(type, key)
 		Log.logMsg(5, "Conditional After lookUpConfig: key=%s val=%s type=%s negate=%s" % (key, value, type, negate))
 		Log.logMsg(5, "Checking conditional for negate=%s type=%s %s=%s" % (negate, type, key, value))
-		if (not value or re.match(r"no|false|0+",str(value),re.I)):
+		if (this.isFalseValue(value)):
 			rvalue = False
 		else:
 			rvalue = True
@@ -744,16 +742,14 @@ class State:
 			Log.logMsg(5, "comment before lookup key=%s cmd=%s sr=%s" % (key, cmd, sr))
 
 			parts = key.split(',',2)
-			valset = self.falseSet
 			commentstr = '#'
 			if (len(parts) > 1):
 				key = parts[0]
 				commentstr = parts[1]
-			if (len(parts) > 2):
-				valset = parts[2].split(',')
 			val = self.lookUpConfig(cmd, key)
 			Log.logMsg(5, "comment after lookup key=%s val=%s cmd=%s sr=%s" % (key, val, cmd, sr))
 			if (len(parts) > 2):
+				valset = parts[2].split(',')
 				if val in valset:
 					val = commentstr
 				else:
@@ -770,16 +766,14 @@ class State:
 			Log.logMsg(5, "uncomment before lookup key=%s cmd=%s sr=%s" % (key, cmd, sr))
 
 			parts = key.split(',',2)
-			valset = self.falseSet
 			commentstr = '#'
 			if (len(parts) > 1):
 				key = parts[0]
 				commentstr = parts[1]
-			if (len(parts) > 2):
-				valset = parts[2].split(',')
 			val = self.lookUpConfig(cmd, key)
 			Log.logMsg(5, "uncomment after lookup key=%s val=%s cmd=%s sr=%s" % (key, val, cmd, sr))
 			if (len(parts) > 2):
+				valset = parts[2].split(',')
 				if val in valset:
 					val = ""
 				else:
