@@ -504,6 +504,14 @@ function(anId) {
 
 // other
 
+/* use this in case you want the button to take as little space as needed, and not be aligned with the size of the drop-down.
+	Especially useful in cases where we mess up the button (remove the text) such as in ZmFreeBusySchedulerView 
+ */
+DwtSelect.prototype.dynamicButtonWidth = 
+function() {
+	this._pseudoItemsEl.style.display =  "none";
+}
+
 DwtSelect.prototype._createHtmlFromTemplate =
 function(templateId, data) {
     // wrap params
@@ -518,7 +526,7 @@ function(templateId, data) {
     DwtButton.prototype._createHtmlFromTemplate.call(this, containerTemplateId, containerData);
     this._selectEl = document.getElementById(data.id+"_select_container");
     this._pseudoItemsEl = document.getElementById(data.id+"_pseudoitems_container");
-	this._pseudoItemsEl.style.display="block"; /* this has to be block for it to affect the layout. it is not seen because it's visibility hidden for the TDs inside, and also "overflow:hidden" (so mouse over the hidden stuff does not highlight) */
+	this._pseudoItemsEl.style.display = "block"; /* this has to be block for it to affect the layout. it is not seen because it's visibility hidden for the TDs inside, and also "overflow:hidden" (so mouse over the hidden stuff does not highlight) */
     // set classes
     var el = this.getHtmlElement();
     this._containerEl = el;
