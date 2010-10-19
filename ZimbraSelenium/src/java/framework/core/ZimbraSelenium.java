@@ -20,7 +20,7 @@ public class ZimbraSelenium extends DefaultSelenium {
 	}
 	
 	public boolean isElementPresent(String locator){
-		boolean result=this.isElementPresent(locator);
+		boolean result=super.isElementPresent(locator);
 	    logger.info("selenium.isElementPresent(" + locator + ")");
 	    logger.info(result + "\n");	   
 	    
@@ -29,12 +29,12 @@ public class ZimbraSelenium extends DefaultSelenium {
 	
 	public void click(String locator){
 		logger.info("selenium.click(" + locator + ")" + "\n");
-		this.click(locator);
+		super.click(locator);
 	}
 	
 	public void clickAt(String locator, String coord){
 		logger.info("selenium.clickAt(" + locator + "," + coord + ")" + "\n");
-		this.clickAt(locator, coord);
+		super.clickAt(locator, coord);
 	}
 	
 	public String call(String coreFunction, String locator, String action, Boolean retryOnFalse)throws HarnessException  {
