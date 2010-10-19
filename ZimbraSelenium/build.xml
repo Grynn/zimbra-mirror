@@ -121,10 +121,6 @@
 		<property name="build.staf.selenium.jars.dir" location="${build.staf.selenium}/STAF-INF/jars" />
 		<property name="build.staf.selenium.classes.dir" location="${build.staf.selenium}/STAF-INF/classes" />
 
-		<copy todir="${build.staf.selenium.classes.dir}/resources">
-			<fileset dir="${webclient.dir}/WebRoot/messages/" />
-		</copy>
-
 		<copy todir="${build.staf.selenium.classes.dir}">
 			<fileset dir="${build.classes.dir}" />
 		</copy>

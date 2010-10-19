@@ -1,8 +1,17 @@
 package staf;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.MalformedURLException;
 import java.net.ServerSocket;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.net.URLConnection;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -15,7 +24,7 @@ import framework.util.HarnessException;
 public class StafSeleniumServer {
 	private static Logger logger = LogManager.getLogger(StafSeleniumServer.class);
 
-	public static final String defaultUserExtensionsFilename = "/p4/matt/main/ZimbraSelenium/src/java/framework/lib/user-extensions.js";
+	public static final String defaultUserExtensionsURI		= "http://zqa-004.eng.vmware.com/files/user-extensions.js";
     public static final String defaultSeleniumServerHost	= "localhost";
     public static final int defaultSeleniumServerPort		= 4445;
 
@@ -23,6 +32,48 @@ public class StafSeleniumServer {
 	private String operatingSystem = null;
 
 
+	private File getUserExtensionsFile(String uri) throws HarnessException {
+		
+		
+		String filename = "/tmp/user-extensions.js";
+		File file = new File(filename);
+
+		try {
+
+			OutputStream out = null;
+			InputStream in = null;
+
+			try {
+
+				// Open the OutputStream for writing
+				out = new FileOutputStream(file);
+
+				// Open the URL for reading
+				URL u = new URL(uri);
+				URLConnection uc = u.openConnection();
+				in = uc.getInputStream();
+
+				// Stream the URL to the File
+				byte[] buffer = new byte[1024];
+				int length;
+				while ((length=in.read(buffer))>0) {
+					out.write(buffer, 0 , length);
+				}
+
+			} finally {
+
+				// Remember to close pointers.
+				if ( in != null )			in.close();
+				if ( out != null )			out.close();
+				
+			}
+			
+		} catch (IOException e) {
+			throw new HarnessException("Unable to read user-extensions from "+ uri, e);
+		}
+
+		return (file);
+	}
 	
 	/**
 	 * Start the appropriate selenium server, as per config.properties settings
@@ -34,7 +85,8 @@ public class StafSeleniumServer {
 		
 		RemoteControlConfiguration rcc = new RemoteControlConfiguration();
 		rcc.setPort(defaultSeleniumServerPort);
-		rcc.setUserExtensions(new File(defaultUserExtensionsFilename));
+		rcc.setUserExtensions(getUserExtensionsFile(defaultUserExtensionsURI));
+		rcc.setTrustAllSSLCertificates(true);
 		
 		try {
 			stopBrowsers();
