@@ -3,6 +3,7 @@ package staf;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -49,6 +50,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     private String argGroup = "group";
     private String argLog = "log";
     private String argLog4j = "log4j";
+    
 
     private String optionQuery= "query";
     private String optionHelp = "help";
@@ -100,6 +102,71 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         }
     }
 	
+	private STAFResult parseExecute(STAFCommandParseResult request, ExecuteHarnessMain harness) {
+		
+		// If specified, load the log4j property file first
+		// so that we start logging immediately
+		if (request.optionTimes(argLog4j) > 0 ) {
+        	PropertyConfigurator.configure(request.optionValue(argLog4j));
+		}
+		        
+
+        // Convert the args to variables
+        String valueServer = request.optionValue(argServer);
+        String valueRoot = request.optionValue(argRoot);
+        String valueJarfile = request.optionValue(argJarfile);
+        String valuePattern = request.optionValue(argPattern);
+        String valueLog = request.optionValue(argLog);
+        
+        mLog.info("valueServer="+ valueServer);
+        mLog.info("valueRoot="+ valueRoot);
+        mLog.info("valueJarfile="+ valueJarfile);
+        mLog.info("valuePattern="+ valuePattern);
+        mLog.info("valueLog="+ valueLog);
+        
+        // Since multiple GROUP arguments can be specified, process each one
+        List<String> valueGroup = new ArrayList<String>();
+        for (int i = 1; i <= request.optionTimes(argGroup); i++) {
+        	String g = request.optionValue(argGroup, i);
+        	valueGroup.add(g);
+            mLog.info("valueGroup="+ g);
+
+        }
+        if ( valueGroup.isEmpty() ) {
+        	// If no groups were specified, default to sanity
+        	valueGroup = Arrays.asList("always", "sanity");
+            mLog.info("valueGroup=always,sanity");
+        }
+        
+        //// Configure the harness based on the arguments
+        //
+        
+        // Set the base folder name
+        ZimbraSeleniumProperties.setBaseDirectory(valueRoot);
+        
+        // Set the config.properties values
+        try {
+			StafProperties configProperties = new StafProperties(valueRoot + "/conf/config.properties");
+			configProperties.setProperty("server", valueServer);
+			String filename = configProperties.save(valueLog);
+	        ZimbraSeleniumProperties.setConfigProperties(filename);
+		} catch (FileNotFoundException e) {
+        	return (new STAFResult(STAFResult.JavaError, e.getMessage()));
+		} catch (IOException e) {
+        	return (new STAFResult(STAFResult.JavaError, e.getMessage()));
+		}
+        
+		// Set the harness parameters
+        harness.jarfilename = valueJarfile;
+        harness.classfilter = valuePattern;
+        harness.groups = valueGroup;
+        harness.testoutputfoldername = valueLog;
+
+		// Done!
+		return (new STAFResult(STAFResult.Ok));
+
+	}
+	
 	private STAFResult handleExecute(RequestInfo info) {
 
         mLog.info("STAF: handleExecute ...");
@@ -115,17 +182,10 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         }    
 
         
-        File props = new File(defaultLog4jProperties);
-        if ( props.exists() ) {
-        	PropertyConfigurator.configure(defaultLog4jProperties);
-        }
-        
-
         
         
         // Make sure the request is valid
         STAFCommandParseResult parsedRequest = stafParserExecute.parse(info.request);
-     
         if (parsedRequest.rc != STAFResult.Ok)
         {
             return new STAFResult(STAFResult.InvalidRequestString, parsedRequest.errorBuffer);   
@@ -142,64 +202,15 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			
 			serviceIsRunning = true;
 		
-			// Parse Arguments
-			if (parsedRequest.optionTimes(argLog4j) > 0 ) {
-				String n = parsedRequest.optionValue(argLog4j);
-				File f = new File(n);
-				if ( !f.exists() ) {
-					return (new STAFResult(STAFResult.JavaError, "filename does not exist: "+ n));
-				}
-	        	PropertyConfigurator.configure(n);
-			}
-			
-	        if (parsedRequest.optionTimes(argServer) != 1 ) {
-	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argServer +" can be specified"));	        		        	
-	        }
-	        if (parsedRequest.optionTimes(argRoot) != 1 ) {
-	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argRoot +" can be specified"));	        		        	
-	        }
-	        if (parsedRequest.optionTimes(argJarfile) != 1 ) {
-	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argJarfile +" can be specified"));	        		        	
-	        } else {
-	        	File f = new File(parsedRequest.optionValue(argJarfile));
-	        	if ( !f.exists() )
-		        	return (new STAFResult(STAFResult.JavaError, "jarfile does not exist "+ f.getAbsolutePath()));
-	        }
-			if ( parsedRequest.optionTimes(argPattern) != 1 ) {
-	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argPattern +" can be specified"));	        					
-			}
-	        if ( parsedRequest.optionTimes(argGroup) < 1 ) {
-	        	return (new STAFResult(STAFResult.JavaError, "Must specify at least one "+ argGroup));
-	        }
-	        if ( parsedRequest.optionTimes(argLog) != 1 ) {
-	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argLog +" can be specified"));
-	        }
-	        
-	        String zimbraSeleniumDirectory = parsedRequest.optionValue(argRoot);
-	        ZimbraSeleniumProperties.setBaseDirectory(zimbraSeleniumDirectory);
-	        
-	        try {
-	        	// Set the config.properties values
-				StafProperties configProperties = new StafProperties(zimbraSeleniumDirectory + "/conf/config.properties");
-				configProperties.setProperty("server", parsedRequest.optionValue(argServer));
-				String filename = configProperties.save(parsedRequest.optionValue(argLog));
-		        ZimbraSeleniumProperties.setConfigProperties(filename);
-			} catch (FileNotFoundException e) {
-	        	return (new STAFResult(STAFResult.JavaError, e.getMessage()));
-			} catch (IOException e) {
-	        	return (new STAFResult(STAFResult.JavaError, e.getMessage()));
-			}
-	        
-	        
-	        
 	        // Create the execution object
 	        ExecuteHarnessMain harness = new ExecuteHarnessMain();
 	        
-	        harness.jarfilename = parsedRequest.optionValue(argJarfile);
-	        harness.classfilter = parsedRequest.optionValue(argPattern);
-	        // TODO: Parse the GROUP args
-	        harness.groups = Arrays.asList("always", "sanity");
-	        harness.testoutputfoldername = parsedRequest.optionValue(argLog);
+
+			// Parse Arguments
+			STAFResult parseResult = parseExecute(parsedRequest, harness);
+			if (parseResult.rc != STAFResult.Ok) {
+				return (parseResult);
+			}	        
 	        
 	        // Execute!
 			try {
@@ -309,7 +320,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         stafParserExecute.addOption(argRoot, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argJarfile, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argPattern, 1, STAFCommandParser.VALUEREQUIRED);
-        stafParserExecute.addOption(argGroup, 1, STAFCommandParser.VALUEREQUIRED);
+        stafParserExecute.addOption(argGroup, 0, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argLog, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOption(argLog4j, 1, STAFCommandParser.VALUEREQUIRED);
         stafParserExecute.addOptionNeed(optionExecute, argServer);
