@@ -550,24 +550,6 @@ AjxUtil.byStringProp = function(prop, a, b) {
     return a[prop].localeCompare(b[prop]);
 };
 
-AjxUtil.LOG = {};
-
-/**
- * Enable logging for the given type.
- * 
- * @param type		[string]		key for this msg
- * @param enable	[boolean]		if true, enable logging for this type
-*/
-AjxUtil.enableLogType =
-function(type, enable) {
-	if (enable) {
-		AjxUtil.LOG[type] = [];
-		AjxUtil.LOG[type].push("Log type: " + type);
-	} else {
-		AjxUtil.LOG[type] = null;
-	}
-};
-
 /**
  * mergesort+dedupe
 **/

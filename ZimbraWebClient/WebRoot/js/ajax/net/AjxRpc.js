@@ -162,7 +162,16 @@ function() {
 
 			// if reap didn't find one either, bail.
 			if (!rpcCtxt) {
-				throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "AjxRpc.__getFreeRpcCtxt");
+				var text = [];
+				for (var i in AjxRpc.__rpcOutstanding) {
+					var rpcCtxt = AjxRpc.__rpcOutstanding[i];
+					var req = rpcCtxt.requestStr;
+					if (req) {
+						text.push(req.replace(/"authToken":"\w*"/, '"authToken":"[removed]"'));
+					}
+				}
+				var detail = text.join("<br><br>");
+				throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "AjxRpc.__getFreeRpcCtxt", detail);
 			}
 		}
 	}
@@ -186,7 +195,7 @@ function() {
 	for (var i in AjxRpc.__rpcOutstanding) {
 		rpcCtxt = AjxRpc.__rpcOutstanding[i];
 		if (rpcCtxt.timestamp + AjxRpc.__RPC_REAP_AGE < time) {
-			DBG.println("AjxRpc.__reap: cleared RPC context " + rpcCtxt.id);
+			DBG.println(AjxDebug.DBG1, "AjxRpc.__reap: cleared RPC context " + rpcCtxt.id);
 			rpcCtxt.cancel();
 			delete AjxRpc.__rpcOutstanding[i];
 			return rpcCtxt;
