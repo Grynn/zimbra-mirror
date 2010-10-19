@@ -23,6 +23,7 @@ import com.ibm.staf.service.STAFCommandParser;
 import com.ibm.staf.service.STAFServiceInterfaceLevel30;
 
 import framework.core.ExecuteHarnessMain;
+import framework.util.HarnessException;
 import framework.util.ZimbraSeleniumProperties;
 
 public class StafIntegration implements STAFServiceInterfaceLevel30 {
@@ -54,6 +55,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     private String optionHalt = "halt";
     
     private static final String defaultLog4jProperties = "/tmp/log4j.properties";
+    
     // 
     private boolean serviceIsRunning = false;
     
@@ -61,9 +63,9 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         mLog.info("StafIntegration: acceptRequest ...");
 
 
-        File f = new File("/log4j.properties");
+        File f = new File(defaultLog4jProperties);
         if ( f.exists() ) {
-            PropertyConfigurator.configure("/log4j.properties");
+            PropertyConfigurator.configure(defaultLog4jProperties);
         } else {
         	BasicConfigurator.configure();
         }
@@ -150,6 +152,9 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	        	PropertyConfigurator.configure(n);
 			}
 			
+	        if (parsedRequest.optionTimes(argServer) != 1 ) {
+	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argServer +" can be specified"));	        		        	
+	        }
 	        if (parsedRequest.optionTimes(argRoot) != 1 ) {
 	        	return (new STAFResult(STAFResult.JavaError, "Only one "+ argRoot +" can be specified"));	        		        	
 	        }
@@ -172,7 +177,19 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	        
 	        String zimbraSeleniumDirectory = parsedRequest.optionValue(argRoot);
 	        ZimbraSeleniumProperties.setBaseDirectory(zimbraSeleniumDirectory);
-	        ZimbraSeleniumProperties.setConfigProperties(zimbraSeleniumDirectory + "/conf/config.properties");
+	        
+	        try {
+	        	// Set the config.properties values
+				StafProperties configProperties = new StafProperties(zimbraSeleniumDirectory + "/conf/config.properties");
+				configProperties.setProperty("server", parsedRequest.optionValue(argServer));
+				String filename = configProperties.save(parsedRequest.optionValue(argLog));
+		        ZimbraSeleniumProperties.setConfigProperties(filename);
+			} catch (FileNotFoundException e) {
+	        	return (new STAFResult(STAFResult.JavaError, e.getMessage()));
+			} catch (IOException e) {
+	        	return (new STAFResult(STAFResult.JavaError, e.getMessage()));
+			}
+	        
 	        
 	        
 	        // Create the execution object
@@ -263,9 +280,9 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	public STAFResult init(InitInfo info) {
         mLog.info("StafIntegration: init ...");
 
-        File f = new File("/log4j.properties");
+        File f = new File(defaultLog4jProperties);
         if ( f.exists() ) {
-            PropertyConfigurator.configure("/log4j.properties");
+            PropertyConfigurator.configure(defaultLog4jProperties);
         } else {
         	BasicConfigurator.configure();
         }
@@ -328,6 +345,12 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         
 		// Now, do the Selenium specific setup ...
         BasicConfigurator.configure();
+        
+        try {
+			StafSeleniumServer.getInstance().startSeleniumServer();
+		} catch (HarnessException e) {
+			return (new STAFResult(STAFResult.JavaError, e.getMessage()));
+		}
 
 		
 		// Now, the service is ready ...
@@ -339,6 +362,8 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 
 	public STAFResult term() {
         mLog.info("StafIntegration: term ...");
+
+		StafSeleniumServer.getInstance().stopSeleniumServer();
 
         try
         {
