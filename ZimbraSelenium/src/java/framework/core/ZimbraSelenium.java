@@ -1,11 +1,16 @@
 package framework.core;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
 
 import framework.util.SleepUtil;
+import framework.util.HarnessException;
 
 public class ZimbraSelenium extends DefaultSelenium {
+	private static Logger logger = LogManager.getLogger(ExecuteHarnessMain.class);
 
 	public String doubleQuote = "\"";
 
@@ -14,20 +19,38 @@ public class ZimbraSelenium extends DefaultSelenium {
 		super(serverHost, serverPort, browserStartCommand, browserURL);
 	}
 	
-	public String call(String coreFunction, String locator, String action, Boolean retryOnFalse) {
+	public boolean isElementPresent(String locator){
+		boolean result=this.isElementPresent(locator);
+	    logger.info("selenium.isElementPresent(" + locator + ")");
+	    logger.info(result + "\n");	   
+	    
+	    return result;
+	}
+	
+	public void click(String locator){
+		logger.info("selenium.click(" + locator + ")" + "\n");
+		this.click(locator);
+	}
+	
+	public void clickAt(String locator, String coord){
+		logger.info("selenium.clickAt(" + locator + "," + coord + ")" + "\n");
+		this.clickAt(locator, coord);
+	}
+	
+	public String call(String coreFunction, String locator, String action, Boolean retryOnFalse)throws HarnessException  {
 		return this.call(coreFunction, locator, action, retryOnFalse, "", "");
 	}
 	public String call(String coreFunction, String locator, String action, Boolean retryOnFalse,
-			String panel, String param1) {
+			String panel, String param1) throws HarnessException  {
 		return this.call(coreFunction, locator, action, retryOnFalse, panel, param1, "", "");
 	}
 	public String call(String coreFunction, String locator, String action, Boolean retryOnFalse,
-			String panel, String param1, String param2) {
+			String panel, String param1, String param2)throws HarnessException  {
 		return this.call(coreFunction, locator, action, retryOnFalse, panel, param1, param2, "");
 	}	
 	public String call(String coreFunction, String locator, String action, Boolean retryOnFalse,
 			String panel, String param1, String param2, String param3)
-			throws SeleniumException {
+			throws HarnessException {
 
 		// indicates that the actual object name must start with required obj
 		// name(js function should take care of resolving
@@ -62,10 +85,17 @@ public class ZimbraSelenium extends DefaultSelenium {
 				second++;
 			}
 		}
-		System.out.println("js >> " + jsFunc);
-		System.out.println("js >> " + retval);
-		System.out.println();
+		logger.info("js >> " + jsFunc);
+		logger.info("js >> " + retval + "\n");
 		
+		
+		if (retval.equals("false")) {
+
+			throw new HarnessException("js function: " + jsFunc + " returns false");
+
+		}
+
+
 		return retval;
 	}
 
@@ -78,5 +108,6 @@ public class ZimbraSelenium extends DefaultSelenium {
 	private String doubleQuote(String str) {
 		return doubleQuote + str + doubleQuote;
 	}
+
 
 }
