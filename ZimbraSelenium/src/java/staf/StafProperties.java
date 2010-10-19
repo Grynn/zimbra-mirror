@@ -34,11 +34,6 @@ public class StafProperties {
     	properties = new Properties();
     	properties.load(new FileReader(filename));
     	
-    	// Set staf defaults
-    	properties.setProperty("seleniumMode", "Remote");
-    	properties.setProperty("serverName", "localhost");
-    	properties.setProperty("serverPort", "" + StafSeleniumServer.defaultSeleniumServerPort);
-
     }
     
     public String setProperty(String key, String value) {

@@ -48,6 +48,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     private String argJarfile = "jarfile";
     private String argPattern = "pattern";
     private String argGroup = "group";
+    private String argBrowser = "browser";	// TODO: implement BROWSER argument
     private String argLog = "log";
     private String argLog4j = "log4j";
     
@@ -146,10 +147,24 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
         
         // Set the config.properties values
         try {
+        	
+        	// Load the original properties
 			StafProperties configProperties = new StafProperties(valueRoot + "/conf/config.properties");
+			
+			// Set values
 			configProperties.setProperty("server", valueServer);
+			configProperties.setProperty("browser", "firefox");
+
+			configProperties.setProperty("seleniumMode", "Remote");
+			configProperties.setProperty("serverName", "localhost");
+			configProperties.setProperty("serverPort", "" + StafSeleniumServer.defaultSeleniumServerPort);
+
+			// Save the temp file in the log folder for the records
 			String filename = configProperties.save(valueLog);
+			
+			// Tell the harness to load the temp file
 	        ZimbraSeleniumProperties.setConfigProperties(filename);
+	        
 		} catch (FileNotFoundException e) {
         	return (new STAFResult(STAFResult.JavaError, e.getMessage()));
 		} catch (IOException e) {
@@ -201,6 +216,8 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 		try {
 			
 			serviceIsRunning = true;
+			
+			StafSeleniumServer.stopBrowsers();
 		
 	        // Create the execution object
 	        ExecuteHarnessMain harness = new ExecuteHarnessMain();
@@ -225,6 +242,8 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			}
 	        
 
+		} catch (HarnessException e) {
+			return (new STAFResult(STAFResult.JavaError, e.getMessage()));
 		} finally {
 			serviceIsRunning = false;
 		}
@@ -244,11 +263,6 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	
 	private STAFResult handleHelp() {
 
-        File props = new File(defaultLog4jProperties);
-        if ( props.exists() ) {
-        	PropertyConfigurator.configure(defaultLog4jProperties);
-        }
-        
 
         mLog.info("StafTestStaf: handleHelp ...");
 

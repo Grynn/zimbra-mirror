@@ -1,15 +1,11 @@
 package staf;
 
-import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.ServerSocket;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -17,6 +13,10 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
+
+import com.ibm.staf.STAFException;
+import com.ibm.staf.STAFHandle;
+import com.ibm.staf.STAFResult;
 
 import framework.util.HarnessException;
 
@@ -29,7 +29,7 @@ public class StafSeleniumServer {
     public static final int defaultSeleniumServerPort		= 4445;
 
 	private SeleniumServer seleniumServer = null;
-	private String operatingSystem = null;
+	private static String operatingSystem = null;
 
 
 	private File getUserExtensionsFile(String uri) throws HarnessException {
@@ -130,7 +130,7 @@ public class StafSeleniumServer {
 	}
 
 	
-	public void stopBrowsers() throws HarnessException {
+	public static void stopBrowsers() throws HarnessException {
 		try {
 			stopBrowsersXP();
 			stopBrowsersUbuntu();
@@ -139,16 +139,16 @@ public class StafSeleniumServer {
 		}
 	}
 	
-	private void stopBrowsersXP() throws IOException, InterruptedException {
+	private static void stopBrowsersXP() throws HarnessException {
 		if ( operatingSystem.startsWith("Windows") ) {
-			CommandLine.CmdExec("taskkill /f /t /im iexplore.exe");
-			CommandLine.CmdExec("taskkill /f /t /im firefox.exe");
-			CommandLine.CmdExec("taskkill /f /t /im Safari.exe");
-			CommandLine.CmdExec("taskkill /f /t /im chrome.exe");
+			KillProcess.kill("iexplore.exe");
+			KillProcess.kill("firefox.exe");
+			KillProcess.kill("Safari.exe");
+			KillProcess.kill("chrome.exe");
 		}
 	}
 
-	private void stopBrowsersUbuntu() throws IOException, InterruptedException {
+	private static void stopBrowsersUbuntu() throws IOException, InterruptedException {
 		// TODO
 		logger.warn("Implement me!");
 	}
@@ -183,13 +183,63 @@ public class StafSeleniumServer {
 		
 	}
 
-	private static class CommandLine {	
-		private static int CmdExec(String command) throws IOException, InterruptedException {
-			Process p = Runtime.getRuntime().exec(command);
-			int exitValue = p.waitFor();
-			logger.info(command + " - " + exitValue);
-			return (exitValue);
+	
+	private static class KillProcess {
+		public static void kill(String processname) throws HarnessException {
+			KillProcess kill = new KillProcess(processname);
+			kill.exec();
 		}
+		
+		
+		private String processName;
+		private KillProcess(String p) {
+			processName = p;
+		}
+		private void exec() throws HarnessException {
+			
+			// TODO: Handle different operating systems besides Windows (i.e. taskkill)
+			
+			String server = "localhost";
+			String service = "PROCESS";
+			String command = "START SHELL COMMAND \"taskkill /f /t /im "+ processName +"\" RETURNSTDOUT RETURNSTDERR WAIT";
+			
+			STAFHandle handle = null;
+			STAFResult result = null;
+			
+			try
+			{
+				
+				handle = new STAFHandle(KillProcess.class.getName());
+				
+		        try
+		        {
+		        			        			            
+		            result = handle.submit2(server, service, command);
+		            if (result.rc != STAFResult.Ok) {
+		            	// TODO: Handle errors
+		            }
+	 
+				} finally {
+		        	
+		            try {
+		            	
+						handle.unRegister();
+				    	
+					} catch (STAFException e) {
+			        	throw new HarnessException("Error unregistering with STAF, RC:" + e.rc, e);
+					}
+					
+				}
+	        
+			}
+			catch (STAFException e)
+			{
+	        	throw new HarnessException("Error registering or unregistering with STAF, RC:" + e.rc, e);
+			}
+		        	
+
+		}
+		
 	}
 
 	
