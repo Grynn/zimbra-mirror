@@ -345,7 +345,7 @@ class State:
 		value = self.lookUpConfig(type, key)
 		Log.logMsg(5, "Conditional After lookUpConfig: key=%s val=%s type=%s negate=%s" % (key, value, type, negate))
 		Log.logMsg(5, "Checking conditional for negate=%s type=%s %s=%s" % (negate, type, key, value))
-		if (this.isFalseValue(value)):
+		if (self.isFalseValue(value)):
 			rvalue = False
 		else:
 			rvalue = True
