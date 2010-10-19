@@ -10,7 +10,7 @@ import framework.util.SleepUtil;
 import framework.util.HarnessException;
 
 public class ZimbraSelenium extends DefaultSelenium {
-	private static Logger logger = LogManager.getLogger(ExecuteHarnessMain.class);
+	private static Logger logger = LogManager.getLogger(ZimbraSelenium.class);
 
 	public String doubleQuote = "\"";
 
