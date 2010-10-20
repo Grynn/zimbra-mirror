@@ -53,6 +53,12 @@ UndoSendZimlet.prototype.initializeToolbar =
 function(app, toolbar, controller, viewId) {
 	if (viewId.indexOf("COMPOSE") >= 0) {
 		var sendBtn = toolbar.getButton("SEND_MENU");
+		if(!sendBtn) {
+			sendBtn = toolbar.getButton("SEND");
+		}
+		if(!sendBtn) {
+			return;
+		}
 		sendBtn.removeSelectionListeners();//remove all selection listeners
 		sendBtn.addSelectionListener(new AjxListener(this, this._sendButtonListener, controller));
 	}
