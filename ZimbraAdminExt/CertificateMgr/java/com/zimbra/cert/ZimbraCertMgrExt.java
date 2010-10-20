@@ -52,9 +52,11 @@ public class ZimbraCertMgrExt implements ZimbraExtension {
     public static final String SAVED_COMM_KEY_FROM_LDAP = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/current_comm.key" ;
     //public static final String COMM_CRT_KEY_FILE = LC.zimbra_home.value() + "/ssl/zimbra/commercial/commercial.key" ;
     // put vefified certificate and key to tempoaray dir
-    public static final String COMM_CRT_KEY_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/commercial.key" ;
-    public static final String COMM_CRT_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/commercial.crt" ;
-    public static final String COMM_CRT_CA_FILE = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/commercial_ca.crt" ;
+    public static final String COMM_CRT_KEY_DIR = LC.mailboxd_directory.value() + "/webapps/zimbraAdmin/tmp/";
+    public static final String COMM_CRT_KEY_FILE = COMM_CRT_KEY_DIR + "commercial.key";
+    public static final String COMM_CRT_FILE = COMM_CRT_KEY_DIR + "commercial.crt";
+    public static final String COMM_CRT_CA_FILE = COMM_CRT_KEY_DIR + "commercial_ca.crt";
+
 
     public static final String ALL_SERVERS = "--- All Servers ---" ;
     public static final String A_zimbraSSLPrivateKey = "zimbraSSLPrivateKey" ;

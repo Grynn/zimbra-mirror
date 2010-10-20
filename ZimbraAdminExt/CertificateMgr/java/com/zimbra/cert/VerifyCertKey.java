@@ -75,6 +75,14 @@ public class VerifyCertKey extends AdminDocumentHandler {
 			String certBuffer_t = stringFix(certBuffer,true);
 			String prvkeyBuffer_t = stringFix(prvkeyBuffer,false);
 			byte [] certByte = certBuffer_t.getBytes();
+
+                        File comm_path = new File(ZimbraCertMgrExt.COMM_CRT_KEY_DIR);
+                        if(!comm_path.exists()) {
+				comm_path.mkdirs();
+			} else if(!comm_path.isDirectory()) {
+                                throw ServiceException.FAILURE("IOException occurred: Now exist directory '" + ZimbraCertMgrExt.COMM_CRT_KEY_DIR + "'", null);
+                        }
+
 			ByteUtil.putContent(ZimbraCertMgrExt.COMM_CRT_FILE, certByte);
 			ByteUtil.putContent(ZimbraCertMgrExt.COMM_CRT_CA_FILE, certByte);
 			
@@ -106,6 +114,10 @@ public class VerifyCertKey extends AdminDocumentHandler {
                         if (!comm_ca.delete()) {
                              throw new SecurityException ("Deleting commercial CA certificate file failed.")  ;
                         }
+			File comm_path = new File(ZimbraCertMgrExt.COMM_CRT_KEY_DIR);
+			if(comm_path.delete()) {
+			     throw new SecurityException ("Deleting directory of certificate/key failed.")  ;
+			}
 
  	        }catch (SecurityException se) {
         	        ZimbraLog.security.error ("File(s) of commercial certificates/prvkey was not deleted", se ) ;
