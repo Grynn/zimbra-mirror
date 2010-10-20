@@ -207,7 +207,8 @@ ZaCosXFormView.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
 	ZaCos.A_zimbraFeatureAdvancedSearchEnabled,
 	ZaCos.A_zimbraFeatureSavedSearchesEnabled,
 	ZaCos.A_zimbraFeatureInitialSearchPreferenceEnabled,
-	ZaCos.A_zimbraFeatureImportExportFolderEnabled
+	ZaCos.A_zimbraFeatureImportExportFolderEnabled,
+	ZaCos.A_zimbraDumpsterEnabled
 ];
 
 ZaCosXFormView.FEATURE_TAB_RIGHTS = [];
@@ -421,7 +422,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 						ZaCos.A_zimbraFeatureHtmlComposeEnabled,
 						ZaCos.A_zimbraFeatureGalEnabled,
 						ZaCos.A_zimbraFeatureGalAutoCompleteEnabled,
-						ZaCos.A_zimbraFeatureImportExportFolderEnabled
+						ZaCos.A_zimbraFeatureImportExportFolderEnabled,
+						ZaCos.A_zimbraDumpsterEnabled
 					]]
 				],
                 items:[
@@ -434,8 +436,9 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     //{ref:ZaCos.A_zimbraFeatureShortcutAliasesEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureShortcutAliasesEnabled,label:ZaMsg.LBL_zimbraFeatureShortcutAliasesEnabled, trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureGalEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureGalEnabled,label:ZaMsg.LBL_zimbraFeatureGalEnabled, trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureGalAutoCompleteEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled,label:ZaMsg.LBL_zimbraFeatureGalAutoCompleteEnabled, trueValue:"TRUE", falseValue:"FALSE"},
-                    {ref:ZaCos.A_zimbraFeatureImportExportFolderEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureImportExportFolderEnabled,label:ZaMsg.LBL_zimbraFeatureImportExportFolderEnabled, trueValue:"TRUE", falseValue:"FALSE"}
-                ]
+                    {ref:ZaCos.A_zimbraFeatureImportExportFolderEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureImportExportFolderEnabled,label:ZaMsg.LBL_zimbraFeatureImportExportFolderEnabled, trueValue:"TRUE", falseValue:"FALSE"},
+		    {ref:ZaCos.A_zimbraDumpsterEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraDumpsterEnabled,label:ZaMsg.LBL_zimbraDumpsterEnabled, trueValue:"TRUE", falseValue:"FALSE"}
+                ] 
             },
             {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraMailFeature, id:"cos_form_features_mail",
                 enableDisableChecks:[ZaCosXFormView.isMailFeatureEnabled],
