@@ -19,11 +19,17 @@ public class ZimbraSelenium extends DefaultSelenium {
 		super(serverHost, serverPort, browserStartCommand, browserURL);
 	}
 	
-	public boolean isElementPresent(String locator){
-		boolean result=super.isElementPresent(locator);
+	public boolean isElementPresent(String locator){		
 	    logger.info("selenium.isElementPresent(" + locator + ")");
-	    logger.info(result + "\n");	   
-	    
+	    boolean result=super.isElementPresent(locator);
+	    logger.info(result + "\n");	   	    
+	    return result;
+	}
+	
+	public boolean isChecked(String locator){
+	    logger.info("selenium.isChecked(" + locator + ")");	    	   	    
+		boolean result= super.isChecked(locator);
+		logger.info(result + "\n");
 	    return result;
 	}
 	
