@@ -162,6 +162,7 @@ public class CommonTest {
 		logger.info("commonTestAfterSuite: start");
 		
 		ClientSessionFactory.session().selenium().stop();
+		SeleniumService.getInstance().stopSeleniumServer();
 
 		logger.info("commonTestAfterSuite: finish");
 
