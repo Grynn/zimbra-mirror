@@ -227,7 +227,7 @@ ZaZimletDeployXWizard.prototype.deployZimletClbck = function (resp) {
 						msgLines.push(AjxMessageFormat.format(ZaMsg.ZMLT_DeployProgres,[progress[i].server,ZaMsg.ZMLT_StatusPending]))						
 					} else if (progress[i].status == ZaZimlet.STATUS_FAILED) {
 						hasErrors = true;
-						msgLines.push(AjxMessageFormat.format(ZaMsg.ZMLT_DeployProgres, [progress[i].server,ZaMsg.ZMLT_StatusFailed]))						
+						msgLines.push(AjxMessageFormat.format(ZaMsg.ZMLT_DeployProgresFail, [progress[i].server,progress[i].error]))						
 					} else if (progress[i].status == ZaZimlet.STATUS_SUCCEEDED) {
 						msgLines.push(AjxMessageFormat.format(ZaMsg.ZMLT_DeployProgres, [progress[i].server,ZaMsg.ZMLT_StatusSuccess]))						
 					}
