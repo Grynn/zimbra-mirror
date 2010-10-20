@@ -14,6 +14,7 @@ import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
 import framework.util.ZimbraAccount;
+import framework.util.ZimbraSeleniumProperties;
 
 @SuppressWarnings("static-access")
 public class LoginPage extends CommonTest {
@@ -63,6 +64,7 @@ public class LoginPage extends CommonTest {
 	public void zLoginToZimbraHTML(String username, String password)  throws HarnessException  {
 		
 		ClientSessionFactory.session().setCurrentUser(null);
+		ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.HTML);
 		SelNGBase.openApplication();
 		SleepUtil.sleep(1500);
 		

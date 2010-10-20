@@ -10,6 +10,7 @@ import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
 import framework.util.ZimbraAccount;
+import framework.util.ZimbraSeleniumProperties;
 
 @SuppressWarnings("static-access")
 public class LoginPage extends AppPage {
@@ -61,6 +62,7 @@ public class LoginPage extends AppPage {
 	public void zLoginToZimbraAjax(String username, String password) throws Exception{
 		
 			ClientSessionFactory.session().setCurrentUser(null);
+			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.AJAX);
 			openApplication();
 			SleepUtil.sleep(1500);
 			obj.zEditField.zType("Username:", username);

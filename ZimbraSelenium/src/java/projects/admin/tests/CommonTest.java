@@ -82,6 +82,7 @@ public class CommonTest {
 			selenium.windowFocus();
 			// selenium.setupZVariables(); // admin doesn't use any of the JS code
 			selenium.allowNativeXpath("true");
+			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.ADMIN);
 			selenium.open(ZimbraSeleniumProperties.getBaseURL());
 		} catch (SeleniumException e) {
 			logger.error("Unable to open admin app.  Is a valid cert installed?", e);

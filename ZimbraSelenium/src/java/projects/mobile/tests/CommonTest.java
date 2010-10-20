@@ -79,6 +79,7 @@ public class CommonTest {
 			selenium.windowFocus();
 			// selenium.setupZVariables(); // mobile doesn't use any of the JS code
 			selenium.allowNativeXpath("true");
+			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.MOBILE);
 			selenium.open(ZimbraSeleniumProperties.getBaseURL());
 		} catch (SeleniumException e) {
 			logger.error("Unable to mobile app.", e);
