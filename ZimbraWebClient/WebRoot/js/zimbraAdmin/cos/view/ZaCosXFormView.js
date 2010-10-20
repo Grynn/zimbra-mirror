@@ -727,16 +727,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
             	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
 					[
 						ZaCos.A_zimbraPrefSaveToSent,
-						ZaCos.A_zimbraAllowAnyFromAddress,
-						ZaCos.A_zimbraPrefComposeInNewWindow,
-						ZaCos.A_zimbraPrefComposeFormat,
-						ZaCos.A_zimbraPrefHtmlEditorDefaultFontFamily,
-						ZaCos.A_zimbraPrefHtmlEditorDefaultFontSize,
-						ZaCos.A_zimbraPrefHtmlEditorDefaultFontColor,
-						ZaCos.A_zimbraPrefForwardReplyInOriginalFormat,
-						ZaCos.A_zimbraPrefMandatorySpellCheckEnabled,
-						ZaCos.A_zimbraMailSignatureMaxLength,
-						ZaCos.A_zimbraPrefAutoSaveDraftInterval
+						ZaCos.A_zimbraAllowAnyFromAddress
 					]]
 				],
             	items :[
@@ -746,7 +737,24 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                 {ref:ZaCos.A_zimbraAllowAnyFromAddress, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraAllowAnyFromAddress,
                 	label:ZaMsg.LBL_zimbraAllowAnyFromAddress,
                     trueValue:"TRUE", falseValue:"FALSE"
-                },
+                }
+            ]},
+            {type:_ZA_TOP_GROUPER_, id:"cos_prefs_mail_sending",borderCssClass:"LowPadedTopGrouperBorder",label:ZaMsg.NAD_MailOptionsComposing,
+            	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
+					[
+						ZaCos.A_zimbraPrefComposeInNewWindow,
+						ZaCos.A_zimbraPrefComposeFormat,
+						ZaCos.A_zimbraPrefHtmlEditorDefaultFontFamily,
+						ZaCos.A_zimbraPrefHtmlEditorDefaultFontSize,
+						ZaCos.A_zimbraPrefHtmlEditorDefaultFontColor,
+						ZaCos.A_zimbraPrefForwardReplyInOriginalFormat,
+						ZaCos.A_zimbraPrefMandatorySpellCheckEnabled,
+						ZaCos.A_zimbraMailSignatureMaxLength,
+						ZaCos.A_zimbraPrefAutoSaveDraftInterval
+
+					]]
+				],
+            	items :[
                 {ref:ZaCos.A_zimbraPrefComposeInNewWindow, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraPrefComposeInNewWindow,
                     label:ZaMsg.LBL_zimbraPrefComposeInNewWindow, trueValue:"TRUE", falseValue:"FALSE"
                 },
