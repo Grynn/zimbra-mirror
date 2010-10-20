@@ -546,9 +546,9 @@ ZaSearchField.prototype._getMyXForm = function() {
 	var colSizes;
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 		numCols = 7;
-		colSizes = ["59", "*", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.search, true, 0), Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.help_search, true, 0), "28", "12", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.advanced_search, false, 0)];
+		colSizes = ["59", "*", "80", "110", "28", "12", "110"];
 	} else {
-		colSizes = ["59", "*", Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.search, true, 0), Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.help_search, true, 0)];
+		colSizes = ["59", "*", "80", "110"];
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.SAVE_SEARCH]) {
 			numCols++;
 			colSizes.push("28");
@@ -557,7 +557,7 @@ ZaSearchField.prototype._getMyXForm = function() {
 		if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ACCOUNT_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.DL_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.ALIAS_LIST_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.RESOURCE_LIST_VIEW]) {
 			numCols+=2;
 			colSizes.push("12");
-			colSizes.push(Dwt_Button_XFormItem.estimateMyWidth(ZaMsg.advanced_search, false, 0));
+			colSizes.push("110");
 		}
 	}
 	var xFormObject = {

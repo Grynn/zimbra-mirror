@@ -863,10 +863,10 @@ ZaBulkImportXWizard.myXFormModifier = function(xFormObject,entry) {
 		    	   getDisplayValue:function(val) {	return val=="TRUE" ? ZaMsg.Yes : ZaMsg.No; 	}
 		       },
 		       {ref:ZaBulkProvision.A2_SMTPHost, type:_OUTPUT_,label:com_zimbra_bulkprovision.SMTPHost,
-		    	   visibilityChangeEventSources:[ZaBulkProvision.A2_SMTPHost],visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_SMTPHost]],bmolsnr:true,
+		    	   visibilityChangeEventSources:[ZaBulkProvision.A2_SMTPHost],visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_SMTPHost]],bmolsnr:true
 		       },
 			   {ref:ZaBulkProvision.A2_SMTPPort, type:_OUTPUT_,label:com_zimbra_bulkprovision.SMTPPort,
-		    	   visibilityChangeEventSources:[ZaBulkProvision.A2_SMTPPort],visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_SMTPPort]],bmolsnr:true,
+		    	   visibilityChangeEventSources:[ZaBulkProvision.A2_SMTPPort],visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaBulkProvision.A2_SMTPPort]],bmolsnr:true
 			   }	
 
 		]
