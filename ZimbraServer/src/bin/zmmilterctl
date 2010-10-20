@@ -23,32 +23,14 @@ libjars=${zimbra_home}/lib/jars
 configfile=${zimbra_home}/conf/localconfig.xml
 pidfile=${zimbra_log_directory}/milter.pid
 pid=""
-
-if [ -x "${zimbra_home}/java/bin/java" ]; then
-    java="${zimbra_home}/java/bin/java"
-else
-    java=java
-fi
+java="${zimbra_home}/bin/zmjava"
 
 case "`uname`" in
 CYGWIN*) PATHSEP=";";;
 *) PATHSEP=":";;
 esac
 
-CP=${libjars}/zimbracommon.jar${PATHSEP}\
-${libjars}/zimbrastore.jar${PATHSEP}\
-${libjars}/mail.jar${PATHSEP}\
-${libjars}/mina-core-1.1.7-zimbra.jar${PATHSEP}\
-${libjars}/slf4j-api-1.5.8.jar${PATHSEP}\
-${libjars}/slf4j-log4j12-1.5.8.jar${PATHSEP}\
-${libjars}/dom4j-1.5.2.jar${PATHSEP}\
-${libjars}/log4j-1.2.15.jar${PATHSEP}\
-${libjars}/guava-r06.jar${PATHSEP}\
-${libjars}/commons-codec-1.4.jar${PATHSEP}\
-${libjars}/commons-logging.jar${PATHSEP}\
-${libjars}/commons-cli-1.2.jar${PATHSEP}\
-${libjars}/commons-httpclient-3.0.jar${PATHSEP}\
-${zimbra_home}/conf
+CP=${zimbra_home}/conf
 
 java_version=$(${java} -version 2>&1 | grep "java version" | sed -e 's/"//g' | awk '{print $NF}' | awk -F_ '{print $1}')
 if [ x"$java_version" = "x1.6.0" ]; then
