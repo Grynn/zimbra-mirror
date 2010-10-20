@@ -207,5 +207,10 @@ ZmCsfeException.MAIL_UNABLE_TO_IMPORT_APPOINTMENTS	= "mail.MAIL_UNABLE_TO_IMPORT
 ZmCsfeException.MAIL_UNABLE_TO_IMPORT_CONTACTS		= "mail.UNABLE_TO_IMPORT_CONTACTS";
 ZmCsfeException.MODIFY_CONFLICT						= "mail.MODIFY_CONFLICT";
 ZmCsfeException.TOO_MANY_TAGS						= "mail.TOO_MANY_TAGS";
+ZmCsfeException.CANNOT_RENAME                       = "mail.CANNOT_RENAME";
+ZmCsfeException.CANNOT_UNLOCK                       = "mail.CANNOT_UNLOCK";
+ZmCsfeException.CANNOT_LOCK                         = "mail.CANNOT_LOCK";
+ZmCsfeException.LOCKED                              = "mail.LOCKED";
+
 
 ZmCsfeException.OFFLINE_ONLINE_ONLY_OP				= "offline.ONLINE_ONLY_OP";
