@@ -106,8 +106,11 @@ public class OfflineGal {
 
         name = name.trim();
         String query = "in:\"" + currFolder.getName() + "\"";
-        if (name.length() > 0 && !name.equals("."))
-            query = query + " AND contact:(" + name + ")";
+        // '.' is a special operator that matches everything.
+        if (name.length() > 0 && !name.equals(".")) {
+            // escape quotes
+            query = query + " AND contact:\"" + name.replace("\"", "\\\"") + "\"";
+        }
         if (type.equals(CTYPE_ACCOUNT))
             query = query + " AND #" + ContactConstants.A_type + ":" + CTYPE_ACCOUNT;
         else if (type.equals(CTYPE_RESOURCE))
