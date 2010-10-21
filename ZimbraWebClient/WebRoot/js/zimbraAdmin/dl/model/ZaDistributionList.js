@@ -787,7 +787,7 @@ ZaDistributionList.removeDeletedMembers = function (mods, obj, dl, finishedCallb
 	var removeList = obj[ZaDistributionList.A2_removeList];
 	obj[ZaDistributionList.A2_removeList] = new Array();
 	command.invoke(params);
-	this._modifyAccountDL(removeList, false);
+	ZaDistributionList.modifyAccountDL(obj, removeList, false);
 };
 ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.removeDeletedMembers);
 
@@ -819,13 +819,13 @@ ZaDistributionList.addNewMembers = function (mods, obj, dl, finishedCallback) {
 	var addList = obj[ZaDistributionList.A2_addList];
 	obj[ZaDistributionList.A2_addList] = new Array();
 	command.invoke(params);
-	this._modifyAccountDL(addList, true);
+	ZaDistributionList.modifyAccountDL(obj, addList, true);
 };
 ZaItem.modifyMethods["ZaDistributionList"].push(ZaDistributionList.addNewMembers);
 
-ZaDistributionList.prototype._modifyAccountDL = function (modifyList, isAdd){
+ZaDistributionList.modifyAccountDL = function (dl, modifyList, isAdd){
 	var tabGroup = ZaApp.getInstance().getTabGroup();
-	var addDL =  { name: this.name, id: this.id } ;
+	var currentDl =  { name: dl.name, id: dl.id } ;
 	for(var i = 0; i < modifyList.length; i++){	
 		var currentItem = modifyList[i];
 		var accountName = null;
@@ -874,14 +874,14 @@ ZaDistributionList.prototype._modifyAccountDL = function (modifyList, isAdd){
 		var isFind = false;
 		var currentInDL = currentView._containedObject[ZaAccount.A2_memberOf][ZaAccount.A2_directMemberList];
 		for(var j = 0; j < currentInDL.length; j++){
-			if(currentInDL[j].id == this.id){
+			if(currentInDL[j].name == currentDl.name){
 				isFind = true;
 				break;
 			}
 		}	
 		
 		if(!isFind && isAdd){
-			currentInDL.push(addDL);
+			currentInDL.push(currentDl);
 		}else if(isFind && !isAdd){
 			currentInDL.splice(j, 1);
 		}else{
