@@ -12,7 +12,20 @@ import framework.util.HarnessException;
  */
 public class PageMain extends AbsMobilePage {
 
-	private static final String _logout = "xpath=//*[@id='_logout']";
+	public static final String _logout = "xpath=//*[@id='_logout']";
+	
+	public static final String mainCopyright = "xpath=//div[@id='copyright_notice']";
+	public static final String mainCopyrightText = "xpath=//div[@id='copyright_notice']//a";
+	
+	public static final String appbarMail = "xpath=//div[@id='appbar']//a[@id='mail']";
+	public static final String appbarContact = "xpath=//div[@id='appbar']//a[@id='contact']";
+	public static final String appbarCal = "xpath=//div[@id='appbar']//a[@id='cal']";
+	public static final String appbarDocs = "xpath=//div[@id='appbar']//a[@id='docs']";
+	public static final String appbarSearch = "xpath=//div[@id='appbar']//a[@id='search']";
+	
+	public static final String compose = "xpath=//a[@href='zmain?st=newmail']";
+	
+	public static final String preferences = "xpath=//a[@href='?st=prefs']";
 	
 	public PageMain(AbsApplication application) {
 		super(application);

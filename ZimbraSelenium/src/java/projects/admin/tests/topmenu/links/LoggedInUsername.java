@@ -27,7 +27,7 @@ public class LoggedInUsername extends CommonTest {
 
 		// Check that the displayed name is contained in the email
 		String displayed = app.zPageMain.getText(PageMain.Zskin_container_username);	
-		ZAssert.assertContains(displayed, gAdmin.EmailAddress, "Verify the correct account display name is shown");
+		ZAssert.assertStringContains(displayed, gAdmin.EmailAddress, "Verify the correct account display name is shown");
 		
 	}
 

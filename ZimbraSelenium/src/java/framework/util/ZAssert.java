@@ -1,5 +1,6 @@
 package framework.util;
 
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -80,15 +81,16 @@ public class ZAssert {
 		
 	}
 
-	public static void assertContains(String sequence, String actual, String message) {
+	public static void assertContains(Collection<?> collection, Object object, String message) {
 
 		TotalCountTests++;
 		CountTests++;
 		
-		logger.info(String.format("%s -- (%s contains %s) [%s]", "assertContains", actual, sequence, message));
+		logger.info(String.format("%s -- (collection contains %s) [%s]", "assertContains", object, message));
         try
         {
-        	Assert.assertTrue(actual.contains(sequence), message);
+        	boolean contains = collection.contains(object);
+        	Assert.assertTrue(contains, message);
         }
         catch (AssertionError e)
         {
@@ -123,6 +125,33 @@ public class ZAssert {
         
         CountPass++; TotalCountPass++;
 		
+	}
+
+	/**
+	 * Verify that "actual" contains "substring"
+	 * @param actual the actual text
+	 * @param substring the substring that should be cotained in actual
+	 * @param message the logging message
+	 */
+	public static void assertStringContains(String actual, String substring, String message) {
+	
+		TotalCountTests++;
+		CountTests++;
+		
+		logger.info(String.format("%s -- (%s contains %s) [%s]", "assertStringContains", actual, substring, message));
+        try
+        {
+        	boolean contains = actual.contains(substring);
+        	Assert.assertTrue(contains, message);
+        }
+        catch (AssertionError e)
+        {
+        	logger.error(e);
+            throw e;
+        }
+        
+        CountPass++; TotalCountPass++;
+
 	}
 
 }
