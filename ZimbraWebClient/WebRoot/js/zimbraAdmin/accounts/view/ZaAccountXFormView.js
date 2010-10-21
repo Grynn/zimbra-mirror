@@ -2903,18 +2903,17 @@ nowrap:false, labelWrap:true,
                						items:[
                    					{
                        						ref: ZaAccount.A_zimbraProxyAllowedDomains,
-                       						msgName:ZaMsg.MSG_zimbraProxyAllowedDomains,
-                       						label:ZaMsg.LBL_zimbraProxyAllowedDomains, labelLocation:_LEFT_,
+                       						label:ZaMsg.LBL_zimbraProxyAllowedDomains, 
                        						labelCssStyle:"vertical-align:top",
-                       						type:_REPEAT_,
-                       						align:_LEFT_,
+                       						type:_SUPER_REPEAT_,
+								resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
                        						repeatInstance:"",
                        						addButtonLabel:ZaMsg.NAD_ProxyAddAllowedDomain ,
                        						removeButtonLabel: ZaMsg.NAD_ProxyRemoveAllowedDomain,
                        						showAddButton:true,
                        						showRemoveButton:true,
                        						showAddOnNextRow:true,
-                       						items: [
+                       						repeatItems: [
                                					{ref:".", type:_TEXTFIELD_,
                                 				enableDisableChecks:[ZaItem.hasWritePermission] ,
                                   				visibilityChecks:[ZaItem.hasReadPermission],

@@ -1640,6 +1640,32 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						});
 		}
 
+				if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraProxyAllowedDomains],[])) {						
+			advancedCaseItems.push({type:_ZAWIZ_TOP_GROUPER_, id:"account_proxyalloweddomains_settings",colSizes:["auto"],numCols:1,
+							label:ZaMsg.NAD_ProxyAllowedDomains,
+							items: [
+              							{ ref: ZaAccount.A_zimbraProxyAllowedDomains,
+                                                                  label:ZaMsg.LBL_zimbraProxyAllowedDomains,
+                                                                  labelCssStyle:"vertical-align:top",
+                                                                  type:_SUPER_REPEAT_,
+                                                                  resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                                                  repeatInstance:"",
+                                                                  addButtonLabel:ZaMsg.NAD_ProxyAddAllowedDomain ,
+                                                                  removeButtonLabel: ZaMsg.NAD_ProxyRemoveAllowedDomain,
+                                                                  showAddButton:true,
+                                                                  showRemoveButton:true,
+                                                                  showAddOnNextRow:true,
+                                                                  repeatItems: [
+                                                                  { ref:".", type:_TEXTFIELD_,
+                                                                    enableDisableChecks:[ZaItem.hasWritePermission] ,
+                                                                    visibilityChecks:[ZaItem.hasReadPermission],
+                                                                    width: "15em"
+                                                                  }
+                                                                  ]
+                                                                }
+							]
+						});
+		}
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPasswordLocked,ZaAccount.A_zimbraMinPwdLength,
 			ZaAccount.A_zimbraMaxPwdLength,ZaAccount.A_zimbraPasswordMinUpperCaseChars,ZaAccount.A_zimbraPasswordMinLowerCaseChars,
 			ZaAccount.A_zimbraPasswordMinPunctuationChars,ZaAccount.A_zimbraPasswordMinNumericChars,
