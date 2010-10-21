@@ -178,9 +178,12 @@ GlobalConfigXFormView.SKIN_TAB_ATTRS = [ZaGlobalConfig.A_zimbraSkinForegroundCol
 
 GlobalConfigXFormView.SKIN_TAB_RIGHTS = [];
 
+GlobalConfigXFormView.BC_TAB_ATTRS = [ZaGlobalConfig.A_zimbraBasicAuthRealm];
+GlobalConfigXFormView.BC_TAB_RIGHTS = [];
+
 GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 	xFormObject.tableCssStyle = "width:100%;overflow:auto;";
-	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8;
+	var _tab1, _tab2, _tab3, _tab4, _tab5, _tab6, _tab7, _tab8, _tab9;
 	
     var tabBarChoices = [];
     var switchItems = [];
@@ -357,10 +360,6 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
 							 		toolTipContent: ZaMsg.tt_MTA_RelayMTA,
 							 		onMouseout: "ZaController.hideTooltip"
 								},
-	  							{ ref: ZaGlobalConfig.A_zimbraBasicAuthRealm, type: _TEXTFIELD_,
-                                      label:ZaMsg.Domain_zimbraBasicAuthRealm,
-                                      toolTipContent: ZaMsg.Domain_zimbraBasicAuthRealm
-                                },
 								{ type: _DWT_ALERT_,
 									containerCssStyle: "padding-bottom:0px",
 									style: DwtAlert.INFO,
@@ -718,6 +717,26 @@ GlobalConfigXFormView.myXFormModifier = function(xFormObject, entry) {
         switchItems.push (case8) ;
     }
 
+    if(ZaTabView.isTAB_ENABLED(entry,GlobalConfigXFormView.BC_TAB_ATTRS, GlobalConfigXFormView.BC_TAB_RIGHTS)) {
+    	_tab9 = ++this.TAB_INDEX;
+
+        tabBarChoices.push ({value:_tab9, label:ZaMsg.Domain_Tab_Briefcase});
+        var case9 =             //skin properties
+                {type: _ZATABCASE_, caseKey:_tab9,
+		       colSizes:["auto"],numCols:1,id:"global_bc_tab",
+		       items: 	[
+                        	{ type:_ZA_TOP_GROUPER_, label:ZaMsg.Domain_BC_ShareConf,
+                                  items :[
+                                          { ref: ZaGlobalConfig.A_zimbraBasicAuthRealm,
+                                            type: _TEXTFIELD_, 
+                                            label: ZaMsg.Domain_zimbraBasicAuthRealm
+                                          }
+                                         ]
+                                }
+                             	]
+                };
+        switchItems.push (case9) ;
+    }
     xFormObject.items = [
 		{ type: _DWT_ALERT_,
 		  cssClass: "DwtTabTable",

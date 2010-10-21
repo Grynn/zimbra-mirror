@@ -540,14 +540,6 @@ function () {
 					if(this._popupOperations[ZaOperation.AUTH_WIZARD])
 						this._popupOperations[ZaOperation.AUTH_WIZARD].enabled=false;
 				}
-		
-				if(!ZaDomain.canConfigureWiki(item)) {
-					if(this._toolbarOperations[ZaOperation.INIT_NOTEBOOK])
-						this._toolbarOperations[ZaOperation.INIT_NOTEBOOK].enabled = false;
-
-					if(this._popupOperations[ZaOperation.INIT_NOTEBOOK])
-						this._popupOperations[ZaOperation.AUTH_WIZARD].enabled=false;
-				}
 
 				if(!item.rights[ZaDomain.RIGHT_DELETE_DOMAIN]) {
 					if(this._toolbarOperations[ZaOperation.DELETE]) {
