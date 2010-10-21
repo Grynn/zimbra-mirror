@@ -28,7 +28,7 @@ ZaBulkProvisionTasksController = function(appCtxt, container) {
 
 ZaBulkProvisionTasksController.prototype = new ZaListViewController();
 ZaBulkProvisionTasksController.prototype.constructor = ZaBulkProvisionTasksController;
-ZaBulkProvisionTasksController.helpURL = location.pathname + "help/admin/html/managing_accounts/how_to_provision_multiple_accounts.htm?locid=" + AjxEnv.DEFAULT_LOCALE;
+ZaBulkProvisionTasksController.helpURL = location.pathname + ZaUtil.HELP_URL + "account_migration/migrating_accounts.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 ZaController.initToolbarMethods["ZaBulkProvisionTasksController"] = new Array();
 ZaController.initPopupMenuMethods["ZaBulkProvisionTasksController"] = new Array();
 ZaController.changeActionsStateMethods["ZaBulkProvisionTasksController"] = new Array(); 
