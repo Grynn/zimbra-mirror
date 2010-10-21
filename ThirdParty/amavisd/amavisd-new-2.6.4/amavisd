@@ -3785,10 +3785,13 @@ sub make_query_keys($$$;$) {
     my(@dkeys); my($d) = $domain;
     for (;;) {               # (@).sub.example.com (@).example.com (@).com (@).
       push(@dkeys, $prepend_to_domain.'.'.$d);
+      if ($d ne '') {
+        push(@dkeys, $d);
+      }
       last  if $d eq '';
       $d = ($d =~ /^([^.]*)\.(.*)\z/s) ? $2 : '';
     }
-    if (@dkeys > 10) { @dkeys = @dkeys[$#dkeys-9 .. $#dkeys] }  # sanity limit
+    if (@dkeys > 20) { @dkeys = @dkeys[$#dkeys-19 .. $#dkeys] }  # sanity limit
     push(@keys,@dkeys);
   }
   if (defined $append_string && $append_string ne '') {
