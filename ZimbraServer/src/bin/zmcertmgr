@@ -556,7 +556,7 @@ deployCA() {
   chmod 755 ${zimbra_conf_directory}/ca
   cp -f ${zimbra_ca_key} ${zimbra_conf_directory}/ca/ca.key
   cp -f ${zimbra_ca_crt}  ${zimbra_conf_directory}/ca/ca.pem
-  if [ -f "${commercial_ca_crt}" ]; then
+  if [ -s "${commercial_ca_crt}" ]; then
     cp -f ${commercial_ca_crt} ${zimbra_conf_directory}/ca/commercial_ca.pem
     cd ${zimbra_conf_directory}/ca
     perl -e 'my $i=1; while (<>) { open(N, ">commercial_ca_$i.pem") if (/BEGIN CERTIFICATE/); print N; if (/END CERTIFICATE/) { close(N); $i++; } }' ${commercial_ca_crt}
@@ -568,7 +568,7 @@ deployCA() {
 
   # add hash to ca
   ln -f -s ca.pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/ca.pem`.0
-  if [ -f "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
+  if [ -s "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
     cd ${zimbra_conf_directory}/ca
     for pem in commercial_ca*.pem; do
       ln -f -s $pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
@@ -735,11 +735,11 @@ deployCert() {
   chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/ca/ca.pem 
   chown ${zimbra_uid}:${zimbra_gid} ${zimbra_conf_directory}/ca/ca.key
   chmod 640 ${zimbra_conf_directory}/ca/ca.pem ${zimbra_conf_directory}/ca/ca.key
-  if [ -f "${commercial_ca_crt}" ]; then
+  if [ -s "${commercial_ca_crt}" ]; then
     cp -f ${commercial_ca_crt} ${zimbra_conf_directory}/ca/commercial_ca.pem
     cd ${zimbra_conf_directory}/ca
     perl -e 'my $i=1; while (<>) { open(N, ">commercial_ca_$i.pem") if (/BEGIN CERTIFICATE/); print N; if (/END CERTIFICATE/) { close(N); $i++; } }' ${commercial_ca_crt}
-    if [ -f "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
+    if [ -s "${zimbra_conf_directory}/ca/commercial_ca.pem" ]; then
       cd ${zimbra_conf_directory}/ca
       for pem in commercial_ca*.pem; do
         ln -f -s $pem ${zimbra_conf_directory}/ca/`${openssl} x509 -hash -noout -in ${zimbra_conf_directory}/ca/$pem`.0
