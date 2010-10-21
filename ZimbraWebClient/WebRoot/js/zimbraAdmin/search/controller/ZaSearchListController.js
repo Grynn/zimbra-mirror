@@ -72,7 +72,19 @@ ZaSearchListController.prototype.show = function (doPush) {
 			busyMsg:ZaMsg.BUSY_SEARCHING,
 			skipCallbackIfCancelled:false			
 	}
-	ZaSearch.searchDirectory(searchParams);
+	var searchQueryList = new Array();
+	var isAliasSpec = false;
+	for(var i = 0; this.searchTypes && i < this.searchTypes.length; i++) {
+		if(this.searchTypes[i] == ZaSearch.ALIASES)
+			isAliasSpec = true;
+	}
+	if(isAliasSpec) {
+		searchQueryList.push(searchParams);
+		var keyword = ZaSearchListController._getSearchKeyWord(this._currentQuery);
+		ZaSearchListController.searchAliasDomain(keyword,this,searchQueryList);
+	}else
+		ZaSearch.searchDirectory(searchParams);
+
 }
 
 ZaSearchListController.prototype._show = 
@@ -177,13 +189,10 @@ function (domainArr, searchQueryList) {
         var searchTypes = ZaSearch.ALIASES;
         var searchQuery = "(uid=*)";
         var controller = ZaApp.getInstance().getSearchListController();
-        if(controller.setSearchTypes)
-                controller.setSearchTypes(searchTypes);
 
 	if(searchQueryList && searchQueryList instanceof Array)
 		paramsArr = searchQueryList;
 	else paramsArr = new Array();
-        controller._currentQuery = searchQuery;
         var busyId = Dwt.getNextId();
 	var inParams = {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId};
         var callback = new AjxCallback(controller, controller.searchCallback, inParams);
@@ -195,7 +204,7 @@ function (domainArr, searchQueryList) {
         	                busyId:busyId,
 	                        busyMsg:ZaMsg.BUSY_SEARCHING,
         	                skipCallbackIfCancelled:false,
-	                        sortBy:params.sortBy,
+	                        sortBy:controller._currentSortField,
         	                attrs:ZaSearch.standardAttributes,
                 	        callback:callback,
 	                        controller: controller,
@@ -284,6 +293,7 @@ function(params) {
 		controller.setSearchTypes(params.types);
 
 	controller._currentQuery = params.query ;
+	controller._currentSortField = params.sortBy;
 	var busyId = Dwt.getNextId();	
 	var callback = new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true, openInSearchTab: true,busyId:busyId});
         var searchParams = {
@@ -301,7 +311,6 @@ function(params) {
                         callback:callback,
                         controller: controller
         }
-
 
 	var isAliasSpec = false;
 	for(var i = 0; params.types && i < params.types.length; i++) {
