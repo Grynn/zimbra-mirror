@@ -250,7 +250,13 @@ ZaBulkProvision.getMyXModel = function () {
 	        {id:ZaBulkProvision.A2_provisionUsers, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_provisionUsers},
 	        {id:ZaBulkProvision.A2_importEmail, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_importEmail},
 	        //direct import from LDAP
-	        {id:ZaBulkProvision.A2_createDomains, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_createDomains}
+	        {id:ZaBulkProvision.A2_createDomains, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:ZaBulkProvision.A2_createDomains},
+	        {id:ZaBulkProvision.A2_IMAPAdminPassword, type:_STRING_, ref:ZaBulkProvision.A2_IMAPAdminPassword},
+	        {id:ZaBulkProvision.A2_IMAPAdminLogin, type:_STRING_, ref:ZaBulkProvision.A2_IMAPAdminLogin},
+	        {id:ZaBulkProvision.A2_SMTPHost, type:_STRING_, ref:ZaBulkProvision.A2_SMTPHost},
+	        {id:ZaBulkProvision.A2_SMTPPort, type:_NUMBER_, ref:ZaBulkProvision.A2_SMTPPort},
+	        {id:ZaBulkProvision.A2_IMAPHost, type:_STRING_, ref:ZaBulkProvision.A2_IMAPHost},
+	        {id:ZaBulkProvision.A2_IMAPPort, type:_NUMBER_, ref:ZaBulkProvision.A2_IMAPPort}
         ]
     }
 
@@ -495,6 +501,14 @@ ZaBulkProvision.generateBulkProvisionPreview = function(obj, callback) {
 	if(obj[ZaBulkProvision.A2_password]) {
 		attr = soapDoc.set(ZaBulkProvision.A2_password,obj[ZaBulkProvision.A2_password]);
 	}
+	
+	if(obj[ZaBulkProvision.A2_SMTPHost]) {
+		attr = soapDoc.set(ZaBulkProvision.A2_SMTPHost,obj[ZaBulkProvision.A2_SMTPHost]);
+	}
+	if(obj[ZaBulkProvision.A2_SMTPPort]) {
+		attr = soapDoc.set(ZaBulkProvision.A2_SMTPPort,obj[ZaBulkProvision.A2_SMTPPort]);
+	}
+	
 	attr = soapDoc.set(ZaBulkProvision.A2_maxResults,obj[ZaBulkProvision.A2_maxResults]);
 	attr = soapDoc.set(ZaBulkProvision.A2_fileFormat,ZaBulkProvision.FILE_FORMAT_PREVIEW);
 	attr = soapDoc.set(ZaBulkProvision.A2_generatePassword,obj[ZaBulkProvision.A2_generatePassword]);

@@ -123,6 +123,17 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
             if (entries != null) {
         	String outFileName = null;
             	if(FILE_FORMAT_PREVIEW.equalsIgnoreCase(fileFormat)) {
+                    String SMTPHost = "";
+                    String SMTPPort = "";
+                    
+                    Element eSMTPHost = request.getOptionalElement(ZimbraBulkProvisionExt.E_SMTPHost);
+                    if(eSMTPHost != null) {
+                        SMTPHost = eSMTPHost.getTextTrim();
+                    }
+                    Element eSMTPPort = request.getOptionalElement(ZimbraBulkProvisionExt.E_SMTPPort);
+                    if(eSMTPPort != null) {
+                        SMTPPort = eSMTPPort.getTextTrim();
+                    }
 	                for (GalContact entry : entries) {	
 	                    String mail = entry.getSingleAttr(ContactConstants.A_email);
 	                    if(mail == null)
@@ -151,6 +162,8 @@ public class GenerateBulkProvisionFileFromLDAP extends AdminDocumentHandler {
 	                response.addElement(E_domainCount).setText(Integer.toString(totalDomains));
 	                response.addElement(ZimbraBulkProvisionExt.E_skippedAccountCount).setText(Integer.toString(totalExistingAccounts));
 	                response.addElement(E_skippedDomainCount).setText(Integer.toString(totalExistingDomains));
+	                response.addElement(ZimbraBulkProvisionExt.E_SMTPHost).setText(SMTPHost);
+	                response.addElement(ZimbraBulkProvisionExt.E_SMTPPort).setText(SMTPPort);	                
 	                return response;
             	} else if(AdminFileDownload.FILE_FORMAT_BULK_CSV.equalsIgnoreCase(fileFormat)) {
             		outFileName = String.format("%s%s_bulk_%s_%s.csv", LC.zimbra_tmp_directory.value(),File.separator,zsc.getAuthtokenAccountId(),fileToken);
