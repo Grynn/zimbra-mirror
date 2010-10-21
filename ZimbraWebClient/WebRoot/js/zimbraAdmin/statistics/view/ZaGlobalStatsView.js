@@ -26,20 +26,20 @@ ZaGlobalStatsView = function(parent) {
 	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
     
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_COUNT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-        this._msgCountPage = new ZaGlobalMessageCountPage(this);
-        this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);
-    }
-    
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_VOL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-	    this._msgsVolumePage = new ZaGlobalMessageVolumePage(this);
-        this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);
-    }
-
-    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_ASAV_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]){
-        this._spamPage = new ZaGlobalSpamActivityPage(this);
-        this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
-    }
+//    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_COUNT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+//        this._msgCountPage = new ZaGlobalMessageCountPage(this);
+//        this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);
+//    }
+//    
+//    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_VOL_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
+//	    this._msgsVolumePage = new ZaGlobalMessageVolumePage(this);
+//        this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);
+//    }
+//
+//    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_ASAV_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]){
+//        this._spamPage = new ZaGlobalSpamActivityPage(this);
+//        this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
+//    }
     
     if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_ADVANCED_STATS_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]){
         this._advancedPage = new ZaGlobalAdvancedStatsPage(this);
@@ -57,11 +57,127 @@ function() {
 	return "ZaGlobalStatsView";
 }
 
+
+
+ZaGlobalStatsView.prototype.getAllServersInfo = function( ){
+
+	try {
+	
+		var soapDoc = AjxSoapDoc.create("GetAllServersRequest", ZaZimbraAdmin.URN, null);	
+		soapDoc.getMethod().setAttribute("applyConfig", "false");
+		soapDoc.getMethod().setAttribute("service", "mta");
+	
+		var params = new Object();
+		params.soapDoc = soapDoc;
+		params.asyncMode=false;
+	
+		var reqMgrParams = {
+			controller : ZaApp.getInstance().getCurrentController(),
+			busyMsg : ZaMsg.BUSY_GET_ALL_SERVER
+		}
+		var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllServersResponse;	
+	  var allServersInfo = resp.server; 
+		
+		return allServersInfo;	
+		
+	}catch ( ex ){
+		
+		ZaApp.getInstance().getCurrentController()._handleException(ex, "ZaGlobalStatsView.getAllServersInfo", null, false);
+	}
+}
+
+ZaGlobalStatsView.prototype.getAllServersMtaServiceStatus = function( ){
+  
+  //this._containedObject.name;
+  allServersInfo = ZaGlobalStatsView.prototype.getAllServersInfo( );
+  
+  if( !allServersInfo ){
+  	return null;
+  }
+   
+  var oneServerDetailInfo = null;
+  var oneServerBriefInfo = {};
+  var i = 0;
+  var j = 0;
+  
+  var isEnabled = false;
+  var isInstalled = false;
+  var allServersMtaServiceEnableStatus = [];
+  
+  for( i = 0; i < allServersInfo.length; i++ ){
+  	  oneServerDetailInfo = allServersInfo[i].a;
+  	  oneServerBriefInfo.id = allServersInfo[i].id;
+  	  oneServerBriefInfo.name = allServersInfo[i].name;
+  	  
+  	  for ( j = 0, isEnabled = isInstalled = false; j < oneServerDetailInfo.length; j++){
+					oneService = oneServerDetailInfo[j];
+					if( "mta" == oneService._content ){
+						if( oneService.n == ZaServer.A_zimbraServiceEnabled ){
+							
+							isEnabled = true;
+							
+						}else if ( oneService.n == ZaServer.A_zimbraServiceInstalled ){
+							
+							isInstalled = true;
+						
+						}							
+					} 
+  	  }
+  	  
+  	  var isMtaEnable = (isEnabled && isInstalled);
+  	  
+  	  allServersMtaServiceEnableStatus[ oneServerBriefInfo.name ] = isMtaEnable;
+
+  }
+  
+	return allServersMtaServiceEnableStatus;
+}
+
+ZaGlobalStatsView.prototype.isAllMtaDisable = function( ){
+	
+	allServersMtaServiceEnableStatus = ZaGlobalStatsView.prototype.getAllServersMtaServiceStatus();
+  if( !allServersMtaServiceEnableStatus ){
+ 		return true; //no info means no zimbraServiceEnabled message sending to the admin 
+ 	}
+ 	
+ 	var i = 0;
+	for ( i in allServersMtaServiceEnableStatus ) 
+	{ 
+ 		if( allServersMtaServiceEnableStatus[i] ){
+ 				return false;
+ 		}
+	}
+
+	return true;
+}
+
 ZaGlobalStatsView.prototype.setObject = function (entry) {
 	this._containedObject = entry ;
-	this._msgCountPage.setObject(entry);
-	this._msgsVolumePage.setObject(entry);
-	this._spamPage.setObject(entry);
+	//this._msgCountPage.setObject(entry);
+	//this._msgsVolumePage.setObject(entry);
+	//this._spamPage.setObject(entry);
+	if( !ZaGlobalStatsView.prototype.isAllMtaDisable()  ){
+    
+    if( this._msgCountPage == null ){
+        this._msgCountPage = new ZaServerMessageCountPage(this);
+        this.addTab(ZaMsg.TABT_InMsgs, this._msgCountPage);
+    }
+ 		this._msgCountPage.setObject(entry);
+    
+    if( this._msgsVolumePage == null ){
+        this._msgsVolumePage = new ZaServerMessageVolumePage(this);
+        this.addTab(ZaMsg.TABT_InData, this._msgsVolumePage);
+    }
+    this._msgsVolumePage.setObject(entry);	
+     
+		if( this._spamPage == null ){
+			  this._spamPage = new ZaServerSpamActivityPage(this);
+        this.addTab(ZaMsg.TABT_Spam_Activity, this._spamPage);
+		}
+	  this._spamPage.setObject(entry);	
+		
+	}
+	
 	this._advancedPage.setObject(entry);
 	this._mobileSyncPage.setObject(entry);
 }
@@ -136,3 +252,4 @@ function() {
 	this.titleCell.innerHTML = AjxStringUtil.htmlEncode(ZaMsg.NAD_GlobalStatistics);
 	this.titleCell.className="AdminTitleBar";
 }
+

@@ -609,7 +609,7 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
 						  	  enableDisableChecks:[[XForm.checkInstanceValue,ZaServer.A_zimbraMtaServiceInstalled,true],
 						  	  [ZaItem.hasWritePermission,ZaServer.A_zimbraServiceEnabled]],
 						  	  label: ZaMsg.NAD_Service_MTA,
-					  	      onChange: ZaServerXFormView.onFormFieldChanged
+					  	      onChange: ZaServerXFormView.onMtaServiceChanged
 						  	},
 						  	{ ref: ZaServer.A_zimbraSnmpServiceEnabled, type: _CHECKBOX_,
 						  	  enableDisableChangeEventSources:[ZaServer.A_zimbraSnmpServiceInstalled],
@@ -1098,3 +1098,37 @@ ZaServerXFormView.myXFormModifier = function(xFormObject, entry) {
     ];
 };
 ZaTabView.XFormModifiers["ZaServerXFormView"].push(ZaServerXFormView.myXFormModifier);
+
+ZaServerXFormView.showMtaServiceEnableRelatedNotice = function( isMtaEnable ){
+	
+	var notice;
+	var style;
+	if( isMtaEnable ){	
+		notice = ZaMsg.NAD_MTA_notice_related_statistics_tabs_enable;
+		style  = DwtMessageDialog.WARNING_STYLE;
+	}
+	else {
+		notice = ZaMsg.NAD_MTA_notice_related_statistics_tabs_disable;	
+		style  = DwtMessageDialog.INFO_STYLE
+	}
+	
+	//ZaApp.getInstance().dialogs["confirmMessageDialog"] = new ZaMsgDialog(ZaApp.getInstance().getAppCtxt().getShell(), null, [DwtDialog.OK_BUTTON]);
+		
+	ZaApp.getInstance().dialogs["msgDialog"].setMessage( notice, style );
+	////ZaApp.getInstance().dialogs["confirmMessageDialog"].registerCallback(DwtDialog.YES_BUTTON, ZaServer.FlushMtaServiceData, this);		
+	ZaApp.getInstance().dialogs["msgDialog"].popup();
+	
+	//var msgDialog = appCtxt.getMsgDialog();
+	//msgDialog.setMessage(notice, DwtMessageDialog.INFO_STYLE);
+	//msgDialog.popup();
+}
+
+ZaServerXFormView.onMtaServiceChanged = function (value, event, form) {
+	
+	ZaServerXFormView.showMtaServiceEnableRelatedNotice( value );
+	
+	form.parent.setDirty(true);
+	this.setInstanceValue(value);
+	return value;
+	//return ZaServerXFormView.onFormFieldChanged( value, event, form );
+}
