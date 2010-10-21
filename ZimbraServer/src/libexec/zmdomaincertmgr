@@ -134,6 +134,8 @@ loadConfigKey() {
     echo -n "** Retrieving $location config key $key..."
     su - zimbra -c "${zimbra_home}/bin/zmprov -m -l -- ${zmprov_opts} ${key} | sed  -e 's/^${key}: //' > ${tmpfile} 2> /dev/null" 2>/dev/null && mv -f ${tmpfile} ${file} 2> /dev/null
     if [ $? = 0 -a -s "${file}" ]; then
+      chown ${zimbra_uid} ${file} 2> /dev/null
+      chmod 400 ${file} 2> /dev/null
       echo "done."
     else
       echo "failed."
@@ -145,10 +147,14 @@ loadConfigKey() {
 deployCerts() {
 
   if [ "x$1" = "x-force" ]; then
-    rm -rf ${zimbra_home}/conf/domaincerts > /dev/null 2>&1
+    rm -rf ${zimbra_domain_cert_directory} > /dev/null 2>&1
   fi
   
   DOMAINS=$(su - zimbra -c "${zimbra_home}/bin/zmprov -m -l -- garpd | awk '{print \$1}'")
+  if [ $? != 0 ]; then
+    echo "Unable to retrieve list of domains with SSL certificates";
+    exit 1
+  fi
   
   for i in ${DOMAINS}; do
     echo -n "** Deploying cert for ${i}..."
@@ -191,6 +197,8 @@ getDomainCertFromLdap() {
   if [ ! -d ${zimbra_domain_cert_directory} ]; then
     mkdir -p ${zimbra_domain_cert_directory}
   fi
+  chown ${zimbra_uid}:${zimbra_gid} ${zimbra_domain_cert_directory} 2> /dev/null
+  chmod 755 ${zimbra_domain_cert_directory} 2> /dev/null
   current_crt=${zimbra_domain_cert_directory}/${domain}.crt
   current_key=${zimbra_domain_cert_directory}/${domain}.key
 
