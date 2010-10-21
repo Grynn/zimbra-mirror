@@ -182,7 +182,7 @@ function() {
 				  style: DwtAlert.INFORMATION,
 				  iconVisible: true, 
 				  content: null,
-				  ref:DeleteAcctsPgrsDlg._STATUS,align:_CENTER_, valign:_MIDDLE_,colSpan:"*",width:"90%",
+				  ref:DeleteAcctsPgrsDlg._STATUS,align:_CENTER_, valign:_MIDDLE_,colSpan:"*",width:"100%",
 				  visibilityChecks:[[XForm.checkInstanceValueEmty,DeleteAcctsPgrsDlg._ERROR_MSG]],
 				  visibilityChangeEventSources:[DeleteAcctsPgrsDlg._ERROR_MSG]
 			},
@@ -190,7 +190,7 @@ function() {
 				  style: DwtAlert.CRITICAL,
 				  iconVisible: true, 
 				  content: null,
-				  ref:DeleteAcctsPgrsDlg._ERROR_MSG, align:_CENTER_, valign:_MIDDLE_,colSpan:"*", width:"90%",
+				  ref:DeleteAcctsPgrsDlg._ERROR_MSG, align:_CENTER_, valign:_MIDDLE_,colSpan:"*", width:"100%",
 				  visibilityChecks:[[XForm.checkInstanceValueNotEmty,DeleteAcctsPgrsDlg._ERROR_MSG]],
 				  visibilityChangeEventSources:[DeleteAcctsPgrsDlg._ERROR_MSG]				  				  
 			},			
