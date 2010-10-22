@@ -4,17 +4,11 @@
 <key name="access control for domain Documents accounts" >
   <topic name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
 </key>
-<key name="account advanced features" >
-  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
-</key>
 <key name="account attributes, assigning" >
   <topic name="Class of Service Managing" url="cos/class_of_service.htm" />
 </key>
 <key name="account ID" >
   <topic name="Managing User Accounts" url="managing_accounts/provisioning_accounts.htm" />
-</key>
-<key name="account quota" >
-  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
 </key>
 <key name="account status" >
   <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
@@ -27,9 +21,6 @@
 </key>
 <key name="accounts" >
   <topic name="Managing User Accounts" url="managing_accounts/provisioning_accounts.htm" />
-  <key name="accounts, quota" >
-    <topic name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
-  </key>
 </key>
 <key name="accounts, adding distribution lists" >
   <topic name="Adding Distribution Lists to an Account" url="managing_accounts/adding_distribution_lists_to_an_account.htm" />
@@ -67,14 +58,8 @@
 <key name="administration tasks" >
   <topic name="About the Administration Console" url="getting_started/about_the_administration_console.htm" />
 </key>
-<key name="administrator account" >
-  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
-</key>
 <key name="administrator accounts, search for" >
   <topic name="Advanced Search" url="search/advanced_search.htm" />
-</key>
-<key name="advanced features" >
-  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
 </key>
 <key name="alias, move" >
   <topic name="Creating a Mail Aliases" url="managing_accounts/creating_a_mail_aliases.htm" />
@@ -119,17 +104,11 @@
 <key name="bulk provisioning" >
   <topic name="Bulk Provisioning" url="managing_accounts/bulk_provisioning.htm" />
 </key>
-<key name="cache, flush" >
-  <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
-</key>
 <key name="change password" >
   <topic name="Password Options" url="passwords/password_options.htm" />
 </key>
 <key name="changing password" >
   <topic name="Changing a Password" url="passwords/changing_a_password.htm" />
-</key>
-<key name="changing quota settings" >
-  <topic name="Changing Quota Settings" url="managing_accounts/changing_quota_settings.htm" />
 </key>
 <key name="changing user passwords" >
   <topic name="Setting and Changing Passwords" url="passwords/setting_passwords.htm" />
@@ -140,17 +119,11 @@
 <key name="CLI tool" >
   <topic name="Management Tasks not available from the Console" url="getting_started/management_tasks_not_available_from_the_console.htm" />
 </key>
-<key name="configuring advanced features" >
-  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
-</key>
 <key name="copyright" >
   <topic name="About Zimbra Collaboration Suite" url="getting_started/about_zcs.htm" />
 </key>
 <key name="COS" >
   <topic name="Class of Service" url="cos/class_of_service.htm" />
-</key>
-<key name="COS advanced features" >
-  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
 </key>
 <key name="COS, adding Zimlets to" >
   <topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
@@ -209,9 +182,6 @@
 </key>
 <key name="deleting mail messages" >
   <topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
-</key>
-<key name="deleting messages" >
-  <topic name="Account Advanced Features" url="managing_accounts/account_advanced_features.htm" />
 </key>
 <key name="disable junk indexing" >
   <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
@@ -273,9 +243,6 @@
 <key name="filter, anti-virus" >
   <topic name="Anti-Virus Protection" url="managing_global_settings/anti-virus_configuration_options.htm" />
 </key>
-<key name="flush cache" >
-  <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
-</key>
 <key name="forwarding mail" >
   <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
 </key>
@@ -318,9 +285,6 @@
 <key name="kill percent" >
   <topic name="Anti-Spam Protection" url="managing_global_settings/anti-spam_protection.htm" />
 </key>
-<key name="locale, flush cache" >
-  <topic name="Flushing the Server Cache" url="managing_servers/flushing_the_server_cache.htm" />
-</key>
 <key name="location, creating" >
   <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
 </key>
@@ -332,6 +296,42 @@
 </key>
 <key name="locked out" >
   <topic name="Changing Locked Out Status" url="passwords/changing_locked_out_status.htm" />
+</key>
+<key name="locked password" >
+  <topic name="Password Options" url="passwords/password_options.htm" />
+</key>
+<key name="locking passwords" >
+  <topic name="Restricting Passwords" url="managing_accounts/restricting_passwords.htm" />
+</key>
+<key name="lockout" >
+  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
+</key>
+<key name="log on access" >
+  <topic name="Mailbox usage" url="managing_accounts/mailbox_usage.htm" />
+</key>
+<key name="Lotus Domino, migration" >
+  <topic name="Zimbra Migration Wizard for Lotus Domino" url="migration_wizard/zimbra_migration_wizard_for_lotus_domino.htm" />
+</key>
+<key name="mail queues" >
+  <topic name="Monitoring Zimbra MTA Mail Queues" url="monitoring/monitoring_zimbra_mta_mail_queues.htm" />
+</key>
+<key name="mail report" >
+  <topic name="Daily Mail Reports" url="monitoring/daily_mail_reports.htm" />
+</key>
+<key name="mail server" >
+  <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
+</key>
+<key name="mail, purging" >
+  <topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
+</key>
+<key name="mailbox quotas" >
+  <topic name="Viewing Mailbox Quotas" url="managing_servers/viewing_mailbox_quotas.htm" />
+</key>
+<key name="maintenance mode" >
+  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
+</key>
+<key name="managing accounts" >
+  <topic name="Managing User Accounts" url="managing_accounts/provisioning_accounts.htm" />
 </key>
 
 </indexdata>

@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -82,72 +82,64 @@ else
 //-->
 //]]></script>
 <h1>Domino Source and Destination Mailboxes</h1>
-<p>In this dialog, list the users who should be migrated to the Zimbra mailbox server.</p>
+<p>In this dialog, list the users who should be migrated to the Zimbra 
+ mailbox server.</p>
 <p>You can select users with either of the following applications:</p>
 <ul type="disc">
-<li class="p">
-<p style="font-weight: bold;">Object Picker<span style="font-weight: normal;">, to select individual accounts to migrate to Zimbra.</span></p>
-</li>
-<li class="p">
-<p><span style="font-weight: bold;"><b>Query Builder</b></span><span>, to select groups of accounts to migrate to Zimbra.</span></p>
-</li>
+	<li class="p"><p style="font-weight: bold;">Object Picker<span style="font-weight: normal;">, 
+	 to select individual accounts to migrate to Zimbra.</span></p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Query Builder</b></span><span>, 
+	 to select groups of accounts to migrate to Zimbra.</span></p></li>
 </ul>
 <p>When importing accounts, the migration wizard assumes that:</p>
 <ul type="disc">
-<li class="p">
-<p>Imports are by a single domain. For example, you might import users from 
-marketing.domain.com on your Domino server to 
-zimbra.domain.com on your Zimbra server.</p>
-</li>
-<li class="p">
-<p>The user’s Common Name (
-CN) in Domino will be the first portion of the email address on the Zimbra server. To continue the above example, a user who has an account for 
-joe@marketing.zimbra.com on Domino would become 
-joe@marketing.zimbra.example.com, on your Zimbra server.</p>
-</li>
+	<li class="p"><p>Imports are by a single domain. For example, you might 
+	 import users from marketing.domain.com 
+	 on your Domino server to zimbra.domain.com 
+	 on your Zimbra server.</p></li>
+	<li class="p"><p>The user’s Common Name ( 
+	 CN) in Domino will be the first portion of 
+	 the email address on the Zimbra server. To continue the above example, 
+	 a user who has an account for joe@marketing.zimbra.com 
+	 on Domino would become joe@marketing.zimbra.example.com, 
+	 on your Zimbra server.</p></li>
 </ul>
 <p>&#160;</p>
-<p>Click <span class="attribute">Object Picker</span> to select specific accounts to migrate. The Object Picker lists all the users in the Domino name and address book (NAB).</p>
-<ul>
-<li style="list-style:none;display: inline">
+<p>Click <span class="attribute">Object Picker</span> to select specific 
+ accounts to migrate. The Object Picker lists all the users in the Domino 
+ name and address book (NAB).</p>
 <ol>
-<li type="1" class="p">
-<p>Select the users that should be migrated to ZCS. To limit the number of users to migrate at one time, choose specific email addresses . You can include a substring. For example, you can specify to migrate all email addresses with the first letter of A, or 
-adam@*.com, or 
-adam@acme.com.</p>
-</li>
-<li type="1" class="p">
-<p><span style="margin-left: 48px;">You can continue to use the Object Picker to add more names. &#160;When complete, click</span> <span style="margin-left: 48px; font-weight: bold;"><b>OK</b></span><span style="margin-left: 48px;">.</span></p>
-</li>
-<li type="1" class="p">
-<p>When all the names are displayed in the Source and Destination Mailboxes dialog, click <span style="font-weight: bold;"><b>Next</b></span>.</p>
-</li>
+	<li style="list-style: none; display: inline;"><ol>
+		<li class="p" type="1"><p>Select the users that should be migrated 
+		 to ZCS. To limit the number of users to migrate at one time, choose 
+		 specific email addresses . You can include a substring. For example, 
+		 you can specify to migrate all email addresses with the first 
+		 letter of A, or adam@*.com, or 
+		 adam@acme.com.</p></li>
+		<li class="p" type="1"><p><span style="margin-left: 48px;">You 
+		 can continue to use the Object Picker to add more names. &#160;When 
+		 complete, click</span> <span style="margin-left: 48px; font-weight: bold;"><b>OK</b></span><span 
+		 style="margin-left: 48px;">.</span></p></li>
+		<li class="p" type="1"><p>When all the names are displayed in the 
+		 Source and Destination Mailboxes dialog, click <span style="font-weight: bold;"><b>Next</b></span>.</p></li>
+	</ol></li>
 </ol>
-</li>
-</ul>
 <p>&#160;</p>
-<p>Click <span class="attribute">Query Builder</span> to select groups of accounts to migrate.</p>
-<ul type="disc">
-<li style="list-style:none;display: inline">
-<ol type="1">
-<li class="p">
-<p>&#160;Enter the search base for the LDAP query</p>
-</li>
-<li class="p">
-<p>Construct the filter to identify which mailboxes to import.</p>
-</li>
-<li class="p">
-<p>Check 
-Subtree to search the entire 
-subtree under the Base DN</p>
-</li>
-<li class="p">
-<p>Click <span style="font-weight: bold;"><b>OK</b></span>.</p>
-</li>
+<p>Click <span class="attribute">Query Builder</span> to select groups 
+ of accounts to migrate.</p>
+<ol type="disc">
+	<li style="list-style: none; display: inline;"><ol type="1">
+		<li class="p"><p>&#160;Enter the search base for the LDAP query</p></li>
+		<li class="p"><p>Construct the filter to identify which mailboxes 
+		 to import.</p></li>
+		<li class="p"><p>Check Subtree to 
+		 search the entire subtree under 
+		 the Base DN</p></li>
+		<li class="p"><p>Click <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
+	</ol></li>
 </ol>
-</li>
-</ul>
-<p style="margin-left: 0px;">The Wizard now checks to see if the accounts selected exists on the Zimbra server.</p>
+<p style="margin-left: 0px;">The Wizard now checks to see if the accounts 
+ selected exists on the Zimbra server.</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)
