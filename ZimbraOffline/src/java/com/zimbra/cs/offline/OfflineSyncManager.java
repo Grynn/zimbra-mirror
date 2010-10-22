@@ -189,11 +189,12 @@ public class OfflineSyncManager {
         }
 
         boolean reauthOK(String password) {
-            return !password.equals(authPassword) || System.currentTimeMillis() - lastAuthFail > OfflineLC.zdesktop_reauth_delay.longValue();
+            return lastAuthFail == 0 || (password == null && authPassword != null) || (password != null  && !password.equals(authPassword)) || System.currentTimeMillis() - lastAuthFail > OfflineLC.zdesktop_reauth_delay.longValue();
         }
 
         void authSuccess(String password, ZAuthToken token, long expires) {
             authPassword = password;
+            lastAuthFail = 0;
             authToken = token;
             authExpires = expires;
             mStatus = mStatus == SyncStatus.authfail ? SyncStatus.online : mStatus;
