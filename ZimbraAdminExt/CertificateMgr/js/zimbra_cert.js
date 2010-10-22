@@ -1,4 +1,4 @@
-if(window.console && window.console.log) console.debug("Loaded zimbra_cert.js");
+if(window.console && window.console.log) console.log("Loaded zimbra_cert.js");
 
 if (ZaOperation) ZaOperation.INSTALLCERT = ++ZA_OP_INDEX;
 ZaItem.CERT = "cert" ;

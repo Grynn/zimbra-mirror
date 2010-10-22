@@ -2005,6 +2005,11 @@ function (value, event, form){
 		var p = form.parent ;
         var oldDomainName = this.getOldDomainPart ();
         var newDomainName = ZaAccount.getDomain(value) ;
+	
+	if( !newDomainName ){
+		return;
+	}
+	
         var domainObj;
         try {
         	domainObj =  ZaDomain.getDomainByName(newDomainName) ;
@@ -2184,7 +2189,7 @@ ZaAccount.setDefaultCos =
 function (instance) {
 	var defaultCos = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name]);
 			
-	if(defaultCos.id) {
+	if( defaultCos && defaultCos.id) {
 		instance._defaultValues = defaultCos;
 		instance.attrs[ZaAccount.A_COSId] = defaultCos.id;	
 	}

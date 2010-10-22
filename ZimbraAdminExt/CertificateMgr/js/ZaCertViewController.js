@@ -1,4 +1,4 @@
-if(window.console && window.console.log) console.debug("Loaded ZaCertViewController.js");
+if(window.console && window.console.log) console.log("Loaded ZaCertViewController.js");
 
 function ZaCertViewController(appCtxt, container) {
 	ZaController.call(this, appCtxt, container, "ZaCertViewController");

@@ -1,4 +1,4 @@
-if(window.console && window.console.log) console.debug("Loaded ZaCertView.js");
+if(window.console && window.console.log) console.log("Loaded ZaCertView.js");
 
 function ZaCertView (parent,className) {
 	if (arguments.length == 0) return ;
