@@ -39,7 +39,7 @@ if (os.geteuid() == 0):
 # th.start()
 
 # Signal handling workaround.  Directly affects the time required for a rewrite request to process
-sleepinterval = 0.1
+sleepinterval = 1.0
 
 def catchSignal(signum, fr):
 	Log.logMsg(4, "Received signal %d" % (signum,));
@@ -170,6 +170,9 @@ else:
 
 while True:
 
+	Log.logMsg (4, "Found %d threads" % threading.activeCount())
+	for th in threading.enumerate():
+		Log.logMsg(4, "Active Thread %s found" % th.getName())
 	t1 = time.clock()
 
 	try:

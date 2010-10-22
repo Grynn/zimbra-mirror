@@ -46,7 +46,7 @@ class Log:
 			cls.cf = conf.Config()
 
 		fmt = logging.Formatter("%(asctime)s %(name)s %(levelname)s [%(process)d-%(threadName)s] %(message)s")
-		sfmt = logging.Formatter("%(name)s %(levelname)s [%(process)d-%(threadName)s] %(message)s")
+		sfmt = logging.Formatter("%(name)s %(levelname)s [%(process)d-%(threadName)s-%(thread)d] %(message)s")
 
 		cls.logger = logging.getLogger('zmconfigd')
 		cls.logger.setLevel(logging.DEBUG)

@@ -241,35 +241,37 @@ class State:
 		gc.start()
 		mc.start()
 		sc.start()
-		lc.join(120)
-		gc.join(120)
-		mc.join(120)
-		sc.join(120)
+		
+		thread_wait_time = 60
+		lc.join(thread_wait_time)
+		gc.join(thread_wait_time)
+		mc.join(thread_wait_time)
+		sc.join(thread_wait_time)
 		try:
 			if (lc.isAlive()):
-				Log.logMsg(1, "Thread %s still alive, waiting 120" %lc.getName())
-				lc.join(120)
+				Log.logMsg(1, "Thread %s still alive, waiting %d" % (lc.getName(),thread_wait_time))
+				lc.join(thread_wait_time)
 				if (lc.isAlive()):
 					Log.logMsg(1, "Thread %s still alive, aborting" % lc.getName())
 					raise Exception, "Thread %s still alive, aborting" % lc.getName()
 			if (gc.isAlive()):
-				Log.logMsg(1, "Thread %s still alive, waiting 120" %gc.getName())
-				gc.join(120)
+				Log.logMsg(1, "Thread %s still alive, waiting %d" % (gc.getName(),thread_wait_time))
+				gc.join(thread_wait_time)
 				if (gc.isAlive()):
 					Log.logMsg(1, "Thread %s still alive, aborting" % gc.getName())
 					raise Exception, "Thread %s still alive, aborting" % gc.getName()
 			if (mc.isAlive()):
-				Log.logMsg(1, "Thread %s still alive, waiting 120" %mc.getName())
-				mc.join(120)
-				if (gc.isAlive()):
-					Log.logMsg(1, "Thread %s still alive, aborting" % gc.getName())
-					raise Exception, "Thread %s still alive, aborting" % gc.getName()
+				Log.logMsg(1, "Thread %s still alive, waiting %d" % (mc.getName(),thread_wait_time))
+				mc.join(thread_wait_time)
+				if (mc.isAlive()):
+					Log.logMsg(1, "Thread %s still alive, aborting" % mc.getName())
+					raise Exception, "Thread %s still alive, aborting" % mc.getName()
 			if (sc.isAlive()):
-				Log.logMsg(1, "Thread %s still alive, waiting 120" %sc.getName())
-				sc.join(120)
-				if (gc.isAlive()):
-					Log.logMsg(1, "Thread %s still alive, aborting" % gc.getName())
-					raise Exception, "Thread %s still alive, aborting" % gc.getName()
+				Log.logMsg(1, "Thread %s still alive, waiting %d" % (sc.getName(),thread_wait_time))
+				sc.join(thread_wait_time)
+				if (sc.isAlive()):
+					Log.logMsg(1, "Thread %s still alive, aborting" % sc.getName())
+					raise Exception, "Thread %s still alive, aborting" % sc.getName()
 
 		except Exception, e:
 			State.lConfig.release()
