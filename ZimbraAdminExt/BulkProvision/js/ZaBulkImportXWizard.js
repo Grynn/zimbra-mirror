@@ -67,7 +67,7 @@ ZaBulkImportXWizard.prototype = new ZaXWizardDialog;
 ZaBulkImportXWizard.prototype.constructor = ZaBulkImportXWizard;
 
 ZaXDialog.XFormModifiers["ZaBulkImportXWizard"] = new Array();
-ZaBulkImportXWizard.helpURL = "appliance/zap_importing_accounts.htm";
+ZaBulkImportXWizard.helpURL = "account_migration/migrating_accounts.htm";
 
 /**
 * Overwritten methods that control wizard's flow (open, go next,go previous, finish)
@@ -254,7 +254,8 @@ function() {
     		var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.importFromFileCallback,{});
    			ZaBulkProvision.importAccountsFromFile(this._containedObject,callback);
 		} else if(this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_AD
-				|| this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_LDAP) {
+				|| this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_LDAP 
+				|| this._containedObject[ZaBulkProvision.A2_provAction] == ZaBulkProvision.ACTION_IMPORT_ZIMBRA) {
 			
 			this.goPage(ZaBulkImportXWizard.STEP_PROVISION);
 			var callback = new AjxCallback(this, ZaBulkImportXWizard.prototype.importCallback,{action:this._containedObject[ZaBulkProvision.A2_provAction]});
@@ -537,6 +538,9 @@ ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);	
 		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);	
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
+		if(this._containedObject[ZaBulkProvision.A2_importEmail]== "FALSE") {
+			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		}
 	}
 	var errorsFileLink = null;
 	var sucessFileLink = null;
