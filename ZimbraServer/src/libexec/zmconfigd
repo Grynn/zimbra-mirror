@@ -173,6 +173,10 @@ while True:
 	Log.logMsg (4, "Found %d threads" % threading.activeCount())
 	for th in threading.enumerate():
 		Log.logMsg(4, "Active Thread %s found" % th.getName())
+	if (threading.activeCount() > 5):
+		Log.logMsg(1, "Hung threads detected (%d total), exiting" % threading.activeCount());
+		sys.exit(1)
+		
 	t1 = time.clock()
 
 	try:
@@ -183,7 +187,7 @@ while True:
 		if myState.forced:
 			Log.logMsg(0, "Key lookup failed.")
 		Log.logMsg(1, "Sleeping...Key lookup failed (%s)" % (e,))
-		time.sleep(5)
+		time.sleep(60)
 		continue
 
 	try:
@@ -214,7 +218,7 @@ while True:
 		if myState.forced and myState.forced < 100:
 			Log.logMsg(0, "Configuration inconsistency detected (%s)" % (e,))
 		Log.logMsg(1, "Sleeping...Configuration inconsistency detected (%s)" % (e,));
-		time.sleep(5)
+		time.sleep(60)
 		continue
 
 	if myState.forced:
