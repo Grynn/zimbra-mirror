@@ -31,7 +31,8 @@ olcAccess: {8}to attrs=zimbraId,zimbraMailAddress,zimbraMailAlias,zimbraMailCa
  dingAddress,zimbraPrefMailForwardingAddress,zimbraMailHost,zimbraMailStatus,z
  imbraMailTransport,zimbraDomainName,zimbraDomainType,zimbraPrefMailLocalDeliv
  eryDisabled  by dn.children="cn=admins,cn=zimbra" write  by dn.base="uid=zmpo
- stfix,cn=appaccts,cn=zimbra" read  by * none
+ stfix,cn=appaccts,cn=zimbra" read  dn.base="uid=zmamavis,cn=appaccts,cn=zimbr
+ a" read  by * none
 olcAccess: {9}to attrs=entry  by dn.children="cn=admins,cn=zimbra" write  by *
   read
 olcLastMod: TRUE
