@@ -105,15 +105,14 @@ public class AccessTokenHandler extends ExtensionHttpHandler {
             // generate access token and secret
             SampleZmOAuthProvider.generateAccessToken(accessor);
             
+            persistConsumerKeyInMbox(accessor);
+
             response.setContentType("text/plain");
             OutputStream out = response.getOutputStream();
             OAuth.formEncode(OAuth.newList("oauth_token", accessor.accessToken,
                                            "oauth_token_secret", accessor.tokenSecret),
                              out);
             out.close();
-
-            persistConsumerKeyInMbox(accessor);
-
         } catch (Exception e){
             SampleZmOAuthProvider.handleException(e, request, response, true);
         }
