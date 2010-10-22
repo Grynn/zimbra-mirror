@@ -57,7 +57,7 @@ public class ZimbraBulkProvisionExt implements ZimbraExtension {
     public static final String E_ZCSImport = "ZCSImport";
     public static final String E_ImportUsers = "ImportUsers";
     public static final String E_useAdminLogin = "UseAdminLogin";
-    public static final String E_IMAPAdminLogin = "E_IMAPAdminLogin";
+    public static final String E_IMAPAdminLogin = "IMAPAdminLogin";
     public static final String E_IMAPAdminPassword = "IMAPAdminPassword";
     public static final String E_connectionType = "ConnectionType";
     public static final String E_SMTPHost = "SMTPHost";
