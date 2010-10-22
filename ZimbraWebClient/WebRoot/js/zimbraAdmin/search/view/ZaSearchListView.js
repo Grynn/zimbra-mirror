@@ -148,6 +148,9 @@ function(account, now, isDragProxy) {
 			if(account.type == ZaItem.DOMAIN) {
 				html[idx++] = AjxStringUtil.htmlEncode(account.attrs[ZaDomain.A_domainName]);
 			} else {
+				if(account.isExternal) {
+					html[idx++] = "<span class='asterisk'>*</span>";	
+				}				
 				html[idx++] = AjxStringUtil.htmlEncode(account.name);
 			}
 			html[idx++] = "</nobr></td>";
