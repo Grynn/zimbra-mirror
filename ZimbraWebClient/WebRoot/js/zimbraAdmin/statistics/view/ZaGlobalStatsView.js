@@ -25,6 +25,7 @@ ZaGlobalStatsView = function(parent) {
 	DwtTabView.call(this, parent);
 	
 	this._appCtxt = this.shell.getData(ZaAppCtxt.LABEL);
+
     
 //    if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.GLOBAL_STATS_MSG_COUNT_TAB] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
 //        this._msgCountPage = new ZaGlobalMessageCountPage(this);
@@ -45,12 +46,14 @@ ZaGlobalStatsView = function(parent) {
         this._advancedPage = new ZaGlobalAdvancedStatsPage(this);
         this.addTab(ZaMsg.TABT_Advanced_Stats, this._advancedPage);
     }
-        this._mobileSyncPage = new ZaGlobalMobileSyncPage(this);
-        this.addTab(ZaMsg.TABT_MobileSync_Stats, this._mobileSyncPage);
+//        this._mobileSyncPage = new ZaGlobalMobileSyncPage(this);
+//        this.addTab(ZaMsg.TABT_MobileSync_Stats, this._mobileSyncPage);
 }
 
 ZaGlobalStatsView.prototype = new DwtTabView;
 ZaGlobalStatsView.prototype.constructor = ZaGlobalStatsView;
+
+ZaGlobalStatsView.extTabObjects = new Array();
 
 ZaGlobalStatsView.prototype.toString = 
 function() {
@@ -179,7 +182,17 @@ ZaGlobalStatsView.prototype.setObject = function (entry) {
 	}
 	
 	this._advancedPage.setObject(entry);
-	this._mobileSyncPage.setObject(entry);
+//	this._mobileSyncPage.setObject(entry);
+
+	for(var i = 0; i < ZaGlobalStatsView.extTabObjects.length; i++) {
+		var tabObj = ZaGlobalStatsView.extTabObjects[i];
+		if(typeof(tabObj.memthod) == "function"){
+			var tabPage = new tabObj.memthod(this);
+			this.addTab(tabObj.title,tabPage);
+			tabPage.setObject(entry);
+		}
+			
+	}
 }
 
 ZaGlobalStatsView.prototype.getTitle = 
