@@ -977,6 +977,9 @@ function () {
             }
 			if (item.type == ZaItem.ACCOUNT) {
 				var enable = false;
+                                var domainName = ZaAccount.getDomain(item.toString());
+                                var isAuthInternal = ZaAccountXFormView.isAuthfromInternal(domainName);
+
 				if(ZaZimbraAdmin.currentAdminAccount.attrs[ZaAccount.A_zimbraIsAdminAccount] == 'TRUE') {
 					enable = true;
 				} else if (AjxUtil.isEmpty(item.rights)) {
@@ -998,8 +1001,8 @@ function () {
 						 
 						 if(this._toolbarOperations[ZaOperation.DELETE])
 						 	this._toolbarOperations[ZaOperation.DELETE].enabled = false;   
-					}	
-					if(!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT, item)) {
+					}
+					if(!ZaItem.hasRight(ZaAccount.SET_PASSWORD_RIGHT, item) && isAuthInternal) {
 						 if(this._popupOperations[ZaOperation.CHNG_PWD])
 						 	this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
 						 
@@ -1014,6 +1017,15 @@ function () {
 							this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
 						}						
 					}									
+				} else {
+					if(!isAuthInternal) {
+                                                 if(this._popupOperations[ZaOperation.CHNG_PWD])
+                                                        this._popupOperations[ZaOperation.CHNG_PWD].enabled = false;
+
+                                                 if(this._toolbarOperations[ZaOperation.CHNG_PWD])
+                                                        this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;
+
+					} 
 				}
 			} else if ((item.type == ZaItem.ALIAS) && (item.attrs[ZaAlias.A_targetType] == ZaItem.ACCOUNT))  {
 				if(!item.targetObj)
