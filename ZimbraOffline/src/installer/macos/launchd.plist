@@ -8,6 +8,7 @@
         <array>
                 <string>@install.data.root@/bin/zdesktop</string>
                 <string>start</string>
+                <string>-w</string>
         </array>
         <key>RunAtLoad</key>
         <true/>

@@ -73,8 +73,6 @@
 		</copy>
 		<replace file="${pmdoc.dir}/index.xml" token="@build.root@" value="${basedir}" />
 		<replace file="${pmdoc.dir}/01app.xml" token="@build.root@" value="${basedir}" />
-		<copy todir="build/dist/app/data/bin" file="src/installer/macos/start-zdesktop" overwrite="true" />
-		<copy todir="build/dist/app/data/bin" file="src/installer/macos/stop-zdesktop" overwrite="true" />
 		<chmod dir="build/dist/app/data/bin" includes="*" perm="ugo+rx" />
 	
 		<delete dir="build/dist/app/win32" />

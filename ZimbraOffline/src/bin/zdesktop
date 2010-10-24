@@ -92,8 +92,6 @@ TMPJ=/tmp/j$$
 ##################################################
 
 ACTION=$1
-shift
-ARGS="$*"
 
 ##################################################
 # Set offline env. vars
@@ -173,39 +171,6 @@ JAVA_OPTIONS="-DSTART='${JETTY_HOME}/etc/start.config' -Dzimbra.home='${ZIMBRA_H
 JETTY_CONSOLE="${ZIMBRA_HOME}/log/zdesktop.out"
 JETTY_RUN="${ZIMBRA_HOME}/log"
 JETTY_PID="$JETTY_RUN/zdesktop.pid"
-
-###########################################################
-# Get the list of config.xml files from the command line.
-###########################################################
-if [ ! -z "$ARGS" ] 
-then
-  for A in $ARGS 
-  do
-    if [ -f $A ] 
-    then
-       CONF="$A" 
-    elif [ -f "$JETTY_HOME/etc/$A" ] 
-    then
-       CONF="$JETTY_HOME/etc/$A" 
-    elif [ -f ${A}.xml ] 
-    then
-       CONF="${A}.xml" 
-    elif [ -f "$JETTY_HOME/etc/${A}.xml" ] 
-    then
-       CONF="$JETTY_HOME/etc/${A}.xml" 
-    else
-       echo "** ERROR: Cannot find configuration '$A' specified in the command line." 
-       exit 1
-    fi
-    if [ ! -r $CONF ] 
-    then
-       echo "** ERROR: Cannot read configuration '$A' specified in the command line." 
-       exit 1
-    fi
-    CONFIGS="$CONFIGS $CONF"
-  done
-fi
-
 
 #####################################################
 # Run the standard server if there's nothing else to run
@@ -350,6 +315,12 @@ case "$ACTION" in
         nohup sh -c "exec $RUN_CMD >> '$JETTY_CONSOLE' 2>&1" >/dev/null &
         echo $! > "$JETTY_PID"
         echo "Jetty running pid="`cat "$JETTY_PID"`
+
+        # mainly used by launchctl on mac        
+        if [ "$2" = "-w" ]
+        then
+            wait $!
+        fi
         ;;
 
   stop)

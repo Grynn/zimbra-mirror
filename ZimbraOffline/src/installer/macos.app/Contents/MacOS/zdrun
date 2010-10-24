@@ -140,7 +140,6 @@ my $plist = "$home_dir/Library/LaunchAgents/com.zimbra.desktop.plist";
 mkdir("$home_dir/Library/LaunchAgents");
 system("cp -f \"$app_root/macos/launchd.plist\" \"$plist\"");
 find_and_replace($plist, $tokens);
-find_and_replace("$data_root/bin/zdesktop", {'/dev/null &' => '/dev/null'});
 system("chmod +x \"$data_root/bin/zdesktop\"");
 system("/bin/launchctl unload \"$plist\"");
 system("/bin/launchctl load \"$plist\"");
