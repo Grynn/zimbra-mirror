@@ -51,6 +51,7 @@ class State:
 		"snmp"      : 90,
 		"spell"     : 100,
 		"mta"       : 110,
+		"sasl"      : 115,
 		"stats"     : 120,
 		}
 
