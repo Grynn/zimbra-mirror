@@ -31,7 +31,7 @@ class MiscConfig(config.Config):
 		for cm in commands.miscCommands:
 			th.append(threading.Thread(target=MiscConfig.doCommand,args=(self,cm),name=cm))
 		
-		[t.daemon = True for t in th]
+		[t.setDaemon(True) for t in th]
 		[t.start() for t in th]
 		[t.join(60) for t in th]
 		dt = time.clock()-t1
