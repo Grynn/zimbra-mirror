@@ -17,6 +17,10 @@ package com.zimbra.cert;
 import java.io.*;
 import java.util.List;
 import java.util.Map;
+import java.util.Date;
+import java.text.DateFormat; 
+import java.text.ParseException; 
+import java.text.SimpleDateFormat; 
 
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.service.ServiceException;
@@ -57,7 +61,14 @@ public class VerifyCertKey extends AdminDocumentHandler {
    		prov = Provisioning.getInstance();
    		String certBuffer = request.getAttribute(CERT) ;
    		String prvkeyBuffer = request.getAttribute(PRIVKEY) ;
-   		
+   		Element response = lc.createElement(ZimbraCertMgrService.VERIFY_CERTKEY_RESPONSE);
+
+		String timeStamp = getCurrentTimeStamp();
+		String storedPath = ZimbraCertMgrExt.COMM_CRT_KEY_DIR + "." + timeStamp + "/";
+		String keyFile = storedPath + ZimbraCertMgrExt.COMM_CRT_KEY_FILE_NAME;
+		String certFile = storedPath + ZimbraCertMgrExt.COMM_CRT_FILE_NAME;
+		String caFile = storedPath + ZimbraCertMgrExt.COMM_CRT_CA_FILE_NAME;
+
 		try {
    			if(certBuffer == null) {
    				throw ServiceException.INVALID_REQUEST("Input Certificate is null", null);
@@ -70,52 +81,59 @@ public class VerifyCertKey extends AdminDocumentHandler {
 			//ZimbraLog.security.debug(" server prvkey = " + serverPrvKey);
 
 			RemoteManager rmgr = RemoteManager.getRemoteManager(prov.getLocalServer());
-
+			
 			// replace the space character with '\n'
 			String certBuffer_t = stringFix(certBuffer,true);
 			String prvkeyBuffer_t = stringFix(prvkeyBuffer,false);
+
+			if(certBuffer_t.length() == 0 || prvkeyBuffer_t.length() == 0) {
+				// invalid certificate or privkey, return invalid
+				response.addAttribute("verifyResult", "invalid");
+				return response;
+			}
+
 			byte [] certByte = certBuffer_t.getBytes();
 
-                        File comm_path = new File(ZimbraCertMgrExt.COMM_CRT_KEY_DIR);
+                        File comm_path = new File(storedPath);
                         if(!comm_path.exists()) {
 				comm_path.mkdirs();
 			} else if(!comm_path.isDirectory()) {
                                 throw ServiceException.FAILURE("IOException occurred: Now exist directory '" + ZimbraCertMgrExt.COMM_CRT_KEY_DIR + "'", null);
                         }
-
-			ByteUtil.putContent(ZimbraCertMgrExt.COMM_CRT_FILE, certByte);
-			ByteUtil.putContent(ZimbraCertMgrExt.COMM_CRT_CA_FILE, certByte);
+			ByteUtil.putContent(certFile, certByte);
+			ByteUtil.putContent(caFile, certByte);
 			
 			byte [] prvkeyByte = prvkeyBuffer_t.getBytes();
-			ByteUtil.putContent(ZimbraCertMgrExt.COMM_CRT_KEY_FILE, prvkeyByte) ;
+			ByteUtil.putContent(keyFile, prvkeyByte) ;
 		
 		
 			String cmd = ZimbraCertMgrExt.VERIFY_COMM_CRTKEY_CMD + " comm "
-				+ " " + ZimbraCertMgrExt.COMM_CRT_KEY_FILE
-				+ " " + ZimbraCertMgrExt.COMM_CRT_FILE
-				+ " " + ZimbraCertMgrExt.COMM_CRT_CA_FILE;
-				
+				+ " " + keyFile + " " + certFile + " " + caFile;
+			
 			RemoteResult rr = rmgr.execute(cmd);
 			verifyResult = OutputParser.parseVerifyResult(rr.getMStdout());
+			ZimbraLog.security.info(" GetVerifyCertResponse:" + verifyResult);
 		}catch (IOException ioe) {
 			throw ServiceException.FAILURE("IOException occurred while running cert verification command", ioe);
 		}
 
             	try {
-                	File comm_priv = new File (ZimbraCertMgrExt.COMM_CRT_KEY_FILE);
+
+                	File comm_priv = new File (keyFile);
 	                if (!comm_priv.delete()) {
         	             throw new SecurityException ("Deleting commercial private key file failed.")  ;
                 	}
-                        File comm_cert = new File (ZimbraCertMgrExt.COMM_CRT_FILE);
+                        File comm_cert = new File (certFile);
                         if (!comm_cert.delete()) {
                              throw new SecurityException ("Deleting commercial certificate file failed.")  ;
                         }
-                        File comm_ca = new File (ZimbraCertMgrExt.COMM_CRT_CA_FILE);
+                        File comm_ca = new File (caFile);
                         if (!comm_ca.delete()) {
                              throw new SecurityException ("Deleting commercial CA certificate file failed.")  ;
                         }
-			File comm_path = new File(ZimbraCertMgrExt.COMM_CRT_KEY_DIR);
-			if(comm_path.delete()) {
+
+			File comm_path = new File(storedPath);
+			if(!comm_path.delete()) {
 			     throw new SecurityException ("Deleting directory of certificate/key failed.")  ;
 			}
 
@@ -123,8 +141,6 @@ public class VerifyCertKey extends AdminDocumentHandler {
         	        ZimbraLog.security.error ("File(s) of commercial certificates/prvkey was not deleted", se ) ;
             	}
 
- 
-        	Element response = lc.createElement(ZimbraCertMgrService.VERIFY_CERTKEY_RESPONSE);
 		if(verifyResult)
 	        	response.addAttribute("verifyResult", "true");
 		else response.addAttribute("verifyResult", "false");
@@ -161,6 +177,11 @@ public class VerifyCertKey extends AdminDocumentHandler {
 		}
 		return out;
 		
+	}
+	
+	private String getCurrentTimeStamp() {
+		SimpleDateFormat fmt = new SimpleDateFormat("yyyyMMdd.HHmmss.SSS");
+		return 	fmt.format(new Date());
 	}
 }
 

@@ -681,7 +681,14 @@ function(cert, prvkey) {
 	                this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_CERT_KEY_VERIFY, ZaMsg.ALERT_DOMAIN_CERT_KEY, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
         	        this._errorDialog.popup();
 			return false;
-		 }
+		 }else if(verifyResult == "invalid") {
+                        this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_CERT_KEY_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.
+zimbraAdminTitle);
+                        this._errorDialog.popup();
+                        return false;
+		 }else if(verifyResult == "true") {
+			return true;
+		 } else return false;
 
 	} else if(!cert && prvkey) {
                         this._errorDialog.setMessage(ZaMsg.ERROR_DOMAIN_CERT_MISSING, null, DwtMessageDialog.CRITICAL_STYLE, ZaMsg.zimbraAdminTitle);
