@@ -15,6 +15,8 @@ public class AppMobileClient extends AbsApplication {
 	
 	public PageLogin					zPageLogin = null;
 	public PageMain						zPageMain = null;
+	public PageMail						zPageMail = null;
+	
 	
 	public AppMobileClient() {
 		super();
@@ -29,6 +31,9 @@ public class AppMobileClient extends AbsApplication {
 		// Main page
 		zPageMain = new PageMain(this);
 		pages.put(zPageMain.myPageName(), zPageMain);
+		
+		zPageMail = new PageMail(this);
+		pages.put(zPageMail.myPageName(), zPageMail);
 		
 	}
 	

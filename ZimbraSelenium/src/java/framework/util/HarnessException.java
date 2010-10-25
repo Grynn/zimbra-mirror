@@ -10,12 +10,12 @@ public class HarnessException extends Exception {
 
 	public HarnessException(String message) {
 		super(message);
-		logger.error(message);
+		logger.error(message, this);
 	}
 
 	public HarnessException(Throwable cause) {
 		super(cause);
-		logger.error(cause);
+		logger.error(cause.getMessage(), cause);
 	}
 
 	public HarnessException(String message, Throwable cause) {

@@ -8,6 +8,8 @@ import framework.core.ClientSessionFactory;
 public class Stafpostqueue extends StafAbstract {
 	private Logger logger = LogManager.getLogger(Stafzmprov.class);
 
+	private static final String MailQueueIsEmpty = "Mail queue is empty";
+	
 	public boolean waitForPostqueue() throws Exception {
 		boolean success = false;
 		String command = "postqueue -p";
@@ -15,6 +17,10 @@ public class Stafpostqueue extends StafAbstract {
 		for (int i = 0; i < 15; i++) {
 			SleepUtil.sleep(1000);
 			if (execute(command)) {
+				if ( this.StafResponse.contains(MailQueueIsEmpty)) {
+					success = true;
+					return (success);
+				}
 				if (!this.StafResponse.contains(ClientSessionFactory.session()
 						.currentUserName().toLowerCase())) {
 					success = true;

@@ -485,8 +485,57 @@ public class ZimbraAccount {
 			// Log the request/response
         	logger.info("\n" + new Date() +" "+ mURI.toString() +"\n---\n"+ requestEnvelope.prettyPrint() +"\n---\n"+ responseEnvelope.prettyPrint() +"\n---\n");
         	
-			
+			// Check the queue, if required
+        	doPostfixDelay();
+        	
 			return (responseEnvelope);
+        }
+        
+        /**
+         * For certain SOAP requests, such as SendMsgRequest, a message may wind up in the
+         * postfix queue.  Check that the queue is empty before proceeding
+         */
+        public void doPostfixDelay() {
+        	
+        	// If disabled, don't do anything
+        	boolean enabled = ZimbraSeleniumProperties.getStringProperty("postfix.check", "true").equals("true");
+        	if ( !enabled ) {
+        		logger.debug("postfix.check was not true ... skipping queue check");
+        		return;
+        	}
+        	
+        	// Create an array of the requests that require a queue check
+        	final List<String> requests = new ArrayList<String>();
+        	requests.add("mail:SendMsgRequest");
+        	requests.add("mail:SendDeliveryReportRequest");
+        	requests.add("mail:CreateTaskRequest");
+        	requests.add("mail:ModifyTaskRequest");
+        	requests.add("mail:SetTaskRequest");
+        	requests.add("mail:SetAppointmentRequest");
+        	requests.add("mail:CreateAppointmentRequest");
+        	requests.add("mail:ModifyAppointmentRequest");
+        	requests.add("mail:CancelAppointmentRequest");
+        	requests.add("mail:ForwardAppointmentRequest");
+        	requests.add("mail:ForwardAppointmentInviteRequest");
+        	requests.add("mail:SendInviteReplyRequest");
+        	requests.add("mail:CreateAppointmentExceptionRequest");
+
+        	// If the current SOAP request matches any of the "queue" requests, set matched=true
+        	for (String request : requests) {
+        		Element[] nodes = selectNodes(requestEnvelope, "//"+ request);
+        		if ( nodes == null )
+        			continue;
+        		if ( nodes.length > 0 ) {
+    				try {
+    					Stafpostqueue sp = new Stafpostqueue();
+    					sp.waitForPostqueue();
+					} catch (Exception e) {
+						logger.warn("Unable to wait for postfix queue", e);
+					}
+        			break;
+        		}
+        	}
+        	
         }
         
         /**
