@@ -108,6 +108,15 @@ public abstract class AbsSeleniumObject {
 	}
 
 	/**
+	 * DefaultSelenium.getXpathCount()
+	 */
+	public int getXpathCount(String xpath) {
+		int count = ClientSessionFactory.session().selenium().getXpathCount(xpath).intValue();
+		logger.info("getXpathCount(" + xpath + ") = " + count);
+		return (count);
+	}
+
+	/**
 	 * DefaultSelenium.getAttribute()
 	 */
 	public String getAttribute(String locator) {

@@ -5,7 +5,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import projects.mobile.tests.CommonTest;
-import framework.items.MailItem;
+import framework.items.ConversationItem;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
@@ -45,16 +45,16 @@ public class ReceiveMail extends CommonTest {
 		app.zPageMail.getMail();
 
 		// Create the list of messages in the inbox
-		List<MailItem> messages = app.zPageMail.getMailList();
+		List<ConversationItem> conversations = app.zPageMail.getConversationList();
 		
+		ZAssert.assertGreaterThan(conversations.size(), 0, "Verify that the list contains conversations");
+
 		// Verify that the sent mail is in the list
 		boolean found = false;
-		for (MailItem m : messages) {
-			if ( m.subject != null ) {
-				if (m.subject.equals(subject)) {
-					found = true;		// Found the message!
-					break;
-				}
+		for (ConversationItem c : conversations) {
+			if ( c.subject.equals(subject)) {
+				found = true;		// Found the message!
+				break;
 			}
 		}
 		

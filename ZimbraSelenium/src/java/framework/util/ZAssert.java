@@ -34,7 +34,7 @@ public class ZAssert {
         }
         catch (AssertionError e)
         {
-        	logger.error(e);
+        	logger.error(e.getMessage(), e);
             throw e;
         }
         
@@ -53,12 +53,92 @@ public class ZAssert {
         }
         catch (AssertionError e)
         {
-        	logger.error(e);
+        	logger.error(e.getMessage(), e);
             throw e;
         }
         
         CountPass++; TotalCountPass++;
 
+	}
+
+	public static void assertGreaterThan(int actual, int expected, String message) {
+		TotalCountTests++;
+		CountTests++;
+		
+		logger.info(String.format("%s -- (%s > %s) [%s]", "assertGreaterThan", actual, expected, message));
+        try
+        {
+        	if ( actual <= expected ) {
+        		throw new AssertionError(actual +" was not greather than " + expected);
+        	}
+        }
+        catch (AssertionError e)
+        {
+        	logger.error(e.getMessage(), e);
+            throw e;
+        }
+        
+        CountPass++; TotalCountPass++;
+	}
+
+	public static void assertGreaterThanEqualTo(int actual, int expected, String message) {
+		TotalCountTests++;
+		CountTests++;
+		
+		logger.info(String.format("%s -- (%s >= %s) [%s]", "assertGreaterThanEqualTo", actual, expected, message));
+        try
+        {
+        	if ( actual < expected ) {
+        		throw new AssertionError(actual +" was not greather than or equal to " + expected);
+        	}
+        }
+        catch (AssertionError e)
+        {
+        	logger.error(e.getMessage(), e);
+            throw e;
+        }
+        
+        CountPass++; TotalCountPass++;
+	}
+
+	public static void assertLessThan(int actual, int expected, String message) {
+		TotalCountTests++;
+		CountTests++;
+		
+		logger.info(String.format("%s -- (%s < %s) [%s]", "assertLessThan", actual, expected, message));
+        try
+        {
+        	if ( actual >= expected ) {
+        		throw new AssertionError(actual +" was not less than " + expected);
+        	}
+        }
+        catch (AssertionError e)
+        {
+        	logger.error(e.getMessage(), e);
+            throw e;
+        }
+        
+        CountPass++; TotalCountPass++;
+	}
+
+	public static void assertLessThanEqualTo(int actual, int expected, String message) {
+		TotalCountTests++;
+		CountTests++;
+		
+		logger.info(String.format("%s -- (%s < %s) [%s]", "assertLessThanEqualTo", actual, expected, message));
+        try
+        {
+        	if ( actual > expected ) {
+        		throw new AssertionError(actual +" was not less than or equal to " + expected);
+        	}
+        }
+        catch (AssertionError e)
+        {
+        	logger.error(e.getMessage(), e);
+            throw e;
+        }
+        
+        CountPass++; TotalCountPass++;
 	}
 
 	public static void assertNotNull(Object object, String message) {
@@ -73,7 +153,7 @@ public class ZAssert {
         }
         catch (AssertionError e)
         {
-        	logger.error(e);
+        	logger.error(e.getMessage(), e);
             throw e;
         }
         
@@ -94,7 +174,7 @@ public class ZAssert {
         }
         catch (AssertionError e)
         {
-        	logger.error(e);
+        	logger.error(e.getMessage(), e);
             throw e;
         }
         
@@ -119,7 +199,7 @@ public class ZAssert {
         }
         catch (AssertionError e)
         {
-        	logger.error(e);
+        	logger.error(e.getMessage(), e);
             throw e;
         }
         
@@ -146,7 +226,7 @@ public class ZAssert {
         }
         catch (AssertionError e)
         {
-        	logger.error(e);
+        	logger.error(e.getMessage(), e);
             throw e;
         }
         
