@@ -61,7 +61,7 @@ public class LMailSender extends MailSender {
     }
 
     @Override
-    protected Collection<Address> sendMessage(Mailbox mbox, MimeMessage mm, boolean ignoreFailedAddresses,
+    protected Collection<Address> sendMessage(Mailbox mbox, MimeMessage mm, 
         Collection<RollbackData> rollbacks) throws IOException, SafeMessagingException {
         try {
         	Address[] rcpts = mm.getAllRecipients();

@@ -285,7 +285,7 @@ public class DataSourceMailbox extends SyncMailbox {
                 YMailSender ms = YMailSender.newInstance(ds);
                 try {
                     ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
-                        origMsgId, msg.getDraftReplyType(), identity, false, false);
+                        origMsgId, msg.getDraftReplyType(), identity, false);
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
                     if (cause != null && cause instanceof YMailException) {
@@ -305,7 +305,7 @@ public class DataSourceMailbox extends SyncMailbox {
                 MailSender ms = ds.isLive() ? LMailSender.newInstance(ds) : new MailSender();
                 try {
                     ms.sendMimeMessage(context, this, saveToSent, mm, null, null,
-                        origMsgId, msg.getDraftReplyType(), identity, false, false);
+                        origMsgId, msg.getDraftReplyType(), identity, false);
                 } catch (ServiceException e) {
                     Throwable cause = e.getCause();
                     if (cause instanceof MessagingException) {
