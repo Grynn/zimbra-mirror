@@ -139,6 +139,7 @@ public class ZMessageComposeBean {
     private String mTaskPercentComplete;
     private String mDescription;
     private String mDescriptionHtml;
+    private String mDecodedDescHtml;
 
     private String mOrigOrganizer;
     private String mRepeatBasicType;
@@ -451,7 +452,10 @@ public class ZMessageComposeBean {
 
     public String getDescriptionHtml() { return mDescriptionHtml; }
     public void setDescriptionHtml(String descHtml) { mDescriptionHtml = descHtml; }
-    
+
+    public String getDecodedDescHtml() { return mDecodedDescHtml; }
+    public void setDecodedDescHtml(String descHtml) { mDecodedDescHtml = BeanUtils.htmlDecode(descHtml); }
+
     public String paramInit(HttpServletRequest req, String name, String defaultValue) {
         String value = req.getParameter(name);
         return (value == null || value.length()==0) ? defaultValue : value;
@@ -1141,6 +1145,7 @@ public class ZMessageComposeBean {
         if(appt.getIsNoBlob()) {
             setDescription(appt.getDescription());
             setDescriptionHtml(appt.getDescriptionHtml());
+            setDecodedDescHtml(BeanUtils.htmlDecode(appt.getDescriptionHtml()));
         }
     }
 
