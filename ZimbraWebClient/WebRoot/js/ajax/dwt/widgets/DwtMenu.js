@@ -721,7 +721,7 @@ function(item, justMakeVisible) {
 
 DwtMenu.prototype.scrollToIndex = 
 function(index, justMakeVisible) {
-	if (this._created && this._layoutStyle == DwtMenu.LAYOUT_SCROLL && index !== null && index >= 0) {
+	if (this._created && this._layoutStyle == DwtMenu.LAYOUT_SCROLL && index !== null && index >= 0 && this._table) {
 		var rows = this._table.rows;
 		if (rows) {
 			var maxRows = this._maxRows;
@@ -755,7 +755,7 @@ function(index, justMakeVisible) {
 			}
 			if (delta)
 				this._doScroll(this._table, delta);
-		
+
 		}
 	}
 };
@@ -886,6 +886,7 @@ function(field, value, skipNotify) {
  * 
  * @param {boolean|number}	which		if <code>true</code>, selects the next menu item
  * 									if <code>false</code>, selects the previous menu item
+ * 									if <code>DwtMenuItem</code>, select that menu item
  * 									if <code>int</code>, selects the menu item with that index
  */
 DwtMenu.prototype.setSelectedItem =
@@ -895,6 +896,9 @@ function(which) {
 		currItem = !currItem
 			? this._children.get(0)
 			: which ? this._children.getNext(currItem) : this._children.getPrev(currItem);
+	} else if (which instanceof DwtMenuItem) {
+		if (this._children.contains(which))
+			currItem = which;
 	} else {
 		which = Math.max(0, Math.min(this._children.size()-1, which));
 		currItem = this._children.get(which);
@@ -1153,6 +1157,8 @@ function(x, y, kbGenerated) {
 	 * we do this by simulating a DwtKeyMap.SELECT_NEXT keyboard action */
 	if (kbGenerated) {
 	 	this.handleKeyAction(DwtKeyMap.SELECT_NEXT);
+	} else if (this.__currentItem) {
+		this.setSelectedItem(this.__currentItem);
 	}
 };
 

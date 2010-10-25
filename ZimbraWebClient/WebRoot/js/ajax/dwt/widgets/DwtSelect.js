@@ -630,6 +630,9 @@ function(newOption) {
     if (newOption) {
 		newOption.select();
 		this._currentSelectionId = newOption.getIdentifier();
+		var menu = this.getMenu();
+		if (menu)
+			menu.setSelectedItem(newOption.getItem());
     }
 };
 
