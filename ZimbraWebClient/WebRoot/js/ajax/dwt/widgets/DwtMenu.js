@@ -105,64 +105,8 @@ DwtMenu = function(params) {
 		this._table.border = this._table.cellPadding = this._table.cellSpacing = 0;
 		this._table.className = "DwtMenuTable";
 		this._table.id = Dwt.getNextId();
-		if(this._layoutStyle == DwtMenu.LAYOUT_SCROLL) {
-			this._table.style.position = "relative";
-			
-			this._topScroller = document.createElement("div");
-			this._topScroller.className = "DwtMenuScrollTop";
-			this._topScroller.id = Dwt.getNextId();
-			
-			this._imgDivTop = document.createElement("div");
-			this._imgDivTop.className ="ImgUpArrowSmall";
-			this._topScroller.appendChild(this._imgDivTop);
-			Dwt.setHandler(this._imgDivTop, DwtEvent.ONMOUSEOUT, function(e) { if (!e) e = window.event; e.cancelBubble = true;	if (e.stopPropagation) e.stopPropagation();} );
-			Dwt.setHandler(this._imgDivTop, DwtEvent.ONMOUSEOVER, function(e) { if (!e) e = window.event; e.cancelBubble = true;	if (e.stopPropagation) e.stopPropagation();} );
-			htmlElement.appendChild(this._topScroller);
-
-			this._tableContainer = document.createElement("div");
-			this._tableContainer.appendChild(this._table);
-			htmlElement.appendChild(this._tableContainer);
-
-			this._bottomScroller = document.createElement("div");
-			this._bottomScroller.className = "DwtMenuScrollBottom";
-			this._bottomScroller.id = Dwt.getNextId();
-			
-			this._imgDivBottom = document.createElement("div");
-			this._imgDivBottom.className ="ImgDownArrowSmall";
-			Dwt.setHandler(this._imgDivBottom, DwtEvent.ONMOUSEOUT, function(e) { if (!e) e = window.event; e.cancelBubble = true;	if (e.stopPropagation) e.stopPropagation();} );
-			Dwt.setHandler(this._imgDivBottom, DwtEvent.ONMOUSEOVER, function(e) { if (!e) e = window.event; e.cancelBubble = true;	if (e.stopPropagation) e.stopPropagation();} );
-			this._bottomScroller.appendChild(this._imgDivBottom);
-			htmlElement.appendChild(this._bottomScroller);
-
-			//scroll up
-			var scrollUpStartListener = AjxCallback.simpleClosure(this._scroll, this, this._table.id, true, false);
-			var scrollUpStopListener = AjxCallback.simpleClosure(this._scroll, this, this._table.id, false, false);
-			var mouseOutTopListener = AjxCallback.simpleClosure(this._handleMouseOut, this, this._topScroller.id, this._table.id);
-			var mouseOutBottomListener = AjxCallback.simpleClosure(this._handleMouseOut, this, this._bottomScroller.id, this._table.id);
-
-			Dwt.setHandler(this._topScroller, DwtEvent.ONMOUSEDOWN, scrollUpStartListener);
-			Dwt.setHandler(this._topScroller, DwtEvent.ONMOUSEUP, scrollUpStopListener);
-			if (!AjxEnv.isIE) {
-				Dwt.setHandler(this._topScroller, DwtEvent.ONMOUSEOUT, mouseOutTopListener);
-			} else {
-				Dwt.setHandler(this._topScroller, DwtEvent.ONMOUSELEAVE, scrollUpStopListener);
-			}
-
-			//scroll down
-			var scrollDownStartListener = AjxCallback.simpleClosure(this._scroll, this, this._table.id, true, true);
-			var scrollDownStopListener = AjxCallback.simpleClosure(this._scroll, this, this._table.id, false, true);
-
-			Dwt.setHandler(this._bottomScroller, DwtEvent.ONMOUSEDOWN, scrollDownStartListener);
-			Dwt.setHandler(this._bottomScroller, DwtEvent.ONMOUSEUP, scrollDownStopListener);
-			if (!AjxEnv.isIE) {
-				Dwt.setHandler(this._bottomScroller, DwtEvent.ONMOUSEOUT, mouseOutBottomListener);
-			} else {
-				Dwt.setHandler(this._bottomScroller, DwtEvent.ONMOUSELEAVE, scrollDownStopListener);
-			}
-
-			var wheelListener = AjxCallback.simpleClosure(this._handleScroll, this, this._table.id);
-			Dwt.setHandler(htmlElement, DwtEvent.ONMOUSEWHEEL, wheelListener);
-
+		if (this._layoutStyle == DwtMenu.LAYOUT_SCROLL) {
+			this._setupScroll();
 		} else {
 			htmlElement.appendChild(this._table);
 		}
@@ -348,6 +292,11 @@ function(index) {
 	return this._children.get(index);
 };
 
+DwtMenu.prototype.getItemIndex =
+function(item) {
+	return this._children.indexOf(item);
+};
+
 /**
  * Gets the item by id.
  * 
@@ -446,6 +395,66 @@ function(msec) {
 		else
 			this._popdownActionId = AjxTimedAction.scheduleAction(this._popdownAction, msec);
 	}
+};
+
+DwtMenu.prototype._setupScroll = function() {
+	var htmlElement = this.getHtmlElement();
+	this._table.style.position = "relative";
+			
+	this._topScroller = document.createElement("div");
+	this._topScroller.className = "DwtMenuScrollTop";
+	this._topScroller.id = Dwt.getNextId();
+	
+	this._imgDivTop = document.createElement("div");
+	this._imgDivTop.className = "ImgUpArrowSmall";
+	this._topScroller.appendChild(this._imgDivTop);
+	Dwt.setHandler(this._imgDivTop, DwtEvent.ONMOUSEOUT, DwtMenu._stopEvent);
+	Dwt.setHandler(this._imgDivTop, DwtEvent.ONMOUSEOVER, DwtMenu._stopEvent);
+	htmlElement.appendChild(this._topScroller);
+
+	this._tableContainer = document.createElement("div");
+	this._tableContainer.appendChild(this._table);
+	htmlElement.appendChild(this._tableContainer);
+
+	this._bottomScroller = document.createElement("div");
+	this._bottomScroller.className = "DwtMenuScrollBottom";
+	this._bottomScroller.id = Dwt.getNextId();
+	
+	this._imgDivBottom = document.createElement("div");
+	this._imgDivBottom.className = "ImgDownArrowSmall";
+	Dwt.setHandler(this._imgDivBottom, DwtEvent.ONMOUSEOUT, DwtMenu._stopEvent);
+	Dwt.setHandler(this._imgDivBottom, DwtEvent.ONMOUSEOVER, DwtMenu._stopEvent);
+	this._bottomScroller.appendChild(this._imgDivBottom);
+	htmlElement.appendChild(this._bottomScroller);
+
+	//scroll up
+	var scrollUpStartListener = AjxCallback.simpleClosure(this._scroll, this, this._table.id, true, false);
+	var scrollUpStopListener = AjxCallback.simpleClosure(this._scroll, this, this._table.id, false, false);
+	var mouseOutTopListener = AjxCallback.simpleClosure(this._handleMouseOut, this, this._topScroller.id, this._table.id);
+	var mouseOutBottomListener = AjxCallback.simpleClosure(this._handleMouseOut, this, this._bottomScroller.id, this._table.id);
+
+	Dwt.setHandler(this._topScroller, DwtEvent.ONMOUSEDOWN, scrollUpStartListener);
+	Dwt.setHandler(this._topScroller, DwtEvent.ONMOUSEUP, scrollUpStopListener);
+	if (!AjxEnv.isIE) {
+		Dwt.setHandler(this._topScroller, DwtEvent.ONMOUSEOUT, mouseOutTopListener);
+	} else {
+		Dwt.setHandler(this._topScroller, DwtEvent.ONMOUSELEAVE, scrollUpStopListener);
+	}
+
+	//scroll down
+	var scrollDownStartListener = AjxCallback.simpleClosure(this._scroll, this, this._table.id, true, true);
+	var scrollDownStopListener = AjxCallback.simpleClosure(this._scroll, this, this._table.id, false, true);
+
+	Dwt.setHandler(this._bottomScroller, DwtEvent.ONMOUSEDOWN, scrollDownStartListener);
+	Dwt.setHandler(this._bottomScroller, DwtEvent.ONMOUSEUP, scrollDownStopListener);
+	if (!AjxEnv.isIE) {
+		Dwt.setHandler(this._bottomScroller, DwtEvent.ONMOUSEOUT, mouseOutBottomListener);
+	} else {
+		Dwt.setHandler(this._bottomScroller, DwtEvent.ONMOUSELEAVE, scrollDownStopListener);
+	}
+
+	var wheelListener = AjxCallback.simpleClosure(this._handleScroll, this, this._table.id);
+	Dwt.setHandler(htmlElement, DwtEvent.ONMOUSEWHEEL, wheelListener);
 };
 
 DwtMenu.prototype.render =
@@ -645,7 +654,7 @@ function(divID, tableID, ev) {
 DwtMenu.prototype._scroll =
 function(divID, scrolling, direction, ev) {
 	var div = divID ? document.getElementById(divID) : null;
-	if(div && scrolling) {
+	if (div && scrolling) {
 		var rows = div.rows;
 		var step = Dwt.getSize(rows[0]).y || 10;
 		if(this._direction != direction || !this._scrollTimer) {
@@ -695,25 +704,58 @@ function(div, step) {
 	}
 };
 
+/**
+ * Checks a menu item (the menu must be radio or checkbox style). The menu item
+ * is identified through the given field/value pair.
+ *
+ * @param {DwtMenuItem}		item				the menu item to scroll to
+ * @param {boolean}			justMakeVisible		false: scroll so the item is in the topmost row; true: scroll so the item is visible (scrolling down to an item puts it in the bottom row, doesn't scroll if the item is already visible)
+ * 
+ */
+DwtMenu.prototype.scrollToItem =
+function(item, justMakeVisible) {
+	var index = this.getItemIndex(item);
+	if (index != -1)
+		this.scrollToIndex(index, justMakeVisible);
+};
+
 DwtMenu.prototype.scrollToIndex = 
-function(index) {
-	//when scrollToIndex is first called this._table.parentNode's height might not be set - hence we set it now
-	var rows = this._table.rows;
-	var numRows = rows.length;
-	var maxRows = this._maxRows;
-	var height = 0;
-	for (var i = 0; i <= maxRows; i++) {
-		height += Dwt.getSize(rows[i]).y;
-	}
-	this._table.parentNode.style.height = height + "px";
-	var isScroll = this._layoutStyle == DwtMenu.LAYOUT_SCROLL;
-	if(this._created && isScroll && index !== null) {
-		var rows = this._table.rows || null;
-		var old = parseInt(this._table.style.top) || 0;
-		if (rows && index < rows.length) {
-			var height = Dwt.getSize(rows[0]).y;
-			step = -(index * height) - (old);
-			this._doScroll(this._table, step);
+function(index, justMakeVisible) {
+	if (this._created && this._layoutStyle == DwtMenu.LAYOUT_SCROLL && index !== null && index >= 0) {
+		var rows = this._table.rows;
+		if (rows) {
+			var maxRows = this._maxRows;
+			var visibleHeight = 0;
+			var rowHeights = [];
+			for (var i = 0, numRows = rows.length; i < numRows; i++) {
+				var h = Dwt.getSize(rows[i]).y;
+				if (i < maxRows)
+					visibleHeight += h;
+				rowHeights.push(h);
+			}
+		
+			var itemHeight = rowHeights[index];
+			var currentOffset = parseInt(this._table.style.top) || 0;
+			if (index >= rows.length)
+				index = rows.length-1;
+			
+			var itemOffset = 0;
+			for (var i=0; i<index && i<rowHeights.length; i++) {
+				itemOffset += rowHeights[i];
+			}
+			var delta = 0;
+			if (justMakeVisible) {
+				if (itemOffset < -currentOffset) {
+					delta = -(itemOffset + currentOffset); // Scroll up, making the item the topmost visible row
+				} else if (itemOffset + itemHeight > visibleHeight - currentOffset) {
+					delta = -(itemOffset + currentOffset - visibleHeight + itemHeight); // Scroll down, making the item the lowermost visible row
+				} // else do not scroll; item is already visible
+			} else {
+				delta = -(itemOffset + currentOffset); // Scroll so that the item is the topmost visible row
+			}
+			if (delta)
+				this._doScroll(this._table, delta);
+		
 		}
 	}
 };
@@ -732,6 +774,18 @@ function(actionCode, ev) {
 	}
 
 	switch (actionCode) {
+
+		case DwtKeyMap.PAGE_UP:
+		case DwtKeyMap.PAGE_DOWN:
+			var item = this.__currentItem || this._children.get(0);
+			var index = this.getItemIndex(item);
+			if (this._maxRows && index!=-1) {
+				this.setSelectedItem(index + ((actionCode == DwtKeyMap.PAGE_UP) ? -this._maxRows : this._maxRows));
+			} else {
+				this.setSelectedItem(actionCode == DwtKeyMap.PAGE_DOWN);
+			}
+			break;
+
 		case DwtKeyMap.SELECT_NEXT:
 		case DwtKeyMap.SELECT_PREV: 
 			this.setSelectedItem(actionCode == DwtKeyMap.SELECT_NEXT);
@@ -842,6 +896,7 @@ function(which) {
 			? this._children.get(0)
 			: which ? this._children.getNext(currItem) : this._children.getPrev(currItem);
 	} else {
+		which = Math.max(0, Math.min(this._children.size()-1, which));
 		currItem = this._children.get(which);
 	}
 	// While the current item is not enabled or is a separator, try another
@@ -860,6 +915,7 @@ function(which) {
 	this._setMouseEvent(mev, {dwtObj:currItem});
 	currItem.notifyListeners(DwtEvent.ONMOUSEOVER, mev);	// mouseover selects a menu item
 	this.__currentItem = currItem;
+	this.scrollToItem(currItem, true);
 };
 
 DwtMenu.prototype.clearExternallySelectedItems =
@@ -1040,7 +1096,7 @@ function(x, y, kbGenerated) {
 	var isScroll = this._layoutStyle == DwtMenu.LAYOUT_SCROLL;
 	var isPopup = (this._style == DwtMenu.POPUP_STYLE || this._style == DwtMenu.DROPDOWN_STYLE);
 	var isCascade = this._layoutStyle == DwtMenu.LAYOUT_CASCADE;
-	if( !isScroll ) {
+	if (!isScroll) {
 		this.setScrollStyle(isPopup && isCascade ? Dwt.CLIP : Dwt.SCROLL);
 	} else if (this._tableContainer) {
 		Dwt.setScrollStyle(this._tableContainer, Dwt.CLIP);
@@ -1261,6 +1317,13 @@ function(ev) {
 
 DwtMenu._capMouseWheelHdlr = function(ev) {
 	return DwtMenu._capMouseDownHdlr(ev);
+};
+
+DwtMenu._stopEvent = function(e) {
+	if (!e) e = window.event;
+	e.cancelBubble = true;
+	if (e.stopPropagation)
+		e.stopPropagation();
 };
 
 /*
