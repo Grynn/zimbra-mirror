@@ -6,7 +6,6 @@ package projects.mobile.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import framework.core.ClientSessionFactory;
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.ui.AbsApplication;
@@ -17,6 +16,9 @@ import framework.util.HarnessException;
  *
  */
 public class PageMail extends AbsMobilePage {
+
+	// TODO: Need better locator that doesn't have content text
+	public static final String lMailIsActive = "xpath=//a[contains(.,'Folders')]";
 
 	public static final String DList_View = "xpath=//div[@id='dlist-view']";
 	public static final String DList_View_2 = "//div[@id='dlist-view']/div";
@@ -34,8 +36,8 @@ public class PageMail extends AbsMobilePage {
 	@Override
 	public boolean isActive() throws HarnessException {
 
-		// TODO
-		return (true);
+		boolean active = this.sIsElementPresent(lMailIsActive);
+		return (active);
 
 	}
 
@@ -53,8 +55,21 @@ public class PageMail extends AbsMobilePage {
 	@Override
 	public void navigateTo() throws HarnessException {
 
-		// TODO
+		// Check if this page is already active.
+		if ( isActive() ) {
+			return;
+		}
 		
+		// Make sure we are logged into the Mobile app
+		if ( !MyApplication.zPageMain.isActive() ) {
+			MyApplication.zPageMain.navigateTo();
+		}
+		
+		// Click on Mail icon
+		sClick(PageMain.appbarMail);
+		
+		waitForActive();
+
 	}
 
 	/**
