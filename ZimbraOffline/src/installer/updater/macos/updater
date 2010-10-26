@@ -43,7 +43,7 @@ rm -fr $stage
 mkdir -p $stage
 mv "$1/update.mar" $stage/update.dmg
 /usr/bin/hdiutil attach $stage/update.dmg -mountpoint $stage/install
-"$stage/install/Zimbra Desktop Installer.app/Contents/MacOS/JavaApplicationStub" $params
+open "$stage/install/Zimbra Desktop.mpkg"
 /usr/bin/hdiutil detach $stage/install
 rm -fr $stage
 
