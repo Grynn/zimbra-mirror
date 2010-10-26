@@ -71,12 +71,12 @@ public class PageManageAccounts extends AbsAdminPage {
 			throw new HarnessException("Admin Console application is not active!");
 
 		
-		boolean present = isElementPresent(DWT93);
+		boolean present = sIsElementPresent(DWT93);
 		if ( !present ) {
 			return (false);
 		}
 		
-		String attrs = getAttribute(DWT93_classAttr);
+		String attrs = sGetAttribute(DWT93_classAttr);
 		if ( !attrs.contains("ZSelected") ) {
 			return (false);
 		}
@@ -97,7 +97,7 @@ public class PageManageAccounts extends AbsAdminPage {
 		}
 		
 		// Click on Addresses -> Accounts
-		click(zti__AppAdmin__ADDRESS__ACCOUNT_textCell);
+		sClick(zti__AppAdmin__ADDRESS__ACCOUNT_textCell);
 		
 		waitForActive();
 
@@ -145,7 +145,7 @@ public class PageManageAccounts extends AbsAdminPage {
 		navigateTo();
 
 		// Click on "New"
-		click(locator);
+		sClick(locator);
 
 		WizardCreateAccount wizard = new WizardCreateAccount(this);
 		if ( !wizard.isOpen() )

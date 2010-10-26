@@ -76,10 +76,10 @@ public class PageMail extends AbsMobilePage {
 	public List<ConversationItem> getConversationList() throws HarnessException {
 		List<ConversationItem> conversations = new ArrayList<ConversationItem>();
 		
-		if (!isElementPresent(DList_View))
+		if (!sIsElementPresent(DList_View))
 			throw new HarnessException("Unable to find the message list!");
 		
-		int count = getXpathCount("//div[contains(@id, 'conv')]");
+		int count = sGetXpathCount("//div[contains(@id, 'conv')]");
 		logger.info(count + " conversations found");
 
 		// TODO: get all current conversations, create them in
@@ -94,7 +94,7 @@ public class PageMail extends AbsMobilePage {
 	 * @throws HarnessException 
 	 */
 	public void getMail() throws HarnessException {
-		this.click(PageMain.appbarMail);
+		this.sClick(PageMain.appbarMail);
 	}
 
 

@@ -38,7 +38,7 @@ public abstract class AbsSeleniumObject {
 	 * @param topLimit
 	 * @return
 	 */
-	public boolean isVisiblePerPosition(String locator, int leftLimit, int topLimit) {
+	public boolean zIsVisiblePerPosition(String locator, int leftLimit, int topLimit) {
 		
 		// Find the current position
 		Number left = ClientSessionFactory.session().selenium().getElementPositionLeft(locator);
@@ -58,7 +58,7 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.getHtmlSource()
 	 * @param locator
 	 */
-	public String getHtmlSource() throws HarnessException {
+	public String sGetHtmlSource() throws HarnessException {
 		String htmlString = ClientSessionFactory.session().selenium().getHtmlSource();
 		logger.info("getHtmlSource()");
 		return (htmlString);
@@ -68,7 +68,7 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.getSelectedId()
 	 * @param locator
 	 */
-	public String getSelectedId(String locator) {
+	public String sGetSelectedId(String locator) {
 		String id = ClientSessionFactory.session().selenium().getSelectedId(locator);
 		logger.info("getSelectedId(" + locator + ") = "+ id);
 		return (id);
@@ -77,7 +77,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.chooseOkOnNextConfirmation()
 	 */
-	public void chooseOkOnNextConfirmation() {
+	public void sChooseOkOnNextConfirmation() {
 		ClientSessionFactory.session().selenium().chooseOkOnNextConfirmation();
 		logger.info("chooseOkOnNextConfirmation()");
 	}
@@ -85,7 +85,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.click()
 	 */
-	public void click(String locator) {
+	public void sClick(String locator) {
 		ClientSessionFactory.session().selenium().click(locator);
 		logger.info("click(" + locator + ")");
 	}
@@ -93,7 +93,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.focus()
 	 */
-	public void focus(String locator) {
+	public void sFocus(String locator) {
 		ClientSessionFactory.session().selenium().focus(locator);
 		logger.info("focus(" + locator + ")");
 	}
@@ -101,7 +101,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.isElementPresent()
 	 */
-	public boolean isElementPresent(String locator) {
+	public boolean sIsElementPresent(String locator) {
 		boolean present = ClientSessionFactory.session().selenium().isElementPresent(locator);
 		logger.info("isElementPresent(" + locator + ") = " + present);
 		return (present);
@@ -110,7 +110,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.getXpathCount()
 	 */
-	public int getXpathCount(String xpath) {
+	public int sGetXpathCount(String xpath) {
 		int count = ClientSessionFactory.session().selenium().getXpathCount(xpath).intValue();
 		logger.info("getXpathCount(" + xpath + ") = " + count);
 		return (count);
@@ -119,7 +119,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.getAttribute()
 	 */
-	public String getAttribute(String locator) {
+	public String sGetAttribute(String locator) {
 		String attrs = ClientSessionFactory.session().selenium().getAttribute(locator);
 		logger.info("getAttribute(" + locator + ") = " + attrs);
 		return (attrs);
@@ -128,7 +128,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.isVisible()
 	 */
-	public boolean isVisible(String locator) {
+	public boolean sIsVisible(String locator) {
 		boolean visible = ClientSessionFactory.session().selenium().isVisible(locator);
 		logger.info("isVisible(" + locator + ") = " + visible);
 		return (visible);
@@ -138,7 +138,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.getText()
 	 */
-	public String getText(String locator) {
+	public String sGetText(String locator) {
 		String text = ClientSessionFactory.session().selenium().getText(locator);
 		logger.info("DefaultSelenium.getText(" + locator + ") = " + text);
 		return (ClientSessionFactory.session().selenium().getText(locator));
@@ -147,7 +147,7 @@ public abstract class AbsSeleniumObject {
 	/**
 	 * DefaultSelenium.type()
 	 */
-	public void type(String locator, String text) {
+	public void sType(String locator, String text) {
 		ClientSessionFactory.session().selenium().type(locator, text);
 		logger.info("type(" + locator + ", " + text + ")");
 	}

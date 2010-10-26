@@ -25,15 +25,15 @@ public class MainScreen extends CommonTest {
 			groups = { "sanity" })
 	public void MainScreen_01() throws HarnessException {
 				
-		ZAssert.assertTrue(app.zPageMain.isElementPresent(PageMain.appbarMail),		"Verify that the appbar Mail icon is present");
-		ZAssert.assertTrue(app.zPageMain.isElementPresent(PageMain.appbarContact),	"Verify that the appbar Contact icon is present");
-		ZAssert.assertTrue(app.zPageMain.isElementPresent(PageMain.appbarCal),		"Verify that the appbar Cal icon is present");
-		ZAssert.assertTrue(app.zPageMain.isElementPresent(PageMain.appbarDocs),		"Verify that the appbar Docs icon is present");
-		ZAssert.assertTrue(app.zPageMain.isElementPresent(PageMain.appbarSearch),	"Verify that the appbar Search icon is present");
+		ZAssert.assertTrue(app.zPageMain.sIsElementPresent(PageMain.appbarMail),		"Verify that the appbar Mail icon is present");
+		ZAssert.assertTrue(app.zPageMain.sIsElementPresent(PageMain.appbarContact),	"Verify that the appbar Contact icon is present");
+		ZAssert.assertTrue(app.zPageMain.sIsElementPresent(PageMain.appbarCal),		"Verify that the appbar Cal icon is present");
+		ZAssert.assertTrue(app.zPageMain.sIsElementPresent(PageMain.appbarDocs),		"Verify that the appbar Docs icon is present");
+		ZAssert.assertTrue(app.zPageMain.sIsElementPresent(PageMain.appbarSearch),	"Verify that the appbar Search icon is present");
 		
-		ZAssert.assertTrue(app.zPageMain.isElementPresent(PageMain.compose),		"Verify that the New Compose link is present");
+		ZAssert.assertTrue(app.zPageMain.sIsElementPresent(PageMain.compose),		"Verify that the New Compose link is present");
 
-		ZAssert.assertTrue(app.zPageMain.isElementPresent(PageMain.preferences),	"Verify that the Preferences link is present");
+		ZAssert.assertTrue(app.zPageMain.sIsElementPresent(PageMain.preferences),	"Verify that the Preferences link is present");
 
 	}
 
@@ -44,9 +44,9 @@ public class MainScreen extends CommonTest {
 		// The copyright doesn't seem to be translated
 		String copyright = "Copyright © 2008-2010 Zimbra, Inc.";
 		
-		ZAssert.assertTrue(app.zPageMain.isElementPresent(PageMain.mainCopyright),	"Verify that the copyright notice is present");
+		ZAssert.assertTrue(app.zPageMain.sIsElementPresent(PageMain.mainCopyright),	"Verify that the copyright notice is present");
 		
-		String text = app.zPageMain.getText(PageMain.mainCopyright);
+		String text = app.zPageMain.sGetText(PageMain.mainCopyright);
 		ZAssert.assertEquals(text, copyright, "Verify the copyright text is correct");
 		
 		Calendar calendar = new GregorianCalendar();

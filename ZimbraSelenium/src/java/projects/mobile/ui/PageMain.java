@@ -46,7 +46,7 @@ public class PageMain extends AbsMobilePage {
 		
 
 		// Look for the Logout button
-		boolean present = isElementPresent(_logout);
+		boolean present = sIsElementPresent(_logout);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
@@ -98,12 +98,12 @@ public class PageMain extends AbsMobilePage {
 		
 		navigateTo();
 
-		if ( !isElementPresent(_logout) ) {
+		if ( !sIsElementPresent(_logout) ) {
 			throw new HarnessException("The logoff button is not present " + _logout);
 		}
 				
 		// Click on logout
-		click(_logout);
+		sClick(_logout);
 				
 		MyApplication.zPageLogin.waitForActive();
 		

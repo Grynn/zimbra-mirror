@@ -25,7 +25,7 @@ public class LoginScreen extends CommonTest {
 			groups = { "smoke" })
 	public void LoginScreen01() throws HarnessException {
 		
-		String username = app.zPageLogin.getText(PageLogin.displayedusername);
+		String username = app.zPageLogin.sGetText(PageLogin.displayedusername);
 		ZAssert.assertEquals(username, app.getLocaleString("usernameLabel"), "Verify the displayed label 'username'");
 		
 
@@ -38,7 +38,7 @@ public class LoginScreen extends CommonTest {
 		Calendar calendar = new GregorianCalendar();
 		String thisYear = "" + calendar.get(Calendar.YEAR);
 		
-		String copyright = app.zPageLogin.getText(PageLogin.displayedcopyright);
+		String copyright = app.zPageLogin.sGetText(PageLogin.displayedcopyright);
 		ZAssert.assertStringContains(thisYear, copyright, "Verify the copyright on the login screen contains the current year");
 		
 

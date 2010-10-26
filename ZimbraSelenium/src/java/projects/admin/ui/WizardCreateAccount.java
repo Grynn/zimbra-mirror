@@ -39,15 +39,15 @@ public class WizardCreateAccount extends AbsWizard {
 		String CN = account.EmailAddress.split("@")[0];
 		String domain = account.EmailAddress.split("@")[1];
 		
-		type("xpath=//@[@id='_XForm_3_name_2']", CN);
-		type("xpath=//@[@id='_XForm_3_name_3_display']", domain);
+		sType("xpath=//@[@id='_XForm_3_name_2']", CN);
+		sType("xpath=//@[@id='_XForm_3_name_3_display']", domain);
 		
 		for (String key : account.AccountAttrs.keySet()) {
 			
 			// TODO: Handle Previous/Next to find the input field, if necessary
 			
 			if ( key.equals("givenName")) {
-				type("xpath=//@[@id='_XForm_3_givenName']", account.AccountAttrs.get(key));
+				sType("xpath=//@[@id='_XForm_3_givenName']", account.AccountAttrs.get(key));
 				continue;
 			}
 
@@ -65,12 +65,12 @@ public class WizardCreateAccount extends AbsWizard {
 	@Override
 	public boolean isOpen() throws HarnessException {
 		
-		boolean present = isElementPresent(zdlg__NEW_ACCT);
+		boolean present = sIsElementPresent(zdlg__NEW_ACCT);
 		if ( !present ) {
 			return (false);
 		}
 		
-		boolean visible = this.isVisiblePerPosition(zdlg__NEW_ACCT, 0, 0);
+		boolean visible = this.zIsVisiblePerPosition(zdlg__NEW_ACCT, 0, 0);
 		if ( !visible ) {
 			return (false);
 		}

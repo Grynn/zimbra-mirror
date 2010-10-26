@@ -23,12 +23,12 @@ public class PageEditAccount extends AbsAdminPage {
 			throw new HarnessException("Admin Console application is not active!");
 
 		
-		boolean present = isElementPresent(ztab__DOAMIN_EDIT__DWT192);
+		boolean present = sIsElementPresent(ztab__DOAMIN_EDIT__DWT192);
 		if ( !present ) {
 			return (false);
 		}
 		
-		String attrs = getAttribute(ztab__DOAMIN_EDIT__DWT192_classAttr);
+		String attrs = sGetAttribute(ztab__DOAMIN_EDIT__DWT192_classAttr);
 		if ( !attrs.contains("ZSelected") ) {
 			return (false);
 		}

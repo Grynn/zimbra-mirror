@@ -41,13 +41,13 @@ public class PageLogin extends AbsMobilePage {
 
 
 		// Look for the login button. 
-		boolean present = isElementPresent(zLoginButton);
+		boolean present = sIsElementPresent(zLoginButton);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
 		}
 		
-		boolean visible = isVisiblePerPosition(zLoginButton, 0 , 0);
+		boolean visible = zIsVisiblePerPosition(zLoginButton, 0 , 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -105,7 +105,7 @@ public class PageLogin extends AbsMobilePage {
 		fillLoginFormFields(account);
 		
 		// Click the Login button
-		click(zLoginButton);
+		sClick(zLoginButton);
 
 		// Wait for the app to load
 		MyApplication.zPageMain.waitForActive();
@@ -124,8 +124,8 @@ public class PageLogin extends AbsMobilePage {
 		if ( !isActive() )
 			throw new HarnessException("LoginPage is not active");
 		
-		type(username, account.EmailAddress);
-		type(password, account.Password);
+		sType(username, account.EmailAddress);
+		sType(password, account.Password);
 	}
 
 
