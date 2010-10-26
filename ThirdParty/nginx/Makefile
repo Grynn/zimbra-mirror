@@ -15,46 +15,52 @@ else
 	include $(NGINX_ROOT)/../versions.def
 endif
 
+PCREOPT	:=
+PCREINC	:=
+PCRELIB	:=
+
+ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
+	PCREOPT	:= --with-pcre=/opt/zimbra
+	PCREINC	:= -I/opt/zimbra/include
+	PCRELIB	:= -L/opt/zimbra/lib
+endif
+
 NGINX_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/nginx/nginx-$(NGINX_VERSION)-zimbra.tgz
 NGINX_INSTALL := $(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra
+
+WITH_CC_OPT := -g \
+	-I/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
+	-I/opt/zimbra/openssl-$(OPENSSL_VERSION)/include \
+	$(PCREINC)
+
+WITH_LD_OPT :=	-L$(CYRUS_LIB_DIR) \
+	-L$(OPENSSL_LIB_DIR) \
+	$(PCRELIB)
 
 all: allclean build tar
 
 build:
-ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	./configure \
-             --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
-             --with-debug \
-             --with-http_stub_status_module \
-             --with-http_ssl_module \
-             --with-sasl-inc=/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
-             --with-mail \
-             --with-pcre=/opt/zimbra \
-             --http-log-path=/opt/zimbra/log/nginx.access.log \
-             --error-log-path=/opt/zimbra/log/nginx.log \
-             --http-client-body-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/client \
-             --http-proxy-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/proxy \
-             --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/fastcgi \
-             --with-mail_ssl_module; \
-	LD_RUN_PATH="$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR)" make; make install)
-else
+            --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
+	    --with-cc-opt="$(WITH_CC_OPT)" \
+	    --with-ld-opt="$(WITH_LD_OPT)" \
+            --with-debug \
+            --with-http_ssl_module \
+            --with-http_stub_status_module \
+	    --with-pcre \
+            --with-http_upstream_zmauth_module \
+            --with-mail \
+            --with-mail-sasl \
+            --with-mail_ssl_module \
+            --error-log-path=/opt/zimbra/log/nginx.log \
+            --http-log-path=/opt/zimbra/log/nginx.access.log \
+            --http-client-body-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/client \
+            --http-proxy-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/proxy \
+            --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/fastcgi \
+	    $(PCREOPT); )
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
-	./configure \
-             --prefix=$(ZIMBRA_HOME)/nginx-$(NGINX_VERSION)-zimbra \
-             --with-debug \
-             --with-http_stub_status_module \
-             --with-http_ssl_module \
-             --with-sasl-inc=/opt/zimbra/cyrus-sasl-$(CYRUS_VERSION)/include \
-             --with-mail \
-             --http-log-path=/opt/zimbra/log/nginx.access.log \
-             --error-log-path=/opt/zimbra/log/nginx.log \
-             --http-client-body-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/client \
-             --http-proxy-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/proxy \
-             --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/fastcgi \
-             --with-mail_ssl_module; \
-	LD_RUN_PATH="$(OPENSSL_LIB_DIR):$(CYRUS_LIB_DIR)" make; make install)
-endif
+	LD_RUN_PATH="$(CYRUS_LIB_DIR):$(OPENSSL_LIB_DIR)" make; make install)
 	(cd $(ZIMBRA_HOME); ln -s $(NGINX_INSTALL) nginx)
 
 tar:
