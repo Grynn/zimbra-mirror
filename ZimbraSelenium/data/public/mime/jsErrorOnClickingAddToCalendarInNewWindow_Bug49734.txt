@@ -1,0 +1,51 @@
+Return-Path: admin@qa60.lab.zimbra.com
+Received: from qa60.lab.zimbra.com (LHLO qa60.lab.zimbra.com) (10.18.97.160)
+ by qa60.lab.zimbra.com with LMTP; Wed, 11 Aug 2010 10:17:10 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by qa60.lab.zimbra.com (Postfix) with ESMTP id E9BB192658
+	for <att@qa60.lab.zimbra.com>; Wed, 11 Aug 2010 10:17:09 -0700 (PDT)
+X-Virus-Scanned: amavisd-new at qa60.lab.zimbra.com
+X-Spam-Flag: NO
+X-Spam-Score: -1.107
+X-Spam-Level: 
+X-Spam-Status: No, score=-1.107 tagged_above=-10 required=6.6
+	tests=[BAYES_00=-1.9, RDNS_NONE=0.793] autolearn=no
+Received: from qa60.lab.zimbra.com ([127.0.0.1])
+	by localhost (qa60.lab.zimbra.com [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id QBOhDaXgU+ue for <att@qa60.lab.zimbra.com>;
+	Wed, 11 Aug 2010 10:17:09 -0700 (PDT)
+Received: from qa60.lab.zimbra.com (qa60.lab.zimbra.com [10.18.97.160])
+	by qa60.lab.zimbra.com (Postfix) with ESMTP id 66C879265C
+	for <att@qa60.lab.zimbra.com>; Wed, 11 Aug 2010 10:17:09 -0700 (PDT)
+Date: Wed, 11 Aug 2010 10:17:09 -0700 (PDT)
+From: admin@qa60.lab.zimbra.com
+To: att@qa60.lab.zimbra.com
+Message-ID: <14386466.8.1281547029321.JavaMail.root@qa60>
+In-Reply-To: <30856257.5.1281547028431.JavaMail.root@qa60>
+Subject: ics attachment from new window
+MIME-Version: 1.0
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_7_19972956.1281547029315"
+X-Originating-IP: [10.16.67.146]
+X-Mailer: Zimbra 6.0.8_GA_2633 (ZimbraWebClient - FF3.0 (Win)/6.0.8_GA_2633)
+
+------=_Part_7_19972956.1281547029315
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+
+test
+------=_Part_7_19972956.1281547029315
+Content-Type: text/calendar; name=basic.ics
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename=basic.ics
+
+QkVHSU46VkNBTEVOREFSDQpQUk9ESUQ6aUNhbEJhc2ljUHJvdmlkZXINClZFUlNJT046Mi4wDQpN
+RVRIT0Q6UFVCTElTSA0KQkVHSU46VkVWRU5UDQpVSUQ6Y2E0YmUyYWUtNmJmYS00NWNjLWE1MmQt
+MzU2ZjEzM2MwNmFhDQpPUkdBTklaRVI6TUFJTFRPOmZvb0Bmb28uY29tDQpTVU1NQVJZOmlDYWxC
+YXNpYw0KREVTQ1JJUFRJT046aUNhbEJhc2ljLkRlc2NyaXB0aW9uDQpEVFNUQVJUOjIwMDYwMTE5
+VDEwMzAwMFoNCkRURU5EOjIwMDYwMTE5VDExMzAwMFoNCkxPQ0FUSU9OOmlDYWxCYXNpYy5Mb2Nh
+dGlvbg0KU1RBVFVTOkNPTkZJUk1FRA0KWC1NSUNST1NPRlQtQ0RPLUJVU1lTVEFUVVM6QlVTWQ0K
+WC1NSUNST1NPRlQtQ0RPLUlOVEVOREVEU1RBVFVTOkJVU1kNClRSQU5TUDpPUEFRVUUNCkRUU1RB
+TVA6MjAwNTAxMTlUMTIwMDAwWg0KU0VRVUVOQ0U6MA0KRU5EOlZFVkVOVA0KRU5EOlZDQUxFTkRB
+Ug0K
+------=_Part_7_19972956.1281547029315--
