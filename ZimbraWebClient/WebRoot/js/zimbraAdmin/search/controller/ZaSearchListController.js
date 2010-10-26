@@ -565,7 +565,11 @@ function () {
 			if(item.type != ZaItem.ALIAS) {
 				if(this._toolbarOperations[ZaOperation.MOVE_ALIAS]) {
 					this._toolbarOperations[ZaOperation.MOVE_ALIAS].enabled = false;
-				}					
+				}
+				
+				if(this._popupOperations[ZaOperation.MOVE_ALIAS]) {
+                                        this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
+                                }					
 			}
             if (item.type == ZaItem.ALIAS || item.type == ZaItem.DL) {
                 if(this._toolbarOperations[ZaOperation.CHNG_PWD]) {
