@@ -124,7 +124,6 @@ DwtShell = function(params) {
 	this._hoverMgr = new DwtHoverMgr();
 	
 	this._keyboardMgr = new DwtKeyboardMgr(this);
-	this._setMouseEventHdlrs();
 }
 
 DwtShell.prototype = new DwtComposite;
