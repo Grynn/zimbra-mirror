@@ -171,11 +171,16 @@ else:
 while True:
 
 	Log.logMsg (4, "Found %d threads" % threading.activeCount())
-	for th in threading.enumerate():
-		Log.logMsg(4, "Active Thread %s found" % th.getName())
-	if (threading.activeCount() > 5):
-		Log.logMsg(1, "Hung threads detected (%d total), exiting" % threading.activeCount());
-		sys.exit(1)
+
+    for th in threading.enumerate():
+        Log.logMsg(4, "Active Thread %s found" % th.getName())
+        if (th.getName() != "listener" and th.getName() != "MainThread" and th.getName() != "Thread"):
+            Log.logMsg(1, "Attempting to join() %s" % th.getName())
+            th.join(1);
+            if (th.isAlive()):
+                Log.logMsg(1, "join() %s FAILED" % th.getName())
+                Log.logMsg(1, "Hung threads detected (%d total), exiting" % threading.activeCount());
+                sys.exit(1)
 		
 	t1 = time.clock()
 
