@@ -886,7 +886,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			ZaAccount.A_zimbraImapEnabled,ZaAccount.A_zimbraPop3Enabled,ZaAccount.A_zimbraFeatureImapDataSourceEnabled,
 			ZaAccount.A_zimbraFeaturePop3DataSourceEnabled,ZaAccount.A_zimbraFeatureConversationsEnabled,ZaAccount.A_zimbraFeatureFiltersEnabled,
 			ZaAccount.A_zimbraFeatureOutOfOfficeReplyEnabled,ZaAccount.A_zimbraFeatureNewMailNotificationEnabled,ZaAccount.A_zimbraFeatureMailPollingIntervalPreferenceEnabled, 
-			ZaAccount.A_zimbraFeatureIdentitiesEnabled,ZaAccount.A_zimbraFeatureReadReceiptsEnabled],[])) {
+			ZaAccount.A_zimbraFeatureMailSendLaterEnabled,ZaAccount.A_zimbraFeatureIdentitiesEnabled,ZaAccount.A_zimbraFeatureReadReceiptsEnabled],[])) {
 			featuresCase.items.push({type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraMailFeature, id:"account_wiz_features_mail",
 						colSizes:["auto"],numCols:1,
 					 	enableDisableChecks:[ZaAccountXFormView.isMailFeatureEnabled],
@@ -905,7 +905,11 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								checkBoxLabel:ZaMsg.LBL_zimbraExternalImapEnabled,  trueValue:"TRUE", falseValue:"FALSE"},		
 							{ref:ZaAccount.A_zimbraFeaturePop3DataSourceEnabled, type:_SUPER_WIZ_CHECKBOX_, 
 								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraExternalPop3Enabled,
-								checkBoxLabel:ZaMsg.LBL_zimbraExternalPop3Enabled,  trueValue:"TRUE", falseValue:"FALSE"},		
+								checkBoxLabel:ZaMsg.LBL_zimbraExternalPop3Enabled,  trueValue:"TRUE", falseValue:"FALSE"},
+							{ref:ZaAccount.A_zimbraFeatureMailSendLaterEnabled, type:_SUPER_WIZ_CHECKBOX_,
+                                                                resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureMailSendLaterEnabled,
+                                                                checkBoxLabel:ZaMsg.LBL_zimbraFeatureMailSendLaterEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
+		
 							{ref:ZaAccount.A_zimbraFeatureConversationsEnabled, type:_SUPER_WIZ_CHECKBOX_, 
 								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureConversationsEnabled,
 								checkBoxLabel:ZaMsg.LBL_zimbraFeatureConversationsEnabled, trueValue:"TRUE", falseValue:"FALSE"},
