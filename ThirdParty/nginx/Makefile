@@ -15,12 +15,10 @@ else
 	include $(NGINX_ROOT)/../versions.def
 endif
 
-PCREOPT	:=
 PCREINC	:=
 PCRELIB	:=
 
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
-	PCREOPT	:= --with-pcre=/opt/zimbra
 	PCREINC	:= -I/opt/zimbra/include
 	PCRELIB	:= -L/opt/zimbra/lib
 endif
@@ -57,8 +55,7 @@ build:
             --http-log-path=/opt/zimbra/log/nginx.access.log \
             --http-client-body-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/client \
             --http-proxy-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/proxy \
-            --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/fastcgi \
-	    $(PCREOPT); )
+            --http-fastcgi-temp-path=$(ZIMBRA_HOME)/data/tmp/nginx/fastcgi; )
 	(cd nginx-$(NGINX_VERSION)-zimbra; \
 	LD_RUN_PATH="$(CYRUS_LIB_DIR):$(OPENSSL_LIB_DIR)" make; make install)
 	(cd $(ZIMBRA_HOME); ln -s $(NGINX_INSTALL) nginx)
