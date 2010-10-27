@@ -59,19 +59,32 @@ function(parentEl, imageName, useParentEl, _disabled) {
 		parentEl.className = className;
 		return;
 	}
-
+	var id = parentEl.firstChild && parentEl.firstChild.id;
+        
 	var overlayName = className+"Overlay";
 	var maskName = className+"Mask";
 	if (color && window.AjxImgData && AjxImgData[overlayName] && AjxImgData[maskName]) {
 		color = (color.match(/^\d$/) ? ZmOrganizer.COLOR_VALUES[color] : color) ||
 				ZmOrganizer.COLOR_VALUES[ZmOrganizer.ORG_DEFAULT_COLOR];
-
-        parentEl.innerHTML = AjxImg.getImageHtml(origImageName, null, null, false, _disabled);
+		parentEl.innerHTML = AjxImg.getImageHtml(origImageName, null, id ? "id='"+id+"'" : null, false, _disabled);
 		return;
 	}
 
-	if (parentEl.firstChild == null) {
-		parentEl.innerHTML = className ? "<div class='" + className + "'></div>" : "<div></div>";
+	if (parentEl.firstChild == null || parentEl.firstChild.nodeName.toLowerCase() != "div") {
+		var html = [], i = 0;
+		html[i++] = "<div";
+		if (id) {
+			html[i++] = " id='";
+			html[i++] = id;
+			html[i++] = "'";
+		}
+		if (className) {
+			html[i++] = " class='";
+			html[i++] = className;
+			html[i++] = "'";
+		}
+		html[i++] = "></div>";
+		parentEl.innerHTML = html.join("");
 		return;
 	}
 
