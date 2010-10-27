@@ -322,7 +322,7 @@ function () {
 			}
 		}
 	}
-	
+
 	//set the cosId to "" if the autoCos is enabled.
 	if (tmpObj[ZaAccount.A2_autoCos] == "TRUE") {
 		tmpObj.attrs[ZaAccount.A_COSId] = "" ;
@@ -405,6 +405,12 @@ function () {
 		}
 		return false;
 	}
+
+	if(tmpObj.attrs[ZaAccount.A_zimbraMailTransport]) {
+		var v = tmpObj.attrs[ZaAccount.A_zimbraMailTransport];
+		if(!this.isLegalofMailTransport(v)) return false;
+	}
+
 	//add-remove aliases
 	var tmpObjCnt = -1;
 	var currentObjCnt = -1;
@@ -545,7 +551,6 @@ function () {
 	}
 
     //TODO: may need to check if the account type update is needed. update the domain account limits object
-   
     return true;
 }
 
@@ -612,4 +617,20 @@ function (ex, method, params, restartOnError, obj) {
 	} else {
 		ZaController.prototype._handleException.call(this, ex, method, params, restartOnError, obj);				
 	}	
+}
+
+ZaAccountViewController.prototype.isLegalofMailTransport =
+function(elementValue) {
+	if(!elementValue) return false;
+
+	var regex = new RegExp("(lmtp|smtp)\\:[\\w\\.\\-]+\\:[0-9]+$");
+	var match = regex.exec(elementValue);
+	if(match != null) {
+		return true;
+	}
+	else {
+		this._errorDialog.setMessage(ZaMsg.ERROR_MAILTRANSPORT_INVALID, null, DwtMessageDialog.CRITICAL_STYLE, null);
+		this._errorDialog.popup();
+	}
+	return false;	
 }

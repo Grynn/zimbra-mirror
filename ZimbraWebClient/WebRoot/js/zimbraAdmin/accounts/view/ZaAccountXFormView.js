@@ -147,7 +147,6 @@ function(entry) {
 		}		
 	}
 					
-	
 	if(this._containedObject.attrs[ZaAccount.A_COSId]) {	
 		this._containedObject[ZaAccount.A2_autoCos] = "FALSE" ;
 	}
@@ -481,19 +480,22 @@ function(domainName) {
 		currDomainName = ZaApp.getInstance().getDomainList().getArray()[0].name;
 	if(currDomainName != null && currDomainName != domainName)
 		domainName = currDomainName;
-
+	
 	if(domainName) {
+		//var domainObj = ZaDomain.getDomainByName(domainName);
 		var domainObj = new ZaDomain();
-	        try {
-        	        domainObj.load("name", domainName, false, true);
-	        } catch (ex) {
-        	        throw (ex);
-	        }
-		ZaDomain.putDomainToCache(domainObj);
+		try {
+                       domainObj.load("name", domainName, false, true);
+		} catch (ex) {
+                       throw (ex);
+		}
+                ZaDomain.putDomainToCache(domainObj);
+
 		if(domainObj.attrs[ZaDomain.A_AuthMech] != ZaDomain.AuthMech_zimbra){
 			return false;
 		}
 	}
+
 	return true;
 }
 
@@ -1043,7 +1045,9 @@ ZaAccountXFormView.ADVANCED_TAB_ATTRS = [ZaAccount.A_zimbraAttachmentsBlocked,
 	ZaAccount.A_zimbraMailMessageLifetime,
 	ZaAccount.A_zimbraMailTrashLifetime,
 	ZaAccount.A_zimbraMailSpamLifetime,
-	ZaAccount.A_zimbraFreebusyExchangeUserOrg];
+	ZaAccount.A_zimbraFreebusyExchangeUserOrg,
+	ZaAccount.A_zimbraMailTransport	
+	];
 ZaAccountXFormView.ADVANCED_TAB_RIGHTS = [];
 
 /**
@@ -3142,6 +3146,19 @@ nowrap:false, labelWrap:true,
                                 }
                             ]
                         },
+
+                	{type:_ZA_TOP_GROUPER_, label:ZaMsg.NAD_MailTransportGrouper, id:"mailtransport_setting",
+                                colSizes:["275px","*"],numCols:2,
+                                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
+                                                [ZaAccount.A_zimbraMailTransport]]],
+                                items:[
+                                {ref:ZaAccount.A_zimbraMailTransport, type:_TEXTFIELD_, msgName:ZaMsg.NAD_MailTransport,label:ZaMsg.NAD_MailTransport,
+                                        labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150
+                                },
+                            	{type:_OUTPUT_,ref:".",label:"", labelLocation:_LEFT_, value: ZaMsg.MSG_MailTransportMessage}
+
+				]
+			},
                         {type: _SPACER_ , height: "10px" }  //add some spaces at the bottom of the page
                     ]
                 });
