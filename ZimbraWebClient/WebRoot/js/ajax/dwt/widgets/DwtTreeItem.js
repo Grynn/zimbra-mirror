@@ -238,6 +238,11 @@ function() {
 	return this._children.getArray();
 };
 
+DwtTreeItem.prototype.getChildIndex =
+function(item) {
+	return this._children.indexOf(item);
+};
+
 /**
  * Gets the image.
  * 
