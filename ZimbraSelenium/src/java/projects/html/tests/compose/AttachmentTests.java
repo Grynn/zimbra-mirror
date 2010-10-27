@@ -27,39 +27,46 @@ import projects.html.ui.MailApp;
 @SuppressWarnings("static-access")
 public class AttachmentTests extends CommonTest {
 
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	// SECTION 1: DATA-PROVIDERS
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	@SuppressWarnings("unused")
 	@DataProvider(name = "composeDataProvider")
 	private Object[][] createData(Method method) {
 		String test = method.getName();
 		if (test.equals("sendMailWith3AttachmentsAndVerify")) {
-			return new Object[][] { { "_selfAccountName_", "", "",
-					getLocalizedData_NoSpecialChar(), "",
-					"putty.log,samplejpg.jpg,testtextfile.txt" } };
+			return new Object[][] { {
+					"_selfAccountName_",
+					"",
+					"",
+					getLocalizedData_NoSpecialChar(),
+					"",
+					"data/public/other/putty.log,data/public/other/samplejpg.jpg,data/public/other/testtextfile.txt" } };
 		} else if (test.equals("addAttachmentOneByOneAndVerify")
 				|| (test.equals("uncheckAttachmentAndVerify") || (test
 						.equals("cancelAddingAttachmentTest")))) {
 			return new Object[][] { { "_selfAccountName_", "", "",
-					getLocalizedData_NoSpecialChar(), "", "testpptfile.ppt" } };
+					getLocalizedData_NoSpecialChar(), "",
+					"data/public/other/testpptfile.ppt" } };
 		} else if (test.equals("bigAttachmentThrowErrorTest")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
-					getLocalizedData_NoSpecialChar(), "", "mail700.pst" } };
+					getLocalizedData_NoSpecialChar(), "",
+					"data/private/pst/mail700.pst" } };
 		} else if (test.equals("unCheckOneAttachmentAndSendMailTest")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
 					getLocalizedData_NoSpecialChar(), "",
-					"testbitmapfile.bmp,testexcelfile.xls" } };
+					"data/public/other/testbitmapfile.bmp,data/public/other/testexcelfile.xls" } };
 		} else {
 			return new Object[][] { { "_selfAccountName_",
 					"ccuser@testdomain.com", "bccuser@testdomain.com", "",
-					getLocalizedData_NoSpecialChar(), "testwordfile.doc" } };
+					getLocalizedData_NoSpecialChar(),
+					"data/public/other/testwordfile.doc" } };
 		}
 	}
 
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	// SECTION 2: SETUP
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	@BeforeClass(groups = { "always" })
 	private void zLogin() throws Exception {
 		zLoginIfRequired();
@@ -76,9 +83,9 @@ public class AttachmentTests extends CommonTest {
 		SelNGBase.needReset.set(true);
 	}
 
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 
 	/**
 	 * Test sends mail to self with 3 attachments and verifies accordingly
@@ -104,7 +111,7 @@ public class AttachmentTests extends CommonTest {
 	/**
 	 * Test adds attachment one by one and verifies accordingly
 	 */
-	@Test(dataProvider = "composeDataProvider", groups = {"d", "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "composeDataProvider", groups = { "d", "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void addAttachmentOneByOneAndVerify(String to, String cc,
 			String bcc, String subject, String body, String attachments)
 			throws Exception {
@@ -114,7 +121,7 @@ public class AttachmentTests extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
-		String newAttachment = "testsoundfile.wav";
+		String newAttachment = "data/public/other/testsoundfile.wav";
 		page.zComposeView.zAddAttachments(newAttachment, false);
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
 		SleepUtil.sleepMedium();
@@ -136,7 +143,7 @@ public class AttachmentTests extends CommonTest {
 		page.zComposeView.zEnterComposeValues(to, cc, bcc, subject, body,
 				attachments);
 		obj.zCheckbox.zClick(attachments);
-		String newAttachment = "testsoundfile.wav";
+		String newAttachment = "data/public/other/testsoundfile.wav";
 		page.zComposeView.zAddAttachments(newAttachment, false);
 		obj.zCheckbox.zNotExists(attachments);
 		obj.zCheckbox.zVerifyIsChecked(newAttachment);
@@ -176,7 +183,8 @@ public class AttachmentTests extends CommonTest {
 				break;
 		}
 		String bigAttToastMessage = obj.zToastAlertMessage.zGetMsg();
-		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("en_US")) {
+		if (ZimbraSeleniumProperties.getStringProperty("locale")
+				.equals("en_US")) {
 			assertReport(
 					bigAttToastMessage,
 					"This file cannot be attached because it has exceeded the maximum allowed size",
@@ -207,7 +215,8 @@ public class AttachmentTests extends CommonTest {
 		SleepUtil.sleepLong(); // please don't remove this
 		String[] attList = attachments.split(",");
 		for (int i = 0; i < attList.length; i++) {
-			File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/projects/html/data/" + attList[i]);
+			File f = new File(ZimbraSeleniumProperties.getBaseDirectory()
+					+ attList[i]);
 			String path = f.getAbsolutePath();
 			obj.zBrowseField.zTypeInDlgWithKeyboard((i + 1) + ".", path, "");
 		}
@@ -245,9 +254,9 @@ public class AttachmentTests extends CommonTest {
 		SelNGBase.needReset.set(false);
 	}
 
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	// SECTION 4: RETRY-METHODS
-	// --------------------------------------------------------------------------
+	//--------------------------------------------------------------------------
 	// since all the tests are independent, retry is simply kill and re-login
 	private void handleRetry() throws Exception {
 		SelNGBase.isExecutionARetry.set(false);

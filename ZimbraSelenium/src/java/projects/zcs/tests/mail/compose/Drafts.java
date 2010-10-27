@@ -48,7 +48,7 @@ public class Drafts extends CommonTest {
 		if (test.equals("modifyDraftAndVerify")) {
 			return new Object[][] { { "_selfAccountName_",
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
-					modifiedSubject, modifiedBody, "testexcelfile.xls" } };
+					modifiedSubject, modifiedBody, "data/public/other/testexcelfile.xls" } };
 		}
 		if (test.equals("autoDraftAndSendMailToSelfInNewWindow")) {
 			return new Object[][] { { "_selfAccountName_",

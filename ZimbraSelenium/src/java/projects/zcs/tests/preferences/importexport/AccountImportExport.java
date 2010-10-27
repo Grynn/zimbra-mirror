@@ -62,9 +62,9 @@ public class AccountImportExport extends CommonTest {
 	static String subjectNewNotebookFolder = "subjectNewNotebookFolder";
 	static String newNotebookFolder = "newNotebookFolder";
 
-	static String fileName = "samlejpg.jpg";
-	static String fileTagged = "testexcelfile.xls";
-	static String fileNewBriefcaseFolder = "testwordfile.doc";
+	static String fileName = "data/public/other/samlejpg.jpg";
+	static String fileTagged = "data/public/other/testexcelfile.xls";
+	static String fileNewBriefcaseFolder = "data/public/other/testwordfile.doc";
 	static String newBriefcaseFolder = "newBriefcaseFolder";
 
 	//--------------------------------------------------------------------------

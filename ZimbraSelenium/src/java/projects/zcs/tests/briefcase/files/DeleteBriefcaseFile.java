@@ -22,7 +22,7 @@ public class DeleteBriefcaseFile extends CommonTest {
 	public Object[][] createData(Method method) {
 		String test = method.getName();
 		if (test.equals("deleteBriefcaseFile"))
-			return new Object[][] { { "testwordfile.doc",
+			return new Object[][] { { "data/public/other/testwordfile.doc",
 					getLocalizedData_NoSpecialChar() } };
 		else
 			return new Object[][] { { "" } };

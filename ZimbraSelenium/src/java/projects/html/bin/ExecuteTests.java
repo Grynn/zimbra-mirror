@@ -60,36 +60,15 @@ public class ExecuteTests {
 	 */
 	private static void debugSuite() {
 		if (null == includedGrps)
-			includedGrps = "always,parallel";
+			includedGrps = "always,test";
 		
 		suiteName = "debugSuite";
 
 		// ---------------------------------------------------
 		testName = "tasks";
 		cls = new ArrayList<String>();
-		//cls.add("projects.html.tests.mail.MailTagTests");
-		//cls.add("projects.html.tests.compose.ComposeReplyFwdInHTMLTests");
-		//cls.add("projects.html.tests.compose.DraftsTests");
-		//cls.add("projects.html.tests.mail.MailFolderTests");
-		//cls.add("projects.html.tests.addressbook.AddressBookTestHtml");
-		//cls.add("projects.html.tests.compose.ComposeBtmToolBarTests");
-		cls.add("projects.html.tests.tasks.Tasks");
-		//cls.add("projects.html.tests.preferences.ComposePref");
-		//cls.add("projects.html.tests.preferences.GeneralPref");
-		//cls.add("projects.html.tests.preferences.ABPreference");			
-		//cls.add("projects.html.tests.calendar.CalendarMiscTests");
+		cls.add("projects.html.tests.addressbook.AddressBookTestHtml");
 		addTests(testName, cls);
-		
-        testName = "calendar";
-	    cls = new ArrayList<String>();
-		cls.add("projects.html.tests.calendar.CalendarMiscTests");
-	    //cls.add("projects.html.tests.preferences.SignatureAndAccPref");
-	    //cls.add("projects.html.tests.preferences.ComposePref");
-	    //cls.add("projects.html.tests.preferences.GeneralPref");
-		//cls.add("projects.html.tests.preferences.ABPreference");
-	    //cls.add("projects.html.tests.tasks.Tasks");
-	  	addTests(testName, cls);
-	  			
 	    // ---------------------------------------------------
 	}
 

@@ -22,7 +22,7 @@ public class MoveBriefcaseFile extends CommonTest {
 	public Object[][] createData(Method method) {
 		String test = method.getName();
 		if (test.equals("moveBriefcaseFiletoNewFolder"))
-			return new Object[][] { { "samlejpg.jpg",
+			return new Object[][] { { "data/public/other/samlejpg.jpg",
 					getLocalizedData_NoSpecialChar() } };
 		else
 			return new Object[][] { { "" } };

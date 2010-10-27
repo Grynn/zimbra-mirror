@@ -258,7 +258,7 @@ public class ComposeView extends AppPage {
 		obj.zButton.zClick(ComposeView.zAddAttachmentIconBtn);
 		String[] attList = attachments.split(",");
 		for (int i = 0; i < attList.length; i++) {
-			File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/projects/zcs/data/" + attList[i]);
+			File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + attList[i]);
 			String path = f.getAbsolutePath();
 			obj.zBrowseField.zTypeInDlgWithKeyboard(localize(locator.attach)
 					+ ":", path, "" + (i + 1) + "");

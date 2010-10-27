@@ -57,9 +57,9 @@ public class AddToCalendar extends CommonTest {
 
 		String subject1, subject2;
 		subject1 = page.zMailApp
-				.zInjectMessage("createApptFromICSAttachment1_Bug27959");
+				.zInjectMessage("data/public/mime/createApptFromICSAttachment1_Bug27959.txt");
 		subject2 = page.zMailApp
-				.zInjectMessage("createApptFromICSAttachment2_Bug27959");
+				.zInjectMessage("data/public/mime/createApptFromICSAttachment2_Bug27959.txt");
 		zGoToApplication("Mail");
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject1);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject2);

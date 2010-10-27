@@ -115,13 +115,17 @@ public class ComposeBtmToolBarTests extends CommonTest {
 		page.zComposeView.zNavigateToMailComposeBtmToolBar();
 		page.zComposeView.zEnterComposeValues(to, cc, "", subject, body,
 				attachments);
-		SleepUtil.sleepSmall(); // lot of timing issue (also error command time out)
+		SleepUtil.sleepSmall(); // lot of timing issue (also error command time
+								// out)
 		obj.zButton.zClick(page.zComposeView.zSaveDraftsBtnBtmToolBar);
-		SleepUtil.sleepSmall();// lot of timing issue (also error command time out)
+		SleepUtil.sleepSmall();// lot of timing issue (also error command time
+								// out)
 		obj.zButton.zClick(page.zComposeView.zCancelBtnBtmToolBar);
-		SleepUtil.sleepSmall();// lot of timing issue (also error command time out)
+		SleepUtil.sleepSmall();// lot of timing issue (also error command time
+								// out)
 		obj.zFolder.zClick(page.zMailApp.zDraftFldr);
-		SleepUtil.sleepSmall();// lot of timing issue (also error command time out)
+		SleepUtil.sleepSmall();// lot of timing issue (also error command time
+								// out)
 		obj.zMessageItem.zExists(subject);
 
 		SelNGBase.needReset.set(false);
@@ -150,7 +154,8 @@ public class ComposeBtmToolBarTests extends CommonTest {
 	/**
 	 * Add receipients using bottom toolbar and verify it
 	 */
-	@Test(dataProvider = "composeDataProvider", groups = { "parallel", "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "composeDataProvider", groups = { "parallel", "smoke",
+			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void addRecepientsWithBtmToolbar(String to, String cc, String bcc,
 			String subject, String body, String attachments) throws Exception {
 		if (SelNGBase.isExecutionARetry.get())

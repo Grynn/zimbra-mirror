@@ -34,13 +34,13 @@ public class CreateBriefcaseFile extends CommonTest {
 	public Object[][] createData(Method method) {
 		String test = method.getName();
 		if (test.equals("newBriefcaseFileUpload"))
-			return new Object[][] { { "testexcelfile.xls",
+			return new Object[][] { { "data/public/other/testexcelfile.xls",
 					getLocalizedData_NoSpecialChar() } };
 		else if (test.equals("sendBriefcaseFileAsAttachment"))
-			return new Object[][] { { "testexcelfile.xls",
+			return new Object[][] { { "data/public/other/testexcelfile.xls",
 					getLocalizedData_NoSpecialChar() } };
 		else
-			return new Object[][] { { "samlejpg.jpg",
+			return new Object[][] { { "data/public/other/samlejpg.jpg",
 					getLocalizedData_NoSpecialChar() } };
 	}
 

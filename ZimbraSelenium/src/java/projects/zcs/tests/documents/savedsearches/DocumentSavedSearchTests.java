@@ -26,7 +26,7 @@ public class DocumentSavedSearchTests extends CommonTest {
 		if (test.equals("test1")) {
 			return new Object[][] { { ClientSessionFactory.session().currentUserName(), "ccuser@testdomain.com",
 					"bccuser@testdomain.com", getLocalizedData(5),
-					getLocalizedData(5), "testexcelfile.xls" } };
+					getLocalizedData(5), "data/public/other/testexcelfile.xls" } };
 		} else {
 			return new Object[][] { { "" } };
 		}

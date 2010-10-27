@@ -1541,7 +1541,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 
 		page.zABCompose.zNavigateToPrefImportExport();
 		obj.zRadioBtn.zClick(localize(locator.contacts));
-		File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/projects/zcs/data/1000contacts.csv");
+		File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/csv/1000contacts.csv");
 		String path = f.getAbsolutePath();
 		obj.zBrowseField.zTypeWithKeyboard(localize(locator.fileLabel), path);
 		obj.zButton.zClick(localize(locator._import));

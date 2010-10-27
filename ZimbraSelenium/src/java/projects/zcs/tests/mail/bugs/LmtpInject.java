@@ -3,10 +3,8 @@ package projects.zcs.tests.mail.bugs;
 import java.lang.reflect.Method;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
-
 import projects.zcs.tests.CommonTest;
 import projects.zcs.ui.MailApp;
 import com.zimbra.common.service.ServiceException;
@@ -68,7 +66,8 @@ public class LmtpInject extends CommonTest {
 			handleRetry();
 
 		String subject;
-		subject = page.zMailApp.zInjectMessage("viewEntireMessage_Bug39246");
+		subject = page.zMailApp
+				.zInjectMessage("data/private/mime/viewEntireMessage_Bug39246.txt");
 
 		zGoToApplication("Mail");
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
@@ -139,7 +138,8 @@ public class LmtpInject extends CommonTest {
 		SleepUtil.sleep(1500);
 
 		zGoToApplication("Address Book");
-		subject = page.zMailApp.zInjectMessage("unableToOpenMessage_Bug45852");
+		subject = page.zMailApp
+				.zInjectMessage("data/private/mime/unableToOpenMessage_Bug45852.txt");
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(1000);
 		obj.zButton.zClick(page.zMailApp.zDetachIconBtn2);
@@ -147,7 +147,10 @@ public class LmtpInject extends CommonTest {
 		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		zWaitTillObjectExist("link",
 				"Re: SF: Case 00051542: - Timezone conversion 24 hour error");
-		ClientSessionFactory.session().selenium().click(
+		ClientSessionFactory
+				.session()
+				.selenium()
+				.click(
 						"Link=Re: SF: Case 00051542: - Timezone conversion 24 hour error");
 		verifyRfc822Attachment2();
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
@@ -161,14 +164,17 @@ public class LmtpInject extends CommonTest {
 		SleepUtil.sleep(2000);
 
 		resetSession();
-		
+
 		page.zLoginpage.zLoginToZimbraAjax(newUser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Fwd: attached messages");
 		obj.zMessageItem.zClick("Fwd: attached messages");
 		SleepUtil.sleep(3500); // give time for link to appear
 		zWaitTillObjectExist("link",
 				"Re: SF: Case 00051542: - Timezone conversion 24 hour error");
-		ClientSessionFactory.session().selenium().click(
+		ClientSessionFactory
+				.session()
+				.selenium()
+				.click(
 						"Link=Re: SF: Case 00051542: - Timezone conversion 24 hour error");
 		verifyRfc822Attachment2();
 		obj.zButton.zClick(page.zMailApp.zCloseIconBtn_newWindow);
@@ -184,7 +190,7 @@ public class LmtpInject extends CommonTest {
 
 		String subject;
 		subject = page.zMailApp
-				.zInjectMessage("parsingErrorWhileAcceptingInvite_Bug38564");
+				.zInjectMessage("data/private/mime/parsingErrorWhileAcceptingInvite_Bug38564.txt");
 
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(2000);
@@ -222,7 +228,7 @@ public class LmtpInject extends CommonTest {
 
 		String subject;
 		subject = page.zMailApp
-				.zInjectMessage("notAbletoViewRfc822Msg_Bug40561");
+				.zInjectMessage("data/private/mime/notAbletoViewRfc822Msg_Bug40561.txt");
 
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(3500); // give time for link to appear
@@ -241,7 +247,7 @@ public class LmtpInject extends CommonTest {
 		SleepUtil.sleep(2000);
 
 		resetSession();
-		
+
 		page.zLoginpage.zLoginToZimbraAjax(newUser);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp("Fwd: **CORP UPGRADE");
 		obj.zMessageItem.zClick("Fwd: **CORP UPGRADE");
@@ -260,7 +266,7 @@ public class LmtpInject extends CommonTest {
 			handleRetry();
 
 		String subject;
-		subject = page.zMailApp.zInjectMessage("cantViewMessage_Bug4738");
+		subject = page.zMailApp.zInjectMessage("data/private/mime/cantViewMessage_Bug4738.txt");
 
 		obj.zMessageItem.zClick(subject);
 		String msgHTML = obj.zMessageItem.zGetInnerHTML(subject);
@@ -293,7 +299,7 @@ public class LmtpInject extends CommonTest {
 			handleRetry();
 
 		String subject;
-		subject = page.zMailApp.zInjectMessage("viewAttachment_Bug37352");
+		subject = page.zMailApp.zInjectMessage("data/private/mime/viewAttachment_Bug37352.txt");
 		zGoToApplication("Mail");
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
@@ -311,13 +317,15 @@ public class LmtpInject extends CommonTest {
 			handleRetry();
 
 		String subject;
-		subject = page.zMailApp.zInjectMessage("msgShowsBlank_Bug42127");
+		subject = page.zMailApp.zInjectMessage("data/private/mime/msgShowsBlank_Bug42127.txt");
 
 		obj.zMessageItem.zClick(subject);
 		if (ZimbraSeleniumProperties.getStringProperty("browser").equals("IE")) {
 			Assert
 					.assertTrue(
-							ClientSessionFactory.session().selenium()
+							ClientSessionFactory
+									.session()
+									.selenium()
 									.isElementPresent(
 											"xpath=//div[contains(@id,'zlif__CLV') and contains(@class,'ImgAttachment')]"),
 							"Attachment symbol does not found");
@@ -370,7 +378,7 @@ public class LmtpInject extends CommonTest {
 
 		String subject;
 		subject = page.zMailApp
-				.zInjectMessage("cantSeeAttachForLargeMsg_Bug30893");
+				.zInjectMessage("data/private/mime/cantSeeAttachForLargeMsg_Bug30893.txt");
 
 		obj.zMessageItem.zClick(subject);
 		SleepUtil.sleep(3000);
@@ -379,18 +387,18 @@ public class LmtpInject extends CommonTest {
 				.contains("FF")) {
 			obj.zMessageItem.zVerifyHasAttachment(subject);
 		}
-		Boolean downloadLink = ClientSessionFactory.session().selenium().isElementPresent(
-				"Link=" + localize(locator.saveFile));
+		Boolean downloadLink = ClientSessionFactory.session().selenium()
+				.isElementPresent("Link=" + localize(locator.saveFile));
 		Boolean briefcaseLink;
 		if (ZimbraSeleniumProperties.getStringProperty("locale").equals("nl")) {
-			briefcaseLink = ClientSessionFactory.session().selenium().isElementPresent(
-					"Link=Aktetas");
+			briefcaseLink = ClientSessionFactory.session().selenium()
+					.isElementPresent("Link=Aktetas");
 		} else {
-			briefcaseLink = ClientSessionFactory.session().selenium().isElementPresent(
-					"Link=" + localize(locator.briefcase));
+			briefcaseLink = ClientSessionFactory.session().selenium()
+					.isElementPresent("Link=" + localize(locator.briefcase));
 		}
-		Boolean removeLink = ClientSessionFactory.session().selenium().isElementPresent(
-				"Link=" + localize(locator.remove));
+		Boolean removeLink = ClientSessionFactory.session().selenium()
+				.isElementPresent("Link=" + localize(locator.remove));
 		assertReport("true", downloadLink.toString(),
 				"Verify Download link exists for message");
 		assertReport("true", briefcaseLink.toString(),
@@ -398,17 +406,18 @@ public class LmtpInject extends CommonTest {
 		assertReport("true", removeLink.toString(),
 				"Verify Remove link exists for message");
 
-		Boolean downloadAllAttachmentsLink = ClientSessionFactory.session().selenium()
-				.isElementPresent("Link=" + localize(locator.downloadAll));
-		Boolean removeAllAttachmentsLink = ClientSessionFactory.session().selenium()
-				.isElementPresent(
+		Boolean downloadAllAttachmentsLink = ClientSessionFactory.session()
+				.selenium().isElementPresent(
+						"Link=" + localize(locator.downloadAll));
+		Boolean removeAllAttachmentsLink = ClientSessionFactory.session()
+				.selenium().isElementPresent(
 						"Link=" + localize(locator.removeAllAttachments));
 		assertReport("true", downloadAllAttachmentsLink.toString(),
 				"Verify Download all attachments link exists for message");
 		assertReport("true", removeAllAttachmentsLink.toString(),
 				"Verify Remove all attachments link exists for message");
-		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
-				"Link=YOUR TRAVEL INFORMATION"));
+		Assert.assertTrue(ClientSessionFactory.session().selenium()
+				.isElementPresent("Link=YOUR TRAVEL INFORMATION"));
 
 		SelNGBase.needReset.set(false);
 	}
@@ -423,14 +432,18 @@ public class LmtpInject extends CommonTest {
 
 		String subject;
 		subject = page.zMailApp
-				.zInjectMessage("cantViewMultipartMessage_Bug43586");
+				.zInjectMessage("data/private/mime/cantViewMultipartMessage_Bug43586.txt");
 		obj.zMessageItem.zClick(subject);
 		String msgHTML = obj.zMessageItem.zGetInnerHTML(subject);
 		Boolean body1 = msgHTML.contains("Oltre duecento trattori");
 		assertReport("true", body1.toString(),
 				"'Oltre duecento trattori' not found in message HTML");
-		Assert.assertTrue(ClientSessionFactory.session().selenium().isElementPresent(
-				"xpath=//tr/td[1]/p/img[contains(@dfsrc,'cid:minicp')]"));
+		Assert
+				.assertTrue(ClientSessionFactory
+						.session()
+						.selenium()
+						.isElementPresent(
+								"xpath=//tr/td[1]/p/img[contains(@dfsrc,'cid:minicp')]"));
 
 		SelNGBase.needReset.set(false);
 	}
@@ -470,8 +483,8 @@ public class LmtpInject extends CommonTest {
 		Assert.assertTrue(actual.indexOf(body) >= 0,
 				"Body-field value mismatched");
 
-		Stafzmprov.modifyAccount(ClientSessionFactory.session().currentUserName(),
-				"zimbraPrefComposeFormat", "html");
+		Stafzmprov.modifyAccount(ClientSessionFactory.session()
+				.currentUserName(), "zimbraPrefComposeFormat", "html");
 		ClientSessionFactory.session().selenium().refresh();
 		SleepUtil.sleep(3500);
 		zWaitTillObjectExist("id", "ztih__main_Mail__ZIMLET_textCell");
@@ -503,7 +516,8 @@ public class LmtpInject extends CommonTest {
 		SleepUtil.sleep(5000); // taking too much time to open msg
 		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zCloseIconBtn_newWindow);
-		String msgBody = ClientSessionFactory.session().selenium().getBodyText();
+		String msgBody = ClientSessionFactory.session().selenium()
+				.getBodyText();
 		obj.zButton.zExists(page.zMailApp.zReplyIconBtn_newWindow);
 		obj.zButton.zExists(page.zMailApp.zReplyAllIconBtn_newWindow);
 		obj.zButton.zExists(page.zMailApp.zForwardIconBtn_newWindow);
@@ -517,14 +531,15 @@ public class LmtpInject extends CommonTest {
 				"Verifying image attachment2");
 		assertReport(msgBody, "broadSoft-sipPhone.PNG",
 				"Verifying image attachment3");
-		Boolean download = ClientSessionFactory.session().selenium().isElementPresent(
-				"Link=" + localize(locator.download));
-		Boolean viewAllImages = ClientSessionFactory.session().selenium().isElementPresent(
-				"Link=" + localize(locator.viewAllImages));
-		Boolean downloadAllAttachments = ClientSessionFactory.session().selenium()
-				.isElementPresent("Link=" + localize(locator.downloadAll));
-		Boolean removeAllAttachments = ClientSessionFactory.session().selenium()
-				.isElementPresent(
+		Boolean download = ClientSessionFactory.session().selenium()
+				.isElementPresent("Link=" + localize(locator.download));
+		Boolean viewAllImages = ClientSessionFactory.session().selenium()
+				.isElementPresent("Link=" + localize(locator.viewAllImages));
+		Boolean downloadAllAttachments = ClientSessionFactory.session()
+				.selenium().isElementPresent(
+						"Link=" + localize(locator.downloadAll));
+		Boolean removeAllAttachments = ClientSessionFactory.session()
+				.selenium().isElementPresent(
 						"Link=" + localize(locator.removeAllAttachments));
 		assertReport("true", download.toString(),
 				"Verifying Download link exist");
@@ -540,7 +555,8 @@ public class LmtpInject extends CommonTest {
 		SleepUtil.sleep(5000); // taking too much time to open msg
 		ClientSessionFactory.session().selenium().selectWindow("_blank");
 		zWaitTillObjectExist("button", page.zMailApp.zCloseIconBtn_newWindow);
-		String msgBody = ClientSessionFactory.session().selenium().getBodyText();
+		String msgBody = ClientSessionFactory.session().selenium()
+				.getBodyText();
 		System.out.println(msgBody);
 		obj.zButton.zExists(page.zMailApp.zReplyIconBtn_newWindow);
 		obj.zButton.zExists(page.zMailApp.zReplyAllIconBtn_newWindow);

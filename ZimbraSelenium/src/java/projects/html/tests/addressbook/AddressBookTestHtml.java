@@ -35,8 +35,10 @@ public class AddressBookTestHtml extends CommonTest {
 					"lastNameForMove:" + getLocalizedData_NoSpecialChar(), "",
 					"", "", targetAddressBookFolder } };
 		} else if (test.equals("importFromCSVAndVerify")) {
-			return new Object[][] { { "contactZimbra.csv", "contactsGmail.csv",
-					"contactYahoo.csv", "contactOutlook.CSV" } };
+			return new Object[][] { { "data/public/csv/contactZimbra.csv",
+					"data/public/csv/contactsGmail.csv",
+					"data/public/csv/contactYahoo.csv",
+					"data/public/csv/contactOutlook.CSV" } };
 		} else if (test.equals("createContactGroupAndVerify")) {
 			return new Object[][] { {
 					"GrpName:" + getLocalizedData_NoSpecialChar(), 3 } };
@@ -69,7 +71,7 @@ public class AddressBookTestHtml extends CommonTest {
 	 * Test to verify UI objects in Contact tab.
 	 * 
 	 * @throws Exception
-	 *             
+	 * 
 	 */
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void verifyContactsUI() throws Exception {
@@ -99,7 +101,7 @@ public class AddressBookTestHtml extends CommonTest {
 		page.zABComposeHTML.zNavigateToContact();
 		page.zABComposeHTML.zCreateBasicContact(lastName, middleName,
 				firstName, "", "");
-		SleepUtil.sleepSmall();		
+		SleepUtil.sleepSmall();
 		// To verify Contact created toaster message
 		page.zABComposeHTML.zVerifyContactToasterMsgs(obj.zToastAlertMessage
 				.zGetMsg(), localize(locator.contactCreated));
@@ -123,10 +125,10 @@ public class AddressBookTestHtml extends CommonTest {
 
 	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void editAndVerifyContactInHtml() throws Exception {
-		//if (SelNGBase.isExecutionARetry.get())
+		// if (SelNGBase.isExecutionARetry.get())
 		createContactInHtmlReusable();
-	
-		SleepUtil.sleepSmall();		
+
+		SleepUtil.sleepSmall();
 		obj.zButton.zClick(page.zABComposeHTML.zEditIconBtn);
 		SleepUtil.sleepSmall();
 		//page.zABComposeHTML.zSelectAndClickEdit("oldlastName","upperToolbar");
@@ -173,7 +175,8 @@ public class AddressBookTestHtml extends CommonTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = { "parallel", "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "ABDataProvider", groups = { "parallel", "smoke",
+			"full" }, retryAnalyzer = RetryFailedTests.class)
 	public void createAddressBook() throws Exception {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
@@ -372,10 +375,10 @@ public class AddressBookTestHtml extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 
-		checkForSkipException("all", "na", "22626", "Some important fields are populated when Yahoo csv is imported");
-		
-		page.zABComposeHTML.zNavigateToContact();
+		checkForSkipException("all", "na", "22626",
+				"Some important fields are populated when Yahoo csv is imported");
 
+		page.zABComposeHTML.zNavigateToContact();
 		page.zABComposeHTML.zNavigateToNewABPageAndImportContact(zimbraCSV);
 		SleepUtil.sleepMedium();
 		page.zABComposeHTML.zNavigateToContactAndVerifyImportedContactDisplay(
@@ -441,7 +444,7 @@ public class AddressBookTestHtml extends CommonTest {
 
 		page.zABComposeHTML.zVerifyContactGrpContactsInCompose(
 				contactGroupName, commaSeparatedAccForGroup, noOfAcc);
-		
+
 		obj.zButton.zClick(page.zComposeView.zSendBtn);
 
 		SelNGBase.needReset.set(false);
@@ -475,9 +478,9 @@ public class AddressBookTestHtml extends CommonTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test(dataProvider = "ABDataProvider", groups = {"smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
+	@Test(dataProvider = "ABDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
 	public void negativeTestGroupWithoutMember() throws Exception {
-		//if (SelNGBase.isExecutionARetry.get())
+		// if (SelNGBase.isExecutionARetry.get())
 		negativeTestContactGroup();
 
 		obj.zEditField.zType(page.zABComposeHTML.zGroupNameEditfield,

@@ -26,12 +26,12 @@ public class AttachmentMail extends CommonTest {
 			return new Object[][] { { "_selfAccountName_",
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(2), getLocalizedData(5),
-					"testwordfile.doc" } };
+					"data/public/other/testwordfile.doc" } };
 		} else if (test.equals("sendHtmlMailWithAttach_NewWindow")) {
 			return new Object[][] { { "_selfAccountName_",
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(2), getLocalizedData(5),
-					"testexcelfile.xls" } };
+					"data/public/other/testexcelfile.xls" } };
 
 		} else {
 			return new Object[][] { { "" }, };

@@ -52,7 +52,7 @@ public class ComposeReplyFwdInPlainText extends CommonTest {
 			return new Object[][] { { "_selfAccountName_",
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData_NoSpecialChar(),
-					getLocalizedData_NoSpecialChar(), "samplejpg.jpg" } };
+					getLocalizedData_NoSpecialChar(), "data/public/other/samplejpg.jpg" } };
 		} else {
 			return new Object[][] { { "_selfAccountName_",
 					"ccuser@testdomain.com", "bccuser@testdomain.com",

@@ -613,8 +613,7 @@ public class ABComposeHtml extends CommonTest {
 	 * @param csvFileName
 	 */
 	public static void zImportContact(String csvFileName) throws HarnessException   {
-
-		File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/projects/html/data/" + csvFileName);
+		File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + csvFileName);
 		String path = f.getAbsolutePath();
 		obj.zBrowseField.zTypeWithKeyboard(zImportContactEditField, path);
 		obj.zButton.zClick(zImportBtn);

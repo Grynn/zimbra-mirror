@@ -27,7 +27,7 @@ public class CreateMail extends CommonTest {
 		String test = method.getName();
 		if (test.equals("simpleAttachTest")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
-					getLocalizedData(2), "", "putty.log" }, };
+					getLocalizedData(2), "", "data/public/other/putty.log" }, };
 		} else if (test
 				.equals("rplyFwdInlineImageAttchMailInPlainText_Bug30335")
 		|| test.equals("attachMultipleTest")
@@ -37,7 +37,7 @@ public class CreateMail extends CommonTest {
 		|| test.equals("sendAttachmentsFromNewWindow")
 		) {
 			return new Object[][] { { "_selfAccountName_", "", "",
-					getLocalizedData(2), "", "putty.log,testexcelfile.xls" }, };
+					getLocalizedData(2), "", "data/public/other/putty.log,data/public/other/testexcelfile.xls" }, };
 		} else if (test
 				.equals("rplyFwdInlineImageAttchMailInPlainText_Bug30335")) {
 			return new Object[][] { { "_selfAccountName_", "", "",
@@ -120,7 +120,7 @@ public class CreateMail extends CommonTest {
 		changeToHTMLAndAttachInline_Retry();
 		obj.zButton.zClick(ComposeView.zOptionsDownArrowBtn);
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
-		page.zComposeView.zAddAttachments("structure.jpg", true);
+		page.zComposeView.zAddAttachments("data/public/other/structure.jpg", true);
 		// SleepUtil.sleep(1000);
 		String html = obj.zEditor.zGetInnerHTML("");
 		boolean b = (html.toLowerCase().indexOf("dfsrc=") > 0);
@@ -197,10 +197,10 @@ public class CreateMail extends CommonTest {
 		page.zComposeView.zNavigateToMailCompose();
 		obj.zButton.zClick(ComposeView.zOptionsDownArrowBtn);
 		obj.zMenuItem.zClick(localize(locator.formatAsHtml));
-		page.zComposeView.zAddAttachments("structure.jpg", true);
+		page.zComposeView.zAddAttachments("data/public/other/structure.jpg", true);
 		page.zComposeView.zSendMailToSelfAndVerify(to, cc, bcc, subject, body,
 				attachments);
-		String attachment = "structure.jpg";
+		String attachment = "data/public/other/structure.jpg";
 		obj.zButton.zClick(MailApp.zForwardIconBtn);
 		obj.zButton.zExists(ComposeView.zSendIconBtn);
 
@@ -247,34 +247,34 @@ public class CreateMail extends CommonTest {
 	private void fwdAMailWithAttachment_Retry() throws Exception {
 		handleRetry();// relogin
 		attachMultipleTest("_selfAccountName_", "", "", getLocalizedData(2),
-				"", "putty.log,testexcelfile.xls");
+				"", "data/public/other/putty.log,data/public/other/testexcelfile.xls");
 	}
 
 	private void changeToHTMLAndAttachInline_Retry() throws Exception {
 		handleRetry();// relogin
 		attachMultipleTest("_selfAccountName_", "", "", getLocalizedData(2),
-				"", "putty.log,testexcelfile.xls");
+				"", "data/public/other/putty.log,data/public/other/testexcelfile.xls");
 		fwdAMailWithAttachment("_selfAccountName_", "", "",
-				getLocalizedData(2), "", "putty.log,testexcelfile.xls");
+				getLocalizedData(2), "", "data/public/other/putty.log,data/public/other/testexcelfile.xls");
 	}
 
 	private void detachRetainsAttachments_Retry() throws Exception {
 		handleRetry();// relogin
 		attachMultipleTest("_selfAccountName_", "", "", getLocalizedData(2),
-				"", "putty.log,testexcelfile.xls");
+				"", "data/public/other/putty.log,data/public/other/testexcelfile.xls");
 		fwdAMailWithAttachment("_selfAccountName_", "", "",
-				getLocalizedData(2), "", "putty.log,testexcelfile.xls");
+				getLocalizedData(2), "", "data/public/other/putty.log,data/public/other/testexcelfile.xls");
 		changeToHTMLAndAttachInline();
 	}
 
 	private void sendAttachmentsFromNewWindow_Retry() throws Exception {
 		handleRetry();// relogin
 		attachMultipleTest("_selfAccountName_", "", "", getLocalizedData(2),
-				"", "putty.log,testExcelFile.xls");
+				"", "data/public/other/putty.log,data/public/other/testExcelFile.xls");
 		fwdAMailWithAttachment("_selfAccountName_", "", "",
-				getLocalizedData(2), "", "putty.log,testexcelfile.xls");
+				getLocalizedData(2), "", "data/public/other/putty.log,data/public/other/testexcelfile.xls");
 		changeToHTMLAndAttachInline();
 		detachRetainsAttachments("_selfAccountName_", "", "",
-				getLocalizedData(2), "", "putty.log,testexcelfile.xls");
+				getLocalizedData(2), "", "data/public/other/putty.log,data/public/other/testexcelfile.xls");
 	}
 }

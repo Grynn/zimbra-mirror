@@ -39,7 +39,7 @@ public class CreateContact extends CommonTest {
 		String test = method.getName();
 		if (test.equals("addRemoveContactPhotoAndVerify")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
-					getLocalizedData_NoSpecialChar(), "structure.jpg" } };
+					getLocalizedData_NoSpecialChar(), "data/public/other/structure.jpg" } };
 		} else if (test.equals("verifyAllFileAsOptionForContact")) {
 			return new Object[][] { { getLocalizedData_NoSpecialChar(),
 					getLocalizedData_NoSpecialChar(),

@@ -55,7 +55,7 @@ public class ComposeView extends CommonTest {
 	// Add Attachments page objects
 	public static final String zAddAttachDoneBtn = "name=actionAttachDone";
 	public static final String zAddAttachCancelBtn = "name=actionAttachCancel";
-	
+
 	// Add Receipients page objects
 	public static final String zAddReceipFindEditField = "id=findField";
 	public static final String zAddReceipContactsSrchWebList = "name=contactLocation";
@@ -108,7 +108,7 @@ public class ComposeView extends CommonTest {
 	 * This tries to go back from compose-to mailapp. Tries to cancel all the
 	 * dialogs that might showup while doing so.
 	 */
-	public static void zGoToMailAppFromCompose()  throws HarnessException  {
+	public static void zGoToMailAppFromCompose() throws HarnessException {
 		if (obj.zButton.zExistsInDlgDontWait(localize("no")).equals("true")) {
 			obj.zButton.zClickInDlg(localize("no"));
 			// note in some intl, ajxMsg cancel(used in dlg btns) is different
@@ -154,7 +154,6 @@ public class ComposeView extends CommonTest {
 		return zLoginAndNavigateToCompose(user1);
 
 	}
-
 
 	// ===========================
 	// ENTER VALUES
@@ -204,8 +203,10 @@ public class ComposeView extends CommonTest {
 		// temporarily comment this out -- due to bug 32611
 		if (!bcc.equals("")) {
 			SleepUtil.sleep(2000);
-			if (ClientSessionFactory.session().selenium().isElementPresent("link=" + localize(locator.showBcc)))
-				ClientSessionFactory.session().selenium().click("link=" + localize(locator.showBcc));
+			if (ClientSessionFactory.session().selenium().isElementPresent(
+					"link=" + localize(locator.showBcc)))
+				ClientSessionFactory.session().selenium().click(
+						"link=" + localize(locator.showBcc));
 			obj.zTextAreaField.zType(zBccField, bcc);
 		}
 		obj.zEditField.zType(zSubjectField, subject);
@@ -266,20 +267,28 @@ public class ComposeView extends CommonTest {
 		zWaitTillObjectExist("button", zAddAttachDoneBtn);
 		String[] attList = attachments.split(",");
 		for (int i = 0; i < attList.length; i++) {
-			File f = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/projects/html/data/" + attList[i]);
+			File f = new File(ZimbraSeleniumProperties.getBaseDirectory()
+					+ attList[i]);
 			String path = f.getAbsolutePath();
-			//obj.zBrowseField.zTypeInDlgWithKeyboard((i + 1) + ".", path, "");
-			//obj.zBrowseField.zTypeInDlgWithKeyboard("css=table.Compose tr:nth-child(" + (i + 2) + "):contains(" + (i + 1) + ".)", path, "");
-			obj.zBrowseField.zTypeInDlgWithKeyboard("css=table.Compose td:contains(" + (i+1) + ".)+td:contains[colspan=2]>input[name=fileUpload]", path, "");	
+			// obj.zBrowseField.zTypeInDlgWithKeyboard((i + 1) + ".", path, "");
+			// obj.zBrowseField.zTypeInDlgWithKeyboard(
+			// "css=table.Compose tr:nth-child(" + (i + 2) + "):contains(" + (i
+			// + 1) + ".)", path, "");
+			obj.zBrowseField
+					.zTypeInDlgWithKeyboard(
+							"css=table.Compose td:contains("
+									+ (i + 1)
+									+ ".)+td:contains[colspan=2]>input[name=fileUpload]",
+							path, "");
 		}
-		
+
 		obj.zButton.zClick(zAddAttachDoneBtn);
 		SleepUtil.sleep(3000); // wait till main compose UI come
 		if (!attachments.equals("mail700.pst")) { /*
 												 * customization for big attach
 												 */
 			for (int i = 0; i < attList.length; i++) {
-				zWaitTillObjectExist("text", attList[i]);// timing issue				
+				zWaitTillObjectExist("text", attList[i]);// timing issue
 			}
 			obj.zCheckbox.zVerifyIsChecked("css=[name=originalAttachment]");
 		}
@@ -297,7 +306,8 @@ public class ComposeView extends CommonTest {
 	public static void zVerifyAttachmentsExists(String attachmentList) {
 		String[] attList = attachmentList.split(",");
 		for (int i = 0; i < attList.length; i++) {
-			boolean b = ClientSessionFactory.session().selenium().isElementPresent("link=" + attList[0]);
+			boolean b = ClientSessionFactory.session().selenium()
+					.isElementPresent("link=" + attList[0]);
 			Assert.assertTrue(b, "Attachment link for: (" + attList[0]
 					+ ") doesnt exist");
 		}
@@ -309,7 +319,8 @@ public class ComposeView extends CommonTest {
 	 * @param attachmentList
 	 *            comma separated attachment names
 	 */
-	public static void zVerifyAttachmentsSelected(String attachmentList)  throws HarnessException  {
+	public static void zVerifyAttachmentsSelected(String attachmentList)
+			throws HarnessException {
 		String[] attList = attachmentList.split(",");
 		for (int i = 0; i < attList.length; i++) {
 			obj.zCheckbox.zVerifyIsChecked(attList[0]);
@@ -506,7 +517,8 @@ public class ComposeView extends CommonTest {
 		ClientSessionFactory.session().selenium().selectWindow(null);
 		MailApp.zClickCheckMailUntilMailShowsUp(subject);
 		obj.zMessageItem.zClick(subject);
-		SleepUtil.sleep(2000); // takes some time to open message - test fails here
+		SleepUtil.sleep(2000); // takes some time to open message - test fails
+								// here
 	}
 
 	/**
@@ -553,7 +565,8 @@ public class ComposeView extends CommonTest {
 		if (fieldToVerify.toLowerCase().equals("to")
 				|| fieldToVerify.toLowerCase().equals("toccbcc")) {
 			if (toCommaSeparated.equals("_selfAccountName_"))
-				toCommaSeparated = ClientSessionFactory.session().currentUserName();
+				toCommaSeparated = ClientSessionFactory.session()
+						.currentUserName();
 
 			toCommaSeparated = toCommaSeparated.trim();
 			if (!toCommaSeparated.equals("")) {
@@ -579,7 +592,8 @@ public class ComposeView extends CommonTest {
 		if (fieldToVerify.toLowerCase().equals("cc")
 				|| fieldToVerify.toLowerCase().equals("toccbcc")) {
 			if (ccCommaSeparated.equals("_selfAccountName_"))
-				ccCommaSeparated = ClientSessionFactory.session().currentUserName();
+				ccCommaSeparated = ClientSessionFactory.session()
+						.currentUserName();
 
 			ccCommaSeparated = ccCommaSeparated.trim();
 			if (!ccCommaSeparated.equals("")) {
@@ -605,15 +619,18 @@ public class ComposeView extends CommonTest {
 		if (fieldToVerify.toLowerCase().equals("bcc")
 				|| fieldToVerify.toLowerCase().equals("toccbcc")) {
 			if (bccCommaSeparated.equals("_selfAccountName_"))
-				bccCommaSeparated = ClientSessionFactory.session().currentUserName();
+				bccCommaSeparated = ClientSessionFactory.session()
+						.currentUserName();
 
 			bccCommaSeparated = bccCommaSeparated.trim();
 			if (!bccCommaSeparated.equals("")) {
 				String[] bccCommaSeparatedArray = bccCommaSeparated.split(",");
 				for (int i = 0; i < bccCommaSeparatedArray.length; i++) {
-					if (ClientSessionFactory.session().selenium().isElementPresent("link="
-							+ localize(locator.showBcc)))
-						ClientSessionFactory.session().selenium().click("link=" + localize(locator.showBcc));
+					if (ClientSessionFactory.session().selenium()
+							.isElementPresent(
+									"link=" + localize(locator.showBcc)))
+						ClientSessionFactory.session().selenium().click(
+								"link=" + localize(locator.showBcc));
 					String actualBccVal = obj.zTextAreaField
 							.zGetInnerText(page.zComposeView.zBccField);
 					Assert.assertTrue(
@@ -644,8 +661,10 @@ public class ComposeView extends CommonTest {
 			obj.zButton.zClick(page.zComposeView.zCcBtn);
 		} else if (toorCcOrBccbtn.toLowerCase().equals("bcc")
 				|| toorCcOrBccbtn.equals(page.zComposeView.zBccBtn)) {
-			if (ClientSessionFactory.session().selenium().isElementPresent("link=" + localize(locator.showBcc)))
-				ClientSessionFactory.session().selenium().click("link=" + localize(locator.showBcc));
+			if (ClientSessionFactory.session().selenium().isElementPresent(
+					"link=" + localize(locator.showBcc)))
+				ClientSessionFactory.session().selenium().click(
+						"link=" + localize(locator.showBcc));
 			obj.zButton.zClick(page.zComposeView.zBccBtn);
 		}
 

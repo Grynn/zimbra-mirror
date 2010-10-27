@@ -30,18 +30,18 @@ public class TagBriefcaseFile extends CommonTest {
 	public Object[][] createData(Method method) throws ServiceException {
 		String test = method.getName();
 		if (test.equals("createRenameDeleteTagForFileAndVerify_ColumnView")) {
-			return new Object[][] { { "testexcelfile.xls" } };
+			return new Object[][] { { "data/public/other/testexcelfile.xls" } };
 		} else if (test
 				.equals("verifyTagFunctionalityFor2FileAndRemoveTag_DetailView")) {
-			return new Object[][] { { "testwordfile.doc" } };
+			return new Object[][] { { "data/public/other/testwordfile.doc" } };
 		} else if (test.equals("applyMutlipleTagToFileAndVerify_ColumnView")) {
-			return new Object[][] { { "samlejpg.jpg" } };
+			return new Object[][] { { "data/public/other/samlejpg.jpg" } };
 		} else if (test.equals("addRemoveTagAndVerifyInAll3View")) {
-			return new Object[][] { { "contacts.csv" } };
+			return new Object[][] { { "data/public/csv/contacts.csv" } };
 		} else if (test.equals("applyTagByDnDTagToFileAndViceVersa")) {
-			return new Object[][] { { "Calendar.ics" } };
+			return new Object[][] { { "data/public/ics/Calendar.ics" } };
 		} else if (test.equals("tryToCreateDuplicateTagInBriefcase")) {
-			return new Object[][] { { "Calendar.ics" } };
+			return new Object[][] { { "data/public/ics/Calendar.ics" } };
 		} else {
 			return new Object[][] { { "" } };
 		}
@@ -113,7 +113,7 @@ public class TagBriefcaseFile extends CommonTest {
 			handleRetry();
 
 		String fileName2, tag1, tag2;
-		fileName2 = "testsoundfile.wav";
+		fileName2 = "data/public/other/testsoundfile.wav";
 		obj.zButton.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.detailView));
 		SleepUtil.sleep(500);
@@ -298,7 +298,7 @@ public class TagBriefcaseFile extends CommonTest {
 			handleRetry();
 
 		String fileName2, tag1, tag2;
-		fileName2 = "testpptfile.ppt";
+		fileName2 = "data/public/other/testpptfile.ppt";
 		obj.zButton.zClick(localize(locator.view));
 		obj.zMenuItem.zClick(localize(locator.columnBrowserView));
 		SleepUtil.sleep(500);

@@ -31,7 +31,7 @@ public class AddToBriefcase extends CommonTest {
 			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5),
-					"testtextfile.txt" } };
+					"data/public/other/testtextfile.txt" } };
 		} else {
 			return new Object[][] { { "" } };
 		}

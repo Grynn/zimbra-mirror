@@ -31,13 +31,13 @@ public class RemoveAttachment extends CommonTest {
 				|| test.equals("removingAttachmentFromMessage_NewWindow")) {
 			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
-					getLocalizedData(5), getLocalizedData(5), "bug22417.ics" } };
+					getLocalizedData(5), getLocalizedData(5), "data/public/ics/bug22417.ics" } };
 		} else if (test.equals("removingAllAttachmentFromMessage")
 				|| test.equals("removingAllAttachmentFromMessage_NewWindow")) {
 			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5),
-					"structure.jpg, contact25.pst" } };
+					"data/public/other/structure.jpg, data/private/pst/contact25.pst" } };
 		} else {
 			return new Object[][] { { "" } };
 		}

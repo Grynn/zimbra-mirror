@@ -146,7 +146,7 @@ public class MailSharing extends CommonTest {
 		} else {
 			return new Object[][] { { "_selfAccountName_",
 					"ccuser@testdomain.com", "", "testOBOSubject",
-					"testOBOBody", "putty.log", "Mail",
+					"testOBOBody", "data/public/other/putty.log", "Mail",
 					localize(locator.inbox), "", Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };

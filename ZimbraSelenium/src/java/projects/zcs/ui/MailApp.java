@@ -173,14 +173,14 @@ public class MailApp extends AppPage {
 	public static void ClickCheckMailUntilMailShowsUp(String folderName,
 			String mailSubject) throws Exception {
 		boolean found = false;
-		
-		try{
+
+		try {
 			Stafpostqueue sp = new Stafpostqueue();
 			sp.waitForPostqueue();
-		}catch(Exception ex){
+		} catch (Exception ex) {
 			ZimbraSeleniumLogger.mLog.error("Error occured using STAF service");
 		}
-				
+
 		if (!folderName.equals("")) {
 			obj.zFolder.zClick(folderName);
 		} else {
@@ -189,12 +189,12 @@ public class MailApp extends AppPage {
 		SleepUtil.sleep(1000); // timing issue
 		String rc = obj.zMessageItem.zExistsDontWait(mailSubject);
 		if (rc.equals("false")) {
-		// check in junk
+			// check in junk
 			obj.zFolder.zClick(localize(locator.junk));
 			SleepUtil.sleep(1000);
 			rc = obj.zMessageItem.zExistsDontWait(mailSubject);
-			if (!rc.equals("false")) 
-				found = true;				
+			if (!rc.equals("false"))
+				found = true;
 		} else {
 			found = true;
 		}
@@ -384,9 +384,9 @@ public class MailApp extends AppPage {
 	public static String zInjectMessage(String fileName) throws Exception {
 		String subject = null;
 		Boolean foundFlag = false;
-		File dir = new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/projects/zcs/data/lmtpInject");
+		File dir = new File(ZimbraSeleniumProperties.getBaseDirectory());
 		StringBuffer contents = new StringBuffer();
-		File file = new File(dir.getAbsolutePath() + "/" + fileName + ".txt");
+		File file = new File(dir.getAbsolutePath() + "/" + fileName);
 		BufferedReader reader = null;
 		reader = new BufferedReader(new FileReader(file));
 		String text = null;
@@ -403,8 +403,8 @@ public class MailApp extends AppPage {
 			}
 		}
 		String[] accounts = { ClientSessionFactory.session().currentUserName() };
-		LmtpUtil.addMessageLmtp(accounts, ClientSessionFactory.session().currentUserName(), contents
-				.toString());
+		LmtpUtil.addMessageLmtp(accounts, ClientSessionFactory.session()
+				.currentUserName(), contents.toString());
 		zGoToApplication("Mail");
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
 

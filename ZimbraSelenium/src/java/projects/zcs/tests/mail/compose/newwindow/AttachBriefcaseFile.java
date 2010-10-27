@@ -31,7 +31,7 @@ public class AttachBriefcaseFile extends CommonTest {
 			return new Object[][] { { ClientSessionFactory.session().currentUserName(),
 					"ccuser@testdomain.com", "bccuser@testdomain.com",
 					getLocalizedData(5), getLocalizedData(5),
-					"testexcelfile.xls,testwordfile.doc" } };
+					"data/public/other/testexcelfile.xls,data/public/other/testwordfile.doc" } };
 		} else {
 			return new Object[][] { { "" } };
 		}

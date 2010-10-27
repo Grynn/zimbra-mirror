@@ -57,31 +57,31 @@ public class BriefcaseSharing extends CommonTest {
 	private Object[][] createData(Method method) throws Exception {
 		String test = method.getName();
 		if (test.equals("shareAsViewerAndVerifyFileUpload"))
-			return new Object[][] { { "testsoundfile.wav", "Briefcase",
+			return new Object[][] { { "data/public/other/testsoundfile.wav", "Briefcase",
 					localize(locator.briefcase), "",
 					Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		else if (test.equals("shareAsManagerAndVerifyFileUpload"))
-			return new Object[][] { { "testwordfile.doc", "Briefcase",
+			return new Object[][] { { "data/public/other/testwordfile.doc", "Briefcase",
 					localize(locator.briefcase), "",
 					Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleManager), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		else if (test.equals("verifyBriefcaseSendLinkFunctionality"))
-			return new Object[][] { { "testtextfile.txt", "Briefcase",
+			return new Object[][] { { "data/public/other/testtextfile.txt", "Briefcase",
 					localize(locator.briefcase), "",
 					Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleManager), "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		else if (test.equals("publicBriefcaseSharing"))
-			return new Object[][] { { "structure.jpg", "Briefcase",
+			return new Object[][] { { "data/public/other/structure.jpg", "Briefcase",
 					localize(locator.briefcase),
 					localize(locator.shareWithPublicLong),
 					Stafzmprov.getRandomAccount(), "", "", "", "",
 					getLocalizedData_NoSpecialChar() } };
 		else
-			return new Object[][] { { "samlejpg.jpg", "Briefcase",
+			return new Object[][] { { "data/public/other/samlejpg.jpg", "Briefcase",
 					localize(locator.briefcase), "",
 					Stafzmprov.getRandomAccount(),
 					localize(locator.shareRoleViewer), "", "", "",
@@ -178,7 +178,7 @@ public class BriefcaseSharing extends CommonTest {
 		page.zSharing.zAcceptShare(mountingfoldername);
 		page.zBriefcaseApp.zGoToBriefcaseApp();
 
-		String newfilename = "putty.log";
+		String newfilename = "data/public/other/putty.log";
 		page.zBriefcaseApp
 				.zBriefcaseFileUpload(newfilename, mountingfoldername);
 		obj.zFolder.zClick(mountingfoldername);
