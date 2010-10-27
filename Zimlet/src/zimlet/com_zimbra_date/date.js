@@ -130,7 +130,6 @@ function(spanElement, contentObjText, matchContext, canvas) {
         if(app) {
             app.showDayView(matchContext.date);
             window.opener.focus();
-            window.close();
         }
     }else {
         var calController = AjxDispatcher.run("GetCalController");
