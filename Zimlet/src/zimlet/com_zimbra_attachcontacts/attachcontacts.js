@@ -178,7 +178,7 @@ AttachContactsZimlet.prototype._openCompose = function() {
 	AjxDispatcher.run("Compose", {action: action, inNewWindow: false, msg: msg});
 	var controller = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
 	this._isDraftInitiatedByThisZimlet = true;
-	controller.saveDraft(ZmComposeController.DRAFT_TYPE_MANUAL);
+	controller.saveDraft(ZmComposeController.DRAFT_TYPE_AUTO);
 };
 
 /**
