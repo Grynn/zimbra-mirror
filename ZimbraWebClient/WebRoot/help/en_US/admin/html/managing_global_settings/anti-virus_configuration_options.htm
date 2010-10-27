@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -83,21 +83,33 @@ else
 //-->
 //]]></script>
 <h1>Anti-Virus Protection</h1>
-<p>The Zimbra Collaboration Suite installs the Clam 
-Antivirus software as the anti-virus filter. By default, the anti-virus software is automatically enabled. You can modify these settings from the <span style="font-weight: bold;"><b>Global Settings&gt;Anti-Virus</b></span> tab.</p>
-<p>The Zimbra MTA checks every two hours for any new anti-virus updates from 
-ClamAV and updates to the software are automatically downloaded to the server. You can modify how often the MTA checks for updates. The frequency can be set between 1 and 24 hours.</p>
-<p>The global settings for the anti-virus protection are configured with these options enabled:</p>
+<p>The Zimbra Collaboration Suite installs the Clam Antivirus 
+ software as the anti-virus filter. By default, the anti-virus software 
+ is automatically enabled. You can modify these settings from the <span 
+	 style="font-weight: bold;"><b>Global Settings&gt;Anti-Virus</b></span> tab.</p>
+<p>The Zimbra MTA checks every two hours for any new anti-virus updates 
+ from ClamAV and updates to the software are 
+ automatically downloaded to the server. You can modify how often the MTA 
+ checks for updates. The frequency can be set between 1 and 24 hours.</p>
+<p>The global settings for the anti-virus protection are configured with 
+ these options enabled:</p>
 <ul type="disc">
-<li class="p">
-<p><span style="font-weight: bold;"><b>Block encrypted archives</b></span>, such as password protected zipped files.</p>
-</li>
-<li class="p">
-<p><span style="font-weight: bold;"><b>Send notification</b></span> to recipient to alert that a mail message to them had a virus and was not delivered.</p>
-</li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Block encrypted archives</b></span>, 
+	 such as password protected zipped files.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Send notification</b></span> 
+	 to recipient to alert that a mail message to them had a virus and 
+	 was not delivered.</p></li>
 </ul>
-<p><span class="Important">Important:</span> If you defined an anti-virus notification address during the installation of the Zimbra Collaboration Suite, create an anti-virus notification mailbox alias in your 
-admin account, so that notification messages can be delivered to your mailbox.</p>
+<p>A virus quarantine mailbox is created when you install ZCS. When the 
+ anti-virus filter detects that an email has a virus, the email message 
+ is automatically sent to this mailbox and an email notification is automatically 
+ sent to recipient. The recipient is asked to contact the system administrator 
+ if they want more information about the email. &#160;Messages in the quarantine 
+ mailbox are purged every 7 days. </p>
+<p><span class="Important">Important:</span> If you defined an anti-virus 
+ notification address during the installation of the Zimbra Collaboration 
+ Suite, create an anti-virus notification mailbox alias in your admin account, so that notification messages can be 
+ delivered to your mailbox.</p>
 <p>&#160;</p>
 <p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[

@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Configuring Authentication Settings</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -83,7 +83,7 @@ else
 //-->
 //]]></script>
 <h1>Configuring Authentication Settings</h1>
-<p>Authentication is the process of identifying a user or a server to the 
+<p>Email authentication is the process of identifying a user to the LDAP 
  directory server and granting access to legitimate users based on user 
  name and password information provided when users log in. Zimbra Collaboration 
  Suite offers the following three authentication mechanisms:</p>
@@ -94,9 +94,9 @@ else
 	 required.</p></li>
 	<li class="p"><p><span style="font-weight: bold;"><b>External LDAP</b></span>. 
 	 The user name and password is the authentication information supplied 
-	 in the bind operation to the directory server. You must configure 
-	 the LDAP URL, LDAP filter, and wither to use DN password to bind to 
-	 the external server.</p></li>
+	 in the bind operation to the LDAP directory server. You must configure 
+	 the LDAP URL, LDAP filter, and whether to use DN password to bind 
+	 to the external server.</p></li>
 	<li class="p"><p><span style="font-weight: bold;"><b>External Active Directory</b></span>. 
 	 The user name and password is the authentication information supplied 
 	 to the Active Directory server. You identify the Active Directory 
@@ -112,7 +112,7 @@ else
 <p>The external LDAP authentication mechanism attempts to bind to the specified 
  directory server using the supplied user name and password. If this bind 
  succeeds, the connection is closed and the password is considered valid. 
- &#160;You configure the following External LDAP settings:</p>
+ &#160;You configure the following external LDAP settings:</p>
 <ul type="disc">
 	<li class="p"><p><span style="font-weight: bold;"><b>LDAP URL</b></span> and 
 	 whether to use <span style="font-weight: bold;"><b>SSL</b></span> or <span 

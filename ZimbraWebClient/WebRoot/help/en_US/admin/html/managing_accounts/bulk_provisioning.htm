@@ -82,73 +82,28 @@ else
 
 //-->
 //]]></script>
-<h1>Using Bulk Provisioning to Create Accounts </h1>
-<p>Use the <span style="font-weight: bold;"><b>Bulk Provisioning</b></span> link 
- on the administration console Account Addresses toolbar to provision up 
- to 500 accounts at once. </p>
-<p>These accounts are provisioned with a user name, display name, and password 
- configured.</p>
-<p>You create a . csv file with three columns, 
- separated by a comma (,). Each row is an account entry. &#160;The account 
- information is configured as:</p>
-<div align="center" >
-<table style="vertical-align: top;" cellspacing="0">
-	<col width="188" />
-	<col width="102" />
-	<col width="144" />
-	<tr style="vertical-align: top;">
-		<td style="border: Solid 1px #000000; padding-right: 10px; padding-left: 10px;" 
-			 width="188"><p style="font-weight: bold;">Column 1</p>
-		<p>&#160;</p>
-		<p style="font-size: 11pt;">AccountName@example.com</p></td>
-		<td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000; 
-			 border-bottom: Solid 1px #000000; padding-right: 10px; padding-left: 10px;" 
-			 width="102"><p><span style="font-weight: bold;"><b>Column 2</b></span></p>
-		<p>&#160;</p>
-		<p style="font-size: 11pt;">Display Name</p></td>
-		<td style="border-top: Solid 1px #000000; border-right: Solid 1px #000000; 
-			 border-bottom: Solid 1px #000000; padding-right: 10px; padding-left: 10px;" 
-			 width="144"><p style="font-weight: bold;">Column 3</p>
-		<p>&#160;</p>
-		<p style="font-size: 11pt;">Password (optional)</p></td>
-	</tr>
-</table>
-</div>
-<p>&#160;</p>
+<h1>Managing Account Migrations from the Admin Console</h1>
+<p>You can migrate accounts from an external directory, either Active Directory 
+ or an LDAP server. A migration wizard guides you through importing data 
+ from an external server. The wizard downloads account information from 
+ your directory and provisions the accounts on ZCS. </p>
+<p>&#160;When this is complete, the wizard generates a report in a .csv 
+ format with a list of new accounts. &#160;</p>
+<p>The wizard configuration details include:</p>
 <ul type="disc">
-	<li class="p"><p>An account name cannot have spaces or use symbols.</p></li>
-	<li class="p"><p>You can type a period (.) between words. For example: 
-	 john.smith@example.com. 
-	 This information creates an account with only required account information 
-	 configured.</p></li>
-	<li class="p"><p>The designated account name is entered as the last 
-	 name for the account. &#160;</p></li>
+	<li><p>Generating passwords for the accounts. You can configure the 
+	 wizard to generate a random password for each account or use one password 
+	 for all accounts and require users to change their passwords the first 
+	 time they login. If you choose to generate random passwords for each 
+	 account, make sure you download the list of provisioned accounts. 
+	 The file is deleted when you close the wizard.</p></li>
+	<li><p>Setting up the LDAP directory connection. So that the Import 
+	 Wizard can connect to the LDAP directory, information about the directory 
+	 is entered. This includes the number of accounts to import, the server 
+	 name, the base distinguished name (DN) of the server to be used as 
+	 the root of the search, password, and a LDAP search filter to identify 
+	 which mailboxes to import</p></li>
 </ul>
-<p>The password is optional. If you do not add the password, you must still 
- include the comma after the display name field. &#160;</p>
-<div align="center" >
-<table style="vertical-align: top;" cellspacing="0">
-	<col width="319" />
-	<tr style="vertical-align: top;">
-		<td style="padding-right: 10px; padding-left: 10px; border-left-style: Solid; 
-			 border-top-style: Solid; border-right-style: Solid; border-bottom-style: Solid; 
-			 border-left-width: 1px; border-top-width: 1px; border-bottom-width: 1px; 
-			 border-right-width: 1px;" width="319" bgcolor="#CCE5FF"><p>user1@example.com,Jane 
-		 Brown,123456</p>
-		<p>user2@ example.com,Mark Smith,123456</p>
-		<p>user3@ example.com,Karen Vents,123456</p>
-		<p>user4@ example.com,Sam Sample,123456</p>
-		<p>user5@ example.com,Zeb Jones,</p></td>
-	</tr>
-</table>
-</div>
-<p>&#160;</p>
-<p>You use the <a href="how_to_provision_multiple_accounts.htm">Bulk Provisioning 
- wizard</a> to upload the information.</p>
-<p>The accounts are automatically assigned the domain default </p>
-<p>If you do not provide a password, a random password is generated for 
- the account. When users log in the first time they are prompted to change 
- the password.</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

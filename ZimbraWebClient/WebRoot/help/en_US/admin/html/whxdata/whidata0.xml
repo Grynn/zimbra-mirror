@@ -1,9 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="access control for domain Documents accounts" >
-  <topic name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
-</key>
 <key name="account attributes, assigning" >
   <topic name="Class of Service Managing" url="cos/class_of_service.htm" />
 </key>
@@ -42,6 +39,9 @@
 </key>
 <key name="active mode" >
   <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
+</key>
+<key name="adding a domain" >
+  <topic name="Adding a New Domain" url="managing_domains/creating_a_domain.htm" />
 </key>
 <key name="adding Zimlets to COS" >
   <topic name="Adding Zimlets to COS and Accounts" url="zimlets/adding_zimlets_to_cos_and_accounts.htm" />
@@ -94,6 +94,12 @@
 <key name="auth token lifetime" >
   <topic name="Session Timeout" url="managing_servers/session_timeout.htm" />
 </key>
+<key name="authentication mode, how to configure" >
+  <topic name="How to Configure Authentication Mode" url="managing_domains/how_to_configure_authentication_mode.htm" />
+</key>
+<key name="authentication settings" >
+  <topic name="Configuring Authentication Settings" url="managing_domains/authentication_settings.htm" />
+</key>
 <key name="blob compression" >
   <topic name="Volume Management" url="managing_servers/volume_management.htm" />
 </key>
@@ -107,6 +113,9 @@
 <key name="change password" >
   <topic name="Password Options" url="passwords/password_options.htm" />
 </key>
+<key name="changing domain status" >
+  <topic name="Changing Domain Status" url="managing_domains/changing_domain_status.htm" />
+</key>
 <key name="changing password" >
   <topic name="Changing a Password" url="passwords/changing_a_password.htm" />
 </key>
@@ -118,6 +127,9 @@
 </key>
 <key name="CLI tool" >
   <topic name="Management Tasks not available from the Console" url="getting_started/management_tasks_not_available_from_the_console.htm" />
+</key>
+<key name="configuring authentication settings" >
+  <topic name="Configuring Authentication Settings" url="managing_domains/authentication_settings.htm" />
 </key>
 <key name="copyright" >
   <topic name="About Zimbra Collaboration Suite" url="getting_started/about_zcs.htm" />
@@ -150,9 +162,6 @@
 <key name="creating COS" >
   <topic name="Creating Classes of Service" url="cos/creating_classes_of_service.htm" />
 </key>
-<key name="creating domain Documents account" >
-  <topic name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
-</key>
 <key name="creating equipment resources" >
   <topic name="Creating a Resource" url="managing_accounts/managing_resource.htm" />
 </key>
@@ -176,9 +185,6 @@
 </key>
 <key name="delete distribution list" >
   <topic name="Delete Distribution Lists" url="managing_accounts/delete_distribution_lists.htm" />
-</key>
-<key name="deleting domain Documents account" >
-  <topic name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
 </key>
 <key name="deleting mail messages" >
   <topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
@@ -207,14 +213,20 @@
 <key name="domain administrator accounts, search for" >
   <topic name="Advanced Search" url="search/advanced_search.htm" />
 </key>
-<key name="domain documents account" >
-  <topic name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
-</key>
 <key name="domain name, change" >
   <topic name="Changing a domain name" url="managing_domains/changing_a_domain_name.htm" />
 </key>
+<key name="domain, adding" >
+  <topic name="Adding a New Domain" url="managing_domains/creating_a_domain.htm" />
+</key>
 <key name="domain, search" >
   <topic name="Advanced Search" url="search/advanced_search.htm" />
+</key>
+<key name="domains" >
+  <topic name="Managing Domains" url="managing_domains/managing_domains.htm" />
+</key>
+<key name="edit domain" >
+  <topic name="Managing Domains" url="managing_domains/managing_domains.htm" />
 </key>
 <key name="email forwarding" >
   <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
@@ -237,6 +249,9 @@
 <key name="extensions, rejecting messages by" >
   <topic name="Blocking messages with specific extensions" url="managing_global_settings/blocking_messages_with_specific_extensions.htm" />
 </key>
+<key name="external active directory" >
+  <topic name="Configuring Authentication Settings" url="managing_domains/authentication_settings.htm" />
+</key>
 <key name="file extensions, rejecting messages with" >
   <topic name="Blocking Attachments to Email" url="managing_global_settings/blocking_attachments_to_email.htm" />
 </key>
@@ -248,6 +263,9 @@
 </key>
 <key name="forwarding, disable" >
   <topic name="Forwarding Mail" url="managing_accounts/forwarding_mail.htm" />
+</key>
+<key name="GAL, how to configure" >
+  <topic name="How to Configure GAL" url="managing_domains/how_to_configure_gal.htm" />
 </key>
 <key name="global attachment settings" >
   <topic name="Global Attachment Settings" url="managing_global_settings/global_attachment_settings.htm" />
@@ -317,21 +335,6 @@
 </key>
 <key name="mail report" >
   <topic name="Daily Mail Reports" url="monitoring/daily_mail_reports.htm" />
-</key>
-<key name="mail server" >
-  <topic name="Assigning Accounts to Different Servers" url="cos/assigning_accounts_to_different_servers.htm" />
-</key>
-<key name="mail, purging" >
-  <topic name="Purging Mail Messages" url="managing_accounts/purging_mail_messages.htm" />
-</key>
-<key name="mailbox quotas" >
-  <topic name="Viewing Mailbox Quotas" url="managing_servers/viewing_mailbox_quotas.htm" />
-</key>
-<key name="maintenance mode" >
-  <topic name="Changing Account Status" url="managing_accounts/changing_account_status.htm" />
-</key>
-<key name="managing accounts" >
-  <topic name="Managing User Accounts" url="managing_accounts/provisioning_accounts.htm" />
 </key>
 
 </indexdata>

@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Managing Domains</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -83,46 +83,93 @@ else
 //-->
 //]]></script>
 <h1>Managing Domains</h1>
-<p>One domain is identified during the installation process and additional domains can be added from the administration console.</p>
-<p>When you create a new domain, the <span style="font-weight: bold;"><b><a href="creating_a_domain.htm">Create New Domain</a></b></span> wizard guides you through the required steps. After a domain is created you can edit the configuration.</p>
-<p>To edit a domain, click <span style="font-weight: bold;"><b>Domains</b></span> and select the domain. The Domain toolbar becomes active. From the toolbar you can configure GAL and Authentication directly, or you can click <span style="font-weight: bold;"><b>Edit</b></span> to access the Domain configuration tabs.</p>
-<p>For each domain, you can configure the following:</p>
+<p>One domain is identified during the installation process and additional 
+ domains can be added from the administration console.</p>
+<p>When you create a new domain, the <span style="font-weight: bold;"><b><a href="creating_a_domain.htm">Create New Domain</a></b></span> wizard guides 
+ you through the required steps. After a domain is created you can edit 
+ the domain's configuration. Click <span style="font-weight: bold;"><b>Domains</b></span> 
+ in the Navigation pane and select the domain. The Domain toolbar becomes 
+ active. From the toolbar you can configure GAL and Authentication directly, 
+ or you can click <span style="font-weight: bold;"><b>Edit</b></span> to access 
+ the Domain configuration tabs.</p>
+<p>For each domain, the following settings can be configured:</p>
 <ul type="disc">
-<li class="p">
-<p>Domain <span style="font-weight: bold;"><b>General</b></span> settings, including domain name, description, the number of accounts that can be created on the domain, default Class of Service assigned to the domain, and the time zone for accounts provisioned on this domain.</p>
-</li>
-<li class="p">
-<p>Domain <span style="font-weight: bold;"><b>GAL</b></span> settings. Options are <span style="font-weight: bold;"><b>Internal</b></span> LDAP server, <span style="font-weight: bold;"><b>External</b></span> LDAP server or <span style="font-weight: bold;"><b>Both</b></span> for GAL lookups and the number of results returned for a GAL search.</p>
-</li>
-<li class="p">
-<p>Domain <span style="font-weight: bold;"><b>Authentication</b></span> settings. Options are <span style="font-weight: bold;"><b>Internal</b></span>, <span style="font-weight: bold;"><b>External</b></span> <span style="font-weight: bold;"><b>LDAP</b></span>, or <span style="font-weight: bold;"><b>External</b></span> <span style="font-weight: bold;"><b>Active</b></span> <span style="font-weight: bold;"><b>Directory</b></span></p>
-</li>
-<li class="p">
-<p><span style="font-weight: bold;"><b>Virtual Hosts</b></span> that are used to establish a default domain for user login.</p>
-</li>
-<li class="p">
-<p>The domain <span style="font-weight: bold;"><b>Documents</b></span> account and who has permissions to access the Documents pages.</p>
-</li>
-<li class="p">
-<p>Free/Busy <span style="font-weight: bold;"><b>Interop</b></span> to used to set up free/busy scheduling across a mix of ZCS servers and third party email servers in the domain. See <span style="font-weight: bold;"><b><a href="../managing_global_settings/making_free_busy_view__available_.htm">Making Free/Busy View Available</a></b></span></p>
-</li>
-<li class="p">
-<p style="font-weight: bold;">Zimlets <span style="font-weight: normal;">that are available for the domain.</span></p>
-</li>
-<li class="p">
-<p style="font-weight: bold;"><span style="font-weight: normal;">Use the</span> Themes <span style="font-weight: normal;">tab to quickly</span> 
-<span style="font-weight: normal;">change the colors used for the client interface. See</span> <a href="../ui_themes/how_to_customize_theme_colors_and_logos.htm">Quick Custom Color</a>.</p>
-</li>
-<li class="p">
-<p><span style="font-weight: bold;"><b>Account Limits</b></span> <span>on the domain. You can set the maximum number of accounts and maximum accounts per COS.</span></p>
-</li>
+	<li class="p"><p><span style="font-weight: bold;"><b>General Information</b></span>. 
+	 Time zone for the domain , public service host name, inbound SMTP 
+	 host name, default class of service for the domain and the status 
+	 of the domain &#160;</p></li>
+	<ul type="circle">
+		<li class="p"><p><span style="font-weight: bold;"><b>Public service 
+		 host name</b></span>. Enter the host name of the REST URL. This is 
+		 the URL that is used when sharing Documents Notebooks, email folders 
+		 and Briefcase folders, as well as sharing Task lists, Address 
+		 Books, and Calendars. See Setting up a Public Service Host Name 
+		 in the Managing ZCS Configurations chapter in the ZCS Administrator's 
+		 Guide.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Inbound SMTP 
+		 host name</b></span>. If your MX records point to a spam-relay or 
+		 any other external non-Zimbra server, enter the name of the server 
+		 here.  </p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Description</b></span>. 
+		 Text field to write a brief description of the domain. This displays 
+		 in the Domain list in the Content pane.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Domain status</b></span>. 
+		 The <a href="changing_domain_status.htm">domain status</a> is 
+		 active in the normal state. You may want to change this status 
+		 when you setting up the domain if you are not ready to use the 
+		 domain.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Default</b></span><span 
+		 style="font-weight: bold;"><b> &#160;</b></span><span 
+		 style="font-weight: bold;"><b>Class of Service</b></span> 
+		 (COS) for the domain. 
+		 If you do not enter a COS, the default COS is used. The COS entered 
+		 here is &#160;automatically assigned to accounts created on the 
+		 domain if no other COS is entered. </p></li>
+	</ul>
+	<li class="p"><p><span style="font-weight: bold;"><b>GAL</b></span>. Shows 
+	 the GAL setting for the domain. This can be &#160;<span style="font-weight: bold;"><b>Internal</b></span> 
+	 LDAP server, <span style="font-weight: bold;"><b>External</b></span> LDAP 
+	 server or <span style="font-weight: bold;"><b>Both. </b></span>&#160;The 
+	 number of results returned for a GAL search can be configured. If 
+	 this field is blank, no maximum is configured.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Authentication</b></span>. 
+	 Shows the configured authentication type for the domain. This can 
+	 be <span style="font-weight: bold;"><b>Internal</b></span>, <span style="font-weight: bold;"><b>External</b></span> 
+	 <span style="font-weight: bold;"><b>LDAP</b></span>, or <span style="font-weight: bold;"><b>External</b></span> 
+	 <span style="font-weight: bold;"><b>Active</b></span> <span style="font-weight: bold;"><b>Directory</b></span></p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Virtual Hosts.</b></span> 
+	 Configure virtual hosts that are used to establish a default domain 
+	 for user login.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Briefcase</b></span>. 
+	 Configure the company name that is displayed in the prompt on the 
+	 <a href="authentication_required_dialog.htm">Authentication Required 
+	 dialog</a> used to log into Briefcase folders shared with external 
+	 guests. The default is Zimbra. </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Free/Busy</b></span> 
+	 <span style="font-weight: bold;"><b>Interop</b></span> to used to set up 
+	 free/busy scheduling across a mix of ZCS servers and third party email 
+	 servers in the domain. See <span style="font-weight: bold;"><b>Making 
+	 Free/Busy View Available</b></span></p></li>
+	<li class="p"><p style="font-weight: bold;">Zimlets. &#160;<span style="font-weight: normal;">Zimlets 
+	 that are available on the domain are listed. You can manage which 
+	 Zimlets are enabled and are mandatory. </span></p></li>
+	<li class="p"><p style="font-weight: bold;"><span style="font-weight: normal;">Use 
+	 the</span> Themes <span style="font-weight: normal;">tab to quickly</span> 
+	 <span style="font-weight: normal;">change the colors 
+	 used for the client interface. See</span> Quick 
+	 Custom Color</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Account 
+	 Limits</b></span> on the domain. You can set the maximum number of accounts 
+	 that can be provisioned on the domain and maximum accounts per COS. 
+	 </p></li>
 </ul>
-<h6>View Accounts on Domains</h6>
-<p>You can view a list of all accounts on a domain. Select the domain and click <span style="font-weight: bold;"><b>View Accounts</b></span> on the domain toolbar. The results display in the Content pane.</p>
-<p>You can save the results displayed in the Content pane to a .csv file. Click <span style="font-weight: bold;"><b>Download</b></span> on the domain toolbar. The can select the location to save the .csv file.</p>
-<p>To <a href="changing_a_domain_name.htm">change a domain name</a> use the CLI utility, <span class="code">zmprov</span>.</p>
 <p>&#160;</p>
-<p><a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'_blank','Configure the Global Address List','using_the_global_address_list_(gal).htm','Configuring Authentication Settings','authentication_settings.htm','Configuring Virtual Hosts','configuring_virtual_hosts.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border="0" height="17" width="81" alt="Related Topics" /></a> </p>
+<p>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'_blank','Configuring Authentication Settings','authentication_settings.htm','Configuring Virtual Hosts','configuring_virtual_hosts.htm');return false;" title="Related Topics"><img src="../ss_btn_related_topics.gif" border="0" height="17" width="81" alt="Related Topics" /></a>
+
+
+ </p>
 <p>&#160;</p>
 <p>&#160;</p>
 <script type="text/javascript" language="JavaScript">//<![CDATA[

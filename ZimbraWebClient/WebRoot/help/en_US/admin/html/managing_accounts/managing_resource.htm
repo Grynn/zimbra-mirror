@@ -130,7 +130,7 @@ else
 														 href="javascript:TextPopup(this)" 
 														 id="a1">Auto accept 
 		 if available, auto decline on conflict.</a> <span style="font-weight: normal;">&#160;</span></p>
-		<div class="droptext" id="POPUP431839636" style="display: none;">
+		<div class="droptext" id="POPUP426583887" style="display: none;">
 			<p>Automatically accept appointments unless the resource is 
 			 already scheduled. The free/busy times can be viewed. You 
 			 can modify the auto-decline rule to accept some meetings that 
@@ -140,15 +140,14 @@ else
 														 href="javascript:TextPopup(this)" 
 														 id="a2">Manual 
 		 accept, auto decline on conflict.</a> </p>
-		<div class="droptext" id="POPUP432473446" style="display: none;">
-			<p><span style="font-weight: bold;"><b>&#160;</b></span>Appointment 
-			 that creates a conflict are declined. All other appointments 
-			 must be manually accepted. Appointment requests that do not 
-			 conflict are marked as tentative in the resource calendar 
-			 and must be manually accepted. If you use this policy, configure 
-			 the forwarding address so a copy of the invite is sent to 
-			 the account that manages this resource. You can modify the 
-			 auto-decline rule to accept some meetings that conflict.</p>
+		<div class="droptext" id="POPUP428697422" style="display: none;">
+			<p>Appointment that create a conflict are declined. All other 
+			 appointments must be manually accepted. Appointment requests 
+			 that do not conflict are marked as tentative in the resource 
+			 calendar and must be manually accepted. If you use this policy, 
+			 configure the forwarding address so a copy of the invite is 
+			 sent to the account that manages this resource. You can modify 
+			 the auto-decline rule to accept some meetings that conflict.</p>
 		</div></li>
 	</ul></li>
 </ol>
@@ -173,11 +172,17 @@ else
 		 dates. </span></p></li>
 	</ul>
 </ul>
-<p style="font-weight: bold; margin-left: 80px;"><span style="font-weight: normal;">The 
- resource accepts appointments even if there are conflicts until either 
- the number of conflicts reaches the maximum allowed or the maximum percentage 
- of conflicts allowed is reached. &#160;If you set both fields, the resource 
- declines appointments whenever either of the conditions is met</span></p>
+<p style="margin-left: 80px; font-weight: normal;">The resource accepts 
+ appointments even if there are conflicts unless either the number of conflicts 
+ reaches the maximum allowed or the maximum percentage of conflicts allowed 
+ is reached. &#160;If you try to schedule an appointment with the resource 
+ and the number of times the resource is unavailable exceeds the rule, 
+ the entire appointment is rejected. If you set both fields, the resource 
+ declines appointments whenever either of the conditions is met.</p>
+<p style="font-weight: bold; margin-left: 80px;"><span style="font-weight: normal;">For 
+ example, if the maximum allowed conflicts is 3 and you try to schedule 
+ an appointment with a resource and more than 3 conflicting dates are found, 
+ the entire recurring appointment is rejected.</span></p>
 <ol type="disc">
 	<ol type="disc">
 		<li style="list-style: none; display: inline;"><p class="note">When 
@@ -190,8 +195,8 @@ else
 		<li class="p"><p style="font-weight: normal;"><span style="font-weight: bold;"><b><a 
 		 class="dropspot" href="javascript:TextPopup(this)" id="a3">Auto 
 		 accept always.</a></b></span> &#160;&#160;</p>
-		<div class="droptext" id="POPUP430573945" style="display: none;">
-			<p>The resource automatically accept all appointments that 
+		<div class="droptext" id="POPUP425127365" style="display: none;">
+			<p>The resource automatically accepts all appointments that 
 			 are scheduled. &#160;In this case free/busy information is 
 			 not maintained, thus more than one meeting could schedule 
 			 the resource for the same time. Because the resource always 
@@ -202,7 +207,7 @@ else
 		<li class="p"><p style="font-weight: normal;"><span style="font-weight: bold;"><b><a 
 		 class="dropspot" href="javascript:TextPopup(this)" id="a4">No 
 		 auto accept or decline.</a></b></span> </p>
-		<div class="droptext" id="POPUP432499817" style="display: none;">
+		<div class="droptext" id="POPUP428169705" style="display: none;">
 			<p>The resource scheduling policy is to manually mange the 
 			 resource. A delegated user logs into the resource account 
 			 and accepts or declines the reservation request.</p>
@@ -253,10 +258,10 @@ else
 
 <script type="text/javascript" language="JavaScript1.2">//<![CDATA[
 	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
-	TextPopupInit('a1','POPUP431839636');
-	TextPopupInit('a2','POPUP432473446');
-	TextPopupInit('a3','POPUP430573945');
-	TextPopupInit('a4','POPUP432499817');
+	TextPopupInit('a1','POPUP426583887');
+	TextPopupInit('a2','POPUP428697422');
+	TextPopupInit('a3','POPUP425127365');
+	TextPopupInit('a4','POPUP428169705');
 //]]></script>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--

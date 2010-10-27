@@ -1,7 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="About Zimbra Collaboration Suite" url="getting_started/about_zcs.htm" />
 <book name="Getting Started" >
   <item name="Navigating the Administration Console" url="getting_started/about_the_administration_console.htm" />
   <item name="Global Administrator's Tasks from Admin Console" url="getting_started/tasks_performed_from_aministration_console.htm" />
@@ -24,7 +23,15 @@
   <item name="Defining Theme for the Zimbra Web Client UI" url="ui_themes/defining_theme_for_the_zimbra_web_client_ui.htm" />
 </book>
 <book name="Managing Domains" >
+  <item name="Managing Domains" url="managing_domains/managing_domains.htm" />
+  <item name="How to Configure GAL" url="managing_domains/how_to_configure_gal.htm" />
+  <item name="Configuring Authentication Settings" url="managing_domains/authentication_settings.htm" />
+  <item name="How to Configure Authentication" url="managing_domains/how_to_configure_authentication_mode.htm" />
+  <item name="Configuring Virtual Hosts" url="managing_domains/configuring_virtual_hosts.htm" />
+  <item name="Adding a New Domain" url="managing_domains/creating_a_domain.htm" />
   <item name="Changing a Domain Name" url="managing_domains/changing_a_domain_name.htm" />
+  <item name="Changing Domain Status" url="managing_domains/changing_domain_status.htm" />
+  <item name="Suspending a Domain" url="managing_domains/suspending_a_domain.htm" />
 </book>
 <book name="Managing Servers" >
   <item name="Managing Servers" url="managing_servers/managing_servers.htm" />
@@ -78,10 +85,6 @@
   <item name="Managing a Resource Account" url="managing_accounts/managing_resource.htm" />
   <item name="Create a Resource" url="managing_accounts/create_a_resource.htm" />
   <item name="Making a Resource Unavailable" url="managing_accounts/taking_a_resource_out_of_service.htm" />
-</book>
-<book name="Managing ZCS Documents" >
-  <item name="About Zimbra Documents" url="documents/about_zimbra_documents.htm" />
-  <item name="Creating Domain Documents Account" url="documents/managing_domain_documents.htm" />
 </book>
 <book name="Managing Zimlets" >
   <item name="Setting Up Zimlets in ZCS" url="zimlets/setting_up_zimlets_in_zcs.htm" />

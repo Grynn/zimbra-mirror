@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -83,26 +83,37 @@ else
 //-->
 //]]></script>
 <h1>About Mail Queues</h1>
-<p>When the Zimbra MTA receives mail it routes it through a series of queues to manage delivery. The MTA maintains queues where mail is temporarily placed while being processed: incoming, active, deferred, and hold.</p>
+<p>When the Zimbra MTA receives mail it routes it through a series of queues 
+ to manage delivery. The MTA maintains queues where mail is temporarily 
+ placed while being processed: incoming, active, deferred, and hold.</p>
 <ul type="disc">
-<li class="p">
-<p>The <span style="font-weight: bold;"><b>incoming</b></span> queue holds a new mail message that has been received. Each message is identified with a unique file name. Messages in the incoming queue are moved to the active queue when there is room in the active queue.</p>
-</li>
-<li class="p">
-<p>The <span style="font-weight: bold;"><b>active</b></span> queue holds messages that are ready to be sent. The MTA sets a limit to the number of messages that can be in the active queue at any one time. From here, messages are moved to and from the anti-virus and anti-spam filters before being delivered or moved to another queue.</p>
-</li>
-<li class="p">
-<p>Message that cannot be delivered for some reason are placed in the <span style="font-weight: bold;"><b>deferred</b></span> queue until they are either delivered successfully or expire and are bounced back to the sender. The reasons for the delivery failures is documented in a file in the defer queue. This queue is scanned frequently to 
-resend the message. &#160;The default for bounce queue lifetime is 5 days. This can by changed from the CLI, 
-zmlocalconfig. See the Administration Guide, CLI appendix.</p>
-</li>
-<li class="p">
-<p>The <span style="font-weight: bold;"><b>hold</b></span> queue keeps mail that could not be processed. Messages stay in this queue until the administrator moves them. No periodic delivery attempts are made for messages in the hold queue.</p>
-</li>
+	<li class="p"><p>The <span style="font-weight: bold;"><b>incoming</b></span> 
+	 queue holds a new mail message that has been received. Each message 
+	 is identified with a unique file name. Messages in the incoming queue 
+	 are moved to the active queue when there is room in the active queue.</p></li>
+	<li class="p"><p>The <span style="font-weight: bold;"><b>active</b></span> 
+	 queue holds messages that are ready to be sent. The MTA sets a limit 
+	 to the number of messages that can be in the active queue at any one 
+	 time. From here, messages are moved to and from the anti-virus and 
+	 anti-spam filters before being delivered or moved to another queue.</p></li>
+	<li class="p"><p>Message that cannot be delivered for some reason are 
+	 placed in the <span style="font-weight: bold;"><b>deferred</b></span> queue 
+	 until they are either delivered successfully or expire and are bounced 
+	 back to the sender. The reasons for the delivery failures is documented 
+	 in a file in the defer queue. This queue is scanned frequently to 
+	 resend the message. &#160;The default 
+	 for bounce queue lifetime is 5 days. This can be changed from the 
+	 CLI, zmlocalconfig. See the Administration 
+	 Guide, CLI appendix.</p></li>
+	<li class="p"><p>The <span style="font-weight: bold;"><b>hold</b></span> queue 
+	 keeps mail that could not be processed. Messages stay in this queue 
+	 until the administrator moves them. No periodic delivery attempts 
+	 are made for messages in the hold queue.</p></li>
 </ul>
 <p>The corrupt queue can be viewed. This queue holds unreadable messages.</p>
 <p>&#160;</p>
-<p>See <a href="monitoring_zimbra_mta_mail_queues.htm">Monitoring Zimbra MTA Mail Queues</a></p>
+<p>See <a href="monitoring_zimbra_mta_mail_queues.htm">Monitoring Zimbra 
+ MTA Mail Queues</a></p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

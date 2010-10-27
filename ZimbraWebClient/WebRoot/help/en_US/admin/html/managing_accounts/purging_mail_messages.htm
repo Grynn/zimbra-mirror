@@ -1,6 +1,5 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -83,20 +83,33 @@ else
 //-->
 //]]></script>
 <h1>Purging Mail Messages</h1>
-<p>You can configure how many days that messages can remain in users' Inbox, Sent, personal folders, Trash, or Junk folders before they are automatically deleted. Mail aging is configured as COS attributes and can be overridden for individual accounts. The date is calculated from the day the message is received for incoming messages and the day the message was composed for sent messages.</p>
-<p>The attributes are set from the Advanced Features tab for either COS or Accounts. You can set the following:</p>
+<p>You can configure how many days that messages can remain in users' Inbox, 
+ Sent, personal folders, Trash, or Junk folders before they are automatically 
+ deleted. Mail aging is configured as COS attributes and can be overridden 
+ for individual accounts. The date is calculated from the day the message 
+ is received for incoming messages and the day the message was composed 
+ for sent messages.</p>
+<p>The attributes are set from the Advanced Features tab for either COS 
+ or Accounts. You can set the following:</p>
 <ul type="disc">
-<li class="p">
-<p><span class="attribute">Email Message Lifetime</span>. The number of days that a mail message can reside in any folder, except Trash and Junk folders, before being automatically purged. The minimum message retention is 31 days. The default is to not delete mail.</p>
-</li>
-<li class="p">
-<p><span class="attribute">Trash Message Lifetime</span>. The number of days that a mail message will remain in the Trash folder before being automatically purged. The default is to purge mail from the Trash folder older than 30 days.</p>
-</li>
-<li class="p">
-<p><span class="attribute">Junk Message Lifetime</span>. The number of days that a mail message will remain in the spam folder before being automatically purged. The default is to purge junk mail older than 30 days.</p>
-</li>
+	<li class="p"><p><span class="attribute">Email Message Lifetime</span>. 
+	 The number of days that a mail message can reside in any folder, except 
+	 Trash and Junk folders, before being automatically purged. The minimum 
+	 message retention is 31 days. The default is to not delete mail.</p></li>
+	<li class="p"><p><span class="attribute">Trash Message Lifetime</span>. 
+	 The number of days that a mail message will remain in the Trash folder 
+	 before being automatically purged. The default is to purge mail from 
+	 the Trash folder older than 30 days.</p></li>
+	<li class="p"><p><span class="attribute">Spam Message Lifetime</span>. 
+	 The number of days that a mail message will remain in the spam folder 
+	 before being automatically purged. The default is to purge spam older 
+	 than 30 days.</p></li>
 </ul>
-<p>The server manages the message purge schedule. The message purge schedule is set in the Global Settings, General Information tab. The <span style="font-weight: bold;"><b>Sleep time between subsequent mailbox purges</b></span>. default setting is to run every 1 minute. If the message purge schedule is set to 0, messages are not purged even if the mail, trash, and spam message lifetime is set.</p>
+<p>The server manages the message purge schedule. The message purge schedule 
+ is set in the Global Settings, General Information tab. The <span style="font-weight: bold;"><b>Sleep 
+ time between subsequent mailbox purges</b></span>. default setting is to run 
+ every 1 minute. If the message purge schedule is set to 0, messages are 
+ not purged even if the mail, trash, and spam message lifetime is set.</p>
 <p>&#160;</p>
 <p>&#160;</p>
 <p>&#160;</p>

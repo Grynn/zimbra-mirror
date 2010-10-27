@@ -1,11 +1,10 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<meta name="generator" content="Adobe RoboHelp 8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Changing Domain Status</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
@@ -39,6 +38,7 @@ visibility:hidden; }
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
 
 </head>
+
 <body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
@@ -83,24 +83,38 @@ else
 //-->
 //]]></script>
 <h1>Changing Domain's Status</h1>
-<p>Domain status is active in the normal state, users can log in and mail is delivered. You can change the status from the domain General tab. When you change the status for a domain, in many cases you affect the status for accounts on the domain also.</p>
+<p>Domain status is active in the normal state, users can log in and mail 
+ is delivered. You can change the status from the domain General tab. When 
+ you change the status for a domain, in many cases you affect the status 
+ for accounts on the domain also.</p>
 <p>The domain status can be any of the following:</p>
 <ul type="disc">
-<li class="p">
-<p><span style="font-weight: bold;"><b>Active</b></span>. Active is the normal status for a domain. Accounts can be created and mail can be delivered. If an account has a different status setting, the account status is overrides the domain status.</p>
-</li>
-<li class="p">
-<p><span style="font-weight: bold;"><b>Closed</b></span>. When a domain status is Closed, account logins are disabled and messages are bounced. A domain status of Closed overrides an individual account's status setting.</p>
-</li>
-<li class="p">
-<p><span style="font-weight: bold;"><b>Locked</b></span>. When a domain status is locked, users cannot log in to check their email but email is still delivered to the accounts. If an account's status setting is Maintenance or Closed, the account's status overrides the domain status setting. For example, mail for accounts in the Maintenance status is queued at the MTA, not delivered. &#160;</p>
-</li>
-<li class="p">
-<p><span style="font-weight: bold;"><b>Maintenance</b></span>. When the domain status is Maintenance, users cannot log in and their email is queued at the MTA. If an account's status is Closed, messages are not queued.</p>
-</li>
-<li class="p">
-<p><span style="font-weight: bold;"><b>Suspended</b></span>. When the domain status is Suspended, users cannot log in, their mail is queued at the MTA, and accounts and distribution lists cannot be created, deleted, or modified. If an account's status is Closed, the account's status mail is not queued at the MTA.</p>
-</li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Active</b></span>. Active 
+	 is the normal status for a domain. Accounts can be created and mail 
+	 can be delivered. If an account has a different status setting, the 
+	 account status is overrides the domain status.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Closed</b></span>. When 
+	 a domain status is Closed, account logins are disabled and messages 
+	 are bounced. A domain status of Closed overrides an individual account's 
+	 status setting.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Locked</b></span>. When 
+	 a domain status is locked, users cannot log in to check their email 
+	 but email is still delivered to the accounts. If an account's status 
+	 setting is Maintenance or Closed, the account's status overrides the 
+	 domain status setting. For example, mail for accounts in the Maintenance 
+	 status is queued at the MTA, not delivered. &#160;</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Maintenance</b></span>. 
+	 When the domain status is Maintenance, users cannot log in and their 
+	 email is queued at the MTA. If an account's status is Closed, messages 
+	 are not queued.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Suspended</b></span>. 
+	 When the domain status is Suspended, users cannot log in, their mail 
+	 is queued at the MTA, and accounts and distribution lists cannot be 
+	 created, deleted, or modified. If an account's status is Closed, the 
+	 account's status mail is not queued at the MTA.</p></li>
+	<li class="P-note"><p class="note">The domain can also be shut down. 
+	 This is done from the CLI, enter as: <span style="font-family: 'Courier New', monospace;">zmprov 
+	 desc -a zimbraDomainStatus shutdown</span>. </p></li>
 </ul>
 <p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
