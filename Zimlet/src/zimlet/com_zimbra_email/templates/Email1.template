@@ -7,7 +7,7 @@
 </template>
 <template id='ContactDetails'>
 	<$ if (data.fullName) { $>
-		<a style='font-size:15px;font-weight:bold;text-decoration:none;' target='_blank' href=''><$= AjxStringUtil.htmlEncode(data.fullName) $></a><br/>
+		<a id='UnknownPersonSlide_NameAnchorId' style='font-size:15px;font-weight:bold;text-decoration:none;' href='#'><$= AjxStringUtil.htmlEncode(data.fullName) $></a><br/>
 	<$ } $>
 	<$ if (data.jobTitle) { $>
 		<label ><$= AjxStringUtil.htmlEncode(data.jobTitle) $></label><br/>

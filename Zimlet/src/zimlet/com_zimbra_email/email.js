@@ -46,7 +46,7 @@ function() {
 	this._prefDialog = new EmailToolTipPrefDialog(this);
 
 	this._subscriberZimlets = [];
-	this._preLoadBusyImg();
+	this._preLoadImgs();
 };
 
 /**
@@ -313,11 +313,13 @@ function(object, context, x, y, span) {
 	this.contextMenu = this.getActionMenu(object, span, context, false);
 };
 
-EmailTooltipZimlet.prototype._preLoadBusyImg =
+EmailTooltipZimlet.prototype._preLoadImgs =
 function() {
 	this._busyImg = new Image();
 	this._busyImg.src = this.getResource("img/EmailZimlet_busy.gif");
 	this.getShell().getHtmlElement().appendChild(this._busyImg);
+	this._unknownPersonImg = new Image();
+	this._unknownPersonImg.src = this.getResource("img/UnknownPerson_dataNotFound.jpg");
 };
 EmailTooltipZimlet.prototype.showBusyImg =
 function(timeoutCallback, xOffset, yOffset) {
@@ -329,8 +331,24 @@ function(timeoutCallback, xOffset, yOffset) {
 	this._busyImg.style.display = "block";
 	this._busyImg.style.position = "absolute";
 	this._busyImg.style.zIndex = "500";
-	this._busyImgTimer = setTimeout(AjxCallback.simpleClosure(this._handleNoImg, this, timeoutCallback), 5000);//hide busyImg after 5 secs
+	this._busyImgTimer = setTimeout(AjxCallback.simpleClosure(this._handleNoImg, this, timeoutCallback), 4000);//hide busyImg after 4 secs
 };
+
+EmailTooltipZimlet.prototype.showLoadingAtId =
+function(timeoutCallback, id) {
+	var div = document.getElementById(id);
+	div.innerHTML = ["<br/><br/><label style='color:gray'>", ZmMsg.loading, "</label>"].join("");
+	this._busyImgTimer = setTimeout(AjxCallback.simpleClosure(this._handleNoImgAtId, this, timeoutCallback, id), 4000);//hide busyImg after 4 secs
+};
+
+EmailTooltipZimlet.prototype._handleNoImgAtId =
+function(timeoutCallback, id) {
+	clearTimeout(this._busyImgTimer);
+	if (timeoutCallback) {
+		timeoutCallback.run();
+	}
+};
+
 
 EmailTooltipZimlet.prototype._handleNoImg =
 function(timeoutCallback) {

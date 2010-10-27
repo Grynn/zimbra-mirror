@@ -51,8 +51,21 @@ function() {
 */
 UnknownPersonSlide.prototype.showTooltip =
 function() {
-	var emailAddress = this.emailZimlet.emailAddress.toLowerCase();	
-	this._handleImgLoadFailure();
+	this._setFrame();
+	this.emailZimlet.tooltip.popup(this.emailZimlet.x, this.emailZimlet.y, true, null);
+	this._slide.select();
+};
+
+UnknownPersonSlide.prototype._setFrame =
+function() {
+	this.emailZimlet.hideBusyImg();
+	var tthtml = this._getTooltipBGHtml();
+	var selectCallback = new AjxCallback(this, this._handleSlideSelect);
+	this._slide = new EmailToolTipSlide(tthtml, true, "UnknownPerson_contact", selectCallback, this.emailZimlet.getMessage("slideTooltip"));
+	this.emailZimlet.slideShow.addSlide(this._slide);
+	this._mainDiv = document.getElementById(UnknownPersonSlide.TEXT_DIV_ID);
+	this._slide.setCanvasElement(this._mainDiv);
+	this._addClickHandlers();
 };
 
 UnknownPersonSlide.prototype._handleImgLoadFailure =
@@ -66,12 +79,15 @@ function() {//onfailure to load img w/in 5 secs, load an dataNotFound image
 UnknownPersonSlide.prototype._handleImageLoad =
 function(img) {
 	this.emailZimlet.hideBusyImg();
-	var tthtml = this._getTooltipBGHtml();
-	var selectCallback = new AjxCallback(this, this._handleSlideSelect, img);
-	this._slide = new EmailToolTipSlide(tthtml, true, "UnknownPerson_contact", selectCallback, this.emailZimlet.getMessage("contact"));
-	this.emailZimlet.slideShow.addSlide(this._slide);
-	this._slide.select();
-	this._addClickHandlers();
+	var div = document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID);
+	div.innerHTML = "";
+	div.appendChild(img);
+	if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) != -1) {
+		img.onclick =  AjxCallback.simpleClosure(this._handleProfileImageClick, this); 
+		img.style.cursor = "pointer";
+	}
+	img.width = 65;
+	img.height = 80;
 };
 
 UnknownPersonSlide.prototype._addClickHandlers =
@@ -99,26 +115,24 @@ function(ev) {
 };
 
 UnknownPersonSlide.prototype._handleSlideSelect =
-function(img) {
+function() {
 	if (this._slide.loaded) {
 		return;
 	}
-	if (img) {
-		var div = document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID);
-		div.appendChild(img);
-		if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) != -1) {
-			img.onclick =  AjxCallback.simpleClosure(this._handleProfileImageClick, this); 
-			img.style.cursor = "pointer";
-		}
-	}
+	this._slide.loaded = true;
+	this._getContactDetailsAndShowTooltip();
+};
 
+UnknownPersonSlide.prototype._getContactDetailsAndShowTooltip =
+function() {
+	this._slide.setInfoMessage(this.emailZimlet.getMessage("loading"));
 	if(this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN)  == -1) {
 		var contactList = AjxDispatcher.run("GetContacts");
 		var contact = contactList ? contactList.getContactByEmail(this.emailZimlet.emailAddress) : null;
 		if (contact) {
-			this._GALRequestCallback(img, null, contact.attr);
+			this._handleContactDetails(null, contact.attr);
 		} else {
-			this._GALRequestCallback(img, null);
+			this._handleContactDetails(null, null);
 		}		
 	} else {//make gal search request
 		var jsonObj, request, soapDoc;
@@ -128,14 +142,13 @@ function(img) {
 		request.name = this.emailZimlet.emailAddress;
 		request.offset = 0;
 		request.limit = 3;
-		var callback = new AjxCallback(this, this._GALRequestCallback, img);
+		var callback = new AjxCallback(this, this._handleContactDetails);
 		appCtxt.getAppController().sendRequest({jsonObj:jsonObj,asyncMode:true,callback:callback, noBusyOverlay:true});
 	}
-	this._slide.loaded = true;
 };
 
-UnknownPersonSlide.prototype._GALRequestCallback =
-function(img, response) {
+UnknownPersonSlide.prototype._handleContactDetails =
+function(response, attrsFromAB) {
 	var validResponse = false;
 	var attrs = {};
 	if(response) {
@@ -145,6 +158,9 @@ function(img, response) {
 			attrs = data.SearchGalResponse.cn[0]._attrs;
 			validResponse = true;
 		}
+	} else if(attrsFromAB) {
+		attrs = attrsFromAB;
+		validResponse = true;
 	}
 	
 	if(!validResponse) {
@@ -155,23 +171,18 @@ function(img, response) {
 			attrs["email"] = this.emailZimlet.emailAddress;
 		}
 	}
+	var photoName = attrs["photoFileName"] ? attrs["photoFileName"] : "noname.jpg";
+	this._setProfileImage(photoName);
 	this._setContactDetails(attrs);
-	this._setHeightAndWidthOfImage();
 	this._popupToolTip();
 };
+
+
 
 UnknownPersonSlide.prototype._popupToolTip =
 function() {
 	this.emailZimlet.tooltip.popup(this.emailZimlet.x, this.emailZimlet.y, true, null);
 };
-
-UnknownPersonSlide.prototype._setHeightAndWidthOfImage =
-function() {
-	var el = document.getElementById(UnknownPersonSlide.PHOTO_ID);
-	el.height = 80;
-	el.width = 65;
-};
-
 
 UnknownPersonSlide.prototype._getTooltipBGHtml =
 function(email) {
@@ -205,7 +216,29 @@ function(attrs) {
 	var iHtml = AjxTemplate.expand("com_zimbra_email.templates.Email1#ContactDetails", attrs);
 	this._setTextDivHeight(iHtml);
 	document.getElementById(UnknownPersonSlide.TEXT_DIV_ID).innerHTML = iHtml;
-	document.getElementById("UnknownPersonSlide_EmailAnchorId").onclick =  AjxCallback.simpleClosure(this._openCompose, this); 
+	document.getElementById("UnknownPersonSlide_EmailAnchorId").onclick =  AjxCallback.simpleClosure(this._openCompose, this);
+	if(document.getElementById("UnknownPersonSlide_NameAnchorId")) {
+		document.getElementById("UnknownPersonSlide_NameAnchorId").onclick =  AjxCallback.simpleClosure(this._openContact, this); 
+	}
+};
+
+UnknownPersonSlide.prototype._setProfileImage =
+function(photoName) {
+	var div = document.getElementById(UnknownPersonSlide.PHOTO_PARENT_ID);
+	div.width = 65;
+	div.height = 80;
+	div.style.width = 65;
+	div.style.height = 80;
+	if (this.emailZimlet.emailAddress.indexOf(UnknownPersonSlide.DOMAIN) == -1) {
+		this._handleImgLoadFailure();
+		return;
+	}
+
+	var img = new Image();
+	img.src = ZmZimletBase.PROXY + UnknownPersonSlide.PHOTO_BASE_URL + photoName;
+	img.onload = AjxCallback.simpleClosure(this._handleImageLoad, this, img);
+	var timeoutCallback = new AjxCallback(this, this._handleImgLoadFailure);
+	this.emailZimlet.showLoadingAtId(timeoutCallback, UnknownPersonSlide.PHOTO_PARENT_ID);
 };
 
 UnknownPersonSlide.prototype._setTextDivHeight =
@@ -220,3 +253,14 @@ function(html) {
 	this._tempdiv.innerHTML = "";
 };
 
+UnknownPersonSlide.prototype._openCompose =
+function() {
+	this.emailZimlet.slideShow.hideTooltipVeil();
+	this.emailZimlet._composeListener(null, this.emailZimlet.emailAddress);
+};
+
+UnknownPersonSlide.prototype._openContact =
+function() {
+	this.emailZimlet.slideShow.hideTooltipVeil();
+	this.emailZimlet._contactListener(true);
+};
