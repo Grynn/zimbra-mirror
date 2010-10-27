@@ -37,7 +37,7 @@ com_zimbra_srchhltr_HandlerObject.prototype.constructor = com_zimbra_srchhltr_Ha
 SearchHighlighterZimlet.prototype.init =
 function() {
 	this._searchController = appCtxt.getSearchController();
-	this._skipKeys = ["in:", "attachment:", "has:", "is:", "before:", "after:", "date:", "larger:", "smaller:",  "from:", "to:", "cc:", "bcc:", "and", "or"];
+	this._skipKeys = ["in:", "attachment:", "has:", "is:", "before:", "after:", "date:", "larger:", "smaller:",  "from:", "to:", "cc:", "bcc:", "and", "or", "not"];
 	this._skipKeysLen = this._skipKeys.length;
 	this._spanIds = [];
 };
@@ -90,7 +90,7 @@ function(searchStr) {
 	if(!searchStr) {
 		return [];
 	}
-	searchStr = searchStr.toLowerCase().replace(/in:"(\w+?\s).*"/, "");//folder with multip-word names
+	searchStr = searchStr.toLowerCase().replace(/in:\"?(\w+(\s)?(\/?))+\"/, "");//folder with multip-word names
 	var dArry = searchStr.split(" ");
 	if (dArry == "") {
 		return [];
