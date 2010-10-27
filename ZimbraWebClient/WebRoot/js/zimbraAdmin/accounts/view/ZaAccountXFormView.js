@@ -482,15 +482,7 @@ function(domainName) {
 		domainName = currDomainName;
 	
 	if(domainName) {
-		//var domainObj = ZaDomain.getDomainByName(domainName);
-		var domainObj = new ZaDomain();
-		try {
-                       domainObj.load("name", domainName, false, true);
-		} catch (ex) {
-                       throw (ex);
-		}
-                ZaDomain.putDomainToCache(domainObj);
-
+		var domainObj = ZaDomain.getDomainByName(domainName);
 		if(domainObj.attrs[ZaDomain.A_AuthMech] != ZaDomain.AuthMech_zimbra){
 			return false;
 		}

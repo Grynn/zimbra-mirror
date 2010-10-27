@@ -1192,7 +1192,8 @@ function(tmpObj) {
 		busyMsg : ZaMsg.BUSY_MODIFY_DOMAIN
 	}
 	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.ModifyDomainResponse;	
-	this.initFromJS(resp.domain[0]);	
+	this.initFromJS(resp.domain[0]);
+	ZaDomain.putDomainToCache(this);
 }
 
 ZaDomain.prototype.setStatus = function (newStatus) {
