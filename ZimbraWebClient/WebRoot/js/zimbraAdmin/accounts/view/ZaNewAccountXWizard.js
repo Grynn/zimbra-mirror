@@ -961,16 +961,14 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			);
 		};
 		
-		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureBriefcaseSpreadsheetEnabled,ZaAccount.A_zimbraFeatureBriefcaseSlidesEnabled, ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled],[])) {  
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled],[])) {  
 			featuresCase.items.push(
 				{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraBriefcasesFeature, id:"account_wiz_features_briefcase",
 				 	colSizes:["auto"],numCols:1,
 					enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureBriefcasesEnabled,"TRUE"]],
 					enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureBriefcasesEnabled,ZaAccount.A_COSId],
 					items:[
-					    {ref:ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled, trueValue:"TRUE", falseValue:"FALSE"},
-						{ref:ZaAccount.A_zimbraFeatureBriefcaseSpreadsheetEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseSpreadsheetEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcaseSpreadsheetEnabled, trueValue:"TRUE", falseValue:"FALSE"}, 
-						{ref:ZaAccount.A_zimbraFeatureBriefcaseSlidesEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseSlidesEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcaseSlidesEnabled, trueValue:"TRUE", falseValue:"FALSE"} 
+					    {ref:ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled, trueValue:"TRUE", falseValue:"FALSE"}
 					]
 				}
 			);

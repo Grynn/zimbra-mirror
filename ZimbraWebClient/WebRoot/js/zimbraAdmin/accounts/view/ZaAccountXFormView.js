@@ -889,8 +889,6 @@ ZaAccountXFormView.FEATURE_TAB_ATTRS = [ZaAccount.A_zimbraFeatureManageZimlets,
 	ZaAccount.A_zimbraFeatureTasksEnabled,
 	//ZaAccount.A_zimbraFeatureNotebookEnabled,
 	ZaAccount.A_zimbraFeatureBriefcasesEnabled,
-	ZaAccount.A_zimbraFeatureBriefcaseSpreadsheetEnabled,
-	ZaAccount.A_zimbraFeatureBriefcaseSlidesEnabled,
 	ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled,
 	ZaAccount.A_zimbraFeatureIMEnabled,
 	ZaAccount.A_zimbraFeatureOptionsEnabled,
@@ -1824,15 +1822,11 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureBriefcasesEnabled,"TRUE"]],
 						enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureBriefcasesEnabled,ZaAccount.A_COSId],
 						visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
-							[ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled,
-							 ZaAccount.A_zimbraFeatureBriefcaseSpreadsheetEnabled,
-							 ZaAccount.A_zimbraFeatureBriefcaseSlidesEnabled
+							[ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled
 							 ]]
 						],
 						items:[						
-							{ref:ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled, trueValue:"TRUE", falseValue:"FALSE"}, 
-							{ref:ZaAccount.A_zimbraFeatureBriefcaseSpreadsheetEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseSpreadsheetEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcaseSpreadsheetEnabled, trueValue:"TRUE", falseValue:"FALSE"}, 
-							{ref:ZaAccount.A_zimbraFeatureBriefcaseSlidesEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseSlidesEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcaseSlidesEnabled, trueValue:"TRUE", falseValue:"FALSE"}	
+							{ref:ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled, trueValue:"TRUE", falseValue:"FALSE"}
 						]
 					},					
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraIMFeature, id:"account_form_features_im", colSizes:["auto"],numCols:1,
