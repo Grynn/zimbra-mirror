@@ -165,7 +165,7 @@ LaunchApp(const NS_tchar *workingDir, int argc, NS_tchar **argv)
 #elif defined(XP_MACOSX)
   LaunchChild(argc, argv);
 #elif defined(XP_WIN)
-  WinLaunchChild(argv[0], argc, argv, -1);
+  WinLaunchChild(argv[0], argc, argv);
 #else
 # warning "Need implementaton of LaunchCallbackApp"
 #endif
@@ -196,6 +196,20 @@ WriteStatusFile(NS_tchar* path, int status)
   close(fd);
 }
 
+static int
+WCharReplace(NS_tchar *wstr, NS_tchar oc, NS_tchar nc)
+{
+  int len = wcslen(wstr);
+  int n = 0;
+  for (int i = 0; i < len; i++) {
+    if (wstr[i] == oc) {
+      wstr[i] = nc;
+      n++;	
+    }
+  }
+  return n;
+}
+
 static void
 DoUpdate(NS_tchar *path)
 {
@@ -203,10 +217,14 @@ DoUpdate(NS_tchar *path)
   NS_tchar dpath[MAXPATHLEN];
   NS_tchar upstatus[MAXPATHLEN];
   NS_tchar upparams[MAXPATHLEN];
+  NS_tchar sysdir[MAXPATHLEN];
+  NS_tchar msiexec[MAXPATHLEN];
   NS_tsnprintf(spath, MAXPATHLEN, NS_T("%s/update.mar"), path);
-  NS_tsnprintf(dpath, MAXPATHLEN, NS_T("%s/update.exe"), path);
+  NS_tsnprintf(dpath, MAXPATHLEN, NS_T("%s/update.msi"), path);
   NS_tsnprintf(upstatus, MAXPATHLEN, NS_T("%s/update.status"), path);
   NS_tsnprintf(upparams, MAXPATHLEN, NS_T("%s/../../update.params"), path);
+  GetSystemDirectory(sysdir, MAXPATHLEN);
+  NS_tsnprintf(msiexec, MAXPATHLEN, NS_T("%s\\msiexec.exe"), sysdir);
 
   int rv = NS_taccess(spath, F_OK | R_OK | W_OK);
   if (rv != OK) {
@@ -224,10 +242,13 @@ DoUpdate(NS_tchar *path)
 	NS_tremove(upstatus);
 	return;
   }
-  
-  int largc = 1;
+ 
+  WCharReplace(dpath, L'/', L'\\');
+  int largc = 3;
   NS_tchar* largv[16]; //16 being max
-  largv[0] = dpath; //first arg is the path to exe
+  largv[0] = msiexec; //first arg is the path to msiexec.exe
+  largv[1] = NS_T("/i"); //second arg is the install-flag
+  largv[2] = dpath; //third arg is the path to update.msi
   NS_tchar argbuf[MAXPATHLEN];
   int start = 0;
   int end = 0;
@@ -259,6 +280,7 @@ DoUpdate(NS_tchar *path)
   //for (int i = 0; i < largc; ++i)
   //    NS_tfprintf(stderr, NS_T("arg[%d]=%s\n"), i, largv[i]);
 
+  LOG(("info: running %ls %ls %ls\n", largv[0], largv[1], largv[2]));
   LaunchApp(path, largc, largv);
 
   LOG(("succeeded\n"));
