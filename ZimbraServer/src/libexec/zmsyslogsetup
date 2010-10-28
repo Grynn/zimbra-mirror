@@ -196,8 +196,8 @@ sub updateSyslogNG {
     local @ARGV="/etc/logrotate.d/zimbra";
     while (<>) {
       s/syslogd/syslog-ng/;
-      s/USER/$uid/;
-      s/GROUP/$gid/;
+      s/USER/zimbra/;
+      s/GROUP/zimbra/;
       print;
     }
   }
@@ -298,15 +298,15 @@ sub updateSyslog {
   chmod 0644,"/var/log/zimbra.log","/var/log/zimbra-stats.log";
 
   if ( -f "/etc/logrotate.d/zimbra" ) {
-    if ( $rsyslog == 1 ) {
-      local $^I="~";
-      local @ARGV=("/etc/logrotate.d/zimbra");
-      while (<>) {
+    local $^I="~";
+    local @ARGV=("/etc/logrotate.d/zimbra");
+    while (<>) {
+      if ( $rsyslog == 1 ) {
         s/syslogd.pid/rsyslogd.pid/g;
-        s/USER/$uid/;
-        s/GROUP/$gid/;
-        print;
       }
+      s/USER/zimbra/;
+      s/GROUP/zimbra/;
+      print;
     }
   }
   if ( -f "/etc/logrotate.d/zimbra~" ){
@@ -402,8 +402,8 @@ sub updateRsyslogd {
         s/USER/syslog/;
         s/GROUP/adm/;
       } else {
-        s/USER/$uid/;
-        s/GROUP/$gid/;
+        s/USER/zimbra/;
+        s/GROUP/zimbra/;
       }
       print;
     }
