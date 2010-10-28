@@ -39,7 +39,9 @@ public class LoginScreen extends CommonTest {
 		String thisYear = "" + calendar.get(Calendar.YEAR);
 		
 		String copyright = app.zPageLogin.sGetText(PageLogin.displayedcopyright);
-		ZAssert.assertStringContains(thisYear, copyright, "Verify the copyright on the login screen contains the current year");
+		
+		String message = String.format("Verify the copyright (%s) on the login screen contains the current year (%s)", copyright, thisYear);
+		ZAssert.assertStringContains(copyright, thisYear, message);
 		
 
 	}

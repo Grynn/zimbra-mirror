@@ -16,11 +16,11 @@ public class PageLogin extends AbsMobilePage {
 	
 	// Displayed text
 	public static final String displayedZLoginAppName = "xpath=//*[@id='ZLoginAppName']";
-	public static final String displayedusername = "xpath=//td[@class='zLoginLabelContainer']//label[@for='username']";
+	public static final String displayedusername = "xpath=//form[@name='loginForm']//label[@for='username']";
 	public static final String displayedpassword = "xpath=//td[@class='zLoginLabelContainer']//label[@for='password']";
 	public static final String displayedremember = "xpath=//td[@class='zLoginCheckboxLabelContainer']//label[@for='remember']";
 	public static final String displayedwhatsthis = "xpath=//*[@id='ZLoginWhatsThisAnchor']";
-	public static final String displayedcopyright = "xpath=//*[@id='ZloginLicenseContainer']";
+	public static final String displayedcopyright = "xpath=//div[@class='copyright']";
 	
 	
 	public ZimbraAccount DefaultLoginAccount = null;
