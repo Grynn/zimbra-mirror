@@ -1,8 +1,9 @@
-<project name="SampleOAuthProvider" default="jar"> <!-- default="jar" -->
+<project name="SampleOAuthProvider" default="package">
 	<property name="jar.file" value="sampleoauthprov.jar" />
 	<property name="src.dir" location="src" />
 	<property name="src.java.dir" location="${src.dir}/java" />
 	<property name="build.dir" location="build" />
+    <property name="build.jars.dir" location="${build.dir}/jars" />
 	<property name="build.classes.dir" location="${build.dir}/classes" />
 	<property name="common.dir" location="../ZimbraCommon" />
 	<property name="common.classes.dir" location="${common.dir}/build/classes" />
@@ -13,6 +14,7 @@
 
 	<target name="build-init">
 		<mkdir dir="${build.classes.dir}" />
+        <mkdir dir="${build.jars.dir}" />
 	</target>
 
 
@@ -48,8 +50,8 @@
 		</javac>
 	</target>
 
-	<target name="jar" depends="compile" description="Creates the jar file">
-		<jar manifest="conf/MANIFEST.MF" destfile="${build.dir}/${jar.file}" basedir="${build.classes.dir}" />
+	<target name="package" depends="compile" description="Creates the jar file">
+		<jar manifest="conf/MANIFEST.MF" destfile="${build.jars.dir}/${jar.file}" basedir="${build.classes.dir}" />
 	</target>
 
 	<target name="clean" description="Removes any temporary files">
