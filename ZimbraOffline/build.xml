@@ -791,11 +791,35 @@
     <replace file="${dist.app.dir}/jetty/etc/webdefault.xml" token="@production@" value="${param.production}"/>
     <replace file="${dist.data.dir}/bin/zdesktop" token="@install.app.root@" value="${param.app.dir}"/>
     <replace file="${dist.data.dir}/bin/zdesktop" token="@install.data.root@" value="${param.data.dir}"/>
+		<if>
+			<isset property="is-windows"/>
+			<then>
+				<set-assert-flag file="${dist.data.dir}/conf/zdesktop.conf"/>
+			</then>
+			<else>
+				<set-assert-flag file="${dist.data.dir}/bin/zdesktop"/>
+			</else>
+		</if>	
 
     <chmod file="${dist.data.dir}/bin/zdesktop" perm="ugo+x" />
 
     <antcall target="offline-make-dist-ext"/>
   </target>
+
+	<macrodef name="set-assert-flag">
+		<attribute name="file"/>
+		<sequential>
+			<if>
+				<equals arg1="${offline.enable_assert}" arg2="true"/>
+				<then>
+					<replace file="@{file}" token="@assert_flag@" value="-ea"/>
+				</then>
+				<else>
+					<replace file="@{file}" token="@assert_flag@" value="-da"/>
+				</else>
+			</if>
+		</sequential>
+	</macrodef>
 
   <target name="offline-make-dist-ext" if="build.exchange.ext">
     <antcall target="offline-ext-jars"/>
