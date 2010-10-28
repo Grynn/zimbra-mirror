@@ -343,6 +343,7 @@ public class DirectorySync {
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.putAll(zgi.getAttrs());
         attrs.putAll(zgi.getPrefAttrs());
+        attrs.putAll(zgi.getZimletProps());
 
         attrs = diffAttributes(acct, attrs);
 
