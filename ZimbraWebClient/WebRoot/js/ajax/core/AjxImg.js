@@ -70,7 +70,7 @@ function(parentEl, imageName, useParentEl, _disabled) {
 		return;
 	}
 
-	if (parentEl.firstChild == null || parentEl.firstChild.nodeName.toLowerCase() != "div") {
+	if (parentEl.firstChild == null || parentEl.firstChild.nodeName.toLowerCase() != "div" || AjxEnv.isIE ) {
 		var html = [], i = 0;
 		html[i++] = "<div";
 		if (id) {
