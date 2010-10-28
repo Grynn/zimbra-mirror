@@ -158,7 +158,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 		 "<div ", (params.showPanelBorder ? "id='ZLoginPanel'" :  "id='ZLoginPanelInvisible'"), ">",
 			"<table class='zLoginTable' width='100%' cellpadding=0 cellspacing=0>",
 				"<tr><td id='ZLoginHeaderContainer'><center>",
-						"<table class='zLoginTable'>",
+						"<table class='zLoginTable' width='100%' cellpadding=4>",
 							"<tr><td id='ZLoginBannerContainer'>",
 									"<div id='ZLoginBannerPanel'>",
 										"<table class='zLoginTable'><tr>",
