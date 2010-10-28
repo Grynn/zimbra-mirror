@@ -883,6 +883,9 @@ ZaOverviewPanelController.prototype._modifySearchMenuButton =
 function (itemType) {
 	if (itemType) {
 		var searchListController = ZaApp.getInstance().getSearchListController(); 
+		if(!searchListController || !searchListController._searchField) {
+			return;
+		}
 		switch (itemType) {
 			case ZaItem.ACCOUNT:
 				searchListController._searchField.accFilterSelected(); break ;

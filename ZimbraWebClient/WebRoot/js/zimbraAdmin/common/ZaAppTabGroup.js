@@ -452,7 +452,9 @@ function (tab, resize) {
 	if (tab == this._searchTab) {
 		this._searchTab = null ;
 		//need to reset the search list controller
-		ZaApp.getInstance().getSearchListController().reset() ;
+		var slc = ZaApp.getInstance().getSearchListController();
+		if(slc)
+			slc.reset() ;
 	}
 	ZaAppTabGroup._TABS.remove (tab) ;
 	
