@@ -60,6 +60,7 @@ public class SkinResources
 
     private static final String P_SKIN = "skin";
 	private static final String P_DEFAULT_SKIN = "zimbraDefaultSkin";
+        private static final String P_DEFAULT_ADMIN_SKIN = "zimbraDefaultAdminSkin";
     private static final String P_USER_AGENT = "agent";
     private static final String P_DEBUG = "debug";
     private static final String P_CLIENT = "client";
@@ -792,20 +793,27 @@ public class SkinResources
         if (zimbraAdminURL == null) {
             zimbraAdminURL = "/zimbraAdmin";
         }
+        
+        String defaultSkinPara = null;
+        String defaultCookiePara = null;
+        String contentPath = req.getContextPath();
+        if (contentPath != null && contentPath.equalsIgnoreCase(zimbraAdminURL)) {
+		defaultSkinPara = P_DEFAULT_ADMIN_SKIN;
+                defaultCookiePara = C_ADMIN_SKIN;
+        } else {
+		defaultSkinPara = P_DEFAULT_SKIN;
+		defaultCookiePara = C_SKIN;
+        }
+
         String skin = req.getParameter(P_SKIN);
         if (skin == null) {
-            String contentPath = req.getContextPath();
             Cookie cookie;
-            if (contentPath != null && contentPath.equalsIgnoreCase(zimbraAdminURL)) {
-                cookie = getCookie(req, C_ADMIN_SKIN);
-            } else {
-                cookie = getCookie(req, C_SKIN);
-            }
-            skin = cookie != null ? cookie.getValue() : getServletContext().getInitParameter(P_DEFAULT_SKIN);
+            cookie = getCookie(req, defaultCookiePara);
+            skin = cookie != null ? cookie.getValue() : getServletContext().getInitParameter(defaultSkinPara);
         }
         File manifest = new File(getServletContext().getRealPath("/skins/"+skin+"/"+SKIN_MANIFEST));
         if (!manifest.exists()) {
-            skin = getServletContext().getInitParameter(P_DEFAULT_SKIN);
+            skin = getServletContext().getInitParameter(defaultSkinPara);
         }
         return StringUtil.escapeHtml(skin);
     }
