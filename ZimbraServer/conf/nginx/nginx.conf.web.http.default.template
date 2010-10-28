@@ -3,6 +3,7 @@
 server
 {
     listen    ${web.http.port} default;
+    client_max_body_size 0;
 
     location /
     {

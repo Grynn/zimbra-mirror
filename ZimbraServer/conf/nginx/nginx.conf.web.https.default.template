@@ -3,6 +3,7 @@
 server
 {
     listen                  ${web.https.port} default;
+    client_max_body_size    0;
     ssl                     on;
     ssl_prefer_server_ciphers ${web.ssl.preferserverciphers};
     ssl_ciphers             ${web.ssl.ciphers};
