@@ -66,13 +66,17 @@ function(entry) {
 	this._containedObject[ZaBulkProvision.A2_src_acct_selection_pool] = [];
 	this._containedObject[ZaBulkProvision.A2_account] = [];
 	this._containedObject[ZaBulkProvision.A2_accountPool] = [];
-	if(this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE_IMAP &&
+	/*if(this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE_IMAP &&
 			!this._containedObject[ZaBulkProvision.A_aid]) {
 		this._containedObject[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
 		this.goPage(ZaBulkDataImportXWizard.STEP_FILE_UPLOAD);
-	}	
+	}	*/
+	this._localXForm.setInstance(this._containedObject);
+	if(this._containedObject[ZaModel.currentStep] > 0)
+		this.goPage(this._containedObject[ZaModel.currentStep]);
+	
 	//this._containedObject[ZaModel.currentStep] = ZaBulkDataImportXWizard.STEP_INTRODUCTION;
-    this._localXForm.setInstance(this._containedObject);
+    
 }
 
 ZaBulkDataImportXWizard.prototype.finishWizard = function() {
@@ -274,6 +278,7 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 		var auxObj1 = new ZaBulkProvision ();
 		if(this._containedObject[ZaBulkProvision.A2_sourceServerType] == ZaBulkProvision.MAIL_SOURCE_TYPE_EXCHANGE_IMAP) {
 			auxObj1[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
+			auxObj1[ZaModel.currentStep] = ZaBulkDataImportXWizard.STEP_FILE_UPLOAD;			
 		} else {
 			auxObj1[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_ZIMBRA;	
 		}

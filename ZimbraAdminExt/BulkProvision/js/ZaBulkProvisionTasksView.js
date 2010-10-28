@@ -91,7 +91,9 @@ function(task, now, isDragProxy) {
 		} else if(field == ZaBulkProvisionTask.A_status) {	
 			// description
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
-			if(task.attrs[ZaBulkProvisionTask.A_finishedTasks] == task.attrs[ZaBulkProvisionTask.A_totalTasks]) {
+			if((parseInt(task.attrs[ZaBulkProvisionTask.A_finishedTasks]) + 
+					(task.attrs[ZaBulkProvisionTask.A_failedTasks] ? parseInt(task.attrs[ZaBulkProvisionTask.A_failedTasks]) : 0 )) == 
+				parseInt(task.attrs[ZaBulkProvisionTask.A_totalTasks])) {
 				html[idx++] = AjxStringUtil.htmlEncode(com_zimbra_bulkprovision.TaskComplete);	
 			} else {
 				html[idx++] = AjxStringUtil.htmlEncode(com_zimbra_bulkprovision.TaskInProgress);
