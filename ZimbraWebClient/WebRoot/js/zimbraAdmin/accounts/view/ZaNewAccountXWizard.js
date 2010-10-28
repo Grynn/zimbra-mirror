@@ -525,6 +525,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 						inputPreProcessor:ZaAccountXFormView.preProcessCOS,
 						toolTipContent:ZaMsg.tt_StartTypingCOSName,
 						onChange:ZaAccount.setCosChanged,
+						onClick:ZaController.showTooltip,
 						emptyText:ZaMsg.enterSearchTerm,						
 						enableDisableChecks:[[ZaNewAccountXWizard.isAutoCos], [ZaItem.hasWritePermission,ZaAccount.A_COSId]],
 						enableDisableChangeEventSources:[ZaAccount.A2_autoCos],
