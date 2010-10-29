@@ -234,10 +234,10 @@ class State:
 		gc = threading.Thread(target=State.getGlobalConfig,args=(self,),name="gc")
 		mc = threading.Thread(target=State.getMiscConfig,args=(self,),name="mc")
 		sc = threading.Thread(target=State.getServerConfig,args=(self,),name="sc")
-		lc.daemon = True;
-		gc.daemon = True;
-		mc.daemon = True;
-		sc.daemon = True;
+		lc.setDaemon(True);
+		gc.setDaemon(True);
+		mc.setDaemon(True);
+		sc.setDaemon(True);
 		lc.start()
 		gc.start()
 		mc.start()
