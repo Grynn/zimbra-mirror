@@ -158,7 +158,7 @@ public class SeleniumService {
 
 	private void stopBrowsersUbuntu() throws IOException, InterruptedException {
 		// TODO
-		logger.warn("Implement me!");
+		logger.warn("Implement me!", new Throwable("implement me!"));
 	}
 	
 

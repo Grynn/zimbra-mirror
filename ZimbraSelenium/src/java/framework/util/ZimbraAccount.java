@@ -89,7 +89,7 @@ public class ZimbraAccount {
 	 */
 	public static ZimbraAccount AccountZWC() {
 		// TODO: need to integrate with the harness and point an account at the test account
-		logger.error("Implement me!");
+		logger.error("Implement me!", new Throwable("implement me!"));
 		return(null);
 	}
 	

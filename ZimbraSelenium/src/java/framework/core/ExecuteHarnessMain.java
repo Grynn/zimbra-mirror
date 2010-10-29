@@ -2,6 +2,7 @@
  * 
  */
 package framework.core;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -12,21 +13,22 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.channels.FileChannel;
-import java.util.HashMap;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.GnuParser;
@@ -47,9 +49,9 @@ import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
+
 import framework.util.HarnessException;
 import framework.util.SkippedTestListener;
-
 import framework.util.SleepUtil;
 import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;
@@ -130,8 +132,9 @@ public class ExecuteHarnessMain {
 	 * Determine all the classes in the specified jarfile filtered by a regex
 	 * @param jarfile The jarfile to inspect
 	 * @param pattern A regex Pattern to match.  Use null for all classes
+	 * @throws HarnessException 
 	 */ 
-	private static List<String> getClassesFromJar(File jarfile, Pattern pattern, String excludeStr) throws FileNotFoundException, IOException {
+	private static List<String> getClassesFromJar(File jarfile, Pattern pattern, String excludeStr) throws FileNotFoundException, IOException, HarnessException {
 		logger.debug("getClassesFromJar "+ jarfile.getAbsolutePath());
 		
 		List<String> classes = new ArrayList<String>();
@@ -175,6 +178,10 @@ public class ExecuteHarnessMain {
 			
 		}
 
+		if (classes.size() < 1) {
+			throw new HarnessException("no classes matched pattern filter "+ pattern.pattern());
+		}
+		
 		return (classes);
 	}
 
@@ -298,72 +305,78 @@ public class ExecuteHarnessMain {
 	 * Execute all TestNG tests based on configuration
 	 * @throws FileNotFoundException
 	 * @throws IOException
+	 * @throws HarnessException 
 	 */
-	public String execute() throws FileNotFoundException, IOException {
+	public String execute() throws FileNotFoundException, IOException, HarnessException {
 		logger.info("Execute tests ...");
 		
 		ResultListener listener = null;
 		
-		try
-		{
-			baos= new ByteArrayOutputStream();
-			ps=new PrintStream(baos,true); //autoflush
-			
-			System.setOut(ps); 
-			System.setErr(ps);	
-			// Build the class list
-			classes = getClassesFromJar(new File(jarfilename), (classfilter == null ? null : Pattern.compile(classfilter)),excludefilter);
-			
-			// Build the list of XmlSuites
-			List<XmlSuite> suites = getXmlSuiteList();
-						
-			// Create the TestNG test runner
-			TestNG ng = new TestNG();
-			
-			for (String st : configMap.keySet()) {
-				ZimbraSeleniumProperties.setStringProperty(st,configMap.get(st));
-			}
-			
-			
-			// keep checking for server down
-			while (ZimbraSeleniumProperties.zimbraGetVersionString().indexOf("unknown") != -1) {
-			  Thread.sleep(100000);
-			}
-			
-			String subject = "ZimbraSelenium-" +ZimbraSeleniumProperties.getAppType() +
-					" browser:" +ZimbraSeleniumProperties.getStringProperty("browser") + 			
-					" locale:" + ZimbraSeleniumProperties.getStringProperty("locale") ;			
-			SendEmail se = new SendEmail(subject);
+		baos= new ByteArrayOutputStream();
+		ps=new PrintStream(baos,true); //autoflush
+		
+		System.setOut(ps); 
+		System.setErr(ps);	
+		// Build the class list
+		classes = getClassesFromJar(new File(jarfilename), (classfilter == null ? null : Pattern.compile(classfilter)),excludefilter);
+		
+		// Build the list of XmlSuites
+		List<XmlSuite> suites = getXmlSuiteList();
+					
+		// Create the TestNG test runner
+		TestNG ng = new TestNG();
+		
+		for (String st : configMap.keySet()) {
+			ZimbraSeleniumProperties.setStringProperty(st,configMap.get(st));
+		}
+		
+		
+		// keep checking for server down
+		while (ZimbraSeleniumProperties.zimbraGetVersionString().indexOf("unknown") != -1) {
+			SleepUtil.sleep(100000);
+		}
+		
+		String subject = "ZimbraSelenium-" +ZimbraSeleniumProperties.getAppType() +
+				" browser:" +ZimbraSeleniumProperties.getStringProperty("browser") + 			
+				" locale:" + ZimbraSeleniumProperties.getStringProperty("locale") ;			
+		SendEmail se = new SendEmail(subject);
+		try {
 			se.sendFirstEmail();
-	
-    
-			// Configure the runner
-			ng.setXmlSuites(suites);
-			
-			ng.addListener(new SummaryReporter(ZimbraSeleniumProperties.getAppType().toString()));
-			
-			//ng.addListener(new SummaryReporter(ZimbraSeleniumProperties.getAppType().toString()));
+		} catch (Exception e) {
+			throw new HarnessException(e);
+		}
+
+
+		// Configure the runner
+		ng.setXmlSuites(suites);
+		
+		ng.addListener(new SummaryReporter(ZimbraSeleniumProperties.getAppType().toString()));
+		
+		//ng.addListener(new SummaryReporter(ZimbraSeleniumProperties.getAppType().toString()));
+		try {
 			ng.addListener(new TestStatusReporter(ZimbraSeleniumProperties.getAppType().toString(),baos,ps)); // TODO: This shouldn't throw Exception
 			ng.addListener(new SkippedTestListener(new File(this.testoutputfoldername)));
 			ng.addListener(listener = new ResultListener());
 			ng.setOutputDirectory(this.testoutputfoldername);
-
-			// Run!
-			ng.run();
-			
-			// finish inProgress - overwrite inProgress/index.html		
-			TestStatusReporter.copyFile(testoutputfoldername + "\\inProgress\\result.txt" , testoutputfoldername + "\\inProgress\\index.html");
-			
-			// TODO: remove the email logic.  just let tms send the email.
-			// email results
-			copyCommandLineOutputFile();
-			se.send(getFileContents(testoutputfoldername + "\\ebody.txt"));
-
-		} catch (HarnessException e) {
-			logger.error("Unable to execute tests", e);
 		} catch (Exception e) {
-			logger.error("Fix TestStatusReporter constructor to not throw raw Exception", e);
+			throw new HarnessException(e);
 		}
+
+		// Run!
+		ng.run();
+		
+		// finish inProgress - overwrite inProgress/index.html		
+		TestStatusReporter.copyFile(testoutputfoldername + "\\inProgress\\result.txt" , testoutputfoldername + "\\inProgress\\index.html");
+		
+		// TODO: remove the email logic.  just let tms send the email.
+		// email results
+		copyCommandLineOutputFile();
+		try {
+			se.send(getFileContents(testoutputfoldername + "\\ebody.txt"));
+		} catch (Exception e) {
+			throw new HarnessException(e);
+		}
+
 		
 		logger.info("Execute tests ... completed");
 		

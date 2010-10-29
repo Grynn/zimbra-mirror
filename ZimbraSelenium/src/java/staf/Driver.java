@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import framework.core.ExecuteHarnessMain;
+import framework.util.HarnessException;
 
 public class Driver {
 
@@ -12,8 +13,9 @@ public class Driver {
 	 * @param args
 	 * @throws IOException 
 	 * @throws FileNotFoundException 
+	 * @throws HarnessException 
 	 */
-	public static void main(String[] args) throws FileNotFoundException, IOException {
+	public static void main(String[] args) throws FileNotFoundException, IOException, HarnessException {
 
         // Create the execution object
         ExecuteHarnessMain harness = new ExecuteHarnessMain();
