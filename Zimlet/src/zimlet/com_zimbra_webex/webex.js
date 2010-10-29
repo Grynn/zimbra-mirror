@@ -755,10 +755,18 @@ WebExZimlet.prototype._updateMeetingBodyAndSave = function(params) {
 		}
 	}
 	composeView.getHtmlEditor().setContent(newContent);
-	if(params.apptController._sendListener) {
-		params.apptController._sendListener();
-	} else if(params.apptController._saveListener) {
-		params.apptController._saveListener();
+	//delay to avoid race condition b/w setting content and sending msg
+	setTimeout(AjxCallback.simpleClosure(this._saveAppt, this, params.apptController), 500);
+};
+/**
+ * Saves appointment
+ * @param {ZmApptController} Appointment Controller
+ */
+WebExZimlet.prototype._saveAppt = function(apptController) {
+	if(apptController._sendListener) {
+		apptController._sendListener();
+	} else if(apptController._saveListener) {
+		apptController._saveListener();
 	}
 	appCtxt.getAppController().setStatusMsg(this.getMessage("WebExZimlet_successfullyCreatedWebEx"), ZmStatusView.LEVEL_INFO);
 };
