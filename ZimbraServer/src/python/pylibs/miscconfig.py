@@ -27,13 +27,14 @@ class MiscConfig(config.Config):
 		self.config = {}
 
 		t1 = time.clock()
-		th = []
+		#th = []
 		for cm in commands.miscCommands:
-			th.append(threading.Thread(target=MiscConfig.doCommand,args=(self,cm),name=cm))
+			this.doCommand(cm);
+			#th.append(threading.Thread(target=MiscConfig.doCommand,args=(self,cm),name=cm))
 		
-		[t.setDaemon(True) for t in th]
-		[t.start() for t in th]
-		[t.join(60) for t in th]
+		#[t.setDaemon(True) for t in th]
+		#[t.start() for t in th]
+		#[t.join(60) for t in th]
 		dt = time.clock()-t1
 		Log.logMsg(5,"Miscconfig loaded in %.2f seconds" % dt)
 
