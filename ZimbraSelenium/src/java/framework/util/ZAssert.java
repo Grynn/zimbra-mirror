@@ -24,20 +24,30 @@ public class ZAssert {
     }
     
 	public static void assertTrue(boolean condition, String message) {
+		
+		// Add counts
 		TotalCountTests++;
 		CountTests++;
 		
-		logger.info(String.format("%s -- (%s == %s) [%s]", "assertTrue", condition, true, message));
+		// Build a 'standard' detailed message
+		String details = String.format("%s -- (%s == %s) [%s]", "assertTrue", condition, true, message);
+		
+		// Log it
+		logger.info(details);
+		
         try
         {
-            Assert.assertTrue(condition, message);
+        	// Execute the Assert base method (if available)
+            Assert.assertTrue(condition, details);
         }
         catch (AssertionError e)
         {
+        	// On failure, log the error
         	logger.error(e.getMessage(), e);
             throw e;
         }
         
+        // Add "pass" counts
         CountPass++; TotalCountPass++;
 
 	}
@@ -46,10 +56,12 @@ public class ZAssert {
 		TotalCountTests++;
 		CountTests++;
 		
-		logger.info(String.format("%s -- (%s == %s) [%s]", "assertEquals", actual, expected, message));
+		String details = String.format("%s -- (%s == %s) [%s]", "assertEquals", actual, expected, message);
+		logger.info(details);
+		
         try
         {
-        	Assert.assertEquals(actual, expected, message);
+        	Assert.assertEquals(actual, expected, details);
         }
         catch (AssertionError e)
         {
@@ -65,11 +77,13 @@ public class ZAssert {
 		TotalCountTests++;
 		CountTests++;
 		
-		logger.info(String.format("%s -- (%s > %s) [%s]", "assertGreaterThan", actual, expected, message));
+		String details = String.format("%s -- (%s > %s) [%s]", "assertGreaterThan", actual, expected, message);
+		logger.info(details);
+		
         try
         {
         	if ( actual <= expected ) {
-        		throw new AssertionError(actual +" was not greather than " + expected);
+        		throw new AssertionError(details);
         	}
         }
         catch (AssertionError e)
@@ -85,11 +99,13 @@ public class ZAssert {
 		TotalCountTests++;
 		CountTests++;
 		
-		logger.info(String.format("%s -- (%s >= %s) [%s]", "assertGreaterThanEqualTo", actual, expected, message));
+		String details = String.format("%s -- (%s >= %s) [%s]", "assertGreaterThanEqualTo", actual, expected, message);
+		logger.info(details);
+		
         try
         {
         	if ( actual < expected ) {
-        		throw new AssertionError(actual +" was not greather than or equal to " + expected);
+        		throw new AssertionError(details);
         	}
         }
         catch (AssertionError e)
@@ -105,11 +121,13 @@ public class ZAssert {
 		TotalCountTests++;
 		CountTests++;
 		
-		logger.info(String.format("%s -- (%s < %s) [%s]", "assertLessThan", actual, expected, message));
+		String details = String.format("%s -- (%s < %s) [%s]", "assertLessThan", actual, expected, message);
+		logger.info(details);
+		
         try
         {
         	if ( actual >= expected ) {
-        		throw new AssertionError(actual +" was not less than " + expected);
+        		throw new AssertionError(details);
         	}
         }
         catch (AssertionError e)
@@ -125,11 +143,13 @@ public class ZAssert {
 		TotalCountTests++;
 		CountTests++;
 		
-		logger.info(String.format("%s -- (%s < %s) [%s]", "assertLessThanEqualTo", actual, expected, message));
+		String details = String.format("%s -- (%s < %s) [%s]", "assertLessThanEqualTo", actual, expected, message);
+		logger.info(details);
+		
         try
         {
         	if ( actual > expected ) {
-        		throw new AssertionError(actual +" was not less than or equal to " + expected);
+        		throw new AssertionError(details);
         	}
         }
         catch (AssertionError e)
@@ -146,10 +166,12 @@ public class ZAssert {
 		TotalCountTests++;
 		CountTests++;
 		
-		logger.info(String.format("%s -- (%s != null) [%s]", "assertNotNull", object, message));
+		String details = String.format("%s -- (%s != null) [%s]", "assertNotNull", object, message);
+		logger.info(details);
+		
         try
         {
-        	Assert.assertNotNull(object, message);
+        	Assert.assertNotNull(object, details);
         }
         catch (AssertionError e)
         {
@@ -166,11 +188,13 @@ public class ZAssert {
 		TotalCountTests++;
 		CountTests++;
 		
-		logger.info(String.format("%s -- (collection contains %s) [%s]", "assertContains", object, message));
+		String details = String.format("%s -- (collection contains %s) [%s]", "assertContains", object, message);
+		logger.info(details);
+		
         try
         {
         	boolean contains = collection.contains(object);
-        	Assert.assertTrue(contains, message);
+        	Assert.assertTrue(contains, details);
         }
         catch (AssertionError e)
         {
@@ -191,11 +215,13 @@ public class ZAssert {
 		TotalCountTests++;
 		CountTests++;
 		
-		logger.info(String.format("%s -- (%s matches %s) [%s]", "assertMatches", pattern.toString(), input, message));
+		String details = String.format("%s -- (%s matches %s) [%s]", "assertMatches", pattern.toString(), input, message);
+		logger.info(details);
+		
         try
         {
         	Matcher m = pattern.matcher(input);
-        	Assert.assertTrue(m.matches(), message);
+        	Assert.assertTrue(m.matches(), details);
         }
         catch (AssertionError e)
         {
@@ -218,11 +244,13 @@ public class ZAssert {
 		TotalCountTests++;
 		CountTests++;
 		
-		logger.info(String.format("%s -- (%s contains %s) [%s]", "assertStringContains", actual, substring, message));
+		String details = String.format("%s -- (%s contains %s) [%s]", "assertStringContains", actual, substring, message);
+		logger.info(details);
+		
         try
         {
         	boolean contains = actual.contains(substring);
-        	Assert.assertTrue(contains, message);
+        	Assert.assertTrue(contains, details);
         }
         catch (AssertionError e)
         {
