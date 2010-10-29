@@ -149,6 +149,16 @@ function(stepNum) {
 			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		}
 	}
+  	if(this._containedObject.attrs[ZaDomain.A_domainName]==undefined) {
+                this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+        } else {
+                if(this._containedObject.attrs[ZaDomain.A_domainName].length > 0) {
+                 this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+                } else {
+                 this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(false);
+                }
+        }
+
 }
 /**
 * @method setObject sets the object contained in the view
@@ -668,7 +678,7 @@ ZaNewDomainXWizard.myXFormModifier = function(xFormObject, entry) {
 			items: [
 				{type:_CASE_, caseKey:ZaNewDomainXWizard.GENERAL_STEP, colSizes:["200px","450px"],numCols:2,
 					items: [
-						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, width:200},
+						{ref:ZaDomain.A_domainName, type:_TEXTFIELD_, label:ZaMsg.Domain_DomainName,labelLocation:_LEFT_, required:true, width:200},
 						{ref:ZaDomain.A_zimbraPublicServiceHostname, type:_TEXTFIELD_, label:ZaMsg.Domain_zimbraPublicServiceHostname,labelLocation:_LEFT_, width:200},			
 						{ type: _DWT_ALERT_,containerCssStyle: "padding-bottom:0px",style: DwtAlert.INFO,
 								iconVisible: true,content: ZaMsg.Domain_InboundSMTPNote,colSpan:"*"},
