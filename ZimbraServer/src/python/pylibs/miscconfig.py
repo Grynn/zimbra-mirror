@@ -29,7 +29,7 @@ class MiscConfig(config.Config):
 		t1 = time.clock()
 		#th = []
 		for cm in commands.miscCommands:
-			this.doCommand(cm);
+			self.doCommand(cm);
 			#th.append(threading.Thread(target=MiscConfig.doCommand,args=(self,cm),name=cm))
 		
 		#[t.setDaemon(True) for t in th]
