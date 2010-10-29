@@ -167,6 +167,7 @@ function() {
 	} else {
 		this._langPair = this._fromLanguage + "|" + this._toLanguage;
 	}
+	this._langPair = this._langPair.replace(/_/, "-");//replace zh_cn to zh-cn(google's format)
 	this._splitTo4900Chunks(bodyContent);
 	this._makeRequest();
 };
@@ -250,18 +251,28 @@ function() {
  */
 GTranslatorZimlet.prototype._translationHandler =
 function(result) {
+	this._manualTranslationRequired = false;
 	if (!result.success) {
 		this.displayErrorMessage(this.getMessage("GTranslatorZimlet_couldNotTranslate"), null, this.getMessage("GTranslatorZimlet_zimletError"));
 		return;
 	}
+
 	var jsonObj = eval("(" + result.text + ")");
-	this._dataChunksTranslated.push(jsonObj.responseData.translatedText);
-	if (this._dataChunksTranslated.length < this._dataChunksToTranslate.length) {
+	if (jsonObj.responseStatus == 400) {
+		this._errMsg = [this.getMessage("GTranslatorZimlet_manuallyTranslate"), "<br/>",  jsonObj.responseDetails].join("");
+		this.displayErrorMessage(this._errMsg, null, this.getMessage("GTranslatorZimlet_zimletError"));
+		this._manualTranslationRequired = true;
+	}
+	if(jsonObj.responseData && jsonObj.responseData.translatedText) {
+		this._dataChunksTranslated.push(jsonObj.responseData.translatedText);
+	}
+
+	if (!this._manualTranslationRequired && this._dataChunksTranslated.length < this._dataChunksToTranslate.length) {
 		this._dataChunkIndex++;
 		this._makeRequest();
 		return;
 	}
-	if (jsonObj.responseData.detectedSourceLanguage) {
+	if (jsonObj.responseData && jsonObj.responseData.detectedSourceLanguage) {
 		this._fromLanguage = jsonObj.responseData.detectedSourceLanguage;
 	}
 	var allTranslatedData = this._dataChunksTranslated.join(" ");
@@ -278,13 +289,14 @@ function(result) {
 
 	var data = AjxStringUtil.htmlEncode(allTranslatedData);
 
-	//this._translatedData = data;
+	if(this._manualTranslationRequired && this._errMsg) {
+		data = this._errMsg;
+	}
 	this._zimletContext.translatedText = data;
 	var langObj = this._getLanguageFromAndToNames();
 	this._zimletContext.langObj = langObj;
 
-	//this._cacheTranslatedTextInZimletContext(data);
-	//this._cacheFromAndToLanguageInZimletContext();
+
 	if (AjxEnv.isIE) {
 		this._tCanvas.innerHTML = this._zimletifyText(AjxStringUtil.nl2br(data))
 	} else {
