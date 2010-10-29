@@ -133,7 +133,12 @@ function(msgStr, detailStr, style, title) {
  */
 ZmErrorDialog.prototype._updateContent = 
 function() {
-	var data = {message: this._msgStr, detail: this._detailStr, showDetails: this._detailsVisible};
+	var data = {
+		message: this._msgStr,
+		detail: this._detailStr,
+		showDetails: this._detailsVisible,
+		detailIsHtml: AjxStringUtil.stripTags(this._detailStr) != this._detailStr
+	};
 	var html = AjxTemplate.expand("zimbra.Widgets#ZmErrorDialogContent", data);
 	this.setSize(Dwt.CLEAR, this._detailsVisible ? "300" : Dwt.CLEAR);
 	DwtMessageDialog.prototype.setMessage.call(this, html, this._msgStyle, this._msgTitle);
