@@ -546,12 +546,12 @@ function(date, useUTC) {
 };
 
 AjxDateUtil.parseServerTime = 
-function(serverStr, date) {
+function(serverStr, date, noSpecialUtcCase) {
 	if (serverStr.charAt(8) == 'T') {
 		var hh = parseInt(serverStr.substr(9,2), 10);
 		var mm = parseInt(serverStr.substr(11,2), 10);
 		var ss = parseInt(serverStr.substr(13,2), 10);
-		if (serverStr.charAt(15) == 'Z') {
+		if (!noSpecialUtcCase && serverStr.charAt(15) == 'Z') {
 			mm += AjxTimezone.getOffset(AjxTimezone.DEFAULT, date);
 		}
 		date.setHours(hh, mm, ss, 0);
@@ -617,7 +617,7 @@ AjxDateUtil.TZDSegment.prototype.parse = function(o, s, i) {
 };
 
 AjxDateUtil.parseServerDateTime = 
-function(serverStr) {
+function(serverStr, noSpecialUtcCase) {
 	if (serverStr == null) return null;
 
 	var d = new Date();
@@ -628,7 +628,7 @@ function(serverStr) {
 	d.setMonth(MM - 1);
 	d.setMonth(MM - 1); // DON'T remove second call to setMonth (see bug #3839)
 	d.setDate(dd);
-	AjxDateUtil.parseServerTime(serverStr, d);
+	AjxDateUtil.parseServerTime(serverStr, d, noSpecialUtcCase);
 	return d;
 };
 

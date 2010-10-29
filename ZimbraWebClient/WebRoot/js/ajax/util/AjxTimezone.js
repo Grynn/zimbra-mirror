@@ -127,6 +127,17 @@ AjxTimezone = function() {};
 // Static methods
 //
 
+AjxTimezone.convertTimezone = function(date, fromClientId, toClientId) {
+	if (fromClientId == toClientId) {
+		return date;
+	}
+	var offset1 = AjxTimezone.getOffset(toClientId, date);
+	var offset2 = AjxTimezone.getOffset(fromClientId, date);
+	//returning a new Date object since we might not always want to modify the parameter Date object
+	return new Date(date.getTime() + (offset1 - offset2) * 60 * 1000);
+};
+
+
 AjxTimezone.getTransition = function(onset, year) {
 	var trans = [ year || new Date().getFullYear(), onset.mon, 1 ];
 	if (onset.mday) {
