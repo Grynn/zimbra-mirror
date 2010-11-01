@@ -37,7 +37,8 @@ my $messages = {
         Done => "done",
         RunCommand => "You can start Zimbra Desktop by double-clicking the desktop icon or by running the following command:",
 		RunWithAbsPath => '*** Error: You must run user-install.pl with absolute path.',
-        Success => 'Zimbra Desktop has been installed successfully for user {0}.'
+        Success => 'Zimbra Desktop has been installed successfully for user {0}.',
+        LaunchZD => 'Press "Enter" to launch Zimbra Desktop; Press "Ctrl-c" to exit: '
     }
 };
 
@@ -246,5 +247,12 @@ system("chmod 700 \"$data_root\"");
 
 print get_message('Success', [$ENV{USER}]), "\n\n";
 print get_message('RunCommand'), "\n";
-print "\"$app_root/linux/prism/zdclient\" -webapp \"$data_root/zdesktop.webapp\" -override \"$data_root/zdesktop.webapp/override.ini\" -profile \"$data_root/profile\"\n\n";
+my $cmd = "\"$app_root/linux/prism/zdclient\" -webapp \"$data_root/zdesktop.webapp\" -override \"$data_root/zdesktop.webapp/override.ini\" -profile \"$data_root/profile\"";
+print "$cmd\n\n";
 
+print get_message('LaunchZD');
+$_ = <STDIN>;
+my $pid = fork();
+if ($pid == 0) {
+    exec($cmd);
+}
