@@ -88,7 +88,7 @@ function(text, sep, camel) {
  */
 AjxStringUtil.fromMixed = function(text, sep) {
     sep = ["$1", sep || " ", "$2"].join("");
-    return text.replace(/([a-z])([A-Z]+)/g, sep).trim();
+    return AjxStringUtil.trim(text.replace(/([a-z])([A-Z]+)/g, sep));
 };
 
 /**
