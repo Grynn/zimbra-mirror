@@ -453,7 +453,6 @@ WebExZimlet.prototype._createOrUpdateMeeting = function(params) {
 			params["seriesMeetingKey"] = meetingKey;//store this to params(not newParams) so we can store this
 		}
 	}
-
 	var request = this._getCreateOrModifyMeetingRequest(newParams);
 	AjxRpc.invoke(request, this.postUri(), {"Content-Type":"text/xml"}, new AjxCallback(this, this._createOrUpdateMeetingResponseHdlr, params), false, false);
 };
@@ -945,17 +944,12 @@ WebExZimlet.prototype._getMeetingDetailshdr = function(hdrName, editorType) {
  * @return	{string}	the formatted date
  */
 WebExZimlet.prototype._formatDate = function(d) {
-	var date = new Date();
-	date.setMonth(d.getMonth());
-	date.setDate(d.getDate());
-	date.setYear(d.getFullYear());
-	date.setHours(parseInt(d.getHours()));
-	date.setMinutes((Math.ceil(d.getMinutes() / 15) * 15) % 60);
-	date.setSeconds(0);
-	date.setMilliseconds(0);
+	d.setMinutes((Math.ceil(d.getMinutes() / 15) * 15) % 60);
+	d.setSeconds(0);
+	d.setMilliseconds(0);
 
 	var formatter = new AjxDateFormat("MM/dd/yyyy HH:mm:ss");
-	return formatter.format(date);
+	return formatter.format(d);
 };
 
 /**
