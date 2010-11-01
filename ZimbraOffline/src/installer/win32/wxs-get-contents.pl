@@ -68,18 +68,35 @@ my $dist_dir = "$build_root\\build\\dist";
 my ($xml_app, $xml_refs) = ("", "");
 my $seed_prefix = "zimbra_desktop_";
 my $cid_counter = 20000;
+my $desktop_shortcut = "";
+my $zdrun_dirid = "";
+
+sub get_shortcut {
+	my ($ind, $scid, $scdir, $iconid, $fileid) = @_;
+
+	return "$ind<Shortcut Id=\"$scid\" Directory=\"$scdir\" Advertise=\"no\" Name=\"Zimbra Desktop\" " .
+		"Show=\"minimized\" Icon=\"$iconid\" Target=\"[SystemFolder]cscript.exe\" " .
+		"Arguments=\'\"[!$fileid]\"\'>\r\n$ind  <Icon Id=\"$iconid\" " .
+		"SourceFile=\"$dist_dir\\app\\data\\zdesktop.webapp\\icons\\default\\launcher.ico\" />\r\n" .
+		"$ind</Shortcut>\r\n";
+}
 
 sub handler_zdrun_vbs {
 	my ($ind, $xml, $fileid) = @_;
-	
+
 	$$xml .= " />\r\n";
-	$$xml .= "$ind<Shortcut Id=\"ID_42446FE2_8C85_4ca0_8AEB_4143383960E8\" Directory=\"ProgramMenuDir\" Advertise=\"no\" Name=\"Zimbra Desktop\" Show=\"minimized\" Icon=\"ID_BB30ED2D_2B17_4c39_B242_BE52A559A470\" Target=\"[SystemFolder]cscript.exe\" Arguments=\'\"[!$fileid]\"\'>\r\n";
-    $$xml .= "$ind  <Icon Id=\"ID_BB30ED2D_2B17_4c39_B242_BE52A559A470\" SourceFile=\"$dist_dir\\app\\data\\zdesktop.webapp\\icons\\default\\launcher.ico\" />\r\n";
-    $$xml .= "$ind</Shortcut>\r\n";
+	$$xml .= get_shortcut($ind, "ID_42446FE2_8C85_4ca0_8AEB_4143383960E8", "ProgramMenuDir", "ID_BB30ED2D_2B17_4c39_B242_BE52A559A470", $fileid);
+	$desktop_shortcut = get_shortcut(" "x12, "ID10627", "DesktopFolder", "ID10628", $fileid);
+}
+
+sub handler_zdrun_dir {
+	my (undef, undef, $dirid) = @_;
+	$zdrun_dirid = $dirid;
 }
 
 my $handlers = {
 	"$dist_dir\\app\\win32\\zdrun.vbs" => \&handler_zdrun_vbs,
+	"$dist_dir\\app\\win32" => \&handler_zdrun_dir
 };
 
 sub next_cid {
@@ -97,7 +114,7 @@ sub guid_by_path {
 
 sub traverse {
     my ($dir, $indent, $id, $name, $xml) = @_;
-    my ($dh, $path, $n, $p);
+    my ($dh, $path, $n, $p, $handler);
     my @subdirs = ();
     
     if (!opendir($dh, $dir)){
@@ -110,7 +127,11 @@ sub traverse {
     $dirid =~ tr/-/_/;
     my $cid = next_cid();
     $$xml .= "$indent<Directory Id=\"$dirid\" Name=\"$name\">\r\n";
-    
+	$handler = $handlers->{lc($dir)};
+	if ($handler) {
+		$handler->("$indent    ", $xml, $dirid);
+	}
+	
     $$xml .= "$indent  <Component Id=\"$cid\" Guid=\"$guid\">\r\n";
     $$xml .= "$indent    <CreateFolder />\r\n";   
     while($n = readdir($dh)) {
@@ -124,7 +145,7 @@ sub traverse {
         	$fileid =~ tr/-/_/;
             $$xml .= "$indent    <File Id=\"$fileid\" Source=\"$path\" DiskId=\"1\" Name=\"$n\"";
             
-            my $handler = $handlers->{lc($path)};
+            $handler = $handlers->{lc($path)};
             if ($handler) {
             	$handler->("$indent    ", $xml, $fileid);
             } else {
@@ -146,6 +167,8 @@ traverse("$dist_dir\\app", "          ", "APPLICATIONFOLDER", "Zimbra Desktop", 
 
 my $tokens = {
 	'@build.application.folder.contents@' => $xml_app, 
-	'@build.component.references@' => $xml_refs
+	'@build.component.references@' => $xml_refs,
+	'@desktop.shortcut@' => $desktop_shortcut,
+	'@zdrun.dir.id@' => $zdrun_dirid
 };
 find_and_replace($wxs_file, $tokens);

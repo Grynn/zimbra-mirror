@@ -130,6 +130,7 @@
           <Component Id="ID10619" Guid="5a6c426a-6f4a-42c5-82fe-1e4fc19d82aa">
             <RegistryValue Root="HKCU" Key="SOFTWARE\Zimbra\Zimbra Desktop\Components\ID10619" Type="string" KeyPath="yes" Value="" />
             <RemoveFolder Id="ID10620" On="uninstall" />
+@desktop.shortcut@ 
           </Component>
         </Directory>
         <Component Id="ID10621" Guid="6f5dc277-6ebc-4891-9fb6-78e30e79935d">
@@ -181,10 +182,14 @@
       <ComponentRef Id="ID10623" />
       <ComponentRef Id="ID10625" />
     </Feature>
-    
+   
+    <CustomAction Id="ID10702" Directory="@zdrun.dir.id@" ExeCommand="[SystemFolder]cscript.exe zdrun.vbs" Execute="immediate" Impersonate="yes" Return="asyncNoWait" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch Zimbra Desktop" />
+    <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
     <UI>
       <UIRef Id="WixUI_InstallDir" />
       <UIRef Id="WixUI_ErrorProgressText" />
+      <Publish Dialog="ExitDialog" Control="Finish" Order="1" Event="DoAction" Value="ID10702">WIXUI_EXITDIALOGOPTIONALCHECKBOX = 1 and NOT Installed</Publish>
     </UI>
     <Property Id="ALLUSERS" Value="0" />
     <Condition Message="This product require Windows XP or newer">VersionNT &gt;= 501</Condition>
