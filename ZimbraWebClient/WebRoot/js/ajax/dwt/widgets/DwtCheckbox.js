@@ -256,6 +256,21 @@ function() {
 };
 
 //
+// DwtControl methods
+//
+
+DwtCheckbox.prototype.setToolTipContent = function(content) {
+    if (content && !this.__mouseEventsSet) {
+        // NOTE: We need mouse events in order to initiate tooltips on hover.
+        // TODO: This should be done transparently in DwtControl for all
+        // TODO: controls with tooltips.
+        this.__mouseEventsSet = true;
+        this._setMouseEvents();
+    }
+    DwtControl.prototype.setToolTipContent.apply(this, arguments);
+};
+
+//
 // Protected methods
 //
 
