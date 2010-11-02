@@ -47,7 +47,7 @@ exe = {
 	'SNMP'          : "bin/zmswatchctl",
 	'LOGGER'        : "bin/zmloggerctl",
 	'MAILBOX'       : "bin/zmstorectl",
-  'CBPOLICYD'     : "bin/zmcbpolicydctl",
+	'CBPOLICYD'     : "bin/zmcbpolicydctl",
 	'PROXYGEN'      : "bin/zmproxyconfgen",
 	'CONVERTD'      : "bin/zmconvertctl",
 	'LDAPHELPER'    : "bin/ldapHelper.pl",
@@ -61,7 +61,10 @@ class Command:
 		if type == "local":
 			LC.reload()
 		else:
-			cls.P.flushCache(Provisioning.CacheEntryType.fromString(type), None)
+			try:
+				cls.P.flushCache(Provisioning.CacheEntryType.fromString(type), None)
+			except Exception, e:
+				pass  # mailboxd is down, or not running here, either way we don't care.
 
 	def __init__(self, desc, name, cmd=None, func=None, args=None, base="/opt/zimbra"):
 		self.desc = desc
