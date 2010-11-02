@@ -1,4 +1,4 @@
-package projects.admin.tests;
+package projects.admin.core;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -27,8 +27,8 @@ import framework.util.ZimbraSeleniumProperties;
  * @author Matt Rhoades
  *
  */
-public class CommonTest {
-	protected static Logger logger = LogManager.getLogger(CommonTest.class);
+public class AdminCommonTest {
+	protected static Logger logger = LogManager.getLogger(AdminCommonTest.class);
 	
 	/**
 	 * Helper field.  admin = ZimbraAdminAccount.GlobalAdmin()
@@ -49,8 +49,8 @@ public class CommonTest {
 	protected AbsPage startingPage = null;
 	protected ZimbraAdminAccount startingAccount = null;
 	
-	protected CommonTest() {
-		logger.info("New "+ CommonTest.class.getCanonicalName());
+	protected AdminCommonTest() {
+		logger.info("New "+ AdminCommonTest.class.getCanonicalName());
 		
 		app = new AppAdminConsole();
 		
@@ -70,9 +70,7 @@ public class CommonTest {
 	public void commonTestBeforeSuite() throws HarnessException {
 		
 		logger.info("commonTestBeforeSuite");
-		
-		SeleniumService.getInstance().startSeleniumServer();
-		
+				
 		try
 		{
 			ClientSession session = ClientSessionFactory.session();

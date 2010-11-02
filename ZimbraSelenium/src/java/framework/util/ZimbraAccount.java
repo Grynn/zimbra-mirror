@@ -87,12 +87,19 @@ public class ZimbraAccount {
 	 * Get the user account logged into ZWC being tested
 	 * @return the ZimbraAccount object representing the test account
 	 */
-	public static ZimbraAccount AccountZWC() {
-		// TODO: need to integrate with the harness and point an account at the test account
-		logger.error("Implement me!", new Throwable("implement me!"));
-		return(null);
+	public static synchronized ZimbraAccount AccountZWC() {
+		if ( _AccountZWC == null ) {
+			_AccountZWC = new ZimbraAccount();
+			_AccountZWC.provision();
+			_AccountZWC.authenticate();
+		}
+		return (_AccountZWC);
 	}
-	
+	public static synchronized void ResetAccountZWC() {
+		_AccountZWC = null;
+	}
+	private static ZimbraAccount _AccountZWC = null;
+
 	public static synchronized ZimbraAccount AccountZMC() {
 		if ( _AccountZMC == null ) {
 			_AccountZMC = new ZimbraAccount();
@@ -100,6 +107,9 @@ public class ZimbraAccount {
 			_AccountZMC.authenticate();
 		}
 		return (_AccountZMC);
+	}
+	public static synchronized void ResetAccountZMC() {
+		_AccountZMC = null;
 	}
 	private static ZimbraAccount _AccountZMC = null;
 
@@ -142,7 +152,7 @@ public class ZimbraAccount {
 		put("zimbraPrefTimeZoneId", "(GMT-08.00) Pacific Time");
 		put("zimbraFeatureReadReceiptsEnabled", "TRUE");
 		put("zimbraPrefCalendarAlwaysShowMiniCal", "FALSE");
-		put("zimbraPrefSkin", "beach");
+		// put("zimbraPrefSkin", "beach");
 		put("zimbraPrefComposeFormat", "html");
  	}};
 

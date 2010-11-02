@@ -2,10 +2,10 @@ package projects.admin.tests.cos;
 
 import org.testng.annotations.Test;
 
-import projects.admin.tests.CommonTest;
+import projects.admin.core.AdminCommonTest;
 import framework.util.HarnessException;
 
-public class CreateCos extends CommonTest {
+public class CreateCos extends AdminCommonTest {
 	
 	public CreateCos() {
 		logger.info("New "+ CreateCos.class.getCanonicalName());

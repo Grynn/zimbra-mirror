@@ -1,4 +1,4 @@
-package projects.mobile.tests;
+package projects.ajax.core;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -9,13 +9,12 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeSuite;
 
-import projects.mobile.ui.AppMobileClient;
+import projects.ajax.ui.AppAjaxClient;
 
 import com.thoughtworks.selenium.SeleniumException;
 
 import framework.core.ClientSession;
 import framework.core.ClientSessionFactory;
-import framework.core.SeleniumService;
 import framework.core.ZimbraSelenium;
 import framework.ui.AbsPage;
 import framework.util.HarnessException;
@@ -27,14 +26,14 @@ import framework.util.ZimbraSeleniumProperties;
  * @author Matt Rhoades
  *
  */
-public class CommonTest {
-	protected static Logger logger = LogManager.getLogger(CommonTest.class);
+public class AjaxCommonTest {
+	protected static Logger logger = LogManager.getLogger(AjaxCommonTest.class);
 		
 
 	/**
 	 * The AdminConsole application object
 	 */
-	protected AppMobileClient app = null;
+	protected AppAjaxClient app = null;
 
 	/**
 	 * BeforeMethod variables
@@ -44,13 +43,13 @@ public class CommonTest {
 	protected AbsPage startingPage = null;
 	protected ZimbraAccount startingAccount = null;
 	
-	protected CommonTest() {
-		logger.info("New "+ CommonTest.class.getCanonicalName());
+	protected AjaxCommonTest() {
+		logger.info("New "+ AjaxCommonTest.class.getCanonicalName());
 		
-		app = new AppMobileClient();
+		app = new AppAjaxClient();
 		
 		startingPage = app.zPageMain;
-		startingAccount = ZimbraAccount.AccountZMC();
+		startingAccount = ZimbraAccount.AccountZWC();
 		
 		app.zPageLogin.DefaultLoginAccount = startingAccount;
 		
@@ -67,9 +66,11 @@ public class CommonTest {
 	public void commonTestBeforeSuite() throws HarnessException {
 		logger.info("commonTestBeforeSuite: start");
 		
-		
-		SeleniumService.getInstance().startSeleniumServer();
-		
+		// Make sure there is a new default account
+		ZimbraAccount.ResetAccountZWC();
+				
+
+				
 		try
 		{
 			ClientSession session = ClientSessionFactory.session();
@@ -77,9 +78,8 @@ public class CommonTest {
 			selenium.start();
 			selenium.windowMaximize();
 			selenium.windowFocus();
-			// selenium.setupZVariables(); // mobile doesn't use any of the JS code
 			selenium.allowNativeXpath("true");
-			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.MOBILE);
+			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.AJAX);
 			selenium.open(ZimbraSeleniumProperties.getBaseURL());
 		} catch (SeleniumException e) {
 			logger.error("Unable to mobile app.", e);
@@ -163,7 +163,6 @@ public class CommonTest {
 		logger.info("commonTestAfterSuite: start");
 		
 		ClientSessionFactory.session().selenium().stop();
-		SeleniumService.getInstance().stopSeleniumServer();
 
 		logger.info("commonTestAfterSuite: finish");
 

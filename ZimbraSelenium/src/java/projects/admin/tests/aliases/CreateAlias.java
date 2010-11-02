@@ -2,10 +2,10 @@ package projects.admin.tests.aliases;
 
 import org.testng.annotations.Test;
 
-import projects.admin.tests.CommonTest;
+import projects.admin.core.AdminCommonTest;
 import framework.util.HarnessException;
 
-public class CreateAlias extends CommonTest {
+public class CreateAlias extends AdminCommonTest {
 	
 	public CreateAlias() {
 		logger.info("New "+ CreateAlias.class.getCanonicalName());

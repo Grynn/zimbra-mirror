@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import projects.ajax.tests.AjaxCommonTest;
+import projects.ajax.core.AjaxCommonTest;
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.items.RecipientItem;

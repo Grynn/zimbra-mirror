@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
-import projects.mobile.tests.CommonTest;
+import projects.mobile.core.MobileCommonTest;
 import framework.items.ConversationItem;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
-public class ReceiveMail extends CommonTest {
+public class ReceiveMail extends MobileCommonTest {
 
 	public ReceiveMail() {
 		logger.info("New "+ ReceiveMail.class.getCanonicalName());

@@ -2,11 +2,11 @@ package projects.mobile.tests.login;
 
 import org.testng.annotations.Test;
 
-import projects.mobile.tests.CommonTest;
+import projects.mobile.core.MobileCommonTest;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 
-public class BasicLogout extends CommonTest {
+public class BasicLogout extends MobileCommonTest {
 	
 	public BasicLogout() {
 		logger.info("New "+ BasicLogout.class.getCanonicalName());

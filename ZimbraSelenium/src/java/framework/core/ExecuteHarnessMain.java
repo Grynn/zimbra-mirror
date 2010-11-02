@@ -302,12 +302,31 @@ public class ExecuteHarnessMain {
 	}
 	
 	/**
+	 * Start the selenium server (if configured) and run tests
+	 * @throws HarnessException 
+	 * @throws IOException 
+	 * @throws FileNotFoundException 
+	 */
+	public String execute() throws HarnessException, FileNotFoundException, IOException {
+		logger.info("Execute ...");
+		
+		String result = null;
+		try {
+			SeleniumService.getInstance().startSeleniumServer();
+			result = executeTests();
+		} finally {
+			SeleniumService.getInstance().stopSeleniumServer();
+		}
+		return (result);
+	}
+	
+	/**
 	 * Execute all TestNG tests based on configuration
 	 * @throws FileNotFoundException
 	 * @throws IOException
 	 * @throws HarnessException 
 	 */
-	public String execute() throws FileNotFoundException, IOException, HarnessException {
+	public String executeTests() throws FileNotFoundException, IOException, HarnessException {
 		logger.info("Execute tests ...");
 		
 		ResultListener listener = null;
@@ -756,7 +775,8 @@ public class ExecuteHarnessMain {
 			// Set the working conditions
 			ZimbraSeleniumProperties.setBaseDirectory(".");
 			ZimbraSeleniumProperties.setConfigProperties("conf/config.properties");
-			
+			SeleniumService.getInstance().setUserExtensions(new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/framework/lib/user-extensions.js"));
+
 			// Create the harness object and execute it
 			ExecuteHarnessMain harness = new ExecuteHarnessMain();
 			if ( harness.parseArgs(args) ) { 

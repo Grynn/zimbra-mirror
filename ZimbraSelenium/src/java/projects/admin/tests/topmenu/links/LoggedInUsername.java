@@ -2,12 +2,12 @@ package projects.admin.tests.topmenu.links;
 
 import org.testng.annotations.Test;
 
-import projects.admin.tests.CommonTest;
+import projects.admin.core.AdminCommonTest;
 import projects.admin.ui.PageMain;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 
-public class LoggedInUsername extends CommonTest {
+public class LoggedInUsername extends AdminCommonTest {
 	
 	public LoggedInUsername() {
 		logger.info("New "+ LoggedInUsername.class.getCanonicalName());

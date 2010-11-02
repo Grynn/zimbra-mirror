@@ -2,13 +2,13 @@ package projects.admin.tests.login;
 
 import org.testng.annotations.Test;
 
-import projects.admin.tests.CommonTest;
+import projects.admin.core.AdminCommonTest;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAdminAccount;
 import framework.util.ZimbraSeleniumProperties;
 
-public class BasicLogin extends CommonTest {
+public class BasicLogin extends AdminCommonTest {
 	
 	public BasicLogin() {
 		logger.info("New "+ BasicLogin.class.getCanonicalName());

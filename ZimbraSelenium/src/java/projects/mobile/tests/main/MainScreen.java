@@ -5,12 +5,12 @@ import java.util.GregorianCalendar;
 
 import org.testng.annotations.Test;
 
-import projects.mobile.tests.CommonTest;
+import projects.mobile.core.MobileCommonTest;
 import projects.mobile.ui.PageMain;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 
-public class MainScreen extends CommonTest {
+public class MainScreen extends MobileCommonTest {
 	
 	public MainScreen() {
 		logger.info("New "+ MainScreen.class.getCanonicalName());

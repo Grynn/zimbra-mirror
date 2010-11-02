@@ -6,7 +6,7 @@ import org.testng.annotations.Test;
 
 import projects.admin.items.AccountItem;
 import projects.admin.items.Item;
-import projects.admin.tests.CommonTest;
+import projects.admin.core.AdminCommonTest;
 import projects.admin.ui.WizardCreateAccount;
 import projects.admin.ui.PageManageAccounts;
 
@@ -16,7 +16,7 @@ import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAdminAccount;
 
-public class CreateAccount extends CommonTest {
+public class CreateAccount extends AdminCommonTest {
 	
 	public CreateAccount() {
 		logger.info("New "+ CreateAccount.class.getCanonicalName());

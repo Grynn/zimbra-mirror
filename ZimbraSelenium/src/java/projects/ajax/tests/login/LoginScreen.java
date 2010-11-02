@@ -5,7 +5,7 @@ import java.util.GregorianCalendar;
 
 import org.testng.annotations.Test;
 
-import projects.ajax.tests.AjaxCommonTest;
+import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.PageLogin;
 
 import framework.util.HarnessException;

@@ -2,10 +2,10 @@ package projects.admin.tests.topmenu.logo;
 
 import org.testng.annotations.Test;
 
-import projects.admin.tests.CommonTest;
+import projects.admin.core.AdminCommonTest;
 import framework.util.HarnessException;
 
-public class BasicLogo extends CommonTest {
+public class BasicLogo extends AdminCommonTest {
 	
 	public BasicLogo() {
 		logger.info("New "+ BasicLogo.class.getCanonicalName());

@@ -2,10 +2,10 @@ package projects.admin.tests.topmenu.search;
 
 import org.testng.annotations.Test;
 
-import projects.admin.tests.CommonTest;
+import projects.admin.core.AdminCommonTest;
 import framework.util.HarnessException;
 
-public class BasicSearch extends CommonTest {
+public class BasicSearch extends AdminCommonTest {
 	
 	public BasicSearch() {
 		logger.info("New "+ BasicSearch.class.getCanonicalName());

@@ -2,7 +2,7 @@ package projects.ajax.tests.login;
 
 import org.testng.annotations.Test;
 
-import projects.ajax.tests.AjaxCommonTest;
+import projects.ajax.core.AjaxCommonTest;
 
 import framework.util.HarnessException;
 import framework.util.ZAssert;

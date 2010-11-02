@@ -137,7 +137,8 @@ public class CommonTest extends SelNGBase {
 		// Create the test domain
 		Stafzmprov.createDomain(ZimbraSeleniumProperties.getStringProperty("testdomain"));
 		
-		SeleniumService.getInstance().startSeleniumServer();
+		// See ExecuteHarnessMain.execute().  Service is started there now.
+		// SeleniumService.getInstance().startSeleniumServer();
 		
 		// Provision the default users
 		@SuppressWarnings("unused")
@@ -226,7 +227,8 @@ public class CommonTest extends SelNGBase {
 
 	@AfterSuite(groups = { "always" })
 	public void cleanup() throws HarnessException {
-		SeleniumService.getInstance().stopSeleniumServer();
+		// See ExecuteHarnessMain.execute().  Service is stopped there now.
+		// SeleniumService.getInstance().stopSeleniumServer();
 	}
 
 	public void initFramework() {

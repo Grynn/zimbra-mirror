@@ -5,14 +5,14 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import projects.ajax.ui.AbsAjaxPage.ItemType;
-import projects.mobile.tests.CommonTest;
+import projects.mobile.core.MobileCommonTest;
 import projects.mobile.ui.FormContactNew;
 import framework.items.ContactItem;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraSeleniumProperties;
 
-public class CreateContact extends CommonTest {
+public class CreateContact extends MobileCommonTest {
 
 	public CreateContact() {
 		logger.info("New "+ CreateContact.class.getCanonicalName());

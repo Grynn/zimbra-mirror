@@ -2,12 +2,12 @@ package projects.mobile.tests.login;
 
 import org.testng.annotations.Test;
 
-import projects.mobile.tests.CommonTest;
+import projects.mobile.core.MobileCommonTest;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
 
-public class BasicLogin extends CommonTest {
+public class BasicLogin extends MobileCommonTest {
 	
 	public BasicLogin() {
 		logger.info("New "+ BasicLogin.class.getCanonicalName());

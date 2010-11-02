@@ -2,7 +2,7 @@ package projects.ajax.tests.mail.compose;
 
 import org.testng.annotations.Test;
 
-import projects.ajax.tests.AjaxCommonTest;
+import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.FormMailNew;
 import projects.ajax.ui.AbsAjaxPage.ItemType;
 import framework.items.MailItem;
