@@ -892,9 +892,17 @@ Selenium.prototype.findZFormObject = function(objName, objTag, objType, panel, o
 	//var divElements = inDocument.getElementsByTagName("DIV");
 	if(inDocument.getElementById("z_shell") != undefined) { //zimbraajax
 		var divElements = inDocument.getElementById("z_shell").childNodes;
-	} else if(inDocument.getElementById("ZloginPanel") != undefined) {//login page
+	} else if (inDocument.getElementById("ZloginPanel") != undefined) {//login page non-carbon theme
 				 mainDiv = inDocument.getElementById("ZloginPanel");
 				loginpage = true;
+    } else if (inDocument.getElementById("ZLoginNotice") != undefined) { //carbon theme 			                                                      			                                                          {//login page
+    	var objs = inDocument.getElementsByTagName("div");
+		if ( objs.length > 0) { 
+			if (objs[0].className == "LoginScreen") {
+			    mainDiv = objs[0];					
+			    loginpage = true;
+			}               
+		}			                                                      		
 	} else if(inDocument.getElementById("DWT1") != undefined) {//compose new window
 		var newwindowelement = inDocument.getElementById("DWT1");
 		if(newwindowelement.className == "MainShell")
@@ -2905,7 +2913,7 @@ Selenium.prototype.htmlMenuCore_html = function(locator, action, itemToSelect, i
 	else if(action == "click"){
 		triggerEvent(element, 'focus', false);
 	    var changed = false;
-		var reqSelected = false;
+		var reqSelected = true;
 		var totalItems  =  element.options.length;
 		
 		for (var i = 0; i < totalItems; i++) {
@@ -2932,10 +2940,8 @@ Selenium.prototype.htmlMenuCore_html = function(locator, action, itemToSelect, i
 			triggerEvent(element, 'change', true);
 		}
 		
-		if(reqSelected)
-            return true;
-		else
-			return false;
+		return reqSelected;
+		
 
 	} else if ( action=="getCount"){
 		return element.options.length;
