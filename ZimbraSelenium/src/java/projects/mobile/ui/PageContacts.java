@@ -34,6 +34,11 @@ public class PageContacts extends AbsMobilePage {
 	@Override
 	public boolean isActive() throws HarnessException {
 
+		// Make sure the main page is active
+		if ( !this.MyApplication.zPageMain.isActive() ) {
+			this.MyApplication.zPageMain.navigateTo();
+		}
+
 		boolean active = this.sIsElementPresent(lContactsIsActive);
 		return (active);
 

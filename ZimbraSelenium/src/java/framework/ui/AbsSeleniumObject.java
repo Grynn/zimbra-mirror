@@ -1,10 +1,14 @@
 package framework.ui;
 
+import java.awt.AWTException;
+import java.awt.Robot;
+
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import framework.core.ClientSessionFactory;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 
 /**
  * This class defines a logical GUI object that accesses Selenium functions
@@ -39,7 +43,7 @@ public abstract class AbsSeleniumObject {
 	 * @return
 	 */
 	public boolean zIsVisiblePerPosition(String locator, int leftLimit, int topLimit) {
-		
+
 		// Find the current position
 		Number left = ClientSessionFactory.session().selenium().getElementPositionLeft(locator);
 		Number top = ClientSessionFactory.session().selenium().getElementPositionTop(locator);
@@ -48,6 +52,29 @@ public abstract class AbsSeleniumObject {
 		boolean hidden = ( (left.intValue() < leftLimit) && (top.intValue() < topLimit) );
 		logger.info("isVisiblePerPosition("+ locator +") - (left, top) = ("+ left.intValue() +", "+ top.intValue() +") (limit, limit) = ("+ leftLimit +", "+ topLimit +") "+ (!hidden));
 		return (!hidden);
+	}
+	
+	/**
+	 * Send a keyboard shortcut
+	 * @param keyEvent Key Event to send, e.g. KeyEvent.VK_N
+	 * @throws HarnessException
+	 */
+	public void zPressKeyboardShortcut(int keyEvent) throws HarnessException {
+		logger.info("zPressKeyboardShortcut("+ keyEvent +")");
+
+		try {
+			
+			Robot zRobot = new Robot();
+
+			SleepUtil.sleep(3000);
+			zRobot.keyPress(keyEvent);
+			zRobot.keyRelease(keyEvent);
+			SleepUtil.sleep(3000);
+
+		} catch (AWTException e) {
+			throw new HarnessException("Unable to send keyboard shortcut "+ keyEvent, e);
+		}
+		
 	}
 
 	//// ***
@@ -88,6 +115,22 @@ public abstract class AbsSeleniumObject {
 	public void sClick(String locator) {
 		ClientSessionFactory.session().selenium().click(locator);
 		logger.info("click(" + locator + ")");
+	}
+	
+	/**
+	 * DefaultSelenium.mouseDown()
+	 */
+	public void sMouseDown(String locator) {
+		ClientSessionFactory.session().selenium().mouseDown(locator);
+		logger.info("mouseDown(" + locator + ")");
+	}
+	
+	/**
+	 * DefaultSelenium.mouseUp()
+	 */
+	public void sMouseUp(String locator) {
+		ClientSessionFactory.session().selenium().mouseUp(locator);
+		logger.info("mouseUp(" + locator + ")");
 	}
 	
 	/**
@@ -150,6 +193,22 @@ public abstract class AbsSeleniumObject {
 	public void sType(String locator, String text) {
 		ClientSessionFactory.session().selenium().type(locator, text);
 		logger.info("type(" + locator + ", " + text + ")");
+	}
+
+	/**
+	 * DefaultSelenium.typeKeys()
+	 */
+	public void sTypeKeys(String locator, String text) {
+		ClientSessionFactory.session().selenium().typeKeys(locator, text);
+		logger.info("typeKeys(" + locator + ", " + text + ")");
+	}
+
+	/**
+	 * DefaultSelenium.keyPressNative()
+	 */
+	public void sKeyPressNative(String code) {
+		ClientSessionFactory.session().selenium().keyPressNative(code);
+		logger.info("keyPressNative(" + code + ")");
 	}
 
 

@@ -1,27 +1,24 @@
 /**
  * 
  */
-package projects.mobile.ui;
+package projects.ajax.ui;
 
-import java.util.ArrayList;
+import java.awt.event.KeyEvent;
 import java.util.List;
 
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.ui.AbsApplication;
+import framework.ui.AbsForm;
 import framework.util.HarnessException;
 
 /**
  * @author Matt Rhoades
  *
  */
-public class PageMail extends AbsMobilePage {
+public class PageMail extends AbsAjaxPage {
 
-	// TODO: Need better locator that doesn't have content text
-	public static final String lMailIsActive = "xpath=//a[contains(.,'Folders')]";
 
-	public static final String DList_View = "xpath=//div[@id='dlist-view']";
-	public static final String DList_View_2 = "//div[@id='dlist-view']/div";
 	
 	public PageMail(AbsApplication application) {
 		super(application);
@@ -35,13 +32,20 @@ public class PageMail extends AbsMobilePage {
 	 */
 	@Override
 	public boolean isActive() throws HarnessException {
-		
+
 		// Make sure the main page is active
 		if ( !this.MyApplication.zPageMain.isActive() ) {
 			this.MyApplication.zPageMain.navigateTo();
 		}
-
-		boolean active = this.sIsElementPresent(lMailIsActive);
+		
+		// If the "folders" tree is visible, then mail is active
+		String locator = "xpath=//div[@id='zov__main_Mail']";
+		
+		boolean loaded = this.sIsElementPresent(locator);
+		if ( !loaded )
+			return (loaded);
+		
+		boolean active = this.zIsVisiblePerPosition(locator, 4, 74);
 		return (active);
 
 	}
@@ -78,6 +82,40 @@ public class PageMail extends AbsMobilePage {
 	}
 
 	/**
+	 * Open a new item by clicking in the New menu
+	 * @param type "Mail", "Contact", "Appointment", "Task", etc.
+	 * @return the corresponding form object
+	 * @throws HarnessException on error
+	 */
+	public AbsForm zMenuNew(String type) throws HarnessException {
+		// TODO: Don't use String for type, set an enum
+		
+		// Initialize the return object
+		AbsForm form = null;
+		
+		if ( type.equalsIgnoreCase("mail") ) {
+
+			this.zPressKeyboardShortcut(KeyEvent.VK_N);
+
+			form = new FormMailNew(this.MyApplication);
+			
+		} else {
+			throw new HarnessException("implement me with option "+ type +"!");
+		}
+		
+		return (form);
+	}
+	
+	/**
+	 * Refresh the inbox list by clicking "Get Mail"
+	 * @throws HarnessException 
+	 */
+	public void getMail() throws HarnessException {
+		this.sClick(PageMain.appbarMail);
+	}
+
+
+	/**
 	 * Return a list of all messages in the current view
 	 * @return
 	 * @throws HarnessException 
@@ -94,28 +132,11 @@ public class PageMail extends AbsMobilePage {
 	 * @throws HarnessException 
 	 */
 	public List<ConversationItem> getConversationList() throws HarnessException {
-		List<ConversationItem> conversations = new ArrayList<ConversationItem>();
 		
-		if (!sIsElementPresent(DList_View))
-			throw new HarnessException("Unable to find the message list!");
-		
-		int count = sGetXpathCount("//div[contains(@id, 'conv')]");
-		logger.info(count + " conversations found");
+		throw new HarnessException("implement me!");
 
-		// TODO: get all current conversations, create them in
-		// ConversationItem objects, and add the to ArrayList
-		
-		return (conversations);
 	}
 
-
-	/**
-	 * Refresh the inbox list by clicking "Get Mail"
-	 * @throws HarnessException 
-	 */
-	public void getMail() throws HarnessException {
-		this.sClick(PageMain.appbarMail);
-	}
 
 
 }

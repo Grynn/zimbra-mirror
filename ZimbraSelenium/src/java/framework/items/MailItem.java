@@ -4,6 +4,7 @@
 package framework.items;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.zimbra.common.soap.Element;
 
@@ -53,7 +54,7 @@ public class MailItem extends ZimbraItem implements IItem {
 	/**
 	 * A list of recipients from the "From:", "To:", "Cc:", and "Bcc:" fields
 	 */
-	public ArrayList<RecipientItem> recipients = new ArrayList<RecipientItem>();
+	public List<RecipientItem> recipients = new ArrayList<RecipientItem>();
 	
 	
 	/**
