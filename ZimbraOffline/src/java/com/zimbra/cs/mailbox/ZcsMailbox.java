@@ -34,6 +34,7 @@ import com.zimbra.common.soap.MailConstants;
 import com.zimbra.common.soap.SoapHttpTransport;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
+import com.zimbra.common.util.HttpUtil;
 import com.zimbra.common.util.Pair;
 import com.zimbra.common.util.ZimbraLog;
 import com.zimbra.cs.account.AccountServiceException;
@@ -45,7 +46,6 @@ import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.db.DbOfflineMailbox;
-import com.zimbra.cs.httpclient.URLUtil;
 import com.zimbra.cs.mailbox.MailItem.TargetConstraint;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
 import com.zimbra.cs.mailbox.util.TypedIdList;
@@ -688,7 +688,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     
     public Pair<Integer,Integer> sendMailItem(MailItem item) throws ServiceException {
     	OfflineAccount acct = getOfflineAccount();
-    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + "/~"+ URLUtil.urlEscape(item.getPath()) + "?lbfums=1";
+    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + "/~"+ HttpUtil.urlEscape(item.getPath()) + "?lbfums=1";
     	try {
     	    Pair<Header[], HttpInputStream> resp = 
     	        UserServlet.putMailItem(getAuthToken(), url, item);
