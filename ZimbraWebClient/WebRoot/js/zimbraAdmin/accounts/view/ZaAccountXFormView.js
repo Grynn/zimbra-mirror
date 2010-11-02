@@ -1109,7 +1109,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 						}		
 						
 						var quotaLimit = this.getInstanceValue(ZaAccount.A_zimbraMailQuota);
-						if(!quotaLimit)
+						if(!quotaLimit || quotaLimit == "0")
 							quotaLimit = ZaMsg.Unlimited;
 							
 						if(quotaLimit == ZaMsg.Unlimited) {
@@ -1125,7 +1125,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 		headerItems.push ({type:_OUTPUT_,ref:ZaAccount.A_zimbraMailQuota, label:ZaMsg.LBL_assignedQuota,
         	getDisplayValue:function() {
 				var val = this.getInstanceValue();
-				if(!val)
+				if(!val || val == "0")
 					val = ZaMsg.Unlimited;
 					
 				if(val == ZaMsg.Unlimited) {
