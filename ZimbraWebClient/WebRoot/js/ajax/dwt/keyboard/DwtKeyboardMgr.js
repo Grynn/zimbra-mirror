@@ -812,6 +812,10 @@ function(ev) {
 DwtKeyboardMgr.prototype.__dispatchKeyEvent = 
 function(hdlr, ev, forceActionCode) {
 
+	if (hdlr && hdlr.handleAnyKey) {
+		/* Let a controller take action on a key press without determining if it should be handled (so we don't return from this function too soon) */
+		hdlr.handleAnyKey(ev);
+	}
 	if (hdlr && hdlr.handleKeyEvent) {
 		var handled = hdlr.handleKeyEvent(ev);
 		return handled ? DwtKeyboardMgr.__KEYSEQ_HANDLED : DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;
