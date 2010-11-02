@@ -31,5 +31,13 @@ public class RecipientItem {
 		this.type = type;
 	}
 	
+	public String prettyPrint() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(RecipientItem.class.getSimpleName()).append('\n');
+		sb.append("Email: ").append(emailAddress).append('\n');
+		sb.append("Name: ").append(name).append('\n');
+		sb.append("Type: ").append(type).append('\n');
+		return (sb.toString());
+	}
 
 }

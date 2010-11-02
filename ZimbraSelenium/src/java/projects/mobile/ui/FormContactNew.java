@@ -39,6 +39,9 @@ public class FormContactNew extends AbsForm {
 
 	@Override
 	public void fill(ZimbraItem item) throws HarnessException {
+		logger.debug(myPageName() + " fill()");
+		logger.info(item.prettyPrint());
+
 		if ( !(item instanceof ContactItem) ) {
 			throw new HarnessException("Invalid item type - must be ContactItem");
 		}

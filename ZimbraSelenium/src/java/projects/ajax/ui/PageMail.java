@@ -237,6 +237,7 @@ public class PageMail extends AbsAjaxPage {
 			
 			// Add the new item to the list
 			items.add(item);
+			logger.info(item.prettyPrint());
 		}
 		
 		// Return the list of items

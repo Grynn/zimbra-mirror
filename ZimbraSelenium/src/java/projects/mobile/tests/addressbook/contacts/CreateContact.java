@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
+import projects.ajax.ui.AbsAjaxPage.ItemType;
 import projects.mobile.tests.CommonTest;
 import projects.mobile.ui.FormContactNew;
 import framework.items.ContactItem;
@@ -33,7 +34,7 @@ public class CreateContact extends CommonTest {
 		contact.email = "email" + ZimbraSeleniumProperties.getUniqueString() + "@example.com";
 
 		// Get the "new contact" page and fill it out (automatically)
-		FormContactNew form = app.zPageContacts.zOpenNewContactForm();
+		FormContactNew form = (FormContactNew) app.zPageContacts.zToolbarNew(ItemType.Contact);
 		form.fill(contact);
 		form.submit();
 		

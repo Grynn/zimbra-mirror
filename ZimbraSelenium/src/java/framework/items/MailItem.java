@@ -198,10 +198,10 @@ public class MailItem extends ZimbraItem implements IItem {
 	}
 	
 	@Override
-	public String printItem() {
+	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(super.prettyPrint());
 		sb.append(MailItem.class.getSimpleName()).append('\n');
-		sb.append("ID: ").append(id).append('\n');
 		sb.append("Subject: ").append(subject).append('\n');
 		for (RecipientItem r : recipients) {
 			sb.append(r.type).append(": ").append(r.emailAddress).append('\n');
@@ -253,7 +253,7 @@ public class MailItem extends ZimbraItem implements IItem {
 		m.importFromSOAP(Element.parseXML(envelopeString));
 		
 		System.out.println("Imported mail item from SOAP");
-		System.out.println(m.printItem());
+		System.out.println(m.prettyPrint());
 		
 		ZimbraAccount.AccountA().soapSend(
 				"<AddMsgRequest xmlns='urn:zimbraMail'>" +
@@ -276,7 +276,7 @@ public class MailItem extends ZimbraItem implements IItem {
 		m.importFromSOAP(ZimbraAccount.AccountA(), "subject:(email01A)");
 		
 		System.out.println("Imported mail item from query");
-		System.out.println(m.printItem());
+		System.out.println(m.prettyPrint());
 
 	}
 

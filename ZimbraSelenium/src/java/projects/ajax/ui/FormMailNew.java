@@ -64,6 +64,7 @@ public class FormMailNew extends AbsForm {
 	@Override
 	public void fill(ZimbraItem item) throws HarnessException {
 		logger.info("FormMailNew.fill(ZimbraItem)");
+		logger.info(item.prettyPrint());
 
 		// Make sure the item is a MailItem
 		if ( !(item instanceof MailItem) ) {

@@ -65,5 +65,18 @@ public class FolderItem extends ZimbraItem implements IItem {
 		throw new HarnessException("implement me");
 	}
 
+	@Override
+	public String prettyPrint() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(super.prettyPrint());
+		sb.append(ContactItem.class.getSimpleName()).append('\n');
+		sb.append("Name: ").append(name).append('\n');
+		sb.append("View: ").append(view).append('\n');
+		if ( parent != null ) {
+			sb.append("Parent: ").append('\n');
+			sb.append(parent.prettyPrint());
+		}
+		return (sb.toString());
+	}
 
 }

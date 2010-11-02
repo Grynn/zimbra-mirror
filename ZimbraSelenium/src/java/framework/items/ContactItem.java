@@ -179,10 +179,10 @@ public class ContactItem extends ZimbraItem implements IItem {
 	}
 
 	@Override
-	public String printItem() {
+	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(super.prettyPrint());
 		sb.append(ContactItem.class.getSimpleName()).append('\n');
-		sb.append("ID: ").append(id).append('\n');
 		sb.append("Email: ").append(email).append('\n');
 		sb.append(String.format("Name: first(%s) middle(%s) last(%s)\n", firstName, middleName, lastName)).append('\n');
 		for (String key : ContactAttributes.keySet())
@@ -221,7 +221,7 @@ public class ContactItem extends ZimbraItem implements IItem {
 		c.importFromSOAP(Element.parseXML(envelopeString));
 		
 		System.out.println("Imported contact item from SOAP");
-		System.out.println(c.printItem());
+		System.out.println(c.prettyPrint());
 		
 		ZimbraAccount.AccountA().soapSend(
 				"<CreateContactRequest xmlns='urn:zimbraMail'>" +
@@ -236,7 +236,7 @@ public class ContactItem extends ZimbraItem implements IItem {
 		c.importFromSOAP(ZimbraAccount.AccountA(), "email.1281656613301.21@domain.com");
 		
 		System.out.println("Imported contact item from query");
-		System.out.println(c.printItem());
+		System.out.println(c.prettyPrint());
 
 		
 	}

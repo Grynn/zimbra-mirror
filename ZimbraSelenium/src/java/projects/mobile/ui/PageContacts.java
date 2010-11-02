@@ -5,8 +5,11 @@ package projects.mobile.ui;
 
 import java.util.List;
 
+import projects.ajax.ui.AbsAjaxPage.ItemType;
+
 import framework.items.ContactItem;
 import framework.ui.AbsApplication;
+import framework.ui.AbsForm;
 import framework.util.HarnessException;
 
 /**
@@ -80,7 +83,8 @@ public class PageContacts extends AbsMobilePage {
 	 * Open a "new contact" form
 	 * @return
 	 */
-	public FormContactNew zOpenNewContactForm() throws HarnessException {
+	public AbsForm zToolbarNew(ItemType type) throws HarnessException {
+		logger.debug(myPageName() + " zToolbarNew "+ type);
 		
 		if ( !isActive() ) {
 			throw new HarnessException("Contacts page is not active");

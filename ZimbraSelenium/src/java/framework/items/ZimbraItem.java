@@ -19,10 +19,11 @@ public abstract class ZimbraItem {
 	 * Create a String containing the relevant object property values
 	 * @return A string representation of this object
 	 */
-	public String printItem() {
+	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("ZimbraItem\n");
+		sb.append(ZimbraItem.class.getSimpleName()).append('\n');
 		sb.append("id: ").append(id).append('\n');
 		return (sb.toString());
 	}
+	
 }

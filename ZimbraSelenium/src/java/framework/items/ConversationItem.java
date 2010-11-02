@@ -75,11 +75,12 @@ public class ConversationItem extends ZimbraItem implements IItem {
 	}
 	
 	@Override
-	public String printItem() {
+	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
+		sb.append(super.prettyPrint());
 		sb.append(ConversationItem.class.getSimpleName()).append('\n');
-		sb.append("ID: ").append(id).append('\n');
 		sb.append("Subject: ").append(subject).append('\n');
+		sb.append("Fragment: ").append(fragment).append('\n');
 		return (sb.toString());
 	}
 
