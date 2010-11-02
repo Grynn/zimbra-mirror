@@ -97,6 +97,7 @@ function () {
 		}
 	}
     this._oldDomainPart = this._domainPart ; //initialization time, old domain and current domain are the same ;		
+	this._inputDomainPart = "";
 };
 
 EmailAddr_XFormItem.prototype.items = [
@@ -121,11 +122,15 @@ EmailAddr_XFormItem.prototype.items = [
 			return val;	
 		},
 		elementChanged:function(namePart, instanceValue, event) {
+			if(namePart && this.getParentItem()._inputDomainPart) {
+				this.getParentItem()._oldDomainPart = this.getParentItem()._domainPart;
+				this.getParentItem()._domainPart = this.getParentItem()._inputDomainPart;
+				this.getParentItem()._inputDomainPart = "";
+			}
             this.getParentItem()._namePart = namePart;
             var val = namePart + "@";
 			if(this.getParentItem()._domainPart)
 				val += this.getParentItem()._domainPart;
-            
             this.getForm().itemChanged(this.getParentItem(), val, event);
 			//if(window.console && window.console.log) console.log("EmailAddr_XFormItem setting value to "+val);
 		}
@@ -185,8 +190,10 @@ EmailAddr_XFormItem.prototype.items = [
 					}
 				}	
 			}
+			if(this.getParentItem()._namePart) {
 			this.getParentItem()._domainPart = domainPart;
-            this.getParentItem()._oldDomainPart = oldDomainPart ;
+			this.getParentItem()._oldDomainPart = oldDomainPart ;
+			}else this.getParentItem()._inputDomainPart = domainPart;
             //bug: 14250, change the instance value here also even if the whole email address is invalid
 			//this.getParentItem().setInstanceValue (val) ;
 			this.getForm().itemChanged(this.getParentItem(), val, event);
