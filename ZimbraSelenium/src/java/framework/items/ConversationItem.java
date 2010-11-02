@@ -25,6 +25,10 @@ public class ConversationItem extends ZimbraItem implements IItem {
 	public String subject;
 			
 	/**
+	 * The fragment for this mail
+	 */
+	public String fragment;
+	/**
 	 * The read/unread status of this mail
 	 */
 	public boolean read;

@@ -16,6 +16,10 @@ import framework.ui.AbsPage;
  */
 public abstract class AbsAjaxPage extends AbsPage {
 
+	public enum ItemType {
+		Mail, Contact, ContactGroup, Appointment, Task, Document, Folder, Tag, Addressbook, Calendar, TaskFolder, Briefcase
+	}
+	
 	protected AppAjaxClient MyApplication = null;
 
 	public AbsAjaxPage(AbsApplication application) {

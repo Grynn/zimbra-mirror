@@ -55,7 +55,7 @@ public abstract class AbsSeleniumObject {
 	}
 	
 	/**
-	 * Send a keyboard shortcut
+	 * Send a keyboard shortcut using Robot
 	 * @param keyEvent Key Event to send, e.g. KeyEvent.VK_N
 	 * @throws HarnessException
 	 */
@@ -75,6 +75,17 @@ public abstract class AbsSeleniumObject {
 			throw new HarnessException("Unable to send keyboard shortcut "+ keyEvent, e);
 		}
 		
+	}
+	
+	/**
+	 * Execute mouseDown followed by mouseUp on a loator
+	 * @param locator
+	 * @throws HarnessException
+	 */
+	public void zClick(String locator) {
+		logger.info("zClick("+ locator +")");
+		ClientSessionFactory.session().selenium().mouseDown(locator);
+		ClientSessionFactory.session().selenium().mouseUp(locator);
 	}
 
 	//// ***
