@@ -1,0 +1,19 @@
+diff -ur rlfe-0.4/extern.h /tmp/q/readline-6.1/examples/rlfe/extern.h
+--- rlfe-0.4/extern.h	2004-11-04 13:52:25.000000000 -0800
++++ /tmp/q/readline-6.1/examples/rlfe/extern.h	2006-11-19 12:43:02.000000000 -0800
+@@ -27,7 +27,14 @@
+ #define __attribute__(x)
+ #endif
+ 
++#if !defined (__P)
++#  if defined (__STDC__) || defined (__GNUC__) || defined (__cplusplus)
++#    define __P(protos) protos
++#  else
++#    define __P(protos) ()
++#  endif
++#endif
++
+ /* pty.c */
+ extern int   OpenPTY __P((char **));
+ extern void  InitPTY __P((int));
+-

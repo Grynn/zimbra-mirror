@@ -1,0 +1,11 @@
+diff -ur rlfe-0.4/config.h.in /tmp/q/readline-6.1/examples/rlfe/config.h.in
+--- rlfe-0.4/config.h.in	2004-11-04 13:55:02.000000000 -0800
++++ /tmp/q/readline-6.1/examples/rlfe/config.h.in	2006-11-09 07:53:50.000000000 -0800
+@@ -373,3 +373,7 @@
+ #undef PTYRANGE1
+ 
+ #define USEVARARGS
++
++#undef HAVE_SYS_STROPTS_H
++
++#undef HAVE_SYS_WAIT_H

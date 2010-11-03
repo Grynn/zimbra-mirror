@@ -1,0 +1,34 @@
+diff -ur rlfe-0.4/pty.c /tmp/q/readline-6.1/examples/rlfe/pty.c
+--- rlfe-0.4/pty.c	2004-11-04 13:13:51.000000000 -0800
++++ /tmp/q/readline-6.1/examples/rlfe/pty.c	2006-11-09 07:55:10.000000000 -0800
+@@ -20,13 +20,15 @@
+  *
+  ****************************************************************
+  */
++#include "config.h"
+ 
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <fcntl.h>
+ #include <signal.h>
+ 
+-#include "config.h"
++#include <unistd.h>
++
+ #include "screen.h"
+ 
+ #ifndef sun
+@@ -34,7 +36,7 @@
+ #endif
+ 
+ /* for solaris 2.1, Unixware (SVR4.2) and possibly others */
+-#ifdef HAVE_SVR4_PTYS
++#if defined (HAVE_SVR4_PTYS) && defined (HAVE_SYS_STROPTS_H)
+ # include <sys/stropts.h>
+ #endif
+ 
+@@ -384,4 +386,3 @@
+   return -1;
+ }
+ #endif
+-
