@@ -575,6 +575,7 @@ ZaAccountListController.prototype._editItem = function (item) {
 **/
 ZaAccountListController.prototype._chngPwdListener =
 function(ev) {
+  try{
 	if(this._contentView.getSelectionCount()==1) {
 		this._chngPwdDlg = new ZaAccChangePwdXDlg(ZaApp.getInstance().getAppCtxt().getShell(), "400px","90px");
 		var item = this._contentView.getSelection()[0];
@@ -599,6 +600,43 @@ function(ev) {
 		this._chngPwdDlg.setObject(obj)
 		this._chngPwdDlg.popup();
 	}
+ } catch (ex) {
+                 if (ex.code &&
+                        (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED ||
+                                ex.code == ZmCsfeException.SVC_AUTH_REQUIRED ||
+                                ex.code == ZmCsfeException.NO_AUTH_TOKEN ||
+                                ex.code == ZmCsfeException.AUTH_TOKEN_CHANGED
+                         )
+                ){
+                 try {
+                        var bReloginMode = false;
+                        if (ZaApp.getInstance() != null && (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED ||
+                                                            ex.code == ZmCsfeException.AUTH_TOKEN_CHANGED
+                                                           ))
+                        {
+                                ZmCsfeCommand._curAuthToken = null;
+
+                                var dlgs = ZaApp.getInstance().dialogs;
+                                if (dlgs != undefined) {
+                                for (var dlg in dlgs) {
+                                        dlgs[dlg].popdown();
+                                }}
+                                this._loginDialog.registerCallback(this.loginCallback, this);
+                                this._loginDialog.setError(ZaMsg.ERROR_SESSION_EXPIRED);
+                                this._loginDialog.clearPassword();
+                        } else {
+                                this._loginDialog.setError(null);
+                                bReloginMode = false;
+                        }
+                        this._loginDialog.setReloginMode(bReloginMode);
+                        this._showLoginDialog(bReloginMode);
+                } catch (ex2) {
+                        console.log(ex2.code);
+                }
+                } else {
+                      this._handleException(ex, "ZaAccountListController._chngPwdListenerLauncher", null, false);
+                }
+    }   
 }
 
 ZaAccountListController.prototype._expireSessionListener = 
