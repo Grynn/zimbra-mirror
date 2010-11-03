@@ -12,6 +12,8 @@ else
 	include $(RLFE_ROOT)/../versions.def
 endif
 
+RLFE_NAME=rlfe
+
 RLFE_TGZ_TARGET := $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/$(RLFE_NAME)/$(RLFE_NAME)-$(RLFE_VERSION).tgz
 INSTALL_PREFIX := $(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)
 
@@ -25,7 +27,6 @@ ifeq ($(BUILD_PLATFORM), UBUNTU10_64)
 	RL_PATCH	:= patch -g0 -p1 < ../patches/rlfe.patch;
 endif
 
-RLFE_NAME=rlfe
 files	:= $(wildcard src/$(RLFE_NAME)-$(RLFE_VERSION).tgz)
 
 all: clean checksrc build check tar
@@ -34,7 +35,7 @@ checksrc:
 	$(if $(files), @echo "", exit 1)
 
 check:
-	@echo "Verifying altermime build...";
+	@echo "Verifying rlfe build...";
 	$(RLFE_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
 
 build: $(RLFE_NAME)-$(RLFE_VERSION)
