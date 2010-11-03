@@ -243,13 +243,16 @@ function() {
 /**
  * Sets the focus to the given object.
  * 
- * @param {HTMLInputElement|DwtControl} focusObj		the object to which to set focus
+ * @param {HTMLInputElement|DwtControl|string} focusObj		the object to which to set focus, or its ID
  */ 
 DwtKeyboardMgr.prototype.grabFocus =
 function(focusObj) {
 	if (!this.__enabled) { return; }
 	if (!this.__keyboardHandlingInited) {
 		return;
+	}
+	if (typeof focusObj == "string") {
+		focusObj = document.getElementById(focusObj);
 	}
 	if (!focusObj) return;
 

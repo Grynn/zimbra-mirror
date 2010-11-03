@@ -45,6 +45,10 @@ function() {
 	}
 	this._prefDialog = new EmailToolTipPrefDialog(this);
 
+	// support for showing address objects in the msg header as bubbles
+	this._isBubble = {};
+	this._bubbleClassName = "addrBubble";
+
 	this._subscriberZimlets = [];
 	this._preLoadImgs();
 };
@@ -110,6 +114,45 @@ function(ev) {
 			}
 		}
 	}
+};
+
+// create bubble for address in header
+EmailTooltipZimlet.prototype.generateSpan =
+function(html, idx, obj, spanId, context, options) {
+
+	if (options && options.addrBubbles) {
+		this._isBubble[spanId] = true;
+		var context = window.parentAppCtxt || window.appCtxt;
+		var contactsApp = context.getApp(ZmApp.CONTACTS);
+		var contact = contactsApp && contactsApp.getContactByEmail(obj.address); // contact in cache?
+		html[idx++] = "<span class='" + this._bubbleClassName + "' id='" + spanId + "'>";
+		if (contact && contact.isDL) {
+			// TODO: show clickable + for DL - waiting for fix for 52113
+		}
+		html[idx++] = obj.toString();
+		html[idx++] = "</span>";
+		return idx;
+	} else {
+		return ZmObjectHandler.prototype.generateSpan.apply(this, arguments);
+	}
+};
+
+EmailTooltipZimlet.prototype.getClassName =
+function(obj, context, spanId) {
+	return (this._isBubble[spanId]) ? this._bubbleClassName :
+				   					  ZmObjectHandler.prototype.getClassName.apply(this, arguments);
+};
+
+EmailTooltipZimlet.prototype.getHoveredClassName =
+function(obj, context, spanId) {
+	return (this._isBubble[spanId]) ? this._bubbleClassName :
+				   					  ZmObjectHandler.prototype.getHoveredClassName.apply(this, arguments);
+};
+
+EmailTooltipZimlet.prototype.getActiveClassName =
+function(obj, context, spanId) {
+	return (this._isBubble[spanId]) ? this._bubbleClassName :
+				   					  ZmObjectHandler.prototype.getActiveClassName.apply(this, arguments);
 };
 
 EmailTooltipZimlet.prototype._getHtmlContent =
