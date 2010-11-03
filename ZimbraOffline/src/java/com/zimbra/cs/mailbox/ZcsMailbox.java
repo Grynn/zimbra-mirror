@@ -725,10 +725,10 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         setConfig(null, VERSIONS_KEY, config);
     }
 
-    public boolean pushNewFolder(OperationContext octxt, int id) throws ServiceException {
+    public boolean pushNewFolder(OperationContext octxt, int id, boolean suppressRssFailure, ZimbraSoapContext zsc) throws ServiceException {
         if ((getChangeMask(octxt, id, MailItem.TYPE_FOLDER) & Change.MODIFIED_CONFLICT) == 0)
             return false;
-        return PushChanges.syncFolder(this, id);
+        return PushChanges.syncFolder(this, id, suppressRssFailure, zsc);
     }
     
     @Override

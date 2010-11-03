@@ -32,6 +32,8 @@ import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.dom4j.QName;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.BigByteBuffer;
 import com.zimbra.common.util.Constants;
@@ -65,6 +67,7 @@ import com.zimbra.cs.service.util.ItemIdFormatter;
 import com.zimbra.cs.session.PendingModifications.Change;
 import com.zimbra.cs.util.JMSession;
 import com.zimbra.cs.zclient.ZMailbox;
+import com.zimbra.soap.ZimbraSoapContext;
 
 public class PushChanges {
 	
@@ -183,8 +186,8 @@ public class PushChanges {
         return new PushChanges(ombx).sync(isOnRequest);
     }
 
-    public static boolean syncFolder(ZcsMailbox ombx, int id) throws ServiceException {
-        return new PushChanges(ombx).syncFolder(id);
+    public static boolean syncFolder(ZcsMailbox ombx, int id, boolean suppressRssFailure, ZimbraSoapContext zsc) throws ServiceException {
+        return new PushChanges(ombx).syncFolder(id, suppressRssFailure, zsc);
     }
     
     private boolean sync(boolean isOnRequest) throws ServiceException {
@@ -230,7 +233,7 @@ public class PushChanges {
                     if (changes.remove(folder.getType(), folder.getId())) {
                         switch (folder.getType()) {
                             case MailItem.TYPE_SEARCHFOLDER:  syncSearchFolder(folder.getId());  break;
-                            case MailItem.TYPE_FOLDER:        syncFolder(folder.getId());        break;
+                            case MailItem.TYPE_FOLDER:        syncFolder(folder.getId(), true, null);        break;
                         }
                     }
                 }
@@ -630,8 +633,9 @@ public class PushChanges {
         }
     }
 
-    private boolean syncFolder(int id) throws ServiceException {
-        Element request = new Element.XMLElement(MailConstants.FOLDER_ACTION_REQUEST);
+    private boolean syncFolder(int id, boolean suppressRssFailure, ZimbraSoapContext zsc) throws ServiceException {
+        QName elementName = MailConstants.FOLDER_ACTION_REQUEST;
+        Element request = zsc != null ? zsc.createElement(elementName) : new Element.XMLElement(elementName);
         Element action = request.addElement(MailConstants.E_ACTION).addAttribute(MailConstants.A_OPERATION, ItemAction.OP_UPDATE).addAttribute(MailConstants.A_ID, id);
 
         int flags, parentId;
@@ -647,7 +651,8 @@ public class PushChanges {
             int mask = ombx.getChangeMask(sContext, id, MailItem.TYPE_FOLDER);
             if ((mask & Change.MODIFIED_CONFLICT) != 0) {
                 // this is a new folder; need to push to the server
-                request = new Element.XMLElement(MailConstants.CREATE_FOLDER_REQUEST);
+                elementName = MailConstants.CREATE_FOLDER_REQUEST;
+                request = zsc != null ? zsc.createElement(elementName) : new Element.XMLElement(elementName);
                 action = request.addElement(MailConstants.E_FOLDER).addAttribute(MailConstants.A_DEFAULT_VIEW, MailItem.getNameForType(folder.getDefaultView()));
                 create = true;
             }
@@ -673,7 +678,7 @@ public class PushChanges {
                 id = createData.getFirst();
             }
         } catch (SoapFaultException sfe) {
-            if (folder.getUrl() != null) {
+            if (suppressRssFailure && folder.getUrl() != null) {
                 OfflineErrorUtil.reportError(ombx, folder.getId(), "failed to sync rss url ["+folder.getUrl()+"]", sfe);
                 return true;
             } else if (!sfe.getCode().equals(MailServiceException.NO_SUCH_FOLDER)) {

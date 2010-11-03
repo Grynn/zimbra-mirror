@@ -31,6 +31,7 @@ import com.zimbra.cs.account.offline.OfflineProvisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
+import com.zimbra.soap.ZimbraSoapContext;
 
 public class OfflineConvAction extends ConvAction {
     
@@ -71,9 +72,10 @@ public class OfflineConvAction extends ConvAction {
         ZcsMailbox ombx = (ZcsMailbox)mbox;
         context.put(OFFLINECONV_MBOX, ombx);
         
-        OperationContext octxt = getOperationContext(getZimbraSoapContext(context), context);
+        ZimbraSoapContext zsc = getZimbraSoapContext(context);
+        OperationContext octxt = getOperationContext(zsc, context);
         Folder folder = ombx.getFolderById(octxt, folderId);
-        if (ombx.pushNewFolder(octxt, folderId)) {
+        if (ombx.pushNewFolder(octxt, folderId, false, zsc)) {
             String newId = Integer.toString(ombx.getFolderByName(octxt, folder.getParentId(), folder.getName()).getId());
             act.addAttribute(MailConstants.A_FOLDER, toAcctId + ":" + newId);
         }

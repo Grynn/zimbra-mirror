@@ -69,8 +69,8 @@ public class OfflineFolderAction extends FolderAction {
         ZcsMailbox ombx = (ZcsMailbox) mbox;
         boolean traceOn = ombx.getOfflineAccount().isDebugTraceEnabled();
         boolean quietWhenOffline = !operation.equals(OP_GRANT) && !operation.equals(OP_REVOKE);
- 
-        boolean isNew = ombx.pushNewFolder(octxt, id);       
+
+        ombx.pushNewFolder(octxt, id, false, zsc);
         if (operation.equals(OP_REFRESH) || operation.equals(OP_IMPORT)) {
             // before doing anything, make sure all data sources are pushed to the server
             ombx.sync(true, traceOn);
