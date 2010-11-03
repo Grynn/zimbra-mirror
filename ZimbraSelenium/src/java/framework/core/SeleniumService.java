@@ -4,12 +4,17 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
+
+import sun.net.www.protocol.http.HttpURLConnection;
 
 import framework.util.CommandLine;
 import framework.util.HarnessException;
@@ -25,11 +30,135 @@ public class SeleniumService {
 	}
 	
 	private File userExtensionsFile = null;
+	
+	/**
+	 * Set the user-extensions.js file to be used by the selenium service
+	 * @param file
+	 */
 	public void setUserExtensions(File file) {
 		userExtensionsFile = file;
 	}
 
+	/**
+	 * Check http://service:port to determine if selenium is running
+	 * @return true if running, false otherwise
+	 * @throws HarnessException
+	 */
+	private boolean serviceIsServerRunning() throws HarnessException {
+		logger.debug("isServerRunning");
 
+		// Create the URL
+		URL url = null;
+		try {
+			URI uri = new URI("http", null, SeleniumServer, SeleniumPort, null, null, null);
+			url = uri.toURL();
+		} catch (URISyntaxException e) {
+			throw new HarnessException("Unable to build URL", e);
+		} catch (MalformedURLException e) {
+			throw new HarnessException("Unable to build URL", e);
+		}
+		
+		// Connect to the URL, if successful, then server is up
+		try {
+			
+			HttpURLConnection connection = null;
+			
+			try {
+				
+				connection = (HttpURLConnection)url.openConnection();
+				connection.setRequestMethod("GET");
+				connection.setDoOutput(true);
+				connection.setReadTimeout(10000);
+				connection.connect();
+				
+				int status = connection.getResponseCode();
+				logger.debug("Selenium Service returned " + status);
+
+			} finally {
+				if (connection != null ){
+					connection.disconnect();
+					connection = null;
+				}
+			}
+			
+		} catch (IOException e) {
+			logger.info("Selenium Service is not running at "+ url.toString());
+			return (false);
+		}
+		
+		logger.info("Selenium Service is running at "+ url.toString());
+		return (true);
+		
+
+	}
+	
+	/**
+	 * Do HTTP Get on http://service:port/selenium-server/driver?cmd=shutDownSeleniumServer
+	 * @throws HarnessException
+	 */
+	private void serviceShutDownSeleniumServer() throws HarnessException {
+		logger.debug("shutDownSeleniumServer");
+
+		// Create the URL
+		URL url = null;
+		try {
+			URI uri = new URI("http", null, SeleniumServer, SeleniumPort, "/selenium-server/driver", "cmd=shutDownSeleniumServer", null);
+			url = uri.toURL();
+		} catch (URISyntaxException e) {
+			throw new HarnessException("Unable to build URL", e);
+		} catch (MalformedURLException e) {
+			throw new HarnessException("Unable to build URL", e);
+		}
+		
+		// Connect to the URL, if successful, then server is up
+		try {
+			
+			HttpURLConnection connection = null;
+			BufferedReader reader = null;
+			
+			try {
+				
+				logger.info("shutDownSeleniumServer @ "+ url.toString());
+
+				connection = (HttpURLConnection)url.openConnection();
+				connection.setRequestMethod("GET");
+				connection.setDoOutput(true);
+				connection.setReadTimeout(10000);
+				connection.connect();
+				
+				reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				String line;
+				while ((line = reader.readLine()) != null ) {
+					logger.debug(line);
+				}
+
+			} finally {
+				if ( reader != null ) {
+					reader.close();
+					reader = null;
+				}
+				if (connection != null ){
+					connection.disconnect();
+					connection = null;
+				}
+				
+			}
+			
+		} catch (IOException e) {
+			logger.debug("Selenium Service threw IOException", e);
+		}
+		
+		// Wait for the service to shut down
+		for (int i = 0; i < 10; i++) {
+			logger.debug("Waiting for service to stop ...");
+			SleepUtil.sleep(1000);
+			if ( !serviceIsServerRunning() )
+				break;
+		}
+	
+	}
+	
+	
 	/**
 	 * Start the appropriate selenium server, as per config.properties settings
 	 * @throws HarnessException 
@@ -37,42 +166,27 @@ public class SeleniumService {
 	public void startSeleniumServer() throws HarnessException {
 		logger.info("SeleniumService.startSeleniumServer()");
 		
+		
 		try
 		{
 			if ( mode == SeleniumMode.Local ) {
 				
+				serviceShutDownSeleniumServer();
 				stopBrowsers();
 				
 				RemoteControlConfiguration rcConfig = new RemoteControlConfiguration();
 				rcConfig.setPort(SeleniumPort);
 				rcConfig.setUserExtensions(userExtensionsFile);
-				ss = new SeleniumServer(false, rcConfig);
-				
-				BufferedReader in = null;
-				try {
-
-					URI stopUri = new URI("http", null, SeleniumServer, SeleniumPort, "/selenium-server/driver", "cmd=shutDownSeleniumServer", null);
-					String s = stopUri.toString();
-					logger.debug("Connecting to "+ s);
-					in = new BufferedReader(new InputStreamReader(stopUri.toURL().openStream()));
-					if ( in.ready() )
-						logger.info("A Selenium Server was running already.  Attempting to kill and start then");
-						
-					String line;
-					while ((line = in.readLine()) != null)
-						logger.info(line);
-
-				} catch (Exception e) {
-					logger.debug("SeleniumServer was not running.  Ignoring.", e);
-				} finally {
-					if ( in != null )
-						in.close();
-				}
-				
-				// TODO: any way to detect that the server is ready?
-				SleepUtil.sleep(10000);
-				
+				ss = new SeleniumServer(false, rcConfig);				
 				ss.boot();
+
+				// Wait for the service to start
+				for (int i = 0; i < 10; i++) {
+					logger.info("Waiting for service to start ...");
+					SleepUtil.sleep(1000);
+					if ( serviceIsServerRunning() )
+						break;
+				}
 
 			}
 			
