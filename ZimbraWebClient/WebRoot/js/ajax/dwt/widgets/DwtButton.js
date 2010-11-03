@@ -880,7 +880,17 @@ function(ev) {
         button.isListenerRegistered(DwtEvent.SELECTION)) {
 		AjxImg.setImage(dropDown, button._dropDownHovImg);
     }
-
+	// bug fix 48266 IE hack, solution is similar to bug 36253
+	// Just rewrite the el's Child's className to trigger IE to render it
+	// In mouserOut, it seems the IE can render it automatically. 	
+	if(AjxEnv.isIE){
+	   	if(ev && ev.target && ev.target.firstChild){
+			var el = ev.target.firstChild;
+			var cname = el.className;
+			el.className = "";
+			el.className = cname;
+		} 
+	}    	
     ev._stopPropagation = true;
 };
 
