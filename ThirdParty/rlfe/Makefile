@@ -29,7 +29,7 @@ endif
 
 files	:= $(wildcard src/$(RLFE_NAME)-$(RLFE_VERSION).tgz)
 
-all: clean checksrc build check tar
+all: allclean checksrc build check tar
 
 checksrc:
 	$(if $(files), @echo "", exit 1)
