@@ -225,7 +225,7 @@ if [[ $PLAT == "UBUNTU"*"64" || $PLAT == "DEBIAN"*"64" ]]; then
 fi
 
 if [ x$RELEASE = "xmain" ]; then
-	LIBREQ="libncurses.$LIBEXT libz.$LIBEXT libbz2.$LIBEXT"
+	LIBREQ="libncurses.$LIBEXT libz.$LIBEXT libbz2.$LIBEXT libreadline.$LIBEXT"
 	HEADERREQ="ncurses.h zlib.h"
 else
 	LIBREQ="libncurses.$LIBEXT libz.$LIBEXT libltdl.$LIBEXT"
