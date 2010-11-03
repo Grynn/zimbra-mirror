@@ -305,6 +305,8 @@ function() {
 				browserVersion = parseFloat(token.substr(index + 9));
 			}
 		}
+		AjxEnv.browserVersion = browserVersion;
+
 		// Note: Opera and WebTV spoof Navigator. We do strict client detection.
 		AjxEnv.isNav 			= (beginsWithMozilla && !isSpoofer && !isCompatible && !AjxEnv.isOpera && !isWebTv && !isHotJava && !AjxEnv.isSafari);
 		AjxEnv.isIE				= (AjxEnv.isIE && !AjxEnv.isOpera);
@@ -341,6 +343,7 @@ function() {
 		AjxEnv.isSafari4up		= (AjxEnv.isSafari && browserVersion >= 4.0) || AjxEnv.isChrome;
 		AjxEnv.isSafari5up		= (AjxEnv.isSafari && browserVersion >= 5.0) || AjxEnv.isChrome;
 		AjxEnv.isDesktop2up		= (AjxEnv.isDesktop && browserVersion >= 2.0);
+		AjxEnv.isChrome7		= (AjxEnv.isChrome && browserVersion >= 7.0);
 
 		AjxEnv.browser = "[unknown]";
 		if (AjxEnv.isOpera) 				{	AjxEnv.browser = "OPERA";	}
@@ -401,6 +404,7 @@ function() {
 // code provided by webkit authors to determine if nightly browser
 AjxEnv.getWebkitVersion =
 function() {
+
 	var webkit_version;
 	var regex = new RegExp("\\(.*\\) AppleWebKit/(.*) \\((.*)");
 	var matches = regex.exec(navigator.userAgent);
@@ -412,9 +416,9 @@ function() {
 		// If minor is Not a Number (NaN) return an empty string
 		if (isNaN(minor)) minor = "";
 
-		webkit_version = { major:parseInt(bits[0]), minor:minor, is_nightly:is_nightly};
+		webkit_version = {major:parseInt(bits[0]), minor:minor, is_nightly:is_nightly};
 	}
-	return {major: webkit_version['major'], minor: webkit_version['minor'], is_nightly: webkit_version['is_nightly']};
+	return webkit_version || {};
 };
 
 

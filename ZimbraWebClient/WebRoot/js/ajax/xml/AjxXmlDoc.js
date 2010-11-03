@@ -303,9 +303,20 @@ function() {
 				this.removeChild(this.lastChild);
 			}
 			var len = domObj.childNodes.length;
-			for (var i = 0; i < len; i++) {
-				var importedNode = this.importNode(domObj.childNodes[i], true);
-				this.appendChild(importedNode);
+			if (AjxEnv.isChrome7) {
+				// workaround for http://code.google.com/p/chromium/issues/detail?id=54969
+				var frag = this.createDocumentFragment();
+				for (var i = 0; i < len; i++) {
+					var importedNode = this.importNode(domObj.childNodes[i], true);
+					frag.appendChild(importedNode);
+				}
+				this.appendChild(frag);
+			}
+			else {
+				for (var i = 0; i < len; i++) {
+					var importedNode = this.importNode(domObj.childNodes[i], true);
+					this.appendChild(importedNode);
+				}
 			}
 		}
 		
@@ -316,26 +327,10 @@ function() {
 			}
 			Node.prototype.__defineGetter__("xml", _NodeGetXml);
 		}
-	}/*else if (AjxEnv.isSafari) {												XXX: Safari3 seems to support DOMParser native :)
-		// add loadXML to Document's API
-		document.__proto__.loadXML = function(str) {
-			var domParser = new DOMParser();
-			var domObj = domParser.parseFromString(str, "text/xml");
-			// remove old child nodes since we recycle DOMParser and append new
-			while (this.hasChildNodes()) {
-				this.removeChild(this.lastChild);
-			}
-			var len = domObj.childNodes.length;
-			for (var i = 0; i < len; i++) {
-				var importedNode = this.importNode(domObj.childNodes[i], true);
-				this.appendChild(importedNode);
-			}
-		}
-	}*/
-
+	}
+	
 	AjxXmlDoc._inited = true;
 };
-
 
 AjxXmlDoc.prototype.set =
 function(name, value, element) {
