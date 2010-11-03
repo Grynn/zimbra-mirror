@@ -579,8 +579,16 @@ function(ev) {
 		this._chngPwdDlg = new ZaAccChangePwdXDlg(ZaApp.getInstance().getAppCtxt().getShell(), "400px","90px");
 		var item = this._contentView.getSelection()[0];
 		item.loadEffectiveRights("id", item.id, false);
-		this._chngPwdDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._changePwdOKCallback, this, item);				
-		this._chngPwdDlg.setTitle(ZaMsg.CHNP_Title + " (" + item.name + ")");
+		this._chngPwdDlg.registerCallback(DwtDialog.OK_BUTTON, ZaAccountListController._changePwdOKCallback, this, item);	
+		if (item.name != undefined && item.name.length > 80) {
+                        this._chngPwdDlg.setTitle(ZaMsg.CHNP_Title + " (" + item.name.substring(1,80) + "..." + ")");
+                } else {
+                      if (item.name != undefined) {
+                        this._chngPwdDlg.setTitle(ZaMsg.CHNP_Title + " (" + item.name + ")");
+                      } else {
+                        this._chngPwdDlg.setTitle(ZaMsg.CHNP_Title);
+                      }
+                }
 		var obj = new Object();
 		obj[ZaAccount.A2_confirmPassword]="";
 		obj.attrs = {};
