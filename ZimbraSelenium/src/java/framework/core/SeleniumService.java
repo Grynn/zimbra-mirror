@@ -24,8 +24,12 @@ public class SeleniumService {
 		Local, Remote, Grid, SauceLabs
 	}
 	
+	private File userExtensionsFile = null;
+	public void setUserExtensions(File file) {
+		userExtensionsFile = file;
+	}
 
-	
+
 	/**
 	 * Start the appropriate selenium server, as per config.properties settings
 	 * @throws HarnessException 
@@ -41,7 +45,7 @@ public class SeleniumService {
 				
 				RemoteControlConfiguration rcConfig = new RemoteControlConfiguration();
 				rcConfig.setPort(SeleniumPort);
-				rcConfig.setUserExtensions(new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/framework/lib/user-extensions.js"));
+				rcConfig.setUserExtensions(userExtensionsFile);
 				ss = new SeleniumServer(false, rcConfig);
 				
 				BufferedReader in = null;

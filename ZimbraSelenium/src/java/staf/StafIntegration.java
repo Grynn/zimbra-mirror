@@ -2,7 +2,12 @@ package staf;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -24,6 +29,7 @@ import com.ibm.staf.service.STAFCommandParser;
 import com.ibm.staf.service.STAFServiceInterfaceLevel30;
 
 import framework.core.ExecuteHarnessMain;
+import framework.core.SeleniumService;
 import framework.util.HarnessException;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -58,7 +64,8 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     private String optionHalt = "halt";
     
     private static final String defaultLog4jProperties = "/tmp/log4j.properties";
-    
+	public static final String defaultUserExtensionsURI		= "http://zqa-004.eng.vmware.com/files/user-extensions.js";
+
     // 
     private boolean serviceIsRunning = false;
     
@@ -153,11 +160,11 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			
 			// Set values
 			configProperties.setProperty("server", valueServer);
-			configProperties.setProperty("browser", "firefox");
+			configProperties.setProperty("browser", "firefox"); // TODO
 
-			configProperties.setProperty("seleniumMode", "Remote");
+			configProperties.setProperty("seleniumMode", "Local");
 			configProperties.setProperty("serverName", "localhost");
-			configProperties.setProperty("serverPort", "" + StafSeleniumServer.defaultSeleniumServerPort);
+			configProperties.setProperty("serverPort", "4444");
 
 			// Save the temp file in the log folder for the records
 			String filename = configProperties.save(valueLog);
@@ -217,8 +224,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			
 			serviceIsRunning = true;
 			
-			StafSeleniumServer.stopBrowsers();
-		
+					
 	        // Create the execution object
 	        ExecuteHarnessMain harness = new ExecuteHarnessMain();
 	        
@@ -232,6 +238,9 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	        // Execute!
 			try {
 				
+				// Point to the user-extensions.js
+				SeleniumService.getInstance().setUserExtensions(getUserExtensionsFile(defaultUserExtensionsURI));
+
 				String response = harness.execute();
 		        resultString.append(response);
 		        
@@ -253,6 +262,50 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 
 	}
 	
+	private File getUserExtensionsFile(String uri) throws HarnessException {
+		
+		
+		String filename = "/tmp/user-extensions.js";
+		File file = new File(filename);
+
+		try {
+
+			OutputStream out = null;
+			InputStream in = null;
+
+			try {
+
+				// Open the OutputStream for writing
+				out = new FileOutputStream(file);
+
+				// Open the URL for reading
+				URL u = new URL(uri);
+				URLConnection uc = u.openConnection();
+				in = uc.getInputStream();
+
+				// Stream the URL to the File
+				byte[] buffer = new byte[1024];
+				int length;
+				while ((length=in.read(buffer))>0) {
+					out.write(buffer, 0 , length);
+				}
+
+			} finally {
+
+				// Remember to close pointers.
+				if ( in != null )			in.close();
+				if ( out != null )			out.close();
+				
+			}
+			
+		} catch (IOException e) {
+			throw new HarnessException("Unable to read user-extensions from "+ uri, e);
+		}
+
+		return (file);
+	}
+	
+
 	private STAFResult handleQuery(RequestInfo info) {
 		return (new STAFResult(STAFResult.JavaError, "handleQuery: Implement me!"));
 	}
@@ -371,12 +424,6 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 		// Now, do the Selenium specific setup ...
         BasicConfigurator.configure();
         
-        try {
-			StafSeleniumServer.getInstance().startSeleniumServer();
-		} catch (HarnessException e) {
-			return (new STAFResult(STAFResult.JavaError, e.getMessage()));
-		}
-
 		
 		// Now, the service is ready ...
 		mLog.info("STAF Selenium: Ready ...");
@@ -388,7 +435,6 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	public STAFResult term() {
         mLog.info("StafIntegration: term ...");
 
-		StafSeleniumServer.getInstance().stopSeleniumServer();
 
         try
         {
