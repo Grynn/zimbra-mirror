@@ -33,7 +33,7 @@ exit(0);
 sub addDumpsterTables($) {
   my ($DATABASE_NAME) = @_;
   
-  Migrate::log("Adding dumpster tables to $DATABASE_NAME.");
+  Migrate::logSql("Adding dumpster tables to $DATABASE_NAME.");
 
   my $sql = <<ADD_TABLES_EOF;
 
