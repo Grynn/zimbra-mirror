@@ -1310,7 +1310,7 @@ function(htmlEl,html){
  */
 Dwt.setFavIcon =
 function(iconURL) {
-	if (AjxEnv.isIE) { return; } // Unsupported.
+	if (AjxEnv.isIE || AjxEnv.isFirefox) { return; } // Unsupported on IE. Too CPU heavy on FF.
 
 	// Look for an existing fav icon to modify.
 	var favIcon = null;
@@ -1331,7 +1331,7 @@ function(iconURL) {
 		}
 	}
 	// If available, change the existing favicon.
-	// (Need to remove/add to dom in order to force a redraw.)   
+	// (Need to remove/add to dom in order to force a redraw.)
 	if (favIcon) {
 		favIcon.href=iconURL;
 		var parent = favIcon.parentNode;
