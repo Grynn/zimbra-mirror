@@ -19,6 +19,8 @@ INSTALL_PREFIX := $(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)
 
 RL_PATCH	:= 
 
+BUILD_TYPE := linux
+
 ifeq ($(BUILD_PLATFORM), )
 	BUILD_PLATFORM := "UNKNOWN"
 endif
@@ -35,9 +37,13 @@ ifeq ($(BUILD_PLATFORM), F13_64)
 	RL_PATCH	:= patch -g0 -p1 < ../patches/rlfe.patch;
 endif
 
+ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
+	BUILD_TYPE := mac
+endif
+
 files	:= $(wildcard src/$(RLFE_NAME)-$(RLFE_VERSION).tgz)
 
-all: allclean checksrc build check tar
+all: allclean checksrc build_$(BUILD_TYPE) check tar
 
 checksrc:
 	$(if $(files), @echo "", exit 1)
@@ -46,7 +52,7 @@ check:
 	@echo "Verifying rlfe build...";
 	$(RLFE_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
 
-build: $(RLFE_NAME)-$(RLFE_VERSION)
+build_linux: $(RLFE_NAME)-$(RLFE_VERSION)
 	(cd $(RLFE_NAME)-$(RLFE_VERSION); \
 	patch -g0 -p1 < ../patches/config-h.patch; \
 	patch -g0 -p1 < ../patches/extern.patch; \
@@ -57,6 +63,13 @@ build: $(RLFE_NAME)-$(RLFE_VERSION)
 	$(MAKE); \
 	mkdir -p $(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin; \
 	cp -pf rlfe $(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/)
+	(cd $(ZIMBRA_HOME); ln -s $(RLFE_NAME)-$(RLFE_VERSION) rlfe)
+
+build_mac:
+	mkdir -p $(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin
+	echo "#!/bin/bash" >$(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
+	echo 'exec "$$@"' >>$(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
+	chmod a+rx $(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
 	(cd $(ZIMBRA_HOME); ln -s $(RLFE_NAME)-$(RLFE_VERSION) rlfe)
 
 $(RLFE_NAME)-$(RLFE_VERSION): 
