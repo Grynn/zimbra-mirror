@@ -27,6 +27,10 @@ ifeq ($(BUILD_PLATFORM), UBUNTU10_64)
 	RL_PATCH	:= patch -g0 -p1 < ../patches/rlfe.patch;
 endif
 
+ifeq ($(BUILD_PLATFORM), RHEL6_64)
+	RL_PATCH	:= patch -g0 -p1 < ../patches/rlfe.patch;
+endif
+
 files	:= $(wildcard src/$(RLFE_NAME)-$(RLFE_VERSION).tgz)
 
 all: allclean checksrc build check tar
