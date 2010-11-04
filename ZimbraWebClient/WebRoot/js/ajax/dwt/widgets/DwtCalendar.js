@@ -274,6 +274,9 @@ function(date, skipNotify, forceRollOver, dblClick) {
 	//if (this._selectionMode == DwtCalendar.WORK_WEEK && !this._currWorkingDays[date.getDay()])
 	//	return false;
 
+	if(!date) {
+		date = new Date();
+	}
 	var newDate = new Date(date.getTime());
 	var oldDate = this._date;
 
