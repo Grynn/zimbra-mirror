@@ -557,13 +557,8 @@ ZaResourceXFormView.myXFormModifier = function(xFormObject, entry) {
                         visibilityChangeEventSources:[ZaResource.A_zimbraCalResType]
                     }
                 ]},
-                {type:_ZAGROUP_, items:[
-                    {ref:ZaResource.A_street, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Street,label:ZaMsg.NAD_Street, labelLocation:_LEFT_, width:defaultWidth},
-                    {ref:ZaResource.A_city, type:_TEXTFIELD_, msgName:ZaMsg.NAD_city ,label:ZaMsg.NAD_city, labelLocation:_LEFT_, width:defaultWidth},
-                    {ref:ZaResource.A_state, type:_TEXTFIELD_, msgName:ZaMsg.NAD_state ,label:ZaMsg.NAD_state, labelLocation:_LEFT_, width:defaultWidth},
-                    {ref:ZaResource.A_country, type:_TEXTFIELD_, msgName:ZaMsg.country ,label:ZaMsg.NAD_country, labelLocation:_LEFT_, width:defaultWidth},
-                    {ref:ZaResource.A_zip, type:_TEXTFIELD_, msgName:ZaMsg.zip ,label:ZaMsg.NAD_zip, labelLocation:_LEFT_, width:defaultWidth}
-                ]}
+                {type:_ZAGROUP_, items:ZaAccountXFormView.getAddressFormItem()
+                 }
             ]
         };
         cases.push(case2);
