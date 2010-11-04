@@ -10,6 +10,7 @@ import projects.ajax.ui.PageLogin;
 
 import framework.util.HarnessException;
 import framework.util.ZAssert;
+import framework.util.ZimbraSeleniumProperties;
 
 public class LoginScreen extends AjaxCommonTest {
 
@@ -29,11 +30,13 @@ public class LoginScreen extends AjaxCommonTest {
 		String username = app.zPageLogin.sGetText(PageLogin.displayedusername);
 		ZAssert.assertEquals(username, app.getLocaleString("usernameLabel"), "Verify the displayed label 'username'");
 		
+		// TODO: add other displayed text
 
 	}
 	
+	
 	@Test(	description = "Verify the copyright on the login screen contains the current year",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void LoginScreen02() {
 		
 		Calendar calendar = new GregorianCalendar();
@@ -46,5 +49,36 @@ public class LoginScreen extends AjaxCommonTest {
 		
 
 	}
+
+	@Test(	description = "Verify initial focus on the login screen should be in username",
+			groups = { "functional" })
+	public void LoginScreen03() throws HarnessException {
+		
+		// Get to the login screen
+		// TODO: probably need to watch out for previously typed text
+		// TODO: probably need to watch out for browser cache
+		// TODO: maybe it is better just to reload the URL?
+		app.zPageLogin.navigateTo();
+		
+		// Type a unique string into the browser
+		String value = "foo" + ZimbraSeleniumProperties.getUniqueString();
+		app.zPageLogin.zTypeCharacters(value);
+		
+		// Get the value of the username field
+		String actual = app.zPageLogin.sGetValue(PageLogin.username);
+		
+		// Verify typed text and the actual text match
+		ZAssert.assertEquals(actual, value, "Verify the username has initial focus");
+		
+	}
+
+	@Test(	description = "Verify tab order in the login screen (username, password, enter)",
+			groups = { "functional" })
+	public void LoginScreen04() throws HarnessException {
+		
+		throw new HarnessException("implement me!");
+		
+	}
+
 
 }

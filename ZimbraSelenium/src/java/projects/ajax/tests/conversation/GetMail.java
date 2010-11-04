@@ -1,4 +1,4 @@
-package projects.ajax.tests.mail;
+package projects.ajax.tests.conversation;
 
 import java.util.List;
 
@@ -20,7 +20,14 @@ public class GetMail extends AjaxCommonTest {
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
-		super.startingAccount = null;
+
+		// Make sure we are using an account with conversation view
+		ZimbraAccount account = new ZimbraAccount();
+		account.provision();
+		account.authenticate();
+		account.modifyPreference("zimbraPrefGroupMailBy", "conversation");
+			
+		super.startingAccount = account;		
 		
 	}
 	
@@ -48,9 +55,9 @@ public class GetMail extends AjaxCommonTest {
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarGetMail();
-		
+				
 		// Get the list of messages
-		List<ConversationItem> conversations = app.zPageMail.getConversationList();
+		List<ConversationItem> conversations = app.zPageMail.zListGetConversations();
 		ZAssert.assertNotNull(conversations, "Verify the conversation list exists");
 
 		boolean found = false;
