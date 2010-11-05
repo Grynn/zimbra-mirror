@@ -1,0 +1,216 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="用户界面功能" >
+  <topic name="用户界面功能和快捷键" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="用通配符搜索" >
+  <topic name="使用搜索功能" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="电子邮件" >
+  <topic name="电子邮件的组成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
+</key>
+<key name="电子邮件通知" >
+  <topic name="设置桌面提示" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="离线工作" >
+  <topic name="离线工作" url="Zdesktop/z-Working_Offline.htm" />
+</key>
+<key name="离线，工作" >
+  <topic name="离线工作" url="Zdesktop/z-Working_Offline.htm" />
+</key>
+<key name="私人效率手册事件" >
+  <topic name="将约会标记为私人" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="私人约会" >
+  <topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="移动" >
+  <topic name="在文件夹间移动邮件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="在文件夹间移动邮件" >
+    <topic name="}}}在文件夹间移动邮件{{{" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="笔记本页面" >
+  <topic name="创建新页面" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="筹划会议" >
+  <topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="签名" >
+  <topic name="使用签名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="签名中的 URL" >
+  <topic name="使用签名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="签名中的图像" >
+  <topic name="使用签名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="约会" >
+  <topic name="关于约会、会议和活动事项" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="约会，quickadd" >
+  <topic name="}}}使用 QuickAdd 创建约会{{{" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="编辑联系人资料" >
+  <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="编辑邮件夹共享许可" >
+  <topic name="撤销共享文件夹的访问权" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="联系人" >
+  <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
+  <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
+  <key name="编辑" >
+    <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="联系人组" >
+  <topic name="创建联系人组列表" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="联系人资料，导入" >
+  <topic name="导入联系人" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="联系人，在列表中还原删除的联系人" >
+  <topic name="删除联系人" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="联系人，在格式中创建自定义字段" >
+  <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="联系人，打印列表" >
+  <topic name="打印联系人资料" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="自动完成地址" >
+  <topic name="使用地址查询" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="自动将邮件移动到文件夹" >
+  <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="自动添加签名" >
+  <topic name="使用签名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="自定义文件夹" >
+  <topic name="创建自定义文件夹" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="自定义联系人字段" >
+  <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="表格，添加到文档页面" >
+  <topic name="添加表格到笔记本页面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="规则，过滤" >
+  <topic name="过滤邮件" url="filters/filtering_your_messages.htm" />
+  <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="角色" >
+  <topic name="邮箱身份" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="订阅 RSS 源" >
+  <topic name="订阅 RSS/Atom 源" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="设置转发地址" >
+  <topic name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="身份" >
+  <topic name="邮箱身份" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="转发" >
+  <topic name="转发邮件" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="转发邮件" >
+  <topic name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="过滤功能，使用方法" >
+  <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="过滤条件" >
+  <topic name="支持的过滤条件与操作" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="过滤规则，现有文件夹" >
+  <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="过滤邮件" >
+  <topic name="过滤邮件" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="还原" >
+  <topic name="还原删除的邮件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="删除的邮件" >
+    <topic name="还原删除的邮件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="选单，右键单击" >
+  <topic name="右键选单" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="选项，休假讯息" >
+  <topic name="休假讯息" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="选项，新邮件通知" >
+  <topic name="新邮件通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="通配符" >
+  <topic name="通配符" url="filters/wildcards.htm" />
+</key>
+<key name="通配符，在搜索中使用" >
+  <topic name="使用搜索功能" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="邀请，回应" >
+  <topic name="回应邀请函" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="邮件" >
+  <topic name="阅读邮件" url="reading_mail/reading_mail.htm" />
+  <key name="阅读" >
+    <topic name="阅读邮件" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="邮件归档" >
+  <topic name="清除邮件" url="reading_mail/archiving_old_messages.htm" />
+  <topic name="邮件归档" url="Zdesktop/Archiving_your_email_messages.htm" />
+</key>
+<key name="邮件草稿" >
+  <topic name="保存邮件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="邮件视图" >
+  <topic name="}}}管理电子邮件视图{{{" url="conversations/conversation_list_view.htm" />
+  <topic name="管理电子邮件视图" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="邮件通知" >
+  <topic name="新邮件通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="邮件，休假" >
+  <topic name="休假讯息" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="邮件，回执" >
+  <topic name="请求回执" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+</key>
+<key name="邮箱身份" >
+  <topic name="邮箱身份" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="重发" >
+  <topic name="右键选单" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="阅读窗格" >
+  <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="阅读窗格视图" >
+  <topic name="管理电子邮件视图" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="阅读窗格，开启或关闭" >
+  <topic name="}}}在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="附件" >
+  <topic name="打开附加文件" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="附加" >
+  <topic name="将文件附加到邮件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="页面，文档" >
+  <topic name="创建新页面" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="预览窗格，开关" >
+  <topic name="}}}在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="首选项，“阅读”窗格视图" >
+  <topic name="}}}在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+
+</indexdata>

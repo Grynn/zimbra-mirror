@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>支持的过滤条件与操作</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("}}}使用过滤器{{{\n}}}支持的过滤条件与操作{{{");
+addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
+AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
+document.write("<a href=\"how_filtering_works.htm\">}}}使用过滤器{{{<\/a> &gt; }}}支持的过滤条件与操作{{{<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_Mail_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">
+			 }}}关于常见的问题以及故障排除方法，请参见“Zimbra Desktop 常见问题”{{{
+</a></p></td>
+		</tr>
+	</table>
+</div>
+
+
+<h1>支持的过滤条件与操作</h1>
+<p>过滤规则对大小写不敏感，意即规则将忽略大小写。</p>
+<h3>条件</h3>
+<p>比较字段包括下列：</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>发件人。}}}</b></span>在电子邮件的&ldquo;发件人:&rdquo;{{{}}}标题中使用此字段来指定姓名。{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>收件人。}}}</b></span>与&ldquo;收件人&rdquo;相同，但在&ldquo;收件人:&rdquo;{{{}}}标题中查找指定的姓名。{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>}}}抄送。{{{}}}</b></span>与&ldquo;收件人&rdquo;相同，但在&ldquo;抄送:&rdquo;{{{}}}标题中查找指定的姓名。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>收件人或抄送</b></span>。{{{}}}与&ldquo;发件人&rdquo;相同，但在&ldquo;收件人&rdquo;和&ldquo;抄送&rdquo;两个标题中查找指定的姓名。{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>主题。</b></span>寻找邮件的&ldquo;主题&rdquo;标题。</p></li>
+</ul>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>标有名字的标题。}}}</b></span>如果选择了此选项，则比较运算符（&ldquo;包含&rdquo;部分）的前面将显示额外的文本输入字段。{{{此选项用于指定邮件标题。}}}您不仅可以指定&ldquo;收件人:&rdquo;{{{}}}或&ldquo;发件人:&rdquo;{{{}}}的标准字段，而且可以指定&ldquo;日期&rdquo;、&ldquo;回复人&rdquo;或邮件标题中可能包括的其他自定义字段。{{{}}}您可以使用此选项过滤掉标题&ldquo;不合规格&rdquo;的邮件，也就是说，其中未能包含在一般邮件中都应当有的某些标准信息。{{{}}}有时候，自动生成的垃圾邮件不包含&ldquo;发件人&rdquo;或&ldquo;回复人&rdquo;字段等信息。{{{然后可用第二个文本字段（紧跟在比较运算符右面的字段）指定要检测的标题。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>大小。</b></span>此条件可用来选择那些大于或小于指定大小的邮件。邮件的大小包括所包含的任何文件附件。您可用此条件滤除过大的邮件。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>日期。</b></span>此选项可用来限定在指定日期之前或之后发送的邮件。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>正文。}}}</b></span>&ldquo;正文&rdquo;的选项有&ldquo;包含&rdquo;/&ldquo;不包含&rdquo;，这使您能够在邮件正文中指定匹配词语。{{{您不能对附件中的词语进行过滤。</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>读信回条。</b></span><span>可以过滤掉读信回条邮件。</span>{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>附件。</b></span>  您可用过滤条件检测邮件中是否包含附件。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>其中的地址。</b></span>  检测联系人资料中是否存在某个地址。下一个字段用于指定哪个地址。</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>效率手册邀请</b></span>。{{{}}}您可过滤掉与效率手册相关的邮件。{{{</p></li>
+</ul>
+<p>有以下比较运算符：</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>完全相符/不完全相符</b></span>。用于指定完全相符项。}}}例如，如果指定<span style="font-weight: bold;"><b>主题</b></span><span style="font-weight: bold;"><b>完全相符</b></span>，则与 <span style="font-weight: bold;"><b>Banana</b></span> 相符的将只有&ldquo;Banana&rdquo;，&ldquo;Bananas&rdquo;和&ldquo;A truck full of banana leaves&rdquo;都不与之相符。{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>包含/不包含</b></span>。}}}用于指定主题行必须包含的某个指定的子串。{{{}}}例如，如果指定<span style="font-weight: bold;"><b>主题中包含 Banana</b></span>，则&ldquo;I'm going bananas&rdquo;是相符项。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>符合通配符/不符合通配符条件</b></span>。{{{通配符 * 是用于邮件过滤比较字段的字符，代表过滤器中的一个或多个任意字符。}}}例如，如果指定主题与&ldquo;banana*&rdquo;匹配，则&ldquo;bananas&rdquo;或&ldquo;banana-leaf casserole&rdquo;都是匹配项，但&ldquo;my banana-leaf casserole&rdquo;则是不匹配项。{{{</p></li>
+</ul>
+<h3>操作项</h3>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>保留在收件箱。</b></span>  将邮件保存在收件箱。如果没有任何过滤规则匹配某个邮件，则采取此默认操作。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>归档到文件夹。</b></span>  将邮件移至指定的文件夹。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>丢弃。</b></span>删除邮件，而且不传递。被丢弃邮件不在任何文件夹中，即便是&ldquo;已删除邮件&rdquo;文件夹。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>转发</b></span>。}}}将邮件转发到指定的地址。{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>标记。</b></span> 选择<span style="font-weight: bold;"><b>为已读</b></span>或<span style="font-weight: bold;"><b>已打标记</b></span>。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>标记使用。</b></span> 可用选定的标记给匹配的邮件打标记。</p></li>
+</ul>
+<h3>多重操作项</h3>
+<p>}}}您可以创建包含多重操作项的过滤规则。{{{}}}您规则中的组合操作项可解释为：{{{</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>丢弃。}}}</b></span>如果与其他操作组合，将忽略丢弃并执行其他操作项。{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>归档到文件夹。}}}</b></span>多重&ldquo;归档到&rdquo;操作项可使多个邮件副本保存到不同的文件夹中。{{{如果指定的文件夹不存在，则将邮件存入收件箱。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>标记/标示。</b></span> 这些操作项适用于从最近执行的操作项返回的邮件。}}}比如，在多重&ldquo;归档到&rdquo;操作项情况下，这可使某些存储的邮件副本无标记，而另一些则有标记。{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>保留在收件箱。}}}</b></span>虽然可指定多重&ldquo;保留&rdquo;操作项，但只有一个邮件副本会存入收件箱。{{{</p></li>
+	<li class="p"><p style="font-weight: bold;">转发地址。<span  	 style="font-weight: normal;">邮件被转发到指定的地址。</span></p></li>
+</ul>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>
