@@ -1,0 +1,157 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<resource>
+  <element name="Hide" value="Nascondi" />
+  <element name="Prev" value="&lt;&lt;" />
+  <element name="PrintThisCategory" value="Stampa questa categoria" />
+  <element name="AboutBoxHelpID" value="ID guida:" />
+  <element name="Logo/Author" value="Prodotto da" />
+  <element name="RSSReadLabel" value="Letto" />
+  <element name="RSSUnReadLabel" value="Non letto" />
+  <element name="NoUpdatePresent" value="Nessun aggiornamento disponibile" />
+  <element name="SyncToc" value="SyncToc" />
+  <element name="Next" value="&gt;&gt;" />
+  <element name="FavoriteDeleteTopic" value="Elimina" />
+  <element name="PreferenceDlgShowBreadCrumb" value="Mostra percorso di navigazione" />
+  <element name="CommentBoxSendServerMessage" value="Commenti inviati alla posizione condivisa" />
+  <element name="CommentBoxShowReviewerMenu" value="Revisore" />
+  <element name="CommentBoxShowCommentButton" value="Mostra" />
+  <element name="CommentBoxSortCommentButton" value="Ordina" />
+  <element name="OpenInBrowser" value="Apri nel browser" />
+  <element name="DownloadingUpdate" value="Download degli aggiornamenti in corso..." />
+  <element name="OpenInNewTab" value="Apri in una nuova scheda" />
+  <element name="IndexSearchText" value="Immettete le parole chiave da cercare" />
+  <element name="ViewerDialogCancelButton" value="Annulla" />
+  <element name="ViewerDialogYesButton" value="Yes" />
+  <element name="CommentBoxInvalidXML" value="File XML non valido" />
+  <element name="CommentBoxDeleteCommentButton" value="Elimina" />
+  <element name="Seperate" value="|" />
+  <element name="LoadingNewTabMsg" value="Caricamento in corso..." />
+  <element name="AboutBoxDialogTitle" value="Informazioni su" />
+  <element name="PreferenceBoxDialogTitle" value="Preferenze" />
+  <element name="PreferenceDlgCheckForUpdate" value="Verifica la presenza di aggiornamenti" />
+  <element name="CommentBoxCommentTitle" value="Commenti" />
+  <element name="CommentBoxFileError" value="Errore di accesso al file di commenti condiviso" />
+  <element name="CommentBoxShowTopicMenu" value="Argomento" />
+  <element name="MarkAsRead" value="Contrassegna come letto" />
+  <element name="CloseAppButton" value="Chiudi" />
+  <element name="Contents" value="Argomenti" />
+  <element name="PrintAlertTitle" value="Stampa" />
+  <element name="SearchTextInputToolTip" value="Immettete il testo da cercare" />
+  <element name="AddToFavoriteMenuItem" value="Aggiungi ai collegamenti" />
+  <element name="PrintSequence" value="Sequenza di stampa" />
+  <element name="AboutButtonTitle" value="Informazioni su" />
+  <element name="PreferenceDialogCommentsDeleteMsg" value="Eliminare tutti i commenti?" />
+  <element name="PreferenceDlgAutoUpdateContent" value="Aggiorna automaticamente il contenuto" />
+  <element name="PreferenceDlgReviewerName" value="Nome revisore" />
+  <element name="CommentBoxAddCommentButton" value="Aggiungi" />
+  <element name="CommentBoxSendRcvCommentButtonToolTip" value="Invia e riceve i commenti" />
+  <element name="CommentBoxAddCommentHereText" value="Aggiungi commenti qui" />
+  <element name="AddNewFavoriteMenu" value="Aggiungi collegamento" />
+  <element name="Search" value="Cerca" />
+  <element name="Glossary" value="Glossario" />
+  <element name="Disabled Prev" value="&lt;&lt;" />
+  <element name="PrintThisPage" value="Stampa questa pagina" />
+  <element name="AboutBoxVersionID" value="ID versione:" />
+  <element name="PreferenceDialogCommentTabTitle" value="Commenti" />
+  <element name="CommentBoxSyncMessage" value="Invia/ricevi per i commenti completati" />
+  <element name="CommentBoxShowCommentButtonToolTip" value="Mostra i commenti in base a" />
+  <element name="CommentBoxSortCommentButtonToolTip" value="Ordina i commenti in base a" />
+  <element name="NewBookmarkName" value="Nome collegamento" />
+  <element name="PreferenceDlgDeleteAllComments" value="Elimina tutti i commenti" />
+  <element name="EditOption" value="Modifica" />
+  <element name="PreferenceDialogBrowseButtonTitle" value="Sfoglia" />
+  <element name="PreferenceDlgChkCommentLocation" value="Utilizza posizione predefinita per la sincronizzazione dei commenti" />
+  <element name="PreferenceDlgCommentSyncLocation" value="Posizione cartella:" />
+  <element name="Disabled Next" value="&gt;&gt;" />
+  <element name="SearchResultDefaultBookmark" value="Risultati della ricerca di " />
+  <element name="FavoriteDisplayTopic" value="Visualizza" />
+  <element name="FavoriteRenameTopic" value="Rinomina" />
+  <element name="PreferenceDlgOpenInNewTab" value="Apri gli argomenti della guida in una nuova scheda" />
+  <element name="PreferenceDlgShowBrowseSequence" value="Mostra sequenza di navigazione" />
+  <element name="NewRSSFeedURL" value="URL feed RSS:" />
+  <element name="NoUpdateLocationSpecified" value="Posizione di aggiornamento non presente" />
+  <element name="UpdateAvailable" value="Aggiornamento disponibile. Eseguire ora l'aggiornamento?" />
+  <element name="GlossaryDefinitionBoxTitle" value="Definizione del glossario" />
+  <element name="FavoriteDeleteButtonTitle" value="Elimina" />
+  <element name="CommentBoxCommentsAddEmptyError" value="Impossibile aggiungere commenti vuoti" />
+  <element name="FavoriteInvalidNameError" value="Nome non valido" />
+  <element name="ErrorInDownloadingUpdate" value="Si è verificato un errore durante il download" />
+  <element name="InstallationStarted" value="Avvio dell'installazione in corso..." />
+  <element name="PreferenceDlgCheckUpdateButton" value="Verifica ora" />
+  <element name="CommentBoxSaveXMLFileDlg" value="Salva file XML dei commenti" />
+  <element name="CommentBoxAddCommentButtonToolTip" value="Attiva/disattiva il riquadro dei commenti" />
+  <element name="CommentBoxSendRcvCommentButton" value="Invia e ricevi" />
+  <element name="NewRSSFeedName" value="Nome feed RSS:" />
+  <element name="MinimizeAppButton" value="Riduci a icona" />
+  <element name="NewBookmarkURL" value="URL collegamento" />
+  <element name="GenericDeleteMsg" value="Eliminare le voci selezionate?" />
+  <element name="ViewerDialogOKButton" value="OK" />
+  <element name="PreferenceDialogAllCommentsDeleted" value="Tutti i commenti verranno eliminati" />
+  <element name="CommentBoxReceiveServerMessage" value="Commenti ricevuti dalla posizione condivisa" />
+  <element name="CommentBoxSendToFileMenu" value="Invia a file" />
+  <element name="CommentBoxShowCommentForCurrentTopic" value="Commenti per argomento" />
+  <element name="CommentBoxSaveCommentText" value="Aggiungi commenti:" />
+  <element name="NewRSSFeedDlgTitle" value="Aggiungi nuovo feed RSS" />
+  <element name="RSSRefreshLabel" value="Aggiorna" />
+  <element name="MaximizeAppButton" value="Ingrandisci" />
+  <element name="ErrorInInstallingUpdate" value="Si è verificato un errore durante l'installazione" />
+  <element name="ErrorWhileUpdating" value="Si è verificato un errore durante l'aggiornamento" />
+  <element name="Show" value="Mostra" />
+  <element name="NewSearchTabTitle" value="Risultati della ricerca" />
+  <element name="SearchButtonToolTip" value="Premere Ctrl+Invio per aprire i risultati della ricerca in una nuova scheda" />
+  <element name="FavoritesTopMenuToolTip" value="Aggiungi o visualizza Preferiti" />
+  <element name="CommentPodToggleToolTip" value="Attiva/disattiva riquadro Commenti" />
+  <element name="ShowHideButtonToolTip" value="Mostra/Nascondi" />
+  <element name="PreferenceDialogContentTabTitle" value="Generale" />
+  <element name="PreferenceDlgUseOfflineHelp" value="Utilizza la guida non in linea" />
+  <element name="CommentBoxSendToServerMenu" value="Invia a server" />
+  <element name="CommentBoxRecieveFromFileMenu" value="Ricevi da file" />
+  <element name="CommentBoxDeleteCommentButtonToolTip" value="Elimina il commento selezionato" />
+  <element name="UpdateAvailableWithVersion" value="È disponibile l'aggiornamento alla versione %s. Eseguire ora l'aggiornamento?" />
+  <element name="NewBookmarkDlgTitle" value="Aggiungi nuovo collegamento" />
+  <element name="FavoriteAlredyExists" value="esiste già nei Preferiti" />
+  <element name="FavoriteMessageTitle" value="Preferiti" />
+  <element name="FavoriteAddRSSFeed" value="Aggiungi feed RSS" />
+  <element name="ViewerDialogNoButton" value="No" />
+  <element name="CommentBoxSaveCommentTextToolTip" value="Scrivete i commenti da aggiungere" />
+  <element name="OpenURL" value="Apri URL" />
+  <element name="MarkAsUnread" value="Contrassegna come non letto" />
+  <element name="CheckingforUpdateMsg" value="Verifica degli aggiornamenti in corso..." />
+  <element name="NewUpdateAvailableMsg" value="Nuovo aggiornamento" />
+  <element name="Index" value="Indice analitico" />
+  <element name="ErrorShowingHelpFile" value="Errore di accesso al file della guida" />
+  <element name="PrintEntireHelpConfirmation" value="Stampare tutti gli argomenti?" />
+  <element name="newFolderName" value="Nuova cartella" />
+  <element name="BrowseSequenceBoxTitle" value="Procedure" />
+  <element name="ViewFavoriteMenuItem" value="Visualizza i Preferiti" />
+  <element name="FavoriteFeedsButtonTitle" value="Feed RSS" />
+  <element name="FavoriteAddFolder" value="Aggiungi cartella" />
+  <element name="CommentBoxCommentFileMismatchError" value="ID guida non corrispondente, impossibile importare i commenti" />
+  <element name="CommentBoxSaveButton" value="Salva" />
+  <element name="CommentImportFileDlgTitle" value="Seleziona file XML dei commenti da importare" />
+  <element name="PreferenceDlgHighLightSearch" value="Evidenzia risultati della ricerca" />
+  <element name="EditRSSFeedDlgTitle" value="Modifica feed RSS" />
+  <element name="PrintEntireHelp" value="Stampa l'intera guida" />
+  <element name="PreferenceButtonTitle" value="Preferenze" />
+  <element name="PreferenceDlgDeleteCommentButton" value="Elimina tutto" />
+  <element name="CommentBoxConnectionError" value="Impossibile accedere alla posizione condivisa per i commenti" />
+  <element name="CommentBoxRecieveFromServerMenu" value="Ricevi da server" />
+  <element name="CommentBoxShowDateMenu" value="Data" />
+  <element name="CommentBoxShowCommentReviewerMenu" value="Commenti del revisore" />
+  <element name="CommentShowCurrentMenuItem" value="Attuale" />
+  <element name="RSSNoneLabel" value="Nessuno" />
+  <element name="ServerConnectionError" value="Nessuna connessione al server disponibile, passaggio alla modalità non in linea" />
+  <element name="Favorites" value="Preferiti" />
+  <element name="PrintMenuOptionsToolTip" value="Menu di stampa" />
+  <element name="FavoriteLinksButtonTitle" value="Collegamenti" />
+  <element name="AboutBoxDescription" value="Descrizione:" />
+  <element name="PreferenceDlgUseLoginName" value="Utilizza sempre il nome di accesso come nome revisore" />
+  <element name="PreferenceDialogUserNameError" value="Specificate un nome revisore valido" />
+  <element name="CommentShowAllMenuItem" value="Tutte" />
+  <element name="CommentBoxSaveButtonToolTip" value="Fate clic per aggiungere i commenti al database" />
+  <element name="RSSSelectLabel" value="Seleziona:" />
+  <element name="SearchResultError" value="Nessun risultato della ricerca" />
+  <element name="UpdateMsgTitle" value="Aggiornamento automatico" />
+  <element name="EditBookmarkDlgTitle" value="Modifica collegamento" />
+</resource>
+

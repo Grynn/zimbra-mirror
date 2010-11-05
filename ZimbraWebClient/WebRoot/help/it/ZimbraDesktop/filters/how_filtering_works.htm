@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxFunzionamento dei filtrixxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Uso dei filtri\nUtilizzo dei filtri per smistare i messaggi in arrivo");
+addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
+AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
+document.write("<a href=\"how_filtering_works.htm\">Uso dei filtri<\/a> &gt; Utilizzo dei filtri per smistare i messaggi in arrivo<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_Mail_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">xxxxPer 
+			 domande generali e la risoluzione di problemi, consulta le 
+			 domande frequenti di Zimbra Desktopxxxx</a></p></td>
+		</tr>
+	</table>
+</div>
+ 
+<h1>Utilizzo dei filtri per smistare i messaggi in arrivo</h1>
+<p>Le attività di filtro della posta consentono di definire regole per 
+ la gestione dei messaggi in arrivo.&#160;I filtri consentono di smistare 
+ automaticamente i messaggi in base alle regole configurate.</p>
+<p>È possibile filtrare i messaggi email in arrivo per:</p>
+<ul type="disc">
+	<li class="p"><p>Smistare i messaggi in arrivo nelle cartelle</p></li>
+	<li class="p"><p>Applicare automaticamente tag ai messaggi</p></li>
+	<li class="p"><p>Inoltrare messaggi</p></li>
+	<li class="p"><p>Segnare il messaggio come letto o contrassegnato</p></li>
+	<li class="p"><p>Ignorare messaggi</p></li>
+</ul>
+<p>Ad esempio, è possibile definire una regola per identificare le mail 
+ provenienti dal tuo supervisore diretto e spostarle in una cartella chiamata 
+ &quot;Posta del capo&quot; o per spostare automaticamente i messaggi da 
+ un indirizzo specifico alla cartella Cestino.</p>
+<p>È possibile filtrare i messaggi email in uscita per:</p>
+<ul type="disc">
+	<li><p>Smistare i messaggi salvati nella cartella Inviati in altre 
+	 cartelle</p></li>
+	<li class="p"><p>Applicare automaticamente tag ai messaggi</p></li>
+	<li class="p"><p>Inoltrare messaggi</p></li>
+	<li class="p"><p>Segnare il messaggio come letto o contrassegnato</p></li>
+	<li class="p"><p>Ignorare messaggi</p></li>
+</ul>
+<h3>xxxxCondizioni del filtroxxxx</h3>
+<p>Ogni filtro è costituito da una regola con una o più condizioni e una 
+ destinazione. xxxxOgni regola di filtro può contenere diverse condizioni.xxxx 
+ Se ad esempio, i messaggi del tuo supervisore vengono inviati da più di 
+ un indirizzo, ad esempio mario.bianchi@azienda.com 
+ o da mario-bianchi23@yahoo.com, è possibile creare un filtro chiamato 
+ &quot;Supervisore&quot; che include due condizioni, una per ogni indirizzo 
+ email.</p>
+<p>xxxxLe condizioni possono essere:xxxx</p>
+<ul type="disc">
+	<li class="p"><p>Indirizzi specifici nei campi Da:, A:, Cc: nell'intestazione 
+	 della mail</p></li>
+	<li class="p"><p>xxxxParole o stringhe di caratteri nell'oggetto o 
+	 nel corpo del messaggio email.xxxx</p></li>
+	<li class="p"><p>xxxxPresenza o assenza di file allegati.xxxx</p></li>
+</ul>
+<p>Tutte le condizioni consentono di specificare &quot;non&quot; come condizione 
+ negativa. xxxxAd esempio, puoi specificare messaggi che non contengono 
+ una determinata parola.xxxx</p>
+<p>xxxxÈ possibile combinare tra loro più condizioni per cercare messaggi 
+ con caratteristiche più complesse.xxxx</p>
+<h3>Differenza tra Una o più e Tutte</h3>
+<p>xxxxLe condizioni all'interno di una regola di filtro possono essere 
+ raggruppate utilizzando xxxx<span style="font-weight: bold;"><b>xxxxUna o 
+ piùxxxx</b></span>xxxx o xxxx<span style="font-weight: bold;"><b>xxxxTuttexxxx</b></span>xxxx.xxxx 
+ Questi termini sono analoghi agli operatori <a href="../Search/and_vs_or_searches.htm">&quot;AND&quot; 
+ e &quot;OR&quot;</a> utilizzati per ricerche mediante la funzione Cerca, 
+ con <span style="font-weight: bold;"><b>Una o più</b></span> che corrisponde 
+ a OR e <span style="font-weight: bold;"><b>Tutte</b></span> che corrisponde a 
+ AND.</p>
+<p>xxxxSe scegli xxxx<span style="font-weight: bold;"><b>xxxxUna o piùxxxx</b></span>xxxx 
+ quando definisci le condizioni per una nuova regola di filtro, un messaggio 
+ che soddisfa una qualsiasi delle condizioni viene considerato una corrispondenza.xxxx 
+ xxxxSe invece scegli xxxx<span style="font-weight: bold;"><b>xxxxTuttexxxx</b></span>xxxx, 
+ per far sì che il messaggio corrisponda al filtro devono essere soddisfatte 
+ tutte le condizioni specificate nella regola di filtro.xxxx</p>
+<h3>xxxxAzioni delle regole dei filtrixxxx</h3>
+<p>xxxxOgni regola di filtro può specificare una o più azioni, tra cui,xxxx 
+ xxxxad esempio:xxxx</p>
+<ul type="disc">
+	<li class="p"><p>Lasciare il messaggio nella cartella In arrivo (nessuna 
+	 azione)</p></li>
+	<li class="p"><p>Spostare il messaggio in un'altra cartella specificata</p></li>
+	<li class="p"><p>xxxxContrassegnare il messaggio con un tag.xxxx</p></li>
+	<li class="p"><p>Segnare il messaggio come letto o come contrassegnato</p></li>
+	<li class="p"><p>Ignorare messaggi xxxxQuesta azione impedisce la consegna 
+	 del messaggio email.xxxx xxxxNon corrisponde all'azione Elimina presente 
+	 nel menu.xxxx xxxxGli elementi eliminati, infatti, vengono spostati 
+	 nella cartella Cestino.xxxx L'azione Ignora impedisce al messaggio 
+	 di raggiungere la tua casella di posta</p></li>
+	<li class="p"><p>Inoltrare il messaggio a un altro indirizzo</p></li>
+</ul>
+<p>L'azione <span style="font-weight: bold;"><b>Non elaborare ulteriori filtri</b></span> 
+ dovrebbe essere l'ultima azione di ciascuna regola di filtro Questa azione 
+ impedisce che vengano applicati altri filtri ai messaggi email che soddisfano 
+ la regola corrente. Se non viene specificata questa azione, le regole 
+ di filtro successive vengono applicate al messaggio anche se questo corrisponde 
+ ai criteri del filtro corrente. Probabilmente non desideri che un messaggio 
+ soddisfi più di una regola di filtro e che venga sottoposto a più azioni, 
+ magari contraddittorie.</p>
+<h3>xxxxConseguenze dell'applicazione dei filtrixxxx</h3>
+<p>xxxxLe regole dei filtri vengono applicate a tutti i messaggi in arrivo 
+ in fase di recapito e se alcuni messaggi le soddisfano, le azioni del 
+ filtro vengono eseguite immediatamente.xxxx</p>
+<p>Puoi anche eseguire le regole di filtro su un gruppo di elementi di 
+ posta esistenti. Nella scheda Preferenze Filtri di posta, il pulsante 
+ <span style="font-weight: bold;"><b>Esegui filtro</b></span> consente di selezionare 
+ più filtri da eseguire nelle cartelle di posta selezionate.</p>
+<h3>Ordine dei filtri</h3>
+<p>I filtri vengono applicati nell'ordine in cui sono elencati nella scheda 
+ Preferenze Filtri di posta, ma xxxxè possibile scegliere anche un altro 
+ ordine.xxxx</p>
+<p>xxxxAll'interno di ciascun filtro, le condizioni consentono di eseguire 
+ la verifica su ogni messaggio email.xxxx xxxxSe il messaggio rispetta 
+ tutte le condizioni (corrispondenti al criterio xxxx<span style="font-weight: bold;"><b>xxxxUna 
+ o piùxxxx</b></span>xxxx oppure xxxx<span style="font-weight: bold;"><b>xxxxTuttexxxx</b></span>xxxx 
+ specificato nella regola di filtro), viene considerato una corrispondenza.xxxx 
+ xxxxL'ordine delle condizioni all'interno di ogni filtro non è importante.xxxx</p>
+<p>xxxxSe il messaggio rispetta tutte le condizioni, vengono applicate 
+ tutte le azioni associate alla regola di filtro, nell'ordine in cui appaiono 
+ nel filtro.xxxx</p>
+<h3>Filtri attivi e inattivi</h3>
+
+<p>xxxxTutti i filtri 
+ attualmente definiti sono elencati nella scheda Preferenze, Filtri di 
+ posta.xxxx xxxxLa casella di controllo xxxx<span 
+	 style="font-weight: bold;"><b>xxxxAttivoxxxx</b></span>xxxx 
+ ti consente di attivare o disattivare i filtri senza dover eliminare le 
+ regole di filtro.xxxx</p>
+<p>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Applicazione di filtri ai messaggi','filtering_your_messages.htm','Condizioni e azioni di filtro supportate','filter_conditions_and_actions_supported.htm');return false;" title=" Argomenti correlati"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  Argomenti correlati </nobr></span></a>
+
+
+ &#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
+if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
+  WritePopupMenuLayer();
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>
