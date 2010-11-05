@@ -13,14 +13,14 @@ import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
-public class GetMail extends AjaxCommonTest {
+public class DeleteConversation extends AjaxCommonTest {
 
-	public GetMail() {
-		logger.info("New "+ GetMail.class.getCanonicalName());
+	public DeleteConversation() {
+		logger.info("New "+ DeleteConversation.class.getCanonicalName());
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
-
+		
 		// Make sure we are using an account with conversation view
 		ZimbraAccount account = new ZimbraAccount();
 		account.provision();
@@ -28,12 +28,11 @@ public class GetMail extends AjaxCommonTest {
 		account.modifyPreference("zimbraPrefGroupMailBy", "conversation");
 			
 		super.startingAccount = account;		
-		
 	}
 	
-	@Test(	description = "Receive a mail",
+	@Test(	description = "Delete a conversation",
 			groups = { "sanity" })
-	public void GetMail_01() throws HarnessException {
+	public void DeleteConversation01() throws HarnessException {
 		
 		
 		// Create the message data to be sent
@@ -55,8 +54,13 @@ public class GetMail extends AjaxCommonTest {
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarGetMail();
-				
-		// Get the list of messages
+		
+		// Select the item
+		app.zPageMail.zListSelectItem(mail.subject);
+		
+		// Click delete
+		app.zPageMail.zToolbarDelete();
+		
 		List<ConversationItem> conversations = app.zPageMail.zListGetConversations();
 		ZAssert.assertNotNull(conversations, "Verify the conversation list exists");
 
@@ -68,9 +72,7 @@ public class GetMail extends AjaxCommonTest {
 				break;
 			}
 		}
-		ZAssert.assertTrue(found, "Verify the message was received in the inbox");
-		
-
+		ZAssert.assertTrue(found, "Verify the conversation is no longer in the inbox");
 		
 	}
 
