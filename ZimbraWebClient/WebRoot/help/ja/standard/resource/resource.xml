@@ -1,0 +1,158 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<resource>
+  <element name="Hide" value="非表示" />
+  <element name="Prev" value="&lt;&lt;" />
+  <element name="PrintThisCategory" value="このカテゴリを印刷" />
+  <element name="AboutBoxHelpID" value="ヘルプ ID :" />
+  <element name="Logo/Author" value="Powered By" />
+  <element name="RSSReadLabel" value="既読" />
+  <element name="RSSUnReadLabel" value="未読" />
+  <element name="NoUpdatePresent" value="更新はありません" />
+  <element name="SyncToc" value="SyncToc" />
+  <element name="Next" value="&gt;&gt;" />
+  <element name="FavoriteDeleteTopic" value="削除" />
+  <element name="PreferenceDlgShowBreadCrumb" value="ブレッドクラムを表示" />
+  <element name="CommentBoxSendServerMessage" value="コメントは共有の場所に送信されました" />
+  <element name="CommentBoxShowReviewerMenu" value="レビュー担当者" />
+  <element name="CommentBoxShowCommentButton" value="表示" />
+  <element name="CommentBoxSortCommentButton" value="並べ替え" />
+  <element name="OpenInBrowser" value="ブラウザで開く" />
+  <element name="DownloadingUpdate" value="更新をダウンロード中..." />
+  <element name="OpenInNewTab" value="新規タブで開く" />
+  <element name="IndexSearchText" value="検索するキーワードを入力" />
+  <element name="ViewerDialogCancelButton" value="キャンセル" />
+  <element name="ViewerDialogYesButton" value="はい" />
+  <element name="CommentBoxInvalidXML" value="無効な XML ファイルです" />
+  <element name="CommentBoxDeleteCommentButton" value="削除" />
+  <element name="Seperate" value="|" />
+  <element name="LoadingNewTabMsg" value="読み込み中..." />
+  <element name="AboutBoxDialogTitle" value="バージョン情報" />
+  <element name="PreferenceBoxDialogTitle" value="環境設定" />
+  <element name="PreferenceDlgCheckForUpdate" value="更新をチェックする" />
+  <element name="CommentBoxCommentTitle" value="コメント" />
+  <element name="CommentBoxFileError" value="共有のコメントファイルへのアクセス中にエラーが発生しました" />
+  <element name="CommentBoxShowTopicMenu" value="トピック" />
+  <element name="MarkAsRead" value="既読にする" />
+  <element name="CloseAppButton" value="閉じる" />
+  <element name="Contents" value="目次" />
+  <element name="PrintAlertTitle" value="印刷" />
+  <element name="SearchTextInputToolTip" value="検索するテキストを入力" />
+  <element name="AddToFavoriteMenuItem" value="リンクを追加" />
+  <element name="PrintSequence" value="印刷順序" />
+  <element name="AboutButtonTitle" value="バージョン情報" />
+  <element name="PreferenceDialogCommentsDeleteMsg" value="すべてのコメントを削除しますか？" />
+  <element name="PreferenceDlgAutoUpdateContent" value="コンテンツの自動更新" />
+  <element name="PreferenceDlgReviewerName" value="レビュー担当者名" />
+  <element name="CommentBoxAddCommentButton" value="追加" />
+  <element name="CommentBoxSendRcvCommentButtonToolTip" value="コメントを送受信" />
+  <element name="CommentBoxAddCommentHereText" value="コメントをここに追加" />
+  <element name="AddNewFavoriteMenu" value="リンクを追加" />
+  <element name="Search" value="検索" />
+  <element name="Glossary" value="用語集" />
+  <element name="Disabled Prev" value="&lt;&lt;" />
+  <element name="PrintThisPage" value="このページを印刷" />
+  <element name="AboutBoxVersionID" value="バージョン ID :" />
+  <element name="PreferenceDialogCommentTabTitle" value="コメント" />
+  <element name="CommentBoxSyncMessage" value="完了したコメントを送受信" />
+  <element name="CommentBoxShowCommentButtonToolTip" value="コメントを表示" />
+  <element name="CommentBoxSortCommentButtonToolTip" value="コメントを並べ替え" />
+  <element name="NewBookmarkName" value="リンク名" />
+  <element name="PreferenceDlgDeleteAllComments" value="すべてのコメントを削除" />
+  <element name="EditOption" value="編集" />
+  <element name="PreferenceDialogBrowseButtonTitle" value="参照" />
+  <element name="PreferenceDlgChkCommentLocation" value="コメントの同期にデフォルトの場所を使用" />
+  <element name="PreferenceDlgCommentSyncLocation" value="フォルダの場所 :" />
+  <element name="Disabled Next" value="&gt;&gt;" />
+  <element name="SearchResultDefaultBookmark" value="検索結果" />
+  <element name="FavoriteDisplayTopic" value="表示" />
+  <element name="FavoriteRenameTopic" value="名前を変更" />
+  <element name="PreferenceDlgOpenInNewTab" value="ヘルプトピックを新規タブで開く" />
+  <element name="PreferenceDlgShowBrowseSequence" value="閲覧順序を表示" />
+  <element name="NewRSSFeedURL" value="RSS フィードの URL :" />
+  <element name="NoUpdateLocationSpecified" value="更新する場所がありません" />
+  <element name="UpdateAvailable" value="利用可能な更新が 1 つあります。今すぐ更新しますか？" />
+  <element name="GlossaryDefinitionBoxTitle" value="用語集定義" />
+  <element name="FavoriteDeleteButtonTitle" value="削除" />
+  <element name="CommentBoxCommentsAddEmptyError" value="空のコメントは追加できません" />
+  <element name="FavoriteInvalidNameError" value="無効な名前です" />
+  <element name="ErrorInDownloadingUpdate" value="ダウンロード中にエラーが発生しました" />
+  <element name="InstallationStarted" value="インストールを開始しています..." />
+  <element name="PreferenceDlgCheckUpdateButton" value="今すぐチェック" />
+  <element name="CommentBoxSaveXMLFileDlg" value="コメントを XML ファイルに保存" />
+  <element name="CommentBoxAddCommentButtonToolTip" value="コメントボックスを切り替え" />
+  <element name="CommentBoxSendRcvCommentButton" value="送受信" />
+  <element name="NewRSSFeedName" value="RSS フィード名 :" />
+  <element name="MinimizeAppButton" value="最小化" />
+  <element name="NewBookmarkURL" value="URL にリンク" />
+  <element name="GenericDeleteMsg" value="すべての項目を削除しますか？" />
+  <element name="ViewerDialogOKButton" value="OK" />
+  <element name="PreferenceDialogAllCommentsDeleted" value="すべてのコメントが削除されました" />
+  <element name="CommentBoxReceiveServerMessage" value="共有の場所からコメントを受信しました" />
+  <element name="CommentBoxSendToFileMenu" value="ファイルに送信" />
+  <element name="CommentBoxShowCommentForCurrentTopic" value="トピックに対するコメント" />
+  <element name="CommentBoxSaveCommentText" value="コメントを追加 :" />
+  <element name="NewRSSFeedDlgTitle" value="新規 RSS フィードを追加" />
+  <element name="RSSRefreshLabel" value="更新" />
+  <element name="MaximizeAppButton" value="最大化" />
+  <element name="ErrorInInstallingUpdate" value="インストール中にエラーが発生しました" />
+  <element name="ErrorWhileUpdating" value="更新中にエラーが発生しました" />
+  <element name="Show" value="表示" />
+  <element name="NewSearchTabTitle" value="検索結果" />
+  <element name="SearchButtonToolTip" value="Ctrl+Enter キーを押すと、検索結果が新規ウィンドウで開きます" />
+  <element name="FavoritesTopMenuToolTip" value="お気に入りを追加または表示" />
+  <element name="CommentPodToggleToolTip" value="コメントポッドを切り替え" />
+  <element name="ShowHideButtonToolTip" value="表示 / 非表示" />
+  <element name="PreferenceDialogContentTabTitle" value="一般" />
+  <element name="PreferenceDlgUseOfflineHelp" value="オフラインヘルプを使用" />
+  <element name="CommentBoxSendToServerMenu" value="サーバに送信" />
+  <element name="CommentBoxRecieveFromFileMenu" value="ファイルから受信" />
+  <element name="CommentBoxDeleteCommentButtonToolTip" value="選択コメントを削除" />
+  <element name="UpdateAvailableWithVersion" value="バージョン %s への更新を利用できます。今すぐ更新しますか？" />
+  <element name="NewBookmarkDlgTitle" value="新規リンクを追加" />
+  <element name="FavoriteAlredyExists" value="既にお気に入りに存在します" />
+  <element name="FavoriteMessageTitle" value="お気に入り" />
+  <element name="FavoriteAddRSSFeed" value="RSS フィードを追加" />
+  <element name="ViewerDialogNoButton" value="いいえ" />
+  <element name="CommentBoxSaveCommentTextToolTip" value="追加したいコメントを入力" />
+  <element name="OpenURL" value="URL を開く" />
+  <element name="MarkAsUnread" value="未読にする" />
+  <element name="CheckingforUpdateMsg" value="更新をチェック中..." />
+  <element name="NewUpdateAvailableMsg" value="新規アップデート" />
+  <element name="Index" value="索引" />
+  <element name="ErrorShowingHelpFile" value="ヘルプファイルへのアクセスエラー" />
+  <element name="PrintEntireHelpConfirmation" value="すべてのトピックを印刷しますか？" />
+  <element name="newFolderName" value="新規フォルダ" />
+  <element name="BrowseSequenceBoxTitle" value="使い方" />
+  <element name="ViewFavoriteMenuItem" value="お気に入りを表示" />
+  <element name="FavoriteFeedsButtonTitle" value="RSS フィード" />
+  <element name="FavoriteAddFolder" value="フォルダを追加" />
+  <element name="CommentBoxCommentFileMismatchError" value="ヘルプ ID が一致しません。コメントを読み込めません" />
+  <element name="CommentBoxSaveButton" value="保存" />
+  <element name="CommentImportFileDlgTitle" value="読み込むコメント XML ファイルを選択してください" />
+  <element name="PreferenceDlgHighLightSearch" value="検索結果を強調表示" />
+  <element name="EditRSSFeedDlgTitle" value="RSS フィードを編集" />
+  <element name="PrintEntireHelp" value="ヘルプ全体を印刷" />
+  <element name="PreferenceButtonTitle" value="環境設定" />
+  <element name="PreferenceDlgDeleteCommentButton" value="すべてを削除" />
+  <element name="CommentBoxConnectionError" value="コメント共有の場所にアクセスできません" />
+  <element name="CommentBoxRecieveFromServerMenu" value="サーバから受信" />
+  <element name="CommentBoxShowDateMenu" value="日付" />
+  <element name="CommentBoxShowCommentReviewerMenu" value="レビュー担当者のコメント" />
+  <element name="CommentShowCurrentMenuItem" value="現在のメニュー" />
+  <element name="RSSNoneLabel" value="なし" />
+  <element name="ServerConnectionError" value="サーバへ接続できません。オフラインモードに切り替えます" />
+  <element name="Favorites" value="お気に入り" />
+  <element name="PrintMenuOptionsToolTip" value="印刷メニュー" />
+  <element name="FavoriteLinksButtonTitle" value="リンク" />
+  <element name="AboutBoxDescription" value="説明 :" />
+  <element name="PreferenceDlgUseLoginName" value="ログイン名に常にレビュー担当者名を使用" />
+  <element name="PreferenceDialogUserNameError" value="有効なレビュー担当者名を指定してください" />
+  <element name="CommentShowAllMenuItem" value="すべて" />
+  <element name="CommentBoxSaveButtonToolTip" value="クリックしてコメントをデータベースに追加" />
+  <element name="RSSSelectLabel" value="選択 :" />
+  <element name="SearchResultError" value="検索条件に一致する結果がみつかりませんでした" />
+  <element name="UpdateMsgTitle" value="自動更新" />
+  <element name="EditBookmarkDlgTitle" value="リンクを編集" />
+</resource>
+

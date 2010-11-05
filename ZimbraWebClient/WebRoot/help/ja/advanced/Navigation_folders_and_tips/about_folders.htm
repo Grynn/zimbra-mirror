@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>フォルダについて</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { x-condition:Advanced_WC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("タグとフォルダを使用してメールを整理する\nフォルダを使用する");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,34 +81,40 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>フォルダを使用する</h1>
-<p>フォルダには、メールメッセージを保存できます。<span style="x-condition: Advanced_WC;">フォルダ内の項目は、ドラッグアンドドロップ操作で、または右クリックして表示されるメニューから[</span><span style="font-weight: bold; x-condition: Advanced_WC;"><B>移動</B></span><span 
- style="x-condition: Advanced_WC;">]を選択することによって、別のフォルダに移動できます。</span>フォルダ内の項目は、メッセージまたは連絡先のチェックボックスをオンにし、[<span style="font-weight: bold;"><B>移動先</B></span>]リストでフォルダを選択することによって、そのフォルダに移動できます。 </p>
-<p>フォルダには、次の2種類があります。 </p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>システムフォルダ。</B></span>システムフォルダは移動することも、削除することも、名前を変更することもできません。システムフォルダには、[受信箱]フォルダ、[送信済み]フォルダ、[ゴミ箱]フォルダなどがあります。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>ユーザー定義のフォルダ。</B></span>ユーザーは、メールを整理するためにフォルダを作成できます。&nbsp;作成したフォルダは、概要ペインの[<span style="font-weight: bold;"><B>フォルダ</B></span>]リストに表示されます。最上位のフォルダの名前は一意でなければなりません。フォルダの名前を、メール<span 
- style="x-condition: Advanced_WC;">、カレンダー、</span>またはアドレスブック内にある最上位のフォルダと同じにすることはできません。   </p></li>
+<p>フォルダには、メールメッセージを保存できます。}}}項目をフォルダ間で移動するには、ドラッグアンドドロップするか、マウスで右クリックしてから[<span  	 style="font-weight: bold;"><b>移動</b></span>]をクリックします。{{{}}}項目をフォルダ間で移動するには、メッセージまたは連絡先を選択して、[<span style="font-weight: bold;"><b>移動先...</b></span>]リストからフォルダを選択します。{{{</p>
+<p>フォルダには、次の2種類があります。</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>システムフォルダ。</b></span> }}}システムフォルダは移動することも、削除することも、名前を変更することもできません。{{{システムフォルダには、[受信箱]フォルダ、[送信済み]フォルダ、[ゴミ箱]フォルダなどがあります。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>ユーザー定義のフォルダ。</b></span> }}}ユーザーは、メールを整理するためにフォルダを作成できます。{{{&nbsp;}}}作成したフォルダは、概要ペインの[<span style="font-weight: bold;"><b>フォルダ</b></span>]リストに表示されます。{{{最上位のフォルダの名前は一意でなければなりません。}}}フォルダの名前を、メール、カレンダー、またはアドレスブック内にある最上位のフォルダと同じにすることはできません。{{{ </p></li>
 </ul>
-<p class="whs2">&nbsp;</p>
-<p class="whs2">
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','システムフォルダ','inbox_folder.htm','フォルダの名前を変更する','renaming_folders.htm','フォルダ間でメールメッセージを移動する','moving_mail_messages_between_folders.htm','メールメッセージビューを管理する','../conversations/conversation_list_view.htm');return false;" title="関連トピック"><img src="../ss_btn_関連トピック.gif" border=0 height=17 width=57 alt="関連トピック"></a>
+<p style="margin-left: 40px;">}}}フォルダ名では大文字と小文字は区別されません。つまり、「Global」と「global」は同じ名前とみなされます。{{{}}}<span style="font-weight: bold;"><b>備考</b></span>：アクセント記号の付いた名前は、アクセント記号のない名前と違うとはみなされません。{{{}}}「op&eacute;ra」という名前のフォルダと「opera」という名前のフォルダを同じフォルダ構造内に作成することはできません。{{{</p>
+<p>&nbsp;</p>
+<p>
+
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+<param  name="Command"  value="関連トピック" />
+<param  name="Font"  value="}}}Arial,8,0,,BOLD UNDERLINE{{{" />
+<param  name="Item1"  value="メールメッセージビューを管理する}}};{{{}}}..\conversations\conversation_list_view.htm{{{" />
+<param  name="Item2"  value="フォルダ間でメールメッセージを移動する}}};{{{}}}moving_mail_messages_between_folders.htm{{{" />
+<param  name="Item3"  value="フォルダの名前を変更する}}};{{{}}}renaming_folders.htm{{{" />
+<param  name="Item4"  value="システムフォルダ}}};{{{}}}inbox_folder.htm{{{" />
+<param  name="Text"  value="}}}テキスト：関連トピック{{{" />
+</object>
+
 
  </p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
-if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
-  WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,36 +1,32 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="共有する項目を管理する" url="6_0new_topics/Managing_items_you_share.htm" />
+<item name="}}}フォルダを共有する{{{" url="Sharing/Sharing_a_folder.htm" />
+<item name="共有する項目を管理する" url="Sharing/Managing_items_you_share.htm" />
+<item name="}}}配布リストを使用して共有する{{{" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="メールフォルダを共有する" >
   <item name="メールフォルダを共有する" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
   <item name="メールボックスを共有する" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+  <item name="}}}共有フォルダへのアクセスを無効にする{{{" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
   <item name="共有メールボックスフォルダへのアクセスを受け入れる" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-  <item name="共有フォルダへのアクセスを無効にする" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
   <item name="共有メールフォルダ内で操作する" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+</book>
+<book name="カレンダーを共有する" >
+  <item name="カレンダーを共有する" url="Calendar/Delegating_Calendar_Access.htm" />
+  <item name="共有カレンダーの管理者権利を与える" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <item name="共有カレンダーの管理者権利を与える" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
+  <item name="共有カレンダーへのアクセスを受け入れる" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+  <item name="カレンダーの共有要求を拒否する" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
 </book>
 <book name="アドレスブックを共有する" >
   <item name="アドレスブックを共有する" url="Contacts/Sharing_your_Address_Book.htm" />
 </book>
-<book name="カレンダーを共有する" >
-  <item name="カレンダーを共有する" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="共有カレンダーの管理者権利を与える" url="6_0new_topics/Admin_rights_for_shared_Calendars.htm" />
-  <item name="共有カレンダーの管理者権利を与える" url="6_0new_topics/Manager_rights_for_shared_Calendars.htm" />
-  <item name="共有カレンダーへのアクセスを受け入れる" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
-  <item name="カレンダーの共有要求を拒否する" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
-</book>
 <book name="タスクリストを共有する" >
-  <item name="自分のタスクリストを共有する" url="Tasks/Share_your_Task_folder.htm" />
+  <item name="}}}自分のタスクリストを共有する{{{" url="Tasks/Share_your_Task_folder.htm" />
   <item name="共有タスクリストへのアクセスを受け入れる" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
 </book>
-<book name="文書ノートブックを共有する" >
-  <item name="文書ノートブックを共有する" url="Documents/Sharing_Notebooks.htm" />
-  <item name="文書ノートブックへのアクセスを受け入れる" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-  <item name="共有ノートブックにリンクする" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-  <item name="文書ノートブックへのアクセスを変更または取り消す" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</book>
 <book name="ブリーフケースフォルダを共有する" >
-  <item name="ブリーフケースを共有する" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+  <item name="ブリーフケースを共有する" url="Briefcase/Sharing_your_Briefcase.htm" />
 </book>
 
 </tocdata>

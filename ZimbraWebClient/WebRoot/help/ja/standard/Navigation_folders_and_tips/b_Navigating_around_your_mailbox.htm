@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>メールボックス内を移動する</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("メールボックス内を移動する\nメールボックス内を移動する");
@@ -56,14 +64,12 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -75,32 +81,26 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>メールボックス内を移動する</h1>
-<p>メールボックスにログインすると、下の図のような画面が表示されます。 </p>
-<p><img src="../75mailboxview.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p><span style="font-weight: bold;"><B>1</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>検索バー</B></span>。検索フィールドを使用して、メッセージや連絡先を検索できます。</p>
-<p><span style="font-weight: bold;"><B>2</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>ユーザー名、割り当て容量の表示、ログアウトリンク</B></span>。ここには、自分の名前とメールボックスの割り当て容量が表示されます。また、右上隅には、メールボックスからログアウトするためのリンクがあります。 </p>
-<p><span style="font-weight: bold;"><B>3</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>概要ペイン</B></span>。（ナビゲーションペインと呼ばれることもあります。）システムフォルダ（受信箱、送信済み、下書き、迷惑メール、ゴミ箱）などのフォルダが表示されます。自分で作成したカスタムフォルダもすべて、このペインに表示されます。さらに、保存済みの検索や作成したタグもここに表示されます。</p>
-<p><span style="font-weight: bold;"><B>4</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>アプリケーションタブ</B></span>。自分のアカウントで使用できるアプリケーションが表示されます。ログインしたとき、最初に表示されるのは[メール]タブです。別のタブをクリックすると、そのアプリケーションの内容ペインが開きます。   &nbsp;</p>
-<p><span style="font-weight: bold;"><B>5</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>ツールバー</B></span>。現在のアプリケーションで使用できる操作が表示されます。ツールバーは、内容ペインの上部と下部に表示されます。上の図のツールバーは、メールアプリケーションのツールバーです。   </p>
-<p><span style="font-weight: bold;"><B>6</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>内容ペイン</B></span>。この領域の内容は、使用しているアプリケーションによって異なります。メールビューでは、内容ペインに[受信箱]フォルダ内のすべてのメッセージまたはスレッドが表示されます。</p>
-<script type="text/javascript" language="javascript1.2">
+<p>メールボックスにログインすると、下の図のような画面が表示されます。</p>
+<p><img src="../75mailboxview.png" alt="75mailboxview.png" style="border: none;" width="750" height="184" border="0" /></p>
+<p>&nbsp;</p>
+<p>}}}<span style="font-weight: bold;"><b>1 検索バー</b></span>。{{{検索フィールドを使用して、メッセージや連絡先を検索できます。</p>
+<p>}}}<span style="font-weight: bold;"><b>2 ユーザー名、割り当て容量の表示</b></span>。{{{ここには、自分の名前とメールボックスの割り当て容量が表示されます。 </p>
+<p>}}}<span style="font-weight: bold;"><b>3 概要ペイン</b></span>。{{{（ナビゲーションペインと呼ばれることもあります。）システムフォルダ（受信箱、送信済み、下書き、迷惑メール、ゴミ箱）などのフォルダが表示されます。自分で作成したカスタムフォルダもすべて、このペインに表示されます。さらに、保存済みの検索や作成したタグもここに表示されます。</p>
+<p>}}}<span style="font-weight: bold;"><b>4 アプリケーションタブ</b></span>。{{{自分のアカウントで使用できるアプリケーションが表示されます。ログインしたとき、最初に表示されるのは[メール]タブです。別のタブをクリックすると、そのアプリケーションの内容ペインが開きます。 &nbsp;</p>
+<p>}}}<span style="font-weight: bold;"><b>5 ツールバー</b></span>。{{{現在のアプリケーションで使用できる操作が表示されます。ツールバーは、内容ペインの上部と下部に表示されます。上の図のツールバーは、メールアプリケーションのツールバーです。</p>
+<p><span style="font-weight: bold;"><b>}}}6 内容ペイン。{{{</b></span> この領域の内容は、使用しているアプリケーションによって異なります。メールビューでは、内容ペインに[受信箱]フォルダ内のすべてのメッセージまたはスレッドが表示されます。</p>
+<p><span style="font-weight: bold;"><b>}}}7 閲覧ペイン。{{{</b></span> }}}読みたいメッセージがここに表示されます。{{{&nbsp;}}}閲覧ペインは、メッセージをクリックするまで空白です。{{{</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

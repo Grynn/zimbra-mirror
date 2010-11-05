@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>インスタントメッセージの基本</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
@@ -51,10 +63,8 @@ if (window.gbWhTopic)
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -70,31 +80,27 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>インスタントメッセージの基本（ベータ版）</h1>
-<p>インスタントメッセージ（IM）機能を使用すると、リアルタイムで友人とメールを交換できます。メールを書いて送信すると、そのテキストが瞬時に受信者のメールボックスに表示されます。</p>
-<p>友人リストを連絡先に追加できます。新しい友人をリストに追加しても、その友人が要求を受け入れるまで、インスタントメッセージを送信することはできません。</p>
-<p>新しい友人が要求を受け入れると、IMの概要ペインを通じてその友人がオンライン状態であるかどうかを知ることができます。話しかけたい友人がオンライン状態の場合は、テキストメッセージを送信して会話を始めることができます。&nbsp;オフライン状態の友人にテキストメッセージを送信することもできます。その友人は、次にログインしたときに、そのテキストメッセージを受信します。</p>
-<h3>友人のオンライン状態を見る/自分のオンライン状態を友人に見せる</h3>
-<p>オンライン状態の友人は、概要ペインのIMリストに太字で表示されます。</p>
-<ol><li class=kadov-p>メールのやりとりをします。</li>
-	<li class=kadov-p>スレッドに色やグラフィックを追加したり、アプリケーションの見た目を変更したりします。</li>
-</ol>
-&nbsp; 
-<h3>自分のオンライン状態を友人に見せる </h3>
-<p>自分の<span class=def id=messlist>メッセンジャーリスト</span>で<span class=def id=contact>連絡先</span>の状態を見ることができるように、相手もメッセンジャーリストで自分の状態を見ることができます。Yahoo!メッセンジャーにログインするとオンライン状態になりますが、常に会話ができる状態であるとは限りません。デスクから離れる場合や電話をかけている場合もあります。そのような場合は、オンライン状態を設定して、現在の自分の状態を連絡先に知らせるようにします。</p>
-<p>状態を選択するには</p>
-<p>独自の状態設定を作成するには</p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<h1>}}}インスタントメッセージの基本（ベータ版）{{{</h1>
+<p>インスタントメッセージ（IM）機能を使用すると、リアルタイムで友人とメールを交換できます。}}}メールを入力して送信すると、そのテキストが瞬時に受信者のメールボックスに表示されます。{{{</p>
+<p>}}}@ClientNameShort@のIMを使用すると、以下のことができます。{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}<a href="Accessing_Instant_Messaging.htm">連絡先（友人とも呼ばれる）のリストを作成</a>して、リアルタイムで通信する{{{</p></li>
+	<li class="p"><p>}}}<a href="Starting_an_IM_chat.htm">個別のIMチャットを設定</a>して、友人とやり取りする{{{</p></li>
+	<li class="p"><p>}}}<a href="Setting_IM_preferences.htm">チャット記録を保存</a>する{{{</p></li>
+	<li class="p"><p><a href="IM_Chat_Options_to_customize_your_chat_experience.htm">}}}IMメッセージとメールを統合する{{{</a></p></li>
+	<li class="p"><p>}}}任意の<a href="Setting_IM_preferences.htm">IMプリファレンス</a>を設定する{{{</p></li>
+	<li class="p"><p>}}}Yahoo!メッセンジャーなど、<a href="Log_into_other_IM_clients.htm">外部のIMクライアントにログイン</a>する{{{</p></li>
+</ul>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

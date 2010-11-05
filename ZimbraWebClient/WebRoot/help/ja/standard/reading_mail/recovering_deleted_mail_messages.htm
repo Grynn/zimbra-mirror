@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>削除したメールメッセージを復元する</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("メールを管理する \n削除したメールメッセージを復元する");
@@ -52,14 +64,12 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -71,21 +81,30 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>削除したメールメッセージを復元する</h1>
-<p>メッセージや連絡先を削除すると、そのファイルは[<span 
- style="font-weight: bold;"><B>ゴミ箱</B></span>]フォルダに移動します。<span style="x-condition: BasicWC;">[ゴミ箱]からファイルを復元するには、[ゴミ箱]フォルダを開き、復元するメールメッセージを選択して、それらのメッセージを別のフォルダに移動します。</span> </p>
-<p>[ゴミ箱]に残ったメッセージは自動的に削除される場合があります。それらのメッセージを元に戻すことはできません。</p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>}}}削除した項目を復元する{{{</h1>
+<p>}}}ご使用の各@CompanyName@アプリケーションには、[ゴミ箱]フォルダがあります。{{{}}}選択したアプリケーションで[ゴミ箱]フォルダを開くと、そのアプリケーションに固有の項目のみが表示されます。{{{}}}ただし、任意のアプリケーションで[<span style="font-weight: bold;"><b>ゴミ箱を空にする</b></span>]を選択すると、すべてのアプリケーションの項目が削除されます。{{{ </p>
+<p>}}}{{{}}}[ゴミ箱]からファイルを復元するには、[ゴミ箱]フォルダを開き、復元するメールメッセージを選択して、それらのメッセージを別のフォルダに移動します。{{{ 
+ </p>
+
+<ol type="1">
+	    
+</ol>
+
+<p>}}}の[ゴミ箱]に残ったメッセージは自動的に削除される場合があります。それらのメッセージを元に戻すことはできません。{{{}}}{{{</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

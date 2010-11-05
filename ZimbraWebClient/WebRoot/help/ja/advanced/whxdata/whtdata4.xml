@@ -1,14 +1,10 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
-<item name="ユーザー設定を変更する" url="Userspecific/Changing_Your_User_Options.htm" />
-<item name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
-<item name="不在メッセージを作成する" url="Userspecific/vacation_message.htm" />
-<item name="送信したメッセージを保存する" url="Navigation_folders_and_tips/sent_folder.htm" />
-<item name="パーソナを作成する" url="Userspecific/Creating_Personas.htm" />
-<item name="メールボックスの割り当て容量" url="Navigation_folders_and_tips/quotas.htm" />
-<item name="デフォルトのタイムゾーンを変更する" url="Userspecific/Changing_your_default_timezone.htm" />
-<item name="携帯デバイスを管理する" url="6_0new_topics/Managing_your_mobile_devices.htm" />
+<item name="フィルター規則を設定する" url="filters/how_filtering_works.htm" />
+<item name="メッセージをフィルターする" url="filters/filtering_your_messages.htm" />
+<item name="サポートされているフィルターの条件と操作" url="filters/filter_conditions_and_actions_supported.htm" />
+<item name="「含む」、「一致」、「完全一致」オプションを使用して選別する" url="Search/contains_vs_matches.htm" />
+<item name="フィルターのワイルドカード" url="filters/wildcards.htm" />
 
 </tocdata>

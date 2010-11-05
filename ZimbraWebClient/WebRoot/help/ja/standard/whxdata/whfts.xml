@@ -1,15 +1,61 @@
-﻿<?xml version='1.0' encoding='utf-8' ?>
+﻿<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- saved from url=(0014)about:internet -->
-<fts>
-<chunkinfo url="whfwdata0.xml" first="!" last="きすぎる"/>
-<chunkinfo url="whfwdata1.xml" first="きで" last="するほとんどの"/>
-<chunkinfo url="whfwdata2.xml" first="するまで" last="までの"/>
-<chunkinfo url="whfwdata3.xml" first="まない" last="チェック"/>
-<chunkinfo url="whfwdata4.xml" first="チェックボックス" last="保護"/>
-<chunkinfo url="whfwdata5.xml" first="修正" last="時期"/>
-<chunkinfo url="whfwdata6.xml" first="時間" last="速"/>
-<chunkinfo url="whfwdata7.xml" first="速度" last="｣"/>
-
-<tchunkinfo first="0" last="69" url="whftdata0.xml" />
-
-</fts>
+<odb>
+	<odbtype type="WebHelp"/>
+	<language name="ja_JP"/>
+	<index type="TopicIndex" url="topictableindex.xml"/>
+	<index type="PackageIndex" url="packageindex.xml"/>
+	<index type="Synonym" url="synonym.xml"/>
+	<files>
+		<file url="whxdata\package_0.xml"/>
+		<file url="whxdata\package_1.xml"/>
+		<file url="whxdata\package_2.xml"/>
+		<file url="whxdata\package_3.xml"/>
+		<file url="whxdata\package_4.xml"/>
+		<file url="whxdata\package_5.xml"/>
+		<file url="whxdata\package_6.xml"/>
+		<file url="whxdata\package_7.xml"/>
+		<file url="whxdata\package_8.xml"/>
+		<file url="whxdata\package_9.xml"/>
+		<file url="whxdata\package_10.xml"/>
+		<file url="whxdata\package_11.xml"/>
+		<file url="whxdata\package_12.xml"/>
+		<file url="whxdata\package_13.xml"/>
+		<file url="whxdata\package_14.xml"/>
+		<file url="whxdata\package_15.xml"/>
+		<file url="whxdata\package_16.xml"/>
+		<file url="whxdata\package_17.xml"/>
+		<file url="whxdata\package_18.xml"/>
+		<file url="whxdata\package_19.xml"/>
+		<file url="whxdata\package_20.xml"/>
+		<file url="whxdata\package_21.xml"/>
+		<file url="whxdata\package_22.xml"/>
+		<file url="whxdata\package_23.xml"/>
+		<file url="whxdata\package_24.xml"/>
+		<file url="whxdata\package_25.xml"/>
+		<file url="whxdata\package_26.xml"/>
+		<file url="whxdata\package_27.xml"/>
+		<file url="whxdata\package_28.xml"/>
+		<file url="whxdata\package_29.xml"/>
+		<file url="whxdata\package_30.xml"/>
+		<file url="whxdata\package_31.xml"/>
+		<file url="whxdata\package_32.xml"/>
+		<file url="whxdata\package_33.xml"/>
+		<file url="whxdata\package_34.xml"/>
+		<file url="whxdata\package_35.xml"/>
+		<file url="whxdata\package_36.xml"/>
+		<file url="whxdata\package_37.xml"/>
+		<file url="whxdata\package_38.xml"/>
+		<file url="whxdata\package_39.xml"/>
+		<file url="whxdata\package_40.xml"/>
+		<file url="whxdata\package_41.xml"/>
+		<file url="whxdata\package_42.xml"/>
+		<file url="whxdata\package_43.xml"/>
+		<file url="whxdata\packageindex.xml"/>
+		<file url="whxdata\synonym.xml"/>
+		<file url="whxdata\topictable_0.xml"/>
+		<file url="whxdata\topictable_1.xml"/>
+		<file url="whxdata\topictableindex.xml"/>
+		<file url="whxdata\whfts.xml"/>
+	</files>
+</odb>

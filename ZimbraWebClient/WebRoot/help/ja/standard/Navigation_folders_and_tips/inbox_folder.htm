@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>システムフォルダ</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("メールボックス内を移動する\nメールのシステムフォルダ");
@@ -52,14 +64,12 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -71,34 +81,35 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>メールのシステムフォルダ</h1>
-<p>メールには、[<span style="font-weight: bold;"><B>受信箱</B></span>]、[<span style="font-weight: bold;"><B>送信済み</B></span>]、[<span style="font-weight: bold;"><B>下書き</B></span>]、[<span style="font-weight: bold;"><B>迷惑メール</B></span>]、および[<span style="font-weight: bold;"><B>ゴミ箱</B></span>]のシステムフォルダがあります。これらのフォルダを移動または削除することや、名前を変更することはできません。システムフォルダは常にフォルダリストの先頭に表示され、その後に自分で作成したフォルダが続きます。</p>
+<p>}}}メールには[<span style="font-weight: bold;"><b>受信箱</b></span>]、[<span style="font-weight: bold;"><b>送信済み</b></span>]、[<span style="font-weight: bold;"><b>下書き</b></span>]、[<span style="font-weight: bold;"><b>迷惑メール</b></span>]、および[<span style="font-weight: bold;"><b>ゴミ箱</b></span>]のシステムフォルダがあります。{{{これらのフォルダを移動または削除することや、名前を変更することはできません。システムフォルダは常にフォルダリストの先頭に表示され、その後に自分で作成したフォルダが続きます。</p>
+ 
 <h2>受信箱</h2>
-<p>[<span style="font-weight: bold;"><B>受信箱</B></span>]フォルダには、新着メールが配置されます。ログインしたときには、デフォルトで[受信箱]が表示されます。 </p>
+<p>[<span style="font-weight: bold;"><b>受信箱</b></span>]フォルダには、新着メールが配置されます。ログインしたときには、デフォルトで[受信箱]が表示されます。</p>
 <h2>送信済み</h2>
-<p>[<span style="font-weight: bold;"><B>送信済み</B></span>]フォルダには、送信した各メッセージのコピーが保存されます。 </p>
+<p>[<span style="font-weight: bold;"><b>送信済み</b></span>]フォルダには、送信した各メッセージのコピーが保存されます。</p>
 <h2>下書き</h2>
-<p>[<span 
- style="font-weight: bold;"><B>下書き</B></span>]フォルダには、まだ送信していない作成中のメッセージを保存できます。[下書き]フォルダ内のメッセージを開くと、そのメッセージは作成ビューで表示されます。</p>
-<h2>迷惑メール </h2>
-<p>勝手に送られてくる自動生成メール（「スパム」や「迷惑メール」とも呼ばれます）に対するほとんどの選別は、それらのメールメッセージが[受信箱]に届く前に迷惑メールフィルターによって処理されます。迷惑メールの可能性があるが定かではないメールは[<span style="font-weight: bold;"><B>迷惑メール</B></span>]フォルダに配置されることがあります。これらのメッセージは、読んだ後に移動するか、または削除します。削除しなかった場合、それらのメッセージは、Zimbra管理者によって指定された期間が経過した後、完全に削除されます。&nbsp;</p>
-<ul><li class=p-note><p class=note>迷惑なメールメッセージが多数送られてくる場合は、Zimbra管理者に連絡してください。迷惑メールの報告は、管理者が社内で使用している迷惑メールフィルターを微調整する上で役に立ちます。</p></li>
-</ul>
-<p>受信したメッセージが明らかに不要なものである場合は、そのメッセージをハイライトし、ツールバーの[<span style="font-weight: bold;"><B>迷惑メール</B></span>]をクリックします。<span 
- style="font-style: italic;"><I></I></span>そうすれば、そのメッセージは[迷惑メール]フォルダに移動します。&nbsp;迷惑メールでないメッセージが[迷惑メール]フォルダに配置される場合もあります。</p>
-<h2>ゴミ箱 </h2>
-<p>削除した項目は[<span style="font-weight: bold;"><B>ゴミ箱</B></span>]フォルダに入れられ、自分でゴミ箱を空にするまで、あるいは自動的に削除されるまで[ゴミ箱]フォルダ内に残ります。このフォルダ内のメールは、管理者によって指定された期間が経過した後、完全に削除されます。</p>
-<script type="text/javascript" language="javascript1.2">
+<p>}}}[<span  	 style="font-weight: bold;"><b>下書き</b></span>]フォルダには、まだ送信していない作成中のメッセージを保存できます。{{{[下書き]フォルダ内のメッセージを開くと、そのメッセージは作成ビューで表示されます。</p>
+  
+<p>}}}{{{</p>
+ <h2>迷惑メール</h2> <p>}}}勝手に送られてくる自動生成メール（「スパム」や「迷惑メール」とも呼ばれます）に対するほとんどの選別は、それらのメールメッセージが[受信箱]に届く前に迷惑メールフィルターによって処理されます。{{{}}}迷惑メールの可能性があるが定かではないメールは[<span  	 style="font-weight: bold;"><b>迷惑メール</b></span>]フォルダに配置されることがあります。{{{これらのメッセージは、読んだ後に移動するか、または削除します。}}}削除しなかった場合、それらのメッセージは、メール管理者によって指定された期間が経過した後、完全に削除されます。{{{</p> <p class="note">}}}<span style="font-weight: bold;"><b>備考：</b></span>迷惑なメールメッセージが多数送られてくる場合は、メールシステム管理者に連絡してください。{{{迷惑メールの報告は、管理者が社内で使用している迷惑メールフィルターを微調整する上で役に立ちます。</p> <p>}}}受信したメッセージが明らかに不要なものである場合は、そのメッセージを選択し、[<span style="font-weight: bold;"><b>その他の操作</b></span>]ボックスで[迷惑メール]を選択します。{{{</p>
+<h2>ゴミ箱</h2>
+<p>削除した項目は[<span style="font-weight: bold;"><b>ゴミ箱</b></span>]フォルダに入れられ、自分でゴミ箱を空にするまで、あるいは自動的に削除されるまで[ゴミ箱]フォルダ内に残ります。}}}このフォルダ内のメールは、管理者によって指定された期間が経過した後、完全に削除されます。{{{}}}{{{</p>
+ 
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

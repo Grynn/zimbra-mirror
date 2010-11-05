@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>署名を使用する</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { font-style:italic; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("メールを作成する\n署名を自動的に追加する");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,34 +81,38 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<p>&nbsp;</p>
+</div>
 <h1>署名を自動的に追加する</h1>
-<p>メールメッセージ用の署名を作成できます。署名には、自分の名前やその他のテキストを、アカウントで許可されている最大文字数まで含めることができます。 </p>
-<p>たとえば、次のような署名を作成できます。</p>
-<p>山田太郎<br> 副社長<br> ウィジェット部門<br> アクメ株式会社<br>303-555-1212 内線111<br>
-taro.yamada@example.com</p>
-<p>複数のIDを作成した場合は、複数の署名を作成し、それらの署名を特定のアドレスに割り当てることができます。「<a href="Mail_Identities.htm">アカウント内で複数のIDを管理する</a>」を参照してください。 </p>
+<p>}}}複数の署名を作成し、作成済みの特定のアドレスに割り当てることができます。{{{「<a href="Mail_Identities.htm">アカウント内で複数のIDを管理する</a>」を参照してください。</p>
+<p>}}}HTMLを使用して署名の書式を設定する場合、会社名をウェブサイトにリンクさせたり、ロゴなどのイメージを署名に追加したりできます。{{{ 
+ </p>
+<h6>}}}署名の例{{{</h6>
+<p>}}}山田太郎<br /> 副社長<br /> ウィジェット部門<br /> アクメ株式会社{{{&nbsp;<br /> }}}303-555-1212 内線111 <br /> taro.yamada@example.com{{{</p>
+<p><img src="../zimbra_bug_50x30_nc.GIF" alt="zimbra_bug_50x30_nc.GIF" style="border: none;" width="50" height="30" border="0" /></p>
+<p>&nbsp;</p>
 <h6>署名を作成するには</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>[<span style="font-weight: bold;"><B>詳細設定</B></span>]を開き、[<span style="font-weight: bold;"><B>署名</B></span>]タブを選択します。 </p></li>
-	<li class=p><p>複数の署名を設定することが可能なため、[署名の名前]フィールドに、その署名を区別するための名前を入力します。 </p></li>
-	<li class=p><p>[<span style="font-weight: bold;"><B>署名</B></span>]テキストボックスに、メッセージに追加したいとおりに署名情報を入力します。 </p></li>
-	<li class=p><p>[<span style="font-weight: bold;"><B>署名の使用</B></span>]領域で、署名をメッセージ内のどこに配置するかを指定します。自分が書いたメッセージのすぐ下に署名を追加する場合は、[<span style="font-weight: bold;"><B>引用メッセージの上</B></span>]を選択します。メッセージの一番下に署名を追加する場合は、[<span style="font-weight: bold;"><B>引用メッセージの下</B></span>]を選択します。</p></li>
-	<li class=p><p>[<span style="font-weight: bold;"><B>保存</B></span>]をクリックします。</p></li>
-	<li class=p><p>この署名をお使いのアカウント名に適用するには、[<span style="font-weight: bold;"><B>アカウント</B></span>]タブにアクセスし、[<span 
- style="font-weight: bold;"><B>署名</B></span>]フィールドのドロップダウンリストから<span style="font-weight: bold;"><B>署名の名前</B></span>を選択します。</p></li>
+<ol type="1">
+	<li class="p"><p>}}}[<span style="font-weight: bold;"><b>プリファレンス</b></span>]を開き、[<span style="font-weight: bold;"><b>署名</b></span>]を選択します。{{{</p></li>
+	<li class="p"><p>}}}[<span style="font-weight: bold;"><b>署名を追加</b></span>]をクリックし、この署名の名前を[<span style="font-weight: bold;"><b>署名の名前</b></span>]フィールドに入力します。{{{</p></li>
+	<li class="p"><p>}}}署名のスタイルを作成するには、[<span style="font-weight: bold;"><b>HTML形式</b></span>]をクリックして署名をカスタマイズします。{{{ 
+	 </p></li>
+	<li class="p"><p>[<span style="font-weight: bold;"><b>署名</b></span>]テキストボックスに、メッセージに追加したいとおりに署名情報を入力します。}}}HTMLを使用する場合、テキストのフォント、サイズ、色を選択し、リンクおよびイメージを署名に追加できます。{{{}}}イメージは、ダウンロードするか、イメージURLにリンクさせます。{{{&nbsp;</p></li>
+	<li class="p"><p>[<span style="font-weight: bold;"><b>署名の使用</b></span>]領域で、署名をメッセージ内のどこに配置するかを指定します。自分が書いたメッセージのすぐ下に署名を追加する場合は、[<span style="font-weight: bold;"><b>引用メッセージの上</b></span>]を選択します。メッセージの一番下に署名を追加する場合は、[<span style="font-weight: bold;"><b>引用メッセージの下</b></span>]を選択します。</p></li>
+	<li class="p"><p>[<span style="font-weight: bold;"><b>保存</b></span>]をクリックします。</p></li>
+	<li class="p"><p>}}}この署名をお使いのアカウント名に適用するには、[]の[<span  	 style="font-weight: bold;"><b>アカウント</b></span>] フォルダにアクセスしてアカウントのパーソナ名を選択し、[<span style="font-weight: bold;"><b>署名</b></span>]フィールドのドロップダウンリストから署名の名前を選択します。{{{</p></li>
 </ol>
-<p class="whs2">&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="font-style: italic;">&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

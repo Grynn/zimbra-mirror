@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>連絡先を自動的に追加する</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
-p.whs2 { font-family:Arial, sans-serif; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("アドレスブックを管理する\n連絡先を自動的に追加する");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,32 +81,32 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>連絡先を自動的に追加する</h1>
-<p>連絡先をアドレスブックにすばやく追加するには、メールメッセージ内のアドレスを選択し、右クリックしてそのアドレスをアドレスブックに追加します。また、[アドレスブック]オプションの[<span style="font-weight: bold;"><B>連絡先の自動追加機能を有効にする</B></span>]チェックボックスがオンになっている場合は、新しいアドレスにメールを送信すると、そのアドレスが[メールを送信した連絡先]リストに自動的に追加されます。</p>
+<p>連絡先をアドレスブックにすばやく追加するには、メールメッセージ内のアドレスを選択し、右クリックしてそのアドレスをアドレスブックに追加します。}}}また、[アドレスブック]ユーザー設定の[<span style="font-weight: bold;"><b>新しい連絡先を[メールを送信した連絡先]に追加</b></span>]チェックボックスがオンになっている場合は、新しいアドレスにメールを送信すると、そのアドレスが[メールを送信した連絡先]リストに自動的に追加されます。{{{</p>
 <h6>メッセージヘッダーから連絡先を追加する</h6>
-<p>メールアドレスをアドレスブックにすばやく追加できます。メールアドレスは、メールヘッダーの[From:]、[To:]、[Cc:]、または[Bcc:]欄から追加できます。&nbsp;&nbsp;この操作は、任意のメッセージまたはスレッドのビューから行うことができます。 </p>
-<p>アドレスの上にマウスポインタを置くと、ツールヒントが開き、その名前に関連付けられた完全なメールアドレスが表示されます。その名前がすでにアドレスブック内に登録されている場合は、メールアドレスと名前の両方が表示されます。名前がどのアドレスブックにも登録されていない場合は、メールアドレスだけが表示されます。</p>
+<p>メールアドレスをアドレスブックにすばやく追加できます。}}}メールアドレスは、メールヘッダーの[差出人:]、[宛先:]、[Cc:]、または[Bcc:]欄から追加できます。{{{&nbsp;}}}この操作は、任意のメッセージまたはスレッドのビューから行うことができます。{{{</p>
+<ol type="1">
+	<li><p>アドレスの上にマウスポインタを置くと、ツールヒントが開き、その名前に関連付けられた完全なメールアドレスが表示されます。その名前がすでにアドレスブック内に登録されている場合は、メールアドレスと名前の両方が表示されます。名前がどのアドレスブックにも登録されていない場合は、メールアドレスだけが表示されます。</p></li>
+</ol>
 <p>&nbsp;</p>
-<p><img src="../contacts2.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>アドレスを右クリックすると、連絡先を追加するためのオプションを含むメニューが表示されます。その名前を連絡先リストに追加するには、[<span style="font-weight: bold;"><B>連絡先に追加</B></span>]をクリックします。&nbsp;連絡先フォームが開き、そこに名前が表示されます。</p>
-<p><img src="../contacts_add_right-click.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>その他の連絡先情報を記入し、その連絡先情報をどのアドレスブックに保存するかを指定します。 </p>
-<h6>メッセージの送信時に連絡先を追加する</h6>
-<p class="whs2"><b style="font-weight: bold;"><span 
- style="font-weight: normal;">メールボックスには、[メールを送信した連絡先]アドレスブック</span></b>が自動的に追加されます。[アドレスブック]オプションでアドレスを自動的に追加するように指定した場合は、メールメッセージを送信したときに、そのアドレスが[メールを送信した連絡先]リストに自動的に保存されます（そのメールがどのアドレスブックにも含まれていない場合）。 &nbsp;</p>
-<p class="whs2">[メールを送信した連絡先]アドレスブックを使用すると、他のアドレスブックに含まれていないさまざまなアドレスを別に保管しておくことができます。</p>
+<p style="margin-left: 48px;"><img src="../contacts2.png" alt="contacts2.png" style="border: none;" width="259" height="108" border="0" /></p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<ol start="2" type="1">
+	<li><p>}}}その名前を連絡先リストに追加するには、アドレスを右クリックし、[<span style="font-weight: bold;"><b>連絡先に追加</b></span>]を選択します。{{{&nbsp;}}}連絡先フォームが開き、そこに名前が表示されます。{{{</p></li>
+</ol>
+<p>}}}その他の連絡先情報を記入し、その連絡先情報をどのアドレスブックに保存するかを指定します。{{{</p>
+<h6>}}}メッセージの送信時に連絡先を追加する{{{</h6>
+<p style="font-family: Arial, sans-serif;">}}}メールボックスには、[<b><span style="font-weight: normal;">メールを送信した連絡先</span></b>]アドレスブックが自動的に作成されます。{{{}}}[プリファレンス]の[アドレスブック]タブで[<span style="font-weight: bold;"><b>新しい連絡先を[メールを送信した連絡先]に追加</b></span>]チェックボックスをオンにした場合は、<span>新しい連絡先情報がこのアドレスブックに自動的に追加されます。</span>{{{ &nbsp;</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

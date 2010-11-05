@@ -1,7 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="アカウントの内容をバックアップする" url="6_0new_topics/Backing_up_the_Content_of_Your_Account.htm" />
-<item name="メールボックスでブロック/許可するアドレスを定義する" url="6_0new_topics/Filtering_Junk_Mail.htm" />
+<item name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+<item name="ユーザー設定を変更する" url="Userspecific/Changing_Your_User_Options.htm" />
+<item name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
+<item name="メールボックスでブロック/許可するアドレスを定義する" url="filters/Filtering_Junk_Mail.htm" />
+<item name="不在メッセージを作成する" url="Userspecific/vacation_message.htm" />
+<item name="}}}パーソナを作成する{{{" url="Userspecific/Creating_Personas.htm" />
+<item name="デフォルトのタイムゾーンを変更する" url="Userspecific/Changing_your_default_timezone.htm" />
 
 </tocdata>

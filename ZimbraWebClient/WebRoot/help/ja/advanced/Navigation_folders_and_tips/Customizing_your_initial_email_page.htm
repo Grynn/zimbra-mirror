@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>最初のメールページをカスタマイズする</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("メールを管理する \n最初のメールページをカスタマイズする");
@@ -52,10 +64,8 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,23 +81,46 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>最初のメールページをカスタマイズする</h1>
-<p>デフォルトでは、メールボックスが[<span style="font-weight: bold;"><B>受信箱</B></span>]ビューで開きます。つまり、[受信箱]フォルダ内のすべてのメッセージが内容ペインに表示されます。この最初のビューは、概要ペイン内の任意のフォルダ、検索、またはタグに変更できます。&nbsp;たとえば、メールボックスを開いたときに未読のメッセージだけが表示されるようにしたい場合は、[<span style="font-weight: bold;"><B>詳細設定</B></span>]&gt;[<span style="font-weight: bold;"><B>メール</B></span>]&gt;[<span style="font-weight: bold;"><B>デフォルトメール検索</B></span>]にアクセスし、フィールドに「<span class=code>is:unread</span>」と入力します。</p>
-<p>また、ログインしたときに、自分で作成した「ToDo」タグが付いたメールが表示されるようにしたい場合は、「<span class=code>tag:ToDo</span>」と入力します。[受信箱]以外のフォルダ内のメールを表示するには、フォルダ検索条件（例、<span class=code>in:Work</span>）を入力します。 </p>
-<p>フォルダやタグが2語以上で構成されている場合は、二重引用符を使用します。たとえば、「<span 
- style="font-weight: bold;"><B>in:&quot;Unread Email&quot;</B></span>」のように入力します。</p>
+<p>デフォルトでは、メールボックスが[<span style="font-weight: bold;"><b>受信箱</b></span>]ビューで開きます。つまり、[受信箱]フォルダ内のすべてのメッセージが内容ペインに表示されます。この最初のビューは、概要ペイン内の任意のフォルダ、検索、またはタグに変更できます。}}}これらの変更は、[<span style="font-weight: bold;"><b>メールのプリファレンス</b></span>]の[<span style="font-weight: bold;"><b>デフォルトメール検索</b></span>]で行います。{{{ &nbsp;</p>
+<p>}}}メールボックスを開いたときに特定のメッセージのみを表示する方法の例{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}メールボックスを開いたときに未読のメッセージのみを表示するには、<span class="code"  	 style="font-weight: normal;">[</span><span style="font-weight: bold;"><b>デフォルトメール検索</b></span><span class="code"  	 style="font-weight: normal;">]フィールドに「</span><span class="code">is :unread</span>」と入力します。{{{</p></li>
+	<li class="p"><p>}}}<span class="code" style="font-weight: normal; font-family: Arial, sans-serif;"></span>特定のタグが付けられたメールメッセージを表示するには、[<span style="font-weight: bold;"><b>デフォルトメール検索</b></span>]フィールドに「tag:&lt;タグ名&gt;」と入力します。{{{}}}たとえば、「ToDo」タグが付いたメッセージのみを表示するには、「<span class="code" style="font-family: Arial, sans-serif;  												 font-size: 10pt;"><font size="2" style="font-size:10pt;">tag:ToDo</font></span>」と入力します。{{{</p></li>
+	<li class="p"><p>}}}<a href="../filters/how_filtering_works.htm">メールフィルター</a>を通じて特定のフォルダに送信したメッセージを表示するには、[<span style="font-weight: bold;"><b>デフォルトメール検索</b></span>]フィールドに「in:&lt;フォルダ名&gt;」と入力します。{{{}}}たとえば、Workフォルダのメッセージを表示するには、「<span  	 style="font-weight: bold;"><b>in:work</b></span>」と入力します。{{{</p></li>
+</ul>
+<p class="note">}}}<span style="font-weight: bold;"><b>備考：</b></span>フォルダやタグが2語以上で構成されている場合は、二重引用符を使用します。{{{}}}たとえば、「<span style="font-weight: bold;"><b>in:&quot;Unread Email&quot;</b></span>」のように入力します。{{{</p>
+<h3>}}}メールを取得するためのメールボックスの動作を設定する{{{</h3>
+<p>}}}[メールのプリファレンス]の[メッセージの表示]領域で、[<span style="font-weight: bold;"><b>[メールを取得]をクリックしたとき</b></span>]のいずれかのオプションを有効にすると、[メールを取得]をクリックしたときにメールボックスの表示を変更するかどうかを設定できます。{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}[<span style="font-weight: bold;"><b>デフォルトの検索を実行</b></span>]を選択すると、[<span style="font-weight: bold;"><b>メールを取得</b></span>]をクリックしたときに、[デフォルトメール検索]フィールドで指定されたメール検索が実行されます。{{{&nbsp;}}}表示されているフォルダがデフォルトの検索ではない場合、ビューは自動的にデフォルトのフォルダビューにリダイレクトされます。{{{}}}ほとんどの場合は、受信箱です。{{{ &nbsp;</p></li>
+	<li class="p"><p>}}}[<span style="font-weight: bold;"><b>現在のビューを更新</b></span>]を選択すると、フォルダから[<span style="font-weight: bold;"><b>メールを取得</b></span>]をクリックしたときに[メールを取得]要求は現在のフォルダビューおよび他の新しいメールで更新を検索します。{{{}}}現在のフォルダビューは変更されません。{{{ </p></li>
+</ul>
+<p class="note" style="margin-left: 40px;">}}}<span style="font-weight: bold;"><b>備考：</b></span>新しいメールを他のフォルダで受信すると、そのフォルダは太字になり、未読メッセージの数が更新されます。{{{ </p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>
+
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+<param  name="Command"  value="関連トピック" />
+<param  name="Font"  value="}}}Arial,8,0,,BOLD UNDERLINE{{{" />
+<param  name="Frame"  value="}}}_blank{{{" />
+<param  name="Item1"  value="メールメッセージビューを管理する}}};{{{}}}..\conversations\conversation_list_view.htm{{{" />
+<param  name="Text"  value="}}}テキスト：関連トピック{{{        " />
+</object>
+
+
+ </p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Zimbraウェブクライアントのワークスペース</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>}}}Zimbraウェブクライアントのワークスペース{{{</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("メールボックス内を移動する\nZimbraウェブクライアント内を移動する");
+	addTocInfo("メールボックス内を移動する\n}}}@ClientN@ClientNameLong@{");
 addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 
 	}
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,32 +81,33 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Zimbraウェブクライアント内を移動する </h1>
-<p>Zimbraウェブクライアントにログインすると、下の図のような全画面ビューが表示されます。 </p>
-<p><img src="../Zimbramainview65.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>Zimbraウェブクライアントページには、以下の領域があります。</p>
-<ol><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>ブラウザのコントロール。</B></span> [ホーム]などの標準ブラウザのボタン、現在アクセスしているアドレス、およびブラウザの種類や設定によって異なるその他の機能が表示されます。ブラウザバーのボタンはZimbraウェブクライアントの一部ではなく、どのウェブページにアクセスしているときでも表示されます。</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>検索バー、ユーザー名、割り当て容量の表示</B></span><span>。</span>この領域には、検索、高度な検索、ログインしたユーザーの名前、メールボックスの割り当て容量が表示されます。</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>アプリケーションタブ</B></span>。上部のタブに、アクセスできるアプリケーションが一覧されます。右側には、[<span style="font-weight: bold;"><B>ヘルプ</B></span>]と[<span style="font-weight: bold;"><B>ログアウト</B></span>]があります。</p></li>
+//]]></script>
+<h1>}}}@ClientNameLong@内を移動する{{{ 
+ </h1>
+<p>}}}@ClientNameLong@にログインすると、下の図のような全画面ビューが表示されます。{{{</p>
+<p><img src="../69_view.png" alt="69_view.png" style="border: none;" width="652" height="321" border="0" /></p>
+<p>}}}@ClientNameLong@ページには、以下の領域があります。{{{</p>
+<ol>
+	<li class="p" type="1"><p>}}}<span style="font-weight: bold;"><b>検索バー</b></span>。{{{}}}この領域では、検索、高度な検索の機能を使用できます。{{{}}}右側には、[<span style="font-weight: bold;"><b>ヘルプ</b></span>]と[<span style="font-weight: bold;"><b>ログアウト</b></span>]があります。{{{</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>アプリケーションタブ</b></span>。}}}この領域には、ログインしたユーザーの名前、メールボックスの割り当て容量が表示されます。{{{&nbsp;}}}その後のタブに、アクセスできるアプリケーションが一覧されます。{{{</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>ツールバー。</b></span> }}}現在のアプリケーションで使用できる操作が表示されます。{{{この例では、<span style="font-weight: bold;"><b>メール</b></span>アプリケーションのツールバーが表示されています。</p></li>
 </ol>
-<ol start=4><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>ツールバー。</B></span>現在のアプリケーションで使用できる操作が表示されます。この例では、<span style="font-weight: bold;"><B>メール</B></span>アプリケーションのツールバーが表示されています。 </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>概要ペイン。</B></span>システムフォルダ（<span style="font-weight: bold;"><B>受信箱</B></span>、<span style="font-weight: bold;"><B>送信済み</B></span>、<span style="font-weight: bold;"><B>下書き</B></span>、<span style="font-weight: bold;"><B>迷惑メール</B></span>、<span style="font-weight: bold;"><B>ゴミ箱</B></span>）や自分で作成したカスタムフォルダなどの<span style="font-weight: bold;"><B>フォルダ</B></span>、保存済みの<span style="font-weight: bold;"><B>検索</B></span>、自分で作成した<span style="font-weight: bold;"><B>タグ</B></span>、メールボックス内でサードパーティアプリケーションを統合するために作成された<span style="font-weight: bold;"><B>Zimlet</B></span>リンクが表示されます。カレンダーアプリケーションを使用している場合は、概要ペインにカレンダーリストとZimletが表示されます。 </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>概要ペインの下にミニカレンダーを表示することもできます。ミニカレンダーの表示はオプションで、[<span style="font-weight: bold;"><B>詳細設定</B></span>]の[<span style="font-weight: bold;"><B>カレンダー</B></span>]タブで有効にできます。</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>内容ペイン</B></span>。この領域の内容は、使用しているアプリケーションによって異なります。受信箱ビューでは、[受信箱]フォルダ内のすべてのメッセージまたはスレッドが表示されます。 </p></li>
+<ol start="4">
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>概要ペイン。</b></span> }}}システムフォルダ（<span style="font-weight: bold;"><b>受信箱</b></span>、<span style="font-weight: bold;"><b>送信済み</b></span>、<span style="font-weight: bold;"><b>下書き</b></span>、<span style="font-weight: bold;"><b>迷惑メール</b></span>、<span style="font-weight: bold;"><b>ゴミ箱</b></span>）や自分で作成したカスタムフォルダなどの<span style="font-weight: bold;"><b>フォルダ</b></span>、保存済みの<span style="font-weight: bold;"><b>検索</b></span>、自分で作成した<span style="font-weight: bold;"><b>タグ</b></span>、メールボックス内でサードパーティアプリケーションを統合するために作成された<span style="font-weight: bold;"><b>Zimlet</b></span>リンクが表示されます。{{{カレンダーアプリケーションを使用している場合は、概要ペインにカレンダーリストとZimletが表示されます。</p></li>
+	<li class="p" type="1"><p>}}}概要ペインの下に<span style="font-weight: bold;"><b>ミニカレンダー</b></span>を表示することもできます。{{{}}}ミニカレンダーの表示はオプションで、[<span style="font-weight: bold;"><b>プリファレンス</b></span>]の[<span style="font-weight: bold;"><b>カレンダー</b></span>]で有効にできます。{{{</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>内容ペイン</b></span>。この領域の内容は、使用しているアプリケーションによって異なります。受信箱ビューでは、[受信箱]フォルダ内のすべてのメッセージまたはスレッドが表示されます。</p></li>
 </ol>
 <p>&nbsp;</p>
+<p class="note">}}}<span style="font-weight: bold;"><b>備考</b></span>：メールツールバーでは、閲覧ペインが右側にある3分割ペインビューに表示を変更することも、閲覧ペインをビュー<img src="../View_icon.png" alt="View_icon.png" style="border: none;" width="28" height="25" border="0" />で非表示にすることもできます。{{{</p>
 <h3>&nbsp;</h3>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

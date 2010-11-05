@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>タスクを並べ替える </title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>タスクを並べ替える</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("タスクリストを使用する\nタスクを並べ替える");
@@ -52,10 +64,8 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,20 +81,31 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>タスクを並べ替える </h1>
-<p>タスクリスト内のタスクは、件名、ステータス、完了％、または期限を基準にして並べ替えることができます。 </p>
-<p>タスクビューで、タスクリストを選択し、内容ペインで並べ替えの基準となる見出しをクリックします。 </p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>タスクを並べ替える</h1>
+<p>}}}タスクリスト内のタスクを並べ替えて、ステータスごとに簡単に確認することができます。{{{}}}[タスク]ツールバーで[<span style="font-weight: bold;"><b>並べ替え基準</b></span>]をクリックし、以下のいずれか1つを選択します。{{{</p>
+<ul type="disc">
+	<li><p>}}}<span style="font-weight: bold;"><b>開始前</b></span>{{{</p></li>
+	<li style="font-weight: bold;"><p>}}}完了{{{</p></li>
+	<li style="font-weight: bold;"><p>}}}進行中{{{</p></li>
+	<li style="font-weight: bold;"><p>}}}待機中{{{</p></li>
+	<li style="font-weight: bold;"><p>}}}遅延{{{</p></li>
+	<li><p>}}}<span style="font-weight: bold;"><b>すべて</b></span><span>。{{{&nbsp;}}}</span>[すべて]を選択すると、ステータスに関わらず、すべてのタスクが表示されます。{{{</p></li>
+	<li><p>}}}<span style="font-weight: bold;"><b>To-Doリスト</b></span><span>。</span>{{{&nbsp;}}}[To-Doリスト]を選択すると、ステータスが「<span style="font-weight: bold;"><b>進行中</b></span>」、「<span style="font-weight: bold;"><b>開始前</b></span>」、または「<span style="font-weight: bold;"><b>待機中</b></span>」（タスクの期限が超過している場合）のタスクが表示されます。{{{}}}.{{{ </p></li>
+</ul>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

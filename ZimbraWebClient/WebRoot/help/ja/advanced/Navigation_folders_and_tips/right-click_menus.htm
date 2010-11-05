@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>右クリックメニュー</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("メールボックス内を移動する\n右クリックメニュー");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,28 +81,34 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>右クリックメニュー</h1>
-<p>アドバンストバージョンのZimbraウェブクライアントのインターフェイスには、項目の上にマウスポインタを置き、マウスの右ボタンをクリックしたときに表示されるポップアップ形式のメニューが数多く用意されています。表示されるメニューの内容は、右クリックした項目の種類によって異なります。 </p>
-<p>以下の項目を右クリックすると、メニューが表示されます。 </p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>スレッド。</B></span>スレッドを既読または未読にする、スレッドにタグを適用する、スレッドを削除する、フォルダ間でスレッドを移動するなどの操作を行うことができます。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>メッセージ。</B></span>メッセージに返信する、メッセージを転送する、メッセージを既読または未読にする、メッセージにタグを適用する、メッセージを削除する、フォルダ間でメッセージを移動する、印刷する、元のメッセージヘッダー情報を表示する、新しいフィルターを作成するなどの操作を行うことができます。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>メッセージヘッダーの名前。</B></span>その名前に関する検索、その人物宛に新しいメールメッセージを作成する、その人物を個人連絡先リストに追加するなどの操作を行うことができます。その名前がすでに連絡先リストに存在する場合は、その連絡先エントリを編集できます。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>フォルダ。</B></span>新しいフォルダを作成する、フォルダ内のすべての項目を既読にする、フォルダを削除する、フォルダの名前を変更する、フォルダを移動する、すべてのフォルダを展開する、検索するなどの操作を行うことができます。システムフォルダ（受信箱、送信済み、ゴミ箱、迷惑メール、下書き）を削除することはできません。</p></li>
+<p>}}}アドバンストバージョンの@ClientNameLong@ のインターフェイスには、項目の上にマウスポインタを置き、マウスの右ボタンをクリックしたときに表示されるポップアップ形式のメニューが数多く用意されています。{{{表示されるメニューの内容は、右クリックした項目の種類によって異なります。</p>
+<p>以下の項目を右クリックすると、メニューが表示されます。</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>スレッド。</b></span> }}}スレッドを既読または未読にする、スレッドにタグを適用する、スレッドを削除する、フォルダ間でスレッドを移動するなどの操作を行うことができます。{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>メッセージ。</b></span> }}}メッセージに返信する、メッセージを転送する、新しいメッセージとして編集する、メッセージを既読または未読にする、メッセージにタグを適用する、メッセージを削除する、フォルダ間でメッセージを移動する、印刷する、元のメッセージヘッダー情報を表示する、新しいフィルターを作成するなどの操作を行うことができます。{{{}}}新しいメッセージとして編集するためのオプションを使用すれば、メッセージを転送しなくても再送信できます。{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>メッセージヘッダーの名前。</b></span> }}}その名前に関する検索、その人物宛に新しいメールメッセージを作成する、その人物を個人連絡先リストに追加するなどの操作を行うことができます。{{{その名前がすでに連絡先リストに存在する場合は、その連絡先エントリを編集できます。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>フォルダ。</b></span> }}}新しいフォルダを作成する、フォルダ内のすべての項目を既読にする、フォルダを削除する、フォルダの名前を変更する、フォルダを移動する、すべてのフォルダを展開する、検索するなどの操作を行うことができます。{{{}}}システムフォルダ（受信箱、送信済み、ゴミ箱、迷惑メール、下書き）を削除することはできません。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>メールタブツールバー</b></span>。{{{}}}メールの内容ペインに表示される列を選択できます。{{{</p></li>
 </ul>
 <p>&nbsp;</p>
+<p>}}}「<a href="Customize_your_view.htm">ビューをカスタマイズする</a>」を参照してください。{{{</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,26 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>メッセージをフィルターする</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-p.whs3 { margin-left:40px; }
-p.whs4 { margin-left:24px; }
-p.whs5 { font-style:normal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -31,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("フィルターを作成する \nメッセージをフィルターする");
+	addTocInfo("}}}メールフィルターを使用する{{{\nメッセージをフィルターする");
 addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 
 	}
@@ -60,14 +64,12 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -79,51 +81,48 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>メッセージをフィルターする</h1>
 <p>フィルター機能を使用すると、一連の照合規則を受信メールに適用し、指定した操作を実行できます。</p>
 <p>受信メールメッセージをフィルターして、それらのメッセージをフォルダに振り分けたり、自動的にタグを付けたり、転送したりできます。また、それらのメッセージを破棄することも可能です。たとえば、以下のような規則を作成できます。</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>主任からのメールをすべて[管理指令]フォルダに振り分ける。</p></li>
-	<li class=p><p>「社内イベント」メーリングリストからのすべてのメールに「イベント」タグを付ける。</p></li>
+<ul type="disc">
+	<li class="p"><p>}}}主任からのメールをすべて[管理指令]フォルダに振り分ける。{{{</p></li>
+	<li class="p"><p>}}}「社内イベント」メーリングリストからのすべてのメールに「イベント」タグを付ける。{{{</p></li>
 </ul>
 <h6>新しいフィルター規則を作成または編集するには</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>[<span style="font-weight: bold;"><B>詳細設定</B></span>]タブをクリックします。&nbsp;</p></li>
-	<li class=p><p>[<span style="font-weight: bold;"><B>メールフィルター</B></span>]タブを開き、[<span style="font-weight: bold;"><B>新しいフィルター</B></span>]をクリックします。</p></li>
-	<li class=p><p>[<span style="font-weight: bold;"><B>フィルター名</B></span>]に、規則の名前を入力します。</p></li>
-	<li class=p><p>[<span style="font-weight: bold;"><B>次の条件が満たされた場合</B></span>]領域で、条件を選択します。&nbsp;ここで、条件を作成します。</p></li>
+<ol type="1">
+	<li class="p"><p>[<span style="font-weight: bold;"><b>詳細設定</b></span>]タブをクリックします。</p></li>
+	<li class="p"><p>}}}[<span style="font-weight: bold;"><b>メールフィルター</b></span>]フォルダを開き、[<span style="font-weight: bold;"><b>新しいフィルター</b></span>]をクリックします。{{{</p></li>
+	<li class="p"><p>[<span style="font-weight: bold;"><b>フィルター名</b></span>]に、規則の名前を入力します。</p></li>
+	<li class="p"><p>[<span style="font-weight: bold;"><b>次の条件が満たされた場合</b></span>]領域で、条件を選択します。&nbsp;}}}ここで、条件を作成します。{{{</p></li>
 </ol>
-<p class="whs3">1つのフィルター内に複数の条件や操作を設定する場合は、以下の手順を繰り返します。</p>
-<ul type="disc" class="whs1">
-	<li class=p><p class="whs4">最初のドロップダウンリストで、使用する<a href="filter_conditions_and_actions_supported.htm">条件</a>を選択します。 &nbsp;</p></li>
-	<li class=p><p class="whs4"><a href="filter_conditions_and_actions_supported.htm">比較</a>方法を指定します。表示されるオプションは、前のドロップダウンリストでの選択内容によって異なります。たとえば、「完全に一致」や「次の文字列に完全には一致しない」が表示されます。</p></li>
-	<li class=p><p class="whs4">テキストフィールドに比較対象となる単語または語句を入力します。</p></li>
+<p style="margin-left: 40px;">1つのフィルター内に複数の条件や操作を設定する場合は、以下の手順を繰り返します。</p>
+<ul type="disc">
+	<li class="p"><p style="margin-left: 24px;">最初のドロップダウンリストで、使用する<a href="filter_conditions_and_actions_supported.htm">条件</a>を選択します。 &nbsp;</p></li>
+	<li class="p"><p style="margin-left: 24px;"><a href="filter_conditions_and_actions_supported.htm">比較</a>方法を指定します。表示されるオプションは、前のドロップダウンリストでの選択内容によって異なります。}}}たとえば、「完全に一致」や「次の文字に完全には一致しない」が表示されます。{{{</p></li>
+	<li class="p"><p style="margin-left: 24px;">テキストフィールドに比較対象となる単語または語句を入力します。</p></li>
 </ul>
-<p class="whs3">さらに条件を追加する場合は、[<span style="font-weight: bold;"><B>追加</B></span>]をクリックします。さらに条件を追加するか、次の手順へ進んで1つまたは複数の操作を追加します。 </p>
-<ol start="5" type="1" class="whs2">
-	<li class=p><p>[<span style="font-weight: bold;"><B>次の操作を実行</B></span>]領域のドロップダウンリストから<a href="filter_conditions_and_actions_supported.htm">操作</a>を選択します。</p></li>
+<p style="margin-left: 40px;">さらに条件を追加する場合は、[<span style="font-weight: bold;"><b>追加</b></span>]をクリックします。さらに条件を追加するか、次の手順へ進んで1つまたは複数の操作を追加します。</p>
+<ol start="5" type="1">
+	<li class="p"><p>[<span style="font-weight: bold;"><b>次の操作を実行</b></span>]領域のドロップダウンリストから<a href="filter_conditions_and_actions_supported.htm">操作</a>を選択します。</p></li>
 </ol>
-<ul type="disc" class="whs1">
-	<li style="margin-left: 0px;" class=p><p class="whs4">必要に応じてフォルダまたはタグ名を指定します。指定する内容は、選択した操作によって異なります。</p></li>
+<ul type="disc">
+	<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">必要に応じてフォルダまたはタグ名を指定します。指定する内容は、選択した操作によって異なります。</p></li>
+	<li style="margin-left: -20px;"><p style="margin-left: 40px;">さらに操作を追加する場合は、[<span style="font-weight: bold;"><b>追加</b></span>]をクリックします。}}}さらに操作を追加するか、[<span style="font-weight: bold;"><b>OK</b></span>]をクリックして設定を完了します。{{{</p></li>
 </ul>
-<p class="whs3">さらに操作を追加する場合は、[<span style="font-weight: bold;"><B>追加</B></span>]をクリックします。さらに操作を追加するか、[<span 
- style="font-weight: bold;"><B>OK</B></span>]をクリックして設定を完了します。 </p>
-<ol start="6" type="1" class="whs2">
-	<li class=p><p class="whs5">フィルター規則を有効にするには、[<span style="font-weight: bold;"><B>フィルター名</B></span>]の横にある[<span style="font-weight: bold;"><B>アクティブ</B></span>]チェックボックスをオンにします。</p></li>
+<ol start="6" type="1">
+	<li class="p"><p style="font-style: normal;">フィルター規則を有効にするには、[<span style="font-weight: bold;"><b>フィルター名</b></span>]の横にある[<span style="font-weight: bold;"><b>アクティブ</b></span>]チェックボックスをオンにします。</p></li>
 </ol>
-<p class="whs5">このフィルターは、今後受信するすべてのメールに自動的に適用されます。</p>
-<p class="whs5">条件および操作の詳細については、「<a href="filter_conditions_and_actions_supported.htm">サポートされているフィルターの条件と操作</a>」を参照してください。</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="font-style: normal;">このフィルターは、今後受信するすべてのメールに自動的に適用されます。</p>
+<p style="font-style: normal;">条件および操作の詳細については、「<a href="filter_conditions_and_actions_supported.htm">サポートされているフィルターの条件と操作</a>」を参照してください。</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

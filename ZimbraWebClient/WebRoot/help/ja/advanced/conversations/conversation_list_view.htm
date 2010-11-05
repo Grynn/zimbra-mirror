@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>メールメッセージビューを管理する</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("メールを管理する \nメールメッセージビューを管理する");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,22 +81,56 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>メールメッセージビューを管理する</h1>
-<p>メールメッセージは、単一のメッセージまたはスレッドとして表示できます。<span style="font-weight: bold;"><B>スレッド</B></span>機能を使用している場合は、デフォルトでスレッドのビューが表示されます。</p>
-<p>現在のセッションに対してのみメッセージの表示方法を変更するには、概要ペインの上のボックスにある[<span style="font-weight: bold;"><B>表示</B></span>]の横の矢印をクリックします。デフォルトのビューを変更するには、[<span style="font-weight: bold;"><B>詳細設定</B></span>]の[<span style="font-weight: bold;"><B>メールボックス</B></span>]タブにアクセスします。 &nbsp;</p>
+<p>}}}メールメッセージは単一のメッセージまたはスレッドとして表示でき、メッセージを表示する際には閲覧ペインをオフにすることも、閲覧ペインを下部または右側に表示することもできます。{{{</p>
+<p>}}}メールボックスでメッセージをグループ分けする方法を変更するには、ツールバーで[<span style="font-weight: bold;"><b>表示</b></span>]をクリックし、スレッドごとに表示するかメッセージごとに表示するかを選択して、閲覧ペインを表示する場所を選択します。{{{ &nbsp;</p>
+<p style="margin-left: 60px;"><img src="../viewlist.png" alt="viewlist.png" style="border: none;" width="250" height="225" border="0" /></p>
 <h2>メッセージビュー</h2>
 <p>この従来のビューには、新しいものから順にメッセージのリストが表示されます。未読のメッセージは太字で表示されます。各行には、それぞれフラグ、タグ、差出人、添付ファイルの有無、件名、フォルダの場所、添付ファイルを含むメッセージのサイズ、メッセージの受信時刻などの情報が表示されます。</p>
-<p><img src="../tradtional_view.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>&nbsp;</p>
+<p><img src="../tradtional_view.png" alt="tradtional_view.png" style="border: none;" width="611" height="91" border="0" /></p>
 <h2>スレッドビュー</h2>
-<p>スレッドビューでは、メッセージが件名ごとにグループ分けされて表示されます。件名の後にある括弧内の数字は、そのスレッドに含まれているメッセージの数を示しています。各スレッドは、それぞれ元のメッセージとすべての返信で構成されています。未読のメッセージを含むスレッドは<span style="font-weight: bold;"><B>太字</B></span>で表示されます。</p>
-<p><img src="../conversation_view80.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
+<p>スレッドビューでは、メッセージが件名ごとにグループ分けされて表示されます。件名の後にある括弧内の数字は、そのスレッドに含まれているメッセージの数を示しています。各スレッドは、それぞれ元のメッセージとすべての返信で構成されています。未読のメッセージを含むスレッドは<span style="font-weight: bold;"><b>太字</b></span>で表示されます。</p>
+<p><img src="../conversation_view80.png" alt="conversation_view80.png" style="border: none;" width="611" height="88" border="0" /></p>
 <p>&nbsp;</p>
-<p>スレッドをダブルクリックすると、そのスレッド内のメッセージが表示されます。また、個々のメッセージをクリックすると、その内容が表示されます。 </p>
-<p>個々のメッセージが保存されているフォルダには関係なく、スレッドに関連するすべてのメッセージが表示されます。[<span style="font-weight: bold;"><B>フォルダ</B></span>]列には、そのメッセージが保存されているフォルダが表示されます。 </p>
+<p>スレッドをダブルクリックすると、そのスレッド内のメッセージが表示されます。また、個々のメッセージをクリックすると、その内容が表示されます。}}}[表示]リンクでは一番古いメッセージと一番新しいメッセージのどちらを先頭に表示するかを選択できます。{{{</p>
+<p>個々のメッセージが保存されているフォルダには関係なく、スレッドに関連するすべてのメッセージが表示されます。[<span style="font-weight: bold;"><b>フォルダ</b></span>]列には、そのメッセージが保存されているフォルダが表示されます。</p>
+<h2>}}}メッセージの内容ペイン内を移動する{{{</h2>
+<p>}}}メッセージビューまたはスレッドビューの各メッセージには、以下の情報を個別に表示する行があります。{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>スレッドインジケータ</b></span>。{{{}}}このメールがスレッドの一部かどうかを示します。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>フラグインジケータ</b></span>。{{{}}}送信者がこのメッセージにフラグを付けたかどうかを示します。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>優先度インジケータ</b></span>。{{{}}}送信者がこのメッセージを高優先度にしたかどうかを示します。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>タグ</b></span>。{{{}}}メッセージに自分で定義したタグを付けたかどうかを示します。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>ステータス</b></span>。{{{}}}開いたエンベロープまたは閉じたエンベロープは、メッセージが既読かどうかを示します。{{{}}}また、太字はメッセージが未読であることを示します。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>差出人</b></span>。{{{}}}送信者の名前またはメールアドレスです。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>添付ファイルインジケータ</b></span>。{{{}}}クリップのアイコンは、メッセージに添付ファイルがあることを示します。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>件名</b></span>。{{{}}}メールメッセージの簡単な説明です。{{{}}}アカウントでスニペットが有効であれば、メールメッセージの最初の行が表示されます。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>フォルダ</b></span>。{{{}}}メッセージがあるフォルダ名を示します。{{{}}}スレッドの場合、メッセージが複数のフォルダにまたがる場合があるため、フォルダ名は表示されません。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>サイズ</b></span>。{{{}}}メッセージのサイズまたはスレッドにあるメッセージの数です。{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>受信</b></span>。{{{}}}メッセージの受信日時です。{{{</p></li>
+</ul>
+<h2>}}}内容ペインのメッセージを並べ替える{{{</h2>
+<p>}}}メッセージは[差出人]、[件名]、[サイズ]、または[受信]の各列を基準に並べ替えられます。{{{</p>
+<p>特定の列を基準にして並べ替えるには、その列タイトルをクリックします。その列に、並べ替えを昇順（上矢印）と降順（下矢印）のどちらで実行するかを示す矢印が表示されます。</p>
+<p>}}}並べ替えの基準にできる列は一度に1つです。{{{</p>
 <p>
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','スレッドのしくみ','conversations_can_span_folders.htm','スレッドを印刷する','printing_a_conversation.htm','メールメッセージを印刷する','../reading_mail/printing_a_mail_message.htm');return false;" title="関連トピック"><img src="../ss_btn_関連トピック.gif" border=0 height=17 width=57 alt="関連トピック"></a>
+
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+<param  name="Command"  value="}}}関連トピック、MENU{{{" />
+<param  name="Font"  value="}}}Arial,8,0,,BOLD UNDERLINE{{{" />
+<param  name="Item1"  value="複数のフォルダに保存されている場合があるスレッドのメッセージ}}};{{{}}}conversations_can_span_folders.htm{{{" />
+<param  name="Item2"  value="スレッドを印刷する}}};{{{}}}printing_a_conversation.htm{{{" />
+<param  name="Item3"  value="メールメッセージを印刷する}}};{{{}}}..\reading_mail\printing_a_mail_message.htm{{{" />
+<param  name="Text"  value="}}}テキスト：関連トピック{{{" />
+</object>
 
 
  </p>
@@ -99,19 +139,14 @@ else
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
-if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
-  WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

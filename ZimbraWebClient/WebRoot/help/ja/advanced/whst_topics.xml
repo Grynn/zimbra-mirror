@@ -1,4 +1,4 @@
-﻿<?xml version='1.0' encoding='ISO-8859-1' ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <!-- saved from url=(0014)about:internet -->
 <topictemplate>
  <topic type="normal">
@@ -9,6 +9,7 @@
 <script type=\"text/javascript\" language=\"javascript1.2\" src=\"";SF_UTILS_JS;"\"></script>
 <script type=\"text/javascript\" language=\"javascript1.2\" src=\"";SF_LANGUAGE_JS;"\"></script>
 <script type=\"text/javascript\" language=\"javascript1.2\" src=\"";SF_TOPIC_JS;"\"></script>
+
 ";]]>
   </add>
   <add tag="body" pos="beginafter">
@@ -16,6 +17,15 @@
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf(\"bc-\");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	";
@@ -30,12 +40,10 @@ if (window.gbWhTopic)
 	if (window.writeIntopicBar)
 		writeIntopicBar(";WH_WEBSKIN.topic.bar.top.pos;");
 
-	if(";WH_USER_OPTIONS.topBreadcrumbs;")
-	{
+	
 	";
-	OutputInTopicDataBreadcrums("%s\r\n");
+	OutputInTopicDataTopBreadcrumbs("%s\r\n");
 	"
-	}
 
 	if (window.setRelStartPage)
 	{
@@ -58,15 +66,13 @@ else
   <add tag="body" pos="endbefore">
    <![CDATA["<script type=\"text/javascript\" language=\"javascript1.2\">
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(";WH_WEBSKIN.topic.bar.bottom.pos;");
-if(";WH_USER_OPTIONS.bottomBreadcrumbs;")
-{
+
 ";
- OutputInTopicDataBreadcrums("%s\r\n");
+ OutputInTopicDataBottomBreadcrumbs("%s\r\n");
 "
-}
+highlightSearch();
 //-->
 </script>";
 OutputInTopicNavBarDataWebSearch.form();]]>	
