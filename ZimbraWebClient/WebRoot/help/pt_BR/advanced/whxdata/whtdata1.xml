@@ -1,22 +1,23 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Sobre compromissos, reuniões e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-<item name="Planejando uma reunião" url="Calendar/About_the_Appointment_Page.htm" />
+<item name="Sobre compromissos, reunioes e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<item name="Planejando uma reuniao" url="Calendar/About_the_Appointment_Page.htm" />
 <item name="Criando um compromisso" url="Calendar/Scheduling_meetings.htm" />
 <item name="Exibindo horas livres/ocupadas" url="Calendar/Seeing_free_busy_times.htm" />
-<item name="Definindo permissões para ver suas informações de livre/ocupado" url="6_0new_topics/Setting_permissions_to_see_your_free_busy_information.htm" />
-<item name="Marcando um compromisso como particular" url="6_0new_topics/Marking_an_appointment_as_private.htm" />
+<item name="Definindo permissoes para ver suas informacoes de livre/ocupado" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+<item name="Enviando seus status livre/ocupado para outros" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+<item name="Marcando um compromisso como particular" url="Calendar/Marking_an_appointment_as_private.htm" />
 <item name="Programando recursos" url="Calendar/Scheduling_Resources.htm" />
-<item name="Transformando uma mensagem em uma solicitação de reunião" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+<item name="Transformando uma mensagem em uma solicitacao de reuniao" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
 <item name="Usando o QuickAdd para criar um compromisso" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 <item name="Programando eventos que duram o dia todo" url="Calendar/Scheduling_All_Day_events.htm" />
 <item name="Criando compromissos recorrentes" url="Calendar/Creating_recurring_appointments.htm" />
-<item name="Alterando os detalhes de uma reunião na agenda" url="6_0new_topics/editing_meetings_on_your_calendar.htm" />
-<item name="Identificando quem pode convidar você para reuniões" url="6_0new_topics/Identifying_who_can_invite_you_to_meetings.htm" />
-<item name="Recebendo uma mensagem de permissão negada" url="6_0new_topics/Receiving_a_permission_denied_message.htm" />
-<item name="Respondendo a um convite de reunião" url="Calendar/Responding_to_an_invitation.htm" />
-<item name="Alterando uma reunião organizada por você" url="6_0new_topics/Changing_a_meeting_.htm" />
+<item name="Alterar os detalhes de uma reuniao na agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
+<item name="Identificando quem pode convidar voce para reunioes" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+<item name="Recebendo uma mensagem de permissao negada" url="Calendar/Receiving_a_permission_denied_message.htm" />
+<item name="Respondendo a um convite de reuniao" url="Calendar/Responding_to_an_invitation.htm" />
+<item name="Alterando uma reuniao organizada por voce" url="Calendar/Changing_a_meeting_.htm" />
 <item name="Apagando um compromisso" url="Calendar/Deleting_an_appointment.htm" />
 <item name="Apagando compromissos recorrentes" url="Calendar/Deleting_recurring_appointments.htm" />
 

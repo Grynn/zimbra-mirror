@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Uso do navegador com o Zimbra</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-img_whs2 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxUso do navegador com o Zimbraxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Navegando em sua caixa de e-mails\nUsando navegadores");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,27 +81,36 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Usando navegadores </h1>
-<p>O Cliente Zimbra para Web foi criado para funcionar com um navegador de Internet.   &nbsp;Microsoft Internet Explorer, Mozilla 
- Firefox e Macintosh Safari são os três navegadores mais populares. Nem todos os navegadores são suportados, então confirme com o administrador do sistema caso tenha dúvidas.</p>
-<p>Algumas orientações gerais para quando usar o Cliente Zimbra para Web em um navegador:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>O botão <span style="font-weight: bold;"><B>Voltar</B></span> do navegador o leva para a página anterior que você estava visualizando. Você também pode usar o botão Avançar.</p></li>
-	<li class=p><p>Para sair, clique em <img src="../logoffbutton.png" x-maintain-ratio="TRUE" border="0" class="img_whs2">. Se você navegar para um site diferente sem sair antes, sua sessão poderá continuar ativa até que o tempo limite se esgote.   Se compartilhar um computador, outros usuários poderão acessar sua conta enquanto sua sessão ainda estiver ativa.</p></li>
-	<li class=p><p>Não use o botão <span style="font-weight: bold;"><B>Recarregar</B></span> (Atualizar) do navegador. Caso faça isso, ocorrerá o download do cliente e sua sessão será reiniciada, o que provavelmente não é o que você desejaria que ocorresse.</p></li>
+//]]></script>
+<h1>xxxxUsando navegadoresxxxx</h1>
+<p>O @ClientNameLong@ 
+ foi criado para funcionar com um navegador de Internet. &#160;Microsoft 
+ Internet Explorer, Mozilla Firefox e Macintosh Safari são os três navegadores 
+ mais populares. xxxxNem todos os navegadores são suportados, então confirme 
+ com o administrador do sistema caso tenha dúvidas.xxxx</p>
+<p>Algumas orientações gerais para quando usar o @ClientNameLong@ em um navegador:</p>
+<ul type="disc">
+	<li class="p"><p>xxxxO botão xxxx<span style="font-weight: bold;"><b>xxxxVoltarxxxx</b></span>xxxx 
+	 do navegador o leva para a página anterior que você estava visualizando.xxxx 
+	 xxxxVocê também pode usar o botão Avançar.xxxx</p></li>
+	<li class="p"><p>Para sair, clique em <img src="../logoffbutton.png" alt="logoffbutton.png" style="border: none;" width="46" height="20" border="0" />. xxxxSe 
+	 você navegar para um site diferente sem sair antes, sua sessão poderá 
+	 continuar ativa até que o tempo limite se esgote.xxxx xxxxSe compartilhar 
+	 um computador, outros usuários poderão acessar sua conta enquanto 
+	 sua sessão ainda estiver ativa.xxxx</p></li>
+	<li class="p"><p>Não use o botão Recarregar (Atualizar) do navegador. 
+	 xxxxCaso faça isso, ocorrerá o download do cliente e sua sessão será 
+	 reiniciada, o que provavelmente não é o que você desejaria que ocorresse.xxxx</p></li>
 </ul>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

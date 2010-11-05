@@ -1,36 +1,32 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Gerenciando os itens que você compartilha" url="6_0new_topics/Managing_items_you_share.htm" />
+<item name="Compartilhando pastas" url="Sharing/Sharing_a_folder.htm" />
+<item name="Gerenciando os itens que voce compartilha" url="Sharing/Managing_items_you_share.htm" />
+<item name="Compartilhando com uma lista de distribuicao" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="Compartilhando pastas de e-mail" >
   <item name="Compartilhando pastas de e-mail" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
   <item name="Compartilhando sua caixa de e-mails" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="Aceitando acesso à pasta de caixa de e-mail compartilhada" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-  <item name="Revogando um acesso a uma pasta compartilhada" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="Revogando acesso a uma pasta compartilhada" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="Aceitando acesso a pasta de caixa de e-mail compartilhada" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="Trabalhando em uma pasta de e-mail compartilhada" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-</book>
-<book name="Compartilhando as listas de endereços" >
-  <item name="Compartilhando sua lista de endereços" url="Contacts/Sharing_your_Address_Book.htm" />
 </book>
 <book name="Compartilhando agendas" >
   <item name="Compartilhando sua agenda" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="Concedendo direitos de administrador para agendas compartilhadas" url="6_0new_topics/Admin_rights_for_shared_Calendars.htm" />
-  <item name="Concedendo direitos de gerenciador para agendas compartilhadas" url="6_0new_topics/Manager_rights_for_shared_Calendars.htm" />
-  <item name="Aceitando acesso à agenda compartilhada" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
-  <item name="Recusando uma solicitação de compartilhamento de agenda" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+  <item name="Concedendo direitos de administrador para agendas compartilhadas" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <item name="Concedendo direitos de gerenciador para agendas compartilhadas" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
+  <item name="Aceitando acesso a agenda compartilhada" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+  <item name="Recusando uma solicitacao de compartilhamento de agenda" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+</book>
+<book name="Compartilhando as listas de enderecos" >
+  <item name="Compartilhando sua lista de enderecos" url="Contacts/Sharing_your_Address_Book.htm" />
 </book>
 <book name="Compartilhando listas de tarefas" >
   <item name="Compartilhar sua lista de tarefas" url="Tasks/Share_your_Task_folder.htm" />
   <item name="Aceitando acesso a uma lista de tarefas compartilhada" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
 </book>
-<book name="Compartilhando notebooks de documentos" >
-  <item name="Compartilhando notebooks de documentos" url="Documents/Sharing_Notebooks.htm" />
-  <item name="Aceitando acesso a um notebook de documentos" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-  <item name="Criando link para um notebook compartilhado" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-  <item name="Alterando ou cancelando acesso à sua pasta de Documentos" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</book>
 <book name="Compartilhando pastas no porta-arquivos" >
-  <item name="Compartilhando seu porta-arquivos" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+  <item name="Compartilhando seu porta-arquivos" url="Briefcase/Sharing_your_Briefcase.htm" />
 </book>
 
 </tocdata>

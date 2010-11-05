@@ -1,8 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="Aceitando acesso a notebooks" last="Endereços IMAP, adicionando" num="104" />
-<chunkinfo url="whidata1.xml" first="Endereços POP, adicionando" last="Recusando uma solicitação de compartilhamento de agenda" num="99" />
-<chunkinfo url="whidata2.xml" first="Regras, filtro" last="Zimlets" num="36" />
+<chunkinfo url="whidata0.xml" first="abrindo arquivos no porta-arquivos" last="dicas de ferramentas" num="103" />
+<chunkinfo url="whidata1.xml" first="dicionario, adicionando palavras ao" last="MI, usando outros clientes" num="98" />
+<chunkinfo url="whidata2.xml" first="miniagenda" last="tarefa, marcar como concluida" num="92" />
+<chunkinfo url="whidata3.xml" first="tarefas, imprimir" last="Zimlets, desativar" num="33" />
 
 </index>

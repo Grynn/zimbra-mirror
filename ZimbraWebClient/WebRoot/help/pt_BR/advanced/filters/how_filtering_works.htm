@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Como funciona a filtragem</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { x-condition:Advanced_WC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxComo funciona a filtragemxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Criando filtros \nConfigurando regras de filtros");
+	addTocInfo("Usando filtros de e-mail\nConfigurando regras de filtros");
 addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 
 	}
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,63 +81,136 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Configurando regras de filtros</h1>
-<p>A filtragem de e-mail possibilita que você defina regras para gerenciar os e-mails recebidos. Os filtros de e-mail são definidos em <span style="font-weight: bold;"><B>Preferências, Filtros de e-mail</B></span>. </p>
-<p>Quando uma mensagem de e-mail recebida corresponde às condições da regra do filtro, as ações correspondentes associadas com aquela regra são aplicadas. Por exemplo, você poderia definir uma regra de filtro para identificar os e-mails vindos de seu supervisor imediato e movê-los para uma pasta chamada &quot;Do meu chefe&quot; ou para mover mensagens automaticamente de um endereço específico para a pasta Lixeira.</p>
-<p>Cada regra de filtro é composta por uma ou mais condições e uma ou mais ações.</p>
-<h3>Condições do filtro</h3>
-<p>Cada regra do filtro pode conter várias condições. Por exemplo, se o seu supervisor envia seus e-mails de mais de um endereço, como jane.silva@empresa.com.br   ou de jane-silva23@yahoo.com.br, você pode criar um único filtro chamado &quot;Supervisora&quot; que tenha duas condições, uma para cada endereço de e-mail.</p>
-<p>As condições incluem:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Endereços específicos nos campos De:, Para:, Cc: no cabeçalho do e-mail</p></li>
-	<li class=p><p>A presença ou ausência de arquivos anexos</p></li>
-	<li class=p><p>Palavras ou seqüências de caracteres no assunto ou no corpo da mensagem de e-mail</p></li>
-	<li class=p><p>Todas as condições permitem que você especifique &quot;não&quot; como condição negativa. Por exemplo, você pode especificar e-mails que não contenham uma palavra em particular.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>Usando os filtros para classificar os e-mails de entrada</h1>
+<p>A filtragem de e-mail possibilita que você defina regras para gerenciar 
+ as mensagens de e-mail recebidas e enviadas.&#160;Os filtros classificam 
+ automaticamente as suas mensagens de acordo com as regras que você configurar.</p>
+<p>Você pode filtrar as mensagens de e-mail recebidas para:</p>
+<ul type="disc">
+	<li class="p"><p>Classificar as mensagens recebidas em pastas</p></li>
+	<li class="p"><p>Marcar mensagens automaticamente</p></li>
+	<li class="p"><p>Encaminhar mensagens</p></li>
+	<li class="p"><p>Marcar a mensagem como lida ou sinalizada</p></li>
+	<li class="p"><p>Descartar mensagens</p></li>
 </ul>
-<p>É possível combinar condições para procurar e-mails com características mais complexas.</p>
-<h3>Qualquer x Todas</h3>
-<p>As condições dentro de uma regra de filtro podem ser agrupadas usando <span style="font-weight: bold;"><B>Qualquer</B></span> ou <span style="font-weight: bold;"><B>Todas </B></span>. O uso desses termos é similar às buscas do tipo <a href="../Search/and_vs_or_searches.htm">&quot;E&quot; x &quot;OU&quot;</a> descritas no recurso Busca, com <span style="font-weight: bold;"><B>Qualquer</B></span> sendo OU e <span style="font-weight: bold;"><B>Todas</B></span> sendo E.</p>
-<p>Se você escolher <span style="font-weight: bold;"><B>Qualquer</B></span> ao definir as condições para uma nova regra de filtro, então uma mensagem que atenda a qualquer uma das condições é considerada uma correspondência. No entanto, se você escolher <span style="font-weight: bold;"><B>Todas</B></span>, todas as condições especificadas na regra do filtro devem se aplicar para que a mensagem corresponda ao filtro.</p>
-<h3>Ações de regra de filtro</h3>
-<p>Cada regra de filtro pode especificar uma ou mais ações. As ações incluem:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Deixar a mensagem na Caixa de entrada (nenhuma ação).</p></li>
-	<li class=p><p>Mover a mensagem para outra pasta especificada.</p></li>
-	<li class=p><p>Marcar a mensagem</p></li>
-	<li class=p><p>Marcar a mensagem como lida ou sinalizada.</p></li>
-	<li class=p><p>Descartar. Essa ação ignora a mensagem de e-mail silenciosamente.   Não é a mesma coisa que a ação Apagar no seu menu. Excluir um item faz com que ele seja movido para a pasta Lixeira. A ação Descartar impede que a mensagem sequer entre na sua caixa de e-mails.</p></li>
-	<li class=p><p>Parar futuras avaliações. Essa ação impede a aplicação de qualquer outra regra de filtro em mensagens de e-mail que correspondam à regra atual.</p></li>
+<p>Por exemplo, você poderia definir uma regra de filtro para identificar 
+ os e-mails vindos de seu supervisor imediato e movê-los para uma pasta 
+ chamada &quot;Do meu chefe&quot; ou para mover mensagens automaticamente 
+ de um endereço específico para a pasta Lixeira.</p>
+<p>Você pode filtrar as mensagens de e-mail enviadas para:</p>
+<ul type="disc">
+	<li><p>Classificar mensagens salvas na pasta Enviadas ou em outras 
+	 pastas</p></li>
+	<li class="p"><p>Marcar mensagens automaticamente</p></li>
+	<li class="p"><p>Encaminhar mensagens</p></li>
+	<li class="p"><p>Marcar a mensagem como lida ou sinalizada</p></li>
+	<li class="p"><p>Descartar mensagens</p></li>
 </ul>
-<p>A ação &quot;parar futura avaliação&quot; deve ser a última ação em cada regra de filtro. Se não for especificada, as regras de filtro subseqüentes serão aplicadas à mensagem de e-mail mesmo que o filtro atual tenha uma correspondência.   Não é provável que você queria que a mesma mensagem corresponda a mais de uma regra de filtro e passe por várias ações, até mesmo contraditórias.</p>
-<h3>Quando os filtros são aplicados</h3>
-<p>Cada mensagem recebida é testada pelas regras do filtro no momento em que o e-mail é entregue e as ações do filtro são aplicadas às mensagens correspondentes naquele momento. </p>
-<h3>Ordem de aplicação pelo sistema</h3>
-<p>Os filtros são aplicados na ordem em que são listados na aba Filtro de e-mails. Você pode mudar essa ordem. </p>
-<p>Em cada filtro, as condições são usadas para testar cada mensagem de e-mail.   Se a mensagem atende às condições coletivamente (usando a designação <span style="font-weight: bold;"><B>Qualquer</B></span> ou <span style="font-weight: bold;"><B>Todas</B></span> conforme especificado na regra do filtro), é considerada uma correspondência. A ordem das condições em cada filtro não é importante.</p>
-<p>Se a mensagem corresponde às condições, todas as ações associadas com aquela regra de filtro são aplicadas, na ordem em que aparecem no filtro.</p>
-<h3>Filtros ativos x inativos</h3>
-<p class="whs2">Todos os filtros definidos no momento estão listados em Preferências, na aba Filtro de e-mails. A caixa de seleção <span style="font-weight: bold;"><B>Ativa</B></span> permite que você ative ou desative filtros sem precisar excluir regras. .</p>
-<p class="whs2">
+<h3>xxxxCondições do filtroxxxx</h3>
+<p>Cada filtro consiste em uma regra com uma ou mais condições e um destino. 
+ xxxxCada regra do filtro pode conter várias condições.xxxx Por exemplo, 
+ se o seu supervisor envia seus e-mails de mais de um endereço, como jane.silva@empresa.com ou de jane-silva23@yahoo.com, 
+ você pode criar um único filtro chamado &quot;Supervisor&quot; que tenha 
+ duas condições, uma para cada endereço de e-mail.</p>
+<p>xxxxAs condições incluem:xxxx</p>
+<ul type="disc">
+	<li class="p"><p>xxxxEndereços específicos nos campos De:, Para:, Cc:xxxx 
+	 xxxxno cabeçalho do e-mailxxxx</p></li>
+	<li class="p"><p>xxxxPalavras ou seqüências de caracteres no assunto 
+	 ou no corpo da mensagem de e-mailxxxx</p></li>
+	<li class="p"><p>xxxxA presença ou ausência de arquivos anexosxxxx</p></li>
+</ul>
+<p>Todas as condições permitem que você especifique &quot;não&quot; como 
+ condição negativa. xxxxPor exemplo, você pode especificar e-mails que 
+ não contenham uma palavra em particular.xxxx</p>
+<p>xxxxÉ possível combinar condições para procurar e-mails com características 
+ mais complexas.xxxx</p>
+<h3>xxxxQualquer x Todasxxxx</h3>
+<p>xxxxAs condições dentro de uma regra de filtro podem ser agrupadas usando 
+ xxxx<span style="font-weight: bold;"><b>xxxxQualquerxxxx</b></span>xxxx ou xxxx<span 
+	 style="font-weight: bold;"><b>xxxxTodas xxxx</b></span>xxxx.xxxx O uso desses 
+ termos é similar às buscas do tipo <a href="../Search/and_vs_or_searches.htm">&quot;E&quot; 
+ X &quot;OU&quot;</a> descritas no recurso de Busca, com <span style="font-weight: bold;"><b>Qualquer</b></span> 
+ sendo OU e <span style="font-weight: bold;"><b>Todas</b></span> sendo E.</p>
+<p>xxxxSe você escolher xxxx<span style="font-weight: bold;"><b>xxxxQualquerxxxx</b></span>xxxx 
+ ao definir as condições para uma nova regra de filtro, então uma mensagem 
+ que atenda a qualquer uma das condições é considerada uma correspondência.xxxx 
+ xxxxNo entanto, se você escolher xxxx<span style="font-weight: bold;"><b>xxxxTodasxxxx</b></span>xxxx, 
+ todas as condições especificadas na regra do filtro devem se aplicar para 
+ que a mensagem corresponda ao filtro.xxxx</p>
+<h3>xxxxAções de regra de filtroxxxx</h3>
+<p>xxxxCada regra de filtro pode especificar uma ou mais ações.xxxx xxxxAs 
+ ações incluem:xxxx</p>
+<ul type="disc">
+	<li class="p"><p>Deixar a mensagem na Caixa de entrada (nenhuma ação)</p></li>
+	<li class="p"><p>Mover a mensagem para outra pasta especificada</p></li>
+	<li class="p"><p>xxxxMarcar a mensagemxxxx</p></li>
+	<li class="p"><p>Marcar a mensagem como lida ou sinalizada</p></li>
+	<li class="p"><p>Descartar a mensagem. xxxxEssa ação ignora a mensagem 
+	 de e-mail silenciosamente.xxxx xxxxNão é a mesma coisa que a ação 
+	 Apagar no seu menu.xxxx xxxxExcluir um item faz com que ele seja movido 
+	 para a pasta Lixeira.xxxx A ação Descartar impede que a mensagem sequer 
+	 entre na sua caixa de e-mails</p></li>
+	<li class="p"><p>Encaminhar a mensagem para outro endereço</p></li>
+</ul>
+<p>A ação <span style="font-weight: bold;"><b>Não processar filtros adicionais 
+ </b></span>deve ser a última de cada regra de filtragem. Essa ação impede 
+ a aplicação de qualquer outra regra de filtragem a mensagens de e-mail 
+ que correspondam à regra atual. Se não for especificada, as regras de 
+ filtro subseqüentes serão aplicadas à mensagem de e-mail mesmo que o filtro 
+ atual tenha uma correspondência. É provável que você não queira que a 
+ mesma mensagem corresponda a mais de uma regra de filtragem e passe por 
+ várias ações, até mesmo contraditórias.</p>
+<h3>xxxxQuando os filtros são aplicadosxxxx</h3>
+<p>xxxxCada mensagem recebida é testada pelas regras do filtro no momento 
+ em que o e-mail é entregue e as ações do filtro são aplicadas às mensagens 
+ correspondentes naquele momento.xxxx</p>
+<p>Você também pode executar as regras de filtragem em um grupo de itens 
+ de e-mail existente. Em Preferências &gt; Filtro de e-mails, o botão&#160;<span 
+	 style="font-weight: bold;"><b>Executar filtro</b></span> permite selecionar 
+ vários filtros para executar nas pastas de e-mail selecionadas.</p>
+<h3>Ordem de filtros</h3>
+<p>Os filtros são aplicados na ordem em que são listados em Preferências 
+ &gt; Filtro de e-mails. xxxxVocê pode mudar essa ordem.xxxx</p>
+<p>xxxxEm cada filtro, as condições são usadas para testar cada mensagem 
+ de e-mail.xxxx xxxxSe a mensagem atende às condições coletivamente (usando 
+ a designação xxxx<span style="font-weight: bold;"><b>xxxxQualquerxxxx</b></span>xxxx 
+ ou xxxx<span style="font-weight: bold;"><b>xxxxTodasxxxx</b></span>xxxx conforme 
+ especificado na regra do filtro), é considerada uma correspondência.xxxx 
+ xxxxA ordem das condições em cada filtro não é importante.xxxx</p>
+<p>xxxxSe a mensagem corresponde às condições, todas as ações associadas 
+ com aquela regra de filtro são aplicadas, na ordem em que aparecem no 
+ filtro.xxxx</p>
+<h3>Filtros ativos X inativos</h3>
 
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Condições de filtro e ações suportadas','filter_conditions_and_actions_supported.htm','Filtrando suas mensagens','filtering_your_messages.htm');return false;" title="Tópicos relacionados"><img src="../ss_btn_tópicos_relacionados.gif" border=0 height=17 width=110 alt="Tópicos relacionados"></a>
+<p>xxxxTodos os filtros 
+ definidos no momento estão listados em Preferências, na aba Filtro de 
+ e-mails.xxxx xxxxA caixa de seleção xxxx<span 
+	 style="font-weight: bold;"><b>xxxxAtivaxxxx</b></span>xxxx 
+ permite que você ative ou desative filtros sem precisar excluir regras.xxxx</p>
+<p>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Condições de filtro e ações suportadas','filter_conditions_and_actions_supported.htm','Filtrando suas mensagens','filtering_your_messages.htm');return false;" title=" Tópicos relacionados"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  Tópicos relacionados </nobr></span></a>
 
 
  </p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+<p>&#160;</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
