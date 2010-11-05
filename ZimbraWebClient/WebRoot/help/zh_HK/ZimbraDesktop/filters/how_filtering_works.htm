@@ -1,0 +1,186 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxx如何使用過濾功能xxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("過濾器使用方法\n使用過濾器分揀收到的郵件");
+addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
+AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
+document.write("<a href=\"how_filtering_works.htm\">過濾器使用方法<\/a> &gt; 使用過濾器分揀收到的郵件<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_Mail_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">xxxx關於常見的問題以及故障排除方法，請參見xxxxxxxx「xxxxxxxxZimbra 
+			 Desktop 常見問題xxxxxxxx」xxxx</a></p></td>
+		</tr>
+	</table>
+</div>
+ 
+<h1>使用過濾器來分類內送郵件 </h1>
+<p>你可透過郵件過濾器制定一些規則，用以管理內送和外寄的郵件。過濾器自動根據你設定的規則分揀郵件。</p>
+<p>透過過濾器，你可對收件進行如下處理：</p>
+<ul type="disc">
+	<li class="p"><p>將收件分類到不同的資料夾中</p></li>
+	<li class="p"><p>自動標記郵件</p></li>
+	<li class="p"><p>轉寄郵件</p></li>
+	<li class="p"><p>將郵件標記為已讀或已打標記</p></li>
+	<li class="p"><p>丟棄郵件</p></li>
+</ul>
+<p>例如，你可定義一個過濾規則來鑒別直接來自你頂頭上司的郵件，並將之移至一個稱之為「From My Boss」的資料夾中，或定義一個過濾規則自動將指定資料夾中的郵件移至「垃圾桶」。</p>
+<p>透過過濾器，你可對外寄郵件進行如下處理：</p>
+<ul type="disc">
+	<li><p>將儲存在「寄件箱」中的郵件分揀至其他資料夾中</p></li>
+	<li class="p"><p>自動標記郵件</p></li>
+	<li class="p"><p>轉寄郵件</p></li>
+	<li class="p"><p>將郵件標記為已讀或已打標記</p></li>
+	<li class="p"><p>丟棄郵件</p></li>
+</ul>
+<h3>xxxx過濾條件xxxx</h3>
+<p>每一次過濾都是一條由一個或多個條件以及一個目標組成的規則。xxxx每一過濾規則都可包含若干個條件xxxxxxxx。xxxx例如，若你的上司傳送給你的郵件來自多個地址，如 
+ jane.smith@company.com 或 
+ jane-smith23@yahoo.com，你便可建立一個「Supervisor」的過濾器，其內可包括兩個條件，每個條件對應一個地址。</p>
+<p>xxxx相關的條件包括：xxxx</p>
+<ul type="disc">
+	<li class="p"><p>郵件標題中的「寄件人：」、「收件人：」及「副本：」地址</p></li>
+	<li class="p"><p>xxxx郵件主題或正文中的詞或字串xxxx</p></li>
+	<li class="p"><p>xxxx是否有附件xxxx</p></li>
+</ul>
+<p>所有條件都允許指定「不」(not) 作為否定條件。xxxx例如，可指定不含某個特定詞的郵件xxxxxxxx。xxxx</p>
+<p>xxxx你可組合各種條件，用以搜尋具有更複雜特性的郵件xxxxxxxx。xxxx</p>
+<h3>「任何」與「所有」</h3>
+<p>xxxx一個過濾規則中的條件可用xxxx<span style="font-weight: bold;"><b>xxxx任何xxxx</b></span>xxxx或xxxx<span 
+	 style="font-weight: bold;"><b>xxxx所有xxxx</b></span>xxxx作為分組條件xxxxxxxx。xxxx這兩個術語的使用類似於「搜尋功能」中所描述的<a 
+	 href="../Search/and_vs_or_searches.htm">「AND」與「OR」</a>搜尋類型，你只需把<span 
+	 style="font-weight: bold;"><b>任何</b></span>當作 OR，把<span style="font-weight: bold;"><b>所有</b></span>當作 
+ AND 即可使用。</p>
+<p>xxxx在定義一個新過濾規則的條件時，若選擇xxxx<span style="font-weight: bold;"><b>xxxx任何xxxx</b></span>xxxx，則滿足其中任何一個條件的郵件都被認作是相符的郵件xxxxxxxx。xxxxxxxx但若選擇xxxx<span 
+	 style="font-weight: bold;"><b>xxxx所有xxxx</b></span>xxxx，則僅當過濾規則中的所有條件都滿足時方被認作是相符的郵件xxxxxxxx。xxxx</p>
+<h3>xxxx過濾規則的操作項xxxx</h3>
+<p>xxxx你可為每一過濾規則指定一項目或多項操作xxxxxxxx。xxxxxxxx相關的操作包括：xxxx</p>
+<ul type="disc">
+	<li class="p"><p>將郵件留在收件箱（無操作）</p></li>
+	<li class="p"><p>將郵件移至另一個指定的資料夾</p></li>
+	<li class="p"><p>xxxx給郵件打標記xxxx</p></li>
+	<li class="p"><p>將郵件標記為已讀或已打標記</p></li>
+	<li class="p"><p>丟棄郵件。xxxx此項操作將在不提示的情況下丟棄郵件xxxxxxxx。xxxxxxxx這不同於選單中的xxxxxxxx「xxxxxxxx刪除xxxxxxxx」xxxxxxxx操作xxxxxxxx。xxxxxxxx刪除之舉是將郵件移至xxxxxxxx「xxxxxxxx垃圾桶xxxxxxxx」。xxxx「丟棄」之舉則阻止郵件抵達你的郵箱</p></li>
+	<li class="p"><p>將郵件轉寄至其他地址</p></li>
+</ul>
+<p><span style="font-weight: bold;"><b>不處理附加過濾器</b></span>操作應是每個過濾規則中的最後的操作。對於與目前規則相符的郵件，此操作項可阻止其他過濾規則套用於該郵件。如果沒有指定停止評估，即便郵件已經與目前過濾條件相符，隨後的過濾規仍將套用於該郵件。一般情況下，你可能並不需要讓同一郵件與多個過濾規則相符合，從而執行多個有可能相互矛盾的操作。</p>
+<h3>xxxx何時應用過濾器xxxx</h3>
+<p>xxxx每封來信都會在投遞時被你設定的過濾規則所檢測，相應的過濾操作亦在此時套用於相符的郵件xxxxxxxx。xxxx</p>
+<p>你也可以對已有的一組郵件執行過濾規則。在「郵件過濾器偏好設定」中，你可透過<span style="font-weight: bold;"><b>執行過濾功能</b></span>按鈕針對選定的郵件夾選擇多個過濾器。</p>
+<h3>過濾器順序</h3>
+<p>過濾器以其在「郵件過濾器偏好設定」中列出的順序應用。xxxx你可改變這個順序xxxxxxxx。xxxx</p>
+<p>xxxx在每個過濾器中，條件用於檢測每封郵件xxxxxxxx。xxxxxxxx如果郵件滿足多個條件（即在過濾規則中使用了xxxx<span 
+	 style="font-weight: bold;"><b>xxxx任何xxxx</b></span>xxxx或xxxx<span style="font-weight: bold;"><b>xxxx所有xxxx</b></span>xxxx兩個條件名稱），則被認為是相符的xxxxxxxx。xxxxxxxx各項條件在過濾器中的順序並不重要xxxxxxxx。xxxx</p>
+<p>xxxx如果郵件與條件相符，則與該過濾規則關聯的所有操作項，都將以其在過濾器中出現的順序應用xxxxxxxx。xxxx</p>
+<h3>活躍與非活躍過濾器</h3>
+
+<p>xxxx所有目前定義的過濾器，都列示於xxxxxxxx「xxxxxxxx選項xxxxxxxx」xxxxxxxx的xxxxxxxx「xxxxxxxx郵件過濾器xxxxxxxx」xxxxxxxx頁中xxxxxxxx。xxxxxxxx在不刪除過濾規則的情況下，xxxx<span 
+	 style="font-weight: bold;"><b>xxxx活躍xxxx</b></span>xxxx核取方格用於啟用或停用過濾器xxxxxxxx。xxxx</p>
+<p>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','支援的過濾條件與操作','filter_conditions_and_actions_supported.htm','過濾郵件','filtering_your_messages.htm');return false;" title=" 相關主題"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  相關主題 </nobr></span></a>
+
+
+ </p>
+<p>&#160;</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
+if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
+  WritePopupMenuLayer();
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

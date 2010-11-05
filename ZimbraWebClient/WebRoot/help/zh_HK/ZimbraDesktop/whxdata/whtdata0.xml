@@ -1,0 +1,150 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="入門" >
+  <item name="關於 Zimbra Desktop" url="Getting_Started/Zimbra_User_Help.htm" />
+  <item name="Zimbra Desktop 功能概況" url="Zdesktop/Overview_of_Zimbra_Desktop_Features.htm" />
+  <item name="離線工作" url="Zdesktop/z-Working_Offline.htm" />
+  <item name="快速鍵" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+</book>
+<book name="設定 Zimbra Desktop" >
+  <item name="設定一個 Zimbra 網絡用戶端帳戶" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
+  <item name="設定 Yahoo!電郵及 Gmail 帳戶" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
+  <item name="設定 POP/IMAP 帳戶" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+  <item name="同步你的帳戶資料" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
+  <item name="關閉自動同步" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
+  <item name="組織你的 Desktop 視窗" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
+  <item name="從 Desktop 刪除一個帳戶" url="Zdesktop/z-Deleting_an_account_from_Desktop.htm" />
+</book>
+<book name="瀏覽 Desktop 郵箱" >
+  <item name="瀏覽 Zimbra Desktop" url="Navigation_folders_and_tips/z-Navigating_Zimbra_Desktop.htm" />
+  <item name="用戶介面功能和快速鍵" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+  <item name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <item name="系統資料夾" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="將操作項套用於多重選擇" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+</book>
+<book name="管理你的郵箱" >
+  <item name="管理電子郵件視窗" url="conversations/conversation_list_view.htm" />
+  <item name="設定收信的 Desktop 操作動作" url="Zdesktop/z_Setting_Desktop_behavior_for_getting_mail.htm" />
+  <item name="查看郵件" url="Navigation_folders_and_tips/Traditional_View.htm" />
+  <item name="如何使用對話" url="conversations/conversations_can_span_folders.htm" />
+  <item name="郵件分類" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="列印對話" url="conversations/printing_a_conversation.htm" />
+  <item name="還原刪除的郵件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="無法投遞的郵件" url="Creating_Messages/undeliverable_mail.htm" />
+  <item name="設定轉寄地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</book>
+<book name="撰寫郵件" >
+  <item name="撰寫和傳送郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="電子郵件的組成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <item name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="使用「副本：」和「密件：」地址" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="加入你的署名" url="Userspecific/using_a_signature.htm" />
+  <item name="將檔案附加到郵件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="支援的附件類型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="儲存郵件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
+</book>
+<book name="讀取、回覆和轉寄郵件" >
+  <item name="讀取郵件" url="reading_mail/reading_mail.htm" />
+  <item name="如何知道有新郵件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <item name="在閱讀窗格中查看郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <item name="將郵件標記為未讀" url="reading_mail/marking_mail_as_unread.htm" />
+  <item name="打開附件" url="reading_mail/opening_file_attachments.htm" />
+  <item name="列印單獨郵件" url="reading_mail/printing_a_mail_message.htm" />
+  <item name="回覆郵件" url="reading_mail/replying_to_mail_messages.htm" />
+  <item name="轉寄郵件" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</book>
+<book name="過濾器使用方法" >
+  <item name="使用過濾器分揀收到的郵件" url="filters/how_filtering_works.htm" />
+  <item name="過濾郵件" url="filters/filtering_your_messages.htm" />
+  <item name="支援的過濾條件與操作" url="filters/filter_conditions_and_actions_supported.htm" />
+  <item name="通配字元" url="filters/wildcards.htm" />
+</book>
+<book name="管理聯絡人清單" >
+  <item name="加入新聯絡人" url="Contacts/creating_a_new_contact.htm" />
+  <item name="建立聯絡人群組清單" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
+  <item name="刪除聯絡人" url="Contacts/deleting_a_contact.htm" />
+  <item name="列印聯絡人資料" url="Contacts/Printing_Contacts.htm" />
+  <item name="匯入聯絡人" url="Contacts/Importing_Contacts.htm" />
+  <item name="匯出聯絡人" url="Contacts/Exporting_Address_Books.htm" />
+</book>
+<book name="管理記事簿" >
+  <item name="使用記事簿" url="Calendar/z-Using_Calendars.htm" />
+  <item name="記事簿視窗" url="Calendar/Calendar_Views.htm" />
+  <item name="對記事簿進行彩色編碼" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="列印記事簿" url="Calendar/Printing_a_calendar.htm" />
+  <item name="刪除記事簿" url="Calendar/Deleting_Calendars.htm" />
+  <item name="匯入 iCal 記事簿" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <item name="匯出 iCal 記事簿" url="Calendar/Exporting_your_iCal_calendar.htm" />
+</book>
+<book name="預約排程" >
+  <item name="關於預約排程" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <item name="安排預約" url="Calendar/About_the_Appointment_Page.htm" />
+  <item name="排程預約項" url="Calendar/Scheduling_meetings.htm" />
+  <item name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="將預約標記為私人" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <item name="使用 QuickAdd 建立預約" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+  <item name="將郵件和聯絡人轉為會議請求" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+  <item name="建立定期重複的預約" url="Calendar/Creating_recurring_appointments.htm" />
+  <item name="改變定期重複的預約" url="Calendar/Deleting_recurring_appointments.htm" />
+  <item name="回覆會議邀請函" url="Calendar/Responding_to_an_invitation.htm" />
+</book>
+<book name="搜尋項目" >
+  <item name="使用搜尋功能" url="Search/using_the_search_feature.htm" />
+  <item name="搜尋郵件" url="Search/_search__vs.__search_for_.htm" />
+  <item name="快速搜尋" url="Search/Quick_search.htm" />
+  <item name="進階搜尋" url="Search/building_search_queries.htm" />
+  <item name="儲存搜尋條件" url="Search/saving_search_queries.htm" />
+  <item name="查詢語言說明" url="Search/query_language_description.htm" />
+  <item name="搜尋例項" url="Search/search_examples.htm" />
+  <item name="「包含」與「相符」" url="Search/contains_vs_matches.htm" />
+  <item name="AND 及 OR 搜尋" url="Search/and_vs_or_searches.htm" />
+  <item name="在搜尋中使用 * 作為通配字元" url="Search/Using_Wildcard_in_Search.htm" />
+</book>
+<book name="偏好設定" >
+  <item name="設定你的 Desktop 偏好設定" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
+  <item name="設定桌面提示" url="Userspecific/Setting_up_desktop_alerts.htm" />
+  <item name="電郵通知至另一地址" url="Userspecific/New_mail_notifications.htm" />
+  <item name="休假訊息" url="Userspecific/vacation_message.htm" />
+  <item name="將 Zimbra Desktop 設為預設的電郵程式" url="managing_your_account/Making_Zimbra_Desktop_Default_Mail_Client.htm" />
+</book>
+<book name="整理帳戶資料" >
+  <item name="郵件分類" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm#bc-1" />
+  <item name="存取你的資料夾" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
+  <item name="刪除資料夾" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <item name="建立自訂資料夾" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+  <item name="為郵件加標記" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <item name="用標記分類郵件" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+  <item name="刪除標記" url="Tags_and_flags/deleting_tags.htm" />
+  <item name="為郵件加上旗標" url="Tags_and_flags/Flagging_an_email_message.htm" />
+</book>
+<book name="事項管理" >
+  <item name="關於事項" url="Tasks/About_Tasks.htm" />
+  <item name="建立事項清單" url="Tasks/Create_tasks_folders.htm" />
+  <item name="加入事項" url="Tasks/Add_a_task.htm" />
+  <item name="改變事項" url="Tasks/Change_a_task.htm" />
+  <item name="刪除事項" url="Tasks/Delete_a_task.htm" />
+  <item name="移動事項" url="Tasks/Moving_tasks.htm" />
+  <item name="事項排序" url="Tasks/Sorting_tasks_.htm" />
+</book>
+<book name="分享資料夾（僅限 Zimbra 帳戶）" >
+  <item name="分享你的 Zimbra 資料夾" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
+  <item name="如何分享資料夾" url="Zdesktop/zd_Sharing_Folders_steps_.htm" />
+  <item name="接受對分享郵件夾的存取權" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+  <item name="在分享資料夾中工作" url="Zdesktop/zd_working_in_a_shared_folder.htm" />
+  <item name="在分享郵件夾中工作" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+  <item name="撤銷分享資料夾的存取權" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</book>
+<book name="使用公事包" >
+  <item name="在「公事包」中工作" url="Briefcase/Working_in_Briefcase.htm" />
+  <item name="建立新文件 " url="Documents/Create_a_new_page.htm" />
+  <item name="使用 Rich text 編輯器" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="在文件中加入表格" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</book>
+<book name="管理帳戶內容" >
+  <item name="郵件歸檔" url="Zdesktop/Archiving_your_email_messages.htm" />
+  <item name="將帳戶資料移至另一帳戶" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</book>
+
+</tocdata>

@@ -1,0 +1,219 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="移動郵件至資料夾" >
+  <topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="移至垃圾桶的邀請函" >
+  <topic name="回應邀請" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="籌劃會議" >
+  <topic name="關於預約頁" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="編輯聯絡人資料" >
+  <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="署名" >
+  <topic name="使用署名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="署名中的 URL" >
+  <topic name="使用署名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="署名中的圖片" >
+  <topic name="使用署名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="聯絡人" >
+  <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
+  <topic name="建立新聯絡人" url="Contacts/creating_a_new_contact.htm" />
+  <key name="編輯" >
+    <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="聯絡人群組" >
+  <topic name="建立聯絡人群組清單" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="聯絡人，列印清單" >
+  <topic name="列印聯絡人資料" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="聯絡人，匯入" >
+  <topic name="匯入聯絡人" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="聯絡人，在表格中建立自訂欄位" >
+  <topic name="建立新聯絡人" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="聯絡人，將刪除的聯絡人重新加入清單" >
+  <topic name="刪除聯絡人" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="自動加入署名" >
+  <topic name="使用署名" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="自動填寫地址" >
+  <topic name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="自動將郵件移動至資料夾" >
+  <topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="自訂聯絡人欄位" >
+  <topic name="建立新聯絡人" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="自訂視窗" >
+  <topic name="自訂視窗" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+</key>
+<key name="自訂資料夾" >
+  <topic name="建立自訂資料夾" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="表格，加入文件頁面" >
+  <topic name="加入表格到記事本頁面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="規則，過濾" >
+  <topic name="過濾郵件" url="filters/filtering_your_messages.htm" />
+  <topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="角色" >
+  <topic name="郵箱身份" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="訂閱 RSS" >
+  <topic name="訂閱 RSS/Atom feed" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="訊息，休假" >
+  <topic name="休假訊息" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="記事本頁面" >
+  <topic name="建立新頁面" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="記事簿，列印" >
+  <topic name="列印記事簿" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="記事簿，閒/忙" >
+  <topic name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="設定轉寄地址" >
+  <topic name="設定轉寄地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="讀取窗格" >
+  <topic name="在「讀取」窗格中讀取郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="資料夾" >
+  <topic name="重新命名資料夾" url="Navigation_folders_and_tips/renaming_folders.htm" />
+</key>
+<key name="資料夾，正在同步" >
+  <topic name="存取你的資料夾" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
+</key>
+<key name="身份" >
+  <topic name="郵箱身份" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="轉寄" >
+  <topic name="轉寄郵件" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="轉寄郵件" >
+  <topic name="設定轉寄地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="通訊錄，匯入" >
+  <topic name="匯入聯絡人" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="通訊錄，聯絡人群組" >
+  <topic name="建立聯絡人群組清單" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="通配字元" >
+  <topic name="通配字元" url="filters/wildcards.htm" />
+</key>
+<key name="通配字元，在搜尋中使用" >
+  <topic name="使用搜尋功能" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="過濾器使用方法" >
+  <topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="過濾條件" >
+  <topic name="支援的過濾條件與操作" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="過濾規則，現有資料夾" >
+  <topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
+</key>
+<key name="過濾郵件" >
+  <topic name="過濾郵件" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="選單，右鍵點擊" >
+  <topic name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="選項，休假訊息" >
+  <topic name="休假訊息" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="選項，新郵件通知" >
+  <topic name="新郵件通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="邀請，回應" >
+  <topic name="回應邀請" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="還原" >
+  <topic name="還原刪除的郵件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="刪除的郵件" >
+    <topic name="還原刪除的郵件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="郵件" >
+  <topic name="讀取郵件" url="reading_mail/reading_mail.htm" />
+  <topic name="電子郵件的組成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <key name="閱讀" >
+    <topic name="讀取郵件" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="郵件存檔" >
+  <topic name="清除郵件" url="reading_mail/archiving_old_messages.htm" />
+</key>
+<key name="郵件草稿" >
+  <topic name="儲存郵件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="郵件視窗" >
+  <topic name="管理電子郵件視窗" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="郵件通知" >
+  <topic name="新郵件通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="郵件，回執" >
+  <topic name="請求回執" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+</key>
+<key name="郵箱身份" >
+  <topic name="郵箱身份" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="閒/忙" >
+  <topic name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="閱讀窗格視窗" >
+  <topic name="管理電子郵件視窗" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="閱讀窗格，開關" >
+  <topic name="在「讀取」窗格中讀取郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <topic name="管理電子郵件視窗" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="關閉 Zimlet" >
+  <topic name="管理 Zimlet" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
+<key name="附件" >
+  <topic name="打開附件" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="附件，加入" >
+  <topic name="將檔案附加到郵件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="離線工作" >
+  <topic name="離線工作" url="Zdesktop/z-Working_Offline.htm" />
+</key>
+<key name="離線，工作" >
+  <topic name="離線工作" url="Zdesktop/z-Working_Offline.htm" />
+</key>
+<key name="電郵通知" >
+  <topic name="設定桌面提示" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="頁面，文件" >
+  <topic name="建立新頁面" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="預約" >
+  <topic name="關於預約、會議和活動" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="預約，quickadd" >
+  <topic name="使用 QuickAdd 建立預約" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="預覽窗格，開關" >
+  <topic name="在「讀取」窗格中讀取郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+
+</indexdata>
