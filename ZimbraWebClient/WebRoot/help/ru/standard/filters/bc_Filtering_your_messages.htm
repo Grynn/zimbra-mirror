@@ -1,26 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Фильтрация сообщений</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-p.whs3 { margin-left:40px; }
-p.whs4 { margin-left:24px; }
-p.whs5 { font-style:normal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxФильтрация сообщенийxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -31,26 +19,41 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Создание фильтров \nФильтрация сообщений");
+	addTocInfo("Использование почтовых фильтров\nФильтрация сообщений");
 addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 
 	}
@@ -60,14 +63,12 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -79,50 +80,48 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Фильтрация сообщений</h1>
-<p>Фильтрация заключается в применении набора соответствующих правил к входящей почте и выполнении определенного действия.</p>
-<p>С помощью фильтрации входящих сообщений можно рассортировывать их по папкам, автоматически помечать тегами, пересылать или удалять. Например, можно создать следующее правило.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Все сообщения руководителя направлять в папку &laquo;Указания руководства&raquo;.</p></li>
-	<li class=p><p>Все сообщения из списка рассылки &laquo;Корпоративные события&raquo; помечать тегом &laquo;События&raquo;.</p></li>
+//]]></script>
+<h1>xxxxФильтрация сообщенийxxxx</h1>
+<p>xxxxФильтрация заключается в применении набора соответствующих правил к входящей почте и выполнении определенного действия.xxxx</p>
+<p>xxxxС помощью фильтрации входящих сообщений можно рассортировывать их по папкам, автоматически помечать тегами, пересылать или удалять.xxxx xxxxНапример, можно создать следующее правило.xxxx</p>
+<ul type="disc">
+	<li class="p"><p>xxxxВсе сообщения руководителя направлять в папку «Указания руководства».xxxx</p></li>
+	<li class="p"><p>xxxxВсе сообщения из списка рассылки «Корпоративные события» помечать тегом «События».xxxx</p></li>
 </ul>
-<h6>Создание или редактирование нового правила фильтрации</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Откройте вкладку <span style="font-weight: bold;"><B>Настройки&nbsp;</B></span>.</p></li>
-	<li class=p><p>Откройте вкладку <span style="font-weight: bold;"><B>Фильтры почты</B></span> и выберите пункт <span style="font-weight: bold;"><B>Новый фильтр</B></span>.</p></li>
-	<li class=p><p>В поле <span style="font-weight: bold;"><B>Имя фильтра</B></span> введите имя правила.</p></li>
-	<li class=p><p>В области <span style="font-weight: bold;"><B>Если следующие условия соблюдаются</B></span> выберите критерий. &nbsp;Создайте условие.</p></li>
+<h6>xxxxСоздание или редактирование нового правила фильтрацииxxxx</h6>
+<ol type="1">
+	<li class="p"><p>xxxxОткройте вкладку xxxx<span style="font-weight: bold;"><b>xxxxНастройкиxxxx</b></span>xxxx.xxxx</p></li>
+	<li class="p"><p>Откройте папку <span style="font-weight: bold;"><b>Фильтры почты</b></span> и щелкните <span style="font-weight: bold;"><b>Новый фильтр</b></span>.</p></li>
+	<li class="p"><p>xxxxВ поле xxxx<span style="font-weight: bold;"><b>xxxxИмя фильтраxxxx</b></span>xxxx введите имя правила.xxxx</p></li>
+	<li class="p"><p>xxxxВ области xxxx<span style="font-weight: bold;"><b>xxxxЕсли следующие условия соблюдаютсяxxxx</b></span>xxxx выберите критерий.xxxx &nbsp;Теперь следует создать условие.</p></li>
 </ol>
-<p class="whs3">Для определения нескольких условий и действий для одного фильтра можно выполнить следующие шаги.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p class="whs4">Выберите в раскрывающемся списке, какое <a href="filter_conditions_and_actions_supported.htm">условие</a> использовать. &nbsp;</p></li>
-	<li class=p><p class="whs4">Выберите метод <a href="filter_conditions_and_actions_supported.htm">сравнения</a>. Отображаемые варианты зависят от выбора в предыдущем меню. Например, могут быть отображены &laquo;соответствует&raquo; или &laquo;не соответствует&raquo;.</p></li>
-	<li class=p><p class="whs4">Введите в текстовом поле слово или фразу для сравнения.</p></li>
+<p style="margin-left: 40px;">xxxxДля определения нескольких условий и действий для одного фильтра можно выполнить следующие шаги.xxxx</p>
+<ul type="disc">
+	<li class="p"><p style="margin-left: 24px;">xxxxВыберите в раскрывающемся списке, какое xxxx<a href="filter_conditions_and_actions_supported.htm">xxxxдействиеxxxx</a>xxxx использовать.xxxx &nbsp;</p></li>
+	<li class="p"><p style="margin-left: 24px;">xxxxВыберите метод xxxx<a href="filter_conditions_and_actions_supported.htm">xxxxсравненияxxxx</a>xxxx.xxxx xxxxОтображаемые варианты зависят от выбора в предыдущем меню.xxxx xxxxНапример, могут быть отображены «соответствует» или «не соответствует».xxxx</p></li>
+	<li class="p"><p style="margin-left: 24px;">xxxxВведите в текстовом поле слово или фразу для сравнения.xxxx</p></li>
 </ul>
-<p class="whs3">Щелкните значок <span style="font-weight: bold;"><B>добавить</B></span>, чтобы добавить другие условия. Можно добавить другие условия или перейти к следующей части, которая заключается в добавлении одного или нескольких действий. </p>
-<ol start="6" type="1" class="whs2">
-	<li class=p><p>В области <span style="font-weight: bold;"><B>Выполнить следующие условия</B></span> выберите в раскрывающемся списке <a href="filter_conditions_and_actions_supported.htm">действие</a>.</p></li>
+<p style="margin-left: 40px;">xxxxЩелкните значок xxxx<span style="font-weight: bold;"><b>xxxxдобавитьxxxx</b></span>xxxx, чтобы добавить другие условия.xxxx xxxxМожно добавить другие условия или перейти к следующей части, которая заключается в добавлении одного или нескольких действий.xxxx</p>
+<ol start="5" type="1">
+	<li class="p"><p>xxxxВ области xxxx<span style="font-weight: bold;"><b>xxxxВыполнить следующие условияxxxx</b></span>xxxx выберите в раскрывающемся списке xxxx<a href="filter_conditions_and_actions_supported.htm">xxxxдействиеxxxx</a>xxxx.xxxx</p></li>
 </ol>
-<ul type="disc" class="whs1">
-	<li style="margin-left: -20px;" class=p><p class="whs3">Укажите папку или имя тега, если необходимо. Что указывать, зависит от выбранного действия.</p></li>
+<ul type="disc">
+	<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">xxxxУкажите папку или имя тега, если необходимо.xxxx xxxxЧто указывать, зависит от выбранного действия.xxxx</p></li>
+	<li style="margin-left: -20px;"><p style="margin-left: 40px;">xxxxЩелкните значок xxxx<span style="font-weight: bold;"><b>xxxxдобавитьxxxx</b></span>xxxx, чтобы добавить другие действия.xxxx xxxxМожно добавить другие действия или нажать кнопку xxxx<span style="font-weight: bold;"><b>xxxxОКxxxx</b></span>xxxx для завершения.xxxx</p></li>
 </ul>
-<p class="whs3">Щелкните значок <span style="font-weight: bold;"><B>добавить</B></span>, чтобы добавить другие действия. Можно добавить другие действия или нажать кнопку <span   style="font-weight: bold;"><B>ОК</B></span> для завершения. </p>
-<ol start="7" type="1" class="whs2">
-	<li class=p><p class="whs5">Установите флажок <span style="font-weight: bold;"><B>Активно</B></span> для пункта <span style="font-weight: bold;"><B>Имя фильтра</B></span>, чтобы включить правило фильтра.</p></li>
+<ol start="6" type="1">
+	<li class="p"><p style="font-style: normal;">xxxxУстановите флажок xxxx<span style="font-weight: bold;"><b>xxxxАктивноxxxx</b></span>xxxx для пункта xxxx<span style="font-weight: bold;"><b>xxxxИмя фильтраxxxx</b></span>xxxx, чтобы включить правило фильтра.xxxx</p></li>
 </ol>
-<p class="whs5">Фильтр будет применяться автоматически ко всем новым входящим почтовым сообщениям по мере их поступления.</p>
-<p class="whs5">Дополнительную информацию для условий и действий, см. в разделе <a href="filter_conditions_and_actions_supported.htm">Поддерживаемые условия и действия фильтров</a>.</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="font-style: normal;">xxxxФильтр будет применяться автоматически ко всем новым входящим почтовым сообщениям по мере их поступления.xxxx</p>
+<p style="font-style: normal;">xxxxДополнительную информацию для условий и действий, см. в разделе xxxx<a href="filter_conditions_and_actions_supported.htm">xxxxПоддерживаемые условия и действия фильтровxxxx</a>xxxx.xxxx</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

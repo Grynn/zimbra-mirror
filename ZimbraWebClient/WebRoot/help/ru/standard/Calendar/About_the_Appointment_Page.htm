@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>О встречах</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>About_the_Appointment_Page</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Планирование встреч, собраний и событий\nНазначение собрания");
@@ -56,14 +64,12 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -75,33 +81,62 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Планирование встречи</h1>
-<p>На виде &laquo;Встречи&raquo; можно создавать отдельные или повторяющиеся встречи, собрания или события и создавать сообщения. После нажатия кнопки <span style="font-weight: bold;"><B>Сохранить</B></span> отправляется сообщение, которое приглашает участников и резервирует запрошенные ресурсы.</p>
-<p>На странице &laquo;Встреча&raquo; необходимо ввести следующие сведения о встрече.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Тема</B></span> собрания. &nbsp;Введенный здесь текст становится описанием в ежедневнике.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Место</B></span> &nbsp;встречи.</p></li>
-	<li class=p><p>Раскрывающийся список <span style="font-weight: bold;"><B>Ежедневник</B></span> отображает все ежедневники в списке ежедневников. &nbsp;Первым отображается исходный ежедневник. При наличии нескольких ежедневников можно создать встречу и выбрать календарь. Встреча будет добавлена в тот ежедневник, который был выбран.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Отметить как</B></span> дает возможность отметить встречу как личную, общедоступную или конфиденциальную. Подробности событий, отмеченных как личные или конфиденциальные, не отображаются в общем ежедневнике. В общем ежедневнике отображается только время начала и завершения, длительность, сведения о повторении и идентификационные данные организатора.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Время</B></span> определяет, когда состоится встреча, день, время, события на весь день и параметры повторяющейся встречи. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Участники</B></span>. &nbsp;<span 
- style="x-condition: BasicWC;">Добавляйте участников, щелкнув пункт </span><span 
- style="x-condition: BasicWC; font-weight: bold;"><B>Добавить </B></span><span style="x-condition: BasicWC;"></span><span style="x-condition: BasicWC; font-weight: bold;"><B>участников</B></span><span 
- style="x-condition: BasicWC;"> на панели инструментов или вводя адреса электронной почты участников в поле &laquo;Участники&raquo;. Для разделения адресов используйте точку с запятой. </span></p></li>
-	<li class=p><p>В поле <span style="font-weight: bold;"><B>Текст</B></span> создайте сообщение, которое будет отправлено участникам вместе с приглашением по электронной почте.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>Planning an appointment</h1>
+<p>You can create single or recurring appointments, meetings or events, 
+  and write 
+ a message from within the Appointment view. When you click <span style="font-weight: bold;"><b>Save</b></span>, 
+ an email is sent inviting the attendees and reserving the resources you 
+ requested.</p>
+
+<p>On the Appointment page, you enter information about the appointment 
+ as follows:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Subject</b></span> of 
+	 the meeting. &#160;The text added here becomes the description in 
+	 the calendar.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Location</b></span> of 
+	 &#160;the meeting. You can use this field to describe the location 
+	 of the meeting, such as an address, building number, floor number. 
+	   
+	 </p></li>
+	
+	<li class="p"><p><span style="font-weight: bold;"><b>Calendar</b></span> drop-down 
+	 list shows all calendars in your Calendar List. &#160;The first calendar 
+	 displayed is your original Calendar. When you have multiple-calendars, 
+	 you can create an appointment and select the calendar. The appointment 
+	 is added to whichever calendar is selected.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Mark as</b></span> lets 
+	 you mark an appointment as private or public.  
+	 </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Time</b></span> is to 
+	 define when the appointment will occur, day, hours, all day events 
+	 and recurring appointment parameters. &#160; </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Attendees</b></span>. 
+	 &#160;&#160;Add attendees by 
+	 typing the attendee's email address in the Attendees field. Use a 
+	 semicolon to separate addresses.  </p></li>
+	
+	
+	<li class="p"><p></p></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Text</b></span> 
+	 area compose a message that will be sent with the email invitation 
+	 to the attendees.</p></li>
 </ul>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+
+
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

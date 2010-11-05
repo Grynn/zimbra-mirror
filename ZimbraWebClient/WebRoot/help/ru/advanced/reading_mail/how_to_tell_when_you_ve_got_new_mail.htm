@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Как узнать, что получено новое сообщение</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { font-weight:normal; }
-p.whs2 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxКак узнать, что получено новое сообщениеxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Управление почтой \nЧтение сообщений\nНовые сообщения");
+	addTocInfo("Управление почтой \nЧтение сообщений\nУведомление о новых сообщениях");
 addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 
 	}
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,24 +81,54 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Как узнать, что получено новое сообщение </h1>
-<p>Новые сообщения можно получить в почтовом ящике через определенные промежутки времени, установленные пользователем, или нажав кнопку <span style="font-weight: bold;"><B>Получить почту</B></span>. </p>
-<p>Интервал опроса новых сообщений можно установить на вкладке <span style="font-weight: bold;"><B>Настройки-&gt;Почта</B></span>. &nbsp;По умолчанию опрос выполняется каждые 5 минут. </p>
-<p class="whs1">Если папка содержит новые непрочитанные сообщения, ее имя выделяется жирным шрифтом, а рядом с именем в скобках указано количество непрочитанных сообщений. &nbsp;Например, <span style="font-weight: bold;"><B>Входящие (22)</B></span> означает, что в разговорах в папке &laquo;Входящие&raquo; содержится 22 непрочитанных сообщения.</p>
-<p class="whs2">См. также раздел</p>
-<p><a href="../Userspecific/Setting_your_user_preferences.htm">Установка пользовательских настроек</a></p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>Уведомление о новых сообщениях</h1>
+<p>xxxxНовые сообщения можно получить в почтовом ящике через определенные 
+ промежутки времени, установленные пользователем, или нажав кнопку xxxx<span 
+	 style="font-weight: bold;"><b>xxxxПолучить почтуxxxx</b></span>xxxx.xxxx</p>
+<p>На странице <span style="font-weight: bold;"><b>Настройки почты</b></span> 
+ можно задать частоту, с которой для учетной записи проверяется наличие 
+ новой почты. xxxxПо умолчанию опрос выполняется каждые 5 минут.xxxx</p>
+<p>Можно включить уведомления о новых почтовых уведомлениях. Соответствующие 
+ параметры можно настроить на вкладке «Настройки-&gt;Почта». xxxxВозможны 
+ следующие варианты уведомлений.xxxx</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxxВоспроизведение 
+	 звукаxxxx</b></span>xxxx.xxxx xxxxПри поступлении нового сообщения в папку 
+	 «Входящие» раздаётся звуковой сигнал.xxxx &#160;Если звук отключен, 
+	 вы не услышите сигнал.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Подсветка вкладки 
+	 «Почта»</b></span>. При поступлении в папку «Входящие» нового сообщения, 
+	 если вы не работаете на вкладке «Почта», вкладка почты будет выделена.</p></li>
+</ul>
+<p style="margin-left: 40px;"><img src="../mailnotificationtab.png" alt="mailnotificationtab.png" style="border: none;" width="382" height="37" border="0" /></p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Мерцание заголовка 
+	 браузера</b></span>. При поступлении в папку «Входящие» нового сообщения 
+	 строка заголовка браузера будет мигать, пока не будет открыта вкладка 
+	 почты.</p></li>
+</ul>
+<p style="font-weight: normal;">xxxxЕсли папка содержит новые непрочитанные 
+ сообщения, ее имя выделяется жирным шрифтом, а рядом с именем в скобках 
+ указано количество непрочитанных сообщений.xxxx &#160;Например, <span 
+	 style="font-weight: bold;"><b>Входящие (22)</b></span> означает, что в разговорах 
+ в папке «Входящие» содержится 22 непрочитанных сообщения.</p>
+<p style="font-weight: bold;">xxxxСм. также разделxxxx</p>
+<p><a href="../Userspecific/Setting_your_user_preferences.htm">xxxxУстановка 
+ пользовательских настроекxxxx</a></p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Общедоступный список задач</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxОбщедоступный список задачxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Общий доступ к папкам\nОбщий доступ к спискам задач\nОбщедоступный список задач");
+	addTocInfo("Общий доступ к папкам\nОбщий доступ к спискам задач\nПредоставление доступа к списку задач");
 addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 
 	}
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,78 +81,124 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
-<h1>Общедоступный список задач</h1>
-<p>Списки задач можно сделать доступными для других пользователей и определить их права доступа к общедоступному списку следующими способами.</p>
-<ul class=whs1 style="list-style: disc;" type=disc>
-	<li class=p><p>Внутренние пользователи или группы. Можно выбрать один из перечисленных типов предоставляемых полномочий.</p></li>
-	<ul class=whs1 style="list-style: disc;" type=disc>
-		<li class=p><p><span><b style="font-weight: bold;">Наблюдатель</b></span>. Обладатель этого статуса может читать содержимое списка задач, но не может вносить изменения в его содержимое.</p></li>
-		<li class=p><p><span><b style="font-weight: bold;">Менеджер</b></span>. Обладатель этого статуса имеет все полномочия создавать задачи, изменять и удалять задачи из списка задач.</p></li>
-		<li class=p-note><p class=note><span><b style="font-weight: bold;">Нет</b></span>. Этот параметр временно отключает доступ к списку задач распорядителя без отмены прав общего доступа. Обладатель этого статуса сохраняет за собой список задач, но не может просматривать задачи или управлять ими. </p></li>
-	</ul>
-	<li class=p><p>Внешние гости. Для доступа к общедоступному списку задач необходимо создать пароль. Для просмотра списка задач гости должны вводить пароль. Они не могут вносить изменения в задачи.</p></li>
-	<li class=p><p>Открытый. Все, кто знает URL-адрес общедоступного списка задач, могут его просматривать. Они не могут вносить какие-либо изменения.</p></li>
+//]]></script>
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2"></script>
+<h1>xxxxОбщедоступный список задачxxxx</h1>
+<p>xxxxСписки задач можно сделать доступными для других пользователей и 
+ определить их права доступа к общедоступному списку следующими способами.xxxx</p>
+<ul class="whs1" type="disc">
+	<li class="p"><p>xxxxВнутренние пользователи или группы.xxxx xxxxМожно 
+	 выбрать один из перечисленных типов предоставляемых полномочий.xxxx</p></li>
+	<li style="list-style: none; display: inline;"><ul class="whs1" type="circle">
+		<li class="p"><p><span><b style="font-weight: bold;">xxxxНаблюдательxxxx</b></span>xxxx.xxxx 
+		 xxxxОбладатель этого статуса может читать содержимое списка задач, 
+		 но не может вносить изменения в его содержимое.xxxx</p></li>
+		<li class="p"><p><b style="font-weight: bold;">xxxxМенеджерxxxx</b>xxxx.xxxx 
+		 Обладатель этого статуса имеет право создавать задачи, изменять 
+		 и удалять задачи из списка задач.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>xxxxАдминистраторxxxx</b></span>xxxx.xxxx 
+		 Обладатель этого статуса имеет полномочия создавать задачи, изменять 
+		 и удалять задачи из списка задач и предоставлять доступ к вашему 
+		 списку задач.</p></li>
+		<li class="p-note"><p class="note"><span><b style="font-weight: bold;">xxxxНетxxxx</b></span>xxxx. 
+		 Этот параметр временно отключает доступ к списку задач распорядителя 
+		 без отмены прав общего доступа.xxxx xxxxОбладатель этого статуса 
+		 сохраняет за собой список задач, но не может просматривать задачи 
+		 или управлять ими.xxxx</p></li>
+	</ul></li>
+	<li class="p"><p>xxxxВнешние гости.xxxx xxxxДля доступа к общедоступному 
+	 списку задач необходимо создать пароль.xxxx xxxxДля просмотра списка 
+	 задач гости должны вводить пароль.xxxx xxxxОни не могут вносить изменения 
+	 в задачи.xxxx</p></li>
+	<li class="p"><p>xxxxОткрытый.xxxx xxxxВсе, кто знает URL-адрес общедоступного 
+	 списка задач, могут его просматривать.xxxx xxxxОни не могут вносить 
+	 какие-либо изменения.xxxx</p></li>
 </ul>
-<h6>Общедоступный список задач</h6>
-<p>Щелкните правой кнопкой мыши список задач, который необходимо сделать общедоступным и выберите пункт &laquo;Общедоступный список задач&raquo;. </p>
-<p><img src="../click_to_share.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>В диалоговом окне &laquo;Свойства профиля общего доступа&raquo; введите пользователей, которым должен быть предоставлен доступ, и укажите необходимые сведения.</p>
-<p><img src="../shareproperties.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p class=whs2>&nbsp;</p>
-<p class=whs2><a class="expandspot" href="javascript:TextPopup(this)" id="a1">Общий доступ для внутренних пользователей и групп</a></p>
-<div class="droptext" id="POPUP258892136" style="display: 'none'; " x-ss-type="dropdown">
- <p>1. Выберите пункт <span style="font-weight: bold;"><B>Внутренние пользователи или группы</B></span> для общего доступа<br><br> 2. В поле <span style="font-weight: bold;"><B>Электронный адрес</B></span> введите электронные адреса лиц, которым вы предоставляете доступ. По мере ввода адресов отображается список имен, соответствующих вводимым буквам. &nbsp;Можно выбрать имя из списка. <br><br> 3. Выберите роль наблюдателя или менеджера. <br><br> 4. В разделе <span style="font-weight: bold;"><B>Сообщение</B></span> выберите тип сообщения, отправляемого для уведомления получателя статуса.<br><br> Нажмите кнопку <span style="font-weight: bold;"><B>ОК</B></span>.</p>
+<h6>xxxxОбщедоступный список задачxxxx</h6>
+<p>xxxxЩелкните правой кнопкой мыши список задач, который необходимо сделать 
+ общедоступным и выберите пункт «Общедоступный список задач».xxxx</p>
+<p><img src="../click_to_share.png" alt="click_to_share.png" style="border: none;" width="287" height="161" border="0" /></p>
+<p>xxxxВ диалоговом окне «Свойства профиля общего доступа» введите пользователей, 
+ которым должен быть предоставлен доступ, и укажите необходимые сведения.xxxx</p>
+<p><img src="../shareproperties.png" alt="shareproperties.png" style="border: none;" width="292" height="233" border="0" /></p>
+<p class="whs2">&#160;</p>
+<p class="whs2"><a class="expandspot" href="javascript:TextPopup(this)" 
+					 id="a1">Общий доступ для внутренних пользователей 
+ и групп</a><span class="expandtext" id="POPUP143306751" style="display: none;">1. 
+ Выберите пункт <span style="font-weight: bold;"><b>Внутренние пользователи 
+ или группы</b></span> для общего доступа<br />
+<br />
+2. В поле <span style="font-weight: bold;"><b>Электронный адрес</b></span> введите 
+ электронные адреса лиц, которым вы предоставляете доступ. xxxxПо мере 
+ ввода адресов отображается список имен, соответствующих вводимым буквам.xxxx 
+ &#160;Можно выбрать имя из списка.<br />
+<br />
+xxxx 3. Выберите роль наблюдателя или менеджера. xxxx<br />
+xxxx xxxx<br />
+xxxx 4. В разделе xxxx<span style="font-weight: bold;"><b>xxxxСообщениеxxxx</b></span>xxxx 
+ выберите тип сообщения, отправляемого для уведомления получателя статуса.xxxx<br />
+<br />
+5. Нажмите кнопку <span style="font-weight: bold;"><b>OK</b></span>.</span></p>
+<p class="whs2"><a class="dropspot" href="javascript:TextPopup(this)" id="a2">xxxxОбщий 
+ доступ для внешних гостейxxxx</a></p>
+<div class="droptext" id="POPUP131074888" style="display: none;">
+	<p>1. xxxxВ разделе xxxx<span style="font-weight: bold;"><b>xxxxОбщий 
+	 доступ сxxxx</b></span>xxxx выберите пункт xxxx<span style="font-weight: bold;"><b>xxxxВнешние 
+	 гостиxxxx</b></span>xxxx.xxxx xxxxПосле этого откроется поле пароля.xxxx</p>
+	<p>2. xxxxВведите электронные адреса гостей.xxxx</p>
+	<p>3. xxxxВведите пароль, который должны вводить гости для доступа 
+	 к этому списку задач.xxxx</p>
+	<p>4. xxxxВыберите тип уведомления, которое будет им отправлено.xxxx 
+	 xxxxСообщение будет содержать сведения, необходимые для доступа к 
+	 списку задач.xxxx</p>
+	<p>5. xxxxНажмите кнопку xxxx<span style="font-weight: bold;"><b>xxxxОКxxxx</b></span>xxxx.xxxx</p>
+	<p>&#160;</p>
 </div>
-<p class=whs2><a class="dropspot" href="javascript:TextPopup(this)" id="a2">Общий доступ для внешних гостей</a></p>
-<div class="droptext" id="POPUP319913059" style="display: 'none'; " x-ss-type="dropdown">
- <p>1. В разделе <span style="font-weight: bold;"><B>Общий доступ с</B></span> выберите пункт <span style="font-weight: bold;"><B>Внешние гости</B></span>. После этого откроется поле пароля.</p>
- <p>2. Введите электронные адреса гостей.</p>
- <p>3. Введите пароль, который должны вводить гости для доступа к этому списку задач.</p>
- <p>4. Выберите тип уведомления, которое будет им отправлено. Сообщение будет содержать сведения, необходимые для доступа к списку задач. </p>
- <p>5. Нажмите кнопку <span style="font-weight: bold;"><B>ОК</B></span>. </p>
- <p>&nbsp;</p>
+<p class="whs2"><a class="dropspot" href="javascript:TextPopup(this)" id="a3">xxxxОбщий 
+ доступ в режиме открытыйxxxx</a></p>
+<div class="droptext" id="POPUP101795979" style="display: none;">
+	<p>1. xxxxВ разделе xxxx<span style="font-weight: bold;"><b>xxxxОбщий 
+	 доступ сxxxx</b></span>xxxx выберите пункт «Открытый».xxxx xxxxПосле этого 
+	 откроется диалоговое окно свойств общей папки с URL-адресом списка 
+	 задач.xxxx</p>
+	<p>2. xxxxЗапомните этот URL-адрес и сообщите его пользователям, обладающих 
+	 правом доступа в режиме «Открытый».xxxx xxxxКогда они перейдут по 
+	 этому URL-адресу, они смогут прочесть содержимое списка задач, но 
+	 не смогут вносить в него изменения.xxxx</p>
 </div>
-<p class=whs2><a class="dropspot" href="javascript:TextPopup(this)" id="a3">Общий доступ в режиме открытый</a></p>
-<div class="droptext" id="POPUP319876656" style="display: 'none'; " x-ss-type="dropdown">
- <p>1. В разделе <span style="font-weight: bold;"><B>Общий доступ с</B></span> выберите пункт &laquo;Открытый&raquo;. После этого откроется диалоговое окно свойств общей папки с URL-адресом списка задач. </p>
- <p>2. Запомните этот URL-адрес и сообщите его пользователям, обладающих правом доступа в режиме &laquo;Открытый&raquo;. Когда они перейдут по этому URL-адресу, они смогут прочесть содержимое списка задач, но не смогут вносить в него изменения.</p>
-</div>
-<div class=droptext id=POPUP212037081 x-ss-type=dropdown style="display: none;">
-<p>При выборе параметра &laquo;Открытый&raquo; все, у кого есть URL-адрес, могут просматривать список задач. &nbsp;Пароль не требуется. </p>
-</div>
-<h3>Изменение или отмена разрешения</h3>
-<p>Полномочия можно отменить в любое время.</p>
-<ol class=whs8 style="list-style: decimal;" type=1>
-	<li class=p><p>Щелкните правой кнопкой мыши общедоступный список задач.</p></li>
-	<li class=p><p>Выберите пункт <span style="font-weight: bold;"><B><b>Изменить свойства</b></B></span>. Появится список пользователей, имеющих доступ к данной папке.</p></li>
-	<li class=p><p>Щелкните ссылку <span style="font-weight: bold;"><B><b>Изменить</b></B></span> для изменения разрешений или <br>щелкните ссылку <span style="font-weight: bold;"><B><b>Отменить</b></B></span> для отмены разрешений. </p></li>
-	<li class=p><p>Выберите, необходимо ли отправить сообщение с описанием изменений.</p></li>
-	<li class=p><p>Нажмите кнопку <span style="font-weight: bold;"><B><b>ОК</b></B></span>.</p></li>
+<h3>xxxxИзменение или отмена разрешенияxxxx</h3>
+<p>xxxxПолномочия можно отменить в любое время.xxxx</p>
+<ol class="whs8" type="1">
+	<li class="p"><p>xxxxЩелкните правой кнопкой мыши общедоступный список 
+	 задач.xxxx</p></li>
+	<li class="p"><p>xxxxВыберите пункт xxxx<span style="font-weight: bold;"><b><b>xxxxИзменить 
+	 свойстваxxxx</b></b></span>xxxx.xxxx xxxxПоявится список пользователей, 
+	 имеющих доступ к данной папке.xxxx</p></li>
+	<li class="p"><p>xxxxЩелкните ссылку xxxx<span style="font-weight: bold;"><b><b>xxxxИзменитьxxxx</b></b></span>xxxx 
+	 для изменения разрешений или xxxx<br />
+	xxxxщелкните ссылку xxxx<span style="font-weight: bold;"><b><b>xxxxОтменитьxxxx</b></b></span>xxxx 
+	 для отмены разрешений.xxxx</p></li>
+	<li class="p"><p>xxxxВыберите, необходимо ли отправить сообщение с 
+	 описанием изменений.xxxx</p></li>
+	<li class="p"><p>xxxxНажмите кнопку xxxx<span style="font-weight: bold;"><b><b>xxxxОКxxxx</b></b></span>xxxx.xxxx</p></li>
 </ol>
-<p>&nbsp;</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a1','POPUP258892136');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a2','POPUP319913059');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a3','POPUP319876656');
-//--></script><script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a1','POPUP143306751');
+	TextPopupInit('a2','POPUP131074888');
+	TextPopupInit('a3','POPUP101795979');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

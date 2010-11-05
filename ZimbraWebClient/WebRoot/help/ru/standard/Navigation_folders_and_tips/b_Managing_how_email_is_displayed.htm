@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Управление отображением сообщений</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
-p.whs2 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxУправление отображением сообщенийxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Управление почтой \nУправление отображением сообщений");
@@ -57,14 +64,12 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -76,31 +81,55 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Управление отображением сообщений</h1>
-<p>Сообщения можно просматривать в виде <span style="font-weight: bold;"><B>сообщений</B></span> или в виде <span style="font-weight: bold;"><B>разговоров</B></span>. </p>
-<p>Чтобы изменить способ группирования сообщений, перейдите на вкладку <span style="font-weight: bold;"><B>Настройки-&gt;Почта</B></span> и измените параметр <span style="font-weight: bold;"><B>Группировать почту по:</B></span>. </p>
-<h2>Сообщения</h2>
-<p>Почта группируется по мере отображения сообщений, при этом самое последнее сообщение отображается первым в почтовой папке. Непрочитанные сообщения выделяются жирным шрифтом. При просмотре строки сообщения можно увидеть, от кого поступило сообщение, есть ли в сообщении вложение, тему сообщения, в какой папке оно хранится, размер сообщения и дату его получения. &nbsp;Если сообщения помечены флагом или тегом, это также отображается.</p>
-<p><img src="../message_group75.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<h2>Разговоры</h2>
-<p>Если почтовые сообщения группируются по разговорам, то сообщения группируются по теме. &nbsp;Разговор &mdash; это группа сообщений с одной темой. &nbsp;При смене темы сообщения, сообщение в разговор не включается.</p>
-<p>Тема отображается только один раз в области вида разговора. Количество сообщений в разговоре показано в скобках после темы. При поступлении новых сообщений, разговор перемещается вверх сообщений. Разговоры, содержащие непрочитанные сообщения, выделяются <span style="font-weight: bold;"><B>жирным шрифтом</B></span>.</p>
-<p class="whs2">Вид &laquo;Разговор&raquo;</p>
-<p><img src="../conversationview.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>&nbsp;</p>
-<p>Дважды щелкните разговор, чтобы отобразить сообщения данного разговора. Щелкните сообщение, чтобы отобразить его содержимое в области чтения ниже. На панели задач сообщения щелкните значок <img src="../newwindowbutton.png" x-maintain-ratio="TRUE" border="0" class="img_whs1">, чтобы отобразить сообщение в новом окне.</p>
-<p>Отображаются все сообщения, имеющие отношение к разговору, даже если сообщения хранятся в других папках. В столбце <span style="font-weight: bold;"><B>Папка</B></span> отображается папка, в которой хранится сообщение. Разговоры не продолжаются бесконечно. Если последнее сообщение в разговоре поступило 30 дней назад или ранее, сообщения, отправляемые с такой же темой позднее, будут составлять новый разговор.</p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<h1>xxxxУправление отображением сообщенийxxxx</h1>
+<p>xxxxСообщения можно просматривать в виде xxxx<span style="font-weight: bold;"><b>xxxxсообщенийxxxx</b></span>xxxx 
+ или в виде xxxx<span style="font-weight: bold;"><b>xxxxразговоровxxxx</b></span>xxxx.xxxx</p>
+<p>xxxxЧтобы изменить способ группирования сообщений, перейдите на вкладку 
+ xxxx<span style="font-weight: bold;"><b>xxxxНастройки-&gt;Почтаxxxx</b></span>xxxx 
+ и измените параметр xxxx<span style="font-weight: bold;"><b>xxxxГруппировать 
+ почту по:xxxx</b></span>xxxx.xxxx</p>
+<p>Также можно просматривать сообщения в виде с тремя областями и областью 
+ чтения слева.</p>
+<h2>xxxxСообщенияxxxx</h2>
+<p>xxxxПочта группируется по мере отображения сообщений, при этом самое 
+ последнее сообщение отображается первым в почтовой папке.xxxx xxxxНепрочитанные 
+ сообщения выделяются жирным шрифтом.xxxx xxxxПри просмотре строки сообщения 
+ можно увидеть, от кого поступило сообщение, есть ли в сообщении вложение, 
+ тему сообщения, в какой папке оно хранится, размер сообщения и дату его 
+ получения.xxxx &#160;Если сообщение содержит включенный флаг или тег, 
+ они также отображаются.</p>
+<p><img src="../message_group75.png" alt="message_group75.png" style="border: none;" width="996" height="128" border="0" /></p>
+<h2>xxxxРазговорыxxxx</h2>
+<p>xxxxЕсли почтовые сообщения группируются по разговорам, то сообщения 
+ группируются по теме.xxxx &#160;Разговор — это группа сообщений с одной 
+ темой. &#160;Если изменить тему сообщения, сообщение в разговор не включается.</p>
+<p>xxxxТема отображается только один раз в области вида разговора.xxxx 
+ xxxxКоличество сообщений в разговоре показано в скобках после темы.xxxx 
+ xxxxПри поступлении новых сообщений, разговор перемещается вверх сообщений.xxxx 
+ xxxxРазговоры, содержащие непрочитанные сообщения, выделяются xxxx<span 
+	 style="font-weight: bold;"><b>xxxxжирным шрифтомxxxx</b></span>xxxx.xxxx</p>
+<p style="font-weight: bold;">xxxxВид «Разговор»xxxx</p>
+<p><img src="../conversationview.png" alt="conversationview.png" style="border: none;" width="1006" height="126" border="0" /></p>
+<p>&#160;</p>
+<p>xxxxДважды щелкните разговор, чтобы отобразить сообщения данного разговора.xxxx 
+ xxxxЩелкните сообщение, чтобы отобразить его содержимое в области чтения 
+ ниже.xxxx На панели задач сообщения щелкните значок <img src="../newwindowbutton.png" alt="newwindowbutton.png" style="border: none;" width="22" height="18" border="0" />, 
+ чтобы отобразить сообщение в новом окне.</p>
+<p>xxxxОтображаются все сообщения, имеющие отношение к разговору, даже 
+ если сообщения хранятся в других папках.xxxx xxxxВ столбце xxxx<span style="font-weight: bold;"><b>xxxxПапкаxxxx</b></span>xxxx 
+ отображается папка, в которой хранится сообщение.xxxx xxxxРазговоры не 
+ продолжаются бесконечно.xxxx xxxxЕсли последнее сообщение в разговоре 
+ поступило 30 дней назад или ранее, сообщения, отправляемые с такой же 
+ темой позднее, будут составлять новый разговор.xxxx</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

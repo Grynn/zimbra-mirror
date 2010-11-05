@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Использование браузера с клиентом Zimbra</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-img_whs2 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxИспользование браузера с клиентом Zimbraxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Навигация в почтовом ящике\nИспользование браузеров");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,26 +81,30 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Использование браузеров </h1>
-<p>Веб-клиент Zimbra предназначен для работы с Интернет-браузерами. &nbsp;Самые популярные среди них &mdash; Microsoft Internet Explorer, Mozilla Firefox и Macintosh Safari. Поддерживаются не все браузеры; если возникнут проблемы, обратитесь к администратору.</p>
-<p>Некоторые общие указания по использованию веб-клиента Zimbra с браузером.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Кнопка браузера <span style="font-weight: bold;"><B>Назад</B></span> возвращает предыдущую страницу просмотра. Можно также воспользоваться кнопкой &laquo;Вперед&raquo;.</p></li>
-	<li class=p><p>Чтобы выйти, щелкните значок <img src="../logoffbutton.png" x-maintain-ratio="TRUE" border="0" class="img_whs2">. Если перейти на другой сайт, не закрыв страницу, сеанс будет оставаться активным, пока не истечет его время. Если вы пользуетесь общедоступным компьютером, другие пользователи могут войти в вашу учетную запись во время активного сеанса.</p></li>
-	<li class=p><p>Не нажимайте кнопку <span style="font-weight: bold;"><B>Перезагрузить</B></span> (Обновить). Это приведет к загрузке клиента и возобновлению сеанса, что вряд ли входит в ваши намерения.</p></li>
+//]]></script>
+<h1>xxxxИспользование браузеровxxxx</h1>
+<p>@ClientNameLong@ предназначен для работы с интернет-браузерами. &nbsp;Самые популярные среди них &mdash; Microsoft Internet Explorer,  Mozilla  Firefox и Macintosh Safari. xxxxПоддерживаются не все браузеры; если возникнут проблемы, обратитесь к администратору.xxxx</p>
+<p>Некоторые общие указания по использованию @ClientNameLong@ с браузером.</p>
+<ul type="disc">
+<li class="p">
+<p>xxxxКнопка браузера xxxx<span style="font-weight: bold;"><b>xxxxНазадxxxx</b></span>xxxx возвращает предыдущую страницу просмотра.xxxx xxxxМожно также воспользоваться кнопкой «Вперед».xxxx</p>
+</li>
+<li class="p">
+<p>Чтобы выйти, щелкните значок <img src="../logoffbutton.png" style="border: none;" alt="logoffbutton.png" width="69" height="19" border="0" />. xxxxЕсли перейти на другой сайт, не закрыв страницу, сеанс будет оставаться активным, пока не истечет его время.xxxx xxxxЕсли вы пользуетесь общедоступным компьютером, другие пользователи могут войти в вашу учетную запись во время активного сеанса.xxxx</p>
+</li>
+<li class="p">
+<p>Не нажимайте кнопку «Перезагрузить (Обновить)». xxxxЭто приведет к загрузке клиента и возобновлению сеанса, что вряд ли входит в ваши намерения.xxxx</p>
+</li>
 </ul>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

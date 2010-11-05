@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Адресная книга</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxАдресная книгаxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Управление адресными книгами\nАдресная книга");
@@ -56,10 +63,8 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,39 +80,31 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Адресная книга</h1>
-<p><span style="font-weight: bold;"><B>Адресная книга</B></span> &mdash; это место для хранения контактных данных в личных адресных книгах. По умолчанию в &laquo;Адресной книге&raquo; создаются адресные книги <span style="font-weight: bold;"><B>Контакты</B></span> и <span style="font-weight: bold;"><B>Отправленные по электронной почте контакты</B></span>. Можно создавать дополнительные адресные книги и предоставлять доступ к ним другим пользователям.</p>
-<p>Можно <a href="creating_a_new_contact.htm">добавлять контакты</a> в любую из адресных книг. Для создания контакта требуется только имя, также можно создать подробную карточку контакта, включающую полное имя, несколько адресов электронной почты, рабочий, домашний и другие адреса, номера телефонов и примечания к контакту. Также можно создавать списки <a href="Creating_Group_Contact_Lists.htm">групповых контактов</a>.</p>
-<p>Адресная книга <span style="font-weight: bold;"><B>Отправленные по электронной почте контакты</B></span> заполняется при отправлении электронной почты на новый адрес, который не содержится в других ваших адресных книгах. Эту функцию можно отключить на вкладке &laquo;Адресная книга&raquo; в меню &laquo;Настройки&raquo;. Снимите флажок <span style="font-weight: bold;"><B>Включить автоматическое добавление контактов</B></span>. </p>
-<p>Администратор электронной почты может установить ограничение на максимальное количество записей, которые могут содержаться во всех ваших адресных книгах. При достижении лимита исчезнет возможность добавлять контакты. Можно удалить неиспользуемые контакты, чтобы освободить место.</p>
-<p>При составлении сообщения электронной почты функция автозаполнения показывает список имен из адресной книги, соответствующих вводимому тексту. </p>
-<h2>Просмотр данных контактов</h2>
-<p>Можно просматривать имена контактов в списке или в виде подробных карточек. Вид <span   style="font-weight: bold;"><B>Список контактов</B></span> является вертикальным списком всех контактов. Вид <span style="font-weight: bold;"><B>Карточки</B></span> отображает все сведения, введенные в форме контакта. </p>
-<p>Можно изменить вид на один сеанс при помощи раскрывающегося списка <span style="font-weight: bold;"><B>Адресная книга</B></span>. Вид адресных книг по умолчанию можно изменить, открыв вкладки &laquo;Настройки-&gt;Адресная книга&raquo;, параметр <span style="font-weight: bold;"><B>Вид контактов по умолчанию</B></span><span>.</span></p>
-<p>Полные контактные данные отображаются в виде всплывающей подсказки при наведении курсора мыши на имя в сообщении&nbsp;или при просмотре содержимого электронной почты, если это имя содержится в одной из адресных книг. 
- </p>
-<h3>Предоставление доступа к спискам контактов</h3>
-<p>Можно <a href="Sharing_your_Address_Book.htm">предоставлять доступ</a> к любой из адресных книг. Эта функция полезна, если адресные книги используются для определенных категорий контактов и другим пользователям необходимо иметь доступ к именам. В зависимости от роли, которая назначена для получившего доступ пользователя, общий список контактов может иметь права только на просмотр или права полного доступа для изменения, добавления и удаления имен. </p>
-<h3>Дополнительные функции адресной книги</h3>
-<p>Другие функции включают следующие возможности.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><a href="../Tags_and_flags/Assigning_tags_to_messages.htm">Применение тегов</a> к контактам</p></li>
-	<li class=p><p><a href="Importing_Contacts.htm">Импорт</a> и <a href="Exporting_Address_Books.htm">экспорт</a> адресных книг</p></li>
+//]]></script>
+<h1>xxxxАдресная книгаxxxx</h1>
+<p><span style="font-weight: bold;"><b>Адресная книга</b></span> &mdash; это место для хранения контактных данных. xxxxПо умолчанию в «Адресной книге» создаются адресные книги xxxx<span style="font-weight: bold;"><b>xxxxКонтактыxxxx</b></span>xxxx и xxxx<span style="font-weight: bold;"><b>xxxxОтправленные по электронной почте контактыxxxx</b></span>xxxx.xxxx Можно создавать дополнительные адресные книги  и предоставлять доступ к ним другим пользователям.</p>
+<p>xxxxМожно xxxx<a href="creating_a_new_contact.htm">xxxxдобавлять контактыxxxx</a>xxxx в любую из адресных книг.xxxx Для создания контакта требуется только имя. Также можно создать подробную форму контакта, включающую полное имя, несколько адресов электронной почты, рабочий, домашний и другие адреса, номера телефонов и изображение. xxxxТакже можно создавать списки xxxx<a href="Creating_Group_Contact_Lists.htm">xxxxгрупповых контактовxxxx</a>xxxx.xxxx</p>
+<p>xxxxАдресная книга xxxx<span style="font-weight: bold;"><b>xxxxОтправленные по электронной почте контактыxxxx</b></span>xxxx заполняется при отправлении электронной почты на новый адрес, который не содержится в других ваших адресных книгах.xxxx Эту функцию можно отключить в меню «Настройки» на вкладке «Адресная книга». Снимите в настройках флажок <span style="font-weight: bold;"><b>Добавлять новые контакты к отправленным по электронной почте контактам</b></span>.</p>
+<p>xxxxАдминистратор электронной почты может установить ограничение на максимальное количество записей, которые могут содержаться во всех ваших адресных книгах.xxxx xxxxПри достижении лимита исчезнет возможность добавлять контакты.xxxx xxxxМожно удалить неиспользуемые контакты, чтобы освободить место.xxxx</p>
+<p>xxxxПри составлении сообщения электронной почты функция автозаполнения показывает список имен из адресной книги, соответствующих вводимому тексту.xxxx</p>
+<h3>xxxxПредоставление доступа к спискам контактовxxxx</h3> <p>xxxxМожно xxxx<a  	 href="Sharing_your_Address_Book.htm">xxxxпредоставлять доступxxxx</a>xxxx к любой из адресных книг.xxxx xxxxЭта функция полезна, если адресные книги используются для определенных категорий контактов и другим пользователям необходимо иметь доступ к именам.xxxx xxxxВ зависимости от роли, которая назначена для получившего доступ пользователя, общий список контактов может иметь права только на просмотр или права полного доступа для изменения, добавления и удаления имен.xxxx</p>
+<h3>xxxxДополнительные функции адресной книгиxxxx</h3>
+<p>xxxxДругие функции включают следующие возможности.xxxx</p>
+<ul type="disc">
+	<li class="p"><p><a href="../Tags_and_flags/Assigning_tags_to_messages.htm">xxxxПрименение теговxxxx</a>xxxx к контактамxxxx</p></li>
+	<li class="p"><p><a href="Importing_Contacts.htm">xxxxИмпортxxxx</a>xxxx и xxxx<a  	 href="Exporting_Address_Books.htm">xxxxэкспортxxxx</a>xxxx адресных книгxxxx</p></li>
 </ul>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

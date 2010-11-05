@@ -1,24 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Перемещение в почте</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
-ul.whs2 { list-style:disc; }
-p.whs3 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxПеремещение в почтеxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Навигация в почтовом ящике\nНавигация в почте");
@@ -58,14 +64,12 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -77,33 +81,57 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Перемещение на вкладке &laquo;Почта&raquo;</h1>
-<p>При открытии вкладки &laquo;Почта&raquo; появляется список сообщений. На этом виде можно открыть и прочитать сообщения.</p>
-<h6>Обычный вид &laquo;Входящие&raquo; при открытии почтового ящика.</h6>
-<p><img src="../mail.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p><span style="font-weight: bold;"><B>1</B></span> &mdash; Эта строка включает пункты &laquo;Обновить&raquo;, &laquo;Написать письмо&raquo;, &laquo;Печать&raquo;, &laquo;Удалить&raquo;, &laquo;Спам&raquo; и два меню действий: &laquo;Переместить в...&raquo; и &laquo;Дополнительные действия&raquo;. 
- </p>
-<ul type="disc" class="whs2">
-	<li style="margin-left: -20px;" class=p><p class="whs3">Щелкните <span style="font-weight: bold;"><B>Обновить</B></span>, чтобы получить новые сообщения. </p></li>
-	<li style="margin-left: -20px;" class=p><p class="whs3">Щелкните <span style="font-weight: bold;"><B>Написать письмо</B></span>, чтобы начать новое сообщение. Откроется область содержимого.</p></li>
-	<li style="margin-left: -20px;" class=p><p class="whs3">Чтобы удалить сообщение, выберите сообщение и нажмите кнопку <span style="font-weight: bold;"><B>Удалить</B></span> или <span style="font-weight: bold;"><B>Спам</B></span>, чтобы переместить помеченное сообщение в Корзину или папку &laquo;Спам&raquo;. &nbsp;</p></li>
-	<li style="margin-left: -20px;" class=p><p class="whs3">Панель действия <span style="font-weight: bold;"><B>Переместить в</B></span> используется для перемещения сообщений в выбранную папку. &nbsp;Стрелки и цифры с другой стороны панели действия <span style="font-weight: bold;"><B>Переместить в</B></span> отображают количество сообщений на этой странице. &nbsp;Это может быть не общее количество сообщений в почтовом ящике. Следующую страницу сообщений можно открыть, щелкнув правую стрелку. </p></li>
-	<li style="margin-left: -20px;" class=p><p class="whs3"><span>С помощью панели действий </span><span style="font-weight: bold;"><B>Дополнительные действия</B></span> можно пометить выбранные сообщения как прочитанные или непрочитанные, с флагом или без флага, уже созданным тегом или удалить тег.</p></li>
+//]]></script>
+<h1>xxxxПеремещение на вкладке «Почта»xxxx</h1>
+<p>xxxxПри открытии вкладки «Почта» появляется список сообщений.xxxx xxxxНа 
+ этом виде можно открыть и прочитать сообщения.xxxx</p>
+<h6>xxxxОбычный вид «Входящие» при открытии почтового ящика.xxxx</h6>
+<p><img src="../mail.png" alt="mail.png" style="border: none;" width="1020" height="194" border="0" /></p>
+<p><span style="font-weight: bold;"><b>xxxx1xxxx</b></span>xxxx xxxxxxxx—xxxxxxxx 
+ Эта строка включает пункты «Обновить», «Написать письмо», «Печать», «Удалить», 
+ «Спам» и два меню действий: «Переместить в...» и «Дополнительные действия».xxxx</p>
+<ul type="disc">
+	<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">xxxxЩелкните 
+	 xxxx<span style="font-weight: bold;"><b>xxxxОбновитьxxxx</b></span>xxxx, 
+	 чтобы получить новые сообщения.xxxx</p></li>
+	<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">xxxxЩелкните 
+	 xxxx<span style="font-weight: bold;"><b>xxxxНаписать письмоxxxx</b></span>xxxx, 
+	 чтобы начать новое сообщение.xxxx xxxxОткроется область содержимого.xxxx</p></li>
+	<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">xxxxЧтобы 
+	 удалить сообщение, выберите сообщение и нажмите кнопку xxxx<span style="font-weight: bold;"><b>xxxxУдалитьxxxx</b></span>xxxx 
+	 или xxxx<span style="font-weight: bold;"><b>xxxxСпамxxxx</b></span>xxxx, 
+	 чтобы переместить помеченное сообщение в Корзину или папку «Спам».xxxx 
+	 &#160;</p></li>
+	<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">xxxxПанель 
+	 действия xxxx<span style="font-weight: bold;"><b>xxxxПереместить вxxxx</b></span>xxxx 
+	 используется для перемещения сообщений в выбранную папку.xxxx &#160;Стрелки 
+	 и цифры с другой стороны панели действия <span style="font-weight: bold;"><b>Переместить</b></span> 
+	 отображают количество сообщений на этой странице. &#160;Это может 
+	 быть не общее количество сообщений в почтовом ящике. xxxxСледующую 
+	 страницу сообщений можно открыть, щелкнув правую стрелку.xxxx</p></li>
+	<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;"><span>С 
+	 помощью панели действий</span> <span style="font-weight: bold;"><b>Другие 
+	 действия</b></span> можно пометить выбранные сообщения как прочитанные 
+	 или непрочитанные, с флагом или без флага, уже с созданным тегом или 
+	 удалить тег.</p></li>
 </ul>
-<p><span style="font-weight: bold;"><B>2</B></span> &mdash; <span style="font-weight: bold;"><B>Панель заголовка</B></span> для области содержимого. Если установить флажок в заголовке, все сообщения на этой странице также будут помечены флажком. </p>
-<p><span style="font-weight: bold;"><B>3</B></span> &mdash; Сообщения отображаются как <a href="b_Managing_how_email_is_displayed.htm">Разговоры или отдельные сообщения</a>. Установите флажок у сообщения или разговора, которые нужно переместить, или над которыми необходимо выполнить дополнительные действия.</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p><span style="font-weight: bold;"><b>2</b></span> - <span style="font-weight: bold;"><b>Панель 
+ заголовка</b></span> для области содержимого. xxxxЕсли установить флажок в 
+ заголовке, все сообщения на этой странице также будут помечены флажком.xxxx</p>
+<p><span style="font-weight: bold;"><b>xxxx3xxxx</b></span>xxxx xxxxxxxx—xxxxxxxx 
+ Сообщения отображаются как xxxx<a href="b_Managing_how_email_is_displayed.htm">xxxxРазговоры 
+ или отдельные сообщенияxxxx</a>xxxx.xxxx xxxxУстановите флажок у сообщения 
+ или разговора, которые нужно переместить, или над которыми необходимо 
+ выполнить дополнительные действия.xxxx</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

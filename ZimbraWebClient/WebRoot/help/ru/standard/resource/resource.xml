@@ -1,0 +1,158 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<resource>
+  <element name="Hide" value="Скрыть" />
+  <element name="Prev" value="&lt;&lt;" />
+  <element name="PrintThisCategory" value="Печать категории" />
+  <element name="AboutBoxHelpID" value="ИД справки:" />
+  <element name="Logo/Author" value="Предоставляется" />
+  <element name="RSSReadLabel" value="Прочитанно" />
+  <element name="RSSUnReadLabel" value="Непрочитанно" />
+  <element name="NoUpdatePresent" value="Нет доступного обновления" />
+  <element name="SyncToc" value="SyncToc" />
+  <element name="Next" value="&gt;&gt;" />
+  <element name="FavoriteDeleteTopic" value="Удалить" />
+  <element name="PreferenceDlgShowBreadCrumb" value="Показать ссылки" />
+  <element name="CommentBoxSendServerMessage" value="Комментарии высланы в общедоступное место" />
+  <element name="CommentBoxShowReviewerMenu" value="Рецензент" />
+  <element name="CommentBoxShowCommentButton" value="Показать" />
+  <element name="CommentBoxSortCommentButton" value="Группировать" />
+  <element name="OpenInBrowser" value="Открыть в браузере" />
+  <element name="DownloadingUpdate" value="Загрузка обновлений…" />
+  <element name="OpenInNewTab" value="Открыть в новой вкладке" />
+  <element name="IndexSearchText" value="Ввести ключевые слова для поиска" />
+  <element name="ViewerDialogCancelButton" value="Отменить" />
+  <element name="ViewerDialogYesButton" value="Yes" />
+  <element name="CommentBoxInvalidXML" value="Неверный файл XML" />
+  <element name="CommentBoxDeleteCommentButton" value="Удалить" />
+  <element name="Seperate" value="|" />
+  <element name="LoadingNewTabMsg" value="Загрузка…" />
+  <element name="AboutBoxDialogTitle" value="Сведения" />
+  <element name="PreferenceBoxDialogTitle" value="Настройки" />
+  <element name="PreferenceDlgCheckForUpdate" value="Проверить обновления" />
+  <element name="CommentBoxCommentTitle" value="Комментарии" />
+  <element name="CommentBoxFileError" value="Ошибка при доступе к общему файлу комментария" />
+  <element name="CommentBoxShowTopicMenu" value="Тема" />
+  <element name="MarkAsRead" value="Пометить как прочитанное" />
+  <element name="CloseAppButton" value="Закрыть" />
+  <element name="Contents" value="Содержание" />
+  <element name="PrintAlertTitle" value="Печать" />
+  <element name="SearchTextInputToolTip" value="Ввести текст для поиска" />
+  <element name="AddToFavoriteMenuItem" value="Добавить в Ссылки" />
+  <element name="PrintSequence" value="Печать последовательности" />
+  <element name="AboutButtonTitle" value="Сведения" />
+  <element name="PreferenceDialogCommentsDeleteMsg" value="Удалить все комментарии?" />
+  <element name="PreferenceDlgAutoUpdateContent" value="Автоматическое обновление содержания" />
+  <element name="PreferenceDlgReviewerName" value="Имя рецензента" />
+  <element name="CommentBoxAddCommentButton" value="Добавить" />
+  <element name="CommentBoxSendRcvCommentButtonToolTip" value="Отослать и получить комментарии" />
+  <element name="CommentBoxAddCommentHereText" value="Добавить комментарии" />
+  <element name="AddNewFavoriteMenu" value="Добавить ссылку" />
+  <element name="Search" value="Поиск" />
+  <element name="Glossary" value="Глоссарий" />
+  <element name="Disabled Prev" value="&lt;&lt;" />
+  <element name="PrintThisPage" value="Печать страницы" />
+  <element name="AboutBoxVersionID" value="ИД версии:" />
+  <element name="PreferenceDialogCommentTabTitle" value="Комментарий" />
+  <element name="CommentBoxSyncMessage" value="Операция Выслать/получить для комментариев завершена" />
+  <element name="CommentBoxShowCommentButtonToolTip" value="Показать комментарии по" />
+  <element name="CommentBoxSortCommentButtonToolTip" value="Группировать комментарии по" />
+  <element name="NewBookmarkName" value="Название ссылки" />
+  <element name="PreferenceDlgDeleteAllComments" value="Удалить все комментарии" />
+  <element name="EditOption" value="Изменить" />
+  <element name="PreferenceDialogBrowseButtonTitle" value="Просмотреть" />
+  <element name="PreferenceDlgChkCommentLocation" value="Использовать место для синхронизации комментариев по умолчанию" />
+  <element name="PreferenceDlgCommentSyncLocation" value="Местоположение папки:" />
+  <element name="Disabled Next" value="&gt;&gt;" />
+  <element name="SearchResultDefaultBookmark" value="Результат поиска для: " />
+  <element name="FavoriteDisplayTopic" value="Показать" />
+  <element name="FavoriteRenameTopic" value="Переименовать" />
+  <element name="PreferenceDlgOpenInNewTab" value="Открыть темы Справки в новой вкладке" />
+  <element name="PreferenceDlgShowBrowseSequence" value="Показать обзор последовательности" />
+  <element name="NewRSSFeedURL" value="URL-адрес RSS-канала:" />
+  <element name="NoUpdateLocationSpecified" value="Отсутствует адрес обновлений" />
+  <element name="UpdateAvailable" value="Обновление доступно. Обновить сейчас?" />
+  <element name="GlossaryDefinitionBoxTitle" value="Определение глоссария" />
+  <element name="FavoriteDeleteButtonTitle" value="Удалить" />
+  <element name="CommentBoxCommentsAddEmptyError" value="Не удается добавить пустые комментарии" />
+  <element name="FavoriteInvalidNameError" value="Неверное имя" />
+  <element name="ErrorInDownloadingUpdate" value="Ошибка при загрузке" />
+  <element name="InstallationStarted" value="Начало установки…" />
+  <element name="PreferenceDlgCheckUpdateButton" value="Проверить сейчас" />
+  <element name="CommentBoxSaveXMLFileDlg" value="Сохранить XML файл комментария " />
+  <element name="CommentBoxAddCommentButtonToolTip" value="Переключить поле Примечания" />
+  <element name="CommentBoxSendRcvCommentButton" value="Отослать и получить" />
+  <element name="NewRSSFeedName" value="Имя RSS-канала:" />
+  <element name="MinimizeAppButton" value="Свернуть" />
+  <element name="NewBookmarkURL" value="URL ссылки" />
+  <element name="GenericDeleteMsg" value="Удалить выбранный элемент?" />
+  <element name="ViewerDialogOKButton" value="ОК" />
+  <element name="PreferenceDialogAllCommentsDeleted" value="Все комментарии удалены" />
+  <element name="CommentBoxReceiveServerMessage" value="Комментарии получены из общедоступного места" />
+  <element name="CommentBoxSendToFileMenu" value="Отправить в файл" />
+  <element name="CommentBoxShowCommentForCurrentTopic" value="Комментарии для темы" />
+  <element name="CommentBoxSaveCommentText" value="Добавить комментарии:" />
+  <element name="NewRSSFeedDlgTitle" value="Добавить новый RSS-канал" />
+  <element name="RSSRefreshLabel" value="Обновить" />
+  <element name="MaximizeAppButton" value="Развернуть" />
+  <element name="ErrorInInstallingUpdate" value="Ошибка при установке" />
+  <element name="ErrorWhileUpdating" value="Ошибка при обновлении" />
+  <element name="Show" value="Показать" />
+  <element name="NewSearchTabTitle" value="Результаты поиска" />
+  <element name="SearchButtonToolTip" value="Нажать Ctrl+Enter для открытия результатов поиска в новой вкладке" />
+  <element name="FavoritesTopMenuToolTip" value="Добавить или просмотреть Избранное" />
+  <element name="CommentPodToggleToolTip" value="Переключить плавающую панель с комментариями" />
+  <element name="ShowHideButtonToolTip" value="Показать/Скрыть" />
+  <element name="PreferenceDialogContentTabTitle" value="Общее" />
+  <element name="PreferenceDlgUseOfflineHelp" value="Показать автономную справку" />
+  <element name="CommentBoxSendToServerMenu" value="Отправить на сервер" />
+  <element name="CommentBoxRecieveFromFileMenu" value="Получить из файла" />
+  <element name="CommentBoxDeleteCommentButtonToolTip" value="Удалить выбранный комментарий" />
+  <element name="UpdateAvailableWithVersion" value="Доступно обновление версии %s. Обновить сейчас?" />
+  <element name="NewBookmarkDlgTitle" value="Добавить новую ссылку" />
+  <element name="FavoriteAlredyExists" value="уже существует в закладке Избранное" />
+  <element name="FavoriteMessageTitle" value="Избранное" />
+  <element name="FavoriteAddRSSFeed" value="Добавить RSS-канал" />
+  <element name="ViewerDialogNoButton" value="No" />
+  <element name="CommentBoxSaveCommentTextToolTip" value="Написать комментарии для добавления" />
+  <element name="OpenURL" value="Открыть URL-адрес" />
+  <element name="MarkAsUnread" value="Пометить как непрочитанное" />
+  <element name="CheckingforUpdateMsg" value="Проверка обновлений…" />
+  <element name="NewUpdateAvailableMsg" value="Новое обновление" />
+  <element name="Index" value="Указатель" />
+  <element name="ErrorShowingHelpFile" value="Ошибка при чтении файла справки" />
+  <element name="PrintEntireHelpConfirmation" value="Распечатать все темы?" />
+  <element name="newFolderName" value="Новая папка" />
+  <element name="BrowseSequenceBoxTitle" value="Как мне…" />
+  <element name="ViewFavoriteMenuItem" value="Просмотреть Избранное" />
+  <element name="FavoriteFeedsButtonTitle" value="RSS-каналы" />
+  <element name="FavoriteAddFolder" value="Добавить папку" />
+  <element name="CommentBoxCommentFileMismatchError" value="Нет совпадения ИД справки, не удается импортировать комментарии" />
+  <element name="CommentBoxSaveButton" value="Сохранить" />
+  <element name="CommentImportFileDlgTitle" value="Выбрать XML файл комментария для импорта" />
+  <element name="PreferenceDlgHighLightSearch" value="Выделить результаты поиска" />
+  <element name="EditRSSFeedDlgTitle" value="Изменить RSS-канал" />
+  <element name="PrintEntireHelp" value="Печать файла Справки" />
+  <element name="PreferenceButtonTitle" value="Настройки" />
+  <element name="PreferenceDlgDeleteCommentButton" value="Удалить все" />
+  <element name="CommentBoxConnectionError" value="Нет доступа к комментариям" />
+  <element name="CommentBoxRecieveFromServerMenu" value="Получить с сервера" />
+  <element name="CommentBoxShowDateMenu" value="Дата" />
+  <element name="CommentBoxShowCommentReviewerMenu" value="Комментарии рецензента" />
+  <element name="CommentShowCurrentMenuItem" value="Текущий" />
+  <element name="RSSNoneLabel" value="Нет" />
+  <element name="ServerConnectionError" value="Нет соединения с сервером, переключение в автономный режим " />
+  <element name="Favorites" value="Избранное" />
+  <element name="PrintMenuOptionsToolTip" value="Печать меню" />
+  <element name="FavoriteLinksButtonTitle" value="Ссылки" />
+  <element name="AboutBoxDescription" value="Описание:" />
+  <element name="PreferenceDlgUseLoginName" value="Всегда использовать имя для входа вместо имени рецензента" />
+  <element name="PreferenceDialogUserNameError" value="Укажите правильное имя рецензента" />
+  <element name="CommentShowAllMenuItem" value="Все" />
+  <element name="CommentBoxSaveButtonToolTip" value="Щелкнуть для добавления комментария в базу данных" />
+  <element name="RSSSelectLabel" value="Выбрать:" />
+  <element name="SearchResultError" value="Нет результатов поиска" />
+  <element name="UpdateMsgTitle" value="Автоматическое обновление" />
+  <element name="EditBookmarkDlgTitle" value="Редактировать ссылку" />
+</resource>
+

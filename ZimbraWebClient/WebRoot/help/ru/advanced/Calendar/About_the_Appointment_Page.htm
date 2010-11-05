@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>О встречах</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { x-condition:Advanced_WC; }
-ul.whs2 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>About_the_Appointment_Page</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Планирование встреч, собраний и событий\nНазначение собрания");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,42 +81,98 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Планирование встречи</h1>
-<p>На виде &laquo;Встречи&raquo; можно создавать отдельные или повторяющиеся встречи, собрания или события<span style="x-condition: Advanced_WC;">, проверять, свободны ли участники для приглашения, резервировать кабинеты и оборудование</span> и создавать сообщения. После нажатия кнопки <span style="font-weight: bold;"><B>Сохранить</B></span> отправляется сообщение, которое приглашает участников и резервирует запрошенные ресурсы.</p>
-<p class="whs1">Вид &laquo;Встречи&raquo; состоит из пяти вкладок, что дает возможность быстро находить участников, места проведения и ресурсы (оборудование), а также видеть их расписание занятости перед окончательным оформлением встречи.</p>
-<p>На странице &laquo;Встреча&raquo; необходимо ввести следующие сведения о встрече.</p>
-<ul type="disc" class="whs2">
-	<li class=p><p><span style="font-weight: bold;"><B>Тема</B></span> собрания. &nbsp;Введенный здесь текст становится описанием в ежедневнике.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Место</B></span> &nbsp;встречи.<span style="x-condition: Advanced_WC;"> Если данное место содержится в каталоге компании, после начала ввода появляется список соответствующих мест. Также можно перейти на вкладку &laquo;Найти место&raquo; для поиска.</span></p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Показать как</B></span> используется для определения параметра вашей занятости на данное время. Можно выбрать пункты &laquo;Занят&raquo;, &laquo;Свободен&raquo;, &laquo;Под вопросом&raquo; и &laquo;Не в офисе&raquo;. Эти сведения отображаются на странице &laquo;Расписание участников&raquo;.</p></li>
-	<li class=p><p>Раскрывающийся список <span style="font-weight: bold;"><B>Ежедневник</B></span> отображает все ежедневники в списке ежедневников. &nbsp;Первым отображается исходный ежедневник. При наличии нескольких ежедневников можно создать встречу и выбрать календарь. Встреча будет добавлена в тот ежедневник, который был выбран.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Отметить как</B></span> дает возможность отметить встречу как личную, общедоступную или конфиденциальную. Подробности событий, отмеченных как личные или конфиденциальные, не отображаются в общем ежедневнике. В общем ежедневнике отображается только время начала и завершения, длительность, сведения о повторении и идентификационные данные организатора.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Время</B></span> определяет, когда состоится встреча, день, время, события на весь день и параметры повторяющейся встречи. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Участники</B></span>. &nbsp;<span 
- style="x-condition: Advanced_WC;">Добавляйте участников, вводя имя в поле &laquo;Участники&raquo;, перейдя на вкладку &laquo;Найти участников&raquo; для поиска или перейдя на вкладку &laquo;Расписание&raquo;, чтобы просмотреть расписание занятости участников.</span> </p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Ресурсы</B></span>. В данном поле отображается все запрашиваемое оборудование. Если ресурс содержится в каталоге компании, после начала ввода в поле появляется список соответствующих ресурсов. Также можно перейти на вкладку &laquo;Найти ресурсы&raquo; для поиска ресурсов.</p></li>
-	<li class=p><p>В поле <span style="font-weight: bold;"><B>Текст</B></span> создайте сообщение, которое будет отправлено участникам вместе с приглашением по электронной почте.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>Planning an appointment</h1>
+<p>You can create single or recurring appointments, meetings or events, 
+ see if attendees are free before 
+ inviting them, reserve a room and equipment, and write 
+ a message from within the Appointment view. When you click <span style="font-weight: bold;"><b>Save</b></span>, 
+ an email is sent inviting the attendees and reserving the resources you 
+ requested.</p>
+<p>The Appointment view consists 
+ of five tabs so you can quickly find attendees, locations, and resources 
+ (equipment) and see their free/busy schedule before finalizing the appointment.</p>
+<p>On the Appointment page, you enter information about the appointment 
+ as follows:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Subject</b></span> of 
+	 the meeting. &#160;The text added here becomes the description in 
+	 the calendar.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Location</b></span> of 
+	 &#160;the meeting. You can use this field to describe the location 
+	 of the meeting, such as an address, building number, floor number. 
+	 Use the <span 
+	 style="font-weight: bold;"><b>Find Location</b></span> tab 
+	 to find and reserve a room that is listed in your company directory. 
+	 This information is listed as a Resource under the Attendees field. 
+	 </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Show 
+	 As</b></span> is used to determine your Free/Busy options for the time. 
+	 You can select, Busy, Free, Tentative, and Out-of-Office. This information 
+	 displays on the Schedule Attendees page.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Calendar</b></span> drop-down 
+	 list shows all calendars in your Calendar List. &#160;The first calendar 
+	 displayed is your original Calendar. When you have multiple-calendars, 
+	 you can create an appointment and select the calendar. The appointment 
+	 is added to whichever calendar is selected.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Mark as</b></span> lets 
+	 you mark an appointment as private or public. Details 
+	 about events that are marked private do not display in a grantee's 
+	 shared calendar. Only the start and end time, duration, reoccurrence 
+	 information, and the organizer's identity are shown. 
+	 </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Time</b></span> is to 
+	 define when the appointment will occur, day, hours, all day events 
+	 and recurring appointment parameters. &#160;You 
+	 can set a meeting reminder notification time. All attendees will be 
+	 notified in advance of the meeting time. </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Attendees</b></span>. 
+	 &#160; Add 
+	 attendees either by typing a name in the Attendees field, going to 
+	 the Find Attendees tab to search for names or use the <a 
+	 href="Using_the_Schedule_tab_when_creating_a_appointment.htm">Schedule 
+	 tab</a> to 
+	 see attendees' free/busy schedule. </p></li>
+	<li class="p"><p>If <span 
+	 style="font-weight: bold;"><b>Request Responses</b></span> is checked, when 
+	 the invitee accepts, marks the invite as tentative, or declines the 
+	 invitation, a status message is sent to you.</p></li>
+	<li class="p"><p>If <span 
+	 style="font-weight: bold;"><b>Send Notification Mail</b></span> is not checked, 
+	 attendees do not receive notification of the meeting or of changes 
+	 you make to the meeting. &#160;Uncheck 
+	 this box when you make minor changes to the meeting that attendees 
+	 do not need to know about. &#160;</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Resources</b></span>. 
+	 &#160;Use the Find Resources tab to find and reserve a resource, such 
+	 as a projector. This information is listed as a resource under the 
+	 Attendees field.</p></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Text</b></span> 
+	 area compose a message that will be sent with the email invitation 
+	 to the attendees.</p></li>
 </ul>
-<p class="whs1">
+<p>
 
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Планирование ресурсов','Scheduling_Resources.htm','Создание встречи','Scheduling_meetings.htm','Создание повторяющихся встреч','Creating_recurring_appointments.htm');return false;" title="См. также"><img src="../ss_btn_см__также.gif" border=0 height=17 width=58 alt="См. также"></a>
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Creating an appointment','Scheduling_meetings.htm','Creating recurring appointments','Creating_recurring_appointments.htm','Scheduling Resources','Scheduling_Resources.htm');return false;" title=" Related Topics"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  Related Topics </nobr></span></a>
+
 
  </p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+<p>&#160;</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

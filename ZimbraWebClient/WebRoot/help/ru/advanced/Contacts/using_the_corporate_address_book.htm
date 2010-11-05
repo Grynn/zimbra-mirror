@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Использование адресной книги компании</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-img_whs2 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxИспользование адресной книги компанииxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Управление адресными книгами\nИспользование адресной книги организации");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,36 +81,57 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Использование адресной книги организации</h1>
-<p>В пределах организации не всегда известен правильный адрес электронной почты, который необходимо использовать. Например, у Ивана Петрова из организации &laquo;Контора&raquo; могут быть адреса <span style="font-weight: bold;"><B>ivan@kontora.ru</B></span> или <span style="font-weight: bold;"><B>ipetrov@kontora.ru</B></span>, или даже <span style="font-weight: bold;"><B>ip123@prodam.kontora.ru</B></span>. 
- </p>
-<p>При создании сообщения обычно доступны для использования два типа адресных книг: адресная книга компании (называемая иногда глобальным списком адресов) и личные адресные книги. Адресная книга организации доступна всем, тогда как личные адресные книги доступны пользователям, которым они принадлежат и которым предоставлен доступ.</p>
-<h6>Добавление имен из адресной книги в новое сообщение электронной почты</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Откройте новое сообщение, щелкнув в меню значок <span style="font-weight: bold;"><B><img src="../newwitharrow.gif" x-maintain-ratio="TRUE" border="0" class="img_whs2"></B></span>.</p></li>
-	<li class=p><p>Щелкните поле <span style="font-weight: bold;"><B>Кому:. </B></span>Появится диалоговое окно выбора адреса. </p></li>
-	<li class=p><p>В поле <span style="font-weight: bold;"><B>Показывать имена из списка</B></span> выберите для поиска одну из адресных книг: <span style="font-weight: bold;"><B>Контакты</B></span> или <span style="font-weight: bold;"><B>Глобальный список адресов</B></span>.</p></li>
-	<li class=p><p>Введите имя или часть имени в поле &laquo;Поиск&raquo; слева и нажмите кнопку <span style="font-weight: bold;"><B>Поиск</B></span>. Слева появится список имен и адресов электронной почты.</p></li>
-	<li class=p><p>Дважды щелкните имя, чтобы добавить его в список получателей справа. С помощью кнопок <span style="font-weight: bold;"><B>Кому</B></span>, <span   style="font-weight: bold;"><B>Копия</B></span> и <span style="font-weight: bold;"><B>Скрытая копия</B></span> укажите, в какие поля вставлять имена при отправке. Нажмите необходимую кнопку перед перемещением имени.</p></li>
+//]]></script>
+<h1>Использование списков контактов организации</h1>
+<p>xxxxВ пределах организации не всегда известен правильный адрес электронной 
+ почты, который необходимо использовать.xxxx xxxxНапример, у Ивана Петрова 
+ из организации «Контора» могут быть адреса xxxx<span style="font-weight: bold;"><b>xxxxivan@kontora.ruxxxx</b></span>xxxx 
+ или xxxx<span style="font-weight: bold;"><b>xxxxipetrov@kontora.ruxxxx</b></span>xxxx, 
+ или даже xxxx<span style="font-weight: bold;"><b>xxxxip123@prodam.kontora.ruxxxx</b></span>xxxx.xxxx</p>
+<p>При создании сообщений электронной почты обычно доступны два вида адресных 
+ книг: адресная книга организации (называемая «Глобальный список адресов») 
+ и личная адресные книги. xxxxАдресная книга организации доступна всем, 
+ тогда как личные адресные книги доступны пользователям, которым они принадлежат 
+ и которым предоставлен доступ.xxxx</p>
+<h6>xxxxДобавление имен из адресной книги в новое сообщение электронной 
+ почтыxxxx</h6>
+<ol type="1">
+	<li class="p"><p>Откройте новое сообщение, щелкнув в меню значок <span 
+	 style="font-weight: bold;"><b><img src="../newwitharrow.gif" alt="newwitharrow.gif" style="border: none;" width="57" height="18" border="0" /></b></span>.</p></li>
+	<li class="p"><p>Щелкните поле <span style="font-weight: bold;"><b>Кому</b></span>. 
+	 Появится диалоговое окно выбора адреса.</p></li>
+	<li class="p"><p>В расположенном справа списке <span style="font-weight: bold;"><b>Показывать 
+	 имена</b></span> выберите <span style="font-weight: bold;"><b>Контакты,</b></span> 
+	 &#160;<span style="font-weight: bold;"><b>Личные и общедоступные контакты</b></span> 
+	 или <span style="font-weight: bold;"><b>Глобальный список адресов</b></span> 
+	 для поиска.</p></li>
+	<li class="p"><p>xxxxВведите имя или часть имени в поле «Поиск» слева 
+	 и нажмите кнопку xxxx<span style="font-weight: bold;"><b>xxxxПоискxxxx</b></span>xxxx.xxxx 
+	 xxxxСлева появится список имен и адресов электронной почты.xxxx</p></li>
+	<li class="p"><p>xxxxДважды щелкните имя, чтобы добавить его в список 
+	 получателей справа.xxxx xxxxС помощью кнопок xxxx<span style="font-weight: bold;"><b>xxxxКомуxxxx</b></span>xxxx, 
+	 xxxx<span style="font-weight: bold;"><b>xxxxКопияxxxx</b></span>xxxx и xxxx<span 
+	 style="font-weight: bold;"><b>xxxxСкрытая копияxxxx</b></span>xxxx 
+	 укажите, в какие поля вставлять имена при отправке.xxxx xxxxНажмите 
+	 необходимую кнопку перед перемещением имени.xxxx</p></li>
 </ol>
-<ul><li class=p-note><p class=note>С помощью кнопки <span style="font-weight: bold;"><B>Удалить</B></span> можно удалить имя из списка получателей справа.</p></li>
-</ul>
-<ol start="6" type="1" class="whs1">
-	<li class=p><p>При необходимости повторяйте поиск, пока не добавите все имена.</p></li>
-	<li class=p><p>По завершении нажмите кнопку <span style="font-weight: bold;"><B>OK</B></span>.</p></li>
+<p class="note" style="margin-left: 40px;"><span style="font-weight: bold;"><b>Примечание</b></span>. 
+ xxxxС помощью кнопки xxxx<span style="font-weight: bold;"><b>xxxxУдалитьxxxx</b></span>xxxx 
+ можно удалить имя из списка получателей справа.xxxx</p>
+<ol start="6" type="1">
+	<li class="p"><p>xxxxПри необходимости повторяйте поиск, пока не добавите 
+	 все имена.xxxx</p></li>
+	<li class="p"><p>xxxxПо завершении нажмите кнопку xxxx<span style="font-weight: bold;"><b>xxxxOKxxxx</b></span>xxxx.xxxx</p></li>
 </ol>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

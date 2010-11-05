@@ -1,0 +1,89 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<!-- saved from url=(0014)about:internet -->
+<indexdata>
+<key name="уведомления о сообщениях" >
+  <topic name="Уведомления о новых сообщениях" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="удаление контактов" >
+  <topic name="Удаление контакта" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="удаление повторяющихся встреч" >
+  <topic name="Изменение повторяющихся встреч" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="удаление собрания" >
+  <topic name="Удаление встречи" url="Calendar/Deleting_an_appointment.htm" />
+</key>
+<key name="установка адреса для пересылки" >
+  <topic name="Установка адреса для пересылки" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="учетная запись IMAP" >
+  <topic name="Управление учетной записью POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="учетная запись IMAP, добавление" >
+  <topic name="Добавление учетных записей POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="учетная запись POP" >
+  <topic name="Управление учетной записью POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="учетная запись POP, добавление" >
+  <topic name="Добавление учетных записей POP" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="учетная запись, импорт" >
+  <topic name="Резервное копирование содержимого учетной записи" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="учетная запись, экспорт" >
+  <topic name="Резервное копирование содержимого учетной записи" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="файлы, вложение" >
+  <topic name="Вложение файлов в сообщения" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="фильтрация нежелательной почты («спама»)" >
+  <topic name="Фильтрация нежелательной почты («спама»)" url="filters/Filtering_Junk_Mail.htm" />
+</key>
+<key name="фильтры, как работают" >
+  <topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />
+</key>
+<key name="форматирование с использованием HTML" >
+  <topic name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="функции веб-клиента Zimbra" >
+  <topic name="О Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="функции интерфейса" >
+  <topic name="Рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="функция поиска" >
+  <topic name="Использование функции поиска" url="Search/using_the_search_feature.htm" />
+  <key name="Использование" >
+    <topic name="Использование функции поиска" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
+<key name="частное событие ежедневника" >
+  <topic name="Пометка встречи как личной" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="частные встречи, общий доступ к деталям" >
+  <topic name="Предоставление доступа к ежедневнику" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="чат" >
+  <topic name="Начало чата МС" url="instant_messaging/Starting_an_IM_chat.htm" />
+</key>
+<key name="черновик сообщения" >
+  <topic name="Сохранение черновиков сообщений" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="черный список" >
+  <topic name="Фильтрация нежелательной почты («спама»)" url="filters/Filtering_Junk_Mail.htm" />
+</key>
+<key name="шрифты" >
+  <topic name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="экспорт данных учетных записей" >
+  <topic name="Резервное копирование содержимого учетной записи" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="экспорт ежедневников iCal" >
+  <topic name="Импорт ежедневника iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="электронные уведомления" >
+  <topic name="Настройка уведомлений" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+
+</indexdata>

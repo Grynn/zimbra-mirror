@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Использование функции поиска</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxИспользование функции поискаxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Поиск элементов\nИспользование функции поиска");
@@ -56,10 +63,8 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,42 +80,53 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Использование функции поиска</h1>
-<p>Поиск позволяет находить сообщения, встречи с контактами, страницы документов и файлы. &nbsp;Поиск можно выполнять по определенным словам, датам, времени, URL-адресу, тегу, размеру, по прочитанным и непрочитанным сообщениям, наличию вложений в файле, определенному типу вложений и другим признакам. 
- </p>
-<p>Zimbra предлагает два инструмента поиска.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Поиск.</B></span> Это быстрый поиск выполняемый по запросу поиска, отображаемому в текущий момент в текстовом поле поиска. Стрелка списка слева от поля поиска позволяет выбирать тип элементов для поиска. Поиск можно выполнять в сообщениях, контактах, в том числе в списках контактов организации, задачах, встречах, на страницах и в файлах. Это быстрые профили поиска, описанные в разделе <a href="Quick_search.htm">Настройки быстрого поиска</a>. 
- </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Расширенный </B></span><span>поиск</span> открывает новую панель и упрощает <a href="building_search_queries.htm">выполнение более сложного поиска</a>. &nbsp;Запросы расширенного поиска можно сохранить и повторно использовать их в будущем. </p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>xxxxИспользование поискаxxxx</h1>
+<p>Поиск позволяет находить сообщения, контакты, встречи, страницы документов и файлы. &nbsp;Поиск можно выполнять по определенным словам, датам, времени, URL-адресу, размеру, тегу, по статусу прочитанного или непрочитанного сообщения, по наличию или отсутствию вложенных файлов, по определенному типу вложений и по другим признакам.</p>
+<p>@CollaborationProductFullName@ предлагает два инструмента поиска.</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxxПоиск.xxxx</b></span>xxxx Это быстрый поиск выполняемый по запросу поиска, отображаемому в текущий момент в текстовом поле поиска.xxxx В поле поиска можно ввести одно из ключевых слов поиска, после чего автоматически отобразится список возможных аргументов поиска. Кроме того, стрелка раскрывающегося списка слева от поля поиска позволяет выбирать тип элементов для поиска. xxxxПоиск можно выполнять в сообщениях, контактах, в том числе в списках контактов организации, задачах, встречах, на страницах и в файлах.xxxx xxxxЭто быстрые профили поиска, описанные в разделе xxxx<a href="Quick_search.htm">xxxxНастройки быстрого поискаxxxx</a>xxxx.xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Расширенный</b></span> <span>поиск</span> открывает новую область и упрощает <a href="building_search_queries.htm">выполнение более сложного поиска</a>. &nbsp;Запросы расширенного поиска можно сохранить и повторно использовать их в будущем.</p></li>
 </ul>
-<h2>Поиск сообщений</h2>
-<p>Если вы знакомы с поиском с условием соответствия тексту или с функцией &laquo;Найти и заменить&raquo; в Microsoft Word, вы должны иметь в виду, что выполнение поиска фактического соответствия тексту в веб-клиенте Zimbra отличается.</p>
-<p>Синтаксис поиска Zimbra следующий</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Можно выполнять поиск фраз, но каждое слово фразы фактически соответствует только одному слову. Варианты орфографии недопустимы. Например, если выполняется поиск слова <span style="font-weight: bold;"><B>яблок</B></span><span   style="font-weight: bold;  text-decoration: underline; "><U><B>и</B></U></span>, сообщения со словом <span style="font-weight: bold;"><B>яблоко</B></span> не являются соответствием. Можно выполнять поиск по имени домена, включая &laquo;.&raquo; (точку).</p></li>
-	<li class=p><p>В профиле поиска не учитывается регистр букв: &laquo;Север&raquo;, &laquo;север&raquo; и &laquo;СЕВЕР&raquo; равнозначны.</p></li>
-	<li class=p><p>В тексте поиска нельзя использовать следующие специальные знаки. <span style="font-weight: bold;"><B>~ ' ! @ # $ % ^ &amp; * () _- + ? / { }[ ] ; : &quot;</B></span></p></li>
-	<li class=p><p>Используйте звездочку <span style="font-weight: bold;"><B>(*)</B></span> как подстановочный знак после префикса. Т.е. поиск ты* выдаст элементы со словом тыква, тысяча и т.д.</p></li>
-	<li class=p><p>Поиск содержимого выполняется в теле сообщения, а также в любом файловом вложении (читаемом системой), которое оно может иметь. Читаемое системой вложение представляет собой тип файла, который можно преобразовать в формат HTML. В том числе, документы Microsoft Office (Word, PowerPoint или Excel), а также текстовые файлы, исключая изображения и аудиофайлы.</p></li>
+<h2>Поиск по ключевым словам</h2>
+<p>Если вы знаете, где следует искать элемент, вы можете ввести в поле поиска одно из следующих <a href="query_language_description.htm">ключевых слов</a> с двоеточием после него, и отобразится список возможных вариантов.</p>
+<ul type="disc">
+	<li class="p"><p>xxxxtag:xxxx</p></li>
+	<li class="p"><p>xxxxin:xxxx</p></li>
+	<li class="p"><p>under:</p></li>
+	<li class="p"><p>xxxxis:xxxx</p></li>
+	<li class="p"><p>xxxxhas:xxxx</p></li>
+	<li class="p"><p>xxxxtype:xxxx</p></li>
+	<li class="p"><p>xxxxattachment:xxxx</p></li>
 </ul>
-<h2>Как создать запросы</h2>
-<p>В следующих разделах можно узнать, как создать сложные запросы.</p>
-<p><a href="query_language_description.htm">Описание языка запросов</a>. Приводится список ключевых слов, используемых в профилях поиска.</p>
-<p><a href="and_vs_or_searches.htm">Поиск с условием AND и OR</a>. Поясняет, как использовать условия AND и OR в профиле поиска.</p>
+<h2>xxxxПоиск сообщенийxxxx</h2>
+<p>Если вы знакомы с поиском с условием соответствия тексту или с функцией «Найти и заменить» в Microsoft Word, обратите внимание, что поиск содержимого в веб-клиенте @ClientNameLong@ немного отличается от процедуры сопоставления символьных строк.</p>
+<p>Синтаксис поиска @CollaborationProductShortName@ следующий.</p>
+<ul type="disc">
+	<li class="p"><p>xxxxМожно выполнять поиск фраз, но каждое слово фразы фактически соответствует только одному слову.xxxx xxxxВарианты орфографии недопустимы.xxxx xxxxНапример, если выполняется поиск слова xxxx<span style="font-weight: bold;"><b>xxxxяблокxxxx</b></span><span  	 style="font-weight: bold; text-decoration: underline; "><u><b>xxxxиxxxx</b></u></span>xxxx, сообщения со словом xxxx<span style="font-weight: bold;"><b>xxxxяблокоxxxx</b></span>xxxx не являются соответствием.xxxx xxxxМожно выполнять поиск по имени домена, включая «.»xxxx xxxx(точку).xxxx</p></li>
+	<li class="p"><p>При поиске не учитывается регистр букв: фразы <span style="font-style: italic;"><i>Север</i></span>, <span style="font-style: italic;"><i>север</i></span> и <span style="font-style: italic;"><i>СЕВЕР</i></span> &mdash; равнозначны.</p></li>
+	<li class="p"><p>xxxxВ тексте поиска нельзя использовать следующие специальные знаки.xxxx <span style="font-weight: bold;"><b>~ ' ! @ # $ % ^ &amp; * () _- + ? / { }[ ] ; : &quot;</b></span></p></li>
+	<li class="p"><p>Поддерживается использование звездочки <span style="font-weight: bold;"><b>(*)</b></span> в качестве подстановочного знака после префикса. Таким образом, поиск строки «ты*» возвращает элементы со словами «тыква», «тысяча» и т. д.</p></li>
+	<li class="p"><p>xxxxПоиск содержимого выполняется в теле сообщения, а также в любом файловом вложении (читаемом системой), которое оно может иметь.xxxx xxxxЧитаемое системой вложение представляет собой тип файла, который можно преобразовать в формат HTML.xxxx В том числе документы Microsoft Office (Word, PowerPoint или Excel), а также текстовые файлы, исключая изображения и аудиофайлы.</p></li>
+</ul>
+<h2>xxxxКак создать запросыxxxx</h2>
+<p>xxxxВ следующих разделах можно узнать, как создать сложные запросы.xxxx</p>
+<p><a href="query_language_description.htm">xxxxОписание языка запросовxxxx</a>xxxx.xxxx xxxxПриводится список ключевых слов, используемых в профилях поиска.xxxx</p>
+<p><a href="and_vs_or_searches.htm">xxxxПоиск с условием AND и ORxxxx</a>xxxx.xxxx Поясняет, как использовать условия AND и OR при поиске.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

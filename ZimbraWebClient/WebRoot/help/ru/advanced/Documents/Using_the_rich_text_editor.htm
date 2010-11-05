@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Использование форматированного текста</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxИспользование редактора форматированного текстаxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,41 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Работа в документах \nИспользование редактора форматированного текста");
+	addTocInfo("Работа в портфеле\nИспользование редактора форматированного текста");
 addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 
 	}
@@ -56,10 +63,8 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,35 +80,35 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Использование форматированного текста</h1>
-<p>Для создания и форматирования страниц можно использовать форматированный текст или теги &nbsp;кода HTML. Между этими двумя форматами можно переключаться, чтобы воспользоваться преимуществами форматированного текста и вставить таблицы или электронные таблицы.</p>
-<p>При редактировании с помощью форматированного текста двухрядная панель инструментов позволяет легко форматировать разметку страницы. Выберите размер, гарнитуру и цвет шрифта, стиль текста и цвет фона. Эти инструменты форматирования работают также, как и многие другие инструменты обработки текста. </p>
-<p>Кроме того, на страницу можно добавлять таблицы, электронные таблицы, вложения и изображения.</p>
-<p><img src="../newpage.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<h2>Добавление стилей абзаца</h2>
-<p>Значок &nbsp;<img src="../para_styles.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"> &nbsp;на панели инструментов показывает имеющиеся стили абзаца. Эти стили позволяют легко &nbsp;форматировать текст и сохранять единообразие стиля на страницах блокнота. Стили включают: <span style="font-weight: bold;"><B>Обычный</B></span> стиль для большинства абзацев, <span style="font-weight: bold;"><B>Заголовки</B></span> шести уровней для определения заголовков разделов,&nbsp;<span style="font-weight: bold;"><B>Адрес</B></span> для выделения текста курсивом и <span style="font-weight: bold;"><B>Форматированный</B></span> для отображения текста шрифтом Courier. Эти стили нельзя изменить, но можно использовать возможности редактирования для иного форматирования стиля, например изменение шрифта, размера, цвета и т.п. </p>
-<h2>Добавление таблиц на страницу </h2>
-<p>Добавление таблиц на страницу выполняется в три этапа. Добавление таблицы, задание свойств таблицы и добавление содержимого. Чтобы добавить таблицу, щелкните значок таблицы <img src="../table.png" x-maintain-ratio="TRUE" border="0" class="img_whs1">на панели инструментов, выберите пункт &laquo;Вставить таблицу&raquo;, затем укажите, сколько строк и столбцов должно быть в таблице. </p>
-<h2>Добавление электронной таблицы на страницу&nbsp;</h2>
-<p>Чтобы добавить электронную таблицу, щелкните значок таблицы <img src="../spreadsheet_icon.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"> на панели инструментов. На страницу будет добавлена электронная таблица из шести столбцов. Электронные таблицы можно использовать для создания &nbsp;баз данных, для ведения списков деятельности, расписаний, задач и т.п.</p>
-<h2>Добавление вложений и изображений на страницу </h2>
-<p>Файлы, на которые есть ссылка на странице &laquo;Документы&raquo;, можно загрузить. Щелкните значок скрепки <img src="../paperclip.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"> или значок изображений <img src="../image.png" x-maintain-ratio="TRUE" border="0" class="img_whs1">, &nbsp;чтобы найти файл для загрузки. Если загружаемый файл уже есть в документах или портфеле, вам поступит уведомление. </p>
-<h2>Подключение к блокноту или к веб-страницам</h2>
-<p>Можно подключиться к другим документам (блокнотам) или внешним веб-страницам и &nbsp;дать ссылке описательный заголовок без отображения URL-адреса. </p>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>xxxxИспользование форматированного текстаxxxx</h1>
+<p>Можно создавать сообщения электронной почты и документы в портфеле, используя редактор форматированного текста для оформления содержимого на странице. </p>
+<p>При редактировании с помощью редактора форматированного текста панель инструментов позволяет легко форматировать разметку страницы. xxxxВыберите размер, гарнитуру и цвет шрифта, стиль текста и цвет фона.xxxx xxxxЭти инструменты форматирования работают также, как и многие другие инструменты обработки текста.xxxx Кроме того, на страницу можно добавлять таблицы, вложения и изображения.</p>
+<p><img src="../briefcasetoolbar.png" style="border: none;" alt="briefcasetoolbar.png" width="660" height="47" border="0" /></p>
+<h2>xxxxДобавление стилей абзацаxxxx</h2>
+<p>Значок&nbsp;<img src="../para_styles.png" alt="para_styles.png" style="border: none;" width="25" height="20" border="0" /> на панели инструментов отображает доступные стили абзаца. Эти стили позволяют легко форматировать текст и сохранять единообразие стиля в документе. Стили включают: <span style="font-weight: bold;"><b>Обычный</b></span> стиль для большинства абзацев, <span style="font-weight: bold;"><b>Заголовки</b></span> шести уровней для определения заголовков разделов, <span style="font-weight: bold;"><b>Адрес</b></span> для выделения текста курсивом и <span style="font-weight: bold;"><b>Форматированный</b></span> для отображения текста шрифтом Courier. Эти стили нельзя изменить, но можно использовать возможности редактирования для изменения шрифта, размера, цвета и т. п.</p>
+<h2>xxxxДобавление таблиц на страницуxxxx</h2>
+<p>xxxxДобавление таблиц на страницу выполняется в три этапа.xxxx xxxxДобавление таблицы, задание свойств таблицы и добавление содержимого.xxxx Чтобы добавить таблицу, щелкните значок таблицы <img src="../table.png" alt="table.png" style="border: none;" width="26" height="19" border="0" /> на панели инструментов, выберите пункт «Вставить таблицу», а затем укажите, сколько строк и столбцов должно быть в таблице.</p>
+<h2>xxxxДобавление вложений и изображений на страницуxxxx</h2>
+<p>Можно загрузить файлы, на которые есть ссылка в файле документа. Щелкните значок скрепки <img src="../paperclip.png" alt="paperclip.png" style="border: none;" width="17" height="16" border="0" /> или значок изображений<img src="../image.png" alt="image.png" style="border: none;" width="20" height="19" border="0" />, чтобы найти файл для загрузки. Появится уведомление, если загружаемый файл уже есть в портфеле.</p>
+<h2>Создание ссылки на веб-страницу</h2>
+<p>Можно создать ссылку на внешний URL-адрес и дать ей описательный заголовок, который будет отображаться вместо URL-адреса. Щелкните значок <img src="../link.png" alt="link.png" style="border: none;" width="24" height="24" border="0" /> и введите адрес страницы или URL-адрес, на который следует создать ссылку.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

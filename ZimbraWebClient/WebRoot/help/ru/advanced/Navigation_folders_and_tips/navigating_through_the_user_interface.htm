@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Рабочее пространство веб-клиента Zimbra</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxРабочее пространство веб-клиента Zimbraxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,41 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Навигация в почтовом ящике\nНавигация в веб-клиенте Zimbra");
+	addTocInfo("Навигация в почтовом ящике\nНавигация @ClientNameLong@");
 addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 
 	}
@@ -56,10 +63,8 @@ addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,32 +80,33 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Перемещение в веб-клиенте Zimbra </h1>
-<p>Войдя в веб-клиент Zimbra, вы увидите полноэкранное изображение, подобное показанному ниже. </p>
-<p><img src="../Zimbramainview65.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>Страница веб-клиента Zimbra содержит следующие области.</p>
-<ol><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Элементы управления браузера.</B></span> Отображает стандартные кнопки браузера, например кнопку &laquo;Начало&raquo;, текущий адрес, и другие параметры, которые могут зависеть от браузера и его настроек. Кнопки на панели браузера не являются частью веб-клиента Zimbra и отображаются для каждой посещаемой веб-страницы.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Панель поиска и отображение имени пользователя и лимита</B></span><span>. В этой области отображаются функции &laquo;П</span>оиск&raquo;, &laquo;Расширенный поиск&raquo;, имя пользователя, с которым вы вошли и лимит почтового ящика.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Вкладки приложений</B></span>. Приложения, к которым можно получить доступ отображаются на вкладках вверху. Справа находится <span style="font-weight: bold;"><B>Справка</B></span> и <span style="font-weight: bold;"><B>Выход</B></span>.</p></li>
+//]]></script>
+<h1>Перемещение в программе @ClientNameLong@ 
+ </h1>
+<p>При открытии программы @ClientNameLong@ отображается полноэкранное изображение, подобное показанному ниже.</p>
+<p><img src="../69_view.png" alt="69_view.png" style="border: none;" width="652" height="321" border="0" /></p>
+<p>Главная страница @ClientNameLong@ содержит следующие области.</p>
+<ol>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Панель поиска</b></span>. В этой области отображаются функции поиска и расширенного поиска. Справа находятся элементы <span style="font-weight: bold;"><b>Справка</b></span> и <span style="font-weight: bold;"><b>Выход</b></span>.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxВкладки приложенийxxxx</b></span>xxxx.xxxx В этой области отображается имя пользователя, под которым выполнен вход, и лимит почтового ящика. &nbsp;Приложения, к которым можно получить доступ отображаются на вкладках рядом.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxПанель инструментов.xxxx</b></span>xxxx Здесь отображаются действия, которые можно выполнять в используемом в данный момент приложении.xxxx xxxxВ данном примере отображается панель инструментов приложения xxxx<span style="font-weight: bold;"><b>xxxxПочтаxxxx</b></span>xxxx.xxxx</p></li>
 </ol>
-<ol start=4><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Панель инструментов.</B></span> Здесь отображаются действия, которые можно выполнять в используемом в данный момент приложении. В данном примере отображается панель инструментов приложения <span style="font-weight: bold;"><B>Почта</B></span>. </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Область обзора.</B></span> Здесь отображаются <span style="font-weight: bold;"><B>Папки</B></span>, в том числе системные папки <span style="font-weight: bold;"><B>Входящие</B></span>, <span style="font-weight: bold;"><B>Отправленные</B></span>, <span style="font-weight: bold;"><B>Черновики</B></span>, <span style="font-weight: bold;"><B>Спам</B></span> и <span style="font-weight: bold;"><B>Корзина</B></span>, а также специальные пользовательские папки, <span style="font-weight: bold;"><B>Профили поиска</B></span>, <span style="font-weight: bold;"><B>Теги</B></span> и ссылки <span style="font-weight: bold;"><B>Zimlet</B></span>, которые создаются для интеграции приложений третьих сторон в почтовый ящик. В ежедневнике в области обзора отображаются список ежедневника и модули Zimlet. </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>В области обзора может также отображаться календарик. Отображение календарика необязательно, его можно включить на вкладке <span style="font-weight: bold;"><B>Настройки-&gt;Ежедневник</B></span>.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Область содержимого</B></span>. Содержимое в этой области меняется в зависимости от используемого приложения. Вид &laquo;Входящие&raquo; отображает все сообщения и разговоры в папке &laquo;Входящие&raquo;. </p></li>
+<ol start="4">
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxОбласть обзора.xxxx</b></span> Здесь отображаются <span style="font-weight: bold;"><b>Папки</b></span>, в том числе системные папки <span style="font-weight: bold;"><b>Входящие</b></span>, <span style="font-weight: bold;"><b>Отправленные</b></span>, <span style="font-weight: bold;"><b>Черновики</b></span>, <span style="font-weight: bold;"><b>Спам</b></span> и <span style="font-weight: bold;"><b>Корзина</b></span>, а также специальные пользовательские папки, <span style="font-weight: bold;"><b>Профили поиска</b></span>, <span style="font-weight: bold;"><b>Теги</b></span> и ссылки на модули <span style="font-weight: bold;"><b>Zimlet</b></span>, которые создаются для интеграции приложений третьих сторон в почтовый ящик. xxxxВ ежедневнике в области обзора отображаются список ежедневника и модули Zimlet.xxxx</p></li>
+	<li class="p" type="1"><p>В области обзора может также отображаться <span style="font-weight: bold;"><b>календарик</b></span>. Отображение календарика необязательно, его можно включить на вкладке <span style="font-weight: bold;"><b>Ежедневник</b></span>-&gt;<span style="font-weight: bold;"><b>Настройки</b></span>.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxОбласть содержимогоxxxx</b></span>xxxx.xxxx xxxxСодержимое в этой области меняется в зависимости от используемого приложения.xxxx xxxxВид «Входящие» отображает все сообщения и разговоры в папке «Входящие».xxxx</p></li>
 </ol>
 <p>&nbsp;</p>
+<p class="note"><span style="font-weight: bold;"><b>Примечание</b></span>. Можно переключиться на вид с тремя областями и областью чтения, отображаемой справа, или полностью отключить область чтения, воспользовавшись ссылкой «Вид» <img src="../View_icon.png" alt="View_icon.png" style="border: none;" width="28" height="25" border="0" /> на панели инструментов «Почта».</p>
 <h3>&nbsp;</h3>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
