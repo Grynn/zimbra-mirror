@@ -1,0 +1,153 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>POP/IMAPアカウントを設定する</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("}}}Zimbra Desktopを設定する{{{\nPOP/IMAPアカウントを設定する");
+addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
+AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
+document.write("<a href=\"Z-Setting_up_your_Zimbra_Web_Client_account.htm\">}}}Zimbra Desktopを設定する{{{<\/a> &gt; POP/IMAPアカウントを設定する<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_Mail_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">
+			 全般的な質問/トラブルシューティングに関する質問についてはZimbra Desktop FAQをご覧ください</a></p></td>
+		</tr>
+	</table>
+</div>
+
+
+<h1>POP/IMAPアカウントを設定する（Microsoft Exchange IMAPを含む）</h1>
+<p>}}}アカウントを設定するには、受信および送信メールサーバーの詳細を含むアカウント設定に関する情報が必要です。{{{}}}これらの情報については、システム管理者またはインターネットサービスプロバイダにお問い合わせください。{{{</p>
+<p>}}}メールボックスにあるすべてのメッセージを含める、または受信箱にあるメッセージのみを同期するように指定できます。{{{</p>
+<h3>アカウントを設定するには</h3>
+<p>操作を始める前に、インターネットに接続していることを確認してください。</p>
+<ol type="1">
+	<li><p style="margin-left: 0px;">}}}Zimbra Desktopを開き、右上の[<span style="font-weight: bold;"><b>セットアップ</b></span>]をクリックします。{{{ &nbsp;</p></li>
+	<li class="p"><p>}}}[<span style="font-weight: bold;"><b>新しいアカウントを追加</b></span>]をクリックします。{{{&nbsp;}}}[アカウントの種類]リストで、アカウントの種類を選択します。{{{}}}Zimbraアカウントの設定ページが表示されます。{{{以下の情報を入力します。</p></li>
+</ol>
+<p style="margin-left: 40px;"><span><b style="font-weight: bold;">}}}アカウント名。{{{</b></span> これはZimbra Desktopにアカウント名として表示される名前です。}}}複数のアカウントを設定する場合は、個々のアカウントを識別しやすい簡単な名前を付けるようにします。{{{}}}たとえば、Yahoo!アカウントの場合は「Yahoo」などの名前を使用します。{{{</p>
+<p style="margin-left: 40px;"><strong style="font-weight: bold;">フルネーム</strong>。}}}自分の名前を入力します（オプション）。{{{</p>
+<p style="margin-left: 40px;"><strong style="font-weight: bold;">メールアドレス</strong>。このアカウントのメールアドレスを入力します。</p>
+<ol start="3" type="1">
+	<li><p style="margin-left: 0px;">}}}[<span style="font-weight: bold;"><b>メールの受信</b></span>]領域で、以下の情報を入力します。{{{</p></li>
+</ol>
+<p style="margin-left: 40px;">}}}<strong style="font-weight: bold;">ユーザー名</strong>。{{{メールの確認に使用するユーザー名を入力します。}}}通常、username@example.comという形式です。{{{</p>
+<p style="margin-left: 40px;">}}}<strong style="font-weight: bold;">パスワード</strong>。{{{このアカウントにログインするときに使用するパスワードを入力します。</p>
+<p style="margin-left: 40px;">}}}<strong style="font-weight: bold;">受信メールサーバー</strong>。{{{受信メールサーバーのアドレスを入力します。}}}通常、mail.example.comという形式です。{{{</p>
+<p style="margin-left: 40px;"><span><b style="font-weight: bold;">セキュリティ</b></span>。}}}[<span style="font-weight: bold;"><b></b></span><strong>このサーバーにアクセスするときSSL暗号化を<b>使用</b></strong>]をオンまたはオフにします。{{{&nbsp;}}}受信メールサーバーが異なるポートを使用する場合は、[<span style="font-weight: bold;"><b><b>編集</b></b></span>]をクリックし、ポート番号を変更します。{{{}}}受信メールサーバーが使用するポートがわからない場合は、システム管理者に問い合わせてください。{{{</p>
+<ol start="4" type="1">
+	<li><p align="left"><strong style="font-weight: normal;">}}}[<span  	 style="font-weight: bold;"><b>メールの送信</b></span>]領域で、以下の情報を入力します。{{{</strong></p></li>
+</ol>
+<p style="margin-left: 40px;">}}}<strong style="font-weight: bold;">SMTPメールサーバー</strong>。{{{送信メールサーバーのアドレスを入力します。}}}通常、smtp.example.comという形式です。{{{</p>
+<p style="margin-left: 40px;"><span><b style="font-weight: bold;">セキュリティ</b></span>。}}}[<span style="font-weight: bold;"><b></b></span><strong>このサーバーにアクセスするときSSL暗号化を<b>使用</b></strong>]をオンまたはオフにします。{{{&nbsp;}}}受信メールサーバーが異なるポートを使用する場合は、[<span style="font-weight: bold;"><b><b>編集</b></b></span>]をクリックし、ポート番号を変更します。{{{}}}受信メールサーバーが使用するポートがわからない場合は、システム管理者に問い合わせてください。{{{</p>
+<p style="margin-left: 40px;">}}}<span></span><strong style="font-weight: normal;">メールの送信時にユーザー名とパスワードが必要な場合</strong>は、[<span style="font-weight: bold;"><b><b>認証</b></b></span>]を選択します。{{{}}}このオプションを選択した場合は、[<strong>ユーザー名</strong>]および[<strong>パスワード</strong>]を入力します。{{{</p>
+<p style="margin-left: 40px;">}}}<strong style="font-weight: bold;">返信先</strong>。{{{}}}返信先として送信メールとは異なる名前およびメールアドレスを使用する場合は、[<strong>名前</strong>]と[<strong>メールアドレス</strong>]に適切な値を入力します。{{{</p>
+<ol start="5" type="1">
+	<li class="p"><p style="margin-left: 0px;">}}}[<span style="font-weight: bold;"><b>同期設定</b></span>]領域で、サーバーと同期する予定を設定します。{{{デフォルトは、15分間隔です。}}}[<span style="font-weight: bold;"><b>手動</b></span>]を選択する場合は、Zimbra Desktopツールバーの[送受信]をクリックして、自分のアカウントとZimbraサーバーを同期する必要があります。{{{}}}短い時間（1分など）を選択すると、コンピュータのパフォーマンスに影響を及ぼす場合があります。{{{</p></li>
+</ol>
+<p style="margin-left: 40px;">}}}この設定はいつでも変更できます。変更するには、[<span style="font-weight: bold;"><b>セットアップ</b></span>]をクリックし、アカウントを選択して設定内容を編集します。{{{</p>
+<ol start="6" type="1">
+	<li class="p"><p style="margin-left: 0px;">}}}設定が終了したら、[<span style="font-weight: bold;"><b>検証して保存</b></span>]をクリックします。{{{</p></li>
+</ol>
+<p style="margin-left: 48px;">}}}Zimbra Desktopによってアカウント情報の検証が行われます。{{{}}}アカウントの検証に成功すると、ダイアログが開き、「<strong>サービスが作成されました</strong>」という旨のメッセージが表示されます。{{{}}}アカウントの検証に成功しなかった場合は、[セットアップ]ダイアログに戻ります。入力内容を確認して情報を修正してください。{{{</p>
+<ol start="7" type="1">
+	<li class="p"><p style="margin-left: 0px;">}}}[<strong>Desktop</strong><span style="font-weight: bold;"><b>を起動</b></span>]をクリックしてZimbra Desktopを開きます。アカウントを<a href="Synchronize_your_account_to_Zimbra_Desktop.htm">同期</a>している間も、Zimbra Desktopで作業することは可能です。{{{</p></li>
+</ol>
+<p align="left">&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>

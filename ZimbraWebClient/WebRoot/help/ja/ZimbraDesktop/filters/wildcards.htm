@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>ワイルドカード</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("フィルターを使用する\nワイルドカード");
+addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
+AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
+document.write("<a href=\"how_filtering_works.htm\">フィルターを使用する<\/a> &gt; ワイルドカード<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_Mail_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&#160;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
+			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">
+			 全般的な質問/トラブルシューティングに関する質問についてはZimbra Desktop FAQをご覧ください</a></p></td>
+		</tr>
+	</table>
+</div>
+
+
+<h1>フィルターのワイルドカード</h1>
+<p>}}}「パターンに一致」比較演算子を用いる比較では、ワイルドカードを使用できます。{{{}}}「<span style="font-weight: bold;"><b>*</b></span>」と「<span style="font-weight: bold;"><b>?</b></span>」の2つのワイルドカードがあります。{{{</p>
+<h3><span style="font-weight: bold;"><b>アスタリスク（*）</b></span></h3>
+<p>}}}アスタリスク（*）は、0文字以上の任意の文字を表すプレースホルダーです。{{{</p>
+<p>}}}件名欄の検索文字列の例：<span style="font-weight: bold;"><b>バナナ*フロート</b></span>{{{</p>
+<p style="margin-left: 40px;">}}}<span style="font-style: italic;"><i>一致</i></span>の例：「バナナフロート」、「バナナリーフカセロールフロート」などの件名が一致します。「スーパーバナナフロート」は一致しません。{{{</p>
+<p>}}}件名欄の検索文字列の例：<span style="font-weight: bold;"><b>白*靴</b></span>{{{</p>
+<p style="margin-left: 40px;">}}}<span style="font-style: italic;"><i>一致</i></span>の例：「白い靴」や「白っぽい靴」などの件名が一致します。「白い靴を希望」は一致しません。{{{</p>
+<h3>疑問符（?）</h3>
+<p>}}}疑問符は、「1文字」を表すプレースホルダーです。{{{</p>
+<p>}}}件名欄の検索文字列の例：<span style="font-weight: bold;"><b>バナナ?ボート</b></span>{{{</p>
+<p style="margin-left: 40px;">}}}<span style="font-style: italic;"><i>一致</i></span>の例：「バナナのボート」、「バナナ-ボート」、「バナナ!ボート」、「バナナ（スペース）ボート」などの件名が一致します。{{{</p>
+<h3 style="margin-left: 0px;">}}}エスケープ文字－スラッシュ：\{{{</h3>
+<p style="margin-left: 0px;">普段ワイルドカードとしてみなされる文字を、ワイルドカードではなくその文字自体として検索文字列を指定したい場合があります。たとえば、次の例のように3つのアスタリスクで囲まれたテキストを検索文字として指定したいとします。</p>
+<p>***MORE MONEY!!!***</p>
+<p>}}}***FREE GIFT***{{{</p>
+<p>}}}ワイルドカードを他の文字の代わりではなく、その文字自体として指定するには、その文字のすぐ前にバックスラッシュ（\）を使用します。{{{}}}たとえば、「\*\*\**\*\*\*」と指定すると、前後が3つのアスタリスクで囲まれた任意の文字列（スペースを含む）が一致します。{{{</p>
+<p><img src="../image19.jpg" alt="image19.jpg" style="border: none;" width="589" height="223" border="0" /></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>
