@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Von Filtern unterstützte Bedingungen und Aktionen</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Von Filtern unterst&uuml;tzte Bedingungen und Aktionen</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Filter erstellen \nVon Filtern unterstützte Bedingungen und Aktionen");
+	addTocInfo("}}}Mailfilter verwenden{{{\nVon Filtern unterstützte Bedingungen und Aktionen");
 addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 
 	}
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,65 +81,66 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Von Filtern unterstützte Bedingungen und Aktionen</h1>
-<p>Bei Filterregeln spielt die Groß- und Kleinschreibung keine Rolle.</p>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>Von Filtern unterst&uuml;tzte Bedingungen und Aktionen</h1>
+<p>Bei Filterregeln spielt die Gro&szlig;- und Kleinschreibung keine Rolle.</p>
 <h3>Bedingungen</h3>
-<p>Für den Vergleich können u. a. folgende Felder verwendet werden:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Von:</B></span> Geben Sie hier einen Namen für die Angabe „Von“ in der Kopfzeile einer Mail ein. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>An:</B></span> Wie „Von“, doch wird hier nach Namen bei „An“ gesucht.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>CC:</B></span> Wie „Von“, doch wird hier nach Namen bei „CC“ gesucht.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Betreff:</B></span> Sucht im „Betreff“ einer Mail.</p></li>
+<p>F&uuml;r den Vergleich k&ouml;nnen u.&nbsp;a. folgende Felder verwendet werden:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Von:}}}</b></span> Dient zum Festlegen eines Namens in der Kopfzeile &bdquo;Von:&ldquo;{{{ }}}einer Mail.{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>An:}}}</b></span> Wie &bdquo;Von&quot;, hier wird jedoch nach den angegebenen Namen in der Kopfzeile &bdquo;An&ldquo;:{{{ }}}gesucht.{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>}}}Cc.{{{}}}</b></span> Wie &bdquo;Von&quot;, sucht jedoch in der Kopfzeile &bdquo;Cc:&ldquo;{{{ }}}.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>An oder Cc</b></span>.{{{ }}}Wie &bdquo;Von&quot;, sucht jedoch sowohl in der Kopfzeile &bdquo;An&ldquo; als auch &bdquo;CC&ldquo;.{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Betreff:</b></span> Sucht im &quot;Betreff&quot; einer Mail.</p></li>
 </ul>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Kopfzeile:</B></span> Wenn Sie diese Option auswählen, erscheint ein zusätzliches Texteingabefeld vor dem Vergleichsoperator (dem nächsten Listenfeld). Über diese Option können Sie die Kopfzeile einer Mail angeben. Sie können nicht nur die Standardfelder „An“ oder „Von“ angeben, sondern auch Datum, Antwortadresse und andere benutzerdefinierte Felder, die in der Kopfzeile einer Mail enthalten sein können. Mithilfe dieser Option können Sie Mails filtern, die &quot;fehlerhafte&quot; Kopfzeilen haben, d. h. diese Mails enthalten bestimmte Informationen nicht, die ansonsten standardmäßig in Mails enthalten sind. Gelegentlich enthalten Spam-Mails, die automatisch generiert werden, bestimmte Informationen nicht, z. B. die Felder „Absender“ oder „Antwortadresse“. Geben Sie im zweiten Textfeld (im Feld rechts vom Vergleichsoperator) das Kriterium ein, das die Kopfzeile erfüllen soll.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Größe:</B></span> Nutzen Sie diese Option, um Mails auszuwählen, die eine bestimmte Größe über- oder unterschreiten.   Die Größe der Mail schließt alle Dateianhänge ein. Mit dieser Option können Sie Mails löschen, die zu groß sind.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Datum:</B></span> Nutzen Sie diese Option, um Mails zu filtern, die vor oder nach einem bestimmten Datum gesendet wurden.   </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Inhalt:</B></span> Die Optionen für den Inhalt sind „enthält“ bzw. „enthält nicht“. Auf diese Weise können Sie Wörter angeben, die im Inhalt enthalten bzw. nicht enthalten sein sollen. Sie können nicht nach Wörtern in Dateianhängen filtern.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Anhang:</B></span> Sie können Mails filtern, die über Dateianhänge verfügen bzw. nicht verfügen.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Adresse in:</B></span> Diese Option prüft das Vorhandensein einer Adresse in Ihren Kontakten. Im nächsten Feld können Sie das Adressbuch angeben. </p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Kopfzeile:}}}</b></span> Wenn Sie diese Option ausw&auml;hlen, erscheint ein zus&auml;tzliches Texteingabefeld vor dem Vergleichsoperator (dem n&auml;chsten &quot;Listenfeld&quot;).{{{ &Uuml;ber diese Option k&ouml;nnen Sie die Kopfzeile einer Mail angeben. }}}Sie k&ouml;nnen nicht nur die Standardfelder von &bdquo;An:&ldquo;{{{ }}}oder &bdquo;Von:&ldquo; festlegen,{{{ }}}sondern auch &bdquo;Datum&ldquo;, &bdquo;Antworten auf&ldquo; oder andere benutzerdefinierte Felder in der Kopfzeile der Mail.{{{ }}}Mithilfe dieser Option k&ouml;nnen Sie Mails filtern, die &quot;fehlerhafte&quot; Kopfzeilen haben, d. h. diese Mails enthalten bestimmte Informationen nicht, die standardm&auml;&szlig;ig in Mails enthalten sind.{{{ Gelegentlich enthalten Spam-Mails, die automatisch generiert werden, bestimmte Informationen nicht, z. B. die Felder &quot;Absender&quot; oder &quot;Antwortadresse&quot;. Geben Sie im zweiten Textfeld (im Feld rechts vom Vergleichsoperator) das Kriterium ein, das die Kopfzeile erf&uuml;llen soll.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Gr&ouml;&szlig;e:</b></span> Nutzen Sie diese Option, um Mails auszuw&auml;hlen, die eine bestimmte Gr&ouml;&szlig;e &uuml;ber- oder unterschreiten. Die Gr&ouml;&szlig;e der Mail schlie&szlig;t alle Dateianh&auml;nge ein. Mit dieser Option k&ouml;nnen Sie Mails l&ouml;schen, die zu gro&szlig; sind.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Datum:</b></span> Nutzen Sie diese Option, um Mails zu filtern, die vor oder nach einem bestimmten Datum gesendet wurden.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Inhalt:</b></span> Die Optionen f&uuml;r den Inhalt sind &quot;enth&auml;lt&quot; bzw. &quot;enth&auml;lt nicht&quot;. Auf diese Weise k&ouml;nnen Sie W&ouml;rter angeben, die im Inhalt enthalten bzw. nicht enthalten sein sollen. Sie k&ouml;nnen nicht nach W&ouml;rtern in Dateianh&auml;ngen filtern.</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Ist eine Lesebest&auml;tigung.</b></span><span>Lesebest&auml;tigungsmails lassen sich filtern.</span>{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Anhang:</b></span> Sie k&ouml;nnen Mails filtern, die &uuml;ber Dateianh&auml;nge verf&uuml;gen bzw. nicht verf&uuml;gen.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Adresse in:</b></span> Diese Option pr&uuml;ft das Vorhandensein einer Adresse in Ihren Kontakten. Im n&auml;chsten Feld k&ouml;nnen Sie das Adressbuch angeben.</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Kalendereinladung</b></span>.{{{ }}}Sie k&ouml;nnen kalenderbezogene Mails filtern.{{{</p></li>
 </ul>
 <p>Vergleichsoperatoren sind u. a. folgende:</p>
-<ul type="disc" class="whs1">
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Entspricht genau/entspricht nicht genau:</B></span> Prüft eine genaue Übereinstimmung. Wenn Sie beispielsweise angeben: <span style="font-weight: bold;"><B>Betreff</B></span> <span style="font-weight: bold;"><B>entspricht genau </B></span><span style="font-weight: bold;"><B>Banane</B></span>, dann ist nur &quot;Banane&quot; eine Entsprechung, &quot;Bananen&quot; oder &quot;Ein Lkw voller Bananenblätter&quot; ist keine Entsprechung.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Enthält/enthält nicht:</B></span> Gibt an, dass die Betreffzeile die angegebene Zeichenkette enthalten muss. Wenn Sie beispielsweise angeben: <span style="font-weight: bold;"><B>Betreff enthält Banane</B></span>, dann ist &quot;Bananenkuchen&quot; eine Entsprechung.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Entspricht der Wildcard-Bedingung/entspricht nicht der Wildcard-Bedingung:</B></span> Der Platzhalter * ist ein Zeichen, den Sie beim Vergleichskriterium des Mailfilters anstelle eines Zeichens oder mehrerer Zeichen angeben können. Wenn Sie beispielsweise angeben: Betreff entspricht genau &quot;Banane*&quot;, dann ist &quot;Bananen&quot; oder &quot;Bananensplit&quot; eine Entsprechung, aber &quot;mein Bananensplit&quot; ist keine Entsprechung.</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Existiert/existiert nicht:</B></span> Stimmt überein, wenn das angegebene Feld in der Mail vorhanden ist.   Wird für die Felder „Kopfzeile“ und „Anhang“ verwendet.</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Unter/nicht unter, über/nicht über:</B></span> Wird zur Überprüfung der „Größe“ verwendet.</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Vor/nicht vor, nach/nicht nach:</B></span> Wird zur Überprüfung von „Datum“ verwendet.</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>In/nicht in:</B></span>  Diese Option prüft das Vorhandensein einer Adresse in Ihren Kontakten.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Entspricht genau/entspricht nicht genau:</b></span> Pr&uuml;ft eine genaue &Uuml;bereinstimmung. }}}Sie geben beispielsweise Folgendes an: <span style="font-weight: bold;"><b>Betreff</b></span> <span style="font-weight: bold;"><b>entsprich genau</b></span> - <span style="font-weight: bold;"><b>Banane</b></span>, dann ist nur &quot;Banane&quot; eine Entsprechung und nicht &quot;Bananen&quot; oder &quot;Lkw voller Bananenbl&auml;tter&quot;.{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Enth&auml;lt/enth&auml;lt nicht:</b></span> }}}Gibt an, dass die Betreffzeile die angegebene Zeichenkette enthalten muss.{{{ }}}Wenn Sie beispielsweise angeben: <span style="font-weight: bold;"><b>Betreff enth&auml;lt Banane</b></span>, dann ist &quot;Bananenkuchen&quot; eine Entsprechung.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Entspricht Platzhalter/entspricht nicht dem Platzhalter</b></span>.{{{ Der Platzhalter * ist ein Zeichen, den Sie beim Vergleichskriterium des Mailfilters anstelle eines Zeichens oder mehrerer Zeichen angeben k&ouml;nnen. Wenn Sie beispielsweise angeben: Betreff entspricht genau &quot;Banane*&quot;, dann ist &quot;Bananen&quot; oder &quot;Bananensplit&quot; eine Entsprechung, aber &quot;mein Bananensplit&quot; ist keine Entsprechung.</p></li>
 </ul>
 <h3>Aktionen</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Im Posteingang belassen:</B></span> Speichert die Mail im Posteingang. Wenn keine der Filterregeln auf eine Mail zutrifft, wird standardmäßig diese Aktion durchgeführt.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>In Ordner speichern:</B></span> Verschiebt die Mail in den angegebenen Ordner.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Verwerfen:</B></span> Löscht die Mail, ohne sie zuzustellen. Die Mail wird in keinem Ihrer Ordner abgelegt, auch nicht im Papierkorb.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Weiterleiten:</B></span> Leitet die Mail an eine angegebene Adresse weiter.</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Evaluation beenden:</B></span> Diese Aktion verhindert, dass auf Mails, die der aktuellen Regel entsprechen, nachfolgende Filterregeln angewendet werden.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Markieren:</B></span> Wählen Sie <span style="font-weight: bold;"><B>als gelesen</B></span> oder <span style="font-weight: bold;"><B>als markiert</B></span> aus. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Markieren mit Tag:</B></span> Sie können entsprechende Mails mit einem ausgewählten Tag markieren.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Im Posteingang belassen:</b></span> Speichert die Mail im Posteingang. Wenn keine der Filterregeln auf eine Mail zutrifft, wird standardm&auml;&szlig;ig diese Aktion durchgef&uuml;hrt.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>In Ordner speichern:</b></span> Verschiebt die Mail in den angegebenen Ordner.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Verwerfen:</b></span> L&ouml;scht die Mail, ohne sie zuzustellen. Die Mail wird in keinem Ihrer Ordner abgelegt, auch nicht im Papierkorb.</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Weiterleiten</b></span>.{{{ }}}Leitet die Mail an eine angegebene Adresse weiter.{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Markieren:</b></span> W&auml;hlen Sie <span style="font-weight: bold;"><b>als gelesen</b></span> oder <span style="font-weight: bold;"><b>als markiert</b></span> aus.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Markieren mit Tag:</b></span> Sie k&ouml;nnen entsprechende Mails mit einem ausgew&auml;hlten Tag markieren.</p></li>
 </ul>
 <h3>Mehrere Aktionen</h3>
-<p>Eine Filterregel kann mehrere Aktionen angeben. Kombinierte Aktionen werden wie folgt interpretiert:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Verwerfen:</B></span> In Kombination mit anderen Aktionen wird die Aktion „Verwerfen“ ignoriert, und die anderen Aktionen werden durchgeführt.</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>Evaluation beenden:</B></span> Aktionen, die auf diese folgen, werden ignoriert.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>In Ordner speichern:</B></span> Mehrere &quot;Speichern in&quot;-Aktionen führen dazu, dass mehrere Kopien der Mail in verschiedenen Ordnern abgelegt werden. Wenn ein angegebener Ordner nicht vorhanden ist, wird die Mail im Posteingang gespeichert.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Markieren/Markieren mit Tag:</B></span> Diese Aktionen werden auf die Mail angewendet, die die vorherige Aktion durchlaufen hat.   Bei mehreren &quot;Speichern in&quot;-Aktionen kann dies dazu führen, dass einige Kopien der Mail mit Tag und andere ohne Tag gespeichert werden.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Im Posteingang belassen:</B></span> Es können mehrere &quot;Im Posteingang belassen&quot;-Aktionen angegeben werden, es wird jedoch nur eine Kopie der Mail im Posteingang gespeichert.</p></li>
-	</ul>
+<p>}}}Sie k&ouml;nnen eine Filterregel aus mehreren Aktionen erstellen.{{{ }}}Kombinierte Aktionen in Ihrer Regel werden wie folgt interpretiert:{{{</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Verwerfen:</b></span> In Kombination mit anderen Aktionen wird die Aktion &quot;Verwerfen&quot; ignoriert, und die anderen Aktionen werden durchgef&uuml;hrt.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>In Ordner speichern:</b></span> Mehrere &quot;Speichern in&quot;-Aktionen f&uuml;hren dazu, dass mehrere Kopien der Mail in verschiedenen Ordnern abgelegt werden. Wenn ein angegebener Ordner nicht vorhanden ist, wird die Mail im Posteingang gespeichert.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Markieren/Markieren mit Tag:</b></span> Diese Aktionen werden auf die Mail angewendet, die die vorherige Aktion durchlaufen hat. Bei mehreren &quot;Speichern in&quot;-Aktionen kann dies dazu f&uuml;hren, dass einige Kopien der Mail mit Tag und andere ohne Tag gespeichert werden.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Im Posteingang belassen:</b></span> Es k&ouml;nnen mehrere &quot;Im Posteingang belassen&quot;-Aktionen angegeben werden, es wird jedoch nur eine Kopie der Mail im Posteingang gespeichert.</p></li>
+	<li class="p"><p style="font-weight: bold;">An Adresse weiterleiten: <span  	 style="font-weight: normal;">Die Mail wird an die angegebene Adresse weitergeleitet.</span></p></li>
+</ul>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,36 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Besprechungen planen</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-img_whs2 { border:none; float:none; border-style:none; }
-p.whs3 { margin-left:40px; }
-p.whs4 { margin-left:0px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs4 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Scheduling_meetings</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -41,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Termine, Besprechungen und Ereignisse planen\nTermin anlegen");
@@ -70,10 +64,8 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -89,58 +81,120 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Termin anlegen</h1>
-<p>Sie können in jeder Ansicht, mit Ausnahme der Ansicht „Einstellungen“, Besprechungen und Termine planen.   Sie können einen Termin nur für sich selbst einrichten oder eine Besprechung planen und Teilnehmer einladen. </p>
-<h2>Einzelbesprechung auf der Terminseite planen</h2>
-<ol type="1" class="whs1">
-	<li class=p><p>Klicken Sie in einer beliebigen Ansicht, mit Ausnahme der Ansicht „Einstellungen“, auf den Pfeil von <img src="../newandarrow.gif" x-maintain-ratio="TRUE" border="0" class="img_whs2"> und wählen Sie <span style="font-weight: bold;"><B>Termin</B></span> aus.</p></li>
-	<li class=p-note><p class=note>Wenn Sie einen Termin auf andere Art einrichten möchten, klicken Sie <a href="About_Appointments,_Meetings_and_Events.htm">hier</a>.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>Scheduling an appointment</h1>
+<p>You can schedule meetings and appointments from any view except Preferences. 
+ You can schedule an appointment for yourself, or you can schedule a meeting 
+ and invite attendees.</p>
+<h2>Scheduling a single meeting from the Appointment page</h2>
+<ol type="1">
+	<li class="p"><p>In any view except Preferences, on the toolbar click 
+	 the arrow on <img src="../newandarrow.gif" alt="newandarrow.gif" style="border: none;" width="44" height="18" border="0" /> and select 
+	 <span style="font-weight: bold;"><b>Appointment</b></span>.</p></li>
 </ol>
-<ol start="2" type="1" class="whs1">
-	<li class=p><p>Geben Sie unter „Details“ den Betreff, den Ort, den Frei/Belegt-Status und die Art der Besprechung (privat/öffentlich) an. </p></li>
+<p class="note" style="margin-left: 40px;"><span style="font-weight: bold;"><b>Note</b></span>: 
+ For other ways to start an appointment click <a href="About_Appointments,_Meetings_and_Events.htm">here</a>.</p>
+<ol start="2" type="1">
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Details</b></span> 
+	 sections, enter the following:.</p></li>
 </ol>
-<p class="whs3">Der Betreff wird als Beschreibung im Kalender angezeigt und muss eingegeben werden.</p>
-<p class="whs3">&nbsp;Orte, die von Ihrem Systemadministrator als Ressourcen angelegt wurden, können reserviert werden. Geben Sie den Namen des Ortes, sofern Sie ihn kennen, in das Feld „Ort“ ein. Wenn Sie den Namen nicht kennen, können Sie auf der Registerkarte <span style="font-weight: bold;"><B>Orte suchen</B></span> nach dem Ort suchen. Wenn Sie den Ort auswählen, wird er in diesem Feld angezeigt.</p>
-<p class="whs3">Unter <span style="font-weight: bold;"><B>Anzeigen als</B></span> geben Sie an, ob dieser Termin auf der Seite zur Planung der Teilnehmer als frei oder beschäftigt angezeigt wird. </p>
-<p class="whs3">Mit <span style="font-weight: bold;"><B>Markieren als</B></span> können Sie einen Termin als privat, öffentlich oder vertraulich kennzeichnen. </p>
-<p class="whs3">Wenn Sie mehrere Kalender haben, wählen Sie im Menü <span style="font-weight: bold;"><B>Kalender</B></span> aus, in welchem Kalender das Ereignis eingerichtet werden soll.</p>
-<ol start="2" type="1" class="whs1">
-	<li class=p><p>Im Bereich <span style="font-weight: bold;"><B>Zeit</B></span> geben Sie Datum und Uhrzeit der Besprechung ein. Geben Sie das <span style="font-weight: bold;"><B>Anfangs</B></span>datum ein oder klicken Sie auf den Pfeil, um einen Kalender aufzurufen, in dem Sie ein Datum auswählen können. Wählen Sie das <span style="font-weight: bold;"><B>End</B></span>datum aus.</p></li>
+<p style="margin-left: 40px;">The <span style="font-weight: bold;"><b>From</b></span> 
+ field displays if you created more than one <a href="../Userspecific/Mail_Identities.htm">persona</a> 
+ for your account. Select the identity to use when creating this appointment. 
+ </p>
+<p style="margin-left: 40px;">The <span style="font-weight: bold;"><b>Subject</b></span> 
+ field is required. This becomes the description in the calendar.</p>
+<p style="margin-left: 40px;">The <span style="font-weight: bold;"><b>Location</b></span> 
+ field can be used to describe the location of the meeting, such as giving 
+ an address, building number, floor number. Open the Find Location tab 
+ to find and reserve a room that is listed in your company's directory. 
+ &#160;These locations have been created as resource accounts by your system 
+ administrator and can be reserved. </p>
+<p style="margin-left: 40px;">The <span style="font-weight: bold;"><b>Show 
+ as</b></span> selection determines if this appointment displays as free, tentative, 
+ busy, or out of office on the Schedule Attendees page.</p>
+<p style="margin-left: 40px;"><span style="font-weight: bold;"><b>Mark as</b></span> 
+ lets you mark the message as <a href="Marking_an_appointment_as_private.htm">private 
+ or public</a>.</p>
+<p style="margin-left: 40px;">If you have multiple calendars, select which 
+ calendar is setting up the event from the <span style="font-weight: bold;"><b>Calendar</b></span> 
+ menu</p>
+<ol start="3" type="1">
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Time</b></span> 
+	 section, set the meeting date and time. Enter the <span style="font-weight: bold;"><b>Start</b></span> 
+	 date or click the down arrow to display a calendar and pick a date. 
+	 Select the <span style="font-weight: bold;"><b>End</b></span> date. Select 
+	 the reminder notification. Attendees will be reminded of this meeting 
+	 based on the time you set here.</p></li>
 </ol>
-<ol type="1" class="whs1">
-	<li class=p-note><p class=note>Hinweis: Wenn eine Zeitzone angezeigt wird, (<span style="font-weight: bold;"><B>Einstellungen &gt; Kalender</B></span>), ist dies die Zeitzone, in der Sie sich befinden. Normalerweise müssen Sie die Zeitzone nicht ändern. Wenn Sie Besprechungen planen, bei denen sich die Teilnehmer in verschiedenen Zeitzonen befinden, wird in der Einladung die Uhrzeit für die Besprechung in der Zeitzone des jeweiligen Teilnehmers angezeigt.   Wenn Sie z. B. eine Besprechung mit Teilnehmern in Hamburg und London planen, zeigt die Einladung an die Teilnehmer in Hamburg die Uhrzeit als GMT+1 und die Einladung an die Teilnehmer in London die Uhrzeit als GMT an (eine Stunde Unterschied).</p></li>
+<p class="note" style="margin-left: 40px;"><span 
+	 style="font-weight: bold;"><b>Note</b></span>: If the time zone is displayed 
+ (<span style="font-weight: bold;"><b>Preferences&gt;Calendar</b></span>), it 
+ reflects the time zone that you are in. You usually do not need to change 
+ this. When you schedule meetings with attendees in different time zones, 
+ the invitation is sent reflecting the meeting time in their time zone. 
+ For example, if you create a meeting with attendees in California and 
+ New York, the invitation displays Pacific time for attendees in California 
+ and Eastern time (three hours later) for attendees in New York.</p>
+<ol start="4" type="1">
+	<li class="p"><p>Enter the names of the attendees. You can enter attendee 
+	 names in any of the following ways:</p>
+	<ul>
+		<li class="p" type="disc"><p>In the <span style="font-weight: bold;"><b>Attendees</b></span> 
+		 text field, type the email addresses, separating addresses by 
+		 a semicolon (;). Names in your Contact list matching what you 
+		 type are displayed as you type.</p></li>
+		<li class="p" type="disc"><p>To see the free/busy schedules for 
+		 attendees, click the <a href="Using_the_Schedule_tab_when_creating_a_appointment.htm"><span 
+		 style="font-weight: bold;"><b>Schedule</b></span> tab</a>. As you enter 
+		 attendees' names and email addresses, if attendees' schedules 
+		 are known, availability appears in horizontal bars next to the 
+		 names. Return to the <span style="font-weight: bold;"><b>Appointment</b></span> 
+		 tab when the attendee's list is complete. &#160;</p></li>
+	</ul></li>
 </ol>
-<ol start="3" type="1" class="whs1">
-	<li class=p><p>Fügen Sie Ressourcen hinzu. Wenn Sie den Namen der Ressource kennen, geben Sie ihn in das Feld „Ressource“ ein. Kennen Sie den Namen nicht, können Sie auf der Registerkarte <span style="font-weight: bold;"><B>   Ressourcen suchen</B></span> nach verfügbaren Ressourcen suchen.</p></li>
-	<li class=p><p>Geben Sie die Namen der Teilnehmer ein. Die Namen der Teilnehmer können Sie auf eine der folgenden Arten eingeben:</p></li>
-	<ul><li style="list-style: disc;" type=disc class=p><p class="whs4">Öffnen Sie die Registerkarte <span style="font-weight: bold;"><B>Teilnehmer</B></span> <span style="font-weight: bold;"><B>suchen</B></span>. Geben Sie einen Namen ein und wählen Sie die zu verwendende Liste aus, entweder „Kontakte“ oder „Globale Adressliste“. Wählen Sie die Namen aus und klicken Sie auf <span style="font-weight: bold;"><B>Hinzufügen</B></span>. Klicken Sie abschließend auf <span style="font-weight: bold;"><B>OK</B></span>.   </p></li>
-		<li style="list-style: disc;" type=disc class=p><p>Geben Sie im Textfeld <span 
- style="font-weight: bold;"><B>Teilnehmer</B></span> die Mail-Adressen getrennt durch Semikolons (;) ein. In Ihrer Kontaktliste enthaltene Namen werden angezeigt, sobald sie Ihrer Eingabe entsprechen.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p>Um die Frei/Belegt-Zeiten der Teilnehmer anzuzeigen, öffnen Sie die Registerkarte <span style="font-weight: bold;"><B>Teilnehmer planen</B></span>. Während Sie Namen und Mail-Adressen der Teilnehmer eingeben, wird, sofern die Planung der Teilnehmer bekannt ist, deren Verfügbarkeit in horizontalen Leisten neben den Namen angezeigt. Wenn die Liste der Teilnehmer vollständig ist, kehren Sie zur Registerkarte <span style="font-weight: bold;"><B>Termin</B></span> zurück. &nbsp;</p></li>
-	</ul>
-	<li class=p><p class="whs4">Im Feld <span style="font-weight: bold;"><B>Text</B></span> können Sie weitere Informationen angeben, die in der Mail enthalten sein sollen. Um Anhänge hinzuzufügen, klicken Sie in der Symbolleiste auf <span style="font-weight: bold;"><B>Anhänge hinzufügen</B></span>.</p></li>
-	<li class=p><p class="whs4">Klicken Sie auf <span style="font-weight: bold;"><B>Speichern</B></span>.   Allen Teilnehmern wird per Mail eine Einladung gesendet, und der Termin wird in den Kalendern der Teilnehmer angezeigt.</p></li>
+<p style="margin-left: 40px;">When <span style="font-weight: bold;"><b>Request 
+ Responses</b></span> is checked, you will receive email notification when 
+ attendees accept or decline your meeting request. &#160;If you do not 
+ want to receive the responses, click the checkbox to remove the check.</p>
+<p style="margin-left: 40px;">When <span style="font-weight: bold;"><b>Send 
+ Notification Mail</b></span> is checked, when you click save, an email is 
+ sent to the attendees list. Send Notification Mail gives you the option 
+ to make changes to a meeting without notifying all the attendees of the 
+ change.</p>
+<ol start="5" type="1">
+	<li class="p"><p style="margin-left: 0px;">Use the <span style="font-weight: bold;"><b>Text</b></span> 
+	 field to add additional information to include in the email. To add 
+	 attachments, click <span style="font-weight: bold;"><b>Add Attachments</b></span> 
+	 on the tool bar.</p></li>
+	<li class="p"><p style="margin-left: 0px;">Click <span style="font-weight: bold;"><b>Save</b></span>. 
+	 An email invitation is sent to all attendees and the appointment is 
+	 displayed in their calendars.</p></li>
 </ol>
-<p class="whs4">Wenn Sie einen Termin zu einem freigegebenen Kalender hinzufügen, müssen Sie möglicherweise die Anzeige aktualisieren, damit der Termin angezeigt wird.</p>
-<p class="whs3">&nbsp;</p>
-<p class="whs3">&nbsp;</p>
-<h2>&nbsp;</h2>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 0px;">If 
+ you are adding an appointment to a shared calendar, you may need to refresh 
+ the screen to see the appointment.</p>
+<p style="margin-left: 40px;">&#160;</p>
+<p style="margin-left: 40px;">&#160;</p>
+<h2>&#160;</h2>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Mails im Lesefenster lesen</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Mails verwalten \nMails lesen\nMails im Lesefenster lesen");
@@ -52,10 +64,8 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,22 +81,42 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Mails im Lesefenster lesen</h1>
-<p>Das Lesefenster ist der Bereich unterhalb der Mails in Ihrem Posteingang. </p>
-<p>Wenn Sie das Lesefenster aktiviert haben und auf eine Mail klicken, wird die Mail in einem Fenster unterhalb der Mail-Kopfzeile angezeigt. Außerdem wird die Mail dann als gelesen markiert. Um die Größe des Lesefensters anzupassen, klicken Sie den Fensterteiler an und ziehen ihn mit der Maus nach oben oder unten.</p>
-<p>Standardmäßig ist die Anzeige von Mails im Lesefenster eingeschaltet. Sie können die Anzeige auf der Registerkarte <span style="font-weight: bold;"><B>Einstellungen, Mail</B></span> ausschalten. Deaktivieren Sie hierfür  <span style="font-weight: bold;"><B>Mail-Lesefenster anzeigen</B></span>.</p>
-<p>Sie können die Einstellung des Lesefensters auch im Menü „Anzeigen“ ändern. Wenn Sie die Einstellung hier vornehmen, gilt sie jedoch nur solange, bis Sie sich abmelden. Beim erneuten Anmelden wird anhand der Einstellung auf der Registerkarte „Einstellungen“ festgelegt, ob das Lesefenster aktiviert wird. &nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>}}}Mails im Lesefenster anzeigen{{{</h1>
+<p>}}}Sie k&ouml;nnen sich Mails in Ihrem Posteingang und in anderen Ordnern als Vorschau im Lesefenster anzeigen lassen.{{{</p>
+<p>Standardm&auml;&szlig;ig ist die Anzeige von Mails im Lesefenster eingeschaltet. }}}Sie k&ouml;nnen dies &uuml;ber den Link <span style="font-weight: bold;"><b>Ansicht</b></span> in der Symbolleiste ausschalten.{{{ }}}Sie k&ouml;nnen die Position des Lesefensters individuell anpassen.{{{</p>
+<h2>}}}Das Lesefenster ausw&auml;hlen{{{</h2>
+<p>}}}Das Lesefenster kann entweder am unteren Rand oder rechts im Lesefenster angezeigt werden.{{{</p>
+<ol type="1">
+	<li class="p"><p>}}}Klicken Sie in der Symbolleiste &bdquo;Mail&ldquo; auf <span style="font-weight: bold;"><b>Ansicht</b></span>.{{{</p></li>
+	<li class="p"><p>}}}W&auml;hlen Sie, ob das Lesefenster entweder am unteren Rand oder rechts im Inhaltsfenster angezeigt werden soll.{{{ }}}Sie k&ouml;nnen das Lesefenster auch ausschalten.{{{</p></li>
+</ol>
+<h2>}}}Mails im Lesefenster anzeigen{{{</h2>
+<p>}}}Das Lesefenster ist leer, bis Sie auf eine Mail klicken.{{{</p>
+<p>}}}Passen Sie die Gr&ouml;&szlig;e des Lesefensters an, indem Sie Ihren Zeiger &uuml;ber die Linie zwischen Inhaltsfenster und Lesefenster f&uuml;hren.{{{ }}}Der Zeiger wird zu einem Doppelpfeil.{{{ }}}Klicken Sie auf den Zeiger und ziehen Sie die Maus, um die Gr&ouml;&szlig;e des Lesefensterbereichs zu &auml;ndern.{{{</p>
+<p>}}}Wenn Sie auf eine Mail in der Liste klicken, wird der Mailtext im Lesefenster angezeigt.{{{</p>
+<h2>}}}Mails im Lesefenster als gelesen kennzeichnen{{{</h2>
+<p>}}}Unter <span style="font-weight: bold;"><b>Mail-Einstellungen</b></span> k&ouml;nnen Sie konfigurieren, ob die Mails, die Sie sich im Lesefenster ansehen, als gelesen oder nicht als gelesen gekennzeichnet werden sollen.{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Sofort als gelesen kennzeichnen</b></span>.{{{ }}}Sobald Sie auf eine Mail im Lesefenster klicken, wird diese als gelesen gekennzeichnet.{{{</p></li>
+	<li class="p"><p style="font-weight: normal;">}}}<span style="font-weight: bold;"><b>Nach &quot;x &quot; Sekunden als gelesen kennzeichnen</b></span>.{{{ }}}Die Standardeinstellung ist 5 Sekunden.{{{ }}}Wenn Sie auf eine Mail klicken und sie sich 5 Sekunden lang ansehen, wird die Mail als gelesen gekennzeichnet.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Nicht als gelesen kennzeichnen</b></span>.{{{ }}}Mails, die Sie im Lesefenster lesen, werden nie als gelesen gekennzeichnet.{{{</p></li>
+</ul>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

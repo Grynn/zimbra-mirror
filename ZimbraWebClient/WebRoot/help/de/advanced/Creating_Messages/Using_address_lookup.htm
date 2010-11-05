@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Adressen vervollständigen</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { margin-left:40px; }
-ul.whs2 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Adressen vervollst&auml;ndigen</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Mails verfassen\nAutomatische Vervollständigung von Adressen");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,45 +81,50 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Automatische Vervollständigung von Adressen</h1>
-<p>Die Funktion Autovervollständigung schlägt Ihnen, sobald Sie anfangen, in die Felder <span style="font-weight: bold;"><B>An, CC oder BCC</B></span> einer neuen Mail Namen einzugeben, Namen vor. Es wird eine Liste möglicher Adressen aus Ihrem Adressbuch angezeigt, die mit dem Text, den Sie eingeben, <span style="font-style: italic;"><I>beginnen</I></span>. </p>
-<p>Je mehr Text Sie in das Feld <span style="font-weight: bold;"><B>An</B></span> eingeben, desto kleiner wird die Anzahl der angezeigten Adressen, weil immer weniger Einträge mit dem von Ihnen eingegebenen Text übereinstimmen. Die Liste wird nicht mehr angezeigt, wenn es keine Entsprechungen mehr gibt.</p>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>Automatische Vervollst&auml;ndigung von Adressen</h1>
+<p>}}}Die Funktion Autovervollst&auml;ndigung schl&auml;gt Ihnen, sobald Sie anfangen, in die Felder <span style="font-weight: bold;"><b>An, CC oder BCC</b></span> einer neuen Mail Namen einzugeben, Namen vor.{{{ Es wird eine Liste m&ouml;glicher Adressen aus Ihrem Adressbuch angezeigt, die mit dem Text, den Sie eingeben, <span style="font-style: italic;"><i>beginnen</i></span>.</p>
+<p>}}}Je mehr Text Sie in das Feld <span style="font-weight: bold;"><b>An:</b></span>{{{ }}}eingeben, desto kleiner wird die Anzahl der angezeigten Adressen, weil immer weniger Eintr&auml;ge mit dem von Ihnen eingegebenen Text &uuml;bereinstimmen.{{{ Die Liste wird nicht mehr angezeigt, wenn es keine Entsprechungen mehr gibt.</p>
 <h4>Beispiel</h4>
-<p>Nehmen wir einmal an, Sie möchten eine Mail an David Brinker senden, dessen Mail-Adresse dbrinker@beispiel.de lautet.   Sobald Sie den ersten Buchstaben „d“ in das Adressfeld eingeben, wird eine Liste mit allen möglichen Entsprechungen angezeigt, wobei die übereinstimmenden Teile hervorgehoben sind. In diesem Fall wird Folgendes angezeigt:</p>
-<p class="whs1"><span style="font-weight: bold;"><B>D</B></span>ieter   Ehrmann &lt;<span style="font-weight: bold;"><B>d</B></span>ehr@beispiel.de&gt;</p>
-<p class="whs1"><span style="font-weight: bold;"><B>D</B></span>avid   Brinker &lt;<span style="font-weight: bold;"><B>d</B></span>brinker@beispiel.de&gt;</p>
-<p class="whs1">Erika <span style="font-weight: bold;"><B>D</B></span>iehl   &lt;erika878@xyz.com&gt;</p>
-<p>Wenn Sie weitere Zeichen in das Feld <span style="font-weight: bold;"><B>An</B></span> eingeben, wird die Liste der Entsprechungen kleiner.</p>
-<h3>Übereinstimmung</h3>
-<p>Die Funktion „Autovervollständigung“ vergleicht den Text, den Sie eingeben, mit den folgenden Teilen eines Kontakts:</p>
-<ul type="disc" class="whs2">
-	<li class=p><p>Vorname</p></li>
-	<li class=p><p>Nachname</p></li>
-	<li class=p><p>Mail-Adresse</p></li>
+<p>}}}Nehmen wir einmal an, Sie m&ouml;chten eine Mail an David Brinker senden, dessen Mail-Adresse dbrinker@acme.com lautet. Sobald Sie den ersten Buchstaben &quot;d&quot; in das Adressfeld eingeben, wird eine Liste mit allen m&ouml;glichen Entsprechungen angezeigt, wobei die &uuml;bereinstimmenden Teile hervorgehoben sind.{{{ In diesem Fall wird Folgendes angezeigt:</p>
+<p style="margin-left: 40px;">}}}<span style="font-weight: bold;"><b>D</b></span>ieter Ehrmann &lt; <span style="font-weight: bold;"><b>d</b></span>ehr@acme.com&gt;{{{</p>
+<p style="margin-left: 40px;">}}}<span style="font-weight: bold;"><b>D</b></span>avid Brinker &lt; <span  	 style="font-weight: bold;"><b>d</b></span>brinker@acme.com&gt;{{{</p>
+<p style="margin-left: 40px;">}}}Erica <span style="font-weight: bold;"><b>D</b></span>iehl &lt;erica878@xyz.com&gt;{{{</p>
+<p>}}}Wenn Sie weitere Zeichen in das Feld <span style="font-weight: bold;"><b>An:</b></span>{{{ }}}eingeben, wird die Liste der Entsprechungen kleiner.{{{</p>
+<h3>&Uuml;bereinstimmung</h3>
+<p>}}}Die Funktion &quot;Autovervollst&auml;ndigung&quot; vergleicht den Text, den Sie eingeben, mit den folgenden Teilen eines Kontakts:{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}} Vorname{{{</p></li>
+	<li class="p"><p>}}} Nachname{{{</p></li>
+	<li class="p"><p>Mail-Adresse</p></li>
 </ul>
-<p>Die Suche nach Entsprechungen beginnt immer am Anfang des Felds. Der Text „hart“ entspricht „hartmut müller“, aber nicht „eckhart müller“.</p>
-<h3>Autovervollständigung nutzen</h3>
-<p>Wenn der von Ihnen eingegebene Text einem oder mehreren Ihrer Kontakte entspricht, werden die Entsprechungen in einer Liste unterhalb des Felds angezeigt, in das Sie gerade Text eingeben. Standardmäßig ist die erste Entsprechung hervorgehoben.</p>
-<p>Mit bestimmten Tasten können Sie bestimmte Funktionen auslösen. Auch mit der Maus können Sie eine Entsprechung auswählen.</p>
-<ul type="disc" class="whs2">
-	<li class=p><p>Durch Eingabe von einem Komma oder Semikolon bzw. durch Drücken der Eingabetaste oder der Tab-Taste wird der Name vervollständigt. Der von Ihnen eingegebene Text wird durch die hervorgehobene Entsprechung ersetzt.</p></li>
-	<li class=p><p>Mit ESC blenden Sie die Liste aus.</p></li>
-	<li class=p><p>Mit den Pfeiltasten auf/ab ändern Sie die Auswahl in der Liste. Auch mit dem Mauszeiger können Sie die Auswahl in der Liste ändern.</p></li>
-	<li class=p><p>Wenn Sie mit der Maus auf eine Entsprechung klicken, wird dieser Name in das Eingabefeld übernommen.</p></li>
+<p>Die Suche nach Entsprechungen beginnt immer am Anfang des Felds. }}}Der Text &quot;r;hart&quot; entspricht &quot;r;hartmut m&uuml;ller&quot;, aber nicht &quot;r;eckhart  m&uuml;ller&quot;.{{{</p>
+<h3>}}}Autovervollst&auml;ndigung nutzen{{{</h3>
+<p>Wenn der von Ihnen eingegebene Text einem oder mehreren Ihrer Kontakte entspricht, werden die Entsprechungen in einer Liste unterhalb des Felds angezeigt, in das Sie gerade Text eingeben. }}}Standardm&auml;&szlig;ig ist die erste Entsprechung hervorgehoben.{{{</p>
+<p>}}}Die Namen werden in einer &quot;Rangordnung&quot; angezeigt. Kontakte, denen Sie bereits Mails gesendet haben, werden vor Kontakten angezeigt, denen Sie noch keine oder nicht so h&auml;ufig Mails gesendet haben.{{{ }}}Das bedeutet, dass die am h&auml;ufigsten angeschriebenen Kontakte ganz oben in der Liste aufgef&uuml;hrt werden.{{{ }}}Wenn Sie nicht wollen, dass der Kontaktname immer ganz oben angezeigt wird, k&ouml;nnen Sie auf <span style="font-weight: bold;"><b>Vergessen</b></span> klicken. Der Kontakt wird an einer niedrigeren Position eingeordnet.{{{</p>
+<p>Mit bestimmten Tasten k&ouml;nnen Sie bestimmte Funktionen ausl&ouml;sen. Auch mit der Maus k&ouml;nnen Sie eine Entsprechung ausw&auml;hlen.</p>
+<ul type="disc">
+	<li class="p"><p>Durch Eingabe von einem Komma oder Semikolon bzw. durch Dr&uuml;cken der Eingabetaste oder der Tab-Taste wird der Name vervollst&auml;ndigt. Der von Ihnen eingegebene Text wird durch die hervorgehobene Entsprechung ersetzt. </p></li>
+	<li class="p"><p>}}}&Uuml;ber die ESC-Taste blenden Sie die Liste aus.{{{</p></li>
+	<li class="p"><p>Mit den Pfeiltasten auf/ab &auml;ndern Sie die Auswahl in der Liste. Auch mit dem Mauszeiger k&ouml;nnen Sie die Auswahl in der Liste &auml;ndern.</p></li>
+	<li class="p"><p>Wenn Sie mit der Maus auf eine Entsprechung klicken, wird dieser Name in das Eingabefeld &uuml;bernommen.</p></li>
 </ul>
-<p>Dadurch, dass eine einzige Taste (z. B. ein Semikolon) die Vervollständigung eines Namens bewirkt, können Sie Adressen schnell eingeben. Wenn Sie einige Zeichen kennen, durch die ein bestimmter Kontakt an die erste Stelle gelangt, können Sie diese Zeichen und ein Semikolon eingeben und schon ist die Adresse des Kontakts eingegeben. Wenn Sie z. B. wissen, dass die Eingabe von „db“ dazu führt, dass David Brinker an erster Stelle angezeigt wird, geben Sie „db;“ ein und die vollständige Adresse „David Brinker &lt;dbrinker@beispiel.de&gt;“ erscheint im Adressfeld.</p>
-<p>Die Autovervollständigung ist auch in anderen Anwendungen verfügbar (z. B. beim Hinzufügen von Teilnehmern zu einem Termin im Kalender), wo sie auf die gleiche Weise funktioniert.</p>
-<script type="text/javascript" language="javascript1.2">
+<p>Dadurch, dass eine einzige Taste (z. B. ein Semikolon) die Vervollst&auml;ndigung eines Namens bewirkt, k&ouml;nnen Sie Adressen schnell eingeben. }}}Wenn Sie einige Zeichen kennen, durch die ein bestimmter Kontakt an die erste Stelle gelangt, k&ouml;nnen Sie diese Zeichen und ein Semikolon eingeben und schon ist die Adresse des Kontakts eingegeben.{{{ }}}Wenn Sie z. B. wissen, dass die Eingabe von &quot;r; db&quot; dazu f&uuml;hrt, dass David Brinker an erster Stelle angezeigt wird, geben Sie &quot;r; db;&quot; ein und die vollst&auml;ndige Adresse &quot;r;David Brinker &lt; dbrinker@acme.com&gt;&rdquo;&quot; erscheint im Adressfeld.{{{</p>
+<p class="note"><span style="font-weight: bold;"><b>Hinweis:</b></span> }}}Sie k&ouml;nnen einstellen, wie die Funktion &quot;Autovervollst&auml;ndigung&quot; auf der Seite <a  	 href="../Userspecific/Setting_your_address_book_preferences.htm">Einstellungen, Adressbuch</a> ausgef&uuml;hrt wird.{{{ </p>
+<p>}}}Die Autovervollst&auml;ndigung ist auch in anderen Anwendungen verf&uuml;gbar (z. B. beim Hinzuf&uuml;gen von Teilnehmern zu einem Termin im Kalender), wo sie auf die gleiche Weise funktioniert.{{{</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

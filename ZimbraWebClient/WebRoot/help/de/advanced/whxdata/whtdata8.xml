@@ -1,14 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-<item name="Benutzereinstellungen ändern" url="Userspecific/Changing_Your_User_Options.htm" />
-<item name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
-<item name="Abwesenheitsmeldungen erstellen" url="Userspecific/vacation_message.htm" />
-<item name="Gesendete Mails speichern" url="Navigation_folders_and_tips/sent_folder.htm" />
-<item name="Persönlichkeiten anlegen" url="Userspecific/Creating_Personas.htm" />
-<item name="Mailbox-Kapazität" url="Navigation_folders_and_tips/quotas.htm" />
-<item name="Standardzeitzone ändern" url="Userspecific/Changing_your_default_timezone.htm" />
-<item name="Mobilgeräte verwalten" url="6_0new_topics/Managing_your_mobile_devices.htm" />
+<item name="Wissenswertes zu Zimlets" url="Zimlets/About_Zimlets.htm" />
+<item name="Zimlets verwalten" url="Zimlets/Managing_your_Zimlets.htm" />
 
 </tocdata>

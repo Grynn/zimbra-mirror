@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Startseite Ihrer Mail benutzerspezifisch einrichten</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Mail-Startseite benutzerspezifisch einrichten</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Mails verwalten \nMail-Startseite benutzerspezifisch einrichten");
@@ -52,10 +64,8 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,23 +81,46 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Startseite Ihrer Mail benutzerspezifisch einrichten</h1>
-<p>Standardmäßig wird beim Öffnen Ihrer Mailbox der <span style="font-weight: bold;"><B>Posteingang</B></span> angezeigt. Alle Mails in Ihrem Posteingang werden im Inhaltsfenster angezeigt. Sie können für diese Startseite im Übersichtsfenster einen beliebigen Ordner, eine Suche oder Tags einstellen. Wenn Sie beim Öffnen Ihrer Mailbox z. B. nur ungelesene Mails anzeigen möchten, geben Sie unter <span style="font-weight: bold;"><B>Einstellungen &gt; Mail &gt; Standardmailsuche</B></span> für die Suche <span class=code>is:unread</span> ein.</p>
-<p>Um Mails mit dem von Ihnen erstellten Tag &quot;Erledigen&quot; anzuzeigen, geben Sie im Feld „Standardmailsuche“ <span class=code>tag:Erledigen</span> ein.   Um Mails eines anderen Ordners, nicht des Posteingangs, anzuzeigen, geben Sie z. B. <span class=code>in:Arbeit</span> ein. </p>
-<p>Nutzen Sie Anführungszeichen, wenn Ordnername oder Tag aus mehreren Wörtern bestehen. Beispiel: <span 
- style="font-weight: bold;"><B>in:&quot;Ungelesene Mails&quot;</B></span>.</p>
+//]]></script>
+<h1>Mail-Startseite benutzerspezifisch einrichten</h1>
+<p>Standardm&auml;&szlig;ig wird beim &Ouml;ffnen Ihrer Mailbox der <span style="font-weight: bold;"><b>Posteingang</b></span> angezeigt. Alle Mails in Ihrem Posteingang werden im Inhaltsfenster angezeigt. Sie k&ouml;nnen f&uuml;r diese Startseite im &Uuml;bersichtsfenster einen beliebigen Ordner, eine Suche oder Tags einstellen. }}}Nehmen Sie diese &Auml;nderungen unter <span style="font-weight: bold;"><b>Mail</b></span>-<span style="font-weight: bold;"><b>Einstellungen, Standardmailsuche</b></span> vor.{{{ &nbsp;</p>
+<p>}}}Beispiele f&uuml;r die Darstellung bestimmter Mails beim &Ouml;ffnen Ihrer Mailbox:{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}Um beim &Ouml;ffnen Ihrer Mailbox nur Ihre ungelesenen Mails angezeigt zu bekommen, geben Sie <span class="code">is:Ungelesen</span> <span class="code"  	 style="font-weight: normal;">in das Feld</span> <span style="font-weight: bold;"><b>Standardmail</b></span>-<span style="font-weight: bold;"><b>Suche</b></span> <span class="code"  	 style="font-weight: normal;">ein.</span>{{{</p></li>
+	<li class="p"><p>}}}<span class="code" style="font-weight: normal; font-family: Arial, sans-serif;"></span>Um Mails mit speziellen Tags anzuzeigen, geben Sie tag:&lt;{{{ }}}Tag-Name&gt; in das Feld <span style="font-weight: bold;"><b>Standardmail</b></span>-<span style="font-weight: bold;"><b>Suche</b></span> ein.{{{ }}}Beispiel: um nur Mals mit dem ToDo-Tag anzuzeigen, geben Sie <span class="code" style="font-family: Arial, sans-serif;  												 font-size: 10pt;"><font size="2" style="font-size:10pt;">tag:{{{ }}}ToDo</font></span> ein.{{{</p></li>
+	<li class="p"><p>}}}Um Mails anzuzeigen, die &uuml;ber einen <a href="../filters/how_filtering_works.htm">Mail-Filter</a> an einen bestimmten Ordner gesendet wurden, geben Sie in:&lt;{{{ }}}Ordnername&gt; in das Feld <span style="font-weight: bold;"><b>Standardmailsuche</b></span> ein.{{{ }}}Beispiel: Um Mails im Arbeitsordner anzuzeigen, geben Sie <span  	 style="font-weight: bold;"><b>in:Arbeit</b></span> ein.{{{</p></li>
+</ul>
+<p class="note">}}}<span style="font-weight: bold;"><b>Hinweis:{{{ &nbsp;}}}</b></span>Nutzen Sie Anf&uuml;hrungszeichen, wenn Ordnername oder Tag aus mehreren W&ouml;rtern bestehen.{{{ }}}Beispiel: <span style="font-weight: bold;"><b>in:&quot;Ungelesene Mails.&quot;</b></span>{{{</p>
+<h3>}}}Mailbox-Verhalten f&uuml;r den Mailempfang einrichten{{{</h3>
+<p>}}}Durch die Aktivierung der Optionen in <span style="font-weight: bold;"><b>Wenn ich auf &bdquo;Mail empfangen&ldquo;</b></span> klicken, wird festgelegt, ob sich Ihre Mailbox-Ansicht beim Klicken auf &bdquo;Mail empfangen&ldquo; &auml;ndert.{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}Wenn <span style="font-weight: bold;"><b>Standardsuche durchf&uuml;hren</b></span> ausgew&auml;hlt ist, wenn Sie auf <span style="font-weight: bold;"><b>Mail empfangen</b></span> klicken, wird die im Feld &bdquo;Standardmailsuche&ldquo; beschriebene Mail-Suche durchgef&uuml;hrt.{{{ }}}Wenn Ihre Standard-Suche nicht der Ordner ist, den Sie sich gerade ansehen, wird Ihre Ansicht automatisch zur Standard-Ordneransicht umgeleitet.{{{ }}}In den meisten F&auml;llen ist dies Ihr Posteingang.{{{ &nbsp;</p></li>
+	<li class="p"><p>}}}Wenn <span style="font-weight: bold;"><b>Aktuelle Ansicht aktualisieren</b></span> ausgew&auml;hlt ist, wenn Sie in einem Ordner auf <span style="font-weight: bold;"><b>Mail empfangen</b></span> klicken, sucht die Abfrage &bdquo;Mail empfangen&ldquo; nach Aktualisierungen Ihrer aktuellen Ordneransicht sowie nach neuen Mails.{{{ }}}Ihre aktuelle Ordneransicht &auml;ndert sich nicht.{{{ </p></li>
+</ul>
+<p class="note" style="margin-left: 40px;"><span style="font-weight: bold;"><b>Hinweis:}}}</b></span> Wenn neue Mails in anderen Ordnern empfangen werden, werden diese Ordner fett dargestellt und die Anzahl an ungelesenen Mails wird aktualisiert.{{{ </p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>
+
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+  <param  name="Command"  value="Verwandte Themen" />
+  <param  name="Font"  value="}}}Arial,8,0,,BOLD UNDERLINE{{{" />
+  <param  name="Frame"  value="}}}_blank{{{" />
+  <param  name="Item1"  value="}}}Mailansicht verwalten;..\conversations\conversation_list_view.htm{{{" />
+  <param  name="Text"  value="}}}Text:{{{  Verwandte Themen        " />
+</object>
+
+
+ </p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

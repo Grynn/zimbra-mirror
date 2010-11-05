@@ -1,26 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Neue Mail verfassen</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
-ul.whs2 { list-style:disc; }
-ol.whs3 { list-style:decimal; }
-p.whs4 { margin-left:40px; }
-ul.whs5 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -31,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Mails verfassen\nNeue Mail verfassen");
@@ -60,10 +64,8 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -79,49 +81,40 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Neue Mail verfassen</h1>
-<p>Um eine neue Mail zu verfassen, klicken Sie zunächst in der Symbolleiste auf <img src="../newwitharrow.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1">, um eine leere Seite zum Verfassen einer Mail aufzurufen. Sie können auch im Feld <span style="font-weight: bold;"><B>Von</B></span> einer Mail mit der rechten Maustaste klicken und <span style="font-weight: bold;"><B>Neue Mail</B></span> auswählen, um eine leere Seite zum Verfassen einer Mail zu öffnen. Je nach Ihren <a href="../Userspecific/Setting_your_user_preferences.htm">Maileinstellungen</a> wird die leere Seite zum Verfassen im Zimbra-Fenster oder als neues Fenster geöffnet.</p>
-<p>Geben Sie im Zimbra-<span style="font-weight: bold;"><B>Fenster zum Verfassen</B></span> ins Feld <span style="font-weight: bold;"><B>An</B></span> die Mail-Adressen der Personen ein, an die Sie die Mail senden möchten.   Sie können Mail-Adressen nachschlagen, indem Sie auf <span style="font-weight: bold;"><B>An</B></span> klicken, um Ihre Kontakte oder die globale Adressliste zu durchsuchen. Um BCC-Adressen hinzuzufügen, klicken Sie in der Verfassen-Symbolleiste auf <span style="font-weight: bold;"><B>Optionen</B></span>. </p>
-<ul><li class=p-note><p class=note>Wenn Sie mehrere <a href="../Userspecific/Mail_Identities.htm">Mail-Identitäten</a> besitzen, müssen Sie die gewünschte Identität auswählen, bevor Sie Ihre Mail verfassen können.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>Mails verfassen und senden</h1>
+<p>}}}Sie k&ouml;nnen eine Mail-Nachricht verfassen und senden, sobald Sie sie geschrieben haben, oder Sie k&ouml;nnen einen Entwurf anlegen und diesen zu einem sp&auml;teren Zeitpunkt fertigstellen und versenden.{{{</p>
+<p>}}}Um eine neue Mail zu verfassen, klicken Sie zun&auml;chst in der Symbolleiste auf <img src="../newwitharrow.gif" alt="newwitharrow.gif" style="border: none;" width="43" height="15" border="0" />, um eine leere Seite zum Verfassen einer Mail aufzurufen.{{{ }}}Sie k&ouml;nnen auch im Feld <span style="font-weight: bold;"><b>Von</b></span> einer Mail mit der rechten Maustaste klicken und <span style="font-weight: bold;"><b>Neue Mail</b></span> ausw&auml;hlen, um eine leere Seite zum Verfassen einer Mail zu &ouml;ffnen.{{{</p>
+<p>}}}Je nach Ihren <a href="../Userspecific/Setting_your_user_preferences.htm">Maileinstellungen</a> wird entweder eine Registerkarte &bdquo;Verfassen&ldquo; in der Symbolleiste &bdquo;Anwendung&ldquo; angezeigt und eine Seite zum Verfassen einer Mail im selben Fenster ge&ouml;ffnet oder es wird ein neues Fenster zum Verfassen ge&ouml;ffnet.{{{ }}}Sie k&ouml;nnen gleichzeitig mehrere Registerkarten &bdquo;Verfassen&ldquo; ge&ouml;ffnet haben und zwischen den jeweiligen Registerkarten in der Symbolleiste wechseln.{{{</p>
+<p>}}}Geben Sie im Feld <span style="font-weight: bold;"><b>An</b></span> der Seite &bdquo;Verfassen&ldquo; die Mail-Adressen der Personen ein, an die Sie die Mail senden{{{ }}}m&ouml;chten.{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}Sie k&ouml;nnen Mail-Adressen nachschlagen, indem Sie auf <span style="font-weight: bold;"><b>An</b></span> klicken, um ggf. Ihre Kontakte oder die globale Adressliste zu durchsuchen.{{{ 
+	 </p></li>
+	<li class="p"><p>}}}Um BCC-Adressen hinzuzuf&uuml;gen, klicken Sie auf <span style="font-weight: bold;"><b>BCC-Feld anzeigen</b></span> neben dem Textfeld <span style="font-weight: bold;"><b>Cc:</b></span>{{{ }}}in der Nachrichten-Kopfzeile.{{{</p></li>
 </ul>
-<p>Sie können Ihre Mail im HTML-Format oder als reinen Text (Plain-Text) verfassen. Das Standardformat richten Sie über die Registerkarten „Einstellungen, Allgemein“&nbsp;ein. Um das Format nur für eine Mail rasch zu ändern, klicken Sie in der Symbolleiste des Mail-Fensters auf <span style="font-weight: bold;"><B>Optionen</B></span> und wählen HTML oder Plain-Text aus. </p>
-<ul type="disc" class="whs2">
-	<li class=p><p>Bei der Option <span style="font-weight: bold;"><B>Als HTML formatieren</B></span><span> 
- </span> können Sie Ihre Mail mit verschiedenen Schriftarten formatieren, Farben verwenden und Tabellen erstellen.</p></li>
-	<li class=p><p>Bei der Option <span style="font-weight: bold;"><B>Als Plain-Text formatieren</B></span> erzeugen Sie Text ohne Formatierung. Jeder Computer kann diese Art von Mails lesen. </p></li>
+<p>}}}Wenn Sie verschiedene Pers&ouml;nlichkeiten angelegt haben, wird das Feld <span style="font-weight: bold;"><b>Von</b></span> auf der Seite zum Verfassen einer Mail angezeigt.{{{ }}}W&auml;hlen Sie die Pers&ouml;nlichkeit aus, die Sie als Von-Adresse verwenden m&ouml;chten.{{{</p>
+<p>Sie k&ouml;nnen Ihre Mail im HTML-Format oder als reinen Text (Plain-Text) verfassen. }}}Das Standardformat richten Sie &uuml;ber die Registerkarte &quot;Allgemeine Einstellungen&quot; ein.{{{ Um das Format nur f&uuml;r eine Mail rasch zu &auml;ndern, klicken Sie in der Symbolleiste des Mail-Fensters auf <span style="font-weight: bold;"><b>Optionen</b></span> und w&auml;hlen HTML oder Plain-Text aus.</p>
+<ul type="disc">
+	<li class="p"><p>}}}Bei der Option <span style="font-weight: bold;"><b>Als HTML formatieren</b></span> k&ouml;nnen Sie Ihre Mail mit verschiedenen Schriftarten formatieren, Farben verwenden, Tabellen erstellen und Hyperlinks hinzuf&uuml;gen.{{{</p></li>
+	<li class="p"><p>Bei der Option <span style="font-weight: bold;"><b>Als Plain-Text formatieren</b></span> erzeugen Sie Text ohne Formatierung. Jeder Computer kann diese Art von Mails lesen.</p></li>
 </ul>
-<h6>So verfassen Sie eine neue Mail</h6>
-<ol type="1" class="whs3">
-	<li class=p><p>Klicken Sie in der Symbolleiste auf <img src="../newwitharrow.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1">. Die Seite zum Verfassen wird angezeigt.</p></li>
-	<li class=p><p>Wenn Sie nicht Ihre Standardidentität nutzen, wählen Sie im Dropdown-Feld <span 
- style="font-weight: bold;"><B>Von</B></span> die zu verwendende Identität (wird auch Persönlichkeit genannt) aus. </p></li>
-	<li class=p><p>Geben Sie Adressen, Betreff und Textkörper ein. </p></li>
-</ol>
-<p class="whs4">Wenn Sie Vor- und Nachnamen eingeben, die nicht in Form einer gültigen Internet-Adresse sind (name@domain.de), wird ein Dialogfeld angezeigt, in dem Sie darauf aufmerksam gemacht werden, dass die Adresse anscheinend nicht gültig ist. Sie können die Mail trotzdem senden, auch wenn sie möglicherweise nicht zugestellt werden kann.</p>
-<p class="whs4">Geben Sie den Text der Mail in das Textfeld unterhalb des <span style="font-weight: bold;"><B>Betreffs</B></span> ein. </p>
-<p class="whs4">Um die Rechtschreibung in einer Mail zu prüfen, klicken Sie auf <span 
- style="font-weight: bold;"><B> Rechtschreibprüfung</B></span>.</p>
-<p class="whs4">Um einen Anhang hinzuzufügen, klicken Sie auf <img src="../attachment.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1">.   </p>
-<ul type="1" class="whs5">
-	<ul start="3" type="1" class="whs5">
-		<li class=p-note><p class=note>Wenn Sie unter „Einstellungen, Signaturen“ eine Signatur definiert, aber nicht aktiviert haben, klicken Sie in der Symbolleiste des Mail-Fensters auf <span style="font-weight: bold;"><B>Signatur hinzufügen</B></span>, um diese Signatur einzufügen.</p></li>
-	</ul>
-</ul>
-<ol start="4" type="1" class="whs3">
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B>Senden</B></span>, um die Mail zu senden. </p></li>
-</ol>
-<p class="whs4">Wenn Sie die Mail nicht sofort senden möchten, klicken Sie auf <span style="font-weight: bold;"><B>Entwurf speichern</B></span>. Die Mail wird dann im Ordner <span style="font-weight: bold;"><B>Entwürfe</B></span> gespeichert.   </p>
-<script type="text/javascript" language="javascript1.2">
+<p>}}}Wenn Sie Ihre @CompanyName@-Accounts verwenden, k&ouml;nnen Sie eine Lesebest&auml;tigung anfordern. Klicken Sie dazu in der Symbolleiste &quot;Verfassen&quot; auf <span style="font-weight: bold;"><b>Optionen</b></span> und w&auml;hlen Sie <span style="font-weight: bold;"><b><a  	 href="Requesting_a_Return_Receipt.htm">Lesebest&auml;tigung anfordern</a></b></span>.{{{</p>
+<p>}}}Sie k&ouml;nnen Ihrer Nachricht <a href="Attachment_File_Types_Supported.htm">Dateien anh&auml;ngen</a>, wie z. B. Bilder, Dokumente, Tabellen und Audiodateien.{{{</p>
+<p style="margin-left: 40px;">&nbsp;</p>
+<p style="margin-left: 0px;">}}}Siehe <a href="Composing_a_new_mail_message.htm">Neue Mails verfassen</a>{{{</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

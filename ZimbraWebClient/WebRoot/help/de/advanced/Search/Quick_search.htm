@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Schnellsuche</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-img_whs2 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Nach Objekten suchen\nSchnellsuche");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,42 +81,42 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Schnellsuche </h1>
-<p>Die Zimbra-Suche ist eine leistungsstarke Funktion. Sie können zwar lernen, wie Sie komplexe Textabfragen eingeben (dies wird beschrieben unter <a HREF="query_language_description.htm">Beschreibung der Sprache für Suchabfragen</a>), doch es ist viel schneller, einfach einen Namen oder ein Wort ohne Schlüsselwörter einzugeben. Wenn Sie z. B. alle Mails finden möchten, die das Wort &quot;tim&quot; in einer der Zeilen Betreff, An, Von, CC oder BCC, im Textkörper oder im Dateianhang enthalten, geben Sie einfach <span class=code style="font-size: 12pt;"><font size=3 style="font-size:12pt;">tim</font></span><span 
- style="font-family: 'Lucida Sans Typewriter', monospace; color: #800080;"> 
- <font color=purple ></font></span>in das Suchfeld ein und klicken auf <span style="font-weight: bold;"><B>Suchen</B></span>.   </p>
-<p>Sie können jeden Wert, z. B. ein Wort, einen Vornamen, Nachnamen, eine Telefonnummer oder einen Domainnamen eingeben. Um nach Kontakten in Ihrem Adressbuch zu suchen, müssen Sie in dem Feld ein vollständiges Wort eingeben. Um z. B. in den Kontakten nach einer Telefonnummer zu suchen, müssen Sie die vollständige Telefonnummer so eingeben, wie sie im Kontakteintrag vorhanden ist. Sie können nicht z. B. nur nach der Vorwahl suchen.</p>
-<p>Damit Sie die Schnellsuche nutzen können, müssen Sie zunächst die Art von Objekt auswählen, nach der Sie suchen möchten. Über die Dropdown-Liste rechts neben dem Suchfeld können Sie auswählen, nach welcher Art von Objekt Sie suchen möchten. Sie können nach Mails, persönlichen Kontakten, persönlichen und freigegebenen Kontakten, Kontakten in der globalen Adressliste, Seiten und Dokumenten unter „Notizen“ oder nach allen Typen suchen. Wenn Sie nach mehreren Typen suchen, zeigt das Symbol in der Liste an, welche Objekttypen in der Suche eingeschlossen sind.   </p>
-<h6>So suchen Sie über die Schnellsuche nach Kontakten in Ihrem persönlichen Adressbuch</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Klicken Sie auf den Pfeil des Suchmenüs, <img src="../searchbutton75.png" x-maintain-ratio="TRUE" border="0" class="img_whs2">, und wählen Sie <span style="font-weight: bold;"><B>Persönliche Kontakte</B></span>.</p></li>
-	<li class=p><p>Geben Sie einen Namen oder andere Kontaktdaten in das Textfeld „Suchen“ ein. </p></li>
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B>Suchen</B></span>, um die Suche durchzuführen.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>Schnellsuche</h1>
+<p>}}}Es ist viel schneller, einfach einen Namen oder ein Wort ohne Schl&uuml;sselw&ouml;rter einzugeben.{{{ }}}Wenn Sie z. B. alle Mails finden m&ouml;chten, die das Wort &quot;tim&quot; in einer der Zeilen &bdquo;Betreff&ldquo;, &bdquo;An&ldquo;, {{{ }}}&bdquo;Von:&ldquo;{{{ }}}&bdquo;Cc:&ldquo;{{{ }}}oder &bdquo;Bcc:&ldquo;{{{ }}}, im Textk&ouml;rper oder im Dateianhang enthalten, geben Sie einfach <span class="code" style="font-size: 12pt;"><font size="3" style="font-size:12pt;">tim</font></span> in das Suchfeld ein und klicken auf <span style="font-weight: bold;"><b>Suchen</b></span>.{{{</p>
+<p>Sie k&ouml;nnen jeden Wert, z. B. ein Wort, einen Vornamen, Nachnamen, eine Telefonnummer oder einen Domainnamen eingeben. Um nach Kontakten in Ihrem Adressbuch zu suchen, m&uuml;ssen Sie in dem Feld ein vollst&auml;ndiges Wort eingeben. Um z. B. in den Kontakten nach einer Telefonnummer zu suchen, m&uuml;ssen Sie die vollst&auml;ndige Telefonnummer so eingeben, wie sie im Kontakteintrag vorhanden ist. Sie k&ouml;nnen nicht z. B. nur nach der Vorwahl suchen.</p>
+<p>Damit Sie die Schnellsuche nutzen k&ouml;nnen, m&uuml;ssen Sie zun&auml;chst die Art von Objekt ausw&auml;hlen, nach der Sie suchen m&ouml;chten. &Uuml;ber die Dropdown-Liste rechts neben dem Suchfeld k&ouml;nnen Sie ausw&auml;hlen, nach welcher Art von Objekt Sie suchen m&ouml;chten. }}}Sie k&ouml;nnen nach Mails, pers&ouml;nlichen Kontakten, pers&ouml;nlichen und freigegebenen Kontakten, Kontakten in der globalen Adressliste , Seiten oder nach allen Typen suchen.{{{ Wenn Sie nach mehreren Typen suchen, zeigt das Symbol in der Liste an, welche Objekttypen in der Suche eingeschlossen sind.</p>
+<p>}}}{{{ &nbsp;</p>
+<h6>}}}So suchen Sie &uuml;ber die Schnellsuche nach Kontakten in Ihrem pers&ouml;nlichen Adressbuch:{{{</h6>
+<ol type="1">
+	<li class="p"><p>}}}Klicken Sie auf den Pfeil des Suchmen&uuml;s, <img src="../searchbutton75.png" alt="searchbutton75.png" style="border: none;" width="92" height="18" border="0" />, und w&auml;hlen Sie <span style="font-weight: bold;"><b>Pers&ouml;nliche Kontakte</b></span>.{{{</p></li>
+	<li class="p"><p>Geben Sie einen Namen oder andere Kontaktdaten in das Textfeld &quot;Suchen&quot; ein.</p></li>
+	<li class="p"><p>Klicken Sie auf <span style="font-weight: bold;"><b>Suchen</b></span>, um die Suche durchzuf&uuml;hren.</p></li>
 </ol>
-<h6>So suchen Sie über die Schnellsuche nach Kontakten im Adressbuch Ihrer Firma</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Klicken Sie auf den Pfeil des Suchmenüs, <img src="../searchbutton75.png" x-maintain-ratio="TRUE" border="0" class="img_whs2">, und wählen Sie <span style="font-weight: bold;"><B>Globale Adressliste (GAL)</B></span>.</p></li>
-	<li class=p><p>Geben Sie einen Namen oder andere Kontaktdaten in das Textfeld „Suchen“ ein.</p></li>
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B>Suchen</B></span>, um die Suche durchzuführen.</p></li>
+<h6>So suchen Sie &uuml;ber die Schnellsuche nach Kontakten im Adressbuch Ihrer Firma</h6>
+<ol type="1">
+	<li class="p"><p>}}}Klicken Sie auf den Pfeil des Suchmen&uuml;s, <img src="../searchbutton75.png" alt="searchbutton75.png" style="border: none;" width="92" height="18" border="0" />, und w&auml;hlen Sie <span style="font-weight: bold;"><b>Globale Adressenliste (GAL)</b></span>.{{{</p></li> <li class="p"><p>Geben Sie einen Namen oder andere Kontaktdaten in das Textfeld &quot;Suchen&quot; ein.</p></li> <li class="p"><p>Klicken Sie auf <span  	 style="font-weight: bold;"><b>Suchen</b></span>, um die Suche durchzuf&uuml;hren.</p></li>
 </ol>
-<h6>So suchen Sie über die Schnellsuche nach Mails</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Klicken Sie auf den Pfeil des Suchmenüs, <img src="../searchbutton75.png" x-maintain-ratio="TRUE" border="0" class="img_whs2">, und wählen Sie <span style="font-weight: bold;"><B>Mails</B></span>.</p></li>
-	<li class=p><p>Geben Sie ein Wort, einen Namen oder andere mailspezifische Daten in das Textfeld „Suchen“ ein.</p></li>
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B>Suchen</B></span>, um die Suche durchzuführen.</p></li>
+<h6>So suchen Sie &uuml;ber die Schnellsuche nach Mails</h6>
+<ol type="1">
+	<li class="p"><p>}}}Klicken Sie auf den Pfeil des Suchmen&uuml;s, <img src="../searchbutton75.png" alt="searchbutton75.png" style="border: none;" width="92" height="18" border="0" />, und w&auml;hlen Sie <span style="font-weight: bold;"><b>Mails</b></span>.{{{</p></li>
+	<li class="p"><p>Geben Sie ein Wort, einen Namen oder andere mailspezifische Daten in das Textfeld &quot;Suchen&quot; ein.</p></li>
+	<li class="p"><p>Klicken Sie auf <span style="font-weight: bold;"><b>Suchen</b></span>, um die Suche durchzuf&uuml;hren.</p></li>
 </ol>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

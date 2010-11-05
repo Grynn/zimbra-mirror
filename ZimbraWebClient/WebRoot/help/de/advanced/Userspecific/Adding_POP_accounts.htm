@@ -1,37 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Externe Accounts hinzufügen</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-ul.whs2 { list-style:decimal; }
-p.whs3 { margin-left:0px; }
-p.whs4 { font-weight:normal; }
-p.whs5 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs3 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Externe Accounts hinzuf&uuml;gen</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -42,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Mails verwalten \nMails anderer Accounts abrufen\nExterne Accounts hinzufügen");
@@ -71,10 +64,8 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -90,44 +81,39 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Externe Accounts hinzufügen </h1>
-<p>Statt sich bei jedem Ihrer externen Mail-Accounts anzumelden, können Sie diese Accounts direkt in diesem Zimbra-Account auf Mails abfragen. Siehe <a href="Managing_your_POP_Accounts.htm">Auf externe Accounts zugreifen</a>.</p>
-<h6>So fügen Sie externe Accounts zu Ihrem Web-Client-Account hinzu</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Öffnen Sie die Registerkarte <span style="font-weight: bold;"><B>Einstellungen</B></span>,   <span style="font-weight: bold;"><B>Accounts</B></span> und klicken Sie auf <span style="font-weight: bold;"><B>Externen Account hinzufügen</B></span>. <span>Ein Name für einen neuen externen Account wird zu Ihren Accounts hinzugefügt. Nun müssen Sie diesen Account einrichten.</span></p></li>
-	<li class=p><p><span>Geben Sie unter </span><span style="font-weight: bold;"><B>Einstellungen für externen Account</B></span> im Feld<span style="font-weight: bold;"><B> Accountname</B></span><span> </span>einen Namen für den Account ein.   Beim Verfassen neuer Mails können Sie diesen Accountnamen in der Liste der Absenderadressen unter „Von“ auswählen. </p></li>
-	<li class=p><p>Geben Sie im Feld <span style="font-weight: bold;"><B>Mail-Adresse</B></span> die genaue Mail-Adresse des externen Accounts ein.</p></li>
-	<li class=p><p>Nun können Sie die Accounteinstellungen einrichten. Diese Daten müssen Sie ggf. bei Ihrem Mail-Provider erfragen.</p></li>
-	<ul type="1" class="whs2">
-		<li style="list-style: disc;" type=disc class=p><p class="whs3">Wählen Sie den <span style="font-weight: bold;"><B>Account-Typ</B></span>, POP oder IMAP.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Nutzername des Accounts:</B></span> Geben Sie den Namen dieses Mail-Accounts ein. </p></li>
-		<li style="list-style: disc;" type=disc class=p><p class="whs3"><span 
- style="font-weight: bold;"><B>Mail-Server:</B></span> Geben Sie den Hostnamen des Mail-Servers ein. </p></li>
-		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Passwort:</B></span>   Geben Sie das Passwort für die Anmeldung an diesem externen Account ein. Um zu überprüfen, ob das eingegebene Passwort korrekt ist, aktivieren Sie <span style="font-weight: bold;"><B>Passwort anzeigen</B></span>.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p><span style="font-weight: bold;"><B>Erweiterte Optionen:</B></span><span> Wenn Ihr Mailanbieter einen anderen Port als den Standardport nutzt, ändern Sie ihn. Wenn Sie eine sichere Verbindung nutzen,</span> aktivieren Sie „Für den Zugriff auf diesen Server eine verschlüsselte Verbindung (SSL) nutzen“.</p></li>
-	</ul>
-	<li class=p><p>Wählen Sie unter <span style="font-weight: bold;"><B>Mails herunterladen auf</B></span> aus, wo die Mails gespeichert werden sollen. Standardmäßig legen Sie einen neuen Ordner an und geben diesen zum Ablegen der Mails an. Sie können sich die Mails aber auch in Ihrem Posteingang zustellen lassen.</p></li>
-	<li class=p><p><span style="margin-left: 0px;">Aktivieren Sie </span><span 
- style="margin-left: 0px; font-weight: bold;"><B>Mails nach dem Herunterladen auf dem Server löschen</B></span><span style="margin-left: 0px;">, wenn die Mails </span>in Ihrem externen Account gelöscht werden sollen, wenn sie an Ihren ZWC-Account gesendet werden.</p></li>
-	<li class=p><p>Geben Sie im Textfeld unter <span style="font-weight: bold;"><B>Von</B></span> den Namen ein, der in Ihren ausgehenden Mails im Feld „Von“ angezeigt werden soll (z. B. Peter Meier). Dies ist der ausgeschriebene Name, der vor Ihrer Mail-Adresse angezeigt wird. </p></li>
-	<li class=p><p>Wenn Sie möchten, dass Antworten an einen anderen Namen und an eine andere Adresse und nicht an die im Feld „Von“ angezeigte Adresse gesendet werden sollen, aktivieren Sie die Option <span style="font-weight: bold;"><B>Antwortadresse</B></span>.   Geben Sie den Namen und die Adresse ein, an die die Antworten für diese Identität gesendet werden sollen.   Beispiel: Antworten auf Schulungsmails, die Peter Meier sendet, sollen an <span style="font-style: italic;"><I>Mitarbeiterschulung</I></span> unter schulung@beispiel.de gesendet werden. 
- </p></li>
-	<li class=p><p>Für diese Persönlichkeit können Sie eine Signatur auswählen.   Wenn Sie die entsprechende Signatur noch nicht angelegt haben, können Sie diesen Teil der Account-Angaben zu einem späteren Zeitpunkt bearbeiten. Wenn Sie nicht möchten, dass die Signatur automatisch eingefügt wird, wählen Sie <span style="font-weight: bold;"><B>Signatur nicht anhängen</B></span>.</p></li>
-	<li style="font-weight: normal; " class=p><p class="whs4">Klicken Sie auf <span style="font-weight: bold;"><B>Speichern</B></span>, um diesen externen Account zu speichern.</p></li>
+//]]></script>
+<h1>Externe Accounts hinzuf&uuml;gen</h1>
+<p>Statt sich bei jedem Ihrer externen Mail-Accounts anzumelden, k&ouml;nnen Sie diese Accounts direkt in diesem Zimbra-Account auf Mails abfragen. Siehe <a href="Managing_your_POP_Accounts.htm">Auf externe Accounts zugreifen</a>.</p>
+<h6>So f&uuml;gen Sie externe Accounts zu Ihrem Web-Client-Account hinzu</h6>
+<ol type="1">
+	<li class="p"><p>}}}&Ouml;ffnen Sie die Registerkarte <span style="font-weight: bold;"><b>Einstellungen</b></span>, <span style="font-weight: bold;"><b>Accounts</b></span> und klicken Sie auf <span  	 style="font-weight: bold;"><b>Externen Account hinzuf&uuml;gen</b></span>.{{{ <span>Ein Name f&uuml;r einen neuen externen Account wird zu Ihren Accounts hinzugef&uuml;gt. Nun m&uuml;ssen Sie diesen Account einrichten.</span></p></li>
+	<li class="p"><p>}}}<span>Geben Sie unter</span> <span style="font-weight: bold;"><b>Einstellungen f&uuml;r externen Account</b></span> im <span>Feld</span> <span style="font-weight: bold;"><b>Accountnamen</b></span> einen Namen f&uuml;r den Account ein.{{{ Beim Verfassen neuer Mails k&ouml;nnen Sie diesen Accountnamen in der Liste der Absenderadressen unter &quot;Von&quot; ausw&auml;hlen.</p></li>
+	<li class="p"><p>Geben Sie im Feld <span style="font-weight: bold;"><b>Mail-Adresse</b></span> die genaue Mail-Adresse des externen Accounts ein.</p></li>
+	<li class="p"><p>Nun k&ouml;nnen Sie die Accounteinstellungen einrichten. Diese Daten m&uuml;ssen Sie ggf. bei Ihrem Mail-Provider erfragen.</p>
+	<ul type="1">
+		<li class="p" type="disc"><p style="margin-left: 0px;">}}}W&auml;hlen Sie den <span style="font-weight: bold;"><b>Account-Typ</b></span>, POP oder IMAP.{{{</p></li>
+		<li class="p" type="disc"><p>}}}<span style="font-weight: bold;"><b>Nutzername des Accounts</b></span>.{{{ Geben Sie den Namen dieses Mail-Accounts ein.</p></li>
+		<li class="p" type="disc"><p style="margin-left: 0px;">}}}<span style="font-weight: bold;"><b>Mail-Server</b></span>.{{{ Geben Sie den Hostnamen des Mail-Servers ein.</p></li>
+		<li class="p" type="disc"><p>}}}<span style="font-weight: bold;"><b>Passwort:</b></span>{{{ Geben Sie das Passwort f&uuml;r die Anmeldung an diesem externen Account ein. Um zu &uuml;berpr&uuml;fen, ob das eingegebene Passwort korrekt ist, aktivieren Sie <span style="font-weight: bold;"><b>Passwort anzeigen</b></span>.</p></li>
+		<li class="p" type="disc"><p>}}}<span style="font-weight: bold;"><b>Erweiterte Optionen</b></span> <span>Wenn Ihr Mailanbieter einen anderen Port als den Standardport nutzt, &auml;ndern Sie ihn.{{{ }}}Wenn Sie eine sichere Verbindung nutzen,</span> aktivieren Sie &bdquo;F&uuml;r den Zugriff auf diesen Server eine verschl&uuml;sselte Verbindung (SSL) nutzen&ldquo;.{{{</p></li>
+	</ul></li>
+	<li class="p"><p>}}}W&auml;hlen Sie unter <span style="font-weight: bold;"><b>Mails herunterladen auf</b></span> aus, wo die Mails gespeichert werden sollen.{{{ Standardm&auml;&szlig;ig legen Sie einen neuen Ordner an und geben diesen zum Ablegen der Mails an. }}}Sie k&ouml;nnen sich die Mails aber auch in Ihrem Posteingang zustellen lassen.{{{</p></li>
+	<li class="p"><p>}}}<span style="margin-left: 0px;">Aktivieren Sie</span> <span  	 style="margin-left: 0px; font-weight: bold;"><b>Mails nach dem Herunterladen auf dem Server l&ouml;schen</b></span><span style="margin-left: 0px;">, wenn die </span>Mails in Ihrem externen Account gel&ouml;scht werden sollen, wenn sie an Ihren ZWC-Account gesendet werden.{{{</p></li>
+	<li class="p"><p>}}}Geben Sie in das Textfeld unter <span style="font-weight: bold;"><b>Von:</b></span>{{{ }}}den Namen ein, der in Ihren ausgehenden Mails im Feld &bdquo;Von&ldquo; angezeigt werden soll (z. B. Peter Meier).{{{ Dies ist der ausgeschriebene Name, der vor Ihrer Mail-Adresse angezeigt wird.</p></li>
+	<li class="p"><p>}}}Wenn Sie m&ouml;chten, dass Antworten an einen anderen Namen und an eine andere Adresse und nicht an die im Feld &quot;Von&quot; angezeigte Adresse gesendet werden sollen, aktivieren Sie <span style="font-weight: bold;"><b>Antwortadresse</b></span>.{{{ Geben Sie den Namen und die Adresse ein, an die die Antworten f&uuml;r diese Identit&auml;t gesendet werden sollen. }}}Beispiel: Antworten auf Schulungsmails, die Peter Meier sendet, sollen an <span style="font-style: italic;"><i>Mitarbeiterschulung</i></span> unter training@example.com gesendet werden.{{{</p></li>
+	<li class="p"><p>F&uuml;r diese Pers&ouml;nlichkeit k&ouml;nnen Sie eine Signatur ausw&auml;hlen. Wenn Sie die entsprechende Signatur noch nicht angelegt haben, k&ouml;nnen Sie diesen Teil der Account-Angaben zu einem sp&auml;teren Zeitpunkt bearbeiten. Wenn Sie nicht m&ouml;chten, dass die Signatur automatisch eingef&uuml;gt wird, w&auml;hlen Sie <span style="font-weight: bold;"><b>Signatur nicht anh&auml;ngen</b></span>.</p></li>
+	<li class="p" style="font-weight: normal;"><p style="font-weight: normal;">Klicken Sie auf <span style="font-weight: bold;"><b>Speichern</b></span>, um diesen externen Account zu speichern.</p></li>
 </ol>
-<p class="whs5">Wenn Sie die Signatur anlegen möchten, gehen Sie nach dem Speichern in die Registerkarte „Signatur“. Siehe <a href="using_a_signature.htm">Signatur automatisch einfügen</a>.</p>
+<p style="margin-left: 40px;">Wenn Sie die Signatur anlegen m&ouml;chten, gehen Sie nach dem Speichern zur Registerkarte &quot;Signatur&quot;. Siehe <a href="using_a_signature.htm">Signaturen verwenden</a>.</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,320 +1,323 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="Löschen" >
-  <topic name="Ordner löschen" url="Navigation_folders_and_tips/deleting_folders.htm" />
-  <key name="Ordner" >
-    <topic name="Ordner löschen" url="Navigation_folders_and_tips/deleting_folders.htm" />
-  </key>
+<key name="}}}Telefon, Wipe{{{" >
+  <topic name="Mobilgeräte verwalten" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
-<key name="Mail" >
-  <topic name="Mails lesen" url="reading_mail/reading_mail.htm" />
-  <topic name="Teile einer Mail" url="Creating_Messages/parts_of_an_email_message.htm" />
-  <key name="Lesen" >
-    <topic name="Mails lesen" url="reading_mail/reading_mail.htm" />
-  </key>
+<key name="}}}Termin als privat markieren{{{" >
+  <topic name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
-<key name="Mail empfangen" >
-  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+<key name="}}}über eine Verteilerliste freigeben{{{" >
+  <topic name="}}}Über eine Verteilerliste freigeben{{{" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 </key>
-<key name="Mail weiterleiten" >
-  <topic name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<key name="}}}URL in Signaturen{{{" >
+  <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
 </key>
-<key name="Mail, neue" >
-  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+<key name="}}}Vergessen{{{" >
+  <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
-<key name="Mail-Accounts" >
-  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+<key name="}}}W in Mini-Kalender{{{" >
+  <topic name="}}}Kalenderwochennummern anzeigen{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
-<key name="Mail-Identität beim Verfassen von Mails" >
-  <topic name="Neue Mail verfassen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+<key name="}}}Warnungsmeldungen{{{" >
+  <topic name="Desktop-Benachrichtigungen einrichten" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
-<key name="Mail-Identitäten" >
-  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
-  <topic name="Persönlichkeiten anlegen" url="Userspecific/Creating_Personas.htm" />
+<key name="}}}Weiße Liste{{{" >
+  <topic name="Spam-Mails filtern" url="filters/Filtering_Junk_Mail.htm" />
 </key>
-<key name="Mailansicht" >
-  <topic name="Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
+<key name="}}}Weiterleiten, Kopfdaten übernehmen{{{" >
+  <topic name="Einstellungen für das Fenster zum Verfassen von Mails einrichten" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
-<key name="Mailbenachrichtigung" >
-  <topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
+<key name="}}}Wipe-Funktion, Mobilgerät{{{" >
+  <topic name="Mobilgeräte verwalten" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
-<key name="Mailbox, volle" >
-  <topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
+<key name="}}}Wochennummer{{{" >
+  <topic name="}}}Kalenderwochennummern anzeigen{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
-<key name="Mailentwurf" >
-  <topic name="Mailentwurf speichern" url="Creating_Messages/saving_a_draft_message.htm" />
-</key>
-<key name="Mails abfragen" >
-  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-</key>
-<key name="Mails archivieren" >
-  <topic name="Mails löschen" url="reading_mail/archiving_old_messages.htm" />
-</key>
-<key name="Mails filtern" >
-  <topic name="Mails filtern" url="filters/filtering_your_messages.htm" />
-</key>
-<key name="Markieren" >
-  <topic name="Mails markieren" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="Mail" >
-    <topic name="Mails markieren" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
-</key>
-<key name="Meldung, Abwesenheit" >
-  <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
-</key>
-<key name="Menüs, Kontextmenüs" >
-  <topic name="Kontextmenüs" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="Mit Platzhalter suchen" >
-  <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
-</key>
-<key name="Nach Mails suchen" >
-  <topic name="Nach Mails suchen" url="Search/_search__vs.__search_for_.htm" />
-</key>
-<key name="Navigation" >
-  <topic name="Ordner (Bereich)" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
-<key name="Navigation mit Tastatur" >
-  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-  <topic name="ZWC, Tastenkürzel" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
-</key>
-<key name="Navigieren" >
-  <topic name="In der Benutzeroberfläche navigieren" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="Neue Mails abfragen" >
-  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-</key>
-<key name="Neue Mails abrufen" >
-  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="Notizbuch" >
-  <topic name="In Notizbüchern arbeiten" url="Documents/Working_in_Notebooks.htm" />
-</key>
-<key name="Notizbuch anlegen" >
-  <topic name="Neue Notizbücher anlegen" url="Documents/Create_multiple_notebooks.htm" />
-</key>
-<key name="Notizbücher, Neue Seiten anlegen" >
-  <topic name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="Notizbücher, Tabellen hinzufügen" >
-  <topic name="Tabelle in Notizbuchseite einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="Notizbücher, Zugriffsrechte ändern" >
-  <topic name="Zugriff für Ihr Notizbuch beenden" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</key>
-<key name="Notizen freigeben" >
-  <topic name="Wiki-Ordner freigeben" url="Documents/Sharing_Notebooks.htm" />
-</key>
-<key name="Notizen, Notizbuch anlegen" >
-  <topic name="Neue Notizbücher anlegen" url="Documents/Create_multiple_notebooks.htm" />
-</key>
-<key name="Option, Abwesenheitsmeldung" >
-  <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
-</key>
-<key name="Optionen" >
-  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="Optionen ändern" >
-  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-  <topic name="Benutzeroptionen ändern" url="Userspecific/Changing_Your_User_Options.htm" />
-</key>
-<key name="Optionen, Benachrichtigung bei neuen Mails" >
-  <topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
-</key>
-<key name="Optionen, Lesefenster anzeigen" >
-  <topic name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="Ordner" >
-  <topic name="Ordner umbenennen" url="Navigation_folders_and_tips/renaming_folders.htm" />
-  <topic name="Wissenswertes zu Ordnern" url="Navigation_folders_and_tips/about_folders.htm" />
-</key>
-<key name="Ordneransicht" >
-  <topic name="Ordner (Bereich)" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
-<key name="Papierkorb" >
-  <topic name="Papierkorb" url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
-<key name="Papierkorb leeren" >
-  <topic name="Kapazitäten" url="Navigation_folders_and_tips/quotas.htm" />
-</key>
-<key name="Passwort" >
-  <topic name="Vergessenes Passwort" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="Passwort ändern" url="Userspecific/chaning_your_password.htm" />
-</key>
-<key name="Persönliche Kontakte" >
-  <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
-</key>
-<key name="Persönliche Verteiler" >
-  <topic name="Kontaktgruppen anlegen" url="Contacts/Creating_Group_Contact_Lists.htm" />
-</key>
-<key name="Persönlichkeit" >
-  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
-  <topic name="Persönlichkeiten anlegen" url="Userspecific/Creating_Personas.htm" />
-</key>
-<key name="Planen von Räumen und Geräten" >
-  <topic name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
-</key>
-<key name="Planungsansicht" >
-  <topic name="Mehrere Kalender anzeigen" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
-</key>
-<key name="Platzhalter" >
-  <topic name="Platzhalter" url="filters/wildcards.htm" />
-</key>
-<key name="Platzhalter in Suche nutzen" >
-  <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
-</key>
-<key name="POP-Account" >
-  <topic name="POP-Accounts verwalten" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="POP-Account-Mails empfangen" >
-  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="POP-Accounts hinzufügen" >
-  <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
-</key>
-<key name="POP-Adressen hinzufügen" >
-  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="Private Termine" >
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="Raum reservieren" >
-  <topic name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
-</key>
-<key name="Rechte für Mail-Ordner bearbeiten" >
-  <topic name="Zugriff auf freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-</key>
-<key name="Rechte, Freigabe für Notizbücher ändern" >
-  <topic name="Zugriff für Ihr Notizbuch beenden" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</key>
-<key name="Rechtschreibprüfung" >
+<key name="}}}Wörter zum Wörterbuch hinzufügen{{{" >
   <topic name="Rechtschreibprüfung nutzen" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
-<key name="Rechtsklick" >
-  <topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+<key name="}}}Wörterbuch, Wörter hinzufügen zum{{{" >
+  <topic name="Rechtschreibprüfung nutzen" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
-<key name="Regeln für Filter" >
-  <topic name="Mails filtern" url="filters/filtering_your_messages.htm" />
-  <topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
+<key name="}}}Zimlets deaktivieren{{{" >
+  <topic name="Zimlets verwalten" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
-<key name="Reservieren von Räumen und Geräten" >
-  <topic name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
+<key name="}}}Zimlets, deaktivieren{{{" >
+  <topic name="Zimlets verwalten" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
-<key name="Ressource" >
-  <topic name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
+<key name="Abmelden" >
+  <topic name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
 </key>
-<key name="Rich-Text-Editor für Notizen" >
-  <topic name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
+<key name="Abwesenheitsmeldung" >
+  <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="Rollen" >
-  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
+<key name="Adressbuch freigeben" >
+  <topic name="Freigabe des eigenen Adressbuchs" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
-<key name="RSS" >
-  <topic name="RSS-/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+<key name="Adressbuch, Freigabe ändern" >
+  <topic name="Freigabe des eigenen Adressbuchs" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
-<key name="RSS-Feed abonnieren" >
-  <topic name="RSS-/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+<key name="Adressbuch, Kontaktgruppen" >
+  <topic name="Kontaktgruppen anlegen" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
-<key name="Schnelleingabe" >
-  <topic name="Termin über Schnelleingabe anlegen" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<key name="Adressbuch, Zugriffsrechte entziehen" >
+  <topic name="Freigabe des eigenen Adressbuchs" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
-<key name="Schnellsuche" >
-  <topic name="Schnellsuche" url="Search/Quick_search.htm" />
+<key name="Adressbücher freigeben" >
+  <topic name="Freigabe des eigenen Adressbuchs" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
-<key name="Schriftarten" >
-  <topic name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
+<key name="Adressbücher importieren" >
+  <topic name="Kontakte importieren" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Objekte importieren und exportieren " url="Userspecific/Importing_and_Exporting_Items_.htm" />
 </key>
-<key name="Seiten in Notizbüchern" >
-  <topic name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
+<key name="Adresse für Weiterleitung einrichten" >
+  <topic name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
-<key name="Signatur" >
-  <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
+<key name="Als Anhänge unterstützte Dateitypen" >
+  <topic name="Als Anhänge unterstützte Dateitypen" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
-<key name="Signatur automatisch einfügen" >
-  <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
+<key name="Als HTML anzeigen" >
+  <topic name="Dateianhänge öffnen" url="reading_mail/opening_file_attachments.htm" />
 </key>
-<key name="Signatur einfügen" >
-  <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="Sitzung abgelaufen" >
-  <topic name="Ablauf der Sitzung" url="Userspecific/if_your_session_expires.htm" />
-</key>
-<key name="Spalten im Inhaltsfenster sortieren" >
-  <topic name="Unterhaltungen sortieren" url="Navigation_folders_and_tips/sorting_conversations.htm" />
-</key>
-<key name="Standardeinstellungen wiederherstellen" >
-  <topic name="Standardeinstellungen wiederherstellen" url="Userspecific/the__restore_defaults__button.htm" />
-</key>
-<key name="Suchabfragen" >
-  <topic name="Suchabfragen erstellen" url="Search/building_search_queries.htm" />
-  <topic name="Suchabfragen speichern" url="Search/saving_search_queries.htm" />
-  <key name="Speichern" >
-    <topic name="Suchabfragen speichern" url="Search/saving_search_queries.htm" />
-  </key>
-</key>
-<key name="Suchbeispiele" >
-  <topic name="Suchbeispiele" url="Search/search_examples.htm" />
-</key>
-<key name="Suchen, UND/ODER" >
-  <topic name="Suchabfragen mit “AND” und “OR”" url="Search/and_vs_or_searches.htm" />
-</key>
-<key name="Suchfunktion" >
-  <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
-  <key name="Arbeiten" >
-    <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
-  </key>
-</key>
-<key name="Tabellen in Notizbuchseiten einfügen" >
-  <topic name="Tabelle in Notizbuchseite einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="Tag mit der Maus ziehen" >
-  <topic name="Mails mit Tags versehen" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-</key>
-<key name="Tags" >
-  <topic name="Mails mit Tags versehen" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-  <topic name="Tags löschen" url="Tags_and_flags/deleting_tags.htm" />
-  <key name="Löschen" >
-    <topic name="Tags löschen" url="Tags_and_flags/deleting_tags.htm" />
-  </key>
-  <key name="Zuweisen" >
-    <topic name="Mails mit Tags versehen" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-  </key>
-</key>
-<key name="Tags erstellen" >
-  <topic name="Mails mit Tags klassifizieren" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
-</key>
-<key name="Tags nutzen" >
-  <topic name="Mails mit Tags klassifizieren" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
-</key>
-<key name="Tastenkürzel" >
-  <topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-  <topic name="ZWC, Tastenkürzel" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
-</key>
-<key name="Termin als privat markieren" >
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="Termin aus Mail anlegen" >
-  <topic name="Zimbra-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
-</key>
-<key name="Termin ändern" >
+<key name="Ändern wiederkehrender Termine" >
   <topic name="Wiederkehrende Termine ändern" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
-<key name="Termin, Schnelleingabe" >
-  <topic name="Termin über Schnelleingabe anlegen" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<key name="Anhänge" >
+  <topic name="Dateianhänge öffnen" url="reading_mail/opening_file_attachments.htm" />
 </key>
-<key name="Termine" >
-  <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<key name="Anhängen" >
+  <topic name="Dateien an eine Mail anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
-<key name="Termine anlegen" >
-  <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<key name="Ansicht, Kalender" >
+  <topic name="Wissenswertes zum Zimbra-Kalender" url="Calendar/About_Calendar.htm" />
 </key>
-<key name="Terminerinnerung" >
+<key name="Antworten" >
+  <topic name="Auf Mails antworten" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="Mails" >
+    <topic name="Auf Mails antworten" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="Assistent" >
+  <topic name="Zimbra-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+</key>
+<key name="Atom-Feed" >
+  <topic name="RSS-/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="Auf externe Accounts zugreifen" >
+  <topic name="Auf externe Accounts zugreifen" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="Aufgaben sortieren" >
+  <topic name="Aufgaben sortieren " url="Tasks/Sorting_tasks_.htm" />
+</key>
+<key name="Automatisches Hinzufügen von Signaturen" >
+  <topic name="Persönlichkeiten anlegen" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="Autovervollständigung von Adressen" >
+  <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="Beantworten von Einladungen" >
+  <topic name="Einladung beantworten" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="Benutzerdefinierte Ordner" >
+  <topic name="Benutzerdefinierte Ordner anlegen" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="Benutzereinstellungen" >
   <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
-<key name="Tooltips" >
+<key name="Benutzeroberfläche, Funktionen" >
   <topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="Berechtigungen für Adressbuch entziehen" >
+  <topic name="Freigabe des eigenen Adressbuchs" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Beschreibung der Sprache für Suchabfragen" >
+  <topic name="Beschreibung der Sprache für Suchabfragen" url="Search/query_language_description.htm" />
+</key>
+<key name="Besprechung anlegen" >
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Besprechung planen" >
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Besprechungen" >
+  <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Browser" >
+  <topic name="In Zimbra mit Browsern arbeiten" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+</key>
+<key name="Dokumente, Rich-Text-Editor" >
+  <topic name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="Drucken" >
+  <topic name="Unterhaltung drucken" url="conversations/printing_a_conversation.htm" />
+  <topic name="Mails drucken" url="reading_mail/printing_a_mail_message.htm" />
+  <key name="Mail" >
+    <topic name="Mails drucken" url="reading_mail/printing_a_mail_message.htm" />
+  </key>
+</key>
+<key name="Drucken von Kalendern" >
+  <topic name="Kalender drucken" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="Einladung im Papierkorb" >
+  <topic name="Einladung beantworten" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="Einstellungen" >
+  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Einstellungen ändern" >
+  <topic name="Benutzeroptionen ändern" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="Einstellungen, Lesefenster anzeigen" >
+  <topic name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Ereignisse" >
+  <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
+  <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="Erstellen" >
+  <topic name="Neue Mail verfassen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <key name="Neue Mail" >
+    <topic name="Neue Mail verfassen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  </key>
+</key>
+<key name="Erstellen von Tags" >
+  <topic name="Mails mit Tags klassifizieren" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="Erweiterte Suche" >
+  <topic name="Suchabfragen erstellen" url="Search/building_search_queries.htm" />
+</key>
+<key name="Externe Accounts" >
+  <topic name="POP-Accounts verwalten" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="Externe Accounts hinzufügen" >
+  <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="Filter, Funktionsweise" >
+  <topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
+</key>
+<key name="Filterbedingungen" >
+  <topic name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
+</key>
+<key name="Firmenadressbuch" >
+  <topic name="Mit dem Firmenadressbuch arbeiten" url="Contacts/using_the_corporate_address_book.htm" />
+</key>
+<key name="Frei/Belegt" >
+  <topic name="Frei-/Belegt-Zeiten anzeigen" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="Freigabe für Mail-Ordner widerrufen" >
+  <topic name="Zugriff auf freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="Freigabe von Aufgabenlisten beenden" >
+  <topic name="Aufgabenliste freigeben" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="Freigabe, Adressbuch" >
+  <topic name="Freigabe des eigenen Adressbuchs" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Freigegebene Aufgabenliste ändern" >
+  <topic name="Aufgabenliste freigeben" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="Funktionen der Benutzeroberfläche" >
+  <topic name="Funktionen und Tastenkürzel der Benutzeroberfläche" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="Funktionen des Zimbra-Web-Clients" >
+  <topic name="Wissenswertes zur Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="GAL und Kontakte" >
+  <topic name="GAL und Kontakte" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="Ganztägiger Termin" >
+  <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="Gerät reservieren" >
+  <topic name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="HTML" >
+  <topic name="Mails im HTML-Format anzeigen" url="reading_mail/displaying_html_in_email_messages.htm" />
+  <topic name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="HTML zur Formatierung nutzen" >
+  <topic name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="HTML, Mails anzeigen als" >
+  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="HTML, Standardeinstellungen einrichten" >
+  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="iCal-Kalender exportieren" >
+  <topic name="iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="iCal-Kalender importieren" >
+  <topic name="iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="Identitäten" >
+  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Persönlichkeiten anlegen" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="Ihren Kalender freigeben" >
+  <topic name="Kalenderzugriff delegieren" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="IMAP-Account" >
+  <topic name="POP-Accounts verwalten" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="IMAP-Accounts hinzufügen" >
+  <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="IMAP-Adressen hinzufügen" >
+  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="Importieren oder Exportieren des iCal-Kalenders" >
+  <topic name="iCal-Kalender importieren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="Importieren von Adressbüchern" >
+  <topic name="Kontakte importieren" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Importieren von Kontakten" >
+  <topic name="Kontakte importieren" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Inhaltsfenster als Startseite einrichten" >
+  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Kalender drucken" >
+  <topic name="Kalender drucken" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="Kalender, Ereignisse" >
+  <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="Kalender, Frei/Belegt" >
+  <topic name="Frei-/Belegt-Zeiten anzeigen" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="Kalender, Wissenswertes" >
+  <topic name="Wissenswertes zum Zimbra-Kalender" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="Kalender, Zugriffsberechtigungen" >
+  <topic name="Kalenderzugriff delegieren" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="Kalenderansicht" >
+  <topic name="Wissenswertes zum Zimbra-Kalender" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="Kalenderfreigabe ablehnen" >
+  <topic name="Kalenderfreigabe ablehnen" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+</key>
+<key name="Kalenderrechte entziehen" >
+  <topic name="Kalenderzugriff delegieren" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="Kontakt" >
+  <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
+  <topic name="Kontakt" url="Contacts/contacts.htm" />
+  <topic name="Neuen Kontakt anlegen" url="Contacts/creating_a_new_contact.htm" />
+  <key name="Bearbeiten" >
+    <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="Kontakt bearbeiten" >
+  <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="Kontakte automatisch hinzufügen" >
+  <topic name="Automatisches Hinzufügen von Kontakten" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
 </key>
 
 </indexdata>

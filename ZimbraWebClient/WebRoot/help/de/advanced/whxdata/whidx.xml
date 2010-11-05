@@ -1,8 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="Abmelden" last="Lesefenster" num="104" />
-<chunkinfo url="whidata1.xml" first="Löschen" last="Tooltips" num="101" />
-<chunkinfo url="whidata2.xml" first="Unterhaltungen" last="Übersichtsfenster" num="24" />
+<chunkinfo url="whidata0.xml" first="}}}Account importieren{{{" last="}}}Standard-Clienttyp ändern{{{" num="97" />
+<chunkinfo url="whidata1.xml" first="}}}Telefon, Wipe{{{" last="Kontakte automatisch hinzufügen" num="103" />
+<chunkinfo url="whidata2.xml" first="Kontakte drucken" last="Übersichtsfenster" num="101" />
+<chunkinfo url="whidata3.xml" first="Unterhaltungen" last="Zugriff auf Ihren Kalender delegieren" num="18" />
 
 </index>

@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Wissenswertes zu Ordnern</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { x-condition:Advanced_WC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Mails mit Tags und Ordnern organisieren\nMit Ordnern arbeiten");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,34 +81,40 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Mit Ordnern arbeiten</h1>
-<p>In Ordnern können Sie Ihre Mails ablegen. <span style="x-condition: Advanced_WC;">Sie können Elemente von einem Ordner in einen anderen verschieben, indem Sie sie mit der Maus ziehen oder indem Sie mit der rechten Maustaste klicken und </span><span style="font-weight: bold; x-condition: Advanced_WC;"><B>Verschieben</B></span><span 
- style="x-condition: Advanced_WC;"> auswählen.</span> Sie können Elemente von einem Ordner in einen anderen verschieben, indem Sie die Mail bzw. den Kontakt durch ein Häkchen kennzeichnen und dann den Ordner in der Liste <span style="font-weight: bold;"><B>Verschieben in...</B></span> auswählen. </p>
-<p>Es gibt zwei Arten von Ordnern. </p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Systemordner:</B></span> Systemordner können nicht verschoben, umbenannt oder gelöscht werden. Beispiele für Systemordner sind Ihr Posteingang, der Ordner „Gesendet“ und der Papierkorb.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Benutzerdefinierte Ordner:</B></span>   Zur Organisation Ihrer Mails können Sie Ordner anlegen. Ordner, die Sie anlegen, werden in der Übersicht in der Liste <span style="font-weight: bold;"><B>Ordner</B></span> angezeigt. Die übergeordneten Ordner müssen eindeutige Namen haben. Die Ordner dürfen nicht dieselben Namen haben wie andere übergeordnete Ordner in der Mail<span 
- style="x-condition: Advanced_WC;">, im Kalender</span> oder im Adressbuch.   </p></li>
+<p>In Ordnern k&ouml;nnen Sie Ihre Mails ablegen. }}}Sie k&ouml;nnen Elemente von einem Ordner in einen anderen verschieben, indem Sie sie mit der Maus ziehen oder indem Sie mit der rechten Maustaste klicken und <span  	 style="font-weight: bold;"><b>Verschieben</b></span> ausw&auml;hlen.{{{ }}}Sie k&ouml;nnen Elemente von einem Ordner in einen anderen verschieben, indem Sie die Mail bzw. den Kontakt durch ein H&auml;kchen kennzeichnen und dann den Ordner in der Liste <span style="font-weight: bold;"><b>Verschieben in ...</b></span> ausw&auml;hlen.{{{</p>
+<p>Es gibt zwei Arten von Ordnern.</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Systemordner:</b></span> Systemordner k&ouml;nnen nicht verschoben, umbenannt oder gel&ouml;scht werden. Beispiele f&uuml;r Systemordner sind Ihr Posteingang, der Ordner &quot;Gesendet&quot; und der Papierkorb.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Benutzerdefinierte Ordner:</b></span>   Zur Organisation Ihrer Mails k&ouml;nnen Sie Ordner anlegen. }}}Ordner, die Sie anlegen, werden in der &Uuml;bersicht in der Liste <span style="font-weight: bold;"><b>Ordner</b></span> angezeigt.{{{ Die &uuml;bergeordneten Ordner m&uuml;ssen eindeutige Namen haben. }}}Die Ordner d&uuml;rfen nicht dieselben Namen haben wie andere &uuml;bergeordnete Ordner in der Mail, im Kalender oder im Adressbuch.{{{ </p></li>
 </ul>
-<p class="whs2">&nbsp;</p>
-<p class="whs2">
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'','Ihre Mailansicht verwalten','../conversations/conversation_list_view.htm','Mails in Ordnern verschieben','moving_mail_messages_between_folders.htm','Ordner umbenennen','renaming_folders.htm','Systemordner','inbox_folder.htm');return false;" title="Verwandte Themen"><img src="../ss_btn_verwandte_themen.gif" border=0 height=17 width=103 alt="Verwandte Themen"></a>
+<p style="margin-left: 40px;">}}}Bei Ordnernamen spielt Gro&szlig;- oder Kleinschreibung keine Rolle, d. h. &quot;Global&quot; und &quot;global&quot; werden als gleich angesehen.{{{ <span style="font-weight: bold;"><b>Hinweis:</b></span> }}}Ein Name mit einem Accent wird nicht von einem ohne Accent unterschieden.{{{ }}}Somit k&ouml;nnen Sie beispielsweise nicht zwei Ordner mit der Bezeichnung &quot;Op&eacute;ra&quot; und &quot;Opera&quot; in derselben Ordnerstruktur anlegen.{{{</p>
+<p>&nbsp;</p>
+<p>
+
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+  <param  name="Command"  value="Verwandte Themen" />
+  <param  name="Font"  value="}}}Arial,8,0,,BOLD UNDERLINE{{{" />
+  <param  name="Item1"  value="}}}Mailansicht verwalten;..\conversations\conversation_list_view.htm{{{" />
+  <param  name="Item2"  value="}}}Mails zwischen Ordnern verschieben;moving_mail_messages_between_folders.htm{{{" />
+  <param  name="Item3"  value="}}}Ordner umbenennen;renaming_folders.htm{{{" />
+  <param  name="Item4"  value="}}}Systemordner;inbox_folder.htm{{{" />
+  <param  name="Text"  value="}}}Text:{{{ Verwandte Themen" />
+</object>
+
 
  </p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
-if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
-  WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

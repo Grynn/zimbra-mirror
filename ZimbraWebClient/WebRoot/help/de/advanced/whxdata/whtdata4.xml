@@ -1,36 +1,13 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Freigegebene Objekte verwalten" url="6_0new_topics/Managing_items_you_share.htm" />
-<book name="Mail-Ordner freigeben" >
-  <item name="Mail-Ordner freigeben" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-  <item name="Mailbox freigeben" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="Zugriff auf freigegebenen Mailbox-Ordner annehmen" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-  <item name="Zugriff auf freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-  <item name="In freigegebenem Mail-Ordner arbeiten" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-</book>
-<book name="Adressbücher freigeben" >
-  <item name="Adressbuch freigeben" url="Contacts/Sharing_your_Address_Book.htm" />
-</book>
-<book name="Kalender freigeben" >
-  <item name="Kalender freigeben" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="Admin-Rechte für freigegebene Kalender erteilen" url="6_0new_topics/Admin_rights_for_shared_Calendars.htm" />
-  <item name="Manager-Rechte für freigegebene Kalender erteilen" url="6_0new_topics/Manager_rights_for_shared_Calendars.htm" />
-  <item name="Zugriff auf freigegebenen Kalender annehmen" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
-  <item name="Kalenderfreigabe ablehnen" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
-</book>
-<book name="Aufgabenlisten freigeben" >
-  <item name="Aufgabenliste freigeben" url="Tasks/Share_your_Task_folder.htm" />
-  <item name="Zugriff auf freigegebene Aufgabenlisten annehmen" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
-</book>
-<book name="Notizbücher freigeben" >
-  <item name="Notizbücher freigeben" url="Documents/Sharing_Notebooks.htm" />
-  <item name="Zugriff auf ein Notizbuch annehmen" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-  <item name="Link zu einem freigegebenen Notizbuch einrichten" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-  <item name="Zugriff für Notizbuch ändern oder beenden" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</book>
-<book name="Ordner " >
-  <item name="Dateien freigeben" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
-</book>
+<item name="Mails und Kontakte mit Tags klassifizieren" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+<item name="Mails mit Tags versehen" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+<item name="Tags löschen" url="Tags_and_flags/deleting_tags.htm" />
+<item name="Mails markieren" url="Tags_and_flags/Flagging_an_email_message.htm" />
+<item name="Mit Ordnern arbeiten" url="Navigation_folders_and_tips/about_folders.htm" />
+<item name="Ordner umbenennen" url="Navigation_folders_and_tips/renaming_folders.htm" />
+<item name="Ordner löschen" url="Navigation_folders_and_tips/deleting_folders.htm" />
+<item name="Benutzerdefinierte Ordner anlegen" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
 
 </tocdata>

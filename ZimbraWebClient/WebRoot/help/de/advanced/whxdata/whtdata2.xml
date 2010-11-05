@@ -1,11 +1,32 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Mit Notizbüchern arbeiten" url="Documents/Working_in_Notebooks.htm" />
-<item name="Neue Notizbücher anlegen" url="Documents/Create_multiple_notebooks.htm" />
-<item name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
-<item name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
-<item name="Seiten in Notizbüchern mit HTML formatieren" url="Documents/Using_HTML_for_format_pages.htm" />
-<item name="Tabelle in Notizbuchseite einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<item name="}}}Ordner freigeben{{{" url="Sharing/Sharing_a_folder.htm" />
+<item name="Freigegebene Objekte verwalten" url="Sharing/Managing_items_you_share.htm" />
+<item name="}}}Über eine Verteilerliste freigeben{{{" url="Sharing/Sharing_with_a_Distribution_List.htm" />
+<book name="Mail-Ordner freigeben" >
+  <item name="Mail-Ordner freigeben" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
+  <item name="Mailbox freigeben" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+  <item name="}}}Zugriff auf einen freigegebenen Ordner entziehen{{{" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="Zugriff auf freigegebenen Mailbox-Ordner annehmen" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+  <item name="In freigegebenem Mail-Ordner arbeiten" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+</book>
+<book name="Kalender freigeben" >
+  <item name="Kalender freigeben" url="Calendar/Delegating_Calendar_Access.htm" />
+  <item name="Admin-Rechte für freigegebene Kalender erteilen" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <item name="Manager-Rechte für freigegebene Kalender erteilen" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
+  <item name="Zugriff auf freigegebenen Kalender annehmen" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+  <item name="Kalenderfreigabe ablehnen" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+</book>
+<book name="Adressbücher freigeben" >
+  <item name="Adressbuch freigeben" url="Contacts/Sharing_your_Address_Book.htm" />
+</book>
+<book name="Aufgabenlisten freigeben" >
+  <item name="}}}Aufgabenliste freigeben{{{" url="Tasks/Share_your_Task_folder.htm" />
+  <item name="Zugriff auf freigegebene Aufgabenlisten annehmen" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+</book>
+<book name="Ordner &quot;Dateien&quot; freigeben" >
+  <item name="Dateien freigeben" url="Briefcase/Sharing_your_Briefcase.htm" />
+</book>
 
 </tocdata>

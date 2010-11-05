@@ -1,12 +1,24 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Wissenswertes zu Aufgaben" url="Tasks/About_Tasks.htm" />
-<item name="Aufgabenlisten anlegen" url="Tasks/Create_tasks_folders.htm" />
-<item name="Aufgaben hinzufügen" url="Tasks/Add_a_task.htm" />
-<item name="Aufgaben ändern" url="Tasks/Change_a_task.htm" />
-<item name="Aufgaben verschieben" url="Tasks/Moving_tasks.htm" />
-<item name="Aufgaben löschen" url="Tasks/Delete_a_task.htm" />
-<item name="Aufgaben sortieren" url="Tasks/Sorting_tasks_.htm" />
+<item name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<item name="Besprechung planen" url="Calendar/About_the_Appointment_Page.htm" />
+<item name="Termin anlegen" url="Calendar/Scheduling_meetings.htm" />
+<item name="Frei-/Belegt-Zeiten anzeigen" url="Calendar/Seeing_free_busy_times.htm" />
+<item name="Berechtigungen zum Anzeigen von Frei-/Belegt-Informationen einstellen" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+<item name="Anderen Nutzern Ihren Frei-/Belegt-Status senden" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+<item name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
+<item name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
+<item name="Mails in Terminanfragen umwandeln" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+<item name="Termin über Schnelleingabe anlegen" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<item name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
+<item name="Wiederkehrende Termine anlegen" url="Calendar/Creating_recurring_appointments.htm" />
+<item name="Besprechungsdetails in Ihrem Kalender ändern" url="Calendar/editing_meetings_on_your_calendar.htm" />
+<item name="Festlegen, wer zu Besprechungen einladen darf" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+<item name="Mail &quot;Berechtigung verweigert&quot;" url="Calendar/Receiving_a_permission_denied_message.htm" />
+<item name="Einladung zu einer Besprechung beantworten" url="Calendar/Responding_to_an_invitation.htm" />
+<item name="Eine selbstorganisierte Besprechung ändern" url="Calendar/Changing_a_meeting_.htm" />
+<item name="Termin löschen" url="Calendar/Deleting_an_appointment.htm" />
+<item name="Wiederkehrende Termine löschen" url="Calendar/Deleting_recurring_appointments.htm" />
 
 </tocdata>
