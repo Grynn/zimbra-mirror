@@ -5,6 +5,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
+import projects.ajax.ui.Buttons;
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
@@ -54,7 +55,7 @@ public class GetConversation extends AjaxCommonTest {
 					"</SendMsgRequest>");
 
 		// Click Get Mail button
-		app.zPageMail.zToolbarGetMail();
+		app.zPageMail.zToolbarPressButton(Buttons.B_GETMAIL);
 				
 		// Get the list of messages
 		List<ConversationItem> conversations = app.zPageMail.zListGetConversations();

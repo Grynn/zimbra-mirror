@@ -3,8 +3,8 @@ package projects.ajax.tests.mail.compose;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
+import projects.ajax.ui.Buttons;
 import projects.ajax.ui.FormMailNew;
-import projects.ajax.ui.AbsAjaxPage.ItemType;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
 import framework.util.HarnessException;
@@ -36,7 +36,7 @@ public class CreateMail extends AjaxCommonTest {
 		
 		
 		// Open the new mail form
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarNew(ItemType.Mail);
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Buttons.B_NEW);
 		ZAssert.assertNotNull(mailform, "Verify the new form opened");
 		
 		// Fill out the form with the data

@@ -1,6 +1,8 @@
 package projects.ajax.ui;
 
+import projects.ajax.ui.Buttons.Button;
 import framework.ui.AbsApplication;
+import framework.ui.AbsSeleniumObject;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 
@@ -126,6 +128,16 @@ public class PageLogin extends AbsAjaxPage {
 		
 		sType(username, account.EmailAddress);
 		sType(password, account.Password);
+	}
+
+	@Override
+	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
+		throw new HarnessException("Login page does not have a Toolbar");
+	}
+
+	@Override
+	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		throw new HarnessException("Login page does not have a Toolbar");
 	}
 
 

@@ -7,10 +7,11 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import projects.ajax.ui.Buttons.Button;
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.ui.AbsApplication;
-import framework.ui.AbsForm;
+import framework.ui.AbsSeleniumObject;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
@@ -20,12 +21,15 @@ import framework.util.SleepUtil;
  */
 public class PageMail extends AbsAjaxPage {
 
-	public static final String lCLVrows = "id=zl__CLV__rows";
+	
+	
+	// Locators
+	public static final String lCLVrows			= "id=zl__CLV__rows";
 
-	public static final String lGetMailIconBtn = "id=zb__CLV__CHECK_MAIL_left_icon";
-	public static final String lGetMailBtn = "id=zb__CLV__CHECK_MAIL";
+	public static final String lGetMailIconBtn	= "id=zb__CLV__CHECK_MAIL_left_icon";
+	public static final String lGetMailBtn		= "id=zb__CLV__CHECK_MAIL";
 
-	public static final String lDeleteBtn = "id=zb__CLV__DELETE";
+	public static final String lDeleteBtn		= "id=zb__CLV__DELETE";
 
 	public PageMail(AbsApplication application) {
 		super(application);
@@ -87,112 +91,196 @@ public class PageMail extends AbsAjaxPage {
 		waitForActive();
 
 	}
-
-	/**
-	 * Open a new item by clicking in the New menu
-	 * @param type "Mail", "Contact", "Appointment", "Task", etc.
-	 * @return the corresponding form object
-	 * @throws HarnessException on error
-	 */
-	public AbsForm zToolbarNew(ItemType type) throws HarnessException {
-		logger.info(myPageName() + " zToolbarNew "+ type);
+	
+	
+	@Override
+	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 		
-		// Initialize the return object
-		AbsForm form = null;
+		if ( button == null )
+			throw new HarnessException("Button cannot be null!");
 		
-		if ( type == ItemType.Mail ) {
-
-			this.zPressKeyboardShortcut(KeyEvent.VK_N);
-
-			form = new FormMailNew(this.MyApplication);
+		// Default behavior variables
+		//
+		String locator = null;			// If set, this will be clicked
+		AbsSeleniumObject page = null;	// If set, this page will be returned
+		
+		// Based on the button specified, take the appropriate action(s)
+		//
+		
+		if ( button == Buttons.B_NEW ) {
 			
-		} else {
-			throw new HarnessException("implement me with option "+ type +"!");
+			// For "NEW" without a specified pulldown option, just return the default item
+			this.zPressKeyboardShortcut(KeyEvent.VK_N);
+			page = new FormMailNew(this.MyApplication);
+			
+		} else if ( button == Buttons.B_GETMAIL ) {
+			
+			locator = lGetMailIconBtn;
+			
+		} else if ( button == Buttons.B_DELETE ) {
+			
+			locator = lDeleteBtn;
+			
+		} else if ( button == Buttons.B_MOVE ) {
+			
+			throw new HarnessException("implement me!");
+			
+		} else if ( button == Buttons.B_PRINT ) {
+			
+			throw new HarnessException("implement me!");
+			
+		} else if ( button == Buttons.B_REPLY ) {
+			
+			throw new HarnessException("implement me!");
+			
+		} else if ( button == Buttons.B_REPLYALL ) {
+			
+			throw new HarnessException("implement me!");
+			
+		} else if ( button == Buttons.B_FORWARD ) {
+			
+			throw new HarnessException("implement me!");
+			
+		} else if ( button == Buttons.B_RESPORTSPAM ) {
+			
+			throw new HarnessException("implement me!");
+			
+		} else if ( button == Buttons.B_TAG ) {
+			
+			throw new HarnessException("implement me!");
+			
+		} else if ( button == Buttons.B_NEWWINDOW ) {
+			
+			throw new HarnessException("implement me!");
+			
+		} else if ( button == Buttons.B_LISTVIEW ) {
+			
+			throw new HarnessException("implement me!");
+			
+		}
+
+		if ( locator == null ) {
+			throw new HarnessException("no logic defined for button "+ button);
 		}
 		
-		return (form);
-	}
-	
-	public void zToolbarGetMail() throws HarnessException {
-		logger.info(myPageName() + " zToolbarGetMail");
+		// Default behavior, process the locator by clicking on it
+		//
 		
 		// Make sure the button exists
-		if ( !this.sIsElementPresent(lGetMailIconBtn) )
-			throw new HarnessException("Get Mail Button is not present "+ lGetMailIconBtn);
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
 		
 		// Click it
-		this.zClick(lGetMailIconBtn);
-		
-		// TODO: required?
-		SleepUtil.sleepSmall();
-		
-	}
-	
-	public void zToolbarDelete() throws HarnessException {
-		logger.info(myPageName() + " zToolbarDelete");
-		
-		// Make sure the button exists
-		if ( !this.sIsElementPresent(lDeleteBtn) )
-			throw new HarnessException("Delete Button is not present "+ lDeleteBtn);
-		
-		// Click it
-		this.zClick(lDeleteBtn);
-	}
-	
-	/**
-	 * Probably needs to return some sort of abstract dialog object
-	 * @throws HarnessException
-	 */
-	public void zToolbarMove() throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-	
-	public void zToolbarPrint() throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-	
-	public void zToolbarReply() throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-	
-	public void zToolbarReplyAll() throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-	
+		this.zClick(locator);
 
-	public void zToolbarForward() throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-	
-	public void zToolbarReportSpam() throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-	
-	/**
-	 * Need to implement ItemTag
-	 * @param tag
-	 * @throws HarnessException
-	 */
-	public void zToolbarTag(Object tag) throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-	
-	/**
-	 * Probably needs to return the separate browser window object
-	 * @throws HarnessException
-	 */
-	public void zToolbarOpenInSeparateWindow() throws HarnessException {
-		throw new HarnessException("implement me!");
+		return (page);
 	}
 
-	/**
-	 * Need to define view enum
-	 * @param tag
-	 * @throws HarnessException
-	 */
-	public void zToolbarChangeView(Object view) throws HarnessException {
-		throw new HarnessException("implement me!");
+	@Override
+	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
+		
+		if ( pulldown == null )
+			throw new HarnessException("Button cannot be null!");
+		
+		if ( pulldown == null )
+			throw new HarnessException("Button cannot be null!");
+
+		// Default behavior variables
+		//
+		String pulldownLocator = null;	// If set, this will be expanded
+		String optionLocator = null;	// If set, this will be clicked
+		AbsSeleniumObject page = null;	// If set, this page will be returned
+		
+		// Based on the button specified, take the appropriate action(s)
+		//
+		
+		if ( pulldown == Buttons.B_NEW ) {
+			
+			if ( option == Buttons.O_NEW_ADDRESSBOOK ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_NEW_APPOINTMENT ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_NEW_BRIEFCASE ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_NEW_CALENDAR ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_NEW_CONTACT ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_NEW_CONTACTGROUP ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_NEW_DOCUMENT ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_NEW_FOLDER ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_NEW_MESSAGE ) {
+				
+				// TODO: should this actually click New followed by Message?
+				
+				pulldownLocator = null;
+				optionLocator = null;
+				page = zToolbarPressButton(pulldown);
+				
+			} else if ( option == Buttons.O_NEW_TAG ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_NEW_TASK ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_NEW_TASKFOLDER ) {
+				throw new HarnessException("implement me!");
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
+			}
+			
+		} else if ( pulldown == Buttons.B_LISTVIEW ) { 
+
+			if ( option == Buttons.O_LISTVIEW_BYCONVERSATION ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_LISTVIEW_BYMESSAGE ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_LISTVIEW_READINGPANEBOTTOM ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_LISTVIEW_READINGPANEOFF ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_LISTVIEW_READINGPANERIGHT ) {
+				throw new HarnessException("implement me!");
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
+			}
+
+		} else if ( pulldown == Buttons.B_TAG ) {
+			
+			if ( option == Buttons.O_TAG_NEWTAG ) {
+				throw new HarnessException("implement me!");
+			} else if ( option == Buttons.O_TAG_REMOVETAG ) {
+				throw new HarnessException("implement me!");
+			} else {
+				throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
+			}
+			
+		} else {
+			throw new HarnessException("no logic defined for pulldown "+ pulldown);
+		}
+
+		// Default behavior
+		if ( pulldownLocator != null ) {
+			
+			// TODO: Expand pulldownLocator
+			
+			if ( optionLocator != null ) {
+				// TODO: Click optionLocator
+			}
+			
+			throw new HarnessException("implement me!");
+		}
+		
+		// Return the specified page, or null if not set
+		return (page);
 	}
+
+
+	
+
 
 	
 
@@ -423,5 +511,7 @@ public class PageMail extends AbsAjaxPage {
 		// TODO: should this method just toggle it?
 		throw new HarnessException("implement me!");
 	}
+
+
 
 }

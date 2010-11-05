@@ -5,6 +5,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
+import projects.ajax.ui.Buttons;
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
@@ -53,13 +54,13 @@ public class DeleteConversation extends AjaxCommonTest {
 					"</SendMsgRequest>");
 
 		// Click Get Mail button
-		app.zPageMail.zToolbarGetMail();
+		app.zPageMail.zToolbarPressButton(Buttons.B_GETMAIL);
 		
 		// Select the item
 		app.zPageMail.zListSelectItem(mail.subject);
 		
 		// Click delete
-		app.zPageMail.zToolbarDelete();
+		app.zPageMail.zToolbarPressButton(Buttons.B_DELETE);
 		
 		List<ConversationItem> conversations = app.zPageMail.zListGetConversations();
 		ZAssert.assertNotNull(conversations, "Verify the conversation list exists");

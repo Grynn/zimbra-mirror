@@ -3,7 +3,9 @@
  */
 package projects.ajax.ui;
 
+import projects.ajax.ui.Buttons.Button;
 import framework.ui.AbsApplication;
+import framework.ui.AbsSeleniumObject;
 import framework.util.HarnessException;
 
 /**
@@ -105,6 +107,20 @@ public class PageMain extends AbsAjaxPage {
 		
 		MyApplication.setActiveAcount(null);
 
+	}
+
+	@Override
+	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
+
+		// Q. Should the tabs or help or logout be processed here?
+		// A. I don't think those are considered "toolbars", so don't handle here for now (Matt)
+		throw new HarnessException("Main page does not have a Toolbar");
+		
+	}
+
+	@Override
+	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		throw new HarnessException("Main page does not have a Toolbar");
 	}
 	
 
