@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>使用 QuickAdd 建立預約</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Using_QuickAdd_to_Create_an_Appointment</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("安排預約、會議和活動\n使用 QuickAdd 建立預約");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,29 +81,47 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>使用QuickAdd建立預約</h1>
-<p>QuickAdd 對話方格可用來快速建立預約。在記事簿上，先選擇開始時間，按兩下或拖曳時間，「快速加入預約」對話方格隨即出現。 </p>
-<p>QuickAdd 功能是一個選項。如果你習慣以按兩下或在記事簿上拖曳方式開啟「預約」頁面，請在「選項」頁面關閉此功能。</p>
-<h6>若需快速建立一個預約</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>在「記事簿」上，按下預約的時間&nbsp;或按下預約的開始時間並拖曳至結束時間。&nbsp;<span style="font-weight: bold;"><B>快速加入預約</B></span>對話方格隨即顯示。   </p></li>
-	<li class=p-note><p class=note>若需從「日」或「週」視窗中建立全天預約，請在記事簿的頂端，按下並拖曳劃過一天或幾天。</p></li>
-	<li class=p><p>輸入主題、地點，如果是重複預約，選擇重複模式。</p></li>
-	<li class=p><p>按<span style="font-weight: bold;"><B>確定</B></span>。&nbsp;該預約即顯示在記事簿上。</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>Using QuickAdd to create an appointment</h1>
+<p>The QuickAdd dialog makes it easy to quickly create an appointment. 
+ On your calendar, you select a start time, double-click or drag through 
+ the time and the QuickAdd Appointment dialog opens.</p>
+<p>QuickAdd is an option. If you would prefer to always open the Appointment 
+ page when you double-click or drag on the calendar, disable this feature 
+ from your Calendar Preferences.</p>
+<h6>To create a quick appointment</h6>
+<ol type="1">
+	<li class="p"><p>Select the Calendar for the appointment. Click the 
+	 time for the appointment or click and drag&#160;from the start time 
+	 to the end time for the appointment. &#160;The <span style="font-weight: bold;"><b>QuickAdd 
+	 Appointment</b></span> dialog appears.</p></li>
 </ol>
-<p>若需邀請參會者或改變重複選項，可按下<span 
- style="font-weight: bold;"><B>更多詳情</B></span>，以打開「預約」頁面。</p>
-<script type="text/javascript" language="javascript1.2">
+<p class="note" style="margin-left: 40px;"><span style="font-weight: bold;"><b>Note</b></span>: 
+ To create an all-day appointment, from the Day or Week view, at the top 
+ of the calendar, click and drag over one or more days.</p>
+<ol start="2" type="1">
+	<li class="p"><p>Enter the subject, location, and if this is a repeat 
+	 appointment, select a repeat mode.</p></li>
+	<li class="p"><p>Set the reminder notice for when to be reminded of 
+	 the meeting start time.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>OK</b></span>. 
+	 The appointment displays on the calendar.</p></li>
+</ol>
+<p>If you need to invite attendees or change repeat options, click <span 
+	 style="font-weight: bold;"><b>More Details</b></span> to open the Appointment 
+ page.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

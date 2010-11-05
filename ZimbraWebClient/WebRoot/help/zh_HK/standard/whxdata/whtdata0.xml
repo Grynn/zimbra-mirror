@@ -2,13 +2,10 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="入門" >
-  <item name="開始使用 ZCS 標準版網絡用戶端" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+  <item name="開始使用標準版網絡用戶端" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
   <item name="登入和登出" url="Userspecific/logging_on_and_off.htm" />
   <item name="改變登入的預設用戶端類型" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="快速鍵" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
-  <item name="變更密碼" url="Userspecific/chaning_your_password.htm" />
-  <item name="忘記密碼了？" url="Userspecific/if_you_forget_your_password.htm" />
-  <item name="如果超過時限" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="瀏覽郵箱" >
   <item name="瀏覽你的郵箱" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
@@ -27,8 +24,6 @@
     <item name="讀取郵件" url="reading_mail/reading_mail.htm" />
     <item name="將郵件標記為未讀" url="reading_mail/b_Marking_mail_as_unread.htm" />
     <item name="打開附件" url="reading_mail/opening_file_attachments.htm" />
-    <item name="附件阻止" url="reading_mail/attachment_blocking.htm" />
-    <item name="郵件阻止功能" url="reading_mail/Message_blocking_feature.htm" />
     <item name="無法投遞的郵件" url="Creating_Messages/undeliverable_mail.htm" />
   </book>
 </book>
@@ -36,8 +31,11 @@
   <item name="編寫新郵件" url="Creating_Messages/b_Composing_email_message.htm" />
   <item name="電子郵件的組成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="自動加入你的署名" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+  <item name="自動完成地址功能" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="將檔案附加到郵件" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="附件檔案類型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="檢查拼字" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="把郵件儲存為草稿" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="回覆和轉寄郵件" >
@@ -47,14 +45,15 @@
 <book name="管理通訊錄" >
   <item name="通訊錄" url="Contacts/b_Your_Address_Books.htm" />
   <item name="加入新聯絡人" url="Contacts/b_Adding_new_contacts.htm" />
+  <item name="匯出聯絡人清單" url="Contacts/Exporting_a_Contact_List.htm" />
 </book>
 <book name="管理記事簿" >
   <item name="關於記事簿" url="Calendar/b_About_Calendar.htm" />
   <item name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="為記事簿加入顏色" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="對記事簿進行彩色編碼" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="記事簿視窗選項" url="Calendar/Calendar_Views.htm" />
-  <item name="匯入 iCalendars" url="6_0new_topics/Importing_iCalendars.htm" />
-  <item name="清除記事簿" url="6_0new_topics/Cleaning_up_your_Calendar.htm" />
+  <item name="匯入 iCalendars" url="Calendar/Importing_iCalendars.htm" />
+  <item name="清除記事簿" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="安排預約、會議和活動" >
   <item name="籌劃會議" url="Calendar/About_the_Appointment_Page.htm" />
@@ -66,37 +65,34 @@
   <item name="關於事項" url="Tasks/About_Tasks.htm" />
   <item name="建立事項清單" url="Tasks/bc_Create_task_lists.htm" />
   <item name="改變事項" url="Tasks/Change_a_task.htm" />
-  <item name="事項排序" url="Tasks/Sorting_tasks_.htm" />
 </book>
 <book name="分享資料夾" >
-  <book name="分享通訊錄" >
-    <item name="連結至某個分享通訊錄" url="6_0new_topics/Linking_to_a_Shared_Address_Book.htm" />
-  </book>
   <book name="分享記事簿" >
-    <item name="連結到分享記事簿" url="6_0new_topics/Link_to_Shared_Calendar.htm" />
+    <item name="連結至分享記事簿" url="Calendar/Link_to_Shared_Calendar.htm" />
+  </book>
+  <book name="分享通訊錄" >
+    <item name="連結至某個分享通訊錄" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
   </book>
 </book>
 <book name="搜尋項目" >
   <item name="使用搜尋功能" url="Search/b_Using_Search.htm" />
-  <item name="建立和儲存一個搜尋條件" url="6_0new_topics/b_Create_and_Save_a_Search_Query.htm" />
+  <item name="建立和儲存一個搜尋條件" url="Search/b_Create_and_Save_a_Search_Query.htm" />
   <item name="查詢語言說明" url="Search/query_language_description.htm" />
 </book>
 <book name="使用標記和資料夾整理郵件" >
   <item name="為郵件和聯絡人加標記" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
   <item name="為郵件加上旗標" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
-  <item name="使用資料夾" url="Navigation_folders_and_tips/about_folders.htm" />
   <item name="重新命名資料夾" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <item name="刪除資料夾" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
-<book name="建立過濾器 " >
+<book name="郵件過濾器使用方法" >
   <item name="過濾郵件" url="filters/bc_Filtering_your_messages.htm" />
   <item name="支援的過濾條件與操作" url="filters/filter_conditions_and_actions_supported.htm" />
 </book>
 <book name="偏好設定" >
   <item name="偏好設定" url="Userspecific/b_Setting_your_Options.htm" />
+  <item name="新郵件通知" url="Userspecific/New_mail_notifications.htm" />
   <item name="建立外出不在訊息" url="Userspecific/vacation_message.htm" />
-  <item name="儲存你傳送的郵件" url="Navigation_folders_and_tips/sent_folder.htm" />
-  <item name="郵箱容量限額" url="Navigation_folders_and_tips/quotas.htm" />
   <item name="訂閱 RSS/ATOM feed" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>
 

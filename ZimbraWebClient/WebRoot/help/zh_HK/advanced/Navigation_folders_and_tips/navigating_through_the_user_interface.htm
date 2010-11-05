@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Zimbra Web Client 工作空間</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxZimbra Web Client 工作空間xxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("瀏覽郵箱\n瀏覽 Zimbra 網絡用戶端");
+	addTocInfo("瀏覽郵箱\n瀏覽 @ClientNameLong@");
 addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 
 	}
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,32 +81,33 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>瀏覽 Zimbra Web Client </h1>
-<p>如下圖所示，登入 Zimbra Web Client 後，你會看見一個全屏視窗。 </p>
-<p><img src="../Zimbramainview65.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>Zimbra Web Client 頁面由以下區域組成：</p>
-<ol><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>瀏覽器控件。</B></span>可顯示標準的瀏覽器按鈕，如首頁、目前地址及其他功能，具體內容取決於所用的瀏覽器軟件和設定。瀏覽器工具列上的按鈕不屬於 Zimbra Web Client，你存取的每個網頁都會顯示這些按鈕。</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>搜尋工具列、用戶名稱以及限額顯示</B></span><span>。搜尋</span>、進階搜尋、你登入時使用的用戶名稱以及你的郵箱容量限額顯示在此區域。</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>應用程式索引標籤</B></span>。可使用的應用程式列在頂端的各個索引標籤中。右邊是<span style="font-weight: bold;"><B>常見問題</B></span>和<span style="font-weight: bold;"><B>登出</B></span>。</p></li>
+//]]></script>
+<h1>瀏覽 @ClientNameLong@ 
+ </h1>
+<p>如下圖所示，登入 @ClientNameLong@ 後，你會看見一個全屏視窗。</p>
+<p><img src="../69_view.png" alt="69_view.png" style="border: none;" width="652" height="321" border="0" /></p>
+<p>@ClientNameLong@ 頁面由以下區域組成：</p>
+<ol>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>搜尋工具列</b></span>。「搜尋」、「進階搜尋」顯示在此區域。右邊是<span style="font-weight: bold;"><b>幫助</b></span>和<span style="font-weight: bold;"><b>登出</b></span>。</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxx應用程式索引標籤xxxx</b></span>xxxx。xxxx此區域包含你登入時使用的用戶名稱以及你的郵箱容量限額。&nbsp;可使用的應用程式列在下方的各個索引標籤中。</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxx工具列xxxx</b></span>。xxxx  顯示目前使用的應用程式的可用操作項。xxxxxxxx在此例中顯示的是xxxx<span style="font-weight: bold;"><b>xxxx郵件xxxx</b></span>xxxx應用程式工具列。xxxx</p></li>
 </ol>
-<ol start=4><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>工具列。</B></span>  顯示目前使用的應用程式的可用操作項。在此例中顯示的是<span style="font-weight: bold;"><B>郵件</B></span>應用程式工具列。 </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>窗格。</B></span>顯示你的<span style="font-weight: bold;"><B>資料夾</B></span>，包括系統資料夾<span style="font-weight: bold;"><B>收件箱</B></span>、 <span style="font-weight: bold;"><B>寄件箱</B></span>, <span style="font-weight: bold;"><B>草稿</B></span> <span style="font-weight: bold;"><B>雜件箱</B></span>和<span style="font-weight: bold;"><B>垃圾桶</B></span>，以及你所建立的任何自訂資料夾、已儲存的<span style="font-weight: bold;"><B>搜尋項</B></span>和你建立的<span style="font-weight: bold;"><B>標記</B></span>、從郵箱建立的用於與第三方應用程式整合的<span style="font-weight: bold;"><B>Zimlet</B></span> 連結。如果你在「記事簿」中，窗格會顯示你的記事簿清單和 Zimlet。 </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>在窗格下可顯示一個小日曆。小日曆是一選項，可在<span style="font-weight: bold;"><B>偏好設定的記事簿索引標籤</B></span>中啟用。</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>內容窗格</B></span>。此區域中的內容取決於所使用的應用程式。在「收件箱」視窗中，內容窗格顯示的是收件箱中所有的郵件和對話。 </p></li>
+<ol start="4">
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxx窗格xxxx</b></span>。顯示你的<span style="font-weight: bold;"><b>資料夾</b></span>，包括系統資料夾<span style="font-weight: bold;"><b>收件箱</b></span>、<span style="font-weight: bold;"><b>寄件箱</b></span>、<span style="font-weight: bold;"><b>草稿</b></span>、<span style="font-weight: bold;"><b>雜件箱</b></span>和<span style="font-weight: bold;"><b>垃圾桶</b></span>，以及你所建立的任何自訂資料夾、您可能已儲存的<span style="font-weight: bold;"><b>搜尋項</b></span>和你建立的<span style="font-weight: bold;"><b>標籤</b></span>、從郵箱建立的用於與第三方應用程式整合的 <span style="font-weight: bold;"><b>Zimlet</b></span> 連結。xxxx如果你在「記事簿」中，窗格會顯示你的記事簿清單和 Zimlet。xxxx</p></li>
+	<li class="p" type="1"><p>在「概況」窗格下可顯示一個<span style="font-weight: bold;"><b>小日曆</b></span>。小日曆是一選項，可在<span style="font-weight: bold;"><b>記事簿</b></span><span style="font-weight: bold;"><b>偏好設定</b></span>中啟用。</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxx內容窗格xxxx</b></span>xxxx。xxxxxxxx此區域中的內容取決於所使用的應用程式。xxxxxxxx在「收件箱」視窗中，內容窗格顯示的是收件箱中所有的郵件和對話。xxxx</p></li>
 </ol>
 <p>&nbsp;</p>
+<p class="note"><span style="font-weight: bold;"><b>xxxx備註xxxx</b></span>xxxx：xxxx你可變更視窗為三窗格視窗，右側顯示「閱讀」窗格，或你可透過郵件工具列的「視窗」<img src="../View_icon.png" alt="View_icon.png" style="border: none;" width="28" height="25" border="0" />完全關閉「閱讀」窗格。</p>
 <h3>&nbsp;</h3>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,40 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>委託記事簿存取權限</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:40px; font-weight:bold; }
-ol.whs3 { list-style:decimal; }
-p.whs4 { margin-left:40px; }
-p.whs5 { margin-left:80px; }
-p.whs6 { margin-left:0px; }
-ul.whs7 { list-style:inside decimal; }
-ol.whs8 { list-style:inside decimal; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs6 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Delegating_Calendar_Access</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -45,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("分享資料夾\n分享記事簿\n分享您的記事簿");
@@ -74,10 +64,8 @@ addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -93,110 +81,159 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
-
-
-<h1>與其他人分享你的記事簿</h1>
-<p>可以與下列人員分享你的記事簿：</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>內部用戶或群組。&nbsp;選擇要授予的權限類型，包括：</p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p><span style="font-weight: bold;"><B>瀏覽者</B></span>。此類分享者可以看見你的記事簿中的活動以及會議請求狀態，但是不能對記事簿做任何改動。</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>管理者</B></span>。此類分享者有全權，可以在此記事簿中建立會議、接受或拒絕邀請、編輯和刪除活動。 </p></li>
-		<li class=p-note><p class=note><span style="font-weight: bold;"><B>無</B></span>選項用於暫時禁止存取授權人的分享記事簿但不撤銷分享權限。此類分享者的記事簿清單中仍有該記事簿，但是不能查看或管理授權人的分享記事簿中的活動。 </p></li>
-	</ul>
-	<li class=p><p>外來客。你須建立一個用於存取分享記事簿的密碼。來客必須輸入該密碼才能查看記事簿。他們不能對記事簿做任何改動。</p></li>
-	<li class=p><p>公開。任何知道分享記事簿 URL 的人都能查看。但不能對記事簿做任何改動。</p></li>
+//]]></script>
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2"></script>
+<h1>Sharing your calendar with others</h1>
+<p>You can <a href="../Sharing/Sharing_a_folder.htm">share</a> your calendar 
+ information with other people and give them one of the following access 
+ privileges:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Internal users or 
+	 groups</b></span>. &#160;You select the type of privileges to grant, either:</p></li>
+	<li style="list-style: none; display: inline;"><ul type="disc">
+		<li class="p"><p><span style="font-weight: bold;"><b>Viewer</b></span>. 
+		 The Grantee can see the activities posted to your calendar and 
+		 the status of meeting requests, but cannot make any changes to 
+		 your calendar.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Manager</b></span>. 
+		 The Grantee has permission to create meetings, accept or decline 
+		 invitations, and edit and delete activities from your calendar.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Admin</b></span>. The Grantee has permission to create 
+		 meetings, accept or decline invitations, edit and delete activities 
+		 from your calendar, share your calendar with others and remove 
+		 other Grantees from your shared calendar.</p></li>
+		<li class="p-note"><p class="note"><span style="font-weight: bold;"><b>None</b></span> 
+		 is an option to temporarily disable access to a grantor's shared 
+		 calendar without revoking the share privileges. The Grantee still 
+		 has the calendar in their calendar list but cannot view or manage 
+		 activities on the grantor's shared calendar.</p></li>
+	</ul></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>External guests</b></span>. 
+	 You create a password to access your shared calendar. Guests must 
+	 enter this password to view the calendar. They cannot make changes 
+	 to the calendar.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Public</b></span>. Anyone 
+	 that knows the URL to the shared calendar can view it. They cannot 
+	 make changes to the calendar.</p></li>
 </ul>
-<h6>若需分享你的「記事簿」</h6>
-<p>右鍵點擊要分享的記事簿，然後選擇「分享記事簿」。</p>
-<p>在「分享屬性」對話方格中選擇與誰分享。</p>
-<p class="whs2"><span style="font-weight: bold;"><B><a class="dropspot" href="javascript:TextPopup(this)" id="a4">內部用戶或群組</a></B></span></p>
-<div class="droptext" id="POPUP256698672" style="display: 'none'; " x-ss-type="dropdown">
- <ol type="1" class="whs3">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs4">如果選擇了「內部」，你可以從隨著輸入而出現的清單中選擇地址，或者輸入清單中沒有的地址。公司郵件伺服器上的用戶或群組必須是有效的地址。 </p></li>
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs4">在<span style="font-weight: bold;"><B>角色</B></span>區，選擇存取權限。</p></li>
- </ol>
- <ol start="3" type="1" class="whs3">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs4">在<span style="font-weight: bold;"><B>郵件</B></span>區，選擇要傳送郵件的類型。&nbsp;有如下選項：</p></li>
- </ol>
- <ul type="disc" class="whs1">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5"><span 
- style="font-weight: bold;"><B>傳送標準郵件</B></span>。標準的分享通知郵件即被傳送到指定的電郵地址。 &nbsp;</p></li>
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs5"><span 
- style="font-weight: bold;"><B>在標準郵件中加入備註</B></span>。可在標準郵件中加入更多的資訊。</p></li>
- </ul>
- <ol start="4" type="1" class="whs3">
-  <li style="margin-left: -20px;" class=p>
-  <p class="whs4">按<span style="font-weight: bold;"><B>確定</B></span>。 </p></li>
- </ol>
- <p>&nbsp;</p>
-</div>
-<p class="whs2"><a class="dropspot" href="javascript:TextPopup(this)" id="a5">外來客</a></p>
-<div class="droptext" id="POPUP258526686" style="display: 'none'; " x-ss-type="dropdown">
- <ol>
-  <li style="list-style: decimal;" type=1 class=p>
-  <p>如果選擇了「外來客」，輸入該來客的電郵地址。&nbsp;&nbsp;你可在「郵件：」欄位中輸入多個地址。地址之間用分號 (;) 隔開。</p></li>
-  <li style="list-style: decimal;" type=1 class=p>
-  <p>輸入密碼，用戶必須輸入該密碼才能查看記事簿。</p></li>
- </ol>
- <ol start=3>
-  <li class=p>
-  <p class="whs6">在<span style="font-weight: bold;"><B>郵件</B></span>區，選擇要傳送郵件的類型。&nbsp;郵件中包括你的記事簿的 URL 及密碼。</p></li>
-  <ul type="1" class="whs7">
-   <li style="list-style: disc;" type=disc class=p>
-   <p class="whs6"><span 
- style="font-weight: bold;"><B>傳送標準郵件</B></span>。標準的分享通知郵件即被傳送到指定的電郵地址。 </p></li>
-   <li style="list-style: disc;" type=disc class=p>
-   <p class="whs6"><span 
- style="font-weight: bold;"><B>在標準郵件中加入備註</B></span>。可在標準郵件中加入更多的資訊。</p></li>
-  </ul>
-  <li class=p>
-  <p class="whs6">按<span style="font-weight: bold;"><B>確定</B></span>。   </p></li>
- </ol>
-</div>
-<p class="whs2"><a class="dropspot" href="javascript:TextPopup(this)" id="a6">公開</a></p>
-<div class="droptext" id="POPUP153628896" style="display: 'none'; " x-ss-type="dropdown">
- <p>如果選擇「公開」，任何擁有記事簿的 URL 的人都可以查看你的記事簿。&nbsp;不需要密碼。 </p>
-</div>
-<h3>修改或撤銷許可</h3>
-<p>你可隨時修改或撤銷許可。</p>
-<ol type="1" class="whs8">
-	<li class=p><p>右鍵點擊分享記事簿。</p></li>
-	<li class=p><p>選擇<span style="font-weight: bold;"><B>編輯屬性</B></span>。分享該資料夾的用戶隨即列出。</p></li>
-	<li class=p><p>若需改變權限，可按一下<span style="font-weight: bold;"><B>編輯</B></span>，<br> 	若需移除權限，可按一下<span style="font-weight: bold;"><B>撤銷</B></span>。   </p></li>
-	<li class=p><p>選擇是否傳送一封描述此次變更的郵件。</p></li>
-	<li class=p><p>按<span style="font-weight: bold;"><B>確定</B></span>。</p></li>
+<h3>Sharing Private Appointment Details</h3>
+<p>When you share your calendar you can select the check box <span style="font-weight: bold;"><b>Allow 
+ user(s) to see my private appointments</b></span> 
+ to allow internal users or groups and external guests to see your private 
+ appointments. They will be able to see details of appointments that are 
+ marked private. &#160;If you do not check the box, the calendar shows 
+ only that your are busy during a private appointment time.</p>
+<h6>To share your Calendar</h6>
+<ol type="1">
+	<li class="p"><p>Right-click on the calendar to share and select Share 
+	 Calendar.</p></li>
+	<li class="p"><p>On the Share Properties dialog select whom to share 
+	 with.</p></li>
 </ol>
-<h6>&nbsp;</h6>
-<p class="whs6">&nbsp;</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a4','POPUP256698672');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a5','POPUP258526686');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a6','POPUP153628896');
-//--></script><script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 40px; font-weight: bold;"><span style="font-weight: bold;"><b><a 
+	 class="dropspot" href="javascript:TextPopup(this)" id="a4">Internal 
+ Users or Groups</a></b></span></p>
+<div class="droptext" id="POPUP458132837" style="display: none;">
+	<ol type="1">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">When 
+		 you choose Internal, you can choose addresses from the list that 
+		 appears as you type or you can type addresses that are not in 
+		 the list. The user or group must be a valid address in your company's 
+		 mail server.</p></li>
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">In 
+		 the <span style="font-weight: bold;"><b>Role</b></span> area, select 
+		 the access permissions.</p></li>
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">If 
+		 you want to share your private appointment information, check 
+		 <span style="font-weight: bold;"><b>Allow user(s) 
+		 to see my private appointments</b></span><span>.</span></p></li>
+	</ol>
+	<ol start="4" type="1">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">In 
+		 the <span style="font-weight: bold;"><b>Message</b></span> area, select 
+		 which type of message to send. &#160;The options are as follows:</p></li>
+	</ol>
+	<ul type="disc">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 80px;"><span 
+		 style="font-weight: bold;"><b>Send standard message</b></span>. The standard 
+		 share notification message is sent to the email address. &#160;</p></li>
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 80px;"><span 
+		 style="font-weight: bold;"><b>Add a note to standard message</b></span>. 
+		 You can add additional information to the standard message.</p></li>
+	</ul>
+	<ol start="5" type="1">
+		<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">Click 
+		 <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
+	</ol>
+	<p>&#160;</p>
+</div>
+<p style="margin-left: 40px; font-weight: bold;"><a class="dropspot" href="javascript:TextPopup(this)" 
+													 id="a5">External guests</a></p>
+<div class="droptext" id="POPUP458139701" style="display: none;">
+	<ol>
+		<li class="p" type="1"><p>When you choose External guests, enter 
+		 the guest email addresses. &#160;&#160;You can enter more than 
+		 one address in the Email: field. Put a semi-colon (;) between 
+		 addresses.</p></li>
+		<li class="p" type="1"><p>Enter the password that users must enter 
+		 to view your calendar.</p></li>
+		<li class="p" type="1"><p>If you want to share your private appointment 
+		 information, check <span style="font-weight: bold;"><b>Allow user(s) to see my private appointments</b></span>.</p></li>
+	</ol>
+	<ol start="4">
+		<li class="p"><p style="margin-left: 0px;">In the <span style="font-weight: bold;"><b>Message</b></span> 
+		 area, select which type of message to send. &#160;The URL to your 
+		 calendar and the password is included in the email message.</p>
+		<ul type="1">
+			<li class="p" type="disc"><p style="margin-left: 0px;"><span 
+			 style="font-weight: bold;"><b>Send standard message</b></span>. The 
+			 standard share notification message is sent to the email address.</p></li>
+			<li class="p" type="disc"><p style="margin-left: 0px;"><span 
+			 style="font-weight: bold;"><b>Add a note to standard message</b></span>. 
+			 You can add additional information to the standard message.</p></li>
+		</ul></li>
+		<li class="p"><p style="margin-left: 0px;">Click <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
+	</ol>
+</div>
+<p style="margin-left: 40px; font-weight: bold;"><a class="dropspot" href="javascript:TextPopup(this)" 
+													 id="a6">Public</a></p>
+<div class="droptext" id="POPUP457763513" style="display: none;">
+	<p>When you choose Public, anyone who has the URL can view your calendar. 
+	 &#160;No password is required.</p>
+</div>
+<h3>Editing or revoking permission</h3>
+<p>You can edit or revoke permissions to access your calendar at any time.</p>
+<ol type="1">
+	<li class="p"><p>Right-click on the shared calendar.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Edit Properties</b></span>. 
+	 Users sharing the folder are listed.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>Edit</b></span> 
+	 to change permissions, or<br />
+	Click <span style="font-weight: bold;"><b>Revoke</b></span> to remove permissions.</p></li>
+	<li class="p"><p>Select whether a message describing the change should 
+	 be sent.</p></li>
+	<li class="p"><p>Click <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
+</ol>
+<p>Alternately, you can edit or revoke permissions from your Preferences&gt;Sharing 
+ page.</p>
+<h6>&#160;</h6>
+<p style="margin-left: 0px;">&#160;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a4','POPUP458132837');
+	TextPopupInit('a5','POPUP458139701');
+	TextPopupInit('a6','POPUP457763513');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

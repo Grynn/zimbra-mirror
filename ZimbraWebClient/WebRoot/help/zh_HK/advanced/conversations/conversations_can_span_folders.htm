@@ -1,24 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>如何使用對話</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { margin-left:40px; color:#800080; font-family:'Courier New' , monospace; }
-ul.whs2 { list-style:disc; }
-p.whs3 { x-condition:Advanced_WC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxx如何使用對話xxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("管理郵件 \n如何使用對話");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,46 +81,55 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>如何使用對話</h1>
-<p>對話視窗可顯示按主題分組的郵件。由於一個對話中的所有郵件具有相同的主題，因此主題只在對話窗格顯示一次。與對話有關的所有郵件都有顯示，即便存儲在不同的資料夾中，亦然。 </p>
-<h2>將郵件組成對話</h2>
-<p>你可按相關性和日期排序把郵件放在一起讀取，其中包括回覆和轉寄的郵件。若需把一封郵件分組到一個對話中，二者必須具有相同的主題。</p>
-<p>例如，下列主題行可視作同一對話的一部分。</p>
-<p class="whs1"><span 
- class=expandtext><font color=purple >誰負責這個專案？ </font></span></p>
-<p class="whs1"><span 
- class=expandtext style="font-weight: bold;"><B>Re:</B></span><span class=expandtext>誰負責這個專案？ </span></p>
-<p class="whs1"><span 
- class=expandtext style="font-weight: bold;"><B>Fwd:</B></span><span class=expandtext>誰負責這個專案？ </span></p>
-<p>但是，如果把標題改為 &quot;誰負責這個專案？ - 問 Mike&quot;，該郵件就不會包含在這個對話中。它會成為另一個對話的一部分。</p>
-<p>對話不會無限增大。如果對話中最後一封郵件是 30 天以前的郵件，以同樣主題傳送的郵件將開始一個新的對話。</p>
-<h2>對話可跨越若干資料夾</h2>
-<p>比如，某對話包括三封郵件，其中一封可能在<span style="font-weight: bold;"><B>收件箱</B></span>中，你的回覆郵件（也是對話的一部分）很可能就在<span 
- style="font-weight: bold;"><B>寄件箱</B></span>中，而另一封郵件可能在某個自訂資料夾中。</p>
-<p>這就意味著：</p>
-<ul type="disc" class="whs2">
-	<li class=p><p>如果搜尋郵件時只找到一封滿足條件的郵件，即便所在的對話中的其他郵件不滿足搜尋條件，整個對話及其中的所有郵件都將列在搜尋結果下。在打開對話時，只有滿足搜尋條件的郵件會凸顯。</p></li>
-	<li class=p><p>同一對話可存在於多個資料夾中。這種情況的發生是由於相關郵件儲存在不同的資料夾中，這可能是移動郵件的結果，也可能是由於套用了過濾規則，從而將收到的郵件放入了不同的資料夾中。</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>xxxx如何使用對話xxxx</h1>
+<p>對話視窗可顯示按主題分組的郵件。xxxx由於一個對話中的所有郵件具有相同的主題，因此主題只在對話窗格顯示一次xxxxxxxx。xxxxxxxx與對話有關的所有郵件都有顯示，即便存儲在不同的資料夾中，亦然xxxxxxxx。xxxx</p>
+<h2>xxxx將郵件組成對話xxxx</h2>
+<p>xxxx你可按相關性和日期排序把郵件放在一起讀取，其中包括回覆和轉寄的郵件xxxxxxxx。xxxx對話可按從新到舊或從舊到新的順序排列。預設情況下為按從新到舊的順序查看對話。如果你希望對話中的郵件按從最舊到最新的順序列出，按下<span 
+	 style="font-weight: bold;"><b>查看</b></span>，然後選擇<span style="font-weight: bold;"><b>展開對話，舊的在前，新的在後</b></span>。 
+ </p>
+<p>xxxx若需把一封郵件分組到一個對話中，二者必須具有相同的主題xxxxxxxx。xxxx</p>
+<p>xxxx例如，下列主題行可視作同一對話的一部分xxxxxxxx。xxxx</p>
+<p style="margin-left: 40px; color: #800080; font-family: 'Courier New', monospace;"><span 
+	 class="expandtext"><font color="purple" >誰負責這個項目？</font></span></p>
+<p style="margin-left: 40px; color: #800080; font-family: 'Courier New', monospace;"><span 
+	 class="expandtext" style="font-weight: bold;"><b>xxxxRe:xxxx</b></span> <span 
+	 class="expandtext">誰負責這個項目？</span></p>
+<p style="margin-left: 40px; color: #800080; font-family: 'Courier New', monospace;"><span 
+	 class="expandtext" style="font-weight: bold;"><b>xxxxFwd:xxxx</b></span> 
+ <span class="expandtext">誰負責這個項目？</span></p>
+<p>但是，如果把標題改為「誰負責這個專案？ - 問 Mike」，該郵件就不會包含在這個對話中。xxxx它會成為另一個對話的一部分xxxxxxxx。xxxx</p>
+<p>xxxx對話不會無限增大xxxxxxxx。xxxxxxxx如果對話中最後一封郵件是 30 天以前的郵件，以同樣主題傳送的郵件將開始一個新的對話xxxxxxxx。xxxx</p>
+<h2>xxxx對話可跨越若干資料夾xxxx</h2>
+<p>比如，某對話包括三封郵件，其中一封可能在<span style="font-weight: bold;"><b>收件箱</b></span>中，你的回覆郵件（也是對話的一部分）很可能就在<span 
+	 style="font-weight: bold;"><b>寄件箱</b></span>中，另一封郵件則可能在自訂資料夾中。 </p>
+<p>xxxx這就意味著：xxxx</p>
+<ul type="disc">
+	<li class="p"><p>xxxx如果搜尋郵件時只找到一封滿足條件的郵件，即便所在的對話中的其他郵件不滿足搜尋條件，整個對話及其中的所有郵件都將列在搜尋結果下xxxxxxxx。xxxxxxxx在打開對話時，只有滿足搜尋條件的郵件會凸顯xxxxxxxx。xxxx</p></li>
+	<li class="p"><p>xxxx同一對話可存在於多個資料夾中xxxxxxxx。xxxxxxxx這種情況的發生是由於相關郵件儲存在不同的資料夾中，這可能是移動郵件的結果，也可能是由於套用了過濾規則，從而將收到的郵件放入了不同的資料夾中xxxxxxxx。xxxx</p></li>
 </ul>
-<p>由於對話是一組相關的郵件，如果將其中一個移至另一個資料夾，該對話中的所有郵件都將移至該資料夾。</p>
-<p class="whs3">
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','列印對話','printing_a_conversation.htm','電子郵件視窗','conversation_list_view.htm');return false;" title="相關主題"><img src="../ss_btn_相關主題.gif" border=0 height=17 width=50 alt="相關主題"></a>
+<p>xxxx由於對話是一組相關的郵件，如果將其中一個移至另一個資料夾，該對話中的所有郵件都將移至該資料夾xxxxxxxx。xxxx</p>
+<p>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','列印對話','printing_a_conversation.htm','電郵視窗管理','conversation_list_view.htm');return false;" title=" 相關主題"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:none"><nobr>  相關主題 </nobr></span></a>
+
 
  </p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

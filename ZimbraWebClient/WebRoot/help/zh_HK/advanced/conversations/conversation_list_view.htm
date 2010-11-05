@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>電子郵件視窗</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxx電子郵件管理視窗xxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("管理郵件 \n電子郵件管理視窗");
+	addTocInfo("管理郵件 \n管理電子郵件視窗");
 addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 
 	}
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,43 +81,67 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>電子郵件視窗</h1>
-<p>你的電子郵件可以作為單獨的郵件查看，也可以作為對話查看。如果你使用<span style="font-weight: bold;"><B>對話</B></span>功能，預設的視窗就是對話。</p>
-<p>要改變目前時限內郵件的分組方式，在窗格上面的方格中，按下<span style="font-weight: bold;"><B>視窗</B></span>後面的箭咀。要改變預設視窗，前往<span style="font-weight: bold;"><B>偏好設定，郵箱</B></span>索引標籤。 &nbsp;</p>
-<h2>郵件視窗</h2>
-<p>用傳統視窗顯示郵件清單時，最近的郵件放在前面。未讀的郵件以粗體顯示。分行顯示的資訊包括：標誌、標記、寄件人、已有的附件、主題、資料夾位置、郵件大小、所含附件以及郵件的接收時間等。</p>
-<p><img src="../tradtional_view.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>&nbsp;</p>
-<h2>對話視窗</h2>
-<p>對話視窗可顯示按主題分組的郵件。對話中所含郵件的數量，顯示在主題後的括弧中。每個對話包括原始郵件及其所有回覆郵件。包含有未讀郵件的對話，以<span style="font-weight: bold;"><B>粗體</B></span>顯示。</p>
-<p><img src="../conversation_view80.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>&nbsp;</p>
-<p>按兩下對話後，便可顯示該對話中的郵件。按下一封郵件，便可顯示其內容。 </p>
-<p>與對話有關的所有郵件都會顯示，即便存儲在其他資料夾中，亦然。<span style="font-weight: bold;"><B>資料夾</B></span>列上會顯示儲存這些郵件的資料夾。 </p>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>xxxx電子郵件管理視窗xxxx</h1>
+<p>你的電子郵件可以作為單獨的郵件查看，也可以作為對話查看，並且查看郵件時，閱讀窗格可關閉，也可以顯示在底部或顯示在右邊。</p>
+<p>如需更改郵箱中郵件的分組方式，在工具列中，按下<span style="font-weight: bold;"><b>查看</b></span>，並選擇以對話或郵件形式查看以及在何處顯示閱讀窗格。 
+ &#160;</p>
+<p style="margin-left: 60px;"><img src="../viewlist.png" alt="viewlist.png" style="border: none;" width="250" height="225" border="0" /></p>
+<h2>xxxx郵件視窗xxxx</h2>
+<p>xxxx用傳統視窗顯示郵件清單時，最近的郵件放在前面xxxxxxxx。xxxxxxxx未讀的郵件以粗體顯示xxxxxxxx。xxxxxxxx分行顯示的資訊包括：標誌xxxxxxxx、xxxxxxxx標記xxxxxxxx、xxxxxxxx寄件人xxxxxxxx、xxxxxxxx已有的附件xxxxxxxx、xxxxxxxx主題xxxxxxxx、xxxxxxxx資料夾位置xxxxxxxx、xxxxxxxx郵件大小xxxxxxxx、xxxxxxxx所含附件以及郵件的接收時間等xxxxxxxx。xxxx</p>
+<p><img src="../tradtional_view.png" alt="tradtional_view.png" style="border: none;" width="816" height="103" border="0" /></p>
+<h2>xxxx對話視窗xxxx</h2>
+<p>xxxx對話視窗可顯示按主題分組的郵件xxxxxxxx。xxxxxxxx對話中所含郵件的數量，顯示在主題後的括弧中xxxxxxxx。xxxxxxxx每個對話包括原始郵件及其所有回覆郵件xxxxxxxx。xxxxxxxx內有未讀郵件的對話以xxxx<span 
+	 style="font-weight: bold;"><b>xxxx粗體xxxx</b></span>xxxx顯示xxxxxxxx。xxxx</p>
+<p><img src="../conversation_view80.png" alt="conversation_view80.png" style="border: none;" width="833" height="104" border="0" /></p>
+<p>&#160;</p>
+<p>xxxx按兩下對話後，便可顯示該對話中的郵件xxxxxxxx。xxxxxxxx按下一封郵件，便可顯示其內容xxxxxxxx。xxxx在視窗連結中，你可選擇先顯示最舊的郵件或顯示最新郵件。</p>
+<p>xxxx與對話有關的所有郵件都會顯示，即便存儲在其他資料夾中，亦然xxxxxxxx。xxxx<span style="font-weight: bold;"><b>xxxx資料夾xxxx</b></span>xxxx列上會顯示儲存這些郵件的資料夾xxxxxxxx。xxxx</p>
+<h2>瀏覽郵件內容窗格</h2>
+<p>無論以郵件或對話視窗查看，每封郵件都有一行分隔線來顯示以下幾欄資訊： </p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>對話指標</b></span>。此郵件是否屬對話的一部分？</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>標記指標</b></span>。寄件人是否已標記此郵件？</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>優先權指標</b></span>。寄件人是否已註明此郵件有高優先權？</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>標記</b></span>。郵件是否已標上你定義的標記？</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>狀態</b></span>。開啟或關閉的信封表示郵件是否已讀。粗體文字亦表示郵件未讀。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>寄件人</b></span>。寄件人的姓名或電郵地址。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>附件</b></span>指標。迴形針圖示表示郵件有附件。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>主題</b></span>。郵件的簡短描述。如果你的帳戶已啟用「郵件片段」功能，則會顯示郵件的第一行。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>資料夾</b></span>。顯示郵件所在資料夾的名稱。對話方式下，不顯示資料夾名稱，因為郵件可跨越若干資料夾。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>大小</b></span>。郵件大小或對話中郵件的數目。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>收件日期</b></span>。收到郵件的日期或時間。</p></li>
+</ul>
+<h2>「內容」窗格中的郵件排序</h2>
+<p>你可按照寄件人、主題、大小或收件日期列對郵件進行排序。</p>
+<p>xxxx若需排序某一列，按下該列的標題xxxxxxxx。xxxxxxxx該列會顯示一個箭咀，用以表明是遞增（上箭咀）排序，還是遞減（下箭咀）排序xxxxxxxx。xxxx</p>
+<p>你一次能依一列進行排序。</p>
 <p>
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','列印對話','printing_a_conversation.htm','列印郵件','../reading_mail/printing_a_mail_message.htm','對話可跨越若干資料夾','conversations_can_span_folders.htm');return false;" title="相關主題"><img src="../ss_btn_相關主題.gif" border=0 height=17 width=50 alt="相關主題"></a>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','列印對話','printing_a_conversation.htm','列印郵件','../reading_mail/printing_a_mail_message.htm','對話可跨越若干資料夾','conversations_can_span_folders.htm');return false;" title=" 相關主題"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  相關主題 </nobr></span></a>
 
 
- </p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
+</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<p>&#160;</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
 if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
   WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

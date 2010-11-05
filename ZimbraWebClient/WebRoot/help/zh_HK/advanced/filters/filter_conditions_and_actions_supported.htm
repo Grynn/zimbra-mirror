@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>支援的過濾條件與操作</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxx支援的過濾條件與操作xxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("建立過濾器 \n支援的過濾條件與操作");
+	addTocInfo("郵件過濾器使用方法\n支援的過濾條件與操作");
 addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 
 	}
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,65 +81,81 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>支援的過濾條件與操作</h1>
-<p>過濾規則對大小寫不敏感，意即規則將忽略大小寫。</p>
-<h3>條件</h3>
-<p>比較欄位包括下列：</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>寄件人。</B></span> 用於指定郵件「寄件人：」標題中的名字。 </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>收件人。</B></span> 與「寄件人」相同，但尋找的是「收件人」標題中指定的名字。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>副本。</B></span>與「寄件人」相同，但尋找的是「副本」標題。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>主題。</B></span>尋找郵件的「主題」標題。</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>xxxx支援的過濾條件與操作xxxx</h1>
+<p>xxxx過濾規則對大小寫不敏感，意即規則將忽略大小寫xxxxxxxx。xxxx</p>
+<h3>xxxx條件xxxx</h3>
+<p>xxxx比較欄位包括下列：xxxx</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx寄件人xxxxxxxx。xxxx</b></span>使用這個來指定「寄件人」名稱： 
+	 電子郵件的標題。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx收件人xxxxxxxx。xxxx</b></span>與「寄件人」相同，但尋找的是「收件人：」標題中指定的名字。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>副本。</b></span>與「寄件人」相同，但尋找的是「副本：」標題中指定的名字。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>「收件人」或「副本」。</b></span>與「寄件人」相同，但同時尋找「收件人」和「副本」標題。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx主題xxxxxxxx。xxxx</b></span>xxxx尋找郵件的xxxxxxxx「xxxxxxxx主題xxxxxxxx」xxxxxxxx標題xxxxxxxx。xxxx</p></li>
 </ul>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>標有名字的標題。</B></span>  選取此選項後，在比較運算子之前將出現一個額外的輸入欄位（「包含」部分）。此選項用於指定郵件標題。你不僅可以指定標準的「收件人：」或「寄件人：」欄位，還可以指定「日期」、「回覆地址」以及其他可能包含於郵件標題中的欄位。你可用此選項過濾掉標題「不合規格」的郵件，也就是說，其中未能包含在一般郵件中都應當有的某些標準資訊。這樣的郵件有時就是垃圾郵件，因為是自動生成的，所以缺少如「寄件人」或「回覆地址」等欄位資訊。然後可用第二個欄位（緊跟在比較運算子右面的欄位）指定要檢測的標題。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>大小。</B></span>此條件可用來選擇那些大於或小於指定大小的郵件。郵件的大小包括所包含的任何附件。你可用此條件濾除過大的郵件。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>日期。</B></span>此選項可用來限定在指定日期之前或之後傳送的郵件。   </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>正文。</B></span>「正文」選項為「包含」/「不包含」，用於指定郵件正文中的相符的詞語。你不能對附件中的詞語進行過濾。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>附件。</B></span>  你可用過濾條件檢測郵件中是否包含附件。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>其中的地址。</B></span>  檢測聯絡人資料中是否存在某個地址。下一個欄位用於指定哪個地址。 </p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx標有名字的標題xxxxxxxx。xxxx</b></span>選取此選項後，在比較運算子之前將出現一個額外的輸入欄位（「包含」部分）。xxxx此選項用於指定郵件標題xxxxxxxx。xxxx你不僅可以指定標準的「收件人：」或「寄件人：」欄位，還可以指定「日期」、「回覆地址」以及其他可能包含於郵件標題中的欄位。你可用此選項過濾掉標題「不合規格」的郵件，也就是說，其中未能包含在一般郵件中都應當有的某些標準資訊。xxxx這樣的郵件有時就是垃圾郵件，因為是自動生成的，所以缺少如xxxxxxxx「xxxxxxxx寄件人xxxxxxxx」xxxxxxxx或xxxxxxxx「xxxxxxxx回覆地址xxxxxxxx」xxxxxxxx等欄位資訊xxxxxxxx。xxxxxxxx然後可用第二個欄位（緊跟在比較運算子右面的欄位）指定要檢測的標題xxxxxxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx大小xxxxxxxx。xxxx</b></span>xxxx此條件可用來選擇那些大於或小於指定大小的郵件xxxxxxxx。xxxxxxxx郵件的大小包括所包含的任何附件xxxxxxxx。xxxxxxxx你可用此條件濾除過大的郵件xxxxxxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx日期xxxxxxxx。xxxx</b></span>xxxx此選項可用來限定在指定日期之前或之後傳送的郵件xxxxxxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx正文xxxxxxxx。xxxx</b></span>xxxx「xxxxxxxx正文xxxxxxxx」xxxxxxxx選項為xxxxxxxx「xxxxxxxx包含xxxxxxxx」xxxxxxxx/xxxxxxxx「xxxxxxxx不包含xxxxxxxx」xxxxxxxx，用於指定郵件正文中的相符的詞語xxxxxxxx。xxxxxxxx你不能對附件中的詞語進行過濾xxxxxxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>是讀信回條。</b></span><span>讀信回條郵件可過濾。</span></p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx附件xxxxxxxx。xxxx</b></span>xxxx 
+	 你可用過濾條件檢測郵件中是否包含附件xxxxxxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx其中的地址xxxxxxxx。xxxx</b></span>xxxx 
+	 檢測聯絡人資料中是否存在某個地址xxxxxxxx。xxxxxxxx下一個欄位用於指定哪個地址xxxxxxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>行事曆邀請</b></span>你可過濾記事簿相關郵件。</p></li>
 </ul>
-<p>有以下比較運算子：</p>
-<ul type="disc" class="whs1">
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>完全相符/不完全相符</B></span>。用於指定完全相符項。例如，若指定<span style="font-weight: bold;"><B>主題</B></span>與<span style="font-weight: bold;"><B>Banana</B></span>&nbsp;<span style="font-weight: bold;"><B>完全相符</B></span>，則 Banana 是相符項，而 Bananas 或 A truck full of banana leaves 則是不相符項。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>包含/不包含</B></span>。用於指定主題行必須包含的某個指定的子串。&nbsp;例如，若指定<span style="font-weight: bold;"><B>主題中包含 Banana</B></span>，則 I'm going bananas 是相符項。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>款式相符/款式上不相符</B></span>。通配字元 * 是用於郵件過濾比較欄位的字元，代表過濾器中的一個或多個任意字元。例如，若指定「主題」與 banana* 相符，則 bananas 或 banana-leaf casserole 都是相符項，但 my banana-leaf casserole 則是不相符項。</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>存在/不存在</B></span>。如果指定的欄位在郵件中存在，則相符。可與「以標題命名」和「附件」欄位一起使用。</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>低於/不低於，超過/不超過</B></span>。用於比較「大小」欄位。</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>早於/不早於，晚於/不晚於</B></span>。用於比較「日期」欄位。</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>在/不在</B></span>。用於檢測聯絡人資料中是否存在某個地址。</p></li>
+<p>xxxx有以下比較運算子：xxxx</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx完全相符/不完全相符xxxx</b></span>xxxx。xxxxxxxx用於指定完全相符項xxxxxxxx。xxxx例如，若指定<span 
+	 style="font-weight: bold;"><b>主題</b></span>與 <span style="font-weight: bold;"><b>Banana</b></span> 
+	 <span style="font-weight: bold;"><b>完全相符</b></span>，則僅「Banana」是相符項，而「Bananas」或「A 
+	 truck full of banana leaves」則是不相符項。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx包含/不包含xxxx</b></span>xxxx。xxxx用於指定主題行必須包含的某個指定的子串。例如，若指定<span style="font-weight: bold;"><b>主題中包含 
+	 Banana</b></span>，則「I'm going bananas」是相符項。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>通配字元相符/通配字元條件不相符</b></span>。xxxx通配字元 
+	 * 是用於郵件過濾比較欄位的字元，代表過濾器中的一個或多個任意字元xxxxxxxx。xxxx例如，若指定「主題」與「 banana*」相符，則「bananas」或「banana-leaf casserole」都是相符項，但「my 
+	 banana-leaf casserole」則是不相符項。</p></li>
 </ul>
-<h3>操作項</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>保留在收件箱。</B></span>  將郵件儲存在收件箱。如果沒有任何過濾規則相符某個郵件，則採取此預設操作。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>歸檔至資料夾。</B></span>  將郵件移至指定的資料夾。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>丟棄。</B></span>刪除郵件，而且不傳遞。被丟棄郵件不在任何資料夾中，即便是「垃圾桶」也不例外。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>轉寄</B></span>。將郵件轉寄至指定的地址</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>停止評估。</B></span>此操作項可阻止後繼的過濾規則套用於任何與目前規則相符的郵件。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>註明。</B></span> 選擇<span style="font-weight: bold;"><B>為已讀</B></span>或<span style="font-weight: bold;"><B>已打標記</B></span>。 </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>標記使用。</B></span> 可用選定的標記給相符的郵件打標記。</p></li>
+<h3>xxxx操作項xxxx</h3>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx保留在收件箱xxxxxxxx。xxxx</b></span>xxxx 
+	 將郵件儲存在收件箱xxxxxxxx。xxxxxxxx如果沒有任何過濾規則相符某個郵件，則採取此預設操作xxxxxxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx歸檔到資料夾xxxxxxxx。xxxx</b></span>xxxx 
+	 將郵件移至指定的資料夾xxxxxxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx丟棄xxxxxxxx。xxxx</b></span>xxxx刪除郵件，而且不傳遞xxxxxxxx。xxxxxxxx被丟棄郵件不在任何資料夾中，即便是xxxxxxxx「xxxxxxxx垃圾桶xxxxxxxx」xxxxxxxx也不例外xxxxxxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx轉寄xxxx</b></span>xxxx。xxxx將郵件轉寄至指定的地址。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx註明xxxxxxxx。xxxx</b></span>xxxx 
+	 選擇xxxx<span style="font-weight: bold;"><b>xxxx為已讀xxxx</b></span>xxxx或xxxx<span 
+	 style="font-weight: bold;"><b>xxxx已打標記xxxx</b></span>xxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx標記使用xxxxxxxx。xxxx</b></span>xxxx 
+	 可用選定的標記給相符的郵件打標記xxxxxxxx。xxxx</p></li>
 </ul>
-<h3>多重操作項</h3>
-<p>過濾規則可指定多個操作項。組合操作項可解釋為：</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>丟棄。</B></span> 如果與其他操作項組合，忽略「丟棄」而執行其他操作。</p></li>
-	<li style="x-condition: Advanced_WC;" class=p><p><span style="font-weight: bold;"><B>停止評估。</B></span>此操作項之後指定的操作項將被忽略。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>歸檔到資料夾。</B></span>  多個「歸檔到」操作項，可使多個郵件副本儲存到不同的資料夾中。如果指定的資料夾不存在，則將郵件存入收件箱。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>標記/標示。</B></span> 這些操作項適用於從最近執行的操作項返回的郵件。比如，在多重「歸檔到」操作項情況下，這可使某些儲存的郵件副本無標記，而另一些則有標記。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>保留在收件箱。</B></span>  雖然可指定多重「保留」操作項，但只有一個郵件副本會存入收件箱。</p></li>
-	</ul>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<h3>xxxx多重操作項xxxx</h3>
+<p>你可建立一個由多重操作項組成的過濾規則。你的規則中的組合操作項可解釋為：</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx丟棄xxxxxxxx。xxxx</b></span>xxxx 
+	 如果與其他操作項組合，忽略xxxxxxxx「xxxxxxxx丟棄xxxxxxxx」xxxxxxxx而執行其他操作xxxxxxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx歸檔到資料夾xxxxxxxx。xxxx</b></span>多個「歸檔到」操作項，可使多個郵件副本儲存到不同的資料夾中。xxxx如果指定的資料夾不存在，則將郵件存入收件箱xxxxxxxx。xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx標記/標示xxxxxxxx。xxxx</b></span>xxxx 
+	 這些操作項適用於從最近執行的操作項返回的郵件xxxxxxxx。xxxx比如，在多重「歸檔到」操作項情況下，這可使某些儲存的郵件副本無標記，而另一些則有標記。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx保留在收件箱xxxxxxxx。xxxx</b></span>雖然可指定多重「保留」操作項，但只有一個郵件副本會存入收件箱。</p></li>
+	<li class="p"><p style="font-weight: bold;">轉寄地址。<span style="font-weight: normal;">xxxx郵件被轉寄至指定的地址xxxxxxxx。xxxx</span></p></li>
+</ul>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

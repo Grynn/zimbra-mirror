@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>事項排序 </title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxx事項排序xxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("使用事項清單\n事項排序");
@@ -52,10 +64,8 @@ addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,20 +81,32 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>事項排序 </h1>
-<p>你可依主題、狀態、完成百分比以及到期日對事項進行排序。 </p>
-<p>在「事項」視窗中，選擇一個事項清單，並在「內容」窗格工具列中，按一下排序依據標題。 </p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>xxxx事項排序xxxx</h1>
+<p>你可依狀態對事項清單中的事項進行排序，便於快速查看。在「事項」工具列中按<span style="font-weight: bold;"><b>「排序依據」</b></span>，然後選擇以下其中一項：</p>
+<ul type="disc">
+	<li><p><span style="font-weight: bold;"><b>未開始</b></span></p></li>
+	<li style="font-weight: bold;"><p>已完成</p></li>
+	<li style="font-weight: bold;"><p>進行中</p></li>
+	<li style="font-weight: bold;"><p>等待其他人</p></li>
+	<li style="font-weight: bold;"><p>已延遲</p></li>
+	<li><p><span style="font-weight: bold;"><b>所有</b></span><span>。&#160;「所有」顯</span>示所有事項，而不考慮狀態。</p></li>
+	<li><p><span style="font-weight: bold;"><b>待辦事項</b></span><span>。</span>&#160;「待辦事項」顯示狀態為<span 
+	 style="font-weight: bold;"><b>進行中</b></span>、<span style="font-weight: bold;"><b>未開始</b></span>的事項，或如事項已過期，則狀態為<span 
+	 style="font-weight: bold;"><b>等待其他人</b></span>的事項。 . </p></li>
+</ul>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

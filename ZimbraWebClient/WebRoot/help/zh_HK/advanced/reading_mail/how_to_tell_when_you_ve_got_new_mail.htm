@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>如何知道有新郵件</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { font-weight:normal; }
-p.whs2 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxx如何知道有新郵件xxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("管理郵件 \n讀取郵件\n新郵件");
+	addTocInfo("管理郵件 \n讀取郵件\n新郵件通知");
 addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 
 	}
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,24 +81,35 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>如何知道有新郵件 </h1>
-<p>登入時將接收新郵件，系統同時會以所設定的時間間隔自動接收，你也可隨時按<span style="font-weight: bold;"><B>收信</B></span>按鈕。 </p>
-<p>在<span style="font-weight: bold;"><B>偏好設定&gt;郵件</B></span>索引標籤中，你可設定查詢新郵件的間隔時間。&nbsp;預設間隔時間為 5 分鐘。 </p>
-<p class="whs1">你可透過粗體字且其後有括弧和數字的資料夾，發現其中是否有未讀郵件。&nbsp;例如，<span style="font-weight: bold;"><B>收件箱(22)</B></span>表示郵箱中有 22 封未讀郵件。</p>
-<p class="whs2">另請參見...</p>
-<p><a href="../Userspecific/Setting_your_user_preferences.htm">用戶偏好設定</a></p>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>新郵件通知</h1>
+<p>xxxx登入時將接收新郵件，系統同時會以所設定的時間間隔自動接收，你也可隨時按xxxx<span style="font-weight: bold;"><b>xxxx收信xxxx</b></span>xxxx按鈕。xxxx</p>
+<p>你可在<span style="font-weight: bold;"><b>郵件偏好設定</b></span>中設定你帳戶檢查新郵件的頻次。xxxx預設間隔時間為 5 分鐘。xxxx</p>
+<p>你可啟用新郵件通知的桌面提醒。你可在偏好設定 &gt; 郵件索引標籤中設定偏好設定。xxxx有下列提示選項：xxxx</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxx播放聲音xxxx</b></span>xxxx。xxxxxxxx當有新郵件到達收件箱時發出「嗶」聲提醒你。xxxx如果你把音量調到靜音，你將聽不到聲音。</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>凸顯郵件標籤</b></span>。如果你沒有在「郵件」索引標籤操作，當新郵件到達收件箱時，郵件索引標籤會凸顯。</p></li>
+</ul>
+<p style="margin-left: 40px;"><img src="../mailnotificationtab.png" alt="mailnotificationtab.png" style="border: none;" width="326" height="37" border="0" /></p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>閃爍顯示瀏覽器標題</b></span>。當新郵件到達收件箱時，瀏覽器閃爍，直到你打開「郵件」索引標籤。</p></li>
+</ul>
+<p style="font-weight: normal;">xxxx你可透過粗體字且其後有括弧和數字的資料夾，發現其中是否有未讀郵件。xxxx例如，<span style="font-weight: bold;"><b>收件箱 (22)</b></span> 表示你的收件箱的對話中有 22 封未讀郵件。</p>
+<p style="font-weight: bold;">xxxx另請參見...xxxx</p>
+<p><a href="../Userspecific/Setting_your_user_preferences.htm">xxxx設定偏好設定xxxx</a></p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

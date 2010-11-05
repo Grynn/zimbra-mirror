@@ -1,14 +1,17 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="iCal 記事簿，匯入或匯出" >
-  <topic name="匯入 iCal 記事簿" url="Calendar/Importing_your_iCal_calendar.htm" />
+<key name="HTML" >
+  <topic name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="RSS feed" >
   <topic name="訂閱 RSS/ATOM feed " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
-<key name="事項排序" >
-  <topic name="事項排序 " url="Tasks/Sorting_tasks_.htm" />
+<key name="事項，列印" >
+  <topic name="關於事項" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="事項，標記為完成" >
+  <topic name="改變事項" url="Tasks/Change_a_task.htm" />
 </key>
 <key name="以 HTML 查看" >
   <topic name="打開附件" url="reading_mail/opening_file_attachments.htm" />
@@ -19,8 +22,11 @@
 <key name="偏好設定" >
   <topic name="設定你的選項" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
-<key name="內容窗格列排序" >
-  <topic name="排序對話" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<key name="儲存搜尋項" >
+  <topic name="建立和儲存一個搜尋條件" url="Search/b_Create_and_Save_a_Search_Query.htm" />
+</key>
+<key name="列印事項" >
+  <topic name="關於事項" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="加入署名" >
   <topic name="自動加入署名" url="Userspecific/b_Automatically_adding_your_signature.htm" />
@@ -31,11 +37,8 @@
 <key name="加入通訊錄" >
   <topic name="通訊錄" url="Contacts/b_Your_Address_Books.htm" />
 </key>
-<key name="匯入 iCal 記事簿" >
-  <topic name="匯入 iCal 記事簿" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="匯出 iCal 記事簿" >
-  <topic name="匯入 iCal 記事簿" url="Calendar/Importing_your_iCal_calendar.htm" />
+<key name="同步至其他記事簿" >
+  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="回覆" >
   <topic name="回覆郵件" url="reading_mail/replying_to_mail_messages.htm" />
@@ -46,32 +49,29 @@
 <key name="在這台電腦上記住我" >
   <topic name="登入和登出" url="Userspecific/logging_on_and_off.htm" />
 </key>
-<key name="垃圾桶" >
-  <topic name="垃圾桶" url="Navigation_folders_and_tips/trash_folder.htm" />
+<key name="在郵件中填寫地址" >
+  <topic name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="字型" >
+  <topic name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="安排會議" >
   <topic name="關於預約頁" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
-<key name="寄件箱" >
-  <topic name="寄件箱" url="Navigation_folders_and_tips/sent_folder.htm" />
-</key>
-<key name="密碼" >
-  <topic name="如果忘記了密碼" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="變更密碼" url="Userspecific/chaning_your_password.htm" />
+<key name="將事項標記為完成" >
+  <topic name="改變事項" url="Tasks/Change_a_task.htm" />
 </key>
 <key name="將預約註明私人" >
   <topic name="關於預約頁面" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="對話" >
-  <key name="排序" >
-    <topic name="排序對話" url="Navigation_folders_and_tips/sorting_conversations.htm" />
-  </key>
 </key>
 <key name="對話視窗" >
   <topic name="管理郵件的顯示方式" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
 <key name="建立搜尋條件" >
   <topic name="使用搜尋功能" url="Search/b_Using_Search.htm" />
+</key>
+<key name="忘記" >
+  <topic name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="快速鍵" >
   <topic name="快速鍵" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -91,9 +91,6 @@
 <key name="新視窗，查看郵件" >
   <topic name="管理郵件的顯示方式" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
-<key name="時限過期" >
-  <topic name="如果超過時限" url="Userspecific/if_your_session_expires.htm" />
-</key>
 <key name="會議" >
   <topic name="關於預約頁" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
@@ -106,11 +103,11 @@
 <key name="標記" >
   <topic name="為郵件和聯絡人加標記" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
 </key>
-<key name="清空垃圾桶" >
-  <topic name="限額" url="Navigation_folders_and_tips/quotas.htm" />
-</key>
 <key name="無法投遞的郵件" >
   <topic name="無法投遞的郵件" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="用 HTML 排版" >
+  <topic name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="登出" >
   <topic name="登入和登出" url="Userspecific/logging_on_and_off.htm" />
@@ -130,19 +127,32 @@
 <key name="聯絡人，加入通訊錄" >
   <topic name="加入新聯絡人" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
+<key name="自動填寫地址" >
+  <topic name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="訊息，休假" >
+  <topic name="休假訊息" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="記事簿，遠端" >
+  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="記事簿，閑/忙時排除" >
+  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="設定轉寄地址" >
   <topic name="設定轉寄地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
 <key name="資料夾" >
   <topic name="重新命名資料夾" url="Navigation_folders_and_tips/renaming_folders.htm" />
-  <topic name="關於資料夾" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
 <key name="資料夾，RSS feed" >
   <topic name="訂閱 RSS/ATOM feed " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
+<key name="轉寄" >
+  <topic name="轉寄郵件" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
 <key name="轉寄郵件" >
   <topic name="設定轉寄地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
-  <topic name="轉寄郵件" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
 <key name="通訊錄，加入新聯絡人" >
   <topic name="加入新聯絡人" url="Contacts/b_Adding_new_contacts.htm" />
@@ -156,11 +166,17 @@
 <key name="過濾郵件" >
   <topic name="過濾郵件" url="filters/bc_Filtering_your_messages.htm" />
 </key>
+<key name="遠端記事簿" >
+  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="選項" >
   <topic name="設定你的選項" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
 <key name="選項，休假訊息" >
   <topic name="休假訊息" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="選項，新郵件通知" >
+  <topic name="新郵件通知" url="Userspecific/New_mail_notifications.htm" />
 </key>
 <key name="還原" >
   <topic name="還原刪除的郵件" url="reading_mail/recovering_deleted_mail_messages.htm" />
@@ -171,34 +187,24 @@
 <key name="郵件" >
   <topic name="讀取郵件" url="reading_mail/reading_mail.htm" />
   <topic name="電子郵件的組成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
-  <key name="讀取" >
+  <key name="閱讀" >
     <topic name="讀取郵件" url="reading_mail/reading_mail.htm" />
   </key>
 </key>
 <key name="郵件草稿" >
   <topic name="儲存郵件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
-<key name="郵件，休假" >
-  <topic name="休假訊息" url="Userspecific/vacation_message.htm" />
+<key name="郵件通知" >
+  <topic name="新郵件通知" url="Userspecific/New_mail_notifications.htm" />
 </key>
 <key name="郵件，設定過濾規則" >
   <topic name="過濾郵件" url="filters/bc_Filtering_your_messages.htm" />
 </key>
-<key name="郵箱已滿" >
-  <topic name="限額" url="Navigation_folders_and_tips/quotas.htm" />
-</key>
-<key name="阻止附件" >
-  <topic name="附件阻止" url="reading_mail/attachment_blocking.htm" />
+<key name="閒/忙排除記事簿" >
+  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="附件" >
   <topic name="打開附件" url="reading_mail/opening_file_attachments.htm" />
-</key>
-<key name="附件阻止" >
-  <topic name="附件阻止" url="reading_mail/attachment_blocking.htm" />
-  <topic name="郵件阻止功能" url="reading_mail/Message_blocking_feature.htm" />
-</key>
-<key name="限額" >
-  <topic name="限額" url="Navigation_folders_and_tips/quotas.htm" />
 </key>
 
 </indexdata>

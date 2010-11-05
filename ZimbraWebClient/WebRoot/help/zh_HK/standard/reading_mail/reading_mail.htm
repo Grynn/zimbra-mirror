@@ -1,26 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>讀取郵件</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { x-condition:BasicWC; }
-img_whs2 { border:none; float:none; border-style:none; }
-ol.whs3 { list-style:decimal; }
-ul.whs4 { list-style:disc; }
-p.whs5 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxx讀取郵件xxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -31,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("管理郵件 \n讀取郵件\n讀取郵件");
@@ -60,14 +64,12 @@ addButton("show",BTN_TEXT,"顯示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -79,48 +81,35 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
-
-
-<h1>讀取郵件</h1>
-<p>預設情況下，所有新郵件都放在你的<span style="font-weight: bold;"><B>收件箱</B></span>中。  &nbsp;如果設有郵件過濾規則，新郵件則可能出現在「收件箱」以外的地方。每個資料夾後面括弧內的數字均用以表示資料夾中未讀郵件之數目。</p>
-<p>若使用的是「對話」視窗，郵件將按組分到各個對話中。&nbsp;</p>
-<p class="whs1">當你開啟郵件時，郵件將顯示在所列郵件下的「讀取」窗格中。在「讀取」窗格中，你可<span style="font-weight: bold;"><B>回覆</B></span>和<span style="font-weight: bold;"><B>轉寄</B></span>郵件。 </p>
-<p class="whs1">工具列右邊的兩個圖示用於在 <span style="font-weight: bold;"><B><a class="dropspot" href="javascript:TextPopup(this)" id="a1" style="x-condition: BasicWC;">新視窗</a>,   </B></span><img src="../newwindowbutton.png" x-maintain-ratio="TRUE" border="0" class="img_whs2">中開啟郵件，然後按下<span style="font-weight: bold;"><B>顯示原件</B></span>，  <img src="../see_original.png" x-maintain-ratio="TRUE" border="0" class="img_whs2">,<span 
- style="font-weight: bold;"> <B></B></span>&nbsp;以查看原始郵件的標題。</p>
-<div class="droptext" id="POPUP258517428" style="display: 'none'; " x-ss-type="dropdown">
- <p><span style="font-weight: bold;"><B>新視窗</B></span>可另開一個視窗開啟郵件。在新的視窗中，你可列印郵件或對話，或在回覆時參考原始郵件。</p>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
 </div>
-<p class="whs1">&nbsp;</p>
-<p class="whs1"><img src="../messageview75.png" x-maintain-ratio="TRUE" border="0" class="img_whs2"></p>
-<h3>若需在「對話」視窗中讀取郵件</h3>
-<ol type="1" class="whs3">
-	<li class=p><p>按兩下含該郵件的對話。</p></li>
-	<li class=p><p>「內容」窗格隨即改變為顯示單封郵件。<span style="font-weight: bold;"><B>部分內容</B></span>列用於顯示郵件正文的第一行。要開啟郵件，可按下之。</p></li>
+ 
+<h1>xxxx讀取郵件xxxx</h1>
+<p>xxxx預設情況下，所有新郵件都放在你的xxxx<span style="font-weight: bold;"><b>xxxx收件箱xxxx</b></span>xxxx中。xxxx&nbsp;如果設有郵件過濾規則，新郵件則可能出現在「收件箱」以外的地方。xxxx每個資料夾後面括弧內的數字均用以表示資料夾中未讀郵件之數目。xxxx</p>
+<p>xxxx若使用的是xxxxxxxx「對話」視窗xxxxxxxx，郵件將按組分到各個對話中。xxxx 將滑鼠移至對話上面時，工具提示便可顯示最新郵件正文的第一行內容。</p>
+<h3>xxxx若需在「對話」視窗中讀取郵件xxxx</h3>
+<ol type="1">
+	<li class="p"><p>xxxx按兩下含該郵件的對話。xxxxxxxx「內容」窗格隨即改變為顯示單封郵件。xxxx<span style="font-weight: bold;"><b>xxxx部分內容xxxx</b></span>xxxx列用於顯示郵件正文的第一行。xxxx </p></li>
+	<li class="p"><p>xxxx要開啟郵件，可按下之。xxxx</p></li>
 </ol>
-<h3>若需在「郵件」視窗中讀取郵件</h3>
-<ul type="disc" class="whs4">
-	<li class=p><p>按兩下郵件。</p></li>
+<p style="margin-left: 40px;">如啟用<span style="font-weight: bold;"><b>閱讀窗格</b></span>，郵件正文便顯示在閱讀窗格中。否則，按兩下郵件。郵件顯示在內容窗格中。</p>
+<h3>若需在「單一郵件」視窗中讀取郵件</h3>
+<ul type="disc">
+	<li><p>如啟用「閱讀窗格」功能，按下郵件後則在閱讀窗格中讀取郵件。</p></li>
+	<li><p>如無啟用「閱讀窗格」功能，按兩下郵件。郵件顯示在內容窗格中。 </p></li>
 </ul>
-<p class="whs5">郵件正文隨即在下面的窗格中顯示。  如果不顯示，請在郵件清單中按兩下該郵件。</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a1','POPUP258517428');
-//--></script><script type="text/javascript" language="javascript1.2">
+<h6>xxxx另請參見...xxxx</h6>
+<p>xxxx如何知道有新郵件xxxx</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

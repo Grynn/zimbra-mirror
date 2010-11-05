@@ -1,36 +1,32 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="管理你分享的內容" url="6_0new_topics/Managing_items_you_share.htm" />
+<item name="分享資料夾" url="Sharing/Sharing_a_folder.htm" />
+<item name="管理你分享的內容" url="Sharing/Managing_items_you_share.htm" />
+<item name="分享分發清單" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="分享郵件夾" >
   <item name="分享郵件夾" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
   <item name="分享你的郵箱" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="接受他人的分享郵箱邀請" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="撤銷分享資料夾的存取權" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="接受對分享郵件夾的存取權" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="在分享郵件夾中工作" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+</book>
+<book name="分享記事簿" >
+  <item name="分享您的記事簿" url="Calendar/Delegating_Calendar_Access.htm" />
+  <item name="授予分享記事簿的管理員權限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <item name="授予對分享記事簿的管理權限" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
+  <item name="接受分享記事簿" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+  <item name="拒絕記事簿分享請求" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
 </book>
 <book name="分享通訊錄" >
   <item name="分享你的通訊錄" url="Contacts/Sharing_your_Address_Book.htm" />
 </book>
-<book name="分享記事簿" >
-  <item name="分享您的記事簿" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="授予分享記事簿的管理員權限" url="6_0new_topics/Admin_rights_for_shared_Calendars.htm" />
-  <item name="授予對分享記事簿的管理權限" url="6_0new_topics/Manager_rights_for_shared_Calendars.htm" />
-  <item name="接受分享記事簿" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
-  <item name="拒絕記事簿分享請求" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
-</book>
 <book name="分享事項清單" >
-  <item name="分享你的「事項」清單" url="Tasks/Share_your_Task_folder.htm" />
+  <item name="分享你的事項清單" url="Tasks/Share_your_Task_folder.htm" />
   <item name="接受分享事項清單" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
 </book>
-<book name="分享「文件」記事本" >
-  <item name="分享「文件」記事本" url="Documents/Sharing_Notebooks.htm" />
-  <item name="接受分享的文件記事本" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-  <item name="連結至分享記事本" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-  <item name="改變或取消對文件資料夾的存取權" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</book>
 <book name="分享公事包" >
-  <item name="分享你的公事包" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+  <item name="分享你的公事包" url="Briefcase/Sharing_your_Briefcase.htm" />
 </book>
 
 </tocdata>
