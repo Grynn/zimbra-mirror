@@ -1,0 +1,290 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="Kalender, Frei/Belegt" >
+  <topic name="Frei-/Belegt-Zeiten anzeigen" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="Kontakt" >
+  <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
+  <topic name="Neuen Kontakt anlegen" url="Contacts/creating_a_new_contact.htm" />
+  <key name="Bearbeiten" >
+    <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="Kontakt bearbeiten" >
+  <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="Kontakte drucken" >
+  <topic name="Kontakte drucken" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="Kontakte hinzufügen" >
+  <topic name="Neuen Kontakt anlegen" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="Kontakte importieren" >
+  <topic name="Kontakte importieren" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Kontakte löschen" >
+  <topic name="Kontakt löschen" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="Kontakte, gelöschten Kontakt wieder in Adressbuch aufnehmen" >
+  <topic name="Kontakt löschen" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="Kontakte, Liste drucken" >
+  <topic name="Kontakte drucken" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="Kontaktgruppen" >
+  <topic name="Kontaktgruppen anlegen" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="Kontextmenüs" >
+  <topic name="Kontextmenüs" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="Lesefenster" >
+  <topic name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Löschen" >
+  <topic name="Ordner löschen" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="Ordner" >
+    <topic name="Ordner löschen" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="Mail" >
+  <topic name="Mails lesen" url="reading_mail/reading_mail.htm" />
+  <topic name="Teile einer Mail" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <key name="Lesen" >
+    <topic name="Mails lesen" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="Mail empfangen" >
+  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="Mail weiterleiten" >
+  <topic name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="Mail-Identität beim Verfassen von Mails" >
+  <topic name="Neue Mail verfassen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
+<key name="Mail-Identitäten" >
+  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="Mail, neue" >
+  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="Mailansicht" >
+  <topic name="Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="Mailbenachrichtigung" >
+  <topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="Mailentwurf" >
+  <topic name="Mailentwurf speichern" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="Mails abfragen" >
+  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="Mails archivieren" >
+  <topic name="Mails löschen" url="reading_mail/archiving_old_messages.htm" />
+</key>
+<key name="Mails filtern" >
+  <topic name="Mails filtern" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="Markieren" >
+  <topic name="Mails markieren" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <key name="Mail" >
+    <topic name="Mails markieren" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  </key>
+</key>
+<key name="Meldung, Abwesenheit" >
+  <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Menüs, Kontextmenüs" >
+  <topic name="Kontextmenüs" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="Mit Platzhalter suchen" >
+  <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="Nach Mails suchen" >
+  <topic name="Nach Mails suchen" url="Search/_search__vs.__search_for_.htm" />
+</key>
+<key name="Navigation mit Tastatur" >
+  <topic name="ZWC, Tastenkürzel" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="Neue Mails abfragen" >
+  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="Notizbücher, Neue Seiten anlegen" >
+  <topic name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="Notizbücher, Tabellen hinzufügen" >
+  <topic name="Tabelle in Notizbuchseite einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="Option, Abwesenheitsmeldung" >
+  <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Optionen, Benachrichtigung bei neuen Mails" >
+  <topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="Ordner" >
+  <topic name="Ordner umbenennen" url="Navigation_folders_and_tips/renaming_folders.htm" />
+</key>
+<key name="Persönliche Kontakte" >
+  <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="Persönliche Verteiler" >
+  <topic name="Kontaktgruppen anlegen" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="Persönlichkeit" >
+  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="Platzhalter" >
+  <topic name="Platzhalter" url="filters/wildcards.htm" />
+</key>
+<key name="Platzhalter in Suche nutzen" >
+  <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="POP-Adressen hinzufügen" >
+  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="Private Termine" >
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Rechte für Mail-Ordner bearbeiten" >
+  <topic name="Zugriff auf freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="Regeln für Filter" >
+  <topic name="Mails filtern" url="filters/filtering_your_messages.htm" />
+  <topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
+</key>
+<key name="Rich-Text-Editor für Notizen" >
+  <topic name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="Rollen" >
+  <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="RSS" >
+  <topic name="RSS-/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="RSS-Feed abonnieren" >
+  <topic name="RSS-/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="Schnelleingabe" >
+  <topic name="Termin über Schnelleingabe anlegen" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="Schnellsuche" >
+  <topic name="Schnellsuche" url="Search/Quick_search.htm" />
+</key>
+<key name="Schriftarten" >
+  <topic name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="Seiten in Notizbüchern" >
+  <topic name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="Signatur" >
+  <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="Signatur automatisch einfügen" >
+  <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="Signatur einfügen" >
+  <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="Suchabfragen" >
+  <topic name="Suchabfragen erstellen" url="Search/building_search_queries.htm" />
+  <topic name="Suchabfragen speichern" url="Search/saving_search_queries.htm" />
+  <key name="Speichern" >
+    <topic name="Suchabfragen speichern" url="Search/saving_search_queries.htm" />
+  </key>
+</key>
+<key name="Suchbeispiele" >
+  <topic name="Suchbeispiele" url="Search/search_examples.htm" />
+</key>
+<key name="Suchen, UND/ODER" >
+  <topic name="Suchen des Typs &quot;AND&quot; und &quot;OR&quot;" url="Search/and_vs_or_searches.htm" />
+</key>
+<key name="Suchfunktion" >
+  <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
+  <key name="Arbeiten" >
+    <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
+<key name="Tabellen in Notizbuchseiten einfügen" >
+  <topic name="Tabelle in Notizbuchseite einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="Tag mit der Maus ziehen" >
+  <topic name="Mails mit Tags versehen" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+</key>
+<key name="Tags" >
+  <topic name="Mails mit Tags versehen" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="Tags löschen" url="Tags_and_flags/deleting_tags.htm" />
+  <key name="Löschen" >
+    <topic name="Tags löschen" url="Tags_and_flags/deleting_tags.htm" />
+  </key>
+  <key name="Zuweisen" >
+    <topic name="Mails mit Tags versehen" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  </key>
+</key>
+<key name="Tags erstellen" >
+  <topic name="Mails mit Tags klassifizieren" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="Tags nutzen" >
+  <topic name="Mails mit Tags klassifizieren" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="Tastenkürzel" >
+  <topic name="ZWC, Tastenkürzel" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="Termin als privat markieren" >
+  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="Termin ändern" >
+  <topic name="Wiederkehrende Termine ändern" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="Termin, Schnelleingabe" >
+  <topic name="Termin über Schnelleingabe anlegen" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="Termine" >
+  <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="Termine anlegen" >
+  <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="Unterhaltungen" >
+  <topic name="Ordnerübergreifende Unterhaltungen" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="Unterhaltung drucken" url="conversations/printing_a_conversation.htm" />
+  <key name="Drucken" >
+    <topic name="Unterhaltung drucken" url="conversations/printing_a_conversation.htm" />
+  </key>
+</key>
+<key name="Unterhaltungsansicht" >
+  <topic name="Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="Unzustellbare Mail" >
+  <topic name="Unzustellbare Mail" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="Verschieben" >
+  <topic name="Mails zwischen Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="Mails in Ordnern" >
+    <topic name="Mails zwischen Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="Vervollständigung der Adresse in Mails" >
+  <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="Vorschaufenster, ein- und ausschalten" >
+  <topic name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Weiterleiten" >
+  <topic name="Mail weiterleiten" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="Wiederherstellen" >
+  <topic name="Gelöschte Mails wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="Gelöschte Mail" >
+    <topic name="Gelöschte Mails wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="Wiederkehrende Termine löschen" >
+  <topic name="Wiederkehrende Termine ändern" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="Zimlets" >
+  <topic name="Wissenswertes zu Zimlets" url="Zimlets/About_Zimlets.htm" />
+  <topic name="Zimlets verwalten" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
+
+</indexdata>
