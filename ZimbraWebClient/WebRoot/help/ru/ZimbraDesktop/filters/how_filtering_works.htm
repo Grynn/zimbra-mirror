@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxКак работают фильтрыxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Использование фильтров\nИспользование фильтров для сортировки входящей почты");
+addButton("show",BTN_TEXT,"Показать","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
+AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
+document.write("<a href=\"how_filtering_works.htm\">Использование фильтров<\/a> &gt; Использование фильтров для сортировки входящей почты<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_Mail_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&nbsp;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a  			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">xxxxПо общим вопросам и диагностике неисправностей обращайтесь к справке по Zimbra Desktopxxxx</a></p></td>
+		</tr>
+	</table>
+</div>
+ 
+<h1>Использование фильтров для сортировки входящей почты</h1>
+<p>Фильтрация почты позволяет определять правила управления входящими и 
+ исходящими сообщениями электронной почты. &#160;Фильтры автоматически 
+ сортируют сообщения согласно установленным правилам.</p>
+<p>Фильтрация входящих сообщений электронной почты выполняется со следующими 
+ целями.</p>
+<ul type="disc">
+	<li class="p"><p>Сортировка входящих сообщений по папкам.</p></li>
+	<li class="p"><p>Автоматическое присвоение тегов сообщениям.</p></li>
+	<li class="p"><p>Пересылка сообщений.</p></li>
+	<li class="p"><p>Пометка сообщений как прочитанных или флагом.</p></li>
+	<li class="p"><p>Отклонение сообщений.</p></li>
+</ul>
+<p>xxxxНапример, можно задать правило фильтра для выявления почтовых сообщений 
+ от непосредственного руководителя и перемещения их в папку под названием 
+ «От моего шефа» или для автоматического перемещения сообщений с определенного 
+ адреса в Корзину.xxxx</p>
+<p>Фильтрация исходящих сообщений выполняется со следующими целями.</p>
+<ul type="disc">
+	<li><p>Сортировка сообщений, сохраненных в папке «Отправленные», по 
+	 другим папкам.</p></li>
+	<li class="p"><p>Автоматическое присвоение тегов сообщениям.</p></li>
+	<li class="p"><p>Пересылка сообщений.</p></li>
+	<li class="p"><p>Пометка сообщений как прочитанных или флагом.</p></li>
+	<li class="p"><p>Отклонение сообщений.</p></li>
+</ul>
+<h3>xxxxУсловия фильтраxxxx</h3>
+<p>Каждый фильтр — это правило с одним или несколькими условиями и целью. 
+ xxxxКаждое правило фильтра может содержать несколько условий.xxxx Например, 
+ если ваш руководитель отправляет вам почту с нескольких адресов, например 
+ nina.ivanova@firma.com или 
+ nina.ivanova23@yahoo.com, можно создать один фильтр с названием «Руководитель», 
+ который будет содержать два условия — по одному для каждого электронного 
+ адреса.</p>
+<p>xxxxУсловия включают:xxxx</p>
+<ul type="disc">
+	<li class="p"><p>конкретные адреса в полях «От», «Кому», «Копия» в 
+	 заголовке сообщения;</p></li>
+	<li class="p"><p>xxxxслова или строки знаков в теме или теле письма;xxxx</p></li>
+	<li class="p"><p>xxxxналичие или отсутствие вложений;xxxx</p></li>
+</ul>
+<p>xxxxвсе условия можно указать как отрицательные, добавив префикс «не».xxxx 
+ xxxxНапример, можно указать сообщение, которое не содержит конкретного 
+ слова.xxxx</p>
+<p>xxxxМожно объединить условия для поиска сообщений с более сложными характеристиками.xxxx</p>
+<h3>Параметры «Любое» и «Все»</h3>
+<p>xxxxУсловия правила фильтра можно сгруппировать по принципу xxxx<span 
+	 style="font-weight: bold;"><b>xxxxлюбоеxxxx</b></span>xxxx или xxxx<span 
+	 style="font-weight: bold;"><b>xxxxвсеxxxx</b></span>xxxx.xxxx xxxxЭти условия 
+ используются аналогично условиям поиска xxxx<a href="../Search/and_vs_or_searches.htm">xxxx«AND» 
+ иxxxx xxxx«OR»xxxx</a>xxxx, описанным в разделе описания функции «Поиск», 
+ где условие xxxx<span style="font-weight: bold;"><b>xxxxлюбоеxxxx</b></span>xxxx 
+ используется как OR, а xxxx<span style="font-weight: bold;"><b>xxxxвсеxxxx</b></span>xxxx 
+ xxxxxxxx—xxxxxxxx как AND.xxxx</p>
+<p>xxxxЕсли при определении условий нового правила фильтра указать xxxx<span 
+	 style="font-weight: bold;"><b>xxxxлюбоеxxxx</b></span>xxxx, то фильтроваться 
+ будет сообщение, соответствующее любому из условий.xxxx xxxxЕсли указать 
+ xxxx<span style="font-weight: bold;"><b>xxxxвсеxxxx</b></span>xxxx, то для фильтрации 
+ сообщения должно применяться каждое условие, определенное в правиле фильтра.xxxx</p>
+<h3>xxxxДействия правила фильтраxxxx</h3>
+<p>xxxxВ каждом правиле фильтра может быть определено одно или несколько 
+ действий,xxxx xxxxДействия могут быть следующими.xxxx</p>
+<ul type="disc">
+	<li class="p"><p>Оставить сообщение в папке «Входящие» (действие не 
+	 выполняется).</p></li>
+	<li class="p"><p>Переместить сообщение в указанную папку.</p></li>
+	<li class="p"><p>xxxxПометить сообщение тегом.xxxx</p></li>
+	<li class="p"><p>Пометить сообщение как прочитанное или флагом.</p></li>
+	<li class="p"><p>Отклонить сообщение. xxxxВ результате этого действия 
+	 сообщение «молча» отклоняется.xxxx xxxxЭто действие не аналогично 
+	 действию «Удалить».xxxx xxxxВ результате удаления элемент перемещается 
+	 в Корзину.xxxx В результате отклонения сообщение даже не дойдет до 
+	 почтового ящика.</p></li>
+	<li class="p"><p>Переслать сообщение на другой адрес.</p></li>
+</ul>
+<p>Действие <span style="font-weight: bold;"><b>Не обрабатывать дополнительные 
+ правила фильтров</b></span> должно быть последним действием в каждом правиле 
+ фильтра. В результате этого действия прекращается применение каких-либо 
+ дополнительных правил фильтра к почтовым сообщениям, соответствующим текущему 
+ правилу. Если этого не указать, последующие правила фильтра будут применяться 
+ к сообщению даже при соответствии текущему фильтру. Возможно, не будет 
+ необходимости проверять одно и то же сообщение на соответствие нескольким 
+ правилам фильтра и подвергать его нескольким, возможно, взаимоисключающим 
+ действиям.</p>
+<h3>xxxxКогда применяются фильтрыxxxx</h3>
+<p>xxxxКаждое входящее сообщение проверяется на соответствие правилам фильтра 
+ во время доставки почты, в это же время к соответствующим сообщениям применяются 
+ действия фильтра.xxxx</p>
+<p>Правила фильтра можно также применить к существующему набору почтовых 
+ элементов. В настройках почтовых фильтров есть кнопка <span style="font-weight: bold;"><b>Запустить 
+ фильтр</b></span>, с помощью которой можно выбрать несколько фильтров и применить 
+ их к указанным папкам почты.</p>
+<h3>Порядок фильтрации</h3>
+<p>Фильтры применяются в том порядке, в котором они перечислены в настройках 
+ почтовых фильтров. xxxxПорядок можно изменить.xxxx</p>
+<p>xxxxУсловия каждого фильтра используются для проверки каждого сообщения.xxxx 
+ xxxxЕсли сообщение соответствует всем условиям (xxxx<span style="font-weight: bold;"><b>xxxxлюбомуxxxx</b></span>xxxx 
+ или xxxx<span style="font-weight: bold;"><b>xxxxвсемxxxx</b></span>xxxx, в зависимости 
+ от того, как определено в правиле фильтра), тогда оно считается соответствующим 
+ заданному критерию.xxxx xxxxПорядок условий в каждом фильтре не имеет 
+ значения.xxxx</p>
+<p>xxxxЕсли сообщение соответствует условиям, к нему применяются все действия, 
+ связанные с этим фильтром, в том порядке, в каком они установлены в фильтре.xxxx</p>
+<h3>Активные и неактивные фильтры</h3>
+
+<p>xxxxВсе фильтры, определенные 
+ в текущий момент, перечислены в разделе «Настройки» на странице «Фильтры 
+ почты».xxxx xxxxУстановив или сняв флажок xxxx<span 
+	 style="font-weight: bold;"><b>xxxxАктивноxxxx</b></span>xxxx, 
+ можно включить или выключить фильтры, не удаляя правил фильтра.xxxx</p>
+<p>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Поддерживаемые условия и действия фильтров','filter_conditions_and_actions_supported.htm','Фильтрация сообщений','filtering_your_messages.htm');return false;" title=" См. также"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  См. также </nobr></span></a>
+
+
+ </p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
+if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
+  WritePopupMenuLayer();
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>
