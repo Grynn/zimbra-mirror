@@ -1,23 +1,14 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>自动添加联系人</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
-p.whs2 { font-family:Arial, sans-serif; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("管理地址簿\n自动添加联系人");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,32 +81,32 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>自动添加联系人</h1>
-<p>联系人可快速添加到地址簿中，方法是在邮件正文中选择一个地址，右键单击将之添加到地址簿中即可。另外，如果勾选了“地址簿”中的<span style="font-weight: bold;"><B>允许自动添加联系人</B></span>选项，当您将邮件发送到一个新地址时，该地址将自动添加到“电子邮件联系人”列表中。</p>
+<p>联系人可快速添加到地址簿中，方法是在邮件正文中选择一个地址，右键单击将之添加到地址簿中即可。}}}另外，如果勾选了地址薄中的<span style="font-weight: bold;"><b>将新联系人添加到&ldquo;电子邮件联系人&rdquo;</b></span>首选项，则会在您将邮件发送到一个新地址时，该地址将自动添加到电子邮件联系人列表。{{{</p>
 <h6>从邮件标题添加联系人</h6>
-<p>您可以非常方便地将电子邮件地址添加到地址簿中。您可从邮件标题中的&nbsp;发件人、收件人、抄送或密送等行中加入电子邮件地址。&nbsp;可从任何邮件或对话视图中加入电子邮件地址。 </p>
-<p>将鼠标移至某姓名上面时，工具提示便可显示与该姓名关联的完整电子邮件地址。如果该姓名已经在地址簿中，联系人信息也将显示。如果该姓名不在地址簿中，则只显示电子邮件地址。</p>
+<p>您可以非常方便地将电子邮件地址添加到地址簿中。}}}您可从邮件标题中的&ldquo;发件人:&rdquo;、&ldquo;收件人:&rdquo;、&ldquo;抄送:&rdquo;或&ldquo;密送:&rdquo;等{{{行中加入电子邮件地址。}}}可从任何邮件或对话视图中加入电子邮件地址。{{{</p>
+<ol type="1">
+	<li><p>将鼠标移至某姓名上面时，工具提示便可显示与该姓名关联的完整电子邮件地址。如果该姓名已经在地址簿中，联系人信息也将显示。如果该姓名不在地址簿中，则只显示电子邮件地址。</p></li>
+</ol>
 <p>&nbsp;</p>
-<p><img src="../contacts2.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>此时右键单击该地址，会出现一个选单，其中包含“添加到联系人”选项。单击<span style="font-weight: bold;"><B>添加到联系人</B></span>后，便可将该姓名添加到联系人列表中。&nbsp;联系人窗口随即显示该姓名。</p>
-<p><img src="../contacts_add_right-click.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>您可添加相关的联系人信息，并选择保存联系人信息的地址簿。 </p>
-<h6>发送邮件时添加联系人</h6>
-<p class="whs2"><b style="font-weight: bold;"><span 
- style="font-weight: normal;">“电子邮件联系人”地址簿</span> </b>会自动添加到您的邮箱中。如果勾选了地址簿中的自动添加地址选项，当您发送电子邮件时，如果所用的地址不在任何一个地址簿中，则该地址会自动保存到“电子邮件联系人”列表中。 &nbsp;</p>
-<p class="whs2">“电子邮件联系人”地址簿有别于其他地址簿，可随机保存电子邮件地址。</p>
+<p style="margin-left: 48px;"><img src="../contacts2.png" alt="contacts2.png" style="border: none;" width="259" height="108" border="0" /></p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<ol start="2" type="1">
+	<li><p>}}}右键单击地址，选择<span style="font-weight: bold;"><b>添加到联系人</b></span>，将该姓名添加到联系人列表。{{{}}}联系人窗口随即打开并显示该姓名。{{{</p></li>
+</ol>
+<p>}}}您可添加更多的联系人信息，并选择保存联系人信息的地址簿。{{{</p>
+<h6>}}}发送邮件时添加联系人{{{</h6>
+<p style="font-family: Arial, sans-serif;">}}}您的邮箱中将自动创建<b><span style="font-weight: normal;">电子邮件联系人地址薄</span></b>。{{{}}}在&ldquo;首选项&rdquo;的&ldquo;地址薄&rdquo;选项卡中，如果勾选了<span style="font-weight: bold;"><b>将新联系人添加到&ldquo;电子邮件联系人&rdquo;</b></span><span>设置，新联系人信息将自动添加到此地址薄中。</span>{{{ &nbsp;</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

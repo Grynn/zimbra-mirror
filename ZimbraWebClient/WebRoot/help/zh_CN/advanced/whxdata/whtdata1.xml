@@ -1,10 +1,32 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="设置过滤规则" url="filters/how_filtering_works.htm" />
-<item name="过滤邮件" url="filters/filtering_your_messages.htm" />
-<item name="支持的过滤条件与操作" url="filters/filter_conditions_and_actions_supported.htm" />
-<item name="通过 CONTAINS、MATCHES 和 IS 选项过滤" url="Search/contains_vs_matches.htm" />
-<item name="过滤器通配符" url="filters/wildcards.htm" />
+<item name="共享文件夹" url="Sharing/Sharing_a_folder.htm" />
+<item name="管理您共享的内容" url="Sharing/Managing_items_you_share.htm" />
+<item name="共享发送名单" url="Sharing/Sharing_with_a_Distribution_List.htm" />
+<book name="共享邮件文件夹" >
+  <item name="共享邮件文件夹" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
+  <item name="共享您的邮箱" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+  <item name="撤销共享文件夹的访问权" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="接受他人的共享邮箱邀请" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+  <item name="在共享邮件文件夹中工作" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+</book>
+<book name="共享效率手册" >
+  <item name="共享效率手册" url="Calendar/Delegating_Calendar_Access.htm" />
+  <item name="授予对共享效率手册的管理员权限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <item name="授予对共享效率手册的管理权限" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
+  <item name="接受对共享效率手册的访问权限" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+  <item name="拒绝效率手册共享请求" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+</book>
+<book name="共享地址簿" >
+  <item name="共享您的地址簿" url="Contacts/Sharing_your_Address_Book.htm" />
+</book>
+<book name="共享任务列表" >
+  <item name="共享您的任务列表" url="Tasks/Share_your_Task_folder.htm" />
+  <item name="接受共享的任务列表" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+</book>
+<book name="共享公文包" >
+  <item name="共享您的公文包" url="Briefcase/Sharing_your_Briefcase.htm" />
+</book>
 
 </tocdata>

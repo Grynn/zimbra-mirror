@@ -1,23 +1,14 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>创建新联系人</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
-ol.whs2 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("管理地址簿\n添加新联系人");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,38 +81,57 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>添加新联系人</h1>
-<p>若需添加新联系人，单击工具条中  <img src="../newwitharrow.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1">按钮中的箭头，或右键单击邮件标题中的姓名并选择<span style="font-weight: bold;"><B>联系人</B></span>。在添加新联系人时，须在相关的字段中输入人名和公司信息。您可选择如何在您的列表中对联系人进行分类。您最多可输入三个电子邮件地址以及三个邮政地址。 </p>
-<h6>若需添加新联系人 </h6>
-<ol type="1" class="whs2">
-	<li class=p><p>在工具条中，单击<span style="font-weight: bold;"><B>新建</B></span>后面的箭头并选择<span style="font-weight: bold;"><B>新</B></span> <span style="font-weight: bold;"><B>联系人</B></span>。<span style="font-weight: bold;"><B>新联系人</B></span>表格随即打开。</p></li>
-	<li class=p><p>输入联系人信息，包括名和姓、电子邮件地址、职务、公司信息、电子邮件和即时通信详细内容和说明。还可以为该联系人上传一幅照片。   </p></li>
-	<li class=p><p>在<span style="font-weight: bold;"><B>归档为</B></span>中，选择归档名字的方式。默认方式为按先姓后名的顺序排列。 </p></li>
-	<li class=p><p>在<span style="font-weight: bold;"><B>地址簿</B></span>中，选择您个人的一个地址簿，以将名字存入</p></li>
-	<li class=p><p>单击<span style="font-weight: bold;"><B>保存</B></span>。   </p></li>
+<p>}}}若需添加新联系人，单击工具栏中的 <img src="../newwitharrow.gif" alt="newwitharrow.gif" style="border: none;" width="52" height="20" border="0" /> 按钮中的箭头，或右键单击邮件标题中的一个姓名，然后选择<span style="font-weight: bold;"><b>联系人</b></span>。{{{</p>
+<p>}}}若需创建联系人，只需添加姓名或添加关于联系人的详细信息（包括多个电子邮件地址、电话号码、邮件地址和图片）即可。{{{</p>
+<h6>若需添加新联系人</h6>
+<ol type="1">
+	<li class="p"><p>}}}在工具栏中，单击<span style="font-weight: bold;"><b>新建</b></span>旁边的箭头，然后选择<span style="font-weight: bold;"><b>联系人</b></span>。{{{}}}联系人窗口随即打开。{{{</p></li>
+	<li class="p"><p>}}}输入联系人姓名。{{{}}}单击 <img src="../AB_dropdownarrow.png" alt="AB_dropdownarrow.png" style="border: none;" width="18" height="18" border="0" /> 以添加其他名称，如中间名或部门名称。{{{ &nbsp;</p></li>
+	<li class="p"><p>}}}输入其他联系信息并上传此联系人的照片。{{{}}}图像文件必须可从您的计算机访问。{{{</p></li>
 </ol>
+<ol>
+	<li style="list-style: none; display: inline;"><ul>
+		<li class="p" type="disc"><p>}}}<img src="../AB_plussign.png" alt="AB_plussign.png" style="border: none;" width="24" height="24" border="0" /> 符号代表可以有多个条目且其中的条目可用特定标签标识的字段。{{{}}}例如，电话号码可以加上标签&ldquo;移动通信&rdquo;、&ldquo;工作单位&rdquo;、&ldquo;家庭&rdquo;或&ldquo;传真&rdquo;。{{{</p></li>
+		<li class="p" type="disc"><p>}}}您可以使用加着标签的<span style="font-weight: bold;"><b>其他</b></span>字段输入自定义字段。{{{}}}将两个自定义字段标识为&ldquo;生日&rdquo;和&ldquo;周年&rdquo;。{{{}}}您还可以创建其他自定义字段。{{{</p></li>
+		<li style="list-style: none; display: inline;"><ul>
+			<li class="p" type="disc"><p>}}}在显示&ldquo;生日&rdquo;的位置，单击选单，然后选择<span style="font-weight: bold;"><b>自定义</b></span>可添加一个自定义字段。{{{</p></li>
+			<li class="p" type="disc"><p>}}}将&ldquo;自定义&rdquo;改为此字段的一个标题，然后在<span  			 style="font-weight: bold;"><b>输入文本</b></span>框中输入信息。{{{</p></li>
+		</ul></li>
+	</ul></li>
+</ol>
+<ol start="4" type="1">
+	<li class="p"><p>}}}在<span style="font-weight: bold;"><b>归档为</b></span>（右侧）中，选择您希望姓名在地址薄中如何显示。{{{}}}默认设置为按姓在前名在后的方式归档，但也可以按名在前姓在后的方式或按公司名称归档。{{{</p></li>
+	<li class="p"><p>}}}在<span style="font-weight: bold;"><b>位置</b></span>（右侧）中，选择要存储姓名的地址薄。{{{</p></li>
+	<li class="p"><p>单击<span style="font-weight: bold;"><b>保存</b></span>。</p></li>
+</ol>
+
+<p>&nbsp;</p>
 <h6>若需从现有的邮件中添加新联系人：</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>打开邮件，在邮件正文窗格的上面，标题以灰色显示。您可添加“发件人”、&nbsp;“收件人：”、&nbsp;“抄送：”和“密送：”字段中的电子邮件地址。</p></li>
-	<li class=p><p>右键单击名字并选择<span style="font-weight: bold;"><B>添加到联系人</B></span>便可将其添加到您的联系人列表。</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>新联系人</B></span>窗口随即打开，并以电子邮件标题中已有的信息进行预置。添加更多的信息并检查预置字段中信息的正确性。 </p></li>
-	<li class=p><p>在<span style="font-weight: bold;"><B>归档为</B></span>中，选择归档名字的方式。默认方式为按先姓后名的顺序排列。 </p></li>
-	<li class=p><p>在<span style="font-weight: bold;"><B>地址簿</B></span>中，选择您个人的一个地址簿，以将名字存入</p></li>
-	<li class=p><p>单击<span style="font-weight: bold;"><B>保存</B></span>。</p></li>
+<ol type="1">
+	<li class="p"><p>}}}打开邮件，在邮件正文窗格的上面，标题以灰色显示。{{{}}}您可以在&ldquo;发件人:&rdquo;、&ldquo;收件人:&rdquo;、&ldquo;抄送:&rdquo;和&ldquo;密送:&rdquo;{{{}}}字段中添加电子邮件地址。{{{</p></li>
+	<li class="p"><p>右键单击名字并选择<span style="font-weight: bold;"><b>添加到联系人</b></span>便可将其添加到您的联系人列表。</p></li>
+	<li class="p"><p>}}}联系人窗口随即打开，并以电子邮件标题中已有的信息进行预置。{{{添加更多的信息并检查预置字段中信息的正确性。</p></li>
+	<li class="p"><p>在<span style="font-weight: bold;"><b>归档为</b></span>中，选择归档名字的方式。默认方式为按先姓后名的顺序排列。</p></li>
+	<li class="p"><p>}}}在<span style="font-weight: bold;"><b>位置</b></span>中，选择要存储姓名的地址薄。{{{</p></li>
+	<li class="p"><p>单击<span style="font-weight: bold;"><b>保存</b></span>。</p></li>
 </ol>
 <p>&nbsp;</p>
-<p>也可创建<a href="Creating_Group_Contact_Lists.htm">联系人组</a>列表。 </p>
-<script type="text/javascript" language="javascript1.2">
+<p>也可创建<a href="Creating_Group_Contact_Lists.htm">联系人组</a>列表。</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -47,6 +47,7 @@ var gbHasTitle=false;
 if (location.hash.length > 1)
 {
 	var sParam = location.hash;
+	sParam = PatchParametersForEscapeChar(sParam);
 	if (sParam.indexOf("#<") == 0)
 	{
 		document.location = "whcsh_home.htm#" + sParam.substring(2);

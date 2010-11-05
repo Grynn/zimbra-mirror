@@ -1,18 +1,14 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>关于 Zimlet</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>About Zimlets</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("使用 Zimlet\n关于 Zimlet");
@@ -52,10 +64,8 @@ addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,27 +81,38 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>关于 Zimlet</h1>
-<p>Zimlet 是为了将第三方信息和内容与 Zimbra Web Client 的功能进行集成而开发的小型程序。Zimlet 可使您在邮件中使用不同的内容类型，并与之互动。 &nbsp;</p>
-<ul class=whs1 style="list-style: disc;" type=disc>
-	<li class=p><p>单击邮件中的 URL 后，您便可启动一个浏览器窗口，前往该 URL。将鼠标悬停在 URL 上，便能以预览方式看网站内容。</p></li>
-	<li class=p><p>右键单击一个电话号码后，即可从所用计算机的softphone（如Skype   或 Cisco 的VOIP ）拨号。</p></li>
-	<li class=p><p>右键单击邮件中的一个日期，便可看到您的效率手册，并可在不离开邮件的情况下安排会议。</p></li>
-	<li class=p><p>右键单击一个姓名、地址或电话号码，即可更新您的地址簿。</p></li>
+//]]></script>
+<h1>About Zimlets</h1>
+<p>Zimlets are small programs created as a mechanism to integrate third-party 
+ information and content with the @ClientNameLong@ 
+ features. Zimlets let you interact with different content types in your 
+ email messages. &#160;</p>
+<ul class="whs1" type="disc">
+	<li class="p"><p>Click on the URL in a message to launch a browser 
+	 window to go to that URL. Hover of the URL to see a preview of the 
+	 site.</p></li>
+	<li class="p"><p>Right-click on a phone number to make a call from 
+	 your computer softphone, such as Skype or a Cisco VOIP phone.</p></li>
+	<li class="p"><p>Right-click on a date within a message to see your 
+	 calendar and to schedule a meeting without leaving the message.</p></li>
+	<li class="p"><p>Right-click on a name, address, or phone number to 
+	 update your address book.</p></li>
 </ul>
-<p>窗格中可能还有其他可用的 Zimlet。 </p>
-<p><span style="font-weight: bold;"><B>备注</B></span>：如果您的窗格中没有 Zimlet，则说明您的系统管理员已将其停用。</p>
-<script type="text/javascript" language="javascript1.2">
+<p>Other Zimlets may be available in your Overview pane. You can manage 
+ which Zimlets are displayed in your account from <span style="font-weight: bold;"><b>Preferences&gt; 
+ Zimlets</b></span>. </p>
+<p class="note"><span style="font-weight: bold;"><b>Note</b></span>: If you do 
+ not see a Zimlets section in your Overview pane, your system administrator 
+ has disabled the Zimlets feature in your account.</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

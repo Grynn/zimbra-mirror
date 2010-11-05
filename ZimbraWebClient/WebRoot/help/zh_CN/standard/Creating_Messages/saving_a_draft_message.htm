@@ -1,22 +1,14 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>保存邮件草稿</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("写信\n把邮件保存为草稿");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,30 +81,37 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>把邮件保存为草稿</h1>
-<p>您可将邮件保存为草稿，以便以后再完成和发送。&nbsp;没有发送或删除前，此类邮件保存在“草稿”文件夹中。 </p>
-<h6>若需创建一个留待以后编辑的草稿：</h6>
-<ul type="disc" class="whs1">
-	<li style="x-condition: BasicWC;" class=p><p>书写邮件。</p></li>
-	<li class=p><p>单击<span style="font-weight: bold;"><B>保存草稿</B></span>。</p></li>
-	<li class=p><p>邮件草稿随即被存入<span style="font-weight: bold;"><B>草稿</B></span>文件夹。</p></li>
-</ul>
+<p>您可将邮件保存为草稿，以便以后再完成和发送。}}}没有发送或删除前，邮件草稿保存在&ldquo;草稿&rdquo;文件夹中。{{{</p>
+<p>}}}可以启用在您编写邮件时自动将邮件保存为草稿的首选项。{{{}}}还可以在写信时单击<span style="font-weight: bold;"><b>保存草稿</b></span>来将其保存为草稿。{{{</p>
+<h6>}}}设置自动保存草稿的首选项{{{</h6>
+<p>}}}转到&ldquo;首选项&rdquo;&gt;&ldquo;写信&rdquo;选项卡，并启用<span style="font-weight: bold;"><b>写信时自动保存邮件草稿</b></span>。{{{每隔几分钟，您所书写的邮件都会自动保存到草稿箱。</p>
+<h6>}}}若需手动保存邮件：{{{</h6>
+<ol type="1">
+	 <li class="p"><p>书写邮件。</p></li>
+	<li class="p"><p>单击<span style="font-weight: bold;"><b>保存草稿</b></span>。</p></li>
+</ol>
+<p style="margin-left: 40px;">邮件草稿随即被存入<span  	 style="font-weight: bold;"><b>草稿</b></span>文件夹。</p>
+<p>&nbsp;</p>
 <h6>若需取用邮件草稿</h6>
-<ul type="disc" class="whs1">
-	<li class=p><p>打开<span style="font-weight: bold;"><B>草稿</B></span>文件夹，单击邮件。</p></li>
-	<li class=p><p>您可照常书写和发送完成的邮件。发送后，邮件即从“草稿”文件夹中删除。</p></li>
+<ul type="disc">
+	<li class="p"><p>}}}打开<span style="font-weight: bold;"><b>草稿</b></span>文件夹，单击邮件，或选择邮件并单击工具栏中的<span  	 style="font-weight: bold;"><b>编辑</b></span>。{{{</p></li>
 </ul>
-<script type="text/javascript" language="javascript1.2">
+<p>您可照常书写和发送完成的邮件。发送后，邮件即从&ldquo;草稿&rdquo;文件夹中删除。</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

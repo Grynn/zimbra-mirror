@@ -1,22 +1,14 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>导入联系人</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("管理地址簿\n导入地址簿");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,29 +81,44 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>导入地址簿</h1>
-<p>您可导入以逗号分隔（csv）的文本文件格式保存的联系人列表和地址簿。 </p>
-<ol type="1" class="whs1">
-	<li class=p><p>前往<span style="font-weight: bold;"><B>首选项， 地址簿</B></span><span>。</span></p></li>
-	<li class=p><p>单击<span style="font-weight: bold;"><B>浏览</B></span>寻找要导入的csv 文件。 </p></li>
-	<li class=p><p>单击<span style="font-weight: bold;"><B>导入</B></span>。屏幕上随即显示您的地址簿列表。 </p></li>
-	<li class=p><p>选择目标地址簿或创建一个新地址簿。 </p></li>
-	<li class=p><p>单击<span style="font-weight: bold;"><B>确定</B></span>。&nbsp;导入过程要用几分钟，具体时间多少与csv文件的大小有关。</p></li>
-	<li class=p><p>导入完成后，<span style="font-weight: bold;"><B>状态框</B></span>将会显示导入的联系人的数量。</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>导入联系人</h1>
+<p>}}}您可导入以逗号分隔 (.csv) 的文本文件格式保存的联系人列表和地址簿。{{{}}}可从<span style="font-weight: bold;"><b>导入/导出</b></span>首选项中使用导入功能{{{</p>
+<p>}}}若需导入联系人列表：{{{</p>
+<ol type="1">
+	<li class="p"><p>}}}选择<span style="font-weight: bold;"><b>首选项</b></span>，然后单击<span style="font-weight: bold;"><b>导入/导出</b></span>。{{{</p></li>
+	<li class="p"><p>}}}在&ldquo;导入文件&rdquo;字段中，浏览以查找要导入的 .csv 文件。{{{</p></li>
+	<li class="p"><p>}}}在<span style="font-weight: bold;"><b>类型</b></span>字段中，单击<span style="font-weight: bold;"><b>自动检测</b></span>以选择要导入的联系人文件的类型：{{{</p></li>
+	<ol type="disc">
+		<li style="list-style: none; display: inline;"><ul type="disc">
+			<li class="p" style="margin-left: -20px;"><p>}}}帐户联系人{{{</p></li>
+			<li class="p" style="margin-left: -20px;"><p>}}}Yahoo! 联系人{{{</p></li>
+			<li class="p" style="margin-left: -20px;"><p>Outlook 2000 联系人</p></li>
+			<li class="p" style="margin-left: -20px;"><p>Outlook 2003 联系人</p></li>
+			<li class="p" style="margin-left: -20px;"><p>Outlook 联系人</p></li>
+			<li class="p" style="margin-left: -20px;"><p>}}}Thunderbird 联系人{{{</p></li>
+		</ul></li>
+	</ol>
 </ol>
-<p>联系人按姓氏字母顺序排列。 &nbsp;</p>
+<p style="margin-left: 40px;">}}}<span>来自不同帐户的联系人列表可能不以相同的顺序显示联系人信息。{{{}}}为要导入的联系人文件选择正确的类型即可确定字段的顺序，这样信息才会正确地显示在您的地址簿中。</span>{{{</p>
+<ol start="4" type="1">
+	<li class="p"><p>}}}单击<span style="font-weight: bold;"><b>导入</b></span>。{{{}}}在<span style="font-weight: bold;"><b>选择地址簿</b></span>对话框中，既可以选择一个已有的地址簿以向其中添加联系人，也可以创建一个新的地址簿以向其中导入文件。{{{</p></li>
+	<li class="p"><p>}}}单击<span style="font-weight: bold;"><b>确定</b></span>。{{{联系人文件的内容即被导入。</p></li>
+</ol>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

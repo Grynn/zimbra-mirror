@@ -1,35 +1,14 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>打印会话</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { margin-left:40px; }
-p.whs3 { margin-left:0px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs3 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -40,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("管理邮件 \n打印会话");
@@ -69,10 +64,8 @@ addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -88,28 +81,33 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>打印会话</h1>
 <p>要将会话中的所有邮件送往打印机：</p>
-<ol type="1" class="whs1">
-	<li class=p><p>在“对话”视图中，右键单击要打印的会话。</p></li>
-	<li class=p><p>在弹出的列表中，单击<span style="font-weight: bold;"><B>打印</B></span>。   </p></li>
+<ol type="1">
+	<li class="p"><p>在&ldquo;会话&rdquo;视图中，右键单击要打印的会话。</p></li>
+	<li class="p"><p>在弹出的列表中，单击<span style="font-weight: bold;"><b>打印</b></span>。</p></li>
 </ol>
-<p class="whs2">此时会出现另一个窗口，在一个滚动框中显示会话中的所有邮件，顶部显示已经打印的邮件总数。 </p>
-<ol start="3" type="1" class="whs1">
-	<li class=p><p class="whs3">在打印对话框中，选择打印机并单击<span style="font-weight: bold;"><B>打印</B></span><span>，</span>从而将邮件送往选中的打印机。</p></li>
-	<li class=p><p>关闭邮件窗口。</p></li>
+<p style="margin-left: 40px;">}}}此时会出现另一个窗口，在一个滚动框中显示会话中的所有邮件。{{{</p>
+<ol start="3" type="1">
+	<li class="p"><p style="margin-left: 0px;">}}}<span>在&ldquo;打印&rdquo;对话框中，选择打印机并单击</span><span style="font-weight: bold;"><b>确定</b></span><span>，从而将会话送往选定的打印机。</span>{{{</p></li>
+	<li class="p"><p>关闭邮件窗口。</p></li>
 </ol>
-<script type="text/javascript" language="javascript1.2">
+<p>&nbsp;</p>
+<p class="note">备注：}}}打印的邮件中使用的字体大小可以在<span style="font-weight: bold;"><b>首选项&gt;常规</b></span>页面中配置。{{{}}}默认大小为 12 磅。{{{ </p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

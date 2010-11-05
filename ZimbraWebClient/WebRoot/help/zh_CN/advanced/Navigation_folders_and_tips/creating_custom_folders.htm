@@ -1,23 +1,14 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>创建自定义文件夹</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-img_whs2 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("使用标记和文件夹整理邮件\n创建自定义文件夹");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,30 +81,32 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>创建自定义文件夹</h1>
-<p>除了“收件箱”、“发件箱”和“已删除邮件”这样的系统预定义的文件夹外，您还可创建自定义的文件夹。自定义文件夹可在其他文件夹（包括系统文件夹）下创建。 </p>
-<p>不能在同一父文件夹下创建名字相同的两个文件夹。比如：您不能在“收件箱”下创建两个名称为 Shopping 的文件夹，但是可以在“收件箱”下创建一个名称为 Shopping 的文件夹，而在“发件箱”下创建另一个同样名称的文件夹。</p>
+<p>}}}除预定义的系统文件夹（如&ldquo;收件箱&rdquo;、&ldquo;已发送邮件&rdquo;和&ldquo;已删除邮件&rdquo;）外，您还可以创建自定义文件夹。{{{自定义文件夹可在其他文件夹（包括系统文件夹）下创建。</p>
+<p>不能在同一父文件夹下创建名字相同的两个文件夹。}}}例如，在您的&ldquo;收件箱&rdquo;文件夹下不能同时存在两个名为&ldquo;购物&rdquo;的文件夹，而只能存在一个名为&ldquo;购物&rdquo;的文件夹，在&ldquo;已发送邮件&rdquo;文件夹下可以存在另一个具有相同名称的文件夹。{{{</p>
 <h6>若需创建一个新文件夹：</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>在工具条中，单击“新建”按钮上的箭头 ( <span style="font-weight: bold;"><B><img src="../newwitharrow.gif" x-maintain-ratio="TRUE" border="0" class="img_whs2"> </B></span>)，然后选择<span style="font-weight: bold;"><B>文件夹</B></span>，或者在文件夹列表的窗格处右键单击<span 
- style="font-weight: bold;"><B>新文件夹</B></span>。&nbsp; <span style="font-weight: bold;"><B>创建新文件夹</B></span>对话框随即打开。</p></li>
-	<li class=p><p>键入文件夹名称。 </p></li>
-	<li class=p><p>选择新文件夹的位置。单击<span style="font-weight: bold;"><B>文件夹</B></span>将该文件夹置于顶层，或从现存文件夹列表中选择一个位置。新文件夹即被放置在所选的文件夹中。</p></li>
-	<li class=p><p>单击<span style="font-weight: bold;"><B>确定</B></span>。</p></li>
+<ol type="1">
+	<li class="p"><p>}}}在<span style="font-weight: bold;"><b>文件夹</b></span>列表的&ldquo;概况&rdquo;窗格中单击鼠标右键，然后选择<span style="font-weight: bold;"><b>新建文件夹</b></span>。{{{}}}<span style="font-weight: bold;"><b>创建新文件夹</b></span>对话框随即打开。{{{</p></li>
+	<li class="p"><p>键入文件夹名称。</p></li>
+	<li class="p"><p>选择新文件夹的位置。单击<span  	 style="font-weight: bold;"><b>文件夹</b></span>将该文件夹置于顶层，或从现存文件夹列表中选择一个位置。新文件夹即被放置在所选的文件夹中。</p></li>
+	<li class="p"><p>}}}单击<span style="font-weight: bold;"><b>确定</b></span>。{{{</p></li>
 </ol>
-<p>若需创建与 RSS 或 ATOM 源相关的文件夹，请勾选<span style="font-weight: bold;"><B>订阅 RSS/ATOM 源</B></span><span>，然后</span>输入 URL。该源将自动发送到 Zimbra 邮箱的文件夹中。</p>
+<p>}}}若需创建与 RSS 或 ATOM 源相关的文件夹，请勾选<span style="font-weight: bold;"><b>订阅 RSS/ATOM 源</b></span><span>，然后</span>输入一个 URL。{{{</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

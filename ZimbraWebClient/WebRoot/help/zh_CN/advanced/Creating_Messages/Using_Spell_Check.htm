@@ -1,23 +1,14 @@
-﻿<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>使用拼写检查</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("写信\n使用拼写检查");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,30 +81,36 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>使用拼写检查</h1>
-<ol type="1" class="whs1">
-	<li class=p><p>若需检查邮件的拼写，可单击工具条上的<span style="font-weight: bold;"><B>拼写检查</B></span><span></span>。</p></li>
-</ol>
-<p class="whs2">拼写检查器不知道的词将会高亮显示。</p>
-<ol start="2" type="1" class="whs1">
-	<li class=p><p>单击高亮显示的词。此时会弹出一个有改错建议的列表。</p></li>
-	<li class=p><p>从中选择正确的词。该词即被高亮显示为其他颜色。</p></li>
-	<li class=p><p>若接受所做的改变并关闭拼写检查器，单击<span style="font-weight: bold;"><B>继续编辑</B></span>。</p></li>
+<p>}}}在发出电子邮件之前，可以对电子邮件内容的拼写进行检查。{{{}}}单击写信工具栏上的<span style="font-weight: bold;"><b>拼写检查</b></span>{{{</p>
+<p>}}}如果希望在发送任何邮件之前自动检查其内容的拼写，可以在<span>首选项&gt;写信</span>页面上启用<span style="font-weight: bold;"><b>发送邮件前强行进行拼写检查</b></span>。{{{</p>
+<p>&nbsp;<span style="margin-left: 40px;">拼写检查器不知道的词将会高亮显示。</span></p>
+<ol type="1">
+	<li class="p"><p>}}}单击<span style="font-weight: bold;"><b>拼写检查</b></span>。{{{}}}拼写不正确的词将高亮显示。{{{</p></li>
+	<li class="p"><p>}}}单击高亮显示的词。{{{此时会弹出一个有改错建议的列表。</p></li>
+	<li class="p"><p>从中选择正确的词。该词即被高亮显示为其他颜色。</p></li>
+	<li class="p"><p>若接受所做的改变并关闭拼写检查器，单击<span style="font-weight: bold;"><b>继续编辑</b></span>。</p></li>
 </ol>
 <p>&nbsp;</p>
-<ul><li class=p-note><p class=note>在关闭拼写检查器之前，您可把已经纠正的词还原为原来的拼写。&nbsp;单击高亮显示的词，并从弹出的列表顶部选择原来的拼写。</p></li>
-</ul>
-<script type="text/javascript" language="javascript1.2">
+<p class="note">}}}<span style="font-weight: bold;"><b>备注</b></span>：{{{在关闭拼写检查器之前，您可把已经纠正的词还原为原来的拼写。}}}单击高亮显示的词，并从弹出的列表顶部选择原来的拼写。{{{</p>
+<h3>}}}向拼写检查词典中添加词{{{</h3>
+<p>}}}可以向拼写检查词典中添加词。{{{</p>
+<ol type="1">
+	<li class="p"><p>}}}单击<span style="font-weight: bold;"><b>拼写检查</b></span>。{{{}}}拼写不正确的词将高亮显示。{{{</p></li>
+	<li class="p"><p>}}}单击高亮显示的词。{{{此时会弹出一个有改错建议的列表。</p></li>
+	<li class="p"><p>}}}改正该词并将其高亮显示后，单击该词，然后单击<span style="font-weight: bold;"><b>添加</b></span>。{{{}}}该词即被添加到词典中。{{{</p></li>
+</ol>
+<p>}}}将词添加到词典中后，就不能从词典中将其删除了。{{{</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
