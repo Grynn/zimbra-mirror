@@ -1,24 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Rechercher des mails</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-img_whs3 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Recherche d’objets\nRechercher des mails");
@@ -58,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -77,39 +81,42 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>Rechercher des mails</h1>
 <p>Vous pouvez rechercher des mails, des conversations ou des contacts</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>En utilisant la <span style="font-weight: bold;"><B>zone de Recherche de texte</B></span> pour saisir votre demande, comme indiqué dans les <a HREF="Quick_search.htm">paramètres de recherche rapide</a>.</p></li>
-	<li class=p><p>En utilisant la recherche<span style="font-weight: bold;"><B>Avancée</B></span><span style="font-weight: bold;"> <B></B></span>pour définir des critères de recherche plus détaillés.</p></li>
+<ul type="disc">
+	<li class="p"><p>En utilisant la <span style="font-weight: bold;"><b>zone de Recherche de texte</b></span> pour saisir votre demande, comme indiqu&eacute; dans les <a href="Quick_search.htm">param&egrave;tres de recherche rapide</a>.</p></li>
+	<li class="p"><p>}}}En utilisant la recherche<span style="font-weight: bold;"><b> Avanc&eacute;e </b></span>pour d&eacute;finir des crit&egrave;res de recherche plus d&eacute;taill&eacute;s.{{{</p></li>
 </ul>
-<h6>Pour rechercher des mails en utilisant la zone de texte Rechercher :</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Saisissez vos critères de recherche dans la case <span style="font-weight: bold;"><B>Rechercher</B></span> comme par exemple <span style="font-family: 'Lucida Console', monospace; color: #800080;"><font color=purple >has:attachment</font></span>   ou peut-être le nom de l’expéditeur.</p></li>
-	<li class=p><p>Cliquez sur la flèche Rechercher, <img src="../searchbutton75.png" x-maintain-ratio="TRUE" border="0" class="img_whs3"> puis sélectionnez le type de recherche dans la liste.</p></li>
-	<li class=p><p>Cliquez sur <span style="font-weight: bold;"><B>Rechercher</B></span>.</p></li>
+<h6>Pour rechercher des mails en utilisant la zone de texte Rechercher&nbsp;:</h6>
+<ol type="1">
+	<li class="p"><p>Saisissez vos crit&egrave;res de recherche dans la case <span style="font-weight: bold;"><b>Rechercher</b></span> comme par exemple <span style="font-family: 'Lucida Console', monospace;  						 color: #800080; font-weight: bold;"><font color="purple" ><b>has:attachment</b></font></span>   ou peut-&ecirc;tre le nom de l&rsquo;exp&eacute;diteur.</p></li>
+	<li class="p"><p>}}}Cliquez sur la fl&egrave;che Rechercher, <img src="../searchbutton75.png" alt="searchbutton75.png" style="border: none;" width="92" height="18" border="0" />puis s&eacute;lectionnez le type de recherche dans la liste.{{{</p></li>
+	<li class="p"><p>Cliquez sur <span style="font-weight: bold;"><b>Rechercher</b></span>.</p></li>
 </ol>
-<h6>Pour rechercher un mail en utilisant des critères détaillés :</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Cliquez sur <span style="font-weight: bold;"><B>Avancé </B></span>pour ouvrir la zone de recherche avancée.</p></li>
-	<li class=p><p>Cliquez sur les icônes de la barre d’outils pour ouvrir le panneau contenant les types de critères que vous voulez utiliser pour votre recherche.</p></li>
-	<li class=p><p>Saisissez les informations. Si vous avez activé les <a href="../Userspecific/Setting_your_user_preferences.htm">Préférences</a>   pour <span style="font-weight: bold;"><B>Toujours montrer la chaîne de recherche</B></span>,   la zone de Recherche s'actualise lorsque vous saisissez des caractères ou effectuez des sélections.</p></li>
-	<li class=p><p>Dès que vous saisissez un critère dans un panneau de recherche, ou dès lors que vous avez effectué un changement de sélection dans un autre panneau de recherche, comme par exemple modifier une case d'option ou une option de recherche du menu déroulant, la recherche s'exécute.</p></li>
-	<li class=p><p>Les éléments correspondant aux critères de la recherche s’affichent dans la partie inférieure droite. Si la fonction de conversation est activée, les conversations contenant des mails qui correspondent aux critères de la recherche s’affichent également.</p></li>
-	<li class=p><p>Pour actualiser la zone des résultats de la recherche, cliquez sur <span style="font-weight: bold;"><B>Rechercher</B></span>.</p></li>
+<h6>Pour rechercher un mail en utilisant des crit&egrave;res d&eacute;taill&eacute;s&nbsp;:</h6>
+<ol type="1">
+	<li class="p"><p>Cliquez sur <span style="font-weight: bold;"><b>Avanc&eacute; </b></span>pour ouvrir la zone de recherche avanc&eacute;e.</p></li>
+	<li class="p"><p>Cliquez sur les ic&ocirc;nes de la barre d&rsquo;outils pour ouvrir le panneau contenant les types de crit&egrave;res que vous voulez utiliser pour votre recherche.</p></li>
+	<li class="p"><p>}}}Saisissez les crit&egrave;res de recherche.{{{</p></li>
 </ol>
+<p style="margin-left: 40px;">D&egrave;s que vous saisissez un crit&egrave;re dans un panneau de recherche, ou d&egrave;s lors que vous avez effectu&eacute; un changement de s&eacute;lection dans un autre panneau de recherche, comme par exemple modifier une case d'option ou une option de recherche du menu d&eacute;roulant, la recherche s'ex&eacute;cute.</p>
+<p style="margin-left: 40px;">Les &eacute;l&eacute;ments correspondant aux crit&egrave;res de la recherche s&rsquo;affichent dans la partie inf&eacute;rieure droite. Si la fonction de conversation est activ&eacute;e, les conversations contenant des mails qui correspondent aux crit&egrave;res de la recherche s&rsquo;affichent &eacute;galement.</p>
+<p class="note" style="margin-left: 40px;">}}}<span style="font-weight: bold;"><b>Remarque</b></span>&nbsp;:{{{ Pour actualiser la zone des r&eacute;sultats de la recherche, cliquez sur <span style="font-weight: bold;"><b>Rechercher</b></span>.</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

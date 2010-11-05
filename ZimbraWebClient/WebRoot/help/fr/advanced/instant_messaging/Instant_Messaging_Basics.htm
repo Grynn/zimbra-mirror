@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Fonctions élémentaires de messagerie instantanée</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Fonctions &eacute;l&eacute;mentaires de messagerie instantan&eacute;e</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
@@ -51,10 +63,8 @@ if (window.gbWhTopic)
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -70,31 +80,27 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Fonctions de base de la messagerie instantanée version bêta (brouillon)</h1>
-<p>La fonction de messagerie instantanée (IM) vous permet d’échanger des messages en temps réel avec vos amis. Lorsque vous rédigez et envoyez un message, le texte s'affiche immédiatement dans la boîte de réception du destinataire.</p>
-<p>Vous pouvez ajouter des contacts à vos listes d'amis. Lorsque vous ajoutez un contact à votre liste, celui-ci doit accepter d'y figurer avant que vous puissiez lui envoyer des messages instantanés.</p>
-<p>Une fois que votre demande de figurer dans la liste d’amis a été acceptée par votre contact, vous pouvez voir son statut de connexion (connecté/déconnecté) dans le panneau d'aperçu MI. Si la personne avec qui vous voulez dialoguer est connectée, vous pouvez lui envoyer un message et démarrer une conversation.   &nbsp; Si votre ami n’est pas connecté, vous pouvez quand même lui envoyer un message. Il le recevra quand il se connectera.</p>
-<h3>Voir lorsque vos amis sont connectés et leur permettre de voir votre statut de connexion</h3>
-<p>Vos amis qui sont connectés apparaissent en gras dans votre liste MI de la fenêtre de discussion</p>
-<ol><li class=kadov-p>Échanger des mails </li>
-	<li class=kadov-p>Ajouter des couleurs et des graphiques à vos conversations, et modifier l’apparence de l’application.</li>
-</ol>
-&nbsp; 
-<h3>Affichage de votre état de connexion </h3>
-<p>De la même manière que vous pouvez voir l'état d’un <span class=def id=contact>contact</span>   sur votre <span class=def id=messlist>Liste Messenger</span>, d’autres utilisateurs peuvent voir le vôtre sur leurs listes Messenger. Après vous être connecté à Yahoo! Messenger,  votre statut vous fait apparaître comme Connecté, mais il est possible que vous ne soyez pas toujours disponible pour dialoguer.   Vous pouvez être absent ou au téléphone. Permettre à vos contacts de connaître votre disponibilité actuelle en configurant votre état.</p>
-<p>Comment sélectionner un état</p>
-<p>Comment créer un état personnalisé</p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<h1>}}}Fonctions &eacute;l&eacute;mentaires de messagerie instantan&eacute;e (b&ecirc;ta){{{</h1>
+<p>La fonction de messagerie instantan&eacute;e (IM) vous permet d&rsquo;&eacute;changer des messages en temps r&eacute;el avec vos amis. }}}Lorsque vous tapez un message et que vous l'envoyez, le texte s'affiche imm&eacute;diatement dans la bo&icirc;te aux lettres du destinataire.{{{</p>
+<p>}}}Vous pouvez utiliser la messagerie instantan&eacute;e dans @ClientNameShort@ pour&nbsp;:{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}<a href="Accessing_Instant_Messaging.htm">Cr&eacute;er une liste de contacts</a>, &eacute;galement appel&eacute;s Amis, avec lesquels communiquer en temps r&eacute;el{{{</p></li>
+	<li class="p"><p>}}}Interagir avec vos amis en <a href="Starting_an_IM_chat.htm">cr&eacute;ant des discussions de discussion instantan&eacute;e individuelles</a>.{{{</p></li>
+	<li class="p"><p>}}}<a href="Setting_IM_preferences.htm">Enregistrer vos</a> transcriptions de discussion{{{</p></li>
+	<li class="p"><p><a href="IM_Chat_Options_to_customize_your_chat_experience.htm">}}}Int&eacute;grer les messages de messagerie instantan&eacute;e aux mails{{{</a></p></li>
+	<li class="p"><p>}}}D&eacute;finir vos <a href="Setting_IM_preferences.htm">pr&eacute;f&eacute;rences de messagerie instantan&eacute;e souhait&eacute;es</a>{{{</p></li>
+	<li class="p"><p>}}}<a href="Log_into_other_IM_clients.htm">Se connecter &agrave; des clients de messagerie instantan&eacute;e externes</a> tels que Yahoo!{{{ }}}Messenger{{{</p></li>
+</ul>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

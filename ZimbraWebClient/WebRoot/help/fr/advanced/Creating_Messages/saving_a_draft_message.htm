@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Enregistrement d’un brouillon</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { x-condition:Advanced_WC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Enregistrement d&rsquo;un brouillon</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Écrire un mail\nEnregistrement de mails en tant que brouillons");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,31 +81,37 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>Enregistrement de mails en tant que brouillons</h1>
-<p>Vous pouvez enregistrer votre message sous forme de brouillon à terminer et l'envoyer ultérieurement. &nbsp;Les messages sont enregistrés dans votre dossier Brouillons jusqu’à ce que vous décidiez de les envoyer ou les supprimer de ce dossier. </p>
-<h6>Pour créer un brouillon à modifier ultérieurement :</h6>
-<ul type="disc" class="whs1">
-	<li style=" x-condition: Advanced_WC; " class=p><p class="whs2">Rédigez votre mail comme décrit dans la section <a HREF="Creating_a_new_mail_message.htm" 
- style="x-condition: Advanced_WC;">Création d’un mail</a>.</p></li>
-	<li class=p><p>Cliquez sur <span style="font-weight: bold;"><B>Enregistrer le brouillon</B></span>.</p></li>
-	<li class=p><p>Le brouillon du mail est enregistré dans votre dossier <span style="font-weight: bold;"><B>Brouillons</B></span>.</p></li>
+<p>Vous pouvez enregistrer votre message sous forme de brouillon &agrave; terminer et l'envoyer ult&eacute;rieurement. }}}&nbsp;Les messages sont enregistr&eacute;s dans votre dossier Brouillons jusqu&rsquo;&agrave; ce que vous d&eacute;cidiez de les envoyer ou les supprimer de ce dossier.{{{</p>
+<p>}}}Vous pouvez activer une pr&eacute;f&eacute;rence pour enregistrer automatiquement votre mail en tant que brouillon pendant que vous le r&eacute;digez.{{{ }}}Vous pouvez &eacute;galement cliquer sur <span style="font-weight: bold;"><b>Enregistrer le brouillon</b></span> en cours de cr&eacute;ation pour enregistrer le mail comme brouillon.{{{</p>
+<h6>}}}Configuration des Pr&eacute;f&eacute;rences pour enregistrer automatiquement les brouillons{{{</h6>
+<p>}}}Allez dans l'onglet Pr&eacute;f&eacute;rences&gt;de messagerie, puis activez la fonction <span style="font-weight: bold;"><b>Enregistrer automatiquement le brouillon des mails en cours de cr&eacute;ation</b></span>.{{{ Les mails que vous r&eacute;digez sont automatiquement enregistr&eacute;s en tant que brouillons apr&egrave;s quelques minutes. </p>
+<h6>}}}Pour enregistrer manuellement un mail&nbsp;:{{{</h6>
+<ol type="1">
+	<li class="p"><p>}}}R&eacute;digez votre mail comme d&eacute;crit dans la section <a  	 href="Creating_a_new_mail_message.htm">Cr&eacute;ation d&rsquo;un mail</a> .{{{</p></li> 
+	<li class="p"><p>Cliquez sur <span style="font-weight: bold;"><b>Enregistrer le brouillon</b></span>.</p></li>
+</ol>
+<p style="margin-left: 40px;">Le brouillon du mail est enregistr&eacute; dans votre dossier <span  	 style="font-weight: bold;"><b>Brouillons</b></span>.</p>
+<p>&nbsp;</p>
+<h6>Pour r&eacute;cup&eacute;rer un brouillon</h6>
+<ul type="disc">
+	<li class="p"><p>}}}Ouvrez le dossier <span style="font-weight: bold;"><b>Brouillons</b></span>, cliquez sur le message, ou s&eacute;lectionnez sur le message, puis cliquez sur <span  	 style="font-weight: bold;"><b>Modifier</b></span> dans la barre d'outils.{{{</p></li>
 </ul>
-<h6>Pour récupérer un brouillon</h6>
-<ul type="disc" class="whs1">
-	<li class=p><p>Ouvrez le dossier <span style="font-weight: bold;"><B>Brouillons</B></span> , puis cliquez sur le message.</p></li>
-	<li class=p><p>Vous pouvez rédiger et envoyer le message terminé de la même manière qu’un mail ordinaire.   Après son envoi, le message est supprimé du dossier Brouillons.</p></li>
-</ul>
-<script type="text/javascript" language="javascript1.2">
+<p>Vous pouvez r&eacute;diger et envoyer le message termin&eacute; de la m&ecirc;me mani&egrave;re qu&rsquo;un mail ordinaire. Apr&egrave;s son envoi, le message est supprim&eacute; du dossier Brouillons.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

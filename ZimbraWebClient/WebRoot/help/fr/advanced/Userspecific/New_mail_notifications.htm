@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Notification de nouveaux mails</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Notifications de nouveau mail</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Configuration de vos préférences\nNotifications de nouveau mail");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,29 +81,33 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Notification de nouveaux mails</h1>
-<p>Vous pouvez configurer vos options de messagerie pour être averti à une adresse différente de l'arrivée de mails sur votre messagerie Zimbra.  &nbsp;Cette fonction peut s’avérer utile si vous ne recevez pas beaucoup de mails sur votre compte Zimbra. Mais lorsque vous en recevez, elle exige une réponse rapide.</p>
-<h6>Pour configurer une notification :</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Activez l’onglet <span style="font-weight: bold;"><B>Préférences   </B></span>.</p></li>
-	<li class=p><p>Activez l’onglet <span style="font-weight: bold;"><B>Mail   </B></span>.</p></li>
-	<li class=p><p>Dans la section Réception des mails, cochez<span style="font-weight: bold;"><B>   Envoyer un mail de notification à,</B></span> puis saisissez l’adresse mail.</p></li>
-	<li class=p><p>Cliquez sur <span style="font-weight: bold;"><B>Enregistrer</B></span>.   La fonction de notification est immédiatement activée.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>Notification par mail vers une autre adresse</h1>
+
+<p>}}}Vous pouvez configurer vos options de mail pour &ecirc;tre inform&eacute; &agrave; une autre adresse mail quand vous recevez un mail dans votre bo&icirc;te aux lettres @ClientNameShort@.{{{ }}}Cette fonction peut s&rsquo;av&eacute;rer utile si vous ne recevez pas beaucoup de mails sur votre compte @CompanyName@. Mais lorsque vous en recevez, elle exige une r&eacute;ponse rapide.{{{</p>
+<h6>Pour configurer une notification&nbsp;:</h6>
+<ol type="1">
+	<li class="p"><p>}}}Activez l&rsquo;onglet Pr&eacute;f&eacute;rences.{{{</p></li>
+	<li class="p"><p>}}}Cliquez sur <span style="font-weight: bold;"><b>Mail</b></span>.{{{</p></li>
+	<li class="p"><p>}}}Dans la section R&eacute;ception des mails, cochez <span style="font-weight: bold;"><b>Envoyer un mail de notification &agrave;</b></span>, puis saisissez l&rsquo;adresse mail.{{{</p></li>
+	<li class="p"><p>Cliquez sur <span style="font-weight: bold;"><b>Enregistrer</b></span>. La fonction de notification est imm&eacute;diatement activ&eacute;e.</p></li>
 </ol>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

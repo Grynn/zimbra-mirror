@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Utilisation du navigateur avec Zimbra</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-img_whs2 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Navigation dans votre boîte aux lettres\nUtilisation des navigateurs");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,27 +81,30 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Utilisation des navigateurs </h1>
-<p>Le client Web de Zimbra est conçu pour fonctionner dans un navigateur Web.   &nbsp;Microsoft Internet Explorer, Mozilla 
- Firefox, et Macintosh Safari sont parmi les navigateurs les plus populaires. Tous les navigateurs ne sont pas supportés, par conséquent contactez votre administrateur si vous avez des questions.</p>
-<p>Instructions générales lors de l’utilisation du client Web de Zimbra dans un navigateur :</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Le bouton <span style="font-weight: bold;"><B>Retour</B></span>   du navigateur vous permet de revenir à la page précédente que vous consultez. Vous pouvez également utiliser le bouton Suivant.</p></li>
-	<li class=p><p>Pour vous déconnecter, cliquez sur <img src="../logoffbutton.png" x-maintain-ratio="TRUE" border="0" class="img_whs2">. Si vous consultez un site différent sans vous être déconnecté, il est possible que votre session reste active un certain temps.   Si vous utilisez un ordinateur partagé, d’autres utilisateurs peuvent accéder à votre compte tant que la session est active.</p></li>
-	<li class=p><p>N’utilisez pas le bouton <span style="font-weight: bold;"><B>Recharger</B></span>   (Actualiser) du navigateur. Si vous l'utilisez, le client sera téléchargé et votre session redémarrée, ce qui n'est probablement pas ce que vous aviez l’intention de faire.</p></li>
+//]]></script>
+<h1>Utilisation des navigateurs</h1>
+<p>}}}Le @ClientNameLong@ est con&ccedil;u pour fonctionner dans un navigateur Web.{{{ }}}Microsoft Internet Explorer, Mozilla Firefox et Macintosh Safari sont parmi les navigateurs les plus populaires.{{{ Tous les navigateurs ne sont pas support&eacute;s, par cons&eacute;quent contactez votre administrateur si vous avez des questions.</p>
+<p>}}}Instructions g&eacute;n&eacute;rales lors de l&rsquo;utilisation du @ClientNameLong@ dans un navigateur&nbsp;:{{{</p>
+<ul type="disc">
+<li class="p">
+<p>Le bouton <span style="font-weight: bold;"><b>Retour</b></span>   du navigateur vous permet de revenir &agrave; la page pr&eacute;c&eacute;dente que vous consultez. Vous pouvez &eacute;galement utiliser le bouton Suivant.</p>
+</li>
+<li class="p">
+<p>}}}Pour vous d&eacute;connecter, cliquez sur <img src="../logoffbutton.png" style="border: none;" alt="logoffbutton.png" width="69" height="19" border="0" />.{{{ Si vous consultez un site diff&eacute;rent sans vous &ecirc;tre d&eacute;connect&eacute;, il est possible que votre session reste active un certain temps. Si vous utilisez un ordinateur partag&eacute;, d&rsquo;autres utilisateurs peuvent acc&eacute;der &agrave; votre compte tant que la session est active.</p>
+</li>
+<li class="p">
+<p>}}}N&rsquo;utilisez pas le bouton Recharger (Actualiser) du navigateur.{{{ Si vous l'utilisez, le client sera t&eacute;l&eacute;charg&eacute; et votre session red&eacute;marr&eacute;e, ce qui n'est probablement pas ce que vous aviez l&rsquo;intention de faire.</p>
+</li>
 </ul>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Conditions et actions de filtre supportées</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Conditions et actions de filtre support&eacute;es</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Création de filtres \nConditions et actions de filtre supportées");
+	addTocInfo("}}}Utiliser des filtres pour trier les mails{{{\nConditions et actions de filtre supportées");
 addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 
 	}
@@ -56,14 +64,12 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -75,59 +81,66 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Conditions et actions de filtre supportées</h1>
-<p>Les règles de filtre ne sont pas sensibles aux majuscules, ce qui signifie que les règles ignorent les lettres en majuscules.</p>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>Conditions et actions de filtre support&eacute;es</h1>
+<p>Les r&egrave;gles de filtre ne sont pas sensibles aux majuscules, ce qui signifie que les r&egrave;gles ignorent les lettres en majuscules.</p>
 <h3>Conditions</h3>
-<p>Les champs de comparaison incluent les éléments suivants :</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>De.</B></span> À utiliser pour spécifier un nom dans l'en-tête De d'un mail. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>À.</B></span> Identique au champ De, mais la recherche des noms spécifiés s'effectue dans l’en-tête À .</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Cc.</B></span> Identique au champ De, mais s’affiche dans le champ Cc .</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Objet.</B></span> S’affiche dans l’en-tête Objet du mail.</p></li>
+<p>Les champs de comparaison incluent les &eacute;l&eacute;ments suivants :</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>De.</b></span> &Agrave; utiliser pour sp&eacute;cifier un nom dans l'en-t&ecirc;te De d'un mail.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>&Agrave;.</b></span> Identique au champ De, mais la recherche des noms sp&eacute;cifi&eacute;s s'effectue dans l&rsquo;en-t&ecirc;te &Agrave; To:.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>}}}Cc.{{{</b></span> Identique au champ De, mais s&rsquo;affiche dans le champ Cc To:.</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>&Agrave; ou Cc</b></span>.{{{ }}}Identique au champ De, mais s&rsquo;affiche dans le champ &Agrave; ou Cc.{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Objet.</b></span> S&rsquo;affiche dans l&rsquo;en-t&ecirc;te Objet du mail.</p></li>
 </ul>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>En-tête nommé.</B></span>  Lorsque vous sélectionnez cette option, un champ d’entrée de texte supplémentaire s’affiche devant l’opérateur de comparaison (la section &quot;contient&quot;). Cette option vous permet d'indiquer l’en-tête mail de votre choix. Vous pouvez non seulement spécifier les champs standard À,   ou De, mais également les champs de Date, Répondre à, et autre champs personnalisés qui peuvent être inclus dans l’en-tête du message. Vous pouvez utiliser cette option pour filtrer les mails qui ont des en-têtes &quot;manquants&quot;,   c’est-à-dire des en-têtes auxquelles il manque certaines informations qui sont normalement considérées comme classiques pour un mail. Parfois le spam (généré automatiquement), omet des informations telles que les champs Expéditeur et Répondre à. Utilisez la deuxième zone de texte (le champ situé immédiatement à droite de l'opérateur de comparaison) pour spécifier l'en-tête à tester.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Taille.</B></span> Utilisez cette option pour sélectionner les mails qui ont une taille plus importante ou plus faible que celle spécifiée.   La taille d'un mail comprend celle des pièces jointes. Vous pouvez l’utiliser pour supprimer les mails trop volumineux. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Date.</B></span> Utilisez cette option pour spécifier les mails envoyés avant ou après une date précise.   </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Contenu.</B></span> Les options de contenu sont Contient/Ne contient pas, et vous permettent de spécifier des mots correspondants dans le corps du mail. Vous ne pouvez pas effectuer d'opération de filtrage par mots dans les pièces jointes.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Pièce jointe.</B></span>   Vous pouvez filtrer vos mails selon qu’ils contiennent ou pas des pièces jointes.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Adresse dans.</B></span>   Vérifie la présence d’une adresse dans vos contacts. Le champ suivant vous sert à indiquer le carnet d'adresses à rechercher. </p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>En-t&ecirc;te nomm&eacute;.</b></span>  Lorsque vous s&eacute;lectionnez cette option, un champ d&rsquo;entr&eacute;e de texte suppl&eacute;mentaire s&rsquo;affiche devant l&rsquo;op&eacute;rateur de comparaison (la section &quot;contient&quot;). Cette option vous permet d'indiquer l&rsquo;en-t&ecirc;te mail de votre choix. Vous pouvez non seulement sp&eacute;cifier les champs standard &Agrave;,   ou De, mais &eacute;galement les champs de Date, R&eacute;pondre &agrave;, et autre champs personnalis&eacute;s qui peuvent &ecirc;tre inclus dans l&rsquo;en-t&ecirc;te du message. }}}Vous pouvez utiliser cette option pour filtrer les mails qui ont des en-t&ecirc;tes &quot;manquants&quot;, c&rsquo;est-&agrave;-dire des en-t&ecirc;tes auxquels il manque certaines informations qui sont normalement consid&eacute;r&eacute;es comme classiques pour un mail.{{{ Parfois le spam (g&eacute;n&eacute;r&eacute; automatiquement), omet des informations telles que les champs Exp&eacute;diteur et R&eacute;pondre &agrave;. Utilisez la deuxi&egrave;me zone de texte (le champ situ&eacute; imm&eacute;diatement &agrave; droite de l'op&eacute;rateur de comparaison) pour sp&eacute;cifier l'en-t&ecirc;te &agrave; tester.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Taille.</b></span> Utilisez cette option pour s&eacute;lectionner les mails qui ont une taille plus importante ou plus faible que celle sp&eacute;cifi&eacute;e. La taille d'un mail comprend celle des pi&egrave;ces jointes. Vous pouvez l&rsquo;utiliser pour supprimer les mails trop volumineux. </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Date.</b></span> Utilisez cette option pour sp&eacute;cifier les mails envoy&eacute;s avant ou apr&egrave;s une date pr&eacute;cise.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Contenu.</b></span> Les options de contenu sont Contient/Ne contient pas, et vous permettent de sp&eacute;cifier des mots correspondants dans le corps du mail. Vous ne pouvez pas effectuer d'op&eacute;ration de filtrage par mots dans les pi&egrave;ces jointes.</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Est un accus&eacute; de lecture.</b></span><span>Les accus&eacute;s de lecture peuvent &ecirc;tre filtr&eacute;s.</span>{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Pi&egrave;ce jointe.</b></span>   Vous pouvez filtrer vos mails selon qu&rsquo;ils contiennent ou pas des pi&egrave;ces jointes.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Adresse dans.</b></span>   V&eacute;rifie la pr&eacute;sence d&rsquo;une adresse dans vos contacts. Le champ suivant vous sert &agrave; indiquer le carnet d'adresses &agrave; rechercher.</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Invitation dans le calendrier</b></span>.{{{ }}}Vous pouvez filtrer les mails relatifs au calendrier.{{{</p></li>
 </ul>
-<p>Les opérateurs de comparaison incluent ce qui suit :</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Contient/ne contient pas</B></span>.   Signifie que le champ Objet doit contenir l’élément spécifié.   &nbsp;Par exemple, la recherche de <span style="font-weight: bold;"><B>Objet contient Banane</B></span> correspondrait à &quot;Je vais manger des bananes&quot;.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Correspond au modèle/Ne correspond pas au modèle</B></span>. Le caractère de substitution * est utilisé dans le champ de comparaison du filtre de mail pour représenter un ou plusieurs caractères du filtre.  Par exemple, en spécifiant les correspondances d’objet &quot;banane*&quot;   les correspondances seraient &quot;bananes&quot; ou &quot;casserole de feuilles de bananes&quot; mais pas &quot;ma casserole de feuilles de bananes.&quot;</p></li>
-	</ul>
+<p>Les op&eacute;rateurs de comparaison incluent ce qui suit&nbsp;:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Correspond exactement/Ne correspond pas exactement</b></span>. Recherche une correspondance exacte. }}}Par exemple, en sp&eacute;cifiant les correspondances d'<span style="font-weight: bold;"><b>Objet</b></span> <span style="font-weight: bold;"><b>-</b></span> <span style="font-weight: bold;"><b>Banane</b></span>, les correspondances seraient &quot;Banane&quot; et non &quot;Bananes&quot; ou &quot;casserole de feuilles de bananes&quot;.{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Contient/ne contient pas</b></span>. }}}Signifie que le champ Objet doit contenir l&rsquo;&eacute;l&eacute;ment sp&eacute;cifi&eacute;.{{{ }}}&nbsp;Par exemple, la recherche de <span style="font-weight: bold;"><b>Objet contient Banane</b></span> correspondrait &agrave; &quot;Je vais manger des bananes&quot;.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Correspond/ne correspond pas aux caract&egrave;res de substitution</b></span>.{{{ Le caract&egrave;re de substitution * est utilis&eacute; dans le champ de comparaison du filtre de mail pour repr&eacute;senter un ou plusieurs caract&egrave;res du filtre.  Par exemple, en sp&eacute;cifiant les correspondances d&rsquo;objet &quot;banane*&quot;   les correspondances seraient &quot;bananes&quot; ou &quot;casserole de feuilles de bananes&quot; mais pas &quot;ma casserole de feuilles de bananes.&quot;</p></li>
+</ul>
 <h3>Actions</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Conserver dans la Boîte de réception.</B></span>   Enregistre les mails dans la boîte de réception. Si aucune règle de filtre ne correspond à un mail, cette action s'exécute par défaut.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Ranger dans un dossier.</B></span>   Déplace un mail vers un dossier spécifié.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Supprimer.</B></span> Supprime le mail sans le distribuer. Le mail ne fait pas partie de vos dossiers, même pas du dossier Corbeille.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Faire suivre</B></span>. Transfère un mail vers une adresse spécifiée.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Marquer.</B></span> Sélectionnez   <span style="font-weight: bold;"><B>comme lu</B></span> ou <span style="font-weight: bold;"><B>avec drapeau</B></span>. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Libeller avec.</B></span> Vous pouvez marquer les mails correspondants avec un tag sélectionné.</p></li>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Conserver dans la Bo&icirc;te de r&eacute;ception.</b></span>   Enregistre les mails dans la bo&icirc;te de r&eacute;ception. Si aucune r&egrave;gle de filtre ne correspond &agrave; un mail, cette action s'ex&eacute;cute par d&eacute;faut.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Ranger dans un dossier.</b></span>   D&eacute;place un mail vers un dossier sp&eacute;cifi&eacute;.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Supprimer.</b></span> Supprime le mail sans le distribuer. Le mail ne fait pas partie de vos dossiers, m&ecirc;me pas du dossier Corbeille.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Faire suivre</b></span>. }}}Transf&egrave;re le mail &agrave; l&rsquo;adresse indiqu&eacute;e.{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Marquer.</b></span> S&eacute;lectionnez   <span style="font-weight: bold;"><b>comme lu</b></span> ou <span style="font-weight: bold;"><b>avec drapeau</b></span>.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Libeller avec.</b></span> Vous pouvez marquer les mails correspondants avec un tag s&eacute;lectionn&eacute;.</p></li>
 </ul>
 <h3>Actions multiples</h3>
-<p>Une règle de filtre permet de définir plusieurs actions. Les combinaisons d’actions sont interprétées de la manière suivante :</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Supprimer.</B></span> Si elle est combinée avec d’autres actions, l’action de suppression est ignorée et les autres actions deviennent effectives.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Ranger dans un dossier.</B></span>   Plusieurs actions &quot;Ranger dans&quot; entraînent la création de plusieurs copies du mail stocké dans différents dossiers. Si aucun dossier n’est spécifié, le mail sera conservé dans la Boîte de réception.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Tag/Drapeau</B></span> Ces actions s'exécutent pour le mail renvoyé à l'expéditeur à partir de l'action précédente la plus récente.   Dans le cas de plusieurs actions &quot;Ranger dans&quot;, il peut arriver que plusieurs copies du mail soient sauvergardées sans tag, et d'autres avec.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Conserver dans la Boîte de réception.</B></span>   Plusieurs actions &quot;conserver&quot; peuvent être définies, mais une seule copie du mail est conservée dans la Boîte de réception.</p></li>
-	<li style="x-condition: BasicWC;" class=p><p><span style="font-weight: bold;"><B>Faire suivre à l’adresse.</B></span> Le mail est transféré à l’adresse indiquée.</p></li>
+<p>}}}Vous pouvez cr&eacute;er un ensemble de r&egrave;gles de filtre constitu&eacute;es de plusieurs actions.{{{ }}}Les combinaisons d'actions dans vos r&egrave;gles sont interpr&eacute;t&eacute;es comme suit&nbsp;:{{{</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Supprimer.</b></span> Si elle est combin&eacute;e avec d&rsquo;autres actions, l&rsquo;action de suppression est ignor&eacute;e et les autres actions deviennent effectives.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Ranger dans un dossier.</b></span>   Plusieurs actions &quot;Ranger dans&quot; entra&icirc;nent la cr&eacute;ation de plusieurs copies du mail stock&eacute; dans diff&eacute;rents dossiers. Si aucun dossier n&rsquo;est sp&eacute;cifi&eacute;, le mail sera conserv&eacute; dans la Bo&icirc;te de r&eacute;ception.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Tag/Drapeau</b></span> Ces actions s'ex&eacute;cutent pour le mail renvoy&eacute; &agrave; l'exp&eacute;diteur &agrave; partir de l'action pr&eacute;c&eacute;dente la plus r&eacute;cente. Dans le cas de plusieurs actions &quot;Ranger dans&quot;, il peut arriver que plusieurs copies du mail soient sauvergard&eacute;es sans tag, et d'autres avec.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Conserver dans la Bo&icirc;te de r&eacute;ception.</b></span>   Plusieurs actions &quot;conserver&quot; peuvent &ecirc;tre d&eacute;finies, mais une seule copie du mail est conserv&eacute;e dans la Bo&icirc;te de r&eacute;ception.</p></li>
+	<li class="p"><p style="font-weight: bold;">Faire suivre &agrave; l&rsquo;adresse. <span  	 style="font-weight: normal;">Le mail est transf&eacute;r&eacute; &agrave; l&rsquo;adresse indiqu&eacute;e.</span></p></li>
 </ul>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

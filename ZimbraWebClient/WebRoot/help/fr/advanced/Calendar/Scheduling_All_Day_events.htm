@@ -1,35 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Programmation de journées entières</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-img_whs2 { border:none; float:none; border-style:none; }
-p.whs3 { margin-left:0px; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs3 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Scheduling_All_Day_events</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -40,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Planification de rendez-vous, réunions et événements\nProgrammation de journées entières");
@@ -69,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -88,38 +81,90 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Programmation de journées entières</h1>
-<p>Vous pouvez créer un événement pour une ou plusieurs journées entières – par exemple une conférence. L’événement s’affiche en haut du calendrier, le jour de l’événement. </p>
-<h2>Programmation d’un rendez-vous journée entière</h2>
-<ol type="1" class="whs1">
-	<li class=p><p>À partir d'un des affichages – à l’exception de la vue Préférences, &nbsp;cliquez    sur &nbsp;<img src="../newandarrow.gif" x-maintain-ratio="TRUE" border="0" class="img_whs2"> &nbsp;puis choisissez <span style="font-weight: bold;"><B>Rendez-vous</B></span>.</p></li>
-	<li class=p><p>Saisissez l’<span style="font-weight: bold;"><B>Objet</B></span>.   &nbsp;L’objet devient la description dans le calendrier. Ce champ est obligatoire.</p></li>
-	<li class=p><p>Saisissez un <span style="font-weight: bold;"><B>Emplacement</B></span>.   Vous pouvez saisir un emplacement. Les emplacements qui ont été créés en tant que comptes de ressources par votre administrateur système peuvent être réservés. Si vous connaissez le nom de l’emplacement, saisissez-le dans le champ Emplacement. Sinon, utilisez l’onglet <span style="font-weight: bold;"><B>Rechercher emplacement</B></span> pour effectuer une recherche. Après avoir sélectionné l'emplacement, celui-ci s'affiche dans ce champ.</p></li>
-	<li class=p><p>Choisissez la date de <span style="font-weight: bold;"><B>Début</B></span>   et la date de <span style="font-weight: bold;"><B>Fin</B></span>. Cochez <span style="font-weight: bold;"><B>Journée entière</B></span>, à la droite de l’heure. &nbsp;</p></li>
-	<li class=p><p>Si vous disposez de plusieurs calendriers, sélectionnez le calendrier pour lequel vous voulez configurer l’événement dans la liste déroulante de <span style="font-weight: bold;"><B>Calendrier   </B></span>.</p></li>
-	<li class=p><p>Ajouter des ressources. Si vous connaissez le nom de la ressource, saisissez-le dans le champ Ressource. Sinon, activez l’onglet <span style="font-weight: bold;"><B>Rechercher ressources</B></span> pour rechercher les ressources disponibles.</p></li>
-	<li class=p><p>Saisissez le nom des participants. Vous pouvez saisir le nom des participants de l’une des manières suivantes :</p></li>
-	<ul><li style="list-style: disc;" type=disc class=p><p class="whs3">Affichez l’onglet <span style="font-weight: bold;"><B>Rechercher</B></span> <span style="font-weight: bold;"><B>Participants</B></span> . Saisissez un nom puis choisissez la liste à utiliser, c'est-à-dire la liste d'adresses globale ou de contacts. Sélectionnez les noms puis appuyez sur <span style="font-weight: bold;"><B>Ajouter</B></span>.   &nbsp;Lorsque vous avez terminé, cliquez sur <span style="font-weight: bold;"><B>OK</B></span>.   </p></li>
-		<li style="list-style: disc;" type=disc class=p><p>Dans le champ <span 
- style="font-weight: bold;"><B>Participants</B></span>, saisissez les adresses mail, en les séparant par un point-virgule (;). Lorsque vous commencez à saisir les noms, la fonction de saisie automatique affiche les noms correspondants dans votre liste de contacts.</p></li>
-		<li style="list-style: disc;" type=disc class=p><p>Pour vérifier la disponibilité (libre/occupé) des participants, activez l’onglet <span style="font-weight: bold;"><B>Programme des participants</B></span>. Lorsque vous saisissez les noms et adresses mail des participants – et que les programmes des participants sont connus – leurs disponibilités s’affichent dans les barres horizontales à côté des noms.  Retournez à l’onglet <span style="font-weight: bold;"><B>Rendez-vous</B></span>   lorsque la liste des participants est terminée. &nbsp;</p></li>
-	</ul>
-	<li class=p><p class="whs3">Saisissez dans le zone de texte les informations supplémentaires concernant la réunion. Pour ajouter des pièces jointes, cliquez sur<span style="font-weight: bold;"><B> Ajouter pièces jointes</B></span> dans la barre d’outils. Elles sont incluses dans le mail à envoyer.</p></li>
-	<li class=p><p class="whs3">Cliquez sur <span style="font-weight: bold;"><B>Enregistrer</B></span>.   Un mail d’invitation est envoyé aux participants. L’événement s’affiche sous forme de bandeau en haut du calendrier.</p></li>
-	<li class=p-note><p class=note>&nbsp;Ignorez l’étape 7 pour vous programmer un rendez-vous sans participants sur votre calendrier.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>Scheduling all-day events</h1>
+<p>You can create an all day or multi-day event such as a conference. The 
+ event displays at the top of the calendar for the day of the event.</p>
+<h2>Scheduling an all day appointment</h2>
+<ol type="1">
+	<li class="p"><p>In any of the views except from Preferences, click 
+	 the arrow on &#160;<img src="../newandarrow.gif" alt="newandarrow.gif" style="border: none;" width="44" height="18" border="0" /> &#160;and 
+	 select <span style="font-weight: bold;"><b>Appointment</b></span>.</p></li>
+	<li class="p"><p>Enter the <span style="font-weight: bold;"><b>Subject</b></span>. 
+	 &#160;The subject becomes the description in the calendar and is required.</p></li>
+	<li class="p"><p>Enter a location. You can use this field to describe 
+	 the location of the meeting, such as giving an address, building number, 
+	 floor number. Use the <span style="font-weight: bold;"><b>Find Location</b></span> 
+	 tab to find and reserve a room that is listed in your company directory. 
+	 These locations have been created as resource accounts by your system 
+	 administrator and can be reserved. &#160;The location you select in 
+	 the Find Location tab is listed as a Resource under the Attendees 
+	 field and is reserved.</p></li>
+	<li class="p"><p>Select the <span style="font-weight: bold;"><b>Start</b></span> 
+	 and <span style="font-weight: bold;"><b>End</b></span> date. Check <span 
+	 style="font-weight: bold;"><b>All day event</b></span>, on the right of the 
+	 time. &#160;</p></li>
+	<li class="p"><p>If you have multiple calendars, from the <span style="font-weight: bold;"><b>Calendar</b></span> 
+	 drop down, select which calendar is setting up the event.</p></li>
+	<li class="p"><p>Add resources. Use the <span style="font-weight: bold;"><b>Find 
+	 Resources</b></span> tab to find and reserve a resource, such as a projector. 
+	 This information is listed as a Resource under the Attendees field.</p></li>
+	<li class="p"><p>Enter the names of the attendees. You can enter attendee 
+	 names in any of the following ways:</p>
+	<ul>
+		<li class="p" type="disc"><p style="margin-left: 0px;">Go to the 
+		 <span style="font-weight: bold;"><b>Find</b></span> <span style="font-weight: bold;"><b>Attendees</b></span> 
+		 tab. Type a name and select which list to use, either Contacts 
+		 or Global Address List. Select the names and press <span style="font-weight: bold;"><b>Add</b></span>. 
+		 &#160;When complete, click <span style="font-weight: bold;"><b>OK</b></span>.</p></li>
+		<li class="p" type="disc"><p>In the <span style="font-weight: bold;"><b>Attendees</b></span> 
+		 text field, type the email addresses, separating addresses by 
+		 a semicolon (;). As you type, names in your Contact list that 
+		 match are displayed.</p></li>
+		<li class="p" type="disc"><p>To see the free/busy schedules for 
+		 attendees, click the <span style="font-weight: bold;"><b>Schedule</b></span> 
+		 tab. As you enter attendees' names and email addresses, if attendees' 
+		 schedules are known, availability appears in horizontal bars next 
+		 to the names. Return to the <span style="font-weight: bold;"><b>Appointment 
+		 Details</b></span> tab when the attendee's list is complete. &#160;</p></li>
+	</ul></li>
 </ol>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 80px;">When <span style="font-weight: bold;"><b>Request 
+ Responses</b></span> is checked, you will receive email notification when 
+ attendees accept or decline your meeting request. &#160;If you do not 
+ want to receive the responses, click the checkbox to remove the check.</p>
+<p style="margin-left: 80px;">When <span style="font-weight: bold;"><b>Send 
+ Notification Mail</b></span> is checked, when you click save, an email is 
+ sent to the attendees list. Send Notification Mail gives you the option 
+ to make changes to a meeting without notifying all the attendees of the 
+ change.</p>
+<ol start="8" type="1">
+	<li class="p"><p style="margin-left: 0px;">Enter any additional information 
+	 about the meeting in the text area. To add attachments, click <span 
+	 style="font-weight: bold;"><b>Add Attachments</b></span> on the toolbar above 
+	 the Calendar tabs. The attachment is included in the email that is 
+	 sent.</p></li>
+	<li class="p"><p style="margin-left: 0px;">Click <span style="font-weight: bold;"><b>Save</b></span>. 
+	 An email invitation is sent to all attendees. The event displays as 
+	 a banner at the top of the Calendar.</p></li>
+</ol>
+<p class="note" style="margin-left: 40px;">&#160;<span style="font-weight: bold;"><b>Note</b></span>: 
+ &#160;Skip step 7 to schedule an appointment for yourself on your calendar, 
+ without attendees.</p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

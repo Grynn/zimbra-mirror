@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Fonctionnement du filtre</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { x-condition:Advanced_WC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Création de filtres \nConfiguration de règles de filtre");
+	addTocInfo("}}}Utiliser des filtres pour trier les mails{{{\nConfiguration de règles de filtre");
 addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 
 	}
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,63 +81,85 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Configuration de règles de filtre</h1>
-<p>Le filtre de mails vous permet de définir des règles pour gérer vos mails entrants. Les filtres de mails sont définis dans l’onglet <span style="font-weight: bold;"><B>Préférences,   Filtres de mails</B></span> . </p>
-<p>Lorsqu’un mail entrant correspond aux conditions de filtrage, les actions associées à ces conditions sont exécutées. Par exemple, vous pouvez définir une règle de filtre pour identifier les mails provenant de votre supérieur hiérarchique direct, et les déplacer vers un dossier appelé &quot;De mon chef&quot;, ou pour déplacer automatiquement les mails provenant d'une adresse spécifique vers le dossier Corbeille.</p>
-<p>Chaque règle de filtre est assortie d’une ou plusieurs conditions, et d’une ou plusieurs actions.</p>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>}}}Utiliser des filtres pour trier les mails entrants{{{</h1>
+<p>}}}Le filtre de mails vous permet de d&eacute;finir des r&egrave;gles pour g&eacute;rer vos mails entrants et sortants.{{{ }}}&nbsp;Les filtres trient automatiquement vos mails en fonction des r&egrave;gles que vous avez d&eacute;finies.{{{</p>
+<p>}}}Vous pouvez trier vos mails entrants pour&nbsp;:{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}Trier les messages entrants dans les dossiers{{{</p></li>
+	<li class="p"><p>}}}Marquer automatiquement les mails{{{</p></li>
+	<li class="p"><p>}}}Transf&eacute;rer les mails{{{</p></li>
+	<li class="p"><p>}}}Marquer le mail comme lu ou l'affecter d'un drapeau{{{</p></li>
+	<li class="p"><p>}}}Supprimer les mails{{{</p></li>
+</ul>
+<p>Par exemple, vous pouvez d&eacute;finir une r&egrave;gle de filtre pour identifier les mails provenant de votre sup&eacute;rieur hi&eacute;rarchique direct, et les d&eacute;placer vers un dossier appel&eacute; &quot;De mon chef&quot;, ou pour d&eacute;placer automatiquement les mails provenant d'une adresse sp&eacute;cifique vers le dossier Corbeille.</p>
+<p>}}}Vous pouvez trier vos mails sortants pour&nbsp;:{{{</p>
+<ul type="disc">
+	<li><p>}}}Trier les messages qui sont enregistr&eacute;s dans le dossier &Eacute;l&eacute;ments envoy&eacute;s dans d'autres dossiers{{{</p></li>
+	<li class="p"><p>}}}Marquer automatiquement les mails{{{</p></li>
+	<li class="p"><p>}}}Transf&eacute;rer les mails{{{</p></li>
+	<li class="p"><p>}}}Marquer le mail comme lu ou l'affecter d'un drapeau{{{</p></li>
+	<li class="p"><p>}}}Supprimer les mails{{{</p></li>
+</ul>
 <h3>Conditions de filtre</h3>
-<p>Chaque règle de filtre contient plusieurs conditions. Par exemple, si votre directeur vous envoie des mails à partir d'adresses différentes, telles que jane.smith@company.com   ou jane-smith23@yahoo.com, vous pouvez créer un filtre appelé &quot;Directeur&quot;   qui comporte deux conditions, une pour chaque adresse mail.</p>
-<p>Les conditions incluent :</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Des adresses spécifiques dans les champs De, À, Cc dans l’en-tête de mail  </p></li>
-	<li class=p><p>La présence ou pas de pièces jointes</p></li>
-	<li class=p><p>Mots ou caractères dans le champ d'objet ou dans le contenu d'un mail</p></li>
-	<li class=p><p>Toutes les conditions vous permettent de spécifier &quot;n’est pas&quot;  en tant que condition négative. Par exemple, vous pouvez spécifier les mails qui ne contiennent pas un mot particulier.</p></li>
+<p>}}}Chaque filtre est une r&egrave;gle avec une ou plusieurs conditions et une destination.{{{ Chaque r&egrave;gle de filtre contient plusieurs conditions. }}}Par exemple, si votre directeur vous envoie des mails provenant de plusieurs adresses &agrave; l'instar de jane.smith@company.com ou de jane-smith23@yahoo.com, vous pouvez cr&eacute;er un filtre d&eacute;sign&eacute; &quot;Directeur&quot; ayant deux conditions, une pour chacune des adresses mails.{{{</p>
+<p>Les conditions incluent&nbsp;:</p>
+<ul type="disc">
+	<li class="p"><p>Des adresses sp&eacute;cifiques dans les champs De, &Agrave;, Cc dans l&rsquo;en-t&ecirc;te de mail  </p></li>
+	<li class="p"><p>Mots ou caract&egrave;res dans le champ d'objet ou dans le contenu d'un mail</p></li>
+	<li class="p"><p>La pr&eacute;sence ou pas de pi&egrave;ces jointes</p></li>
 </ul>
-<p>Vous pouvez combiner des conditions pour rechercher un mail ayant des caractéristiques plus complexes.</p>
-<h3>Aucun vs Tous</h3>
-<p>Les conditions d’une règle de filtre peuvent être groupées à l’aide des éléments <span style="font-weight: bold;"><B>Indifférent</B></span>   ou <span style="font-weight: bold;"><B>Tous </B></span>. L’utilisation de ces termes est identique aux recherches de type <a href="../Search/and_vs_or_searches.htm">&quot;ET&quot;   vs &quot;OU&quot;</a> décrites dans la fonction Rechercher, avec <span style="font-weight: bold;"><B>Indifférent</B></span> correspondant à OU et <span style="font-weight: bold;"><B>Tous</B></span>   correspondant à ET.</p>
-<p>Si vous choisissez <span style="font-weight: bold;"><B>Indifférent</B></span> lors de la configuration des conditions d'une règle de filtre, tout mail correspondant à l'une de ces conditions est considéré comme une correspondance. Néanmoins, si vous choisissez <span style="font-weight: bold;"><B>Tous</B></span>,  toutes les conditions spécifiées dans cette règle de filtre doivent être satisfaites pour que le filtre s'applique au mail.</p>
-<h3>Actions de règles de filtre</h3>
-<p>Chaque règle de filtre peut spécifier une ou plusieurs actions. Ces actions comprennent les scénarios suivants :</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Conserver le mail dans la Boîte de réception (aucune action).</p></li>
-	<li class=p><p>Déplacer le mail vers un dossier spécifié.</p></li>
-	<li class=p><p>Marquer le mail</p></li>
-	<li class=p><p>Marquer le mail comme lu ou l'affecter d'un drapeau</p></li>
-	<li class=p><p>Supprimer. Cette action supprime le mail de manière «  discrète  ».   Remarque : Cette action n’est pas la même que l'action Effacer qui vous est proposée dans votre menu. Lorsque vous effacez un objet, celui-ci est dirigé vers le dossier Corbeille. L’action Supprimer empêche que le mail soit distribué dans votre Boîte de réception.</p></li>
-	<li class=p><p>Arrêter l’évaluation supplémentaire. Cette action empêche l'application de règles de filtre supplémentaires aux mails correspondant à la règle actuelle.</p></li>
+<p>Toutes les conditions vous permettent de sp&eacute;cifier &quot;n&rsquo;est pas&quot;  en tant que condition n&eacute;gative. Par exemple, vous pouvez sp&eacute;cifier les mails qui ne contiennent pas un mot particulier.</p>
+<p>Vous pouvez combiner des conditions pour rechercher un mail ayant des caract&eacute;ristiques plus complexes.</p>
+<h3>}}}Aucun vs Tous{{{</h3>
+<p>Les conditions d&rsquo;une r&egrave;gle de filtre peuvent &ecirc;tre group&eacute;es &agrave; l&rsquo;aide des &eacute;l&eacute;ments <span style="font-weight: bold;"><b>Indiff&eacute;rent</b></span>   ou <span style="font-weight: bold;"><b>Tous </b></span>. L&rsquo;utilisation de ces termes est identique aux recherches de type <a href="../Search/and_vs_or_searches.htm">&quot;ET&quot;   vs &quot;OU&quot;</a> d&eacute;crites dans la fonction Rechercher, avec <span style="font-weight: bold;"><b>Indiff&eacute;rent</b></span> correspondant &agrave; OU et <span style="font-weight: bold;"><b>Tous</b></span>   correspondant &agrave; ET.</p>
+<p>Si vous choisissez <span style="font-weight: bold;"><b>Indiff&eacute;rent</b></span> lors de la configuration des conditions d'une r&egrave;gle de filtre, tout mail correspondant &agrave; l'une de ces conditions est consid&eacute;r&eacute; comme une correspondance. N&eacute;anmoins, si vous choisissez <span style="font-weight: bold;"><b>Tous</b></span>,  toutes les conditions sp&eacute;cifi&eacute;es dans cette r&egrave;gle de filtre doivent &ecirc;tre satisfaites pour que le filtre s'applique au mail.</p>
+<h3>Actions de r&egrave;gles de filtre</h3>
+<p>Chaque r&egrave;gle de filtre peut sp&eacute;cifier une ou plusieurs actions. Ces actions comprennent les sc&eacute;narios suivants :</p>
+<ul type="disc">
+	<li class="p"><p>}}}Conserver le mail dans la Bo&icirc;te de r&eacute;ception (aucune action){{{</p></li>
+	<li class="p"><p>}}}D&eacute;placer le mail vers un dossier sp&eacute;cifi&eacute;{{{</p></li>
+	<li class="p"><p>Marquer le mail</p></li>
+	<li class="p"><p>}}}Marquer le mail comme lu ou l'affecter d'un drapeau{{{</p></li>
+	<li class="p"><p>}}}Supprimer le mail.{{{ Cette action supprime le mail de mani&egrave;re &laquo; discr&egrave;te &raquo;. Remarque : Cette action n&rsquo;est pas la m&ecirc;me que l'action Effacer qui vous est propos&eacute;e dans votre menu. Lorsque vous effacez un objet, celui-ci est dirig&eacute; vers le dossier Corbeille. }}}L'action Supprimer emp&ecirc;che le mail d'entrer dans votre bo&icirc;te de r&eacute;ception{{{</p></li>
+	<li class="p"><p>}}}Transf&eacute;rer le mail &agrave; une autre adresse{{{</p></li>
 </ul>
-<p>L’action &quot;Arrêter l’évaluation supplémentaire&quot; doit être la dernière dans chaque règle de filtre. Si cela n’est pas spécifié, les règles de filtre ultérieures sont évaluées pour le mail même si le filtre actuel établit une correspondance.   Il est peu probable que vous souhaitiez que le même mail corresponde à plusieurs règles de filtre et subisse des actions qui risquent d'être contradictoires.</p>
-<h3>Moment d’application des filtres</h3>
-<p>Chaque mail entrant est testé en accord avec vos règles de filtre dès l’instant où le mail est distribué ; à ce moment précis, les actions du filtre sont appliquées aux mails correspondants. </p>
-<h3>Ordre d’application du système</h3>
-<p>Les filtres sont appliqués dans l’ordre dans lequel ils sont répertoriés dans l’onglet Filtres de mail. Vous pouvez modifier cet ordre. </p>
-<p>Dans chaque filtre, les conditions sont utilisées pour tester chaque mail.   Si le mail satisfait collectivement aux conditions (la désignation <span style="font-weight: bold;"><B>Indifférent</B></span>   ou <span style="font-weight: bold;"><B>Tous</B></span> comme convenu dans la règle de filtre), il est considéré comme une correspondance. L’ordre des conditions dans chaque filtre n’est pas important.</p>
-<p>Si le mail correspond aux conditions, toutes les actions associées à cette règle de filtre sont appliquées dans l’ordre dans lequel elles apparaissent dans le filtre.</p>
-<h3>Filtres actifs/inactifs</h3>
-<p class="whs2">L'ensemble des filtres définis actuellement sont répertoriés dans l'onglet Options, sur la page Filtres de mails. La case <span style="font-weight: bold;"><B>Active</B></span>   vous permet d’activer/désactiver les filtres sans avoir à supprimer les règles de filtre. .</p>
-<p class="whs2">
+<p>}}}Remarque&nbsp;: dans chaque r&egrave;gle de filtre, <span style="font-weight: bold;"><b>Ne pas appliquer d'autres filtres</b></span> doit toujours &ecirc;tre la derni&egrave;re action.{{{ }}}(elle emp&ecirc;che l&rsquo;application d'autres r&egrave;gles de filtre aux mails entrants qui satisfont la r&egrave;gle actuelle).{{{ }}}&nbsp;Si cette action n'est pas sp&eacute;cifi&eacute;e, les r&egrave;gles des filtres ult&eacute;rieurs continuent &agrave; &ecirc;tre appliqu&eacute;es aux mails entrants &ndash; m&ecirc;me si la ou les conditions du filtre actuel sont satisfaites &ndash;,{{{ }}}ce qui risque de cr&eacute;er des conflits entre des actions contradictoires.{{{</p>
+<h3>Moment d&rsquo;application des filtres</h3>
+<p>Chaque mail entrant est test&eacute; en accord avec vos r&egrave;gles de filtre d&egrave;s l&rsquo;instant o&ugrave; le mail est distribu&eacute; ; &agrave; ce moment pr&eacute;cis, les actions du filtre sont appliqu&eacute;es aux mails correspondants.</p>
+<p>}}}Vous pouvez &eacute;galement appliquer des r&egrave;gles de filtre &agrave; un ensemble de mails d&eacute;j&agrave; stock&eacute;s dans votre compte.{{{ }}}Dans le sous-onglet &quot;Filtres de mails&quot; de l'onglet &quot;Pr&eacute;f&eacute;rences&quot;, le bouton&nbsp;<span style="font-weight: bold;"><b>Appliquer le filtre</b></span> vous permet de s&eacute;lectionner le filtre &agrave; appliquer au(x) dossier(s) s&eacute;lectionn&eacute;(s).{{{</p>
+<h3>}}}Ordre de filtre{{{</h3>
+<p>}}}Les filtres sont appliqu&eacute;s dans l'ordre dans lequel ils apparaissent dans &quot;Filtres de mails&quot; de l'onglet &quot;Pr&eacute;f&eacute;rences&quot;.{{{ Vous pouvez modifier cet ordre.</p>
+<p>Dans chaque filtre, les conditions sont utilis&eacute;es pour tester chaque mail. Si le mail satisfait collectivement aux conditions (la d&eacute;signation <span style="font-weight: bold;"><b>Indiff&eacute;rent</b></span>   ou <span style="font-weight: bold;"><b>Tous</b></span> comme convenu dans la r&egrave;gle de filtre), il est consid&eacute;r&eacute; comme une correspondance. L&rsquo;ordre des conditions dans chaque filtre n&rsquo;est pas important.</p>
+<p>Si le mail correspond aux conditions, toutes les actions associ&eacute;es &agrave; cette r&egrave;gle de filtre sont appliqu&eacute;es dans l&rsquo;ordre dans lequel elles apparaissent dans le filtre.</p>
+<h3>}}}Filtres actifs/{{{ }}}inactifs{{{</h3>
+ <p>L'ensemble des filtres d&eacute;finis actuellement sont r&eacute;pertori&eacute;s dans l'onglet Options, sur la page Filtres de mails. La case <span  	 style="font-weight: bold;"><b>Active</b></span>   vous permet d&rsquo;activer/d&eacute;sactiver les filtres sans avoir &agrave; supprimer les r&egrave;gles de filtre.</p> <p>
 
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Conditions et actions de filtre supportées','filter_conditions_and_actions_supported.htm','Filtrer vos messages','filtering_your_messages.htm');return false;" title="Rubriques connexes"><img src="../ss_btn_rubriques_connexes.gif" border=0 height=17 width=104 alt="Rubriques connexes"></a>
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+  <param  name="Command"  value="}}}Rubriques connexes, MENU{{{" />
+  <param  name="Font"  value="}}}Arial, 8,0, GRAS SOULIGN&Eacute;{{{" />
+  <param  name="Item1"  value="}}}Conditions et actions de filtre support&eacute;es&nbsp;; filter_conditions_and_actions_supported.htm{{{" />
+  <param  name="Item2"  value="}}}Filtrer vos mails&nbsp;; filtering_your_messages.htm{{{" />
+  <param  name="Text"  value="}}}Texte&nbsp;:{{{ Rubriques connexes" />
+</object>
 
-
- </p>
+  </p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
-if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
-  WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

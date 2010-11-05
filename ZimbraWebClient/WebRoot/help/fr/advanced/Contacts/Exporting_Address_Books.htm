@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Exportation de carnets d’adresses</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Exportation de carnets d&rsquo;adresses</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,43 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
+	addTocInfo("Gestion de vos carnets d’adresses\nExportation de carnets d’adresses");
+addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -55,10 +64,8 @@ if (window.gbWhTopic)
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -74,28 +81,33 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Exportation de carnets d’adresses</h1>
-<p>Vos &nbsp;carnets d’adresses sont exportés et enregistrés au format de fichier texte (.csv) avec une virgule pour les séparer. </p>
-<ol type="1" class="whs1">
-	<li class=p><p>Affichez <span style="font-weight: bold;"><B>Préférences,   Carnet d’adresses</B></span><span>.</span></p></li>
-	<li class=p><p>Cliquez sur <span style="font-weight: bold;"><B>Exporter</B></span>.   La liste de vos carnets d’adresses s’affiche. </p></li>
-	<li class=p><p>Choisissez le carnet d’adresses à exporter. </p></li>
-	<li class=p><p>Cliquez sur <span style="font-weight: bold;"><B>OK</B></span>.</p></li>
-	<li class=p><p>Cochez <span style="font-weight: bold;"><B>Enregistrer sur le disque</B></span>   puis cliquez sur <span style="font-weight: bold;"><B>OK</B></span>. &nbsp;Sélectionnez l’emplacement où enregistrer le fichier et choisissez le nom du fichier. Le nom par défaut est Contacts.csv.</p></li>
-	<li class=p><p>Cliquez sur <span style="font-weight: bold;"><B>Enregistrer</B></span>.   </p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>}}}Exportation des listes de contact du carnet d'adresses{{{</h1>
+<p>}}}Lorsque vous exportez une liste de contacts, celle-ci est enregistr&eacute;e au format .csv (dans le fichier g&eacute;n&eacute;r&eacute;, les diff&eacute;rents contacts sont s&eacute;par&eacute;s par une virgule).{{{</p>
+<p>}}}Pour exporter votre carnet d'adresses{{{</p>
+<ol type="1">
+	<li class="p"><p>}}}S&eacute;lectionnez <span style="font-weight: bold;"><b>Pr&eacute;f&eacute;rences</b></span>, puis cliquez sur <span style="font-weight: bold;"><b>Importer / Exporter</b></span> {{{</p></li>
+	<li class="p"><p>Dans la section &quot;Export&quot;, s&eacute;lectionnez le type <span style="font-weight: bold;"><b>Contacts.</b></span></p></li>
+	<li class="p"><p>}}}Dans le champ <span style="font-weight: bold;"><b>Source</b></span>, cliquez pour s&eacute;lectionner la liste de contacts &agrave; exporter.{{{ </p></li>
+</ol>
+<ol start="4" type="1">
+	<li class="p"><p>}}}Cliquez sur <span style="font-weight: bold;"><b>Exporter</b></span>.{{{</p></li>
+	<li class="p"><p>}}}S&eacute;lectionnez l'emplacement de destination du fichier export&eacute;, puis cliquez sur <span  	 style="font-weight: bold;"><b>OK</b></span>.{{{ }}}Pour plus de d&eacute;tails sur l'importation de ces contacts dans l'application cible, consultez la documentation de celle-ci.{{{</p></li>
 </ol>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

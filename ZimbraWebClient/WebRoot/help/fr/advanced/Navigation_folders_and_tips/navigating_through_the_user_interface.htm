@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Espace de travail de Zimbra Web Client</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Navigation dans votre boîte aux lettres\nNavigation sur le client Web de Zimbra");
+	addTocInfo("Navigation dans votre boîte aux lettres\n}}}Navigati@ClientNameLong@g@{{{");
 addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 
 	}
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,32 +81,33 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Navigation sur le client Web de Zimbra </h1>
-<p>Lorsque vous vous connectez au client Web de Zimbra, l’interface affichera un écran complet similaire à celui ci-dessous. </p>
-<p><img src="../Zimbramainview65.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>La page du client Web de Zimbra inclut les zones suivantes :</p>
-<ol><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Commandes du navigateur.</B></span> Affiche les boutons standard du navigateur, comme par exemple Accueil, l'adresse actuelle vers laquelle vous pointez, et d’autres fonctions qui dépendent de votre logiciel et des paramètres de votre navigateur. Les boutons de la barre du navigateur ne font pas partie du client Web de Zimbra, et apparaissent sur chaque page Web que vous visitez.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Barre de recherche, Nom d’utilisateur et Affichage de quota</B></span><span>. La R</span>echerche, Recherche avancée, le nom d’utilisateur avec lequel vous êtes connecté et le quota de votre boîte aux lettres s’affichent dans cette zone.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Onglet d’applications</B></span>. Les applications accessibles sont répertoriées dans les onglets situés dans la partie supérieure. Vous trouvez également les boutons <span style="font-weight: bold;"><B>Aide</B></span>   et <span style="font-weight: bold;"><B>Déconnexion</B></span>.</p></li>
+//]]></script>
+<h1>}}}Navigation @ClientNameLong@{{{ 
+ </h1>
+<p>}}}Lorsque vous vous connectez &agrave; @ClientNameLong@, vous verrez un affichage plein &eacute;cran similaire &agrave; celui-ci.{{{</p>
+<p><img src="../69_view.png" alt="69_view.png" style="border: none;" width="652" height="321" border="0" /></p>
+<p>}}}La page @ClientNameLong@ inclut les zones suivantes&nbsp;:{{{</p>
+<ol>
+	<li class="p" type="1"><p>}}}<span style="font-weight: bold;"><b>Barre de recherche</b></span>.{{{ }}}Cette zone affiche la Recherche, Recherche avanc&eacute;e.{{{ }}}Vous trouvez &eacute;galement &agrave; droite les boutons <span style="font-weight: bold;"><b>Aide</b></span> et <span style="font-weight: bold;"><b>D&eacute;connexion</b></span>.{{{</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Onglet d&rsquo;applications</b></span>. }}}Cette zone inclut le nom d'utilisateur sous lequel vous vous &ecirc;tes connect&eacute; et le quota de votre bo&icirc;te aux lettres.{{{ }}}Les applications accessibles sont r&eacute;pertori&eacute;es dans les onglets qui suivent.{{{</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Barre d&rsquo;outils</b></span>   Affiche les actions disponibles pour l&rsquo;application que vous utilisez actuellement. Dans cet exemple, la barre d&rsquo;outils de l&rsquo;application<span style="font-weight: bold;"><b>Mail</b></span> s&rsquo;affiche.</p></li>
 </ol>
-<ol start=4><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Barre d’outils.</B></span>   Affiche les actions disponibles pour l’application que vous utilisez actuellement. Dans cet exemple, la barre d’outils de l’application<span style="font-weight: bold;"><B>Mail</B></span> s’affiche. </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Panneau d’aperçu.</B></span> Affiche vos <span style="font-weight: bold;"><B>Dossiers</B></span>,   y compris les dossiers système <span style="font-weight: bold;"><B>Boîte de réception</B></span>,   <span style="font-weight: bold;"><B>Envoyés</B></span>, <span style="font-weight: bold;"><B>Brouillons</B></span>,   <span style="font-weight: bold;"><B>Spams</B></span>, et <span style="font-weight: bold;"><B>Corbeille</B></span>,   ainsi que tous les dossiers personnalisés que vous avez créés, les <span style="font-weight: bold;"><B>Recherches</B></span>   que vous avez sauvegardées, et les <span style="font-weight: bold;"><B>Tags</B></span> que vous avez créés, les liens <span style="font-weight: bold;"><B>Zimlet</B></span> qui ont été créés pour intégrer les applications tierces à votre boîte aux lettres. Lorsque vous utilisez l’application Calendrier, la fenêtre d’aperçu affiche votre liste de calendriers et les Zimlets. </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>Un mini-calendrier peut s’afficher au-dessous de la fenêtre d’aperçu. L’affichage du mini-calendrier est facultatif et peut être activé dans <span style="font-weight: bold;"><B>Préférences,   dans l’onglet Calendrier</B></span>.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Panneau de contenu</B></span>. Le contenu de cette zone change selon l’application utilisée. Dans l’affichage Boîte de réception, le panneau affiche tous les mails ou conversations dans votre Boîte de réception. </p></li>
+<ol start="4">
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Panneau d&rsquo;aper&ccedil;u.}}}</b></span>Affiche vos <span style="font-weight: bold;"><b>Dossiers</b></span>, y compris les dossiers syst&egrave;me <span style="font-weight: bold;"><b>Bo&icirc;te de r&eacute;ception</b></span>, <span style="font-weight: bold;"><b>Envoy&eacute;s</b></span>, <span style="font-weight: bold;"><b>Brouillons</b></span>,  <span style="font-weight: bold;"><b>Spams</b></span> et <span style="font-weight: bold;"><b>Corbeille</b></span>, ainsi que tous les dossiers personnalis&eacute;s que vous avez cr&eacute;&eacute;s, les <span style="font-weight: bold;"><b>Recherches</b></span> que vous avez sauvegard&eacute;es, et les <span style="font-weight: bold;"><b>Tags</b></span> que vous avez cr&eacute;&eacute;s, les liens <span style="font-weight: bold;"><b>Zimlet</b></span> qui ont &eacute;t&eacute; cr&eacute;&eacute;s pour int&eacute;grer les applications tierces &agrave; votre bo&icirc;te aux lettres.{{{ Lorsque vous utilisez l&rsquo;application Calendrier, la fen&ecirc;tre d&rsquo;aper&ccedil;u affiche votre liste de calendriers et les Zimlets.</p></li>
+	<li class="p" type="1"><p>}}}Un <span style="font-weight: bold;"><b>mini-calendrier</b></span> peut s&rsquo;afficher au-dessous de la fen&ecirc;tre d&rsquo;aper&ccedil;u.{{{ }}}L&rsquo;affichage du mini-calendrier est facultatif et peut &ecirc;tre activ&eacute; dans <span style="font-weight: bold;"><b>Pr&eacute;f&eacute;rences</b></span> <span style="font-weight: bold;"><b>du calendrier</b></span>.{{{</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Panneau de contenu</b></span>. Le contenu de cette zone change selon l&rsquo;application utilis&eacute;e. Dans l&rsquo;affichage Bo&icirc;te de r&eacute;ception, le panneau affiche tous les mails ou conversations dans votre Bo&icirc;te de r&eacute;ception.</p></li>
 </ol>
 <p>&nbsp;</p>
+<p class="note">}}}<span style="font-weight: bold;"><b>Remarque</b></span>&nbsp;:{{{ }}}vous pouvez changer votre affichage en affichage &agrave; trois panneaux qui affiche le Panneau de lecture &agrave; droite ou vous pouvez d&eacute;sactiver compl&egrave;tement le Panneau de lecture,<img src="../View_icon.png" alt="View_icon.png" style="border: none;" width="28" height="25" border="0" />, dans la barre d'outils Mail.{{{</p>
 <h3>&nbsp;</h3>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

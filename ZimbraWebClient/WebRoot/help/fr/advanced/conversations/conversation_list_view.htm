@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Gestion de l’affichage de vos mails</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Gestion de l&rsquo;affichage de vos mails</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Gestion de vos mails \nGestion de l’affichage de vos mails");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,22 +81,56 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Gestion de l’affichage de vos mails</h1>
-<p>Vous pouvez afficher vos mails sous la forme de simples messages ou en tant que conversations.   Si vous utilisez la fonction <span style="font-weight: bold;"><B>Conversations</B></span>  , l’affichage par défaut est celui d’une conversation.</p>
-<p>Pour modifier la manière dont les mails sont regroupés lors de cette session, cliquez sur la flèche à côté d' <span style="font-weight: bold;"><B>Affichage</B></span> dans le champ situé au-dessus du panneau Aperçu. Pour modifier l’affichage par défaut, affichez l’onglet <span style="font-weight: bold;"><B>Préférences,   Boîte de réception</B></span>. &nbsp;</p>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>Gestion de l&rsquo;affichage de vos mails</h1>
+<p>}}}Vous pouvez afficher vos mails comme des messages simples ou conversations et vous pouvez consulter les messages avec le Panneau de lecture affich&eacute; au bas de la page ou sur la droite de la page.{{{</p>
+<p>}}}Pour modifier la mani&egrave;re dont les messages sont regroup&eacute;s dans votre bo&icirc;te aux lettres, dans la barre d'outils, cliquez sur <span style="font-weight: bold;"><b>Affichage</b></span> et choisissez la vue par conversation ou par message et l'emplacement d'affichage du Panneau de lecture.{{{ &nbsp;</p>
+<p style="margin-left: 60px;"><img src="../viewlist.png" alt="viewlist.png" style="border: none;" width="250" height="225" border="0" /></p>
 <h2>Affichage des mails</h2>
-<p>L’affichage traditionnel présente une liste de mails en commençant par le mail le plus récent. Les mails non lus sont affichés en gras. Les informations affichées sur une ligne contiennent les éléments suivants : colonnes de priorité (drapeaux), libellés (tags), De, présence de pièces jointes, objet, emplacement du dossier, taille du mail, y compris pièces jointes et heure à laquelle le mail a été reçu.</p>
-<p><img src="../tradtional_view.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>&nbsp;</p>
+<p>L&rsquo;affichage traditionnel pr&eacute;sente une liste de mails en commen&ccedil;ant par le mail le plus r&eacute;cent. Les mails non lus sont affich&eacute;s en gras. Les informations affich&eacute;es sur une ligne contiennent les &eacute;l&eacute;ments suivants : colonnes de priorit&eacute; (drapeaux), libell&eacute;s (tags), De, pr&eacute;sence de pi&egrave;ces jointes, objet, emplacement du dossier, taille du mail, y compris pi&egrave;ces jointes et heure &agrave; laquelle le mail a &eacute;t&eacute; re&ccedil;u.</p>
+<p><img src="../tradtional_view.png" alt="tradtional_view.png" style="border: none;" width="611" height="91" border="0" /></p>
 <h2>Affichage de conversation</h2>
-<p>La vue de conversation affiche vos mails regroupés par objet. Le nombre de messages dans la conversation s’affiche entre parenthèses après l’objet. Chaque conversation contient le message d'origine et l'ensemble des réponses.   Les conversations contenant des messages non lus sont affichées en <span style="font-weight: bold;"><B>gras</B></span>.</p>
-<p><img src="../conversation_view80.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
+<p>La vue de conversation affiche vos mails regroup&eacute;s par objet. Le nombre de messages dans la conversation s&rsquo;affiche entre parenth&egrave;ses apr&egrave;s l&rsquo;objet. Chaque conversation contient le message d'origine et l'ensemble des r&eacute;ponses. Les conversations contenant des messages non lus sont affich&eacute;es en <span style="font-weight: bold;"><b>gras</b></span>.</p>
+<p><img src="../conversation_view80.png" alt="conversation_view80.png" style="border: none;" width="611" height="88" border="0" /></p>
 <p>&nbsp;</p>
-<p>Double-cliquez sur la conversation pour afficher les messages dans la conversation.   Cliquez sur un message pour afficher son contenu. </p>
-<p>Tous les messages associés à la conversation sont affichés, même s'ils sont conservés dans d’autres dossiers. La colonne <span style="font-weight: bold;"><B>Dossier</B></span>   affiche le dossier dans lequel le message est conservé. </p>
+<p>Double-cliquez sur la conversation pour afficher les messages dans la conversation. Cliquez sur un message pour afficher son contenu. }}}Dans le lien Affichage, vous pouvez choisir d'afficher d'abord le mail le plus ancien ou le plus r&eacute;cent.{{{</p>
+<p>Tous les messages associ&eacute;s &agrave; la conversation sont affich&eacute;s, m&ecirc;me s'ils sont conserv&eacute;s dans d&rsquo;autres dossiers. La colonne <span style="font-weight: bold;"><b>Dossier</b></span>   affiche le dossier dans lequel le message est conserv&eacute;.</p>
+<h2>}}}Navigation dans le panneau de contenu des mails{{{</h2>
+<p>}}}En affichage message ou conversation, chaque mail dispose d'une ligne distincte qui affiche les colonnes d'informations suivantes&nbsp;:{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Indicateur de conversation</b></span>.{{{ }}}Ce mail fait-il partie d'une conversation&nbsp;?{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Indicateur de drapeau</b></span>.{{{ }}}L'exp&eacute;diteur a-t-il affect&eacute; un drapeau &agrave; ce message&nbsp;?{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Indicateur de priorit&eacute;</b></span>.{{{ }}}Ce mail a-t-il &eacute;t&eacute; affect&eacute; d'une haute priorit&eacute;&nbsp;?{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Tags</b></span>.{{{ }}}Le mail a-t-il &eacute;t&eacute; marqu&eacute; d'un Tag que vous avez d&eacute;fini&nbsp;?{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Statut</b></span>.{{{ }}}Les enveloppes ouvertes ou ferm&eacute;es indiquent si le mail a &eacute;t&eacute; lu ou non.{{{ }}}Le texte en gras indique &eacute;galement que le message n'a pas &eacute;t&eacute; lu.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>De</b></span>.{{{ }}}Nom ou adresse mail de l'exp&eacute;diteur.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Indicateur de</b></span> pi&egrave;ce jointe.{{{ }}}L'ic&ocirc;ne d'un trombone indique qu'un mail contient une pi&egrave;ce jointe.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Objet</b></span>.{{{ }}}Courte description du mail.{{{ }}}Si les extraits de contenu sont activ&eacute;s dans votre compte, la premi&egrave;re ligne du mail s'affiche.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Dossier</b></span>.{{{ }}}Affiche le nom du dossier dans lequel le message est conserv&eacute;.{{{ }}}Pour les conversations, le nom du dossier ne s'affiche pas parce que les mails peuvent inclure plusieurs dossiers d'intervalles.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Taille</b></span>.{{{ }}}Taille du mail ou nombre de mails contenus dans la conversation.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Re&ccedil;u</b></span>.{{{ }}}Date ou heure &agrave; laquelle le mail a &eacute;t&eacute; re&ccedil;u.{{{</p></li>
+</ul>
+<h2>}}}Trier les mails dans le panneau de contenus{{{</h2>
+<p>}}}Vous pouvez trier les messages en utilisant les colonnes De, Objet, Taille ou Re&ccedil;u.{{{</p>
+<p>Pour trier par rapport &agrave; une colonne sp&eacute;cifique, cliquez sur le titre de la colonne. La colonne affiche une fl&egrave;che indiquant si le tri est effectu&eacute; par ordre croissant (fl&egrave;che Haut) ou par ordre d&eacute;croissant (fl&egrave;che Bas).</p>
+<p>}}}Vous pouvez trier une colonne &agrave; la fois.{{{</p>
 <p>
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Dossiers d\'intervalles de conversations','conversations_can_span_folders.htm','Impression d’un mail','../reading_mail/printing_a_mail_message.htm','Impression d’une conversation','printing_a_conversation.htm');return false;" title="Rubriques connexes"><img src="../ss_btn_rubriques_connexes.gif" border=0 height=17 width=104 alt="Rubriques connexes"></a>
+
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+  <param  name="Command"  value="}}}Rubriques connexes, MENU{{{" />
+  <param  name="Font"  value="}}}Arial, 8,0, GRAS SOULIGN&Eacute;{{{" />
+  <param  name="Item1"  value="}}}Dossiers d'intervalles de conversations&nbsp;; conversations_can_span_folders.htm{{{" />
+  <param  name="Item2"  value="}}}Impression d'une conversation&nbsp;; printing_a_conversation.htm{{{" />
+  <param  name="Item3"  value="}}}Impression d'un mail&nbsp;; \reading_mail\printing_a_mail_message.htm{{{" />
+  <param  name="Text"  value="}}}Texte&nbsp;:{{{ Rubriques connexes" />
+</object>
 
 
  </p>
@@ -99,19 +139,14 @@ else
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
-if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
-  WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,9 +1,11 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Travailler dans un Porte-documents" url="Miscellaneous_one_off_topics/Working_in_Briefcase.htm" />
-<item name="Travailler avec des fichiers dans un Porte-documents" url="Briefcase_newfor6_0/Working_with_files_in_Briefcase.htm" />
-<item name="Créer une présentation dans le Porte-documents" url="6_0new_topics/creating_slide_presentations_in_briefcase.htm" />
-<item name="Créer des feuilles de calculs dans un Porte-documents" url="Briefcase_newfor6_0/Creating_Spreadsheets_in_Briefcase.htm" />
+<item name="Travailler dans un Porte-documents" url="Briefcase/Working_in_Briefcase.htm" />
+<item name="Travailler avec des fichiers dans un Porte-documents" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+<item name="Créer une page" url="Documents/Create_a_new_page.htm" />
+<item name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+<item name="Ajouter un tableau à une page de carnet" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<item name="Envoyer des fichiers à partir de votre Porte-documents" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 
 </tocdata>

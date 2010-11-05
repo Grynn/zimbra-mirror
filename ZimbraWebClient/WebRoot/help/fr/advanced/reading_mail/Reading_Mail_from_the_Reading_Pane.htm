@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Lire un mail dans le panneau de lecture</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Gestion de vos mails \nLecture des mails\nLire un mail dans le panneau de lecture");
@@ -52,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,22 +81,42 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Lire un mail dans le panneau de lecture</h1>
-<p>Le panneau de lecture est la zone située au-dessous des mails dans votre Boîte de réception. </p>
-<p>Lorsque vous cliquez sur un mail, celui-ci s'affiche dans un panneau au-dessous des informations d'en-tête du mail (si vous avez activé l’affichage du panneau de lecture).     Les mails sont marqués comme lus. Pour régler la taille du panneau de lecture, cliquez puis déplacez la ligne de séparation du panneau vers le haut ou vers le bas.</p>
-<p>Par défaut, l’affichage des mails dans le panneau de lecture est activé. &nbsp;Vous pouvez le désactiver dans l’onglet <span style="font-weight: bold;"><B>Préférences,   Mail</B></span>. Décochez <span style="font-weight: bold;"><B>Afficher le panneau de lecture des mails</B></span>.</p>
-<p>Vous pouvez également modifier l’option du panneau de lecture dans le menu Affichage. Remarque : lorsque vous effectuez des modifications dans ce menu, ces dernières s'appliquent aussi longtemps que vous restez connecté. Lorsque vous vous reconnectez, vos paramètres de Préférences déterminent si le panneau de lecture est activé ou non. &nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>}}}Affichage des messages &agrave; partir du Panneau de lecture{{{</h1>
+<p>}}}Vous pouvez utiliser le Panneau de lecture pour avoir un aper&ccedil;u des messages dans votre Bo&icirc;te de r&eacute;ception et d'autres dossiers.{{{</p>
+<p>Par d&eacute;faut, l&rsquo;affichage des mails dans le panneau de lecture est activ&eacute;. }}}Vous pouvez le d&eacute;sactiver dans le lien <span style="font-weight: bold;"><b>Affichage</b></span> de la barre d&rsquo;outils.{{{ }}}Vous pouvez personnaliser l'emplacement du Panneau de lecture.{{{</p>
+<h2>}}}S&eacute;lection de l'affichage du Panneau de lecture{{{</h2>
+<p>}}}Le Panneau de lecture peut s'afficher en bas ou &agrave; droite du Panneau de contenu.{{{</p>
+<ol type="1">
+	<li class="p"><p>}}}Cliquez sur <span style="font-weight: bold;"><b>Afficher</b></span> dans la barre d'outils Mail.{{{</p></li>
+	<li class="p"><p>}}}S&eacute;lectionnez pour afficher le Panneau de lecture en bas ou &agrave; droite du Panneau de contenu.{{{ }}}Vous pouvez &eacute;galement d&eacute;sactiver le Panneau de lecture.{{{</p></li>
+</ol>
+<h2>}}}Affichage des messages dans le Panneau de lecture{{{</h2>
+<p>}}}Le Panneau de lecture est vide jusqu'&agrave; ce que vous cliquiez sur un message.{{{</p>
+<p>}}}Ajustez la taille du Panneau de lecture en pla&ccedil;ant votre pointeur sur le haut de la ligne entre le Panneau de contenu et le Panneau de lecture.{{{ }}}Le pointeur devient une fl&egrave;che bidirectionnelle.{{{ }}}Cliquez sur le pointeur et faites glisser pour modifier la taille de la zone du Panneau de lecture.{{{</p>
+<p>}}}Quand vous cliquez sur un message dans la liste, le texte du message s'affiche dans le Panneau de lecture.{{{</p>
+<h2>}}}Marquage des messages comme lus &agrave; partir du Panneau de lecture{{{</h2>
+<p>}}}Dans<span style="font-weight: bold;"><b> Pr&eacute;f&eacute;rences mail</b></span>, vous pouvez configurer si vous souhaitez marquer ou non les messages que vous voyez dans le Panneau de lecture comme lus.{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Le marquer comme lu imm&eacute;diatement</b></span>.{{{ }}}D&egrave;s que vous cliquez sur un message dans le Panneau de lecture, il est marqu&eacute; comme lu.{{{</p></li>
+	<li class="p"><p style="font-weight: normal;">}}}<span style="font-weight: bold;"><b>Le marquer comme lu apr&egrave;s &quot;x &quot;&nbsp;secondes</b></span>.{{{ }}}Le d&eacute;lai par d&eacute;faut est de 5&nbsp;secondes.{{{ }}}Si vous cliquez sur un message et l'afficher pendant 5&nbsp;secondes, le message est marqu&eacute; comme lu.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Ne pas le marquer comme lu</b></span>.{{{ }}}Les messages que vous lisez dans le Panneau de lecture ne sont jamais marqu&eacute;s comme lus.{{{</p></li>
+</ul>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,30 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Filtrer vos messages</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-ul.whs3 { margin-left:20px; }
-p.whs4 { margin-left:25px; }
-p.whs5 { margin-left:40px; }
-p.whs6 { margin-left:24px; }
-img_whs7 { border:none; float:none; border-style:none; }
-p.whs8 { font-style:normal; }
-p.whs9 { x-condition:Advanced_WC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>}}}Filtrer vos mails{{{</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -35,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Création de filtres \nFiltrer vos mails");
+	addTocInfo("}}}Utiliser des filtres pour trier les mails{{{\n}}}Filtrer vos mails{{{");
 addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 
 	}
@@ -64,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -83,69 +81,80 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Filtrer vos messages</h1>
-<p>Le filtre applique un ensemble de règles de correspondance au mail entrant, puis exécute une action précise.</p>
-<p>Vous pouvez filtrer vos mails entrants pour les trier dans des dossiers, les marquer automatiquement, les faire suivre, ou les supprimer. Par exemple, vous pouvez créer une règle de la manière suivante :</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Tous les mails envoyés par votre directeur sont rangés dans le dossier &quot;Directives commerciales&quot;.</p></li>
-	<li class=p><p>Tous les mails contenus dans la liste de diffusion &quot;événements de la société&quot; sont marqués avec le tag &quot;Événements&quot;.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>}}}Filtrer vos mails{{{</h1>
+<p>Le filtre applique un ensemble de r&egrave;gles de correspondance au courrier entrant, puis ex&eacute;cute une action sp&eacute;cifi&eacute;e.</p>
+<p>Vous pouvez filtrer vos mails entrants pour les trier dans des dossiers, les marquer automatiquement, les faire suivre, ou les supprimer. }}}Exemples de r&egrave;gle&nbsp;:{{{</p>
+<ul type="disc">
+	<li class="p"><p>Tous les mails envoy&eacute;s par votre directeur sont rang&eacute;s dans le dossier &quot;Directives commerciales&quot;.</p></li>
+	<li class="p"><p>Tous les mails contenus dans la liste de diffusion &quot;&eacute;v&eacute;nements de la soci&eacute;t&eacute;&quot; sont marqu&eacute;s avec le tag &quot;&Eacute;v&eacute;nements&quot;.</p></li>
 </ul>
-<h6>Pour créer ou modifier une règle de filtre :</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Activez l’onglet <span style="font-weight: bold;"><B>Préférences   &nbsp;</B></span>.</p></li>
-	<li class=p><p>Activez l’onglet <span style="font-weight: bold;"><B>Filtres de mails  </B></span> puis cliquez sur <span style="font-weight: bold;"><B>Nouveau filtre</B></span>.</p></li>
-	<li class=p><p>La boîte de dialogue <span style="font-weight: bold;"><B>Ajouter un filtre</B></span>   s’affiche. </p></li>
-	<li class=p><p>Dans <span style="font-weight: bold;"><B>Nom du filtre</B></span>,   saisissez le nom de la règle.</p></li>
-	<li class=p><p>Dans la zone <span style="font-weight: bold;"><B>Si les conditions ci-dessous sont satisfaites</B></span>, sélectionnez une préférence de groupement. &nbsp;</p></li>
+<h6>Pour cr&eacute;er ou modifier une r&egrave;gle de filtre&nbsp;:</h6>
+<ol type="1">
+	<li class="p"><p>Activez l&rsquo;onglet <span style="font-weight: bold;"><b>Pr&eacute;f&eacute;rences   </b></span>.</p></li>
+	<li class="p"><p>}}}Activez le dossier <span style="font-weight: bold;"><b>Filtres</b></span>, puis cliquez sur <span style="font-weight: bold;"><b>Nouveau filtre</b></span>.{{{</p></li>
+	<li class="p"><p>La bo&icirc;te de dialogue <span style="font-weight: bold;"><b>Ajouter un filtre</b></span>   s&rsquo;affiche. }}}Elle vous permet de d&eacute;finir les valeurs de r&egrave;gle et de destination qui devront &ecirc;tre appliqu&eacute;es par le nouveau filtre.{{{</p></li>
+	<li class="p"><p>}}}Dans le champ <span style="font-weight: bold;"><b>Nom du filtre</b></span>, tapez le nom de votre choix pour la r&egrave;gle de filtre que vous &ecirc;tes sur le point de d&eacute;finir (ce nom doit &ecirc;tre unique).{{{</p></li>
+	<li class="p"><p>}}}Dans la zone <span style="font-weight: bold;"><b>Si l'une des conditions/toutes les conditions suivantes sont satisfaites</b></span>, choisissez une pr&eacute;f&eacute;rence de groupement.{{{ &nbsp;</p></li>
 </ol>
-<ul type="disc" class="whs3">
-	<li style="margin-left: -20px;" class=p><p class="whs4"><span 
- style="font-weight: bold;"><B>Condition indifférente </B></span>signifie que si n'importe quelle condition du filtre est satisfaite, l'action devient effective. </p></li>
-	<li style="margin-left: -20px;" class=p><p class="whs4"><span 
- style="font-weight: bold;"><B>Toutes les conditions</B></span> signifie que toutes les conditions du filtre doivent être satisfaites afin d’exécuter l’action du filtre.   &nbsp;</p></li>
+<ul type="disc">
+	<ul type="disc">
+		<li class="p"><p style="margin-left: 24px;">}}}<span style="font-weight: bold;"><b>L'une des conditions</b></span>&nbsp;: d&egrave;s qu'une des conditions sp&eacute;cifi&eacute;es dans le filtre est satisfaite, l'action d&eacute;finie est d&eacute;clench&eacute;e.{{{</p></li>
+		<li class="p"><p style="margin-left: 24px;">}}}<span style="font-weight: bold;"><b>Toutes les conditions&nbsp;:</b></span> l'action d&eacute;finie est d&eacute;clench&eacute;e seulement si TOUTES les conditions sp&eacute;cifi&eacute;es dans le filtre sont satisfaites.{{{ &nbsp;</p></li>
+	</ul>
 </ul>
-<p class="whs5">Vous pouvez répéter les étapes suivantes afin de configurer plusieurs conditions et actions dans un seul filtre.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p class="whs6">Choisissez dans la première liste déroulante une <a href="filter_conditions_and_actions_supported.htm">condition</a>   à utiliser. &nbsp;</p></li>
-	<li class=p><p class="whs6">Choisissez un procédé de <a href="filter_conditions_and_actions_supported.htm">comparaison</a> . Les options affichées dépendent de votre choix dans le menu précédent.   Par exemple, &quot;est&quot; ou &quot;n’est pas&quot; peuvent s’afficher.</p></li>
-	<li class=p><p class="whs6">Saisissez un mot ou une phrase à comparer dans la zone du texte.</p></li>
+<p style="margin-left: 40px;">Vous pouvez r&eacute;p&eacute;ter les &eacute;tapes suivantes afin de configurer plusieurs conditions et actions dans un seul filtre. }}}Pour configurer plusieurs conditions, cliquez sur le lien +.{{{</p>
+<ul type="disc">
+	<ul type="disc">
+		<li class="p"><p style="margin-left: 24px;">Choisissez dans la premi&egrave;re liste d&eacute;roulante une <a href="filter_conditions_and_actions_supported.htm">condition</a>   &agrave; utiliser. &nbsp;</p></li>
+		<li class="p"><p style="margin-left: 24px;">Choisissez un proc&eacute;d&eacute; de <a href="filter_conditions_and_actions_supported.htm">comparaison</a> . }}}Les valeurs disponibles d&eacute;pendent de la s&eacute;lection effectu&eacute;e.{{{ Par exemple, &quot;est&quot; ou &quot;n&rsquo;est pas&quot; peuvent s&rsquo;afficher.</p></li>
+		<li class="p"><p style="margin-left: 24px;">Saisissez un mot ou une phrase &agrave; comparer dans la zone du texte.</p></li>
+	</ul>
 </ul>
-<p class="whs5">Cliquez sur <span style="x-condition: Advanced_WC;"> 
- <img src="../plusbutton.gif" x-maintain-ratio="TRUE" border="0" class="img_whs7">Ajouter</span>   pour ajouter des conditions. Vous pouvez continuer à ajouter des conditions ou passer à l'étape suivante, qui consiste à ajouter une ou plusieurs actions. </p>
-<ol start="6" type="1" class="whs2">
-	<li class=p><p>Dans le champ <span style="font-weight: bold;"><B>Exécuter les actions suivantes</B></span>, choisissez une <a href="filter_conditions_and_actions_supported.htm">action</a>   dans le menu déroulant.</p></li>
+<p style="margin-left: 40px;">}}}Cliquez sur  <img src="../plusbutton.gif" alt="plusbutton.gif" style="border: none;" width="21" height="20" border="0" />   pour ajouter des conditions.{{{ }}}Apr&egrave;s avoir d&eacute;fini la ou les conditions requises, vous allez s&eacute;lectionner la ou les actions &agrave; associer &agrave; celles-ci.{{{</p>
+<ol start="6" type="1">
+	<li class="p"><p>Dans le champ <span style="font-weight: bold;"><b>Ex&eacute;cuter les actions suivantes</b></span>, choisissez une <a href="filter_conditions_and_actions_supported.htm">action</a>   dans le menu d&eacute;roulant.</p></li>
 </ol>
-<ul type="disc" class="whs3">
-	<li style="margin-left: -20px;" class=p><p class="whs4">Spécifiez un dossier ou le nom d'un tag, si nécessaire.  Ce que vous spécifiez dépend de l’action que vous choisissez.</p></li>
+<ul type="disc">
+	<li class="p"><p style="margin-left: 40px;">Sp&eacute;cifiez un dossier ou le nom d'un tag, si n&eacute;cessaire.  Ce que vous sp&eacute;cifiez d&eacute;pend de l&rsquo;action que vous choisissez.</p></li>
 </ul>
-<p class="whs5">Cliquez sur <span style="x-condition: Advanced_WC;"> 
- <img src="../plusbutton.gif" x-maintain-ratio="TRUE" border="0" class="img_whs7"></span>,      pour ajouter des actions. Vous pouvez continuer à ajouter des actions ou cliquer sur <span style="font-weight: bold;"><B>OK</B></span> pour terminer. </p>
-<ol start="7" type="1" class="whs2">
-	<li class=p><p class="whs8">Cochez la case <span style="font-weight: bold;"><B>Actif</B></span>   pour activer la règle de filtre.</p></li>
+<p style="margin-left: 40px;">}}}Cliquez sur  <img src="../plusbutton.gif" alt="plusbutton.gif" style="border: none;" width="21" height="20" border="0" />  pour ajouter des actions.{{{ }}}Apr&egrave;s avoir d&eacute;fini la ou les actions requises, cliquez sur <span  	 style="font-weight: bold;"><b>OK</b></span>.{{{</p>
+<ol start="7" type="1">
+	<li class="p" style="font-style: normal;"><p style="font-style: normal;">}}}Dans la partie sup&eacute;rieure de la bo&icirc;te de dialogue <span style="font-weight: bold;"><b>Ajouter un filtre</b></span>, notez la case.{{{ cochez cette case pour activer la r&egrave;gle de filtre ; }}}d&eacute;cochez-la pour d&eacute;sactiver cette r&egrave;gle.{{{</p></li>
+	<li class="p" style="font-style: normal;"><p style="font-style: normal;">}}}Cochez <span style="font-weight: bold;"><b>Ne pas appliquer d'autres filtres</b></span>, s'il s'agit du seul filtre &agrave; ex&eacute;cuter sur les mails qui remplissent les conditions du filtre.{{{ }}}Remarque&nbsp;: dans chaque r&egrave;gle de filtre, <span style="font-weight: bold;"><b>Ne pas appliquer d'autres filtres</b></span> doit toujours &ecirc;tre la derni&egrave;re action.{{{ }}}(elle emp&ecirc;che l&rsquo;application d'autres r&egrave;gles de filtre aux mails entrants qui satisfont la r&egrave;gle actuelle).{{{</p>
+	<p class="note">&nbsp;}}}<span style="font-weight: bold;"><b>Remarque</b></span>&nbsp;:{{{ }}}Si cette action n'est pas sp&eacute;cifi&eacute;e, les r&egrave;gles des filtres ult&eacute;rieurs continuent &agrave; &ecirc;tre appliqu&eacute;es aux mails entrants &ndash; m&ecirc;me si la ou les conditions du filtre actuel sont satisfaites &ndash;,{{{ }}}ce qui risque de cr&eacute;er des conflits entre des actions contradictoires.{{{</p></li>
 </ol>
-<p class="whs8">Le filtre sera appliqué de manière automatique dès la réception de nouveaux mails.</p>
-<ul><li style="x-condition: Advanced_WC;" class=p-note><p class=note>Vous pouvez également créer un nouveau filtre à partir d’un mail. Cliquez avec le bouton droit sur le mail, puis choisissez <span style="font-weight: bold;"><B>Nouveau filtre</B></span>. La boîte de dialogue   <span style="font-weight: bold;"><B>Modifier filtre</B></span> s’affiche avec les champs   <span style="font-weight: bold;"><B>De</B></span>, <span style="font-weight: bold;"><B>À</B></span>,   et <span style="font-weight: bold;"><B>Objet</B></span> configurés avec les données du mail. &nbsp;Si les conditions du filtre sont correctes, donnez un nom au filtre puis cliquez sur OK. </p></li>
-</ul>
-<p class="whs9">&nbsp;</p>
-<p class="whs9">
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Caractères de substitution','wildcards.htm','Conditions et actions de filtre supportées','filter_conditions_and_actions_supported.htm','Fonctionnement du filtre','how_filtering_works.htm');return false;" title="Rubriques connexes"><img src="../ss_btn_rubriques_connexes.gif" border=0 height=17 width=104 alt="Rubriques connexes"></a>
+<p style="font-style: normal;">Les modifications que vous apportez aux r&egrave;gles des filtres sont enregistr&eacute;es imm&eacute;diatement. Le filtre sera appliqu&eacute; de mani&egrave;re automatique d&egrave;s la r&eacute;ception de nouveaux mails. &nbsp;</p>
+<p style="font-style: normal;">}}}Vous pouvez &eacute;galement appliquer des r&egrave;gles de filtre aux mails d&eacute;j&agrave; stock&eacute;s dans votre compte.{{{ }}}Dans Pr&eacute;f&eacute;rences de filtres, cliquez sur <span style="font-weight: bold;"><b>Appliquer le filtre</b></span> et s&eacute;lectionnez les dossiers principaux auxquels le filtre sera appliqu&eacute;.{{{</p>
+<p class="note">}}}<span style="font-weight: bold;"><b>Remarque</b></span>&nbsp;:{{{ Vous pouvez &eacute;galement cr&eacute;er un nouveau filtre &agrave; partir d&rsquo;un mail. Cliquez avec le bouton droit sur le mail, puis choisissez <span style="font-weight: bold;"><b>Nouveau filtre</b></span>. La bo&icirc;te de dialogue   <span style="font-weight: bold;"><b>Modifier filtre</b></span> s&rsquo;affiche avec les champs   <span style="font-weight: bold;"><b>De</b></span>, <span style="font-weight: bold;"><b>&Agrave;</b></span>,   et <span style="font-weight: bold;"><b>Objet</b></span> configur&eacute;s avec les donn&eacute;es du mail. }}}&nbsp;Si les conditions du filtre sont correctes, donnez un nom de votre choix &agrave; celui-ci et cliquez sur OK.{{{</p> <p>&nbsp;</p> <p>
+
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+  <param  name="Command"  value="}}}Rubriques connexes, MENU{{{" />
+  <param  name="Font"  value="}}}Arial, 8,0, GRAS SOULIGN&Eacute;{{{" />
+  <param  name="Item1"  value="}}}Conditions et actions de filtre support&eacute;es&nbsp;; filter_conditions_and_actions_supported.htm{{{" />
+  <param  name="Item2"  value="}}}Fonctionnement du filtre&nbsp;; how_filtering_works.htm{{{" />
+  <param  name="Item3"  value="}}}Substitutions&nbsp;; wildcards.htm{{{" />
+  <param  name="Text"  value="}}}Texte&nbsp;:{{{ Rubriques connexes" />
+</object>
+
 
  </p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
-if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
-  WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

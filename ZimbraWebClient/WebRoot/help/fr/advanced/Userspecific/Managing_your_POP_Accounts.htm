@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Accéder à vos comptes externes</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Acc&eacute;der &agrave; vos comptes externes</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Gestion de vos mails \nRécupérer les mails de comptes externes\nAccéder à vos comptes externes");
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,37 +81,34 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Accéder à vos comptes externes</h1>
-<p>Au lieu de vous connecter séparément à chacun de vos comptes de messagerie externes, vous pouvez consulter les mails de ces comptes directement depuis le client Web de Zimbra.   Lorsque vous configurez votre compte externe sur ZWC, vous pouvez spécifier l’emplacement de sauvegarde des mails et créer l’avatar que vous voulez utiliser lorsque vous répondez ou transférez un mail reçu depuis ce compte externe. </p>
-<h2>Informations nécessaires pour configurer votre compte externe</h2>
-<p>Lorsque vous configurez votre compte externe, vous devez connaître les informations suivantes concernant ce compte : il est possible que vous deviez contacter votre fournisseur de messagerie pour obtenir ces informations.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Type de compte</B></span>.   Il s’agit du type de mail que votre fournisseur utilise, &nbsp;POP   ou IMAP</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Nom d’utilisateur du compte</B></span>.   Le nom d’utilisateur associé à ce compte de messagerie. Parfois votre nom d’utilisateur correspond à la partie de votre adresse mail précédant le caractère @. Dans d'autres cas, il s’agit de votre adresse complète.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Serveur de messagerie</B></span>.   Il s’agit du nom du serveur de votre compte externe.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Paramètres avancés</B></span>.   Votre fournisseur doit vous prévenir si votre compte n’utilise pas les ports standard IMAP (143) ou POP (110). Activez <span style="font-weight: bold;"><B>Avec ce serveur, utiliser une connexion cryptée (SSL) </B></span>   lorsque vous devez utiliser une connexion sécurisée au serveur externe. &nbsp;Les numéros de port changeront.</p></li>
+//]]></script>
+<h1>Acc&eacute;der &agrave; vos comptes externes</h1>
+<p>}}}Au lieu de vous connecter &agrave; chacun des comptes de messagerie externes, vous pouvez r&eacute;cup&eacute;rer les mails de votre compte directement &agrave; partir de @ClientNameLong@.{{{ }}}Lorsque vous configurez votre compte externe sur @ClientNameShort@, vous pouvez sp&eacute;cifier l&rsquo;emplacement de sauvegarde des mails et cr&eacute;er l&rsquo;avatar que vous voulez utiliser lorsque vous r&eacute;pondez ou transf&eacute;rez un mail re&ccedil;u depuis ce compte externe.{{{</p>
+<h2>Informations n&eacute;cessaires pour configurer votre compte externe</h2>
+<p>Lorsque vous configurez votre compte externe, vous devez conna&icirc;tre les informations suivantes concernant ce compte&nbsp;: il est possible que vous deviez contacter votre fournisseur de messagerie pour obtenir ces informations.</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Type de compte</b></span>. }}}Il s&rsquo;agit du type de mail que votre fournisseur utilise, POP ou IMAP.{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Nom d&rsquo;utilisateur du compte</b></span>. Le nom d&rsquo;utilisateur associ&eacute; &agrave; ce compte de messagerie.{{{ Parfois votre nom d&rsquo;utilisateur correspond &agrave; la partie de votre adresse mail pr&eacute;c&eacute;dant le caract&egrave;re @. Dans d'autres cas, il s&rsquo;agit de votre adresse compl&egrave;te.</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Serveur de messagerie</b></span>.{{{ Il s&rsquo;agit du nom du serveur de votre compte externe.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Param&egrave;tres avanc&eacute;s</b></span>. Votre fournisseur doit vous pr&eacute;venir si votre compte n&rsquo;utilise pas les ports standard IMAP (143) ou POP (110). }}}Activez <span style="font-weight: bold;"><b>Avec ce serveur, utiliser une connexion crypt&eacute;e ( SSL) </b></span>lorsque vous devez utiliser une connexion s&eacute;curis&eacute;e au serveur externe.{{{ }}}Les num&eacute;ros de port changeront.{{{</p></li>
 </ul>
 <h6>Recevoir des mails sur votre compte</h6>
-<p>Lorsque vous récupérez vos mails externes, les mails et pièces jointes sont enregistrés dans le dossier que vous avez spécifié lors de la configuration des informations de votre compte. </p>
-<p>Les mails de votre compte externe ne sont pas automatiquement reçus dans le compte de votre client Web de Zimbra. </p>
-<ul type="disc" class="whs1">
-	<li class=p><p>&nbsp;Si vous avez configuré la <span style="font-weight: bold;"><B>Boîte de réception</B></span>   comme dossier pour sauvegarder les mails de votre compte externe, cliquez sur <span 
- style="font-weight: bold;"><B>Actualiser la réception du courrier</B></span> dans la barre d’outils. Votre dossier Boîte de réception est mis à jour avec tous les nouveaux mails – y compris les mails de vos comptes externes.</p></li>
-	<li class=p><p>Si vous avez configuré un autre dossier pour vos comptes externes, sélectionnez ce dossier puis cliquez sur le bouton <span style="font-weight: bold;"><B>Actualiser la réception du courrier</B></span> dans la barre d’outils. &nbsp;Les mails sont réceptionnés dans ce dossier. Cliquez sur <span style="font-weight: bold;"><B>Actualiser</B></span>   pour consulter les derniers mails.</p></li>
+<p>Lorsque vous r&eacute;cup&eacute;rez vos mails externes, les mails et pi&egrave;ces jointes sont enregistr&eacute;s dans le dossier que vous avez sp&eacute;cifi&eacute; lors de la configuration des informations de votre compte. </p>
+<p>}}}Les messages provenant de votre compte externe ne sont pas automatiquement re&ccedil;us dans votre compte @ClientNameLong@.{{{</p>
+<ul type="disc">
+	<li class="p"><p>}}}Si vous avez configur&eacute; la <span style="font-weight: bold;"><b>Bo&icirc;te de r&eacute;ception</b></span> comme dossier pour sauvegarder les mails de votre compte externe, cliquez sur <span  	 style="font-weight: bold;"><b>Actualiser la r&eacute;ception du courrier</b></span> dans la barre d&rsquo;outils.{{{ Votre dossier Bo&icirc;te de r&eacute;ception est mis &agrave; jour avec tous les nouveaux mails &ndash; y compris les mails de vos comptes externes.</p></li>
+	<li class="p"><p>Si vous avez configur&eacute; un autre dossier pour vos comptes externes, s&eacute;lectionnez ce dossier puis cliquez sur le bouton <span style="font-weight: bold;"><b>Actualiser la r&eacute;ception du courrier</b></span> dans la barre d&rsquo;outils. }}}Les mails sont r&eacute;ceptionn&eacute;s dans ce dossier.{{{ Cliquez sur <span style="font-weight: bold;"><b>Actualiser</b></span>   pour consulter les derniers mails.</p></li>
 </ul>
 <p>&nbsp;</p>
-<p class="whs2">&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="margin-left: 40px;">&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

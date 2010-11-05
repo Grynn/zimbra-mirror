@@ -566,7 +566,7 @@ function addSearchForm()
 	else if("image"=="image"&&gsIGo)
 	{
 		sButton+="<td NOWRAP valign=\"middle\"><a class=\"searchbtn\" href=\"javascript:void(0);\" onclick=\"searchForm.submit(); return false;\">"
-		sButton+="<img alt=\"Ok\" src=\""+gsIGo+"\" border=0 align=\"absmiddle\"></a></td>";
+		sButton+="<img alt=\"Aller\" src=\""+gsIGo+"\" border=0 align=\"absmiddle\"></a></td>";
 	}
 	sButton+="</tr></table>";
 	if(gbNav6)

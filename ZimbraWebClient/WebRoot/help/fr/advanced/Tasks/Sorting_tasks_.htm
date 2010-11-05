@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Trier des tâches </title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Trier des t&acirc;ches</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Utilisation des listes de tâches\nTrier des tâches");
@@ -52,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,20 +81,31 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Trier des tâches </h1>
-<p>Vous pouvez trier des tâches d’une liste par objet, statut, état d'avancement et date d’échéance. </p>
-<p>Dans l’affichage Tâches, sélectionnez une liste de tâches et, dans la barre d’outils du panneau de contenu, cliquez sur le titre Trier par. </p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>Trier des t&acirc;ches</h1>
+<p>}}}Vous pouvez trier les t&acirc;ches dans votre liste de t&acirc;ches afin de voir rapidement les t&acirc;ches par &eacute;tat.{{{ }}}Dans la barre d'outils T&acirc;ches, cliquez sur <span style="font-weight: bold;"><b>Trier par</b></span>, puis s&eacute;lectionnez l'un des &eacute;l&eacute;ments suivants&nbsp;:{{{</p>
+<ul type="disc">
+	<li><p>}}}<span style="font-weight: bold;"><b>Non lanc&eacute;(e)</b></span>.{{{</p></li>
+	<li style="font-weight: bold;"><p>}}}L'op&eacute;ration est termin&eacute;e.{{{</p></li>
+	<li style="font-weight: bold;"><p>}}}En cours{{{</p></li>
+	<li style="font-weight: bold;"><p>}}}En attente de donn&eacute;es{{{</p></li>
+	<li style="font-weight: bold;"><p>}}}Report&eacute;{{{</p></li>
+	<li><p>}}}<span style="font-weight: bold;"><b>Tout</b></span><span>.{{{ }}}Tout</span> affiche toutes les t&acirc;ches quelque soit leur &eacute;tat.{{{</p></li>
+	<li><p>}}}<span style="font-weight: bold;"><b>Liste de t&acirc;ches</b></span><span>.</span>{{{ }}}La Liste des t&acirc;ches affiche les t&acirc;ches ayant l'&eacute;tat <span style="font-weight: bold;"><b>En cours</b></span>, <span style="font-weight: bold;"><b>Non lanc&eacute;(e)</b></span> ou, si la t&acirc;che est arriv&eacute;e &agrave; &eacute;ch&eacute;ance, <span style="font-weight: bold;"><b>En attente de donn&eacute;es</b></span>.{{{ . </p></li>
+</ul>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

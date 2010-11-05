@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Menus de clic droit</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Navigation dans votre boîte aux lettres\nMenus de clic droit");
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,28 +81,34 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>Menus de clic droit</h1>
-<p>De nombreuses sections de l’interface du client Web avancé de Zimbra autorisent les menus d’actions qui apparaissent lorsque vous déplacez votre curseur sur un élément tel qu’un dossier. Cliquez ensuite avec le bouton droit de la souris. Les options du menu qui s’affiche varient suivant le type d’élément. </p>
-<p>En faisant un clic droit sur les éléments suivants, les menus s’affichent : </p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Conversations.</B></span>   Vous pouvez marquer des conversations comme lues ou non lues, appliquer des tags aux conversations, supprimer des conversations, ou déplacer des conversations dans des dossiers.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Mails.</B></span> Vous pouvez répondre ou faire suivre le mail, le marquer comme lu ou non lu, appliquer des tags au mail, supprimer le mail, le déplacer vers un autre dossier, l’imprimer, afficher les données de l’en-tête original, et créer un nouveau filtre.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Noms des en-têtes de mails</B></span>   Vous pouvez effectuer des recherches à propos du nom, rédiger un mail à envoyer à cette personne, ou ajouter la personne à votre liste de contacts personnels. Si le nom correspond à un contact existant, vous pouvez modifier les données du contact.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Dossiers.</B></span> Vous pouvez créer un dossier, marquer tous les éléments du dossier comme lus, supprimer ou renommer le dossier, déplacer le dossier, extraire tous les dossiers, ou effectuer une recherche.   Vous ne pouvez pas supprimer les dossiers système (Boîte de réception, Envoyés, Corbeille, Spams, Brouillons).</p></li>
+<p>}}}De nombreuses parties de l'interface &eacute;volu&eacute; @ClientNameLong@ font s'afficher des menus contextuels d'action quand vous passez votre curseur sur un objet tel qu'un dossier, puis cliquez avec le bouton droit de la souris.{{{ Les options du menu qui s&rsquo;affiche varient suivant le type d&rsquo;&eacute;l&eacute;ment.</p>
+<p>En faisant un clic droit sur les &eacute;l&eacute;ments suivants, les menus s&rsquo;affichent&nbsp;:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Conversations.</b></span>   Vous pouvez marquer des conversations comme lues ou non lues, appliquer des tags aux conversations, supprimer des conversations, ou d&eacute;placer des conversations dans des dossiers.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Mails.}}}</b></span>Vous pouvez r&eacute;pondre ou faire suivre le mail, le marquer comme lu ou non lu, appliquer des tags au mail, supprimer le message, le d&eacute;placer vers un autre dossier, l&rsquo;imprimer, afficher les donn&eacute;es de l&rsquo;en-t&ecirc;te original, et cr&eacute;er un nouveau filtre.{{{ }}}L'option de modifier le message comme Nouveau vous permet de renvoyer un message sans avoir &agrave; le faire suivre.{{{</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Noms des en-t&ecirc;tes de mails</b></span>   Vous pouvez effectuer des recherches &agrave; propos du nom, r&eacute;diger un mail &agrave; envoyer &agrave; cette personne, ou ajouter la personne &agrave; votre liste de contacts personnels. Si le nom correspond &agrave; un contact existant, vous pouvez modifier les donn&eacute;es du contact.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Dossiers.</b></span> Vous pouvez cr&eacute;er un dossier, marquer tous les &eacute;l&eacute;ments du dossier comme lus, supprimer ou renommer le dossier, d&eacute;placer le dossier, extraire tous les dossiers, ou effectuer une recherche. }}}Vous ne pouvez pas supprimer les dossiers syst&egrave;me (Bo&icirc;te de r&eacute;ception, Envoy&eacute;s, Corbeille, Spams ou Brouillons).{{{</p></li>
+	<li class="p"><p>}}}<span style="font-weight: bold;"><b>Barre d'outils de l'onglet Mail</b></span>.{{{ }}}Vous pouvez s&eacute;lectionner quelles colonnes afficher dans le Panneau de contenu mail.{{{</p></li>
 </ul>
 <p>&nbsp;</p>
+<p>}}}Consultez <a href="Customize_your_view.htm">Personnaliser la vue de votre compte</a>{{{</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
