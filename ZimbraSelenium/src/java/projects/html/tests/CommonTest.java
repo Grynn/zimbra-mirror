@@ -25,7 +25,6 @@ import projects.html.PageObjects;
 import com.zimbra.common.service.ServiceException;
 
 import framework.core.*;
-import framework.core.SeleniumService;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.Stafzmprov;
@@ -460,6 +459,7 @@ public class CommonTest extends SelNGBase {
 		for (i = 0; i <= 15; i++) {
 			String retVal = null;
 			objectType = objectType.toLowerCase();
+			try {
 			if (objectType.equals("button")) {
 				retVal = obj.zButton.zExistsDontWait(objectName);
 			} else if (objectType.equals("checkbox")) {
@@ -499,9 +499,14 @@ public class CommonTest extends SelNGBase {
 				found = true;
 				break;
 			}
+			}
+			catch (Exception e) {
+	           //if the element not yet appear, then wait
+			   SleepUtil.sleep(1000);            	
+	        }
 		}
 		if (!found)
-			Assert.fail("Object(" + objectName
+			throw new Exception("Object(" + objectName
 					+ ") didn't appear even after 60 seconds");
 	}
 

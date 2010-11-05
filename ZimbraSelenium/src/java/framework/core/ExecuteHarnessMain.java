@@ -521,9 +521,16 @@ public class ExecuteHarnessMain {
 	      subject.replace("\r", "");
 	      message.setSubject(subject);
 	      message.setContent(body, "text/plain");
-	      message.setFrom(new InternetAddress("qa-tms@zimbra.com"));
+	      
+	      String emailFrom = ZimbraSeleniumProperties.getStringProperty("emailFrom");
+	      emailFrom = ((emailFrom == null) || (emailFrom.length() == 0))?"qa-tms@zimbra.com":emailFrom;
+          
+          String emailTo = ZimbraSeleniumProperties.getStringProperty("emailTo");
+	      emailTo = ((emailTo == null) || (emailTo.length() == 0))?"qa-group@zimbra.com":emailTo;
+
+	      message.setFrom(new InternetAddress(emailFrom));
 	      message.addRecipient(Message.RecipientType.TO,
-	    		 new InternetAddress("qa-automation@zimbra.com"));
+	    		 new InternetAddress(emailTo));
 
 	      transport.connect();
 	      transport.sendMessage(message,

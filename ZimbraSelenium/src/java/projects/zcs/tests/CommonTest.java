@@ -634,7 +634,7 @@ public class CommonTest extends SelNGBase {
 		for (i = 0; i <= 30; i++) {
 			String retVal = null;
 			objectType = objectType.toLowerCase();
-
+            try {
 			if (objectType.equals("button")) {
 				retVal = obj.zButton.zExistsDontWait(objectName);
 			} else if (objectType.equals("id")) {
@@ -682,17 +682,21 @@ public class CommonTest extends SelNGBase {
 				else
 					retVal = "false";
 			}
-
 			if (retVal.equals("false")) {
 				SleepUtil.sleep(1000);
 			} else {
-				SleepUtil.sleep(1000);
 				found = true;
 				break;
 			}
-		}
+            }
+            catch (Exception e) {
+            	//if the element not yet appear, then wait
+				SleepUtil.sleep(1000);            	
+            }
+
+            }
 		if (!found)
-			Assert.fail("Object(" + objectName
+			throw new Exception("Object(" + objectName
 					+ ") didn't appear even after 30 seconds");
 	}
 
