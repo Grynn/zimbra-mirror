@@ -1,0 +1,308 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="Aangepaste mappen" >
+  <topic name="Aangepaste mappen maken" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="aanpassen, contactveld" >
+  <topic name="Een nieuw contact maken" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="Abonneren op RSS" >
+  <topic name="Abonneren op RSS/ATOM-feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="account instellen, IMAP" >
+  <topic name="POP/IMAP-accounts instellen" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
+<key name="account, exporteren" >
+  <topic name="Een back-up maken van de inhoud van je account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="account, importeren" >
+  <topic name="Een back-up maken van de inhoud van je account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="Adresboek, groepcontacten" >
+  <topic name="Groepcontactlijsten maken" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="Adresboeken importeren" >
+  <topic name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Adressen automatisch invullen in e-mail" >
+  <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="afbeeldingen in handtekening" >
+  <topic name="Een handtekening gebruiken" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="Afdrukken" >
+  <topic name="Een conversatie afdrukken" url="conversations/printing_a_conversation.htm" />
+  <topic name="Een e-mailbericht afdrukken" url="reading_mail/printing_a_mail_message.htm" />
+  <key name="E-mailbericht" >
+    <topic name="Een e-mailbericht afdrukken" url="reading_mail/printing_a_mail_message.htm" />
+  </key>
+</key>
+<key name="Afdrukken, agenda" >
+  <topic name="Een agenda afdrukken" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="Afdrukken, contacten" >
+  <topic name="Contacten afdrukken" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="afdrukken, taken" >
+  <topic name="Info over taken" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="Afspraak, Snel Toevoegen" >
+  <topic name="Snel Toevoegen gebruiken om een afspraak te maken" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="Afspraken" >
+  <topic name="Afspraken, vergaderingen en evenementen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="afspraken als privé markeren" >
+  <topic name="Een afspraak als privé markeren" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="Afspraken maken, hoe" >
+  <topic name="Afspraken, vergaderingen en evenementen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="Agenda afdrukken" >
+  <topic name="Een agenda afdrukken" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="Agenda, vrij/bezet" >
+  <topic name="Tijdstippen vrij/bezet bekijken" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="Aktetas, bestanden toevoegen aan e-mail" >
+  <topic name="Bestanden als bijlage toevoegen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="Algemene adreslijst versus contacten" >
+  <topic name="Algemene adreslijst versus contacten" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="als nieuw bewerken" >
+  <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="Archiveren, berichten" >
+  <topic name="Verwijderen, berichten" url="reading_mail/archiving_old_messages.htm" />
+</key>
+<key name="archiveren, e-mail" >
+  <topic name="E-mailberichten archiveren" url="Zdesktop/Archiving_your_email_messages.htm" />
+</key>
+<key name="Atom-feed" >
+  <topic name="Abonneren op RSS/ATOM-feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="Automatisch handtekening toevoegen" >
+  <topic name="Een handtekening gebruiken" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="Automatisch invullen, adressen" >
+  <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="backup, accountgegevens" >
+  <topic name="Een back-up maken van de inhoud van je account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="Beantwoorden" >
+  <topic name="E-mailberichten beantwoorden" url="reading_mail/replying_to_mail_messages.htm" />
+  <key name="E-mailberichten" >
+    <topic name="E-mailberichten beantwoorden" url="reading_mail/replying_to_mail_messages.htm" />
+  </key>
+</key>
+<key name="Bekijken als HTML" >
+  <topic name="Bestanden in bijlagen openen" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="bericht, ontvangstbewijs" >
+  <topic name="Een ontvangstbewijs vragen" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+</key>
+<key name="berichten naar een map verplaatsen" >
+  <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
+</key>
+<key name="Berichten, vakantie" >
+  <topic name="Vakantiebericht" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Berichtweergave" >
+  <topic name="De weergave van je e-mailberichten beheren" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="Beschrijving van de querytaal" >
+  <topic name="Beschrijving van de querytaal" url="Search/query_language_description.htm" />
+</key>
+<key name="bestanden, toevoegen als bijlage" >
+  <topic name="Bestanden als bijlage toevoegen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="Bewerken, toestemmingen voor e-mailmap" >
+  <topic name="Toegang tot een gedeelde map intrekken" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="Bijlage, als bijlage toevoegen" >
+  <topic name="Bestanden als bijlage toevoegen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="Bijlagen" >
+  <topic name="Bestanden in bijlagen openen" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="binnenkomende e-mail sorteren" >
+  <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
+</key>
+<key name="Conceptbericht" >
+  <topic name="Een conceptbericht opslaan" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="Contact" >
+  <topic name="Een contact bewerken" url="Contacts/editing_a_contact.htm" />
+  <topic name="Een nieuw contact maken" url="Contacts/creating_a_new_contact.htm" />
+  <key name="Bewerken" >
+    <topic name="Een contact bewerken" url="Contacts/editing_a_contact.htm" />
+  </key>
+</key>
+<key name="Contact bewerken" >
+  <topic name="Een contact bewerken" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="Contacten importeren" >
+  <topic name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="contacten, aangepaste velden op formulier maken" >
+  <topic name="Een nieuw contact maken" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="Contacten, lijst afdrukken" >
+  <topic name="Contacten afdrukken" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="Contacten, verwijderd contact opnieuw toevoegen aan lijst" >
+  <topic name="Een contact verwijderen" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="Controleren of er nieuwe e-mail is binnengekomen" >
+  <topic name="Hoe weet je dat je nieuwe e-mail hebt?" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="controleren, reacties op vergadering" >
+  <topic name="Het tabblad Planning gebruiken bij het maken van een afspraak" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="Conversaties" >
+  <topic name="Conversaties kunnen meerdere mappen omvatten" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="Een conversatie afdrukken" url="conversations/printing_a_conversation.htm" />
+  <key name="Afdrukken" >
+    <topic name="Een conversatie afdrukken" url="conversations/printing_a_conversation.htm" />
+  </key>
+</key>
+<key name="Conversatieweergave" >
+  <topic name="De weergave van je e-mailberichten beheren" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="De weergave aanpassen" >
+  <topic name="De weergave aanpassen" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+</key>
+<key name="Deelvenster Inhoud, kolomkop wijzigen" >
+  <topic name="De weergave aanpassen" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+</key>
+<key name="Documenten, nieuwe pagina's maken" >
+  <topic name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="Documenten, RTF-editor" >
+  <topic name="De RTF-editor gebruiken" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="Documenten, tabellen toevoegen" >
+  <topic name="Een tabel aan een notitieboekpagina toevoegen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="Doorsturen" >
+  <topic name="Een e-mailbericht doorsturen" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</key>
+<key name="Doorsturen, jouw e-mail" >
+  <topic name="Een doorstuuradres instellen" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="E-mail" >
+  <topic name="E-mail lezen" url="reading_mail/reading_mail.htm" />
+  <key name="Lezen" >
+    <topic name="E-mail lezen" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="e-mail automatisch naar een map verplaatsen" >
+  <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
+</key>
+<key name="E-mail controleren" >
+  <topic name="Hoe weet je dat je nieuwe e-mail hebt?" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="E-mail die niet kan worden afgeleverd" >
+  <topic name="E-mail die niet kan worden afgeleverd" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="E-mail, kennisgeving van" >
+  <topic name="Kennisgeving nieuwe berichten" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="E-mailbericht" >
+  <topic name="Gedeelten van een e-mailbericht" url="Creating_Messages/parts_of_an_email_message.htm" />
+</key>
+<key name="E-mailberichtoverzicht" >
+  <topic name="De weergave van je e-mailberichten beheren" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="E-mailidentiteiten" >
+  <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="e-mailkennisgeving" >
+  <topic name="Bureaubladwaarschuwingen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="Evenementen" >
+  <topic name="Afspraken, vergaderingen en evenementen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="exporteren, accountgegevens" >
+  <topic name="Een back-up maken van de inhoud van je account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="Exporteren, iCal-agenda's" >
+  <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="Filteren, berichten" >
+  <topic name="Berichten filteren" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="Filteren, hoe het werkt" >
+  <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
+</key>
+<key name="filterregels, bestaande mappen" >
+  <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
+</key>
+<key name="Filtervoorwaarden" >
+  <topic name="Ondersteunde filtercondities en acties" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
+</key>
+<key name="Gebruikersinterfacefuncties" >
+  <topic name="Gebruikersinterfacefuncties en sneltoetsen" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="Groepcontacten" >
+  <topic name="Groepcontactlijsten maken" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="Handtekening" >
+  <topic name="Een handtekening gebruiken" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="herinneringen" >
+  <topic name="Bureaubladwaarschuwingen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="Herstellen" >
+  <topic name="Verwijderde e-mailberichten herstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="Verwijderde e-mailberichten" >
+    <topic name="Verwijderde e-mailberichten herstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="HTML" >
+  <topic name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="iCal-agenda's importeren of exporteren" >
+  <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="ics-bijlagen, opslaan" >
+  <topic name="Een uitnodiging beantwoorden" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="Identiteiten" >
+  <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="IM-kennisgeving" >
+  <topic name="Bureaubladwaarschuwingen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="IMAP-account instellen" >
+  <topic name="POP/IMAP-accounts instellen" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
+<key name="IMAP-adressen toevoegen" >
+  <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="importeren, account" >
+  <topic name="Een back-up maken van de inhoud van je account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="Importeren, adresboeken" >
+  <topic name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Importeren, contacten" >
+  <topic name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Importeren, iCal-agenda's" >
+  <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="Instellen, een doorstuuradres" >
+  <topic name="Een doorstuuradres instellen" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="Intrekken, toegang tot gedeelde mappen" >
+  <topic name="Toegang tot een gedeelde map intrekken" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="Label, slepen en neerzetten" >
+  <topic name="Labels aan berichten toewijzen" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+</key>
+
+</indexdata>

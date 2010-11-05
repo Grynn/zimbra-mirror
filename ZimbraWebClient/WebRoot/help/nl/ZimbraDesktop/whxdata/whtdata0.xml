@@ -1,0 +1,142 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<tocdata>
+<book name="Aan de slag" >
+  <item name="Info over Zimbra Desktop" url="Getting_Started/Zimbra_User_Help.htm" />
+  <item name="Overzicht van de Zimbra Desktop-functies" url="Zdesktop/Overview_of_Zimbra_Desktop_Features.htm" />
+  <item name="Offline werken" url="Zdesktop/z-Working_Offline.htm" />
+  <item name="Toetsenbordsneltoetsen" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+</book>
+<book name="Zimbra Desktop instellen" >
+  <item name="Een Zimbra Web Client-account instellen" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
+  <item name="Yahoo instellen! Mail- en Gmail-accounts" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
+  <item name="POP/IMAP-accounts instellen" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+  <item name="Je accounts synchroniseren" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
+  <item name="Automatisch synchroniseren uitschakelen" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
+  <item name="De weergave van Zimbra Desktop indelen" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
+  <item name="Een account uit Zimbra Desktop verwijderen" url="Zdesktop/z-Deleting_an_account_from_Desktop.htm" />
+</book>
+<book name="Navigeren in je postvak" >
+  <item name="Navigeren in Zimbra Desktop" url="Navigation_folders_and_tips/z-Navigating_Zimbra_Desktop.htm" />
+  <item name="Gebruikersinterfacefuncties en sneltoetsen" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+  <item name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <item name="Systeemmappen" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="Bewerkingen toepassen op meerdere selecties" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+</book>
+<book name="Je postvak beheren" >
+  <item name="De weergave van je e-mailberichten beheren" url="conversations/conversation_list_view.htm" />
+  <item name="Standaardgedrag van het bureaublad voor het ontvangen van e-mail instellen" url="Zdesktop/z_Setting_Desktop_behavior_for_getting_mail.htm" />
+  <item name="Berichten bekijken" url="Navigation_folders_and_tips/Traditional_View.htm" />
+  <item name="Hoe werken conversaties" url="conversations/conversations_can_span_folders.htm" />
+  <item name="E-mailberichten categoriseren" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="Een conversatie afdrukken" url="conversations/printing_a_conversation.htm" />
+  <item name="Verwijderde e-mailberichten herstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="E-mail die niet kan worden afgeleverd" url="Creating_Messages/undeliverable_mail.htm" />
+  <item name="Een doorstuuradres instellen" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</book>
+<book name="E-mail opstellen" >
+  <item name="E-mailberichten opstellen en verzenden" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="Gedeelten van een e-mailbericht" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <item name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="Cc: en Bcc:-adressen adressen toevoegen" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="Je handtekening toevoegen" url="Userspecific/using_a_signature.htm" />
+  <item name="Bestanden als bijlage toevoegen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="Ondersteunde bestandstypen als bijlage" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Een conceptbericht opslaan" url="Creating_Messages/saving_a_draft_message.htm" />
+</book>
+<book name="Berichten lezen, beantwoorden en doorsturen" >
+  <item name="E-mail lezen" url="reading_mail/reading_mail.htm" />
+  <item name="Hoe weet je dat je nieuwe e-mail hebt?" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <item name="Berichten bekijken in het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <item name="E-mail als niet-gelezen markeren" url="reading_mail/marking_mail_as_unread.htm" />
+  <item name="Bestanden in bijlagen openen" url="reading_mail/opening_file_attachments.htm" />
+  <item name="Afzonderlijke e-mailberichten afdrukken" url="reading_mail/printing_a_mail_message.htm" />
+  <item name="E-mailberichten beantwoorden" url="reading_mail/replying_to_mail_messages.htm" />
+  <item name="Een e-mailbericht doorsturen" url="Creating_Messages/forwarding_a_mail_message.htm" />
+</book>
+<book name="Filters gebruiken" >
+  <item name="Filters gebruiken om binnenkomende e-mail te sorteren" url="filters/how_filtering_works.htm" />
+  <item name="Berichten filteren" url="filters/filtering_your_messages.htm" />
+  <item name="Ondersteunde filtercondities en acties" url="filters/filter_conditions_and_actions_supported.htm" />
+  <item name="Wildcards" url="filters/wildcards.htm" />
+</book>
+<book name="De lijst met contacten beheren" >
+  <item name="Nieuwe contacten toevoegen" url="Contacts/creating_a_new_contact.htm" />
+  <item name="Contactengroepslijsten maken" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="Een contact bewerken" url="Contacts/editing_a_contact.htm" />
+  <item name="Een contact verwijderen" url="Contacts/deleting_a_contact.htm" />
+  <item name="Contacten afdrukken" url="Contacts/Printing_Contacts.htm" />
+  <item name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
+  <item name="Contacten exporteren" url="Contacts/Exporting_Address_Books.htm" />
+</book>
+<book name="Je agenda's beheren" >
+  <item name="Agenda's gebruiken" url="Calendar/z-Using_Calendars.htm" />
+  <item name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
+  <item name="Agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Een agenda afdrukken" url="Calendar/Printing_a_calendar.htm" />
+  <item name="Agenda's verwijderen" url="Calendar/Deleting_Calendars.htm" />
+  <item name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <item name="Je iCal-agenda exporteren" url="Calendar/Exporting_your_iCal_calendar.htm" />
+</book>
+<book name="Afspraken plannen" >
+  <item name="Info over het plannen van afspraken" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <item name="Een afspraak plannen" url="Calendar/About_the_Appointment_Page.htm" />
+  <item name="Een afspraak maken" url="Calendar/Scheduling_meetings.htm" />
+  <item name="Tijdstippen vrij/bezet bekijken" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="Een afspraak als privé markeren" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <item name="Snel Toevoegen gebruiken om een afspraak te maken" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+  <item name="Berichten en contacten veranderen in een aanvraag voor een vergadering" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+  <item name="Terugkerende afspraken maken" url="Calendar/Creating_recurring_appointments.htm" />
+  <item name="Terugkerende afspraken wijzigen" url="Calendar/Deleting_recurring_appointments.htm" />
+  <item name="Een uitnodiging voor een vergadering beantwoorden" url="Calendar/Responding_to_an_invitation.htm" />
+</book>
+<book name="Naar items zoeken" >
+  <item name="Zoeken gebruiken" url="Search/using_the_search_feature.htm" />
+  <item name="Zoeken naar berichten" url="Search/_search__vs.__search_for_.htm" />
+  <item name="Snel zoeken" url="Search/Quick_search.htm" />
+  <item name="Uitgebreid zoeken" url="Search/building_search_queries.htm" />
+  <item name="Zoekopdrachten opslaan" url="Search/saving_search_queries.htm" />
+  <item name="Beschrijving van de querytaal" url="Search/query_language_description.htm" />
+  <item name="Zoekvoorbeelden" url="Search/search_examples.htm" />
+  <item name="Bevat versus Komt overeen met" url="Search/contains_vs_matches.htm" />
+  <item name="AND- en OR-zoekopdrachten" url="Search/and_vs_or_searches.htm" />
+  <item name="Het sterretje * als wildcard gebruiken bij het zoeken" url="Search/Using_Wildcard_in_Search.htm" />
+</book>
+<book name="Je voorkeuren instellen" >
+  <item name="Je voorkeuren instellen voor Zimbra Desktop" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
+  <item name="Bureaubladwaarschuwingen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
+  <item name="E-mailkennisgevingen aan een ander adres" url="Userspecific/New_mail_notifications.htm" />
+  <item name="Vakantiebericht" url="Userspecific/vacation_message.htm" />
+  <item name="Zimbra Desktop de standaardmailtoepassing maken" url="managing_your_account/Making_Zimbra_Desktop_Default_Mail_Client.htm" />
+</book>
+<book name="Je accounts organiseren" >
+  <item name="E-mailberichten categoriseren" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm#bc-1" />
+  <item name="Toegang zoeken tot je mappen" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
+  <item name="Mappen verwijderen" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <item name="Aangepaste mappen maken" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+  <item name="Labels aan berichten toewijzen" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <item name="Labels gebruiken om e-mailberichten te classificeren" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+  <item name="Labels verwijderen" url="Tags_and_flags/deleting_tags.htm" />
+  <item name="Een e-mailbericht van een vlag voorzien" url="Tags_and_flags/Flagging_an_email_message.htm" />
+</book>
+<book name="Je taken beheren" >
+  <item name="Info over taken" url="Tasks/About_Tasks.htm" />
+  <item name="Taaklijsten maken" url="Tasks/Create_tasks_folders.htm" />
+  <item name="Een taak toevoegen" url="Tasks/Add_a_task.htm" />
+  <item name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
+  <item name="Een taak verwijderen" url="Tasks/Delete_a_task.htm" />
+  <item name="Taken verplaatsen" url="Tasks/Moving_tasks.htm" />
+  <item name="Taken sorteren" url="Tasks/Sorting_tasks_.htm" />
+</book>
+<book name="Mappen delen (alleen Zimbra-accounts)" >
+<chunk name="Mappen delen (alleen Zimbra-accounts)" ref="whtdata1.xml" />
+</book>
+<book name="Aktetas gebruiken" >
+<chunk name="Aktetas gebruiken" ref="whtdata2.xml" />
+</book>
+<book name="Je accountinhoud beheren" >
+  <item name="E-mailberichten archiveren" url="Zdesktop/Archiving_your_email_messages.htm" />
+  <item name="Accountgegevens verplaatsen naar een ander account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</book>
+
+</tocdata>

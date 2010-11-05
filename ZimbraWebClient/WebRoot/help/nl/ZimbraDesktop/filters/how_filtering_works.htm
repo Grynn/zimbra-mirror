@@ -1,0 +1,232 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxHoe werkt filterenxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
+//<![CDATA[
+function reDo() {
+  if (innerWidth != origWidth || innerHeight != origHeight)
+     location.reload();
+}
+if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) {
+	origWidth = innerWidth;
+	origHeight = innerHeight;
+	onresize = reDo;
+}
+onerror = null; 
+//]]>
+</script>
+<style type="text/css">
+<!--
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
+-->
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+<script type="text/javascript" language="javascript" src="../whver.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
+<script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
+</head>
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.gbWhTopic)
+{
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
+	if (window.addTocInfo)
+	{
+	addTocInfo("Filters gebruiken\nFilters gebruiken om binnenkomende e-mail te sorteren");
+addButton("show",BTN_TEXT,"Weergeven","","","","",0,0,"","","");
+
+	}
+	if (window.writeBtnStyle)
+		writeBtnStyle();
+
+	if (window.writeIntopicBar)
+		writeIntopicBar(1);
+
+	
+	document.write("<p style=\"text-align:right; background: silver\"> ");
+AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
+document.write("<a href=\"how_filtering_works.htm\">Filters gebruiken<\/a> &gt; Filters gebruiken om binnenkomende e-mail te sorteren<\/p>");
+
+
+	if (window.setRelStartPage)
+	{
+	setRelStartPage("../Zimbra_Mail_Help.htm");
+
+		autoSync(1);
+		sendSyncInfo();
+		sendAveInfoOut();
+	}
+}
+else
+	if (window.gbIE4)
+		document.location.reload();
+
+//-->
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	<table style="vertical-align: top;" cellspacing="0" width="100%">
+		<col style="width: 50%;" />
+		<col style="width: 50%;" />
+		<tr style="vertical-align: top;">
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-weight: bold;">&nbsp;</p></td>
+			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
+   <p 
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a  			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">xxxxZie Veelgestelde vragen over Zimbra Desktop voor antwoorden op algemene vragen en oplossingen voor problemenxxxx</a></p></td>
+		</tr>
+	</table>
+</div>
+ 
+<h1>Filters gebruiken om binnenkomende e-mail te sorteren</h1>
+<p>Met filteren kun je regels opstellen om binnenkomende en uitgaande e-mailberichten 
+ te beheren. &#160;Met filters worden je berichten automatisch gesorteerd 
+ volgens de regels die je instelt.</p>
+<p>Je kunt binnenkomende e-mailberichten filteren voor de volgende doeleinden:</p>
+<ul type="disc">
+	<li class="p"><p>Binnenkomende berichten sorteren in mappen</p></li>
+	<li class="p"><p>Automatisch berichten labelen</p></li>
+	<li class="p"><p>Berichten doorsturen</p></li>
+	<li class="p"><p>Het bericht als gelezen of gevlagd markeren</p></li>
+	<li class="p"><p>Berichten verwijderen</p></li>
+</ul>
+<p>Je kunt bijvoorbeeld een filterregel definiëren die e-mail van je directe 
+ supervisor identificeert en verplaatst naar een map genaamd &quot;Van 
+ supervisor&quot;, of om berichten van een specifiek adres automatisch 
+ naar de Prullenbak te verplaatsen.</p>
+<p>Je kunt uitgaande e-mailberichten filteren voor de volgende doeleinden:</p>
+<ul type="disc">
+	<li><p>Berichten opgeslagen in de map Verzonden sorteren in andere 
+	 mappen</p></li>
+	<li class="p"><p>Automatisch berichten labelen</p></li>
+	<li class="p"><p>Berichten doorsturen</p></li>
+	<li class="p"><p>Het bericht als gelezen of gevlagd markeren</p></li>
+	<li class="p"><p>Berichten verwijderen</p></li>
+</ul>
+<h3>xxxxFilterconditiesxxxx</h3>
+<p>Elk filter is een regel met een of meer voorwaarden en een bestemming. 
+ xxxxElke filterregel kan verscheidene condities bevatten.xxxx Als je supervisor 
+ je bijvoorbeeld e-mails stuurt van meer dan één adres, zoals jane.smith@bedrijf.nl of en jane-smith23@yahoo.com, 
+ kun je één filter maken met de naam &quot;Supervisor&quot; en twee voorwaarden, 
+ één voor elk e-mailadres.</p>
+<p>xxxxCondities omvatten:xxxx</p>
+<ul type="disc">
+	<li class="p"><p>xxxxSpecifieke adressen in de adressen Van:, Aan:, 
+	 Cc:xxxx xxxxin de e-mailkopxxxx</p></li>
+	<li class="p"><p>xxxxWoorden of tekenreeksen in het onderwerp of in 
+	 het tekstgedeelte van het e-mailberichtxxxx</p></li>
+	<li class="p"><p>xxxxDe aan- of afwezigheid van bestandsbijlagenxxxx</p></li>
+</ul>
+<p>Bij alle voorwaarden kun je &quot;niet&quot; opgeven als negatieve voorwaarde. 
+ xxxxJe kunt bijvoorbeeld e-mail opgeven dat een specifiek woord niet bevat.xxxx</p>
+<p>xxxxJe kunt condities combineren om naar e-mail te zoeken met complexere 
+ kenmerken.xxxx</p>
+<h3>Willekeurige versus Alle</h3>
+<p>xxxxCondities binnen een filterregel kunnen worden gegroepeerd met xxxx<span 
+	 style="font-weight: bold;"><b>xxxxWillekeurigexxxx</b></span>xxxx of xxxx<span 
+	 style="font-weight: bold;"><b>xxxxAllexxxx</b></span>xxxx.xxxx Het gebruik 
+ van deze termen lijkt op de zoekopdrachten <a href="../Search/and_vs_or_searches.htm">EN 
+ versus OF</a> die worden beschreven onder de functie Zoeken. Hierbij is 
+ <span style="font-weight: bold;"><b>Willekeurige</b></span> OF en <span style="font-weight: bold;"><b>Alle</b></span> 
+ EN.</p>
+<p>xxxxAls je xxxx<span style="font-weight: bold;"><b>xxxxWillekeurigexxxx</b></span>xxxx 
+ kiest bij het definiëren van condities voor een nieuwe filterregel, dan 
+ wordt een bericht dat zelfs maar aan één van de condities voldoet beschouwd 
+ als een overeenkomst.xxxx xxxxAls je echter xxxx<span style="font-weight: bold;"><b>xxxxAllexxxx</b></span>xxxx 
+ kiest, moet elke conditie die is opgegeven in die filterregel van toepassing 
+ zijn voordat het bericht overeenkomt met het filter.xxxx</p>
+<h3>xxxxFilterregelactiesxxxx</h3>
+<p>xxxxElke filterregel kan één of meer acties opgeven.xxxx xxxxActies 
+ omvatten:xxxx</p>
+<ul type="disc">
+	<li class="p"><p>Het bericht in het Postvak IN laten staan (geen actie).</p></li>
+	<li class="p"><p>Het bericht naar een opgegeven map verplaatsen.</p></li>
+	<li class="p"><p>xxxxHet bericht labelen.xxxx</p></li>
+	<li class="p"><p>Het bericht als gelezen of gevlagd markeren.</p></li>
+	<li class="p"><p>xxxxHet bericht weggooien.xxxx xxxxDeze actie verwijdert 
+	 het e-mailbericht stil.xxxx xxxxDit is niet hetzelfde als de actie 
+	 Verwijderen op je menu.xxxx xxxxAls je een item verwijdert, wordt 
+	 het naar de Prullenbak verplaatst.xxxx Hiermee voorkom je dat het 
+	 bericht je Postvak IN zelfs maar bereikt.</p></li>
+	<li class="p"><p>Het bericht doorsturen naar een ander adres.</p></li>
+</ul>
+<p>De actie <span style="font-weight: bold;"><b>Geen extra filters verwerken</b></span> 
+ moet de laatste actie binnen elke filterregel zijn. xxxxDit voorkomt dat 
+ er extra filterregels worden toegepast op e-mailberichten die overeenkomen 
+ met de huidige regel.xxxx xxxxAls dit niet wordt opgegeven, worden alle 
+ regels die hierop volgen geëvalueerd voor het e-mailbericht, zelfs als 
+ het huidige filter een overeenkomst is.xxxx xxxxJe wilt waarschijnlijk 
+ liever niet dat hetzelfde bericht overeenkomt met meer dan één filterregel 
+ en meerdere, misschien zelfs tegenstrijdige, acties ondergaat.xxxx</p>
+<h3>xxxxWanneer filters worden toegepastxxxx</h3>
+<p>xxxxElk binnenkomend bericht wordt gecontroleerd op de filterregels 
+ die van toepassing zijn op het tijdstip dat de e-mail wordt afgeleverd 
+ en de filteracties worden op dat moment op overeenkomende berichten toegepast. 
+ xxxx</p>
+<p>Je kunt de filterregels ook toepassen op bestaande e-mail. In Voorkeuren 
+ &gt; E-mailfilter kun je met de knop <span style="font-weight: bold;"><b>Filter 
+ activeren</b></span> meerdere filters selecteren en deze vervolgens uitvoeren 
+ voor bepaalde e-mailmappen.</p>
+<h3>xxxxFiltervolgordexxxx</h3>
+<p>De filters worden toegepast in de volgorde waarin ze op het tabblad 
+ Voorkeuren &gt; E-mailfilter worden weergegeven. xxxxJe kunt deze volgorde 
+ wijzigen.xxxx</p>
+<p>xxxxBinnen elk filter worden de condities gebruikt om elk e-mailbericht 
+ te testen.xxxx xxxxAls het bericht voldoet aan de gezamenlijke condities 
+ (met behulp van de benaming xxxx<span style="font-weight: bold;"><b>xxxxWillekeurigexxxx</b></span>xxxx 
+ of xxxx<span style="font-weight: bold;"><b>xxxxAllexxxx</b></span>xxxx zoals 
+ opgegeven in de filterregel), dan wordt het beschouwd als een overeenkomst.xxxx 
+ xxxxDe volgorde van de condities binnen elk filter is niet belangrijk.xxxx</p>
+<p>xxxxAls het bericht overeenkomt met de condities, worden alle acties 
+ die zijn gekoppeld aan die filterregel toegepast, in de volgorde waarop 
+ ze in het filter verschijnen.xxxx</p>
+<h3>Actieve versus inactieve filters</h3>
+
+<p>xxxxAlle op dit moment 
+ gedefinieerde filters staan vermeld op de pagina Opties, E-mailfilter.xxxx 
+ xxxxMet het keuzevakje xxxx<span 
+	 style="font-weight: bold;"><b>xxxxActiefxxxx</b></span>xxxx 
+ kun je filters in- of uitschakelen zonder dat je de filterregels hoeft 
+ te verwijderen.xxxx</p>
+<p>
+
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Je berichten filteren','filtering_your_messages.htm','Ondersteunde filtercondities en acties','filter_conditions_and_actions_supported.htm');return false;" title=" Verwante onderwerpen"><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr>  Verwante onderwerpen </nobr></span></a>
+
+
+ </p>
+<p>&#160;</p>
+<script type="text/javascript" language="JavaScript">//<![CDATA[
+if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
+  WritePopupMenuLayer();
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
+<!--
+if (window.writeIntopicBar)
+	writeIntopicBar(0);
+
+
+highlightSearch();
+//-->
+//]]></script>
+</body>
+</html>
