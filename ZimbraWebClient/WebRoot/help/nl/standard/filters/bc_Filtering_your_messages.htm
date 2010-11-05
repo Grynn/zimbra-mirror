@@ -1,38 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Je berichten filteren</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-p.whs3 { margin-left:40px; }
-p.whs4 { margin-left:24px; }
-p.whs5 { margin-left:0px; }
-p.whs6 { font-style:normal; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "p.whs5 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxBerichten filterenxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -43,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Filters maken \nBerichten filteren");
+	addTocInfo("Mailfilters gebruiken\nBerichten filteren");
 addButton("show",BTN_TEXT,"Weergeven","","","","",0,0,"","","");
 
 	}
@@ -72,14 +64,12 @@ addButton("show",BTN_TEXT,"Weergeven","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -91,81 +81,48 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Je berichten filteren</h1>
-<p>Door te filteren kun je bepaalde regels toepassen op je binnenkomende 
- e-mail en vervolgens een opgegeven actie uitvoeren.</p>
-<p>Je kunt je binnenkomende e-mailberichten filteren zodat ze gesorteerd 
- worden in mappen, automatisch worden gelabeld, worden doorgestuurd of 
- verwijderd. Je kunt bijvoorbeeld een regel als volgt maken:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Alle e-mails van je baas gaan naar de map &quot;Managementrichtlijnen&quot;.</p></li>
-	<li class=p><p>Alle e-mails van de verzendlijst &quot;bedrijfsevenementen&quot; 
- wordt gelabeld als &quot;Evenement&quot;.</p></li>
+//]]></script>
+<h1>xxxxBerichten filterenxxxx</h1>
+<p>xxxxFilteren wil zeggen dat een aantal vastgestelde regels worden toegepast op binnenkomende e-mail, waarna vervolgens een bewerking wordt uitgevoerd.xxxx</p>
+<p>xxxxJe kunt je binnenkomende e-mailberichten filteren zodat ze gesorteerd worden in mappen, automatisch worden gelabeld, worden doorgestuurd of verwijderd.xxxx xxxxJe kunt bijvoorbeeld als volgt een regel maken:xxxx</p>
+<ul type="disc">
+	<li class="p"><p>Alle e-mails van je supervisor gaan naar de map &quot;Managementrichtlijnen&quot;.</p></li>
+	<li class="p"><p>Alle e-mails van de verzendlijst &quot;bedrijfsevenementen&quot; worden gelabeld met &quot;Evenement&quot;.</p></li>
 </ul>
-<h6>Een nieuwe filterregel maken of bewerken:</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Klik op het tabblad <span style="font-weight: bold;"><B>Voorkeuren 
- </B></span>.</p></li>
-	<li class=p><p>Open het tabblad <span style="font-weight: bold;"><B>E-mailfilters 
- </B></span>en klik op <span style="font-weight: bold;"><B>Nieuw filter</B></span>.</p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Filternaam</B></span> 
- typ je de naam voor de regel.</p></li>
-	<li class=p><p>In het gedeelte <span style="font-weight: bold;"><B>Als 
- aan de volgende condities is voldaan </B></span>selecteer je een conditie. 
- Nu kun je de conditie maken.</p></li>
+<h6>xxxxEen nieuwe filterregel maken of bewerken:xxxx</h6>
+<ol type="1">
+	<li class="p"><p>xxxxKlik op het tabblad xxxx<span style="font-weight: bold;"><b>xxxxVoorkeurenxxxx</b></span>xxxx.xxxx</p></li>
+	<li class="p"><p>Open de map <span style="font-weight: bold;"><b>E-mailfilters</b></span> en klik op <span style="font-weight: bold;"><b>Nieuw filter</b></span>.</p></li>
+	<li class="p"><p>xxxxIn xxxx<span style="font-weight: bold;"><b>xxxxFilternaamxxxx</b></span>xxxx typ je de naam voor de regel.xxxx</p></li>
+	<li class="p"><p>xxxxIn het gedeelte xxxx<span style="font-weight: bold;"><b>xxxxAls aan de volgende condities is voldaan  xxxx</b></span>xxxx selecteer je een conditie.xxxx xxxxNu kun je de conditie maken.xxxx</p></li>
 </ol>
-<p class="whs3">De volgende stappen kunnen worden herhaald 
- om meerdere condities en acties binnen één enkel filter op te stellen.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p class="whs4">Selecteer in de eerste keuzelijst 
- welke <a href="filter_conditions_and_actions_supported.htm">conditie</a> 
- je wilt gebruiken. &nbsp;</p></li>
-	<li class=p><p class="whs4">Kies een <a href="filter_conditions_and_actions_supported.htm">vergelijkingsmethode</a>. 
- De opties zijn afhankelijk van je keuze in de vorige keuzelijst. Bijvoorbeeld 
- &quot;is&quot; of &quot;is niet&quot; kan worden weergegeven.</p></li>
-	<li class=p><p class="whs4">Geef een woord of zin op 
- waarmee wordt vergeleken in het tekstveld.</p></li>
+<p style="margin-left: 40px;">xxxxDe volgende stappen kunnen worden herhaald om meerdere condities en acties binnen één enkel filter op te stellen.xxxx</p>
+<ul type="disc">
+	<li class="p"><p style="margin-left: 24px;">xxxxSelecteer in de eerste keuzelijst welke xxxx<a href="filter_conditions_and_actions_supported.htm">xxxxconditiexxxx</a>xxxx je wilt gebruiken.xxxx &nbsp;</p></li>
+	<li class="p"><p style="margin-left: 24px;">xxxxKies een xxxx<a href="filter_conditions_and_actions_supported.htm">xxxxvergelijkingsmethodexxxx</a>xxxx.xxxx xxxxDe opties zijn afhankelijk van je keuze in de vorige keuzelijst.xxxx Er kan bijvoorbeeld &quot;is&quot; of &quot;is niet&quot; worden weergegeven.</p></li>
+	<li class="p"><p style="margin-left: 24px;">xxxxGeef een woord of zin op waarmee wordt vergeleken in het tekstveld.xxxx</p></li>
 </ul>
-<ol start="5" type="1" class="whs2">
-	<li class=p><p class="whs5">Klik op <span style="font-weight: bold;"><B>Toevoegen</B></span> 
- om meer condities toe te voegen. Je kunt doorgaan en meer condities toevoegen, 
- of naar het volgende gedeelte gaan om één of meer acties toe te voegen. 
- </p></li>
-	<li class=p><p>In het gedeelte <span style="font-weight: bold;"><B>Voer 
- de volgende handelingen uit </B></span>kies je een <a href="filter_conditions_and_actions_supported.htm">actie</a> 
- in de keuzelijst.</p></li>
+<p style="margin-left: 40px;">xxxxKlik op xxxx<span style="font-weight: bold;"><b>xxxxToevoegenxxxx</b></span>xxxx om meer condities toe te voegen.xxxx xxxxJe kunt doorgaan en meer condities toevoegen, of naar het volgende gedeelte gaan om één of meer acties toe te voegen.xxxx</p>
+<ol start="5" type="1">
+	<li class="p"><p>xxxxIn het gedeelte xxxx<span style="font-weight: bold;"><b>xxxxVoer de volgende handelingen uit  xxxx</b></span>xxxx kies je een xxxx<a href="filter_conditions_and_actions_supported.htm">xxxxactiexxxx</a>xxxx in de keuzelijst.xxxx</p></li>
 </ol>
-<ul type="disc" class="whs1">
-	<li class=p><p class="whs4">Geef een map of labelnaam 
- op, indien noodzakelijk. Wat je opgeeft is afhankelijk van de actie die 
- je kiest.</p></li>
+<ul type="disc">
+	<li class="p" style="margin-left: -20px;"><p style="margin-left: 40px;">xxxxGeef een map of labelnaam op, indien noodzakelijk.xxxx xxxxWat je opgeeft is afhankelijk van de actie die je kiest.xxxx</p></li>
+	<li style="margin-left: -20px;"><p style="margin-left: 40px;">xxxxKlik op xxxx<span style="font-weight: bold;"><b>xxxxToevoegenxxxx</b></span>xxxx om meer acties toe te voegen.xxxx Je kunt doorgaan met het toevoegen van meer acties of op <span style="font-weight: bold;"><b>OK</b></span> klikken om af te sluiten.</p></li>
 </ul>
-<p class="whs3">Klik op <span style="font-weight: bold;"><B>Toevoegen</B></span> 
- om meer acties toe te voegen. Je kunt doorgaan met het toevoegen van meer 
- acties of op <span style="font-weight: bold;"><B>OK</B></span> klikken om af 
- te sluiten. </p>
-<ol start="7" type="1" class="whs2">
-	<li style="font-style: normal; " class=p><p class="whs6">Vink 
- het vakje <span style="font-weight: bold;"><B>actief</B></span> naast de <span 
- style="font-weight: bold;"><B>Filternaam</B></span> aan om de filterregel in 
- te schakelen.</p></li>
+<ol start="6" type="1">
+	<li class="p"><p style="font-style: normal;">xxxxVink het vakje xxxx<span style="font-weight: bold;"><b>xxxxactiefxxxx</b></span>xxxx naast de xxxx<span style="font-weight: bold;"><b>xxxxFilternaamxxxx</b></span>xxxx aan om de filterregel in te schakelen.xxxx</p></li>
 </ol>
-<p class="whs6">Het filter wordt automatisch toegepast op 
- alle binnenkomende e-mailberichten zodra ze arriveren.</p>
-<p class="whs6">Voor meer informatie over de condities en 
- acties, ga je naar <a href="filter_conditions_and_actions_supported.htm">Ondersteunde 
- filtercondities en acties</a>.</p>
-<script type="text/javascript" language="javascript1.2">
+<p style="font-style: normal;">xxxxHet filter wordt automatisch toegepast op alle binnenkomende e-mailberichten zodra ze arriveren.xxxx</p>
+<p style="font-style: normal;">xxxxVoor meer informatie over de condities en acties, ga je naar xxxx<a href="filter_conditions_and_actions_supported.htm">xxxxOndersteunde filtercondities en actiesxxxx</a>xxxx.xxxx</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

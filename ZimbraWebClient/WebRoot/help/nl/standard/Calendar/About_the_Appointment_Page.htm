@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Pagina Afspraak</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>About_the_Appointment_Page</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Afspraken, vergaderingen en evenementen plannen\nEen vergadering plannen");
@@ -56,14 +64,12 @@ addButton("show",BTN_TEXT,"Weergeven","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -75,50 +81,62 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Een afspraak plannen</h1>
-<p>Vanuit de weergave Afspraak kun je eenmalige of herhalende afspraken, 
- vergaderingen of evenementen maken,  en een bericht schrijven. Als je op <span style="font-weight: bold;"><B>Opslaan</B></span> 
- klikt, worden de deelnemers via een e-mail uitgenodigd en worden de hulpbronnen 
- die je hebt aangevraagd gereserveerd.</p>
-<p>Op de pagina Afspraak kun je als volgt informatie invoeren over de afspraak:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Onderwerp</B></span> van 
- de vergadering. De tekst die hier wordt toegevoegd wordt de beschrijving 
- in de agenda.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Locatie</B></span> van 
- de vergadering. Je kunt dit veld gebruiken om de locatie van de vergadering 
- aan te geven zoals een adres, het nummer van een gebouw of de etage. </p></li>
-	<li class=p><p>In de keuzelijst <span style="font-weight: bold;"><B>Agenda</B></span> 
- worden alle agenda's in je agendalijst weergegeven. De eerste agenda die 
- wordt weergegeven is je oorspronkelijke agenda. Als je meerdere agenda's 
- hebt, kun je een afspraak maken en de agenda selecteren. De afspraak wordt 
- toegevoegd aan de agenda die je selecteert.</p></li>
-	<li class=p><p>Met <span style="font-weight: bold;"><B>Markeren als</B></span> 
- kun je een afspraak privé of openbaar maken. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Tijd</B></span> geeft aan 
- wanneer de afspraak plaatsvindt. Hiermee kun je parameters instellen met 
- betrekking tot de dag, het aantal uren, en of dit een dagvullend evenement 
- is of een herhalende afspraak.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Deelnemers</B></span>. 
- <span style="x-condition: BasicWC, HStd_WC;">Voeg deelnemers toe door 
- het e-mailadres van de deelnemer in het veld Deelnemers te typen. Gebruik 
- een puntkomma om adressen te scheiden. </span></p></li>
-	<li class=p><p>In het gedeelte <span style="font-weight: bold;"><B>Tekst</B></span> 
- kun je een bericht opstellen dat samen met de e-mailuitnodiging aan de 
- deelnemers wordt verzonden.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>Planning an appointment</h1>
+<p>You can create single or recurring appointments, meetings or events, 
+  and write 
+ a message from within the Appointment view. When you click <span style="font-weight: bold;"><b>Save</b></span>, 
+ an email is sent inviting the attendees and reserving the resources you 
+ requested.</p>
+
+<p>On the Appointment page, you enter information about the appointment 
+ as follows:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Subject</b></span> of 
+	 the meeting. &#160;The text added here becomes the description in 
+	 the calendar.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Location</b></span> of 
+	 &#160;the meeting. You can use this field to describe the location 
+	 of the meeting, such as an address, building number, floor number. 
+	   
+	 </p></li>
+	
+	<li class="p"><p><span style="font-weight: bold;"><b>Calendar</b></span> drop-down 
+	 list shows all calendars in your Calendar List. &#160;The first calendar 
+	 displayed is your original Calendar. When you have multiple-calendars, 
+	 you can create an appointment and select the calendar. The appointment 
+	 is added to whichever calendar is selected.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Mark as</b></span> lets 
+	 you mark an appointment as private or public.  
+	 </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Time</b></span> is to 
+	 define when the appointment will occur, day, hours, all day events 
+	 and recurring appointment parameters. &#160; </p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Attendees</b></span>. 
+	 &#160;&#160;Add attendees by 
+	 typing the attendee's email address in the Attendees field. Use a 
+	 semicolon to separate addresses.  </p></li>
+	
+	
+	</p></li>
+	<li class="p"><p>In the <span style="font-weight: bold;"><b>Text</b></span> 
+	 area compose a message that will be sent with the email invitation 
+	 to the attendees.</p></li>
 </ul>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+
+
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -5,18 +5,19 @@
 <item name="Een vergadering plannen" url="Calendar/About_the_Appointment_Page.htm" />
 <item name="Een afspraak maken" url="Calendar/Scheduling_meetings.htm" />
 <item name="Tijdstippen vrij/bezet bekijken" url="Calendar/Seeing_free_busy_times.htm" />
-<item name="Toestemmingen instellen om jouw vrij/bezet-informatie te bekijken" url="6_0new_topics/Setting_permissions_to_see_your_free_busy_information.htm" />
-<item name="Een afspraak als privé markeren" url="6_0new_topics/Marking_an_appointment_as_private.htm" />
+<item name="Toestemmingen instellen om jouw vrij/bezet-informatie te bekijken" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+<item name="Jouw vrij/bezet-status verzenden aan anderen" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+<item name="Een afspraak als privé markeren" url="Calendar/Marking_an_appointment_as_private.htm" />
 <item name="Hulpbronnen plannen" url="Calendar/Scheduling_Resources.htm" />
 <item name="Een bericht omzetten in een aanvraag voor een vergadering" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
 <item name="Snel Toevoegen gebruiken om een afspraak te maken" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 <item name="Dagvullende evenementen plannen" url="Calendar/Scheduling_All_Day_events.htm" />
 <item name="Terugkerende afspraken maken" url="Calendar/Creating_recurring_appointments.htm" />
-<item name="Details van vergaderingen wijzigen in je agenda" url="6_0new_topics/editing_meetings_on_your_calendar.htm" />
-<item name="Bepalen wie jou kan uitnodigen voor een vergadering" url="6_0new_topics/Identifying_who_can_invite_you_to_meetings.htm" />
-<item name="Het bericht Toestemming geweigerd ontvangen" url="6_0new_topics/Receiving_a_permission_denied_message.htm" />
+<item name="Details van vergaderingen wijzigen in je agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
+<item name="Bepalen wie jou kan uitnodigen voor een vergadering" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+<item name="Het bericht Toestemming geweigerd ontvangen" url="Calendar/Receiving_a_permission_denied_message.htm" />
 <item name="Een uitnodiging voor een vergadering beantwoorden" url="Calendar/Responding_to_an_invitation.htm" />
-<item name="Een vergadering wijzigen die jij hebt georganiseerd" url="6_0new_topics/Changing_a_meeting_.htm" />
+<item name="Een vergadering wijzigen die jij hebt georganiseerd" url="Calendar/Changing_a_meeting_.htm" />
 <item name="Een afspraak verwijderen" url="Calendar/Deleting_an_appointment.htm" />
 <item name="Terugkerende afspraken verwijderen" url="Calendar/Deleting_recurring_appointments.htm" />
 

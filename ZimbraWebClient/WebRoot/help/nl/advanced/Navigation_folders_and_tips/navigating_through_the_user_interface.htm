@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>De werkruimte van de Zimbra-webclient</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; border-style:none; width:1205px; height:610px; float:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxDe werkruimte van de Zimbra-webclientxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Navigeren in je postvak\nNavigeren in de Zimbra-webclient");
+	addTocInfo("Navigeren in je postvak\nNavigating @ClientNameLong@");
 addButton("show",BTN_TEXT,"Weergeven","","","","",0,0,"","","");
 
 	}
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Weergeven","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,63 +81,33 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Navigeren in de Zimbra-webclient </h1>
-<p>Na het aanmelden bij de Zimbra-webclient krijg je een scherm te zien 
- ongeveer zoals hieronder weergegeven. </p>
-<p><img src="../Zimbramainview65.gif" x-maintain-ratio="TRUE" width="1205px" height="610px" border="0" class="img_whs1"></p>
-<p>De pagina van de Zimbra-webclient bevat de volgende gedeelten:</p>
-<ol><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Browser-regelaars.</B></span> 
- Toont de standaard browserknoppen, zoals bijvoorbeeld Home, het huidige 
- URL-adres en andere functies zoals bepaald door de specifieke browsersoftware 
- en jouw instellingen. De knoppen op de browserbalk maken geen deel uit 
- van de Zimbra-webclient en worden weergegeven voor elke pagina die je 
- bezoekt.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Zoekbalk, 
- Gebruikersnaam en Quota-weergave</B></span><span>. In dit gedeelte worden 
- de</span> Zoekfunctie, Geavanceerd zoeken, de gebruikersnaam waarmee je 
- hebt aangemeld en het quota van je mailbox weergegeven.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Toepassingstabbladen</B></span>. 
- De toepassingen waartoe je toegang hebt, worden aan de bovenkant in de 
- tabbladen weergegeven. Rechts zie je <span style="font-weight: bold;"><B>Help</B></span> 
- en <span style="font-weight: bold;"><B>Afmelden</B></span>.</p></li>
+//]]></script>
+<h1>Navigeren in @ClientNameLong@ 
+ </h1>
+<p>Na aanmelding bij @ClientNameLong@ krijg je een scherm te zien ongeveer zoals hieronder weergegeven.</p>
+<p><img src="../69_view.png" alt="69_view.png" style="border: none;" width="652" height="321" border="0" /></p>
+<p>De pagina van @ClientNameLong@ bevat de volgende gedeelten:</p>
+<ol>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Zoekbalk</b></span>. Hier worden de functies Zoeken en Geavanceerd zoeken weergegeven. Rechts zie je <span style="font-weight: bold;"><b>Help</b></span> en <span style="font-weight: bold;"><b>Afmelden</b></span>.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxToepassingstabbladenxxxx</b></span>xxxx.xxxx Hier zie je je mailboxquota en de gebruikersnaam waarmee je bent aangemeld.  De toepassingen waartoe je toegang hebt, worden weergegeven op de tabs.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxWerkbalk.xxxx</b></span>xxxx Toont bewerkingen die beschikbaar zijn voor de huidig gebruikte toepassing.xxxx xxxxIn dit voorbeeld wordt de werkbalk van de toepassing xxxx<span style="font-weight: bold;"><b>xxxxE-mailxxxx</b></span>xxxx weergegeven.xxxx</p></li>
 </ol>
-<ol start=4><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Werkbalk.</B></span> 
- Toont bewerkingen die beschikbaar zijn voor de huidig gebruikte toepassing. 
- In dit voorbeeld wordt de werkbalk van de toepassing <span style="font-weight: bold;"><B>E-mail</B></span> 
- weergegeven. </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Deelvenster 
- Overzicht.</B></span> Toont je <span style="font-weight: bold;"><B>Mappen</B></span>, 
- inclusief de systeemmappen <span style="font-weight: bold;"><B>Postvak IN</B></span>, 
- <span style="font-weight: bold;"><B>Verzonden</B></span>, <span style="font-weight: bold;"><B>Concepten</B></span>, 
- <span style="font-weight: bold;"><B>Spam</B></span> en de <span style="font-weight: bold;"><B>Prullenbak</B></span>, 
- alsmede eventueel door jou gemaakte mappen, <span style="font-weight: bold;"><B>Zoekopdrachten</B></span> 
- die je wellicht hebt opgeslagen en <span style="font-weight: bold;"><B>Labels</B></span> 
- die je hebt gemaakt, en eventuele <span style="font-weight: bold;"><B>Zimlet</B></span>-links 
- voor integratie met toepassingen van andere fabrikanten binnen je mailbox. 
- Wanneer je in de toepassing Agenda bent, geeft het deelvenster Overzicht 
- je agendalijst en Zimlets weer. </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>Een mini-agenda 
- kan onder het deelvenster Overzicht worden weergegeven. Weergave van de 
- mini-agenda is optioneel en kan worden ingeschakeld in het tabblad <span 
- style="font-weight: bold;"><B>Voorkeuren, Agenda</B></span>.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Deelvenster 
- Inhoud</B></span>. De inhoud van dit gedeelte is afhankelijk van welke toepassing 
- in gebruik is. In de weergave van het Postvak IN toont dit gedeelte alle 
- berichten of conversaties in je Postvak IN. </p></li>
+<ol start="4">
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxDeelvenster Overzicht.xxxx</b></span> Bevat je <span style="font-weight: bold;"><b>mappen</b></span>, inclusief de systeemmappen <span style="font-weight: bold;"><b>Postvak IN</b></span>, <span style="font-weight: bold;"><b>Verzonden</b></span>, <span style="font-weight: bold;"><b>Concepten</b></span>, <span style="font-weight: bold;"><b>Spam</b></span> en <span style="font-weight: bold;"><b>Prullenbak</b></span>, alsmede eventueel door jou gemaakte mappen, <span style="font-weight: bold;"><b>Zoekopdrachten</b></span> die je wellicht hebt opgeslagen en <span style="font-weight: bold;"><b>Labels</b></span> die je hebt gemaakt, en eventuele <span style="font-weight: bold;"><b>Zimlet</b></span>-koppelingen voor integratie met toepassingen van andere fabrikanten binnen je mailbox. xxxxWanneer je in de toepassing Agenda bent, geeft het deelvenster Overzicht je agendalijst en Zimlets weer.xxxx</p></li>
+	<li class="p" type="1"><p>Onder het deelvenster Overzicht kun je een <span style="font-weight: bold;"><b>mini-kalender</b></span> weergeven. Weergave van de mini-kalender is optioneel en kan worden ingeschakeld in <span style="font-weight: bold;"><b>Voorkeuren &gt; </b></span><span style="font-weight: bold;"><b>Agenda</b></span>.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxDeelvenster Inhoudxxxx</b></span>xxxx.xxxx xxxxDe inhoud van dit gedeelte is afhankelijk van welke toepassing in gebruik is.xxxx xxxxIn de weergave van het Postvak IN toont dit gedeelte alle berichten of conversaties in je Postvak IN.xxxx</p></li>
 </ol>
 <p>&nbsp;</p>
+<p class="note">xxxx xxxx<span style="font-weight: bold;"><b>xxxxLet opxxxx</b></span>xxxx:xxxx Je kunt de weergave wijzigen in een weergave met drie deelvensters met het leesvenster rechts, of je kunt het leesvenster volledig uitschakelen via Weergeven <img src="../View_icon.png" alt="View_icon.png" style="border: none;" width="28" height="25" border="0" /> op de e-mailwerkbalk.</p>
 <h3>&nbsp;</h3>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

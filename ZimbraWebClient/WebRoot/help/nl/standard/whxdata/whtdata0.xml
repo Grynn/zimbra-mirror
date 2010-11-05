@@ -6,9 +6,6 @@
   <item name="In- en uitloggen" url="Userspecific/logging_on_and_off.htm" />
   <item name="Mijn standaard client-type wijzigen voor het inloggen" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Toetsenbordsneltoetsen" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
-  <item name="Je wachtwoord wijzigen" url="Userspecific/chaning_your_password.htm" />
-  <item name="Wachtwoord vergeten?" url="Userspecific/if_you_forget_your_password.htm" />
-  <item name="Als je sessie verloopt" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="Navigeren in je postvak" >
   <item name="Navigeren in je postvak" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
@@ -27,8 +24,6 @@
     <item name="E-mail lezen" url="reading_mail/reading_mail.htm" />
     <item name="E-mail als niet-gelezen markeren" url="reading_mail/b_Marking_mail_as_unread.htm" />
     <item name="Bestanden in bijlagen openen" url="reading_mail/opening_file_attachments.htm" />
-    <item name="Bijlagen blokkeren" url="reading_mail/attachment_blocking.htm" />
-    <item name="Berichten blokkeren" url="reading_mail/Message_blocking_feature.htm" />
     <item name="E-mail die niet kan worden afgeleverd" url="Creating_Messages/undeliverable_mail.htm" />
   </book>
 </book>
@@ -36,8 +31,11 @@
   <item name="Nieuwe e-mailberichten opstellen" url="Creating_Messages/b_Composing_email_message.htm" />
   <item name="Gedeelten van een e-mailbericht" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Automatisch je handtekening toevoegen" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+  <item name="Automatisch invullen van adressen" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Bestanden als bijlage aan je bericht toevoegen" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Bijlagebestandstypes" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="De spelling controleren" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Berichten als concepten opslaan" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Berichten beantwoorden en doorsturen" >
@@ -47,18 +45,19 @@
 <book name="Je adresboeken beheren" >
   <item name="Je adresboeken" url="Contacts/b_Your_Address_Books.htm" />
   <item name="Nieuwe contacten toevoegen" url="Contacts/b_Adding_new_contacts.htm" />
+  <item name="Een lijst met contacten exporteren" url="Contacts/Exporting_a_Contact_List.htm" />
 </book>
 <book name="Je agenda beheren" >
   <item name="Info over Agenda" url="Calendar/b_About_Calendar.htm" />
-  <item name="Nieuwe agenda maken" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="Kleur toevoegen aan agenda’s" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="Opties om agenda’s weer te geven" url="Calendar/Calendar_Views.htm" />
-  <item name="iCalendars importeren" url="6_0new_topics/Importing_iCalendars.htm" />
-  <item name="Je agenda opschonen" url="6_0new_topics/Cleaning_up_your_Calendar.htm" />
+  <item name="Een nieuwe agenda maken" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Opties om agenda's weer te geven" url="Calendar/Calendar_Views.htm" />
+  <item name="iCalendars importeren" url="Calendar/Importing_iCalendars.htm" />
+  <item name="Je agenda opschonen" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Afspraken, vergaderingen en evenementen plannen" >
   <item name="Een vergadering plannen" url="Calendar/About_the_Appointment_Page.htm" />
-  <item name="Een vergadering plannen" url="Calendar/b_Scheduling_a_meeting.htm" />
+  <item name="Een vergadering plannen " url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="Terugkerende afspraken maken" url="Calendar/b_creating_recurring_appointments.htm" />
   <item name="Een afspraak verwijderen" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
@@ -66,37 +65,34 @@
   <item name="Info over taken" url="Tasks/About_Tasks.htm" />
   <item name="Taaklijsten maken" url="Tasks/bc_Create_task_lists.htm" />
   <item name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
-  <item name="Taken sorteren" url="Tasks/Sorting_tasks_.htm" />
 </book>
 <book name="Mappen delen" >
-  <book name="Adresboeken delen" >
-    <item name="Koppelen naar een gedeeld adresboek" url="6_0new_topics/Linking_to_a_Shared_Address_Book.htm" />
+  <book name="Agenda's delen" >
+    <item name="Naar een gedeelde agenda koppelen" url="Calendar/Link_to_Shared_Calendar.htm" />
   </book>
-  <book name="Agenda’s delen" >
-    <item name="Koppeling naar gedeelde agenda" url="6_0new_topics/Link_to_Shared_Calendar.htm" />
+  <book name="Adresboeken delen" >
+    <item name="Koppelen naar een gedeeld adresboek" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
   </book>
 </book>
 <book name="Naar items zoeken" >
   <item name="Zoeken gebruiken" url="Search/b_Using_Search.htm" />
-  <item name="Zoekopdrachten maken en opslaan" url="6_0new_topics/b_Create_and_Save_a_Search_Query.htm" />
+  <item name="Zoekopdrachten maken en opslaan" url="Search/b_Create_and_Save_a_Search_Query.htm" />
   <item name="Beschrijving van de querytaal" url="Search/query_language_description.htm" />
 </book>
 <book name="Labels en mappen gebruiken om e-mail te organiseren" >
   <item name="Labels toewijzen aan berichten en contacten" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
   <item name="Een e-mailbericht van een vlag voorzien" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
-  <item name="Mappen gebruiken" url="Navigation_folders_and_tips/about_folders.htm" />
   <item name="Mappen een nieuwe naam geven" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <item name="Mappen verwijderen" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
-<book name="Filters maken " >
+<book name="Mailfilters gebruiken" >
   <item name="Berichten filteren" url="filters/bc_Filtering_your_messages.htm" />
   <item name="Ondersteunde filtercondities en acties" url="filters/filter_conditions_and_actions_supported.htm" />
 </book>
 <book name="Je voorkeuren instellen" >
   <item name="Je voorkeuren instellen" url="Userspecific/b_Setting_your_Options.htm" />
+  <item name="Kennisgeving nieuwe berichten" url="Userspecific/New_mail_notifications.htm" />
   <item name="Afwezigheidsberichten maken" url="Userspecific/vacation_message.htm" />
-  <item name="Berichten opslaan die je hebt verzonden" url="Navigation_folders_and_tips/sent_folder.htm" />
-  <item name="Mailboxquota" url="Navigation_folders_and_tips/quotas.htm" />
   <item name="Abonneren op RSS/ATOM-feeds" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>
 

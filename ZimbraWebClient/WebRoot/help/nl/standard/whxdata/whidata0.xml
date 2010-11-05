@@ -7,6 +7,21 @@
 <key name="Adresboeken maken" >
   <topic name="Je adresboeken" url="Contacts/b_Your_Address_Books.htm" />
 </key>
+<key name="Adressen automatisch invullen in e-mail" >
+  <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="afdrukken, taken" >
+  <topic name="Info over taken" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="agenda op afstand" >
+  <topic name="Nieuwe agenda maken" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="agenda, uitsluiten van vrij/bezet" >
+  <topic name="Nieuwe agenda maken" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="Automatisch invullen, adressen" >
+  <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
 <key name="Beantwoorden" >
   <topic name="E-mailberichten beantwoorden" url="reading_mail/replying_to_mail_messages.htm" />
   <key name="E-mailberichten" >
@@ -31,26 +46,11 @@
 <key name="Bijlagen" >
   <topic name="Bestanden in bijlagen openen" url="reading_mail/opening_file_attachments.htm" />
 </key>
-<key name="Bijlagen blokkeren" >
-  <topic name="Bijlagen blokkeren" url="reading_mail/attachment_blocking.htm" />
-  <topic name="Berichten blokkeren" url="reading_mail/Message_blocking_feature.htm" />
-</key>
-<key name="Bijlagen, ondersteunde bestandstypen" >
-  <topic name="Ondersteunde bestandstypen als bijlage" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-</key>
-<key name="Blokkeren, bijlagen" >
-  <topic name="Bijlagen blokkeren" url="reading_mail/attachment_blocking.htm" />
-</key>
 <key name="Conceptbericht" >
   <topic name="Een conceptbericht opslaan" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
 <key name="Contacten aan adresboek toevoegen" >
   <topic name="Nieuwe contacten toevoegen" url="Contacts/b_Adding_new_contacts.htm" />
-</key>
-<key name="Conversaties" >
-  <key name="Sorteren" >
-    <topic name="Conversaties sorteren" url="Navigation_folders_and_tips/sorting_conversations.htm" />
-  </key>
 </key>
 <key name="Conversatieweergave" >
   <topic name="Beheren hoe e-mail wordt getoond" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
@@ -70,11 +70,11 @@
 <key name="E-mail die niet kan worden afgeleverd" >
   <topic name="E-mail die niet kan worden afgeleverd" url="Creating_Messages/undeliverable_mail.htm" />
 </key>
+<key name="E-mail, kennisgeving van" >
+  <topic name="Kennisgeving nieuwe berichten" url="Userspecific/New_mail_notifications.htm" />
+</key>
 <key name="E-mailbericht" >
   <topic name="Gedeelten van een e-mailbericht" url="Creating_Messages/parts_of_an_email_message.htm" />
-</key>
-<key name="Exporteren, iCal-agenda’s" >
-  <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="Filteren, berichten" >
   <topic name="Berichten filteren" url="filters/bc_Filtering_your_messages.htm" />
@@ -94,17 +94,17 @@
     <topic name="Verwijderde e-mailberichten herstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
 </key>
-<key name="iCal-agenda’s importeren of exporteren" >
-  <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="Importeren, iCal-agenda’s" >
-  <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
+<key name="HTML" >
+  <topic name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="Instellen, een doorstuuradres" >
   <topic name="Een doorstuuradres instellen" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
 <key name="Labels" >
   <topic name="Labels toewijzen aan berichten en contacten" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+</key>
+<key name="Lettertypen" >
+  <topic name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="Maken, zoekopdrachten" >
   <topic name="Zoeken gebruiken" url="Search/b_Using_Search.htm" />
@@ -114,16 +114,27 @@
 </key>
 <key name="Mappen" >
   <topic name="Mappen een nieuwe naam geven" url="Navigation_folders_and_tips/renaming_folders.htm" />
-  <topic name="Info over mappen" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
 <key name="Markeren, afspraak als privé" >
   <topic name="Pagina Afspraak" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
+<key name="markeren, taak als voltooid" >
+  <topic name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
+</key>
 <key name="Nieuw venster, berichten bekijken" >
   <topic name="Beheren hoe e-mail wordt getoond" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
+<key name="Ondersteunde bestandstypen als bijlage" >
+  <topic name="Ondersteunde bestandstypen als bijlage" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
 <key name="Onthoud mij op deze computer" >
   <topic name="In- en uitloggen" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="Opmaak toepassen met HTML" >
+  <topic name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="opslaan, zoekopdracht" >
+  <topic name="Zoekopdrachten maken en opslaan" url="Search/b_Create_and_Save_a_Search_Query.htm" />
 </key>
 <key name="Optie, vakantiebericht" >
   <topic name="Vakantiebericht" url="Userspecific/vacation_message.htm" />
@@ -131,35 +142,29 @@
 <key name="Opties" >
   <topic name="Je opties instellen" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
+<key name="Opties voor kennisgeving nieuwe berichten" >
+  <topic name="Kennisgeving nieuwe berichten" url="Userspecific/New_mail_notifications.htm" />
+</key>
 <key name="Plannen, een vergadering" >
   <topic name="Info over de Afspraakpagina" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="Privéafspraken" >
   <topic name="Pagina Afspraak" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
-<key name="Prullenbak leegmaken" >
-  <topic name="Quota" url="Navigation_folders_and_tips/quotas.htm" />
-</key>
-<key name="Prullenbak, map" >
-  <topic name="Prullenbak, map" url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
-<key name="Quota" >
-  <topic name="Quota" url="Navigation_folders_and_tips/quotas.htm" />
-</key>
 <key name="RSS-feed" >
   <topic name="Abonneren op RSS/ATOM-feed " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
-</key>
-<key name="Sessie, verlopen" >
-  <topic name="Als je sessie verloopt" url="Userspecific/if_your_session_expires.htm" />
 </key>
 <key name="Sneltoetsen" >
   <topic name="Toetsenbordsneltoetsen" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
 </key>
-<key name="Sorteren, kolommen v.h. inhouddeelvenster" >
-  <topic name="Conversaties sorteren" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<key name="synchroniseren met andere agenda" >
+  <topic name="Nieuwe agenda maken" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
-<key name="Sorteren, taken" >
-  <topic name="Taken sorteren " url="Tasks/Sorting_tasks_.htm" />
+<key name="taak, markeren als voltooid" >
+  <topic name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="taken, afdrukken" >
+  <topic name="Info over taken" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="Toetsenbordsneltoetsen" >
   <topic name="Toetsenbordsneltoetsen" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -182,11 +187,8 @@
 <key name="Vergaderingen" >
   <topic name="Info over de Afspraakpagina" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
-<key name="Verzonden, map" >
-  <topic name="Verzonden, map" url="Navigation_folders_and_tips/sent_folder.htm" />
-</key>
-<key name="Vol, mailbox" >
-  <topic name="Quota" url="Navigation_folders_and_tips/quotas.htm" />
+<key name="vergeten" >
+  <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="Voorkeuren" >
   <topic name="Je opties instellen" url="Userspecific/b_Setting_your_Options.htm" />
@@ -194,9 +196,8 @@
 <key name="Voorzien, een vergadering" >
   <topic name="Info over de Afspraakpagina" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
-<key name="Wachtwoord" >
-  <topic name="Als je je wachtwoord vergeet" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="Je wachtwoord wijzigen" url="Userspecific/chaning_your_password.htm" />
+<key name="vrij/bezet, agenda uitsluiten" >
+  <topic name="Nieuwe agenda maken" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="Zoeken" >
   <topic name="Zoeken gebruiken" url="Search/b_Using_Search.htm" />

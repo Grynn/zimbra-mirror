@@ -1,6 +1,102 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="E-mail" >
+  <topic name="E-mail lezen" url="reading_mail/reading_mail.htm" />
+  <key name="Lezen" >
+    <topic name="E-mail lezen" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="e-mail automatisch naar een map verplaatsen" >
+  <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
+</key>
+<key name="E-mail controleren" >
+  <topic name="Hoe weet je dat je nieuwe e-mail hebt?" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="E-mail die niet kan worden afgeleverd" >
+  <topic name="E-mail die niet kan worden afgeleverd" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="E-mail, kennisgeving van" >
+  <topic name="Kennisgeving nieuwe berichten" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="E-mailbericht" >
+  <topic name="Gedeelten van een e-mailbericht" url="Creating_Messages/parts_of_an_email_message.htm" />
+</key>
+<key name="E-mailberichtoverzicht" >
+  <topic name="De weergave van je e-mailberichten beheren" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="E-mailidentiteiten" >
+  <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Persona's maken" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="e-mailkennisgeving" >
+  <topic name="Bureaubladwaarschuwingen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="Evenementen" >
+  <topic name="Dagvullende evenementen plannen" url="Calendar/Scheduling_All_Day_events.htm" />
+  <topic name="Afspraken, vergaderingen en evenementen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="exporteren, accountgegevens" >
+  <topic name="Een back-up maken van de inhoud van je account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="Exporteren, iCal-agenda's" >
+  <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="Externe accounts" >
+  <topic name="POP-accounts beheren" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="Externe accounts, hoe toevoegen" >
+  <topic name="POP-accounts toevoegen" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="externe gebruiker" >
+  <topic name="Bepalen wie jou kan uitnodigen voor een vergadering" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+</key>
+<key name="Filteren, berichten" >
+  <topic name="Berichten filteren" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="Filteren, hoe het werkt" >
+  <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
+</key>
+<key name="filterregels, bestaande mappen" >
+  <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
+</key>
+<key name="Filtervoorwaarden" >
+  <topic name="Ondersteunde filtercondities en acties" url="filters/filter_conditions_and_actions_supported.htm" />
+  <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
+</key>
+<key name="Gebruikersinterfacefuncties" >
+  <topic name="Gebruikersinterfacefuncties en sneltoetsen" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="Gebruikersvoorkeuren" >
+  <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="Gedeelde toegang, adresboek" >
+  <topic name="Je adresboek delen" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="gegevens op mobieltje wissen" >
+  <topic name="Je mobiele apparaten beheren" url="Userspecific/Managing_your_mobile_devices.htm" />
+</key>
+<key name="Groepcontacten" >
+  <topic name="Groepcontactlijsten maken" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="Handtekening" >
+  <topic name="Een handtekening gebruiken" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="Handtekeningen, automatisch toevoegen" >
+  <topic name="Persona's maken" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="herinneringen" >
+  <topic name="Bureaubladwaarschuwingen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="Herstellen" >
+  <topic name="Verwijderde e-mailberichten herstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="Verwijderde e-mailberichten" >
+    <topic name="Verwijderde e-mailberichten herstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
+<key name="Hoe wordt de eerste weergave van het inhouddeelvenster ingesteld" >
+  <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
 <key name="HTML" >
   <topic name="HTML in e-mailberichten weergeven" url="reading_mail/displaying_html_in_email_messages.htm" />
   <topic name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -14,12 +110,27 @@
 <key name="Hulpbron" >
   <topic name="Hulpbronnen plannen" url="Calendar/Scheduling_Resources.htm" />
 </key>
-<key name="iCal-agenda’s importeren of exporteren" >
+<key name="iCal-agenda's importeren of exporteren" >
   <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="ics-bijlagen, opslaan" >
+  <topic name="Een uitnodiging beantwoorden" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
 <key name="Identiteiten" >
   <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
-  <topic name="Persona’s maken" url="Userspecific/Creating_Personas.htm" />
+  <topic name="Persona's maken" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="IM" >
+  <topic name="Basisinformatie over sms" url="instant_messaging/Instant_Messaging_Basics.htm" />
+</key>
+<key name="IM-kennisgeving" >
+  <topic name="Bureaubladwaarschuwingen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="IM-vrienden" >
+  <topic name="Toegang tot IM" url="instant_messaging/Accessing_Instant_Messaging.htm" />
+</key>
+<key name="IM, andere clientsoftware gebruiken" >
+  <topic name="Inloggen bij andere IM-clients" url="instant_messaging/Log_into_other_IM_clients.htm" />
 </key>
 <key name="IMAP-account" >
   <topic name="POP-accounts beheren" url="Userspecific/Managing_your_POP_Accounts.htm" />
@@ -30,13 +141,20 @@
 <key name="IMAP-adressen toevoegen" >
   <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
 </key>
+<key name="importeren, account" >
+  <topic name="Een back-up maken van de inhoud van je account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
 <key name="Importeren, adresboeken" >
   <topic name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Items importeren en exporteren " url="Userspecific/Importing_and_Exporting_Items_.htm" />
+</key>
+<key name="importeren, agenda's" >
+  <topic name="Items importeren en exporteren " url="Userspecific/Importing_and_Exporting_Items_.htm" />
 </key>
 <key name="Importeren, contacten" >
   <topic name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
 </key>
-<key name="Importeren, iCal-agenda’s" >
+<key name="Importeren, iCal-agenda's" >
   <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="Instellen, een doorstuuradres" >
@@ -44,6 +162,9 @@
 </key>
 <key name="Interfacefuncties" >
   <topic name="De werkruimte van de Zimbra-webclient" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="interne gebruiker" >
+  <topic name="Bepalen wie jou kan uitnodigen voor een vergadering" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="Intrekken, agendatoestemmingen" >
   <topic name="Toegang tot een agenda delegeren" url="Calendar/Delegating_Calendar_Access.htm" />
@@ -57,8 +178,17 @@
 <key name="Intrekken, toestemmingen voor adresboek" >
   <topic name="Je adresboek delen" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
+<key name="junk-mail, filteren" >
+  <topic name="Junk-mail filteren" url="filters/Filtering_Junk_Mail.htm" />
+</key>
 <key name="Knopinfo" >
   <topic name="De werkruimte van de Zimbra-webclient" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="kopinformatie weergeven in antwoordberichten" >
+  <topic name="Voorkeuren instellen voor het venster voor het opstellen van e-mailberichten" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
+<key name="koppen, opnemen" >
+  <topic name="Voorkeuren instellen voor het venster voor het opstellen van e-mailberichten" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="Label, slepen en neerzetten" >
   <topic name="Labels aan berichten toewijzen" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
@@ -82,11 +212,27 @@
 <key name="Leesdeelvenster" >
   <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
+<key name="Leesdeelvenster bekijken" >
+  <topic name="De werkruimte van de Zimbra-webclient" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="Leesdeelvenster, bekijken" >
+  <topic name="De weergave van je e-mailberichten beheren" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="Leesdeelvenster, in- en uitschakelen" >
+  <topic name="De weergave van je e-mailberichten beheren" url="conversations/conversation_list_view.htm" />
+</key>
 <key name="Lettertypen" >
   <topic name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
+<key name="lijstweergave, agenda" >
+  <topic name="Agenda-lijstweergave" url="Calendar/Calendar_List_View.htm" />
+</key>
 <key name="Locatie reserveren" >
   <topic name="Hulpbronnen plannen" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="lokale gebruiker" >
+  <topic name="Bepalen wie jou kan uitnodigen voor een vergadering" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="Mailidentiteit" >
   <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -100,21 +246,40 @@
 <key name="Maken, labels" >
   <topic name="Labels gebruiken om e-mailberichten te classificeren" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
-<key name="Maken, notitieboek voor documenten" >
-  <topic name="Nieuwe notitieboeken maken" url="Documents/Create_multiple_notebooks.htm" />
-</key>
 <key name="Mappen" >
   <topic name="Mappen een nieuwe naam geven" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <topic name="Info over mappen" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
+<key name="mappen delen" >
+  <topic name="Een map delen" url="Sharing/Sharing_a_folder.htm" />
+</key>
+<key name="mappen naam geven" >
   <topic name="Info over mappen" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
 <key name="Mappen, deelvenster" >
   <topic name="Mappen-gedeelte" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
+<key name="mappen, naam geven" >
+  <topic name="Info over mappen" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
 <key name="Markeren, afspraak als privé" >
   <topic name="Pagina Afspraak" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
-<key name="Menu’s, rechtsklikmenu’s" >
-  <topic name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
+<key name="markeren, taak als voltooid" >
+  <topic name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="Menu's, rechtsklikmenu's" >
+  <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="mini-agenda" >
+  <topic name="Je Agenda-voorkeuren instellen" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="Weeknummers in agenda weergeven" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
+<key name="mobieltje" >
+  <topic name="Je mobiele apparaten beheren" url="Userspecific/Managing_your_mobile_devices.htm" />
+</key>
+<key name="mobieltje, gegevens wissen" >
+  <topic name="Alle gegevens op je mobieltje wissen" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </key>
 <key name="Navigatie" >
   <topic name="Mappen-gedeelte" url="Navigation_folders_and_tips/Folders_area.htm" />
@@ -123,194 +288,13 @@
   <topic name="Navigeren in de gebruikersinterface" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="Navigeren, met het toetsenbord" >
-  <topic name="Sneltoetsen in de Zimbra-webclient" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
+  <topic name="Sneltoetsen in de Zimbra-webclient" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="Nieuwe berichten" >
   <topic name="Hoe weet je dat je nieuwe e-mail hebt?" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
-<key name="Notitieboek" >
-  <topic name="Werken in notitieboeken" url="Documents/Working_in_Notebooks.htm" />
-</key>
-<key name="Notitieboekpagina’s" >
+<key name="Notitieboekpagina's" >
   <topic name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="Onthoud mij op deze computer" >
-  <topic name="In- en uitloggen" url="Userspecific/logging_on_and_off.htm" />
-</key>
-<key name="Ontvangen, e-mail" >
-  <topic name="Hoe weet je dat je nieuwe e-mail hebt?" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-</key>
-<key name="Opmaak toepassen met HTML" >
-  <topic name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
-</key>
-<key name="Opstellen" >
-  <topic name="Een nieuw e-mailbericht maken" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="Nieuw e-mailbericht" >
-    <topic name="Een nieuw e-mailbericht maken" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
-</key>
-<key name="Optie, vakantiebericht" >
-  <topic name="Vakantiebericht" url="Userspecific/vacation_message.htm" />
-</key>
-<key name="Opties" >
-  <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="Opties voor kennisgeving nieuwe berichten" >
-  <topic name="Kennisgeving nieuwe berichten" url="Userspecific/New_mail_notifications.htm" />
-</key>
-<key name="Opties voor leesdeelvenster bekijken" >
-  <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="Opties, standaardopties herstellen" >
-  <topic name="Standaardopties herstellen" url="Userspecific/the__restore_defaults__button.htm" />
-</key>
-<key name="Opties, wijzigen" >
-  <topic name="Je gebruikersopties wijzigen" url="Userspecific/Changing_Your_User_Options.htm" />
-</key>
-<key name="Overzicht, deelvenster" >
-  <topic name="Mappen-gedeelte" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
-<key name="Pagina’s, Documenten-" >
-  <topic name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="Persona" >
-  <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
-  <topic name="Persona’s maken" url="Userspecific/Creating_Personas.htm" />
-</key>
-<key name="Persoonlijke contacten" >
-  <topic name="Een contact bewerken" url="Contacts/editing_a_contact.htm" />
-</key>
-<key name="Persoonlijke distributielijsten" >
-  <topic name="Groepcontactlijsten maken" url="Contacts/Creating_Group_Contact_Lists.htm" />
-</key>
-<key name="Plannen, een ruimte of apparatuur" >
-  <topic name="Hulpbronnen plannen" url="Calendar/Scheduling_Resources.htm" />
-</key>
-<key name="Plannen, een vergadering" >
-  <topic name="Info over de Afspraakpagina" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="Planningweergave" >
-  <topic name="Meerdere agenda’s weergeven" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
-</key>
-<key name="POP-account" >
-  <topic name="POP-accounts beheren" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="POP-account, e-mail ontvangen met" >
-  <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="POP-accounts toevoegen" >
-  <topic name="POP-accounts toevoegen" url="Userspecific/Adding_POP_accounts.htm" />
-</key>
-<key name="POP-adressen toevoegen" >
-  <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="Privéafspraken" >
-  <topic name="Pagina Afspraak" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="Prullenbak leegmaken" >
-  <topic name="Quota" url="Navigation_folders_and_tips/quotas.htm" />
-</key>
-<key name="Prullenbak, map" >
-  <topic name="Prullenbak, map" url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
-<key name="Quota" >
-  <topic name="Quota" url="Navigation_folders_and_tips/quotas.htm" />
-</key>
-<key name="Rechtsklikken" >
-  <topic name="De werkruimte van de Zimbra-webclient" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="Rechtsklikmenu’s" >
-  <topic name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="Regels, filter-" >
-  <topic name="Berichten filteren" url="filters/filtering_your_messages.htm" />
-  <topic name="Hoe werkt filteren" url="filters/how_filtering_works.htm" />
-</key>
-<key name="Reserveren, ruimten en apparatuur" >
-  <topic name="Hulpbronnen plannen" url="Calendar/Scheduling_Resources.htm" />
-</key>
-<key name="Rollen" >
-  <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="RSS" >
-  <topic name="Abonneren op RSS/ATOM-feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-</key>
-<key name="RTF-editor voor documentenpagina’s" >
-  <topic name="De RTF-editor gebruiken" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
-<key name="Search Builder" >
-  <topic name="Zoekopdrachten samenstellen" url="Search/building_search_queries.htm" />
-</key>
-<key name="Sessie, verlopen" >
-  <topic name="Als je sessie verloopt" url="Userspecific/if_your_session_expires.htm" />
-</key>
-<key name="Slepen en neerzetten" >
-  <topic name="De werkruimte van de Zimbra-webclient" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="Snel Toevoegen" >
-  <topic name="Snel Toevoegen gebruiken om een afspraak te maken" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-</key>
-<key name="Snel zoeken" >
-  <topic name="Snel zoeken" url="Search/Quick_search.htm" />
-</key>
-<key name="Sneltoetsen" >
-  <topic name="De werkruimte van de Zimbra-webclient" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-  <topic name="Sneltoetsen in de Zimbra-webclient" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
-  <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="Sorteren, kolommen v.h. inhouddeelvenster" >
-  <topic name="Conversaties sorteren" url="Navigation_folders_and_tips/sorting_conversations.htm" />
-</key>
-<key name="Sorteren, taken" >
-  <topic name="Taken sorteren " url="Tasks/Sorting_tasks_.htm" />
-</key>
-<key name="Spelling nakijken" >
-  <topic name="Spellingcontrole gebruiken" url="Creating_Messages/Using_Spell_Check.htm" />
-</key>
-<key name="Standaardopties herstellen" >
-  <topic name="Standaardopties herstellen" url="Userspecific/the__restore_defaults__button.htm" />
-</key>
-<key name="Tabellen toevoegen aan Documentenpagina’s" >
-  <topic name="Een tabel aan een notitieboekpagina toevoegen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="Terugkerende afspraken wijzigen" >
-  <topic name="Terugkerende afspraken wijzigen" url="Calendar/Deleting_recurring_appointments.htm" />
-</key>
-<key name="Toegang tot externe accounts" >
-  <topic name="Toegang tot je externe accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="Toestemmingen, toegang wijzigen tot je notitieboeken" >
-  <topic name="Toegang annuleren tot je Documenten-wikimap" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</key>
-<key name="Toetsenbord, navigeren met" >
-  <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="Toetsenbordsneltoetsen" >
-  <topic name="Sneltoetsen in de Zimbra-webclient" url="Navigation_folders_and_tips/ZWC_Keyboard_Shortcut_Keys.htm" />
-</key>
-<key name="Toevoegen, bestaande accounts" >
-  <topic name="POP-accounts toevoegen" url="Userspecific/Adding_POP_accounts.htm" />
-</key>
-<key name="Toevoegen, contacten" >
-  <topic name="Een nieuw contact maken" url="Contacts/creating_a_new_contact.htm" />
-</key>
-<key name="Toevoegen, handtekening" >
-  <topic name="Een handtekening gebruiken" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="Traditionele weergave" >
-  <topic name="Traditionele weergave" url="Navigation_folders_and_tips/Traditional_View.htm" />
-</key>
-<key name="Uitloggen" >
-  <topic name="In- en uitloggen" url="Userspecific/logging_on_and_off.htm" />
-</key>
-<key name="Uitnodiging verplaatst naar Prullenbak" >
-  <topic name="Reageren op een uitnodiging" url="Calendar/Responding_to_an_invitation.htm" />
-</key>
-<key name="Uitnodiging, reageren op" >
-  <topic name="Reageren op een uitnodiging" url="Calendar/Responding_to_an_invitation.htm" />
-</key>
-<key name="Vakantiebericht" >
-  <topic name="Vakantiebericht" url="Userspecific/vacation_message.htm" />
 </key>
 
 </indexdata>

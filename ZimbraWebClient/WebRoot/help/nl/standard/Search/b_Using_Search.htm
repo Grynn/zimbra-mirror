@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Zoeken gebruiken</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-ul.whs2 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxZoeken gebruikenxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Naar items zoeken\nZoeken gebruiken");
@@ -57,14 +64,12 @@ addButton("show",BTN_TEXT,"Weergeven","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -76,78 +81,45 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
-
-
-<h1>Zoeken gebruiken</h1>
-<p>De zoekfunctie in Zimbra is een krachtig hulpmiddel. Alhoewel je kunt leren om complexe tekstquery's te creëren zoals beschreven in <a href="query_language_description.htm">Beschrijving van de querytaal</a>, kun je ook eenvoudigweg een naam of woord typen zonder trefwoorden. Als je bijvoorbeeld alle e-mail wilt vinden met het woord &quot;tim&quot; in de onderwerpregel, de velden Aan:, Van:, Cc: of Bcc:, in de tekst van het bericht zelf of in een bestandsbijlage, kun je gewoon het woordje <span class=code style="font-size: 12pt;"><font size=3 style="font-size:12pt;">tim</font></span><span 
- style="font-family: 'Lucida Sans Typewriter', monospace; color: #800080;"> <font color=purple ></font></span>opgeven in het tekstvak <span style="font-weight: bold;"><B>Zoeken</B></span> en op <span style="font-weight: bold;"><B>Zoeken</B></span> klikken. </p>
-<p>Je selecteert waar je wilt zoeken. Je kunt zoeken in berichten, persoonlijke contacten, persoonlijke agenda's en persoonlijke takenlijsten. </p>
-<p>Je kunt elke willekeurige waarde invoeren, zoals een woord, voornaam, achternaam, telefoonnummer of domeinnaam.&nbsp;&nbsp;Voor meer opties kun je het sterretje * gebruiken als een <a class="dropspot" href="javascript:TextPopup(this)" id="a2">wildcard</a>. 
- &nbsp;</p>
-<div class="droptext" id="POPUP305251954" style="display: 'none'; " x-ss-type="dropdown">
- <h6>Het sterretje * als wildcard gebruiken bij het zoeken</h6>
- <p>Het sterretje * kan worden gebruikt als wildcard bij het zoeken naar inhoud met woorden die een gelijksoortige spelling hebben. 
- &nbsp;</p>
- <p>Gebruik het sterretje * als een wildcard na een voorvoegsel. Deze zoekopdracht voor <span style="font-weight: bold;"><B>do*</B></span> retourneert woorden zoals dof en door. </p>
+//]]></script>
+<script src="../ehlpdhtm.js" type="text/javascript" language="JavaScript1.2"></script>
+<h1>xxxxZoeken gebruikenxxxx</h1>
+<p>De zoekfunctie in @CompanyName@ is een krachtig hulpmiddel. xxxxAlhoewel je kunt leren om complexe tekstquery's te creëren zoals beschreven in xxxx<a href="query_language_description.htm">xxxxBeschrijving van de querytaalxxxx</a>xxxx, kun je ook eenvoudigweg een naam of woord typen zonder trefwoorden.xxxx Als je bijvoorbeeld alle e-mails wilt vinden met het woord &quot;tim&quot; in de onderwerpregel, de velden Aan, Van, CC of BCC, de berichttekst of een bestandsbijlage, typ je alleen <span class="code" style="font-size: 12pt;"><font size="3" style="font-size:12pt;">tim</font></span> in het vak <span style="font-weight: bold;"><b>Zoeken</b></span> en klik je vervolgens op <span style="font-weight: bold;"><b>Zoeken</b></span>.</p>
+<p>Geef aan waarin je wilt zoeken: &nbsp;e-mailberichten, contacten, afspraken, taken, documentpagina's of bestanden in Aktetas. &nbsp;Je kunt ook aangeven dat je in alle mappen wilt zoeken.</p>
+<h6>Naar contacten zoeken in je adresboek</h6>
+<p>xxxxAls je naar contacten in je adresboeken wilt zoeken, moet de query een volledig woord zijn.xxxx xxxxAls je bijvoorbeeld naar contacten op telefoonnummer wilt zoeken, moet je het volledige telefoonnummer opgeven zoals het vermeld staat in het contact. Je kunt dus niet alleen maar op netnummer zoeken.xxxx</p>
+<ol type="1">
+	<li class="p"><p>Selecteer in de vervolgkeuzelijst naast het zoekveld <span style="font-weight: bold;"><b>Persoonlijke </b></span><span  	 style="font-weight: bold;"><b>contacten</b></span>. Er wordt nu in al je adresboeken gezocht.</p></li>
+	<li class="p"><p>Typ een volledige naam of andere contactgegevens in het zoekvak.</p></li>
+	<li class="p"><p>xxxxKlik op xxxx<span style="font-weight: bold;"><b>xxxxZoeken xxxx</b></span>xxxxom de zoekopdracht uit te voeren.xxxx</p></li>
+</ol>
+<h6>Snel naar andere typen zoeken</h6>
+<p>xxxxJe kunt elke willekeurige waarde invoeren, zoals een woord, voornaam, achternaam, telefoonnummer of domeinnaam.xxxx &nbsp;&nbsp;Voor meer opties gebruik je het sterretje * als een <a class="dropspot" href="javascript:TextPopup(this)"  							 id="a2">wildcard</a>. &nbsp;</p>
+<div class="droptext" id="POPUP443242009" style="display: none;">
+	<h6>xxxxHet sterretje * als wildcard gebruiken bij het zoekenxxxx</h6>
+	<p>Het sterretje * kan worden gebruikt als wildcard bij het zoeken naar inhoud met woorden die een gelijksoortige spelling hebben. &nbsp;</p>
+	<p>xxxxGebruik het sterretje * als een wildcard na een voorvoegsel.xxxx xxxxDeze zoekopdracht voor xxxx<span style="font-weight: bold;"><b>xxxxdo*xxxx</b></span>xxxx retourneert woorden zoals dof en door.xxxx</p>
 </div>
-<p>Als je naar contacten in je adresboeken wilt zoeken, moet de query een volledig woord zijn. Als je bijvoorbeeld naar contacten op telefoonnummer wilt zoeken, moet je het volledige telefoonnummer opgeven zoals het vermeld staat in het contact. Je kunt bijvoorbeeld niet alleen maar op netnummer zoeken.</p>
-<h6>Naar contacten zoeken in je adresboek:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>In het gedeelte Tekst zoeken selecteer je <span style="font-weight: bold;"><B>Persoonlijke contacten</B></span> in de keuzelijst. Op die manier wordt in al je adresboeken gezocht.</p></li>
-	<li class=p><p>Typ een naam of andere contactgegevens in het tekstveld <span style="font-weight: bold;"><B>Zoeken</B></span>. </p></li>
-	<li class=p><p>Klik op <span style="font-weight: bold;"><B>Zoeken </B></span>om de zoekopdracht uit te voeren.</p></li>
+<ol type="1">
+	<li class="p"><p>Selecteer in de vervolgkeuzelijst naast het zoekveld het item waarnaar je wilt zoeken, of selecteer <span style="font-weight: bold;"><b>Alle itemtypes</b></span> om in alle mappen in je account te zoeken.</p></li>
+	<li class="p"><p>Typ een woord, naam of andere e-mailverwante gegevens in het zoekvak.</p></li>
+	<li class="p"><p>xxxxKlik op xxxx<span style="font-weight: bold;"><b>xxxxZoeken xxxx</b></span>xxxxom de zoekopdracht uit te voeren.xxxx</p></li>
 </ol>
-<h6>Snel naar e-mailberichten zoeken:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>In het gedeelte Tekst zoeken selecteer je <span style="font-weight: bold;"><B>E-mailberichten</B></span> in de keuzelijst.</p></li>
-	<li class=p><p>Typ een woord, naam of andere e-mailverwante gegevens in het tekstvak <span style="font-weight: bold;"><B>Zoeken</B></span>.</p></li>
-	<li class=p><p>Klik op <span style="font-weight: bold;"><B>Zoeken </B></span>om de zoekopdracht uit te voeren.</p></li>
-</ol>
-<h2>Een complexe zoekquery maken </h2>
-<p>Als je dezelfde zoekopdracht vaak uitvoert of wilt zoeken naar specifieke, gedetailleerde informatie, kun je een zoekquery maken en die in je map Zoeken opslaan. Als je de zoekopdracht opnieuw uitvoert, kun je eenvoudigweg op de zoekopdracht klikken.</p>
-<p>Een zoekquery maken en opslaan</p>
-<ol type="1" class="whs1">
-	<li class=p><p>Klik in het <span style="font-weight: bold;"><B>deelvenster Zoekoverzicht</B></span> op <span style="font-weight: bold;"><B>Bewerken</B></span>. Er wordt een deelvenster <span 
- style="font-weight: bold;"><B>Nieuwe zoekopdracht maken</B></span> geopend.</p></li>
-	<li class=p><p>Selecteer waar je de zoekmap wilt maken. Als je opslaat in de hoofdmap, wordt de zoekopdracht weergegeven in het gedeelte Zoeken. 
-Als je een andere map selecteert, wordt de zoekopdracht in die map opgeslagen.</p></li>
-<li class=p><p>In het veld <span style="font-weight: bold;"><B>Naam zoekopdracht</B></span> geef je de zoekopdracht een naam. </p></li>
-	<li class=p><p>In het veld<span style="font-weight: bold;"><B> Zoekquery</B></span> typ je jouw query met behulp van de querytaal die staat beschreven in <a href="query_language_description.htm">Beschrijving van de querytaal</a>. Je kunt tevens <a class="dropspot" href="javascript:TextPopup(this)" id="a1" style="font-weight: bold;">AND of OR</a> in je query gebruiken. </p>
-<div class="droptext" id="POPUP304285763" style="display: 'none'; " x-ss-type="dropdown">
- <h6>AND of OR gebruiken bij het maken van je zoekopdracht</h6>
- <p>Voor zoekopdrachten met meerdere criteria kun je naar items zoeken die overeenkomen met één van de opgegeven criteria of met alle criteria. :</p>
- <ul type="disc" class="whs2">
-  <li class=p>
-  <p>Als je naar berichten zoekt die overeenkomen met een van de opgegeven criteria heet dit een <span style="font-style: italic;"><I>OR-</I></span>opdracht, omdat als het bericht X of Ybevat, het als een overeenkomst wordt beschouwd.</p></li>
-  <li class=p>
-  <p>Als je naar berichten zoekt die zowel X als Y bevatten, dan wordt dit een <span style="font-style: italic;"><I>AND-</I></span>zoekopdracht genoemd, omdat het bericht overeen dient te komen met alle opgegeven criteria om als overeenkomst te worden beschouwd. </p></li>
- </ul>
-</div></li>
-	<li class=p><p>Klik op <span style="font-weight: bold;"><B>Zoekopdracht maken</B></span> om een zoekopdracht te maken en op te slaan in de opgegeven map.</p></li>
-</ol>
-<p>Als je jouw zoekopdracht wilt uitvoeren, klik je op de naam van de zoekopdracht in het deelvenster Overzicht. De zoekopdrachten worden weergegeven in het deelvenster Inhoud.</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a2','POPUP305251954');
-//--></script><script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a1','POPUP304285763');
-//--></script><script type="text/javascript" language="javascript1.2">
+<p>&nbsp;</p>
+
+
+<script type="text/javascript" language="JavaScript1.2">//<![CDATA[
+	if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
+	TextPopupInit('a2','POPUP443242009');
+//]]></script>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
-
