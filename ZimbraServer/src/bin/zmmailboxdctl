@@ -49,18 +49,7 @@ spnegoJavaOptions=$(cat $spnego_options_file)
 #
 mk_download_dir() {
   if [ -d "${mailboxd_directory}/webapps/zimbra/downloads" ]; then
-    cat >${mailboxd_directory}/webapps/zimbra/downloads/index.html<<EOF
-<HTML><BODY>
-EOF
-    for filename in `ls -r ${mailboxd_directory}/webapps/zimbra/downloads/ | grep -v html`; do
-      cat >>${mailboxd_directory}/webapps/zimbra/downloads/index.html<<EOF
-<BR>
-<A HREF="/downloads/${filename}">${filename}</A>
-EOF
-    done
-    cat >>${mailboxd_directory}/webapps/zimbra/downloads/index.html<<EOF
-</BODY></HTML>
-EOF
+    ${zimbra_home}/libexec/zmupdatedownload
   fi
 }
 
