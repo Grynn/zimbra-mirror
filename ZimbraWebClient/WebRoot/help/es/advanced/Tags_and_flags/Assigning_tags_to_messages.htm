@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Etiquetar mensajes</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-img_whs2 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>etiquetar mensajes</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Utilizar etiquetas y carpetas para organizar los mensajes\nEtiquetar mensajes");
@@ -57,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,50 +80,53 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>Etiquetar mensajes y otros elementos</h1>
-<p>Etiquetar un mensje es parecido a marcarlo excepto que tú creas y aplicas una o varias etiquetas a un solo elemento para incluirlo en varias categorías a la vez. Después de <a href="Using_tags_to_classify_mail_messages.htm">crear   una etiqueta</a>, puedes aplicarla a tus conversaciones, mensajes o contactos.</p>
-<h6>Para aplicar una etiqueta arrastrando y colocándola:</h6>
+<p>Etiquetar un mensaje es parecido a marcarlo excepto que t&uacute; creas y aplicas una o varias etiquetas a un solo elemento para incluirlo en varias categor&iacute;as a la vez. Despu&eacute;s de <a href="Using_tags_to_classify_mail_messages.htm">crear una etiqueta</a>, puedes aplicarla a tus conversaciones, mensajes o contactos.</p>
+
+<h6>Para aplicar una etiqueta arrastrando y coloc&aacute;ndola:</h6>
 <p>Arrastra y coloca la etiqueta del panel de resumen a la izquierda sobre el elemento en el panel de contenido.</p>
-<h6>Para aplicar la etiqueta al elemento usando los menús:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Haz clic con el botón derecho en el elemento en el panel de contenido. </p></li>
-	<li class=p><p>Selecciona <span style="font-weight: bold;"><B>Etiquetar mensaje   </B></span>(o<span style="font-weight: bold;"><B> Etiquetar conversación</B></span> o<span 
- style="font-weight: bold;"><B> Etiquetar contacto, etc.</B></span>).</p></li>
-	<li class=p><p>Selecciona una de las etiquetas de la lista que se abre. Sólo verás las etiquetas que no se han aplicado al elemento seleccionado.</p></li>
+<h6>Para aplicar la etiqueta al elemento usando los men&uacute;s:</h6>
+<ol type="1">
+	<li class="p"><p>Haz clic con el bot&oacute;n derecho en el elemento en el panel de contenido.</p></li>
+	<li class="p"><p>Selecciona <span style="font-weight: bold;"><b>Etiquetar mensaje</b></span> (o <span style="font-weight: bold;"><b>Etiquetar conversaci&oacute;n</b></span> o <span  	 style="font-weight: bold;"><b>Etiquetar contacto, etc.</b></span>).</p></li>
+	<li class="p"><p>Selecciona una de las etiquetas de la lista que se abre. S&oacute;lo ver&aacute;s las etiquetas que no se han aplicado al elemento seleccionado.</p></li>
 </ol>
 <h6>Para crear una nueva etiqueta y aplicarla al elemento:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Haz clic con el botón derecho en el elemento y selecciona la opción para etiquetarlo del menú. </p></li>
-	<li class=p><p>Selecciona <span style="font-weight: bold;"><B>Nueva etiqueta</B></span>.</p></li>
-	<li class=p><p>Ponle nombre a la etiqueta y pulsa en <span style="font-weight: bold;"><B>Aceptar</B></span>.</p></li>
+<ol type="1">
+	<li class="p"><p>Haz clic con el bot&oacute;n derecho en el elemento y selecciona la opci&oacute;n para etiquetarlo del men&uacute;.</p></li>
+	<li class="p"><p>Selecciona <span style="font-weight: bold;"><b>Nueva etiqueta</b></span>.</p></li>
+	<li class="p"><p>Ponle nombre a la etiqueta y pulsa en <span style="font-weight: bold;"><b>Aceptar</b></span>.</p></li>
 </ol>
 <h6>Para quitar una etiqueta de determinado elemento:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Haz clic con el botón derecho en el elemento y selecciona la opción para etiquetarlo del menú. </p></li>
-	<li class=p><p>Selecciona <span style="font-weight: bold;"><B>Eliminar etiqueta</B></span>.   Si el elemento tiene varias etiquetas, puedes seleccionar quitar una o todas las etiquetas.</p></li>
+<ol type="1">
+	<li class="p"><p>Haz clic con el bot&oacute;n derecho en el elemento y selecciona la opci&oacute;n para etiquetarlo del men&uacute;.</p></li>
+	<li class="p"><p>Selecciona <span style="font-weight: bold;"><b>Eliminar etiqueta</b></span>. Si el elemento tiene varias etiquetas, puedes seleccionar quitar una o todas las etiquetas.</p></li>
 </ol>
 <h6>Para aplicar o eliminar una etiqueta en varios elementos a la vez:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Selecciona todos los elementos en cuestión mediante las teclas Control+clic o Mayús+clic.</p></li>
-	<li class=p><p>Haz clic con el botón derecho en cualquiera de los elementos seleccionados y selecciona la opción de etiquetas que aparece.</p></li>
-	<li class=p><p>Selecciona la etiqueta que quieres añadir o eliminar. </p></li>
+<ol type="1">
+	<li class="p"><p>Selecciona todos los elementos en cuesti&oacute;n mediante las teclas Control+clic o May&uacute;s+clic.</p></li>
+	<li class="p"><p>Haz clic con el bot&oacute;n derecho en cualquiera de los elementos seleccionados y selecciona la opci&oacute;n de etiquetas que aparece.</p></li>
+	<li class="p"><p>Selecciona la etiqueta que quieres a&ntilde;adir o eliminar.</p></li>
 </ol>
-<h6>Para encontrar rápidamente los mensajes etiquetados:</h6>
+<h6>Para encontrar r&aacute;pidamente los mensajes etiquetados:</h6>
 <p>Haz clic en una etiqueta en el panel de resumen.</p>
-<p><img src="../tag-list.gif" x-maintain-ratio="TRUE" border="0" class="img_whs2"></p>
-<p>Alternativamente, puedes realizar una búsqueda de etiquetas específica. En el campo de <span style="font-weight: bold;"><B>búsquedas</B></span>, introduce la palabra clave <span class=code>tag: &lt;&quot;nombre de la etiqueta&quot;&gt;   </span>y pulsa en <span style="font-weight: bold;"><B>Buscar</B></span>. Por ejemplo,   si buscas <span style="font-weight: bold; font-family: 'Lucida Sans Typewriter', monospace;"><B>tag:Urgente,  </B></span>verás todos los elementos a los que has aplicado esa etiqueta.</p>
-<p><img src="../tag-purple.gif" x-maintain-ratio="TRUE" border="0" class="img_whs2"></p>
-<script type="text/javascript" language="javascript1.2">
+<p><img src="../tag-list.gif" alt="tag-list.gif" style="border: none;" width="144" height="119" border="0" /></p>
+<p>Alternativamente, puedes realizar una b&uacute;squeda de etiquetas espec&iacute;fica. En el campo de <span style="font-weight: bold;"><b>b&uacute;squedas</b></span>, introduce la palabra clave <span class="code">tag: &lt;&quot;nombre de la etiqueta&quot;&gt;</span> y haz clic en <span style="font-weight: bold;"><b>Buscar</b></span>. Por ejemplo, si buscas <span  	 style="font-weight: bold; font-family: 'Lucida Sans Typewriter', monospace;"><b>tag:Urgente, </b></span>ver&aacute;s todos los elementos a los que has aplicado esa etiqueta.</p>
+<p><img src="../tag-purple.gif" alt="tag-purple.gif" style="border: none;" width="460" height="34" border="0" /></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

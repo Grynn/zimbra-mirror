@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Imprimir tus contactos</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>imprimir tus contactos</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Gestionar tus libretas de direcciones\nImprimir los nombres de los contactos o las libretas de direcciones");
@@ -56,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,22 +80,34 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>Imprimir los nombres de los contactos o las libretas de direcciones</h1>
-<p>Puedes imprimir una libreta entera o sólo los datos de un contacto.</p>
-<h6>Para imprimir desde una libreta de direcciones</h6>
-<p>Selecciona la libreta de direcciones, luego el nombre del contacto   y después pulsa en el icono de impresión <img src="../print.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1"> o, para imprimir la lista entera, pulsa en la flecha al lado del   icono de impresión y selecciona <span style="font-weight: bold;"><B>Imprimir libreta de   direcciones</B></span>. </p>
-<p>&nbsp;Si los grupos de contactos son muy largos,   sólo se imprimirán los primeros nombres de la lista y verás <span style="font-weight: bold;"><B>Más...</B></span>,   para que sepas que hay otros nombres que no se llegaron a imprimir.</p>
-<script type="text/javascript" language="javascript1.2">
+<p>Puedes imprimir una libreta entera o s&oacute;lo los datos de los contactos seleccionados.</p>
+<ol type="1">
+	<li class="p"><p>Selecciona la libreta de direcciones y habilita las casillas situadas al lado de los contactos cuyos datos quieres imprimir.</p></li>
+	<li class="p"><p>Haz clic en el icono para imprimir, <img src="../print.gif" alt="print.gif" style="border: none;" width="19" height="19" border="0" />.</p></li>
+</ol>
+<p>&nbsp;</p>
+<p>Imprimir la libreta de direcciones:</p>
+<ol type="1">
+	<li class="p"><p>Selecciona la libreta de direcciones que quieres imprimir.</p></li>
+	<li class="p"><p>Haz clic en la flecha situada al lado del icono para imprimir y selecciona la opci&oacute;n <span style="font-weight: bold;"><b>Imprimir libreta de direcciones</b></span>.</p></li>
+</ol>
+<p>&nbsp;</p>
+<p>Si los grupos de contactos son muy largos, s&oacute;lo se imprimir&aacute;n los primeros nombres de la lista y ver&aacute;s <span style="font-weight: bold;"><b>M&aacute;s...</b></span>, para que sepas que hay otros nombres que no se llegaron a imprimir.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

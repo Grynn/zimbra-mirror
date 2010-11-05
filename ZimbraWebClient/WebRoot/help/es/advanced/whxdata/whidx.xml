@@ -1,8 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="acceder a cuentas externas" last="ejemplos de búsquedas" num="101" />
-<chunkinfo url="whidata1.xml" first="eliminar" last="recurso" num="101" />
-<chunkinfo url="whidata2.xml" first="reenviar" last="Zimlets" num="31" />
+<chunkinfo url="whidata0.xml" first="}}}abrir los archivos del maletín{{{" last="}}}respuesta, mostrar asunto{{{" num="92" />
+<chunkinfo url="whidata1.xml" first="}}}reuniones, permiso denegado{{{" last="direcciones POP, añadir" num="101" />
+<chunkinfo url="whidata2.xml" first="disponibilidad" last="reenviar tus mensajes" num="101" />
+<chunkinfo url="whidata3.xml" first="reglas, filtro" last="Zimlets" num="26" />
 
 </index>

@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Gestionar la vista de tus mensajes</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>gestionar la vista de tus mensajes</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,41 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Gestionar tus mensajes \nGestionar la vista de tus mensajes");
+	addTocInfo("Gestionar tus mensajes \ngestionar la vista de tus mensajes");
 addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 
 	}
@@ -56,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,23 +80,56 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Gestionar la vista de tus mensajes</h1>
-<p>Puedes ver tus mensajes como mensajes individuales   o como conversaciones.   Si estás usando la prestación <span style="font-weight: bold;"><B>Conversaciones</B></span>,   la vista predeterminada es por conversación.</p>
-<p>Para cambiar cómo se agrupan los mensajes en esta sesión, pulsa en la flecha al   lado de <span style="font-weight: bold;"><B>Ver</B></span> en el cuadro encima del   panel general. Para cambiar la vista predeterminada, ve a <span style="font-weight: bold;"><B>Preferencias</B></span>   en la pestaña <span style="font-weight: bold;"><B>Correo</B></span>. &nbsp;</p>
-<h2>Visualización de mensajes</h2>
-<p>La vista tradicional incluye una lista de mensajes con el mensaje más reciente en primer lugar. Los mensajes sin leer están resaltados de negrita. La información incluida en una única línea incluyen marcas de seguimiento, etiquetas, el campo De:, si hay un archivo adjunto, el asunto, la ubicación de la carpeta, el tamaño del mensaje (incluyendo los archivos adjuntos) y la hora en la que se recibió el mensaje.</p>
-<p><img src="../tradtional_view.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>&nbsp;</p>
-<h2>Vista por conversación</h2>
-<p>La vista por conversación muestra tus mensajes agrupados por su asunto. Verás el número de los mensajes en la conversación entre paréntesis después del asunto. Cada conversación consiste en el mensaje original y todas sus respuestas.   Las conversaciones que incluyen mensajes sin leer estarán en <span style="font-weight: bold;"><B>negrita</B></span>.</p>
-<p><img src="../conversation_view80.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>&nbsp;</p>
-<p>Haz doble clic en la conversación para ver los mensajes dentro de la conversación.   Haz clic en el mensaje para ver su contenido. </p>
-<p>Se visualizarán todos los mensajes relacionados con la conversación, incluso si están guardados en otras carpetas. La columna <span style="font-weight: bold;"><B>Carpeta</B></span>   indica la carpeta donde está archivado el mensaje. </p>
-<p>
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Imprimir un mensaje','../reading_mail/printing_a_mail_message.htm','Imprimir una conversación','printing_a_conversation.htm','Las conversaciones pueden abarcar varias carpetas','conversations_can_span_folders.htm');return false;" title="Temas relacionados"><img src="../ss_btn_temas_relacionados.gif" border=0 height=17 width=105 alt="Temas relacionados"></a>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
 
+
+<h1>gestionar la vista de tus mensajes</h1>
+<p>Puedes ver tus mensajes como mensajes individuales o como conversaciones. Por otro lado, puedes ver los mensajes con el panel de lectura desactivado, visualizado al pie de la p&aacute;gina o visualizado a mano derecha.</p>
+<p>Para cambiar el modo en que se agrupan los mensajes en tu buz&oacute;n de correo, haz clic en <span style="font-weight: bold;"><b>Ver</b></span>, en la barra de herramientas, e indica si quieres verlos por conversaci&oacute;n o por mensaje, y d&oacute;nde quieres que se visualice el panel de lectura. &nbsp;</p>
+<p style="margin-left: 60px;"><img src="../viewlist.png" alt="viewlist.png" style="border: none;" width="250" height="225" border="0" /></p>
+<h2>Visualizaci&oacute;n de mensajes</h2>
+<p>La vista tradicional incluye una lista de mensajes con el mensaje m&aacute;s reciente en primer lugar. Los mensajes sin leer est&aacute;n resaltados de negrita. La informaci&oacute;n incluida en una &uacute;nica l&iacute;nea incluyen marcas de seguimiento, etiquetas, el campo De:, si hay un archivo adjunto, el asunto, la ubicaci&oacute;n de la carpeta, el tama&ntilde;o del mensaje (incluyendo los archivos adjuntos) y la hora en la que se recibi&oacute; el mensaje.</p>
+<p><img src="../tradtional_view.png" alt="tradtional_view.png" style="border: none;" width="611" height="91" border="0" /></p>
+<h2>Vista por conversaci&oacute;n</h2>
+<p>La vista por conversaci&oacute;n muestra tus mensajes agrupados por su asunto. Ver&aacute;s el n&uacute;mero de los mensajes en la conversaci&oacute;n entre par&eacute;ntesis despu&eacute;s del asunto. Cada conversaci&oacute;n consiste en el mensaje original y todas sus respuestas. Las conversaciones que incluyen mensajes sin leer estar&aacute;n en <span style="font-weight: bold;"><b>negrita</b></span>.</p>
+<p><img src="../conversation_view80.png" alt="conversation_view80.png" style="border: none;" width="611" height="88" border="0" /></p>
+<p>&nbsp;</p>
+<p>Haz doble clic en la conversaci&oacute;n para ver los mensajes dentro de la conversaci&oacute;n. Haz clic en el mensaje para ver su contenido. En el enlace Ver, puedes seleccionar si quieres que se muestre en primer lugar el mensaje que se envi&oacute; hace m&aacute;s tiempo o el m&aacute;s reciente.</p>
+<p>Se visualizar&aacute;n todos los mensajes relacionados con la conversaci&oacute;n, incluso si est&aacute;n guardados en otras carpetas. La columna <span style="font-weight: bold;"><b>Carpeta</b></span>   indica la carpeta donde est&aacute; archivado el mensaje.</p>
+<h2>Navegar por el panel de contenido de los mensajes</h2>
+<p>Cada mensaje, tanto en la vista por mensajes como por conversaci&oacute;n, tiene una l&iacute;nea aparte que muestra las siguientes columnas de informaci&oacute;n:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Indicador de conversaci&oacute;n</b></span>. &iquest;Forma parte este mensaje de una conversaci&oacute;n?</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Indicador de marca de seguimiento</b></span>. &iquest;Ha marcado el remitente este mensaje?</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Indicador de prioridad</b></span>. &iquest;Ha marcado el remitente este mensaje como de prioridad alta?</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Etiquetas</b></span>. &iquest;Se ha marcado el mensaje con una etiqueta creada por ti?</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Estado</b></span>. Los sobres abiertos o cerrados indican si el mensaje se ha le&iacute;do o no. El texto en negrita tambi&eacute;n indica que el mensaje no se ha le&iacute;do.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>De</b></span>. Nombre o direcci&oacute;n de correo electr&oacute;nico del remitente.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Indicador</b></span> de archivo adjunto. Un clip indica que el mensaje incluye un archivo adjunto.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Asunto</b></span>. Breve descripci&oacute;n del mensaje. Si activas en tu cuenta la opci&oacute;n de visualizaci&oacute;n de retazos, podr&aacute;s ver la primera l&iacute;nea de los mensajes.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Carpeta</b></span>. Muestra el nombre de la carpeta en la que se encuentra el mensaje. En el caso de las conversaciones, no se muestra ning&uacute;n nombre de carpeta, ya que los mensajes pueden abarcar varias carpetas.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Tama&ntilde;o</b></span>. El tama&ntilde;o del mensaje o del total de mensajes de la conversaci&oacute;n.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Recibido</b></span>. La fecha o la hora en que se recibi&oacute; el mensaje.</p></li>
+</ul>
+<h2>Organizar los mensajes en el panel de contenido</h2>
+<p>Puedes organizar tus mensajes por las columnas De, Asunto, Tama&ntilde;o o Recibido.</p>
+<p>Para ordenar por una determinada columna, haz clic en el encabezado de la columna. La columna mostrar&aacute; una flecha que indica si se ordena de manera ascendente (con la flecha hacia arriba) o de manera descendente (con la flecha hacia abajo).</p>
+<p>Puedes ordenar por una columna a la vez.</p>
+<p>
+
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+  <param  name="Command"  value="Temas relacionados,MEN&Uacute;" />
+  <param  name="Font"  value="Arial,8,0,,BOLD UNDERLINE" />
+  <param  name="Item1"  value="Las conversaciones pueden abarcar varias carpetas;conversations_can_span_folders.htm" />
+  <param  name="Item2"  value="Imprimir una conversaci&oacute;n;printing_a_conversation.htm" />
+  <param  name="Item3"  value="Imprimir un mensaje;..\reading_mail\printing_a_mail_message.htm" />
+  <param  name="Text"  value="Texto: Temas relacionados" />
+</object>
 
  </p>
 <p>&nbsp;</p>
@@ -99,19 +137,14 @@ else
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
-if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
-  WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

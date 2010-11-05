@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Modificar un contacto</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>modificar un contacto</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Gestionar tus libretas de direcciones\nModificar los datos de contacto");
@@ -57,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,39 +80,52 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Modificar los datos de contacto</h1>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>&nbsp;Modificar los datos de contacto</h1>
 <h6>Para buscar y abrir un formulario de contacto:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>En el campo de búsqueda en la barra, introduce los criterios de búsqueda, como el nombre o apellido del contacto o el nombre del grupo. </p></li>
+<ol type="1">
+	<li class="p"><p>Abre la pesta&ntilde;a Libreta de direcciones. Se abrir&aacute; el campo de b&uacute;squedas <span style="font-weight: bold;"><b>en:contactos</b></span><span>.</span></p></li>
+	<li class="p"><p>En el campo de b&uacute;squeda, introduce los criterios de b&uacute;squeda, como el nombre o el apellido del contacto o el nombre del grupo.</p></li>
 </ol>
-<p class="whs2">Si quieres buscar por dirección de correo electrónico, deberás introducir la dirección completa. El nombre o apellido tendrán que coincidir exactamente.   Por ejemplo, podrías incluir <span style="font-weight: bold; font-style: italic;"><I><B>Moreno   </B></I></span>o <span style="font-style: italic; font-weight: bold;"><I><B>moreno@acme.com</B></I></span>.</p>
-<ol start="2" type="1" class="whs1">
-	<li class=p><p>Selecciona la libreta de direcciones o la libreta general de direcciones en la lista desplegable a mano derecha en la que quieres buscar.</p></li>
-	<li class=p><p>En Editar contacto, haz doble clic en la entrada para abrir el formulario y realizar tus cambios.</p></li>
-	<li class=p><p>Pulsa en <span style="font-weight: bold;"><B>Guardar</B></span> para habilitar tus cambios.</p></li>
+<p style="margin-left: 40px;">Si quieres buscar por direcci&oacute;n de correo electr&oacute;nico, deber&aacute;s introducir la direcci&oacute;n completa. El nombre o apellido tendr&aacute;n que coincidir exactamente. Por ejemplo, podr&iacute;as incluir <span style="font-weight: bold;  													 font-style: italic;"><i><b>Moreno</b></i></span> o <span style="font-style: italic;  												 font-weight: bold;"><i><b>moreno@acme.com</b></i></span>.</p>
+<ol start="3" type="1">
+	<li class="p"><p>En la lista desplegable situada junto al campo de b&uacute;squedas, selecciona <span style="font-weight: bold;"><b>Contactos</b></span> para realizar la b&uacute;squeda en tus libretas de direcciones o selecciona <span style="font-weight: bold;"><b>Lista general de direcciones (GAL)</b></span> &nbsp;para realizar la b&uacute;squeda en la libreta de direcciones de la empresa. </p></li>
+	<li class="p"><p>En <span style="font-weight: bold;"><b>Editar contacto</b></span>, haz doble clic en el nombre para abrir el formulario de contacto y editarlo.</p></li>
+	<li class="p"><p>Realiza los cambios y haz clic en <span style="font-weight: bold;"><b>Guardar</b></span> para habilitar estos cambios.</p></li>
 </ol>
-<h6>Para abrir un contacto para editarlo:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>En la zona de Contactos, haz clic con el botón derecho en el contacto que quieres modificar y selecciona Editar contacto.</p></li>
-	<li class=p><p>En esta ventana, realiza tus cambios y pulsa en   <span style="font-weight: bold;"><B>Guardar</B></span> para habilitarlos.</p></li>
+<h6>Para abrir un formulario de contacto para editarlo:</h6>
+<ol type="1">
+	<li class="p"><p>En una libreta de direcciones, haz clic con el bot&oacute;n derecho en el contacto que quieres editar y selecciona <span style="font-weight: bold;"><b>Editar contacto</b></span>.</p></li>
+	<li class="p"><p>Realiza los cambios y haz clic en <span style="font-weight: bold;"><b>Guardar</b></span> para habilitar estos cambios.</p></li>
 </ol>
 <h6>Para mover un contacto a otra libreta de direcciones:</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Selecciona el contacto y abre el formulario de edición.</p></li>
-	<li class=p><p>En el menú desplegable de libretas de direcciones, selecciona la libreta a la que quieres mover el contacto.</p></li>
-	<li class=p><p>Pulsa en <span style="font-weight: bold;"><B>Guardar</B></span>.   </p></li>
+<p>Tienes varias opciones para mover un contacto:</p>
+<p>Desde el formulario de contacto</p>
+<ol type="1">
+	<li class="p"><p>Selecciona el contacto y haz clic en <span style="font-weight: bold;"><b>Editar</b></span> para abrir el formulario de contacto.</p></li>
+	<li class="p"><p>En el men&uacute; desplegable de <span style="font-weight: bold;"><b>libretas de direcciones</b></span>, selecciona la libreta a la que quieres mover el contacto.</p></li>
+	<li class="p"><p>Pulsa en <span style="font-weight: bold;"><b>Guardar</b></span>.</p></li>
 </ol>
-<script type="text/javascript" language="javascript1.2">
+<p>Desde el nombre del contacto</p>
+<ol type="1">
+	<li class="p"><p>Haz clic con el bot&oacute;n derecho en el contacto que quieres mover.</p></li>
+	<li class="p"><p>Selecciona <span style="font-weight: bold;"><b>Mover</b></span>. En el cuadro de di&aacute;logo Mover contacto, selecciona la libreta de direcciones.</p></li>
+	<li class="p"><p>Haz clic en <span style="font-weight: bold;"><b>Aceptar</b></span>.</p></li>
+</ol>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

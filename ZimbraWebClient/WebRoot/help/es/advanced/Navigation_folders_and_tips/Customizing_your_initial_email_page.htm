@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Personalizar la página de inicio de tu buzón de correo</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Personalizar la p&aacute;gina de inicio de tu buz&oacute;n de correo</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Gestionar tus mensajes \nPersonalizar la página de inicio de tu buzón de correo");
@@ -52,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,23 +80,45 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Personalizar la página de inicio de tu buzón de correo</h1>
-<p>Por defecto, se abre el buzón con la <span style="font-weight: bold;"><B>Bandeja de entrada</B></span>  visualizada. Verás todos los mensajes que figuran en tu bandeja de entrada en el panel de contenido. Puedes cambiar esta opción para que el panel de contenido se abra con cualquiera de tus carpetas, búsquedas o etiquetas. &nbsp;Por ejemplo, si sólo quieres   ver los mensajes no leídos al abrir el buzón, ve a   <span style="font-weight: bold;"><B>Preferencias&gt;Correo&gt;Búsqueda de correo predeterminada</B></span>   e introduce <span class=code>is:unread</span> en el campo de búsqueda.</p>
-<p>O si al iniciar sesión quieres ver los mensajes a los que se han etiquetado con la etiqueta &quot;Pendiente&quot;   que ya has creado, introduce <span class=code>tag:Pendiente</span> en el campo de búsqueda.   Para ver los mensajes en una carpeta que no sea la bandeja de entrada, introduce esa carpeta,   por ejemplo, <span class=code>in:Trabajo</span> en el campo de búsqueda. </p>
-<p>Utiliza comillas si la carpeta o etiqueta consiste en más de una palabra. Por ejemplo, <span 
- style="font-weight: bold;"><B>in:&quot;Mensajes sin leer&quot;</B></span>.</p>
+//]]></script>
+<h1>Personalizar la p&aacute;gina de inicio de tu buz&oacute;n de correo</h1>
+<p>Por defecto, se abre el buz&oacute;n con la <span style="font-weight: bold;"><b>Bandeja de entrada</b></span> visualizada. Ver&aacute;s todos los mensajes que figuran en tu bandeja de entrada en el panel de contenido. Puedes cambiar esta opci&oacute;n para que el panel de contenido se abra con cualquiera de tus carpetas, b&uacute;squedas o etiquetas. Realiza estos cambios desde <span style="font-weight: bold;"><b>Preferencias de</b></span> <span style="font-weight: bold;"><b>correo, B&uacute;squeda de correo predeterminada</b></span>. &nbsp;</p>
+<p>Ejemplos acerca de c&oacute;mo visualizar solamente mensajes espec&iacute;ficos al abrir el buz&oacute;n de correo:</p>
+<ul type="disc">
+	<li class="p"><p>Para visualizar &uacute;nicamente los mensajes no le&iacute;dos al abrir el buz&oacute;n de correo, escribe <span class="code">is :unread</span> <span class="code"  	 style="font-weight: normal;">en el campo</span> <span style="font-weight: bold;"><b>B&uacute;squeda de correo</b></span> <span style="font-weight: bold;"><b>predeterminada</b></span> <span class="code"  	 style="font-weight: normal;">.</span></p></li>
+	<li class="p"><p><span class="code" style="font-weight: normal; font-family: Arial, sans-serif;">P</span>ara visualizar mensajes etiquetados con etiquetas espec&iacute;ficas, escriba la etiqueta siguiente:&lt; nombredeetiqueta&gt; en el campo <span style="font-weight: bold;"><b>B&uacute;squeda de correo</b></span> <span style="font-weight: bold;"><b>predeterminada</b></span>. Por ejemplo, para visualizar &uacute;nicamente mensajes marcados con la etiqueta Pendiente, &nbsp;escribe la <span class="code" style="font-family: Arial, sans-serif;  												 font-size: 10pt;"><font size="2" style="font-size:10pt;">etiqueta siguiente: Pendiente</font></span>.</p></li>
+	<li class="p"><p>Para visualizar mensajes enviados a una carpeta espec&iacute;fica a trav&eacute;s de un <a href="../filters/how_filtering_works.htm">filtro de correo electr&oacute;nico</a>, escribe lo siguiente:&lt; nombredecarpeta&gt; en el campo <span style="font-weight: bold;"><b>B&uacute;squeda de correo predeterminada</b></span>. Por ejemplo, para visualizar mensajes en la carpeta Trabajo, escribe <span  	 style="font-weight: bold;"><b>lo siguiente:trabajo</b></span>.</p></li>
+</ul>
+<p class="note"><span style="font-weight: bold;"><b>Nota: &nbsp;</b></span>Utiliza comillas si la carpeta o etiqueta contiene m&aacute;s de una palabra. Por ejemplo, escribe <span style="font-weight: bold;"><b>lo siguiente:&quot;Mensajes sin leer.&quot;</b></span></p>
+<h3>Ajuste del comportamiento de la bandeja de correo para obtener correo</h3>
+<p>En la secci&oacute;n Preferencias del correo a la hora de mostrar mensajes, si se activa una de las opciones de <span style="font-weight: bold;"><b>Cuando hago clic en Ver correo</b></span> permite ajustar si deseas que tu buz&oacute;n de correo cambie al hacer clic en Ver correo.</p>
+<ul type="disc">
+	<li class="p"><p>Si se selecciona <span style="font-weight: bold;"><b>Ejecutar mi b&uacute;squeda predeterminada</b></span>, al hacer clic en <span style="font-weight: bold;"><b>Ver correo</b></span>, se ejecutar&aacute; la b&uacute;squeda de correo descrita en el campo B&uacute;squeda de correo predeterminada. &nbsp;Si tu b&uacute;squeda predeterminada no se corresponde con la carpeta que est&aacute;s visualizando, pasar&aacute;s a ver la carpeta predeterminada autom&aacute;ticamente. En la mayor&iacute;a de casos, la carpeta predeterminada es la Bandeja de entrada. &nbsp;</p></li>
+	<li class="p"><p>Si se encuentra seleccionado <span style="font-weight: bold;"><b>Actualizar mi vista actual</b></span>, cuando hagas clic en <span style="font-weight: bold;"><b>Ver correo</b></span> desde una carpeta, dicha solicitud buscar&aacute; actualizaciones en la carpeta actual y correo nuevo. La vista de la carpeta actual no cambiar&aacute;. </p></li>
+</ul>
+<p class="note" style="margin-left: 40px;"><span style="font-weight: bold;"><b>Nota:</b></span> &nbsp;Si se recibe correo nuevo en otras carpetas, estas pasar&aacute;n a mostrarse en negrita y se actualizar&aacute; el n&uacute;mero de mensajes no le&iacute;dos. </p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>
+
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+  <param  name="Command"  value="Temas relacionados" />
+  <param  name="Font"  value="Arial,8,0,,BOLD UNDERLINE" />
+  <param  name="Frame"  value="_blank" />
+  <param  name="Item1"  value="Gestionar la vista de los mensajes;..\conversations\conversation_list_view.htm" />
+  <param  name="Text"  value="Texto:  Temas relacionados        " />
+</object>
+
+ </p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

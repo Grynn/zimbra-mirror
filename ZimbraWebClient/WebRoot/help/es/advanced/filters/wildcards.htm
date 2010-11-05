@@ -1,37 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>comodines</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { margin-left:40px; }
-h3.whs2 { margin-left:0px; }
-p.whs3 { margin-left:0px; }
-img_whs4 { border:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript">
-<!--
-if ((navigator.appName == "Netscape") && (parseInt(navigator.appVersion) == 4))
-{
-  var strNSS = "<style type='text/css'>";
-  strNSS += "h3.whs2 {margin-left:1pt; }";
-  strNSS += "p.whs3 {margin-left:1pt; }";
-  strNSS +="</style>";
-  document.write(strNSS);
-}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -42,26 +19,41 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Crear filtros \nComodines en los filtros");
+	addTocInfo("}}}Utilizar filtros de correo{{{\nComodines en los filtros");
 addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 
 	}
@@ -71,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -90,35 +80,38 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>Comodines en los filtros</h1>
-<p>Puedes usar comodines en las comparaciones que utilizan el operador   de comparación &quot;Coincide con patrón&quot;. Los dos caracteres de comodín   disponibles son <span style="font-weight: bold;"><B>*</B></span> y <span style="font-weight: bold;"><B>?</B></span></p>
-<h3><span style="font-weight: bold;"><B>Asterisco (*)</B></span></h3>
-<p>El asterisco * sustituye a &quot;cero o más caracteres de   cualquier tipo&quot;.</p>
-<p>Por ejemplo, si buscas el asunto: <span style="font-weight: bold;"><B>informe*anual</B></span></p>
-<p class="whs1"><span style="font-style: italic;"><I>Coincidirá con:</I></span>   Asuntos como &quot;informe anual&quot;, &quot;informeanual&quot; e   &quot;informe interanual&quot; pero no con &quot;¡urgente!-informe anual&quot;</p>
-<p>Por ejemplo, si buscas el asunto: <span style="font-weight: bold;"><B>c*blanca</B></span></p>
-<p class="whs1"><span style="font-style: italic;"><I>Coincidirá con:</I></span>   Asuntos como &quot;casablanca&quot; o &quot;carpeta blanca&quot;   pero no con &quot;¿de quién es la carpeta blanca?&quot;</p>
+<p>Puedes usar comodines en las comparaciones que utilizan el operador de comparaci&oacute;n &quot;Coincide con patr&oacute;n&quot;. Los dos caracteres comod&iacute;n disponibles son <span style="font-weight: bold;"><b>*</b></span> y <span style="font-weight: bold;"><b>?</b></span></p>
+<h3><span style="font-weight: bold;"><b>Asterisco (*)</b></span></h3>
+<p>El asterisco * sustituye a &quot;cero o m&aacute;s caracteres de cualquier tipo&quot;.</p>
+<p>Por ejemplo, si buscas el asunto: <span style="font-weight: bold;"><b>informe*anual</b></span></p>
+<p style="margin-left: 40px;"><span style="font-style: italic;"><i>Coincidir&aacute; con:</i></span> Asuntos como &quot; informe anual&quot;, &quot;informeanual&quot; e &quot;informe interanual&quot;, pero no con &quot;&iexcl;urgente!-informe anual&quot;</p>
+<p>Por ejemplo, si buscas el asunto: <span style="font-weight: bold;"><b>c*blanca</b></span></p>
+<p style="margin-left: 40px;"><span style="font-style: italic;"><i>Coincidir&aacute; con:</i></span> Asuntos como &quot;casablanca&quot; o &quot;carpeta blanca&quot; pero no con &quot;&iquest;de qui&eacute;n es la carpeta blanca?&quot;</p>
 <h3>Interrogante (?)</h3>
-<p>El interrogante sustituye a &quot;un solo carácter&quot;.</p>
-<p>Por ejemplo, si buscas el asunto: <span style="font-weight: bold;"><B>señor?moreno</B></span></p>
-<p class="whs1"><span style="font-style: italic;"><I>Coincidirá con:</I></span>   Asuntos como &quot;señoramoreno&quot;, &quot;señor moreno&quot;,   &quot;señor-moreno&quot; y &quot;señor_moreno&quot;</p>
-<h3 class="whs2">El carácter de escape es la barra: \</h3>
-<p class="whs3">A veces, posiblemente quieras especificar una coincidencia exacta para una cadena de caracteres que contiene otros que normalmente se considerarían comodines. Por ejemplo, si quieres buscar una coincidencia exacta con un asunto que está rodeado en ambos lados de tres asteriscos, como</p>
+<p>El interrogante sustituye a &quot;un solo car&aacute;cter&quot;.</p>
+<p>Por ejemplo, si buscas el asunto: <span style="font-weight: bold;"><b>se&ntilde;or?moreno</b></span></p>
+<p style="margin-left: 40px;"><span style="font-style: italic;"><i>Coincidir&aacute; con:</i></span> Asuntos como &quot; se&ntilde;oramoreno&quot;, &quot;se&ntilde;or moreno&quot;, &quot;se&ntilde;or-moreno&quot; y &quot;se&ntilde;or_moreno&quot;</p>
+<h3 style="margin-left: 0px;">El car&aacute;cter de escape es la barra: \</h3>
+<p style="margin-left: 0px;">A veces, posiblemente quieras especificar una coincidencia exacta para una cadena de caracteres que contiene otros que normalmente se considerar&iacute;an comodines. Por ejemplo, si quieres buscar una coincidencia exacta con un asunto que est&aacute; rodeado en ambos lados de tres asteriscos, como</p>
 <p>***MORE MONEY!!!*** o</p>
 <p>***FREE GIFT***</p>
-<p>Para que el comodín se incluya en la búsqueda y no como un sustituto de otros caracteres, utiliza la barra oblicua hacia atrás (\) antes del carácter en cuestión.   Por ejemplo, la cadena &quot;\*\*\**\*\*\*&quot; indicaría   que buscas un asunto con tres asteriscos antes y después del texto que haya en medio (incluyendo los espacios).</p>
-<p><img src="../image19.jpg" border="0" class="img_whs4"></p>
-<script type="text/javascript" language="javascript1.2">
+<p>Para que el comod&iacute;n se incluya en la b&uacute;squeda y no como un sustituto de otros caracteres, utiliza la barra oblicua hacia atr&aacute;s (\) antes del car&aacute;cter en cuesti&oacute;n. Por ejemplo, la cadena &quot;\*\*\**\*\*\*&quot; indicar&iacute;a un asunto con tres asteriscos antes y despu&eacute;s del texto que haya en medio (incluidos los espacios).</p>
+<p><img src="../image19.jpg" alt="image19.jpg" style="border: none;" width="589" height="223" border="0" /></p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

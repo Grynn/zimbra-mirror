@@ -1,36 +1,32 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Gestionar los elementos que compartes" url="6_0new_topics/Managing_items_you_share.htm" />
+<item name="}}}Compartir carpetas{{{" url="Sharing/Sharing_a_folder.htm" />
+<item name="Gestionar los elementos que compartes" url="Sharing/Managing_items_you_share.htm" />
+<item name="}}}Compartir con una lista de distribución{{{" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="Compartir carpetas de correo" >
   <item name="Compartir carpetas de correo" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
   <item name="Compartir tu buzón de correo" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+  <item name="}}}Revocar el acceso a una carpeta compartida{{{" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
   <item name="Aceptar el acceso a una carpeta de correo compartida" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-  <item name="Revocar el acceso a una carpeta compartida" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
   <item name="Trabajar con una carpeta de correo compartida" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+</book>
+<book name="Compartir tus agendas" >
+  <item name="Compartir tu agenda" url="Calendar/Delegating_Calendar_Access.htm" />
+  <item name="Otorgar privilegios de administración para las agendas compartidas" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <item name="Otorgar privilegios de controlador para las agendas compartidas" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
+  <item name="Aceptar acceder a una agenda compartida" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+  <item name="Rechazar una petición de compartir agendas" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
 </book>
 <book name="Compartir tus libretas de direcciones" >
   <item name="Compartir tu libreta de direcciones" url="Contacts/Sharing_your_Address_Book.htm" />
 </book>
-<book name="Compartir tus agendas" >
-  <item name="Compartir tu agenda" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="Otorgar privilegios de administración para las agendas compartidas" url="6_0new_topics/Admin_rights_for_shared_Calendars.htm" />
-  <item name="Otorgar privilegios de controlador para las agendas compartidas" url="6_0new_topics/Manager_rights_for_shared_Calendars.htm" />
-  <item name="Aceptar acceder a una agenda compartida" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
-  <item name="Rechazar una petición de compartir agendas" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
-</book>
 <book name="Compartir las listas de tareas" >
-  <item name="Compartir tu lista de tareas" url="Tasks/Share_your_Task_folder.htm" />
+  <item name="}}}Compartir tu lista de tareas{{{" url="Tasks/Share_your_Task_folder.htm" />
   <item name="Aceptar acceder a listas de tareas compartidas" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
 </book>
-<book name="Compartir tus blocs de notas" >
-  <item name="Compartir tus blocs de notas" url="Documents/Sharing_Notebooks.htm" />
-  <item name="Aceptar acceder a un bloc de notas" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-  <item name="Enlazar a un bloc de notas compartido" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-  <item name="Cambiar o cancelar el acceso a tu Bloc de notas" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</book>
 <book name="Compartir carpetas del Maletín" >
-  <item name="Compartir tu Maletín" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+  <item name="Compartir tu Maletín" url="Briefcase/Sharing_your_Briefcase.htm" />
 </book>
 
 </tocdata>

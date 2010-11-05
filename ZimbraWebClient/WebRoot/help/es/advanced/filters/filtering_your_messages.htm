@@ -1,30 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Filtrar tus mensajes</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-ul.whs3 { margin-left:20px; }
-p.whs4 { margin-left:25px; }
-p.whs5 { margin-left:40px; }
-p.whs6 { margin-left:24px; }
-img_whs7 { border:none; float:none; border-style:none; }
-p.whs8 { font-style:normal; }
-p.whs9 { x-condition:Advanced_WC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>filtrar tus mensajes</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -35,26 +19,41 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Crear filtros \nFiltrar tus mensajes");
+	addTocInfo("}}}Utilizar filtros de correo{{{\nfiltrar tus mensajes");
 addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 
 	}
@@ -64,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -83,69 +80,79 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Filtrar tus mensajes</h1>
-<p>Los filtros aplican una serie de reglas de coincidencia al correo entrante y luego ejecutan la acción correspondiente.</p>
-<p>Puedes filtrar los mensajes entrantes para enviarlos a determinadas carpetas, etiquetarlos automáticamente, reenviarlos o eliminarlos. Por ejemplo, podrías crear la siguiente regla:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Todos los mensajes que recibas de tu supervisor irán a la carpeta &quot;Directivas   generales&quot;.</p></li>
-	<li class=p><p>Todos los mensajes que se reciban de la lista de correo &quot;eventos corporativos&quot; se   etiquetarán con &quot;Eventos&quot;.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>filtrar tus mensajes</h1>
+<p>Los filtros aplican una serie de reglas de coincidencia al correo entrante y luego ejecutan la acci&oacute;n correspondiente.</p>
+<p>Puedes filtrar los mensajes entrantes para enviarlos a determinadas carpetas, etiquetarlos autom&aacute;ticamente, reenviarlos o eliminarlos. Por ejemplo, puedes crear la siguiente regla:</p>
+<ul type="disc">
+	<li class="p"><p>Todos los mensajes que recibas de tu supervisor ir&aacute;n a la carpeta &quot;Directivas generales&quot;.</p></li>
+	<li class="p"><p>Todos los mensajes que se reciban de la lista de correo &quot;eventos corporativos&quot; se etiquetar&aacute;n con &quot;Eventos&quot;.</p></li>
 </ul>
 <h6>Para crear un nuevo filtro o editar uno existente:</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Pulsa en la pestaña <span style="font-weight: bold;"><B>Preferencias&nbsp;</B></span>.</p></li>
-	<li class=p><p>Abre la pestaña <span style="font-weight: bold;"><B>Filtros de correo   </B></span>y pulsa en <span style="font-weight: bold;"><B>Nuevo filtro</B></span>.</p></li>
-	<li class=p><p>Se abrirá el cuadro de diálogo <span style="font-weight: bold;"><B>Añadir filtro</B></span>. </p></li>
-	<li class=p><p>En el campo <span style="font-weight: bold;"><B>Nombre del filtro</B></span>,   introduce un nombre.</p></li>
-	<li class=p><p>En la zona <span style="font-weight: bold;"><B>Si se cumplen   las siguientes condiciones</B></span>, selecciona la condición. &nbsp;</p></li>
+<ol type="1">
+	<li class="p"><p>Pulsa en la pesta&ntilde;a <span style="font-weight: bold;"><b>Preferencias   </b></span>.</p></li>
+	<li class="p"><p>Abre <span style="font-weight: bold;"><b>Filtros</b></span> y haz clic en <span style="font-weight: bold;"><b>Nuevo filtro</b></span>.</p></li>
+	<li class="p"><p>Se abrir&aacute; el cuadro de di&aacute;logo <span style="font-weight: bold;"><b>A&ntilde;adir filtro</b></span>. Aqu&iacute; es donde defines las reglas del filtro y su destino.</p></li>
+	<li class="p"><p>En el campo <span style="font-weight: bold;"><b>Nombre del filtro</b></span>, introduce un nombre &uacute;nico para identificar el filtro.</p></li>
+	<li class="p"><p>En el apartado &nbsp;<span style="font-weight: bold;"><b>Si xxx de las siguientes condiciones se cumplen</b></span>, selecciona una preferencia de agrupaci&oacute;n. &nbsp;</p></li>
 </ol>
-<ul type="disc" class="whs3">
-	<li style="margin-left: -20px;" class=p><p class="whs4"><span 
- style="font-weight: bold;"><B>Cualquier condición </B></span>significa que si se cumple cualquier condición del filtro, se aplicará la acción especificada. </p></li>
-	<li style="margin-left: -20px;" class=p><p class="whs4"><span 
- style="font-weight: bold;"><B>Todas las condiciones</B></span> significa que el mensaje   tiene que cumplir con todas las condiciones del filtro para que se aplique la acción.   &nbsp;</p></li>
+<ul type="disc">
+	<ul type="disc">
+		<li class="p"><p style="margin-left: 24px;"><span style="font-weight: bold;"><b>Cualquiera</b></span> significa que, si se cumple cualquier condici&oacute;n del filtro, se aplicar&aacute; la acci&oacute;n especificada.</p></li>
+		<li class="p"><p style="margin-left: 24px;"><span style="font-weight: bold;"><b>Todas las condiciones</b></span> significa que el mensaje tiene que cumplir con todas las condiciones del filtro para que se aplique la acci&oacute;n. &nbsp;</p></li>
+	</ul>
 </ul>
-<p class="whs5">Puedes repetir los pasos a continuación para añadir más condiciones y acciones dentro del mismo filtro.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p class="whs6">Selecciona qué <a href="filter_conditions_and_actions_supported.htm">condición</a>   usar de la lista desplegable. &nbsp;</p></li>
-	<li class=p><p class="whs6">Selecciona un método de <a href="filter_conditions_and_actions_supported.htm">comparación</a> . Las opciones que veas dependerán de tu elección en la lista desplegable anterior.   Por ejemplo, podrías ver las opciones &quot;contiene&quot; o &quot;no contiene&quot;.</p></li>
-	<li class=p><p class="whs6">Introduce la palabra o frase a comparar en el campo de texto.</p></li>
+<p style="margin-left: 40px;">Puedes repetir los pasos a continuaci&oacute;n para a&ntilde;adir m&aacute;s condiciones y acciones dentro del mismo filtro. Haz clic en el enlace + para especificar varias condiciones.</p>
+<ul type="disc">
+	<ul type="disc">
+		<li class="p"><p style="margin-left: 24px;">Selecciona qu&eacute; <a href="filter_conditions_and_actions_supported.htm">condici&oacute;n</a> usar de la lista desplegable. &nbsp;</p></li>
+		<li class="p"><p style="margin-left: 24px;">Selecciona un m&eacute;todo de <a href="filter_conditions_and_actions_supported.htm">comparaci&oacute;n</a> . Las opciones que veas depender&aacute;n de tu elecci&oacute;n en la lista desplegable anterior. Por ejemplo, podr&iacute;as ver las opciones &quot;contiene&quot; o &quot;no contiene&quot;.</p></li>
+		<li class="p"><p style="margin-left: 24px;">Introduce la palabra o frase a comparar en el campo de texto.</p></li>
+	</ul>
 </ul>
-<p class="whs5">Pulsa en<span style="x-condition: Advanced_WC;"> 
- <img src="../plusbutton.gif" x-maintain-ratio="TRUE" border="0" class="img_whs7"></span>,   para añadir más condiciones. Puedes seguir añadiendo más condiciones o pasar al siguiente paso para determinar una o más acciones a seguir. </p>
-<ol start="6" type="1" class="whs2">
-	<li class=p><p>En la sección <span style="font-weight: bold;"><B>Ejecutar las   siguientes acciones</B></span>, selecciona una <a href="filter_conditions_and_actions_supported.htm">acción</a>   de la lista desplegable.</p></li>
+<p style="margin-left: 40px;">Haz clic en <img src="../plusbutton.gif" alt="plusbutton.gif" style="border: none;" width="21" height="20" border="0" /> ,  para a&ntilde;adir m&aacute;s condiciones. Puedes seguir a&ntilde;adiendo m&aacute;s condiciones o pasar al siguiente paso para determinar una o m&aacute;s acciones a seguir.</p>
+<ol start="6" type="1">
+	<li class="p"><p>En la secci&oacute;n <span style="font-weight: bold;"><b>Ejecutar las   siguientes acciones</b></span>, selecciona una <a href="filter_conditions_and_actions_supported.htm">acci&oacute;n</a> de la lista desplegable.</p></li>
 </ol>
-<ul type="disc" class="whs3">
-	<li style="margin-left: -20px;" class=p><p class="whs4">Especifica una carpeta o el nombre de la etiqueta si hace falta. Dependerá de qué acción hayas escogido.</p></li>
+<ul type="disc">
+	<li class="p"><p style="margin-left: 40px;">Especifica una carpeta o el nombre de la etiqueta si hace falta. Depender&aacute; de qu&eacute; acci&oacute;n hayas escogido.</p></li>
 </ul>
-<p class="whs5">Pulsa en<span style="x-condition: Advanced_WC;"> 
- <img src="../plusbutton.gif" x-maintain-ratio="TRUE" border="0" class="img_whs7"></span>,    para   añadir más acciones. Puedes añadir más acciones o pulsa en <span style="font-weight: bold;"><B>Aceptar</B></span>   para acabar. </p>
-<ol start="7" type="1" class="whs2">
-	<li class=p><p class="whs8">Activa la casilla <span style="font-weight: bold;"><B>Activo</B></span>   para habilitar el filtro.</p></li>
+<p style="margin-left: 40px;">Haz clic en <img src="../plusbutton.gif" alt="plusbutton.gif" style="border: none;" width="21" height="20" border="0" /> ,  para a&ntilde;adir m&aacute;s acciones. Puedes a&ntilde;adir m&aacute;s acciones o pulsa en <span  	 style="font-weight: bold;"><b>Aceptar</b></span> para acabar.</p>
+<ol start="7" type="1">
+	<li class="p" style="font-style: normal;"><p style="font-style: normal;">En la parte superior del cuadro de di&aacute;logo A&ntilde;adir filtro, ver&aacute;s la casilla <span style="font-weight: bold;"><b>Activo</b></span>. Activa esta casilla para habilitar el filtro. &nbsp;Puedes desactivar la casilla si no quieres que se ejecute ese filtro.</p></li>
+	<li class="p" style="font-style: normal;"><p style="font-style: normal;">Activa la opci&oacute;n <span style="font-weight: bold;"><b>No procesar filtros adicionales</b></span>, si este filtro es el &uacute;nico que quieres que se ejecute para los mensajes que cumplen con las condiciones del filtro. La acci&oacute;n <span style="font-weight: bold;"><b>No procesar filtros adicionales</b></span> deber&iacute;a ser la &uacute;ltima acci&oacute;n en cada filtro. Esta acci&oacute;n evita que se apliquen m&aacute;s reglas de filtro a los mensajes que coincidan con la regla actual.</p>
+	<p class="note">&nbsp;<span style="font-weight: bold;"><b>Nota</b></span>: Si no especificas esta opci&oacute;n, se analizar&aacute; el mensaje con las siguientes reglas aunque ya haya coincidido con una regla anterior. No es muy probable que quieras que el mismo mensaje coincida con m&aacute;s de una regla y que se le apliquen varias acciones, probablemente contradictorias.</p></li>
 </ol>
-<p class="whs8">Se aplicará el filtro automáticamente a todos los mensajes entrantes conforme van llegando.</p>
-<ul><li style="x-condition: Advanced_WC;" class=p-note><p class=note>También puedes crear un nuevo filtro desde el mensaje de correo. Haz clic con el botón derecho del ratón en   el mensaje y selecciona <span style="font-weight: bold;"><B>Nuevo filtro</B></span>. Se abrirá el cuadro de diálogo   <span style="font-weight: bold;"><B>Editar filtro</B></span> con los campos   <span style="font-weight: bold;"><B>De</B></span>, <span style="font-weight: bold;"><B>Para</B></span>   y <span style="font-weight: bold;"><B>Asunto</B></span> rellenados con la información del mensaje. &nbsp;Si las condiciones del filtro son las correctas,   ponle nombre al filtro y pulsa en Aceptar. </p></li>
-</ul>
-<p class="whs9">&nbsp;</p>
-<p class="whs9">
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Comodines','wildcards.htm','Condiciones y acciones admitidas de los filtros','filter_conditions_and_actions_supported.htm','Cómo funcionan los filtros','how_filtering_works.htm');return false;" title="Temas relacionados"><img src="../ss_btn_temas_relacionados.gif" border=0 height=17 width=105 alt="Temas relacionados"></a>
+<p style="font-style: normal;">Los cambios que realizas a los filtros se guardan de forma inmediata. Se aplicar&aacute; el filtro autom&aacute;ticamente a todos los mensajes entrantes conforme van llegando. &nbsp;</p>
+<p style="font-style: normal;">Tambi&eacute;n puedes aplicar los filtros a los mensajes ya recibidos. En la secci&oacute;n Preferencias de los filtros, haz clic en &nbsp;<span style="font-weight: bold;"><b>Ejecutar filtro</b></span> y selecciona las carpetas de correo en las que deseas ejecutar el filtro seleccionado.</p>
+<p class="note"><span style="font-weight: bold;"><b>Nota</b></span>: Tambi&eacute;n puedes crear un nuevo filtro desde el mensaje de correo. Haz clic con el bot&oacute;n derecho del rat&oacute;n en el mensaje y selecciona <span style="font-weight: bold;"><b>Nuevo filtro</b></span>. Se abrir&aacute; el cuadro de di&aacute;logo   <span style="font-weight: bold;"><b>Editar filtro</b></span> con los campos <span style="font-weight: bold;"><b>De</b></span>, <span style="font-weight: bold;"><b>Para</b></span> y <span style="font-weight: bold;"><b>Asunto</b></span> rellenados con la informaci&oacute;n del mensaje. &nbsp;Si las condiciones del filtro son las correctas, ponle nombre al filtro y haz clic en Aceptar.</p> <p>&nbsp;</p> <p>
+
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+  <param  name="Command"  value="Temas relacionados,MEN&Uacute;" />
+  <param  name="Font"  value="Arial,8,0,,BOLD UNDERLINE" />
+  <param  name="Item1"  value="Condiciones y acciones admitidas de los filtros;filter_conditions_and_actions_supported.htm" />
+  <param  name="Item2"  value="C&oacute;mo funcionan los filtros;how_filtering_works.htm" />
+  <param  name="Item3"  value="Comodines;wildcards.htm" />
+  <param  name="Text"  value="Texto: Temas relacionados" />
+</object>
 
  </p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
-if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
-  WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

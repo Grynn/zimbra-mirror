@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Leer los mensajes en el panel de lectura</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>leer los mensajes en el panel de lectura</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Gestionar tus mensajes \nLeer tus mensajes\nLeer los mensajes en el panel de lectura");
@@ -52,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,22 +80,42 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Leer los mensajes en el panel de lectura</h1>
-<p>El panel de lectura se encuentra debajo de la lista de mensajes en tu bandeja de entrada. </p>
-<p>Si has habilitado el panel de lectura, al hacer clic en un mensaje, aparecerá en el panel debajo del encabezado y se marcará ese mensaje como leído. Para ajustar el tamaño del panel de lectura, haz clic en la barra separadora y muévela hacia arriba o abajo.</p>
-<p>Por defecto,  el panel de lectura está habilitado. &nbsp;Lo   puedes deshabilitar mediante la pestaña <span style="font-weight: bold;"><B>Preferencias, Correo</B></span>. Desactiva la casilla <span style="font-weight: bold;"><B>Mostrar   el panel de lectura de mensajes</B></span>.</p>
-<p>También puedes cambiar la opción del panel de lectura desde el menu Ver pero, si lo cambias aquí, sólo se aplicará a la sesión actual hasta que te desconectes. Al volver a iniciar sesión, la configuración en Preferencias determinará si está habilitado o no el panel de lectura. &nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>Ver mensajes desde el panel de lectura</h1>
+<p>Puedes utilizar el panel de lectura para previsualizar los mensajes de tu bandeja de entrada y de otras carpetas.</p>
+<p>Por defecto, el panel de lectura est&aacute; habilitado. &nbsp;Puedes desactivarlo desde el enlace <span style="font-weight: bold;"><b>Ver</b></span> de la barra de herramientas. Puedes personalizar la ubicaci&oacute;n del panel de lectura.</p>
+<h2>Seleccionar la vista del panel de lectura</h2>
+<p>El panel de lectura puede visualizarse en la parte inferior o en la parte derecha del panel de contenido.</p>
+<ol type="1">
+	<li class="p"><p>Haz clic en <span style="font-weight: bold;"><b>Ver</b></span> en la barra de herramientas de correo.</p></li>
+	<li class="p"><p>Selecciona para visualizar el panel de lectura en la parte inferior o en la parte derecha del panel de contenido. Tambi&eacute;n puedes desactivar el panel de lectura.</p></li>
+</ol>
+<h2>Ver mensajes en el panel de lectura</h2>
+<p>El panel de lectura estar&aacute; vac&iacute;o hasta que hagas clic en un mensaje.</p>
+<p>Para ajustar el tama&ntilde;o del panel de lectura, coloca el puntero del rat&oacute;n sobre la l&iacute;nea que se encuentra situada entre el panel de contenido y el panel de lectura. El puntero se convertir&aacute; en una flecha de dos direcciones. Haz clic en el puntero y arr&aacute;stralo para cambiar el tama&ntilde;o del &aacute;rea del panel de lectura.</p>
+<p>Al hacer clic en un mensaje de la lista, el texto del mensaje se visualizar&aacute; en el panel de lectura.</p>
+<h2>Marcar mensajes como le&iacute;dos desde el panel de lectura</h2>
+<p>En<span style="font-weight: bold;"><b>&nbsp;Preferencias de correo</b></span>, puedes configurar si deseas que los mensajes que se visualizan en el panel de lectura se marquen o no como le&iacute;dos</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Marcarlos como le&iacute;dos inmediatamente</b></span>. En cuanto hagas clic en un mensaje en el panel de lectura, se marcar&aacute; como le&iacute;do.</p></li>
+	<li class="p"><p style="font-weight: normal;"><span style="font-weight: bold;"><b>Marcar como le&iacute;do despu&eacute;s de &nbsp;&quot;x &quot; segundos</b></span>. &nbsp;El ajuste predeterminado es 5 segundos. Si haces clic en un mensaje y lo visualizas durante 5 segundos, se marcar&aacute; como le&iacute;do.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>No marcar como le&iacute;do</b></span>. &nbsp;Los mensajes que leas en el panel de lectura nunca se marcar&aacute;n como le&iacute;dos.</p></li>
+</ul>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Trabajar con una carpeta de correo compartida</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Compartir carpetas\nCompartir carpetas de correo\nTrabajar con una carpeta de correo compartida");
@@ -52,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,25 +80,29 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>Trabajar con una carpeta de correo compartida</h1>
-<p>Al aceptar acceder a una carpeta de correo compartida, verás esta nueva carpeta en el panel general de tu buzón. &nbsp;Al abrir la carpeta, verás su contenido. &nbsp;No se guarda el contenido en tu buzón de correo. &nbsp;</p>
-<p>Puedes abrir los mensajes y, si tienes permiso de Controlador, podrás responder al mensaje, reenviarlo o eliminarlo. Se guardan copias de los mensajes que envías en el buzón de correo del dueño de la carpeta y si eliminas un mensaje de su buzón o lo señalas como spam, se moverá a la Papelera o a la carpeta Spam del dueño. </p>
-<p>Si tienes acceso a más de una carpeta del dueño del buzón, podrás mover el contenido de una carpeta a otra dentro de ese buzón. &nbsp;Puedes copiar un mensaje de correo de las carpetas del dueño a una de tus carpetas de correo; se dejará el mensaje en la carpeta del dueño del buzón.</p>
-<p>Puedes crear subcarpetas en la carpeta de correo compartida y esas nuevas subcarpetas se verán en el buzón del dueño. </p>
+<p class="note"><span style="font-weight: bold;"><b>Nota</b></span>: Disponible &uacute;nicamente para cuentas de @CompanyName@. Adem&aacute;s, se requiere una conexi&oacute;n a Internet.</p>
+<p>Al aceptar acceder a una carpeta de correo compartida, ver&aacute;s esta nueva carpeta en el panel general de tu buz&oacute;n. &nbsp;Al abrir la carpeta, ver&aacute;s su contenido. &nbsp;No se guarda el contenido en tu buz&oacute;n de correo.</p>
+<p>Puedes abrir los mensajes y, si tienes permiso de Controlador o Administrador, podr&aacute;s responder al mensaje, reenviarlo o eliminarlo. Se guardan copias de los mensajes que env&iacute;as en el buz&oacute;n de correo del due&ntilde;o de la carpeta y si eliminas un mensaje de su buz&oacute;n o lo se&ntilde;alas como spam, se mover&aacute; a la Papelera o a la carpeta Spam del due&ntilde;o.</p>
+<p>Si tienes acceso a m&aacute;s de una carpeta del due&ntilde;o del buz&oacute;n, podr&aacute;s mover el contenido de una carpeta a otra dentro de ese buz&oacute;n. &nbsp;Puedes copiar un mensaje de correo de las carpetas del due&ntilde;o a una de tus carpetas de correo; se dejar&aacute; una copia del mensaje en la carpeta del due&ntilde;o del buz&oacute;n.</p>
+<p>Puedes crear subcarpetas en la carpeta de correo compartida y esas nuevas subcarpetas se ver&aacute;n en el buz&oacute;n del due&ntilde;o.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

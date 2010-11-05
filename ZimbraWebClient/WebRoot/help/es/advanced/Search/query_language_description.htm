@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Descripción del lenguaje de búsquedas</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { font-weight:bold; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>descripci&oacute;n del lenguaje de b&uacute;squedas</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,26 +19,41 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Buscar elementos\nDescripción del lenguaje de búsquedas");
+	addTocInfo("Buscar elementos\ndescripción del lenguaje de búsquedas");
 addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 
 	}
@@ -57,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,84 +80,91 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Descripción del lenguaje de búsquedas</h1>
-<p>Esta sección de ayuda avanzada describe la sintaxis utilizada en la función de búsqueda de Zimbra. Siempre aplicamos algún tipo de consulta para visualizar lo que ves en la interfaz de Zimbra. </p>
-<p><b style="font-weight: bold;">Consejo</b>: Puedes configurar tus Preferencias   en la pestaña General para '<i><b>Mostrar siempre cadena de búsqueda'</b></i> &nbsp;para   ver la consulta actual en la barra de herramientas de las búsquedas. Por ejemplo, al activar esta opción y si seleccionas tu bandeja de entrada, verás la búsqueda '<i><b>in:inbox'</b></i> (en:bandeja de entrada).</p>
-<h2>Estructura lingüística de las búsquedas</h2>
-<p>Puedes realizar una búsqueda sencilla simplemente introduciendo una palabra en el campo de búsquedas. Las palabras que no incluyen un operador de búsqueda se buscarán con el operador  'content:' -- se buscarán coincidencias con cualquier texto dentro del mensaje.   </p>
-<p>Puedes realizar búsquedas más avanzadas mediante los <b>operadores de búsqueda</b>.   Un operador de búsqueda es una palabra clave especial seguida de los dos puntos y otro parámetro específico para ese operador. Por ejemplo: </p>
-<ul><li class=p><p><b style="font-weight: bold;">in:inbox</b> el operador   es &quot;in&quot; (en) y el parámetro es &quot;inbox&quot;   (bandeja de entrada) y verás los mensajes que coinciden con tu búsqueda y que están en la carpeta denominada &quot;inbox&quot; </p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>descripci&oacute;n del lenguaje de b&uacute;squedas</h1>
+<p>Esta secci&oacute;n de ayuda avanzada describe detalladamente la sintaxis utilizada en la funci&oacute;n de b&uacute;squeda de @CompanyName@. Siempre aplicamos alg&uacute;n tipo de consulta para visualizar lo que ves en la interfaz.</p>
+<h2>Estructura ling&uuml;&iacute;stica de las b&uacute;squedas</h2>
+<p>Puedes realizar una b&uacute;squeda sencilla simplemente introduciendo una palabra en el campo de b&uacute;squedas. Las palabras que no incluyen un operador de b&uacute;squeda se buscar&aacute;n con el operador 'content:' -- se buscar&aacute;n coincidencias con cualquier texto dentro del mensaje.</p>
+<p>Puedes realizar b&uacute;squedas m&aacute;s avanzadas mediante los <b>operadores de b&uacute;squeda</b>. Un operador de b&uacute;squeda es una palabra clave especial seguida de los dos puntos y otro par&aacute;metro espec&iacute;fico para ese operador. Por ejemplo:</p>
+<ul>
+	<li class="p"><p><b style="font-weight: bold;">in: inbox</b> el operador es &quot;in&quot; (en) y el par&aacute;metro es &quot; inbox&quot; (bandeja de entrada) y ver&aacute;s los mensajes que coinciden con tu b&uacute;squeda y que est&aacute;n en la carpeta denominada &quot; inbox&quot;</p></li>
 </ul>
-<ul><li class=p><p><b style="font-weight: bold;">from:alguien</b> el operador   es &quot;from&quot; (de) y el parámetro es &quot;alguien&quot; - sirve   para ver los mensajes que ese &quot;alguien&quot; te ha enviado.   </p></li>
+<ul>
+	<li class="p"><p><b style="font-weight: bold;">from:alguien</b> el operador es &quot;from&quot; (de) y el par&aacute;metro es &quot;alguien&quot; - sirve para ver los mensajes que ese &quot;alguien&quot; te ha enviado.</p></li>
 </ul>
-<p>Puedes añadir el prefijo &quot;not&quot; (no) a cualquier palabra clave para   buscar elementos que no incluyen ese criterio, por ejemplo <b>not in:inbox</b> (no en la bandeja de entrada).   Las búsquedas no tienen en cuenta las mayúsculas ni minúsculas y, por lo tanto, la búsqueda &quot;in:inbox&quot; es igual a &quot;in:Inbox&quot;. El guión (<b>-</b>) sirve como sinónimo de <b>NOT</b>   Por lo tanto: <b>not in:inbox</b> es igual a <b>-in:inbox</b> </p>
-<p>En la mayoría de los casos, no tienes que introducir caracteres de punctuación en la cadena de búsqueda; el código de la búsqueda los ignorará. En algunos casos, sin embargo, esto no es cierto (por ejemplo, si buscas la hora '9:30' en un mensaje); en estos casos, deberías incluir el parámetro entre comillas. Por ejemplo: <b>subject:&quot;9:30&quot;</b>   (asunto:9:30) verás los mensajes que incluyen 9:30 en su asunto. </p>
-<p>Los caracteres permitidos en los parámetros de búsqueda: </p>
-<ul><li class=p><p>No se pueden incluir los siguientes caracteres en ningún lugar del parámetro de la búsqueda salvo si los introduces entre comillas: ~ '&nbsp;! # $ % ^ &amp; * 
- ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;: </p></li>
-	<li class=p><p>Puedes incluir los siguientes carácteres en los parámetros de búsqueda con tal de que no sean el primer carácter de la cadena: - + &lt; &gt; </p></li>
+<p>Puedes a&ntilde;adir el prefijo &quot;not&quot; (no) a cualquier palabra clave para buscar elementos que no incluyen ese criterio, por ejemplo <b>not in: inbox</b> (no en la bandeja de entrada). Las b&uacute;squedas no tienen en cuenta las may&uacute;sculas ni min&uacute;sculas y, por lo tanto, la b&uacute;squeda &quot;in:inbox&quot; es igual a &quot;in:Inbox&quot;. El gui&oacute;n (<b>-</b>) sirve como sin&oacute;nimo de <b>NOT</b> Por lo tanto: <b>not in:inbox</b> es igual a <b>-in:inbox</b></p>
+<p>En la mayor&iacute;a de los casos, no tienes que introducir caracteres de puntuaci&oacute;n en la cadena de b&uacute;squeda; el c&oacute;digo de la b&uacute;squeda los ignorar&aacute;. En algunos casos, sin embargo, esto no es cierto (por ejemplo, si buscas la hora '9:30' en un mensaje); en estos casos, deber&iacute;as incluir el par&aacute;metro entre comillas. Por ejemplo: <b>subject:&quot;9:30&quot;</b> (asunto:9:30) ver&aacute;s los mensajes que incluyen 9:30 en su asunto.</p>
+<p>Los caracteres permitidos en los par&aacute;metros de b&uacute;squeda:</p>
+<ul>
+	<li class="p"><p>No se pueden incluir los siguientes caracteres en ning&uacute;n lugar del par&aacute;metro de la b&uacute;squeda salvo si los introduces entre comillas: ~ '&nbsp;! # $ % ^ &amp; * ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;:</p></li>
+	<li class="p"><p>Puedes incluir los siguientes caracteres en los par&aacute;metros de b&uacute;squeda con tal de que no sean el primer car&aacute;cter de la cadena: - + &lt; &gt;</p></li>
 </ul>
-<h2>Varias palabras de búsqueda </h2>
-<p>Si introduces varias palabras en la búsqueda (separadas por espacios), por defecto, se  usarán juntas con la variable &quot;AND&quot;. Por ejemplo <b>in:inbox   miguel</b> significa &quot;quiero mensajes que  se encuentren en la bandeja de entrada Y que incluyan la palabra miguel&quot;.   Para las búsquedas en las que quieres incluir varios criterios, puedes usar estas variables para encontrar elementos que coinciden con un solo criterio o que coinciden con todos. Puedes realizar ambos tipos de búsqueda con la búsqueda avanzada. </p>
-<p>Las reglas para todas las búsquedas salvo la básica son: </p>
-<ul><li class=p><p>Para buscar mensajes que coinciden con cualquiera de los criterios especificados,   utiliza <b>OR</b> (o) y,  si el mensaje contiene el criterio X o Y, se   considerará una coincidencia. Para los paneles de la búsqueda avanzada con múltiples casillas, al seleccionar varias   opciones dentro de un solo panel, se utilizará la variable <b>OR </b>para esas opciones. </p></li>
-	<li class=p><p>Para buscar mensajes que contienen los criterios X e Y,  utiliza <b>AND</b> (y) para indicar   que el mensaje debe cumplir todos los criterios para que se considere una coincidencia. Para los paneles de la búsqueda avanzada con casillas,   si abres varias instancias del mismo panel y activas diferentes casillas en cada panel,   se realizará una búsqueda con la variable <b>AND</b>. </p></li>
+<h2>Varias palabras de b&uacute;squeda</h2>
+<p>Si introduces varias palabras en la b&uacute;squeda (separadas por espacios), por defecto, se usar&aacute;n juntas con la variable &quot; AND&quot;. Por ejemplo <b>in:inbox miguel</b> significa &quot;quiero mensajes que se encuentren en la bandeja de entrada Y que incluyan la palabra miguel&quot;. Para las b&uacute;squedas en las que quieres incluir varios criterios, puedes usar estas variables para encontrar elementos que coinciden con un solo criterio o que coinciden con todos. Puedes realizar ambos tipos de b&uacute;squeda con la b&uacute;squeda avanzada.</p>
+<p>Las reglas para todas las b&uacute;squedas salvo la b&aacute;sica son:</p>
+<ul>
+	<li class="p"><p>Para buscar mensajes que coinciden con cualquiera de los criterios especificados, utiliza <b>OR</b> (o) y, si el mensaje contiene el criterio X o Y, se considerar&aacute; una coincidencia. Para los paneles de la b&uacute;squeda avanzada con m&uacute;ltiples casillas, al seleccionar varias opciones dentro de un solo panel, se utilizar&aacute; la variable <b>OR </b>para esas opciones.</p></li>
+	<li class="p"><p>Para buscar mensajes que contienen los criterios X e Y, utiliza <b>AND</b> (y) para indicar que el mensaje debe cumplir todos los criterios para que se considere una coincidencia. Para los paneles de la b&uacute;squeda avanzada con casillas, si abres varias instancias del mismo panel y activas diferentes casillas en cada panel, se realizar&aacute; una b&uacute;squeda con la variable <b>AND</b>.</p></li>
 </ul>
-<p>Sólo verás &quot;OR&quot; en la búsqueda. Si seleccionaste la opción para ver la búsqueda en la barra de búsqueda conforme vas haciendo tus selecciones en la búsqueda avanzada, se actualizará el campo de búsqueda con la consulta resultante.   Con la variable <b>AND</b>,   no verás la palabra <b>AND</b>.   </p>
-<p><b style="font-weight: bold;">Consejo</b>: Utilizar los paréntesis con AND y   OR. Las palabras que introduzcas entre paréntesis se consideran como una sola unidad. Por ejemplo <b>from:   (miguel moreno)</b> es igual a <b>from:miguel AND   from:moreno</b>. Si introduces el variable OR entre paréntesis,   <b>from:(miguel OR moreno)</b>, verás los mensajes que ha enviado <b>from:miguel OR  from:moreno</b>. </p>
-<h3>Utilizar el asterisco <b>*</b> como comodín en las búsquedas </h3>
-<p>Puedes usar el asterisco (<b>*</b>) como comodín en tus   búsquedas para encontrar contenido con palabras que se deletrean de manera parecida. </p>
-<p>Utiliza el asterisco <b>*</b> como comodín después de un prefijo. Por ejemplo,   si introduces <b>do*</b>, verás los mensajes que incluyen    las palabras <i>domingo</i>, <i>dormitorio</i>, <i>doble</i>, etc. </p>
-<h2>Descripción de las palabras clave y ejemplos</h2>
-<p class="whs1">content:</p>
-<p class="whs2">Especifica el texto que el mensaje debe incluir en su contenido.   Por ejemplo, <span class=code>content:amigos</span> encontraría todos los   mensajes que contienen la palabra &quot;amigos&quot;.</p>
-<p class="whs1">from:</p>
-<p class="whs2">Indica el nombre del remitente o su dirección de correo en el encabezado De:. Puede ser texto, por ejemplo &quot;Miguel Moreno&quot;,   una dirección, como &quot;mleugim@acme.com&quot;,   o un dominio concreto, como &quot;zimbra.com&quot;.</p>
-<p class="whs1">to:</p>
-<p class="whs2">Tal como ocurre con el campo from: salvo que sirve para indicar a uno de los destinatarios incluidos en el encabezado Para:.</p>
-<p class="whs1">cc:</p>
-<p class="whs2">Tal como ocurre con el campo from: salvo que sirve para indicar a uno de los destinatarios en el encabezado CC: del mensaje.</p>
-<p class="whs1">subject:</p>
-<p class="whs2">Puedes usar esta variable para buscar texto que aparece en el asunto del mensaje. Por ejemplo, <span class=code>subject:&quot;nueva   política anti tabaco&quot;</span>. Utiliza comillas para buscar una coincidencia exacta.</p>
-<p class="whs1">in:</p>
-<p class="whs2">Especifica en qué carpeta buscar. Por ejemplo, <span class=code>in:sent</span>   te mostraría todos los mensajes en la carpeta <span style="font-weight: bold;"><B>Enviados</B></span>.  </p>
-<p class="whs1">has:</p>
-<p class="whs2">Sirve para indicar un atributo que debe tener el mensaje. Estos atributos pueden ser &quot;attachment&quot; (archivo adjunto),   &quot;phone&quot; (teléfono) o &quot;url&quot;. Por ejemplo, si introduces   <span class=code>has:attachment</span>, verías todos los mensajes que   contienen uno o más archivos adjuntos de cualquier tipo.</p>
-<p class="whs1">filename:</p>
-<p class="whs2">Especifica el nombre del archivo adjunto. Por ejemplo,<span 
- class=code> filename:query.txt</span> encontraría el mensaje que tiene el archivo adjunto de nombre &quot;query.txt&quot;.</p>
-<p class="whs1">type:</p>
-<p class="whs2">Indica una búsqueda dentro de determinado tipo de archivos adjuntos. Puedes especificar que se trata de un archivo &quot;text&quot;,   &quot;word&quot;, &quot;excel&quot; y &quot;pdf&quot;.   Por ejemplo, la búsqueda <span class=code>type:word &quot;hola&quot;</span> encontraría   los mensajes que tienen un archivo adjunto de Microsoft Word que contiene la palabra &quot;hola&quot;.</p>
-<p class="whs1">attachment:</p>
-<p class="whs2">Sirve para buscar mensajes con determinado tipo de archivo adjunto. Por ejemplo, <span class=code>attachment:word</span> encontraría   todos los mensajes que tienen un documento de Microsoft Word adjunto.</p>
-<p class="whs1">is:</p>
-<p class="whs2">Busca mensajes con determinado estado.   Puedes especificar &quot;unread&quot; (no leído), &quot;read&quot; (leído), &quot;flagged&quot; (marcado),   &quot;unflagged&quot; (no marcado), &quot;sent&quot; (enviado), &quot;draft&quot; (borrador),   &quot;received&quot; (recibido), &quot;replied&quot; (contestado),  &quot;unreplied&quot; (sin contestar),   &quot;forwarded&quot; (reenviado),  unforwarded&quot; (no reenviado),  &quot;anywhere&quot; (en cualquier lugar)   &quot;remote&quot; (remoto-en una carpeta compartida) y &quot;local&quot; (en tu ordenador).   Por ejemplo, <span class=code>is: unread</span> encontrará todos los mensajes no leídos.</p>
-<p class="whs1">date:</p>
-<p class="whs2">Utiliza esta palabra clave para especificar una fecha con el formato predeterminado de tu navegador (por ejemplo, en España, el formato   es dd/mm/yyyy). Por ejemplo,   <span class=code>date:2/1/2007</span> encontraría mensajes fechados   el 2 de enero de 2007. Puedes usar el símbolo de más (&gt;) o menos (&lt;) en vez de   las variables <i>after</i> (después) o <i>before</i> (antes). También se permite usar &gt;= y &lt;=.   </p>
-<p class="whs1">after:</p>
-<p class="whs2">Sirve para buscar mensajes enviados después de determinada fecha.   Por ejemplo, <span class=code>after:2/1/2007</span><span class=code style="font-weight: normal; font-family: Arial, sans-serif; font-size: 10pt;"><font size=2 style="font-size:10pt;">   encontraría los mensajes enviados después del 2 de enero de 2007</font></span><span class=code style="font-weight: normal;">.</span></p>
-<p class="whs1">before:</p>
-<p class="whs2">Tal como ocurre con <span class=code>after:</span> salvo que busca mensajes enviados antes de la fecha especificada.</p>
-<p class="whs1">size:</p>
-<p class="whs2">Busca mensajes cuyo tamaño total, incluyendo los archivos adjuntos, es de determinado numero de bytes, kilobytes (KB) o megabytes (MB)&nbsp;Por   ejemplo, <span class=code>size:12 kb</span> encontraría   mensajes de 12 KB exactos. También puedes usar el símbolo (&gt;) o (&lt;) en vez de las variables bigger (mayor) o smaller (menor).</p>
-<p class="whs1">larger:</p>
-<p class="whs2">Parecido a size: salvo que busca mensajes más grandes que el tamaño especificado.</p>
-<p class="whs1">smaller:</p>
-<p class="whs2">Parecido a size: salvo que busca mensajes más pequeños que el tamaño especificado.</p>
-<p class="whs1">tag:</p>
-<p class="whs2">Busca mensajes que has etiquetado con determinada etiqueta. Por ejemplo,<span class=code> tag:urgente</span> encontrará   los mensajes que llevan una etiqueta que has creado y llamado &quot;urgente&quot;.</p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>S&oacute;lo ver&aacute;s &quot;OR&quot; en la b&uacute;squeda. Si seleccionaste la opci&oacute;n para ver la b&uacute;squeda en la barra de b&uacute;squeda conforme vas haciendo tus selecciones en la b&uacute;squeda avanzada, se actualizar&aacute; el campo de b&uacute;squeda con la consulta resultante. Con la variable <b>AND</b>, no ver&aacute;s la palabra <b>AND</b>.</p>
+<p><b style="font-weight: bold;">Consejo</b>: Utilizar los par&eacute;ntesis con AND y OR. Las palabras que introduzcas entre par&eacute;ntesis se consideran como una sola unidad. Por ejemplo <b>from: (miguel moreno)</b> es igual a <b>from:miguel AND from: moreno</b>. Si introduces la variable OR entre par&eacute;ntesis, <b>from:(miguel OR moreno)</b>, ver&aacute;s los mensajes que ha enviado <b>from:miguel OR from: moreno</b>.</p>
+<h3>Utilizar el asterisco <b>*</b> como comod&iacute;n en las b&uacute;squedas</h3>
+<p>Puedes usar el asterisco (<b>*</b>) como comod&iacute;n en tus b&uacute;squedas para encontrar contenido con palabras que se deletrean de manera parecida.</p>
+<p>Utiliza el asterisco <b>*</b> como comod&iacute;n despu&eacute;s de un prefijo. Por ejemplo, si introduces <b>do*</b>, ver&aacute;s los mensajes que incluyen las palabras <i>domingo</i>, <i>dormitorio</i>, <i>doble</i>, etc.</p>
+<h2>Descripci&oacute;n de las palabras clave y ejemplos</h2>
+<p style="font-weight: bold;">content:</p>
+<p style="margin-left: 40px;">Especifica el texto que el mensaje debe incluir en su contenido. Por ejemplo, <span class="code">content:amigos</span> encontrar&iacute;a todos los mensajes que contienen la palabra &quot;amigos&quot;.</p>
+<p style="font-weight: bold;">De:</p>
+<p style="margin-left: 40px;">Indica el nombre del remitente o su direcci&oacute;n de correo en el encabezado De:. Puede ser texto, por ejemplo &quot;Miguel Moreno&quot;, una direcci&oacute;n, como &quot;joe@acme.com&quot;, o un dominio concreto, como &quot; zimbra.com&quot;.</p>
+<p style="font-weight: bold;">to:</p>
+<p style="margin-left: 40px;">Tal como ocurre con el campo from: salvo que sirve para indicar a uno de los destinatarios incluidos en el encabezado Para: .</p>
+<p style="font-weight: bold;">CC:</p>
+<p style="margin-left: 40px;">Tal como ocurre con el campo from: salvo que sirve para indicar a uno de los destinatarios en el encabezado CC: del mensaje.</p>
+<p style="font-weight: bold;">subject:</p>
+<p style="margin-left: 40px;">Puedes usar esta variable para buscar texto que aparece en el asunto del mensaje. Por ejemplo, <span class="code">subject:nueva pol&iacute;tica anti tabaco</span> </p>
+<p style="font-weight: bold;">in:</p>
+<p style="margin-left: 40px;">Especifica en qu&eacute; carpeta buscar. Por ejemplo, <span class="code">in:sent</span>   te mostrar&iacute;a todos los mensajes en la carpeta <span style="font-weight: bold;"><b>Enviados</b></span>.  </p>
+<p style="font-weight: bold;">has:</p>
+<p style="margin-left: 40px;">Sirve para indicar un atributo que debe tener el mensaje. Estos atributos pueden ser &quot;attachment&quot; (archivo adjunto), &quot;phone&quot; (tel&eacute;fono) o &quot; url&quot;. Por ejemplo, si introduces <span class="code">has:attachment</span>, ver&iacute;as todos los mensajes que contienen uno o m&aacute;s archivos adjuntos de cualquier tipo.</p>
+<p style="font-weight: bold;">filename:</p>
+<p style="margin-left: 40px;">Especifica el nombre del archivo adjunto. Por ejemplo, <span class="code">filename: query.tx</span>t encontrar&iacute;a el mensaje que tiene el archivo adjunto de nombre &quot; query.txt&quot;.</p>
+<p style="font-weight: bold;">type:</p>
+<p style="margin-left: 40px;">Indica una b&uacute;squeda dentro de determinado tipo de archivos adjuntos. Puedes especificar que se trata de un archivo &quot;text&quot;, &quot;word&quot;, &quot;excel&quot; y &quot; pdf&quot;. Por ejemplo, la b&uacute;squeda <span class="code">type:word &quot;hola&quot;</span> encontrar&iacute;a los mensajes que tienen un archivo adjunto de Microsoft Word que contiene la palabra &quot;hola&quot;.</p>
+<p style="font-weight: bold;">attachment:</p>
+<p style="margin-left: 40px;">Sirve para buscar mensajes con determinado tipo de archivo adjunto. Por ejemplo, <span class="code">attachment:word</span> encontrar&iacute;a todos los mensajes que tienen un documento de Microsoft Word adjunto.</p>
+<p style="font-weight: bold;">is:</p>
+<p style="margin-left: 40px;">Busca mensajes con determinado estado. Puedes especificar &quot;no le&iacute;do&quot;, &quot;le&iacute;do&quot;, &quot;marcado&quot;, &quot; no marcado&quot;, &quot;enviado&quot;, &quot;borrador&quot;, &quot;recibido&quot;, &quot;contestado&quot;, &quot; sin contestar&quot;, &quot;reenviado&quot;, no reenviado&quot;, &quot;en cualquier lugar&quot;, &quot;remoto&quot; (en una carpeta compartida), &quot;local&quot; y &quot;enviado&quot;. Por ejemplo, <span class="code">is: unread</span> encontrar&aacute; todos los mensajes no le&iacute;dos.</p>
+<p style="font-weight: bold;">date:</p>
+<p style="margin-left: 40px;">Utiliza esta palabra clave para especificar una fecha con el formato predeterminado de tu navegador (por ejemplo, en Espa&ntilde;a, el formato es dd/ mm/ aaaa). Por ejemplo, <span  	 class="code">date:2/1/2010</span> encontrar&iacute;a mensajes fechados el 2 de enero de 2010. Puedes usar el s&iacute;mbolo de mayor que (&gt;) o menor que (&lt;) en vez de las variables <i>despu&eacute;s</i> o <i>antes</i>. Tambi&eacute;n se permite utilizar &gt;= y &lt;=.</p>
+<p style="font-weight: bold;">after:</p>
+<p style="margin-left: 40px;">Sirve para buscar mensajes enviados despu&eacute;s de determinada fecha. Por ejemplo, <span class="code">after:2/1/2010</span> <span class="code"  															 style="font-weight: normal;  															 font-family: Arial, sans-serif;  															 font-size: 10pt;"><font size="2" style="font-size:10pt;">encontrar&iacute;a los mensajes enviados despu&eacute;s del 2 de enero de 2010</font></span><span class="code" style="font-weight: normal;">.</span></p>
+<p style="font-weight: bold;">before:</p>
+<p style="margin-left: 40px;">Tal como ocurre con <span class="code">after:</span> salvo que busca mensajes enviados antes de la fecha especificada.</p>
+<p style="font-weight: bold;">size:</p>
+<p style="margin-left: 40px;">Busca mensajes cuyo tama&ntilde;o total, incluyendo los archivos adjuntos, es de determinado numero de bytes, kilobytes o megabytes &nbsp;Por ejemplo, <span class="code">size:12 kb</span> encontrar&iacute;a mensajes de 12 KB exactos. Tambi&eacute;n puedes usar el s&iacute;mbolo (&gt;) o (&lt;) en vez de las variables bigger (mayor) o smaller (menor).</p>
+<p style="font-weight: bold;">larger:</p>
+<p style="margin-left: 40px;">Parecido a size: salvo que busca mensajes m&aacute;s grandes que el tama&ntilde;o especificado.</p>
+<p style="font-weight: bold;">smaller:</p>
+<p style="margin-left: 40px;">Parecido a size: salvo que busca mensajes m&aacute;s peque&ntilde;os que el tama&ntilde;o especificado.</p>
+<p style="font-weight: bold;"><span><b>solo:</b></span></p>
+<p style="margin-left: 40px;">Encuentra mensajes para los que todav&iacute;a no hay una respuesta.</p>
+<p style="font-weight: bold;">tag:</p>
+<p style="margin-left: 40px;">Busca mensajes que has etiquetado con determinada etiqueta. Por ejemplo,<span class="code"> tag:urgente</span> encontrar&aacute; los mensajes que llevan una etiqueta que has creado y llamado &quot;urgente&quot;.</p>
+<p style="font-weight: bold;"><span><b>prioridad:</b></span></p>
+<p style="margin-left: 40px;">Encuentra mensajes, tareas o elementos de la agenda en funci&oacute;n de si tienen prioridad &quot;alta&quot; o &quot;baja&quot;. Por ejemplo, la prioridad <span  	 class="code">:alta </span>permitir&aacute; encontrar elementos con un ajuste de prioridad alto.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

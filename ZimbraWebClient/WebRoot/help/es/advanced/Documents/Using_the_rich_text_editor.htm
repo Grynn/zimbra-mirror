@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Utilizar el editor de texto enriquecido</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>utilizar el editor de texto enriquecido</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,41 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Trabajar con el Bloc de notas \nUtilizar el editor de texto enriquecido");
+	addTocInfo("Trabajar con el Maletín\nutilizar el editor de texto enriquecido");
 addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 
 	}
@@ -56,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,35 +80,36 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>Utilizar el editor de texto enriquecido</h1>
-<p>Puedes crear tus páginas usando el editor de texto enriquecido para dar formato al   contenido &nbsp;o código HTML mediante etiquetas de HTML. Puedes cambiar entre los dos formatos para beneficiarte de las prestaciones del editor de texto enriquecido e introducir tablas y hojas de cálculo.</p>
-<p>Al usar el editor de texto enriquecido, verás dos barras de herramientas para que des formato a tu página fácilmente. Selecciona el tamaño de fuente, el estilo y tipo de letra, color de la letra y color de fondo. Estas herramientas funcionan igual que en muchos programas de procesamiento de texto. </p>
-<p>Asimismo, puedes hacer clic para añadir tablas, hojas de cálculo y adjuntar archivos e imágenes a tu página.</p>
-<p><img src="../newpage.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<h2>Formato de los párrafos</h2>
-<p>El icono &nbsp;<img src="../para_styles.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"> &nbsp;de la barra de herramientas   muestra todos los estilos disponibles para los párrafos. Estos estilos hacen que sea   fácil &nbsp;dar formato al texto y mantener un estilo coherente en todas las   páginas de tu bloc de notas. Las opciones incluyen <span style="font-weight: bold;"><B>Normal</B></span>   para la mayoría de párrafos, seis niveles de <span style="font-weight: bold;"><B>Encabezado</B></span>   para identificar los títulos, &nbsp;<span style="font-weight: bold;"><B>Dirección</B></span>   para poner el texto en cursiva y <span style="font-weight: bold;"><B>Preformateado</B></span>  para cuando quieres usar texto con la fuente Courier. No se pueden modificar estos estilos pero puedes usar las opciones de edición para crear un estilo diferente – cambiar el estilo, tamaño, color de la fuente, etc.. </p>
-<h2>Añadir tablas a tu página </h2>
-<p>Se pueden añadir tablas a tu página en tres pasos. Añades la tabla, configuras sus propiedades y luego añades el contenido. Para añadir una tabla, pulsa en el icono <img src="../table.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"> en la barra de herramientas,   selecciona Insertar tabla y luego indica cuántas filas y columnas quieres incluir. </p>
-<h2>Añadir una hoja de cálculo a tu página &nbsp;</h2>
-<p>Para añadir una hoja de cálculo, pulsa en el icono <img src="../spreadsheet_icon.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"> en la barra de herramientas. Se añadirá una hoja de cálculo de seis columnas a la página. Las hojas de cálculo sirven para crear &nbsp;bases de datos   para controlar las listas de tus actividades, programas, tareas pendientes, etc. Incluyen las funciones básicas de las hojas de cálculo y una serie de funciones predefinidas.</p>
-<h2>Añadir archivos adjuntos e imágenes a tu página </h2>
-<p>Puedes cargar archivos que se enlazan desde la página de Blocs de notas. Pulsa en el icono del   clip <img src="../paperclip.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"> o de imágenes <img src="../image.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"> &nbsp;para examinar y encontrar el archivo   que quieres agregar. Recibirás una notificación si cargas un archivo que ya se encuentra en tus Blocs de notas o Maletín. </p>
-<h2>Enlazar a una página de un bloc de notas o a páginas web</h2>
-<p>Puedes enlazar a otras páginas de tus blocs de notas o a una dirección URL externa,   añadiendo &nbsp;un nombre descriptivo al enlace para que no se vea la   dirección URL en sí. </p>
+<p>Puedes crear los mensajes y documentos en tu Malet&iacute;n mediante el editor de texto enriquecido para dar formato al contenido de la p&aacute;gina. </p>
+<p>Al usar el editor de texto enriquecido, ver&aacute;s una barra de herramientas para que des formato a tu p&aacute;gina. Selecciona el tama&ntilde;o de fuente, el estilo y tipo de letra, color de la letra y color de fondo. Estas herramientas funcionan igual que en muchos programas de procesamiento de texto. Asimismo, puedes hacer clic para a&ntilde;adir tablas,&nbsp;archivos adjuntos e im&aacute;genes a tu p&aacute;gina.A</p>
+<p><img src="../briefcasetoolbar.png" style="border: none;" alt="briefcasetoolbar.png" width="660" height="47" border="0" /></p>
+<h2>Formato de los p&aacute;rrafos</h2>
+<p>El &nbsp;icono &nbsp;<img src="../para_styles.png" alt="para_styles.png" style="border: none;" width="25" height="20" border="0" /> de la barra de herramientas muestra todos los estilos disponibles para los p&aacute;rrafos. Estos estilos hacen que sea f&aacute;cil dar formato al texto y mantener un estilo coherente en todo el documento. Las opciones incluyen <span style="font-weight: bold;"><b>Normal</b></span> para la mayor&iacute;a de p&aacute;rrafos, seis niveles de <span style="font-weight: bold;"><b>Encabezado</b></span> para identificar los t&iacute;tulos, &nbsp;<span style="font-weight: bold;"><b>Direcci&oacute;n</b></span> para poner el texto en cursiva, y <span style="font-weight: bold;"><b>Preformateado</b></span> para cuando quieres usar texto con la fuente Courier. Estos estilos no se pueden modificar, pero puedes usar las opciones de edici&oacute;n para cambiar el estilo, tama&ntilde;o, color de la fuente, etc.</p>
+<h2>A&ntilde;adir tablas a tu p&aacute;gina</h2>
+<p>Se pueden a&ntilde;adir tablas a tu p&aacute;gina en tres pasos. A&ntilde;ades la tabla, configuras sus propiedades y luego a&ntilde;ades el contenido. Para a&ntilde;adir una tabla, haz clic en el icono de tabla <img src="../table.png" alt="table.png" style="border: none;" width="26" height="19" border="0" />, en la barra de herramientas, selecciona Insertar tabla y luego indica cu&aacute;ntas filas y columnas quieres incluir.</p>
+<h2>A&ntilde;adir archivos adjuntos e im&aacute;genes a tu p&aacute;gina</h2>
+<p>Puedes cargar archivos que se enlazan desde el documento. Pulsa en el icono del clip, <img src="../paperclip.png" alt="paperclip.png" style="border: none;" width="17" height="16" border="0" />, o de im&aacute;genes, <img src="../image.png" alt="image.png" style="border: none;" width="20" height="19" border="0" /> &nbsp;para examinar y encontrar el archivo que quieres agregar. Recibir&aacute;s una notificaci&oacute;n si cargas un archivo que ya se encuentra en tu Malet&iacute;n.</p>
+<h2>Enlazar a una &nbsp;p&aacute;gina web</h2>
+<p>Puedes enlazar a una direcci&oacute;n URL externa &nbsp;a&ntilde;adiendo un nombre descriptivo al enlace para que no se vea la direcci&oacute;n URL en s&iacute;. Haz clic en el icono <img src="../link.png" alt="link.png" style="border: none;" width="24" height="24" border="0" /> e introduce la p&aacute;gina o la direcci&oacute;n URL con la que quieres enlazar.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

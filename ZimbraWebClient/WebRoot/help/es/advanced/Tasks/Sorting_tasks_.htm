@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Ordenar las tareas </title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>ordenar las tareas</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,26 +19,41 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Usar las listas de tareas\nOrdenar las tareas");
+	addTocInfo("Usar las listas de tareas\nordenar las tareas");
 addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 
 	}
@@ -52,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -71,20 +80,31 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Ordenar las tareas </h1>
-<p>Puedes ordenar las tareas en una lista de tareas por su asunto, el estado, el porcentaje completado y su fecha de entrega. </p>
-<p>En Tareas, selecciona la lista de tareas y, en la barra de herramientas del panel de contenido, haz clic en el encabezado con el que quieres ordenarla. </p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
+<h1>ordenar las tareas</h1>
+<p>Puedes ordenar las tareas de la lista para verlas r&aacute;pidamente por estado. En la barra de herramientas de Tareas, haz clic en <span style="font-weight: bold;"><b>Ordenar por</b></span> y selecciona una de las siguientes opciones:</p>
+<ul type="disc">
+	<li><p><span style="font-weight: bold;"><b>No se ha iniciado</b></span>.</p></li>
+	<li style="font-weight: bold;"><p>Completada</p></li>
+	<li style="font-weight: bold;"><p>Procesando</p></li>
+	<li style="font-weight: bold;"><p>Esperando a alguien m&aacute;s</p></li>
+	<li style="font-weight: bold;"><p>Aplazada</p></li>
+	<li><p><span style="font-weight: bold;"><b>Todas</b></span><span>. &nbsp;Todas m</span>uestra todas las tareas independientemente de su estado.</p></li>
+	<li><p><span style="font-weight: bold;"><b>Lista de tareas pendientes</b></span><span>.</span> &nbsp;En la lista de tareas pendientes se muestran las tareas con los estados <span style="font-weight: bold;"><b>Procesando</b></span>, <span style="font-weight: bold;"><b>No se ha iniciado</b></span> o, si est&aacute; vencida, <span style="font-weight: bold;"><b>Esperando a alguien m&aacute;s</b></span>. . </p></li>
+</ul>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

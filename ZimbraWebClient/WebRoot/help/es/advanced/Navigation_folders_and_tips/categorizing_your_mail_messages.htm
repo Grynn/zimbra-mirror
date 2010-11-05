@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Clasificar tus mensajes de correo</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { x-condition:Advanced_WC; }
--->
-</style><script type="text/javascript" language="JavaScript" title="BSSC Special Effects" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Gestionar tus mensajes \nClasificar tus mensajes de correo");
@@ -57,10 +63,8 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,35 +80,43 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Clasificar tus mensajes de correo</h1>
-<p>El programa en línea te permite clasificar tus mensajes de varias maneras.   Puedes usar estos métodos junto a la función de búsqueda para encontrar y recuperar tus mensajes fácilmente. Los métodos disponibles son:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Filtros.</B></span> En   Preferencias en la pestaña Filtros de correo, puedes crear reglas para clasificar los mensajes entrantes según su asunto, el remitente, el destinatario y otros elementos. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Carpetas.</B></span> Puedes   crear carpetas para organizar tus mensajes y mover éstos de una carpeta a otra,   por ejemplo, sacar mensajes de la carpeta &quot;Pendiente&quot;   y moverlos a la carpeta &quot;Terminado&quot;. </p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Etiquetas.</B></span> Puedes   marcar los mensajes de correo con etiquetas y luego usar la Búsqueda para mostrar todos los mensajes con determinada etiqueta.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Conversaciones.</B></span>   Puedes agrupar los mensajes por conversación. Esta herramienta agrupa automáticamente los mensajes enviados y recibidos con el mismo asunto en una sola conversación</p></li>
-</ul>
-<p class="whs2">Puedes <a href="../Userspecific/Setting_your_user_preferences.htm" 
- style="x-condition: Advanced_WC;">crear accesos directos</a> desde las <span 
- style="font-weight: bold;"><B>Preferencias en la pestaña Accesos directos</B></span> para el   correo, búsquedas guardadas y etiquetas. </p>
-<p class="whs2">
-<a href="javascript:void(0);" onClick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) >=2 && typeof(PopupMenu_Invoke) == 'function') PopupMenu_Invoke(e,'','Crear carpetas personalizadas','creating_custom_folders.htm','Cómo funcionan los filtros','../filters/how_filtering_works.htm','Etiquetar mensajes','../Tags_and_flags/Assigning_tags_to_messages.htm','Gestionar la vista de tus mensajes','../conversations/conversation_list_view.htm');return false;" title="Temas relacionados"><img src="../ss_btn_temas_relacionados.gif" border=0 height=17 width=105 alt="Temas relacionados"></a>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
 
+
+<h1>Clasificar tus mensajes de correo</h1>
+<p>Se proporcionan varios m&eacute;todos para clasificar tus mensajes de correo electr&oacute;nico. Puedes usar estos m&eacute;todos junto a la funci&oacute;n de b&uacute;squeda para encontrar y recuperar tus mensajes f&aacute;cilmente. Los m&eacute;todos disponibles son:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Filtros.</b></span> En Preferencias, en Filtros de correo, puedes crear reglas para clasificar los mensajes entrantes seg&uacute;n su asunto, el remitente, el destinatario y otros elementos.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Carpetas.</b></span> Puedes   crear carpetas para organizar tus mensajes y mover &eacute;stos de una carpeta a otra,   por ejemplo, sacar mensajes de la carpeta &quot;Pendiente&quot; y moverlos a la carpeta &quot;Terminado&quot;.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Etiquetas.</b></span> Puedes marcar los mensajes de correo con etiquetas y luego usar la B&uacute;squeda para mostrar todos los mensajes con determinada etiqueta.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Conversaciones.</b></span> Puedes agrupar los mensajes por conversaci&oacute;n. Esta funci&oacute;n integrada agrupa autom&aacute;ticamente todos los mensajes enviados y recibidos con el mismo asunto en una sola conversaci&oacute;n.</p></li>
+</ul>
+<p>&nbsp;</p>
+<p>
+
+<object
+  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
+    type="application/x-oleobject" >
+  <param  name="Command"  value="Temas relacionados,MEN&Uacute;" />
+  <param  name="Font"  value="Arial,8,0,,BOLD UNDERLINE" />
+  <param  name="Item1"  value="Etiquetar mensajes;..\tags_and_flags\Assigning_tags_to_messages.htm" />
+  <param  name="Item2"  value="Crear carpetas personalizadas;creating_custom_folders.htm" />
+  <param  name="Item3"  value="C&oacute;mo funcionan los filtros;..\filters\how_filtering_works.htm" />
+  <param  name="Item4"  value="Gestionar la vista de los mensajes;..\conversations\conversation_list_view.htm" />
+  <param  name="Text"  value="Texto: Temas relacionados" />
+</object>
  .</p>
-<script type="text/javascript" language="JavaScript" title="WebHelpRelatedTopics"><!--
-if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
-  WritePopupMenuLayer();
-//--></script><script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
