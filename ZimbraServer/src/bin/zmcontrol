@@ -455,7 +455,7 @@ sub displayVersion {
 	#}
   $string .=  ((-f "/opt/zimbra/bin/zmbackupquery") ? " NETWORK" : " FOSS"); 
   $string .= " edition.";
-	print "\n\n$string\n\n";
+	print "$string\n";
 }
 
 sub checkAvailableSpace {
