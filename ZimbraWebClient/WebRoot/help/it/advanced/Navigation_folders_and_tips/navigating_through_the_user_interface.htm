@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Area di lavoro di Zimbra Web Client</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxArea di lavoro di Zimbra Web Clientxxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Navigazione nella casella di posta\nNavigazione in Zimbra Web Client");
+	addTocInfo("Navigazione nella casella di posta\nNavigazione in @ClientNameLong@");
 addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
 
 	}
@@ -56,10 +64,8 @@ addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -75,32 +81,33 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Navigazione in Zimbra Web Client </h1>
-<p>Quando accedi a Zimbra Web Client, si apre una vista a schermo intero simile   a quella mostrata in basso. </p>
-<p><img src="../Zimbramainview65.gif" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>La pagina di Zimbra Web Client comprende le aree seguenti:</p>
-<ol><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Controlli del   browser.</B></span> Mostra i pulsanti del browser standard, come Pagina iniziale (Home), l'indirizzo   corrente attivo e altre funzioni che potrebbero dipendere   dal software e dalle impostazioni del browser. I pulsanti della barra del browser non   fanno parte di Zimbra Web Client e appaiono in ogni pagina web visitata.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Barra   di ricerca, nome utente e visualizzazione dello spazio disponibile</B></span><span>. La funzione di R</span>icerca, la Ricerca avanzata,   il nome utente con il quale hai effettuato l'accesso e lo spazio disponibile nella tua casella di posta   sono visualizzati in questa area.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Schede delle applicazioni</B></span>. I nomi delle schede elencate lungo il bordo superiore corrispondono alle applicazioni a cui puoi accedere. A destra ci sono l'<span style="font-weight: bold;"><B>Aiuto</B></span>   e il link <span style="font-weight: bold;"><B>Esci</B></span>.</p></li>
+//]]></script>
+<h1>Navigazione in @ClientNameLong@ 
+ </h1>
+<p>Quando accedi a @ClientNameLong@, si apre una vista a schermo intero simile a quella mostrata in basso.</p>
+<p><img src="../69_view.png" alt="69_view.png" style="border: none;" width="652" height="321" border="0" /></p>
+<p>La pagina di @ClientNameLong@ comprende le aree seguenti:</p>
+<ol>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>Barra di ricerca</b></span>. In questa area sono disponibili la ricerca e la ricerca avanzata. A destra sono presenti l'<span style="font-weight: bold;"><b>Aiuto</b></span> e il link <span style="font-weight: bold;"><b>Esci</b></span>.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxSchede delle applicazionixxxx</b></span>xxxx.xxxx Quest'area include il nome utente con cui hai effettuato l'accesso e lo spazio disponibile nella casella di posta.&nbsp;Nelle schede a seguire sono elencate le applicazioni a cui puoi accedere.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxBarra degli strumenti.xxxx</b></span>xxxx   Mostra le azioni disponibili per l'applicazione attualmente in uso.xxxx xxxxIn   questo esempio, è visualizzata la barra degli strumenti dell'applicazione xxxx<span style="font-weight: bold;"><b>xxxxMailxxxx</b></span>xxxx.xxxx</p></li>
 </ol>
-<ol start=4><li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Barra degli strumenti.</B></span>   Mostra le azioni disponibili per l'applicazione attualmente in uso. In   questo esempio, è visualizzata la barra degli strumenti dell'applicazione <span style="font-weight: bold;"><B>Mail</B></span>. </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Riquadro di navigazione</B></span> Visualizza le tue <span style="font-weight: bold;"><B>Cartelle</B></span>,   incluse quelle di sistema <span style="font-weight: bold;"><B>In arrivo</B></span>,   <span style="font-weight: bold;"><B>Inviati</B></span>, <span style="font-weight: bold;"><B>Bozze</B></span>,   <span style="font-weight: bold;"><B>Posta indesiderata</B></span> e <span style="font-weight: bold;"><B>Cestino</B></span>,   oltre alle eventuali cartelle personalizzate create in un secondo momento, le <span style="font-weight: bold;"><B>Ricerche</B></span>   che hai salvato e i <span style="font-weight: bold;"><B>Tag</B></span> che hai   creato, i link <span style="font-weight: bold;"><B>Zimlet</B></span> che potresti aver creato per consentire l'integrazione con applicazioni di terze parti all'interno della casella di posta. Quando sei nell'applicazione Agenda, il riquadro di navigazione include l'elenco di Agende e gli zimlet. </p></li>
-	<li style="list-style: decimal;" type=1 class=p><p>Al di sotto del riquadro di navigazione, talvolta appare un minicalendario. La visualizzazione del minicalendario   è facoltativa e può essere attivata nella <span style="font-weight: bold;"><B>scheda Preferenze,   Agenda</B></span>.</p></li>
-	<li style="list-style: decimal;" type=1 class=p><p><span style="font-weight: bold;"><B>Riquadro del contenuto</B></span>. Il contenuto di questa area cambia in base all'applicazione in uso. Nella vista In arrivo, sono visualizzati tutti i messaggi o le conversazioni presenti nella cartella In arrivo. </p></li>
+<ol start="4">
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxRiquadro di navigazionexxxx</b></span> Visualizza le tue <span style="font-weight: bold;"><b>Cartelle</b></span>, incluse quelle di sistema <span style="font-weight: bold;"><b>In arrivo</b></span>, <span style="font-weight: bold;"><b>Inviati</b></span>, <span style="font-weight: bold;"><b>Bozze</b></span>, <span style="font-weight: bold;"><b>Posta indesiderata</b></span> e <span style="font-weight: bold;"><b>Cestino</b></span>, oltre alle eventuali cartelle personalizzate create in un secondo momento, le <span style="font-weight: bold;"><b>Ricerche</b></span> che hai salvato e i <span style="font-weight: bold;"><b>Tag</b></span> che hai creato, i link <span style="font-weight: bold;"><b>zimlet</b></span> che potresti aver creato per consentire l'integrazione con applicazioni di terze parti all'interno della casella di posta. xxxxQuando sei nell'applicazione Agenda, il riquadro di navigazione include l'elenco di Agende e gli zimlet.xxxx</p></li>
+	<li class="p" type="1"><p>Al di sotto del riquadro di navigazione, talvolta appare un <span style="font-weight: bold;"><b>minicalendario</b></span>. La visualizzazione del minicalendario è facoltativa e può essere attivata nella pagina <span style="font-weight: bold;"><b>Preferenze</b></span> <span style="font-weight: bold;"><b>Agenda</b></span>.</p></li>
+	<li class="p" type="1"><p><span style="font-weight: bold;"><b>xxxxRiquadro del contenutoxxxx</b></span>xxxx.xxxx xxxxIl contenuto di questa area cambia in base all'applicazione in uso.xxxx xxxxNella vista In arrivo, sono visualizzati tutti i messaggi o le conversazioni presenti nella cartella In arrivo.xxxx</p></li>
 </ol>
 <p>&nbsp;</p>
+<p class="note"><span style="font-weight: bold;"><b>Nota</b></span>: Puoi modificare la visualizzazione in modo che comprenda tre riquadri, ovvero con il riquadro di lettura a destra. In alternativa, è possibile disattivare del tutto il riquadro di lettura mediante il link Visualizza <img src="../View_icon.png" alt="View_icon.png" style="border: none;" width="28" height="25" border="0" /> sulla barra degli strumenti Mail.</p>
 <h3>&nbsp;</h3>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

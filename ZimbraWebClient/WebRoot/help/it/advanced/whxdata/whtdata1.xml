@@ -5,18 +5,19 @@
 <item name="Organizzazione di una riunione" url="Calendar/About_the_Appointment_Page.htm" />
 <item name="Creazione di un appuntamento" url="Calendar/Scheduling_meetings.htm" />
 <item name="Visualizzazione degli orari liberi/occupati" url="Calendar/Seeing_free_busy_times.htm" />
-<item name="Impostazione delle autorizzazioni per la visualizzazione dei tuoi orari liberi/occupati" url="6_0new_topics/Setting_permissions_to_see_your_free_busy_information.htm" />
-<item name="Segnare un appuntamento come privato" url="6_0new_topics/Marking_an_appointment_as_private.htm" />
+<item name="Impostazione delle autorizzazioni per la visualizzazione dei tuoi orari liberi/occupati" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+<item name="Invio dello stato libero/occupato ad altri" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+<item name="Segnare un appuntamento come privato" url="Calendar/Marking_an_appointment_as_private.htm" />
 <item name="Pianificazione delle risorse" url="Calendar/Scheduling_Resources.htm" />
 <item name="Trasformazione di un messaggio in una richiesta di riunione" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
 <item name="Uso di Aggiunta rapida per creare un appuntamento" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 <item name="Pianificazione di Giornate intere" url="Calendar/Scheduling_All_Day_events.htm" />
 <item name="Creazione di appuntamenti ricorrenti" url="Calendar/Creating_recurring_appointments.htm" />
-<item name="Modifica dei dettagli delle riunioni in agenda" url="6_0new_topics/editing_meetings_on_your_calendar.htm" />
-<item name="Identificazione di chi può invitarti alle riunioni" url="6_0new_topics/Identifying_who_can_invite_you_to_meetings.htm" />
-<item name="Ricezione di un messaggio di autorizzazione negata" url="6_0new_topics/Receiving_a_permission_denied_message.htm" />
+<item name="Modifica dei dettagli delle riunioni in agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
+<item name="Identificazione di chi può invitarti alle riunioni" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+<item name="Ricezione di un messaggio di autorizzazione negata" url="Calendar/Receiving_a_permission_denied_message.htm" />
 <item name="Risposta a un invito a una riunione" url="Calendar/Responding_to_an_invitation.htm" />
-<item name="Modifica di una riunione organizzata da te" url="6_0new_topics/Changing_a_meeting_.htm" />
+<item name="Modifica di una riunione organizzata da te" url="Calendar/Changing_a_meeting_.htm" />
 <item name="Eliminazione di un appuntamento" url="Calendar/Deleting_an_appointment.htm" />
 <item name="Eliminazione di appuntamenti ricorrenti" url="Calendar/Deleting_recurring_appointments.htm" />
 

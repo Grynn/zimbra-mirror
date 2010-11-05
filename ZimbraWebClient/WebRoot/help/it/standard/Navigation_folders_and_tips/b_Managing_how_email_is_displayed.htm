@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Gestione della visualizzazione dei messaggi</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
-p.whs2 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxGestione della visualizzazione dei messaggixxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Gestione dei messaggi email \nGestione della visualizzazione dei messaggi");
@@ -57,14 +64,12 @@ addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -76,31 +81,58 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Gestione della visualizzazione dei messaggi</h1>
-<p>Puoi visualizzare i tuoi messaggi email come <span style="font-weight: bold;"><B>Messaggi</B></span>   o come <span style="font-weight: bold;"><B>Conversazioni</B></span>.. </p>
-<p>Per raggruppare i messaggi in modo diverso, vai alla scheda <span style="font-weight: bold;"><B>Preferenze,   Mail</B></span> e modifica le impostazioni di <span style="font-weight: bold;"><B>Raggruppa le mail   per</B></span>. </p>
-<h2>Messaggi</h2>
-<p>Le mail raggruppate come messaggi vengono visualizzate con il messaggio più recente in prima posizione all'interno delle cartelle di posta. I messaggi non letti sono evidenziati in grassetto. La   riga del messaggio riporta il mittente, l'eventuale presenza di   allegati, l'oggetto, la cartella in cui è stato salvato, le dimensioni e la data di ricezione. &nbsp;Se sono presenti,   vengono visualizzati anche i contrassegni o i tag.</p>
-<p><img src="../message_group75.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<h2>Conversazioni</h2>
-<p>Se le mail sono raggruppate per conversazioni, i messaggi vengono raggruppati in base all'oggetto.   &nbsp;Una conversazione è un gruppo di messaggi con lo stesso oggetto. &nbsp;Se l'oggetto viene modificato, il messaggio   non viene più incluso nella conversazione.</p>
-<p>L'oggetto viene visualizzato solo una volta nel riquadro della vista Conversazione. Il numero   di messaggi nella conversazione appare in parentesi   dopo l'oggetto. Quando arriva una nuova mail, la conversazione viene spostata nella parte alta dei messaggi. Le conversazioni contenenti messaggi non letti sono evidenziate in <span style="font-weight: bold;"><B>grassetto</B></span>.</p>
-<p class="whs2">Vista della conversazione</p>
-<p><img src="../conversationview.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p>&nbsp;</p>
-<p>Clicca due volte sulla conversazione per visualizzare tutti i messaggi da cui è composta.   Clicca su un messaggio per visualizzarne il contenuto nel riquadro di lettura in basso.   Nella barra degli strumenti del messaggio, puoi cliccare sull'icona <img src="../newwindowbutton.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"> per visualizzare il messaggio in una nuova finestra.</p>
-<p>Vengono visualizzati tutti i messaggi correlati alla conversazione, anche se   sono archiviati in altre cartelle. La colonna <span style="font-weight: bold;"><B>Cartella</B></span>   mostra la cartella in cui il messaggio è stato archiviato. Le conversazioni non possono continuare per un tempo indefinito. Se l'ultimo messaggio   della conversazione è più vecchio di 30 giorni, i messaggi inviati con lo stesso oggetto   danno inizio a una nuova conversazione.</p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<h1>xxxxGestione della visualizzazione dei messaggixxxx</h1>
+<p>xxxxPuoi visualizzare i tuoi messaggi email come xxxx<span style="font-weight: bold;"><b>xxxxMessaggixxxx</b></span>xxxx 
+ o come xxxx<span style="font-weight: bold;"><b>xxxxConversazionixxxx</b></span>xxxx..xxxx</p>
+<p>xxxxPer raggruppare i messaggi in modo diverso, vai alla scheda xxxx<span 
+	 style="font-weight: bold;"><b>xxxxPreferenze, Mailxxxx</b></span>xxxx e modifica 
+ le impostazioni di xxxx<span style="font-weight: bold;"><b>xxxxRaggruppa 
+ le mail perxxxx</b></span>xxxx.xxxx</p>
+<p>Puoi anche visualizzare i messaggi nella vista a tre riquadri, con il 
+ riquadro di lettura sulla sinistra.</p>
+<h2>xxxxMessaggixxxx</h2>
+<p>xxxxLe mail raggruppate come messaggi vengono visualizzate con il messaggio 
+ più recente in prima posizione all'interno delle cartelle di posta.xxxx 
+ xxxxI messaggi non letti sono evidenziati in grassetto.xxxx xxxxLa riga 
+ del messaggio riporta il mittente, l'eventuale presenza di allegati, l'oggetto, 
+ la cartella in cui è stato salvato, le dimensioni e la data di ricezione.xxxx&#160;Se 
+ sono presenti, vengono visualizzati anche i contrassegni o i tag dei messaggi.</p>
+<p><img src="../message_group75.png" alt="message_group75.png" style="border: none;" width="900" height="91" border="0" /></p>
+<h2>xxxxConversazionixxxx</h2>
+<p>xxxxSe le mail sono raggruppate per conversazioni, i messaggi vengono 
+ raggruppati in base all'oggetto.xxxx&#160;Una conversazione è un gruppo 
+ di messaggi con lo stesso oggetto.&#160;Se l'oggetto viene modificato, 
+ il messaggio non viene più incluso nella conversazione.</p>
+<p>xxxxL'oggetto viene visualizzato solo una volta nel riquadro della vista 
+ Conversazione.xxxx xxxxIl numero di messaggi nella conversazione appare 
+ in parentesi dopo l'oggetto.xxxx xxxxQuando arriva una nuova mail, la 
+ conversazione viene spostata nella parte alta dei messaggi.xxxx xxxxLe 
+ conversazioni contenenti messaggi non letti sono evidenziate in xxxx<span 
+	 style="font-weight: bold;"><b>xxxxgrassettoxxxx</b></span>xxxx.xxxx</p>
+<p style="font-weight: bold;">xxxxVista della conversazionexxxx</p>
+<p><img src="../conversationview.png" alt="conversationview.png" style="border: none;" width="850" height="103" border="0" /></p>
+<p>&#160;</p>
+<p>xxxxClicca due volte sulla conversazione per visualizzare tutti i messaggi 
+ da cui è composta.xxxx xxxxClicca su un messaggio per visualizzarne il 
+ contenuto nel riquadro di lettura in basso.xxxx Nella barra degli strumenti 
+ del messaggio, puoi cliccare sull'icona <img src="../newwindowbutton.png" alt="newwindowbutton.png" style="border: none;" width="22" height="18" border="0" /> per visualizzare 
+ il messaggio in una nuova finestra.</p>
+<p>xxxxVengono visualizzati tutti i messaggi correlati alla conversazione, 
+ anche se sono archiviati in altre cartelle.xxxx xxxxLa colonna xxxx<span 
+	 style="font-weight: bold;"><b>xxxxCartellaxxxx</b></span>xxxx mostra la cartella 
+ in cui il messaggio è stato archiviato.xxxx xxxxLe conversazioni non possono 
+ continuare per un tempo indefinito.xxxx xxxxSe l'ultimo messaggio della 
+ conversazione è più vecchio di 30 giorni, i messaggi inviati con lo stesso 
+ oggetto danno inizio a una nuova conversazione.xxxx</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

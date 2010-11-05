@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Impostazione delle opzioni</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxImpostazione delle preferenzexxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Impostazione delle preferenze\nImpostazione delle preferenze");
@@ -57,14 +64,12 @@ addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -76,83 +81,84 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Impostazione delle preferenze</h1>
-<p>Le preferenze utente predefinite sono configurate al momento della creazione dell'account e determinano il funzionamento della posta, delle rubriche e della composizione dei messaggi.</p>
-<p>Puoi modificarle dalla scheda Preferenze<span style="font-weight: bold;"> 
- <B></B></span>. &nbsp;Se una preferenza descritta in questo argomento non è presente nella tua vista, non è disponibile nel tuo account.   </p>
-<h3>Generali</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Sei entrato nel client web standard. Per impostarlo come <span style="font-weight: bold;"><B>Tipo di client</B></span>   predefinito all'accesso, seleziona <span style="font-weight: bold;"><B>Standard</B></span><span>.</span></p></li>
-	<li class=p><p class="whs2"><b style="font-weight: bold;"><span 
- style="font-weight: normal;">Standard</span> <span style="font-weight: normal;">è l'opzione consigliata quando le connessioni Internet sono lente, quando si usano browser non aggiornati o se si desidera un accesso più semplice.</span> </b></p></li>
-	<li class=p><p class="whs2">La versione del client <b><span style="font-weight: normal;">Avanzato</b>   off</span>re la serie completa di funzioni di collaborazione web e rappresenta la scelta ideale se usi browser più aggiornati e disponi di connessioni Internet più veloci. <br>&nbsp;</p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Tema</B></span> seleziona   il colore di sfondo dell'interfaccia della casella di posta.</p></li>
-	<li class=p><p>Seleziona il <span style="font-weight: bold;"><B>fuso orario</B></span>   per impostare la data e l'ora dei messaggi da inviare o ricevere e per   indicare correttamente gli appuntamenti dell'Agenda. &nbsp;Il fuso orario selezionato  può essere diverso da quello configurato nel tuo computer. </p></li>
-	<li class=p><p>Se è visualizzato il pulsante <span style="font-weight: bold;"><B>Cambia password</B></span>, puoi anche cambiare la password. Se non riesci a modificarla, rivolgiti all'amministratore per informazioni sulle regole relative alla password.</p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Cerca nelle cartelle</B></span>,   puoi scegliere di estendere automaticamente la ricerca alle cartelle Posta indesiderata e Cestino. Per impostazione predefinita, queste cartelle sono escluse dalla ricerca.</p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Lingua di ricerca</B></span>,   seleziona <span style="font-weight: bold;"><B>Mostra sempre la stringa di ricerca</B></span> per mostrare i dettagli della stringa di ricerca nel boxino di ricerca. </p></li>
+//]]></script>
+<h1>xxxxImpostazione delle preferenzexxxx</h1>
+<p>xxxxLe preferenze utente predefinite sono configurate al momento della creazione dell'account e determinano il funzionamento della posta, delle rubriche e della composizione dei messaggi.xxxx</p>
+<p>Puoi modificarle dalla scheda Preferenze.  Se una preferenza descritta in questo argomento non è presente nella tua vista, non è disponibile nel tuo account.</p>
+<h3>xxxxGeneralixxxx</h3>
+<ul type="disc">
+	<li class="p"><p>xxxxSei entrato nel client web avanzato.xxxx Per impostarlo come <span style="font-weight: bold;"><b>Tipo di client</b></span> predefinito all'accesso, seleziona <span style="font-weight: bold;"><b>Standard</b></span>.</p></li>
+	<li class="p" type="circle"><p style="margin-left: 40px;"><b><span  	 style="font-weight: bold;"><b>Standard</b></span> <span style="font-weight: normal;">è l'opzione consigliata quando le connessioni Internet sono lente, quando si usano browser non aggiornati o se si desidera un accesso più semplice.</span></b></p></li>
+	<li class="p" type="circle"><p style="margin-left: 40px;">L'opzione <span style="font-weight: normal;"><b  	 style="font-weight: bold;">Avanzato</b></span> offre la serie completa di funzioni di collaborazione web xxxxed è particolarmente adatta se si usano browser aggiornati e connessioni Internet veloci.xxxx</p></li>
+	<li class="p"><p>xxxxIn xxxx<span style="font-weight: bold;"><b>xxxxTemaxxxx</b></span>xxxx seleziona   il colore di sfondo dell'interfaccia della casella di posta.xxxx</p></li>
+	<li class="p"><p>xxxxSeleziona il xxxx<span style="font-weight: bold;"><b>xxxxfuso orarioxxxx</b></span>xxxx   per impostare la data e l'ora dei messaggi da inviare o ricevere e per   indicare correttamente gli appuntamenti dell'Agenda.xxxx  Questo fuso orario può essere diverso da quello configurato nel tuo computer.</p></li>
+	<li class="p"><p>xxxxSe è visualizzato il pulsante xxxx<span style="font-weight: bold;"><b>xxxxCambia passwordxxxx</b></span>xxxx, puoi anche cambiare la password.xxxx xxxxSe non riesci a modificarla, rivolgiti all'amministratore per informazioni sulle regole relative alla password.xxxx</p></li>
+	<li class="p"><p>xxxxIn xxxx<span style="font-weight: bold;"><b>xxxxCerca nelle cartellexxxx</b></span>xxxx,   puoi scegliere di estendere automaticamente la ricerca alle cartelle Posta indesiderata e Cestino.xxxx xxxxPer impostazione predefinita, queste cartelle sono escluse dalla ricerca.xxxx</p></li>
+	<li class="p"><p>xxxxIn xxxx<span style="font-weight: bold;"><b>xxxxLingua di ricercaxxxx</b></span>xxxx,   seleziona xxxx<span style="font-weight: bold;"><b>xxxxMostra sempre la stringa di ricercaxxxx</b></span>xxxx per mostrare i dettagli della stringa di ricerca nel boxino di ricerca.xxxx</p></li>
 </ul>
-<h3>Mail</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Seleziona il numero di elementi (messaggi o conversazioni) da visualizzare per pagina. Per impostazione predefinita, vengono visualizzati 25 elementi per pagina, ma è possibile selezionarne 10, 50 o 100.</p></li>
-	<li class=p><p>Scegli come raggruppare la posta ricevuta, per conversazione o per messaggio. Se è disponibile la <a href="../Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm">funzione Conversazione</a>, l'opzione predefinita è Conversazione.</p></li>
-	<li class=p><p>Specifica se visualizzare in HTML i messaggi formattati come HTML. Se è disattivata, questa opzione visualizza i messaggi in testo normale, mostrando i tag HTML anziché applicarli come codice.</p></li>
-	<li class=p><p>Se l'opzione <span style="font-weight: bold;"><B>Anteprima messaggio   </B></span>&nbsp;è attivata, le prime parole del testo del messaggio appaiono accanto all'Oggetto nella colonna Oggetto.</p></li>
-	<li class=p><p>La ricerca specificata nel campo <span style="font-weight: bold;"><B>Ricerca mail predefinita </B></span><span style="font-weight: bold;"> <B></B></span>definisce   la ricerca da eseguire all'accesso. &nbsp;&nbsp;La   ricerca predefinita viene eseguita nella cartella <span style="font-weight: bold;"><B>In arrivo</B></span>.   &nbsp;Quando entri nel client, vengono visualizzati i risultati della cartella In arrivo.   Puoi modificare questo campo per far sì che venga visualizzata un'altra cartella, tag o ricerca salvata quando apri per la prima volta il client web. Fai riferimento a <a href="../Search/query_language_description.htm">Descrizione del linguaggio di query</a> per la descrizione della sintassi.</p></li>
-	<li class=p><p>Attiva e specifica un indirizzo a cui <a href="Setting_a_Forwarding_Address.htm">inoltrare i tuoi messaggi</a>. Puoi selezionare la casella relativa all'opzione che consente di eliminare la mail originale dalla casella di posta. </p></li>
-	<li class=p><p>Attiva e specifica un indirizzo per l'invio di notifiche  di ricezione di nuovi messaggi. </p></li>
-	<li class=p><p>Attiva <span style="font-weight: bold;"><B>Invia risposta   automatica</B></span> per rispondere a una mail in arrivo con un<a href="vacation_message.htm">   messaggio</a> che informa che sei fuori ufficio. Digita il testo di questo messaggio nel boxino. </p></li>
-	<li class=p><p>Configura <span style="font-weight: bold;"><B>Messaggi   inviati da me...</B></span> per gestire i messaggi che invii anche al tuo indirizzo, oltre che ad altri destinatari, oppure a indirizzi quali una   mailing list che comprende anche te.</p></li>
+<h3>xxxxMailxxxx</h3>
+<ul type="disc">
+	<li class="p"><p>xxxxSeleziona il numero di elementi (messaggi o conversazioni) da visualizzare per pagina.xxxx xxxxPer impostazione predefinita, vengono visualizzati 25 elementi per pagina, ma è possibile selezionarne 10, 50 o 100.xxxx</p></li>
+	<li class="p"><p>xxxxScegli come raggruppare la posta ricevuta, per conversazione o per messaggio.xxxx xxxxSe è disponibile la xxxx<a href="../Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm">xxxxfunzione Conversazionexxxx</a>xxxx, l'opzione predefinita è Conversazione.xxxx</p></li>
+	<li class="p"><p>xxxxSpecifica se visualizzare in HTML i messaggi formattati come HTML.xxxx xxxxSe è disattivata, questa opzione visualizza i messaggi in testo normale, mostrando i tag HTML anziché applicarli come codice.xxxx</p></li>
+	<li class="p"><p>Il <span style="font-weight: bold;"><b>riquadro Lettura</b></span> permette di visualizzare un'anteprima dei messaggi presenti nella casella In arrivo e in altre cartelle. Quando è attivo, i messaggi vengono visualizzati nel riquadro dell'anteprima. Il riquadro di lettura può essere visualizzato al di sotto dell'elenco dei messaggi o sulla destra in una vista a tre riquadri.</p></li>
+	<li class="p"><p>xxxxSe l'opzione xxxx<span style="font-weight: bold;"><b>xxxxAnteprima messaggio   xxxx</b></span>xxxxè attivata, le prime parole del testo del messaggio appaiono accanto all'Oggetto nella colonna Oggetto.xxxx</p></li>
+	<li class="p"><p>La ricerca specificata nel campo <span style="font-weight: bold;"><b>Ricerca mail predefinita</b></span> definisce la ricerca da eseguire all'accesso. La ricerca predefinita viene eseguita nella cartella <span style="font-weight: bold;"><b>In arrivo</b></span>.  Quando entri nel client, vengono visualizzati i risultati della cartella In arrivo. xxxxPuoi modificare questo campo per far sì che venga visualizzata un'altra cartella, tag o ricerca salvata quando apri per la prima volta il client web.xxxx xxxxFai riferimento a xxxx<a href="../Search/query_language_description.htm">xxxxDescrizione del linguaggio di queryxxxx</a>xxxx per una descrizione della sintassi.xxxx</p></li>
+	<li class="p"><p>xxxxAttiva e specifica un indirizzo a cui xxxx<a href="Setting_a_Forwarding_Address.htm">xxxxinoltrare i tuoi messaggixxxx</a>xxxx.xxxx xxxxPuoi selezionare la casella relativa all'opzione che consente di eliminare la mail originale dalla casella di posta.xxxx</p></li>
+	<li class="p"><p>xxxxAttiva e specifica un indirizzo per l'invio di xxxx<a href="New_mail_notifications.htm">xxxxnotifichexxxx</a>xxxx  di ricezione di nuovi messaggi.xxxx</p></li>
+	<li class="p"><p>xxxxAttiva xxxx<span style="font-weight: bold;"><b>xxxxInvia risposta   automaticaxxxx</b></span>xxxx per rispondere a una mail in arrivo con unxxxx<a href="vacation_message.htm">xxxx   messaggioxxxx</a>xxxx che informa che sei fuori ufficio.xxxx Digita il testo di questo messaggio nel boxino, quindi imposta la data di inizio e di fine per l'uso di questo messaggio.</p></li>
+	<li class="p"><p>xxxxConfigura xxxx<span style="font-weight: bold;"><b>xxxxMessaggi   inviati da me...xxxx</b></span>xxxx per gestire i messaggi che invii anche al tuo indirizzo, oltre che ad altri destinatari, oppure a indirizzi quali una   mailing list che comprende anche te.xxxx</p></li>
+	<li class="p"><p>Se hai impostato l'utilizzo di un client POP3, puoi scegliere quali messaggi scaricare su ZWC quando accedi al server POP.</p></li>
 </ul>
-<h3>Composizione</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>In <span style="font-weight: bold;"><B>Rispondi/Rispondi a tutti</B></span>,   scegli se includere il testo originale nel corpo del tuo messaggio di risposta. </p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p><span style="font-weight: bold;"><B>Testo completo</B></span>   include il messaggio originale nel corpo del messaggio senza contrassegni speciali.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Testo completo   con prefisso</B></span> aggiunge un prefisso a ogni riga del messaggio email precedente.   Il carattere di prefisso può essere &gt; o |.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Un allegato</B></span>   include il messaggio originale come allegato alla risposta.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Non includere</B></span>   non include il messaggio originale nella risposta.</p></li>
-	</ul>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Inoltra</B></span>,   scegli come includere il testo originale di un messaggio quando lo inoltri: nel corpo del messaggio, nel corpo del messaggio con un prefisso o come allegato al messaggio.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Carattere di prefisso</B></span>   imposta il prefisso da usare per i messaggi di risposta o inoltrati.</p></li>
-	<li class=p><p>In <span style="font-weight: bold;"><B>Messaggi inviati</B></span>,   seleziona <span style="font-weight: bold;"><B>Salva una copia dei messaggi inviati</B></span>   per salvare una copia di ogni messaggio inviato nella cartella Inviati. </p></li>
+<h3>xxxxComposizionexxxx</h3>
+<ul type="disc">
+	<li class="p"><p>In <span style="font-weight: bold;"><b>Componi</b></span>: scegli se scrivere i messaggi in formato HTML o come testo normale. Il formato HTML permette di comporre messaggi contenenti opzioni di formattazione come stile, dimensione e colore dei caratteri.</p></li>
 </ul>
-<h3>Firme</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>È possibile creare una firma da aggiungere ai tuoi messaggi email. Tale firma può includere il tuo nome e un testo supplementare che non può superare il numero massimo di caratteri consentiti dal tuo account. Se hai creato più identità, puoi creare più firme e assegnarle a indirizzi specifici.</p></li>
+<ul type="disc">
+	<li class="p"><p>xxxxIn xxxx<span style="font-weight: bold;"><b>xxxxRispondi/Rispondi a tuttixxxx</b></span>xxxx,   scegli se includere il testo originale nel corpo del tuo messaggio di risposta.xxxx</p></li>
+	<li style="list-style: none; display: inline;"><ul type="circle">
+		<li class="p"><p><span style="font-weight: bold;"><b>xxxxTesto xxxxxxxxcompletoxxxx</b></span>xxxx   include il messaggio originale nel corpo del messaggio senza contrassegni speciali.xxxx</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Testo completo con prefisso</b></span> aggiunge un prefisso a ogni riga del messaggio email precedente. Il carattere di prefisso può essere &gt; o |.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>xxxxUn allegatoxxxx</b></span>xxxx   include il messaggio originale come allegato alla risposta.xxxx</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>xxxxNon includerexxxx</b></span>xxxx   non include il messaggio originale nella risposta.xxxx</p></li>
+	</ul></li>
+	<li class="p"><p>xxxxIn xxxx<span style="font-weight: bold;"><b>xxxxInoltraxxxx</b></span>xxxx,   scegli come includere il testo originale di un messaggio quando lo inoltri: nel corpo del messaggio, nel corpo del messaggio con un prefisso o come allegato al messaggio.xxxx</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxxCarattere di prefissoxxxx</b></span>xxxx   imposta il prefisso da usare per i messaggi di risposta o inoltrati.xxxx</p></li>
+	<li class="p"><p>xxxxIn xxxx<span style="font-weight: bold;"><b>xxxxMessaggi inviatixxxx</b></span>xxxx,   seleziona xxxx<span style="font-weight: bold;"><b>xxxxSalva una copia dei messaggi inviatixxxx</b></span>xxxx   per salvare una copia di ogni messaggio inviato nella cartella Inviati.xxxx</p></li>
 </ul>
-<h3>Rubrica</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Seleziona il numero di contatti da visualizzare per pagina. Il numero predefinito è 25.</p></li>
-	<li class=p><p>Attiva la funzione che consente di aggiungere automaticamente gli indirizzi alla tua Rubrica durante l'invio di messaggi. Se è attivata, gli indirizzi vengono salvati nella Rubrica Contatti usati per email.</p></li>
-	<li class=p><p>Il link <span style="font-weight: bold;"><B>gestione delle Rubriche</B></span> porta alla pagina di modifica dei contatti della Rubrica in cui è possibile   creare nuove rubriche e collegarsi a Rubriche condivise, esportare e importare elenchi di contatti ed eliminare contatti nelle Rubriche. </p></li>
+<h3>xxxxFirmexxxx</h3>
+<ul type="disc">
+	<li class="p"><p>xxxxÈ possibile creare una firma da aggiungere ai tuoi messaggi email.xxxx xxxxTale firma può includere il tuo nome e un testo supplementare che non può superare il numero di caratteri consentiti dal tuo account. xxxx xxxxSe hai creato più identità, puoi creare più firme e assegnarle a indirizzi specifici.xxxx</p></li>
+	<li class="p"><p>Scegli l'ubicazione della firma. Questa è la posizione in cui viene inserita la firma nei messaggi con risposta. Vuoi la firma al di sopra dei messaggi inclusi nella risposta o al fondo del messaggio?</p></li>
 </ul>
-<h3>Agenda</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Scegli come <a href="../Calendar/Calendar_Views.htm">visualizzare   l'Agenda Zimbra</a>. La vista predefinita è Settimana lavorativa.</p></li>
-	<li class=p><p>Specifica il giorno con cui iniziare la settimana nella tua Rubrica. </p></li>
-	<li class=p><p>Nella sezione <span style="font-weight: bold;"><B>Vista giornaliera/Vista settimanale</B></span>, puoi impostare l'ora di inizio e di fine della giornata dell'Agenda.</p></li>
-	<li class=p><p>Se viaggi in paesi con fusi orari diversi, è preferibile selezionare l'opzione   <span style="font-weight: bold;"><B>Visualizza l'elenco dei fusi orari   nella vista degli appuntamenti</B></span>. </p></li>
-	<li class=p><p>Il link <span style="font-weight: bold;"><B>gestione delle Agende</B></span>   porta alla pagina di modifica dell'Agenda in cui è possibile modificare un'Agenda esistente, aggiungere nuove Agende, iscriversi ad Agende o collegarsi a un'Agenda condivisa.</p></li>
+<h3>xxxx Rubricaxxxx</h3>
+<ul type="disc">
+	<li class="p"><p>xxxxSeleziona il numero di contatti da visualizzare per pagina.xxxx xxxxIl numero predefinito è 25.xxxx</p></li>
+	<li class="p"><p>xxxxAttiva la funzione che consente di aggiungere automaticamente gli indirizzi alla tua Rubrica durante l'invio di messaggi.xxxx xxxxSe è attivata, gli indirizzi vengono salvati nella Rubrica Contatti usati per email.xxxx</p></li>
+	<li class="p"><p>xxxxIl link xxxx<span style="font-weight: bold;"><b>xxxxgestione delle Rubrichexxxx</b></span>xxxx porta alla pagina di modifica dei contatti della Rubrica in cui è possibile   creare nuove rubriche e collegarsi a Rubriche condivise, esportare e importare elenchi di contatti ed eliminare contatti nelle Rubriche.xxxx</p></li>
 </ul>
-<h3>Account</h3>
-<p>Ai messaggi email appena inviati, inoltrati o con risposta è sempre associata un'identità. &nbsp;Questa identità rappresenta l'identità predefinita   creata come nome dell'account. È possibile modificare il nome   &quot;descrittivo&quot; visualizzato nel campo Da dei messaggi email,   selezionare l'aggiunta automatica della firma ai messaggi email o al contrario scegliere di non aggiungerla.</p>
-<h3>Filtri di posta</h3>
-<p>L'uso di filtri comporta l'applicazione di una serie di regole di corrispondenza ai messaggi in arrivo e quindi l'esecuzione di un'azione specifica. Usa questa scheda per definire le regole di filtro della posta   come viene descritto in <a href="../filters/bc_Filtering_your_messages.htm">Filtro dei messaggi</a></p>
-<h3>Tasti di scelta rapida</h3>
-<p>I tasti di scelta rapida della tastiera consentono di usare l'applicazione senza mouse. L'elenco mostra tutti i tasti di scelta rapida disponibili. Fai riferimento anche a: <a 
- href="../Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm">Tasti di scelta rapida della tastiera</a></p>
-<script type="text/javascript" language="javascript1.2">
+<h3>xxxxAgendaxxxx</h3>
+<ul type="disc">
+	<li class="p"><p>Scegli come <a href="../Calendar/Calendar_Views.htm">visualizzare l'Agenda</a>. xxxxLa vista predefinita è Settimana lavorativa.xxxx</p></li>
+	<li class="p"><p>xxxxSpecifica il giorno con cui iniziare la settimana nella tua Rubrica. xxxx</p></li>
+	<li class="p"><p>xxxxNella sezione xxxx<span style="font-weight: bold;"><b>xxxxVista giornaliera/Vista settimanalexxxx</b></span>xxxx, puoi impostare l'ora di inizio e di fine della giornata dell'Agenda.xxxx</p></li>
+	<li class="p"><p>Se viaggi in paesi con fusi orari diversi, è preferibile selezionare l'opzione <span style="font-weight: bold;"><b>Visualizza l'elenco dei fusi orari nella vista degli appuntamenti</b></span>.</p></li>
+	<li class="p"><p>xxxxIl link xxxx<span style="font-weight: bold;"><b>xxxxgestione delle Agendexxxx</b></span>xxxx   porta alla pagina di modifica dell'Agenda in cui è possibile modificare un'Agenda esistente, aggiungere nuove Agende, iscriversi ad Agende o collegarsi a un'Agenda condivisa.xxxx</p></li>
+</ul>
+<h3>xxxxAccountxxxx</h3>
+<p>xxxxAi messaggi email appena inviati, inoltrati o con risposta è sempre associata un'identità. xxxx  Questa identità rappresenta l'identità predefinita creata come nome dell'account. È possibile modificare il nome &quot;descrittivo&quot; visualizzato nel campo Da dei messaggi email e selezionare l'aggiunta automatica della firma ai messaggi email.</p>
+<h3>xxxxFiltri di postaxxxx</h3>
+<p>xxxxL'uso di filtri comporta l'applicazione di una serie di regole di corrispondenza ai messaggi in arrivo e quindi l'esecuzione di un'azione specifica.xxxx Usa questa scheda per definire le regole di filtro della posta come viene descritto in Filtro dei messaggi.</p>
+<h3>xxxxTasti di scelta rapidaxxxx</h3>
+<p>xxxxI tasti di scelta rapida della tastiera consentono di usare l'applicazione senza mouse.xxxx xxxxL'elenco mostra tutti i tasti di scelta rapida disponibili.xxxx Fai riferimento anche a <a  	 href="../Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm">Tasti di scelta rapida della tastiera</a>.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

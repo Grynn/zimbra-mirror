@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Come ricevere nuovi messaggi</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { font-weight:normal; }
-p.whs2 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxCome ricevere nuovi messaggixxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,26 +19,42 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Gestione dei messaggi email \nLettura dei messaggi\nNuovi messaggi");
+	addTocInfo("Gestione dei messaggi email \nLettura dei messaggi\nNotifiche di nuovi messaggi");
 addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
 
 	}
@@ -57,10 +64,8 @@ addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -76,24 +81,53 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Come ricevere nuovi messaggi </h1>
-<p>I nuovi messaggi vengono ricevuti quando entri nel client, automaticamente a intervalli   impostati da te e su richiesta quando clicchi su <span style="font-weight: bold;"><B>Ricevi posta</B></span>. </p>
-<p>Gli intervalli di ricezione automatica dei nuovi messaggi possono essere impostati nella scheda <span style="font-weight: bold;"><B>Preferenze&gt;Mail</B></span>. &nbsp;L'intervallo predefinito è 5 minuti. </p>
-<p class="whs1">I messaggi non letti sono facilmente identificabili nelle cartelle   evidenziate in grassetto e con un numero in parentesi accanto al nome. &nbsp;<span style="font-weight: bold;"><B>In arrivo   (22)</B></span>, ad esempio, indica che la cartella In arrivo contiene un totale di 22 messaggi non letti   all'interno delle conversazioni.</p>
-<p class="whs2">Fai riferimento anche a:</p>
-<p><a href="../Userspecific/Setting_your_user_preferences.htm">Impostazione delle preferenze utente</a></p>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>Notifiche di nuovi messaggi</h1>
+<p>xxxxI nuovi messaggi vengono ricevuti quando entri nel client, automaticamente 
+ a intervalli impostati da te e su richiesta quando clicchi su xxxx<span 
+	 style="font-weight: bold;"><b>xxxxRicevi postaxxxx</b></span>xxxx.xxxx</p>
+<p>Puoi impostare la frequenza con cui il tuo account verifica la presenza 
+ di nuovi messaggi e-mail da <span style="font-weight: bold;"><b>Preferenze 
+ mail</b></span>. xxxxL'intervallo predefinito è cinque minuti.xxxx</p>
+<p>Puoi attivare degli avvisi sul desktop per ricevere una notifica quando 
+ arrivano nuovi messaggi e-mail. Queste preferenze si impostano nella scheda 
+ Preferenze &gt; Mail. xxxxLe opzioni di avviso disponibili sono le seguenti:xxxx</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>xxxxRiproduci un 
+	 suonoxxxx</b></span>xxxx.xxxx xxxxQuando la cartella In arrivo riceve 
+	 una nuova mail, vieni avvisato con un segnale acustico.xxxx&#160;Se 
+	 il volume è azzerato non sentirai alcun suono.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Evidenzia la scheda 
+	 Mail</b></span>. Se non stai lavorando nella scheda Mail, quando la cartella 
+	 In arrivo riceve un nuovo messaggio la scheda Mail viene evidenziata.</p></li>
+</ul>
+<p style="margin-left: 40px;"><img src="../mailnotificationtab.png" alt="mailnotificationtab.png" style="border: none;" width="298" height="39" border="0" /></p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Fai lampeggiare il 
+	 titolo del browser</b></span>. Quando arriva un nuovo messaggio istantaneo, 
+	 il browser lampeggia finché non apri la scheda Mail.</p></li>
+</ul>
+<p style="font-weight: normal;">xxxxI messaggi non letti sono facilmente 
+ identificabili nelle cartelle evidenziate in grassetto e con un numero 
+ in parentesi accanto al nome.xxxx&#160;<span style="font-weight: bold;"><b>In 
+ arrivo (22)</b></span> ad esempio, indica che la cartella In arrivo contiene 
+ un totale di 22 messaggi non letti all'interno delle conversazioni.</p>
+<p style="font-weight: bold;">xxxxFai riferimento anche a:xxxx</p>
+<p><a href="../Userspecific/Setting_your_user_preferences.htm">xxxxImpostazione 
+ delle preferenze utentexxxx</a></p>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

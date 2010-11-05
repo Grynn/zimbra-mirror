@@ -1,83 +1,94 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <resource>
-<item name="Prev" value="&lt;&lt;" />
 <item name="Hide" value="Nascondi" />
-<item name="SyncTocTooltip" value="Sincronizza Indice" />
-<item name="InTopicSearchBtnText" value="Vai" />
-<item name="JS_alert_appletNotLoad " value=" Impossibile caricare l'applet. Se si sta utilizzando una versione precedente di Netscape, occorre modificare il file prefs.js." />
-<item name="FtsInputPrompt" value="Digitare le parole da cercare:" />
+<item name="Prev" value="&lt;&lt;" />
 <item name="Done" value="Fine" />
+<item name="FtsInputPrompt" value="Digitare le parole da cercare:" />
+<item name="JS_alert_InvalidExpression_3" value="Guida" />
+<item name="InTopicSearchBtnText" value="Vai" />
+<item name="SyncTocTooltip" value="Sincronizza Indice" />
 <item name="Logo/Author" value="Prodotto da" />
-<item name="MergeError1" value="La Guida in linea secondaria" />
 <item name="JS_alert_cantLoadProject" value="Impossibile caricare il progetto:" />
-<item name="Next" value="&gt;&gt;" />
+<item name="JS_alert_InitDatabaseFailed" value="Errore: Impossibile inizializzare il database." />
+<item name="JS_alert_InvalidExpression_4" value="per sapere come usare l'espressione dell'interrogazione.(Da completare)" />
+<item name="MergeError1" value="La Guida in linea secondaria" />
 <item name="SyncToc" value="SyncToc" />
-<item name="MergeError2" value="è in una lingua diversa rispetto alla Guida in linea principale; l'indice e le ricerche globali nella Guida in linea secondaria verranno disabilitati." />
-<item name="nls_body_instruction" value="Immettete la domanda nella casella di testo di cui sopra e fate clic su GO." />
-<item name="ToolBarSearchBtnText" value="Vai" />
+<item name="Next" value="&gt;&gt;" />
 <item name="SuggestViewNoFrameMessage" value="Per visualizzare la Guida senza fotogrammi, fare clic su questo" />
-<item name="MergeError3" value="utilizza un contrassegno diverso dell'impostazione Web rispetto al sistema principale della Guida che comporterà la disattivazione della funzione di unione nel sistema della Guida." />
-<item name="Hide_Navigation_Component" value="Nascondi il componente di navigazione" />
-<item name="FtsBtnText" value="Vai" />
-<item name="TopicsFound" value="Argomenti trovati" />
-<item name="LoadingContentsData" value="Caricamento in corso... fare clic qui per annullare..." />
-<item name="Definition" value="Definizione:" />
+<item name="ToolBarSearchBtnText" value="Vai" />
+<item name="nls_body_instruction" value="Immettete la domanda nella casella di testo di cui sopra e fate clic su GO." />
+<item name="MergeError2" value="è in una lingua diversa rispetto alla Guida in linea principale; l'indice e le ricerche globali nella Guida in linea secondaria verranno disabilitati." />
 <item name="CompletingContents" value="Completamento Argomenti in corso..." />
-<item name="GeneratedBy" value="Generato da" />
-<item name="PoweredBy" value="Prodotto da" />
+<item name="Definition" value="Definizione:" />
+<item name="LoadingContentsData" value="Caricamento in corso... fare clic qui per annullare..." />
+<item name="TopicsFound" value="Argomenti trovati" />
+<item name="Title" value="Titolo" />
+<item name="FtsBtnText" value="Vai" />
+<item name="Hide_Navigation_Component" value="Nascondi il componente di navigazione" />
+<item name="MergeError3" value="utilizza un contrassegno diverso dell'impostazione Web rispetto al sistema principale della Guida che comporterà la disattivazione della funzione di unione nel sistema della Guida." />
+<item name="Seperate" value="|" />
 <item name="IndexAlphabetBookmarks" value="ABCDEFGHIJKLMNOPQRSTUVWXYZ" />
+<item name="PoweredBy" value="Prodotto da" />
+<item name="GeneratedBy" value="Generato da" />
 <item name="Contents" value="Argomenti" />
+<item name="JS_alert_NotAllDatabaseInited" value="Avviso: Non tutti i database sono stati caricati. Alcuni argomenti non verranno trovati." />
 <item name="IndexSelectTopicLabel" value="Selezionate un argomento e fate clic su Visualizza" />
-<item name="Disabled Prev" value="&lt;&lt;" />
-<item name="Glossary" value="Glossario" />
 <item name="Search" value="Cerca" />
-<item name="CantSearch" value="Impossibile cercare la frase." />
-<item name="LoadingIndex" value="Caricamento indice analitico in corso..." />
+<item name="Glossary" value="Glossario" />
+<item name="Disabled Prev" value="&lt;&lt;" />
 <item name="LoadingData" value="Caricamento dati in corso, attendere..." />
-<item name="Show_Navigation_Component" value="Mostra il componente di navigazione" />
+<item name="LoadingIndex" value="Caricamento indice analitico in corso..." />
+<item name="CantSearch" value="Impossibile cercare la frase." />
 <item name="Book" value="Libro" />
+<item name="Show_Navigation_Component" value="Mostra il componente di navigazione" />
 <item name="Disabled Next" value="&gt;&gt;" />
-<item name="nls_body_empty" value="Spiacenti, non siamo in grado di trovare una risposta adeguata alla vostra domanda." />
-<item name="nls_button_go_hint" value="Avvia ricerca" />
-<item name="FtsHilitePrompt" value="Evidenzia risultati della ricerca" />
-<item name="Find" value="Trova" />
 <item name="CantOpenURLorFile" value="Impossibile aprire URL o file" />
-<item name="Print" value="Stampa" />
-<item name="About" value="Riguardo" />
-<item name="Author" value="Autore" />
-<item name="IndexSelectTopicTitle" value="Selezionate un argomento" />
-<item name="Blank_topic_text" value="Questo argomento è stato creato dal programma guidato di conversione dei progetti WinHelp e corrisponde al punto di destinazione di un argomento mancante o di un hyperlink interrotto." />
-<item name="BrowserLimitedMessage" value="Il browser non supporta i fotogrammi. Consigliamo di aggiornare il browser ad una versione che li supporta." />
-<item name="LoadingTOCItem" value="Caricamento indice in corso:" />
-<item name="Display" value="Visualizza" />
+<item name="Find" value="Trova" />
+<item name="FtsHilitePrompt" value="Evidenzia risultati della ricerca" />
+<item name="FtsMaxResult" value="Risultati della ricerca per pagina" />
+<item name="nls_button_go_hint" value="Avvia ricerca" />
+<item name="nls_body_empty" value="Spiacenti, non siamo in grado di trovare una risposta adeguata alla vostra domanda." />
 <item name="Cancel" value="Annulla" />
-<item name="IndexSelectTopicError" value="Selezionate un argomento." />
-<item name="nls_edit_label" value="Immettete la vostra domanda:" />
-<item name="SearchLabel" value="Cerca" />
+<item name="Display" value="Visualizza" />
+<item name="LoadingTOCItem" value="Caricamento indice in corso:" />
+<item name="BrowserLimitedMessage" value="Il browser non supporta i fotogrammi. Consigliamo di aggiornare il browser ad una versione che li supporta." />
+<item name="Blank_topic_text" value="Questo argomento è stato creato dal programma guidato di conversione dei progetti WinHelp e corrisponde al punto di destinazione di un argomento mancante o di un hyperlink interrotto." />
+<item name="IndexSelectTopicTitle" value="Selezionate un argomento" />
+<item name="Author" value="Autore" />
+<item name="About" value="Riguardo" />
+<item name="Print" value="Stampa" />
 <item name="RelateTopicListPrompt" value="Fare clic su un argomento e quindi su Visualizza." />
-<item name="Seperate " value=" |" />
-<item name="NextTooltip" value="Argomento successivo" />
-<item name="JS_alert_colorlimitation" value="WebHelp ha rilevato che il display è impostato su 16 colori. Per assistenza completa su WebHelp, impostare il display per l'utilizzo di 256 colori o più." />
+<item name="Canceled" value="Annullato" />
+<item name="SearchLabel" value="Cerca" />
+<item name="nls_edit_label" value="Immettete la vostra domanda:" />
+<item name="IndexSelectTopicError" value="Selezionate un argomento." />
 <item name="TopicsNotFound" value="Non è stato trovato nessun argomento." />
+<item name="JS_alert_colorlimitation" value="WebHelp ha rilevato che il display è impostato su 16 colori. Per assistenza completa su WebHelp, impostare il display per l'utilizzo di 256 colori o più." />
+<item name="JS_alert_LoadXmlFailed" value="Errore: Impossibile caricare il file XML." />
+<item name="NextTooltip" value="Argomento successivo" />
 <item name="Show" value="Mostra" />
-<item name="PreTooltip" value="Argomento precedente" />
-<item name="SearchPrompt" value="- Cerca -" />
-<item name="IndexBtnText" value="Vai" />
-<item name="JS_alert_ProjectLoadingFail" value="Impossibile caricare correttamente, selezionare Aggiorna." />
-<item name="LoadingContents" value="Caricamento argomenti in corso, attendere..." />
 <item name="Term" value="Parola:" />
+<item name="LoadingContents" value="Caricamento argomenti in corso, attendere..." />
+<item name="JS_alert_ProjectLoadingFail" value="Impossibile caricare correttamente, selezionare Aggiorna." />
+<item name="Rank" value="Classifica" />
+<item name="IndexBtnText" value="Vai" />
+<item name="SearchPrompt" value="- Cerca -" />
+<item name="PreTooltip" value="Argomento precedente" />
 <item name="WebSearchButton" value="WebSearch" />
-<item name="Remote_Page" value="Pagina remota" />
-<item name="WebSearch" value="WebSearch" />
 <item name="LoadingFTS" value="Lettura dati della ricerca in corso..." />
+<item name="WebSearch" value="WebSearch" />
+<item name="Remote_Page" value="Pagina remota" />
 <item name="Index" value="Indice analitico" />
-<item name="JS_alert_ErrorInLoading" value="Errore nel caricamento del componente di navigazione. Rigenerare WebHelp." />
 <item name="IndexInputPrompt" value="Digitare la parola chiave da cercare:" />
-<item name="Page" value="Pagina" />
+<item name="JS_alert_appletNotLoad" value="Impossibile caricare l'applet. Se si sta utilizzando una versione precedente di Netscape, occorre modificare il file prefs.js." />
+<item name="JS_alert_ErrorInLoading" value="Errore nel caricamento del componente di navigazione. Rigenerare WebHelp." />
 <item name="SuggestViewNoFrameMsg2" value="hyperlink." />
-<item name="nls_button_go_text" value="Vai" />
+<item name="JS_alert_InvalidExpression_1" value="Il testo digitato non è un'espressione valida." />
+<item name="Page" value="Pagina" />
 <item name="Searching" value="Ricerca in corso..." />
+<item name="JS_alert_InvalidExpression_2" value="Fate clic su" />
+<item name="nls_button_go_text" value="Vai" />
 
   <item name="English"   value="" />
   <item name="langorder" value="0,1,2,3,4,5,6,7,8,40,41,42,43,44,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,38,45,46,47,48,49,50,33,51,52,53,88,54,34,55,56,115,119,121,123,125,126,127,128,129,130,57,58,89,90,91,59,60,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,246,252,61,62,63,64,66,67,131,148,150,154,158,168,171,173,175,185,187,189,191,193,197,214,216,218,220,225,230,240,242,244,251,252,68,69,70,71,27,114,28,82,170,85,112,109,110,65,113,223,86,213,29,255,30,31,80,81,83,84,111,36,37,79,229,222,87,212,32,254,251,39,72,97,98,99,100,73,101,74,102,133,93,103,35,104,75,105,92,122,124,76,106,107,108,77,120,199,94,116,117,118,78,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,95,197,230,230,230,230,246,227,224,131,131,131,131,131,131,131,150,158,158,158,158,175,175,175,175,154,193,197,197,197,197,197,96,197,230,230,230,230,246,227,250," />
@@ -207,7 +218,7 @@
 
 	<paneskin>
 		<background color="#e8dcc1" img="" />
-		<font name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+		<font name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
 		<toc>
 			<background color="#f9f9f9" img="" />
 			<icons>
@@ -218,7 +229,7 @@
 			</icons>
 			<fonts>
 				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
 			</fonts>
 			<activebackgroundcolor attr="#cacaca" />
 			<margin attr="" />
@@ -227,7 +238,7 @@
 		<index>
 			<form>
 				<fonts>
-					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+					<title name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
 				</fonts>
 				<button normal="" hover="" />
 				<editwith value="20" />
@@ -235,7 +246,7 @@
 			<background color="#f9f9f9" img="" />
 			<fonts>
 				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
 				<empty name="" size="8pt" color="" style="" weight="" decoration="" />
 			</fonts>
 			<activebackgroundcolor attr="#cacaca" />
@@ -245,7 +256,7 @@
 		<fts>
 			<form>
 				<fonts>
-					<title name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="none" />
+					<title name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
 				</fonts>
 				<button normal="" hover="" />
 				<editwith value="20" />
@@ -253,7 +264,7 @@
 			<background color="#f9f9f9" img="" />
 			<fonts>
 				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
 				<error name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
 			</fonts>
 			<activebackgroundcolor attr="#cacaca" />
@@ -264,7 +275,7 @@
 			<background color="#f9f9f9" img="" />
 			<fonts>
 				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#42646f" style="Normal" weight="Normal" decoration="underline" />
+				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
 			</fonts>
 			<activebackgroundcolor attr="#cacaca" />
 			<margin attr="" />

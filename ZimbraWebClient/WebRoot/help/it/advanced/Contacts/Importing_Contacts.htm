@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Importazione di contatti</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>xxxxImportazione di contattixxxx</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +19,43 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
+	addTocInfo("Gestione delle Rubriche\nImportazione di Rubriche");
+addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -55,10 +64,8 @@ if (window.gbWhTopic)
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
@@ -74,29 +81,43 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Importazione di Rubriche</h1>
-<p>Puoi importare elenchi di contatti e Rubriche salvate in file di testo delimitati da virgole   (in formato .csv). </p>
-<ol type="1" class="whs1">
-	<li class=p><p>Vai alla scheda <span style="font-weight: bold;"><B>Preferenze,   Rubrica</B></span><span>.</span></p></li>
-	<li class=p><p>Clicca su <span style="font-weight: bold;"><B>Sfoglia</B></span>   per individuare il file .csv da importare. </p></li>
-	<li class=p><p>Clicca su <span style="font-weight: bold;"><B>Importa</B></span>.   Viene visualizzato un elenco delle tue Rubriche. </p></li>
-	<li class=p><p>Seleziona la Rubrica in cui importare oppure creane una nuova. </p></li>
-	<li class=p><p>Clicca su <span style="font-weight: bold;"><B>OK</B></span>. &nbsp;A seconda delle dimensioni del   file .csv, l'importazione potrebbe richiedere   alcuni minuti.</p></li>
-	<li class=p><p>Quando l'importazione è completa, la casella <span style="font-weight: bold;"><B>Stato</B></span> mostra il numero di contatti importati correttamente.</p></li>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+ 
+<h1>xxxxImportazione di contattixxxx</h1>
+<p>Puoi importare elenchi di contatti e Rubriche salvate in file di testo con valori delimitati da virgole (in formato .csv). L'importazione è disponibile dalla scheda Preferenze, <span style="font-weight: bold;"><b>Importa/Esporta</b></span>.</p>
+<p>Per importare un elenco di contatti:</p>
+<ol type="1">
+	<li class="p"><p>Seleziona <span style="font-weight: bold;"><b>Preferenze</b></span> e clicca su <span style="font-weight: bold;"><b>Importa/Esporta</b></span>.</p></li>
+	<li class="p"><p>Nel campo File, seleziona con il pulsante Sfoglia il file da importare.</p></li>
+	<li class="p"><p>Nel campo <span style="font-weight: bold;"><b>Tipo</b></span>, clicca su <span style="font-weight: bold;"><b>Autorilevamento</b></span> per selezionare il tipo di file dei contatti da importare:</p></li>
+	<ol type="disc">
+		<li style="list-style: none; display: inline;"><ul type="disc">
+			<li class="p" style="margin-left: -20px;"><p>Contatti account</p></li>
+			<li class="p" style="margin-left: -20px;"><p>Contatti Yahoo!</p></li>
+			<li class="p" style="margin-left: -20px;"><p>xxxxContatti Outlook 2000xxxx</p></li>
+			<li class="p" style="margin-left: -20px;"><p>xxxxContatti Outlook 2003xxxx</p></li>
+			<li class="p" style="margin-left: -20px;"><p>xxxxContatti Outlookxxxx</p></li>
+			<li class="p" style="margin-left: -20px;"><p>Contatti Thunderbird</p></li>
+		</ul></li>
+	</ol>
 </ol>
-<p>I contatti sono organizzati in ordine alfabetico in base al cognome. &nbsp;</p>
+<p style="margin-left: 40px;"><span>È possibile che gli elenchi di contatti dei vari account non visualizzino le informazioni sui contatti nello stesso ordine. Per far sì che le informazioni vengano visualizzate correttamente nella Rubrica, è importante selezionare il tipo giusto di file di contatti da importare.</span></p>
+<ol start="4" type="1">
+	<li class="p"><p>xxxxClicca su xxxx<span style="font-weight: bold;"><b>xxxxImportaxxxx</b></span>xxxx.xxxx Nella finestra di dialogo <span style="font-weight: bold;"><b>Scegli Rubrica</b></span>, seleziona una rubrica esistente a cui aggiungere i contatti, oppure creane una nuova in cui importare il file.</p></li>
+	<li class="p"><p>xxxxClicca su xxxx<span style="font-weight: bold;"><b>xxxxOKxxxx</b></span>xxxx.xxxx xxxxIl contenuto del file dei contatti viene importato.xxxx</p></li>
+</ol>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

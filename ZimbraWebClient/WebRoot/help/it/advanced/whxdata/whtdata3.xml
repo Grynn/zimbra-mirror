@@ -1,36 +1,32 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Gestione degli elementi condivisi" url="6_0new_topics/Managing_items_you_share.htm" />
+<item name="Condivisione di cartelle" url="Sharing/Sharing_a_folder.htm" />
+<item name="Gestione degli elementi condivisi" url="Sharing/Managing_items_you_share.htm" />
+<item name="Condivisione con un elenco di distribuzione" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="Condivisione di cartelle di posta" >
   <item name="Condivisione di cartelle di posta" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
   <item name="Condivisione della casella di posta" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="Accettazione dell'accesso alla cartella della casella di posta condivisa" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="Revoca dell'accesso a una cartella condivisa" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="Accettazione dell'accesso alla cartella della casella di posta condivisa" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="Uso di una cartella di posta condivisa" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-</book>
-<book name="Condivisione di Rubriche" >
-  <item name="Condivisione della Rubrica" url="Contacts/Sharing_your_Address_Book.htm" />
 </book>
 <book name="Condivisione di Agende" >
   <item name="Condivisione dell'Agenda" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="Assegnazione dei diritti di amministratore per Agende condivise" url="6_0new_topics/Admin_rights_for_shared_Calendars.htm" />
-  <item name="Concessione dei diritti di gestione per Agende condivise" url="6_0new_topics/Manager_rights_for_shared_Calendars.htm" />
+  <item name="Assegnazione dei diritti di amministratore per Agende condivise" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <item name="Concessione dei diritti di gestione per Agende condivise" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
   <item name="Accettazione dell'accesso all'Agenda condivisa" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
   <item name="Rifiuto di una richiesta di condivisione di un'Agenda" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+</book>
+<book name="Condivisione di Rubriche" >
+  <item name="Condivisione della Rubrica" url="Contacts/Sharing_your_Address_Book.htm" />
 </book>
 <book name="Condivisione di elenchi di impegni" >
   <item name="Condivisione dell'elenco di impegni" url="Tasks/Share_your_Task_folder.htm" />
   <item name="Accettazione dell'accesso a elenchi di impegni condivisi" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
 </book>
-<book name="Condivisione di Blocchi Note in Documenti" >
-  <item name="Condivisione di Blocchi Note in Documenti" url="Documents/Sharing_Notebooks.htm" />
-  <item name="Accettazione dell'accesso a un Blocco Note in Documenti" url="Documents/Accepting_Access_to_a_Documents_Notebook.htm" />
-  <item name="Collegamento a un Blocco Note condiviso" url="Documents/Linking_to_a_shared_wiki_folder.htm" />
-  <item name="Modifica o annullamento dell'accesso alla cartella Documenti" url="Documents/Cancelling_access_to_your_Documents_wiki_folder.htm" />
-</book>
 <book name="Condivisione di cartelle nella Valigetta" >
-  <item name="Condivisione della Valigetta" url="Miscellaneous_one_off_topics/Sharing_your_Briefcase.htm" />
+  <item name="Condivisione della Valigetta" url="Briefcase/Sharing_your_Briefcase.htm" />
 </book>
 
 </tocdata>
