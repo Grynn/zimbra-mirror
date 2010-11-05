@@ -1198,11 +1198,15 @@ function(htmlEl)  {
 		if (s == '[xpconnect wrapped native prototype]' || s == '[object XULElement]') { return null; }
 	}
 
-	while (htmlEl) {
-		if (htmlEl.id && DwtControl.ALL_BY_ID && DwtControl.ALL_BY_ID[htmlEl.id]) {
-			return DwtControl.ALL_BY_ID[htmlEl.id];
+	try{
+		while (htmlEl) {
+			if (htmlEl.id && DwtControl.ALL_BY_ID && DwtControl.ALL_BY_ID[htmlEl.id]) {
+				return DwtControl.ALL_BY_ID[htmlEl.id];
+			}
+			htmlEl = htmlEl.parentNode;
 		}
-		htmlEl = htmlEl.parentNode;
+	} catch(e) {
+		//In some FF, we might get permission denied error. Ignore it.
 	}
 	return null;
 };
