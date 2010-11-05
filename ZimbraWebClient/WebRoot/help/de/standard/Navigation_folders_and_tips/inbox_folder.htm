@@ -1,18 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Systemordner</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -23,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("In der Mailbox navigieren\nMail-Systemordner");
@@ -52,14 +64,12 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -71,34 +81,35 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>Mail-Systemordner</h1>
-<p>Die Systemordner sind <span style="font-weight: bold;"><B>Posteingang</B></span>,   <span style="font-weight: bold;"><B>Gesendet</B></span>, <span style="font-weight: bold;"><B>Entwürfe</B></span>,   <span style="font-weight: bold;"><B>Spam</B></span> und <span style="font-weight: bold;"><B>Papierkorb</B></span>.   Diese Ordner können Sie nicht verschieben, umbenennen oder löschen. Systemordner werden immer an oberster Stelle in Ihrer Ordnerliste angezeigt. Darunter folgen die von Ihnen angelegten Ordner.</p>
+<p>}}}Die Systemordner sind <span style="font-weight: bold;"><b>Posteingang</b></span>, <span style="font-weight: bold;"><b>Gesendet</b></span>, <span style="font-weight: bold;"><b>Entw&uuml;rfe</b></span>, <span style="font-weight: bold;"><b>Spam</b></span> und <span style="font-weight: bold;"><b>Papierkorb</b></span>.{{{ Diese Ordner k&ouml;nnen Sie nicht verschieben, umbenennen oder l&ouml;schen. Systemordner werden immer an oberster Stelle in Ihrer Ordnerliste angezeigt. Darunter folgen die von Ihnen angelegten Ordner.</p>
+ 
 <h2>Posteingang</h2>
-<p>Neue Mails werden im <span style="font-weight: bold;"><B>Posteingang</B></span> abgelegt.   Standardmäßig wird nach der Anmeldung der Posteingang angezeigt. </p>
+<p>Neue Mails werden im <span style="font-weight: bold;"><b>Posteingang</b></span> abgelegt. Standardm&auml;&szlig;ig wird nach der Anmeldung der Posteingang angezeigt.</p>
 <h2>Gesendet</h2>
-<p>Eine Kopie der von Ihnen gesendeten Mails wird im Ordner <span style="font-weight: bold;"><B>Gesendet</B></span> gespeichert. </p>
-<h2>Entwürfe</h2>
-<p>Mails, die Sie verfasst, aber noch nicht gesendet haben, können Sie im Ordner <span 
- style="font-weight: bold;"><B>Entwürfe</B></span> speichern. Wenn Sie eine Mail im Ordner „Entwürfe“ öffnen, wird sie in der Ansicht zum Verfassen aufgerufen.</p>
-<h2>Spam </h2>
-<p>Das Filtern unerwünschter, automatisch versendeter Mails (werden auch &quot;Spam-&quot; oder &quot;Junk-Mails&quot; genannt) wird von einem Spam-Filter durchgeführt, bevor diese Mails Ihren Posteingang erreichen. Mails, bei denen es sich möglicherweise um Spam-Mails handelt, möglicherweise aber auch nicht, werden in Ihrem <span style="font-weight: bold;"><B>Spam</B></span>-Ordner abgelegt. Sie können diese Mails überprüfen und sie entweder in einen anderen Ordner verschieben oder löschen.   Wenn Sie die Mails nicht löschen, werden sie nach einem von Ihrem Zimbra-Administrator festgelegten Zeitraum automatisch gelöscht.</p>
-<ul><li class=p-note><p class=note>Wenn Sie eine große Zahl unerwünschter Mails erhalten, wenden Sie sich an Ihren Zimbra-Systemadministrator.   Indem Sie Spam melden, helfen Sie Ihrem Mail-Administrator, den Spam-Filter Ihrer Firma präziser einzustellen.</p></li>
-</ul>
-<p>Wenn Sie eine Mail erhalten, die offensichtlich nicht von Bedeutung ist, können Sie sie auswählen und in der Symbolleiste auf <span style="font-weight: bold;"><B>Spam</B></span> klicken.<span 
- style="font-style: italic;"> <I></I></span>Daraufhin wird die Mail in Ihren Spam-Ordner verschoben. Gelegentlich werden in Ihrem Spam-Ordner Mails, bei denen es sich nicht um Spam handelt, abgelegt.</p>
-<h2>Papierkorb </h2>
-<p>Gelöschte Objekte werden im Ordner <span style="font-weight: bold;"><B>Papierkorb</B></span> abgelegt und bleiben dort vorhanden, bis Sie den Papierkorb manuell leeren oder der Papierkorb automatisch gelöscht wird. Mails werden in diesem Ordner nach einem vom Administrator festgelegten Zeitraum automatisch gelöscht.</p>
-<script type="text/javascript" language="javascript1.2">
+<p>Eine Kopie der von Ihnen gesendeten Mails wird im Ordner <span style="font-weight: bold;"><b>Gesendet</b></span> gespeichert.</p>
+<h2>Entw&uuml;rfe</h2>
+<p>}}}Mails, die Sie verfasst, aber noch nicht gesendet haben, k&ouml;nnen Sie im Ordner <span  	 style="font-weight: bold;"><b>Entw&uuml;rfe </b></span> speichern.{{{ Wenn Sie eine Mail im Ordner &quot;Entw&uuml;rfe&quot; &ouml;ffnen, wird sie in der Ansicht zum Verfassen aufgerufen.</p>
+  
+<p>}}}</p>
+ <h2>Spam</h2> <p>Das Filtern unerw&uuml;nschter, automatisch versendeter Mails (werden auch &quot;Spam-&quot; oder &quot;Junk-Mails&quot; genannt) wird von einem Spam-Filter durchgef&uuml;hrt, bevor diese Mails Ihren Posteingang erreichen. }}}Mails, bei denen es sich m&ouml;glicherweise um Spam-Mails handelt, m&ouml;glicherweise aber auch nicht, werden in Ihrem <span  	 style="font-weight: bold;"><b>Spam-Ordner</b></span> abgelegt.{{{ Sie k&ouml;nnen diese Mails &uuml;berpr&uuml;fen und sie entweder in einen anderen Ordner verschieben oder l&ouml;schen. }}}Wenn Sie die Mails nicht l&ouml;schen, werden sie nach einem von Ihrem Mail-Administrator festgelegten Zeitraum automatisch gel&ouml;scht.{{{</p> <p class="note">}}}<span style="font-weight: bold;"><b>Hinweis:{{{ &nbsp;}}}</b></span>Wenn Sie eine gro&szlig;e Zahl unerw&uuml;nschter Mails erhalten, wenden Sie sich an Ihren Mail-Systemadministrator.{{{ Indem Sie Spam melden, helfen Sie Ihrem Mail-Administrator, den Spam-Filter Ihrer Firma pr&auml;ziser einzustellen.</p> <p>}}}Wenn Sie eine Mail vorfinden, die eindeutig nicht relevant ist, k&ouml;nnen Sie sie ausw&auml;hlen und dann im Feld <span style="font-weight: bold;"><b>Weitere Aktionen</b></span> die Option &bdquo;Spam&ldquo; ausw&auml;hlen.{{{</p>
+<h2>Papierkorb</h2>
+<p>Gel&ouml;schte Mails werden im Ordner <span style="font-weight: bold;"><b>Papierkorb</b></span> abgelegt und bleiben dort vorhanden, bis Sie den Papierkorb manuell leeren oder der Papierkorb automatisch gel&ouml;scht wird. }}} ails werden nach einem vom Administrator festgelegten Zeitraum automatisch gel&ouml;scht.{{{ </p>
+ 
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

@@ -1,26 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Mails lesen</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-p.whs1 { x-condition:BasicWC; }
-img_whs2 { border:none; float:none; border-style:none; }
-ol.whs3 { list-style:decimal; }
-ul.whs4 { list-style:disc; }
-p.whs5 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -31,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Mails verwalten \nMails lesen\nMails lesen");
@@ -60,14 +64,12 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -79,48 +81,36 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
 
 
 <h1>Mails lesen</h1>
-<p>Standardmäßig werden alle neuen Mails in Ihrem <span style="font-weight: bold;"><B>Posteingang</B></span> abgelegt. Wenn Sie Filterregeln für Mails eingerichtet haben, werden neue Mails möglicherweise an anderen Stellen und nicht in Ihrem Posteingang abgelegt. Die neben jedem Ordner in Klammern angezeigte Zahl ist die Anzahl ungelesener Mails in dem jeweiligen Ordner.</p>
-<p>Wenn Sie die Unterhaltungsansicht nutzen, werden Mails in Unterhaltungen gruppiert. </p>
-<p class="whs1">Wenn Sie Ihre Mail öffnen, wird die Mail im Lesefenster unterhalb der aufgelisteten Mails angezeigt. In diesem Lesefenster können Sie auf die Mail <span style="font-weight: bold;"><B>antworten</B></span> oder sie <span style="font-weight: bold;"><B>weiterleiten</B></span>. </p>
-<p class="whs1">Über zwei Symbole auf der rechten Seite der Symbolleiste können Sie die Mail in einem <span style="font-weight: bold;"><B><a class="dropspot" href="javascript:TextPopup(this)" id="a1" style="x-condition: BasicWC;">neuen Fenster</a>,   </B></span><img src="../newwindowbutton.png" x-maintain-ratio="TRUE" border="0" class="img_whs2">, öffnen, und wenn Sie auf <span style="font-weight: bold;"><B>Original anzeigen</B></span>, <img src="../see_original.png" x-maintain-ratio="TRUE" border="0" class="img_whs2">, klicken,<span 
- style="font-weight: bold;"><B></B></span>&nbsp;werden die Kopfzeilendaten der Mail im Original angezeigt.</p>
-<div class="droptext" id="POPUP258517428" style="display: 'none'; " x-ss-type="dropdown">
- <p>Die Option <span style="font-weight: bold;"><B>Neues Fenster</B></span> öffnet die Mail in einem neuen Browser-Fenster. In dem neuen Fenster können Sie die Mail oder Unterhaltung problemlos drucken und sich beim Antworten auf die ursprüngliche Mail beziehen.</p>
-</div>
-<p class="whs1">&nbsp;</p>
-<p class="whs1"><img src="../messageview75.png" x-maintain-ratio="TRUE" border="0" class="img_whs2"></p>
+<p>Standardm&auml;&szlig;ig werden alle neuen Mails in Ihrem <span style="font-weight: bold;"><b>Posteingang</b></span> abgelegt. }}}Wenn Sie Filterregeln f&uuml;r Mails eingerichtet haben, werden neue Mails m&ouml;glicherweise an anderen Stellen und nicht in Ihrem Posteingang abgelegt.{{{ Die neben jedem Ordner in Klammern angezeigte Zahl ist die Anzahl ungelesener Mails in dem jeweiligen Ordner.</p>
+<p>Wenn Sie die Unterhaltungsansicht nutzen, werden Mails in Unterhaltungen gruppiert. }}}Wenn Sie die Maus &uuml;ber die Unterhaltung f&uuml;hren, zeigt ein Tooltip die erste Zeile des Inhalts der neuesten Mail an.{{{</p>
 <h3>So lesen Sie eine Mail in der Unterhaltungsansicht</h3>
-<ol type="1" class="whs3">
-	<li class=p><p>Doppelklicken Sie auf die Unterhaltung, in der sich die Mail befindet.</p></li>
-	<li class=p><p>Im Inhaltsfenster werden jetzt die einzelnen Mails der Unterhaltung angezeigt. Die Spalte <span style="font-weight: bold;"><B>Fragment</B></span> zeigt die erste Zeile des Mailinhalts an. Um eine Mail zu öffnen, klicken Sie auf die Zeile mit der Mail, die Sie lesen möchten.</p></li>
+<ol type="1">
+	<li class="p"><p>Doppelklicken Sie auf die Unterhaltung, in der sich die Mail befindet. Im Inhaltsfenster werden jetzt die einzelnen Mails der Unterhaltung angezeigt. Die Spalte <span style="font-weight: bold;"><b>Fragment</b></span> zeigt die erste Zeile des Mailinhalts an. </p></li>
+	<li class="p"><p>Um eine Mail zu &ouml;ffnen, klicken Sie auf die Zeile mit der Mail, die Sie lesen m&ouml;chten.</p></li>
 </ol>
-<h3>So lesen Sie eine Mail in der Mailansicht</h3>
-<ul type="disc" class="whs4">
-	<li class=p><p>Doppelklicken Sie auf die Mail.</p></li>
+<p style="margin-left: 40px;">}}}Wenn Sie das <span style="font-weight: bold;"><b>Lesefenster</b></span> ge&ouml;ffnet haben, wird der Mailinhalt im Lesefenster angezeigt.{{{ }}}Ansonsten doppelklicken Sie auf die Mail.{{{ }}}Die Mail wird im Inhaltsfenster angezeigt.{{{</p>
+<h3>}}}So lesen Sie eine Mail in der Einzelmail-Ansicht{{{</h3>
+<ul type="disc">
+	<li><p>}}}Wenn die Funktion &bdquo;Lesefenster&ldquo; aktiviert ist, klicken Sie auf die Mail, und lesen Sie sie im Lesefenster.{{{</p></li>
+	<li><p>}}}Ist die Funktion &bdquo;Lesefenster&ldquo; nicht aktiviert, doppelklicken Sie auf die Mail.{{{ }}}Die Mail wird im Inhaltsfenster angezeigt.{{{ </p></li>
 </ul>
-<p class="whs5">Der Mailinhalt wird im unteren Fenster angezeigt.   Wird der Inhalt nicht angezeigt, doppelklicken Sie in der Liste der Mails auf die gewünschte Mail.</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a1','POPUP258517428');
-//--></script><script type="text/javascript" language="javascript1.2">
+<h6>Siehe auch</h6>
+<p>Empfang neuer Mails erkennen</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

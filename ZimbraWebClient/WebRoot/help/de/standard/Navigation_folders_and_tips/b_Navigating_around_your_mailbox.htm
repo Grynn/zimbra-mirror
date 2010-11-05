@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>In Ihrer Mailbox navigieren</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>In der Mailbox navigieren</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("In der Mailbox navigieren\nIn der Mailbox navigieren");
@@ -56,14 +64,12 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -75,32 +81,26 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>In Ihrer Mailbox navigieren</h1>
-<p>Wenn Sie sich an Ihrer Mailbox anmelden, wird eine Ansicht ähnlich der folgenden dargestellt. </p>
-<p><img src="../75mailboxview.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<p><span style="font-weight: bold;"><B>1</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>Suchleiste:</B></span> Mithilfe des Suchfelds können Sie nach Mails oder Kontakten suchen.</p>
-<p><span style="font-weight: bold;"><B>2</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>Nutzername, Mailbox-Kapazität und Link zum Abmelden:</B></span>   Hier werden Ihr Benutzername und Ihre Mailbox-Kapazität angezeigt. Der Link zum Abmelden von Ihrer Mailbox befindet sich in der Ecke oben rechts. </p>
-<p><span style="font-weight: bold;"><B>3</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>Übersichtsfenster:</B></span> (Auch Navigationsfenster genannt.) Hier werden Ihre Ordner angezeigt. Dazu gehören die Systemordner: Posteingang, Gesendet, Entwürfe, Spam und Papierkorb. Alle von Ihnen angelegten Ordner werden ebenfalls in diesem Fenster angezeigt. Auch Suchvorgänge, die Sie gespeichert haben, und von Ihnen erstellte Tags werden hier aufgeführt.</p>
-<p><span style="font-weight: bold;"><B>4</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>Registerkarten der Anwendungen:</B></span> Dies sind die in Ihrem Account verfügbaren Anwendungen. Sie beginnen jede Sitzung auf der Registerkarte „Mail“. Wenn Sie auf eine andere Registerkarte klicken, wird das Inhaltsfenster der jeweiligen Anwendung angezeigt.   &nbsp;</p>
-<p><span style="font-weight: bold;"><B>5</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>Symbolleiste:</B></span> Hier werden Befehle für die aktuelle Anwendung angezeigt. Die Symbolleiste wird am oberen und unteren Rand des Inhaltsfensters dargestellt. Die Symbolleiste in diesem Bild ist die der Mail-Anwendung.   </p>
-<p><span style="font-weight: bold;"><B>6</B></span> &nbsp;&nbsp;<span 
- style="font-weight: bold;"><B>Inhaltsfenster:</B></span> Der Inhalt in diesem Bereich richtet sich nach der jeweils aufgerufenen Anwendung. In der Mailansicht zeigt das Inhaltsfenster alle Mails und Unterhaltungen Ihres Posteingangs an.</p>
-<script type="text/javascript" language="javascript1.2">
+//]]></script>
+<h1>In der Mailbox navigieren</h1>
+<p>Wenn Sie sich an Ihrer Mailbox anmelden, wird eine Ansicht &auml;hnlich der folgenden dargestellt.</p>
+<p><img src="../75mailboxview.png" alt="75mailboxview.png" style="border: none;" width="750" height="184" border="0" /></p>
+<p>&nbsp;</p>
+<p>}}}<span style="font-weight: bold;"><b>1</b></span> &nbsp;&nbsp;<span style="font-weight: bold;"><b>Suchleiste</b></span>.{{{ Mithilfe des Suchfelds k&ouml;nnen Sie nach Mails oder Kontakten suchen.</p>
+<p>}}}<span style="font-weight: bold;"><b>2</b></span> &nbsp;&nbsp;<span style="font-weight: bold;"><b>Nutzername, Kapazit&auml;tsanzeige</b></span>.{{{ Hier werden Ihr Benutzername und Ihre Mailbox-Kapazit&auml;t angezeigt. </p>
+<p>}}}<span style="font-weight: bold;"><b>3</b></span> &nbsp;&nbsp;<span style="font-weight: bold;"><b>&Uuml;bersichtsfenster</b></span>.{{{ (Auch Navigationsfenster genannt.) Hier werden Ihre Ordner angezeigt. Dazu geh&ouml;ren die Systemordner: Posteingang, Gesendet, Entw&uuml;rfe, Spam und Papierkorb. Alle von Ihnen angelegten Ordner werden ebenfalls in diesem Fenster angezeigt. Auch Suchvorg&auml;nge, die Sie gespeichert haben, und von Ihnen erstellte Tags werden hier aufgef&uuml;hrt.</p>
+<p>}}}<span style="font-weight: bold;"><b>4</b></span> &nbsp;&nbsp;<span style="font-weight: bold;"><b>Registerkarten der Anwendungen</b></span>.{{{ Dies sind die in Ihrem Account verf&uuml;gbaren Anwendungen. Sie beginnen jede Sitzung auf der Registerkarte &quot;Mail&quot;. Wenn Sie auf eine andere Registerkarte klicken, wird das Inhaltsfenster der jeweiligen Anwendung angezeigt. &nbsp;</p>
+<p>}}}<span style="font-weight: bold;"><b>5</b></span> &nbsp;&nbsp;<span style="font-weight: bold;"><b>Symbolleiste</b></span>.{{{ Hier werden Befehle f&uuml;r die aktuelle Anwendung angezeigt. Die Symbolleiste wird am oberen und unteren Rand des Inhaltsfensters dargestellt. Die Symbolleiste in diesem Bild ist die der Mail-Anwendung.</p>
+<p>}}}<span style="font-weight: bold;"><b>6</b></span> &nbsp;<span style="font-weight: bold;"><b>&nbsp;Inhaltsfenster.</b></span>{{{ Der Inhalt in diesem Bereich richtet sich nach der jeweils aufgerufenen Anwendung. In der Mailansicht zeigt das Inhaltsfenster alle Mails und Unterhaltungen Ihres Posteingangs an.</p>
+<p><span style="font-weight: bold;"><b>}}}7 Lesefenster.{{{}}}</b></span> Eine Mail, die Sie lesen wollen, wird hier angezeigt.{{{ }}}Das Lesefenster ist leer, bis Sie auf eine Mail klicken.{{{</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

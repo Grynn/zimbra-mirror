@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Anzeige der Mails einrichten</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
-p.whs2 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +20,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Mails verwalten \nAnzeige der Mails einrichten");
@@ -57,14 +64,12 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -76,31 +81,30 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Anzeige der Mails einrichten</h1>
-<p>Sie können sich Ihre Mails als einzelne <span style="font-weight: bold;"><B>Mails</B></span> oder als <span style="font-weight: bold;"><B>Unterhaltungen</B></span> anzeigen lassen. </p>
-<p>Um die Gruppierung von Mails zu ändern, öffnen Sie die Registerkarten <span style="font-weight: bold;"><B>Einstellungen, Mail</B></span> und ändern die Einstellung <span style="font-weight: bold;"><B>Mails gruppieren nach</B></span>. </p>
+<p>Sie k&ouml;nnen sich Ihre Mails als einzelne <span style="font-weight: bold;"><b>Mails</b></span> oder als <span style="font-weight: bold;"><b>Unterhaltungen</b></span> anzeigen lassen.</p>
+<p>Um die Gruppierung von Mails zu &auml;ndern, &ouml;ffnen Sie die Registerkarten <span style="font-weight: bold;"><b>Einstellungen, Mail</b></span> und &auml;ndern die Einstellung <span style="font-weight: bold;"><b>Mails gruppieren nach</b></span>.</p>
+<p>}}}Sie k&ouml;nnen Mails auch in einer Drei-Fenster-Ansicht anzeigen, mit dem Lesefenster auf der linken Seite.{{{</p>
 <h2>Mails</h2>
-<p>Wenn Sie Mails als einzelne Mails gruppieren, werden die neuesten Mails an oberster Stelle in den Mail-Ordnern angeordnet. Ungelesene Mails werden fett dargestellt. Wenn Sie sich die Zeile mit der Mail ansehen, sehen Sie den Absender der Mail, Sie erkennen, ob die Mail über Anhänge verfügt, Sie sehen den Betreff, den Ordner, in dem die Mail gespeichert wurde, und wann die Mail empfangen wurde. Wenn Mails markiert oder durch ein Tag gekennzeichnet sind, wird dies ebenfalls angezeigt.</p>
-<p><img src="../message_group75.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
+<p>Wenn Sie Mails als einzelne Mails gruppieren, werden die neuesten Mails an oberster Stelle in den Mail-Ordnern angeordnet. Ungelesene Mails werden fett dargestellt. Wenn Sie sich die Zeile mit der Mail ansehen, sehen Sie den Absender der Mail, Sie erkennen, ob die Mail &uuml;ber Anh&auml;nge verf&uuml;gt, Sie sehen den Betreff, den Ordner, in dem die Mail gespeichert wurde, und wann die Mail empfangen wurde. }}}Wenn Mails markiert oder durch ein Tag gekennzeichnet sind, wird dies ebenfalls angezeigt.{{{</p>
+<p><img src="../message_group75.png" style="border: none;" alt="message_group75.png" width="626" height="102" border="0" /></p>
 <h2>Unterhaltungen</h2>
-<p>Wenn Sie Mails nach Unterhaltungen gruppieren, werden Ihre Mails nach dem Betreff sortiert. Eine Unterhaltung ist eine Gruppe von Mails mit dem gleichen Betreff. Wird der Betreff geändert, ist die Mail nicht mehr Teil der Unterhaltung.</p>
-<p>Der Betreff wird in der Unterhaltungsansicht nur einmal angezeigt. Die Anzahl der Mails in einer Unterhaltung wird in Klammern nach dem Betreff angegeben. Wenn neue Mails eingehen, wird die Unterhaltung oben in den Mails angezeigt. Unterhaltungen, die ungelesene Mails enthalten, sind <span style="font-weight: bold;"><B>fett dargestellt</B></span>.</p>
-<p class="whs2">Unterhaltungsansicht</p>
-<p><img src="../conversationview.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
+<p>Wenn Sie Mails nach Unterhaltungen gruppieren, werden Ihre Mails nach dem Betreff sortiert. }}}Eine Unterhaltung ist eine Gruppe von Mails mit dem gleichen Betreff.{{{ }}}Wird der Betreff ge&auml;ndert, ist die Mail nicht mehr Teil der Unterhaltung.{{{</p>
+<p>Der Betreff wird in der Unterhaltungsansicht nur einmal angezeigt. Die Anzahl der Mails in einer Unterhaltung wird in Klammern nach dem Betreff angegeben. Wenn neue Mails eingehen, wird die Unterhaltung oben in den Mails angezeigt. Unterhaltungen, die ungelesene Mails enthalten, sind <span style="font-weight: bold;"><b>fett dargestellt</b></span>.</p>
+<p style="font-weight: bold;">Unterhaltungsansicht</p>
+<p><img src="../conversationview.png" style="border: none;" alt="conversationview.png" width="627" height="98" border="0" /></p>
 <p>&nbsp;</p>
-<p>Doppelklicken Sie auf eine Unterhaltung, um die Mails in der Unterhaltung anzuzeigen.   Klicken Sie auf eine Mail, um ihren Inhalt im unteren Lesefenster anzuzeigen.   Sie können in der Symbolleiste auf <img src="../newwindowbutton.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"> klicken, um die Mail in einem neuen Fenster anzuzeigen.</p>
-<p>Alle Mails einer Unterhaltung werden angezeigt, auch wenn sich einige Mails in anderen Ordnern befinden. Die Spalte <span style="font-weight: bold;"><B>Ordner</B></span> zeigt den Ordner an, in dem die Mail abgelegt ist. Unterhaltungen werden nicht unendlich fortgeführt. Wenn die letzte Mail in einer Unterhaltung 30 Tage alt oder älter ist, wird mit einer Mail, die mit demselben Betreff gesendet wird, eine neue Unterhaltung begonnen.</p>
-<script type="text/javascript" language="javascript1.2">
+<p>Doppelklicken Sie auf eine Unterhaltung, um die Mails in der Unterhaltung anzuzeigen. Klicken Sie auf eine Mail, um ihren Inhalt im unteren Lesefenster anzuzeigen. }}}Sie k&ouml;nnen in der Symbolleiste auf <img src="../newwindowbutton.png" style="border: none;" alt="newwindowbutton.png" width="22" height="18" border="0" /> klicken, um die Mail in einem neuen Fenster anzuzeigen.{{{</p>
+<p>Alle Mails einer Unterhaltung werden angezeigt, auch wenn sich einige Mails in anderen Ordnern befinden. Die Spalte <span style="font-weight: bold;"><b>Ordner</b></span> zeigt den Ordner an, in dem die Mail abgelegt ist. Unterhaltungen werden nicht unendlich fortgef&uuml;hrt. Wenn die letzte Mail in einer Unterhaltung 30 Tage alt oder &auml;lter ist, wird mit einer Mail, die mit demselben Betreff gesendet wird, eine neue Unterhaltung begonnen.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

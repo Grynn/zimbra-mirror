@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Adresse für Weiterleitung einrichten</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
+<title>Adresse f&uuml;r Weiterleitung einrichten</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Mails verwalten \nAdresse für Weiterleitung einrichten");
@@ -56,14 +64,12 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -75,26 +81,25 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Adresse für Weiterleitung einrichten</h1>
-<p>Sie können eine Mail-Adresse angeben, an die Ihre Mails weitergeleitet werden sollen. Dabei können Sie auswählen, ob die Mails in Ihrem Posteingang gespeichert oder nach der Weiterleitung automatisch gelöscht werden sollen.</p>
+//]]></script>
+<h1>Adresse f&uuml;r Weiterleitung einrichten</h1>
+<p class="note"><span style="font-weight: bold;"><b>Hinweis:</b></span> Nur in @CompanyName@-Accounts verf&uuml;gbar</p>
+<p>Sie k&ouml;nnen eine Mail-Adresse angeben, an die Ihre Mails weitergeleitet werden sollen. Dabei k&ouml;nnen Sie ausw&auml;hlen, ob die Mails in Ihrem Posteingang gespeichert oder nach der Weiterleitung automatisch gel&ouml;scht werden sollen.</p>
 <h6>So leiten Sie Ihre Mails weiter</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Öffnen Sie die Registerkarte <span style="font-weight: bold;"><B>Einstellungen</B></span> und wählen Sie die Registerkarte <span style="font-weight: bold;"><B>Mail</B></span>.</p></li>
-	<li class=p><p>Blättern Sie zum Bereich „Mails empfangen“ und geben Sie unter <span style="font-weight: bold;"><B>Wenn eine Mail eingeht: Eine Kopie weiterleiten an</B></span> die vollständige Adresse für die Weiterleitung ein.</p></li>
-	<li class=p><p>Wenn die Mail automatisch in Ihrem Account gelöscht werden soll, aktivieren Sie die Option <span style="font-weight: bold;"><B>Keine lokale Kopie der Mail speichern</B></span>.</p></li>
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B>Speichern</B></span>.   </p></li>
+<ol type="1">
+	<li class="p"><p>&Ouml;ffnen Sie die Registerkarte <span style="font-weight: bold;"><b>Einstellungen</b></span> und w&auml;hlen Sie die Registerkarte <span style="font-weight: bold;"><b>Mail</b></span>.</p></li>
+	<li class="p"><p>Im Bereich &bdquo;Mails empfangen&ldquo; geben Sie unter <span style="font-weight: bold;"><b>Wenn eine Mail eingeht: Eine Kopie weiterleiten an</b></span> die vollst&auml;ndige Adresse f&uuml;r die Weiterleitung ein.</p></li>
+	<li class="p"><p>Wenn die Mail automatisch in Ihrem Account gel&ouml;scht werden soll, aktivieren Sie die Option <span style="font-weight: bold;"><b>Keine lokale Kopie der Mail speichern</b></span>.</p></li>
+	<li class="p"><p>Klicken Sie auf <span style="font-weight: bold;"><b>Speichern</b></span>.</p></li>
 </ol>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

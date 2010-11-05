@@ -1,25 +1,19 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="MS-HAID" content="creating messages" />
+<meta name="MS-HAID" content="composing messages" />
+<meta name="MS-HAID" content="messages composing" />
+<meta name="MS-HAID" content="writing an email" />
+ <meta name="generator" content="Adobe RoboHelp 8" />
 <title>Neue Mails verfassen</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-img_whs2 { border:none; float:none; border-style:none; }
-p.whs3 { margin-left:40px; }
-p.whs4 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -30,23 +24,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Mails verfassen\nNeue Mails verfassen");
@@ -59,14 +68,12 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -78,55 +85,45 @@ else
 		document.location.reload();
 
 //-->
-</script><script type="text/javascript" language="JavaScript1.2" x-save-method="compute-relative" src="../ehlpdhtm.js" name="EHELP_DHTM"></script>
-<script type="text/javascript" language=JavaScript1.2>
-<!-- 
-if( typeof( FilePopupInit ) != 'function' ) FilePopupInit = new Function();if( typeof( TextPopupInit ) != 'function' ) TextPopupInit = new Function();
- //-->
-</script>
-
-
-
+//]]></script>
 <h1>Neue Mail verfassen</h1>
 <p>&nbsp;</p>
-<ol type="1" class="whs1">
-	<li class=p><p>Um eine neue Mail zu verfassen, klicken Sie auf die Registerkarte <span style="font-weight: bold;"><B>Verfassen</B></span>. Es wird ein leeres Fenster zum Verfassen einer Mail angezeigt. &nbsp;</p></li>
-	<li class=p><p>Geben Sie ins Feld <span style="font-weight: bold;"><B>An</B></span> die Mail-Adressen der Personen ein, an die Sie die Mail senden möchten. Sie können auch in die Felder <span style="font-weight: bold;"><B>CC</B></span>   und <span style="font-weight: bold;"><B>BCC</B></span> Adressen eingeben. Um die Mail-Adresse einer Person nachzuschlagen, klicken Sie in der Symbolleiste „Verfassen“ auf <img src="../add_recipients.png" x-maintain-ratio="TRUE" border="0" class="img_whs2">. Sie können in den Adressbüchern nach bestimmten Namen suchen. Achten Sie darauf, ob der Name unter „An“, „CC“ oder „BCC“ eingefügt werden soll.   </p></li>
-	<li class=p><p>Geben Sie den Betreff der Mail in die Zeile <span style="font-weight: bold;"><B>Betreff</B></span> ein. </p></li>
-	<li class=p><p>Geben Sie den Text der Mail in das Textfeld unterhalb der Betreffzeile ein. </p></li>
+<ol type="1">
+<li class="p">
+<p>}}}Um eine neue Mail in der Mail-Symbolleiste zu verfassen, klicken Sie auf die Registerkarte <span style="font-weight: bold;"><b>Verfassen</b></span>.{{{ Es wird ein leeres Fenster zum Verfassen einer Mail angezeigt. &nbsp;</p>
+</li>
+<li class="p">
+<p>}}}Geben Sie in das Feld <span style="font-weight: bold;"><b>An:</b></span> die Mail-Adressen der Personen ein, an die Sie die Mail senden m&ouml;chten{{{ }}}.{{{ }}}Sie k&ouml;nnen auch in die Felder <span style="font-weight: bold;"><b>CC</b></span> oder <span style="font-weight: bold;"><b>BCC</b></span> Adressen eingeben.<br />{{{ }}}Um die Mail-Adresse einer Person nachzuschlagen, klicken Sie in der Symbolleiste &bdquo;Verfassen&ldquo; auf <img src="../add_recipients.png" style="border: none;" alt="add_recipients.png" width="85" height="20" border="0" />.{{{ Sie k&ouml;nnen in den Adressb&uuml;chern nach bestimmten Namen suchen. Achten Sie darauf, ob der Name unter &quot;An&quot;, &quot;CC&quot; oder &quot;BCC&quot; eingef&uuml;gt werden soll.</p>
+</li>
+<li class="p">
+<p>Geben Sie den Betreff der Mail in die Zeile <span style="font-weight: bold;"><b>Betreff</b></span> ein.</p>
+</li>
+<li class="p">
+<p>Geben Sie den Text der Mail in das Textfeld unterhalb der Betreffzeile ein. }}}Siehe Im Rich-Text-Editor arbeiten{{{</p>
+</li>
 </ol>
-<p class="whs3">Wenn Sie <a href="../Userspecific/b_Automatically_adding_your_signature.htm">eine Signatur</a> eingerichtet haben, wird Ihre Signatur automatisch in Ihre Mail eingefügt.   </p>
-<ol type="1" class="whs1">
-	<li class=p><p>Um einen Anhang hinzuzufügen, klicken Sie auf <span style="font-weight: bold;"><B><a class="dropspot" href="javascript:TextPopup(this)" id="a3">Anhänge hinzufügen</a></B></span>.</p>
-<div class="droptext" id="POPUP304190044" style="display: 'none'; " x-ss-type="dropdown">
- <p class="whs4"><span style="font-weight: bold;"><B>Anhänge hinzufügen</B></span></p>
- <p>Sie können bis zu 10 Dateien anhängen. </p>
- <ol type="1" class="whs1">
-  <li class=p>
-  <p>Klicken Sie auf „Durchsuchen“, um die gewünschte Datei zu suchen.</p></li>
-  <li class=p>
-  <p>Wählen Sie die Datei aus und klicken Sie auf „Öffnen“. Dateiname und Ordner werden angezeigt.</p></li>
-  <li class=p>
-  <p>Wenn die Dateien angehängt sind, klicken Sie auf <span style="font-weight: bold;"><B>Fertig</B></span>.   Die Namen der angehängten Dateien werden unterhalb des Betreffs angezeigt.</p></li>
- </ol>
- <p>Hinweis: Wenn Sie sich entscheiden, die Datei doch nicht zu senden, entfernen Sie das Häkchen.</p>
-</div></li>
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B>Senden</B></span>, um die Mail zu senden. Wenn Sie <span style="font-weight: bold;"><B>Kopien der Mails im Ordner „Gesendet“ speichern</B></span> aktiviert haben, wird eine Kopie Ihrer Mail in Ihrem Ordner „Gesendet“ abgelegt.</p></li>
+<p style="margin-left: 40px;">Wenn Sie <a href="../Userspecific/b_Automatically_adding_your_signature.htm">eine Signatur</a> eingerichtet haben, wird Ihre Signatur automatisch in Ihre Mail eingef&uuml;gt.</p>
+<ol start="5" type="1">
+<li class="p">
+<p>}}}Um einen Anhang hinzuzuf&uuml;gen, klicken Sie auf <span style="font-weight: bold;"><b>Anh&auml;nge hinzuf&uuml;gen</b></span>.{{{</p>
+</li>
+<li class="p">
+<p>}}}Wenn die Mail eine hohe Priorit&auml;t erhalten und entsprechend gekennzeichnet werden soll, &auml;ndern Sie die ausgew&auml;hlte Priorit&auml;t.{{{ }}}Diese ist rechts von der Betreffzeile zu finden.{{{</p>
+</li>
+<li class="p">
+<p>Klicken Sie auf <span style="font-weight: bold;"><b>Senden</b></span>, um die Mail zu senden. Wenn Sie <span style="font-weight: bold;"><b>Kopien der Mails im Ordner &quot;Gesendet&quot; speichern</b></span> aktiviert haben, wird eine Kopie Ihrer Mail in Ihrem Ordner &quot;Gesendet&quot; abgelegt.</p>
+</li>
 </ol>
-<p class="whs3">Wenn Sie die Mail nicht sofort senden möchten, klicken Sie auf <span style="font-weight: bold;"><B>Entwurf speichern</B></span>. Die Mail wird dann im Ordner „Entwürfe“ gespeichert.</p>
+<p style="margin-left: 40px;">Wenn Sie die Mail nicht sofort senden m&ouml;chten, klicken Sie auf <span style="font-weight: bold;"><b>Entwurf speichern</b></span>. Die Mail wird dann im Ordner &quot;Entw&uuml;rfe&quot; gespeichert.</p>
 <p>&nbsp;</p>
-<script language="javascript1.2" type="text/javascript"><!--
-TextPopupInit('a3','POPUP304190044');
-//--></script><script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

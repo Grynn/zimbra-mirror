@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Ordner löschen</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Ordner l&ouml;schen</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Mails mit Tags und Ordnern organisieren\nOrdner löschen");
@@ -57,14 +64,12 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -76,40 +81,36 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Ordner löschen</h1>
-<p>Benutzerdefinierte Ordner können Sie löschen. Systemordner können Sie nicht löschen.</p>
-<p>Wenn Sie einen Ordner löschen, wird sein Inhalt in den Papierkorb verschoben. Sie können Inhalte aus dem Papierkorb wiederherstellen, indem Sie diese mit der Maus in einen anderen Ordner ziehen. </p>
-<ul><li class=p-note><p class=note>Der Papierkorb wird in regelmäßigen Abständen geleert, d. h. darin enthaltene Objekte bleiben nicht ewig verfügbar.</p></li>
-</ul>
-<h6>So löschen Sie einen Ordner</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Wählen Sie den zu löschenden Ordner aus und klicken Sie in der Ordner-Kopfzeile auf <span style="font-weight: bold;"><B>Bearbeiten</B></span>.</p></li>
-	<li class=p><p>Aktivieren Sie <span style="font-weight: bold;"><B>Diesen Ordner löschen</B></span>.</p></li>
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B>Ordner löschen</B></span>.</p></li>
+//]]></script>
+<h1>Ordner l&ouml;schen</h1>
+<p>Benutzerdefinierte Ordner k&ouml;nnen Sie l&ouml;schen. Systemordner k&ouml;nnen Sie nicht l&ouml;schen.</p>
+<p>Wenn Sie einen Ordner l&ouml;schen, wird sein Inhalt in den Papierkorb verschoben. Sie k&ouml;nnen Inhalte aus dem Papierkorb wiederherstellen, indem Sie diese mit der Maus in einen anderen Ordner ziehen.</p>
+<p class="note"><span style="font-weight: bold;"><b>Hinweis:</b></span> Der Papierkorb wird in regelm&auml;&szlig;igen Abst&auml;nden geleert, d. h. darin enthaltene Objekte bleiben nicht ewig verf&uuml;gbar.</p>
+<h6>So l&ouml;schen Sie einen Ordner</h6>
+<ol type="1">
+	<li class="p"><p>W&auml;hlen Sie den zu l&ouml;schenden Ordner aus und klicken Sie in der Ordner-Kopfzeile auf <span style="font-weight: bold;"><b>Bearbeiten</b></span>.</p></li>
+	<li class="p"><p>Aktivieren Sie <span style="font-weight: bold;"><b>Diesen Ordner l&ouml;schen</b></span>.</p></li>
+	<li class="p"><p>Klicken Sie auf <span style="font-weight: bold;"><b>Ordner l&ouml;schen</b></span>.</p></li>
 </ol>
-<p class="whs2">Wenn der Ordner Mails enthält, die Sie speichern möchten, verschieben Sie sie vor dem Löschen in einen anderen Ordner.</p>
-<p class="whs2">&nbsp;</p>
-<h2>Inhalt eines Ordners löschen</h2>
-<p>Wenn Sie den gesamten Inhalt eines Ordners, jedoch nicht den Order selbst, löschen möchten, gehen Sie wie folgt vor:</p>
-<ol type="1" class="whs1">
-	<li class=p><p>Wählen Sie den Ordner aus und klicken Sie in der Ordner-Kopfzeile auf <span 
- style="font-weight: bold;"><B>Bearbeiten</B></span>.</p></li>
-	<li class=p><p>Aktivieren Sie <span style="font-weight: bold;"><B>Alle Objekte in diesem Ordner dauerhaft löschen. </B></span></p></li>
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B>Alle Objekte löschen</B></span>. Der Inhalt des Ordners wird sofort gelöscht. Dieser Vorgang kann nicht rückgängig gemacht werden.</p></li>
+<p style="margin-left: 40px;">Wenn der Ordner Mails enth&auml;lt, die Sie speichern m&ouml;chten, verschieben Sie sie vor dem L&ouml;schen in einen anderen Ordner.</p>
+<p style="margin-left: 40px;">&nbsp;</p>
+<h2>Inhalt eines Ordners l&ouml;schen</h2>
+<p>Wenn Sie den gesamten Inhalt eines Ordners, jedoch nicht den Order selbst, l&ouml;schen m&ouml;chten, gehen Sie wie folgt vor:</p>
+<ol type="1">
+	<li class="p"><p>}}}W&auml;hlen Sie den Ordner aus und klicken Sie in der Ordner-Kopfzeile auf <span  	 style="font-weight: bold;"><b>Bearbeiten</b></span>.{{{</p></li>
+	<li class="p"><p>}}}Aktivieren Sie <span style="font-weight: bold;"><b>Alle Objekte in diesem Ordner dauerhaft l&ouml;schen.</b></span>{{{</p></li>
+	<li class="p"><p>Klicken Sie auf <span style="font-weight: bold;"><b>Alle Objekte l&ouml;schen</b></span>. Der Inhalt des Ordners wird sofort gel&ouml;scht. Dieser Vorgang kann nicht r&uuml;ckg&auml;ngig gemacht werden.</p></li>
 </ol>
-<p class="whs2">.</p>
+<p style="margin-left: 40px;">.</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

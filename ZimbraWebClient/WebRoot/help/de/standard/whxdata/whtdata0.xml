@@ -2,13 +2,10 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="Erste Schritte" >
-  <item name="Erste Schritte mit dem ZCS-Standard-Web-Client" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+  <item name="}}}Erste Schritte mit dem Standard-Web-Client{{{" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
   <item name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
   <item name="Voreingestellten Client-Typ für die Anmeldung ändern" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Tastenkürzel" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
-  <item name="Passwort ändern" url="Userspecific/chaning_your_password.htm" />
-  <item name="Passwort vergessen?" url="Userspecific/if_you_forget_your_password.htm" />
-  <item name="Sitzung abgelaufen" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="In der Mailbox navigieren" >
   <item name="In der Mailbox navigieren" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
@@ -27,8 +24,6 @@
     <item name="Mails lesen" url="reading_mail/reading_mail.htm" />
     <item name="Mails als ungelesen markieren" url="reading_mail/b_Marking_mail_as_unread.htm" />
     <item name="Dateianhänge öffnen" url="reading_mail/opening_file_attachments.htm" />
-    <item name="Anhänge blockieren" url="reading_mail/attachment_blocking.htm" />
-    <item name="Mailblockierung" url="reading_mail/Message_blocking_feature.htm" />
     <item name="Unzustellbare Mail" url="Creating_Messages/undeliverable_mail.htm" />
   </book>
 </book>
@@ -36,8 +31,11 @@
   <item name="Neue Mails verfassen" url="Creating_Messages/b_Composing_email_message.htm" />
   <item name="Teile einer Mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Signatur automatisch einfügen" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+  <item name="Automatische Vervollständigung von Adressen" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Dateien an Mail anhängen" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Dateitypen für Anhänge" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="}}}HTML-Editor verwenden{{{" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="}}}Rechtschreibung überprüfen{{{" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Mails als Entwürfe speichern" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Mails beantworten und weiterleiten" >
@@ -47,14 +45,15 @@
 <book name="Adressbücher verwalten" >
   <item name="Adressbücher" url="Contacts/b_Your_Address_Books.htm" />
   <item name="Neue Kontakte hinzufügen" url="Contacts/b_Adding_new_contacts.htm" />
+  <item name="Kontaktliste exportieren" url="Contacts/Exporting_a_Contact_List.htm" />
 </book>
 <book name="Kalender verwalten" >
   <item name="Wissenswertes zum Kalender" url="Calendar/b_About_Calendar.htm" />
-  <item name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="Kalender farblich gestalten" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="}}}Neuen Kalender anlegen{{{" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="}}}Kalender farbcodieren{{{" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Mögliche Kalenderansichten" url="Calendar/Calendar_Views.htm" />
-  <item name="iCalendars importieren" url="6_0new_topics/Importing_iCalendars.htm" />
-  <item name="Kalender bereinigen" url="6_0new_topics/Cleaning_up_your_Calendar.htm" />
+  <item name="iCalendars importieren" url="Calendar/Importing_iCalendars.htm" />
+  <item name="Kalender bereinigen" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Termine, Besprechungen und Ereignisse planen" >
   <item name="Besprechung planen" url="Calendar/About_the_Appointment_Page.htm" />
@@ -66,37 +65,34 @@
   <item name="Wissenswertes zu Aufgaben" url="Tasks/About_Tasks.htm" />
   <item name="Aufgabenlisten anlegen" url="Tasks/bc_Create_task_lists.htm" />
   <item name="Aufgaben ändern" url="Tasks/Change_a_task.htm" />
-  <item name="Aufgaben sortieren" url="Tasks/Sorting_tasks_.htm" />
 </book>
 <book name="Ordner freigeben" >
-  <book name="Adressbücher freigeben" >
-    <item name="Link zu freigegebenem Adressbuch einrichten" url="6_0new_topics/Linking_to_a_Shared_Address_Book.htm" />
-  </book>
   <book name="Kalender freigeben" >
-    <item name="Link zu freigegebenem Kalender einrichten" url="6_0new_topics/Link_to_Shared_Calendar.htm" />
+    <item name="}}}Link zu einem freigegebenen Kalender{{{" url="Calendar/Link_to_Shared_Calendar.htm" />
+  </book>
+  <book name="Adressbücher freigeben" >
+    <item name="Link zu freigegebenem Adressbuch einrichten" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
   </book>
 </book>
 <book name="Nach Objekten suchen" >
   <item name="Suche durchführen" url="Search/b_Using_Search.htm" />
-  <item name="Suchabfrage erstellen und speichern" url="6_0new_topics/b_Create_and_Save_a_Search_Query.htm" />
+  <item name="Suchabfrage erstellen und speichern" url="Search/b_Create_and_Save_a_Search_Query.htm" />
   <item name="Beschreibung der Sprache für Suchabfragen" url="Search/query_language_description.htm" />
 </book>
 <book name="Mails mit Tags und Ordnern organisieren" >
   <item name="Mails und Kontakte mit Tags versehen" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
   <item name="Mails markieren" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
-  <item name="Mit Ordnern arbeiten" url="Navigation_folders_and_tips/about_folders.htm" />
   <item name="Ordner umbenennen" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <item name="Ordner löschen" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
-<book name="Filter erstellen " >
+<book name="}}}Mailfilter verwenden{{{" >
   <item name="Mails filtern" url="filters/bc_Filtering_your_messages.htm" />
   <item name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
 </book>
 <book name="Einstellungen einrichten" >
   <item name="Einstellungen einrichten" url="Userspecific/b_Setting_your_Options.htm" />
+  <item name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
   <item name="Abwesenheitsmeldungen erstellen" url="Userspecific/vacation_message.htm" />
-  <item name="Gesendete Mails speichern" url="Navigation_folders_and_tips/sent_folder.htm" />
-  <item name="Mailbox-Kapazität" url="Navigation_folders_and_tips/quotas.htm" />
   <item name="RSS/ATOM-Feeds abonnieren" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>
 

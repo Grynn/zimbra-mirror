@@ -1,24 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>An- und Abmelden</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-ol.whs2 { list-style:decimal; }
-p.whs3 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -29,23 +19,39 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Erste Schritte\nAn- und Abmelden");
@@ -58,14 +64,12 @@ addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -77,54 +81,48 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>An- und Abmelden</h1>
-<p>Sie müssen sich anmelden und authentifizieren, um den Zimbra-Web-Client nutzen zu können. Der Zimbra-Web-Client ist in zwei Versionen verfügbar, der Standardversion und der erweiterten Version.</p>
-<ul type="disc" class="whs1">
-	<li class=p><p>Der erweiterte Web-Client bietet den vollständigen Satz Ajax-basierter Webkommunikationsfunktionen. Der erweiterte Web-Client funktioniert mit neueren Browsern und schnelleren Internetverbindungen. </p></li>
-	<li class=p><p>Der Standard-Web-Client ist eine gute Wahl, wenn Sie eine langsame Internetverbindung haben oder HTML-basiertes Messaging für die Navigation in der Mailbox bevorzugen. </p></li>
+<p>Sie m&uuml;ssen angemeldet und authentifiziert sein, um @ClientNameLong@ nutzen zu k&ouml;nnen. @ClientNameLong@ ist in zwei Versionen verf&uuml;gbar, der Standardversion und der erweiterten Version.</p>
+<ul type="disc">
+	<li class="p"><p>Der erweiterte Web-Client bietet den vollst&auml;ndigen Satz Ajax-basierter Webkommunikationsfunktionen. Der erweiterte Web-Client funktioniert mit neueren Browsern und schnelleren Internetverbindungen.</p></li>
+	<li class="p"><p>Der Standard-Web-Client ist eine gute Wahl, wenn Sie eine langsame Internetverbindung haben oder HTML-basiertes Messaging f&uuml;r die Navigation in der Mailbox bevorzugen.</p></li>
 </ul>
-<p>Im Dialogfenster für die Anmeldung können Sie auswählen, für welche Version Sie sich anmelden möchten. </p>
-<ul><li class=p-note><p class=note>Meistens ist der erweiterte Web-Client voreingestellt und wird nach der Anmeldung automatisch geöffnet. Sie können die Voreinstellung ändern und den Standard-Web-Client einrichten. Hierfür gehen Sie nach der Anmeldung in die Registerkarte „Einstellungen“.</p></li>
-</ul>
+<p>Im Dialogfenster f&uuml;r die Anmeldung k&ouml;nnen Sie ausw&auml;hlen, f&uuml;r welche Version Sie sich anmelden m&ouml;chten.</p>
+<p class="note"><span style="font-weight: bold;"><b>Hinweise</b></span>: Meistens ist der erweiterte Web-Client voreingestellt und wird nach der Anmeldung automatisch ge&ouml;ffnet. Sie k&ouml;nnen die Voreinstellung &auml;ndern und den Standard-Web-Client einrichten. Hierf&uuml;r gehen Sie nach der Anmeldung in die Registerkarte &bdquo;Einstellungen&ldquo;.</p>
 <h6>So melden Sie sich an</h6>
-<ol type="1" class="whs2">
-	<li class=p><p>Öffnen Sie ein Browserfenster und geben Sie die von Ihrem Zimbra-Administrator mitgeteilte URL ein.<span style="margin-left: 40px;"><br>
-	<br> 	Beispiel: </span><span style="margin-left: 40px; font-weight: bold;"><B><br>
-	<br>
-	http://mail.domain.de/zimbra/mail</B></span></p></li>
-	<li class=p><p>Wenn das Fenster für die Anmeldung angezeigt wird, geben Sie Ihren Nutzernamen ein. Sie müssen möglicherweise Ihre vollständige Mail-Adresse als Nutzernamen und Ihr Passwort eingeben. &nbsp;</p></li>
+<ol type="1">
+	<li class="p"><p>&Ouml;ffnen Sie ein Browserfenster und geben Sie die von Ihrem Zimbra-Administrator mitgeteilte URL ein.<span style="margin-left: 40px;"><br /> <br /> Beispiel:</span><span style="margin-left: 40px; font-weight: bold;"><b><br /> <br /> http:// mail.domain.com/ zimbra/mail</b></span></p></li>
+	<li class="p"><p>Wenn das Fenster f&uuml;r die Anmeldung angezeigt wird, geben Sie Ihren Nutzernamen ein. Sie m&uuml;ssen m&ouml;glicherweise Ihre vollst&auml;ndige Mail-Adresse als Nutzernamen und Ihr Passwort eingeben. &nbsp;</p></li>
 </ol>
-<p class="whs3"><span style="margin-left: 40px;">Beispiel für eine vollständige Mail-Adresse:</span><span style="margin-left: 40px; font-weight: bold;"><B><br>
-<br> marianne@beispiel.de<br> marianne123</B></span></p>
-<p class="whs3">Um Ihre Daten zu schützen, wird Ihr Passwort auf dem Bildschirm wie folgt angezeigt: ******.</p>
-<ol start="3" type="1" class="whs2">
-	<li class=p><p>Damit Ihre Anmeldedaten auf diesem Computer bis zum Ablauf der Sitzung bzw. bis zu Ihrer Abmeldung gespeichert werden, aktivieren Sie <span style="font-weight: bold;"><B>Zugang auf diesem Computer merken</B></span>.</p></li>
+<p style="margin-left: 40px;">Beispiel f&uuml;r eine vollst&auml;ndige Mail-Adresse:<span  	 style="font-weight: bold;"><b> <br /> <br /> myra@example.com<br /> myra123</b></span></p>
+<p style="margin-left: 40px;">Um Ihre Daten zu sch&uuml;tzen, wird Ihr Passwort auf dem Bildschirm wie folgt angezeigt: ******.</p>
+<ol start="3" type="1">
+	<li class="p"><p>Damit Ihre Anmeldedaten auf diesem Computer bis zum Ablauf der Sitzung bzw. bis zu Ihrer Abmeldung gespeichert werden, aktivieren Sie <span style="font-weight: bold;"><b>Zugang auf diesem Computer merken</b></span>.</p></li>
 </ol>
-<p class="whs3">Wenn Sie diese Option aktivieren, müssen Sie sich während eines Tages nicht bei jedem Neustart des Browsers anmelden. Wenn Sie diese Option aktiviert haben und sich nicht abmelden, bleibt Ihre Sitzung aktiv, bis sie abläuft. Der Systemadministrator konfiguriert, wie lange eine Sitzung aktiv bleibt.</p>
-<p class="whs3"><span style="font-weight: bold;"><B>Hinweis:</B></span> Wenn Sie Ihren Web-Client in Ihrem Browser geöffnet lassen, aber eine Zeit lang nicht auf Ihre Mailbox zugreifen, läuft möglicherweise Ihre Sitzung ab und Sie müssen sich erneut anmelden.</p>
-<ol start="4" type="1" class="whs2">
-	<li class=p><p>Wenn Sie nicht mit dem voreingestellten <a href="../Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm">Client-Typ</a> arbeiten möchten, ändern Sie die angezeigte Version.</p></li>
-	<li class=p><p>Klicken Sie auf <span style="font-weight: bold;"><B>Anmelden</B></span>.</p></li>
+<p style="margin-left: 40px;">Wenn Sie diese Option aktivieren, m&uuml;ssen Sie sich w&auml;hrend eines Tages nicht bei jedem Neustart des Browsers anmelden. Wenn Sie diese Option aktiviert haben und sich nicht abmelden, bleibt Ihre Sitzung aktiv, bis sie abl&auml;uft. Der Systemadministrator konfiguriert, wie lange eine Sitzung aktiv bleibt.</p>
+<p style="margin-left: 40px;"><span style="font-weight: bold;"><b>Hinweis:</b></span> Wenn Sie Ihren Web-Client in Ihrem Browser ge&ouml;ffnet lassen, aber eine Zeit lang nicht auf Ihre Mailbox zugreifen, l&auml;uft m&ouml;glicherweise Ihre Sitzung ab und Sie m&uuml;ssen sich erneut anmelden.</p>
+<ol start="4" type="1">
+	<li class="p"><p>Wenn Sie nicht mit dem voreingestellten <a href="../Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm">Client-Typ</a> arbeiten m&ouml;chten, &auml;ndern Sie die angezeigte Version.</p></li>
+	<li class="p"><p>Klicken Sie auf <span style="font-weight: bold;"><b>Anmelden</b></span>.</p></li>
 </ol>
+<p>&nbsp;</p>
 <h6>So melden Sie sich ab</h6>
-<p>Um zu verhindern, dass sich andere Personen an Ihrem Mail-Account anmelden, sollten Sie sich immer über den Link zum <span style="font-weight: bold;"><B>Abmelden</B></span> abmelden, wenn Sie Ihre Zimbra-Sitzung beenden.</p>
+<p>Um zu verhindern, dass sich andere Personen an Ihrem Mail-Account anmelden, sollten Sie sich immer &uuml;ber den Link zum <span style="font-weight: bold;"><b>Abmelden</b></span> abmelden, wenn Sie Ihre Zimbra-Sitzung beenden.</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
