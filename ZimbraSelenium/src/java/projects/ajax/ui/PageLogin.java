@@ -1,5 +1,6 @@
 package projects.ajax.ui;
 
+import projects.ajax.ui.Actions.Action;
 import projects.ajax.ui.Buttons.Button;
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
@@ -139,6 +140,17 @@ public class PageLogin extends AbsAjaxPage {
 	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		throw new HarnessException("Login page does not have a Toolbar");
 	}
+
+	@Override
+	public AbsSeleniumObject zListItem(Action action, String item) throws HarnessException {
+		throw new HarnessException("Login page does not have lists");
+	}
+
+	@Override
+	public AbsSeleniumObject zListItem(Action action, Action option, String item) throws HarnessException {
+		throw new HarnessException("Login page does not have lists");
+	}
+
 
 
 }

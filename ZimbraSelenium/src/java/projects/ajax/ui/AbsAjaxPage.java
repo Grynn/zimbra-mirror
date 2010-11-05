@@ -3,6 +3,7 @@
  */
 package projects.ajax.ui;
 
+import projects.ajax.ui.Actions.Action;
 import projects.ajax.ui.Buttons.Button;
 import framework.ui.AbsApplication;
 import framework.ui.AbsPage;
@@ -34,6 +35,27 @@ public abstract class AbsAjaxPage extends AbsPage {
 		
 	}
 
+	/**
+	 * Take action on list items
+	 * 
+	 * (mainly applies to mail, contacts, tasks)
+	 * For mail, item identifier is the subject.
+	 * For contacts, item identifier is the email.
+	 * For tasks, item identifier is the summary.
+	 * 
+	 * @param action See Actions class
+	 * @param item The item identifier
+	 * @return
+	 * @throws HarnessException
+	 */
+	public abstract AbsSeleniumObject zListItem(Action action, String item) throws HarnessException;
+	
+	/**
+	 * Take action on list items with optional action
+	 * (mainly right-click -> context menu)
+	 */
+	public abstract AbsSeleniumObject zListItem(Action action, Action option, String item) throws HarnessException;
+	
 	/**
 	 * Click on a button
 	 * @param button the button to press

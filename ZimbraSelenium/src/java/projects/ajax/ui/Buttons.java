@@ -51,7 +51,7 @@ public class Buttons {
 		
 		private final String ID;
 		
-		public Button(String id) {
+		protected Button(String id) {
 			this.ID = id;
 		}
 

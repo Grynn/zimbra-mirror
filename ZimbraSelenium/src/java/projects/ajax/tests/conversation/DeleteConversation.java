@@ -5,6 +5,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
+import projects.ajax.ui.Actions;
 import projects.ajax.ui.Buttons;
 import framework.items.ConversationItem;
 import framework.items.MailItem;
@@ -57,7 +58,7 @@ public class DeleteConversation extends AjaxCommonTest {
 		app.zPageMail.zToolbarPressButton(Buttons.B_GETMAIL);
 		
 		// Select the item
-		app.zPageMail.zListSelectItem(mail.subject);
+		app.zPageMail.zListItem(Actions.A_LEFTCLICK, mail.subject);
 		
 		// Click delete
 		app.zPageMail.zToolbarPressButton(Buttons.B_DELETE);

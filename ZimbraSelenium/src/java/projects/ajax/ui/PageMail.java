@@ -7,6 +7,7 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import projects.ajax.ui.Actions.Action;
 import projects.ajax.ui.Buttons.Button;
 import framework.items.ConversationItem;
 import framework.items.MailItem;
@@ -399,118 +400,92 @@ public class PageMail extends AbsAjaxPage {
 		return (items);
 	}
 
-	/**
-	 * Expand a conversation
-	 * @param subject
-	 * @throws HarnessException
-	 */
-	public void zListExpandConversation(String subject) throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
 
-	/**
-	 * Select (left-click) a conversation/message
-	 * @param subject
-	 * @throws HarnessException
-	 */
-	public void zListSelectItem(String subject) throws HarnessException {
-		logger.info(myPageName() + " zListSelectItem("+ subject +")");
+
+
+	@Override
+	public AbsSeleniumObject zListItem(Action action, String subject) throws HarnessException {
+		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
+		
+		AbsSeleniumObject page = null;
+		
+		if ( action == Actions.A_LEFTCLICK ) {
+			
+			// TODO: how to handle both messages and conversations, maybe check the view first?
+			if ( !this.sIsElementPresent(lCLVrows) )
+				throw new HarnessException("Conversation List View Rows is not present "+ lCLVrows);
+			
+			// How many items are in the table?
+			int count = this.sGetXpathCount("//div[@id='zl__CLV__rows']//div[contains(@id, 'zli__CLV__')]");
+			logger.debug(myPageName() + " zListSelectItem: number of conversations: "+ count);
+
+			StringBuilder sb = new StringBuilder();
+			
+			// Get each conversation's data from the table list
+			for (int i = 0; i < count; i++) {
 				
-		// TODO: how to handle both messages and conversations, maybe check the view first?
-		if ( !this.sIsElementPresent(lCLVrows) )
-			throw new HarnessException("Conversation List View Rows is not present "+ lCLVrows);
-		
-		// How many items are in the table?
-		int count = this.sGetXpathCount("//div[@id='zl__CLV__rows']//div[contains(@id, 'zli__CLV__')]");
-		logger.debug(myPageName() + " zListSelectItem: number of conversations: "+ count);
+				final String convlocator = "//div[@id='zl__CLV__rows']/div["+ count +"]";
+				String locator;
+				
+				// Look for the subject
+				
+				// Subject - Fragment
+				locator = "//div[@id='zl__CLV__rows']/div["+ count +"]//td[contains(@id, '__su')]";
+				String s = this.sGetText(locator).trim();
+				sb.append(s).append(", ");
+				
+				if ( !s.contains(subject) ) {
+					continue;	// No match
+				}
 
-		StringBuilder sb = new StringBuilder();
-		
-		// Get each conversation's data from the table list
-		for (int i = 0; i < count; i++) {
-			
-			final String convlocator = "//div[@id='zl__CLV__rows']/div["+ count +"]";
-			String locator;
-			
-			// Look for the subject
-			
-			// Subject - Fragment
-			locator = "//div[@id='zl__CLV__rows']/div["+ count +"]//td[contains(@id, '__su')]";
-			String s = this.sGetText(locator).trim();
-			sb.append(s).append(", ");
-			
-			if ( !s.contains(subject) ) {
-				continue;	// No match
+				// The subject matched!
+				// Left-Click on the item
+				this.sClick(convlocator);
+				
+				// No page to return
+				return (null);
 			}
+			
+			throw new HarnessException("Unable to locate item with subject("+ subject +") in ("+ sb.toString() +")");
 
-			// The subject matched!
-			// Left-Click on the item
-			this.sClick(convlocator);
+		} else if ( action == Actions.A_CTRLSELECT ) {
 			
-			// Done!
-			return;
+			throw new HarnessException("implement me!  action = "+ action);
 			
+		} else if ( action == Actions.A_SHIFTSELECT ) {
+			
+			throw new HarnessException("implement me!  action = "+ action);
+			
+		} else if ( action == Actions.A_RIGHTCLICK ) {
+			
+			throw new HarnessException("implement me!  action = "+ action);
+			
+		} else if ( action == Actions.A_MAIL_CHECKBOX ) {
+			
+			throw new HarnessException("implement me!  action = "+ action);
+			
+		} else if ( action == Actions.A_MAIL_EXPANDCONVERSATION ) {
+			
+			throw new HarnessException("implement me!  action = "+ action);
+			
+		} else if ( action == Actions.A_MAIL_FLAG ) {
+			
+			throw new HarnessException("implement me!  action = "+ action);
+			
+		} else {
+			throw new HarnessException("implement me!  action = "+ action);
 		}
-
-		// Failed!
-		throw new HarnessException("Unable to locate item with subject("+ subject +" in ("+ sb.toString() +")");
+		
+		// TODO: once more actions are implemented, may need to enable this
+		// default return command
+		// return (page);
 	}
 
-	/**
-	 * Select (shift-left-click) a conversation/message
-	 * @param subject
-	 * @throws HarnessException
-	 */
-	public void zListShiftSelectItem(String subject) throws HarnessException {
+	@Override
+	public AbsSeleniumObject zListItem(Action action, Action option, String subject) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 
-	/**
-	 * Select (ctrl-left-click) a conversation/message
-	 * @param subject
-	 * @throws HarnessException
-	 */
-	public void zListCtrlSelectItem(String subject) throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-
-	/**
-	 * Right click on a conversation/message
-	 * @param subject
-	 * @throws HarnessException
-	 */
-	public void zListRightClickItem(String subject) throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-
-	/**
-	 * Right click on a conversation/message and select option
-	 * @param subject
-	 * @throws HarnessException
-	 */
-	public void zListRightClickItem(String subject, String option) throws HarnessException {
-		throw new HarnessException("implement me!");
-	}
-
-	/**
-	 * Click on the checkbox next to a conversation/message
-	 * @param subject
-	 * @throws HarnessException
-	 */
-	public void zListCheckItem(String subject) throws HarnessException {
-		// TODO: should this method just toggle it?
-		throw new HarnessException("implement me!");
-	}
-
-	/**
-	 * Click on the flag next to a conversation/message
-	 * @param subject
-	 * @throws HarnessException
-	 */
-	public void zListFlagItem(String subject) throws HarnessException {
-		// TODO: should this method just toggle it?
-		throw new HarnessException("implement me!");
-	}
 
 
 
