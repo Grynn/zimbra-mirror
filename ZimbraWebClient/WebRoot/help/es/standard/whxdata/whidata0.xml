@@ -1,11 +1,38 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="agendas iCal, importar o exportar" >
-  <topic name="importar tu agenda iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
+<key name="}}}agenda remota{{{" >
+  <topic name="Crear nueva agenda" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
-<key name="archivos adjuntos" >
-  <topic name="abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
+<key name="}}}agenda, excluir de disponible/ocupado{{{" >
+  <topic name="Crear nueva agenda" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="}}}agenda, remota{{{" >
+  <topic name="Crear nueva agenda" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="}}}disponible/ocupado, excluir agenda{{{" >
+  <topic name="Crear nueva agenda" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="}}}guardar búsqueda{{{" >
+  <topic name="Crear y guardar búsquedas" url="Search/b_Create_and_Save_a_Search_Query.htm" />
+</key>
+<key name="}}}imprimir tareas{{{" >
+  <topic name="Acerca de las tareas" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="}}}marcar tarea como completa{{{" >
+  <topic name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="}}}olvidar{{{" >
+  <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="}}}sincronizar con otra agenda{{{" >
+  <topic name="Crear nueva agenda" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="}}}tarea, marcar como completa{{{" >
+  <topic name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="}}}tareas, imprimir{{{" >
+  <topic name="Acerca de las tareas" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="añadir firmas" >
   <topic name="añadir tu firma de forma automática" url="Userspecific/b_Automatically_adding_your_signature.htm" />
@@ -16,12 +43,14 @@
 <key name="añadir libretas de direcciones" >
   <topic name="tus libretas de direcciones" url="Contacts/b_Your_Address_Books.htm" />
 </key>
-<key name="bloquear archivos adjuntos" >
-  <topic name="bloqueo de archivos adjuntos" url="reading_mail/attachment_blocking.htm" />
+<key name="archivos adjuntos" >
+  <topic name="abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
 </key>
-<key name="bloqueo de archivos adjuntos" >
-  <topic name="bloqueo de archivos adjuntos" url="reading_mail/attachment_blocking.htm" />
-  <topic name="función de bloqueo de mensajes" url="reading_mail/Message_blocking_feature.htm" />
+<key name="autocompletado de direcciones" >
+  <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="autocompletado de direcciones de correo" >
+  <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="borrador" >
   <topic name="guardar un borrador" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -35,21 +64,11 @@
 <key name="buscar, guardar" >
   <topic name="utilizar la búsqueda" url="Search/b_Using_Search.htm" />
 </key>
-<key name="buzón lleno" >
-  <topic name="Cuotas" url="Navigation_folders_and_tips/quotas.htm" />
-</key>
-<key name="caduca la sesión" >
-  <topic name="si caduca tu sesión" url="Userspecific/if_your_session_expires.htm" />
-</key>
-<key name="carpeta Enviados" >
-  <topic name="la carpeta Enviados" url="Navigation_folders_and_tips/sent_folder.htm" />
-</key>
 <key name="carpeta, fuente RSS" >
   <topic name="suscribirse a una fuente RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
 <key name="carpetas" >
   <topic name="cambiar el nombre de las carpetas" url="Navigation_folders_and_tips/renaming_folders.htm" />
-  <topic name="acerca de las carpetas" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
 <key name="citas privadas" >
   <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
@@ -63,15 +82,6 @@
 <key name="contactos, añadir a la libreta de direcciones" >
   <topic name="añadir nuevos contactos" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
-<key name="contraseña" >
-  <topic name="si olvidas tu contraseña" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="cambiar tu contraseña" url="Userspecific/chaning_your_password.htm" />
-</key>
-<key name="conversaciones" >
-  <key name="ordenar" >
-    <topic name="ordenar conversaciones" url="Navigation_folders_and_tips/sorting_conversations.htm" />
-  </key>
-</key>
 <key name="correo" >
   <topic name="leer el correo" url="reading_mail/reading_mail.htm" />
   <key name="leer" >
@@ -81,17 +91,11 @@
 <key name="crear una consulta de búsqueda" >
   <topic name="utilizar la búsqueda" url="Search/b_Using_Search.htm" />
 </key>
-<key name="Cuotas" >
-  <topic name="Cuotas" url="Navigation_folders_and_tips/quotas.htm" />
-</key>
 <key name="descripción del lenguaje de búsquedas" >
   <topic name="descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
 </key>
 <key name="etiquetas" >
   <topic name="aplicar etiquetas a mensajes y contactos" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
-</key>
-<key name="exportar agendas iCal" >
-  <topic name="importar tu agenda iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="filtrar mensajes" >
   <topic name="filtrar tus mensajes" url="filters/bc_Filtering_your_messages.htm" />
@@ -99,14 +103,20 @@
 <key name="firma, añadir de forma automática" >
   <topic name="añadir tu firma de forma automática" url="Userspecific/b_Automatically_adding_your_signature.htm" />
 </key>
+<key name="formatear con HTML" >
+  <topic name="utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
 <key name="fuente RSS " >
   <topic name="suscribirse a una fuente RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+</key>
+<key name="fuentes" >
+  <topic name="utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="grupos de contactos, añadir" >
   <topic name="añadir nuevos contactos" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
-<key name="importar agendas iCal" >
-  <topic name="importar tu agenda iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
+<key name="HTML" >
+  <topic name="utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="libreta de direcciones, añadir nuevos contactos" >
   <topic name="añadir nuevos contactos" url="Contacts/b_Adding_new_contacts.htm" />
@@ -132,26 +142,23 @@
 <key name="mensajes, configurar las reglas del filtro" >
   <topic name="filtrar tus mensajes" url="filters/bc_Filtering_your_messages.htm" />
 </key>
+<key name="notificación de mensajes" >
+  <topic name="notificaciones de nuevos mensajes" url="Userspecific/New_mail_notifications.htm" />
+</key>
 <key name="nueva ventana, ver mensajes" >
   <topic name="gestionar cómo se visualizan los mensajes" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
-</key>
-<key name="opciones" >
-  <topic name="configurar tus preferencias" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
 <key name="opción, mensaje por ausencia" >
   <topic name="mensaje por ausencia" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="ordenar contenido por panel y columnas" >
-  <topic name="ordenar conversaciones" url="Navigation_folders_and_tips/sorting_conversations.htm" />
+<key name="opciones" >
+  <topic name="configurar tus preferencias" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
-<key name="ordenar las tareas" >
-  <topic name="ordenar las tareas " url="Tasks/Sorting_tasks_.htm" />
+<key name="opciones, notificación de mensaje nuevo" >
+  <topic name="notificaciones de nuevos mensajes" url="Userspecific/New_mail_notifications.htm" />
 </key>
 <key name="organizar una reunión" >
   <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="Papelera" >
-  <topic name="carpeta Papelera" url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="preferencias" >
   <topic name="configurar tus preferencias" url="Userspecific/b_Setting_your_Options.htm" />
@@ -191,9 +198,6 @@
 </key>
 <key name="tipos de archivos adjuntos admitidos" >
   <topic name="tipos de archivos adjuntos admitidos" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-</key>
-<key name="Vaciar Papelera" >
-  <topic name="Cuotas" url="Navigation_folders_and_tips/quotas.htm" />
 </key>
 <key name="ver como HTML" >
   <topic name="abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />

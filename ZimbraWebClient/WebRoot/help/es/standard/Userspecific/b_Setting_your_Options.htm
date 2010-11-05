@@ -1,23 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
 <title>Configurar tus preferencias</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
-p.whs2 { margin-left:40px; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Configurar tus preferencias\nConfigurar tus preferencias");
@@ -57,14 +63,12 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -76,83 +80,84 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
 <h1>Configurar tus preferencias</h1>
-<p>Las preferencias predeterminadas de tu cuenta se configuran al crear la cuenta y definen cómo funcionan el correo, tus libretas de direcciones y la redacción de nuevos mensajes.</p>
-<p>Puedes cambiar esta configuración predeterminada desde la pestaña Preferencias<span style="font-weight: bold;"> 
- <B></B></span>. &nbsp;Si se describe una preferencia aquí que no encuentras   en tu cuenta es porque dicha preferencia no está disponible para tu cuenta.   </p>
+<p>Las preferencias predeterminadas de tu cuenta se configuran al crear la cuenta y definen c&oacute;mo funcionan el correo, tus libretas de direcciones y la redacci&oacute;n de nuevos mensajes.</p>
+<p>Puedes cambiar esta configuraci&oacute;n de preferencia desde la pesta&ntilde;a Preferencias. &nbsp;Si se describe una preferencia aqu&iacute; que no encuentras en tu cuenta es porque dicha preferencia no est&aacute; disponible para tu cuenta.</p>
 <h3>General</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Estás conectado a la versión estándar del programa. Para que   esta versión sea el <span style="font-weight: bold;"><B>Tipo de cliente</B></span>   predeterminado al iniciar sesión, selecciona <span style="font-weight: bold;"><B>Estándar</B></span><span>.</span></p></li>
-	<li class=p><p class="whs2">Se recomienda la versión <b style="font-weight: bold;"><span 
- style="font-weight: normal;">Estándar</span> <span style="font-weight: normal;">si tienes una conexión lenta a Internet o si utilizas un navegador antiguo o para que   el acceso sea más fácil.</span> </b></p></li>
-	<li class=p><p class="whs2">La versión <b><span style="font-weight: normal;">Avanzada</b>   ofrece</span> la serie completa de herramientas de colaboración en la Web. Esta versión funciona mejor con los navegadores más recientes y las conexiones rápidas a Internet. <br>&nbsp;</p></li>
-	<li class=p><p>En <span style="font-weight: bold;"><B>Tema</B></span>, selecciona   el color de fondo para la interfaz de correo.</p></li>
-	<li class=p><p>Indica tu <span style="font-weight: bold;"><B>zona horaria</B></span>   para configurar la fecha y hora de los mensajes que envías y recibes y para poder configurar tus citas de la agenda correctamente. &nbsp;Esta hora   puede ser diferente a la zona horaria configurada para tu ordenador. </p></li>
-	<li class=p><p>Si ves la opción <span style="font-weight: bold;"><B>Cambiar contraseña</B></span>,   significa que la puedes modificar. Si surgen problemas al intentar cambiar la contraseña, ponte en contacto con el administrador de tu cuenta para obtener información sobre el formato de las contraseñas.</p></li>
-	<li class=p><p>En <span style="font-weight: bold;"><B>Configuración de búsquedas</B></span>,   puedes optar por incluir las carpetas Spam y Papelera automáticamente en las búsquedas que realices. Por defecto, no se incluyen estas carpetas en las búsquedas.</p></li>
-	<li class=p><p>En <span style="font-weight: bold;"><B>Buscar idioma</B></span>,   activa la opción <span style="font-weight: bold;"><B>Mostrar siempre cadena de búsqueda </B></span>para   ver los detalles de la cadena búscada en el campo de texto. </p></li>
+<ul type="disc">
+	<li class="p"><p>Est&aacute;s conectado a la versi&oacute;n avanzada del programa. Para que esta versi&oacute;n sea el <span style="font-weight: bold;"><b>Tipo de cliente</b></span> predeterminado al iniciar sesi&oacute;n, selecciona <span style="font-weight: bold;"><b>Est&aacute;ndar</b></span>.</p></li>
+	<li class="p" type="circle"><p style="margin-left: 40px;"><b>Se recomienda la versi&oacute;n <span  	 style="font-weight: bold;"><b>Est&aacute;ndar</b></span> <span style="font-weight: normal;">si tienes una conexi&oacute;n lenta a Internet o si utilizas un navegador antiguo o para que el acceso sea m&aacute;s f&aacute;cil.</span></b></p></li>
+	<li class="p" type="circle"><p style="margin-left: 40px;">La versi&oacute;n <span style="font-weight: normal;"><b  	 style="font-weight: bold;">Avanzada</b> ofr</span>ece la serie completa de herramientas de colaboraci&oacute;n en la web. El programa funciona mejor con los navegadores m&aacute;s recientes y las conexiones r&aacute;pidas a Internet.</p></li>
+	<li class="p"><p>En <span style="font-weight: bold;"><b>Tema</b></span>, selecciona el color de fondo para la interfaz de correo.</p></li>
+	<li class="p"><p>Indica tu <span style="font-weight: bold;"><b>zona horaria</b></span> para configurar la fecha y hora de los mensajes que env&iacute;as y recibes y para poder configurar tus citas de la agenda correctamente. &nbsp;Esta hora puede ser diferente a la zona horaria configurada para tu ordenador.</p></li>
+	<li class="p"><p>Si ves la opci&oacute;n <span style="font-weight: bold;"><b>Cambiar contrase&ntilde;a</b></span>, significa que la puedes modificar. Si surgen problemas al intentar cambiar la contrase&ntilde;a, ponte en contacto con el administrador de tu cuenta para obtener informaci&oacute;n sobre el formato de las contrase&ntilde;as.</p></li>
+	<li class="p"><p>En <span style="font-weight: bold;"><b>Configuraci&oacute;n de b&uacute;squedas</b></span>, puedes optar por incluir las carpetas Spam y Papelera autom&aacute;ticamente en las b&uacute;squedas que realices. Por defecto, no se incluyen estas carpetas en las b&uacute;squedas.</p></li>
+	<li class="p"><p>En <span style="font-weight: bold;"><b>Buscar idioma</b></span>, activa la opci&oacute;n <span style="font-weight: bold;"><b>Mostrar siempre cadena de b&uacute;squeda </b></span>para ver los detalles de la cadena buscada en el campo de texto.</p></li>
 </ul>
 <h3>Correo</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Selecciona cuántos elementos (mensajes o conversaciones) quieres ver por página. Por defecto, se muestran 25 elementos por página pero puedes seleccionar 10, 50 ó 100.</p></li>
-	<li class=p><p>Indica cómo quieres agrupar tus mensajes, si por conversaciones o por mensajes individuales. Si dispones de la <a href="../Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm">función de   conversaciones</a>, por defecto, es la opción predeterminada.</p></li>
-	<li class=p><p>Indica si quieres ver los mensajes con formato HTML para aquéllos que se han formateado así. Si desactivas estas opción, verás los mensajes como texto sin formato y podrás leer las etiquetas HTML que se hayan usado sin modificar la presentación del texto en sí.</p></li>
-	<li class=p><p>Al activar la <span style="font-weight: bold;"><B>Vista previa del mensaje</B></span>&nbsp;, verás las primeras palabras del mensaje al lado del Asunto en esa columna.</p></li>
-	<li class=p><p>La búsqueda que defines en el campo <span style="font-weight: bold;"><B>Búsqueda de correo predeterminada </B></span><span style="font-weight: bold;"> <B></B></span>define la búsqueda que se ejecutará al iniciar sesión. &nbsp;&nbsp;Por defecto, la búsqueda predeterminada es en tu <span style="font-weight: bold;"><B>Bandeja de entrada</B></span>.   &nbsp;Al iniciar sesión, verás el contenido de tu bandeja de entrada. Puedes cambiar este campo para que veas otra carpeta, etiqueta o búsqueda guardada al iniciar sesión. Consulta la sección <a href="../Search/query_language_description.htm">Descripción   del lenguaje de búsquedas</a> para ver la sintaxis adecuada.</p></li>
-	<li class=p><p>Especifica y habilita una dirección para <a href="Setting_a_Forwarding_Address.htm">reenviar   tus mensajes</a>. Puedes activar la casilla para eliminar el mensaje original de tu bandeja de entrada. </p></li>
-	<li class=p><p>Especifica y habilita una dirección para las notificaciones   de que has recibido mensajes nuevos. </p></li>
-	<li class=p><p>Activa el <span style="font-weight: bold;"><B>envío de respuesta automática   </B></span> para responder a los mensajes entrantes con un <a href="vacation_message.htm">   mensaje</a> indicando que estás fuera de la oficina. Introduce el texto del mensaje en el cuadro de texto disponible. </p></li>
-	<li class=p><p>Configura los <span style="font-weight: bold;"><B>Mensajes que he   enviado yo</B></span> para gestionar los que envías y que te incluyen como uno de los destinatarios o que se dirigen a una lista de correo en la que estás tú.</p></li>
+<ul type="disc">
+	<li class="p"><p>Selecciona cu&aacute;ntos elementos (mensajes o conversaciones) quieres ver por p&aacute;gina. Por defecto, se muestran 25 elementos por p&aacute;gina pero puedes seleccionar 10, 50 &oacute; 100.</p></li>
+	<li class="p"><p>Indica c&oacute;mo quieres agrupar tus mensajes, si por conversaciones o por mensajes individuales. Si dispones de la <a href="../Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm">funci&oacute;n de conversaciones</a>, por defecto, es la opci&oacute;n predeterminada.</p></li>
+	<li class="p"><p>Indica si quieres ver los mensajes con formato HTML para aqu&eacute;llos que se han formateado as&iacute;. Si desactivas esta opci&oacute;n, ver&aacute;s los mensajes como texto sin formato y podr&aacute;s leer las etiquetas HTML que se hayan usado sin modificar la presentaci&oacute;n del texto en s&iacute;.</p></li>
+	<li class="p"><p>El <span style="font-weight: bold;"><b>panel de lectura</b></span> puede utilizarse para previsualizar los mensajes de tu bandeja de entrada y de otras carpetas. Cuando se encuentra activado, los mensajes se muestran en el panel de vista previa. El panel de lectura puede encontrarse debajo de la lista de mensajes o a la derecha en una vista de tres paneles.</p></li>
+	<li class="p"><p>Al activar la <span style="font-weight: bold;"><b>Vista previa del mensaje</b></span>, ver&aacute;s las primeras palabras del mensaje al lado del Asunto en esa columna.</p></li>
+	<li class="p"><p>La b&uacute;squeda que defines en el campo <span style="font-weight: bold;"><b>B&uacute;squeda de correo predeterminada</b></span> define la b&uacute;squeda que se ejecutar&aacute; al iniciar sesi&oacute;n. &nbsp;&nbsp;Por defecto, la b&uacute;squeda predeterminada es en tu <span style="font-weight: bold;"><b>Bandeja de entrada</b></span>. &nbsp;Al iniciar sesi&oacute;n, ver&aacute;s el contenido de tu bandeja. Puedes cambiar este campo para que veas otra carpeta, etiqueta o b&uacute;squeda guardada al iniciar sesi&oacute;n. Consulta la secci&oacute;n <a href="../Search/query_language_description.htm">Descripci&oacute;n del lenguaje de b&uacute;squedas</a> para ver la sintaxis adecuada.</p></li>
+	<li class="p"><p>Especifica y habilita una direcci&oacute;n para <a href="Setting_a_Forwarding_Address.htm">reenviar tus mensajes</a>. Puedes activar la casilla para eliminar el mensaje original de tu bandeja de entrada.</p></li>
+	<li class="p"><p>Especifica y habilita una direcci&oacute;n para las <a href="New_mail_notifications.htm">notificaciones</a> de que has recibido mensajes nuevos.</p></li>
+	<li class="p"><p>Activa el <span style="font-weight: bold;"><b>env&iacute;o de respuesta autom&aacute;tica   </b></span> para responder a los mensajes entrantes con un <a href="vacation_message.htm">mensaje</a> indicando que est&aacute;s fuera de la oficina. Escribe el texto de este mensaje en el cuadro de texto y ajusta las fechas de inicio y finalizaci&oacute;n para utilizar el mensaje.</p></li>
+	<li class="p"><p>Configura los <span style="font-weight: bold;"><b>Mensajes que he   enviado yo</b></span> para gestionar los que env&iacute;as y que te incluyen como uno de los destinatarios o que se dirigen a una lista de correo en la que est&aacute;s t&uacute;.</p></li>
+	<li class="p"><p>Si has configurado tu cuenta para usar un programa POP3, tambi&eacute;n puedes configurar qu&eacute; se hace al descargarte los mensajes a ZWC.</p></li>
 </ul>
 <h3>Redactar</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>En la sección <span style="font-weight: bold;"><B>Responder/Responder a todos</B></span>,   indica si quieres incluir el texto del mensaje original en el cuerpo de tu respuesta. </p></li>
-	<ul type="disc" class="whs1">
-		<li class=p><p><span style="font-weight: bold;"><B>Texto completo en el mensaje</B></span>   incluye el mensaje original en el cuerpo del mensaje sin añadir ninguna marca especial.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Texto completo en el mensaje   con prefijo</B></span> añade un prefijo a cada línea del mensaje original.   Este carácter puede ser &gt; o |.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>Un archivo adjunto</B></span>   envía el mensaje original como un archivo adjunto a tu respuesta.</p></li>
-		<li class=p><p><span style="font-weight: bold;"><B>No incluir</B></span>   no incluye el mensaje original en tu respuesta.</p></li>
-	</ul>
-	<li class=p><p>En <span style="font-weight: bold;"><B>Reenviar</B></span>,   indica cómo quieres incluir el texto original en un mensaje que reenvías: en el cuerpo del mensaje, en el cuerpo del mensaje con un prefijo o como un archivo adjunto.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Carácter como prefijo</B></span>   indica el prefijo que se usará en tus respuestas y mensajes reenviados.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Mensajes enviados</B></span>,   selecciona <span style="font-weight: bold;"><B>Guardar una copia de los mensajes enviados</B></span>   para guardar una copia de todos los mensajes que envías en la carpeta Enviados. </p></li>
+<ul type="disc">
+	<li class="p"><p>En <span style="font-weight: bold;"><b>Redactar</b></span>: selecciona si deseas redactar tus mensajes mediante HTML o como texto sin formato. HTML permite redactar mensaje con opciones de formato de texto entre las que se incluyen la fuente, el tama&ntilde;o y el color.</p></li>
+</ul>
+<ul type="disc">
+	<li class="p"><p>En la secci&oacute;n <span style="font-weight: bold;"><b>Responder/Responder a todos</b></span>, indica si quieres incluir el texto del mensaje original en el cuerpo de tu respuesta.</p></li>
+	<li style="list-style: none; display: inline;"><ul type="circle">
+		<li class="p"><p><span style="font-weight: bold;"><b>Texto completo en el mensaje</b></span> incluye el mensaje original en el cuerpo del mensaje sin a&ntilde;adir ninguna marca especial.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Texto completo en el mensaje con prefijo</b></span> a&ntilde;ade un prefijo a cada l&iacute;nea del mensaje original. Este car&aacute;cter puede ser &gt; o |.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>Un archivo adjunto</b></span> env&iacute;a el mensaje original como un archivo adjunto a tu respuesta.</p></li>
+		<li class="p"><p><span style="font-weight: bold;"><b>No incluir</b></span> no incluye el mensaje original en tu respuesta.</p></li>
+	</ul></li>
+	<li class="p"><p>En <span style="font-weight: bold;"><b>Reenviar</b></span>, indica c&oacute;mo quieres incluir el texto original en un mensaje que reenv&iacute;as: en el cuerpo del mensaje, en el cuerpo del mensaje con un prefijo o como un archivo adjunto.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Car&aacute;cter como prefijo</b></span> indica el prefijo que se usar&aacute; en tus respuestas y mensajes reenviados.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Mensajes enviados</b></span>, selecciona <span style="font-weight: bold;"><b>Guardar una copia de los mensajes enviados</b></span> para guardar una copia de todos los mensajes que env&iacute;as en la carpeta Enviados.</p></li>
 </ul>
 <h3>Firmas</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Puedes crear firmas para incluirlas en tus mensajes de correo. La firma puede incluir tu nombre y cualquier texto adicional hasta alcanzar el número máximo de caracteres permitido para tu cuenta. Si has creado varias identidades de correo, también puedes crear una firma particular para cada dirección.</p></li>
+<ul type="disc">
+	<li class="p"><p>Puedes crear firmas para incluirlas en tus mensajes de correo. La firma puede incluir tu nombre y cualquier texto adicional hasta alcanzar el n&uacute;mero m&aacute;ximo de caracteres permitido para tu cuenta. Si has creado varias identidades de correo, tambi&eacute;n puedes crear una firma particular para cada direcci&oacute;n.</p></li>
+	<li class="p"><p>Selecciona la ubicaci&oacute;n de la firma. Esta es la ubicaci&oacute;n de la firma de los mensajes respondidos. &iquest;Deseas que la firma figure sobre los mensajes incluidos en la respuesta o al final del mensaje?</p></li>
 </ul>
 <h3>Libreta de direcciones</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Indica el número de contactos que quieres ver por página. Por defecto, se muestran 25.</p></li>
-	<li class=p><p>Activa la función para añadir direcciones automáticamente a tu libreta de direcciones cada vez que envías un mensaje. Si activas esta opción, se añadirán las direcciones a la libreta Destinatarios.</p></li>
-	<li class=p><p>El enlace de <span style="font-weight: bold;"><B>página para gestionar las   libretas de direcciones</B></span> sirve para ir a la página de Contactos donde podrás   crear nuevas libretas y enlazar a libretas compartidas, exportar e importar tus listas de contactos y eliminar los contactos de tus libretas. </p></li>
+<ul type="disc">
+	<li class="p"><p>Indica el n&uacute;mero de contactos que quieres ver por p&aacute;gina. Por defecto, se muestran 25.</p></li>
+	<li class="p"><p>Activa la funci&oacute;n para a&ntilde;adir direcciones autom&aacute;ticamente a tu libreta de direcciones cada vez que env&iacute;as un mensaje. Si activas esta opci&oacute;n, se a&ntilde;adir&aacute;n las direcciones a la libreta Destinatarios.</p></li>
+	<li class="p"><p>El enlace de <span style="font-weight: bold;"><b>p&aacute;gina para gestionar las   libretas de direcciones</b></span> sirve para ir a la p&aacute;gina de Contactos donde podr&aacute;s crear nuevas libretas y enlazar a libretas compartidas, exportar e importar tus listas de contactos y eliminar los contactos de tus libretas.</p></li>
 </ul>
 <h3>Agenda</h3>
-<ul type="disc" class="whs1">
-	<li class=p><p>Indica cómo quieres <a href="../Calendar/Calendar_Views.htm">ver   tu agenda de Zimbra</a>. Por defecto, se utiliza la semana laboral.</p></li>
-	<li class=p><p>Indica con qué día de la semana quieres que empiecen las semanas de tu agenda.</p></li>
-	<li class=p><p>En la sección <span style="font-weight: bold;"><B>Vista por día/semana</B></span>,   puedes indicar a qué hora empiezan y acaban los días de la agenda.</p></li>
-	<li class=p><p>Si viajas entre zonas horarias, puedes optar por   <span style="font-weight: bold;"><B>mostrar la lista de zonas horarias   en la vista de citas</B></span>. </p></li>
-	<li class=p><p>El enlace de <span style="font-weight: bold;"><B>página para administrar las agendas</B></span>   te llevará a la página de la agenda donde podrás modificar una agenda existente, crear nuevas agendas, suscribirte a otras agendas o enlazar a una agenda compartida.</p></li>
+<ul type="disc">
+	<li class="p"><p>Indica c&oacute;mo quieres <a href="../Calendar/Calendar_Views.htm">ver tu agenda</a>. Por defecto, se utiliza la semana laboral.</p></li>
+	<li class="p"><p>Indica con qu&eacute; d&iacute;a de la semana quieres que empiecen las semanas de tu agenda.</p></li>
+	<li class="p"><p>En la secci&oacute;n <span style="font-weight: bold;"><b>Vista por d&iacute;a/semana</b></span>, puedes indicar a qu&eacute; hora empiezan y acaban los d&iacute;as de la agenda.</p></li>
+	<li class="p"><p>Si viajas entre zonas horarias, puedes optar por <span style="font-weight: bold;"><b>mostrar la lista de zonas horarias en la vista de citas</b></span>.</p></li>
+	<li class="p"><p>El enlace de <span style="font-weight: bold;"><b>p&aacute;gina para administrar las agendas</b></span> te llevar&aacute; a la p&aacute;gina de la agenda donde podr&aacute;s modificar una agenda existente, crear nuevas agendas, suscribirte a otras agendas o enlazar a una agenda compartida.</p></li>
 </ul>
 <h3>Cuentas</h3>
-<p>Al enviar, responder a o reenviar un mensaje, siempre se asocia una identidad a ese mensaje. &nbsp;Se trata de la identidad predeterminada creada como el nombre de la cuenta. Puedes cambiar esta &quot;identidad&quot; o nombre que se incluye en el campo De: de tus mensajes y puedes seleccionar la firma que se incluirá automáticamente en tus mensajes (también puedes indicar que no se añada la firma automáticamente).</p>
+<p>Al enviar, responder a o reenviar un mensaje, siempre se asocia una identidad a ese mensaje. &nbsp;Se trata de la identidad predeterminada creada como el nombre de la cuenta. Puedes cambiar esta &quot;identidad&quot; o nombre que se incluye en el campo De: de tus mensajes y puedes seleccionar la firma que se incluir&aacute; autom&aacute;ticamente en tus mensajes.</p>
 <h3>Filtros de correo</h3>
-<p>Los filtros aplican una serie de reglas de coincidencia al correo entrante y luego ejecutan la acción correspondiente. Utiliza esta pestaña para definir las reglas de los filtros tal como   se describe en <a href="../filters/bc_Filtering_your_messages.htm">Filtrar tus mensajes</a></p>
+<p>Los filtros aplican una serie de reglas de coincidencia al correo entrante y luego ejecutan la acci&oacute;n correspondiente. Utiliza esta pesta&ntilde;a para definir las reglas de los filtros de correo tal como se describe en Filtrar tus mensajes.</p>
 <h3>Accesos directos</h3>
-<p>Los accesos directos del teclado te permiten usar el programa sin tener que usar el ratón. La lista detalla todos los accesos directos existentes. Consulta también la sección <a 
- href="../Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm">Teclas de acceso directo</a></p>
-<script type="text/javascript" language="javascript1.2">
+<p>Los accesos directos del teclado te permiten usar el programa sin tener que usar el rat&oacute;n. La lista detalla todos los accesos directos existentes. Consulta tambi&eacute;n la secci&oacute;n <a  	 href="../Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm">Teclas de acceso directo</a>.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

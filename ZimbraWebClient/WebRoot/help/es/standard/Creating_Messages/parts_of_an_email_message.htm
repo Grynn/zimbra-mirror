@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Los componentes de un mensaje</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>componentes de un mensaje</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Redactar mensajes de correo\nLos componentes de un mensaje");
@@ -56,14 +63,12 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -75,33 +80,36 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>Los componentes de un mensaje</h1>
-<p>Un mensaje de correo electrónico consiste en los componentes generales detallados a continuación:</p>
+<p>Un mensaje de correo electr&oacute;nico consiste en los componentes generales detallados a continuaci&oacute;n:</p>
 <h3>Encabezado</h3>
-<p>El encabezado del mensaje contiene información sobre el remitente y los destinatarios.   El contenido exacto puede variar según el sistema de correo electrónico con el que se ha redactado el mensaje. Por lo general, todos los encabezados contienen los siguientes datos:</p>
-<ul type="disc" class="whs1">
-	<li class=p><p><span style="font-weight: bold;"><B>Asunto.</B></span> El asunto  es una descripción del tema del mensaje y se visualiza en la mayoría de los sistemas de correo electrónico que detallan los mensajes de manera individualizada. El asunto puede ser algo como &quot;misión corporativa para 2007&quot; o, si tu sistema anti-spam es demasiado permisivo, algo como &quot;¡Pierde 10 kilos en 10 días! Pregúntame   cómo.&quot;</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Remitente (De).</B></span>   Es la dirección de correo electrónico del que manda el mensaje. Se da por sentado que es la misma dirección a la que se responde salvo que se haya especificado una dirección diferente para ello.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Fecha y hora recibido   (En)</B></span>. La hora en la que se recibió el mensaje.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Responder a.</B></span> Se trata   de la dirección de correo electrónico que recibirá tu respuesta al pulsar en el botón para responder a un mensaje.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Destinatario (Para:).</B></span>   El nombre/apellido del destinatario del mensaje, tal como lo haya configurado el remitente.</p></li>
-	<li class=p><p><span style="font-weight: bold;"><B>Dirección del destinatario.</B></span>   La dirección de correo electrónico del destinatario o la dirección a la que se envió el mensaje de verdad.</p></li>
+<p>El encabezado del mensaje contiene informaci&oacute;n sobre el remitente y los destinatarios. El contenido exacto puede variar seg&uacute;n el sistema de correo electr&oacute;nico con el que se ha redactado el mensaje. Por lo general, todos los encabezados contienen los siguientes datos:</p>
+<ul type="disc">
+	<li class="p"><p><span style="font-weight: bold;"><b>Asunto.</b></span> El asunto  es una descripci&oacute;n del tema del mensaje y se visualiza en la mayor&iacute;a de los sistemas de correo electr&oacute;nico que detallan los mensajes de manera individualizada. El asunto puede ser algo como &quot;misi&oacute;n corporativa para 2010&quot; o, si tu sistema anti-spam es demasiado permisivo, algo como &quot;&iexcl;Pierde 10 kilos en 10 d&iacute;as! Preg&uacute;ntame c&oacute;mo.&quot;</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Remitente (De).</b></span> Es la direcci&oacute;n de correo electr&oacute;nico de la persona que env&iacute;a el mensaje. Se da por sentado que es la misma direcci&oacute;n a la que se responde salvo que se haya especificado una direcci&oacute;n diferente para ello.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Fecha y hora recibido   (En)</b></span>. La fecha y la hora en que se recibi&oacute; el mensaje.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Responder a.</b></span> Se trata   de la direcci&oacute;n de correo electr&oacute;nico que recibir&aacute; tu respuesta al pulsar en el bot&oacute;n para responder a un mensaje.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Destinatario (Para:).</b></span>   El nombre/apellido del destinatario del mensaje, tal como lo haya configurado el remitente.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Direcci&oacute;n del destinatario.</b></span>   La direcci&oacute;n de correo electr&oacute;nico del destinatario o la direcci&oacute;n a la que se envi&oacute; el mensaje de verdad.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Archivos adjuntos</b></span>. Archivos que se adjuntan al mensaje. </p></li>
 </ul>
 <h3>Texto del mensaje</h3>
-<p>El texto del mensaje es el contenido en sí del mensaje, por ejemplo, &quot;Los empleados que pueden beneficiarse del nuevo programa de formación deberán ponerse en contacto con los responsables de su departamento antes del viernes que viene si quieren apuntarse.&quot;   &nbsp;El texto del mensaje también puede incluir una firma o un texto automático que introduce el sistema de correo del remitente.</p>
-<h3>Archivos adjuntos</h3>
-<p>Son archivos separados que se pueden optar por enviar junto al mensaje.</p>
-<script type="text/javascript" language="javascript1.2">
+<p>El texto del mensaje es el contenido en s&iacute; del mensaje, por ejemplo, &quot;Los empleados que pueden beneficiarse del nuevo programa de formaci&oacute;n deber&aacute;n ponerse en contacto con los responsables de su departamento antes del viernes que viene si quieren apuntarse.&quot; &nbsp;El texto del mensaje tambi&eacute;n puede incluir una firma o un texto autom&aacute;tico que introduce el sistema de correo del remitente.</p>
+<p>&nbsp;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

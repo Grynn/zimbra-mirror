@@ -1,22 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Crear nueva agenda</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ol.whs1 { list-style:decimal; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>Create New Calendar</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,26 +20,41 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Gestionar tu agenda\nCrear nueva agenda");
+	addTocInfo("Gestionar tu agenda\n}}}Crear una nueva Agenda{{{");
 addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 
 	}
@@ -56,14 +64,12 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -75,39 +81,76 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Crear nuevas agendas</h1>
-<p>Se crea una agenda automáticamente para ti y puedes crear más   para estar al tanto de diferentes funciones. &nbsp;Por   ejemplo, puedes crear una agenda para el trabajo, otra para tus actividades personales y otra para   las de la empresa, puedes suscribirte a una agenda disponible en Internet y puedes crear un enlace a una agenda compartida. </p>
-<p>Puedes usar la Vista   de agenda para ver dos o más agendas, una al lado de la otra.</p>
-<h6>Para crear una agenda</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Pulsa en la pestaña Agenda.</p></li>
-	<li class=p><p>En el panel general de la agenda, haz clic para <span style="font-weight: bold;"><B>editar</B></span>.   </p></li>
-	<li class=p><p>En la barra de herramientas, haz clic en <span style="font-weight: bold;"><B>Nueva agenda</B></span>. </p></li>
-	<li class=p><p>Ponle un nombre a la agenda y selecciona el color que quieres usar para resaltar las actividades de esa agenda. Si no quieres que los demás vean las actividades de esa agenda, &nbsp;activa la casilla <span style="font-weight: bold;"><B>Excluir esta agenda cuando se informe de tiempo libre/ocupado</B></span>.</p></li>
-	<li class=p><p>Por defecto, está habilitada la opción <span style="font-weight: bold;"><B>Comprobado   en interfaz</B></span>. Se visualizarán las actividades de esta agenda al abrir la vista Agenda. &nbsp;Si   no quieres ver esta agenda junto a otra, desactiva la casilla. En este caso, para ver las actividades de esta agenda, deberás seleccionar   la agenda y abrirla. </p></li>
-	<li class=p><p>Pulsa en <span style="font-weight: bold;"><B>Crear agenda</B></span>.</p></li>
+//]]></script>
+<h1>Creating new calendars</h1>
+<p>One calendar is created for you, and you can create additional calendars to keep track of different type of functions. &#160;For example, you can create a calendar for work, for personal, and for company activities, you can subscribe to a calendar that is available on the Internet, and you can link to a calendar that is being shared with you.</p>
+<p>You can use the Schedule view &#160;to see two or more of your calendars side-by-side.</p>
+<h6>To create a calendar</h6>
+<ol type="1">
+<li class="p">
+<p>Select the Calendar tab.</p>
+</li>
+<li class="p">
+<p>In the Calendar Overview pane, click <span style="font-weight: bold;"><b>edit</b></span>.</p>
+</li>
+<li class="p">
+<p>In the toolbar click <span style="font-weight: bold;"><b>New Calendar</b></span>.</p>
+</li>
+<li class="p">
+<p>Type the name of the calendar</p>
+</li>
+<li class="p">
+<p>Select a color to display the Calendar activities. This lets color-code calendars in your mailbox so that activities for that calendar always displays in the selected color.</p>
+</li>
+<li class="p">
+<p>If you do not want the calendar activities to be viewed by others, &#160;check <span style="font-weight: bold;"><b>Exclude this calendar when reporting free/busy times</b></span>.</p>
+</li>
+<li class="p">
+<p>By default <span style="font-weight: bold;"><b>Checked in 
+UI</b></span> is enabled. Activities for this calendar will display when you open the Calendar view. &#160;If you do not want to see this calendar along with the other calendar, 
+uncheck the box. In that case, to see this calendar's activities, you select the calendar and open it.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Create Calendar</b></span>.</p>
+</li>
 </ol>
-<h6>Para suscribirte a otra agenda</h6>
-<ol type="1" class="whs1">
-	<li class=p><p>Selecciona la pestaña <span style="font-weight: bold;"><B>Agenda</B></span>.</p></li>
-	<li class=p><p>En el panel general de la agenda, haz clic para <span style="font-weight: bold;"><B>editar</B></span>. Verás los datos predeterminados de la agenda. &nbsp;</p></li>
-	<li class=p><p>En la barra de herramientas, haz clic en <span style="font-weight: bold;"><B>Suscribirse a agenda</B></span>.&nbsp;</p></li>
-	<li class=p><p>Ponle un nombre a la agenda, introduce una dirección URL iCal   válida para la agenda remota y selecciona un color para las actividades de la agenda.</p></li>
-	<li class=p><p>Pulsa en <span style="font-weight: bold;"><B>Crear agenda</B></span>.</p></li>
+<h6>To subscribe to another calendar</h6>
+<ol type="1">
+<li class="p">
+<p>Select the <span style="font-weight: bold;"><b>Calendar</b></span> tab.</p>
+</li>
+<li class="p">
+<p>In the Calendar Overview pane, click <span style="font-weight: bold;"><b>edit</b></span>. The default calendar information is displayed. &#160;</p>
+</li>
+<li class="p">
+<p>In the toolbar, click <span style="font-weight: bold;"><b>Subscribe to Calendar.</b></span> &#160;</p>
+</li>
+<li class="p">
+<p>Type the name of the calendar, enter a valid 
+iCal file URL for the remote calendar, select a color to display the Calendar activities.</p>
+</li>
+<li class="p">
+<p>If you do not want the calendar activities to be viewed by others, &#160;check <span style="font-weight: bold;"><b>Exclude this calendar when reporting free/busy times</b></span>.</p>
+</li>
+<li class="p">
+<p>By default <span style="font-weight: bold;"><b>Checked in 
+UI</b></span> is enabled. Activities for this calendar will display when you open the Calendar view. &#160;If you do not want to see this calendar along with the other calendar, 
+uncheck the box. In that case, to see this calendar's activities, you select the calendar and open it.</p>
+</li>
+<li class="p">
+<p>Click <span style="font-weight: bold;"><b>Create Calendar.</b></span></p>
+</li>
 </ol>
-<h6>&nbsp;</h6>
-<p>&nbsp;</p>
-<script type="text/javascript" language="javascript1.2">
+<h6>&#160;</h6>
+<p>&#160;</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

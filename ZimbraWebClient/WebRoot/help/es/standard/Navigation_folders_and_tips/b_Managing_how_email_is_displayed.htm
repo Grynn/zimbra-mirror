@@ -1,23 +1,15 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Gestionar cómo se visualizan los mensajes</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-img_whs1 { border:none; float:none; border-style:none; }
-p.whs2 { font-weight:bold; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>gestionar c&oacute;mo se visualizan los mensajes</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -28,26 +20,41 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
-	addTocInfo("Gestionar tus mensajes \nGestionar cómo se visualizan los mensajes");
+	addTocInfo("Gestionar tus mensajes \ngestionar cómo se visualizan los mensajes");
 addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 
 	}
@@ -57,14 +64,12 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -76,31 +81,30 @@ else
 		document.location.reload();
 
 //-->
-</script>
-<h1>Gestionar cómo se visualizan los mensajes</h1>
-<p>Puedes ver tus mensajes como <span style="font-weight: bold;"><B>Mensajes individuales</B></span>   o como <span style="font-weight: bold;"><B>Conversaciones</B></span>. </p>
-<p>Para cambiar cómo se agrupan los mensajes, ve a <span style="font-weight: bold;"><B>Preferencias en la pestaña   Correo</B></span> y cambia la opción de <span style="font-weight: bold;"><B>Agrupar correo   por</B></span>. </p>
+//]]></script>
+<h1>gestionar c&oacute;mo se visualizan los mensajes</h1>
+<p>Puedes ver tus mensajes como <span style="font-weight: bold;"><b>Mensajes individuales</b></span> o como <span style="font-weight: bold;"><b>Conversaciones</b></span>.</p>
+<p>Para cambiar c&oacute;mo se agrupan los mensajes, ve a <span style="font-weight: bold;"><b>Preferencias en la pesta&ntilde;a Correo</b></span> y cambia la opci&oacute;n de <span style="font-weight: bold;"><b>Agrupar correo por</b></span>.</p>
+<p>Tambi&eacute;n puedes ver mensajes en una vista de tres paneles, con el panel de lectura situado a la izquierda.</p>
 <h2>Mensajes</h2>
-<p>Los mensajes de correo agrupados como mensajes individuales se muestran con el mensaje más reciente encabezando las carpetas de mensajes. Los mensajes sin leer están resaltados de negrita. Al mirar a la línea de cada mensaje, verás quién es el remitente, si incluye un archivo adjunto, el asunto del mensaje, en qué carpeta se ha guardado, su tamaño y cuándo lo recibiste. &nbsp;Si   los mensajes tienen una marca de seguimiento o una etiqueta, también la verás aquí.</p>
-<p><img src="../message_group75.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
-<h2>Conversaciones</h2>
-<p>Si agrupas los mensajes por conversaciones, se detallarán por su asunto.   &nbsp;Una conversación es un grupo de mensajes que comparten el mismo asunto. &nbsp;Si se modifica el asunto, no se incluirá   ese mensaje en la conversación.</p>
-<p>Sólo se verá el asunto una vez en el panel de conversaciones. Verás el número de los mensajes en la conversación entre paréntesis después del asunto. Al entrar un nuevo mensaje en esa conversación, se moverá ésta a la parte superior de la lista de mensajes. Las conversaciones que incluyen mensajes sin leer estarán   en <span style="font-weight: bold;"><B>negrita</B></span>.</p>
-<p class="whs2">Vista por conversación</p>
-<p><img src="../conversationview.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"></p>
+<p>Los mensajes de correo agrupados como mensajes individuales se muestran con el mensaje m&aacute;s reciente encabezando las carpetas de mensajes. Los mensajes sin leer est&aacute;n resaltados de negrita. Al mirar a la l&iacute;nea de cada mensaje, ver&aacute;s qui&eacute;n es el remitente, si incluye un archivo adjunto, el asunto del mensaje, en qu&eacute; carpeta se ha guardado, su tama&ntilde;o y cu&aacute;ndo lo recibiste. &nbsp;Si los mensajes tienen una marca de seguimiento o una etiqueta, tambi&eacute;n la ver&aacute;s aqu&iacute;.</p>
+<p><img src="../message_group75.png" style="border: none;" alt="message_group75.png" width="626" height="102" border="0" /></p>
+<h2>conversaciones</h2>
+<p>Si agrupas los mensajes por conversaciones, se detallar&aacute;n por su asunto. &nbsp;Una conversaci&oacute;n es un grupo de mensajes que comparten el mismo asunto. &nbsp;Si se modifica el asunto, no se incluir&aacute; ese mensaje en la conversaci&oacute;n.</p>
+<p>S&oacute;lo se ver&aacute; el asunto una vez en el panel de conversaciones. Ver&aacute;s el n&uacute;mero de los mensajes en la conversaci&oacute;n entre par&eacute;ntesis despu&eacute;s del asunto. Al entrar un nuevo mensaje en esa conversaci&oacute;n, se mover&aacute; &eacute;sta a la parte superior de la lista de mensajes. Las conversaciones que incluyen mensajes sin leer estar&aacute;n en <span style="font-weight: bold;"><b>negrita</b></span>.</p>
+<p style="font-weight: bold;">Vista por conversaci&oacute;n</p>
+<p><img src="../conversationview.png" style="border: none;" alt="conversationview.png" width="627" height="98" border="0" /></p>
 <p>&nbsp;</p>
-<p>Haz doble clic en la conversación para ver los mensajes dentro de la conversación.   Haz clic en un mensaje para ver su contenido en el panel de lectura más abajo.   En la barra de herramientas del mensaje, puedes pulsar en el icono <img src="../newwindowbutton.png" x-maintain-ratio="TRUE" border="0" class="img_whs1"> para ver el mensaje en una nueva ventana.</p>
-<p>Se visualizarán todos los mensajes relacionados con la conversación, incluso si están guardados en otras carpetas. La columna <span style="font-weight: bold;"><B>Carpeta</B></span>   indica la carpeta donde está archivado el mensaje. Las conversaciones, sin embargo, no duran eternamente. Si el último mensaje de una conversación se envió hace 30 días o más, los mensajes que se envíen posteriormente con el mismo asunto iniciarán una nueva conversación.</p>
-<script type="text/javascript" language="javascript1.2">
+<p>Haz doble clic en la conversaci&oacute;n para ver los mensajes dentro de la conversaci&oacute;n. Haz clic en un mensaje para ver su contenido en el panel de lectura m&aacute;s abajo. En la barra de herramientas del mensaje, puedes hacer clic en el icono <img src="../newwindowbutton.png" style="border: none;" alt="newwindowbutton.png" width="22" height="18" border="0" /> para ver el mensaje en una nueva ventana.</p>
+<p>Se visualizar&aacute;n todos los mensajes relacionados con la conversaci&oacute;n, incluso si est&aacute;n guardados en otras carpetas. La columna <span style="font-weight: bold;"><b>Carpeta</b></span>   indica la carpeta donde est&aacute; archivado el mensaje. Las conversaciones, sin embargo, no duran eternamente. Si el &uacute;ltimo mensaje de una conversaci&oacute;n se envi&oacute; hace 30 d&iacute;as o m&aacute;s, los mensajes que se env&iacute;en posteriormente con el mismo asunto iniciar&aacute;n una nueva conversaci&oacute;n.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>

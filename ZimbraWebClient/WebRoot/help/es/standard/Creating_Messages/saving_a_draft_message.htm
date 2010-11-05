@@ -1,22 +1,14 @@
-<!doctype HTML public "-//W3C//DTD HTML 4.0 Frameset//EN">
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!-- saved from url=(0014)about:internet -->
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="content-type" content="text/html; charset=utf-8">
-<meta name="generator" content="Adobe RoboHelp - www.adobe.com">
-<title>Guardar un borrador</title>
-<link rel="stylesheet" href="../default_ns.css"><script type="text/javascript" language="JavaScript" title="WebHelpSplitCss">
-<!--
-if (navigator.appName !="Netscape")
-{   document.write("<link rel='stylesheet' href='../default.css'>");}
-//-->
-</script>
-<style type="text/css">
-<!--
-ul.whs1 { list-style:disc; }
--->
-</style><script type="text/javascript" language="JavaScript" title="WebHelpInlineScript">
-<!--
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="Adobe RoboHelp 8" />
+<title>guardar un borrador</title>
+<link rel="StyleSheet" href="../default.css" type="text/css" />
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
      location.reload();
@@ -27,23 +19,38 @@ if ((parseInt(navigator.appVersion) == 4) && (navigator.appName == "Netscape")) 
 	onresize = reDo;
 }
 onerror = null; 
-//-->
+//]]>
 </script>
 <style type="text/css">
 <!--
-div.WebHelpPopupMenu { position:absolute; left:0px; top:0px; z-index:4; visibility:hidden; }
+div.WebHelpPopupMenu { position:absolute;
+left:0px;
+top:0px;
+z-index:4;
+visibility:hidden; }
 -->
-</style><script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
+</style>
+<script type="text/javascript" language="javascript1.2" src="../whmsg.js"></script>
 <script type="text/javascript" language="javascript" src="../whver.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whproxy.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whutils.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whlang.js"></script>
 <script type="text/javascript" language="javascript1.2" src="../whtopic.js"></script>
+
 </head>
-<body><script type="text/javascript" language="javascript1.2">
+<body><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.gbWhTopic)
 {
+	var strUrl = document.location.href;
+	var bc = 0;
+	var n = strUrl.toLowerCase().indexOf("bc-");
+	if(n != -1)
+	{
+		document.location.href = strUrl.substring(0, n);
+		bc = strUrl.substring(n+3);
+	}
+
 	if (window.addTocInfo)
 	{
 	addTocInfo("Redactar mensajes de correo\nGuardar un borrador");
@@ -56,14 +63,12 @@ addButton("show",BTN_TEXT,"Mostrar","","","","",0,0,"","","");
 	if (window.writeIntopicBar)
 		writeIntopicBar(1);
 
-	if(1)
-	{
 	
-	}
+	
 
 	if (window.setRelStartPage)
 	{
-	setRelStartPage("../Zimbra_Basic_User_Help.htm");
+	setRelStartPage("../Zimbra_User_Help.htm");
 
 		autoSync(1);
 		sendSyncInfo();
@@ -75,30 +80,37 @@ else
 		document.location.reload();
 
 //-->
-</script>
+//]]></script>
+<div style="width: 100%; position: relative;" id="header">
+	
+</div>
+
+
 <h1>Guardar un borrador</h1>
-<p>Puedes guardar el mensaje que estás redactando para terminarlo y enviarlo más tarde. &nbsp;Se guardan estos mensajes en la carpeta Borradores hasta que los envíes o elimines de la carpeta. </p>
-<h6>Para crear un borrador y modificarlo después:</h6>
-<ul type="disc" class="whs1">
-	<li style="x-condition: BasicWC;" class=p><p>Escribe tu mensaje.</p></li>
-	<li class=p><p>Pulsa en <span style="font-weight: bold;"><B>Guardar borrador</B></span>.</p></li>
-	<li class=p><p>Se guardará en la carpeta <span style="font-weight: bold;"><B>Borradores</B></span>.</p></li>
-</ul>
+<p>Puedes guardar el mensaje que est&aacute;s redactando para terminarlo y enviarlo m&aacute;s tarde. &nbsp;Estos mensajes se guardan en la carpeta Borradores hasta que los env&iacute;es o elimines de la carpeta.</p>
+<p>Puedes configurar tus preferencias para que los mensajes que est&aacute;s redactando se guarden autom&aacute;ticamente como borradores. Tambi&eacute;n puedes hacer clic en <span style="font-weight: bold;"><b>Guardar borrador</b></span> mientras redactas el mensaje para guardarlo como borrador.</p>
+<h6>Configurar tus preferencias para guardar los borradores autom&aacute;ticamente</h6>
+<p>Ve a la pesta&ntilde;a Redactar&gt;Preferencias y activa la opci&oacute;n <span style="font-weight: bold;"><b>Guardar autom&aacute;ticamente borradores de los mensajes mientras los redactas</b></span>. Los mensajes que redactas se guardan autom&aacute;ticamente como borradores cada pocos minutos.</p>
+<h6>Para guardar un mensaje de forma manual:</h6>
+<ol type="1">
+	 <li class="p"><p>Escribe tu mensaje.</p></li>
+	<li class="p"><p>Pulsa en <span style="font-weight: bold;"><b>Guardar borrador</b></span>.</p></li>
+</ol>
+<p style="margin-left: 40px;">Se guardar&aacute; en la carpeta <span  	 style="font-weight: bold;"><b>Borradores</b></span>.</p>
+<p>&nbsp;</p>
 <h6>Para recuperar un borrador</h6>
-<ul type="disc" class="whs1">
-	<li class=p><p>Abre la carpeta <span style="font-weight: bold;"><B>Borradores</B></span>   y haz clic en el mensaje en cuestión.</p></li>
-	<li class=p><p>Podrás terminar de redactar y enviar el mensaje como si fuera un mensaje normal.   Al enviar el mensaje, se eliminará de la carpeta Borradores.</p></li>
+<ul type="disc">
+	<li class="p"><p>Abre la carpeta <span style="font-weight: bold;"><b>Borradores</b></span>, haz clic en el mensaje, o selecciona el mensaje y pulsa en <span  	 style="font-weight: bold;"><b>Editar</b></span> en la barra de herramientas.</p></li>
 </ul>
-<script type="text/javascript" language="javascript1.2">
+<p>Podr&aacute;s terminar de redactar y enviar el mensaje como si fuera un mensaje normal. Al enviar el mensaje, se eliminar&aacute; de la carpeta Borradores.</p>
+<script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
-highlightSearch();
 if (window.writeIntopicBar)
 	writeIntopicBar(0);
-if(0)
-{
 
-}
+
+highlightSearch();
 //-->
-</script>
+//]]></script>
 </body>
 </html>
