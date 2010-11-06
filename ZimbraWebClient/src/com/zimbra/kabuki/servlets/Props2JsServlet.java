@@ -43,6 +43,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.util.BufferStream;
+import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.servlet.DiskCacheServlet;
 
 /**
  * This class looks for the resource bundle for the requested file (e.g.
@@ -95,7 +97,12 @@ import com.zimbra.common.util.BufferStream;
  *
  * @author Andy Clark
  */
-public class Props2JsServlet extends HttpServlet {
+public class Props2JsServlet extends DiskCacheServlet {
+
+    //
+    // Constants
+    //
+
     protected static final String COMPRESSED_EXT = ".zgz";
 
     protected static final String P_DEBUG = "debug";
@@ -105,56 +112,57 @@ public class Props2JsServlet extends HttpServlet {
     protected static final String A_BASENAME_PATTERNS = P_BASENAME_PATTERNS;
     protected static final String A_BASENAME_PATTERNS_LIST = A_BASENAME_PATTERNS+"-list";
 
-    private static Map<Locale, Map<String, byte[]>> buffers =
-        new HashMap<Locale, Map<String, byte[]>>();
+    //
+    // Constructors
+    //
 
-    private String getDirPath(String dirname) {
-        if (new File(dirname).isAbsolute()) {
-            return dirname;
-        }
-        String basedir = this.getServletContext().getRealPath("/");
-        if (!basedir.endsWith("/"))
-            basedir += "/";
-        return basedir + dirname;
+    public Props2JsServlet() {
+        super("uistrings");
     }
+
+    //
+    // HttpServlet methods
+    //
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws
         IOException, ServletException {
         // get request info
         boolean debug = req.getParameter(P_DEBUG) != null;
         Locale locale = getLocale(req);
-        Map<String, byte[]> localeBuffers;
+        if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: locale: "+locale);
+
         String uri = getRequestURI(req);
-        
-        synchronized(buffers) {
-            localeBuffers = buffers.get(locale);
-            if (localeBuffers == null) {
-                localeBuffers =  Collections.synchronizedMap(new HashMap<String,
-                    byte[]>());
-                buffers.put(locale, localeBuffers);
-            }
-        }
-        
-        // get byte buffer
-        byte[] buffer = debug ? null : localeBuffers.get(uri);
+        // NOTE: For some unknown reason, on my system, the string "null" is
+        // NOTE: prefixed to the return value from getRequestURI. Even
+        // NOTE: returning a string literal causes this to happen. However,
+        // NOTE: inlining the exact same code here solves the problem.
+//        String uri = (String) req.getAttribute(A_REQUEST_URI);
+//        if (uri == null) {
+//            uri = req.getRequestURI();
+//        }
+        if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: !!! uri: "+uri);
+        boolean compress = uri.endsWith(COMPRESSED_EXT);
 
-        if (buffer == null) {
+        String cacheId = locale.toString()+":"+uri;
+        if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: cache id: "+cacheId);
+
+        // generate buffer
+        byte[] buffer = null;
+        File file = !debug ? getCacheFile(cacheId) : null;
+        if (file == null) {
             buffer = getBuffer(req, locale, uri);
-            // do not need to compress JS because Prop2Js has been optimized
-            if (uri.endsWith(COMPRESSED_EXT)) {
-                // gzip response
-                ByteArrayOutputStream bos = new ByteArrayOutputStream(buffer.length / 2);
-                OutputStream gzos = new GZIPOutputStream(bos);
-                
-                gzos.write(buffer);
-                gzos.close();
-                buffer = bos.toByteArray();
+            if (!debug && !LC.zimbra_minimize_resources.booleanValue()){
+                file = createCacheFile(cacheId, "javascript");
+                if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: buffer file: "+file);
+                copy(buffer, file);
+                if (compress) {
+                    file = compress(file);
+                }
+                putCacheFile(cacheId, file);
             }
-            if (!LC.zimbra_minimize_resources.booleanValue())
-                localeBuffers.put(uri, buffer);
         }
 
-        // generate output
+        // set headers
         OutputStream out = resp.getOutputStream();
         try {
             if (uri.endsWith(COMPRESSED_EXT))
@@ -164,9 +172,22 @@ public class Props2JsServlet extends HttpServlet {
             if (isErrorEnabled())
                 error(e.getMessage());
         }
-        out.write(buffer);
-        out.flush();
+
+        // write buffer
+        if (file != null) {
+            // NOTE: If we saved the buffer to a file and compression is
+            // NOTE: enabled then the file has *already* been compressed
+            // NOTE: and the Content-Encoding header has been added.
+            copy(file, resp, false);
+        }
+        else {
+            copy(new String(buffer, "UTF-8"), resp, compress);
+        }
     }
+
+    //
+    // Protected methods
+    //
 
     protected boolean isWarnEnabled() {
         return true;
@@ -307,6 +328,24 @@ public class Props2JsServlet extends HttpServlet {
         }
     }
 
+    //
+    // Private methods
+    //
+
+    private String getDirPath(String dirname) {
+        if (new File(dirname).isAbsolute()) {
+            return dirname;
+        }
+        String basedir = this.getServletContext().getRealPath("/");
+        if (!basedir.endsWith("/"))
+            basedir += "/";
+        return basedir + dirname;
+    }
+
+    //
+    // Classes
+    //
+
     public static class PropsLoader extends ClassLoader {
         private List<File> files;
         private List<String> patterns;
@@ -366,5 +405,7 @@ public class Props2JsServlet extends HttpServlet {
             str.append(s.substring(index));
             return str.toString();
         }
-    }
-}
+
+    } // class PropsLoader
+
+} // class Props2JsServlet
