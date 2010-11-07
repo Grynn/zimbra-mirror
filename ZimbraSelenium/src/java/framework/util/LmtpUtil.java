@@ -1,18 +1,75 @@
 package framework.util;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.StringUtil;
+import com.zimbra.cs.lmtpserver.LmtpProtocolException;
 import com.zimbra.cs.lmtpserver.utils.LmtpClient;
 
 public class LmtpUtil {
 
+	/**
+	 * Inject a mime file to a list of email addresses
+	 * @param recipients an array of email addresses
+	 * @param fullpath the full path of the file
+	 * @throws HarnessException
+	 */
+	public static void injectFile(String recipient, String fullpath) throws HarnessException {
+		// conver the recipient to an array, and call the same method
+		injectFile(new String[]{ recipient }, fullpath);
+	}
+	
+	/**
+	 * Inject a mime file to a list of email addresses
+	 * @param recipients an array of email addresses
+	 * @param fullpath the full path of the file
+	 * @throws HarnessException
+	 */
+	public static void injectFile(String[] recipients, String fullpath) throws HarnessException {
+		String sender = "foo@example.com";
+		File mime = new File(fullpath);
+		
+		try {
+			
+			// Convert the file contents to a String
+			StringBuffer contents = new StringBuffer();
+			BufferedReader reader = null;
+			try {
+				reader = new BufferedReader(new FileReader(mime));
+				String line;
+				while ( (line = reader.readLine()) != null) {
+					contents.append(line).append(System.getProperty("line.separator"));				
+				}
+			} finally {
+				if ( reader != null )
+					reader.close();
+			}
+			
+			// Inject the mime
+			LmtpUtil.addMessageLmtp(recipients, sender, contents.toString());
+
+			// Make sure the mime is delivered
+			Stafpostqueue sp = new Stafpostqueue();
+			sp.waitForPostqueue();
+
+		} catch (Exception e) {
+			throw new HarnessException(e);
+		} finally {
+			
+		}
+
+	}
+
 	public static void addMessageLmtp(String[] recipients, String sender,
-			String message) throws Exception {
+			String message) throws IOException, LmtpProtocolException  {
 
 		LmtpClient lmtp = new LmtpClient( ZimbraSeleniumProperties.getStringProperty("server"),	7025);
 		byte[] data = message.getBytes();

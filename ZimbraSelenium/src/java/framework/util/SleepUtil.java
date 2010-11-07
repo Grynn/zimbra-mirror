@@ -49,18 +49,30 @@ public class SleepUtil {
 		}
 	}
 	
+	/**
+	 * Sleep a 1000 msec
+	 */
 	public static void sleepSmall() {
 		sleep(ZimbraSeleniumProperties.getIntProperty("small_wait", 1000));
 	}
 	
+	/**
+	 * Sleep a 2000 msec
+	 */
 	public static void sleepMedium() {
 		sleep(ZimbraSeleniumProperties.getIntProperty("medium_wait", 2000));
 	}
 	
+	/**
+	 * Sleep a 4000 msec
+	 */
 	public static void sleepLong() {
 		sleep(ZimbraSeleniumProperties.getIntProperty("long_wait", 4000));
 	}
 	
+	/**
+	 * Sleep a 10,000 msec
+	 */
 	public static void sleepVeryLong() {
 		sleep(ZimbraSeleniumProperties.getIntProperty("very_long_wait", 10000));
 	}

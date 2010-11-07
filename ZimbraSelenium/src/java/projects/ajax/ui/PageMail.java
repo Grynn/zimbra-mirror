@@ -440,7 +440,8 @@ public class PageMail extends AbsAjaxPage {
 
 				// The subject matched!
 				// Left-Click on the item
-				this.sClick(convlocator);
+				this.zClick(convlocator);
+				// this.sClick(convlocator);
 				
 				// No page to return
 				return (null);
@@ -484,6 +485,18 @@ public class PageMail extends AbsAjaxPage {
 	@Override
 	public AbsSeleniumObject zListItem(Action action, Action option, String subject) throws HarnessException {
 		throw new HarnessException("implement me!");
+	}
+
+	/**
+	 * Get the Reading Pane object
+	 * @return
+	 */
+	public DisplayMail zGetReadingPane() {
+		
+		// TODO: check if something is displayed in the reading pane?
+		
+		return (new DisplayMail(this.MyApplication));
+		
 	}
 
 
