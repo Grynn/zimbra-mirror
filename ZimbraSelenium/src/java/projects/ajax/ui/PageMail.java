@@ -23,14 +23,138 @@ import framework.util.SleepUtil;
 public class PageMail extends AbsAjaxPage {
 
 	
+	public static class Locators {
+		
+		public static final String zNewFolderOverviewPaneIcon = "id=ztih__main_Mail__FOLDER_textCell";
+
+		// folders
+		public static final String zInboxFldr		= "id=zti__main_Mail__2_textCell";
+		public static final String zSentFldr		= "id=zti__main_Mail__5_textCell";
+		public static final String zDraftsFldr 		= "id=zti__main_Mail__6_textCell";
+		public static final String zJunkFldr 		= "id=zti__main_Mail__4_textCell";
+		public static final String zTrashFldr 		= "id=zti__main_Mail__3_textCell";
+
+		public static final String zInboxFldrMoveDlg 	= "id=zti__ZmChooseFolderDialog_Mail__2_textCell";
+		public static final String zSentFldrMoveDlg 	= "id=zti__ZmChooseFolderDialog_Mail__5_textCell";
+		public static final String zJunkFldrMoveDlg 	= "id=zti__ZmChooseFolderDialog_Mail__4_textCell";
+		public static final String zTrashFldrMoveDlg 	= "id=zti__ZmChooseFolderDialog_Mail__3_textCell";
+
+		public static final String zFoldersNewFolderDlg = "id=ztih__ZmNewFolderDialog__FOLDER_textCell";
+
+		public static final String zNewIconBtn 			= "id=zb__TV__NEW_MENU_left_icon";
+		public static final String zNewMenuIconBtn 		= "id=zb__CLV__NEW_MENU_left_icon";
+		public static final String zNewMenuBtn 			= "id=zb__CLV__NEW_MENU";
+		public static final String zNewMenuDropDown 	= "id=zb__CLV__NEW_MENU_dropdown";
+		public static final String zGetMailIconBtn 		= "id=zb__CLV__CHECK_MAIL_left_icon";
+		public static final String zGetMailBtn 			= "id=zb__CLV__CHECK_MAIL";
+		public static final String zDeleteIconBtn 		= "id=zb__CLV__DELETE_left_icon";
+		public static final String zDeleteBtn 			= "id=zb__CLV__DELETE";
+		public static final String zMoveIconBtn 		= "id=zb__CLV__MOVE_left_icon";
+		public static final String zMoveBtn 			= "id=zb__CLV__MOVE";
+		public static final String zPrintIconBtn 		= "id=zb__CLV__PRINT_left_icon";
+		public static final String zPrintBtn 			= "id=zb__CLV__PRINT";
+		public static final String zReplyIconBtn 		= "id=zb__CLV__REPLY_left_icon";
+		public static final String zReplyBtn 			= "id=zb__CLV__REPLY";
+		public static final String zReplyAllIconBtn 	= "id=zb__CLV__REPLY_ALL_left_icon";
+		public static final String zReplyAllBtn 		= "id=zb__CLV__REPLY_ALL";
+		public static final String zForwardIconBtn 		= "id=zb__CLV__FORWARD_left_icon";
+		public static final String zForwardBtn 			= "id=zb__CLV__FORWARD";
+		public static final String zJunkIconBtn 		= "id=zb__CLV__SPAM_left_icon";
+		public static final String zJunkBtn 			= "id=zb__CLV__SPAM";
+		public static final String zTagIconBtn 			= "id=zb__CLV__TAG_MENU_left_icon";
+		public static final String zTagBtn 				= "id=zb__CLV__TAG_MENU";
+		public static final String zDetachIconBtn 		= "id=zb__TV__DETACH_left_icon";
+		public static final String zDetachBtn 			= "id=zb__TV__DETACH";
+		public static final String zDetachIconBtn2 		= "id=zb__CLV__DETACH_left_icon";
+		public static final String zDetachBtn2 			= "id=zb__CLV__DETACH";
+		public static final String zDetachBtn_ComposedMessage = "id=zb__COMPOSE1__DETACH_COMPOSE";
+		public static final String zViewIconBtn 		= "id=zb__CLV__VIEW_MENU_left_icon";
+		public static final String zViewBtn 			= "id=zb__CLV__VIEW_MENU";
+
+		public static final String zCloseIconBtn_newWindow 		= "id=zb__MSG1__CLOSE_left_icon";
+		public static final String zDeleteIconBtn_newWindow 	= "id=zb__MSG1__DELETE_title";
+		public static final String zReplyIconBtn_newWindow 		= "id=zb__MSG1__REPLY_left_icon";
+		public static final String zReplyAllIconBtn_newWindow 	= "id=zb__MSG1__REPLY_ALL_left_icon";
+		public static final String zForwardIconBtn_newWindow 	= "id=zb__MSG1__FORWARD_left_icon";
+		public static final String zJunkIconBtn_newWindow 		= "id=zb__MSG1__SPAM_left_icon";
+		public static final String zTagIconBtn_newWindow 		= "id=zb__MSG1__TAG_MENU_left_icon";
+
+		public static final String zSendBtn_newWindow 			= "id=zb__COMPOSE1__SEND";
+		public static final String zCancelBtn_newWindow 		= "id=zb__COMPOSE1__CANCEL";
+		public static final String zSaveDraftsBtn_newWindow 	= "id=zb__COMPOSE1__SAVE_DRAFT";
+		public static final String zAddAttachmentBtn_newWindow 	= "id=zb__COMPOSE1__ATTACHMENT";
+		public static final String zSpellCheckBtn_newWindow 	= "id=zb__COMPOSE1__SPELL_CHECK";
+		public static final String zSignatureBtn_newWindow 		= "id=zb__COMPOSE1__ADD_SIGNATURE";
+		public static final String zOptionsBtn_newWindow 		= "id=zb__COMPOSE1__COMPOSE_OPTIONS";
+
+		public static final String zEditDraftIconBtn 	= "id=zb__CLV__EDIT_left_icon";
+		public static final String zEditDraftBtn 		= "id=zb__CLV__EDIT";
+		public static final String zMailTabIconBtn 		= "id=zb__App__Mail_left_icon";
+		public static final String zMailViewIconBtn 	= "id=zb__CLV__VIEW_MENU_left_icon";
+		public static final String zCancelIconBtn 		= "id=zb__COMPOSE1__CANCEL_left_icon";
+		public static final String zTagOverViewHeader 	= "id=ztih__main_Mail__TAG_div";
+		public static final String zSearchIconBtn 		= "id=zb__Search__SEARCH_left_icon";
+
+		public static final String zSearchMenuIconBtn 			= "id=zmi__CLV__Par__SEARCH_left_icon";
+		public static final String zAdvancedSearchMenuIconBtn 	= "id=zmi__CLV__Par__BROWSE_left_icon";
+		public static final String zNewEmailMenuIconBtn 		= "id=zmi__CLV__Par__NEW_MESSAGE_left_icon";
+		public static final String zAddToContactsMenuIconBtn 	= "id=zmi__CLV__Par__CONTACT_left_icon";
+		public static final String zMarkReadMenuIconBtn 		= "id=zmi__CLV__MARK_READ_left_icon";
+		public static final String zMarkReadMenuEnaDisaBtn 		= "id=zmi__CLV__MARK_READ";
+		public static final String zMarkUnReadMenuIconBtn 		= "id=zmi__CLV__MARK_UNREAD_left_icon";
+		public static final String zMarkUnReadMenuEnaDisaBtn 	= "id=zmi__CLV__MARK_UNREAD";
+		public static final String zReplyMenuIconBtn 			= "id=zmi__CLV__REPLY_left_icon";
+		public static final String zReplyMenuEnaDisaBtn 		= "id=zmi__CLV__REPLY";
+		public static final String zReplyAllMenuIconBtn 		= "id=zmi__CLV__REPLY_ALL_left_icon";
+		public static final String zReplyAllMenuEnaDisaBtn 		= "id=zmi__CLV__REPLY_ALL";
+		public static final String zForwardMenuIconBtn 			= "id=zmi__CLV__FORWARD_left_icon";
+		public static final String zForwardMenuEnaDisaBtn 		= "id=zmi__CLV__FORWARD";
+		public static final String zEditAsNewMenuIconBtn 		= "id=zmi__CLV__EDIT_left_icon";
+		public static final String zEditAsNewMenuEnaDisaBtn 	= "id=zmi__CLV__EDIT";
+		public static final String zTagMenuIconBtn 				= "id=zmi__CLV__TAG_MENU_left_icon";
+		public static final String zNewTagMenuIconBtn 			= "id=zmi__CLV__TAG_MENU|MENU|NEWTAG_title";
+		public static final String zRemoveTagMenuIconBtn 		= "id=zmi__CLV__TAG_MENU|MENU|REMOVETAG_title";
+		public static final String zDeleteMenuIconBtn 			= "id=zmi__CLV__DELETE_left_icon";
+		public static final String zMoveMenuIconBtn 			= "id=zmi__CLV__MOVE_left_icon";
+		public static final String zPrintMenuIconBtn 			= "id=zmi__CLV__PRINT_left_icon";
+		public static final String zPrintMenuEnaDisaBtn 		= "id=zmi__CLV__PRINT";
+		public static final String zJunkMenuIconBtn 			= "id=zmi__CLV__SPAM_left_icon";
+		public static final String zShowOriginalMenuIconBtn 	= "id=zmi__CLV__SHOW_ORIG_left_icon";
+		public static final String zShowOriginalMenuEnaDisaBtn 	= "id=zmi__CLV__SHOW_ORIG";
+		public static final String zNewFilterMenuIconBtn 		= "id=zmi__CLV__ADD_FILTER_RULE_left_icon";
+		public static final String zNewFilterMenuEnaDisaBtn 	= "id=zmi__CLV__ADD_FILTER_RULE";
+		public static final String zCreateApptMenuIconBtn 		= "id=zmi__CLV__CREATE_APPT_left_icon";
+		public static final String zCreateApptEnaDisaBtn 		= "id=zmi__CLV__CREATE_APPT";
+		public static final String zCreateTaskMenuEnaDisaBtn 	= "id=zmi__CLV__CREATE_TASK_left_icon";
+		public static final String zCreateTaskEnaDisaBtn 		= "id=zmi__CLV__CREATE_TASK";
+
+		public static final String zGeneralPrefFolder 		= "id=zti__main_Options__PREF_PAGE_GENERAL_textCell";
+		public static final String zMailPrefFolder 			= "id=zti__main_Options__PREF_PAGE_MAIL_textCell";
+		public static final String zComposingPrefFolder 	= "id=zti__main_Options__PREF_PAGE_COMPOSING_textCell";
+		public static final String zSignaturesPrefFolder 	= "id=zti__main_Options__PREF_PAGE_SIGNATURES_textCell";
+		public static final String zAccountsPrefFolder 		= "id=zti__main_Options__PREF_PAGE_ACCOUNTS_textCell";
+		public static final String zFiltersPrefFolder 		= "id=zti__main_Options__PREF_PAGE_FILTERS_textCell";
+
+		public static final String zAddressBookPrefFolder 	= "id=zti__main_Options__PREF_PAGE_CONTACTS_textCell";
+		public static final String zCalendarPrefFolder 		= "id=zti__main_Options__PREF_PAGE_CALENDAR_textCell";
+		public static final String zSharingPrefFolder 		= "id=zti__main_Options__PREF_PAGE_SHARING_textCell";
+		public static final String zImportExportPrefFolder 	= "id=zti__main_Options__PREF_PAGE_IMPORT_EXPORT_textCell";
+		public static final String zShortcutsPrefFolder 	= "id=zti__main_Options__PREF_PAGE_SHORTCUTS_textCell";
+		public static final String zZimletsPrefFolder 		= "id=zti__main_Options__PREF_PAGE_PREF_ZIMLETS_textCell";
+		public static final String zShowOriginalDraftMenuIconBtn = "id=zmi__CLV__Dra__SHOW_ORIG_left_icon";
+
+		public static final String zPreferencesTabIconBtn = "id=zb__App__Options_left_icon";
+	//	public static final String zPreferencesMailIconBtn = "id=ztab__PREF__"
+	//			+ localize(locator.mail) + "_title";
+
+
+		public static final String zCLVRows			= "id=zl__CLV__rows";
+
+	}
 	
-	// Locators
-	public static final String lCLVrows			= "id=zl__CLV__rows";
+	
 
-	public static final String lGetMailIconBtn	= "id=zb__CLV__CHECK_MAIL_left_icon";
-	public static final String lGetMailBtn		= "id=zb__CLV__CHECK_MAIL";
 
-	public static final String lDeleteBtn		= "id=zb__CLV__DELETE";
 
 	public PageMail(AbsApplication application) {
 		super(application);
@@ -87,7 +211,7 @@ public class PageMail extends AbsAjaxPage {
 		}
 		
 		// Click on Mail icon
-		sClick(PageMain.appbarMail);
+		sClick(PageMain.Locators.zAppbarMail);
 		
 		waitForActive();
 
@@ -117,11 +241,11 @@ public class PageMail extends AbsAjaxPage {
 			
 		} else if ( button == Buttons.B_GETMAIL ) {
 			
-			locator = lGetMailIconBtn;
+			locator = Locators.zGetMailIconBtn;
 			
 		} else if ( button == Buttons.B_DELETE ) {
 			
-			locator = lDeleteBtn;
+			locator = Locators.zDeleteBtn;
 			
 		} else if ( button == Buttons.B_MOVE ) {
 			
@@ -307,8 +431,8 @@ public class PageMail extends AbsAjaxPage {
 		List<ConversationItem> items = new ArrayList<ConversationItem>();
 		
 		// Make sure the button exists
-		if ( !this.sIsElementPresent(lCLVrows) )
-			throw new HarnessException("Conversation List View Rows is not present "+ lCLVrows);
+		if ( !this.sIsElementPresent(Locators.zCLVRows) )
+			throw new HarnessException("Conversation List View Rows is not present "+ Locators.zCLVRows);
 		
 		// How many items are in the table?
 		int count = this.sGetXpathCount("//div[@id='zl__CLV__rows']//div[contains(@id, 'zli__CLV__')]");
@@ -412,8 +536,8 @@ public class PageMail extends AbsAjaxPage {
 		if ( action == Actions.A_LEFTCLICK ) {
 			
 			// TODO: how to handle both messages and conversations, maybe check the view first?
-			if ( !this.sIsElementPresent(lCLVrows) )
-				throw new HarnessException("Conversation List View Rows is not present "+ lCLVrows);
+			if ( !this.sIsElementPresent(Locators.zCLVRows) )
+				throw new HarnessException("Conversation List View Rows is not present "+ Locators.zCLVRows);
 			
 			// How many items are in the table?
 			int count = this.sGetXpathCount("//div[@id='zl__CLV__rows']//div[contains(@id, 'zli__CLV__')]");

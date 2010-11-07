@@ -7,12 +7,15 @@ import framework.util.SleepUtil;
 
 public class DisplayMail extends AbsDisplay {
 
-	public static final String lSubject = "xpath=//td[@class='LabelColValue SubjectCol']";
-	public static final String lDate = "xpath=//td[@class='LabelColValue DateCol']";
+	public static class Locators {
+		public static final String zSubject = "xpath=//td[@class='LabelColValue SubjectCol']";
+		public static final String zDate = "xpath=//td[@class='LabelColValue DateCol']";
 
-	
-	public static final String lViewEntireMessage = "id=zv__CLV__MSG_msgTruncation_link";
-	public static final String lHighlightObjects = "id=zv__CLV_highlightObjects_link";
+		
+		public static final String zViewEntireMessage = "id=zv__CLV__MSG_msgTruncation_link";
+		public static final String zHighlightObjects = "id=zv__CLV_highlightObjects_link";
+
+	}
 	
 
 	
@@ -35,10 +38,10 @@ public class DisplayMail extends AbsDisplay {
 	public Object zClickViewEntireMessage() throws HarnessException {
 		logger.info(myPageName() + " zViewEntireMessage");
 		
-		if ( this.sIsElementPresent(lViewEntireMessage) )
-			throw new HarnessException("'View Entire Message' link does not exist: "+ lViewEntireMessage);
+		if ( this.sIsElementPresent(Locators.zViewEntireMessage) )
+			throw new HarnessException("'View Entire Message' link does not exist: "+ Locators.zViewEntireMessage);
 		
-		this.sClick(lViewEntireMessage);
+		this.sClick(Locators.zViewEntireMessage);
 		
 		SleepUtil.sleepLong();	// Messages are usually large, let it load
 

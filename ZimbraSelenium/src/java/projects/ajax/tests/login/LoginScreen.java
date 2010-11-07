@@ -27,7 +27,7 @@ public class LoginScreen extends AjaxCommonTest {
 			groups = { "smoke" })
 	public void LoginScreen01() throws HarnessException {
 		
-		String username = app.zPageLogin.sGetText(PageLogin.displayedusername);
+		String username = app.zPageLogin.sGetText(PageLogin.Locators.zDisplayedusername);
 		ZAssert.assertEquals(username, app.getLocaleString("usernameLabel"), "Verify the displayed label 'username'");
 		
 		// TODO: add other displayed text
@@ -42,7 +42,7 @@ public class LoginScreen extends AjaxCommonTest {
 		Calendar calendar = new GregorianCalendar();
 		String thisYear = "" + calendar.get(Calendar.YEAR);
 		
-		String copyright = app.zPageLogin.sGetText(PageLogin.displayedcopyright);
+		String copyright = app.zPageLogin.sGetText(PageLogin.Locators.zDisplayedcopyright);
 		
 		String message = String.format("Verify the copyright (%s) on the login screen contains the current year (%s)", copyright, thisYear);
 		ZAssert.assertStringContains(copyright, thisYear, message);
@@ -65,7 +65,7 @@ public class LoginScreen extends AjaxCommonTest {
 		app.zPageLogin.zTypeCharacters(value);
 		
 		// Get the value of the username field
-		String actual = app.zPageLogin.sGetValue(PageLogin.username);
+		String actual = app.zPageLogin.sGetValue(PageLogin.Locators.zInputUsername);
 		
 		// Verify typed text and the actual text match
 		ZAssert.assertEquals(actual, value, "Verify the username has initial focus");

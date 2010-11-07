@@ -9,13 +9,17 @@ import framework.util.HarnessException;
 
 public class FormContactNew extends AbsForm {
 
-	public static final String lSubmit = "";
-	
-	public static final String lLastName		= "xpath=//input[@id='lastName']";
-	public static final String lFirstName		= "xpath=//input[@id='firstName']";
-	public static final String lJobTitle		= "xpath=//input[@id='jobTitle']";
-	public static final String lCompany			= "xpath=//input[@id='company']";
-	public static final String lEmail			= "xpath=//input[@id='email']";
+	public static class Locators {
+		
+		public static final String lSubmit = "";
+		
+		public static final String lLastName		= "xpath=//input[@id='lastName']";
+		public static final String lFirstName		= "xpath=//input[@id='firstName']";
+		public static final String lJobTitle		= "xpath=//input[@id='jobTitle']";
+		public static final String lCompany			= "xpath=//input[@id='company']";
+		public static final String lEmail			= "xpath=//input[@id='email']";
+
+	}
 	
 	public FormContactNew(AbsApplication application) {
 		super(application);
@@ -31,10 +35,10 @@ public class FormContactNew extends AbsForm {
 
 	@Override
 	public void submit() throws HarnessException {
-		if ( !(this.sIsElementPresent(lSubmit)) ) {
-			throw new HarnessException("Submit button is not present "+ lSubmit);
+		if ( !(this.sIsElementPresent(Locators.lSubmit)) ) {
+			throw new HarnessException("Submit button is not present "+ Locators.lSubmit);
 		}
-		this.sClick(lSubmit);
+		this.sClick(Locators.lSubmit);
 	}
 
 	@Override
@@ -49,15 +53,15 @@ public class FormContactNew extends AbsForm {
 		ContactItem contact = (ContactItem)item;
 		
 		if ( contact.firstName != null ) {
-			this.sType(lFirstName, contact.firstName);
+			this.sType(Locators.lFirstName, contact.firstName);
 		}
 		
 		if ( contact.lastName != null ) {
-			this.sType(lLastName, contact.lastName);
+			this.sType(Locators.lLastName, contact.lastName);
 		}
 
 		if ( contact.email != null ) {
-			this.sType(lEmail, contact.email);
+			this.sType(Locators.lEmail, contact.email);
 		}
 
 	}

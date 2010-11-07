@@ -13,11 +13,15 @@ import framework.util.Stafpostqueue;
 
 public class FormMailNew extends AbsForm {
 	
-	public static final String zSendIconBtn = "css=[id^=zb__COMPOSE][id$=__SEND_left_icon]";
+	public static class Locators {
+		
+		public static final String zSendIconBtn = "css=[id^=zb__COMPOSE][id$=__SEND_left_icon]";
 
-	public static final String zToField = "css=[id^=zv__COMPOSE][id$=_to_control]";
-	public static final String zSubjectField = "css=[id^=zv__COMPOSE][id$=_subject_control]";
-	public static final String zBodyField = "TODO";
+		public static final String zToField = "css=[id^=zv__COMPOSE][id$=_to_control]";
+		public static final String zSubjectField = "css=[id^=zv__COMPOSE][id$=_subject_control]";
+		public static final String zBodyField = "TODO";
+		
+	}
 
 	
 	public FormMailNew(AbsApplication application) {
@@ -37,13 +41,13 @@ public class FormMailNew extends AbsForm {
 		logger.info("FormMailNew.submit()");
 		
 		// Look for "Send"
-		boolean visible = this.sIsElementPresent(zSendIconBtn);
+		boolean visible = this.sIsElementPresent(Locators.zSendIconBtn);
 		if ( !visible )
-			throw new HarnessException("Send button is not visible "+ zSendIconBtn);
+			throw new HarnessException("Send button is not visible "+ Locators.zSendIconBtn);
 		
 		// Click on it
-		this.sMouseDown(zSendIconBtn);
-		this.sMouseUp(zSendIconBtn);
+		this.sMouseDown(Locators.zSendIconBtn);
+		this.sMouseUp(Locators.zSendIconBtn);
 		
 		// Need to wait for the client request to be sent
 		SleepUtil.sleepSmall();
@@ -79,7 +83,7 @@ public class FormMailNew extends AbsForm {
 		
 		// Handle the subject
 		if ( mail.subject != null ) {
-			this.sType(zSubjectField, mail.subject);
+			this.sType(Locators.zSubjectField, mail.subject);
 			SleepUtil.sleepMedium();
 		}
 		
@@ -134,7 +138,7 @@ public class FormMailNew extends AbsForm {
 		
 		if ( to != null ) {
 			// Add the recipient string to the To field
-			this.sType(zToField, to.toString());
+			this.sType(Locators.zToField, to.toString());
 		}
 		
 		// TODO: handle cc, bcc, and from

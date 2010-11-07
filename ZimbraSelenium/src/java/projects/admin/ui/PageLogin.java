@@ -12,11 +12,15 @@ import framework.util.ZimbraAdminAccount;
  */
 public class PageLogin extends AbsAdminPage {
 	
-	public static final String ZLoginDialog = "xpath=//div[@class='ZaLoginDialog']";
-	public static final String ZLoginUserName = "xpath=//*[@id='ZLoginUserName']";
-	public static final String ZLoginPassword = "xpath=//*[@id='ZLoginPassword']";
-	public static final String ZLoginButtonContainer = "xpath=//*[@id='ZLoginButton']";
-	public static final String ZLoginLicenseContainer = "xpath=//*[@id='ZLoginLicenseContainer']";
+	public static class Locators {
+		
+		public static final String zLoginDialog = "xpath=//div[@class='ZaLoginDialog']";
+		public static final String zLoginUserName = "xpath=//*[@id='ZLoginUserName']";
+		public static final String zLoginPassword = "xpath=//*[@id='ZLoginPassword']";
+		public static final String zLoginButtonContainer = "xpath=//*[@id='ZLoginButton']";
+		public static final String zLoginLicenseContainer = "xpath=//*[@id='ZLoginLicenseContainer']";
+		
+	}
 
 	/**
 	 * An object that controls the Admin Console Login Page
@@ -43,13 +47,13 @@ public class PageLogin extends AbsAdminPage {
 
 
 		// Look for the login button. 
-		boolean present = sIsElementPresent(ZLoginButtonContainer);
+		boolean present = sIsElementPresent(Locators.zLoginButtonContainer);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
 		}
 		
-		boolean visible = zIsVisiblePerPosition(ZLoginButtonContainer, 0 , 0);
+		boolean visible = zIsVisiblePerPosition(Locators.zLoginButtonContainer, 0 , 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -101,7 +105,7 @@ public class PageLogin extends AbsAdminPage {
 		fillLoginFormFields(account);
 		
 		// Click the Login button
-		sClick(ZLoginButtonContainer);
+		sClick(Locators.zLoginButtonContainer);
 
 		// Wait for the app to load
 		MyApplication.zPageMain.waitForActive();
@@ -120,8 +124,8 @@ public class PageLogin extends AbsAdminPage {
 		if ( !isActive() )
 			throw new HarnessException("LoginPage is not active");
 		
-		sType(ZLoginUserName, account.EmailAddress);
-		sType(ZLoginPassword, account.Password);
+		sType(Locators.zLoginUserName, account.EmailAddress);
+		sType(Locators.zLoginPassword, account.Password);
 	}
 
 

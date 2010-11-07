@@ -6,7 +6,6 @@ package projects.mobile.ui;
 import java.util.List;
 
 import projects.ajax.ui.AbsAjaxPage.ItemType;
-
 import framework.items.ContactItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
@@ -18,11 +17,15 @@ import framework.util.HarnessException;
  */
 public class PageContacts extends AbsMobilePage {
 
-	// TODO: Need better locator that doesn't have content text
-	public static final String lContactsIsActive = "xpath=//a[contains(.,'Address Books')]";
-
-	// TODO: Need better locator that doesn't have content text
-	public static final String lNewContact = "xpath=//a[contains(.,'Add')]";
+	public static class Locators {
+	
+		// TODO: Need better locator that doesn't have content text
+		public static final String zContactsIsActive = "xpath=//a[contains(.,'Address Books')]";
+	
+		// TODO: Need better locator that doesn't have content text
+		public static final String zNewContact = "xpath=//a[contains(.,'Add')]";
+	
+	}
 	
 	public PageContacts(AbsApplication application) {
 		super(application);
@@ -42,7 +45,7 @@ public class PageContacts extends AbsMobilePage {
 			this.MyApplication.zPageMain.navigateTo();
 		}
 
-		boolean active = this.sIsElementPresent(lContactsIsActive);
+		boolean active = this.sIsElementPresent(Locators.zContactsIsActive);
 		return (active);
 
 	}
@@ -72,7 +75,7 @@ public class PageContacts extends AbsMobilePage {
 		}
 		
 		// Click on Contact icon
-		sClick(PageMain.appbarContact);
+		sClick(PageMain.Locators.zAppbarContact);
 		
 		waitForActive();
 		
@@ -91,10 +94,10 @@ public class PageContacts extends AbsMobilePage {
 		}
 		
 		// Click on "Add"
-		if ( !this.sIsElementPresent(lNewContact) ) {
+		if ( !this.sIsElementPresent(Locators.zNewContact) ) {
 			throw new HarnessException("'Add' contact button is not present");
 		}
-		this.sClick(lNewContact);
+		this.sClick(Locators.zNewContact);
 		
 		FormContactNew form = new FormContactNew(this.MyApplication);
 		
@@ -122,7 +125,7 @@ public class PageContacts extends AbsMobilePage {
 	 * @throws HarnessException 
 	 */
 	public void refresh() throws HarnessException {
-		this.sClick(PageMain.appbarContact);
+		this.sClick(PageMain.Locators.zAppbarContact);
 	}
 
 

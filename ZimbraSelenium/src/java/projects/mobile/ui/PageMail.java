@@ -17,11 +17,15 @@ import framework.util.HarnessException;
  */
 public class PageMail extends AbsMobilePage {
 
-	// TODO: Need better locator that doesn't have content text
-	public static final String lMailIsActive = "xpath=//a[contains(.,'Folders')]";
+	public static class Locators {
+		
+		// TODO: Need better locator that doesn't have content text
+		public static final String zMailIsActive = "xpath=//a[contains(.,'Folders')]";
 
-	public static final String DList_View = "xpath=//div[@id='dlist-view']";
-	public static final String DList_View_2 = "//div[@id='dlist-view']/div";
+		public static final String zDList_View = "xpath=//div[@id='dlist-view']";
+		public static final String zDList_View_2 = "//div[@id='dlist-view']/div";
+
+	}
 	
 	public PageMail(AbsApplication application) {
 		super(application);
@@ -41,7 +45,7 @@ public class PageMail extends AbsMobilePage {
 			this.MyApplication.zPageMain.navigateTo();
 		}
 
-		boolean active = this.sIsElementPresent(lMailIsActive);
+		boolean active = this.sIsElementPresent(Locators.zMailIsActive);
 		return (active);
 
 	}
@@ -71,7 +75,7 @@ public class PageMail extends AbsMobilePage {
 		}
 		
 		// Click on Mail icon
-		sClick(PageMain.appbarMail);
+		sClick(PageMain.Locators.zAppbarMail);
 		
 		waitForActive();
 
@@ -96,7 +100,7 @@ public class PageMail extends AbsMobilePage {
 	public List<ConversationItem> getConversationList() throws HarnessException {
 		List<ConversationItem> conversations = new ArrayList<ConversationItem>();
 		
-		if (!sIsElementPresent(DList_View))
+		if (!sIsElementPresent(Locators.zDList_View))
 			throw new HarnessException("Unable to find the message list!");
 		
 		int count = sGetXpathCount("//div[contains(@id, 'conv')]");
@@ -114,7 +118,7 @@ public class PageMail extends AbsMobilePage {
 	 * @throws HarnessException 
 	 */
 	public void getMail() throws HarnessException {
-		this.sClick(PageMain.appbarMail);
+		this.sClick(PageMain.Locators.zAppbarMail);
 	}
 
 

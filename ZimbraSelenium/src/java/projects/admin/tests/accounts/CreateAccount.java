@@ -4,11 +4,11 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
+import projects.admin.core.AdminCommonTest;
 import projects.admin.items.AccountItem;
 import projects.admin.items.Item;
-import projects.admin.core.AdminCommonTest;
-import projects.admin.ui.WizardCreateAccount;
 import projects.admin.ui.PageManageAccounts;
+import projects.admin.ui.WizardCreateAccount;
 
 import com.zimbra.common.soap.Element;
 
@@ -58,7 +58,7 @@ public class CreateAccount extends AdminCommonTest {
 		AccountItem account = new AccountItem();
 				
 		WizardCreateAccount wizard = 
-			app.zPageManageAccounts.getNewAccountWizard(PageManageAccounts.zb__ACLV__NEW_MENU_title);
+			app.zPageManageAccounts.getNewAccountWizard(PageManageAccounts.Locators.zb__ACLV__NEW_MENU_title);
 		wizard.completeWizard(account);
 		
 		// Verify the account exists in the ZCS
@@ -83,7 +83,7 @@ public class CreateAccount extends AdminCommonTest {
 		AccountItem account = new AccountItem();
 				
 		WizardCreateAccount wizard = 
-			app.zPageManageAccounts.getNewAccountWizard(PageManageAccounts.zmi__ACLV__NEW_WIZARD_title);
+			app.zPageManageAccounts.getNewAccountWizard(PageManageAccounts.Locators.zmi__ACLV__NEW_WIZARD_title);
 		wizard.completeWizard(account);
 
 		// Verify the account exists in the ZCS

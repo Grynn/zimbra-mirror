@@ -15,15 +15,20 @@ import framework.util.HarnessException;
  */
 public class PageMain extends AbsAjaxPage {
 
-	public static final String LLogout = "xpath=//*[@id='skin_container_logoff']";
-	
-	public static final String appbarMail = "xpath=//div[@id='zb__App__Mail']";
-	public static final String appbarContact = "xpath=//div[@id='appbar']//a[@id='zb__App__Contacts']";
-	public static final String appbarCal = "xpath=//div[@id='appbar']//a[@id='zb__App__Calendar']";
-	public static final String appbarTasks = "xpath=//div[@id='appbar']//a[@id='zb__App__Tasks']";
-	public static final String appbarBriefcase = "xpath=//div[@id='appbar']//a[@id='zb__App__Briefcase']";
-	public static final String appbarPreferences = "xpath=//div[@id='appbar']//a[@id='zb__App__Options']";
-	// For Social tab, see Zimlet classes
+	public static class Locators {
+		
+		public static final String zLogoffButton = "xpath=//*[@id='skin_container_logoff']";
+		
+		public static final String zAppbarMail = "xpath=//div[@id='zb__App__Mail']";
+		public static final String zAppbarContact = "xpath=//div[@id='appbar']//a[@id='zb__App__Contacts']";
+		public static final String zAppbarCal = "xpath=//div[@id='appbar']//a[@id='zb__App__Calendar']";
+		public static final String zAppbarTasks = "xpath=//div[@id='appbar']//a[@id='zb__App__Tasks']";
+		public static final String zAppbarBriefcase = "xpath=//div[@id='appbar']//a[@id='zb__App__Briefcase']";
+		public static final String zAppbarPreferences = "xpath=//div[@id='appbar']//a[@id='zb__App__Options']";
+		
+		// For Social tab, see Zimlet classes
+		
+	}
 	
 	
 	public PageMain(AbsApplication application) {
@@ -45,7 +50,7 @@ public class PageMain extends AbsAjaxPage {
 		
 
 		// Look for the Logout button
-		boolean present = sIsElementPresent(LLogout);
+		boolean present = sIsElementPresent(Locators.zLogoffButton);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
@@ -97,12 +102,12 @@ public class PageMain extends AbsAjaxPage {
 		
 		navigateTo();
 
-		if ( !sIsElementPresent(LLogout) ) {
-			throw new HarnessException("The logoff button is not present " + LLogout);
+		if ( !sIsElementPresent(Locators.zLogoffButton) ) {
+			throw new HarnessException("The logoff button is not present " + Locators.zLogoffButton);
 		}
 				
 		// Click on logout
-		sClick(LLogout);
+		sClick(Locators.zLogoffButton);
 				
 		MyApplication.zPageLogin.waitForActive();
 		

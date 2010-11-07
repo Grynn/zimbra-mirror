@@ -10,12 +10,14 @@ import framework.util.HarnessException;
  */
 public class PageMain extends AbsAdminPage {
 
-	public static final String skin_container_logo		= "xpath=//*[@id='skin_container_logo']";
-	public static final String Zskin_container_username	= "xpath=//*[@id='skin_container_username']";
-	public static final String Zskin_container_logoff	= "css=table[class=skin_table] span[onclick=ZaZimbraAdmin.logOff();]"; 
-	public static final String Zskin_container_help		= "xpath=//*[@id='skin_container_help']";
-	public static final String Zskin_container_dw		= "xpath=//*[@id='skin_container_dw']";
-
+	public static class Locators {
+		public static final String zSkinContainerLogo		= "xpath=//*[@id='skin_container_logo']";
+		public static final String zSkinContainerUsername	= "xpath=//*[@id='skin_container_username']";
+		public static final String zSkinContainerLogoff		= "css=table[class=skin_table] span[onclick=ZaZimbraAdmin.logOff();]"; 
+		public static final String zSkinContainerHelp		= "xpath=//*[@id='skin_container_help']";
+		public static final String zSkinContainerDW			= "xpath=//*[@id='skin_container_dw']";
+	}
+	
 	public PageMain(AbsApplication application) {
 		super(application);
 		
@@ -38,7 +40,7 @@ public class PageMain extends AbsAdminPage {
 		
 
 		// Look for the Logo 
-		boolean present = sIsElementPresent(Zskin_container_logoff);
+		boolean present = sIsElementPresent(Locators.zSkinContainerLogoff);
 		if ( !present ) {
 			logger.debug("isActive() present = "+ present);
 			return (false);
@@ -46,7 +48,7 @@ public class PageMain extends AbsAdminPage {
 		
 
 		// Look for the Logout button. 
-		boolean visible = zIsVisiblePerPosition(Zskin_container_logoff, 0, 0);
+		boolean visible = zIsVisiblePerPosition(Locators.zSkinContainerLogoff, 0, 0);
 		if ( !visible ) {
 			logger.debug("isActive() visible = "+ visible);
 			return (false);
@@ -85,16 +87,16 @@ public class PageMain extends AbsAdminPage {
 		
 		navigateTo();
 
-		if ( !sIsElementPresent(Zskin_container_logoff) ) {
-			throw new HarnessException("The logoff button is not present " + Zskin_container_logoff);
+		if ( !sIsElementPresent(Locators.zSkinContainerLogoff) ) {
+			throw new HarnessException("The logoff button is not present " + Locators.zSkinContainerLogoff);
 		}
 		
-		if ( !zIsVisiblePerPosition(Zskin_container_logoff, 10, 10) ) {
-			throw new HarnessException("The logoff button is not visible " + Zskin_container_logoff);
+		if ( !zIsVisiblePerPosition(Locators.zSkinContainerLogoff, 10, 10) ) {
+			throw new HarnessException("The logoff button is not visible " + Locators.zSkinContainerLogoff);
 		}
 		
 		// Click on logout
-		sClick(Zskin_container_logoff);
+		sClick(Locators.zSkinContainerLogoff);
 		
 		// Sometimes there is a "confirm" popup.
 		// Disable it using zimbraPrefAdminConsoleWarnOnExit=FALSE
@@ -113,7 +115,7 @@ public class PageMain extends AbsAdminPage {
 		if ( !isActive() )
 			throw new HarnessException("MainPage is not active");
 
-		String username = sGetText(Zskin_container_username);	
+		String username = sGetText(Locators.zSkinContainerUsername);	
 		return (username);
 		
 	}

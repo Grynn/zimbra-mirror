@@ -14,32 +14,36 @@ import framework.util.HarnessException;
  */
 public class PageManageAccounts extends AbsAdminPage {
 
-	// ** OverviewTreePanel -> Addresses -> Accounts
-	public static final String zti__AppAdmin__ADDRESS__ACCOUNT_textCell = "xpath=//*[@id='zti__AppAdmin__ADDRESS__ACCOUNT_textCell']";
-	
-	// ** "Manage Accounts" Tab Title
-	public static final String DWT93 = "xpath=//*[@id='DWT93']";
-	public static final String DWT93_classAttr = "xpath=(//*[@id='DWT93'])@class";
-	
-	// ** Menus
-	public static final String zb__ACLV__NEW_MENU_title = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";		// New Button
-	public static final String zb__ACLV__EDIT_title = "xpath=//*[@id='zb__ACLV__EDIT_title']";
-	public static final String zb__ACLV__DELETE_title = "xpath=//*[@id='zb__ACLV__DELETE_title']";
-	public static final String zb__ACLV__CHNG_PWD_title = "xpath=//*[@id='zb__ACLV__CHNG_PWD_title']";
-	public static final String zb__ACLV__EXPIRE_SESSION_title = "xpath=//*[@id='zb__ACLV__EXPIRE_SESSION_title']";
-	public static final String zb__ACLV__VIEW_MAIL_title = "xpath=//*[@id='zb__ACLV__VIEW_MAIL_title']";
-	public static final String zb__ACLV__UNKNOWN_66_title = "xpath=//*[@id='zb__ACLV__UNKNOWN_66_title']"; // Search Mail
-	public static final String zb__ACLV__UNKNOWN_72_title = "xpath=//*[@id='zb__ACLV__UNKNOWN_72_title']"; // Move Mailbox
-	public static final String zb__ACLV__MORE_ACTIONS_title = "xpath=//*[@id='zb__ACLV__MORE_ACTIONS_title']";
-	public static final String zb__ACLV__PAGE_BACK_title = "xpath=//*[@id='zb__ACLV__PAGE_BACK_title']";
-	public static final String zb__ACLV__PAGE_FORWARD_title = "xpath=//*[@id='zb__ACLV__PAGE_FORWARD_title']";
-	public static final String zb__ACLV__HELP_title = "xpath=//*[@id='zb__ACLV__HELP_title']";
+	public static class Locators {
+		
+		// ** OverviewTreePanel -> Addresses -> Accounts
+		public static final String zti__AppAdmin__ADDRESS__ACCOUNT_textCell = "xpath=//*[@id='zti__AppAdmin__ADDRESS__ACCOUNT_textCell']";
+		
+		// ** "Manage Accounts" Tab Title
+		public static final String DWT93 = "xpath=//*[@id='DWT93']";
+		public static final String DWT93_classAttr = "xpath=(//*[@id='DWT93'])@class";
+		
+		// ** Menus
+		public static final String zb__ACLV__NEW_MENU_title = "xpath=//*[@id='zb__ACLV__NEW_MENU_title']";		// New Button
+		public static final String zb__ACLV__EDIT_title = "xpath=//*[@id='zb__ACLV__EDIT_title']";
+		public static final String zb__ACLV__DELETE_title = "xpath=//*[@id='zb__ACLV__DELETE_title']";
+		public static final String zb__ACLV__CHNG_PWD_title = "xpath=//*[@id='zb__ACLV__CHNG_PWD_title']";
+		public static final String zb__ACLV__EXPIRE_SESSION_title = "xpath=//*[@id='zb__ACLV__EXPIRE_SESSION_title']";
+		public static final String zb__ACLV__VIEW_MAIL_title = "xpath=//*[@id='zb__ACLV__VIEW_MAIL_title']";
+		public static final String zb__ACLV__UNKNOWN_66_title = "xpath=//*[@id='zb__ACLV__UNKNOWN_66_title']"; // Search Mail
+		public static final String zb__ACLV__UNKNOWN_72_title = "xpath=//*[@id='zb__ACLV__UNKNOWN_72_title']"; // Move Mailbox
+		public static final String zb__ACLV__MORE_ACTIONS_title = "xpath=//*[@id='zb__ACLV__MORE_ACTIONS_title']";
+		public static final String zb__ACLV__PAGE_BACK_title = "xpath=//*[@id='zb__ACLV__PAGE_BACK_title']";
+		public static final String zb__ACLV__PAGE_FORWARD_title = "xpath=//*[@id='zb__ACLV__PAGE_FORWARD_title']";
+		public static final String zb__ACLV__HELP_title = "xpath=//*[@id='zb__ACLV__HELP_title']";
 
-	
-	// NEW Menu
-	// TODO: define these locators
-	public static final String zmi__ACLV__NEW_WIZARD_title = "xpath=//*[@id='zmi__ACLV__NEW_WIZARD_title']";	// New -> Account (<td class="ZWidgetTitle" id="zmi__ACLV__NEW_WIZARD_title">Account</td>)
-	
+		
+		// NEW Menu
+		// TODO: define these locators
+		public static final String zmi__ACLV__NEW_WIZARD_title = "xpath=//*[@id='zmi__ACLV__NEW_WIZARD_title']";	// New -> Account (<td class="ZWidgetTitle" id="zmi__ACLV__NEW_WIZARD_title">Account</td>)
+		
+
+	}
 
 	
 	
@@ -71,12 +75,12 @@ public class PageManageAccounts extends AbsAdminPage {
 			throw new HarnessException("Admin Console application is not active!");
 
 		
-		boolean present = sIsElementPresent(DWT93);
+		boolean present = sIsElementPresent(Locators.DWT93);
 		if ( !present ) {
 			return (false);
 		}
 		
-		String attrs = sGetAttribute(DWT93_classAttr);
+		String attrs = sGetAttribute(Locators.DWT93_classAttr);
 		if ( !attrs.contains("ZSelected") ) {
 			return (false);
 		}
@@ -97,7 +101,7 @@ public class PageManageAccounts extends AbsAdminPage {
 		}
 		
 		// Click on Addresses -> Accounts
-		sClick(zti__AppAdmin__ADDRESS__ACCOUNT_textCell);
+		sClick(Locators.zti__AppAdmin__ADDRESS__ACCOUNT_textCell);
 		
 		waitForActive();
 
@@ -126,7 +130,7 @@ public class PageManageAccounts extends AbsAdminPage {
 		logger.debug("createAccount(AccountItem account)" + account.EmailAddress);
 
 		// Get the New Account Wizard
-		WizardCreateAccount wizard = getNewAccountWizard(zb__ACLV__NEW_MENU_title);
+		WizardCreateAccount wizard = getNewAccountWizard(Locators.zb__ACLV__NEW_MENU_title);
 		AccountItem a = (AccountItem)wizard.completeWizard(account);
 		
 		// Return the account
