@@ -1,13 +1,13 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="}}}フォルダを共有する{{{" url="Sharing/Sharing_a_folder.htm" />
+<item name="フォルダを共有する" url="Sharing/Sharing_a_folder.htm" />
 <item name="共有する項目を管理する" url="Sharing/Managing_items_you_share.htm" />
-<item name="}}}配布リストを使用して共有する{{{" url="Sharing/Sharing_with_a_Distribution_List.htm" />
+<item name="配布リストを使用して共有する" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="メールフォルダを共有する" >
   <item name="メールフォルダを共有する" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
   <item name="メールボックスを共有する" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="}}}共有フォルダへのアクセスを無効にする{{{" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="共有フォルダへのアクセスを無効にする" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
   <item name="共有メールボックスフォルダへのアクセスを受け入れる" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="共有メールフォルダ内で操作する" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
 </book>
@@ -22,7 +22,7 @@
   <item name="アドレスブックを共有する" url="Contacts/Sharing_your_Address_Book.htm" />
 </book>
 <book name="タスクリストを共有する" >
-  <item name="}}}自分のタスクリストを共有する{{{" url="Tasks/Share_your_Task_folder.htm" />
+  <item name="自分のタスクリストを共有する" url="Tasks/Share_your_Task_folder.htm" />
   <item name="共有タスクリストへのアクセスを受け入れる" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
 </book>
 <book name="ブリーフケースフォルダを共有する" >

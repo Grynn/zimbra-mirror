@@ -3,29 +3,29 @@
 <book name="はじめに" >
   <item name="Zimbra Desktopについて" url="Getting_Started/Zimbra_User_Help.htm" />
   <item name="Zimbra Desktopの機能の概要" url="Zdesktop/Overview_of_Zimbra_Desktop_Features.htm" />
-  <item name="}}}オフラインで作業する{{{" url="Zdesktop/z-Working_Offline.htm" />
+  <item name="オフラインで作業する" url="Zdesktop/z-Working_Offline.htm" />
   <item name="キーボードショートカット" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </book>
-<book name="}}}Zimbra Desktopを設定する{{{" >
-  <item name="}}}Zimbra Web Clientのアカウントを設定する{{{" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
+<book name="Zimbra Desktopを設定する" >
+  <item name="Zimbra Web Clientのアカウントを設定する" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
   <item name="Yahoo!メールおよびGmailのアカウントを設定する" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
   <item name="POP/IMAPアカウントを設定する" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
   <item name="アカウントを同期する" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
-  <item name="}}}自動同期を無効にする{{{" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
-  <item name="}}}Desktopビューを整理する{{{" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
+  <item name="自動同期を無効にする" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
+  <item name="Desktopビューを整理する" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
   <item name="Desktopからアカウントを削除する" url="Zdesktop/z-Deleting_an_account_from_Desktop.htm" />
 </book>
 <book name="Desktopメールボックス内を移動する" >
   <item name="Zimbra Desktop内を移動する" url="Navigation_folders_and_tips/z-Navigating_Zimbra_Desktop.htm" />
   <item name="ユーザーインターフェイスの機能とショートカット" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
   <item name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
-  <item name="}}}システムフォルダ{{{" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="システムフォルダ" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="操作を複数の選択項目に適用する" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
 </book>
 <book name="メールボックスを管理する" >
   <item name="メールメッセージビューを管理する" url="conversations/conversation_list_view.htm" />
   <item name="メールを取得するためのDesktopの動作を設定する" url="Zdesktop/z_Setting_Desktop_behavior_for_getting_mail.htm" />
-  <item name="}}}メッセージを表示する{{{" url="Navigation_folders_and_tips/Traditional_View.htm" />
+  <item name="メッセージを表示する" url="Navigation_folders_and_tips/Traditional_View.htm" />
   <item name="スレッドのしくみ" url="conversations/conversations_can_span_folders.htm" />
   <item name="メールメッセージを分類する" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="スレッドを印刷する" url="conversations/printing_a_conversation.htm" />
@@ -38,7 +38,7 @@
   <item name="メールメッセージの各部分について" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Cc:アドレスとBcc:アドレスを使用する" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
-  <item name="}}}署名を追加する{{{" url="Userspecific/using_a_signature.htm" />
+  <item name="署名を追加する" url="Userspecific/using_a_signature.htm" />
   <item name="メールメッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="サポートされている添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
@@ -62,17 +62,17 @@
 </book>
 <book name="連絡先リストを管理する" >
   <item name="新しい連絡先を追加する" url="Contacts/creating_a_new_contact.htm" />
-  <item name="}}}連絡先グループリストを作成する{{{" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="連絡先グループリストを作成する" url="Contacts/Creating_Group_Contact_Lists.htm" />
   <item name="連絡先を編集する" url="Contacts/editing_a_contact.htm" />
   <item name="連絡先を削除する" url="Contacts/deleting_a_contact.htm" />
-  <item name="}}}連絡先を印刷する{{{" url="Contacts/Printing_Contacts.htm" />
-  <item name="}}}連絡先をインポートする{{{" url="Contacts/Importing_Contacts.htm" />
-  <item name="}}}連絡先をエクスポートする{{{" url="Contacts/Exporting_Address_Books.htm" />
+  <item name="連絡先を印刷する" url="Contacts/Printing_Contacts.htm" />
+  <item name="連絡先をインポートする" url="Contacts/Importing_Contacts.htm" />
+  <item name="連絡先をエクスポートする" url="Contacts/Exporting_Address_Books.htm" />
 </book>
 <book name="カレンダーを管理する" >
   <item name="カレンダーを使用する" url="Calendar/z-Using_Calendars.htm" />
-  <item name="}}}カレンダービュー{{{" url="Calendar/Calendar_Views.htm" />
-  <item name="}}}カレンダーを色分けする{{{" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
+  <item name="カレンダーを色分けする" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="カレンダーを印刷する" url="Calendar/Printing_a_calendar.htm" />
   <item name="カレンダーを削除する" url="Calendar/Deleting_Calendars.htm" />
   <item name="iCalカレンダーをインポートする" url="Calendar/Importing_your_iCal_calendar.htm" />
@@ -82,7 +82,7 @@
   <item name="予約の予定について" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
   <item name="予約を計画する" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="予約を予定する" url="Calendar/Scheduling_meetings.htm" />
-  <item name="}}}予定あり/予定なしの時間帯を表示する{{{" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="予定あり/予定なしの時間帯を表示する" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
   <item name="簡易追加機能を使用して予約を作成する" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
   <item name="メッセージや連絡先を会議要求に変換する" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
@@ -94,20 +94,20 @@
   <item name="検索を使用する" url="Search/using_the_search_feature.htm" />
   <item name="メッセージを検索する" url="Search/_search__vs.__search_for_.htm" />
   <item name="簡易検索" url="Search/Quick_search.htm" />
-  <item name="}}}高度な検索{{{" url="Search/building_search_queries.htm" />
+  <item name="高度な検索" url="Search/building_search_queries.htm" />
   <item name="検索クエリを保存する" url="Search/saving_search_queries.htm" />
   <item name="クエリ言語の記述" url="Search/query_language_description.htm" />
   <item name="検索の例" url="Search/search_examples.htm" />
   <item name="「含む」と「一致する」" url="Search/contains_vs_matches.htm" />
-  <item name="}}}AND検索とOR検索{{{" url="Search/and_vs_or_searches.htm" />
-  <item name="}}}検索でアスタリスクワイルドカード（*）を使用する{{{" url="Search/Using_Wildcard_in_Search.htm" />
+  <item name="AND検索とOR検索" url="Search/and_vs_or_searches.htm" />
+  <item name="検索でアスタリスクワイルドカード（*）を使用する" url="Search/Using_Wildcard_in_Search.htm" />
 </book>
 <book name="ユーザー設定を指定する" >
-  <item name="}}}Desktopの詳細設定を指定する{{{" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
+  <item name="Desktopの詳細設定を指定する" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
   <item name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
-  <item name="}}}他のアドレスメール通知を送信する{{{" url="Userspecific/New_mail_notifications.htm" />
+  <item name="他のアドレスメール通知を送信する" url="Userspecific/New_mail_notifications.htm" />
   <item name="不在メッセージ" url="Userspecific/vacation_message.htm" />
-  <item name="}}}Zimbra Desktopをデフォルトのメールクライアントに設定する{{{" url="managing_your_account/Making_Zimbra_Desktop_Default_Mail_Client.htm" />
+  <item name="Zimbra Desktopをデフォルトのメールクライアントに設定する" url="managing_your_account/Making_Zimbra_Desktop_Default_Mail_Client.htm" />
 </book>
 <book name="アカウントを整理する" >
   <item name="メールメッセージを分類する" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm#bc-1" />
@@ -128,8 +128,8 @@
   <item name="タスクを移動する" url="Tasks/Moving_tasks.htm" />
   <item name="タスクを並べ替える" url="Tasks/Sorting_tasks_.htm" />
 </book>
-<book name="}}}フォルダを共有する（Zimbraアカウントのみ）{{{" >
-  <item name="}}}Zimbraフォルダを共有する{{{" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
+<book name="フォルダを共有する（Zimbraアカウントのみ）" >
+  <item name="Zimbraフォルダを共有する" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
   <item name="フォルダを共有するには" url="Zdesktop/zd_Sharing_Folders_steps_.htm" />
   <item name="共有メールボックスフォルダへのアクセスを受け入れる" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="共有フォルダで作業する" url="Zdesktop/zd_working_in_a_shared_folder.htm" />
@@ -144,7 +144,7 @@
 </book>
 <book name="アカウントの内容を管理する" >
   <item name="メールメッセージをアーカイブする" url="Zdesktop/Archiving_your_email_messages.htm" />
-  <item name="}}}アカウントデータを別のアカウントに移動する{{{" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <item name="アカウントデータを別のアカウントに移動する" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 
 </tocdata>

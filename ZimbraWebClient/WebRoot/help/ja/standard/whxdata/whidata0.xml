@@ -1,39 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="}}}カレンダー、リモート{{{" >
-  <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}カレンダー、予定なし/予定ありから除外する{{{" >
-  <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}タスク、印刷する{{{" >
-  <topic name="タスクについて" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="}}}タスク、完了マークを付ける{{{" >
-  <topic name="タスクを変更する" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}タスクに完了マークを付ける{{{" >
-  <topic name="タスクを変更する" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}タスクを印刷する{{{" >
-  <topic name="タスクについて" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="}}}リモートカレンダー{{{" >
-  <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}予定なし/予定あり、カレンダーを除外する{{{" >
-  <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}別のカレンダーと同期する{{{" >
-  <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}忘れる{{{" >
-  <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="}}}検索を保存する{{{" >
-  <topic name="検索クエリを作成して保存する" url="Search/b_Create_and_Save_a_Search_Query.htm" />
-</key>
 <key name="HTML" >
   <topic name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
@@ -70,6 +37,12 @@
 <key name="オプション、不在メッセージ" >
   <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
 </key>
+<key name="カレンダー、リモート" >
+  <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="カレンダー、予定なし/予定ありから除外する" >
+  <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="キーボードショートカット" >
   <topic name="キーボードショートカット" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
 </key>
@@ -93,6 +66,18 @@
 </key>
 <key name="タグ" >
   <topic name="タグをメッセージや連絡先に割り当てる" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+</key>
+<key name="タスク、印刷する" >
+  <topic name="タスクについて" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="タスク、完了マークを付ける" >
+  <topic name="タスクを変更する" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="タスクに完了マークを付ける" >
+  <topic name="タスクを変更する" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="タスクを印刷する" >
+  <topic name="タスクについて" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="フィルターの条件" >
   <topic name="サポートされているフィルターの条件と操作" url="filters/filter_conditions_and_actions_supported.htm" />
@@ -139,6 +124,9 @@
 <key name="メール通知" >
   <topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
 </key>
+<key name="リモートカレンダー" >
+  <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="ログオフする" >
   <topic name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
 </key>
@@ -147,6 +135,9 @@
 </key>
 <key name="不在メッセージ" >
   <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="予定なし/予定あり、カレンダーを除外する" >
+  <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="予約にプライベートのマークを付ける" >
   <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
@@ -160,11 +151,17 @@
 <key name="会議を計画する" >
   <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
+<key name="別のカレンダーと同期する" >
+  <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="復元する" >
   <topic name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <key name="削除したメールメッセージ" >
     <topic name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
+</key>
+<key name="忘れる" >
+  <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="新しいウィンドウ、メッセージを表示する" >
   <topic name="メールの表示方法を管理する" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
@@ -177,6 +174,9 @@
 </key>
 <key name="検索、検索を作成する" >
   <topic name="検索を使用する" url="Search/b_Using_Search.htm" />
+</key>
+<key name="検索を保存する" >
+  <topic name="検索クエリを作成して保存する" url="Search/b_Create_and_Save_a_Search_Query.htm" />
 </key>
 <key name="検索クエリを作成する" >
   <topic name="検索を使用する" url="Search/b_Using_Search.htm" />

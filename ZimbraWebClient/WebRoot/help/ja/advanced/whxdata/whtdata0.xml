@@ -2,25 +2,25 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="はじめに" >
-  <item name="}}}@ClientNameL@ClientNameLong@へようこそ{{{" url="Getting_Started/about_liquid_mail.htm" />
-  <item name="}}}@@ClientNameShort@7.0の新機能{{{" url="New_in_6.0.htm" />
+  <item name="@ClientNameLong@ClientNameLong@こそ" url="Getting_Started/about_liquid_mail.htm" />
+  <item name="@Cli@ClientNameShort@の新機能" url="New_in_6.0.htm" />
   <item name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
   <item name="ログイン時のクライアントの種類を変更する" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="キーボードショートカット" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <item name="@CompanyName@me@アシスタント{{{" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <item name="@CompanyName@アシスタント" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="パスワードを変更する" url="Userspecific/chaning_your_password.htm" />
   <item name="パスワードを忘れた場合" url="Userspecific/if_you_forget_your_password.htm" />
   <item name="セッションの有効期限が切れた場合" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="メールボックス内を移動する" >
-  <item name="}}}@ClientN@ClientNameLong@{" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="@ClientName@ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <item name="全般の詳細設定を指定する" url="Userspecific/Setting_your_general_preferences.htm" />
   <item name="ビューをカスタマイズする" url="Navigation_folders_and_tips/Customize_your_view.htm" />
   <item name="ユーザーインターフェイスの機能とショートカット" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
   <item name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="操作を複数の選択項目に適用する" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
   <item name="ブラウザを使用する" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-  <item name="}}}作業内容を保存する{{{" url="Userspecific/browser_session_handling.htm" />
+  <item name="作業内容を保存する" url="Userspecific/browser_session_handling.htm" />
   <item name="概要ペインを表示する" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="メールのシステムフォルダ" url="Navigation_folders_and_tips/inbox_folder.htm" />
 </book>
@@ -29,13 +29,13 @@
   <item name="メールの詳細設定を指定する" url="Userspecific/Setting_your_mail_preferences.htm" />
   <item name="メールメッセージを分類する" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="最初のメールページをカスタマイズする" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
-  <item name="}}}スレッドのしくみ{{{" url="conversations/conversations_can_span_folders.htm" />
+  <item name="スレッドのしくみ" url="conversations/conversations_can_span_folders.htm" />
   <item name="スレッドを印刷する" url="conversations/printing_a_conversation.htm" />
   <item name="フォルダ間でメールメッセージを移動する" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <item name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
-  <item name="}}}RSS/Atomフィードを購読する{{{" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+  <item name="RSS/Atomフィードを購読する" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
   <item name="アカウント内で複数のIDを管理する" url="Userspecific/Mail_Identities.htm" />
-  <item name="}}}[迷惑メール]フォルダを管理する{{{" url="filters/Managing_your_Junk_Folder.htm" />
+  <item name="[迷惑メール]フォルダを管理する" url="filters/Managing_your_Junk_Folder.htm" />
   <item name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="メールメッセージを完全に削除する" url="reading_mail/archiving_old_messages.htm" />
   <book name="メッセージを読む" >
@@ -43,8 +43,8 @@
     <item name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
     <item name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
     <item name="メールを未読にする" url="reading_mail/marking_mail_as_unread.htm" />
-    <item name="}}}新着メッセージの通知{{{" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-    <item name="}}}メールメッセージをHTML形式で表示する{{{" url="reading_mail/displaying_html_in_email_messages.htm" />
+    <item name="新着メッセージの通知" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+    <item name="メールメッセージをHTML形式で表示する" url="reading_mail/displaying_html_in_email_messages.htm" />
     <item name="添付ファイルを開く" url="reading_mail/opening_file_attachments.htm" />
     <item name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
     <item name="配信不能メール" url="Creating_Messages/undeliverable_mail.htm" />
@@ -61,12 +61,12 @@
   <item name="メールメッセージの各部分について" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="署名を自動的に追加する" url="Userspecific/using_a_signature.htm" />
   <item name="アドレスのオートコンプリート" url="Creating_Messages/Using_address_lookup.htm" />
-  <item name="}}}メールを後で送信されるように予定する{{{" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
+  <item name="メールを後で送信されるように予定する" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="閲覧確認を要求する" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="メッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Cc:アドレスとBcc:アドレスを追加する" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
-  <item name="}}}HTMLエディタを使用する{{{" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="スペルチェックを使用する" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="メッセージを下書きとして保存する" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
@@ -79,7 +79,7 @@
   <item name="使用可能なアドレスブックの種類" url="Contacts/gal_vs_contacts.htm" />
   <item name="アドレスブックの詳細設定を指定する" url="Userspecific/Setting_your_address_book_preferences.htm" />
   <item name="新しい連絡先を追加する" url="Contacts/creating_a_new_contact.htm" />
-  <item name="}}}連絡先情報を転送する{{{" url="Contacts/Forwarding_Contact_Information.htm" />
+  <item name="連絡先情報を転送する" url="Contacts/Forwarding_Contact_Information.htm" />
   <item name="社内アドレスブックを使用する" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="連絡先を自動的に追加する" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
   <item name="グループ連絡先リストを作成する" url="Contacts/Creating_Group_Contact_Lists.htm" />
@@ -90,24 +90,24 @@
   <item name="連絡先を削除する" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="カレンダーを管理する" >
-  <item name="}}}@Co@CompanyName@ダーについて{{{" url="Calendar/About_Calendar.htm" />
+  <item name="@Compa@CompanyName@ついて" url="Calendar/About_Calendar.htm" />
   <item name="カレンダーを作成する" url="Calendar/Create_Calendars.htm" />
-  <item name="}}}カレンダーを色分けする{{{" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="カレンダーを色分けする" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="カレンダーの詳細設定を指定する" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <item name="}}}カレンダー週を表示する{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <item name="カレンダー週を表示する" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
   <item name="カレンダービューのオプション" url="Calendar/Calendar_Views.htm" />
   <item name="カレンダーリストビュー" url="Calendar/Calendar_List_View.htm" />
   <item name="複数のカレンダーを表示する" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
   <item name="カレンダーを削除する" url="Calendar/Deleting_Calendars.htm" />
-  <item name="}}}iCalカレンダーをインポートする{{{" url="Calendar/Importing_your_iCal_calendar.htm" />
-  <item name="}}}iCalカレンダーをエクスポートする{{{" url="Calendar/Exporting_your_iCal_calendar.htm" />
+  <item name="iCalカレンダーをインポートする" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <item name="iCalカレンダーをエクスポートする" url="Calendar/Exporting_your_iCal_calendar.htm" />
   <item name="カレンダーを印刷する" url="Calendar/Printing_a_calendar.htm" />
 </book>
 <book name="予約、会議、イベントを予定する" >
   <item name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
   <item name="会議を計画する" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="予約を作成する" url="Calendar/Scheduling_meetings.htm" />
-  <item name="}}}予定あり/予定なしの時間帯を表示する{{{" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="予定あり/予定なしの時間帯を表示する" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="予定なし/予定あり情報を見るアクセス許可を設定する" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
   <item name="予定なし/予定ありのステータスを他のユーザーに送信する" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
   <item name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
@@ -129,7 +129,7 @@
   <item name="タスクリストを作成する" url="Tasks/Create_tasks_folders.htm" />
   <item name="タスクを追加する" url="Tasks/Add_a_task.htm" />
   <item name="タスクを変更する" url="Tasks/Change_a_task.htm" />
-  <item name="}}}タスクのリマインダーを設定する{{{" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
+  <item name="タスクのリマインダーを設定する" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
   <item name="タスクを移動する" url="Tasks/Moving_tasks.htm" />
   <item name="タスクを削除する" url="Tasks/Delete_a_task.htm" />
   <item name="タスクを並べ替える" url="Tasks/Sorting_tasks_.htm" />
@@ -151,21 +151,24 @@
 <book name="タグとフォルダを使用してメールを整理する" >
 <chunk name="タグとフォルダを使用してメールを整理する" ref="whtdata3.xml" />
 </book>
-<book name="}}}メールフィルターを使用する{{{" >
-<chunk name="}}}メールフィルターを使用する{{{" ref="whtdata4.xml" />
+<book name="メールフィルターを使用する" >
+  <item name="フィルター規則を設定する" url="filters/how_filtering_works.htm" />
+  <item name="メッセージをフィルターする" url="filters/filtering_your_messages.htm" />
+  <item name="サポートされているフィルターの条件と操作" url="filters/filter_conditions_and_actions_supported.htm" />
+  <item name="「含む」、「一致」、「完全一致」オプションを使用して選別する" url="Search/contains_vs_matches.htm" />
+  <item name="フィルターのワイルドカード" url="filters/wildcards.htm" />
 </book>
 <book name="ユーザー設定を指定する" >
-<chunk name="ユーザー設定を指定する" ref="whtdata5.xml" />
+<chunk name="ユーザー設定を指定する" ref="whtdata4.xml" />
 </book>
-<book name="}}}携帯デバイスを管理する（Network Editionのみ）{{{" >
-  <item name="携帯デバイスを管理する" url="Userspecific/Managing_your_mobile_devices.htm" />
-  <item name="携帯デバイスをワイプする" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+<book name="携帯デバイスを管理する（Network Editionのみ）" >
+<chunk name="携帯デバイスを管理する（Network Editionのみ）" ref="whtdata5.xml" />
 </book>
-<book name="}}}アカウントのフォルダを保存する{{{" >
-  <item name="}}}アカウントの内容をバックアップする{{{" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+<book name="アカウントのフォルダを保存する" >
+<chunk name="アカウントのフォルダを保存する" ref="whtdata6.xml" />
 </book>
 <book name="Zimletを使用する" >
-<chunk name="Zimletを使用する" ref="whtdata6.xml" />
+<chunk name="Zimletを使用する" ref="whtdata7.xml" />
 </book>
 
 </tocdata>

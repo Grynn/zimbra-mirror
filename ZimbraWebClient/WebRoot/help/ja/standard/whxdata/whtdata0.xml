@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="はじめに" >
-  <item name="}}}標準ウェブクライアントの概要{{{" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+  <item name="標準ウェブクライアントの概要" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
   <item name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
   <item name="ログイン時のクライアントの種類を変更する" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="キーボードショートカット" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -34,8 +34,8 @@
   <item name="アドレスのオートコンプリート" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="メッセージにファイルを添付する" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="}}}HTMLエディタを使用する{{{" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="}}}スペルをチェックする{{{" url="Creating_Messages/Check_the_spelling.htm" />
+  <item name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="スペルをチェックする" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="メッセージを下書きとして保存する" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="メッセージに返信する/メッセージを転送する" >
@@ -49,8 +49,8 @@
 </book>
 <book name="カレンダーを管理する" >
   <item name="カレンダーについて" url="Calendar/b_About_Calendar.htm" />
-  <item name="}}}新しいカレンダーを作成する{{{" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="}}}カレンダーを色分けする{{{" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="カレンダーを色分けする" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="カレンダービューのオプション" url="Calendar/Calendar_Views.htm" />
   <item name="iCalendarをインポートする" url="Calendar/Importing_iCalendars.htm" />
   <item name="カレンダーを削除する" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
@@ -68,7 +68,7 @@
 </book>
 <book name="フォルダを共有する" >
   <book name="カレンダーを共有する" >
-    <item name="}}}共有カレンダーにリンクする{{{" url="Calendar/Link_to_Shared_Calendar.htm" />
+    <item name="共有カレンダーにリンクする" url="Calendar/Link_to_Shared_Calendar.htm" />
   </book>
   <book name="アドレスブックを共有する" >
     <item name="共有アドレスブックにリンクする" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
@@ -85,7 +85,7 @@
   <item name="フォルダの名前を変更する" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <item name="フォルダを削除する" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
-<book name="}}}メールフィルターを使用する{{{" >
+<book name="メールフィルターを使用する" >
   <item name="メッセージをフィルターする" url="filters/bc_Filtering_your_messages.htm" />
   <item name="サポートされているフィルターの条件と操作" url="filters/filter_conditions_and_actions_supported.htm" />
 </book>
@@ -93,7 +93,7 @@
   <item name="ユーザー設定を指定する" url="Userspecific/b_Setting_your_Options.htm" />
   <item name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
   <item name="不在メッセージを作成する" url="Userspecific/vacation_message.htm" />
-  <item name="}}}RSS/ATOMフィードを購読する{{{" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+  <item name="RSS/ATOMフィードを購読する" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>
 
 </tocdata>

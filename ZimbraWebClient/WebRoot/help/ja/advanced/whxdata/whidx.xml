@@ -1,8 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="[ゴミ箱]フォルダ" last="HTML形式で表示" num="118" />
-<chunkinfo url="whidata1.xml" first="iCalカレンダー、インポートまたはエクスポート" last="予約、簡易追加" num="116" />
-<chunkinfo url="whidata2.xml" first="予約にプライベートのマークを付ける" last="閲覧ペイン" num="87" />
+<chunkinfo url="whidata0.xml" first="[ゴミ箱]フォルダ" last="パブリック/プライベートカレンダーイベント" num="114" />
+<chunkinfo url="whidata1.xml" first="パーソナ" last="復元する" num="117" />
+<chunkinfo url="whidata2.xml" first="必須の参加" last="電話、ワイプする" num="87" />
 
 </index>

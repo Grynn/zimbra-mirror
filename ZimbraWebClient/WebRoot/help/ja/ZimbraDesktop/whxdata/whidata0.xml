@@ -1,177 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
-<key name="}}}ics添付ファイル、保存する{{{" >
-  <topic name="招待に応答する" url="Calendar/Responding_to_an_invitation.htm" />
-</key>
-<key name="}}}IMAPアカウントの設定{{{" >
-  <topic name="POP/IMAPアカウントを設定する" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
-</key>
-<key name="}}}IM通知{{{" >
-  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}Microsoft Exchange IMAPアカウントの設定{{{" >
-  <topic name="POP/IMAPアカウントを設定する" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
-</key>
-<key name="}}}Winミニカレンダー{{{" >
-  <topic name="}}}カレンダー週を表示する{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-</key>
-<key name="}}}Zimlet、無効にする{{{" >
-  <topic name="Zimletを管理する" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
-<key name="}}}Zimletを無効にする{{{" >
-  <topic name="Zimletを管理する" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
-<key name="}}}アカウント、インポート{{{" >
-  <topic name="アカウントの内容をバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}アカウント、エクスポート{{{" >
-  <topic name="アカウントの内容をバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}アカウントの設定、IMAP{{{" >
-  <topic name="POP/IMAPアカウントを設定する" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
-</key>
-<key name="}}}アカウントをインポートする{{{" >
-  <topic name="アカウントの内容をバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}アカウントデータをエクスポートする{{{" >
-  <topic name="アカウントの内容をバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}アカウントデータをバックアップする{{{" >
-  <topic name="アカウントの内容をバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}アラート{{{" >
-  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}オフライン、作業する{{{" >
-  <topic name="オフラインで作業する" url="Zdesktop/z-Working_Offline.htm" />
-</key>
-<key name="}}}オフラインで作業する{{{" >
-  <topic name="オフラインで作業する" url="Zdesktop/z-Working_Offline.htm" />
-</key>
-<key name="}}}カスタム連絡先フィールド{{{" >
-  <topic name="新しい連絡先を作成する" url="Contacts/creating_a_new_contact.htm" />
-</key>
-<key name="}}}タスク、印刷する{{{" >
-  <topic name="タスクについて" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="}}}タスク、完了マークを付ける{{{" >
-  <topic name="タスクを変更する" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}タスクに完了マークを付ける{{{" >
-  <topic name="タスクを変更する" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}タスクを印刷する{{{" >
-  <topic name="タスクについて" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="}}}パブリック/プライベートカレンダーイベント{{{" >
-  <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
-</key>
-<key name="}}}ビューをカスタマイズする{{{" >
-  <topic name="ビューをカスタマイズする" url="Navigation_folders_and_tips/Customize_your_view.htm" />
-</key>
-<key name="}}}ファイル、添付する{{{" >
-  <topic name="メールメッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="}}}フィルター規則、既存のフォルダ{{{" >
-  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}フォルダ、同期する{{{" >
-  <topic name="フォルダにアクセスする" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
-</key>
-<key name="}}}ブリーフケース、メールにファイルを添付する{{{" >
-  <topic name="メールメッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="}}}ブリーフケースのファイルを添付する{{{" >
-  <topic name="メールメッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="}}}プライベートカレンダーイベント{{{" >
-  <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
-</key>
-<key name="}}}ミニカレンダー{{{" >
-  <topic name="}}}カレンダー週を表示する{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-</key>
-<key name="}}}メッセージ、閲覧確認{{{" >
-  <topic name="閲覧確認を要求する" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
-</key>
-<key name="}}}メッセージをフォルダに移動する{{{" >
-  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}メールをアーカイブする{{{" >
-  <topic name="メールメッセージをアーカイブする" url="Zdesktop/Archiving_your_email_messages.htm" />
-</key>
-<key name="}}}メールを自動的にフォルダに移動する{{{" >
-  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}メール通知{{{" >
-  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}リマインダー{{{" >
-  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}予約にプライベートのマークを付ける{{{" >
-  <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
-</key>
-<key name="}}}任意の参加{{{" >
-  <topic name="}}}予約の作成時に[予定]タブを使用する{{{" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="}}}会議のリマインダー{{{" >
-  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}会議の応答を確認する{{{" >
-  <topic name="}}}予約の作成時に[予定]タブを使用する{{{" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="}}}内容ペイン、列ヘッダーを変更する{{{" >
-  <topic name="ビューをカスタマイズする" url="Navigation_folders_and_tips/Customize_your_view.htm" />
-</key>
-<key name="}}}再送信する{{{" >
-  <topic name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="}}}受信メールを並べ替える{{{" >
-  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}受信者、検索{{{" >
-  <topic name="}}}受信者を検索する{{{ " url="Search/Searching_for_Recipients_.htm" />
-</key>
-<key name="}}}受信者を検索する{{{" >
-  <topic name="}}}受信者を検索する{{{ " url="Search/Searching_for_Recipients_.htm" />
-</key>
-<key name="}}}必須の参加{{{" >
-  <topic name="}}}予約の作成時に[予定]タブを使用する{{{" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="}}}忘れる{{{" >
-  <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="}}}新しいZimletをアップロードする{{{" >
-  <topic name="Zimletを管理する" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
-<key name="}}}新規として編集する{{{" >
-  <topic name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="}}}署名のURL{{{" >
-  <topic name="署名を使用する" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="}}}署名のイメージ{{{" >
-  <topic name="署名を使用する" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="}}}連絡先、フォームにカスタムフィールドを作成する{{{" >
-  <topic name="新しい連絡先を作成する" url="Contacts/creating_a_new_contact.htm" />
-</key>
-<key name="}}}週番号{{{" >
-  <topic name="}}}カレンダー週を表示する{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-</key>
-<key name="}}}閲覧ペイン、オンとオフを切り替える{{{" >
-  <topic name="メールメッセージビューを管理する" url="conversations/conversation_list_view.htm" />
-  <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="}}}閲覧ペインを表示{{{" >
-  <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="}}}閲覧ペインビュー{{{" >
-  <topic name="メールメッセージビューを管理する" url="conversations/conversation_list_view.htm" />
-</key>
-<key name="}}}閲覧確認{{{" >
-  <topic name="閲覧確認を要求する" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
-</key>
 <key name="Atomフィード" >
   <topic name="RSS/Atomフィードを購読する" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
@@ -196,11 +24,23 @@
 <key name="iCalカレンダーをエクスポート" >
   <topic name="iCalカレンダーをインポートする" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
+<key name="ics添付ファイル、保存する" >
+  <topic name="招待に応答する" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="ID" >
   <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
 </key>
+<key name="IMAPアカウントの設定" >
+  <topic name="POP/IMAPアカウントを設定する" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
 <key name="IMAPアドレス、追加する" >
   <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="IM通知" >
+  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="Microsoft Exchange IMAPアカウントの設定" >
+  <topic name="POP/IMAPアカウントを設定する" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
 </key>
 <key name="POPアドレス、追加する" >
   <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
@@ -211,9 +51,36 @@
 <key name="RSSを購読する" >
   <topic name="RSS/Atomフィードを購読する" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
+<key name="Winミニカレンダー" >
+  <topic name="カレンダー週を表示する" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
 <key name="Zimlet" >
   <topic name="Zimletについて" url="Zimlets/About_Zimlets.htm" />
   <topic name="Zimletを管理する" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
+<key name="Zimlet、無効にする" >
+  <topic name="Zimletを管理する" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
+<key name="Zimletを無効にする" >
+  <topic name="Zimletを管理する" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
+<key name="アカウント、インポート" >
+  <topic name="アカウントの内容をバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="アカウント、エクスポート" >
+  <topic name="アカウントの内容をバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="アカウントの設定、IMAP" >
+  <topic name="POP/IMAPアカウントを設定する" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
+<key name="アカウントをインポートする" >
+  <topic name="アカウントの内容をバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="アカウントデータをエクスポートする" >
+  <topic name="アカウントの内容をバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="アカウントデータをバックアップする" >
+  <topic name="アカウントの内容をバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 <key name="アドレスをオートコンプリートする" >
   <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
@@ -227,8 +94,17 @@
 <key name="アドレスブックをインポートする" >
   <topic name="連絡先をインポートする" url="Contacts/Importing_Contacts.htm" />
 </key>
+<key name="アラート" >
+  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
 <key name="イベント" >
   <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="オフライン、作業する" >
+  <topic name="オフラインで作業する" url="Zdesktop/z-Working_Offline.htm" />
+</key>
+<key name="オフラインで作業する" >
+  <topic name="オフラインで作業する" url="Zdesktop/z-Working_Offline.htm" />
 </key>
 <key name="オプション、メール着信通知" >
   <topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
@@ -238,6 +114,9 @@
 </key>
 <key name="カスタムフォルダ" >
   <topic name="カスタムフォルダを作成する" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="カスタム連絡先フィールド" >
+  <topic name="新しい連絡先を作成する" url="Contacts/creating_a_new_contact.htm" />
 </key>
 <key name="カレンダー、予定なし/予定あり" >
   <topic name="予定あり/予定なしの時間帯を表示する" url="Calendar/Seeing_free_busy_times.htm" />
@@ -298,8 +177,20 @@
 <key name="タグを使用する" >
   <topic name="タグを使用してメールメッセージを分類する" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
+<key name="タスク、印刷する" >
+  <topic name="タスクについて" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="タスク、完了マークを付ける" >
+  <topic name="タスクを変更する" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="タスクに完了マークを付ける" >
+  <topic name="タスクを変更する" url="Tasks/Change_a_task.htm" />
+</key>
 <key name="タスクを並べ替える" >
   <topic name="タスクを並べ替える " url="Tasks/Sorting_tasks_.htm" />
+</key>
+<key name="タスクを印刷する" >
+  <topic name="タスクについて" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="テーブル、文書ページに追加する" >
   <topic name="ノートブックページにテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
@@ -307,8 +198,17 @@
 <key name="ノートブックページ" >
   <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
 </key>
+<key name="パブリック/プライベートカレンダーイベント" >
+  <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
 <key name="パーソナ" >
   <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="ビューをカスタマイズする" >
+  <topic name="ビューをカスタマイズする" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+</key>
+<key name="ファイル、添付する" >
+  <topic name="メールメッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="フィルター、しくみ" >
   <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
@@ -317,8 +217,14 @@
   <topic name="サポートされているフィルターの条件と操作" url="filters/filter_conditions_and_actions_supported.htm" />
   <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
 </key>
+<key name="フィルター規則、既存のフォルダ" >
+  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
+</key>
 <key name="フォルダ" >
   <topic name="フォルダの名前を変更する" url="Navigation_folders_and_tips/renaming_folders.htm" />
+</key>
+<key name="フォルダ、同期する" >
+  <topic name="フォルダにアクセスする" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
 </key>
 <key name="フォント" >
   <topic name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -329,6 +235,15 @@
     <topic name="メールメッセージにフラグを付ける" url="Tags_and_flags/Flagging_an_email_message.htm" />
   </key>
 </key>
+<key name="ブリーフケース、メールにファイルを添付する" >
+  <topic name="メールメッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="ブリーフケースのファイルを添付する" >
+  <topic name="メールメッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="プライベートカレンダーイベント" >
+  <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
 <key name="プライベート予約" >
   <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
@@ -338,14 +253,23 @@
 <key name="ページ、文書" >
   <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
 </key>
+<key name="ミニカレンダー" >
+  <topic name="カレンダー週を表示する" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
 <key name="メッセージ、不在" >
   <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="メッセージ、閲覧確認" >
+  <topic name="閲覧確認を要求する" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
 <key name="メッセージをアーカイブする" >
   <topic name="メッセージを完全に削除する" url="reading_mail/archiving_old_messages.htm" />
 </key>
 <key name="メッセージをフィルターする" >
   <topic name="メッセージをフィルターする" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="メッセージをフォルダに移動する" >
+  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
 </key>
 <key name="メッセージを作成するときのメールID" >
   <topic name="新しいメールメッセージを作成する" url="Creating_Messages/Creating_a_new_mail_message.htm" />
@@ -371,11 +295,83 @@
 <key name="メールのアドレスのオートコンプリート" >
   <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
+<key name="メールをアーカイブする" >
+  <topic name="メールメッセージをアーカイブする" url="Zdesktop/Archiving_your_email_messages.htm" />
+</key>
 <key name="メールを受信する" >
   <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="メールを確認" >
   <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="メールを自動的にフォルダに移動する" >
+  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
+</key>
+<key name="メールを転送する" >
+  <topic name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="メールフォルダのアクセス許可を編集" >
+  <topic name="共有フォルダへのアクセスを無効にする" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="メールメッセージ" >
+  <topic name="メールメッセージの各部分について" url="Creating_Messages/parts_of_an_email_message.htm" />
+</key>
+<key name="メールメッセージビュー" >
+  <topic name="メールメッセージビューを管理する" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="メール通知" >
+  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
+  <topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="ユーザーインターフェイスの機能" >
+  <topic name="ユーザーインターフェイスの機能とショートカット" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="リマインダー" >
+  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="ワイルドカード" >
+  <topic name="ワイルドカード" url="filters/wildcards.htm" />
+</key>
+<key name="ワイルドカード、検索で使用する" >
+  <topic name="検索機能を使用する" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="ワイルドカードを使って検索" >
+  <topic name="検索機能を使用する" url="Search/using_the_search_feature.htm" />
+</key>
+<key name="下書きメッセージ" >
+  <topic name="下書きメッセージを保存する" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="不在メッセージ" >
+  <topic name="不在メッセージ" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="予定なし/予定あり" >
+  <topic name="予定あり/予定なしの時間帯を表示する" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="予約" >
+  <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="予約、簡易追加" >
+  <topic name="簡易追加機能を使用して予約を作成する" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="予約にプライベートのマークを付ける" >
+  <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="予約の作成方法" >
+  <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="予約を変更する" >
+  <topic name="繰り返し予約を変更する" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="任意の参加" >
+  <topic name="予約の作成時に[予定]タブを使用する" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="会議" >
+  <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="会議のリマインダー" >
+  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 
 </indexdata>
