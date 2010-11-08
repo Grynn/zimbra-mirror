@@ -1,134 +1,138 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <tocdata>
-<book name="}}}Premiers pas{{{" >
-  <item name="}}}À propos de Zimbra Desktop{{{" url="Getting_Started/Zimbra_User_Help.htm" />
-  <item name="}}}Aperçu des fonctions de Zimbra Desktop{{{" url="Zdesktop/Overview_of_Zimbra_Desktop_Features.htm" />
-  <item name="}}}Travailler hors ligne{{{" url="Zdesktop/z-Working_Offline.htm" />
-  <item name="}}}Touches de raccourcis clavier{{{" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+<book name="Premiers pas" >
+  <item name="À propos de Zimbra Desktop" url="Getting_Started/Zimbra_User_Help.htm" />
+  <item name="Aperçu des fonctions de Zimbra Desktop" url="Zdesktop/Overview_of_Zimbra_Desktop_Features.htm" />
+  <item name="Travailler hors ligne" url="Zdesktop/z-Working_Offline.htm" />
+  <item name="Touches de raccourcis clavier" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </book>
-<book name="}}}Configuration de Zimbra Desktop{{{" >
-  <item name="}}}Configurer un compte client Web Zimbra{{{" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
-  <item name="}}}Configuration de Yahoo!{{{ }}}Comptes Mail et Gmail{{{" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
-  <item name="}}}Configurer les comptes POP/IMAP{{{" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
-  <item name="}}}Synchroniser vos comptes{{{" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
-  <item name="}}}Désactivation de la synchronisation automatique{{{" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
-  <item name="}}}Organisation de votre affichage de bureau{{{" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
-  <item name="}}}Suppression d’un compte sur Desktop{{{" url="Zdesktop/z-Deleting_an_account_from_Desktop.htm" />
+<book name="Configuration de Zimbra Desktop" >
+  <item name="Configurer un compte client Web Zimbra" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
+  <item name="Configuration de Yahoo! Comptes Mail et Gmail" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
+  <item name="Configurer les comptes POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+  <item name="Synchroniser vos comptes" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
+  <item name="Désactivation de la synchronisation automatique" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
+  <item name="Organisation de votre affichage de bureau" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
+  <item name="Suppression d’un compte sur Desktop" url="Zdesktop/z-Deleting_an_account_from_Desktop.htm" />
 </book>
-<book name="}}}Navigation dans votre boîte aux lettres{{{" >
-  <item name="}}}Navigation sur Zimbra Desktop{{{" url="Navigation_folders_and_tips/z-Navigating_Zimbra_Desktop.htm" />
-  <item name="}}}Fonctions d’interface utilisateur et raccourcis{{{" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-  <item name="}}}Menus de clic droit{{{" url="Navigation_folders_and_tips/right-click_menus.htm" />
-  <item name="}}}Dossiers du système{{{" url="Navigation_folders_and_tips/inbox_folder.htm" />
-  <item name="}}}Appliquer des actions à plusieurs sélections{{{" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
+<book name="Navigation dans votre boîte aux lettres" >
+  <item name="Navigation sur Zimbra Desktop" url="Navigation_folders_and_tips/z-Navigating_Zimbra_Desktop.htm" />
+  <item name="Fonctions d’interface utilisateur et raccourcis" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+  <item name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <item name="Dossiers du système" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="Appliquer des actions à plusieurs sélections" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
 </book>
-<book name="}}}Gestion de votre boîte aux lettres{{{" >
-  <item name="}}}Gestion de l’affichage de vos mails{{{" url="conversations/conversation_list_view.htm" />
-  <item name="}}}Configuration du comportement du bureau pour actualiser{{{" url="Zdesktop/z_Setting_Desktop_behavior_for_getting_mail.htm" />
-  <item name="}}}Affichage des mails{{{" url="Navigation_folders_and_tips/Traditional_View.htm" />
-  <item name="}}}Quel est le principe de fonctionnement des conversations ?{{{" url="conversations/conversations_can_span_folders.htm" />
-  <item name="}}}Classification de vos mails{{{" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-  <item name="}}}Impression d’une conversation{{{" url="conversations/printing_a_conversation.htm" />
-  <item name="}}}Récupération de mails supprimés{{{" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  <item name="}}}Livraison de mail impossible{{{" url="Creating_Messages/undeliverable_mail.htm" />
-  <item name="}}}Configurer une adresse de redirection{{{" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<book name="Gestion de votre boîte aux lettres" >
+  <item name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
+  <item name="Configuration du comportement du bureau pour actualiser" url="Zdesktop/z_Setting_Desktop_behavior_for_getting_mail.htm" />
+  <item name="Affichage des mails" url="Navigation_folders_and_tips/Traditional_View.htm" />
+  <item name="Quel est le principe de fonctionnement des conversations ?" url="conversations/conversations_can_span_folders.htm" />
+  <item name="Classification de vos mails" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="Impression d’une conversation" url="conversations/printing_a_conversation.htm" />
+  <item name="Récupération de mails supprimés" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Livraison de mail impossible" url="Creating_Messages/undeliverable_mail.htm" />
+  <item name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </book>
-<book name="}}}Écrire un mail{{{" >
-  <item name="}}}Création et envoi de mails{{{" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <item name="}}}Parties d’un mail{{{" url="Creating_Messages/parts_of_an_email_message.htm" />
-  <item name="}}}Utilisation de l’éditeur HTML{{{" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="}}}Utilisation des adresses Cc :{{{ }}}et Cci :{{{ }}}adresses{{{" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
-  <item name="}}}Ajouter votre signature{{{" url="Userspecific/using_a_signature.htm" />
-  <item name="}}}Joindre des fichiers à un mail{{{" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-  <item name="}}}Types de fichiers de pièces jointes pris en charge{{{" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="}}}Utilisation de la vérification d’adresse{{{" url="Creating_Messages/Using_address_lookup.htm" />
-  <item name="}}}Enregistrement d’un brouillon{{{" url="Creating_Messages/saving_a_draft_message.htm" />
+<book name="Écrire un mail" >
+  <item name="Création et envoi de mails" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="Parties d’un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <item name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="Utilisation des adresses Cc : et Cci : adresses" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="Ajouter votre signature" url="Userspecific/using_a_signature.htm" />
+  <item name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="Types de fichiers de pièces jointes pris en charge" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
+  <item name="Enregistrement d’un brouillon" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
-<book name="}}}Lire, Répondre et Faire suivre des mails{{{" >
-  <item name="}}}Lecture d’un mail{{{" url="reading_mail/reading_mail.htm" />
-  <item name="}}}Comment vous avertir lorsque vous recevez un mail{{{" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-  <item name="}}}Affichage des messages à partir du Panneau de lecture{{{" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-  <item name="}}}Marquer des mails comme non lus{{{" url="reading_mail/marking_mail_as_unread.htm" />
-  <item name="}}}Ouvrir des pièces jointes{{{" url="reading_mail/opening_file_attachments.htm" />
-  <item name="}}}Impression de mails individuels{{{" url="reading_mail/printing_a_mail_message.htm" />
-  <item name="}}}Répondre à des mails{{{" url="reading_mail/replying_to_mail_messages.htm" />
-  <item name="}}}Faire suivre un mail{{{" url="Creating_Messages/forwarding_a_mail_message.htm" />
+<book name="Lire, Répondre et Faire suivre des mails" >
+  <item name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
+  <item name="Comment vous avertir lorsque vous recevez un mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <item name="Affichage des messages à partir du Panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <item name="Marquer des mails comme non lus" url="reading_mail/marking_mail_as_unread.htm" />
+  <item name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
+  <item name="Impression de mails individuels" url="reading_mail/printing_a_mail_message.htm" />
+  <item name="Répondre à des mails" url="reading_mail/replying_to_mail_messages.htm" />
+  <item name="Faire suivre un mail" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </book>
-<book name="}}}Utilisation de filtres{{{" >
-  <item name="}}}Utiliser des filtres pour trier les mails entrants{{{" url="filters/how_filtering_works.htm" />
-  <item name="}}}Filtrer vos mails{{{" url="filters/filtering_your_messages.htm" />
-  <item name="}}}Conditions et actions de filtre supportées{{{" url="filters/filter_conditions_and_actions_supported.htm" />
-  <item name="}}}caractères de substitution{{{" url="filters/wildcards.htm" />
+<book name="Utilisation de filtres" >
+  <item name="Utiliser des filtres pour trier les mails entrants" url="filters/how_filtering_works.htm" />
+  <item name="Filtrer vos mails" url="filters/filtering_your_messages.htm" />
+  <item name="Conditions et actions de filtre supportées" url="filters/filter_conditions_and_actions_supported.htm" />
+  <item name="caractères de substitution" url="filters/wildcards.htm" />
 </book>
-<book name="}}}Gestion de vos listes de contacts{{{" >
-  <item name="}}}Ajout de nouveaux contacts{{{" url="Contacts/creating_a_new_contact.htm" />
-  <item name="}}}Création de Listes du Groupe de Contacts{{{" url="Contacts/Creating_Group_Contact_Lists.htm" />
-  <item name="}}}Modification d’un contact{{{" url="Contacts/editing_a_contact.htm" />
-  <item name="}}}Suppression d’un contact{{{" url="Contacts/deleting_a_contact.htm" />
-  <item name="}}}Impression des contacts{{{" url="Contacts/Printing_Contacts.htm" />
-  <item name="}}}Importer des contacts{{{" url="Contacts/Importing_Contacts.htm" />
-  <item name="}}}Exporter des contacts{{{" url="Contacts/Exporting_Address_Books.htm" />
+<book name="Gestion de vos listes de contacts" >
+  <item name="Ajout de nouveaux contacts" url="Contacts/creating_a_new_contact.htm" />
+  <item name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="Modification d’un contact" url="Contacts/editing_a_contact.htm" />
+  <item name="Suppression d’un contact" url="Contacts/deleting_a_contact.htm" />
+  <item name="Impression des contacts" url="Contacts/Printing_Contacts.htm" />
+  <item name="Importer des contacts" url="Contacts/Importing_Contacts.htm" />
+  <item name="Exporter des contacts" url="Contacts/Exporting_Address_Books.htm" />
 </book>
-<book name="}}}Gestion de vos calendriers{{{" >
-  <item name="}}}Utiliser les calendriers{{{" url="Calendar/z-Using_Calendars.htm" />
-  <item name="}}}Affichage des calendriers{{{" url="Calendar/Calendar_Views.htm" />
-  <item name="}}}Appliquer des codes de couleur aux calendriers{{{" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="}}}Impression d’un calendrier{{{" url="Calendar/Printing_a_calendar.htm" />
-  <item name="}}}Suppression de calendriers{{{" url="Calendar/Deleting_Calendars.htm" />
-  <item name="}}}Importation de votre calendrier iCal{{{" url="Calendar/Importing_your_iCal_calendar.htm" />
-  <item name="}}}Exportation de votre calendrier iCal{{{" url="Calendar/Exporting_your_iCal_calendar.htm" />
+<book name="Gestion de vos calendriers" >
+  <item name="Utiliser les calendriers" url="Calendar/z-Using_Calendars.htm" />
+  <item name="Affichage des calendriers" url="Calendar/Calendar_Views.htm" />
+  <item name="Appliquer des codes de couleur aux calendriers" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Impression d’un calendrier" url="Calendar/Printing_a_calendar.htm" />
+  <item name="Suppression de calendriers" url="Calendar/Deleting_Calendars.htm" />
+  <item name="Importation de votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <item name="Exportation de votre calendrier iCal" url="Calendar/Exporting_your_iCal_calendar.htm" />
 </book>
-<book name="}}}Planification de rendez-vous{{{" >
-  <item name="}}}À propos de la planification de rendez-vous{{{" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="}}}Programmation d’un rendez-vous{{{" url="Calendar/About_the_Appointment_Page.htm" />
-  <item name="}}}Planification d’un rendez-vous{{{" url="Calendar/Scheduling_meetings.htm" />
-  <item name="}}}Consultation des disponibilités (libre/occupé){{{" url="Calendar/Seeing_free_busy_times.htm" />
-  <item name="}}}Marquer un rendez-vous comme étant d’ordre privé{{{" url="Calendar/Marking_an_appointment_as_private.htm" />
-  <item name="}}}Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous{{{" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-  <item name="}}}Conversion de mails et de contacts en demande de réunion{{{" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
-  <item name="}}}Création de rendez-vous récurrents{{{" url="Calendar/Creating_recurring_appointments.htm" />
-  <item name="}}}Modification de rendez-vous récurrents{{{" url="Calendar/Deleting_recurring_appointments.htm" />
-  <item name="}}}Répondre à une invitation de réunion{{{" url="Calendar/Responding_to_an_invitation.htm" />
+<book name="Planification de rendez-vous" >
+  <item name="À propos de la planification de rendez-vous" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <item name="Programmation d’un rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
+  <item name="Planification d’un rendez-vous" url="Calendar/Scheduling_meetings.htm" />
+  <item name="Consultation des disponibilités (libre/occupé)" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="Marquer un rendez-vous comme étant d’ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <item name="Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+  <item name="Conversion de mails et de contacts en demande de réunion" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+  <item name="Création de rendez-vous récurrents" url="Calendar/Creating_recurring_appointments.htm" />
+  <item name="Modification de rendez-vous récurrents" url="Calendar/Deleting_recurring_appointments.htm" />
+  <item name="Répondre à une invitation de réunion" url="Calendar/Responding_to_an_invitation.htm" />
 </book>
-<book name="}}}Recherche d’objets{{{" >
-  <item name="}}}Utiliser la recherche{{{" url="Search/using_the_search_feature.htm" />
-  <item name="}}}Rechercher des mails{{{" url="Search/_search__vs.__search_for_.htm" />
-  <item name="}}}Recherche rapide{{{" url="Search/Quick_search.htm" />
-  <item name="}}}Recherche avancée{{{" url="Search/building_search_queries.htm" />
-  <item name="}}}Enregistrement des recherches{{{" url="Search/saving_search_queries.htm" />
-  <item name="}}}Description du langage de demande{{{" url="Search/query_language_description.htm" />
-  <item name="}}}Exemples de recherches{{{" url="Search/search_examples.htm" />
-  <item name="}}}Contient / Correspond{{{" url="Search/contains_vs_matches.htm" />
-  <item name="}}}Recherches ET / OU{{{" url="Search/and_vs_or_searches.htm" />
-  <item name="}}}Utiliser le caractère * de substitution dans une recherche{{{" url="Search/Using_Wildcard_in_Search.htm" />
+<book name="Recherche d’objets" >
+  <item name="Utiliser la recherche" url="Search/using_the_search_feature.htm" />
+  <item name="Rechercher des mails" url="Search/_search__vs.__search_for_.htm" />
+  <item name="Recherche rapide" url="Search/Quick_search.htm" />
+  <item name="Recherche avancée" url="Search/building_search_queries.htm" />
+  <item name="Enregistrement des recherches" url="Search/saving_search_queries.htm" />
+  <item name="Description du langage de demande" url="Search/query_language_description.htm" />
+  <item name="Exemples de recherches" url="Search/search_examples.htm" />
+  <item name="Contient / Correspond" url="Search/contains_vs_matches.htm" />
+  <item name="Recherches ET / OU" url="Search/and_vs_or_searches.htm" />
+  <item name="Utiliser le caractère * de substitution dans une recherche" url="Search/Using_Wildcard_in_Search.htm" />
 </book>
-<book name="}}}Configuration de vos préférences{{{" >
-  <item name="}}}Configuration de vos préférences Desktop{{{" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
-  <item name="}}}Configurer des alertes dans Zimbra Desktop{{{" url="Userspecific/Setting_up_desktop_alerts.htm" />
-  <item name="}}}Notification par mail vers une autre adresse{{{" url="Userspecific/New_mail_notifications.htm" />
-  <item name="}}}Message d'absence{{{" url="Userspecific/vacation_message.htm" />
-  <item name="}}}Définir Zimbra Desktop comme messagerie par défaut{{{" url="managing_your_account/Making_Zimbra_Desktop_Default_Mail_Client.htm" />
+<book name="Configuration de vos préférences" >
+  <item name="Configuration de vos préférences Desktop" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
+  <item name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
+  <item name="Notification par mail vers une autre adresse" url="Userspecific/New_mail_notifications.htm" />
+  <item name="Message d'absence" url="Userspecific/vacation_message.htm" />
+  <item name="Définir Zimbra Desktop comme messagerie par défaut" url="managing_your_account/Making_Zimbra_Desktop_Default_Mail_Client.htm" />
 </book>
-<book name="}}}Organisation de vos comptes{{{" >
-<chunk name="}}}Organisation de vos comptes{{{" ref="whtdata1.xml" />
+<book name="Organisation de vos comptes" >
+  <item name="Classification de vos mails" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm#bc-1" />
+  <item name="Accéder à vos dossiers" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
+  <item name="Supprimer des dossiers" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <item name="Créer des dossiers personnalisés" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+  <item name="Affecter des tags à des mails" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <item name="Utiliser les tags pour classer les mails" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+  <item name="Supprimer des tags" url="Tags_and_flags/deleting_tags.htm" />
+  <item name="Marquer un mail d’un drapeau" url="Tags_and_flags/Flagging_an_email_message.htm" />
 </book>
-<book name="}}}Gestion de vos tâches{{{" >
-  <item name="}}}À propos des tâches{{{" url="Tasks/About_Tasks.htm" />
-  <item name="}}}Créer des listes de tâches{{{" url="Tasks/Create_tasks_folders.htm" />
-  <item name="}}}Ajouter une tâche{{{" url="Tasks/Add_a_task.htm" />
-  <item name="}}}Modifier une tâche{{{" url="Tasks/Change_a_task.htm" />
-  <item name="}}}Supprimer une tâche{{{" url="Tasks/Delete_a_task.htm" />
-  <item name="}}}Déplacer des tâches{{{" url="Tasks/Moving_tasks.htm" />
-  <item name="}}}Trier des tâches{{{" url="Tasks/Sorting_tasks_.htm" />
+<book name="Gestion de vos tâches" >
+<chunk name="Gestion de vos tâches" ref="whtdata1.xml" />
 </book>
-<book name="}}}Partager des dossiers (uniquement les comptes Zimbra){{{" >
-<chunk name="}}}Partager des dossiers (uniquement les comptes Zimbra){{{" ref="whtdata2.xml" />
+<book name="Partager des dossiers (uniquement les comptes Zimbra)" >
+<chunk name="Partager des dossiers (uniquement les comptes Zimbra)" ref="whtdata2.xml" />
 </book>
-<book name="}}}Utilisation du Porte-documents{{{" >
-<chunk name="}}}Utilisation du Porte-documents{{{" ref="whtdata3.xml" />
+<book name="Utilisation du Porte-documents" >
+  <item name="Travailler dans un Porte-documents" url="Briefcase/Working_in_Briefcase.htm" />
+  <item name="Créer un document " url="Documents/Create_a_new_page.htm" />
+  <item name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="Ajout d'un tableau à un document" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </book>
-<book name="}}}Gestion du contenu de votre compte{{{" >
-<chunk name="}}}Gestion du contenu de votre compte{{{" ref="whtdata4.xml" />
+<book name="Gestion du contenu de votre compte" >
+<chunk name="Gestion du contenu de votre compte" ref="whtdata3.xml" />
 </book>
 
 </tocdata>

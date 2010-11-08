@@ -1,12 +1,11 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <tocdata>
-<item name="}}}Classification de vos mails{{{" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm#bc-1" />
-<item name="}}}Accéder à vos dossiers{{{" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
-<item name="}}}Supprimer des dossiers{{{" url="Navigation_folders_and_tips/deleting_folders.htm" />
-<item name="}}}Créer des dossiers personnalisés{{{" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
-<item name="}}}Affecter des tags à des mails{{{" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-<item name="}}}Utiliser les tags pour classer les mails{{{" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
-<item name="}}}Supprimer des tags{{{" url="Tags_and_flags/deleting_tags.htm" />
-<item name="}}}Marquer un mail d’un drapeau{{{" url="Tags_and_flags/Flagging_an_email_message.htm" />
+<item name="À propos des tâches" url="Tasks/About_Tasks.htm" />
+<item name="Créer des listes de tâches" url="Tasks/Create_tasks_folders.htm" />
+<item name="Ajouter une tâche" url="Tasks/Add_a_task.htm" />
+<item name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
+<item name="Supprimer une tâche" url="Tasks/Delete_a_task.htm" />
+<item name="Déplacer des tâches" url="Tasks/Moving_tasks.htm" />
+<item name="Trier des tâches" url="Tasks/Sorting_tasks_.htm" />
 
 </tocdata>

@@ -53,7 +53,7 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addTocInfo("}}}Recherche d’objets{{{\n}}}Description du langage de demande{{{");
+	addTocInfo("Recherche d’objets\nDescription du langage de demande");
 addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 
 	}
@@ -66,7 +66,7 @@ addButton("show",BTN_TEXT,"Montrer","","","","",0,0,"","","");
 	
 	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"using_the_search_feature.htm\">}}}Recherche d’objets{{{<\/a> &gt; }}}Description du langage de demande{{{<\/p>");
+document.write("<a href=\"using_the_search_feature.htm\">Recherche d’objets<\/a> &gt; Description du langage de demande<\/p>");
 
 
 	if (window.setRelStartPage)
@@ -103,17 +103,17 @@ else
 
 
 <h1>Description du langage de demande</h1>
-<p>}}}Cette rubrique &eacute;volu&eacute;e d&eacute;crit en d&eacute;tail la syntaxe des requ&ecirc;tes utilis&eacute;e pour la fonction Rechercher de Zimbra.{{{ }}}Certains types de recherche sont toujours appliqu&eacute;s pour produire l'affichage que vous voyez dans l'interface.{{{</p>
+<p>Cette rubrique &eacute;volu&eacute;e d&eacute;crit en d&eacute;tail la syntaxe des requ&ecirc;tes utilis&eacute;e pour la fonction Rechercher de Zimbra. Certains types de recherche sont toujours appliqu&eacute;s pour produire l'affichage que vous voyez dans l'interface.</p>
 <h2>Structure de langage de recherche</h2>
 <p>Les recherches simples peuvent &ecirc;tre effectu&eacute;es en saisissant simplement un mot dans le champ de recherche. Les mots simples (mots sans op&eacute;rateur de recherche) sont interpr&eacute;t&eacute;s pour effectuer une recherche dans le &laquo;&nbsp;contenu&nbsp;&raquo;. Op&eacute;rateur &ndash; ceci correspond &agrave; toute zone de texte du mail.</p>
 <p>Les recherches plus avanc&eacute;es peuvent &ecirc;tre effectu&eacute;es en sp&eacute;cifiant un <b>op&eacute;rateur de recherche</b>. Un op&eacute;rateur de recherche est un mot cl&eacute; sp&eacute;cial suivi de deux points, puis de tout autre param&egrave;tre sp&eacute;cifique &agrave; cet op&eacute;rateur. Par exemple&nbsp;:</p>
 <ul>
-	<li class="p"><p><b style="font-weight: bold;">in: }}}bo&icirc;te de r&eacute;ception</b> l'op&eacute;rateur est &quot;dans&quot; et le param&egrave;tre est&quot; bo&icirc;te de r&eacute;ception&quot; - cela renvoie les messages qui se trouvent dans le dossier nomm&eacute; &quot; bo&icirc;te de r&eacute;ception&quot;{{{</p></li>
+	<li class="p"><p><b style="font-weight: bold;">in: bo&icirc;te de r&eacute;ception</b> l'op&eacute;rateur est &quot;dans&quot; et le param&egrave;tre est&quot; bo&icirc;te de r&eacute;ception&quot; - cela renvoie les messages qui se trouvent dans le dossier nomm&eacute; &quot; bo&icirc;te de r&eacute;ception&quot;</p></li>
 </ul>
 <ul>
 	<li class="p"><p><b style="font-weight: bold;">from:someone</b> l&rsquo;op&eacute;rateur est &quot;from&quot; et le param&egrave;tre est &quot;someone&quot; - ceci permet d&rsquo;&eacute;tablir une correspondance avec les mails contenant le mot &quot;quelqu&rsquo;un&quot; dans leur adresse mail</p></li>
 </ul>
-<p>}}}Vous pouvez faire pr&eacute;c&eacute;der un mot cl&eacute; par le mot &quot;pas&quot; afin de sp&eacute;cifier les &eacute;l&eacute;ments qui n&rsquo;ont pas ce crit&egrave;re sp&eacute;cifique, par exemple <b>pas dans&nbsp;:{{{ }}}bo&icirc;te de r&eacute;ception</b>.{{{ }}}La recherche n'est pas sensible &agrave; la casse, ce qui signifie que &quot;dans&nbsp;:bo&icirc;te de r&eacute;ception&quot; est la m&ecirc;me chose que &quot;dans&nbsp;:Bo&icirc;te de r&eacute;ception&quot;.{{{ Le signe moins (<b>-</b>) est synonyme de <b>PAS</b>   Par cons&eacute;quent : }}}<b>pas dans&nbsp;:bo&icirc;te de r&eacute;ception</b> est identique &agrave; <b>-dans&nbsp;:bo&icirc;te de r&eacute;ception</b>{{{</p>
+<p>Vous pouvez faire pr&eacute;c&eacute;der un mot cl&eacute; par le mot &quot;pas&quot; afin de sp&eacute;cifier les &eacute;l&eacute;ments qui n&rsquo;ont pas ce crit&egrave;re sp&eacute;cifique, par exemple <b>pas dans&nbsp;: bo&icirc;te de r&eacute;ception</b>. La recherche n'est pas sensible &agrave; la casse, ce qui signifie que &quot;dans&nbsp;:bo&icirc;te de r&eacute;ception&quot; est la m&ecirc;me chose que &quot;dans&nbsp;:Bo&icirc;te de r&eacute;ception&quot;. Le signe moins (<b>-</b>) est synonyme de <b>PAS</b>   Par cons&eacute;quent : <b>pas dans&nbsp;:bo&icirc;te de r&eacute;ception</b> est identique &agrave; <b>-dans&nbsp;:bo&icirc;te de r&eacute;ception</b></p>
 <p>Dans la plupart des cas, il n&rsquo;est pas n&eacute;cessaire d&rsquo;inclure des caract&egrave;res de ponctuation dans votre caract&egrave;re de recherche, car ces derniers sont ignor&eacute;s par le code de recherche. Pour certaines recherches, cela ne s'applique pas (par exemple, rechercher l&rsquo;heure &laquo;&nbsp;9:30&nbsp;&raquo; dans un mail) et dans ce cas vous devez &eacute;crire le param&egrave;tre de recherche entre guillemets. Par exemple&nbsp;: <b>subject:&quot;9:30&quot;</b>   renvoie les mails comportant le caract&egrave;re 9:30 dans la ligne d&rsquo;objet.</p>
 <p>Caract&egrave;res autoris&eacute;s dans les param&egrave;tres de recherche&nbsp;:</p>
 <ul>
@@ -121,14 +121,14 @@ else
 	<li class="p"><p>Les caract&egrave;res suivants sont autoris&eacute;s dans une recherche tant qu&rsquo;ils ne sont pas plac&eacute;s en t&ecirc;te de la recherche&nbsp;: - + &lt; &gt;</p></li>
 </ul>
 <h2>Recherche de plusieurs termes</h2>
-<p>}}}Si plusieurs termes sont saisis (s&eacute;par&eacute;s par des espaces), ils ne sont pas &quot; Ajout&eacute;s&quot; par d&eacute;faut. <b>in:inbox tim</b> signifie &quot;rechercher les mails qui sont dans la bo&icirc;te de r&eacute;ception ET qui contiennent le mot tim&quot;.{{{ Pour effectuer des recherches &agrave; l&rsquo;aide de plusieurs crit&egrave;res, vous pouvez rechercher des &eacute;l&eacute;ments correspondant &agrave; l&rsquo;un des crit&egrave;res sp&eacute;cifi&eacute;s ou &agrave; l&rsquo;ensemble des crit&egrave;res. Vous pouvez effectuer les deux types de recherches &agrave; l&rsquo;aide de la recherche avanc&eacute;e.</p>
+<p>Si plusieurs termes sont saisis (s&eacute;par&eacute;s par des espaces), ils ne sont pas &quot; Ajout&eacute;s&quot; par d&eacute;faut. <b>in:inbox tim</b> signifie &quot;rechercher les mails qui sont dans la bo&icirc;te de r&eacute;ception ET qui contiennent le mot tim&quot;. Pour effectuer des recherches &agrave; l&rsquo;aide de plusieurs crit&egrave;res, vous pouvez rechercher des &eacute;l&eacute;ments correspondant &agrave; l&rsquo;un des crit&egrave;res sp&eacute;cifi&eacute;s ou &agrave; l&rsquo;ensemble des crit&egrave;res. Vous pouvez effectuer les deux types de recherches &agrave; l&rsquo;aide de la recherche avanc&eacute;e.</p>
 <p>Pour l&rsquo;ensemble des volets de recherche autres que la recherche basique, les r&egrave;gles sont les suivantes :</p>
 <ul>
 	<li class="p"><p>La recherche de mails correspondant &agrave; l&rsquo;un des crit&egrave;res sp&eacute;cifi&eacute;s s&rsquo;appelle une recherche <b>OR</b>.  En effet, si l&rsquo;un des mails contient le terme X ou Y, il est alors consid&eacute;r&eacute; comme une correspondance. Pour les panneaux de recherche avanc&eacute;e &agrave; plusieurs options, cocher plusieurs s&eacute;lections dans un seul panneau permet de cr&eacute;er une recherche <b>OR </b>pour ces &eacute;l&eacute;ments.</p></li>
 	<li class="p"><p>La recherche de mails contenant &agrave; la fois X et Y s&rsquo;appelle une recherche '<b>AND'</b>. En effet, le mail doit correspondre &agrave; l&rsquo;ensemble des crit&egrave;res sp&eacute;cifi&eacute;s afin d'&ecirc;tre consid&eacute;r&eacute; comme une correspondance. Pour les panneaux de serveur avanc&eacute; ayant des cases activ&eacute;es, ouvrir plusieurs instances du m&ecirc;me panneau et s&eacute;lectionner plusieurs options dans chacune d'entre elles permet de sp&eacute;cifier les crit&egrave;res comme une recherche '<b>AND'</b>.</p></li>
 </ul>
 <p>Seul &quot;OR&quot; s&rsquo;affiche dans une demande. Si vous avez s&eacute;lectionn&eacute; comme option d'afficher la demande de recherche dans la barre de recherche (lorsque vous effectuez des s&eacute;lections dans la recherche avanc&eacute;e), la zone de recherche s'actualise pour afficher les r&eacute;sultats de la demande. Avec le type de recherche '<b>AND'</b>, le mot '<b>AND'</b> ne s&rsquo;affiche pas.</p>
-<p>}}}<b style="font-weight: bold;">Conseil</b>&nbsp;:{{{ }}}En utilisant des parenth&egrave;ses avec AND et OR,{{{ les mots entre parenth&egrave;ses sont consid&eacute;r&eacute;s comme une unit&eacute;. Par exemple <b>from: }}}(john thomas)</b> est &eacute;quivalent &agrave; <b>from:john AND from:{{{ }}}thomas</b>.{{{ }}}Si vous utilisez OR dans les parenth&egrave;ses, <b>from:(john or smith)</b>, la recherche correspond aux r&eacute;sultats <b>from:john OR from:{{{ }}}thomas</b>.{{{</p>
+<p><b style="font-weight: bold;">Conseil</b>&nbsp;: En utilisant des parenth&egrave;ses avec AND et OR, les mots entre parenth&egrave;ses sont consid&eacute;r&eacute;s comme une unit&eacute;. Par exemple <b>from: (john thomas)</b> est &eacute;quivalent &agrave; <b>from:john AND from: thomas</b>. Si vous utilisez OR dans les parenth&egrave;ses, <b>from:(john or smith)</b>, la recherche correspond aux r&eacute;sultats <b>from:john OR from: thomas</b>.</p>
 <h3>Utiliser le caract&egrave;re <b>*</b> de substitution dans une recherche</h3>
 <p>L&rsquo;ast&eacute;risque (<b>*</b>) peut servir de caract&egrave;re de substitution pour rechercher dans une zone de texte des mots ayant une orthographe similaire.</p>
 <p>Utiliser l&rsquo;ast&eacute;risque <b>*</b> en tant que caract&egrave;re de substitution apr&egrave;s un pr&eacute;fixe. Par exemple,   le caract&egrave;re de recherche <b>ca*</b> renvoie aux &eacute;l&eacute;ments tels que   <i>cache</i>, <i>caprice</i>, <i>carotte</i>, etc.</p>
@@ -136,43 +136,43 @@ else
 <p style="font-weight: bold;">Contenu :</p>
 <p style="margin-left: 40px;">Sp&eacute;cifie le texte que le message doit contenir. Par exemple, <span class="code">content:bananes</span> recherche tous les &eacute;l&eacute;ments contenant le mot &quot;bananes&quot;.</p>
 <p style="font-weight: bold;">De :,</p>
-<p style="margin-left: 40px;">Sp&eacute;cifie le nom ou l'adresse mail d&rsquo;un exp&eacute;diteur qui se trouve dans l&rsquo;en-t&ecirc;te De. }}}Il peut s&rsquo;agir de texte, comme pour &quot;John Smith III&quot;, d'une adresse mail comme &quot; joe@acme.com&quot; ou d'un domaine comme &quot; zimbra.com&quot;.{{{</p>
+<p style="margin-left: 40px;">Sp&eacute;cifie le nom ou l'adresse mail d&rsquo;un exp&eacute;diteur qui se trouve dans l&rsquo;en-t&ecirc;te De. Il peut s&rsquo;agir de texte, comme pour &quot;John Smith III&quot;, d'une adresse mail comme &quot; joe@acme.com&quot; ou d'un domaine comme &quot; zimbra.com&quot;.</p>
 <p style="font-weight: bold;">to:</p>
 <p style="margin-left: 40px;">Identique &agrave; from: hormis le fait qu&rsquo;il sp&eacute;cifie une des personnes &agrave; laquelle le mail &eacute;tait adress&eacute; dans l&rsquo;en-t&ecirc;te To:.</p>
 <p style="font-weight: bold;">Cc :</p>
 <p style="margin-left: 40px;">Identique &agrave; from: mis &agrave; part qu&rsquo;il sp&eacute;cifie un destinataire dans l&rsquo;en-t&ecirc;te Cc: du mail.</p>
 <p style="font-weight: bold;">subject:</p>
-<p style="margin-left: 40px;">Sp&eacute;cifie une zone de texte qui doit appara&icirc;tre dans l&rsquo;en-t&ecirc;te d&rsquo;objet du mail. }}}Exemple&nbsp;: <span class="code">sujet:nouvelle politique de cong&eacute;s.</span>{{{ </p>
+<p style="margin-left: 40px;">Sp&eacute;cifie une zone de texte qui doit appara&icirc;tre dans l&rsquo;en-t&ecirc;te d&rsquo;objet du mail. Exemple&nbsp;: <span class="code">sujet:nouvelle politique de cong&eacute;s.</span> </p>
 <p style="font-weight: bold;">in:</p>
 <p style="margin-left: 40px;">Sp&eacute;cifie un dossier. Par exemple, <span class="code">in:sent</span>   vous permet d&rsquo;afficher tous les &eacute;l&eacute;ments contenus dans votre dossier <span style="font-weight: bold;"><b>Envoy&eacute;s</b></span>.</p>
 <p style="font-weight: bold;">has:</p>
-<p style="margin-left: 40px;">Sp&eacute;cifie un attribut que le mail doit poss&eacute;der. }}}Les types d' objet que vous pouvez sp&eacute;cifier sont &quot;pi&egrave;ce jointe&quot;, &quot;t&eacute;l&eacute;phone&quot; ou &quot; url&quot;.{{{ Par exemple,   <span class="code">has:attachment</span> vous permet de rechercher tous les mails contenant une ou plusieurs pi&egrave;ces jointes de n'importe quel type.</p>
+<p style="margin-left: 40px;">Sp&eacute;cifie un attribut que le mail doit poss&eacute;der. Les types d' objet que vous pouvez sp&eacute;cifier sont &quot;pi&egrave;ce jointe&quot;, &quot;t&eacute;l&eacute;phone&quot; ou &quot; url&quot;. Par exemple,   <span class="code">has:attachment</span> vous permet de rechercher tous les mails contenant une ou plusieurs pi&egrave;ces jointes de n'importe quel type.</p>
 <p style="font-weight: bold;">filename:</p>
-<p style="margin-left: 40px;">Sp&eacute;cifie le nom d&rsquo;une pi&egrave;ce jointe. }}}Par exemple, <span class="code">filename:{{{ }}}query.tx</span>t trouverait les messages avec une pi&egrave;ce jointe de fichier nomm&eacute;e &quot; query.txt&quot;.{{{</p>
+<p style="margin-left: 40px;">Sp&eacute;cifie le nom d&rsquo;une pi&egrave;ce jointe. Par exemple, <span class="code">filename: query.tx</span>t trouverait les messages avec une pi&egrave;ce jointe de fichier nomm&eacute;e &quot; query.txt&quot;.</p>
 <p style="font-weight: bold;">type:</p>
-<p style="margin-left: 40px;">Sp&eacute;cifie une recherche dans les pi&egrave;ces jointes d&rsquo;un type sp&eacute;cifique. }}}Les types de pi&egrave;ces jointes que vous pouvez sp&eacute;cifier sont &quot;text&quot;, &quot;word&quot;, &quot;excel&quot; et &quot; pdf&quot;.{{{ Par exemple, <span class="code">type: word &quot;salut&quot;</span> permet de rechercher les mails avec des pi&egrave;ces jointes qui sont des documents Microsoft Word. La recherche s'effectue dans ces pi&egrave;ces jointes par rapport au mot &quot;salut&quot;.</p>
+<p style="margin-left: 40px;">Sp&eacute;cifie une recherche dans les pi&egrave;ces jointes d&rsquo;un type sp&eacute;cifique. Les types de pi&egrave;ces jointes que vous pouvez sp&eacute;cifier sont &quot;text&quot;, &quot;word&quot;, &quot;excel&quot; et &quot; pdf&quot;. Par exemple, <span class="code">type: word &quot;salut&quot;</span> permet de rechercher les mails avec des pi&egrave;ces jointes qui sont des documents Microsoft Word. La recherche s'effectue dans ces pi&egrave;ces jointes par rapport au mot &quot;salut&quot;.</p>
 <p style="font-weight: bold;">attachment:</p>
 <p style="margin-left: 40px;">Sp&eacute;cifie tout &eacute;l&eacute;ment d&rsquo;un certain type de pi&egrave;ce jointe. Par exemple, <span class="code">attachment:word</span> vous permet de rechercher tous les mails ayant des pi&egrave;ces jointes Word.</p>
 <p style="font-weight: bold;">is:</p>
-<p style="margin-left: 40px;">Recherche les mails avec un statut sp&eacute;cifique. }}}Les valeurs autoris&eacute;es sont &quot;non lu&quot;, &quot;lu&quot;, &quot;avec drapeau&quot;, &quot; sans drapeau&quot;, &quot;envoy&eacute;&quot;, &quot;brouillon&quot;, &quot;re&ccedil;u&quot;, &quot;r&eacute;pondu&quot;, &quot; non r&eacute;pondu&quot;, &quot;transf&eacute;r&eacute;&quot;, non transf&eacute;r&eacute;&quot;, &quot;partout&quot;, &quot;&agrave; distance&quot; (dans un dossier partag&eacute;), &quot;local&quot;, &quot;envoy&eacute;&quot;.{{{ Par exemple, <span class="code">is: unread</span> vous permet de rechercher tous les mails non lus.</p>
+<p style="margin-left: 40px;">Recherche les mails avec un statut sp&eacute;cifique. Les valeurs autoris&eacute;es sont &quot;non lu&quot;, &quot;lu&quot;, &quot;avec drapeau&quot;, &quot; sans drapeau&quot;, &quot;envoy&eacute;&quot;, &quot;brouillon&quot;, &quot;re&ccedil;u&quot;, &quot;r&eacute;pondu&quot;, &quot; non r&eacute;pondu&quot;, &quot;transf&eacute;r&eacute;&quot;, non transf&eacute;r&eacute;&quot;, &quot;partout&quot;, &quot;&agrave; distance&quot; (dans un dossier partag&eacute;), &quot;local&quot;, &quot;envoy&eacute;&quot;. Par exemple, <span class="code">is: unread</span> vous permet de rechercher tous les mails non lus.</p>
 <p style="font-weight: bold;">date:</p>
-<p style="margin-left: 40px;">}}}Utilisez ce mot cl&eacute; pour sp&eacute;cifier une date, en utilisant le format de date par d&eacute;faut de votre navigateur (pour le fran&ccedil;ais, le format est jj/mm/aaaa).{{{ }}}Par exemple, <span  	 class="code">date:01/02/2010</span> permet de rechercher les mails dat&eacute;s du 1er f&eacute;vrier 2008. Les symboles sup&eacute;rieur &agrave; (&gt;) ou inf&eacute;rieur &agrave; (&lt;) peuvent &ecirc;tre utilis&eacute;s en remplacement d<i>'apr&egrave;s </i>ou <i>avant</i>.{{{ }}}&gt;= et &lt;= sont &eacute;galement autoris&eacute;s.{{{</p>
+<p style="margin-left: 40px;">Utilisez ce mot cl&eacute; pour sp&eacute;cifier une date, en utilisant le format de date par d&eacute;faut de votre navigateur (pour le fran&ccedil;ais, le format est jj/mm/aaaa). Par exemple, <span  	 class="code">date:01/02/2010</span> permet de rechercher les mails dat&eacute;s du 1er f&eacute;vrier 2008. Les symboles sup&eacute;rieur &agrave; (&gt;) ou inf&eacute;rieur &agrave; (&lt;) peuvent &ecirc;tre utilis&eacute;s en remplacement d<i>'apr&egrave;s </i>ou <i>avant</i>. &gt;= et &lt;= sont &eacute;galement autoris&eacute;s.</p>
 <p style="font-weight: bold;">after:</p>
-<p style="margin-left: 40px;">Sp&eacute;cifie un mail envoy&eacute; apr&egrave;s une certaine date. }}}Par exemple, <span class="code">apr&egrave;s:01/02/2010</span><span class="code"  															 style="font-weight: normal;  															 font-family: Arial, sans-serif;  															 font-size: 10pt;"><font size="2" style="font-size:10pt;">  sp&eacute;cifie les mails envoy&eacute;s apr&egrave;s le 1er f&eacute;vrier 2010</font></span><span class="code" style="font-weight: normal;">.</span>{{{</p>
+<p style="margin-left: 40px;">Sp&eacute;cifie un mail envoy&eacute; apr&egrave;s une certaine date. Par exemple, <span class="code">apr&egrave;s:01/02/2010</span><span class="code"  															 style="font-weight: normal;  															 font-family: Arial, sans-serif;  															 font-size: 10pt;"><font size="2" style="font-size:10pt;">  sp&eacute;cifie les mails envoy&eacute;s apr&egrave;s le 1er f&eacute;vrier 2010</font></span><span class="code" style="font-weight: normal;">.</span></p>
 <p style="font-weight: bold;">before:</p>
 <p style="margin-left: 40px;">Similaire &agrave; <span class="code">after:</span> hormis le fait qu&rsquo;il d&eacute;finit les mails envoy&eacute;s avant la date sp&eacute;cifi&eacute;e.</p>
 <p style="font-weight: bold;">size:</p>
-<p style="margin-left: 40px;">}}}Sp&eacute;cifie les mails dont la taille totale, y compris les pi&egrave;ces jointes, est d&rsquo;un certain nombre d&rsquo;octets, de kilo-octets, ou de m&eacute;ga-octets. Par exemple, <span class="code">taille:12 ko</span> permet de rechercher les mails dont la taille est exactement de 12 Ko.{{{ Les symboles sup&eacute;rieur &agrave; (&gt;) ou inf&eacute;rieur &agrave; (&lt;) peuvent &ecirc;tre utilis&eacute;s &agrave; la place de plus grand ou plus petit.</p>
+<p style="margin-left: 40px;">Sp&eacute;cifie les mails dont la taille totale, y compris les pi&egrave;ces jointes, est d&rsquo;un certain nombre d&rsquo;octets, de kilo-octets, ou de m&eacute;ga-octets. Par exemple, <span class="code">taille:12 ko</span> permet de rechercher les mails dont la taille est exactement de 12 Ko. Les symboles sup&eacute;rieur &agrave; (&gt;) ou inf&eacute;rieur &agrave; (&lt;) peuvent &ecirc;tre utilis&eacute;s &agrave; la place de plus grand ou plus petit.</p>
 <p style="font-weight: bold;">larger:</p>
 <p style="margin-left: 40px;">Identique &agrave; size: hormis le fait qu&rsquo;il permet de sp&eacute;cifier une taille sup&eacute;rieure &agrave; celle indiqu&eacute;e.</p>
 <p style="font-weight: bold;">smaller:</p>
 <p style="margin-left: 40px;">Identique &agrave; size: hormis le fait qu&rsquo;il permet de sp&eacute;cifier une taille inf&eacute;rieure &agrave; celle indiqu&eacute;e.</p>
-<p style="font-weight: bold;"><span><b>}}}solo&nbsp;:{{{</b></span></p>
-<p style="margin-left: 40px;">}}}trouve les mails auxquels vous n'avez pas encore r&eacute;pondu.{{{</p>
+<p style="font-weight: bold;"><span><b>solo&nbsp;:</b></span></p>
+<p style="margin-left: 40px;">trouve les mails auxquels vous n'avez pas encore r&eacute;pondu.</p>
 <p style="font-weight: bold;">tag:</p>
 <p style="margin-left: 40px;">Recherche les mails marqu&eacute;s par un tag sp&eacute;cifique. Par exemple,<span class="code"> tag :ambre</span> permet de rechercher les mails marqu&eacute;s d&rsquo;un tag appel&eacute; &quot;ambre&quot;.</p>
-<p style="font-weight: bold;"><span><b>}}}priorit&eacute;&nbsp;:{{{</b></span></p>
-<p style="margin-left: 40px;">}}}trouve les messages, les t&acirc;ches ou les objets du calendrier en se basant sur la priorit&eacute; &quot;haute&quot; &quot;basse&quot;.{{{ }}}Par exemple, la priorit&eacute;&nbsp;<span  	 class="code">: haute</span> trouvera les objets ayant une priorit&eacute; haute.{{{</p>
+<p style="font-weight: bold;"><span><b>priorit&eacute;&nbsp;:</b></span></p>
+<p style="margin-left: 40px;">trouve les messages, les t&acirc;ches ou les objets du calendrier en se basant sur la priorit&eacute; &quot;haute&quot; &quot;basse&quot;. Par exemple, la priorit&eacute;&nbsp;<span  	 class="code">: haute</span> trouvera les objets ayant une priorit&eacute; haute.</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

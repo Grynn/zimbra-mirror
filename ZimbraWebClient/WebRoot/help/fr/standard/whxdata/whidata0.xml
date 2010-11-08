@@ -1,39 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="}}}calendrier distant{{{" >
-  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}calendrier, exclure de libre/occupé{{{" >
-  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}calendrier, supprimer{{{" >
-  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}enregistrer la recherche{{{" >
-  <topic name="Créer et enregistrer une requête" url="Search/b_Create_and_Save_a_Search_Query.htm" />
-</key>
-<key name="}}}ignorer{{{" >
-  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="}}}libre/occupé, exclure le calendrier{{{" >
-  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}marquer tâche comme terminée{{{" >
-  <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}synchroniser un autre calendrier{{{" >
-  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}tâche, marquer comme terminée{{{" >
-  <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}tâches d'impression{{{" >
-  <topic name="À propos des tâches" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="}}}tâches, impression{{{" >
-  <topic name="À propos des tâches" url="Tasks/About_Tasks.htm" />
-</key>
 <key name="affichage de conversation" >
   <topic name="Choisir comment les mails sont affichés" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
@@ -54,6 +21,15 @@
 </key>
 <key name="brouillon" >
   <topic name="Enregistrement d’un brouillon" url="Creating_Messages/saving_a_draft_message.htm" />
+</key>
+<key name="calendrier distant" >
+  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="calendrier, exclure de libre/occupé" >
+  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="calendrier, supprimer" >
+  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="carnet d’adresses, ajouter de nouveaux contacts" >
   <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
@@ -85,6 +61,9 @@
 <key name="dossiers" >
   <topic name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
 </key>
+<key name="enregistrer la recherche" >
+  <topic name="Créer et enregistrer une requête" url="Search/b_Create_and_Save_a_Search_Query.htm" />
+</key>
 <key name="faire suivre votre mail" >
   <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
@@ -92,7 +71,7 @@
   <topic name="S’abonner au fil RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
 <key name="filtrer des mails" >
-  <topic name="}}}Filtrer vos mails{{{" url="filters/bc_Filtering_your_messages.htm" />
+  <topic name="Filtrer vos mails" url="filters/bc_Filtering_your_messages.htm" />
 </key>
 <key name="formatage avec HTML" >
   <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -103,15 +82,24 @@
 <key name="HTML" >
   <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
+<key name="ignorer" >
+  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="libre/occupé, exclure le calendrier" >
+  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="Livraison de mail impossible " >
   <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
 </key>
-<key name="Mail" >
+<key name="mail" >
   <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
   <topic name="Parties d’un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <key name="Lecture" >
     <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
   </key>
+</key>
+<key name="marquer tâche comme terminée" >
+  <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
 </key>
 <key name="marquer un rendez-vous comme étant d’ordre privé" >
   <topic name="À propos de la page de rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
@@ -123,7 +111,7 @@
   <topic name="Message d'absence" url="Userspecific/vacation_message.htm" />
 </key>
 <key name="messages, configuration de règles de filtre" >
-  <topic name="}}}Filtrer vos mails{{{" url="filters/bc_Filtering_your_messages.htm" />
+  <topic name="Filtrer vos mails" url="filters/bc_Filtering_your_messages.htm" />
 </key>
 <key name="notification de mail" >
   <topic name="Notifications de nouveau mail" url="Userspecific/New_mail_notifications.htm" />
@@ -196,6 +184,18 @@
 </key>
 <key name="signature, ajouter automatiquement" >
   <topic name="Ajouter automatiquement votre signature" url="Userspecific/b_Automatically_adding_your_signature.htm" />
+</key>
+<key name="synchroniser un autre calendrier" >
+  <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="tâche, marquer comme terminée" >
+  <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="tâches d'impression" >
+  <topic name="À propos des tâches" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="tâches, impression" >
+  <topic name="À propos des tâches" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="tags" >
   <topic name="Affecter des tags à des mails et à des contacts" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />

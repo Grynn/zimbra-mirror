@@ -1,9 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="}}}accusé de réception{{{" last="}}}sauvegarde de données de compte{{{" num="91" />
-<chunkinfo url="whidata1.xml" first="}}}sous-fenêtre de lecture, activer ou désactiver{{{" last="exporter des calendriers iCal" num="98" />
-<chunkinfo url="whidata2.xml" first="faire suivre votre mail" last="rendez-vous privés" num="95" />
-<chunkinfo url="whidata3.xml" first="rendez-vous récurrents, modification" last="Zimlets" num="38" />
+<chunkinfo url="whidata0.xml" first="accès aux comptes externes" last="dossiers personnalisés" num="99" />
+<chunkinfo url="whidata1.xml" first="dossiers, nommer" last="notification de MI" num="91" />
+<chunkinfo url="whidata2.xml" first="notification par mail" last="Supprimer" num="95" />
+<chunkinfo url="whidata3.xml" first="supprimer des rendez-vous récurrents" last="Zimlets, désactiver" num="36" />
 
 </index>

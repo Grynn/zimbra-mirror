@@ -1,178 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
-<key name="}}}accusé de réception{{{" >
+<key name="accusé de réception" >
   <topic name="Demander un accusé de réception" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
-</key>
-<key name="}}}affichage du panneau de lecture{{{" >
-  <topic name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
-</key>
-<key name="}}}alertes{{{" >
-  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}calendrier d'évènements privés{{{" >
-  <topic name="Marquer un rendez-vous comme étant d’ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
-</key>
-<key name="}}}compte, export{{{" >
-  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}compte, import{{{" >
-  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}contacts, créer des champs personnalisés dans la fenêtre{{{" >
-  <topic name="Création d’un nouveau contact" url="Contacts/creating_a_new_contact.htm" />
-</key>
-<key name="}}}déplacer le mail automatiquement dans un dossier{{{" >
-  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}déplacer les messages dans un dossier{{{" >
-  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}désactiver les Zimlets{{{" >
-  <topic name="Gestion de vos Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
-<key name="}}}destinataires, rechercher{{{" >
-  <topic name="}}}Recherche de destinataires{{{ " url="Search/Searching_for_Recipients_.htm" />
-</key>
-<key name="}}}évènements publics/privés du calendrier{{{" >
-  <topic name="Marquer un rendez-vous comme étant d’ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
-</key>
-<key name="}}}exporter des données de compte{{{" >
-  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}fichiers, joindre{{{" >
-  <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="}}}fichiers, synchronisation{{{" >
-  <topic name="Accéder à vos dossiers" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
-</key>
-<key name="}}}hors ligne, travailler{{{" >
-  <topic name="Travailler hors ligne" url="Zdesktop/z-Working_Offline.htm" />
-</key>
-<key name="}}}ignorer{{{" >
-  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="}}}images dans les signatures{{{" >
-  <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="}}}importer des comptes{{{" >
-  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}Installation de compte IMAP{{{" >
-  <topic name="Configurer les comptes POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
-</key>
-<key name="}}}Installation de compte Microsoft Exchange IMAP{{{" >
-  <topic name="Configurer les comptes POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
-</key>
-<key name="}}}Installation de compte, IMAP{{{" >
-  <topic name="Configurer les comptes POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
-</key>
-<key name="}}}joindre les fichiers du porte-documents{{{" >
-  <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="}}}mail, accusé de réception{{{" >
-  <topic name="Demander un accusé de réception" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
-</key>
-<key name="}}}mails archivés{{{" >
-  <topic name="Archivage de vos mails" url="Zdesktop/Archiving_your_email_messages.htm" />
-</key>
-<key name="}}}marquer tâche comme terminée{{{" >
-  <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}marquer un rendez-vous comme étant d’ordre privé{{{" >
-  <topic name="Marquer un rendez-vous comme étant d’ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
-</key>
-<key name="}}}mini-calendrier {{{" >
-  <topic name="}}}Afficher le n° de semaine{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-</key>
-<key name="}}}modifier comme nouveau mail{{{" >
-  <topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="}}}n° de semaine{{{" >
-  <topic name="}}}Afficher le n° de semaine{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-</key>
-<key name="}}}notification de MI{{{" >
-  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}notification par mail{{{" >
-  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}panneau de lecture, activer ou désactiver{{{" >
-  <topic name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
-</key>
-<key name="}}}panneau de lecture, modifier les en-têtes des colonnes{{{" >
-  <topic name="Personnaliser la vue de votre compte" url="Navigation_folders_and_tips/Customize_your_view.htm" />
-</key>
-<key name="}}}personnaliser champs de contacts{{{" >
-  <topic name="Création d’un nouveau contact" url="Contacts/creating_a_new_contact.htm" />
-</key>
-<key name="}}}personnaliser la vue{{{" >
-  <topic name="Personnaliser la vue de votre compte" url="Navigation_folders_and_tips/Customize_your_view.htm" />
-</key>
-<key name="}}}pièces jointes ics, sauvegarder{{{" >
-  <topic name="Répondre à une invitation" url="Calendar/Responding_to_an_invitation.htm" />
-</key>
-<key name="}}}porte-documents, joindre les fichiers à un mail{{{" >
-  <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="}}}présence non obligatoire{{{" >
-  <topic name="}}}Utiliser l’onglet Programme lors de la création d'un rendez-vous{{{" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="}}}présence obligatoire{{{" >
-  <topic name="}}}Utiliser l’onglet Programme lors de la création d'un rendez-vous{{{" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="}}}Rappels de réunion{{{" >
-  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}rappels{{{" >
-  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}rechercher des destinataires{{{" >
-  <topic name="}}}Recherche de destinataires{{{ " url="Search/Searching_for_Recipients_.htm" />
-</key>
-<key name="}}}règles de filtre, dossiers existants{{{" >
-  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}renvoyer{{{" >
-  <topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="}}}sauvegarde de données de compte{{{" >
-  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}sous-fenêtre de lecture, activer ou désactiver{{{" >
-  <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="}}}tâche, marquer comme terminée{{{" >
-  <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}tâches d'impression{{{" >
-  <topic name="À propos des tâches" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="}}}tâches, impression{{{" >
-  <topic name="À propos des tâches" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="}}}travailler hors ligne{{{" >
-  <topic name="Travailler hors ligne" url="Zdesktop/z-Working_Offline.htm" />
-</key>
-<key name="}}}trier les mails entrants{{{" >
-  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}uploader les nouveaux Zimlets{{{" >
-  <topic name="Gestion de vos Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
-<key name="}}}URL dans les signatures{{{" >
-  <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="}}}vérifier une réponse à une invitation{{{" >
-  <topic name="}}}Utiliser l’onglet Programme lors de la création d'un rendez-vous{{{" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="}}}voir sous-fenêtre de lecture{{{" >
-  <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="}}}W dans le mini- calendrier{{{" >
-  <topic name="}}}Afficher le n° de semaine{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-</key>
-<key name="}}}Zimlets, désactiver{{{" >
-  <topic name="Gestion de vos Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
 <key name="Activer les drapeaux" >
   <topic name="Marquer un mail d’un drapeau" url="Tags_and_flags/Flagging_an_email_message.htm" />
@@ -192,6 +21,9 @@
 <key name="affichage des mails" >
   <topic name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
 </key>
+<key name="affichage du panneau de lecture" >
+  <topic name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
+</key>
 <key name="Affichage traditionnel" >
   <topic name="Affichage traditionnel" url="Navigation_folders_and_tips/Traditional_View.htm" />
 </key>
@@ -207,6 +39,9 @@
 <key name="ajouter une signature" >
   <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
 </key>
+<key name="alertes" >
+  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
 <key name="archivage de mails" >
   <topic name="purge des mails" url="reading_mail/archiving_old_messages.htm" />
 </key>
@@ -216,6 +51,9 @@
 <key name="brouillon" >
   <topic name="Enregistrement d’un brouillon" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
+<key name="calendrier d'évènements privés" >
+  <topic name="Marquer un rendez-vous comme étant d’ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
 <key name="calendrier, impression" >
   <topic name="Impression d’un calendrier" url="Calendar/Printing_a_calendar.htm" />
 </key>
@@ -223,7 +61,7 @@
   <topic name="Consultation des disponibilités (libre/occupé)" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
 <key name="calendriers iCal, importer ou exporter" >
-  <topic name="}}}Importation de votre calendrier iCal{{{" url="Calendar/Importing_your_iCal_calendar.htm" />
+  <topic name="Importation de votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="caractère de substitution, utiliser dans la recherche" >
   <topic name="Utilisation de la fonction de recherche" url="Search/using_the_search_feature.htm" />
@@ -235,10 +73,16 @@
   <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
 <key name="carnets d'adresses, importation" >
-  <topic name="}}}Importer des contacts{{{" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Importer des contacts" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="comment créer des rendez-vous" >
   <topic name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="compte, export" >
+  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="compte, import" >
+  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 <key name="Conditions de filtre" >
   <topic name="Conditions et actions de filtre supportées" url="filters/filter_conditions_and_actions_supported.htm" />
@@ -260,8 +104,11 @@
 <key name="Contacts personnels" >
   <topic name="Modification d’un contact" url="Contacts/editing_a_contact.htm" />
 </key>
+<key name="contacts, créer des champs personnalisés dans la fenêtre" >
+  <topic name="Création d’un nouveau contact" url="Contacts/creating_a_new_contact.htm" />
+</key>
 <key name="contacts, importer" >
-  <topic name="}}}Importer des contacts{{{" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Importer des contacts" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="contacts, rajouter à la liste un contact supprimé" >
   <topic name="Suppression d’un contact" url="Contacts/deleting_a_contact.htm" />
@@ -290,19 +137,173 @@
   </key>
 </key>
 <key name="Déplacer" >
-  <topic name="}}}Déplacer des mails d’un dossier à l’autre{{{" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <topic name="Déplacer des mails d’un dossier à l’autre" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <key name="mails dans des dossiers" >
-    <topic name="}}}Déplacer des mails d’un dossier à l’autre{{{" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+    <topic name="Déplacer des mails d’un dossier à l’autre" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   </key>
+</key>
+<key name="déplacer le mail automatiquement dans un dossier" >
+  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
+</key>
+<key name="déplacer les messages dans un dossier" >
+  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
+</key>
+<key name="désactiver les Zimlets" >
+  <topic name="Gestion de vos Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
 <key name="Description du langage de demande" >
   <topic name="Description du langage de demande" url="Search/query_language_description.htm" />
+</key>
+<key name="destinataires, rechercher" >
+  <topic name="Recherche de destinataires " url="Search/Searching_for_Recipients_.htm" />
 </key>
 <key name="Documents, ajouter des tableaux" >
   <topic name="Ajouter un tableau à une page de carnet" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="Documents, créer des pages" >
   <topic name="Créer une page" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="Documents, éditeur de format RTF" >
+  <topic name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="dossiers" >
+  <topic name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
+</key>
+<key name="dossiers personnalisés" >
+  <topic name="Créer des dossiers personnalisés" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="éditeur de format RTF pour des pages de documents" >
+  <topic name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="événements" >
+  <topic name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="évènements publics/privés du calendrier" >
+  <topic name="Marquer un rendez-vous comme étant d’ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="Exemples de recherches" >
+  <topic name="Exemples de recherches" url="Search/search_examples.htm" />
+</key>
+<key name="exporter des calendriers iCal" >
+  <topic name="Importation de votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="exporter des données de compte" >
+  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="faire suivre votre mail" >
+  <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="fichiers, joindre" >
+  <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="fichiers, synchronisation" >
+  <topic name="Accéder à vos dossiers" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
+</key>
+<key name="Fil Atom" >
+  <topic name="S’abonner à un fil RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="filtre, son fonctionnement" >
+  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
+</key>
+<key name="filtrer des mails" >
+  <topic name="Filtrer vos mails" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="fonction de recherche" >
+  <topic name="Utilisation de la fonction de recherche" url="Search/using_the_search_feature.htm" />
+  <key name="Utilisation" >
+    <topic name="Utilisation de la fonction de recherche" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
+<key name="fonctions" >
+  <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="Fonctions d’interface utilisateur" >
+  <topic name="Fonctions d’interface utilisateur et raccourcis" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="formatage avec HTML" >
+  <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="groupes de contacts" >
+  <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="hors ligne, travailler" >
+  <topic name="Travailler hors ligne" url="Zdesktop/z-Working_Offline.htm" />
+</key>
+<key name="HTML" >
+  <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="identité mail pour la création d’un mail" >
+  <topic name="Création d’un mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+</key>
+<key name="identités" >
+  <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="identités mail" >
+  <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="ignorer" >
+  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="images dans les signatures" >
+  <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="importation de carnets d'adresses" >
+  <topic name="Importer des contacts" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="importer des calendriers iCal" >
+  <topic name="Importation de votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="importer des comptes" >
+  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="importer des contacts" >
+  <topic name="Importer des contacts" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="Impression" >
+  <topic name="Impression d’une conversation" url="conversations/printing_a_conversation.htm" />
+  <topic name="Impression d’un mail" url="reading_mail/printing_a_mail_message.htm" />
+  <key name="mail" >
+    <topic name="Impression d’un mail" url="reading_mail/printing_a_mail_message.htm" />
+  </key>
+</key>
+<key name="impression des contacts" >
+  <topic name="Impression des contacts" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="impression d’un calendrier" >
+  <topic name="Impression d’un calendrier" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="Installation de compte IMAP" >
+  <topic name="Configurer les comptes POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
+<key name="Installation de compte Microsoft Exchange IMAP" >
+  <topic name="Configurer les comptes POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
+<key name="Installation de compte, IMAP" >
+  <topic name="Configurer les comptes POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
+<key name="invitation déplacée vers la corbeille" >
+  <topic name="Répondre à une invitation" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="invitation, répondre" >
+  <topic name="Répondre à une invitation" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="Joindre" >
+  <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="joindre les fichiers du porte-documents" >
+  <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="libre/occupé" >
+  <topic name="Consultation des disponibilités (libre/occupé)" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="Liste GAL / liste de contacts" >
+  <topic name="Liste GAL / liste de contacts" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="listes de distribution personnelles" >
+  <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="Livraison de mail impossible " >
+  <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
 </key>
 
 </indexdata>

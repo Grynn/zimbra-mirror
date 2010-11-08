@@ -1,111 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
-<key name="Documents, éditeur de format RTF" >
-  <topic name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
-<key name="dossiers" >
-  <topic name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
-</key>
-<key name="dossiers personnalisés" >
-  <topic name="Créer des dossiers personnalisés" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
-</key>
-<key name="éditeur de format RTF pour des pages de documents" >
-  <topic name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
-<key name="événements" >
-  <topic name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-</key>
-<key name="Exemples de recherches" >
-  <topic name="Exemples de recherches" url="Search/search_examples.htm" />
-</key>
-<key name="exporter des calendriers iCal" >
-  <topic name="}}}Importation de votre calendrier iCal{{{" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="faire suivre votre mail" >
-  <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
-</key>
-<key name="Fil Atom" >
-  <topic name="S’abonner à un fil RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-</key>
-<key name="filtre, son fonctionnement" >
-  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
-</key>
-<key name="filtrer des mails" >
-  <topic name="}}}Filtrer vos mails{{{" url="filters/filtering_your_messages.htm" />
-</key>
-<key name="fonction de recherche" >
-  <topic name="Utilisation de la fonction de recherche" url="Search/using_the_search_feature.htm" />
-  <key name="Utilisation" >
-    <topic name="Utilisation de la fonction de recherche" url="Search/using_the_search_feature.htm" />
-  </key>
-</key>
-<key name="fonctions" >
-  <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="Fonctions d’interface utilisateur" >
-  <topic name="Fonctions d’interface utilisateur et raccourcis" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-</key>
-<key name="formatage avec HTML" >
-  <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
-</key>
-<key name="groupes de contacts" >
-  <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
-</key>
-<key name="HTML" >
-  <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
-</key>
-<key name="identité mail pour la création d’un mail" >
-  <topic name="Création d’un mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-</key>
-<key name="identités" >
-  <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="identités mail" >
-  <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="importation de carnets d'adresses" >
-  <topic name="}}}Importer des contacts{{{" url="Contacts/Importing_Contacts.htm" />
-</key>
-<key name="importer des calendriers iCal" >
-  <topic name="}}}Importation de votre calendrier iCal{{{" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="importer des contacts" >
-  <topic name="}}}Importer des contacts{{{" url="Contacts/Importing_Contacts.htm" />
-</key>
-<key name="Impression" >
-  <topic name="Impression d’une conversation" url="conversations/printing_a_conversation.htm" />
-  <topic name="Impression d’un mail" url="reading_mail/printing_a_mail_message.htm" />
-  <key name="mail" >
-    <topic name="Impression d’un mail" url="reading_mail/printing_a_mail_message.htm" />
-  </key>
-</key>
-<key name="impression des contacts" >
-  <topic name="Impression des contacts" url="Contacts/Printing_Contacts.htm" />
-</key>
-<key name="impression d’un calendrier" >
-  <topic name="Impression d’un calendrier" url="Calendar/Printing_a_calendar.htm" />
-</key>
-<key name="invitation déplacée vers la corbeille" >
-  <topic name="Répondre à une invitation" url="Calendar/Responding_to_an_invitation.htm" />
-</key>
-<key name="invitation, répondre" >
-  <topic name="Répondre à une invitation" url="Calendar/Responding_to_an_invitation.htm" />
-</key>
-<key name="Joindre" >
-  <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="libre/occupé" >
-  <topic name="Consultation des disponibilités (libre/occupé)" url="Calendar/Seeing_free_busy_times.htm" />
-</key>
-<key name="Liste GAL / liste de contacts" >
-  <topic name="Liste GAL / liste de contacts" url="Contacts/gal_vs_contacts.htm" />
-</key>
-<key name="listes de distribution personnelles" >
-  <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
-</key>
-<key name="Livraison de mail impossible " >
-  <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
-</key>
 <key name="Mail" >
   <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
   <topic name="Parties d’un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
@@ -113,7 +7,17 @@
     <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
   </key>
 </key>
+<key name="mail, accusé de réception" >
+  <topic name="Demander un accusé de réception" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+</key>
+<key name="mails archivés" >
+  <topic name="Archivage de vos mails" url="Zdesktop/Archiving_your_email_messages.htm" />
+</key>
+<key name="marquer tâche comme terminée" >
+  <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
+</key>
 <key name="marquer un rendez-vous comme étant d’ordre privé" >
+  <topic name="Marquer un rendez-vous comme étant d’ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
   <topic name="À propos de la page de rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="Menus de clic droit" >
@@ -128,6 +32,12 @@
 <key name="messages, absence" >
   <topic name="Message d'absence" url="Userspecific/vacation_message.htm" />
 </key>
+<key name="mini-calendrier " >
+  <topic name="Afficher le n° de semaine" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
+<key name="modifier comme nouveau mail" >
+  <topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
 <key name="Modifier contact" >
   <topic name="Modification d’un contact" url="Contacts/editing_a_contact.htm" />
 </key>
@@ -137,11 +47,20 @@
 <key name="modifier un rendez-vous" >
   <topic name="Modification de rendez-vous récurrents" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
+<key name="n° de semaine" >
+  <topic name="Afficher le n° de semaine" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
 <key name="navigation, clavier" >
   <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="notification de mail" >
   <topic name="Notifications de nouveau mail" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="notification de MI" >
+  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="notification par mail" >
+  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 <key name="nouveaux mails" >
   <topic name="Comment vous avertir lorsque vous recevez un mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -161,11 +80,26 @@
 <key name="panneau de lecture" >
   <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
+<key name="panneau de lecture, activer ou désactiver" >
+  <topic name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="panneau de lecture, modifier les en-têtes des colonnes" >
+  <topic name="Personnaliser la vue de votre compte" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+</key>
 <key name="panneau d’aperçu, activer ou désactiver" >
   <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
+<key name="personnaliser champs de contacts" >
+  <topic name="Création d’un nouveau contact" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="personnaliser la vue" >
+  <topic name="Personnaliser la vue de votre compte" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+</key>
 <key name="pièces jointes" >
   <topic name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="pièces jointes ics, sauvegarder" >
+  <topic name="Répondre à une invitation" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
 <key name="planification d’une réunion" >
   <topic name="À propos de la page de Rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
@@ -173,8 +107,17 @@
 <key name="polices" >
   <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
+<key name="porte-documents, joindre les fichiers à un mail" >
+  <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
 <key name="préférences, afficher le panneau de lecture" >
   <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="présence non obligatoire" >
+  <topic name="Utiliser l’onglet Programme lors de la création d'un rendez-vous" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="présence obligatoire" >
+  <topic name="Utiliser l’onglet Programme lors de la création d'un rendez-vous" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
 <key name="quick add/ajout rapide" >
   <topic name="Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
@@ -184,6 +127,12 @@
 </key>
 <key name="raccourcis clavier" >
   <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="rappels" >
+  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="Rappels de réunion" >
+  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 <key name="réception des mails" >
   <topic name="Comment vous avertir lorsque vous recevez un mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -196,6 +145,9 @@
 </key>
 <key name="Recherche rapide" >
   <topic name="Recherche rapide" url="Search/Quick_search.htm" />
+</key>
+<key name="rechercher des destinataires" >
+  <topic name="Recherche de destinataires " url="Search/Searching_for_Recipients_.htm" />
 </key>
 <key name="rechercher un mail" >
   <topic name="Rechercher des mails" url="Search/_search__vs.__search_for_.htm" />
@@ -212,8 +164,11 @@
 <key name="Redirection" >
   <topic name="Faire suivre un mail" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
+<key name="règles de filtre, dossiers existants" >
+  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
+</key>
 <key name="règles, filtre" >
-  <topic name="}}}Filtrer vos mails{{{" url="filters/filtering_your_messages.htm" />
+  <topic name="Filtrer vos mails" url="filters/filtering_your_messages.htm" />
   <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
 </key>
 <key name="rendez-vous" >
@@ -227,6 +182,9 @@
 </key>
 <key name="rendez-vous, quickadd/ajout rapide" >
   <topic name="Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+</key>
+<key name="renvoyer" >
+  <topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="Répondre" >
   <topic name="Répondre à des mails" url="reading_mail/replying_to_mail_messages.htm" />
@@ -250,8 +208,14 @@
 <key name="saisie d’adresse" >
   <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
+<key name="sauvegarde de données de compte" >
+  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
 <key name="signature" >
   <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="sous-fenêtre de lecture, activer ou désactiver" >
+  <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="suppression de contacts" >
   <topic name="Suppression d’un contact" url="Contacts/deleting_a_contact.htm" />
@@ -270,6 +234,15 @@
 </key>
 <key name="tableaux, ajouter à des pages de documents" >
   <topic name="Ajouter un tableau à une page de carnet" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="tâche, marquer comme terminée" >
+  <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="tâches d'impression" >
+  <topic name="À propos des tâches" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="tâches, impression" >
+  <topic name="À propos des tâches" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="tag, glisser-déposer" >
   <topic name="Affecter des tags à des mails" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
@@ -290,17 +263,41 @@
 <key name="touches de raccourcis" >
   <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
+<key name="travailler hors ligne" >
+  <topic name="Travailler hors ligne" url="Zdesktop/z-Working_Offline.htm" />
+</key>
 <key name="trier des tâches" >
   <topic name="Trier des tâches " url="Tasks/Sorting_tasks_.htm" />
 </key>
+<key name="trier les mails entrants" >
+  <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
+</key>
 <key name="Types de fichiers de pièces jointes supportés" >
   <topic name="Types de fichiers de pièces jointes supportés" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
+<key name="uploader les nouveaux Zimlets" >
+  <topic name="Gestion de vos Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
+<key name="URL dans les signatures" >
+  <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
 </key>
 <key name="Utilisation des tags" >
   <topic name="Utiliser les tags pour classer les mails" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
 <key name="vérifier les nouveaux mails" >
   <topic name="Comment vous avertir lorsque vous recevez un mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="vérifier l’arrivée de nouveaux mails" >
+  <topic name="Comment vous avertir lorsque vous recevez un mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="vérifier une réponse à une invitation" >
+  <topic name="Utiliser l’onglet Programme lors de la création d'un rendez-vous" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="voir sous-fenêtre de lecture" >
+  <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="W dans le mini- calendrier" >
+  <topic name="Afficher le n° de semaine" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 
 </indexdata>

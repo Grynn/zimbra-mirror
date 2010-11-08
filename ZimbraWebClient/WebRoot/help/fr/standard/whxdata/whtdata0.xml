@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="Premiers pas" >
-  <item name="}}}Premiers pas avec le client Web standard{{{" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+  <item name="Premiers pas avec le client Web standard" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
   <item name="Se connecter et se déconnecter" url="Userspecific/logging_on_and_off.htm" />
   <item name="Modification du type de connexion par défaut de mon client " url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Touches de raccourcis clavier" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -34,8 +34,8 @@
   <item name="Saisie automatique d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Joindre des fichiers à votre mail" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Types de pièces jointes" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="}}}Utilisation de l’éditeur HTML{{{" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="}}}Vérification orthographique{{{" url="Creating_Messages/Check_the_spelling.htm" />
+  <item name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="Vérification orthographique" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Enregistrement de mails en tant que brouillons" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Répondre et transférer des mails" >
@@ -49,8 +49,8 @@
 </book>
 <book name="Gestion de votre calendrier" >
   <item name="À propos du Calendrier" url="Calendar/b_About_Calendar.htm" />
-  <item name="}}}Créer un nouveau calendrier{{{" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="}}}Appliquer des codes de couleur à vos calendriers{{{" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Créer un nouveau calendrier" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="Appliquer des codes de couleur à vos calendriers" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Options d’affichage du Calendrier" url="Calendar/Calendar_Views.htm" />
   <item name="Importer un calendrier iCalendar" url="Calendar/Importing_iCalendars.htm" />
   <item name="Nettoyer votre calendrier" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
@@ -68,7 +68,7 @@
 </book>
 <book name="Partager des dossiers" >
   <book name="Partage de calendriers" >
-    <item name="}}}Lien vers calendrier partagé{{{" url="Calendar/Link_to_Shared_Calendar.htm" />
+    <item name="Lien vers calendrier partagé" url="Calendar/Link_to_Shared_Calendar.htm" />
   </book>
   <book name="Partager des carnets d’adresses" >
     <item name="Lien avec un carnet d’adresses partagé" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
@@ -85,8 +85,8 @@
   <item name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <item name="Supprimer des dossiers" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
-<book name="}}}Utiliser des filtres pour trier les mails{{{" >
-  <item name="}}}Filtrer vos mails{{{" url="filters/bc_Filtering_your_messages.htm" />
+<book name="Utiliser des filtres pour trier les mails" >
+  <item name="Filtrer vos mails" url="filters/bc_Filtering_your_messages.htm" />
   <item name="Conditions et actions de filtre supportées" url="filters/filter_conditions_and_actions_supported.htm" />
 </book>
 <book name="Configuration de vos préférences" >
