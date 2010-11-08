@@ -80,18 +80,6 @@ public class OfflineMailboxManager extends MailboxManager {
         }
     }
 
-    private final Object getMailboxMonitor = new Object();
-
-    @Override
-    protected Mailbox getMailboxById(int mailboxId, FetchMode fetchMode, boolean skipMailHostCheck)
-    throws ServiceException {
-        synchronized (getMailboxMonitor) {
-            // have to fake MailboxMonitor out, it does not want us to hold it's lock since it will serialize mb instantiation
-            // but w/ SQLite we need to do just that to avoid reading db when another thread might have progressed on to sync
-            return super.getMailboxById(mailboxId, fetchMode, skipMailHostCheck);
-        }
-    }
-
     public synchronized void purgeBadMailboxByAccountId(String accountId) {
         int mailboxId = lookupMailboxId(accountId);
         try {
