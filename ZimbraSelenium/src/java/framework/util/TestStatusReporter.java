@@ -2,7 +2,7 @@ package framework.util;
 
 import java.io.*;
 import java.nio.channels.FileChannel;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -26,12 +26,12 @@ public class TestStatusReporter extends TestListenerAdapter {
    private ArrayList<String> confFailArray = new ArrayList<String>();
    private ArrayList<String> confSkipArray = new ArrayList<String>();
   
-   private ArrayList<String> failReasonArray = new ArrayList<String>();
-   private ArrayList<String> skipReasonArray = new ArrayList<String>();
-   private ArrayList<String> confFailReasonArray = new ArrayList<String>();
-   private ArrayList<String> confSkipReasonArray = new ArrayList<String>();
+   private HashMap<String,String> failReasonMap = new HashMap <String,String>();
+   private HashMap<String,String> skipReasonMap = new HashMap <String,String>();
+   private HashMap<String,String> confFailReasonMap = new HashMap <String,String>();
+   private HashMap<String,String> confSkipReasonMap = new HashMap <String,String>();
 
-   private String path="";
+   private String path=""; 
    
    private PrintStream ps=null;
    private ByteArrayOutputStream baos;
@@ -564,7 +564,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 		
 		body.append("\n\n" + lines + "FAIL: " + (failed>0?uri+"/fail/":"") +  lines);
 		if (failed >0) {
-		    body.append(getTestList(failArray, failReasonArray));
+		    body.append(getTestList(failArray, failReasonMap));
 		    
 		}
 		
@@ -616,7 +616,7 @@ public class TestStatusReporter extends TestListenerAdapter {
  	 	
  	return result.toString();
  }
- private String getTestList(ArrayList<String> array,ArrayList<String> reasonArray) {
+ private String getTestList(ArrayList<String> array, HashMap<String,String> reasonMap) {
 	 	StringBuffer result= new StringBuffer();
 	 	
 	 	for (int i=0; i <array.size(); i++){
@@ -625,7 +625,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 	 		   
 	 		   //result.append("<a href='" + uri + methodName.replace(".","/") + "'>"  + methodName+ "</a>" + "\n");
 	 		   result.append(methodName + "\n\t");
-	 		   result.append(reasonArray.get(i) + "\n");
+	 		   result.append(reasonMap.get(array.get(i)) + "\n");
 	 	 }           
 	 	 	
 	 	return result.toString();
@@ -715,11 +715,9 @@ public class TestStatusReporter extends TestListenerAdapter {
           classInProgressPrintWriter.println( "<br>\t" + getErrorLine(tr.getThrowable(),tr.getName()));
         
 
-    	  confFailReasonArray.add(tr.getThrowable().getMessage() + "\n\t" + getErrorLine(tr.getThrowable(),tr.getName()));
+    	  confFailReasonMap.put(fullTestName,tr.getThrowable().getMessage() + "\n\t" + getErrorLine(tr.getThrowable(),tr.getName()));
       }
-      else {
-    	  confFailReasonArray.add("");
-      }
+   
       classInProgressPrintWriter.flush();
 
   }
@@ -732,7 +730,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 	  log(new Date().toString() + "-------------- FAILED " + fullTestName + " FAILED ----------------------------------------");
 
       printToFile(failDir , fullTestName);
-      //TODO: add back in
+      
       ClientSessionFactory.session().selenium().captureScreenshot(path + "\\" + failDir + "\\"+ fullTestName + ".png");
 	
       classInProgressPrintWriter.println( "<br>\t" + new Date().toString() + " FAILED" );
@@ -744,7 +742,7 @@ public class TestStatusReporter extends TestListenerAdapter {
       classInProgressPrintWriter.println( "<br>\t" + getErrorLine(tr.getThrowable(),tr.getName()));
       classInProgressPrintWriter.flush();
       
-      failReasonArray.add(tr.getThrowable().getMessage() + "\n\t" + getErrorLine(tr.getThrowable(),tr.getName()));
+      failReasonMap.put(fullTestName, tr.getThrowable().getMessage() + "\n\t" + getErrorLine(tr.getThrowable(),tr.getName()));
   
   }
   
@@ -777,8 +775,8 @@ public class TestStatusReporter extends TestListenerAdapter {
       confSkipArray.add(fullTestName); 
       
       printToFile(confSkipDir , fullTestName);
-      // TODO: add back in	 
-      // SelNGBase.selenium.captureScreenshot(path + "\\"  + fullTestName + ".png");
+      ClientSessionFactory.session().selenium().captureScreenshot(path + "\\" + skipDir + "\\"+ fullTestName + ".png");
+  	
       classInProgressPrintWriter.println( "<br>\t" + new Date().toString() + " CONFIG SKIPPED" );
       
       if (tr.getThrowable() != null) {
@@ -787,10 +785,7 @@ public class TestStatusReporter extends TestListenerAdapter {
     	  classInProgressPrintWriter.println( "<br>\t" + tr.getThrowable().getMessage());
           classInProgressPrintWriter.println( "<br>\t" + getErrorLine(tr.getThrowable(),tr.getName()));
 
-    	  confSkipReasonArray.add(tr.getThrowable().getMessage() + "\n\t" + getErrorLine(tr.getThrowable(),tr.getName()));
-      }
-      else {
-    	  confSkipReasonArray.add("");
+    	  confSkipReasonMap.put(fullTestName,tr.getThrowable().getMessage() + "\n\t" + getErrorLine(tr.getThrowable(),tr.getName()));
       }
       classInProgressPrintWriter.flush();
     
@@ -819,11 +814,9 @@ public class TestStatusReporter extends TestListenerAdapter {
     	  classInProgressPrintWriter.println( "<br>\t" + tr.getThrowable().getMessage());
           classInProgressPrintWriter.println( "<br>\t" + getErrorLine(tr.getThrowable(),tr.getName()));
 
-    	  skipReasonArray.add(tr.getThrowable().getMessage() + "\n\t" + getErrorLine(tr.getThrowable(),tr.getName()));
+    	  skipReasonMap.put(fullTestName,tr.getThrowable().getMessage() + "\n\t" + getErrorLine(tr.getThrowable(),tr.getName()));
       }
-      else {
-    	  skipReasonArray.add("");
-      }
+   
        classInProgressPrintWriter.flush();  
   }
   @Override
