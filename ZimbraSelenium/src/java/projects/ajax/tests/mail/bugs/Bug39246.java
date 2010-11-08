@@ -28,7 +28,7 @@ public class Bug39246 extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Verify bug 39246",
-			groups = { "sanity" })
+			groups = { "functional" })
 	public void Bug39246_01() throws IOException, LmtpProtocolException, HarnessException  {
 		
 		final String subject = "Bug39246";

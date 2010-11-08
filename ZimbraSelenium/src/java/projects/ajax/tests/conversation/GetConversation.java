@@ -33,7 +33,7 @@ public class GetConversation extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Receive a conversation",
-			groups = { "sanity" })
+			groups = { "smoke" })
 	public void GetConversation01() throws HarnessException {
 		
 		

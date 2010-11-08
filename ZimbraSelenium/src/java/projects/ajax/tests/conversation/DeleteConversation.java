@@ -33,7 +33,7 @@ public class DeleteConversation extends AjaxCommonTest {
 	}
 	
 	@Test(	description = "Delete a conversation",
-			groups = { "sanity" })
+			groups = { "smoke" })
 	public void DeleteConversation01() throws HarnessException {
 		
 		
