@@ -75,7 +75,23 @@ public class MailItem extends ZimbraItem implements IItem {
 	/**
 	 * The folder that contains this mail
 	 */
-	public FolderItem folder;
+	public String folder;
+
+	public boolean isSelected;
+
+	public boolean isFlagged;
+
+	public String priority;
+
+	public String from;
+
+	public boolean hasAttachments;
+
+	public String fragment;
+
+	public String size;
+
+	public String received;
 	
 	
 	/**

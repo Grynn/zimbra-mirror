@@ -39,7 +39,7 @@ public class GetConversation extends AjaxCommonTest {
 		
 		// Create the message data to be sent
 		MailItem mail = new MailItem();
-		mail.recipients.add(new RecipientItem(ZimbraAccount.AccountA()));
+		mail.recipients.add(new RecipientItem(app.getActiveAccount().EmailAddress));
 		mail.subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		mail.bodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
 		

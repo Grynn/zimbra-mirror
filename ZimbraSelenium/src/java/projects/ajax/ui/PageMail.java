@@ -45,32 +45,40 @@ public class PageMail extends AbsAjaxPage {
 		public static final String zNewMenuIconBtn 		= "id=zb__CLV__NEW_MENU_left_icon";
 		public static final String zNewMenuBtn 			= "id=zb__CLV__NEW_MENU";
 		public static final String zNewMenuDropDown 	= "id=zb__CLV__NEW_MENU_dropdown";
+		public static final String zGetMailIconBtnCLVID 	= "zb__CLV__CHECK_MAIL_left_icon";
+		public static final String zGetMailIconBtnTVID 		= "zb__TV__CHECK_MAIL_left_icon";
 		public static final String zGetMailIconBtn 		= "id=zb__CLV__CHECK_MAIL_left_icon";
 		public static final String zGetMailBtn 			= "id=zb__CLV__CHECK_MAIL";
-		public static final String zDeleteIconBtn 		= "id=zb__CLV__DELETE_left_icon";
+		public static final String zDeleteIconBtnID 	= "zb__CLV__DELETE_left_icon";
 		public static final String zDeleteBtn 			= "id=zb__CLV__DELETE";
-		public static final String zMoveIconBtn 		= "id=zb__CLV__MOVE_left_icon";
+		public static final String zMoveIconBtnID 		= "zb__CLV__MOVE_left_icon";
 		public static final String zMoveBtn 			= "id=zb__CLV__MOVE";
-		public static final String zPrintIconBtn 		= "id=zb__CLV__PRINT_left_icon";
+		public static final String zPrintIconBtnID 		= "zb__CLV__PRINT_left_icon";
 		public static final String zPrintBtn 			= "id=zb__CLV__PRINT";
-		public static final String zReplyIconBtn 		= "id=zb__CLV__REPLY_left_icon";
+		public static final String zReplyIconBtnID 		= "zb__CLV__REPLY_left_icon";
 		public static final String zReplyBtn 			= "id=zb__CLV__REPLY";
-		public static final String zReplyAllIconBtn 	= "id=zb__CLV__REPLY_ALL_left_icon";
+		public static final String zReplyAllIconBtnID 	= "zb__CLV__REPLY_ALL_left_icon";
 		public static final String zReplyAllBtn 		= "id=zb__CLV__REPLY_ALL";
-		public static final String zForwardIconBtn 		= "id=zb__CLV__FORWARD_left_icon";
+		public static final String zForwardIconBtnID 	= "zb__CLV__FORWARD_left_icon";
 		public static final String zForwardBtn 			= "id=zb__CLV__FORWARD";
-		public static final String zJunkIconBtn 		= "id=zb__CLV__SPAM_left_icon";
+		public static final String zJunkIconBtnID 		= "zb__CLV__SPAM_left_icon";
 		public static final String zJunkBtn 			= "id=zb__CLV__SPAM";
 		public static final String zTagIconBtn 			= "id=zb__CLV__TAG_MENU_left_icon";
 		public static final String zTagBtn 				= "id=zb__CLV__TAG_MENU";
-		public static final String zDetachIconBtn 		= "id=zb__TV__DETACH_left_icon";
+		public static final String zTagMenuDropdownBtnID	= "zb__CLV__TAG_MENU_dropdown";
+		public static final String zDetachIconBtnID		= "zb__TV__DETACH_left_icon";
 		public static final String zDetachBtn 			= "id=zb__TV__DETACH";
 		public static final String zDetachIconBtn2 		= "id=zb__CLV__DETACH_left_icon";
 		public static final String zDetachBtn2 			= "id=zb__CLV__DETACH";
 		public static final String zDetachBtn_ComposedMessage = "id=zb__COMPOSE1__DETACH_COMPOSE";
-		public static final String zViewIconBtn 		= "id=zb__CLV__VIEW_MENU_left_icon";
+		public static final String zViewIconBtnID 		= "zb__CLV__VIEW_MENU_left_icon";
 		public static final String zViewBtn 			= "id=zb__CLV__VIEW_MENU";
+		public static final String zViewMenuDropdownBtnID	= "zb__CLV__VIEW_MENU_dropdown";
+		
+		public static final String zViewMenuCLVBtnID	= zViewIconBtnID;
+		public static final String zViewMenuTVBtnID		= "zb__TV__VIEW_MENU_left_icon";
 
+		
 		public static final String zCloseIconBtn_newWindow 		= "id=zb__MSG1__CLOSE_left_icon";
 		public static final String zDeleteIconBtn_newWindow 	= "id=zb__MSG1__DELETE_title";
 		public static final String zReplyIconBtn_newWindow 		= "id=zb__MSG1__REPLY_left_icon";
@@ -148,7 +156,8 @@ public class PageMail extends AbsAjaxPage {
 	//			+ localize(locator.mail) + "_title";
 
 
-		public static final String zCLVRows			= "id=zl__CLV__rows";
+		public static final String zCLVRows			= "zl__CLV__rows";
+		public static final String zTVRows			= "zl__TV__rows";
 
 	}
 	
@@ -225,6 +234,7 @@ public class PageMail extends AbsAjaxPage {
 		if ( button == null )
 			throw new HarnessException("Button cannot be null!");
 		
+				
 		// Default behavior variables
 		//
 		String locator = null;			// If set, this will be clicked
@@ -236,57 +246,156 @@ public class PageMail extends AbsAjaxPage {
 		if ( button == Buttons.B_NEW ) {
 			
 			// For "NEW" without a specified pulldown option, just return the default item
+			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
+			//
+			
 			this.zPressKeyboardShortcut(KeyEvent.VK_N);
-			page = new FormMailNew(this.MyApplication);
+			
+			// Not default behavior (zPressKeyboardShortcut vs. zClick).
+			// Do not fall through.
+			return (new FormMailNew(this.MyApplication));
 			
 		} else if ( button == Buttons.B_GETMAIL ) {
 			
-			locator = Locators.zGetMailIconBtn;
+			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
+				locator = "id="+ Locators.zGetMailIconBtnTVID;
+			} else {
+				locator = "id="+ Locators.zGetMailIconBtnCLVID;
+			}
+
 			
 		} else if ( button == Buttons.B_DELETE ) {
 			
-			locator = Locators.zDeleteBtn;
+			String id;
+			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
+				id = "zb__TV__DELETE_left_icon";
+			} else {
+				id = "zb__CLV__DELETE_left_icon";
+			}
+			
+			// Check if the button is enabled
+			String attrs = sGetAttribute("xpath=(//td[@id='"+ id +"']/div)@class");
+			if ( attrs.contains("ZDisabledImage") ) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			}
+
+			locator = "id="+ id;
+				
 			
 		} else if ( button == Buttons.B_MOVE ) {
 			
-			throw new HarnessException("implement me!");
+			// Check if the button is enabled
+			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zMoveIconBtnID +"']/div)@class");
+			if ( attrs.contains("ZDisabledImage") ) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			}
+
+			locator = "id='"+ Locators.zMoveIconBtnID;
+			page = null;	// TODO
+			throw new HarnessException("implement Move dialog");
 			
 		} else if ( button == Buttons.B_PRINT ) {
 			
-			throw new HarnessException("implement me!");
+			// Check if the button is enabled
+			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zPrintIconBtnID +"']/div)@class");
+			if ( attrs.contains("ZDisabledImage") ) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			}
+
+			locator = "id='"+ Locators.zPrintIconBtnID;
+			page = null;	// TODO
+			throw new HarnessException("implement Print dialog");
 			
 		} else if ( button == Buttons.B_REPLY ) {
 			
-			throw new HarnessException("implement me!");
+			// Check if the button is enabled
+			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zReplyIconBtnID +"']/div)@class");
+			if ( attrs.contains("ZDisabledImage") ) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			}
+
+			locator = "id='"+ Locators.zReplyIconBtnID;
+			page = new FormMailNew(this.MyApplication);
 			
 		} else if ( button == Buttons.B_REPLYALL ) {
 			
-			throw new HarnessException("implement me!");
+			// Check if the button is enabled
+			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zReplyAllIconBtnID +"']/div)@class");
+			if ( attrs.contains("ZDisabledImage") ) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			}
+
+			locator = "id='"+ Locators.zReplyAllIconBtnID;
+			page = new FormMailNew(this.MyApplication);
 			
 		} else if ( button == Buttons.B_FORWARD ) {
 			
-			throw new HarnessException("implement me!");
+			// Check if the button is enabled
+			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zForwardIconBtnID +"']/div)@class");
+			if ( attrs.contains("ZDisabledImage") ) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			}
+
+			locator = "id='"+ Locators.zForwardIconBtnID;
+			page = new FormMailNew(this.MyApplication);
 			
 		} else if ( button == Buttons.B_RESPORTSPAM ) {
 			
-			throw new HarnessException("implement me!");
+			// Check if the button is enabled
+			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zJunkIconBtnID +"']/div)@class");
+			if ( attrs.contains("ZDisabledImage") ) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			}
+
+			locator = "id='"+ Locators.zJunkIconBtnID;			
 			
 		} else if ( button == Buttons.B_TAG ) {
 			
-			throw new HarnessException("implement me!");
+			// For "TAG" without a specified pulldown option, just click on the pulldown
+			// To use "TAG" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
+			//
+			
+			// Check if the button is enabled
+			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zTagMenuDropdownBtnID +"']/div)@class");
+			if ( attrs.contains("ZDisabledImage") ) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			}
+
+			locator = "id='"+ Locators.zTagMenuDropdownBtnID +"'";
 			
 		} else if ( button == Buttons.B_NEWWINDOW ) {
 			
-			throw new HarnessException("implement me!");
+			// Check if the button is enabled
+			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zDetachIconBtnID +"']/div)@class");
+			if ( attrs.contains("ZDisabledImage") ) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			}
+
+			locator = "id='"+ Locators.zDetachIconBtnID;
+			page = null;	// TODO
+			throw new HarnessException("implement new window page ... probably just DisplayMail object?");
+			
 			
 		} else if ( button == Buttons.B_LISTVIEW ) {
 			
-			throw new HarnessException("implement me!");
+			// For "TAG" without a specified pulldown option, just click on the pulldown
+			// To use "TAG" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
+			//
 			
+			// Check if the button is enabled
+			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zViewMenuDropdownBtnID +"']/div)@class");
+			if ( attrs.contains("ZDisabledImage") ) {
+				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+			}
+
+			locator = "id='"+ Locators.zViewMenuDropdownBtnID +"'";
+			
+		} else {
+			throw new HarnessException("no logic defined for button "+ button);
 		}
 
 		if ( locator == null ) {
-			throw new HarnessException("no logic defined for button "+ button);
+			throw new HarnessException("locator was null for button "+ button);
 		}
 		
 		// Default behavior, process the locator by clicking on it
@@ -406,8 +515,24 @@ public class PageMail extends AbsAjaxPage {
 
 	
 
+	public enum PageMailView {
+		BY_MESSAGE, BY_CONVERSATION
+	}
 
-	
+	/**
+	 * Get the Page Property: ListView = By message OR By Conversation
+	 * @return
+	 * @throws HarnessException
+	 */
+	public PageMailView zGetPropMailView() throws HarnessException {
+		if ( sIsElementPresent( "id="+ Locators.zViewMenuTVBtnID ) ) {
+			return (PageMailView.BY_MESSAGE);
+		} else if ( sIsElementPresent( "id="+ Locators.zViewMenuCLVBtnID ) ) {
+			return (PageMailView.BY_CONVERSATION);
+		}
+		
+		throw new HarnessException("Unable to determine the Page Mail View");
+	}
 
 	/**
 	 * Return a list of all messages in the current view
@@ -415,9 +540,97 @@ public class PageMail extends AbsAjaxPage {
 	 * @throws HarnessException 
 	 */
 	public List<MailItem> zListGetMessages() throws HarnessException {
-		SleepUtil.sleepMedium();
-		throw new HarnessException("implement me!");
+		
+		List<MailItem> items = new ArrayList<MailItem>();
+		
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(Locators.zTVRows) )
+			throw new HarnessException("Message List View Rows is not present "+ Locators.zTVRows);
+		
+		// How many items are in the table?
+		int count = this.sGetXpathCount("//div[@id='zl__TV__rows']//div[contains(@id, 'zli__TV__')]");
+		logger.debug(myPageName() + " zListGetMessages: number of conversations: "+ count);
 
+		// Get each conversation's data from the table list
+		for (int i = 0; i < count; i++) {
+			final String msglocator = "//div[@id='zl__TV__rows']/div["+ count +"]";
+			String locator;
+			
+			MailItem item = new MailItem();
+
+			// Is it checked?
+			locator = msglocator + "//div[contains(@class, 'ImgCheckboxChecked')]";
+			item.isSelected = this.sIsElementPresent(locator);
+						
+			// Is it flagged
+			// TODO: probably can't have boolean, need 'blank', 'disabled', 'red', and other states
+			locator = msglocator + "//div[contains(@class, 'ImgFlagRed')]";
+			item.isFlagged = this.sIsElementPresent(locator);
+			
+			locator = "xpath=("+ msglocator +"//div[contains(@id, '__pr')])@class";
+			String priority = this.sGetAttribute(locator);
+			if ( priority.equals("ImgPriorityHigh_list") ) {
+				item.priority = "high";
+			} else {
+				// TODO - handle other priorities
+			}
+
+			
+			locator = msglocator + "//div[contains(@id, '__tg')]";
+			// TODO: handle tags
+
+			// Get the From
+			locator = msglocator + "//*[contains(@id, '__fr')]";
+			item.from = this.sGetText(locator).trim();
+			
+			// Get the attachment
+			locator = "xpath=("+ msglocator +"//div[contains(@id, '__at')])@class";
+			String attach = this.sGetAttribute(locator);
+			if ( attach.equals("ImgBlank_16") ) {
+				item.hasAttachments = false;
+			} else {
+				// TODO - handle other attachment types
+			}
+				
+			// Get the fragment
+			locator = msglocator + "//span[contains(@id, '__fm')]";
+			item.fragment = this.sGetText(locator).trim();
+
+			// Get the subject
+			locator = msglocator + "//td[contains(@id, '__su')]";
+			String s = this.sGetText(locator).trim();
+			
+			// The subject contains the fragment, e.g. "subject - fragment", so
+			// strip it off
+			item.subject = s.replace(item.fragment, "").trim();
+
+			// Get the folder
+			locator = msglocator + "//nobr[contains(@id, '__fo')]";
+			if ( this.sIsElementPresent(locator) ) {
+				item.folder = this.sGetText(locator).trim();
+			} else {
+				item.folder = "";
+			}
+
+			// Get the size
+			locator = msglocator + "//nobr[contains(@id, '__sz')]";
+			if ( this.sIsElementPresent(locator) ) {
+				item.size = this.sGetText(locator).trim();
+			} else {
+				item.size = "";
+			}
+			
+			// Get the received date
+			locator = msglocator + "//td[contains(@id, '__dt')]";
+			item.received = this.sGetText(locator).trim();
+			
+			// Add the new item to the list
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
+		
+		// Return the list of items
+		return (items);
 	}
 
 	/**
@@ -436,7 +649,7 @@ public class PageMail extends AbsAjaxPage {
 		
 		// How many items are in the table?
 		int count = this.sGetXpathCount("//div[@id='zl__CLV__rows']//div[contains(@id, 'zli__CLV__')]");
-		logger.debug(myPageName() + " getConversationList: number of conversations: "+ count);
+		logger.debug(myPageName() + " zListGetConversations: number of conversations: "+ count);
 
 		// Get each conversation's data from the table list
 		for (int i = 0; i < count; i++) {
@@ -535,12 +748,22 @@ public class PageMail extends AbsAjaxPage {
 		
 		if ( action == Actions.A_LEFTCLICK ) {
 			
+			String listLocator;
+			String rowLocator;
+			if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+				listLocator = "//div[@id='zl__TV__rows']";
+				rowLocator = "//div[contains(@id, 'zli__TV__')]";
+			} else {
+				listLocator = "//div[@id='zl__CLV__rows']";
+				rowLocator = "//div[contains(@id, 'zli__CLV__')]";
+			}
+			
 			// TODO: how to handle both messages and conversations, maybe check the view first?
-			if ( !this.sIsElementPresent(Locators.zCLVRows) )
+			if ( !this.sIsElementPresent(listLocator) )
 				throw new HarnessException("Conversation List View Rows is not present "+ Locators.zCLVRows);
 			
 			// How many items are in the table?
-			int count = this.sGetXpathCount("//div[@id='zl__CLV__rows']//div[contains(@id, 'zli__CLV__')]");
+			int count = this.sGetXpathCount(listLocator + rowLocator);
 			logger.debug(myPageName() + " zListSelectItem: number of conversations: "+ count);
 
 			StringBuilder sb = new StringBuilder();
@@ -548,13 +771,13 @@ public class PageMail extends AbsAjaxPage {
 			// Get each conversation's data from the table list
 			for (int i = 0; i < count; i++) {
 				
-				final String convlocator = "//div[@id='zl__CLV__rows']/div["+ count +"]";
+				final String convlocator = listLocator + "/div["+ count +"]";
 				String locator;
 				
 				// Look for the subject
 				
 				// Subject - Fragment
-				locator = "//div[@id='zl__CLV__rows']/div["+ count +"]//td[contains(@id, '__su')]";
+				locator = listLocator + "/div["+ count +"]//td[contains(@id, '__su')]";
 				String s = this.sGetText(locator).trim();
 				sb.append(s).append(", ");
 				

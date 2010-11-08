@@ -15,6 +15,7 @@ import java.io.PrintStream;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
@@ -310,14 +311,26 @@ public class ExecuteHarnessMain {
 	public String execute() throws HarnessException, FileNotFoundException, IOException {
 		logger.info("Execute ...");
 		
-		String result = null;
+		Date start = new Date();
+		Date finish;
+		
+		StringBuilder result = new StringBuilder();
 		try {
+			
 			SeleniumService.getInstance().startSeleniumServer();
-			result = executeTests();
+			String response = executeTests();
+			result.append(executeTests()).append('\n');
+			
 		} finally {
 			SeleniumService.getInstance().stopSeleniumServer();
+			finish = new Date();
 		}
-		return (result);
+		
+		// calculate how long the tests took
+		long duration = finish.getTime() - start.getTime();
+		result.append("Duration: ").append(duration / 1000).append(" seconds\n");
+		
+		return (result.toString());
 	}
 	
 	/**

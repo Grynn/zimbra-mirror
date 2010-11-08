@@ -1,4 +1,4 @@
-package projects.ajax.tests.conversation;
+package projects.ajax.tests.mail.mail;
 
 import java.util.List;
 
@@ -7,7 +7,6 @@ import org.testng.annotations.Test;
 import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.Actions;
 import projects.ajax.ui.Buttons;
-import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
 import framework.util.HarnessException;
@@ -15,27 +14,27 @@ import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
-public class DeleteConversation extends AjaxCommonTest {
+public class DeleteMail extends AjaxCommonTest {
 
-	public DeleteConversation() {
-		logger.info("New "+ DeleteConversation.class.getCanonicalName());
+	public DeleteMail() {
+		logger.info("New "+ DeleteMail.class.getCanonicalName());
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
-		
+
 		// Make sure we are using an account with conversation view
 		ZimbraAccount account = new ZimbraAccount();
 		account.provision();
 		account.authenticate();
-		account.modifyPreference("zimbraPrefGroupMailBy", "conversation");
+		account.modifyPreference("zimbraPrefGroupMailBy", "message");
 			
 		super.startingAccount = account;		
+		
 	}
 	
-	@Test(	description = "Delete a conversation",
-			groups = { "sanity" })
-	public void DeleteConversation01() throws HarnessException {
-		
+	@Test(	description = "Delete a mail",
+			groups = { "smoke" })
+	public void DeleteMail_01() throws HarnessException {
 		
 		// Create the message data to be sent
 		MailItem mail = new MailItem();
@@ -56,25 +55,26 @@ public class DeleteConversation extends AjaxCommonTest {
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Buttons.B_GETMAIL);
-		
+				
 		// Select the item
 		app.zPageMail.zListItem(Actions.A_LEFTCLICK, mail.subject);
 		
 		// Click delete
 		app.zPageMail.zToolbarPressButton(Buttons.B_DELETE);
 		
-		List<ConversationItem> conversations = app.zPageMail.zListGetConversations();
-		ZAssert.assertNotNull(conversations, "Verify the conversation list exists");
+		List<MailItem> messages = app.zPageMail.zListGetMessages();
+		ZAssert.assertNotNull(messages, "Verify the conversation list exists");
 
 		boolean found = false;
-		for (ConversationItem c : conversations) {
-			logger.info("Subject: looking for "+ mail.subject +" found: "+ c.subject);
-			if ( c.subject.equals(mail.subject) ) {
+		for (MailItem m : messages) {
+			logger.info("Subject: looking for "+ mail.subject +" found: "+ m.subject);
+			if ( m.subject.equals(mail.subject) ) {
 				found = true;
 				break;
 			}
 		}
-		ZAssert.assertFalse(found, "Verify the conversation is no longer in the inbox");
+		ZAssert.assertFalse(found, "Verify the message is no longer in the inbox");
+
 		
 	}
 

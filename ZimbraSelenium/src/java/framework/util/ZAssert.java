@@ -52,6 +52,35 @@ public class ZAssert {
 
 	}
 
+	public static void assertFalse(boolean condition, String message) {
+		
+		// Add counts
+		TotalCountTests++;
+		CountTests++;
+		
+		// Build a 'standard' detailed message
+		String details = String.format("%s -- (%s == %s) [%s]", "assertFalse", condition, true, message);
+		
+		// Log it
+		logger.info(details);
+		
+        try
+        {
+        	// Execute the Assert base method (if available)
+            Assert.assertFalse(condition, details);
+        }
+        catch (AssertionError e)
+        {
+        	// On failure, log the error
+        	logger.error(e.getMessage(), e);
+            throw e;
+        }
+        
+        // Add "pass" counts
+        CountPass++; TotalCountPass++;
+
+	}
+
 	public static void assertEquals(Object actual, Object expected, String message) {
 		TotalCountTests++;
 		CountTests++;
