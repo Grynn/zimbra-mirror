@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="Erste Schritte" >
-  <item name="}}}Erste Schritte mit dem Standard-Web-Client{{{" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+  <item name="Erste Schritte mit dem Standard-Web-Client" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
   <item name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
   <item name="Voreingestellten Client-Typ für die Anmeldung ändern" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Tastenkürzel" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -34,8 +34,8 @@
   <item name="Automatische Vervollständigung von Adressen" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Dateien an Mail anhängen" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Dateitypen für Anhänge" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="}}}HTML-Editor verwenden{{{" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="}}}Rechtschreibung überprüfen{{{" url="Creating_Messages/Check_the_spelling.htm" />
+  <item name="HTML-Editor verwenden" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="Rechtschreibung überprüfen" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Mails als Entwürfe speichern" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Mails beantworten und weiterleiten" >
@@ -49,8 +49,8 @@
 </book>
 <book name="Kalender verwalten" >
   <item name="Wissenswertes zum Kalender" url="Calendar/b_About_Calendar.htm" />
-  <item name="}}}Neuen Kalender anlegen{{{" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="}}}Kalender farbcodieren{{{" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="Kalender farbcodieren" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Mögliche Kalenderansichten" url="Calendar/Calendar_Views.htm" />
   <item name="iCalendars importieren" url="Calendar/Importing_iCalendars.htm" />
   <item name="Kalender bereinigen" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
@@ -68,7 +68,7 @@
 </book>
 <book name="Ordner freigeben" >
   <book name="Kalender freigeben" >
-    <item name="}}}Link zu einem freigegebenen Kalender{{{" url="Calendar/Link_to_Shared_Calendar.htm" />
+    <item name="Link zu einem freigegebenen Kalender" url="Calendar/Link_to_Shared_Calendar.htm" />
   </book>
   <book name="Adressbücher freigeben" >
     <item name="Link zu freigegebenem Adressbuch einrichten" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
@@ -85,7 +85,7 @@
   <item name="Ordner umbenennen" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <item name="Ordner löschen" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
-<book name="}}}Mailfilter verwenden{{{" >
+<book name="Mailfilter verwenden" >
   <item name="Mails filtern" url="filters/bc_Filtering_your_messages.htm" />
   <item name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
 </book>

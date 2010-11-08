@@ -88,17 +88,17 @@ else
 
 
 <h1>Beschreibung der Sprache f&uuml;r Suchabfragen</h1>
-<p>}}}In diesem erweiterten Thema wird die Suchgrammatik f&uuml;r die @CompanyName@-Suchfunktion ausf&uuml;hrlich beschrieben.{{{ }}}Um die Ansicht zu erzeugen, die Sie auf der Oberfl&auml;che sehen, ist immer eine Art von Abfrage erforderlich.{{{</p>
+<p>In diesem erweiterten Thema wird die Suchgrammatik f&uuml;r die @CompanyName@-Suchfunktion ausf&uuml;hrlich beschrieben. Um die Ansicht zu erzeugen, die Sie auf der Oberfl&auml;che sehen, ist immer eine Art von Abfrage erforderlich.</p>
 <h2>Aufbau der Sprache f&uuml;r Suchabfragen</h2>
-<p>Eine einfache Suche f&uuml;hren Sie durch, indem Sie einfach ein Wort in das Suchfeld eingeben. }}}Reine W&ouml;rter (W&ouml;rter ohne Suchoperator) werden als Suche &uuml;ber den Operator 'content:'{{{ }}}gedeutet, d. h. es wird nach Textentsprechungen in der Mail gesucht.{{{</p>
+<p>Eine einfache Suche f&uuml;hren Sie durch, indem Sie einfach ein Wort in das Suchfeld eingeben. Reine W&ouml;rter (W&ouml;rter ohne Suchoperator) werden als Suche &uuml;ber den Operator 'content:' gedeutet, d. h. es wird nach Textentsprechungen in der Mail gesucht.</p>
 <p>Komplexere Suchabfragen definieren Sie mithilfe eines <b>Suchoperators</b>. Ein Suchoperator ist ein bestimmtes Schl&uuml;sselwort gefolgt von einem Doppelpunkt, darauf folgt ein weiterer Parameter, der sich auf den vorhergehenden Operator bezieht. Beispiel:</p>
 <ul>
-	<li class="p"><p><b style="font-weight: bold;">in: }}}Bei inbox</b> ist der Operator &quot;in&quot;, der Parameter ist &quot;inbox&quot; (Posteingang). Diese Suche findet Mails, die sich im &quot;inbox&quot; befinden.{{{</p></li>
+	<li class="p"><p><b style="font-weight: bold;">in: Bei inbox</b> ist der Operator &quot;in&quot;, der Parameter ist &quot;inbox&quot; (Posteingang). Diese Suche findet Mails, die sich im &quot;inbox&quot; befinden.</p></li>
 </ul>
 <ul>
-	<li class="p"><p>}}}Bei <b style="font-weight: bold;">from:Peter</b> ist der Operator &quot;from:&quot; und der Parameter ist &quot;Peter&quot;. Diese Suche findet Mails, bei denen sich das Wort &quot;Peter&quot; in der Absenderadresse befindet.{{{</p></li>
+	<li class="p"><p>Bei <b style="font-weight: bold;">from:Peter</b> ist der Operator &quot;from:&quot; und der Parameter ist &quot;Peter&quot;. Diese Suche findet Mails, bei denen sich das Wort &quot;Peter&quot; in der Absenderadresse befindet.</p></li>
 </ul>
-<p>}}}Sie k&ouml;nnen jedem Schl&uuml;sselwort das Wort &quot;not&quot; (nicht) voranstellen, um nach Elementen zu suchen, die dem Kriterium nicht entsprechen, z. B. <b>not in:.{{{ }}}inbox</b>.{{{ }}}Die Suche unterscheidet nicht zwischen Gro&szlig;- und Kleinschreibung, d. h. &quot;in:inbox ist identisch mit &quot;in:Inbox&quot;.{{{ }}}Das Minuszeichen (<b>-</b>) ist ein Synonym f&uuml;r <b>NOT</b> (Nicht):{{{ }}}<b>not in:inbox</b> entspricht also <b>-in:inbox</b>{{{</p>
+<p>Sie k&ouml;nnen jedem Schl&uuml;sselwort das Wort &quot;not&quot; (nicht) voranstellen, um nach Elementen zu suchen, die dem Kriterium nicht entsprechen, z. B. <b>not in:. inbox</b>. Die Suche unterscheidet nicht zwischen Gro&szlig;- und Kleinschreibung, d. h. &quot;in:inbox ist identisch mit &quot;in:Inbox&quot;. Das Minuszeichen (<b>-</b>) ist ein Synonym f&uuml;r <b>NOT</b> (Nicht): <b>not in:inbox</b> entspricht also <b>-in:inbox</b></p>
 <p>In den meisten F&auml;llen ist es nicht erforderlich, Satzzeichen in Ihre Suchzeichenfolge einzugeben, weil der Suchcode diese ignoriert. Es gibt bestimmte F&auml;lle, bei denen diese Aussage nicht zutrifft (wenn Sie z. B. nach der Uhrzeit &quot;9:30&quot; in einer Mail suchen). In einem solchen Fall m&uuml;ssen Sie den Suchparameter in Anf&uuml;hrungszeichen eingeben. Beispiel: <b>subject:&quot;9:30&quot;</b> sucht nach Mails, die die Zeichenfolge 9:30 in der Betreffzeile enthalten.</p>
 <p>Zul&auml;ssige Zeichen im Suchparameter:</p>
 <ul>
@@ -106,58 +106,58 @@ else
 	<li class="p"><p>Die folgenden Zeichen d&uuml;rfen in Suchparametern nicht als erstes Zeichen angegeben werden: - + &lt; &gt;</p></li>
 </ul>
 <h2>Mehrere Suchbegriffe</h2>
-<p>}}}Wenn Sie mehrere Suchbegriffe eingeben (durch Leerzeichen getrennt), werden sie standardm&auml;&szlig;ig durch &quot; ANDed&quot; verkn&uuml;pft. <b>in:inbox tim</b> bedeutet, &quot;Mails suchen, die sich im Posteingang befinden UND das Wort tim enthalten&quot;.{{{ Bei Suchabfragen mit mehreren Kriterien k&ouml;nnen Sie nach Elementen suchen, die einem angegebenen Kriterium oder allen angegebenen Kriterien entsprechen. F&uuml;r beide Arten von Suchabfragen nutzen Sie die erweiterte Suche.</p>
+<p>Wenn Sie mehrere Suchbegriffe eingeben (durch Leerzeichen getrennt), werden sie standardm&auml;&szlig;ig durch &quot; ANDed&quot; verkn&uuml;pft. <b>in:inbox tim</b> bedeutet, &quot;Mails suchen, die sich im Posteingang befinden UND das Wort tim enthalten&quot;. Bei Suchabfragen mit mehreren Kriterien k&ouml;nnen Sie nach Elementen suchen, die einem angegebenen Kriterium oder allen angegebenen Kriterien entsprechen. F&uuml;r beide Arten von Suchabfragen nutzen Sie die erweiterte Suche.</p>
 <p>In allen Suchfenstern mit Ausnahme der einfachen Suche gelten die folgenden Regeln:</p>
 <ul>
 	<li class="p"><p>Wenn Sie nach Mails suchen, die einem der angegebenen Kriterien entsprechen, handelt es sich um eine <b>OR</b>-Suche (ODER), weil die Kriterien als erf&uuml;llt gelten, wenn die Mail entweder X oder Y enth&auml;lt. Wenn Sie bei der erweiterten Suche mehrere Kontrollk&auml;stchen in einem Suchfenster aktivieren, wird f&uuml;r diese Optionen eine <b>OR</b>-Suche durchgef&uuml;hrt.</p></li>
 	<li class="p"><p>Wenn Sie nach Mails suchen, die X und Y enthalten, handelt es sich um eine <b>AND</b>-Suche (UND), weil die Mail alle angegebenen Kriterien erf&uuml;llen muss, um als Entsprechung zu gelten. Wenn Sie bei der erweiterten Suche ein Suchfenster mehrmals &ouml;ffnen und jeweils andere Kontrollk&auml;stchen aktivieren, werden die angegebenen Kriterien als <b>AND</b>-Suche durchgef&uuml;hrt.</p></li>
 </ul>
 <p>Nur &quot;OR&quot; wird in der Abfrage angezeigt. Wenn Sie die Option ausgew&auml;hlt haben, dass die Suchabfrage in der Suchleiste angezeigt werden soll, wenn Sie die Kriterien f&uuml;r die erweiterte Suche festlegen, wird das Suchtextfeld aktualisiert, um die resultierende Abfrage anzuzeigen. Bei der Suche vom Typ <b>AND</b> wird das Wort <b>AND</b> nicht angezeigt.</p>
-<p><b style="font-weight: bold;">Tipp</b>: }}}Verwendung von Klammern zusammen mit AND und OR.{{{ W&ouml;rter in Klammern werden als Einheit betrachtet. }}}Beispiel: <b>from:{{{ }}}(john thomas)</b> entspricht <b>from:john AND from:{{{ }}}thomas</b>.{{{ }}}Wenn Sie in der Klammer OR angeben, <b>from:(johann or thomas)</b>, wird nach Mails <b>from:john OR from:{{{ }}}thomas</b> gesucht.{{{</p>
+<p><b style="font-weight: bold;">Tipp</b>: Verwendung von Klammern zusammen mit AND und OR. W&ouml;rter in Klammern werden als Einheit betrachtet. Beispiel: <b>from: (john thomas)</b> entspricht <b>from:john AND from: thomas</b>. Wenn Sie in der Klammer OR angeben, <b>from:(johann or thomas)</b>, wird nach Mails <b>from:john OR from: thomas</b> gesucht.</p>
 <h3>Platzhalter <b>*</b> bei der Suche nutzen</h3>
 <p>Das Sternchen (<b>*</b>) kann in einer Suche als Platzhalter eingesetzt werden, um Inhalte mit W&ouml;rtern &auml;hnlicher Schreibweise zu finden.</p>
-<p>Nutzen Sie das Sternchen <b>*</b> als Platzhalter im Anschluss an eine bestimmte Zeichenfolge. }}}Beispiel: Die Suche nach <b>Hu*</b> findet Elemente mit den W&ouml;rtern <i>Hund</i>, <i>Hut</i>, <i>Husten</i> usw.{{{</p>
+<p>Nutzen Sie das Sternchen <b>*</b> als Platzhalter im Anschluss an eine bestimmte Zeichenfolge. Beispiel: Die Suche nach <b>Hu*</b> findet Elemente mit den W&ouml;rtern <i>Hund</i>, <i>Hut</i>, <i>Husten</i> usw.</p>
 <h2>Beschreibungen der Schl&uuml;sselw&ouml;rter und Beispiele</h2>
 <p style="font-weight: bold;">content:</p>
 <p style="margin-left: 40px;">Gibt Text an, der im Mailinhalt vorhanden sein muss. Beispiel: <span class="code">content:bananen</span> sucht alle Elemente mit dem Wort &quot;bananen&quot;.</p>
 <p style="font-weight: bold;">from:</p>
-<p style="margin-left: 40px;">Sucht einen Absendernamen oder eine Mail-Adresse, der/die sich in der Kopfzeile &quot;Von&quot; befinden muss. }}}Hierbei kann es sich um Text handeln, z. B. &quot;Johann Schmidt-Schulze&quot;, eine Mail-Adresse wie &quot;joe@acme.com&quot; oder eine Domain wie &quot; zimbra.com&quot;.{{{</p>
+<p style="margin-left: 40px;">Sucht einen Absendernamen oder eine Mail-Adresse, der/die sich in der Kopfzeile &quot;Von&quot; befinden muss. Hierbei kann es sich um Text handeln, z. B. &quot;Johann Schmidt-Schulze&quot;, eine Mail-Adresse wie &quot;joe@acme.com&quot; oder eine Domain wie &quot; zimbra.com&quot;.</p>
 <p style="font-weight: bold;">to:</p>
-<p style="margin-left: 40px;">}}}Entspricht dem Schl&uuml;sselwort &bdquo;from:&ldquo;,{{{ }}}au&szlig;er dass nach einer der Personen gesucht wird, die in der Kopfzeile &bdquo;An&ldquo; als Empf&auml;nger angegeben wurden{{{ }}}.{{{</p>
+<p style="margin-left: 40px;">Entspricht dem Schl&uuml;sselwort &bdquo;from:&ldquo;, au&szlig;er dass nach einer der Personen gesucht wird, die in der Kopfzeile &bdquo;An&ldquo; als Empf&auml;nger angegeben wurden .</p>
 <p style="font-weight: bold;">cc:</p>
-<p style="margin-left: 40px;">}}}Entspricht dem Schl&uuml;sselwort &bdquo;from:&ldquo;,{{{ }}}au&szlig;er dass nach einem Empf&auml;nger in der Kopfzeile &bdquo;CC&ldquo;{{{ }}}der Mail gesucht wird.{{{</p>
+<p style="margin-left: 40px;">Entspricht dem Schl&uuml;sselwort &bdquo;from:&ldquo;, au&szlig;er dass nach einem Empf&auml;nger in der Kopfzeile &bdquo;CC&ldquo; der Mail gesucht wird.</p>
 <p style="font-weight: bold;">subject:</p>
-<p style="margin-left: 40px;">Sucht Text, der in der Betreffzeile der Mail enthalten sein muss. }}}Beispiel: <span class="code">subject:Neue Urlaubsregelung</span>.{{{ </p>
+<p style="margin-left: 40px;">Sucht Text, der in der Betreffzeile der Mail enthalten sein muss. Beispiel: <span class="code">subject:Neue Urlaubsregelung</span>. </p>
 <p style="font-weight: bold;">in:</p>
 <p style="margin-left: 40px;">Gibt einen Ordner an. Beispiel: <span class="code">in:sent</span> zeigt alle Objekte in Ihrem Ordner <span style="font-weight: bold;"><b>Gesendet</b></span> an, und <span class="code">in:privat</span> zeigt alle Objekte in Ihrem Ordner <span style="font-weight: bold;"><b>Privat</b></span> an.</p>
 <p style="font-weight: bold;">has:</p>
-<p style="margin-left: 40px;">Sucht nach einem Attribut, das die Mail aufweisen muss. }}}Hier k&ouml;nnen Sie Parameter wie &quot;attachment&quot; (Anhang), &quot;phone&quot; (Telefon) oder &quot; url&quot; angeben.{{{ Beispiel: <span class="code">has:attachment</span> sucht alle Mails, die einen Anhang oder mehrere Anh&auml;nge beliebigen Typs enthalten.</p>
+<p style="margin-left: 40px;">Sucht nach einem Attribut, das die Mail aufweisen muss. Hier k&ouml;nnen Sie Parameter wie &quot;attachment&quot; (Anhang), &quot;phone&quot; (Telefon) oder &quot; url&quot; angeben. Beispiel: <span class="code">has:attachment</span> sucht alle Mails, die einen Anhang oder mehrere Anh&auml;nge beliebigen Typs enthalten.</p>
 <p style="font-weight: bold;">filename:</p>
-<p style="margin-left: 40px;">Dient dazu, den Namen eines Dateianhangs anzugeben. }}}Beispiel: <span class="code">filename:{{{ }}}query.txt</span> sucht nach Mails mit dem Dateianhang &quot; query.txt&quot;.{{{</p>
+<p style="margin-left: 40px;">Dient dazu, den Namen eines Dateianhangs anzugeben. Beispiel: <span class="code">filename: query.txt</span> sucht nach Mails mit dem Dateianhang &quot; query.txt&quot;.</p>
 <p style="font-weight: bold;">type:</p>
-<p style="margin-left: 40px;">Sucht innerhalb von Anh&auml;ngen bestimmten Typs. }}}F&uuml;r die Typen von Anh&auml;ngen k&ouml;nnen Sie &quot;text&quot;, &quot;word&quot;, &quot;excel&quot; und &quot; pdf&quot; angeben.{{{ Beispiel: <span class="code">type:word &quot;hallo&quot;</span> sucht nach Mails mit angeh&auml;ngten Microsoft-Word-Dokumenten, die das Wort &quot;hallo&quot; enthalten.</p>
+<p style="margin-left: 40px;">Sucht innerhalb von Anh&auml;ngen bestimmten Typs. F&uuml;r die Typen von Anh&auml;ngen k&ouml;nnen Sie &quot;text&quot;, &quot;word&quot;, &quot;excel&quot; und &quot; pdf&quot; angeben. Beispiel: <span class="code">type:word &quot;hallo&quot;</span> sucht nach Mails mit angeh&auml;ngten Microsoft-Word-Dokumenten, die das Wort &quot;hallo&quot; enthalten.</p>
 <p style="font-weight: bold;">attachment:</p>
 <p style="margin-left: 40px;">Sucht nach Mails mit bestimmten Typen von Anh&auml;ngen. Beispiel: <span class="code">attachment:word</span> sucht alle Mails mit Word-Anh&auml;ngen.</p>
 <p style="font-weight: bold;">is:</p>
-<p style="margin-left: 40px;">Sucht nach Mails mit einem bestimmten Status. }}}Folgende Werte sind zul&auml;ssig: &quot;unread&quot; (ungelesen), &quot;read&quot; (gelesen), &quot;flagged&quot; (markiert), &quot;unflagged&quot; (nicht markiert), &quot;sent&quot; (gesendet), &quot;draft&quot; (Entwurf), &quot;received&quot; (erhalten), &quot;replied&quot; (beantwortet), &quot;unreplied&quot; (nicht beantwortet), &quot;forwarded&quot; (weitergeleitet), &quot;unforwarded&quot; (nicht weitergeleitet), &quot;anywhere&quot; (irgendwo), &quot;remote&quot; (extern, in einem freigegebenen Ordner), &quot;local&quot; (lokal).{{{ }}}Beispiel: <span class="code">is:{{{ }}}unread</span> (ungelesen) sucht alle ungelesenen Mails.{{{</p>
+<p style="margin-left: 40px;">Sucht nach Mails mit einem bestimmten Status. Folgende Werte sind zul&auml;ssig: &quot;unread&quot; (ungelesen), &quot;read&quot; (gelesen), &quot;flagged&quot; (markiert), &quot;unflagged&quot; (nicht markiert), &quot;sent&quot; (gesendet), &quot;draft&quot; (Entwurf), &quot;received&quot; (erhalten), &quot;replied&quot; (beantwortet), &quot;unreplied&quot; (nicht beantwortet), &quot;forwarded&quot; (weitergeleitet), &quot;unforwarded&quot; (nicht weitergeleitet), &quot;anywhere&quot; (irgendwo), &quot;remote&quot; (extern, in einem freigegebenen Ordner), &quot;local&quot; (lokal). Beispiel: <span class="code">is: unread</span> (ungelesen) sucht alle ungelesenen Mails.</p>
 <p style="font-weight: bold;">date:</p>
-<p style="margin-left: 40px;">}}}Mit diesem Schl&uuml;sselwort geben Sie ein Datum an. Nutzen Sie das Format, das in den L&auml;ndereinstellungen Ihres Browsers als Standard eingerichtet ist (in Deutsch ist das Standardformat TT/ MM/JJJJ).{{{ }}}Beispiel: <span  	 class="code">date:2/1/2010</span> sucht Mails vom 1. Februar 2010. Statt <i>after:</i> (nach) und <i>before:</i> (vor) k&ouml;nnen die Zeichen f&uuml;r &bdquo;gr&ouml;&szlig;er als&ldquo; (&gt;) und &bdquo;kleiner als&ldquo; (&lt;) verwendet werden.{{{ }}}&gt;= and &lt;= sind ebenfalls zul&auml;ssig.{{{</p>
+<p style="margin-left: 40px;">Mit diesem Schl&uuml;sselwort geben Sie ein Datum an. Nutzen Sie das Format, das in den L&auml;ndereinstellungen Ihres Browsers als Standard eingerichtet ist (in Deutsch ist das Standardformat TT/ MM/JJJJ). Beispiel: <span  	 class="code">date:2/1/2010</span> sucht Mails vom 1. Februar 2010. Statt <i>after:</i> (nach) und <i>before:</i> (vor) k&ouml;nnen die Zeichen f&uuml;r &bdquo;gr&ouml;&szlig;er als&ldquo; (&gt;) und &bdquo;kleiner als&ldquo; (&lt;) verwendet werden. &gt;= and &lt;= sind ebenfalls zul&auml;ssig.</p>
 <p style="font-weight: bold;">after:</p>
-<p style="margin-left: 40px;">Sucht nach Mails, die nach einem bestimmten Datum gesendet wurden. }}}Beispiel: <span class="code">after:17.03.2007</span> <span class="code"  															 style="font-weight: normal;  															 font-family: Arial, sans-serif;  															 font-size: 10pt;"><font size="2" style="font-size:10pt;"> sucht nach Mails, die nach dem 17. M&auml;rz 2007 gesendet wurden</font></span><span class="code" style="font-weight: normal;">.</span>{{{</p>
+<p style="margin-left: 40px;">Sucht nach Mails, die nach einem bestimmten Datum gesendet wurden. Beispiel: <span class="code">after:17.03.2007</span> <span class="code"  															 style="font-weight: normal;  															 font-family: Arial, sans-serif;  															 font-size: 10pt;"><font size="2" style="font-size:10pt;"> sucht nach Mails, die nach dem 17. M&auml;rz 2007 gesendet wurden</font></span><span class="code" style="font-weight: normal;">.</span></p>
 <p style="font-weight: bold;">before:</p>
-<p style="margin-left: 40px;">}}}Wie bei <span class="code">after:</span>,{{{ }}}au&szlig;er dass nach Mails gesucht wird, die vor einem bestimmten Datum gesendet wurden.{{{</p>
+<p style="margin-left: 40px;">Wie bei <span class="code">after:</span>, au&szlig;er dass nach Mails gesucht wird, die vor einem bestimmten Datum gesendet wurden.</p>
 <p style="font-weight: bold;">size:</p>
-<p style="margin-left: 40px;">}}}Gibt die Gesamtgr&ouml;&szlig;e einer Mail mit Anh&auml;ngen in Byte, Kilobyte oder Megabyte an. Beispiel: <span class="code">size:12 kb</span> sucht nach Mails, die genau 12 KB gro&szlig; sind.{{{ Statt &quot;larger:&quot; (gr&ouml;&szlig;er) oder &quot;smaller:&quot; (kleiner) k&ouml;nnen auch die Zeichen f&uuml;r &quot;gr&ouml;&szlig;er als&quot; (&gt;) oder &quot;kleiner als&quot; (&lt;) eingegeben werden.</p>
+<p style="margin-left: 40px;">Gibt die Gesamtgr&ouml;&szlig;e einer Mail mit Anh&auml;ngen in Byte, Kilobyte oder Megabyte an. Beispiel: <span class="code">size:12 kb</span> sucht nach Mails, die genau 12 KB gro&szlig; sind. Statt &quot;larger:&quot; (gr&ouml;&szlig;er) oder &quot;smaller:&quot; (kleiner) k&ouml;nnen auch die Zeichen f&uuml;r &quot;gr&ouml;&szlig;er als&quot; (&gt;) oder &quot;kleiner als&quot; (&lt;) eingegeben werden.</p>
 <p style="font-weight: bold;">larger:</p>
-<p style="margin-left: 40px;">}}}Wie bei &bdquo;size:&ldquo;{{{ }}}au&szlig;er dass nach Mails gesucht wird, die gr&ouml;&szlig;er sind als die angegebene Gr&ouml;&szlig;e.{{{</p>
+<p style="margin-left: 40px;">Wie bei &bdquo;size:&ldquo; au&szlig;er dass nach Mails gesucht wird, die gr&ouml;&szlig;er sind als die angegebene Gr&ouml;&szlig;e.</p>
 <p style="font-weight: bold;">smaller:</p>
-<p style="margin-left: 40px;">}}}Wie bei &bdquo;size:&ldquo;,{{{ }}}au&szlig;er dass nach Mails gesucht wird, die kleiner sind als die angegebene Gr&ouml;&szlig;e.{{{</p>
-<p style="font-weight: bold;"><span><b>}}}solo:{{{</b></span></p>
-<p style="margin-left: 40px;">}}}Sucht nach Mails, die noch nicht beantwortet wurden.{{{</p>
+<p style="margin-left: 40px;">Wie bei &bdquo;size:&ldquo;, au&szlig;er dass nach Mails gesucht wird, die kleiner sind als die angegebene Gr&ouml;&szlig;e.</p>
+<p style="font-weight: bold;"><span><b>solo:</b></span></p>
+<p style="margin-left: 40px;">Sucht nach Mails, die noch nicht beantwortet wurden.</p>
 <p style="font-weight: bold;">tag:</p>
-<p style="margin-left: 40px;">Sucht Mails, die mit einem bestimmten Tag markiert wurden. }}}Beispiel: <span class="code"> tag:wichtig</span> sucht nach Mails, die mit dem Tag &quot;wichtig&quot; gekennzeichnet wurden.{{{</p>
-<p style="font-weight: bold;"><span><b>}}}priority:{{{</b></span></p>
-<p style="margin-left: 40px;">}}}Sucht nach Mails, Aufgaben oder Kalenderobjekten gem&auml;&szlig; einer &quot;hohen&quot; bzw. &quot;niedrigen&quot; Priorit&auml;t.{{{ }}}Beispiel: priority<span  	 class="code">:hoch</span> sucht nach Objekten mit einer hohen Priorit&auml;tseinstellung.{{{</p>
+<p style="margin-left: 40px;">Sucht Mails, die mit einem bestimmten Tag markiert wurden. Beispiel: <span class="code"> tag:wichtig</span> sucht nach Mails, die mit dem Tag &quot;wichtig&quot; gekennzeichnet wurden.</p>
+<p style="font-weight: bold;"><span><b>priority:</b></span></p>
+<p style="margin-left: 40px;">Sucht nach Mails, Aufgaben oder Kalenderobjekten gem&auml;&szlig; einer &quot;hohen&quot; bzw. &quot;niedrigen&quot; Priorit&auml;t. Beispiel: priority<span  	 class="code">:hoch</span> sucht nach Objekten mit einer hohen Priorit&auml;tseinstellung.</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

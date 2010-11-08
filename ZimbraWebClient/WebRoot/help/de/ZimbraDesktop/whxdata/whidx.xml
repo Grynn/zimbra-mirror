@@ -1,6 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <index>
-<chunkinfo url="whidata0.xml" first="}}}Account einrichten, IMAP{{{" last="Kalender drucken" num="106" />
-<chunkinfo url="whidata1.xml" first="Kalender, Frei/Belegt" last="Zimlets" num="93" />
+<chunkinfo url="whidata0.xml" first="Abwesenheitsmeldung" last="Mailbenachrichtigung" num="108" />
+<chunkinfo url="whidata1.xml" first="Mailentwurf" last="Zimlets, deaktivieren" num="90" />
 
 </index>

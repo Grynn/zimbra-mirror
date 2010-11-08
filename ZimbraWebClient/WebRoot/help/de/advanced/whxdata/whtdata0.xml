@@ -2,25 +2,25 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="Erste Schritte" >
-  <item name="}}}Willkommen b@ClientNameLong@en Version von @ClientNameLong@{{{" url="Getting_Started/about_liquid_mail.htm" />
-  <item name="}}}N@ClientNameShort@ort@-Funktionen in Version 7.0{{{" url="New_in_6.0.htm" />
+  <item name="Willkommen bei @ClientNameLong@Version von @ClientNameLong@" url="Getting_Started/about_liquid_mail.htm" />
+  <item name="Neue@ClientNameShort@@-Funktionen in Version 7.0" url="New_in_6.0.htm" />
   <item name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
   <item name="Voreingestellten Client-Typ für die Anmeldung ändern" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Tastenkürzel" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <item name="@CompanyName@me@-Assistent{{{" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <item name="@CompanyName@-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="Passwort ändern" url="Userspecific/chaning_your_password.htm" />
   <item name="Passwort vergessen?" url="Userspecific/if_you_forget_your_password.htm" />
   <item name="Ablauf der Sitzung" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="In der Mailbox navigieren" >
-  <item name="}}}Durch @C@ClientNameLong@avigieren{{{" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="Durch @Clie@ClientNameLong@gieren" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <item name="Allgemeine Einstellungen einrichten" url="Userspecific/Setting_your_general_preferences.htm" />
   <item name="Ansicht benutzerspezifisch einrichten" url="Navigation_folders_and_tips/Customize_your_view.htm" />
   <item name="Funktionen und Tastenkürzel der Benutzeroberfläche" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
   <item name="Kontextmenüs" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Für mehrere ausgewählte Objekte Aktionen durchführen" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
   <item name="Browser nutzen" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-  <item name="}}}Ihre Arbeit speichern{{{" url="Userspecific/browser_session_handling.htm" />
+  <item name="Ihre Arbeit speichern" url="Userspecific/browser_session_handling.htm" />
   <item name="Übersichtsfenster anzeigen" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="Mail-Systemordner" url="Navigation_folders_and_tips/inbox_folder.htm" />
 </book>
@@ -29,13 +29,13 @@
   <item name="Maileinstellungen einrichten" url="Userspecific/Setting_your_mail_preferences.htm" />
   <item name="Mails nach Kategorien sortieren" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Mail-Startseite benutzerspezifisch einrichten" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
-  <item name="}}}Funktionsweise von Unterhaltungen{{{" url="conversations/conversations_can_span_folders.htm" />
+  <item name="Funktionsweise von Unterhaltungen" url="conversations/conversations_can_span_folders.htm" />
   <item name="Unterhaltung drucken" url="conversations/printing_a_conversation.htm" />
   <item name="Mails zwischen Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <item name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="RSS-/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
   <item name="Verschiedene Identitäten im Account verwalten" url="Userspecific/Mail_Identities.htm" />
-  <item name="}}}Spam-Ordner verwalten{{{" url="filters/Managing_your_Junk_Folder.htm" />
+  <item name="Spam-Ordner verwalten" url="filters/Managing_your_Junk_Folder.htm" />
   <item name="Gelöschte Mails wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Mails löschen" url="reading_mail/archiving_old_messages.htm" />
   <book name="Mails lesen" >
@@ -43,7 +43,7 @@
     <item name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
     <item name="Desktop-Benachrichtigungen einrichten" url="Userspecific/Setting_up_desktop_alerts.htm" />
     <item name="Mails als ungelesen markieren" url="reading_mail/marking_mail_as_unread.htm" />
-    <item name="}}}Benachrichtigung über neue Mails{{{" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+    <item name="Benachrichtigung über neue Mails" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
     <item name="Mails im HTML-Format anzeigen" url="reading_mail/displaying_html_in_email_messages.htm" />
     <item name="Dateianhänge öffnen" url="reading_mail/opening_file_attachments.htm" />
     <item name="Mails drucken" url="reading_mail/printing_a_mail_message.htm" />
@@ -61,12 +61,12 @@
   <item name="Teile einer Mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Signatur automatisch einfügen" url="Userspecific/using_a_signature.htm" />
   <item name="Automatische Vervollständigung von Adressen" url="Creating_Messages/Using_address_lookup.htm" />
-  <item name="}}}Mails für die künftige Zustellung planen{{{" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
+  <item name="Mails für die künftige Zustellung planen" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Lesebestätigung anfordern" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Dateien an Mail anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Dateitypen für Anhänge" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="}}}CC:{{{ }}}und BCC:{{{ }}}Adressen hinzufügen{{{" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
-  <item name="}}}HTML-Editor verwenden{{{" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="CC: und BCC: Adressen hinzufügen" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="HTML-Editor verwenden" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Rechtschreibprüfung nutzen" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="Mails als Entwürfe speichern" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
@@ -79,7 +79,7 @@
   <item name="Verfügbare Arten von Adressbüchern" url="Contacts/gal_vs_contacts.htm" />
   <item name="Einstellungen für das Adressbuch einrichten" url="Userspecific/Setting_your_address_book_preferences.htm" />
   <item name="Neue Kontakte hinzufügen" url="Contacts/creating_a_new_contact.htm" />
-  <item name="}}}Kontaktinformationen weiterleiten{{{" url="Contacts/Forwarding_Contact_Information.htm" />
+  <item name="Kontaktinformationen weiterleiten" url="Contacts/Forwarding_Contact_Information.htm" />
   <item name="Mit dem Firmenadressbuch arbeiten" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="Kontakte automatisch hinzufügen" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
   <item name="Kontaktgruppen anlegen" url="Contacts/Creating_Group_Contact_Lists.htm" />
@@ -90,11 +90,11 @@
   <item name="Kontakte löschen" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="Kalender verwalten" >
-  <item name="}}}Wis@CompanyName@m @CompanyName@-Kalender{{{" url="Calendar/About_Calendar.htm" />
+  <item name="Wissen@CompanyName@CompanyName@-Kalender" url="Calendar/About_Calendar.htm" />
   <item name="Kalender erstellen" url="Calendar/Create_Calendars.htm" />
-  <item name="}}}Kalender farbcodieren{{{" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Kalender farbcodieren" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Kalendereinstellungen einrichten" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <item name="}}}Kalenderwochennummern anzeigen{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <item name="Kalenderwochennummern anzeigen" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
   <item name="Mögliche Kalenderansichten" url="Calendar/Calendar_Views.htm" />
   <item name="Listenansicht im Kalender" url="Calendar/Calendar_List_View.htm" />
   <item name="Mehrere Kalender anzeigen" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
@@ -111,7 +111,7 @@
   <item name="Aufgabenlisten anlegen" url="Tasks/Create_tasks_folders.htm" />
   <item name="Aufgaben hinzufügen" url="Tasks/Add_a_task.htm" />
   <item name="Aufgaben ändern" url="Tasks/Change_a_task.htm" />
-  <item name="}}}Erinnerung in den Aufgaben festlegen{{{" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
+  <item name="Erinnerung in den Aufgaben festlegen" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
   <item name="Aufgaben verschieben" url="Tasks/Moving_tasks.htm" />
   <item name="Aufgaben löschen" url="Tasks/Delete_a_task.htm" />
   <item name="Aufgaben sortieren" url="Tasks/Sorting_tasks_.htm" />
@@ -133,21 +133,21 @@
 <book name="Mails mit Tags und Ordnern organisieren" >
 <chunk name="Mails mit Tags und Ordnern organisieren" ref="whtdata4.xml" />
 </book>
-<book name="}}}Mailfilter verwenden{{{" >
-<chunk name="}}}Mailfilter verwenden{{{" ref="whtdata5.xml" />
+<book name="Mailfilter verwenden" >
+<chunk name="Mailfilter verwenden" ref="whtdata5.xml" />
 </book>
 <book name="Einstellungen einrichten" >
 <chunk name="Einstellungen einrichten" ref="whtdata6.xml" />
 </book>
-<book name="}}}Mobilgerät verwalten (nur Netzwerk-Edition){{{" >
+<book name="Mobilgerät verwalten (nur Netzwerk-Edition)" >
   <item name="Mobilgeräte verwalten" url="Userspecific/Managing_your_mobile_devices.htm" />
   <item name="Wipe-Funktion für Ihr Mobilgerät ausführen" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </book>
-<book name="}}}Accountordner speichern{{{" >
-<chunk name="}}}Accountordner speichern{{{" ref="whtdata7.xml" />
+<book name="Accountordner speichern" >
+  <item name="Inhalt des Accounts sichern" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 <book name="Zimlets nutzen" >
-<chunk name="Zimlets nutzen" ref="whtdata8.xml" />
+<chunk name="Zimlets nutzen" ref="whtdata7.xml" />
 </book>
 
 </tocdata>

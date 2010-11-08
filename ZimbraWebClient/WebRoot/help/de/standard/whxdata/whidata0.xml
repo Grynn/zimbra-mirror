@@ -1,39 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="}}}Aufgabe als abgeschlossen markieren{{{" >
-  <topic name="Aufgaben ändern" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}Aufgabe, als abgeschlossen markieren{{{" >
-  <topic name="Aufgaben ändern" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}Aufgaben, drucken{{{" >
-  <topic name="Wissenswertes zu Aufgaben" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="}}}Druckaufgaben{{{" >
-  <topic name="Wissenswertes zu Aufgaben" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="}}}Externer Kalender{{{" >
-  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}Frei/Belegt, Kalender ausschließen{{{" >
-  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}Kalender, aus Frei/Belegt ausschließen{{{" >
-  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}Kalender, Extern{{{" >
-  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}Mit einem anderen Kalender synchronisieren{{{" >
-  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="}}}Suche speichern{{{" >
-  <topic name="Suchabfrage erstellen und speichern" url="Search/b_Create_and_Save_a_Search_Query.htm" />
-</key>
-<key name="}}}Vergessen{{{" >
-  <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
 <key name="Abmelden" >
   <topic name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
 </key>
@@ -67,6 +34,15 @@
     <topic name="Auf Mails antworten" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
 </key>
+<key name="Aufgabe als abgeschlossen markieren" >
+  <topic name="Aufgaben ändern" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="Aufgabe, als abgeschlossen markieren" >
+  <topic name="Aufgaben ändern" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="Aufgaben, drucken" >
+  <topic name="Wissenswertes zu Aufgaben" url="Tasks/About_Tasks.htm" />
+</key>
 <key name="Automatisch Signatur einfügen" >
   <topic name="Signatur automatisch einfügen" url="Userspecific/b_Automatically_adding_your_signature.htm" />
 </key>
@@ -85,17 +61,32 @@
 <key name="Besprechungen" >
   <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
+<key name="Druckaufgaben" >
+  <topic name="Wissenswertes zu Aufgaben" url="Tasks/About_Tasks.htm" />
+</key>
 <key name="Einstellungen" >
   <topic name="Optionen einrichten" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
+<key name="Externer Kalender" >
+  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="Filterbedingungen" >
   <topic name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
+</key>
+<key name="Frei/Belegt, Kalender ausschließen" >
+  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="HTML" >
   <topic name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="HTML zur Formatierung nutzen" >
   <topic name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="Kalender, aus Frei/Belegt ausschließen" >
+  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="Kalender, Extern" >
+  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="Kontakte zu Adressbuch hinzufügen" >
   <topic name="Neue Kontakte hinzufügen" url="Contacts/b_Adding_new_contacts.htm" />
@@ -130,6 +121,9 @@
 </key>
 <key name="Meldung, Abwesenheit" >
   <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Mit einem anderen Kalender synchronisieren" >
+  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="Neues Fenster, Mails anzeigen in" >
   <topic name="Anzeige der Mails einrichten" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
@@ -168,6 +162,7 @@
   <topic name="Suche durchführen" url="Search/b_Using_Search.htm" />
 </key>
 <key name="Suche speichern" >
+  <topic name="Suchabfrage erstellen und speichern" url="Search/b_Create_and_Save_a_Search_Query.htm" />
   <topic name="Suche durchführen" url="Search/b_Using_Search.htm" />
 </key>
 <key name="Suchen" >
@@ -187,6 +182,9 @@
 </key>
 <key name="Unzustellbare Mail" >
   <topic name="Unzustellbare Mail" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="Vergessen" >
+  <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="Vervollständigung der Adresse in Mails" >
   <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />

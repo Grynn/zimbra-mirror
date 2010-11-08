@@ -1,9 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="}}}Account importieren{{{" last="}}}Standard-Clienttyp ändern{{{" num="97" />
-<chunkinfo url="whidata1.xml" first="}}}Telefon, Wipe{{{" last="Kontakte automatisch hinzufügen" num="103" />
-<chunkinfo url="whidata2.xml" first="Kontakte drucken" last="Übersichtsfenster" num="101" />
-<chunkinfo url="whidata3.xml" first="Unterhaltungen" last="Zugriff auf Ihren Kalender delegieren" num="18" />
+<chunkinfo url="whidata0.xml" first="Abmelden" last="Funktionen des Zimbra-Web-Clients" num="100" />
+<chunkinfo url="whidata1.xml" first="GAL und Kontakte" last="Notizbücher, Neue Seiten anlegen" num="103" />
+<chunkinfo url="whidata2.xml" first="Notizbücher, Tabellen hinzufügen" last="Warnungsmeldungen" num="98" />
+<chunkinfo url="whidata3.xml" first="Weiße Liste" last="Zugriff auf Ihren Kalender delegieren" num="17" />
 
 </index>
