@@ -100,6 +100,8 @@
 			<arg value="build/macos_installer.pmdoc" />
 			<arg value="--title" />
 			<arg value="${prod_title}" />
+			<arg value="--id" />
+			<arg value="com.zimbra.desktop.full" />
 			<arg value="--verbose" />
 			<arg value="--no-recommend" />
 		</exec>
