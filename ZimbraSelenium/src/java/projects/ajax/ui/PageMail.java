@@ -771,7 +771,7 @@ public class PageMail extends AbsAjaxPage {
 			// Get each conversation's data from the table list
 			for (int i = 0; i < count; i++) {
 				
-				final String convlocator = listLocator + "/div["+ count +"]";
+				final String itemlocator = listLocator + "/div["+ count +"]";
 				String locator;
 				
 				// Look for the subject
@@ -787,11 +787,11 @@ public class PageMail extends AbsAjaxPage {
 
 				// The subject matched!
 				// Left-Click on the item
-				this.zClick(convlocator);
+				this.zClick(itemlocator);
 				// this.sClick(convlocator);
 				
 				// No page to return
-				return (null);
+				return (new DisplayMail(MyApplication));
 			}
 			
 			throw new HarnessException("Unable to locate item with subject("+ subject +") in ("+ sb.toString() +")");

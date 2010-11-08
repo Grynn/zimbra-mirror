@@ -242,6 +242,14 @@ public abstract class AbsSeleniumObject {
 	}
 
 
+	/**
+	 * DefaultSeleniu.selectFrame()
+	 */
+	public void sSelectFrame(String locator) {
+		ClientSessionFactory.session().selenium().selectFrame(locator);
+		logger.info("sSelectFrame(" + locator + ")");
+	}
+	
 	//// ***
 	// End: Selenium methods
 	//// ***
