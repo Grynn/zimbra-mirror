@@ -65,7 +65,7 @@
   <item name="请求回执" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="将文件附加到邮件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="附件文件类型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="添加“抄送”和“密送:”{{{地址" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="添加“抄送”和“密送:”地址" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="使用 HTML 编辑器" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="使用拼写检查" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="把邮件保存为草稿" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -115,7 +115,7 @@
   <item name="将邮件转为会议请求" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
   <item name="使用 QuickAdd 创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
   <item name="安排全天活动" url="Calendar/Scheduling_All_Day_events.htm" />
-  <item name="}}}创建定期重复的约会{{{" url="Calendar/Creating_recurring_appointments.htm" />
+  <item name="创建定期重复的约会" url="Calendar/Creating_recurring_appointments.htm" />
   <item name="改变效率手册上的会议细节" url="Calendar/editing_meetings_on_your_calendar.htm" />
   <item name="确定谁可邀请您参加会议" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
   <item name="因权限不足而收到的被拒邮件" url="Calendar/Receiving_a_permission_denied_message.htm" />
@@ -175,10 +175,10 @@
   <item name="如何清除您的移动通信设备" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </book>
 <book name="保存您的帐户文件夹" >
-<chunk name="保存您的帐户文件夹" ref="whtdata4.xml" />
+  <item name="备份您的帐户的内容。" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 <book name="使用 Zimlet" >
-<chunk name="使用 Zimlet" ref="whtdata5.xml" />
+<chunk name="使用 Zimlet" ref="whtdata4.xml" />
 </book>
 
 </tocdata>

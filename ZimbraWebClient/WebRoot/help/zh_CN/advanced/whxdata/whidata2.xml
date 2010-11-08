@@ -1,20 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="联系人" >
-  <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
-  <topic name="联系人" url="Contacts/contacts.htm" />
-  <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
-  <key name="编辑" >
-    <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
-  </key>
-</key>
-<key name="联系人列表" >
-  <topic name="联系人" url="Contacts/contacts.htm" />
-</key>
-<key name="联系人组" >
-  <topic name="创建联系人组列表" url="Contacts/Creating_Group_Contact_Lists.htm" />
-</key>
 <key name="联系人资料，导入" >
   <topic name="导入联系人" url="Contacts/Importing_Contacts.htm" />
 </key>
@@ -68,7 +54,7 @@
   <topic name="安排资源" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="设定选项" >
-  <topic name="}}}设置用户首选项{{{" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="设置转发地址" >
   <topic name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
@@ -87,7 +73,7 @@
   <topic name="转发邮件" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
 <key name="转发电邮地址" >
-  <topic name="}}}设置用户首选项{{{" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="转发邮件" >
   <topic name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
@@ -157,7 +143,6 @@
   <topic name="保存邮件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
 <key name="邮件视图" >
-  <topic name="}}}管理电子邮件视图{{{" url="conversations/conversation_list_view.htm" />
   <topic name="管理电子邮件视图" url="conversations/conversation_list_view.htm" />
 </key>
 <key name="邮件通知" >
@@ -170,9 +155,9 @@
   <topic name="请求回执" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
 <key name="邮箱身份" >
-  <topic name="}}}设置用户首选项{{{" url="Userspecific/Setting_your_user_preferences.htm" />
-  <topic name="邮箱身份" url="Userspecific/Mail_Identities.htm" />
   <topic name="创建身份" url="Userspecific/Creating_Personas.htm" />
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="邮箱身份" url="Userspecific/Mail_Identities.htm" />
 </key>
 <key name="重发" >
   <topic name="右键选单" url="Navigation_folders_and_tips/right-click_menus.htm" />
@@ -183,8 +168,11 @@
 <key name="阅读窗格视图" >
   <topic name="管理电子邮件视图" url="conversations/conversation_list_view.htm" />
 </key>
+<key name="阅读窗格，关闭/开启" >
+  <topic name="管理电子邮件视图" url="conversations/conversation_list_view.htm" />
+</key>
 <key name="阅读窗格，开启或关闭" >
-  <topic name="}}}在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="阅读窗格，视图" >
   <topic name="Zimbra Web Client 工作空间" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
@@ -202,16 +190,16 @@
   <topic name="创建新页面" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="预览窗格，开关" >
-  <topic name="}}}在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="预订房间和设备" >
   <topic name="安排资源" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="首选项" >
-  <topic name="}}}设置用户首选项{{{" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="首选项，“阅读”窗格视图" >
-  <topic name="}}}在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="首选项，常规选项卡" >
   <topic name="设置常规首选项" url="Userspecific/Setting_your_general_preferences.htm" />

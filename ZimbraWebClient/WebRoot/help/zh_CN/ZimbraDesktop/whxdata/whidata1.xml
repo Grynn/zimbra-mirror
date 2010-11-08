@@ -1,11 +1,5 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
-<key name="用户界面功能" >
-  <topic name="用户界面功能和快捷键" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-</key>
-<key name="用通配符搜索" >
-  <topic name="使用搜索功能" url="Search/using_the_search_feature.htm" />
-</key>
 <key name="电子邮件" >
   <topic name="电子邮件的组成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
 </key>
@@ -27,7 +21,7 @@
 <key name="移动" >
   <topic name="在文件夹间移动邮件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <key name="在文件夹间移动邮件" >
-    <topic name="}}}在文件夹间移动邮件{{{" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+    <topic name="在文件夹间移动邮件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   </key>
 </key>
 <key name="笔记本页面" >
@@ -49,7 +43,7 @@
   <topic name="关于约会、会议和活动事项" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
 <key name="约会，quickadd" >
-  <topic name="}}}使用 QuickAdd 创建约会{{{" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+  <topic name="使用 QuickAdd 创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="编辑联系人资料" >
   <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
@@ -170,7 +164,6 @@
   <topic name="保存邮件草稿" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
 <key name="邮件视图" >
-  <topic name="}}}管理电子邮件视图{{{" url="conversations/conversation_list_view.htm" />
   <topic name="管理电子邮件视图" url="conversations/conversation_list_view.htm" />
 </key>
 <key name="邮件通知" >
@@ -194,8 +187,11 @@
 <key name="阅读窗格视图" >
   <topic name="管理电子邮件视图" url="conversations/conversation_list_view.htm" />
 </key>
+<key name="阅读窗格，关闭/开启" >
+  <topic name="管理电子邮件视图" url="conversations/conversation_list_view.htm" />
+</key>
 <key name="阅读窗格，开启或关闭" >
-  <topic name="}}}在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="附件" >
   <topic name="打开附加文件" url="reading_mail/opening_file_attachments.htm" />
@@ -207,10 +203,10 @@
   <topic name="创建新页面" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="预览窗格，开关" >
-  <topic name="}}}在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="首选项，“阅读”窗格视图" >
-  <topic name="}}}在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 
 </indexdata>

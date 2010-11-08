@@ -53,7 +53,7 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addTocInfo("}}}搜索项目{{{\n}}}查询语言说明{{{");
+	addTocInfo("搜索项目\n查询语言说明");
 addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
 
 	}
@@ -66,7 +66,7 @@ addButton("show",BTN_TEXT,"显示","","","","",0,0,"","","");
 	
 	document.write("<p style=\"text-align:right; background: silver\"> ");
 AddMasterBreadcrumbs("../Zimbra_Mail_Help.htm", "", "&gt;", "Desktop", "../Getting_Started/Zimbra_User_Help.htm");
-document.write("<a href=\"using_the_search_feature.htm\">}}}搜索项目{{{<\/a> &gt; }}}查询语言说明{{{<\/p>");
+document.write("<a href=\"using_the_search_feature.htm\">搜索项目<\/a> &gt; 查询语言说明<\/p>");
 
 
 	if (window.setRelStartPage)
@@ -96,7 +96,7 @@ else
    <p 
 				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
 			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">
-			 }}}关于常见的问题以及故障排除方法，请参见“Zimbra Desktop 常见问题”{{{
+			 关于常见的问题以及故障排除方法，请参见“Zimbra Desktop 常见问题”
 </a></p></td>
 		</tr>
 	</table>
@@ -104,17 +104,17 @@ else
 
 
 <h1>查询语言说明</h1>
-<p>}}}此节详细说明 Zimbra 的搜索功能中使用的搜索语法。{{{}}}始终使用某类型的查询来生成您在界面上看到的视图。{{{</p>
+<p>此节详细说明 Zimbra 的搜索功能中使用的搜索语法。始终使用某类型的查询来生成您在界面上看到的视图。</p>
 <h2>搜索语言结构</h2>
-<p>只需在搜索字段中输入一个单词即可搜索。}}}裸词（不含搜索运算符的单词）被解释为在&ldquo;content:&rdquo;{{{}}}运算符中搜索 -- 与邮件中的任何文本相匹配。{{{</p>
+<p>只需在搜索字段中输入一个单词即可搜索。裸词（不含搜索运算符的单词）被解释为在&ldquo;content:&rdquo;运算符中搜索 -- 与邮件中的任何文本相匹配。</p>
 <p>更高级的搜索可通过指定一个<b>搜索运算符</b>实现。特殊关键字后跟一个冒号即为搜索运算符，其后是适合于该运算符的其他参数。例如：</p>
 <ul>
-	<li class="p"><p><b style="font-weight: bold;">in: }}}inbox</b>，运算符为&ldquo;in&rdquo;，参数为&ldquo;inbox&rdquo;，也就是说，返回名为&ldquo;inbox&rdquo;的文件夹中的邮件{{{</p></li>
+	<li class="p"><p><b style="font-weight: bold;">in: inbox</b>，运算符为&ldquo;in&rdquo;，参数为&ldquo;inbox&rdquo;，也就是说，返回名为&ldquo;inbox&rdquo;的文件夹中的邮件</p></li>
 </ul>
 <ul>
-	<li class="p"><p>}}}<b style="font-weight: bold;">from:someone</b> 运算符是&ldquo;from&rdquo;，参数是&ldquo;someone&rdquo;，则会返回发件人地址中含&ldquo;someone&rdquo;的邮件{{{</p></li>
+	<li class="p"><p><b style="font-weight: bold;">from:someone</b> 运算符是&ldquo;from&rdquo;，参数是&ldquo;someone&rdquo;，则会返回发件人地址中含&ldquo;someone&rdquo;的邮件</p></li>
 </ul>
-<p>}}}在任何关键字前都可加上前缀&ldquo;not&rdquo;，以指定不符合该条件的项目，例如 <b>not in:{{{}}}inbox</b>。{{{}}}搜索不区分大小写，即&ldquo;in:inbox&rdquo;与&ldquo;in:Inbox&rdquo;相同。{{{减号（<b>-</b>）是 <b>NOT</b> 的同意词，因此：}}}<b>not in:inbox</b> 与 <b>-in:inbox</b> 相同{{{</p>
+<p>在任何关键字前都可加上前缀&ldquo;not&rdquo;，以指定不符合该条件的项目，例如 <b>not in:inbox</b>。搜索不区分大小写，即&ldquo;in:inbox&rdquo;与&ldquo;in:Inbox&rdquo;相同。减号（<b>-</b>）是 <b>NOT</b> 的同意词，因此：<b>not in:inbox</b> 与 <b>-in:inbox</b> 相同</p>
 <p>大多数情况下无需在搜索字符串中使用标点符号，因为会被搜索程序代码所忽略。有些情况下不是这样（例如，搜索含有时间 '9:30' 的邮件），在这种情况下您需要为搜索参数加上引号。例如：<b>subject:&quot;9:30&quot;</b> 返回的是主题中含字符串 9:30 的邮件。</p>
 <p>搜索参数中允许使用的字符：</p>
 <ul>
@@ -122,58 +122,58 @@ else
 	<li class="p"><p>下列字符可以用于搜索参数，但不能作为首字使用。 - + &lt; &gt;</p></li>
 </ul>
 <h2>多重搜索字</h2>
-<p>}}}如果输入了多个搜索字（用空格分开），默认情况下它们是&ldquo;ANDed&rdquo;的关系。<b>in:inbox tim</b> 表示&ldquo;将返回位于收件箱中且 (AND) 含有 tim 的邮件&rdquo;。{{{对于有多种条件的搜索项，您可以查找匹其中任意条件的项目，也可查找符合全部条件的项目。您可用&ldquo;高级&rdquo;搜索功能进行这两种类型的搜索。</p>
-<p>}}}对于除基本搜索之外的所有搜索窗格，规则为：{{{</p>
+<p>如果输入了多个搜索字（用空格分开），默认情况下它们是&ldquo;ANDed&rdquo;的关系。<b>in:inbox tim</b> 表示&ldquo;将返回位于收件箱中且 (AND) 含有 tim 的邮件&rdquo;。对于有多种条件的搜索项，您可以查找匹其中任意条件的项目，也可查找符合全部条件的项目。您可用&ldquo;高级&rdquo;搜索功能进行这两种类型的搜索。</p>
+<p>对于除基本搜索之外的所有搜索窗格，规则为：</p>
 <ul>
-	<li class="p"><p>}}}匹配指定条件中任意条件的邮件搜索称为 <b>OR</b> 搜索，也就是说，如果邮件中包含 X 或 Y，就会被视为匹配项。{{{对于有多个复选框的&ldquo;高级&rdquo;搜索窗格，可在单一窗格中对多个选项进行选择，为所需项目创建一个 '<b>OR '</b>（或）搜索。</p></li>
+	<li class="p"><p>匹配指定条件中任意条件的邮件搜索称为 <b>OR</b> 搜索，也就是说，如果邮件中包含 X 或 Y，就会被视为匹配项。对于有多个复选框的&ldquo;高级&rdquo;搜索窗格，可在单一窗格中对多个选项进行选择，为所需项目创建一个 '<b>OR '</b>（或）搜索。</p></li>
 	<li class="p"><p>同时包含 X 与 Y 的搜索称为 '<b>AND'</b>（与）搜索，邮件必须符合所有指定的条件才是匹配的。对于有多个复选框的&ldquo;高级&rdquo;服务器窗格，在同一窗格中打开多个实例，并对每个实例中的选项进行不同的勾选，将会使条件被指定为 '<b>AND'</b>（与）搜索项。</p></li>
 </ul>
-<p>}}}只有&ldquo;OR&rdquo;出现在查询条件中。{{{在&ldquo;高级&rdquo;搜索中进行选择时，如果作为选项您选择了在&ldquo;搜索&rdquo;工具条显示搜索结果，则&ldquo;搜索&rdquo;框随即更新并显示得到的结果。对于<b>AND</b> 类型的搜索，'<b>AND'</b>一词并不会出现。</p>
-<p><b style="font-weight: bold;">提示</b>：}}}AND 和 OR 可结合括号使用。{{{括号中的字词视为一个单位。例如 <b>from:}}}(john thomas)</b> 等同于 <b>from:john AND from:{{{}}}thomas</b>。{{{}}}如果括号中有 OR，如 <b>from:(john or smith)</b>，则等同于 <b>from:john OR from:{{{}}}thomas</b>。{{{</p>
+<p>只有&ldquo;OR&rdquo;出现在查询条件中。在&ldquo;高级&rdquo;搜索中进行选择时，如果作为选项您选择了在&ldquo;搜索&rdquo;工具条显示搜索结果，则&ldquo;搜索&rdquo;框随即更新并显示得到的结果。对于<b>AND</b> 类型的搜索，'<b>AND'</b>一词并不会出现。</p>
+<p><b style="font-weight: bold;">提示</b>：AND 和 OR 可结合括号使用。括号中的字词视为一个单位。例如 <b>from:(john thomas)</b> 等同于 <b>from:john AND from:thomas</b>。如果括号中有 OR，如 <b>from:(john or smith)</b>，则等同于 <b>from:john OR from:thomas</b>。</p>
 <h3>在搜索中使用 <b>*</b> 作为通配符</h3>
 <p>星号（<b>*</b>）可在搜索中作为通配符使用，以便找到与单词拼写相似的内容。</p>
 <p>请在前缀后使用星号 <b>*</b>。例如，搜索字符串 <b>do*</b> 返回的结果是 <i>do</i>、<i>dog</i>、<i>door</i> 等。</p>
 <h2>关键字说明及实例</h2>
 <p style="font-weight: bold;">content:</p>
-<p style="margin-left: 40px;">用于指定邮件中必须包含的文本。}}}例如，<span class="code">content:bananas</span> 将找出所有包含&ldquo;bananas&rdquo;的项。{{{</p>
+<p style="margin-left: 40px;">用于指定邮件中必须包含的文本。例如，<span class="code">content:bananas</span> 将找出所有包含&ldquo;bananas&rdquo;的项。</p>
 <p style="font-weight: bold;">from:</p>
-<p style="margin-left: 40px;">}}}指定发件人标题中的发件人姓名或电子邮件地址。{{{}}}可以是文字，如&ldquo;John Smith III&rdquo;，可以是电子邮箱地址，如&ldquo; joe@acme.com&rdquo;，也可以是域名，如&ldquo; zimbra.com&rdquo;。{{{</p>
+<p style="margin-left: 40px;">指定发件人标题中的发件人姓名或电子邮件地址。可以是文字，如&ldquo;John Smith III&rdquo;，可以是电子邮箱地址，如&ldquo; joe@acme.com&rdquo;，也可以是域名，如&ldquo; zimbra.com&rdquo;。</p>
 <p style="font-weight: bold;">to:</p>
-<p style="margin-left: 40px;">于 from: 相同，}}}除非指定在&ldquo;收件人:&rdquo;{{{}}}标题中填写的电子邮件地址对应的人员。{{{</p>
+<p style="margin-left: 40px;">于 from: 相同，除非指定在&ldquo;收件人:&rdquo;标题中填写的电子邮件地址对应的人员。</p>
 <p style="font-weight: bold;">cc:</p>
-<p style="margin-left: 40px;">于 from: 相同，}}}除非指定邮件的&ldquo;抄送:&rdquo;{{{}}}标题中的收件人。{{{</p>
+<p style="margin-left: 40px;">于 from: 相同，除非指定邮件的&ldquo;抄送:&rdquo;标题中的收件人。</p>
 <p style="font-weight: bold;">subject:</p>
-<p style="margin-left: 40px;">指定的文字必须是在邮件标题中的文字。}}}例如， <span class="code">subject:new vacation policy</span>。{{{ </p>
+<p style="margin-left: 40px;">指定的文字必须是在邮件标题中的文字。例如， <span class="code">subject:new vacation policy</span>。 </p>
 <p style="font-weight: bold;">in:</p>
 <p style="margin-left: 40px;">用于指定一个文件夹。例如，<span class="code">in:sent</span> 应该显示<span style="font-weight: bold;"><b>已发送邮件</b></span>文件夹中的所有条目。</p>
 <p style="font-weight: bold;">has:</p>
-<p style="margin-left: 40px;">用于指定邮件必须具备的属性。}}}可指定的目标类型包括&ldquo;附件&rdquo;、&ldquo;电话&rdquo;或&ldquo; url&rdquo;。{{{例如，<span class="code">has:attachment</span>将找出所有包含一个或多个附件的邮件。</p>
+<p style="margin-left: 40px;">用于指定邮件必须具备的属性。可指定的目标类型包括&ldquo;附件&rdquo;、&ldquo;电话&rdquo;或&ldquo; url&rdquo;。例如，<span class="code">has:attachment</span>将找出所有包含一个或多个附件的邮件。</p>
 <p style="font-weight: bold;">filename:</p>
-<p style="margin-left: 40px;">用于指定附件文件的名称。}}}例如，<span class="code">filename:{{{}}}query.tx</span>t 将找出附件文件名为&ldquo; query.txt&rdquo;的邮件。{{{</p>
+<p style="margin-left: 40px;">用于指定附件文件的名称。例如，<span class="code">filename:query.tx</span>t 将找出附件文件名为&ldquo; query.txt&rdquo;的邮件。</p>
 <p style="font-weight: bold;">type:</p>
-<p style="margin-left: 40px;">用于指定在某个类型的附件中进行的搜索。}}}可指定的附件类型包括：&ldquo;文本&rdquo;、&ldquo;word&rdquo;、&ldquo;excel&rdquo;和&ldquo; pdf&rdquo;。{{{例如，<span class="code">type:word &quot;hello&quot;</span> 将找出含Microsoft Word 文档附件的邮件，同时在这些文档中搜索单词 &quot;hello&quot;。</p>
+<p style="margin-left: 40px;">用于指定在某个类型的附件中进行的搜索。可指定的附件类型包括：&ldquo;文本&rdquo;、&ldquo;word&rdquo;、&ldquo;excel&rdquo;和&ldquo; pdf&rdquo;。例如，<span class="code">type:word &quot;hello&quot;</span> 将找出含Microsoft Word 文档附件的邮件，同时在这些文档中搜索单词 &quot;hello&quot;。</p>
 <p style="font-weight: bold;">attachment:</p>
 <p style="margin-left: 40px;">用于指定包含特定类型附件的任何条目。例如，<span class="code">attachment:word</span> 将找出所有带 Word 附件的邮件。</p>
 <p style="font-weight: bold;">is:</p>
-<p style="margin-left: 40px;">用于搜索某种特定状态下的邮件。}}}允许的值包括&ldquo;unread&rdquo;、&ldquo;read&rdquo;、&ldquo;flagged&rdquo;、&ldquo; unflagged&rdquo;、&ldquo;sent&rdquo;、&ldquo;draft&rdquo;、&ldquo;received&rdquo;、&ldquo;replied&rdquo;、&ldquo;unreplied&rdquo;、&ldquo;forwarded&rdquo;、&ldquo;unforwarded&rdquo;、&ldquo;anywhere&rdquo;、&ldquo;remote&rdquo;（在共享文件夹中）、&ldquo;local&rdquo;、&ldquo;sent&rdquo;。{{{例如，<span class="code">is:unread </span>将查找所有未读的邮件。</p>
+<p style="margin-left: 40px;">用于搜索某种特定状态下的邮件。允许的值包括&ldquo;unread&rdquo;、&ldquo;read&rdquo;、&ldquo;flagged&rdquo;、&ldquo; unflagged&rdquo;、&ldquo;sent&rdquo;、&ldquo;draft&rdquo;、&ldquo;received&rdquo;、&ldquo;replied&rdquo;、&ldquo;unreplied&rdquo;、&ldquo;forwarded&rdquo;、&ldquo;unforwarded&rdquo;、&ldquo;anywhere&rdquo;、&ldquo;remote&rdquo;（在共享文件夹中）、&ldquo;local&rdquo;、&ldquo;sent&rdquo;。例如，<span class="code">is:unread </span>将查找所有未读的邮件。</p>
 <p style="font-weight: bold;">date:</p>
-<p style="margin-left: 40px;">}}}可用此关键字指定一个日期，其格式使用浏览器本地语言的默认格式（对于美式英文，其格式为 mm/ dd/ yyyy）。{{{}}}例如，<span  	 class="code">date:2/1/2010</span> 将查找 2010 年 2 月 1 日的邮件。大于号 (&gt;) 或小于号 (&lt;) 可用于替代 <i>after</i> 或 <i>before</i>。{{{}}}&gt;= 和 &lt;= 也是允许的。{{{</p>
+<p style="margin-left: 40px;">可用此关键字指定一个日期，其格式使用浏览器本地语言的默认格式（对于美式英文，其格式为 mm/ dd/ yyyy）。例如，<span  	 class="code">date:2/1/2010</span> 将查找 2010 年 2 月 1 日的邮件。大于号 (&gt;) 或小于号 (&lt;) 可用于替代 <i>after</i> 或 <i>before</i>。&gt;= 和 &lt;= 也是允许的。</p>
 <p style="font-weight: bold;">after:</p>
-<p style="margin-left: 40px;">指定某特定日期之后发送的邮件。}}}例如，<span class="code">after:2/1/2010</span> <span class="code"  															 style="font-weight: normal;  															 font-family: Arial, sans-serif;  															 font-size: 10pt;"><font size="2" style="font-size:10pt;">指定 2010 年 2 月 1 日之后发送的邮件</font></span><span class="code" style="font-weight: normal;">。</span>{{{</p>
+<p style="margin-left: 40px;">指定某特定日期之后发送的邮件。例如，<span class="code">after:2/1/2010</span> <span class="code"  															 style="font-weight: normal;  															 font-family: Arial, sans-serif;  															 font-size: 10pt;"><font size="2" style="font-size:10pt;">指定 2010 年 2 月 1 日之后发送的邮件</font></span><span class="code" style="font-weight: normal;">。</span></p>
 <p style="font-weight: bold;">before:</p>
 <p style="margin-left: 40px;">与 <span class="code">after: </span>相同只是用于指定某特定日期之前发送的邮件。</p>
 <p style="font-weight: bold;">size:</p>
-<p style="margin-left: 40px;">}}}指定总大小（含附件）为指定的字节数、千字节数或兆数的邮件。例如，<span class="code">size:12 kb</span> 将找出大小正好为 12K 的邮件。{{{大于 (&gt;) 或小于 (&lt;) 符号可以用于替代 bigger 或 smaller。</p>
+<p style="margin-left: 40px;">指定总大小（含附件）为指定的字节数、千字节数或兆数的邮件。例如，<span class="code">size:12 kb</span> 将找出大小正好为 12K 的邮件。大于 (&gt;) 或小于 (&lt;) 符号可以用于替代 bigger 或 smaller。</p>
 <p style="font-weight: bold;">larger:</p>
 <p style="margin-left: 40px;">与 size: 相似：只是指定大于某特定大小的邮件。</p>
 <p style="font-weight: bold;">smaller:</p>
 <p style="margin-left: 40px;">与 size: 相似：只是指定小于某特定大小的邮件。</p>
-<p style="font-weight: bold;"><span><b>}}}solo:{{{</b></span></p>
-<p style="margin-left: 40px;">}}}查找尚未回复的电子邮件。{{{</p>
+<p style="font-weight: bold;"><span><b>solo:</b></span></p>
+<p style="margin-left: 40px;">查找尚未回复的电子邮件。</p>
 <p style="font-weight: bold;">tag:</p>
-<p style="margin-left: 40px;">用于查找被标上指定标记的邮件。}}}例如， <span class="code">tag:amber</span> 将找出具有&ldquo;amber&rdquo;标记的邮件。{{{</p>
-<p style="font-weight: bold;"><span><b>}}}priority:{{{</b></span></p>
-<p style="margin-left: 40px;">}}}根据优先级的高低查找邮件、任务或效率手册项目。{{{}}}例如，priority<span  	 class="code">:high </span>将找出优先级设置为&ldquo;高&rdquo;的项目。{{{</p>
+<p style="margin-left: 40px;">用于查找被标上指定标记的邮件。例如， <span class="code">tag:amber</span> 将找出具有&ldquo;amber&rdquo;标记的邮件。</p>
+<p style="font-weight: bold;"><span><b>priority:</b></span></p>
+<p style="margin-left: 40px;">根据优先级的高低查找邮件、任务或效率手册项目。例如，priority<span  	 class="code">:high </span>将找出优先级设置为&ldquo;高&rdquo;的项目。</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)
