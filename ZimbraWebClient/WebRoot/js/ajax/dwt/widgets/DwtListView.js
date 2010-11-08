@@ -40,6 +40,7 @@ DwtListView = function(params) {
 	DwtComposite.call(this, params);
 
 	this._view = params.view || Dwt.getNextId();
+        alert(params.headerList);
 	if (params.headerList) {
 		var htmlElement = this.getHtmlElement();
 
@@ -58,6 +59,7 @@ DwtListView = function(params) {
 		this._currentColId = null;
 		this.sortingEnabled = true;
 	} else {
+                alert("scroll");
 		this.setScrollStyle(DwtControl.SCROLL); // auto scroll
 	}
 		
@@ -381,6 +383,7 @@ function(item) {
  */
 DwtListView.prototype.setSize =
 function(width, height) {
+        alert("height" + height);
 	DwtComposite.prototype.setSize.call(this, width, height);
 	this._sizeChildren(height);
 };
@@ -1106,7 +1109,8 @@ DwtListView.prototype.setListDivHeight =
 function (listViewHeight) {
 	if (this._listDiv && this._listColDiv) {
 		var headerHeight = Dwt.getSize (this._listColDiv).y ;
-		var listDivHeight = listViewHeight - headerHeight ;
+		//the 10px allows for the diff between container and list for all browsers and eliminates vertical unnecessary scrolls
+		var listDivHeight = listViewHeight - headerHeight - 10; 
 		Dwt.setSize(this._listDiv, Dwt.DEFAULT, listDivHeight);
 	}
 };
