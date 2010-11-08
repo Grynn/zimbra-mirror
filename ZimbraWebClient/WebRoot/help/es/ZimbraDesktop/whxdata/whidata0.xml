@@ -1,179 +1,13 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
-<key name="}}}adjuntar archivos del maletín{{{" >
-  <topic name="adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="}}}agenda en miniatura{{{" >
-  <topic name="}}}Ver números de semanas de la agenda{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-</key>
-<key name="}}}alertas{{{" >
-  <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}archivar correo{{{" >
-  <topic name="Archivar tus mensajes de correo" url="Zdesktop/Archiving_your_email_messages.htm" />
-</key>
-<key name="}}}archivos adjuntos ics, guardar{{{" >
-  <topic name="Responder a una invitación" url="Calendar/Responding_to_an_invitation.htm" />
-</key>
-<key name="}}}archivos, adjuntar{{{" >
-  <topic name="adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="}}}asistencia obligatoria{{{" >
-  <topic name="}}}Utilizar la pestaña Programa al crear una cita{{{" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="}}}asistencia opcional{{{" >
-  <topic name="}}}Utilizar la pestaña Programa al crear una cita{{{" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="}}}buscar destinatarios{{{" >
-  <topic name="}}}Buscar destinatarios{{{ " url="Search/Searching_for_Recipients_.htm" />
-</key>
-<key name="}}}campo de contacto personalizado{{{" >
-  <topic name="crear un nuevo contacto" url="Contacts/creating_a_new_contact.htm" />
-</key>
-<key name="}}}cargar nuevos Zimlets{{{" >
-  <topic name="Gestionar tus Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
-<key name="}}}carpetas, sincronizar{{{" >
-  <topic name="Acceder a tus carpetas" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
-</key>
-<key name="}}}clasificar los mensajes entrantes{{{" >
-  <topic name="cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}configuración de la cuenta IMAP de Microsoft Exchange{{{" >
-  <topic name="Configurar las cuentas POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
-</key>
-<key name="}}}configuración de la cuenta IMAP{{{" >
-  <topic name="Configurar las cuentas POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
-</key>
-<key name="}}}configuración de la cuenta, IMAP{{{" >
-  <topic name="Configurar las cuentas POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
-</key>
-<key name="}}}consultar la respuesta a la reunión{{{" >
-  <topic name="}}}Utilizar la pestaña Programa al crear una cita{{{" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="}}}contactos, crear campos personalizados en el formulario{{{" >
-  <topic name="crear un nuevo contacto" url="Contacts/creating_a_new_contact.htm" />
-</key>
-<key name="}}}copia de seguridad de los datos de la cuenta{{{" >
-  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}cuenta, exportar{{{" >
-  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}cuenta, importar{{{" >
-  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}desactivar Zimlets{{{" >
-  <topic name="Gestionar tus Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
-<key name="}}}destinatarios, buscar{{{" >
-  <topic name="}}}Buscar destinatarios{{{ " url="Search/Searching_for_Recipients_.htm" />
-</key>
-<key name="}}}editar como nuevo{{{" >
-  <topic name="menús accesibles con el botón derecho del ratón" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="}}}evento del calendario privado{{{" >
-  <topic name="Marcar una cita como privada" url="Calendar/Marking_an_appointment_as_private.htm" />
-</key>
-<key name="}}}eventos de agenda públicos/privados{{{" >
-  <topic name="Marcar una cita como privada" url="Calendar/Marking_an_appointment_as_private.htm" />
-</key>
-<key name="}}}exportar datos de la cuenta{{{" >
-  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}imágenes en las firmas{{{" >
-  <topic name="usar una firma" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="}}}importar cuenta{{{" >
-  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="}}}imprimir tareas{{{" >
-  <topic name="Acerca de las tareas" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="}}}Maletín, adjuntar archivos al correo electrónico{{{" >
-  <topic name="adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="}}}marcar citas como privadas{{{" >
-  <topic name="Marcar una cita como privada" url="Calendar/Marking_an_appointment_as_private.htm" />
-</key>
-<key name="}}}marcar tarea como completa{{{" >
-  <topic name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}mensaje, notificación de lectura{{{" >
-  <topic name="Solicitar una notificación de lectura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
-</key>
-<key name="}}}mover correo automáticamente a una carpeta{{{" >
-  <topic name="cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}mover mensajes a una carpeta{{{" >
-  <topic name="cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}notificación de lectura{{{" >
-  <topic name="Solicitar una notificación de lectura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
-</key>
-<key name="}}}notificación de mensajes{{{" >
-  <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}notificación de MI{{{" >
-  <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}número de semana{{{" >
-  <topic name="}}}Ver números de semanas de la agenda{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-</key>
-<key name="}}}olvidar{{{" >
-  <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="}}}panel de contenido, cambiar el encabezado de la columna{{{" >
-  <topic name="Personalizar la vista" url="Navigation_folders_and_tips/Customize_your_view.htm" />
-</key>
-<key name="}}}panel de lectura, activar o desactivar{{{" >
-  <topic name="gestionar la vista de tus mensajes" url="conversations/conversation_list_view.htm" />
-  <topic name="leer los mensajes en el panel de lectura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="}}}personalizar la vista{{{" >
-  <topic name="Personalizar la vista" url="Navigation_folders_and_tips/Customize_your_view.htm" />
-</key>
-<key name="}}}recordatorios de citas{{{" >
-  <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}recordatorios{{{" >
-  <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="}}}reenviar{{{" >
-  <topic name="menús accesibles con el botón derecho del ratón" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="}}}reglas de los filtros,  carpetas existentes{{{" >
-  <topic name="cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
-</key>
-<key name="}}}sin conexión, trabajar{{{" >
-  <topic name="Trabajar sin conexión" url="Zdesktop/z-Working_Offline.htm" />
-</key>
-<key name="}}}tarea, marcar como completa{{{" >
-  <topic name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="}}}tareas, imprimir{{{" >
-  <topic name="Acerca de las tareas" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="}}}trabajar sin conexión{{{" >
-  <topic name="Trabajar sin conexión" url="Zdesktop/z-Working_Offline.htm" />
-</key>
-<key name="}}}URL en las firmas{{{" >
-  <topic name="usar una firma" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="}}}ver el panel de lectura{{{" >
-  <topic name="leer los mensajes en el panel de lectura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="}}}vista del panel de lectura{{{" >
-  <topic name="gestionar la vista de tus mensajes" url="conversations/conversation_list_view.htm" />
-</key>
-<key name="}}}W en agenda en miniatura{{{" >
-  <topic name="}}}Ver números de semanas de la agenda{{{" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-</key>
-<key name="}}}Zimlets, desactivar{{{" >
-  <topic name="Gestionar tus Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
 <key name="adjuntar archivos" >
   <topic name="adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="adjuntar archivos del maletín" >
+  <topic name="adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="agenda en miniatura" >
+  <topic name="Ver números de semanas de la agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="agenda, disponible/ocupado" >
   <topic name="consultar la disponibilidad" url="Calendar/Seeing_free_busy_times.htm" />
@@ -184,6 +18,9 @@
 <key name="agendas iCal, importar o exportar" >
   <topic name="importar tu agenda iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
+<key name="alertas" >
+  <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
 <key name="añadido rápido" >
   <topic name="utilizar el Añadido rápido para crear una cita" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
@@ -193,11 +30,26 @@
 <key name="añadir firma (automática)" >
   <topic name="usar una firma" url="Userspecific/using_a_signature.htm" />
 </key>
+<key name="archivar correo" >
+  <topic name="Archivar tus mensajes de correo" url="Zdesktop/Archiving_your_email_messages.htm" />
+</key>
 <key name="archivar mensajes" >
   <topic name="eliminar los mensajes" url="reading_mail/archiving_old_messages.htm" />
 </key>
 <key name="archivos adjuntos" >
   <topic name="abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="archivos adjuntos ics, guardar" >
+  <topic name="Responder a una invitación" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="archivos, adjuntar" >
+  <topic name="adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="asistencia obligatoria" >
+  <topic name="Utilizar la pestaña Programa al crear una cita" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="asistencia opcional" >
+  <topic name="Utilizar la pestaña Programa al crear una cita" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
 <key name="autocompletado de direcciones" >
   <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
@@ -220,6 +72,9 @@
 <key name="buscar con comodín" >
   <topic name="usar la función de búsqueda" url="Search/using_the_search_feature.htm" />
 </key>
+<key name="buscar destinatarios" >
+  <topic name="Buscar destinatarios " url="Search/Searching_for_Recipients_.htm" />
+</key>
 <key name="buscar un mensaje" >
   <topic name="Buscar mensajes" url="Search/_search__vs.__search_for_.htm" />
 </key>
@@ -239,11 +94,20 @@
 <key name="cambiar una cita" >
   <topic name="cambiar las citas recurrentes" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
+<key name="campo de contacto personalizado" >
+  <topic name="crear un nuevo contacto" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="cargar nuevos Zimlets" >
+  <topic name="Gestionar tus Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
 <key name="carpetas" >
   <topic name="cambiar el nombre de las carpetas" url="Navigation_folders_and_tips/renaming_folders.htm" />
 </key>
 <key name="carpetas personalizadas" >
   <topic name="crear carpetas personalizadas" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="carpetas, sincronizar" >
+  <topic name="Acceder a tus carpetas" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
 </key>
 <key name="cita, añadido rápido" >
   <topic name="utilizar el Añadido rápido para crear una cita" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
@@ -256,6 +120,9 @@
 </key>
 <key name="citas recurrentes, cambiar" >
   <topic name="cambiar las citas recurrentes" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="clasificar los mensajes entrantes" >
+  <topic name="cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
 </key>
 <key name="cómo crear citas" >
   <topic name="acerca de las citas, las reuniones y los eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
@@ -276,8 +143,20 @@
   <topic name="condiciones y acciones admitidas de los filtros" url="filters/filter_conditions_and_actions_supported.htm" />
   <topic name="cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
 </key>
+<key name="configuración de la cuenta IMAP" >
+  <topic name="Configurar las cuentas POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
+<key name="configuración de la cuenta IMAP de Microsoft Exchange" >
+  <topic name="Configurar las cuentas POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
+<key name="configuración de la cuenta, IMAP" >
+  <topic name="Configurar las cuentas POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
+</key>
 <key name="configurar una dirección de reenvío" >
   <topic name="configurar una dirección de reenvío" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="consultar la respuesta a la reunión" >
+  <topic name="Utilizar la pestaña Programa al crear una cita" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
 <key name="contacto" >
   <topic name="modificar un contacto" url="Contacts/editing_a_contact.htm" />
@@ -292,6 +171,9 @@
 <key name="Contactos personales" >
   <topic name="modificar un contacto" url="Contacts/editing_a_contact.htm" />
 </key>
+<key name="contactos, crear campos personalizados en el formulario" >
+  <topic name="crear un nuevo contacto" url="Contacts/creating_a_new_contact.htm" />
+</key>
 <key name="contactos, importar" >
   <topic name="importar contactos" url="Contacts/Importing_Contacts.htm" />
 </key>
@@ -305,10 +187,128 @@
     <topic name="imprimir una conversación" url="conversations/printing_a_conversation.htm" />
   </key>
 </key>
+<key name="copia de seguridad de los datos de la cuenta" >
+  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
 <key name="correo" >
   <topic name="leer el correo" url="reading_mail/reading_mail.htm" />
   <key name="leer" >
     <topic name="leer el correo" url="reading_mail/reading_mail.htm" />
+  </key>
+</key>
+<key name="creador de búsquedas" >
+  <topic name="crear búsquedas" url="Search/building_search_queries.htm" />
+</key>
+<key name="crear" >
+  <topic name="redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <key name="nuevo mensaje de correo" >
+    <topic name="redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  </key>
+</key>
+<key name="crear etiquetas" >
+  <topic name="usar etiquetas para clasificar los mensajes" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="cuenta, exportar" >
+  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="cuenta, importar" >
+  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="desactivar Zimlets" >
+  <topic name="Gestionar tus Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
+</key>
+<key name="descripción del lenguaje de búsquedas" >
+  <topic name="descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
+</key>
+<key name="destinatarios, buscar" >
+  <topic name="Buscar destinatarios " url="Search/Searching_for_Recipients_.htm" />
+</key>
+<key name="direcciones IMAP, añadir" >
+  <topic name="identidades de correo" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="direcciones POP, añadir" >
+  <topic name="identidades de correo" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="disponibilidad" >
+  <topic name="consultar la disponibilidad" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="editar como nuevo" >
+  <topic name="menús accesibles con el botón derecho del ratón" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="Editar contacto" >
+  <topic name="modificar un contacto" url="Contacts/editing_a_contact.htm" />
+</key>
+<key name="editor de texto enriquecido para el bloc de notas" >
+  <topic name="utilizar el editor de texto enriquecido" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="ejemplos de búsquedas" >
+  <topic name="ejemplos de búsquedas" url="Search/search_examples.htm" />
+</key>
+<key name="eliminar" >
+  <topic name="eliminar carpetas" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="carpetas" >
+    <topic name="eliminar carpetas" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="eliminar contactos" >
+  <topic name="eliminar un contacto" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="eliminar las citas recurrentes" >
+  <topic name="cambiar las citas recurrentes" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="etiqueta, arrastrar y colocar" >
+  <topic name="etiquetar mensajes" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+</key>
+<key name="etiquetas" >
+  <topic name="etiquetar mensajes" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="eliminar las etiquetas" url="Tags_and_flags/deleting_tags.htm" />
+  <key name="aplicar" >
+    <topic name="etiquetar mensajes" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  </key>
+  <key name="eliminar" >
+    <topic name="eliminar las etiquetas" url="Tags_and_flags/deleting_tags.htm" />
+  </key>
+</key>
+<key name="etiquetas, crear" >
+  <topic name="usar etiquetas para clasificar los mensajes" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="evento del calendario privado" >
+  <topic name="Marcar una cita como privada" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="eventos" >
+  <topic name="acerca de las citas, las reuniones y los eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="eventos de agenda públicos/privados" >
+  <topic name="Marcar una cita como privada" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
+<key name="exportar agendas iCal" >
+  <topic name="importar tu agenda iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="exportar datos de la cuenta" >
+  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="filtrar mensajes" >
+  <topic name="filtrar tus mensajes" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="filtro, cómo funciona" >
+  <topic name="cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
+</key>
+<key name="firma" >
+  <topic name="usar una firma" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="formatear con HTML" >
+  <topic name="utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="fuente Atom " >
+  <topic name="Suscribirte a fuentes RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="fuentes" >
+  <topic name="utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="función de búsqueda" >
+  <topic name="usar la función de búsqueda" url="Search/using_the_search_feature.htm" />
+  <key name="usar" >
+    <topic name="usar la función de búsqueda" url="Search/using_the_search_feature.htm" />
   </key>
 </key>
 

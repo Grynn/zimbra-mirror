@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="Para empezar" >
-  <item name="}}}Empezar a usar el programa en línea estándar{{{" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+  <item name="Empezar a usar el programa en línea estándar" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
   <item name="Iniciar sesión y salir de la cuenta" url="Userspecific/logging_on_and_off.htm" />
   <item name="Cambiar la versión predeterminada del programa al iniciar sesión" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="teclas de acceso directo" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -34,8 +34,8 @@
   <item name="Autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Adjuntar archivos a un mensaje" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Tipos de archivos adjuntos" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="}}}Utilizar el editor de HTML{{{" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="}}}Comprobar la ortografía{{{" url="Creating_Messages/Check_the_spelling.htm" />
+  <item name="Utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="Comprobar la ortografía" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Guardar un borrador" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Responder a y reenviar los mensajes" >
@@ -49,8 +49,8 @@
 </book>
 <book name="Gestionar tu agenda" >
   <item name="Acerca de la Agenda" url="Calendar/b_About_Calendar.htm" />
-  <item name="}}}Crear una nueva Agenda{{{" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="}}}Codificación de color de las agendas{{{" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Crear una nueva Agenda" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="Codificación de color de las agendas" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Opciones de la vista de agendas" url="Calendar/Calendar_Views.htm" />
   <item name="Importar agendas iCalendar" url="Calendar/Importing_iCalendars.htm" />
   <item name="Ordenar tu agenda" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
@@ -68,7 +68,7 @@
 </book>
 <book name="Compartir carpetas" >
   <book name="Compartir tus agendas" >
-    <item name="}}}Enlazar a agendas compartidas{{{" url="Calendar/Link_to_Shared_Calendar.htm" />
+    <item name="Enlazar a agendas compartidas" url="Calendar/Link_to_Shared_Calendar.htm" />
   </book>
   <book name="Compartir tus libretas de direcciones" >
     <item name="Enlazar a una libreta de direcciones compartida" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />
@@ -85,7 +85,7 @@
   <item name="cambiar el nombre de las carpetas" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <item name="eliminar carpetas" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
-<book name="}}}Utilizar filtros de correo{{{" >
+<book name="Utilizar filtros de correo" >
   <item name="filtrar tus mensajes" url="filters/bc_Filtering_your_messages.htm" />
   <item name="Condiciones y acciones admitidas de los filtros" url="filters/filter_conditions_and_actions_supported.htm" />
 </book>
