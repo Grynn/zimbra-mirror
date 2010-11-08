@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Adobe RoboHelp 8" />
-<title>xxxxОписание языка запросовxxxx</title>
+<title>Описание языка запросов</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
 //<![CDATA[
@@ -86,19 +86,19 @@ else
 	
 </div>
  
-<h1>xxxxОписание языка запросовxxxx</h1>
+<h1>Описание языка запросов</h1>
 <p>Этот расширенный раздел подробно описывает грамматику языка поиска, 
  используемую функцией поиска клиента @CompanyName@. 
  Для получения вида, отображаемого в интерфейсе, всегда применяется определенный 
  тип запроса.</p>
-<h2>xxxxСтруктура языка поискаxxxx</h2>
-<p>xxxxПростой поиск можно выполнить, просто введя слово в поле поиска.xxxx 
+<h2>Структура языка поиска</h2>
+<p>Простой поиск можно выполнить, просто введя слово в поле поиска. 
  Только слова (слова без оператора поиска) используются для поиска в операторе 
  «content:», что соответствует любому тексту в сообщении.</p>
-<p>xxxxРасширенный поиск можно выполнить, указав xxxx<b>xxxxоператор поискаxxxx</b>xxxx.xxxx 
- xxxxОператор поиска xxxxxxxx—xxxxxxxx это специальное ключевое слово, 
+<p>Расширенный поиск можно выполнить, указав <b>оператор поиска</b>. 
+ Оператор поиска — это специальное ключевое слово, 
  за которым следует двоеточие, а затем другие параметры, специфические 
- для этого оператора.xxxx xxxxНапример:xxxx</p>
+ для этого оператора. Например:</p>
 <ul>
 	<li class="p"><p><b style="font-weight: bold;">in: 
 	 входящие</b> оператором является «in», 
@@ -106,9 +106,9 @@ else
 	 что возвращает сообщения, которые содержатся в папке с именем «Входящие».</p></li>
 </ul>
 <ul>
-	<li class="p"><p>xxxxоператором в xxxx<b style="font-weight: bold;">xxxxfrom:petrovxxxx</b>xxxx 
+	<li class="p"><p>оператором в <b style="font-weight: bold;">from:petrov</b> 
 	 является «от», а параметром «someone», что выдает сообщение, которые 
-	 содержат слово «someone» в электронном адресе.xxxx</p></li>
+	 содержат слово «someone» в электронном адресе.</p></li>
 </ul>
 <p>Перед любым ключевым словом можно поставить префикс «not» (НЕ), чтобы 
  определить элементы, которые не содержат критерий, например <b>not in: входящие</b>. В профиле 
@@ -116,12 +116,12 @@ else
  равнозначно «in:Входящие». Знак минуса (<b>-</b>) является синонимом <b>NOT</b>. 
  Поэтому <b>not in:входящие</b> равнозначно 
  <b>-in:входящие</b>.</p>
-<p>xxxxВ большинстве случаев нет необходимости включать знаки пунктуации, 
- строку поиска, поскольку они игнорируются кодом поиска.xxxx xxxxНо в определенных 
+<p>В большинстве случаев нет необходимости включать знаки пунктуации, 
+ строку поиска, поскольку они игнорируются кодом поиска. Но в определенных 
  случаях это не так (например, поиск времени «9:30» в сообщении), и в этих 
- случаях параметр поиска следует заключать в кавычки.xxxx xxxxНапример:xxxx 
+ случаях параметр поиска следует заключать в кавычки. Например: 
  <b>subject:«9:30»</b> возвращает сообщения, которые содержат в теме «9:30».</p>
-<p>xxxxДопустимые знаки в параметре поиска.xxxx</p>
+<p>Допустимые знаки в параметре поиска.</p>
 <ul>
 	<li class="p"><p>Следующие знаки можно использовать в параметре поиска 
 	 только заключенными в кавычки: ~ '&#160;! # $ % ^ &amp; * ( ) _&#160;? 
@@ -129,102 +129,102 @@ else
 	<li class="p"><p>Следующие знаки можно использовать в параметре поиска, 
 	 только если они не являются первыми знаками в строке: - + &lt; &gt;</p></li>
 </ul>
-<h2>xxxxНесколько условий поискаxxxx</h2>
+<h2>Несколько условий поиска</h2>
 <p>Если указываются несколько условий поиска (разделенные пробелами), то 
  по умолчанию они объединяются оператором «AND». <b>in:Входящие Петр</b> означает «выдать сообщения, которые находятся 
- в папке «Входящие» И содержат слово «Петр». xxxxДля поиска с использованием нескольких критериев, 
- можно найти элементы соответствующие одному или всем указанным критериям.xxxx 
- xxxxМожно выполнить оба типа поиска с использованием функции создания 
- расширенного поиска.xxxx</p>
-<p>xxxxДля всех областей поиска, кроме обычного поиска, правила следующие.xxxx</p>
+ в папке «Входящие» И содержат слово «Петр». Для поиска с использованием нескольких критериев, 
+ можно найти элементы соответствующие одному или всем указанным критериям. 
+ Можно выполнить оба типа поиска с использованием функции создания 
+ расширенного поиска.</p>
+<p>Для всех областей поиска, кроме обычного поиска, правила следующие.</p>
 <ul>
-	<li class="p"><p>xxxxПоиск сообщений, соответствующих любым указанным 
-	 критериям называется поиском с условием 'xxxx<b>xxxxOR'xxxx</b>xxxx, 
+	<li class="p"><p>Поиск сообщений, соответствующих любым указанным 
+	 критериям называется поиском с условием '<b>OR'</b>, 
 	 потому что, если сообщение содержит X или Y, оно считается соответствующим 
-	 условиям поиска.xxxx xxxxДля панелей расширенного поиска с несколькими 
+	 условиям поиска. Для панелей расширенного поиска с несколькими 
 	 установленными флажками выбор нескольких вариантов на одной панели 
-	 создает поиск для этих элементов с условием xxxx<b>xxxxORxxxx</b>xxxx.xxxx</p></li>
-	<li class="p"><p>xxxxПоиск сообщений, которые содержат X и Y называется 
-	 поиском с условием xxxx<b>xxxxANDxxxx</b>xxxx, потому что сообщение 
-	 должно соответствовать указанным критериям, чтобы считаться соответствием.xxxx 
-	 xxxxДля панелей расширенного сервера с установленными флажками, открытие 
+	 создает поиск для этих элементов с условием <b>OR</b>.</p></li>
+	<li class="p"><p>Поиск сообщений, которые содержат X и Y называется 
+	 поиском с условием <b>AND</b>, потому что сообщение 
+	 должно соответствовать указанным критериям, чтобы считаться соответствием. 
+	 Для панелей расширенного сервера с установленными флажками, открытие 
 	 нескольких копий одной и той же панели и установка разных флажков 
 	 на каждой из них делает необходимым определение критериев поиска как 
-	 поиска с условием xxxx<b>xxxxANDxxxx</b>xxxx.xxxx</p></li>
+	 поиска с условием <b>AND</b>.</p></li>
 </ul>
-<p>xxxxВ запросе появится только «OR».xxxx xxxxЕсли задан параметр показывать 
+<p>В запросе появится только «OR». Если задан параметр показывать 
  запрос поиска на панели поиска по мере выбора в поле «Расширенный поиск», 
- текстовое окно поиска будет обновляться и отображать полученный запрос.xxxx 
- xxxxВ профиле поиска типа xxxx<b>xxxxANDxxxx</b>xxxx слово xxxx<b>xxxxANDxxxx</b>xxxx 
- не отображается.xxxx</p>
+ текстовое окно поиска будет обновляться и отображать полученный запрос. 
+ В профиле поиска типа <b>AND</b> слово <b>AND</b> 
+ не отображается.</p>
 <p><b style="font-weight: bold;">Совет</b>. Использование скобок с операторами 
- AND и OR. xxxxСлова в скобках считаются единицей.xxxx 
+ AND и OR. Слова в скобках считаются единицей. 
  Например, <b>from: (иван сидоров)</b> равнозначно 
  <b>from:иван AND from: сидоров</b>. 
  Если использовать OR в скобках, <b>from:(иван or иванов)</b>, результат 
  поиска будет <b>from:иван OR from: сидоров</b>.</p>
-<h3>xxxxИспользование xxxx<b>xxxx*xxxx</b>xxxx в качестве подстановочного 
- знака в поискеxxxx</h3>
-<p>xxxxЗвездочку (xxxx<b>xxxx*xxxx</b>xxxx) можно использовать в качестве 
+<h3>Использование <b>*</b> в качестве подстановочного 
+ знака в поиске</h3>
+<p>Звездочку (<b>*</b>) можно использовать в качестве 
  подстановочного знака при поиске содержимого, которое содержит слова с 
- похожим написанием.xxxx</p>
-<p>xxxxИспользуйте звездочку xxxx<b>xxxx*xxxx</b>xxxx как подстановочный 
- знак после префикса.xxxx xxxxНапример, строка поиска xxxx<b>xxxxты*xxxx</b>xxxx выдает элементы xxxx<i>xxxxтыxxxx</i>xxxx, 
- xxxx<i>xxxxтыкваxxxx</i>xxxx, xxxx<i>xxxxтысячаxxxx</i>xxxx и т.д.xxxx</p>
-<h2>xxxxПримеры и описания ключевых словxxxx</h2>
-<p style="font-weight: bold;">xxxxcontent:xxxx</p>
-<p style="margin-left: 40px;">xxxxОпределяет текст, который должен содержаться 
- в сообщении.xxxx xxxxНапример, xxxx<span class="code" style="font-size: 10pt; 
-											 font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">xxxxcontent:яблокиxxxx</font></span>xxxx 
- находит все элементы, которые содержат слово «яблоки».xxxx</p>
-<p style="font-weight: bold;">xxxxfrom:xxxx</p>
-<p style="margin-left: 40px;">xxxxОпределяет имя или электронный адрес 
- отправителя, которые содержатся в заголовке «От».xxxx Это может быть текст, 
+ похожим написанием.</p>
+<p>Используйте звездочку <b>*</b> как подстановочный 
+ знак после префикса. Например, строка поиска <b>ты*</b> выдает элементы <i>ты</i>, 
+ <i>тыква</i>, <i>тысяча</i> и т.д.</p>
+<h2>Примеры и описания ключевых слов</h2>
+<p style="font-weight: bold;">content:</p>
+<p style="margin-left: 40px;">Определяет текст, который должен содержаться 
+ в сообщении. Например, <span class="code" style="font-size: 10pt; 
+											 font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">content:яблоки</font></span> 
+ находит все элементы, которые содержат слово «яблоки».</p>
+<p style="font-weight: bold;">from:</p>
+<p style="margin-left: 40px;">Определяет имя или электронный адрес 
+ отправителя, которые содержатся в заголовке «От». Это может быть текст, 
  например «Иван Иванов III», адрес электронной почты, например «ivan@acme.com» или домен, например «zimbra.com».</p>
-<p style="font-weight: bold;">xxxxto:xxxx</p>
+<p style="font-weight: bold;">to:</p>
 <p style="margin-left: 40px;">Аналогично условию «from:», за исключением 
  того, что здесь определяется один из получателей, указанных в заголовке 
  «Кому».</p>
-<p style="font-weight: bold;">xxxxcc:xxxx</p>
+<p style="font-weight: bold;">cc:</p>
 <p style="margin-left: 40px;">Аналогично условию «from:», за исключением 
  того, что здесь определяется получатель из заголовка сообщения «Копия».</p>
-<p style="font-weight: bold;">xxxxsubject:xxxx</p>
-<p style="margin-left: 40px;">xxxxОпределяет текст, отображаемый в заголовке 
- сообщения «Тема».xxxx Примером может быть <span class="code" style="font-family: Arial, sans-serif; 
+<p style="font-weight: bold;">subject:</p>
+<p style="margin-left: 40px;">Определяет текст, отображаемый в заголовке 
+ сообщения «Тема». Примером может быть <span class="code" style="font-family: Arial, sans-serif; 
 												 font-size: 10pt;"><font size="2" style="font-size:10pt;">subject:новая 
  политика отпусков</font></span>. </p>
-<p style="font-weight: bold;">xxxxin:xxxx</p>
-<p style="margin-left: 40px;">xxxxОпределяет папку.xxxx xxxxНапример, xxxx<span 
-	 class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">xxxxin:отправленныеxxxx</font></span>xxxx 
- выдаст все элементы в папке xxxx<span style="font-weight: bold;"><b>xxxxОтправленныеxxxx</b></span>xxxx.xxxx</p>
-<p style="font-weight: bold;">xxxxhas:xxxx</p>
-<p style="margin-left: 40px;">xxxxОпределяет атрибут, который должен содержаться 
- в сообщении.xxxx Типы объектов, которые можно определить: «attachment» 
- (вложение), «phone» (телефон) или « url» (URL-адрес). xxxxНапример, если указать xxxx<span 
-	 class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">xxxxhas:attachmentxxxx</font></span>xxxx 
+<p style="font-weight: bold;">in:</p>
+<p style="margin-left: 40px;">Определяет папку. Например, <span 
+	 class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">in:отправленные</font></span> 
+ выдаст все элементы в папке <span style="font-weight: bold;"><b>Отправленные</b></span>.</p>
+<p style="font-weight: bold;">has:</p>
+<p style="margin-left: 40px;">Определяет атрибут, который должен содержаться 
+ в сообщении. Типы объектов, которые можно определить: «attachment» 
+ (вложение), «phone» (телефон) или « url» (URL-адрес). Например, если указать <span 
+	 class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">has:attachment</font></span> 
  будут найдены все сообщения, которые содержат одно или несколько вложений 
- любого типа.xxxx</p>
-<p style="font-weight: bold;">xxxxfilename:xxxx</p>
-<p style="margin-left: 40px;">xxxxОпределяет имя файла вложения.xxxx Например, 
+ любого типа.</p>
+<p style="font-weight: bold;">filename:</p>
+<p style="margin-left: 40px;">Определяет имя файла вложения. Например, 
  в результаты поиска<span style="font-weight: bold; font-family: Arial, sans-serif;"><b> 
  </b></span><span class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">filename: query.tx</font></span><span 
 	 style="font-weight: bold; font-family: Arial, sans-serif;"><b>t</b></span> 
  будут включены сообщения с вложенным файлом с именем « 
  query.txt».</p>
-<p style="font-weight: bold;">xxxxtype:xxxx</p>
-<p style="margin-left: 40px;">xxxxОпределяет поиск во вложениях определенного 
- типа.xxxx Типы вложений, которые можно определить: «text», «word», «excel» 
- и «pdf». xxxxНапример, если указать xxxx<span 
-	 class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">xxxxtype:word 
- «hello»xxxx</font></span>xxxx, будут найдены сообщения с вложениями формата Microsoft 
- Word, содержащие слово «hello».xxxx</p>
-<p style="font-weight: bold;">xxxxattachment:xxxx</p>
-<p style="margin-left: 40px;">xxxxОпределяет элемент с определенным типом 
- вложения.xxxx xxxxНапример, если указать xxxx<span class="code" style="font-size: 10pt; 
-													 font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">xxxxattachment:wordxxxx</font></span>xxxx, 
- будут найдены все сообщения с вложениями формата Word.xxxx</p>
-<p style="font-weight: bold;">xxxxis:xxxx</p>
-<p style="margin-left: 40px;">xxxxПоиск сообщений с определенным статусом.xxxx 
+<p style="font-weight: bold;">type:</p>
+<p style="margin-left: 40px;">Определяет поиск во вложениях определенного 
+ типа. Типы вложений, которые можно определить: «text», «word», «excel» 
+ и «pdf». Например, если указать <span 
+	 class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">type:word 
+ «hello»</font></span>, будут найдены сообщения с вложениями формата Microsoft 
+ Word, содержащие слово «hello».</p>
+<p style="font-weight: bold;">attachment:</p>
+<p style="margin-left: 40px;">Определяет элемент с определенным типом 
+ вложения. Например, если указать <span class="code" style="font-size: 10pt; 
+													 font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">attachment:word</font></span>, 
+ будут найдены все сообщения с вложениями формата Word.</p>
+<p style="font-weight: bold;">is:</p>
+<p style="margin-left: 40px;">Поиск сообщений с определенным статусом. 
  Допустимые значения «unread» (непрочитанное), «read» (прочитанное), «flagged» 
  (с флагом), «unflagged» (без флага), «sent» 
  (отправленное), «draft» (черновик), «received» (полученное), «replied» 
@@ -235,7 +235,7 @@ else
 															 style="font-size: 10pt; 
 															 font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">is: 
  unread</font></span> найдет все непрочитанные сообщения.</p>
-<p style="font-weight: bold;">xxxxdate:xxxx</p>
+<p style="font-weight: bold;">date:</p>
 <p style="margin-left: 40px;">Это ключевое слово используется для определения 
  даты с использованием формата, принятого по умолчанию в используемом браузере 
  (для русского языка формат следующий: дд.мм.гггг). 
@@ -243,44 +243,44 @@ else
 								 font-size: 10pt;"><font size="2" style="font-size:10pt;">date:01.02.2010</font></span><span 
 	 style="font-family: Arial, sans-serif;">, б</span>удут найдены сообщения, 
  датированные 1 февраля 2010 года. Можно использовать знаки больше (&gt;) 
- или меньше (&lt;), обозначающие <i>после</i> или <i>до</i>. xxxx&gt;= 
- и &lt;= также допустимы.xxxx</p>
-<p style="font-weight: bold;">xxxxafter:xxxx</p>
-<p style="margin-left: 40px;">xxxxОпределяет сообщения отправленные после 
- определенной даты.xxxx Например,<span style="font-family: Arial, sans-serif;"> 
+ или меньше (&lt;), обозначающие <i>после</i> или <i>до</i>. &gt;= 
+ и &lt;= также допустимы.</p>
+<p style="font-weight: bold;">after:</p>
+<p style="margin-left: 40px;">Определяет сообщения отправленные после 
+ определенной даты. Например,<span style="font-family: Arial, sans-serif;"> 
  </span><span class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">after:01.02.2010</font></span><span 
 	 style="font-family: Arial, sans-serif;"> </span><span class="code" 
 															 style="font-weight: normal; 
 															 font-size: 10pt; 
 															 font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">определяет 
  сообщения, отправленные после 1 февраля 2010 года.</font></span></p>
-<p style="font-weight: bold; font-family: Arial, sans-serif;">xxxxbefore:xxxx</p>
+<p style="font-weight: bold; font-family: Arial, sans-serif;">before:</p>
 <p style="margin-left: 40px; font-family: Arial, sans-serif;">Аналогично 
  условию <span class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">after:</font></span>, 
  но определяет сообщения, отправленные до указанной даты.</p>
-<p style="font-weight: bold; font-family: Arial, sans-serif;">xxxxsize:xxxx</p>
+<p style="font-weight: bold; font-family: Arial, sans-serif;">size:</p>
 <p style="margin-left: 40px; font-family: Arial, sans-serif;">Определяет 
  сообщения, общий размер которых, включая вложения, соответствует определенному 
  объему в байтах, килобайтах или мегабайтах. Например, если указать <span 
 	 class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">size:12 
  kb</font></span>, то будут найдены сообщения, размер 
- которых составляет точно 12 КБ. xxxxВместо слов «больше» или «меньше» 
- можно использовать знаки больше (&gt;) или меньше (&lt;).xxxx</p>
-<p style="font-weight: bold; font-family: Arial, sans-serif;">xxxxlarger:xxxx</p>
+ которых составляет точно 12 КБ. Вместо слов «больше» или «меньше» 
+ можно использовать знаки больше (&gt;) или меньше (&lt;).</p>
+<p style="font-weight: bold; font-family: Arial, sans-serif;">larger:</p>
 <p style="margin-left: 40px; font-family: Arial, sans-serif;">Аналогично 
  условию «size:», но определяет сообщения, размер которых превышает указанный.</p>
-<p style="font-weight: bold; font-family: Arial, sans-serif;">xxxxsmaller:xxxx</p>
+<p style="font-weight: bold; font-family: Arial, sans-serif;">smaller:</p>
 <p style="margin-left: 40px; font-family: Arial, sans-serif;">Аналогично 
  условию «size:», но определяет сообщения, размер которых меньше указанного.</p>
 <p style="font-weight: bold; font-family: Arial, sans-serif;">solo:</p>
 <p style="margin-left: 40px; font-family: Arial, sans-serif;">Находит почтовые 
  сообщения, которые еще не были отвечены.</p>
-<p style="font-weight: bold; font-family: Arial, sans-serif;">xxxxtag:xxxx</p>
-<p style="margin-left: 40px; font-family: Arial, sans-serif;">xxxxНаходит 
- сообщения, помеченные определенным тэгом.xxxx xxxxНапример, если указать 
- xxxx<span class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;">xxxx 
- tag:amberxxxx</font></span>xxxx, будут найдены сообщения с тегом, который называется 
- «Амбра».xxxx</p>
+<p style="font-weight: bold; font-family: Arial, sans-serif;">tag:</p>
+<p style="margin-left: 40px; font-family: Arial, sans-serif;">Находит 
+ сообщения, помеченные определенным тэгом. Например, если указать 
+ <span class="code" style="font-size: 10pt; font-family: Arial, sans-serif;"><font size="2" style="font-size:10pt;"> 
+ tag:amber</font></span>, будут найдены сообщения с тегом, который называется 
+ «Амбра».</p>
 <p style="font-weight: bold; font-family: Arial, sans-serif;">priority:</p>
 <p style="margin-left: 40px;"><span style="font-family: Arial, sans-serif;">Находит 
  сообщения, задачи или элементы ежедневника с высоким («high») или низким 
