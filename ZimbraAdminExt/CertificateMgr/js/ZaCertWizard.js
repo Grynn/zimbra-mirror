@@ -273,7 +273,7 @@ ZaCertWizard.prototype.getCertTypeFromUploadInputs = function (filename) {
 		var v = this.uploadInputs[n] ;
 		if (n == "intermediateCA" && v != null) {
 			for (var i=0; i < v.length; i ++)
-			if (filename = v[i]) {
+			if (filename == v[i]) {
 				return n ;
 			}
 		}else{
@@ -392,7 +392,7 @@ function() {
 			//No same file name is allowed due to the server limitation - server only return the filename
 			var formEl = document.getElementById(ZaCertWizard.CertUploadFormId);
 			var inputEls = formEl.getElementsByTagName("input") ;
-			
+	
 			this.uploadInputs = {
 				certFile : null ,
 				rootCA : null ,
@@ -469,15 +469,30 @@ function() {
 
 //TODO: move it to ZaUtil
 ZaCertWizard.getFileName = function (fullPath) {
+	// The <fullpath> is not same as the local path because the 
+	// security policy of different browser.
+	// * For IE7/8, if local upload path is disabled in setting, 
+	//       the <fullpath> would be "C:\fakepath\filename.ext";
+	// * For FF and SF, only the filename "filename.ext" is given, 
+	//       not containing the full local path.
+	// * For Chrome and Opera, it will present 
+	//	 "C:\fakepath\filename.ext".
+	// The fake path will result in file uploading error finally. 
+	// If the upload is ok for above fake path, the following codes
+	// only need to return back the corrent filename. Or, it should
+	// be handled before upload operation.
+
 		if (fullPath == null) return null ;
 		
 		var lastIndex = 0;
+	/*
 		if (AjxEnv.isWindows) {
 			lastIndex = fullPath.lastIndexOf("\\") ;
 		}else{
 			lastIndex = fullPath.lastIndexOf("/") ;			
 		}
-
+	*/
+		lastIndex = fullPath.lastIndexOf("\\") ;
 		return fullPath.substring(lastIndex + 1) ;
 }
 
@@ -608,7 +623,6 @@ ZaCertWizard.removeIntermediaCAInput = function (removeSpanEl) {
 	var intermediaCADivEl = rowEl.parentNode.parentNode.parentNode ;
 	formEl.removeChild(intermediaCADivEl) ;	
 }
-
 
 ZaCertWizard.onRepeatRemove = 
 function (index, form) {
