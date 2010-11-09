@@ -577,7 +577,7 @@ ZaGALConfigXWizard.myXFormModifier = function(xFormObject, entry) {
 									enableDisableChangeEventSources:[ZaDomain.A_GALServerType]
 									
 								},						
-								{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_}
+								{ref:ZaDomain.A_GalLdapSearchBase, type:_TEXTAREA_, width:380, height:40, label:ZaMsg.Domain_GalLdapSearchBase, labelLocation:_LEFT_,bmolsnr:true}
 							]
 						}
 					]
