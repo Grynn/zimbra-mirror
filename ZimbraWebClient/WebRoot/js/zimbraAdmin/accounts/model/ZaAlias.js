@@ -104,7 +104,7 @@ function() {
 						target.attrs[ZaAccount.A_displayname], html, idx);
 		
 			idx = this._addRow(ZaMsg.NAD_AccountStatus, 
-						ZaDistributionList._dlStatus[target.attrs[ZaDistributionList.A_mailStatus]], html, idx);		
+						ZaDistributionList.getDLStatus(target.attrs[ZaDistributionList.A_mailStatus]), html, idx);		
 			
 		}
 		html[idx++] = "</table>";

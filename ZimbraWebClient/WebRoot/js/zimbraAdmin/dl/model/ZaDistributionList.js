@@ -84,9 +84,14 @@ ZaDistributionList.A2_share_selection_cache = "shares_selection_cache";
 ZaDistributionList.A2_published_share_selection_cache = "published_shares_selection_cache";
 ZaDistributionList.A_isAdminGroup = "zimbraIsAdminGroup" ;
 
-ZaDistributionList._dlStatus = {
-	enabled  : ZaMsg.DL_Status_enabled ,
-	disabled : ZaMsg.DL_Status_disabled
+ZaDistributionList.getDLStatus = function (status) {
+    if (status == "enabled") {
+        return ZaMsg.DL_Status_enabled ;
+    } else if (status == "disabled" ) {
+        return ZaMsg.DL_Status_disabled ;
+    } else {
+        return ZaMsg.ERROR_UNKNOWN ;
+    }
 }
 
 ZaDistributionList.RENAME_DL_RIGHT = "renameDistributionList";
