@@ -280,6 +280,7 @@ ZaBulkDataImportXWizard.prototype.goNext = function() {
 			auxObj1[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_XML;
 			auxObj1[ZaModel.currentStep] = ZaBulkDataImportXWizard.STEP_FILE_UPLOAD;			
 		} else {
+			auxObj1[ZaModel.currentStep] = ZaBulkDataImportXWizard.STEP_OPTIONS;
 			auxObj1[ZaBulkProvision.A2_sourceType] = ZaBulkProvision.SOURCE_TYPE_ZIMBRA;	
 		}
 		auxObj1[ZaBulkProvision.A2_sourceServerType] = this._containedObject[ZaBulkProvision.A2_sourceServerType];
