@@ -20,9 +20,8 @@ public class ZimbraSelenium extends DefaultSelenium {
 	}
 	
 	public boolean isElementPresent(String locator){		
-	    logger.info("selenium.isElementPresent(" + locator + ")");
 	    boolean result=super.isElementPresent(locator);
-	    logger.info(result + "\n");	   	    
+	    logger.info("selenium.isElementPresent(" + locator + ") = " + result);	   	    
 	    return result;
 	}
 	

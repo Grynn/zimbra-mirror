@@ -552,8 +552,8 @@ public class PageMail extends AbsAjaxPage {
 		logger.debug(myPageName() + " zListGetMessages: number of conversations: "+ count);
 
 		// Get each conversation's data from the table list
-		for (int i = 0; i < count; i++) {
-			final String msglocator = "//div[@id='zl__TV__rows']/div["+ count +"]";
+		for (int i = 1; i <= count; i++) {
+			final String msglocator = "//div[@id='zl__TV__rows']/div["+ i +"]";
 			String locator;
 			
 			MailItem item = new MailItem();
@@ -652,8 +652,8 @@ public class PageMail extends AbsAjaxPage {
 		logger.debug(myPageName() + " zListGetConversations: number of conversations: "+ count);
 
 		// Get each conversation's data from the table list
-		for (int i = 0; i < count; i++) {
-			final String convlocator = "//div[@id='zl__CLV__rows']/div["+ count +"]";
+		for (int i = 1; i <= count; i++) {
+			final String convlocator = "//div[@id='zl__CLV__rows']/div["+ i +"]";
 			String locator;
 			
 			ConversationItem item = new ConversationItem();
@@ -701,7 +701,7 @@ public class PageMail extends AbsAjaxPage {
 			item.fragment = this.sGetText(locator).trim();
 
 			// Get the subject
-			locator = "//div[@id='zl__CLV__rows']/div["+ count +"]//td[contains(@id, '__su')]";
+			locator = convlocator + "//td[contains(@id, '__su')]";
 			String s = this.sGetText(locator).trim();
 			
 			// The subject contains the fragment, e.g. "subject - fragment", so
@@ -760,24 +760,24 @@ public class PageMail extends AbsAjaxPage {
 			
 			// TODO: how to handle both messages and conversations, maybe check the view first?
 			if ( !this.sIsElementPresent(listLocator) )
-				throw new HarnessException("Conversation List View Rows is not present "+ Locators.zCLVRows);
+				throw new HarnessException("List View Rows is not present "+ listLocator);
 			
 			// How many items are in the table?
 			int count = this.sGetXpathCount(listLocator + rowLocator);
-			logger.debug(myPageName() + " zListSelectItem: number of conversations: "+ count);
+			logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
 
 			StringBuilder sb = new StringBuilder();
 			
 			// Get each conversation's data from the table list
-			for (int i = 0; i < count; i++) {
+			for (int i = 1; i <= count; i++) {
 				
-				final String itemlocator = listLocator + "/div["+ count +"]";
+				String itemlocator = listLocator + "/div["+ i +"]";
 				String locator;
 				
 				// Look for the subject
 				
 				// Subject - Fragment
-				locator = listLocator + "/div["+ count +"]//td[contains(@id, '__su')]";
+				locator = itemlocator + "//td[contains(@id, '__su')]";
 				String s = this.sGetText(locator).trim();
 				sb.append(s).append(", ");
 				
