@@ -158,7 +158,7 @@ public class DisplayMail extends AbsDisplay {
 		
 		// Make sure the subject is present
 		if ( !this.sIsElementPresent(locator) )
-			throw new HarnessException("Unable to find the locator for field = "+ field);
+			throw new HarnessException("Unable to find the field = "+ field +" using locator = "+ locator);
 		
 		// Get the subject value
 		String value = this.sGetText(locator).trim();

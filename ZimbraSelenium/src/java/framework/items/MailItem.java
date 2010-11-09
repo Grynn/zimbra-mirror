@@ -6,6 +6,8 @@ package framework.items;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import com.zimbra.common.soap.Element;
 
 import framework.items.RecipientItem.RecipientType;
@@ -71,6 +73,8 @@ public class MailItem extends ZimbraItem implements IItem {
 	 * The text body of the message
 	 */
 	public String bodyText;
+	
+	private String bodyHtml;
 	
 	/**
 	 * The folder that contains this mail
@@ -295,5 +299,22 @@ public class MailItem extends ZimbraItem implements IItem {
 		System.out.println(m.prettyPrint());
 
 	}
+
+	/**
+	 * Set the HTML body of the message
+	 * @param body
+	 */
+	public void setBodyHtml(String body) {
+		bodyHtml = StringEscapeUtils.escapeHtml(body);
+	}
+
+	/**
+	 * Get the HTML body of the message
+	 * @param body
+	 */
+	public String getBodyHtml() {
+		return (bodyHtml);
+	}
+
 
 }

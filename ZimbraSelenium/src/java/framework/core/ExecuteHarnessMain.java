@@ -319,7 +319,7 @@ public class ExecuteHarnessMain {
 			
 			SeleniumService.getInstance().startSeleniumServer();
 			String response = executeTests();
-			result.append(executeTests()).append('\n');
+			result.append(response).append('\n');
 			
 		} finally {
 			SeleniumService.getInstance().stopSeleniumServer();
