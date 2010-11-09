@@ -187,9 +187,14 @@ ZaGlobalStatsView.prototype.setObject = function (entry) {
 	for(var i = 0; i < ZaGlobalStatsView.extTabObjects.length; i++) {
 		var tabObj = ZaGlobalStatsView.extTabObjects[i];
 		if(typeof(tabObj.memthod) == "function"){
-			var tabPage = new tabObj.memthod(this);
-			this.addTab(tabObj.title,tabPage);
-			tabPage.setObject(entry);
+			var tabPage = null;
+			if(!tabObj.tabKey) {
+                                tabPage = new tabObj.memthod(this);
+                                tabObj.tabKey = this.addTab(tabObj.title,tabPage);
+			}else {
+				tabPage = this.getTabView(tabObj.tabKey);
+			}
+			if(tabPage) tabPage.setObject(entry);
 		}
 			
 	}
