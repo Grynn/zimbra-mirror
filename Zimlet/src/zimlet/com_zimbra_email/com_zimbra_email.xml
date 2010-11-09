@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_email" version="11.3" target="main view-window" label=" Email Contact Details" description="Highlights and previews associated contact details for an email address.">
+<zimlet name="com_zimbra_email" version="11.5" target="main view-window" label=" Email Contact Details" description="Highlights and previews associated contact details for an email address.">
 	<include>templates/Email1.template.js</include>
 	<include>email.js</include>
 	<include>EmailToolTipSlideShow.js</include>
@@ -16,13 +16,10 @@
 			<menuItem label="${msg.search}" icon="Search" id="SEARCH"/>
 			<menuItem label="${msg.advancedSearch}" icon="SearchBuilder" id="SEARCHBUILDER"/>
 			<menuItem label="${msg.newEmail}" icon="NewMessage" id="NEWEMAIL"/>
-            <menuItem label="${msg.newIM}" icon="ImAvailable" id="NEWIM"/>
+			<menuItem label="${msg.newIM}" icon="ImAvailable" id="NEWIM"/>
 			<menuItem label="${msg.newContact}" icon="Edit" id="NEWCONTACT"/>
 			<menuItem label="${msg.addToFilter}" icon="AddFilter" id="ADDTOFILTER"/>
 			<menuItem label="${msg.goToUrl}" icon="URL" id="GOTOURL"/>
 		</contextMenu>
 	</contentObject>
-	<zimletPanelItem label="${msg.label}" icon="MsgStatusUnread">
-		<toolTipText>${msg.tooltip}</toolTipText>
-	</zimletPanelItem>
 </zimlet>

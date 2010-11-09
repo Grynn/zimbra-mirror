@@ -213,6 +213,7 @@ function(attrs) {
 	}
 
 	attrs["rightClickForMoreOptions"] = this.emailZimlet.getMessage("rightClickForMoreOptions");
+	attrs = this._formatTexts(attrs);
 	var iHtml = AjxTemplate.expand("com_zimbra_email.templates.Email1#ContactDetails", attrs);
 	this._setTextDivHeight(iHtml);
 	document.getElementById(UnknownPersonSlide.TEXT_DIV_ID).innerHTML = iHtml;
@@ -221,6 +222,26 @@ function(attrs) {
 		document.getElementById("UnknownPersonSlide_NameAnchorId").onclick =  AjxCallback.simpleClosure(this._openContact, this); 
 	}
 };
+
+UnknownPersonSlide.prototype._formatTexts =
+function(attrs) {
+	var email = attrs.email ? attrs.email : "";
+	attrs["formattedEmail"] = email;
+	if(email.length > 25) {
+		var tmp = email.split("@");
+		var fPart = tmp[0];
+		var lPart = tmp[1];
+		if(fPart.length > 25){
+			fPart = fPart.substring(0, 24) + "..";
+		}
+		attrs["formattedEmail"] = [fPart, " @", lPart].join("");
+	}
+	var fullName = attrs.fullName ? attrs.fullName : "";
+	if(fullName  ==  email) {
+		attrs["fullName"] = "";
+	}
+	return attrs;
+}
 
 UnknownPersonSlide.prototype._setProfileImage =
 function(photoName) {

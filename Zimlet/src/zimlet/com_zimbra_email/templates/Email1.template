@@ -1,8 +1,8 @@
 <template id='Frame'>
-	<div style='display:block;width:100%;height:100%;background:white' width=100% height=100%>
-		<table><tr><td>
+	<div style='display:block;width:100%;height:100%;background:white;overflow:auto;' width=100% height=100%>
+		<table><tr><td valign='top'>
 		<div align=center id="${photoParentId}"></div></td><td>
-		<div align=center id="${textDivId}"></div></td></tr></table>
+		<div align=center style='width:175px' id="${textDivId}"></div></td></tr></table>
 	</div>
 </template>
 <template id='ContactDetails'>
