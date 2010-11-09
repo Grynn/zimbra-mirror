@@ -175,12 +175,12 @@ ZaServerMBXStatsPage.prototype._getXForm = function () {
 											//idPrefix, label, 
 											//iconInfo, width, sortable, sortField, resizeable, visible
 	sourceHeaderList[0] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT, 	ZaMsg.MBXStats_ACCOUNT, 	
-												null, 300, sortable++, ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT, true, true);
+												null, 250, sortable++, ZaServerMBXStatsPage.XFORM_ITEM_ACCOUNT, true, true);
 	sourceHeaderList[1] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_QUOTA,   	ZaMsg.MBXStats_QUOTA,   	
 												null, 120,  sortable++,  ZaServerMBXStatsPage.XFORM_ITEM_QUOTA, true, true);												
 	defaultColumnSortable = sortable ;
 	sourceHeaderList[2] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, 	ZaMsg.MBXStats_DISKUSAGE,	
-												null, 120,  sortable++,  ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, true, true);
+												null, 200,  sortable++,  ZaServerMBXStatsPage.XFORM_ITEM_DISKUSAGE, true, true);
 	sourceHeaderList[3] = new ZaListHeaderItem(ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE,	ZaMsg.MBXStats_QUOTAUSAGE, 	
 												null, "auto",  sortable++, ZaServerMBXStatsPage.XFORM_ITEM_QUOTAUSAGE, false, true);
 	
