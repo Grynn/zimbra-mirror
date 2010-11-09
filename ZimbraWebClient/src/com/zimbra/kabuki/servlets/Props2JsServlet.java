@@ -43,8 +43,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.zimbra.common.localconfig.LC;
 import com.zimbra.common.util.BufferStream;
-import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.servlet.DiskCacheServlet;
 
 /**
  * This class looks for the resource bundle for the requested file (e.g.
@@ -97,12 +95,7 @@ import com.zimbra.cs.servlet.DiskCacheServlet;
  *
  * @author Andy Clark
  */
-public class Props2JsServlet extends DiskCacheServlet {
-
-    //
-    // Constants
-    //
-
+public class Props2JsServlet extends HttpServlet {
     protected static final String COMPRESSED_EXT = ".zgz";
 
     protected static final String P_DEBUG = "debug";
@@ -112,57 +105,56 @@ public class Props2JsServlet extends DiskCacheServlet {
     protected static final String A_BASENAME_PATTERNS = P_BASENAME_PATTERNS;
     protected static final String A_BASENAME_PATTERNS_LIST = A_BASENAME_PATTERNS+"-list";
 
-    //
-    // Constructors
-    //
+    private static Map<Locale, Map<String, byte[]>> buffers =
+        new HashMap<Locale, Map<String, byte[]>>();
 
-    public Props2JsServlet() {
-        super("uistrings");
+    private String getDirPath(String dirname) {
+        if (new File(dirname).isAbsolute()) {
+            return dirname;
+        }
+        String basedir = this.getServletContext().getRealPath("/");
+        if (!basedir.endsWith("/"))
+            basedir += "/";
+        return basedir + dirname;
     }
-
-    //
-    // HttpServlet methods
-    //
 
     public void doGet(HttpServletRequest req, HttpServletResponse resp) throws
         IOException, ServletException {
         // get request info
         boolean debug = req.getParameter(P_DEBUG) != null;
         Locale locale = getLocale(req);
-        if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: locale: "+locale);
-
+        Map<String, byte[]> localeBuffers;
         String uri = getRequestURI(req);
-        // NOTE: For some unknown reason, on my system, the string "null" is
-        // NOTE: prefixed to the return value from getRequestURI. Even
-        // NOTE: returning a string literal causes this to happen. However,
-        // NOTE: inlining the exact same code here solves the problem.
-//        String uri = (String) req.getAttribute(A_REQUEST_URI);
-//        if (uri == null) {
-//            uri = req.getRequestURI();
-//        }
-        if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: !!! uri: "+uri);
-        boolean compress = uri.endsWith(COMPRESSED_EXT);
-
-        String cacheId = locale.toString()+":"+uri;
-        if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: cache id: "+cacheId);
-
-        // generate buffer
-        byte[] buffer = null;
-        File file = !debug ? getCacheFile(cacheId) : null;
-        if (file == null) {
-            buffer = getBuffer(req, locale, uri);
-            if (!debug && !LC.zimbra_minimize_resources.booleanValue()){
-                file = createCacheFile(cacheId, "javascript");
-                if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: buffer file: "+file);
-                copy(buffer, file);
-                if (compress) {
-                    file = compress(file);
-                }
-                putCacheFile(cacheId, file);
+        
+        synchronized(buffers) {
+            localeBuffers = buffers.get(locale);
+            if (localeBuffers == null) {
+                localeBuffers =  Collections.synchronizedMap(new HashMap<String,
+                    byte[]>());
+                buffers.put(locale, localeBuffers);
             }
         }
+        
+        // get byte buffer
+        byte[] buffer = debug ? null : localeBuffers.get(uri);
 
-        // set headers
+        if (buffer == null) {
+            buffer = getBuffer(req, locale, uri);
+            // do not need to compress JS because Prop2Js has been optimized
+            if (uri.endsWith(COMPRESSED_EXT)) {
+                // gzip response
+                ByteArrayOutputStream bos = new ByteArrayOutputStream(buffer.length / 2);
+                OutputStream gzos = new GZIPOutputStream(bos);
+                
+                gzos.write(buffer);
+                gzos.close();
+                buffer = bos.toByteArray();
+            }
+            if (!LC.zimbra_minimize_resources.booleanValue())
+                localeBuffers.put(uri, buffer);
+        }
+
+        // generate output
         OutputStream out = resp.getOutputStream();
         try {
             if (uri.endsWith(COMPRESSED_EXT))
@@ -172,22 +164,9 @@ public class Props2JsServlet extends DiskCacheServlet {
             if (isErrorEnabled())
                 error(e.getMessage());
         }
-
-        // write buffer
-        if (file != null) {
-            // NOTE: If we saved the buffer to a file and compression is
-            // NOTE: enabled then the file has *already* been compressed
-            // NOTE: and the Content-Encoding header has been added.
-            copy(file, resp, false);
-        }
-        else {
-            copy(new String(buffer, "UTF-8"), resp, compress);
-        }
+        out.write(buffer);
+        out.flush();
     }
-
-    //
-    // Protected methods
-    //
 
     protected boolean isWarnEnabled() {
         return true;
@@ -328,24 +307,6 @@ public class Props2JsServlet extends DiskCacheServlet {
         }
     }
 
-    //
-    // Private methods
-    //
-
-    private String getDirPath(String dirname) {
-        if (new File(dirname).isAbsolute()) {
-            return dirname;
-        }
-        String basedir = this.getServletContext().getRealPath("/");
-        if (!basedir.endsWith("/"))
-            basedir += "/";
-        return basedir + dirname;
-    }
-
-    //
-    // Classes
-    //
-
     public static class PropsLoader extends ClassLoader {
         private List<File> files;
         private List<String> patterns;
@@ -405,7 +366,5 @@ public class Props2JsServlet extends DiskCacheServlet {
             str.append(s.substring(index));
             return str.toString();
         }
-
-    } // class PropsLoader
-
-} // class Props2JsServlet
+    }
+}
