@@ -141,7 +141,7 @@ case "$1" in
           done
           for i in $(seq 0 ${#ids[@]}); do
             if [ "${ids[$i]}" ]; then
-              kill -15 ${ids[$i]} 2> /dev/null
+              kill -9 ${ids[$i]} 2> /dev/null
             fi
           done
         else
