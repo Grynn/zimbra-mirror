@@ -13,5 +13,7 @@
 # basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 # ***** END LICENSE BLOCK *****
 # 
+source /opt/zimbra/bin/zmshutil || exit 1
+zmsetvars -f zimbra_home
 
-exec `dirname $0`/zmjava com.zimbra.cs.account.ProvUtil "$@"
+exec ${zimbra_home}/rlfe/bin/rlfe -h ${zimbra_home}/.zmprov_history `dirname $0`/zmjava com.zimbra.cs.account.ProvUtil "$@"
