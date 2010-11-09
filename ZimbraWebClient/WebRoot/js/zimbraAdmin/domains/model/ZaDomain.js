@@ -921,9 +921,9 @@ ZaDomain.testSyncSettings = function (obj, callback){
 			attr.setAttribute("n", ZaDomain.A_zimbraGalSyncLdapBindDn);
 		}
 	
-		if(obj.attrs[ZaDomain.A_GalLdapBindPassword]) {
-			attr = soapDoc.set("a", obj.attrs[ZaDomain.A_GalLdapBindPassword]);
-			attr.setAttribute("n", ZaDomain.A_GalLdapBindPassword);
+		if(obj.attrs[ZaDomain.A_zimbraGalSyncLdapBindPassword]) {
+			attr = soapDoc.set("a", obj.attrs[ZaDomain.A_zimbraGalSyncLdapBindPassword]);
+			attr.setAttribute("n", ZaDomain.A_zimbraGalSyncLdapBindPassword);
 		}
 	}
 
@@ -1722,6 +1722,10 @@ ZaDomain.myXModel = {
 		{id:ZaDomain.A_GALServerType, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALServerType},
 		{id:ZaDomain.A_GALSyncServerType, type:_STRING_, ref:"attrs/" + ZaDomain.A_GALSyncServerType},
 		{id:ZaDomain.A_GALSyncUseGALSearch, type:_ENUM_, choices:ZaModel.BOOLEAN_CHOICES, ref:"attrs/" + ZaDomain.A_GALSyncUseGALSearch},
+		{id:ZaDomain.A_zimbraGalSyncLdapBindDn, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapBindDn},
+                {id:ZaDomain.A_zimbraGalSyncLdapBindPassword, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapBindPassword},
+		{id:ZaDomain.A_zimbraGalSyncLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapSearchBase},
+		{id:ZaDomain.A_zimbraGalSyncLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalSyncLdapFilter,required:true},
 		{id:ZaDomain.A_GalLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapFilter,required:true},
 		{id:ZaDomain.A_zimbraGalAutoCompleteLdapFilter, type:_STRING_, ref:"attrs/" + ZaDomain.A_zimbraGalAutoCompleteLdapFilter},		
 		{id:ZaDomain.A_GalLdapSearchBase, type:_STRING_, ref:"attrs/" + ZaDomain.A_GalLdapSearchBase},
