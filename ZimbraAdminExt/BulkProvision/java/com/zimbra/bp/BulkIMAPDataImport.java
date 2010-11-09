@@ -25,11 +25,13 @@ import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.datasource.DataSourceManager;
 import com.zimbra.cs.datasource.ImportStatus;
+import com.zimbra.cs.account.Server;
 import com.zimbra.cs.service.FileUploadServlet;
 import com.zimbra.cs.service.admin.AdminDocumentHandler;
 import com.zimbra.cs.service.admin.AdminFileDownload;
 import com.zimbra.soap.ZimbraSoapContext;
-
+import com.zimbra.cs.account.accesscontrol.AdminRight;
+import com.zimbra.cs.account.accesscontrol.Rights.Admin;
 /**
  * 
  * @author Greg Solovyev
@@ -43,6 +45,8 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 	public Element handle(Element request, Map<String, Object> context)
 			throws ServiceException {
 		ZimbraSoapContext zsc = getZimbraSoapContext(context);
+	    Server localServer = Provisioning.getInstance().getLocalServer();
+	    checkRight(zsc, context, localServer, Admin.R_createMigrationTask); 		
 		String op = request.getAttribute(ZimbraBulkProvisionExt.A_op);
 		Element response = zsc.createElement(ZimbraBulkProvisionService.BULK_IMAP_DATA_IMPORT_RESPONSE);
 		Map<accountState, List<ExternalIMAPAccount>> IMAPAccounts = null;
@@ -610,4 +614,12 @@ public class BulkIMAPDataImport extends AdminDocumentHandler {
 		return importDS;
 	}
 
+   public void docRights(List<AdminRight> relatedRights, List<String> notes) {
+        relatedRights.add(Admin.R_createMigrationTask);
+        relatedRights.add(Admin.R_modifyAccount);
+        relatedRights.add(Admin.R_adminLoginAs);
+
+        notes.add(String.format("Admin has to have %s and %s rights for each account that is being migrated.",Admin.R_modifyAccount.getName(),Admin.R_adminLoginAs.getName()));
+        notes.add(Admin.R_createMigrationTask + " right is required in order to access this SOAP handler.");
+    }
 }

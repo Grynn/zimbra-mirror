@@ -6,7 +6,7 @@ if(ZaSettings) {
 	ZaSettings.BULK_PROVISION_TASKS_VIEW = "bulkProvisionTasksView";
 	ZaSettings.ALL_UI_COMPONENTS.push({ value: ZaSettings.BULK_PROVISION_TASKS_VIEW, label: com_zimbra_bulkprovision.UI_Comp_bulkProvisioning});
 	ZaSettings.OVERVIEW_TOOLS_ITEMS.push(ZaSettings.BULK_PROVISION_TASKS_VIEW);
-    ZaSettings.VIEW_RIGHTS [ZaSettings.BULK_PROVISION_TASKS_VIEW] = "adminConsoleBulkProvisioningRights" ;
+    ZaSettings.VIEW_RIGHTS [ZaSettings.BULK_PROVISION_TASKS_VIEW] = "adminConsoleMigrationRights" ;
 }
 ZaEvent.S_BULK_PROVISION_TASK = ZaEvent.EVENT_SOURCE_INDEX++;
 ZaZimbraAdmin._BULK_PROVISION_TASKS_LIST = ZaZimbraAdmin.VIEW_INDEX++;
