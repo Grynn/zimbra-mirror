@@ -212,9 +212,10 @@ function(aMessage) {
 	var myStack = new Array();
 	if (AjxEnv.isIE5_5up) {
 		// On IE, the caller chain is on the arguments stack
-		var myTrace = arguments.caller;
-		while (myTrace) {
-		    myStack[myStack.length] = myTrace.callee;
+		var myTrace = arguments.callee.caller;
+		var i = 0; // stop at 20 since there might be somehow an infinite loop here. Maybe in case of a recursion. 
+		while (myTrace && i++ < 20) {
+		    myStack[myStack.length] = myTrace;
 	    	myTrace = myTrace.caller;
 		}
 	} else {
