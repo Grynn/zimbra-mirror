@@ -105,13 +105,13 @@ public class GetMail extends AjaxCommonTest {
 		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Actions.A_LEFTCLICK, mail.subject);
 
 		// Verify the To, From, Subject, Body
-		ZAssert.assertEquals(			actual.zGetMailProperty(Field.Subject), mail.subject, "Verify the subject matches");
-		ZAssert.assertNotNull(			actual.zGetMailProperty(Field.ReceivedDate), "Verify the date is displayed");
-		ZAssert.assertNotNull(			actual.zGetMailProperty(Field.ReceivedTime), "Verify the time is displayed");
-		ZAssert.assertStringContains(	actual.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");
-		ZAssert.assertStringContains(	actual.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the From matches");
-		ZAssert.assertStringContains(	actual.zGetMailProperty(Field.To), app.getActiveAccount().EmailAddress, "Verify the To matches");
-		ZAssert.assertEquals(			actual.zGetMailProperty(Field.Body), mail.bodyText, "Verify the body matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.subject, "Verify the subject matches");
+		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedDate), "Verify the date is displayed");
+		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedTime), "Verify the time is displayed");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the From matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), app.getActiveAccount().EmailAddress, "Verify the To matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Body), mail.bodyText, "Verify the body matches");
 
 		
 	}

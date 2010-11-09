@@ -51,6 +51,8 @@ public class ZimbraAccount {
     public String ZimbraSoapAdminHost = null;
     public String ZimbraMailHost = null;
     public String ZimbraId = null;
+    public String CN = null;
+    public String DisplayName = null;
     public String EmailAddress = null;
     public String Password = null;
     public Map<String, String> preferences = null;
@@ -71,7 +73,12 @@ public class ZimbraAccount {
 	public ZimbraAccount(String email, String password) {
 		
 		if ( email == null ) {
-			email = ZimbraSeleniumProperties.getStringProperty("locale").toLowerCase() + "_account_" + System.currentTimeMillis() + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
+			CN = "a" + ZimbraSeleniumProperties.getUniqueString();
+			DisplayName = CN;
+			email = CN + "@" + ZimbraSeleniumProperties.getStringProperty("testdomain", "testdomain.com");
+		} else {
+			CN = email.split("@")[0];
+			DisplayName = CN;
 		}
 		EmailAddress = email;
 		
@@ -175,6 +182,7 @@ public class ZimbraAccount {
     		for (Map.Entry<String, String> entry : accountAttrs.entrySet()) {
     			prefs.append(String.format("<a n='%s'>%s</a>", entry.getKey(), entry.getValue()));
     		}
+    		prefs.append(String.format("<a n='%s'>%s</a>", "displayName", DisplayName));
 
 			ZimbraAdminAccount.GlobalAdmin().soapSend(
 					"<CreateAccountRequest xmlns='urn:zimbraAdmin'>" +
