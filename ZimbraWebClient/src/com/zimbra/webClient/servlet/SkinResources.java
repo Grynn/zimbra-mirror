@@ -206,8 +206,9 @@ public class SkinResources
             (compressStr != null && (compressStr.equals("true") || compressStr.equals("1")))
         ;
         compress = compress && macros.get("MSIE_6") == null;
+        // NOTE: Keep compressed extension at end of cacheId.
         if (compress) {
-            cacheId += ":" + EXT_COMPRESSED;
+            cacheId += EXT_COMPRESSED;
         }
 
         if (ZimbraLog.webclient.isDebugEnabled()) {
@@ -272,13 +273,25 @@ public class SkinResources
 
 				// write buffer to cache file
 				if (!debug) {
-			                file = createCacheFile(cacheId, type);
+                    // NOTE: This assumes that the cacheId will *end* with the compressed
+                    // NOTE: extension. Therefore, make sure to keep in sync.
+                    String uncompressedCacheId = compress ?
+                        cacheId.substring(0, cacheId.length() - EXT_COMPRESSED.length()) : cacheId;
+
+                    // store uncompressed file in cache
+                    file = createCacheFile(uncompressedCacheId, type);
 					if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: buffer file: "+file);
 					copy(buffer, file);
-					if (compress) {
-						file = compress(file);
+                    putCacheFile(uncompressedCacheId, file);
+
+                    // store compressed file in cache
+                    if (compress) {
+                        String compressedCacheId = cacheId;
+                        File gzfile = createCacheFile(compressedCacheId, type+EXT_COMPRESSED);
+                        if (ZimbraLog.webclient.isDebugEnabled()) ZimbraLog.webclient.debug("DEBUG: buffer file: " + gzfile);
+                        file = compress(file, gzfile);
+                        putCacheFile(compressedCacheId, file);
                     }
-					putCacheFile(cacheId, file);
 				}
             }
         } else {
