@@ -68,6 +68,10 @@ build_linux: $(RLFE_NAME)-$(RLFE_VERSION)
 build_mac:
 	mkdir -p $(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin
 	echo "#!/bin/bash" >$(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
+	echo 'if [ $$1 == "-h" ]; then' >>$(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
+	echo '  shift' >>$(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
+	echo '  shift' >>$(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
+	echo 'fi' >>$(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
 	echo 'exec "$$@"' >>$(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
 	chmod a+rx $(ZIMBRA_HOME)/$(RLFE_NAME)-$(RLFE_VERSION)/bin/rlfe
 	(cd $(ZIMBRA_HOME); ln -s $(RLFE_NAME)-$(RLFE_VERSION) rlfe)
@@ -82,7 +86,6 @@ tar:
 p4edit: $(RLFE_TGZ_TARGET)
 	p4 add $(RLFE_TGZ_TARGET)
 	p4 edit $(RLFE_TGZ_TARGET)
-	
 
 clean:
 	/bin/rm -rf $(RLFE_NAME)-$(RLFE_VERSION)
