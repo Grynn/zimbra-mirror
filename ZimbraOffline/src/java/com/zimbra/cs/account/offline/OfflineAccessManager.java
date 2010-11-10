@@ -28,6 +28,11 @@ import com.zimbra.cs.account.accesscontrol.Right;
 
 public class OfflineAccessManager extends AccessManager {
 
+    @Override
+    public boolean isAdequateAdminAccount(Account acct) {
+        return true;
+    }
+    
 	@Override
 	public boolean canAccessAccount(AuthToken at, Account target,
 			boolean asAdmin) throws ServiceException {
