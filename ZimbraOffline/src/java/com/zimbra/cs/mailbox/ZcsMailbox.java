@@ -386,7 +386,11 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 
             // update the id in the database and in memory
             markItemDeleted(item.getType(), id);
-            DbOfflineMailbox.renumberItem(item, newId);
+            try {
+                DbOfflineMailbox.renumberItem(item, newId);
+            } catch (ServiceException se) {
+                throw ServiceException.FAILURE("Failure renumbering item name["+item.getName()+"] subject["+item.getSubject()+"]", se);
+            }
             item.mId = item.mData.id = newId;
             item.markItemCreated();
 
