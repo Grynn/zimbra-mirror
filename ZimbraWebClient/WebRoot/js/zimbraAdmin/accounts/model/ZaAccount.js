@@ -70,6 +70,11 @@ ZaAccount.A_mailHost = "zimbraMailHost";
 ZaAccount.A_zimbraMailTransport = "zimbraMailTransport";
 ZaAccount.A_COSId = "zimbraCOSId";
 
+//Phonetic attribute
+ZaAccount.A_zimbraPhoneticFirstName = "zimbraPhoneticFirstName";
+ZaAccount.A_zimbraPhoneticLastName = "zimbraPhoneticLastName";
+ZaAccount.A_zimbraPhoneticCompany = "zimbraPhoneticCompany";
+
 ZaAccount.A_zimbraIsAdminAccount = "zimbraIsAdminAccount";
 ZaAccount.A_zimbraIsDelegatedAdminAccount = "zimbraIsDelegatedAdminAccount" ;
 
@@ -1653,7 +1658,10 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_accountName, type:_STRING_, ref:"attrs/"+ZaAccount.A_accountName},
         {id:ZaAccount.A_firstName, type:_STRING_, ref:"attrs/"+ZaAccount.A_firstName},
         {id:ZaAccount.A_lastName, type:_STRING_, ref:"attrs/"+ZaAccount.A_lastName, required:true},
-        {id:ZaAccount.A_mail, type:_STRING_, ref:"attrs/"+ZaAccount.A_mail},
+        {id:ZaAccount.A_zimbraPhoneticFirstName, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPhoneticFirstName},
+        {id:ZaAccount.A_zimbraPhoneticLastName, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPhoneticLastName},
+	{id:ZaAccount.A_zimbraPhoneticCompany, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPhoneticCompany},
+	{id:ZaAccount.A_mail, type:_STRING_, ref:"attrs/"+ZaAccount.A_mail},
         {id:ZaAccount.A_password, type:_STRING_, ref:"attrs/"+ZaAccount.A_password},
         {id:ZaAccount.A2_confirmPassword, type:_STRING_},
          ZaItem.descriptionModelItem,
@@ -2162,8 +2170,14 @@ ZaAccount.generateDisplayName =
 function (instance, firstName, lastName, initials) {
 	var oldDisplayName = this.getInstanceValue(ZaAccount.A_displayname);
 	var newDisplayname = "";
-	if(firstName)
-		newDisplayname = firstName;
+	var firstOne = firstName, secondOne = lastName;
+	if(ZaZimbraAdmin.isLanguage("ja")){
+		firstOne = lastName;
+		secondOne = firstName;
+	}
+
+	if(firstOne)
+		newDisplayname = firstOne;
 	else
 		newDisplayname = "";
 		
@@ -2173,11 +2187,11 @@ function (instance, firstName, lastName, initials) {
 		newDisplayname += initials;
 		newDisplayname += ".";
 	}
-	if(lastName) {
+	if(secondOne) {
 		if(newDisplayname.length > 0)
 			newDisplayname += " ";
 			
-	    newDisplayname += lastName;
+	    newDisplayname += secondOne;
 	} 
 	if(newDisplayname == oldDisplayName) {
 		return false;

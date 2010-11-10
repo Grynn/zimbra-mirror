@@ -475,6 +475,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 					this.getForm().itemChanged(this, elementValue, event);
 				}
 			},
+			{ref:ZaAccount.A_zimbraPhoneticFirstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticFirstName,label:ZaMsg.NAD_zimbraPhoneticFirstName,
+                               labelLocation:_LEFT_, cssClass:"admin_xform_name_input",width:150, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]
+                        },
 			{ref:ZaAccount.A_initials, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Initials,label:ZaMsg.NAD_Initials, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:50,
 				elementChanged: function(elementValue,instanceValue, event) {
 					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
@@ -491,6 +494,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 					this.getForm().itemChanged(this, elementValue, event);
 				}
 			},
+			{ref:ZaAccount.A_zimbraPhoneticLastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticLastName,label:ZaMsg.NAD_zimbraPhoneticLastName,
+                         	labelLocation:_LEFT_, cssClass:"admin_xform_name_input",width:150, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]
+                        },
 			{type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, 
 				labelLocation:_LEFT_, visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_displayname]],
 				items: [
@@ -692,7 +698,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 							},
 							{type:_ZAWIZGROUP_, 
 								items:[					
-									{ref:ZaAccount.A_company, type:_TEXTFIELD_, msgName:ZaMsg.NAD_company,label:ZaMsg.NAD_company, labelLocation:_LEFT_, width:250}/*,
+									{ref:ZaAccount.A_company, type:_TEXTFIELD_, msgName:ZaMsg.NAD_company,label:ZaMsg.NAD_company, labelLocation:_LEFT_, width:250},
+									{ref:ZaAccount.A_zimbraPhoneticCompany, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticCompany, label:ZaMsg.NAD_zimbraPhoneticCompany, labelLocation:_LEFT_, width:250, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]}
+									/*,
 									{ref:ZaAccount.A_orgUnit, type:_TEXTFIELD_, msgName:ZaMsg.NAD_orgUnit,label:ZaMsg.NAD_orgUnit, labelLocation:_LEFT_, width:250},														
 									{ref:ZaAccount.A_office, type:_TEXTFIELD_, msgName:ZaMsg.NAD_office,label:ZaMsg.NAD_office, labelLocation:_LEFT_, width:250}    */
 								]

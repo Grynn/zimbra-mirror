@@ -293,8 +293,20 @@ ZaZimbraAdmin.redir =
 function(locationStr){
 	window.location = locationStr;
 }
-
-
+// This function must be called after ZaZimbraAdmin.initInfo() is called.
+ZaZimbraAdmin.isLanguage =
+function(lang){
+	var defaultLang = null;
+	//if user have set its pref, just use user's seting
+	//else use brower's setting 
+	if(ZaZimbraAdmin.LOCALE == null){
+		defaultLang = AjxEnv.DEFAULT_LOCALE; 
+	}else{
+		defaultLang = ZaZimbraAdmin.LOCALE; 
+	}
+	
+	return defaultLang == lang;		
+}
 // Start up the ZimbraMail application
 ZaZimbraAdmin.prototype.startup =
 function() {
@@ -328,6 +340,16 @@ function() {
             ZaZimbraAdmin.reload_msg ();
             this.initDialogs(true) ;  //make sure all the precreated dialogs are also recreated.
         }
+
+	if(ZaZimbraAdmin.isLanguage("ja")){
+		if(ZaAccountXFormView.CONTACT_TAB_ATTRS)
+        		ZaAccountXFormView.CONTACT_TAB_ATTRS.push(ZaAccount.A_zimbraPhoneticCompany);
+
+		if(ZaAccountXFormView.ACCOUNT_NAME_GROUP_ATTRS)
+        		ZaAccountXFormView.ACCOUNT_NAME_GROUP_ATTRS.push(ZaAccount.A_zimbraPhoneticFirstName, 
+				ZaAccount.A_zimbraPhoneticLastName);
+	}
+	
         if(!ZaSettings.initialized)
 			ZaSettings.init();
 		else
