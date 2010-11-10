@@ -13,9 +13,6 @@
 	<property name="dist.dir" location="${build.dir}/dist/zimbra-${build.version}" />
 	<property name="dist.lib.dir" location="${dist.dir}/lib" />
 	<property name="tms.dir" location="${build.dir}/tms"/>
-	<property name="tms.jars.dir" location="${tms.dir}/jars"/>
-	<property name="tms.bin.dir" location="${tms.dir}/src/bin"/>
-	<property name="tms.conf.dir" location="${tms.dir}/conf"/>
 	<property name="tms.tgz.file" location="${dist.dir}/selng.tgz"/>
 
 	<property name="conf.dir" location="conf" />
@@ -236,47 +233,29 @@
 		</java>
 	</target>
 
-	<target name="build-selng" depends="jar" description="Creates the TMS package">
-		<echo message="coping project jars..." />
-		<copy file="${dist.lib.dir}/zimbraselenium.jar" todir="${tms.jars.dir}"/>
-		<copy todir="${tms.jars.dir}">
-			<fileset dir="jars">
-				<include name="**/*"/>
-			</fileset>
-		</copy>
-		<copy todir="${tms.bin.dir}">
+	<target name="tgz-contents" depends="jar,jar-staf" description="Creates the TMS package contents folder">
+		<echo message="Creating TMS TGZ contents ..." />
+		<copy file="${dist.lib.dir}/zimbraselenium.jar" todir="${tms.dir}/jars/"/>
+		<copy file="${dist.lib.dir}/zimbraselngstaf.jar" todir="${tms.dir}/jars/"/>
+		<copy todir="${tms.dir}/src/bin/">
 			<fileset dir="src/bin">
 				<include name="**/*"/>
 			</fileset>
 		</copy>
-		<copy todir="${tms.conf.dir}">
+		<copy todir="${tms.dir}/conf/">
 			<fileset dir="conf">
 				<include name="**/*"/>
 			</fileset>
 		</copy>
-		<echo message="coping external files..." />
-		<copy todir="${tms.jars.dir}">
-			<fileset dir="${server.dir}/build">
-				<include name="zimbrastore.jar"/>
+		<copy todir="${tms.dir}/data/">
+			<fileset dir="data">
+				<include name="**/*"/>
 			</fileset>
 		</copy>
-		<copy todir="${tms.jars.dir}">
-			<fileset dir="${server.dir}/build">
-				<include name="zimbrastore.jar"/>
-			</fileset>
-		</copy>
-		<copy todir="${tms.jars.dir}">
-			<fileset dir="${common.dir}/build">
-				<include name="zimbracommon.jar"/>
-			</fileset>
-			<fileset dir="${common.dir}/jars">
-				<include name="**/*.jar"/>
-				<exclude name = "**/jetty-6.1.22.z6.jar"/>
-				<exclude name = "**/jetty-util-6.1.22.z6.jar"/>
-			</fileset>
-		</copy>
-
-		<echo message="zipping package ..." />
+	</target>
+	
+	<target name="tgz-file" depends="tgz-contents" description="Creates the TMS Package TGZ file">
+		<echo message="zipping TMS TGZ package ..." />
 		<tar destfile="${tms.tgz.file}" compression="gzip">
 			<tarfileset dir="${tms.dir}" prefix="SelNG" mode="777">
 				<include name="**/*"/>
@@ -284,5 +263,9 @@
 		</tar>
 		<checksum file="${tms.tgz.file}" forceOverwrite="yes"/>
 	</target>
+	
+	<target name="build-selng" depends="tgz-file" description="Creates the TMS Package">
+	</target>
+		
 
 </project>
