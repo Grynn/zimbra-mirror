@@ -16,4 +16,4 @@
 source /opt/zimbra/bin/zmshutil || exit 1
 zmsetvars -f zimbra_home
 
-exec ${zimbra_home}/rlfe/bin/rlfe `dirname $0`/zmjava com.zimbra.cs.account.ProvUtil "$@"
+exec `dirname $0`/zmjava com.zimbra.cs.account.ProvUtil "$@"
