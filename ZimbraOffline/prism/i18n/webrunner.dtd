@@ -25,6 +25,7 @@
 <!ENTITY tools.label                "@prism.exts.Tools@">
 <!ENTITY prefs.label                "@prism.exts.Preferences@">
 <!ENTITY appsPref.label             "@prism.exts.AppsPref@">
+<!ENTITY minimizeWindow.label       "@prism.exts.Minimize@">
 <!ENTITY addons.label               "@prism.exts.AddOns@">
 
 <!ENTITY zoomIn.label               "@prism.exts.ZoomIn@">
