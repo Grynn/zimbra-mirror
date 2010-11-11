@@ -54,24 +54,27 @@ function() {
 Com_Zimbra_Url.THUMB_URL = "http://images.websnapr.com/?url=";
 Com_Zimbra_Url.THUMB_SIZE = 'width="200" height="150"';
 
+// chars to ignore if they follow a URL, since they are unlikely to be part of it
+Com_Zimbra_Url.IGNORE = AjxUtil.arrayAsHash([".", ",", ";", "!", "*", ":", "?", ")", "]", "}"]);
+
 Com_Zimbra_Url.prototype.match =
 function(line, startIndex) {
+
 	for (var i = 0; i < Com_Zimbra_Url.REGEXES.length; i++) {
 		
 		var re = Com_Zimbra_Url.REGEXES[i];
 		re.lastIndex = startIndex;
 		var m = re.exec(line);
-		if (!m) {
-			continue;
+		if (!m) { continue; }
+
+		var url = m[0];
+		var last = url.charAt(url.length - 1);
+		while (url.length && Com_Zimbra_Url.IGNORE[last]) {
+			url = url.substring(0, url.length - 1);
+			last = url.charAt(url.length - 1);
 		}
-		var last = m[0].charAt(m[0].length - 1);
-		if (last == '.' || last == "," || last == '!' || (last == ')' && m[0].indexOf('(') == -1)) {
-			var m2 = {index: m.index };
-			m2[0] = m[0].substring(0, m[0].length - 1);
-			return m2;
-		} else {
-			return m;
-		}
+		m[0] = url;
+		return m;
 	}
 };
 
