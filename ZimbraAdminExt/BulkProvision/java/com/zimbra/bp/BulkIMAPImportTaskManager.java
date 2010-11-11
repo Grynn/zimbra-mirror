@@ -1,6 +1,7 @@
 package com.zimbra.bp;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
@@ -113,7 +114,9 @@ public class BulkIMAPImportTaskManager {
     private static void cleanTaskQueue ( Queue<HashMap<taskKeys, String>> taskQueue) throws ServiceException {
         synchronized(taskQueue) {
             if(!taskQueue.isEmpty()) {
-                for(HashMap<taskKeys, String> task : taskQueue) {
+                Iterator<HashMap<taskKeys, String>> iter = taskQueue.iterator();
+                while(iter.hasNext()) {
+                    HashMap<taskKeys, String> task = iter.next();
                     String accountID = task.get(taskKeys.accountID);
                     String dataSourceID = task.get(taskKeys.dataSourceID);
                     if (accountID == null) {
@@ -133,6 +136,7 @@ public class BulkIMAPImportTaskManager {
                             ZimbraLog.extensions.error("Error while cleaning IMAP import task queue.", ex);
                         }
                     }
+                    iter.remove();
                 }
             }
         } 
