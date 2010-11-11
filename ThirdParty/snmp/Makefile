@@ -69,9 +69,13 @@ ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
 	@echo MAC $(BUILD_PLATFORM)
 	(cd $(SNMP_NAME)-$(SNMP_VERSION); \
 	cp ../patches/darwin10.h include/net-snmp/system; \
-	$(ENVMOD) CFLAGS="-g -O2" ./configure --prefix=$(INSTALL_PREFIX) \
+	$(ENVMOD) CFLAGS="-g -O2" \
+	LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)" \
+	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR) \
+	./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \
 	--with-sys-location="unknown" --with-logfile="$(ZIMBRA_HOME)/log/snmpd.log" \
+	--with-openssl=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) \
 	--disable-embedded-perl \
 	--without-perl-modules \
 	--with-persistent-directory="$(INSTALL_PREFIX)/var"; \
@@ -84,9 +88,13 @@ ifeq (MACOSXx86_10, $(findstring MACOSXx86_10, $(BUILD_PLATFORM)))
 else
 	echo NON_MAC $(BUILD_PLATFORM)
 	(cd $(SNMP_NAME)-$(SNMP_VERSION); \
-	$(ENVMOD) CFLAGS="-g -O2" ./configure --prefix=$(INSTALL_PREFIX) \
+	$(ENVMOD) CFLAGS="-g -O2" \
+	LDFLAGS="-L$(OPENSSL_LIB_DIR) -R$(OPENSSL_LIB_DIR)" \
+	LD_LIBRARY_PATH=$(OPENSSL_LIB_DIR) \
+ 	./configure --prefix=$(INSTALL_PREFIX) \
 	--with-default-snmp-version=3 --with-sys-contact="admin" \
 	--with-sys-location="unknown" --with-logfile="$(ZIMBRA_HOME)/log/snmpd.log" \
+	--with-openssl=$(ZIMBRA_HOME)/openssl-$(OPENSSL_VERSION) \
 	--disable-embedded-perl \
 	--with-perl-modules="PREFIX=$(PERL_DEST_DIR) LIB=$(PERL_DEST_LIB_DIR)" \
 	--with-persistent-directory="$(INSTALL_PREFIX)/var"; \
