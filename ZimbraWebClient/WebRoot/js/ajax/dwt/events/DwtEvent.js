@@ -138,7 +138,15 @@ DwtEvent.ONSELECTSTART = "onselectstart";
  */
 DwtEvent.ONSCROLL = "onscroll";
 
+/**
+ * Browser "onpaste" event.
+ */
+DwtEvent.ONPASTE = "onpaste";
+
+
+
 // semantic events
+
 /**
  * Action event. An example is right-clicking on a list item or tree item
  * generally brings up a context menu.
