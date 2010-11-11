@@ -281,6 +281,13 @@ function ()  {
     item.updateElement(ZaAccount.getAccountTypeOutput.call(item, true)) ;
 }
 
+ZaAccountXFormView.cosGroupItemId = "cos_grouper_" + Dwt.getNextId();
+ZaAccountXFormView.prototype.updateCosGrouper =
+function () {
+    var item = this._localXForm.getItemsById (ZaAccountXFormView.cosGroupItemId) [0] ;
+    item.items[0].setElementEnabled(true);
+    item.updateElement() ;
+}
 /*
 ZaAccountXFormView.onRepeatRemove = 
 function (index, form) {
@@ -1290,16 +1297,16 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 		var case1Items = [
 			 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts,
 			 	visibilityChecks:[ZaAccountXFormView.isDomainLeftAccountsAlertVisible],
-			 	visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A2_accountTypes],
+			 	visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A2_accountTypes, ZaAccount.A_name],
 				containerCssStyle: "width:400px;",
 				style: DwtAlert.WARNING, iconVisible: false
 			 },
 	
 	        //account types group
 	        {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_type_group",
-	                colSpan: "*", numCols: 1, colSizes: ["100%"], 
-	                visibilityChecks:[ZaAccountXFormView.isAccountTypeGrouperVisible],
-	                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
+	                colSpan: "*", numCols: 1, colSizes: ["100%"],
+	                visibilityChecks:[ZaAccountXFormView.isAccountTypeGrouperVisible, ZaAccount.isShowAccountType],
+	                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId, ZaAccount.A_name],
 	                items: [
 	                    {type: _DWT_ALERT_, 
 	                    	visibilityChecks:[ZaAccountXFormView.isAccountTypeSet],
@@ -1408,6 +1415,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 		setupGroup.items.push(
 			{type:_GROUP_, numCols:3,colSizes:["156px","22px","100px"], nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_COSId]],
+				id: ZaAccountXFormView.cosGroupItemId,
 				items: [
 					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, choices:this.cosChoices,
 						//inputPreProcessor:ZaAccountXFormView.preProcessCOS,
@@ -1469,8 +1477,11 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 		colSizes:["275px","*"],numCols:2,
 		items:[ 
                 { type: _DWT_ALERT_, containerCssStyle: "padding-bottom:0px",
-                      style: DwtAlert.WARNING,iconVisible: (!ZaAccountXFormView.isAuthfromInternal(entry.name)),
-                      content: ((ZaAccountXFormView.isAuthfromInternal(entry.name))?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
+                      //style: DwtAlert.WARNING,iconVisible: (!ZaAccountXFormView.isAuthfromInternal(entry.name)),
+                      //content: ((ZaAccountXFormView.isAuthfromInternal(entry.name))?ZaMsg.Alert_InternalPassword:ZaMsg.Alert_ExternalPassword)
+                      style: DwtAlert.WARNING,iconVisible: false,
+                      content: ZaMsg.Alert_InternalPassword
+
                 },
 		{ref:ZaAccount.A_password, type:_SECRET_, msgName:ZaMsg.NAD_Password,
 			label:ZaMsg.NAD_Password, labelLocation:_LEFT_,

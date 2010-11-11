@@ -2128,7 +2128,10 @@ function (value, event, form){
 						ZaAccountXFormView.zimletChoices.dirtyChoices();
 					}					
 				}
-			}				
+			}
+                	ZaAccount.setDefaultCos(instance);
+                	instance [ZaAccount.A2_autoCos] = "TRUE";
+			
 			form.refresh();
 		}
                    
@@ -2145,7 +2148,7 @@ function (value, event, form){
                     //only show domain left accounts when zimbraDomainMaxAccounts is set, but zimbraDomainCOSMaxAccounts is not set
                     var usedAccounts = domainObj.getUsedDomainAccounts(newDomainName );
                     form.getModel().setInstanceValue(form.getInstance(),     ZaAccount.A2_domainLeftAccounts,
-                        AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [maxDomainAccounts - usedAccounts, newDomainName]));
+                        AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [newDomainName, usedAccounts - maxDomainAccounts]));
                 }else if (cosMaxAccounts && cosMaxAccounts.length > 0){
                     //update the account type information
                     form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_errorMessage,"");
@@ -2325,6 +2328,28 @@ ZaAccount.isEmailRetentionPolicyDisabled = function () {
 	return !ZaAccount.isEmailRetentionPolicyEnabled.call(this);
 }
 
+ZaAccount.isShowAccountType = function() {
+    var form = this.getForm () ;
+    var instance = form.getInstance () ;
+    var acctTypes = instance[ZaAccount.A2_accountTypes] ;
+    var isShow = false;
+
+    for (var i=0; i < acctTypes.length && !isShow; i ++) {
+   
+    	var domainName = ZaAccount.getDomain (instance.name) ;
+    	var domainObj =  ZaDomain.getDomainByName (domainName, form.parent._app);
+        var cos = ZaCos.getCosById (acctTypes[i] , ZaApp.getInstance()) ;
+        if (cos == null) {
+        	ZaApp.getInstance().getCurrentController().popupErrorDialog(
+                        AjxMessageFormat.format(ZaMsg.ERROR_INVALID_ACCOUNT_TYPE, [acctTypes[i]]));
+                return isShow;
+        }
+	if(domainObj.isCosLimitInDomain(cos.name))
+		isShow = true;
+    }
+    return isShow;
+}
+
 ZaAccount.getAccountTypeOutput = function (isNewAccount) {
     var form = this.getForm () ;
     var instance = form.getInstance () ;
@@ -2338,6 +2363,9 @@ ZaAccount.getAccountTypeOutput = function (isNewAccount) {
             currentType = currentCos.id ;
         */
         var currentType = instance[ZaAccount.A2_currentAccountType] ;
+	if(!currentType)
+		currentType = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name]).id;
+
         var domainName = ZaAccount.getDomain (instance.name) ;
         var domainObj =  ZaDomain.getDomainByName (domainName, form.parent._app);
 
@@ -2357,7 +2385,7 @@ ZaAccount.getAccountTypeOutput = function (isNewAccount) {
                 return ;
             }
             var accountTypeDisplayValue = cos.attrs[ZaCos.A_description] ;
-            if (!accountTypeDisplayValue)
+            if (!accountTypeDisplayValue || accountTypeDisplayValue.length < 1)
                 accountTypeDisplayValue = cos.name ;
             
             //3 columns a row
@@ -2413,6 +2441,8 @@ ZaAccount.setAccountType = function (newType, ev) {
 
         if(form.parent.setDirty)
 			form.parent.setDirty(true);
+
+	form.parent.updateCosGrouper();
     }
 }
 

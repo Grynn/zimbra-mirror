@@ -90,6 +90,14 @@ function ()  {
     item.updateElement(ZaAccount.getAccountTypeOutput.call(item, true)) ;
 }
 
+ZaNewAccountXWizard.cosGroupItemId = "cos_grouper_" + Dwt.getNextId();
+ZaNewAccountXWizard.prototype.updateCosGrouper =
+function () {
+    var item = this._localXForm.getItemsById (ZaNewAccountXWizard.cosGroupItemId) [0] ;
+    item.items[0].setElementEnabled(true);
+    item.updateElement() ;
+}
+
 /*
 ZaNewAccountXWizard.onNameFieldChanged = 
 function (value, event, form) {
@@ -419,7 +427,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 	var case1Items = [ 
 		 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts,
                 visibilityChecks:[ZaNewAccountXWizard.isDomainLeftAccountsAlertVisible],
-                visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A2_accountTypes],
+                visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A2_accountTypes, ZaAccount.A_name],
 			    bmolsnr:true,	
                 containerCssStyle: "width:400px;",
 				style: DwtAlert.WARNING, iconVisible: false
@@ -441,12 +449,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
         //account types group
         {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_wiz_type_group",
                 colSpan: "*", numCols: 1, colSizes: ["100%"],
-                visibilityChecks:[ZaNewAccountXWizard.isAccountTypeGrouperVisible],
-                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
+                visibilityChecks:[ZaNewAccountXWizard.isAccountTypeGrouperVisible,ZaAccount.isShowAccountType],
+                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId,ZaAccount.A_name],
                 items: [
                     {type: _DWT_ALERT_, 
                     	visibilityChecks:[ZaNewAccountXWizard.isAccountTypeSet],
-                        visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
+                        visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId, ZaAccount.A_name],
                         containerCssStyle: "width:400px;",
                         style: DwtAlert.CRITICAL, iconVisible: false ,
                         content: ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET
@@ -541,6 +549,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 		setupGroup.items.push(
 			{type:_GROUP_, numCols:3, nowrap:true, label:ZaMsg.NAD_ClassOfService, labelLocation:_LEFT_,
 				visibilityChecks:[[ZaItem.hasWritePermission,ZaAccount.A_COSId]],
+				id: ZaNewAccountXWizard.cosGroupItemId,
 				items: [
 					{ref:ZaAccount.A_COSId, type:_DYNSELECT_,label: null, 
 						inputPreProcessor:ZaAccountXFormView.preProcessCOS,

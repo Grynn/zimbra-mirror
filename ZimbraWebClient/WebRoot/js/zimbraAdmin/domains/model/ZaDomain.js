@@ -1990,13 +1990,25 @@ ZaDomain.prototype.updateUsedAccounts = function () {
 ZaDomain.prototype.getUsedAccounts =
 function (cosName, refresh) {
     if (!this[ZaDomain.A2_account_limit]) this[ZaDomain.A2_account_limit] = {};
-    if (!this[ZaDomain.A2_account_limit][cosName])  this[ZaDomain.A2_account_limit][cosName] = {} ;
+    if (!this[ZaDomain.A2_account_limit][cosName])  this[ZaDomain.A2_account_limit][cosName] = {used:null} ;
 
     if (refresh || (this[ZaDomain.A2_account_limit][cosName].used == null)) {
         this.updateUsedAccounts();   
     }
- 
-    return this[ZaDomain.A2_account_limit][cosName].used ;
+
+    if(!this[ZaDomain.A2_account_limit][cosName])
+	return 0;
+    else 
+    	return this[ZaDomain.A2_account_limit][cosName].used ;
+}
+
+ZaDomain.prototype.isCosLimitInDomain =
+function(cosName) {
+    if(!this[ZaDomain.A2_account_limit] || this[ZaDomain.A2_account_limit].length < 1) {
+	this.updateMaxAccounts();	
+    }
+    if(this[ZaDomain.A2_account_limit][cosName]) return true;
+    else return false;
 }
 
 ZaDomain.prototype.getMaxAccounts = function (cosName, refresh) {
@@ -2010,6 +2022,9 @@ ZaDomain.prototype.getMaxAccounts = function (cosName, refresh) {
        this.updateMaxAccounts ();
     }
 
+    if(!this[ZaDomain.A2_account_limit][cosName])
+	return 0;
+    else
     return  this[ZaDomain.A2_account_limit][cosName].max ;
 }
 
@@ -2041,10 +2056,14 @@ ZaDomain.prototype.getAvailableAccounts = function (cosName, refresh) {
         //retrieve the used accounts
         var used = this.getUsedAccounts (cosName, refresh);
         var max = this.getMaxAccounts (cosName, refresh) ;
-        this [ZaDomain.A2_account_limit][cosName].available = max - used ;
+        //this [ZaDomain.A2_account_limit][cosName].available = max - used ;
 //    }
-
-    return this[ZaDomain.A2_account_limit][cosName].available;
+    if(!this [ZaDomain.A2_account_limit][cosName])
+	return 0;
+    else {
+	this[ZaDomain.A2_account_limit][cosName].available = max - used ;
+    	return this[ZaDomain.A2_account_limit][cosName].available;
+    }
 }
 
 //Account types is only available when ZimbraDomainCOSMaxAccounts are set
