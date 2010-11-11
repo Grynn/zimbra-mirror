@@ -13,11 +13,11 @@
 	<div id="header-wrap">
 		<div class="span-12" id="header">
 			<div class="span-7">
-				<h1><a title="Zimbra - the leader in open source email and collaboration" href="http://www.zimbra.com"><img src="./zimbra_logo.png" width="156" height="50" border="0" alt="www.zimbra.com" title="www.zimbra.com"></a></h1>
+				<h1><a title="Zimbra - the leader in open source email and collaboration" href="http://www.zimbra.com" target="_blank"><img src="./zimbra_logo.png" width="156" height="50" border="0" alt="www.zimbra.com" title="www.zimbra.com"></a></h1>
 				<div id="tagline" ><img src="./zimbra_tagline.png" width="288" height="11" border="0" alt="The leader in open source email & collaboration" title="The leader in open source email & collaboration"></div>
 			</div>
 			<div class="span-5 last">
-				<div id="top-links"><a href="http://www.zimbra.com/forums/">Forums</a> | <a href="http://blog.zimbra.com/">Blog</a> | <a href="http://wiki.zimbra.com/">Wiki</a></div>
+				<div id="top-links"><a href="http://www.zimbra.com/forums/" target="_blank">Forums</a> | <a href="http://blog.zimbra.com/" target="_blank">Blog</a> | <a href="http://wiki.zimbra.com/" target="_blank">Wiki</a></div>
 			</div>
 		</div>
 	</div>
@@ -47,12 +47,12 @@ Calendars, Tasks, and mail are synced directly with the Zimbra server.
 				</td>
 		        <td width="7%"></td>
 		        <td width="23%">
-            	<a href="/downloads/@@ZCO_32BIT@@"">Download 32-bit</a>
+            	<a href="/downloads/@@ZCO_32BIT@@" target="_blank">Download 32-bit</a>
             	<br>
             	<small>Windows MSI Installer</small>
             	<br>
             	<br>
-            	<a href="/downloads/@@ZCO_64BIT@@"">Download 64-bit</a>
+            	<a href="/downloads/@@ZCO_64BIT@@" target="_blank">Download 64-bit</a>
             	<br>
             	<small>Windows MSI Installer</small>
             	</td>
@@ -75,7 +75,7 @@ Calendars are synced directly with the Zimbra server.
 				</td>
 		        <td width="7%"></td>
 		        <td width="23%">
-            	<a href="/downloads/@@ISYNC_UB@@">Download</a>
+            	<a href="/downloads/@@ISYNC_UB@@" target="_blank">Download</a>
             	<br>
             	<small>DMG Package</small>
             	</td>
@@ -106,7 +106,7 @@ This tool allows users to import Microsoft Outlook PST files to the Zimbra Serve
 				</td>
 		        <td width="7%"></td>
 		        <td width="23%">
-            	<a href="/downloads/@@PST_IMPORT@@">Download</a>
+            	<a href="/downloads/@@PST_IMPORT@@" target="_blank">Download</a>
             	<br>
             	<small>ZIP Archive</small>
             	</td>
@@ -128,7 +128,7 @@ This application performs a server-to-server migration of email, calendar and co
 				</td>
 		        <td width="7%"></td>
 		        <td width="23%">
-            	<a href="/downloads/@@EXCHANGE_MIG_WIZARD@@">Download</a>
+            	<a href="/downloads/@@EXCHANGE_MIG_WIZARD@@" target="_blank">Download</a>
             	<br>
             	<small>Windows EXE Executable</small>
             	</td>
@@ -150,7 +150,7 @@ This application performs a server-to-server migration of email, calendar and co
 				</td>
 		        <td width="7%"></td>
 		        <td width="23%">
-            	<a href="/downloads/@@DOMINO_MIG_WIZARD@@">Download</a>
+            	<a href="/downloads/@@DOMINO_MIG_WIZARD@@" target="_blank">Download</a>
             	<br>
             	<small>Windows EXE Executable</small>
             	</td>
