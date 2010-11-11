@@ -129,7 +129,7 @@ function(html, idx, obj, spanId, context, options) {
 		if (contact && contact.isDL) {
 			// TODO: show clickable + for DL - waiting for fix for 52113
 		}
-		html[idx++] = obj.toString();
+		html[idx++] = AjxStringUtil.htmlEncode(obj.toString());
 		html[idx++] = "</span>";
 		return idx;
 	} else {
