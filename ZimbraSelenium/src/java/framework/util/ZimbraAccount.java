@@ -173,6 +173,12 @@ public class ZimbraAccount {
 		put("zimbraPrefCalendarAlwaysShowMiniCal", "FALSE");
 		// put("zimbraPrefSkin", "beach");
 		put("zimbraPrefComposeFormat", "html");
+		
+		put("zimbraZimletAvailableZimlets","+com_zimbra_email");
+		put("zimbraZimletAvailableZimlets","+com_zimbra_webex");
+		put("zimbraZimletAvailableZimlets","+com_zimbra_social");
+		put("zimbraZimletAvailableZimlets","+com_zimbra_linkedin");
+
  	}};
 
 	/**
