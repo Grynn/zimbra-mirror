@@ -357,7 +357,7 @@ function(timeout) {
 DwtKeyboardMgr.prototype.clearKeySeq =
 function() {
 	this.__killKeySeqTimedActionId = -1;
-	this.__keySequence.length = 0;
+	this.__keySequence = [];
 };
 
 /**
