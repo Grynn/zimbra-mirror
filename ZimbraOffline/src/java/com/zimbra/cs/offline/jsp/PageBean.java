@@ -110,13 +110,19 @@ public class PageBean {
         return LC.get(key);
     }
 
-    public static String addAuthToken(String url, String devMode) {
+    private static final String[] knownPassThroughFlags = new String[] {"dev","notifydebug","scripterrors"};
+
+    public static String addAuthToken(String url, HttpServletRequest request) {
         String at = LC.get("zdesktop_installation_key");
         
         if (at != null && !at.startsWith("@"))
             url += (url.indexOf('?') < 0 ? "?" : "&") + "at=" + at;
-        if (devMode != null && devMode.length() > 0)
-            url += (url.indexOf('?') < 0 ? "?" : "&") + "dev=" + devMode;
+        for (String flagKey : knownPassThroughFlags) {
+            String flagVal = request.getParameter(flagKey);
+            if (flagVal != null && flagVal.length() > 0) {
+                url += (url.indexOf('?') < 0 ? "?" : "&") + flagKey + "=" + flagVal;
+            }
+        }
         return url;
     }
 

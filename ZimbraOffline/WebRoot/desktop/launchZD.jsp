@@ -66,6 +66,8 @@
 	request.setAttribute("packages", "dev");
     }
 
+    boolean isScriptErrorOn = getParameter(request, "scripterrors", "0").equals("1");    
+    boolean isNotifyDebugOn = getParameter(request, "notifydebug", "0").equals("1");
     String debug = getParameter(request, "debug", getAttribute(request, "debug", null));
     String extraPackages = getParameter(request, "packages", getAttribute(request, "packages", null));
     String mode = getAttribute(request, "mode", null);
@@ -106,6 +108,8 @@
     pageContext.setAttribute("ext", ext);
     pageContext.setAttribute("isDebug", isDebug);
     pageContext.setAttribute("isDevMode", isDev);
+    pageContext.setAttribute("isScriptErrorOn", isScriptErrorOn);
+    pageContext.setAttribute("isNotifyDebugOn", isNotifyDebugOn);
     pageContext.setAttribute("isOfflineMode", "true");
     pageContext.setAttribute("isProdMode", !prodMode.equals(""));
     pageContext.setAttribute("locale", locale);
@@ -132,6 +136,8 @@
     appExtension   = "${zm:jsEncode(ext)}";
     appDevMode     = ${isDevMode};
     isTinyMCE      = true;
+    window.isScriptErrorOn = ${isScriptErrorOn};
+    window.isNotifyDebugOn = ${isNotifyDebugOn};
 </script>
 </head>
 <body>

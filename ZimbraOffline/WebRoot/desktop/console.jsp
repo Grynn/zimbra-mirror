@@ -25,8 +25,6 @@
 <jsp:setProperty name="bean" property="*"/>
 <jsp:setProperty name="bean" property="locale" value="${pageContext.request.locale}"/>
 
-<% pageContext.setAttribute("devMode", request.getParameter("dev")); %>
-
 <zd:auth/>
 
 <c:set var="accounts" value="${bean.accounts}"/>
@@ -34,7 +32,7 @@
 <c:set var='login'><fmt:message key='GotoDesktop'/></c:set>
 
 <c:if test="${param.loginOp != 'logout' && (param.client == 'advanced' || (param.client == 'standard' && fn:length(accounts) == 1))}">
-	<jsp:forward page="${zdf:addAuthToken('/desktop/login.jsp', devMode)}"/>
+	<jsp:forward page="${zdf:addAuthToken('/desktop/login.jsp', pageContext.request)}"/>
 </c:if>
 
 <html>
@@ -50,7 +48,7 @@
 
 <script type="text/javascript">
 function OnAdd() {
-	window.location = "${zdf:addAuthToken('/desktop/accsetup.jsp', devMode)}";
+	window.location = "${zdf:addAuthToken('/desktop/accsetup.jsp', pageContext.request)}";
 }
 
 function OnDelete(id, name, type, flavor) {
@@ -65,11 +63,11 @@ function OnEdit(id, name, type, flavor) {
 
 function OnLogin() {
 	zd.disableButton("loginButton", "<fmt:message key='Loading'/>");
-	window.location = "${zdf:addAuthToken('/desktop/login.jsp', devMode)}";
+	window.location = "${zdf:addAuthToken('/desktop/login.jsp', pageContext.request)}";
 }
 
 function OnDefault(id, name, type, flavor) {
-	document.accountForm.action = "${zdf:addAuthToken('/desktop/console.jsp', devMode)}";
+	document.accountForm.action = "${zdf:addAuthToken('/desktop/console.jsp', pageContext.request)}";
 	submit(id, name, type, flavor, "");
 }
 
@@ -336,7 +334,7 @@ function submit(id, name, type, flavor, verb) {
 
 <zd:tips userAgent="${header['User-Agent']}"/>
 
-<form name="accountForm" action="${zdf:addAuthToken('/desktop/accsetup.jsp', devMode)}" method="POST">
+<form name="accountForm" action="${zdf:addAuthToken('/desktop/accsetup.jsp', pageContext.request)}" method="POST">
 	<input type="hidden" name="accountId">
 	<input type="hidden" name="accountName">
 	<input type="hidden" name="accountType">

@@ -22,14 +22,12 @@
 
 <fmt:setBundle basename="/messages/ZdMsg" scope="request"/>
 
-<% pageContext.setAttribute("devMode", request.getParameter("dev")); %>
-
 <zd:auth/>
 
 <c:set var='accountFlavor' value="${param.accountFlavor eq null ? '' : param.accountFlavor}"/>
 <c:set var='verb' value="${param.verb eq null ? '' : param.verb}"/>
 <c:set var='save' value='Save'/>
-<c:set var="uri" value="${zdf:addAuthToken('/desktop/accsetup.jsp', devMode)}"/>
+<c:set var="uri" value="${zdf:addAuthToken('/desktop/accsetup.jsp', pageContext.request)}"/>
 <c:set var='betaLink'>
 	<fmt:message key='BetaNoteSupport'>
 		<fmt:param>
@@ -174,7 +172,7 @@ function accntChange(accnt) {
 }
 
 function OnCancel() {
-	window.location = "${zdf:addAuthToken('/desktop/console.jsp', devMode)}";
+	window.location = "${zdf:addAuthToken('/desktop/console.jsp', pageContext.request)}";
 }
 
 function OnDelete() {
@@ -360,7 +358,7 @@ function onEditLink(id, keep, makeInvisible) {
 											<c:when test="${accountFlavor eq ''}">
 											</c:when>
 											<c:when test="${not bean.noVerb && (bean.allOK || not (bean.add || bean.modify))}">
-												<jsp:forward page="${zdf:addAuthToken('/desktop/console.jsp', devMode)}">
+												<jsp:forward page="${zdf:addAuthToken('/desktop/console.jsp', pageContext.request)}">
 													<jsp:param name="accountName" value="${bean.accountName}"></jsp:param>
 													<jsp:param name="error" value="${bean.error}"></jsp:param>
 													<jsp:param name="verb" value="${bean.verb}"></jsp:param>
