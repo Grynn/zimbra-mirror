@@ -98,10 +98,18 @@ public class DbOfflineDirectory {
         }
     }
     
-    private static void validateNewLeafName(EntryType etype, NamedEntry parent, String name) throws ServiceException {
+    private static void validateNewLeafName(EntryType etype, NamedEntry parent, String name, int entryId, Connection conn)
+    throws ServiceException {
         //bug 52717; cannot rely on db to do case-insensitive check with utf8
         //have to read existing and compare in java; otherwise we create entries that cause directory sync to fail
-        List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(etype, parent);
+        String currentName = null;
+        if (entryId >= 0) {
+            currentName = getLeafName(etype, parent, entryId, conn);
+            if (currentName != null && currentName.equals(name)) {
+                return; //some external site is updating with same name; this is inefficient but otherwise ok
+            }
+        }
+        List<String> names = DbOfflineDirectory.listAllDirectoryLeaves(etype, parent, conn);
         for (String existing : names) {
             if (existing.equalsIgnoreCase(name)) {
                 if (etype == EntryType.IDENTITY)
@@ -114,6 +122,31 @@ public class DbOfflineDirectory {
         }
     }
 
+    private static String getLeafName(EntryType etype, NamedEntry parent, int entryId, Connection conn)
+    throws ServiceException {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement("SELECT entry_name FROM directory_leaf WHERE parent_id = ? AND "+
+                "entry_type = ? AND entry_id = ?");
+            stmt.setInt(1, getIdForParent(conn, parent));
+            stmt.setString(2, etype.toString());
+            stmt.setInt(3, entryId);
+            rs = stmt.executeQuery();
+            if (!rs.next()) {
+                return null;
+            } else {
+                return rs.getString(1);
+            }
+        } catch (SQLException e) {
+            throw ServiceException.FAILURE("listing all entries of type " + etype, e);
+        } finally {
+            OfflineDbPool.getInstance().closeResults(rs);
+            OfflineDbPool.getInstance().closeStatement(stmt);
+        }
+        
+    }
+
     public static void createDirectoryLeaf(EntryType etype, NamedEntry parent, String name, String id, Map<String,Object> attrs, boolean markChanged)
     throws ServiceException {
         Connection conn = null;
@@ -121,8 +154,8 @@ public class DbOfflineDirectory {
         int entryId;
 
         try {
-            validateNewLeafName(etype, parent, name);
             conn = OfflineDbPool.getInstance().getConnection();
+            validateNewLeafName(etype, parent, name, -1, conn);
 
             int parentId = getIdForParent(conn, parent);
 
@@ -300,11 +333,18 @@ public class DbOfflineDirectory {
 
     public static List<String> listAllDirectoryLeaves(EntryType etype, NamedEntry parent) throws ServiceException {
         Connection conn = null;
+        try {
+            conn = OfflineDbPool.getInstance().getConnection();
+            return listAllDirectoryLeaves(etype, parent, conn);
+        } finally {
+            OfflineDbPool.getInstance().quietClose(conn);
+        }
+    }
+
+    private static List<String> listAllDirectoryLeaves(EntryType etype, NamedEntry parent, Connection conn) throws ServiceException {
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
-            conn = OfflineDbPool.getInstance().getConnection();
-
             stmt = conn.prepareStatement("SELECT entry_name FROM directory_leaf WHERE parent_id = ? AND entry_type = ?");
             stmt.setInt(1, getIdForParent(conn, parent));
             stmt.setString(2, etype.toString());
@@ -318,7 +358,6 @@ public class DbOfflineDirectory {
         } finally {
             OfflineDbPool.getInstance().closeResults(rs);
             OfflineDbPool.getInstance().closeStatement(stmt);
-            OfflineDbPool.getInstance().quietClose(conn);
         }
     }
 
@@ -454,15 +493,15 @@ public class DbOfflineDirectory {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
-            if (newName != null) {
-                validateNewLeafName(etype, parent, newName);
-            }
             conn = OfflineDbPool.getInstance().getConnection();
 
             int entryId = getIdForLeaf(conn, etype, parent, lookupKey, lookupValue);
             if (entryId <= 0)
                 return;
 
+            if (newName != null) {
+                validateNewLeafName(etype, parent, newName, entryId, conn);
+            }
             modifyDirectoryEntry(conn, etype, entryId, attrs);
 
             if (newName != null) {
