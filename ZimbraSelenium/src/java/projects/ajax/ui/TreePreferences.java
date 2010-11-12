@@ -1,0 +1,97 @@
+/**
+ * 
+ */
+package projects.ajax.ui;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+
+import framework.ui.AbsApplication;
+import framework.ui.AbsTree;
+import framework.util.HarnessException;
+
+/**
+ * @author zimbra
+ *
+ */
+public class TreePreferences extends AbsTree {
+
+	public static class Locators {
+		public static String zGeneralTextID = "zti__main_Options__PREF_PAGE_GENERAL_textCell";
+		public static String zGeneralImageID = "zti__main_Options__PREF_PAGE_GENERAL_imageCell";
+		
+	}
+	
+	public enum TreeItem {
+		General,
+		Mail, MailComposing, MailSignatures, MailAccounts, MailFilters, MailTrustedAddresses,
+		AddressBook,
+		Calendar,
+		Sharing,
+		Notifications,
+		ImportExport,
+		Shortcuts,
+		Zimlets
+	}
+		
+	
+	public TreePreferences(AbsApplication application) {
+		super(application);
+		logger.info("new " + TreePreferences.class.getCanonicalName());
+	}
+	
+	public void zClickTreeItem(TreeItem item) throws HarnessException {
+		logger.info("zClickTreeItem(" + item +")");
+		
+		if ( !itemToLocator.containsKey(item) ) {
+			throw new HarnessException("locator not defined in itemToLocator for "+ item);
+		}
+		
+		if ( itemToLocator.get(item) == null ) {
+			throw new HarnessException("locator is null in itemToLocator for "+ item);
+		}
+
+		String locator = itemToLocator.get(item);
+		
+		if ( !sIsElementPresent(locator) ) {
+			throw new HarnessException("locator is not present "+ locator);
+		}
+		
+		zClick(locator);
+		
+	}
+	
+	private static final Map<TreeItem, String> itemToLocator = createItemToLocator();
+	private static Map<TreeItem, String> createItemToLocator() {
+		
+		Map<TreeItem, String> map = new HashMap<TreeItem, String>();
+		
+		map.put(TreeItem.General, "id=" + Locators.zGeneralTextID);
+		map.put(TreeItem.Mail, null);
+		map.put(TreeItem.MailComposing, null);
+		map.put(TreeItem.MailSignatures, null);
+		map.put(TreeItem.MailAccounts, null);
+		map.put(TreeItem.MailFilters, null);
+		map.put(TreeItem.MailTrustedAddresses, null);
+		map.put(TreeItem.AddressBook, null);
+		map.put(TreeItem.Calendar, null);
+		map.put(TreeItem.Sharing, null);
+		map.put(TreeItem.Notifications, null);
+		map.put(TreeItem.ImportExport, null);
+		map.put(TreeItem.Shortcuts, null);
+		map.put(TreeItem.Zimlets, null);
+		
+		return (Collections.unmodifiableMap(map));
+	}
+
+
+	/* (non-Javadoc)
+	 * @see framework.ui.AbsTree#myPageName()
+	 */
+	@Override
+	public String myPageName() {
+		return (this.getClass().getName());
+	}
+
+}
