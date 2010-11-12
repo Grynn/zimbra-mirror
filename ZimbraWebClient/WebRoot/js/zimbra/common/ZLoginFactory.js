@@ -252,7 +252,7 @@ ZLoginFactory.getLoginDialogHTML = function (params) {
 						"</div>",
 						"<table class='zLoginTable' width='100%' cellpadding=0 cellspacing=0>",
 							"<tr>",
-								"<td id='ZloginClientLevelContainer'>",
+								"<td id='ZLoginClientLevelContainer'>",
 									params.clientLevelNotice,
 								"</td>",
 							"</tr>",
