@@ -252,6 +252,15 @@ if [ -d ${zimbra_home} ]; then
   chmod 755 ${zimbra_home}/data
   chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/data
 
+  if [ -d ${zimbra_home}/extensions-network-extra ]; then
+    chmod 755 ${zimbra_home}/extensions-network-extra
+    chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/extensions-network-extra
+  fi
+
+  if [ -d ${zimbra_home}/extensions-extra ]; then
+    chmod 755 ${zimbra_home}/extensions-extra
+    chown  ${zimbra_user}:${zimbra_group} ${zimbra_home}/extensions-extra
+  fi
 
 fi
 
