@@ -6,6 +6,7 @@ package projects.ajax.ui;
 import framework.ui.AbsApplication;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
+import projects.ajax.ui.Addressbook.*;
 
 /**
  * @author Matt Rhoades
@@ -16,6 +17,7 @@ public class AppAjaxClient extends AbsApplication {
 	public PageLogin					zPageLogin = null;
 	public PageMain						zPageMain = null;
 	public PageMail						zPageMail = null;
+	public PageAddressbook              zPageAddressbook = null;
 	public PagePreferences				zPagePreferences = null;
 	
 	public TreePreferences				zTreePreferences = null;
@@ -45,6 +47,11 @@ public class AppAjaxClient extends AbsApplication {
 		zTreePreferences = new TreePreferences(this);
 		trees.put(zTreePreferences.myPageName(), zTreePreferences);
 		
+
+		//Addressbook page    
+		zPageAddressbook = new PageAddressbook(this);
+		pages.put(zPageAddressbook.myPageName(), zPageAddressbook);
+
 	}
 	
 	/* (non-Javadoc)
