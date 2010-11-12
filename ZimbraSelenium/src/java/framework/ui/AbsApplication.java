@@ -37,6 +37,7 @@ public abstract class AbsApplication {
 		logger.info("new " + AbsApplication.class.getCanonicalName());
 		
 		pages = new HashMap<String, AbsPage>();
+		trees = new HashMap<String, AbsTree>();
 
 	}
 	
