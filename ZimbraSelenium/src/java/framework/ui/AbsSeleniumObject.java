@@ -198,6 +198,15 @@ public abstract class AbsSeleniumObject {
 		return (visible);
 	}
 
+	/**
+	 * DefaultSelenium.isChecked()
+	 */
+	public boolean sIsChecked(String locator) {
+		boolean checked = ClientSessionFactory.session().selenium().isChecked(locator);
+		logger.info("isChecked(" + locator + ") = " + checked);
+		return (checked);
+	}
+
 
 	/**
 	 * DefaultSelenium.getText()

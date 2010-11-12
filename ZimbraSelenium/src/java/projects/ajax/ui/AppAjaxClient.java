@@ -16,7 +16,9 @@ public class AppAjaxClient extends AbsApplication {
 	public PageLogin					zPageLogin = null;
 	public PageMain						zPageMain = null;
 	public PageMail						zPageMail = null;
+	public PagePreferences				zPagePreferences = null;
 	
+	public TreePreferences				zTreePreferences = null;
 	
 	public AppAjaxClient() {
 		super();
@@ -35,7 +37,14 @@ public class AppAjaxClient extends AbsApplication {
 		// Mail page
 		zPageMail = new PageMail(this);
 		pages.put(zPageMail.myPageName(), zPageMail);
+		
+		// Preferences page
+		zPagePreferences = new PagePreferences(this);
+		pages.put(zPagePreferences.myPageName(), zPagePreferences);
 
+		zTreePreferences = new TreePreferences(this);
+		trees.put(zTreePreferences.myPageName(), zTreePreferences);
+		
 	}
 	
 	/* (non-Javadoc)

@@ -25,6 +25,7 @@ public abstract class AbsApplication {
 	
 	// A map of the pages in this app
 	protected Map<String, AbsPage>			pages = null;
+	protected Map<String, AbsTree>			trees = null;
 	
 	// A pointer to the currently logged in user
 	private ZimbraAccount authenticatedAccount = null;
