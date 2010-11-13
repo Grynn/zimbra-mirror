@@ -33,5 +33,5 @@ events {
 # 
 
 # Kerberos 5 keytab location
-env KRB5_KTNAME=${main.krb5keytab};
+krb5_keytab ${main.krb5keytab};
 
