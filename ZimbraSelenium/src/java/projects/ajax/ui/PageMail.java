@@ -184,11 +184,11 @@ public class PageMail extends AbsAjaxPage {
 		}
 		
 		// If the "folders" tree is visible, then mail is active
-		String locator = "xpath=//div[@id='zov__main_Mail']";
+		String locator = "//div[contains(@id,'__CHECK_MAIL')]";
 		
 		boolean loaded = this.sIsElementPresent(locator);
 		if ( !loaded )
-			return (loaded);
+			return (false);
 		
 		boolean active = this.zIsVisiblePerPosition(locator, 4, 74);
 		return (active);
@@ -220,7 +220,7 @@ public class PageMail extends AbsAjaxPage {
 		}
 		
 		// Click on Mail icon
-		sClick(PageMain.Locators.zAppbarMail);
+		zClick(PageMain.Locators.zAppbarMail);
 		
 		waitForActive();
 
