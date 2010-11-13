@@ -346,8 +346,16 @@ function(src, dontExecCommand, width, height) {
     if (dontExecCommand) {
         var doc = this._getIframeDoc();
 	    var img = doc.createElement("img");
-        img.src = src;
-		if (width) {
+
+        //avoid mixed content security warning with IE
+        if (src && src.indexOf("cid:") == 0) {
+            img.setAttribute("dfsrc", src);
+        }
+        else {
+            img.setAttribute("src", src);
+        }
+        
+        if (width) {
 			img.width = width;
 		}
 		else {
