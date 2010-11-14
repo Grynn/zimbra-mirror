@@ -12,12 +12,14 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.lang.reflect.Method;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
@@ -37,10 +39,16 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Option;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.log4j.Appender;
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.FileAppender;
+import org.apache.log4j.Layout;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PatternLayout;
 import org.apache.log4j.PropertyConfigurator;
+import org.testng.IInvokedMethod;
+import org.testng.IInvokedMethodListener;
 import org.testng.IReporter;
 import org.testng.ISuite;
 import org.testng.ITestContext;
@@ -388,6 +396,7 @@ public class ExecuteHarnessMain {
 		try {
 			ng.addListener(new TestStatusReporter(ZimbraSeleniumProperties.getAppType().toString(),baos,ps)); // TODO: This shouldn't throw Exception
 			ng.addListener(new SkippedTestListener(new File(this.testoutputfoldername)));
+			ng.addListener(new MethodListener(this.testoutputfoldername));
 			ng.addListener(listener = new ResultListener());
 			ng.setOutputDirectory(this.testoutputfoldername);
 		} catch (Exception e) {
@@ -565,6 +574,82 @@ public class ExecuteHarnessMain {
 			System.out.println("+++++++++++++++All test ran generateReport" + ZimbraSeleniumProperties.getStringProperty("locale"));
 				}
 	}
+	
+	public static class MethodListener implements IInvokedMethodListener {
+		private static Logger logger = LogManager.getLogger(MethodListener.class);
+		
+		private static Logger openqaLogger = LogManager.getLogger("org.openqa");
+		private static Logger frameworkLogger = LogManager.getLogger("framework");
+		private static Logger projectsLogger = LogManager.getLogger("projects");
+		
+		public Map<String, Appender> appenders = null;
+		private static Layout layout = null;
+
+		private String outputFolder = null;
+		
+		/**
+		 * A MethodListener that creates a log file for each test class
+		 * @param folder
+		 */
+		public MethodListener(String folder) {
+			layout = new PatternLayout("%-4r [%t] %-5p %c %x - %m%n");
+			appenders = new HashMap<String, Appender>();
+			outputFolder = (folder == null ? "logs" : folder);
+		}
+		
+		protected String getKey(Method method) {
+			return (method.getDeclaringClass().getCanonicalName());
+		}
+		
+		protected String getFilename(Method method) {
+			// String c = method.getDeclaringClass().getCanonicalName().replace('.', '/');
+			String c = method.getDeclaringClass().getCanonicalName();
+			String m = method.getName();
+			return (String.format("%s/debug/%s%s.txt", outputFolder, c, m));
+		}
+		
+		@Override
+		public void beforeInvocation(IInvokedMethod method, ITestResult result) {
+			if ( method.isTestMethod() ) {
+				
+				try {
+					String key = getKey(method.getTestMethod().getMethod());
+					if ( !appenders.containsKey(key) ) {
+						String filename = getFilename(method.getTestMethod().getMethod());
+						Appender a = new FileAppender(layout, filename, false);
+						appenders.put(key, a);
+						openqaLogger.addAppender(a);
+						frameworkLogger.addAppender(a);
+						projectsLogger.addAppender(a);
+					}
+				} catch (IOException e) {
+					logger.warn("Unable to add test class appender", e);
+				}
+
+			}
+		}
+		
+		@Override
+		public void afterInvocation(IInvokedMethod method, ITestResult result) {
+			if ( method.isTestMethod() ) {
+				Appender a = null;
+				String key = getKey(method.getTestMethod().getMethod());
+				if ( appenders.containsKey(key) ) {
+					a = appenders.get(key);
+					appenders.remove(key);
+				}
+				if ( a != null ) {
+					openqaLogger.removeAppender(a);
+					frameworkLogger.removeAppender(a);
+					projectsLogger.removeAppender(a);
+					a.close();
+					a = null;
+				}
+			}
+		}
+
+	}
+	
 	public static class ResultListener implements ITestListener {
 
 		private int testsTotal = 0;
