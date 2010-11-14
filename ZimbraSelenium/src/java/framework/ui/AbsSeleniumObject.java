@@ -45,6 +45,12 @@ public abstract class AbsSeleniumObject {
 	 */
 	public boolean zIsVisiblePerPosition(String locator, int leftLimit, int topLimit) {
 
+		// Check if the locator is present
+		if ( !sIsElementPresent(locator) ) {
+			logger.info("isVisiblePerPosition("+ locator +") element is not present");
+			return (false);
+		}
+		
 		// Find the current position
 		Number left = ClientSessionFactory.session().selenium().getElementPositionLeft(locator);
 		Number top = ClientSessionFactory.session().selenium().getElementPositionTop(locator);

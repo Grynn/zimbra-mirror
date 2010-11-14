@@ -782,10 +782,13 @@ public class ZimbraAccount {
     			}
     		}
 
-    		Element[] retVal = new Element[zimbraElements.size()];
-    		zimbraElements.toArray(retVal);
-    		return retVal;
-        }
+    		int size = zimbraElements.size();
+    		Element[] retVal = new Element[size];
+    		for (int i = 0; i < size; i++) {
+    			retVal[i] = zimbraElements.get(i);
+    		}
+    		return (retVal);
+    	}
         
         /**
          * Return the element from the last received SOAP response that matches the xpath

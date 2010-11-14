@@ -14,6 +14,7 @@ public class Buttons {
 	public static final Button B_MOVE = new Button("B_MOVE");
 	public static final Button B_PRINT = new Button("B_PRINT");
 	public static final Button B_TAG = new Button("B_TAG");
+	public static final Button B_SAVE = new Button("B_SAVE");
 	
 	public static final Button O_NEW_MESSAGE = new Button("O_NEW_MESSAGE");
 	public static final Button O_NEW_CONTACT = new Button("O_NEW_CONTACT");
@@ -30,6 +31,11 @@ public class Buttons {
 	public static final Button O_TAG_NEWTAG = new Button("O_TAG_NEWTAG");
 	public static final Button O_TAG_REMOVETAG = new Button("O_TAG_REMOVETAG");
 
+	// General dialog buttons
+	public static final Button B_YES = new Button("B_YES");
+	public static final Button B_NO = new Button("B_NO");
+	public static final Button B_CANCEL = new Button("B_CANCEL");
+
 	// MailPage buttons and pulldown options
 	public static final Button B_GETMAIL = new Button("B_GETMAIL");
 	public static final Button B_REPLY = new Button("B_REPLY");
@@ -45,7 +51,20 @@ public class Buttons {
 	public static final Button O_LISTVIEW_READINGPANERIGHT = new Button("O_LSITVIEW_READINGPANERIGHT");
 	public static final Button O_LISTVIEW_READINGPANEOFF = new Button("O_LSITVIEW_READINGPANEOFF");
 
+	// SearchPage buttons and pulldown options
+	public static final Button B_SEARCHTYPE = new Button("B_SEARCHTYPE");
+	public static final Button B_SEARCH = new Button("B_SEARCH");
+	public static final Button B_SEARCHSAVE = new Button("B_SEARCHSAVE");
+	public static final Button B_SEARCHADVANCED = new Button("B_SEARCHADVANCED");
 	
+	public static final Button O_SEARCHTYPE_ALL = new Button("O_SEARCHTYPE_ALL");
+	public static final Button O_SEARCHTYPE_EMAIL = new Button("O_SEARCHTYPE_EMAIL");
+	public static final Button O_SEARCHTYPE_CONTACTS = new Button("O_SEARCHTYPE_CONTACTS");
+	public static final Button O_SEARCHTYPE_GAL = new Button("O_SEARCHTYPE_GAL");
+	public static final Button O_SEARCHTYPE_APPOINTMENTS = new Button("O_SEARCHTYPE_APPOINTMENTS");
+	public static final Button O_SEARCHTYPE_TASKS = new Button("O_SEARCHTYPE_TASKS");
+	public static final Button O_SEARCHTYPE_FILES = new Button("O_SEARCHTYPE_FILES");
+	public static final Button O_SEARCHTYPE_INCLUDESHARED = new Button("O_SEARCHTYPE_INCLUDESHARED");
 
 	public static class Button {
 		

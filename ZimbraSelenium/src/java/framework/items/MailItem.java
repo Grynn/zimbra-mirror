@@ -317,4 +317,38 @@ public class MailItem extends ZimbraItem implements IItem {
 	}
 
 
+	/**
+	 * Generate a sample mime from this object
+	 * This String can be used in an <AddMsgRequest/>
+	 */
+	public String generateMimeString() {
+		StringBuilder sb = new StringBuilder();
+		
+		for (RecipientItem r : this.recipients) {
+			if ( r.type == RecipientItem.RecipientType.To ) {
+				sb.append("To: ").append(r.emailAddress).append('\n');
+			} else if ( r.type == RecipientItem.RecipientType.From) { 
+				sb.append("From: ").append(r.emailAddress).append('\n');
+			} else if ( r.type == RecipientItem.RecipientType.Cc) { 
+				sb.append("Cc: ").append(r.emailAddress).append('\n');
+			}
+		}
+		if ( this.subject != null ) {
+			sb.append("Subject: ").append(this.subject).append('\n');
+		}
+		
+		sb.append("MIME-Version: 1.0\n");
+		sb.append("Content-Type: text/plain; charset=utf-8\n");
+		sb.append("Content-Transfer-Encoding: 7bit\n");
+		
+		if ( this.bodyText == null ) {
+			sb.append("\n\n\n");
+		} else {
+			sb.append("\n\n");
+			sb.append(bodyText);
+			sb.append("\n\n\n");
+		}
+
+		return (sb.toString());
+	}
 }

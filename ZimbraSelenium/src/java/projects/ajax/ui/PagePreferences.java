@@ -8,6 +8,7 @@ import projects.ajax.ui.Buttons.Button;
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 
 /**
  * @author Matt Rhoades
@@ -17,6 +18,14 @@ public class PagePreferences extends AbsAjaxPage {
 
 	
 	public static class Locators {
+		
+		// Preferences Toolbar: Save, Cancel
+		public static final String zToolbarSaveID = "zb__PREF__SAVE_title";
+		public static final String zToolbarCancelID = "zb__PREF__CANCEL_title";
+
+		public static final String zSaveChangesYes = "id=DWT241_title";
+		public static final String zSaveChangesNo = "id=DWT242_title";
+		public static final String zSaveChangesCancel = "id=DWT243_title";
 		
 
 	}
@@ -96,6 +105,59 @@ public class PagePreferences extends AbsAjaxPage {
 	}
 
 	/**
+	 * Click "Cancel" to navigate away from preferences
+	 * @throws HarnessException 
+	 */
+	public void zNavigateAway(Button savechanges) throws HarnessException {
+		logger.info("zNavigateAway(" + savechanges +")");
+
+		// See also bug 53203
+
+		// Click Cancel
+		zToolbarPressButton(Buttons.B_CANCEL);
+
+		// Check if the "Would you like to save your changes?" appears
+		//
+		
+		// Wait for the dialog to appear
+		SleepUtil.sleep(5000);
+		
+		// Check for the dialog
+		if ( zIsVisiblePerPosition("id=DWT240", 420, 200) ) {
+			logger.debug("zNavigateAway(" + savechanges +") - dialog is showing");
+
+			String locator = null;
+			
+			// "Would you like to save your changes?" is displayed.  
+			if ( savechanges == Buttons.B_YES ) {
+				locator = Locators.zSaveChangesYes;
+			} else if ( savechanges == Buttons.B_NO ) {
+				locator = Locators.zSaveChangesNo;
+			} else if ( savechanges == Buttons.B_CANCEL ) {
+				locator = Locators.zSaveChangesCancel;
+			} else {
+				throw new HarnessException("zNavigateAway() not defined for button "+ savechanges);
+			}
+			
+			if ( locator == null ) {
+				throw new HarnessException("zNavigateAway() no locator for button "+ savechanges);
+			}
+			
+			if ( !sIsElementPresent(locator) ) {
+				throw new HarnessException("zNavigateAway() locator is not present "+ locator);
+			}
+			
+			zClick(locator);
+			
+		} else {
+			logger.debug("zNavigateAway(" + savechanges +") - dialog did not show");
+		}
+		
+		
+	}
+	
+
+	/**
 	 * Determine if a checkbox is checked or not
 	 * @param preference the Account preference to check
 	 * @return true if checked, false if not checked
@@ -149,14 +211,56 @@ public class PagePreferences extends AbsAjaxPage {
 
 	@Override
 	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
-		throw new HarnessException(myPageName() + " does not have a Toolbar");
+		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
+		
+		if ( button == null )
+			throw new HarnessException("Button cannot be null!");
+		
+				
+		// Default behavior variables
+		//
+		String locator = null;			// If set, this will be clicked
+		AbsSeleniumObject page = null;	// If set, this page will be returned
+		
+		// Based on the button specified, take the appropriate action(s)
+		//
+		
+		if ( button == Buttons.B_SAVE ) {
+			
+			locator = "id="+ Locators.zToolbarSaveID;
+			page = null;
+			
+		} else if ( button == Buttons.B_CANCEL ) {
+			
+			locator = "id="+ Locators.zToolbarCancelID;
+			page = null;
+						
+		} else {
+			throw new HarnessException("no logic defined for button "+ button);
+		}
+
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for button "+ button);
+		}
+		
+		// Default behavior, process the locator by clicking on it
+		//
+		
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+		
+		// Click it
+		this.zClick(locator);
+
+		return (page);
 	}
 
 	@Override
 	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		throw new HarnessException(myPageName() + " does not have a Toolbar");
 	}
-	
+
 	
 
 

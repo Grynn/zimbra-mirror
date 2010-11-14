@@ -14,7 +14,6 @@ import framework.items.MailItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
 import framework.util.HarnessException;
-import framework.util.SleepUtil;
 
 /**
  * @author Matt Rhoades
