@@ -288,7 +288,8 @@ public class TestStatusReporter extends TestListenerAdapter {
 
 	     appType=atype;
 		 output = new PrintWriter(new FileWriter(new File(path+ "/zimbraSelenium-failed.xml")));       
-		
+		 classInProgressPrintWriter= new PrintWriter(new File(path+ "\\" + inProgressDir + "\\class.html"));
+         
 		 this.baos=baos;
 		 this.ps = ps;
 	
@@ -428,22 +429,15 @@ public class TestStatusReporter extends TestListenerAdapter {
  
   @Override
   public void onStart(ITestContext testContext) {
-	    //TODO: save this file into a different directory   
 	    printToFile("","start");  
-	    try 
-        {
-	    	
-            classInProgressPrintWriter= new PrintWriter(new File(path+ "\\" + inProgressDir + "\\class.html"));
-            classInProgressPrintWriter.println("<html> <head><meta http-equiv='refresh' content='30'>");
-            classInProgressPrintWriter.println("<meta http-Equiv='Cache-Control' Content='no-cache'>");
-            classInProgressPrintWriter.println("<meta http-Equiv='Pragma' Content='no-cache'>");
-            classInProgressPrintWriter.println("<meta http-Equiv='Expires' Content='0'></head><body>");
+	    classInProgressPrintWriter.println("<html> <head><meta http-equiv='refresh' content='30'>");
+        classInProgressPrintWriter.println("<meta http-Equiv='Cache-Control' Content='no-cache'>");
+        classInProgressPrintWriter.println("<meta http-Equiv='Pragma' Content='no-cache'>");
+        classInProgressPrintWriter.println("<meta http-Equiv='Expires' Content='0'></head><body>");
 
-            classInProgressPrintWriter.println(new Date().toString() + "\n " + "Running ... " + testContext.getName());
-            classInProgressPrintWriter.flush();
-        }
-        catch (Exception e) { e.printStackTrace();}
-  }
+        classInProgressPrintWriter.println(new Date().toString() + "\n " + "Running ... " + testContext.getName());
+        classInProgressPrintWriter.flush();
+      }
 
 
   @Override
@@ -734,7 +728,6 @@ public class TestStatusReporter extends TestListenerAdapter {
       ClientSessionFactory.session().selenium().captureScreenshot(path + "\\" + failDir + "\\"+ fullTestName + ".png");
 	
       classInProgressPrintWriter.println( "<br>\t" + new Date().toString() + " FAILED" );
-     //TODO Add back in
       classInProgressPrintWriter.println( "<br>\t" + "<a href='../fail/" + fullTestName + ".png' target=newWindow><img src='../fail/" + fullTestName + ".png' width=100 height=100 border=0></a>" 
     	                                  + "  <a href='../fail/" + fullTestName + ".txt' target=newWindow> details </a>"  );
       
@@ -746,7 +739,7 @@ public class TestStatusReporter extends TestListenerAdapter {
   
   }
   
-  
+ 
   private String getErrorLine(Throwable thr, String methodName) {
 	  String result="";
 	  StackTraceElement[] seArray= thr.getStackTrace();
