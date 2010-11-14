@@ -605,7 +605,7 @@ public class ExecuteHarnessMain {
 			// String c = method.getDeclaringClass().getCanonicalName().replace('.', '/');
 			String c = method.getDeclaringClass().getCanonicalName();
 			String m = method.getName();
-			return (String.format("%s/debug/%s%s.txt", outputFolder, c, m));
+			return (String.format("%s/debug/%s.%s.txt", outputFolder, c, m));
 		}
 		
 		@Override
