@@ -135,6 +135,9 @@ Cos_List_XModelItem.prototype.getSuperValue = function(ins) {
 	var lst = eval("ins._defaultValues." + _ref);
 	var retval = [];
 	if(lst) {
+		if(!(lst instanceof Array))
+			lst = [lst];
+
 		var cnt = lst.length
 		for(var i=0;i<cnt;i++) {
 			retval.push(lst[i]);

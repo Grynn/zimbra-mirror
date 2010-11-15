@@ -52,7 +52,7 @@ ZaZimletSelect_XFormItem.prototype.getNormalizedInstanceValue = function () {
 	}
 	//make sure the returned value is an array
 	if(normalizedValue) {
-		if (typeof normalizedValue == "string") {
+		if (normalizedValue instanceof String) {
 			if (normalizedValue == "") 	
 				normalizedValue = [];
 			else
