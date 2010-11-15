@@ -275,7 +275,7 @@ if [ ! -d ${zimbra_home}/data/tmp/nginx ]; then
   mkdir -p ${zimbra_home}/data/tmp/nginx/fastcgi
 fi
 chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/data/tmp
-chmod 755 ${zimbra_home}/data/tmp
+chmod 1777 ${zimbra_home}/data/tmp
 chmod 755 ${zimbra_home}/data/tmp/nginx
 chmod 755 ${zimbra_home}/data/tmp/nginx/client
 chmod 755 ${zimbra_home}/data/tmp/nginx/proxy
