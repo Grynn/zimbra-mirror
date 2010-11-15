@@ -44,10 +44,12 @@ ZmErrorDialog = function(parent, msgs) {
 	DwtMessageDialog.call(this, {parent:parent, extraButtons:[reportButton, detailButton]});
 
 	this.registerCallback(ZmErrorDialog.REPORT_BUTTON, this._reportCallback, this);
-	this.registerCallback(ZmErrorDialog.DETAIL_BUTTON, this._showDetail, this);
+	this.registerCallback(ZmErrorDialog.DETAIL_BUTTON, this.showDetail, this);
 	
 	this._showDetailsMsg = msgs.showDetails;
 	this._hideDetailsMsg = msgs.hideDetails;
+
+	this._setAllowSelection();
 };
 
 ZmErrorDialog.prototype = new DwtMessageDialog;
@@ -136,8 +138,7 @@ function() {
 	var data = {
 		message: this._msgStr,
 		detail: this._detailStr,
-		showDetails: this._detailsVisible,
-		detailIsHtml: AjxStringUtil.stripTags(this._detailStr) != this._detailStr
+		showDetails: this._detailsVisible
 	};
 	var html = AjxTemplate.expand("zimbra.Widgets#ZmErrorDialogContent", data);
 	this.setSize(Dwt.CLEAR, this._detailsVisible ? "300" : Dwt.CLEAR);
@@ -317,10 +318,8 @@ function() {
 
 /**
  * Displays the detail text
- * 
- * @private
  */
-ZmErrorDialog.prototype._showDetail = 
+ZmErrorDialog.prototype.showDetail = 
 function() {
 	this._detailsVisible = !this._detailsVisible;
 	this._updateContent();
