@@ -522,7 +522,7 @@ fi
 
 if [ -L ${zimba_home}/rlfe ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/rlfe"
-  chown ${root_user}:${root_group} ${zimbra_home}/rlfe-* 2> /dev/null
+  chown -R ${root_user}:${root_group} ${zimbra_home}/rlfe-* 2> /dev/null
 fi
 
 if [ -d ${zimbra_home}/snmp/var ]; then
