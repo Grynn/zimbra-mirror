@@ -119,27 +119,17 @@ function(iconCell, selectCellId, name, iconDivId, iconName) {
 
 EmailToolTipSlideShow.prototype.showTooltipVeil =
 function() {
-	var veilId = "EmailTooltipSlideShow_veil"+Dwt.getNextId();
-
+	var veilId = "EmailTooltipSlideShow_veil";
+	this._toolTipVeil = document.getElementById(veilId);
 	if (this._toolTipVeil) {
-		this._toolTipVeil.style.display = "block";
+		var styleObj = this._toolTipVeil.style;
+		styleObj.display = "block";
+		this.isVeilShown = true;
 		return;
 	}
 	this._toolTipVeil = this.emailZimlet.getShell().getHtmlElement().appendChild(document.createElement('div'));
-	var styleObj = this._toolTipVeil.style;
-	styleObj.position = "absolute";
-	styleObj.id =veilId;
-	styleObj.display = "block";
-	styleObj.width = "100%";
-	styleObj.height = "100%";
-	styleObj.zIndex = "700";
-	styleObj.background = "black";
-	styleObj.opacity = 0.2;
-	styleObj.zoom = 1;
-	styleObj.filter = "progid:DXImageTransform.Microsoft.Alpha(opacity=20)";
-	styleObj.cursor = "pointer";
-	this.emailZimlet.seriesAnimation.addFadeIn(veilId);
-	this.emailZimlet.seriesAnimation.startAnimation();
+	this._toolTipVeil.id = veilId;
+	this._toolTipVeil.className = "EmailZimlet_veil";
 	this._toolTipVeil.onclick =  AjxCallback.simpleClosure(this.hideTooltipVeil, this);
 	this._autoHideVeilIfTooltipIsPoppedDownTimer = setInterval(AjxCallback.simpleClosure(this._hideVeilIfToolTipIsDown, this), 2000);
 	this.isVeilShown = true;

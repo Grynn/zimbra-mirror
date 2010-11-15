@@ -35,3 +35,18 @@
     height: 16px;
     overflow: hidden;
 }
+
+.EmailZimlet_veil {
+	position:absolute;
+	display:block;
+	width: 100%;
+	height: 100%;
+	z-index: 700;
+	background: black;
+	opacity: 0.2;
+	zoom:1;
+	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=20);
+	cursor: pointer;
+	top = 0px;
+	left = 0px;
+}
