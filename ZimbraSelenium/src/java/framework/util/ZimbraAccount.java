@@ -464,7 +464,8 @@ public class ZimbraAccount {
 	        	PartBase filename1 = new StringPart("filename1", f.getAbsolutePath());
 	        	
 	        	FilePart fp = new FilePart(f.getName(), f);
-	        	fp.setContentType(contentTypeMap.getContentType(f));
+	        	String contentType = contentTypeMap.getContentType(f);
+	        	fp.setContentType(contentType);
 	        	
 	        	Part[] parts = { filename1, fp };
 
@@ -479,9 +480,13 @@ public class ZimbraAccount {
 	        	{
 	        		logger.info(postHeaders[i]);
 	        	}
-	        	ByteArrayOutputStream baos = new ByteArrayOutputStream();
-	        	request.writeRequest(baos);
-	        	logger.info(baos.toString());
+	        	if ( contentType.contains("text") ) {
+		        	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		        	request.writeRequest(baos);
+		        	logger.info(baos.toString());
+	        	} else {
+	        		logger.info("binary data omitted from logs");
+	        	}
 	        	
 	        	Header[] responseHeaders = method.getResponseHeaders();
 	        	for (int i = 0; i < responseHeaders.length; i ++)
