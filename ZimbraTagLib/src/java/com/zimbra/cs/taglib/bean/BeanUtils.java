@@ -1137,6 +1137,14 @@ public class BeanUtils {
         mailbox.getMailbox().clearApptSummaryCache();
     }
 
+    public static void refreshPrefs(ZMailboxBean mailbox) throws JspTagException {
+        try {
+            mailbox.getMailbox().getPrefs(true);
+        } catch (ServiceException e) {
+            throw new JspTagException(e);
+        }
+    }
+
     public static boolean hasShareMountPoint(ZMailboxBean mailbox, ZMessageBean message) {
         ZShare share = message.getShare();
         if (share == null) return false;
