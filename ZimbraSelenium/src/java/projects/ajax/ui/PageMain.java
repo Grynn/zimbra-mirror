@@ -23,8 +23,8 @@ public class PageMain extends AbsAjaxPage {
 		public static final String zAppbarContact = "xpath=//div[@id='appbar']//a[@id='zb__App__Contacts']";
 		public static final String zAppbarCal = "xpath=//div[@id='appbar']//a[@id='zb__App__Calendar']";
 		public static final String zAppbarTasks = "xpath=//div[@id='appbar']//a[@id='zb__App__Tasks']";
-		public static final String zAppbarBriefcase = "xpath=//div[@id='zb__App__Briefcase']";
-		public static final String zAppbarPreferences = "xpath=//div[@id='zb__App__Options']";
+		public static final String zAppbarBriefcase = "css=td[id='zb__App__Briefcase_left_icon'] [class='ImgBriefcase']";
+		public static final String zAppbarPreferences = "xpath=//div[@id='appbar']//a[@id='zb__App__Options']";
 		
 		// For Social tab, see Zimlet classes
 		

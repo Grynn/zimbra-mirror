@@ -18,6 +18,7 @@ public class AppAjaxClient extends AbsApplication {
 	public PageMain						zPageMain = null;
 	public PageSearch					zPageSearch = null;
 	public PageMail						zPageMail = null;
+	public PageBriefcase                zPageBriefcase = null;
 	public PageAddressbook              zPageAddressbook = null;
 	public PagePreferences				zPagePreferences = null;
 	
@@ -43,6 +44,10 @@ public class AppAjaxClient extends AbsApplication {
 		// Mail page
 		zPageMail = new PageMail(this);
 		pages.put(zPageMail.myPageName(), zPageMail);
+		
+		// PageBriefcase page
+		zPageBriefcase = new PageBriefcase(this);
+		pages.put(zPageBriefcase.myPageName(), zPageBriefcase);
 		
 		// Preferences page
 		zPagePreferences = new PagePreferences(this);

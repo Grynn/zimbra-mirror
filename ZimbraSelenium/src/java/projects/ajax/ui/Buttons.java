@@ -22,6 +22,7 @@ public class Buttons {
 	public static final Button O_NEW_APPOINTMENT = new Button("O_NEW_APPOINTMENT");
 	public static final Button O_NEW_TASK = new Button("O_NEW_TASK");
 	public static final Button O_NEW_DOCUMENT = new Button("O_NEW_DOCUMENT");
+	public static final Button O_UPLOAD_FILE = new Button("O_UPLOAD_FILE");
 	public static final Button O_NEW_FOLDER = new Button("O_NEW_FOLDER");
 	public static final Button O_NEW_TAG = new Button("O_NEW_TAG");
 	public static final Button O_NEW_ADDRESSBOOK = new Button("O_NEW_ADDRESSBOOK");
