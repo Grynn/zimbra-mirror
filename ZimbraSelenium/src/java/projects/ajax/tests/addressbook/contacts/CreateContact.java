@@ -10,7 +10,7 @@ import framework.util.*;
 import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.Actions;
 import projects.ajax.ui.AppAjaxClient;
-import projects.ajax.ui.Buttons;
+
 import projects.ajax.ui.Addressbook.*;
 
 //TODO: add more in ContactItem.java
@@ -34,7 +34,7 @@ public class CreateContact extends AjaxCommonTest  {
 	
 	
 	@Test(	description = "Create a basic contact item",
-			groups = { "smoke" })
+			groups = { "sanity" })
 	public void CreateContact_01() throws HarnessException {				
 		createBasicContact(app);		
 	}

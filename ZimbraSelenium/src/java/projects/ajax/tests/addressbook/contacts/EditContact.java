@@ -8,7 +8,7 @@ import framework.util.SleepUtil;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.Buttons;
+
 import projects.ajax.ui.Addressbook.*;
 
 
@@ -29,7 +29,7 @@ public class EditContact extends AjaxCommonTest  {
 	}
 	
 	@Test(	description = "Edit a contact item",
-			groups = { "smoke" })
+			groups = { "sanity" })
 	public void EditContact_01() throws HarnessException {
 		
 		// Create a contact 

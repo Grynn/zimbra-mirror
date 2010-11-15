@@ -8,7 +8,7 @@ import framework.util.SleepUtil;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.Buttons;
+
 import projects.ajax.ui.Addressbook.*;
 
 public class DeleteContact extends AjaxCommonTest  {
@@ -28,7 +28,7 @@ public class DeleteContact extends AjaxCommonTest  {
 	}
 	
 	@Test(	description = "Delete a contact item",
-			groups = { "smoke" })
+			groups = { "sanity"})
 	public void DeleteContact_01() throws HarnessException {
 		
 		// Create a contact 
