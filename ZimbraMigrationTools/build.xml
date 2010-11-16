@@ -43,7 +43,7 @@
 
   <path id="library.lib.classpath">
     <pathelement location="../ZimbraCommon/jars/commons-codec-1.4.jar"/>
-    <pathelement location="../ZimbraCommon/jars/commons-httpclient-3.0.jar"/>
+    <pathelement location="../ZimbraCommon/jars/commons-httpclient-3.1.jar"/>
     <pathelement location="../ZimbraCommon/jars/commons-logging.jar"/>
     <pathelement location="../ZimbraCommon/jars/saaj.jar"/>
     <pathelement location="../ZimbraCommon/jars/log4j-1.2.16.jar"/>

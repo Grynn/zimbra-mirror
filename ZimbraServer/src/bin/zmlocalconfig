@@ -44,7 +44,7 @@ ${PATHSEP}${ZMROOT}/lib/jars/zimbrastore.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/zimbra-native.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-logging.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-cli-1.2.jar\
-${PATHSEP}${ZMROOT}/lib/jars/commons-httpclient-3.0.jar\
+${PATHSEP}${ZMROOT}/lib/jars/commons-httpclient-3.1.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/commons-codec-1.4.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/guava-r06.jar\
 ${PATHSEP}${ZMROOT}/lib/jars/dom4j-1.5.2.jar\
