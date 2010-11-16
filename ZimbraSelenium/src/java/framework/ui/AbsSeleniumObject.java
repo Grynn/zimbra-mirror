@@ -104,6 +104,23 @@ public abstract class AbsSeleniumObject {
 		ClientSessionFactory.session().selenium().mouseUp(locator);
 	}
 
+	/**
+	 * Execute select on a windowID
+	 * @param windowID
+	 * @throws HarnessException
+	 */
+	public void zSelectWindow(String windowID) throws HarnessException {
+		logger.info("zSelectWindow("+ windowID +")");
+
+        this.sSelectWindow(windowID);
+
+        this.sWindowFocus();   
+
+        this.sWindowMaximize();
+
+	}
+	
+	
 	//// ***
 	// Start: Selenium methods
 	//// ***
@@ -264,6 +281,31 @@ public abstract class AbsSeleniumObject {
 		ClientSessionFactory.session().selenium().selectFrame(locator);
 		logger.info("sSelectFrame(" + locator + ")");
 	}
+	
+
+	/**
+	 * DefaultSelenium.selectWindow()
+	 */
+	public void sSelectWindow(String windowID) {
+		ClientSessionFactory.session().selenium().selectWindow(windowID);
+		logger.info("sSelectWindow(" + windowID + ")");
+	}
+	
+	/**
+	 * DefaultSelenium.windowFocus()
+	 */
+	public void sWindowFocus() {
+		ClientSessionFactory.session().selenium().windowFocus();
+		logger.info("sWindowFocus()");
+	}
+	
+	/**
+	 * DefaultSelenium.wwindowMaximize()
+	 */
+	public void sWindowMaximize() {
+		ClientSessionFactory.session().selenium().windowMaximize();
+		logger.info("sWindowMaximize()");
+	}	
 	
 	//// ***
 	// End: Selenium methods
