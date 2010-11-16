@@ -154,26 +154,27 @@ function(imageName, styleStr, attrStr, wrapInTable, _disabled) {
                     "width:",overlay.w,";",
                     "height:",overlay.h,";"
                 ].join("");
-                var position = [
+                var location = [
                     "top:",mask.t,";",
                     "left:",mask.l,";"
                 ].join("");
                 if(typeof document.documentMode != 'undefined'){ //IE8 is the first one to define this. IE8 can lie when in compat mode, so we need to really know it's it.
                     clip = [
                         'clip:rect(',
-                        (-1*mask.t)-1,'px, ',
-                        overlay.w-1,'px, ',
-                        (mask.t*-1)+overlay.h-1,'px, ',
+                        (-1*mask.t)-1,'px,',
+                        overlay.w-1,'px,',
+                        (mask.t*-1)+overlay.h-1,'px,',
                         overlay.l,'px);'
                     ].join('');
                 }
+                var filter = 'filter:mask(color='+color+');';
                 html = [
-                    "<div style='display:inline-block;position:relative;overflow:hidden;",size,styleStr,"' ",attrStr,">",
-                        "<div style='overflow:hidden;position:relative;",size,"'>",
-                            "<img src='",mask.f,"' border=0 ",
-                                 "style='filter:mask(color=",color,");position:absolute;",position,clip,"'>",
+                    "<div class='IEImage' style='display:inline-block;position:relative;overflow:hidden;",size,styleStr,"' ",attrStr,">",
+                        "<div class='IEImageMask' style='overflow:hidden;position:relative;",size,"'>",
+                            "<img class=ImgFolderMask_red src='",mask.f,"' border=0 ",
+                                 "style='position:absolute;",location,clip,filter,"'>",
                         "</div>",
-                        "<div class='",overlayName,"' style='",size,";position:absolute;top:",overlay.t,";left:",overlay.l,"'></div>",
+                        "<div class='IEImageOverlay ",overlayName,"' style='",size,";position:absolute;top:",overlay.t,";left:",overlay.l,"'></div>",
                     "</div>"
                 ].join("");
             }
