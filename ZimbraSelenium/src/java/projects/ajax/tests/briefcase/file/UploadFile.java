@@ -34,13 +34,14 @@ public class UploadFile extends AjaxCommonTest {
 		// Upload file to server through SOAP
 		ZimbraAccount account = app.getActiveAccount();
 		String attachmentId = account.uploadFile(filePath);
+		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
 		// Save uploaded file to briefcase through SOAP
 		account.soapSend(
 
 		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" +
 
-		"<doc l='16'>" +
+		"<doc l='" + briefcaseFolderId + "'>" +
 
 		"<upload id='" + attachmentId + "'/>" +
 
@@ -79,19 +80,18 @@ public class UploadFile extends AjaxCommonTest {
 		// Upload file to server through SOAP
 		ZimbraAccount account = app.getActiveAccount();
 		String attachmentId = account.uploadFile(filePath);
+		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
 		// Save uploaded file to briefcase through SOAP
 		account.soapSend(
 
-				"<SaveDocumentRequest xmlns='urn:zimbraMail'>" +
+		"<SaveDocumentRequest xmlns='urn:zimbraMail'>" +
 
-				"<doc l='16'>" +
+		"<doc l='" + briefcaseFolderId + "<upload id='" + attachmentId + "'/>" +
 
-				"<upload id='" + attachmentId + "'/>" +
+		"</doc>" +
 
-				"</doc>" +
-
-				"</SaveDocumentRequest>");
+		"</SaveDocumentRequest>");
 
 		// Select Briefcase tab
 		SleepUtil.sleepSmall();

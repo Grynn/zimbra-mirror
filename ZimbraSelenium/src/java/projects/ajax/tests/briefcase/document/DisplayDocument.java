@@ -1,7 +1,6 @@
 package projects.ajax.tests.briefcase.document;
 
 import org.testng.annotations.Test;
-
 import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.PageBriefcase.Locators;
 import framework.core.ClientSessionFactory;
@@ -32,12 +31,15 @@ public class DisplayDocument extends AjaxCommonTest {
 		DocumentItem document = new DocumentItem();
 
 		ZimbraAccount account = app.getActiveAccount();
+		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
 						+ document.getDocName()
-						+ "' l='16' ct='application/x-zimbra-doc'>"
+						+ "' l='"
+						+ briefcaseFolderId
+						+ "' ct='application/x-zimbra-doc'>"
 						+ "<content>&lt;html>&lt;body>"
 						+ document.getDocText()
 						+ "&lt;/body>&lt;/html></content>"
