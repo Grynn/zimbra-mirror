@@ -224,7 +224,7 @@ if [[ $PLAT == "UBUNTU"*"64" || $PLAT == "DEBIAN"*"64" ]]; then
 	NONMACLIB="libpcre.so libexpat.so libpopt.so libperl.so"
 fi
 
-if [ x$RELEASE = "xmain" ]; then
+if [[ x$RELEASE == "xGNR"* || x$RELEASE = "xHELIX" || x$RELEASE = "xmain" ]]; then
 	LIBREQ="libncurses.$LIBEXT libz.$LIBEXT libbz2.$LIBEXT libreadline.$LIBEXT"
 	HEADERREQ="ncurses.h zlib.h"
 else
