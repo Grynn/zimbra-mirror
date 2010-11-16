@@ -106,16 +106,11 @@ public class UploadFile extends AjaxCommonTest {
 		String fileName = arr[arr.length - 1];
 
 		String name = "";
-		if (ClientSessionFactory.session().selenium().isElementPresent(
-				"css=[id='zl__BDLV__rows']")
-				&& ClientSessionFactory.session().selenium().isVisible(
-						"css=[id='zl__BDLV__rows']")) {
-			name = ClientSessionFactory
-					.session()
-					.selenium()
-					.getText(
-							"css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
-									+ fileName + ")");
+		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
+				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
+			name = app.zPageBriefcase
+					.sGetText("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
+							+ fileName + ")");
 		}
 
 		ZAssert.assertEquals(name, fileName, "Verify file name through GUI");

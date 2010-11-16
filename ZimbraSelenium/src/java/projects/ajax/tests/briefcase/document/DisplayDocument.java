@@ -58,14 +58,11 @@ public class DisplayDocument extends AjaxCommonTest {
 		SleepUtil.sleepLong();
 
 		String name = "";
-		if (ClientSessionFactory.session().selenium().isElementPresent(
+		if (app.zPageBriefcase.sIsElementPresent(
 				"css=[id='zl__BDLV__rows']")
-				&& ClientSessionFactory.session().selenium().isVisible(
+				&& app.zPageBriefcase.sIsVisible(
 						"css=[id='zl__BDLV__rows']")) {
-			name = ClientSessionFactory
-					.session()
-					.selenium()
-					.getText(
+			name = app.zPageBriefcase.sGetText(
 							"css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
 									+ document.getDocName() + ")");
 		}
