@@ -441,7 +441,7 @@ ZaAuthConfigXWizard.myXFormModifier = function(xFormObject) {
 								visibilityChecks:[[XForm.checkInstanceValue,ZaDomain.A_AuthTestResultCode,ZaDomain.Check_OK]],
 								visibilityChangeEventSources:[ZaDomain.A_AuthTestResultCode]	
 							},
-							{type:_GROUP_, isTabGroup:false, deferred:false, 
+							{type:_GROUP_, isTabGroup:false, deferred:false, colSpan:2, 
 								visibilityChangeEventSources:[ZaDomain.A_AuthTestResultCode],
 								visibilityChecks:[
 									function () {

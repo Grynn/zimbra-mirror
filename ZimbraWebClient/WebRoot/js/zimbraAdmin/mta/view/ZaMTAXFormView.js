@@ -535,32 +535,32 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							label:ZaMsg.PQV_Summary,
 							items: [						
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width:"100%", label:ZaMsg.PQV_GroupRDomain, items: [
-								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1, width: "100%", label:ZaMsg.PQV_GroupOriginIP,items: [
-								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"96%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1, width: "100%", label:ZaMsg.PQV_GroupSenderDomain,items: [
-								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},	
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width: "100%", label:ZaMsg.PQV_GroupReceiverAddress,items: [
-								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width: "100%", label:ZaMsg.PQV_GroupSenderAddress,items: [
-								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1, width: "100%", label:ZaMsg.PQV_GroupError,items: [
-								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_error, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_error, type:_DWT_LIST_, height:"150", width:"96%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							}						
@@ -589,7 +589,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								    }]
 								 }
 							]},			
-						    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource",
+						    {ref:ZaMTA.A_DeferredQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"99%", cssClass: "DLSource",
 						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList}								
 						]}		
 					]
@@ -616,27 +616,27 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						{type:_SPACER_, height:"1"},		
 						{type:_ZAALLSCREEN_GROUPER_, numCols:5, width: "100%", label:ZaMsg.PQV_Summary, colSizes:["20%","20%","20%","20%","20%"], items:[
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width:"100%", label:ZaMsg.PQV_GroupRDomain, items: [
-								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1, width: "100%", label:ZaMsg.PQV_GroupOriginIP,items: [
-								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1, width: "100%", label:ZaMsg.PQV_GroupSenderDomain,items: [
-								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},	
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width: "100%", label:ZaMsg.PQV_GroupReceiverAddress,items: [
-								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width: "100%", label:ZaMsg.PQV_GroupSenderAddress,items: [
-								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							}						
@@ -665,13 +665,13 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								    }]
 								}														
 							]},										
-						    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
+						    {ref:ZaMTA.A_IncomingQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"99%", cssClass: "DLSource", 
 						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList}								
 								]
 							}		
 					]
 				},
-				{type:_ZATABCASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",
+				{type:_ZATABCASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : "XFormCase"), width:"100%",
 					caseKey:ZaMTAXFormView._tab3, 
 					items:[	
 						{type:_SPACER_, height:"15"},
@@ -694,26 +694,26 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						{type:_SPACER_, height:"1"},							
 						{type:_ZAALLSCREEN_GROUPER_, numCols:5, width: "100%", label:ZaMsg.PQV_Summary, colSizes:["20%","20%","20%","20%","20%"], items:[
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width:"100%", label:ZaMsg.PQV_GroupRDomain, items: [
-							    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+							    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 							]},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1, width: "100%", label:ZaMsg.PQV_GroupOriginIP,items: [
-								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1, width: "100%", label:ZaMsg.PQV_GroupSenderDomain,items: [
-								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},	
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width: "100%", label:ZaMsg.PQV_GroupReceiverAddress,items: [
-								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width: "100%", label:ZaMsg.PQV_GroupSenderAddress,items: [
-								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							}						
@@ -742,12 +742,12 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 								    }
 								 ]}
 							]},									
-							{ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
+							{ref:ZaMTA.A_ActiveQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"99%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList}								
 						]}		
 					]
 				},
-				{type:_ZATABCASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",
+				{type:_ZATABCASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : "XFormCase"), width:"100%",
 					caseKey:ZaMTAXFormView._tab4, 
 					items:[	
 						{type:_SPACER_, height:"15"},
@@ -770,27 +770,27 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						{type:_SPACER_, height:"1"},							
 						{type:_ZAALLSCREEN_GROUPER_, numCols:5, width: "100%", label:ZaMsg.PQV_Summary, colSizes:["20%","20%","20%","20%","20%"], items:[
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width:"100%", label:ZaMsg.PQV_GroupRDomain, items: [
-								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1, width: "100%", label:ZaMsg.PQV_GroupOriginIP,items: [
-								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1, width: "100%", label:ZaMsg.PQV_GroupSenderDomain,items: [
-								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},	
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width: "100%", label:ZaMsg.PQV_GroupReceiverAddress,items: [
-								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width: "100%", label:ZaMsg.PQV_GroupSenderAddress,items: [
-								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							}						
@@ -819,14 +819,14 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							    	}
 							    ]}
 							]},								
-						    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
+						    {ref:ZaMTA.A_HoldQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"99%", cssClass: "DLSource", 
 						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList
 						   	}								
 						]}		
 					]
 				},											
 					
-				{type:_ZATABCASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : ""), width:"100%",
+				{type:_ZATABCASE_, numCols:1, cssClass:(AjxEnv.isIE ? "IEcontainer" : "XFormCase"), width:"100%",
 					caseKey:ZaMTAXFormView._tab5, 
 					items:[	
 						{type:_SPACER_, height:"15"},
@@ -850,27 +850,27 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 						{type:_SPACER_, height:"1"},							
 						{type:_ZAALLSCREEN_GROUPER_, numCols:5, width: "100%", label:ZaMsg.PQV_Summary, colSizes:["20%","20%","20%","20%","20%"], items:[
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width:"100%", label:ZaMsg.PQV_GroupRDomain, items: [
-								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_rdomain, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu, preserveSelection:true, multiselect:true,onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1, width: "100%", label:ZaMsg.PQV_GroupOriginIP,items: [
-								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_origip, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,preserveSelection:true, multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1, width: "100%", label:ZaMsg.PQV_GroupSenderDomain,items: [
-								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_sdomain, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},	
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width: "100%", label:ZaMsg.PQV_GroupReceiverAddress,items: [
-								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_raddress, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							},		
 							{type:_ZASMALL_CENTER_GROUPER_, numCols:1,width: "100%", label:ZaMsg.PQV_GroupSenderAddress,items: [
-								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"100%", cssClass: "DLSource", 
+								    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_saddress, type:_DWT_LIST_, height:"150", width:"97%", cssClass: "DLSource", 
 							   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, onSelection:ZaMTAXFormView.filterListSelectionListener, widgetClass:ZaQSummaryListView, headerList:headerList}								
 								]
 							}						
@@ -899,7 +899,7 @@ ZaMTAXFormView.myXFormModifier = function(xFormObject) {
 							    }]
 							 }					
 						]},									
-					    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"100%", cssClass: "DLSource", 
+					    {ref:ZaMTA.A_CorruptQ+"/"+ZaMTA.A_messages, onSelection:ZaMTAXFormView.msgListSelectionListener, type:_DWT_LIST_, height:"200", width:"99%", cssClass: "DLSource", 
 						   		forceUpdate: false,createPopupMenu:ZaMTAXFormView.createPopupMenu,multiselect:true, widgetClass:ZaQMessagesListView, headerList:msgHeaderList}								
 							]
 						}		

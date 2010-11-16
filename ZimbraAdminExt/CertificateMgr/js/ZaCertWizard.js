@@ -637,7 +637,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 	var case_select_server = {
 			type:_CASE_, numCols:2, colSizes:["100px","*"],
             tabGroupKey:ZaCertWizard.STEP_SELECT_SERVER, caseKey:ZaCertWizard.STEP_SELECT_SERVER,
-			align:_LEFT_, valign:_TOP_, cssStyle:"padding-left:50px;"
+			align:_LEFT_, valign:_TOP_, width:"80%",  cssStyle:"padding-left:50px;"
 		};
 	
 	var case_select_server_items = [
@@ -662,7 +662,7 @@ ZaCertWizard.myXFormModifier = function(xFormObject) {
 		
 	var case_user_options = {type:_CASE_, numCols:2, colSizes:["25px","*"], 
             tabGroupKey:ZaCertWizard.STEP_USER_OPTION, caseKey:ZaCertWizard.STEP_USER_OPTION,
-			align:_LEFT_, valign:_TOP_, cssStyle:"padding-left:50px;"};
+			align:_LEFT_, valign:_TOP_, width:"80%", cssStyle:"padding-left:50px;"};
 			
 	var case_user_options_items = [
 				{	type: _GROUP_, numCols:2, colSpan: "*", colSizes:["75px","*"], items: [
