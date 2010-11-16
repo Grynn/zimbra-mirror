@@ -25,7 +25,7 @@ public class DisplayDocument extends AjaxCommonTest {
 
 	}
 
-	@Test(description = "Create document through SOAP - verify through GUI", groups = { "sanity" })
+	@Test(description = "Create document through SOAP - verify through GUI", groups = { "smoke" })
 	public void DisplayDocument_01() throws HarnessException {
 
 		// Create document item
@@ -34,6 +34,16 @@ public class DisplayDocument extends AjaxCommonTest {
 		ZimbraAccount account = app.getActiveAccount();
 
 		document.createUsingSOAP(account);
+		account
+				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
+						+ "<doc name='"
+						+ document.getDocName()
+						+ "' l='16' ct='application/x-zimbra-doc'>"
+						+ "<content>&lt;html>&lt;body>"
+						+ document.getDocText()
+						+ "&lt;/body>&lt;/html></content>"
+						+ "</doc>"
+						+ "</SaveDocumentRequest>");
 
 		// Select Briefcase tab
 		SleepUtil.sleepSmall();
@@ -45,7 +55,7 @@ public class DisplayDocument extends AjaxCommonTest {
 
 		// Verify document is created
 		SleepUtil.sleepLong();
-		
+
 		String name = "";
 		if (ClientSessionFactory.session().selenium().isElementPresent(
 				"css=[id='zl__BDLV__rows']")
