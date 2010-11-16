@@ -45,7 +45,7 @@ public class CreateDocument extends AjaxCommonTest {
 		try {
 			String newPageTitle = "Zimbra Docs";
 			documentBriefcaseNew.zSelectWindow(newPageTitle);
-			
+
 			// ClientSessionFactory.session().selenium().waitForCondition("selenium.browserbot.getUserWindow()","10000");
 			// ClientSessionFactory.session().selenium().getEval("selenium.browserbot.getCurrentWindow()");
 			// ClientSessionFactory.session().selenium().getEval("selenium.browserbot.getUserWindow()");
@@ -64,17 +64,25 @@ public class CreateDocument extends AjaxCommonTest {
 			// Save and close
 			documentBriefcaseNew.submit();
 		} finally {
-			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");					
+			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
 		}
 		ZimbraAccount account = app.getActiveAccount();
 
 		// Verify document name through SOAP
-		document.importFromSOAP(account, document.getDocName());
-		String name = account.soapSelectValue("//mail:doc", "name");
+		app.getActiveAccount().soapSend(
 
-		ZAssert.assertEquals(name, document.getDocName(),
-				"Verify document name through SOAP");
+		"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
+
+		"<query>" + document.getDocName() + "</query>" +
+
+		"</SearchRequest>");
+
+		String name = app.getActiveAccount().soapSelectValue("//mail:doc",
+				"name");
+
+		ZAssert.assertEquals(document.getDocName(), name,
+				" Verify document name through SOAP");	
 		/*
 		*/
-	}	
+	}
 }

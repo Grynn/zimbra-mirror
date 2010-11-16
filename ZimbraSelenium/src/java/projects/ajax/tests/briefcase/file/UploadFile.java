@@ -64,8 +64,16 @@ public class UploadFile extends AjaxCommonTest {
 		String fileName = arr[arr.length - 1];
 
 		// import from soap
-		document.importFromSOAP(account, fileName);
-		String name = account.soapSelectValue("//mail:doc", "name");
+		app.getActiveAccount().soapSend(
+
+				"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
+
+				"<query>" + fileName + "</query>" +
+
+				"</SearchRequest>");
+
+		String name = app.getActiveAccount().soapSelectValue("//mail:doc",
+						"name");
 
 		ZAssert.assertEquals(name, fileName, "Verify file name through SOAP");
 	}

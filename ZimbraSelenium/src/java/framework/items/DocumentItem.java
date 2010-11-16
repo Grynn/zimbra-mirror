@@ -192,11 +192,7 @@ public class DocumentItem extends ZimbraItem implements IItem {
 						"Element does not contain doc element");
 
 			// Set the ID
-			super.id = doc.getAttribute("id", null);
-
-			String name = doc.getAttribute("name");
-			if (name != null)
-				docName = name;
+			super.id = doc.getAttribute("id", null);		
 		} catch (Exception e) {
 			throw new HarnessException("Could not parse SaveDocumentResponse: "
 					+ response.prettyPrint(), e);
