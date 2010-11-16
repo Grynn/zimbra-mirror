@@ -468,70 +468,8 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
                ]
         },
         {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountNameGrouper, id:"account_wiz_name_group",numCols:2,
-			items:[
-			{ref:ZaAccount.A_name, type:_EMAILADDR_, msgName:ZaMsg.NAD_AccountName,label:ZaMsg.NAD_AccountName,
-				labelLocation:_LEFT_,forceUpdate:true,
-                bmolsnr: true,
-                onChange: ZaAccount.setDomainChanged,visibilityChecks:[],enableDisableChecks:[]
-			},
-			{ref:ZaAccount.A_firstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_FirstName,label:ZaMsg.NAD_FirstName, 
-				labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
-				elementChanged: function(elementValue,instanceValue, event) {
-					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccount.generateDisplayName.call(this, this.getInstance(), elementValue, this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials] );
-					}
-					this.getForm().itemChanged(this, elementValue, event);
-				}
-			},
-			{ref:ZaAccount.A_zimbraPhoneticFirstName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticFirstName,label:ZaMsg.NAD_zimbraPhoneticFirstName,
-                               labelLocation:_LEFT_, cssClass:"admin_xform_name_input",width:150, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]
-                        },
-			{ref:ZaAccount.A_initials, type:_TEXTFIELD_, msgName:ZaMsg.NAD_Initials,label:ZaMsg.NAD_Initials, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:50,
-				elementChanged: function(elementValue,instanceValue, event) {
-					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],elementValue);
-					}
-					this.getForm().itemChanged(this, elementValue, event);
-				}
-			},
-			{ref:ZaAccount.A_lastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_LastName,label:ZaMsg.NAD_LastName, labelLocation:_LEFT_, cssClass:"admin_xform_name_input", width:150,
-				elementChanged: function(elementValue,instanceValue, event) {
-					if(this.getInstance()[ZaAccount.A2_autodisplayname]=="TRUE") {
-						ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], elementValue ,this.getInstance().attrs[ZaAccount.A_initials]);
-					}
-					this.getForm().itemChanged(this, elementValue, event);
-				}
-			},
-			{ref:ZaAccount.A_zimbraPhoneticLastName, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticLastName,label:ZaMsg.NAD_zimbraPhoneticLastName,
-                         	labelLocation:_LEFT_, cssClass:"admin_xform_name_input",width:150, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]
-                        },
-			{type:_GROUP_, numCols:3, nowrap:true, width:200, msgName:ZaMsg.NAD_DisplayName,label:ZaMsg.NAD_DisplayName, 
-				labelLocation:_LEFT_, visibilityChecks:[[ZaItem.hasReadPermission,ZaAccount.A_displayname]],
-				items: [
-					{ref:ZaAccount.A_displayname, type:_TEXTFIELD_, label:null,	cssClass:"admin_xform_name_input", width:150, 
-						enableDisableChecks:[ZaNewAccountXWizard.isAutoDisplayname,ZaItem.hasWritePermission],
-						enableDisableChangeEventSources:[ZaAccount.A2_autodisplayname],bmolsnr:true,
-						visibilityChecks:[]
-					},
-					{ref:ZaAccount.A2_autodisplayname, type:_CHECKBOX_, msgName:ZaMsg.NAD_Auto,label:ZaMsg.NAD_Auto,labelLocation:_RIGHT_,trueValue:"TRUE", falseValue:"FALSE",
-						elementChanged: function(elementValue,instanceValue, event) {
-							if(elementValue=="TRUE") {
-								ZaAccount.generateDisplayName.call(this, this.getInstance(), this.getInstance().attrs[ZaAccount.A_firstName], this.getInstance().attrs[ZaAccount.A_lastName],this.getInstance().attrs[ZaAccount.A_initials]);	
-							}
-							this.getForm().itemChanged(this, elementValue, event);
-						},
-						visibilityChecks:[],
-						enableDisableChecks:[[ZaItem.hasWritePermission,ZaAccount.A_displayname]]
-					}
-				]
-			},/*
-			{ref:ZaAccount.A_zimbraMailCanonicalAddress, type:_TEXTFIELD_,width:250,
-				msgName:ZaMsg.NAD_CanonicalFrom,label:ZaMsg.NAD_CanonicalFrom, labelLocation:_LEFT_, align:_LEFT_
-			},  */
-			{ref:ZaAccount.A_zimbraHideInGal, type:_CHECKBOX_,
-			  msgName:ZaMsg.LBL_zimbraHideInGal,label:ZaMsg.LBL_zimbraHideInGal, trueValue:"TRUE", falseValue:"FALSE"
-			}
-		]}
+			items:ZaAccountXFormView.getAccountNameInfoItem() 
+		}
 	];
 	if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry, 
 		[ZaAccount.A_accountStatus, ZaAccount.A_COSId, ZaAccount.A_zimbraIsAdminAccount,ZaAccount.A_mailHost],[])) {
@@ -706,9 +644,9 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								]
 							},
 							{type:_ZAWIZGROUP_, 
-								items:[					
-									{ref:ZaAccount.A_company, type:_TEXTFIELD_, msgName:ZaMsg.NAD_company,label:ZaMsg.NAD_company, labelLocation:_LEFT_, width:250},
-									{ref:ZaAccount.A_zimbraPhoneticCompany, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticCompany, label:ZaMsg.NAD_zimbraPhoneticCompany, labelLocation:_LEFT_, width:250, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]}
+								items:[	
+									{ref:ZaAccount.A_zimbraPhoneticCompany, type:_TEXTFIELD_, msgName:ZaMsg.NAD_zimbraPhoneticCompany, label:ZaMsg.NAD_zimbraPhoneticCompany, labelLocation:_LEFT_, width:250, visibilityChecks:[[ZaZimbraAdmin.isLanguage, "ja"]]},				
+									{ref:ZaAccount.A_company, type:_TEXTFIELD_, msgName:ZaMsg.NAD_company,label:ZaMsg.NAD_company, labelLocation:_LEFT_, width:250}
 									/*,
 									{ref:ZaAccount.A_orgUnit, type:_TEXTFIELD_, msgName:ZaMsg.NAD_orgUnit,label:ZaMsg.NAD_orgUnit, labelLocation:_LEFT_, width:250},														
 									{ref:ZaAccount.A_office, type:_TEXTFIELD_, msgName:ZaMsg.NAD_office,label:ZaMsg.NAD_office, labelLocation:_LEFT_, width:250}    */
