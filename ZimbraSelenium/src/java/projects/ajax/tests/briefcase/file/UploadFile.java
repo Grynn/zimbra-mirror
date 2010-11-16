@@ -81,7 +81,17 @@ public class UploadFile extends AjaxCommonTest {
 		String attachmentId = account.uploadFile(filePath);
 
 		// Save uploaded file to briefcase through SOAP
-		document.createUsingSOAP(account, attachmentId);
+		account.soapSend(
+
+				"<SaveDocumentRequest xmlns='urn:zimbraMail'>" +
+
+				"<doc l='16'>" +
+
+				"<upload id='" + attachmentId + "'/>" +
+
+				"</doc>" +
+
+				"</SaveDocumentRequest>");
 
 		// Select Briefcase tab
 		SleepUtil.sleepSmall();

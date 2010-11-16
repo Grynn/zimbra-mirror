@@ -64,8 +64,7 @@ public class CreateDocument extends AjaxCommonTest {
 			// Save and close
 			documentBriefcaseNew.submit();
 		} finally {
-			ClientSessionFactory.session().selenium().selectWindow(
-					"Zimbra: Briefcase");
+			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");					
 		}
 		ZimbraAccount account = app.getActiveAccount();
 
