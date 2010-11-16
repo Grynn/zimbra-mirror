@@ -431,19 +431,11 @@ public class SkinResources
         File skinDir = new File(skinDirname);
         File manifestFile = new File(skinDir, SKIN_MANIFEST);
 
-        String appContextPath = null;
-        try {
-            Context initCtx = new InitialContext();
-            Context envCtx = (Context) initCtx.lookup("java:comp/env");
-            appContextPath = (String) envCtx.lookup("mailUrl");
-        }
-        catch (NamingException ne) {
-            // ignore
-        }
+        String appContextPath = req.getContextPath();
         if (appContextPath == null) {
+            ZimbraLog.webclient.debug("!!!Did not find context path in request object!");
             appContextPath = "/zimbra";
         }
-
 		// domain overrides
 		Map<String,String> substOverrides = new HashMap<String,String>();
 	    substOverrides.put(Manifest.S_APP_CONTEXT_PATH, appContextPath);
