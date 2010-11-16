@@ -33,7 +33,6 @@ public class DisplayDocument extends AjaxCommonTest {
 
 		ZimbraAccount account = app.getActiveAccount();
 
-		document.createUsingSOAP(account);
 		account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
 						+ "<doc name='"
