@@ -323,21 +323,16 @@ function() {
 * @private
 **/
 ZaController.prototype._showLoginDialog =
-function(bReloginMode) {
+function() {
 	ZaZimbraAdmin._killSplash();
 	this._authenticating = true;
-	this._loginDialog.setVisible(true, false,bReloginMode);
+	this._loginDialog.setVisible(true, false);
 	/*if(!AjxEnv.isFirefox1up && !AjxEnv.isFirefox3up && !AjxEnv.isFirefox2_0up && !AjxEnv.isNav7 && !AjxEnv.isIE6up && !AjxEnv.isIE7up)
 		this._loginDialog.setError(AjxMessageFormat.format(ZaMsg.ERROR_BROWSER_UNSUPORTED, [navigator.userAgent]));
 	*/	
 	try {
-		if(bReloginMode && ZLoginFactory.get(ZLoginFactory.USER_ID) && ZLoginFactory.get(ZLoginFactory.USER_ID).value=="")
-			bReloginMode = false; //lost login name, enable the user name field
-			
-		if(!bReloginMode) {
-			var uname = "";
-			this._loginDialog.setFocus(uname);
-		} 
+		var uname = "";
+		this._loginDialog.setFocus(uname);
 	} catch (ex) {
 		// something is out of whack... just make the user relogin
 		ZaZimbraAdmin.logOff();
@@ -356,7 +351,6 @@ function(ex, method, params, restartOnError, obj) {
 		) 
 	{
 		try {
-			var bReloginMode = false;
 			if (ZaApp.getInstance() != null && (ex.code == ZmCsfeException.SVC_AUTH_EXPIRED ||
 							    ex.code == ZmCsfeException.AUTH_TOKEN_CHANGED
 							   )) 
@@ -374,10 +368,8 @@ function(ex, method, params, restartOnError, obj) {
 				this._loginDialog.clearPassword();
 			} else {
 				this._loginDialog.setError(null);
-				bReloginMode = false;
 			}
-			this._loginDialog.setReloginMode(bReloginMode);
-			this._showLoginDialog(bReloginMode);
+			this._showLoginDialog();
 		} catch (ex2) {
 			console.log(ex2.code);
 		}

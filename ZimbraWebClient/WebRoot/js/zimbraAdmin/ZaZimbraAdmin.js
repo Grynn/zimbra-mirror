@@ -885,7 +885,7 @@ ZaZimbraAdmin.isGlobalAdmin = function () {
 
 ZaAboutDialog = function(parent, className, title, w, h) {
 	if (arguments.length == 0) return;
- 	var clsName = className || "DwtDialog";
+ 	var clsName = className || "DwtDialog AboutScreen";
  	DwtDialog.call(this, parent, clsName,  ZaMsg.about_title, [DwtDialog.OK_BUTTON]);
 }
 
@@ -900,6 +900,7 @@ ZaAboutDialog.prototype.popup = function () {
 	params.showAbout = true,
 	params.showPanelBorder = false;
     params.companyURL = ZaAppCtxt.getLogoURI () ;
+    params.showLongVersion = true;
     params.longVersion = AjxBuffer.concat(ZaMsg.splashScreenVersion, " ", ZaServerVersionInfo.version , " " , date);
     var html = ZLoginFactory.getLoginDialogHTML(params);
     this.setContent(html);

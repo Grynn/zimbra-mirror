@@ -14,14 +14,18 @@
  */
 
 ZaLoginDialog = function(parent, zIndex, className, appCtxt) {
-    className = className || "ZaLoginDialog";
-    DwtBaseDialog.call(this, parent, className, ZaMsg.login, zIndex);
+    className = className || "LoginScreen";
+    DwtComposite.call(this, {parent:parent, className:className, posStyle:DwtControl.ABSOLUTE_STYLE});
 
-    //check the zimbraAdminConsoleLoginURL
-   // if(ZaZimbraAdmin.zimbraAdminLoginURL)
     this._zimbraAdminLoginURL = ZaZimbraAdmin.zimbraAdminLoginURL;
-    /*else
-    	this._zimbraAdminLoginURL = this.getLoginURL();*/
+
+    this._origClassName = className;
+    this._xparentClassName = className + "-Transparent";
+    this.setBounds(0, 0, "100%", "100%");
+    var htmlElement = this.getHtmlElement();
+    htmlElement.style.zIndex = Dwt.Z_DIALOG + 1; //login screen covers all dialogs and error messages
+    htmlElement.className = className;
+    this.setVisible(false);
     
     //license expiration warning won't show before login.
 	//var licenseStatus = ZaZimbraAdmin.getLicenseStatus();
@@ -42,9 +46,8 @@ ZaLoginDialog = function(parent, zIndex, className, appCtxt) {
 	this.setContent(html);
 }
 
-ZaLoginDialog.prototype = new DwtBaseDialog;
+ZaLoginDialog.prototype = new DwtComposite;
 ZaLoginDialog.prototype.constructor = ZaLoginDialog;
-
 ZaLoginDialog.prototype.toString = 
 function() {
 	return "ZaLoginDialog";
@@ -55,7 +58,6 @@ ZaLoginDialog.prototype.getLoginURL = function () {
 	var elBy = soapDoc.set("domain", location.hostname);
 	elBy.setAttribute("by", "virtualHostname");
 
-	//var getAccCommand = new ZmCsfeCommand();
 	var params = new Object();
 	params.soapDoc = soapDoc;
     params.noAuthToken = true ;
@@ -101,46 +103,13 @@ function(errorStr) {
 }
 
 ZaLoginDialog.prototype.setFocus =
-function(username, bReloginMode) {
+function(username) {
 	ZLoginFactory.showUserField(username);
-	this.setReloginMode(username && username.length && bReloginMode);
  }
- 
-ZaLoginDialog.prototype.popup =
-function(loc,bReloginMode) {
-	if (this._poppedUp) return;
-	if(!bReloginMode)
-		this.cleanup(true);
-		
-	var thisZ = this._zIndex;
-	// if we're modal, setup the veil effect,
-	// and track which dialogs are open
-	if (this._mode == DwtBaseDialog.MODAL) {
-		thisZ = this._setModalEffect(thisZ);
-	}
-
-	this._shell._veilOverlay.activeDialogs.push(this);
-	// use whichever has a value, local has precedence
-	if (loc) {
-		this._loc.x = loc.x;
-		this._loc.y = loc.y;
-		this._position(loc);
-	} else {
-		this._position();
-	}
-	
-	this.setZIndex(thisZ);
-	this._poppedUp = true;
-	var testCookie = AjxCookie.getCookie(document, ZaZimbraAdmin.TEST_COOKIE_NAME);
-	if(!testCookie) {
-		this.setError(ZaMsg.ERROR_COOKIES_DISABLED);
-	}
-}
-
 
 ZaLoginDialog.prototype.setVisible = 
-function(visible, transparentBg,bReloginMode) {
-
+function(visible, transparentBg) {
+	DwtComposite.prototype.setVisible.call(this, visible);
     //redirect to zimbraAdminConsoleLoginURL
     if (visible && this._zimbraAdminLoginURL != null && this._zimbraAdminLoginURL.length > 0) {
         if (window.onbeforeunload != null) {
@@ -151,28 +120,15 @@ function(visible, transparentBg,bReloginMode) {
         return ;
     }
 
-    if (!!visible == this.isPoppedUp()) {
-		return;
-	}
-	
-	if (visible) {
-		this._veilClass = this._shell._veilOverlay.className; 
-		this._shell._veilOverlay.className = "ZaSplashScreen";
-		this.popup(null,bReloginMode);
-	} else {
-		this._shell._veilOverlay.className = this._veilClass;
-		this.popdown();
-	}
 	for (var i = 0; i < ZLoginFactory.TAB_ORDER.length; i++) {
 		var element = document.getElementById(ZLoginFactory.TAB_ORDER[i]);
-		if (visible) {
+		if (visible && element) {
 			Dwt.associateElementWithObject(element, this);
-		} else {
+		} else if(element) {
 			Dwt.disassociateElementFromObject(null, this);
 		}
 	}
 
-	//Dwt.setHandler(this._getContentDiv(), DwtEvent.ONKEYDOWN, ZLoginFactory.handleKeyPress);
 	if(visible) {
 		if (AjxEnv.isIE) {
 			var el = ZLoginFactory.getLoginPanel();
@@ -180,54 +136,16 @@ function(visible, transparentBg,bReloginMode) {
 		} else {
 			window["onkeypress"] = ZLoginFactory.handleKeyPress;
 		}
+		//set the focus on the user name field
+		var userIdEl = ZLoginFactory.get(ZLoginFactory.USER_ID);
+		if(!userIdEl.disabled)
+			userIdEl.focus();		
 	}
-	
-	//set the focus on the user name field
-	var userIdEl = ZLoginFactory.get(ZLoginFactory.USER_ID);
-	if(!userIdEl.disabled)
-		userIdEl.focus();
-	//set the event handler for the user id field and password field\
-	/* Use the Virtual host in the AuthRequest
-	var userIdEl = ZLoginFactory.get(ZLoginFactory.USER_ID);
- 	var passwdEl = ZLoginFactory.get(ZLoginFactory.PASSWORD_ID);
-   	if (userIdEl) {
-   		userIdEl.onblur= ZaLoginDialog.autoDomainName ; 
-   	}
-   	
-   	if (passwdEl) {
-   		passwdEl.onfocus = ZaLoginDialog.autoDomainName ;
-   	}*/
 }
-/*
-ZaLoginDialog.autoDomainName =
-function (){
-	var domainName = location.hostname ;
-	var userIdEl = ZLoginFactory.get(ZLoginFactory.USER_ID);
-	if (userIdEl && userIdEl.value != null && userIdEl.value.length > 0 ) {
-		var u = userIdEl.value ;
-		if (u.indexOf("@") < 0 ) { //no @
-			DBG.println(AjxDebug.DBG3, "Auto append the domain name " + domainName + " to the user field.");
-			userIdEl.value = u + "@" + domainName ;
-			DBG.println(AjxDebug.DBG3, "Current user name = " + userIdEl.value) ;
-		}
-	}
-}*/
 
 ZaLoginDialog.prototype.addChild =
 function(child, childHtmlElement) {
     this._children.add(child);
-}
-
-ZaLoginDialog.prototype.setReloginMode = 
-function(bReloginMode) {
-	if (bReloginMode) {
-		ZLoginFactory.showLogOff();
-		ZLoginFactory.get(ZLoginFactory.USER_ID).disabled = true;
-	} else {
-		ZLoginFactory.hideLogOff();
-		ZLoginFactory.get(ZLoginFactory.USER_ID).disabled = false;
-	}
-	
 }
 
 ZaLoginDialog.prototype._loginSelListener =

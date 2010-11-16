@@ -5,12 +5,12 @@
 		<file>skin.properties</file>
 	</substitutions>
 	<css>
-		<file>../_base/base/skin.css</file>
+		<file>skin.css</file>
 	</css>
     <script>
         <file>../_base/base/skin.js</file>
     </script>
-	<html>
-		<file>../_base/base/skin.html</file>
-	</html>
+    <html>
+        <file>skin.html</file>
+    </html>
 </skin>

@@ -135,13 +135,3 @@ body						{	@ChromeBg@	}
 .asterisk {
 @Text-error@	
 }
-/* Hack the AppChiclets to do them with CSS instead of images */
-
-#IFNDEF MSIE
-	.ImgAppBanner{background-image:url("@AppBannerImg@");width:@AppBannerWidth@;height:@AppBannerHeight@;}
-	.ImgLoginBanner{background-image:url("@LoginBannerImg@");width:@LoginBannerWidth@;height:@LoginBannerHeight@;}	
-#ENDIF
-#IFDEF MSIE
-	.ImgAppBanner{filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@AppBannerImg@',sizingMethod='scale');width:@AppBannerWidth@;height:@AppBannerHeight@;}
-	.ImgLoginBanner{filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='@LoginBannerImg@',sizingMethod='scale');width:@LoginBannerWidth@;height:@LoginBannerHeight@;}
-#ENDIF
