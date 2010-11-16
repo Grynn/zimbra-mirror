@@ -1271,7 +1271,13 @@ function(value) {
 	if (value.length == 2) {
 		var d = new Date;
 		d.setYear(parseInt(value, 10));
-		value = String(d.getFullYear()).substr(0,2) + value;
+        var fullYear = d.getFullYear();
+        if (fullYear <= AjxMsg.dateParsing2DigitStartYear) {
+            value = String(fullYear + 100);
+        }
+        else {
+            value = String(fullYear).substr(0,2) + value;
+        }
 	}
 	return parseInt(value, 10);
 };
