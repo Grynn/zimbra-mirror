@@ -217,6 +217,16 @@ function(tabGroup) {
 	return otg;
 };
 
+/**
+ * Gets current tab group
+ *
+ * @return {DwtTabGroup}	current tab group
+ */
+DwtKeyboardMgr.prototype.getCurrentTabGroup =
+function() {
+    return this.__currTabGroup;
+};
+
 DwtKeyboardMgr.prototype.pushDefaultHandler =
 function(handler) {
 	if (!this.__enabled || !this.__keyboardHandlingInited || !handler) { return; }
