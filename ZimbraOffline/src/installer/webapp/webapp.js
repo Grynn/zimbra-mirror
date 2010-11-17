@@ -92,6 +92,8 @@ function reloadWebAppIni(iniFile) {
   var newUri = WebAppProperties.uri; 
   var newPort = getPort(newUri);
 
+  // we may get an uri that's different from the one in webapp.ini (e.g. clicking on mailto link)
+  // so we'd better only update the port without messing with anything else.
   WebAppProperties.uri = oldPort != "" && oldPort != newPort ? 
     oldUri.replace(":" + oldPort + "/", ":" + newPort + "/") : oldUri;
 

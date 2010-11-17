@@ -158,9 +158,73 @@
           <!-- Root Application Directory: Id="APPLICATIONFOLDER", Name="Zimbra Desktop" -->
 @build.application.folder.contents@          
                     
-        </Directory>  <!-- PromgramFilesFolder -->
-      </Directory>  <!--  InstallOrganizationFolder -->
-      
+        </Directory>  <!--  InstallOrganizationFolder -->
+        
+        <!-- Registry entries for ZimbraMAPI extension -->
+        <Component Id="ID10629" Guid="b76b6050-8869-497b-8d69-5f43fc37715b">
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop">
+            <RegistryValue Value="Zimbra Desktop" Type="string" />
+            <RegistryValue Name="DLLPath" Value="[APPLICATIONFOLDER]win32\prism\extensions\mapi@zimbra.com\zimMapi32.dll" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\Capabilities">
+            <RegistryValue Name="ApplicationDescription" Value="" Type="string" />
+            <RegistryValue Name="ApplicationIcon" Value="[APPLICATIONFOLDER]win32\prism\extensions\mapi@zimbra.com\zimbra.ico,0" Type="string" />
+            <RegistryValue Name="ApplicationName" Value="ZimbraDesktop" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\Capabilities\FileAssociations">
+            <RegistryValue Name=".eml" Value="ZimbraDesktopEML" Type="string" />
+            <RegistryValue Name=".wdseml" Value="ZimbraDesktopEML" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\Capabilities\StartMenu">
+            <RegistryValue Name="Mail" Value="Zimbra Desktop" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\Capabilities\URLAssociations">
+            <RegistryValue Name="mailto" Value="ZimbraDesktop.Url.mailto" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\DefaultIcon">
+            <RegistryValue Value="[APPLICATIONFOLDER]win32\prism\extensions\mapi@zimbra.com\zimbra.ico,0" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\InstallInfo">
+            <RegistryValue Name="HideIconsCommand" Value="&quot;[APPLICATIONFOLDER]win32\prism\extensions\mapi@zimbra.com\helper.exe&quot; /HideShortcuts" Type="string" />
+            <RegistryValue Name="ShowIconsCommand" Value="&quot;[APPLICATIONFOLDER]win32\prism\extensions\mapi@zimbra.com\helper.exe&quot; /ShowShortcuts" Type="string" />
+            <RegistryValue Name="ReinstallCommand" Value="&quot;[APPLICATIONFOLDER]win32\prism\extensions\mapi@zimbra.com\helper.exe&quot; /SetAsDefaultAppGlobal" Type="string" />
+            <RegistryValue Name="IconsVisible" Value="0" Type="integer" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\Protocols" />
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\Protocols\mailto">
+            <RegistryValue Value="ZimbraDesktop URL" Type="string" />
+            <RegistryValue Name="FriendlyTypeName" Value="ZimbraDesktop URL" Type="string" />
+            <RegistryValue Name="URL Protocol" Value="" Type="string" />
+            <RegistryValue Name="EditFlags" Value="2" Type="integer" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\Protocols\mailto\DefaultIcon">
+            <RegistryValue Value="[APPLICATIONFOLDER]win32\prism\extensions\mapi@zimbra.com\zimbra.ico,0" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\Protocols\mailto\shell" />
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\Protocols\mailto\shell\open" />
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\Protocols\mailto\shell\open\command">
+            <RegistryValue Value="&quot;[APPLICATIONFOLDER]win32\prism\zdclient.exe&quot; -url &quot;%1&quot;" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\shell" />
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\shell\open" />
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\shell\open\command">
+            <RegistryValue Value="&quot;[APPLICATIONFOLDER]win32\prism\zdclient.exe&quot;" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\shell\properties">
+            <RegistryValue Value="" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\shell\properties\command">
+            <RegistryValue Value="&quot;[APPLICATIONFOLDER]win32\prism\zdclient.exe&quot; -options" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\shell\safemode">
+            <RegistryValue Value="" Type="string" />
+          </RegistryKey>
+          <RegistryKey Root="HKLM" Action="createAndRemoveOnUninstall" Key="SOFTWARE\Clients\Mail\Zimbra Desktop\shell\safemode\command">
+            <RegistryValue Value="&quot;[APPLICATIONFOLDER]win32\prism\zdclient.exe&quot; -safe-mode" Type="string" />
+          </RegistryKey>
+        </Component>
+        
+      </Directory>  <!-- PromgramFilesFolder -->      
     </Directory>  <!-- TARGETDIR -->
     
     
@@ -181,6 +245,7 @@
       <ComponentRef Id="ID10621" />
       <ComponentRef Id="ID10623" />
       <ComponentRef Id="ID10625" />
+      <ComponentRef Id="ID10629" />
     </Feature>
    
     <CustomAction Id="ID10702" Directory="@zdrun.dir.id@" ExeCommand="[SystemFolder]cscript.exe zdrun.vbs" Execute="immediate" Impersonate="yes" Return="asyncNoWait" />

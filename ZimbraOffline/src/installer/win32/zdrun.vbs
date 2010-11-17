@@ -16,7 +16,7 @@
 ' ZD runner
 '
 
-Dim oFso, oReg, oShellApp, oShell, oWMI, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot
+Dim oFso, oReg, oShellApp, oShell, oWMI, sScriptPath, sScriptDir, oTokens, sAppRoot, sDataRoot, sOverridePath
 Dim sLocalAppDir, bIsUpgrade, sTmpDir, sRestoreDir, aUserDirs, aUserFiles, sVersion, sVerFile
 
 const HKEY_CURRENT_USER = &H80000001
@@ -68,8 +68,7 @@ End Sub
 Sub LaunchPrism()
     Dim sCmd
 
-    sCmd = Chr(34) & sAppRoot & "\win32\prism\zdclient.exe" & Chr(34) & " -override " & _
-        Chr(34) & sDataRoot & "\zdesktop.webapp\override.ini" & Chr(34)  
+    sCmd = Chr(34) & sAppRoot & "\win32\prism\zdclient.exe" & Chr(34)
     oShell.Run sCmd, 1, false 
     WScript.Quit
 End Sub
@@ -224,6 +223,7 @@ sDataRoot = GetDataRoot()
 sVerFile = sDataRoot & "\conf\version"
 sTmpDir = sDataRoot & ".tmp"
 sRestoreDir = sDataRoot & ".rst"
+sOverridePath = sDataRoot & "\zdesktop.webapp\override.ini"
 bIsUpgrade = false
 
 If oFso.FolderExists(sDataRoot) Then
@@ -274,8 +274,8 @@ FindAndReplace sDataRoot & "\conf\localconfig.xml", oTokens
 FindAndReplace sDataRoot & "\conf\zdesktop.conf", oTokens
 FindAndReplace sDataRoot & "\jetty\etc\jetty.xml", oTokens
 FindAndReplace sDataRoot & "\zdesktop.webapp\webapp.ini", oTokens
-FindAndReplace sDataRoot & "\zdesktop.webapp\override.ini", oTokens
 FindAndReplace sDataRoot & "\profile\user.js", oTokens
+FindAndReplace sOverridePath, oTokens
 
 If bIsUpgrade Then
 	RestoreData sTmpDir
@@ -283,5 +283,7 @@ End If
 
 oReg.CreateKey HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop"
 oReg.SetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop", "DataRoot", sDataRoot
+oReg.CreateKey HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop\Prism"
+oReg.SetStringValue HKEY_CURRENT_USER, "Software\Zimbra\Zimbra Desktop\Prism", "OverridePath", sOverridePath
 
 LaunchPrism
