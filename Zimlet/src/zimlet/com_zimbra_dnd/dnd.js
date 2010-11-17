@@ -218,12 +218,29 @@ Com_Zimbra_DnD.prototype._onDrop = function(ev) {
 
     var dt = ev.dataTransfer;
     var files = dt.files;
-
+    
     if(files) {
         Com_Zimbra_DnD.attachment_ids = [];
         Com_Zimbra_DnD.flength = files.length;
+
+        for (var j = 0; j < files.length; j++) {
+            var file = files[j];
+            var size = file.size || file.fileSize; /*Safari*/;
+            if(size > appCtxt.get(ZmSetting.ATTACHMENT_SIZE_LIMIT)) {
+                var msgDlg = appCtxt.getMsgDialog();
+                var errorMsg = AjxMessageFormat.format(ZmMsg.attachmentSizeError, AjxUtil.formatSize(appCtxt.get(ZmSetting.ATTACHMENT_SIZE_LIMIT)));
+                msgDlg.setMessage(errorMsg, DwtMessageDialog.WARNING_STYLE);
+                msgDlg.popup();
+                return false;
+            }
+        }
+
         for (var i = 0; i < files.length; i++) {
             var file = files[i];
+            var size = file.size || file.fileSize /*Safari*/;
+            if(size > appCtxt.get(ZmSetting.ATTACHMENT_SIZE_LIMIT)) {
+                continue;
+            }
             this._uploadFiles(file);
             this.dndTooltipEl.innerHTML = "<img src='/img/animated/ImgSpinner.gif' width='16' height='16' border='0' style='float:left;'/>&nbsp;<div style='display:inline;'>" + ZmMsg.attachingFiles + "</div>";
         }
@@ -252,6 +269,7 @@ Com_Zimbra_DnD.prototype._uploadFiles = function(file) {
     } catch(exp) {
         var msgDlg = appCtxt.getMsgDialog();
         msgDlg.setMessage(ZmMsg.importErrorUpload, DwtMessageDialog.CRITICAL_STYLE);
+        this.dndTooltipEl.innerHTML = ZmMsg.dndTooltip;
         msgDlg.popup();
         return false;
     }
