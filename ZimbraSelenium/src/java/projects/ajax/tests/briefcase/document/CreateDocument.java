@@ -41,31 +41,14 @@ public class CreateDocument extends AjaxCommonTest {
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
 				.zToolbarPressButton(Buttons.O_NEW_DOCUMENT);
 
-		SleepUtil.sleepVeryLong();
-		try {
-			String newPageTitle = "Zimbra Docs";
-			documentBriefcaseNew.zSelectWindow(newPageTitle);
+		// Fill out the document with the data
+		documentBriefcaseNew.fill(document);
 
-			// ClientSessionFactory.session().selenium().waitForCondition("selenium.browserbot.getUserWindow()","10000");
-			// ClientSessionFactory.session().selenium().getEval("selenium.browserbot.getCurrentWindow()");
-			// ClientSessionFactory.session().selenium().getEval("selenium.browserbot.getUserWindow()");
+		// Save and close
+		documentBriefcaseNew.submit();
 
-			// if name field appears in the toolbar then document page is opened
-			if (!documentBriefcaseNew
-					.sIsElementPresent("//*[@id='DWT3_item_1']")) {
-				throw new HarnessException("could not open a new page");
-			} else {
-				DocumentBriefcaseNew.pageTitle = newPageTitle;
-			}
+		documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
 
-			// Fill out the document with the data
-			documentBriefcaseNew.fill(document);
-
-			// Save and close
-			documentBriefcaseNew.submit();
-		} finally {
-			documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
-		}
 		ZimbraAccount account = app.getActiveAccount();
 
 		// Verify document name through SOAP
@@ -81,7 +64,7 @@ public class CreateDocument extends AjaxCommonTest {
 				"name");
 
 		ZAssert.assertEquals(document.getDocName(), name,
-				" Verify document name through SOAP");	
+				" Verify document name through SOAP");
 		/*
 		*/
 	}

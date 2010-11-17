@@ -68,6 +68,17 @@ public class DocumentItem extends ZimbraItem implements IItem {
 	}
 
 	/**
+	 * get file name from a given path
+	 * 
+	 * @param filePath
+	 */
+	public String getFileName(String filePath) {
+		String[] arr = filePath.split("/");
+		String fileName = arr[arr.length - 1];
+		return fileName;
+	}
+
+	/**
 	 * Create a document item
 	 */
 	public DocumentItem() {
@@ -192,7 +203,8 @@ public class DocumentItem extends ZimbraItem implements IItem {
 						"Element does not contain doc element");
 
 			// Set the ID
-			super.id = doc.getAttribute("id", null);		
+			super.id = doc.getAttribute("id", null);
+
 		} catch (Exception e) {
 			throw new HarnessException("Could not parse SaveDocumentResponse: "
 					+ response.prettyPrint(), e);

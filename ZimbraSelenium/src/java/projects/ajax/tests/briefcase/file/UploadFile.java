@@ -30,6 +30,7 @@ public class UploadFile extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 		String filePath = document.getFilePath_1();
+		String fileName = document.getFileName(filePath);
 
 		// Upload file to server through SOAP
 		ZimbraAccount account = app.getActiveAccount();
@@ -60,9 +61,7 @@ public class UploadFile extends AjaxCommonTest {
 		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
 
 		// Verify file name through SOAP
-		String[] arr = filePath.split("/");
-		String fileName = arr[arr.length - 1];
-
+		
 		// import from soap
 		app.getActiveAccount().soapSend(
 
@@ -84,7 +83,8 @@ public class UploadFile extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 		String filePath = document.getFilePath_2();
-
+		String fileName = document.getFileName(filePath);
+		
 		// Upload file to server through SOAP
 		ZimbraAccount account = app.getActiveAccount();
 		String attachmentId = account.uploadFile(filePath);
@@ -110,9 +110,7 @@ public class UploadFile extends AjaxCommonTest {
 
 		// Verify document is created
 		SleepUtil.sleepLong();
-		String[] arr = filePath.split("/");
-		String fileName = arr[arr.length - 1];
-
+	
 		String name = "";
 		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
 				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
