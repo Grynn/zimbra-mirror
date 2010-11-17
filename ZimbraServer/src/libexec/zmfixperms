@@ -520,7 +520,7 @@ if [ -L ${zimbra_home}/openldap ]; then
   fi
 fi
 
-if [ -L ${zimba_home}/rlfe ]; then
+if [ -L ${zimbra_home}/rlfe ]; then
   printMsg "Fixing ownership and permissions on ${zimbra_home}/rlfe"
   chown -R ${root_user}:${root_group} ${zimbra_home}/rlfe-* 2> /dev/null
 fi
