@@ -20,5 +20,6 @@
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-r06-javadoc.zip!/"/>
     </attributes>
   </classpathentry>
+  <classpathentry kind="lib" path="/ZimbraSoap/jars/metro/webservices-rt.jar"/>
   <classpathentry kind="output" path="build/classes"/>
 </classpath>
