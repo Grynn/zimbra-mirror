@@ -188,7 +188,7 @@ public class ComputeSearchContextTag extends ZimbraSimpleTag {
         }
 
         if (mSortBy == null)
-            mSortBy = ZSearchParams.TYPE_CONTACT.equals(mTypes) ? ZMailbox.SearchSortBy.nameAsc :
+            mSortBy = (ZSearchParams.TYPE_CONTACT.equals(mTypes) || ZSearchParams.TYPE_GAL.equals(mTypes)) ? ZMailbox.SearchSortBy.nameAsc :
                     ZSearchParams.TYPE_TASK.equals(mTypes) ? ZMailbox.SearchSortBy.taskDueDesc :
                     ZMailbox.SearchSortBy.dateDesc;
 
