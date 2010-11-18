@@ -129,7 +129,11 @@ function(account, now, isDragProxy) {
 					} else if (account.attrs[ZaAccount.A_zimbraIsSystemResource] == "TRUE") {
 						html[idx++] = AjxImg.getImageHtml("SystemResource");
 					} else {
-						html[idx++] = AjxImg.getImageHtml("Account");
+						if(account.isExternal) {
+							html[idx++] = AjxImg.getImageHtml("AccountIMAP");	
+						} else {
+							html[idx++] = AjxImg.getImageHtml("Account");
+						}
 					}
 				break;
 				case ZaItem.DL:
@@ -157,9 +161,6 @@ function(account, now, isDragProxy) {
 		} else if(field == ZaAccount.A_name) {
 			// name
 			html[idx++] = "<td nowrap width=" + (AjxEnv.isIE ? IEWidth : this._headerList[i]._width) + "><nobr>";
-			if(account.isExternal) {
-				html[idx++] = "<span class='asterisk'>*</span>";	
-			}
 			html[idx++] = AjxStringUtil.htmlEncode(account.name);
 			html[idx++] = "</nobr></td>";
 		} else if (field == ZaAccount.A_displayname) {
