@@ -70,7 +70,7 @@ function(parentEl, imageName, useParentEl, _disabled) {
 		return;
 	}
 
-	if (parentEl.firstChild == null || parentEl.firstChild.nodeName.toLowerCase() != "div" || AjxEnv.isIE ) {
+	if (parentEl.firstChild == null || parentEl.firstChild.nodeName.toLowerCase() != "div") {
 		var html = [], i = 0;
 		html[i++] = "<div";
 		if (id) {
@@ -86,6 +86,8 @@ function(parentEl, imageName, useParentEl, _disabled) {
 		html[i++] = "></div>";
 		parentEl.innerHTML = html.join("");
 		return;
+	} else if (AjxEnv.isIE) {
+		parentEl.firstChild.innerHTML = "";
 	}
 
 	parentEl.firstChild.className = className;
