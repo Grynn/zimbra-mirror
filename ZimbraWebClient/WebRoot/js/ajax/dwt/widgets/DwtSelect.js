@@ -30,6 +30,8 @@
  * @param {boolean}      [layout=true]		layout to use: DwtMenu.LAYOUT_STACK, DwtMenu.LAYOUT_CASCADE or DwtMenu.LAYOUT_SCROLL. A value of [true] defaults to DwtMenu.LAYOUT_CASCADE and a value of [false] defaults to DwtMenu.LAYOUT_STACK.
  *        
  * @extends		DwtButton
+ *
+ * TODO: add option to keep options sorted by display text
  */
 DwtSelect = function(params) {
 	if (arguments.length == 0) { return; }
@@ -130,9 +132,12 @@ function(element) {
  * @param {Object}	value			if the option parameter is a {@link DwtSelectOption}, this will override the value already set in the option.
  * @param {String}  image	(optional)
  * @return 	{number} a handle to the newly added option
+ *
+ * TODO: support adding at an index
  */
 DwtSelect.prototype.addOption =
 function(option, selected, value, image) {
+
 	if (!option) { return -1; }
 	image = image || null;
 
@@ -144,8 +149,9 @@ function(option, selected, value, image) {
 	} else {
 		if (option instanceof DwtSelectOption) {
 			opt = option;
-			if (value)
+			if (value) {
 				opt.setValue(value);
+			}
 			selected = opt.isSelected();
 		} else if(option instanceof DwtSelectOptionData || option.value != null) {
 			val = value != null ? value : option.value;
@@ -181,16 +187,53 @@ function(option, selected, value, image) {
     return (this._options.size() - 1);
 };
 
+/**
+ * Removes an option.
+ *
+ * @param {DwtSelectOption}		option			option to remove
+ *
+ * @return {number} index of the option that was removed, or -1 if there was an error
+ */
 DwtSelect.prototype.removeOption =
-function(value) {
+function(option) {
 
-	var option = this.getOptionWithValue(value);
-	if (!option) { return; }
+	if (!option) { return -1; }
+
+	// Register listener to create new menu.
+	this.setMenu(this._menuCallback, true);
+
 	this._options.remove(option);
+
+	var value = option.getValue();
 	var index = this._optionValuesToIndices[value];
 	if (index != null) {
 		this._pseudoItemsEl.deleteRow(index);
+		if (this._selectedOption == option) {
+			this._setSelectedOption(this._options.get(index));
+		}
 	}
+
+	delete this._optionValuesToIndices[value];
+	for (var i = index, len = this._options.size(); i < len; i++) {
+		var option = this._options.get(i);
+		this._optionValuesToIndices[option.getValue()] = i;
+	}
+
+	return index;
+};
+
+/**
+ * Removes an option based on its value.
+ *
+ * @param {string}		value			value of the option to remove
+ *
+ * @return {number} index of the option that was removed, or -1 if there was an error
+ */
+DwtSelect.prototype.removeOptionWithValue =
+function(value) {
+
+	var option = this.getOptionWithValue(value);
+	return option ? this.removeOption(option) : -1;
 };
 
 DwtSelect.prototype.popup =
@@ -220,11 +263,12 @@ function() {
  */
 DwtSelect.prototype.rename =
 function(value, newValue) {
+
 	var option = this.getOptionWithValue(value);
 	if (!option) { return; }
 	option._displayValue = newValue;
 
-	if (this.__selectedOption && (this.__selectedOption._value == value))	{
+	if (this._selectedOption && (this._selectedOption._value == value))	{
 		this.setText(AjxStringUtil.htmlEncode(newValue));
 	}
 
@@ -526,7 +570,9 @@ function(templateId, data) {
     DwtButton.prototype._createHtmlFromTemplate.call(this, containerTemplateId, containerData);
     this._selectEl = document.getElementById(data.id+"_select_container");
     this._pseudoItemsEl = document.getElementById(data.id+"_pseudoitems_container");
-	this._pseudoItemsEl.style.display = "block"; /* this has to be block for it to affect the layout. it is not seen because it's visibility hidden for the TDs inside, and also "overflow:hidden" (so mouse over the hidden stuff does not highlight) */
+	// this has to be block for it to affect the layout. it is not seen because its visibility hidden for the TDs
+	// inside, and also "overflow:hidden" (so mouse over the hidden stuff does not highlight)
+	this._pseudoItemsEl.style.display = "block";
     // set classes
     var el = this.getHtmlElement();
     this._containerEl = el;
@@ -649,7 +695,8 @@ function() {
 				};
 	var resetAction = new AjxTimedAction(this, reset);
 	AjxTimedAction.scheduleAction(resetAction, 4);
-}
+};
+
 
 //
 // Class
@@ -831,6 +878,11 @@ DwtSelectMenu.prototype.constructor = DwtSelectMenu;
 
 DwtSelectMenu.prototype.TEMPLATE = "dwt.Widgets#ZSelectMenu";
 
+DwtSelectMenu.prototype.toString =
+function() {
+    return "DwtSelectMenu";
+};
+
 /**
  * Creates a select menu item.
  * @constructor
@@ -848,3 +900,8 @@ DwtSelectMenuItem.prototype = new DwtMenuItem;
 DwtSelectMenuItem.prototype.constructor = DwtSelectMenuItem;
 
 DwtSelectMenuItem.prototype.TEMPLATE = "dwt.Widgets#ZSelectMenuItem";
+
+DwtSelectMenuItem.prototype.toString =
+function() {
+    return "DwtSelectMenuItem";
+};
