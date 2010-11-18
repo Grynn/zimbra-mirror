@@ -34,7 +34,6 @@ function com_zimbra_socialTwitter(zimlet, preferences) {
 	}
 }
 com_zimbra_socialTwitter.FRIENDS_TIMELINE_URL = "https://api.twitter.com/1/statuses/friends_timeline.json";
-com_zimbra_socialTwitter.SENT_MSGS_URL = "https://api.twitter.com/1/statuses/user_timeline.json";
 com_zimbra_socialTwitter.MENTIONS_URL = "https://api.twitter.com/1/statuses/mentions.json";
 com_zimbra_socialTwitter.DM_URL = "https://api.twitter.com/1/direct_messages.json";
 com_zimbra_socialTwitter.DM_URL_POST = "https://api.twitter.com/1/direct_messages/new.json";
@@ -143,6 +142,7 @@ function(params) {
 	var components = this._getAdditionalParams(params.tableId);
 
 	var url = "";
+	var useSimpleHttpGet = false;
 	if (type == "ACCOUNT") {
 		url = com_zimbra_socialTwitter.FRIENDS_TIMELINE_URL;
 	} else if (type == "DIRECT_MSGS") {
@@ -150,11 +150,17 @@ function(params) {
 	} else if (type == "MENTIONS") {
 		url = com_zimbra_socialTwitter.MENTIONS_URL;
 	} else if (type == "SENT_MSGS") {
-		url = com_zimbra_socialTwitter.SENT_MSGS_URL;
+		useSimpleHttpGet = true;
+		url = [com_zimbra_socialTwitter.PROFILE_BASE_URL, params.account.screen_name, ".json"].join("");
 	} else if (type == "PROFILE_MSGS") {
-		url = [com_zimbra_socialTwitter.PROFILE_BASE_URL, screen_name, ".json"].join("");
+		useSimpleHttpGet = true;
+		url = [com_zimbra_socialTwitter.PROFILE_BASE_URL, params.screen_name, ".json"].join("");
 	}
-	this.zimlet.socialOAuth.makeHTTPGet({url: url, components: components, callback: callback});
+	if(useSimpleHttpGet) {
+		this.zimlet.socialOAuth.makeSimpleHTTPGet({url: url, components: components, callback: callback});
+	} else {
+		this.zimlet.socialOAuth.makeHTTPGet({url: url, components: components, callback: callback});
+	}
 };
 
 com_zimbra_socialTwitter.prototype._twitterItemsHandler =
@@ -171,7 +177,7 @@ com_zimbra_socialTwitter.prototype._checkIfFollowing = function(params) {
 	components["source_screen_name"] = params.account.name;
 	components["target_screen_name"] = params.profileAccnt.screen_name;
 	var callback = new AjxCallback(this, this._checkIfFollowingCallback, params);
-	this.zimlet.socialOAuth.makeHTTPGet({url: com_zimbra_socialTwitter.FRIENDSHIP_BASE_URL, components: components, callback: callback});
+	this.zimlet.socialOAuth.makeSimpleHTTPGet({url: com_zimbra_socialTwitter.FRIENDSHIP_BASE_URL, components: components, callback: callback});
 };
 
 com_zimbra_socialTwitter.prototype._checkIfFollowingCallback = function(params, response) {
