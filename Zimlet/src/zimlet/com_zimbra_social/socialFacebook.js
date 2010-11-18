@@ -18,7 +18,10 @@
 function com_zimbra_socialFacebook(zimlet) {
 	this.zimlet = zimlet;
 	this.waitingForApproval = false;
+	this.itemsLimit = 100;
+	this._extendedPerms = "read_stream,publish_stream,offline_access,friends_activities,user_activities,friends_likes,user_likes";
 	this.isZD = false;
+	this._tableIdAndFBProfilesCache = new Array();
 	this.apiKey = this.zimlet.getConfig("social_facebook_api_key");
 	try{
 		var version = appCtxt.getActiveAccount().settings.getInfoResponse.version;
@@ -154,8 +157,14 @@ function (tableId, account) {
 	var paramsArray = [
 		["method", "Stream.get"],
 		["session_key", account.session_key],
-		["filter_key", "nf"]	
+		["limit", this.itemsLimit],
+		["filter_key", "nf,pp"]	
 	];
+
+	var sinceOrUntilParams = this._getSinceOrUntilParams(tableId);
+	if(sinceOrUntilParams != "") {
+		paramsArray.push(sinceOrUntilParams);
+	}
 	var params = this._getFBParams(paramsArray, account.secret);
 	if (!tableId) {
 		var tableId = this.zimlet._showCard({headerName:"facebook", type:"FACEBOOK", autScroll:true});
@@ -163,6 +172,29 @@ function (tableId, account) {
 	this._doPOST(url, params, new AjxCallback(this, this._getStreamCallback, tableId));
 };
 
+com_zimbra_socialFacebook.prototype._getSinceOrUntilParams =
+function (tableId) {
+	var refreshType = this.zimlet.tableIdAndRefreshType[tableId];
+	var id;
+	var idName;
+	if(refreshType == "OLDER") {
+		id = this.zimlet._tableIdAndBottomPostIdMap[tableId];
+		if(!id) {//when the first page has no results..
+			id = this.zimlet.tableIdAndMarkAsReadId[tableId];
+		}
+		idName = "end_time";
+	} else if(refreshType == "NEWER") {
+		id = this.zimlet.tableIdAndTopPostIdMap[tableId];
+		idName = "start_time";
+	} else  {
+		return "";
+	}
+	if(id) {		
+		return [idName, id];
+	} else {
+		return "";
+	}
+};
 
 com_zimbra_socialFacebook.prototype.postLike =
 function (obj) {
@@ -201,18 +233,16 @@ function (obj) {
 
 com_zimbra_socialFacebook.prototype._getMoreCommentsCallback =
 function (obj, response) {
-	var text = response.text;
-
-	if (text.indexOf("Error 500 Connection reset") >= 0) {//if connection reset is shown, then either ignore it(if the user is not in social) or show warning msg(if the user is using social)
-		var activeApp = appCtxt.getCurrentApp();
-		if (activeApp.getName() == this.zimlet._socialAppName) {
-			var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-			appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("couldNotGetComments"), ZmStatusView.LEVEL_WARNING, null, transitions);
+	var jsonObj = this.zimlet._extractJSONResponse(null, this.zimlet.getMessage("couldNotGetComments"), response);
+	if(jsonObj.error) {
+		if(appCtxt.getCurrentAppName().indexOf("social") > 0) {//dont show error unless in social tab
+			return;
 		}
-	} else {
-		obj["moreComments"] = eval("(" + text + ")");
-		this._getUserInfo(obj);
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("couldNotGetComments") + jsonObj.error, ZmStatusView.LEVEL_WARNING);
+		return;
 	}
+	obj["moreComments"] = jsonObj;
+	this._getUserInfo(obj);
 };
 
 com_zimbra_socialFacebook.prototype._getUserInfo =
@@ -241,44 +271,66 @@ function (obj) {
 
 com_zimbra_socialFacebook.prototype._getUsersInfoCallback =
 function (obj, response) {
-	var text = response.text;
-	if (text.indexOf("Error 500 Connection reset") >= 0) {//if connection reset is shown, then either ignore it(if the user is not in social) or show warning msg(if the user is using social)
-		var activeApp = appCtxt.getCurrentApp();
-		if (activeApp.getName() == this.zimlet._socialAppName) {
-			var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-			appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("tryRefreshingFBCard"), ZmStatusView.LEVEL_WARNING, null, transitions);
+	var jsonObj = this.zimlet._extractJSONResponse(null, this.zimlet.getMessage("tryRefreshingFBCard"), response);
+	if(jsonObj.error) {
+		if(appCtxt.getCurrentAppName().indexOf("social") > 0) {//dont show error unless in social tab
+			return;
 		}
-	} else {
-		var moreprofiles = eval("(" + text + ")");
-		this._fb_profiles = this._fb_profiles.concat(moreprofiles);
-		var html = this.zimlet._getCommentsHtml(obj.moreComments, obj.moreComments.length, obj.postId, obj.divId, obj.account);
-		try {
-			document.getElementById(obj.divId).innerHTML = html;
-		} catch(e) {
-		}
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("tryRefreshingFBCard") + jsonObj.error, ZmStatusView.LEVEL_WARNING);
+		return;
+	}
+	var moreprofiles = jsonObj;
+	var fbProfiles = this._getFBProfiles[obj.tableId];
+	if(fbProfiles && fbProfiles instanceof Array) {
+		fbProfiles = fbProfiles.concat(moreprofiles);
+		this._cacheFBProfiles(tableId, fbProfiles);
+	}
+	var html = this.zimlet._getCommentsHtml(obj.moreComments, obj.moreComments.length, obj.postId, obj.divId, obj.account);
+	try {
+		document.getElementById(obj.divId).innerHTML = html;
+	} catch(e) {
 	}
 };
 
 com_zimbra_socialFacebook.prototype._getStreamCallback =
 function (tableId, response) {
-	var text = response.text;
-	if (text.indexOf("Error 500 Connection reset") >= 0) {//if connection reset is shown, then either ignore it(if the user is not in social) or show warning msg(if the user is using social)
-		var activeApp = appCtxt.getCurrentApp();
-		if (activeApp.getName() == this.zimlet._socialAppName) {
-			var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-			appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("tryRefreshingFBCard"), ZmStatusView.LEVEL_WARNING, null, transitions);
+	var jsonObj = this.zimlet._extractJSONResponse(tableId, this.zimlet.getMessage("errorTryRefreshing"), response);
+	var posts = jsonObj.posts;
+	if(jsonObj.profiles && posts) {
+		this._cacheFBProfiles(tableId, jsonObj.profiles);
+		if(posts && !(posts instanceof Array)) {
+			posts = [];
 		}
-	} else {
-		var jsonObj = eval("(" + text + ")");
-		this._fb_profiles = jsonObj.profiles;
-		this.zimlet.createCardView(tableId, jsonObj.posts, "FACEBOOK");
+		this.zimlet.createCardView({tableId:tableId, items:posts, type:"FACEBOOK"});
+	} else if(jsonObj.error){
+		this.zimlet.createCardView({tableId:tableId, items:jsonObj, type:"FACEBOOK"});
+	}else if(jsonObj.error_code && jsonObj.error_code != ""){
+		jsonObj.error = jsonObj.error_code;
+		this.zimlet.createCardView({tableId:tableId, items:jsonObj,  type:"FACEBOOK"});
 	}
 };
 
-com_zimbra_socialFacebook.prototype._getFacebookHTML =
-function () {
-
+com_zimbra_socialFacebook.prototype._cacheFBProfiles =
+function (tableId, profiles) {
+	var pageNumber = this.zimlet.tableIdAndPageNumberMap[tableId];
+	if(!pageNumber) {
+		pageNumber = 1;
+	}
+	if(!this._tableIdAndFBProfilesCache[tableId]) {
+		this._tableIdAndFBProfilesCache[tableId] = [];
+	}
+	this._tableIdAndFBProfilesCache[tableId][pageNumber] = profiles;
 };
+
+com_zimbra_socialFacebook.prototype._getFBProfiles =
+function (tableId) {
+	var pageNumber = this.zimlet.tableIdAndPageNumberMap[tableId];
+	if(!pageNumber) {
+		pageNumber = 1;
+	}
+	return this._tableIdAndFBProfilesCache[tableId][pageNumber];
+};
+
 com_zimbra_socialFacebook.prototype._getSignatureFromJSP =
 function (args) {
 	var params = new Array;
@@ -300,10 +352,14 @@ function () {
 		["method", "Auth.createToken"]
 	];
 	var signature = this._getSignatureFromJSP(paramsArray);
+	setTimeout(AjxCallback.simpleClosure(this._doFbCreateToken, this, url, paramsArray, signature), 500);//delay calling by .5 secs(otherwise, sometimes breaks in ff)
+};
+
+com_zimbra_socialFacebook.prototype._doFbCreateToken =
+function (url, paramsArray, signature) {
 	var params = this._getFBParams(paramsArray, null, signature);
 	this._doPOST(url, params, new AjxCallback(this, this._fbCreateTokenCallback));
 	this.zimlet.preferences.showAddFBInfoDlg();
-
 };
 
 com_zimbra_socialFacebook.prototype._fbCreateTokenCallback =
@@ -327,7 +383,7 @@ function (authToken) {
 		params["auth_token"] = AjxStringUtil.urlComponentEncode(this.fb_auth_token);
 	}
 	if (!authToken) {
-		params["req_perms"] = AjxStringUtil.urlComponentEncode("read_stream,publish_stream,offline_access");
+		params["req_perms"] = AjxStringUtil.urlComponentEncode(this._extendedPerms);
 	}
 	var tmp = [];
 	for (var name in params) {
@@ -346,6 +402,12 @@ function () {
 		["auth_token", this.fb_auth_token]
 	];
 	var signature = this._getSignatureFromJSP(paramsArray);
+	setTimeout(AjxCallback.simpleClosure(this._doGetSessionId, this, url, paramsArray, signature), 500);//delay calling by .5 secs(otherwise, sometimes breaks in ff)
+
+
+};
+com_zimbra_socialFacebook.prototype._doGetSessionId =
+function (url, paramsArray, signature) {
 	var params = this._getFBParams(paramsArray, null, signature);
 	this._doPOST(url, params, new AjxCallback(this, this._sessionIdCallback));
 };
@@ -377,7 +439,7 @@ function (fromAuthorizeBtn) {
 		params["next"] = AjxStringUtil.urlComponentEncode("http://www.facebook.com/connect/login_success.html");
 		params["cancel_url"] = AjxStringUtil.urlComponentEncode("http://www.facebook.com/connect/login_failure.html");
 
-		params["ext_perm"] = AjxStringUtil.urlComponentEncode("read_stream,publish_stream,offline_access");
+		params["ext_perm"] = AjxStringUtil.urlComponentEncode(this._extendedPerms);
 	} else {
 		var url = "https://www.facebook.com/login.php?";
 		params["api_key"] = AjxStringUtil.urlComponentEncode(this.apiKey);
@@ -385,7 +447,7 @@ function (fromAuthorizeBtn) {
 		params["v"] = AjxStringUtil.urlComponentEncode("1.0");
 		params["connect_display"] = AjxStringUtil.urlComponentEncode("popup");
 		params["cancel_url"] = AjxStringUtil.urlComponentEncode("http://www.facebook.com/connect/login_failure.html");
-		params["req_perms"] = AjxStringUtil.urlComponentEncode("read_stream,publish_stream,offline_access");
+		params["req_perms"] = AjxStringUtil.urlComponentEncode(this._extendedPerms);
 	}
 	var tmp = [];
 	for (var name in params) {
@@ -479,12 +541,13 @@ function(tableId, account) {
 	this._fbGetStream(tableId, account);
 };
 
-com_zimbra_socialFacebook.prototype._getFacebookProfile =
-function(id) {
-	for (var i = 0; i < this._fb_profiles.length; i++) {
-		var reqId = this._fb_profiles[i].id == undefined ? this._fb_profiles[i].uid : this._fb_profiles[i].id;
+com_zimbra_socialFacebook.prototype.getFacebookProfile =
+function(id, tableId) {
+	var fbProfiles = this._getFBProfiles(tableId);
+	for (var i = 0; i < fbProfiles.length; i++) {
+		var reqId = fbProfiles[i].id == undefined ? fbProfiles[i].uid : fbProfiles[i].id;
 		if (id == reqId) {
-			return this._fb_profiles[i];
+			return fbProfiles[i];
 		}
 	}
 };

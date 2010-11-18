@@ -27,14 +27,14 @@ function() {
 
 com_zimbra_socialTweetMeme.prototype._tweetMemeCallback =
 function(response) {
-	var text = response.text;
-	var jsonObj = eval("(" + text + ")");
-	if (jsonObj.status != "success") {
-		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg("Tweetmeme Error: " + response.text, ZmStatusView.LEVEL_WARNING, null, transitions);
+	var jsonObj = this.zimlet._extractJSONResponse(null, this.zimlet.getMessage("tweetMemeError"), response);
+	if(jsonObj.error) {
+		if(appCtxt.getCurrentAppName().indexOf("social") > 0) {//dont show error unless in social tab
+			return;
+		}
+		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("tweetMemeError") + jsonObj.error, ZmStatusView.LEVEL_WARNING);
 		return;
 	}
-
 	var cats = jsonObj.categories;
 	this.allTweetMemeCats = new Array();
 	this.allTweetMemeCats.push({query:"__MOST_POPULAR__", name:"Most Popular"});
@@ -69,13 +69,9 @@ function(params) {
 };
 com_zimbra_socialTweetMeme.prototype._tweetMemeSearchCallback =
 function(params, response) {
-	var text = response.text;
-	var jsonObj = eval("(" + text + ")");
-	if (jsonObj.status != "success") {
-		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("tweetMemeError") + " " + response.text, ZmStatusView.LEVEL_WARNING, null, transitions);
-		return;
+	var jsonObj = this.zimlet._extractJSONResponse(params.tableId, this.zimlet.getMessage("tweetMemeError"), response);
+	if(jsonObj.stories) {
+		jsonObj = jsonObj.stories;
 	}
-	this.zimlet.createCardView(params.tableId, jsonObj.stories, "TWEETMEME");
-
+	this.zimlet.createCardView({tableId:params.tableId, items:jsonObj, type:"TWEETMEME"});
 };

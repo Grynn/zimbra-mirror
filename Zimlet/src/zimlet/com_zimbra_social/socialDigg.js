@@ -57,14 +57,12 @@ function(params) {
 	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._DiggSearchCallback, params), true);
 };
+
 com_zimbra_socialDigg.prototype._DiggSearchCallback =
 function(params, response) {
-	var text = response.text;
-	if (!response.success) {
-		var transitions = [ ZmToast.FADE_IN, ZmToast.PAUSE, ZmToast.PAUSE,  ZmToast.FADE_OUT ];
-		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("diggError") + text, ZmStatusView.LEVEL_WARNING, null, transitions);
-		return;
+	var jsonObj = this.zimlet._extractJSONResponse(params.tableId, this.zimlet.getMessage("diggError"), response);
+	if(jsonObj.stories) {
+		jsonObj = jsonObj.stories;
 	}
-	var jsonObj = eval("(" + text + ")");
-	this.zimlet.createCardView(params.tableId, jsonObj.stories, "DIGG");
+	this.zimlet.createCardView({tableId:params.tableId, items:jsonObj, type:"DIGG"});
 };

@@ -221,7 +221,7 @@ function() {
 	var noAccountsFound = true;
 	this._fbNeedPermCount = 0;
 	this._fbNeedPermissions = "";
-	html[i++] = "<table cellspacing=1>";
+	html[i++] = "<table width=100% border=1 cellspacing=0 cellpadding=3>";
 	html[i++] = "<TR><TH>Select</TH><TH>"
 		+this.zimlet.getMessage("accountType")+
 		"</TH><TH>"+this.zimlet.getMessage("accountName")+
@@ -333,9 +333,12 @@ com_zimbra_socialPreferences.prototype.showAddFBInfoDlg = function(obj) {
 	}
 	this._getFbInfoView = new DwtComposite(this.zimlet.getShell());
 	this._getFbInfoView.getHtmlElement().style.overflow = "auto";
-	this._getFbInfoView.setSize(550);
+	this._getFbInfoView.setSize(590);
 
 	this._getFbInfoView.getHtmlElement().innerHTML = this._createFbInfoView();
+	var className = this._getFbInfoView.getHtmlElement().className;
+	this._getFbInfoView.getHtmlElement().className = className + " social_fbLoginContainer";
+	
 	var addFBAccntButtonId = Dwt.getNextId();
 	var addFBAccntButton = new DwtDialog_ButtonDescriptor(addFBAccntButtonId, ("Authorized"), DwtDialog.ALIGN_RIGHT);
 	this._getFbInfoDialog = this.zimlet._createDialog({title:this.zimlet.getMessage("addFacebookAcc"), view:this._getFbInfoView, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
@@ -375,26 +378,20 @@ com_zimbra_socialPreferences.prototype._createFbInfoView =
 function() {
 	var html = new Array();
 	var i = 0;
-	html[i++] = "<DIV  class='social_yellow'>";
+	html[i++] = "<DIV>";
 	html[i++] = "<H3>"+this.zimlet.getMessage("fbSigninSteps")+"</H3>";
-	html[i++] = "<b><u><i><label style='color:blue'>"+this.zimlet.getMessage("pleaseCompleteBothParts")+"</label></i></u></b><br/><br/>";
+	html[i++] = "<b><u><i><label style='color:white;font-size:14px'>"+this.zimlet.getMessage("pleaseCompleteBothParts")+"</label></i></u></b><br/><br/>";
 
 	html[i++] = "<B>"+this.zimlet.getMessage("fbSignInPart1")+"</B><br/>";
 	html[i++] = this.zimlet.getMessage("fbSignInLine1") + " <div id='social_goToFacebookPage'> </div>";
-	html[i++] = this.zimlet.getMessage("fbSignInLine2") + " <br/>";
-	html[i++] = this.zimlet.getMessage("fbSignInLine3") + "<br/>";
-	html[i++] = this.zimlet.getMessage("fbSignInLine4") + "<br/>";
-	html[i++] = this.zimlet.getMessage("fbSignInLine5") + "<br/>";
+	html[i++] = this.zimlet.getMessage("fbSignInLine2") + " <br/><br/>";
+
 	html[i++] = "<br/> <B>"+this.zimlet.getMessage("fbSignInPart2")+"</B><br/>";
-	html[i++] = this.zimlet.getMessage("fbSignInLine6") + "<div id='social_loadFBAccountPermissions'></div>";
-	html[i++] = this.zimlet.getMessage("fbSignInLine7");
-	html[i++] = this.zimlet.getMessage("fbSignInLine8");
-	html[i++] = "</DIV>";
+	html[i++] = this.zimlet.getMessage("fbSignInLine3") + "<div id='social_loadFBAccountPermissions'></div>";
+	html[i++] = this.zimlet.getMessage("fbSignInLine4")+ " <br/>";
+	html[i++] = this.zimlet.getMessage("fbSignInLine5")+ " <br/>";
+	html[i++] = "</DIV><br/>";
 	html[i++] = "<DIV>";
-	html[i++] = "<H3>"+this.zimlet.getMessage("permissions")+"</H3>";
-	html[i++] = this.zimlet.getMessage("fbReadPermission") + "<br/>";
-	html[i++] = this.zimlet.getMessage("fbWritePermission") + "<br/>";
-	html[i++] =  this.zimlet.getMessage("fbRememberMePermission") + "<br/>";
 	html[i++] = "<br>" + this.zimlet.getMessage("fbRevokeInfoMsg");
 	html[i++] = "</DIV>";
 	return html.join("");
@@ -441,7 +438,7 @@ function() {
 		this.zimlet.setUserProperty("social_pref_toolbarButtonOn", currentVal);
 		save = true;
 	}
-
+	
 	currentVal = document.getElementById("social_pref_SocialMailUpdateOn").checked;
 	if (this.social_pref_SocialMailUpdateOn != currentVal) {
 		this.zimlet.setUserProperty("social_pref_SocialMailUpdateOn", currentVal);
@@ -557,6 +554,7 @@ function() {
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_tweetmemePopularIsOn' /></td><td width=100%>"+this.zimlet.getMessage("showTweetmemeByDefault")+"</td></tr>";
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_trendsPopularIsOn' /></td><td width=100%>"+this.zimlet.getMessage("showTopTwitterTrendsByDefault")+"</td></tr>";
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_diggPopularIsOn' /></td><td width=100%> "+this.zimlet.getMessage("showDiggsPopularByDefault")+"</td></tr>";
+
 	html[i++] = "</table>";
 	html[i++] = "<table>";
 	html[i++] = "<tr><td>"+this.zimlet.getMessage("feedCardWidth") +"</td><td>" + this._createCardWidthList() + "</td></tr>";
@@ -572,6 +570,7 @@ function() {
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_SocialMailUpdateOn' /></td><td width=100%>"+this.zimlet.getMessage("sendSocialMail")+"</td></tr>";
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_showTweetAlertsOn' /></td><td width=100%>"+this.zimlet.getMessage("showTweetAlert")+"</td></tr>";
 	html[i++] = "<tr><td><input type='checkbox' id='social_pref_toolbarButtonOn' /></td><td width=100%>"+this.zimlet.getMessage("showSocializeBtn")+"</td></tr>";
+
 	html[i++] = "</table>";
 	return html.join("");
 };
@@ -583,31 +582,31 @@ function() {
 	html[i++] = "<select id='social_pref_cardWidthList'>";
 	var sizes = [
 		{
-			name:"Very small",
+			name:this.zimlet.getMessage("verySmall"),
 			val:"300px"
 		},
 		{
-			name:"Small",
+			name:this.zimlet.getMessage("small"),
 			val:"350px"
 		},
 		{
-			name:"Medium",
+			name:this.zimlet.getMessage("medium"),
 			val:"400px"
 		},
 		{
-			name:"Large",
+			name:this.zimlet.getMessage("large"),
 			val:"450px"
 		},
 		{
-			name:"XL",
+			name:this.zimlet.getMessage("xl"),
 			val:"500px"
 		},
 		{
-			name:"2XL",
+			name:this.zimlet.getMessage("2xl"),
 			val:"550px"
 		},
 		{
-			name:"3XL",
+			name:this.zimlet.getMessage("3xl"),
 			val:"600px"
 		}
 	];

@@ -1,0 +1,13 @@
+<template id='OAuthDialogView'>
+	<DIV class='Oauth_yellow'>
+		<b>${stepsToAddAccount}</b><br/>
+		${step1}<div id='Oauth_goToOauthPage'> </div><br/>
+		${step2}<br/>
+		${step3}<br/>
+		${step4}<br/>
+		${step5}<br/>
+		<B>${step6}<input id='Oauth_pin_field'  type='text'/></B><br/>
+		${step7}<BR/><BR/>
+		${stepNotes} 
+	</DIV>
+</template>

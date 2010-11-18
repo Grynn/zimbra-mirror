@@ -64,6 +64,7 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     String  consumerSecretZD= "oyriZ32PAMNk3F6lGOeEE0GGyDSPHg1EjTMSWOKuIPw"; 
     long timeStamp = System.currentTimeMillis() / 1000;
     String nonce = request.getParameter("nonce");
+    
 	String isZD = request.getParameter("isZD");
 	if(isZD.equals("true")) {
 		consumerKey = consumerKeyZD;
@@ -77,9 +78,13 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
     String status = request.getParameter("status");
     String oauth_verifier = request.getParameter("oauth_verifier");
+	String oauth_callback = request.getParameter("oauth_callback");
     String text = request.getParameter("text");
     String screen_name = request.getParameter("screen_name");
     String count = request.getParameter("count");
+	String max_id = request.getParameter("max_id");
+	String since_id = request.getParameter("since_id");	
+   
     HashMap<String, String> hm = new HashMap<String, String>();
     if (status != null) {
         hm.put("status", status);
@@ -90,44 +95,70 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     if (screen_name != null) {
         hm.put("screen_name", screen_name);
     }
-    if (oauth_verifier != null) {
-        hm.put("oauth_verifier", oauth_verifier);
-    }
+
     if (count != null) {
         hm.put("count", count);
     }
-    String sig = generateAuthorizationHeader(method, url, hm, nonce, String.valueOf(timeStamp), token, tokenSecret, consumerKey, consumerSecret);
+	if(max_id != null) {
+        hm.put("max_id", max_id);
+	} 
+	if(since_id != null) {
+        hm.put("since_id", since_id);
+	} 
+    String sig = generateAuthorizationHeader(method, url, hm, nonce, String.valueOf(timeStamp), token, tokenSecret, consumerKey, consumerSecret, oauth_verifier, oauth_callback);
 %>
 
 <%=  sig %>
 
 <%!
-    public String generateAuthorizationHeader(String method, String url, HashMap<String, String> params, String nonce, String timeStamp, String token, String tokenSecret, String consumerKey, String consumerSecret) {
-        params.put("oauth_consumer_key", consumerKey);
-        params.put("oauth_signature_method", "HMAC-SHA1");
-        params.put("oauth_timestamp", timeStamp);
-        params.put("oauth_nonce", nonce);
-        params.put("oauth_version", "1.0");
+    public String generateAuthorizationHeader(String method, String url, HashMap<String, String> params, String nonce, String timeStamp, String token, String tokenSecret, 
+														String consumerKey, String consumerSecret, String oauth_verifier, String oauth_callback) {
 
+		HashMap<String, String> authHeaderParams = new HashMap<String, String>(); 
+        authHeaderParams.put("oauth_consumer_key", consumerKey);
+        authHeaderParams.put("oauth_signature_method", "HMAC-SHA1");
+        authHeaderParams.put("oauth_timestamp", timeStamp);
+        authHeaderParams.put("oauth_nonce", nonce);
+        authHeaderParams.put("oauth_version", "1.0");
         if (token != null) {
-            params.put("oauth_token", token);
+            authHeaderParams.put("oauth_token", token);
         }
-        parseGetParameters(url, params);
-        String normalizedParams = normalizeRequestParameters(params);
+		if(oauth_callback != null) {
+            authHeaderParams.put("oauth_callback", oauth_callback);
+		}
+		if(oauth_verifier != null) {
+            authHeaderParams.put("oauth_verifier", oauth_verifier);
+		}
+
+		HashMap<String, String> sigParams = new HashMap<String, String>(); 
+		sigParams.putAll(params);
+		sigParams.putAll(authHeaderParams);
+        parseGetParameters(url, sigParams);
+
+        String normalizedParams = normalizeRequestParameters(sigParams);
         StringBuffer base = new StringBuffer(method).append("&").append(
                 encode(constructRequestURL(url))).append("&");
         base.append(encode(normalizedParams));
         String oauthBaseString = base.toString();
         String signature = generateSignature(oauthBaseString, tokenSecret, consumerSecret);
+        
+		authHeaderParams.put("oauth_signature", signature); //add signature to authHeaderParams
+
+		String resp ="OAuth " + encodeParameters(authHeaderParams, ",", true);
+/*
 
         String resp = "{"
                 + "\"url\": \"" + url + "\","
+				+ "\"oauthBaseString\": \"" + oauthBaseString + "\","
                 + "\"params\": \"" + (normalizedParams + "&oauth_signature=" + encode(signature)) + "\","
                 + "\"timeStamp\": \"" + timeStamp + "\","
                 + "\"signature\": \"" + encode(signature) + "\","
+				  + "\"oauthHeader\": \"" + oauthHeader + "\","
                 + "\"nonce\": \"" + nonce + "\""
 
                 + "}";
+*/				
+
         return resp;
     }
 %>
@@ -216,25 +247,36 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
             HashMap<String, String> params) {
         Map<String, String> sortedMap = new TreeMap<String, String>(params);
 
-        return encodeParameters(sortedMap, "&");
+        return encodeParameters(sortedMap, "&", false);
     }
 %>
 
 
 <%!
     public String encodeParameters(Map<String, String> postParams,
-                                   String splitter) {
+                                   String splitter, boolean quot) {
         StringBuffer buf = new StringBuffer();
         Iterator<Map.Entry<String, String>> it = postParams.entrySet()
                 .iterator();
         while (it.hasNext()) {
             Map.Entry<String, String> pairs = (Map.Entry<String, String>) it.next();
             if (buf.length() != 0) {
+				if (quot) {
+					buf.append("\"");
+				}
                 buf.append(splitter);
             }
             buf.append(encode(pairs.getKey())).append("=");
+			if (quot) {
+					buf.append("\"");
+			}
             buf.append(encode(pairs.getValue()));
 
+        }
+		if (buf.length() != 0) {
+			if (quot) {
+				buf.append("\"");
+			}
         }
         return buf.toString();
     }

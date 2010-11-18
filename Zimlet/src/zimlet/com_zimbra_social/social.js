@@ -26,7 +26,6 @@ var SocialZimlet = com_zimbra_social_handlerObject;
 SocialZimlet.prototype.init =
 function() {
 	this.initializeVariables();
-
 	this._createsocialApp();
 };
 
@@ -110,8 +109,9 @@ function() {
 	this.tableIdAndTimerMap = new Array();
 	this.tableIdAndAccountMap = new Array();
 	this.tableIdAndSearchMap = new Array();
+	this.tableIdAndHttpErrorMap = new Array();
 	this._FBPostIdAndCommentboxMap = new Array();
-	this.tableIdAndPostIdMap = new Array();
+	this.tableIdAndEndPostIdMap = new Array();
 	this.tableIdAndResultsMap = new Array();
 	this.allAccounts = new Array();
 	this._allHashLinks = new Array();
@@ -124,8 +124,15 @@ function() {
 	this._allFacebookCommentsLinks = new Array();
 	this._allFBLikeLinks = new Array();
 	this._allFBMoreCommentsLinks = new Array();
+	this.tableIdAndPageNumberMap = new Array();
+	this._tableIdAndBottomPostIdMap = new Array();
+	this.tableIdAndRefreshType = new Array();
+	this.tableIdAndMarkAsReadId = new Array();
+	this.tableIdAndTopPostIdMap = new Array();
+	this.tableIdAndHighestPostIdMap = new Array();
+	this.tableIdAndCacheMap = new Array();
+	this.tableIdAndUnreadMap = new Array();
 	this.cardInfoSectionIdsArray = new Array();//every card's data div (used to reset its height when window is resized)
-	//this._migrateOldPropsNames();//from tweetzi to social
 	this.isTextPasted = false;
 	this._autoShorten = true;
 
@@ -135,7 +142,7 @@ function() {
 	this.tweetmeme = new com_zimbra_socialTweetMeme(this);
 	this.digg = new com_zimbra_socialDigg(this);
 	this.miniDlg = new com_zimbra_socialMiniDlg(this);
-
+	this.socialOAuth = new SocialOAuth(this);
 	this.loadAllAccountsFromDB();
 	this._objectManager = new ZmObjectManager(new DwtComposite(this.getShell()));
 
@@ -178,48 +185,7 @@ function() {
 	}
 };
 
-SocialZimlet.prototype._migrateOldPropsNames =
-function() {
-	var props = new Array();
-	var propsToEmpty = new Array();
-	props["tweetzi_AllTwitterAccounts"] = "social_AllTwitterAccounts";
-	props["tweetZi_emailLastUpdateDate"] = "social_emailLastUpdateDate";
-	props["tweetzi_AllTwitterSearches"] = "social_AllTwitterSearches";
-	props["tweetzi_facebook_api_key"] = "social_facebook_api_key";
-	props["tweetzi_facebook_secret"] = "social_facebook_secret";
-	props["tweetzi_twitter_consumer_key"] = "social_twitter_consumer_key";
-	props["tweetzi_twitter_consumer_secret"] = "social_twitter_consumer_secret";
-	for (var oldprop in props) {
-		var migrated = false;
-		var old_prop_val = this.getPropValueFromSettings(oldprop);
-		var new_prop_val = this.getPropValueFromSettings(props[oldprop]);
-		if (old_prop_val != undefined && old_prop_val != "" && (new_prop_val == undefined || new_prop_val == "")) {
-			migrated = true;
-			this.setUserProperty(props[oldprop], old_prop_val);
-		}
-	}
-	if (migrated)
-		this.saveUserProperties();
-};
 
-SocialZimlet.prototype.getPropValueFromSettings =
-function(name) {
-	try {
-		if (this._propsInSettings == undefined) {
-			this._propsInSettings = appCtxt.getActiveAccount().settings.getInfoResponse.props.prop;
-		}
-	} catch(e) {
-		this._propsInSettings = new Array();
-	}
-	if (this._propsInSettings == undefined)
-		return (new Array());
-
-	for (var i = 0; i < this._propsInSettings.length; i++) {
-		if (name == this._propsInSettings[i].name)
-			return this._propsInSettings[i]._content;
-	}
-	return (new Array());
-};
 
 SocialZimlet.prototype._addTweetButtons =
 function() {
@@ -501,12 +467,15 @@ function(ev) {
 SocialZimlet.prototype._twitterSearchBtnListener =
 function() {
 	var val = document.getElementById("social_searchField").value;
+	if(AjxStringUtil.trim(val) == "") {
+		return;
+	}
 	var tableId = this._showCard({headerName:val, type:"SEARCH", autoScroll:true});
 	var sParams = {query:val, tableId:tableId, type:"SEARCH"};
 	this.twitter.twitterSearch(sParams);
 	var timer = setInterval(AjxCallback.simpleClosure(this.twitter.twitterSearch, this.twitter, sParams), 400000);
 	this.tableIdAndTimerMap[tableId] = timer;
-	var search = {name:val, axn:"on", pId:""};
+	var search = {name:val, axn:"on", _p:""};
 	this.tSearchFolders.push({name:val, icon:"SearchFolder", account:"", type:"SEARCH", search:search});
 
 	this.twitter.allSearches.push(search);
@@ -623,6 +592,7 @@ function(params) {
 		trimName = headerName.substring(0, this._getMaxHeaderTextLength()) + "..";		
 	}
 
+
 	var prettyName = type.toLowerCase() + ": " + trimName;
 	var iconName = "social_twitterIcon";
 	var hdrCellColor = "black";
@@ -704,7 +674,7 @@ function(params) {
 		html[i++] = "<img  title='"+this.getMessage("moveRight")+"' src='" + this.getResource("social_rightArrow.png") + "' id='social_rightArrow" + this.cardIndex + "'/></td>";
 	}
 
-	if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
+	if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK") {
 		html[i++] = "<td width='5%'valign='middle'>";
 		html[i++] = "<img    title='"+this.getMessage("markAsRead")+"' src='" + this.getResource("social_markread.gif") + "' id='social_markAsReadBtn" + this.cardIndex + "' />";
 		html[i++] = "</td>";
@@ -734,7 +704,6 @@ function(params) {
 	card.innerHTML = html.join("");
 
 	var params = {row:row, cellId:card.id, tableId:cardInfoSectionId, headerName:origHeaderName, type:type}
-	var params = {row:row, cellId:card.id, tableId:cardInfoSectionId, headerName:origHeaderName, type:type}
 	var callback = AjxCallback.simpleClosure(this._handleCloseButton, this, params);
 	document.getElementById("social_closeBtn" + this.cardIndex).onclick = callback;
 
@@ -743,7 +712,7 @@ function(params) {
 		var callback = AjxCallback.simpleClosure(this._handleRefreshButton, this, params);
 		document.getElementById("social_refreshBtn" + this.cardIndex).onclick = callback;
 	}
-	if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
+	if (type == "ACCOUNT" || type == "SEARCH" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK") {
 		var params = {row:row, cellId:card.id, tableId:cardInfoSectionId, headerName:origHeaderName, type:type}
 		var callback = AjxCallback.simpleClosure(this._handleMarkAsReadButton, this, params);
 		document.getElementById("social_markAsReadBtn" + this.cardIndex).onclick = callback;
@@ -760,6 +729,7 @@ function(params) {
 		document.getElementById('social_twitterCardsDiv').scrollLeft =
 		(parseInt(this.preferences.social_pref_cardWidthList.replace("px", "")) + 10) * sDistance;
 	}
+	this._setMsgToCard(cardInfoSectionId, this.getMessage("loading"));
 	return cardInfoSectionId;
 };
 
@@ -826,44 +796,78 @@ function  (cellId, colIndex2) {
 		(parseInt(this.preferences.social_pref_cardWidthList.replace("px", "")) + 10) * scrollTo;
 	}
 	//save positions
+	this._saveAllCardsAndPositions();
+	appCtxt.getAppController().setStatusMsg(this.getMessage("feedPositionSaved"), ZmStatusView.LEVEL_INFO);
+};
+
+SocialZimlet.prototype._saveAllCardsAndPositions =
+function() {
 	for (var tableId in this.tableIdAndAccountMap) {
-		var reqId = tableId.replace("social_cardInfoSectionId", "social_card");
-		for (var i = 0; i < cells.length; i++) {
-			if (cells[i].id == reqId) {
-				this.tableIdAndAccountMap[tableId]["__pos"] = i;
-				break;
-			}
-		}
+		this.tableIdAndAccountMap[tableId]["__pos"] = this._getTableCardPosition(tableId);
 	}
 	this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
 
 	for (var tableId in this.tableIdAndSearchMap) {
-		var reqId = tableId.replace("social_cardInfoSectionId", "social_card");
-		for (var i = 0; i < cells.length; i++) {
-			if (cells[i].id == reqId) {
-				this.tableIdAndSearchMap[tableId]["__pos"] = i;
-				break;
-			}
-		}
+		this.tableIdAndSearchMap[tableId]["__pos"] = this._getTableCardPosition(tableId);
 	}
 	this.setUserProperty("social_AllTwitterSearches", this.twitter.getAllSearchesAsJSON(), true);
-	appCtxt.getAppController().setStatusMsg(this.getMessage("feedPositionSaved"), ZmStatusView.LEVEL_INFO);
+};
+
+SocialZimlet.prototype._getTableCardPosition =
+function(tableId) {
+	if(!this._twitterCardsParentTable) {
+		this._twitterCardsParentTable = document.getElementById('social_twitterCardsParentTable');
+	}
+	var reqId = tableId.replace("social_cardInfoSectionId", "social_card");
+	var cells = this._twitterCardsParentTable.rows[0].cells;
+	for(var i=0; i < cells.length; i++) {
+		if(cells[i].id == reqId) {
+			return i;
+		}
+	}
+	return -1;
 };
 
 SocialZimlet.prototype._setCardUnreadCount =
-function(tableId, unReadCount) {
+function(tableId, unReadCount, type) {
+	var currentPage = 1;
+	if(this.tableIdAndPageNumberMap[tableId]) {
+		currentPage = this.tableIdAndPageNumberMap[tableId];
+	}
+	this._storeUnreadCount(tableId, unReadCount);
+	var totalUnreadCount = this._getTotalUnreadCount(tableId, unReadCount);
+	var itemsLimit = this._getItemsLimit(type);
+	itemsLimit = itemsLimit + (currentPage -1) * itemsLimit;
+	var plusStr = "";
+	if(totalUnreadCount == itemsLimit) {
+		plusStr = "+";
+	}
 	var cellId = tableId.replace("social_cardInfoSectionId", "social_unreadCountCell");
 	var cell = document.getElementById(cellId);
 	if (cell == null)
 		return;
 
-	if (unReadCount == 0) {
+	if (totalUnreadCount == 0) {
 		cell.className = "";
 		cell.innerHTML = "";
 	} else {
 		cell.className = "social_unReadClass";
-		cell.innerHTML = unReadCount;
+		cell.innerHTML = totalUnreadCount + plusStr;
 	}
+};
+
+
+SocialZimlet.prototype._getItemsLimit =
+function(type) {
+	var itemsLimit = 0;
+	if(type == "FACEBOOK") {
+		itemsLimit = this.facebook.itemsLimit;
+	} else if(type == "SEARCH") {
+		itemsLimit = this.preferences.social_pref_numberofTweetsSearchesToReturn;
+	} else if(type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
+		itemsLimit = this.preferences.social_pref_numberofTweetsToReturn;
+	}
+	return itemsLimit;
 };
 
 SocialZimlet.prototype._handleUndoShortenLink =
@@ -876,22 +880,32 @@ function() {
 
 SocialZimlet.prototype._handleRefreshButton =
 function(params) {
-	if (params.type == "SEARCH" || params.type == "TREND") {
-		this.twitter.twitterSearch({query:params.headerName, tableId:params.tableId, type:params.type});
-	} else if (params.type == "ACCOUNT") {
-		this.twitter.getFriendsTimeLine({tableId: params.tableId, account: this.tableIdAndAccountMap[params.tableId]});
-	} else if (params.type == "TWEETMEME") {
-		this.tweetmeme.tweetMemeSearch({query:params.headerName, tableId:params.tableId});
-	} else if (params.type == "DIGG") {
-		this.digg.diggSearch({query:params.headerName, tableId:params.tableId});
-	} else if (params.type == "FACEBOOK") {
-		this.facebook._fbGetStream(params.tableId, this.tableIdAndAccountMap[params.tableId]);
-	} else if (params.type == "MENTIONS") {
-		this.twitter.getMentions({tableId: params.tableId, account: this.tableIdAndAccountMap[params.tableId]});
-	} else if (params.type == "DIRECT_MSGS") {
-		this.twitter.getDirectMessages({tableId: params.tableId, account: this.tableIdAndAccountMap[params.tableId]});
-	} else if (params.type == "SENT_MSGS") {
-		this.twitter.getSentMessages({tableId:params.tableId, account:this.tableIdAndAccountMap[params.tableId]});
+	var tableId = params.tableId;
+	this._resetPagination(tableId);
+	this._setMsgToCard(params.tableId, this.getMessage("loading"));
+	this._doRefreshFeeds(tableId, params.type, params.headerName);
+};
+
+SocialZimlet.prototype._resetPagination =
+function(tableId) {
+	this.tableIdAndPageNumberMap[tableId] = 1;
+	this._tableIdAndBottomPostIdMap[tableId] = null;
+	this.tableIdAndTopPostIdMap[tableId] = null;
+	this.tableIdAndRefreshType[tableId] = "REFRESH";
+};
+
+SocialZimlet.prototype._doRefreshFeeds =
+function(tableId, type, headerName) {
+	if (type == "SEARCH" || type == "TREND") {
+		this.twitter.twitterSearch({query:headerName, tableId:tableId, type:type});
+	} else if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
+		this.twitter.getTwitterFeeds({tableId: tableId, account: this.tableIdAndAccountMap[tableId], type:type});
+	} else if (type == "TWEETMEME") {
+		this.tweetmeme.tweetMemeSearch({query:headerName, tableId:tableId});
+	} else if (type == "DIGG") {
+		this.digg.diggSearch({query:headerName, tableId:tableId});
+	} else if (type == "FACEBOOK") {
+		this.facebook._fbGetStream(tableId, this.tableIdAndAccountMap[tableId]);
 	}
 };
 
@@ -907,33 +921,29 @@ function(id) {
 
 SocialZimlet.prototype._handleMarkAsReadButton =
 function(params) {
-	if (params.type == "SEARCH") {
-		var search = this.tableIdAndSearchMap[params.tableId];
-		var pId = this.tableIdAndPostIdMap[params.tableId];
-		search.pId = pId;
-		this.twitter._updateAllSearches(search.name, "on");
-	} else if (params.type == "ACCOUNT") {
-		var account = this.tableIdAndAccountMap[params.tableId];
-		var pId = this.tableIdAndPostIdMap[params.tableId];
-		account.__postId = pId;
+	var type = params.type;
+	var tableId = params.tableId;
+	var _p = this.tableIdAndHighestPostIdMap[tableId];
+	this.tableIdAndMarkAsReadId[tableId] = _p;
+	var feedObj = type == "SEARCH" ? this.tableIdAndSearchMap[tableId] : this.tableIdAndAccountMap[tableId];
+	if (type == "SEARCH") {
+		feedObj._p = _p;
+		this.twitter._updateAllSearches(feedObj.name, "on");
+	} else if (type == "ACCOUNT" || type == "FACEBOOK") {
+		feedObj._p = _p;
 		this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
-	} else if (params.type == "MENTIONS") {
-		var account = this.tableIdAndAccountMap[params.tableId];
-		var pId = this.tableIdAndPostIdMap[params.tableId];
-		account.__mId = pId;
+	} else if (type == "MENTIONS") {
+		feedObj._m = _p;
 		this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
-	} else if (params.type == "DIRECT_MSGS") {
-		var account = this.tableIdAndAccountMap[params.tableId];
-		var pId = this.tableIdAndPostIdMap[params.tableId];
-		account.__dmId = pId;
+	} else if (type == "DIRECT_MSGS") {
+		feedObj._d = _p;
 		this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
-	} else if (params.type == "SENT_MSGS") {
-		var account = this.tableIdAndAccountMap[params.tableId];
-		var pId = this.tableIdAndPostIdMap[params.tableId];
-		account.__smId = pId;
+	} else if (type == "SENT_MSGS") {
+		feedObj._s = _p;
 		this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
 	}
-	this.createCardView(params.tableId, this.tableIdAndResultsMap[params.tableId], params.type);
+	this._resetPagination(tableId);
+	this._doRefreshFeeds(tableId, type);
 };
 
 SocialZimlet.prototype._handleDeleteButton =
@@ -946,16 +956,8 @@ function(params) {
 			break;
 		}
 	}
-	if (params.tableId) {
-		var timer = this.tableIdAndTimerMap[params.tableId];
-		if (timer) { //remove update timers
-			clearInterval(timer);
-		}
-	}
-
 	params.row.deleteCell(document.getElementById(params.cellId).cellIndex);
 	this.twitter._updateAllSearches(params.headerName, "delete");
-
 };
 
 SocialZimlet.prototype._handleCloseButton =
@@ -967,6 +969,7 @@ function(params) {
 		this.tableIdAndAccountMap[params.tableId].isDisplayed = false;
 		this.tableIdAndAccountMap[params.tableId]["__s"] = "0";
 		this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
+		delete this.tableIdAndAccountMap[params.tableId];
 	}
 	if (params.tableId) {
 		var timer = this.tableIdAndTimerMap[params.tableId];
@@ -974,6 +977,7 @@ function(params) {
 			clearInterval(timer);
 		}
 	}
+	this.tableIdAndCacheMap[params.tableId] = [];
 };
 
 //---------------------------------------------------------------------------------
@@ -1003,6 +1007,7 @@ SocialZimlet.prototype.appActive = function(appName, active) {
 		if (this.getUserProperty("social_pref_dontShowWelcomeScreenOn") == "false") {
 			this.preferences._showWelcomeDlg();
 		}
+		document.title = this.getMessage("zimbraSocial");
 	}
 	else {
 		this._hideApp(appName);
@@ -1119,13 +1124,12 @@ function() {
 	var expandIconId = "social_expandIcon_" + Dwt.getNextId();
 	if (this.prefFolder == undefined) {
 		this.prefFolders = new Array();
-		//this.prefFolders.push({name:"Add/Remove Accounts", icon:"Group", account:"", type:"MANAGE_ACCOUNTS"});
 		this.prefFolders.push({name:this.getMessage("preferences"), icon:"Preferences", account:"", type:"PREFERENCES"});
 		this.prefFolders.push({name:"Help", icon:"Help", account:"", type:"HELP"});
 
 	}
 	this.expandIconAndFolderTreeMap[expandIconId] = new Array();
-	html[i++] = this._getTreeHeaderHTML("Settings", expandIconId);	//header
+	html[i++] = this._getTreeHeaderHTML(this.getMessage("settings"), expandIconId);	//header
 	html[i++] = "<div class='DwtTreeItemLevel1ChildDiv' style='display: block;'>";
 	for (var j = 0; j < this.prefFolders.length; j++) {
 		var folder = this.prefFolders[j];
@@ -1265,34 +1269,38 @@ function(ev) {
 	if (el.id.indexOf("socialTreeItem__ACCOUNT") == 0) {
 		account = this.treeIdAndAccountMap[el.id];
 		tableId = this._showCard({headerName:label, type:"ACCOUNT", autoScroll:true});
-		this.twitter.getFriendsTimeLine({tableId: tableId, account: account});
-		timer = setInterval(AjxCallback.simpleClosure(this.twitter._updateAccountStream, this.twitter, tableId, account), 400000);
-		this.tableIdAndTimerMap[tableId] = timer;
 		this.tableIdAndAccountMap[tableId] = account;
+		this.tableIdAndMarkAsReadId[tableId] = account._p;
+		this.twitter.getTwitterFeeds({tableId: tableId, account: account, type:"ACCOUNT"});
+		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getTwitterFeeds, this.twitter, {tableId: tableId, account: account, type:"ACCOUNT"}), 400000);
+		this.tableIdAndTimerMap[tableId] = timer;
 		account.isDisplayed = true;
 		account["__s"] = "1";//__s means shown, 1 means true
-		this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
+		this._saveAllCardsAndPositions();
 	} else if (el.id.indexOf("socialTreeItem__MENTIONS") == 0) {
 		account = this.treeIdAndAccountMap[el.id];
 		tableId = this._showCard({headerName:label, type:"MENTIONS", autoScroll:true});
-		this.twitter.getMentions({tableId: tableId, account: account});
-		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getMentions, this.twitter, {tableId: tableId, account: account}), 400000);
-		this.tableIdAndTimerMap[tableId] = timer;
 		this.tableIdAndAccountMap[tableId] = account;
+		this.tableIdAndMarkAsReadId[tableId] = account._m;
+		this.twitter.getTwitterFeeds({tableId: tableId, account: account, type:"MENTIONS"});
+		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getTwitterFeeds, this.twitter, {tableId: tableId, account: account, type:"MENTIONS"}), 400000);
+		this.tableIdAndTimerMap[tableId] = timer;
 	} else if (el.id.indexOf("socialTreeItem__DIRECT_MSGS") == 0) {
 		account = this.treeIdAndAccountMap[el.id];
 		tableId = this._showCard({headerName:label, type:"DIRECT_MSGS", autoScroll:true});
-		this.twitter.getDirectMessages({tableId: tableId, account: account});
-		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getDirectMessages, this.twitter, {tableId: tableId, account: account}), 400000);
-		this.tableIdAndTimerMap[tableId] = timer;
 		this.tableIdAndAccountMap[tableId] = account;
+		this.tableIdAndMarkAsReadId[tableId] = account._d;
+		this.twitter.getTwitterFeeds({tableId: tableId, account: account, type:"DIRECT_MSGS"});
+		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getTwitterFeeds, this.twitter, {tableId: tableId, account: account, type:"DIRECT_MSGS"}), 400000);
+		this.tableIdAndTimerMap[tableId] = timer;
 	} else if (el.id.indexOf("socialTreeItem__SENT_MSGS") == 0) {
 		account = this.treeIdAndAccountMap[el.id];
 		tableId = this._showCard({headerName:label, type:"SENT_MSGS", autoScroll:true});
-		this.twitter.getSentMessages({tableId: tableId, account: account});
-		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getSentMessages, this.twitter, {tableId: tableId, account: account}), 400000);
-		this.tableIdAndTimerMap[tableId] = timer;
 		this.tableIdAndAccountMap[tableId] = account;
+		this.tableIdAndMarkAsReadId[tableId] = account._s;
+		this.twitter.getTwitterFeeds({tableId: tableId, account: account, type:"SENT_MSGS"});
+		timer = setInterval(AjxCallback.simpleClosure(this.twitter.getTwitterFeeds, this.twitter, {tableId: tableId, account: account, type:"SENT_MSGS"}), 400000);
+		this.tableIdAndTimerMap[tableId] = timer;
 	} else if (el.id.indexOf("socialTreeItem__MANAGE_ACCOUNTS") == 0) {
 		this.preferences._showManageAccntsDlg();
 	} else if (el.id.indexOf("socialTreeItem__PREFERENCES") == 0) {
@@ -1307,9 +1315,10 @@ function(ev) {
 		}
 		var search = this.treeIdAndSearchMap[el.id];
 		tableId = this._showCard({headerName:search.name, type:"SEARCH", autoScroll:true});
+		this.tableIdAndSearchMap[tableId] = search;
+		this.tableIdAndMarkAsReadId[tableId] = search._p;
 		sParams = {query:search.name, tableId:tableId, type:"SEARCH"};
 		this.twitter.twitterSearch(sParams);
-		this.tableIdAndSearchMap[tableId] = search;
 		this.twitter._updateAllSearches(label, "on");
 		timer = setInterval(AjxCallback.simpleClosure(this.twitter.twitterSearch, this.twitter, sParams), 400000);
 		this.tableIdAndTimerMap[tableId] = timer;
@@ -1332,8 +1341,10 @@ function(ev) {
 		timer = setInterval(AjxCallback.simpleClosure(this.facebook._updateFacebookStream, this.facebook, tableId, account), 400000);
 		this.tableIdAndTimerMap[tableId] = timer;
 		this.tableIdAndAccountMap[tableId] = account;
+		this.tableIdAndMarkAsReadId[tableId] = account._p;
 		account.isDisplayed = true;
 		account["__s"] = "1";//__s means shown, 1 means true
+		this._saveAllCardsAndPositions();
 		this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
 	}
 };
@@ -1442,28 +1453,53 @@ function(ev) {
 };
 
 SocialZimlet.prototype.createCardView =
-function(tableId, jsonObj, type) {
-	if (this.miniDlg.miniDlgON)//return if its from miniDlg view
+function(params) {
+	var tableId = params.tableId;
+	var jsonObj = params.items;
+	var type = params.type;
+	var additionalParams = params.additionalParams;
+	if (this.miniDlg.miniDlgON) {//return if its from miniDlg view
 		return;
-
-	if (!tableId)
+	}
+	if (!tableId) {
 		return;
-
+	}
 	var html = [];
 	var i = 0;
 
-	var unReadCount = 0;
-	var pId = "";
-
-	var rowIdsToMarkAsRead = new Array();
-	if (jsonObj == undefined)
-		return;
-
-	if (jsonObj.length == 0) {
-		document.getElementById(tableId).innerHTML = "<br/><br/><div width=90% align=center><label style='color:#0000FF;font-weight:bold;font-size:12px'>"+this.getMessage("noDataFound")+"</label></div>";
+	if (jsonObj == undefined) {
 		return;
 	}
-	for (var k = 0; k < jsonObj.length; k++) {
+	var markAsReadId = this.tableIdAndMarkAsReadId[tableId];
+	var numberOfPosts = jsonObj.length;
+	var isPreviouslyReadFlagDisplayed = false;
+	var unReadCount = 0;
+	var accountName = "";
+	this._cacheResults(tableId, jsonObj);
+	if (numberOfPosts == 0) {
+		this._addNewerAndOlderLinks(tableId, numberOfPosts, html, "top", type);
+		var i = html.length;
+		html[i++] = "<br/><br/><div width=90% align=center><label style='color:#0000FF;font-weight:bold;font-size:12px'>"+this.getMessage("noDataFound")+"</label></div>";
+		document.getElementById(tableId).innerHTML = html.join("");
+		var query = "";
+		if(additionalParams && additionalParams.query) {
+			query = additionalParams.query;
+		}
+		this._addOlderAndNewerLinkHandlers(tableId, type, query);
+		return;
+	}
+	if (jsonObj.error) {
+		this._setErrorToCard(tableId, jsonObj.error);
+		return;
+	}
+	if(type == "PROFILE_MSGS") {
+		type = "ACCOUNT";
+	}
+	if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
+		accountName = this.tableIdAndAccountMap[tableId].name;
+	}
+
+	for (var k = 0; k < numberOfPosts; k++) {
 		var obj = jsonObj[k];
 		var user = "";
 		var profile_image_url = "";
@@ -1477,34 +1513,39 @@ function(tableId, jsonObj, type) {
 		var notFollowing = true;
 		var userId = "";
 		var diggCount = "";
-		if (k == 0 && (type == "SEARCH" || type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS")) {
-			this.tableIdAndResultsMap[tableId] = jsonObj;
-			this.tableIdAndPostIdMap[tableId] = obj.id;
-			if (type == "SEARCH") {
-				var search = this.tableIdAndSearchMap[tableId];
-				pId = search.pId ? search.pId : "";
-			} else if (type == "ACCOUNT") {
-				var accnt = this.tableIdAndAccountMap[tableId];
-				pId = accnt.__postId ? accnt.__postId : "";
-			} else if (type == "MENTIONS") {
-				var accnt = this.tableIdAndAccountMap[tableId];
-				pId = accnt.__mId ? accnt.__mId : "";
-			} else if (type == "DIRECT_MSGS") {
-				var accnt = this.tableIdAndAccountMap[tableId];
-				pId = accnt.__dmId ? accnt.__dmId : "";
-			} else if (type == "SENT_MSGS") {
-				var accnt = this.tableIdAndAccountMap[tableId];
-				pId = accnt.__smId ? accnt.__smId : "";
-			}
-
-		}
+		var currentPostId = "";
 		var rowId = Dwt.getNextId();
-		if (pId && obj.id <= pId) {
-			rowIdsToMarkAsRead.push(rowId);
+		var markAsUnread = false;
+		var columnSpan = 2;
+		if(type == "FACEBOOK") {
+			currentPostId = obj.updated_time;
 		} else {
-			unReadCount++;
+			currentPostId = obj.id;
+		}
+		
+		if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK" || type == "SEARCH") {
+			if (k == 0) {
+				this.tableIdAndTopPostIdMap[tableId] = currentPostId;
+				if(this._isPageDirtyWithNewPosts(tableId, currentPostId)) {
+					return;
+				}
+				this._addNewerAndOlderLinks(tableId, numberOfPosts, html, "top", type);
+				this._addRefreshNoticeDiv(tableId, html);
+				i = html.length;
+			}
+		
+			if (k == (numberOfPosts - 1)) {
+				this._tableIdAndBottomPostIdMap[tableId] = currentPostId;
+			}
+			if(!markAsReadId || markAsReadId < currentPostId) {
+				markAsUnread = true;
+				columnSpan = 3;
+				unReadCount++;
+			}
 		}
 
+
+		
 		if (type == "SEARCH" || type == "TREND") {//for both search and trends
 			screen_name = obj.from_user;
 			created_at = obj.created_at;
@@ -1516,20 +1557,20 @@ function(tableId, jsonObj, type) {
 			imageAnchor = imageAnchor + "<img height='48' width='48' src='" + obj.profile_image_url + "' />";
 			imageAnchor = imageAnchor + "</a></div>";
 			imageAnchor = imageAnchor + "</td>";
-		} else     if (type == "TWEETMEME") {
+		} else if (type == "TWEETMEME") {
 			screen_name = "tweetmeme";
 			created_at = obj.created_at;
 			text = " " + obj.title + " " + obj.url;
 			source = "tweetmeme";
 			tweetcount = obj.url_count;
-			imageAnchor = "<TD > ";
+			imageAnchor = "<TD> ";
 			imageAnchor = imageAnchor + "<a  href='" + obj.url + "' target='_blank' style='color:gray'>";
 			imageAnchor = imageAnchor + "<table><tr>";
 			imageAnchor = imageAnchor + "<td class='social_tweetMemeBg' width=48px height=48px align='center'  valign='middle'>";
 			imageAnchor = imageAnchor + tweetcount + "</td></tr><tr><td class='social_tweetMemeRetweetBg'>retweets</td></tr></table>";
 			imageAnchor = imageAnchor + "</a>";
 			imageAnchor = imageAnchor + "</td>";
-		} else     if (type == "DIGG") {
+		} else if (type == "DIGG") {
 			diggCount = obj.diggs;
 			text = [" ", obj.title, " ", obj.link].join("");
 			screen_name = "digg";
@@ -1567,7 +1608,7 @@ function(tableId, jsonObj, type) {
 				continue;
 			}
 
-			var user = this.facebook._getFacebookProfile(obj.actor_id);
+			var user = this.facebook.getFacebookProfile(obj.actor_id, tableId);
 			screen_name = user.name;
 			created_at = obj.created_time;
 			if (obj.message != "") {
@@ -1639,7 +1680,11 @@ function(tableId, jsonObj, type) {
 		html[i++] = "<TABLE width=100%>";
 		html[i++] = "<TR>";
 		html[i++] = imageAnchor;
+		if(markAsUnread) {
+			html[i++] = "<td valign=top> <img title='"+this.getMessage("unreadItem")+"'  src='" + this.getResource("social_unreadMsgIcon.gif") + "' ></img></td>";
+		}
 		html[i++] = "<TD class='social_feedText' width=90%>";
+
 		if (type != "TWEETMEME" && type != "FACEBOOK") {
 			html[i++] = [" <a href='#' style='color:darkblue;font-size:12px;font-weight:bold' id='", this._getAccountLinkId(screen_name, tableId),
 				"'>", screen_name, ":</a> "].join("");
@@ -1649,33 +1694,29 @@ function(tableId, jsonObj, type) {
 		html[i++] = zimletyFiedTxt;
 		html[i++] = "<br/><label style='color:gray;font-size:11px'>&nbsp;" + created_at + "</label><br/>";
 
-		// html[i++] = "<br/><span align=right style='color:gray;font-size:10px'>&nbsp;- "+created_at+ " via " + source+"</span>";
 		html[i++] = "</TD>";
 		html[i++] = "</TR>";
 
 		if (type == "FACEBOOK") {
-			var additionalInfo = this._getAdditionalFBMessageInfo(obj, this.tableIdAndAccountMap[tableId]);
+			var additionalInfo = this._getAdditionalFBMessageInfo(obj, this.tableIdAndAccountMap[tableId], tableId);
 			if (additionalInfo.html != "") {
 				html[i++] = "<TR>";
-				html[i++] = "<TD colspan=2>";
+				html[i++] = "<TD colspan="+columnSpan+">";
 				html[i++] = additionalInfo.html;
 				html[i++] = "</TD>";
 				html[i++] = "</TR>";
 			}
 			html[i++] = "<TR>";
-			html[i++] = "<TD align=center colspan=2>";
+			html[i++] = "<TD align=center colspan="+columnSpan+">";
 			html[i++] = "<DIV id='" + additionalInfo.commentBoxId + "' style='display:none' />";
 			html[i++] = "</TD>";
 			html[i++] = "</TR>";
 		}
 
 		html[i++] = "<TR>";
-		html[i++] = "<TD colspan=2 style='color:gray'>";
+		html[i++] = "<TD colspan="+columnSpan+" style='color:gray'>";
 		html[i++] = "<table width=100%>";
 		html[i++] = "<TR>";
-		//if(type == "ACCOUNT" && notFollowing){
-		//	html[i++] = "<TD width=85% style='color:gray'>";
-		//}
 		if (type == "TWEETMEME" || type == "DIGG") {
 			html[i++] = "<TD width=95% style='color:gray;font-size:11px'>";
 		} else {
@@ -1683,38 +1724,31 @@ function(tableId, jsonObj, type) {
 		}
 		html[i++] = source.indexOf("via") != -1 ? source : "via " + source;
 		html[i++] = "</td>";
-		html[i++] = "<td colspan=2 >";
+		html[i++] = "<td colspan="+columnSpan+" >";
 
 		if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
-			if (this.twitterAccountNames == undefined) {
-				this.twitterAccountNames = new Array();
-
-				for (var accntId in this.allAccounts) {
-					var accnt = this.allAccounts[accntId];
-					if (accnt.type == "twitter") {
-						this.twitterAccountNames[accnt.name] = true;
-					}
-				}
-			}
-
-			if (this.twitterAccountNames[screen_name]) {
-				html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._gettwitterDeleteLinkId(obj.id, tableId) + "'>delete</a>&nbsp;&nbsp;";
+			if(accountName == screen_name) {
+				html[i++] = "<a href='#'  title='"+this.getMessage("deletePost")+"' style='color:gray;font-size:11px' id='" + this._gettwitterDeleteLinkId(obj.id, tableId, type) + "'>"+this.getMessage("del")+"</a>&nbsp;&nbsp;";
 			}
 		}
 
-		if (type == "ACCOUNT" || type == "SEARCH" || type == "TREND") {
-			html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._gettwitterDMLinkId("d @" + screen_name) + "'>dm</a>&nbsp;&nbsp;";
+		if (type == "ACCOUNT" || type == "SEARCH" || type == "TREND" || type == "DIRECT_MSGS") {
+			html[i++] = "<a href='#' title='"+this.getMessage("directMessage")+"' style='color:gray;font-size:11px' id='" + this._gettwitterDMLinkId("d @" + screen_name) + "'>"+this.getMessage("dm")+"</a>&nbsp;&nbsp;";
+		}
+		if(type != "DIRECT_MSGS") {
+			var linkName = this.getMessage("retweet");
+			if(type == "FACEBOOK") {
+				linkName = this.getMessage("share");
+			}
+			html[i++] = "<a href='#' title='"+this.getMessage("retweetThisItem")+"' style='color:gray;font-size:11px' id='" + this._gettwitterRetweetLinkId("RT @" + screen_name + text) + "'>"+linkName+"</a>&nbsp;&nbsp;";
 		}
 
-		html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._gettwitterRetweetLinkId("RT @" + screen_name + text) + "'>retweet</a>&nbsp;&nbsp;";
-
-		if (type != "TWEETMEME" && type != "FACEBOOK" && type != "DIGG") {
-			html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._gettwitterReplyLinkId("@" + screen_name) + "'>reply</a>";
+		if (type != "TWEETMEME" && type != "FACEBOOK" && type != "DIGG" && type != "DIRECT_MSGS") {
+			html[i++] = "<a href='#' title='"+this.getMessage("replyToThisPerson")+"' style='color:gray;font-size:11px' id='" + this._gettwitterReplyLinkId("@" + screen_name) + "'>"+this.getMessage("reply")+"</a>";
 		}
 		if (type == "FACEBOOK") {
-			html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._getFBLikeLinkId(obj.post_id, tableId) + "'>like</a>&nbsp;&nbsp;";
-
-			html[i++] = "<a href='#' style='color:gray;font-size:11px' id='" + this._getFacebookCommentLinkId(obj.post_id, tableId) + "'>comment</a>";
+			html[i++] = "<a href='#' title='"+this.getMessage("likeThisPost")+"' style='color:gray;font-size:11px' id='" + this._getFBLikeLinkId(obj.post_id, tableId) + "'>like</a>&nbsp;&nbsp;";
+			html[i++] = "<a href='#' title='"+this.getMessage("commentOnThisPost")+"' style='color:gray;font-size:11px' id='" + this._getFacebookCommentLinkId(obj.post_id, tableId) + "'>comment</a>";
 		}
 		html[i++] = "</td>";
 		html[i++] = "</TR>";
@@ -1724,19 +1758,20 @@ function(tableId, jsonObj, type) {
 		html[i++] = "</TABLE>";
 		html[i++] = "</DIV>";
 	}
-	var showOlderMsgsId = Dwt.getNextId();
-	html[i++] = "<br/><div width=80% align=center><a id='" + showOlderMsgsId + "' href='#' style='color:#0000FF;font-weight:bold;font-size:12px;display:none' >";
-	html[i++] = this.getMessage("clickForOlderMsgs");
-	html[i++] = "</a></div>";
+
+	this._addNewerAndOlderLinks(tableId, numberOfPosts, html, "bottom", type);
+
+	if(!document.getElementById(tableId)) {
+		return;
+	}
 	document.getElementById(tableId).innerHTML = html.join("");
-	if (type == "SEARCH" || type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
-		this._setCardRowsAsRead(rowIdsToMarkAsRead, showOlderMsgsId);
-		this._setCardUnreadCount(tableId, unReadCount);
-		if (rowIdsToMarkAsRead.length > 0) {
-			var showOlderItemsLink = document.getElementById(showOlderMsgsId);
-			showOlderItemsLink.style.display = "block";
-			showOlderItemsLink.onclick = AjxCallback.simpleClosure(this._showCardOlderMsgs, this, rowIdsToMarkAsRead, showOlderItemsLink);
+	if (type == "SEARCH" || type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS" || type == "FACEBOOK") {
+		this._setCardUnreadCount(tableId, unReadCount, type);
+		var query = "";
+		if(additionalParams && additionalParams.query) {
+			query = additionalParams.query;
 		}
+		this._addOlderAndNewerLinkHandlers(tableId, type, query);
 	}
 	this._addRetweetLinkHandlers();
 	this._addReplyLinkHandlers();
@@ -1749,27 +1784,141 @@ function(tableId, jsonObj, type) {
 	this._addTwitterDeleteLinkHandlers();
 };
 
+SocialZimlet.prototype._addNewerAndOlderLinks =
+function(tableId, numberOfPosts, html, position, type) {
+	var i = html.length;
+	var olderItemsLnkId = tableId + "_olderPostsLinkId_" + position;
+	var newerItemsLnkId = tableId + "_newerPostsLinkId_"  + position;
+	var mainDivDisplayStyle = "";
 
-SocialZimlet.prototype._setCardRowsAsRead =
-function(rowIdsToMarkAsRead, showOlderMsgsId) {
-	for (var i = 0; i < rowIdsToMarkAsRead.length; i++) {
-		var row = document.getElementById(rowIdsToMarkAsRead[i]);
-		row.style.display = "none";
+	var newerLnkDisplayStyle = "none";
+	if(this.tableIdAndPageNumberMap[tableId] > 1) {
+		newerLnkDisplayStyle = "";
 	}
+	var olderLnkDisplayStyle = "";
+	/*
+	var olderLnkDisplayStyle = "none";
+	var itemsLimit = this._getItemsLimit(type);
+	if(numberOfPosts == itemsLimit) {
+		olderLnkDisplayStyle = "";
+	}
+	*/
+	if(olderLnkDisplayStyle == "none" && newerLnkDisplayStyle == "none") {
+		mainDivDisplayStyle = "none";
+	}
+	html[i++] = ["<div style='display:", mainDivDisplayStyle, "' class='social_rowsDiv' width=100%><table width=100%><tr><td align=left><a style='display:", newerLnkDisplayStyle, 
+				"' href='#' id='", newerItemsLnkId, "' >< ", this.getMessage("newerItems"), "</a></td><td align=right><a  style='display:", olderLnkDisplayStyle, 
+				"' href='#' id='", olderItemsLnkId, "' >", this.getMessage("olderItems"), " ></a></td></tr></table></div>"].join("");
+
+};
+
+SocialZimlet.prototype._addRefreshNoticeDiv =
+function(tableId, html) {
+	var i =html.length;
+	var refreshNoticeId = tableId +  "_refreshNotice";
+	html[i++] = "<div class='social_yellow' id='" + refreshNoticeId + "' width=100% style='display:none;color:red;'></div>";
+};
+
+SocialZimlet.prototype._isPageDirtyWithNewPosts =
+function(tableId, newId) {
+	var isDirty = false;
+	if(!this.tableIdAndHighestPostIdMap[tableId] || this.tableIdAndHighestPostIdMap[tableId] < newId) {
+		this.tableIdAndHighestPostIdMap[tableId] = newId;
+	}
+	var pageNumber = this.tableIdAndPageNumberMap[tableId];
+	if(!pageNumber) {
+		pageNumber = 1;
+	}
+	if(pageNumber > 1 && (newId < this.tableIdAndHighestPostIdMap[tableId])) {
+		isDirty = false;
+	} else if(pageNumber > 1 && (newId > this.tableIdAndHighestPostIdMap[tableId])) {
+		document.getElementById(tableId +  "_refreshNotice").innerHTML = "There are new tweets. Please click refresh to load them";
+		document.getElementById(tableId +  "_refreshNotice").style.display = "block";
+		isDirty = true;
+	} else if(newId == this.tableIdAndHighestPostIdMap[tableId]) {
+		isDirty = false;
+	}
+	//}  else if(pageNumber > 1 && (newId == this.tableIdAndHighestPostIdMap[tableId])) {
+	//	isDirty = true;
+	//} 
+
+	return isDirty;
+};
+
+SocialZimlet.prototype._cacheResults =
+function(tableId, jsonObj) {
+	var pageNumber = this.tableIdAndPageNumberMap[tableId];
+	if(!pageNumber) {
+		pageNumber = 1;
+	}
+	if(!this.tableIdAndCacheMap[tableId]) {
+		this.tableIdAndCacheMap[tableId] = [];
+	}
+	this.tableIdAndCacheMap[tableId][pageNumber] = jsonObj;
+};
+
+SocialZimlet.prototype._storeUnreadCount =
+function(tableId, unreadCount) {
+	var pageNumber = this.tableIdAndPageNumberMap[tableId];
+	if(!pageNumber) {
+		pageNumber = 1;
+	}
+	if(!this.tableIdAndUnreadMap[tableId]) {
+		this.tableIdAndUnreadMap[tableId] = [];
+	}
+	this.tableIdAndUnreadMap[tableId][pageNumber] = unreadCount;
+};
+
+SocialZimlet.prototype._getTotalUnreadCount =
+function(tableId, unreadCount) {
+	var pageNumber = this.tableIdAndPageNumberMap[tableId];
+	if(!pageNumber) {
+		pageNumber = 1;
+	}
+	var pages = this.tableIdAndUnreadMap[tableId];
+	if(!pages) {
+		return unreadCount;
+	}
+	var count = 0;
+	for(var i = 1; i < pageNumber; i++) {
+		count = count + pages[i];
+	}
+	return count + unreadCount;
 };
 
 SocialZimlet.prototype._showCardOlderMsgs =
-function(rowIdsToMarkAsRead, showOlderItemsLink) {
-	for (var i = 0; i < rowIdsToMarkAsRead.length; i++) {
-		var row = document.getElementById(rowIdsToMarkAsRead[i]);
-		if (row)
-			row.style.display = "block";
+function(tableId, type, query) {
+	this._setMsgToCard(tableId, this.getMessage("loading"));
+	this.tableIdAndRefreshType[tableId] = "OLDER";
+	this._doRefreshFeeds(tableId, type, query);
+	this._updatePageNumber(tableId, 1);
+};
+
+SocialZimlet.prototype._showCardNewerMsgs =
+function(tableId, type, query) {
+	this._setMsgToCard(tableId, this.getMessage("loading"));
+	this._updatePageNumber(tableId, -1);
+	var pageNumber = this.tableIdAndPageNumberMap[tableId];
+	var table = this.tableIdAndCacheMap[tableId];
+	var additionalParams = {query:query};
+	if(table && table[pageNumber]) {
+		this.createCardView({tableId:tableId, items:table[pageNumber], type:type, additionalParams:additionalParams});
+	} else {//not cached, simply refresh
+		this._doRefreshFeeds(tableId, type, query);
 	}
-	showOlderItemsLink.style.display = "none";
+};
+
+SocialZimlet.prototype._updatePageNumber =
+function(tableId, plusOrMinusOne) {
+	var pageNumber = this.tableIdAndPageNumberMap[tableId];
+	if(!pageNumber) {
+		pageNumber = 1;
+	}
+	this.tableIdAndPageNumberMap[tableId] = pageNumber + plusOrMinusOne;
 };
 
 SocialZimlet.prototype._getAdditionalFBMessageInfo =
-function(obj, account) {
+function(obj, account, tableId) {
 	var html = new Array();
 	var i = 0;
 	if (obj.description) {
@@ -1814,16 +1963,16 @@ function(obj, account) {
 			} else {
 				html[i++] = "<TD width='100px' valign='top'>";
 			}
-			html[i++] = "<table cellspacing='0' cellpadding='0' width=100%>";
+			html[i++] = "<table cellspacing='0' cellpadding='2' width=100%>";
 			html[i++] = "<TR>";
 			html[i++] = "<TD  valign='top'>";
-			var id = Dwt.getNextId();
-			var arry = media.href.split("?v=");
-			var vid = "";
-			if(arry.length == 2) {
-				vid = arry[1];
-			}
-			if(media.src != "") {
+			if(media.src != "" && media.href) {
+				var id = Dwt.getNextId();
+				var arry = media.href.split("?v=");
+				var vid = "";
+				if(arry.length == 2) {
+					vid = arry[1];
+				}
 				if(isYouTube) {
 					html[i++] = "<object type='application/x-shockwave-flash' style='width:100%; height:350px;' data='" + media.src + "'><param name='movie' value='" + media.src + "' /></object>";
 				} else {
@@ -1841,14 +1990,11 @@ function(obj, account) {
 					} else if(media.type == "video" && vid==""){
 						html[i++] = "<a  href='" + media.href + "' target='_blank' >"+this.getMessage("openExternalLink")+"</a>";					
 					} else {
-						html[i++] = "<img width='100px' height='100px' SRC='"+media.src+"' />";
+						html[i++] = "<div class='social_shadow'><a  style='color:white' href='" + media.href + "' target='_blank' >"+"<img width='100px' height='100px' SRC='"+media.src+"' ></img></a></div>";
 					}
 
 				}
 			}
-
-			
-
 			html[i++] = "</TD>";
 			html[i++] = "</TR><TR><TD>";
 
@@ -1913,7 +2059,7 @@ function(obj, account) {
 		var comments = obj.comments.comment_list;
 		var commentsDivId = "social_commentsdiv_" + Dwt.getNextId();
 		html[i++] = "<div id='" + commentsDivId + "'>";
-		html[i++] = this._getCommentsHtml(comments, obj.comments.count, obj.post_id, commentsDivId, account);
+		html[i++] = this._getCommentsHtml(comments, obj.comments.count, obj.post_id, commentsDivId, account, tableId);
 		html[i++] = "</div>";
 	}
 
@@ -1923,9 +2069,36 @@ function(obj, account) {
 	else
 		return {html:"<BR/>" + str, commentBoxId:commentBoxId};
 };
+SocialZimlet.prototype._setErrorToCard =
+function(tableId, error) {
+		var id = Dwt.getNextId();
+		var html = [];
+		html.push("<br/><br/><div width=90% align=center><label style='color:gray;font-weight:bold;font-size:12px'>", error, " </label>",
+				"<a id='", id,"' href='#' style='text-decoration:underline;color:gray' >",
+			this.getMessage("details"),"</a><br/><br/><label style='color:gray;font-style:italics'>",this.getMessage("clickOnRefreshToTryAgain"),"</label></div>");
+
+		document.getElementById(tableId).innerHTML = html.join("");
+		document.getElementById(id).onclick = AjxCallback.simpleClosure(this._displayFeedErrorWindow, this, tableId);
+};
+
+SocialZimlet.prototype._setMsgToCard =
+function(tableId, msg) {
+		var html = [];
+		html.push("<br/><br/><div width=90% align=center><label style='color:gray;font-weight:bold;font-size:12px'>", msg, "</label></div>");
+		document.getElementById(tableId).innerHTML = html.join("");
+};
+
+SocialZimlet.prototype._displayFeedErrorWindow =
+function(tableId) {
+	var win = this.openCenteredWindow("");
+	if(this.tableIdAndHttpErrorMap[tableId]) {
+		win.document.write("<div style='color:blue;font-size:16px;font-weight:bold;background:#FFFF99'>Below is the HTTP error we received from the Server:</div>");
+		win.document.write(this.tableIdAndHttpErrorMap[tableId]);
+	}
+};
 
 SocialZimlet.prototype._getCommentsHtml =
-function(comments, totlCmnts, postId, divId, account) {
+function(comments, totlCmnts, postId, divId, account, tableId) {
 	var html = new Array();
 	var i = 0;
 	if (this._zimletDiv == undefined) {
@@ -1938,7 +2111,7 @@ function(comments, totlCmnts, postId, divId, account) {
 		if(!comment) {			
 			break;
 		}
-		var profile = this.facebook._getFacebookProfile(comment.fromid);
+		var profile = this.facebook.getFacebookProfile(comment.fromid, tableId);
 		html[i++] = "<table width=100% cellpadding=1 cellspacing=1>";
 		html[i++] = "<tr>";
 		html[i++] = "<TD style='width:16px;height:16px' align='center'>";
@@ -1971,7 +2144,7 @@ function(comments, totlCmnts, postId, divId, account) {
 		html[i++] = "</table>";
 	}
 	if (actualComments < totlCmnts) {
-		var moreCommentsLinkId = this._getFacebookMoreCommentsLinkId(postId, divId, account);
+		var moreCommentsLinkId = this._getFacebookMoreCommentsLinkId(postId, divId, account, tableId);
 		html[i++] = "<table width=100% cellpadding=1 cellspacing=1><tr><td>";
 		html[i++] = "<tr>";
 		html[i++] = "<TD style='width:16px;height:16px' align='center'>";
@@ -2006,9 +2179,9 @@ function(dm) {
 };
 
 SocialZimlet.prototype._gettwitterDeleteLinkId =
-function(postId, tableId) {
+function(postId, tableId, type) {
 	var id = "social_twitterDeleteLink_" + Dwt.getNextId();
-	this._allTwitterDeleteLinks[id] = {hasHandler:false, account:this.tableIdAndAccountMap[tableId], tableId:tableId, postId:postId};
+	this._allTwitterDeleteLinks[id] = {hasHandler:false, account:this.tableIdAndAccountMap[tableId], tableId:tableId, postId:postId, type:type};
 	return id;
 };
 SocialZimlet.prototype._getAccountLinkId =
@@ -2033,9 +2206,9 @@ function(postId, tableId) {
 };
 
 SocialZimlet.prototype._getFacebookMoreCommentsLinkId =
-function(postId, divId, account) {
+function(postId, divId, account, tableId) {
 	var id = "social_FBMoreCommentsLink_" + Dwt.getNextId();
-	this._allFBMoreCommentsLinks[id] = {hasHandler:false, postId:postId, divId:divId, account:account};
+	this._allFBMoreCommentsLinks[id] = {hasHandler:false, postId:postId, divId:divId, account:account, tableId:tableId};
 	return id;
 };
 
@@ -2052,6 +2225,22 @@ function(userId, tableId) {
 	this._allFollowLinks[id] = {hasHandler:false, userId:userId, tableId:tableId};
 	return id;
 };
+
+SocialZimlet.prototype._addOlderAndNewerLinkHandlers =
+function(tableId, type, query) {
+	document.getElementById(tableId + "_olderPostsLinkId_top").onclick = AjxCallback.simpleClosure(this._showCardOlderMsgs, this, tableId, type, query);
+	document.getElementById(tableId + "_newerPostsLinkId_top").onclick = AjxCallback.simpleClosure(this._showCardNewerMsgs, this, tableId, type, query);
+	//when there are no msgs, we will just show one set of links(top-set)
+	var bottomOlderLink = document.getElementById(tableId + "_olderPostsLinkId_bottom");
+	if(bottomOlderLink) {
+		bottomOlderLink.onclick = AjxCallback.simpleClosure(this._showCardOlderMsgs, this, tableId, type, query);
+	}
+	var bottomNewerLink = document.getElementById(tableId + "_newerPostsLinkId_bottom");
+	if(bottomNewerLink) {
+		bottomNewerLink.onclick = AjxCallback.simpleClosure(this._showCardNewerMsgs, this, tableId, type, query);
+	}
+};
+
 
 SocialZimlet.prototype._addRetweetLinkHandlers =
 function() {
@@ -2099,8 +2288,9 @@ SocialZimlet.prototype._addFbPostLikeLinkHandlers =
 function() {
 	for (var id in this._allFBLikeLinks) {
 		var obj = this._allFBLikeLinks[id];
-		if (!obj.hasHandler) {
-			document.getElementById(id).onclick = AjxCallback.simpleClosure(this.facebook.postLike, this.facebook, obj);
+		var el = document.getElementById(id);
+		if (!obj.hasHandler && el) {
+			el.onclick = AjxCallback.simpleClosure(this.facebook.postLike, this.facebook, obj);
 			obj.hasHandler = true;
 		}
 	}
@@ -2110,8 +2300,9 @@ SocialZimlet.prototype._addFbMoreCommentLinkHandlers =
 function() {
 	for (var id in this._allFBMoreCommentsLinks) {
 		var obj = this._allFBMoreCommentsLinks[id];
-		if (!obj.hasHandler) {
-			document.getElementById(id).onclick = AjxCallback.simpleClosure(this.facebook.insertMoreComments, this.facebook, obj);
+		var el = document.getElementById(id);
+		if (!obj.hasHandler && el) {
+			el.onclick = AjxCallback.simpleClosure(this.facebook.insertMoreComments, this.facebook, obj);
 			obj.hasHandler = true;
 		}
 	}
@@ -2121,8 +2312,9 @@ SocialZimlet.prototype._addReplyLinkHandlers =
 function() {
 	for (var id in this._allReplyLinks) {
 		var obj = this._allReplyLinks[id];
-		if (!obj.hasHandler) {
-			document.getElementById(id).onclick = AjxCallback.simpleClosure(this.addReplyText, this, obj.reply);
+		var el = document.getElementById(id);
+		if (!obj.hasHandler && el) {
+			el.onclick = AjxCallback.simpleClosure(this.addReplyText, this, obj.reply);
 			obj.hasHandler = true;
 		}
 	}
@@ -2132,8 +2324,9 @@ SocialZimlet.prototype._addAccountLinkHandlers =
 function() {
 	for (var id in this._allAccountsLinks) {
 		var obj = this._allAccountsLinks[id];
-		if (!obj.hasHandler) {
-			document.getElementById(id).onclick = AjxCallback.simpleClosure(this.twitter.showUserProfile, this.twitter, obj.screen_name, obj.tableId);
+		var el = document.getElementById(id);
+		if (!obj.hasHandler && el) {
+			el.onclick = AjxCallback.simpleClosure(this.twitter.showUserProfile, this.twitter, obj.screen_name, obj.tableId);
 			obj.hasHandler = true;
 		}
 	}
@@ -2143,8 +2336,9 @@ SocialZimlet.prototype._addHashHandlers =
 function() {
 	for (var id in this._allHashLinks) {
 		var obj = this._allHashLinks[id];
-		if (!obj.hasHandler) {
-			document.getElementById(id).onclick = AjxCallback.simpleClosure(this._handleHashLinks, this, obj.word);
+		var el = document.getElementById(id);
+		if (!obj.hasHandler && el) {
+			el.onclick = AjxCallback.simpleClosure(this._handleHashLinks, this, obj.word);
 			obj.hasHandler = true;
 		}
 	}
@@ -2270,6 +2464,10 @@ SocialZimlet.prototype.getAllAccountsAsString = function() {
 			if (name == "raw" || name == "isDisplayed" || name == "offline_access" || name == "publish_stream" || name == "read_stream") {
 				continue;
 			}
+
+			if((!accnt[name] && accnt[name] != 0) || accnt[name] == "undefined") {
+				accnt[name] = "";
+			}
 			if (val == "") {
 				val = name + "=" + accnt[name];
 			} else {
@@ -2362,10 +2560,12 @@ function(params) {
 					continue;
 				}
 				var tableId = this._showCard({headerName:account.name, type:"ACCOUNT", autoScroll:false});
-				this.twitter.getFriendsTimeLine({tableId: tableId, account: account});
-				var timer = setInterval(AjxCallback.simpleClosure(this.twitter._updateAccountStream, this.twitter, tableId, account), 400000);
-				this.tableIdAndTimerMap[tableId] = timer;
 				this.tableIdAndAccountMap[tableId] = account;
+				this.tableIdAndMarkAsReadId[tableId] = account._p;
+				this.twitter.getTwitterFeeds({tableId: tableId, account: account, type:"ACCOUNT"});
+				var timer = setInterval(AjxCallback.simpleClosure(this.twitter.getTwitterFeeds, this.twitter, {tableId: tableId, account: account, type:"ACCOUNT"}), 400000);
+				this.tableIdAndTimerMap[tableId] = timer;
+
 				account.isDisplayed = true;
 				account["__s"] = "1";//__s means shown, 1 means true
 				this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
@@ -2374,10 +2574,11 @@ function(params) {
 					continue;
 				}
 				var tableId = this._showCard({headerName:account.name, type:"FACEBOOK", autoScroll:false});
+				this.tableIdAndAccountMap[tableId] = account;
+				this.tableIdAndMarkAsReadId[tableId] = account._p;
 				this.facebook._fbGetStream(tableId, account);
 				var timer = setInterval(AjxCallback.simpleClosure(this.facebook._updateFacebookStream, this.facebook, tableId, account), 400000);
 				this.tableIdAndTimerMap[tableId] = timer;
-				this.tableIdAndAccountMap[tableId] = account;
 				account.isDisplayed = true;
 				account["__s"] = "1";//__s means shown, 1 means true
 				this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
@@ -2387,6 +2588,7 @@ function(params) {
 					var label = search.name;
 					var tableId = this._showCard({headerName:label, type:"SEARCH", autoScroll:false});
 					this.tableIdAndSearchMap[tableId] = search;
+					this.tableIdAndMarkAsReadId[tableId] = search._p;
 					var sParams = {query:label, tableId:tableId, type:"SEARCH"};
 					this.twitter.twitterSearch(sParams);
 					var timer = setInterval(AjxCallback.simpleClosure(this.twitter.twitterSearch, this.twitter, sParams), 400000);
@@ -2401,25 +2603,20 @@ function(params) {
 SocialZimlet.prototype._sortAndMergeAccountsAndSearches =
 function() {
 	var simpleArry = [];
-	if (!this.accountsWithPositions) {
-		this.accountsWithPositions = new Array();
-	}
 	for (var id in this.allAccounts) {
 		var item = this.allAccounts[id];
-		simpleArry.push(item);
 		if (item.__pos && (item.__pos != "" || item.__pos != "undefined")) {
-			this.accountsWithPositions.push(item);
+			simpleArry.push(item);
 		}
 	}
 	for (var id in this.twitter.allSearches) {
 		var item = this.twitter.allSearches[id];
-		simpleArry.push(item);
 		if (item.__pos && (item.__pos != "" || item.__pos != "undefined")) {
-			this.accountsWithPositions.push(item);
+			simpleArry.push(item);
 		}
 	}
-
-	return simpleArry.sort(social_sortAccounts);
+	simpleArry = simpleArry.sort(social_sortAccounts);
+	return simpleArry;
 };
 
 function social_sortAccounts(a, b) {
@@ -2427,6 +2624,39 @@ function social_sortAccounts(a, b) {
 	var y = parseInt(b.__pos);
 	return ((x < y) ? 1 : ((x > y) ? -1 : 0));
 }
+
+SocialZimlet.prototype._extractJSONResponse =
+function(tableId, errorName, response) {
+	var text = response.text;
+	var errorCode = response.status;
+	var success = true;
+	var jsonObj;
+	if (response.status != 200 && response.success == false) {
+			success = false;
+	} else {
+		jsonObj = eval("(" + text + ")");
+		if((jsonObj.error && jsonObj.error != "")  || (jsonObj.status && jsonObj.status != "success")
+			|| (jsonObj.error_code && jsonObj.error_code != "")) {
+			if(jsonObj.error_code) {
+				errorCode = jsonObj.error_code;
+			}
+			success = false;
+		}
+	}
+		
+	if(!success) {
+		text = ["{\"error\":\"Could not load.\"}"].join("");
+		jsonObj = eval("(" + text + ")");
+		if(tableId) {
+			this.tableIdAndHttpErrorMap[tableId] = response.text;
+			var timer = this.tableIdAndTimerMap[tableId];
+			if (timer) { //remove update timers
+				clearInterval(timer);
+			}
+		}
+	}
+	return jsonObj;
+};
 
 SocialZimlet.prototype._showWarningMsg = function(message) {
 	var style = DwtMessageDialog.WARNING_STYLE;
@@ -2442,9 +2672,10 @@ function (url) {
 	var height = 600;
 	var left = parseInt((screen.availWidth / 2) - (width / 2));
 	var top = parseInt((screen.availHeight / 2) - (height / 2));
-	var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + "screenX=" + left + ",screenY=" + top;
+	var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,scrollbars,left=" + left + ",top=" + top + "screenX=" + left + ",screenY=" + top;
 	var win = window.open(url, "subWind", windowFeatures);
 	if (!win) {
 		this._showWarningMsg(ZmMsg.popupBlocker);
 	}
+	return win;
 };

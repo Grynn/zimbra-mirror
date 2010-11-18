@@ -63,8 +63,7 @@
 
 .social_cardDiv {
     background: #FFFFFC;
-    border-bottom: 1px solid #6E6E6E;
-    border-right: 1px solid #6E6E6E;
+	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
 }
 
 .social_rowsDiv {
@@ -82,10 +81,11 @@
     font-size: 16px;
     font-family: 'Lucida Grande', sans-serif;
     overflow: auto;
-    border-top: 1px solid #B2B2B2;
-    border-bottom: 2px solid #6E6E6E;
-    border-left: 1px solid #B2B2B2;
-    border-right: 2px solid #6E6E6E;
+	border-width:0px 1px 0px 1px;
+    border-top: 0px solid #B2B2B2;
+    border-bottom: 1px solid #6E6E6E;
+    border-left: 0px solid #B2B2B2;
+    border-right: 1px solid #6E6E6E;
     display: block;
     z-index: 9001;
 
@@ -171,6 +171,11 @@ div.social_profileInnerDiv td {
     color: black;
     font-weight: bold;
 }
+.social_shadow {
+	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+	padding:2px;
+}
+
 
 .social_twitterColor {
     background-image: url(social_twitterBg.gif);
@@ -204,16 +209,26 @@ div.social_profileInnerDiv td {
     border-right: 1px solid #6E6E6E;
 }
 
+.social_rowUnread {
+   background: #FFFFCC;
+}
+
 .social_yellow {
     background: #FFFFCC;
     border-bottom: 1px solid #6E6E6E;
     border-right: 1px solid #6E6E6E;
 }
 
+.social_yellowBT {
+    background: #FFFFCC;
+    border-bottom: 1px solid #6E6E6E;
+    border-top: 1px solid #6E6E6E;
+}
+
 .social_white {
     background: #FFFFFF;
-    border-bottom: 1px solid #6E6E6E;
-    border-right: 1px solid #6E6E6E;
+    border-bottom: 1px solid #CCCCCC;
+    border-right: 1px solid #CCCCCC;
 }
 
 .social_yellowBold {
@@ -241,6 +256,7 @@ div.social_profileInnerDiv td {
     font-weight: bold;
     font-size: 10px;
     border: 1px solid white;
+	padding:2px;
 }
 
 .social_feedText {
@@ -255,6 +271,14 @@ div.social_profileInnerDiv td {
     font-family: 'Lucida Grande', sans-serif;
     color: #252525;
     vertical-align: top;
+}
+
+
+.social_fbLoginContainer {
+    font-size: 14px;
+    font-family: "lucida grande",tahoma,verdana,arial,sans-serif;
+    color: white;
+	background:#3B5998;
 }
 
 #social_twitterCardsDiv a {
