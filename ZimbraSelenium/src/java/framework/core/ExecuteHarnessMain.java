@@ -70,6 +70,21 @@ import framework.util.ZimbraSeleniumProperties.AppType;
 
 
 /**
+ * The <code>ExecuteHarnessMain</code> class is the main execution class for the
+ * Zimbra Selenium Harness.
+ * <p>
+ * Typical usage:<p>
+<code>
+<p>
+	        ExecuteHarnessMain harness = new ExecuteHarnessMain();<br>
+	        harness.jarfilename = "foo.jar";<br>
+	        harness.classfilter = "projects.tests.ajax";<br>
+	        harness.groups = "always,sanity".split(',');<br>
+	        harness.testoutputfoldername = "logs";<br>
+			harness.execute();<br>
+<p>
+</code>
+ * 
  * @author Matt Rhoades
  *
  */
@@ -99,22 +114,24 @@ public class ExecuteHarnessMain {
 	public String jarfilename;
 	
 	/**
-	 * The regex pattern used to search for tests, i.e. projects.zcs.tests
+	 * The regex pattern used to search for tests<p>For example, projects.zcs.tests
 	 */
 	public String classfilter = null;
 
 	
 	/**
-	 * The regex pattern used to exclude search for tests, i.e. projects.zcs.tests
+	 * The regex pattern used to exclude search for tests<p>For example, projects.zcs.tests
 	 */
 	public String excludefilter = null;
 
 	/**
-	 * The list of groups to include execute
+	 * The list of groups to execute
 	 */
 	public List<String> groups = Arrays.asList("always", "sanity");
 
-	
+	/**
+	 * The list of groups to exclude
+	 */
 	public List<String> excludeGroups = Arrays.asList("skip");
 		
 	/**
@@ -575,23 +592,24 @@ public class ExecuteHarnessMain {
 				}
 	}
 	
-	public static class MethodListener implements IInvokedMethodListener {
+	/**
+	 * A TestNG MethodListener that creates a log file for each test class
+	 * <p>
+	 * @author Matt Rhoades
+	 */
+	protected static class MethodListener implements IInvokedMethodListener {
 		private static Logger logger = LogManager.getLogger(MethodListener.class);
 		
 		private static Logger openqaLogger = LogManager.getLogger("org.openqa");
 		private static Logger frameworkLogger = LogManager.getLogger("framework");
 		private static Logger projectsLogger = LogManager.getLogger("projects");
 		
-		public Map<String, Appender> appenders = null;
+		private Map<String, Appender> appenders = null;
 		private static Layout layout = null;
 
 		private String outputFolder = null;
 		
-		/**
-		 * A MethodListener that creates a log file for each test class
-		 * @param folder
-		 */
-		public MethodListener(String folder) {
+		protected MethodListener(String folder) {
 			layout = new PatternLayout("%-4r [%t] %-5p %c %x - %m%n");
 			appenders = new HashMap<String, Appender>();
 			outputFolder = (folder == null ? "logs" : folder);
@@ -608,6 +626,9 @@ public class ExecuteHarnessMain {
 			return (String.format("%s/debug/%s.%s.txt", outputFolder, c, m));
 		}
 		
+		/**
+		 * Add a new FileAppender for each class before invocation
+		 */
 		@Override
 		public void beforeInvocation(IInvokedMethod method, ITestResult result) {
 			if ( method.isTestMethod() ) {
@@ -629,6 +650,9 @@ public class ExecuteHarnessMain {
 			}
 		}
 		
+		/**
+		 * Remove any FileAppenders after invocation
+		 */
 		@Override
 		public void afterInvocation(IInvokedMethod method, ITestResult result) {
 			if ( method.isTestMethod() ) {
@@ -650,7 +674,12 @@ public class ExecuteHarnessMain {
 
 	}
 	
-	public static class ResultListener implements ITestListener {
+	/**
+	 * A TestNG TestListener that tracks the pass/fail/skip counts
+	 * <p>
+	 * @author Matt Rhoades
+	 */
+	protected static class ResultListener implements ITestListener {
 
 		private int testsTotal = 0;
 		private int testsPass = 0;
@@ -659,10 +688,10 @@ public class ExecuteHarnessMain {
 		private List<String> failedTests = new ArrayList<String>();
 		private List<String> skippedTests = new ArrayList<String>();
 		
-		public ResultListener() {
+		protected ResultListener() {
 		}
 		
-		public String getResults() {
+		protected String getResults() {
 			StringBuilder sb = new StringBuilder();
 			sb.append("Total Tests:   ").append(testsTotal).append('\n');
 			sb.append("Total Passed:  ").append(testsPass).append('\n');
@@ -695,23 +724,35 @@ public class ExecuteHarnessMain {
 		public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
 		}
 
+		/**
+		 * Add 1 to the failed tests
+		 */
 		@Override
 		public void onTestFailure(ITestResult result) {
 			testsFailed++;
 			failedTests.add(result.getName());
 		}
 
+		/**
+		 * Add 1 to the skipped tests
+		 */
 		@Override
 		public void onTestSkipped(ITestResult result) {
 			testsSkipped++;	
 			skippedTests.add(result.getName());
 		}
 
+		/**
+		 * Add 1 to the total tests
+		 */
 		@Override
 		public void onTestStart(ITestResult result) {
 			testsTotal++;
 		}
 
+		/**
+		 * Add 1 to the passed tests
+		 */
 		@Override
 		public void onTestSuccess(ITestResult result) {
 			testsPass++;
@@ -727,7 +768,7 @@ public class ExecuteHarnessMain {
 	 * @throws ParseException
 	 * @throws HarnessException 
 	 */
-    public boolean parseArgs(String arguments[]) throws ParseException, HarnessException {
+    private boolean parseArgs(String arguments[]) throws ParseException, HarnessException {
 
     	// Build option list
     	Options options = new Options();

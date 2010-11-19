@@ -6,6 +6,19 @@ import java.util.Map;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+/**
+ * Use the <code>ClientSessionFactory</code> class to retrieve
+ * {@link ClientSession} instances.
+ * <p>
+ * The factory determines the current {@link ClientSession} instance
+ * based on the current thread ID.
+ * <p>
+ * If no session exists, it is created.
+ * <p>
+ * 
+ * @author Matt Rhoades
+ *
+ */
 public class ClientSessionFactory {
 	private static Logger logger = LogManager.getLogger(ClientSessionFactory.class);
 	

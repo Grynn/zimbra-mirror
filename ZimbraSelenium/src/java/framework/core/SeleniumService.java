@@ -21,6 +21,15 @@ import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
+/**
+ * The <code>SeleniumService</code> class is used to start
+ * a Selenium server instance, specifically for the Zimbra Selenium
+ * Harness implementation.
+ * <p>
+ * 
+ * @author Matt Rhoades
+ *
+ */
 public class SeleniumService {
 	private static Logger logger = LogManager.getLogger(SeleniumService.class);
 

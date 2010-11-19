@@ -12,6 +12,11 @@ import org.apache.log4j.Logger;
 
 import framework.util.ZimbraSeleniumProperties;
 
+/**
+ * @deprecated As of version 7.0
+ * @author zimbra
+ *
+ */
 public class SelNGBase {
 	private static Logger logger = LogManager.getLogger(SelNGBase.class);
 	

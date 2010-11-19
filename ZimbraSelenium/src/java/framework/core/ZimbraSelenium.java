@@ -9,6 +9,11 @@ import com.thoughtworks.selenium.SeleniumException;
 import framework.util.SleepUtil;
 import framework.util.HarnessException;
 
+/**
+ * @deprecated As of version 7.0
+ * @author zimbra
+ *
+ */
 public class ZimbraSelenium extends DefaultSelenium {
 	private static Logger logger = LogManager.getLogger(ZimbraSelenium.class);
 

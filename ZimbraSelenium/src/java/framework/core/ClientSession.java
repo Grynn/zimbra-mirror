@@ -6,9 +6,17 @@ import org.apache.log4j.Logger;
 import framework.util.ZimbraAccount;
 
 /**
- * This class defines all stateful information for test methods
- *  
- * Save information here to ensure thread-safe execution
+ * A <code>ClientSession</code> object contains all session information for the test methods.
+ * <p>
+ * The Zimbra Selenium harness is designed to  
+ * execute test cases concurrently at the class level.
+ * 
+ * The {@link ClientSession} objects maintain all session information on 
+ * a per thread basis, such as the current DefaultSelenium object.  Each 
+ * TestNG thread uses a single {@link ClientSession} Object.
+ * <p>
+ * Use the {@link ClientSessionFactory} to retrieve the current {@link ClientSession}.
+ * <p>
  * 
  * @author Matt Rhoades
  *
@@ -23,7 +31,7 @@ public class ClientSession {
 	private String currentBrowserName = null;
 	private ZimbraAccount currentAccount = null;
 
-	public ClientSession() {
+	protected ClientSession() {
 		logger.info("New ClientSession");
 		
 		name = "ClientSession-" + Thread.currentThread().getName();
@@ -32,6 +40,7 @@ public class ClientSession {
 	
 	/**
 	 * Get the current ZimbraSelenium (DefaultSelenium) object
+	 * <p>
 	 * @return
 	 */
 	public ZimbraSelenium selenium() {
@@ -47,6 +56,7 @@ public class ClientSession {
 	
 	/**
 	 * Get the current Browser Name
+	 * <p>
 	 * @return
 	 */
 	public String currentBrowserName() {
@@ -59,6 +69,7 @@ public class ClientSession {
 	
 	/**
 	 * Get the currently logged in user name
+	 * <p>
 	 * @return
 	 */
 	public String currentUserName() {
@@ -70,9 +81,12 @@ public class ClientSession {
 	
 	/**
 	 * NOT FOR TEST CASE USE.  Set the currently logged in user name.
-	 * 
+	 * <p>
 	 * This method should only be used by the AppPage LoginPage object.
-	 * 
+	 * <p>
+	 * TODO: once projects.zcs.* and projects.html.* are converted to this
+	 * mechanism, need to make this method "protected" rather than "public"
+	 * <p>
 	 * @param account
 	 * @return
 	 */
