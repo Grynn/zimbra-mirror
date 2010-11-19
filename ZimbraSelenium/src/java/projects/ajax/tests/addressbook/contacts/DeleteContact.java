@@ -3,7 +3,7 @@ import org.testng.annotations.Test;
 
 
 import framework.items.*;
-import framework.ui.Buttons;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZAssert;

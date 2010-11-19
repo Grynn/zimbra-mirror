@@ -5,9 +5,9 @@ package projects.ajax.ui;
 
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
-import framework.ui.Buttons;
-import framework.ui.Actions.Action;
-import framework.ui.Buttons.Button;
+import framework.ui.Button;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
@@ -105,20 +105,20 @@ public class PageSearch extends AbsAjaxPage {
 		// Based on the button specified, take the appropriate action(s)
 		//
 		
-		if ( button == Buttons.B_SEARCHTYPE ) {
+		if ( button == Button.B_SEARCHTYPE ) {
 					
 			throw new HarnessException("implement me!");
 			
-		} else if ( button == Buttons.B_SEARCH ) {
+		} else if ( button == Button.B_SEARCH ) {
 			
 			locator = Locators.zSearchButton;
 			page = null;
 			
-		} else if ( button == Buttons.B_SEARCHSAVE ) {
+		} else if ( button == Button.B_SEARCHSAVE ) {
 			
 			throw new HarnessException("implement me!");
 			
-		} else if ( button == Buttons.B_SEARCHADVANCED ) {
+		} else if ( button == Button.B_SEARCHADVANCED ) {
 			
 			throw new HarnessException("implement me!");
 			
@@ -181,7 +181,7 @@ public class PageSearch extends AbsAjaxPage {
 		logger.info(myPageName() + " zRunSearchQuery("+ query +")");
 
 		zAddSearchQuery(query);
-		zToolbarPressButton(Buttons.B_SEARCH);
+		zToolbarPressButton(Button.B_SEARCH);
 		
 		SleepUtil.sleep(10000);
 		

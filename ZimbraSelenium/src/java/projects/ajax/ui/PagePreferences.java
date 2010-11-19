@@ -5,9 +5,9 @@ package projects.ajax.ui;
 
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
-import framework.ui.Buttons;
-import framework.ui.Actions.Action;
-import framework.ui.Buttons.Button;
+import framework.ui.Button;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
@@ -115,7 +115,7 @@ public class PagePreferences extends AbsAjaxPage {
 		// See also bug 53203
 
 		// Click Cancel
-		zToolbarPressButton(Buttons.B_CANCEL);
+		zToolbarPressButton(Button.B_CANCEL);
 
 		// Check if the "Would you like to save your changes?" appears
 		//
@@ -130,11 +130,11 @@ public class PagePreferences extends AbsAjaxPage {
 			String locator = null;
 			
 			// "Would you like to save your changes?" is displayed.  
-			if ( savechanges == Buttons.B_YES ) {
+			if ( savechanges == Button.B_YES ) {
 				locator = Locators.zSaveChangesYes;
-			} else if ( savechanges == Buttons.B_NO ) {
+			} else if ( savechanges == Button.B_NO ) {
 				locator = Locators.zSaveChangesNo;
-			} else if ( savechanges == Buttons.B_CANCEL ) {
+			} else if ( savechanges == Button.B_CANCEL ) {
 				locator = Locators.zSaveChangesCancel;
 			} else {
 				throw new HarnessException("zNavigateAway() not defined for button "+ savechanges);
@@ -226,12 +226,12 @@ public class PagePreferences extends AbsAjaxPage {
 		// Based on the button specified, take the appropriate action(s)
 		//
 		
-		if ( button == Buttons.B_SAVE ) {
+		if ( button == Button.B_SAVE ) {
 			
 			locator = "id="+ Locators.zToolbarSaveID;
 			page = null;
 			
-		} else if ( button == Buttons.B_CANCEL ) {
+		} else if ( button == Button.B_CANCEL ) {
 			
 			locator = "id="+ Locators.zToolbarCancelID;
 			page = null;

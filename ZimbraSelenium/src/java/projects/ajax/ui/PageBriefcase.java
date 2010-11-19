@@ -4,12 +4,12 @@
 package projects.ajax.ui;
 
 import java.awt.event.KeyEvent;
-import framework.core.ClientSessionFactory;
+
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
-import framework.ui.Buttons;
-import framework.ui.Actions.Action;
-import framework.ui.Buttons.Button;
+import framework.ui.Action;
+import framework.ui.Button;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
@@ -130,7 +130,7 @@ public class PageBriefcase extends AbsAjaxPage {
 		// Based on the button specified, take the appropriate action(s)
 		//
 
-		if (button == Buttons.B_NEW) {
+		if (button == Button.B_NEW) {
 
 			// For "NEW" without a specified pulldown option, just return the
 			// default item
@@ -143,9 +143,9 @@ public class PageBriefcase extends AbsAjaxPage {
 			// Not default behavior (zPressKeyboardShortcut vs. zClick)
 			return (new DocumentBriefcaseNew(this.MyApplication));
 
-		} else if (button == Buttons.O_NEW_BRIEFCASE) {
+		} else if (button == Button.O_NEW_BRIEFCASE) {
 			locator = "id=" + Locators.zNewMenuIconBtn;
-		} else if (button == Buttons.O_NEW_DOCUMENT) {
+		} else if (button == Button.O_NEW_DOCUMENT) {
 			// Check if the button is visible
 			String attrs = sGetAttribute("xpath=(//div[@id='zb__BDLV__NEW_MENU'])@style");
 			if (!attrs.contains("visible")) {
@@ -172,7 +172,7 @@ public class PageBriefcase extends AbsAjaxPage {
 				throw new HarnessException("couldn't select window"
 						+ newPageTitle, ex);
 			}
-		} else if (button == Buttons.O_UPLOAD_FILE) {
+		} else if (button == Button.O_UPLOAD_FILE) {
 			// Check if the button is visible
 			String attrs = sGetAttribute("xpath=(//div[@id='zb__BDLV__NEW_FILE'])@style");
 			if (!attrs.contains("visible")) {
@@ -180,7 +180,7 @@ public class PageBriefcase extends AbsAjaxPage {
 			}
 			locator = Locators.zUploadFileIconBtn;
 			page = null;
-		} else if (button == Buttons.B_MOVE) {
+		} else if (button == Button.B_MOVE) {
 
 			// Check if the button is enabled
 			String attrs = sGetAttribute("xpath=(//td[@id='"
@@ -194,7 +194,7 @@ public class PageBriefcase extends AbsAjaxPage {
 			page = null; // TODO
 			throw new HarnessException("implement Move dialog");
 
-		} else if (button == Buttons.B_PRINT) {
+		} else if (button == Button.B_PRINT) {
 
 			// Check if the button is enabled
 			String attrs = sGetAttribute("xpath=(//td[@id='"
@@ -208,7 +208,7 @@ public class PageBriefcase extends AbsAjaxPage {
 			page = null; // TODO
 			throw new HarnessException("implement Print dialog");
 
-		} else if (button == Buttons.B_TAG) {
+		} else if (button == Button.B_TAG) {
 
 			// For "TAG" without a specified pulldown option, just click on the
 			// pulldown
@@ -226,7 +226,7 @@ public class PageBriefcase extends AbsAjaxPage {
 
 			locator = "id='" + "Locators.zTagMenuDropdownBtnID" + "'";
 
-		} else if (button == Buttons.B_LISTVIEW) {
+		} else if (button == Button.B_LISTVIEW) {
 
 			// For "TAG" without a specified pulldown option, just click on the
 			// pulldown
@@ -287,25 +287,25 @@ public class PageBriefcase extends AbsAjaxPage {
 		// Based on the button specified, take the appropriate action(s)
 		//
 
-		if (pulldown == Buttons.B_NEW) {
+		if (pulldown == Button.B_NEW) {
 
-			if (option == Buttons.O_NEW_ADDRESSBOOK) {
+			if (option == Button.O_NEW_ADDRESSBOOK) {
 				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_NEW_APPOINTMENT) {
+			} else if (option == Button.O_NEW_APPOINTMENT) {
 				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_NEW_BRIEFCASE) {
+			} else if (option == Button.O_NEW_BRIEFCASE) {
 				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_NEW_CALENDAR) {
+			} else if (option == Button.O_NEW_CALENDAR) {
 				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_NEW_CONTACT) {
+			} else if (option == Button.O_NEW_CONTACT) {
 				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_NEW_CONTACTGROUP) {
+			} else if (option == Button.O_NEW_CONTACTGROUP) {
 				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_NEW_DOCUMENT) {
+			} else if (option == Button.O_NEW_DOCUMENT) {
 				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_NEW_FOLDER) {
+			} else if (option == Button.O_NEW_FOLDER) {
 				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_NEW_MESSAGE) {
+			} else if (option == Button.O_NEW_MESSAGE) {
 
 				// TODO: should this actually click New followed by Message?
 
@@ -313,29 +313,11 @@ public class PageBriefcase extends AbsAjaxPage {
 				optionLocator = null;
 				page = zToolbarPressButton(pulldown);
 
-			} else if (option == Buttons.O_NEW_TAG) {
+			} else if (option == Button.O_NEW_TAG) {
 				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_NEW_TASK) {
+			} else if (option == Button.O_NEW_TASK) {
 				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_NEW_TASKFOLDER) {
-				throw new HarnessException("implement me!");
-			} else {
-				throw new HarnessException(
-						"no logic defined for pulldown/option " + pulldown
-								+ "/" + option);
-			}
-
-		} else if (pulldown == Buttons.B_LISTVIEW) {
-
-			if (option == Buttons.O_LISTVIEW_BYCONVERSATION) {
-				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_LISTVIEW_BYMESSAGE) {
-				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_LISTVIEW_READINGPANEBOTTOM) {
-				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_LISTVIEW_READINGPANEOFF) {
-				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_LISTVIEW_READINGPANERIGHT) {
+			} else if (option == Button.O_NEW_TASKFOLDER) {
 				throw new HarnessException("implement me!");
 			} else {
 				throw new HarnessException(
@@ -343,11 +325,29 @@ public class PageBriefcase extends AbsAjaxPage {
 								+ "/" + option);
 			}
 
-		} else if (pulldown == Buttons.B_TAG) {
+		} else if (pulldown == Button.B_LISTVIEW) {
 
-			if (option == Buttons.O_TAG_NEWTAG) {
+			if (option == Button.O_LISTVIEW_BYCONVERSATION) {
 				throw new HarnessException("implement me!");
-			} else if (option == Buttons.O_TAG_REMOVETAG) {
+			} else if (option == Button.O_LISTVIEW_BYMESSAGE) {
+				throw new HarnessException("implement me!");
+			} else if (option == Button.O_LISTVIEW_READINGPANEBOTTOM) {
+				throw new HarnessException("implement me!");
+			} else if (option == Button.O_LISTVIEW_READINGPANEOFF) {
+				throw new HarnessException("implement me!");
+			} else if (option == Button.O_LISTVIEW_READINGPANERIGHT) {
+				throw new HarnessException("implement me!");
+			} else {
+				throw new HarnessException(
+						"no logic defined for pulldown/option " + pulldown
+								+ "/" + option);
+			}
+
+		} else if (pulldown == Button.B_TAG) {
+
+			if (option == Button.O_TAG_NEWTAG) {
+				throw new HarnessException("implement me!");
+			} else if (option == Button.O_TAG_REMOVETAG) {
 				throw new HarnessException("implement me!");
 			} else {
 				throw new HarnessException(

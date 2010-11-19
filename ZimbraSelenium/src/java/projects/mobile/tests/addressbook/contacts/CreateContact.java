@@ -7,7 +7,7 @@ import org.testng.annotations.Test;
 import projects.mobile.core.MobileCommonTest;
 import projects.mobile.ui.FormContactNew;
 import framework.items.ContactItem;
-import framework.ui.Buttons;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraSeleniumProperties;
@@ -34,7 +34,7 @@ public class CreateContact extends MobileCommonTest {
 		contact.email = "email" + ZimbraSeleniumProperties.getUniqueString() + "@example.com";
 
 		// Get the "new contact" page and fill it out (automatically)
-		FormContactNew form = (FormContactNew) app.zPageContacts.zToolbarPressButton(Buttons.B_NEW);
+		FormContactNew form = (FormContactNew) app.zPageContacts.zToolbarPressButton(Button.B_NEW);
 		form.fill(contact);
 		form.submit();
 		

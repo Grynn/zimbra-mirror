@@ -8,8 +8,8 @@ import java.util.List;
 import framework.items.ContactItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
-import framework.ui.Buttons;
-import framework.ui.Buttons.Button;
+import framework.ui.Button;
+import framework.ui.Button;
 import framework.util.HarnessException;
 
 /**
@@ -97,7 +97,7 @@ public class PageContacts extends AbsMobilePage {
 		String locator = null;
 		AbsForm form = null;
 		
-		if ( button == Buttons.B_NEW ) {
+		if ( button == Button.B_NEW ) {
 			
 			locator = Locators.zNewContact;
 			form = new FormContactNew(this.MyApplication);

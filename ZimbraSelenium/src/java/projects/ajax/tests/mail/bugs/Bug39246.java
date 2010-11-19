@@ -9,8 +9,8 @@ import projects.ajax.ui.DisplayMail;
 
 import com.zimbra.cs.lmtpserver.LmtpProtocolException;
 
-import framework.ui.Actions;
-import framework.ui.Buttons;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.LmtpUtil;
 import framework.util.SleepUtil;
@@ -39,10 +39,10 @@ public class Bug39246 extends AjaxCommonTest {
 		LmtpUtil.injectFile(app.getActiveAccount().EmailAddress, mime);
 
 		// Get Mail
-		app.zPageMail.zToolbarPressButton(Buttons.B_GETMAIL);
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 		
 		// Select the message
-		app.zPageMail.zListItem(Actions.A_LEFTCLICK, subject);
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, subject);
 		SleepUtil.sleepLong();	// Message is large, let it load
 
 		// In the preview pane, click "View Entire Message"

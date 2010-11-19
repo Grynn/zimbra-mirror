@@ -7,7 +7,7 @@ import projects.ajax.ui.DocumentBriefcaseNew;
 import projects.ajax.ui.PageBriefcase.Locators;
 import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
-import framework.ui.Buttons;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZAssert;
@@ -39,7 +39,7 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Open new document page
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
-				.zToolbarPressButton(Buttons.O_NEW_DOCUMENT);
+				.zToolbarPressButton(Button.O_NEW_DOCUMENT);
 
 		// Fill out the document with the data
 		documentBriefcaseNew.fill(document);

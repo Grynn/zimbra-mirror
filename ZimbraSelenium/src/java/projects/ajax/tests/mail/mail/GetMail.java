@@ -9,8 +9,8 @@ import projects.ajax.ui.DisplayMail;
 import projects.ajax.ui.DisplayMail.Field;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
-import framework.ui.Actions;
-import framework.ui.Buttons;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
@@ -56,7 +56,7 @@ public class GetMail extends AjaxCommonTest {
 					"</SendMsgRequest>");
 
 		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Buttons.B_GETMAIL);
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		// Get all the messages in the inbox
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
@@ -99,10 +99,10 @@ public class GetMail extends AjaxCommonTest {
 					"</SendMsgRequest>");
 
 		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Buttons.B_GETMAIL);
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		// Select the message so that it shows in the reading pane
-		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Actions.A_LEFTCLICK, mail.subject);
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.subject);
 
 		// Verify the To, From, Subject, Body
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.subject, "Verify the subject matches");
@@ -146,10 +146,10 @@ public class GetMail extends AjaxCommonTest {
 					"</SendMsgRequest>");
 
 		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Buttons.B_GETMAIL);
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		// Select the message so that it shows in the reading pane
-		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Actions.A_LEFTCLICK, mail.subject);
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.subject);
 
 		// Verify the To, From, Subject, Body
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.subject, "Verify the subject matches");

@@ -2,8 +2,8 @@ package projects.ajax.ui;
 
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
-import framework.ui.Actions.Action;
-import framework.ui.Buttons.Button;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 

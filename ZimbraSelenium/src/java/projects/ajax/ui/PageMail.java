@@ -11,10 +11,10 @@ import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
-import framework.ui.Actions;
-import framework.ui.Buttons;
-import framework.ui.Actions.Action;
-import framework.ui.Buttons.Button;
+import framework.ui.Action;
+import framework.ui.Button;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 
 /**
@@ -244,7 +244,7 @@ public class PageMail extends AbsAjaxPage {
 		// Based on the button specified, take the appropriate action(s)
 		//
 		
-		if ( button == Buttons.B_NEW ) {
+		if ( button == Button.B_NEW ) {
 			
 			// For "NEW" without a specified pulldown option, just return the default item
 			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
@@ -256,7 +256,7 @@ public class PageMail extends AbsAjaxPage {
 			// Do not fall through.
 			return (new FormMailNew(this.MyApplication));
 			
-		} else if ( button == Buttons.B_GETMAIL ) {
+		} else if ( button == Button.B_GETMAIL ) {
 			
 			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
 				locator = "id="+ Locators.zGetMailIconBtnTVID;
@@ -265,7 +265,7 @@ public class PageMail extends AbsAjaxPage {
 			}
 
 			
-		} else if ( button == Buttons.B_DELETE ) {
+		} else if ( button == Button.B_DELETE ) {
 			
 			String id;
 			if ( zGetPropMailView() == PageMailView.BY_MESSAGE ) {
@@ -283,7 +283,7 @@ public class PageMail extends AbsAjaxPage {
 			locator = "id="+ id;
 				
 			
-		} else if ( button == Buttons.B_MOVE ) {
+		} else if ( button == Button.B_MOVE ) {
 			
 			// Check if the button is enabled
 			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zMoveIconBtnID +"']/div)@class");
@@ -295,7 +295,7 @@ public class PageMail extends AbsAjaxPage {
 			page = null;	// TODO
 			throw new HarnessException("implement Move dialog");
 			
-		} else if ( button == Buttons.B_PRINT ) {
+		} else if ( button == Button.B_PRINT ) {
 			
 			// Check if the button is enabled
 			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zPrintIconBtnID +"']/div)@class");
@@ -307,7 +307,7 @@ public class PageMail extends AbsAjaxPage {
 			page = null;	// TODO
 			throw new HarnessException("implement Print dialog");
 			
-		} else if ( button == Buttons.B_REPLY ) {
+		} else if ( button == Button.B_REPLY ) {
 			
 			// Check if the button is enabled
 			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zReplyIconBtnID +"']/div)@class");
@@ -318,7 +318,7 @@ public class PageMail extends AbsAjaxPage {
 			locator = "id='"+ Locators.zReplyIconBtnID;
 			page = new FormMailNew(this.MyApplication);
 			
-		} else if ( button == Buttons.B_REPLYALL ) {
+		} else if ( button == Button.B_REPLYALL ) {
 			
 			// Check if the button is enabled
 			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zReplyAllIconBtnID +"']/div)@class");
@@ -329,7 +329,7 @@ public class PageMail extends AbsAjaxPage {
 			locator = "id='"+ Locators.zReplyAllIconBtnID;
 			page = new FormMailNew(this.MyApplication);
 			
-		} else if ( button == Buttons.B_FORWARD ) {
+		} else if ( button == Button.B_FORWARD ) {
 			
 			// Check if the button is enabled
 			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zForwardIconBtnID +"']/div)@class");
@@ -340,7 +340,7 @@ public class PageMail extends AbsAjaxPage {
 			locator = "id='"+ Locators.zForwardIconBtnID;
 			page = new FormMailNew(this.MyApplication);
 			
-		} else if ( button == Buttons.B_RESPORTSPAM ) {
+		} else if ( button == Button.B_RESPORTSPAM ) {
 			
 			// Check if the button is enabled
 			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zJunkIconBtnID +"']/div)@class");
@@ -350,7 +350,7 @@ public class PageMail extends AbsAjaxPage {
 
 			locator = "id='"+ Locators.zJunkIconBtnID;			
 			
-		} else if ( button == Buttons.B_TAG ) {
+		} else if ( button == Button.B_TAG ) {
 			
 			// For "TAG" without a specified pulldown option, just click on the pulldown
 			// To use "TAG" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
@@ -364,7 +364,7 @@ public class PageMail extends AbsAjaxPage {
 
 			locator = "id='"+ Locators.zTagMenuDropdownBtnID +"'";
 			
-		} else if ( button == Buttons.B_NEWWINDOW ) {
+		} else if ( button == Button.B_NEWWINDOW ) {
 			
 			// Check if the button is enabled
 			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zDetachIconBtnID +"']/div)@class");
@@ -377,7 +377,7 @@ public class PageMail extends AbsAjaxPage {
 			throw new HarnessException("implement new window page ... probably just DisplayMail object?");
 			
 			
-		} else if ( button == Buttons.B_LISTVIEW ) {
+		} else if ( button == Button.B_LISTVIEW ) {
 			
 			// For "TAG" without a specified pulldown option, just click on the pulldown
 			// To use "TAG" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
@@ -431,25 +431,25 @@ public class PageMail extends AbsAjaxPage {
 		// Based on the button specified, take the appropriate action(s)
 		//
 		
-		if ( pulldown == Buttons.B_NEW ) {
+		if ( pulldown == Button.B_NEW ) {
 			
-			if ( option == Buttons.O_NEW_ADDRESSBOOK ) {
+			if ( option == Button.O_NEW_ADDRESSBOOK ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_NEW_APPOINTMENT ) {
+			} else if ( option == Button.O_NEW_APPOINTMENT ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_NEW_BRIEFCASE ) {
+			} else if ( option == Button.O_NEW_BRIEFCASE ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_NEW_CALENDAR ) {
+			} else if ( option == Button.O_NEW_CALENDAR ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_NEW_CONTACT ) {
+			} else if ( option == Button.O_NEW_CONTACT ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_NEW_CONTACTGROUP ) {
+			} else if ( option == Button.O_NEW_CONTACTGROUP ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_NEW_DOCUMENT ) {
+			} else if ( option == Button.O_NEW_DOCUMENT ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_NEW_FOLDER ) {
+			} else if ( option == Button.O_NEW_FOLDER ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_NEW_MESSAGE ) {
+			} else if ( option == Button.O_NEW_MESSAGE ) {
 				
 				// TODO: should this actually click New followed by Message?
 				
@@ -457,37 +457,37 @@ public class PageMail extends AbsAjaxPage {
 				optionLocator = null;
 				page = zToolbarPressButton(pulldown);
 				
-			} else if ( option == Buttons.O_NEW_TAG ) {
+			} else if ( option == Button.O_NEW_TAG ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_NEW_TASK ) {
+			} else if ( option == Button.O_NEW_TASK ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_NEW_TASKFOLDER ) {
+			} else if ( option == Button.O_NEW_TASKFOLDER ) {
 				throw new HarnessException("implement me!");
 			} else {
 				throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
 			}
 			
-		} else if ( pulldown == Buttons.B_LISTVIEW ) { 
+		} else if ( pulldown == Button.B_LISTVIEW ) { 
 
-			if ( option == Buttons.O_LISTVIEW_BYCONVERSATION ) {
+			if ( option == Button.O_LISTVIEW_BYCONVERSATION ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_LISTVIEW_BYMESSAGE ) {
+			} else if ( option == Button.O_LISTVIEW_BYMESSAGE ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_LISTVIEW_READINGPANEBOTTOM ) {
+			} else if ( option == Button.O_LISTVIEW_READINGPANEBOTTOM ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_LISTVIEW_READINGPANEOFF ) {
+			} else if ( option == Button.O_LISTVIEW_READINGPANEOFF ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_LISTVIEW_READINGPANERIGHT ) {
+			} else if ( option == Button.O_LISTVIEW_READINGPANERIGHT ) {
 				throw new HarnessException("implement me!");
 			} else {
 				throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
 			}
 
-		} else if ( pulldown == Buttons.B_TAG ) {
+		} else if ( pulldown == Button.B_TAG ) {
 			
-			if ( option == Buttons.O_TAG_NEWTAG ) {
+			if ( option == Button.O_TAG_NEWTAG ) {
 				throw new HarnessException("implement me!");
-			} else if ( option == Buttons.O_TAG_REMOVETAG ) {
+			} else if ( option == Button.O_TAG_REMOVETAG ) {
 				throw new HarnessException("implement me!");
 			} else {
 				throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
@@ -747,7 +747,7 @@ public class PageMail extends AbsAjaxPage {
 		
 		AbsSeleniumObject page = null;
 		
-		if ( action == Actions.A_LEFTCLICK ) {
+		if ( action == Action.A_LEFTCLICK ) {
 			
 			String listLocator;
 			String rowLocator;
@@ -797,27 +797,27 @@ public class PageMail extends AbsAjaxPage {
 			
 			throw new HarnessException("Unable to locate item with subject("+ subject +") in ("+ sb.toString() +")");
 
-		} else if ( action == Actions.A_CTRLSELECT ) {
+		} else if ( action == Action.A_CTRLSELECT ) {
 			
 			throw new HarnessException("implement me!  action = "+ action);
 			
-		} else if ( action == Actions.A_SHIFTSELECT ) {
+		} else if ( action == Action.A_SHIFTSELECT ) {
 			
 			throw new HarnessException("implement me!  action = "+ action);
 			
-		} else if ( action == Actions.A_RIGHTCLICK ) {
+		} else if ( action == Action.A_RIGHTCLICK ) {
 			
 			throw new HarnessException("implement me!  action = "+ action);
 			
-		} else if ( action == Actions.A_MAIL_CHECKBOX ) {
+		} else if ( action == Action.A_MAIL_CHECKBOX ) {
 			
 			throw new HarnessException("implement me!  action = "+ action);
 			
-		} else if ( action == Actions.A_MAIL_EXPANDCONVERSATION ) {
+		} else if ( action == Action.A_MAIL_EXPANDCONVERSATION ) {
 			
 			throw new HarnessException("implement me!  action = "+ action);
 			
-		} else if ( action == Actions.A_MAIL_FLAG ) {
+		} else if ( action == Action.A_MAIL_FLAG ) {
 			
 			throw new HarnessException("implement me!  action = "+ action);
 			

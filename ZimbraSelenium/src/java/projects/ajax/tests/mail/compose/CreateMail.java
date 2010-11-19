@@ -6,7 +6,7 @@ import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.FormMailNew;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
-import framework.ui.Buttons;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
@@ -36,7 +36,7 @@ public class CreateMail extends AjaxCommonTest {
 		
 		
 		// Open the new mail form
-		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Buttons.B_NEW);
+		FormMailNew mailform = (FormMailNew) app.zPageMail.zToolbarPressButton(Button.B_NEW);
 		ZAssert.assertNotNull(mailform, "Verify the new form opened");
 		
 		// Fill out the form with the data

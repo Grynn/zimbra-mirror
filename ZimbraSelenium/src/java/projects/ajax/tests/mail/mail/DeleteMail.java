@@ -7,8 +7,8 @@ import org.testng.annotations.Test;
 import projects.ajax.core.AjaxCommonTest;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
-import framework.ui.Actions;
-import framework.ui.Buttons;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
@@ -54,13 +54,13 @@ public class DeleteMail extends AjaxCommonTest {
 					"</SendMsgRequest>");
 
 		// Click Get Mail button
-		app.zPageMail.zToolbarPressButton(Buttons.B_GETMAIL);
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
 		// Select the item
-		app.zPageMail.zListItem(Actions.A_LEFTCLICK, mail.subject);
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.subject);
 		
 		// Click delete
-		app.zPageMail.zToolbarPressButton(Buttons.B_DELETE);
+		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
 		
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(messages, "Verify the conversation list exists");

@@ -10,7 +10,7 @@ import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
 import framework.items.RecipientItem.RecipientType;
-import framework.ui.Buttons;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
@@ -51,7 +51,7 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		ZAssert.assertTrue(checked, "Verify if zimbraPrefIncludeTrashInSearch is TRUE, the preference box is checked" );
 		
 		// Click cancel to close preferences
-		app.zPagePreferences.zNavigateAway(Buttons.B_NO);
+		app.zPagePreferences.zNavigateAway(Button.B_NO);
 		
 	}
 

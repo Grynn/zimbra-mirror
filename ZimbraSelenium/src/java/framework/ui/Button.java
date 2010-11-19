@@ -1,21 +1,33 @@
 package framework.ui;
 
-import projects.ajax.ui.AbsAjaxPage;
 
 
 
 /**
- * The <code>Buttons</code> class defines constants that represent
+ * The <code>Button</code> class defines constants that represent
  * general buttons in the client apps.
  * <p>
- * The button constants can be used in page methods such as
- * {@link AbsAjaxPage#zToolbarPressButton(Button)}.
+ * <p>
+ * Action constant names start with "B_" for buttons or "O_" for
+ * optional context menu button, and take the general format
+ * <code>B_PAGE_TEXT</code>,
+ * where "Page" is the application name such as MAIL, ADDRESSBOOK, and
+ * "Text" is the displayed English text on the button.  For non-page
+ * specific Buttons, the "Page" is not specified.
+ * <p>
+ * The action constants can be used in page methods, for example:
+ * <pre>
+ * {@code
+ * // Click on the NEW button to compose a new mail
+ * app.zPageMail.zToolbarPressButton(Button.B_TAG, Button.O_TAG_REMOVETAG);
+ * }
+ * </pre>
  * <p>
  * 
  * @author Matt Rhoades
  *
  */
-public class Buttons {
+public class Button {
 
 	// General buttons and pulldown options
 	public static final Button B_NEW = new Button("B_NEW");
@@ -76,48 +88,46 @@ public class Buttons {
 	public static final Button O_SEARCHTYPE_FILES = new Button("O_SEARCHTYPE_FILES");
 	public static final Button O_SEARCHTYPE_INCLUDESHARED = new Button("O_SEARCHTYPE_INCLUDESHARED");
 
-	public static class Button {
 		
-		private final String ID;
-		
-		protected Button(String id) {
-			this.ID = id;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = prime * result + ((ID == null) ? 0 : ID.hashCode());
-			return result;
-		}
-		
-		@Override
-		public boolean equals(Object obj) {
-			
-			if (this == obj)
-				return true;
-			
-			if (obj == null)
-				return false;
-			
-			if (getClass() != obj.getClass())
-				return false;
-			
-			Button other = (Button) obj;
-			if (ID == null) {
-				if (other.ID != null)
-					return false;
-			} else if (!ID.equals(other.ID))
-				return false;
-			return true;
-		}
-
-		@Override
-		public String toString() {
-			return ID;
-		}
-
-
+	private final String ID;
+	
+	protected Button(String id) {
+		this.ID = id;
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((ID == null) ? 0 : ID.hashCode());
+		return result;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		
+		if (this == obj)
+			return true;
+		
+		if (obj == null)
+			return false;
+		
+		if (getClass() != obj.getClass())
+			return false;
+		
+		Button other = (Button) obj;
+		if (ID == null) {
+			if (other.ID != null)
+				return false;
+		} else if (!ID.equals(other.ID))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return ID;
+	}
+
+
 }
