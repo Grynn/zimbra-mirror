@@ -882,6 +882,11 @@ ZaAccountXFormView.isAccountTypeGrouperVisible = function () {
 	 return !AjxUtil.isEmpty(this.getInstanceValue(ZaAccount.A2_accountTypes));
 }
 
+ZaAccountXFormView.isAccountsTypeAlertInvisible = function () {
+        var val = this.getInstanceValue(ZaAccount.A2_showAccountTypeMsg);
+        return (AjxUtil.isEmpty(val));
+}
+
 ZaAccountXFormView.isAccountTypeSet = function () {
 	 return !ZaAccount.isAccountTypeSet(this.getInstance());
 }
@@ -1394,8 +1399,9 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 		var case1Items = [
 			 {type: _DWT_ALERT_, ref: ZaAccount.A2_domainLeftAccounts,
 			 	visibilityChecks:[ZaAccountXFormView.isDomainLeftAccountsAlertVisible],
-			 	visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A2_accountTypes, ZaAccount.A_name],
+			 	visibilityChangeEventSources:[ZaAccount.A2_domainLeftAccounts,ZaAccount.A_name, ZaAccount.A2_accountTypes],
 				containerCssStyle: "width:400px;",
+				bmolsnr:true,
 				style: DwtAlert.WARNING, iconVisible: false
 			 },
 	
@@ -1403,15 +1409,22 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 	        {type:_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_type_group",
 	                colSpan: "*", numCols: 1, colSizes: ["100%"],
 	                visibilityChecks:[ZaAccountXFormView.isAccountTypeGrouperVisible, ZaAccount.isShowAccountType],
-	                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId, ZaAccount.A_name],
+	                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId, ZaAccount.A_name, ZaAccount.A2_showAccountTypeMsg],
 	                items: [
-	                    {type: _DWT_ALERT_, 
-	                    	visibilityChecks:[ZaAccountXFormView.isAccountTypeSet],
-	                    	visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId],
+	                    {type: _DWT_ALERT_,
+	                    	visibilityChecks:[ZaAccountXFormView.isAccountTypeSet, ZaAccountXFormView.isAccountsTypeAlertInvisible],
+	                    	visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId, ZaAccount.A_name,ZaAccount.A2_showAccountTypeMsg],
 	                    	containerCssStyle: "width:400px;",
 	                        style: DwtAlert.CRITICAL, iconVisible: false ,
 	                        content: ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET
-	                    }, 
+	                    },
+                    	    {type: _DWT_ALERT_, ref: ZaAccount.A2_showAccountTypeMsg,
+                        	visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaAccount.A2_showAccountTypeMsg]],
+                        	visibilityChangeEventSources:[ZaAccount.A2_showAccountTypeMsg, ZaAccount.A_name],
+                        	bmolsnr:true,
+                        	containerCssStyle: "width:400px;",
+                        	style: DwtAlert.WARNING, iconVisible: false
+                            },
 	                    { type: _OUTPUT_, id: ZaAccountXFormView.accountTypeItemId ,
 	                        getDisplayValue: ZaAccount.getAccountTypeOutput,
 	                        //center the elements

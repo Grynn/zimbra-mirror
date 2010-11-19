@@ -362,6 +362,11 @@ ZaNewAccountXWizard.isDomainLeftAccountsAlertVisible = function () {
 	return (!AjxUtil.isEmpty(val1) && AjxUtil.isEmpty(val2));
 }
 
+ZaNewAccountXWizard.isAccountsTypeAlertInvisible = function () {
+        var val = this.getInstanceValue(ZaAccount.A2_showAccountTypeMsg);
+        return (AjxUtil.isEmpty(val));
+}
+
 ZaNewAccountXWizard.isAccountTypeGrouperVisible = function () {
 	return !AjxUtil.isEmpty(this.getInstanceValue(ZaAccount.A2_accountTypes));
 }
@@ -450,15 +455,22 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
         {type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_AccountTypeGrouper, id:"account_wiz_type_group",
                 colSpan: "*", numCols: 1, colSizes: ["100%"],
                 visibilityChecks:[ZaNewAccountXWizard.isAccountTypeGrouperVisible,ZaAccount.isShowAccountType],
-                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId,ZaAccount.A_name],
+                visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId,ZaAccount.A_name, ZaAccount.A2_showAccountTypeMsg],
                 items: [
                     {type: _DWT_ALERT_, 
-                    	visibilityChecks:[ZaNewAccountXWizard.isAccountTypeSet],
-                        visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId, ZaAccount.A_name],
+                    	visibilityChecks:[ZaNewAccountXWizard.isAccountTypeSet, ZaNewAccountXWizard.isAccountsTypeAlertInvisible],
+                        visibilityChangeEventSources:[ZaAccount.A2_accountTypes,ZaAccount.A_COSId, ZaAccount.A_name, ZaAccount.A2_showAccountTypeMsg],
                         containerCssStyle: "width:400px;",
                         style: DwtAlert.CRITICAL, iconVisible: false ,
                         content: ZaMsg.ERROR_ACCOUNT_TYPE_NOT_SET
-                    },                                                                      
+                    },
+                    {type: _DWT_ALERT_, ref: ZaAccount.A2_showAccountTypeMsg,
+                    	visibilityChecks:[[XForm.checkInstanceValueNotEmty,ZaAccount.A2_showAccountTypeMsg]],
+                	visibilityChangeEventSources:[ZaAccount.A2_showAccountTypeMsg, ZaAccount.A_name],
+                	bmolsnr:true,
+                        containerCssStyle: "width:400px;",
+                        style: DwtAlert.WARNING, iconVisible: false
+                    },
                     { type: _OUTPUT_, id: ZaNewAccountXWizard.accountTypeItemId,
                         getDisplayValue: ZaAccount.getAccountTypeOutput,
                         valueChangeEventSources:[ZaAccount.A_name,ZaAccount.A_COSId,ZaAccount.A2_accountTypes,ZaAccount.A2_currentAccountType],

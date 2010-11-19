@@ -314,6 +314,7 @@ ZaAccount.A2_calFwdAddr_selection_cache = "calFwdAddr_selection_cache";
 ZaAccount.A2_fp_selection_cache = "fp_selection_cache"; 
 ZaAccount.A2_errorMessage = "errorMessage";
 ZaAccount.A2_warningMessage = "warningMessage";
+ZaAccount.A2_showAccountTypeMsg = "showAccountTypeMsg";
 //constants for rights
 
 ZaAccount.SET_PASSWORD_RIGHT = "setAccountPassword";
@@ -1639,6 +1640,7 @@ ZaAccount.myXModel = {
     	{id:ZaAccount.A2_errorMessage, ref:ZaAccount.A2_errorMessage, type:_STRING_},
     	{id:ZaAccount.A2_warningMessage, ref:ZaAccount.A2_warningMessage, type:_STRING_},
         {id:ZaAccount.A2_domainLeftAccounts, ref:ZaAccount.A2_domainLeftAccounts, type:_STRING_},
+        {id:ZaAccount.A2_showAccountTypeMsg, ref:ZaAccount.A2_showAccountTypeMsg, type:_STRING_},
         {id:ZaAccount.A_name, type:_STRING_, ref:"name", required:true, 
         	constraints: {type:"method", value:
 			   function (value, form, formItem, instance) {				   
@@ -2138,27 +2140,35 @@ function (value, event, form){
         //if domain name is not changed, we don't want to update the account type output
         if  (oldDomainName !=  newDomainName){   
             if (domainObj && domainObj.attrs ){
+                var cosMaxAccounts = domainObj.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts] ;
+                if (cosMaxAccounts && cosMaxAccounts.length > 0){
+                	form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_errorMessage,"");
+                	form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_accountTypes,domainObj.getAccountTypes ());
+                	form.parent.updateAccountType();
+                }
+
+             }
+		
+        } 
+	if (domainObj && domainObj.attrs ){
                 var maxDomainAccounts = domainObj.attrs[ZaDomain.A_domainMaxAccounts] ;
                 var cosMaxAccounts = domainObj.attrs[ZaDomain.A_zimbraDomainCOSMaxAccounts] ;
                 if (maxDomainAccounts) {
                     maxDomainAccounts = parseInt (maxDomainAccounts);
                 }
-                if ((maxDomainAccounts && maxDomainAccounts > 0)
-                        && (!cosMaxAccounts || cosMaxAccounts.length <= 0)) {
-                    //only show domain left accounts when zimbraDomainMaxAccounts is set, but zimbraDomainCOSMaxAccounts is not set
+                if (maxDomainAccounts && maxDomainAccounts > 0) {
                     var usedAccounts = domainObj.getUsedDomainAccounts(newDomainName );
-                    form.getModel().setInstanceValue(form.getInstance(),     ZaAccount.A2_domainLeftAccounts,
+                    if (maxDomainAccounts < usedAccounts && (!cosMaxAccounts || cosMaxAccounts.length <= 0)) {
+			form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_accountTypes,null);
+                        form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_domainLeftAccounts,
                         AjxMessageFormat.format (ZaMsg.NAD_DomainAccountLimits, [newDomainName, usedAccounts - maxDomainAccounts]));
-                }else if (cosMaxAccounts && cosMaxAccounts.length > 0){
-                    //update the account type information
-                    form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_errorMessage,"");
-                    form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_accountTypes,domainObj.getAccountTypes ());
-                    form.parent.updateAccountType();
-                }else{
+		    }else {
+			form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_domainLeftAccounts,null);
+		    }
+		} else {
                     form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_domainLeftAccounts,null);
-                }
-             }
-        }
+		}
+	}
 
         if(form.parent.setDirty)  { //edit account view
 			form.parent.setDirty(true);	
@@ -2363,12 +2373,13 @@ ZaAccount.getAccountTypeOutput = function (isNewAccount) {
             currentType = currentCos.id ;
         */
         var currentType = instance[ZaAccount.A2_currentAccountType] ;
-	if(!currentType)
-		currentType = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name]).id;
+	var defaultType = ZaCos.getDefaultCos4Account(instance[ZaAccount.A_name]); 
+	if(!currentType && defaultType)
+		currentType = defaultType.id;
 
         var domainName = ZaAccount.getDomain (instance.name) ;
         var domainObj =  ZaDomain.getDomainByName (domainName, form.parent._app);
-
+	var isFullUsed = true;
 
         out.push("<table with=100%>");
         out.push("<colgroup><col width='200px' /><col width='200px' /><col width='200px' /></colgroup> ");
@@ -2379,6 +2390,7 @@ ZaAccount.getAccountTypeOutput = function (isNewAccount) {
         domainObj.updateUsedAccounts();  
         for (var i=0; i < acctTypes.length; i ++) {
             var cos = ZaCos.getCosById (acctTypes[i] , ZaApp.getInstance()) ;
+            var isCheck = false;
             if (cos == null) {
                 ZaApp.getInstance().getCurrentController().popupErrorDialog(
                         AjxMessageFormat.format(ZaMsg.ERROR_INVALID_ACCOUNT_TYPE, [acctTypes[i]]));
@@ -2398,6 +2410,18 @@ ZaAccount.getAccountTypeOutput = function (isNewAccount) {
             var usedAccounts = domainObj.getUsedAccounts(cos.name);
             var availableAccounts = domainObj.getAvailableAccounts(cos.name);
 
+	    if(availableAccounts > 0) isFullUsed = false;
+            else if (currentType == acctTypes[i]) isFullUsed = false;
+	    if (currentType == acctTypes[i]) {
+		 //isFullUsed = false;
+                 isCheck = true;
+		 if (currentType != instance.attrs[ZaAccount.A_COSId]) {
+        		instance.autoCos = "FALSE" ;
+        		instance.attrs[ZaAccount.A_COSId] = currentType;
+			form.parent.updateCosGrouper();
+		 }
+	    }
+
             out.push("<div>" +
                      "<label style='font-weight: bold;"
                     + ((availableAccounts > 0 || currentType == acctTypes[i] ) ? "" : "color: #686357;")
@@ -2406,7 +2430,7 @@ ZaAccount.getAccountTypeOutput = function (isNewAccount) {
             out.push("<input type=radio name=" + radioGroupName + " value=" + acctTypes[i]
                     + ((availableAccounts > 0 || currentType == acctTypes[i] ) ?  (" onclick=\"ZaAccount.setAccountType.call("
                                     + this.getGlobalRef() + ", '" + acctTypes[i] +  "', event );\" ") : (" disabled "))
-                    + ((currentType == acctTypes[i]) ? " checked " : "" )
+                    + (/*(currentType == acctTypes[i])*/isCheck ? " checked " : "" )
                     + " />") ;
             out.push(accountTypeDisplayValue + "</label></div>") ;
 
@@ -2419,8 +2443,16 @@ ZaAccount.getAccountTypeOutput = function (isNewAccount) {
         }
 
         out.push("</tbody></table>") ;
-    }
+    
+	// set warning message because of not avaliable account
+	if(isFullUsed) {
+                form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_showAccountTypeMsg,
+                        AjxMessageFormat.format (ZaMsg.MSG_AccountTypeUnavailable, [defaultType.name]));
+	}else{
+                form.getModel().setInstanceValue(form.getInstance(),ZaAccount.A2_showAccountTypeMsg,null);
+	}
 
+    }
     return out.join("") ; 
 }
 
@@ -2448,13 +2480,18 @@ ZaAccount.setAccountType = function (newType, ev) {
 
 ZaAccount.isAccountTypeSet = function (tmpObj) {
 
-    var cosId = tmpObj.attrs [ZaAccount.A_COSId] || tmpObj[ZaAccount.A2_currentAccountType];    
+    var cosId = tmpObj.attrs [ZaAccount.A_COSId] || tmpObj[ZaAccount.A2_currentAccountType];
+    var defaultType = ZaCos.getDefaultCos4Account(tmpObj[ZaAccount.A_name]);
     if (!tmpObj.accountTypes  || tmpObj.accountTypes.length <= 0) {
         return  true ; //account type is not present, no need to check if it is set
     } else if (!cosId){
         return false ;
     }
 
+    // check whether default account type is adopted
+    if(cosId == defaultType.id)
+	return true;
+    // if not, check whether accountType in list is selected
     for (var i=0; i < tmpObj.accountTypes.length; i ++) {
         if (cosId == tmpObj.accountTypes[i] )
             return true ;
