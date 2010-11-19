@@ -9,17 +9,31 @@ import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 
 /**
- * Used to define a Zimbra Contact
- * 
+ * The <code>ContactGroupItem</code> defines a Zimbra Contact Group
+ * <p> 
  * @author Matt Rhoades
  *
  */
 public class ContactGroupItem extends ContactItem implements IItem {
 
+	/**
+	 * The name of the contact group
+	 */
 	public String nickname = null;
+	
+	/**
+	 * The list of contacts within this group
+	 */
 	public ArrayList<String> dlist = null;
+	
+	/**
+	 * The "File As" setting for this contact group
+	 */
 	public String fileas = null;
 	
+	/**
+	 * Create a new, empty contact group
+	 */
 	public ContactGroupItem() {
 		type = "group";
 		dlist = new ArrayList<String>();
