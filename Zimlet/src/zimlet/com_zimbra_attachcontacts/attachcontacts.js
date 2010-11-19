@@ -152,8 +152,14 @@ AttachContactsZimlet.prototype._initContactsReminderToolbar = function(toolbar, 
 AttachContactsZimlet.prototype.resetToolbarOperations =
 function(parent, num){
   if (parent.getOp(AttachContactsZimlet.SEND_CONTACTS)){
-      parent.enable(AttachContactsZimlet.SEND_CONTACTS, num > 0);
+      parent.enable(AttachContactsZimlet.SEND_CONTACTS, num > 0 && this._isOkayToAttach());
   }
+};
+
+
+AttachContactsZimlet.prototype._isOkayToAttach = function() {
+    this._getContactListIds();
+    return this.contactIdsToAttach && this.contactIdsToAttach.length > 0;
 };
 
 AttachContactsZimlet.prototype._contactListSendListener = function() {
@@ -167,7 +173,9 @@ AttachContactsZimlet.prototype._getContactListIds = function() {
 	var items = controller.getCurrentView().getSelection();
 	this.contactIdsToAttach = [];
 	for (var i=0; i<items.length; i++) {
-		this.contactIdsToAttach.push(items[i].id);
+        if (!items[i].isGroup()) {
+		    this.contactIdsToAttach.push(items[i].id);
+        }
 	}
 	return this.contactIdsToAttach;
 };
@@ -270,9 +278,12 @@ AttachContactsZimlet.prototype._contactActionMenuListener = function(contactCall
 		if (contacts.length) {
 			this.contactIdsToAttach = [];
 			for (var i=0; i<contacts.length; i++) {
-				this.contactIdsToAttach[i] = contacts[i].id;
+                if (!contacts[i].isGroup()){
+				    this.contactIdsToAttach.push(contacts[i].id);
+                }
 			}
-			this._openCompose();
+            if (this.contactIdsToAttach.length > 0)
+			    this._openCompose();
 		}
 	}
 };

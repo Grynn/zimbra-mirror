@@ -257,50 +257,42 @@ function(items) {
 
 			var fields;
 
-			if (contact.isGroup()) {
-				members = contact.getGroupMembers().good;
-				fields = members.map(function(member) {return member.toString()}).getArray() || [];
-				if (AttachContactsTabView.GROUP_CUTOFF > 0 && fields.length > AttachContactsTabView.GROUP_CUTOFF) {
-					// TODO: Do we want to ensure that entries containing this._currentQuery are put in the top of the array before slicing it?
-					var moreMsg = AjxMessageFormat.format(this.zimlet.getMessage("ACZ_more"), fields.length - AttachContactsTabView.GROUP_CUTOFF + 1);
-					fields = fields.slice(0, AttachContactsTabView.GROUP_CUTOFF - 1);
-					fields.push(moreMsg);
-				}
-			} else {
+            //query should prevent contract group results, but check anyway
+            if (!contact.isGroup()){
 				fields = [];
 				for (var j=0; j<desiredAttrs.length; j++) {
 					var wattr = this._getFirstWorkingAttr(contact.getAttrs(), desiredAttrs[j]);
 					if (wattr)
 						fields.push(wattr);
 				}
-			}
 
-			var chkId = "attachContactsZimlet_"+Dwt.getNextId();
-			this._checkboxIdAndItemIdMap[chkId] = item.id;
-			html[idx++] = "<div class='";
-			html[idx++] = rowClass;
-			html[idx++] = "'>";
+                var chkId = "attachContactsZimlet_"+Dwt.getNextId();
+                this._checkboxIdAndItemIdMap[chkId] = item.id;
+                html[idx++] = "<div class='";
+                html[idx++] = rowClass;
+                html[idx++] = "'>";
 
-			html[idx++] = "<table width=100%>";
-			html[idx++] = "<tr><td width=16px><input id='";
-			html[idx++] = chkId;
-			html[idx++] = "' type='checkbox'/></td>";
+                html[idx++] = "<table width=100%>";
+                html[idx++] = "<tr><td width=16px><input id='";
+                html[idx++] = chkId;
+                html[idx++] = "' type='checkbox'/></td>";
 
-			html[idx++] = "<td width=16px>";
-			html[idx++] = AjxImg.getImageHtml(contact.getIcon());
-			html[idx++] = "</td>";
+                html[idx++] = "<td width=16px>";
+                html[idx++] = AjxImg.getImageHtml(contact.getIcon());
+                html[idx++] = "</td>";
 
-			html[idx++] = "<td><span style=\"font-weight:bold;\">";
-			html[idx++] = AjxStringUtil.htmlEncode(name);
-			html[idx++] = "</span></td></tr>";
+                html[idx++] = "<td><span style=\"font-weight:bold;\">";
+                html[idx++] = AjxStringUtil.htmlEncode(name);
+                html[idx++] = "</span></td></tr>";
 
-			for (var j=0; j<fields.length; j++) {
-				html[idx++] = "<tr><td></td><td colspan=2>";
-				html[idx++] = AjxStringUtil.htmlEncode(fields[j]);
-				html[idx++] = "</td></tr>";
-			}
+                for (var j=0; j<fields.length; j++) {
+                    html[idx++] = "<tr><td></td><td colspan=2>";
+                    html[idx++] = AjxStringUtil.htmlEncode(fields[j]);
+                    html[idx++] = "</td></tr>";
+                }
 
-			html[idx++] = "</table></div>";
+                html[idx++] = "</table></div>";
+            }
 		}
 	}
 	
@@ -520,7 +512,7 @@ function(query, forward) {
 AttachContactsTabView.prototype._searchContacts =
 function(params) {
 	var jsonObj = {SearchRequest:{_jsns:"urn:zimbraMail"}};
-	jsonObj.SearchRequest.query = params.query;
+	jsonObj.SearchRequest.query = params.query + " not #type:group";
 	jsonObj.SearchRequest.types = "contact";
 	jsonObj.SearchRequest.limit = params.limit;
 	jsonObj.SearchRequest.offset = params.offset;
