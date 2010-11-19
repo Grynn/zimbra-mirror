@@ -152,15 +152,17 @@ if [ -d ${zimbra_home} ]; then
     chmod 640 ${zimbra_home}/${i}
   done
 
-  if [ "`cat /selinux/enforce 2> /dev/null`" = "1" ]; then
-    # make sure ssh keys are in home dir selinux type
-    chcon -R -v -u system_u -t user_home_t ${zimbra_home}/.ssh/
-    if [ -f ${zimbra_home}/httpd/modules/libphp5.so ]; then
-      # allow text relocation for these problem files
-      chcon -t textrel_shlib_t ${zimbra_home}/httpd/modules/libphp5.so
+  if [ -f /selinux/enforce ]; then
+    if [ "`cat /selinux/enforce 2> /dev/null`" = "1" ]; then
+      # make sure ssh keys are in home dir selinux type
+      chcon -R -v -u system_u -t user_home_t ${zimbra_home}/.ssh/
+      if [ -f ${zimbra_home}/httpd/modules/libphp5.so ]; then
+        # allow text relocation for these problem files
+        chcon -t textrel_shlib_t ${zimbra_home}/httpd/modules/libphp5.so
+      fi
+      # Fix Zimbra upgrades selinux perms
+      restorecon -R /etc/security
     fi
-    # Fix Zimbra upgrades selinux perms
-    restorecon -R /etc/security
   fi
 
   if [ -d ${zimbra_home}/contrib ]; then
