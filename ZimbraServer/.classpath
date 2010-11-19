@@ -78,7 +78,7 @@
   <classpathentry kind="lib" path="/ZimbraCommon/jars/yuicompressor-2.4.2-zimbra.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-charset.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/zimbra-native.jar" sourcepath="/ZimbraNative/src/java"/>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/memcached-2.3.1.jar"/>
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/memcached-2.5.jar"/>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/apache-jsieve-0.4.jar" sourcepath="/ZimbraCommon/jars-src/apache-jsieve-0.4-sources.jar">
     <attributes>
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/apache-jsieve-0.4-javadoc.jar!/"/>
