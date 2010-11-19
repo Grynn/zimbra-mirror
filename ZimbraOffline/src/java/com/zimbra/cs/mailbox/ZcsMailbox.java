@@ -192,7 +192,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
     
     String getRemoteHost() throws ServiceException, MalformedURLException {
-    	return new URL(getSoapUri()).getHost();
+        return new URL(getSoapUri()).getHost();
     }
 
 //    @Override protected synchronized void initialize() throws ServiceException {
@@ -200,7 +200,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
 //
 //        Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
 //        Mountpoint.create(ID_FOLDER_ARCHIVE, userRoot, "Archive", OfflineProvisioning.getOfflineInstance().getLocalAccount().getId(), Mailbox.ID_FOLDER_INBOX,
-//        		          MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR);
+//                          MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR);
 //    }
 
     @Override int getInitialItemId() {
@@ -288,10 +288,10 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             } catch (NoSuchItemException nsie) { }
             
             try {
-            	super.delete(octxt, new int[] {id}, type, tcon); //NOTE: don't call the one with single id as it will dead loop
+                super.delete(octxt, new int[] {id}, type, tcon); //NOTE: don't call the one with single id as it will dead loop
             } catch (Exception x) {
-            	SyncExceptionHandler.localDeleteFailed(this, id, x);
-            	//something is wrong, but we'll just skip since failed deleting a local item is not immediately fatal (not too good either)
+                SyncExceptionHandler.localDeleteFailed(this, id, x);
+                //something is wrong, but we'll just skip since failed deleting a local item is not immediately fatal (not too good either)
             }
         }
     }
@@ -590,6 +590,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                     //currently UI receives SoapJS in its responses, we ask for that protocol so notifications are handled correctly
                     ZimbraSoapContext zscIn = new ZimbraSoapContext(at, at.getAccountId(), SoapProtocol.Soap12, SoapProtocol.SoapJS);
                     ZimbraSoapContext zscProxy = new ZimbraSoapContext(zscIn, getAccountId(), session);
+                    proxy.setTimeouts(OfflineLC.zdesktop_request_timeout.intValue());
                     return DocumentHandler.proxyWithNotification(request, proxy, zscProxy, session);
                 }
             } 
@@ -602,7 +603,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
     
     Element sendRequest(Element request, boolean requiresAuth) throws ServiceException {
-    	return sendRequest(request, requiresAuth, true, OfflineLC.zdesktop_request_timeout.intValue());
+        return sendRequest(request, requiresAuth, true, OfflineLC.zdesktop_request_timeout.intValue());
     }
 
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout) throws ServiceException {
@@ -647,31 +648,31 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                     elt.setText("*");
                 }
                 
-            	OfflineLog.request.debug(request);
-            	
-            	if (pswd != null)
-            	    elt.setText(pswd);
+                OfflineLog.request.debug(request);
+                
+                if (pswd != null)
+                    elt.setText(pswd);
             }
 
             Element response = null;
             if (saxHandlers != null) {
                 response = transport.invoke(request.detach(), false, true, null, null, null, saxHandlers);
             } else if (noSession) {
-            	if (sendAcctId)
+                if (sendAcctId)
                     response = transport.invoke(request.detach(), false, true, acct.getId());
-            	else 
-            	    response = transport.invokeWithoutSession(request.detach());
+                else 
+                    response = transport.invokeWithoutSession(request.detach());
             } else {
-            	if (mSessionId != null)
-            		transport.setSessionId(mSessionId);
-            	response = transport.invoke(request.detach());
+                if (mSessionId != null)
+                    transport.setSessionId(mSessionId);
+                response = transport.invoke(request.detach());
             }
             if (acct.isDebugTraceEnabled() && response != null)
-            	OfflineLog.response.debug(response);
+                OfflineLog.response.debug(response);
 
             // update sessionId if changed
             if (transport.getSessionId() != null)
-            	mSessionId = transport.getSessionId();
+                mSessionId = transport.getSessionId();
 
             return response;
         } catch (IOException e) {
@@ -680,7 +681,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
     
     OfflineAccount.Version getRemoteServerVersion() throws ServiceException {
-    	return getOfflineAccount().getRemoteServerVersion();
+        return getOfflineAccount().getRemoteServerVersion();
     }
     
     void pollForUpdates() throws ServiceException {

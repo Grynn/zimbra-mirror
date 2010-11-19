@@ -30,7 +30,7 @@ import com.zimbra.cs.offline.common.OfflineConstants;
 
 public class MailboxSync {
     
-	//legacy
+    //legacy
     private static final String SN_OFFLINE  = "offline";
     private static final String FN_PROGRESS = "state";
     private static final String FN_TOKEN    = "token";
@@ -52,7 +52,7 @@ public class MailboxSync {
     private enum SyncStage {
         BLANK, INITIAL, SYNC
     }
-	
+    
     private Element mSyncTree;
     
     private SyncStage mStage = SyncStage.BLANK;
@@ -66,20 +66,20 @@ public class MailboxSync {
 
     @SuppressWarnings("unchecked")
     MailboxSync(ZcsMailbox ombx) throws ServiceException {
-    	this.ombx = ombx;
-    	poller = new OfflinePoller(ombx);
-    	
-    	Metadata syncState = ombx.getConfig(null, CONF_SYNCSTATE);
-    	if (syncState != null && syncState.containsKey(CKEY_STAGE)) {
+        this.ombx = ombx;
+        poller = new OfflinePoller(ombx);
+        
+        Metadata syncState = ombx.getConfig(null, CONF_SYNCSTATE);
+        if (syncState != null && syncState.containsKey(CKEY_STAGE)) {
             try {
-            	setStage(SyncStage.valueOf(syncState.get(CKEY_STAGE)));
+                setStage(SyncStage.valueOf(syncState.get(CKEY_STAGE)));
                 switch (mStage) {
                 case INITIAL: {
                     MetadataList mdl = syncState.getList(CKEY_DONE_FOLDERS, true);
                     if (mdl != null)
                         mDoneFolders.addAll(mdl.asList());
                     mLastSyncedItem = (int)syncState.getLong(CKEY_LASTID, 0);
-                    	
+                        
                     Metadata syncTree = ombx.getConfig(null, CONF_SYNCTREE);
                     mSyncTree = Element.parseXML(syncTree.get(CKEY_SYNCRESP));
                     //fall-thru
@@ -92,36 +92,36 @@ public class MailboxSync {
             } catch (Exception e) {
                 ZimbraLog.mailbox.warn("invalid persisted sync data - must reset mailbox", e);
             }
-    	} else { //legacy metadata support
-    	    Metadata config = ombx.getConfig(null, SN_OFFLINE);
-    	    if (config != null && config.containsKey(FN_PROGRESS)) {
-    	        try {
-    	            setStage(SyncStage.valueOf(config.get(FN_PROGRESS)));
-    	            switch (mStage) {
-    	            case INITIAL: {
-    	                Element syncTree = Element.parseXML(config.get(FN_INITIAL));
-    	                int lastId = (int) config.getLong(FN_LAST_ID, 0);
-    	                saveSyncTree(syncTree, syncTree.getAttribute(MailConstants.A_TOKEN));
-    	                checkpointItem(lastId);
-    	                break;
-    	            }
-    	            case SYNC: {
-    	                String token = config.get(FN_TOKEN, null);
-    	                recordInitialSyncComplete(token);
-    	                break;
-    	            }
-    	            }
-    	            ombx.setConfig(null, SN_OFFLINE, null);
-    	        } catch (Exception e) {
-    	            ZimbraLog.mailbox.warn("invalid persisted sync data; will force reset");
-	        }
-    	    }
-    	}
+        } else { //legacy metadata support
+            Metadata config = ombx.getConfig(null, SN_OFFLINE);
+            if (config != null && config.containsKey(FN_PROGRESS)) {
+                try {
+                    setStage(SyncStage.valueOf(config.get(FN_PROGRESS)));
+                    switch (mStage) {
+                    case INITIAL: {
+                        Element syncTree = Element.parseXML(config.get(FN_INITIAL));
+                        int lastId = (int) config.getLong(FN_LAST_ID, 0);
+                        saveSyncTree(syncTree, syncTree.getAttribute(MailConstants.A_TOKEN));
+                        checkpointItem(lastId);
+                        break;
+                    }
+                    case SYNC: {
+                        String token = config.get(FN_TOKEN, null);
+                        recordInitialSyncComplete(token);
+                        break;
+                    }
+                    }
+                    ombx.setConfig(null, SN_OFFLINE, null);
+                } catch (Exception e) {
+                    ZimbraLog.mailbox.warn("invalid persisted sync data; will force reset");
+            }
+            }
+        }
     }
     
     void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
-       	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
-       	
+        OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
+           
         if (!syncMan.isServiceActive()) {
             if (isOnRequest)
                 OfflineLog.offline.debug("offline sync request ignored");
@@ -130,7 +130,7 @@ public class MailboxSync {
                 if (isOnRequest && isDebugTraceOn) {
                     OfflineLog.offline.debug("============================== SYNC DEBUG TRACE START ==============================");
                     ombx.getOfflineAccount().setRequestScopeDebugTraceOn(true);
-        	}
+                }
                 try {
                     if (!isOnRequest) {
                         if (ombx.isAutoSyncDisabled() || !syncMan.reauthOK(ombx.getAccount()) || !syncMan.retryOK(ombx.getAccount()))
@@ -206,6 +206,7 @@ public class MailboxSync {
             }
         } else if (isOnRequest) {
             OfflineLog.offline.info("[" + ombx.getAccount().getName() + "] sync already in progress");
+            syncMan.ensureRunning(ombx.getAccount());
         }
     }
     
@@ -227,7 +228,7 @@ public class MailboxSync {
      * @return
      */
     boolean isFolderDone(int folderId) {
-    	return mDoneFolders.contains((long)folderId);
+        return mDoneFolders.contains((long)folderId);
     }
 
     /** Returns the id of the last item initial synced from the current folder
@@ -239,7 +240,7 @@ public class MailboxSync {
     }
     
     boolean isInitialSyncComplete() {
-    	return mStage == SyncStage.SYNC;
+        return mStage == SyncStage.SYNC;
     }
     
     /**
@@ -249,15 +250,15 @@ public class MailboxSync {
      * @throws ServiceException
      */
     void saveSyncTree(Element syncResponse, String token) throws ServiceException {
-    	Metadata syncTree = new Metadata().put(CKEY_SYNCRESP, syncResponse);
-    	ombx.setConfig(null, CONF_SYNCTREE, syncTree);
-    	
-    	setStage(SyncStage.INITIAL);
-    	mSyncTree = syncResponse;
-    	mDoneFolders = new HashSet<Long>();
-    	mLastSyncedItem = 0;
-    	mSyncToken = token;
-    	checkpoint();
+        Metadata syncTree = new Metadata().put(CKEY_SYNCRESP, syncResponse);
+        ombx.setConfig(null, CONF_SYNCTREE, syncTree);
+        
+        setStage(SyncStage.INITIAL);
+        mSyncTree = syncResponse;
+        mDoneFolders = new HashSet<Long>();
+        mLastSyncedItem = 0;
+        mSyncToken = token;
+        checkpoint();
     }
     
     /**
@@ -266,8 +267,8 @@ public class MailboxSync {
      * @throws ServiceException
      */
     void checkpointItem(int itemId) throws ServiceException {
-    	mLastSyncedItem = itemId;
-    	checkpoint();
+        mLastSyncedItem = itemId;
+        checkpoint();
     }
     
     /**
@@ -276,9 +277,9 @@ public class MailboxSync {
      * @throws ServiceException
      */
     void checkpointFolder(int folderId) throws ServiceException {
-    	mDoneFolders.add((long)folderId);
-    	mLastSyncedItem = 0;
-    	checkpoint();
+        mDoneFolders.add((long)folderId);
+        mLastSyncedItem = 0;
+        checkpoint();
     }
     
     private void checkpoint() throws ServiceException {
@@ -301,7 +302,7 @@ public class MailboxSync {
      */
     void recordInitialSyncComplete(String token) throws ServiceException {
         setStage(SyncStage.SYNC);
-    	
+        
         if (mSyncTree != null) {
             mSyncTree = null;
             ombx.setConfig(null, CONF_SYNCTREE, null);
@@ -328,7 +329,7 @@ public class MailboxSync {
     }
     
     private void setStage(SyncStage stage) throws ServiceException {
-    	mStage = stage;
-    	OfflineSyncManager.getInstance().setStage(ombx.getAccount(), stage.toString());
+        mStage = stage;
+        OfflineSyncManager.getInstance().setStage(ombx.getAccount(), stage.toString());
     }
 }

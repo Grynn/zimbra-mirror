@@ -283,6 +283,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
             }
         } else if (isOnRequest) {
             OfflineLog.offline.debug("[" + getAccount().getName() + "] sync already in progress");
+            OfflineSyncManager.getInstance().ensureRunning(getAccount());
         }
     }
 

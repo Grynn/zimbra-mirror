@@ -117,6 +117,19 @@ public class OfflineSyncManager {
         long lastAuthFail;
         ZAuthToken authToken; //null for data sources
         long authExpires; //0 for data sources
+        private Thread currentSyncThread = null;
+
+        private void setCurrentSyncThread() {
+            if (currentSyncThread == null) {
+                currentSyncThread = Thread.currentThread();
+            }
+        }
+        
+        private void clearCurrentSyncThread(boolean force) {
+            if (currentSyncThread != null && (force || currentSyncThread == Thread.currentThread())) {
+                currentSyncThread = null;
+            }
+        }
 
         boolean syncStart() {
             if (mStatus == SyncStatus.running)
@@ -124,6 +137,7 @@ public class OfflineSyncManager {
             mStatus = SyncStatus.running;
             mCode = null;
             mError = null;
+            setCurrentSyncThread();
             return true;
         }
 
@@ -134,6 +148,7 @@ public class OfflineSyncManager {
             mLastFailTime = 0;
             mStatus = SyncStatus.online;
             mRetryCount = 0;
+            clearCurrentSyncThread(false);
             return true;
         }
         
@@ -144,6 +159,7 @@ public class OfflineSyncManager {
             mLastFailTime = mLastSyncTime = 0;
             mRetryCount = 0;
             mStatus = SyncStatus.unknown;
+            clearCurrentSyncThread(true);
         }
 
         void resetLastSyncTime() {
@@ -156,6 +172,7 @@ public class OfflineSyncManager {
             }
             mCode = code;
             mStatus = SyncStatus.offline;
+            clearCurrentSyncThread(false);
         }
 
         void syncFailed(String code, String message, Throwable t) {
@@ -164,6 +181,7 @@ public class OfflineSyncManager {
             mError = new SyncError(message, t);
             mStatus = SyncStatus.error;
             ++mRetryCount;
+            clearCurrentSyncThread(false);
         }
 
         boolean retryOK() {
@@ -207,6 +225,7 @@ public class OfflineSyncManager {
             authExpires = 0;
             mStatus = SyncStatus.authfail;
             mCode = code;
+            clearCurrentSyncThread(false);
         }
 
         void encode(Element e) {
@@ -297,6 +316,16 @@ public class OfflineSyncManager {
             getStatus(entry).mStage = stage;
         }
     }
+    
+    public void ensureRunning(NamedEntry entry) {
+        synchronized (syncStatusTable) {
+            OfflineSyncStatus status = getStatus(entry);
+            if (status.getSyncStatus() != SyncStatus.running && status.currentSyncThread != null) {
+                OfflineLog.offline.warn("Thread [%s] still syncing but status is [%s] setting status back to %s", status.currentSyncThread.getName(), status.getSyncStatus(), SyncStatus.running);
+                syncStart(entry);
+            }
+        }
+    }
 
     public void syncStart(NamedEntry entry) {
         boolean b;
@@ -382,7 +411,7 @@ public class OfflineSyncManager {
     public boolean retryOK(NamedEntry entry) {
         synchronized (syncStatusTable) {
             return getStatus(entry).retryOK();
-        }	    
+        }        
     }
 
     public void authSuccess(Account account, ZAuthToken token, long expires) {
@@ -731,14 +760,14 @@ public class OfflineSyncManager {
     }
 
     /*
-		<zdsync xmlns="urn:zimbraOffline">
-		  <account name="foo@domain1.com" id="1234-5678" status="online" [code="{CODE}"] lastsync="1234567" unread="32">
-			  [<error [message="{MESSAGE}"]>
-			    [<exception>{EXCEPTION}</exception>]
-			  </error>]
-		  </account>
-		  [(<account>...</account>)*]
-		</zdsync>
+        <zdsync xmlns="urn:zimbraOffline">
+          <account name="foo@domain1.com" id="1234-5678" status="online" [code="{CODE}"] lastsync="1234567" unread="32">
+              [<error [message="{MESSAGE}"]>
+                [<exception>{EXCEPTION}</exception>]
+              </error>]
+          </account>
+          [(<account>...</account>)*]
+        </zdsync>
      */
     public void encode(Element context, String requestedAccountId) throws ServiceException {
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
