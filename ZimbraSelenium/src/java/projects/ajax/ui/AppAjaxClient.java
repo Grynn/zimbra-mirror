@@ -3,12 +3,37 @@
  */
 package projects.ajax.ui;
 
+import projects.ajax.core.AjaxCommonTest;
+import projects.ajax.ui.Addressbook.PageAddressbook;
 import framework.ui.AbsApplication;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
-import projects.ajax.ui.Addressbook.*;
 
 /**
+ * The <code>AppAjaxClient</code> class defines the Zimbra Ajax client.
+ * <p>
+ * The <code>AppAjaxClient</code> contains all pages, folder trees,
+ * dialog boxes, forms, menus for the Ajax client.
+ * <p>
+ * In {@link AjaxCommonTest}, there is one
+ * AppAjaxClient object created per test case class (ensuring 
+ * class-level concurrency).  The test case methods can access
+ * different application pages and trees, using the object
+ * properties.
+ * <p>
+ * <pre>
+ * {@code
+ * 
+ * // Navigate to the addresbook
+ * app.zPageAddressbook.navigateTo();
+ * 
+ * // Click "New" button to create a new contact
+ * app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
+ * 
+ * }
+ * </pre>
+ * <p>
+ * 
  * @author Matt Rhoades
  *
  */
@@ -80,6 +105,10 @@ public class AppAjaxClient extends AbsApplication {
 		return ("Ajax Client");
 	}
 
+	/* (non-Javadoc)
+	 * @see projects.admin.ui.AbsApplication#myApplicationName()
+	 */
+	@Override
 	protected ZimbraAccount setActiveAcount(ZimbraAccount account) throws HarnessException {
 		return (super.setActiveAcount(account));
 	}

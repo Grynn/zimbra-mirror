@@ -11,8 +11,21 @@ import framework.util.SleepUtil;
 import framework.util.Stafpostqueue;
 
 
+/**
+ * The <code>FormMailNew<code> object defines a compose new message view
+ * in the Zimbra Ajax client.
+ * <p>
+ * This class can be used to compose a new message.
+ * <p>
+ * 
+ * @author Matt Rhoades
+ * @see http://wiki.zimbra.com/wiki/Testing:_Selenium:_ZimbraSelenium_Overview#Mail_Page
+ */
 public class FormMailNew extends AbsForm {
 	
+	/**
+	 * Defines Selenium locators for various objects in {@link FormMailNew}
+	 */
 	public static class Locators {
 		
 		public static final String zSendIconBtn = "css=[id^=zb__COMPOSE][id$=__SEND_left_icon]";
@@ -24,7 +37,13 @@ public class FormMailNew extends AbsForm {
 	}
 
 	
-	public FormMailNew(AbsApplication application) {
+	/**
+	 * Protected constuctor for this object.  Only classes within
+	 * this package should create DisplayMail objects.
+	 * 
+	 * @param application
+	 */
+	protected FormMailNew(AbsApplication application) {
 		super(application);
 		
 		logger.info("new " + FormMailNew.class.getCanonicalName());

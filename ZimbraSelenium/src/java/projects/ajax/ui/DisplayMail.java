@@ -5,8 +5,26 @@ import framework.ui.AbsDisplay;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
+/**
+ * The <code>DisplayMail<code> object defines a read-only view of a message
+ * in the Zimbra Ajax client.
+ * <p>
+ * This class can be used to extract data from the message, such as To,
+ * From, Subject, Received Date, message body.  Additionally, it can
+ * be used to click on certain links in the message body, such as 
+ * "view entire message" and "highlight objects".
+ * <p>
+ * Hover over objects, such as email or URL hover over, are encapsulated.
+ * <p>
+ * 
+ * @author zimbra
+ * @see http://wiki.zimbra.com/wiki/Testing:_Selenium:_ZimbraSelenium_Overview#Mail_Page
+ */
 public class DisplayMail extends AbsDisplay {
 
+	/**
+	 * Defines Selenium locators for various objects in {@link DisplayMail}
+	 */
 	public static class Locators {
 		public static final String zSubject = "xpath=//td[@class='LabelColValue SubjectCol']";
 		public static final String zDate = "xpath=//td[@class='LabelColValue DateCol']";
@@ -19,8 +37,6 @@ public class DisplayMail extends AbsDisplay {
 
 	/**
 	 * The various displayed fields in a message
-	 * @author Matt Rhoades
-	 *
 	 */
 	public static enum Field {
 		ReceivedTime,	// Message received time
@@ -34,8 +50,13 @@ public class DisplayMail extends AbsDisplay {
 	}
 	
 
-	
-	public DisplayMail(AbsApplication application) {
+	/**
+	 * Protected constuctor for this object.  Only classes within
+	 * this package should create DisplayMail objects.
+	 * 
+	 * @param application
+	 */
+	protected DisplayMail(AbsApplication application) {
 		super(application);
 		
 		logger.info("new " + DisplayMail.class.getCanonicalName());
@@ -51,6 +72,11 @@ public class DisplayMail extends AbsDisplay {
 		return (this.getClass().getName());
 	}
 
+	/**
+	 * Click on "view entire message" in this message
+	 * @return TBD: return the new window?
+	 * @throws HarnessException
+	 */
 	public Object zClickViewEntireMessage() throws HarnessException {
 		logger.info(myPageName() + " zViewEntireMessage");
 		
@@ -65,10 +91,20 @@ public class DisplayMail extends AbsDisplay {
 		return (null);
 	}
 
+	/**
+	 * Click on "highlight objects" in this message
+	 * @return TBD: return the new window?
+	 * @throws HarnessException
+	 */
 	public Object zClickHighlightObjects() throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 	
+	/**
+	 * Get the string value of the specified field
+	 * @return the displayed string value
+	 * @throws HarnessException
+	 */
 	public String zGetMailProperty(Field field) throws HarnessException {
 		logger.info("DisplayMail.zGetDisplayedValue(" + field + ")");
 
