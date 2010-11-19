@@ -74,16 +74,18 @@ import framework.util.ZimbraSeleniumProperties.AppType;
  * Zimbra Selenium Harness.
  * <p>
  * Typical usage:<p>
-<code>
-<p>
-	        ExecuteHarnessMain harness = new ExecuteHarnessMain();<br>
-	        harness.jarfilename = "foo.jar";<br>
-	        harness.classfilter = "projects.tests.ajax";<br>
-	        harness.groups = "always,sanity".split(',');<br>
-	        harness.testoutputfoldername = "logs";<br>
-			harness.execute();<br>
-<p>
-</code>
+ * <pre>
+ * {@code
+ * 
+ * ExecuteHarnessMain harness = new ExecuteHarnessMain();
+ * harness.jarfilename = "foo.jar";
+ * harness.classfilter = "projects.tests.ajax";
+ * harness.groups = "always,sanity".split(',');
+ * harness.testoutputfoldername = "logs";
+ * harness.execute();
+ * 
+ * }
+ * </pre>
  * 
  * @author Matt Rhoades
  *

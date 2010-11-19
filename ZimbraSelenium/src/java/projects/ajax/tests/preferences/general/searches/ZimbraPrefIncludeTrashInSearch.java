@@ -5,12 +5,12 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.Buttons;
 import projects.ajax.ui.TreePreferences.TreeItem;
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
 import framework.items.RecipientItem.RecipientType;
+import framework.ui.Buttons;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;

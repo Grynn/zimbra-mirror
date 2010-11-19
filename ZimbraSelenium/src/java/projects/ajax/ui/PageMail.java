@@ -7,12 +7,14 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import projects.ajax.ui.Actions.Action;
-import projects.ajax.ui.Buttons.Button;
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
+import framework.ui.Actions;
+import framework.ui.Buttons;
+import framework.ui.Actions.Action;
+import framework.ui.Buttons.Button;
 import framework.util.HarnessException;
 
 /**

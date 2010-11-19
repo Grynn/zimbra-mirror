@@ -13,16 +13,57 @@ import projects.ajax.ui.AppAjaxClient;
 
 import com.thoughtworks.selenium.SeleniumException;
 
-import framework.core.ClientSession;
 import framework.core.ClientSessionFactory;
-import framework.core.ZimbraSelenium;
 import framework.ui.AbsPage;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
 /**
- * Common definitions for all Mobile Client test cases
+ * The <code>AjaxCommonTest</code> class is the base test case class
+ * for normal Ajax client test case classes.
+ * <p>
+ * The AjaxCommonTest provides two basic functionalities:
+ * <ol>
+ * <li>{@link AbsPage} {@link #startingPage} - navigate to this
+ * page before each test case method</li>
+ * <li>{@link ZimbraAccount} {@link #startingAccount} - ensure this
+ * account is authenticated before each test case method</li>
+ * </ol>
+ * <p>
+ * It is important to note that no re-authentication (i.e. logout
+ * followed by login) will occur if {@link #startingAccount} is 
+ * already the currently authenticated account.
+ * <p>
+ * The same rule applies to the {@link #startingPage}, as well.  If
+ * the "Contact App" is the specified starting page, and the contact
+ * app is already opened, albiet in a "new contact" view, then the
+ * "new contact" view will not be closed.
+ * <p>
+ * Typical usage:<p>
+ * <pre>
+ * {@code
+ * public class TestCaseClass extends AjaxCommonTest {
+ * 
+ *     public TestCaseClass() {
+ *     
+ *         // All tests start at the Mail page
+ *         super.startingPage = app.zPageMail;
+ *         
+ *         // Create a new account to log into
+ *         ZimbraAccount account = new ZimbraAccount();
+ *         super.startingAccount = account;
+ *         
+ *         // ...
+ *         
+ *     }
+ *     
+ *     // ...
+ * 
+ * }
+ * }
+ * </pre>
+ * 
  * @author Matt Rhoades
  *
  */
@@ -57,9 +98,11 @@ public class AjaxCommonTest {
 	
 	/**
 	 * Global BeforeSuite
-	 * 
-	 * 1. Make sure the selenium server is available
-	 * 
+	 * <p>
+	 * <ol>
+	 * <li>Start the DefaultSelenium client</li>
+	 * </ol>
+	 * <p>
 	 * @throws HarnessException
 	 */
 	@BeforeSuite( groups = { "always" } )
@@ -73,17 +116,14 @@ public class AjaxCommonTest {
 				
 		try
 		{
-			ClientSession session = ClientSessionFactory.session();
-			ZimbraSelenium selenium = session.selenium();
-			selenium.start();
-			selenium.windowMaximize();
-			selenium.windowFocus();
-			selenium.allowNativeXpath("true");
+			ClientSessionFactory.session().selenium().start();
+			ClientSessionFactory.session().selenium().windowMaximize();
+			ClientSessionFactory.session().selenium().windowFocus();
+			ClientSessionFactory.session().selenium().allowNativeXpath("true");
 			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.AJAX);
-			selenium.open(ZimbraSeleniumProperties.getBaseURL());
+			ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getBaseURL());
 		} catch (SeleniumException e) {
-			logger.error("Unable to mobile app.", e);
-			throw e;
+			throw new HarnessException("Unable to open app", e);
 		}
 
 		logger.info("commonTestBeforeSuite: finish");		
@@ -104,10 +144,12 @@ public class AjaxCommonTest {
 
 	/**
 	 * Global BeforeMethod
-	 * 
-	 * 1. For all tests, make sure the CommonTest.startingPage is active
-	 * 2. For all tests, make sure the logged in user is 
-	 * 
+	 * <p>
+	 * <ol>
+	 * <li>For all tests, make sure {@link #startingPage} is active</li>
+	 * <li>For all tests, make sure {@link #startingAccount} is logged in</li>
+	 * </ol>
+	 * <p>
 	 * @throws HarnessException
 	 */
 	@BeforeMethod( groups = { "always" } )
@@ -155,6 +197,10 @@ public class AjaxCommonTest {
 
 	/**
 	 * Global AfterSuite
+	 * <p>
+	 * <ol>
+	 * <li>Stop the DefaultSelenium client</li>
+	 * </ol>
 	 * 
 	 * @throws HarnessException
 	 */

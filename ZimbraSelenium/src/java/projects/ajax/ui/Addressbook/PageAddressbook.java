@@ -1,11 +1,11 @@
 package  projects.ajax.ui.Addressbook;
 
 import projects.ajax.ui.*;
-import projects.ajax.ui.Actions.Action;
-import projects.ajax.ui.Buttons.Button;
 import projects.ajax.ui.PageMain.Locators;
 import framework.core.ClientSessionFactory;
 import framework.ui.*;
+import framework.ui.Actions.Action;
+import framework.ui.Buttons.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.items.*;

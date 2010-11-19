@@ -3,27 +3,62 @@
  */
 package projects.ajax.ui;
 
-import projects.ajax.ui.Actions.Action;
-import projects.ajax.ui.Buttons.Button;
 import framework.ui.AbsApplication;
 import framework.ui.AbsPage;
 import framework.ui.AbsSeleniumObject;
+import framework.ui.Actions.Action;
+import framework.ui.Buttons.Button;
 import framework.util.HarnessException;
 
 
 /**
- * This class sits between the page classes and the AbsPage abstract classes. It
- * defines the "MyApplication" object, which is an Mobile Client application
+ * The <code>AbsAjaxPage</code> abstract class defines common functionality
+ * of all Ajax Client page classes.
+ * <p>
+ * All Ajax page classes must extend this class.
+ * <p>
+ * The derived classes are created in the {@link AppAjaxClient} class.
+ * Individual test cases should not create AbsAjaxPage objects, but 
+ * rather re-use the existing object in the client object.  For example:
+ * <pre>
+ * {@code
+ * 
+ * public void TestCase1() throws HarnessException {
+ *   FormMailNew compose = app.zMailPage.zToolbarPressButton(Button.B_NEW);
+ * }
+ * 
+ * }
+ * </pre>
+ * <p>
+ * For organization, classes that extend this class should use
+ * the name format <code>Page<Name></code>.
+ * <p>
+ * <pre>
+ * {@code
+ * 	public class PageSample extends AbsAjaxPage {
+ * 
+ *     	public PageSample(AbsApplication application) {
+ *			super(application);
+ *
+ *			// ...
+ *
+ *		}
+ *     
+ *     	// ...
+ * 
+ * 	}
+ * }
+ * </pre>
+ * <p>
+ * It has been suggested to move the AbsAjaxPage class into
+ * the AbsPage class.
+ * </p>
  * 
  * @author Matt Rhoades
  *
  */
 public abstract class AbsAjaxPage extends AbsPage {
 
-	public enum ItemType {
-		Mail, Contact, ContactGroup, Appointment, Task, Document, Folder, Tag, Addressbook, Calendar, TaskFolder, Briefcase
-	}
-	
 	protected AppAjaxClient MyApplication = null;
 
 	public AbsAjaxPage(AbsApplication application) {

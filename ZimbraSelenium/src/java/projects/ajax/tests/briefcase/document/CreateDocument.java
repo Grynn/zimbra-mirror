@@ -3,11 +3,11 @@ package projects.ajax.tests.briefcase.document;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.Buttons;
 import projects.ajax.ui.DocumentBriefcaseNew;
 import projects.ajax.ui.PageBriefcase.Locators;
 import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
+import framework.ui.Buttons;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZAssert;

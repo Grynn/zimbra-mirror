@@ -5,10 +5,11 @@ package projects.mobile.ui;
 
 import java.util.List;
 
-import projects.ajax.ui.AbsAjaxPage.ItemType;
 import framework.items.ContactItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
+import framework.ui.Buttons;
+import framework.ui.Buttons.Button;
 import framework.util.HarnessException;
 
 /**
@@ -86,23 +87,39 @@ public class PageContacts extends AbsMobilePage {
 	 * Open a "new contact" form
 	 * @return
 	 */
-	public AbsForm zToolbarNew(ItemType type) throws HarnessException {
-		logger.debug(myPageName() + " zToolbarNew "+ type);
+	public AbsForm zToolbarPressButton(Button button) throws HarnessException {
+		logger.debug(myPageName() + " zToolbarPressButton("+ button +")");
 		
 		if ( !isActive() ) {
 			throw new HarnessException("Contacts page is not active");
 		}
 		
-		// Click on "Add"
-		if ( !this.sIsElementPresent(Locators.zNewContact) ) {
-			throw new HarnessException("'Add' contact button is not present");
+		String locator = null;
+		AbsForm form = null;
+		
+		if ( button == Buttons.B_NEW ) {
+			
+			locator = Locators.zNewContact;
+			form = new FormContactNew(this.MyApplication);
+			
+		} else {
+			
+			throw new HarnessException("zToolbarPressButton() not defined for button "+ button);
+			
 		}
-		this.sClick(Locators.zNewContact);
 		
-		FormContactNew form = new FormContactNew(this.MyApplication);
+		if ( locator == null ) {
+			throw new HarnessException("zToolbarPressButton() no locator defined for button "+ button);
+		}
 		
-		// Maybe need to check if the form is opened correctly?
+		// Default behavior
 		
+		// Click on "Add"
+		if ( !this.sIsElementPresent(locator) ) {
+			throw new HarnessException("locator is not present " + locator);
+		}
+		this.sClick(locator);
+						
 		return (form);
 		
 	}

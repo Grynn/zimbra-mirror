@@ -3,12 +3,12 @@ import org.testng.annotations.Test;
 
 
 import framework.items.*;
+import framework.ui.Buttons;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
 import projects.ajax.core.AjaxCommonTest;
-
 import projects.ajax.ui.Addressbook.*;
 
 public class DeleteContact extends AjaxCommonTest  {

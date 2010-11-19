@@ -6,11 +6,11 @@ import org.testng.annotations.Test;
 
 import framework.items.*;
 import framework.items.ContactItem.GenerateItemType;
+import framework.ui.Actions;
+import framework.ui.Buttons;
 import framework.util.*;
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.Actions;
 import projects.ajax.ui.AppAjaxClient;
-
 import projects.ajax.ui.Addressbook.*;
 
 //TODO: add more in ContactItem.java

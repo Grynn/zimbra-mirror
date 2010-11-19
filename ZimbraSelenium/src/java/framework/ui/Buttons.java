@@ -1,8 +1,17 @@
-package projects.ajax.ui;
+package framework.ui;
+
+import projects.ajax.ui.AbsAjaxPage;
+
 
 
 /**
- * Defines all the button IDs
+ * The <code>Buttons</code> class defines constants that represent
+ * general buttons in the client apps.
+ * <p>
+ * The button constants can be used in page methods such as
+ * {@link AbsAjaxPage#zToolbarPressButton(Button)}.
+ * <p>
+ * 
  * @author Matt Rhoades
  *
  */

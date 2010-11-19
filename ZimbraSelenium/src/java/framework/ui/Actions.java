@@ -1,6 +1,26 @@
-package projects.ajax.ui;
+package framework.ui;
+
+import projects.ajax.ui.PageMail;
 
 
+/**
+ * The <code>Actions</code> class defines constants that represent
+ * general actions in the client apps.
+ * <p>
+ * This class defines constants for
+ * <ol>
+ * <li>Mouse actions, such as click or ctrl-click</li>
+ * <li>Zimbra object actions, such as check a checkbox or flag a mail</li>
+ * </ol>
+ * <p>
+ * The action constants can be used in page methods such as
+ * {@link PageMail#zListItem(Action, String)} to click on a
+ * message in the inbox.
+ * <p>
+
+ * @author Matt Rhoades
+ *
+ */
 public class Actions {
 
 	// General actions

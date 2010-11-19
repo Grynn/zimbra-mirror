@@ -5,12 +5,12 @@ import java.io.IOException;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.Actions;
-import projects.ajax.ui.Buttons;
 import projects.ajax.ui.DisplayMail;
 
 import com.zimbra.cs.lmtpserver.LmtpProtocolException;
 
+import framework.ui.Actions;
+import framework.ui.Buttons;
 import framework.util.HarnessException;
 import framework.util.LmtpUtil;
 import framework.util.SleepUtil;

@@ -3,10 +3,10 @@ package projects.ajax.tests.mail.compose;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.Buttons;
 import projects.ajax.ui.FormMailNew;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
+import framework.ui.Buttons;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
