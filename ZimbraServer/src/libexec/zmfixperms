@@ -471,6 +471,18 @@ if [ -L ${zimbra_home}/jetty ]; then
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/webapps/zimlet
   chmod 755 ${zimbra_home}/jetty/webapps/zimlet ${zimbra_home}/jetty/webapps/zimlet/WEB-INF
 
+  if [ ! -d ${zimbra_home}/jetty/work/zimlet ]; then
+    mkdir -p ${zimbra_home}/jetty/work/zimlet
+  fi
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/work/zimlet
+  chmod 750 ${zimbra_home}/jetty/work/zimlet
+
+  if [ ! -d ${zimbra_home}/jetty/work/spnego ]; then
+    mkdir -p ${zimbra_home}/jetty/work/spnego
+  fi
+  chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/jetty/work/spnego
+  chmod 750 ${zimbra_home}/jetty/work/spnego
+
   if [ ! -d ${zimbra_home}/fbqueue ]; then
     mkdir -p ${zimbra_home}/fbqueue
   fi
