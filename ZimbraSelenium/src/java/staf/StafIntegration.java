@@ -265,7 +265,7 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	private File getUserExtensionsFile(String uri) throws HarnessException {
 		
 		
-		String filename = "/tmp/user-extensions.js";
+		String filename = "/user-extensions.js";
 		File file = new File(filename);
 
 		try {
