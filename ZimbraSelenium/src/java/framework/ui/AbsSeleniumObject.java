@@ -7,15 +7,35 @@ import java.awt.event.KeyEvent;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import com.thoughtworks.selenium.DefaultSelenium;
+
+import framework.core.ClientSession;
 import framework.core.ClientSessionFactory;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
 /**
- * This class defines a logical GUI object that accesses Selenium functions
- * 
- * The class has DefaultSelenium methods and Zimbra-specific GUI methods that are
- * common to multiple objects.
+ * The <code>AbsSeleniumObject</code> class is a base class that all "GUI"
+ * objects can derive from, allowing access to the DefaultSelenium methods.
+ * <p>
+ * The <code>AbsSeleniumObject</code> is implemented as a thread safe (on
+ * the test class level) way to access DefaultSelenium methods.
+ * <p>
+ * It is intended that Pages, Forms, Trees, etc. will derive from 
+ * AbsSeleniumObject and call DefaultSelenium methods using AbsSeleniumObject
+ * methods.  The class implementations should not use the {@link ClientSession}
+ * objects directly.
+ * <p>
+ * Selenium methods start with a lower case "s", so that 
+ * {@link DefaultSelenium#click(String)}
+ * can be accessed using
+ * {@link #sClick(String)}.
+ * <p>
+ * Zimbra specific methods start with a lower case "z", such as the
+ * Zimbra-specific implementation of click {@link #zClick(String)},
+ * which performs the more stable action of MOUSE_DOWN followed by
+ * MOUSE_UP.
+ * <p>
  * 
  * @author Matt Rhoades
  *

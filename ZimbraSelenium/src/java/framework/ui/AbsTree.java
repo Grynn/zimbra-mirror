@@ -3,11 +3,11 @@ package framework.ui;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import framework.util.HarnessException;
-import framework.util.SleepUtil;
-
 /**
- * This class defines an abstract Zimbra Admin Console Application "Manage Object" page
+ * A <code>AbsTree</code> object represents a "tree panel", 
+ * such as a Folder tree, Addressbook tree, Calendar tree, etc.
+ * <p>
+ * 
  * @author Matt Rhoades
  *
  */
@@ -15,6 +15,9 @@ public abstract class AbsTree extends AbsSeleniumObject {
 	protected static Logger logger = LogManager.getLogger(AbsTree.class);
 
 
+	/**
+	 * A pointer to the application that created this object
+	 */
 	protected AbsApplication MyAbsApplication = null;
 
 	/**
@@ -27,7 +30,7 @@ public abstract class AbsTree extends AbsSeleniumObject {
 	}
 	
 	/**
-	 * Return the unique name for this page
+	 * Return the unique name for this page class
 	 * @return
 	 */
 	public abstract String myPageName();

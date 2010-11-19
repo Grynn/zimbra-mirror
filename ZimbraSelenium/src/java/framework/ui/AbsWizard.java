@@ -15,6 +15,18 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
+/**
+ * A <code>AbsWizard</code> object represents a "wizard widget", 
+ * such as a create account, create folder, new tag, etc.
+ * <p>
+ * Wizards usually display in a panel and include one or more steps
+ * to create an object.
+ * <p>
+ * 
+ * @see <a href="http://wiki.zimbra.com/wiki/Testing:_Selenium:_ZimbraSelenium_Overview#Folder_Page">Create a new folder</a>
+ * @author Matt Rhoades
+ *
+ */
 public abstract class AbsWizard extends AbsSeleniumObject {
 	protected static Logger logger = LogManager.getLogger(AbsWizard.class);
 
@@ -23,7 +35,7 @@ public abstract class AbsWizard extends AbsSeleniumObject {
 	}
 	
 	/**
-	 * The Page that creates this wizard
+	 * A pointer to the page that created this object
 	 */
 	protected AbsPage MyPage = null;
 	

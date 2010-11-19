@@ -7,13 +7,25 @@ import framework.items.ZimbraItem;
 import framework.util.HarnessException;
 
 /**
- * This class defines an abstract Zimbra Admin Console Application "Manage Object" page
+ * A <code>AbsForm</code> object represents a "compose page", 
+ * such as a new message, new contact, new appointment, new document, etc.
+ * <p>
+ * Form objects are usually returned after clicking NEW from the toolbar.
+ * <p>
+ * As a shortcut, form objects take a {@link ZimbraItem} object in the 
+ * {@link AbsForm#fill(ZimbraItem)} and attempts to fill in the form
+ * automatically based on the item's previously set properties.
+ * <p>
+ * 
  * @author Matt Rhoades
  *
  */
 public abstract class AbsForm extends AbsSeleniumObject {
 	protected static Logger logger = LogManager.getLogger(AbsForm.class);
 
+	/**
+	 * A pointer to the application that created this object
+	 */
 	protected AbsApplication MyAbsApplication = null;
 
 	/**
@@ -50,7 +62,7 @@ public abstract class AbsForm extends AbsSeleniumObject {
 	
 	
 	/**
-	 * Return the unique name for this page
+	 * Return the unique name for this page class
 	 * @return
 	 */
 	public abstract String myPageName();

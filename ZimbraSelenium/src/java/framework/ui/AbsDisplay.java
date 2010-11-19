@@ -3,18 +3,28 @@ package framework.ui;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import framework.items.ZimbraItem;
-import framework.util.HarnessException;
-
 /**
- * This class defines an abstract displayed page
- * Examples: reading pane, invitee appointment view, briefcase file
+ * A <code>AbsDisplay</code> object represents a read-only "displayed object", 
+ * such as a message, contact, appointment (as attendee), document, etc.
+ * <p>
+ * Displayed objects are usually returned after opening or selecting an
+ * object from a list, such as double-clicking on a message from the mail
+ * message list view.
+ * <p>
+ * The Display object allows the test method to access displayed information,
+ * such as To addresses, subject, message body, contact field, appointment
+ * start time, etc.
+ * <p>
+ * 
  * @author Matt Rhoades
  *
  */
 public abstract class AbsDisplay extends AbsSeleniumObject {
 	protected static Logger logger = LogManager.getLogger(AbsDisplay.class);
 
+	/**
+	 * A pointer to the application that created this object
+	 */
 	protected AbsApplication MyAbsApplication = null;
 
 	/**
@@ -28,7 +38,7 @@ public abstract class AbsDisplay extends AbsSeleniumObject {
 		
 	
 	/**
-	 * Return the unique name for this page
+	 * Return the unique name for this page class
 	 * @return
 	 */
 	public abstract String myPageName();
