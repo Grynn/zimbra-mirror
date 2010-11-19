@@ -48,6 +48,8 @@ function() {
 	// support for showing address objects in the msg header as bubbles
 	this._isBubble = {};
 	this._bubbleClassName = "addrBubble";
+	this._internalId = Dwt.getNextId();
+	DwtControl.ALL_BY_ID[this._internalId] = this;
 
 	this._subscriberZimlets = [];
 	this._preLoadImgs();
@@ -122,15 +124,27 @@ function(html, idx, obj, spanId, context, options) {
 
 	if (options && options.addrBubbles) {
 		this._isBubble[spanId] = true;
-		var context = window.parentAppCtxt || window.appCtxt;
-		var contactsApp = context.getApp(ZmApp.CONTACTS);
-		var contact = contactsApp && contactsApp.getContactByEmail(obj.address); // contact in cache?
-		html[idx++] = "<span class='" + this._bubbleClassName + "' id='" + spanId + "'>";
-		if (contact && contact.isDL) {
-			// TODO: show clickable + for DL - waiting for fix for 52113
+		var canExpand = obj.isGroup && obj.canExpand;
+		if (canExpand && !this._aclv) {
+			// create a ZmAutocompleteListView to handle DL expansion; it's never shown
+			var params = {
+				dataClass:		appCtxt.getAutocompleter(),
+				matchValue:		ZmAutocomplete.AC_VALUE_FULL,
+				options:		{addrBubbles:true, massDLComplete:true},
+				compCallback:	new AjxCallback(this, this._dlAddrSelected)
+			};
+			this._aclv = new ZmAutocompleteListView(params);
 		}
-		html[idx++] = AjxStringUtil.htmlEncode(obj.toString());
-		html[idx++] = "</span>";
+
+		var params = {
+			parentId:	this._internalId,	// pretend to be a ZmAddressInputField
+			address:	obj.toString(),
+			id:			spanId,
+			canExpand:	canExpand,
+			dlAddress:	canExpand && obj.address,
+			separator:	AjxEmailAddress.SEPARATOR
+		};
+		html[idx++] = ZmAddressInputField.getBubble(params);
 		return idx;
 	} else {
 		return ZmObjectHandler.prototype.generateSpan.apply(this, arguments);
@@ -697,8 +711,9 @@ function(isDirty) {
 EmailTooltipZimlet.prototype._composeListener =
 function(ev, addr) {
 
-	addr = (this._actionObject) ? this._getAddress(this._actionObject) : addr ;
-	if (!addr) addr = "";
+	if (!addr) {
+		addr = this._actionObject ? this._getAddress(this._actionObject) : "" ;
+	}
 	var params = {};
 
 	var inNewWindow = (!appCtxt.get(ZmSetting.NEW_WINDOW_COMPOSE) && ev && ev.shiftKey) ||
@@ -833,4 +848,28 @@ function (url) {
 	if (!win) {
 		this._showWarningMsg(ZmMsg.popupBlocker);
 	}
+};
+
+/**
+ * Expands the distribution list address of the bubble with the given ID.
+ *
+ * @param {string}	bubbleId	ID of bubble
+ * @param {string}	email		address to expand
+ */
+EmailTooltipZimlet.prototype.expandBubble =
+function(bubbleId, email) {
+
+	var bubble = document.getElementById(bubbleId);
+	if (bubble) {
+		var loc = Dwt.getLocation(bubble);
+		loc.y += Dwt.getSize(bubble).y + 2;
+		this._aclv.expandDL(email, null, null, null, loc);
+	}
+};
+
+// handle click on an address (or "Select All") in popup DL expansion list
+EmailTooltipZimlet.prototype._dlAddrSelected =
+function(text, el, match, ev) {
+
+	this._composeListener(ev, text);
 };
