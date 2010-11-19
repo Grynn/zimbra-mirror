@@ -126,7 +126,7 @@ public class OfflineGal {
             if (cursor != null) {
                 SearchParams.parseCursor(cursor, mAccount.getId(), sp);
             }
-            return mGalMbox.search(SoapProtocol.Soap12, mOpContext, sp);
+            return mGalMbox.index.search(SoapProtocol.Soap12, mOpContext, sp);
         } catch (IOException e) {
             OfflineLog.offline.debug("gal mailbox IO error (" + mAccount.getName() + "): " + e.getMessage());
             return null;

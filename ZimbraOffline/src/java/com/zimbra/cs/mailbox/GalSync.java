@@ -201,7 +201,8 @@ public class GalSync {
                 byte[] types = new byte[1];
                 types[0] = MailItem.TYPE_CONTACT;
 
-                ZimbraQueryResults zqr = galMbox.search(context, "#" + OfflineConstants.GAL_LDAP_DN + ":\"" + id + "\"", types, SortBy.NONE, 1);
+                ZimbraQueryResults zqr = galMbox.index.search(
+                        context, "#" + OfflineConstants.GAL_LDAP_DN + ":\"" + id + "\"", types, SortBy.NONE, 1);
                 try {
                     if (zqr.hasNext())
                         return zqr.getNext().getItemId();

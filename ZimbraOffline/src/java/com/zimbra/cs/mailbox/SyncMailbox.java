@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -61,7 +61,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
 
         OfflineAccount account = (OfflineAccount)getAccount();
         OfflineProvisioning provisioning = OfflineProvisioning.getOfflineInstance();
-        
+
         if (account.isDataSourceAccount())
             accountName = account.getAttr(OfflineProvisioning.A_offlineDataSourceName);
         else
@@ -76,7 +76,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
         super.initialize();
 
         Folder userRoot = getFolderById(ID_FOLDER_USER_ROOT);
-        
+
         Folder.create(ID_FOLDER_FAILURE, this, userRoot, FAILURE_PATH,
             Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0,
             MailItem.DEFAULT_COLOR_RGB, null, null);
@@ -84,7 +84,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
             Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_MESSAGE, 0,
             MailItem.DEFAULT_COLOR_RGB, null, null);
     }
-    
+
     @Override
     synchronized boolean finishInitialization() throws ServiceException {
         if (super.finishInitialization()) {
@@ -146,11 +146,13 @@ public abstract class SyncMailbox extends DesktopMailbox {
         if (async) {
             class DeleteThread extends Thread {
                 SyncMailbox mbox;
-                
+
                 DeleteThread(SyncMailbox mbox) {
                     super("mailbox-reaper:" + mbox.getAccountId());
                     this.mbox = mbox;
                 }
+
+                @Override
                 public void run() {
                     try {
                         mbox.deleteThisMailbox(true);
@@ -160,9 +162,9 @@ public abstract class SyncMailbox extends DesktopMailbox {
                     }
                 }
             }
-            
+
             MailboxManager mm = MailboxManager.getInstance();
-            
+
             synchronized (mm) {
                 unhookMailboxForDeletion();
                 mm.markMailboxDeleted(this); // to remove from cache
@@ -172,12 +174,12 @@ public abstract class SyncMailbox extends DesktopMailbox {
             deleteThisMailbox(false);
         }
     }
-	
+
     private synchronized String unhookMailboxForDeletion()
         throws ServiceException {
         String accountId = getAccountId();
         boolean success = false;
-        
+
         if (accountId.endsWith(DELETING_MID_SUFFIX))
             return accountId;
         accountId = accountId + ":" + getId() + DELETING_MID_SUFFIX;
@@ -196,14 +198,14 @@ public abstract class SyncMailbox extends DesktopMailbox {
         if (async) {
             DeleteMailbox redoRecorder = new DeleteMailbox(getId());
             boolean success = false;
-            
+
             synchronized(this) {
                 try {
                     beginTransaction("deleteMailbox", null, redoRecorder);
                     redoRecorder.log();
-    
+
                     Connection conn = getOperationConnection();
-                    
+
                     DbMailbox.clearMailboxContent(this);
                     synchronized(MailboxManager.getInstance()) {
                         DbMailbox.deleteMailbox(conn, this);
@@ -215,8 +217,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
                     endTransaction(success);
                 }
                 try {
-                    if (mIndexHelper != null)
-                        mIndexHelper.deleteIndex();
+                    index.deleteIndex();
                 } catch (Exception e) {
                     ZimbraLog.store.warn("Unable to delete index data", e);
                 }
@@ -247,9 +248,10 @@ public abstract class SyncMailbox extends DesktopMailbox {
     protected synchronized void initSyncTimer() throws ServiceException {
         if (isGalAcct || isMPAcct)
             return;
-        
+
         cancelCurrentTask();
         currentTask = new TimerTask() {
+            @Override
             public void run() {
                 boolean doGC;
                 long now;
@@ -262,8 +264,8 @@ public abstract class SyncMailbox extends DesktopMailbox {
                     syncOnTimer();
                     now = System.currentTimeMillis();
                     if (lastOptimizeTime == 0) {
-                    	lastOptimizeTime = now - OPTIMIZE_INTERVAL +
-                    		30 * Constants.MILLIS_PER_MINUTE;
+                        lastOptimizeTime = now - OPTIMIZE_INTERVAL +
+                            30 * Constants.MILLIS_PER_MINUTE;
                     } else if (now - lastOptimizeTime > OPTIMIZE_INTERVAL) {
                         optimize(null, 0);
                         lastOptimizeTime = now;
@@ -303,7 +305,7 @@ public abstract class SyncMailbox extends DesktopMailbox {
         super.snapshotCounts();
 
         boolean outboxed = false;
-        
+
         PendingModifications pms = getPendingModifications();
         if (pms == null || !pms.hasNotifications())
             return;
@@ -311,10 +313,10 @@ public abstract class SyncMailbox extends DesktopMailbox {
         if (pms.created != null) {
             for (MailItem item : pms.created.values()) {
                 if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && item.getFolderId() != ID_FOLDER_FAILURE) {
-                	itemCreated(item);
-                	trackChangeNew(item);
+                    itemCreated(item);
+                    trackChangeNew(item);
                     if (item.getFolderId() == ID_FOLDER_OUTBOX)
-                    	outboxed = true;
+                        outboxed = true;
                 }
             }
         }
@@ -325,13 +327,13 @@ public abstract class SyncMailbox extends DesktopMailbox {
                     continue;
                 MailItem item = (MailItem) change.what;
                 if ((item.getId() >= FIRST_USER_ID || item instanceof Tag) && item.getFolderId() != ID_FOLDER_FAILURE) {
-                	trackChangeModified(item, change.why);
+                    trackChangeModified(item, change.why);
                     if (item.getFolderId() == ID_FOLDER_OUTBOX)
                         outboxed = true;
                 }
             }
         }
-        
+
         if (outboxed) {
             OutboxTracker.invalidate(this);
         }
