@@ -91,7 +91,6 @@ com_zimbra_socialPreferences.prototype._addFacebookBtnListener =
 function() {
 	this.reloginToFB = true;
 	this.showAddFBInfoDlg();
-	//this.zimlet.facebook.loginToFB();
 };
 
 com_zimbra_socialPreferences.prototype._deleteAccountBtnListener =
@@ -158,6 +157,7 @@ function() {
 	html[i++] = "<BR/>";
 	return html.join("");
 };
+
 com_zimbra_socialPreferences.prototype._updateAccountsTable =
 function(additionalMsgParams) {
 	document.getElementById("social_pref_accntsTable").innerHTML = this._getPrefAccountsTableHTML();
@@ -379,9 +379,8 @@ function() {
 	var html = new Array();
 	var i = 0;
 	html[i++] = "<DIV>";
-	html[i++] = "<H3>"+this.zimlet.getMessage("fbSigninSteps")+"</H3>";
-	html[i++] = "<b><u><i><label style='color:white;font-size:14px'>"+this.zimlet.getMessage("pleaseCompleteBothParts")+"</label></i></u></b><br/><br/>";
-
+	html[i++] =  AjxMessageFormat.format(this.zimlet.getMessage("logoutfirst"), "Facebook")+"<br/><br/>";
+	html[i++] = "<b><u><i><label style='color:white;font-size:14px'>"+this.zimlet.getMessage("pleaseCompleteBothParts")+"</label></i></u></b><br/>";
 	html[i++] = "<B>"+this.zimlet.getMessage("fbSignInPart1")+"</B><br/>";
 	html[i++] = this.zimlet.getMessage("fbSignInLine1") + " <div id='social_goToFacebookPage'> </div>";
 	html[i++] = this.zimlet.getMessage("fbSignInLine2") + " <br/><br/>";
@@ -390,9 +389,6 @@ function() {
 	html[i++] = this.zimlet.getMessage("fbSignInLine3") + "<div id='social_loadFBAccountPermissions'></div>";
 	html[i++] = this.zimlet.getMessage("fbSignInLine4")+ " <br/>";
 	html[i++] = this.zimlet.getMessage("fbSignInLine5")+ " <br/>";
-	html[i++] = "</DIV><br/>";
-	html[i++] = "<DIV>";
-	html[i++] = "<br>" + this.zimlet.getMessage("fbRevokeInfoMsg");
 	html[i++] = "</DIV>";
 	return html.join("");
 };

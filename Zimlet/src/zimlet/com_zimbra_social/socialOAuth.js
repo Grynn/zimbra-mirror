@@ -76,9 +76,13 @@ SocialOAuth.prototype.showOAuthDialog = function(serviceName) {
 
 SocialOAuth.prototype._createPINView =
 function() {
-	var stepNotes = this.zimlet.getMessage("stepNotes").replace("{0}", this.serviceName);
-	var step1 = this.zimlet.getMessage("step1").replace("{0}", this.serviceName).replace("{1}", this.serviceName);
+	try{
+		var stepNotes = this.zimlet.getMessage("stepNotes");
+		var step1 = this.zimlet.getMessage("step1").replace("{0}", this.serviceName).replace("{1}", this.serviceName);
+	}catch(e) {
+	}
 	var subs = {
+		logoutfirst:  AjxMessageFormat.format(this.zimlet.getMessage("logoutfirst"), this.serviceName),
 		stepsToAddAccount: AjxMessageFormat.format(this.zimlet.getMessage("stepsToAddAccount"), this.serviceName),
 		step1: step1,
 		step2: AjxMessageFormat.format(this.zimlet.getMessage("step2"), this.serviceName),
@@ -134,7 +138,7 @@ function(response) {
 			this._oauthRequestResponse[nvArray[0]] = nvArray[1];
 		}
 	}
-	this._openCenteredWindow(this.authorizeBaseUrl +  AjxStringUtil.urlComponentEncode(this._oauthRequestResponse["oauth_token"]));
+	this.zimlet.openCenteredWindow(this.authorizeBaseUrl +  AjxStringUtil.urlComponentEncode(this._oauthRequestResponse["oauth_token"]));
 };
 
 //step 3
@@ -325,17 +329,4 @@ function() {
 		result += chars.substring(rnum, rnum + 1);
 	}
 	return result;
-};
-
-SocialOAuth.prototype._openCenteredWindow =
-function (url) {
-	var width = 800;
-	var height = 600;
-	var left = parseInt((screen.availWidth / 2) - (width / 2));
-	var top = parseInt((screen.availHeight / 2) - (height / 2));
-	var windowFeatures = "width=" + width + ",height=" + height + ",status,resizable,left=" + left + ",top=" + top + "screenX=" + left + ",screenY=" + top;
-	var win = window.open(url, "subWind", windowFeatures);
-	if (!win) {
-		this.zimlet.showWarningMsg(ZmMsg.popupBlocker);
-	}
 };

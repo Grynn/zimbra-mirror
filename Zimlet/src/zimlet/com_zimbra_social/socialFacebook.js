@@ -140,7 +140,7 @@ function(params) {
 	var account = params.account;
 	var url = "https://www.facebook.com/authorize.php?";
 	var params = "version=1.0&ext_perm=" + permission + "&api_key=" + this.apiKey;
-	this.openCenteredWindow(AjxStringUtil.urlComponentEncode(url + params));
+	this.zimlet.openCenteredWindow(AjxStringUtil.urlComponentEncode(url + params));
 
 };
 

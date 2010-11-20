@@ -63,7 +63,10 @@
 
 .social_cardDiv {
     background: #FFFFFC;
-	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+	box-shadow: 7px 7px 8px #818181;
+	-webkit-box-shadow: 7px 7px 8px #818181;
+	-moz-box-shadow: 7px 7px 8px #818181;
+	filter: progid:DXImageTransform.Microsoft.dropShadow(color=#818181, offX=7, offY=7, positive=true);
 }
 
 .social_rowsDiv {
@@ -172,10 +175,12 @@ div.social_profileInnerDiv td {
     font-weight: bold;
 }
 .social_shadow {
-	-moz-box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.6);
+	box-shadow: 7px 7px 8px #818181;
+	-webkit-box-shadow: 7px 7px 8px #818181;
+	-moz-box-shadow: 7px 7px 8px #818181;
+	filter: progid:DXImageTransform.Microsoft.dropShadow(color=#818181, offX=7, offY=7, positive=true);
 	padding:2px;
 }
-
 
 .social_twitterColor {
     background-image: url(social_twitterBg.gif);

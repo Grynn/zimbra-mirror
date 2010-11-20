@@ -132,7 +132,7 @@ function() {
 com_zimbra_socialMiniDlg.prototype._addUrlShortenButton_miniDlg =
 function() {
 	var shortenButton = new DwtButton({parent:this.zimlet.getShell()});
-	shortenButton.setText(this.getMessage("shortenUrl"));
+	shortenButton.setText(this.zimlet.getMessage("shortenUrl"));
 	shortenButton.addSelectionListener(new AjxListener(this.zimlet, this.zimlet._shortenUrlButtonListener));
 	document.getElementById("social_shortenUrlButtonDIV_miniDlg").appendChild(shortenButton.getHtmlElement());
 };
@@ -191,7 +191,6 @@ function() {
 		html[idx++] = this.zimlet.allAccounts[id].name;
 		html[idx++] = " &nbsp;&nbsp;&nbsp;&nbsp;";
 	}
-
 	html[idx++] = "</TR></TABLE>";
 
 	if (hasAccounts)
