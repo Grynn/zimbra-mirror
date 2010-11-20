@@ -90,14 +90,19 @@ function(searchStr) {
 	if(!searchStr) {
 		return [];
 	}
-	searchStr = searchStr.toLowerCase().replace(/in:\"?(\w+(\s)?(\/?))+\"/, "");//folder with multip-word names
-	var dArry = searchStr.split(" ");
-	if (dArry == "") {
+	searchStr = searchStr.toLowerCase().replace(/in:\"(\w?[^a-zA-Z0-9_\"]?)+\"|in:(\w?[^a-zA-Z0-9_\"\s]?)+/g, "");//folder with multip-word names
+	searchStr = AjxStringUtil.trim(searchStr);
+	if(searchStr == "") {
 		return [];
 	}
+	var dArry = searchStr.split(" ");
+
 	var result1 = [];
 	for (var i = 0; i < dArry.length; i++) {
-		var d = dArry[i];
+		var d = AjxStringUtil.trim(dArry[i]);
+		if(d == "") {
+			continue;
+		}
 		var skipThis = false;
 		for (var j = 0; j < this._skipKeysLen; j++) {
 			var k = this._skipKeys[j];
