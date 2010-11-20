@@ -943,7 +943,7 @@ function(params) {
 		this.setUserProperty("social_AllTwitterAccounts", this.getAllAccountsAsString(), true);
 	}
 	this._resetPagination(tableId);
-	this._doRefreshFeeds(tableId, type);
+	this._doRefreshFeeds(tableId, type, feedObj.name);
 };
 
 SocialZimlet.prototype._handleDeleteButton =
