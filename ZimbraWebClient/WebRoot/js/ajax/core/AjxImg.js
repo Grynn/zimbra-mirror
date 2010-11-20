@@ -173,8 +173,7 @@ function(imageName, styleStr, attrStr, wrapInTable, _disabled) {
                 html = [
                     "<div class='IEImage' style='display:inline-block;position:relative;overflow:hidden;",size,styleStr,"' ",attrStr,">",
                         "<div class='IEImageMask' style='overflow:hidden;position:relative;",size,"'>",
-                            "<img class=ImgFolderMask_red src='",mask.f,"' border=0 ",
-                                 "style='position:absolute;",location,clip,filter,"'>",
+                            "<img src='",mask.f,"' border=0 style='position:absolute;",location,clip,filter,"'>",
                         "</div>",
                         "<div class='IEImageOverlay ",overlayName,"' style='",size,";position:absolute;top:",overlay.t,";left:",overlay.l,"'></div>",
                     "</div>"
