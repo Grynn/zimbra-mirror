@@ -298,7 +298,15 @@ function(selectedTxt, newTxt) {
 
 SocialZimlet.prototype._postToUrlShortnerCallback =
 function(longUrl, response) {
+
+	if(!this._failedToShortenUrls) {
+		this._failedToShortenUrls = [];
+	}
+	if(this._failedToShortenUrls[longUrl]) {
+		return;
+	}
 	if (!response.success) {
+		this._failedToShortenUrls[longUrl] = true;
 		appCtxt.getAppController().setStatusMsg(this.getMessage("couldNotShorten"), ZmStatusView.LEVEL_WARNING);
 		return;
 	}
@@ -306,6 +314,7 @@ function(longUrl, response) {
 		var text = eval("(" + response.text + ")");
 		var shortUrl = text.results[longUrl].shortUrl;
 		if (!shortUrl) {
+			this._failedToShortenUrls[longUrl] = true;
 			appCtxt.getAppController().setStatusMsg(this.getMessage("couldNotShorten"), ZmStatusView.LEVEL_WARNING);
 			return;
 		} else {
@@ -318,6 +327,7 @@ function(longUrl, response) {
 			this.undoShortenUrlDiv.style.display = "block";
 		}
 	} catch(e) {
+		this._failedToShortenUrls[longUrl] = true;
 		appCtxt.getAppController().setStatusMsg(this.getMessage("couldNotShorten"), ZmStatusView.LEVEL_WARNING);
 	}
 	this._autoShorten = false;
@@ -443,6 +453,15 @@ function(text) {
 		}
 	}
 	var sText = text.toLowerCase();
+	var urlsToShorten = this.getUrlsToShorten(potentialUrlsToShorten);
+	for (var i = 0; i < urlsToShorten.length; i++) {
+		this._postToUrlShortner({longUrl:urlsToShorten[i],callback:null});
+	}
+	this.isTextPasted = false;
+};
+
+SocialZimlet.prototype.getUrlsToShorten =
+function(potentialUrlsToShorten) {
 	var urlsToShorten = new Array();
 	for (var i = 0; i < potentialUrlsToShorten.length; i++) {
 		var url = potentialUrlsToShorten[i];
@@ -450,10 +469,7 @@ function(text) {
 			urlsToShorten.push(url);
 		}
 	}
-	for (var i = 0; i < urlsToShorten.length; i++) {
-		this._postToUrlShortner({longUrl:urlsToShorten[i],callback:null});
-	}
-	this.isTextPasted = false;
+	return urlsToShorten;
 };
 
 SocialZimlet.prototype.twitterSearchKeyHdlr =
@@ -2112,6 +2128,9 @@ function(comments, totlCmnts, postId, divId, account, tableId) {
 			break;
 		}
 		var profile = this.facebook.getFacebookProfile(comment.fromid, tableId);
+		if(!profile) {
+			continue;
+		}
 		html[i++] = "<table width=100% cellpadding=1 cellspacing=1>";
 		html[i++] = "<tr>";
 		html[i++] = "<TD style='width:16px;height:16px' align='center'>";

@@ -51,8 +51,13 @@ function(controller) {
 	if(lastUrl == "") {
 		this._processContent({longUrl : lastUrl, subject : message.subject});
 	} else {
-		var callback = new AjxCallback(this, this._processContent, {longUrl : lastUrl, subject : message.subject});
-		this.zimlet._postToUrlShortner({longUrl:lastUrl, callback:callback});
+		var urlsToShorten = this.zimlet.getUrlsToShorten([lastUrl]);
+		if(urlsToShorten.length == 0) {
+			this._processContent({longUrl : "", subject : message.subject});
+		} else {
+			var callback = new AjxCallback(this, this._processContent, {longUrl : lastUrl, subject : message.subject});
+			this.zimlet._postToUrlShortner({longUrl:lastUrl, callback:callback});
+		}
 	}
 };
 
@@ -70,6 +75,9 @@ function(params, response) {
 	}else if(response.success) {
 		var text = eval("(" + response.text + ")");
 		var shortUrl = text.results[longUrl].shortUrl;
+		if(!shortUrl) {
+			shortUrl = "";
+		}
 		var leftOverLen = 140 - shortUrl.length;
 		if (leftOverLen < subject.length) {
 			subject = subject.substring(0, (leftOverLen - 4)) + "...";

@@ -18,7 +18,7 @@
 function com_zimbra_socialFacebook(zimlet) {
 	this.zimlet = zimlet;
 	this.waitingForApproval = false;
-	this.itemsLimit = 100;
+	this.itemsLimit = 50;
 	this._extendedPerms = "read_stream,publish_stream,offline_access,friends_activities,user_activities,friends_likes,user_likes";
 	this.isZD = false;
 	this._tableIdAndFBProfilesCache = new Array();
@@ -280,12 +280,12 @@ function (obj, response) {
 		return;
 	}
 	var moreprofiles = jsonObj;
-	var fbProfiles = this._getFBProfiles[obj.tableId];
+	var fbProfiles = this._getFBProfiles(obj.tableId);
 	if(fbProfiles && fbProfiles instanceof Array) {
 		fbProfiles = fbProfiles.concat(moreprofiles);
-		this._cacheFBProfiles(tableId, fbProfiles);
+		this._cacheFBProfiles(obj.tableId, fbProfiles);
 	}
-	var html = this.zimlet._getCommentsHtml(obj.moreComments, obj.moreComments.length, obj.postId, obj.divId, obj.account);
+	var html = this.zimlet._getCommentsHtml(obj.moreComments, obj.moreComments.length, obj.postId, obj.divId, obj.account, obj.tableId);
 	try {
 		document.getElementById(obj.divId).innerHTML = html;
 	} catch(e) {
