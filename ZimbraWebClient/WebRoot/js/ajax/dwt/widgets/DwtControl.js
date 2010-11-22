@@ -1820,7 +1820,15 @@ function(oel, nel, inheritClass, inheritStyle) {
     if (inheritStyle == null || inheritStyle) {
         var style = oel.getAttribute("style");
         if (style) {
-            nel.setAttribute("style", [nel.getAttribute("style"),style].join(";"))
+            if (AjxEnv.isIE) {
+                for (var attribute in style) {
+                    if (style[attribute] && style.hasOwnProperty(attribute)) {
+                        nel.style[attribute] = style[attribute];
+                    }
+                }
+            } else {
+                nel.setAttribute("style", [nel.getAttribute("style"),style].join(";"));
+            }
         }
     }
 };
