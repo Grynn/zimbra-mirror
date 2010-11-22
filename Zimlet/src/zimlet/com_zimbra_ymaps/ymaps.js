@@ -36,6 +36,14 @@ var YMapsZimlet = com_zimbra_ymaps_HandlerObject;
 YMapsZimlet.URL = "http://api.local.yahoo.com/MapsService/V1/mapImage?appid=ZimbraMail&zoom=4&image_height=245&image_width=345&location=";
 
 /**
+ * Y! Maps Main RegEx. It simply matches a string that has a number followed by 4-9 words and Zip/PostalCode.
+ * We further process the matched string to ignore strings w/ few common english words to ignore edge cases where simple 
+ * English sentance happen to match the above pattern.
+ */
+YMapsZimlet.REGEX = "\\d+,?\\s((\\w?\\.?\\,?\\#?)+\\s){4,9}((\\d{5,7}(-\\d{4,5})?)|([A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2}))";
+
+
+/**
  * Map image URI cache.
  */
 YMapsZimlet.CACHE = [];
@@ -55,6 +63,49 @@ function() {
 YMapsZimlet.prototype.doubleClicked =
 function() {
 	this.singleClicked();
+};
+
+/**
+ * Called by the framework when generating the span for in-context link.
+ *
+ */
+YMapsZimlet.prototype.match =
+function(line, startIndex) {
+	this._setRegExps();
+	if (this._regexps.length == 0) {
+		return;
+	}
+	if(!this._skipRegex) {
+		this._skipRegex = new RegExp(AjxStringUtil.trim(this.getMessage("skipRegex")), "ig");
+	}
+	var a = this._regexps;
+	var ret = null;
+	for (var i = 0; i < a.length; ++i) {
+		var re = a[i];
+		re.lastIndex = startIndex;
+		var m = re.exec(line);
+		if (m && m[0] != "") {
+			if(this._skipRegex.test(m[0])) {
+				continue;
+			}
+
+			if (!ret || m.index < ret.index) {
+				ret = m;
+				ret.matchLength = m[0].length;
+				return ret;
+			}
+		}
+	}
+	return ret;
+};
+
+YMapsZimlet.prototype._setRegExps =
+function() {
+	if(this._regexps) {
+		return this._regexps;
+	}
+	this._regexps = new Array();
+	this._regexps.push(new RegExp(YMapsZimlet.REGEX, "ig")); 
 };
 
 /**
