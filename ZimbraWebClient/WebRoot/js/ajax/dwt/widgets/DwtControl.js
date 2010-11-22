@@ -1818,16 +1818,18 @@ function(oel, nel, inheritClass, inheritStyle) {
         Dwt.addClass(nel, oel.className);
     }
     if (inheritStyle == null || inheritStyle) {
-        var style = oel.getAttribute("style");
+        var style = oel.getAttribute("style") || oel.style;
         if (style) {
-            if (AjxEnv.isIE) {
+            if (AjxUtil.isString(style)) { // All non-IE browsers
+                nel.setAttribute("style", [nel.getAttribute("style"),style].join(";"));
+            } else {
                 for (var attribute in style) {
-                    if (style[attribute] && style.hasOwnProperty(attribute)) {
-                        nel.style[attribute] = style[attribute];
+                    if (style[attribute]) {
+						try {
+                        	nel.style[attribute] = style[attribute];
+						} catch (e) {}
                     }
                 }
-            } else {
-                nel.setAttribute("style", [nel.getAttribute("style"),style].join(";"));
             }
         }
     }
