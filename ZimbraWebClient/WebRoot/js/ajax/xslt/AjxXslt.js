@@ -83,7 +83,9 @@ function() {
 	var doc = this._doc.getDoc();
 	if (AjxEnv.isNav || AjxEnv.isChrome || AjxEnv.isSafari) {
 		this._processor = new XSLTProcessor();
-		this._processor.importStylesheet(doc);
+		if(this._processor) {
+			this._processor.importStylesheet(doc);
+		}
 	} else if (AjxEnv.isIE) {
 		var err = doc.parseError;
 	    if (err.errorCode != 0) {
@@ -104,7 +106,9 @@ function() {
 			throw new AjxException("XSLTemplate", AjxException.UNSUPPORTED, "AjxXslt.createProcessor");
 		}
         this._processor = proc;
-        this._processor.stylesheet = doc;
+		if(this._processor) {
+			this._processor.stylesheet = doc;
+		}
 	}
 };
 
@@ -196,6 +200,9 @@ function(dom) {
 */
 AjxXslt.prototype.transformNav =
 function(dom) {
+	if(!this._processor) {
+		return "";
+	}
 	return this._processor.transformToDocument(dom);
 };
 
@@ -205,5 +212,8 @@ function(dom) {
 AjxXslt.prototype.transformNav2 =
 function(dom) {
 	this._fragment = document.implementation.createDocument("", "", null);
+	if(!this._processor) {
+		return "";
+	}
 	return this._processor.transformToFragment(dom, this._fragment);
 };
