@@ -1365,6 +1365,26 @@ public class BeanUtils {
         }
     }
 
+    /**
+     * Checks if the user's UA matches the allowed user agents for honoring
+     * zimbraWebClientLogoutURL.
+     * Returns true if the regex matches or if the
+     * zimbraWebClientLogoutURLAllowedUA is not set(implies all UAs are allowed),
+     * false otherwise.
+     */
+    public static boolean isAllowedUA(com.zimbra.cs.taglib.bean.ZUserAgentBean ua, String[] allowedUA) {
+        if (allowedUA.length == 0) return true;
+        Pattern pattern;
+        Matcher m;
+        for (String str : allowedUA) {
+            pattern = Pattern.compile(str);
+            m = pattern.matcher(ua.getUserAgent());
+            if (m.find())
+                return true;
+        }
+        return false;
+    }
+    
     public static boolean getIsMyCard(PageContext pc, String ids) throws ServiceException, JspException {
 		ZMailbox mbox = ZJspSession.getZMailbox(pc);
 		return mbox.getIsMyCard(ids);

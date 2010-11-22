@@ -7422,4 +7422,10 @@
 		<function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
 		<function-signature>java.lang.String replaceAll(java.lang.String, java.lang.String,java.lang.String)</function-signature>
 	</function>
+
+    <function>
+        <name>isAllowedUA</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>boolean isAllowedUA(com.zimbra.cs.taglib.bean.ZUserAgentBean, java.lang.String[])</function-signature>
+    </function>
 </taglib>
