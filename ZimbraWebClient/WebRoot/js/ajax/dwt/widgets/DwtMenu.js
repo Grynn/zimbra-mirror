@@ -624,6 +624,7 @@ function(divID, ev) {
 	  	var wheelData = ev.detail ? ev.detail * -1 : ev.wheelDelta / 40;
 		var rows = div.rows;
 		var step = Dwt.getSize(rows[0]).y || 10;
+		this._popdownSubmenus();
 		if (wheelData > 0) { //scroll up
 			this._doScroll(div, +step)
 		} else if (wheelData < 0) { //scroll down
@@ -657,24 +658,24 @@ function(divID, scrolling, direction, ev) {
 	if (div && scrolling) {
 		var rows = div.rows;
 		var step = Dwt.getSize(rows[0]).y || 10;
-		if(this._direction != direction || !this._scrollTimer) {
+		if (this._direction != direction || !this._scrollTimer) {
+			this._popdownSubmenus();
 			this._direction = direction;
-			if (this._scrollTimer)    {
+			if (this._scrollTimer) {
 				clearInterval(this._scrollTimer);
 				this._scrollTimer = null;
 			}
 	
 			if (direction) { //scroll down
 				this._scrollTimer = setInterval(AjxCallback.simpleClosure(this._doScroll, this, div, -step), 100);
-				this._doScroll(div, -step)
-
+				this._doScroll(div, -step);
 			} else { //scroll up
 				this._scrollTimer = setInterval(AjxCallback.simpleClosure(this._doScroll, this, div, step), 100);
-				this._doScroll(div, step)
+				this._doScroll(div, step);
 			}
 		}
 	} else {
-		if (this._scrollTimer)    {
+		if (this._scrollTimer) {
 			clearInterval(this._scrollTimer);
 			this._scrollTimer = null;
 		}
@@ -685,22 +686,24 @@ DwtMenu.prototype._doScroll =
 function(div, step) {
 	if (div && step && div.parentNode.style.height) {
 		var old = parseInt(div.style.top) || 0;
-		if (step < 0) { //scroll down
+		var top;
+		if (step < 0) { // scroll down
 			var rows = this._table.rows || null;
 			var height = Dwt.getSize(rows[0]).y;
 			var max = div.scrollHeight - (parseInt(div.parentNode.style.height || rows.length*height) || 0);
-			if (Math.abs(old+step) <= max) {
-				div.style.top = (old+step)+"px";
+			if (Math.abs(old + step) <= max) {
+				top = old + step;
 			} else {
-				div.style.top = (-max) +"px";
+				top = -max;
 			}
-		} else { //scroll up
-			if ((step+old) < 0) {
-				div.style.top = (step+old)+"px";
+		} else { // scroll up
+			if ((old + step) < 0) {
+				top = old + step;
 			} else {
-				div.style.top = "0px";
+				top = 0;
 			}
 		}
+		Dwt.setLocation(div, Dwt.DEFAULT, top);
 	}
 };
 
@@ -753,9 +756,10 @@ function(index, justMakeVisible) {
 			} else {
 				delta = -(itemOffset + currentOffset); // Scroll so that the item is the topmost visible row
 			}
-			if (delta)
+			if (delta) {
+				this._popdownSubmenus();
 				this._doScroll(this._table, delta);
-
+			}
 		}
 	}
 };
