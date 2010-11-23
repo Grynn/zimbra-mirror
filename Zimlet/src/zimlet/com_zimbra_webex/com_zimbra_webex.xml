@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_webex" version="2.4" label="WebEx" description="Easily schedule, start or join WebEx meetings.">
+<zimlet name="com_zimbra_webex" version="2.5" label="WebEx" description="Easily schedule, start or join WebEx meetings.">
   <include>webex.js</include>
   <includeCSS>webex.css</includeCSS>
   <handlerObject>com_zimbra_webex_HandlerObject</handlerObject>
@@ -14,7 +14,7 @@
       <menuItem icon="WEBEX-panelIcon" label="${msg.WebExZimlet_startJoinExistingMeeting}" id="START_JOIN_MEETING"/>
 	 <menuItem />
       <menuItem icon="Group" label= "${msg.WebExZimlet_manageAccounts}" id="ACCOUNT_PREFERENCES"/>
-      <menuItem icon="Preferences" label="${msg.WebExZimlet_generalPreferences}" id="GENERAL_PREFERENCES"/>	  
+      <menuItem icon="Preferences" label="${msg.WebExZimlet_preferences}" id="GENERAL_PREFERENCES"/>	  
     </contextMenu>
   </zimletPanelItem>
   <userProperties>

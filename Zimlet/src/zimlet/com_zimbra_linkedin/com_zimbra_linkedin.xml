@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_linkedin" version="0.4" label="LinkedIn" target="main view-window" description="Hooks on to email Zimlet; shows LinkedIn search reault for a given email">
+<zimlet name="com_zimbra_linkedin" version="0.5" label="LinkedIn" target="main view-window" description="Hooks on to email Zimlet; shows LinkedIn search reault for a given email">
 	<include>linkedin.js</include>
 	<include>LinkedInOauth.js</include>
 	<include>LinkedInPrefDialog.js</include>
@@ -7,5 +7,8 @@
 	<handlerObject>com_zimbra_linkedin_handlerObject</handlerObject>
 	<zimletPanelItem label="${msg.label}" icon="LinkedinZimletIcon">
 		<toolTipText>${msg.tooltip}</toolTipText>
+		<contextMenu>
+			<menuItem icon="Preferences" label="${msg.preferences}" id="linkedin_preferences"/> 
+		</contextMenu>
 	</zimletPanelItem>
 </zimlet>

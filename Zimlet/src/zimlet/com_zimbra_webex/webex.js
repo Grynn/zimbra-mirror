@@ -971,10 +971,7 @@ WebExZimlet.prototype.postUri = function(securityParams) {
  *
  */
 WebExZimlet.prototype.singleClicked = function() {
-	var dlg = appCtxt.getMsgDialog();
-	dlg.reset();//reset dialog since we could be using it
-	dlg.setMessage(this.getMessage("WebExZimlet_rightClickForOptions"), DwtMessageDialog.INFO_STYLE);
-	dlg.popup();
+	this._displayGeneralPrefsDlg();
 };
 
 /**
@@ -1572,7 +1569,7 @@ function() {
 	view.getHtmlElement().innerHTML = this._createGeneralPrefsView();
 	//this.pView.setSize("510", "350");
 	//this.pView.getHtmlElement().style.background = "white";
-	this.generalPrefsDlg = new ZmDialog({parent: this.getShell(), title:this.getMessage("WebExZimlet_generalPreferences"), view:view, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
+	this.generalPrefsDlg = new ZmDialog({parent: this.getShell(), title:this.getMessage("WebExZimlet_preferences"), view:view, standardButtons:[DwtDialog.OK_BUTTON, DwtDialog.CANCEL_BUTTON]});
 	this.generalPrefsDlg.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._generalPrefsOkBtnListner));
 	var postCallback = new AjxCallback(this, this._setDataToGeneralPrefsDlg);
 	this._getGeneralPrefsMetaData(postCallback);

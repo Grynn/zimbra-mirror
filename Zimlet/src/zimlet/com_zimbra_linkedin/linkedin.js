@@ -109,6 +109,19 @@ LinkedInZimlet.prototype.doubleClicked = function() {
 };
 
 /**
+ * Called by the Zimbra framework when a menu item is selected
+ * dispatch the call, ensuring the webex configuration is set.
+ *
+ */
+LinkedInZimlet.prototype.menuItemSelected = function(itemId) {
+	switch (itemId) {
+		case "linkedin_preferences":
+			this.singleClicked();
+			break;
+	}
+};
+
+/**
  * This method is called when the panel item is single-clicked.
  *
  */
