@@ -154,17 +154,15 @@ public class GetMail extends AjaxCommonTest {
 		// Verify the To, From, Subject, Body
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.subject, "Verify the subject matches");
 		
-		// TODO: the element IDs are not matching.  Must fix this test case after client change is made
-		//
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.subject, "Verify the subject matches");
+		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedDate), "Verify the date is displayed");
+		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedTime), "Verify the time is displayed");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the From matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), app.getActiveAccount().EmailAddress, "Verify the To matches");
 		
-		// ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedDate), "Verify the date is displayed");
-		// ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedTime), "Verify the time is displayed");
-		// ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");
-		// ZAssert.assertEquals(	actual.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the From matches");
-		// ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), app.getActiveAccount().EmailAddress, "Verify the To matches");
-		// ZAssert.assertEquals(	actual.zGetMailProperty(Field.Body), mail.bodyText, "Verify the body matches");
-
-		throw new HarnessException("need to finish implementation");
+		// TODO: need to normalize html text for comparison
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Body), mail.getBodyHtml(), "Verify the body matches");
 		
 	}
 

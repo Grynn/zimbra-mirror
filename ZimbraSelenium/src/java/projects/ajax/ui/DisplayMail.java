@@ -143,15 +143,15 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.Cc ) {
 			
-			locator = "//span[@id='OBJ_PREFIX_DWT32']";
+			locator = "//tr[contains(@id,'_cc')]//td[contains(@class,'LabelColValue')]";
 			
 		} else if ( field == Field.From ) {
 			
-			locator = "//span[@id='OBJ_PREFIX_DWT29']";
+			locator = "//tr[contains(@id,'_from')]";
 
 		} else if ( field == Field.ReceivedDate ) {
 			
-			locator = "//span[@id='OBJ_PREFIX_DWT30']";
+			locator = "//tr[contains(@id, '__MSG_hdrTableTopRow')]//td[contains(@class,'DateCol')]";
 
 		} else if ( field == Field.ReceivedTime ) {
 			
@@ -177,7 +177,7 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.To ) {
 			
-			locator = "//span[@id='OBJ_PREFIX_DWT31']";
+			locator = "//tr[contains(@id,'_to')]//td[@class='LabelColValue']";
 
 		} else {
 			
