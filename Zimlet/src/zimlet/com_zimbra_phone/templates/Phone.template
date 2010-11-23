@@ -6,7 +6,7 @@
 			</td>
 			<td>
 				<b>
-					<div style='white-space:nowrap'><$= ZmMsg.phone $>:</div>
+					<div style='white-space:nowrap'>${callStr}</div>
 				</b>
 			</td>
 			<td>

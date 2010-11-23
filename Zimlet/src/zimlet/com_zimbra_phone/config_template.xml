@@ -1,4 +1,4 @@
-<zimletConfig name="com_zimbra_phone" version="2.1">
+<zimletConfig name="com_zimbra_phone" version="2.2">
 	<global>
 		<property name="defaultContactField">companyPhone</property>
 	</global>

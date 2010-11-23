@@ -89,7 +89,7 @@ function(html, idx, phone, context) {
 
 Com_Zimbra_Phone.prototype.toolTipPoppedUp =
 function(spanElement, contentObjText, matchContext, canvas) {
-	var subs = {contentObjText: contentObjText};
+	var subs = {contentObjText: contentObjText, callStr: this.getMessage("call")};
 	canvas.innerHTML = AjxTemplate.expand("com_zimbra_phone.templates.Phone#Tooltip", subs);
 };
 
