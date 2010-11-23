@@ -221,6 +221,20 @@ function(attrs) {
 	if(document.getElementById("UnknownPersonSlide_NameAnchorId")) {
 		document.getElementById("UnknownPersonSlide_NameAnchorId").onclick =  AjxCallback.simpleClosure(this._openContact, this); 
 	}
+	this._removeCustomAttrs(attrs);
+};
+
+UnknownPersonSlide.prototype._removeCustomAttrs =
+function(attrs) {
+	if(attrs["rightClickForMoreOptions"]) {
+		delete attrs["rightClickForMoreOptions"];
+	}
+	if(attrs["formattedEmail"]) {
+		delete attrs["formattedEmail"];
+	}
+	if(attrs["address"]) {
+		delete attrs["address"];
+	}
 };
 
 UnknownPersonSlide.prototype._formatTexts =
