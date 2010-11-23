@@ -26,10 +26,12 @@ ZaEditVolumeXDialog = function(parent, w, h, title) {
 	ZaXDialog.call(this, parent,null, title, w, h);
 	this._containedObject = {};
 	this.initForm(ZaServer.volumeObjModel,this.getMyXForm());
+	this._helpURL = ZaEditVolumeXDialog.helpURL;
 }
 
 ZaEditVolumeXDialog.prototype = new ZaXDialog;
 ZaEditVolumeXDialog.prototype.constructor = ZaEditVolumeXDialog;
+ZaEditVolumeXDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_servers/adding_a_new_storage_volume_to_the_server.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 ZaEditVolumeXDialog.prototype.getMyXForm = 
 function() {	

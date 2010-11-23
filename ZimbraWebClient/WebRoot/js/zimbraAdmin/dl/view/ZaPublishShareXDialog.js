@@ -26,11 +26,13 @@ ZaPublishShareXDialog = function(parent, w, h, title) {
 	ZaXDialog.call(this, parent,null, title, w, h,"ZaPublishShareXDialog");
 	this.initForm(ZaDistributionList.myXModel,this.getMyXForm());
 	this._containedObject = {};
+	this._helpURL = ZaPublishShareXDialog.helpURL;
 }
 
 ZaPublishShareXDialog.prototype = new ZaXDialog;
 ZaPublishShareXDialog.prototype.constructor = ZaPublishShareXDialog;
 ZaXDialog.XFormModifiers["ZaPublishShareXDialog"] = new Array();
+ZaPublishShareXDialog.helpURL = location.pathname + ZaUtil.HELP_URL + "managing_accounts/managing_shared_items_with_distribution_lists.htm?locid="+AjxEnv.DEFAULT_LOCALE;
 
 /**
 * sets the object contained in the view
