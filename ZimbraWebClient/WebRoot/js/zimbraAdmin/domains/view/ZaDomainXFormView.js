@@ -1118,7 +1118,6 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 					{type:_ZALEFT_GROUPER_, numCols:1, width: "100%",label:ZaMsg.NAD_DomainSSLCertificate, containerCssStyle: "padding-top:5px", 
 					items: [
 	                                        {ref: ZaDomain.A_zimbraSSLCertificate, type:_TEXTAREA_, width: "100%", height: 450,
-        	                                label:"", labelCssStyle:"vertical-align:top",
                 	                        onChange:ZaDomainXFormView.onFormFieldChanged}
 					]}
 				
@@ -1126,7 +1125,6 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 					{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.NAD_DomainSSLPrivateKey, containerCssStyle: "padding-top:5px",
 					items: [
 	                                        {ref: ZaDomain.A_zimbraSSLPrivateKey, type:_TEXTAREA_, width: "100%", height: 450,
-        	                                label:"", labelCssStyle:"vertical-align:top",
                 	                        onChange:ZaDomainXFormView.onFormFieldChanged}
 
 					]}
