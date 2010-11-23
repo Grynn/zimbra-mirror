@@ -79,6 +79,11 @@ function(viewId, isNewView) {
 		this._zimletContext = parentAppCtxt.getZimletMgr().getZimletByName("com_zimbra_gtranslator");
 	}
 	if (viewId.indexOf("COMPOSE") >= 0 &&  !this._zimletContext._isToolbarClosed && !this._zimletContext._alreadyUsed) {
+		var composeController = appCtxt.getCurrentController();
+		var currentMsg = composeController._msg;
+		if(!currentMsg || (currentMsg.id != this.srcMsgObj.id)) {
+			return;
+		}
 		var editor = appCtxt.getCurrentView().getHtmlEditor();
 		var mode = editor.getMode();
 		var currentContent = editor.getContent();
