@@ -684,13 +684,13 @@ function(divID, scrolling, direction, ev) {
 
 DwtMenu.prototype._doScroll =
 function(div, step) {
-	if (div && step && div.parentNode.style.height) {
+	if (div && step) {
 		var old = parseInt(div.style.top) || 0;
 		var top;
 		if (step < 0) { // scroll down
 			var rows = this._table.rows || null;
-			var height = Dwt.getSize(rows[0]).y;
-			var max = div.scrollHeight - (parseInt(div.parentNode.style.height || rows.length*height) || 0);
+			var height = rows && rows.length && Dwt.getSize(rows[0]).y;
+			var max = div.scrollHeight - (parseInt(div.parentNode.style.height) || ((this._maxRows || (rows && rows.length)) * height) || 0);
 			if (Math.abs(old + step) <= max) {
 				top = old + step;
 			} else {
