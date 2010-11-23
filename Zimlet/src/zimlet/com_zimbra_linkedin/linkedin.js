@@ -186,7 +186,6 @@ function() {
 LinkedInZimlet.prototype._showLinkedInPrefFromTooltip =
 function() {
 	this._setTooltipSticky(false);
-	this.emailZimlet.slideShow.hideTooltipVeil();
 	this.singleClicked();
 };
 
@@ -305,7 +304,6 @@ function(authParams, profileId) {
 		this._inviteFriendsDlg = this.emailZimlet._linkedInZimlet_inviteFriendDlg;
 	}
 	this._setTooltipSticky(false);
-	this.emailZimlet.slideShow.hideTooltipVeil();
 	if (this._inviteFriendsDlg) {
 		this._inviteFriendsDlg.authParams = authParams;
 		this._inviteFriendsDlg.profileId = profileId;

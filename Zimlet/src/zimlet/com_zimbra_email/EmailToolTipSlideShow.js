@@ -23,29 +23,19 @@ function EmailToolTipSlideShow(zimlet, canvas) {
 	this.numberOfSlides = 0;
 	this.emailZimlet = zimlet;
 	this.canvas = canvas;
-	this.isVeilShown = false;
 	this._createFrame(canvas);
 	this.mainDiv = document.getElementById(EmailToolTipSlideShow.mainDivId);
 	this.navDiv = document.getElementById(EmailToolTipSlideShow.navDivId);
 	this.navTableRow = document.getElementById(EmailToolTipSlideShow.navTableRowId);
-	this._addCloseBtn();
-
 	this.currentSelectCellId = null;
 	this.currentSlideId = null;
 	this.navDiv.onclick = AjxCallback.simpleClosure(this._handleClick, this);
-	canvas.onmouseover =  AjxCallback.simpleClosure(this.showTooltipVeil, this);
+	canvas.onmouseover =  AjxCallback.simpleClosure(this.handleMouseOver, this);
+	canvas.onmouseout = AjxCallback.simpleClosure(this.handleMouseOut, this);
 	//set height and width to make it work in IE
 	this.mainDiv.style.width = EmailTooltipZimlet.tooltipWidth + "px";
 	this.mainDiv.style.height =  EmailTooltipZimlet.tooltipHeight + "px";
 	this.navDiv.style.width = EmailTooltipZimlet.tooltipWidth + "px";
-};
-
-EmailToolTipSlideShow.prototype._addCloseBtn =
-function(canvas) {
-	var iconCell = document.getElementById(EmailToolTipSlideShow.closeBtnId);
-	this._insertIconHtml(iconCell, Dwt.getNextId(), this.emailZimlet.getMessage("close"), EmailToolTipSlideShow.closeBtnId, "Cancel");
-	iconCell.align="right";
-	iconCell.width="90%";
 };
 
 EmailToolTipSlideShow.prototype._createFrame =
@@ -71,9 +61,7 @@ function(e) {
 		targ = targ.parentNode;
 	}
 	if(targ.id) {
-		if(targ.id == EmailToolTipSlideShow.closeBtnId) {
-			this.hideTooltipVeil();
-		} else if(this.slidesIconAndSlideMap[targ.id]){
+		if(this.slidesIconAndSlideMap[targ.id]){
 			this.slidesIconAndSlideMap[targ.id].select();
 		}
 	}
@@ -117,37 +105,14 @@ function(iconCell, selectCellId, name, iconDivId, iconName) {
 	iconCell.innerHTML = ["<div title='",name,"' id='",iconDivId,"' class='Img", iconName, "' style='cursor:pointer;'></div>"].join("");
 };
 
-EmailToolTipSlideShow.prototype.showTooltipVeil =
+EmailToolTipSlideShow.prototype.handleMouseOver =
 function() {
-	var veilId = "EmailTooltipSlideShow_veil";
-	this._toolTipVeil = document.getElementById(veilId);
-	if (this._toolTipVeil) {
-		var styleObj = this._toolTipVeil.style;
-		styleObj.display = "block";
-		this.isVeilShown = true;
-		return;
-	}
-	this._toolTipVeil = this.emailZimlet.getShell().getHtmlElement().appendChild(document.createElement('div'));
-	this._toolTipVeil.id = veilId;
-	this._toolTipVeil.className = "EmailZimlet_veil";
-	this._toolTipVeil.onclick =  AjxCallback.simpleClosure(this.hideTooltipVeil, this);
-	this._autoHideVeilIfTooltipIsPoppedDownTimer = setInterval(AjxCallback.simpleClosure(this._hideVeilIfToolTipIsDown, this), 2000);
-	this.isVeilShown = true;
+	this.isMouseOverTooltip = true;
 };
 
-EmailToolTipSlideShow.prototype.hideTooltipVeil =
+EmailToolTipSlideShow.prototype.handleMouseOut =
 function() {
-	if (this._toolTipVeil) {
-		this._toolTipVeil.style.display = "none";
-	}
-	this.emailZimlet.tooltip.popdown();
-	clearInterval(this._autoHideVeilIfTooltipIsPoppedDownTimer);
-	this.isVeilShown = false;
-};
+	this.isMouseOverTooltip = false;
+	this.emailZimlet.hoverOut();
 
-EmailToolTipSlideShow.prototype._hideVeilIfToolTipIsDown =
-function() {
-	if(this.emailZimlet.tooltip && !this.emailZimlet.tooltip._poppedUp && this.isVeilShown) {
-		this.hideTooltipVeil();
-	}
 };

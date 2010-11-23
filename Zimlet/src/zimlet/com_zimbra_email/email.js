@@ -268,18 +268,26 @@ function(contact, address) {
 
 EmailTooltipZimlet.prototype.hoverOut =
 function(object, context, x, y, span) {
-	setTimeout(AjxCallback.simpleClosure(this._popDownIfMouseNotOnSlide, this), 300);
+	setTimeout(AjxCallback.simpleClosure(this.popDownIfMouseNotOnSlide, this), 700);
 	//override to ignore hoverout. 
 };
 
-EmailTooltipZimlet.prototype._popDownIfMouseNotOnSlide =
+EmailTooltipZimlet.prototype.popDownIfMouseNotOnSlide =
 function() {
-	if(this.slideShow && this.slideShow.isVeilShown) {
+	if(this.slideShow && this.slideShow.isMouseOverTooltip) {
 		return;
 	} else if(this.tooltip) {
 		this.tooltip.popdown();
 	}
 };
+
+EmailTooltipZimlet.prototype.popdown =
+function() {
+	if(this.tooltip) {
+		this.tooltip.popdown();
+	}
+};
+
 
 EmailTooltipZimlet.prototype.addSubscriberZimlet =
 function(subscriberZimlet, isPrimary) {
@@ -662,6 +670,7 @@ function(obj) {
 
 EmailTooltipZimlet.prototype._contactListener =
 function(isDirty) {
+	this.popdown();
 	var loadCallback = new AjxCallback(this, this._handleLoadContact, [isDirty]);
 	AjxDispatcher.require(["ContactsCore", "Contacts"], false, loadCallback, null, true);
 };
@@ -710,7 +719,7 @@ function(isDirty) {
 
 EmailTooltipZimlet.prototype._composeListener =
 function(ev, addr) {
-
+	this.popdown();
 	if (!addr) {
 		addr = this._actionObject ? this._getAddress(this._actionObject) : "" ;
 	}
@@ -839,6 +848,7 @@ function(opacity, styleObj) {
 
 EmailTooltipZimlet.prototype.openCenteredWindow =
 function (url) {
+	this.popdown();
 	var width = 800;
 	var height = 600;
 	var left = parseInt((screen.availWidth / 2) - (width / 2));
@@ -870,6 +880,5 @@ function(bubbleId, email) {
 // handle click on an address (or "Select All") in popup DL expansion list
 EmailTooltipZimlet.prototype._dlAddrSelected =
 function(text, el, match, ev) {
-
 	this._composeListener(ev, text);
 };

@@ -110,8 +110,8 @@ function(ev) {
 	if(!rightclick) {
 		return;
 	}
-	this.emailZimlet.contextMenu.popup(null, this.emailZimlet.x, this.emailZimlet.y);
-	setTimeout(AjxCallback.simpleClosure(this.emailZimlet.slideShow.hideTooltipVeil, this.emailZimlet.slideShow), 200);
+	DwtUiEvent.setBehaviour(ev, true, false);
+	this.emailZimlet.contextMenu.popup(100, this.emailZimlet.x, this.emailZimlet.y);
 };
 
 UnknownPersonSlide.prototype._handleSlideSelect =
@@ -276,12 +276,10 @@ function(html) {
 
 UnknownPersonSlide.prototype._openCompose =
 function() {
-	this.emailZimlet.slideShow.hideTooltipVeil();
 	this.emailZimlet._composeListener(null, this.emailZimlet.emailAddress);
 };
 
 UnknownPersonSlide.prototype._openContact =
 function() {
-	this.emailZimlet.slideShow.hideTooltipVeil();
 	this.emailZimlet._contactListener(true);
 };
