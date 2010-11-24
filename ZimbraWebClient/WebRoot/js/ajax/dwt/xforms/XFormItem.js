@@ -946,7 +946,7 @@ XFormItem.prototype.handleKeyUp = function (ev, domItem) {
 XFormItem.prototype.handleKeyDown = function (ev, domItem) {
 	ev = (ev != null)? ev: window.event;
 	var key = DwtKeyEvent.getCharCode(ev);
-	if (key == DwtKeyEvent.KEY_ENTER && !AjxEnv.isChrome) {
+	if (key == DwtKeyEvent.KEY_ENTER) {
 		// By telling the browser just to let this do the default, and 
 		// not let the event bubble, our keyup handler
 		// wil see the enter key.
@@ -2250,6 +2250,16 @@ Textarea_XFormItem.prototype.setElementDisabledProperty = function (enable) {
 	this.getElement().disabled = (enable != true);
 	this.getElement().readOnly = (enable != true)
 }
+
+Textarea_XFormItem.prototype.getKeyPressHandlerHTML = function () {
+
+        var keydownEv = "onkeydown";
+        if (AjxEnv.isNav || AjxEnv.isChrome || AjxEnv.isSafari) {
+                keydownEv = "onkeypress";
+        }
+        return AjxBuffer.concat(" ", keydownEv,"=\"",this.getGlobalRef(), ".handleKeyDown(event, this)\"",
+                                                   " onkeyup=\"", this.getGlobalRef(), ".handleKeyUp(event, this)\"");
+};
 
 /**
  * @class defines XFormItem type _CHECKBOX_
