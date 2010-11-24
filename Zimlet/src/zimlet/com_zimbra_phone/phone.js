@@ -42,36 +42,15 @@ function(line, startIndex) {
 Com_Zimbra_Phone.prototype.init =
 function() {
 	var regexps = [
-        new RegExp(this.getMessage("northAmericanNumberingPlan"),"ig"),
-        new RegExp(this.getMessage("genericInternational"), "ig")
+        new RegExp(this.getMessage("localPhoneRegEx"),"ig")
     ];
-    var localNumbers = this.getMessage("localNumbers");
-    if (localNumbers && localNumbers != "###") {
-        regexps.push(new RegExp(localNumbers, "ig"));
-    }
 	this.regexps = regexps;
+	this.countryCode = this.getMessage("countryCode");
+	if(!this.countryCode) {
+		this.countryCode = 1;
+	}
 };
-/**
-* Not needed anymore as labels are refered from zimlet specific props file now
-* Com_Zimbra_Phone.prototype.getActionMenu =
-	function(obj, span, context) {
-        var actionMenu = ZmZimletBase.prototype.getActionMenu.call(this, obj, span, context);
 
-        var op = actionMenu.getOp("SEARCH");
-        if (op) {
-            op.setText(ZmMsg.search);
-        }
-        op = actionMenu.getOp("ADDCONTACT");
-        if (op) {
-            op.setText(ZmMsg.AB_ADD_CONTACT);
-        }
-        op = actionMenu.getOp("CALL");
-        if (op) {
-            op.setText(ZmMsg.call);
-        }
-        return actionMenu;
-    };
-*/
 Com_Zimbra_Phone.prototype._getHtmlContent =
 function(html, idx, phone, context) {
 	var call = Com_Zimbra_Phone.getCallToLink(phone);
@@ -163,7 +142,9 @@ function(phoneIn) {
 
 	var phone = AjxStringUtil.trim(phoneIn, true);
 	if (!/^(?:\+|00)/.test(phone)) {
-		phone = "+1" + phone;
+		if(this.countryCode == 1) {//use countrycode(when its missing) only for US(for now)
+			phone = "+1" + phone;
+		}
 	}
 	return "callto:" + phone;
 };
