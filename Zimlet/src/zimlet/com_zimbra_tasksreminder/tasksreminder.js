@@ -15,18 +15,21 @@
  */
 
 
-com_zimbra_tasksreminder = function() {
+com_zimbra_tasksreminder_handlerObj = function() {
 	ZmZimletBase.call(this);
 };
-com_zimbra_tasksreminder.prototype = new ZmZimletBase;
-com_zimbra_tasksreminder.prototype.constructor = com_zimbra_tasksreminder;
+com_zimbra_tasksreminder_handlerObj.prototype = new ZmZimletBase;
+com_zimbra_tasksreminder_handlerObj.prototype.constructor = com_zimbra_tasksreminder_handlerObj;
 
-com_zimbra_tasksreminder.prototype.toString = function() {
-	return "com_zimbra_tasksreminder";
+
+var TaskReminderZimlet = com_zimbra_tasksreminder_handlerObj;
+
+TaskReminderZimlet.prototype.toString = function() {
+	return "TaskReminderZimlet";
 };
 
 
-com_zimbra_tasksreminder.prototype.init = function() {
+TaskReminderZimlet.prototype.init = function() {
 	this.taskreminder_lastShownDate = this.getUserProperty("taskreminder_lastShownDate");
 	var todayStr = this._getTodayStr();
 	if(this.taskreminder_lastShownDate != todayStr) {
@@ -41,7 +44,7 @@ com_zimbra_tasksreminder.prototype.init = function() {
 	}		
 };
 
-com_zimbra_tasksreminder.prototype.setSearcholders =
+TaskReminderZimlet.prototype.setSearcholders =
 function() {
 	var tmpArry = new Array();
 	tmpArry.push("is:local");
@@ -66,7 +69,7 @@ function() {
 		this.searchInFolders = " ("+tmpArry.join(" OR ") + ")";
 };
 
-com_zimbra_tasksreminder.prototype.runSearch = function(response) {
+TaskReminderZimlet.prototype.runSearch = function(response) {
 	this.taskreminder_beforedays = parseInt(this.getUserProperty("taskreminder_beforedays"));
 	this.taskreminder_afterdays = parseInt(this.getUserProperty("taskreminder_afterdays"));
 	var callbck = new AjxCallback(this, this._handleSearchResponse);
@@ -76,10 +79,10 @@ com_zimbra_tasksreminder.prototype.runSearch = function(response) {
 	var todayStart = new Date(todayDate.getFullYear(),todayDate.getMonth(), todayDate.getDate());
 	var daysback200 = new Date(todayStart.getTime() - (200 * 24 * 3600 * 1000));
 	var daysback200_normalized = this._normalizeDate(daysback200.getMonth()+1,  daysback200.getDate(), daysback200.getFullYear());
-	appCtxt.getSearchController().search({query: "after:\""+daysback200_normalized+"\" "+ this.searchInFolders, userText: true, limit:200, types:_types, noRender:true,  callback:callbck});
+	appCtxt.getSearchController().search({query: "after:\""+daysback200_normalized+"\" and (not in:\"trash\")"+ this.searchInFolders, userText: true, limit:200, types:_types, noRender:true,  callback:callbck});
 };
 
-com_zimbra_tasksreminder.prototype._handleSearchResponse = function(response) {
+TaskReminderZimlet.prototype._handleSearchResponse = function(response) {
 	var tasks = response.getResponse().getResults("TASK").getArray();
 	if(tasks.length == 0) {
 		return;
@@ -116,7 +119,7 @@ com_zimbra_tasksreminder.prototype._handleSearchResponse = function(response) {
 };
 
 
-com_zimbra_tasksreminder.prototype._showTasksReminderDialog = function(taskObjs) {
+TaskReminderZimlet.prototype._showTasksReminderDialog = function(taskObjs) {
 	//if zimlet dialog already exists...
 	if (this._tskReminderDialog) {
 		this._tskReminderDialog.popup();
@@ -127,16 +130,16 @@ com_zimbra_tasksreminder.prototype._showTasksReminderDialog = function(taskObjs)
 	this._tskReminderDlgView.getHtmlElement().style.overflow = "auto";
 	this._tskReminderDlgView.getHtmlElement().innerHTML = this._createTasksReminderView(taskObjs);
 	var sendPrefEmailBtnId = Dwt.getNextId();
-	var sendPrefEmailBtn = new DwtDialog_ButtonDescriptor(sendPrefEmailBtnId, ("Send Email"), DwtDialog.ALIGN_LEFT);
+	var sendPrefEmailBtn = new DwtDialog_ButtonDescriptor(sendPrefEmailBtnId, this.getMessage("sendEmail"), DwtDialog.ALIGN_LEFT);
 
-	this._tskReminderDialog = this._createDialog({title:"Tasks Reminder", view:this._tskReminderDlgView, standardButtons:[DwtDialog.CANCEL_BUTTON], extraButtons:[sendPrefEmailBtn]});
+	this._tskReminderDialog = this._createDialog({title:this.getMessage("tasksReminder"), view:this._tskReminderDlgView, standardButtons:[DwtDialog.CANCEL_BUTTON], extraButtons:[sendPrefEmailBtn]});
 	this._tskReminderDialog.setButtonListener(sendPrefEmailBtnId, new AjxListener(this, this._sendEmailWithPrefInfo));
 	this._tskReminderDialog.popup();
 	this._searchField.value = this.prevSearchFieldVal; //reset search-field's value
 };
 
 
-com_zimbra_tasksreminder.prototype._createTasksReminderView = function(taskObjs) {
+TaskReminderZimlet.prototype._createTasksReminderView = function(taskObjs) {
 	this.taskObjs = taskObjs.sort(sortTasksByOverDue);
 	var html = new Array();
 	var i = 0;
@@ -147,24 +150,30 @@ com_zimbra_tasksreminder.prototype._createTasksReminderView = function(taskObjs)
 		html[i++] = "<TR>";
 		html[i++] = "<TD>";
 		html[i++] = "<span style=\"font-weight:bold;font-size:14px\"> " + to.subject + "</SPAN>";
-		html[i++] = "<span style=\"color:gray\">  - " +to.status +", "+ to.pComplete + "% complete</SPAN>";
+		html[i++] = "<span style=\"color:gray\">  - " +to.status +", "+ to.pComplete + "% "+this.getMessage("complete")+"</SPAN>";
 
 		html[i++] = "</TD>";
 		html[i++] = "</TR>";
 		html[i++] = "<TR>";
 		html[i++] = "<TD>";
-		html[i++] = "<span>End Date: " + to.endDateTxt + "</SPAN>";
+		html[i++] = "<span>"+this.getMessage("endDate")+" " + to.endDateTxt + "</SPAN>";
 		var days = "days";
 		if(to.overdue == 1 || to.overdue == -1) {
 			days = "day";
 		}
 
 		if(to.pComplete == 100) {
-			html[i++] = "<span style=\"font-weight:bold;color:green\"> Task complete</SPAN>";	
+			html[i++] = "<span style=\"font-weight:bold;color:green\"> ";
+			html[i++] = this.getMessage("taskComplete");
+			html[i++] = "</SPAN>";	
 		} else if(to.overdue < 0 && to.pComplete < 100) {
-			html[i++] = "<span style=\"font-weight:bold;color:red\"> "+(to.overdue * -1) + " "+days+" overdue</SPAN>";
+			html[i++] = "<span style=\"font-weight:bold;color:red\"> "+(to.overdue * -1) + " "+days+" ";
+			html[i++] = this.getMessage("overdue");
+			html[i++] = "</SPAN>";
 		} else {
-			html[i++] = "<span style=\"font-weight:bold;color:orange\"> "+(to.overdue) + " "+days+" left</SPAN>";
+			html[i++] = "<span style=\"font-weight:bold;color:orange\"> "+(to.overdue) + " "+days+" ";
+			html[i++] = this.getMessage("left");
+			html[i++] = "</SPAN>";
 		}
 		html[i++] = "</TD>";
 		html[i++] = "<TR>";
@@ -176,7 +185,7 @@ com_zimbra_tasksreminder.prototype._createTasksReminderView = function(taskObjs)
 
 
 //return string like: 10/20/2009
-com_zimbra_tasksreminder.prototype._getTodayStr = function() {
+TaskReminderZimlet.prototype._getTodayStr = function() {
 	var todayDate = new Date();
 	var todayStart = new Date(todayDate.getFullYear(),todayDate.getMonth(), todayDate.getDate());
 	return this._normalizeDate(todayStart.getMonth()+1,  todayStart.getDate(), todayStart.getFullYear());
@@ -192,7 +201,7 @@ function sortTasksByOverDue(a, b) {
 }
 
 
-com_zimbra_tasksreminder.prototype._normalizeDate =
+TaskReminderZimlet.prototype._normalizeDate =
 function(month, day, year) {
 	var fString = [];
 	var ds = I18nMsg.formatDateShort.toLowerCase();
@@ -221,12 +230,12 @@ function taskReminder_sortTimeObjs(a, b) {
 	return ((x > y) ? 1 : ((x < y) ? -1 : 0));
 }
 
-com_zimbra_tasksreminder.prototype._sendEmailWithPrefInfo = function() {
+TaskReminderZimlet.prototype._sendEmailWithPrefInfo = function() {
 	var action = ZmOperation.NEW_MESSAGE;
 	var msg = new ZmMailMsg();
 	var toOverride = null;
 
-	var subjOverride = "Tasks Reminder";
+	var subjOverride = this.getMessage("tasksReminder");
 	var extraBodyText = this._constructEmailBdy();
 	AjxDispatcher.run("Compose", {action: action, inNewWindow: false, msg: msg,
 		toOverride: toOverride, subjOverride: subjOverride,
@@ -237,7 +246,7 @@ com_zimbra_tasksreminder.prototype._sendEmailWithPrefInfo = function() {
 
 };
 
-com_zimbra_tasksreminder.prototype._constructEmailBdy =
+TaskReminderZimlet.prototype._constructEmailBdy =
 function() {
 	var newLine = "";
 	if (appCtxt.getSettings().getSetting("COMPOSE_AS_FORMAT").value == "text") {
@@ -250,37 +259,37 @@ function() {
 	var i = 0;
 	for(var j =0; j < this.taskObjs.length; j++) { 
 		var to = this.taskObjs[j];
-		var days = "days";
+		var days = this.getMessage("days");
 		if(to.overdue == 1 || to.overdue == -1) {
-			days = "day";
+			days = this.getMessage("day");
 		}
 		var taskCompleteStr = "";
 		if(to.pComplete == 100) {
-			 taskCompleteStr =" Task complete";	
+			 taskCompleteStr =" "+this.getMessage("taskComplete");	
 		} else if(to.overdue < 0 && to.pComplete < 100) {
 				taskCompleteStr =[(to.overdue * -1) , " ", days ," overdue"].join("");
 		} else {
 			taskCompleteStr =[(to.overdue), " ", days, " left"].join("");
 		}
 
-		html[i++] = ["-----------TASK (",taskCompleteStr ,")-----------------" , newLine].join("");
-		html[i++] = ["SUBJECT: ", to.subject, newLine].join("");
-		html[i++] = ["STATUS: ", to.status, ,newLine, "  PERCENT COMPLETE: ", to.pComplete, "%",newLine].join("");
-		html[i++] = ["End Date: ",to.endDateTxt, newLine, newLine, newLine].join("");
+		html[i++] = ["-----------",this.getMessage("task")," (",taskCompleteStr ,")-----------------" , newLine].join("");
+		html[i++] = [this.getMessage("subject")," ", to.subject, newLine].join("");
+		html[i++] = [this.getMessage("status")," ", to.status, ,newLine, "  ",this.getMessage("percentComplete")," ", to.pComplete, "%",newLine].join("");
+		html[i++] = [this.getMessage("endDate"), " ",to.endDateTxt, newLine, newLine, newLine].join("");
 	}
 	return html.join("");
 };
 
 
-com_zimbra_tasksreminder.prototype.doubleClicked = function() {
+TaskReminderZimlet.prototype.doubleClicked = function() {
 	this.singleClicked();
 };
-com_zimbra_tasksreminder.prototype.singleClicked = function() {
+TaskReminderZimlet.prototype.singleClicked = function() {
 	this._showPreferenceDlg();
 };
 
 
-com_zimbra_tasksreminder.prototype._showPreferenceDlg = function() {
+TaskReminderZimlet.prototype._showPreferenceDlg = function() {
 
 	this.taskreminder_beforedays = this.getUserProperty("taskreminder_beforedays");
 	this.taskreminder_afterdays = this.getUserProperty("taskreminder_afterdays");
@@ -294,8 +303,8 @@ com_zimbra_tasksreminder.prototype._showPreferenceDlg = function() {
 	this._preferenceView = new DwtComposite(this.getShell());
 	this._preferenceView.getHtmlElement().innerHTML = this._createPrefView();
 	var showAgainDlgBtnId = Dwt.getNextId();
-	var showAgainDlgBtn = new DwtDialog_ButtonDescriptor(showAgainDlgBtnId, ("Show Reminders Again"), DwtDialog.ALIGN_LEFT);
-	this._preferenceDialog = this._createDialog({title:"Task Reminder -Zimlet Preferences", view:this._preferenceView, standardButtons:[DwtDialog.OK_BUTTON], extraButtons:[showAgainDlgBtn]});
+	var showAgainDlgBtn = new DwtDialog_ButtonDescriptor(showAgainDlgBtnId, this.getMessage("showRemindersAgain"), DwtDialog.ALIGN_LEFT);
+	this._preferenceDialog = this._createDialog({title:this.getMessage("preferences"), view:this._preferenceView, standardButtons:[DwtDialog.OK_BUTTON], extraButtons:[showAgainDlgBtn]});
 	this._preferenceDialog.setButtonListener(showAgainDlgBtnId, new AjxListener(this, this._showAgainListener));
 	this._preferenceDialog.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._okBtnListener));
 	this._preferenceDialog.popup();
@@ -303,7 +312,7 @@ com_zimbra_tasksreminder.prototype._showPreferenceDlg = function() {
 
 };
 
-com_zimbra_tasksreminder.prototype._showAgainListener = function() {
+TaskReminderZimlet.prototype._showAgainListener = function() {
 		this._searchField = appCtxt.getSearchController().getSearchToolbar().getSearchField();
 		this.prevSearchFieldVal =this._searchField.value;
 		this.setSearcholders();
@@ -311,29 +320,34 @@ com_zimbra_tasksreminder.prototype._showAgainListener = function() {
 		this._searchField.value = this.prevSearchFieldVal; //reset search-field's value
 };
 
-com_zimbra_tasksreminder.prototype.setPrefValues = function() {
+TaskReminderZimlet.prototype.setPrefValues = function() {
 	document.getElementById("taskreminder_beforedays").value = this.taskreminder_beforedays;
 	document.getElementById("taskreminder_afterdays").value = this.taskreminder_afterdays;
 };
 
-com_zimbra_tasksreminder.prototype._createPrefView = function() {
+TaskReminderZimlet.prototype._createPrefView = function() {
 	var html = new Array();
 	var i = 0;
+	var bField = "<input style=\"width: 30px\" id='taskreminder_beforedays'  type='text'/>";
+	var eField = "<input style=\"width: 30px\"  id='taskreminder_afterdays'  type='text'/>";
+
+
+	var remindMeStr = this.getMessage("remindMeStr").replace("{0}", bField).replace("{1}", eField);
 	html[i++] = "<DIV style=\"font-weight:bold;font-size:14px\">";
 	html[i++] = "Select Reminder Range:";
 	html[i++] = "</DIV>";
 	html[i++] = "<DIV>";
-	html[i++] = "Remind me <input style=\"width: 30px\" id='taskreminder_beforedays'  type='text'/> days before and <input style=\"width: 30px\"  id='taskreminder_afterdays'  type='text'/> days after due date of a task.";
+	html[i++] = remindMeStr;
 	html[i++] = "</DIV>";
 	html[i++] = "<BR/>";
 	html[i++] = "<BR/>";
 	html[i++] = "<DIV style=\"font-weight:bold;color:gray\">";
-	html[i++] = "PS: Reminders are show only once a day";
+	html[i++] = this.getMessage("note");
 	html[i++] = "</DIV>";
 	return html.join("");
 };
 
-com_zimbra_tasksreminder.prototype._okBtnListener = function() {
+TaskReminderZimlet.prototype._okBtnListener = function() {
 	this._preferenceDialog.popdown();
 	if (document.getElementById("taskreminder_beforedays").value != this.taskreminder_beforedays) {
 		this.setUserProperty("taskreminder_beforedays", document.getElementById("taskreminder_beforedays").value);
@@ -346,6 +360,6 @@ com_zimbra_tasksreminder.prototype._okBtnListener = function() {
 	}
 	if(this._mustSave) {
 		this.saveUserProperties();
-		appCtxt.getAppController().setStatusMsg("Properties Saved", ZmStatusView.LEVEL_INFO);
+		appCtxt.getAppController().setStatusMsg(this.getMessage("propertiesSaved"), ZmStatusView.LEVEL_INFO);
 	}
 }; 
