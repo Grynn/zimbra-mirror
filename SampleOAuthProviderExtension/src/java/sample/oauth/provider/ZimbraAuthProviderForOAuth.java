@@ -38,8 +38,10 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.ZimbraLog;
+import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.AuthToken;
 import com.zimbra.cs.account.AuthTokenException;
+import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.ZimbraAuthToken;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
@@ -76,18 +78,10 @@ public class ZimbraAuthProviderForOAuth extends AuthProvider{
         	return null;
     	}
     	
-    	//String cookieName = cookieName(isAdminReq);
-        String encodedAuthToken = null;
-        //javax.servlet.http.Cookie cookies[] =  req.getCookies();
-        //if (cookies != null) {
-        //    for (int i = 0; i < cookies.length; i++) {
-        //        if (cookies[i].getName().equals(cookieName)) {
-        //            encodedAuthToken = cookies[i].getValue();
-        //            break;
-        //        }
-        //    }
-        //}
-        OAuthMessage oAuthMessage = OAuthServlet.getMessage(req, null);
+        String origUrl = req.getHeader("X-Zimbra-Orig-Url");
+        OAuthMessage oAuthMessage =
+                StringUtil.isNullOrEmpty(origUrl) ?
+                        OAuthServlet.getMessage(req, null) : OAuthServlet.getMessage(req, origUrl);
 
         try {
             if(oAuthMessage.getToken() == null){
@@ -98,7 +92,7 @@ public class ZimbraAuthProviderForOAuth extends AuthProvider{
             throw new AuthTokenException("Error in getting OAuth token from request", e);
         }
 
-        OAuthAccessor accessor = null;
+        OAuthAccessor accessor;
         try {
             accessor = SampleZmOAuthProvider.getAccessor(oAuthMessage);
             SampleZmOAuthProvider.VALIDATOR.validateMessage(oAuthMessage, accessor);
@@ -112,13 +106,19 @@ public class ZimbraAuthProviderForOAuth extends AuthProvider{
             throw AuthProviderException.FAILURE("permission_denied");
         }
         
-        checkConsumerKeyinMbox(accessor);
-
-        encodedAuthToken = (String) accessor.getProperty("ZM_AUTH_TOKEN");
-
-        ZimbraLog.extensions.debug("[oauth_token]"+accessor.accessToken+",[ZM_AUTH_TOKEN]"+encodedAuthToken);
-
+        String encodedAuthToken = (String) accessor.getProperty("ZM_AUTH_TOKEN");
+        ZimbraLog.extensions.debug("[oauth_token]" + accessor.accessToken);
         AuthToken authToken = genAuthToken(encodedAuthToken);
+
+        try {
+            Account account = Provisioning.getInstance().getAccountById(authToken.getAccountId());
+            if (Provisioning.onLocalServer(account))
+                checkConsumerKeyinMbox(accessor);
+        } catch (ServiceException e) {
+            ZimbraLog.extensions.warn("Error in checking whether account on local server or not", e);
+            throw AuthProviderException.FAILURE(e.getMessage());
+        }
+
         if (authToken.isExpired()) {
             // renew the auth token
             try {

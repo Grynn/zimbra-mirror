@@ -38,9 +38,6 @@
 		<fileset dir="jars">
 			<include name="**/*.jar"/>
 		</fileset>
-		<fileset dir="../ZimbraOffline/build">
-			<include name="**/*.jar"/>
-		</fileset>
 	</path>
 
 	<target name="compile" depends="build-init" description="Compiles the source code">
