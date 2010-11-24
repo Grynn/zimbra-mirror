@@ -5,7 +5,8 @@
     <div><b>ID: </b>          <xsl:value-of select="bug_id"/></div>
     <xsl:choose>
       <xsl:when test="@error != ''">
-        <div><b>Error: </b>       <xsl:value-of select="@error"/></div>
+        <div><b>Error: </b> <xsl:value-of select="@error"/> </div>
+	<div>See if bug is Public and is valid</div>
       </xsl:when>
       <xsl:otherwise>
         <div><b>Status: </b>      <xsl:value-of select="bug_status"/></div>
