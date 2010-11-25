@@ -589,7 +589,9 @@ function(x, y) {
 			}
 
 		} else { // Cascade to the right
-			newX = (parseInt(pmstyle.left) + parseInt(pmstyle.width) || (pbound.x + pbound.width));
+			var left = parseInt(pmstyle.left) || (pbound.x - (parseInt(pmstyle.paddingLeft) || 0));
+			var width = parseInt(pmstyle.width) || pbound.width;
+			newX = left + width;
 			if (this._congruent) {
 				var offset = parseInt(pmstyle.paddingRight) + parseInt(tstyle.paddingLeft) + parseInt(tstyle.borderLeftWidth);
 				if (!isNaN(offset)) {
