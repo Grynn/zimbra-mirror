@@ -31,8 +31,7 @@ YFlickrPhotoset.prototype.getId = function()
 /* Get the Human Readable Display Name */
 YFlickrPhotoset.prototype.getDisplayName = function()
 {
-    if (this.getKeywordScope() != "global") { return this.getKeywordBy() + ":" + this.getKeywordTerm(); }
-    else { return this.getKeywordBy() + ":" + this.getKeywordTerm() + " " + this.getKeywordScope(); }
+	return this.getKeywordTerm();
 }
 
 /* which search by will get us this ? */
@@ -541,7 +540,6 @@ function YFlickrTaggedPhotoset(tag,scope)
     this.slides = [];                   // array of slides, each slide is <div>
 
     this.scope = scope || "local";
-
     /* YFlickrTaggedPhotoset initialization */
     this.tag = tag;
     this.psid = "tag" + this.tag;
@@ -556,7 +554,7 @@ YFlickrTaggedPhotoset.prototype.constructor = YFlickrTaggedPhotoset;
 YFlickrTaggedPhotoset.prototype.getApiArgs = function()
 {
     return [["method", "flickr.photos.search"],
-            ["tags", this.tag]
+            ["text", this.tag]
            ];
 }
 

@@ -66,8 +66,8 @@ function flickrapi_getsignedurl (endpoint, secret, args)
             url = url + args[i][0] + "=" + args[i][1];
             extra = extra + args[i][0] + args[i][1];
         }
-
-        extra = hex_md5(extra);
+		AjxPackage.require("Crypt");
+        extra = AjxMD5.hex_md5(extra);
         url = url + "&api_sig=" + extra;
     }
 
@@ -85,8 +85,8 @@ function flickrapi_getapisig (secret,args)
         for (var i=0; i<args.length; i++) {
             sig=sig+args[i][0] + args[i][1];
         }
-
-        sig = hex_md5(sig);
+		AjxPackage.require("Crypt");
+        sig = AjxMD5.hex_md5(sig);
     }
 
     return sig;

@@ -15,7 +15,7 @@
 <%@ page buffer="8kb" autoFlush="true" %>
 <%@ page pageEncoding="UTF-8" contentType="text/html; charset=UTF-8" %>
 <%@ page language="java" import="org.apache.commons.httpclient.*, org.apache.commons.httpclient.methods.*, javax.servlet.*, com.zimbra.common.util.*"%>
-<%@ page language="java" import="java.net.*, java.util.*, com.zimbra.common.util.*, com.zimbra.cs.util.NetUtil, com.zimbra.cs.servlet.ZimbraServlet"%>
+<%@ page language="java" import="java.net.*, java.util.*,com.zimbra.common.util.*, com.zimbra.cs.util.*, com.zimbra.cs.servlet.*"%>
 <%@ page language="java" import="java.io.*, org.apache.commons.httpclient.methods.multipart.*"%>
 <%@ page language="java" import="com.zimbra.cs.service.*" %>
 <%@ page language="java" import="com.zimbra.cs.zclient.*" %>

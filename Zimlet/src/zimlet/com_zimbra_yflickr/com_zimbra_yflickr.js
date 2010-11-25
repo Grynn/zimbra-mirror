@@ -55,7 +55,7 @@ var FLICKR_PHOTOSPERPAGE = FLICKRDISP_PHOTOSPERSLIDE;           // fetch 4x2 pho
 var YFLICKR_BUSYIMGURL = "img/animated/Imgwait_32.gif";
 
 /* YFlickr zimlet object */
-function Com_Zimbra_Yflickr()
+function Com_Zimbra_Yflickr_handlerObj()
 {
     this.api_key = YFLICKR_APIKEY;              // API key (can be chosen roundrobin from a list
     this.api_secret = YFLICKR_APISECRET;        // API secret
@@ -86,16 +86,16 @@ function Com_Zimbra_Yflickr()
     /* (attachment state) variables */
     this.attach_current = -1;           // current img being attached
     this.attach_photos = [];            // list of <img>s to be attached
-
-    //Load AjxMD5.js
-    this._loadObject("/js/ajax/util/AjxMD5.js");
 }
 
-Com_Zimbra_Yflickr.prototype = new ZmZimletBase();
-Com_Zimbra_Yflickr.prototype.constructor = Com_Zimbra_Yflickr;
+
+Com_Zimbra_Yflickr_handlerObj.prototype = new ZmZimletBase();
+Com_Zimbra_Yflickr_handlerObj.prototype.constructor = Com_Zimbra_Yflickr_handlerObj;
+
+FlickrZimlet = Com_Zimbra_Yflickr_handlerObj;
 
 // initializer function (automatically called by zimlet framework)
-Com_Zimbra_Yflickr.prototype.init = function()
+FlickrZimlet.prototype.init = function()
 {
     // connect to flickr, verify the api_key, get a frob
     //this.connect();
@@ -106,18 +106,19 @@ Com_Zimbra_Yflickr.prototype.init = function()
     // add 'Save to Flickr' link
     this.addAttachmentHandler ();
 
+	//load flickr account info if already authorized
+	this.authorize(null, true);
+
     // assign self to window object because we need to execute some code in window context
     window.YFlickr_widget = this;
 };
 
-Com_Zimbra_Yflickr.prototype._getNoAuthDlg = function(){
+FlickrZimlet.prototype._getNoAuthDlg = function(){
 
     if(!this.noauthDlg){
         this.noauthDlg = new DwtDialog (appCtxt.getShell(),null,"Flickr Authorization Required",[DwtDialog.OK_BUTTON]);
         this.noauthDlg.setContent ("<span style=\"text-align:center;\">" +
-                                   "The Flickr Zimlet has not yet been authorized to access your photos." +
-                                   "<br/>" +
-                                   "Please click 'Authorize' from the Flickr Zimlet context menu, and complete the authorization process first." +
+                                   this.getMessage("pleaseAuthorize") +
                                    "<br/>" +
                                    "</span>"
                 );
@@ -126,18 +127,18 @@ Com_Zimbra_Yflickr.prototype._getNoAuthDlg = function(){
 };
 
 /* Utility functions for debugging */
-Com_Zimbra_Yflickr.prototype.debug = function(msg) {
+FlickrZimlet.prototype.debug = function(msg) {
     DBG.println ("[yflickr] " + msg);
 }
 
-Com_Zimbra_Yflickr.prototype.info = function(msg) {
+FlickrZimlet.prototype.info = function(msg) {
     this.displayStatusMessage (msg);
     this.debug (msg);
 }
 
 /* Routines related to manipulating photosets */
 
-Com_Zimbra_Yflickr.prototype.addPhotoset = function (ps)
+FlickrZimlet.prototype.addPhotoset = function (ps)
 {
     // first assign a the set by id, to yphotosets (this is the original)
     eval ("this.yphotosets." + ps.getId() + " = ps");
@@ -153,7 +154,7 @@ Com_Zimbra_Yflickr.prototype.addPhotoset = function (ps)
    @input       the text (manually) typed in by the user
    @current     the text that is currently in the search control
  */
-Com_Zimbra_Yflickr.prototype.suggestSearch = function(input, current)
+FlickrZimlet.prototype.suggestSearch = function(input, current)
 {
     var idx = this.suggestedSearches.indexOf (current);
     var suggestion = "";
@@ -186,7 +187,7 @@ Com_Zimbra_Yflickr.prototype.suggestSearch = function(input, current)
     return suggestion;
 }
 
-Com_Zimbra_Yflickr.prototype.hasPhotoset = function (ps)
+FlickrZimlet.prototype.hasPhotoset = function (ps)
 {
     var x = eval ("this.yphotosets." + ps.getId());
     if (x != null) { return true; }
@@ -194,7 +195,7 @@ Com_Zimbra_Yflickr.prototype.hasPhotoset = function (ps)
 }
 
 // Return all photosets as an array
-Com_Zimbra_Yflickr.prototype.getPhotosets = function ()
+FlickrZimlet.prototype.getPhotosets = function ()
 {
     var s = []
     for (var t in this.yphotosets) {
@@ -204,7 +205,7 @@ Com_Zimbra_Yflickr.prototype.getPhotosets = function ()
 }
 
 // Get a photoset by id
-Com_Zimbra_Yflickr.prototype.getPhotosetById = function (id)
+FlickrZimlet.prototype.getPhotosetById = function (id)
 {
     return eval ("this.yphotosets." + id);
 }
@@ -214,7 +215,7 @@ Com_Zimbra_Yflickr.prototype.getPhotosetById = function (id)
    Returns
         [searchby, searchterm, searchscope]
  */
-Com_Zimbra_Yflickr.prototype.splitSearchTerm = function (s)
+FlickrZimlet.prototype.splitSearchTerm = function (s)
 {
     var parts = s.split (" ");  // TODO: use regex ?
     var by = "";
@@ -234,7 +235,7 @@ Com_Zimbra_Yflickr.prototype.splitSearchTerm = function (s)
     return [by,term,scope];
 }
 
-Com_Zimbra_Yflickr.prototype.canonicalizeSearchTerm = function (s)
+FlickrZimlet.prototype.canonicalizeSearchTerm = function (s)
 {
     var searchparts = this.splitSearchTerm(s);
     var canon = "";
@@ -246,7 +247,7 @@ Com_Zimbra_Yflickr.prototype.canonicalizeSearchTerm = function (s)
 }
 
 /* search the cached photosets by search term -- return null if the search term is not cached */
-Com_Zimbra_Yflickr.prototype.searchPhotoset = function (s)
+FlickrZimlet.prototype.searchPhotoset = function (s)
 {
     var cs = this.canonicalizeSearchTerm (s);
     var id = YFlickr_getIndexableName (cs);
@@ -258,7 +259,7 @@ Com_Zimbra_Yflickr.prototype.searchPhotoset = function (s)
    @signed  (boolean) indicates whether a signed url is required
    @iself   (boolean) indicates whether the auth-token and nsid should be passed
  */
-Com_Zimbra_Yflickr.prototype.getRESTUrl = function (params, signed, iself)
+FlickrZimlet.prototype.getRESTUrl = function (params, signed, iself)
 {
     var url;
     var p = [["api_key", this.api_key]];
@@ -285,7 +286,7 @@ Com_Zimbra_Yflickr.prototype.getRESTUrl = function (params, signed, iself)
 }
 
 // connect to flickr and authenticate
-Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
+FlickrZimlet.prototype.connect = function(auth_stage, result)
 {
     if (!auth_stage) { 
         auth_stage = FLICKR_AUTHSTAGE_NONE;
@@ -354,7 +355,7 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
 
         } else
         {
-            this.info ("Flickr API Key/Secret is invalid !" + flickrapi_geterrmsg (jso));
+            this.info (this.getMessage("invalidKey") + flickrapi_geterrmsg (jso));
             this.authStage = FLICKR_AUTHSTAGE_NONE;
         }
     }
@@ -403,7 +404,7 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
         }
         else
         {
-            this.info ("Cannot get Flickr Frob" + flickrapi_geterrmsg(jso));
+            this.info (this.getMessage("noFrob") + flickrapi_geterrmsg(jso));
             this.frob = null;
 
             this.authStage = FLICKR_AUTHSTAGE_VERIFIED;
@@ -434,11 +435,9 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
         if (rsp_stat == "ok")
         {
             this.authStage = FLICKR_AUTHSTAGE_GOTTOKEN;
-
             // flickr.auth.getToken returns an auth node
             this.token = jso.auth;
-            this.debug ("Got Flickr token " + this.token.token + " with " + this.token.perms + " permissions for user " + this.token.user.username);
-
+			this._saveFlickrInfoToDB();
             // Get Flickr Photosets
             var url = this.getRESTUrl ([["method", "flickr.photosets.getList"]], true, true);
             var callback = new AjxCallback (this, this.connect, [FLICKR_AUTHSTAGE_GOTPHOTOSETS]);
@@ -448,8 +447,8 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
         }
         else
         {
-            this.info ("Cannot get Flickr Auth Token -- not authorized to access User Photos" + flickrapi_geterrmsg(jso));
-
+            this.info (this.getMessage("noAuthToken") + flickrapi_geterrmsg(jso));
+			
             /* There are two cases in which we can land here
                One is that we opportunistically attempted to authorize the zimlet,
                and the second is if the user genuinely changed his/her mind about
@@ -508,8 +507,10 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
         }
         else
         {
+			this._invalidateUserAccount();
             // could not get photosets
-            this.info ("Could not get flickr photosets" + flickrapi_geterrmsg (jso));
+            this.info (this.getMessage("couldNotGetPhotoSets") + flickrapi_geterrmsg (jso));
+
             // this.photosets = [];
         }
     }
@@ -551,16 +552,53 @@ Com_Zimbra_Yflickr.prototype.connect = function(auth_stage, result)
             this.tagnames = [];
         }
     }
-
+	this.info(this.getMessage("loggedIntoFlickr"));
     this.debug ("Leaving Flickr Stage: " + FLICKR_AUTHSTAGES[auth_stage]);
 }
 
-Com_Zimbra_Yflickr.prototype._getAuthDlg = function(){
+
+FlickrZimlet.prototype._saveFlickrInfoToDB = function(){
+	this.__saveToDB({token:this.token.token.toString(), 
+					perms:this.token.perms.toString(),
+					username: this.token.user.username.toString(), 
+					nsid:this.token.user.nsid.toString()});
+	this.info(this.getMessage("FlickrAccountSaved"));
+};
+
+FlickrZimlet.prototype._invalidateUserAccount = function(){
+	this.__saveToDB({token:"", perms:"", username:"", nsid:""});
+};
+
+FlickrZimlet.prototype.__saveToDB = function(flickrParams){
+	this.setUserProperty("token", flickrParams.token);
+	this.setUserProperty("perms", flickrParams.perms);
+	this.setUserProperty("username", flickrParams.username);
+	this.setUserProperty("nsid", flickrParams.nsid);
+	this.saveUserProperties();
+};
+
+
+FlickrZimlet.prototype._loadFlickrInfoFromDB = function(){
+	this.token = {}
+	this.token.token = this.getUserProperty("token");
+	this.token.perms = this.getUserProperty("perms");
+	this.token.user = {}
+	this.token.user.username = this.getUserProperty("username");
+	this.token.user.nsid = this.getUserProperty("nsid");
+	if(this.token.token != "" && this.token.perms != "" && this.token.user.username != "" && this.token.user.nsid != "") {
+		this._hasValidFlickrAccount = true;
+		this.authStage = FLICKR_AUTHSTAGE_GOTTOKEN;
+	}
+	this._alreadyLoadedFromDB = true;
+};
+
+
+FlickrZimlet.prototype._getAuthDlg = function(){
 
     if(!this.authDlg){
-        this.authDlg = new DwtDialog (appCtxt.getShell(),null,"Flickr Authorization Required",[DwtDialog.OK_BUTTON]);
+        this.authDlg = new DwtDialog (appCtxt.getShell(),null,this.getMessage("authRequired"),[DwtDialog.OK_BUTTON]);
         this.authDlg.setContent ("<span style=\"text-align:center;\">" +
-                                 "A new browser window has been created for you to authorize the Flickr zimlet to access your photo albums." +
+                                 this.getMessage("authorizeInNewWindow") +
                                  "</span>"
                 );
     }
@@ -568,8 +606,23 @@ Com_Zimbra_Yflickr.prototype._getAuthDlg = function(){
 };
 
 // set up a window for the user to authorize the frob
-Com_Zimbra_Yflickr.prototype.authorize = function(fromContextMenu)
+FlickrZimlet.prototype.authorize = function(fromContextMenu, fromInit)
 {
+		this._loadFlickrInfoFromDB();
+		debugger;
+		if(this._hasValidFlickrAccount) {
+	            // Get Flickr Photosets
+            var url = this.getRESTUrl ([["method", "flickr.photosets.getList"]], true, true);
+            var callback = new AjxCallback (this, this.connect, [FLICKR_AUTHSTAGE_GOTPHOTOSETS]);
+
+            this.debug ("url=" + url);
+            this.sendRequest (null, url, null, callback, true, true);
+			return;
+		}
+		//if called from init and we dont have valid account, bail so we dont annoy users to authenticate to flickr.
+		if(fromInit) {
+			return;
+		}
     if (this.authStage < FLICKR_AUTHSTAGE_GOTFROB)
     {
         if(!this.triedConnectingOnce){
@@ -582,14 +635,14 @@ Com_Zimbra_Yflickr.prototype.authorize = function(fromContextMenu)
         this.debug ("cannot proceed to authorization without frob");
 
         // var dlg = appCtxt.getMsgDialog ();
-        var dlg = new DwtDialog (appCtxt.getShell(), null, "Cannot authorize", [DwtDialog.OK_BUTTON]);
-        dlg.setContent ("No frob has yet been issued for authorization. This means that either the api_key and/or secret is invalid, or that the flickr.com website cannot be accessed. Please correct your configuration and try again");
+        var dlg = new DwtDialog (appCtxt.getShell(), null, this.getMessage("cannotAuth"), [DwtDialog.OK_BUTTON]);
+        dlg.setContent (this.getMessage("frobTokenNotReturned"));
         dlg.popup();
     }
     else if (this.authStage > FLICKR_AUTHSTAGE_AUTHORIZED) {
         if(fromContextMenu)  {
-            var dlg = new DwtDialog (appCtxt.getShell(), null, "Already authorized", [DwtDialog.OK_BUTTON]);
-            dlg.setContent ("The Flickr Zimlet is already authorized to access your Flickr Account");
+            var dlg = new DwtDialog (appCtxt.getShell(), null, this.getMessage("alreadyAuthorized"), [DwtDialog.OK_BUTTON]);
+            dlg.setContent (this.getMessage("alreadyAuthorizedVerbose"));
             dlg.popup();
         }
         else {
@@ -615,7 +668,7 @@ Com_Zimbra_Yflickr.prototype.authorize = function(fromContextMenu)
 }
 
 // this function is (should be) called after the user has finished the manual process of authorizing the flickr zimlet to connect
-Com_Zimbra_Yflickr.prototype.get_token = function()
+FlickrZimlet.prototype.get_token = function()
 {
     var authDlg = this._getAuthDlg();
     if (authDlg && authDlg.isPoppedUp()) {
@@ -629,7 +682,7 @@ Com_Zimbra_Yflickr.prototype.get_token = function()
     @scope           "local" or "global" depending on whether you want to search only your own photos or everyone else's
     @callback        The callback function to execute after fetching the photos of the set
  */
-Com_Zimbra_Yflickr.prototype.fetchPhotos = function (fargs, scope, callback)
+FlickrZimlet.prototype.fetchPhotos = function (fargs, scope, callback)
 {
     // TODO: check whether we are authorized, if not, then return back
 
@@ -644,7 +697,7 @@ Com_Zimbra_Yflickr.prototype.fetchPhotos = function (fargs, scope, callback)
 
 // handler for menu items that do not have <actionURL> 
 // (see xml file for details on the menu items)
-Com_Zimbra_Yflickr.prototype.menuItemSelected = function(itemId)
+FlickrZimlet.prototype.menuItemSelected = function(itemId)
 {
 	switch (itemId) {
         case "YflickrAuthorize":
@@ -653,84 +706,35 @@ Com_Zimbra_Yflickr.prototype.menuItemSelected = function(itemId)
 		case "YflickrHelp":
 		this.displayFlickrHelp();
 		break;
-        case "YflickrCredits":
-        this.displayCredits();
-        break;
-		case "YflickrAbout":
-		this.displayAboutFlickrZimlet();
-		break;
         case "YflickrReconnect":
         this.connect();
         break;
 	}
 }
 
-Com_Zimbra_Yflickr.prototype.displayFlickrHelp = function() {
+FlickrZimlet.prototype.displayFlickrHelp = function() {
 }
-
-Com_Zimbra_Yflickr.prototype.displayAboutFlickrZimlet = function()
-{
-    var view = new DwtComposite (this.getShell());
-    var args = {title: "About Flickr Zimlet", view: view};
-    var dlg = this._createDialog (args);
-    var aboutText = 
-        "The Flickr Zimlet for Zimbra Collaboration Suite 5.0 is brought to you by Zimbra, a Yahoo! company" + "<br/>" +
-        "Copyright (c) 2007. All rights reserved. Flickr, Yahoo! and Zimbra are trademarks owned by Yahoo!, Inc." + "<br/>" +
-        "This software is distributed as-is without any warranties whatsoever, either direct or implied.";
-    view.getHtmlElement().innerHTML = aboutText;
-    dlg.setButtonListener (DwtDialog.OK_BUTTON, new AjxListener(this,function() { dlg.popdown(); dlg.dispose(); }));
-    dlg.setButtonListener (DwtDialog.CANCEL_BUTTON, new AjxListener(this,function() { dlg.popdown(); dlg.dispose(); }));
-    dlg.popup();
-}
-
-Com_Zimbra_Yflickr.prototype.displayCredits = function()
-{
-    var view = new DwtComposite (this.getShell());
-    var args = {title: "About Flickr Zimlet", view: view};
-    var dlg = this._createDialog (args);
-    var credits =
-    "<span style=\"text-align: center; display:block; margin-left: auto; margin-right: auto;\">" + 
-    "Contributors:" + "<p>" +
-    "Poonam Jaiswal <poonam@zimbra.com>" + "<br/>" +
-    "Mansoor Peerbhoy <mansoor@zimbra.com>" + "<br/>" +
-    "Krishna Kumar Sure <krishnakumar@zimbra.com>" + "<br/>" +
-    "Chintan Zaveri <czaveri@zimbra.com>" +
-    "</p>" +
-    "Special Thanks to: " + "<p>" +
-    "Naveen Prakash" + "<br/>" + 
-    "Rajesh Segu" + "<br/>" +
-    "Satish Sugumaran" + "<br/>" +
-    "The Entire Zimbra Team" +
-    "</p>"
-    "</span>";
-
-    view.getHtmlElement().innerHTML = credits;
-    dlg.setButtonListener (DwtDialog.OK_BUTTON, new AjxListener(this,function() { dlg.popdown(); dlg.dispose(); }));
-    dlg.setButtonListener (DwtDialog.CANCEL_BUTTON, new AjxListener(this,function() { dlg.popdown(); dlg.dispose(); }));
-    dlg.popup();
-}
-
 
 
 // add the flickr photo selection dialog box to the attach files page
-Com_Zimbra_Yflickr.prototype.addFlickrTabToAttachDialog = function()
+FlickrZimlet.prototype.addFlickrTabToAttachDialog = function()
 {
     var attachdlg = this._attachdlg = appCtxt.getAttachDialog ();
     var tabview = attachdlg ? attachdlg.getTabView () : null;
     this.FTV = new FlickrTabView (tabview, this);
-    var tabkey = attachdlg.addTab ("flickr", "Flickr Photos", this.FTV);
+    var tabkey = attachdlg.addTab ("flickr", this.getMessage("Flickr"), this.FTV);
 
     var callback = new AjxCallback (this, this.onAttachPhotos);
     attachdlg.addOkListener (tabkey, callback);
 }
 
-Com_Zimbra_Yflickr.prototype.isInline = function()
+FlickrZimlet.prototype.isInline = function()
 {
     return this._attachdlg.isInline();
 }
 
 // (event handler) called when flickr photos are selected for attachment
-Com_Zimbra_Yflickr.prototype.onAttachPhotos = function()
+FlickrZimlet.prototype.onAttachPhotos = function()
 {
     this.attach_photos = this.getSelectedPhotos();
     this.attach_current = -1;
@@ -742,7 +746,7 @@ Com_Zimbra_Yflickr.prototype.onAttachPhotos = function()
 }
 
 /* get all <img> nodes selected for attachment */
-Com_Zimbra_Yflickr.prototype.getSelectedPhotos = function()
+FlickrZimlet.prototype.getSelectedPhotos = function()
 {
     var imgs = [];
     var sets = this.getPhotosets();
@@ -753,7 +757,7 @@ Com_Zimbra_Yflickr.prototype.getSelectedPhotos = function()
 }
 
 /* deselect all photos (= <img> nodes) from all sets that were previously selected for attachment */
-Com_Zimbra_Yflickr.prototype.deselectAllPhotos = function()
+FlickrZimlet.prototype.deselectAllPhotos = function()
 {
     var sets = this.getPhotosets();
     for (var s=0; s<sets.length; s++) {
@@ -764,7 +768,7 @@ Com_Zimbra_Yflickr.prototype.deselectAllPhotos = function()
 /* Invoked (as a callback) when all images have been uploaded to the server
    Now just attach the images to the composer window
  */
-Com_Zimbra_Yflickr.prototype.doneAttachPhotos = function ()
+FlickrZimlet.prototype.doneAttachPhotos = function ()
 {
     // locate the compose controller and set up the callback handler
     var cc = appCtxt.getApp(ZmApp.MAIL).getComposeController(appCtxt.getApp(ZmApp.MAIL).getCurrentSessionId(ZmId.VIEW_COMPOSE));
@@ -784,7 +788,7 @@ Com_Zimbra_Yflickr.prototype.doneAttachPhotos = function ()
 }
 
 // upload a photo to the zimbra file-upload servlet
-Com_Zimbra_Yflickr.prototype.attachPhoto = function (callback)
+FlickrZimlet.prototype.attachPhoto = function (callback)
 {
     var i = this.attach_current;
     var l = this.attach_photos.length;
@@ -812,7 +816,7 @@ Com_Zimbra_Yflickr.prototype.attachPhoto = function (callback)
 }
 
 // invoked as a callback when a single photo has been attached
-Com_Zimbra_Yflickr.prototype.doneAttachPhoto = function (callback, result)
+FlickrZimlet.prototype.doneAttachPhoto = function (callback, result)
 {
     var re = new RegExp("'([^']+)'", "m");
     var re_id = new RegExp ("^[0-9a-f:-]+$","im");
@@ -837,14 +841,14 @@ Com_Zimbra_Yflickr.prototype.doneAttachPhoto = function (callback, result)
 }
 
 /* For uploading photos to flickr */
-Com_Zimbra_Yflickr.prototype.addAttachmentHandler = function()
+FlickrZimlet.prototype.addAttachmentHandler = function()
 {
     this._msgController = AjxDispatcher.run("GetMsgController");
     this._msgController._initializeListView(ZmId.VIEW_MSG);
     this._msgController._listView[ZmId.VIEW_MSG].addAttachmentLinkHandler (ZmMimeTable.IMG_JPEG,"flickr",this.addSaveToFlickrLink);
 }
 
-Com_Zimbra_Yflickr.prototype.addSaveToFlickrLink = function (attachment)
+FlickrZimlet.prototype.addSaveToFlickrLink = function (attachment)
 {
     var html = 
     "<a href='#' class='AttLink' style='text-decoration:underline;' " +
@@ -857,7 +861,7 @@ Com_Zimbra_Yflickr.prototype.addSaveToFlickrLink = function (attachment)
 }
 
 /* Handle 'Upload to Flickr' action */
-Com_Zimbra_Yflickr.prototype.onSaveToFlickr = function(ct,label,src)
+FlickrZimlet.prototype.onSaveToFlickr = function(ct,label,src)
 {
     if (this.authStage < FLICKR_AUTHSTAGE_GOTTOKEN) {
         this._getNoAuthDlg().popup();
@@ -899,7 +903,7 @@ Com_Zimbra_Yflickr.prototype.onSaveToFlickr = function(ct,label,src)
 }
 
 /* Upload a single Photo to Flickr */
-Com_Zimbra_Yflickr.prototype.onConfirmSaveToFlickr = function (ct, label, src, title, tags)
+FlickrZimlet.prototype.onConfirmSaveToFlickr = function (ct, label, src, title, tags)
 {
     /* Show a busy message indicating that the file is being uploaded */
     var busy = document.createElement ("div");
@@ -913,7 +917,7 @@ Com_Zimbra_Yflickr.prototype.onConfirmSaveToFlickr = function (ct, label, src, t
 
     var busyTextS = document.createElement ("span");
     busyTextS.className = "Yflickr_hCenter";
-    busyTextS.appendChild (document.createTextNode ("Please wait while the photo is being uploaded"));
+    busyTextS.appendChild (document.createTextNode (this.getMessage("pleaseWait")));
 
     busy.appendChild (busyImgS);
     busy.appendChild (busyTextS);
@@ -931,7 +935,7 @@ Com_Zimbra_Yflickr.prototype.onConfirmSaveToFlickr = function (ct, label, src, t
     tags = tags || "";
 
     uploadDlg.popdown();
-    this.info("Your photo is getting uploaded in the background.");
+    this.info(this.getMessage("photoBeingUploadedInBackground"));
 
     /* Make a call to yflickr.jsp to upload the selected photo to Flickr */
 
@@ -954,9 +958,9 @@ Com_Zimbra_Yflickr.prototype.onConfirmSaveToFlickr = function (ct, label, src, t
     AjxRpc.invoke(params,url+"?"+params,null,callback,false);
 }
 
-Com_Zimbra_Yflickr.prototype._getUploadDlg = function(){
+FlickrZimlet.prototype._getUploadDlg = function(){
     if(!this.uploadDlg){
-        this.uploadDlg = new DwtDialog (appCtxt.getShell(),null,"Upload Photo(s) to Flickr",[DwtDialog.OK_BUTTON,DwtDialog.CANCEL_BUTTON]);
+        this.uploadDlg = new DwtDialog (appCtxt.getShell(),null,"uploadPhotosToFlickr",[DwtDialog.OK_BUTTON,DwtDialog.CANCEL_BUTTON]);
     }
     return this.uploadDlg;
 };
@@ -964,7 +968,7 @@ Com_Zimbra_Yflickr.prototype._getUploadDlg = function(){
 /* Callback function after a photo has been uploaded to Flickr 
    @result  contains the result of the Flickr upload operation 
  */
-Com_Zimbra_Yflickr.prototype.onDoneSaveToFlickr = function(result)
+FlickrZimlet.prototype.onDoneSaveToFlickr = function(result)
 {
     //var uploadDlg = this._getUploadDlg();
     
@@ -1018,7 +1022,7 @@ Com_Zimbra_Yflickr.prototype.onDoneSaveToFlickr = function(result)
     if (!uploadDlg.isPoppedUp()) { uploadDlg.popup(); }*/
 }
 
-Com_Zimbra_Yflickr.prototype.msgDropped = function(msg)
+FlickrZimlet.prototype.msgDropped = function(msg)
 {
     var links = msg.attLinks;
     if ((links != null) && (links.length != 0)) {
@@ -1060,7 +1064,7 @@ FlickrTabView.prototype._createProgressDivs = function(){
 
     /* the progress text div */
     var approgressDiv = document.createElement ("div");
-    approgressDiv.appendChild (document.createTextNode ("Please wait while your photos are being attached"));
+    approgressDiv.appendChild (document.createTextNode (this.zimlet.getMessage("pleaseWaitPhotosAreBeingAttached")));
     apDiv.appendChild (approgressDiv);
 
     this.apDiv = apDiv;
@@ -1088,7 +1092,7 @@ FlickrTabView.prototype._createHtml = function()
 
     this.noauthDiv = document.createElement ("div");
     this.noauthDiv.className = "Yflickr_busyMsg";
-    this.noauthDiv.appendChild (document.createTextNode ("The Flickr Zimlet has not yet been authorized to access your photos. Please click 'Authorize' from the Flickr Zimlet context menu, and complete the authorization process first."));
+    this.noauthDiv.appendChild (document.createTextNode (this.zimlet.getMessage("pleaseAuthorize")));
 
     /* One time initialization (which was present in showMe () has been shifted here */
 
@@ -1179,7 +1183,7 @@ FlickrTabView.prototype.showAttachProgress = function ()
 FlickrTabView.prototype.resetAttachProgress = function ()
 {
     YFlickr_clearElement (this.getApprogressDiv());
-    this.getApprogressDiv().appendChild (document.createTextNode ("Please wait while your photos are being attached"));
+    this.getApprogressDiv().appendChild (document.createTextNode (this.zimlet.getMessage("pleaseWaitPhotosAreBeingAttached")));
 }
 
 // Utility function to show custom text in the attachment dialog. Useful when something else needs to be shown
@@ -1244,7 +1248,6 @@ function YFlickr_search (ev)
 FlickrTabView.prototype.doSearch = function (s)
 {
     /* search syntax is "searchby:term [extra]" */
-
     var ps = this.zimlet.searchPhotoset (s);
     if (ps != null)
     {
@@ -1254,23 +1257,18 @@ FlickrTabView.prototype.doSearch = function (s)
     else
     {
         var parts = s.split (" ");
-        if (parts.length > 2) {
-            this.zimlet.info ("too many search terms");
-        } else {
-            var parts = this.zimlet.splitSearchTerm(this.zimlet.canonicalizeSearchTerm (s));
-            var by = parts[0];
-            var term = parts[1];
-            var scope = parts[2];
+        var parts = this.zimlet.splitSearchTerm(this.zimlet.canonicalizeSearchTerm (s));
+        var by = parts[0];
+        var term = parts[1];
+        var scope = parts[2];
 
-            if (by == "set") { this.zimlet.info ("no such set: " + term); }
-            else if (by == "tag") { 
-                var ps = this.zimlet.addPhotoset (new YFlickrTaggedPhotoset(term,scope));
-                this.setSelectedPhotoset (ps);
-                this.showMe ();
-            } else { 
-                this.zimlet.info ("unsupported search - " + s);
-            }
-        }
+        if (by == "set") { 
+			this.zimlet.info ("no such set: " + term); 
+		}else { 
+             var ps = this.zimlet.addPhotoset (new YFlickrTaggedPhotoset(s, scope));
+             this.setSelectedPhotoset (ps);
+             this.showMe ();
+		}             
     }
 }
 
@@ -1371,19 +1369,19 @@ function YFlickr_clearElement (el)
     }
 }
 
-function YFlickr_getIndexableName (s)
-{
-    return "S" + hex_md5 (s);
+function YFlickr_getIndexableName (s){
+	AjxPackage.require("Crypt");
+    return "S" + AjxMD5.hex_md5(s);
 }
 
-Com_Zimbra_Yflickr.prototype.singleClicked = function() {
+FlickrZimlet.prototype.singleClicked = function() {
     this.authorize();
 }
-Com_Zimbra_Yflickr.prototype.doubleClicked = function() {
+FlickrZimlet.prototype.doubleClicked = function() {
     this.authorize();
 }
 
-Com_Zimbra_Yflickr.prototype._loadObject = function(file){
+FlickrZimlet.prototype._loadObject = function(file){
 	var fileref;
 	if (file.indexOf(".js")!=-1){ //If object is a js file
 		fileref=document.createElement('script');
