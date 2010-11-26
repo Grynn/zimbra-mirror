@@ -609,7 +609,6 @@ FlickrZimlet.prototype._getAuthDlg = function(){
 FlickrZimlet.prototype.authorize = function(fromContextMenu, fromInit)
 {
 		this._loadFlickrInfoFromDB();
-		debugger;
 		if(this._hasValidFlickrAccount) {
 	            // Get Flickr Photosets
             var url = this.getRESTUrl ([["method", "flickr.photosets.getList"]], true, true);
