@@ -18,6 +18,8 @@ YBabelfishPrefsDialog = function(shell, className, parent) {
 	this._zimlet = parent;
 	var title = "Default Language";
 	DwtDialog.call(this, {parent:shell, className:className, title:title});
+	this.getHtmlElement().style.display= "auto";
+	this.getHtmlElement().style.width="500px";
 	this.setButtonListener(DwtDialog.OK_BUTTON, new AjxListener(this, this._prefSelected));
 	this._createSearchHtml();
 };

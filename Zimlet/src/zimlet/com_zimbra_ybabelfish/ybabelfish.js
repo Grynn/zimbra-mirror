@@ -116,7 +116,6 @@ function(zmObject) {
 	} else {
 		this._langSelect.setSelected(15);
 	}
-
 	this._yBabelfishDialog.popup();
 };
 
@@ -235,14 +234,11 @@ function() {
 
 	this._translateButton = new DwtDialog_ButtonDescriptor(translateId, this.getMessage("translateButton"), DwtDialog.ALIGN_RIGHT);
 	this._mailButton = new DwtDialog_ButtonDescriptor(mailId, this.getMessage("mailButton"), DwtDialog.ALIGN_RIGHT);
-	this._closeButton = new DwtDialog_ButtonDescriptor(closeId, this.getMessage("closeButton"), DwtDialog.ALIGN_RIGHT);
 
 	// finally, create dialog holding all these widgets
-	this._yBabelfishDialog = this._createDialog({title:this.getMessage("title"), view:this._parentView, standardButtons:[], extraButtons:[this._translateButton, this._mailButton, this._closeButton]});
-	
+	this._yBabelfishDialog = this._createDialog({title:this.getMessage("title"), view:this._parentView, standardButtons:[DwtDialog.CANCEL_BUTTON], extraButtons:[this._translateButton, this._mailButton]});
 	this._yBabelfishDialog.setButtonListener(translateId, new AjxListener(this, this._translateListener));
 	this._yBabelfishDialog.setButtonListener(mailId, new AjxListener(this, this._sendListener));
-	this._yBabelfishDialog.setButtonListener(closeId, new AjxListener(this, this._yBabelfishDialogOkListener));
 };
 
 Com_Zimbra_Ybabelfish.prototype._resetDefaultLang = 
