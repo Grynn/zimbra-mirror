@@ -1373,6 +1373,10 @@ function(o) {
 	var _string = function (s) {
 		return '"' + s.replace(AjxStringUtil._SPECIAL_CHARS, _char) + '"';
 	}
+
+	if (o === null) {
+		return 'null';
+	}
 	
 	// String
 	if (t === 'string') {
