@@ -65,8 +65,8 @@ DwtColorPicker.PARAMS = ["parent", "className", "posStyle", "noFillLabel", "allo
 //
 
 // RE to parse out components out of a "rgb(r, g, b);" string
-DwtColorPicker._RGB_RE = /rgb\(([0-9]{1,3}),\s*([0-9]{1,3}),\s*([0-9]{1,3})\)/;
-DwtColorPicker._HEX_RE = /\#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i;
+DwtColorPicker._RGB_RE = /^rgb\(([0-9]{1,3}),\s*([0-9]{1,3}),\s*([0-9]{1,3})\)$/;
+DwtColorPicker._HEX_RE = /^\#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})$/i;
 
 //
 // Data
@@ -117,9 +117,26 @@ DwtColorPicker.prototype._createHtmlFromTemplate = function(templateId, data) {
     // create controls
     if (data.allowColorInput) {
         var inputEl = document.getElementById(data.id+"_input");
-        var input = this._colorInput = new DwtInputField({parent:this});
+	var inputParams = {
+		parent: this,
+		validationStyle: DwtInputField.CONTINUAL_VALIDATION, //update the preview for each key up 
+		errorIconStyle: DwtInputField.ERROR_ICON_RIGHT, 
+		validator: DwtColorPicker.__isValidInputValue
+	};
+        var input = this._colorInput = new DwtInputField(inputParams);
         input.replaceElement(inputEl);
-        var buttonEl = document.getElementById(data.id+"_button");
+	// Add  callback for update the preview when the input value is validated.
+	var updateCallback = new AjxCallback(this, this._updatePreview);
+	input.setValidationCallback(updateCallback);
+	
+	var error = this._error = new DwtLabel({parent:this});
+	var errorEl = document.getElementById(data.id+"_error");
+        error.replaceElement(errorEl);
+        error.setVisible(false);
+        
+	this._preview = document.getElementById(data.id+"_preview");
+        
+	var buttonEl = document.getElementById(data.id+"_button");
         var button = new DwtButton({parent:this});
         button.setText(AjxMsg.setColor);
         button.replaceElement(buttonEl);
@@ -181,7 +198,12 @@ DwtColorPicker.prototype._handleMouseUp = function(htmlEvent) {
 
 DwtColorPicker.prototype._handleSetColor = function(evt) {
     var color = this._colorInput.getValue();
-    this._handleColorSelect(color);
+    if (color) {
+	color = DwtColorPicker.__color2hex(color);
+	if(!color) 
+		return; 
+    	this._handleColorSelect(color);
+    }
 };
 
 DwtColorPicker.prototype._handleColorSelect = function(color) {
@@ -214,6 +236,11 @@ DwtColorPicker.prototype.getInputColor = function () {
 DwtColorPicker.__color2hex = function(s) {
     var m = s && s.match(DwtColorPicker._RGB_RE);
     if (m) {
+	// each component should be in range of (0 - 255)
+	for( var i = 1; i <= 3; i++ ) {
+		if(parseInt(m[i]) > 255)
+			return "";
+	}
         return AjxColor.color(m[1], m[2], m[3]);
     }
     m = s && s.match(DwtColorPicker._HEX_RE);
@@ -223,6 +250,31 @@ DwtColorPicker.__color2hex = function(s) {
     return "";
 };
 
+DwtColorPicker.__isValidInputValue = function(s) {
+   // null is valid for we consider the condition
+   // the user delete all the word it has been input
+   if (!s)
+	return s;
+   var r = DwtColorPicker.__color2hex(s);
+   if (!r) { 
+	throw AjxMsg.colorFormatError;	
+   }
+   return s;	
+};
+
+DwtColorPicker.prototype._updatePreview = function(inputelement, isValid, value){
+   if (isValid) {
+	value = DwtColorPicker.__color2hex(value);
+	Dwt.setVisible(this._preview, true);
+	this._preview.style.backgroundColor = value;
+	this._error.setVisible(false);
+   }
+   else {
+	Dwt.setVisible(this._preview, false);
+	this._error.setVisible(true);
+	this._error.setText(AjxMsg.colorFormatError);
+   }
+};
 //
 // Classes
 //
