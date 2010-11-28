@@ -6,7 +6,6 @@ import org.testng.annotations.Test;
 
 import framework.items.*;
 import framework.items.ContactItem.GenerateItemType;
-import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.*;
 import projects.ajax.core.AjaxCommonTest;
