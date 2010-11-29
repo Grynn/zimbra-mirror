@@ -37,6 +37,10 @@ ifeq ($(BUILD_PLATFORM), F13_64)
 	RL_PATCH	:= patch -g0 -p1 < ../patches/rlfe.patch;
 endif
 
+ifeq ($(BUILD_PLATFORM), DEBIAN6_64)
+	RL_PATCH	:= patch -g0 -p1 < ../patches/rlfe.patch;
+endif
+
 ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	BUILD_TYPE := mac
 endif
