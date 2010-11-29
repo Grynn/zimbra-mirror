@@ -84,10 +84,14 @@ function() {
 	this._todayStr = this._getTodayStr();
 	if (emailLastUpdateDate != this._todayStr){
 		this.apptSummary_onlySendSummaryWhenThereAreAppts = this.getUserProperty(ApptSummaryZimlet.USER_PROP_ONLY_SEND_APPTS) == "true";
-		var appts = this._getAppts(new Date());
-		this._parseApptsAndSendEmail(appts);
-		this.setUserProperty(ApptSummaryZimlet.USER_PROP_LAST_UPDATE, this._todayStr, true);
+		this._getAppts(new Date());
 	}
+};
+
+ApptSummaryZimlet.prototype._handleAppts =
+function(appts) {
+    this._parseApptsAndSendEmail(appts);
+    this.setUserProperty(ApptSummaryZimlet.USER_PROP_LAST_UPDATE, this._todayStr, true);
 };
 
 /**
@@ -104,9 +108,9 @@ function(date, noheader) {
 		this._startDate.setHours(0, 0, 0, 0);
 		var startTime = this._startDate.getTime();
 		var end = this._startDate.getTime() + AjxDateUtil.MSEC_PER_DAY;
-		var params = {start:startTime, end:end, fanoutAllDay:true};
-		this._calController = AjxDispatcher.run("GetCalController");
-		return result = this._calController.getApptSummaries(params);
+        var params = {start:startTime, end:end, fanoutAllDay:true, callback: new AjxCallback(this, this._handleAppts)};
+        this._calController = AjxDispatcher.run("GetCalController");
+        this._calController.getApptSummaries(params);		
 	} catch (ex) {
 		DBG.println(ex);
 		return new AjxVector();
