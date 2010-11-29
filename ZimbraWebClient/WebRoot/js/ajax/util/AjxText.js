@@ -632,7 +632,11 @@ AjxDateFormat.prototype.parse = function(s) {
 		}
         if (object.timezone != null) { date.setMinutes(date.getMinutes() - object.timezone); }
 		// TODO: era
-		
+
+		if (isNaN(date.getTime())) {
+			return null; //in some cases (see bug 51266) the date is invalid without throwing an exception. return null in this case 
+		}
+
 		object = date;
 	}
 	catch (e) {
