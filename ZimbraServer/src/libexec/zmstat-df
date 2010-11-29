@@ -36,38 +36,46 @@ chomp $platform;
 my $DF = '/bin/df -k';
 my $HEADING = 'timestamp, path, disk, disk_use, disk_space, disk_pct_used';
 
+my @DF_EXCLUDES = split(/:/, getLocalConfig("zmstat_df_excludes") || "");
+
 sub get_df_stat() {
     open(DF, "$DF |") || die "Can't open $DF: $!";
     my $dev;
     my @stats;
     while (<DF>) {
-         next if ($_ =~ /^Filesystem\s+/);
-         my ($space, $used, $avail, $pct, $path);
-         if ($_ =~ /^(\S+)\s*$/) {
-             $dev = $1;
-             next;
-         } elsif ($_ =~ /^(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\%\s+(.+)/) {
-             $dev   = $1;
-             $space = $2;
-             $used  = $3;
-             $avail = $4;
-             $pct   = $5;
-             $path  = $6;
-         } elsif ($_ =~ /^\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\%\s+(.+)/) {
-             $space = $1;
-             $used  = $2;
-             $avail = $3;
-             $pct   = $4;
-             $path  = $5;
+        next if ($_ =~ /^Filesystem\s+/);
+        my ($space, $used, $avail, $pct, $path);
+        if ($_ =~ /^(\S+)\s*$/) {
+            $dev = $1;
+            next;
+        } elsif ($_ =~ /^(\S+)\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\%\s+(.+)/) {
+            $dev   = $1;
+            $space = $2;
+            $used  = $3;
+            $avail = $4;
+            $pct   = $5;
+            $path  = $6;
+        } elsif ($_ =~ /^\s+(\d+)\s+(\d+)\s+(\d+)\s+(\d+)\%\s+(.+)/) {
+            $space = $1;
+            $used  = $2;
+            $avail = $3;
+            $pct   = $4;
+            $path  = $5;
         }
         next if $dev !~ m#^/#;
-        push(@stats, {
-            path => $path,
-            disk => $dev,
-            disk_use => $used,
-            disk_pct_used => $pct,
-            disk_space => $space
-        });
+        my $skip_vol = 0;
+        for my $vol ( @DF_EXCLUDES ) {
+            $skip_vol = 1 if ($vol eq $path);
+        }
+        if ($skip_vol != 1) {
+            push(@stats, {
+                path => $path,
+                disk => $dev,
+                disk_use => $used,
+                disk_pct_used => $pct,
+                disk_space => $space
+            });
+		}
     }
     close DF;
     @stats;
