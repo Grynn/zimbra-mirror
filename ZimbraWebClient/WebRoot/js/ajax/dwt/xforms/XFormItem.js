@@ -2282,6 +2282,8 @@ Checkbox_XFormItem.prototype.falseValue = _UNDEFINED_;
 Checkbox_XFormItem.prototype.focusable = true;
 Checkbox_XFormItem.prototype.visibilityChecks = [XFormItem.prototype.hasReadPermission];
 Checkbox_XFormItem.prototype.enableDisableChecks = [XFormItem.prototype.hasWritePermission];
+Checkbox_XFormItem.prototype.nowrap = false;
+Checkbox_XFormItem.prototype.labelWrap = true;
 //	methods
 Checkbox_XFormItem.prototype.outputHTML = function (html, currentCol) {
 	// figure out how to show the checkbox as checked or not
