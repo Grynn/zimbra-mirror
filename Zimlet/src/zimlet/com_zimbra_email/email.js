@@ -268,13 +268,16 @@ function(contact, address) {
 
 EmailTooltipZimlet.prototype.hoverOut =
 function(object, context, x, y, span) {
+	this._hoverOver =  false;
 	setTimeout(AjxCallback.simpleClosure(this.popDownIfMouseNotOnSlide, this), 700);
 	//override to ignore hoverout. 
 };
 
 EmailTooltipZimlet.prototype.popDownIfMouseNotOnSlide =
 function() {
-	if(this.slideShow && this.slideShow.isMouseOverTooltip) {
+	if(this._hoverOver) {
+		return;
+	} else if(this.slideShow && this.slideShow.isMouseOverTooltip) {
 		return;
 	} else if(this.tooltip) {
 		this.tooltip.popdown();
@@ -283,11 +286,11 @@ function() {
 
 EmailTooltipZimlet.prototype.popdown =
 function() {
+	this._hoverOver =  false;
 	if(this.tooltip) {
 		this.tooltip.popdown();
 	}
 };
-
 
 EmailTooltipZimlet.prototype.addSubscriberZimlet =
 function(subscriberZimlet, isPrimary) {
@@ -299,6 +302,7 @@ function(subscriberZimlet, isPrimary) {
 
 EmailTooltipZimlet.prototype.hoverOver =
 function(object, context, x, y, span) {
+	this._hoverOver = true;
 	this._initializeProps(object, context, x, y, span);
 	appCtxt.notifyZimlets("onEmailHoverOver", [this], {waitUntilLoaded:true});
 	if (this.primarySubscriberZimlet) {
