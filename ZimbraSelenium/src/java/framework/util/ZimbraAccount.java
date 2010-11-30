@@ -550,9 +550,10 @@ public class ZimbraAccount {
         protected URI getUploadURI(String host) throws URISyntaxException {
         	
         	// TODO: Need to make this configurable (config.properties)
-        	String scheme = "http";
+        	String scheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
         	String userinfo = null;
-        	int port = 80;
+        	String p = ZimbraSeleniumProperties.getStringProperty("server.port", "80");
+        	int port = Integer.parseInt(p);
         	String path = "/service/upload";
         	String query = "fmt=raw";
         	String fragment = null;
