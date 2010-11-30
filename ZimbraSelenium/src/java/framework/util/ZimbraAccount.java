@@ -53,6 +53,8 @@ import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.SoapUtil;
 import com.zimbra.common.util.ByteUtil;
 
+import framework.core.DevEnvironment;
+
 @SuppressWarnings("deprecation")
 public class ZimbraAccount {
 	private static Logger logger = LogManager.getLogger(ZimbraAccount.class);
@@ -222,11 +224,19 @@ public class ZimbraAccount {
 				} else {
 					ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
 					ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+					
 				}
 			} else {
 				ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
 				ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
 			}
+			
+			// Start: Dev environment hack
+			if ( DevEnvironment.isUsingDevEnvironment() ) {
+				ZimbraMailHost = "localhost";
+			}
+			// End: Dev environment hack
+
 			
 		} catch (HarnessException e) {
 			logger.error("Unable to provision account: "+ EmailAddress, e);
@@ -703,6 +713,7 @@ public class ZimbraAccount {
         		return;
         	}
         	
+        	
         	// Create an array of the requests that require a queue check
         	final List<String> requests = new ArrayList<String>();
         	requests.add("mail:SendMsgRequest");
@@ -726,8 +737,14 @@ public class ZimbraAccount {
         			continue;
         		if ( nodes.length > 0 ) {
     				try {
-    					Stafpostqueue sp = new Stafpostqueue();
-    					sp.waitForPostqueue();
+    					
+    		        	// If in dev enviroment, just wait a few seconds
+    					if ( DevEnvironment.isUsingDevEnvironment() ) {
+    						SleepUtil.sleep(5000);
+    					} else {
+    						Stafpostqueue sp = new Stafpostqueue();
+    						sp.waitForPostqueue();
+    					}
 					} catch (Exception e) {
 						logger.warn("Unable to wait for postfix queue", e);
 					}
@@ -901,9 +918,10 @@ public class ZimbraAccount {
         	// TODO: need to get URI settings from config.properties
         	
         	
-        	String scheme = "http";
+        	String scheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
         	String userInfo = null;
-        	int port = 80;
+        	String p = ZimbraSeleniumProperties.getStringProperty("server.port", "80");
+        	int port = Integer.parseInt(p);
         	String path = "/";
         	String query = null;
         	String fragment = null;

@@ -156,6 +156,7 @@ public class ExecuteHarnessMain {
 	protected List<String> classes = null;
 	
 	
+	
 	/**
 	 * Determine all the classes in the specified jarfile filtered by a regex
 	 * @param jarfile The jarfile to inspect
@@ -399,10 +400,12 @@ public class ExecuteHarnessMain {
 				" browser:" +ZimbraSeleniumProperties.getStringProperty("browser") + 			
 				" locale:" + ZimbraSeleniumProperties.getStringProperty("locale") ;			
 		SendEmail se = new SendEmail(subject);
-		try {
-			se.sendFirstEmail();
-		} catch (Exception e) {
-			throw new HarnessException(e);
+		if ( !DevEnvironment.isUsingDevEnvironment() ) {
+			try {
+				se.sendFirstEmail();
+			} catch (Exception e) {
+				throw new HarnessException(e);
+			}
 		}
 
 
@@ -428,13 +431,17 @@ public class ExecuteHarnessMain {
 		// finish inProgress - overwrite inProgress/index.html		
 		TestStatusReporter.copyFile(testoutputfoldername + "\\inProgress\\result.txt" , testoutputfoldername + "\\inProgress\\index.html");
 		
-		// TODO: remove the email logic.  just let tms send the email.
-		// email results
-		copyCommandLineOutputFile();
-		try {
-			se.send(getFileContents(testoutputfoldername + "\\ebody.txt"));
-		} catch (Exception e) {
-			throw new HarnessException(e);
+		if ( !DevEnvironment.isUsingDevEnvironment() ) {
+
+			// TODO: remove the email logic.  just let tms send the email.
+			// email results
+			copyCommandLineOutputFile();
+			try {
+				se.send(getFileContents(testoutputfoldername + "\\ebody.txt"));
+			} catch (Exception e) {
+				throw new HarnessException(e);
+			}
+			
 		}
 
 		
@@ -776,6 +783,7 @@ public class ExecuteHarnessMain {
     	Options options = new Options();
         options.addOption(new Option("h", "help", false, "print usage"));
         options.addOption(new Option("l", "log4j", true, "log4j file containing log4j configuration"));
+        options.addOption(new Option("d", "dev", false, "use development settings"));
         options.addOption(new Option("j", "jarfile", true, "jarfile containing test cases"));
         options.addOption(new Option("p", "pattern", true, "class filter regex, i.e. projects.zcs.tests."));
         options.addOption(new Option("g", "groups", true, "comma separated list of groups to execute (always, sanity, smoke, full)"));
@@ -803,7 +811,13 @@ public class ExecuteHarnessMain {
 	        }
 
 	     
-	        
+	        // In the dev environment, server name defaults to localhost
+	        // STAF isn't invoked
+	        // etc., etc.
+	        if ( cmd.hasOption('d') ) {
+	        	DevEnvironment.setDevEnvironment(true);
+	        }
+
 	        
 	        if ( cmd.hasOption('c') ) {
 	        	

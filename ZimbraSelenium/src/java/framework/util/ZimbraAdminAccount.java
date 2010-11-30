@@ -4,6 +4,8 @@ import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import framework.core.DevEnvironment;
+
 public class ZimbraAdminAccount extends ZimbraAccount {
 	private static Logger logger = LogManager.getLogger(ZimbraAccount.class);
 
@@ -11,6 +13,12 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 		EmailAddress = email;
 		Password = ZimbraSeleniumProperties.getStringProperty("adminPwd", "test123");
 		ZimbraMailHost = EmailAddress.split("@")[1];
+		
+		// Start: Dev environment hack
+		if ( DevEnvironment.isUsingDevEnvironment() ) {
+			ZimbraMailHost = "localhost";
+		}
+		// End: Dev environment hack
 	}
 	
 	/**
@@ -27,6 +35,13 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 			        "</CreateAccountRequest>");
 			ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account", "id");
 			ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
+			
+			// Start: Dev environment hack
+			if ( DevEnvironment.isUsingDevEnvironment() ) {
+				ZimbraMailHost = "localhost";
+			}
+			// End: Dev environment hack
+
 		} catch (HarnessException e) {
 			logger.error("Unable to provision account: "+ EmailAddress);
 			ZimbraId = null;
@@ -80,9 +95,8 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 	 */
 	public static synchronized ZimbraAdminAccount GlobalAdmin() {
 		if ( _GlobalAdmin == null ) {
-			String name = ZimbraSeleniumProperties.getStringProperty("adminName", "admin");
-			String domain = ZimbraSeleniumProperties.getStringProperty("server.host","qa60.lab.zimbra.com");
-			_GlobalAdmin = new ZimbraAdminAccount(name +"@"+ domain);
+			String name = ZimbraSeleniumProperties.getStringProperty("adminName", "admin@zqa-062.eng.vmware.com");
+			_GlobalAdmin = new ZimbraAdminAccount(name);
 			_GlobalAdmin.authenticate();
 		}
 		return (_GlobalAdmin);

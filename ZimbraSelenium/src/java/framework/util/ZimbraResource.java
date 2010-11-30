@@ -8,6 +8,8 @@ import org.apache.log4j.Logger;
 
 import com.zimbra.common.soap.Element;
 
+import framework.core.DevEnvironment;
+
 
 public class ZimbraResource extends ZimbraAccount {
 	private static Logger logger = LogManager.getLogger(ZimbraResource.class);
@@ -107,6 +109,13 @@ public class ZimbraResource extends ZimbraAccount {
 				ZimbraId = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:calresource", "id");
 				ZimbraMailHost = ZimbraAdminAccount.GlobalAdmin().soapSelectValue("//admin:account/admin:a[@n='zimbraMailHost']", null);
 			}
+			
+			// Start: Dev environment hack
+			if ( DevEnvironment.isUsingDevEnvironment() ) {
+				ZimbraMailHost = "localhost";
+			}
+			// End: Dev environment hack
+
 			
 		} catch (HarnessException e) {
 			logger.error("Unable to provision account: "+ EmailAddress, e);
