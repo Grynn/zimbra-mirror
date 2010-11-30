@@ -35,7 +35,7 @@
 <item name="JS_alert_NotAllDatabaseInited" value="警告: 未加载所有数据库。某些主题将会找不到。" />
 <item name="IndexSelectTopicLabel" value="选择一个主题，然后单击“显示”" />
 <item name="Search" value="搜索" />
-<item name="Glossary" value="术语表" />
+<item name="Glossary" value="glos" />
 <item name="Disabled Prev" value="&lt;&lt;" />
 <item name="LoadingData" value="正在载入数据，请稍候..." />
 <item name="LoadingIndex" value="正在载入索引..." />
@@ -214,67 +214,67 @@
 
 
 	<paneskin>
-		<background color="#e8dcc1" img="" />
-		<font name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
+		<background color="#e9e9e9" img="" />
+		<font name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
 		<toc>
-			<background color="#f9f9f9" img="" />
+			<background color="#eeeeee" img="" />
 			<icons>
-				<book open="chr_book_op.gif" close="chr_book_clo.gif" />
-				<item  local="chr_page.gif" remote="chr_webpage.gif" />
+				<book open="navpane_opennode.gif" close="navpane_closednode.gif" />
+				<item  local="navpane_page.gif" remote="navpane_web.gif" />
 				<newbook open="" close="" />
 				<newitem  local="" remote="" />
 			</icons>
 			<fonts>
-				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
+				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="10pt" color="#666666" style="Normal" weight="Normal" decoration="underline" />
 			</fonts>
-			<activebackgroundcolor attr="#cacaca" />
+			<activebackgroundcolor attr="#c3c3c3" />
 			<margin attr="" />
 			<indent attr="" />
 		</toc>
 		<index>
 			<form>
 				<fonts>
-					<title name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
+					<title name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
 				</fonts>
 				<button normal="" hover="" />
 				<editwith value="20" />
 			</form>
-			<background color="#f9f9f9" img="" />
+			<background color="#eeeeee" img="" />
 			<fonts>
-				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
-				<empty name="" size="8pt" color="" style="" weight="" decoration="" />
+				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="10pt" color="#666666" style="Normal" weight="Normal" decoration="underline" />
+				<empty name="" size="10pt" color="" style="" weight="" decoration="" />
 			</fonts>
-			<activebackgroundcolor attr="#cacaca" />
+			<activebackgroundcolor attr="#c3c3c3" />
 			<margin attr="" />
 			<indent attr="" />
 		</index>
 		<fts>
 			<form>
 				<fonts>
-					<title name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
+					<title name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
 				</fonts>
 				<button normal="" hover="" />
 				<editwith value="20" />
 			</form>
-			<background color="#f9f9f9" img="" />
+			<background color="#eeeeee" img="" />
 			<fonts>
-				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
-				<error name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="10pt" color="#666666" style="Normal" weight="Normal" decoration="underline" />
+				<error name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
 			</fonts>
-			<activebackgroundcolor attr="#cacaca" />
+			<activebackgroundcolor attr="#c3c3c3" />
 			<margin attr="" />
 			<indent attr="" />
 		</fts>
 		<glossary>
-			<background color="#f9f9f9" img="" />
+			<background color="#eeeeee" img="" />
 			<fonts>
-				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
+				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="10pt" color="#666666" style="Normal" weight="Normal" decoration="underline" />
 			</fonts>
-			<activebackgroundcolor attr="#cacaca" />
+			<activebackgroundcolor attr="#c3c3c3" />
 			<margin attr="" />
 			<indent attr="" />
 		</glossary>

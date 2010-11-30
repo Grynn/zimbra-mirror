@@ -31,8 +31,8 @@
 <key name="创建搜索条件" >
   <topic name="使用搜索功能" url="Search/b_Using_Search.htm" />
 </key>
-<key name="同步到其他效率手册" >
-  <topic name="创建新的效率手册" url="Calendar/b_Create_New_Calendar.htm" />
+<key name="同步到其他行事历" >
+  <topic name="创建新的行事历" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="回复" >
   <topic name="回复邮件" url="reading_mail/replying_to_mail_messages.htm" />
@@ -85,12 +85,6 @@
 <key name="支持的附件类型" >
   <topic name="支持的附件类型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
-<key name="效率手册，排除闲/忙" >
-  <topic name="创建新的效率手册" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="效率手册，远程" >
-  <topic name="创建新的效率手册" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
 <key name="文件夹" >
   <topic name="重命名文件夹" url="Navigation_folders_and_tips/renaming_folders.htm" />
 </key>
@@ -121,6 +115,9 @@
 <key name="添加联系人组列表" >
   <topic name="添加新联系人" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
+<key name="版本" >
+  <topic name="公文包中文件的版本控制" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
 <key name="用 HTML 格式排版" >
   <topic name="使用 HTML 编辑器" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
@@ -145,6 +142,21 @@
 <key name="自动完成地址" >
   <topic name="使用地址查询" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
+<key name="自定义工作周" >
+  <topic name="行事历视图" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="行事历视图" >
+  <topic name="行事历视图" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="行事历，排除闲/忙" >
+  <topic name="创建新的行事历" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="行事历，自定义工作周" >
+  <topic name="行事历视图" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="行事历，远程" >
+  <topic name="创建新的行事历" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="设置转发地址" >
   <topic name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
@@ -166,8 +178,8 @@
     <topic name="还原删除的邮件" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
 </key>
-<key name="远程效率手册" >
-  <topic name="创建新的效率手册" url="Calendar/b_Create_New_Calendar.htm" />
+<key name="远程行事历" >
+  <topic name="创建新的行事历" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="退出" >
   <topic name="登录和退出" url="Userspecific/logging_on_and_off.htm" />
@@ -199,8 +211,8 @@
 <key name="邮件，设置过滤规则" >
   <topic name="过滤邮件" url="filters/bc_Filtering_your_messages.htm" />
 </key>
-<key name="闲/忙，排除效率手册" >
-  <topic name="创建新的效率手册" url="Calendar/b_Create_New_Calendar.htm" />
+<key name="闲/忙，排除行事历" >
+  <topic name="创建新的行事历" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="附件" >
   <topic name="打开附加文件" url="reading_mail/opening_file_attachments.htm" />

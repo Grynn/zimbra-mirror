@@ -17,8 +17,8 @@
 <key name="HTML，默认设定" >
   <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
-<key name="iCal 效率手册，导入或导出" >
-  <topic name="导入 iCal 效率手册" url="Calendar/Importing_your_iCal_calendar.htm" />
+<key name="iCal 行事历，导入或导出" >
+  <topic name="导入 iCal 行事历" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="ics 附件，保存" >
   <topic name="回复邀请函" url="Calendar/Responding_to_an_invitation.htm" />
@@ -58,9 +58,6 @@
 </key>
 <key name="POP 帐户，添加" >
   <topic name="添加 POP 帐户" url="Userspecific/Adding_POP_accounts.htm" />
-</key>
-<key name="quick add" >
-  <topic name="使用 QuickAdd 创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="QuickAdd" >
   <topic name="使用 QuickAdd 创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
@@ -162,7 +159,7 @@
 <key name="公司地址簿" >
   <topic name="使用公司地址簿" url="Contacts/using_the_corporate_address_book.htm" />
 </key>
-<key name="公开/私人效率手册事件" >
+<key name="公开/私人行事历事件" >
   <topic name="将约会标记为私人" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="公文包，从其中发送文件" >
@@ -180,14 +177,17 @@
 <key name="共享地址簿" >
   <topic name="共享您的地址簿" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
-<key name="共享效率手册" >
-  <topic name="授权他人访问效率手册" url="Calendar/Delegating_Calendar_Access.htm" />
-</key>
 <key name="共享文件夹" >
   <topic name="共享文件夹" url="Sharing/Sharing_a_folder.htm" />
 </key>
+<key name="共享行事历" >
+  <topic name="授权他人访问行事历" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
 <key name="共享访问权，地址簿" >
   <topic name="共享您的地址簿" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="共享页面" >
+  <topic name="管理您共享的内容" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="关闭 Zimlet" >
   <topic name="管理 Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
@@ -236,6 +236,9 @@
 </key>
 <key name="发送空闲/忙碌状态" >
   <topic name="将您的空闲/忙碌状态发送给其他人" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+</key>
+<key name="取消" >
+  <topic name="取消操作" url="Userspecific/Undo_Action.htm" />
 </key>
 <key name="取消会议" >
   <topic name="删除约会" url="Calendar/Deleting_an_appointment.htm" />
@@ -343,8 +346,8 @@
   <topic name="如果忘记了密码" url="Userspecific/if_you_forget_your_password.htm" />
   <topic name="变更您的密码" url="Userspecific/chaning_your_password.htm" />
 </key>
-<key name="导入 iCal 效率手册" >
-  <topic name="导入 iCal 效率手册" url="Calendar/Importing_your_iCal_calendar.htm" />
+<key name="导入 iCal 行事历" >
+  <topic name="导入 iCal 行事历" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="导入地址簿" >
   <topic name="导入联系人" url="Contacts/Importing_Contacts.htm" />
@@ -356,14 +359,14 @@
 <key name="导入帐户数据" >
   <topic name="备份您的账户的内容。" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
-<key name="导入效率手册" >
-  <topic name="导入和导出内容 " url="Userspecific/Importing_and_Exporting_Items_.htm" />
-</key>
 <key name="导入联系人资料" >
   <topic name="导入联系人" url="Contacts/Importing_Contacts.htm" />
 </key>
-<key name="导出 iCal 效率手册" >
-  <topic name="导入 iCal 效率手册" url="Calendar/Importing_your_iCal_calendar.htm" />
+<key name="导入行事历" >
+  <topic name="导入和导出内容 " url="Userspecific/Importing_and_Exporting_Items_.htm" />
+</key>
+<key name="导出 iCal 行事历" >
+  <topic name="导入 iCal 行事历" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="将任务标记为完成" >
   <topic name="改变任务" url="Tasks/Change_a_task.htm" />
@@ -379,14 +382,14 @@
   <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
 </key>
 <key name="小日历" >
-  <topic name="设置效率手册首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <topic name="查看效率手册星期数字" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="设置行事历首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="查看行事历星期数字" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="小日历中的 W" >
-  <topic name="查看效率手册星期数字" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="查看行事历星期数字" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
-<key name="帐户，导入" >
-  <topic name="备份您的账户的内容。" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+<key name="已删除的文件，恢复" >
+  <topic name="清空“已删除邮件”文件夹 " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 
 </indexdata>

@@ -7,7 +7,7 @@
 <meta name="generator" content="Adobe RoboHelp 8" />
 <title>自定义初始电子邮件页面</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
-<script type="text/javascript" language="JavaScript">
+<script type="text/javascript" language="JavaScript" src="../ehlpdhtm.js"></script><script type="text/javascript" language="JavaScript">
 //<![CDATA[
 function reDo() {
   if (innerWidth != origWidth || innerHeight != origHeight)
@@ -87,7 +87,7 @@ else
 <p>在打开邮箱时如何只显示特定邮件的示例如下：</p>
 <ul type="disc">
 	<li class="p"><p>若需在打开邮箱时只显示未读邮件，请在<span style="font-weight: bold;"><b>默认邮件</b></span><span style="font-weight: bold;"><b>搜索</b></span><span class="code"  	 style="font-weight: normal;">字段中键入</span> <span class="code">is :unread</span><span class="code"  	 style="font-weight: normal;">。</span></p></li>
-	<li class="p"><p><span class="code" style="font-weight: normal; font-family: Arial, sans-serif;"></span>若需显示加有特定标记的电子邮件，请在<span style="font-weight: bold;"><b>默认邮件</b></span><span style="font-weight: bold;"><b>搜索</b></span>字段中键入 tag:&lt;tagname&gt;。例如，若需只显示加有 ToDo 标记的邮件，请键入 <span class="code" style="font-family: Arial, sans-serif;  												 font-size: 10pt;"><font size="2" style="font-size:10pt;">tag:ToDo</font></span>。</p></li>
+	<li class="p"><p><span class="code" style="font-weight: normal; font-family: Arial, sans-serif;">若</span>需显示加有特定标记的电子邮件，请在<span style="font-weight: bold;"><b>默认邮件</b></span><span style="font-weight: bold;"><b>搜索</b></span>字段中键入 tag:&lt;tagname&gt;。例如，若需只显示加有 ToDo 标记的邮件，请键入 <span class="code" style="font-family: Arial, sans-serif;  												 font-size: 10pt;"><font size="2" style="font-size:10pt;">tag:ToDo</font></span>。</p></li>
 	<li class="p"><p>若需显示通过<a href="../filters/how_filtering_works.htm">电子邮件过滤器</a>发送到特定文件夹的邮件，请在<span style="font-weight: bold;"><b>默认邮件搜索</b></span>字段中键入 in:&lt;foldername&gt;。例如，若需显示&ldquo;工作&rdquo;文件夹中的邮件，请键入 <span  	 style="font-weight: bold;"><b>in:work</b></span>。</p></li>
 </ul>
 <p class="note"><span style="font-weight: bold;"><b>备注：&nbsp;</b></span>若文件夹或标记名称多于一个字，请加上引号。例如，<span style="font-weight: bold;"><b>in:&ldquo;Unread Email&rdquo;。</b></span></p>
@@ -101,19 +101,14 @@ else
 <p>&nbsp;</p>
 <p>
 
-<object
-  classid="clsid:ADB880A6-D8FF-11CF-9377-00AA003B7A11"
-    type="application/x-oleobject" >
-<param  name="Command"  value="相关主题" />
-<param  name="Font"  value="Arial,8,0,,BOLD UNDERLINE" />
-<param  name="Frame"  value="_blank" />
-<param  name="Item1"  value="管理您的电子邮件视图;..\conversations\conversation_list_view.htm" />
-<param  name="Text"  value="文本：相关主题        " />
-</object>
+<a href="javascript:void(0);" onclick="var e; if (parseInt(navigator.appVersion)>=4){e=event;}  if (parseInt(navigator.appVersion) &gt;=2 &amp;&amp; typeof(PickupDialog_Invoke) == 'function') PickupDialog_Invoke(e,'_blank','管理您的电子邮件视图','../conversations/conversation_list_view.htm');return false;" title="相关主题        "><span style="font-family:Arial;font-size:8pt;font-weight:bold;font-style:normal;text-decoration:underline"><nobr> 相关主题         </nobr></span></a>
 
 
  </p>
-<script type="text/javascript" language="javascript1.2">//<![CDATA[
+<script type="text/javascript" language="JavaScript">//<![CDATA[
+if (parseInt(navigator.appVersion) >= 3 && typeof (WritePopupMenuLayer) == "function")
+  WritePopupMenuLayer();
+//]]></script><script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)
 	writeIntopicBar(0);

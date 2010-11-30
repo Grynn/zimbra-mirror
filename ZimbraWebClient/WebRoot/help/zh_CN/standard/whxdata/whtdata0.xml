@@ -46,14 +46,15 @@
   <item name="地址簿" url="Contacts/b_Your_Address_Books.htm" />
   <item name="添加新联系人" url="Contacts/b_Adding_new_contacts.htm" />
   <item name="导出联系人列表" url="Contacts/Exporting_a_Contact_List.htm" />
+  <item name="打印联系人姓名" url="Contacts/Printing_contact_names.htm" />
 </book>
-<book name="管理效率手册" >
-  <item name="关于效率手册" url="Calendar/b_About_Calendar.htm" />
-  <item name="创建新的效率手册" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="彩色编码效率手册" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="效率手册视图选项" url="Calendar/Calendar_Views.htm" />
+<book name="管理行事历" >
+  <item name="关于行事历" url="Calendar/b_About_Calendar.htm" />
+  <item name="创建新的行事历" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="彩色编码行事历" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="行事历视图选项" url="Calendar/Calendar_Views.htm" />
   <item name="导入 iCalendars" url="Calendar/Importing_iCalendars.htm" />
-  <item name="清除效率手册" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
+  <item name="清除行事历" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="安排约会、会议和活动事项" >
   <item name="筹划会议" url="Calendar/About_the_Appointment_Page.htm" />
@@ -67,8 +68,8 @@
   <item name="改变任务" url="Tasks/Change_a_task.htm" />
 </book>
 <book name="共享文件夹" >
-  <book name="共享效率手册" >
-    <item name="链接到共享效率手册" url="Calendar/Link_to_Shared_Calendar.htm" />
+  <book name="共享行事历" >
+    <item name="链接到共享行事历" url="Calendar/Link_to_Shared_Calendar.htm" />
   </book>
   <book name="共享地址簿" >
     <item name="链接到一个共享地址簿" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />

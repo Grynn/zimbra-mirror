@@ -115,10 +115,10 @@ else
 	<li class="p"><p><b style="font-weight: bold;">from:someone</b> 运算符是&ldquo;from&rdquo;，参数是&ldquo;someone&rdquo;，则会返回发件人地址中含&ldquo;someone&rdquo;的邮件</p></li>
 </ul>
 <p>在任何关键字前都可加上前缀&ldquo;not&rdquo;，以指定不符合该条件的项目，例如 <b>not in:inbox</b>。搜索不区分大小写，即&ldquo;in:inbox&rdquo;与&ldquo;in:Inbox&rdquo;相同。减号（<b>-</b>）是 <b>NOT</b> 的同意词，因此：<b>not in:inbox</b> 与 <b>-in:inbox</b> 相同</p>
-<p>大多数情况下无需在搜索字符串中使用标点符号，因为会被搜索程序代码所忽略。有些情况下不是这样（例如，搜索含有时间 '9:30' 的邮件），在这种情况下您需要为搜索参数加上引号。例如：<b>subject:&quot;9:30&quot;</b> 返回的是主题中含字符串 9:30 的邮件。</p>
+<p>大多数情况下无需在搜索字符串中使用标点符号，因为会被搜索程序代码所忽略。有些情况下不是这样（例如，搜索含有时间 '9:30' 的邮件），在这种情况下您需要为搜索参数加上引号。例如：<b>subject:&quot;9:30&quot;</b>返回的是主题中含字符串 9:30 的邮件。</p>
 <p>搜索参数中允许使用的字符：</p>
 <ul>
-	<li class="p"><p>下列字符如果不加引号就不能用于搜索参数： ~ '&nbsp;! # $ % ^ &amp; * ( ) _&nbsp;? / { }[ ]&nbsp;;&nbsp;:</p></li>
+	<li class="p"><p>下列字符如果不加引号就不能用于搜索参数： ~ '&#160;! # $ % ^ &amp; * ( ) _&#160;? / { }[ ]&#160;;&#160;:</p></li>
 	<li class="p"><p>下列字符可以用于搜索参数，但不能作为首字使用。 - + &lt; &gt;</p></li>
 </ul>
 <h2>多重搜索字</h2>
@@ -132,7 +132,7 @@ else
 <p><b style="font-weight: bold;">提示</b>：AND 和 OR 可结合括号使用。括号中的字词视为一个单位。例如 <b>from:(john thomas)</b> 等同于 <b>from:john AND from:thomas</b>。如果括号中有 OR，如 <b>from:(john or smith)</b>，则等同于 <b>from:john OR from:thomas</b>。</p>
 <h3>在搜索中使用 <b>*</b> 作为通配符</h3>
 <p>星号（<b>*</b>）可在搜索中作为通配符使用，以便找到与单词拼写相似的内容。</p>
-<p>请在前缀后使用星号 <b>*</b>。例如，搜索字符串 <b>do*</b> 返回的结果是 <i>do</i>、<i>dog</i>、<i>door</i> 等。</p>
+<p>使用星号 <b>*</b> 作为通配符。例如，搜索字符串 <b>do*</b> 返回的结果是 <i>do</i>、<i>dog</i>、<i>door</i> 等。</p>
 <h2>关键字说明及实例</h2>
 <p style="font-weight: bold;">content:</p>
 <p style="margin-left: 40px;">用于指定邮件中必须包含的文本。例如，<span class="code">content:bananas</span> 将找出所有包含&ldquo;bananas&rdquo;的项。</p>
@@ -163,7 +163,7 @@ else
 <p style="font-weight: bold;">before:</p>
 <p style="margin-left: 40px;">与 <span class="code">after: </span>相同只是用于指定某特定日期之前发送的邮件。</p>
 <p style="font-weight: bold;">size:</p>
-<p style="margin-left: 40px;">指定总大小（含附件）为指定的字节数、千字节数或兆数的邮件。例如，<span class="code">size:12 kb</span> 将找出大小正好为 12K 的邮件。大于 (&gt;) 或小于 (&lt;) 符号可以用于替代 bigger 或 smaller。</p>
+<p style="margin-left: 40px;">指定邮件的总大小（含附件），以字节、千字节或兆为单位。&#160;例如，<span class="code">size:12 kb</span> 将找出大小正好为 12K 的邮件。大于 (&gt;) 或小于 (&lt;) 符号可以用于替代 bigger 或 smaller。</p>
 <p style="font-weight: bold;">larger:</p>
 <p style="margin-left: 40px;">与 size: 相似：只是指定大于某特定大小的邮件。</p>
 <p style="font-weight: bold;">smaller:</p>
@@ -171,9 +171,9 @@ else
 <p style="font-weight: bold;"><span><b>solo:</b></span></p>
 <p style="margin-left: 40px;">查找尚未回复的电子邮件。</p>
 <p style="font-weight: bold;">tag:</p>
-<p style="margin-left: 40px;">用于查找被标上指定标记的邮件。例如， <span class="code">tag:amber</span> 将找出具有&ldquo;amber&rdquo;标记的邮件。</p>
+<p style="margin-left: 40px;">用于查找被标上指定标记的邮件。例如，<span class="code">tag:amber</span> 将找出具有&ldquo;amber&rdquo;标记的邮件。</p>
 <p style="font-weight: bold;"><span><b>priority:</b></span></p>
-<p style="margin-left: 40px;">根据优先级的高低查找邮件、任务或效率手册项目。例如，priority<span  	 class="code">:high </span>将找出优先级设置为&ldquo;高&rdquo;的项目。</p>
+<p style="margin-left: 40px;">根据优先级的高低查找邮件、任务或行事历项目。例如，priority<span  	 class="code">:high </span>将找出优先级设置为&ldquo;高&rdquo;的项目。</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

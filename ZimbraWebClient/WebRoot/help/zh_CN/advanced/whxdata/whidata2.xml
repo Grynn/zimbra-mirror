@@ -1,35 +1,50 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="联系人资料，导入" >
-  <topic name="导入联系人" url="Contacts/Importing_Contacts.htm" />
-</key>
-<key name="联系人，在列表中还原删除的联系人" >
-  <topic name="删除联系人" url="Contacts/deleting_a_contact.htm" />
-</key>
-<key name="联系人，在格式中创建自定义字段" >
-  <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
-</key>
-<key name="联系人，打印列表" >
-  <topic name="打印联系人资料" url="Contacts/Printing_Contacts.htm" />
-</key>
-<key name="自动完成地址" >
-  <topic name="使用地址查询" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="自动将邮件移动到文件夹" >
-  <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
-</key>
-<key name="自动添加签名" >
-  <topic name="使用签名" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="自动添加联系人" >
-  <topic name="添加联系人，自动" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
-</key>
 <key name="自定义文件夹" >
   <topic name="创建自定义文件夹" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
 </key>
 <key name="自定义联系人字段" >
   <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="行事历中的管理员角色" >
+  <topic name="对共享行事历的管理员权限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+</key>
+<key name="行事历的列表视图" >
+  <topic name="行事历列表视图" url="Calendar/Calendar_List_View.htm" />
+</key>
+<key name="行事历视图" >
+  <topic name="关于 Zimbra 行事历" url="Calendar/About_Calendar.htm" />
+  <topic name="行事历列表视图" url="Calendar/Calendar_List_View.htm" />
+  <topic name="行事历视图" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="行事历首选项" >
+  <topic name="设置行事历首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="确定谁可邀请您参加会议" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+</key>
+<key name="行事历，与管理员角色共享" >
+  <topic name="对共享行事历的管理员权限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+</key>
+<key name="行事历，事件" >
+  <topic name="安排全天事件" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="行事历，关于" >
+  <topic name="关于 Zimbra 行事历" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="行事历，忙/闲" >
+  <topic name="查看空闲忙碌时间" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="行事历，打印" >
+  <topic name="打印行事历" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="行事历，自定义工作周" >
+  <topic name="行事历视图" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="行事历，设置邀请权限" >
+  <topic name="确定谁可邀请您参加会议" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+</key>
+<key name="行事历，访问权限" >
+  <topic name="授权他人访问行事历" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
 <key name="表格，添加到文档页面" >
   <topic name="添加表格到笔记本页面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
@@ -38,11 +53,11 @@
   <topic name="过滤邮件" url="filters/filtering_your_messages.htm" />
   <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
 </key>
-<key name="视图，效率手册" >
-  <topic name="关于 Zimbra 效率手册" url="Calendar/About_Calendar.htm" />
+<key name="视图，行事历" >
+  <topic name="关于 Zimbra 行事历" url="Calendar/About_Calendar.htm" />
 </key>
-<key name="视图，效率手册列表" >
-  <topic name="效率手册列表视图" url="Calendar/Calendar_List_View.htm" />
+<key name="视图，行事历列表" >
+  <topic name="行事历列表视图" url="Calendar/Calendar_List_View.htm" />
 </key>
 <key name="角色" >
   <topic name="邮箱身份" url="Userspecific/Mail_Identities.htm" />
@@ -112,11 +127,11 @@
 <key name="选项，休假讯息" >
   <topic name="休假讯息" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="选项，效率手册" >
-  <topic name="设置效率手册首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-</key>
 <key name="选项，新邮件通知" >
   <topic name="新邮件通知" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="选项，行事历" >
+  <topic name="设置行事历首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
 </key>
 <key name="选项，设定" >
   <topic name="变更用户选项" url="Userspecific/Changing_Your_User_Options.htm" />
@@ -162,6 +177,9 @@
 <key name="重发" >
   <topic name="右键选单" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
+<key name="重命名公文包中的文件" >
+  <topic name="在公文包中使用文件" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+</key>
 <key name="阅读窗格" >
   <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
@@ -201,14 +219,17 @@
 <key name="首选项，“阅读”窗格视图" >
   <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
+<key name="首选项，共享" >
+  <topic name="管理您共享的内容" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="首选项，常规选项卡" >
   <topic name="设置常规首选项" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
 <key name="首选项，改变" >
   <topic name="变更用户选项" url="Userspecific/Changing_Your_User_Options.htm" />
 </key>
-<key name="首选项，效率手册" >
-  <topic name="设置效率手册首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+<key name="首选项，行事历" >
+  <topic name="设置行事历首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
 </key>
 <key name="黑名单" >
   <topic name="过滤垃圾邮件" url="filters/Filtering_Junk_Mail.htm" />

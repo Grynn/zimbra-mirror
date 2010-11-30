@@ -9,8 +9,8 @@
 <key name="HTML" >
   <topic name="使用 HTML 编辑器" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
-<key name="iCal 效率手册，导入或导出" >
-  <topic name="导入 iCal 效率手册" url="Calendar/Importing_your_iCal_calendar.htm" />
+<key name="iCal 行事历，导入或导出" >
+  <topic name="导入 iCal 行事历" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="ics 附件，保存" >
   <topic name="回复邀请函" url="Calendar/Responding_to_an_invitation.htm" />
@@ -29,9 +29,6 @@
 </key>
 <key name="POP 地址，添加" >
   <topic name="邮箱身份" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="quick add" >
-  <topic name="使用 QuickAdd 创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="QuickAdd" >
   <topic name="使用 QuickAdd 创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
@@ -102,11 +99,14 @@
 <key name="使用标记" >
   <topic name="用标记为邮件分类" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
-<key name="公开/私人效率手册事件" >
+<key name="公开/私人行事历事件" >
   <topic name="将约会标记为私人" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="公文包，将文件附加到电子邮件" >
   <topic name="将文件附加到邮件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+</key>
+<key name="共享页面" >
+  <topic name="管理您共享的内容" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="关闭 Zimlet" >
   <topic name="管理 Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
@@ -186,8 +186,8 @@
 <key name="定期重复的约会，改变" >
   <topic name="改变定期重复的约会" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
-<key name="导入 iCal 效率手册" >
-  <topic name="导入 iCal 效率手册" url="Calendar/Importing_your_iCal_calendar.htm" />
+<key name="导入 iCal 行事历" >
+  <topic name="导入 iCal 行事历" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="导入地址簿" >
   <topic name="导入联系人" url="Contacts/Importing_Contacts.htm" />
@@ -201,8 +201,8 @@
 <key name="导入联系人资料" >
   <topic name="导入联系人" url="Contacts/Importing_Contacts.htm" />
 </key>
-<key name="导出 iCal 效率手册" >
-  <topic name="导入 iCal 效率手册" url="Calendar/Importing_your_iCal_calendar.htm" />
+<key name="导出 iCal 行事历" >
+  <topic name="导入 iCal 行事历" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="将任务标记为完成" >
   <topic name="改变任务" url="Tasks/Change_a_task.htm" />
@@ -215,10 +215,10 @@
   <topic name="如何使用过滤功能" url="filters/how_filtering_works.htm" />
 </key>
 <key name="小日历" >
-  <topic name="查看效率手册星期数字" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="查看行事历星期数字" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="小日历中的 W" >
-  <topic name="查看效率手册星期数字" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="查看行事历星期数字" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="帐户设置，IMAP" >
   <topic name="设置 POP/IMAP 账户" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
@@ -251,11 +251,11 @@
 <key name="打印任务" >
   <topic name="关于任务" url="Tasks/About_Tasks.htm" />
 </key>
-<key name="打印效率手册" >
-  <topic name="打印效率手册" url="Calendar/Printing_a_calendar.htm" />
-</key>
 <key name="打印联系人资料" >
   <topic name="打印联系人资料" url="Contacts/Printing_Contacts.htm" />
+</key>
+<key name="打印行事历" >
+  <topic name="打印行事历" url="Calendar/Printing_a_calendar.htm" />
 </key>
 <key name="接收邮件" >
   <topic name="如何知道有新邮件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -304,12 +304,6 @@
 <key name="改变约会" >
   <topic name="改变定期重复的约会" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
-<key name="效率手册，忙/闲" >
-  <topic name="查看空闲忙碌时间" url="Calendar/Seeing_free_busy_times.htm" />
-</key>
-<key name="效率手册，打印" >
-  <topic name="打印效率手册" url="Calendar/Printing_a_calendar.htm" />
-</key>
 <key name="文件夹" >
   <topic name="重命名文件夹" url="Navigation_folders_and_tips/renaming_folders.htm" />
 </key>
@@ -344,7 +338,10 @@
   <topic name="无法投递的邮件" url="Creating_Messages/undeliverable_mail.htm" />
 </key>
 <key name="星期数字" >
-  <topic name="查看效率手册星期数字" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="查看行事历星期数字" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
+<key name="查找共享项" >
+  <topic name="管理您共享的内容" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="查看阅读窗格" >
   <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
@@ -385,6 +382,9 @@
 </key>
 <key name="添加联系人" >
   <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="版本" >
+  <topic name="公文包中文件的版本控制" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 <key name="用 HTML 格式排版" >
   <topic name="使用 HTML 编辑器" url="Creating_Messages/Using_HTML_Editor.htm" />
