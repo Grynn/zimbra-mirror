@@ -221,6 +221,10 @@ public class PageMail extends AbsAjaxPage {
 		}
 		
 		// Click on Mail icon
+		if ( !sIsElementPresent(PageMain.Locators.zAppbarMail) ) {
+			throw new HarnessException("Can't locate mail icon");
+		}
+
 		zClick(PageMain.Locators.zAppbarMail);
 		
 		waitForActive();

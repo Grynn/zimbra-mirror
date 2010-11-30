@@ -20,7 +20,7 @@ public class PageMain extends AbsAjaxPage {
 		public static final String zLogoffButton = "xpath=//*[@id='skin_container_logoff']";
 		
 		public static final String zAppbarMail = "xpath=//div[@id='zb__App__Mail']";
-		public static final String zAppbarContact = "xpath=//div[@id='appbar']//a[@id='zb__App__Contacts']";
+		public static final String zAppbarContact = "xpath=//div[@id='zb__App__Contacts']";
 		public static final String zAppbarCal = "xpath=//div[@id='appbar']//a[@id='zb__App__Calendar']";
 		public static final String zAppbarTasks = "xpath=//div[@id='appbar']//a[@id='zb__App__Tasks']";
 		public static final String zAppbarBriefcase = "css=td[id='zb__App__Briefcase_left_icon'] [class='ImgBriefcase']";

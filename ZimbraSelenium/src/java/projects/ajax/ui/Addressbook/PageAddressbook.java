@@ -162,6 +162,10 @@ public class PageAddressbook extends AbsAjaxPage{
 		}
 	
 		// Click on Addressbook icon
+		if ( !sIsElementPresent(PageMain.Locators.zAppbarContact) ) {
+			throw new HarnessException("Can't locate addressbook icon");
+		}
+		
 		zClick(PageMain.Locators.zAppbarContact);
 		
 		

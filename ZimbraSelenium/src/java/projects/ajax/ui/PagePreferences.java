@@ -99,6 +99,10 @@ public class PagePreferences extends AbsAjaxPage {
 		}
 		
 		// Click on Preferences icon
+		if ( !sIsElementPresent(PageMain.Locators.zAppbarPreferences) ) {
+			throw new HarnessException("Can't locate preferences icon");
+		}
+
 		zClick(PageMain.Locators.zAppbarPreferences);
 		
 		waitForActive();
