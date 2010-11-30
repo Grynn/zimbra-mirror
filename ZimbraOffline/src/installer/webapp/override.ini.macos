@@ -1,0 +1,9 @@
+[App]
+Vendor=Zimbra
+Name=Zimbra Desktop
+
+[Environment]
+PRISM_HOME=@install.app.root@/macos/prism/Prism.app/Contents/Resources
+GRE_HOME=@install.app.root@/macos/prism/Prism.app/Contents/Frameworks/XUL.framework
+PRISM_WEBAPP=@install.data.root@/zdesktop.webapp
+XRE_PROFILE_PATH=@install.data.root@/profile

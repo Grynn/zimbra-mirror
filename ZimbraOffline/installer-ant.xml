@@ -78,6 +78,9 @@
 	
 		<delete dir="build/dist/app/win32" />
 		<delete dir="build/dist/app/linux" />
+		<delete file="build/dist/app/data/zdesktop.webapp/override.ini.linux" />
+		<delete file="build/dist/app/data/zdesktop.webapp/override.ini.win32" />
+		<move file="build/dist/app/data/zdesktop.webapp/override.ini.macos" tofile="build/dist/app/data/zdesktop.webapp/override.ini" />
 		<if><available file="${updater.app}" type="dir" /><then>
 			<move file="${updater.app}" tofile="${updater.app}_noreloc" preservelastmodified="true" />
 		</then></if>
@@ -133,6 +136,8 @@
 		<copy todir="build/dist/app/data/bin" file="src/installer/win32/zdctl-wrapper.vbs" overwrite="true" />
 		<delete file="build/dist/app/data/bin/zdesktop" />
 		<delete file="build/dist/app/data/zdesktop.webapp/override.ini.linux" />
+		<delete file="build/dist/app/data/zdesktop.webapp/override.ini.macos" />
+		<move file="build/dist/app/data/zdesktop.webapp/override.ini.win32" tofile="build/dist/app/data/zdesktop.webapp/override.ini" />
 
 		<copy todir="${wxs.dir}" file="src/installer/win32/win_installer.wxs" overwrite="true" />
 		<replace file="${wxs.dir}/win_installer.wxs" token="@build.root@" value="${basedir}" />
@@ -174,7 +179,8 @@
 	<target name="installer-pack-media-linux" if="is-linux">
 		<delete dir="build/dist/app/win32" />
 		<delete dir="build/dist/app/macos" />
-		<delete file="build/dist/app/data/zdesktop.webapp/override.ini" />
+		<delete file="build/dist/app/data/zdesktop.webapp/override.ini.win32" />
+		<delete file="build/dist/app/data/zdesktop.webapp/override.ini.macos" />
 		<move file="build/dist/app/data/zdesktop.webapp/override.ini.linux" tofile="build/dist/app/data/zdesktop.webapp/override.ini" />
 		<replace file="build/dist/app/data/zdesktop.webapp/webapp.ini" token="status=false" value="status=true" />
 		<copy todir="build/dist" file="src/installer/linux/install.pl" preservelastmodified="true" overwrite="true" />
