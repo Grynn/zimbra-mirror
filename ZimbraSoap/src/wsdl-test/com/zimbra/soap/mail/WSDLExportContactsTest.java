@@ -16,9 +16,9 @@ package com.zimbra.soap.mail;
 
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.zimbra.soap.Utility;
-import com.zimbra.soap.mail.wsimport.ExportContactsRequest;
-import com.zimbra.soap.mail.wsimport.ExportContactsResponse;
-import com.zimbra.soap.mail.wsimport.MailService;
+import com.zimbra.soap.mail.wsimport.generated.ExportContactsRequest;
+import com.zimbra.soap.mail.wsimport.generated.ExportContactsResponse;
+import com.zimbra.soap.mail.wsimport.generated.MailService;
 
 import org.junit.Assert;
 import org.junit.After;

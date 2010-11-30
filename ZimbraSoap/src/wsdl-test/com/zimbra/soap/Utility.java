@@ -23,14 +23,14 @@ import com.sun.xml.ws.developer.WSBindingProvider;
 import com.sun.xml.bind.api.JAXBRIContext;
 
 import com.zimbra.soap.header.HeaderContext;
-import com.zimbra.soap.account.wsimport.AccountService_Service;
-import com.zimbra.soap.account.wsimport.AccountService;
-import com.zimbra.soap.account.wsimport.Account;
-import com.zimbra.soap.account.wsimport.AuthRequest;
-import com.zimbra.soap.account.wsimport.AuthResponse;
-import com.zimbra.soap.account.wsimport.By;
-import com.zimbra.soap.mail.wsimport.MailService_Service;
-import com.zimbra.soap.mail.wsimport.MailService;
+import com.zimbra.soap.account.wsimport.generated.AccountService_Service;
+import com.zimbra.soap.account.wsimport.generated.AccountService;
+import com.zimbra.soap.account.wsimport.generated.Account;
+import com.zimbra.soap.account.wsimport.generated.AuthRequest;
+import com.zimbra.soap.account.wsimport.generated.AuthResponse;
+import com.zimbra.soap.account.wsimport.generated.By;
+import com.zimbra.soap.mail.wsimport.generated.MailService_Service;
+import com.zimbra.soap.mail.wsimport.generated.MailService;
 
 import org.junit.Assert;
 
