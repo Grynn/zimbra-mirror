@@ -2,12 +2,11 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="Erste Schritte" >
-  <item name="Willkommen bei @ClientNameLong@Version von @ClientNameLong@" url="Getting_Started/about_liquid_mail.htm" />
-  <item name="Neue@ClientNameShort@@-Funktionen in Version 7.0" url="New_in_6.0.htm" />
+  <item name="Willkommen bei @ClientNameLong@, Erweiterte Version" url="Getting_Started/about_liquid_mail.htm" />
   <item name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
   <item name="Voreingestellten Client-Typ für die Anmeldung ändern" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Tastenkürzel" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <item name="@CompanyName@-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <item name="@CompanyName@-Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="Passwort ändern" url="Userspecific/chaning_your_password.htm" />
   <item name="Passwort vergessen?" url="Userspecific/if_you_forget_your_password.htm" />
   <item name="Ablauf der Sitzung" url="Userspecific/if_your_session_expires.htm" />
@@ -23,6 +22,8 @@
   <item name="Ihre Arbeit speichern" url="Userspecific/browser_session_handling.htm" />
   <item name="Übersichtsfenster anzeigen" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="Mail-Systemordner" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="Papierkorb leeren" url="Navigation_folders_and_tips/trash_folder.htm" />
+  <item name="Aktion rückgängig machen" url="Userspecific/Undo_Action.htm" />
 </book>
 <book name="Mails verwalten " >
   <item name="Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
@@ -55,7 +56,7 @@
   </book>
 </book>
 <book name="Mails verfassen" >
-  <item name="Neue Mail verfassen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="Wissenswertes zum Verfassen von Mails" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   <item name="Neue Mail verfassen" url="Creating_Messages/Composing_a_new_mail_message.htm" />
   <item name="Einstellungen für das Fenster zum Verfassen von Mails einrichten" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="Teile einer Mail" url="Creating_Messages/parts_of_an_email_message.htm" />
@@ -66,7 +67,7 @@
   <item name="Dateien an Mail anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Dateitypen für Anhänge" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="CC: und BCC: Adressen hinzufügen" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
-  <item name="HTML-Editor verwenden" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="Im HTML-Editor arbeiten " url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Rechtschreibprüfung nutzen" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="Mails als Entwürfe speichern" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
@@ -111,7 +112,6 @@
   <item name="Aufgabenlisten anlegen" url="Tasks/Create_tasks_folders.htm" />
   <item name="Aufgaben hinzufügen" url="Tasks/Add_a_task.htm" />
   <item name="Aufgaben ändern" url="Tasks/Change_a_task.htm" />
-  <item name="Erinnerung in den Aufgaben festlegen" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
   <item name="Aufgaben verschieben" url="Tasks/Moving_tasks.htm" />
   <item name="Aufgaben löschen" url="Tasks/Delete_a_task.htm" />
   <item name="Aufgaben sortieren" url="Tasks/Sorting_tasks_.htm" />
@@ -121,7 +121,7 @@
   <item name="Mit Dateien im Ordner &quot;Dateien&quot; arbeiten" url="Briefcase/Working_with_files_in_Briefcase.htm" />
   <item name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
   <item name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="Tabelle in Notizbuchseite einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="Tabelle in Ordner &quot;Dateien&quot; einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
   <item name="Dateien aus Ihrem Ordner &quot;Dateien&quot; senden" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </book>
 <book name="Ordner freigeben" >

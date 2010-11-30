@@ -1,5 +1,17 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
+<key name="Mail, Lesebestätigung" >
+  <topic name="Lesebestätigung anfordern" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+</key>
+<key name="Mail, neue" >
+  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="Mailansicht" >
+  <topic name="Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="Mailbenachrichtigung" >
+  <topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
+</key>
 <key name="Mailentwurf" >
   <topic name="Mailentwurf speichern" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
@@ -60,7 +72,7 @@
 <key name="Obligatorische Teilnahme" >
   <topic name="Registerkarte „Planung“ bei der Erstellung eines Termins verwenden" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
-<key name="öffentliche/private Kalenderereignisse" >
+<key name="Öffentliche/Private Kalenderereignisse" >
   <topic name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="Offline arbeiten" >
@@ -108,7 +120,7 @@
 <key name="Private Termine" >
   <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
-<key name="privates Kalenderereignis" >
+<key name="Privates Kalenderereignis" >
   <topic name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="Reaktion auf die Besprechung überprüfen" >
@@ -141,6 +153,9 @@
 </key>
 <key name="Schriftarten" >
   <topic name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
+</key>
+<key name="Seite freigeben" >
+  <topic name="Freigegebene Objekte verwalten" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="Seiten in Notizbüchern" >
   <topic name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
@@ -205,9 +220,6 @@
 <key name="Termin ändern" >
   <topic name="Wiederkehrende Termine ändern" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
-<key name="Termin, Schnelleingabe" >
-  <topic name="Termin über Schnelleingabe anlegen" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-</key>
 <key name="Termine" >
   <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
@@ -238,6 +250,9 @@
   <key name="Mails in Ordnern" >
     <topic name="Mails zwischen Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   </key>
+</key>
+<key name="Versionen" >
+  <topic name="Versionskontrolle der Dateien im Ordner &quot;Dateien&quot;" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 <key name="Vervollständigung der Adresse in Mails" >
   <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />

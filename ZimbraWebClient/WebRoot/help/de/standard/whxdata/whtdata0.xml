@@ -34,7 +34,7 @@
   <item name="Automatische Vervollständigung von Adressen" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Dateien an Mail anhängen" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Dateitypen für Anhänge" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="HTML-Editor verwenden" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="Im HTML-Editor arbeiten " url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Rechtschreibung überprüfen" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Mails als Entwürfe speichern" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
@@ -46,6 +46,7 @@
   <item name="Adressbücher" url="Contacts/b_Your_Address_Books.htm" />
   <item name="Neue Kontakte hinzufügen" url="Contacts/b_Adding_new_contacts.htm" />
   <item name="Kontaktliste exportieren" url="Contacts/Exporting_a_Contact_List.htm" />
+  <item name="Kontaktnamen drucken" url="Contacts/Printing_contact_names.htm" />
 </book>
 <book name="Kalender verwalten" >
   <item name="Wissenswertes zum Kalender" url="Calendar/b_About_Calendar.htm" />
@@ -68,7 +69,7 @@
 </book>
 <book name="Ordner freigeben" >
   <book name="Kalender freigeben" >
-    <item name="Link zu einem freigegebenen Kalender" url="Calendar/Link_to_Shared_Calendar.htm" />
+    <item name="Link zu freigegebenem Kalender" url="Calendar/Link_to_Shared_Calendar.htm" />
   </book>
   <book name="Adressbücher freigeben" >
     <item name="Link zu freigegebenem Adressbuch einrichten" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />

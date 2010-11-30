@@ -86,6 +86,9 @@
     <topic name="Auf Mails antworten" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
 </key>
+<key name="Arbeitswoche anpassen" >
+  <topic name="Kalenderansichten" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="Assistent" >
   <topic name="Zimbra-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
@@ -106,6 +109,9 @@
 </key>
 <key name="Aufgaben, drucken" >
   <topic name="Wissenswertes zu Aufgaben" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="Auschecken" >
+  <topic name="Mit Dateien im Ordner &quot;Dateien&quot; arbeiten" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="Automatisches Hinzufügen von Signaturen" >
   <topic name="Persönlichkeiten anlegen" url="Userspecific/Creating_Personas.htm" />
@@ -180,6 +186,9 @@
 <key name="Dateien im Ordner &quot;Dateien&quot; öffnen" >
   <topic name="Mit Dateien im Ordner &quot;Dateien&quot; arbeiten" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
+<key name="Dateien im Ordner „Dateien“ umbenennen" >
+  <topic name="Mit Dateien im Ordner &quot;Dateien&quot; arbeiten" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+</key>
 <key name="Dateien in den Ordner verschieben" >
   <topic name="Mit Dateien im Ordner &quot;Dateien&quot; arbeiten" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
@@ -216,6 +225,9 @@
 </key>
 <key name="Einstellungen ändern" >
   <topic name="Benutzeroptionen ändern" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="Einstellungen, Freigeben" >
+  <topic name="Freigegebene Objekte verwalten" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="Einstellungen, Kalender" >
   <topic name="Kalendereinstellungen einrichten" url="Userspecific/Setting_your_Calendar_preferences.htm" />
@@ -257,7 +269,7 @@
 <key name="Externe Accounts hinzufügen" >
   <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
 </key>
-<key name="externer Nutzer" >
+<key name="Externer Nutzer" >
   <topic name="Festlegen, wer zu Besprechungen einladen darf" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="Filter, Funktionsweise" >
@@ -293,18 +305,6 @@
 </key>
 <key name="Freigabe, Adressbuch" >
   <topic name="Freigabe des eigenen Adressbuchs" url="Contacts/Sharing_your_Address_Book.htm" />
-</key>
-<key name="Freigegebene Aufgabenliste ändern" >
-  <topic name="Aufgabenliste freigeben" url="Tasks/Share_your_Task_folder.htm" />
-</key>
-<key name="Freunde im IM" >
-  <topic name="Auf den Instant Messenger zugreifen" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
-<key name="Funktionen der Benutzeroberfläche" >
-  <topic name="Funktionen und Tastenkürzel der Benutzeroberfläche" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-</key>
-<key name="Funktionen des Zimbra-Web-Clients" >
-  <topic name="Wissenswertes zur Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
 </key>
 
 </indexdata>

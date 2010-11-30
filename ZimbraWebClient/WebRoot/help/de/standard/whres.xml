@@ -35,7 +35,7 @@
 <item name="JS_alert_NotAllDatabaseInited" value="Achtung: Es wurden nicht alle Datenbanken geladen. Manche Themen können daher nicht gefunden werden." />
 <item name="IndexSelectTopicLabel" value="Wählen Sie ein Thema und klicken Sie dann auf Anzeigen" />
 <item name="Search" value="Suchen" />
-<item name="Glossary" value="Glossar" />
+<item name="Glossary" value="glos" />
 <item name="Disabled Prev" value="&lt;&lt;" />
 <item name="LoadingData" value="Bitte warten, Daten werden geladen ..." />
 <item name="LoadingIndex" value="Der Index wird geladen..." />
@@ -101,325 +101,568 @@
 
   <stopwords>
     <word name="0" />
+    <word name="0" />
+    <word name="1" />
     <word name="1" />
     <word name="2" />
+    <word name="2" />
+    <word name="3" />
     <word name="3" />
     <word name="4" />
+    <word name="4" />
+    <word name="5" />
     <word name="5" />
     <word name="6" />
+    <word name="6" />
+    <word name="7" />
     <word name="7" />
     <word name="8" />
+    <word name="8" />
+    <word name="9" />
     <word name="9" />
     <word name="ab" />
     <word name="aber" />
+    <word name="aber" />
+    <word name="alle" />
     <word name="alle" />
     <word name="allem" />
+    <word name="allem" />
+    <word name="allen" />
     <word name="allen" />
     <word name="aller" />
+    <word name="aller" />
+    <word name="alles" />
     <word name="alles" />
     <word name="als" />
     <word name="am" />
     <word name="an" />
     <word name="anschließend" />
+    <word name="anschließend" />
+    <word name="auch" />
     <word name="auch" />
     <word name="auf" />
+    <word name="auf" />
+    <word name="ausser" />
     <word name="ausser" />
     <word name="ausserdem" />
+    <word name="ausserdem" />
+    <word name="außer" />
     <word name="außer" />
     <word name="außerdem" />
+    <word name="außerdem" />
+    <word name="beide" />
     <word name="beide" />
     <word name="beiden" />
+    <word name="beiden" />
+    <word name="beider" />
     <word name="beider" />
     <word name="beides" />
+    <word name="beides" />
+    <word name="beliebige" />
     <word name="beliebige" />
     <word name="beliebigem" />
+    <word name="beliebigem" />
+    <word name="beliebigen" />
     <word name="beliebigen" />
     <word name="beliebiger" />
+    <word name="beliebiger" />
+    <word name="beliebiges" />
     <word name="beliebiges" />
     <word name="benutzen" />
+    <word name="benutzen" />
+    <word name="benutzt" />
     <word name="benutzt" />
     <word name="benötigen" />
+    <word name="benötigen" />
+    <word name="benötigt" />
     <word name="benötigt" />
     <word name="besser" />
+    <word name="besser" />
+    <word name="Bezug" />
     <word name="Bezug" />
     <word name="bin" />
+    <word name="bin" />
+    <word name="bist" />
     <word name="bist" />
     <word name="brauchen" />
+    <word name="brauchen" />
+    <word name="braucht" />
     <word name="braucht" />
     <word name="da" />
+    <word name="da" />
+    <word name="dadurch" />
     <word name="dadurch" />
     <word name="dafür" />
+    <word name="dafür" />
+    <word name="daher" />
     <word name="daher" />
     <word name="dahin" />
+    <word name="dahin" />
+    <word name="dahinter" />
     <word name="dahinter" />
     <word name="damit" />
+    <word name="damit" />
+    <word name="daneben" />
     <word name="daneben" />
     <word name="dann" />
+    <word name="dann" />
+    <word name="darauf" />
     <word name="darauf" />
     <word name="darf" />
+    <word name="darf" />
+    <word name="darunter" />
     <word name="darunter" />
     <word name="darüber" />
+    <word name="darüber" />
+    <word name="das" />
     <word name="das" />
     <word name="davon" />
+    <word name="davon" />
+    <word name="Dein" />
     <word name="Dein" />
     <word name="Deine" />
+    <word name="Deine" />
+    <word name="deinem" />
     <word name="deinem" />
     <word name="deinen" />
+    <word name="deinen" />
+    <word name="dem" />
     <word name="dem" />
     <word name="den" />
+    <word name="den" />
     <word name="denen" />
+    <word name="denen" />
+    <word name="denn" />
     <word name="denn" />
     <word name="der" />
     <word name="deren" />
+    <word name="deren" />
+    <word name="derer" />
     <word name="derer" />
     <word name="des" />
+    <word name="des" />
+    <word name="dessen" />
     <word name="dessen" />
     <word name="die" />
+    <word name="die" />
+    <word name="diese" />
     <word name="diese" />
     <word name="diesem" />
+    <word name="diesem" />
+    <word name="diesen" />
     <word name="diesen" />
     <word name="dieser" />
+    <word name="dieser" />
+    <word name="dieses" />
     <word name="dieses" />
     <word name="dir" />
+    <word name="dir" />
+    <word name="dort" />
     <word name="dort" />
     <word name="dran" />
+    <word name="dran" />
+    <word name="Du" />
     <word name="Du" />
     <word name="dürfen" />
+    <word name="dürfen" />
+    <word name="ein" />
     <word name="ein" />
     <word name="eine" />
+    <word name="eine" />
+    <word name="einem" />
     <word name="einem" />
     <word name="einen" />
+    <word name="einen" />
+    <word name="einer" />
     <word name="einer" />
     <word name="eines" />
+    <word name="eines" />
+    <word name="einfach" />
     <word name="einfach" />
     <word name="einige" />
+    <word name="einige" />
+    <word name="einigen" />
     <word name="einigen" />
     <word name="einiger" />
+    <word name="einiger" />
     <word name="einiges" />
+    <word name="einiges" />
+    <word name="entlang" />
     <word name="entlang" />
     <word name="er" />
     <word name="es" />
     <word name="Fall" />
+    <word name="Fall" />
+    <word name="falls" />
     <word name="falls" />
     <word name="fertig" />
+    <word name="fertig" />
+    <word name="folgende" />
     <word name="folgende" />
     <word name="folgendem" />
+    <word name="folgendem" />
+    <word name="folgenden" />
     <word name="folgenden" />
     <word name="folgender" />
+    <word name="folgender" />
+    <word name="folgendermaßen" />
     <word name="folgendermaßen" />
     <word name="früher" />
+    <word name="früher" />
+    <word name="für" />
     <word name="für" />
     <word name="gebrauchen" />
+    <word name="gebrauchen" />
+    <word name="gebraucht" />
     <word name="gebraucht" />
     <word name="gehabt" />
+    <word name="gehabt" />
+    <word name="geht" />
     <word name="geht" />
     <word name="gemacht" />
+    <word name="gemacht" />
+    <word name="genau" />
     <word name="genau" />
     <word name="getan" />
+    <word name="getan" />
+    <word name="Gleiche" />
     <word name="Gleiche" />
     <word name="gross" />
+    <word name="gross" />
+    <word name="habe" />
     <word name="habe" />
     <word name="haben" />
+    <word name="haben" />
+    <word name="hast" />
     <word name="hast" />
     <word name="hat" />
     <word name="hatte" />
+    <word name="hatte" />
+    <word name="hatten" />
     <word name="hatten" />
     <word name="hier" />
+    <word name="hier" />
+    <word name="hierher" />
     <word name="hierher" />
     <word name="hinab" />
+    <word name="hinab" />
+    <word name="hinter" />
     <word name="hinter" />
     <word name="holen" />
+    <word name="holen" />
+    <word name="ihm" />
     <word name="ihm" />
     <word name="ihn" />
+    <word name="ihn" />
+    <word name="ihnen" />
     <word name="ihnen" />
     <word name="Ihr" />
+    <word name="Ihr" />
+    <word name="Ihre" />
     <word name="Ihre" />
     <word name="ihrem" />
+    <word name="ihrem" />
+    <word name="ihren" />
     <word name="ihren" />
     <word name="ihrer" />
+    <word name="ihrer" />
     <word name="im" />
+    <word name="im" />
+    <word name="immer" />
     <word name="immer" />
     <word name="in" />
     <word name="innerhalb" />
+    <word name="innerhalb" />
+    <word name="ist" />
     <word name="ist" />
     <word name="Ja" />
+    <word name="Ja" />
+    <word name="jede" />
     <word name="jede" />
     <word name="jedem" />
+    <word name="jedem" />
+    <word name="jeden" />
     <word name="jeden" />
     <word name="jeder" />
+    <word name="jeder" />
+    <word name="jedes" />
     <word name="jedes" />
     <word name="kann" />
+    <word name="kann" />
+    <word name="kein" />
     <word name="kein" />
     <word name="keine" />
+    <word name="keine" />
+    <word name="keinem" />
     <word name="keinem" />
     <word name="keiner" />
+    <word name="keiner" />
+    <word name="keins" />
     <word name="keins" />
     <word name="klein" />
+    <word name="klein" />
+    <word name="können" />
     <word name="können" />
     <word name="könnte" />
+    <word name="könnte" />
+    <word name="lieber" />
     <word name="lieber" />
     <word name="mehr" />
+    <word name="mehr" />
+    <word name="mein" />
     <word name="mein" />
     <word name="meine" />
+    <word name="meine" />
+    <word name="meinem" />
     <word name="meinem" />
     <word name="meinen" />
+    <word name="meinen" />
+    <word name="meiner" />
     <word name="meiner" />
     <word name="meines" />
+    <word name="meines" />
+    <word name="mir" />
     <word name="mir" />
     <word name="mit" />
+    <word name="mit" />
+    <word name="muss" />
     <word name="muss" />
     <word name="möchten" />
+    <word name="möchten" />
+    <word name="mögen" />
     <word name="mögen" />
     <word name="müssen" />
+    <word name="müssen" />
+    <word name="nach" />
     <word name="nach" />
     <word name="neben" />
+    <word name="neben" />
+    <word name="nicht" />
     <word name="nicht" />
     <word name="noch" />
+    <word name="noch" />
+    <word name="normal" />
     <word name="normal" />
     <word name="ob" />
+    <word name="ob" />
+    <word name="oben" />
     <word name="oben" />
     <word name="oder" />
+    <word name="oder" />
+    <word name="ohne" />
     <word name="ohne" />
     <word name="OK" />
+    <word name="OK" />
+    <word name="okay" />
     <word name="okay" />
     <word name="per" />
+    <word name="per" />
+    <word name="pro" />
     <word name="pro" />
     <word name="schon" />
+    <word name="schon" />
+    <word name="sei" />
     <word name="sei" />
     <word name="seid" />
+    <word name="seid" />
+    <word name="seine" />
     <word name="seine" />
     <word name="seinem" />
+    <word name="seinem" />
+    <word name="seinen" />
     <word name="seinen" />
     <word name="seit" />
+    <word name="seit" />
+    <word name="sich" />
     <word name="sich" />
     <word name="Sie" />
+    <word name="Sie" />
     <word name="siehe" />
+    <word name="siehe" />
+    <word name="sind" />
     <word name="sind" />
     <word name="so" />
     <word name="sobald" />
+    <word name="sobald" />
+    <word name="sonstige" />
     <word name="sonstige" />
     <word name="sonstiges" />
+    <word name="sonstiges" />
+    <word name="stattdessen" />
     <word name="stattdessen" />
     <word name="stets" />
+    <word name="stets" />
+    <word name="tun" />
     <word name="tun" />
     <word name="und" />
     <word name="unser" />
+    <word name="unser" />
+    <word name="unsere" />
     <word name="unsere" />
     <word name="unserem" />
+    <word name="unserem" />
+    <word name="unseren" />
     <word name="unseren" />
     <word name="unseres" />
+    <word name="unseres" />
+    <word name="unter" />
     <word name="unter" />
     <word name="verwenden" />
+    <word name="verwenden" />
+    <word name="verwendet" />
     <word name="verwendet" />
     <word name="viel" />
+    <word name="viel" />
+    <word name="viele" />
     <word name="viele" />
     <word name="vielen" />
+    <word name="vielen" />
+    <word name="vieler" />
     <word name="vieler" />
     <word name="vieles" />
+    <word name="vieles" />
+    <word name="vielleicht" />
     <word name="vielleicht" />
     <word name="vom" />
+    <word name="vom" />
+    <word name="von" />
     <word name="von" />
     <word name="vor" />
+    <word name="vor" />
+    <word name="voran" />
     <word name="voran" />
     <word name="voraus" />
+    <word name="voraus" />
+    <word name="wann" />
     <word name="wann" />
     <word name="war" />
+    <word name="war" />
     <word name="waren" />
+    <word name="waren" />
+    <word name="warum" />
     <word name="warum" />
     <word name="was" />
     <word name="Weg" />
+    <word name="Weg" />
+    <word name="weil" />
     <word name="weil" />
     <word name="Weise" />
+    <word name="Weise" />
+    <word name="weiter" />
     <word name="weiter" />
     <word name="weitere" />
+    <word name="weitere" />
+    <word name="weiteren" />
     <word name="weiteren" />
     <word name="weiterer" />
+    <word name="weiterer" />
+    <word name="welche" />
     <word name="welche" />
     <word name="welcher" />
+    <word name="welcher" />
+    <word name="welches" />
     <word name="welches" />
     <word name="wenn" />
+    <word name="wenn" />
+    <word name="werden" />
     <word name="werden" />
     <word name="weshalb" />
+    <word name="weshalb" />
+    <word name="weswegen" />
     <word name="weswegen" />
     <word name="wie" />
+    <word name="wie" />
+    <word name="wieso" />
     <word name="wieso" />
     <word name="wir" />
+    <word name="wir" />
+    <word name="wird" />
     <word name="wird" />
     <word name="wo" />
+    <word name="wo" />
+    <word name="wofür" />
     <word name="wofür" />
     <word name="woher" />
+    <word name="woher" />
+    <word name="wonach" />
     <word name="wonach" />
     <word name="woran" />
+    <word name="woran" />
+    <word name="woraus" />
     <word name="woraus" />
     <word name="wovon" />
+    <word name="wovon" />
+    <word name="wäre" />
     <word name="wäre" />
     <word name="wären" />
+    <word name="wären" />
+    <word name="zwischen" />
     <word name="zwischen" />
   </stopwords>
 
 
 	<paneskin>
-		<background color="#e8dcc1" img="" />
-		<font name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
+		<background color="#e9e9e9" img="" />
+		<font name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
 		<toc>
-			<background color="#f9f9f9" img="" />
+			<background color="#eeeeee" img="" />
 			<icons>
-				<book open="chr_book_op.gif" close="chr_book_clo.gif" />
-				<item  local="chr_page.gif" remote="chr_webpage.gif" />
+				<book open="navpane_opennode.gif" close="navpane_closednode.gif" />
+				<item  local="navpane_page.gif" remote="navpane_web.gif" />
 				<newbook open="" close="" />
 				<newitem  local="" remote="" />
 			</icons>
 			<fonts>
-				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
+				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="10pt" color="#666666" style="Normal" weight="Normal" decoration="underline" />
 			</fonts>
-			<activebackgroundcolor attr="#cacaca" />
+			<activebackgroundcolor attr="#c3c3c3" />
 			<margin attr="" />
 			<indent attr="" />
 		</toc>
 		<index>
 			<form>
 				<fonts>
-					<title name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
+					<title name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
 				</fonts>
 				<button normal="" hover="" />
 				<editwith value="20" />
 			</form>
-			<background color="#f9f9f9" img="" />
+			<background color="#eeeeee" img="" />
 			<fonts>
-				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
-				<empty name="" size="8pt" color="" style="" weight="" decoration="" />
+				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="10pt" color="#666666" style="Normal" weight="Normal" decoration="underline" />
+				<empty name="" size="10pt" color="" style="" weight="" decoration="" />
 			</fonts>
-			<activebackgroundcolor attr="#cacaca" />
+			<activebackgroundcolor attr="#c3c3c3" />
 			<margin attr="" />
 			<indent attr="" />
 		</index>
 		<fts>
 			<form>
 				<fonts>
-					<title name="Arial" size="8pt" color="#0051a2" style="Normal" weight="Normal" decoration="none" />
+					<title name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
 				</fonts>
 				<button normal="" hover="" />
 				<editwith value="20" />
 			</form>
-			<background color="#f9f9f9" img="" />
+			<background color="#eeeeee" img="" />
 			<fonts>
-				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
-				<error name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
+				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="10pt" color="#666666" style="Normal" weight="Normal" decoration="underline" />
+				<error name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
 			</fonts>
-			<activebackgroundcolor attr="#cacaca" />
+			<activebackgroundcolor attr="#c3c3c3" />
 			<margin attr="" />
 			<indent attr="" />
 		</fts>
 		<glossary>
-			<background color="#f9f9f9" img="" />
+			<background color="#eeeeee" img="" />
 			<fonts>
-				<normal name="Arial" size="8pt" color="#4e5a78" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="8pt" color="#000080" style="Normal" weight="Normal" decoration="underline" />
+				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Arial" size="10pt" color="#666666" style="Normal" weight="Normal" decoration="underline" />
 			</fonts>
-			<activebackgroundcolor attr="#cacaca" />
+			<activebackgroundcolor attr="#c3c3c3" />
 			<margin attr="" />
 			<indent attr="" />
 		</glossary>

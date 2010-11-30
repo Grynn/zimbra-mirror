@@ -1,11 +1,32 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="Freigaben suchen" >
+  <topic name="Freigegebene Objekte verwalten" url="Sharing/Managing_items_you_share.htm" />
+</key>
+<key name="Freigegebene Aufgabenliste ändern" >
+  <topic name="Aufgabenliste freigeben" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="Freunde im IM" >
+  <topic name="Auf den Instant Messenger zugreifen" url="instant_messaging/Accessing_Instant_Messaging.htm" />
+</key>
+<key name="Funktionen der Benutzeroberfläche" >
+  <topic name="Funktionen und Tastenkürzel der Benutzeroberfläche" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="Funktionen des Zimbra-Web-Clients" >
+  <topic name="Wissenswertes zur Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
 <key name="GAL und Kontakte" >
   <topic name="GAL und Kontakte" url="Contacts/gal_vs_contacts.htm" />
 </key>
 <key name="Ganztägiger Termin" >
   <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="Gelöschte Dateien wiederherstellen" >
+  <topic name="Papierkorb leeren " url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
+<key name="Gelöschte Dateien, wiederherstellen" >
+  <topic name="Papierkorb leeren " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="Gerät reservieren" >
   <topic name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
@@ -78,7 +99,7 @@
 <key name="Inhaltsfenster, Spaltentitel ändern" >
   <topic name="Ansicht benutzerspezifisch einrichten" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 </key>
-<key name="interner Nutzer" >
+<key name="Interner Nutzer" >
   <topic name="Festlegen, wer zu Besprechungen einladen darf" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="Kalender drucken" >
@@ -86,6 +107,9 @@
 </key>
 <key name="Kalender importieren" >
   <topic name="Objekte importieren und exportieren " url="Userspecific/Importing_and_Exporting_Items_.htm" />
+</key>
+<key name="Kalender, Arbeitswoche anpassen" >
+  <topic name="Kalenderansichten" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="Kalender, Berechtigungen zum Einladen festlegen" >
   <topic name="Festlegen, wer zu Besprechungen einladen darf" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
@@ -107,6 +131,7 @@
 </key>
 <key name="Kalenderansicht" >
   <topic name="Wissenswertes zum Zimbra-Kalender" url="Calendar/About_Calendar.htm" />
+  <topic name="Kalenderansichten" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="Kalenderansichten" >
   <topic name="Listenansicht im Kalender" url="Calendar/Calendar_List_View.htm" />
@@ -198,7 +223,7 @@
 <key name="Listenansicht der Kalender" >
   <topic name="Listenansicht im Kalender" url="Calendar/Calendar_List_View.htm" />
 </key>
-<key name="lokaler Nutzer" >
+<key name="Lokaler Nutzer" >
   <topic name="Festlegen, wer zu Besprechungen einladen darf" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="Löschen" >
@@ -293,31 +318,6 @@
 </key>
 <key name="Nach Mails suchen" >
   <topic name="Nach Mails suchen" url="Search/_search__vs.__search_for_.htm" />
-</key>
-<key name="Nachrichten in einen Ordner verschieben" >
-  <topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
-</key>
-<key name="Navigation" >
-  <topic name="Ordner (Bereich)" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
-<key name="Navigation mit Tastatur" >
-  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-  <topic name="ZWC, Tastenkürzel" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-</key>
-<key name="Navigieren" >
-  <topic name="In der Benutzeroberfläche navigieren" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="Neue Mails abfragen" >
-  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-</key>
-<key name="Neue Mails abrufen" >
-  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="Neue Zimlets hochladen" >
-  <topic name="Zimlets verwalten" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
-<key name="Notizbücher, Neue Seiten anlegen" >
-  <topic name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
 </key>
 
 </indexdata>

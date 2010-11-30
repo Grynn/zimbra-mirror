@@ -8,7 +8,7 @@
 </book>
 <book name="Zimbra Desktop einrichten" >
   <item name="Einen Zimbra-Web-Client-Account einrichten" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
-  <item name="Yahoo! Mail und Gmail-Accounts einrichten" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
+  <item name="Yahoo! Mail- und Gmail-Accounts einrichten" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
   <item name="POP-/IMAP-Accounts einrichten" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
   <item name="Accounts synchronisieren" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
   <item name="Automatische Synchronisierung ausschalten" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
@@ -107,7 +107,7 @@
   <item name="Desktop-Benachrichtigungen einrichten" url="Userspecific/Setting_up_desktop_alerts.htm" />
   <item name="Mailbenachrichtigung an eine andere Adresse" url="Userspecific/New_mail_notifications.htm" />
   <item name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
-  <item name="Zimbra Desktop als Standard-Mail-Client einrichten" url="managing_your_account/Making_Zimbra_Desktop_Default_Mail_Client.htm" />
+  <item name="Zimbra Desktop als Standard-Mailprogramm einrichten" url="managing_your_account/Making_Zimbra_Desktop_Default_Mail_Client.htm" />
 </book>
 <book name="Accounts organisieren" >
   <item name="Mails nach Kategorien sortieren" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm#bc-1" />

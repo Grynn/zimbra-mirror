@@ -1,9 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="Abmelden" last="Funktionen des Zimbra-Web-Clients" num="100" />
-<chunkinfo url="whidata1.xml" first="GAL und Kontakte" last="Notizbücher, Neue Seiten anlegen" num="103" />
-<chunkinfo url="whidata2.xml" first="Notizbücher, Tabellen hinzufügen" last="Warnungsmeldungen" num="98" />
-<chunkinfo url="whidata3.xml" first="Weiße Liste" last="Zugriff auf Ihren Kalender delegieren" num="17" />
+<chunkinfo url="whidata0.xml" first="Abmelden" last="Freigabe, Adressbuch" num="100" />
+<chunkinfo url="whidata1.xml" first="Freigaben suchen" last="Nach Mails suchen" num="103" />
+<chunkinfo url="whidata2.xml" first="Nachrichten in einen Ordner verschieben" last="Unzustellbare Mail" num="98" />
+<chunkinfo url="whidata3.xml" first="URL in Signaturen" last="Zugriff auf Ihren Kalender delegieren" num="27" />
 
 </index>

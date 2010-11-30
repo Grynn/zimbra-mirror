@@ -1,6 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <index>
-<chunkinfo url="whidata0.xml" first="Abwesenheitsmeldung" last="Mailbenachrichtigung" num="108" />
-<chunkinfo url="whidata1.xml" first="Mailentwurf" last="Zimlets, deaktivieren" num="90" />
+<chunkinfo url="whidata0.xml" first="Abwesenheitsmeldung" last="Mail-Identitäten" num="109" />
+<chunkinfo url="whidata1.xml" first="Mail, Lesebestätigung" last="Zimlets, deaktivieren" num="95" />
 
 </index>

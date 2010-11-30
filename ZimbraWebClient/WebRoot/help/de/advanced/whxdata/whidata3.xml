@@ -1,6 +1,36 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="URL in Signaturen" >
+  <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="Vergessen" >
+  <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="Verschieben" >
+  <topic name="Mails zwischen Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="Mails in Ordnern" >
+    <topic name="Mails zwischen Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="Versionen" >
+  <topic name="Versionskontrolle der Dateien im Ordner &quot;Dateien&quot;" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
+<key name="Vervollständigung der Adresse in Mails" >
+  <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="Vorhandene Accounts hinzufügen" >
+  <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="Vorschaufenster, ein- und ausschalten" >
+  <topic name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="W in Mini-Kalender" >
+  <topic name="Kalenderwochennummern anzeigen" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
+<key name="Warnungsmeldungen" >
+  <topic name="Desktop-Benachrichtigungen einrichten" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
 <key name="Weiße Liste" >
   <topic name="Spam-Mails filtern" url="filters/Filtering_Junk_Mail.htm" />
 </key>

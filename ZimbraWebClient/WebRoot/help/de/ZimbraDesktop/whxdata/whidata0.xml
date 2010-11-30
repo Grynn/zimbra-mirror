@@ -57,6 +57,9 @@
     <topic name="Auf Mails antworten" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
 </key>
+<key name="Arbeitswoche anpassen" >
+  <topic name="Kalenderansichten" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="Atom-Feed" >
   <topic name="RSS-/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
@@ -131,6 +134,9 @@
 <key name="Einladung im Papierkorb" >
   <topic name="Einladung beantworten" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
+<key name="Einstellungen, Freigeben" >
+  <topic name="Freigegebene Objekte verwalten" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="Einstellungen, Lesefenster anzeigen" >
   <topic name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
@@ -173,6 +179,9 @@
 </key>
 <key name="Freigabe für Mail-Ordner widerrufen" >
   <topic name="Zugriff auf freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+</key>
+<key name="Freigaben suchen" >
+  <topic name="Freigegebene Objekte verwalten" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="Funktionen der Benutzeroberfläche" >
   <topic name="Funktionen und Tastenkürzel der Benutzeroberfläche" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
@@ -225,8 +234,14 @@
 <key name="Kalender drucken" >
   <topic name="Kalender drucken" url="Calendar/Printing_a_calendar.htm" />
 </key>
+<key name="Kalender, Arbeitswoche anpassen" >
+  <topic name="Kalenderansichten" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="Kalender, Frei/Belegt" >
   <topic name="Frei-/Belegt-Zeiten anzeigen" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="Kalenderansicht" >
+  <topic name="Kalenderansichten" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="Kontakt" >
   <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
@@ -316,18 +331,6 @@
 </key>
 <key name="Mail-Identitäten" >
   <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="Mail, Lesebestätigung" >
-  <topic name="Lesebestätigung anfordern" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
-</key>
-<key name="Mail, neue" >
-  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-</key>
-<key name="Mailansicht" >
-  <topic name="Mailansicht verwalten" url="conversations/conversation_list_view.htm" />
-</key>
-<key name="Mailbenachrichtigung" >
-  <topic name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
 </key>
 
 </indexdata>
