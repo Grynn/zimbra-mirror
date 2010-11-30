@@ -739,13 +739,9 @@ public class ZimbraAccount {
         		if ( nodes.length > 0 ) {
     				try {
     					
-    		        	// If in dev enviroment, just wait a few seconds
-    					if ( DevEnvironment.isUsingDevEnvironment() ) {
-    						SleepUtil.sleep(5000);
-    					} else {
-    						Stafpostqueue sp = new Stafpostqueue();
-    						sp.waitForPostqueue();
-    					}
+						Stafpostqueue sp = new Stafpostqueue();
+						sp.waitForPostqueue();
+
 					} catch (Exception e) {
 						logger.warn("Unable to wait for postfix queue", e);
 					}

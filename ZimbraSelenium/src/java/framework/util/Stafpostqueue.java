@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import framework.core.ClientSessionFactory;
+import framework.core.DevEnvironment;
 
 public class Stafpostqueue extends StafAbstract {
 	private Logger logger = LogManager.getLogger(Stafzmprov.class);
@@ -11,6 +12,15 @@ public class Stafpostqueue extends StafAbstract {
 	private static final String MailQueueIsEmpty = "Mail queue is empty";
 	
 	public boolean waitForPostqueue() throws Exception {
+		
+		// Start: Dev env hack
+		if ( DevEnvironment.isUsingDevEnvironment() ) {
+			logger.info("In dev environment, waiting for message to be delivered ...");
+			SleepUtil.sleep(5000);
+			return (true);
+		}
+		// End: Dev env hack
+		
 		boolean success = false;
 		String command = "postqueue -p";
 
