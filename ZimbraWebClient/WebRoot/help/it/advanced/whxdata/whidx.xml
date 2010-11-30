@@ -1,9 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="accesso ad account esterni" last="dizionario, aggiunta di parole a" num="101" />
-<chunkinfo url="whidata1.xml" first="Documenti, aggiunta di tabelle" last="Notifica IM" num="95" />
-<chunkinfo url="whidata2.xml" first="numero settimana" last="tag, trascinamento" num="90" />
-<chunkinfo url="whidata3.xml" first="tasti di scelta rapida" last="Zimlet, disattiva" num="33" />
+<chunkinfo url="whidata0.xml" first="accesso ad account esterni" last="dispositivo cellulare" num="101" />
+<chunkinfo url="whidata1.xml" first="dizionario, aggiunta di parole a" last="navigazione, tastiera" num="96" />
+<chunkinfo url="whidata2.xml" first="notifica email" last="stampa impegni" num="92" />
+<chunkinfo url="whidata3.xml" first="tabelle, aggiunta a pagine di Documenti" last="Zimlet, disattiva" num="40" />
 
 </index>

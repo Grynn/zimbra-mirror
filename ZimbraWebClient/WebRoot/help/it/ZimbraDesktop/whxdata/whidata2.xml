@@ -1,5 +1,17 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
+<key name="Visualizza come HTML" >
+  <topic name="Apertura dei file allegati" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="visualizza riquadro di lettura" >
+  <topic name="Lettura dei messaggi dal riquadro di lettura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="visualizzazione riquadro di lettura" >
+  <topic name="Gestione della vista del messaggio email" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="W in mini agenda" >
+  <topic name="Visualizzazione numeri settimana dell'Agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
 <key name="Zimlet" >
   <topic name="Zimlet" url="Zimlets/About_Zimlets.htm" />
   <topic name="Gestione degli zimlet" url="Zimlets/Managing_your_Zimlets.htm" />

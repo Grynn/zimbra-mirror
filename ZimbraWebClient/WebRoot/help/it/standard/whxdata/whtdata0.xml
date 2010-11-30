@@ -46,6 +46,7 @@
   <item name="Rubriche" url="Contacts/b_Your_Address_Books.htm" />
   <item name="Aggiunta di nuovi contatti" url="Contacts/b_Adding_new_contacts.htm" />
   <item name="Esportazione di un elenco di contatti" url="Contacts/Exporting_a_Contact_List.htm" />
+  <item name="Stampa dei nomi dei contatti" url="Contacts/Printing_contact_names.htm" />
 </book>
 <book name="Gestione dell'Agenda" >
   <item name="Agenda" url="Calendar/b_About_Calendar.htm" />

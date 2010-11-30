@@ -3,7 +3,6 @@
 <tocdata>
 <book name="Introduzione" >
   <item name="Benvenuti nell'edizione avanzata di @ClientNameLong@" url="Getting_Started/about_liquid_mail.htm" />
-  <item name="Nuove funzionalità di @ClientNameShort@ 7.0" url="New_in_6.0.htm" />
   <item name="Accesso e uscita" url="Userspecific/logging_on_and_off.htm" />
   <item name="Impostazione del tipo di client predefinito per l'accesso" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Tasti di scelta rapida della tastiera" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
@@ -23,6 +22,8 @@
   <item name="Salvataggio del lavoro" url="Userspecific/browser_session_handling.htm" />
   <item name="Visualizzazione del riquadro di navigazione" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="Cartelle di sistema di Mail" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="Svuotare la cartella Cestino" url="Navigation_folders_and_tips/trash_folder.htm" />
+  <item name="Annullamento di un'azione" url="Userspecific/Undo_Action.htm" />
 </book>
 <book name="Gestione dei messaggi email " >
   <item name="Gestione della vista del messaggio email" url="conversations/conversation_list_view.htm" />
@@ -55,8 +56,8 @@
   </book>
 </book>
 <book name="Composizione di messaggi email" >
-  <item name="Composizione di un nuovo messaggio email" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <item name="Composizione di un nuovo messaggio email " url="Creating_Messages/Composing_a_new_mail_message.htm" />
+  <item name="Informazioni sulla composizione di messaggi email" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="Composizione e invio di un nuovo messaggio email" url="Creating_Messages/Composing_a_new_mail_message.htm" />
   <item name="Impostazioni delle preferenze per la finestra di composizione delle mail" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="Parti di un messaggio email" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Aggiunta automatica della firma" url="Userspecific/using_a_signature.htm" />
@@ -65,7 +66,7 @@
   <item name="Richiesta della conferma di lettura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Allegare file al messaggio" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Tipi di file allegati" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="Aggiunta di indirizzi in Cc: e Ccn:." url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="Aggiunta di indirizzi in Cc: e Ccn:" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Uso dell'editor HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Uso del controllo ortografico" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="Salvataggio di messaggi come bozze" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -111,7 +112,6 @@
   <item name="Creazione di elenchi di impegni" url="Tasks/Create_tasks_folders.htm" />
   <item name="Aggiunta di un impegno" url="Tasks/Add_a_task.htm" />
   <item name="Modifica di un impegno" url="Tasks/Change_a_task.htm" />
-  <item name="Impostazione di un promemoria in Attività" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
   <item name="Spostamento degli impegni" url="Tasks/Moving_tasks.htm" />
   <item name="Eliminazione di un impegno" url="Tasks/Delete_a_task.htm" />
   <item name="Ordinamento degli impegni" url="Tasks/Sorting_tasks_.htm" />

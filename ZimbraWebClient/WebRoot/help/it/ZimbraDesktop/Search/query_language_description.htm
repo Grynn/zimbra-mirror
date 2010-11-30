@@ -91,13 +91,10 @@ else
 		<tr style="vertical-align: top;">
 			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
    <p 
-				 style="font-weight: bold;">&#160;</p></td>
+				 style="font-weight: bold;">&nbsp;</p></td>
 			<td style="width: 50%; padding-right: 10px; padding-left: 10px;">
    <p 
-				 style="font-size: 8pt; color: #ff0000;" align="right"><a 
-			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">Per 
-			 domande generali e la risoluzione di problemi, consulta le 
-			 domande frequenti di Zimbra Desktop</a></p></td>
+				 style="font-size: 8pt; color: #ff0000;" align="right"><a  			 href="http://wiki.zimbra.com/wiki/Zimbra_Desktop_2_FAQ" target="_blank">Per domande generali e la risoluzione di problemi, consulta le domande frequenti di Zimbra Desktop</a></p></td>
 		</tr>
 	</table>
 </div>
@@ -108,12 +105,12 @@ else
 <p>Per eseguire ricerche semplici, è sufficiente inserire una parola nel boxino di ricerca. Nel caso di parole senza un operatore di ricerca, la query presume che la ricerca vada effettuata con l'operatore 'content' e restituisce come risultato qualsiasi parte di testo inclusa nel messaggio.</p>
 <p>Le ricerche più avanzate possono essere eseguite specificando un <b>operatore di ricerca</b>. L'operatore di ricerca è una parola chiave speciale seguita da due punti, a loro volta seguiti da qualche altro parametro specifico dell'operatore. Ad esempio,</p>
 <ul>
-	<li class="p"><p><b style="font-weight: bold;">in:in arrivo</b> l'operatore è &quot;in&quot; e il parametro è &quot;in arrivo&quot; - Vengono restituiti i messaggi inclusi nella cartella denominata &quot;in arrivo&quot;</p></li>
+	<li class="p"><p><b style="font-weight: bold;">in: in arrivo</b> l'operatore è &quot;in&quot; e il parametro è &quot; in arrivo&quot; - Vengono restituiti i messaggi inclusi nella cartella denominata &quot; in arrivo&quot;</p></li>
 </ul>
 <ul>
-	<li class="p"><p><b style="font-weight: bold;">from:qualcuno</b> l'operatore è &quot;from&quot; e il parametro è &quot;qualcuno&quot; - Vengono restituiti i messaggi che includono la parola &quot;qualcuno&quot; nell'indirizzo e-mail</p></li>
+	<li class="p"><p><b style="font-weight: bold;">from:qualcuno</b> l'operatore è &quot;from&quot; e il parametro è &quot;qualcuno&quot; - Vengono restituiti i messaggi che includono la parola &quot;qualcuno&quot; nell'indirizzo email</p></li>
 </ul>
-<p>È possibile far precedere le parole chiave dalla parola &quot;not&quot; per specificare elementi che non includono quel criterio, ad esempio <b>not in:in arrivo</b>. La ricerca non fa distinzione tra maiuscole e minuscole. Pertanto in:in arrivo&quot; equivale a &quot;in:In arrivo&quot;. Il segno meno (<b>-</b>) è un sinonimo di <b>NOT</b>. <b>not in:in arrivo</b> equivale quindi a <b>-in:in arrivo</b></p>
+<p>È possibile far precedere le parole chiave dalla parola &quot;not&quot; per specificare elementi che non includono quel criterio, ad esempio <b>not in: in arrivo</b>. La ricerca non fa distinzione tra maiuscole e minuscole. Pertanto in:in arrivo&quot; equivale a &quot;in:In arrivo&quot;. Il segno meno (<b>-</b>) è un sinonimo di <b>NOT</b>. <b>not in:in arrivo</b> equivale quindi a <b>-in:in arrivo</b></p>
 <p>In genere non è necessario includere caratteri di punteggiatura nella stringa di ricerca dal momento che essi vengono ignorati dalla funzione di ricerca. Tuttavia, in alcuni   casi specifici, ad esempio se si cerca   l'ora '9:30' in un messaggio, è necessario racchiudere tra virgolette il parametro per ottenere i risultati desiderati. Ad esempio, <b>subject:&quot;9:30&quot;</b> restituirà messaggi che includono nell'oggetto la stringa 9:30.</p>
 <p>Caratteri consentiti nel parametro di ricerca:</p>
 <ul>
@@ -128,15 +125,15 @@ else
 	<li class="p"><p>Una ricerca di messaggi contenenti sia X che Y   viene definita ricerca <b>'AND'</b>. Per poter essere considerato una corrispondenza, infatti, il messaggio deve soddisfare tutti i criteri specificati. Nei riquadri di ricerca avanzata che includono caselle di controllo,   se si aprono più istanze dello stesso riquadro e si selezionano caselle di controllo diverse in ciascuna di esse, il criterio viene specificato come una ricerca <b>'AND'</b>.</p></li>
 </ul>
 <p>In una query, l'unico operatore visualizzato è &quot;OR&quot;. Se hai scelto di visualizzare la query nella barra di ricerca   mentre selezioni le opzioni di ricerca avanzata, il boxino di ricerca si aggiorna per mostrare la query risultante. Nelle ricerche di tipo <b>'AND'</b>, la parola <b>'AND'</b>   non appare.</p>
-<p><b style="font-weight: bold;">Suggerimento</b>: Uso di parentesi con AND e OR. Le parole racchiuse tra parentesi vengono considerate un'unità. Ad esempio <b>from: (giovanni tommasi)</b> equivale a <b>from:giovanni AND from:tommasi</b>. Se usi OR nella parentesi,  <b>from:(giovanni or tommasi)</b>, viene eseguita una ricerca di risultati di <b>from:giovanni OR from:tommasi</b>.</p>
+<p><b style="font-weight: bold;">Suggerimento</b>: Uso di parentesi con AND e OR. Le parole racchiuse tra parentesi vengono considerate un'unità. Ad esempio <b>from: (giovanni tommasi)</b> equivale a <b>from:giovanni AND from: tommasi</b>. Se usi OR nella parentesi,  <b>from:(giovanni or tommasi)</b>, viene eseguita una ricerca di risultati di <b>from:giovanni OR from: tommasi</b>.</p>
 <h3>Uso di <b>*</b> come carattere jolly nelle ricerche</h3>
 <p>L'asterisco (<b>*</b>) può essere usato come carattere jolly nelle   ricerche per trovare contenuto che comprende parole simili fra loro.</p>
-<p>Puoi usare l'asterisco come carattere jolly dopo un prefisso. Ad esempio, la ricerca <b>do*</b> restituisce parole come   <i>donatore</i>, <i>dono</i>, <i>domanda</i>, ecc.</p>
+<p>Usa l'asterisco <b>*</b> come carattere jolly. Ad esempio, la ricerca <b>do*</b> restituisce parole come   <i>donatore</i>, <i>dono</i>, <i>domanda</i>, ecc.</p>
 <h2>Descrizioni ed esempi di parole chiave</h2>
 <p style="font-weight: bold;">content:</p>
 <p style="margin-left: 40px;">Specifica il testo che il messaggio deve contenere. Ad esempio, <span class="code">content:banane</span> trova tutti gli elementi contenenti la parola &quot;banane&quot;.</p>
 <p style="font-weight: bold;">da:,</p>
-<p style="margin-left: 40px;">Specifica il nome di un mittente o un indirizzo email   incluso nell'intestazione Da. Può essere testo come in &quot;Mario Rossi&quot;, un indirizzo e-mail come &quot;joe@acme.com&quot; o un dominio come &quot;zimbra.com&quot;.</p>
+<p style="margin-left: 40px;">Specifica il nome di un mittente o un indirizzo email   incluso nell'intestazione Da. Può essere testo come in &quot;Mario Rossi&quot;, un indirizzo email come &quot; joe@acme.com&quot; o un dominio come &quot; zimbra.com&quot;.</p>
 <p style="font-weight: bold;">to:</p>
 <p style="margin-left: 40px;">Equivale a from: ma specifica una delle persone a cui è indirizzato il messaggio nell'intestazione A: A.</p>
 <p style="font-weight: bold;">cc:</p>
@@ -148,7 +145,7 @@ else
 <p style="font-weight: bold;">has:</p>
 <p style="margin-left: 40px;">Specifica un attributo che il messaggio deve contenere. I tipi di oggetto che è possibile specificare sono &quot;allegato&quot;, &quot;telefono&quot; o &quot; url&quot;. Ad esempio,   <span class="code">has:allegato</span> consente di trovare tutti i messaggi contenenti uno o più allegati di qualsiasi tipo.</p>
 <p style="font-weight: bold;">filename:</p>
-<p style="margin-left: 40px;">Specifica il nome del file allegato. Ad esempio, <span class="code">filename: query.txt</span> consente di trovare i messaggi che includono un file allegato chiamato &quot; query.txt&quot;.</p>
+<p style="margin-left: 40px;">Specifica il nome del file allegato. Ad esempio, <span class="code">filename: query.tx</span> consente di trovare i messaggi che includono un file allegato chiamato &quot; query.txt&quot;.</p>
 <p style="font-weight: bold;">type:</p>
 <p style="margin-left: 40px;">Specifica una ricerca all'interno di allegati appartenenti al tipo specificato. I tipi di oggetto che è possibile specificare sono &quot;testo&quot;, &quot;word&quot;, &quot;excel&quot; e &quot; pdf&quot;. Ad esempio, <span class="code">type:word &quot;ciao&quot;</span> consente di trovare messaggi con allegati rappresentati da documenti Microsoft Word e cerca all'interno degli allegati la parola &quot;ciao&quot;.</p>
 <p style="font-weight: bold;">attachment:</p>
@@ -162,7 +159,7 @@ else
 <p style="font-weight: bold;">before:</p>
 <p style="margin-left: 40px;">Equivale a <span class="code">after:</span> ma specifica i messaggi inviati prima della data specificata.</p>
 <p style="font-weight: bold;">size:</p>
-<p style="margin-left: 40px;">Specifica i messaggi la cui dimensione totale, inclusi gli allegati, è pari a un numero specificato di byte, kilobyte o megabyte&nbsp;Ad esempio, <span class="code">size:12 kb</span> consente di trovare messaggi di 12 KB. I simboli maggiore di (&gt;) o minore di (&lt;) possono essere usati al posto delle parole chiave larger o smaller.</p>
+<p style="margin-left: 40px;">Specifica i messaggi la cui dimensione totale, inclusi gli allegati, è pari a un numero specificato di byte, kilobyte o megabyte &nbsp;Ad esempio, <span class="code">size:12 kb</span> consente di trovare messaggi di 12 KB. I simboli maggiore di (&gt;) o minore di (&lt;) possono essere usati al posto delle parole chiave larger o smaller.</p>
 <p style="font-weight: bold;">larger:</p>
 <p style="margin-left: 40px;">Simile a size: ma specifica una dimensione maggiore di quella specificata.</p>
 <p style="font-weight: bold;">smaller:</p>

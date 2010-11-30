@@ -87,22 +87,43 @@ else
 </div>
  
 <h1>Caratteri jolly dei filtri</h1>
-<p>I caratteri jolly possono essere usati nelle operazioni di confronto che usano l'operatore &quot;corrisponde al criterio&quot;. I due caratteri jolly sono <span style="font-weight: bold;"><b>*</b></span> e <span style="font-weight: bold;"><b>?</b></span></p>
+<p>I caratteri jolly possono essere 
+ usati nelle operazioni di confronto che usano l'operatore &quot;corrisponde 
+ al criterio&quot;. I due caratteri 
+ jolly sono <span style="font-weight: bold;"><b>*</b></span> e 
+ <span style="font-weight: bold;"><b>?</b></span></p>
 <h3><span style="font-weight: bold;"><b>Asterisco (*)</b></span></h3>
-<p>L'asterisco * è un segnaposto per &quot;zero o più caratteri di qualsiasi tipo&quot;.</p>
+<p>L'asterisco * è un segnaposto per &quot;zero o più caratteri di 
+ qualsiasi tipo&quot;.</p>
 <p>Esempio di stringa di ricerca di un oggetto: <span style="font-weight: bold;"><b>banana*cioccolato</b></span></p>
-<p style="margin-left: 40px;">Con<span style="font-style: italic;"><i> Corrisponde a:</i></span> Oggetti come &quot;banana con cioccolato&quot;, &quot;banana al cioccolato&quot;, ma non a &quot;panna-banana-cioccolato&quot;</p>
+<p style="margin-left: 40px;">Con<span style="font-style: italic;"><i> 
+ Corrisponde a:</i></span> Oggetti come &quot; 
+ banana con cioccolato&quot;, 
+ &quot;banana al cioccolato&quot;, ma non a &quot;panna-banana-cioccolato&quot;</p>
 <p>Esempio di stringa di ricerca di un oggetto: <span style="font-weight: bold;"><b>p*ombrelli</b></span></p>
-<p style="margin-left: 40px;">Con<span style="font-style: italic;"><i> Corrisponde a:</i></span> Oggetti come &quot;portaombrelli&quot; o &quot;poggiaombrelli&quot; ma non portati &quot;ombrelli neri&quot;</p>
+<p style="margin-left: 40px;">Con<span style="font-style: italic;"><i> 
+ Corrisponde a:</i></span> Oggetti come &quot;portaombrelli&quot; o 
+ &quot;poggiaombrelli&quot; ma non portati &quot;ombrelli neri&quot;</p>
 <h3>Punto interrogativo (?)</h3>
 <p>Il punto interrogativo è un segnaposto per &quot;un solo carattere&quot;.</p>
 <p>Esempio di stringa di ricerca di un oggetto: <span style="font-weight: bold;"><b>banana?cioccolato</b></span></p>
-<p style="margin-left: 40px;">Con<span style="font-style: italic;"><i> Corrisponde a:</i></span> Oggetti come &quot; banana-cioccolato&quot;, &quot;banana/cioccolato&quot; o &quot;banana&amp;cioccolato&quot;</p>
-<h3 style="margin-left: 0px;">Carattere di escape barra rovesciata: \</h3>
-<p style="margin-left: 0px;">Se necessario, puoi specificare   una corrispondenza esatta per una stringa contenente caratteri che in genere   vengono considerati caratteri jolly, ad esempio una parola   in un oggetto preceduta e seguita da tre   asterischi, come nel caso di</p>
+<p style="margin-left: 40px;">Con<span style="font-style: italic;"><i> 
+ Corrisponde a:</i></span> Oggetti come &quot; 
+ banana-cioccolato&quot;, &quot;banana/cioccolato&quot; 
+ o &quot;banana&amp;cioccolato&quot;</p>
+<h3 style="margin-left: 0px;">Carattere di escape barra rovesciata: 
+ \</h3>
+<p style="margin-left: 0px;">Se necessario, puoi specificare una corrispondenza 
+ esatta per una stringa contenente caratteri che in genere vengono considerati 
+ caratteri jolly, ad esempio una parola in un oggetto preceduta 
+ e seguita da tre asterischi, come nel caso di</p>
 <p>***MORE MONEY!!!*** o</p>
 <p>***FREE GIFT***</p>
-<p>Per indicare che un carattere jolly è un carattere vero e proprio anziché un segnaposto, è necessario farlo precedere da una barra rovesciata (\). La stringa di confronto &quot;\*\*\**\*\*\*&quot;, ad esempio, specifica un oggetto composto da una stringa preceduta e seguita da tre asterischi (spazi inclusi).</p>
+<p>Per indicare che un carattere 
+ jolly è un carattere vero e proprio anziché un segnaposto, è necessario 
+ farlo precedere da una barra rovesciata (\). La stringa di confronto 
+ &quot;\*\*\**\*\*\*&quot;, ad esempio, specifica un oggetto composto da 
+ una stringa preceduta e seguita da tre asterischi (spazi inclusi).</p>
 <p><img src="../image19.jpg" alt="image19.jpg" style="border: none;" width="589" height="223" border="0" /></p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--

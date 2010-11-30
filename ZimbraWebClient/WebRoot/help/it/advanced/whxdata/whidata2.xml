@@ -1,6 +1,13 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="notifica email" >
+  <topic name="Impostazione di avvisi sul desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
+  <topic name="Nuove notifiche email" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="Notifica IM" >
+  <topic name="Impostazione di avvisi sul desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
 <key name="numero settimana" >
   <topic name="Visualizzazione numeri settimana dell'Agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
@@ -31,6 +38,9 @@
 <key name="organizzazione di una riunione" >
   <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
+<key name="pagina condivisione" >
+  <topic name="Gestione degli elementi condivisi" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="pagine, Documenti" >
   <topic name="Creazione di una nuova pagina" url="Documents/Create_a_new_page.htm" />
 </key>
@@ -50,6 +60,9 @@
 </key>
 <key name="personalizza campo contatti" >
   <topic name="Creazione di un nuovo contatto" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="personalizzazione della settimana lavorativa" >
+  <topic name="Viste dell'Agenda" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="Personalizzazione della vista" >
   <topic name="Personalizzazione della vista" url="Navigation_folders_and_tips/Customize_your_view.htm" />
@@ -76,6 +89,9 @@
 </key>
 <key name="preferenze, Agenda" >
   <topic name="Impostazione delle preferenze dell'Agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+</key>
+<key name="preferenze, condivisione" >
+  <topic name="Gestione degli elementi condivisi" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="preferenze, modifica" >
   <topic name="Modifica delle opzioni utente" url="Userspecific/Changing_Your_User_Options.htm" />
@@ -136,6 +152,9 @@
 <key name="ricerca dei destinatari" >
   <topic name="Ricerca dei destinatari " url="Search/Searching_for_Recipients_.htm" />
 </key>
+<key name="ricerca di condivisioni" >
+  <topic name="Gestione degli elementi condivisi" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="ricerca di un messaggio" >
   <topic name="Ricerca di messaggi" url="Search/_search__vs.__search_for_.htm" />
 </key>
@@ -143,7 +162,7 @@
   <topic name="Ricerca rapida" url="Search/Quick_search.htm" />
 </key>
 <key name="ricerca, and/or" >
-  <topic name="Differenza tra ricerche “And” e “Or” " url="Search/and_vs_or_searches.htm" />
+  <topic name="Differenza tra ricerche &quot;And&quot; e &quot;Or&quot; " url="Search/and_vs_or_searches.htm" />
 </key>
 <key name="ricezione dei messaggi" >
   <topic name="Come ricevere nuovi messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -151,11 +170,17 @@
 <key name="ricorda nome utente e password su questo computer" >
   <topic name="Accesso e uscita" url="Userspecific/logging_on_and_off.htm" />
 </key>
+<key name="ridenominazione di file nella valigetta" >
+  <topic name="Uso dei file nella Valigetta" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+</key>
 <key name="rifiuto di una richiesta di condivisione di un'Agenda" >
   <topic name="Rifiuto di una richiesta di condivisione di un'Agenda" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
 </key>
 <key name="riinvia" >
   <topic name="Menu del tasto destro del mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="ripristino di file eliminati" >
+  <topic name="Svuota Cestino " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="riquadro contenuto, modifica intestazione colonna" >
   <topic name="Personalizzazione della vista" url="Navigation_folders_and_tips/Customize_your_view.htm" />
@@ -262,25 +287,6 @@
 </key>
 <key name="stampa impegni" >
   <topic name="Impegni" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="tabelle, aggiunta a pagine di Documenti" >
-  <topic name="Aggiunta di una tabella a una pagina del Blocco Note" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="tag" >
-  <topic name="Assegnazione di tag ai messaggi" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-  <topic name="Eliminazione dei tag" url="Tags_and_flags/deleting_tags.htm" />
-  <key name="Assegnazione" >
-    <topic name="Assegnazione di tag ai messaggi" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-  </key>
-  <key name="Eliminazione" >
-    <topic name="Eliminazione dei tag" url="Tags_and_flags/deleting_tags.htm" />
-  </key>
-</key>
-<key name="tag, creazione" >
-  <topic name="Uso dei tag per classificare i messaggi email" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
-</key>
-<key name="tag, trascinamento" >
-  <topic name="Assegnazione di tag ai messaggi" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
 </key>
 
 </indexdata>

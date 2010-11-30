@@ -1,6 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="dizionario, aggiunta di parole a" >
+  <topic name="Uso del controllo ortografico" url="Creating_Messages/Using_Spell_Check.htm" />
+</key>
 <key name="Documenti, aggiunta di tabelle" >
   <topic name="Aggiunta di una tabella a una pagina del Blocco Note" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
@@ -58,6 +61,9 @@
 <key name="esportazione di Agende iCal" >
   <topic name="Importazione dell'Agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
+<key name="estrazione" >
+  <topic name="Uso dei file nella Valigetta" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+</key>
 <key name="eventi" >
   <topic name="Pianificazione di Giornate intere" url="Calendar/Scheduling_All_Day_events.htm" />
   <topic name="Appuntamenti, riunioni ed eventi" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
@@ -70,6 +76,9 @@
 </key>
 <key name="feed Atom" >
   <topic name="Iscrizione ai feed RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="file eliminati, ripristino" >
+  <topic name="Svuota Cestino " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="file, allegare" >
   <topic name="Allegare file a un messaggio email" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -121,8 +130,8 @@
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="identità di posta" >
-  <topic name="Creazione di personalità" url="Userspecific/Creating_Personas.htm" />
   <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Creazione di personalità" url="Userspecific/Creating_Personas.htm" />
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="identità di posta usata nella composizione del messaggio" >
@@ -286,13 +295,6 @@
 </key>
 <key name="navigazione, tastiera" >
   <topic name="Tasti di scelta rapida della tastiera di ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-</key>
-<key name="notifica email" >
-  <topic name="Impostazione di avvisi sul desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-  <topic name="Nuove notifiche email" url="Userspecific/New_mail_notifications.htm" />
-</key>
-<key name="Notifica IM" >
-  <topic name="Impostazione di avvisi sul desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 
 </indexdata>

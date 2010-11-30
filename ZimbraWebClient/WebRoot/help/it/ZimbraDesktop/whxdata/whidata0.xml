@@ -9,8 +9,14 @@
 <key name="Agenda, libero/occupato" >
   <topic name="Visualizzazione degli orari liberi/occupati" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
+<key name="agenda, personalizzazione della settimana lavorativa" >
+  <topic name="Viste dell'Agenda" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="Agenda, stampa" >
   <topic name="Stampa di un'Agenda" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="Agenda, vista" >
+  <topic name="Viste dell'Agenda" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="Agende iCal, importazione o esportazione" >
   <topic name="Importazione dell'Agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
@@ -53,9 +59,6 @@
 </key>
 <key name="appuntamenti ricorrenti, modifica" >
   <topic name="Modifica di appuntamenti ricorrenti" url="Calendar/Deleting_recurring_appointments.htm" />
-</key>
-<key name="appuntamento, Aggiunta rapida" >
-  <topic name="Uso di Aggiunta rapida per creare un appuntamento" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="archiviazione dei messaggi" >
   <topic name="eliminazione di messaggi" url="reading_mail/archiving_old_messages.htm" />

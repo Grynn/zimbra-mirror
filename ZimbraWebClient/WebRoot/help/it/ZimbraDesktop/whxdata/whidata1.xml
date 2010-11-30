@@ -82,6 +82,9 @@
 <key name="organizzazione di una riunione" >
   <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
+<key name="pagina condivisione" >
+  <topic name="Gestione degli elementi condivisi" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="pagine, Documenti" >
   <topic name="Creazione di una nuova pagina" url="Documents/Create_a_new_page.htm" />
 </key>
@@ -97,6 +100,9 @@
 <key name="personalizza campo contatti" >
   <topic name="Creazione di un nuovo contatto" url="Contacts/creating_a_new_contact.htm" />
 </key>
+<key name="personalizzazione della settimana lavorativa" >
+  <topic name="Viste dell'Agenda" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="Personalizzazione della vista" >
   <topic name="Personalizzazione della vista" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 </key>
@@ -108,6 +114,9 @@
 </key>
 <key name="posta, ricezione" >
   <topic name="Come ricevere nuovi messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="preferenze, condivisione" >
+  <topic name="Gestione degli elementi condivisi" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="preferenze, visualizzazione dal riquadro di lettura" >
   <topic name="Lettura dei messaggi dal riquadro di lettura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
@@ -147,6 +156,9 @@
 <key name="ricerca dei destinatari" >
   <topic name="Ricerca dei destinatari " url="Search/Searching_for_Recipients_.htm" />
 </key>
+<key name="ricerca di condivisioni" >
+  <topic name="Gestione degli elementi condivisi" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="ricerca di un messaggio" >
   <topic name="Ricerca di messaggi" url="Search/_search__vs.__search_for_.htm" />
 </key>
@@ -154,7 +166,7 @@
   <topic name="Ricerca rapida" url="Search/Quick_search.htm" />
 </key>
 <key name="ricerca, and/or" >
-  <topic name="Differenza tra ricerche “And” e “Or” " url="Search/and_vs_or_searches.htm" />
+  <topic name="Differenza tra ricerche &quot;And&quot; e &quot;Or&quot; " url="Search/and_vs_or_searches.htm" />
 </key>
 <key name="ricezione dei messaggi" >
   <topic name="Come ricevere nuovi messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -266,6 +278,9 @@
 <key name="verifica risposta alla riunione" >
   <topic name="Uso della scheda Pianificazione durante la creazione di un appuntamento" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
+<key name="versioni" >
+  <topic name="Controllo delle versioni dei file nella Valigetta" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
 <key name="vista del messaggio email" >
   <topic name="Gestione della vista del messaggio email" url="conversations/conversation_list_view.htm" />
 </key>
@@ -277,18 +292,6 @@
 </key>
 <key name="Vista tradizionale" >
   <topic name="Vista tradizionale" url="Navigation_folders_and_tips/Traditional_View.htm" />
-</key>
-<key name="visualizza riquadro di lettura" >
-  <topic name="Lettura dei messaggi dal riquadro di lettura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="Visualizzazione come HTML" >
-  <topic name="Apertura dei file allegati" url="reading_mail/opening_file_attachments.htm" />
-</key>
-<key name="visualizzazione riquadro di lettura" >
-  <topic name="Gestione della vista del messaggio email" url="conversations/conversation_list_view.htm" />
-</key>
-<key name="W in mini agenda" >
-  <topic name="Visualizzazione numeri settimana dell'Agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 
 </indexdata>

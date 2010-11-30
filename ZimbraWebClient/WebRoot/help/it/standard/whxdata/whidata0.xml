@@ -7,8 +7,14 @@
 <key name="Agenda, escludi da orari liberi/occupati" >
   <topic name="Creazione di una nuova Agenda" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
+<key name="agenda, personalizzazione della settimana lavorativa" >
+  <topic name="Viste dell'Agenda" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="Agenda, remota" >
   <topic name="Creazione di una nuova Agenda" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="Agenda, vista" >
+  <topic name="Viste dell'Agenda" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="aggiunta all'elenco di contatti di un gruppo" >
   <topic name="Aggiunta di nuovi contatti" url="Contacts/b_Adding_new_contacts.htm" />
@@ -35,7 +41,7 @@
   <topic name="Uso dell'editor HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="cartella, feed RSS" >
-  <topic name="Iscriviti al feed RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+  <topic name="Iscrizione ai feed RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
 <key name="cartelle" >
   <topic name="Ridenominazione delle cartelle" url="Navigation_folders_and_tips/renaming_folders.htm" />
@@ -65,7 +71,7 @@
   <topic name="Uso della ricerca degli indirizzi" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="feed RSS" >
-  <topic name="Iscriviti al feed RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+  <topic name="Iscrizione ai feed RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
 <key name="filtro dei messaggi" >
   <topic name="Filtro dei messaggi" url="filters/bc_Filtering_your_messages.htm" />
@@ -139,6 +145,9 @@
 <key name="organizzazione di una riunione" >
   <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
+<key name="personalizzazione della settimana lavorativa" >
+  <topic name="Viste dell'Agenda" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="pianificazione di una riunione" >
   <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
@@ -199,10 +208,13 @@
 <key name="uscita" >
   <topic name="Accesso e uscita" url="Userspecific/logging_on_and_off.htm" />
 </key>
+<key name="versioni" >
+  <topic name="Controllo delle versioni dei file nella Valigetta" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
 <key name="vista della conversazione" >
   <topic name="Gestione della visualizzazione dei messaggi" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
-<key name="Visualizzazione come HTML" >
+<key name="Visualizza come HTML" >
   <topic name="Apertura dei file allegati" url="reading_mail/opening_file_attachments.htm" />
 </key>
 <key name="visualizzazione dei messaggi" >

@@ -1,10 +1,29 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="tabelle, aggiunta a pagine di Documenti" >
+  <topic name="Aggiunta di una tabella a una pagina del Blocco Note" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="tag" >
+  <topic name="Assegnazione di tag ai messaggi" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="Eliminazione dei tag" url="Tags_and_flags/deleting_tags.htm" />
+  <key name="Assegnazione" >
+    <topic name="Assegnazione di tag ai messaggi" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  </key>
+  <key name="Eliminazione" >
+    <topic name="Eliminazione dei tag" url="Tags_and_flags/deleting_tags.htm" />
+  </key>
+</key>
+<key name="tag, creazione" >
+  <topic name="Uso dei tag per classificare i messaggi email" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="tag, trascinamento" >
+  <topic name="Assegnazione di tag ai messaggi" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+</key>
 <key name="tasti di scelta rapida" >
   <topic name="Area di lavoro di Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
   <topic name="Tasti di scelta rapida della tastiera di ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+  <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="tastiera, navigazione tramite" >
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -57,6 +76,9 @@
 <key name="verifica risposta alla riunione" >
   <topic name="Uso della scheda Pianificazione durante la creazione di un appuntamento" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
+<key name="versioni" >
+  <topic name="Controllo delle versioni dei file nella Valigetta" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
 <key name="vista a tre riquadri" >
   <topic name="Area di lavoro di Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
@@ -81,14 +103,14 @@
 <key name="viste agenda" >
   <topic name="Vista elenco Agenda" url="Calendar/Calendar_List_View.htm" />
 </key>
+<key name="Visualizza come HTML" >
+  <topic name="Apertura dei file allegati" url="reading_mail/opening_file_attachments.htm" />
+</key>
 <key name="visualizza informazioni intestazione nei messaggi di risposta" >
   <topic name="Impostazioni delle preferenze per la finestra di composizione delle mail" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="visualizza riquadro di lettura" >
   <topic name="Lettura dei messaggi dal riquadro di lettura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="Visualizzazione come HTML" >
-  <topic name="Apertura dei file allegati" url="reading_mail/opening_file_attachments.htm" />
 </key>
 <key name="visualizzazione riquadro di lettura" >
   <topic name="Gestione della vista del messaggio email" url="conversations/conversation_list_view.htm" />
