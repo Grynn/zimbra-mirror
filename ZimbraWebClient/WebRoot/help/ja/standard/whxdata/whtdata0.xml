@@ -46,6 +46,7 @@
   <item name="アドレスブック" url="Contacts/b_Your_Address_Books.htm" />
   <item name="新しい連絡先を追加する" url="Contacts/b_Adding_new_contacts.htm" />
   <item name="連絡先リストをエクスポートする" url="Contacts/Exporting_a_Contact_List.htm" />
+  <item name="連絡先名を印刷する" url="Contacts/Printing_contact_names.htm" />
 </book>
 <book name="カレンダーを管理する" >
   <item name="カレンダーについて" url="Calendar/b_About_Calendar.htm" />
@@ -89,8 +90,8 @@
   <item name="メッセージをフィルターする" url="filters/bc_Filtering_your_messages.htm" />
   <item name="サポートされているフィルターの条件と操作" url="filters/filter_conditions_and_actions_supported.htm" />
 </book>
-<book name="ユーザー設定を指定する" >
-  <item name="ユーザー設定を指定する" url="Userspecific/b_Setting_your_Options.htm" />
+<book name="プリファレンスを指定する" >
+  <item name="プリファレンスを指定する" url="Userspecific/b_Setting_your_Options.htm" />
   <item name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
   <item name="不在メッセージを作成する" url="Userspecific/vacation_message.htm" />
   <item name="RSS/ATOMフィードを購読する" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />

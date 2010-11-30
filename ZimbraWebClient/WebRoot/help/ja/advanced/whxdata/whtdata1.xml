@@ -13,7 +13,7 @@
 </book>
 <book name="カレンダーを共有する" >
   <item name="カレンダーを共有する" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="共有カレンダーの管理者権利を与える" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <item name="共有カレンダーのシステム管理者権利を与える" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
   <item name="共有カレンダーの管理者権利を与える" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
   <item name="共有カレンダーへのアクセスを受け入れる" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
   <item name="カレンダーの共有要求を拒否する" url="Calendar/Declining_a_Calendar_Share_Request.htm" />

@@ -120,16 +120,6 @@
 		<file url="whxdata\package_110.xml"/>
 		<file url="whxdata\package_111.xml"/>
 		<file url="whxdata\package_112.xml"/>
-		<file url="whxdata\package_113.xml"/>
-		<file url="whxdata\package_114.xml"/>
-		<file url="whxdata\package_115.xml"/>
-		<file url="whxdata\package_116.xml"/>
-		<file url="whxdata\package_117.xml"/>
-		<file url="whxdata\package_118.xml"/>
-		<file url="whxdata\package_119.xml"/>
-		<file url="whxdata\package_120.xml"/>
-		<file url="whxdata\package_121.xml"/>
-		<file url="whxdata\package_122.xml"/>
 		<file url="whxdata\packageindex.xml"/>
 		<file url="whxdata\synonym.xml"/>
 		<file url="whxdata\topictable_0.xml"/>
@@ -138,6 +128,7 @@
 		<file url="whxdata\topictable_3.xml"/>
 		<file url="whxdata\topictable_4.xml"/>
 		<file url="whxdata\topictable_5.xml"/>
+		<file url="whxdata\topictable_6.xml"/>
 		<file url="whxdata\topictableindex.xml"/>
 		<file url="whxdata\whfts.xml"/>
 	</files>

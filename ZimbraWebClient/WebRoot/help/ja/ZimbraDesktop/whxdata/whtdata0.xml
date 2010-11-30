@@ -102,8 +102,8 @@
   <item name="AND検索とOR検索" url="Search/and_vs_or_searches.htm" />
   <item name="検索でアスタリスクワイルドカード（*）を使用する" url="Search/Using_Wildcard_in_Search.htm" />
 </book>
-<book name="ユーザー設定を指定する" >
-  <item name="Desktopの詳細設定を指定する" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
+<book name="プリファレンスを指定する" >
+  <item name="Desktopのプリファレンスを指定する" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
   <item name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
   <item name="他のアドレスメール通知を送信する" url="Userspecific/New_mail_notifications.htm" />
   <item name="不在メッセージ" url="Userspecific/vacation_message.htm" />

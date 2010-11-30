@@ -104,15 +104,15 @@ else
 
 <h1>AND型とOR型の検索</h1>
 <p>複数の条件を使用する検索では、指定した条件のいずれかに一致する項目を探すことも、指定した条件のすべてに一致する項目を探すこともできます。高度な検索を使用すると、両方の種類の検索を実行できます。</p>
-<p>基本検索以外のすべての検索ペインでは、以下の規則が適用されます。</p>
+<p>すべての検索ペインでは、以下の規則が適用されます。</p>
 <ul type="disc">
+	<li class="p"><p>基本検索ペインでは、AND検索クエリを作成できます。2つの基本検索ペインを開いている場合、2つのペイン間のOR検索クエリが作成されます。</p></li>
 	<li class="p"><p>指定した条件のいずれかに一致するメッセージを検索する場合、これを<span style="font-style: italic;"><i>OR</i></span>検索と言います。なぜなら、メッセージがいずれかの項目（つまり、X OR Y）を含んでいる場合、そのメッセージは一致するとみなされるからです。複数のチェックボックスがある高度な検索のペインでは、1つのペイン内で複数の項目を選択することで、それらの項目の<span style="font-style: italic;"><i>OR</i></span>検索を作成できます。</p></li>
-	<li class="p"><p>XとYの両方を含むメッセージを検索する場合、これを<span style="font-style: italic;"><i>AND</i></span>検索と言います。指定したすべての条件を満たすメッセージが一致項目とみなされます。複数のチェックボックスがある高度な検索のペインでは、同じペインを複数個開き、それぞれのペインで異なるチェックボックスを選択することで<span style="font-style: italic;"><i>AND</i></span>検索の条件を指定できます。</p></li>
+	<li class="p"><p>XとYの両方を含むメッセージを検索する場合、これを<span style="font-style: italic;"><i>AND</i></span>検索と言います。指定したすべての条件を満たすメッセージが一致項目とみなされます。高度な検索ペインの[タグ]と[ステータス]では、同じペインを複数個開き、それぞれのペインで異なるチェックボックスを選択することで<span style="font-style: italic;"><i>AND</i></span>検索の条件を指定できます。</p></li>
 </ul>
-<p>たとえば、Adobe PDFファイルまたはJPEGイメージのいずれかを含むメッセージを検索するとします。この場合は、1つの添付ファイルペインでこれらのチェックボックスをオンにします。</p>
-<p class="note" style="margin-left: 0px;"><span style="font-weight: bold;"><b>備考</b></span>：クエリに表示されるのは「OR」だけです。検索バーで検索クエリを表示するオプションを選択した場合は、高度な検索でオプションを選択するごとに[検索]テキストボックスが更新され、新しいクエリが表示されます。<span style="font-style: italic;"><i>AND</i></span>検索を実行する場合、「<span style="font-style: italic;"><i>AND</i></span>」という単語は表示されません。以下の例は、[差出人:]欄に「martin」を含み、かつ[宛先:]欄または[Cc:]欄のどちらかに「boxman」を含むメッセージを検索するための条件を示しています。</p>
-<p style="margin-left: 40px;">&nbsp;</p>
-<p style="font-family: 'Lucida Console', monospace; color: #800080; margin-left: 40px;"><img src="../basic_search.gif" alt="basic_search.gif" style="border: none;" width="144" height="168" border="0" /> &nbsp;<img src="../searchbar.gif" alt="searchbar.gif" style="border: none;" width="483" height="38" border="0" /></p>
+<p class="note" style="margin-left: 0px;"><span style="font-weight: bold;"><b>備考</b></span>：クエリに表示されるのは「OR」だけです。検索バーで検索クエリを表示するオプションを選択した場合は、[検索]テキストボックスが更新され、新しいクエリが表示されます。<span style="font-style: italic;"><i>AND</i></span>検索を実行する場合、「<span style="font-style: italic;"><i>AND</i></span>」という単語は表示されません。以下の例は、[差出人:]欄に「martin」を含み、かつ[To:]欄または[Cc:]欄のどちらかに「boxman」を含むメッセージを検索するためのAND条件を示しています。</p>
+<p style="margin-left: 40px;">&#160;</p>
+<p style="font-family: 'Lucida Console', monospace; color: #800080; margin-left: 40px;"><img src="../basic_search.gif" alt="basic_search.gif" style="border: none;" width="144" height="168" border="0" /> &#160;<img src="../searchbar.gif" alt="searchbar.gif" style="border: none;" width="483" height="38" border="0" /></p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

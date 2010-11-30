@@ -1,6 +1,55 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="印刷する" >
+  <topic name="スレッドを印刷する" url="conversations/printing_a_conversation.htm" />
+  <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
+  <key name="メールメッセージ" >
+    <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
+  </key>
+</key>
+<key name="取り消す" >
+  <topic name="操作を取り消す" url="Userspecific/Undo_Action.htm" />
+</key>
+<key name="受信メールを並べ替える" >
+  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
+</key>
+<key name="受信者、検索" >
+  <topic name="受信者を検索する " url="Search/Searching_for_Recipients_.htm" />
+</key>
+<key name="受信者を検索する" >
+  <topic name="受信者を検索する " url="Search/Searching_for_Recipients_.htm" />
+</key>
+<key name="右クリック" >
+  <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="右クリックメニュー" >
+  <topic name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="場所、確保する" >
+  <topic name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
+</key>
+<key name="外部のユーザー" >
+  <topic name="自分を会議に招待できる人物を指定する" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+</key>
+<key name="外部アカウント" >
+  <topic name="POPアカウントを管理する" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="外部アカウント、追加方法" >
+  <topic name="POPアカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="外部アカウントにアクセスする" >
+  <topic name="外部アカウントにアクセスする" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="役割" >
+  <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="復元する" >
+  <topic name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="削除したメールメッセージ" >
+    <topic name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  </key>
+</key>
 <key name="必須の参加" >
   <topic name="予約の作成時に[予定]タブを使用する" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
@@ -38,7 +87,7 @@
   <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="新着メールをポーリングする" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="新着メールを確認する" >
   <topic name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -50,10 +99,10 @@
   <topic name="POPアカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
 </key>
 <key name="最初の内容ペインビューを設定する" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="検索、and/or" >
-  <topic name="「And」型と「Or」型の検索" url="Search/and_vs_or_searches.htm" />
+  <topic name="「AND」型と「OR」型の検索" url="Search/and_vs_or_searches.htm" />
 </key>
 <key name="検索の例" >
   <topic name="検索の例" url="Search/search_examples.htm" />
@@ -84,13 +133,13 @@
   <topic name="添付ファイルを開く" url="reading_mail/opening_file_attachments.htm" />
 </key>
 <key name="添付ファイルとしてメッセージを転送する" >
-  <topic name="メール作成ウィンドウの詳細設定を指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="メール作成ウィンドウのプリファレンスを指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="社内アドレスブック" >
   <topic name="社内アドレスブックを使用する" url="Contacts/using_the_corporate_address_book.htm" />
 </key>
 <key name="移動、キーボード" >
-  <topic name="ZWCキーボードショートカットのキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+  <topic name="ZWCキーボードショートカットキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="移動する" >
   <topic name="フォルダ間でメールメッセージを移動する" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
@@ -142,23 +191,8 @@
   <topic name="メッセージをフィルターする" url="filters/filtering_your_messages.htm" />
   <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
 </key>
-<key name="詳細設定" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="詳細設定、[全般]タブ" >
-  <topic name="全般の詳細設定を指定する" url="Userspecific/Setting_your_general_preferences.htm" />
-</key>
-<key name="詳細設定、カレンダー" >
-  <topic name="カレンダーの詳細設定を指定する" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-</key>
-<key name="詳細設定、変更する" >
-  <topic name="ユーザーオプションを変更する" url="Userspecific/Changing_Your_User_Options.htm" />
-</key>
-<key name="詳細設定、閲覧ペインを表示" >
-  <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
 <key name="転送、ヘッダー情報を含める" >
-  <topic name="メール作成ウィンドウの詳細設定を指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="メール作成ウィンドウのプリファレンスを指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="転送する" >
   <topic name="メールメッセージを転送する" url="Creating_Messages/forwarding_a_mail_message.htm" />
@@ -167,16 +201,16 @@
   <topic name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
 <key name="転送メールアドレス" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="辞書、語句を追加する" >
   <topic name="スペルチェックを使用する" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
 <key name="返信、ヘッダー情報を表示する" >
-  <topic name="メール作成ウィンドウの詳細設定を指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="メール作成ウィンドウのプリファレンスを指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="返信、件名を表示する" >
-  <topic name="メール作成ウィンドウの詳細設定を指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="メール作成ウィンドウのプリファレンスを指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="返信する" >
   <topic name="メールメッセージに返信する" url="reading_mail/replying_to_mail_messages.htm" />
@@ -185,7 +219,7 @@
   </key>
 </key>
 <key name="返信メッセージのヘッダー情報を表示する" >
-  <topic name="メール作成ウィンドウの詳細設定を指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="メール作成ウィンドウのプリファレンスを指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="迷惑メールをブロックする" >
   <topic name="迷惑メールをフィルターする" url="filters/Filtering_Junk_Mail.htm" />
@@ -230,6 +264,9 @@
 </key>
 <key name="連絡先リスト" >
   <topic name="連絡先" url="Contacts/contacts.htm" />
+</key>
+<key name="週平日をカスタマイズする" >
+  <topic name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="週番号" >
   <topic name="カレンダー週を表示する" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />

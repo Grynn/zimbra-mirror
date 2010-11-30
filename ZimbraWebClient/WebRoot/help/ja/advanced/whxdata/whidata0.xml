@@ -5,7 +5,7 @@
   <topic name="[ゴミ箱]フォルダ" url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="[全般]タブ" >
-  <topic name="全般の詳細設定を指定する" url="Userspecific/Setting_your_general_preferences.htm" />
+  <topic name="全般のプリファレンスを指定する" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
 <key name="3分割ペインビュー" >
   <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
@@ -21,10 +21,10 @@
   <topic name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="HTML、デフォルトに設定" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="html、メールを表示" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="HTMLを使って書式設定する" >
   <topic name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -80,7 +80,7 @@
   <topic name="POPアカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
 </key>
 <key name="POPアカウントのメール、受信する" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="POPアドレス、追加する" >
   <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
@@ -167,10 +167,10 @@
   <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="オプション" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="オプション、カレンダー" >
-  <topic name="カレンダーの詳細設定を指定する" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="カレンダーのプリファレンスを指定する" url="Userspecific/Setting_your_Calendar_preferences.htm" />
 </key>
 <key name="オプション、メール着信通知" >
   <topic name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
@@ -182,7 +182,7 @@
   <topic name="ユーザーオプションを変更する" url="Userspecific/Changing_Your_User_Options.htm" />
 </key>
 <key name="オプションを変更する" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="カスタムフォルダ" >
   <topic name="カスタムフォルダを作成する" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
@@ -197,7 +197,7 @@
   <topic name="全日イベントを予定する" url="Calendar/Scheduling_All_Day_events.htm" />
 </key>
 <key name="カレンダー、システム管理者の役割を共有する" >
-  <topic name="共有カレンダーの管理者権利" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <topic name="共有カレンダーのシステム管理者権利" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
 </key>
 <key name="カレンダー、予定なし/予定あり" >
   <topic name="予定あり/予定なしの時間帯を表示する" url="Calendar/Seeing_free_busy_times.htm" />
@@ -211,8 +211,15 @@
 <key name="カレンダー、概要" >
   <topic name="Zimbraカレンダーについて" url="Calendar/About_Calendar.htm" />
 </key>
+<key name="カレンダー、週平日をカスタマイズする" >
+  <topic name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="カレンダーのシステム管理者の役割" >
-  <topic name="共有カレンダーの管理者権利" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <topic name="共有カレンダーのシステム管理者権利" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+</key>
+<key name="カレンダーのプリファレンス" >
+  <topic name="カレンダーのプリファレンスを指定する" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="自分を会議に招待できる人物を指定する" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="カレンダーのリストビュー" >
   <topic name="カレンダーリストビュー" url="Calendar/Calendar_List_View.htm" />
@@ -222,10 +229,6 @@
 </key>
 <key name="カレンダーの特権を取り消す" >
   <topic name="カレンダーへのアクセスを委任する" url="Calendar/Delegating_Calendar_Access.htm" />
-</key>
-<key name="カレンダーの詳細設定" >
-  <topic name="カレンダーの詳細設定を指定する" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <topic name="自分を会議に招待できる人物を指定する" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="カレンダーへのアクセスを委任" >
   <topic name="カレンダーへのアクセスを委任する" url="Calendar/Delegating_Calendar_Access.htm" />
@@ -241,19 +244,20 @@
 </key>
 <key name="カレンダービュー" >
   <topic name="Zimbraカレンダーについて" url="Calendar/About_Calendar.htm" />
+  <topic name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
   <topic name="カレンダーリストビュー" url="Calendar/Calendar_List_View.htm" />
 </key>
 <key name="キーボードによる移動" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="キーボードショートカット" >
-  <topic name="ZWCキーボードショートカットのキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+  <topic name="ZWCキーボードショートカットキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="クエリ言語の記述" >
   <topic name="クエリ言語の記述" url="Search/query_language_description.htm" />
 </key>
 <key name="クライアントの種類" >
-  <topic name="全般の詳細設定を指定する" url="Userspecific/Setting_your_general_preferences.htm" />
+  <topic name="全般のプリファレンスを指定する" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
 <key name="グループ連絡先" >
   <topic name="グループ連絡先リストを作成する" url="Contacts/Creating_Group_Contact_Lists.htm" />
@@ -268,14 +272,14 @@
   <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="ショートカットキー" >
-  <topic name="ZWCキーボードショートカットのキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ZWCキーボードショートカットキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="スペルチェック" >
   <topic name="スペルチェックを使用する" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
 <key name="スペルチェック、必須として設定する" >
-  <topic name="メール作成ウィンドウの詳細設定を指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="メール作成ウィンドウのプリファレンスを指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="スレッド" >
   <topic name="複数のフォルダに保存されている場合があるスレッドのメッセージ" url="conversations/conversations_can_span_folders.htm" />
@@ -327,6 +331,9 @@
 <key name="タスクを印刷する" >
   <topic name="タスクについて" url="Tasks/About_Tasks.htm" />
 </key>
+<key name="チェックアウト" >
+  <topic name="ブリーフケースでファイルを操作する" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+</key>
 <key name="チャット" >
   <topic name="IMチャットを開始する" url="instant_messaging/Starting_an_IM_chat.htm" />
 </key>
@@ -337,7 +344,7 @@
   <topic name="ノートブックページにテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="デフォルトのクライアントの種類を変更する" >
-  <topic name="全般の詳細設定を指定する" url="Userspecific/Setting_your_general_preferences.htm" />
+  <topic name="全般のプリファレンスを指定する" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
 <key name="ドラッグアンドドロップ" >
   <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
@@ -347,13 +354,6 @@
 </key>
 <key name="ノートブックページ" >
   <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="パスワード" >
-  <topic name="パスワードを忘れた場合" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="パスワードを変更する" url="Userspecific/chaning_your_password.htm" />
-</key>
-<key name="パブリック/プライベートカレンダーイベント" >
-  <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 
 </indexdata>

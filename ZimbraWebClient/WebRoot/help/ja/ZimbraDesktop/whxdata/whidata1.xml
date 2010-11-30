@@ -1,5 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
+<key name="会議" >
+  <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="会議のリマインダー" >
+  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
 <key name="会議の応答を確認する" >
   <topic name="予約の作成時に[予定]タブを使用する" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
@@ -20,6 +27,12 @@
 </key>
 <key name="個人配布リスト" >
   <topic name="グループ連絡先リストを作成する" url="Contacts/Creating_Group_Contact_Lists.htm" />
+</key>
+<key name="共有を検索" >
+  <topic name="共有する項目を管理する" url="Sharing/Managing_items_you_share.htm" />
+</key>
+<key name="共有ページ" >
+  <topic name="共有する項目を管理する" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="共有メールフォルダへのアクセスを取り消す" >
   <topic name="共有フォルダへのアクセスを無効にする" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
@@ -101,7 +114,7 @@
   <topic name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="検索、and/or" >
-  <topic name="「And」型と「Or」型の検索" url="Search/and_vs_or_searches.htm" />
+  <topic name="「AND」型と「OR」型の検索" url="Search/and_vs_or_searches.htm" />
 </key>
 <key name="検索の例" >
   <topic name="検索の例" url="Search/search_examples.htm" />
@@ -129,7 +142,7 @@
   <topic name="添付ファイルを開く" url="reading_mail/opening_file_attachments.htm" />
 </key>
 <key name="移動、キーボード" >
-  <topic name="ZWCキーボードショートカットのキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+  <topic name="ZWCキーボードショートカットキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="移動する" >
   <topic name="フォルダ間でメールメッセージを移動する" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
@@ -167,9 +180,6 @@
 <key name="規則、フィルター" >
   <topic name="メッセージをフィルターする" url="filters/filtering_your_messages.htm" />
   <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
-</key>
-<key name="詳細設定、閲覧ペインを表示" >
-  <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="転送する" >
   <topic name="メールメッセージを転送する" url="Creating_Messages/forwarding_a_mail_message.htm" />
@@ -216,6 +226,9 @@
 </key>
 <key name="連絡先を追加する" >
   <topic name="新しい連絡先を作成する" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="週平日をカスタマイズする" >
+  <topic name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="週番号" >
   <topic name="カレンダー週を表示する" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />

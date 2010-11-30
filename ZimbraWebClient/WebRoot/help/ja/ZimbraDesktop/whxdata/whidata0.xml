@@ -124,11 +124,17 @@
 <key name="カレンダー、印刷する" >
   <topic name="カレンダーを印刷する" url="Calendar/Printing_a_calendar.htm" />
 </key>
+<key name="カレンダー、週平日をカスタマイズする" >
+  <topic name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="カレンダーを印刷する" >
   <topic name="カレンダーを印刷する" url="Calendar/Printing_a_calendar.htm" />
 </key>
+<key name="カレンダービュー" >
+  <topic name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="キーボードショートカット" >
-  <topic name="ZWCキーボードショートカットのキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+  <topic name="ZWCキーボードショートカットキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="クエリ言語の記述" >
   <topic name="クエリ言語の記述" url="Search/query_language_description.htm" />
@@ -143,7 +149,7 @@
   <topic name="サポートされている添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
 <key name="ショートカットキー" >
-  <topic name="ZWCキーボードショートカットのキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+  <topic name="ZWCキーボードショートカットキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="スレッド" >
   <topic name="複数のフォルダに保存されている場合があるスレッドのメッセージ" url="conversations/conversations_can_span_folders.htm" />
@@ -198,6 +204,9 @@
 <key name="ノートブックページ" >
   <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
 </key>
+<key name="バージョン" >
+  <topic name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
 <key name="パブリック/プライベートカレンダーイベント" >
   <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
@@ -246,6 +255,12 @@
 </key>
 <key name="プライベート予約" >
   <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="プリファレンス、共有" >
+  <topic name="共有する項目を管理する" url="Sharing/Managing_items_you_share.htm" />
+</key>
+<key name="プリファレンス、閲覧ペインを表示" >
+  <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="プレビューペイン、オンとオフを切り替える" >
   <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
@@ -350,9 +365,6 @@
 <key name="予約" >
   <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
-<key name="予約、簡易追加" >
-  <topic name="簡易追加機能を使用して予約を作成する" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-</key>
 <key name="予約にプライベートのマークを付ける" >
   <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
   <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
@@ -365,13 +377,6 @@
 </key>
 <key name="任意の参加" >
   <topic name="予約の作成時に[予定]タブを使用する" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
-<key name="会議" >
-  <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="会議のリマインダー" >
-  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 
 </indexdata>

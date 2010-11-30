@@ -1,6 +1,16 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="バージョン" >
+  <topic name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
+<key name="パスワード" >
+  <topic name="パスワードを忘れた場合" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="パスワードを変更する" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="パブリック/プライベートカレンダーイベント" >
+  <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
 <key name="パーソナ" >
   <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
   <topic name="パーソナを作成する" url="Userspecific/Creating_Personas.htm" />
@@ -76,6 +86,9 @@
 <key name="ブリーフケースフォルダを共有する" >
   <topic name="ブリーフケースを共有する" url="Briefcase/Sharing_your_Briefcase.htm" />
 </key>
+<key name="ブリーフケース内のファイルの名前を変更する" >
+  <topic name="ブリーフケースでファイルを操作する" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+</key>
 <key name="ブリーフケース内のファイルを移動する" >
   <topic name="ブリーフケースでファイルを操作する" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
@@ -91,11 +104,29 @@
 <key name="プライベート予約、詳細を共有する" >
   <topic name="カレンダーへのアクセスを委任する" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
+<key name="プリファレンス" >
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="プリファレンス、[全般]タブ" >
+  <topic name="全般のプリファレンスを指定する" url="Userspecific/Setting_your_general_preferences.htm" />
+</key>
+<key name="プリファレンス、カレンダー" >
+  <topic name="カレンダーのプリファレンスを指定する" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+</key>
+<key name="プリファレンス、共有" >
+  <topic name="共有する項目を管理する" url="Sharing/Managing_items_you_share.htm" />
+</key>
+<key name="プリファレンス、変更する" >
+  <topic name="ユーザーオプションを変更する" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="プリファレンス、閲覧ペインを表示" >
+  <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
 <key name="プレビューペイン、オンとオフを切り替える" >
   <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="ヘッダー、含める" >
-  <topic name="メール作成ウィンドウの詳細設定を指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="メール作成ウィンドウのプリファレンスを指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="ページ、文書" >
   <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
@@ -104,7 +135,7 @@
   <topic name="迷惑メールをフィルターする" url="filters/Filtering_Junk_Mail.htm" />
 </key>
 <key name="ミニカレンダー" >
-  <topic name="カレンダーの詳細設定を指定する" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="カレンダーのプリファレンスを指定する" url="Userspecific/Setting_your_Calendar_preferences.htm" />
   <topic name="カレンダー週を表示する" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="メッセージ、不在" >
@@ -146,7 +177,7 @@
 <key name="メールID" >
   <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
   <topic name="パーソナを作成する" url="Userspecific/Creating_Personas.htm" />
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="メールのアドレスのオートコンプリート" >
   <topic name="アドレス参照を使用する" url="Creating_Messages/Using_address_lookup.htm" />
@@ -179,8 +210,8 @@
 <key name="ユーザーインターフェイスの機能" >
   <topic name="ユーザーインターフェイスの機能とショートカット" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
 </key>
-<key name="ユーザー設定" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+<key name="ユーザープリファレンス" >
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="リソース" >
   <topic name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
@@ -227,9 +258,6 @@
 <key name="予約" >
   <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
-<key name="予約、簡易追加" >
-  <topic name="簡易追加機能を使用して予約を作成する" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-</key>
 <key name="予約にプライベートのマークを付ける" >
   <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
   <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
@@ -241,7 +269,7 @@
   <topic name="繰り返し予約を変更する" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
 <key name="予約リマインダー" >
-  <topic name="ユーザー設定を指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="任意の参加" >
   <topic name="予約の作成時に[予定]タブを使用する" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
@@ -289,6 +317,9 @@
 <key name="全日予約" >
   <topic name="全日イベントを予定する" url="Calendar/Scheduling_All_Day_events.htm" />
 </key>
+<key name="共有を検索" >
+  <topic name="共有する項目を管理する" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="共有アクセス、アドレスブック" >
   <topic name="アドレスブックを共有する" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
@@ -297,6 +328,9 @@
 </key>
 <key name="共有タスクリストを変更する" >
   <topic name="自分のタスクリストを共有する" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="共有ページ" >
+  <topic name="共有する項目を管理する" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="共有メールフォルダへのアクセスを取り消す" >
   <topic name="共有フォルダへのアクセスを無効にする" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
@@ -310,56 +344,16 @@
 <key name="再送信する" >
   <topic name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
+<key name="削除したファイル、復元する" >
+  <topic name="ゴミ箱を空にする " url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
+<key name="削除した項目を復元する" >
+  <topic name="ゴミ箱を空にする " url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
 <key name="削除する" >
   <topic name="フォルダを削除する" url="Navigation_folders_and_tips/deleting_folders.htm" />
   <key name="フォルダ" >
     <topic name="フォルダを削除する" url="Navigation_folders_and_tips/deleting_folders.htm" />
-  </key>
-</key>
-<key name="印刷する" >
-  <topic name="スレッドを印刷する" url="conversations/printing_a_conversation.htm" />
-  <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
-  <key name="メールメッセージ" >
-    <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
-  </key>
-</key>
-<key name="受信メールを並べ替える" >
-  <topic name="フィルター機能のしくみ" url="filters/how_filtering_works.htm" />
-</key>
-<key name="受信者、検索" >
-  <topic name="受信者を検索する " url="Search/Searching_for_Recipients_.htm" />
-</key>
-<key name="受信者を検索する" >
-  <topic name="受信者を検索する " url="Search/Searching_for_Recipients_.htm" />
-</key>
-<key name="右クリック" >
-  <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="右クリックメニュー" >
-  <topic name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="場所、確保する" >
-  <topic name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
-</key>
-<key name="外部のユーザー" >
-  <topic name="自分を会議に招待できる人物を指定する" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
-</key>
-<key name="外部アカウント" >
-  <topic name="POPアカウントを管理する" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="外部アカウント、追加方法" >
-  <topic name="POPアカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
-</key>
-<key name="外部アカウントにアクセスする" >
-  <topic name="外部アカウントにアクセスする" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="役割" >
-  <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="復元する" >
-  <topic name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  <key name="削除したメールメッセージ" >
-    <topic name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
 </key>
 

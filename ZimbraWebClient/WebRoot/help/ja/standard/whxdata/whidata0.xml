@@ -43,6 +43,12 @@
 <key name="カレンダー、予定なし/予定ありから除外する" >
   <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
+<key name="カレンダー、週平日をカスタマイズする" >
+  <topic name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="カレンダービュー" >
+  <topic name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="キーボードショートカット" >
   <topic name="キーボードショートカット" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
 </key>
@@ -79,6 +85,9 @@
 <key name="タスクを印刷する" >
   <topic name="タスクについて" url="Tasks/About_Tasks.htm" />
 </key>
+<key name="バージョン" >
+  <topic name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
 <key name="フィルターの条件" >
   <topic name="サポートされているフィルターの条件と操作" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
@@ -93,6 +102,9 @@
 </key>
 <key name="プライベート予約" >
   <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="プリファレンス" >
+  <topic name="オプションを設定する" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
 <key name="メッセージ、フィルター規則を設定する" >
   <topic name="メッセージをフィルターする" url="filters/bc_Filtering_your_messages.htm" />
@@ -190,9 +202,6 @@
 <key name="署名を追加する" >
   <topic name="署名を自動的に追加する" url="Userspecific/b_Automatically_adding_your_signature.htm" />
 </key>
-<key name="詳細設定" >
-  <topic name="オプションを設定する" url="Userspecific/b_Setting_your_Options.htm" />
-</key>
 <key name="転送する" >
   <topic name="メールメッセージを転送する" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
@@ -207,6 +216,9 @@
 </key>
 <key name="連絡先、アドレスブックに追加する" >
   <topic name="新しい連絡先を追加する" url="Contacts/b_Adding_new_contacts.htm" />
+</key>
+<key name="週平日をカスタマイズする" >
+  <topic name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="配信不能メール" >
   <topic name="配信不能メール" url="Creating_Messages/undeliverable_mail.htm" />
