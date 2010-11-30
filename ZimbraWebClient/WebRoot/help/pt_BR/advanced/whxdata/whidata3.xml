@@ -1,27 +1,46 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="Senha" >
+  <topic name="Se esquecer sua senha" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Alterando sua senha" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="sessão expirada" >
+  <topic name="Caso sua sessão expire" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="Sinalização" >
+  <topic name="Sinalizando uma mensagem de e-mail" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <key name="Mensagem de e-mail" >
+    <topic name="Sinalizando uma mensagem de e-mail" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  </key>
+</key>
+<key name="tabelas, adicionando a páginas de Documentos" >
+  <topic name="Adicionando uma tabela a uma página de Notebook" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="tarefa, marcar como concluída" >
+  <topic name="Alterar uma tarefa" url="Tasks/Change_a_task.htm" />
+</key>
 <key name="tarefas, imprimir" >
   <topic name="Sobre Tarefas" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="teclas de atalho" >
   <topic name="Teclas de atalho de teclado do ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <topic name="Definindo suas preferencias de usuario" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Definindo suas preferências de usuário" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="telefone, limpeza" >
-  <topic name="Gerenciando seus dispositivos moveis" url="Userspecific/Managing_your_mobile_devices.htm" />
+  <topic name="Gerenciando seus dispositivos móveis" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
 <key name="tipo de cliente" >
-  <topic name="Configurando suas preferencias gerais" url="Userspecific/Setting_your_general_preferences.htm" />
+  <topic name="Configurando suas preferências gerais" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
 <key name="Tipos de arquivo de anexo suportados" >
   <topic name="Tipos de arquivo de anexo suportados" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
-<key name="Topicos de conversacao" >
-  <topic name="Topicos de conversacao podem se estender por pastas" url="conversations/conversations_can_span_folders.htm" />
-  <topic name="Imprimindo um topico de conversacao" url="conversations/printing_a_conversation.htm" />
+<key name="Tópicos de conversação" >
+  <topic name="Tópicos de conversação podem se estender por pastas" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="Imprimindo um tópico de conversação" url="conversations/printing_a_conversation.htm" />
   <key name="Imprimindo" >
-    <topic name="Imprimindo um topico de conversacao" url="conversations/printing_a_conversation.htm" />
+    <topic name="Imprimindo um tópico de conversação" url="conversations/printing_a_conversation.htm" />
   </key>
 </key>
 <key name="upload de novos zimlets" >
@@ -33,68 +52,72 @@
 <key name="Usando marcadores" >
   <topic name="Usando marcadores para classificar mensagens de e-mail" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
-<key name="usuario externo" >
-  <topic name="Identificando quem pode convidar voce para reunioes" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+<key name="usuário externo" >
+  <topic name="Identificando quem pode convidar você para reuniões" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
-<key name="usuario interno" >
-  <topic name="Identificando quem pode convidar voce para reunioes" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+<key name="usuário interno" >
+  <topic name="Identificando quem pode convidar você para reuniões" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
-<key name="usuario local" >
-  <topic name="Identificando quem pode convidar voce para reunioes" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+<key name="usuário local" >
+  <topic name="Identificando quem pode convidar você para reuniões" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
-<key name="verificacao ortografica" >
-  <topic name="Usando o verificador ortografico" url="Creating_Messages/Using_Spell_Check.htm" />
+<key name="verificação ortográfica" >
+  <topic name="Usando o verificador ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
 <key name="verificando para obter novos e-mails" >
-  <topic name="Definindo suas preferencias de usuario" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Definindo suas preferências de usuário" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
-<key name="verificando resposta de reuniao" >
-  <topic name="Usando a guia Programacao ao criar um compromisso" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+<key name="verificando resposta de reunião" >
+  <topic name="Usando a guia Programação ao criar um compromisso" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
-<key name="verificando se ha novas mensagens" >
-  <topic name="Como saber quando voce tem novas mensagens" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+<key name="verificando se há novas mensagens" >
+  <topic name="Como saber quando você tem novas mensagens" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="verificar e-mail" >
-  <topic name="Como saber quando voce tem novas mensagens" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="Como saber quando você tem novas mensagens" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
-<key name="verificar ortografia, configurando como obrigatorio" >
-  <topic name="Definindo suas preferencias para a janela de composicao de e-mails" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+<key name="verificar ortografia, configurando como obrigatório" >
+  <topic name="Definindo suas preferências para a janela de composição de e-mails" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
-<key name="visualizacao de agenda" >
+<key name="versões" >
+  <topic name="Controle de versão de arquivos no porta-arquivos" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
+<key name="visualização de agenda" >
   <topic name="Sobre a agenda do Zimbra" url="Calendar/About_Calendar.htm" />
+  <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
 </key>
-<key name="visualizacao de lista de agendas" >
-  <topic name="Exibicao em lista da Agenda" url="Calendar/Calendar_List_View.htm" />
+<key name="visualização de lista de agendas" >
+  <topic name="Exibição em lista da Agenda" url="Calendar/Calendar_List_View.htm" />
 </key>
-<key name="visualizacao de mensagem de e-mail" >
-  <topic name="Gerenciando a visualizacao da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
+<key name="visualização de mensagem de e-mail" >
+  <topic name="Gerenciando a visualização da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
 </key>
-<key name="visualizacao de mensagens" >
-  <topic name="Gerenciando a visualizacao da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
+<key name="visualização de mensagens" >
+  <topic name="Gerenciando a visualização da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
 </key>
-<key name="visualizacao de programacao" >
-  <topic name="Visualizando varias agendas" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+<key name="visualização de programação" >
+  <topic name="Visualizando várias agendas" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
 </key>
-<key name="visualizacao de topicos de conversacao" >
-  <topic name="Gerenciando a visualizacao da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
+<key name="visualização de tópicos de conversação" >
+  <topic name="Gerenciando a visualização da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
 </key>
-<key name="visualizacao de tres paineis" >
-  <topic name="Espaco de trabalho do Cliente Zimbra para Web" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+<key name="visualização de três painéis" >
+  <topic name="Espaço de trabalho do Cliente Zimbra para Web" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
-<key name="visualizacao do painel de leitura" >
-  <topic name="Gerenciando a visualizacao da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
+<key name="visualização do painel Leitura" >
+  <topic name="Gerenciando a visualização da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
 </key>
-<key name="visualizacao, agendas em listas" >
-  <topic name="Exibicao em lista da Agenda" url="Calendar/Calendar_List_View.htm" />
+<key name="visualização, agendas em listas" >
+  <topic name="Exibição em lista da Agenda" url="Calendar/Calendar_List_View.htm" />
 </key>
-<key name="visualizacoes de agenda" >
-  <topic name="Exibicao em lista da Agenda" url="Calendar/Calendar_List_View.htm" />
+<key name="visualizações de agenda" >
+  <topic name="Exibição em lista da Agenda" url="Calendar/Calendar_List_View.htm" />
 </key>
 <key name="visualizar em HTML" >
   <topic name="Abrindo arquivos anexos" url="reading_mail/opening_file_attachments.htm" />
 </key>
-<key name="visualizar painel de leitura" >
-  <topic name="Lendo e-mails no Painel de Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+<key name="visualizar painel Leitura" >
+  <topic name="Lendo e-mails no painel Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="Zimlets" >
   <topic name="Sobre Zimlets" url="Zimlets/About_Zimlets.htm" />

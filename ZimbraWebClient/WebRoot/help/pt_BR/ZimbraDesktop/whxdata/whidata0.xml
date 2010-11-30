@@ -15,6 +15,9 @@
 <key name="agenda, livre/ocupado" >
   <topic name="Exibindo horas livres/ocupadas" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
+<key name="agenda, personalizar semana útil" >
+  <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="Agendas iCal, importar ou exportar" >
   <topic name="Importando sua agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
@@ -36,12 +39,6 @@
 <key name="anexos ics, salvando" >
   <topic name="Respondendo a um convite" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
-<key name="apagando compromissos recorrentes" >
-  <topic name="Alterando compromissos recorrentes" url="Calendar/Deleting_recurring_appointments.htm" />
-</key>
-<key name="apagando contatos" >
-  <topic name="Apagando um contato" url="Contacts/deleting_a_contact.htm" />
-</key>
 <key name="arquivamento de mensagens de e-mail" >
   <topic name="Arquivando suas mensagens de e-mail" url="Zdesktop/Archiving_your_email_messages.htm" />
 </key>
@@ -52,7 +49,7 @@
   <topic name="Anexando arquivos a uma mensagem de e-mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="assinar RSS" >
-  <topic name="Assinar conteudos RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+  <topic name="Assinar conteúdos RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
 <key name="Assinatura" >
   <topic name="Usando uma assinatura" url="Userspecific/using_a_signature.htm" />
@@ -63,11 +60,11 @@
 <key name="busca com curinga" >
   <topic name="Usando o recurso de busca" url="Search/using_the_search_feature.htm" />
 </key>
-<key name="busca por destinatarios" >
-  <topic name="Buscando destinatarios " url="Search/Searching_for_Recipients_.htm" />
+<key name="busca por destinatários" >
+  <topic name="Buscando destinatários " url="Search/Searching_for_Recipients_.htm" />
 </key>
-<key name="Busca rapida" >
-  <topic name="Busca rapida" url="Search/Quick_search.htm" />
+<key name="Busca rápida" >
+  <topic name="Busca rápida" url="Search/Quick_search.htm" />
 </key>
 <key name="busca, and/or" >
   <topic name="Tipos de buscas &quot;And&quot; x &quot;Or&quot;" url="Search/and_vs_or_searches.htm" />
@@ -85,44 +82,44 @@
   <topic name="Classificando tarefas " url="Tasks/Sorting_tasks_.htm" />
 </key>
 <key name="Como criar compromissos" >
-  <topic name="Sobre compromissos, reunioes e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="Sobre compromissos, reuniões e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
-<key name="compromisso, quickadd" >
-  <topic name="Usando o QuickAdd para criar um compromisso" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<key name="compartilhando página" >
+  <topic name="Gerenciando itens compartilhados" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="compromissos" >
-  <topic name="Sobre compromissos, reunioes e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="Sobre compromissos, reuniões e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
 <key name="compromissos particulares" >
-  <topic name="Sobre a pagina Compromissos" url="Calendar/About_the_Appointment_Page.htm" />
+  <topic name="Sobre a página Compromissos" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="compromissos recorrentes, alterando" >
   <topic name="Alterando compromissos recorrentes" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
-<key name="Condicoes do filtro" >
-  <topic name="Condicoes de filtro e acoes suportadas" url="filters/filter_conditions_and_actions_supported.htm" />
+<key name="Condições do filtro" >
+  <topic name="Condições de filtro e ações suportadas" url="filters/filter_conditions_and_actions_supported.htm" />
   <topic name="Como funciona a filtragem" url="filters/how_filtering_works.htm" />
 </key>
-<key name="configuracao de conta IMAP" >
+<key name="configuração de conta IMAP" >
   <topic name="Configurando contas POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
 </key>
-<key name="configuracao de conta IMAP do Microsoft Exchange" >
+<key name="configuração de conta IMAP do Microsoft Exchange" >
   <topic name="Configurando contas POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
 </key>
-<key name="configuracao de conta, IMAP" >
+<key name="configuração de conta, IMAP" >
   <topic name="Configurando contas POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
 </key>
-<key name="confirmacao de leitura" >
-  <topic name="Solicitando uma confirmacao de leitura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+<key name="confirmação de leitura" >
+  <topic name="Solicitando uma confirmação de leitura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
 <key name="Construtor de buscas" >
-  <topic name="Construindo criterios de busca" url="Search/building_search_queries.htm" />
+  <topic name="Construindo critérios de busca" url="Search/building_search_queries.htm" />
 </key>
 <key name="conta, exportar" >
-  <topic name="Fazendo backup do conteudo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <topic name="Fazendo backup do conteúdo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 <key name="conta, importar" >
-  <topic name="Fazendo backup do conteudo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <topic name="Fazendo backup do conteúdo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 <key name="contato" >
   <topic name="Editando um contato" url="Contacts/editing_a_contact.htm" />
@@ -140,17 +137,17 @@
 <key name="Contatos pessoais" >
   <topic name="Editando um contato" url="Contacts/editing_a_contact.htm" />
 </key>
-<key name="contatos, adicionando um contato apagado novamente na lista" >
-  <topic name="Apagando um contato" url="Contacts/deleting_a_contact.htm" />
+<key name="contatos, adicionando um contato excluido novamente na lista" >
+  <topic name="Excluindo um contato" url="Contacts/deleting_a_contact.htm" />
 </key>
-<key name="contatos, criando campos personalizados no formulario" >
+<key name="contatos, criando campos personalizados no formulário" >
   <topic name="Criando um novo contato" url="Contacts/creating_a_new_contact.htm" />
 </key>
 <key name="contatos, importando" >
   <topic name="Importando contatos" url="Contacts/Importing_Contacts.htm" />
 </key>
-<key name="conteudo Atom" >
-  <topic name="Assinar conteudos RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+<key name="conteúdo Atom" >
+  <topic name="Assinar conteúdos RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
 <key name="convite movido para a lixeira" >
   <topic name="Respondendo a um convite" url="Calendar/Responding_to_an_invitation.htm" />
@@ -167,11 +164,11 @@
 <key name="criando marcadores" >
   <topic name="Usando marcadores para classificar mensagens de e-mail" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
-<key name="Criterios de busca" >
-  <topic name="Construindo criterios de busca" url="Search/building_search_queries.htm" />
-  <topic name="Salvando criterios de busca" url="Search/saving_search_queries.htm" />
+<key name="Critérios de busca" >
+  <topic name="Construindo critérios de busca" url="Search/building_search_queries.htm" />
+  <topic name="Salvando critérios de busca" url="Search/saving_search_queries.htm" />
   <key name="Salvando" >
-    <topic name="Salvando criterios de busca" url="Search/saving_search_queries.htm" />
+    <topic name="Salvando critérios de busca" url="Search/saving_search_queries.htm" />
   </key>
 </key>
 <key name="curinga, usando na busca" >
@@ -180,26 +177,26 @@
 <key name="Curingas" >
   <topic name="Curingas" url="filters/wildcards.htm" />
 </key>
-<key name="definindo um endereco de encaminhamento" >
-  <topic name="Definindo um endereco de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+<key name="definindo um endereço de encaminhamento" >
+  <topic name="Definindo um endereço de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
 <key name="desativar zimlets" >
   <topic name="Gerenciando seus Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
-<key name="Descricao da linguagem de criterios" >
-  <topic name="Descricao da linguagem de criterios" url="Search/query_language_description.htm" />
+<key name="Descrição da linguagem de critérios" >
+  <topic name="Descrição da linguagem de critérios" url="Search/query_language_description.htm" />
 </key>
-<key name="destinatario, busca" >
-  <topic name="Buscando destinatarios " url="Search/Searching_for_Recipients_.htm" />
+<key name="destinatário, busca" >
+  <topic name="Buscando destinatários " url="Search/Searching_for_Recipients_.htm" />
 </key>
 <key name="Documentos, adicionando tabelas" >
-  <topic name="Adicionando uma tabela a uma pagina de Notebook" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <topic name="Adicionando uma tabela a uma página de Notebook" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
-<key name="Documentos, criando novas paginas" >
-  <topic name="Criar uma nova pagina" url="Documents/Create_a_new_page.htm" />
+<key name="Documentos, criando novas páginas" >
+  <topic name="Criar uma nova página" url="Documents/Create_a_new_page.htm" />
 </key>
-<key name="Documentos, editor de texto com formatacao" >
-  <topic name="Usando o editor de texto com formatacao" url="Documents/Using_the_rich_text_editor.htm" />
+<key name="Documentos, editor de texto com formatação" >
+  <topic name="Usando o editor de texto com formatação" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="e-mail" >
   <topic name="Lendo e-mail" url="reading_mail/reading_mail.htm" />
@@ -207,43 +204,43 @@
     <topic name="Lendo e-mail" url="reading_mail/reading_mail.htm" />
   </key>
 </key>
-<key name="E-mail que nao e possivel entregar" >
-  <topic name="E-mail que nao e possivel entregar" url="Creating_Messages/undeliverable_mail.htm" />
+<key name="E-mail que não é possível entregar" >
+  <topic name="E-mail que não é possível entregar" url="Creating_Messages/undeliverable_mail.htm" />
 </key>
 <key name="editar como novo" >
-  <topic name="Menus do botao direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Menus do botão direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="Editar contato" >
   <topic name="Editando um contato" url="Contacts/editing_a_contact.htm" />
 </key>
-<key name="editar permissoes de pasta de e-mail" >
+<key name="editar permissões de pasta de e-mail" >
   <topic name="Revogando um acesso a uma pasta compartilhada" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </key>
-<key name="editor de texto com formatacao para paginas de Documento" >
-  <topic name="Usando o editor de texto com formatacao" url="Documents/Using_the_rich_text_editor.htm" />
+<key name="editor de texto com formatação para páginas de Documento" >
+  <topic name="Usando o editor de texto com formatação" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="Encaminhando" >
   <topic name="Encaminhando uma mensagem de e-mail" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
 <key name="encaminhando seus e-mails" >
-  <topic name="Definindo um endereco de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+  <topic name="Definindo um endereço de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
-<key name="enderecos IMAP, adicionando" >
+<key name="endereços IMAP, adicionando" >
   <topic name="Identidades de e-mail" url="Userspecific/Mail_Identities.htm" />
 </key>
-<key name="enderecos POP, adicionando" >
+<key name="endereços POP, adicionando" >
   <topic name="Identidades de e-mail" url="Userspecific/Mail_Identities.htm" />
 </key>
 <key name="esquecer" >
-  <topic name="Usando a procura de enderecos" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Usando a procura de endereços" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="evento de agenda particular" >
   <topic name="Marcando um compromisso como particular" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="eventos" >
-  <topic name="Sobre compromissos, reunioes e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="Sobre compromissos, reuniões e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
-<key name="eventos de agenda publicos/particulares" >
+<key name="eventos de agenda públicos/particulares" >
   <topic name="Marcando um compromisso como particular" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="Excluindo" >
@@ -252,6 +249,12 @@
     <topic name="Excluindo pastas" url="Navigation_folders_and_tips/deleting_folders.htm" />
   </key>
 </key>
+<key name="excluindo compromissos recorrentes" >
+  <topic name="Alterando compromissos recorrentes" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="excluindo contatos" >
+  <topic name="Excluindo um contato" url="Contacts/deleting_a_contact.htm" />
+</key>
 <key name="Exemplos de busca" >
   <topic name="Exemplos de busca" url="Search/search_examples.htm" />
 </key>
@@ -259,10 +262,10 @@
   <topic name="Importando sua agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="exportar dados da conta" >
-  <topic name="Fazendo backup do conteudo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <topic name="Fazendo backup do conteúdo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 <key name="fazer backup dos dados da conta" >
-  <topic name="Fazendo backup do conteudo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <topic name="Fazendo backup do conteúdo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 <key name="filtrando mensagens" >
   <topic name="Filtrando suas mensagens" url="filters/filtering_your_messages.htm" />
@@ -294,17 +297,17 @@
 <key name="importando contatos" >
   <topic name="Importando contatos" url="Contacts/Importing_Contacts.htm" />
 </key>
-<key name="importando listas de enderecos" >
+<key name="importando listas de endereços" >
   <topic name="Importando contatos" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="importar agendas iCal" >
   <topic name="Importando sua agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="importar conta" >
-  <topic name="Fazendo backup do conteudo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <topic name="Fazendo backup do conteúdo de sua conta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 <key name="Imprimindo" >
-  <topic name="Imprimindo um topico de conversacao" url="conversations/printing_a_conversation.htm" />
+  <topic name="Imprimindo um tópico de conversação" url="conversations/printing_a_conversation.htm" />
   <topic name="Imprimindo uma mensagem de e-mail" url="reading_mail/printing_a_mail_message.htm" />
   <key name="mensagem de e-mail" >
     <topic name="Imprimindo uma mensagem de e-mail" url="reading_mail/printing_a_mail_message.htm" />

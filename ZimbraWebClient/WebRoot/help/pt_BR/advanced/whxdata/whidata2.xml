@@ -1,9 +1,21 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="Menus de botão direito do mouse" >
+  <topic name="Menus de botão direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="menus, botão direito do mouse" >
+  <topic name="Menus de botão direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="MI" >
+  <topic name="Informações básicas sobre o sistema de troca de mensagens instantâneas" url="instant_messaging/Instant_Messaging_Basics.htm" />
+</key>
+<key name="MI, usando outros clientes" >
+  <topic name="Fazer login em outros clientes de MI" url="instant_messaging/Log_into_other_IM_clients.htm" />
+</key>
 <key name="miniagenda" >
-  <topic name="Definindo suas preferencias de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <topic name="Visualizando o numero de semanas da agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="Definindo suas preferências de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="Visualizando o número de semanas da agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="Movendo" >
   <topic name="Movendo mensagens de e-mail entre pastas" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
@@ -20,85 +32,85 @@
 <key name="movendo mensagens para uma pasta" >
   <topic name="Como funciona a filtragem" url="filters/how_filtering_works.htm" />
 </key>
-<key name="navegacao" >
-  <topic name="Area de pastas" url="Navigation_folders_and_tips/Folders_area.htm" />
+<key name="navegação" >
+  <topic name="Área de pastas" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
-<key name="navegacao no teclado" >
-  <topic name="Definindo suas preferencias de usuario" url="Userspecific/Setting_your_user_preferences.htm" />
+<key name="navegação no teclado" >
+  <topic name="Definindo suas preferências de usuário" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
-<key name="navegacao, teclado" >
+<key name="navegação, teclado" >
   <topic name="Teclas de atalho de teclado do ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="navegadores" >
   <topic name="Uso do navegador com o Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
 </key>
 <key name="Navegando" >
-  <topic name="Navegando pela interface de usuario" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Navegando pela interface de usuário" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="nomeando pastas" >
   <topic name="Sobre pastas" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
-<key name="notificacao de e-mail" >
-  <topic name="Notificacoes de novos e-mails" url="Userspecific/New_mail_notifications.htm" />
+<key name="notificação de e-mail" >
+  <topic name="Notificações de novos e-mails" url="Userspecific/New_mail_notifications.htm" />
 </key>
-<key name="notificacao por e-mail" >
+<key name="notificação por e-mail" >
   <topic name="Configurando alertas de desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
-<key name="notificacao por mensagem instantanea" >
+<key name="notificação por mensagem instantânea" >
   <topic name="Configurando alertas de desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 <key name="novas mensagens" >
-  <topic name="Como saber quando voce tem novas mensagens" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="Como saber quando você tem novas mensagens" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
-<key name="numero de semanas" >
-  <topic name="Visualizando o numero de semanas da agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+<key name="número de semanas" >
+  <topic name="Visualizando o número de semanas da agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
-<key name="opcao, mensagem de ferias" >
-  <topic name="Mensagem de ferias" url="Userspecific/vacation_message.htm" />
+<key name="opção, mensagem de férias" >
+  <topic name="Mensagem de férias" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="opcoes" >
-  <topic name="Definindo suas preferencias de usuario" url="Userspecific/Setting_your_user_preferences.htm" />
+<key name="opções" >
+  <topic name="Definindo suas preferências de usuário" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
-<key name="opcoes, agenda" >
-  <topic name="Definindo suas preferencias de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+<key name="opções, agenda" >
+  <topic name="Definindo suas preferências de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
 </key>
-<key name="opcoes, alterando" >
-  <topic name="Alterando suas opcoes de usuario" url="Userspecific/Changing_Your_User_Options.htm" />
+<key name="opções, alterando" >
+  <topic name="Alterando suas opções de usuário" url="Userspecific/Changing_Your_User_Options.htm" />
 </key>
-<key name="opcoes, notificacao de novos e-mails" >
-  <topic name="Notificacoes de novos e-mails" url="Userspecific/New_mail_notifications.htm" />
+<key name="opções, notificação de novos e-mails" >
+  <topic name="Notificações de novos e-mails" url="Userspecific/New_mail_notifications.htm" />
 </key>
-<key name="pagina de conteudo, alterando cabecalho de coluna" >
-  <topic name="Personalizar sua visualizacao" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+<key name="página de conteúdo, alterando cabeçalho de coluna" >
+  <topic name="Personalizar sua visualização" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 </key>
-<key name="paginas notebook" >
-  <topic name="Criar uma nova pagina" url="Documents/Create_a_new_page.htm" />
+<key name="páginas notebook" >
+  <topic name="Criar uma nova página" url="Documents/Create_a_new_page.htm" />
 </key>
-<key name="paginas, documentos" >
-  <topic name="Criar uma nova pagina" url="Documents/Create_a_new_page.htm" />
+<key name="páginas, documentos" >
+  <topic name="Criar uma nova página" url="Documents/Create_a_new_page.htm" />
 </key>
-<key name="painel de leitura" >
-  <topic name="Lendo e-mails no Painel de Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+<key name="painel Leitura" >
+  <topic name="Lendo e-mails no painel Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
-<key name="painel de leitura, ativando e desativando" >
-  <topic name="Lendo e-mails no Painel de Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+<key name="painel Leitura, ativando e desativando" >
+  <topic name="Lendo e-mails no painel Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
-<key name="painel de leitura, ativando/desativando" >
-  <topic name="Gerenciando a visualizacao da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
+<key name="painel Leitura, ativando/desativando" >
+  <topic name="Gerenciando a visualização da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
 </key>
-<key name="painel de leitura, visualizacao" >
-  <topic name="Espaco de trabalho do Cliente Zimbra para Web" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+<key name="painel Leitura, visualização" >
+  <topic name="Espaço de trabalho do Cliente Zimbra para Web" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
-<key name="painel de pastas" >
-  <topic name="Area de pastas" url="Navigation_folders_and_tips/Folders_area.htm" />
+<key name="painel Pastas" >
+  <topic name="Área de pastas" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
-<key name="painel de visao geral" >
-  <topic name="Area de pastas" url="Navigation_folders_and_tips/Folders_area.htm" />
+<key name="painel Visão Geral" >
+  <topic name="Área de pastas" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
-<key name="painel de visualizacao, ativando e desativando" >
-  <topic name="Lendo e-mails no Painel de Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+<key name="painel visualização, ativando e desativando" >
+  <topic name="Lendo e-mails no painel Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
-<key name="papeis" >
+<key name="papéis" >
   <topic name="Identidades de e-mail" url="Userspecific/Mail_Identities.htm" />
 </key>
 <key name="Pasta Lixeira" >
@@ -114,18 +126,21 @@
 <key name="pastas, nomeando" >
   <topic name="Sobre pastas" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
-<key name="permissao negada com convite de reuniao" >
-  <topic name="Recebendo uma mensagem de permissao negada" url="Calendar/Receiving_a_permission_denied_message.htm" />
+<key name="permissão negada com convite de reunião" >
+  <topic name="Recebendo uma mensagem de permissão negada" url="Calendar/Receiving_a_permission_denied_message.htm" />
 </key>
 <key name="personagem" >
   <topic name="Identidades de e-mail" url="Userspecific/Mail_Identities.htm" />
   <topic name="Criando personagens" url="Userspecific/Creating_Personas.htm" />
 </key>
-<key name="personalizando sua visualizacao" >
-  <topic name="Personalizar sua visualizacao" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+<key name="personalizando sua visualização" >
+  <topic name="Personalizar sua visualização" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 </key>
-<key name="planejando uma reuniao" >
-  <topic name="Sobre a pagina de compromisso" url="Calendar/About_the_Appointment_Page.htm" />
+<key name="personalizar semana útil" >
+  <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="planejando uma reunião" >
+  <topic name="Sobre a página de compromisso" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="porta-arquivos, anexando arquivos a mensagens de e-mail" >
   <topic name="Anexando arquivos a uma mensagem de e-mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -136,60 +151,63 @@
 <key name="porta-arquivos, enviando arquivos do" >
   <topic name="Enviar arquivos de seu porta-arquivos" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </key>
-<key name="preenchimento automatico de enderecos" >
-  <topic name="Usando a procura de enderecos" url="Creating_Messages/Using_address_lookup.htm" />
+<key name="preenchimento automático de endereços" >
+  <topic name="Usando a procura de endereços" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
-<key name="preenchimento de endereco em e-mail" >
-  <topic name="Usando a procura de enderecos" url="Creating_Messages/Using_address_lookup.htm" />
+<key name="preenchimento de endereço em e-mail" >
+  <topic name="Usando a procura de endereços" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
-<key name="preferencias" >
-  <topic name="Definindo suas preferencias de usuario" url="Userspecific/Setting_your_user_preferences.htm" />
+<key name="preferências" >
+  <topic name="Definindo suas preferências de usuário" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
-<key name="preferencias de agenda" >
-  <topic name="Definindo suas preferencias de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <topic name="Identificando quem pode convidar voce para reunioes" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+<key name="preferências de agenda" >
+  <topic name="Definindo suas preferências de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="Identificando quem pode convidar você para reuniões" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
-<key name="preferencias do usuario" >
-  <topic name="Definindo suas preferencias de usuario" url="Userspecific/Setting_your_user_preferences.htm" />
+<key name="preferências do usuário" >
+  <topic name="Definindo suas preferências de usuário" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
-<key name="preferencias, agenda" >
-  <topic name="Definindo suas preferencias de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+<key name="preferências, agenda" >
+  <topic name="Definindo suas preferências de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
 </key>
-<key name="preferencias, alterando" >
-  <topic name="Alterando suas opcoes de usuario" url="Userspecific/Changing_Your_User_Options.htm" />
+<key name="preferências, alterando" >
+  <topic name="Alterando suas opções de usuário" url="Userspecific/Changing_Your_User_Options.htm" />
 </key>
-<key name="preferencias, guia geral" >
-  <topic name="Configurando suas preferencias gerais" url="Userspecific/Setting_your_general_preferences.htm" />
+<key name="preferências, compartilhando" >
+  <topic name="Gerenciando itens compartilhados" url="Sharing/Managing_items_you_share.htm" />
 </key>
-<key name="preferencias, visualizar painel de leitura" >
-  <topic name="Lendo e-mails no Painel de Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+<key name="preferências, guia geral" >
+  <topic name="Configurando suas preferências gerais" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
-<key name="presenca obrigatoria" >
-  <topic name="Usando a guia Programacao ao criar um compromisso" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+<key name="preferências, visualizar painel Leitura" >
+  <topic name="Lendo e-mails no painel Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
-<key name="presenca opcional" >
-  <topic name="Usando a guia Programacao ao criar um compromisso" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+<key name="presença obrigatória" >
+  <topic name="Usando a guia Programação ao criar um compromisso" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
-<key name="programando uma reuniao" >
-  <topic name="Sobre a pagina de compromisso" url="Calendar/About_the_Appointment_Page.htm" />
+<key name="presença opcional" >
+  <topic name="Usando a guia Programação ao criar um compromisso" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
+<key name="programando uma reunião" >
+  <topic name="Sobre a página de compromisso" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="programando uma sala ou equipamento" >
   <topic name="Programando recursos" url="Calendar/Scheduling_Resources.htm" />
-</key>
-<key name="quick add" >
-  <topic name="Usando o QuickAdd para criar um compromisso" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="QuickAdd" >
   <topic name="Usando o QuickAdd para criar um compromisso" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="recebendo e-mail" >
-  <topic name="Como saber quando voce tem novas mensagens" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="Como saber quando você tem novas mensagens" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="Recuperando" >
-  <topic name="Recuperando mensagens de e-mail apagadas" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  <key name="Mensagens de e-mail apagadas" >
-    <topic name="Recuperando mensagens de e-mail apagadas" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <topic name="Recuperando mensagens de e-mail excluidas " url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <key name="Mensagens de e-mail excluidas " >
+    <topic name="Recuperando mensagens de e-mail excluidas " url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
+</key>
+<key name="recuperar arquivos excluídos" >
+  <topic name="Esvaziar a lixeira " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="recurso" >
   <topic name="Programando recursos" url="Calendar/Scheduling_Resources.htm" />
@@ -201,19 +219,19 @@
   </key>
 </key>
 <key name="recursos da interface" >
-  <topic name="Espaco de trabalho do Cliente Zimbra para Web" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Espaço de trabalho do Cliente Zimbra para Web" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
-<key name="Recursos da interface de usuario" >
-  <topic name="Recursos e atalhos da interface de usuario" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+<key name="Recursos da interface de usuário" >
+  <topic name="Recursos e atalhos da interface de usuário" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
 </key>
 <key name="recursos do Cliente Web Zimbra" >
-  <topic name="Sobre o Pacote de colaboracao Zimbra" url="Getting_Started/about_liquid_mail.htm" />
+  <topic name="Sobre o Pacote de colaboração Zimbra" url="Getting_Started/about_liquid_mail.htm" />
 </key>
-<key name="recusando uma solicitacao de compartilhamento de agenda" >
-  <topic name="Recusando uma solicitacao de compartilhamento de agenda" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+<key name="recusando uma solicitação de compartilhamento de agenda" >
+  <topic name="Recusando uma solicitação de compartilhamento de agenda" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
 </key>
 <key name="reenviar" >
-  <topic name="Menus de botao direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Menus de botão direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="regras de filtro, pastas existentes" >
   <topic name="Como funciona a filtragem" url="filters/how_filtering_works.htm" />
@@ -221,6 +239,9 @@
 <key name="regras, filtro" >
   <topic name="Filtrando suas mensagens" url="filters/filtering_your_messages.htm" />
   <topic name="Como funciona a filtragem" url="filters/how_filtering_works.htm" />
+</key>
+<key name="renomeando arquivos no porta-arquivos" >
+  <topic name="Trabalhando com arquivos no porta-arquivos" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="reservando salas e equipamento" >
   <topic name="Programando recursos" url="Calendar/Scheduling_Resources.htm" />
@@ -232,57 +253,38 @@
   </key>
 </key>
 <key name="resposta, exibir assunto" >
-  <topic name="Definindo suas preferencias para a janela de composicao de e-mails" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="Definindo suas preferências para a janela de composição de e-mails" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
-<key name="resposta, exibir informacoes do cabecalho" >
-  <topic name="Definindo suas preferencias para a janela de composicao de e-mails" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+<key name="resposta, exibir informações do cabeçalho" >
+  <topic name="Definindo suas preferências para a janela de composição de e-mails" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
-<key name="reunioes" >
-  <topic name="Sobre compromissos, reunioes e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <topic name="Sobre a pagina de compromisso" url="Calendar/About_the_Appointment_Page.htm" />
+<key name="reuniões" >
+  <topic name="Sobre compromissos, reuniões e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="Sobre a página de compromisso" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
-<key name="reunioes, permissao negada" >
-  <topic name="Recebendo uma mensagem de permissao negada" url="Calendar/Receiving_a_permission_denied_message.htm" />
+<key name="reuniões, permissão negada" >
+  <topic name="Recebendo uma mensagem de permissão negada" url="Calendar/Receiving_a_permission_denied_message.htm" />
 </key>
 <key name="revogando a lista de tarefas compartilhada" >
   <topic name="Compartilhar sua lista de tarefas" url="Tasks/Share_your_Task_folder.htm" />
 </key>
-<key name="revogando permissoes na lista de enderecos" >
-  <topic name="Compartilhando sua lista de enderecos" url="Contacts/Sharing_your_Address_Book.htm" />
+<key name="revogando permissões na lista de endereços" >
+  <topic name="Compartilhando sua lista de endereços" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
 <key name="revogar acesso de pastas compartilhadas de e-mail" >
   <topic name="Revogando um acesso a uma pasta compartilhada" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </key>
-<key name="revogar privilegios a agenda" >
-  <topic name="Delegando acesso a agenda" url="Calendar/Delegating_Calendar_Access.htm" />
+<key name="revogar privilégios à agenda" >
+  <topic name="Delegando acesso à agenda" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
 <key name="RSS" >
-  <topic name="Assinar conteudos RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+  <topic name="Assinar conteúdos RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
 <key name="S na miniagenda" >
-  <topic name="Exibindo os numeros da semana na agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="Exibindo os números da semana na agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="saindo" >
   <topic name="Fazendo login e saindo" url="Userspecific/logging_on_and_off.htm" />
-</key>
-<key name="Senha" >
-  <topic name="Se esquecer sua senha" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="Alterando sua senha" url="Userspecific/chaning_your_password.htm" />
-</key>
-<key name="sessao expirada" >
-  <topic name="Caso sua sessao expire" url="Userspecific/if_your_session_expires.htm" />
-</key>
-<key name="Sinalizacao" >
-  <topic name="Sinalizando uma mensagem de e-mail" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="Mensagem de e-mail" >
-    <topic name="Sinalizando uma mensagem de e-mail" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
-</key>
-<key name="tabelas, adicionando a paginas de Documentos" >
-  <topic name="Adicionando uma tabela a uma pagina de Notebook" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="tarefa, marcar como concluida" >
-  <topic name="Alterar uma tarefa" url="Tasks/Change_a_task.htm" />
 </key>
 
 </indexdata>

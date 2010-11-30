@@ -1,5 +1,14 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
+<key name="Visualização tradicional" >
+  <topic name="Visualização tradicional" url="Navigation_folders_and_tips/Traditional_View.htm" />
+</key>
+<key name="visualizar em HTML" >
+  <topic name="Abrindo arquivos anexos" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="visualizar painel Leitura" >
+  <topic name="Lendo e-mails no painel Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
 <key name="Zimlets" >
   <topic name="Sobre Zimlets" url="Zimlets/About_Zimlets.htm" />
   <topic name="Gerenciando seus Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
