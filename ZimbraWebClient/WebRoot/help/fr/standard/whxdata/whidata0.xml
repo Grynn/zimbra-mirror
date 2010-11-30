@@ -7,6 +7,9 @@
 <key name="affichage des mails" >
   <topic name="Choisir comment les mails sont affichés" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
+<key name="affichage du calendrier" >
+  <topic name="Affichages du Calendrier" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="afficher au format HTML" >
   <topic name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
 </key>
@@ -27,6 +30,9 @@
 </key>
 <key name="calendrier, exclure de libre/occupé" >
   <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="calendrier, personnaliser la semaine ouvrée" >
+  <topic name="Affichages du Calendrier" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="calendrier, supprimer" >
   <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
@@ -56,7 +62,7 @@
   <topic name="Description du langage de demande" url="Search/query_language_description.htm" />
 </key>
 <key name="dossier, fil RSS " >
-  <topic name="S’abonner au fil RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+  <topic name="S'abonner au fil RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
 <key name="dossiers" >
   <topic name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
@@ -68,7 +74,7 @@
   <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
 <key name="Fil RSS" >
-  <topic name="S’abonner au fil RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+  <topic name="S'abonner au fil RSS/ATOM " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
 <key name="filtrer des mails" >
   <topic name="Filtrer vos mails" url="filters/bc_Filtering_your_messages.htm" />
@@ -91,7 +97,7 @@
 <key name="Livraison de mail impossible " >
   <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
 </key>
-<key name="mail" >
+<key name="Mail" >
   <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
   <topic name="Parties d’un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <key name="Lecture" >
@@ -128,6 +134,9 @@
 <key name="options, notification de nouveau mail" >
   <topic name="Notifications de nouveau mail" url="Userspecific/New_mail_notifications.htm" />
 </key>
+<key name="personnaliser la semaine ouvrée" >
+  <topic name="Affichages du Calendrier" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="pièces jointes" >
   <topic name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
 </key>
@@ -139,6 +148,9 @@
 </key>
 <key name="préférences" >
   <topic name="Configuration de vos options" url="Userspecific/b_Setting_your_Options.htm" />
+</key>
+<key name="programmation d’une réunion" >
+  <topic name="À propos de la page de Rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="raccourcis clavier" >
   <topic name="Touches de raccourcis clavier" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -205,6 +217,9 @@
 </key>
 <key name="Types de fichiers de pièces jointes supportés" >
   <topic name="Types de fichiers de pièces jointes supportés" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+</key>
+<key name="versions" >
+  <topic name="Contrôle de la version des fichiers du Porte-documents" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 
 </indexdata>

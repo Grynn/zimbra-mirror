@@ -3,7 +3,7 @@
 <tocdata>
 <item name="Partager des dossiers" url="Sharing/Sharing_a_folder.htm" />
 <item name="Gérer les objets partagés" url="Sharing/Managing_items_you_share.htm" />
-<item name="Partage d'une liste de diffusion" url="Sharing/Sharing_with_a_Distribution_List.htm" />
+<item name="Partager avec une liste de diffusion" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="Partage de dossiers de messagerie" >
   <item name="Partage de dossiers de messagerie" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
   <item name="Partage de votre boîte aux lettres" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
@@ -25,7 +25,7 @@
   <item name="Partager votre liste de tâches" url="Tasks/Share_your_Task_folder.htm" />
   <item name="Accepter l’accès à des listes de tâches partagées" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
 </book>
-<book name="Partage de dossiers de porte-documents" >
+<book name="Partager les dossiers du porte-documents" >
   <item name="Partager votre Porte-documents" url="Briefcase/Sharing_your_Briefcase.htm" />
 </book>
 

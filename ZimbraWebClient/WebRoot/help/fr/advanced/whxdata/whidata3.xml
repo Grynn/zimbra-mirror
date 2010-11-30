@@ -1,6 +1,36 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="saisie automatique d’adresses" >
+  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="saisie d’adresse" >
+  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="sauvegarde de données de compte" >
+  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="se rappeler de moi sur cet ordinateur" >
+  <topic name="Connexion et déconnexion" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="signature" >
+  <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="signatures, ajouter automatiquement" >
+  <topic name="Créer des avatars" url="Userspecific/Creating_Personas.htm" />
+</key>
+<key name="suppression de contacts" >
+  <topic name="Suppression d’un contact" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="suppression du mobile" >
+  <topic name="Mobile perdu ou volé – Effacer les données personnelles" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+</key>
+<key name="Supprimer" >
+  <topic name="Supprimer des dossiers" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="dossiers" >
+    <topic name="Supprimer des dossiers" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
 <key name="supprimer des rendez-vous récurrents" >
   <topic name="Modification de rendez-vous récurrents" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
@@ -57,6 +87,9 @@
 <key name="trier les mails entrants" >
   <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
 </key>
+<key name="trouver des partages" >
+  <topic name="Gérer les objets partagés" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="type de client" >
   <topic name="Configurer vos préférences générales " url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
@@ -91,19 +124,16 @@
   <topic name="Comment vous avertir lorsque vous recevez un mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="vérifier l’orthographe" >
-  <topic name="Utilisation du vérificateur d’orthographe" url="Creating_Messages/Using_Spell_Check.htm" />
+  <topic name="Utilisation du vérificateur d'orthographe" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
 <key name="vérifier une réponse à une invitation" >
   <topic name="Utiliser l’onglet Programme lors de la création d'un rendez-vous" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
-<key name="voir sous-fenêtre de lecture" >
-  <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="vue du programme" >
-  <topic name="Affichage de plusieurs calendriers" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+<key name="versions" >
+  <topic name="Contrôle de la version des fichiers du Porte-documents" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 <key name="W dans le mini- calendrier" >
-  <topic name="Afficher le n° de semaine" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="Afficher le numéro des semaines dans le calendrier" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="Zimlets" >
   <topic name="À propos des Zimlets" url="Zimlets/About_Zimlets.htm" />

@@ -1,6 +1,19 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="Documents, éditeur de format RTF" >
+  <topic name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
+<key name="Dossier Corbeille" >
+  <topic name="Dossier Corbeille" url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
+<key name="dossiers" >
+  <topic name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <topic name="À propos des dossiers" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
+<key name="dossiers personnalisés" >
+  <topic name="Créer des dossiers personnalisés" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
 <key name="dossiers, nommer" >
   <topic name="À propos des dossiers" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
@@ -41,6 +54,9 @@
 <key name="exporter des données de compte" >
   <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
+<key name="extraire" >
+  <topic name="Travailler avec des fichiers dans un Porte-documents" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+</key>
 <key name="Faire suivre un mail en pièce jointe" >
   <topic name="Configurer vos préférences pour la fenêtre Écrire un mail " url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
@@ -49,6 +65,9 @@
 </key>
 <key name="faire suivre, inclure les informations d’en-tête" >
   <topic name="Configurer vos préférences pour la fenêtre Écrire un mail " url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
+<key name="fichiers supprimés, récupérer" >
+  <topic name="Vider la corbeille " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="fichiers, joindre" >
   <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -193,7 +212,7 @@
 <key name="Livraison de mail impossible " >
   <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
 </key>
-<key name="mail" >
+<key name="Mail" >
   <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
   <topic name="Parties d’un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <key name="Lecture" >
@@ -230,7 +249,7 @@
 </key>
 <key name="mini-calendrier " >
   <topic name="Configurer vos préférences de calendrier" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <topic name="Afficher le n° de semaine" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="Afficher le numéro des semaines dans le calendrier" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="Mobile" >
   <topic name="Gérer des mobiles" url="Userspecific/Managing_your_mobile_devices.htm" />
@@ -261,29 +280,10 @@
   <topic name="Modifier votre mot de passe" url="Userspecific/chaning_your_password.htm" />
 </key>
 <key name="n° de semaine" >
-  <topic name="Afficher le n° de semaine" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="Afficher le numéro des semaines dans le calendrier" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="navigateurs" >
   <topic name="Utilisation du navigateur avec Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-</key>
-<key name="Navigation" >
-  <topic name="Navigation sur l’interface utilisateur" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-  <topic name="Zone de dossiers" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
-<key name="navigation clavier" >
-  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="navigation, clavier" >
-  <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-</key>
-<key name="nommer les dossiers" >
-  <topic name="À propos des dossiers" url="Navigation_folders_and_tips/about_folders.htm" />
-</key>
-<key name="notification de mail" >
-  <topic name="Notifications de nouveau mail" url="Userspecific/New_mail_notifications.htm" />
-</key>
-<key name="notification de MI" >
-  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 
 </indexdata>

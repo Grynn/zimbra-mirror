@@ -1,6 +1,25 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="navigation" >
+  <topic name="Navigation sur l’interface utilisateur" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Zone de dossiers" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="navigation clavier" >
+  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="navigation, clavier" >
+  <topic name="Touches de raccourcis du clavier ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="nommer les dossiers" >
+  <topic name="À propos des dossiers" url="Navigation_folders_and_tips/about_folders.htm" />
+</key>
+<key name="notification de mail" >
+  <topic name="Notifications de nouveau mail" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="notification de MI" >
+  <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
 <key name="notification par mail" >
   <topic name="Configurer des alertes dans Zimbra Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
@@ -28,6 +47,9 @@
 <key name="ouvrir les fichiers dans le porte-documents" >
   <topic name="Travailler avec des fichiers dans un Porte-documents" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
+<key name="page de partage" >
+  <topic name="Gérer les objets partagés" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="pages d'un carnet" >
   <topic name="Créer une page" url="Documents/Create_a_new_page.htm" />
 </key>
@@ -45,6 +67,7 @@
 </key>
 <key name="panneau de lecture, activer ou désactiver" >
   <topic name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
+  <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="panneau de lecture, affichage" >
   <topic name="Espace de travail de Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
@@ -58,14 +81,14 @@
 <key name="partage de carnet d’adresses" >
   <topic name="Partage de votre carnet d’adresses" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
-<key name="partage de dossiers" >
-  <topic name="Partager un dossier" url="Sharing/Sharing_a_folder.htm" />
-</key>
 <key name="partager avec une liste de diffusion" >
-  <topic name="Partage d'une liste de diffusion" url="Sharing/Sharing_with_a_Distribution_List.htm" />
+  <topic name="Partager avec une liste de diffusion" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 </key>
 <key name="partager des carnets d’adresses" >
   <topic name="Partage de votre carnet d’adresses" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="partager des dossiers" >
+  <topic name="Partager un dossier" url="Sharing/Sharing_a_folder.htm" />
 </key>
 <key name="partager les fichiers du porte-documents" >
   <topic name="Partager votre Porte-documents" url="Briefcase/Sharing_your_Briefcase.htm" />
@@ -75,6 +98,9 @@
 </key>
 <key name="personnaliser champs de contacts" >
   <topic name="Création d’un nouveau contact" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="personnaliser la semaine ouvrée" >
+  <topic name="Affichages du Calendrier" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="personnaliser la vue" >
   <topic name="Personnaliser la vue de votre compte" url="Navigation_folders_and_tips/Customize_your_view.htm" />
@@ -125,14 +151,17 @@
 <key name="préférences, onglet général" >
   <topic name="Configurer vos préférences générales " url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
+<key name="préférences, partage" >
+  <topic name="Gérer les objets partagés" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="présence non obligatoire" >
   <topic name="Utiliser l’onglet Programme lors de la création d'un rendez-vous" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
 <key name="présence obligatoire" >
   <topic name="Utiliser l’onglet Programme lors de la création d'un rendez-vous" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
-<key name="quick add/ajout rapide" >
-  <topic name="Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<key name="programmation d’une réunion" >
+  <topic name="À propos de la page de Rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="QuickAdd/Ajout rapide" >
   <topic name="Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
@@ -179,6 +208,9 @@
     <topic name="Récupération de mails supprimés" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
 </key>
+<key name="récupérer des fichiers supprimés" >
+  <topic name="Vider la corbeille " url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
 <key name="Redirection" >
   <topic name="Faire suivre un mail" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
@@ -207,8 +239,8 @@
 <key name="rendez-vous récurrents, modification" >
   <topic name="Modification de rendez-vous récurrents" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
-<key name="rendez-vous, quickadd/ajout rapide" >
-  <topic name="Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<key name="renommer des fichiers dans le porte-documents" >
+  <topic name="Travailler avec des fichiers dans un Porte-documents" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="renvoyer" >
   <topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
@@ -255,39 +287,6 @@
 </key>
 <key name="RSS" >
   <topic name="S’abonner à un fil RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-</key>
-<key name="saisie automatique d’adresses" >
-  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="saisie d’adresse" >
-  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="sauvegarde de données de compte" >
-  <topic name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="se rappeler de moi sur cet ordinateur" >
-  <topic name="Connexion et déconnexion" url="Userspecific/logging_on_and_off.htm" />
-</key>
-<key name="signature" >
-  <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
-</key>
-<key name="signatures, ajouter automatiquement" >
-  <topic name="Créer des avatars" url="Userspecific/Creating_Personas.htm" />
-</key>
-<key name="sous-fenêtre de lecture, activer ou désactiver" >
-  <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="suppression de contacts" >
-  <topic name="Suppression d’un contact" url="Contacts/deleting_a_contact.htm" />
-</key>
-<key name="suppression du mobile" >
-  <topic name="Mobile perdu ou volé – Effacer les données personnelles" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
-</key>
-<key name="Supprimer" >
-  <topic name="Supprimer des dossiers" url="Navigation_folders_and_tips/deleting_folders.htm" />
-  <key name="dossiers" >
-    <topic name="Supprimer des dossiers" url="Navigation_folders_and_tips/deleting_folders.htm" />
-  </key>
 </key>
 
 </indexdata>

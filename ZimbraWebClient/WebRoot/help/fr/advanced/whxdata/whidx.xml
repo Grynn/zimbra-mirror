@@ -1,9 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="accès aux comptes externes" last="dossiers personnalisés" num="99" />
-<chunkinfo url="whidata1.xml" first="dossiers, nommer" last="notification de MI" num="91" />
-<chunkinfo url="whidata2.xml" first="notification par mail" last="Supprimer" num="95" />
-<chunkinfo url="whidata3.xml" first="supprimer des rendez-vous récurrents" last="Zimlets, désactiver" num="36" />
+<chunkinfo url="whidata0.xml" first="accès aux comptes externes" last="Documents, créer des pages" num="99" />
+<chunkinfo url="whidata1.xml" first="Documents, éditeur de format RTF" last="navigateurs" num="91" />
+<chunkinfo url="whidata2.xml" first="navigation" last="RSS" num="94" />
+<chunkinfo url="whidata3.xml" first="saisie automatique d’adresses" last="Zimlets, désactiver" num="46" />
 
 </index>

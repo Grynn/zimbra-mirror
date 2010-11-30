@@ -21,6 +21,9 @@
 <key name="affichage des mails" >
   <topic name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
 </key>
+<key name="affichage du calendrier" >
+  <topic name="Affichages du Calendrier" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="affichage du panneau de lecture" >
   <topic name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
 </key>
@@ -29,6 +32,9 @@
 </key>
 <key name="afficher au format HTML" >
   <topic name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
+</key>
+<key name="afficher le panneau de lecture" >
+  <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="ajouter automatiquement une signature" >
   <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
@@ -59,6 +65,9 @@
 </key>
 <key name="calendrier, libre/occupé" >
   <topic name="Consultation des disponibilités (libre/occupé)" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
+<key name="calendrier, personnaliser la semaine ouvrée" >
+  <topic name="Affichages du Calendrier" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="calendriers iCal, importer ou exporter" >
   <topic name="Importation de votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
@@ -301,9 +310,6 @@
 </key>
 <key name="listes de distribution personnelles" >
   <topic name="Création de Listes du Groupe de Contacts" url="Contacts/Creating_Group_Contact_Lists.htm" />
-</key>
-<key name="Livraison de mail impossible " >
-  <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
 </key>
 
 </indexdata>

@@ -36,9 +36,13 @@
 </key>
 <key name="affichage du calendrier" >
   <topic name="À propos du calendrier Zimbra" url="Calendar/About_Calendar.htm" />
+  <topic name="Affichages du Calendrier" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="affichage du panneau de lecture" >
   <topic name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="affichage du programme" >
+  <topic name="Affichage de plusieurs calendriers" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
 </key>
 <key name="affichage, calendrier" >
   <topic name="À propos du calendrier Zimbra" url="Calendar/About_Calendar.htm" />
@@ -51,6 +55,9 @@
 </key>
 <key name="afficher la liste des calendriers" >
   <topic name="Calendrier – Affichage Liste" url="Calendar/Calendar_List_View.htm" />
+</key>
+<key name="afficher le panneau de lecture" >
+  <topic name="Lire un mail dans le panneau de lecture" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="afficher les informations d’en-tête pour répondre aux mails" >
   <topic name="Configurer vos préférences pour la fenêtre Écrire un mail " url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
@@ -71,7 +78,7 @@
   <topic name="Accès à la messagerie instantanée" url="instant_messaging/Accessing_Instant_Messaging.htm" />
 </key>
 <key name="ajouter des mots au dictionnaire" >
-  <topic name="Utilisation du vérificateur d’orthographe" url="Creating_Messages/Using_Spell_Check.htm" />
+  <topic name="Utilisation du vérificateur d'orthographe" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
 <key name="ajouter une signature" >
   <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
@@ -81,6 +88,9 @@
 </key>
 <key name="amis dans la MI" >
   <topic name="Accès à la messagerie instantanée" url="instant_messaging/Accessing_Instant_Messaging.htm" />
+</key>
+<key name="annuler" >
+  <topic name="Annuler une action" url="Userspecific/Undo_Action.htm" />
 </key>
 <key name="annuler réunions" >
   <topic name="supprimer un rendez-vous" url="Calendar/Deleting_an_appointment.htm" />
@@ -127,6 +137,9 @@
 </key>
 <key name="calendrier, partagé avec rôle gestionnaire" >
   <topic name="Droits Admin pour un calendrier partagé" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+</key>
+<key name="calendrier, personnaliser la semaine ouvrée" >
+  <topic name="Affichages du Calendrier" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="calendriers iCal, importer ou exporter" >
   <topic name="Importation de votre calendrier iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
@@ -281,7 +294,7 @@
   <topic name="Recherche de destinataires " url="Search/Searching_for_Recipients_.htm" />
 </key>
 <key name="dictionnaire, ajouter des mots" >
-  <topic name="Utilisation du vérificateur d’orthographe" url="Creating_Messages/Using_Spell_Check.htm" />
+  <topic name="Utilisation du vérificateur d'orthographe" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
 <key name="discussion" >
   <topic name="Démarrer une discussion de messagerie instantanée" url="instant_messaging/Starting_an_IM_chat.htm" />
@@ -291,19 +304,6 @@
 </key>
 <key name="Documents, créer des pages" >
   <topic name="Créer une page" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="Documents, éditeur de format RTF" >
-  <topic name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
-<key name="Dossier Corbeille" >
-  <topic name="Dossier Corbeille" url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
-<key name="dossiers" >
-  <topic name="Renommer des dossiers" url="Navigation_folders_and_tips/renaming_folders.htm" />
-  <topic name="À propos des dossiers" url="Navigation_folders_and_tips/about_folders.htm" />
-</key>
-<key name="dossiers personnalisés" >
-  <topic name="Créer des dossiers personnalisés" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
 </key>
 
 </indexdata>

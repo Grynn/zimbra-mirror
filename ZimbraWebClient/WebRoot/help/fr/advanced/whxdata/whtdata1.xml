@@ -4,14 +4,15 @@
 <item name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 <item name="Planification d’une réunion" url="Calendar/About_the_Appointment_Page.htm" />
 <item name="Création d’un rendez-vous" url="Calendar/Scheduling_meetings.htm" />
+<item name="Utiliser l’onglet Programme lors de la création d'un rendez-vous" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 <item name="Consultation des disponibilités (libre/occupé)" url="Calendar/Seeing_free_busy_times.htm" />
 <item name="Configurer les autorisations pour consulter vos informations de disponibilité (libre/occupé) " url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
 <item name="Envoyer votre état de disponibilité (libre/occupé) aux autres utilisateurs" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
 <item name="Marquer un rendez-vous comme étant d’ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
-<item name="Programmation des ressources" url="Calendar/Scheduling_Resources.htm" />
+<item name="Planification des ressources" url="Calendar/Scheduling_Resources.htm" />
 <item name="Conversion d’un mail en une demande de réunion" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
 <item name="Utilisation de QuickAdd/Ajout rapide pour créer un rendez-vous" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-<item name="Programmation de journées entières" url="Calendar/Scheduling_All_Day_events.htm" />
+<item name="Programmation des événements de journée entière" url="Calendar/Scheduling_All_Day_events.htm" />
 <item name="Création de rendez-vous récurrents" url="Calendar/Creating_recurring_appointments.htm" />
 <item name="Modifier les détails d'une réunion dans votre calendrier" url="Calendar/editing_meetings_on_your_calendar.htm" />
 <item name="Désigner les personnes qui peuvent vous inviter à des réunions" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />

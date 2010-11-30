@@ -1,7 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <index>
-<chunkinfo url="whidata0.xml" first="accusé de réception" last="Livraison de mail impossible " num="100" />
-<chunkinfo url="whidata1.xml" first="Mail" last="W dans le mini- calendrier" num="98" />
-<chunkinfo url="whidata2.xml" first="Zimlets" last="Zimlets, désactiver" num="2" />
+<chunkinfo url="whidata0.xml" first="accusé de réception" last="listes de distribution personnelles" num="102" />
+<chunkinfo url="whidata1.xml" first="Livraison de mail impossible " last="vérifier l’arrivée de nouveaux mails" num="98" />
+<chunkinfo url="whidata2.xml" first="vérifier une réponse à une invitation" last="Zimlets, désactiver" num="5" />
 
 </index>

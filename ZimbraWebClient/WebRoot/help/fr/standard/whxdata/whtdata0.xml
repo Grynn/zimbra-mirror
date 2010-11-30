@@ -14,7 +14,7 @@
 </book>
 <book name="Gestion de vos mails " >
   <item name="Choisir comment les mails sont affichés" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
-  <item name="Comment savoir si je reçois un mail ?" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
+  <item name="Comment savoir si je reçois un mail" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
   <item name="Classification de vos mails" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Imprimer des mails" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
@@ -46,6 +46,7 @@
   <item name="Vos carnets d’adresses" url="Contacts/b_Your_Address_Books.htm" />
   <item name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
   <item name="Exporter une liste de contacts" url="Contacts/Exporting_a_Contact_List.htm" />
+  <item name="Impression des noms de contacts" url="Contacts/Printing_contact_names.htm" />
 </book>
 <book name="Gestion de votre calendrier" >
   <item name="À propos du Calendrier" url="Calendar/b_About_Calendar.htm" />
@@ -57,7 +58,7 @@
 </book>
 <book name="Planification de rendez-vous, réunions et événements" >
   <item name="Planification d’une réunion" url="Calendar/About_the_Appointment_Page.htm" />
-  <item name="Planification d’une réunion" url="Calendar/b_Scheduling_a_meeting.htm" />
+  <item name="Programmation d’une réunion" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="Création de rendez-vous récurrents" url="Calendar/b_creating_recurring_appointments.htm" />
   <item name="Supprimer un rendez-vous" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
@@ -68,7 +69,7 @@
 </book>
 <book name="Partager des dossiers" >
   <book name="Partage de calendriers" >
-    <item name="Lien vers calendrier partagé" url="Calendar/Link_to_Shared_Calendar.htm" />
+    <item name="Connecter à un calendrier partagé" url="Calendar/Link_to_Shared_Calendar.htm" />
   </book>
   <book name="Partager des carnets d’adresses" >
     <item name="Lien avec un carnet d’adresses partagé" url="Contacts/Linking_to_a_Shared_Address_Book.htm" />

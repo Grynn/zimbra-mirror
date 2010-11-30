@@ -3,17 +3,16 @@
 <tocdata>
 <book name="Premiers pas" >
   <item name="Bienvenue dans @ClientNameLong@, Advanced Edition" url="Getting_Started/about_liquid_mail.htm" />
-  <item name="Nouv@ClientNameShort@Short@ fonctions de la version 7.0" url="New_in_6.0.htm" />
   <item name="Se connecter et se déconnecter" url="Userspecific/logging_on_and_off.htm" />
   <item name="Modification du type de connexion par défaut de mon client " url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Touches de raccourcis clavier" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <item name="@CompanyName@ Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <item name="@CompanyName@mpanyName@" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="Modifier votre mot de passe" url="Userspecific/chaning_your_password.htm" />
   <item name="Vous avez oublié votre mot de passe ?" url="Userspecific/if_you_forget_your_password.htm" />
   <item name="Si votre session a expiré" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="Navigation dans votre boîte aux lettres" >
-  <item name="Navigation@@ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="Navigation @ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <item name="Configurer vos préférences générales " url="Userspecific/Setting_your_general_preferences.htm" />
   <item name="Personnaliser la vue de votre compte" url="Navigation_folders_and_tips/Customize_your_view.htm" />
   <item name="Fonctions d’interface utilisateur et raccourcis" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
@@ -23,13 +22,15 @@
   <item name="Enregistrer votre travail" url="Userspecific/browser_session_handling.htm" />
   <item name="Affichage dans le panneau d’aperçu" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="Dossiers du système de messagerie" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="Vider votre dossier Corbeille" url="Navigation_folders_and_tips/trash_folder.htm" />
+  <item name="Annuler une action" url="Userspecific/Undo_Action.htm" />
 </book>
 <book name="Gestion de vos mails " >
   <item name="Gestion de l’affichage de vos mails" url="conversations/conversation_list_view.htm" />
   <item name="Configurer vos préférences mails" url="Userspecific/Setting_your_mail_preferences.htm" />
   <item name="Classification de vos mails" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Personnalisation de votre page de messagerie initiale" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
-  <item name="Quel est le principe de fonctionnement des conversations ?" url="conversations/conversations_can_span_folders.htm" />
+  <item name="Quel est le principe de fonctionnement des conversations" url="conversations/conversations_can_span_folders.htm" />
   <item name="Impression d’une conversation" url="conversations/printing_a_conversation.htm" />
   <item name="Déplacer des mails dans des dossiers" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <item name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
@@ -55,7 +56,7 @@
   </book>
 </book>
 <book name="Écrire un mail" >
-  <item name="Création d’un mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="À propos de la création de mails" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   <item name="Création d’un mail" url="Creating_Messages/Composing_a_new_mail_message.htm" />
   <item name="Configurer vos préférences pour la fenêtre Écrire un mail " url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="Parties d’un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
@@ -67,7 +68,7 @@
   <item name="Types de pièces jointes" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Ajout d’adresses Cc : et Cci : ." url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="Utilisation du vérificateur orthographique" url="Creating_Messages/Using_Spell_Check.htm" />
+  <item name="Utilisation du vérificateur d'orthographe" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="Enregistrement de mails en tant que brouillons" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Répondre et transférer des mails" >
@@ -90,11 +91,11 @@
   <item name="Suppression de contacts" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="Gestion de votre calendrier" >
-  <item name="À prop@CompanyName@me@ du Calendrier" url="Calendar/About_Calendar.htm" />
+  <item name="À prop@CompanyName@ier de @CompanyName@" url="Calendar/About_Calendar.htm" />
   <item name="Créer des calendriers" url="Calendar/Create_Calendars.htm" />
   <item name="Appliquer des codes de couleur à vos calendriers" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Configurer vos préférences de calendrier" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <item name="Afficher le n° des semaines sur votre calendrier" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <item name="Afficher le numéro des semaines dans le calendrier" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
   <item name="Options d’affichage du Calendrier" url="Calendar/Calendar_Views.htm" />
   <item name="Calendrier – Affichage Liste" url="Calendar/Calendar_List_View.htm" />
   <item name="Affichage de plusieurs calendriers" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
@@ -111,7 +112,6 @@
   <item name="Créer des listes de tâches" url="Tasks/Create_tasks_folders.htm" />
   <item name="Ajouter une tâche" url="Tasks/Add_a_task.htm" />
   <item name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
-  <item name="Configuration d'un rappel dans Tâches" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
   <item name="Déplacer des tâches" url="Tasks/Moving_tasks.htm" />
   <item name="Supprimer une tâche" url="Tasks/Delete_a_task.htm" />
   <item name="Trier des tâches" url="Tasks/Sorting_tasks_.htm" />
@@ -139,10 +139,10 @@
   <item name="Mobile perdu ou volé – Effacer les données personnelles" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </book>
 <book name="Enregistrer vos fichiers de compte" >
-<chunk name="Enregistrer vos fichiers de compte" ref="whtdata8.xml" />
+  <item name="Sauvegarder (backup) le contenu de votre compte" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 <book name="Utilisation des Zimlets" >
-<chunk name="Utilisation des Zimlets" ref="whtdata9.xml" />
+<chunk name="Utilisation des Zimlets" ref="whtdata8.xml" />
 </book>
 
 </tocdata>
