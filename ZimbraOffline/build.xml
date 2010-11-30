@@ -1016,7 +1016,7 @@
 
     <!-- unzip zimbra mapi extension for windows -->
     <if><isset property="is-windows" /><then>
-        <unzip src="src/installer/extensions/zimbramapi-0.4.xpi" dest="${dist.app.dir}/win32/prism/extensions/mapi@zimbra.com" overwrite="true"/>
+        <unzip src="src/installer/extensions/zimbramapi-0.4.1.xpi" dest="${dist.app.dir}/win32/prism/extensions/mapi@zimbra.com" overwrite="true"/>
     </then></if>
 
     <!-- unzip inquisitor extension
@@ -1024,8 +1024,8 @@
     <unzip src="src/installer/extensions/inquisitor4prism.xpi" dest="${dist.data.dir}/profile/extensions/Inquisitor@yahoo" overwrite="true"/>
     -->
 
-        <!-- override default settings in profile -->
-        <copy todir="${dist.data.dir}/profile" file="prism/profile/user.js" overwrite="true" />
+    <!-- override default settings in profile -->
+    <copy todir="${dist.data.dir}/profile" file="prism/profile/user.js" overwrite="true" />
 
     <!-- any non-branding patches that are between prism drops should go here -->
 
