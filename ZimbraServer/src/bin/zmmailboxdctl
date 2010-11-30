@@ -39,7 +39,8 @@ mailboxd_java_heap_new_size_percent=${mailboxd_java_heap_new_size_percent:=25}
 javaXmn=$(expr ${javaXmx} '*' ${mailboxd_java_heap_new_size_percent} / 100)
 
 #
-# Spnego - the spnego_options_file is written by zmconfigd to avoid a zmprov call here.
+# Spnego - the spnego_options_file is written by zmconfigd 
+#          to avoid a zmprov call here.
 #
 spnego_options_file=${zimbra_home}/conf/spnego_java_options
 spnegoJavaOptions=$(cat $spnego_options_file)
@@ -96,10 +97,15 @@ case "$1" in
       if [ -z "`echo ${mailboxd_java_options} | grep Xss`" ]; then
         mailboxd_java_options="${mailboxd_java_options} -Xss${mailboxd_thread_stack_size}"
       fi
+
+      networkaddress_cache_ttl=${networkaddress_cache_ttl:=60}
+      if [ -z "`echo ${mailboxd_java_options} | grep sun.net.inetaddr.ttl`" ]; then
+        mailboxd_java_options="${mailboxd_java_options} -Dsun.net.inetaddr.ttl=${networkaddress_cache_ttl}"
+      fi
       echo -n "Starting mailboxd..."
       sudo ${zimbra_home}/libexec/zmmailboxdmgr start \
-        -ea ${mailboxd_java_options} $spnegoJavaOptions -Xms${javaXms}m -Xmx${javaXmx}m \
-        -Xmn${javaXmn}m < /dev/null > /dev/null 2>&1
+        -ea ${mailboxd_java_options} ${spnegoJavaOptions} -Xms${javaXms}m \
+        -Xmx${javaXmx}m -Xmn${javaXmn}m < /dev/null > /dev/null 2>&1
       status=$?
       if [ $status = 0 ]; then
         echo "done."
