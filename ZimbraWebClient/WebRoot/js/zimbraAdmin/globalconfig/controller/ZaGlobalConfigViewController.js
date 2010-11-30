@@ -235,7 +235,9 @@ function () {
 			if(tmpObj.attrs[a] instanceof Array) {
                 if (!this._currentObject.attrs[a]) 
                 	this._currentObject.attrs[a] = [] ;
-                	
+		else if(!(this._currentObject.attrs[a] instanceof Array))
+			this._currentObject.attrs[a] = [this._currentObject.attrs[a]];
+                
                 if( tmpObj.attrs[a].join(",").valueOf() !=  this._currentObject.attrs[a].join(",").valueOf()) {
 					mods[a] = tmpObj.attrs[a];
 				}
