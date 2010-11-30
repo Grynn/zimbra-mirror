@@ -1,5 +1,11 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
+<key name="función de búsqueda" >
+  <topic name="usar la función de búsqueda" url="Search/using_the_search_feature.htm" />
+  <key name="usar" >
+    <topic name="usar la función de búsqueda" url="Search/using_the_search_feature.htm" />
+  </key>
+</key>
 <key name="funciones de la interfaz del usuario" >
   <topic name="funciones y accesos directos de la interfaz" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
 </key>
@@ -10,7 +16,7 @@
   <topic name="crear grupos de contactos" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
 <key name="HTML" >
-  <topic name="utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <topic name="Utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="identidad de correo al redactar un mensaje" >
   <topic name="redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
@@ -70,10 +76,10 @@
 <key name="Maletín, adjuntar archivos al correo electrónico" >
   <topic name="adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
-<key name="marcar" >
+<key name="Marcar" >
   <topic name="marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
   <key name="mensaje de correo" >
-    <topic name="marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
+    <topic name="Marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
   </key>
 </key>
 <key name="marcar cita como privada" >
@@ -177,6 +183,12 @@
 <key name="personalizar la vista" >
   <topic name="Personalizar la vista" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 </key>
+<key name="personalizar semana laboral" >
+  <topic name="Vistas de la agenda" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="preferencias, compartir" >
+  <topic name="Gestionar los elementos que compartes" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="preferencias, ver el panel de lectura" >
   <topic name="leer los mensajes en el panel de lectura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
@@ -193,9 +205,9 @@
   <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 <key name="recuperar" >
-  <topic name="recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <topic name="Recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <key name="mensajes eliminados" >
-    <topic name="recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
+    <topic name="Recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
 </key>
 <key name="reenviar" >
@@ -266,6 +278,12 @@
 </key>
 <key name="ver el panel de lectura" >
   <topic name="leer los mensajes en el panel de lectura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="versiones" >
+  <topic name="Control de versiones de los archivos del Maletín" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
+<key name="vista de la agenda" >
+  <topic name="Vistas de la agenda" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="vista del panel de lectura" >
   <topic name="gestionar la vista de tus mensajes" url="conversations/conversation_list_view.htm" />

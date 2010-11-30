@@ -44,6 +44,9 @@
 <key name="agenda, permisos de acceso" >
   <topic name="determinar acceso a las agendas" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
+<key name="agenda, personalizar semana laboral" >
+  <topic name="Vistas de la agenda" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="agendas iCal, importar o exportar" >
   <topic name="importar tu agenda iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
@@ -75,10 +78,13 @@
   <topic name="eliminar los mensajes" url="reading_mail/archiving_old_messages.htm" />
 </key>
 <key name="archivos adjuntos" >
-  <topic name="abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
+  <topic name="Abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
 </key>
 <key name="archivos adjuntos ics, guardar" >
   <topic name="Responder a una invitación" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
+<key name="archivos eliminados, recuperar" >
+  <topic name="Vaciar Papelera " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="archivos, adjuntar" >
   <topic name="adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -131,6 +137,9 @@
 <key name="buscar destinatarios" >
   <topic name="Buscar destinatarios " url="Search/Searching_for_Recipients_.htm" />
 </key>
+<key name="buscar elementos compartidos" >
+  <topic name="Gestionar los elementos que compartes" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="buscar un mensaje" >
   <topic name="Buscar mensajes" url="Search/_search__vs.__search_for_.htm" />
 </key>
@@ -149,6 +158,9 @@
 </key>
 <key name="caduca la sesión" >
   <topic name="si caduca tu sesión" url="Userspecific/if_your_session_expires.htm" />
+</key>
+<key name="cambiar el nombre de los archivos del maletín" >
+  <topic name="Trabajar con archivos en el Maletín" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="cambiar el tipo de cliente predeterminado" >
   <topic name="Configurar tus preferencias generales" url="Userspecific/Setting_your_general_preferences.htm" />
@@ -189,9 +201,6 @@
 </key>
 <key name="cita de todo el día" >
   <topic name="programar eventos para todo el día" url="Calendar/Scheduling_All_Day_events.htm" />
-</key>
-<key name="cita, añadido rápido" >
-  <topic name="utilizar el Añadido rápido para crear una cita" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="citas" >
   <topic name="acerca de las citas, las reuniones y los eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
@@ -234,6 +243,9 @@
 </key>
 <key name="compartir las libretas de direcciones" >
   <topic name="compartir tu libreta de direcciones" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="compartir página" >
+  <topic name="Gestionar los elementos que compartes" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="compartir tu agenda" >
   <topic name="determinar acceso a las agendas" url="Calendar/Delegating_Calendar_Access.htm" />
@@ -288,17 +300,11 @@
   <topic name="cambiar tu contraseña" url="Userspecific/chaning_your_password.htm" />
 </key>
 <key name="conversaciones" >
-  <topic name="las conversaciones pueden abarcar varias carpetas" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="Las conversaciones pueden abarcar varias carpetas" url="conversations/conversations_can_span_folders.htm" />
   <topic name="imprimir una conversación" url="conversations/printing_a_conversation.htm" />
   <key name="imprimir" >
     <topic name="imprimir una conversación" url="conversations/printing_a_conversation.htm" />
   </key>
-</key>
-<key name="copia de seguridad de los datos de la cuenta" >
-  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="corrección ortográfica, ajustar como obligatoria" >
-  <topic name="Configurar tus preferencias para la ventana de redacción de mensajes" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 
 </indexdata>

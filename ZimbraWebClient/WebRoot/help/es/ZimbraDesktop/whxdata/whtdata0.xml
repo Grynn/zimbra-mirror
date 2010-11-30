@@ -12,7 +12,7 @@
   <item name="Configurar las cuentas POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
   <item name="Sincronizar tus cuentas" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
   <item name="Desactivar la sincronización automática" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
-  <item name="Organizar tu vista de Desktop" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
+  <item name="Organización de la vista del Desktop" url="Zdesktop/z-Changing_account_order_on_Desktop.htm" />
   <item name="Eliminar una cuenta de Desktop" url="Zdesktop/z-Deleting_an_account_from_Desktop.htm" />
 </book>
 <book name="Navegar por el buzón de correo de Desktop" >
@@ -24,7 +24,7 @@
 </book>
 <book name="Gestionar tu buzón" >
   <item name="Gestionar la vista de tus mensajes" url="conversations/conversation_list_view.htm" />
-  <item name="Determinación de cómo Desktop obtiene el correo" url="Zdesktop/z_Setting_Desktop_behavior_for_getting_mail.htm" />
+  <item name="Ajuste del comportamiento del Desktop para obtener correo" url="Zdesktop/z_Setting_Desktop_behavior_for_getting_mail.htm" />
   <item name="Visualizar mensajes" url="Navigation_folders_and_tips/Traditional_View.htm" />
   <item name="Cómo funcionan las conversaciones" url="conversations/conversations_can_span_folders.htm" />
   <item name="Clasificar tus mensajes de correo" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
@@ -62,7 +62,7 @@
 </book>
 <book name="Gestionar tus listas de contactos" >
   <item name="Añadir nuevos contactos" url="Contacts/creating_a_new_contact.htm" />
-  <item name="Crear grupos de contactos" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="Crear listas de grupos de contactos" url="Contacts/Creating_Group_Contact_Lists.htm" />
   <item name="Modificar un contacto" url="Contacts/editing_a_contact.htm" />
   <item name="Eliminar un contacto" url="Contacts/deleting_a_contact.htm" />
   <item name="Imprimir contactos" url="Contacts/Printing_Contacts.htm" />
@@ -72,7 +72,7 @@
 <book name="Gestionar tus agendas" >
   <item name="Usar las agendas" url="Calendar/z-Using_Calendars.htm" />
   <item name="Vistas de la agenda" url="Calendar/Calendar_Views.htm" />
-  <item name="Agendas clasificadas por color" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Codificación de color de las agendas" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Imprimir una agenda" url="Calendar/Printing_a_calendar.htm" />
   <item name="Eliminar agendas" url="Calendar/Deleting_Calendars.htm" />
   <item name="Importar tu agenda iCal " url="Calendar/Importing_your_iCal_calendar.htm" />

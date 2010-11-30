@@ -4,7 +4,8 @@
 <item name="Acerca de las citas, las reuniones y los eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 <item name="Organizar una reunión" url="Calendar/About_the_Appointment_Page.htm" />
 <item name="Crear una cita" url="Calendar/Scheduling_meetings.htm" />
-<item name="consultar la disponibilidad" url="Calendar/Seeing_free_busy_times.htm" />
+<item name="Usar el programador para crear una cita" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+<item name="Consultar la disponibilidad" url="Calendar/Seeing_free_busy_times.htm" />
 <item name="Configurar los permisos para que los demás vean si estás disponible u ocupado" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
 <item name="Notificar a los demás si estás ocupado o disponible" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
 <item name="Marcar una cita como privada" url="Calendar/Marking_an_appointment_as_private.htm" />

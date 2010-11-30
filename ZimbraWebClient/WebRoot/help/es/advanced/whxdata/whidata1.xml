@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="copia de seguridad de los datos de la cuenta" >
+  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="corrección ortográfica, ajustar como obligatoria" >
+  <topic name="Configurar tus preferencias para la ventana de redacción de mensajes" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
 <key name="corrector ortográfico" >
   <topic name="utilizar el corrector ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
@@ -13,7 +19,7 @@
 <key name="creador de búsquedas" >
   <topic name="crear búsquedas" url="Search/building_search_queries.htm" />
 </key>
-<key name="crear" >
+<key name="Crear" >
   <topic name="redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   <key name="nuevo mensaje de correo" >
     <topic name="redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
@@ -53,7 +59,10 @@
   <topic name="Gestionar tus Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
 <key name="descripción del lenguaje de búsquedas" >
-  <topic name="descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
+  <topic name="Descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
+</key>
+<key name="deshacer" >
+  <topic name="Acción Deshacer" url="Userspecific/Undo_Action.htm" />
 </key>
 <key name="destinatarios, buscar" >
   <topic name="Buscar destinatarios " url="Search/Searching_for_Recipients_.htm" />
@@ -97,10 +106,10 @@
 <key name="ejemplos de búsquedas" >
   <topic name="ejemplos de búsquedas" url="Search/search_examples.htm" />
 </key>
-<key name="eliminar" >
+<key name="Eliminar" >
   <topic name="eliminar carpetas" url="Navigation_folders_and_tips/deleting_folders.htm" />
   <key name="carpetas" >
-    <topic name="eliminar carpetas" url="Navigation_folders_and_tips/deleting_folders.htm" />
+    <topic name="Eliminar carpetas" url="Navigation_folders_and_tips/deleting_folders.htm" />
   </key>
 </key>
 <key name="eliminar contactos" >
@@ -114,6 +123,9 @@
 </key>
 <key name="encabezados, incluir" >
   <topic name="Configurar tus preferencias para la ventana de redacción de mensajes" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
+<key name="enviar" >
+  <topic name="Trabajar con archivos en el Maletín" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="enviar archivos del maletín" >
   <topic name="Enviar archivos desde tu maletín" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
@@ -130,7 +142,7 @@
   <key name="aplicar" >
     <topic name="etiquetar mensajes" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
   </key>
-  <key name="eliminar" >
+  <key name="Eliminar" >
     <topic name="eliminar las etiquetas" url="Tags_and_flags/deleting_tags.htm" />
   </key>
 </key>
@@ -200,7 +212,7 @@
 </key>
 <key name="HTML" >
   <topic name="ver HTML en los mensajes de correo" url="reading_mail/displaying_html_in_email_messages.htm" />
-  <topic name="utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <topic name="Utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="HTML, configurar los valores predeterminados" >
   <topic name="configurar tus preferencias" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -298,21 +310,6 @@
 </key>
 <key name="maletín, compartir" >
   <topic name="Compartir tu Maletín" url="Briefcase/Sharing_your_Briefcase.htm" />
-</key>
-<key name="maletín, enviar archivos desde el" >
-  <topic name="Enviar archivos desde tu maletín" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
-</key>
-<key name="marcar" >
-  <topic name="marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="mensaje de correo" >
-    <topic name="marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
-</key>
-<key name="marcar cita como privada" >
-  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="marcar citas como privadas" >
-  <topic name="Marcar una cita como privada" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 
 </indexdata>

@@ -5,7 +5,7 @@
   <item name="Empezar a usar el programa en línea estándar" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
   <item name="Iniciar sesión y salir de la cuenta" url="Userspecific/logging_on_and_off.htm" />
   <item name="Cambiar la versión predeterminada del programa al iniciar sesión" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
-  <item name="teclas de acceso directo" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
+  <item name="Teclas de acceso directo" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
 </book>
 <book name="Navegar por el buzón de correo" >
   <item name="Navegar por el buzón de correo" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
@@ -13,18 +13,18 @@
   <item name="Carpetas del sistema de correo" url="Navigation_folders_and_tips/inbox_folder.htm" />
 </book>
 <book name="Gestionar tus mensajes " >
-  <item name="gestionar cómo se visualizan los mensajes" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
+  <item name="Gestionar cómo se visualizan los mensajes" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
   <item name="Cómo saber que has recibido un mensaje nuevo" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
   <item name="Clasificar tus mensajes de correo" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Imprimir los mensajes de correo" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="Configurar una dirección de reenvío" url="Userspecific/Setting_a_Forwarding_Address.htm" />
-  <item name="recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Eliminar los mensajes" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="Leer tus mensajes" >
-    <item name="leer el correo" url="reading_mail/reading_mail.htm" />
+    <item name="Leer el correo" url="reading_mail/reading_mail.htm" />
     <item name="Marcar los mensajes como no leídos" url="reading_mail/b_Marking_mail_as_unread.htm" />
-    <item name="abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
-    <item name="mensajes que no se pueden entregar" url="Creating_Messages/undeliverable_mail.htm" />
+    <item name="Abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
+    <item name="Mensajes que no se pueden entregar" url="Creating_Messages/undeliverable_mail.htm" />
   </book>
 </book>
 <book name="Redactar mensajes de correo" >
@@ -39,13 +39,14 @@
   <item name="Guardar un borrador" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Responder a y reenviar los mensajes" >
-  <item name="responder a los mensajes" url="reading_mail/replying_to_mail_messages.htm" />
-  <item name="reenviar un mensaje" url="Creating_Messages/forwarding_a_mail_message.htm" />
+  <item name="Responder a los mensajes" url="reading_mail/replying_to_mail_messages.htm" />
+  <item name="Reenviar un mensaje" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </book>
 <book name="Gestionar tus libretas de direcciones" >
-  <item name="tus libretas de direcciones" url="Contacts/b_Your_Address_Books.htm" />
-  <item name="añadir nuevos contactos" url="Contacts/b_Adding_new_contacts.htm" />
+  <item name="Tus libretas de direcciones" url="Contacts/b_Your_Address_Books.htm" />
+  <item name="Añadir nuevos contactos" url="Contacts/b_Adding_new_contacts.htm" />
   <item name="Exportar la lista de contactos" url="Contacts/Exporting_a_Contact_List.htm" />
+  <item name="Imprimir los nombres de los contactos" url="Contacts/Printing_contact_names.htm" />
 </book>
 <book name="Gestionar tu agenda" >
   <item name="Acerca de la Agenda" url="Calendar/b_About_Calendar.htm" />
@@ -75,23 +76,23 @@
   </book>
 </book>
 <book name="Buscar elementos" >
-  <item name="utilizar la búsqueda" url="Search/b_Using_Search.htm" />
+  <item name="Utilizar la búsqueda" url="Search/b_Using_Search.htm" />
   <item name="Crear y guardar búsquedas" url="Search/b_Create_and_Save_a_Search_Query.htm" />
-  <item name="descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
+  <item name="Descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
 </book>
 <book name="Utilizar etiquetas y carpetas para organizar los mensajes" >
-  <item name="aplicar etiquetas a mensajes y contactos" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
-  <item name="marcar un mensaje de correo" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
-  <item name="cambiar el nombre de las carpetas" url="Navigation_folders_and_tips/renaming_folders.htm" />
-  <item name="eliminar carpetas" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
+  <item name="Aplicar etiquetas a mensajes y contactos" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+  <item name="Marcar un mensaje de correo" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
+  <item name="Cambiar el nombre de las carpetas" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <item name="Eliminar carpetas" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
 </book>
 <book name="Utilizar filtros de correo" >
-  <item name="filtrar tus mensajes" url="filters/bc_Filtering_your_messages.htm" />
+  <item name="Filtrar tus mensajes" url="filters/bc_Filtering_your_messages.htm" />
   <item name="Condiciones y acciones admitidas de los filtros" url="filters/filter_conditions_and_actions_supported.htm" />
 </book>
 <book name="Configurar tus preferencias" >
   <item name="Configurar tus preferencias" url="Userspecific/b_Setting_your_Options.htm" />
-  <item name="notificaciones de nuevos mensajes" url="Userspecific/New_mail_notifications.htm" />
+  <item name="Notificaciones de nuevos mensajes" url="Userspecific/New_mail_notifications.htm" />
   <item name="Crear mensajes por ausencia" url="Userspecific/vacation_message.htm" />
   <item name="Suscribirse a una fuente RSS/ATOM" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>

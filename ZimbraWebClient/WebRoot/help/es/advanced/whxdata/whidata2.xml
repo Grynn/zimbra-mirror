@@ -1,6 +1,21 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="maletín, enviar archivos desde el" >
+  <topic name="Enviar archivos desde tu maletín" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
+</key>
+<key name="Marcar" >
+  <topic name="marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <key name="mensaje de correo" >
+    <topic name="Marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  </key>
+</key>
+<key name="marcar cita como privada" >
+  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="marcar citas como privadas" >
+  <topic name="Marcar una cita como privada" url="Calendar/Marking_an_appointment_as_private.htm" />
+</key>
 <key name="marcar tarea como completa" >
   <topic name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
 </key>
@@ -145,6 +160,9 @@
 <key name="personalizar la vista" >
   <topic name="Personalizar la vista" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 </key>
+<key name="personalizar semana laboral" >
+  <topic name="Vistas de la agenda" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="pestaña general" >
   <topic name="Configurar tus preferencias generales" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
@@ -163,6 +181,9 @@
 </key>
 <key name="preferencias, cambiar" >
   <topic name="cambiar las preferencias del usuario" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="preferencias, compartir" >
+  <topic name="Gestionar los elementos que compartes" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="preferencias, pestaña general" >
   <topic name="Configurar tus preferencias generales" url="Userspecific/Setting_your_general_preferences.htm" />
@@ -195,10 +216,13 @@
   <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 <key name="recuperar" >
-  <topic name="recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <topic name="Recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <key name="mensajes eliminados" >
-    <topic name="recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
+    <topic name="Recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
+</key>
+<key name="recuperar archivos eliminados" >
+  <topic name="Vaciar Papelera " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="recuperar mensajes nuevos" >
   <topic name="configurar tus preferencias" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -259,30 +283,6 @@
 </key>
 <key name="revocar permisos de acceso a las agendas" >
   <topic name="determinar acceso a las agendas" url="Calendar/Delegating_Calendar_Access.htm" />
-</key>
-<key name="rol de administrador en la agenda" >
-  <topic name="Privilegios de administración para las agendas compartidas" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-</key>
-<key name="roles" >
-  <topic name="identidades de correo" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="RSS" >
-  <topic name="Suscribirte a fuentes RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-</key>
-<key name="salir de la cuenta" >
-  <topic name="iniciar sesión y salir de la cuenta" url="Userspecific/logging_on_and_off.htm" />
-</key>
-<key name="suscribirte a fuente RSS" >
-  <topic name="Suscribirte a fuentes RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-</key>
-<key name="tablas, añadir a las páginas de los blocs de notas" >
-  <topic name="añadir una tabla a la página del bloc de notas" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="tarea, marcar como completa" >
-  <topic name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="tareas, imprimir" >
-  <topic name="Acerca de las tareas" url="Tasks/About_Tasks.htm" />
 </key>
 
 </indexdata>

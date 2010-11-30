@@ -15,13 +15,16 @@
 <key name="agenda, imprimir" >
   <topic name="imprimir una agenda" url="Calendar/Printing_a_calendar.htm" />
 </key>
+<key name="agenda, personalizar semana laboral" >
+  <topic name="Vistas de la agenda" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="agendas iCal, importar o exportar" >
   <topic name="importar tu agenda iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="alertas" >
   <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
-<key name="añadido rápido" >
+<key name="Añadido rápido" >
   <topic name="utilizar el Añadido rápido para crear una cita" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="añadir contactos" >
@@ -37,7 +40,7 @@
   <topic name="eliminar los mensajes" url="reading_mail/archiving_old_messages.htm" />
 </key>
 <key name="archivos adjuntos" >
-  <topic name="abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
+  <topic name="Abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
 </key>
 <key name="archivos adjuntos ics, guardar" >
   <topic name="Responder a una invitación" url="Calendar/Responding_to_an_invitation.htm" />
@@ -75,6 +78,9 @@
 <key name="buscar destinatarios" >
   <topic name="Buscar destinatarios " url="Search/Searching_for_Recipients_.htm" />
 </key>
+<key name="buscar elementos compartidos" >
+  <topic name="Gestionar los elementos que compartes" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="buscar un mensaje" >
   <topic name="Buscar mensajes" url="Search/_search__vs.__search_for_.htm" />
 </key>
@@ -109,9 +115,6 @@
 <key name="carpetas, sincronizar" >
   <topic name="Acceder a tus carpetas" url="Navigation_folders_and_tips/z-Accessing_your_folders.htm" />
 </key>
-<key name="cita, añadido rápido" >
-  <topic name="utilizar el Añadido rápido para crear una cita" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-</key>
 <key name="citas" >
   <topic name="acerca de las citas, las reuniones y los eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
@@ -132,6 +135,9 @@
 </key>
 <key name="comodines" >
   <topic name="comodines" url="filters/wildcards.htm" />
+</key>
+<key name="compartir página" >
+  <topic name="Gestionar los elementos que compartes" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="comprobar correo" >
   <topic name="cómo saber que tienes mensajes nuevos" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -181,7 +187,7 @@
   <topic name="eliminar un contacto" url="Contacts/deleting_a_contact.htm" />
 </key>
 <key name="conversaciones" >
-  <topic name="las conversaciones pueden abarcar varias carpetas" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="Las conversaciones pueden abarcar varias carpetas" url="conversations/conversations_can_span_folders.htm" />
   <topic name="imprimir una conversación" url="conversations/printing_a_conversation.htm" />
   <key name="imprimir" >
     <topic name="imprimir una conversación" url="conversations/printing_a_conversation.htm" />
@@ -199,7 +205,7 @@
 <key name="creador de búsquedas" >
   <topic name="crear búsquedas" url="Search/building_search_queries.htm" />
 </key>
-<key name="crear" >
+<key name="Crear" >
   <topic name="redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   <key name="nuevo mensaje de correo" >
     <topic name="redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
@@ -218,7 +224,7 @@
   <topic name="Gestionar tus Zimlets" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
 <key name="descripción del lenguaje de búsquedas" >
-  <topic name="descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
+  <topic name="Descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
 </key>
 <key name="destinatarios, buscar" >
   <topic name="Buscar destinatarios " url="Search/Searching_for_Recipients_.htm" />
@@ -244,10 +250,10 @@
 <key name="ejemplos de búsquedas" >
   <topic name="ejemplos de búsquedas" url="Search/search_examples.htm" />
 </key>
-<key name="eliminar" >
+<key name="Eliminar" >
   <topic name="eliminar carpetas" url="Navigation_folders_and_tips/deleting_folders.htm" />
   <key name="carpetas" >
-    <topic name="eliminar carpetas" url="Navigation_folders_and_tips/deleting_folders.htm" />
+    <topic name="Eliminar carpetas" url="Navigation_folders_and_tips/deleting_folders.htm" />
   </key>
 </key>
 <key name="eliminar contactos" >
@@ -265,7 +271,7 @@
   <key name="aplicar" >
     <topic name="etiquetar mensajes" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
   </key>
-  <key name="eliminar" >
+  <key name="Eliminar" >
     <topic name="eliminar las etiquetas" url="Tags_and_flags/deleting_tags.htm" />
   </key>
 </key>
@@ -304,12 +310,6 @@
 </key>
 <key name="fuentes" >
   <topic name="utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
-</key>
-<key name="función de búsqueda" >
-  <topic name="usar la función de búsqueda" url="Search/using_the_search_feature.htm" />
-  <key name="usar" >
-    <topic name="usar la función de búsqueda" url="Search/using_the_search_feature.htm" />
-  </key>
 </key>
 
 </indexdata>
