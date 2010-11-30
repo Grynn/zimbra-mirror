@@ -49,8 +49,8 @@
 <key name="markeren, taak als voltooid" >
   <topic name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
 </key>
-<key name="Menu's, rechtsklikmenu's" >
-  <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+<key name="Menu’s, rechtsklikmenu’s" >
+  <topic name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="Microsoft Exchange IMAP-account instellen" >
   <topic name="POP/IMAP-accounts instellen" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
@@ -64,7 +64,7 @@
 <key name="Nieuwe berichten" >
   <topic name="Hoe weet je dat je nieuwe e-mail hebt?" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
-<key name="Notitieboekpagina's" >
+<key name="Notitieboekpagina’s" >
   <topic name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="Offline werken" >
@@ -89,7 +89,7 @@
   <topic name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="opnieuw verzenden" >
-  <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="Opstellen" >
   <topic name="Een nieuw e-mailbericht maken" url="Creating_Messages/Creating_a_new_mail_message.htm" />
@@ -106,7 +106,10 @@
 <key name="optionele deelname" >
   <topic name="Het tabblad Planning gebruiken bij het maken van een afspraak" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
-<key name="Pagina's, Documenten-" >
+<key name="pagina delen" >
+  <topic name="Items beheren die jij deelt" url="Sharing/Managing_items_you_share.htm" />
+</key>
+<key name="Pagina’s, Documenten-" >
   <topic name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="Persona" >
@@ -133,8 +136,8 @@
 <key name="privégebeurtenis in agenda" >
   <topic name="Een afspraak als privé markeren" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
-<key name="Rechtsklikmenu's" >
-  <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+<key name="Rechtsklikmenu’s" >
+  <topic name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="Regels, filter-" >
   <topic name="Berichten filteren" url="filters/filtering_your_messages.htm" />
@@ -146,11 +149,14 @@
 <key name="RSS" >
   <topic name="Abonneren op RSS/ATOM-feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
-<key name="RTF-editor voor documentenpagina's" >
+<key name="RTF-editor voor documentenpagina’s" >
   <topic name="De RTF-editor gebruiken" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="Search Builder" >
   <topic name="Zoekopdrachten samenstellen" url="Search/building_search_queries.htm" />
+</key>
+<key name="shares zoeken" >
+  <topic name="Items beheren die jij deelt" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="Snel Toevoegen" >
   <topic name="Snel Toevoegen gebruiken om een afspraak te maken" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
@@ -167,7 +173,7 @@
 <key name="taak, markeren als voltooid" >
   <topic name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
 </key>
-<key name="Tabellen toevoegen aan Documentenpagina's" >
+<key name="Tabellen toevoegen aan Documentenpagina’s" >
   <topic name="Een tabel aan een notitieboekpagina toevoegen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="taken, afdrukken" >
@@ -228,6 +234,9 @@
 <key name="verplichte deelname" >
   <topic name="Het tabblad Planning gebruiken bij het maken van een afspraak" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
+<key name="versies" >
+  <topic name="Versiebeheer van bestanden in aktektas" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
 <key name="Verwijderen" >
   <topic name="Mappen verwijderen" url="Navigation_folders_and_tips/deleting_folders.htm" />
   <key name="Mappen" >
@@ -249,6 +258,9 @@
 <key name="Voorbeelddeelvenster, in- en uitschakelen" >
   <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
+<key name="voorkeuren, delen" >
+  <topic name="Items beheren die jij deelt" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="Voorkeuren, leesdeelvenster bekijken" >
   <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
@@ -266,6 +278,9 @@
 </key>
 <key name="weeknummer" >
   <topic name="Weeknummers in agenda weergeven" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
+<key name="werkweek aanpassen" >
+  <topic name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="Wijzigen, een afspraak" >
   <topic name="Terugkerende afspraken wijzigen" url="Calendar/Deleting_recurring_appointments.htm" />
@@ -300,16 +315,6 @@
   <key name="Gebruiken" >
     <topic name="De zoekfunctie gebruiken" url="Search/using_the_search_feature.htm" />
   </key>
-</key>
-<key name="Zoekopdrachten" >
-  <topic name="Zoekopdrachten samenstellen" url="Search/building_search_queries.htm" />
-  <topic name="Zoekopdrachten opslaan" url="Search/saving_search_queries.htm" />
-  <key name="Opslaan" >
-    <topic name="Zoekopdrachten opslaan" url="Search/saving_search_queries.htm" />
-  </key>
-</key>
-<key name="Zoekvoorbeelden" >
-  <topic name="Zoekvoorbeelden" url="Search/search_examples.htm" />
 </key>
 
 </indexdata>

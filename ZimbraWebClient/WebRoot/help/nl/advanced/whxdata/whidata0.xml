@@ -56,9 +56,6 @@
 <key name="Afspraak, herinnering aan" >
   <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
-<key name="Afspraak, Snel Toevoegen" >
-  <topic name="Snel Toevoegen gebruiken om een afspraak te maken" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-</key>
 <key name="Afspraken" >
   <topic name="Afspraken, vergaderingen en evenementen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
@@ -82,7 +79,7 @@
   <topic name="Dagvullende evenementen plannen" url="Calendar/Scheduling_All_Day_events.htm" />
 </key>
 <key name="agenda, gedeeld met beheerder" >
-  <topic name="Beheerdersrechten voor gedeelde Agenda's" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <topic name="Beheerdersrechten voor gedeelde Agenda’s" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
 </key>
 <key name="Agenda, info over" >
   <topic name="Info over Zimbra-agenda" url="Calendar/About_Calendar.htm" />
@@ -96,8 +93,12 @@
 <key name="Agenda, vrij/bezet" >
   <topic name="Tijdstippen vrij/bezet bekijken" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
+<key name="agenda, werkweek aanpassen" >
+  <topic name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="Agendaoverzicht" >
   <topic name="Info over Zimbra-agenda" url="Calendar/About_Calendar.htm" />
+  <topic name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="agendaweergaven" >
   <topic name="Agenda-lijstweergave" url="Calendar/Calendar_List_View.htm" />
@@ -115,7 +116,7 @@
   <topic name="Algemene adreslijst versus contacten" url="Contacts/gal_vs_contacts.htm" />
 </key>
 <key name="als nieuw bewerken" >
-  <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="antwoord, onderwerp weergeven" >
   <topic name="Voorkeuren instellen voor het venster voor het opstellen van e-mailberichten" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
@@ -154,7 +155,7 @@
   <topic name="Het bedrijfsadresboek gebruiken" url="Contacts/using_the_corporate_address_book.htm" />
 </key>
 <key name="beheerder in agenda" >
-  <topic name="Beheerdersrechten voor gedeelde Agenda's" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <topic name="Beheerdersrechten voor gedeelde Agenda’s" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
 </key>
 <key name="Bekijken als HTML" >
   <topic name="Bestanden in bijlagen openen" url="reading_mail/opening_file_attachments.htm" />
@@ -274,7 +275,7 @@
 <key name="Delen, je agenda" >
   <topic name="Toegang tot een agenda delegeren" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
-<key name="Documenten, nieuwe pagina's maken" >
+<key name="Documenten, nieuwe pagina’s maken" >
   <topic name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="Documenten, RTF-editor" >

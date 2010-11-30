@@ -19,6 +19,12 @@
 <key name="agenda, uitsluiten van vrij/bezet" >
   <topic name="Nieuwe agenda maken" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
+<key name="agenda, werkweek aanpassen" >
+  <topic name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="Agendaoverzicht" >
+  <topic name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="Automatisch invullen, adressen" >
   <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
@@ -190,6 +196,9 @@
 <key name="vergeten" >
   <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
+<key name="versies" >
+  <topic name="Versiebeheer van bestanden in aktektas" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
 <key name="Voorkeuren" >
   <topic name="Je opties instellen" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
@@ -198,6 +207,9 @@
 </key>
 <key name="vrij/bezet, agenda uitsluiten" >
   <topic name="Nieuwe agenda maken" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="werkweek aanpassen" >
+  <topic name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="Zoeken" >
   <topic name="Zoeken gebruiken" url="Search/b_Using_Search.htm" />

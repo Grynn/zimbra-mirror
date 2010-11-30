@@ -46,12 +46,13 @@
   <item name="Je adresboeken" url="Contacts/b_Your_Address_Books.htm" />
   <item name="Nieuwe contacten toevoegen" url="Contacts/b_Adding_new_contacts.htm" />
   <item name="Een lijst met contacten exporteren" url="Contacts/Exporting_a_Contact_List.htm" />
+  <item name="Contactnamen afdrukken" url="Contacts/Printing_contact_names.htm" />
 </book>
 <book name="Je agenda beheren" >
   <item name="Info over Agenda" url="Calendar/b_About_Calendar.htm" />
   <item name="Een nieuwe agenda maken" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
-  <item name="Opties om agenda's weer te geven" url="Calendar/Calendar_Views.htm" />
+  <item name="Agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Opties om agenda’s weer te geven" url="Calendar/Calendar_Views.htm" />
   <item name="iCalendars importeren" url="Calendar/Importing_iCalendars.htm" />
   <item name="Je agenda opschonen" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
@@ -67,7 +68,7 @@
   <item name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
 </book>
 <book name="Mappen delen" >
-  <book name="Agenda's delen" >
+  <book name="Agenda’s delen" >
     <item name="Naar een gedeelde agenda koppelen" url="Calendar/Link_to_Shared_Calendar.htm" />
   </book>
   <book name="Adresboeken delen" >

@@ -1,0 +1,14 @@
+﻿<?xml version='1.0' encoding='utf-8' ?>
+<indexdata>
+<key name="Zoekopdrachten" >
+  <topic name="Zoekopdrachten samenstellen" url="Search/building_search_queries.htm" />
+  <topic name="Zoekopdrachten opslaan" url="Search/saving_search_queries.htm" />
+  <key name="Opslaan" >
+    <topic name="Zoekopdrachten opslaan" url="Search/saving_search_queries.htm" />
+  </key>
+</key>
+<key name="Zoekvoorbeelden" >
+  <topic name="Zoekvoorbeelden" url="Search/search_examples.htm" />
+</key>
+
+</indexdata>

@@ -1,6 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <index>
-<chunkinfo url="whidata0.xml" first="Aangepaste mappen" last="Label, slepen en neerzetten" num="100" />
-<chunkinfo url="whidata1.xml" first="Labels" last="Zoekvoorbeelden" num="102" />
+<chunkinfo url="whidata0.xml" first="Aangepaste mappen" last="Label, slepen en neerzetten" num="101" />
+<chunkinfo url="whidata1.xml" first="Labels" last="zoekfunctie" num="104" />
+<chunkinfo url="whidata2.xml" first="Zoekopdrachten" last="Zoekvoorbeelden" num="3" />
 
 </index>

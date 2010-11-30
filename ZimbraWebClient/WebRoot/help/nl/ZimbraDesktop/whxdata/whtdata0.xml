@@ -18,7 +18,7 @@
 <book name="Navigeren in je postvak" >
   <item name="Navigeren in Zimbra Desktop" url="Navigation_folders_and_tips/z-Navigating_Zimbra_Desktop.htm" />
   <item name="Gebruikersinterfacefuncties en sneltoetsen" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-  <item name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <item name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Systeemmappen" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="Bewerkingen toepassen op meerdere selecties" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
 </book>
@@ -69,12 +69,12 @@
   <item name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
   <item name="Contacten exporteren" url="Contacts/Exporting_Address_Books.htm" />
 </book>
-<book name="Je agenda's beheren" >
-  <item name="Agenda's gebruiken" url="Calendar/z-Using_Calendars.htm" />
+<book name="Je agenda’s beheren" >
+  <item name="Agenda’s gebruiken" url="Calendar/z-Using_Calendars.htm" />
   <item name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
   <item name="Agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Een agenda afdrukken" url="Calendar/Printing_a_calendar.htm" />
-  <item name="Agenda's verwijderen" url="Calendar/Deleting_Calendars.htm" />
+  <item name="Agenda’s verwijderen" url="Calendar/Deleting_Calendars.htm" />
   <item name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
   <item name="Je iCal-agenda exporteren" url="Calendar/Exporting_your_iCal_calendar.htm" />
 </book>

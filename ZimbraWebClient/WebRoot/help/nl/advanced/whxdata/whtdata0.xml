@@ -2,8 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="Aan de slag" >
-  <item name="Welkom bij @ClientNameLong@, Geavanceerde versie" url="Getting_Started/about_liquid_mail.htm" />
-  <item name="Nieuwe functies in @ClientNameShort@ 7.0" url="New_in_6.0.htm" />
+  <item name="Welkom bij @ClientNameLong@, Advanced Edition" url="Getting_Started/about_liquid_mail.htm" />
   <item name="In- en uitloggen" url="Userspecific/logging_on_and_off.htm" />
   <item name="Mijn standaard client-type wijzigen voor het inloggen" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Toetsenbordsneltoetsen" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
@@ -13,16 +12,18 @@
   <item name="Als je sessie verloopt" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="Navigeren in je postvak" >
-  <item name="Navigating @ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="Navigeren in @ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <item name="Je algemene voorkeuren instellen" url="Userspecific/Setting_your_general_preferences.htm" />
   <item name="De weergave aanpassen" url="Navigation_folders_and_tips/Customize_your_view.htm" />
   <item name="Gebruikersinterfacefuncties en sneltoetsen" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-  <item name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <item name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Bewerkingen toepassen op meerdere selecties" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
   <item name="Browsers gebruiken" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
   <item name="Uw werk opslaan" url="Userspecific/browser_session_handling.htm" />
   <item name="Het deelvenster Overzicht bekijken" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="E-mail-systeemmappen" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="De Prullenbak leegmaken" url="Navigation_folders_and_tips/trash_folder.htm" />
+  <item name="Actie ongedaan maken" url="Userspecific/Undo_Action.htm" />
 </book>
 <book name="E-mail beheren " >
   <item name="De weergave van je e-mailberichten beheren" url="conversations/conversation_list_view.htm" />
@@ -55,8 +56,8 @@
   </book>
 </book>
 <book name="E-mail opstellen" >
-  <item name="Een nieuw e-mailbericht opstellen" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <item name="Een nieuw e-mailbericht opstellen " url="Creating_Messages/Composing_a_new_mail_message.htm" />
+  <item name="Info over het opstellen van e-mailberichten" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="Een nieuw e-mailbericht opstellen" url="Creating_Messages/Composing_a_new_mail_message.htm" />
   <item name="Voorkeuren instellen voor het venster voor het opstellen van e-mailberichten" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="Gedeelten van een e-mailbericht" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Automatisch je handtekening toevoegen" url="Userspecific/using_a_signature.htm" />
@@ -91,14 +92,14 @@
 </book>
 <book name="Je agenda beheren" >
   <item name="Info over @CompanyName@ Agenda" url="Calendar/About_Calendar.htm" />
-  <item name="Agenda's maken" url="Calendar/Create_Calendars.htm" />
-  <item name="agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Agenda’s maken" url="Calendar/Create_Calendars.htm" />
+  <item name="Agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Je Agenda-voorkeuren instellen" url="Userspecific/Setting_your_Calendar_preferences.htm" />
   <item name="Weeknummers in agenda weergeven" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-  <item name="Opties om agenda's weer te geven" url="Calendar/Calendar_Views.htm" />
+  <item name="Opties om agenda’s weer te geven" url="Calendar/Calendar_Views.htm" />
   <item name="Agenda-lijstweergave" url="Calendar/Calendar_List_View.htm" />
-  <item name="Meerdere agenda's weergeven" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
-  <item name="Agenda's verwijderen" url="Calendar/Deleting_Calendars.htm" />
+  <item name="Meerdere agenda’s weergeven" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+  <item name="Agenda’s verwijderen" url="Calendar/Deleting_Calendars.htm" />
   <item name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
   <item name="Je iCal-agenda exporteren" url="Calendar/Exporting_your_iCal_calendar.htm" />
   <item name="Een agenda afdrukken" url="Calendar/Printing_a_calendar.htm" />
@@ -111,7 +112,6 @@
   <item name="Taaklijsten maken" url="Tasks/Create_tasks_folders.htm" />
   <item name="Een taak toevoegen" url="Tasks/Add_a_task.htm" />
   <item name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
-  <item name="Een herinnering instellen in taken" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
   <item name="Taken verplaatsen" url="Tasks/Moving_tasks.htm" />
   <item name="Een taak verwijderen" url="Tasks/Delete_a_task.htm" />
   <item name="Taken sorteren" url="Tasks/Sorting_tasks_.htm" />

@@ -1,6 +1,30 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="Voorkeuren wijzigen" >
+  <topic name="Je gebruikersopties wijzigen" url="Userspecific/Changing_Your_User_Options.htm" />
+</key>
+<key name="voorkeuren, Agenda" >
+  <topic name="Je Agenda-voorkeuren instellen" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+</key>
+<key name="voorkeuren, delen" >
+  <topic name="Items beheren die jij deelt" url="Sharing/Managing_items_you_share.htm" />
+</key>
+<key name="Voorkeuren, leesdeelvenster bekijken" >
+  <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+</key>
+<key name="voorkeuren, tabblad Algemeen" >
+  <topic name="Je algemene voorkeuren instellen" url="Userspecific/Setting_your_general_preferences.htm" />
+</key>
+<key name="Voorzien, een vergadering" >
+  <topic name="Info over de Afspraakpagina" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="vrienden in IM" >
+  <topic name="Toegang tot IM" url="instant_messaging/Accessing_Instant_Messaging.htm" />
+</key>
+<key name="Vrij/bezet" >
+  <topic name="Tijdstippen vrij/bezet bekijken" url="Calendar/Seeing_free_busy_times.htm" />
+</key>
 <key name="Vrij/bezet, delen" >
   <topic name="Jouw vrij/bezet-status verzenden aan anderen" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
 </key>
@@ -25,6 +49,9 @@
 </key>
 <key name="weergave, agenda-lijstweergave" >
   <topic name="Agenda-lijstweergave" url="Calendar/Calendar_List_View.htm" />
+</key>
+<key name="werkweek aanpassen" >
+  <topic name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="Wijzigen, een afspraak" >
   <topic name="Terugkerende afspraken wijzigen" url="Calendar/Deleting_recurring_appointments.htm" />

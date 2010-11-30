@@ -3,7 +3,7 @@
 <tocdata>
 <item name="Mappen delen" url="Sharing/Sharing_a_folder.htm" />
 <item name="Items beheren die jij deelt" url="Sharing/Managing_items_you_share.htm" />
-<item name="Een distributielijst delen" url="Sharing/Sharing_with_a_Distribution_List.htm" />
+<item name="Delen met een distributielijst" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="E-mailmappen delen" >
   <item name="E-mailmappen delen" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
   <item name="Je Postvak IN delen" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
@@ -11,10 +11,10 @@
   <item name="Toegang tot de gedeelde postvakmap accepteren" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="Werken binnen een gedeelde e-mailmap" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
 </book>
-<book name="Agenda's delen" >
+<book name="Agenda’s delen" >
   <item name="Je agenda delen" url="Calendar/Delegating_Calendar_Access.htm" />
-  <item name="Beheerdersrechten toekennen voor gedeelde Agenda's" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-  <item name="Managersrechten toekennen voor gedeelde Agenda's" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
+  <item name="Beheerdersrechten toekennen voor gedeelde Agenda’s" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <item name="Managersrechten toekennen voor gedeelde Agenda’s" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
   <item name="Toegang accepteren tot een gedeelde agenda" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
   <item name="Een aanvraag om een agenda te delen afwijzen" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
 </book>

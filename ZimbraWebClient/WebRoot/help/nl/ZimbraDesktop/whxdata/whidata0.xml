@@ -46,9 +46,6 @@
 <key name="afdrukken, taken" >
   <topic name="Info over taken" url="Tasks/About_Tasks.htm" />
 </key>
-<key name="Afspraak, Snel Toevoegen" >
-  <topic name="Snel Toevoegen gebruiken om een afspraak te maken" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-</key>
 <key name="Afspraken" >
   <topic name="Afspraken, vergaderingen en evenementen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
@@ -64,6 +61,12 @@
 <key name="Agenda, vrij/bezet" >
   <topic name="Tijdstippen vrij/bezet bekijken" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
+<key name="agenda, werkweek aanpassen" >
+  <topic name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="Agendaoverzicht" >
+  <topic name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="Aktetas, bestanden toevoegen aan e-mail" >
   <topic name="Bestanden als bijlage toevoegen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
@@ -71,7 +74,7 @@
   <topic name="Algemene adreslijst versus contacten" url="Contacts/gal_vs_contacts.htm" />
 </key>
 <key name="als nieuw bewerken" >
-  <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="Archiveren, berichten" >
   <topic name="Verwijderen, berichten" url="reading_mail/archiving_old_messages.htm" />
@@ -177,7 +180,7 @@
 <key name="Deelvenster Inhoud, kolomkop wijzigen" >
   <topic name="De weergave aanpassen" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 </key>
-<key name="Documenten, nieuwe pagina's maken" >
+<key name="Documenten, nieuwe pagina’s maken" >
   <topic name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="Documenten, RTF-editor" >
@@ -228,7 +231,7 @@
 <key name="exporteren, accountgegevens" >
   <topic name="Een back-up maken van de inhoud van je account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
-<key name="Exporteren, iCal-agenda's" >
+<key name="Exporteren, iCal-agenda’s" >
   <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="Filteren, berichten" >
@@ -265,7 +268,7 @@
 <key name="HTML" >
   <topic name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
-<key name="iCal-agenda's importeren of exporteren" >
+<key name="iCal-agenda’s importeren of exporteren" >
   <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="ics-bijlagen, opslaan" >
@@ -292,7 +295,7 @@
 <key name="Importeren, contacten" >
   <topic name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
 </key>
-<key name="Importeren, iCal-agenda's" >
+<key name="Importeren, iCal-agenda’s" >
   <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="Instellen, een doorstuuradres" >
