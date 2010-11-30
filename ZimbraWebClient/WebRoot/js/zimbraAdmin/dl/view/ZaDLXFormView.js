@@ -794,7 +794,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 	var cases = [];
         if(AjxEnv.isIE || AjxEnv.isFirefox){
 	var case1 =
-        {type:_ZATABCASE_,  caseKey:_tab1,  numCols:2,  colSizes: ["50%","50%"], id: "dl_form_members",
+        {type:_ZATABCASE_,  caseKey:_tab1,  numCols:2,  colSizes: ["450px","420px"], id: "dl_form_members",
                   items:[
                          {type:_GROUP_, width: "98%", numCols: 1,
                                 items:[
