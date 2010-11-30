@@ -386,6 +386,7 @@ if [ -L ${zimbra_home}/cyrus-sasl ]; then
   if [ ! -d ${zimbra_home}/cyrus-sasl/state ]; then  
     mkdir -p ${zimbra_home}/cyrus-sasl/state
   fi
+  chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/lib/sasl2
   chown -R ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/{etc,state}
   chmod 755 ${zimbra_home}/cyrus-sasl/state 
 
@@ -396,6 +397,14 @@ if [ -L ${zimbra_home}/cyrus-sasl ]; then
   if [ -f ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf ]; then
     chmod 440 ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf
     chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/etc/saslauthd.conf
+  fi
+  if [ -f ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf.in ]; then
+    chmod 640 ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf.in
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf.in
+  fi
+  if [ -f ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf ]; then
+    chmod 640 ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf
+    chown ${zimbra_user}:${zimbra_group} ${zimbra_home}/cyrus-sasl/lib/sasl2/smtpd.conf
   fi
 fi
 
