@@ -59,11 +59,11 @@ public class VerifyAllSkinUI extends CommonTest {
 		for (int i = 0; i <= skin.length - 1; i++) {
 			System.out.println("---------- Verifying skin UI(" + skin[i]
 					+ ") ----------");
-			ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-					+ ZimbraSeleniumProperties.getStringProperty("server") + "/?skin="
+			ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+					+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?skin="
 					+ skin[i].toLowerCase());
-			zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-					+ ZimbraSeleniumProperties.getStringProperty("server") + "/?skin="
+			zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+					+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?skin="
 					+ skin[i].toLowerCase());
 
 			// mail

@@ -128,14 +128,14 @@ public class MailBugs extends CommonTest {
 			// Show original
 			resetSession();
 			page.zLoginpage.zLoginToZimbraAjax("admin@"
-					+ ZimbraSeleniumProperties.getStringProperty("server"));
+					+ ZimbraSeleniumProperties.getStringProperty("server.host"));
 			zGoToApplication("Preferences");
 			zGoToPreferences("Accounts");
 			SleepUtil.sleep(1500);
 			obj.zButton.zClick("admin@"
-					+ ZimbraSeleniumProperties.getStringProperty("server"));
+					+ ZimbraSeleniumProperties.getStringProperty("server.host"));
 			obj.zMenuItem.zClick("root@"
-					+ ZimbraSeleniumProperties.getStringProperty("server"));
+					+ ZimbraSeleniumProperties.getStringProperty("server.host"));
 			obj.zButton.zClick("id=zb__PREF__SAVE_left_icon");
 			SleepUtil.sleep(2000);
 
@@ -166,7 +166,7 @@ public class MailBugs extends CommonTest {
 									.getStringProperty("server")),
 							"Show original contains Sender if sender is alias from - Bug 30438");
 			verifyShowOriginalMsgBody(showOrigText, "From: root@"
-					+ ZimbraSeleniumProperties.getStringProperty("server"),
+					+ ZimbraSeleniumProperties.getStringProperty("server.host"),
 					"To: admin@"
 							+ ZimbraSeleniumProperties
 									.getStringProperty("server"),
@@ -199,7 +199,7 @@ public class MailBugs extends CommonTest {
 									.getStringProperty("server")),
 							"Show original contains Sender if sender is alias from - Bug 30438");
 			verifyShowOriginalMsgBody(showOrigText, "From: root@"
-					+ ZimbraSeleniumProperties.getStringProperty("server"),
+					+ ZimbraSeleniumProperties.getStringProperty("server.host"),
 					"To: admin@"
 							+ ZimbraSeleniumProperties
 									.getStringProperty("server"),

@@ -136,14 +136,14 @@ public class AddToCalendar extends CommonTest {
 		String startDate = "20060119";
 		String calView = "workWeek";
 		ClientSessionFactory.session().selenium().open(
-				ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-						+ ZimbraSeleniumProperties.getStringProperty("server")
+				ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+						+ ZimbraSeleniumProperties.getStringProperty("server.host")
 						+ "/?app=calendar&view=" + calView + "&date="
 						+ startDate);
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties
 				.getStringProperty("mode")
 				+ "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server")
+				+ ZimbraSeleniumProperties.getStringProperty("server.host")
 				+ "/?app=calendar&view=" + calView + "&date=" + startDate);
 		Thread.sleep(2000);
 		obj.zAppointment.zExists("iCalBasic");

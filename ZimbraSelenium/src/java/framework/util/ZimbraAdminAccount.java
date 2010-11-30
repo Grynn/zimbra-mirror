@@ -62,7 +62,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 	public static synchronized ZimbraAdminAccount AdminConsoleAdmin() {
 		if ( _AdminConsoleAdmin == null ) {
 			String name = "globaladmin"+ ZimbraSeleniumProperties.getUniqueString();
-			String domain = ZimbraSeleniumProperties.getStringProperty("server","qa60.lab.zimbra.com");
+			String domain = ZimbraSeleniumProperties.getStringProperty("server.host","qa60.lab.zimbra.com");
 			_AdminConsoleAdmin = new ZimbraAdminAccount(name +"@"+ domain);
 			_AdminConsoleAdmin.provision();
 			_AdminConsoleAdmin.authenticate();
@@ -81,7 +81,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 	public static synchronized ZimbraAdminAccount GlobalAdmin() {
 		if ( _GlobalAdmin == null ) {
 			String name = ZimbraSeleniumProperties.getStringProperty("adminName", "admin");
-			String domain = ZimbraSeleniumProperties.getStringProperty("server","qa60.lab.zimbra.com");
+			String domain = ZimbraSeleniumProperties.getStringProperty("server.host","qa60.lab.zimbra.com");
 			_GlobalAdmin = new ZimbraAdminAccount(name +"@"+ domain);
 			_GlobalAdmin.authenticate();
 		}
@@ -109,7 +109,7 @@ public class ZimbraAdminAccount extends ZimbraAccount {
 		
 		
 		// Create a new global admin account
-		String domain = ZimbraSeleniumProperties.getStringProperty("server","qa60.lab.zimbra.com");
+		String domain = ZimbraSeleniumProperties.getStringProperty("server.host","qa60.lab.zimbra.com");
 		ZimbraAdminAccount admin = new ZimbraAdminAccount("admin"+ System.currentTimeMillis() +"@"+ domain);
 		admin.provision();	// Create the account (CreateAccountRequest)
 		admin.authenticate();		// Authenticate the account (AuthRequest)

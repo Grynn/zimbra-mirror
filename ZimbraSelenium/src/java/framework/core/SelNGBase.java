@@ -103,7 +103,7 @@ public class SelNGBase {
 		selenium.windowMaximize();
 		selenium.windowFocus();
 		selenium.allowNativeXpath("true");
-		selenium.open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"	+ ZimbraSeleniumProperties.getStringProperty("server") + "/" + parameter);
+		selenium.open(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"	+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/" + parameter);
 		
 	}
 

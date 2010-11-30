@@ -72,7 +72,7 @@ public class SummaryReporter implements IReporter {
 			" locale:" + ZimbraSeleniumProperties.getStringProperty("locale") + 
 			" browser:" + ClientSessionFactory.session().currentBrowserName() + 
 			" client:" + System.getenv("COMPUTERNAME") + 
-			" server:" + ZimbraSeleniumProperties.getStringProperty("server") + 
+			" server:" + ZimbraSeleniumProperties.getStringProperty("server.host") + 
 			" zimbra:" + version +
 			" duration:" + (duration/1000) + "s(" + (SleepUtil.TotalSleepMillis/1000) + ")";
 		String subject = "SelNG-" + appType.toLowerCase()+" "+testdetails;

@@ -36,46 +36,46 @@ public class CalendarMiscTests extends CommonTest {
 					{
 							"day",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=day&date=20081015",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=day&date=20081016",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=day&date=20081014" },
 					{
 							"workWeek",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=workWeek&date=20081015",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=workWeek&date=20081022",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=workWeek&date=20081008" },
 					{
 							"month",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=month&date=20081015",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=month&date=20081115",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=month&date=20080915" },
 					{
 							"week",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=week&date=20081015",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=week&date=20081022",
 							"http://"
-									+ ZimbraSeleniumProperties.getStringProperty("server")
+									+ ZimbraSeleniumProperties.getStringProperty("server.host")
 									+ "/zimbra/h/calendar?view=week&date=20081008" } };
 		} else if (test.equals("zCalendarScheduleView")) {
 			return new Object[][] { { "check" }, { "uncheck" } };
@@ -119,9 +119,9 @@ public class CalendarMiscTests extends CommonTest {
 		if (SelNGBase.isExecutionARetry.get())
 			handleRetry();
 				
-		String urlInitial =  "http://" + ZimbraSeleniumProperties.getStringProperty("server") + "/zimbra/h/calendar";
+		String urlInitial =  "http://" + ZimbraSeleniumProperties.getStringProperty("server.host") + "/zimbra/h/calendar";
 		
-		String urlToNavigate = "http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":80/home/"
+		String urlToNavigate = "http://" + ZimbraSeleniumProperties.getStringProperty("server.host") + ":80/home/"
 		+ ClientSessionFactory.session().currentUserName() + "?fmt=freebusy";
 		
 		if(null == someting || someting.trim().length() == 0)
@@ -178,7 +178,7 @@ public class CalendarMiscTests extends CommonTest {
 
 		String subject = getLocalizedData_NoSpecialChar();
 		String location = getLocalizedData_NoSpecialChar();
-		String url =  "http://" + ZimbraSeleniumProperties.getStringProperty("server") + "/zimbra/h/calendar";
+		String url =  "http://" + ZimbraSeleniumProperties.getStringProperty("server.host") + "/zimbra/h/calendar";
 		String timezone;
 		
 		//open calendar view
@@ -257,7 +257,7 @@ public class CalendarMiscTests extends CommonTest {
 			handleRetry();
 
 		String expectedMsg;
-		expectedMsg = "http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":80/home/"
+		expectedMsg = "http://" + ZimbraSeleniumProperties.getStringProperty("server.host") + ":80/home/"
 				+ ClientSessionFactory.session().currentUserName() + "?fmt=freebusy";
 
 		page.zCalFolderApp.zNavigateToCalendarFoldersPage();
@@ -298,8 +298,8 @@ public class CalendarMiscTests extends CommonTest {
 
 		String dateToNavigate = sdf.format(testcal.getTime());
 
-		String urlToNavigate = ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/zimbra/h/calendar?view="
+		String urlToNavigate = ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/zimbra/h/calendar?view="
 				+ view + "&date=" + dateToNavigate;
 
 		page.zCalendarApp.zCreateSimpleAppt(subject, "", "", "");

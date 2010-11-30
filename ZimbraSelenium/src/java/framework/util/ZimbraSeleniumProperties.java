@@ -213,35 +213,38 @@ public class ZimbraSeleniumProperties {
 	}
 	
 	public static String getBaseURL() {
+		String scheme = ZimbraSeleniumProperties.getStringProperty("server.scheme", "http");
+		String host = ZimbraSeleniumProperties.getStringProperty("server.host", "localhost");
+		String port = ZimbraSeleniumProperties.getStringProperty("server.port", "7070");
 		
 		if ( appType == AppType.DESKTOP )
 			return "http://localhost:7633/zimbra/desktop/zmail.jsp";
 		
-		if ( appType == AppType.AJAX )
-			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "";
+		if ( appType == AppType.AJAX ) {
+			return (scheme + "://"+ host + ":" + port);
+		}
+ 
+		if ( appType == AppType.HTML ) {
+			return (scheme + "://"+ host + ":" + port + "/h/");
+		}
 
-		if ( appType == AppType.HTML )
-			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-					+ ZimbraSeleniumProperties.getStringProperty("server") + "/h/";
+		if ( appType == AppType.MOBILE ) {
+			return (scheme + "://"+ host + ":" + port + "/m/");
+		}
 
-		if ( appType == AppType.MOBILE )
-			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-					+ ZimbraSeleniumProperties.getStringProperty("server") + "/m/";
+		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) {
+			return (scheme +"://"+ host + ":"+ port +"?dev=1&debug=0");
+		}
 
-		if(ZimbraSeleniumProperties.getStringProperty("runCodeCoverage", "no").equalsIgnoreCase("yes")) 
-			return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-					+ ZimbraSeleniumProperties.getStringProperty("server") + "?dev=1&debug=0";
-
-		if ( appType == AppType.ADMIN )
-			return "https://" +
-				ZimbraSeleniumProperties.getStringProperty("server") + ":7071";
+		if ( appType == AppType.ADMIN ) {
+			return ("https://"+ host +":7071");
+		}
 
 
 		// Default
 		logger.warn("Using default URL");
-		return ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "";
+		return (scheme +"://"+ host);
+
 	}
 
 	public static String zimbraGetVersionString() throws HarnessException {		

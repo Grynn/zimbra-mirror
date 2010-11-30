@@ -54,46 +54,46 @@ public class ClientURLTests extends CommonTest {
 			handleRetry();
 
 		// Address book
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=contacts");
-		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=contacts");
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=contacts");
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=contacts");
 		obj.zFolder.zExists(page.zABCompose.zContactsFolder);
 		obj.zButton.zExists(page.zABCompose.zNewABOverviewPaneIcon);
 		obj.zButton.zExists(page.zABCompose.zNewContactMenuIconBtn);
 
 		// Calendar
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar");
-		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar");
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=calendar");
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=calendar");
 		obj.zFolder.zExists(page.zCalApp.zCalendarFolder);
 		obj.zButton.zExists(page.zCalApp.zNewCalOverviewPaneIcon);
 		obj.zButton.zExists(page.zCalApp.zCalNewApptBtn);
 
 		// Tasks
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=tasks");
-		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=tasks");
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=tasks");
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=tasks");
 		obj.zFolder.zExists(page.zTaskApp.zTasksFolder);
 		obj.zButton.zExists(page.zTaskApp.zNewTasksOverviewPaneIcon);
 		obj.zButton.zExists(page.zTaskApp.zTasksNewBtn);
 
 		// Documents
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=documents");
-		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=documents");
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=documents");
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=documents");
 		obj.zFolder.zExists(page.zDocumentApp.zNotebookFolder);
 		obj.zButton.zExists(page.zDocumentApp.zNewNotebookOverviewPaneIcon);
 		obj.zButton.zExists(page.zDocumentCompose.zNewPageIconBtn);
 
 		// Briefcase
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=briefcase");
-		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=briefcase");
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=briefcase");
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=briefcase");
 		obj.zFolder.zExists(page.zBriefcaseApp.zBriefcaseFolder);
 		obj.zButton.zExists("id=ztih__main_Briefcase__BRIEFCASE_textCell");
 		obj.zButton.zExists(page.zBriefcaseApp.zNewMenuIconBtn);
@@ -123,11 +123,11 @@ public class ClientURLTests extends CommonTest {
 			subjectField = getLocalizedData_NoSpecialChar();
 			bodyField = getLocalizedData_NoSpecialChar();
 		}
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?view=compose" + "&to="
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?view=compose" + "&to="
 				+ toField + "&subject=" + subjectField + "&body=" + bodyField);
-		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?view=compose" + "&to="
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?view=compose" + "&to="
 				+ toField + "&subject=" + subjectField + "&body=" + bodyField);
 		obj.zButton.zExists(page.zComposeView.zSendIconBtn);
 		String toValue = obj.zTextAreaField
@@ -158,8 +158,8 @@ public class ClientURLTests extends CommonTest {
 		resetSession();
 		page.zLoginpage
 				.zCustomLoginToZimbraAjax("mail?view=compose&to=foo@example.com&subject=יאט&body=body");
-		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server")
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host")
 				+ "/mail?view=compose&to=foo@example.com&subject=יאט&body=body");
 		obj.zButton.zExists(page.zComposeView.zSendIconBtn);
 		assertReport(
@@ -220,11 +220,11 @@ public class ClientURLTests extends CommonTest {
 			expectedDate = "2009-3-10";
 		}
 		String calView = "workWeek";
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar&view=" + calView
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=calendar&view=" + calView
 				+ "&date=" + startDate);
-		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/?app=calendar&view=" + calView
+		zNavigateAgainIfRequired(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/?app=calendar&view=" + calView
 				+ "&date=" + startDate);
 		obj.zFolder.zExists(page.zCalApp.zCalendarFolder);
 		obj.zButton.zExists(CalApp.zViewBtn);

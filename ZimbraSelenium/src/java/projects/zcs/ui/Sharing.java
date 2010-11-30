@@ -423,10 +423,10 @@ public class Sharing extends AppPage {
 					"URL text mismatched"
 							+ page.zComposeView.formatExpActValues(
 									lCaseBodyTxt, "URL"));
-			String folderSharedURL = "http://" + ZimbraSeleniumProperties.getStringProperty("server")
+			String folderSharedURL = "http://" + ZimbraSeleniumProperties.getStringProperty("server.host")
 					+ ":80/home/" + currentloggedinuser + "/";
 			/*
-			 * String folderSharedURL = "http://" + ZimbraSeleniumProperties.getStringProperty("server") +
+			 * String folderSharedURL = "http://" + ZimbraSeleniumProperties.getStringProperty("server.host") +
 			 * ":80/home/" + currentloggedinuser + "/" + sharingfoldername;
 			 */
 

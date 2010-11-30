@@ -199,22 +199,22 @@ public class LmtpInject extends CommonTest {
 		String calView = "workWeek";
 		String startDate = "20080924";
 		ClientSessionFactory.session().selenium().open(
-				ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-						+ ZimbraSeleniumProperties.getStringProperty("server")
+				ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+						+ ZimbraSeleniumProperties.getStringProperty("server.host")
 						+ "/?app=calendar&view=" + calView + "&date="
 						+ startDate);
 		zNavigateAgainIfRequired(ZimbraSeleniumProperties
 				.getStringProperty("mode")
 				+ "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server")
+				+ ZimbraSeleniumProperties.getStringProperty("server.host")
 				+ "/?app=calendar&view=" + calView + "&date=" + startDate);
 		obj.zAppointment.zDblClick("happyhappyjoyjoy fun time");
 		SleepUtil.sleep(2000);
 		obj.zButton.zExists(localize(locator.close));
 		obj.zButton.zExists(localize(locator.today));
 		ClientSessionFactory.session().selenium().open(
-				ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-						+ ZimbraSeleniumProperties.getStringProperty("server")
+				ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+						+ ZimbraSeleniumProperties.getStringProperty("server.host")
 						+ "/?app=calendar");
 		SleepUtil.sleep(3000);
 

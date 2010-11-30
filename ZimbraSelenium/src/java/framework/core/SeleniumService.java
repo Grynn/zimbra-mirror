@@ -356,7 +356,7 @@ public class SeleniumService {
 	          "\"browser-version\": \"" + ZimbraSeleniumProperties.getStringProperty("browserVersion") + "\"," +
 /* TODO: Adding the job name would be useful for finding the test videos in OnDemand
 	          "\"job-name\": \"" + 	Current method or class name + "\"," +  */
-	          "\"user-extensions-url\": \"http://" + ZimbraSeleniumProperties.getStringProperty("server") + ":8080/user-extensions.js\"}";
+	          "\"user-extensions-url\": \"http://" + ZimbraSeleniumProperties.getStringProperty("server.host") + ":8080/user-extensions.js\"}";
 		
 		} else {
 			

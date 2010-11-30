@@ -25,7 +25,7 @@ public class StafAbstract {
 	public StafAbstract() {
 		logger.info("new StafAbstract");
 		
-		StafServer = ZimbraSeleniumProperties.getStringProperty("server", "local");
+		StafServer = ZimbraSeleniumProperties.getStringProperty("server.host", "local");
 		StafService = "PROCESS";
 		StafTimeoutMillis = 30000;
 		StafParms = "START SHELL COMMAND \"ls\" RETURNSTDOUT RETURNSTDERR WAIT "+ StafTimeoutMillis;

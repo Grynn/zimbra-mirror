@@ -71,7 +71,7 @@ public class LmtpUtil {
 	public static void addMessageLmtp(String[] recipients, String sender,
 			String message) throws IOException, LmtpProtocolException  {
 
-		LmtpClient lmtp = new LmtpClient( ZimbraSeleniumProperties.getStringProperty("server"),	7025);
+		LmtpClient lmtp = new LmtpClient( ZimbraSeleniumProperties.getStringProperty("server.host"),	7025);
 		byte[] data = message.getBytes();
 		lmtp.sendMessage(new ByteArrayInputStream(data), recipients, sender,
 				"TestUtil", (long) data.length);
@@ -82,7 +82,7 @@ public class LmtpUtil {
 			String ccUser, String subject, String body) throws Exception {
 
 		LmtpClient lmtp = new LmtpClient(
-				ZimbraSeleniumProperties.getStringProperty("server"),
+				ZimbraSeleniumProperties.getStringProperty("server.host"),
 				7025);
 		
 		String message = getTestMessageContent(sender, recipients[0], ccUser,
@@ -120,21 +120,21 @@ public class LmtpUtil {
 
 		String recipientName = "";
 		if (recipient == null) {
-			recipient = "touser@" + ZimbraSeleniumProperties.getStringProperty("server");
+			recipient = "touser@" + ZimbraSeleniumProperties.getStringProperty("server.host");
 			recipientName = "touser";
 		} else {
 			recipientName = recipient.substring(0, recipient.indexOf("@"));
 		}
 		String senderName = "";
 		if (sender == null) {
-			sender = "sender@" + ZimbraSeleniumProperties.getStringProperty("server");
+			sender = "sender@" + ZimbraSeleniumProperties.getStringProperty("server.host");
 			senderName = "senderName";
 		} else {
 			senderName = sender.substring(0, sender.indexOf("@"));
 		}
 		String ccUserName = "";
 		if (ccUser == null) {
-			ccUser = "ccuserName@" + ZimbraSeleniumProperties.getStringProperty("server");
+			ccUser = "ccuserName@" + ZimbraSeleniumProperties.getStringProperty("server.host");
 			ccUserName = "ccuserName";
 		} else {
 			ccUserName = ccUser.substring(0, ccUser.indexOf("@"));

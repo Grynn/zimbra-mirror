@@ -326,14 +326,14 @@ public class CreateApptTests extends CommonTest {
 				"", body, apptStartDate, apptEndDate, startTime, endTime,
 				localize(locator.recurBasicSelectDaily));
 
-		ClientSessionFactory.session().selenium().open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
+		ClientSessionFactory.session().selenium().open("http://" + ZimbraSeleniumProperties.getStringProperty("server.host")
 				+ "/zimbra/h/calendar?view=day&date=20090601");
 
 		SleepUtil.sleepMedium();
 
 		obj.zAppointment.zExists(subject);
 
-		ClientSessionFactory.session().selenium().open("http://" + ZimbraSeleniumProperties.getStringProperty("server")
+		ClientSessionFactory.session().selenium().open("http://" + ZimbraSeleniumProperties.getStringProperty("server.host")
 				+ "/zimbra/h/calendar?view=day&date=20090702");
 
 		SleepUtil.sleepMedium();

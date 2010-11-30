@@ -59,8 +59,8 @@ public class DeepLinkTests extends CommonTest {
 		String[] recipients = { to };
 		LmtpUtil.injectMessage(to, recipients, cc, subject, body);
 		page.zMailApp.ClickCheckMailUntilMailShowsUp(subject);
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "/h");
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "/h");
 		SleepUtil.sleep(5000);
 		ClientSessionFactory.session().selenium().click("xpath=id('R0')/td[2]");
 		SleepUtil.sleep(2000);
@@ -71,8 +71,8 @@ public class DeepLinkTests extends CommonTest {
 		msgLocation = currentURL.substring(msgId).replaceAll("&cid=-", "");
 		System.out.println(msgLocation);
 
-		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-				+ ZimbraSeleniumProperties.getStringProperty("server") + "?app=mails&id=" + msgLocation);
+		ClientSessionFactory.session().selenium().open(ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+				+ ZimbraSeleniumProperties.getStringProperty("server.host") + "?app=mails&id=" + msgLocation);
 		SleepUtil.sleep(5000);
 
 		obj.zFolder.zExists(page.zMailApp.zInboxFldr);

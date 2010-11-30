@@ -527,7 +527,7 @@ public class TestStatusReporter extends TestListenerAdapter {
 		body.append("\nPass: " + passed);			
 		body.append("\nbrowser: " + ClientSessionFactory.session().currentBrowserName());
 		body.append("\nlocale: " + ZimbraSeleniumProperties.getStringProperty("locale")); 		
-		body.append("\nserver: " +ZimbraSeleniumProperties.getStringProperty("server"));
+		body.append("\nserver: " +ZimbraSeleniumProperties.getStringProperty("server.host"));
 	    body.append("\nclient: " + System.getenv("COMPUTERNAME")) ;
 		body.append("\nduration: " + duration + " sec( Sleep: " + (SleepUtil.TotalSleepMillis/1000) + " sec)");
         body.append("\nstart at: " + startDate);

@@ -272,8 +272,8 @@ public class BriefcaseSharing extends CommonTest {
 		page.zLoginpage.logoutOfZimbraAjax();
 		SleepUtil.sleep(3000);
 		ClientSessionFactory.session().selenium().open(
-				ZimbraSeleniumProperties.getStringProperty("mode") + "://"
-						+ ZimbraSeleniumProperties.getStringProperty("server")
+				ZimbraSeleniumProperties.getStringProperty("server.scheme") + "://"
+						+ ZimbraSeleniumProperties.getStringProperty("server.host")
 						+ "/home/"
 						+ ClientSessionFactory.session().currentUserName().toLowerCase() + "/"
 						+ "Briefcase");

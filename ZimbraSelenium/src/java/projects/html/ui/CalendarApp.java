@@ -815,7 +815,7 @@ public class CalendarApp extends CommonTest {
 
 		String[] temp = viewAndDateSeparatedByColon.split(":");
 		SleepUtil.sleep(3000);
-		String url = "http://" + ZimbraSeleniumProperties.getStringProperty("server")
+		String url = "http://" + ZimbraSeleniumProperties.getStringProperty("server.host")
 				+ "/zimbra/h/calendar?view=" + temp[0] + "&date=" + temp[1];
 
 		ClientSessionFactory.session().selenium().open(url);

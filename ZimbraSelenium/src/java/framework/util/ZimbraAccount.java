@@ -1267,7 +1267,7 @@ public class ZimbraAccount {
 	public static void main(String[] args) throws HarnessException {
 				
 	
-		String domain = ZimbraSeleniumProperties.getStringProperty("server","qa60.lab.zimbra.com");
+		String domain = ZimbraSeleniumProperties.getStringProperty("server.host","qa60.lab.zimbra.com");
 		
 		// Configure log4j using the basic configuration
 		BasicConfigurator.configure();

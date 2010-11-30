@@ -518,7 +518,7 @@ public class ExecuteHarnessMain {
 			StringBuffer body = new StringBuffer( "");
 		
 			body.append(ZimbraSeleniumProperties.zimbraGetVersionString());			
-		    body.append("\n\nserver: " +ZimbraSeleniumProperties.getStringProperty("server"));
+		    body.append("\n\nserver: " +ZimbraSeleniumProperties.getStringProperty("server.host"));
 		    body.append("\nclient: " + System.getenv("COMPUTERNAME")) ;
 		    	   
 			
