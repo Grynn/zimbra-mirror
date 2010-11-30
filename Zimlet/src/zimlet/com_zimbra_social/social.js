@@ -577,6 +577,7 @@ function() {
 	if(!this.maxHeaderTextLength) {
 		var cardWidth = parseInt(this.preferences.social_pref_cardWidthList.replace("px", ""));
 		this.maxHeaderTextLength = (cardWidth/50)*2;
+		this.maxHeaderTextLength = this.maxHeaderTextLength +2;
 	}
 	return this.maxHeaderTextLength;
 };
@@ -1558,10 +1559,11 @@ function(params) {
 				columnSpan = 3;
 				unReadCount++;
 			}
+			if(!this.tableIdAndHighestPostIdMap[tableId] || this.tableIdAndHighestPostIdMap[tableId] < currentPostId) {
+				this.tableIdAndHighestPostIdMap[tableId] = currentPostId;
+			}
 		}
 
-
-		
 		if (type == "SEARCH" || type == "TREND") {//for both search and trends
 			screen_name = obj.from_user;
 			created_at = obj.created_at;
@@ -1838,9 +1840,7 @@ function(tableId, html) {
 SocialZimlet.prototype._isPageDirtyWithNewPosts =
 function(tableId, newId) {
 	var isDirty = false;
-	if(!this.tableIdAndHighestPostIdMap[tableId] || this.tableIdAndHighestPostIdMap[tableId] < newId) {
-		this.tableIdAndHighestPostIdMap[tableId] = newId;
-	}
+
 	var pageNumber = this.tableIdAndPageNumberMap[tableId];
 	if(!pageNumber) {
 		pageNumber = 1;

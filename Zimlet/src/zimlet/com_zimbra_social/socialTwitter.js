@@ -113,7 +113,7 @@ com_zimbra_socialTwitter.prototype.twitterSearch =
 function(params) {
 	var components = new Array();
 	components["rpp"] = this.preferences.social_pref_numberofTweetsSearchesToReturn;
-	components["q"] = AjxStringUtil.urlComponentEncode(params.query);
+	components["q"] = params.query;
 	this._addSinceAndMaxIds(params.tableId, components);
 	var callback = new AjxCallback(this, this._twitterSearchCallback, params);
 	this.zimlet.socialOAuth.makeSimpleHTTPGet({url: com_zimbra_socialTwitter.SEARCH_BASE_URL, components: components, callback: callback});
@@ -140,7 +140,6 @@ function(params) {
 	}
 	this.zimlet.socialOAuth.setAuthTokens({oauth_token: account.oauth_token, oauth_token_secret: account.oauth_token_secret});
 	var components = this._getAdditionalParams(params.tableId);
-
 	var url = "";
 	var useSimpleHttpGet = false;
 	if (type == "ACCOUNT") {
@@ -433,15 +432,16 @@ function(showAlertObj) {
 		if (!firstItem) {
 			continue;
 		}
-		totalUnreadCount = totalUnreadCount + accnt["ACCOUNT"].unReadCount;
-		totalUnreadCount = totalUnreadCount + accnt["DIRECT_MSGS"].unReadCount;
-		totalUnreadCount = totalUnreadCount + accnt["MENTIONS"].unReadCount;
+		var accUC = accnt["ACCOUNT"] ? accnt["ACCOUNT"].unReadCount : 0;
+		var dmUC = accnt["DIRECT_MSGS"] ? accnt["DIRECT_MSGS"].unReadCount : 0;
+		var mUC = accnt["MENTIONS"] ? accnt["MENTIONS"].unReadCount : 0;
 
+		totalUnreadCount = totalUnreadCount + accUC + dmUC + mUC;
 		html[i++] = "<TABLE width=500px>";
 		html[i++] = "<TR><TD>";
 		html[i++] = "<label style='font-weight:bold;font-size:12px;color:darkblue'>" + accntName + ": </label>";
 		html[i++] = "<label style='font-weight:bold;font-size:12px'>";
-		html[i++] = ["Account: ",accnt["ACCOUNT"].unReadCount, " DM: ",accnt["DIRECT_MSGS"].unReadCount, " Mentions: ",accnt["MENTIONS"].unReadCount].join("");
+		html[i++] = ["Account: ",accUC, " DM: ",dmUC, " Mentions: ",mUC].join("");
 		html[i++] = "</label></TD></TR></TABLE>";
 		html[i++] = "<TABLE width=500px>";
 		html[i++] = "<TD width=48px height=48px align='center' valign='top'> ";
@@ -496,15 +496,17 @@ function(emailContentObj) {
 	var summary = new Array();
 	for (var accntName in emailContentObj) {
 		var accnt = emailContentObj[accntName];
-		totalUnreadCount = totalUnreadCount + accnt.ACCOUNT.unReadCount;
-		totalUnreadCount = totalUnreadCount + accnt.DIRECT_MSGS.unReadCount;
-		totalUnreadCount = totalUnreadCount + accnt.MENTIONS.unReadCount;
+		var accUC = accnt.ACCOUNT ? accnt.ACCOUNT.unReadCount : 0;
+		var dmUC = accnt.DIRECT_MSGS ? accnt.DIRECT_MSGS.unReadCount : 0;
+		var mUC = accnt.MENTIONS ? accnt.MENTIONS.unReadCount : 0;
+
+		totalUnreadCount = totalUnreadCount + accUC + dmUC + mUC;
 		summary[j++] = "----------------------------\n";
 		summary[j++] = this.zimlet.getMessage("account") + " " + accntName + "\n";
 		summary[j++] = "----------------------------\n";
-		summary[j++] = this.zimlet.getMessage("messages") + " " + accnt.ACCOUNT.unReadCount + "\n";
-		summary[j++] = this.zimlet.getMessage("directMessages") + " " + accnt.DIRECT_MSGS.unReadCount + "\n";
-		summary[j++] = this.zimlet.getMessage("mentions") + accnt.MENTIONS.unReadCount + "\n";
+		summary[j++] = this.zimlet.getMessage("messages") + " " + accUC + "\n";
+		summary[j++] = this.zimlet.getMessage("directMessages") + " " + dmUC + "\n";
+		summary[j++] = this.zimlet.getMessage("mentions") + mUC + "\n";
 		summary[j++] = "\n\n";
 	}
 	html[i++] = AjxMessageFormat.format(this.zimlet.getMessage("tweetSubject"), totalUnreadCount);
@@ -516,6 +518,9 @@ function(emailContentObj) {
 		for (var j = 0; j < props.length; j++) {
 			var prop = props[j];
 			var propStr = "";
+			if(!accnt[prop]) {
+				continue;
+			}
 			if (prop == "ACCOUNT")
 				propStr = accntName + ": " + this.zimlet.getMessage("newMsgs") + "(" + accnt[prop].unReadCount + ")";
 			else
