@@ -65,6 +65,11 @@ function() {
 	var isAdvanced = sb_controller.isAdvancedSearch (query) ;
 	var searchListController = ZaApp.getInstance().getSearchListController() ;
 	searchListController._isAdvancedSearch = isAdvanced ;
+
+	// reset search controller
+	searchListController._currentDomain = null;
+	searchListController._currentPageNum = 1;
+	searchListController.fetchAttrs = ZaSearch.standardAttributes;
 	
 	params.types = this.getSearchTypes();
 	

@@ -2099,25 +2099,33 @@ function (domainName) {
         var controller = ZaApp.getInstance().getSearchListController();
         var busyId = Dwt.getNextId();
         var callback =  new AjxCallback(controller, controller.searchCallback, {limit:controller.RESULTSPERPAGE,show:true,busyId:busyId});
+	// set search query
         controller._currentQuery = "" ;
         var searchTypes = [ZaSearch.ACCOUNTS, ZaSearch.DLS, ZaSearch.ALIASES, ZaSearch.RESOURCES] ;
-
+	// set search types
         if(controller.setSearchTypes)
             controller.setSearchTypes(searchTypes);
+	// search domain
+	controller._currentDomain = domainName;
+	// search attributes
+	controller.fetchAttrs = AjxBuffer.concat(ZaAlias.searchAttributes,",",
+                        ZaDistributionList.searchAttributes,",",
+                        ZaResource.searchAttributes,",",
+                        ZaSearch.standardAttributes);
+	// set current pagenum
+	controller._currentPageNum = 1;
+
         var searchParams = {
                 query:controller._currentQuery,
-                domain: domainName,
+                domain: controller._currentDomain,
                 types:searchTypes,
-                attrs:AjxBuffer.concat(ZaAlias.searchAttributes,",",
-                	ZaDistributionList.searchAttributes,",",
-                	ZaResource.searchAttributes,",",
-                	ZaSearch.standardAttributes),
+                attrs:controller.fetchAttrs,
                 callback:callback,
                 controller: controller,
-				showBusy:true,
-				busyId:busyId,
-				busyMsg:ZaMsg.BUSY_SEARCHING,
-				skipCallbackIfCancelled:false                
+                                showBusy:true,
+                                busyId:busyId,
+                                busyMsg:ZaMsg.BUSY_SEARCHING,
+                                skipCallbackIfCancelled:false                
         }
         ZaSearch.searchDirectory(searchParams);
     }else {

@@ -30,6 +30,7 @@ ZaSearchListController = function(appCtxt, container) {
    	
 	this._currentPageNum = 1;
 	this._currentQuery = null;
+	this._currentDomain = null;
 	this._currentSortField = ZaAccount.A_uid;
 	this._currentSortOrder = "1";
 	this.searchTypes = [ZaSearch.ALIASES,ZaSearch.DLS,ZaSearch.ACCOUNTS, ZaSearch.RESOURCES, ZaSearch.DOMAINS, ZaSearch.COSES];
@@ -70,7 +71,7 @@ ZaSearchListController.prototype.show = function (doPush) {
 			showBusy:true,
 			busyId:busyId,
 			busyMsg:ZaMsg.BUSY_SEARCHING,
-			skipCallbackIfCancelled:false			
+			skipCallbackIfCancelled:false
 	}
 	var searchQueryList = new Array();
 	var isAliasSpec = false;
@@ -78,12 +79,14 @@ ZaSearchListController.prototype.show = function (doPush) {
 		if(this.searchTypes[i] == ZaSearch.ALIASES)
 			isAliasSpec = true;
 	}
-	if(isAliasSpec) {
+	if(isAliasSpec && !this._currentDomain) {
 		searchQueryList.push(searchParams);
 		var keyword = ZaSearchListController._getSearchKeyWord(this._currentQuery);
 		ZaSearchListController.searchAliasDomain(keyword,this,searchQueryList);
-	}else
+	}else {
+		if(this._currentDomain) searchParams.domain = this._currentDomain;
 		ZaSearch.searchDirectory(searchParams);
+	}
 
 }
 
