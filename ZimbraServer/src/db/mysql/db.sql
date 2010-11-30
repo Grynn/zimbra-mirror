@@ -211,9 +211,12 @@ CREATE TABLE mobile_devices (
    remote_wipe_req     INTEGER UNSIGNED,
    remote_wipe_ack     INTEGER UNSIGNED,
    policy_values       VARCHAR(512),
+   last_used_date      DATE,
+   deleted_by_user     BOOLEAN NOT NULL DEFAULT 0,
 
    PRIMARY KEY (mailbox_id, device_id),
-   CONSTRAINT fk_mobile_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE
+   CONSTRAINT fk_mobile_mailbox_id FOREIGN KEY (mailbox_id) REFERENCES mailbox(id) ON DELETE CASCADE,
+   INDEX i_last_used_date (last_used_date)
 ) ENGINE = InnoDB;
 
 
