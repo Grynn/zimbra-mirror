@@ -3,7 +3,7 @@
 <tocdata>
 <book name="Начало работы" >
   <item name="Начало работы со стандартным веб-клиентом" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
-  <item name="Вход и выход из учетной записи" url="Userspecific/logging_on_and_off.htm" />
+  <item name="Вход и выход" url="Userspecific/logging_on_and_off.htm" />
   <item name="Изменение типа клиента по умолчанию для входа" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Горячие клавиши" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
 </book>
@@ -28,13 +28,13 @@
   </book>
 </book>
 <book name="Создание сообщения" >
-  <item name="Создание новых сообщений" url="Creating_Messages/b_Composing_email_message.htm" />
+  <item name="Составление и отправка сообщений" url="Creating_Messages/b_Composing_email_message.htm" />
   <item name="Элементы сообщения" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Автоматическое добавление подписи" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Автоматическое заполнение адреса" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Вложение файлов в сообщение" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
   <item name="Типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="Мспользование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Проверка правописания" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Сохранение сообщений как черновиков" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
@@ -46,6 +46,7 @@
   <item name="Адресные книги" url="Contacts/b_Your_Address_Books.htm" />
   <item name="Добавление новых контактов" url="Contacts/b_Adding_new_contacts.htm" />
   <item name="Экспорт списка контактов" url="Contacts/Exporting_a_Contact_List.htm" />
+  <item name="Печать имен контактов" url="Contacts/Printing_contact_names.htm" />
 </book>
 <book name="Управление ежедневником" >
   <item name="О ежедневнике" url="Calendar/b_About_Calendar.htm" />

@@ -3,8 +3,7 @@
 <tocdata>
 <book name="Начало работы" >
   <item name="Вас приветствует веб-клиент @ClientNameLong@, Advanced Edition" url="Getting_Started/about_liquid_mail.htm" />
-  <item name="Новые функции в @ClientNameShort@ версии 7.0" url="New_in_6.0.htm" />
-  <item name="Вход и выход из учетной записи" url="Userspecific/logging_on_and_off.htm" />
+  <item name="Вход и выход" url="Userspecific/logging_on_and_off.htm" />
   <item name="Изменение типа клиента по умолчанию для входа" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Горячие клавиши" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
   <item name="Помощник @CompanyName@" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
@@ -13,7 +12,7 @@
   <item name="Если истекло время сеанса" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="Навигация в почтовом ящике" >
-  <item name="Навигация @ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="Навигация в @ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <item name="Установка общих настроек" url="Userspecific/Setting_your_general_preferences.htm" />
   <item name="Настройка пользовательского вида" url="Navigation_folders_and_tips/Customize_your_view.htm" />
   <item name="Функции и горячие клавиши пользовательского интерфейса" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
@@ -23,6 +22,8 @@
   <item name="Сохранение работы" url="Userspecific/browser_session_handling.htm" />
   <item name="Просмотр области обзора" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="Системные папки почты" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="Очистка Корзины" url="Navigation_folders_and_tips/trash_folder.htm" />
+  <item name="Отмена действия" url="Userspecific/Undo_Action.htm" />
 </book>
 <book name="Управление почтой " >
   <item name="Управление видом сообщений" url="conversations/conversation_list_view.htm" />
@@ -55,18 +56,18 @@
   </book>
 </book>
 <book name="Создание сообщения" >
-  <item name="Создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <item name="Создание нового сообщения " url="Creating_Messages/Composing_a_new_mail_message.htm" />
+  <item name="Информация о составлении почтовых сообщений" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="Составление и отправка сообщений" url="Creating_Messages/Composing_a_new_mail_message.htm" />
   <item name="Установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="Элементы сообщения" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Автоматическое добавление подписи" url="Userspecific/using_a_signature.htm" />
   <item name="Автоматическое заполнение адреса" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Расписание для последующей доставки сообщений" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Запрос подтверждения прочтения письма" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
-  <item name="Вложение файлов в сообщение " url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <item name="Вложение файлов в сообщение" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Добавление адресов в поля «Копия» и «Скрытая копия»" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
-  <item name="Мспользование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <item name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Использование проверки правописания" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="Сохранение сообщений как черновиков" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
@@ -82,11 +83,11 @@
   <item name="Пересылка контактных данных" url="Contacts/Forwarding_Contact_Information.htm" />
   <item name="Использование адресной книги организации" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="Автоматическое добавление контактов" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
-  <item name="Создание списков групповых контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="Создание групповых списков контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
   <item name="Импорт адресных книг" url="Contacts/Importing_Contacts.htm" />
   <item name="Экспорт адресных книг" url="Contacts/Exporting_Address_Books.htm" />
   <item name="Печать контактов или адресных книг" url="Contacts/Printing_Contacts.htm" />
-  <item name="Изменение контактных данных" url="Contacts/editing_a_contact.htm" />
+  <item name="Изменение данных контакта" url="Contacts/editing_a_contact.htm" />
   <item name="Удаление контактов" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="Управление ежедневником" >
@@ -111,7 +112,6 @@
   <item name="Создание списков задач" url="Tasks/Create_tasks_folders.htm" />
   <item name="Добавление задачи" url="Tasks/Add_a_task.htm" />
   <item name="Изменение задачи" url="Tasks/Change_a_task.htm" />
-  <item name="Установка напоминания задач" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
   <item name="Перемещение задач" url="Tasks/Moving_tasks.htm" />
   <item name="Удаление задачи" url="Tasks/Delete_a_task.htm" />
   <item name="Сортировка задач" url="Tasks/Sorting_tasks_.htm" />

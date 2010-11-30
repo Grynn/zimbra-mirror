@@ -1,9 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="«Глобальный список адресов» и «Контакты»" last="групповые контакты" num="95" />
-<chunkinfo url="whidata1.xml" first="добавить подпись" last="ответ, отображение сведений заголовка" num="96" />
-<chunkinfo url="whidata2.xml" first="ответ, отображение темы" last="уведомления" num="101" />
-<chunkinfo url="whidata3.xml" first="уведомления о сообщениях" last="электронные уведомления" num="28" />
+<chunkinfo url="whidata0.xml" first="«Глобальный список адресов» и «Контакты»" last="импорт адресных книг" num="101" />
+<chunkinfo url="whidata1.xml" first="импорт ежедневников" last="параметры, сообщение об отсутствии" num="94" />
+<chunkinfo url="whidata2.xml" first="параметры, уведомления о новых сообщениях" last="уведомления о сообщениях" num="99" />
+<chunkinfo url="whidata3.xml" first="удаление" last="электронные уведомления" num="34" />
 
 </index>

@@ -58,11 +58,11 @@
   <item name="Использование фильтров для сортировки входящей почты" url="filters/how_filtering_works.htm" />
   <item name="Фильтрация сообщений" url="filters/filtering_your_messages.htm" />
   <item name="Поддерживаемые условия и действия фильтров" url="filters/filter_conditions_and_actions_supported.htm" />
-  <item name="поиск по шаблону" url="filters/wildcards.htm" />
+  <item name="Поиск по шаблону" url="filters/wildcards.htm" />
 </book>
 <book name="Управление списками контактов" >
   <item name="Добавление новых контактов" url="Contacts/creating_a_new_contact.htm" />
-  <item name="Создание списков групповых контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="Создание групповых списков контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
   <item name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
   <item name="Удаление контакта" url="Contacts/deleting_a_contact.htm" />
   <item name="Печать контактов" url="Contacts/Printing_Contacts.htm" />
@@ -128,8 +128,8 @@
   <item name="Перемещение задач" url="Tasks/Moving_tasks.htm" />
   <item name="Сортировка задач" url="Tasks/Sorting_tasks_.htm" />
 </book>
-<book name="Папки общего доступа (только для учетных записей Zimbra)" >
-<chunk name="Папки общего доступа (только для учетных записей Zimbra)" ref="whtdata1.xml" />
+<book name="Общий доступ к папкам (только для учетных записей Zimbra)" >
+<chunk name="Общий доступ к папкам (только для учетных записей Zimbra)" ref="whtdata1.xml" />
 </book>
 <book name="Использование портфеля" >
 <chunk name="Использование портфеля" ref="whtdata2.xml" />

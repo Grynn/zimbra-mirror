@@ -45,7 +45,7 @@
 <item name="CantOpenURLorFile" value="Невозможно открыть URL или файл" />
 <item name="Find" value="Найти" />
 <item name="FtsHilitePrompt" value="Выделить результаты поиска" />
-<item name="FtsMaxResult" value="Search results per page" />
+<item name="FtsMaxResult" value="Результатов поиска на странице" />
 <item name="nls_button_go_hint" value="Начать поиск" />
 <item name="nls_body_empty" value="Извините, нам не удалось найти достойный ответ на вопрос." />
 <item name="Cancel" value="Отмена" />
