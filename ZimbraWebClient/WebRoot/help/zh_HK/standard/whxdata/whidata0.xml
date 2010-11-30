@@ -106,6 +106,9 @@
 <key name="無法投遞的郵件" >
   <topic name="無法投遞的郵件" url="Creating_Messages/undeliverable_mail.htm" />
 </key>
+<key name="版本" >
+  <topic name="公事包中檔案版本管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
 <key name="用 HTML 排版" >
   <topic name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
@@ -130,8 +133,17 @@
 <key name="自動填寫地址" >
   <topic name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
+<key name="自訂工作週" >
+  <topic name="記事簿視窗" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="訊息，休假" >
   <topic name="休假訊息" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="記事簿、自訂工作週" >
+  <topic name="記事簿視窗" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="記事簿視窗" >
+  <topic name="記事簿視窗" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="記事簿，遠端" >
   <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />

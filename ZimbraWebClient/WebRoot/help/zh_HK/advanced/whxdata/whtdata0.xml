@@ -3,7 +3,6 @@
 <tocdata>
 <book name="入門" >
   <item name="歡迎使用 @ClientNameLong@ 進階版" url="Getting_Started/about_liquid_mail.htm" />
-  <item name="7.0 中的新 @ClientNameShort@ 功能" url="New_in_6.0.htm" />
   <item name="登入和登出" url="Userspecific/logging_on_and_off.htm" />
   <item name="改變登入的預設用戶端類型" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="快速鍵" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
@@ -23,6 +22,8 @@
   <item name="儲存工作" url="Userspecific/browser_session_handling.htm" />
   <item name="查看「概況」窗格" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="郵件系統資料夾" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="清空垃圾桶" url="Navigation_folders_and_tips/trash_folder.htm" />
+  <item name="取消操作" url="Userspecific/Undo_Action.htm" />
 </book>
 <book name="管理郵件 " >
   <item name="管理電子郵件視窗" url="conversations/conversation_list_view.htm" />
@@ -55,8 +56,8 @@
   </book>
 </book>
 <book name="撰寫郵件" >
-  <item name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <item name="編寫新郵件 " url="Creating_Messages/Composing_a_new_mail_message.htm" />
+  <item name="關於編寫郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="編寫新郵件" url="Creating_Messages/Composing_a_new_mail_message.htm" />
   <item name="設定寫信視窗的偏好設定" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="電子郵件的組成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="自動加入你的署名" url="Userspecific/using_a_signature.htm" />
@@ -65,7 +66,7 @@
   <item name="請求回執" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="將檔案附加到郵件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="附件檔案類型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="加入「副本：」及「密件：」地址" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="加入副本：和密件：地址" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="使用拼字檢查" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="把郵件儲存為草稿" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -107,6 +108,7 @@
   <item name="關於預約、會議和活動" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
   <item name="籌劃會議" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="建立預約" url="Calendar/Scheduling_meetings.htm" />
+  <item name="建立預約時，使用日程安排索引標籤" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
   <item name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="設定你的空閒/忙碌資訊的查看許可" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
   <item name="將你的空閒/忙碌狀態傳送給其他人" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
@@ -129,7 +131,6 @@
   <item name="建立事項清單" url="Tasks/Create_tasks_folders.htm" />
   <item name="加入事項" url="Tasks/Add_a_task.htm" />
   <item name="改變事項" url="Tasks/Change_a_task.htm" />
-  <item name="設定事項提醒" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
   <item name="移動事項" url="Tasks/Moving_tasks.htm" />
   <item name="刪除事項" url="Tasks/Delete_a_task.htm" />
   <item name="事項排序" url="Tasks/Sorting_tasks_.htm" />
@@ -158,29 +159,27 @@
   <item name="搜尋例項" url="Search/search_examples.htm" />
 </book>
 <book name="使用標記和資料夾整理郵件" >
-  <item name="用標記分類郵件和聯絡人" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
-  <item name="為郵件加標記" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-  <item name="刪除標記" url="Tags_and_flags/deleting_tags.htm" />
-  <item name="為郵件加上旗標" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <item name="使用資料夾" url="Navigation_folders_and_tips/about_folders.htm" />
-  <item name="重新命名資料夾" url="Navigation_folders_and_tips/renaming_folders.htm" />
-  <item name="刪除資料夾" url="Navigation_folders_and_tips/deleting_folders.htm" />
-  <item name="建立自訂資料夾" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+<chunk name="使用標記和資料夾整理郵件" ref="whtdata2.xml" />
 </book>
 <book name="郵件過濾器使用方法" >
-<chunk name="郵件過濾器使用方法" ref="whtdata2.xml" />
+  <item name="設定過濾規則" url="filters/how_filtering_works.htm" />
+  <item name="過濾郵件" url="filters/filtering_your_messages.htm" />
+  <item name="支援的過濾條件與操作" url="filters/filter_conditions_and_actions_supported.htm" />
+  <item name="用 CONTAINS、MATCHES 和 IS 選項過濾" url="Search/contains_vs_matches.htm" />
+  <item name="過濾器通配字元" url="filters/wildcards.htm" />
 </book>
 <book name="偏好設定" >
 <chunk name="偏好設定" ref="whtdata3.xml" />
 </book>
-<book name="管理你的流動通信裝置（僅限網絡版）" >
-<chunk name="管理你的流動通信裝置（僅限網絡版）" ref="whtdata4.xml" />
+<book name="管理你的流動通信裝置（僅限網路版）" >
+  <item name="管理你的流動通信裝置" url="Userspecific/Managing_your_mobile_devices.htm" />
+  <item name="如何清除你的流動通信裝置" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </book>
 <book name="分享你的帳戶資料夾" >
-<chunk name="分享你的帳戶資料夾" ref="whtdata5.xml" />
+<chunk name="分享你的帳戶資料夾" ref="whtdata4.xml" />
 </book>
 <book name="使用 Zimlet" >
-<chunk name="使用 Zimlet" ref="whtdata6.xml" />
+<chunk name="使用 Zimlet" ref="whtdata5.xml" />
 </book>
 
 </tocdata>

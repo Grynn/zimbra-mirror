@@ -66,7 +66,7 @@
 <key name="RSS" >
   <topic name="訂閱 RSS/Atom feed" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
-<key name="Zimbra 網絡用戶端的功能" >
+<key name="Zimbra 網路用戶端的功能" >
   <topic name="關於 Zimbra 協同辦公系統" url="Getting_Started/about_liquid_mail.htm" />
 </key>
 <key name="Zimlet" >
@@ -83,7 +83,7 @@
   <topic name="一般偏好設定" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
 <key name="三窗格視窗" >
-  <topic name="Zimbra 網絡用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Zimbra 網路用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="上傳新的 Zimlet" >
   <topic name="管理 Zimlet" url="Zimlets/Managing_your_Zimlets.htm" />
@@ -98,7 +98,7 @@
   <topic name="改變事項" url="Tasks/Change_a_task.htm" />
 </key>
 <key name="介面功能" >
-  <topic name="Zimbra 網絡用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Zimbra 網路用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="以 HTML 查看" >
   <topic name="打開附件" url="reading_mail/opening_file_attachments.htm" />
@@ -129,6 +129,9 @@
 </key>
 <key name="偏好設定" >
   <topic name="設定用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="偏好設定、分享" >
+  <topic name="管理你分享的內容" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="偏好設定，一般索引標籤" >
   <topic name="一般偏好設定" url="Userspecific/Setting_your_general_preferences.htm" />
@@ -193,6 +196,9 @@
 <key name="分享通訊錄" >
   <topic name="分享你的通訊錄" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
+<key name="分享項頁面" >
+  <topic name="管理你分享的內容" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="列印" >
   <topic name="列印對話" url="conversations/printing_a_conversation.htm" />
   <topic name="列印郵件" url="reading_mail/printing_a_mail_message.htm" />
@@ -220,6 +226,9 @@
 </key>
 <key name="刪除會議" >
   <topic name="刪除預約" url="Calendar/Deleting_an_appointment.htm" />
+</key>
+<key name="刪除的檔案、還原" >
+  <topic name="清空垃圾桶 " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="刪除聯絡人" >
   <topic name="刪除聯絡人" url="Contacts/deleting_a_contact.htm" />
@@ -267,6 +276,9 @@
 <key name="匯出帳戶資料" >
   <topic name="備份你的帳戶的內容" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
+<key name="取消" >
+  <topic name="取消操作" url="Userspecific/Undo_Action.htm" />
+</key>
 <key name="取消會議" >
   <topic name="刪除預約" url="Calendar/Deleting_an_appointment.htm" />
 </key>
@@ -277,7 +289,10 @@
   <topic name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="右鍵點擊" >
-  <topic name="Zimbra 網絡用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Zimbra 網路用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="同步至其他記事簿" >
+  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="命名資料夾" >
   <topic name="關於資料夾" url="Navigation_folders_and_tips/about_folders.htm" />
@@ -361,6 +376,9 @@
 <key name="將預約註明私人" >
   <topic name="關於預約頁面" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
+<key name="尋找分享項" >
+  <topic name="管理你分享的內容" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="對話" >
   <topic name="對話可跨越若干資料夾" url="conversations/conversations_can_span_folders.htm" />
   <topic name="列印對話" url="conversations/printing_a_conversation.htm" />
@@ -377,18 +395,6 @@
 </key>
 <key name="小日曆內的星期" >
   <topic name="查看記事簿星期" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-</key>
-<key name="帳戶，匯入" >
-  <topic name="備份你的帳戶的內容" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="帳戶，匯出" >
-  <topic name="備份你的帳戶的內容" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="建立" >
-  <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="新郵件" >
-    <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
 </key>
 
 </indexdata>

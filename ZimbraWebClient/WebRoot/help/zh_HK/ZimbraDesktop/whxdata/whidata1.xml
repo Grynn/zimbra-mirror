@@ -1,5 +1,11 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <indexdata>
+<key name="移動" >
+  <topic name="在資料夾間移動郵件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="在資料夾間移動郵件" >
+    <topic name="在資料夾間移動郵件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
 <key name="移動郵件至資料夾" >
   <topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
 </key>
@@ -52,6 +58,9 @@
 <key name="自動將郵件移動至資料夾" >
   <topic name="如何使用過濾功能" url="filters/how_filtering_works.htm" />
 </key>
+<key name="自訂工作週" >
+  <topic name="記事簿視窗" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="自訂聯絡人欄位" >
   <topic name="建立新聯絡人" url="Contacts/creating_a_new_contact.htm" />
 </key>
@@ -80,8 +89,20 @@
 <key name="記事本頁面" >
   <topic name="建立新頁面" url="Documents/Create_a_new_page.htm" />
 </key>
+<key name="記事簿、自訂工作週" >
+  <topic name="記事簿視窗" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="記事簿視窗" >
+  <topic name="記事簿視窗" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="記事簿，列印" >
   <topic name="列印記事簿" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="記事簿，遠端" >
+  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
+<key name="記事簿，閑/忙時排除" >
+  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="記事簿，閒/忙" >
   <topic name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
@@ -132,6 +153,9 @@
 <key name="過濾郵件" >
   <topic name="過濾郵件" url="filters/filtering_your_messages.htm" />
 </key>
+<key name="遠端記事簿" >
+  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="選單，右鍵點擊" >
   <topic name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
@@ -178,6 +202,9 @@
 <key name="閒/忙" >
   <topic name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
+<key name="閒/忙排除記事簿" >
+  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="閱讀窗格視窗" >
   <topic name="管理電子郵件視窗" url="conversations/conversation_list_view.htm" />
 </key>
@@ -208,9 +235,6 @@
 </key>
 <key name="預約" >
   <topic name="關於預約、會議和活動" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-</key>
-<key name="預約，quickadd" >
-  <topic name="使用 QuickAdd 建立預約" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="預覽窗格，開關" >
   <topic name="在「讀取」窗格中讀取郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />

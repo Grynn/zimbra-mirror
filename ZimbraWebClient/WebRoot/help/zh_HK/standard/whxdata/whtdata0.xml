@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="入門" >
-  <item name="開始使用標準版網絡用戶端" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
+  <item name="開始使用標準版網路用戶端" url="Getting_Started/Zimbra_Basic_User_Help.htm" />
   <item name="登入和登出" url="Userspecific/logging_on_and_off.htm" />
   <item name="改變登入的預設用戶端類型" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="快速鍵" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -46,6 +46,7 @@
   <item name="通訊錄" url="Contacts/b_Your_Address_Books.htm" />
   <item name="加入新聯絡人" url="Contacts/b_Adding_new_contacts.htm" />
   <item name="匯出聯絡人清單" url="Contacts/Exporting_a_Contact_List.htm" />
+  <item name="列印聯絡人姓名" url="Contacts/Printing_contact_names.htm" />
 </book>
 <book name="管理記事簿" >
   <item name="關於記事簿" url="Calendar/b_About_Calendar.htm" />

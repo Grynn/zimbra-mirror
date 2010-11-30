@@ -83,21 +83,6 @@
 		<file url="whxdata\package_73.xml"/>
 		<file url="whxdata\package_74.xml"/>
 		<file url="whxdata\package_75.xml"/>
-		<file url="whxdata\package_76.xml"/>
-		<file url="whxdata\package_77.xml"/>
-		<file url="whxdata\package_78.xml"/>
-		<file url="whxdata\package_79.xml"/>
-		<file url="whxdata\package_80.xml"/>
-		<file url="whxdata\package_81.xml"/>
-		<file url="whxdata\package_82.xml"/>
-		<file url="whxdata\package_83.xml"/>
-		<file url="whxdata\package_84.xml"/>
-		<file url="whxdata\package_85.xml"/>
-		<file url="whxdata\package_86.xml"/>
-		<file url="whxdata\package_87.xml"/>
-		<file url="whxdata\package_88.xml"/>
-		<file url="whxdata\package_89.xml"/>
-		<file url="whxdata\package_90.xml"/>
 		<file url="whxdata\packageindex.xml"/>
 		<file url="whxdata\synonym.xml"/>
 		<file url="whxdata\topictable_0.xml"/>
@@ -105,6 +90,7 @@
 		<file url="whxdata\topictable_2.xml"/>
 		<file url="whxdata\topictable_3.xml"/>
 		<file url="whxdata\topictable_4.xml"/>
+		<file url="whxdata\topictable_5.xml"/>
 		<file url="whxdata\topictableindex.xml"/>
 		<file url="whxdata\whfts.xml"/>
 	</files>

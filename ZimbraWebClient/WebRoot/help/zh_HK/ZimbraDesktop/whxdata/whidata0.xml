@@ -79,6 +79,9 @@
 <key name="個人聯絡資料" >
   <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
 </key>
+<key name="偏好設定、分享" >
+  <topic name="管理你分享的內容" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="偏好設定，讀信窗格" >
   <topic name="在「讀取」窗格中讀取郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
@@ -99,6 +102,9 @@
 </key>
 <key name="再次傳送" >
   <topic name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="分享項頁面" >
+  <topic name="管理你分享的內容" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="列印" >
   <topic name="列印對話" url="conversations/printing_a_conversation.htm" />
@@ -161,6 +167,9 @@
 <key name="右鍵選單" >
   <topic name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
+<key name="同步至其他記事簿" >
+  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
+</key>
 <key name="回執" >
   <topic name="請求回執" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
@@ -196,6 +205,9 @@
 </key>
 <key name="將預約註明私人" >
   <topic name="關於預約頁面" url="Calendar/About_the_Appointment_Page.htm" />
+</key>
+<key name="尋找分享項" >
+  <topic name="管理你分享的內容" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="對話" >
   <topic name="對話可跨越若干資料夾" url="conversations/conversations_can_span_folders.htm" />
@@ -239,9 +251,6 @@
 </key>
 <key name="忘記" >
   <topic name="使用地址查詢" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="快速加入" >
-  <topic name="使用 QuickAdd 建立預約" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="快速搜尋" >
   <topic name="快速搜尋" url="Search/Quick_search.htm" />
@@ -372,6 +381,9 @@
 <key name="無法投遞的郵件" >
   <topic name="無法投遞的郵件" url="Creating_Messages/undeliverable_mail.htm" />
 </key>
+<key name="版本" >
+  <topic name="公事包中檔案版本管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
 <key name="用 HTML 排版" >
   <topic name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
@@ -386,12 +398,6 @@
 </key>
 <key name="私人預約" >
   <topic name="關於預約頁面" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="移動" >
-  <topic name="在資料夾間移動郵件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
-  <key name="在資料夾間移動郵件" >
-    <topic name="在資料夾間移動郵件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
-  </key>
 </key>
 
 </indexdata>
