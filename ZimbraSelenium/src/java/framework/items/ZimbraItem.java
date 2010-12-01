@@ -1,5 +1,10 @@
 package framework.items;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+import framework.ui.AbsPage;
+
 
 /**
  * The <code>ZimbraItem</code> class provides a skeletal implementation
@@ -16,6 +21,7 @@ package framework.items;
  *
  */
 public abstract class ZimbraItem {
+	protected static Logger logger = LogManager.getLogger(ZimbraItem.class);
 
 	/**
 	 * The unique (per mailbox) Zimbra ID for the object

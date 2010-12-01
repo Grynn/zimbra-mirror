@@ -30,9 +30,9 @@ public class CreateMail extends AjaxCommonTest {
 		
 		// Create the message data to be sent
 		MailItem mail = new MailItem();
-		mail.recipients.add(new RecipientItem(ZimbraAccount.AccountA()));
-		mail.subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.bodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
+		mail.aRecipients.add(new RecipientItem(ZimbraAccount.AccountA()));
+		mail.aSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		mail.gBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
 		
 		// Open the new mail form
@@ -49,7 +49,7 @@ public class CreateMail extends AjaxCommonTest {
 		// Verify the message is received at the destination
 		ZimbraAccount.AccountA().soapSend(
 				"<SearchRequest xmlns='urn:zimbraMail' types='message'>" +
-					"<query>subject:("+ mail.subject +")</query>" +
+					"<query>subject:("+ mail.aSubject +")</query>" +
 				"</SearchRequest>");
 		String messageID = ZimbraAccount.AccountA().soapSelectValue("//mail:SearchResponse//mail:m", "id");
 		ZAssert.assertNotNull(messageID, "Verify the recipient can search for the message");
@@ -65,7 +65,7 @@ public class CreateMail extends AjaxCommonTest {
 		// TODO: add checks for TO, Subject, Body
 		ZAssert.assertEquals(from, app.getActiveAccount().EmailAddress, "Verify the from field is correct");
 		ZAssert.assertEquals(to, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
-		ZAssert.assertEquals(subject, mail.subject, "Verify the subject field is correct");
+		ZAssert.assertEquals(subject, mail.aSubject, "Verify the subject field is correct");
 		
 
 		

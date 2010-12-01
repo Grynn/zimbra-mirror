@@ -38,71 +38,109 @@ public class MailItem extends ZimbraItem implements IItem {
 		public static final int LowPriority = 		0x0800;
 	}
 	
+	////
+	// START: SOAP Data
+	////
+	
 	/**
 	 * The subject for this mail
 	 */
-	public String subject;
+	public String aSubject;
+	
 	
 	/**
-	 * The message body parts for this mail
+	 * The plain text content
 	 */
-	public MessagePart part;
+	public String aBodyText;
 	
 	/**
-	 * The sender of this mail
+	 * The html text content
 	 */
-	public RecipientItem sender;
+	public String aBodyHtml;
+	
 	
 	/**
 	 * A list of recipients from the "From:", "To:", "Cc:", and "Bcc:" fields
 	 */
-	public List<RecipientItem> recipients = new ArrayList<RecipientItem>();
+	public List<RecipientItem> aRecipients = new ArrayList<RecipientItem>();
 	
-	
-	/**
-	 * The read/unread status of this mail
-	 */
-	public boolean read;
-	
-	/**
-	 * The flags associated with this mail (see soap.txt for details)
-	 */
-	public int flags;
-	
-	/**
-	 * The text body of the message
-	 */
-	public String bodyText;
-	
-	private String bodyHtml;
 	
 	/**
 	 * The folder that contains this mail
 	 */
-	public String folder;
+	public FolderItem aFolder;
 
-	public boolean isSelected;
+	/**
+	 * The read/unread status of this mail
+	 */
+	public boolean aRead;
+	
+	/**
+	 * The flags associated with this mail (see soap.txt for details)
+	 */
+	public int aFlags;
+	
+	////
+	// FINISH: SOAP Data
+	////
 
-	public boolean isFlagged;
 
-	public String priority;
+	////
+	// START: GUI Data
+	////
 
-	public String from;
+	public boolean gIsChecked;
+	
+	public boolean gIsFlagged;
 
-	public boolean hasAttachments;
+	public String gPriority; // TODO: how to represent the icon?
+	
+	public String gTags; // TODO: how to represent the icon?
 
-	public String fragment;
+	public String gStatusIcon; // TODO: how to represent these status icons?
+	
+	public String gFrom;
 
-	public String size;
+	public boolean gHasAttachments;
 
-	public String received;
+	public String gSubject;
+
+	public String gFragment;
+
+	public String gFolder;
+
+	public String gSize;
+
+	public String gReceived;
+
+	
+	/**
+	 * Is the message currently highlighted in the list view?
+	 */
+	public boolean gIsSelected;
+
+
+	/**
+	 * The text body of the message
+	 */
+	public String gBodyText;
+	
+	/**
+	 * The HTML body of the message
+	 */
+	private String gBodyHtml;
+	
+	////
+	// FINISH: GUI Data
+	////
+
 	
 	
 	/**
 	 * Create a mail item
 	 */
 	public MailItem() {
-		flags = MessageFlags.None;	// Clear all flags
+		aFlags = MessageFlags.None;	// Clear all flags
 	}
 
 	/**
@@ -111,8 +149,8 @@ public class MailItem extends ZimbraItem implements IItem {
 	 * @return the previous value of the flag
 	 */
 	public int addFlag(int flag) {
-		int original = flags;
-		flags |= flag;
+		int original = aFlags;
+		aFlags |= flag;
 		return (original);
 	}
 	
@@ -122,8 +160,8 @@ public class MailItem extends ZimbraItem implements IItem {
 	 * @return the previous value of the flag
 	 */
 	public int removeFlag(int flag) {
-		int original = flags;
-		flags &= ~flag;
+		int original = aFlags;
+		aFlags &= ~flag;
 		return (original);
 	}
 	
@@ -158,7 +196,7 @@ public class MailItem extends ZimbraItem implements IItem {
 			// If there is a subject, save it
 			Element sElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:su");
 			if ( sElement != null )
-				subject = sElement.getText();
+				aSubject = sElement.getText().trim();
 			
 			// Parse the recipients
 			Element[] recipientElements = ZimbraAccount.SoapClient.selectNodes(m, "//mail:e");
@@ -171,18 +209,23 @@ public class MailItem extends ZimbraItem implements IItem {
 					r.type = RecipientType.Cc;
 				if ( type.equals("b"))
 					r.type = RecipientType.Bcc;
-				if ( type.equals("f")) {
+				if ( type.equals("f"))
 					r.type = RecipientType.From;
-					sender = new RecipientItem();
-					sender.emailAddress = rElement.getAttribute("a", null);
-					sender.name = rElement.getAttribute("p", null);
-							}
+
 				r.emailAddress = rElement.getAttribute("a", null);
 				r.name = rElement.getAttribute("p", null);
-				recipients.add(r);
+				aRecipients.add(r);
 			} 
+			
+			Element contentTextPlain = ZimbraAccount.SoapClient.selectNode(m, "//mail:mp[@ct='text/plain']//mail:content");
+			if ( contentTextPlain != null ) {
+				aBodyText = contentTextPlain.getText().trim();
+			}
+			
 		} catch (Exception e) {
 			throw new HarnessException("Could not parse GetMsgResponse: "+ GetMsgResponse.prettyPrint(), e);
+		} finally {
+			logger.info(this.prettyPrint());
 		}
 		
 	}
@@ -222,22 +265,42 @@ public class MailItem extends ZimbraItem implements IItem {
 		StringBuilder sb = new StringBuilder();
 		sb.append(super.prettyPrint());
 		sb.append(MailItem.class.getSimpleName()).append('\n');
-		sb.append("Subject: ").append(subject).append('\n');
-		for (RecipientItem r : recipients) {
+		sb.append('\n').append(prettyPrintSOAP());
+		sb.append('\n').append(prettyPrintGUI());
+		return (sb.toString());
+	}
+	
+	public String prettyPrintSOAP() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("SOAP Data:\n");
+		sb.append("Subject: ").append(aSubject).append('\n');
+		for (RecipientItem r : aRecipients) {
 			sb.append(r.type).append(": ").append(r.emailAddress).append('\n');
 		}
-		sb.append("TextBody: \n\n").append(bodyText).append("\n\n");
+		sb.append("Content(text):").append('\n').append(aBodyText).append('\n');
+		sb.append("Content(html):").append('\n').append(aBodyHtml).append('\n');
+		return (sb.toString());
+	}
+
+	public String prettyPrintGUI() {
+		StringBuilder sb = new StringBuilder();
+		sb.append("GUI Data:\n");
+		sb.append("IsChecked: ").append(gIsChecked).append('\n');
+		sb.append("IsFlagged: ").append(gIsFlagged).append('\n');
+		sb.append("Priority: ").append(gPriority).append('\n');
+		sb.append("Tagged: ").append(gTags).append('\n');
+		sb.append("Status Icon: ").append(gStatusIcon).append('\n');
+		sb.append("From: ").append(gFrom).append('\n');
+		sb.append("Has Attachments: ").append(gHasAttachments).append('\n');
+		sb.append("Subject: ").append(gSubject).append('\n');
+		sb.append("Fragment: ").append(gFragment).append('\n');
+		sb.append("Folder: ").append(gFolder).append('\n');
+		sb.append("Size: ").append(gSize).append('\n');
+		sb.append("Received: ").append(gReceived).append('\n');
 		return (sb.toString());
 	}
 
 
-	/**
-	 * MessagePart defines a part of a mail message
-	 *
-	 */
-	public static class MessagePart {
-		
-	}
 
 	/**
 	 * Sample MailItem Driver
@@ -305,7 +368,7 @@ public class MailItem extends ZimbraItem implements IItem {
 	 * @param body
 	 */
 	public void setBodyHtml(String body) {
-		bodyHtml = StringEscapeUtils.escapeHtml(body);
+		gBodyHtml = StringEscapeUtils.escapeHtml(body);
 	}
 
 	/**
@@ -313,7 +376,7 @@ public class MailItem extends ZimbraItem implements IItem {
 	 * @param body
 	 */
 	public String getBodyHtml() {
-		return (bodyHtml);
+		return (gBodyHtml);
 	}
 
 
@@ -324,7 +387,7 @@ public class MailItem extends ZimbraItem implements IItem {
 	public String generateMimeString() {
 		StringBuilder sb = new StringBuilder();
 		
-		for (RecipientItem r : this.recipients) {
+		for (RecipientItem r : this.aRecipients) {
 			if ( r.type == RecipientItem.RecipientType.To ) {
 				sb.append("To: ").append(r.emailAddress).append('\n');
 			} else if ( r.type == RecipientItem.RecipientType.From) { 
@@ -333,19 +396,19 @@ public class MailItem extends ZimbraItem implements IItem {
 				sb.append("Cc: ").append(r.emailAddress).append('\n');
 			}
 		}
-		if ( this.subject != null ) {
-			sb.append("Subject: ").append(this.subject).append('\n');
+		if ( this.aSubject != null ) {
+			sb.append("Subject: ").append(this.aSubject).append('\n');
 		}
 		
 		sb.append("MIME-Version: 1.0\n");
 		sb.append("Content-Type: text/plain; charset=utf-8\n");
 		sb.append("Content-Transfer-Encoding: 7bit\n");
 		
-		if ( this.bodyText == null ) {
+		if ( this.gBodyText == null ) {
 			sb.append("\n\n\n");
 		} else {
 			sb.append("\n\n");
-			sb.append(bodyText);
+			sb.append(gBodyText);
 			sb.append("\n\n\n");
 		}
 

@@ -13,8 +13,6 @@ import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
 import framework.ui.Action;
 import framework.ui.Button;
-import framework.ui.Action;
-import framework.ui.Button;
 import framework.util.HarnessException;
 
 /**
@@ -554,7 +552,7 @@ public class PageMail extends AbsAjaxPage {
 		
 		// How many items are in the table?
 		int count = this.sGetXpathCount("//div[@id='zl__TV__rows']//div[contains(@id, 'zli__TV__')]");
-		logger.debug(myPageName() + " zListGetMessages: number of conversations: "+ count);
+		logger.debug(myPageName() + " zListGetMessages: number of messages: "+ count);
 
 		// Get each conversation's data from the table list
 		for (int i = 1; i <= count; i++) {
@@ -565,17 +563,17 @@ public class PageMail extends AbsAjaxPage {
 
 			// Is it checked?
 			locator = msglocator + "//div[contains(@class, 'ImgCheckboxChecked')]";
-			item.isSelected = this.sIsElementPresent(locator);
+			item.gIsSelected = this.sIsElementPresent(locator);
 						
 			// Is it flagged
 			// TODO: probably can't have boolean, need 'blank', 'disabled', 'red', and other states
 			locator = msglocator + "//div[contains(@class, 'ImgFlagRed')]";
-			item.isFlagged = this.sIsElementPresent(locator);
+			item.gIsFlagged = this.sIsElementPresent(locator);
 			
 			locator = "xpath=("+ msglocator +"//div[contains(@id, '__pr')])@class";
 			String priority = this.sGetAttribute(locator);
 			if ( priority.equals("ImgPriorityHigh_list") ) {
-				item.priority = "high";
+				item.gPriority = "high";
 			} else {
 				// TODO - handle other priorities
 			}
@@ -586,48 +584,48 @@ public class PageMail extends AbsAjaxPage {
 
 			// Get the From
 			locator = msglocator + "//*[contains(@id, '__fr')]";
-			item.from = this.sGetText(locator).trim();
+			item.gFrom = this.sGetText(locator).trim();
 			
 			// Get the attachment
 			locator = "xpath=("+ msglocator +"//div[contains(@id, '__at')])@class";
 			String attach = this.sGetAttribute(locator);
 			if ( attach.equals("ImgBlank_16") ) {
-				item.hasAttachments = false;
+				item.gHasAttachments = false;
 			} else {
 				// TODO - handle other attachment types
 			}
 				
 			// Get the fragment
 			locator = msglocator + "//span[contains(@id, '__fm')]";
-			item.fragment = this.sGetText(locator).trim();
+			item.gFragment = this.sGetText(locator).trim();
 
 			// Get the subject
 			locator = msglocator + "//td[contains(@id, '__su')]";
-			String s = this.sGetText(locator).trim();
+			String subject = this.sGetText(locator).trim();
 			
 			// The subject contains the fragment, e.g. "subject - fragment", so
 			// strip it off
-			item.subject = s.replace(item.fragment, "").trim();
+			item.gSubject = subject.replace(item.gFragment, "").trim();
 
 			// Get the folder
 			locator = msglocator + "//nobr[contains(@id, '__fo')]";
 			if ( this.sIsElementPresent(locator) ) {
-				item.folder = this.sGetText(locator).trim();
+				item.gFolder = this.sGetText(locator).trim();
 			} else {
-				item.folder = "";
+				item.gFolder = "";
 			}
 
 			// Get the size
 			locator = msglocator + "//nobr[contains(@id, '__sz')]";
 			if ( this.sIsElementPresent(locator) ) {
-				item.size = this.sGetText(locator).trim();
+				item.gSize = this.sGetText(locator).trim();
 			} else {
-				item.size = "";
+				item.gSize = "";
 			}
 			
 			// Get the received date
 			locator = msglocator + "//td[contains(@id, '__dt')]";
-			item.received = this.sGetText(locator).trim();
+			item.gReceived = this.sGetText(locator).trim();
 			
 			// Add the new item to the list
 			items.add(item);

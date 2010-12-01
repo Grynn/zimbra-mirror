@@ -101,8 +101,8 @@ public class FormMailNew extends AbsForm {
 		//
 		
 		// Handle the subject
-		if ( mail.subject != null ) {
-			this.sType(Locators.zSubjectField, mail.subject);
+		if ( mail.aSubject != null ) {
+			this.sType(Locators.zSubjectField, mail.aSubject);
 			SleepUtil.sleepMedium();
 		}
 		
@@ -114,10 +114,10 @@ public class FormMailNew extends AbsForm {
 		StringBuilder from = null;
 		
 		// Convert the list of recipients to a semicolon separated string
-		if ( mail.recipients != null ) {
-			if ( !mail.recipients.isEmpty() ) {
+		if ( mail.aRecipients != null ) {
+			if ( !mail.aRecipients.isEmpty() ) {
 				
-				for (RecipientItem r : mail.recipients) {
+				for (RecipientItem r : mail.aRecipients) {
 					if ( r.type == RecipientType.To ) {
 						if ( to == null ) {
 							to = new StringBuilder();

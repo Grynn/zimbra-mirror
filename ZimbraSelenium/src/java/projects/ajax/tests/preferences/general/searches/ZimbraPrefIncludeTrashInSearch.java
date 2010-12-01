@@ -65,16 +65,16 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		String query = "query" + ZimbraSeleniumProperties.getUniqueString();
 		
 		MailItem message1 = new MailItem();
-		message1.subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		message1.recipients.add(new RecipientItem("foo@example.com", RecipientType.From));
-		message1.recipients.add(new RecipientItem("bar@example.com", RecipientType.To));
-		message1.bodyText = query; 
+		message1.aSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		message1.aRecipients.add(new RecipientItem("foo@example.com", RecipientType.From));
+		message1.aRecipients.add(new RecipientItem("bar@example.com", RecipientType.To));
+		message1.gBodyText = query; 
 		
 		MailItem message2 = new MailItem();
-		message2.subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		message2.recipients.add(new RecipientItem("foo@example.com", RecipientType.From));
-		message2.recipients.add(new RecipientItem("bar@example.com", RecipientType.To));
-		message2.bodyText = query; 
+		message2.aSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		message2.aRecipients.add(new RecipientItem("foo@example.com", RecipientType.From));
+		message2.aRecipients.add(new RecipientItem("bar@example.com", RecipientType.To));
+		message2.gBodyText = query; 
 		
 		
 		// Determine the folder ID's for inbox and trash
@@ -113,13 +113,13 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		boolean found1 = false;
 		boolean found2 = false;
 		for (ConversationItem c : items) {
-			if ( c.subject.equals(message1.subject) ) {
+			if ( c.subject.equals(message1.aSubject) ) {
 				found1 = true;
 				break;
 			}
 		}
 		for (ConversationItem c : items) {
-			if ( c.subject.equals(message2.subject) ) {
+			if ( c.subject.equals(message2.aSubject) ) {
 				found2 = true;
 				break;
 			}
