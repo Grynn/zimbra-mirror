@@ -16,6 +16,7 @@ package com.zimbra.cs.account.offline;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
@@ -92,8 +93,6 @@ public class OfflineGal {
             return null;
         }
 
-        byte[] types = new byte[1];
-        types[0] = MailItem.TYPE_CONTACT;
         mOpContext = new OperationContext(mGalMbox);
 
         Folder fstFolder = mGalMbox.getFolderById(mOpContext, Mailbox.ID_FOLDER_CONTACTS);
@@ -119,7 +118,7 @@ public class OfflineGal {
         try  {
             SearchParams sp = new SearchParams();
             sp.setQueryStr(query);
-            sp.setTypes(types);
+            sp.setTypes(Collections.singleton(MailItem.TYPE_CONTACT));
             sp.setSortByStr(sortBy);
             sp.setOffset(offset);
             sp.setLimit(limit);

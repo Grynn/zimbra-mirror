@@ -17,6 +17,7 @@ package com.zimbra.cs.mailbox;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -133,7 +134,6 @@ public class GalSync {
             }
         }
 
-        @SuppressWarnings("unchecked")
         @Override
         public void onEnd(ElementPath elPath) { //TODO: add trace logging;
             String path = elPath.getPath();
@@ -198,11 +198,9 @@ public class GalSync {
 
         private int findContact(String id) throws ServiceException, IOException {
             if (ds == null) {
-                byte[] types = new byte[1];
-                types[0] = MailItem.TYPE_CONTACT;
-
-                ZimbraQueryResults zqr = galMbox.index.search(
-                        context, "#" + OfflineConstants.GAL_LDAP_DN + ":\"" + id + "\"", types, SortBy.NONE, 1);
+                ZimbraQueryResults zqr = galMbox.index.search(context,
+                        "#" + OfflineConstants.GAL_LDAP_DN + ":\"" + id + "\"",
+                        Collections.singleton(MailItem.TYPE_CONTACT), SortBy.NONE, 1);
                 try {
                     if (zqr.hasNext())
                         return zqr.getNext().getItemId();
