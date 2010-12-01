@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -70,14 +70,14 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     public static final int FIRST_OFFLINE_ITEM_ID = 2 << 29;
 
     private String mSessionId;
-    
+
     private MailboxSync mMailboxSync = null;
 
     private Map<Integer,Integer> mRenumbers = new HashMap<Integer,Integer>();
     private Set<Integer> mLocalTagDeletes = new HashSet<Integer>();
 
     private static final OfflineAccount.Version MIN_ZCS_VER_PUSH = new OfflineAccount.Version("5.0.6");
-    
+
     ZcsMailbox(MailboxData data) throws ServiceException {
         super(data);
     }
@@ -140,14 +140,14 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     public ZAuthToken getAuthToken() throws ServiceException {
         return getAuthToken(true);
     }
-    
+
     static private Map<String, Long> authErrorTimes = new HashMap<String, Long>();
-    
+
     public ZAuthToken getAuthToken(boolean quickRetry) throws ServiceException {
         ZAuthToken authToken = OfflineSyncManager.getInstance().lookupAuthToken(getAccount());
-        
+
         if (authToken == null) {
-            String uri = getSoapUri();    
+            String uri = getSoapUri();
             synchronized(authErrorTimes) {
                 if (!quickRetry) {
                     Long last = authErrorTimes.get(uri);
@@ -155,12 +155,12 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                         last.longValue() < OfflineLC.zdesktop_authreq_retry_interval.longValue())
                         return null;
                 }
-            
+
                 String passwd = getAccount().getAttr(OfflineProvisioning.A_offlineRemotePassword);
                 Element request = new Element.XMLElement(AccountConstants.AUTH_REQUEST);
                 request.addElement(AccountConstants.E_ACCOUNT).addAttribute(AccountConstants.A_BY, "id").setText(getAccountId());
                 request.addElement(AccountConstants.E_PASSWORD).setText(passwd);
-    
+
                 Element response = null;
                 try {
                     response = sendRequest(request, false, true, OfflineLC.zdesktop_authreq_timeout.intValue());
@@ -171,7 +171,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                         throw e;
                     }
                 }
-    
+
                 if (response != null) {
                     authToken = new ZAuthToken(response.getElement(AccountConstants.E_AUTH_TOKEN), false);
                     long expires = System.currentTimeMillis() + response.getAttributeLong(AccountConstants.E_LIFETIME);
@@ -179,10 +179,10 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 }
             }
         }
-        
+
         return authToken;
     }
-    
+
     String getRemoteUser() throws ServiceException {
         return getAccount().getName();
     }
@@ -190,7 +190,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     String getSoapUri() throws ServiceException {
         return Offline.getServerURI(getAccount(), AccountConstants.USER_SERVICE_URI);
     }
-    
+
     String getRemoteHost() throws ServiceException, MalformedURLException {
         return new URL(getSoapUri()).getHost();
     }
@@ -207,7 +207,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         // locally-generated items must be differentiable from authentic, server-blessed ones
         return FIRST_OFFLINE_ITEM_ID;
     }
-    
+
     /**
      * Get a tag from persistence. If useRenumbered = false, we check only the db
      * @param octxt
@@ -247,7 +247,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
      */
     MailItem getRenumberedItemById(int id, byte type, boolean useRenumbered) throws ServiceException {
         NoSuchItemException trappedExcept = null;
-        try { 
+        try {
             MailItem item = super.getItemById(id, type);
             if (item != null)
                 return item;
@@ -286,7 +286,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                         mLocalTagDeletes.add(id);
                 }
             } catch (NoSuchItemException nsie) { }
-            
+
             try {
                 super.delete(octxt, new int[] {id}, type, tcon); //NOTE: don't call the one with single id as it will dead loop
             } catch (Exception x) {
@@ -493,7 +493,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             if (prevIndexId != item.getIndexId()) {
                 queueForIndexing(item, false, null);
             }
-            
+
             item.setColor(new MailItem.Color(color));
             item.setTags(flags, tags);
             if (getFlagById(Flag.ID_FLAG_UNREAD).canTag(item))
@@ -528,41 +528,41 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     boolean isPushType(byte type) {
         return PushChanges.PUSH_TYPES_SET.contains(type);
     }
-    
+
     @Override
     int getChangeMaskFilter(byte type) {
         switch (type) {
-        case MailItem.TYPE_MESSAGE:       return PushChanges.MESSAGE_CHANGES;     
-        case MailItem.TYPE_CHAT:          return PushChanges.CHAT_CHANGES;        
-        case MailItem.TYPE_CONTACT:       return PushChanges.CONTACT_CHANGES;     
-        case MailItem.TYPE_FOLDER:        return PushChanges.FOLDER_CHANGES;      
-        case MailItem.TYPE_SEARCHFOLDER:  return PushChanges.SEARCH_CHANGES;      
-        case MailItem.TYPE_TAG:           return PushChanges.TAG_CHANGES;         
+        case MailItem.TYPE_MESSAGE:       return PushChanges.MESSAGE_CHANGES;
+        case MailItem.TYPE_CHAT:          return PushChanges.CHAT_CHANGES;
+        case MailItem.TYPE_CONTACT:       return PushChanges.CONTACT_CHANGES;
+        case MailItem.TYPE_FOLDER:        return PushChanges.FOLDER_CHANGES;
+        case MailItem.TYPE_SEARCHFOLDER:  return PushChanges.SEARCH_CHANGES;
+        case MailItem.TYPE_TAG:           return PushChanges.TAG_CHANGES;
         case MailItem.TYPE_APPOINTMENT:
-        case MailItem.TYPE_TASK:          return PushChanges.APPOINTMENT_CHANGES; 
+        case MailItem.TYPE_TASK:          return PushChanges.APPOINTMENT_CHANGES;
         case MailItem.TYPE_WIKI:
         case MailItem.TYPE_DOCUMENT:      return PushChanges.DOCUMENT_CHANGES;
         default:                          return 0;
         }
     }
-    
+
     public Element proxyRequest(Element request, SoapProtocol resProto, boolean quietWhenOffline, String op) throws ServiceException {
         if (!OfflineSyncManager.getInstance().isConnectionDown()) {
             try {
-                return sendRequest(request, true, true, OfflineLC.zdesktop_request_timeout.intValue(), resProto);         
+                return sendRequest(request, true, true, OfflineLC.zdesktop_request_timeout.intValue(), resProto);
             } catch (ServiceException e) {
                 if (!OfflineSyncManager.isConnectionDown(e))
                     throw e;
             }
-        }  
+        }
         if (quietWhenOffline) {
             OfflineLog.offline.debug(op + " is unavailable when offline");
             return null;
         } else {
             throw OfflineServiceException.ONLINE_ONLY_OP(op);
-        }            
+        }
     }
-    
+
     public Element sendRequestWithNotification(Element request) throws ServiceException {
         Server server = Provisioning.getInstance().get(ServerBy.name,OfflineConstants.SYNC_SERVER_PREFIX+getAccountId());
         if (server != null) {
@@ -593,7 +593,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                     proxy.setTimeouts(OfflineLC.zdesktop_request_timeout.intValue());
                     return DocumentHandler.proxyWithNotification(request, proxy, zscProxy, session);
                 }
-            } 
+            }
         }
         return sendRequest(request);
     }
@@ -601,7 +601,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     public Element sendRequest(Element request) throws ServiceException {
         return sendRequest(request, true);
     }
-    
+
     Element sendRequest(Element request, boolean requiresAuth) throws ServiceException {
         return sendRequest(request, requiresAuth, true, OfflineLC.zdesktop_request_timeout.intValue());
     }
@@ -609,23 +609,23 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout) throws ServiceException {
         return sendRequest(request, requiresAuth, noSession, timeout, null);
     }
-    
+
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout, SoapProtocol resProto) throws ServiceException {
         return sendRequest(request, requiresAuth, noSession, timeout, resProto, null);
     }
-    
+
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout, SoapProtocol resProto,
         Map<String, ElementHandler> saxHandlers) throws ServiceException {
         String uri = getSoapUri();
         ZAuthToken authToken = requiresAuth ? getAuthToken() : null;
         return sendRequest(request, requiresAuth, noSession, timeout, resProto, saxHandlers, uri, authToken);
     }
-    
+
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout, SoapProtocol resProto,
         Map<String, ElementHandler> saxHandlers, String uri, ZAuthToken authToken) throws ServiceException {
         return sendRequest(request, requiresAuth, noSession, timeout, resProto, saxHandlers, uri, authToken, false);
     }
-    
+
     public Element sendRequest(Element request, boolean requiresAuth, boolean noSession, int timeout, SoapProtocol resProto,
         Map<String, ElementHandler> saxHandlers, String uri, ZAuthToken authToken, boolean sendAcctId) throws ServiceException {
         OfflineAccount acct = getOfflineAccount();
@@ -647,9 +647,9 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                     pswd = elt.getText();
                     elt.setText("*");
                 }
-                
+
                 OfflineLog.request.debug(request);
-                
+
                 if (pswd != null)
                     elt.setText(pswd);
             }
@@ -660,7 +660,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             } else if (noSession) {
                 if (sendAcctId)
                     response = transport.invoke(request.detach(), false, true, acct.getId());
-                else 
+                else
                     response = transport.invokeWithoutSession(request.detach());
             } else {
                 if (mSessionId != null)
@@ -679,35 +679,35 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             throw ServiceException.PROXY_ERROR(e, uri);
         }
     }
-    
+
     OfflineAccount.Version getRemoteServerVersion() throws ServiceException {
         return getOfflineAccount().getRemoteServerVersion();
     }
-    
+
     void pollForUpdates() throws ServiceException {
         Element request = new Element.XMLElement(MailConstants.NO_OP_REQUEST);
         request.addAttribute("wait", "1");
         request.addAttribute("delegate", "0");
         sendRequest(request, true, false, 15 * Constants.SECONDS_PER_MINUTE * 1000); //will block
     }
-    
+
     public Pair<Integer,Integer> sendMailItem(MailItem item) throws ServiceException {
-    	OfflineAccount acct = getOfflineAccount();
-    	String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + "/~"+ HttpUtil.urlEscape(item.getPath()) + "?lbfums=1";
-    	try {
-    	    Pair<Header[], HttpInputStream> resp = 
-    	        UserServlet.putMailItem(getAuthToken(), url, item);
-    	    int id = 0, version = 0;
-    	    for (Header h : resp.getFirst()) {
-    	        if (h.getName().equals("X-Zimbra-ItemId"))
-    	            id = Integer.parseInt(h.getValue());
-    	        else if (h.getName().equals("X-Zimbra-Version"))
-    	            version = Integer.parseInt(h.getValue());
-    	    }
-    	    return new Pair<Integer,Integer>(id, version);
-    	} catch (IOException e) {
-    	    throw ServiceException.PROXY_ERROR(e, url);
-    	}
+        OfflineAccount acct = getOfflineAccount();
+        String url = Offline.getServerURI(acct, UserServlet.SERVLET_PATH) + "/~"+ HttpUtil.urlEscape(item.getPath()) + "?lbfums=1";
+        try {
+            Pair<Header[], HttpInputStream> resp =
+                UserServlet.putMailItem(getAuthToken(), url, item);
+            int id = 0, version = 0;
+            for (Header h : resp.getFirst()) {
+                if (h.getName().equals("X-Zimbra-ItemId"))
+                    id = Integer.parseInt(h.getValue());
+                else if (h.getName().equals("X-Zimbra-Version"))
+                    version = Integer.parseInt(h.getValue());
+            }
+            return new Pair<Integer,Integer>(id, version);
+        } catch (IOException e) {
+            throw ServiceException.PROXY_ERROR(e, url);
+        }
     }
 
     static final String VERSIONS_KEY = "VERSIONS";
@@ -735,17 +735,19 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             return false;
         return PushChanges.syncFolder(this, id, suppressRssFailure, zsc);
     }
-    
+
     @Override
     protected void updateRssDataSource(Folder folder) {} //bug 38129, to suppress creation of datasource
-    
+
     @Override
-    synchronized boolean finishInitialization() throws ServiceException {
-        if (super.finishInitialization()) {
-            if (mMailboxSync == null) {
-                mMailboxSync = new MailboxSync(this);            
+    boolean open() throws ServiceException {
+        if (super.open()) {
+            synchronized (this) {
+                if (mMailboxSync == null) {
+                    mMailboxSync = new MailboxSync(this);
+                }
+                return true;
             }
-            return true;
         }
         return false;
     }

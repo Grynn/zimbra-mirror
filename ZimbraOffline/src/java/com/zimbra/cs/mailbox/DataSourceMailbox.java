@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -89,7 +89,7 @@ public class DataSourceMailbox extends SyncMailbox {
         if (hasFolders) {
             List<Pair<Integer, String>> systemMailFolders = new ArrayList<
                 Pair<Integer, String>>();
-            
+
             systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_INBOX, "/Inbox"));
             systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_TRASH, "/Trash"));
             systemMailFolders.add(new Pair<Integer, String>(ID_FOLDER_SPAM,  "/Junk"));
@@ -127,18 +127,20 @@ public class DataSourceMailbox extends SyncMailbox {
     }
 
     @Override
-    synchronized boolean finishInitialization() throws ServiceException {
-        if (super.finishInitialization()) {
-            if (hasFolders) {
-                Folder draft = getFolderById(ID_FOLDER_DRAFTS);
-                if ((draft.getFlagBitmask() & Flag.BITMASK_SYNC) != 0)
-                    alterTag(null, ID_FOLDER_DRAFTS, MailItem.TYPE_FOLDER,
-                        Flag.ID_FLAG_SYNC, false);
-                if ((draft.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0)
-                    alterTag(null, ID_FOLDER_DRAFTS, MailItem.TYPE_FOLDER,
-                        Flag.ID_FLAG_SYNCFOLDER, false);
+    boolean open() throws ServiceException {
+        if (super.open()) {
+            synchronized (this) {
+                if (hasFolders) {
+                    Folder draft = getFolderById(ID_FOLDER_DRAFTS);
+                    if ((draft.getFlagBitmask() & Flag.BITMASK_SYNC) != 0)
+                        alterTag(null, ID_FOLDER_DRAFTS, MailItem.TYPE_FOLDER,
+                            Flag.ID_FLAG_SYNC, false);
+                    if ((draft.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0)
+                        alterTag(null, ID_FOLDER_DRAFTS, MailItem.TYPE_FOLDER,
+                            Flag.ID_FLAG_SYNCFOLDER, false);
+                }
+                return true;
             }
-            return true;
         }
         return false;
     }
@@ -150,7 +152,7 @@ public class DataSourceMailbox extends SyncMailbox {
                 OfflineDataSource ds = getDataSource();
                 if (ds != null && ds.isSyncInboxOnly()) {
                     int flags = mi.getFlagBitmask();
-                    
+
                     flags &= ~Flag.BITMASK_SYNCFOLDER;
                     flags &= ~Flag.BITMASK_SYNC;
                     return Flag.bitmaskToFlags(flags);
@@ -225,7 +227,7 @@ public class DataSourceMailbox extends SyncMailbox {
         for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
             int id = iterator.next();
             Message msg;
-            
+
             if (context == null)
                 context = new OperationContext(this);
 
@@ -341,16 +343,16 @@ public class DataSourceMailbox extends SyncMailbox {
         Message msg, String error) {
         try {
             MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
-            
+
             mm.setFrom(new InternetAddress(acct.getName()));
             mm.setRecipient(RecipientType.TO, new InternetAddress(acct.getName()));
             mm.setSubject("Delivery failed: " + error);
-    
+
             mm.saveChanges(); //must call this to update the headers
-    
+
             MimeMultipart mmp = new MimeMultipart();
             MimeBodyPart mbp = new MimeBodyPart();
-            
+
             mbp.setText(error == null ?
                 "SEND FAILED. PLEASE CHECK RECIPIENT ADDRESSES AND SMTP SETTINGS" : error);
                     mmp.addBodyPart(mbp);
@@ -481,13 +483,13 @@ public class DataSourceMailbox extends SyncMailbox {
             OfflineSyncManager.getInstance().ensureRunning(getAccount());
         }
     }
-    
+
     Set<Folder> getAccessibleFolders(short rights) throws ServiceException {
         Set<Folder> accessable = super.getAccessibleFolders(rights);
         boolean all = true;
         Set<Folder> visible = new HashSet<Folder>();
         OfflineDataSource ds = getDataSource();
-        
+
         if (ds == null)
             return accessable;
         for (Folder folder : accessable == null ? getFolderById(

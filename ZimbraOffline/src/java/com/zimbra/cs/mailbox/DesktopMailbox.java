@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -46,7 +46,7 @@ public abstract class DesktopMailbox extends Mailbox {
     public static final String FAILURE_PATH = "Error Reports";
     public static final String NOTIFICATIONS_PATH = "Notification Mountpoints";
     public static final String OUTBOX_PATH = "Outbox";
-    
+
     public static final int ID_FOLDER_NOTIFICATIONS = 250;
     public static final int ID_FOLDER_FAILURE = 252;
     public static final int ID_FOLDER_OUTBOX = 254;
@@ -75,8 +75,8 @@ public abstract class DesktopMailbox extends Mailbox {
     }
 
     @Override
-    synchronized boolean finishInitialization() throws ServiceException {
-        if (super.finishInitialization()) {
+    boolean open() throws ServiceException {
+        if (super.open()) {
             ensureSystemFolderExists();
             checkOfflineVersion();
             return true;
@@ -118,7 +118,7 @@ public abstract class DesktopMailbox extends Mailbox {
             CreateFolder redo = new CreateFolder(getId(), FAILURE_PATH,
                 ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
                 MailItem.TYPE_MESSAGE, 0, MailItem.DEFAULT_COLOR_RGB, null);
-            
+
             redo.setFolderId(ID_FOLDER_FAILURE);
             redo.start(System.currentTimeMillis());
             createFolder(new TracelessContext(redo), FAILURE_PATH,

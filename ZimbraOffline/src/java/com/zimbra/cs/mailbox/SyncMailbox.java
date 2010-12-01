@@ -86,8 +86,8 @@ public abstract class SyncMailbox extends DesktopMailbox {
     }
 
     @Override
-    synchronized boolean finishInitialization() throws ServiceException {
-        if (super.finishInitialization()) {
+    boolean open() throws ServiceException {
+        if (super.open()) {
             initSyncTimer();
             return true;
         }
