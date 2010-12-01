@@ -28,7 +28,7 @@ public class DeleteContact extends AjaxCommonTest  {
 	}
 	
 	@Test(	description = "Delete a contact item",
-			groups = { "sanity"})
+			groups = { "smoke" })
 	public void DeleteContact_01() throws HarnessException {
 		
 		// Create a contact 

@@ -29,7 +29,7 @@ public class EditContact extends AjaxCommonTest  {
 	}
 	
 	@Test(	description = "Edit a contact item",
-			groups = { "sanity" })
+			groups = { "smoke" })
 	public void EditContact_01() throws HarnessException {
 		
 		// Create a contact 
