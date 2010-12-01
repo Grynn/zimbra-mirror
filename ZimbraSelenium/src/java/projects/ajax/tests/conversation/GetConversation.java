@@ -39,15 +39,15 @@ public class GetConversation extends AjaxCommonTest {
 		
 		// Create the message data to be sent
 		MailItem mail = new MailItem();
-		mail.aRecipients.add(new RecipientItem(app.getActiveAccount().EmailAddress));
-		mail.aSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		mail.dToRecipients.add(new RecipientItem(app.getActiveAccount().EmailAddress));
+		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		mail.gBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
 		ZimbraAccount.AccountA().soapSend(
 					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m>" +
 							"<e t='t' a='"+ app.getActiveAccount().EmailAddress +"'/>" +
-							"<su>"+ mail.aSubject +"</su>" +
+							"<su>"+ mail.dSubject +"</su>" +
 							"<mp ct='text/plain'>" +
 								"<content>"+ mail.gBodyText +"</content>" +
 							"</mp>" +
@@ -63,8 +63,8 @@ public class GetConversation extends AjaxCommonTest {
 
 		boolean found = false;
 		for (ConversationItem c : conversations) {
-			logger.info("Subject: looking for "+ mail.aSubject +" found: "+ c.subject);
-			if ( c.subject.equals(mail.aSubject) ) {
+			logger.info("Subject: looking for "+ mail.dSubject +" found: "+ c.subject);
+			if ( c.subject.equals(mail.dSubject) ) {
 				found = true;
 				break;
 			}

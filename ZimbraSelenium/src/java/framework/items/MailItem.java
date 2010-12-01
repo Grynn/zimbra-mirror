@@ -10,7 +10,6 @@ import org.apache.commons.lang.StringEscapeUtils;
 
 import com.zimbra.common.soap.Element;
 
-import framework.items.RecipientItem.RecipientType;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 
@@ -45,40 +44,44 @@ public class MailItem extends ZimbraItem implements IItem {
 	/**
 	 * The subject for this mail
 	 */
-	public String aSubject;
+	public String dSubject;
 	
 	
 	/**
 	 * The plain text content
 	 */
-	public String aBodyText;
+	public String dBodyText;
 	
 	/**
 	 * The html text content
 	 */
-	public String aBodyHtml;
+	public String dBodyHtml;
 	
 	
 	/**
 	 * A list of recipients from the "From:", "To:", "Cc:", and "Bcc:" fields
 	 */
-	public List<RecipientItem> aRecipients = new ArrayList<RecipientItem>();
+	public List<RecipientItem> dToRecipients = new ArrayList<RecipientItem>();
+	public List<RecipientItem> dCcRecipients = new ArrayList<RecipientItem>();
+	public List<RecipientItem> dBccRecipients = new ArrayList<RecipientItem>();
+	public RecipientItem dFromRecipient;
+	
 	
 	
 	/**
 	 * The folder that contains this mail
 	 */
-	public FolderItem aFolder;
+	public FolderItem dFolder;
 
 	/**
 	 * The read/unread status of this mail
 	 */
-	public boolean aRead;
+	public boolean dRead;
 	
 	/**
 	 * The flags associated with this mail (see soap.txt for details)
 	 */
-	public int aFlags;
+	public int dFlags;
 	
 	////
 	// FINISH: SOAP Data
@@ -140,7 +143,25 @@ public class MailItem extends ZimbraItem implements IItem {
 	 * Create a mail item
 	 */
 	public MailItem() {
-		aFlags = MessageFlags.None;	// Clear all flags
+		dFlags = MessageFlags.None;	// Clear all flags
+	}
+
+	public List<RecipientItem> dAllRecipients() {
+		List<RecipientItem> list = new ArrayList<RecipientItem>();
+		
+		if ( dFromRecipient != null )
+			list.add(dFromRecipient);
+		
+		for ( RecipientItem r : dToRecipients )
+			list.add(r);
+		
+		for ( RecipientItem r : dCcRecipients )
+			list.add(r);
+
+		for ( RecipientItem r : dBccRecipients )
+			list.add(r);
+
+		return (list);
 	}
 
 	/**
@@ -149,8 +170,8 @@ public class MailItem extends ZimbraItem implements IItem {
 	 * @return the previous value of the flag
 	 */
 	public int addFlag(int flag) {
-		int original = aFlags;
-		aFlags |= flag;
+		int original = dFlags;
+		dFlags |= flag;
 		return (original);
 	}
 	
@@ -160,8 +181,8 @@ public class MailItem extends ZimbraItem implements IItem {
 	 * @return the previous value of the flag
 	 */
 	public int removeFlag(int flag) {
-		int original = aFlags;
-		aFlags &= ~flag;
+		int original = dFlags;
+		dFlags &= ~flag;
 		return (original);
 	}
 	
@@ -196,30 +217,32 @@ public class MailItem extends ZimbraItem implements IItem {
 			// If there is a subject, save it
 			Element sElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:su");
 			if ( sElement != null )
-				aSubject = sElement.getText().trim();
+				dSubject = sElement.getText().trim();
 			
 			// Parse the recipients
-			Element[] recipientElements = ZimbraAccount.SoapClient.selectNodes(m, "//mail:e");
-			for (Element rElement : recipientElements) {
+			Element[] eElements = ZimbraAccount.SoapClient.selectNodes(m, "//mail:e");
+			for (Element eElement : eElements) {
+				
 				RecipientItem r = new RecipientItem();
-				String type = rElement.getAttribute("t", "t");
-				if ( type.equals("t"))
-					r.type = RecipientType.To;
-				if ( type.equals("c"))
-					r.type = RecipientType.Cc;
-				if ( type.equals("b"))
-					r.type = RecipientType.Bcc;
-				if ( type.equals("f"))
-					r.type = RecipientType.From;
-
-				r.emailAddress = rElement.getAttribute("a", null);
-				r.name = rElement.getAttribute("p", null);
-				aRecipients.add(r);
+				r.importFromSOAP(eElement);
+				
+				if ( r.dType == RecipientItem.RecipientType.To ) {
+					dToRecipients.add(r);
+				} else if ( r.dType == RecipientItem.RecipientType.Cc ) {
+					dCcRecipients.add(r);
+				} else if ( r.dType == RecipientItem.RecipientType.Bcc ) {
+					dBccRecipients.add(r);
+				} else if ( r.dType == RecipientItem.RecipientType.From ) {
+					dFromRecipient = r;
+				} else {
+					throw new HarnessException("Unable to parse recipient element "+ eElement.prettyPrint());
+				}
+				
 			} 
 			
 			Element contentTextPlain = ZimbraAccount.SoapClient.selectNode(m, "//mail:mp[@ct='text/plain']//mail:content");
 			if ( contentTextPlain != null ) {
-				aBodyText = contentTextPlain.getText().trim();
+				dBodyText = contentTextPlain.getText().trim();
 			}
 			
 		} catch (Exception e) {
@@ -273,12 +296,21 @@ public class MailItem extends ZimbraItem implements IItem {
 	public String prettyPrintSOAP() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("SOAP Data:\n");
-		sb.append("Subject: ").append(aSubject).append('\n');
-		for (RecipientItem r : aRecipients) {
-			sb.append(r.type).append(": ").append(r.emailAddress).append('\n');
+		sb.append("Subject: ").append(dSubject).append('\n');
+		for (RecipientItem r : dToRecipients) {
+			sb.append(r.prettyPrint());
 		}
-		sb.append("Content(text):").append('\n').append(aBodyText).append('\n');
-		sb.append("Content(html):").append('\n').append(aBodyHtml).append('\n');
+		for (RecipientItem r : dCcRecipients) {
+			sb.append(r.prettyPrint());
+		}
+		for (RecipientItem r : dBccRecipients) {
+			sb.append(r.prettyPrint());
+		}
+		if ( dFromRecipient != null ) {
+			sb.append(dFromRecipient.prettyPrint());
+		}
+		sb.append("Content(text):").append('\n').append(dBodyText).append('\n');
+		sb.append("Content(html):").append('\n').append(dBodyHtml).append('\n');
 		return (sb.toString());
 	}
 
@@ -387,31 +419,36 @@ public class MailItem extends ZimbraItem implements IItem {
 	public String generateMimeString() {
 		StringBuilder sb = new StringBuilder();
 		
-		for (RecipientItem r : this.aRecipients) {
-			if ( r.type == RecipientItem.RecipientType.To ) {
-				sb.append("To: ").append(r.emailAddress).append('\n');
-			} else if ( r.type == RecipientItem.RecipientType.From) { 
-				sb.append("From: ").append(r.emailAddress).append('\n');
-			} else if ( r.type == RecipientItem.RecipientType.Cc) { 
-				sb.append("Cc: ").append(r.emailAddress).append('\n');
-			}
+		if ( this.dFromRecipient != null ) {
+			sb.append("From: ").append(dFromRecipient.dEmailAddress).append('\n');
 		}
-		if ( this.aSubject != null ) {
-			sb.append("Subject: ").append(this.aSubject).append('\n');
+		for (RecipientItem r : this.dToRecipients) {
+			sb.append("To: ").append(r.dEmailAddress).append('\n');
+		}
+		for (RecipientItem r : this.dCcRecipients) {
+			sb.append("Cc: ").append(r.dEmailAddress).append('\n');
+		}
+		for (RecipientItem r : this.dBccRecipients) {
+			sb.append("Bcc: ").append(r.dEmailAddress).append('\n');
+		}
+		
+		if ( this.dSubject != null ) {
+			sb.append("Subject: ").append(this.dSubject).append('\n');
 		}
 		
 		sb.append("MIME-Version: 1.0\n");
 		sb.append("Content-Type: text/plain; charset=utf-8\n");
 		sb.append("Content-Transfer-Encoding: 7bit\n");
 		
-		if ( this.gBodyText == null ) {
+		if ( this.dBodyText == null ) {
 			sb.append("\n\n\n");
 		} else {
 			sb.append("\n\n");
-			sb.append(gBodyText);
+			sb.append(this.dBodyText);
 			sb.append("\n\n\n");
 		}
 
 		return (sb.toString());
 	}
+
 }

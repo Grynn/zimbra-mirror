@@ -65,15 +65,15 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		String query = "query" + ZimbraSeleniumProperties.getUniqueString();
 		
 		MailItem message1 = new MailItem();
-		message1.aSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		message1.aRecipients.add(new RecipientItem("foo@example.com", RecipientType.From));
-		message1.aRecipients.add(new RecipientItem("bar@example.com", RecipientType.To));
+		message1.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		message1.dFromRecipient = new RecipientItem("foo@example.com", RecipientType.From);
+		message1.dToRecipients.add(new RecipientItem("bar@example.com", RecipientType.To));
 		message1.gBodyText = query; 
 		
 		MailItem message2 = new MailItem();
-		message2.aSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		message2.aRecipients.add(new RecipientItem("foo@example.com", RecipientType.From));
-		message2.aRecipients.add(new RecipientItem("bar@example.com", RecipientType.To));
+		message2.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		message2.dFromRecipient = new RecipientItem("foo@example.com", RecipientType.From);
+		message2.dToRecipients.add(new RecipientItem("bar@example.com", RecipientType.To));
 		message2.gBodyText = query; 
 		
 		
@@ -113,13 +113,13 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		boolean found1 = false;
 		boolean found2 = false;
 		for (ConversationItem c : items) {
-			if ( c.subject.equals(message1.aSubject) ) {
+			if ( c.subject.equals(message1.dSubject) ) {
 				found1 = true;
 				break;
 			}
 		}
 		for (ConversationItem c : items) {
-			if ( c.subject.equals(message2.aSubject) ) {
+			if ( c.subject.equals(message2.dSubject) ) {
 				found2 = true;
 				break;
 			}

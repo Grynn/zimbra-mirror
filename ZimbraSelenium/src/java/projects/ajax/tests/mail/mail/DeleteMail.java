@@ -38,15 +38,15 @@ public class DeleteMail extends AjaxCommonTest {
 		
 		// Create the message data to be sent
 		MailItem mail = new MailItem();
-		mail.aRecipients.add(new RecipientItem(app.getActiveAccount().EmailAddress));
-		mail.aSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		mail.dToRecipients.add(new RecipientItem(app.getActiveAccount().EmailAddress));
+		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		mail.gBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
 		ZimbraAccount.AccountA().soapSend(
 					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m>" +
 							"<e t='t' a='"+ app.getActiveAccount().EmailAddress +"'/>" +
-							"<su>"+ mail.aSubject +"</su>" +
+							"<su>"+ mail.dSubject +"</su>" +
 							"<mp ct='text/plain'>" +
 								"<content>"+ mail.gBodyText +"</content>" +
 							"</mp>" +
@@ -57,7 +57,7 @@ public class DeleteMail extends AjaxCommonTest {
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 				
 		// Select the item
-		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.aSubject);
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 		
 		// Click delete
 		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
@@ -67,8 +67,8 @@ public class DeleteMail extends AjaxCommonTest {
 
 		boolean found = false;
 		for (MailItem m : messages) {
-			logger.info("Subject: looking for "+ mail.aSubject +" found: "+ m.aSubject);
-			if ( m.aSubject.equals(mail.aSubject) ) {
+			logger.info("Subject: looking for "+ mail.dSubject +" found: "+ m.dSubject);
+			if ( m.dSubject.equals(mail.dSubject) ) {
 				found = true;
 				break;
 			}

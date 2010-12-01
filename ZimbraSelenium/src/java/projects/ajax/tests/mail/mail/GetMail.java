@@ -111,16 +111,16 @@ public class GetMail extends AjaxCommonTest {
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		// Select the message so that it shows in the reading pane
-		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.aSubject);
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 
 		// Verify the To, From, Subject, Body
-		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.aSubject, "Verify the subject matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.dSubject, "Verify the subject matches");
 		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedDate), "Verify the date is displayed");
 		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedTime), "Verify the time is displayed");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the From matches");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), app.getActiveAccount().EmailAddress, "Verify the To matches");
-		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Body), mail.aBodyText, "Verify the body matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Body), mail.dBodyText, "Verify the body matches");
 
 		
 	}
@@ -132,8 +132,8 @@ public class GetMail extends AjaxCommonTest {
 		
 		// Create the message data to be sent
 		MailItem mail = new MailItem();
-		mail.aRecipients.add(new RecipientItem(app.getActiveAccount().EmailAddress));
-		mail.aSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		mail.dToRecipients.add(new RecipientItem(app.getActiveAccount().EmailAddress));
+		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		mail.gBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
 		String bodyHtml = "body" + ZimbraSeleniumProperties.getUniqueString();
 		mail.setBodyHtml("<html><body><bold>" + bodyHtml +"</bold></body></html>");
@@ -143,7 +143,7 @@ public class GetMail extends AjaxCommonTest {
 						"<m>" +
 							"<e t='t' a='"+ app.getActiveAccount().EmailAddress +"'/>" +
 							"<e t='c' a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>" +
-							"<su>"+ mail.aSubject +"</su>" +
+							"<su>"+ mail.dSubject +"</su>" +
 							"<mp ct='multipart/alternative'>" +
 								"<mp ct='text/plain'>" +
 									"<content>"+ mail.gBodyText +"</content>" +
@@ -159,12 +159,12 @@ public class GetMail extends AjaxCommonTest {
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
 
 		// Select the message so that it shows in the reading pane
-		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.aSubject);
+		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 
 		// Verify the To, From, Subject, Body
-		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.aSubject, "Verify the subject matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.dSubject, "Verify the subject matches");
 		
-		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.aSubject, "Verify the subject matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.dSubject, "Verify the subject matches");
 		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedDate), "Verify the date is displayed");
 		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedTime), "Verify the time is displayed");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");

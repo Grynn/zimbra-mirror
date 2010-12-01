@@ -1,5 +1,7 @@
 package projects.ajax.ui;
 
+import java.util.List;
+
 import framework.items.MailItem;
 import framework.items.RecipientItem;
 import framework.items.ZimbraItem;
@@ -101,8 +103,8 @@ public class FormMailNew extends AbsForm {
 		//
 		
 		// Handle the subject
-		if ( mail.aSubject != null ) {
-			this.sType(Locators.zSubjectField, mail.aSubject);
+		if ( mail.dSubject != null ) {
+			this.sType(Locators.zSubjectField, mail.dSubject);
 			SleepUtil.sleepMedium();
 		}
 		
@@ -114,40 +116,41 @@ public class FormMailNew extends AbsForm {
 		StringBuilder from = null;
 		
 		// Convert the list of recipients to a semicolon separated string
-		if ( mail.aRecipients != null ) {
-			if ( !mail.aRecipients.isEmpty() ) {
+		List<RecipientItem> recipients = mail.dAllRecipients();
+		if ( recipients != null ) {
+			if ( !recipients.isEmpty() ) {
 				
-				for (RecipientItem r : mail.aRecipients) {
-					if ( r.type == RecipientType.To ) {
+				for (RecipientItem r : recipients) {
+					if ( r.dType == RecipientType.To ) {
 						if ( to == null ) {
 							to = new StringBuilder();
-							to.append(r.emailAddress);
+							to.append(r.dEmailAddress);
 						} else {
-							to.append(";").append(r.emailAddress);
+							to.append(";").append(r.dEmailAddress);
 						}
 					}
-					if ( r.type == RecipientType.Cc ) {
+					if ( r.dType == RecipientType.Cc ) {
 						if ( cc == null ) {
 							cc = new StringBuilder();
-							cc.append(r.emailAddress);
+							cc.append(r.dEmailAddress);
 						} else {
-							cc.append(";").append(r.emailAddress);
+							cc.append(";").append(r.dEmailAddress);
 						}
 					}
-					if ( r.type == RecipientType.Bcc ) {
+					if ( r.dType == RecipientType.Bcc ) {
 						if ( bcc == null ) {
 							bcc = new StringBuilder();
-							bcc.append(r.emailAddress);
+							bcc.append(r.dEmailAddress);
 						} else {
-							bcc.append(";").append(r.emailAddress);
+							bcc.append(";").append(r.dEmailAddress);
 						}
 					}
-					if ( r.type == RecipientType.From ) {
+					if ( r.dType == RecipientType.From ) {
 						if ( from == null ) {
 							from = new StringBuilder();
-							from.append(r.emailAddress);
+							from.append(r.dEmailAddress);
 						} else {
-							from.append(";").append(r.emailAddress);
+							from.append(";").append(r.dEmailAddress);
 						}
 					}
 				}
