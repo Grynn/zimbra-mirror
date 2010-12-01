@@ -301,18 +301,20 @@ AjxTimezone.getClientId = function(serverId) {
 
 AjxTimezone.getShortName = function(clientId) {
 	var rule = AjxTimezone.getRule(clientId);
-	if (!rule.shortName) {
-		rule.shortName = ["GMT",AjxTimezone._SHORT_NAMES[clientId]].join("");
-	}
-	return rule.shortName;
+    if (rule && rule.shortName) return rule.shortName;
+    var generatedShortName = ["GMT",AjxTimezone._SHORT_NAMES[clientId]].join("");
+    if(rule) rule.shortName = generatedShortName;
+	return generatedShortName;
 };
+
 AjxTimezone.getMediumName = function(clientId) {
 	var rule = AjxTimezone.getRule(clientId);
-	if (!rule.mediumName) {
-		rule.mediumName = AjxMsg[clientId] || ['(',AjxTimezone.getShortName(clientId),') ',clientId].join("");
-	}
-	return rule.mediumName;
+    if (rule && rule.mediumName) return rule.mediumName;
+    var generatedMediumName = AjxMsg[clientId] || ['(',AjxTimezone.getShortName(clientId),') ',clientId].join("");
+    if(rule) rule.mediumName = generatedMediumName;
+	return generatedMediumName;
 };
+
 AjxTimezone.getLongName = AjxTimezone.getMediumName;
 
 AjxTimezone.addRule = function(rule) {
