@@ -98,9 +98,9 @@
       <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/sqlite-jdbc-3.6.20.1-javadoc.jar!/"/>
     </attributes>
   </classpathentry>
-  <classpathentry kind="lib" path="/ZimbraCommon/jars/guava-r06.jar" sourcepath="/ZimbraCommon/jars-src/guava-src-r06.zip">
+  <classpathentry kind="lib" path="/ZimbraCommon/jars/guava-r07.jar" sourcepath="/ZimbraCommon/jars-src/guava-src-r06.zip">
     <attributes>
-      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-r06-javadoc.zip!/"/>
+      <attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-r07-javadoc.zip!/"/>
     </attributes>
   </classpathentry>
   <classpathentry kind="lib" path="/ZimbraCommon/jars/commons-cli-1.2.jar" sourcepath="/ZimbraCommon/jars-src/commons-cli-1.2-src.zip">
