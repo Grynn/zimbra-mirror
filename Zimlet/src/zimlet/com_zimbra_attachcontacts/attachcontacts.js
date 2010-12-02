@@ -319,7 +319,7 @@ AttachContactsZimlet._getEmailActionMenu = function(attachContactsZimlet) {
 	var menu = this.getActionMenu.func.apply(this, args); // Call overridden function
 	var contactCallback = new AjxCallback(this, this._getActionedContact, [false]); // Callback to method in com_zimbra_email
 	var contact = contactCallback.run();
-	if (contact && !contact.isGal) {
+	if (contact && !contact.isGal && contact.id) {
 		attachContactsZimlet.addMenuButton(contactCallback, menu, "NEWCONTACT");
 	} else {
 		if (menu.getOp(AttachContactsZimlet.SEND_CONTACTS))
