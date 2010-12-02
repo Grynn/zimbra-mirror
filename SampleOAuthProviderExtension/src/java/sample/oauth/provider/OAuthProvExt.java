@@ -16,13 +16,12 @@
 
 package sample.oauth.provider;
 
-import com.zimbra.cs.extension.ZimbraExtension;
-import com.zimbra.cs.extension.ExtensionDispatcherServlet;
-
 import com.zimbra.common.service.ServiceException;
-import com.zimbra.common.util.ZimbraLog;
-
+import com.zimbra.cs.extension.ExtensionDispatcherServlet;
+import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.service.AuthProvider;
+import com.zimbra.soap.SoapServlet;
+import sample.oauth.provider.soap.OAuthProviderService;
 
 public class OAuthProvExt implements ZimbraExtension {
 
@@ -36,6 +35,8 @@ public class OAuthProvExt implements ZimbraExtension {
     	
     	AuthProvider.register(new ZimbraAuthProviderForOAuth());
     	AuthProvider.refresh();
+
+        SoapServlet.addService("SoapServlet", new OAuthProviderService());
     }
 
     public void destroy() {
