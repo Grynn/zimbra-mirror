@@ -1957,11 +1957,13 @@ function(obj, account, tableId) {
 			var media = medias[j];
 			var videoEmbedded = false;
 			var isYouTube = false;
-		
 			if(!media.video) {
-				media.src = media.src ?  (media.src.indexOf("/") ==0 ? "https://www.facebook.com"+media.src : media.src) : "";
+				media.src = media.src && typeof(media.src)=="string" ?  (media.src.indexOf("/") ==0 ? "https://www.facebook.com"+media.src : media.src) : "";
 			} else if(media.video && media.video.source_url){
 				media.src = media.video.source_url;
+				if(typeof(media.src)!="string") {
+					media.src = "";
+				}
 				if(media.src.indexOf("youtube") > 0) {
 					media.src = media.src.replace("autoplay=1", "autoplay=0");
 					media.src = media.src + "&fs=1";//add fullscreen button
