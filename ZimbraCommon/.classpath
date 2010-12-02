@@ -7,7 +7,7 @@
 	<classpathentry kind="lib" path="jars/bouncycastle.jar"/>
 	<classpathentry kind="lib" path="jars/catalina-ant.jar"/>
 	<classpathentry kind="lib" path="jars/commons-codec-1.4.jar" sourcepath="/ThirdParty/commons-codec/src"/>
-	<classpathentry kind="lib" path="jars/commons-dbcp-1.2.2.jar" sourcepath="/ThirdParty/commons-dbcp/src">
+	<classpathentry kind="lib" path="jars/commons-dbcp-1.4.jar" sourcepath="/ThirdParty/commons-dbcp/src">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/"/>
 		</attributes>
@@ -27,7 +27,7 @@
 			<attribute name="javadoc_location" value="http://jakarta.apache.org/commons/logging/commons-logging-1.0.4/docs/apidocs/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="jars/commons-pool-1.5.3.jar">
+	<classpathentry kind="lib" path="jars/commons-pool-1.5.5.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/pool/apidocs/"/>
 		</attributes>

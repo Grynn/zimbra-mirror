@@ -61,12 +61,12 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraCommon"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraServer"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ZimbraTagLib"/>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-dbcp-1.2.2.jar" sourcepath="/ThirdParty/commons-dbcp/src">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-dbcp-1.4.jar" sourcepath="/ThirdParty/commons-dbcp/src">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/dbcp/api-1.2.2/"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-pool-1.5.3.jar">
+	<classpathentry kind="lib" path="/ZimbraCommon/jars/commons-pool-1.5.5.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://commons.apache.org/pool/apidocs/"/>
 		</attributes>
