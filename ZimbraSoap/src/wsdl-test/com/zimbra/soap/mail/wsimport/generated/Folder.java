@@ -69,14 +69,14 @@ import javax.xml.bind.annotation.XmlType;
 
 })
 @XmlSeeAlso({
-    SearchFolder.class,
-    Mountpoint.class
+    Mountpoint.class,
+    SearchFolder.class
 })
 public class Folder {
 
     @XmlElements({
-        @XmlElement(name = "folder"),
         @XmlElement(name = "search", type = SearchFolder.class),
+        @XmlElement(name = "folder"),
         @XmlElement(name = "link", type = Mountpoint.class)
     })
     protected List<Folder> folderOrLinkOrSearch;
@@ -136,8 +136,8 @@ public class Folder {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Folder }
      * {@link SearchFolder }
+     * {@link Folder }
      * {@link Mountpoint }
      * 
      * 

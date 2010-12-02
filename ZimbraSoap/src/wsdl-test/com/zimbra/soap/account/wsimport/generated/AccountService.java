@@ -51,6 +51,18 @@ public interface AccountService {
      * 
      * @param parameters
      * @return
+     *     returns com.zimbra.soap.account.wsimport.generated.EndSessionResponse
+     */
+    @WebMethod
+    @WebResult(name = "EndSessionResponse", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+    public EndSessionResponse endSessionRequest(
+        @WebParam(name = "EndSessionRequest", targetNamespace = "urn:zimbraAccount", partName = "parameters")
+        EndSessionRequest parameters);
+
+    /**
+     * 
+     * @param parameters
+     * @return
      *     returns com.zimbra.soap.account.wsimport.generated.GetIdentitiesResponse
      */
     @WebMethod

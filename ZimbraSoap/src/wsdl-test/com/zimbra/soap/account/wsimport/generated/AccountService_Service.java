@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "AccountService", targetNamespace = "urn:zimbraAccount", wsdlLocation = "file:/downloads/p4/gelliot_osx/main/ZimbraSoap/build/schema/AccountService.wsdl")
+@WebServiceClient(name = "AccountService", targetNamespace = "urn:zimbraAccount", wsdlLocation = "file:/Users/gren/p4/gelliot_mac/main/ZimbraSoap/build/schema/AccountService.wsdl")
 public class AccountService_Service
     extends Service
 {
@@ -30,9 +30,9 @@ public class AccountService_Service
         try {
             URL baseUrl;
             baseUrl = com.zimbra.soap.account.wsimport.generated.AccountService_Service.class.getResource(".");
-            url = new URL(baseUrl, "file:/downloads/p4/gelliot_osx/main/ZimbraSoap/build/schema/AccountService.wsdl");
+            url = new URL(baseUrl, "file:/Users/gren/p4/gelliot_mac/main/ZimbraSoap/build/schema/AccountService.wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'file:/downloads/p4/gelliot_osx/main/ZimbraSoap/build/schema/AccountService.wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'file:/Users/gren/p4/gelliot_mac/main/ZimbraSoap/build/schema/AccountService.wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         ACCOUNTSERVICE_WSDL_LOCATION = url;

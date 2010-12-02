@@ -59,4 +59,16 @@ public interface MailService {
         @WebParam(name = "ExportContactsRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
         ExportContactsRequest parameters);
 
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.mail.wsimport.generated.ImportContactsResponse
+     */
+    @WebMethod
+    @WebResult(name = "ImportContactsResponse", targetNamespace = "urn:zimbraMail", partName = "parameters")
+    public ImportContactsResponse importContactsRequest(
+        @WebParam(name = "ImportContactsRequest", targetNamespace = "urn:zimbraMail", partName = "parameters")
+        ImportContactsRequest parameters);
+
 }
