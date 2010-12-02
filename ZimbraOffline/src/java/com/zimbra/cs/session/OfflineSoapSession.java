@@ -24,8 +24,8 @@ import com.zimbra.cs.service.util.ItemIdFormatter;
 
 public class OfflineSoapSession extends SoapSession {
 
-    public OfflineSoapSession(String authenticatedId) {
-        super(authenticatedId);
+    public OfflineSoapSession(String authenticatedId, boolean asAdmin) {
+        super(authenticatedId, asAdmin);
     }
 
     @Override

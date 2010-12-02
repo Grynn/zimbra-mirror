@@ -21,8 +21,8 @@ import com.zimbra.soap.ZimbraSoapContext;
 
 public class OfflineRemoteSoapSession extends OfflineSoapSession {
 
-    public OfflineRemoteSoapSession(String authenticatedId) {
-        super(authenticatedId);
+    public OfflineRemoteSoapSession(String authenticatedId, boolean asAdmin) {
+        super(authenticatedId, asAdmin);
     }
 
     @Override protected boolean isMailboxListener() {
