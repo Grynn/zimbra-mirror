@@ -217,6 +217,27 @@ function(str, dels) {
 };
 
 /**
+ *
+ * splits the line into words, keeping leading whitespace with each word
+ *
+ * @param line the text to split
+ *
+ * @return {array} the array of words
+ */
+AjxStringUtil.splitKeepLeadingWhitespace =
+function(line) {
+
+	var wordWithLeadingSpaces = /\s*\S+/g;
+	var words = [];
+	var result;
+	while (result = wordWithLeadingSpaces.exec(line)) {
+		var word = result[0];
+		words.push(word);
+	}
+	return words;
+};
+
+/**
  * Wraps text to the given length and optionally quotes it. The level of quoting in the
  * source text is preserved based on the prefixes. Special lines such as email headers
  * always start a new line.
@@ -258,15 +279,14 @@ function(params) {
 	// the word's prefix, whether it's a paragraph break, and whether it's
 	// special (cannot be wrapped into a previous line)
 	for (var l = 0, llen = lines.length; l < llen; l++) {
-		var line = AjxStringUtil.trim(lines[l]);
+		var line = lines[l];
 		// get this line's prefix
 		var m = line.match(/^([\s>\|]+)/);
 		var prefix = m ? m[1] : "";
 		if (prefix) {
 			line = line.substr(prefix.length);
 		}
-		line = line.replace(/\s+/g, " ");	// compress all space into single spaces
-		var wds = line.split(" ");
+		var wds = AjxStringUtil.splitKeepLeadingWhitespace(line);
 		if (wds && wds[0] && wds[0].length) {
 			var isSpecial = AjxStringUtil.MSG_SEP_RE.test(line) || AjxStringUtil.COLON_RE.test(line) ||
 							AjxStringUtil.HDR_RE.test(line) || AjxStringUtil.SIG_RE.test(line);
