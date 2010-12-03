@@ -20,6 +20,7 @@ import com.zimbra.common.util.HttpUtil;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.soap.VoiceConstants;
 import com.zimbra.common.mailbox.ContactConstants;
+import com.zimbra.common.mime.shim.JavaMailInternetAddress;
 import com.zimbra.cs.taglib.ZJspSession;
 import com.zimbra.cs.zclient.ZFilterAction.ZDiscardAction;
 import com.zimbra.cs.zclient.ZFilterAction.ZFileIntoAction;
@@ -1350,7 +1351,7 @@ public class BeanUtils {
         boolean validEmail = true;
         try {
             emailline = emailline.replace(";", ",");
-            InternetAddress[] inetAddrs = InternetAddress.parseHeader(emailline, false);
+            InternetAddress[] inetAddrs = JavaMailInternetAddress.parseHeader(emailline, false);
             for (InternetAddress ia : inetAddrs) {
                 Matcher m = sEMAIL_ADDRESS.matcher(ia.getAddress());                          
                 boolean matchFound = m.matches();

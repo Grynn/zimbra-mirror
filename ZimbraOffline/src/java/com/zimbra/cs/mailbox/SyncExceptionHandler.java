@@ -26,6 +26,7 @@ import javax.mail.Message.RecipientType;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import com.zimbra.common.mime.shim.JavaMailInternetAddress;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.util.ByteUtil;
@@ -225,8 +226,8 @@ public class SyncExceptionHandler {
         try {
             MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
             mm.setSentDate(now);
-            mm.setFrom(new InternetAddress(dmbx.getAccount().getName()));
-            mm.setRecipient(RecipientType.TO, new InternetAddress(dmbx.getAccountName()));
+            mm.setFrom(new JavaMailInternetAddress(dmbx.getAccount().getName()));
+            mm.setRecipient(RecipientType.TO, new JavaMailInternetAddress(dmbx.getAccountName()));
             mm.setSubject(subject);
             mm.setText(buf.toString());
             mm.saveChanges(); //must call this to update the headers
@@ -245,8 +246,8 @@ public class SyncExceptionHandler {
             Date now = new Date();
             MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
             mm.setSentDate(now);
-            mm.setFrom(new InternetAddress(dmbx.getAccount().getName()));
-            mm.setRecipient(RecipientType.TO, new InternetAddress(OfflineLC.zdesktop_support_email.value()));
+            mm.setFrom(new JavaMailInternetAddress(dmbx.getAccount().getName()));
+            mm.setRecipient(RecipientType.TO, new JavaMailInternetAddress(OfflineLC.zdesktop_support_email.value()));
             mm.setSubject(subject);
             mm.setText(message);
             mm.saveChanges(); //must call this to update the headers

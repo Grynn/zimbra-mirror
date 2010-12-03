@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
+import javax.activation.DataHandler;
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Message.RecipientType;
@@ -32,6 +33,10 @@ import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 
+import com.zimbra.common.mime.MimeConstants;
+import com.zimbra.common.mime.shim.JavaMailInternetAddress;
+import com.zimbra.common.mime.shim.JavaMailMimeBodyPart;
+import com.zimbra.common.mime.shim.JavaMailMimeMultipart;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.Pair;
@@ -50,6 +55,7 @@ import com.zimbra.cs.datasource.imap.ImapSync;
 import com.zimbra.cs.db.DbMailItem;
 import com.zimbra.cs.mailbox.MailSender.SafeSendFailedException;
 import com.zimbra.cs.mailbox.MailServiceException.NoSuchItemException;
+import com.zimbra.cs.mime.MailboxBlobDataSource;
 import com.zimbra.cs.mime.Mime;
 import com.zimbra.cs.mime.ParsedMessage;
 import com.zimbra.cs.mime.Mime.FixedMimeMessage;
@@ -344,24 +350,27 @@ public class DataSourceMailbox extends SyncMailbox {
         try {
             MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
 
-            mm.setFrom(new InternetAddress(acct.getName()));
-            mm.setRecipient(RecipientType.TO, new InternetAddress(acct.getName()));
+            mm.setFrom(new JavaMailInternetAddress(acct.getName()));
+            mm.setRecipient(RecipientType.TO, new JavaMailInternetAddress(acct.getName()));
             mm.setSubject("Delivery failed: " + error);
-
             mm.saveChanges(); //must call this to update the headers
 
-            MimeMultipart mmp = new MimeMultipart();
-            MimeBodyPart mbp = new MimeBodyPart();
+            MimeMultipart mmp = new JavaMailMimeMultipart();
 
+            MimeBodyPart mbp = new JavaMailMimeBodyPart();
             mbp.setText(error == null ?
                 "SEND FAILED. PLEASE CHECK RECIPIENT ADDRESSES AND SMTP SETTINGS" : error);
-                    mmp.addBodyPart(mbp);
-            mbp = new MimeBodyPart();
-            mbp.setContent(msg.getMimeMessage(), "message/rfc822");
+            mmp.addBodyPart(mbp);
+
+            mbp = new JavaMailMimeBodyPart();
+            mbp.setDataHandler(new DataHandler(new MailboxBlobDataSource(msg.getBlob())));
+            mbp.setHeader("Content-Type", MimeConstants.CT_MESSAGE_RFC822);
             mbp.setHeader("Content-Disposition", "attachment");
             mmp.addBodyPart(mbp, mmp.getCount());
+
             mm.setContent(mmp);
             mm.saveChanges();
+
             ParsedMessage pm = new ParsedMessage(mm, true);
             addMessage(context, pm, Mailbox.ID_FOLDER_INBOX, true,
                 Flag.BITMASK_UNREAD | Flag.BITMASK_FROM_ME, null);

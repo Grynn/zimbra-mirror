@@ -45,6 +45,7 @@ import com.zimbra.common.soap.Element;
 import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.mime.MimeConstants;
+import com.zimbra.common.mime.shim.JavaMailInternetAddress;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
@@ -342,14 +343,14 @@ public class PushChanges {
     	int totalSent = 0;
     	OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         for (Iterator<Integer> iterator = OutboxTracker.iterator(ombx, isOnRequest ? 0L : ombx.getSyncFrequency());	iterator.hasNext();) {
-        	int id = iterator.next();
+            int id = iterator.next();
             try {
                 Message msg = ombx.getMessageById(sContext, id);
                 if (msg.getFolderId() != DesktopMailbox.ID_FOLDER_OUTBOX) {
-                	OutboxTracker.remove(ombx, id);
-                	continue;
+                    OutboxTracker.remove(ombx, id);
+                    continue;
                 }
-                
+
                 OfflineLog.offline.debug("push: sending mail (" + id + "): " + msg.getSubject());
                 syncMan.syncStart(ombx.getAccount());
 
@@ -360,7 +361,7 @@ public class PushChanges {
                 sSendUIDs.put(msgKey, new Pair<Integer, String>(msg.getSavedSequence(), sendUID));
 
                 try {
-                	String uploadId = uploadMessage(msg);
+                    String uploadId = uploadMessage(msg);
                     Element request = new Element.XMLElement(MailConstants.SEND_MSG_REQUEST).addAttribute(MailConstants.A_SEND_UID, sendUID);
                     Element m = request.addElement(MailConstants.E_MSG).addAttribute(MailConstants.A_ATTACHMENT_ID, uploadId);
                     if (!msg.getDraftOrigId().equals(""))
@@ -372,59 +373,59 @@ public class PushChanges {
                     //run one more time to make sure it's still in outbox after we finished uploading the message
                     msg = ombx.getMessageById(sContext, id);
                     if (msg.getFolderId() != DesktopMailbox.ID_FOLDER_OUTBOX) {
-                    	OutboxTracker.remove(ombx, id);
-                    	continue;
+                        OutboxTracker.remove(ombx, id);
+                        continue;
                     }
-                    
-                	ombx.sendRequest(request);
-                	OfflineLog.offline.debug("push: sent mail (" + id + "): " + msg.getSubject());
-                	++totalSent;
+
+                    ombx.sendRequest(request);
+                    OfflineLog.offline.debug("push: sent mail (" + id + "): " + msg.getSubject());
+                    ++totalSent;
 
                     // remove the draft from the outbox
                     ombx.delete(sContext, id, MailItem.TYPE_MESSAGE);
                     OfflineLog.offline.debug("push: deleted pending draft (" + id + ')');
                 } catch (ServiceException x) {
-                	if ((x instanceof ZClientException || x instanceof SoapFaultException) && !x.isReceiversFault() &&
-                			!x.getCode().equals(ZClientException.IO_ERROR) && !x.getCode().equals(ZClientException.UPLOAD_FAILED)) { //supposedly this is client fault
-                		OfflineLog.offline.debug("push: failed to send mail (" + id + "): " + msg.getSubject(), x);
-                		
-                		ombx.move(sContext, id, MailItem.TYPE_MESSAGE, Mailbox.ID_FOLDER_DRAFTS); //move message back to drafts folder;
-                		
-                		//we need to tell user of the failure
-                		try {
-                		    MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
-                			mm.setSentDate(new Date());
-                			mm.setFrom(new InternetAddress("donotreply@host.local", "Desktop Notifier"));
-	                		mm.setRecipient(RecipientType.TO, new InternetAddress(ombx.getAccount().getName()));
-	                		
-	                		String sentDate = new SimpleDateFormat("MMMMM d, yyyy").format(msg.getDate());
-	                		String sentTime = new SimpleDateFormat("h:mm a").format(msg.getDate());
-	                		
-	                		String text = "Your message \"" + msg.getSubject() + "\" sent on " + sentDate + " at " + sentTime + " to \"" + msg.getRecipients() + "\" can't be delivered.  None of the recipients will receive the message.  It has been returned to Drafts folder for your review.\n";
-	                		String subject = null;
-	                		if (x.getCode().equals(ZClientException.UPLOAD_SIZE_LIMIT_EXCEEDED))
-	                			subject = "message size exceeds server limit";
-	                		else if (x.getCode().equals(MailServiceException.SEND_ABORTED_ADDRESS_FAILURE))
-	                			subject = x.getMessage();
-	                		else {
-	                			text += "\n----------------------------------------------------------------------------\n\n" +
-	                				    SyncExceptionHandler.sendMailFailed(ombx, id, x);
-	                			subject = x.getCode();
-	                		}
-	                		mm.setSubject("Delivery Failure Notification: " + subject);
-	                		mm.setText(text);
+                    if ((x instanceof ZClientException || x instanceof SoapFaultException) && !x.isReceiversFault() &&
+                            !x.getCode().equals(ZClientException.IO_ERROR) && !x.getCode().equals(ZClientException.UPLOAD_FAILED)) { //supposedly this is client fault
+                        OfflineLog.offline.debug("push: failed to send mail (" + id + "): " + msg.getSubject(), x);
 
-	                		mm.saveChanges(); //must call this to update the headers
-	                		ParsedMessage pm = new ParsedMessage(mm, true);
-	                		ombx.addMessage(sContext, pm, DesktopMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
-                		} catch (Exception e) {
-                			OfflineLog.offline.warn("can't save warning of failed push (" + id + ")" + msg.getSubject(), e);
-                		}
-                	} else {
-                		OutboxTracker.recordFailure(ombx, id);
-                		OfflineLog.offline.info("push: %s when sending message: %s", x.getCode(), msg.getSubject(), x);
-                		continue; //will retry later
-                	}
+                        ombx.move(sContext, id, MailItem.TYPE_MESSAGE, Mailbox.ID_FOLDER_DRAFTS); //move message back to drafts folder;
+
+                        //we need to tell user of the failure
+                        try {
+                            MimeMessage mm = new Mime.FixedMimeMessage(JMSession.getSession());
+                            mm.setSentDate(new Date());
+                            mm.setFrom(new InternetAddress("donotreply@host.local", "Desktop Notifier"));
+                            mm.setRecipient(RecipientType.TO, new JavaMailInternetAddress(ombx.getAccount().getName()));
+
+                            String sentDate = new SimpleDateFormat("MMMMM d, yyyy").format(msg.getDate());
+                            String sentTime = new SimpleDateFormat("h:mm a").format(msg.getDate());
+
+                            String text = "Your message \"" + msg.getSubject() + "\" sent on " + sentDate + " at " + sentTime + " to \"" + msg.getRecipients() + "\" can't be delivered.  None of the recipients will receive the message.  It has been returned to Drafts folder for your review.\n";
+                            String subject = null;
+                            if (x.getCode().equals(ZClientException.UPLOAD_SIZE_LIMIT_EXCEEDED))
+                                subject = "message size exceeds server limit";
+                            else if (x.getCode().equals(MailServiceException.SEND_ABORTED_ADDRESS_FAILURE))
+                                subject = x.getMessage();
+                            else {
+                                text += "\n----------------------------------------------------------------------------\n\n" +
+                                SyncExceptionHandler.sendMailFailed(ombx, id, x);
+                                subject = x.getCode();
+                            }
+                            mm.setSubject("Delivery Failure Notification: " + subject);
+                            mm.setText(text);
+
+                            mm.saveChanges(); //must call this to update the headers
+                            ParsedMessage pm = new ParsedMessage(mm, true);
+                            ombx.addMessage(sContext, pm, DesktopMailbox.ID_FOLDER_INBOX, true, Flag.BITMASK_UNREAD, null);
+                        } catch (Exception e) {
+                            OfflineLog.offline.warn("can't save warning of failed push (" + id + ")" + msg.getSubject(), e);
+                        }
+                    } else {
+                        OutboxTracker.recordFailure(ombx, id);
+                        OfflineLog.offline.info("push: %s when sending message: %s", x.getCode(), msg.getSubject(), x);
+                        continue; //will retry later
+                    }
                 }
 
                 OutboxTracker.remove(ombx, id);

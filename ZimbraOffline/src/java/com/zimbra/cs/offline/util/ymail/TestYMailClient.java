@@ -34,12 +34,13 @@ import com.zimbra.cs.mailclient.imap.MailboxInfo;
 import com.zimbra.cs.mailclient.imap.MessageData;
 import com.zimbra.cs.mailclient.imap.Body;
 import com.zimbra.cs.util.ZimbraApplication;
+import com.zimbra.common.mime.shim.JavaMailInternetAddress;
+import com.zimbra.common.mime.shim.JavaMailMimeMessage;
 import com.zimbra.common.util.Log;
 
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeMultipart;
 import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimePart;
 import javax.mail.internet.ContentType;
 import javax.mail.internet.MimeUtility;
@@ -291,7 +292,7 @@ public class TestYMailClient {
 
     private MimeMessage getMessage(long uid) throws IOException, MessagingException {
         Body body = getMessageData(uid, "BODY.PEEK[]").getBodySections()[0];
-        return new MimeMessage(null, body.getImapData().getInputStream());
+        return new JavaMailMimeMessage(null, body.getImapData().getInputStream());
     }
 
     private MessageData getMessageData(long uid, String param)
@@ -335,9 +336,9 @@ public class TestYMailClient {
 
     private static MimeMessage simpleMessage(String text) throws Exception {
         Session session = Session.getInstance(new Properties());
-        MimeMessage mm = new MimeMessage(session);
-        mm.setFrom(new InternetAddress(FROM));
-        mm.setRecipient(Message.RecipientType.TO, new InternetAddress(TO));
+        MimeMessage mm = new JavaMailMimeMessage(session);
+        mm.setFrom(new JavaMailInternetAddress(FROM));
+        mm.setRecipient(Message.RecipientType.TO, new JavaMailInternetAddress(TO));
         mm.setContent(text, "plain/text");
         return mm;
     }
@@ -346,9 +347,9 @@ public class TestYMailClient {
         Session session = Session.getInstance(new Properties());
         InputStream is = new FileInputStream(file);
         try {
-            MimeMessage mm = new MimeMessage(session, is);
-            mm.setFrom(new InternetAddress(FROM));
-            mm.setRecipient(Message.RecipientType.TO, new InternetAddress(TO));
+            MimeMessage mm = new JavaMailMimeMessage(session, is);
+            mm.setFrom(new JavaMailInternetAddress(FROM));
+            mm.setRecipient(Message.RecipientType.TO, new JavaMailInternetAddress(TO));
             mm.setRecipients(Message.RecipientType.CC, (Address[]) null);
             mm.setRecipients(Message.RecipientType.BCC, (Address[]) null);
             return mm;
