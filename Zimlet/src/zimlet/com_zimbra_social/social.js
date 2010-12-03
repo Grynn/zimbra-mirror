@@ -700,7 +700,7 @@ function(params) {
 	html[i++] = "<td width='5%' valign='middle'></td>";
 	if (type != "PROFILE") {
 		html[i++] = "<td width='5%' valign='middle'>";
-		html[i++] = "<img  title='Refresh this feed' src='" + this.getResource("social_refreshBtn.gif") + "' id='social_refreshBtn" + this.cardIndex + "'/></td>";
+		html[i++] = "<img  title='"+this.getMessage("refreshThisFeed")+"' src='" + this.getResource("social_refreshBtn.gif") + "' id='social_refreshBtn" + this.cardIndex + "'/></td>";
 	}
 
 	html[i++] = "<td width='5%' valign='middle'></td><td width='5%' valign='middle'>";
