@@ -704,7 +704,7 @@ function(params) {
 	}
 
 	html[i++] = "<td width='5%' valign='middle'></td><td width='5%' valign='middle'>";
-	html[i++] = "<img  title='Close this feed' src='" + this.getResource("social_closeBtn.png") + "' id='social_closeBtn" + this.cardIndex + "'/></td>";
+	html[i++] = "<img   title='"+this.getMessage("closeThisFeed")+"' src='" + this.getResource("social_closeBtn.png") + "' id='social_closeBtn" + this.cardIndex + "'/></td>";
 
 	html[i++] = "</tr>";
 	html[i++] = "</table>";
