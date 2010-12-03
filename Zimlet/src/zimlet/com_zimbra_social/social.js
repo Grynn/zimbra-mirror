@@ -2267,28 +2267,33 @@ SocialZimlet.prototype._addRetweetLinkHandlers =
 function() {
 	for (var id in this._allReweetLinks) {
 		var obj = this._allReweetLinks[id];
-		if (!obj.hasHandler) {
-			document.getElementById(id).onclick = AjxCallback.simpleClosure(this.addRetweetText, this, obj.rt);
+		var el = document.getElementById(id);
+		if (el && !obj.hasHandler) {
+			el.onclick = AjxCallback.simpleClosure(this.addRetweetText, this, obj.rt);
 			obj.hasHandler = true;
 		}
 	}
 };
+
 SocialZimlet.prototype._addDMLinkHandlers =
 function() {
 	for (var id in this._allDMLinks) {
 		var obj = this._allDMLinks[id];
-		if (!obj.hasHandler) {
-			document.getElementById(id).onclick = AjxCallback.simpleClosure(this.addDMText, this, obj.dm);
+		var el = document.getElementById(id);
+		if (el && !obj.hasHandler) {
+			el.onclick = AjxCallback.simpleClosure(this.addDMText, this, obj.dm);
 			obj.hasHandler = true;
 		}
 	}
 };
+
 SocialZimlet.prototype._addTwitterDeleteLinkHandlers =
 function() {
 	for (var id in this._allTwitterDeleteLinks) {
 		var obj = this._allTwitterDeleteLinks[id];
-		if (!obj.hasHandler) {
-			document.getElementById(id).onclick = AjxCallback.simpleClosure(this.twitter.deletePost, this.twitter, obj);
+		var el = document.getElementById(id);
+		if (el && !obj.hasHandler) {
+			el.onclick = AjxCallback.simpleClosure(this.twitter.deletePost, this.twitter, obj);
 			obj.hasHandler = true;
 		}
 	}
@@ -2298,8 +2303,9 @@ SocialZimlet.prototype._addFbCommentLinkHandlers =
 function() {
 	for (var id in this._allFacebookCommentsLinks) {
 		var obj = this._allFacebookCommentsLinks[id];
-		if (!obj.hasHandler) {
-			document.getElementById(id).onclick = AjxCallback.simpleClosure(this.displayFbCommentWidget, this, {postId:obj.postId, tableId:obj.tableId, linkId:id});
+		var el = document.getElementById(id);
+		if (el && !obj.hasHandler) {
+			el.onclick = AjxCallback.simpleClosure(this.displayFbCommentWidget, this, {postId:obj.postId, tableId:obj.tableId, linkId:id});
 			obj.hasHandler = true;
 		}
 	}
