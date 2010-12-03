@@ -17,9 +17,6 @@
 <key name="phone, wipe" >
   <topic name="Managing your mobile devices" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
-<key name="planning a meeting" >
-  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="polling for new mail" >
   <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
@@ -47,6 +44,9 @@
 <key name="preferences, general tab" >
   <topic name="Setting your general preferences" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
+<key name="preferences, sharing" >
+  <topic name="Managing items you share" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="preferences, view reading pane" >
   <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
@@ -69,9 +69,6 @@
 <key name="printing contacts" >
   <topic name="Printing Contacts" url="Contacts/Printing_Contacts.htm" />
 </key>
-<key name="private appointments" >
-  <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="private appointments, sharing details" >
   <topic name="Delegating_Calendar_Access" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
@@ -83,9 +80,6 @@
 </key>
 <key name="Query language description" >
   <topic name="Query language description" url="Search/query_language_description.htm" />
-</key>
-<key name="quick add" >
-  <topic name="Using Quick to Create an Appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="Quick search" >
   <topic name="Quick search" url="Search/Quick_search.htm" />
@@ -101,12 +95,7 @@
 </key>
 <key name="reading pane, turning off/on" >
   <topic name="Managing your email message view" url="conversations/conversation_list_view.htm" />
-</key>
-<key name="reading pane, turning on or off" >
   <topic name="Reading Mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="reading pane, view" >
-  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="receiving mail" >
   <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -114,11 +103,17 @@
 <key name="recipients, search" >
   <topic name="Searching for Recipients " url="Search/Searching_for_Recipients_.htm" />
 </key>
+<key name="recover deleted files" >
+  <topic name="Empty Trash " url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
 <key name="Recovering" >
   <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <key name="deleted mail messages" >
     <topic name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
+</key>
+<key name="recreate appointments" >
+  <topic name="Creating an appointment from an existing appointment" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 </key>
 <key name="recurring appointments, changing" >
   <topic name="Changing recurring appointments" url="Calendar/Deleting_recurring_appointments.htm" />
@@ -128,6 +123,12 @@
 </key>
 <key name="reminders" >
   <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
+</key>
+<key name="renaming files in briefcase" >
+  <topic name="Working with files in Briefcase" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+</key>
+<key name="reply to a calendar invite" >
+  <topic name="Editing meetings on your calendar" url="Calendar/editing_meetings_on_your_calendar.htm" />
 </key>
 <key name="reply, display heading information" >
   <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
@@ -140,6 +141,9 @@
   <key name="mail messages" >
     <topic name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
+</key>
+<key name="replying from calendar" >
+  <topic name="Replying from an appointment on my calendar" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
 </key>
 <key name="resend" >
   <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
@@ -165,7 +169,7 @@
 <key name="revoking shared task list" >
   <topic name="Share your Task list" url="Tasks/Share_your_Task_folder.htm" />
 </key>
-<key name="rich text editor for Document pages" >
+<key name="rich text editor" >
   <topic name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="right click" >
@@ -187,14 +191,8 @@
 <key name="schedule view" >
   <topic name="Viewing Multiple Calendars" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
 </key>
-<key name="scheduling a meeting" >
-  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="scheduling a room or equipment" >
   <topic name="Scheduling Resources" url="Calendar/Scheduling_Resources.htm" />
-</key>
-<key name="Search Builder" >
-  <topic name="Building search queries" url="Search/building_search_queries.htm" />
 </key>
 <key name="Search examples" >
   <topic name="Search examples" url="Search/search_examples.htm" />
@@ -251,14 +249,15 @@
 <key name="sharing folders" >
   <topic name="Sharing a folder" url="Sharing/Sharing_a_folder.htm" />
 </key>
+<key name="sharing page" >
+  <topic name="Managing items you share" url="Sharing/Managing_items_you_share.htm" />
+</key>
 <key name="sharing with a distribution list" >
   <topic name="Sharing with a Distribution List" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 </key>
 <key name="shortcut keys" >
   <topic name="ZWC Keyboard Shortcut Keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
   <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="shortcuts" >
   <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="signature" >
@@ -279,14 +278,11 @@
 <key name="spell-check, setting as manadatory" >
   <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
-<key name="starting IM chat" >
-  <topic name="Starting an IM chat" url="instant_messaging/Starting_an_IM_chat.htm" />
-</key>
 <key name="subscribe to RSS" >
   <topic name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
-<key name="tables, adding to Documents pages" >
-  <topic name="Adding a table to a Notebook Page" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<key name="tables, adding to a document" >
+  <topic name="Adding a table to a document" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="tag, drag and drop" >
   <topic name="Assigning tags to messages" url="Tags_and_flags/Assigning_tags_to_messages.htm" />

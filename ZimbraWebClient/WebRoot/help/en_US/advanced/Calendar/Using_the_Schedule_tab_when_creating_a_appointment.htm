@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Adobe RoboHelp 8" />
-<title>Using the Schedule tab when creating a appointment</title>
+<title>Viewing attendee and location availability in the Suggestion Panel</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
 //<![CDATA[
@@ -54,7 +54,8 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
+	addTocInfo("Scheduling Appointments, Meetings and Events\nViewing attendee and location availability");
+addButton("show",BTN_TEXT,"Show Table of Contents","","","","",0,0,"","","");
 
 	}
 	if (window.writeBtnStyle)
@@ -81,21 +82,64 @@ else
 
 //-->
 //]]></script>
-<h1>Using the Schedule tab when creating an appointment</h1>
-<p>The Schedule tab can be used to help schedule a meeting time when most 
- attendees are available. Each person you are inviting is listed with a 
- timeline showing the free and busy periods 
- for that person, &#160;if the attendee's schedule is known. You can adjust 
- the day and times to review different availability.</p>
-<p>You can also mark the person's attendance to the meeting as required 
- or optional. Click on the Icon next to the name to select the option.</p>
-<p style="margin-left: 48px;"><img src="../cal_manatory_optionalpulldn.png" alt="cal_manatory_optionalpulldn.png" style="border: none;" width="200" height="151" border="0" /></p>
-<p style="margin-left: 48px;">&#160;</p>
-<p>Required is the default. When you select <span style="font-weight: bold;"><b>Optional 
- Attendee</b></span>, the Icon changes to <img src="../cal_optionalicon.png" alt="cal_optionalicon.png" style="border: none;" width="36" height="25" border="0" />.</p>
-<p>The checkmark with the question mark shows that the attendee has not 
- responded to the invitation. When they respond, the column is updated 
- to reflect their status. </p>
+<h1>Viewing attendee and location availability in the Suggestion Panel</h1>
+<p>When you schedule meetings, you can check to see when attendees are 
+ busy or free so you can find a good time for all attendees to meet. As 
+ you add attendees to an appointment, a suggestion panel in the Overview 
+ pane shows availability in 30 minute time slots for the attendees and 
+ for at least one location. </p>
+<p>The mini-calendar suggests attendee availability by color code.</p>
+<ul type="disc">
+	<li><p>Green means that all attendees and at least one location is 
+	 available for those days. </p></li>
+	<li><p>Orange means that not everyone can attend but more than half 
+	 can and at least one location is available. You can hover the cursor 
+	 over the date to see the names of up to 10 people who are not available 
+	 </p></li>
+	<li><p>Red means more than half of the attendees cannot attend the 
+	 meeting on those days. </p></li>
+</ul>
+<p>The number on the right is the number of locations that area available 
+ for this time. You can click this to see a list of suggest locations and 
+ to select a location.</p>
+<p>In the example below, all attendees are available all month except for 
+ January 18. Less than half are available on that date.</p>
+<p><img src="../schedular.png" alt="schedular.png" style="border: none;" width="199" height="301" border="0" /></p>
+<p>&#160;</p>
+<p>You can set preferences for what type of locations should be included 
+ in the suggested times. Click <span style="font-weight: bold;"><b>Suggest 
+ Times</b></span> in the Overview pane heading to open the <span style="font-weight: bold;"><b>Suggestion 
+ Preferences</b></span> dialog. </p>
+<ul type="disc">
+	<li><p><span style="font-weight: bold;"><b>Name</b></span>,<span style="font-weight: bold;"><b> 
+	 Minimum Capacity</b></span>,<span style="font-weight: bold;"><b> Description</b></span>,<span 
+	 style="font-weight: bold;"><b> Site</b></span>,<span style="font-weight: bold;"><b> 
+	 Building, Floor</b></span>. &#160;You can be specific about the <a href="Scheduling_Resources.htm">room 
+	 resource</a> you want to reserve, specifying a name, capacity, and 
+	 specific location. <span style="font-weight: bold;"><b>Note</b></span>: &#160;This 
+	 information must have been configured for the room in order to be 
+	 searched.</p></li>
+	<li><p><span style="font-weight: bold;"><b>Include</b></span>. You specify 
+	 what hours should be included in the search for attendees availability. 
+	 </p></li>
+	<ul type="disc">
+		<li><p><span style="font-weight: bold;"><b>My Working Hour Only</b></span>. 
+		 Search only for times that meet your configured working hours. 
+		 This is the work week and hours you set in your Calendar preferences.</p></li>
+		<li><p><span style="font-weight: bold;"><b>All Attendee Working Hours.</b></span> 
+		 When searching for a location it takes in consideration everyone's 
+		 working hours. <span style="font-weight: bold;"><b>Note</b></span>: &#160;If 
+		 you include attendees from different time zones, especially those 
+		 that are many time zones away, you will never be able to find 
+		 a location that all attendees get to. &#160;In this case, the 
+		 suggestion panel does not show any location resources.</p></li>
+		<li><p><span style="font-weight: bold;"><b>Non-Working Hours</b></span>. 
+		 This search schedules for hours that are not marked as working, 
+		 such as evenings and weekends.</p></li>
+	</ul>
+</ul>
+<p>&#160;</p>
+<p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

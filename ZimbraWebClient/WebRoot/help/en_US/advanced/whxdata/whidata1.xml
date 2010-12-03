@@ -1,6 +1,15 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="export iCal calendars" >
+  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
+</key>
+<key name="external accounts" >
+  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
+</key>
+<key name="external accounts, how to add" >
+  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
 <key name="external user" >
   <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
@@ -22,6 +31,9 @@
 </key>
 <key name="filtering messages" >
   <topic name="Filtering your messages" url="filters/filtering_your_messages.htm" />
+</key>
+<key name="find shares" >
+  <topic name="Managing items you share" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="Flagging" >
   <topic name="Flagging an email message" url="Tags_and_flags/Flagging_an_email_message.htm" />
@@ -48,11 +60,17 @@
 <key name="formatting with HTML" >
   <topic name="Using HTML Editor" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
+<key name="forward a calendar invite" >
+  <topic name="Editing meetings on your calendar" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
 <key name="Forwarding" >
   <topic name="Forwarding a mail message" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
 <key name="forwarding a message as an attachment" >
   <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
+<key name="forwarding an appointment" >
+  <topic name="Forwarding an appointment" url="Calendar/Forwarding_an_appointment.htm" />
 </key>
 <key name="forwarding email address" >
   <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -109,18 +127,6 @@
 <key name="identities" >
   <topic name="Mail Identities" url="Userspecific/Mail_Identities.htm" />
   <topic name="Creating Personas" url="Userspecific/Creating_Personas.htm" />
-</key>
-<key name="IM" >
-  <topic name="Instant Messaging Basics" url="instant_messaging/Instant_Messaging_Basics.htm" />
-</key>
-<key name="IM buddies" >
-  <topic name="Accessing Instant Messaging" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
-<key name="IM notification" >
-  <topic name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="IM, using other clients" >
-  <topic name="Log into other IM clients" url="instant_messaging/Log_into_other_IM_clients.htm" />
 </key>
 <key name="images in signatures" >
   <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
@@ -205,9 +211,6 @@
 <key name="mandatory attendance" >
   <topic name="Using the Schedule tab when creating a appointment" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
-<key name="mark appointment as private" >
-  <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="mark task complete" >
   <topic name="Change a task" url="Tasks/Change_a_task.htm" />
 </key>
@@ -219,7 +222,6 @@
 </key>
 <key name="meetings" >
   <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="meetings, permission denied" >
   <topic name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
@@ -273,9 +275,6 @@
 <key name="new messages" >
   <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
-<key name="notebook pages" >
-  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
-</key>
 <key name="opening files in briefcase" >
   <topic name="Working with files in Briefcase" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
@@ -300,7 +299,7 @@
 <key name="overview pane" >
   <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
-<key name="pages, Documents" >
+<key name="pages, creating in Briefcase" >
   <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="password" >

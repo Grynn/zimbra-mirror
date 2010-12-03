@@ -3,10 +3,9 @@
 <tocdata>
 <book name="Getting Started" >
   <item name="Welcome to the @ClientNameLong@, Advanced Edition" url="Getting_Started/about_liquid_mail.htm" />
-  <item name="New @ClientNameShort@ Features in 7.0" url="New_in_6.0.htm" />
   <item name="Logging in and out" url="Userspecific/logging_on_and_off.htm" />
   <item name="Changing my default client type for log in" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
-  <item name="Keyboard Shortcut keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+  <item name="Keyboard shortcut keys" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
   <item name="@CompanyName@ Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="Changing your password" url="Userspecific/chaning_your_password.htm" />
   <item name="Forget your password?" url="Userspecific/if_you_forget_your_password.htm" />
@@ -20,28 +19,30 @@
   <item name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Applying actions to multiple selections" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
   <item name="Using browsers" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-  <item name="Saving your work" url="Userspecific/browser_session_handling.htm" />
+  <item name="Saving my work" url="Userspecific/browser_session_handling.htm" />
   <item name="Viewing the Overview pane" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="Mail system folders" url="Navigation_folders_and_tips/inbox_folder.htm" />
+  <item name="Empty your Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
+  <item name="Undo Action" url="Userspecific/Undo_Action.htm" />
 </book>
 <book name="Managing Your Email " >
   <item name="Managing your email message view" url="conversations/conversation_list_view.htm" />
-  <item name="Setting your mail preferences" url="Userspecific/Setting_your_mail_preferences.htm" />
-  <item name="Categorizing your email messages" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-  <item name="Customizing your initial email page" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
+  <item name="Setting mail preferences" url="Userspecific/Setting_your_mail_preferences.htm" />
+  <item name="Categorizing email messages" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="Customizing initial email page" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
   <item name="How conversations work" url="conversations/conversations_can_span_folders.htm" />
   <item name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
   <item name="Moving email messages between folders" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <item name="Setting a forwarding address" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-  <item name="Managing different identities within your account" url="Userspecific/Mail_Identities.htm" />
+  <item name="Managing your account identities" url="Userspecific/Mail_Identities.htm" />
   <item name="Managing your Spam Folder" url="filters/Managing_your_Junk_Folder.htm" />
-  <item name="Recovering deleted mail messages" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Recovering deleted items" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Purging email messages" url="reading_mail/archiving_old_messages.htm" />
   <book name="Reading Messages" >
     <item name="Reading mail" url="reading_mail/reading_mail.htm" />
-    <item name="Reading mail from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-    <item name="Setting up desktop alerts" url="Userspecific/Setting_up_desktop_alerts.htm" />
+    <item name="Viewing messages from the Reading Pane" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+    <item name="Setting up desktop alerts and reminders" url="Userspecific/Setting_up_desktop_alerts.htm" />
     <item name="Marking mail as unread" url="reading_mail/marking_mail_as_unread.htm" />
     <item name="Notification about new messages" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
     <item name="Displaying HTML in email messages" url="reading_mail/displaying_html_in_email_messages.htm" />
@@ -55,17 +56,17 @@
   </book>
 </book>
 <book name="Composing Email" >
-  <item name="Composing a new mail message" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <item name="About composing email messages" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   <item name="Composing a new mail message" url="Creating_Messages/Composing_a_new_mail_message.htm" />
   <item name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="Parts of an email message" url="Creating_Messages/parts_of_an_email_message.htm" />
-  <item name="Add your signature automatically" url="Userspecific/using_a_signature.htm" />
+  <item name="Automatically add your signature" url="Userspecific/using_a_signature.htm" />
   <item name="Automatic address completion" url="Creating_Messages/Using_address_lookup.htm" />
-  <item name="Schedule Emails for Future Delivery" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
-  <item name="Requesting a Return Receipt" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+  <item name="Schedule emails for future delivery" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
+  <item name="Requesting a return receipt" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Attaching files to your message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-  <item name="Attachment file types" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="Adding CC: and BCC: addresses" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="Attachment file types supported" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Adding Cc: and Bcc: addresses" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Using HTML editor" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Using spell check" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="Saving messages as drafts" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -79,11 +80,11 @@
   <item name="Types of address books available" url="Contacts/gal_vs_contacts.htm" />
   <item name="Setting your address book preferences" url="Userspecific/Setting_your_address_book_preferences.htm" />
   <item name="Adding new contacts" url="Contacts/creating_a_new_contact.htm" />
-  <item name="Forwarding Contact Information" url="Contacts/Forwarding_Contact_Information.htm" />
+  <item name="Forwarding contact information" url="Contacts/Forwarding_Contact_Information.htm" />
   <item name="Using company address book" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="Adding contacts automatically" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
-  <item name="Creating Group Contact Lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
-  <item name="Importing address books" url="Contacts/Importing_Contacts.htm" />
+  <item name="Creating group contact lists" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="Importing contacts" url="Contacts/Importing_Contacts.htm" />
   <item name="Exporting address books" url="Contacts/Exporting_Address_Books.htm" />
   <item name="Printing contact names or address books" url="Contacts/Printing_Contacts.htm" />
   <item name="Editing contact information" url="Contacts/editing_a_contact.htm" />
@@ -94,9 +95,9 @@
   <item name="Create calendars" url="Calendar/Create_Calendars.htm" />
   <item name="Color coding your calendars" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <item name="Viewing Calendar Week Numbers" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <item name="Viewing Calendar week numbers" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
   <item name="Calendar view options" url="Calendar/Calendar_Views.htm" />
-  <item name="Calendar List View" url="Calendar/Calendar_List_View.htm" />
+  <item name="Calendar list view" url="Calendar/Calendar_List_View.htm" />
   <item name="Viewing multiple calendars" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
   <item name="Deleting calendars" url="Calendar/Deleting_Calendars.htm" />
   <item name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
@@ -107,11 +108,10 @@
 <chunk name="Scheduling Appointments, Meetings and Events" ref="whtdata1.xml" />
 </book>
 <book name="Using Task Lists" >
-  <item name="About Tasks" url="Tasks/About_Tasks.htm" />
+  <item name="Using task lists" url="Tasks/About_Tasks.htm" />
   <item name="Create tasks lists" url="Tasks/Create_tasks_folders.htm" />
   <item name="Add a task" url="Tasks/Add_a_task.htm" />
   <item name="Change a task" url="Tasks/Change_a_task.htm" />
-  <item name="Setting a Reminder in Tasks" url="Tasks/Setting_a_Reminder_in_Tasks.htm" />
   <item name="Moving tasks" url="Tasks/Moving_tasks.htm" />
   <item name="Delete a task" url="Tasks/Delete_a_task.htm" />
   <item name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />
@@ -119,10 +119,11 @@
 <book name="Working in Briefcase" >
   <item name="Working in Briefcase" url="Briefcase/Working_in_Briefcase.htm" />
   <item name="Working with files in Briefcase" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-  <item name="Create a new page" url="Documents/Create_a_new_page.htm" />
+  <item name="Create a new document" url="Documents/Create_a_new_page.htm" />
   <item name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="Adding a table to a  notebook page" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-  <item name="Send Files from your Briefcase" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
+  <item name="Adding a table to a document in Briefcase" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="Version Control of Files in Briefcase" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+  <item name="Send files from your Briefcase" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </book>
 <book name="Sharing Folders" >
 <chunk name="Sharing Folders" ref="whtdata2.xml" />
@@ -147,10 +148,10 @@
 <chunk name="Managing your Mobile Device (Network Edition Only)" ref="whtdata6.xml" />
 </book>
 <book name="Saving Your Account Folders" >
-  <item name="Backing up the content of your account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+<chunk name="Saving Your Account Folders" ref="whtdata7.xml" />
 </book>
 <book name="Using Zimlets" >
-<chunk name="Using Zimlets" ref="whtdata7.xml" />
+<chunk name="Using Zimlets" ref="whtdata8.xml" />
 </book>
 
 </tocdata>

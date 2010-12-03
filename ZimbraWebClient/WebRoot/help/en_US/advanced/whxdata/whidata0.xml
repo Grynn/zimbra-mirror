@@ -16,11 +16,11 @@
 <key name="adding contacts" >
   <topic name="Creating a new contact" url="Contacts/creating_a_new_contact.htm" />
 </key>
-<key name="adding contacts to IM" >
-  <topic name="Accessing Instant Messaging" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
 <key name="adding existing accounts" >
   <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
+<key name="adding tables" >
+  <topic name="Adding a table to a document" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="adding words to my dictionary" >
   <topic name="Using Spell Check" url="Creating_Messages/Using_Spell_Check.htm" />
@@ -55,9 +55,6 @@
 <key name="appointment reminder" >
   <topic name="Setting your user preferences" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
-<key name="appointment, quickadd" >
-  <topic name="Using QuickAdd to Create an Appointment" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
-</key>
 <key name="appointments" >
   <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
@@ -69,9 +66,6 @@
 </key>
 <key name="Atom feed" >
   <topic name="Subscribe to RSS/Atom feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-</key>
-<key name="Attaching" >
-  <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="attaching files from Briefcase" >
   <topic name="Attaching files to a mail message" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -112,15 +106,13 @@
 <key name="browsers" >
   <topic name="Browser use with Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
 </key>
-<key name="buddies in IM" >
-  <topic name="Accessing Instant Messaging" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
 <key name="Calendar preferences" >
   <topic name="Setting your Calendar preferences" url="Userspecific/Setting_your_Calendar_preferences.htm" />
   <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="calendar view" >
   <topic name="About Zimbra Calendar" url="Calendar/About_Calendar.htm" />
+  <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="calendar views" >
   <topic name="Calendar List View" url="Calendar/Calendar_List_View.htm" />
@@ -131,14 +123,26 @@
 <key name="calendar, access permissions" >
   <topic name="Delegating Calendar Access" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
+<key name="calendar, customize work week" >
+  <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="calendar, events" >
   <topic name="Scheduling All Day events" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="calendar, forwarding an appointment" >
+  <topic name="Forwarding an appointment" url="Calendar/Forwarding_an_appointment.htm" />
 </key>
 <key name="calendar, free/busy" >
   <topic name="Seeing free/busy times" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
 <key name="calendar, printing" >
   <topic name="Printing a calendar" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="calendar, reply to" >
+  <topic name="Editing meetings on your calendar" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
+<key name="calendar, replying from" >
+  <topic name="Replying from an appointment on my calendar" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
 </key>
 <key name="Calendar, setting permissions to invite" >
   <topic name="Identifying who can invite you to meetings" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
@@ -161,11 +165,11 @@
 <key name="changing shared task list" >
   <topic name="Share your Task list" url="Tasks/Share_your_Task_folder.htm" />
 </key>
-<key name="chat" >
-  <topic name="Starting an IM chat" url="instant_messaging/Starting_an_IM_chat.htm" />
-</key>
 <key name="check mail" >
   <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="check out" >
+  <topic name="Working with files in Briefcase" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="checking for new messages" >
   <topic name="How to tell when you've got new mail" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -215,6 +219,9 @@
     <topic name="Printing a conversation" url="conversations/printing_a_conversation.htm" />
   </key>
 </key>
+<key name="copy appointments" >
+  <topic name="Creating an appointment from an existing appointment" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+</key>
 <key name="corporate address book" >
   <topic name="Using the corporate address book" url="Contacts/using_the_corporate_address_book.htm" />
 </key>
@@ -227,6 +234,9 @@
     <topic name="Creating a new mail message" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   </key>
 </key>
+<key name="creating new pages" >
+  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
+</key>
 <key name="creating tags" >
   <topic name="Using tags to classify mail messages" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
@@ -235,6 +245,9 @@
 </key>
 <key name="custom folders" >
   <topic name="Creating custom folders" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="customize work week" >
+  <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="customizing your view" >
   <topic name="Customize your view" url="Navigation_folders_and_tips/Customize_your_view.htm" />
@@ -247,6 +260,9 @@
 </key>
 <key name="delete a meeting" >
   <topic name="Deleting_an_appointment" url="Calendar/Deleting_an_appointment.htm" />
+</key>
+<key name="deleted files, recover" >
+  <topic name="Empty Trash " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="Deleting" >
   <topic name="Deleting folders" url="Navigation_folders_and_tips/deleting_folders.htm" />
@@ -268,15 +284,6 @@
 </key>
 <key name="display heading information in reply messages" >
   <topic name="Setting your preferences for the email compose window" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
-</key>
-<key name="Documents, adding tables" >
-  <topic name="Adding a table to a Notebook Page" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="Documents, creating new pages" >
-  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="Documents, rich text editor" >
-  <topic name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="draft message" >
   <topic name="Saving a draft message" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -311,15 +318,6 @@
 </key>
 <key name="export account data" >
   <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="export iCal calendars" >
-  <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="external accounts" >
-  <topic name="Managing your POP Accounts" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="external accounts, how to add" >
-  <topic name="Adding POP accounts" url="Userspecific/Adding_POP_accounts.htm" />
 </key>
 
 </indexdata>
