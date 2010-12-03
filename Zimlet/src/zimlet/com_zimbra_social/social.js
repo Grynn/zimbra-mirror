@@ -1513,6 +1513,9 @@ function(params) {
 		type = "ACCOUNT";
 	}
 	if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
+		if(!this.tableIdAndAccountMap[tableId]) {
+			return;
+		}
 		accountName = this.tableIdAndAccountMap[tableId].name;
 	}
 
