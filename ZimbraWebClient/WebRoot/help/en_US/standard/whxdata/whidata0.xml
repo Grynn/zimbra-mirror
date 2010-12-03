@@ -28,6 +28,12 @@
 <key name="auto-complete addresses" >
   <topic name="Using address lookup" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
+<key name="calendar view" >
+  <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="calendar, customize work week" >
+  <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
+</key>
 <key name="calendar, exclude from free/busy" >
   <topic name="Create New Calendar" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
@@ -42,6 +48,9 @@
 </key>
 <key name="creating a search query" >
   <topic name="Using Search" url="Search/b_Using_Search.htm" />
+</key>
+<key name="customize work week" >
+  <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="draft message" >
   <topic name="Saving a draft message" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -100,14 +109,8 @@
 <key name="mail notification" >
   <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
 </key>
-<key name="mark appointment as private" >
-  <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="mark task complete" >
   <topic name="Change a task" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="meetings" >
-  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="messages, setting up filter rules" >
   <topic name="Filtering your messages" url="filters/bc_Filtering_your_messages.htm" />
@@ -127,17 +130,11 @@
 <key name="options, new mail notification" >
   <topic name="New mail notifications" url="Userspecific/New_mail_notifications.htm" />
 </key>
-<key name="planning a meeting" >
-  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="preferences" >
   <topic name="Setting your Options" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
 <key name="print tasks" >
   <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="private appointments" >
-  <topic name="About_the_Appointment_Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="Query language description" >
   <topic name="Query language description" url="Search/query_language_description.htm" />
@@ -165,9 +162,6 @@
 </key>
 <key name="save search" >
   <topic name="Create and Save a Search Query" url="Search/b_Create_and_Save_a_Search_Query.htm" />
-</key>
-<key name="scheduling a meeting" >
-  <topic name="About the Appointment Page" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="search" >
   <topic name="Using Search" url="Search/b_Using_Search.htm" />
@@ -204,6 +198,9 @@
 </key>
 <key name="Vacation message" >
   <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="versions" >
+  <topic name="Version Control of Files in Briefcase" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 <key name="view as HTML" >
   <topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
