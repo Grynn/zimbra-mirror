@@ -222,7 +222,7 @@ function() {
 	this._fbNeedPermCount = 0;
 	this._fbNeedPermissions = "";
 	html[i++] = "<table width=100% border=1 cellspacing=0 cellpadding=3>";
-	html[i++] = "<TR><TH>Select</TH><TH>"
+	html[i++] = "<TR><TH>"+this.zimlet.getMessage("select")+"</TH><TH>"
 		+this.zimlet.getMessage("accountType")+
 		"</TH><TH>"+this.zimlet.getMessage("accountName")+
 		"</TH><TH>"+this.zimlet.getMessage("readPermission")+
