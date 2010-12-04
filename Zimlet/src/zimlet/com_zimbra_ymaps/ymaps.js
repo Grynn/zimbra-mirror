@@ -36,11 +36,18 @@ var YMapsZimlet = com_zimbra_ymaps_HandlerObject;
 YMapsZimlet.URL = "http://api.local.yahoo.com/MapsService/V1/mapImage?appid=ZimbraMail&zoom=4&image_height=245&image_width=345&location=";
 
 /**
- * Y! Maps Main RegEx. It simply matches a string that has a number followed by 4-9 words and Zip/PostalCode.
+ * Matches if the address contains country name at the end(instead of Zip)
+ * Currently we only support EU and US and Canada
+ */
+YMapsZimlet.COUNTRY_NAMES = "(Austria|Belgium|Bulgaria|Croatia|CzechRepublic|Denmark|Finland|France|Germany|Hungary|Ireland|Italy|Netherlands|Norway|Poland|Portugal|Romania|Russia|Spain|Sweden|Switzerland|UK|Canada|USA)";
+
+/**
+ * Y! Maps Main RegEx. It simply matches a string that has a number followed by 2-9 words and Zip/PostalCode.
  * We further process the matched string to ignore strings w/ few common english words to ignore edge cases where simple 
  * English sentance happen to match the above pattern.
+ * Also matches canadian zip codes which is 2, 3-letters alpha-numeric words  for example: "7L7 T2E"
  */
-YMapsZimlet.REGEX = "\\d+,?\\s((\\w?\\.?\\,?\\#?)+\\s){4,9}((\\d{5,7}(-\\d{4,5})?)|([A-Z]{1,2}[0-9][A-Z0-9]? [0-9][ABD-HJLNP-UW-Z]{2}))";
+YMapsZimlet.REGEX = "(\\d-?)+,?\\s((\\w?\\.?\\,?\\#?)+\\s){2,9}((\\d{5,7}(-\\d{4,5})?)|(([a-zA-Z]{1,2}\\d{1,2}[a-zA-Z]{1,2}\\s?)|(\\d{1,2}[a-zA-Z]{1,2}\\d{1,2}\\s?))+|"+YMapsZimlet.COUNTRY_NAMES+")";
 
 
 /**
