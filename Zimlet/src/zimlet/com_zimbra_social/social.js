@@ -502,7 +502,7 @@ function() {
 SocialZimlet.prototype._loadInformation =
 function() {
 	this.twitter.getTwitterTrends();
-	this.tweetmeme.getTweetmemeCategories();
+	this.tweetmeme.loadTweetMemeCategories();
 	this.digg.getDiggCategories();
 };
 
@@ -918,9 +918,9 @@ function(tableId, type, headerName) {
 	} else if (type == "ACCOUNT" || type == "MENTIONS" || type == "DIRECT_MSGS" || type == "SENT_MSGS") {
 		this.twitter.getTwitterFeeds({tableId: tableId, account: this.tableIdAndAccountMap[tableId], type:type});
 	} else if (type == "TWEETMEME") {
-		this.tweetmeme.tweetMemeSearch({query:headerName, tableId:tableId});
+		this.tweetmeme.tweetMemeSearch({headerName:headerName, tableId:tableId});
 	} else if (type == "DIGG") {
-		this.digg.diggSearch({query:headerName, tableId:tableId});
+		this.digg.diggSearch({headerName:headerName, tableId:tableId});
 	} else if (type == "FACEBOOK") {
 		this.facebook._fbGetStream(tableId, this.tableIdAndAccountMap[tableId]);
 	}
@@ -1142,8 +1142,7 @@ function() {
 	if (this.prefFolder == undefined) {
 		this.prefFolders = new Array();
 		this.prefFolders.push({name:this.getMessage("preferences"), icon:"Preferences", account:"", type:"PREFERENCES"});
-		this.prefFolders.push({name:"Help", icon:"Help", account:"", type:"HELP"});
-
+		this.prefFolders.push({name:this.getMessage("help"), icon:"Help", account:"", type:"HELP"});
 	}
 	this.expandIconAndFolderTreeMap[expandIconId] = new Array();
 	html[i++] = this._getTreeHeaderHTML(this.getMessage("settings"), expandIconId);	//header
@@ -1347,10 +1346,10 @@ function(ev) {
 		this.tableIdAndTimerMap[tableId] = timer;
 	} else if (el.id.indexOf("socialTreeItem__TWEETMEME") == 0) {
 		tableId = this._showCard({headerName:label, type:"TWEETMEME", autoScroll:true});
-		this.tweetmeme.tweetMemeSearch({query:label, tableId:tableId});
+		this.tweetmeme.tweetMemeSearch({headerName:label, tableId:tableId});
 	} else if (el.id.indexOf("socialTreeItem__DIGG") == 0) {
 		tableId = this._showCard({headerName:label, type:"DIGG", autoScroll:true});
-		this.digg.diggSearch({query:label, tableId:tableId});
+		this.digg.diggSearch({headerName:label, tableId:tableId});
 	} else if (el.id.indexOf("socialTreeItem__FACEBOOK") == 0) {
 		tableId = this._showCard({headerName:"facebook", type:"FACEBOOK",autoScroll:true});
 		account = this.treeIdAndAccountMap[el.id];
@@ -1669,20 +1668,20 @@ function(params) {
 		tmpTime = Math.round(tmpTime);
 		var timeStr = "";
 		if (tmpTime < 1) {
-			timeStr = tmpTime + " seconds ago";
+			timeStr = tmpTime + " "+this.getMessage("secondsAgo");
 		} else if (tmpTime < 60) {
-			timeStr = tmpTime + " minutes ago";
+			timeStr = tmpTime + " "+this.getMessage("minutesAgo");
 		} else if (tmpTime >= 60) {
 			tmpTime = Math.round(tmpTime / 60);
 			if (tmpTime < 24) {
 				if (tmpTime == 1)
-					timeStr = "about " + tmpTime + " hour ago";
+					timeStr = this.getMessage("about")+" " + tmpTime  + " "+this.getMessage("hourAgo");
 				else
-					timeStr = "about " + tmpTime + " hours ago";
+					timeStr = this.getMessage("about")+" " + tmpTime + " "+this.getMessage("hoursAgo");;
 			} else {
 				var d = new Date(parsedDate);
 				var arry = d.toString().split(" ");
-				timeStr = [ arry[1]," ", arry[2], " at ", d.getHours(),  ":",  d.getMinutes(),  ":",  d.getSeconds()].join("");
+				timeStr = [ arry[1]," ", arry[2], " "+this.getMessage("at")+" ", d.getHours(),  ":",  d.getMinutes(),  ":",  d.getSeconds()].join("");
 			}
 		}
 		created_at = timeStr;
@@ -1743,7 +1742,7 @@ function(params) {
 		} else {
 			html[i++] = "<TD width=90% style='color:gray;font-size:11px'>";
 		}
-		html[i++] = source.indexOf("via") != -1 ? source : "via " + source;
+		html[i++] = source.indexOf("via") != -1 ? source : this.getMessage("via") + " " + source;
 		html[i++] = "</td>";
 		html[i++] = "<td colspan="+columnSpan+" >";
 
@@ -1768,8 +1767,8 @@ function(params) {
 			html[i++] = "<a href='#' title='"+this.getMessage("replyToThisPerson")+"' style='color:gray;font-size:11px' id='" + this._gettwitterReplyLinkId("@" + screen_name) + "'>"+this.getMessage("reply")+"</a>";
 		}
 		if (type == "FACEBOOK") {
-			html[i++] = "<a href='#' title='"+this.getMessage("likeThisPost")+"' style='color:gray;font-size:11px' id='" + this._getFBLikeLinkId(obj.post_id, tableId) + "'>like</a>&nbsp;&nbsp;";
-			html[i++] = "<a href='#' title='"+this.getMessage("commentOnThisPost")+"' style='color:gray;font-size:11px' id='" + this._getFacebookCommentLinkId(obj.post_id, tableId) + "'>comment</a>";
+			html[i++] = "<a href='#' title='"+this.getMessage("likeThisPost")+"' style='color:gray;font-size:11px' id='" + this._getFBLikeLinkId(obj.post_id, tableId) + "'>"+this.getMessage("like")+"</a>&nbsp;&nbsp;";
+			html[i++] = "<a href='#' title='"+this.getMessage("commentOnThisPost")+"' style='color:gray;font-size:11px' id='" + this._getFacebookCommentLinkId(obj.post_id, tableId) + "'>"+this.getMessage("comment")+"</a>";
 		}
 		html[i++] = "</td>";
 		html[i++] = "</TR>";
@@ -2064,9 +2063,9 @@ function(obj, account, tableId) {
 		html[i++] = "<TD>";
 		html[i++] = "<DIV class='social_FBCommentRow'>";
 		if (obj.likes.count == 1) {
-			html[i++] = "<a  href='" + obj.likes.href + "' target='_blank'>1 person</a> likes this";
+			html[i++] = "<a  href='" + obj.likes.href + "' target='_blank'>"+this.getMessage("onePersonLikeThis")+"</a> ";
 		} else {
-			html[i++] = "<a  href='" + obj.likes.href + "' target='_blank'>" + obj.likes.count + " people</a> like this";
+			html[i++] = "<a  href='" + obj.likes.href + "' target='_blank'>" + obj.likes.count + " "+this.getMessage("peopleLikeThis")+"</a>";
 		}
 		html[i++] = "</div>";
 		html[i++] = "</td>";
@@ -2252,8 +2251,15 @@ function(userId, tableId) {
 
 SocialZimlet.prototype._addOlderAndNewerLinkHandlers =
 function(tableId, type, query) {
-	document.getElementById(tableId + "_olderPostsLinkId_top").onclick = AjxCallback.simpleClosure(this._showCardOlderMsgs, this, tableId, type, query);
-	document.getElementById(tableId + "_newerPostsLinkId_top").onclick = AjxCallback.simpleClosure(this._showCardNewerMsgs, this, tableId, type, query);
+	var topOlderLink = document.getElementById(tableId + "_olderPostsLinkId_top");
+	if(topOlderLink) {
+		topOlderLink.onclick = AjxCallback.simpleClosure(this._showCardOlderMsgs, this, tableId, type, query);
+	}
+	var topNewerLink = document.getElementById(tableId + "_newerPostsLinkId_top");
+	if(topNewerLink) {
+		topNewerLink.onclick = AjxCallback.simpleClosure(this._showCardNewerMsgs, this, tableId, type, query);
+	}
+
 	//when there are no msgs, we will just show one set of links(top-set)
 	var bottomOlderLink = document.getElementById(tableId + "_olderPostsLinkId_bottom");
 	if(bottomOlderLink) {

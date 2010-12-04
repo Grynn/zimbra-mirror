@@ -21,16 +21,12 @@ function com_zimbra_socialDigg(zimlet) {
 
 com_zimbra_socialDigg.prototype.getDiggCategories =
 function() {
-
 	this.allDiggCats = new Array();
-	this.allDiggCats.push({query:"Popular in 24hours", name:"Popular in 24hours"});
-	this.allDiggCats.push({query:"technology", name:"technology"});
-	this.allDiggCats.push({query:"science", name:"science"});
-	this.allDiggCats.push({query:"sports", name:"sports"});
-	this.allDiggCats.push({query:"world_business", name:"world_business"});
-	this.allDiggCats.push({query:"entertainment", name:"entertainment"});
-	this.allDiggCats.push({query:"videos", name:"videos"});
-	this.allDiggCats.push({query:"Offbeat", name:"Offbeat"});
+	this.allDiggCats.push({query:"Popular in 24hours", name:this.zimlet.getMessage("popularIn24Hours")});
+	this.allDiggCats.push({query:"technology", name:this.zimlet.getMessage("technology")});
+	this.allDiggCats.push({query:"science", name:this.zimlet.getMessage("science")});
+	this.allDiggCats.push({query:"sports", name:this.zimlet.getMessage("sports")});
+	this.allDiggCats.push({query:"entertainment", name:this.zimlet.getMessage("entertainment")});
 
 	if (this.zimlet.preferences.social_pref_diggPopularIsOn) {
 		for (var i = 0; i < 1; i++) {
@@ -42,9 +38,21 @@ function() {
 	this.zimlet._updateAllWidgetItems({updateDiggTree:true});
 };
 
+com_zimbra_socialDigg.prototype._getQueryFromHeaderName =
+function(headerName) {
+	for(var i =0; i < this.allDiggCats.length; i++) {
+		var cat = this.allDiggCats[i];
+		if(cat.name == headerName) {
+			return cat.query;
+		}
+	}
+	return "Popular in 24hours";
+};
+
 com_zimbra_socialDigg.prototype.diggSearch =
 function(params) {
-	var query = params.query;
+	var headerName = params.headerName;
+	var query = this._getQueryFromHeaderName(headerName);
 	var url = "";
 	var tmp = new Date();
 	var time = ((new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate())).getTime() - 3600 * 24 * 1000) / 1000;

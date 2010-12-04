@@ -19,30 +19,16 @@ function com_zimbra_socialTweetMeme(zimlet) {
 	this.zimlet = zimlet;
 }
 
-com_zimbra_socialTweetMeme.prototype.getTweetmemeCategories =
+com_zimbra_socialTweetMeme.prototype.loadTweetMemeCategories =
 function() {
-	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode("http://api.tweetmeme.com/stories/categories.json");
-	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._tweetMemeCallback), true);
-};
-
-com_zimbra_socialTweetMeme.prototype._tweetMemeCallback =
-function(response) {
-	var jsonObj = this.zimlet._extractJSONResponse(null, this.zimlet.getMessage("tweetMemeError"), response);
-	if(jsonObj.error) {
-		if(appCtxt.getCurrentAppName().indexOf("social") > 0) {//dont show error unless in social tab
-			return;
-		}
-		appCtxt.getAppController().setStatusMsg(this.zimlet.getMessage("tweetMemeError") + jsonObj.error, ZmStatusView.LEVEL_WARNING);
-		return;
-	}
-	var cats = jsonObj.categories;
 	this.allTweetMemeCats = new Array();
-	this.allTweetMemeCats.push({query:"__MOST_POPULAR__", name:"Most Popular"});
-	this.allTweetMemeCats.push({query:"__MOST_RECENT__", name:"Most Recent"});
+	this.allTweetMemeCats.push({query:"__MOST_POPULAR__", name:this.zimlet.getMessage("mostPopular")});
+	this.allTweetMemeCats.push({query:"__MOST_RECENT__", name:this.zimlet.getMessage("mostRecent")});
+	this.allTweetMemeCats.push({query:"Technology", name:this.zimlet.getMessage("technology")});
+	this.allTweetMemeCats.push({query:"Entertainment", name:this.zimlet.getMessage("entertainment")});
+	this.allTweetMemeCats.push({query:"Science", name:this.zimlet.getMessage("science")});
+	this.allTweetMemeCats.push({query:"Sports", name:this.zimlet.getMessage("sports")});
 
-	for (var i = 0; i < cats.length; i++) {
-		this.allTweetMemeCats.push({query:cats[i].name, name:cats[i].display});
-	}
 	if (this.zimlet.preferences.social_pref_tweetmemePopularIsOn) {
 		for (var i = 0; i < 1; i++) {
 			var folder = this.allTweetMemeCats[i];
@@ -53,16 +39,28 @@ function(response) {
 	this.zimlet._updateAllWidgetItems({updateTweetMemeTree:true});
 };
 
+com_zimbra_socialTweetMeme.prototype._getQueryFromHeaderName =
+function(headerName) {
+	for(var i =0; i < this.allTweetMemeCats.length; i++) {
+		var cat = this.allTweetMemeCats[i];
+		if(cat.name == headerName) {
+			return cat.query;
+		}
+	}
+	return "__MOST_POPULAR__";
+};
+
 com_zimbra_socialTweetMeme.prototype.tweetMemeSearch =
 function(params) {
-	var query = params.query;
+	var headerName = params.headerName;
+	var query = this._getQueryFromHeaderName(headerName);
 	var url = "";
 	if (query == "__MOST_POPULAR__")
 		url = "http://api.tweetmeme.com/stories/popular.json?";
 	else if (query == "__MOST_RECENT__")
 		url = "http://api.tweetmeme.com/stories/recent.json";
 	else
-		url = "http://api.tweetmeme.com/stories/popular.json?category=" + AjxStringUtil.urlComponentEncode(params.query);
+		url = "http://api.tweetmeme.com/stories/popular.json?category=" + AjxStringUtil.urlComponentEncode(query);
 
 	var entireurl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(url);
 	AjxRpc.invoke(null, entireurl, null, new AjxCallback(this, this._tweetMemeSearchCallback, params), true);
