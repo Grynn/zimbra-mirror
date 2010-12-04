@@ -771,6 +771,8 @@ public class ZimbraAccount {
         	Element[] nodes = selectNodes(context, xpath);
         	if (nodes == null)
         		return (null);
+        	if (nodes.length == 0)
+        		return (null);
         	return (nodes[0]);        		
         }
         
