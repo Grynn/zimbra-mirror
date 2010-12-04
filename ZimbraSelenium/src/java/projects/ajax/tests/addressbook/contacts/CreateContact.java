@@ -42,14 +42,12 @@ public class CreateContact extends AjaxCommonTest  {
 	public static ContactItem createBasicContact(AppAjaxClient app)throws HarnessException {
 		// Create a contact Item
 		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
-
 			
-		app.zPageAddressbook.zClick(PageAddressbook.NewDropDown.NEW);
-		
-		//TODO new FormContactNew(app.zPageAddressBook)
-		FormContactNew formContactNew = new FormContactNew(app);
+		FormContactNew formContactNew = (FormContactNew)app.zPageAddressbook.zToolbarPressButton(Button.B_NEW);
+				
 			
-		//TODO: verify formcontactnew page is displayed
+		//verify form contact new page is displayed
+		ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent("xpath=//div[@id='editcontactform']"),"new contact form not displayed");
 		
         // Fill in the form
 	    formContactNew.fill(contactItem);
@@ -58,15 +56,19 @@ public class CreateContact extends AjaxCommonTest  {
         formContactNew.save();
 		
         SleepUtil.sleepMedium();
-        String firstName =  contactItem.firstName;
-        String lastName  =  contactItem.lastName;
-        
-    	// Verify Addressbook page displayed
-
-        // Verify the first/last name exists		        
-		ZAssert.assertTrue(PageAddressbook.LeftPanel.isContained(firstName,lastName), "First/Last name not existed on the left panel");
-		ZAssert.assertTrue(PageAddressbook.RightPanel.isContained(firstName,lastName), "First/Last name not existed on the right panel");
+		  
+        //verify contact "file as" is displayed
+		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
+		boolean isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(contactItem.fileAs)) {
+	            isFileAsEqual = true;	
+				break;
+			}
+		}
 		
+        ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") existed ");
+
 		return contactItem;
 	}
 }
