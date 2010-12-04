@@ -1,109 +1,23 @@
 package  projects.ajax.ui.Addressbook;
 
 import projects.ajax.ui.*;
+import projects.ajax.ui.PageMail.PageMailView;
 import projects.ajax.ui.PageMain.Locators;
 import framework.core.ClientSessionFactory;
 import framework.ui.*;
-import framework.ui.Action;
-import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.items.*;
 import framework.items.FolderItem.FolderView;
 
+import java.awt.event.KeyEvent;
+import java.util.*;
+
 public class PageAddressbook extends AbsAjaxPage{
 
-	public static class AddressbookFolder extends FolderItem {
-	    public static final StringItem CONTACTS=new StringItem("Contacts",0);
-	    public static final StringItem EMAILED_CONTACTS=new StringItem("Emailed Contacts",1);
-	    public static final StringItem TRASH=new StringItem("Trash",2);
-		  
-		public AddressbookFolder() {
-			view = FolderView.Contact;	
-		}
-	
-		public static void click(StringItem item) {
-			ClientSessionFactory.session().selenium().click("div[@id='DwtTreeItemLevel1ChildDiv']/div[" + item.getOrder() + "]");
-		}
-		
-	}
-	
-	public static class NewDropDown extends AbsSeleniumObject{
-		public static final String NEW="xpath=//div[@id='zb__CNS__NEW_MENU']";
-	    //TODO other fixed items
-		//create an appointment
-		public static void clickNew() {
-			ClientSessionFactory.session().selenium().click(NEW);
-		}
-		
-		public static void mouseOverNew() {
-			ClientSessionFactory.session().selenium().mouseOver(NEW);
-		}
-	}
 	
 	
-	public static class Toolbar extends AbsSeleniumObject{
-		public static final String EDIT="id=zb__CNS__EDIT";
-		public static final String DELETE="id=zb__CNS__DELETE";
-		public static final String MOVE="id=zb__CNS__MOVE";		
-		public static final String PRINT="id=zb__CNS__PRINT";
-		//TODO print selected contact
-		//TODO print addressbook
-		public static final String TAG="id=zb__CNS__TAG_MENU";
-		public static final String FORWARD="id=zb__CNS__SEND_CONTACTS_IN_EMAIL";
-		
-		public static final String NEWTAG="id=zb__CNS__TAG_MENU|MENU|NEWTAG";
-		public static final String REMOVETAG="id=zb__CNS__TAG_MENU|MENU|REMOVETAG";
-	
-	}
-	
-	
-	public static class IndexBar extends AbsSeleniumObject{
-		//ABC 
-		
-	}
-	 
-	public static class LeftPanel extends AbsSeleniumObject{
-		public static final String DIV="xpath=//div[@id='zv__CNS']";
-		public static final String NO_RESULTS_FOUND="No results found.";
-		
-		public static boolean isEmpty() {
-			 //System.out.println(">>>>> getText >>>>>>" + ClientSessionFactory.session().selenium().getText(DIV));
-			 return ClientSessionFactory.session().selenium().getText(DIV).equals(NO_RESULTS_FOUND);
-		}
-			
-		public static boolean isContained(String first, String last) {
-			boolean result=false;
-	        
-			//TODO lastname
-			//System.out.println(">>>>> getText >>>>>>" + ClientSessionFactory.session().selenium().getText(DIV + "/div[1]"));
-			result= (ClientSessionFactory.session().selenium().getText(DIV + "/div[" + "1]").contains(first)); 
-			
-			return result;
-		}
-	}
-	
-	public static class RightPanel extends AbsSeleniumObject{
-		public static final String DIV="xpath=//div[@class='ZmContactInfoView']";
-		
-		public static boolean isEmpty() {
-			//System.out.println(">>>>> getText >>>>>>" + ClientSessionFactory.session().selenium().getText(DIV));
-		    return (ClientSessionFactory.session().selenium().getText(DIV).trim().length() == 0);
-		}
-
-		public static boolean isContained(String first, String last) {
-			boolean result=false;
-			//System.out.println(">>>>> getText >>>>>>" + ClientSessionFactory.session().selenium().getText(DIV + "/div[2]/table/tbody"));
-
-			//TODO lastname
-			result= (ClientSessionFactory.session().selenium().getText(DIV + "/div[2]/table/tbody").contains(first)); 
-
-			return result;
-		}
-
-		
-	}
-	
+	 	
 	public PageAddressbook(AbsApplication application) {
 		super(application);		
 		logger.info("new " + PageAddressbook.class.getCanonicalName());
@@ -120,19 +34,17 @@ public class PageAddressbook extends AbsAjaxPage{
 	 if ( !this.MyApplication.zPageMain.isActive() ) {
 			this.MyApplication.zPageMain.navigateTo();
 		}
+    
+		//make sure Addressbook  tab is selected		
+	    String attrs = sGetAttribute("xpath=(//div[@id='zb__App__Contacts'])@class");		
 		
-		// If the "folders" tree is visible, then mail is active
+		boolean active=attrs.contains("ZSelected");
+		
+	    //make sure Addressbook folder is displayed
 		String locator = "xpath=//div[@id='ztih__main_Contacts__ADDRBOOK_div']";
 		
-		boolean loaded = this.sIsElementPresent(locator);
-		if ( !loaded )
-			return (loaded);
-	
-		//TODO?????
-		//boolean active = this.zIsVisiblePerPosition(locator, 4, 74);
-	   
-		boolean active=	ClientSessionFactory.session().selenium().isElementPresent(PageAddressbook.LeftPanel.DIV);
-		
+		active &= this.sIsElementPresent(locator);
+			
 		return (active);
 
 	}
@@ -177,6 +89,32 @@ public class PageAddressbook extends AbsAjaxPage{
 		//SleepUtil.sleepMedium();
 		
 	}
+	public List<ContactItem> zListGetContacts() throws HarnessException {
+		
+		List <ContactItem> list= new ArrayList<ContactItem>();
+		
+		//ensure it is in Addressbook main page
+	    navigateTo();
+	    if ( !this.sIsElementPresent("//div[@id='zv__CNS']") )
+	    	//maybe return empty list?????
+			throw new HarnessException("Contact List is not present "+ "//div[@id='zv__CNS']");
+		
+	    //Get the number of contacts (String) 
+	    int count = this.sGetXpathCount("//div[@id='zv__CNS']//div[contains(@id, 'zli__CNS__')]");
+		logger.debug(myPageName() + " zListGetContacts: number of contacts: "+ count);
+
+		// Get each contact's data from the table list
+		for (int i = 1; i <= count; i++) {
+         	String contactDisplayedLocator = "//div[@id='zv__CNS']/div["+ i +"]/table/tbody/tr/td[3]";
+						
+			ContactItem ci=new ContactItem(ClientSessionFactory.session().selenium().getText(contactDisplayedLocator));		    			
+			list.add(ci);	    	      
+		}
+       
+		    
+		return list;		
+	}
+	
 	@Override
 	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
@@ -190,9 +128,53 @@ public class PageAddressbook extends AbsAjaxPage{
 		String locator = null;			// If set, this will be clicked
 		AbsSeleniumObject page = null;	// If set, this page will be returned
 		
-		locator=button.toString();
-		zClick(locator);
-	    return page;
+	   if ( button == Button.B_NEW ) {			
+			// For "NEW" without a specified pulldown option, just return the default item
+			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
+			//			
+			this.zPressKeyboardShortcut(KeyEvent.VK_N);
+			
+			// Not default behavior (zPressKeyboardShortcut vs. zClick).
+			// Do not fall through.
+			return (new FormContactNew(this.MyApplication));			
+	   } else if ( button == Button.B_DELETE ) {
+
+		String id = "zb__CNS__DELETE_left_icon";
+		
+		// Check if the button is enabled
+		String attrs = sGetAttribute("xpath=(//td[@id='"+ id +"']/div)@class");
+		if ( attrs.contains("ZDisabledImage") ) {
+			throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+		}
+
+		locator = "id="+ id;
+	   
+	   } else if ( button == Button.B_EDIT ) {
+
+		String id = "zb__CNS__EDIT_left_icon";
+		
+		// Check if the button is enabled
+		String attrs = sGetAttribute("xpath=(//td[@id='"+ id +"']/div)@class");
+		if ( attrs.contains("ZDisabledImage") ) {
+			throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+		}
+
+		locator = "id="+ id;
+		page = new FormContactNew(MyApplication);
+	   }
+	   
+	   
+        // Default behavior, process the locator by clicking on it
+		//
+	   
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+		
+		// Click it
+		this.zClick(locator);
+
+		return (page);
 	}
 	
 	@Override
@@ -221,7 +203,33 @@ public class PageAddressbook extends AbsAjaxPage{
 	
 	@Override
 	public AbsSeleniumObject zListItem(Action action, String subject) throws HarnessException {
-		throw new HarnessException("implement me!");
+		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
+		
+		AbsSeleniumObject page = null;
+		
+		if ( action == Action.A_LEFTCLICK ) {
+			 //Get the number of contacts (String) 
+		    int count = this.sGetXpathCount("xpath=//div[@id='zv__CNS']//div[contains(@id, 'zli__CNS__')]");
+			logger.debug(myPageName() + " zListItem: number of contacts: "+ count);
+
+			// Get each contact's data from the table list
+			for (int i = 1; i <= count; i++) {
+	         	String contactDisplayedLocator = "//xpath=div[@id='zv__CNS']/div["+ i +"]/table/tbody/tr/td[3]";
+							
+	         	if (!subject.equals(ClientSessionFactory.session().selenium().getText(contactDisplayedLocator))) {;		    			
+				   continue;
+	         	} 
+	         	
+	         	//click
+	         	this.zClick(contactDisplayedLocator);	        	
+			}
+	       				
+		}
+		else {
+			throw new HarnessException("implement me!");
+		}
+		return (new DisplayContact(MyApplication));
+		
 	}
 
 

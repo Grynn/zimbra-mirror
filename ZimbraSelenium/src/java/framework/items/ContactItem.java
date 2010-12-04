@@ -15,7 +15,8 @@ import framework.util.ZimbraSeleniumProperties;
  *
  */
 public class ContactItem extends ZimbraItem implements IItem {
-
+    
+	public String fileAs = null;	
 	public String type = null;
 	public String firstName = null;
 	public String middleName = null;
@@ -26,6 +27,11 @@ public class ContactItem extends ZimbraItem implements IItem {
 	public FolderItem AddressBook = null;
 	
 	public ContactItem() {
+	}
+
+	
+	public ContactItem(String fileAs) {
+		this.fileAs=fileAs;
 	}
 
 	public String getAttribute(String key, String defaultValue) {
@@ -105,6 +111,9 @@ public class ContactItem extends ZimbraItem implements IItem {
 			c.firstName = "first" + ZimbraSeleniumProperties.getUniqueString();
 			c.middleName = "middle" + ZimbraSeleniumProperties.getUniqueString();
 			c.lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
+		    
+			//default value for file as is last, first
+			c.fileAs = c.lastName + "," + c.firstName;
 			return (c);
 		}
 		
