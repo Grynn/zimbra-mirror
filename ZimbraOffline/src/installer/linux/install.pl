@@ -127,8 +127,9 @@ sub dialog_app_root() {
 }
 
 sub dialog_user_install() {
-    print get_message('UserInstall', [$ENV{USER}]), "\n";
-    return lc(get_input(get_message('YesNo'), 'Y'));
+    my $user = $ENV{USER};
+    print get_message('UserInstall', [$user]), "\n";
+    return lc(get_input(get_message('YesNo'), $user eq 'root' ? 'N' : 'Y'));
 }
 
 # main
