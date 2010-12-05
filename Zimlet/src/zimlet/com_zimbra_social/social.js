@@ -2647,7 +2647,7 @@ function() {
 	}
 	for (var id in this.twitter.allSearches) {
 		var item = this.twitter.allSearches[id];
-		if (item.__pos && (item.__pos != "" || item.__pos != "undefined")) {
+		if (item.axn == "on" || item.__pos && (item.__pos != "" || item.__pos != "undefined")) {
 			simpleArry.push(item);
 		}
 	}
