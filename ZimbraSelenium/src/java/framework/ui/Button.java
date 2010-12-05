@@ -88,7 +88,8 @@ public class Button {
 	public static final Button O_SEARCHTYPE_FILES = new Button("O_SEARCHTYPE_FILES");
 	public static final Button O_SEARCHTYPE_INCLUDESHARED = new Button("O_SEARCHTYPE_INCLUDESHARED");
 
-		
+    //Addressbook button
+	public static final Button B_EDIT = new Button("zb__CNS__EDIT");
 	private final String ID;
 	
 	protected Button(String id) {
