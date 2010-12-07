@@ -1,9 +1,20 @@
 package framework.util;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.RandomAccessFile;
+import java.io.Writer;
 import java.nio.channels.FileChannel;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -11,6 +22,7 @@ import org.apache.log4j.LogManager;
 import org.testng.ITestContext;
 import org.testng.ITestResult;
 import org.testng.TestListenerAdapter;
+
 import framework.core.ClientSessionFactory;
 
 public class TestStatusReporter extends TestListenerAdapter {  
@@ -42,12 +54,9 @@ public class TestStatusReporter extends TestListenerAdapter {
 
 	private Date startDate = new Date();
 
-	private String appType = "";
 	private PrintWriter classInProgressPrintWriter=null;
 	private ArrayList<String> categoryArrayList = new ArrayList<String>();
 
-		 classInProgressPrintWriter= new PrintWriter(new File(path+ "\\" + inProgressDir + "\\class.html"));
-         
 
 	private static class GetFromFile{
 
@@ -205,27 +214,27 @@ public class TestStatusReporter extends TestListenerAdapter {
 
 
 				//TODO read until see the first {
-				while (line.indexOf("{") == -1){	    		   
-					line = getLineAt(lineNumber++);
-					result.append(line);
-				}
-
-				// >0 if { > }
-				int numParen=1;
-
-				//read until the #{ and #} balance
-				while (numParen != 0) {
-					line = getLineAt(lineNumber++);	    		  	    		  
-					result.append(line);
-					//don't count comment /*
-					if (line.indexOf("/*") != -1) {	    			
-						while (line.indexOf("*/") == -1) {
-							line = getLineAt(lineNumber++);	    		  	    		  
-							result.append(line);	    	    			    				  
-						}
+					while (line.indexOf("{") == -1){	    		   
+						line = getLineAt(lineNumber++);
+						result.append(line);
 					}
-					numParen = countParen(line,numParen);
-				}
+
+					// >0 if { > }
+					int numParen=1;
+
+					//read until the #{ and #} balance
+					while (numParen != 0) {
+						line = getLineAt(lineNumber++);	    		  	    		  
+						result.append(line);
+						//don't count comment /*
+						if (line.indexOf("/*") != -1) {	    			
+							while (line.indexOf("*/") == -1) {
+								line = getLineAt(lineNumber++);	    		  	    		  
+								result.append(line);	    	    			    				  
+							}
+						}
+						numParen = countParen(line,numParen);
+					}
 
 
 
@@ -284,8 +293,8 @@ public class TestStatusReporter extends TestListenerAdapter {
 
 		startDate = new Date();
 
-		appType=atype;
 		output = new PrintWriter(new FileWriter(new File(path+ "/zimbraSelenium-failed.xml")));       
+		classInProgressPrintWriter= new PrintWriter(new File(path+ "\\" + inProgressDir + "\\class.html"));
 
 		this.baos=baos;
 		this.ps = ps;
@@ -426,21 +435,14 @@ public class TestStatusReporter extends TestListenerAdapter {
 
 	@Override
 	public void onStart(ITestContext testContext) {
-		//TODO: save this file into a different directory   
 		printToFile("","start");  
-		try 
-		{
+		classInProgressPrintWriter.println("<html> <head><meta http-equiv='refresh' content='30'>");
+		classInProgressPrintWriter.println("<meta http-Equiv='Cache-Control' Content='no-cache'>");
+		classInProgressPrintWriter.println("<meta http-Equiv='Pragma' Content='no-cache'>");
+		classInProgressPrintWriter.println("<meta http-Equiv='Expires' Content='0'></head><body>");
 
-			classInProgressPrintWriter= new PrintWriter(new File(path+ "\\" + inProgressDir + "\\class.html"));
-			classInProgressPrintWriter.println("<html> <head><meta http-equiv='refresh' content='30'>");
-			classInProgressPrintWriter.println("<meta http-Equiv='Cache-Control' Content='no-cache'>");
-			classInProgressPrintWriter.println("<meta http-Equiv='Pragma' Content='no-cache'>");
-			classInProgressPrintWriter.println("<meta http-Equiv='Expires' Content='0'></head><body>");
-
-			classInProgressPrintWriter.println(new Date().toString() + "\n " + "Running ... " + testContext.getName());
-			classInProgressPrintWriter.flush();
-		}
-		catch (Exception e) { e.printStackTrace();}
+		classInProgressPrintWriter.println(new Date().toString() + "\n " + "Running ... " + testContext.getName());
+		classInProgressPrintWriter.flush();
 	}
 
 
@@ -711,7 +713,6 @@ public class TestStatusReporter extends TestListenerAdapter {
 
 			classInProgressPrintWriter.println( "<br>\t" + tr.getThrowable().getMessage());
 			classInProgressPrintWriter.println( "<br>\t" + getErrorLine(tr.getThrowable(),tr.getName()));
- 
 
 
 			confFailReasonMap.put(fullTestName,tr.getThrowable().getMessage() + "\n\t" + getErrorLine(tr.getThrowable(),tr.getName()));
@@ -733,7 +734,6 @@ public class TestStatusReporter extends TestListenerAdapter {
 		ClientSessionFactory.session().selenium().captureScreenshot(path + "\\" + failDir + "\\"+ fullTestName + ".png");
 
 		classInProgressPrintWriter.println( "<br>\t" + new Date().toString() + " FAILED" );
-		//TODO Add back in
 		classInProgressPrintWriter.println( "<br>\t" + "<a href='../fail/" + fullTestName + ".png' target=newWindow><img src='../fail/" + fullTestName + ".png' width=100 height=100 border=0></a>" 
 				+ "  <a href='../fail/" + fullTestName + ".txt' target=newWindow> details </a>"  );
 
@@ -838,19 +838,4 @@ public class TestStatusReporter extends TestListenerAdapter {
 
 
 
-	private String getRetriedTestsInfo() {
-		String tmpstr = "";
-		String str = "";
-		try {
-			BufferedReader in = new BufferedReader(new FileReader(
-					path+ "\\SkippedTests.txt"));
-
-			while ((tmpstr = in.readLine()) != null) {
-				str = str + "\n" + (tmpstr.split("\\(")[0]);
-			}
-			in.close();
-		} catch (IOException e) {
-		}
-		return str;
-	}
 } 
