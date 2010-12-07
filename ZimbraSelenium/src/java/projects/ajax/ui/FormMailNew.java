@@ -104,6 +104,8 @@ public class FormMailNew extends AbsForm {
 		
 		// Handle the subject
 		if ( mail.dSubject != null ) {
+			if ( !this.sIsElementPresent(Locators.zSubjectField) )
+				throw new HarnessException("Unable to find locator "+ Locators.zSubjectField);
 			this.sType(Locators.zSubjectField, mail.dSubject);
 			SleepUtil.sleepMedium();
 		}
@@ -160,6 +162,8 @@ public class FormMailNew extends AbsForm {
 		
 		if ( to != null ) {
 			// Add the recipient string to the To field
+			if ( !this.sIsElementPresent(Locators.zToField) )
+				throw new HarnessException("Unable to find locator "+ Locators.zSubjectField);
 			this.sType(Locators.zToField, to.toString());
 		}
 		

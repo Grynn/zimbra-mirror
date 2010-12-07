@@ -253,7 +253,8 @@ public class PageMail extends AbsAjaxPage {
 			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
 			//
 			
-			this.zTypeCharacters("n");
+			this.zPressKeyboardShortcut(KeyEvent.VK_N);
+			// this.zTypeCharacters("n");
 
 			// Not default behavior (zPressKeyboardShortcut vs. zClick).
 			// Do not fall through.
