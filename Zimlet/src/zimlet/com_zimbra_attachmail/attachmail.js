@@ -529,6 +529,7 @@ function(ev) {
 		document.getElementById(AttachMailTabView.ELEMENT_ID_SEARCH_FIELD).value = ["in:\"", item.getSearchPath(),"\""].join("");
 		var query = this._getQueryFromFolder(item.id);
 		this.executeQuery(query);
+        this._tabAttachMailView.focus();
 	}
 };
 
