@@ -3,7 +3,6 @@ package projects.ajax.tests.mail.tags;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.DialogTag;
 import framework.items.MailItem;
 import framework.ui.Action;
 import framework.ui.Button;
@@ -11,10 +10,10 @@ import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraSeleniumProperties;
 
-public class TagMessage extends AjaxCommonTest {
+public class UnTagMessage extends AjaxCommonTest {
 
-	public TagMessage() {
-		logger.info("New "+ TagMessage.class.getCanonicalName());
+	public UnTagMessage() {
+		logger.info("New "+ UnTagMessage.class.getCanonicalName());
 		
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
@@ -24,17 +23,25 @@ public class TagMessage extends AjaxCommonTest {
 	}
 
 	
-	@Test(	description = "Tag a message using Toolbar -> Tag -> New Tag",
+	@Test(	description = "Remove a tag from a message using Toolbar -> Tag -> New Tag",
 			groups = { "smoke" })
-	public void TagMessage_01() throws HarnessException {
+	public void UnTagMessage_01() throws HarnessException {
 		
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		String tagname = "tag"+ ZimbraSeleniumProperties.getUniqueString();
 		
+		// Create a tag
+		app.getActiveAccount().soapSend(
+				"<CreateTagRequest xmlns='urn:zimbraMail'>" +
+                	"<tag name='"+ tagname +"' color='1' />" +
+                "</CreateTagRequest>");
+		String tagid = app.getActiveAccount().soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
+	
 
 		// Add a message to the mailbox
 		app.getActiveAccount().soapSend(
 					"<AddMsgRequest xmlns='urn:zimbraMail'>" +
-                		"<m l='"+ app.getActiveAccount().getFolderIdByName("Inbox") +"'>" +
+                		"<m l='"+ app.getActiveAccount().getFolderIdByName("Inbox") +"' t='"+ tagid +"'>" +
                     		"<content>From: foo@foo.com\n" +
 "To: foo@foo.com \n" +
 "Subject: "+ subject +"\n" +
@@ -57,25 +64,18 @@ public class TagMessage extends AjaxCommonTest {
 				
 		// Select the item
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+	
+		// Untag it
+		app.zPageMail.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG);
 		
-		String tagName = "tag"+ ZimbraSeleniumProperties.getUniqueString();
-		
-		// Click new tag
-		DialogTag dialogTag = (DialogTag) app.zPageMail.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_NEWTAG);
-		dialogTag.zSetTagName(tagName);
-		dialogTag.zClickButton(Button.B_OK);
-		
-		app.getActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
-		String tagID = app.getActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tagName +"']", "id");
-
 
 		app.getActiveAccount().soapSend(
 					"<GetMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m id='"+ mail.id +"'/>" +
 					"</GetMsgRequest>");
 		String mailTags = app.getActiveAccount().soapSelectValue("//mail:GetMsggResponse//mail:m", "t");
-		 
-		ZAssert.assertEquals(tagID, mailTags, "Verify the tag appears on the message");
+		
+		ZAssert.assertNull(mailTags, "Verify that the tag is removed from the message");
 		
 
 		

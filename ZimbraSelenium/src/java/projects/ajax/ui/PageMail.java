@@ -253,8 +253,8 @@ public class PageMail extends AbsAjaxPage {
 			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
 			//
 			
-			this.zPressKeyboardShortcut(KeyEvent.VK_N);
-			
+			this.zTypeCharacters("n");
+
 			// Not default behavior (zPressKeyboardShortcut vs. zClick).
 			// Do not fall through.
 			return (new FormMailNew(this.MyApplication));
@@ -459,7 +459,9 @@ public class PageMail extends AbsAjaxPage {
 				pulldownLocator = null;
 				optionLocator = null;
 				page = zToolbarPressButton(pulldown);
-				
+
+				// FALL THROUGH
+
 			} else if ( option == Button.O_NEW_TAG ) {
 				throw new HarnessException("implement me!");
 			} else if ( option == Button.O_NEW_TASK ) {
@@ -493,10 +495,25 @@ public class PageMail extends AbsAjaxPage {
 				// Type "nt" shortcut
 				
 				this.zTypeCharacters("nt");
-				return (new DialogTag(this.MyApplication));
+
+				pulldownLocator = null;	
+				optionLocator = null;
+				page = new DialogTag(this.MyApplication);
+
+				// FALL THROUGH
 				
 			} else if ( option == Button.O_TAG_REMOVETAG ) {
-				throw new HarnessException("implement me!");
+
+				// Type "u" shortcut
+				
+				this.zTypeCharacters("u");
+				
+				pulldownLocator = null;	
+				optionLocator = null;
+				page = null;
+
+				// FALL THROUGH
+
 			} else {
 				throw new HarnessException("no logic defined for pulldown/option "+ pulldown +"/"+ option);
 			}

@@ -191,6 +191,29 @@ public class ZAssert {
         CountPass++; TotalCountPass++;
 	}
 
+	public static void assertNull(Object object, String message) {
+
+		TotalCountTests++;
+		CountTests++;
+		
+		String details = String.format("%s -- (%s == null) [%s]", "assertNull", object, message);
+		logger.info(details);
+		
+        try
+        {
+        	Assert.assertNull(object, details);
+        }
+        catch (AssertionError e)
+        {
+        	logger.error(e.getMessage(), e);
+            throw e;
+        }
+        
+        CountPass++; TotalCountPass++;
+		
+	}
+
+
 	public static void assertNotNull(Object object, String message) {
 
 		TotalCountTests++;
