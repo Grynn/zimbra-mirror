@@ -70,6 +70,7 @@ public class ZimbraAccount {
     public String EmailAddress = null;
     public String Password = null;
     public Map<String, String> preferences = null;
+
     
     
     /*
@@ -304,6 +305,33 @@ public class ZimbraAccount {
 		String value = soapSelectValue("//acct:pref[@name='"+ pref +"']", null);
 		return (value);
 	}
+	
+	/**
+	 * Get a folder ID by folder name
+	 */
+	public String getFolderIdByName(String foldername) throws HarnessException {
+		soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>");
+		Element[] elements = this.soapSelectNodes("//mail:folder[@name='"+ foldername +"']");
+		
+		// Error checking
+		if ( elements == null ) {
+			throw new HarnessException("No folder matched name "+ foldername);
+		}
+		if ( elements.length == 0 ) {
+			throw new HarnessException("Returned folder list for name "+ foldername +" was 0");
+		}
+		if ( elements.length > 1 ) {
+			throw new HarnessException("Too many matches for folder name "+ foldername);
+		}
+		
+		Element eFolder = elements[0];
+		String id = eFolder.getAttribute("id", null);
+
+		logger.debug("GetFolderResponse for name "+ foldername +" was "+ eFolder.prettyPrint());
+		return (id);
+
+	}
+	
 	
 	/**
 	 * Upload a file to the upload servlet

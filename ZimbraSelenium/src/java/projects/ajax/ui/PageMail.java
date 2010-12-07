@@ -14,6 +14,7 @@ import framework.ui.AbsSeleniumObject;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 
 /**
  * @author Matt Rhoades
@@ -488,7 +489,12 @@ public class PageMail extends AbsAjaxPage {
 		} else if ( pulldown == Button.B_TAG ) {
 			
 			if ( option == Button.O_TAG_NEWTAG ) {
-				throw new HarnessException("implement me!");
+
+				// Type "nt" shortcut
+				
+				this.zTypeCharacters("nt");
+				return (new DialogTag(this.MyApplication));
+				
 			} else if ( option == Button.O_TAG_REMOVETAG ) {
 				throw new HarnessException("implement me!");
 			} else {
@@ -501,14 +507,27 @@ public class PageMail extends AbsAjaxPage {
 
 		// Default behavior
 		if ( pulldownLocator != null ) {
-			
-			// TODO: Expand pulldownLocator
-			
-			if ( optionLocator != null ) {
-				// TODO: Click optionLocator
+						
+			// Make sure the locator exists
+			if ( !this.sIsElementPresent(pulldownLocator) ) {
+				throw new HarnessException("Button "+ pulldown +" option "+ option +" pulldownLocator "+ pulldownLocator +" not present!");
 			}
 			
-			throw new HarnessException("implement me!");
+			this.zClick(pulldownLocator);
+			SleepUtil.sleepSmall();
+			
+			if ( optionLocator != null ) {
+
+				// Make sure the locator exists
+				if ( !this.sIsElementPresent(optionLocator) ) {
+					throw new HarnessException("Button "+ pulldown +" option "+ option +" optionLocator "+ optionLocator +" not present!");
+				}
+				
+				this.zClick(pulldownLocator);
+				SleepUtil.sleepSmall();
+
+			}
+			
 		}
 		
 		// Return the specified page, or null if not set

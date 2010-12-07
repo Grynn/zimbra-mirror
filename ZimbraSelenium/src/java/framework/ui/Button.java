@@ -53,10 +53,12 @@ public class Button {
 	public static final Button O_TAG_NEWTAG = new Button("O_TAG_NEWTAG");
 	public static final Button O_TAG_REMOVETAG = new Button("O_TAG_REMOVETAG");
 
+
 	// General dialog buttons
 	public static final Button B_YES = new Button("B_YES");
 	public static final Button B_NO = new Button("B_NO");
 	public static final Button B_CANCEL = new Button("B_CANCEL");
+	public static final Button B_OK = new Button("B_OK");
 
 	// MailPage buttons and pulldown options
 	public static final Button B_GETMAIL = new Button("B_GETMAIL");
