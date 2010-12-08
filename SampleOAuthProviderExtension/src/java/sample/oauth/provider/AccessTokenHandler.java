@@ -129,6 +129,7 @@ public class AccessTokenHandler extends ExtensionHttpHandler {
                 ZimbraServlet.proxyServletRequest(request, response, accountId);
             }
         } catch (Exception e){
+            ZimbraLog.extensions.debug("AccessTokenHandler exception", e);            
             SampleZmOAuthProvider.handleException(e, request, response, true);
         }
     }

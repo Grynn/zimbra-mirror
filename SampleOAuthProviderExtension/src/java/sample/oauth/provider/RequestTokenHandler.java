@@ -106,6 +106,7 @@ public class RequestTokenHandler extends ExtensionHttpHandler {
             out.close();
             
         } catch (Exception e){
+            ZimbraLog.extensions.debug("RequestTokenHandler exception", e);
             SampleZmOAuthProvider.handleException(e, request, response, true);
         }
         

@@ -117,6 +117,7 @@ public class AuthorizationHandler extends ExtensionHttpHandler {
             	returnToConsumer(request, response, accessor);
             }
         } catch (Exception e){
+            ZimbraLog.extensions.debug("AuthorizationHandler exception", e);
             SampleZmOAuthProvider.handleException(e, request, response, true);
         }
     }
