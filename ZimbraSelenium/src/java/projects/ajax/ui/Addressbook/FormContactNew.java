@@ -74,7 +74,7 @@ public class FormContactNew extends AbsForm {
 	}
 
 	@Override
-	public void submit() throws HarnessException {
+	public void zSubmit() throws HarnessException {
 		logger.info("FormContactNew.submit()");
 		save();
 	}
@@ -97,7 +97,7 @@ public class FormContactNew extends AbsForm {
 	}
 
 	@Override
-	public void fill(ZimbraItem item) throws HarnessException {
+	public void zFill(ZimbraItem item) throws HarnessException {
 		logger.info("FormMailNew.fill(ZimbraItem)");
 		logger.info(item.prettyPrint());
 

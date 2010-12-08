@@ -13,7 +13,7 @@ import framework.util.HarnessException;
  * Form objects are usually returned after clicking NEW from the toolbar.
  * <p>
  * As a shortcut, form objects take a {@link ZimbraItem} object in the 
- * {@link AbsForm#fill(ZimbraItem)} and attempts to fill in the form
+ * {@link AbsForm#zFill(ZimbraItem)} and attempts to fill in the form
  * automatically based on the item's previously set properties.
  * <p>
  * 
@@ -41,23 +41,23 @@ public abstract class AbsForm extends AbsSeleniumObject {
 	 * Fill out the form (but don't submit)
 	 * @throws HarnessException on error
 	 */
-	public abstract void fill(ZimbraItem item) throws HarnessException;
+	public abstract void zFill(ZimbraItem item) throws HarnessException;
 	
 	
 	/**
 	 * Click on "submit" button
 	 * @throws HarnessException on error
 	 */
-	public abstract void submit() throws HarnessException;
+	public abstract void zSubmit() throws HarnessException;
 	
 	
 	/**
 	 * Fill and submit the form
 	 * @throws HarnessException on error
 	 */
-	public void complete(ZimbraItem item) throws HarnessException {
-		fill(item);
-		submit();
+	public void zComplete(ZimbraItem item) throws HarnessException {
+		zFill(item);
+		zSubmit();
 	}
 	
 	

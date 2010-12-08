@@ -51,11 +51,11 @@ public class PageBriefcase extends AbsAjaxPage {
 	 * @see projects.admin.ui.AbsPage#isActive()
 	 */
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-		if (!this.MyApplication.zPageMain.isActive()) {
-			this.MyApplication.zPageMain.navigateTo();
+		if (!this.MyApplication.zPageMain.zIsActive()) {
+			this.MyApplication.zPageMain.zNavigateTo();
 		}
 
 		// If the "folders" tree is visible, then Briefcase tab is active
@@ -84,16 +84,16 @@ public class PageBriefcase extends AbsAjaxPage {
 	 * @see projects.admin.ui.AbsPage#navigateTo()
 	 */
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 
 		// Check if this page is already active.
-		if (isActive()) {
+		if (zIsActive()) {
 			return;
 		}
 
 		// Make sure we are logged into the Ajax app
-		if (!MyApplication.zPageMain.isActive()) {
-			MyApplication.zPageMain.navigateTo();
+		if (!MyApplication.zPageMain.zIsActive()) {
+			MyApplication.zPageMain.zNavigateTo();
 		}
 
 		// make sure mail page is loaded
@@ -110,7 +110,7 @@ public class PageBriefcase extends AbsAjaxPage {
 				&& this.sIsVisible(PageMain.Locators.zAppbarBriefcase))
 			zClick(PageMain.Locators.zAppbarBriefcase);
 
-		waitForActive();
+		zWaitForActive();
 
 	}
 

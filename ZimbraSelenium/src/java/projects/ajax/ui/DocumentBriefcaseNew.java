@@ -42,7 +42,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 	}
 		
 	@Override
-	public void fill(ZimbraItem item) throws HarnessException {
+	public void zFill(ZimbraItem item) throws HarnessException {
 		logger.info("DocumentBriefcaseNew.fill(ZimbraItem)");
 		logger.info(item.prettyPrint());
 
@@ -61,7 +61,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	
 	@Override
-	public void submit() throws HarnessException {
+	public void zSubmit() throws HarnessException {
 		logger.info("PageBriefcaseNew.SaveAndClose()");
 		
 		// Look for "Save & Close"

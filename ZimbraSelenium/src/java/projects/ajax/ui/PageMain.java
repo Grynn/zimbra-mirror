@@ -42,10 +42,10 @@ public class PageMain extends AbsAjaxPage {
 	 * @see projects.admin.ui.AbsPage#isActive()
 	 */
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the Mobile Client is loaded in the browser
-		if ( !MyApplication.isLoaded() )
+		if ( !MyApplication.zIsLoaded() )
 			throw new HarnessException("Admin Console application is not active!");
 		
 
@@ -73,10 +73,10 @@ public class PageMain extends AbsAjaxPage {
 	 * @see projects.admin.ui.AbsPage#navigateTo()
 	 */
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 
 
-		if ( isActive() ) {
+		if ( zIsActive() ) {
 			// This page is already active
 			return;
 		}
@@ -84,12 +84,12 @@ public class PageMain extends AbsAjaxPage {
 		
 		// 1. Logout
 		// 2. Login as the default account
-		if ( !MyApplication.zPageLogin.isActive() ) {
-			MyApplication.zPageLogin.navigateTo();
+		if ( !MyApplication.zPageLogin.zIsActive() ) {
+			MyApplication.zPageLogin.zNavigateTo();
 		}
 		MyApplication.zPageLogin.login();
 
-		waitForActive();
+		zWaitForActive();
 		
 	}
 
@@ -100,7 +100,7 @@ public class PageMain extends AbsAjaxPage {
 	public void logout() throws HarnessException {
 		logger.debug("logout()");
 		
-		navigateTo();
+		zNavigateTo();
 
 		if ( !sIsElementPresent(Locators.zLogoffButton) ) {
 			throw new HarnessException("The logoff button is not present " + Locators.zLogoffButton);
@@ -109,9 +109,9 @@ public class PageMain extends AbsAjaxPage {
 		// Click on logout
 		sClick(Locators.zLogoffButton);
 				
-		MyApplication.zPageLogin.waitForActive();
+		MyApplication.zPageLogin.zWaitForActive();
 		
-		MyApplication.setActiveAcount(null);
+		MyApplication.zSetActiveAcount(null);
 
 	}
 

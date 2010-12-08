@@ -31,17 +31,17 @@ public class UnTagMessage extends AjaxCommonTest {
 		String tagname = "tag"+ ZimbraSeleniumProperties.getUniqueString();
 		
 		// Create a tag
-		app.getActiveAccount().soapSend(
+		app.zGetActiveAccount().soapSend(
 				"<CreateTagRequest xmlns='urn:zimbraMail'>" +
                 	"<tag name='"+ tagname +"' color='1' />" +
                 "</CreateTagRequest>");
-		String tagid = app.getActiveAccount().soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
+		String tagid = app.zGetActiveAccount().soapSelectValue("//mail:CreateTagResponse/mail:tag", "id");
 	
 
 		// Add a message to the mailbox
-		app.getActiveAccount().soapSend(
+		app.zGetActiveAccount().soapSend(
 					"<AddMsgRequest xmlns='urn:zimbraMail'>" +
-                		"<m l='"+ app.getActiveAccount().getFolderIdByName("Inbox") +"' t='"+ tagid +"'>" +
+                		"<m l='"+ app.zGetActiveAccount().getFolderIdByName("Inbox") +"' t='"+ tagid +"'>" +
                     		"<content>From: foo@foo.com\n" +
 "To: foo@foo.com \n" +
 "Subject: "+ subject +"\n" +
@@ -56,7 +56,7 @@ public class UnTagMessage extends AjaxCommonTest {
 		
 		// Get the message data from SOAP
 		MailItem mail = new MailItem();
-		mail.importFromSOAP(app.getActiveAccount(), "subject:("+ subject +")");
+		mail.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 		
 
 		// Click Get Mail button
@@ -69,11 +69,11 @@ public class UnTagMessage extends AjaxCommonTest {
 		app.zPageMail.zToolbarPressPulldown(Button.B_TAG, Button.O_TAG_REMOVETAG);
 		
 
-		app.getActiveAccount().soapSend(
+		app.zGetActiveAccount().soapSend(
 					"<GetMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m id='"+ mail.id +"'/>" +
 					"</GetMsgRequest>");
-		String mailTags = app.getActiveAccount().soapSelectValue("//mail:GetMsggResponse//mail:m", "t");
+		String mailTags = app.zGetActiveAccount().soapSelectValue("//mail:GetMsggResponse//mail:m", "t");
 		
 		ZAssert.assertNull(mailTags, "Verify that the tag is removed from the message");
 		

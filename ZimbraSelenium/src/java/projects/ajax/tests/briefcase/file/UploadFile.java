@@ -33,7 +33,7 @@ public class UploadFile extends AjaxCommonTest {
 		String fileName = document.getFileName(filePath);
 
 		// Upload file to server through SOAP
-		ZimbraAccount account = app.getActiveAccount();
+		ZimbraAccount account = app.zGetActiveAccount();
 		String attachmentId = account.uploadFile(filePath);
 		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
@@ -54,7 +54,7 @@ public class UploadFile extends AjaxCommonTest {
 
 		// Select Briefcase tab
 		SleepUtil.sleepSmall();
-		app.zPageBriefcase.navigateTo();
+		app.zPageBriefcase.zNavigateTo();
 
 		// ClientSessionFactory.session().selenium().refresh();
 		// refresh briefcase page
@@ -63,7 +63,7 @@ public class UploadFile extends AjaxCommonTest {
 		// Verify file name through SOAP
 		
 		// import from soap
-		app.getActiveAccount().soapSend(
+		app.zGetActiveAccount().soapSend(
 
 				"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
 
@@ -71,7 +71,7 @@ public class UploadFile extends AjaxCommonTest {
 
 				"</SearchRequest>");
 
-		String name = app.getActiveAccount().soapSelectValue("//mail:doc",
+		String name = app.zGetActiveAccount().soapSelectValue("//mail:doc",
 						"name");
 
 		ZAssert.assertEquals(name, fileName, "Verify file name through SOAP");
@@ -86,7 +86,7 @@ public class UploadFile extends AjaxCommonTest {
 		String fileName = document.getFileName(filePath);
 		
 		// Upload file to server through SOAP
-		ZimbraAccount account = app.getActiveAccount();
+		ZimbraAccount account = app.zGetActiveAccount();
 		String attachmentId = account.uploadFile(filePath);
 		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
@@ -102,7 +102,7 @@ public class UploadFile extends AjaxCommonTest {
 
 		// Select Briefcase tab
 		SleepUtil.sleepSmall();
-		app.zPageBriefcase.navigateTo();
+		app.zPageBriefcase.zNavigateTo();
 
 		// ClientSessionFactory.session().selenium().refresh();
 		// refresh briefcase page

@@ -208,7 +208,7 @@ public class AppAdminConsole extends AbsApplication {
 
 
 	@Override
-	public boolean isLoaded() throws HarnessException {
+	public boolean zIsLoaded() throws HarnessException {
 		// TODO: how to determine if the current browser app is the AdminConsole
 		// Maybe check the current URL?
 		return (true);
@@ -219,9 +219,9 @@ public class AppAdminConsole extends AbsApplication {
 		return ("Admin Console");
 	}
 
-	protected ZimbraAccount setActiveAcount(ZimbraAccount account) throws HarnessException {
+	protected ZimbraAccount zSetActiveAcount(ZimbraAccount account) throws HarnessException {
 		// Should we throw an exception if the account is not a ZimbraAdminAccount?
-		return (super.setActiveAcount(account));
+		return (super.zSetActiveAcount(account));
 	}
 
 

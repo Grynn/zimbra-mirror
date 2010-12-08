@@ -51,14 +51,14 @@ public abstract class AbsWizard extends AbsSeleniumObject {
 	/**
 	 * Determine whether this wizard is open or not
 	 */
-	public abstract boolean isOpen() throws HarnessException;
+	public abstract boolean zIsOpen() throws HarnessException;
 	
 	/**
 	 * Fill out this wizard with the specified Item data
 	 * @param item
 	 * @throws HarnessException
 	 */
-	public abstract Item completeWizard(Item item) throws HarnessException;
+	public abstract Item zCompleteWizard(Item item) throws HarnessException;
 	
 	public void clickHelp() throws HarnessException {
 		clickWizardButton(WizardButton.Help);

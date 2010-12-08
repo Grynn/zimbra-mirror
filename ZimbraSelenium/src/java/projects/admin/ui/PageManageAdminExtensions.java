@@ -20,7 +20,7 @@ public class PageManageAdminExtensions extends AbsAdminPage {
 	 * @see projects.admin.ui.AbsAdminPage#isActive()
 	 */
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 
@@ -36,7 +36,7 @@ public class PageManageAdminExtensions extends AbsAdminPage {
 	 * @see projects.admin.ui.AbsAdminPage#navigateTo()
 	 */
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 

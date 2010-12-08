@@ -32,9 +32,9 @@ public class TagMessage extends AjaxCommonTest {
 		
 
 		// Add a message to the mailbox
-		app.getActiveAccount().soapSend(
+		app.zGetActiveAccount().soapSend(
 					"<AddMsgRequest xmlns='urn:zimbraMail'>" +
-                		"<m l='"+ app.getActiveAccount().getFolderIdByName("Inbox") +"'>" +
+                		"<m l='"+ app.zGetActiveAccount().getFolderIdByName("Inbox") +"'>" +
                     		"<content>From: foo@foo.com\n" +
 "To: foo@foo.com \n" +
 "Subject: "+ subject +"\n" +
@@ -49,7 +49,7 @@ public class TagMessage extends AjaxCommonTest {
 		
 		// Get the message data from SOAP
 		MailItem mail = new MailItem();
-		mail.importFromSOAP(app.getActiveAccount(), "subject:("+ subject +")");
+		mail.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 		
 
 		// Click Get Mail button
@@ -65,15 +65,15 @@ public class TagMessage extends AjaxCommonTest {
 		dialogTag.zSetTagName(tagName);
 		dialogTag.zClickButton(Button.B_OK);
 		
-		app.getActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
-		String tagID = app.getActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tagName +"']", "id");
+		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
+		String tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tagName +"']", "id");
 
 
-		app.getActiveAccount().soapSend(
+		app.zGetActiveAccount().soapSend(
 					"<GetMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m id='"+ mail.id +"'/>" +
 					"</GetMsgRequest>");
-		String mailTags = app.getActiveAccount().soapSelectValue("//mail:GetMsggResponse//mail:m", "t");
+		String mailTags = app.zGetActiveAccount().soapSelectValue("//mail:GetMsggResponse//mail:m", "t");
 		 
 		ZAssert.assertEquals(tagID, mailTags, "Verify the tag appears on the message");
 		

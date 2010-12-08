@@ -32,10 +32,10 @@ public class PageMain extends AbsAdminPage {
 	/**
 	 * If the "Logout" button is visible, assume the MainPage is active
 	 */
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 		
 		// Make sure the Admin Console is loaded in the browser
-		if ( !MyApplication.isLoaded() )
+		if ( !MyApplication.zIsLoaded() )
 			throw new HarnessException("Admin Console application is not active!");
 		
 
@@ -59,9 +59,9 @@ public class PageMain extends AbsAdminPage {
 	}
 
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 
-		if ( isActive() ) {
+		if ( zIsActive() ) {
 			// This page is already active
 			return;
 		}
@@ -69,12 +69,12 @@ public class PageMain extends AbsAdminPage {
 		
 		// 1. Logout
 		// 2. Login as the default account
-		if ( !MyApplication.zPageLogin.isActive() ) {
-			MyApplication.zPageLogin.navigateTo();
+		if ( !MyApplication.zPageLogin.zIsActive() ) {
+			MyApplication.zPageLogin.zNavigateTo();
 		}
 		MyApplication.zPageLogin.login();
 
-		waitForActive();
+		zWaitForActive();
 		
 	}
 
@@ -85,7 +85,7 @@ public class PageMain extends AbsAdminPage {
 	public void logout() throws HarnessException {
 		logger.debug("logout()");
 		
-		navigateTo();
+		zNavigateTo();
 
 		if ( !sIsElementPresent(Locators.zSkinContainerLogoff) ) {
 			throw new HarnessException("The logoff button is not present " + Locators.zSkinContainerLogoff);
@@ -103,16 +103,16 @@ public class PageMain extends AbsAdminPage {
 		// This is the default configureation for the AdminConsoleAdmin() account
 		
 		
-		MyApplication.zPageLogin.waitForActive();
+		MyApplication.zPageLogin.zWaitForActive();
 		
-		MyApplication.setActiveAcount(null);
+		MyApplication.zSetActiveAcount(null);
 
 	}
 	
 	public String getContainerUsername() throws HarnessException {
 		logger.debug("getLoggedInAccount()");
 		
-		if ( !isActive() )
+		if ( !zIsActive() )
 			throw new HarnessException("MainPage is not active");
 
 		String username = sGetText(Locators.zSkinContainerUsername);	

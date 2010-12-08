@@ -39,11 +39,11 @@ public class PageContacts extends AbsMobilePage {
 	 * @see projects.admin.ui.AbsPage#isActive()
 	 */
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-		if ( !this.MyApplication.zPageMain.isActive() ) {
-			this.MyApplication.zPageMain.navigateTo();
+		if ( !this.MyApplication.zPageMain.zIsActive() ) {
+			this.MyApplication.zPageMain.zNavigateTo();
 		}
 
 		boolean active = this.sIsElementPresent(Locators.zContactsIsActive);
@@ -63,22 +63,22 @@ public class PageContacts extends AbsMobilePage {
 	 * @see projects.admin.ui.AbsPage#navigateTo()
 	 */
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 
 		// Check if this page is already active.
-		if ( isActive() ) {
+		if ( zIsActive() ) {
 			return;
 		}
 		
 		// Make sure we are logged into the Mobile app
-		if ( !MyApplication.zPageMain.isActive() ) {
-			MyApplication.zPageMain.navigateTo();
+		if ( !MyApplication.zPageMain.zIsActive() ) {
+			MyApplication.zPageMain.zNavigateTo();
 		}
 		
 		// Click on Contact icon
 		sClick(PageMain.Locators.zAppbarContact);
 		
-		waitForActive();
+		zWaitForActive();
 		
 		
 	}
@@ -90,7 +90,7 @@ public class PageContacts extends AbsMobilePage {
 	public AbsForm zToolbarPressButton(Button button) throws HarnessException {
 		logger.debug(myPageName() + " zToolbarPressButton("+ button +")");
 		
-		if ( !isActive() ) {
+		if ( !zIsActive() ) {
 			throw new HarnessException("Contacts page is not active");
 		}
 		

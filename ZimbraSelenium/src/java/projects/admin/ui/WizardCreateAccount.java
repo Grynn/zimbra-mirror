@@ -32,7 +32,7 @@ public class WizardCreateAccount extends AbsWizard {
 	 * @see projects.admin.ui.AbsWizard#completeWizard(projects.admin.clients.Item)
 	 */
 	@Override
-	public Item completeWizard(Item item) throws HarnessException {
+	public Item zCompleteWizard(Item item) throws HarnessException {
 		
 		AccountItem account = (AccountItem)item;
 		
@@ -63,7 +63,7 @@ public class WizardCreateAccount extends AbsWizard {
 	}
 
 	@Override
-	public boolean isOpen() throws HarnessException {
+	public boolean zIsOpen() throws HarnessException {
 		
 		boolean present = sIsElementPresent(zdlg__NEW_ACCT);
 		if ( !present ) {

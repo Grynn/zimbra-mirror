@@ -27,7 +27,7 @@ public class BasicLogin extends AjaxCommonTest {
 		app.zPageLogin.login(ZimbraAccount.AccountZMC());
 		
 		// Verify main page becomes active
-		ZAssert.assertTrue(app.zPageMain.isActive(), "Verify that the account is logged in");
+		ZAssert.assertTrue(app.zPageMain.zIsActive(), "Verify that the account is logged in");
 		
 	}
 

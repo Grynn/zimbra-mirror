@@ -46,11 +46,11 @@ public class PagePreferences extends AbsAjaxPage {
 	 * @see projects.admin.ui.AbsPage#isActive()
 	 */
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-		if ( !this.MyApplication.zPageMain.isActive() ) {
-			this.MyApplication.zPageMain.navigateTo();
+		if ( !this.MyApplication.zPageMain.zIsActive() ) {
+			this.MyApplication.zPageMain.zNavigateTo();
 		}
 		
 		/*
@@ -86,16 +86,16 @@ public class PagePreferences extends AbsAjaxPage {
 	 * @see projects.admin.ui.AbsPage#navigateTo()
 	 */
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 
 		// Check if this page is already active.
-		if ( isActive() ) {
+		if ( zIsActive() ) {
 			return;
 		}
 		
 		// Make sure we are logged into the Mobile app
-		if ( !MyApplication.zPageMain.isActive() ) {
-			MyApplication.zPageMain.navigateTo();
+		if ( !MyApplication.zPageMain.zIsActive() ) {
+			MyApplication.zPageMain.zNavigateTo();
 		}
 		
 		// Click on Preferences icon
@@ -105,7 +105,7 @@ public class PagePreferences extends AbsAjaxPage {
 
 		zClick(PageMain.Locators.zAppbarPreferences);
 		
-		waitForActive();
+		zWaitForActive();
 
 	}
 

@@ -16,10 +16,10 @@ public class PageEditAccount extends AbsAdminPage {
 	}
 
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the Admin Console is loaded in the browser
-		if ( !MyApplication.isLoaded() )
+		if ( !MyApplication.zIsLoaded() )
 			throw new HarnessException("Admin Console application is not active!");
 
 		
@@ -43,7 +43,7 @@ public class PageEditAccount extends AbsAdminPage {
 	}
 
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 

@@ -38,10 +38,10 @@ public class PageLogin extends AbsMobilePage {
 	}
 
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 		
 		// Make sure the application is loaded first
-		if ( !MyApplication.isLoaded() )
+		if ( !MyApplication.zIsLoaded() )
 			throw new HarnessException("Admin Console application is not active!");
 
 
@@ -68,20 +68,20 @@ public class PageLogin extends AbsMobilePage {
 	}
 
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 
-		if ( isActive() ) {
+		if ( zIsActive() ) {
 			// This page is already active.
 			return;
 		}
 		
 		
 		// Logout
-		if ( MyApplication.zPageMain.isActive() ) {
+		if ( MyApplication.zPageMain.zIsActive() ) {
 			MyApplication.zPageMain.logout();
 		}
 		
-		waitForActive();
+		zWaitForActive();
 		
 	}
 
@@ -104,7 +104,7 @@ public class PageLogin extends AbsMobilePage {
 	public void login(ZimbraAccount account) throws HarnessException {
 		logger.debug("login(ZimbraAccount account)" + account.EmailAddress);
 
-		navigateTo();
+		zNavigateTo();
 		
 		// Fill out the form
 		fillLoginFormFields(account);
@@ -113,9 +113,9 @@ public class PageLogin extends AbsMobilePage {
 		sClick(Locators.zBtnLogin);
 
 		// Wait for the app to load
-		MyApplication.zPageMain.waitForActive();
+		MyApplication.zPageMain.zWaitForActive();
 		
-		MyApplication.setActiveAcount(account);
+		MyApplication.zSetActiveAcount(account);
 		
 	}
 	
@@ -126,7 +126,7 @@ public class PageLogin extends AbsMobilePage {
 	public void fillLoginFormFields(ZimbraAccount account) throws HarnessException {
 		logger.debug("fillFields(ZimbraAccount account)" + account.EmailAddress);
 		
-		if ( !isActive() )
+		if ( !zIsActive() )
 			throw new HarnessException("LoginPage is not active");
 		
 		sType(Locators.zInputUsername, account.EmailAddress);

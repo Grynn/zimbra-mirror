@@ -28,11 +28,11 @@ public class PageAddressbook extends AbsAjaxPage{
 	 * @see projects.admin.ui.AbsPage#isActive()
 	 */
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-	 if ( !this.MyApplication.zPageMain.isActive() ) {
-			this.MyApplication.zPageMain.navigateTo();
+	 if ( !this.MyApplication.zPageMain.zIsActive() ) {
+			this.MyApplication.zPageMain.zNavigateTo();
 		}
     
 		//make sure Addressbook  tab is selected		
@@ -61,16 +61,16 @@ public class PageAddressbook extends AbsAjaxPage{
 	 * @see projects.admin.ui.AbsPage#navigateTo()
 	 */
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 
 		// Check if this page is already active.
-		if ( isActive() ) {
+		if ( zIsActive() ) {
 			return;
 		}
 		
 	
-		if ( !MyApplication.zPageMain.isActive() ) {
-			MyApplication.zPageMain.navigateTo();
+		if ( !MyApplication.zPageMain.zIsActive() ) {
+			MyApplication.zPageMain.zNavigateTo();
 		}
 	
 		// Click on Addressbook icon
@@ -81,7 +81,7 @@ public class PageAddressbook extends AbsAjaxPage{
 		zClick(PageMain.Locators.zAppbarContact);
 		
 		
-		waitForActive();
+		zWaitForActive();
 
 		
 		//ClientSessionFactory.session().selenium().click(PageMain.Locators.zAppbarContact);
@@ -94,7 +94,7 @@ public class PageAddressbook extends AbsAjaxPage{
 		List <ContactItem> list= new ArrayList<ContactItem>();
 		
 		//ensure it is in Addressbook main page
-	    navigateTo();
+	    zNavigateTo();
 	    if ( !this.sIsElementPresent("//div[@id='zv__CNS']") )
 	    	//maybe return empty list?????
 			throw new HarnessException("Contact List is not present "+ "//div[@id='zv__CNS']");

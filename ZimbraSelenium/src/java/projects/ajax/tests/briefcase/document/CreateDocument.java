@@ -35,24 +35,24 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Select Briefcase tab
 		SleepUtil.sleepSmall();
-		app.zPageBriefcase.navigateTo();
+		app.zPageBriefcase.zNavigateTo();
 
 		// Open new document page
 		DocumentBriefcaseNew documentBriefcaseNew = (DocumentBriefcaseNew) app.zPageBriefcase
 				.zToolbarPressButton(Button.O_NEW_DOCUMENT);
 
 		// Fill out the document with the data
-		documentBriefcaseNew.fill(document);
+		documentBriefcaseNew.zFill(document);
 
 		// Save and close
-		documentBriefcaseNew.submit();
+		documentBriefcaseNew.zSubmit();
 
 		documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
 
-		ZimbraAccount account = app.getActiveAccount();
+		ZimbraAccount account = app.zGetActiveAccount();
 
 		// Verify document name through SOAP
-		app.getActiveAccount().soapSend(
+		app.zGetActiveAccount().soapSend(
 
 		"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
 
@@ -60,7 +60,7 @@ public class CreateDocument extends AjaxCommonTest {
 
 		"</SearchRequest>");
 
-		String name = app.getActiveAccount().soapSelectValue("//mail:doc",
+		String name = app.zGetActiveAccount().soapSelectValue("//mail:doc",
 				"name");
 
 		ZAssert.assertEquals(document.getDocName(), name,

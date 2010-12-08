@@ -92,7 +92,7 @@ public class AppAjaxClient extends AbsApplication {
 	 * @see projects.admin.ui.AbsApplication#isLoaded()
 	 */
 	@Override
-	public boolean isLoaded() throws HarnessException {
+	public boolean zIsLoaded() throws HarnessException {
 		// TODO: Need to define this method
 		return (true);
 	}
@@ -109,8 +109,8 @@ public class AppAjaxClient extends AbsApplication {
 	 * @see projects.admin.ui.AbsApplication#myApplicationName()
 	 */
 	@Override
-	protected ZimbraAccount setActiveAcount(ZimbraAccount account) throws HarnessException {
-		return (super.setActiveAcount(account));
+	protected ZimbraAccount zSetActiveAcount(ZimbraAccount account) throws HarnessException {
+		return (super.zSetActiveAcount(account));
 	}
 
 }

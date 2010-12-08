@@ -26,7 +26,7 @@ public class LoginScreen extends MobileCommonTest {
 	public void LoginScreen01() throws HarnessException {
 		
 		String username = app.zPageLogin.sGetText(PageLogin.Locators.zDisplayedusername);
-		ZAssert.assertEquals(username, app.getLocaleString("usernameLabel"), "Verify the displayed label 'username'");
+		ZAssert.assertEquals(username, app.zGetLocaleString("usernameLabel"), "Verify the displayed label 'username'");
 		
 
 	}

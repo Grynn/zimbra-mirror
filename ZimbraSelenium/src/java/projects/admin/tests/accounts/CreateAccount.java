@@ -59,7 +59,7 @@ public class CreateAccount extends AdminCommonTest {
 				
 		WizardCreateAccount wizard = 
 			app.zPageManageAccounts.getNewAccountWizard(PageManageAccounts.Locators.zb__ACLV__NEW_MENU_title);
-		wizard.completeWizard(account);
+		wizard.zCompleteWizard(account);
 		
 		// Verify the account exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(
@@ -84,7 +84,7 @@ public class CreateAccount extends AdminCommonTest {
 				
 		WizardCreateAccount wizard = 
 			app.zPageManageAccounts.getNewAccountWizard(PageManageAccounts.Locators.zmi__ACLV__NEW_WIZARD_title);
-		wizard.completeWizard(account);
+		wizard.zCompleteWizard(account);
 
 		// Verify the account exists in the ZCS
 		ZimbraAdminAccount.AdminConsoleAdmin().soapSend(

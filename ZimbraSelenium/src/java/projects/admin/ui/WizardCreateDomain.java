@@ -21,7 +21,7 @@ public class WizardCreateDomain extends AbsWizard {
 	 * @see projects.admin.ui.AbsWizard#completeWizard(projects.admin.clients.Item)
 	 */
 	@Override
-	public Item completeWizard(Item item) throws HarnessException {
+	public Item zCompleteWizard(Item item) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 
@@ -29,7 +29,7 @@ public class WizardCreateDomain extends AbsWizard {
 	 * @see projects.admin.ui.AbsWizard#isOpen()
 	 */
 	@Override
-	public boolean isOpen() throws HarnessException {
+	public boolean zIsOpen() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 

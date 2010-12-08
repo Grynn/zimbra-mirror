@@ -35,8 +35,8 @@ public class CreateContact extends MobileCommonTest {
 
 		// Get the "new contact" page and fill it out (automatically)
 		FormContactNew form = (FormContactNew) app.zPageContacts.zToolbarPressButton(Button.B_NEW);
-		form.fill(contact);
-		form.submit();
+		form.zFill(contact);
+		form.zSubmit();
 		
 		// Reset the contacts list
 		app.zPageContacts.refresh();

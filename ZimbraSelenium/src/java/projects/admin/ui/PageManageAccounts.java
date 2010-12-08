@@ -68,10 +68,10 @@ public class PageManageAccounts extends AbsAdminPage {
 	 * @see projects.admin.ui.AbsAdminPage#isActive()
 	 */
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 		
 		// Make sure the Admin Console is loaded in the browser
-		if ( !MyApplication.isLoaded() )
+		if ( !MyApplication.zIsLoaded() )
 			throw new HarnessException("Admin Console application is not active!");
 
 		
@@ -93,9 +93,9 @@ public class PageManageAccounts extends AbsAdminPage {
 	 * @see projects.admin.ui.AbsAdminPage#navigateTo()
 	 */
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 
-		if ( isActive() ) {
+		if ( zIsActive() ) {
 			// This page is already active.
 			return;
 		}
@@ -103,7 +103,7 @@ public class PageManageAccounts extends AbsAdminPage {
 		// Click on Addresses -> Accounts
 		sClick(Locators.zti__AppAdmin__ADDRESS__ACCOUNT_textCell);
 		
-		waitForActive();
+		zWaitForActive();
 
 	}
 	
@@ -131,7 +131,7 @@ public class PageManageAccounts extends AbsAdminPage {
 
 		// Get the New Account Wizard
 		WizardCreateAccount wizard = getNewAccountWizard(Locators.zb__ACLV__NEW_MENU_title);
-		AccountItem a = (AccountItem)wizard.completeWizard(account);
+		AccountItem a = (AccountItem)wizard.zCompleteWizard(account);
 		
 		// Return the account
 		return (a);
@@ -146,13 +146,13 @@ public class PageManageAccounts extends AbsAdminPage {
 	public WizardCreateAccount getNewAccountWizard(String locator) throws HarnessException {
 		
 		// Make sure the Manage Accounts page is showing
-		navigateTo();
+		zNavigateTo();
 
 		// Click on "New"
 		sClick(locator);
 
 		WizardCreateAccount wizard = new WizardCreateAccount(this);
-		if ( !wizard.isOpen() )
+		if ( !wizard.zIsOpen() )
 			throw new HarnessException("Clicking on locator "+ locator +" did not open wizard");
 		
 		// Return the Wizard object

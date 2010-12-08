@@ -14,7 +14,7 @@ public class PageSearchResults extends AbsAdminPage {
 	}
 
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 
@@ -24,7 +24,7 @@ public class PageSearchResults extends AbsAdminPage {
 	}
 
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 	

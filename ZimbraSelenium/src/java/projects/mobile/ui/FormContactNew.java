@@ -34,7 +34,7 @@ public class FormContactNew extends AbsForm {
 	}
 
 	@Override
-	public void submit() throws HarnessException {
+	public void zSubmit() throws HarnessException {
 		if ( !(this.sIsElementPresent(Locators.lSubmit)) ) {
 			throw new HarnessException("Submit button is not present "+ Locators.lSubmit);
 		}
@@ -42,7 +42,7 @@ public class FormContactNew extends AbsForm {
 	}
 
 	@Override
-	public void fill(ZimbraItem item) throws HarnessException {
+	public void zFill(ZimbraItem item) throws HarnessException {
 		logger.debug(myPageName() + " fill()");
 		logger.info(item.prettyPrint());
 

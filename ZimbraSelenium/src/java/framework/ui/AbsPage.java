@@ -13,8 +13,8 @@ import framework.util.SleepUtil;
  * In addition to the major application tabs, the AbsPage also implements
  * other frames in the clients, such as the top title area and the search area.
  * <p>
- * Implementing AbsPage classes must define the {@link AbsPage#isActive()} and
- * {@link AbsPage#navigateTo()} methods.  The test method classes can set a
+ * Implementing AbsPage classes must define the {@link AbsPage#zIsActive()} and
+ * {@link AbsPage#zNavigateTo()} methods.  The test method classes can set a
  * "startingapp", which the harness will attempt to navigate-to before running
  * each test method.
  * <p>
@@ -59,36 +59,36 @@ public abstract class AbsPage extends AbsSeleniumObject {
 	 * @return true if active.  false if not.
 	 * @throws HarnessException
 	 */
-	public abstract boolean isActive() throws HarnessException;
+	public abstract boolean zIsActive() throws HarnessException;
 
 	/**
 	 * Wait for this page to become active (default PageLoadDelay)
 	 * @throws HarnessException
 	 */
-	public void waitForActive() throws HarnessException {
-		waitForActive(PageLoadDelay);
+	public void zWaitForActive() throws HarnessException {
+		zWaitForActive(PageLoadDelay);
 	}
 	
 	/**
 	 * Wait for this page to become active
 	 * @throws HarnessException
 	 */
-	public void waitForActive(long millis) throws HarnessException {
+	public void zWaitForActive(long millis) throws HarnessException {
 		
-		if ( isActive() ) {
+		if ( zIsActive() ) {
 			return; // Page became active
 		}
 		
 		do {
 			SleepUtil.sleep(SleepUtil.SleepGranularity);
 			millis = millis - SleepUtil.SleepGranularity;
-			if ( isActive() ) {
+			if ( zIsActive() ) {
 				return; // Page became active
 			}
 		} while (millis > SleepUtil.SleepGranularity);
 		
 		SleepUtil.sleep(millis);
-		if ( isActive() ) {
+		if ( zIsActive() ) {
 			return;	// Page became active
 		}
 
@@ -99,25 +99,7 @@ public abstract class AbsPage extends AbsSeleniumObject {
 	 * Navigate to this page
 	 * @throws HarnessException
 	 */
-	public abstract void navigateTo() throws HarnessException;
+	public abstract void zNavigateTo() throws HarnessException;
 	
 
-	/**
-	 * Click Previous/Next in the list
-	 * @param button
-	 * @throws HarnessException If the button is not active, throw Exception
-	 */
-	public void clickNavigation(ListNavButton button) throws HarnessException {
-		// This method is not applicable to all pages, so throw exception if not defined
-		throw new HarnessException("clickNavigation() not defined for this page type");
-	}
-	
-	/**
-	 * Click Help button in this page
-	 * @throws HarnessException If the button is not available
-	 */
-	public void clickHelp() throws HarnessException {
-		// This method is not applicable to all pages, so throw exception if not defined
-		throw new HarnessException("clickHelp() not defined for this page type");
-	}
 }

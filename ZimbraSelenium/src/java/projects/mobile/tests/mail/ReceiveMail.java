@@ -33,7 +33,7 @@ public class ReceiveMail extends MobileCommonTest {
 		ZimbraAccount.AccountA().soapSend(
 				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 					"<m>" +
-						"<e t='t' a='"+ app.getActiveAccount().EmailAddress +"'/>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 						"<su>"+ subject +"</su>" +
 						"<mp ct='text/plain'>" +
 							"<content>"+ body +"</content>" +

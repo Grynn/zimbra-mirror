@@ -21,7 +21,7 @@ public class BasicLogout extends AjaxCommonTest {
 		app.zPageMain.logout();
 		
 		// Verify main page becomes active
-		ZAssert.assertTrue(app.zPageLogin.isActive(), "Verify that the account is logged out");
+		ZAssert.assertTrue(app.zPageLogin.zIsActive(), "Verify that the account is logged out");
 		
 	}
 

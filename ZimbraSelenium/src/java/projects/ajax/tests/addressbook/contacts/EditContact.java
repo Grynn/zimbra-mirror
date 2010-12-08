@@ -38,7 +38,7 @@ public class EditContact extends AjaxCommonTest  {
 		 // Create a contact 
 		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
  
-        app.getActiveAccount().soapSend(
+        app.zGetActiveAccount().soapSend(
                 "<CreateContactRequest xmlns='urn:zimbraMail'>" +
                 "<cn fileAsStr='" + contactItem.lastName + "," + contactItem.firstName + "' >" +
                 "<a n='firstName'>" + contactItem.firstName +"</a>" +
@@ -47,7 +47,7 @@ public class EditContact extends AjaxCommonTest  {
                 "</cn>" +
                 "</CreateContactRequest>");
 
-        app.getActiveAccount().soapSelectNode("//mail:CreateContactResponse", 1);
+        app.zGetActiveAccount().soapSelectNode("//mail:CreateContactResponse", 1);
 
         // Select the contact
         app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);
@@ -60,10 +60,10 @@ public class EditContact extends AjaxCommonTest  {
 							
 			
         // Fill in the form
-	    formContactNew.fill(newContact);
+	    formContactNew.zFill(newContact);
 	    
 		// Save the contact
-        formContactNew.submit();
+        formContactNew.zSubmit();
 		
         
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();   

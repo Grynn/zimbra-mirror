@@ -39,14 +39,14 @@ public class DeleteConversation extends AjaxCommonTest {
 		
 		// Create the message data to be sent
 		MailItem mail = new MailItem();
-		mail.dToRecipients.add(new RecipientItem(app.getActiveAccount().EmailAddress));
+		mail.dToRecipients.add(new RecipientItem(app.zGetActiveAccount().EmailAddress));
 		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		mail.gBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
 		ZimbraAccount.AccountA().soapSend(
 					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m>" +
-							"<e t='t' a='"+ app.getActiveAccount().EmailAddress +"'/>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 							"<su>"+ mail.dSubject +"</su>" +
 							"<mp ct='text/plain'>" +
 								"<content>"+ mail.gBodyText +"</content>" +

@@ -45,7 +45,7 @@ public class GetMail extends AjaxCommonTest {
 		ZimbraAccount.AccountA().soapSend(
 					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m>" +
-							"<e t='t' a='"+ app.getActiveAccount().EmailAddress +"'/>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 							"<su>"+ subject +"</su>" +
 							"<mp ct='text/plain'>" +
 								"<content>"+ "body" + ZimbraSeleniumProperties.getUniqueString() +"</content>" +
@@ -94,7 +94,7 @@ public class GetMail extends AjaxCommonTest {
 		ZimbraAccount.AccountA().soapSend(
 					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m>" +
-							"<e t='t' a='"+ app.getActiveAccount().EmailAddress +"'/>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 							"<e t='c' a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>" +
 							"<su>"+ subject +"</su>" +
 							"<mp ct='text/plain'>" +
@@ -105,7 +105,7 @@ public class GetMail extends AjaxCommonTest {
 
 		// Get all the SOAP data for later verification
 		MailItem mail = new MailItem();
-		mail.importFromSOAP(app.getActiveAccount(), "subject:("+ subject +")");
+		mail.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
@@ -119,7 +119,7 @@ public class GetMail extends AjaxCommonTest {
 		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedTime), "Verify the time is displayed");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the From matches");
-		ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), app.getActiveAccount().EmailAddress, "Verify the To matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), app.zGetActiveAccount().EmailAddress, "Verify the To matches");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Body), mail.dBodyText, "Verify the body matches");
 
 		
@@ -132,7 +132,7 @@ public class GetMail extends AjaxCommonTest {
 		
 		// Create the message data to be sent
 		MailItem mail = new MailItem();
-		mail.dToRecipients.add(new RecipientItem(app.getActiveAccount().EmailAddress));
+		mail.dToRecipients.add(new RecipientItem(app.zGetActiveAccount().EmailAddress));
 		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		mail.gBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
 		String bodyHtml = "body" + ZimbraSeleniumProperties.getUniqueString();
@@ -141,7 +141,7 @@ public class GetMail extends AjaxCommonTest {
 		ZimbraAccount.AccountA().soapSend(
 					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m>" +
-							"<e t='t' a='"+ app.getActiveAccount().EmailAddress +"'/>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 							"<e t='c' a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>" +
 							"<su>"+ mail.dSubject +"</su>" +
 							"<mp ct='multipart/alternative'>" +
@@ -169,7 +169,7 @@ public class GetMail extends AjaxCommonTest {
 		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedTime), "Verify the time is displayed");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the From matches");
-		ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), app.getActiveAccount().EmailAddress, "Verify the To matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), app.zGetActiveAccount().EmailAddress, "Verify the To matches");
 		ZAssert.assertStringContains(actual.zGetMailProperty(Field.Body), bodyHtml, "Verify the body matches");
 		
 	}

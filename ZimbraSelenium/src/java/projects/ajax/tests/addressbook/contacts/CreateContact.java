@@ -50,7 +50,7 @@ public class CreateContact extends AjaxCommonTest  {
 		ZAssert.assertTrue(app.zPageAddressbook.sIsElementPresent("xpath=//div[@id='editcontactform']"),"new contact form not displayed");
 		
         // Fill in the form
-	    formContactNew.fill(contactItem);
+	    formContactNew.zFill(contactItem);
 	    
 		// Save the contact
         formContactNew.save();

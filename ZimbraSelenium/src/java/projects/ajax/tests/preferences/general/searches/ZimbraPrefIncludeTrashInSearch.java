@@ -78,13 +78,13 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		
 		
 		// Determine the folder ID's for inbox and trash
-		app.getActiveAccount().soapSend("<GetFolderRequest xmlns = 'urn:zimbraMail'/>");
-		String inboxId = app.getActiveAccount().soapSelectValue("//mail:folder[@name='Inbox']", "id");
-		String trashId = app.getActiveAccount().soapSelectValue("//mail:folder[@name='Trash']", "id");
+		app.zGetActiveAccount().soapSend("<GetFolderRequest xmlns = 'urn:zimbraMail'/>");
+		String inboxId = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='Inbox']", "id");
+		String trashId = app.zGetActiveAccount().soapSelectValue("//mail:folder[@name='Trash']", "id");
 		
 		
 		// Add a message to the inbox
-		app.getActiveAccount().soapSend(
+		app.zGetActiveAccount().soapSend(
 				"<AddMsgRequest xmlns='urn:zimbraMail'>" +
                 	"<m l='"+ inboxId +"'>" +
                     	"<content>" + message1.generateMimeString() + "</content>" +
@@ -93,7 +93,7 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		
 		
 		// Add a message to the trash
-		app.getActiveAccount().soapSend(
+		app.zGetActiveAccount().soapSend(
 				"<AddMsgRequest xmlns='urn:zimbraMail'>" +
                 	"<m l='"+ trashId +"'>" +
                     	"<content>" + message2.generateMimeString() + "</content>" +
@@ -102,7 +102,7 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 
 
 		// Go to mail
-		app.zPageMail.navigateTo();
+		app.zPageMail.zNavigateTo();
 		
 		// Search for the query
 		app.zPageSearch.zRunSearchQuery(query);

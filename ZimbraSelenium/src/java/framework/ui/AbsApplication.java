@@ -76,7 +76,7 @@ public abstract class AbsApplication {
 	 * @return true if loaded, false otherwise
 	 * @throws HarnessException
 	 */
-	public abstract boolean isLoaded() throws HarnessException;
+	public abstract boolean zIsLoaded() throws HarnessException;
 
 	/**
 	 * Return a list of active pages
@@ -88,10 +88,10 @@ public abstract class AbsApplication {
 	 * @return
 	 * @throws HarnessException
 	 */
-	public List<AbsPage> getActivePages() throws HarnessException {
+	public List<AbsPage> zGetActivePages() throws HarnessException {
 		List<AbsPage> actives = new ArrayList<AbsPage>();
 		for (AbsPage p : pages.values()) {
-			if ( p.isActive() ) {
+			if ( p.zIsActive() ) {
 				actives.add(p);
 			}
 		}
@@ -109,7 +109,7 @@ public abstract class AbsApplication {
 	 * <p>
 	 * @return the authenticated account
 	 */
-	protected ZimbraAccount setActiveAcount(ZimbraAccount account) throws HarnessException {
+	protected ZimbraAccount zSetActiveAcount(ZimbraAccount account) throws HarnessException {
 		
 		// Check if we are setting the active account to nobody
 		if ( account == null ) {
@@ -140,7 +140,7 @@ public abstract class AbsApplication {
 	 * Return the currently logged in account
 	 * @return null if no account is authenticated
 	 */
-	public ZimbraAccount getActiveAccount() {
+	public ZimbraAccount zGetActiveAccount() {
 		return (authenticatedAccount);
 	}
 
@@ -150,13 +150,13 @@ public abstract class AbsApplication {
 	 * @return
 	 * @throws HarnessException
 	 */
-	public String getLocaleString(String key) throws HarnessException {
+	public String zGetLocaleString(String key) throws HarnessException {
 		
 		if ( L10N == null ) {
 			// If we are on a non-authenticated page, return the default L10N values
-			return (defaultL10N.getString(key));
+			return (defaultL10N.zGetString(key));
 		}
-		return (L10N.getString(key));
+		return (L10N.zGetString(key));
 	}
 	// Use the default java locale for non-authenticated screens
 	// Most of the time, this will be English

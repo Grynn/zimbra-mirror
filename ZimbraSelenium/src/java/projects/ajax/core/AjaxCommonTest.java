@@ -160,16 +160,16 @@ public class AjaxCommonTest {
 		if ( startingAccount != null ) {
 			logger.debug("commonTestBeforeMethod: startingAccount is defined");
 			
-			if ( !startingAccount.equals(app.getActiveAccount())) {
+			if ( !startingAccount.equals(app.zGetActiveAccount())) {
 				
-				if ( app.zPageMain.isActive() )
+				if ( app.zPageMain.zIsActive() )
 					app.zPageMain.logout();
 				app.zPageLogin.login(startingAccount);
 				
 			}
 			
 			// Confirm
-			if ( !startingAccount.equals(app.getActiveAccount())) {
+			if ( !startingAccount.equals(app.zGetActiveAccount())) {
 				throw new HarnessException("Unable to authenticate as "+ startingAccount.EmailAddress);
 			}
 		}
@@ -179,12 +179,12 @@ public class AjaxCommonTest {
 			logger.debug("commonTestBeforeMethod: startingPage is defined");
 			
 			// If the starting page is not active, navigate to it
-			if ( !startingPage.isActive() ) {
-				startingPage.navigateTo();
+			if ( !startingPage.zIsActive() ) {
+				startingPage.zNavigateTo();
 			}
 			
 			// Confirm that the page is active
-			if ( !startingPage.isActive() ) {
+			if ( !startingPage.zIsActive() ) {
 				throw new HarnessException("Unable to navigate to "+ startingPage.myPageName());
 			}
 			

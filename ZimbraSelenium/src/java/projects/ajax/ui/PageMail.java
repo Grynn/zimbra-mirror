@@ -176,11 +176,11 @@ public class PageMail extends AbsAjaxPage {
 	 * @see projects.admin.ui.AbsPage#isActive()
 	 */
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-		if ( !this.MyApplication.zPageMain.isActive() ) {
-			this.MyApplication.zPageMain.navigateTo();
+		if ( !this.MyApplication.zPageMain.zIsActive() ) {
+			this.MyApplication.zPageMain.zNavigateTo();
 		}
 		
 		// If the "folders" tree is visible, then mail is active
@@ -207,16 +207,16 @@ public class PageMail extends AbsAjaxPage {
 	 * @see projects.admin.ui.AbsPage#navigateTo()
 	 */
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 
 		// Check if this page is already active.
-		if ( isActive() ) {
+		if ( zIsActive() ) {
 			return;
 		}
 		
 		// Make sure we are logged into the Mobile app
-		if ( !MyApplication.zPageMain.isActive() ) {
-			MyApplication.zPageMain.navigateTo();
+		if ( !MyApplication.zPageMain.zIsActive() ) {
+			MyApplication.zPageMain.zNavigateTo();
 		}
 		
 		// Click on Mail icon
@@ -226,7 +226,7 @@ public class PageMail extends AbsAjaxPage {
 
 		zClick(PageMain.Locators.zAppbarMail);
 		
-		waitForActive();
+		zWaitForActive();
 
 	}
 	

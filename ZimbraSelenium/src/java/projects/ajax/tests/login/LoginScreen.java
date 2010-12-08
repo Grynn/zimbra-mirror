@@ -28,7 +28,7 @@ public class LoginScreen extends AjaxCommonTest {
 	public void LoginScreen01() throws HarnessException {
 		
 		String username = app.zPageLogin.sGetText(PageLogin.Locators.zDisplayedusername);
-		ZAssert.assertEquals(username, app.getLocaleString("usernameLabel"), "Verify the displayed label 'username'");
+		ZAssert.assertEquals(username, app.zGetLocaleString("usernameLabel"), "Verify the displayed label 'username'");
 		
 		// TODO: add other displayed text
 
@@ -58,7 +58,7 @@ public class LoginScreen extends AjaxCommonTest {
 		// TODO: probably need to watch out for previously typed text
 		// TODO: probably need to watch out for browser cache
 		// TODO: maybe it is better just to reload the URL?
-		app.zPageLogin.navigateTo();
+		app.zPageLogin.zNavigateTo();
 		
 		// Type a unique string into the browser
 		String value = "foo" + ZimbraSeleniumProperties.getUniqueString();

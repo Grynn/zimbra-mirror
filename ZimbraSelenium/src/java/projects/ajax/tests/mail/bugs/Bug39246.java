@@ -36,7 +36,7 @@ public class Bug39246 extends AjaxCommonTest {
 		
 		
 		// Inject the example message
-		LmtpUtil.injectFile(app.getActiveAccount().EmailAddress, mime);
+		LmtpUtil.injectFile(app.zGetActiveAccount().EmailAddress, mime);
 
 		// Get Mail
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);

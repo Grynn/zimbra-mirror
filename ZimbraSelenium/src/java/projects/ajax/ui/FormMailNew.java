@@ -58,7 +58,7 @@ public class FormMailNew extends AbsForm {
 	}
 
 	@Override
-	public void submit() throws HarnessException {
+	public void zSubmit() throws HarnessException {
 		logger.info("FormMailNew.submit()");
 		
 		// Look for "Send"
@@ -87,7 +87,7 @@ public class FormMailNew extends AbsForm {
 	}
 
 	@Override
-	public void fill(ZimbraItem item) throws HarnessException {
+	public void zFill(ZimbraItem item) throws HarnessException {
 		logger.info("FormMailNew.fill(ZimbraItem)");
 		logger.info(item.prettyPrint());
 

@@ -27,7 +27,7 @@ public class BasicLogin extends AdminCommonTest {
 		app.zPageLogin.login(gAdmin);
 		
 		// Verify main page becomes active
-		ZAssert.assertTrue(app.zPageMain.isActive(), "Verify that the account is logged in");
+		ZAssert.assertTrue(app.zPageMain.zIsActive(), "Verify that the account is logged in");
 		
 	}
 
@@ -44,7 +44,7 @@ public class BasicLogin extends AdminCommonTest {
 		app.zPageLogin.login(account);
 		
 		// Verify main page becomes active
-		ZAssert.assertTrue(app.zPageMain.isActive(), "Verify that the account is logged in");
+		ZAssert.assertTrue(app.zPageMain.zIsActive(), "Verify that the account is logged in");
 		
 	}
 

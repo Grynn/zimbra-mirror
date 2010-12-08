@@ -40,10 +40,10 @@ public class CreateMail extends AjaxCommonTest {
 		ZAssert.assertNotNull(mailform, "Verify the new form opened");
 		
 		// Fill out the form with the data
-		mailform.fill(mail);
+		mailform.zFill(mail);
 		
 		// Send the message
-		mailform.submit();
+		mailform.zSubmit();
 				
 		
 		// Verify the message is received at the destination
@@ -63,7 +63,7 @@ public class CreateMail extends AjaxCommonTest {
 		String subject = ZimbraAccount.AccountA().soapSelectValue("//mail:GetMsgResponse//mail:su", null);
 		
 		// TODO: add checks for TO, Subject, Body
-		ZAssert.assertEquals(from, app.getActiveAccount().EmailAddress, "Verify the from field is correct");
+		ZAssert.assertEquals(from, app.zGetActiveAccount().EmailAddress, "Verify the from field is correct");
 		ZAssert.assertEquals(to, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
 		ZAssert.assertEquals(subject, mail.dSubject, "Verify the subject field is correct");
 		

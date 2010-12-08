@@ -38,10 +38,10 @@ public class PageSearch extends AbsAjaxPage {
 	 * @see projects.admin.ui.AbsPage#isActive()
 	 */
 	@Override
-	public boolean isActive() throws HarnessException {
+	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the Mobile Client is loaded in the browser
-		if ( !MyApplication.isLoaded() )
+		if ( !MyApplication.zIsLoaded() )
 			throw new HarnessException("Application is not active!");
 		
 
@@ -69,23 +69,23 @@ public class PageSearch extends AbsAjaxPage {
 	 * @see projects.admin.ui.AbsPage#navigateTo()
 	 */
 	@Override
-	public void navigateTo() throws HarnessException {
+	public void zNavigateTo() throws HarnessException {
 
 
-		if ( isActive() ) {
+		if ( zIsActive() ) {
 			// This page is already active
 			return;
 		}
 		
 
 		// If search is not active, then we must not be logged in
-		if ( !MyApplication.zPageMain.isActive() ) {
-			MyApplication.zPageMain.navigateTo();
+		if ( !MyApplication.zPageMain.zIsActive() ) {
+			MyApplication.zPageMain.zNavigateTo();
 		}
 
 		// Nothing more to do to make search appear, since it is always active if the app is active
 		
-		waitForActive();
+		zWaitForActive();
 		
 	}
 

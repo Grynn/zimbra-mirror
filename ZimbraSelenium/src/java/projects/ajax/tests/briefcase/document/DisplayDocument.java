@@ -30,7 +30,7 @@ public class DisplayDocument extends AjaxCommonTest {
 		// Create document item
 		DocumentItem document = new DocumentItem();
 
-		ZimbraAccount account = app.getActiveAccount();
+		ZimbraAccount account = app.zGetActiveAccount();
 		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
 
 		account
@@ -48,7 +48,7 @@ public class DisplayDocument extends AjaxCommonTest {
 
 		// Select Briefcase tab
 		SleepUtil.sleepSmall();
-		app.zPageBriefcase.navigateTo();
+		app.zPageBriefcase.zNavigateTo();
 
 		// ClientSessionFactory.session().selenium().refresh();
 		// refresh briefcase page

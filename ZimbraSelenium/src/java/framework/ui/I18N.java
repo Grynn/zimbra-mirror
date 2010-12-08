@@ -63,10 +63,10 @@ public class I18N {
 	 * @return
 	 * @throws HarnessException
 	 */
-	public String getString(String key) throws HarnessException {
+	public String zGetString(String key) throws HarnessException {
 		
 		for (String id : bundles.keySet() ) {
-			String value = getString(id, key);
+			String value = zGetString(id, key);
 			if ( value != null ) {
 				return (value);
 			}
@@ -83,7 +83,7 @@ public class I18N {
 	 * @return
 	 * @throws HarnessException 
 	 */
-	public String getString(String bundlename, String key) throws HarnessException {
+	public String zGetString(String bundlename, String key) throws HarnessException {
 		
 		if ( !bundles.containsKey(bundlename) )
 			throw new HarnessException("Unknown bundle ID " + bundlename);

@@ -37,7 +37,7 @@ public class DeleteContact extends AjaxCommonTest  {
 		 // Create a contact 
 		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
  
-        app.getActiveAccount().soapSend(
+        app.zGetActiveAccount().soapSend(
                 "<CreateContactRequest xmlns='urn:zimbraMail'>" +
                 "<cn fileAsStr='" + contactItem.lastName + "," + contactItem.firstName + "' >" +
                 "<a n='firstName'>" + contactItem.firstName +"</a>" +
@@ -46,7 +46,7 @@ public class DeleteContact extends AjaxCommonTest  {
                 "</cn>" +
                 "</CreateContactRequest>");
 
-        app.getActiveAccount().soapSelectNode("//mail:CreateContactResponse", 1);
+        app.zGetActiveAccount().soapSelectNode("//mail:CreateContactResponse", 1);
 
         // Select the item
         app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);
