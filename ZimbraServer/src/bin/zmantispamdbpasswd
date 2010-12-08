@@ -64,7 +64,6 @@ if [ ${password_key} = antispam_mysql_password ]; then
 SET PASSWORD FOR '${antispam_mysql_user}' = PASSWORD('${newpassword}');
 SET PASSWORD FOR '${antispam_mysql_user}'@'localhost' = PASSWORD('${newpassword}');
 SET PASSWORD FOR '${antispam_mysql_user}'@'localhost.localdomain' = PASSWORD('${newpassword}');
-SET PASSWORD FOR '${antispam_mysql_user}'@'${antispam_mysql_host}' = PASSWORD('${newpassword}');
 EOF
     if [ $? = 0 ]; then
         echo '*' Changed antispam mysql user password
