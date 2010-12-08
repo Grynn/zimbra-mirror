@@ -3,34 +3,21 @@
  */
 package framework.core;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.lang.reflect.Method;
-import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -49,8 +36,6 @@ import org.apache.log4j.PatternLayout;
 import org.apache.log4j.PropertyConfigurator;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
-import org.testng.IReporter;
-import org.testng.ISuite;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -60,9 +45,7 @@ import org.testng.xml.XmlSuite;
 import org.testng.xml.XmlTest;
 
 import framework.util.HarnessException;
-import framework.util.SkippedTestListener;
 import framework.util.SleepUtil;
-import framework.util.SummaryReporter;
 import framework.util.TestStatusReporter;
 import framework.util.ZimbraSeleniumProperties;
 import framework.util.ZimbraSeleniumProperties.AppType;
@@ -92,8 +75,7 @@ import framework.util.ZimbraSeleniumProperties.AppType;
  */
 public class ExecuteHarnessMain {
 	private static Logger logger = LogManager.getLogger(ExecuteHarnessMain.class);
-	private static PrintStream ps=null;
-	private static ByteArrayOutputStream baos; 
+
 	private static HashMap<String, String> configMap= new HashMap<String,String>();
 	
 	
@@ -372,11 +354,7 @@ public class ExecuteHarnessMain {
 		
 		ResultListener listener = null;
 		
-		baos= new ByteArrayOutputStream();
-		ps=new PrintStream(baos,true); //autoflush
-		
-		System.setOut(ps); 
-		System.setErr(ps);	
+
 		// Build the class list
 		classes = getClassesFromJar(new File(jarfilename), (classfilter == null ? null : Pattern.compile(classfilter)),excludefilter);
 		
@@ -396,30 +374,12 @@ public class ExecuteHarnessMain {
 			SleepUtil.sleep(100000);
 		}
 		
-		String subject = "ZimbraSelenium-" +ZimbraSeleniumProperties.getAppType() +
-				" browser:" +ZimbraSeleniumProperties.getStringProperty("browser") + 			
-				" locale:" + ZimbraSeleniumProperties.getStringProperty("locale") ;			
-		SendEmail se = new SendEmail(subject);
-		if ( !DevEnvironment.isUsingDevEnvironment() ) {
-			try {
-				se.sendFirstEmail();
-			} catch (Exception e) {
-				throw new HarnessException(e);
-			}
-		}
-
-
 		// Configure the runner
 		ng.setXmlSuites(suites);
+		ng.addListener(new MethodListener(this.testoutputfoldername));
+		ng.addListener(listener = new ResultListener());
 		
-		ng.addListener(new SummaryReporter(ZimbraSeleniumProperties.getAppType().toString()));
-		
-		//ng.addListener(new SummaryReporter(ZimbraSeleniumProperties.getAppType().toString()));
 		try {
-			ng.addListener(new TestStatusReporter(ZimbraSeleniumProperties.getAppType().toString(),baos,ps)); // TODO: This shouldn't throw Exception
-			ng.addListener(new SkippedTestListener(new File(this.testoutputfoldername)));
-			ng.addListener(new MethodListener(this.testoutputfoldername));
-			ng.addListener(listener = new ResultListener());
 			ng.setOutputDirectory(this.testoutputfoldername);
 		} catch (Exception e) {
 			throw new HarnessException(e);
@@ -431,19 +391,6 @@ public class ExecuteHarnessMain {
 		// finish inProgress - overwrite inProgress/index.html		
 		TestStatusReporter.copyFile(testoutputfoldername + "\\inProgress\\result.txt" , testoutputfoldername + "\\inProgress\\index.html");
 		
-		if ( !DevEnvironment.isUsingDevEnvironment() ) {
-
-			// TODO: remove the email logic.  just let tms send the email.
-			// email results
-			copyCommandLineOutputFile();
-			try {
-				se.send(getFileContents(testoutputfoldername + "\\ebody.txt"));
-			} catch (Exception e) {
-				throw new HarnessException(e);
-			}
-			
-		}
-
 		
 		logger.info("Execute tests ... completed");
 		
@@ -452,154 +399,8 @@ public class ExecuteHarnessMain {
 	}
 	
 
-	public String getFileContents(String filePath) {
-		String str = "";
-		String tmpStr = "";
-		try {
-			BufferedReader in = new BufferedReader(new FileReader(filePath));
-
-			while ((tmpStr = in.readLine()) != null) {
-				str = str + "\n" + tmpStr;
-			}
-			in.close();
-		} catch (IOException e) {
-		}
-		return str;
-	}
 
 
-	public void copyCommandLineOutputFile() {
-		File f = new File(testoutputfoldername + "/testresult.txt");
-		if (!f.exists())
-			try {
-				f.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		try {
-
-			// Create channel on the source
-			FileChannel srcChannel = new FileInputStream(ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")
-					+ "/testresult.txt").getChannel();
-
-			// Create channel on the destination
-			FileChannel dstChannel = new FileOutputStream(testoutputfoldername + "/testresult.txt").getChannel();
-
-			// Copy file contents from source to destination
-			dstChannel.transferFrom(srcChannel, 0, srcChannel.size());
-			// Close the channels
-			srcChannel.close();
-			dstChannel.close();
-		} catch (IOException e) {
-		}
-
-	}
-
-	private static class SendEmail {
-		private String subject="SelNG: Couldnt get subject";
-		private String body="SelNG: Couldnt get body";
-		
-		public SendEmail(String sub, String bd){
-			subject = sub;
-			body = bd;
-		}
-		
-		public SendEmail(String sub){
-			subject = sub;			
-		}
-
-
-		public void sendFirstEmail() throws Exception {
-				
-			String bodyfileXpPath =  ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")+"\\"  +
-			ZimbraSeleniumProperties.zimbraGetVersionString()  + "\\"  + 
-            ZimbraSeleniumProperties.getAppType().toString() +"\\" + 
-            ZimbraSeleniumProperties.getStringProperty("browser") + "\\" +  
-            ZimbraSeleniumProperties.getStringProperty("locale") ;
-			
-			String lines = "\n--------------------------------------------\n";
-			String uri = (bodyfileXpPath.replace("T:/",
-					"http://tms.lab.zimbra.com/testlogs/")).replace("\\", "/");
-		    uri = ZimbraSeleniumProperties.getStringProperty("TestURL") + uri;
-			
-			StringBuffer body = new StringBuffer( "");
-		
-			body.append(ZimbraSeleniumProperties.zimbraGetVersionString());			
-		    body.append("\n\nserver: " +ZimbraSeleniumProperties.getStringProperty("server.host"));
-		    body.append("\nclient: " + System.getenv("COMPUTERNAME")) ;
-		    	   
-			
-			body.append("\n\n" + lines + "IN PROGRESS: " + lines + uri+ "/" + TestStatusReporter.inProgressDir );
-			
-			body.append("\n\n" + lines + "LOGS: " + lines );
-			body.append("\n" + "Initialization: \n" + uri+ "/start.txt");
-			body.append("\n" + "All Results: \n" + uri+ "/finish.txt");
-
-			body.append("\n\n" + lines + "CATEGORIES: " + lines + uri+ "/" + TestStatusReporter.categoryDir );	
-			
-			body.append("\n\n" + lines + "Configuration FAIL: " + lines + uri + "/" + TestStatusReporter.confFailDir );
-			body.append("\n\n" + lines + "Configuration SKIP: " + lines   + uri + "/" +  TestStatusReporter.confSkipDir);
-			body.append("\n\n" + lines + "FAIL: " + lines  + uri + "/" +  TestStatusReporter.failDir );
-			
-			body.append("\n\n" + lines + "SKIP: "  + lines  + uri + "/" +  TestStatusReporter.skipDir);
-			body.append("\n\n" + lines + "PASS: "  + lines  + uri + "/" +  TestStatusReporter.passDir);
-
-			
-			body.append("\n\n" + lines + "TestNG REPORTS: " + lines);		
-		    body.append("\n" + uri );
-			body.append("\n" + uri + "/emailable-report.html");
-			
-			body.append("\n\n" + lines + "SKIP TESTS INFO: " + lines+ "\n" + uri + "/SkippedTests.txt");
-
-			
-            send(body.toString());
-
-		}
-
-	   public void send(String body) throws Exception{
-	      Properties props = new Properties();
-	      props.setProperty("mail.transport.protocol", "smtp");
-	      props.setProperty("mail.host", "mail.zimbra.com");
-
-	      Session mailSession = Session.getDefaultInstance(props, null);
-	      Transport transport = mailSession.getTransport();
-
-	      MimeMessage message = new MimeMessage(mailSession);
-	      subject= subject.replace("\n", "");
-	      subject.replace("\r", "");
-	      message.setSubject(subject);
-	      message.setContent(body, "text/plain");
-	      
-	      String emailFrom = ZimbraSeleniumProperties.getStringProperty("emailFrom");
-	      emailFrom = ((emailFrom == null) || (emailFrom.length() == 0))?"qa-tms@zimbra.com":emailFrom;
-          
-          String emailTo = ZimbraSeleniumProperties.getStringProperty("emailTo");
-	      emailTo = ((emailTo == null) || (emailTo.length() == 0))?"qa-group@zimbra.com":emailTo;
-
-	      message.setFrom(new InternetAddress(emailFrom));
-	      message.addRecipient(Message.RecipientType.TO,
-	    		 new InternetAddress(emailTo));
-
-	      transport.connect();
-	      transport.sendMessage(message,
-	          message.getRecipients(Message.RecipientType.TO));
-	      transport.close();
-	    }
-	}
-	public class mySummaryReporter implements IReporter {
-
-	    
-	    public mySummaryReporter(String atype){
-	    	System.out.println("\nmySummaryReporter" );
-	    }	
-		public void generateReport(java.util.List<XmlSuite> xmlSuites,
-				java.util.List<ISuite> suites, java.lang.String outputDirectory) {
-			//long duration = (new Date()).getTime() - startDate.getTime();
-			
-			
-			System.out.println("+++++++++++++++All test ran generateReport" + ZimbraSeleniumProperties.getStringProperty("locale"));
-				}
-	}
 	
 	/**
 	 * A TestNG MethodListener that creates a log file for each test class
@@ -951,7 +752,7 @@ public class ExecuteHarnessMain {
 		
 		logger.info(result);
 		System.out.println("*****\n"+ result);
-        ps.close();
+
 	}
 
 }
