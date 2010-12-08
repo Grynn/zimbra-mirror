@@ -1683,18 +1683,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         throw OfflineServiceException.UNSUPPORTED("removeMembers");
     }
 
-    private void validateIdentityAttrs(Map<String, Object> attrs) throws ServiceException {
-        Set<String> validAttrs = AttributeManager.getInstance().getLowerCaseAttrsInClass(AttributeClass.identity);
-        validAttrs.add(A_objectClass.toLowerCase());
-
-        for (String key : attrs.keySet()) {
-            if (key.startsWith("+") || key.startsWith("-"))
-                key = key.substring(1);
-            if (!validAttrs.contains(key.toLowerCase()))
-                throw ServiceException.INVALID_REQUEST("unable to modify attr: " + key, null);
-        }
-    }
-
     @Override
     public synchronized Identity createIdentity(Account account, String name, Map<String, Object> attrs) throws ServiceException {
         return createIdentity(account, name, attrs, isZcsAccount(account));
@@ -1776,7 +1764,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     synchronized void modifyIdentity(Account account, String name, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
-        validateIdentityAttrs(attrs);
         if (name.equalsIgnoreCase(DEFAULT_IDENTITY_NAME)) {
             modifyAttrs(account, attrs, false, true, markChanged);
             return;
@@ -1842,18 +1829,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         return new OfflineIdentity(account, (String) attrs.get(A_zimbraPrefIdentityName), attrs, this);
     }
 
-    private static void validateSignatureAttrs(Map<String, Object> attrs) throws ServiceException {
-        Set<String> validAttrs = AttributeManager.getInstance().getLowerCaseAttrsInClass(AttributeClass.signature);
-        validAttrs.add(A_objectClass.toLowerCase());
-
-        for (String key : attrs.keySet()) {
-            if (key.startsWith("+") || key.startsWith("-"))
-                key = key.substring(1);
-            if (!validAttrs.contains(key.toLowerCase()) && !key.equalsIgnoreCase(A_offlineModifiedAttrs))
-                throw ServiceException.INVALID_REQUEST("unable to modify attr: " + key, null);
-        }
-    }
-
     @Override
     public synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs) throws ServiceException {
         return createSignature(account, signatureName, attrs, isZcsAccount(account));
@@ -1865,8 +1840,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     synchronized Signature createSignature(Account account, String signatureName, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
-        validateSignatureAttrs(attrs);
-
         boolean setAsDefault = false;
         List<Signature> existing = getAllSignatures(account);
         int numSigs = existing.size();
@@ -1931,8 +1904,6 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     }
 
     synchronized void modifySignature(Account account, String signatureId, Map<String, Object> attrs, boolean markChanged) throws ServiceException {
-        validateSignatureAttrs(attrs);
-
         Signature signature = get(account, SignatureBy.id, signatureId);
         if (signature == null)
             throw AccountServiceException.NO_SUCH_SIGNATURE(signatureId);
