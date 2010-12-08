@@ -738,7 +738,6 @@ public class ExecuteHarnessMain {
 			// Set the working conditions
 			ZimbraSeleniumProperties.setBaseDirectory(".");
 			ZimbraSeleniumProperties.setConfigProperties("conf/config.properties");
-			SeleniumService.getInstance().setUserExtensions(new File(ZimbraSeleniumProperties.getBaseDirectory() + "/src/java/framework/lib/user-extensions.js"));
 
 			// Create the harness object and execute it
 			ExecuteHarnessMain harness = new ExecuteHarnessMain();

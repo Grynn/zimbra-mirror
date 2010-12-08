@@ -38,16 +38,7 @@ public class SeleniumService {
 		Local, Remote, Grid, SauceLabs
 	}
 	
-	private File userExtensionsFile = null;
 	
-	/**
-	 * Set the user-extensions.js file to be used by the selenium service
-	 * @param file
-	 */
-	public void setUserExtensions(File file) {
-		userExtensionsFile = file;
-	}
-
 	/**
 	 * Check http://service:port to determine if selenium is running
 	 * @return true if running, false otherwise
@@ -185,7 +176,6 @@ public class SeleniumService {
 				
 				RemoteControlConfiguration rcConfig = new RemoteControlConfiguration();
 				rcConfig.setPort(SeleniumPort);
-				rcConfig.setUserExtensions(userExtensionsFile);
 				ss = new SeleniumServer(false, rcConfig);				
 				ss.boot();
 

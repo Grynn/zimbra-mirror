@@ -2,12 +2,7 @@ package staf;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +24,6 @@ import com.ibm.staf.service.STAFCommandParser;
 import com.ibm.staf.service.STAFServiceInterfaceLevel30;
 
 import framework.core.ExecuteHarnessMain;
-import framework.core.SeleniumService;
 import framework.util.HarnessException;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -64,7 +58,6 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
     private String optionHalt = "halt";
     
     private static final String defaultLog4jProperties = "/tmp/log4j.properties";
-	public static final String defaultUserExtensionsURI		= "http://zqa-004.eng.vmware.com/files/user-extensions.js";
 
     // 
     private boolean serviceIsRunning = false;
@@ -159,7 +152,10 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 			StafProperties configProperties = new StafProperties(valueRoot + "/conf/config.properties");
 			
 			// Set values
-			configProperties.setProperty("server", valueServer);
+			configProperties.setProperty("server.scheme", "http");
+			configProperties.setProperty("server.host", valueServer);
+			configProperties.setProperty("server.port", "80");
+			configProperties.setProperty("adminName", "admin@" + valueServer);
 			configProperties.setProperty("browser", "firefox"); // TODO
 
 			configProperties.setProperty("seleniumMode", "Local");
@@ -238,9 +234,6 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 	        // Execute!
 			try {
 				
-				// Point to the user-extensions.js
-				SeleniumService.getInstance().setUserExtensions(getUserExtensionsFile(defaultUserExtensionsURI));
-
 				String response = harness.execute();
 		        resultString.append(response);
 		        
@@ -262,48 +255,6 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 
 	}
 	
-	private File getUserExtensionsFile(String uri) throws HarnessException {
-		
-		
-		String filename = "/user-extensions.js";
-		File file = new File(filename);
-
-		try {
-
-			OutputStream out = null;
-			InputStream in = null;
-
-			try {
-
-				// Open the OutputStream for writing
-				out = new FileOutputStream(file);
-
-				// Open the URL for reading
-				URL u = new URL(uri);
-				URLConnection uc = u.openConnection();
-				in = uc.getInputStream();
-
-				// Stream the URL to the File
-				byte[] buffer = new byte[1024];
-				int length;
-				while ((length=in.read(buffer))>0) {
-					out.write(buffer, 0 , length);
-				}
-
-			} finally {
-
-				// Remember to close pointers.
-				if ( in != null )			in.close();
-				if ( out != null )			out.close();
-				
-			}
-			
-		} catch (IOException e) {
-			throw new HarnessException("Unable to read user-extensions from "+ uri, e);
-		}
-
-		return (file);
-	}
 	
 
 	private STAFResult handleQuery(RequestInfo info) {
