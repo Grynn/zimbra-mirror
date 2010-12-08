@@ -171,7 +171,7 @@ public class ZimbraAccount {
 		put("zimbraPrefAutoAddAddressEnabled", "FALSE");
 		put("zimbraPrefCalendarInitialView", "workWeek");
 		put("zimbraPrefCalendarApptReminderWarningTime", "0");
-		put("zimbraPrefTimeZoneId", "(GMT-08.00) Pacific Time");
+		put("zimbraPrefTimeZoneId", ZimbraSeleniumProperties.getStringProperty("zimbraPrefTimeZoneId", "America/Los_Angeles"));
 		put("zimbraFeatureReadReceiptsEnabled", "TRUE");
 		put("zimbraPrefCalendarAlwaysShowMiniCal", "FALSE");
 		// put("zimbraPrefSkin", "beach");
