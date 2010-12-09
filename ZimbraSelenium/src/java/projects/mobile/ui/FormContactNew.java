@@ -11,7 +11,7 @@ public class FormContactNew extends AbsForm {
 
 	public static class Locators {
 		
-		public static final String lSubmit = "";
+		public static final String lSubmit = "//input[@name='actionSave']";
 		
 		public static final String lLastName		= "xpath=//input[@id='lastName']";
 		public static final String lFirstName		= "xpath=//input[@id='firstName']";
@@ -53,14 +53,20 @@ public class FormContactNew extends AbsForm {
 		ContactItem contact = (ContactItem)item;
 		
 		if ( contact.firstName != null ) {
+			if ( !this.sIsElementPresent(Locators.lFirstName) )
+				throw new HarnessException("Unable to find locator "+ Locators.lFirstName);
 			this.sType(Locators.lFirstName, contact.firstName);
 		}
 		
 		if ( contact.lastName != null ) {
+			if ( !this.sIsElementPresent(Locators.lLastName) )
+				throw new HarnessException("Unable to find locator "+ Locators.lLastName);
 			this.sType(Locators.lLastName, contact.lastName);
 		}
 
 		if ( contact.email != null ) {
+			if ( !this.sIsElementPresent(Locators.lEmail) )
+				throw new HarnessException("Unable to find locator "+ Locators.lEmail);
 			this.sType(Locators.lEmail, contact.email);
 		}
 

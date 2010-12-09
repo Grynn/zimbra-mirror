@@ -9,8 +9,8 @@ import framework.items.ContactItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
 import framework.ui.Button;
-import framework.ui.Button;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 
 /**
  * @author Matt Rhoades
@@ -24,8 +24,7 @@ public class PageContacts extends AbsMobilePage {
 		public static final String zContactsIsActive = "xpath=//a[contains(.,'Address Books')]";
 	
 		// TODO: Need better locator that doesn't have content text
-		public static final String zNewContact = "xpath=//a[contains(.,'Add')]";
-	
+		public static final String zNewContact = "//span//a[contains(.,'Add')]";
 	}
 	
 	public PageContacts(AbsApplication application) {
@@ -94,6 +93,7 @@ public class PageContacts extends AbsMobilePage {
 			throw new HarnessException("Contacts page is not active");
 		}
 		
+		int delay = 0;
 		String locator = null;
 		AbsForm form = null;
 		
@@ -101,6 +101,7 @@ public class PageContacts extends AbsMobilePage {
 			
 			locator = Locators.zNewContact;
 			form = new FormContactNew(this.MyApplication);
+			delay = 3000;
 			
 		} else {
 			
@@ -114,11 +115,16 @@ public class PageContacts extends AbsMobilePage {
 		
 		// Default behavior
 		
-		// Click on "Add"
+		// Click on "locator"
 		if ( !this.sIsElementPresent(locator) ) {
 			throw new HarnessException("locator is not present " + locator);
 		}
 		this.sClick(locator);
+		
+		// Sleep if specified
+		if ( delay > 0 ) {
+			SleepUtil.sleep(delay);
+		}
 						
 		return (form);
 		
