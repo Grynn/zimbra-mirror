@@ -467,7 +467,7 @@ public class ZimbraAccount {
 			try {
 				uri = getUploadURI(host);
 			} catch (URISyntaxException e) {
-				throw new HarnessException("Unable to determine URI for upload", e);
+				throw new HarnessException("Unable to determine URI for upload " + host, e);
 			}
 			
 			// Use HTTP to upload
@@ -537,7 +537,7 @@ public class ZimbraAccount {
 
 				// parse the response
 	            if (code != HttpStatus.SC_OK) {
-                    throw new HarnessException("Attachment post failed, response status: " + code);
+                    throw new HarnessException("Attachment "+ f.getAbsolutePath() +" post failed, response status: " + code);
 	            }
 
             	// paw through the returned HTML and get the attachment id
@@ -552,9 +552,9 @@ public class ZimbraAccount {
                 logger.info("Attachment ID: "+ attachmentId);
                 
 	        } catch (HttpException e) {
-				throw new HarnessException("Unable to upload file", e);
+				throw new HarnessException("Unable to upload file "+ f.getAbsolutePath() , e);
 			} catch (IOException e) {
-				throw new HarnessException("Unable to upload file", e);
+				throw new HarnessException("Unable to upload file "+ f.getAbsolutePath() , e);
 			} finally {
 				if ( method != null ) {
 					method.releaseConnection();
