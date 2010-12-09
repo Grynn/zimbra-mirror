@@ -126,7 +126,35 @@ public class ExecuteHarnessMain {
 	/**
 	 * Where output is logged
 	 */
-	public String testoutputfoldername = null;
+	protected String testoutputfoldername = null;
+	public void setTestOutputFolderName(String path) {
+		
+		// Append the app, browser, locale
+		path += "/" +
+            ZimbraSeleniumProperties.getAppType() +"/" + 
+            ZimbraSeleniumProperties.getStringProperty("browser") + "/" +  
+            ZimbraSeleniumProperties.getStringProperty("locale") ;  		
+
+		// Make sure the path exists
+		File output = new File(path);
+		if ( !output.exists() )		output.mkdirs();
+		
+		// Set the property to the absolute path
+		try {
+			testoutputfoldername = output.getCanonicalPath();
+		} catch (IOException e) {
+			logger.warn("Unable to get canonical path of the test output folder ("+ e.getMessage() +").  Using absolute path.");
+			testoutputfoldername = output.getAbsolutePath();
+		}
+		
+		// Make sure any other dependent folders exist
+		File debug = new File(testoutputfoldername + "/debug");
+		if ( !debug.exists() )		debug.mkdirs();
+		
+		File testng = new File(testoutputfoldername + "/TestNG");
+		if ( !testng.exists() )		testng.mkdirs();
+		
+	}
 	
 	/**
 	 * Where conf folder is located
@@ -380,7 +408,7 @@ public class ExecuteHarnessMain {
 		ng.addListener(listener = new ResultListener());
 		
 		try {
-			ng.setOutputDirectory(this.testoutputfoldername);
+			ng.setOutputDirectory(this.testoutputfoldername + "/TestNG");
 		} catch (Exception e) {
 			throw new HarnessException(e);
 		}
@@ -660,27 +688,14 @@ public class ExecuteHarnessMain {
 
 	        //'o' check should be after 'p' check to avoid code redundancy
 	        if ( cmd.hasOption('o') ) {
-	        	 this.testoutputfoldername = cmd.getOptionValue('o');
+	        	this.setTestOutputFolderName(cmd.getOptionValue('o'));
 	        } else {
-	             this.testoutputfoldername = 
-	       		 ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot")+"\\"  +
-			     ZimbraSeleniumProperties.zimbraGetVersionString() + "\\"  + 
-	             ZimbraSeleniumProperties.getAppType() +"\\" + 
-	             ZimbraSeleniumProperties.getStringProperty("browser") + "\\" +  
-	             ZimbraSeleniumProperties.getStringProperty("locale") ;  		
+	        	this.setTestOutputFolderName( 
+	        			ZimbraSeleniumProperties.getStringProperty("ZimbraLogRoot") +"/"+
+	        			ZimbraSeleniumProperties.zimbraGetVersionString()
+				    ); 
 	        }
 	        
-	        // Make sure the test output folder exists, create it if not
-	        File outputfolder = new File(testoutputfoldername);
-	        if ( !outputfolder.exists() ) {
-	        	outputfolder.mkdirs();
-	        }
-	        try {
-				this.testoutputfoldername = outputfolder.getCanonicalPath();
-			} catch (IOException e) {
-				logger.warn("Unable to get canonical path of the test output folder ("+ e.getMessage() +").  Using absolute path.");
-				this.testoutputfoldername = outputfolder.getAbsolutePath();
-			}
 	        	
 	        if ( cmd.hasOption('l') ) {
 	        	PropertyConfigurator.configure(cmd.getOptionValue('l'));

@@ -1,5 +1,6 @@
 package staf;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -44,6 +45,10 @@ public class StafProperties {
 
     public String save(String foldername) throws IOException {
     	propertiesFilename = foldername + "/" + System.currentTimeMillis() + "config.properties";
+    	
+    	File f = new File(propertiesFilename);
+    	f.getParentFile().mkdirs();
+    	
     	properties.store(new FileWriter(propertiesFilename), ConfigPropertiesComments);
     	return (propertiesFilename);
     }

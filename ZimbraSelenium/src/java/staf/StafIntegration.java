@@ -173,12 +173,13 @@ public class StafIntegration implements STAFServiceInterfaceLevel30 {
 		} catch (IOException e) {
         	return (new STAFResult(STAFResult.JavaError, e.getMessage()));
 		}
-        
+
 		// Set the harness parameters
         harness.jarfilename = valueJarfile;
         harness.classfilter = valuePattern;
         harness.groups = valueGroup;
-        harness.testoutputfoldername = valueLog;
+        harness.setTestOutputFolderName(valueLog);
+
 
 		// Done!
 		return (new STAFResult(STAFResult.Ok));
