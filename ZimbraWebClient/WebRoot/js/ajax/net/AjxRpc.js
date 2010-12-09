@@ -149,13 +149,15 @@ function() {
 	if (AjxRpc.__rpcCache.length > 0) {
 		rpcCtxt = AjxRpc.__rpcCache.pop();
 		DBG.println(AjxDebug.DBG2, "reusing RPC ID " + rpcCtxt.id);
+		AjxDebug.println(AjxDebug.RPC, "reusing RPC ID " + rpcCtxt.id);
 	} else {
 		if (AjxRpc.__RPC_COUNT < AjxRpc.__RPC_CACHE_MAX) {
 			// we haven't reached our limit, so create a new AjxRpcRequest
 			var id = "__RpcCtxt_" + AjxRpc.__RPC_COUNT;
 			rpcCtxt = new AjxRpcRequest(id);
 			AjxRpc.__RPC_COUNT++;
-			DBG.println(AjxDebug.DBG2, "Created RPC " + id + ", total created: " + AjxRpc.__RPC_COUNT);
+			DBG.println(AjxDebug.DBG1, "Created RPC " + id + ", total created: " + AjxRpc.__RPC_COUNT);
+			AjxDebug.println(AjxDebug.RPC, "Created RPC " + id + ", total created: " + AjxRpc.__RPC_COUNT);
 		} else {
 			// yikes, we're out of rpc's! Look for an old one to kill.
 			rpcCtxt = AjxRpc.__reap();
@@ -171,6 +173,7 @@ function() {
 					}
 				}
 				var detail = text.join("<br><br>");
+				AjxDebug.println(AjxDebug.RPC, "Out of RPC cache!!! Outstanding requests: " + detail);
 				throw new AjxException("Out of RPC cache", AjxException.OUT_OF_RPC_CACHE, "AjxRpc.__getFreeRpcCtxt", detail);
 			}
 		}
@@ -196,6 +199,7 @@ function() {
 		rpcCtxt = AjxRpc.__rpcOutstanding[i];
 		if (rpcCtxt.timestamp + AjxRpc.__RPC_REAP_AGE < time) {
 			DBG.println(AjxDebug.DBG1, "AjxRpc.__reap: cleared RPC context " + rpcCtxt.id);
+			AjxDebug.println(AjxDebug.RPC, "AjxRpc.__reap: cleared RPC context " + rpcCtxt.id);
 			rpcCtxt.cancel();
 			delete AjxRpc.__rpcOutstanding[i];
 			return rpcCtxt;

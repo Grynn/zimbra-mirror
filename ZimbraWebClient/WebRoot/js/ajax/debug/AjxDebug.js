@@ -79,9 +79,19 @@ AjxDebug.DBG3 = 3; // anything goes
 AjxDebug.TGT_WINDOW		= "window";
 AjxDebug.TGT_CONSOLE	= "console";
 
-// holds log output in memory so we can show it to user
-AjxDebug.BUFFER = [];
-AjxDebug.BUFFER_MAX = 500;
+// holds log output in memory so we can show it to user if requested; hash of arrays by type
+AjxDebug.BUFFER		= {};
+AjxDebug.BUFFER_MAX	= {};
+
+// Special log types. These can be used to make high-priority log info available in prod mode.
+// To turn off logging for a type, set its BUFFER_MAX to 0.
+AjxDebug.RPC			= "rpc";	// for troubleshooting "Out of RPC cache" errors
+AjxDebug.NOTIFY			= "notify";	// for troubleshooting missing new mail
+AjxDebug.DEFAULT_TYPE	= "debug";	// regular DBG messages
+
+AjxDebug.BUFFER_MAX[AjxDebug.RPC]			= 200;
+AjxDebug.BUFFER_MAX[AjxDebug.NOTIFY]		= 200;
+AjxDebug.BUFFER_MAX[AjxDebug.DEFAULT_TYPE]	= 0;	// this one can get big due to object dumps
 
 AjxDebug.MAX_OUT = 25000; // max length capable of outputting an XML msg
 
@@ -138,6 +148,7 @@ function() {
  */
 AjxDebug.prototype.println =
 function(level, msg, linkName) {
+	
 	if (!this._isWriteable()) { return; }
 
 	try {
@@ -146,7 +157,7 @@ function(level, msg, linkName) {
 
 		msg = result.args.join("");
 		var eol = (this._target != AjxDebug.TGT_CONSOLE) ? "<br>" : "";
-		this._add(this._timestamp() + msg + eol, null, null, null, result.linkName);
+		this._add({msg:this._timestamp() + msg + eol, linkName:result.linkName, level:level});
 	} catch (ex) {
 		// do nothing
 	}
@@ -183,7 +194,7 @@ function(level, obj, showFuncs, linkName) {
 	if (!obj) { return; }
 
 	showFuncs = result.args[1];
-	this._add(null, obj, false, false, result.linkName, showFuncs);
+	this._add({obj:obj, linkName:result.linkName, showFuncs:showFuncs, level:level});
 };
 
 /**
@@ -199,7 +210,7 @@ function(level, text, linkName) {
 	var result = this._handleArgs(arguments);
 	if (!result) { return; }
 
-	this._add(null, result.args[0], false, true, result.linkName);
+	this._add({obj:result.args[0], isRaw:true, linkName:result.linkName, level:level});
 };
 
 /**
@@ -223,7 +234,7 @@ function(level, text, linkName) {
 		this.printRaw(text);
 		return;
 	}
-	this._add(null, text, true, false, result.linkName);
+	this._add({obj:text, isRaw:false, linkName:result.linkName, level:level});
 };
 
 /**
@@ -264,7 +275,7 @@ function(on, msg) {
 		text = text + ": " + msg;
 	}
 
-	var debugMsg = new DebugMessage(text);
+	var debugMsg = new DebugMessage({msg:text});
 	this._addMessage(debugMsg);
 	this._startTimePt = this._lastTimePt = new Date().getTime();
 };
@@ -293,7 +304,7 @@ function(msg, restart) {
 	var html = "<div>" + text + "</div>";
 
 	// Add the message to our stack
-	this._addMessage(new DebugMessage(html));
+	this._addMessage(new DebugMessage({msg:html}));
 	return interval;
 };
 
@@ -358,33 +369,32 @@ function() {
 };
 
 AjxDebug.prototype._getHtmlForObject =
-function(anObj, isXml, isRaw, timestamp, showFuncs) {
+function(obj, params) {
+
+	params = params || {};
 	var html = [];
 	var idx = 0;
 
-	if (anObj === undefined) {
+	if (obj === undefined) {
 		html[idx++] = "<span>Undefined</span>";
-	} else if (anObj === null) {
+	} else if (obj === null) {
 		html[idx++] = "<span>NULL</span>";
-	} else if (AjxUtil.isBoolean(anObj)) {
-		html[idx++] = "<span>" + anObj + "</span>";
-	} else if (AjxUtil.isNumber(anObj)) {
-		html[idx++] = "<span>" + anObj +"</span>";
+	} else if (AjxUtil.isBoolean(obj)) {
+		html[idx++] = "<span>" + obj + "</span>";
+	} else if (AjxUtil.isNumber(obj)) {
+		html[idx++] = "<span>" + obj +"</span>";
 	} else {
-		if (isRaw) {
+		if (params.isRaw) {
 			html[idx++] = this._timestamp();
 			html[idx++] = "<textarea rows='25' style='width:100%' readonly='true'>";
-			html[idx++] = anObj;
+			html[idx++] = obj;
 			html[idx++] = "</textarea><p></p>";
-		} else if (isXml) {
+		} else if (params.isXml) {
 			var xmldoc = new AjxDebugXmlDocument;
 			var doc = xmldoc.create();
 			// IE bizarrely throws error if we use doc.loadXML here (bug 40451)
 			if (doc && ("loadXML" in doc)) {
-				doc.loadXML(anObj);
-	//			if (timestamp) {
-	//				html[idx++] = [doc.documentElement.nodeName, this._getTimeStamp(timestamp)].join(" - ");
-	//			}
+				doc.loadXML(obj);
 				html[idx++] = "<div style='border-width:2px; border-style:inset; width:100%; height:300px; overflow:auto'>";
 				html[idx++] = this._createXmlTree(doc, 0, {"authToken":true});
 				html[idx++] = "</div>";
@@ -393,7 +403,7 @@ function(anObj, isXml, isRaw, timestamp, showFuncs) {
 			}
 		} else {
 			html[idx++] = "<div style='border-width:2px; border-style:inset; width:100%; height:300px; overflow:auto'><pre>";
-			html[idx++] = this._dump(anObj, true, showFuncs, {"ZmAppCtxt":true, "authToken":true});
+			html[idx++] = this._dump(obj, true, params.showFuncs, {"ZmAppCtxt":true, "authToken":true});
 			html[idx++] = "</div></pre>";
 		}
 	}
@@ -735,19 +745,17 @@ function(obj) {
 };
 
 AjxDebug.prototype._add =
-function(aMsg, extraInfo, isXml, isRaw, linkName, showFuncs) {
-	var timestamp = new Date();
-	if (extraInfo) {
-		extraInfo = this._getHtmlForObject(extraInfo, isXml, isRaw, timestamp, showFuncs);
-	}
+function(params) {
+
+	params.extraHtml = params.obj && this._getHtmlForObject(params.obj, params);
 
 	// Add the message to our stack
-    this._addMessage(new DebugMessage(aMsg, null, null, timestamp, extraInfo, linkName));
+    this._addMessage(new DebugMessage(params));
 };
 
 AjxDebug.prototype._addMessage =
-function(aMsg) {
-	this._msgQueue[this._msgQueue.length] = aMsg;
+function(msg) {
+	this._msgQueue.push(msg);
 	this._showMessages();
 };
 
@@ -785,7 +793,7 @@ function() {
 			for (var i = 0, len = this._msgQueue.length; i < len; ++i ) {
 				var msg = this._msgQueue[i];
 				var linkLabel = msg.linkName;
-				var contentLabel = [msg.message, msg.eHtml].join("");
+				var contentLabel = [msg.message, msg.extraHtml].join("");
 				this._createLinkNContent("Link", linkLabel, "Content", contentLabel, now);
 			}
 		}
@@ -798,14 +806,23 @@ AjxDebug.prototype._addMessagesToBuffer =
 function() {
 
 	var eol = (this._target == AjxDebug.TGT_CONSOLE) ? "<br>" : "";
-	var now = new Date();
-	var buffer = AjxDebug.BUFFER;
 	for (var i = 0, len = this._msgQueue.length; i < len; ++i ) {
 		var msg = this._msgQueue[i];
-		while (buffer.length >= AjxDebug.BUFFER_MAX) {
+		AjxDebug._addMessageToBuffer(msg.type, msg.message + msg.extraHtml + eol);
+	}
+};
+
+AjxDebug._addMessageToBuffer =
+function(type, msg) {
+
+	type = type || AjxDebug.DEFAULT_TYPE;
+	var max = AjxDebug.BUFFER_MAX[type];
+	if (max > 0) {
+		var buffer = AjxDebug.BUFFER[type] = AjxDebug.BUFFER[type] || [];
+		while (buffer.length >= max) {
 			buffer.shift();
 		}
-		buffer.push(msg.message + msg.eHtml + eol);
+		buffer.push(msg);
 	}
 };
 
@@ -818,7 +835,7 @@ function() {
 	for (var i = 0, len = this._msgQueue.length; i < len; ++i ) {
 		var msg = this._msgQueue[i];
 		if (window.console && window.console.log) {
-			window.console.log(AjxStringUtil.stripTags(msg.message + msg.eHtml));
+			window.console.log(AjxStringUtil.stripTags(msg.message + msg.extraHtml));
 		}
 	}
 };
@@ -906,15 +923,56 @@ function() {
 	}
 };
 
+AjxDebug.println =
+function(type, msg) {
+	AjxDebug._addMessageToBuffer(type, msg + "<br>");
+};
+
+/**
+ *
+ * @param {hash}	params			hash of params:
+ * @param {string}	methodNameStr	SOAP method, eg SearchRequest or SearchResponse
+ * @param {boolean}	asyncMode		true if request made asynchronously
+ */
+AjxDebug.logSoapMessage =
+function(params) {
+
+	var ts = AjxDebug._getTimeStamp();
+	var msg = ["<b>", params.methodNameStr, params.asyncMode ? "" : " (SYNCHRONOUS)" , " - ", ts, "</b>"].join("");
+	for (var type in AjxDebug.BUFFER) {
+		if (type == AjxDebug.DEFAULT_TYPE) { continue; }
+		AjxDebug.println(type, msg);
+	}
+	if (window.DBG) {
+		window.DBG.println(AjxDebug.DBG1, msg, params.methodNameStr);
+	}
+};
+
+AjxDebug._getTimeStamp =
+function(date) {
+	return AjxDebug.prototype._getTimeStamp.apply(null, arguments);
+};
+
+AjxDebug.getDebugLog =
+function(type) {
+
+	type = type || AjxDebug.DEFAULT_TYPE;
+	var buffer = AjxDebug.BUFFER[type];
+	return buffer ? buffer.join("") : "";
+};
+
 /**
  * Simple wrapper for log messages.
  * @private
  */
-DebugMessage = function(aMsg, aType, aCategory, aTime, extraHtml, linkName) {
-	this.message = aMsg || "";
-	this.type = aType || null;
-	this.category = aCategory || "";
-	this.time = aTime || (new Date().getTime());
-	this.eHtml = extraHtml || "";
-	this.linkName = linkName;
+DebugMessage = function(params) {
+
+	params = params || {};
+	this.message = params.msg || "";
+	this.type = params.type || null;
+	this.category = params.category || "";
+	this.time = params.time || (new Date().getTime());
+	this.extraHtml = params.extraHtml || "";
+	this.linkName = params.linkName;
+	this.type = (params.level && typeof(params.level) == "string") ? params.level : AjxDebug.DEFAULT_TYPE;
 };

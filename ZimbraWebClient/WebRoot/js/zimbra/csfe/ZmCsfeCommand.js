@@ -383,11 +383,7 @@ function(params) {
 		context.authToken = ZmCsfeCommand._curAuthToken = authToken;
 	}
 
-	if (window.DBG) {
-		var ts = DBG._getTimeStamp();
-		DBG.println(AjxDebug.DBG1, ["<b>", params.methodNameStr, params.asyncMode ? "" : " (SYNCHRONOUS)" , " - ", ts, "</b>"].join(""), params.methodNameStr);
-		DBG.dumpObj(AjxDebug.DBG1, obj);
-	}
+	AjxDebug.logSoapMessage(params);
 
 	params.jsonRequestObj = obj;
 
@@ -489,11 +485,7 @@ function(params) {
 		}
 	}
 
-	if (window.DBG) {
-		var ts = DBG._getTimeStamp();
-		DBG.println(AjxDebug.DBG1, ["<b>", params.methodNameStr, params.asyncMode ? "" : " (SYNCHRONOUS)" , " - ", ts, "</b>"].join(""), params.methodNameStr);
-		DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
-	}
+	AjxDebug.logSoapMessage(params);
 
 	return soapDoc.getXml();
 };
@@ -611,11 +603,8 @@ function(response, params) {
 
 	}
 
-	if (window.DBG) {
-		var ts = DBG._getTimeStamp();
-		var method = ZmCsfeCommand.getMethodName(obj.Body);
-		DBG.println(AjxDebug.DBG1, ["<b>" + method, params.asyncMode ? "" : " (SYNCHRONOUS)" , " - ", ts, "</b>"].join(""), method);
-	}
+	params.methodNameStr = ZmCsfeCommand.getMethodName(obj.Body);
+	AjxDebug.logSoapMessage(params);
 	DBG.dumpObj(AjxDebug.DBG1, obj, -1);
 
 	var fault = obj && obj.Body && obj.Body.Fault;
