@@ -247,7 +247,7 @@
 		<echo message="Creating TMS TGZ contents ..." />
 		<copy file="${dist.lib.dir}/zimbraselenium.jar" todir="${tms.dir}/jars/"/>
 		<copy file="${dist.lib.dir}/zimbrastaf.jar" todir="${tms.dir}/jars/"/>
-		<copy todir="${tms.dir}/src/bin/">
+		<copy todir="${tms.dir}/bin/">
 			<fileset dir="src/bin">
 				<include name="**/*"/>
 			</fileset>
