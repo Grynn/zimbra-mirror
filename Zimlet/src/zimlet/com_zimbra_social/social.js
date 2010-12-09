@@ -1630,6 +1630,10 @@ function(params) {
 
 			var user = this.facebook.getFacebookProfile(obj.actor_id, tableId);
 			screen_name = user.name;
+			var targetUser = this.facebook.getFacebookProfile(obj.target_id, tableId);
+			if(targetUser) {
+				screen_name += " > " + targetUser.name;
+			}
 			created_at = obj.created_time;
 			if (obj.message != "") {
 				text = obj.message;
@@ -1944,8 +1948,22 @@ function(obj, account, tableId) {
 	}
 	var commentBoxId = "social_fbcommentBoxId_" + Dwt.getNextId();
 	this._FBPostIdAndCommentboxMap[obj.post_id] = commentBoxId;
-	if (obj.attachment && obj.attachment.media != undefined && obj.attachment.media.length > 0) {
-		var attachment = obj.attachment;
+	var attachment = obj.attachment;
+	if(attachment && attachment.media && !(attachment.media instanceof Array) && !attachment.media.src) {
+		html[i++] = "<table width=100%><tr><td>";
+		if(attachment.href && attachment.name && attachment.href != "") {
+			html[i++] = "<a  href='" + attachment.href + "' target='_blank'>";
+			html[i++] = attachment.name;
+			html[i++] = "</a>";
+			html[i++] = "<br/>";
+		}
+		if(attachment.description) {
+			html[i++] = "<div style='font-size:11px' class='social_feedText'>";
+			html[i++] = attachment.description;
+			html[i++] = "</div>";
+		}
+		html[i++] = "</td></tr></table>";
+	} else if (attachment && attachment.media != undefined && attachment.media.length > 0) {
 		var medias = attachment.media;
 		var counter = 0;
 		var maxItems = 2;
