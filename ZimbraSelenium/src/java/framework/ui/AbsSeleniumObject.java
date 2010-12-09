@@ -166,14 +166,6 @@ public abstract class AbsSeleniumObject {
 	}
 	
 	/**
-	 * DefaultSelenium.chooseOkOnNextConfirmation()
-	 */
-	public void sChooseOkOnNextConfirmation() {
-		ClientSessionFactory.session().selenium().chooseOkOnNextConfirmation();
-		logger.info("chooseOkOnNextConfirmation()");
-	}
-	
-	/**
 	 * DefaultSelenium.click()
 	 */
 	public void sClick(String locator) {

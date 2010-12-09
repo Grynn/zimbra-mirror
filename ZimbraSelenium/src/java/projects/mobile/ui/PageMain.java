@@ -16,18 +16,18 @@ public class PageMain extends AbsMobilePage {
 	
 		public static final String zBtnLogout = "xpath=//*[@id='_logout']";
 		
-		public static final String zMainCopyright = "xpath=//div[@id='copyright_notice']";
-		public static final String zMainCopyrightText = "xpath=//div[@id='copyright_notice']//a";
+		public static final String zMainCopyright = "//div[@id='copyright_notice']";
+		public static final String zMainCopyrightText = "//div[@id='copyright_notice']//a";
 		
-		public static final String zAppbarMail = "xpath=//div[@id='appbar']//a[@id='mail']";
-		public static final String zAppbarContact = "xpath=//div[@id='appbar']//a[@id='contact']";
-		public static final String zAppbarCal = "xpath=//div[@id='appbar']//a[@id='cal']";
-		public static final String zAppbarDocs = "xpath=//div[@id='appbar']//a[@id='docs']";
-		public static final String zAppbarSearch = "xpath=//div[@id='appbar']//a[@id='search']";
+		public static final String zAppbarMail = "//div[@id='appbar']//a[@id='mail']";
+		public static final String zAppbarContact = "//div[@id='appbar']//a[@id='contact']";
+		public static final String zAppbarCal = "//div[@id='appbar']//a[@id='cal']";
+		public static final String zAppbarDocs = "//div[@id='appbar']//a[@id='docs']";
+		public static final String zAppbarSearch = "//div[@id='appbar']//a[@id='search']";
 		
-		public static final String zBtnCompose = "xpath=//a[@href='zmain?st=newmail']";
+		public static final String zBtnCompose = "//a[@href='zmain?st=newmail']";
 		
-		public static final String zPreferences = "xpath=//a[@href='?st=prefs']";
+		public static final String zPreferences = "//a[@href='?st=prefs']";
 	
 	}
 	

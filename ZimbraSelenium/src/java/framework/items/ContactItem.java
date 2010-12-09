@@ -26,6 +26,17 @@ public class ContactItem extends ZimbraItem implements IItem {
 	
 	public FolderItem AddressBook = null;
 	
+	/**
+	 *  The GUI display name
+	 */
+	public String gDisplayName;
+	
+	/**
+	 * The GUI displayed email
+	 */
+	public String gEmail;
+	
+	
 	public ContactItem() {
 	}
 

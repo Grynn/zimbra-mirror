@@ -5,6 +5,7 @@ import framework.items.ZimbraItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 
 
 public class FormContactNew extends AbsForm {
@@ -39,6 +40,7 @@ public class FormContactNew extends AbsForm {
 			throw new HarnessException("Submit button is not present "+ Locators.lSubmit);
 		}
 		this.sClick(Locators.lSubmit);
+		SleepUtil.sleepMedium();
 	}
 
 	@Override

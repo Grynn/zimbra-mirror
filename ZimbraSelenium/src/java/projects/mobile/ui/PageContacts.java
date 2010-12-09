@@ -3,6 +3,7 @@
  */
 package projects.mobile.ui;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import framework.items.ContactItem;
@@ -136,10 +137,57 @@ public class PageContacts extends AbsMobilePage {
 	 * @return
 	 * @throws HarnessException 
 	 */
-	public List<ContactItem> getContactList() throws HarnessException {
+	public List<ContactItem> zListGetContacts() throws HarnessException {
 		
-		throw new HarnessException("implement me!");
+		List<ContactItem> items = new ArrayList<ContactItem>();
+		
+		
+		// How many items are in the table?
+		int count = this.sGetXpathCount("//div[@id='body']//div[contains(@class, 'list-row')]");
+		logger.debug(myPageName() + " zListGetContacts: number of contacts: "+ count);
+		SleepUtil.sleepLong();
+		
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			
+			final String contactLocator = "//div[contains(@id, 'conv')]["+ i +"]";
+			
+			if ( !this.sIsElementPresent(contactLocator) ) {
+				throw new HarnessException("Can't find contact row from locator "+ contactLocator);
+			}
 
+			String locator;
+			
+			ContactItem item = new ContactItem();
+
+			// TODO: Is it checked?
+
+			// TODO: Contact icon
+			
+			// TODO: Displayed name
+			locator = contactLocator + "//span[@class='td m']//a/div/strong";
+			if ( this.sIsElementPresent(locator) ) {
+				item.gDisplayName = this.sGetText(locator);
+			} else {
+				item.gDisplayName = "";
+			}
+
+			// TODO: email address
+			locator = contactLocator + "//span[@class='td m']//div[@class='Email']";
+			if ( this.sIsElementPresent(locator) ) {
+				item.gEmail = this.sGetText(locator);
+			} else {
+				item.gEmail = "";
+			}
+
+			
+			// Add the new item to the list
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
+		
+		// Return the list of items
+		return (items);
 	}
 
 
@@ -147,8 +195,12 @@ public class PageContacts extends AbsMobilePage {
 	 * Refresh to sync new server changes
 	 * @throws HarnessException 
 	 */
-	public void refresh() throws HarnessException {
+	public void zRefresh() throws HarnessException {
+		this.sClick(PageMain.Locators.zAppbarMail);
+		SleepUtil.sleepMedium();
+
 		this.sClick(PageMain.Locators.zAppbarContact);
+		SleepUtil.sleepMedium();
 	}
 
 

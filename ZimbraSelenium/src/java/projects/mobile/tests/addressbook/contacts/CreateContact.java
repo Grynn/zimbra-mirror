@@ -37,17 +37,20 @@ public class CreateContact extends MobileCommonTest {
 		FormContactNew form = (FormContactNew) app.zPageContacts.zToolbarPressButton(Button.B_NEW);
 		form.zFill(contact);
 		form.zSubmit();
-		
+
 		// Reset the contacts list
-		app.zPageContacts.refresh();
+		app.zPageContacts.zRefresh();
+		
 		
 		// Get the list of contacts
-		List<ContactItem> contacts = app.zPageContacts.getContactList();
+		List<ContactItem> contacts = app.zPageContacts.zListGetContacts();
+		
+		ZAssert.assertGreaterThan(contacts.size(), 0, "Verify the contact list size is greater than 0");
 
 		// Verify that the sent mail is in the list
 		boolean found = false;
 		for (ContactItem c : contacts) {
-			if ( c.email.equals(contact.email)) {
+			if ( c.gEmail.equals(contact.email)) {
 				found = true;		// Found the message!
 				break;
 			}
