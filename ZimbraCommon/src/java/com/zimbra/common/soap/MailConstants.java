@@ -157,6 +157,7 @@ public class MailConstants {
     public static final String E_SEND_INVITE_REPLY_REQUEST = "SendInviteReplyRequest";
     public static final String E_ICAL_REPLY_REQUEST = "ICalReplyRequest";
     public static final String E_GET_FREE_BUSY_REQUEST = "GetFreeBusyRequest";
+    public static final String E_GET_FREE_BUSY_RESPONSE = "GetFreeBusyResponse";
     public static final String E_GET_WORKING_HOURS_REQUEST = "GetWorkingHoursRequest";
     public static final String E_GET_ICAL_REQUEST = "GetICalRequest";
     public static final String E_ANNOUNCE_ORGANIZER_CHANGE_REQUEST = "AnnounceOrganizerChangeRequest";
@@ -401,6 +402,7 @@ public class MailConstants {
     public static final QName SEND_INVITE_REPLY_REQUEST = QName.get(E_SEND_INVITE_REPLY_REQUEST, NAMESPACE);
     public static final QName ICAL_REPLY_REQUEST = QName.get(E_ICAL_REPLY_REQUEST, NAMESPACE);
     public static final QName GET_FREE_BUSY_REQUEST = QName.get(E_GET_FREE_BUSY_REQUEST, NAMESPACE);
+    public static final QName GET_FREE_BUSY_RESPONSE = QName.get(E_GET_FREE_BUSY_RESPONSE, NAMESPACE);
     public static final QName GET_WORKING_HOURS_REQUEST = QName.get(E_GET_WORKING_HOURS_REQUEST, NAMESPACE);
     public static final QName GET_ICAL_REQUEST = QName.get(E_GET_ICAL_REQUEST, NAMESPACE);
     public static final QName ANNOUNCE_ORGANIZER_CHANGE_REQUEST = QName.get(E_ANNOUNCE_ORGANIZER_CHANGE_REQUEST, NAMESPACE);

@@ -37,6 +37,6 @@ public class OfflineGetFreeBusy extends GetFreeBusy {
                 return super.handle(request, context);          
         }
         
-        return OfflineServiceProxy.GetFreeBusy().handle(request, context);
+        return new OfflineServiceProxy("get free/busy", false, true, MailConstants.GET_FREE_BUSY_RESPONSE).handle(request, context);
     }
 }

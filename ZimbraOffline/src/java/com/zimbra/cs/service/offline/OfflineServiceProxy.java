@@ -16,11 +16,13 @@ package com.zimbra.cs.service.offline;
 
 import java.util.Map;
 
+import org.dom4j.QName;
+
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.Element;
 import com.zimbra.cs.mailbox.Mailbox;
-import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.cs.mailbox.OfflineServiceException;
+import com.zimbra.cs.mailbox.ZcsMailbox;
 import com.zimbra.soap.DocumentHandler;
 import com.zimbra.soap.ZimbraSoapContext;
 
@@ -34,6 +36,11 @@ public class OfflineServiceProxy extends DocumentHandler {
         mOp = op;
         mQuiet = quiet;
         mHandleLocal = handleLocal;
+    }
+
+    public OfflineServiceProxy(String op, boolean quiet, boolean handleLocal, QName responseQname) {
+        this(op, quiet, handleLocal);
+        setResponseQName(responseQname);
     }
     
     public Element handle(Element request, Map<String, Object> context) throws ServiceException {
@@ -54,10 +61,6 @@ public class OfflineServiceProxy extends DocumentHandler {
             return getResponseElement(ctxt);
         
         return response;
-    }
-    
-    public static OfflineServiceProxy GetFreeBusy() {
-        return new OfflineServiceProxy("get free/busy", false, true);
     }
     
     public static OfflineServiceProxy SearchCalendarResources() {
