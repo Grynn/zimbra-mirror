@@ -324,11 +324,11 @@ public class ZContactBean implements Comparable {
 
     public String getImage() {
         if (getIsGroup())
-            return "contacts/ImgGroup.gif";
+            return "contacts/ImgGroup.png";
         else if (getIsGalContact())
-            return "startup/ImgGALContact.gif";
+            return "startup/ImgGALContact.png";
         else
-            return "contacts/ImgContact.gif";
+            return "contacts/ImgContact.png";
     }
 
     public String getImageAltKey() {

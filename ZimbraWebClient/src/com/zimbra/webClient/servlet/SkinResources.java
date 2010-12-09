@@ -32,6 +32,7 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.*;
 import javax.servlet.http.*;
+import javax.swing.ImageIcon;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.*;
@@ -58,9 +59,11 @@ public class SkinResources
     // Constants
     //
 
+    public static final String A_IMAGE_CACHE = SkinResources.class.getName()+":images";
+
     private static final String P_SKIN = "skin";
 	private static final String P_DEFAULT_SKIN = "zimbraDefaultSkin";
-        private static final String P_DEFAULT_ADMIN_SKIN = "zimbraDefaultAdminSkin";
+    private static final String P_DEFAULT_ADMIN_SKIN = "zimbraDefaultAdminSkin";
     private static final String P_USER_AGENT = "agent";
     private static final String P_DEBUG = "debug";
     private static final String P_CLIENT = "client";
@@ -162,6 +165,30 @@ public class SkinResources
 	public SkinResources() {
 		super("skinres");
 	}
+
+    //
+    // DiskCacheServlet methods
+    //
+
+    protected boolean flushCache(ServletRequest req) {
+        boolean flushed = super.flushCache(req);
+        if (flushed) {
+            // NOTE: The app:imginfo tag for the standard client stores its
+            // NOTE: image cache in this servlet's ServletContext object so
+            // NOTE: that the image info can be flushed with the command:
+            // NOTE: "zmprov fc skin".
+            ServletContext context = getServletContext();
+            // NOTE: We don't care what the image cache actually *is*
+            // NOTE: because we can just remove it from the servlet context
+            // NOTE: and it will be recreated the next time app:imginfo is
+            // NOTE: called.
+            Object cache = context.getAttribute(A_IMAGE_CACHE);
+            if (cache != null) {
+                context.removeAttribute(A_IMAGE_CACHE);
+            }
+        }
+        return flushed;
+    }
 
     //
     // HttpServlet methods
@@ -1766,5 +1793,51 @@ public class SkinResources
             return str.toString();
         }
     } // class Manifest
+
+    /**
+     * <strong>Note:</strong>
+     * This class is used by the app:imginfo tag. It needs to be defined
+     * outside of the tag itself because of JSP class loader weirdness.
+     * Otherwise, once an ImageInfo object is put into the cache, trying
+     * to pull it out of the cache will result in a ClassCastException
+     * that looks like "N cannot be cast to N".
+     */
+    public static class ImageInfo {
+        
+        // Constants
+        public static final int DEFAULT_WIDTH = 16; // TODO: settable?
+        public static final int DEFAULT_HEIGHT = 16; // TODO: settable?
+
+        // Data
+        private File file;
+        private String src;
+        private int width;
+        private int height;
+
+        // Constructors
+        public ImageInfo(File file, String src) {
+            this.file = file;
+            this.src = src;
+            try {
+                // NOTE: Assuming the web container is running "headless"
+                ImageIcon icon = new ImageIcon(file.toURL());
+                this.width = icon.getIconWidth();
+                this.height = icon.getIconHeight();
+                if (this.width == -1) {
+                    throw new Exception("no size data available");
+                }
+            }
+            catch (Exception e) {
+                this.width = DEFAULT_WIDTH;
+                this.height = DEFAULT_HEIGHT;
+            }
+        }
+
+        // Public methods
+        public String getSrc() { return src; }
+        public int getWidth() { return width; }
+        public int getHeight() { return height; }
+
+    } // class ImageInfo
 
 } // class SkinResources

@@ -310,6 +310,11 @@ then
 fi
 
 #####################################################
+# Run Java "headless"
+#####################################################
+JAVA_OPTIONS="$JAVA_OPTIONS -Djava.awt.headless=true"
+
+#####################################################
 # This is how the Jetty server will be started
 #####################################################
 RUN_CMD="$JAVA -ea $JAVA_OPTIONS -jar $JETTY_HOME/start.jar $JETTY_ARGS $CONFIGS"
