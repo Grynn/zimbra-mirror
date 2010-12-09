@@ -384,6 +384,7 @@ function(params) {
 	}
 
 	AjxDebug.logSoapMessage(params);
+	DBG.dumpObj(AjxDebug.DBG1, obj);
 
 	params.jsonRequestObj = obj;
 
@@ -486,6 +487,7 @@ function(params) {
 	}
 
 	AjxDebug.logSoapMessage(params);
+	DBG.printXML(AjxDebug.DBG1, soapDoc.getXml());
 
 	return soapDoc.getXml();
 };
