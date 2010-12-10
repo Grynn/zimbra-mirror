@@ -521,3 +521,8 @@ AjxVector.prototype.sub = function(f, obj) {
 	}
 	return AjxVector.fromArray(a);
 };
+
+AjxVector.prototype.slice =
+function(start, end) {
+	return AjxVector.fromArray(this._array.slice(start, end));
+};
