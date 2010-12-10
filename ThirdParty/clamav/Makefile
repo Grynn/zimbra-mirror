@@ -54,7 +54,7 @@ build:
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav
 	(cd $(ZIMBRA_HOME); tar czf $(CLAMAV_TGZ_TARGET) clamav-$(CLAMAV_VERSION))
-	chmod -R a+w $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/clamav/$(CLAMAV_TGZ_TARGET)
+	chmod -R a+w $(CLAMAV_TGZ_TARGET)
 
 p4edit: $(CLAMAV_TGZ_TARGET)
 	p4 add $(CLAMAV_TGZ_TARGET)

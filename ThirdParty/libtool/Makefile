@@ -38,7 +38,7 @@ build:
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/libtool
 	(cd $(ZIMBRA_HOME); tar czf $(LIBTOOL_TGZ_TARGET) libtool-$(LIBTOOL_VERSION))
-	chmod -R a+w $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/libtool/*
+	chmod -R a+w $(LIBTOOL_TGZ_TARGET)
 
 clean:
 	/bin/rm -rf libtool-$(LIBTOOL_VERSION)

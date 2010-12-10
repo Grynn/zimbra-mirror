@@ -138,7 +138,7 @@ install:
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix
 	(cd $(ZIMBRA_HOME); tar czf $(POSTFIX_TGZ_TARGET) postfix-$(POSTFIX_VERSION))
-	chmod -R a+w $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/postfix/*
+	chmod -R a+w $(POSTFIX_TGZ_TARGET)
 
 p4edit: $(POSTFIX_TGZ_TARGET)
 	p4 add $(POSTFIX_TGZ_TARGET)

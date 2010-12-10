@@ -68,7 +68,7 @@ tar: $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/aspell
 	(cd $(ZIMBRA_HOME); tar czf \
 	$(ASPELL_TGZ_TARGET) \
 	aspell-$(ASPELL_VERSION))
-	chmod -R a+w $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/aspell/*
+	chmod -R a+w $(ASPELL_TGZ_TARGET)
 
 $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/aspell:
 	mkdir -p $@

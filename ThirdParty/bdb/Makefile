@@ -57,7 +57,7 @@ build:
 tar:
 	mkdir -p $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/bdb
 	(cd $(ZIMBRA_HOME); tar czf $(BDB_TGZ_TARGET) bdb-$(BDB_VERSION))
-	chmod -R a+w $(P4_ROOT)/ThirdPartyBuilds/$(BUILD_PLATFORM)/bdb/*
+	chmod -R a+w $(BDB_TGZ_TARGET)
 
 clean:
 	/bin/rm -rf db-$(BDB_VERSION)
