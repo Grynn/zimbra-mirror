@@ -210,7 +210,7 @@ ZaAccount.A_zimbraPrefCalendarAutoAddInvites = "zimbraPrefCalendarAutoAddInvites
 ZaAccount.A_zimbraPrefCalendarApptVisibility = "zimbraPrefCalendarApptVisibility";
 ZaAccount.A_zimbraFeatureReadReceiptsEnabled = "zimbraFeatureReadReceiptsEnabled";
 ZaAccount.A_zimbraFeatureMailPriorityEnabled = "zimbraFeatureMailPriorityEnabled";
-ZaAccount.A_zimbraFeatureInstantNotify = "zimbraFeatureInstantNotify";
+//ZaAccount.A_zimbraFeatureInstantNotify = "zimbraFeatureInstantNotify";
 ZaAccount.A_zimbraFeatureImapDataSourceEnabled = "zimbraFeatureImapDataSourceEnabled";
 ZaAccount.A_zimbraFeaturePop3DataSourceEnabled = "zimbraFeaturePop3DataSourceEnabled";
 ZaAccount.A_zimbraFeatureMailSendLaterEnabled = "zimbraFeatureMailSendLaterEnabled";
@@ -232,7 +232,6 @@ ZaAccount.A_zimbraFeatureGalEnabled="zimbraFeatureGalEnabled";
 ZaAccount.A_zimbraFeatureSharingEnabled="zimbraFeatureSharingEnabled";
 //ZaAccount.A_zimbraFeatureNotebookEnabled = "zimbraFeatureNotebookEnabled";
 ZaAccount.A_zimbraFeatureBriefcasesEnabled = "zimbraFeatureBriefcasesEnabled";
-ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled = "zimbraFeatureBriefcaseDocsEnabled";
 ZaAccount.A_zimbraFeatureHtmlComposeEnabled = "zimbraFeatureHtmlComposeEnabled";
 ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled = "zimbraFeatureGalAutoCompleteEnabled";
 ZaAccount.A_zimbraImapEnabled = "zimbraImapEnabled";
@@ -248,7 +247,7 @@ ZaAccount.A_zimbraFeatureOptionsEnabled = "zimbraFeatureOptionsEnabled";
 //ZaAccount.A_zimbraFeatureShortcutAliasesEnabled = "zimbraFeatureShortcutAliasesEnabled" ;
 ZaAccount.A_zimbraFeatureMailEnabled = "zimbraFeatureMailEnabled" ;
 ZaAccount.A_zimbraFeatureGroupCalendarEnabled = "zimbraFeatureGroupCalendarEnabled" ;
-ZaAccount.A_zimbraFeatureIMEnabled = "zimbraFeatureIMEnabled" ;
+//ZaAccount.A_zimbraFeatureIMEnabled = "zimbraFeatureIMEnabled" ;
 ZaAccount.A_zimbraFeatureFlaggingEnabled = "zimbraFeatureFlaggingEnabled" ;
 ZaAccount.A_zimbraForeignPrincipal = "zimbraForeignPrincipal" ;
 //security
@@ -1879,7 +1878,6 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraFeatureMailEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureMailEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         //{id:ZaAccount.A_zimbraFeatureNotebookEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureNotebookEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureBriefcasesEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureBriefcasesEnabled, choices:ZaModel.BOOLEAN_CHOICES},
-        {id:ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureHtmlComposeEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureHtmlComposeEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureMailForwardingEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureMailForwardingEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureSharingEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureSharingEnabled, choices:ZaModel.BOOLEAN_CHOICES},
@@ -1892,8 +1890,8 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefCalendarApptReminderWarningTime, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefCalendarApptReminderWarningTime, choices:ZaModel.REMINDER_CHOICES},
         {id:ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureGalAutoCompleteEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureGroupCalendarEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureGroupCalendarEnabled, choices:ZaModel.BOOLEAN_CHOICES},
-        {id:ZaAccount.A_zimbraFeatureIMEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureIMEnabled, choices:ZaModel.BOOLEAN_CHOICES},
-        {id:ZaAccount.A_zimbraFeatureInstantNotify, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureInstantNotify, choices:ZaModel.BOOLEAN_CHOICES},
+        //{id:ZaAccount.A_zimbraFeatureIMEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureIMEnabled, choices:ZaModel.BOOLEAN_CHOICES},
+        //{id:ZaAccount.A_zimbraFeatureInstantNotify, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureInstantNotify, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraFeatureFlaggingEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraFeatureFlaggingEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraImapEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraImapEnabled, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPop3Enabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPop3Enabled, choices:ZaModel.BOOLEAN_CHOICES},

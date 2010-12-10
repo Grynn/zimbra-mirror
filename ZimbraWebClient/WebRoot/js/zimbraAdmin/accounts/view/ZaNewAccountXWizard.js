@@ -814,12 +814,12 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 								trueValue:"TRUE", falseValue:"FALSE"},														
 							//{ref:ZaAccount.A_zimbraFeatureNotebookEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureNotebookEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureNotebookEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureBriefcasesEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureBriefcasesEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcasesEnabled,  trueValue:"TRUE", falseValue:"FALSE"},							
-							{ref:ZaAccount.A_zimbraFeatureIMEnabled,
-								type:_SUPER_WIZ_CHECKBOX_, 
-								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-								msgName:ZaMsg.LBL_zimbraFeatureIMEnabled,
-								checkBoxLabel:ZaMsg.LBL_zimbraFeatureIMEnabled,  
-								trueValue:"TRUE", falseValue:"FALSE"},
+							//{ref:ZaAccount.A_zimbraFeatureIMEnabled,
+							//	type:_SUPER_WIZ_CHECKBOX_, 
+							//	resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+							//	msgName:ZaMsg.LBL_zimbraFeatureIMEnabled,
+							//	checkBoxLabel:ZaMsg.LBL_zimbraFeatureIMEnabled,  
+							//	trueValue:"TRUE", falseValue:"FALSE"},
 							{ref:ZaAccount.A_zimbraFeatureOptionsEnabled,
 								type:_SUPER_WIZ_CHECKBOX_, 
 								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
@@ -937,33 +937,20 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 					]
 				}
 			);
-		};
-		
-		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled],[])) {  
-			featuresCase.items.push(
-				{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraBriefcasesFeature, id:"account_wiz_features_briefcase",
-				 	colSizes:["auto"],numCols:1,
-					enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureBriefcasesEnabled,"TRUE"]],
-					enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureBriefcasesEnabled,ZaAccount.A_COSId],
-					items:[
-					    {ref:ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled, trueValue:"TRUE", falseValue:"FALSE"}
-					]
-				}
-			);
-		};
+		};	
 				
-		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureIMEnabled],[])) {
-			featuresCase.items.push(
-				{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraIMFeature, id:"account_wiz_features_im",
-					 	colSizes:["auto"],numCols:1,
-						visibilityChecks:[ZaAccountXFormView.isIMFeatureEnabled],
-						visibilityChangeEventSources:[ZaAccount.A_zimbraFeatureIMEnabled,ZaAccount.A_COSId],
-						items:[			
-							{ref:ZaAccount.A_zimbraFeatureInstantNotify, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureInstantNotify,checkBoxLabel:ZaMsg.LBL_zimbraFeatureInstantNotify, trueValue:"TRUE", falseValue:"FALSE"}
-						]
-				}
-			);
-		};
+	//	if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraFeatureIMEnabled],[])) {
+	//		featuresCase.items.push(
+	//			{type:_ZAWIZ_TOP_GROUPER_, label:ZaMsg.NAD_zimbraIMFeature, id:"account_wiz_features_im",
+	//				 	colSizes:["auto"],numCols:1,
+	//					visibilityChecks:[ZaAccountXFormView.isIMFeatureEnabled],
+	//					visibilityChangeEventSources:[ZaAccount.A_zimbraFeatureIMEnabled,ZaAccount.A_COSId],
+	//					items:[			
+	//						{ref:ZaAccount.A_zimbraFeatureInstantNotify, type:_SUPER_WIZ_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureInstantNotify,checkBoxLabel:ZaMsg.LBL_zimbraFeatureInstantNotify, trueValue:"TRUE", falseValue:"FALSE"}
+	//					]
+	//			}
+	//		);
+	//	};
 
 		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ //ZaAccount.A_zimbraFeatureAdvancedSearchEnabled,
 			ZaAccount.A_zimbraFeatureAdvancedSearchEnabled,

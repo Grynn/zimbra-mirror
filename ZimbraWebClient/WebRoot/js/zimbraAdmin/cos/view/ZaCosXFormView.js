@@ -175,8 +175,7 @@ ZaCosXFormView.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
 	ZaCos.A_zimbraFeatureTasksEnabled,
 	//ZaCos.A_zimbraFeatureNotebookEnabled,
 	ZaCos.A_zimbraFeatureBriefcasesEnabled,
-	ZaCos.A_zimbraFeatureBriefcaseDocsEnabled,
-	ZaCos.A_zimbraFeatureIMEnabled,
+	//ZaCos.A_zimbraFeatureIMEnabled,
 	ZaCos.A_zimbraFeatureOptionsEnabled,
 	ZaCos.A_zimbraFeatureTaggingEnabled,
 	ZaCos.A_zimbraFeatureSharingEnabled,
@@ -200,7 +199,7 @@ ZaCosXFormView.FEATURE_TAB_ATTRS = [ZaCos.A_zimbraFeatureMailEnabled,
 	ZaCos.A_zimbraFeatureMailPollingIntervalPreferenceEnabled,
 	ZaCos.A_zimbraFeatureIdentitiesEnabled,
 	ZaCos.A_zimbraFeatureGroupCalendarEnabled,
-	ZaCos.A_zimbraFeatureInstantNotify,
+	//ZaCos.A_zimbraFeatureInstantNotify,
 	ZaCos.A_zimbraFeaturePeopleSearchEnabled,
 	ZaCos.A_zimbraFeatureAdvancedSearchEnabled,
 	ZaCos.A_zimbraFeatureSavedSearchesEnabled,
@@ -395,7 +394,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 						ZaCos.A_zimbraFeatureCalendarEnabled,
 						ZaCos.A_zimbraFeatureTasksEnabled,
 						//ZaCos.A_zimbraFeatureNotebookEnabled,
-						ZaCos.A_zimbraFeatureIMEnabled,
+						//ZaCos.A_zimbraFeatureIMEnabled,
 						ZaCos.A_zimbraFeatureOptionsEnabled
 					]]
 				],
@@ -406,7 +405,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     {ref:ZaCos.A_zimbraFeatureTasksEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureTaskEnabled,label:ZaMsg.LBL_zimbraFeatureTaskEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
                     //{ref:ZaCos.A_zimbraFeatureNotebookEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureNotebookEnabled,label:ZaMsg.LBL_zimbraFeatureNotebookEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureBriefcasesEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureBriefcasesEnabled,label:ZaMsg.LBL_zimbraFeatureBriefcasesEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
-                    {ref:ZaCos.A_zimbraFeatureIMEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureIMEnabled,label:ZaMsg.LBL_zimbraFeatureIMEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
+                    //{ref:ZaCos.A_zimbraFeatureIMEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureIMEnabled,label:ZaMsg.LBL_zimbraFeatureIMEnabled,  trueValue:"TRUE", falseValue:"FALSE"},
                     {ref:ZaCos.A_zimbraFeatureOptionsEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureOptionsEnabled,label:ZaMsg.LBL_zimbraFeatureOptionsEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
                     //zimbraMobile from the extension
                 ]
@@ -495,36 +494,24 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 		    {ref:ZaCos.A_zimbraFeatureFreeBusyViewEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled, label:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled, trueValue:"TRUE", falseValue:"FALSE"}
                 ]
             },
-            {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraBriefcasesFeature, id:"cos_form_features_briefcase",
-                enableDisableChecks:[ZaCosXFormView.isBriefcaseFeatureEnabled],
-                enableDisableChangeEventSources:[ZaCos.A_zimbraFeatureBriefcasesEnabled],
-				visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
-					[
-						ZaCos.A_zimbraFeatureBriefcaseDocsEnabled
-					]]
-				],                
-                items:[
-                    {ref:ZaCos.A_zimbraFeatureBriefcaseDocsEnabled, type:_CHECKBOX_, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,label:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,  trueValue:"TRUE", falseValue:"FALSE"}
-                ]
-            },            
-            {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraIMFeature, id:"cos_form_features_im",
-                visibilityChecks:[ZaCosXFormView.isIMFeatureEnabled],
-                visibilityChangeEventSources:[ZaCos.A_zimbraFeatureIMEnabled],
-                visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
-					[
-						ZaCos.A_zimbraFeatureInstantNotify
-					]]
-				], 
-                items:[
-                    {ref:ZaCos.A_zimbraFeatureInstantNotify,
-                     type:_CHECKBOX_,
-                     msgName:ZaMsg.LBL_zimbraFeatureInstantNotify,
-                     label:ZaMsg.LBL_zimbraFeatureInstantNotify,
-                     trueValue:"TRUE",
-                     falseValue:"FALSE"}
-
-                ]
-            },
+            //{type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraIMFeature, id:"cos_form_features_im",
+            //    visibilityChecks:[ZaCosXFormView.isIMFeatureEnabled],
+            //    visibilityChangeEventSources:[ZaCos.A_zimbraFeatureIMEnabled],
+            //    visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
+	//				[
+	//					ZaCos.A_zimbraFeatureInstantNotify
+	//				]]
+	//			], 
+          //      items:[
+          //        {ref:ZaCos.A_zimbraFeatureInstantNotify,
+          //           type:_CHECKBOX_,
+          //           msgName:ZaMsg.LBL_zimbraFeatureInstantNotify,
+          //           label:ZaMsg.LBL_zimbraFeatureInstantNotify,
+          //           trueValue:"TRUE",
+          //           falseValue:"FALSE"}
+		
+          //      ]
+          //  },
             {type:_ZA_TOP_GROUPER_,  label:ZaMsg.NAD_zimbraSearchFeature, id:"cos_form_features_search",
                 visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
 					[

@@ -1777,7 +1777,7 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							 ZaAccount.A_zimbraFeatureTasksEnabled,
 							 //ZaAccount.A_zimbraFeatureNotebookEnabled,
 							 ZaAccount.A_zimbraFeatureBriefcasesEnabled,
-							 ZaAccount.A_zimbraFeatureIMEnabled,
+							 //ZaAccount.A_zimbraFeatureIMEnabled,
 							 ZaAccount.A_zimbraFeatureOptionsEnabled
 							 ]]
 						],
@@ -1815,11 +1815,11 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								msgName:ZaMsg.LBL_zimbraFeatureBriefcasesEnabled,
 								checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcasesEnabled,  
 								trueValue:"TRUE", falseValue:"FALSE"},								
-							{ref:ZaAccount.A_zimbraFeatureIMEnabled, type:_SUPER_CHECKBOX_, 
-								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
-								msgName:ZaMsg.LBL_zimbraFeatureIMEnavbled,
-								checkBoxLabel:ZaMsg.LBL_zimbraFeatureIMEnabled,  
-								trueValue:"TRUE", falseValue:"FALSE"},								
+							//{ref:ZaAccount.A_zimbraFeatureIMEnabled, type:_SUPER_CHECKBOX_, 
+							//	resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
+							//	msgName:ZaMsg.LBL_zimbraFeatureIMEnavbled,
+							//	checkBoxLabel:ZaMsg.LBL_zimbraFeatureIMEnabled,  
+							//	trueValue:"TRUE", falseValue:"FALSE"},								
 							{ref:ZaAccount.A_zimbraFeatureOptionsEnabled, type:_SUPER_CHECKBOX_, 
 								resetToSuperLabel:ZaMsg.NAD_ResetToCOS, 
 								msgName:ZaMsg.LBL_zimbraFeatureOptionsEnabled,
@@ -1922,34 +1922,23 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 							{ref:ZaAccount.A_zimbraFeatureFreeBusyViewEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureFreeBusyViewEnabled,  trueValue:"TRUE", falseValue:"FALSE"}	
 						]
 					},
-					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraBriefcasesFeature, id:"account_form_features_briefcase",colSizes:["auto"],numCols:1,
-						enableDisableChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureBriefcasesEnabled,"TRUE"]],
-						enableDisableChangeEventSources:[ZaAccount.A_zimbraFeatureBriefcasesEnabled,ZaAccount.A_COSId],
-						visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
-							[ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled
-							 ]]
-						],
-						items:[						
-							{ref:ZaAccount.A_zimbraFeatureBriefcaseDocsEnabled, type:_SUPER_CHECKBOX_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS, msgName:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled,checkBoxLabel:ZaMsg.LBL_zimbraFeatureBriefcaseDocsEnabled, trueValue:"TRUE", falseValue:"FALSE"}
-						]
-					},					
-					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraIMFeature, id:"account_form_features_im", colSizes:["auto"],numCols:1,
-						visibilityChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureIMEnabled,"TRUE"]],
-						visibilityChangeEventSources:[ZaAccount.A_zimbraFeatureIMEnabled,ZaAccount.A_COSId],
-						visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
-							[ZaAccount.A_zimbraFeatureInstantNotify ]]
-						],
-						items:[	
-							{ref:ZaAccount.A_zimbraFeatureInstantNotify,
-								 type:_SUPER_CHECKBOX_,
-								 msgName:ZaMsg.LBL_zimbraFeatureInstantNotify,
-								 checkBoxLabel:ZaMsg.LBL_zimbraFeatureInstantNotify,
-								 trueValue:"TRUE",
-								 falseValue:"FALSE",
-								 resetToSuperLabel:ZaMsg.NAD_ResetToCOS
-							}
-						]
-					},
+				//	{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraIMFeature, id:"account_form_features_im", colSizes:["auto"],numCols:1,
+				//		visibilityChecks:[[XForm.checkInstanceValue,ZaAccount.A_zimbraFeatureIMEnabled,"TRUE"]],
+				//		visibilityChangeEventSources:[ZaAccount.A_zimbraFeatureIMEnabled,ZaAccount.A_COSId],
+				//		visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 
+				//			[ZaAccount.A_zimbraFeatureInstantNotify ]]
+				//		],
+				//		items:[	
+				//			{ref:ZaAccount.A_zimbraFeatureInstantNotify,
+				//				 type:_SUPER_CHECKBOX_,
+				//				 msgName:ZaMsg.LBL_zimbraFeatureInstantNotify,
+				//				 checkBoxLabel:ZaMsg.LBL_zimbraFeatureInstantNotify,
+				//				 trueValue:"TRUE",
+				//				 falseValue:"FALSE",
+				//				 resetToSuperLabel:ZaMsg.NAD_ResetToCOS
+				//			}
+				//		]
+				//	},
 					{type:_ZA_TOP_GROUPER_, label: ZaMsg.NAD_zimbraSearchFeature, id:"account_form_features_search", colSizes:["auto"],numCols:1,
 						visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible,
 							[ZaAccount.A_zimbraFeatureAdvancedSearchEnabled,
