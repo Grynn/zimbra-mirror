@@ -43,7 +43,7 @@ rm -fr $stage
 mkdir -p $stage
 mv "$1/update.mar" $stage/update.dmg
 /usr/bin/hdiutil attach $stage/update.dmg -mountpoint $stage/install
-open "$stage/install/Zimbra Desktop.mpkg"
+open -W "$stage/install/Zimbra Desktop.mpkg"
 /usr/bin/hdiutil detach $stage/install
 rm -fr $stage
 
