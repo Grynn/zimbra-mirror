@@ -392,26 +392,6 @@ function(params) {
 	return before + result.join("") + after;
 };
 
-/**
- * Returns true if the character for the given key is considered printable.
- *
- * @param keycode	a numeric keycode (not a character code)
- * @return	{boolean}	<code>true</code> if the character for the given key is considered printable
- */
-AjxStringUtil.IS_PRINT_CODE = {};
-var print_codes = [32,48,49,50,51,52,53,54,55,56,57,59,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,
-                   81,82,83,84,85,86,87,88,89,90,96,97,98,99,100,101,102,103,104,105,106,107,109,110,111,186,
-                   187,188,189,190,191,192,219,220,221,222];
-var l = print_codes.length;
-for (var i = 0; i < l; i++) {
-	AjxStringUtil.IS_PRINT_CODE[print_codes[i]] = true;
-}
-
-AjxStringUtil.isPrintKey =
-function(keycode) {
-	return AjxStringUtil.IS_PRINT_CODE[keycode];
-};
-
 AjxStringUtil.SHIFT_CHAR = { 48:')', 49:'!', 50:'@', 51:'#', 52:'$', 53:'%', 54:'^', 55:'&', 56:'*', 57:'(',
 							59:':', 186:':', 187:'+', 188:'<', 189:'_', 190:'>', 191:'?', 192:'~',
 							219:'{', 220:'|', 221:'}', 222:'"' };

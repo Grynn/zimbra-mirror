@@ -127,6 +127,11 @@ for (var i = 0; i < ZaAutoCompleteListView.DELIMS.length; i++)
 ZaAutoCompleteListView.onKeyDown =
 function(ev) {
 	DBG.println(AjxDebug.DBG3, "onKeyDown");
+	var element = DwtUiEvent.getTargetWithProp(ev, "id");
+	var aclv = element && AjxCore.objectWithId(element._acListViewId);
+	if (aclv) {
+		aclv._inputLength = element.value.length;
+	}
 	var key = DwtKeyEvent.getCharCode(ev);
 	return (key == DwtKeyEvent.KEY_TAB || key == DwtKeyEvent.KEY_ESCAPE) ? ZaAutoCompleteListView.onKeyUp(ev) : true;
 }
@@ -152,6 +157,7 @@ function(ev) {
 		return true;
 	var value = element.value;
 	DBG.println(AjxDebug.DBG3, ev.type + " event, key = " + key + ", value = " + value);
+	ev.inputLengthChanged = (value.length != aclv._inputLength);
 
 	if (aclv._inputFieldXFormItem) {
 		DBG.println(AjxDebug.DBG1, "Set the inputField " + aclv._inputFieldXFormItem["refPath"] + " value: " + value) ;
@@ -191,7 +197,7 @@ function(ev) {
 	if ((key == 9) && !aclv.size())
 		return true;
 
-	if (AjxStringUtil.isPrintKey(key) || (key == 3 || key == 9 || key == 13))
+	if (ev.inputLengthChanged || (key == 3 || key == 9 || key == 13))
 		aclv._numChars++;
 
 	// if the user types a single delimiting character with the list showing, do completion
@@ -212,7 +218,7 @@ function(ev) {
 	}
 
 	// skip if it's some weird character
-	if (!AjxStringUtil.isPrintKey(key) && 
+	if (!ev.inputLengthChanged && 
 		(key != 3 && key != 13 && key != 9 && key != 8 && key != 46))
 		return true;
 
