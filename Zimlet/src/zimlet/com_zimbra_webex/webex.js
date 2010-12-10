@@ -328,7 +328,7 @@ WebExZimlet.prototype._saveAsWebExHandler = function(ev) {
 			}
 		}
 	} catch(ex) {
-		this._showErrorMessage(ex);
+		this._webexZimlet._showErrorMessage(ex);
 		return;
 	}
 };
@@ -630,7 +630,7 @@ WebExZimlet.prototype._getCreateOrModifyMeetingRequest = function(params) {
 		apiType = "java:com.webex.service.binding.meeting.CreateMeeting";
 		meetingKeyStr = "";
 	}
-	if (pwd == "" || pwd == "N/A") {
+	if (!pwd || pwd == "" || pwd == "N/A" || pwd == "null") {
 		var pwdStr = "";
 	} else {
 		var pwdStr = ["<accessControl><meetingPassword>", pwd, "</meetingPassword></accessControl>"].join("");
@@ -1871,9 +1871,11 @@ function(accountNumber) {
 	} catch(ex) {
 		this._showErrorMessage(ex);
 		return;
-	}	
-	document.getElementById(this._showSelectAccntsDlg._altHostFieldId).value = this._currentWebExAccount[WebExZimlet.PROP_ALT_HOSTS.propId];
-	document.getElementById(this._showSelectAccntsDlg._mPwdFieldId).value = this._currentWebExAccount[WebExZimlet.PROP_MEETING_PASSWORD.propId];
+	}
+	var altHost = this._currentWebExAccount[WebExZimlet.PROP_ALT_HOSTS.propId];
+	var mPwd = this._currentWebExAccount[WebExZimlet.PROP_MEETING_PASSWORD.propId];
+	document.getElementById(this._showSelectAccntsDlg._altHostFieldId).value = altHost == "N/A"? "" : altHost;
+	document.getElementById(this._showSelectAccntsDlg._mPwdFieldId).value = mPwd == "N/A" ? "" : mPwd;
 };
 
 /**
