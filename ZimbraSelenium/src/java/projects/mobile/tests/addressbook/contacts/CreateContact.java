@@ -50,7 +50,7 @@ public class CreateContact extends MobileCommonTest {
 		// Verify that the sent mail is in the list
 		boolean found = false;
 		for (ContactItem c : contacts) {
-			if ( c.gEmail.equals(contact.email)) {
+			if ( contact.email.equals(c.gEmail) ) {
 				found = true;		// Found the message!
 				break;
 			}

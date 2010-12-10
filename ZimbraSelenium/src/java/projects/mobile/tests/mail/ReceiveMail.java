@@ -42,17 +42,25 @@ public class ReceiveMail extends MobileCommonTest {
 				"</SendMsgRequest>");
 		
 		// Get the newly received message
-		app.zPageMail.getMail();
+		app.zPageMail.zRefresh();
 
 		// Create the list of messages in the inbox
-		List<ConversationItem> conversations = app.zPageMail.getConversationList();
+		List<ConversationItem> conversations = app.zPageMail.zListGetConversations();
 		
 		ZAssert.assertGreaterThan(conversations.size(), 0, "Verify that the list contains conversations");
 
 		// Verify that the sent mail is in the list
 		boolean found = false;
 		for (ConversationItem c : conversations) {
-			if ( c.subject.equals(subject)) {
+			
+			// subject could be truncated and end with "..." ... strip that.
+			String s = c.gSubject.trim();
+			if ( c.gSubject.trim().endsWith("...") ) {
+				s = c.gSubject.trim().replace("...", "");
+			}
+			
+			// subject could be truncated, so check containing rather than equals
+			if ( subject.contains(s) ) {
 				found = true;		// Found the message!
 				break;
 			}

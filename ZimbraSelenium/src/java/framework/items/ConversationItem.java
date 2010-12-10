@@ -77,7 +77,51 @@ public class ConversationItem extends ZimbraItem implements IItem {
 	 * The read/unread status of this conversation
 	 */
 	public boolean read;
+
+	////
+	// START: GUI Data
+	////
+
+	public boolean gIsChecked;
 	
+	public boolean gIsFlagged;
+
+	public String gPriority; // TODO: how to represent the icon?
+	
+	public String gTags; // TODO: how to represent the icon?
+
+	public String gStatusIcon; // TODO: how to represent these status icons?
+	
+	public String gFrom;
+
+	public boolean gHasAttachments;
+
+	public String gSubject;
+
+	public String gFragment;
+
+	public String gFolder;
+
+	public String gSize;
+
+	public String gReceived;
+
+	
+	/**
+	 * Is the message currently highlighted in the list view?
+	 */
+	public boolean gIsSelected;
+
+
+	/**
+	 * The text body of the message
+	 */
+	public String gBodyText;
+	
+	
+	////
+	// FINISH: GUI Data
+	////
 		
 	
 	/**

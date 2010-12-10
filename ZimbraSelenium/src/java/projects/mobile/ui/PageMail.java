@@ -10,6 +10,7 @@ import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.ui.AbsApplication;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 
 /**
  * @author Matt Rhoades
@@ -86,7 +87,7 @@ public class PageMail extends AbsMobilePage {
 	 * @return
 	 * @throws HarnessException 
 	 */
-	public List<MailItem> getMessageList() throws HarnessException {
+	public List<MailItem> zListGetMessages() throws HarnessException {
 		
 		throw new HarnessException("implement me!");
 
@@ -97,8 +98,8 @@ public class PageMail extends AbsMobilePage {
 	 * @return
 	 * @throws HarnessException 
 	 */
-	public List<ConversationItem> getConversationList() throws HarnessException {
-		List<ConversationItem> conversations = new ArrayList<ConversationItem>();
+	public List<ConversationItem> zListGetConversations() throws HarnessException {
+		List<ConversationItem> items = new ArrayList<ConversationItem>();
 		
 		if (!sIsElementPresent(Locators.zDList_View))
 			throw new HarnessException("Unable to find the message list!");
@@ -106,10 +107,55 @@ public class PageMail extends AbsMobilePage {
 		int count = sGetXpathCount("//div[contains(@id, 'conv')]");
 		logger.info(count + " conversations found");
 
-		// TODO: get all current conversations, create them in
-		// ConversationItem objects, and add the to ArrayList
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			
+			final String convLocator = "//div[contains(@id, 'conv')]["+ i +"]";
+			
+			if ( !this.sIsElementPresent(convLocator) ) {
+				throw new HarnessException("Can't find conversation row from locator "+ convLocator);
+			}
+
+			String locator;
+			
+			ConversationItem item = new ConversationItem();
+
+			// TODO: Is it checked?
+
+			// TODO: Converstation icon
+			
+			// From:
+			locator = convLocator + "//div[@class='from-span']";
+			if ( this.sIsElementPresent(locator) ) {
+				item.gFrom = this.sGetText(locator);
+			} else {
+				item.gFrom = "";
+			}
+
+			// Subject:
+			locator = convLocator + "//div[@class='sub-span']";
+			if ( this.sIsElementPresent(locator) ) {
+				item.gSubject = this.sGetText(locator);
+			} else {
+				item.gSubject = "";
+			}
+
+			// From:
+			locator = convLocator + "//div[@class='fragment-span']";
+			if ( this.sIsElementPresent(locator) ) {
+				item.gFragment = this.sGetText(locator);
+			} else {
+				item.gFragment = "";
+			}
+
+
+			
+			// Add the new item to the list
+			items.add(item);
+			logger.info(item.prettyPrint());
+		}
 		
-		return (conversations);
+		return (items);
 	}
 
 
@@ -117,8 +163,13 @@ public class PageMail extends AbsMobilePage {
 	 * Refresh the inbox list by clicking "Get Mail"
 	 * @throws HarnessException 
 	 */
-	public void getMail() throws HarnessException {
+	public void zRefresh() throws HarnessException {
+		this.sClick(PageMain.Locators.zAppbarContact);
+		SleepUtil.sleepMedium();
+
 		this.sClick(PageMain.Locators.zAppbarMail);
+		SleepUtil.sleepMedium();
+
 	}
 
 
