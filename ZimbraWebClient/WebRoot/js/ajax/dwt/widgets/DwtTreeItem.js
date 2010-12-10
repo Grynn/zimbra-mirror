@@ -726,6 +726,20 @@ function() {
 	}
 };
 
+/**
+ *   This is for bug 45129.
+ *   In the DwControl's focusByMouseDownEvent, it focuses the TreeItem 
+ *   And change TreeItem's color. But sometimes when mousedown and mouseup
+ *   haven't been matched on the one element. It will cause multiple selection. 
+ *   For in the mouseup handle function, we has done focus if we find both mouse 
+ *   down and up happened on the same element. So when the mouse is down, we just
+ *   do nothing.
+ */
+DwtTreeItem.prototype._focusByMouseDownEvent =
+function(ev) {
+	
+}
+
 DwtTreeItem._nodeIconMouseDownHdlr =
 function(ev) {
 	var obj = DwtControl.getTargetControl(ev);
