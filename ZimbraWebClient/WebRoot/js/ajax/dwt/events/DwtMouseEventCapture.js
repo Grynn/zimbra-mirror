@@ -30,7 +30,9 @@
  * @param {function}      params.mouseUpHdlr		the browser event handler
  * @param {function}      params.mouseOutHdlr		the browser event handler
  * @param {function}      params.mouseWheelHdlr	the browser event handler
- * @param {boolean}      params.hardCapture		if <code>true</code>, event propagation is halted at this element (IE only)
+ * @param {boolean}       params.hardCapture		if <code>true</code>, event propagation is halted at this element (IE only)
+ * @param {function}      params.onRelease			function to call when capturer is being released
+ * @param {boolean}       params.enableAnyEvent		if <code>true</code>, handlers may be called even when a DwtControl is halting propagation
  * 
  * @private
  */
@@ -47,10 +49,12 @@ DwtMouseEventCapture = function(params) {
 	this._mouseOutHdlr = params.mouseOutHdlr || DwtMouseEventCapture.emptyHdlr;
 	this._mouseWheelHdlr = params.mouseWheelHdlr || DwtMouseEventCapture.emptyHdlr;
 	this._hardCapture = (params.hardCapture !== false);
+	this._onRelease = AjxUtil.isFunction(params.onRelease) && params.onRelease || null;
+	this._enableAnyEvent = params.enableAnyEvent;
 }
 
 DwtMouseEventCapture.PARAMS = ["targetObj", "id", "mouseOverHdlr", "mouseDownHdlr", "mouseMoveHdlr",
-							   "mouseUpHdlr", "mouseOutHdlr", "mouseWheelHdlr", "hardCapture"];
+							   "mouseUpHdlr", "mouseOutHdlr", "mouseWheelHdlr", "hardCapture", "onRelease", "enableAnyEvent"];
 
 DwtMouseEventCapture._capturing = false;
 
@@ -117,6 +121,9 @@ function() {
 DwtMouseEventCapture.prototype.release = 
 function() {
 	if (window._mouseEventCaptureObj == null) { return; }
+	if (this._onRelease) {
+		this._onRelease();
+	}
 
 	var obj = window._shellCaptureObj;
 	if (document.body && document.body.addEventListener) {
@@ -139,6 +146,38 @@ function() {
 	}
 	window._mouseEventCaptureObj = null;
 	DwtMouseEventCapture._capturing = false;
+}
+
+DwtMouseEventCapture.prototype.runHandler =
+function(type, ev) {
+	if (this._enableAnyEvent) {
+		switch (type) {
+			case DwtEvent.ONMOUSEOVER:
+				this._mouseOverHdlr && this._mouseOverHdlr(ev);
+				break;
+			case DwtEvent.ONMOUSEDOWN:
+				this._mouseDownHdlr && this._mouseDownHdlr(ev);
+				break;
+			case DwtEvent.ONMOUSEMOVE:
+				this._mouseMoveHdlr && this._mouseMoveHdlr(ev);
+				break;
+			case DwtEvent.ONMOUSEUP:
+				this._mouseUpHdlr && this._mouseUpHdlr(ev);
+				break;
+			case DwtEvent.ONMOUSEOUT:
+				this._mouseOutHdlr && this._mouseOutHdlr(ev);
+				break;
+			case DwtEvent.ONMOUSEWHEEL:
+				this._mouseWheelHdlr && this._mouseWheelHdlr(ev);
+				break;
+		}
+	}
+}
+
+DwtMouseEventCapture.runHandler =
+function(type, ev) {
+	if (window._mouseEventCaptureObj)
+		window._mouseEventCaptureObj.runHandler(type, ev);
 }
 
 DwtMouseEventCapture.emptyHdlr =
