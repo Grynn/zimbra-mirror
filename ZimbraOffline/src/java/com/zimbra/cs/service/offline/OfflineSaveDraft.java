@@ -27,7 +27,7 @@ public class OfflineSaveDraft extends SaveDraft {
     }
 
     @Override
-    protected boolean scheduleAutoSendTask() {
+    protected boolean schedulesAutoSendTask() {
         return false;
     }
 }
