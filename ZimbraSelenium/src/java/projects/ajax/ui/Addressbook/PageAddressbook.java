@@ -1,17 +1,18 @@
 package  projects.ajax.ui.Addressbook;
 
-import projects.ajax.ui.*;
-import projects.ajax.ui.PageMail.PageMailView;
-import projects.ajax.ui.PageMain.Locators;
-import framework.core.ClientSessionFactory;
-import framework.ui.*;
-import framework.util.HarnessException;
-import framework.util.SleepUtil;
-import framework.items.*;
-import framework.items.FolderItem.FolderView;
-
 import java.awt.event.KeyEvent;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import projects.ajax.ui.AbsAjaxPage;
+import projects.ajax.ui.PageMain;
+import framework.core.ClientSessionFactory;
+import framework.items.ContactItem;
+import framework.ui.AbsApplication;
+import framework.ui.AbsSeleniumObject;
+import framework.ui.Action;
+import framework.ui.Button;
+import framework.util.HarnessException;
 
 public class PageAddressbook extends AbsAjaxPage{
 

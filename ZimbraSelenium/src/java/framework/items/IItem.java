@@ -37,4 +37,9 @@ public interface IItem {
 	 */
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException;
 	
+	/**
+	 * Create a string version of this object suitable for using with a logger
+	 */
+	public String prettyPrint();
+
 }

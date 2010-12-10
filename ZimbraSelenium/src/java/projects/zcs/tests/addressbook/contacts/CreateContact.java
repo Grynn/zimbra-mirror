@@ -27,7 +27,7 @@ public class CreateContact extends CommonTest {
 	public CreateContact() {
 		
 		EmailedContacts = new FolderItem();
-		EmailedContacts.name = localize(Locators.emailedContacts);
+		EmailedContacts.setName(localize(Locators.emailedContacts));
 		
 	}
 	

@@ -1262,7 +1262,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		page.zABCompose.zCreateNewAddBook(newAddressBook);
 
 		FolderItem folder = new FolderItem();
-		folder.name = newAddressBook;
+		folder.setName(newAddressBook);
 
 		ContactItem contact = new ContactItem();
 		contact.lastName = lastName;
@@ -1412,10 +1412,10 @@ public class MailAutoCompleteAddress extends CommonTest {
 			handleRetry();
 
 		FolderItem subAddressBook = new FolderItem();
-		subAddressBook.name = getLocalizedData_NoSpecialChar();
+		subAddressBook.setName(getLocalizedData_NoSpecialChar());
 
 		FolderItem subSubAddressBook = new FolderItem();
-		subSubAddressBook.name = getLocalizedData_NoSpecialChar();
+		subSubAddressBook.setName(getLocalizedData_NoSpecialChar());
 
 		String lastName, sublastName, subSublastName, user2, mountingfoldername;
 		lastName = "1" + getLocalizedData_NoSpecialChar();
@@ -1437,10 +1437,10 @@ public class MailAutoCompleteAddress extends CommonTest {
 		Stafzmprov.createAccount(acc2);
 		Stafzmprov.createAccount(acc3);
 		zGoToApplication("Address Book");
-		page.zABCompose.zCreateNewAddBook(subAddressBook.name,
+		page.zABCompose.zCreateNewAddBook(subAddressBook.getName(),
 				localize(locator.contacts));
-		page.zABCompose.zCreateNewAddBook(subSubAddressBook.name,
-				subAddressBook.name);
+		page.zABCompose.zCreateNewAddBook(subSubAddressBook.getName(),
+				subAddressBook.getName());
 
 		ContactItem contact1 = new ContactItem();
 		contact1.lastName = lastName;
@@ -1457,7 +1457,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		subContact.firstName = "";
 		subContact.email = acc2;
 
-		obj.zFolder.zClick(subAddressBook.name);
+		obj.zFolder.zClick(subAddressBook.getName());
 		page.zABCompose.createItem(ActionMethod.DEFAULT, subContact);
 
 		ContactItem subSubContact = new ContactItem();
@@ -1466,7 +1466,7 @@ public class MailAutoCompleteAddress extends CommonTest {
 		subSubContact.firstName = "";
 		subSubContact.email = acc3;
 
-		obj.zFolder.zClick(subSubAddressBook.name);
+		obj.zFolder.zClick(subSubAddressBook.getName());
 		page.zABCompose.createItem(ActionMethod.DEFAULT, subSubContact);
 
 		page.zSharing.zShareFolder("Address Book",

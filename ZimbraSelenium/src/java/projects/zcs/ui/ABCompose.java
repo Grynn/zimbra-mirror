@@ -179,10 +179,10 @@ public class ABCompose extends AppPage {
 		if ((c.firstName != null) && (!c.firstName.equals("")))
 			obj.zEditField.zActivateAndType(zFirstEditField, c.firstName);
 		
-		if ((c.AddressBook != null) && (!c.AddressBook.name.equals("")) && (c.AddressBook.name.equals(localize(locator.contacts))) ) {
+		if ((c.AddressBook != null) && (!c.AddressBook.getName().equals("")) && (c.AddressBook.getName().equals(localize(locator.contacts))) ) {
 			obj.zButton.zClick(zContactsFolder_NewUI);
 			SleepUtil.sleep(1500);
-			obj.zFolder.zClickInDlgByName(c.AddressBook.name, localize(locator.chooseAddrBook));
+			obj.zFolder.zClickInDlgByName(c.AddressBook.getName(), localize(locator.chooseAddrBook));
 			obj.zButton.zClickInDlgByName(localize(locator.ok), localize(locator.chooseAddrBook));
 		}
 	}
@@ -241,7 +241,7 @@ public class ABCompose extends AppPage {
 	/**
 	 * Create a new contact AddressBook
 	 */
-	public ZimbraItem createAddressBookItem(ActionMethod method, ZimbraItem item) throws HarnessException {
+	public FolderItem createAddressBookItem(ActionMethod method, FolderItem item) throws HarnessException {
 		try
 		{
 			FolderItem f = (FolderItem)item;
@@ -249,7 +249,7 @@ public class ABCompose extends AppPage {
 			zWaitTillObjectExist("button", replaceUserNameInStaticId(zNewABOverviewPaneIcon));
 			obj.zButton .zRtClick(replaceUserNameInStaticId(replaceUserNameInStaticId(zNewABOverviewPaneIcon)));
 			obj.zMenuItem.zClick(localize(locator.newAddrBook));
-			obj.zEditField.zTypeInDlg(localize(locator.nameLabel), f.name);
+			obj.zEditField.zTypeInDlg(localize(locator.nameLabel), f.getName());
 			obj.zButton.zClickInDlg(localize(locator.ok));
 			SleepUtil.sleep(1000);
 			
@@ -272,7 +272,7 @@ public class ABCompose extends AppPage {
 		if ( !(method.equals(ActionMethod.DEFAULT) || method.equals(ABComposeActionMethod.RightClickEdit))) {
 			throw new HarnessException("Implement me!  Only Right Click is supported.");
 		}
-		obj.zFolder.zRtClick(addressbook.name);
+		obj.zFolder.zRtClick(addressbook.getName());
 		obj.zMenuItem.zClick(localize(locator.renameFolder));
 		obj.zEditField.zTypeInDlg(localize(locator.newName), newname);
 		obj.zButton.zClickInDlg(localize(locator.ok));

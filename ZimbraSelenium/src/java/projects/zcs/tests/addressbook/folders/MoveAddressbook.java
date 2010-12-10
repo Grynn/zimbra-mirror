@@ -43,18 +43,18 @@ public class MoveAddressbook extends CommonTest {
 			handleRetry();
 
 		FolderItem addressbook = new FolderItem();
-		addressbook.name = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		addressbook.setName("folder" + ZimbraSeleniumProperties.getUniqueString());
 		
 		page.zABCompose.createAddressBookItem(ActionMethod.DEFAULT, addressbook);
 		zDragAndDrop(
 				"//td[contains(@id, 'zti__main_Contacts') and contains(text(), '"
-						+ addressbook.name + "')]",
+						+ addressbook.getName() + "')]",
 				page.zABCompose.zEmailedContactsFolder);
 		
 		Assert
 				.assertTrue(ClientSessionFactory.session().selenium()
 						.isElementPresent("//div[@id='zti__main_Contacts__13']/div[@class='DwtTreeItemChildDiv']//td[contains(text(), '"
-								+ addressbook.name + "')]"));
+								+ addressbook.getName() + "')]"));
 
 		SelNGBase.needReset.set(false);
 	}

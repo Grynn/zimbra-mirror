@@ -22,7 +22,7 @@ public class MoveContact extends CommonTest {
 	public MoveContact() {
 		
 		EmailedContacts = new FolderItem();
-		EmailedContacts.name = localize(Locators.emailedContacts);
+		EmailedContacts.setName(localize(Locators.emailedContacts));
 		
 	}
 	
@@ -61,7 +61,7 @@ public class MoveContact extends CommonTest {
 		
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 		if (obj.zContactListItem.zExistsDontWait(contact.lastName).equals("true")) {
-			page.zABApp.zMoveContactAndVerify(contact.lastName, EmailedContacts.name, "ToolbarMove");
+			page.zABApp.zMoveContactAndVerify(contact.lastName, EmailedContacts.getName(), "ToolbarMove");
 		}
 
 		SelNGBase.needReset.set(false);
@@ -87,7 +87,7 @@ public class MoveContact extends CommonTest {
 
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 		if (obj.zContactListItem.zExistsDontWait(contact.lastName).equals("true")) {
-			page.zABApp.zMoveContactAndVerify(contact.lastName, EmailedContacts.name,
+			page.zABApp.zMoveContactAndVerify(contact.lastName, EmailedContacts.getName(),
 					"RightClickMove");
 		}
 

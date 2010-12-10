@@ -12,34 +12,12 @@ import framework.util.ZimbraAccount;
  * @author Matt Rhoades
  *
  */
-public class FolderItem extends ZimbraItem implements IItem {
-	
-	public enum FolderView {
-		Conversation, Message, Contact, Appointment, Task, Wiki, Document
-	}
-	
-	/**
-	 * The folder name
-	 */
-	public String name;
-	
-	/**
-	 * The folder view
-	 * 
-	 * One of Conversation, Message, Contact, Appointment, Task, Wiki, Document
-	 */
-	public FolderView view;
-	
-	/**
-	 * The parent folder
-	 */
-	public FolderItem parent;
+public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IItem {
 	
 	/**
 	 * Create a new FolderItem object
 	 */
 	public FolderItem() {
-		view = FolderView.Conversation;	// Default per soap.txt
 	}
 
 	/* (non-Javadoc)
@@ -47,7 +25,21 @@ public class FolderItem extends ZimbraItem implements IItem {
 	 */
 	@Override
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
-		throw new HarnessException("implement me");
+		
+		// TODO: handle all folder properties, not just name and parent
+		
+		// TODO: Maybe use JaxbUtil to create it?
+		
+		account.soapSend(
+				"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
+                	"<folder name='"+ super.getName() +"' l='"+ super.getParentId() +"'/>" +
+                "</CreateFolderRequest>");
+		
+		Element[] response = account.soapSelectNodes("//mail:CreateFolderResponse");
+		if ( response.length != 1 ) {
+			throw new HarnessException("Unable to create folder "+ account.soapLastResponse());
+		}
+		
 	}
 
 	/* (non-Javadoc)
@@ -68,14 +60,10 @@ public class FolderItem extends ZimbraItem implements IItem {
 	@Override
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(super.prettyPrint());
-		sb.append(ContactItem.class.getSimpleName()).append('\n');
-		sb.append("Name: ").append(name).append('\n');
-		sb.append("View: ").append(view).append('\n');
-		if ( parent != null ) {
-			sb.append("Parent: ").append('\n');
-			sb.append(parent.prettyPrint());
-		}
+		sb.append(FolderItem.class.getSimpleName()).append('\n');
+		sb.append("Name: ").append(super.getName()).append('\n');
+		sb.append("View: ").append(super.getView()).append('\n');
+		sb.append("Parent ID: ").append(super.getParentId()).append('\n');
 		return (sb.toString());
 	}
 

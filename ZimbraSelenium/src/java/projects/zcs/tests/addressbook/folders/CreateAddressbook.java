@@ -44,14 +44,14 @@ public class CreateAddressbook extends CommonTest {
 			handleRetry();
 
 		FolderItem addressbook = new FolderItem();
-		addressbook.name = "original" + ZimbraSeleniumProperties.getUniqueString();
+		addressbook.setName("original" + ZimbraSeleniumProperties.getUniqueString());
 		
 		// Create the addressbook
 		page.zABCompose.createAddressBookItem(ActionMethod.DEFAULT, addressbook);
-		zWaitTillObjectExist("folder", addressbook.name);
+		zWaitTillObjectExist("folder", addressbook.getName());
 		
 		// Verify the folder with the new name exists
-		obj.zFolder.zExists(addressbook.name);
+		obj.zFolder.zExists(addressbook.getName());
 
 		SelNGBase.needReset.set(false);
 	}
@@ -67,7 +67,7 @@ public class CreateAddressbook extends CommonTest {
 			handleRetry();
 
 		FolderItem addressbook = new FolderItem();
-		addressbook.name = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		addressbook.setName("folder" + ZimbraSeleniumProperties.getUniqueString());
 		
 		// Create addressbook
 		page.zABCompose.createAddressBookItem(ActionMethod.DEFAULT, addressbook);
@@ -76,10 +76,10 @@ public class CreateAddressbook extends CommonTest {
 		obj.zMenuItem.zClick(localize(locator.newAddrBook));
 		SleepUtil.sleep(1000);
 		obj.zEditField.zTypeInDlgByName(localize(locator.nameLabel),
-				addressbook.name, localize(locator.createNewAddrBook));
+				addressbook.getName(), localize(locator.createNewAddrBook));
 		obj.zButton.zClickInDlgByName(localize(locator.ok),
 				localize(locator.createNewAddrBook));
-		assertReport(localize(locator.errorAlreadyExists, addressbook.name, ""),
+		assertReport(localize(locator.errorAlreadyExists, addressbook.getName(), ""),
 				obj.zDialog.zGetMessage(localize(locator.criticalMsg)),
 				"Verifying dialog message");
 		obj.zButton.zClickInDlgByName(localize(locator.ok),

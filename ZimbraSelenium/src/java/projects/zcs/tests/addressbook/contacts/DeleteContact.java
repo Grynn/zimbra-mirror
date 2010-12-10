@@ -20,7 +20,7 @@ public class DeleteContact extends CommonTest {
 	public DeleteContact() {
 		
 		EmailedContacts = new FolderItem();
-		EmailedContacts.name = localize(Locators.emailedContacts);
+		EmailedContacts.setName(localize(Locators.emailedContacts));
 		
 	}
 	

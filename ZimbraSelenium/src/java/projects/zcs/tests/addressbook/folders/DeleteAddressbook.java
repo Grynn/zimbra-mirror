@@ -47,15 +47,15 @@ public class DeleteAddressbook extends CommonTest {
 			handleRetry();
 
 		FolderItem addressbook = new FolderItem();
-		addressbook.name = "folder" + ZimbraSeleniumProperties.getUniqueString();
+		addressbook.setName("folder" + ZimbraSeleniumProperties.getUniqueString());
 		
 		page.zABCompose.createAddressBookItem(ActionMethod.DEFAULT, addressbook);
-		zWaitTillObjectExist("folder", addressbook.name);
+		zWaitTillObjectExist("folder", addressbook.getName());
 		
-		page.zMailApp.zDeleteFolder(addressbook.name);
+		page.zMailApp.zDeleteFolder(addressbook.getName());
 		
 		obj.zFolder.zClick(localize(locator.trash));
-		obj.zFolder.zExists(addressbook.name);
+		obj.zFolder.zExists(addressbook.getName());
 
 		SelNGBase.needReset.set(false);
 	}

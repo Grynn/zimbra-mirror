@@ -179,14 +179,14 @@ public class AccountImportExport extends CommonTest {
 
 		// keep one contact in new AB folder
 		FolderItem folder = new FolderItem();
-		folder.name = newABFolder;
+		folder.setName(newABFolder);
 		ContactItem contact = new ContactItem();
 		contact.firstName = firstNameNewFolder;
 		contact.middleName = "";
 		contact.lastName = lastNameNewFolder;
 		contact.AddressBook = folder;
 		
-		page.zABCompose.zCreateNewAddBook(folder.name);
+		page.zABCompose.zCreateNewAddBook(folder.getName());
 		page.zABCompose.createItem(ActionMethod.DEFAULT, contact);
 
 		// ------------------------- Calendar -------------------------
