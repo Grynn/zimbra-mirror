@@ -151,34 +151,39 @@ ZaCert.certOvTreeModifier = function (tree) {
 	if (!overviewPanelController) throw new Exception("ZaCert.certOvTreeModifier: Overview Panel Controller is not set.");
 	
 	if(ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CERTS_VIEW] || ZaSettings.ENABLED_UI_COMPONENTS[ZaSettings.CARTE_BLANCHE_UI]) {
-		overviewPanelController._certTi = new DwtTreeItem({parent:overviewPanelController._toolsTi,className:"AdminTreeItem"});
-		overviewPanelController._certTi.setText(com_zimbra_cert_manager.OVP_certs);
-		overviewPanelController._certTi.setImage("OverviewCertificate"); //TODO: Use Cert icons
-		overviewPanelController._certTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW);	
-		
-		//add the server nodes
 		try {
+			overviewPanelController._certTi = new DwtTreeItem({parent:overviewPanelController._toolsTi,className:"AdminTreeItem"});
+			overviewPanelController._certTi.setText(com_zimbra_cert_manager.OVP_certs);
+			overviewPanelController._certTi.setImage("OverviewCertificate"); //TODO: Use Cert icons
+
 			var serverList = overviewPanelController._app.getServerList().getArray();
 			if(serverList && serverList.length) {
 				var cnt = serverList.length;
-				for(var ix=0; ix< cnt; ix++) {
-					var ti1 = new DwtTreeItem({parent:overviewPanelController._certTi,className:"AdminTreeItem"});			
-					ti1.setText(serverList[ix].name);	
-					ti1.setImage("Server");
-					ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS);
-					ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
+				if(cnt>1) {
+					overviewPanelController._certTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW);
+					//add the server nodes
+					for(var ix=0; ix< cnt; ix++) {
+						var ti1 = new DwtTreeItem({parent:overviewPanelController._certTi,className:"AdminTreeItem"});			
+						ti1.setText(serverList[ix].name);	
+						ti1.setImage("Server");
+						ti1.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS);
+						ti1.setData(ZaOverviewPanelController._OBJ_ID, serverList[ix].id);
+						ZaCert.TARGET_SERVER_CHOICES.push (
+							{label: serverList[ix].name, value: serverList[ix].id }
+						);
+					}
+					ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW] = ZaCert.certsServerListTreeListener;
+				} else {
+					overviewPanelController._certTi.setData(ZaOverviewPanelController._TID, ZaZimbraAdmin._CERTS);
+					overviewPanelController._certTi.setData(ZaOverviewPanelController._OBJ_ID, serverList[0].id);
 					ZaCert.TARGET_SERVER_CHOICES.push (
-						{label: serverList[ix].name, value: serverList[ix].id }
-					);
+							{label: serverList[0].name, value: serverList[0].id }
+						);
 				}
+				ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS] = ZaCert.certsServerNodeTreeListener;
 			}
 		} catch (ex) {
 			overviewPanelController._handleException(ex, "ZaCert.certOvTreeModifier", null, false);
-		}
-		
-		if(ZaOverviewPanelController.overviewTreeListeners) {
-			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS_SERVER_LIST_VIEW] = ZaCert.certsServerListTreeListener;		
-			ZaOverviewPanelController.overviewTreeListeners[ZaZimbraAdmin._CERTS] = ZaCert.certsServerNodeTreeListener;
 		}
 	}
 }
