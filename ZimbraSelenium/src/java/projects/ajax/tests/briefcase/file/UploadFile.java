@@ -9,6 +9,7 @@ import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
+import framework.util.ZimbraSeleniumProperties;
 
 public class UploadFile extends AjaxCommonTest {
 
@@ -29,7 +30,7 @@ public class UploadFile extends AjaxCommonTest {
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
-		String filePath = document.getFilePath_1();
+		String filePath = ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/other/testtextfile.txt";
 		String fileName = document.getFileName(filePath);
 
 		// Upload file to server through SOAP
@@ -82,7 +83,7 @@ public class UploadFile extends AjaxCommonTest {
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
-		String filePath = document.getFilePath_2();
+		String filePath =  ZimbraSeleniumProperties.getBaseDirectory() + "/data/public/other/structure.jpg";
 		String fileName = document.getFileName(filePath);
 		
 		// Upload file to server through SOAP

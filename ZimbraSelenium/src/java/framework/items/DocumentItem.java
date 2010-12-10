@@ -42,29 +42,16 @@ public class DocumentItem extends ZimbraItem implements IItem {
 	public static Element e;
 
 	/**
-	 * The #1 file path
+	 * The file path
 	 */
-	private String filePath_1;
+	private String filePath;
 
-	public String getFilePath_1() {
-		return filePath_1;
+	public String getFilePath() {
+		return filePath;
 	}
 
-	public void setFilePath_1(String filePath_1) {
-		this.filePath_1 = filePath_1;
-	}
-
-	/**
-	 * The #2 file path
-	 */
-	private String filePath_2;
-
-	public String getFilePath_2() {
-		return filePath_2;
-	}
-
-	public void setFilePath_2(String filePath_2) {
-		this.filePath_2 = filePath_2;
+	public void setFilePath(String filePath) {
+		this.filePath = filePath;
 	}
 
 	/**
@@ -91,9 +78,7 @@ public class DocumentItem extends ZimbraItem implements IItem {
 	 */
 	public void populateDocumentData() {
 		docName = "name" + ZimbraSeleniumProperties.getUniqueString();
-		docText = "text" + ZimbraSeleniumProperties.getUniqueString();
-		filePath_1 = "data/public/other/testtextfile.txt";
-		filePath_2 = "data/public/other/structure.jpg";
+		docText = "text" + ZimbraSeleniumProperties.getUniqueString();			
 	}
 
 	/**
