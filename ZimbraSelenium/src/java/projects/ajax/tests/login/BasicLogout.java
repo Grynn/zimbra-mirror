@@ -18,7 +18,7 @@ public class BasicLogout extends AjaxCommonTest {
 	public void BasicLogout01() throws HarnessException {
 		
 		// Login
-		app.zPageMain.logout();
+		app.zPageMain.zLogout();
 		
 		// Verify main page becomes active
 		ZAssert.assertTrue(app.zPageLogin.zIsActive(), "Verify that the account is logged out");

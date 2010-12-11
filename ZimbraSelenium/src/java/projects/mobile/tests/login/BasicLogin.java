@@ -23,7 +23,7 @@ public class BasicLogin extends MobileCommonTest {
 	public void BasicLogin01() throws HarnessException {
 		
 		// Login
-		app.zPageLogin.login(ZimbraAccount.AccountZMC());
+		app.zPageLogin.zLogin(ZimbraAccount.AccountZMC());
 		
 		// Verify main page becomes active
 		ZAssert.assertTrue(app.zPageMain.zIsActive(), "Verify that the account is logged in");

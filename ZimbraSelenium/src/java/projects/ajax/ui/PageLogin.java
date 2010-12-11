@@ -80,7 +80,7 @@ public class PageLogin extends AbsAjaxPage {
 		
 		// Logout
 		if ( MyApplication.zPageMain.zIsActive() ) {
-			MyApplication.zPageMain.logout();
+			MyApplication.zPageMain.zLogout();
 		}
 		
 		zWaitForActive();
@@ -91,10 +91,10 @@ public class PageLogin extends AbsAjaxPage {
 	 * Login as DefaultLoginAccount
 	 * @throws HarnessException
 	 */
-	public void login() throws HarnessException {
+	public void zLogin() throws HarnessException {
 		logger.debug("login()");
 
-		login(DefaultLoginAccount);
+		zLogin(DefaultLoginAccount);
 	}
 
 	
@@ -103,13 +103,14 @@ public class PageLogin extends AbsAjaxPage {
 	 * @param account
 	 * @throws HarnessException
 	 */
-	public void login(ZimbraAccount account) throws HarnessException {
+	public void zLogin(ZimbraAccount account) throws HarnessException {
 		logger.debug("login(ZimbraAccount account)" + account.EmailAddress);
 
 		zNavigateTo();
 		
 		// Fill out the form
-		fillLoginFormFields(account);
+		zSetLoginName(account.EmailAddress);
+		zSetLoginPassword(account.Password);
 		
 		// Click the Login button
 		sClick(Locators.zBtnLogin);
@@ -122,18 +123,40 @@ public class PageLogin extends AbsAjaxPage {
 	}
 	
 	/**
-	 * Fill the form with the specified user
+	 * Add the specified name to the login name field
+	 * @param name
 	 * @throws HarnessException
 	 */
-	public void fillLoginFormFields(ZimbraAccount account) throws HarnessException {
-		logger.debug("fillFields(ZimbraAccount account)" + account.EmailAddress);
-		
-		if ( !zIsActive() )
-			throw new HarnessException("LoginPage is not active");
-		
-		sType(Locators.zInputUsername, account.EmailAddress);
-		sType(Locators.zInputPassword, account.Password);
+	public void zSetLoginName(String name) throws HarnessException {
+		String locator = Locators.zInputUsername;
+		if ( name == null ) {
+			throw new HarnessException("Name is null");
+		}
+			
+		if ( !this.sIsElementPresent(locator) ) {
+			throw new HarnessException("Login field does not exist "+ locator);
+		}
+		sType(locator, name);
 	}
+	
+	/**
+	 * Add the specified password to the login password field
+	 * @param name
+	 * @throws HarnessException
+	 */
+	public void zSetLoginPassword(String password) throws HarnessException {
+		String locator = Locators.zInputPassword;
+		if ( password == null ) {
+			throw new HarnessException("Password is null");
+		}
+		if ( !this.sIsElementPresent(locator) ) {
+			throw new HarnessException("Password field does not exist "+ locator);
+		}
+		sType(locator, password);
+	}
+	
+
+	
 
 	@Override
 	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {

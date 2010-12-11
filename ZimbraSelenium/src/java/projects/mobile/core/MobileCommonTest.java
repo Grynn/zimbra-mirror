@@ -120,8 +120,8 @@ public class MobileCommonTest {
 			if ( !startingAccount.equals(app.zGetActiveAccount())) {
 				
 				if ( app.zPageMain.zIsActive() )
-					app.zPageMain.logout();
-				app.zPageLogin.login(startingAccount);
+					app.zPageMain.zLogout();
+				app.zPageLogin.zLogin(startingAccount);
 				
 			}
 			

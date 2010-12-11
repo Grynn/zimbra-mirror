@@ -87,7 +87,7 @@ public class PageMain extends AbsAjaxPage {
 		if ( !MyApplication.zPageLogin.zIsActive() ) {
 			MyApplication.zPageLogin.zNavigateTo();
 		}
-		MyApplication.zPageLogin.login();
+		MyApplication.zPageLogin.zLogin();
 
 		zWaitForActive();
 		
@@ -97,7 +97,7 @@ public class PageMain extends AbsAjaxPage {
 	 * Click the logout button
 	 * @throws HarnessException
 	 */
-	public void logout() throws HarnessException {
+	public void zLogout() throws HarnessException {
 		logger.debug("logout()");
 		
 		zNavigateTo();

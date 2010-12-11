@@ -88,7 +88,7 @@ public class PageMain extends AbsMobilePage {
 		if ( !MyApplication.zPageLogin.zIsActive() ) {
 			MyApplication.zPageLogin.zNavigateTo();
 		}
-		MyApplication.zPageLogin.login();
+		MyApplication.zPageLogin.zLogin();
 
 		zWaitForActive();
 		
@@ -98,8 +98,8 @@ public class PageMain extends AbsMobilePage {
 	 * Click the logout button
 	 * @throws HarnessException
 	 */
-	public void logout() throws HarnessException {
-		logger.debug("logout()");
+	public void zLogout() throws HarnessException {
+		logger.debug("zLogout()");
 		
 		zNavigateTo();
 
