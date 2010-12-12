@@ -4,7 +4,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.Addressbook.FormContactNew;
+import projects.ajax.ui.addressbook.FormContactNew;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
 import framework.items.ContactItem.GenerateItemType;
