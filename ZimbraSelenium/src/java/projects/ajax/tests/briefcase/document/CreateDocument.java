@@ -4,14 +4,11 @@ import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.DocumentBriefcaseNew;
-import projects.ajax.ui.PageBriefcase.Locators;
-import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
 import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZAssert;
-import framework.util.ZimbraAccount;
 
 public class CreateDocument extends AjaxCommonTest {
 
@@ -20,10 +17,7 @@ public class CreateDocument extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		ZimbraAccount account = new ZimbraAccount();
-		account.provision();
-		account.authenticate();
-		super.startingAccount = account;
+		super.startingAccount = null;
 
 	}
 
@@ -49,7 +43,6 @@ public class CreateDocument extends AjaxCommonTest {
 
 		documentBriefcaseNew.zSelectWindow("Zimbra: Briefcase");
 
-		ZimbraAccount account = app.zGetActiveAccount();
 
 		// Verify document name through SOAP
 		app.zGetActiveAccount().soapSend(

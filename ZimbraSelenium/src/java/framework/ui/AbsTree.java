@@ -3,6 +3,9 @@ package framework.ui;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
+import framework.items.IItem;
+import framework.util.HarnessException;
+
 /**
  * A <code>AbsTree</code> object represents a "tree panel", 
  * such as a Folder tree, Addressbook tree, Calendar tree, etc.
@@ -29,6 +32,15 @@ public abstract class AbsTree extends AbsSeleniumObject {
 		MyAbsApplication = application;
 	}
 	
+	/**
+	 * Apply the specified action on the specified address book
+	 * @param action
+	 * @param addressbook
+	 * @return
+	 * @throws HarnessException
+	 */
+	public abstract AbsSeleniumObject zTreeItem(Action action, IItem item) throws HarnessException;
+
 	/**
 	 * Return the unique name for this page class
 	 * @return

@@ -23,11 +23,7 @@ public class CreateContact extends AjaxCommonTest  {
 		super.startingPage = app.zPageAddressbook;
 
 		// Make sure we are using an account with conversation view
-		ZimbraAccount account = new ZimbraAccount();
-		account.provision();
-		account.authenticate();
-			
-		super.startingAccount = account;		
+		super.startingAccount = null;		
 		
 	}
 	

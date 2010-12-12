@@ -34,7 +34,7 @@ public class TagMessage extends AjaxCommonTest {
 		// Add a message to the mailbox
 		app.zGetActiveAccount().soapSend(
 					"<AddMsgRequest xmlns='urn:zimbraMail'>" +
-                		"<m l='"+ app.zGetActiveAccount().getFolderIdByName("Inbox") +"'>" +
+                		"<m l='"+ app.zGetActiveAccount().getFolderByName("Inbox").getId() +"'>" +
                     		"<content>From: foo@foo.com\n" +
 "To: foo@foo.com \n" +
 "Subject: "+ subject +"\n" +
@@ -48,8 +48,7 @@ public class TagMessage extends AjaxCommonTest {
                 	"</AddMsgRequest>");
 		
 		// Get the message data from SOAP
-		MailItem mail = new MailItem();
-		mail.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 		
 
 		// Click Get Mail button

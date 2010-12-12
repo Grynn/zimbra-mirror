@@ -157,6 +157,11 @@ public class AjaxCommonTest {
 		logger.info("commonTestBeforeMethod: start");
 		
 		// If a startinAccount is defined, then make sure we are authenticated as that user
+		if ( startingAccount == null ) {
+			logger.debug("commonTestBeforeMethod: startingAccount is not defined");
+			startingAccount = ZimbraAccount.AccountZWC();
+		}
+		
 		if ( startingAccount != null ) {
 			logger.debug("commonTestBeforeMethod: startingAccount is defined");
 			

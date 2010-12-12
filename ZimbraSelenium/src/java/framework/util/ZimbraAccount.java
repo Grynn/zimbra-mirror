@@ -43,8 +43,6 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.dom4j.DocumentException;
 
-import bsh.This;
-
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.net.SocketFactories;
 import com.zimbra.common.service.ServiceException;
@@ -312,7 +310,7 @@ public class ZimbraAccount {
 	/**
 	 * Get a FolderItem by folder name
 	 */
-	public FolderItem getFolderIdByName(String foldername) throws HarnessException {
+	public FolderItem getFolderByName(String foldername) throws HarnessException {
 		
 		// Get all folders
 		soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>");
@@ -334,9 +332,9 @@ public class ZimbraAccount {
 		// Get just the folder ID
 		soapSend(
 				"<GetFolderRequest xmlns='urn:zimbraMail'>" +
-					"<folder l='"+ id +"/>" +
+					"<folder l='"+ id +"'/>" +
 				"</GetFolderRequest>");
-		Element response = this.soapSelectNode("//GetFolderResponse", 1);
+		Element response = this.soapSelectNode("//mail:GetFolderResponse", 1);
 
 		logger.debug("GetFolderResponse for name "+ foldername +" was "+ response.prettyPrint());
 		return (FolderItem.importFromSOAP(response));

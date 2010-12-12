@@ -41,7 +41,7 @@ public class UnTagMessage extends AjaxCommonTest {
 		// Add a message to the mailbox
 		app.zGetActiveAccount().soapSend(
 					"<AddMsgRequest xmlns='urn:zimbraMail'>" +
-                		"<m l='"+ app.zGetActiveAccount().getFolderIdByName("Inbox") +"' t='"+ tagid +"'>" +
+                		"<m l='"+ app.zGetActiveAccount().getFolderByName("Inbox").getId() +"' t='"+ tagid +"'>" +
                     		"<content>From: foo@foo.com\n" +
 "To: foo@foo.com \n" +
 "Subject: "+ subject +"\n" +
@@ -55,8 +55,7 @@ public class UnTagMessage extends AjaxCommonTest {
                 	"</AddMsgRequest>");
 		
 		// Get the message data from SOAP
-		MailItem mail = new MailItem();
-		mail.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 		
 
 		// Click Get Mail button

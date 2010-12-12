@@ -4,6 +4,7 @@ import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.TreePreferences.TreeItem;
+import framework.ui.Action;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
@@ -32,7 +33,7 @@ public class ZimbraPrefIncludeSpamInSearch extends AjaxCommonTest {
 		
 
 		// Go to "General"
-		app.zTreePreferences.zClickTreeItem(TreeItem.General);
+		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.General);
 		
 		// Determine the status of the checkbox
 		boolean checked = app.zPagePreferences.zGetCheckboxStatus("zimbraPrefIncludeSpamInSearch");

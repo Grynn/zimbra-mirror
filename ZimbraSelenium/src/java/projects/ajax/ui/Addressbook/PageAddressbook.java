@@ -4,6 +4,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.LogManager;
+
 import projects.ajax.ui.AbsAjaxPage;
 import projects.ajax.ui.PageMain;
 import framework.core.ClientSessionFactory;
@@ -13,6 +15,7 @@ import framework.ui.AbsSeleniumObject;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 
 public class PageAddressbook extends AbsAjaxPage{
 
@@ -203,33 +206,65 @@ public class PageAddressbook extends AbsAjaxPage{
 	}
 	
 	@Override
-	public AbsSeleniumObject zListItem(Action action, String subject) throws HarnessException {
-		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
+	public AbsSeleniumObject zListItem(Action action, String contact) throws HarnessException {
+		logger.info(myPageName() + " zListItem("+ action +", "+ contact +")");
 		
 		AbsSeleniumObject page = null;
 		
 		if ( action == Action.A_LEFTCLICK ) {
+			
+			String listLocator = "//div[@id='zv__CNS']";
+			String rowLocator = "//div[contains(@id, 'zli__CNS__')]";
+			
+			if ( !this.sIsElementPresent(listLocator) )
+				throw new HarnessException("List View Rows is not present "+ listLocator);
+
+			if ( !this.sIsElementPresent(rowLocator) )
+				throw new HarnessException("List does not contain any items "+ rowLocator);
+			
 			 //Get the number of contacts (String) 
-		    int count = this.sGetXpathCount("xpath=//div[@id='zv__CNS']//div[contains(@id, 'zli__CNS__')]");
+		    int count = this.sGetXpathCount(listLocator + rowLocator);
 			logger.debug(myPageName() + " zListItem: number of contacts: "+ count);
 
+			if ( count == 0 )
+				throw new HarnessException("List count was zero");
+			
 			// Get each contact's data from the table list
 			for (int i = 1; i <= count; i++) {
-	         	String contactDisplayedLocator = "//xpath=div[@id='zv__CNS']/div["+ i +"]/table/tbody/tr/td[3]";
-							
-	         	if (!subject.equals(ClientSessionFactory.session().selenium().getText(contactDisplayedLocator))) {;		    			
-				   continue;
-	         	} 
+				
+				String itemLocator = listLocator + rowLocator + "[" + i +"]";
+				
+				if ( !this.sIsElementPresent(itemLocator) ) {
+					throw new HarnessException("unable to locate item " + itemLocator);
+				}
+				
+	         	String contactDisplayedLocator = itemLocator + "//td[3]";
+	         	String displayAs = this.sGetText(contactDisplayedLocator);
 	         	
+	         	// Log this item to the debug output
+	         	LogManager.getLogger("projects").info("zListItem: found contact "+ displayAs);
+	         	
+	         	if ( !contact.equals(displayAs) )
+	         		continue;
+								         	
 	         	//click
-	         	this.zClick(contactDisplayedLocator);	        	
+	         	this.zClick(contactDisplayedLocator);
+	         	SleepUtil.sleepSmall();
+	         	
+	         	// All done
+	         	return (new DisplayContact(MyApplication));
+	         	
 			}
+			
+			throw new HarnessException("Never found the contact "+ contact);
+
 	       				
 		}
 		else {
 			throw new HarnessException("implement me!");
 		}
-		return (new DisplayContact(MyApplication));
+		
+		// return (new DisplayContact(MyApplication));
 		
 	}
 

@@ -7,8 +7,11 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import framework.items.IItem;
 import framework.ui.AbsApplication;
+import framework.ui.AbsSeleniumObject;
 import framework.ui.AbsTree;
+import framework.ui.Action;
 import framework.util.HarnessException;
 
 /**
@@ -41,8 +44,14 @@ public class TreePreferences extends AbsTree {
 		logger.info("new " + TreePreferences.class.getCanonicalName());
 	}
 	
-	public void zClickTreeItem(TreeItem item) throws HarnessException {
-		logger.info("zClickTreeItem(" + item +")");
+	/**
+	 * Click on an item in the preferences tree
+	 * @param action
+	 * @param item
+	 * @throws HarnessException
+	 */
+	public void zTreeItem(Action action, TreeItem item) throws HarnessException {
+		logger.info("zTreeItem(" + action +", "+ item +")");
 		
 		if ( !itemToLocator.containsKey(item) ) {
 			throw new HarnessException("locator not defined in itemToLocator for "+ item);
@@ -60,6 +69,13 @@ public class TreePreferences extends AbsTree {
 		
 		zClick(locator);
 		
+	}
+
+	/**
+	 * Not implemented.  Use zTreeItem(Action action, TreeItem item) instead
+	 */
+	public AbsSeleniumObject zTreeItem(Action action, IItem preference) throws HarnessException {
+		throw new HarnessException("Not implemented.  Use zTreeItem(Action action, TreeItem item) instead");
 	}
 	
 	private static final Map<TreeItem, String> itemToLocator = createItemToLocator();

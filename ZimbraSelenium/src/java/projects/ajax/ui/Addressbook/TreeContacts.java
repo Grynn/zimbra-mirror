@@ -4,6 +4,7 @@
 package projects.ajax.ui.Addressbook;
 
 import framework.items.FolderItem;
+import framework.items.IItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
 import framework.ui.AbsTree;
@@ -27,23 +28,34 @@ public class TreeContacts extends AbsTree {
 		logger.info("new " + TreeContacts.class.getCanonicalName());
 	}
 	
-	public AbsSeleniumObject zTreeItem(Action action, FolderItem addressbook) throws HarnessException {
+	/* (non-Javadoc)
+	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)
+	 */
+	public AbsSeleniumObject zTreeItem(Action action, IItem addressbook) throws HarnessException {
 		
 		// Validate the arguments
 		if ( (action == null) || (addressbook == null) ) {
 			throw new HarnessException("Must define an action and addressbook");
 		}
 		
-		AbsSeleniumObject page = null;
-		String locator = "id=zti__main_Contacts__"+ addressbook.getId() +"_textCell";
-		
-		if ( !this.sIsElementPresent(locator) ) {
-			throw new HarnessException("Unable to locator folder in tree "+ locator);
+		if ( !(addressbook instanceof FolderItem) ) {
+			throw new HarnessException("Must use FolderItem as argument, but was "+ addressbook.getClass());
 		}
+		
+		FolderItem folder = (FolderItem)addressbook;
+		
+		AbsSeleniumObject page = null;
+		String locator = null;
 		
 		if ( action == Action.A_LEFTCLICK ) {
 			
-			this.sClick(locator);
+			locator = "id=zti__main_Contacts__"+ folder.getId() +"_textCell";
+			
+			if ( !this.sIsElementPresent(locator) ) {
+				throw new HarnessException("Unable to locator folder in tree "+ locator);
+			}
+
+			this.zClick(locator);
 			SleepUtil.sleepSmall();
 			page = null;
 			

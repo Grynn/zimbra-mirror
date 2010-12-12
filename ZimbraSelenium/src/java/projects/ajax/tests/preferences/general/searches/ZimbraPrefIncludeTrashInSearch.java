@@ -10,6 +10,7 @@ import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
 import framework.items.RecipientItem.RecipientType;
+import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
@@ -42,7 +43,7 @@ public class ZimbraPrefIncludeTrashInSearch extends AjaxCommonTest {
 		
 
 		// Go to "General"
-		app.zTreePreferences.zClickTreeItem(TreeItem.General);
+		app.zTreePreferences.zTreeItem(Action.A_LEFTCLICK, TreeItem.General);
 		
 		// Determine the status of the checkbox
 		boolean checked = app.zPagePreferences.zGetCheckboxStatus("zimbraPrefIncludeTrashInSearch");

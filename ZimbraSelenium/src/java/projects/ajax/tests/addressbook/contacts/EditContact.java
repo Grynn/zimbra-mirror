@@ -3,6 +3,8 @@ import java.util.List;
 
 import org.testng.annotations.Test;
 
+import projects.ajax.core.AjaxCommonTest;
+import projects.ajax.ui.Addressbook.FormContactNew;
 import framework.items.ContactItem;
 import framework.items.ContactItem.GenerateItemType;
 import framework.ui.Action;
@@ -10,9 +12,6 @@ import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZAssert;
-import framework.util.ZimbraAccount;
-import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.Addressbook.*;
 
 
 public class EditContact extends AjaxCommonTest  {
@@ -23,11 +22,7 @@ public class EditContact extends AjaxCommonTest  {
 		super.startingPage = app.zPageAddressbook;
 
 		// Make sure we are using an account with conversation view
-		ZimbraAccount account = new ZimbraAccount();
-		account.provision();
-		account.authenticate();
-			
-		super.startingAccount = account;		
+		super.startingAccount = null;		
 		
 	}
 	
@@ -48,6 +43,9 @@ public class EditContact extends AjaxCommonTest  {
                 "</CreateContactRequest>");
 
         app.zGetActiveAccount().soapSelectNode("//mail:CreateContactResponse", 1);
+
+        // Refresh the view, to pick up the new contact
+        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, app.zGetActiveAccount().getFolderByName("Contacts"));
 
         // Select the contact
         app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);

@@ -104,8 +104,7 @@ public class GetMail extends AjaxCommonTest {
 					"</SendMsgRequest>");
 
 		// Get all the SOAP data for later verification
-		MailItem mail = new MailItem();
-		mail.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 		
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);

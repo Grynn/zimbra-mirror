@@ -1,9 +1,9 @@
 package projects.ajax.tests.briefcase.file;
 
 import org.testng.annotations.Test;
+
 import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.PageBriefcase.Locators;
-import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
@@ -18,10 +18,7 @@ public class UploadFile extends AjaxCommonTest {
 
 		super.startingPage = app.zPageBriefcase;
 
-		ZimbraAccount account = new ZimbraAccount();
-		account.provision();
-		account.authenticate();
-		super.startingAccount = account;
+		super.startingAccount = null;
 
 	}
 
