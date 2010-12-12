@@ -3,7 +3,7 @@ package projects.ajax.tests.preferences.general.searches;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.TreePreferences.TreeItem;
+import projects.ajax.ui.preferences.TreePreferences.TreeItem;
 import framework.ui.Action;
 import framework.util.HarnessException;
 import framework.util.ZAssert;

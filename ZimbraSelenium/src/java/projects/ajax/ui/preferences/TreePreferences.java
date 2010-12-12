@@ -1,7 +1,7 @@
 /**
  * 
  */
-package projects.ajax.ui;
+package projects.ajax.ui.preferences;
 
 import java.util.Collections;
 import java.util.HashMap;

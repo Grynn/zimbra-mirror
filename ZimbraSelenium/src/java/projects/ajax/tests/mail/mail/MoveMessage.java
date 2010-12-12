@@ -3,7 +3,7 @@ package projects.ajax.tests.mail.mail;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.Mail.DialogMove;
+import projects.ajax.ui.mail.DialogMove;
 import framework.items.FolderItem;
 import framework.items.MailItem;
 import framework.ui.Action;

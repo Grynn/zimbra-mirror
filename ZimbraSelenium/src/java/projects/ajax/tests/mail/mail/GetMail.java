@@ -5,8 +5,8 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.DisplayMail;
-import projects.ajax.ui.DisplayMail.Field;
+import projects.ajax.ui.mail.DisplayMail;
+import projects.ajax.ui.mail.DisplayMail.Field;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
 import framework.ui.Action;

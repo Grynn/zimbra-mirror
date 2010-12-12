@@ -5,7 +5,7 @@ import java.util.List;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.TreePreferences.TreeItem;
+import projects.ajax.ui.preferences.TreePreferences.TreeItem;
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.items.RecipientItem;

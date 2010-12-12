@@ -1,4 +1,4 @@
-package projects.ajax.ui;
+package projects.ajax.ui.briefcase;
 
 import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;

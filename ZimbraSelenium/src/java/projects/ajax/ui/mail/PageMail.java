@@ -1,13 +1,15 @@
 /**
  * 
  */
-package projects.ajax.ui;
+package projects.ajax.ui.mail;
 
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-import projects.ajax.ui.Mail.DialogMove;
+import projects.ajax.ui.AbsAjaxPage;
+import projects.ajax.ui.PageMain;
+import projects.ajax.ui.PageMain.Locators;
 
 import framework.items.ConversationItem;
 import framework.items.MailItem;

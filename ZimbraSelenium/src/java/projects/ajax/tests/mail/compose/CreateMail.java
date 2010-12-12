@@ -3,7 +3,7 @@ package projects.ajax.tests.mail.compose;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.FormMailNew;
+import projects.ajax.ui.mail.FormMailNew;
 import framework.items.MailItem;
 import framework.items.RecipientItem;
 import framework.ui.Button;

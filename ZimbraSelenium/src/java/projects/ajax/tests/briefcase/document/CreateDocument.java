@@ -3,7 +3,7 @@ package projects.ajax.tests.briefcase.document;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.DocumentBriefcaseNew;
+import projects.ajax.ui.briefcase.DocumentBriefcaseNew;
 import framework.items.DocumentItem;
 import framework.ui.Button;
 import framework.util.HarnessException;

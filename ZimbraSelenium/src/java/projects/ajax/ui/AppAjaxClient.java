@@ -4,8 +4,13 @@
 package projects.ajax.ui;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.Addressbook.PageAddressbook;
-import projects.ajax.ui.Addressbook.TreeContacts;
+import projects.ajax.ui.addressbook.PageAddressbook;
+import projects.ajax.ui.addressbook.TreeContacts;
+import projects.ajax.ui.briefcase.PageBriefcase;
+import projects.ajax.ui.mail.PageMail;
+import projects.ajax.ui.preferences.PagePreferences;
+import projects.ajax.ui.preferences.TreePreferences;
+import projects.ajax.ui.search.PageSearch;
 import framework.ui.AbsApplication;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;

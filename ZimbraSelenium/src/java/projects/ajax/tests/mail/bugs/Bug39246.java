@@ -5,7 +5,7 @@ import java.io.IOException;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.DisplayMail;
+import projects.ajax.ui.mail.DisplayMail;
 
 import com.zimbra.cs.lmtpserver.LmtpProtocolException;
 

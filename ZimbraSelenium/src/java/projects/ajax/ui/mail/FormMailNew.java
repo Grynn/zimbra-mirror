@@ -1,4 +1,4 @@
-package projects.ajax.ui;
+package projects.ajax.ui.mail;
 
 import java.util.List;
 

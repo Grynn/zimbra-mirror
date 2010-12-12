@@ -1,8 +1,9 @@
 /**
  * 
  */
-package projects.ajax.ui;
+package projects.ajax.ui.search;
 
+import projects.ajax.ui.AbsAjaxPage;
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
 import framework.ui.Button;

@@ -9,8 +9,8 @@ import java.util.Map;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import projects.ajax.ui.PageMail;
 import projects.ajax.ui.PageMain;
+import projects.ajax.ui.mail.PageMail;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 

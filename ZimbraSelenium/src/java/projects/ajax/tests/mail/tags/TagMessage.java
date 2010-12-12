@@ -3,7 +3,7 @@ package projects.ajax.tests.mail.tags;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.DialogTag;
+import projects.ajax.ui.mail.DialogTag;
 import framework.items.FolderItem;
 import framework.items.MailItem;
 import framework.ui.Action;

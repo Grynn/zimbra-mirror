@@ -3,7 +3,7 @@ package projects.ajax.tests.briefcase.file;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
-import projects.ajax.ui.PageBriefcase.Locators;
+import projects.ajax.ui.briefcase.PageBriefcase.Locators;
 import framework.items.DocumentItem;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;

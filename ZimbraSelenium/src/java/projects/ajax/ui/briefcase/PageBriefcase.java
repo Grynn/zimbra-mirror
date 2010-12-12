@@ -1,9 +1,13 @@
 /**
  * 
  */
-package projects.ajax.ui;
+package projects.ajax.ui.briefcase;
 
 import java.awt.event.KeyEvent;
+
+import projects.ajax.ui.AbsAjaxPage;
+import projects.ajax.ui.PageMain;
+import projects.ajax.ui.PageMain.Locators;
 
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;

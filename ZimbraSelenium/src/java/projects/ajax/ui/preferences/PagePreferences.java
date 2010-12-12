@@ -1,8 +1,11 @@
 /**
  * 
  */
-package projects.ajax.ui;
+package projects.ajax.ui.preferences;
 
+import projects.ajax.ui.AbsAjaxPage;
+import projects.ajax.ui.PageMain;
+import projects.ajax.ui.PageMain.Locators;
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
 import framework.ui.Button;
