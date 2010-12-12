@@ -7,6 +7,7 @@ import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
 import framework.items.ContactItem;
+import framework.items.FolderItem;
 import framework.items.ContactItem.GenerateItemType;
 import framework.ui.Action;
 import framework.ui.Button;
@@ -44,7 +45,8 @@ public class DeleteContact extends AjaxCommonTest  {
         app.zGetActiveAccount().soapSelectNode("//mail:CreateContactResponse", 1);
         
         // Refresh the view, to pick up the new contact
-        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, app.zGetActiveAccount().getFolderByName("Contacts"));
+        FolderItem contactFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Contacts");
+        app.zTreeContacts.zTreeItem(Action.A_LEFTCLICK, contactFolder);
         
         // Select the item
         app.zPageAddressbook.zListItem(Action.A_LEFTCLICK, contactItem.fileAs);

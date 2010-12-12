@@ -4,11 +4,13 @@ import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.DialogTag;
+import framework.items.FolderItem;
 import framework.items.MailItem;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
+import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
 public class TagMessage extends AjaxCommonTest {
@@ -19,7 +21,10 @@ public class TagMessage extends AjaxCommonTest {
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
 			
-		super.startingAccount = null;		
+		super.startingAccount = new ZimbraAccount();
+		super.startingAccount.provision();
+		super.startingAccount.authenticate();
+		super.startingAccount.modifyPreference("zimbraPrefGroupMailBy", "message");
 		
 	}
 
@@ -32,9 +37,10 @@ public class TagMessage extends AjaxCommonTest {
 		
 
 		// Add a message to the mailbox
+		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Inbox");
 		app.zGetActiveAccount().soapSend(
 					"<AddMsgRequest xmlns='urn:zimbraMail'>" +
-                		"<m l='"+ app.zGetActiveAccount().getFolderByName("Inbox").getId() +"'>" +
+                		"<m l='"+ inboxFolder.getId() +"'>" +
                     		"<content>From: foo@foo.com\n" +
 "To: foo@foo.com \n" +
 "Subject: "+ subject +"\n" +

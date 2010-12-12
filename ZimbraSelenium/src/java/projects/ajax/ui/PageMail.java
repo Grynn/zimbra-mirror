@@ -7,6 +7,8 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
+import projects.ajax.ui.Mail.DialogMove;
+
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.ui.AbsApplication;
@@ -290,14 +292,15 @@ public class PageMail extends AbsAjaxPage {
 		} else if ( button == Button.B_MOVE ) {
 			
 			// Check if the button is enabled
-			String attrs = sGetAttribute("xpath=(//td[@id='"+ Locators.zMoveIconBtnID +"']/div)@class");
+			String attrs = sGetAttribute("xpath=(//td[contains(@id, '__MOVE_left_icon')]/div)@class");
 			if ( attrs.contains("ZDisabledImage") ) {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
 			}
 
-			locator = "id='"+ Locators.zMoveIconBtnID;
-			page = null;	// TODO
-			throw new HarnessException("implement Move dialog");
+			locator = "//td[contains(@id, '__MOVE_left_icon')]";
+			page = new DialogMove(MyApplication);
+			
+			// FALL THROUGH
 			
 		} else if ( button == Button.B_PRINT ) {
 			

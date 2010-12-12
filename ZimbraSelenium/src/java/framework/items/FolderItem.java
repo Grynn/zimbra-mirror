@@ -44,7 +44,8 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 	}
 
 	public static FolderItem importFromSOAP(Element response) throws HarnessException {
-		
+		logger.debug("importFromSOAP("+ response.prettyPrint() +")");
+
 		// TODO: can the ZimbraSOAP methods be used to convert this response to item?
 		
 		// Example response:
@@ -79,8 +80,21 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 	}
 
 
-	public static FolderItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
-		throw new HarnessException("implement me");
+	public static FolderItem importFromSOAP(ZimbraAccount account, String name) throws HarnessException {
+		logger.debug("importFromSOAP("+ account.EmailAddress +", "+ name +")");
+		
+		// Get all the folders
+		account.soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>");
+		String id = account.soapSelectValue("//mail:folder[@name='"+ name +"']", "id");
+		
+		// Get just the folder specified
+		account.soapSend(
+				"<GetFolderRequest xmlns='urn:zimbraMail'>" +
+					"<folder l='"+ id +"'/>" +
+				"</GetFolderRequest>");
+		Element response = account.soapSelectNode("//mail:GetFolderResponse", 1);
+				
+		return (importFromSOAP(response));
 	}
 
 	@Override

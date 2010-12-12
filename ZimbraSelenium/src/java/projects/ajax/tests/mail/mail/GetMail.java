@@ -25,12 +25,10 @@ public class GetMail extends AjaxCommonTest {
 		super.startingPage = app.zPageMail;
 
 		// Make sure we are using an account with conversation view
-		ZimbraAccount account = new ZimbraAccount();
-		account.provision();
-		account.authenticate();
-		account.modifyPreference("zimbraPrefGroupMailBy", "message");
-			
-		super.startingAccount = account;		
+		super.startingAccount = new ZimbraAccount();
+		super.startingAccount.provision();
+		super.startingAccount.authenticate();
+		super.startingAccount.modifyPreference("zimbraPrefGroupMailBy", "message");
 		
 	}
 	
