@@ -4,7 +4,7 @@ import framework.core.ClientSessionFactory;
 import framework.items.ContactGroupItem;
 import framework.items.ContactItem;
 import framework.items.FolderItem;
-import framework.items.ZimbraItem;
+import framework.items.IItem;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
@@ -198,7 +198,7 @@ public class ABCompose extends AppPage {
 	/**
 	 * Create a new contact group
 	 */
-	public ZimbraItem createContactGroupItem(ActionMethod method, ZimbraItem item) throws HarnessException {
+	public IItem createContactGroupItem(ActionMethod method, IItem item) throws HarnessException {
 		try
 		{
 			ContactGroupItem g = (ContactGroupItem)item;
@@ -283,7 +283,7 @@ public class ABCompose extends AppPage {
 	/**
 	 * Create a new contact item
 	 */
-	public ZimbraItem createItem(ActionMethod method, ZimbraItem item) throws HarnessException {
+	public IItem createItem(ActionMethod method, IItem item) throws HarnessException {
 		try
 		{
 			ContactItem c = (ContactItem)item;
@@ -320,7 +320,7 @@ public class ABCompose extends AppPage {
 		}
 	}
 	
-	public ZimbraItem modifyItem(ActionMethod method, ZimbraItem oldItem, ZimbraItem newItem) throws HarnessException {
+	public IItem modifyItem(ActionMethod method, IItem oldItem, IItem newItem) throws HarnessException {
 		try {
 			ContactItem oldContact = (ContactItem)oldItem;
 			ContactItem newContact = (ContactItem)newItem;
@@ -349,7 +349,7 @@ public class ABCompose extends AppPage {
 
 	}
 
-	public void deleteItem(ActionMethod method, ZimbraItem item) throws HarnessException {
+	public void deleteItem(ActionMethod method, IItem item) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 	
@@ -524,7 +524,7 @@ public class ABCompose extends AppPage {
 	 * @return
 	 * @throws Exception
 	 */
-	public boolean zVerifyEditContact(ZimbraItem item) throws Exception {
+	public boolean zVerifyEditContact(IItem item) throws Exception {
 		
 		ContactItem c = (ContactItem)item;
 		ContactItem actual = new ContactItem();

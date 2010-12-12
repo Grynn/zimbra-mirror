@@ -1,6 +1,10 @@
 package framework.items;
 
-public class StringItem extends ZimbraItem{
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+public class StringItem {
+	protected static Logger logger = LogManager.getLogger(IItem.class);
 
 	private String string;
 	private int order; //the order of the element within the outer list

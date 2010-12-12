@@ -4,7 +4,7 @@ import java.util.List;
 
 import framework.items.MailItem;
 import framework.items.RecipientItem;
-import framework.items.ZimbraItem;
+import framework.items.IItem;
 import framework.items.RecipientItem.RecipientType;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
@@ -87,7 +87,7 @@ public class FormMailNew extends AbsForm {
 	}
 
 	@Override
-	public void zFill(ZimbraItem item) throws HarnessException {
+	public void zFill(IItem item) throws HarnessException {
 		logger.info("FormMailNew.fill(ZimbraItem)");
 		logger.info(item.prettyPrint());
 

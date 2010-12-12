@@ -2,7 +2,7 @@ package projects.ajax.ui;
 
 import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
-import framework.items.ZimbraItem;
+import framework.items.IItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
 import framework.util.HarnessException;
@@ -42,7 +42,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 	}
 		
 	@Override
-	public void zFill(ZimbraItem item) throws HarnessException {
+	public void zFill(IItem item) throws HarnessException {
 		logger.info("DocumentBriefcaseNew.fill(ZimbraItem)");
 		logger.info(item.prettyPrint());
 

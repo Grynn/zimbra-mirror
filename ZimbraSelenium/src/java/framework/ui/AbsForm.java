@@ -3,7 +3,7 @@ package framework.ui;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import framework.items.ZimbraItem;
+import framework.items.IItem;
 import framework.util.HarnessException;
 
 /**
@@ -41,7 +41,7 @@ public abstract class AbsForm extends AbsSeleniumObject {
 	 * Fill out the form (but don't submit)
 	 * @throws HarnessException on error
 	 */
-	public abstract void zFill(ZimbraItem item) throws HarnessException;
+	public abstract void zFill(IItem item) throws HarnessException;
 	
 	
 	/**
@@ -55,7 +55,7 @@ public abstract class AbsForm extends AbsSeleniumObject {
 	 * Fill and submit the form
 	 * @throws HarnessException on error
 	 */
-	public void zComplete(ZimbraItem item) throws HarnessException {
+	public void zComplete(IItem item) throws HarnessException {
 		zFill(item);
 		zSubmit();
 	}

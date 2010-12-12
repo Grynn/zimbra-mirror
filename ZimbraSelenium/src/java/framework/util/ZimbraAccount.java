@@ -43,6 +43,8 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.dom4j.DocumentException;
 
+import bsh.This;
+
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.net.SocketFactories;
 import com.zimbra.common.service.ServiceException;
@@ -54,6 +56,7 @@ import com.zimbra.common.soap.SoapUtil;
 import com.zimbra.common.util.ByteUtil;
 
 import framework.core.DevEnvironment;
+import framework.items.FolderItem;
 
 @SuppressWarnings("deprecation")
 public class ZimbraAccount {
@@ -307,9 +310,11 @@ public class ZimbraAccount {
 	}
 	
 	/**
-	 * Get a folder ID by folder name
+	 * Get a FolderItem by folder name
 	 */
-	public String getFolderIdByName(String foldername) throws HarnessException {
+	public FolderItem getFolderIdByName(String foldername) throws HarnessException {
+		
+		// Get all folders
 		soapSend("<GetFolderRequest xmlns='urn:zimbraMail'/>");
 		Element[] elements = this.soapSelectNodes("//mail:folder[@name='"+ foldername +"']");
 		
@@ -324,11 +329,17 @@ public class ZimbraAccount {
 			throw new HarnessException("Too many matches for folder name "+ foldername);
 		}
 		
-		Element eFolder = elements[0];
-		String id = eFolder.getAttribute("id", null);
+		String id = this.soapSelectValue("//mail:folder[@name='"+ foldername +"']", "id");
+		
+		// Get just the folder ID
+		soapSend(
+				"<GetFolderRequest xmlns='urn:zimbraMail'>" +
+					"<folder l='"+ id +"/>" +
+				"</GetFolderRequest>");
+		Element response = this.soapSelectNode("//GetFolderResponse", 1);
 
-		logger.debug("GetFolderResponse for name "+ foldername +" was "+ eFolder.prettyPrint());
-		return (id);
+		logger.debug("GetFolderResponse for name "+ foldername +" was "+ response.prettyPrint());
+		return (FolderItem.importFromSOAP(response));
 
 	}
 	

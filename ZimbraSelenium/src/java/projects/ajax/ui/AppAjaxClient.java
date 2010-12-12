@@ -5,6 +5,7 @@ package projects.ajax.ui;
 
 import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.Addressbook.PageAddressbook;
+import projects.ajax.ui.Addressbook.TreeContacts;
 import framework.ui.AbsApplication;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
@@ -47,6 +48,7 @@ public class AppAjaxClient extends AbsApplication {
 	public PageAddressbook              zPageAddressbook = null;
 	public PagePreferences				zPagePreferences = null;
 	
+	public TreeContacts					zTreeContacts = null;
 	public TreePreferences				zTreePreferences = null;
 	
 	public AppAjaxClient() {
@@ -70,6 +72,13 @@ public class AppAjaxClient extends AbsApplication {
 		zPageMail = new PageMail(this);
 		pages.put(zPageMail.myPageName(), zPageMail);
 		
+		//Addressbook page    
+		zPageAddressbook = new PageAddressbook(this);
+		pages.put(zPageAddressbook.myPageName(), zPageAddressbook);
+
+		zTreeContacts = new TreeContacts(this);
+		trees.put(zTreeContacts.myPageName(), zTreeContacts);
+		
 		// PageBriefcase page
 		zPageBriefcase = new PageBriefcase(this);
 		pages.put(zPageBriefcase.myPageName(), zPageBriefcase);
@@ -81,10 +90,6 @@ public class AppAjaxClient extends AbsApplication {
 		zTreePreferences = new TreePreferences(this);
 		trees.put(zTreePreferences.myPageName(), zTreePreferences);
 		
-
-		//Addressbook page    
-		zPageAddressbook = new PageAddressbook(this);
-		pages.put(zPageAddressbook.myPageName(), zPageAddressbook);
 
 	}
 	

@@ -3,6 +3,9 @@ package framework.items;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import com.zimbra.common.soap.Element;
 
 import framework.util.HarnessException;
@@ -15,6 +18,7 @@ import framework.util.ZimbraAccount;
  *
  */
 public class ContactGroupItem extends ContactItem implements IItem {
+	protected static Logger logger = LogManager.getLogger(IItem.class);
 
 	/**
 	 * The name of the contact group
@@ -97,18 +101,15 @@ public class ContactGroupItem extends ContactItem implements IItem {
 	}
 	
 	
-	@Override
-	public void importFromSOAP(Element GetContactsResponse) throws HarnessException {
+	public static ContactGroupItem importFromSOAP(Element GetContactsResponse) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 
-	@Override
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 
-	@Override
-	public void importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
+	public static ContactGroupItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 
@@ -124,56 +125,6 @@ public class ContactGroupItem extends ContactItem implements IItem {
 		return (sb.toString());
 	}
 	
-	/**
-	 * Sample ContactItem Driver
-	 * @param args
-	 * @throws Exception
-	 */
-	public static void main(String[] args) throws Exception {
-		
-		String envelopeString = 
-			"<soap:Envelope xmlns:soap='http://www.w3.org/2003/05/soap-envelope'>" +
-				"<soap:Header>" +
-					"<context xmlns='urn:zimbra'>" +
-						"<change token='2'></change>" +
-					"</context>" +
-				"</soap:Header>" +
-				"<soap:Body>" +
-					"<GetContactsResponse xmlns='urn:zimbraMail'>" +
-						"<cn d='1281656466000' fileAsStr='Last.1281656613238.17, First.1281656613238.16' id='425' l='7' rev='2'>" +
-							"<a n='lastName'>Last.1281656613238.17</a>" +
-							"<a n='email'>email.1281656613238.18@domain.com</a>" +
-							"<a n='firstName'>First.1281656613238.16</a>" +
-						"</cn>" +
-					"</GetContactsResponse>" +
-				"</soap:Body>" +
-			"</soap:Envelope>";
-		
-
-		
-		ContactGroupItem c = new ContactGroupItem();
-		c.importFromSOAP(Element.parseXML(envelopeString));
-		
-		System.out.println("Imported contact item from SOAP");
-		System.out.println(c.prettyPrint());
-		
-		ZimbraAccount.AccountA().soapSend(
-				"<CreateContactRequest xmlns='urn:zimbraMail'>" +
-					"<cn>" +
-						"<a n='firstName'>First.1281656613301.19</a>" +
-						"<a n='lastName'>Last.1281656613301.20</a>" +
-						"<a n='email'>email.1281656613301.21@domain.com</a>" +
-					"</cn>" +
-				"</CreateContactRequest>");
-		
-		c = new ContactGroupItem();
-		c.importFromSOAP(ZimbraAccount.AccountA(), "email.1281656613301.21@domain.com");
-		
-		System.out.println("Imported contact item from query");
-		System.out.println(c.prettyPrint());
-
-		
-	}
 
 }
 

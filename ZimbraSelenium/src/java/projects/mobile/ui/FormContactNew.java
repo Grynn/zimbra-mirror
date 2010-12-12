@@ -1,7 +1,7 @@
 package projects.mobile.ui;
 
 import framework.items.ContactItem;
-import framework.items.ZimbraItem;
+import framework.items.IItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
 import framework.util.HarnessException;
@@ -44,7 +44,7 @@ public class FormContactNew extends AbsForm {
 	}
 
 	@Override
-	public void zFill(ZimbraItem item) throws HarnessException {
+	public void zFill(IItem item) throws HarnessException {
 		logger.debug(myPageName() + " fill()");
 		logger.info(item.prettyPrint());
 

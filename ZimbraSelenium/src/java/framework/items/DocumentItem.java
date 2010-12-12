@@ -3,6 +3,9 @@
  */
 package framework.items;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import com.zimbra.common.soap.Element;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
@@ -13,7 +16,8 @@ import framework.util.ZimbraSeleniumProperties;
  * 
  * 
  */
-public class DocumentItem extends ZimbraItem implements IItem {
+public class DocumentItem implements IItem {
+	protected static Logger logger = LogManager.getLogger(IItem.class);
 	/**
 	 * The document name
 	 */
@@ -70,6 +74,15 @@ public class DocumentItem extends ZimbraItem implements IItem {
 	 */
 	public DocumentItem() {
 		populateDocumentData();
+	}
+
+	// TODO: eventually, replace this with the com.zimbra.soap.types.Contact method
+	private String myId;
+	public String getId() {
+		return (myId);
+	}
+	public void setId(String id) {
+		myId=id;
 	}
 
 	/**
@@ -131,12 +144,6 @@ public class DocumentItem extends ZimbraItem implements IItem {
 		return briefcaseFolderID;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see framework.items.IItem#CreateSOAP(framework.util.ZimbraAccount)
-	 */
-	@Override
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
 		e = account
 				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
@@ -165,12 +172,6 @@ public class DocumentItem extends ZimbraItem implements IItem {
 		// account.soapSelectValue("//mail:doc","name");
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see framework.items.IItem#ImportSOAP(com.zimbra.common.soap.Element)
-	 */
-	@Override
 	public void importFromSOAP(Element response) throws HarnessException {
 		try {
 			// Make sure we only have the DocumentResponse part
@@ -188,7 +189,7 @@ public class DocumentItem extends ZimbraItem implements IItem {
 						"Element does not contain doc element");
 
 			// Set the ID
-			super.id = doc.getAttribute("id", null);
+			this.setId( doc.getAttribute("id", null) );
 
 		} catch (Exception e) {
 			throw new HarnessException("Could not parse SaveDocumentResponse: "
@@ -197,7 +198,6 @@ public class DocumentItem extends ZimbraItem implements IItem {
 
 	}
 
-	@Override
 	public void importFromSOAP(ZimbraAccount account, String query)
 			throws HarnessException {
 		try {
@@ -241,7 +241,6 @@ public class DocumentItem extends ZimbraItem implements IItem {
 	@Override
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(super.prettyPrint());
 		sb.append(DocumentItem.class.getSimpleName()).append('\n');
 		sb.append("Doc name: ").append(docName).append('\n');
 		sb.append("Doc text: \n\n").append(docText).append("\n\n");

@@ -3,9 +3,9 @@
  */
 package projects.zcs.ui;
 
-import framework.items.ZimbraItem;
-import framework.util.HarnessException;
 import projects.zcs.tests.CommonTest;
+import framework.items.IItem;
+import framework.util.HarnessException;
 
 
 /**
@@ -42,7 +42,7 @@ public class AppPage extends CommonTest {
 	 * @return
 	 * @throws HarnessException 
 	 */
-	public ZimbraItem createItem(ActionMethod method, ZimbraItem item) throws HarnessException {
+	public IItem createItem(ActionMethod method, IItem item) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 	
@@ -55,7 +55,7 @@ public class AppPage extends CommonTest {
 	 * @return
 	 * @throws HarnessException 
 	 */
-	public ZimbraItem modifyItem(ActionMethod method, ZimbraItem oldItem, ZimbraItem newItem) throws HarnessException {
+	public IItem modifyItem(ActionMethod method, IItem oldItem, IItem newItem) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 
@@ -67,7 +67,7 @@ public class AppPage extends CommonTest {
 	 * @param item The object (page-specific type) to delete
 	 * @throws HarnessException 
 	 */
-	public void deleteItem(ActionMethod method, ZimbraItem item) throws HarnessException  {
+	public void deleteItem(ActionMethod method, IItem item) throws HarnessException  {
 		throw new HarnessException("implement me");
 	}
 	

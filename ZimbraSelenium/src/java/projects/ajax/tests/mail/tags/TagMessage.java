@@ -71,7 +71,7 @@ public class TagMessage extends AjaxCommonTest {
 
 		app.zGetActiveAccount().soapSend(
 					"<GetMsgRequest xmlns='urn:zimbraMail'>" +
-						"<m id='"+ mail.id +"'/>" +
+						"<m id='"+ mail.getId() +"'/>" +
 					"</GetMsgRequest>");
 		String mailTags = app.zGetActiveAccount().soapSelectValue("//mail:GetMsggResponse//mail:m", "t");
 		 

@@ -3,6 +3,9 @@
  */
 package framework.items;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import com.zimbra.common.soap.Element;
 
 import framework.util.HarnessException;
@@ -13,17 +16,14 @@ import framework.util.ZimbraAccount;
  *
  */
 public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IItem {
-	
+	protected static Logger logger = LogManager.getLogger(IItem.class);
+
 	/**
 	 * Create a new FolderItem object
 	 */
 	public FolderItem() {
 	}
 
-	/* (non-Javadoc)
-	 * @see framework.items.IItem#CreateSOAP(framework.util.ZimbraAccount)
-	 */
-	@Override
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
 		
 		// TODO: handle all folder properties, not just name and parent
@@ -42,18 +42,12 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		
 	}
 
-	/* (non-Javadoc)
-	 * @see framework.items.IItem#ImportSOAP(com.zimbra.common.soap.Element)
-	 */
-	@Override
-	public void importFromSOAP(Element response) throws HarnessException {
+	public static FolderItem importFromSOAP(Element response) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 
 
-	@Override
-	public void importFromSOAP(ZimbraAccount account, String query)
-			throws HarnessException {
+	public static FolderItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 

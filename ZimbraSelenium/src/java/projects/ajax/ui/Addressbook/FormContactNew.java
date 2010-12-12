@@ -97,7 +97,7 @@ public class FormContactNew extends AbsForm {
 	}
 
 	@Override
-	public void zFill(ZimbraItem item) throws HarnessException {
+	public void zFill(IItem item) throws HarnessException {
 		logger.info("FormMailNew.fill(ZimbraItem)");
 		logger.info(item.prettyPrint());
 

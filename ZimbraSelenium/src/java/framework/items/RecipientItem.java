@@ -1,11 +1,15 @@
 package framework.items;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import com.zimbra.common.soap.Element;
 
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 
-public class RecipientItem extends ZimbraItem implements IItem {
+public class RecipientItem implements IItem {
+	protected static Logger logger = LogManager.getLogger(IItem.class);
 
 	public enum RecipientType {
 		To, Cc, Bcc, From
@@ -49,11 +53,10 @@ public class RecipientItem extends ZimbraItem implements IItem {
 		
 	}
 
-	/**
-	 * Parse <e d="dislay" t="f" a="address@domain.com"/>
-	 **/
-	@Override
-	public void importFromSOAP(Element eElement) throws HarnessException {
+	public static RecipientItem importFromSOAP(Element eElement) throws HarnessException {
+		
+		RecipientItem recipient = null;
+		
 		try {
 
 	
@@ -61,36 +64,36 @@ public class RecipientItem extends ZimbraItem implements IItem {
 			if ( element == null )
 				throw new HarnessException("Element does not contain an e element");
 			
-			// Set the ID
-			super.id = null;
-			
+			recipient = new RecipientItem();
+						
 			String type = element.getAttribute("t", null);
 			if ( type.equals("t") )
-				dType = RecipientType.To;
+				recipient.dType = RecipientType.To;
 			else if ( type.equals("c") )
-				dType = RecipientType.Cc;
+				recipient.dType = RecipientType.Cc;
 			else if ( type.equals("b") )
-				dType = RecipientType.Bcc;
+				recipient.dType = RecipientType.Bcc;
 			else if ( type.equals("f") )
-				dType = RecipientType.From;
+				recipient.dType = RecipientType.From;
 			else
 				throw new HarnessException("Unkown <e t='?'/> attribute: "+ type);
 			
 
-			dDisplayName = element.getAttribute("d", null);
+			recipient.dDisplayName = element.getAttribute("d", null);
 			
-			dEmailAddress = element.getAttribute("a", null);
+			recipient.dEmailAddress = element.getAttribute("a", null);
+			
+			return (recipient);
 
 			
 		} catch (Exception e) {
 			throw new HarnessException("Could not parse </e>: "+ eElement.prettyPrint(), e);
 		} finally {
-			logger.info(this.prettyPrint());
+			if ( recipient != null ) logger.info(recipient.prettyPrint());
 		}
 	}
 
-	@Override
-	public void importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
+	public static RecipientItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
 		throw new HarnessException("not supported");
 	}
 

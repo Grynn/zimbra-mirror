@@ -3,6 +3,9 @@
  */
 package framework.items;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
 import com.zimbra.common.soap.Element;
 
 import framework.util.HarnessException;
@@ -14,7 +17,8 @@ import framework.util.ZimbraAccount;
  * @author Matt Rhoades
  *
  */
-public class ConversationItem extends ZimbraItem implements IItem {
+public class ConversationItem implements IItem {
+	protected static Logger logger = LogManager.getLogger(IItem.class);
 
 	/**
 	 * Whether the checkbox is checked or not
@@ -131,31 +135,21 @@ public class ConversationItem extends ZimbraItem implements IItem {
 	}
 
 	
-	/* (non-Javadoc)
-	 * @see framework.items.IItem#CreateSOAP(framework.util.ZimbraAccount)
-	 */
-	@Override
 	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 
-	/* (non-Javadoc)
-	 * @see framework.items.IItem#ImportSOAP(com.zimbra.common.soap.Element)
-	 */
-	@Override
-	public void importFromSOAP(Element GetMsgResponse) throws HarnessException {
+	public static ConversationItem importFromSOAP(Element GetMsgResponse) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 
-	@Override
-	public void importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
+	public static ConversationItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 	
 	@Override
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(super.prettyPrint());
 		sb.append(ConversationItem.class.getSimpleName()).append('\n');
 		sb.append("isSelected: ").append(isSelected).append('\n');
 		sb.append("isExpanded: ").append(isExpanded).append('\n');

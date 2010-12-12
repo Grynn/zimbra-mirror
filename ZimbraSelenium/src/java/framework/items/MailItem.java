@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang.StringEscapeUtils;
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
 
 import com.zimbra.common.soap.Element;
 
@@ -19,7 +21,8 @@ import framework.util.ZimbraAccount;
  * @author Matt Rhoades
  *
  */
-public class MailItem extends ZimbraItem implements IItem {
+public class MailItem implements IItem {
+	protected static Logger logger = LogManager.getLogger(IItem.class);
 
 	public class MessageFlags {
 		public static final int None = 				0x0000;
@@ -145,6 +148,16 @@ public class MailItem extends ZimbraItem implements IItem {
 	public MailItem() {
 		dFlags = MessageFlags.None;	// Clear all flags
 	}
+	
+	// TODO: eventually, replace this with the com.zimbra.soap.types.Contact method
+	private String myId;
+	public String getId() {
+		return (myId);
+	}
+	public void setId(String id) {
+		myId=id;
+	}
+
 
 	public List<RecipientItem> dAllRecipients() {
 		List<RecipientItem> list = new ArrayList<RecipientItem>();
@@ -194,11 +207,9 @@ public class MailItem extends ZimbraItem implements IItem {
 		throw new HarnessException("implement me");
 	}
 
-	/* (non-Javadoc)
-	 * @see framework.items.IItem#ImportSOAP(com.zimbra.common.soap.Element)
-	 */
-	@Override
-	public void importFromSOAP(Element GetMsgResponse) throws HarnessException {
+	public static MailItem importFromSOAP(Element GetMsgResponse) throws HarnessException {
+		
+		MailItem mail = null;
 		
 		try {
 
@@ -211,29 +222,32 @@ public class MailItem extends ZimbraItem implements IItem {
 			if ( m == null )
 				throw new HarnessException("Element does not contain an m element");
 			
+			// Create the object
+			mail = new MailItem();
+			
 			// Set the ID
-			super.id = m.getAttribute("id", null);
+			mail.setId(m.getAttribute("id", null));
 			
 			// If there is a subject, save it
 			Element sElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:su");
 			if ( sElement != null )
-				dSubject = sElement.getText().trim();
+				mail.dSubject = sElement.getText().trim();
 			
 			// Parse the recipients
 			Element[] eElements = ZimbraAccount.SoapClient.selectNodes(m, "//mail:e");
 			for (Element eElement : eElements) {
 				
 				RecipientItem r = new RecipientItem();
-				r.importFromSOAP(eElement);
+				r = RecipientItem.importFromSOAP(eElement);
 				
 				if ( r.dType == RecipientItem.RecipientType.To ) {
-					dToRecipients.add(r);
+					mail.dToRecipients.add(r);
 				} else if ( r.dType == RecipientItem.RecipientType.Cc ) {
-					dCcRecipients.add(r);
+					mail.dCcRecipients.add(r);
 				} else if ( r.dType == RecipientItem.RecipientType.Bcc ) {
-					dBccRecipients.add(r);
+					mail.dBccRecipients.add(r);
 				} else if ( r.dType == RecipientItem.RecipientType.From ) {
-					dFromRecipient = r;
+					mail.dFromRecipient = r;
 				} else {
 					throw new HarnessException("Unable to parse recipient element "+ eElement.prettyPrint());
 				}
@@ -242,20 +256,21 @@ public class MailItem extends ZimbraItem implements IItem {
 			
 			Element contentTextPlain = ZimbraAccount.SoapClient.selectNode(m, "//mail:mp[@ct='text/plain']//mail:content");
 			if ( contentTextPlain != null ) {
-				dBodyText = contentTextPlain.getText().trim();
+				mail.dBodyText = contentTextPlain.getText().trim();
 			}
+			
+			return (mail);
 			
 		} catch (Exception e) {
 			throw new HarnessException("Could not parse GetMsgResponse: "+ GetMsgResponse.prettyPrint(), e);
 		} finally {
-			logger.info(this.prettyPrint());
+			if ( mail != null )	logger.info(mail.prettyPrint());
 		}
 		
 	}
 
-	@Override
-	public void importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
-
+	public static MailItem importFromSOAP(ZimbraAccount account, String query) throws HarnessException {
+		
 		try {
 			
 			account.soapSend(
@@ -276,7 +291,7 @@ public class MailItem extends ZimbraItem implements IItem {
 			Element getMsgResponse = account.soapSelectNode("//mail:GetMsgResponse", 1);
 			
 			// Using the response, create this item
-			importFromSOAP(getMsgResponse);
+			return (importFromSOAP(getMsgResponse));
 			
 		} catch (Exception e) {
 			throw new HarnessException("Unable to import using SOAP query("+ query +") and account("+ account.EmailAddress +")", e);
@@ -286,7 +301,6 @@ public class MailItem extends ZimbraItem implements IItem {
 	@Override
 	public String prettyPrint() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(super.prettyPrint());
 		sb.append(MailItem.class.getSimpleName()).append('\n');
 		sb.append('\n').append(prettyPrintSOAP());
 		sb.append('\n').append(prettyPrintGUI());
@@ -334,66 +348,6 @@ public class MailItem extends ZimbraItem implements IItem {
 
 
 
-	/**
-	 * Sample MailItem Driver
-	 * @param args
-	 * @throws Exception
-	 */
-	public static void main(String[] args) throws Exception {
-		String envelopeString = 
-			"<soap:Envelope xmlns:soap='http://www.w3.org/2003/05/soap-envelope'>" +
-				"<soap:Header>" +
-					"<context xmlns='urn:zimbra'>" +
-						"<change token='5'></change>" +
-					"</context>" +
-				"</soap:Header>" +
-				"<soap:Body>" +
-					"<GetMsgResponse xmlns='urn:zimbraMail'>" +
-						"<m rev='2' cid='352' id='352' sd='1281643943000' d='1281643943000' l='5' s='429' f='s'>" +
-							"<e d='test1281644074332' t='f' a='test1281644074332.1@qa60.lab.zimbra.com' p='test1281644074332 1'></e>" +
-							"<e p='test1281644074332 1' a='test1281644074332.1@qa60.lab.zimbra.com' d='test1281644074332' t='t'></e>" +
-							"<su>Subject1281644074394.3</su>" +
-							"<fr>content of the message1281644074394.4</fr>" +
-							"<mid>&lt;19975588.6.1281643943936.JavaMail.root@qa60&gt;</mid>" +
-							"<mp body='1' s='38' ct='text/plain' part='1'>" +
-								"<content>content of the message1281644074394.4</content>" +
-							"</mp>" +
-						"</m>" +
-					"</GetMsgResponse>" +
-				"</soap:Body>" +
-			"</soap:Envelope>";
-
-		
-		MailItem m = new MailItem();
-		m.importFromSOAP(Element.parseXML(envelopeString));
-		
-		System.out.println("Imported mail item from SOAP");
-		System.out.println(m.prettyPrint());
-		
-		ZimbraAccount.AccountA().soapSend(
-				"<AddMsgRequest xmlns='urn:zimbraMail'>" +
-					"<m l='1'>" +
-						"<content>"+
-"From: foo@foo.com \n"+
-"To: foo@foo.com \n"+
-"Subject: email01A \n"+
-"MIME-Version: 1.0 \n"+
-"Content-Type: text/plain; charset=utf-8 \n"+
-"Content-Transfer-Encoding: 7bit \n"+
-"\n"+
-"simple text string in the body\n"+
-"\n"+
-						"</content>" +
-					"</m>" +
-				"</AddMsgRequest>");
-		
-		m = new MailItem();
-		m.importFromSOAP(ZimbraAccount.AccountA(), "subject:(email01A)");
-		
-		System.out.println("Imported mail item from query");
-		System.out.println(m.prettyPrint());
-
-	}
 
 	/**
 	 * Set the HTML body of the message

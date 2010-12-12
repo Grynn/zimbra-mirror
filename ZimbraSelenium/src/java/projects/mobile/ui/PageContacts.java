@@ -167,9 +167,9 @@ public class PageContacts extends AbsMobilePage {
 			// TODO: Displayed name
 			locator = contactLocator + "//span[@class='td m']//a/div/strong";
 			if ( this.sIsElementPresent(locator) ) {
-				item.gDisplayName = this.sGetText(locator);
+				item.gListFileAsDisplay = this.sGetText(locator);
 			} else {
-				item.gDisplayName = "";
+				item.gListFileAsDisplay = "";
 			}
 
 			// TODO: email address
