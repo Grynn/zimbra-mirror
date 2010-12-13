@@ -355,6 +355,9 @@ public class ExecuteHarnessMain {
 		StringBuilder result = new StringBuilder();
 		try {
 			
+			// Always add a file appender for all debugging
+			Logger.getRootLogger().addAppender(new FileAppender(new PatternLayout("%-4r %-5p %c %x - %m%n"), testoutputfoldername + "/debug.txt", false));
+			
 			SeleniumService.getInstance().startSeleniumServer();
 			String response = executeTests();
 			result.append(response).append('\n');
@@ -702,7 +705,7 @@ public class ExecuteHarnessMain {
 	        } else {
 	        	BasicConfigurator.configure();
 	        }
-	        
+	        	        
 	        if ( cmd.hasOption('j') ) {
 	        	this.jarfilename = cmd.getOptionValue('j'); 
 	        }
