@@ -15,6 +15,9 @@ public class InsertHelpBranding implements Filter {
     //
 
     private static final String P_EXTENSIONS = "exts";
+    private static final String P_MIME_TYPES = "types";
+
+    private static final String A_MIME_TYPE = InsertHelpBranding.class.getName()+":mime-type";
 
     private static final String RB_BRANDING = "/messages/ZbMsg";
 
@@ -26,7 +29,7 @@ public class InsertHelpBranding implements Filter {
 
     private ServletContext context;
 
-    private List<FilenameFilter> filters;
+    private List<ExtensionFilter> filters;
 
     //
     // Filter methods
@@ -34,7 +37,7 @@ public class InsertHelpBranding implements Filter {
 
     public void init(FilterConfig config) throws ServletException {
         this.context = config.getServletContext();
-        this.filters = createFiltersFor(config.getInitParameter(P_EXTENSIONS));
+        this.filters = createFiltersFor(config.getInitParameter(P_EXTENSIONS), config.getInitParameter(P_MIME_TYPES));
     }
 
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
@@ -44,8 +47,9 @@ public class InsertHelpBranding implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse)response;
 
         String uri = httpRequest.getRequestURI();
-        for (FilenameFilter filter : this.filters) {
+        for (ExtensionFilter filter : this.filters) {
             if (filter.accept(null, uri)) {
+                httpRequest.setAttribute(A_MIME_TYPE, filter.getType());
                 doGet(httpRequest, httpResponse);
                 return;
             }
@@ -76,6 +80,12 @@ public class InsertHelpBranding implements Filter {
         try {
             in = new BufferedInputStream(new FileInputStream(file));
             OutputStream out = response.getOutputStream();
+
+            // set content-type
+            String type = (String)request.getAttribute(A_MIME_TYPE);
+            if (type != null) {
+                response.setHeader("Content-Type", type);
+            }
 
             // replace tokens
             Buffer buffer = new Buffer();
@@ -143,12 +153,14 @@ public class InsertHelpBranding implements Filter {
         return null;
     }
 
-    private static List<FilenameFilter> createFiltersFor(String exts) {
-        List<FilenameFilter> filters = new LinkedList<FilenameFilter>();
+    private static List<ExtensionFilter> createFiltersFor(String exts, String types) {
+        List<ExtensionFilter> filters = new LinkedList<ExtensionFilter>();
         StringTokenizer tokenizer = new StringTokenizer(exts, ",");
+        StringTokenizer tokenizer2 = new StringTokenizer(types != null ? types : "", ",");
         while (tokenizer.hasMoreTokens()) {
             String ext = tokenizer.nextToken().trim();
-            filters.add(new ExtensionFilter(ext));
+            String type = tokenizer2.hasMoreTokens() ? tokenizer2.nextToken() : null;
+            filters.add(new ExtensionFilter(ext, type));
         }
         return filters;
     }
@@ -193,10 +205,17 @@ public class InsertHelpBranding implements Filter {
     }
 
     static class ExtensionFilter implements FilenameFilter {
+        // Data
         private String ext;
-        public ExtensionFilter(String ext) {
+        private String type;
+        // Constructors
+        public ExtensionFilter(String ext, String type) {
             this.ext = ext.toLowerCase();
+            this.type = type;
         }
+        // Public methods
+        public String getType() { return type; }
+        // FilenameFilter methods
         public boolean accept(File dir, String filename) {
             return filename.toLowerCase().endsWith(this.ext);
         }
