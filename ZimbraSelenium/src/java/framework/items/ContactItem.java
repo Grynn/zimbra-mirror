@@ -147,7 +147,7 @@ public class ContactItem implements IItem {
 			c.lastName = "last" + ZimbraSeleniumProperties.getUniqueString();
 		    
 			//default value for file as is last, first
-			c.fileAs = c.lastName + "," + c.firstName;
+			c.fileAs = c.lastName + ", " + c.firstName;
 			return (c);
 		}
 		

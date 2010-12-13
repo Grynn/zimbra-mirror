@@ -484,6 +484,7 @@ public class ExecuteHarnessMain {
 						frameworkLogger.addAppender(a);
 						projectsLogger.addAppender(a);
 					}
+					logger.info("MethodListener: START: "+ method.getTestMethod().getMethodName());
 				} catch (IOException e) {
 					logger.warn("Unable to add test class appender", e);
 				}
@@ -497,6 +498,7 @@ public class ExecuteHarnessMain {
 		@Override
 		public void afterInvocation(IInvokedMethod method, ITestResult result) {
 			if ( method.isTestMethod() ) {
+				logger.info("MethodListener: FINISH: "+ method.getTestMethod().getMethodName());
 				Appender a = null;
 				String key = getKey(method.getTestMethod().getMethod());
 				if ( appenders.containsKey(key) ) {
