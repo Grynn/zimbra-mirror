@@ -42,7 +42,7 @@ public class WSDLGetPrefsTest {
     @Test
     public void simple() throws Exception {
        GetPrefsRequest req = new GetPrefsRequest();
-       Utility.addSoapAuthHeader((WSBindingProvider)acctSvcEIF);
+       Utility.addSoapAcctAuthHeader((WSBindingProvider)acctSvcEIF);
        GetPrefsResponse response = acctSvcEIF.getPrefsRequest(req);
        Assert.assertNotNull(response);
        List <Pref> respPrefs = response.getPref();
@@ -52,7 +52,7 @@ public class WSDLGetPrefsTest {
     @Test
     public void getTwo() throws Exception {
        GetPrefsRequest req = new GetPrefsRequest();
-       Utility.addSoapAuthHeader((WSBindingProvider)acctSvcEIF);
+       Utility.addSoapAcctAuthHeader((WSBindingProvider)acctSvcEIF);
        Pref calUserQAddPref = new Pref();
        calUserQAddPref.setName("zimbraPrefCalendarUseQuickAdd");
        Pref zimbraPrefShowSearchString = new Pref();

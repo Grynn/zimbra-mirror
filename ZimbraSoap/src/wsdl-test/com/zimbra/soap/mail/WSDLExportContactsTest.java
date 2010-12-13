@@ -50,7 +50,7 @@ public class WSDLExportContactsTest {
     public void defaultZimbraFmt() throws Exception {
        ExportContactsRequest req = new ExportContactsRequest();
        req.setCt("csv");
-       Utility.addSoapAuthHeader((WSBindingProvider)mailSvcEIF);
+       Utility.addSoapAcctAuthHeader((WSBindingProvider)mailSvcEIF);
        ExportContactsResponse resp = mailSvcEIF.exportContactsRequest(req);
        Assert.assertNotNull("ExportContactsResponse object", resp);
        String content = resp.getContent();
@@ -66,7 +66,7 @@ public class WSDLExportContactsTest {
        req.setCsvfmt("windows-live-mail-csv");
        req.setCsvlocale("fr");
        req.setCsvsep(";");
-       Utility.addSoapAuthHeader((WSBindingProvider)mailSvcEIF);
+       Utility.addSoapAcctAuthHeader((WSBindingProvider)mailSvcEIF);
        ExportContactsResponse resp = mailSvcEIF.exportContactsRequest(req);
        Assert.assertNotNull("ExportContactsResponse object", resp);
        String content = resp.getContent();

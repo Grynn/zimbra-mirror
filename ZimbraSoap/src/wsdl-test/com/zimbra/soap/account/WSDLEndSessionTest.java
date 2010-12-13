@@ -38,7 +38,7 @@ public class WSDLEndSessionTest {
     @Test
     public void simple() throws Exception {
        EndSessionRequest req = new EndSessionRequest();
-       Utility.addSoapAuthHeader((WSBindingProvider)acctSvcEIF);
+       Utility.addSoapAcctAuthHeader((WSBindingProvider)acctSvcEIF);
        EndSessionResponse response = acctSvcEIF.endSessionRequest(req);
        Assert.assertNotNull(response);
     }

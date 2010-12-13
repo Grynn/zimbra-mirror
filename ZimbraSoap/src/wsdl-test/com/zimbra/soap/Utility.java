@@ -22,13 +22,14 @@ import com.sun.xml.ws.api.message.Headers;
 import com.sun.xml.ws.developer.WSBindingProvider;
 import com.sun.xml.bind.api.JAXBRIContext;
 
-import com.zimbra.soap.header.HeaderContext;
 import com.zimbra.soap.account.wsimport.generated.AccountService_Service;
 import com.zimbra.soap.account.wsimport.generated.AccountService;
 import com.zimbra.soap.account.wsimport.generated.Account;
 import com.zimbra.soap.account.wsimport.generated.AuthRequest;
 import com.zimbra.soap.account.wsimport.generated.AuthResponse;
 import com.zimbra.soap.account.wsimport.generated.By;
+import com.zimbra.soap.admin.wsimport.generated.AdminService_Service;
+import com.zimbra.soap.admin.wsimport.generated.AdminService;
 import com.zimbra.soap.mail.wsimport.generated.MailService_Service;
 import com.zimbra.soap.mail.wsimport.generated.MailService;
 
@@ -39,14 +40,17 @@ import org.junit.Assert;
  */
 public class Utility {
     private static AccountService acctSvcEIF = null;
+    private static AdminService adminSvcEIF = null;
     private static MailService mailSvcEIF = null;
-    private static String authToken = null;
+    private static String acctAuthToken = null;
+    private static String adminAuthToken = null;
 
-    public static void addSoapAuthHeader(WSBindingProvider bp) throws Exception {
-        Utility.getAuthToken();
-        JAXBRIContext jaxb = (JAXBRIContext) JAXBRIContext.newInstance(HeaderContext.class);
-        HeaderContext hdrCtx = new HeaderContext();
-        hdrCtx.setAuthToken(authToken);
+    public static void addSoapAcctAuthHeader(WSBindingProvider bp) throws Exception {
+        Utility.getAccountServiceAuthToken();
+        // Note that am not using JAXB generated HeaderContext here
+        JAXBRIContext jaxb = (JAXBRIContext) JAXBRIContext.newInstance(com.zimbra.soap.header.HeaderContext.class);
+        com.zimbra.soap.header.HeaderContext hdrCtx = new com.zimbra.soap.header.HeaderContext();
+        hdrCtx.setAuthToken(acctAuthToken);
         Header soapHdr = Headers.create(jaxb,hdrCtx);
         List <Header> soapHdrs = new ArrayList <Header>();
         soapHdrs.add(soapHdr);
@@ -55,9 +59,9 @@ public class Utility {
         bp.setOutboundHeaders(soapHdrs);
     }
 
-    public static String getAuthToken() throws Exception {
+    public static String getAccountServiceAuthToken() throws Exception {
         Utility.getAcctSvcEIF();
-        if (authToken == null) {
+        if (acctAuthToken == null) {
             Utility.getAcctSvcEIF();
             AuthRequest authReq = new AuthRequest();
             Account acct = new Account();
@@ -70,9 +74,9 @@ public class Utility {
             // Invoke the methods.
             AuthResponse authResponse = getAcctSvcEIF().authRequest(authReq);
             Assert.assertNotNull(authResponse);
-            authToken = authResponse.getAuthToken();
+            acctAuthToken = authResponse.getAuthToken();
         }
-        return authToken;
+        return acctAuthToken;
     }
 
     private static void setAcctSvcEIF(AccountService acctSvcEIF) {
@@ -89,6 +93,57 @@ public class Utility {
         return acctSvcEIF;
     }
 
+    public static void addSoapAdminAuthHeader(WSBindingProvider bp) throws Exception {
+        Utility.getAdminServiceAuthToken();
+        // Note that am not using JAXB generated HeaderContext here
+        JAXBRIContext jaxb = (JAXBRIContext) JAXBRIContext.newInstance(com.zimbra.soap.header.HeaderContext.class);
+        com.zimbra.soap.header.HeaderContext hdrCtx = new com.zimbra.soap.header.HeaderContext();
+        hdrCtx.setAuthToken(adminAuthToken);
+        Header soapHdr = Headers.create(jaxb,hdrCtx);
+        List <Header> soapHdrs = new ArrayList <Header>();
+        soapHdrs.add(soapHdr);
+        // See http://metro.java.net/1.5/guide/SOAP_headers.html
+        // WSBindingProvider bp = (WSBindingProvider)acctSvcEIF;
+        bp.setOutboundHeaders(soapHdrs);
+    }
+
+    public static String getAdminServiceAuthToken() throws Exception {
+        Utility.getAdminSvcEIF();
+        if (adminAuthToken == null) {
+            Utility.getAdminSvcEIF();
+            com.zimbra.soap.admin.wsimport.generated.AuthRequest authReq =
+                    new com.zimbra.soap.admin.wsimport.generated.AuthRequest();
+            com.zimbra.soap.admin.wsimport.generated.Account acct =
+                    new com.zimbra.soap.admin.wsimport.generated.Account();
+            acct.setBy(com.zimbra.soap.admin.wsimport.generated.By.NAME);
+            acct.setValue("admin");
+            authReq.setAccount(acct);
+            authReq.setPassword("test123");
+            authReq.setAuthToken(null);
+            com.zimbra.soap.admin.wsimport.generated.AuthResponse authResponse =
+                    getAdminSvcEIF().authRequest(authReq);
+            Assert.assertNotNull(authResponse);
+            adminAuthToken = authResponse.getAuthToken();
+            Assert.assertTrue(adminAuthToken != null);
+            Assert.assertTrue(adminAuthToken.length() > 10);
+        }
+        return adminAuthToken;
+    }
+
+    private static void setAdminSvcEIF(AdminService adminSvcEIF) {
+        Utility.adminSvcEIF = adminSvcEIF;
+    }
+
+    public static AdminService getAdminSvcEIF() throws Exception {
+        if (adminSvcEIF == null) {
+            // The AccountService_Service class is the Java type bound to
+            // the service section of the WSDL document.
+            AdminService_Service adminSvc = new AdminService_Service();
+            setAdminSvcEIF(adminSvc.getAdminServicePort());
+        }
+        return adminSvcEIF;
+    }
+
     private static void setMailSvcEIF(MailService mailSvcEIF) {
         Utility.mailSvcEIF = mailSvcEIF;
     }
@@ -99,5 +154,24 @@ public class Utility {
             Utility.setMailSvcEIF(mailSvc.getMailServicePort());
         }
         return mailSvcEIF;
+    }
+
+    public static void setUpToAcceptAllHttpsServerCerts() {
+        // Create a trust manager that does not validate certificate chains
+        // without this, we need to import the server certificate into the trust store.
+        // when using https as is required for Admin
+        javax.net.ssl.TrustManager[] trustAllCerts = new javax.net.ssl.TrustManager[]{
+                new javax.net.ssl.X509TrustManager() {
+                    public java.security.cert.X509Certificate[] getAcceptedIssuers() { return null; }
+                    public void checkClientTrusted( java.security.cert.X509Certificate[] certs, String authType) { }
+                    public void checkServerTrusted( java.security.cert.X509Certificate[] certs, String authType) { }
+                    }
+                };
+        // Install the all-trusting trust manager
+        try {
+            javax.net.ssl.SSLContext sc = javax.net.ssl.SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new java.security.SecureRandom());
+            javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        } catch (Exception e) { }
     }
 }

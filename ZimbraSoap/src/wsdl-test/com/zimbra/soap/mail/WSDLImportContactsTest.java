@@ -52,7 +52,7 @@ public class WSDLImportContactsTest {
        Content theContent = new Content();
        theContent.setValue("\"email\",\"firstName\",\"lastName\"\n\"fred@example.org\",\"Fred\",\"Flintstone\"");
        req.setContent(theContent);
-       Utility.addSoapAuthHeader((WSBindingProvider)mailSvcEIF);
+       Utility.addSoapAcctAuthHeader((WSBindingProvider)mailSvcEIF);
        ImportContactsResponse resp = mailSvcEIF.importContactsRequest(req);
        Assert.assertNotNull("ImportContactsResponse object", resp);
        ImportContact contact = resp.getCn();
@@ -74,7 +74,7 @@ public class WSDLImportContactsTest {
        Content theContent = new Content();
        theContent.setValue("\"E-Mail-Adresse\";\"Vorname\";\"Nachname\"\n\"ae@example.org\";\"Albert\";\"Einstein\"");
        req.setContent(theContent);
-       Utility.addSoapAuthHeader((WSBindingProvider)mailSvcEIF);
+       Utility.addSoapAcctAuthHeader((WSBindingProvider)mailSvcEIF);
        ImportContactsResponse resp = mailSvcEIF.importContactsRequest(req);
        Assert.assertNotNull("ImportContactsResponse object", resp);
        ImportContact contact = resp.getCn();
