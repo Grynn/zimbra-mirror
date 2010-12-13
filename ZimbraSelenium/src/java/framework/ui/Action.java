@@ -33,15 +33,16 @@ package framework.ui;
 public class Action {
 
 	// General actions
-	public static final Action A_LEFTCLICK = new Action("A_CLICK");
-	public static final Action A_SHIFTSELECT = new Action("A_CLICK");
-	public static final Action A_CTRLSELECT = new Action("A_CLICK");
-	public static final Action A_RIGHTCLICK = new Action("A_CLICK");
+	public static final Action A_LEFTCLICK = new Action("A_LEFTCLICK");
+	public static final Action A_SHIFTSELECT = new Action("A_SHIFTSELECT");
+	public static final Action A_CTRLSELECT = new Action("A_CTRLSELECT");
+	public static final Action A_RIGHTCLICK = new Action("A_RIGHTCLICK");
 
 	// Mail page actions
 	public static final Action A_MAIL_CHECKBOX = new Action("A_MAIL_CHECK");
-	public static final Action A_MAIL_FLAG = new Action("A_MAIL_CHECK");
-	public static final Action A_MAIL_EXPANDCONVERSATION = new Action("A_MAIL_CHECK");
+	public static final Action A_MAIL_FLAG = new Action("A_MAIL_FLAG");
+	public static final Action A_MAIL_UNFLAG = new Action("A_MAIL_UNFLAG");
+	public static final Action A_MAIL_EXPANDCONVERSATION = new Action("A_MAIL_EXPANDCONVERSATION");
 	
 	private final String ID;
 	

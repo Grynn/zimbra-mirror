@@ -9,8 +9,6 @@ import java.util.List;
 
 import projects.ajax.ui.AbsAjaxPage;
 import projects.ajax.ui.PageMain;
-import projects.ajax.ui.PageMain.Locators;
-
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.ui.AbsApplication;
@@ -790,56 +788,62 @@ public class PageMail extends AbsAjaxPage {
 		logger.info(myPageName() + " zListItem("+ action +", "+ subject +")");
 		
 		AbsSeleniumObject page = null;
+		String listLocator;
+		String rowLocator;
+		String itemlocator = null;
 		
+		
+		// Find the item locator
+		//
+		
+		if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
+			listLocator = "//div[@id='zl__TV__rows']";
+			rowLocator = "//div[contains(@id, 'zli__TV__')]";
+		} else {
+			listLocator = "//div[@id='zl__CLV__rows']";
+			rowLocator = "//div[contains(@id, 'zli__CLV__')]";
+		}
+		
+		// TODO: how to handle both messages and conversations, maybe check the view first?
+		if ( !this.sIsElementPresent(listLocator) )
+			throw new HarnessException("List View Rows is not present "+ listLocator);
+		
+		// How many items are in the table?
+		int count = this.sGetXpathCount(listLocator + rowLocator);
+		logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
+		
+		// Get each conversation's data from the table list
+		for (int i = 1; i <= count; i++) {
+			
+			itemlocator = listLocator + "/div["+ i +"]";
+			String subjectlocator;
+			
+			// Look for the subject
+			
+			// Subject - Fragment
+			subjectlocator = itemlocator + "//td[contains(@id, '__su')]";
+			String s = this.sGetText(subjectlocator).trim();
+			
+			if ( s.contains(subject) ) {
+				break; // found it
+			}
+			
+			itemlocator = null;
+		}
+		
+		if ( itemlocator == null ) {
+			throw new HarnessException("Unable to locate item with subject("+ subject +")");
+		}
+
 		if ( action == Action.A_LEFTCLICK ) {
 			
-			String listLocator;
-			String rowLocator;
-			if (zGetPropMailView() == PageMailView.BY_MESSAGE) {
-				listLocator = "//div[@id='zl__TV__rows']";
-				rowLocator = "//div[contains(@id, 'zli__TV__')]";
-			} else {
-				listLocator = "//div[@id='zl__CLV__rows']";
-				rowLocator = "//div[contains(@id, 'zli__CLV__')]";
-			}
+			// Left-Click on the item
+			this.zClick(itemlocator);
 			
-			// TODO: how to handle both messages and conversations, maybe check the view first?
-			if ( !this.sIsElementPresent(listLocator) )
-				throw new HarnessException("List View Rows is not present "+ listLocator);
+			// Return the displayed mail page object
+			page = new DisplayMail(MyApplication);
 			
-			// How many items are in the table?
-			int count = this.sGetXpathCount(listLocator + rowLocator);
-			logger.debug(myPageName() + " zListSelectItem: number of list items: "+ count);
-
-			StringBuilder sb = new StringBuilder();
-			
-			// Get each conversation's data from the table list
-			for (int i = 1; i <= count; i++) {
-				
-				String itemlocator = listLocator + "/div["+ i +"]";
-				String locator;
-				
-				// Look for the subject
-				
-				// Subject - Fragment
-				locator = itemlocator + "//td[contains(@id, '__su')]";
-				String s = this.sGetText(locator).trim();
-				sb.append(s).append(", ");
-				
-				if ( !s.contains(subject) ) {
-					continue;	// No match
-				}
-
-				// The subject matched!
-				// Left-Click on the item
-				this.zClick(itemlocator);
-				// this.sClick(convlocator);
-				
-				// No page to return
-				return (new DisplayMail(MyApplication));
-			}
-			
-			throw new HarnessException("Unable to locate item with subject("+ subject +") in ("+ sb.toString() +")");
+			// FALL THROUGH
 
 		} else if ( action == Action.A_CTRLSELECT ) {
 			
@@ -861,17 +865,26 @@ public class PageMail extends AbsAjaxPage {
 			
 			throw new HarnessException("implement me!  action = "+ action);
 			
-		} else if ( action == Action.A_MAIL_FLAG ) {
+		} else if ( (action == Action.A_MAIL_FLAG) || (action == Action.A_MAIL_UNFLAG) ) {
+			// Both FLAG and UNFLAG have the same action and result
 			
-			throw new HarnessException("implement me!  action = "+ action);
+			String flaglocator = itemlocator + "//div[contains(@id, '__fg')]";
+			
+			// Left-Click on the flag field
+			this.zClick(flaglocator);
+			
+			// No page to return
+			page = null;
+
+			// FALL THROUGH
 			
 		} else {
 			throw new HarnessException("implement me!  action = "+ action);
 		}
 		
-		// TODO: once more actions are implemented, may need to enable this
 		// default return command
-		// return (page);
+		return (page);
+		
 	}
 
 	@Override

@@ -84,7 +84,7 @@ public class MailItem implements IItem {
 	/**
 	 * The flags associated with this mail (see soap.txt for details)
 	 */
-	public int dFlags;
+	public String dFlags;
 	
 	////
 	// FINISH: SOAP Data
@@ -146,7 +146,6 @@ public class MailItem implements IItem {
 	 * Create a mail item
 	 */
 	public MailItem() {
-		dFlags = MessageFlags.None;	// Clear all flags
 	}
 	
 	// TODO: eventually, replace this with the com.zimbra.soap.types.Contact method
@@ -182,10 +181,9 @@ public class MailItem implements IItem {
 	 * @param flag - A MessagePart flag to add
 	 * @return the previous value of the flag
 	 */
-	public int addFlag(int flag) {
-		int original = dFlags;
-		dFlags |= flag;
-		return (original);
+	public String setFlags(String flags) {
+		dFlags = flags;
+		return (dFlags);
 	}
 	
 	/**
@@ -193,10 +191,8 @@ public class MailItem implements IItem {
 	 * @param flag - A MessagePart flag to remove
 	 * @return the previous value of the flag
 	 */
-	public int removeFlag(int flag) {
-		int original = dFlags;
-		dFlags &= ~flag;
-		return (original);
+	public String getFlags() {
+		return (dFlags);
 	}
 	
 	/* (non-Javadoc)
@@ -227,6 +223,7 @@ public class MailItem implements IItem {
 			
 			// Set the ID
 			mail.setId(m.getAttribute("id", null));
+			mail.setFlags(m.getAttribute("f", ""));
 			
 			// If there is a subject, save it
 			Element sElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:su");

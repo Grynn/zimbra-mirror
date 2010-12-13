@@ -372,4 +372,33 @@ public class ZAssert {
 
 	}
 
+	/**
+	 * Verify that "actual" does not contain "substring"
+	 * @param actual the actual text
+	 * @param substring the substring that should be cotained in actual
+	 * @param message the logging message
+	 */
+	public static void assertStringDoesNotContain(String actual, String substring, String message) {
+	
+		TotalCountTests++;
+		CountTests++;
+		
+		String details = String.format("%s -- (%s does not contain %s) [%s]", "assertStringDoesNotContain", actual, substring, message);
+		logger.info(details);
+		
+        try
+        {
+        	boolean contains = actual.contains(substring);
+        	Assert.assertFalse(contains, details);
+        }
+        catch (AssertionError e)
+        {
+        	logger.error(e.getMessage(), e);
+            throw e;
+        }
+        
+        CountPass++; TotalCountPass++;
+
+	}
+
 }
