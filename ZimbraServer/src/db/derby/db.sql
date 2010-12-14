@@ -2,12 +2,12 @@
 -- ***** BEGIN LICENSE BLOCK *****
 -- Zimbra Collaboration Suite Server
 -- Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
--- 
+--
 -- The contents of this file are subject to the Zimbra Public License
 -- Version 1.3 ("License"); you may not use this file except in
 -- compliance with the License.  You may obtain a copy of the License at
 -- http://www.zimbra.com/license.
--- 
+--
 -- Software distributed under the License is distributed on an "AS IS"
 -- basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
 -- ***** END LICENSE BLOCK *****
@@ -78,8 +78,6 @@ CREATE TABLE mailbox (
    comment            VARCHAR(255),               -- usually the main email address originally associated with the mailbox
    last_soap_access   INTEGER NOT NULL DEFAULT 0,
    new_messages       INTEGER NOT NULL DEFAULT 0,
-   idx_deferred_count INTEGER NOT NULL DEFAULT 0,
-   highest_indexed     VARCHAR(21), -- mod_content of highest item in the index
 
    CONSTRAINT pk_mailbox PRIMARY KEY (id),
    CONSTRAINT ui_mailbox_account_id UNIQUE (account_id),
@@ -97,7 +95,7 @@ CREATE TABLE deleted_account (
     account_id VARCHAR(127) NOT NULL,
     mailbox_id INTEGER NOT NULL,
     deleted_at INTEGER NOT NULL,      -- UNIX-style timestamp
-   
+
     CONSTRAINT pk_deleted_account PRIMARY KEY (email)
 );
 
@@ -152,7 +150,7 @@ CREATE TABLE table_maintenance (
    maintenance_date    TIMESTAMP NOT NULL,
    last_optimize_date  TIMESTAMP,
    num_rows            INTEGER NOT NULL,
-  
+
    CONSTRAINT pk_table_maintenance PRIMARY KEY (table_name, database_name)
 );
 
@@ -161,7 +159,7 @@ CREATE TABLE service_status (
    service  VARCHAR(255) NOT NULL,
    time     TIMESTAMP,
    status   SMALLINT,
-  
+
    CONSTRAINT ui_service_status UNIQUE (server, service)
 );
 

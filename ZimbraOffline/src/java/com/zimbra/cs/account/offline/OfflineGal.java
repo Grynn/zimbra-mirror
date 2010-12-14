@@ -14,7 +14,6 @@
  */
 package com.zimbra.cs.account.offline;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -115,21 +114,16 @@ public class OfflineGal {
         else if (type.equals(CTYPE_RESOURCE))
             query = query + " AND #" + ContactConstants.A_type + ":" + CTYPE_RESOURCE;
 
-        try  {
-            SearchParams sp = new SearchParams();
-            sp.setQueryStr(query);
-            sp.setTypes(Collections.singleton(MailItem.TYPE_CONTACT));
-            sp.setSortByStr(sortBy);
-            sp.setOffset(offset);
-            sp.setLimit(limit);
-            if (cursor != null) {
-                SearchParams.parseCursor(cursor, mAccount.getId(), sp);
-            }
-            return mGalMbox.index.search(SoapProtocol.Soap12, mOpContext, sp);
-        } catch (IOException e) {
-            OfflineLog.offline.debug("gal mailbox IO error (" + mAccount.getName() + "): " + e.getMessage());
-            return null;
+        SearchParams sp = new SearchParams();
+        sp.setQueryStr(query);
+        sp.setTypes(Collections.singleton(MailItem.TYPE_CONTACT));
+        sp.setSortByStr(sortBy);
+        sp.setOffset(offset);
+        sp.setLimit(limit);
+        if (cursor != null) {
+            SearchParams.parseCursor(cursor, mAccount.getId(), sp);
         }
+        return mGalMbox.index.search(SoapProtocol.Soap12, mOpContext, sp);
     }
 
     public void search(Element response, String name, String type, String sortBy, int offset, int limit, Element cursor) throws ServiceException {
