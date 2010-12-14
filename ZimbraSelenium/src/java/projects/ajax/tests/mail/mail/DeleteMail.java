@@ -148,9 +148,7 @@ public class DeleteMail extends AjaxCommonTest {
 		
 		// Click delete
 		app.zKeyboard.zTypeKeyEvent(KeyEvent.VK_DELETE);
-		
-		// TODO: How to type 'delete' key?
-		
+				
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(messages, "Verify the message list exists");
 
@@ -163,6 +161,89 @@ public class DeleteMail extends AjaxCommonTest {
 			}
 		}
 		ZAssert.assertNull(found, "Verify the message is no longer in the inbox");
+
+		
+	}
+
+	@Test(	description = "Delete multiple messages (3) by select and toolbar delete",
+			groups = { "smoke" })
+	public void DeleteMail_04() throws HarnessException {
+		
+		// Create the message data to be sent
+		String subject1 = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		String subject2 = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+		String subject3 = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+				
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>"+ subject1 +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>"+ subject2 +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		ZimbraAccount.AccountA().soapSend(
+				"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+					"<m>" +
+						"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+						"<su>"+ subject3 +"</su>" +
+						"<mp ct='text/plain'>" +
+							"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+						"</mp>" +
+					"</m>" +
+				"</SendMsgRequest>");
+
+		// Import each message into MailItem objects
+		MailItem mail1 = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject1 +")");
+		MailItem mail2 = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject2 +")");
+		MailItem mail3 = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject3 +")");
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+				
+		// Select all three items
+		app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, mail1.dSubject);
+		app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, mail2.dSubject);
+		app.zPageMail.zListItem(Action.A_MAIL_CHECKBOX, mail3.dSubject);
+		
+		// Click toolbar delete button
+		app.zPageMail.zToolbarPressButton(Button.B_DELETE);
+				
+		List<MailItem> messages = app.zPageMail.zListGetMessages();
+		ZAssert.assertNotNull(messages, "Verify the message list exists");
+
+		MailItem found1 = null;
+		MailItem found2 = null;
+		MailItem found3 = null;
+		for (MailItem m : messages) {
+			logger.info("Subject: looking at: "+ m.gSubject);
+			if ( mail1.dSubject.equals(m.gSubject) ) {
+				found1 = m;
+			}
+			if ( mail2.dSubject.equals(m.gSubject) ) {
+				found2 = m;
+			}
+			if ( mail3.dSubject.equals(m.gSubject) ) {
+				found3 = m;
+			}
+		}
+		ZAssert.assertNull(found1, "Verify the message "+ mail1.dSubject +" is no longer in the inbox");
+		ZAssert.assertNull(found2, "Verify the message "+ mail2.dSubject +" is no longer in the inbox");
+		ZAssert.assertNull(found3, "Verify the message "+ mail3.dSubject +" is no longer in the inbox");
 
 		
 	}

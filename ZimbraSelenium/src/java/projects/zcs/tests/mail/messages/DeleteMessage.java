@@ -44,41 +44,6 @@ public class DeleteMessage extends CommonTest {
 	//--------------------------------------------------------------------------
 	// SECTION 3: TEST-METHODS
 	//--------------------------------------------------------------------------
-	/**
-	 * This test injects 3 mail, delete it (trash) and verifies mail not exist
-	 * into Inbox folder and check whether all properly moved to Trash folder or
-	 * not. It also deletes from that and check for empty folder
-	 */
-	@Test(dataProvider = "MailDataProvider", groups = { "smoke", "full" }, retryAnalyzer = RetryFailedTests.class)
-	public void deleteMultipleMails(String from, String to, String cc,
-			String bcc) throws Exception {
-		// if we are retrying the test, run cleanup and re-login etc
-		if (SelNGBase.isExecutionARetry.get())
-			handleRetry();
-
-		String subject[] = { "subject1", "subject2", "subject3" };
-		String body[] = { "body1", "body2", "body3" };
-		for (int i = 0; i <= 2; i++) {
-			commonInjectMessage(from, to, cc, bcc, subject[i], body[i]);
-		}
-		SleepUtil.sleep(1500);
-		obj.zCheckbox.zClick(zMailListItemChkBox);
-		SleepUtil.sleep(1500);
-		obj.zButton.zClick(page.zMailApp.zDeleteIconBtn);
-		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zInboxFldr));
-		verifyInjectedMailsNotExists();
-		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zTrashFldr));
-		verifyInjectedMailsExists();
-		SleepUtil.sleep(1500);
-		obj.zCheckbox.zClick(zMailListItemChkBox);
-		SleepUtil.sleep(1500);
-		obj.zButton.zClick(page.zMailApp.zDeleteIconBtn);
-		obj.zFolder.zClick(replaceUserNameInStaticId(page.zMailApp.zTrashFldr));
-		verifyInjectedMailsNotExists();
-
-		SelNGBase.needReset.set(false);
-	}
-
 	private void commonInjectMessage(String from, String to, String cc,
 			String bcc, String subject, String body) throws Exception {
 		to = ClientSessionFactory.session().currentUserName();
