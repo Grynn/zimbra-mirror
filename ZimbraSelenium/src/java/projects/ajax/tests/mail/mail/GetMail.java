@@ -11,6 +11,7 @@ import framework.items.MailItem;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 import framework.util.XmlStringUtil;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
@@ -18,6 +19,8 @@ import framework.util.ZimbraSeleniumProperties;
 
 public class GetMail extends AjaxCommonTest {
 
+	int pollIntervalSeconds = 60;
+	
 	public GetMail() {
 		logger.info("New "+ GetMail.class.getCanonicalName());
 		
@@ -30,7 +33,8 @@ public class GetMail extends AjaxCommonTest {
 		super.startingAccount.authenticate();
 		super.startingAccount.modifyPreference("zimbraPrefGroupMailBy", "message");
 		super.startingAccount.modifyPreference("zimbraPrefMessageViewHtmlPreferred", "TRUE");
-		
+		super.startingAccount.modifyPreference("zimbraPrefMailPollingInterval", "" + pollIntervalSeconds);
+
 	}
 	
 	@Test(	description = "Receive a mail",
@@ -167,6 +171,86 @@ public class GetMail extends AjaxCommonTest {
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the From matches");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), app.zGetActiveAccount().EmailAddress, "Verify the To matches");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Body), bodyHTML, "Verify the body matches");
+		
+	}
+
+
+	@Test(	description = "Click 'Get Mail' to receive any new messages",
+			groups = { "functional" })
+	public void GetMail_04() throws HarnessException {
+
+		
+		// Create the message data to be sent
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		
+		ZimbraAccount.AccountA().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+						"<m>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+							"<su>"+ subject +"</su>" +
+							"<mp ct='text/plain'>" +
+								"<content>content" + ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+							"</mp>" +
+						"</m>" +
+					"</SendMsgRequest>");
+		
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+
+		// Get the message list
+		List<MailItem> messages = app.zPageMail.zListGetMessages();
+		ZAssert.assertNotNull(messages, "Verify the list contains messages");
+
+		MailItem found = null;
+		for (MailItem m : messages) {
+			if ( mail.dSubject.equals(m.gSubject) ) {
+				found = m;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the list contains the new message");
+		
+	}
+
+	@Test(	description = "Verify new messages are polled based on the preference setting",
+			groups = { "functional" })
+	public void GetMail_05() throws HarnessException {
+
+		
+		// Create the message data to be sent
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		
+		ZimbraAccount.AccountA().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+						"<m>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+							"<su>"+ subject +"</su>" +
+							"<mp ct='text/plain'>" +
+								"<content>content" + ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+							"</mp>" +
+						"</m>" +
+					"</SendMsgRequest>");
+		
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+
+		// Wait for the timeout to expire
+		logger.info("waiting for the message to arrive");
+		SleepUtil.sleep((this.pollIntervalSeconds + 15) * 1000);
+
+		// Get the message list
+		List<MailItem> messages = app.zPageMail.zListGetMessages();
+		ZAssert.assertNotNull(messages, "Verify the list contains messages");
+
+		MailItem found = null;
+		for (MailItem m : messages) {
+			if ( mail.dSubject.equals(m.gSubject) ) {
+				found = m;
+				break;
+			}
+		}
+		ZAssert.assertNotNull(found, "Verify the list contains the new message");
 		
 	}
 
