@@ -39,7 +39,8 @@ public class Action {
 	public static final Action A_RIGHTCLICK = new Action("A_RIGHTCLICK");
 
 	// Mail page actions
-	public static final Action A_MAIL_CHECKBOX = new Action("A_MAIL_CHECK");
+	public static final Action A_MAIL_CHECKBOX = new Action("A_MAIL_CHECKBOX");
+	public static final Action A_MAIL_UNCHECKBOX = new Action("A_MAIL_UNCHECKBOX");
 	public static final Action A_MAIL_FLAG = new Action("A_MAIL_FLAG");
 	public static final Action A_MAIL_UNFLAG = new Action("A_MAIL_UNFLAG");
 	public static final Action A_MAIL_EXPANDCONVERSATION = new Action("A_MAIL_EXPANDCONVERSATION");

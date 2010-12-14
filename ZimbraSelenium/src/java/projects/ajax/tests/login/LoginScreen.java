@@ -62,7 +62,7 @@ public class LoginScreen extends AjaxCommonTest {
 		
 		// Type a unique string into the browser
 		String value = "foo" + ZimbraSeleniumProperties.getUniqueString();
-		app.zPageLogin.zTypeCharacters(value);
+		app.zKeyboard.zTypeCharacters(value);
 		
 		// Get the value of the username field
 		String actual = app.zPageLogin.sGetValue(PageLogin.Locators.zInputUsername);

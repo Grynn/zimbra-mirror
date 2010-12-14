@@ -1,6 +1,5 @@
 package  projects.ajax.ui.addressbook;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -135,8 +134,8 @@ public class PageAddressbook extends AbsAjaxPage{
 	   if ( button == Button.B_NEW ) {			
 			// For "NEW" without a specified pulldown option, just return the default item
 			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
-			//			
-			this.zPressKeyboardShortcut(KeyEvent.VK_N);
+			//
+		    MyApplication.zKeyboard.zTypeCharacters("n");
 			
 			// Not default behavior (zPressKeyboardShortcut vs. zClick).
 			// Do not fall through.

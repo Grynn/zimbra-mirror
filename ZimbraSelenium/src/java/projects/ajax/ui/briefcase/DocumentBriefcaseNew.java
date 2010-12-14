@@ -1,5 +1,6 @@
 package projects.ajax.ui.briefcase;
 
+import projects.ajax.ui.AppAjaxClient;
 import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
 import framework.items.IItem;
@@ -31,7 +32,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	public void typeDocumentText(String text) throws HarnessException {
 		if(ClientSessionFactory.session().selenium().isElementPresent(Locators.zBodyField)){
-			zTypeCharacters(text);			
+			((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeCharacters(text);			
 		}
 		//ClientSessionFactory.session().selenium().type("xpath=(//html/body)",text);
 	}

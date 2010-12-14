@@ -1,5 +1,6 @@
 package projects.ajax.ui.addressbook;
 
+import projects.ajax.ui.AppAjaxClient;
 import framework.items.*;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
@@ -113,12 +114,15 @@ public class FormContactNew extends AbsForm {
 		if ( contact.firstName != null ) {
 			this.zClick(Locators.zFirstEditField);
 			
-			this.zTypeCharacters(contact.firstName);
-			//this.sType(Locators.zFirstEditField, contact.firstName);
+			((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeCharacters(contact.firstName);
 		}
 		
 		if ( contact.lastName != null ) {
-			this.sType(Locators.zLastEditField, contact.lastName);
+			
+			this.sFocus(Locators.zLastEditField);
+			
+			this.zClick(Locators.zLastEditField);
+			((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeCharacters(contact.lastName);
 		}
 
 		if ( contact.email != null ) {

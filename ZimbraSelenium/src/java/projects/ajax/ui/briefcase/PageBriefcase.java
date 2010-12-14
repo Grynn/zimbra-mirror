@@ -3,16 +3,11 @@
  */
 package projects.ajax.ui.briefcase;
 
-import java.awt.event.KeyEvent;
-
 import projects.ajax.ui.AbsAjaxPage;
 import projects.ajax.ui.PageMain;
-import projects.ajax.ui.PageMain.Locators;
-
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
 import framework.ui.Action;
-import framework.ui.Button;
 import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
@@ -142,7 +137,7 @@ public class PageBriefcase extends AbsAjaxPage {
 			// zToolbarPressPulldown(Button, Button)
 			//
 
-			this.zPressKeyboardShortcut(KeyEvent.VK_N);
+			MyApplication.zKeyboard.zTypeCharacters("n");
 
 			// Not default behavior (zPressKeyboardShortcut vs. zClick)
 			return (new DocumentBriefcaseNew(this.MyApplication));

@@ -3,7 +3,6 @@
  */
 package projects.ajax.ui.mail;
 
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -254,9 +253,7 @@ public class PageMail extends AbsAjaxPage {
 			// For "NEW" without a specified pulldown option, just return the default item
 			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
 			//
-			
-			this.zPressKeyboardShortcut(KeyEvent.VK_N);
-			// this.zTypeCharacters("n");
+			MyApplication.zKeyboard.zTypeCharacters("n");
 
 			// Not default behavior (zPressKeyboardShortcut vs. zClick).
 			// Do not fall through.
@@ -497,8 +494,7 @@ public class PageMail extends AbsAjaxPage {
 			if ( option == Button.O_TAG_NEWTAG ) {
 
 				// Type "nt" shortcut
-				
-				this.zTypeCharacters("nt");
+				MyApplication.zKeyboard.zTypeCharacters("nt");
 
 				pulldownLocator = null;	
 				optionLocator = null;
@@ -509,8 +505,7 @@ public class PageMail extends AbsAjaxPage {
 			} else if ( option == Button.O_TAG_REMOVETAG ) {
 
 				// Type "u" shortcut
-				
-				this.zTypeCharacters("u");
+				MyApplication.zKeyboard.zTypeCharacters("u");
 				
 				pulldownLocator = null;	
 				optionLocator = null;
@@ -714,8 +709,11 @@ public class PageMail extends AbsAjaxPage {
 			locator = convlocator + "//div[contains(@class, 'ImgFlagRed')]";
 			item.isFlagged = this.sIsElementPresent(locator);
 			
-			locator = "xpath=("+ convlocator +"//div[contains(@id, '__pr')])@class";
-			String priority = this.sGetAttribute(locator);
+			// What's the priority?
+			locator = convlocator +"//div[contains(@id, '__pr')]";
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("Unable to locator priority field");
+			String priority = this.sGetAttribute("xpath="+locator+"@class");
 			if ( priority.equals("ImgPriorityHigh_list") ) {
 				item.priority = "high";
 			} else {
@@ -859,7 +857,39 @@ public class PageMail extends AbsAjaxPage {
 			
 		} else if ( action == Action.A_MAIL_CHECKBOX ) {
 			
-			throw new HarnessException("implement me!  action = "+ action);
+			String selectlocator = itemlocator + "//div[contains(@id, '__se')]";
+			if ( !this.sIsElementPresent(selectlocator) )
+				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
+			
+			String image = this.sGetAttribute("xpath="+ selectlocator +"@class");
+			if ( image.equals("ImgCheckboxChecked") )
+				throw new HarnessException("Trying to check box, but it was already enabled");
+				
+			// Left-Click on the flag field
+			this.zClick(selectlocator);
+			
+			// No page to return
+			page = null;
+
+			// FALL THROUGH
+			
+		} else if ( action == Action.A_MAIL_UNCHECKBOX ) {
+			
+			String selectlocator = itemlocator + "//div[contains(@id, '__se')]";
+			if ( !this.sIsElementPresent(selectlocator) )
+				throw new HarnessException("Checkbox locator is not present "+ selectlocator);
+			
+			String image = this.sGetAttribute("xpath="+ selectlocator +"@class");
+			if ( image.equals("ImgCheckboxUnchecked") )
+				throw new HarnessException("Trying to uncheck box, but it was already disabled");
+				
+			// Left-Click on the flag field
+			this.zClick(selectlocator);
+			
+			// No page to return
+			page = null;
+
+			// FALL THROUGH
 			
 		} else if ( action == Action.A_MAIL_EXPANDCONVERSATION ) {
 			
