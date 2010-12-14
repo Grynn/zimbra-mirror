@@ -64,9 +64,9 @@ public class GetMiniCalTag extends ZimbraSimpleTag {
                 // if non are checked, return no appointments (to match behavior of ajax client
                 days = new HashSet<String>();
             } else if (mFolderId.indexOf(',') == -1) {
-                days = mbox.getMiniCal(mStart, mEnd, new String[] {mFolderId});
+                days = mbox.getMiniCal(mStart, mEnd, new String[] {mFolderId}).getDates();
             } else {
-                days = mbox.getMiniCal(mStart, mEnd, mFolderId.split(","));
+                days = mbox.getMiniCal(mStart, mEnd, mFolderId.split(",")).getDates();
             }
             jctxt.setAttribute(mVar, new ZMiniCalBean(days),  PageContext.PAGE_SCOPE);
 
