@@ -107,11 +107,7 @@ public class FormContactNew extends AbsForm {
 		                      //TODO: ,Locators.zEmail1EditField};
 		
 		for (int i=0; i < fieldList.length; i++) {
-		  this.sFocus(fieldList[i]);
-		  
-		  while (this.sGetValue(fieldList[i]).length() >0) {		
-             ((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeKeyEvent(KeyEvent.VK_BACK_SPACE);
-		   }  
+		  this.sType(fieldList[i], "");
 		}
 	}
 	
