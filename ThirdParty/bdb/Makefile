@@ -27,7 +27,7 @@ ifeq (MACOSX,$(findstring MACOSX,$(BUILD_PLATFORM)))
 	LIB_EXT := dylib
 endif
 
-files	:= $(wildcard src/db-$(BDB_RELEASE).tar.gz)
+files	:= $(wildcard src/db-$(BDB_VERSION).tar.gz)
 
 all: checksrc allclean build check tar
 
@@ -41,13 +41,8 @@ check:
 
 build:
 	@echo "Building for Platform $(BUILD_PLATFORM)"
-	(tar xzf src/db-$(BDB_RELEASE).tar.gz; \
-	mv db-$(BDB_RELEASE) db-$(BDB_VERSION); \
+	(tar xzf src/db-$(BDB_VERSION).tar.gz; \
 	cd db-$(BDB_VERSION); \
-	patch -g0 -p1 < ../patches/4.7.25-1.patch; \
-	patch -g0 -p1 < ../patches/4.7.25-2.patch; \
-	patch -g0 -p1 < ../patches/4.7.25-3.patch; \
-	patch -g0 -p1 < ../patches/4.7.25-4.patch; \
 	cd build_unix; \
 	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) ../dist/configure --prefix=$(ZIMBRA_HOME)/bdb-$(BDB_VERSION) $(CONFIG_FLAG); \
 	CFLAGS="-g -O2 -fPIC" LD_RUN_PATH=$(BDB_LIB_DIR) $(MAKE) $(MAKEARGS); \
