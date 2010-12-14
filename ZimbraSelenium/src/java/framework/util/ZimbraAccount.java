@@ -51,6 +51,7 @@ import com.zimbra.common.soap.SoapFaultException;
 import com.zimbra.common.soap.SoapParseException;
 import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.soap.SoapUtil;
+import com.zimbra.common.soap.Element.ContainerException;
 import com.zimbra.common.util.ByteUtil;
 
 import framework.core.DevEnvironment;
@@ -681,6 +682,9 @@ public class ZimbraAccount {
         		return (sendSOAP(host, requestContext, Element.parseXML(request)));
         	} catch (DocumentException e) {
 				throw new HarnessException("Unable to parse request "+ request, e);
+        	} catch (ContainerException e) {
+				throw new HarnessException("Unable to parse request "+ request, e);
+
         	}
         }
         

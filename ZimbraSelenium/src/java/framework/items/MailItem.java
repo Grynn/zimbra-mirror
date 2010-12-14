@@ -6,13 +6,13 @@ package framework.items;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang.StringEscapeUtils;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.zimbra.common.soap.Element;
 
 import framework.util.HarnessException;
+import framework.util.XmlStringUtil;
 import framework.util.ZimbraAccount;
 
 /**
@@ -351,7 +351,7 @@ public class MailItem implements IItem {
 	 * @param body
 	 */
 	public void setBodyHtml(String body) {
-		gBodyHtml = StringEscapeUtils.escapeHtml(body);
+		gBodyHtml = XmlStringUtil.escapeXml(body);
 	}
 
 	/**

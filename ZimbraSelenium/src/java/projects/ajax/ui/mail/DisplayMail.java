@@ -126,15 +126,16 @@ public class DisplayMail extends AbsDisplay {
 				
 				String bodyLocator = "//body";
 				
-				// Make sure the subject is present
+				// Make sure the body is present
 				if ( !this.sIsElementPresent(bodyLocator) )
 					throw new HarnessException("Unable to find the message body!");
 				
-				// Get the subject value
-				String body = this.sGetText(bodyLocator).trim();
+				// Get the body value
+				// String body = this.sGetText(bodyLocator).trim();
+				String html = this.zGetHtml(bodyLocator);
 				
-				logger.info("DisplayMail.zGetBody(" + bodyLocator + ") = " + body);
-				return(body);
+				logger.info("DisplayMail.zGetBody(" + bodyLocator + ") = " + html);
+				return(html);
 
 			} finally {
 				// Make sure to go back to the original iframe
@@ -204,7 +205,6 @@ public class DisplayMail extends AbsDisplay {
 
 		
 	}
-	
 
 
 

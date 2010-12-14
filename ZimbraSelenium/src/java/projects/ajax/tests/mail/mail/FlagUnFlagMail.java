@@ -24,7 +24,7 @@ public class FlagUnFlagMail extends AjaxCommonTest {
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
 
-		// Make sure we are using an account with conversation view
+		// Make sure we are using an account with message view
 		super.startingAccount = new ZimbraAccount();
 		super.startingAccount.provision();
 		super.startingAccount.authenticate();

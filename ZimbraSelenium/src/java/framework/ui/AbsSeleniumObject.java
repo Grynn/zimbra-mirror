@@ -4,6 +4,7 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
 import com.thoughtworks.selenium.DefaultSelenium;
+import com.thoughtworks.selenium.SeleniumException;
 
 import framework.core.ClientSession;
 import framework.core.ClientSessionFactory;
@@ -104,7 +105,20 @@ public abstract class AbsSeleniumObject {
 
 	}
 	
+	public String zGetHtml(String locator) throws HarnessException {
+		try {
+			String script = "this.page().findElement('"+ locator +"').innerHTML";
+			String html = ClientSessionFactory.session().selenium().getEval(script);
+			logger.info("zGetHtml("+ locator +") = " + html);
+			return (html);
+		} catch (SeleniumException e) {
+			throw new HarnessException("Unable to grab HTML from locator "+ locator, e);
+		}
+
+	}
 	
+
+
 	//// ***
 	// Start: Selenium methods
 	//// ***

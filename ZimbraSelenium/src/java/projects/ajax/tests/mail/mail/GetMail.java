@@ -8,10 +8,10 @@ import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.mail.DisplayMail;
 import projects.ajax.ui.mail.DisplayMail.Field;
 import framework.items.MailItem;
-import framework.items.RecipientItem;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
+import framework.util.XmlStringUtil;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
@@ -24,11 +24,12 @@ public class GetMail extends AjaxCommonTest {
 		// All tests start at the login page
 		super.startingPage = app.zPageMail;
 
-		// Make sure we are using an account with conversation view
+		// Make sure we are using an account with message view
 		super.startingAccount = new ZimbraAccount();
 		super.startingAccount.provision();
 		super.startingAccount.authenticate();
 		super.startingAccount.modifyPreference("zimbraPrefGroupMailBy", "message");
+		super.startingAccount.modifyPreference("zimbraPrefMessageViewHtmlPreferred", "TRUE");
 		
 	}
 	
@@ -37,7 +38,7 @@ public class GetMail extends AjaxCommonTest {
 	public void GetMail_01() throws HarnessException {
 		
 		// Create the message data to be sent
-		String subject = "body" + ZimbraSeleniumProperties.getUniqueString();
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
 		
 		// Send the message from AccountA to the ZWC user
 		ZimbraAccount.AccountA().soapSend(
@@ -51,14 +52,7 @@ public class GetMail extends AjaxCommonTest {
 						"</m>" +
 					"</SendMsgRequest>");
 
-
-		/*
-		 * 
-		// Get all the SOAP data for later verification
-		MailItem mail = new MailItem();
-		mail.importFromSOAP(app.getActiveAccount(), "subject:("+ subject +")");
-		
-		 */
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 
 
 		// Click Get Mail button
@@ -66,18 +60,18 @@ public class GetMail extends AjaxCommonTest {
 
 		// Get all the messages in the inbox
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
-		ZAssert.assertNotNull(messages, "Verify the conversation list exists");
+		ZAssert.assertNotNull(messages, "Verify the message list exists");
 
 		// Make sure the message appears in the list
-		boolean found = false;
+		MailItem found = null;
 		for (MailItem m : messages) {
 			logger.info("Subject: looking for "+ subject +" found: "+ m.gSubject);
-			if ( m.gSubject.equals(subject) ) {
-				found = true;
+			if ( mail.dSubject.equals(m.gSubject) ) {
+				found = m;
 				break;
 			}
 		}
-		ZAssert.assertTrue(found, "Verify the message is in the inbox");
+		ZAssert.assertNotNull(found, "Verify the message is in the inbox");
 
 		
 	}
@@ -117,7 +111,10 @@ public class GetMail extends AjaxCommonTest {
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the From matches");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), app.zGetActiveAccount().EmailAddress, "Verify the To matches");
-		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Body), mail.dBodyText, "Verify the body matches");
+		
+		// The body could contain HTML, even though it is only displaying text (e.g. <br> may be present)
+		// do a contains, rather than equals.
+		ZAssert.assertStringContains(	actual.zGetMailProperty(Field.Body), mail.dBodyText, "Verify the body matches");
 
 		
 	}
@@ -128,29 +125,33 @@ public class GetMail extends AjaxCommonTest {
 
 		
 		// Create the message data to be sent
-		MailItem mail = new MailItem();
-		mail.dToRecipients.add(new RecipientItem(app.zGetActiveAccount().EmailAddress));
-		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.gBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
-		String bodyHtml = "body" + ZimbraSeleniumProperties.getUniqueString();
-		mail.setBodyHtml("<html><body><bold>" + bodyHtml +"</bold></body></html>");
-
+		String subject = "subject" + ZimbraSeleniumProperties.getUniqueString();
+		String bodyText = "text" + ZimbraSeleniumProperties.getUniqueString();
+		String bodyHTML = "text <strong>bold"+ ZimbraSeleniumProperties.getUniqueString() +"</strong> text";
+		String contentHTML = XmlStringUtil.escapeXml(
+			"<html>" +
+				"<head></head>" +
+				"<body>"+ bodyHTML +"</body>" +
+			"</html>");
+		
 		ZimbraAccount.AccountA().soapSend(
 					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m>" +
 							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
 							"<e t='c' a='"+ ZimbraAccount.AccountB().EmailAddress +"'/>" +
-							"<su>"+ mail.dSubject +"</su>" +
+							"<su>"+ subject +"</su>" +
 							"<mp ct='multipart/alternative'>" +
 								"<mp ct='text/plain'>" +
-									"<content>"+ mail.gBodyText +"</content>" +
+									"<content>" + bodyText +"</content>" +
 								"</mp>" +
 								"<mp ct='text/html'>" +
-									"<content>"+ mail.getBodyHtml() +"</content>" +
+									"<content>"+ contentHTML +"</content>" +
 								"</mp>" +
 							"</mp>" +
 						"</m>" +
 					"</SendMsgRequest>");
+		
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
 
 		// Click Get Mail button
 		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
@@ -158,16 +159,14 @@ public class GetMail extends AjaxCommonTest {
 		// Select the message so that it shows in the reading pane
 		DisplayMail actual = (DisplayMail) app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 
-		// Verify the To, From, Subject, Body
-		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.dSubject, "Verify the subject matches");
-		
+		// Verify the To, From, Subject, Body		
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Subject), mail.dSubject, "Verify the subject matches");
 		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedDate), "Verify the date is displayed");
 		ZAssert.assertNotNull(	actual.zGetMailProperty(Field.ReceivedTime), "Verify the time is displayed");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.From), ZimbraAccount.AccountA().EmailAddress, "Verify the From matches");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Cc), ZimbraAccount.AccountB().EmailAddress, "Verify the From matches");
 		ZAssert.assertEquals(	actual.zGetMailProperty(Field.To), app.zGetActiveAccount().EmailAddress, "Verify the To matches");
-		ZAssert.assertStringContains(actual.zGetMailProperty(Field.Body), bodyHtml, "Verify the body matches");
+		ZAssert.assertEquals(	actual.zGetMailProperty(Field.Body), bodyHTML, "Verify the body matches");
 		
 	}
 
