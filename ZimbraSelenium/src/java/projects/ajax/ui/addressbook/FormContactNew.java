@@ -1,5 +1,7 @@
 package projects.ajax.ui.addressbook;
 
+import java.awt.event.KeyEvent;
+
 import projects.ajax.ui.AppAjaxClient;
 import framework.items.*;
 import framework.ui.AbsApplication;
@@ -30,8 +32,8 @@ public class FormContactNew extends AbsForm {
 		public static final String zRemoveImageLink = "id=editcontactform_REMOVE_IMAGE";
 		public static final String zContactsFolder_NewUI = "id=editcontactform_FOLDER_left_icon";
 		public static final String zContactDetailsIconBtn = "id=editcontactform_DETAILS";
-
-		public static final String zEmail1EditField = "id=*_EMAIL";
+        // TODO need fixed id for email
+		public static final String zEmail1EditField = "id=editcontactform_EMAIL_*";
 		public static final String zWorkEmail1EditField = "xpath=//div[@id='editcontactform_EMAIL_1']/input[contains(@id,'editcontactform_EMAIL_DWT')]";
 		public static final String zPhone1EditField = "id=*_PHONE";
 		public static final String zIM1EditField = "id=*_IM";
@@ -97,9 +99,25 @@ public class FormContactNew extends AbsForm {
 		
 	}
 
+	// reset the form
+	public void zReset() throws HarnessException {
+		logger.info("FormMailNew.zReset()");
+		String[] fieldList = {Locators.zFirstEditField, 
+				              Locators.zLastEditField };
+		                      //TODO: ,Locators.zEmail1EditField};
+		
+		for (int i=0; i < fieldList.length; i++) {
+		  this.sFocus(fieldList[i]);
+		  
+		  while (this.sGetValue(fieldList[i]).length() >0) {		
+             ((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeKeyEvent(KeyEvent.VK_BACK_SPACE);
+		   }  
+		}
+	}
+	
 	@Override
 	public void zFill(IItem item) throws HarnessException {
-		logger.info("FormMailNew.fill(ZimbraItem)");
+		logger.info("FormMailNew.fill(IItem)");
 		logger.info(item.prettyPrint());
 
 		// Make sure the item is a ContactItem
@@ -112,8 +130,9 @@ public class FormContactNew extends AbsForm {
 		
 		// Fill out the form		
 		if ( contact.firstName != null ) {
-			this.zClick(Locators.zFirstEditField);
-			
+			this.sFocus(Locators.zFirstEditField);
+
+			this.zClick(Locators.zFirstEditField);			
 			((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeCharacters(contact.firstName);
 		}
 		
@@ -124,10 +143,11 @@ public class FormContactNew extends AbsForm {
 			this.zClick(Locators.zLastEditField);
 			((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeCharacters(contact.lastName);
 		}
-
-		if ( contact.email != null ) {
-			this.sType(Locators.zEmail1EditField, contact.email);
-		}
+ 
+		//TODO: need fix xpath for zEmail1EditField
+		//if ( contact.email != null ) {			
+		//	this.sType(Locators.zEmail1EditField, contact.email);
+		//}
 
 		SleepUtil.sleepMedium();
 			
