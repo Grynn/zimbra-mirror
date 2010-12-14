@@ -212,6 +212,7 @@ public class BeanUtils {
         s = replaceAll(s, "&nbsp;", " ");
         s = replaceAll(s,"&lt;","<");
         s = replaceAll(s,"&gt;",">");
+        s = replaceAll(s,"&quot;","\"");
         return s;
     }
 
