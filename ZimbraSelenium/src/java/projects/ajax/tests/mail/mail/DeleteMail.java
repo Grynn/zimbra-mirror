@@ -3,6 +3,7 @@ package projects.ajax.tests.mail.mail;
 import java.awt.event.KeyEvent;
 import java.util.List;
 
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import projects.ajax.core.AjaxCommonTest;
@@ -119,10 +120,18 @@ public class DeleteMail extends AjaxCommonTest {
 		
 	}
 
-
+	@DataProvider(name = "DataProviderDeleteKeys")
+	public Object[][] DataProviderDeleteKeys() {
+	  return new Object[][] {
+	    new Object[] { "VK_DELETE", KeyEvent.VK_DELETE },
+	    new Object[] { "VK_BACK_SPACE", KeyEvent.VK_BACK_SPACE },
+	  };
+	}
+	
 	@Test(	description = "Delete a mail by selecting and typing 'delete' keyboard",
-			groups = { "smoke" })
-	public void DeleteMail_03() throws HarnessException {
+			groups = { "smoke" },
+			dataProvider = "DataProviderDeleteKeys")
+	public void DeleteMail_03(String name, int keyEvent) throws HarnessException {
 		
 		// Create the message data to be sent
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
@@ -147,7 +156,53 @@ public class DeleteMail extends AjaxCommonTest {
 		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
 		
 		// Click delete
-		app.zKeyboard.zTypeKeyEvent(KeyEvent.VK_DELETE);
+		logger.info("Typing shortcut key "+ name + " KeyEvent: "+ keyEvent);
+		app.zKeyboard.zTypeKeyEvent(keyEvent);
+				
+		List<MailItem> messages = app.zPageMail.zListGetMessages();
+		ZAssert.assertNotNull(messages, "Verify the message list exists");
+
+		MailItem found = null;
+		for (MailItem m : messages) {
+			logger.info("Subject: looking for "+ mail.dSubject +" found: "+ m.gSubject);
+			if ( mail.dSubject.equals(m.gSubject) ) {
+				found = m;
+				break;
+			}
+		}
+		ZAssert.assertNull(found, "Verify the message is no longer in the inbox");
+
+		
+	}
+
+	@Test(	description = "Delete a mail by selecting and typing '.t' shortcut",
+			groups = { "smoke" } )
+	public void DeleteMail_04() throws HarnessException {
+		
+		// Create the message data to be sent
+		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
+				
+		ZimbraAccount.AccountA().soapSend(
+					"<SendMsgRequest xmlns='urn:zimbraMail'>" +
+						"<m>" +
+							"<e t='t' a='"+ app.zGetActiveAccount().EmailAddress +"'/>" +
+							"<su>"+ subject +"</su>" +
+							"<mp ct='text/plain'>" +
+								"<content>content"+ ZimbraSeleniumProperties.getUniqueString() +"</content>" +
+							"</mp>" +
+						"</m>" +
+					"</SendMsgRequest>");
+
+		MailItem mail = MailItem.importFromSOAP(app.zGetActiveAccount(), "subject:("+ subject +")");
+		
+		// Click Get Mail button
+		app.zPageMail.zToolbarPressButton(Button.B_GETMAIL);
+				
+		// Check the item
+		app.zPageMail.zListItem(Action.A_LEFTCLICK, mail.dSubject);
+		
+		// Click delete
+		app.zKeyboard.zTypeCharacters(".t");
 				
 		List<MailItem> messages = app.zPageMail.zListGetMessages();
 		ZAssert.assertNotNull(messages, "Verify the message list exists");
@@ -167,7 +222,7 @@ public class DeleteMail extends AjaxCommonTest {
 
 	@Test(	description = "Delete multiple messages (3) by select and toolbar delete",
 			groups = { "functional" })
-	public void DeleteMail_04() throws HarnessException {
+	public void DeleteMail_05() throws HarnessException {
 		
 		// Create the message data to be sent
 		String subject1 = "subject"+ ZimbraSeleniumProperties.getUniqueString();
