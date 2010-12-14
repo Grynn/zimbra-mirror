@@ -1111,6 +1111,7 @@
   <property name="jspc.build.dir" value="${dist.dir}/jetty/work/zimbra/jsp" />
 
   <path id='jspc.class.path'>
+    <pathelement path="${webclient.build.dir}/classes" />
     <pathelement path="${dist.dir}/jetty/resources" />
     <fileset dir="${common.jars.dir}" includes="*.jar"/>
     <fileset dir="${common.build.dir}" includes="zimbracommon.jar"/>
