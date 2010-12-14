@@ -34,7 +34,7 @@ public class CreateContact extends AjaxCommonTest  {
 		createBasicContact(app);		
 	}
 
-	//used for other class such as DeleteContact, MoveContact
+	//can be used for other classes such as DeleteContact, MoveContact
 	public static ContactItem createBasicContact(AppAjaxClient app)throws HarnessException {
 		// Create a contact Item
 		ContactItem contactItem = ContactItem.generateContactItem(GenerateItemType.Basic);
@@ -52,7 +52,10 @@ public class CreateContact extends AjaxCommonTest  {
         formContactNew.save();
 		
         SleepUtil.sleepMedium();
-		  
+
+        //verify toasted message 'contact created'
+        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "Contact Created", "Verify toast message 'Contact Created'");
+
         //verify contact "file as" is displayed
 		List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();
 		boolean isFileAsEqual=false;

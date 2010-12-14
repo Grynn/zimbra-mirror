@@ -68,7 +68,10 @@ public class EditContact extends AjaxCommonTest  {
 		// Save the contact
         formContactNew.zSubmit();
 		
-    
+        
+        //verify toasted message Contact Saved
+        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "Contact Saved", "Verify toast message 'Contact Saved'");
+
         //verify new contact item is displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();   
  	           
@@ -82,10 +85,19 @@ public class EditContact extends AjaxCommonTest  {
 		
         ZAssert.assertTrue(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") existed ");
 
+        
 		//verify old contact not displayed
-	    //ZAssert.assertNotContainsContactItem(contacts, contactItem, "contact "+ contactItem.fileAs +" is not displayed");
-
-	    
+    	isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(contactItem.fileAs)) {
+	            isFileAsEqual = true;	 
+				break;
+			}
+		}
+		
+        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");
+      
+        	    
 	}
 
 }

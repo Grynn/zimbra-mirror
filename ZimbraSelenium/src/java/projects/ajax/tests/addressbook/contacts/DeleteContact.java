@@ -56,6 +56,8 @@ public class DeleteContact extends AjaxCommonTest  {
         app.zPageAddressbook.zToolbarPressButton(Button.B_DELETE);
         SleepUtil.sleepSmall();
         
+        //verify toasted message 1 contact moved to Trash
+        ZAssert.assertStringContains(app.zPageAddressbook.sGetText("xpath=//div[@id='z_toast_text']"), "1 contact moved to Trash", "Verify toast message '1 contact moved to Trash'");
 
         //verify deleted contact not displayed
         List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
@@ -70,7 +72,7 @@ public class DeleteContact extends AjaxCommonTest  {
 		
         ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");
         
-        //TODO verify toasted message
+ 
    
    	}
 
