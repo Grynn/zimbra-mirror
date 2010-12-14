@@ -192,10 +192,23 @@ public class ZimbraAccount {
 			
 			// Make sure domain exists
 			String domain = EmailAddress.split("@")[1];
+			
+			// Check if the domain exists
 			ZimbraAdminAccount.GlobalAdmin().soapSend(
-					"<CreateDomainRequest xmlns='urn:zimbraAdmin'>" +
-	                	"<name>"+ domain +"</name>" +
-	                "</CreateDomainRequest>");
+					"<GetDomainRequest xmlns='urn:zimbraAdmin'>" +
+                		"<domain by='name'>"+ domain +"</domain>" +
+                	"</GetDomainRequest>");
+			Element response = ZimbraAdminAccount.GlobalAdmin().soapSelectNode("//admin:GetDomainResponse/admin:domain", 1);
+			
+			if ( response == null ) {
+
+				// If the domain does not exist, create it
+				ZimbraAdminAccount.GlobalAdmin().soapSend(
+						"<CreateDomainRequest xmlns='urn:zimbraAdmin'>" +
+		                	"<name>"+ domain +"</name>" +
+		                "</CreateDomainRequest>");
+				
+			}	
 			
 
 			// Build the list of default preferences
