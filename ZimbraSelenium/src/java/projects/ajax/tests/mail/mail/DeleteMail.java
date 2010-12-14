@@ -166,7 +166,7 @@ public class DeleteMail extends AjaxCommonTest {
 	}
 
 	@Test(	description = "Delete multiple messages (3) by select and toolbar delete",
-			groups = { "smoke" })
+			groups = { "functional" })
 	public void DeleteMail_04() throws HarnessException {
 		
 		// Create the message data to be sent
