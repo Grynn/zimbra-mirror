@@ -171,11 +171,12 @@ function(imageName, styleStr, attrStr, wrapInTable, _disabled) {
                 }
                 var filter = 'filter:mask(color='+color+');';
                 html = [
+                    // NOTE: Keep in sync with output of ImageMerger.java.
                     "<div class='IEImage' style='display:inline-block;position:relative;overflow:hidden;",size,styleStr,"' ",attrStr,">",
                         "<div class='IEImageMask' style='overflow:hidden;position:relative;",size,"'>",
                             "<img src='",mask.f,"' border=0 style='position:absolute;",location,clip,filter,"'>",
                         "</div>",
-                        "<div class='IEImageOverlay ",overlayName,"' style='",size,";position:absolute;top:",overlay.t,";left:",overlay.l,"'></div>",
+                        "<div class='IEImageOverlay ",overlayName,"' style='",size,";position:absolute;top:0;left:0;'></div>",
                     "</div>"
                 ].join("");
             }

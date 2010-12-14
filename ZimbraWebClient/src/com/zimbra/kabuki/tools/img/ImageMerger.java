@@ -291,34 +291,48 @@ public class ImageMerger {
 
     private void printlnCss(ImageEntry entry) {
         if (cssOut == null) return;
-        String selector = toSelector(entry.image.getName());
-        String url = cssPath+"/"+entry.filename.replace(File.separatorChar,'/')+"?v=@jsVersion@";
+
+        // print normal info
+        printlnCss(entry.filename, entry.image, entry.x, entry.y, entry.layout);
+
+        // print IE overlay info
+        String name = entry.image.getName();
+        if (name.endsWith("Overlay")) {
+            // NOTE: Keep in sync with output of AjxImg.js.
+            print(cssOut, ".IEImage ");
+            printlnCss(entry.iefilename, entry.image, 0, 0, ImageLayout.NONE);
+        }
+    }
+
+    private void printlnCss(String filename, DecodedImage image, int x, int y, ImageLayout layout) {
+        String selector = toSelector(image.getName());
+        String url = cssPath+"/"+filename.replace(File.separatorChar,'/')+"?v=@jsVersion@";
         print(cssOut, "%s {", selector);
 
         // conditional properties for PNGs
-        boolean isPng = entry.filename.toLowerCase().endsWith(".png");
+        boolean isPng = filename.toLowerCase().endsWith(".png");
         if (isPng) {
             println(cssOut);
             println(cssOut, "#IFDEF MSIE_LOWER_THAN_7");
             println(cssOut, "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='%s',sizingMethod='crop');", url);
-            println(cssOut, "background-repeat:%s;", entry.layout.toCss());
+            println(cssOut, "background-repeat:%s;", layout.toCss());
             println(cssOut, "position:relative;");
-            println(cssOut, "top:%dpx;left:%dpx;", negative(entry.y), negative(entry.x));
+            println(cssOut, "top:%dpx;left:%dpx;", negative(y), negative(x));
             println(cssOut, "#ELSE");
-            println(cssOut, "background:url('%s') %dpx %dpx %s;", url, negative(entry.x), negative(entry.y), entry.layout.toCss());
+            println(cssOut, "background:url('%s') %dpx %dpx %s;", url, negative(x), negative(y), layout.toCss());
             println(cssOut, "#ENDIF");
         }
 
         // background image properties for non-PNGs
         else {
-            print(cssOut, "background:url('%s') %dpx %dpx %s;", url, negative(entry.x), negative(entry.y), entry.layout.toCss());
+            print(cssOut, "background:url('%s') %dpx %dpx %s;", url, negative(x), negative(y), layout.toCss());
         }
 
         // common properties
-        boolean isNone = entry.layout.equals(ImageLayout.NONE);
+        boolean isNone = layout.equals(ImageLayout.NONE);
         if (isNone) {
-            print(cssOut, "width:%dpx !important;", entry.image.getWidth());
-            print(cssOut, "height:%dpx !important;", entry.image.getHeight());
+            print(cssOut, "width:%dpx !important;", image.getWidth());
+            print(cssOut, "height:%dpx !important;", image.getHeight());
         }
         print(cssOut, "overflow:hidden;");
 
@@ -347,10 +361,11 @@ public class ImageMerger {
         if (name.endsWith("Overlay") || name.endsWith("Mask")) {
             println(
                 jsOut,
-                "AjxImgData[\"%s\"]={t:%d,l:%d,w:%d,h:%d,f:\"%s/%s\"};",
+                "AjxImgData[\"%s\"]={t:%d,l:%d,w:%d,h:%d,f:\"%s/%s\",ief:\"%s/%s\"};",
                 name, -entry.y, -entry.x,
                 entry.image.getWidth(), entry.image.getHeight(),
-                cssPath, entry.filename.replace(File.separatorChar,'/')
+                cssPath, entry.filename.replace(File.separatorChar,'/'),
+                cssPath, entry.iefilename.replace(File.separatorChar,'/')
             );
         }
     }
@@ -526,6 +541,7 @@ public class ImageMerger {
     static class ImageEntry {
         // Data
         public String filename;
+        public String iefilename;
         public DecodedImage image;
         public int x;
         public int y;
@@ -533,6 +549,7 @@ public class ImageMerger {
         // Constructors
         public ImageEntry(File dir, File file, DecodedImage image, ImageLayout layout) {
             this.filename = dir.getName()+File.separator+file.getName();
+            this.iefilename = this.filename;
             this.image = image;
             this.layout = layout;
         }
