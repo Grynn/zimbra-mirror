@@ -421,10 +421,10 @@ public class PageMail extends AbsAjaxPage {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
 		
 		if ( pulldown == null )
-			throw new HarnessException("Button cannot be null!");
+			throw new HarnessException("Pulldown cannot be null!");
 		
-		if ( pulldown == null )
-			throw new HarnessException("Button cannot be null!");
+		if ( option == null )
+			throw new HarnessException("Option cannot be null!");
 
 		// Default behavior variables
 		//
@@ -493,11 +493,8 @@ public class PageMail extends AbsAjaxPage {
 			
 			if ( option == Button.O_TAG_NEWTAG ) {
 
-				// Type "nt" shortcut
-				MyApplication.zKeyboard.zTypeCharacters("nt");
-
-				pulldownLocator = null;	
-				optionLocator = null;
+				pulldownLocator = "//div[contains(@id,'__TAG_MENU')]//td[contains(@id,'__TAG_MENU_dropdown')]";	
+				optionLocator = "//div[contains(@id,'__TAG_MENU|MENU')]//td[contains(@id,'NEWTAG_title')]";
 				page = new DialogTag(this.MyApplication);
 
 				// FALL THROUGH
@@ -539,7 +536,7 @@ public class PageMail extends AbsAjaxPage {
 					throw new HarnessException("Button "+ pulldown +" option "+ option +" optionLocator "+ optionLocator +" not present!");
 				}
 				
-				this.zClick(pulldownLocator);
+				this.zClick(optionLocator);
 				SleepUtil.sleepSmall();
 
 			}

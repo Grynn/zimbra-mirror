@@ -9,6 +9,7 @@ import framework.items.MailItem;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
+import framework.util.SleepUtil;
 import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
@@ -70,17 +71,21 @@ public class TagMessage extends AjaxCommonTest {
 		dialogTag.zSetTagName(tagName);
 		dialogTag.zClickButton(Button.B_OK);
 		
+		// Wait for the client to save the data
+		SleepUtil.sleepLong();
+		
+		// Make sure the tag was created on the server (get the tag ID)
 		app.zGetActiveAccount().soapSend("<GetTagRequest xmlns='urn:zimbraMail'/>");;
 		String tagID = app.zGetActiveAccount().soapSelectValue("//mail:GetTagResponse//mail:tag[@name='"+ tagName +"']", "id");
 
-
+		// Make sure the tag was applied to the message
 		app.zGetActiveAccount().soapSend(
 					"<GetMsgRequest xmlns='urn:zimbraMail'>" +
 						"<m id='"+ mail.getId() +"'/>" +
 					"</GetMsgRequest>");
-		String mailTags = app.zGetActiveAccount().soapSelectValue("//mail:GetMsggResponse//mail:m", "t");
+		String mailTags = app.zGetActiveAccount().soapSelectValue("//mail:GetMsgResponse//mail:m", "t");
 		 
-		ZAssert.assertEquals(tagID, mailTags, "Verify the tag appears on the message");
+		ZAssert.assertEquals(mailTags, tagID, "Verify the tag appears on the message");
 		
 
 		

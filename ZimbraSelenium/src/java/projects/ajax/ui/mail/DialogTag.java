@@ -19,13 +19,18 @@ public class DialogTag extends AbsDialog {
 	public static class Locators {
 	
 		// TODO:  See https://bugzilla.zimbra.com/show_bug.cgi?id=54173
+		public static final String zTagDialogId		= "CreateTagDialog";
 		
-		public static final String zTitleId	 		= "DWT40_title";
+		public static final String zTitleId	 		= "CreateTagDialog_title";
 
-		public static final String zTagNameFieldId	= "DWT40_name";
+		public static final String zTagNameFieldId	= "CreateTagDialog_name";
 
-		public static final String zButtonOkId 		= "DWT41";
-		public static final String zButtonCancelId 	= "DWT42";
+		public static final String zTagColorPulldownId = "ZmTagColorMenu_dropdown";
+		
+		public static final String zButtonsId 		= "CreateTagDialog_buttons";
+		public static final String zButtonOkId 		= "DWT178_title";
+		public static final String zButtonCancelId 	= "DWT179_title";
+
 
 	}
 	
@@ -34,10 +39,16 @@ public class DialogTag extends AbsDialog {
 		super(application);
 	}
 	
+	public boolean isActive() {
+		
+		return ( this.sIsElementPresent(Locators.zTagDialogId) );
+		
+	}
+	
 	public void zSetTagName(String name) throws HarnessException {
 		logger.info(myPageName() + " zSetTagName("+ name +")");
 
-		String locator = Locators.zTagNameFieldId;
+		String locator = "//input[@id='"+ Locators.zTagNameFieldId +"']";
 		
 		// Make sure the locator exists
 		if ( !this.sIsElementPresent(locator) ) {
@@ -63,11 +74,13 @@ public class DialogTag extends AbsDialog {
 		
 		if ( button == Button.B_OK ) {
 			
-			locator = Locators.zButtonOkId;
+			// TODO: L10N this
+			locator =  "//div[@id='"+ Locators.zTagDialogId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='OK']";
 			
 		} else if ( button == Button.B_CANCEL ) {
 			
-			locator = Locators.zButtonCancelId;
+			// TODO: L10N this
+			locator =  "//div[@id='"+ Locators.zTagDialogId +"']//div[@id='"+ Locators.zButtonsId +"']//td[text()='Cancel']";
 
 		} else {
 			throw new HarnessException("Button "+ button +" not implemented");
