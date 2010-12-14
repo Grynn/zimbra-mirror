@@ -6,6 +6,7 @@ import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.mail.DialogMove;
 import framework.items.FolderItem;
 import framework.items.MailItem;
+import framework.items.FolderItem.SystemFolder;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
@@ -36,11 +37,11 @@ public class MoveMessage extends AjaxCommonTest {
 		
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
 		String foldername = "folder"+ ZimbraSeleniumProperties.getUniqueString();
-		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Inbox");
 		
 		// Create a subfolder to move the message into
 		// i.e. Inbox/subfolder
 		//
+		FolderItem inbox = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		app.zGetActiveAccount().soapSend(
 					"<CreateFolderRequest xmlns='urn:zimbraMail'>" +
 						"<folder name='" + foldername +"' l='"+ inbox.getId() +"'/>" +

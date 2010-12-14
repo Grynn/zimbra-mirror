@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import projects.ajax.core.AjaxCommonTest;
 import framework.items.FolderItem;
 import framework.items.MailItem;
+import framework.items.FolderItem.SystemFolder;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
@@ -40,7 +41,7 @@ public class MarkUnReadMail extends AjaxCommonTest {
 		// Create the message data to be sent
 		String subject = "subject"+ ZimbraSeleniumProperties.getUniqueString();
 		
-		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Inbox");
+		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		app.zGetActiveAccount().soapSend(
 					"<AddMsgRequest xmlns='urn:zimbraMail'>" +
                 		"<m l='"+ inboxFolder.getId() +"' f=''>" +

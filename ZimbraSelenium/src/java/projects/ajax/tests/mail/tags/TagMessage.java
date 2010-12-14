@@ -6,6 +6,7 @@ import projects.ajax.core.AjaxCommonTest;
 import projects.ajax.ui.mail.DialogTag;
 import framework.items.FolderItem;
 import framework.items.MailItem;
+import framework.items.FolderItem.SystemFolder;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
@@ -38,7 +39,7 @@ public class TagMessage extends AjaxCommonTest {
 		
 
 		// Add a message to the mailbox
-		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), "Inbox");
+		FolderItem inboxFolder = FolderItem.importFromSOAP(app.zGetActiveAccount(), SystemFolder.Inbox);
 		app.zGetActiveAccount().soapSend(
 					"<AddMsgRequest xmlns='urn:zimbraMail'>" +
                 		"<m l='"+ inboxFolder.getId() +"'>" +

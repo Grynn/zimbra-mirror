@@ -20,6 +20,53 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 	protected static Logger logger = LogManager.getLogger(IItem.class);
 
 	/**
+	 * Logical objects that represent the default system folders
+	 * @author Matt Rhoades
+	 *
+	 */
+	public static class SystemFolder {
+		
+		public static final SystemFolder Briefcase = new SystemFolder("Briefcase");
+		public static final SystemFolder Calendar = new SystemFolder("Calendar");
+		public static final SystemFolder Chats = new SystemFolder("Chats");
+		public static final SystemFolder Contacts = new SystemFolder("Contacts");
+		public static final SystemFolder EmailedContacts = new SystemFolder("Emailed Contacts");
+		public static final SystemFolder Inbox = new SystemFolder("Inbox");
+		public static final SystemFolder Junk = new SystemFolder("Junk");
+		public static final SystemFolder Sent = new SystemFolder("Sent");
+		public static final SystemFolder Tasks = new SystemFolder("Tasks");
+		public static final SystemFolder Trash = new SystemFolder("Trash");
+				
+		private String name;
+		private SystemFolder(String foldername) {
+			name = foldername;
+		}
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((name == null) ? 0 : name.hashCode());
+			return result;
+		}
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			SystemFolder other = (SystemFolder) obj;
+			if (name == null) {
+				if (other.name != null)
+					return false;
+			} else if (!name.equals(other.name))
+				return false;
+			return true;
+		}
+
+	}
+	/**
 	 * Create a new FolderItem object
 	 */
 	public FolderItem() {
@@ -43,6 +90,14 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		
 	}
 
+	/**
+	 * Import a FolderItem specified in a GetFolderResponse
+	 * <br>
+	 * The GetFolderResponse should only contain a single <folder/> element
+	 * @param response
+	 * @return
+	 * @throws HarnessException
+	 */
 	public static FolderItem importFromSOAP(Element response) throws HarnessException {
 		logger.debug("importFromSOAP("+ response.prettyPrint() +")");
 
@@ -80,6 +135,24 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 	}
 
 
+	/**
+	 * Import a system folder (i.e. Inbox, Sent, Trash, Contacts, etc.)
+	 * @param account
+	 * @param folder
+	 * @return
+	 * @throws HarnessException
+	 */
+	public static FolderItem importFromSOAP(ZimbraAccount account, SystemFolder folder) throws HarnessException {
+		return (importFromSOAP(account, folder.name));
+	}
+	
+	/**
+	 * Import a folder by name
+	 * @param account
+	 * @param folder
+	 * @return
+	 * @throws HarnessException
+	 */
 	public static FolderItem importFromSOAP(ZimbraAccount account, String name) throws HarnessException {
 		logger.debug("importFromSOAP("+ account.EmailAddress +", "+ name +")");
 		
