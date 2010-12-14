@@ -58,9 +58,20 @@ public class DeleteContact extends AjaxCommonTest  {
         
 
         //verify deleted contact not displayed
-        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts();   
-        ZAssert.assertNotContainsContactItem(contacts, contactItem, "Verify contact "+ contactItem.firstName +" is deleted");
-
+        List<ContactItem> contacts = app.zPageAddressbook.zListGetContacts(); 
+ 	           
+		boolean isFileAsEqual=false;
+		for (ContactItem ci : contacts) {
+			if (ci.fileAs.equals(contactItem.fileAs)) {
+	            isFileAsEqual = true;	 
+				break;
+			}
+		}
+		
+        ZAssert.assertFalse(isFileAsEqual, "Verify contact fileAs (" + contactItem.fileAs + ") deleted");
+        
+        //TODO verify toasted message
+   
    	}
 
 }

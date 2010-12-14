@@ -259,64 +259,7 @@ public class ZAssert {
 		
 	}
 
-	public static void assertContainsContactItem(Collection<ContactItem> collection, ContactItem contactItem, String message) {
-
-		TotalCountTests++;
-		CountTests++;
-		
-		String details = String.format("%s -- (collection contains %s) [%s]", "assertContainsContactItem", contactItem, message);
-		logger.info(details);
-		
-        try
-        {
-        	boolean contains = false;
-        	Iterator<ContactItem> i= collection.iterator();
-        	while (i.hasNext() && !contains){
-        		//TODO: compare other contactitem attributes
-        		contains = i.next().fileAs.equals(contactItem.fileAs);
-        	}
-        	Assert.assertTrue(contains, details);
-        }
-        catch (AssertionError e)
-        {
-        	logger.error(e.getMessage(), e);
-            throw e;
-        }
-        
-        CountPass++; TotalCountPass++;
-		
-	}
-
-	public static void assertNotContainsContactItem(Collection<ContactItem> collection, ContactItem contactItem, String message) {
-
-		TotalCountTests++;
-		CountTests++;
-		
-		String details = String.format("%s -- (collection contains %s) [%s]", "assertContainsContactItem", contactItem, message);
-		logger.info(details);
-		
-        try
-        {
-        	boolean contains = false;
-        	Iterator<ContactItem> i= collection.iterator();
-        	while (i.hasNext() && !contains){
-        		//TODO: compare other contactitem attributes
-        		contains = i.next().fileAs.equals(contactItem.fileAs);
-        	}
-        	Assert.assertFalse(contains, details);
-        }
-        catch (AssertionError e)
-        {
-        	logger.error(e.getMessage(), e);
-            throw e;
-        }
-        
-        CountPass++; TotalCountPass++;
-		
-	}
-
-	
-	public static void assertMatches(String pattern, String input, String message) {
+		public static void assertMatches(String pattern, String input, String message) {
 		assertMatches(Pattern.compile(pattern), input, message);
 	}
 	
