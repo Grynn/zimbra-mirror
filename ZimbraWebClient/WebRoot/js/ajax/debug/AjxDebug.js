@@ -42,9 +42,13 @@
  */
 AjxDebug = function(params) {
 
-	params = Dwt.getParams(arguments, AjxDebug.PARAMS);
+	if (arguments.length == 0) {
+		params = {};
+	}
+	else if (typeof arguments[0] == "number") {
+		params = {level:arguments[0], name:arguments[1], showTime:arguments[2]};
+	}
 
-	this._level = (params.level != null) ? Number(params.level) : AjxDebug.DBG1;
 	this._showTime = params.showTime;
 	this._target = params.target || AjxDebug.TGT_WINDOW;
 	this._showTiming = false;
@@ -53,10 +57,8 @@ AjxDebug = function(params) {
 
 	this._msgQueue = [];
 	this._isPrevWinOpen = false;
-	this._enable(this._level != AjxDebug.NONE);
+	this.setDebugLevel(params.level);
 };
-
-AjxDebug.PARAMS = ["level", "name", "showTime"];
 
 /**
  * Defines "no debugging" level.
@@ -123,11 +125,10 @@ function(title) {
  * @param {constant}	level	 	debug level for the current debugger
  */
 AjxDebug.prototype.setDebugLevel =
-function(level, disable) {
-	this._level = /^[\d]+$/.test(level) ? Number(level) : level;
-	if (!disable) {
-		this._enable(level != AjxDebug.NONE);
-	}
+function(level) {
+
+	this._level = Number(level);
+	this._enable(this._level != AjxDebug.NONE);
 };
 
 /**
@@ -218,6 +219,8 @@ function(level, text, linkName) {
  *
  * @param {constant}	level	 	debug level for the current debugger
  * @param {string}	text		some XML
+ * 
+ * TODO: fix for printing to console
  */
 AjxDebug.prototype.printXML =
 function(level, text, linkName) {
@@ -234,7 +237,7 @@ function(level, text, linkName) {
 		this.printRaw(text);
 		return;
 	}
-	this._add({obj:text, isRaw:false, linkName:result.linkName, level:level});
+	this._add({obj:text, isXml:true, linkName:result.linkName, level:level});
 };
 
 /**
