@@ -8,6 +8,7 @@ import projects.ajax.ui.addressbook.PageAddressbook;
 import projects.ajax.ui.addressbook.TreeContacts;
 import projects.ajax.ui.briefcase.PageBriefcase;
 import projects.ajax.ui.mail.PageMail;
+import projects.ajax.ui.mail.TreeMail;
 import projects.ajax.ui.preferences.PagePreferences;
 import projects.ajax.ui.preferences.TreePreferences;
 import projects.ajax.ui.search.PageSearch;
@@ -55,6 +56,7 @@ public class AppAjaxClient extends AbsApplication {
 	public PageAddressbook              zPageAddressbook = null;
 	public PagePreferences				zPagePreferences = null;
 	
+	public TreeMail						zTreeMail = null;
 	public TreeContacts					zTreeContacts = null;
 	public TreePreferences				zTreePreferences = null;
 	
@@ -81,6 +83,9 @@ public class AppAjaxClient extends AbsApplication {
 		// Mail page
 		zPageMail = new PageMail(this);
 		pages.put(zPageMail.myPageName(), zPageMail);
+		
+		zTreeMail = new TreeMail(this);
+		trees.put(zTreeMail.myPageName(), zTreeMail);
 		
 		//Addressbook page    
 		zPageAddressbook = new PageAddressbook(this);
