@@ -719,20 +719,20 @@ function(){
  *		mode -> Text and convert, then text is stripped out of content
  */
 DwtHtmlEditor.prototype.setMode =
-function(mode, convert) {
+function(mode, convert, convertor) {
 
 	if (mode == this._mode || (mode != DwtHtmlEditor.HTML && mode != DwtHtmlEditor.TEXT)) {	return;	}
 
 	var idoc = this._getIframeDoc();
 	this._mode = mode;
 	if (mode == DwtHtmlEditor.HTML) {
-		var textArea = document.getElementById(this._textAreaId);
+		var textArea = Dwt.byId(this._textAreaId);
 		var iFrame;
+		var content = convert ? AjxStringUtil.convertToHtml(textArea.value, true) : textArea.value;
 		if (this._iFrameId) {
-			idoc.body.innerHTML = convert ? AjxStringUtil.convertToHtml(textArea.value)	: textArea.value;
+			idoc.body.innerHTML = content;
 			iFrame = document.getElementById(this._iFrameId);
 		} else {
-			var content = convert ? AjxStringUtil.convertToHtml(textArea.value)	: textArea.value;
 			iFrame = this._initHtmlMode(content);
 		}
 
@@ -744,8 +744,8 @@ function(mode, convert) {
 			this._enableDesignMode(idoc);
 		}
 	} else {
-		var textArea = this._textAreaId ? document.getElementById(this._textAreaId)	: this._initTextMode(true);
-		textArea.value = convert ? this._convertHtml2Text() : idoc.innerHTML;
+		var textArea = this._textAreaId ? Dwt.byId(this._textAreaId) : this._initTextMode(true);
+		textArea.value = convert ? this._convertHtml2Text(convertor) : idoc.innerHTML;
 
 		Dwt.setVisible(document.getElementById(this._iFrameId), false);
 		Dwt.setVisible(textArea, true);

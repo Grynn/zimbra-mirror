@@ -581,15 +581,60 @@ function(str, removeContent) {
  * @return	{string}	the resulting string
  */
 AjxStringUtil.convertToHtml =
-function(str) {
+function(str, quotePrefix) {
 	if (!str) {return "";}
+
+	if (quotePrefix) {
+		// Convert a section of lines prefixed with > or |
+		// to a section encapsuled in <blockquote> tags
+		var prefix_re = /^(>|\|\s+)/;
+		var lines = str.split(/\r?\n/);
+		var level = 0;
+		for (var i=0; i<lines.length; i++) {
+			var line = lines[i];
+			if (line.length > 0) {
+				var lineLevel = 0;
+				while (line.match(prefix_re)) { // Remove prefixes while counting how many there are on the line
+					line = line.replace(prefix_re,"");
+					lineLevel++;
+				}
+				while (lineLevel > level) { // If the lineLevel has changed since the last line, add blockquote start or end tags, and adjust level accordingly
+					line = "<blockquote>" + line;
+					level++;
+				}
+				while (lineLevel < level) {
+					line = line + "</blockquote>";
+					level--;
+				}
+			}
+			lines[i] = line;
+		}
+		while (level > 0) {
+			lines.push("</blockquote>");
+			level--;
+		}
+
+		str = lines.join("\n");
+		str = str.replace(/&/mg, "&amp;");
+		
+		str = str.replace(/<(?!\/?blockquote)/mg, "&lt;"); // Replace "<" only if it is not followed by "blockquote"
+
+		str = str.replace(/(\/?blockquote)?>/mg, function($0, $1) { // Replace ">" only if it is not preceded by "blockquote"
+			return $1 ? $0 : '&gt;';
+		});
+
+	} else {
+		str = str
+			.replace(/&/mg, "&amp;")
+			.replace(/</mg, "&lt;")
+			.replace(/>/mg, "&gt;")
+	}
+		
+
 	str = str
-		.replace(/&/mg, "&amp;")
 		.replace(/  /mg, " &nbsp;")
 		.replace(/^ /mg, "&nbsp;")
 		.replace(/\t/mg, "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;")
-		.replace(/</mg, "&lt;")
-		.replace(/>/mg, "&gt;")
 		.replace(/\r?\n/mg, "<br>");
 	return str;
 };
@@ -991,6 +1036,10 @@ function(domRoot, convertor) {
 
 	if (!domRoot) { return null; }
 
+	if (convertor && AjxUtil.isFunction(convertor._before)) {
+		domRoot = convertor._before(domRoot);
+	}
+
 	if (typeof domRoot == "string") {
 		var domNode = document.createElement("SPAN");
 		domNode.innerHTML = domRoot;
@@ -1000,7 +1049,14 @@ function(domRoot, convertor) {
 	var idx = 0;
 	var ctxt = {};
 	this._traverse(domRoot, text, idx, AjxStringUtil._NO_LIST, 0, 0, ctxt, convertor);
-	return text.join("");
+
+	var result = text.join("");
+
+	if (convertor && AjxUtil.isFunction(convertor._after)) {
+		result = convertor._after(result);
+	}
+
+	return result;
 };
 
 AjxStringUtil._traverse =
@@ -1010,7 +1066,7 @@ function(el, text, idx, listType, listLevel, bulletNum, ctxt, convertor) {
 
 	var result = null;
 	if (convertor && convertor[nodeName]) {
-		result = convertor[nodeName](el);
+		result = convertor[nodeName](el,ctxt);
 	}
 
 	if (result != null) {
