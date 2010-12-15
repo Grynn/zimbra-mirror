@@ -37,7 +37,7 @@ checksrc:
 check:
 	@echo "Verifying bdb build...";
 	$(BDB_ROOT)/../zmcheck.pl -b $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/bin/db_recover
-	$(BDB_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib/libdb-4.7.$(LIB_EXT)
+	$(BDB_ROOT)/../zmcheck.pl -l $(ZIMBRA_HOME)/bdb-$(BDB_VERSION)/lib/libdb-5.1.$(LIB_EXT)
 
 build:
 	@echo "Building for Platform $(BUILD_PLATFORM)"
