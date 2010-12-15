@@ -215,7 +215,7 @@ DBFILE_PERL_LIBS := \
 	DB_File
 
 BDB_PERL_LIBS := \
-	BerkeleyDB-0.41
+	BerkeleyDB-0.43
 
 MAIL_SPF := \
 	Mail-SPF-v2.008
