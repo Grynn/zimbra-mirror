@@ -1,7 +1,6 @@
 package framework.core;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -15,9 +14,9 @@ import org.openqa.selenium.server.RemoteControlConfiguration;
 import org.openqa.selenium.server.SeleniumServer;
 
 import sun.net.www.protocol.http.HttpURLConnection;
-
 import framework.util.CommandLine;
 import framework.util.HarnessException;
+import framework.util.OperatingSystem;
 import framework.util.SleepUtil;
 import framework.util.ZimbraSeleniumProperties;
 
@@ -256,26 +255,44 @@ public class SeleniumService {
 	}
 	
 	private void stopBrowsers() throws HarnessException {
-		try {
-			stopBrowsersXP();
-			stopBrowsersUbuntu();
-		} catch (Exception e) {
-			throw new HarnessException(e);
-		}
+		stopBrowsersXP();
+		stopBrowsersMac();
+		stopBrowsersLinux();
 	}
 	
-	private void stopBrowsersXP() throws IOException, InterruptedException {
-		if (!SelNGBase.suiteName.equals("debugSuite")) {
+	private void stopBrowsersXP() throws HarnessException {
+		
+		// Only run for windows
+		if ( !OperatingSystem.isWindows() )
+			return;
+
+		try {
 			CommandLine.CmdExec("taskkill /f /t /im iexplore.exe");
 			CommandLine.CmdExec("taskkill /f /t /im firefox.exe");
 			CommandLine.CmdExec("taskkill /f /t /im Safari.exe");
 			CommandLine.CmdExec("taskkill /f /t /im chrome.exe");
+		} catch (IOException e) {
+			throw new HarnessException("Unable to kill browsers", e);
+		} catch (InterruptedException e) {
+			throw new HarnessException("Unable to kill browsers", e);
 		}
+
 	}
 
-	private void stopBrowsersUbuntu() throws IOException, InterruptedException {
-		// TODO
-		logger.warn("Implement me!", new Throwable("implement me!"));
+	private void stopBrowsersMac() throws HarnessException {
+		// Only run for Mac
+		if ( !OperatingSystem.isMac() )
+			return;
+
+		logger.warn("implement me!", new Throwable("implement me!"));
+	}
+	
+	private void stopBrowsersLinux() throws HarnessException {
+		// Only run for Linux
+		if ( !OperatingSystem.isLinux() )
+			return;
+
+		logger.warn("implement me!", new Throwable("implement me!"));
 	}
 	
 
