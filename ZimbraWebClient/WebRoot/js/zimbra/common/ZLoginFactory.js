@@ -99,9 +99,7 @@ function(msgs) {
 
 // show and hide various things
 ZLoginFactory.getLoginPanel = function () 			{												
-	var retval = this.get("ZLoginPanel");
-	if(!retval)
-		retval = this.get("ZLoginPanelInvisible");
+	var retval = document.getElementsByName("loginForm");
 
 	return retval;
 	

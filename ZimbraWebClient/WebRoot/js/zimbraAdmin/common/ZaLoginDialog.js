@@ -132,7 +132,17 @@ function(visible, transparentBg) {
 	if(visible) {
 		if (AjxEnv.isIE) {
 			var el = ZLoginFactory.getLoginPanel();
-			el["onkeydown"] = ZLoginFactory.handleKeyPress;
+			/*
+ 			 *Bug fix 54362
+			 * There are two named "loginForm" one is LoginDialog,
+			 * the other one is "Splash Screen" for they shared the same 
+			 * Html generation function 			
+			 */
+			var loginEl = this.getHtmlElement();
+			for(var i = 0; i < el.length; i++){
+				if(Dwt.contains(loginEl, el[i]))
+					el[i]["onkeydown"] = ZLoginFactory.handleKeyPress;
+			}
 		} else {
 			window["onkeypress"] = ZLoginFactory.handleKeyPress;
 		}
