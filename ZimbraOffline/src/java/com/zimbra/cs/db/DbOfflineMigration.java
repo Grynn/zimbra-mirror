@@ -57,6 +57,8 @@ public class DbOfflineMigration {
                 switch (oldDbVersion) {
                 case 63:
                     migrateFromVersion63(conn, isTestRun);
+                case 64:
+                    migrateFromVersion64(conn, isTestRun);
                     //if there are more versions, let it fall through
                     break;
                 default:
@@ -117,6 +119,25 @@ public class DbOfflineMigration {
             stmt.close();
             
             stmt = conn.prepareStatement("UPDATE config set value='64' where name='db.version'");
+            stmt.executeUpdate();
+            stmt.close();
+            
+            isSuccess = true;
+        } finally {
+            DbPool.closeStatement(stmt);
+            if (isTestRun || !isSuccess)
+                conn.rollback();
+            else
+                conn.commit();
+        }
+    }
+    
+    private void migrateFromVersion64(Connection conn, boolean isTestRun) throws Exception {
+        PreparedStatement stmt = null;
+        boolean isSuccess = false;
+        try {
+            // only update db.version without actually creating dumpster tables
+            stmt = conn.prepareStatement("UPDATE config set value='65' where name='db.version'");
             stmt.executeUpdate();
             stmt.close();
             
