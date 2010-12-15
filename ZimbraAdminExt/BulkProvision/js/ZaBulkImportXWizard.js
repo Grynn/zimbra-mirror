@@ -536,10 +536,11 @@ ZaBulkImportXWizard.prototype.processBulkImportResponse = function(response) {
 	}
 	if(status == ZaBulkProvision.iSTATUS_FINISHED || status == ZaBulkProvision.iSTATUS_ABORTED || status == ZaBulkProvision.iSTATUS_ERROR) {
 		this._button[DwtDialog.CANCEL_BUTTON].setEnabled(true);	
-		this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);	
 		this._button[DwtWizardDialog.PREV_BUTTON].setEnabled(true);
 		if(this._containedObject[ZaBulkProvision.A2_importEmail]== "FALSE") {
 			this._button[DwtWizardDialog.FINISH_BUTTON].setEnabled(true);
+		} else {
+			this._button[DwtWizardDialog.NEXT_BUTTON].setEnabled(true);
 		}
 	}
 	var errorsFileLink = null;
