@@ -127,7 +127,7 @@ function(title) {
 AjxDebug.prototype.setDebugLevel =
 function(level) {
 
-	this._level = Number(level);
+	this._level = parseInt(level) || level;
 	this._enable(this._level != AjxDebug.NONE);
 };
 
