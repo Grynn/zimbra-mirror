@@ -75,6 +75,20 @@ public class Button {
 	public static final Button O_LISTVIEW_READINGPANERIGHT = new Button("O_LSITVIEW_READINGPANERIGHT");
 	public static final Button O_LISTVIEW_READINGPANEOFF = new Button("O_LSITVIEW_READINGPANEOFF");
 
+	// Compose mail buttons and pulldown options
+	public static final Button B_SEND = new Button("B_SEND");
+	public static final Button B_SAVE_DRAFT = new Button("B_SAVE_DRAFT");
+	public static final Button B_ADD_ATTACHMENT = new Button("B_ADD_ATTACHMENT");
+	public static final Button B_SPELL_CHECK = new Button("B_SPELL_CHECK");
+	public static final Button B_SIGNATURE = new Button("B_SIGNATURE");
+	public static final Button B_OPTIONS = new Button("B_OPTIONS");
+
+	public static final Button O_SEND_SEND_LATER = new Button("O_SEND_SEND_LATER");
+	public static final Button O_SIGNATURE_DO_NOT_ADD_SIGNATURE = new Button("O_SIGNATURE_DO_NOT_ADD_SIGNATURE");
+	public static final Button O_OPTION_FORMAT_AS_HTML = new Button("O_OPTION_FORMAT_AS_HTML");
+	public static final Button O_OPTION_FORMAT_AS_TEXT = new Button("O_OPTION_FORMAT_AS_TEXT");
+	public static final Button O_OPTION_REQUEST_READ_RECEIPT = new Button("O_OPTION_REQUEST_READ_RECEIPT");
+
 	// SearchPage buttons and pulldown options
 	public static final Button B_SEARCHTYPE = new Button("B_SEARCHTYPE");
 	public static final Button B_SEARCH = new Button("B_SEARCH");

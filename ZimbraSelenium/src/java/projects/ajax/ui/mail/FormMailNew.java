@@ -8,6 +8,8 @@ import framework.items.IItem;
 import framework.items.RecipientItem.RecipientType;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
+import framework.ui.AbsSeleniumObject;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.Stafpostqueue;
@@ -30,14 +32,46 @@ public class FormMailNew extends AbsForm {
 	 */
 	public static class Locators {
 		
-		public static final String zSendIconBtn = "css=[id^=zb__COMPOSE][id$=__SEND_left_icon]";
+		public static final String zSendIconBtn = "//div[contains(@id,'ztb__COMPOSE')]//td[contains(@id,'__SEND_title')]";
+		public static final String zCancelIconBtn = "css=[id^=zb__COMPOSE][id$=__CANCEL_title]";
+		public static final String zSaveDraftIconBtn = "css=[id^=zb__COMPOSE][id$=__SAVE_DRAFT_title]";
+		public static final String zAddAttachmentIconBtn = "css=[id^=zb__COMPOSE][id$=__ATTACHMENT_title]";
+		public static final String zSpellCheckIconBtn = "css=[id^=zb__COMPOSE][id$=__SPELL_CHECK_title]";
+
+		public static final String zSendPulldownBtn = "css=[id^=zb__COMPOSE][id$=__SEND_MENU_dropdown]";
+		public static final String zSignaturePulldownBtn = "css=[id^=zb__COMPOSE][id$=__ADD_SIGNATURE_dropdown]";
+		public static final String zOptionsPulldownBtn = "css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
 
 		public static final String zToField = "css=[id^=zv__COMPOSE][id$=_to_control]";
+		public static final String zCcField = "css=[id^=zv__COMPOSE][id$=_cc_control]";
+		public static final String zBccField = "css=[id^=zv__COMPOSE][id$=_bcc_control]";
 		public static final String zSubjectField = "css=[id^=zv__COMPOSE][id$=_subject_control]";
+		
 		public static final String zBodyField = "TODO";
 		
 	}
 
+	public static class Field {
+	
+		public static final Field To = new Field("To");
+		public static final Field Cc = new Field("Cc");
+		public static final Field Bcc = new Field("Bcc");
+		public static final Field Subject = new Field("Subject");
+		public static final Field Body = new Field("Body");
+		
+		
+		private String field;
+		private Field(String name) {
+			field = name;
+		}
+		
+		@Override
+		public String toString() {
+			return (field);
+		}
+
+	}
+	
 	
 	/**
 	 * Protected constuctor for this object.  Only classes within
@@ -61,31 +95,178 @@ public class FormMailNew extends AbsForm {
 	public void zSubmit() throws HarnessException {
 		logger.info("FormMailNew.submit()");
 		
-		// Look for "Send"
-		boolean visible = this.sIsElementPresent(Locators.zSendIconBtn);
-		if ( !visible )
-			throw new HarnessException("Send button is not visible "+ Locators.zSendIconBtn);
-		
-		// Click on it
-		this.sMouseDown(Locators.zSendIconBtn);
-		this.sMouseUp(Locators.zSendIconBtn);
-		
-		// Need to wait for the client request to be sent
-		SleepUtil.sleepSmall();
-		
-		// Wait for the message to be delivered
-		try {
-		
-			// Check the message queue
-			Stafpostqueue sp = new Stafpostqueue();
-			sp.waitForPostqueue();
-		
-		} catch (Exception e) {
-			throw new HarnessException("Unable to wait for message queue", e);
-		}
+		zToolbarPressButton(Button.B_SEND);
 
 	}
 
+	/**
+	 * Press the toolbar button
+	 * @param button
+	 * @return
+	 * @throws HarnessException
+	 */
+	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
+		
+		if ( button == null )
+			throw new HarnessException("Button cannot be null!");
+		
+		// Fallthrough objects
+		AbsSeleniumObject page = null;
+		String locator = null;
+		
+		if ( button == Button.B_SEND ) {
+			
+			locator = Locators.zSendIconBtn;
+			
+			// Look for "Send"
+			if ( !this.sIsElementPresent(Locators.zSendIconBtn) )
+				throw new HarnessException("Send button is not visible "+ Locators.zSendIconBtn);
+			
+			// Click on it
+			this.zClick(locator);
+			
+			// Need to wait for the client request to be sent
+			SleepUtil.sleepSmall();
+			
+			// Wait for the message to be delivered
+			try {
+			
+				// Check the message queue
+				Stafpostqueue sp = new Stafpostqueue();
+				sp.waitForPostqueue();
+			
+			} catch (Exception e) {
+				throw new HarnessException("Unable to wait for message queue", e);
+			}
+			
+			return (null);
+		
+		} else if ( button == Button.B_CANCEL ) {
+
+			locator = Locators.zCancelIconBtn;
+			throw new HarnessException("Need to implement Warning: Save current message as draft?");
+			
+		} else if ( button == Button.B_SAVE_DRAFT ) {
+
+			locator = Locators.zSaveDraftIconBtn;
+			page = this;
+			
+			// FALL THROUGH
+			
+		} else if ( button == Button.B_ADD_ATTACHMENT ) {
+
+			throw new HarnessException("implement me (?)");
+			
+			// FALL THROUGH
+			
+		} else if ( button == Button.B_SPELL_CHECK ) {
+
+			locator = Locators.zSpellCheckIconBtn;
+			page = this;
+			
+			// FALL THROUGH
+			
+		} else if ( button == Button.B_SIGNATURE ) {
+
+			throw new HarnessException("use zToolbarPressPulldown to attach signature");
+			
+		} else if ( button == Button.B_OPTIONS ) {
+
+			throw new HarnessException("use zToolbarPressPulldown to attach signature");
+			
+		} else {
+			throw new HarnessException("no logic defined for button "+ button);
+		}
+
+		// Make sure a locator was set
+		if ( locator == null )
+			throw new HarnessException("locator was null for button "+ button);
+
+		
+		// Default behavior, process the locator by clicking on it
+		//
+		
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+		
+		// Click it
+		this.zClick(locator);
+
+		// Return the page, if specified
+		return (page);
+
+	}
+	
+	/**
+	 * Press the toolbar pulldown and the menu option
+	 * @param pulldown
+	 * @param option
+	 * @return
+	 * @throws HarnessException
+	 */
+	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
+		
+		throw new HarnessException("implement me!");
+
+	}
+	
+	/**
+	 * Fill in the form field with the specified text
+	 * @param field
+	 * @param value
+	 * @throws HarnessException
+	 */
+	public void zFillField(Field field, String value) throws HarnessException {
+	
+		String locator;
+		
+		if ( field == Field.To ) {
+			
+			locator = Locators.zToField;
+			
+		} else if ( field == Field.Cc ) {
+			
+			locator = Locators.zCcField;
+			
+		} else if ( field == Field.Bcc ) {
+			
+			locator = Locators.zBccField;
+			
+		} else if ( field == Field.Subject ) {
+			
+			locator = Locators.zSubjectField;
+			
+		} else if ( field == Field.Body ) {
+
+			throw new HarnessException("implement me!");
+			
+		} else {
+			throw new HarnessException("not implemented for field "+ field);
+		}
+		
+		if ( locator == null ) {
+			throw new HarnessException("locator was null for field "+ field);
+		}
+		
+		// Default behavior, enter value into locator field
+		//
+		
+		// Make sure the button exists
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("Field is not present field="+ field +" locator="+ locator);
+		
+		// Enter text
+		this.sType(locator, value);
+		
+		// Is this sleep required?
+		SleepUtil.sleepSmall();
+
+	}
+	
+	
 	@Override
 	public void zFill(IItem item) throws HarnessException {
 		logger.info("FormMailNew.fill(ZimbraItem)");
@@ -104,10 +285,9 @@ public class FormMailNew extends AbsForm {
 		
 		// Handle the subject
 		if ( mail.dSubject != null ) {
-			if ( !this.sIsElementPresent(Locators.zSubjectField) )
-				throw new HarnessException("Unable to find locator "+ Locators.zSubjectField);
-			this.sType(Locators.zSubjectField, mail.dSubject);
-			SleepUtil.sleepMedium();
+			
+			zFillField(Field.Subject, mail.dSubject);
+
 		}
 		
 		// Handle the Recipient list, which can be a combination
@@ -160,15 +340,19 @@ public class FormMailNew extends AbsForm {
 			}
 		}
 		
+		// Fill out the To field
 		if ( to != null ) {
-			// Add the recipient string to the To field
-			if ( !this.sIsElementPresent(Locators.zToField) )
-				throw new HarnessException("Unable to find locator "+ Locators.zSubjectField);
-			this.sType(Locators.zToField, to.toString());
+			this.zFillField(Field.To, to.toString());
 		}
 		
-		// TODO: handle cc, bcc, and from
-
+		if ( cc != null ) {
+			this.zFillField(Field.Cc, to.toString());
+		}
+		
+		if ( bcc != null ) {
+			this.zFillField(Field.To, to.toString());
+		}
+		
 		// TODO: handle bodyText
 		
 	}
