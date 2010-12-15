@@ -32,7 +32,7 @@ public class CreateMail extends AjaxCommonTest {
 		MailItem mail = new MailItem();
 		mail.dToRecipients.add(new RecipientItem(ZimbraAccount.AccountA()));
 		mail.dSubject = "subject" + ZimbraSeleniumProperties.getUniqueString();
-		mail.gBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
+		mail.dBodyText = "body" + ZimbraSeleniumProperties.getUniqueString();
 		
 		
 		// Open the new mail form
@@ -46,29 +46,14 @@ public class CreateMail extends AjaxCommonTest {
 		mailform.zSubmit();
 				
 		
-		// Verify the message is received at the destination
-		ZimbraAccount.AccountA().soapSend(
-				"<SearchRequest xmlns='urn:zimbraMail' types='message'>" +
-					"<query>subject:("+ mail.dSubject +")</query>" +
-				"</SearchRequest>");
-		String messageID = ZimbraAccount.AccountA().soapSelectValue("//mail:SearchResponse//mail:m", "id");
-		ZAssert.assertNotNull(messageID, "Verify the recipient can search for the message");
+		MailItem received = MailItem.importFromSOAP(ZimbraAccount.AccountA(), "subject:("+ mail.dSubject +")");
 		
-		ZimbraAccount.AccountA().soapSend(
-				"<GetMsgRequest xmlns='urn:zimbraMail'>" +
-                	"<m id='"+ messageID +"'/>" +
-                "</GetMsgRequest>");
-		String from = ZimbraAccount.AccountA().soapSelectValue("//mail:GetMsgResponse//mail:e[@t='f']", "a");
-		String to = ZimbraAccount.AccountA().soapSelectValue("//mail:GetMsgResponse//mail:e[@t='t']", "a");
-		String subject = ZimbraAccount.AccountA().soapSelectValue("//mail:GetMsgResponse//mail:su", null);
 		
 		// TODO: add checks for TO, Subject, Body
-		ZAssert.assertEquals(from, app.zGetActiveAccount().EmailAddress, "Verify the from field is correct");
-		ZAssert.assertEquals(to, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
-		ZAssert.assertEquals(subject, mail.dSubject, "Verify the subject field is correct");
-		
+		ZAssert.assertEquals(received.dFromRecipient.dEmailAddress, app.zGetActiveAccount().EmailAddress, "Verify the from field is correct");
+		ZAssert.assertEquals(received.dToRecipients.get(0).dEmailAddress, ZimbraAccount.AccountA().EmailAddress, "Verify the to field is correct");
+		ZAssert.assertEquals(received.dSubject, mail.dSubject, "Verify the subject field is correct");
 
-		
 	}
 
 }

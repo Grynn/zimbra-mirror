@@ -250,14 +250,10 @@ public class PageMail extends AbsAjaxPage {
 		
 		if ( button == Button.B_NEW ) {
 			
-			// For "NEW" without a specified pulldown option, just return the default item
-			// To use "NEW" with a pulldown option, see  zToolbarPressPulldown(Button, Button)
-			//
-			MyApplication.zKeyboard.zTypeCharacters("n");
+			locator = "//div[contains(@id,'ztb__')]//td[contains(@id,'__NEW_MENU_title')]";
+			page = new FormMailNew(this.MyApplication);
 
-			// Not default behavior (zPressKeyboardShortcut vs. zClick).
-			// Do not fall through.
-			return (new FormMailNew(this.MyApplication));
+			// FALL THROUGH 
 			
 		} else if ( button == Button.B_GETMAIL ) {
 			
