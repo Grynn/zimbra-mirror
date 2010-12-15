@@ -228,7 +228,7 @@ function(str) {
 	// Also check for . since we require FQDN
 	var atIndex = str.indexOf('@');
 	var dotIndex = str.lastIndexOf('.');
-	return ((atIndex != -1) && (dotIndex != -1) && (dotIndex > atIndex));
+	return ((atIndex != -1) && (dotIndex != -1) && (dotIndex > atIndex) && (dotIndex != str.length - 1));
 };
 
 /**
