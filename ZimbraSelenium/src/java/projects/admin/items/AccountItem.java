@@ -3,9 +3,16 @@ package projects.admin.items;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.log4j.LogManager;
+import org.apache.log4j.Logger;
+
+import framework.items.IItem;
+import framework.util.HarnessException;
+import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
-public class AccountItem extends Item {
+public class AccountItem implements IItem {
+	protected static Logger logger = LogManager.getLogger(IItem.class);
 
 	public String EmailAddress;
 	public String Id;
@@ -39,6 +46,18 @@ public class AccountItem extends Item {
 		// Surname is required in Admin Console
 		AccountAttrs.put("sn", lastName);
 		
+	}
+
+	@Override
+	public void createUsingSOAP(ZimbraAccount account) throws HarnessException {
+		throw new HarnessException("implement me!");
+	}
+
+	@Override
+	public String prettyPrint() {
+		StringBuilder sb = new StringBuilder();
+		logger.error("implement me!", new Throwable("implement me!"));
+		return (sb.toString());
 	}
 	
 	

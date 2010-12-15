@@ -3,7 +3,7 @@ package framework.ui;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
-import projects.admin.items.Item;
+import framework.items.IItem;
 import framework.util.HarnessException;
 
 /**
@@ -58,7 +58,7 @@ public abstract class AbsWizard extends AbsSeleniumObject {
 	 * @param item
 	 * @throws HarnessException
 	 */
-	public abstract Item zCompleteWizard(Item item) throws HarnessException;
+	public abstract IItem zCompleteWizard(IItem item) throws HarnessException;
 	
 	public void clickHelp() throws HarnessException {
 		clickWizardButton(WizardButton.Help);

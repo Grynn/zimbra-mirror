@@ -6,12 +6,12 @@ import org.testng.annotations.Test;
 
 import projects.admin.core.AdminCommonTest;
 import projects.admin.items.AccountItem;
-import projects.admin.items.Item;
 import projects.admin.ui.PageManageAccounts;
 import projects.admin.ui.WizardCreateAccount;
 
 import com.zimbra.common.soap.Element;
 
+import framework.items.IItem;
 import framework.util.HarnessException;
 import framework.util.ZAssert;
 import framework.util.ZimbraAdminAccount;
@@ -45,7 +45,7 @@ public class CreateAccount extends AdminCommonTest {
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 		
 		// Verify the account exists in the Account list
-		List<Item> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
+		List<IItem> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
 		ZAssert.assertTrue(accounts.contains(account), "Verify the new account appears in the list");
 
 	}
@@ -70,7 +70,7 @@ public class CreateAccount extends AdminCommonTest {
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 
 		// Verify the account exists in the Account list
-		List<Item> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
+		List<IItem> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
 		ZAssert.assertTrue(accounts.contains(account), "Verify the new account appears in the list");
 
 	}
@@ -95,7 +95,7 @@ public class CreateAccount extends AdminCommonTest {
 		ZAssert.assertNotNull(response, "Verify the account is created successfully");
 
 		// Verify the account exists in the Account list
-		List<Item> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
+		List<IItem> accounts = app.zPageSearchResults.getSearchResults(account.EmailAddress);
 		ZAssert.assertTrue(accounts.contains(account), "Verify the new account appears in the list");
 
 	}

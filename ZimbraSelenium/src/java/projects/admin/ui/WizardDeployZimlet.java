@@ -3,7 +3,7 @@
  */
 package projects.admin.ui;
 
-import projects.admin.items.Item;
+import framework.items.IItem;
 import framework.ui.AbsWizard;
 import framework.util.HarnessException;
 
@@ -18,18 +18,15 @@ public class WizardDeployZimlet extends AbsWizard {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsWizard#completeWizard(projects.admin.clients.Item)
-	 */
-	@Override
-	public Item zCompleteWizard(Item item) throws HarnessException {
-		throw new HarnessException("implement me");
-	}
-
-	/* (non-Javadoc)
 	 * @see projects.admin.ui.AbsWizard#isOpen()
 	 */
 	@Override
 	public boolean zIsOpen() throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+
+	@Override
+	public IItem zCompleteWizard(IItem item) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 

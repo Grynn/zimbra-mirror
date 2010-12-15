@@ -4,7 +4,7 @@
 package projects.admin.ui;
 
 import projects.admin.items.AccountItem;
-import projects.admin.items.Item;
+import framework.items.IItem;
 import framework.ui.AbsWizard;
 import framework.util.HarnessException;
 
@@ -32,7 +32,10 @@ public class WizardCreateAccount extends AbsWizard {
 	 * @see projects.admin.ui.AbsWizard#completeWizard(projects.admin.clients.Item)
 	 */
 	@Override
-	public Item zCompleteWizard(Item item) throws HarnessException {
+	public IItem zCompleteWizard(IItem item) throws HarnessException {
+		
+		if ( !(item instanceof AccountItem) )
+			throw new HarnessException("item must be an AccountItem, was "+ item.getClass().getCanonicalName());
 		
 		AccountItem account = (AccountItem)item;
 		

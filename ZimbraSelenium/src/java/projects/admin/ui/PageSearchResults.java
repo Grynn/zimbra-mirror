@@ -2,9 +2,9 @@ package projects.admin.ui;
 
 import java.util.List;
 
+import framework.items.IItem;
 import framework.ui.AbsApplication;
 import framework.util.HarnessException;
-import projects.admin.items.Item;
 
 
 public class PageSearchResults extends AbsAdminPage {
@@ -28,7 +28,7 @@ public class PageSearchResults extends AbsAdminPage {
 		throw new HarnessException("implement me");
 	}
 	
-	public List<Item> getSearchResults(String query) throws HarnessException {
+	public List<IItem> getSearchResults(String query) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 
