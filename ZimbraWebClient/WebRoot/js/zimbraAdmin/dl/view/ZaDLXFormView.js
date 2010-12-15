@@ -589,7 +589,17 @@ ZaDLXFormView.upublishShareButtonListener = function () {
 	var form = this.getForm();
 	var dl = this.getInstance();
 	var shares = this.getInstanceValue(ZaDistributionList.A2_published_share_selection_cache);
-	ZaDistributionList.publishShare.call(dl,shares,true, new AjxCallback(form,ZaDLXFormView.unpublishShareCallback));		
+	var shareGroupByOwnId = {};
+	for(var i = 0; i < shares.length; i++){
+		if(!shareGroupByOwnId[shares[i][ZaShare.A_ownerId]]){
+			shareGroupByOwnId[shares[i][ZaShare.A_ownerId]] = new Array();
+		}
+		shareGroupByOwnId[shares[i][ZaShare.A_ownerId]].push(shares[i]);
+	}
+
+	for(var i in shareGroupByOwnId){
+		ZaDistributionList.publishShare.call(dl,shareGroupByOwnId[i],true, new AjxCallback(form,ZaDLXFormView.unpublishShareCallback));		
+	}	
 }
 
 ZaDLXFormView.unpublishShareCallback = function (respObj) {
