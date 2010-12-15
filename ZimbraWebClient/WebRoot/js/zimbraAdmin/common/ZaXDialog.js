@@ -154,6 +154,9 @@ function(entry) {
 	return xFormObject;
 }
 
+ZaXDialog.prototype.setDirty = function () {
+	//override
+}
 /**
 *  ZaXDialog
 * @private
