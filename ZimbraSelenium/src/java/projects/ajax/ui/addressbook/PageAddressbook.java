@@ -165,7 +165,20 @@ public class PageAddressbook extends AbsAjaxPage{
 
 			locator = "id="+ id;
 			page = new FormContactNew(MyApplication);
-		}
+		
+	    } else if ( button == Button.B_MOVE) {
+
+		    String id = "zb__CNS__MOVE_left_icon";
+
+		    // Check if the button is enabled
+		    String attrs = sGetAttribute("xpath=(//td[@id='"+ id +"']/div)@class");
+		    if ( attrs.contains("ZDisabledImage") ) {
+			  throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
+		    }
+
+		   locator = "id="+ id;
+		   page = new DialogContactMove(MyApplication);
+	    }
 
 
 		if ( locator == null )
