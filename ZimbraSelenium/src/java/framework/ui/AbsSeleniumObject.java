@@ -147,7 +147,8 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.click()
 	 */
 	public void sClick(String locator) {
-		ClientSessionFactory.session().selenium().click(locator);
+		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
+		((DefaultSelenium)ClientSessionFactory.session().selenium()).click(locator);
 		logger.info("click(" + locator + ")");
 	}
 	
@@ -179,7 +180,8 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.isElementPresent()
 	 */
 	public boolean sIsElementPresent(String locator) {
-		boolean present = ClientSessionFactory.session().selenium().isElementPresent(locator);
+		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
+		boolean present = ((DefaultSelenium)ClientSessionFactory.session().selenium()).isElementPresent(locator);
 		logger.info("isElementPresent(" + locator + ") = " + present);
 		return (present);
 	}
@@ -215,7 +217,8 @@ public abstract class AbsSeleniumObject {
 	 * DefaultSelenium.isChecked()
 	 */
 	public boolean sIsChecked(String locator) {
-		boolean checked = ClientSessionFactory.session().selenium().isChecked(locator);
+		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
+		boolean checked = ((DefaultSelenium)ClientSessionFactory.session().selenium()).isChecked(locator);
 		logger.info("isChecked(" + locator + ") = " + checked);
 		return (checked);
 	}

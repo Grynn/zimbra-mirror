@@ -14,9 +14,7 @@ import projects.mobile.ui.AppMobileClient;
 import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
 
-import framework.core.ClientSession;
 import framework.core.ClientSessionFactory;
-import framework.core.ZimbraSelenium;
 import framework.ui.AbsPage;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;

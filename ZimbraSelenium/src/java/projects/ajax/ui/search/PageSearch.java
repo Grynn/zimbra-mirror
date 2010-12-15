@@ -6,7 +6,6 @@ package projects.ajax.ui.search;
 import projects.ajax.ui.AbsAjaxPage;
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
-import framework.ui.Button;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
