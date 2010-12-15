@@ -74,7 +74,7 @@ public class MailItem implements IItem {
 	/**
 	 * The folder that contains this mail
 	 */
-	public FolderItem dFolder;
+	public String dFolderId;
 
 	/**
 	 * The read/unread status of this mail
@@ -224,6 +224,7 @@ public class MailItem implements IItem {
 			// Set the ID
 			mail.setId(m.getAttribute("id", null));
 			mail.setFlags(m.getAttribute("f", ""));
+			mail.dFolderId = m.getAttribute("l", null);
 			
 			// If there is a subject, save it
 			Element sElement = ZimbraAccount.SoapClient.selectNode(m, "//mail:su");

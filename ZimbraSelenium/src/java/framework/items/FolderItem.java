@@ -30,6 +30,7 @@ public class FolderItem extends com.zimbra.soap.mail.type.Folder implements IIte
 		public static final SystemFolder Calendar = new SystemFolder("Calendar");
 		public static final SystemFolder Chats = new SystemFolder("Chats");
 		public static final SystemFolder Contacts = new SystemFolder("Contacts");
+		public static final SystemFolder Drafts = new SystemFolder("Drafts");
 		public static final SystemFolder EmailedContacts = new SystemFolder("Emailed Contacts");
 		public static final SystemFolder Inbox = new SystemFolder("Inbox");
 		public static final SystemFolder Junk = new SystemFolder("Junk");

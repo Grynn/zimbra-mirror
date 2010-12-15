@@ -145,7 +145,11 @@ public class FormMailNew extends AbsForm {
 		} else if ( button == Button.B_CANCEL ) {
 
 			locator = Locators.zCancelIconBtn;
-			throw new HarnessException("Need to implement Warning: Save current message as draft?");
+			page = null;
+			
+			logger.warn("Need to implement Warning: Save current message as draft?");
+			
+			// FALL THROUGH
 			
 		} else if ( button == Button.B_SAVE_DRAFT ) {
 
