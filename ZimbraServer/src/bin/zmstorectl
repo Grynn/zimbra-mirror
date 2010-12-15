@@ -66,7 +66,7 @@ case "$1" in
       ${zimbra_home}/bin/zmtlsctl >/dev/null 2>&1
     fi
     for i in $START_ORDER; do
-      ${zimbra_home}/bin/$i start norewrite
+      ${zimbra_home}/bin/$i start norewrite >/dev/null 2>&1
       R=$?
       if [ $R -ne "0" ]; then
         STATUS=$R
@@ -89,7 +89,7 @@ case "$1" in
   ;;
   restart|reload)
     for i in $START_ORDER; do
-      ${zimbra_home}/bin/$i $1 norewrite
+      ${zimbra_home}/bin/$i $1
       R=$?
       if [ $R -ne "0" ]; then
         STATUS=$R
@@ -102,12 +102,14 @@ case "$1" in
       if [ $i = "mysql.server" ]; then
         ${zimbra_home}/bin/mysqladmin status > /dev/null 2>&1
       else
-        ${zimbra_home}/bin/$i status
+        ${zimbra_home}/bin/$i status > /dev/null 2>&1
       fi
       R=$?
       if [ $R -ne "0" ]; then
         echo "$i is not running."
-		STATUS=$R
+        if [ x"$i" != "xzmmtaconfigctl" ]; then
+          STATUS=$R
+        fi
       fi
     done
     exit $STATUS
