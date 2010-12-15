@@ -94,14 +94,17 @@ function() {
 BlogsToSignatureZimlet.prototype._invoke =
 function() {
 	var feedUrl = ZmZimletBase.PROXY + AjxStringUtil.urlComponentEncode(this.rssFeedUrl);
-	AjxRpc.invoke(null, feedUrl, null, new AjxCallback(this, this._reponseHandler), true);
+	AjxRpc.invoke(null, feedUrl, null, new AjxCallback(this, this._responseHandler), true);
 };
 
-BlogsToSignatureZimlet.prototype._reponseHandler =
-function(reponse) {
+BlogsToSignatureZimlet.prototype._responseHandler =
+function(response) {
+	if (!response || !response.xml) {
+		return;
+	}
 	var items = "";
 	try {
-		items = reponse.xml.getElementsByTagName("item");
+		items = response.xml.getElementsByTagName("item");
 	} catch(e) {//there was some expn getting feed
 		this._showErrorMsg(e);
 		return;
