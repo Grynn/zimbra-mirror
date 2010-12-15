@@ -11,11 +11,10 @@ import org.testng.annotations.BeforeSuite;
 
 import projects.admin.ui.AppAdminConsole;
 
+import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
 
-import framework.core.ClientSession;
 import framework.core.ClientSessionFactory;
-import framework.core.ZimbraSelenium;
 import framework.ui.AbsPage;
 import framework.util.HarnessException;
 import framework.util.ZimbraAdminAccount;
@@ -72,15 +71,16 @@ public class AdminCommonTest {
 				
 		try
 		{
-			ClientSession session = ClientSessionFactory.session();
-			ZimbraSelenium selenium = session.selenium();
+			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.ADMIN);
+
+			DefaultSelenium selenium = ClientSessionFactory.session().selenium();
 			selenium.start();
 			selenium.windowMaximize();
 			selenium.windowFocus();
-			// selenium.setupZVariables(); // admin doesn't use any of the JS code
 			selenium.allowNativeXpath("true");
-			ZimbraSeleniumProperties.setAppType(ZimbraSeleniumProperties.AppType.ADMIN);
+			selenium.setTimeout("30000");	// Use 30 second timeout for opening the browser
 			selenium.open(ZimbraSeleniumProperties.getBaseURL());
+			
 		} catch (SeleniumException e) {
 			logger.error("Unable to open admin app.  Is a valid cert installed?", e);
 			throw e;
