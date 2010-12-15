@@ -222,9 +222,14 @@ function(entry) {
 	}
 	this._containedObject.name = "";
 
-	if(entry.rights)
+	if(entry.rights) {
 		this._containedObject.rights = entry.rights;
-
+	} else {
+		this._containedObject.rights = [];
+	}
+	if(this._containedObject.rights[ZaAccount.RENAME_ACCOUNT_RIGHT] === undefined)
+		this._containedObject.rights[ZaAccount.RENAME_ACCOUNT_RIGHT] = true; //since this is a new account, we should be able to give it a name
+	
 	if(entry.setAttrs)
 		this._containedObject.setAttrs = entry.setAttrs;
 	
