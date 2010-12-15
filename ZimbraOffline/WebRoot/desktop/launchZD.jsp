@@ -260,16 +260,12 @@
 
 	var prodMode = ${isProdMode};
 	var debugLevel = "<%= (debug != null) ? debug : "" %>";
-
-	if (!prodMode || debugLevel) {
-	    AjxDispatcher.require("Debug");
-	    DBG = new AjxDebug(AjxDebug.NONE, null, false);
-	    // figure out the debug level
-	    if (debugLevel == 't') {
+	window.DBG = new AjxDebug(AjxDebug.NONE, null, false);
+    // figure out the debug level
+	if (debugLevel == 't') {
 		DBG.showTiming(true);
-	    } else {
+	} else if (debugLevel) {
 		DBG.setDebugLevel(debugLevel);
-	    }
 	}
 
 	AjxHistoryMgr.BLANK_FILE = "${contextPath}/public/blankHistory.html";
