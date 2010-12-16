@@ -18,7 +18,7 @@
 <book name="Navigeren in je postvak" >
   <item name="Navigeren in Zimbra Desktop" url="Navigation_folders_and_tips/z-Navigating_Zimbra_Desktop.htm" />
   <item name="Gebruikersinterfacefuncties en sneltoetsen" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-  <item name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <item name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Systeemmappen" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="Bewerkingen toepassen op meerdere selecties" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
 </book>
@@ -69,18 +69,17 @@
   <item name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
   <item name="Contacten exporteren" url="Contacts/Exporting_Address_Books.htm" />
 </book>
-<book name="Je agenda’s beheren" >
-  <item name="Agenda’s gebruiken" url="Calendar/z-Using_Calendars.htm" />
+<book name="Je agenda's beheren" >
+  <item name="Agenda's gebruiken" url="Calendar/z-Using_Calendars.htm" />
   <item name="Agendaweergaven" url="Calendar/Calendar_Views.htm" />
   <item name="Agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Een agenda afdrukken" url="Calendar/Printing_a_calendar.htm" />
-  <item name="Agenda’s verwijderen" url="Calendar/Deleting_Calendars.htm" />
+  <item name="Agenda's verwijderen" url="Calendar/Deleting_Calendars.htm" />
   <item name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
   <item name="Je iCal-agenda exporteren" url="Calendar/Exporting_your_iCal_calendar.htm" />
 </book>
 <book name="Afspraken plannen" >
   <item name="Info over het plannen van afspraken" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="Een afspraak plannen" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Een afspraak maken" url="Calendar/Scheduling_meetings.htm" />
   <item name="Tijdstippen vrij/bezet bekijken" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="Een afspraak als privé markeren" url="Calendar/Marking_an_appointment_as_private.htm" />
@@ -132,11 +131,13 @@
 <chunk name="Mappen delen (alleen Zimbra-accounts)" ref="whtdata1.xml" />
 </book>
 <book name="Aktetas gebruiken" >
-<chunk name="Aktetas gebruiken" ref="whtdata2.xml" />
+  <item name="Met de Aktetas werken" url="Briefcase/Working_in_Briefcase.htm" />
+  <item name="Een nieuw document maken " url="Documents/Create_a_new_page.htm" />
+  <item name="De RTF-editor gebruiken" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="Een tabel aan een document toevoegen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </book>
 <book name="Je accountinhoud beheren" >
-  <item name="E-mailberichten archiveren" url="Zdesktop/Archiving_your_email_messages.htm" />
-  <item name="Accountgegevens verplaatsen naar een ander account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+<chunk name="Je accountinhoud beheren" ref="whtdata2.xml" />
 </book>
 
 </tocdata>

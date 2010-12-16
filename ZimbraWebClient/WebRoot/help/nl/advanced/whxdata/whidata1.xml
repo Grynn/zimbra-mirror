@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="Doorstuuradres" >
+  <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="drie deelvensters" >
+  <topic name="De werkruimte van de Zimbra-webclient" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
 <key name="E-mail" >
   <topic name="E-mail lezen" url="reading_mail/reading_mail.htm" />
   <key name="Lezen" >
@@ -27,7 +33,7 @@
 </key>
 <key name="E-mailidentiteiten" >
   <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
-  <topic name="Persona’s maken" url="Userspecific/Creating_Personas.htm" />
+  <topic name="Persona's maken" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="e-mailkennisgeving" >
   <topic name="Bureaubladwaarschuwingen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
@@ -39,7 +45,7 @@
 <key name="exporteren, accountgegevens" >
   <topic name="Een back-up maken van de inhoud van je account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
-<key name="Exporteren, iCal-agenda’s" >
+<key name="Exporteren, iCal-agenda's" >
   <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="Externe accounts" >
@@ -83,7 +89,7 @@
   <topic name="Een handtekening gebruiken" url="Userspecific/using_a_signature.htm" />
 </key>
 <key name="Handtekeningen, automatisch toevoegen" >
-  <topic name="Persona’s maken" url="Userspecific/Creating_Personas.htm" />
+  <topic name="Persona's maken" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="herinneringen" >
   <topic name="Bureaubladwaarschuwingen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
@@ -110,7 +116,7 @@
 <key name="Hulpbron" >
   <topic name="Hulpbronnen plannen" url="Calendar/Scheduling_Resources.htm" />
 </key>
-<key name="iCal-agenda’s importeren of exporteren" >
+<key name="iCal-agenda's importeren of exporteren" >
   <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="ics-bijlagen, opslaan" >
@@ -118,19 +124,7 @@
 </key>
 <key name="Identiteiten" >
   <topic name="E-mailidentiteiten" url="Userspecific/Mail_Identities.htm" />
-  <topic name="Persona’s maken" url="Userspecific/Creating_Personas.htm" />
-</key>
-<key name="IM" >
-  <topic name="Basisinformatie over sms" url="instant_messaging/Instant_Messaging_Basics.htm" />
-</key>
-<key name="IM-kennisgeving" >
-  <topic name="Bureaubladwaarschuwingen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="IM-vrienden" >
-  <topic name="Toegang tot IM" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
-<key name="IM, andere clientsoftware gebruiken" >
-  <topic name="Inloggen bij andere IM-clients" url="instant_messaging/Log_into_other_IM_clients.htm" />
+  <topic name="Persona's maken" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="IMAP-account" >
   <topic name="POP-accounts beheren" url="Userspecific/Managing_your_POP_Accounts.htm" />
@@ -154,7 +148,7 @@
 <key name="Importeren, contacten" >
   <topic name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
 </key>
-<key name="Importeren, iCal-agenda’s" >
+<key name="Importeren, iCal-agenda's" >
   <topic name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="Instellen, een doorstuuradres" >
@@ -213,7 +207,6 @@
   <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="Leesdeelvenster bekijken" >
-  <topic name="De werkruimte van de Zimbra-webclient" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="Leesdeelvenster, bekijken" >
@@ -221,6 +214,7 @@
 </key>
 <key name="Leesdeelvenster, in- en uitschakelen" >
   <topic name="De weergave van je e-mailberichten beheren" url="conversations/conversation_list_view.htm" />
+  <topic name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="Lettertypen" >
   <topic name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -262,14 +256,11 @@
 <key name="mappen, naam geven" >
   <topic name="Info over mappen" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
-<key name="Markeren, afspraak als privé" >
-  <topic name="Pagina Afspraak" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="markeren, taak als voltooid" >
   <topic name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
 </key>
-<key name="Menu’s, rechtsklikmenu’s" >
-  <topic name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
+<key name="Menu's, rechtsklikmenu's" >
+  <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="mini-agenda" >
   <topic name="Je Agenda-voorkeuren instellen" url="Userspecific/Setting_your_Calendar_preferences.htm" />
@@ -295,6 +286,12 @@
 </key>
 <key name="Nieuwe berichten" >
   <topic name="Hoe weet je dat je nieuwe e-mail hebt?" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="nieuwe pagina's maken" >
+  <topic name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="Ondersteunde bestandstypen als bijlage" >
+  <topic name="Ondersteunde bestandstypen als bijlage" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
 
 </indexdata>

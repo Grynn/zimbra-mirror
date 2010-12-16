@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="Aan de slag" >
-  <item name="Welkom bij @ClientNameLong@, Advanced Edition" url="Getting_Started/about_liquid_mail.htm" />
+  <item name="Welkom bij @ClientNameLong@, Geavanceerde versie" url="Getting_Started/about_liquid_mail.htm" />
   <item name="In- en uitloggen" url="Userspecific/logging_on_and_off.htm" />
   <item name="Mijn standaard client-type wijzigen voor het inloggen" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Toetsenbordsneltoetsen" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
@@ -16,10 +16,10 @@
   <item name="Je algemene voorkeuren instellen" url="Userspecific/Setting_your_general_preferences.htm" />
   <item name="De weergave aanpassen" url="Navigation_folders_and_tips/Customize_your_view.htm" />
   <item name="Gebruikersinterfacefuncties en sneltoetsen" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-  <item name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <item name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Bewerkingen toepassen op meerdere selecties" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
   <item name="Browsers gebruiken" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-  <item name="Uw werk opslaan" url="Userspecific/browser_session_handling.htm" />
+  <item name="Werk opslaan" url="Userspecific/browser_session_handling.htm" />
   <item name="Het deelvenster Overzicht bekijken" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="E-mail-systeemmappen" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="De Prullenbak leegmaken" url="Navigation_folders_and_tips/trash_folder.htm" />
@@ -27,7 +27,7 @@
 </book>
 <book name="E-mail beheren " >
   <item name="De weergave van je e-mailberichten beheren" url="conversations/conversation_list_view.htm" />
-  <item name="Je e-mailvoorkeuren instellen" url="Userspecific/Setting_your_mail_preferences.htm" />
+  <item name="E-mailvoorkeuren instellen" url="Userspecific/Setting_your_mail_preferences.htm" />
   <item name="E-mailberichten categoriseren" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="De aanvankelijke e-mailpagina aanpassen" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
   <item name="Hoe werken conversaties" url="conversations/conversations_can_span_folders.htm" />
@@ -35,14 +35,14 @@
   <item name="E-mailberichten verplaatsen tussen mappen" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <item name="Een doorstuuradres instellen" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Abonneren op RSS/ATOM-feeds" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-  <item name="Verschillende identiteiten beheren voor je account" url="Userspecific/Mail_Identities.htm" />
+  <item name="Accountidentiteiten beheren" url="Userspecific/Mail_Identities.htm" />
   <item name="De map Spam beheren" url="filters/Managing_your_Junk_Folder.htm" />
-  <item name="Verwijderde e-mailberichten herstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Verwijderde items herstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="E-mailberichten verwijderen" url="reading_mail/archiving_old_messages.htm" />
   <book name="Berichten lezen" >
     <item name="E-mail lezen" url="reading_mail/reading_mail.htm" />
-    <item name="E-mail lezen via het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-    <item name="Bureaubladwaarschuwingen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
+    <item name="Berichten bekijken in het Leesdeelvenster" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+    <item name="Bureaubladwaarschuwingen en herinneringen instellen" url="Userspecific/Setting_up_desktop_alerts.htm" />
     <item name="E-mail als niet-gelezen markeren" url="reading_mail/marking_mail_as_unread.htm" />
     <item name="Melding over nieuwe berichten" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
     <item name="HTML in e-mailberichten weergeven" url="reading_mail/displaying_html_in_email_messages.htm" />
@@ -62,10 +62,10 @@
   <item name="Gedeelten van een e-mailbericht" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Automatisch je handtekening toevoegen" url="Userspecific/using_a_signature.htm" />
   <item name="Automatisch invullen van adressen" url="Creating_Messages/Using_address_lookup.htm" />
-  <item name="E-mailberichten plannen voor toekomstige levering" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
+  <item name="E-mails plannen voor toekomstige verzending" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Een ontvangstbewijs vragen" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Bestanden als bijlage aan je bericht toevoegen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-  <item name="Bijlagebestandstypes" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Ondersteunde bestandstypen als bijlage" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Cc:- en Bcc: adressen toevoegen" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="HTML-editor gebruiken" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Spellingcontrole gebruiken" url="Creating_Messages/Using_Spell_Check.htm" />
@@ -80,11 +80,11 @@
   <item name="Soorten adresboeken die beschikbaar zijn" url="Contacts/gal_vs_contacts.htm" />
   <item name="De voorkeuren voor je adresboek instellen" url="Userspecific/Setting_your_address_book_preferences.htm" />
   <item name="Nieuwe contacten toevoegen" url="Contacts/creating_a_new_contact.htm" />
-  <item name="Contactinformatie doorsturen" url="Contacts/Forwarding_Contact_Information.htm" />
+  <item name="Contactgegevens doorsturen" url="Contacts/Forwarding_Contact_Information.htm" />
   <item name="Het bedrijfsadresboek gebruiken" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="Contacten automatisch toevoegen" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
-  <item name="Groepcontactlijsten maken" url="Contacts/Creating_Group_Contact_Lists.htm" />
-  <item name="Adresboeken importeren" url="Contacts/Importing_Contacts.htm" />
+  <item name="Contactengroepslijsten maken" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="Contacten importeren" url="Contacts/Importing_Contacts.htm" />
   <item name="Adresboeken exporteren" url="Contacts/Exporting_Address_Books.htm" />
   <item name="Contactnamen of adresboeken afdrukken" url="Contacts/Printing_Contacts.htm" />
   <item name="Contactgegevens bewerken" url="Contacts/editing_a_contact.htm" />
@@ -92,14 +92,14 @@
 </book>
 <book name="Je agenda beheren" >
   <item name="Info over @CompanyName@ Agenda" url="Calendar/About_Calendar.htm" />
-  <item name="Agenda’s maken" url="Calendar/Create_Calendars.htm" />
-  <item name="Agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Agenda's maken" url="Calendar/Create_Calendars.htm" />
+  <item name="agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Je Agenda-voorkeuren instellen" url="Userspecific/Setting_your_Calendar_preferences.htm" />
   <item name="Weeknummers in agenda weergeven" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-  <item name="Opties om agenda’s weer te geven" url="Calendar/Calendar_Views.htm" />
+  <item name="Opties om agenda's weer te geven" url="Calendar/Calendar_Views.htm" />
   <item name="Agenda-lijstweergave" url="Calendar/Calendar_List_View.htm" />
-  <item name="Meerdere agenda’s weergeven" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
-  <item name="Agenda’s verwijderen" url="Calendar/Deleting_Calendars.htm" />
+  <item name="Meerdere agenda's weergeven" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
+  <item name="Agenda's verwijderen" url="Calendar/Deleting_Calendars.htm" />
   <item name="Je iCal-agenda importeren" url="Calendar/Importing_your_iCal_calendar.htm" />
   <item name="Je iCal-agenda exporteren" url="Calendar/Exporting_your_iCal_calendar.htm" />
   <item name="Een agenda afdrukken" url="Calendar/Printing_a_calendar.htm" />
@@ -108,7 +108,7 @@
 <chunk name="Afspraken, vergaderingen en evenementen plannen" ref="whtdata1.xml" />
 </book>
 <book name="Taaklijsten gebruiken" >
-  <item name="Info over taken" url="Tasks/About_Tasks.htm" />
+  <item name="Taaklijsten gebruiken" url="Tasks/About_Tasks.htm" />
   <item name="Taaklijsten maken" url="Tasks/Create_tasks_folders.htm" />
   <item name="Een taak toevoegen" url="Tasks/Add_a_task.htm" />
   <item name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
@@ -119,9 +119,10 @@
 <book name="Met de Aktetas werken" >
   <item name="Met de Aktetas werken" url="Briefcase/Working_in_Briefcase.htm" />
   <item name="Werken met bestanden in de Aktetas" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-  <item name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
+  <item name="Een nieuw document maken" url="Documents/Create_a_new_page.htm" />
   <item name="De RTF-editor gebruiken" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="Een tabel aan een notitieboekpagina toevoegen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="Een tabel aan een document in Aktetas toevoegen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="Versiebeheer van bestanden in Aktektas" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
   <item name="Bestanden verzenden vanuit je Aktetas" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </book>
 <book name="Mappen delen" >
@@ -140,11 +141,10 @@
 <chunk name="Je voorkeuren instellen" ref="whtdata6.xml" />
 </book>
 <book name="Je mobiele apparaat beheren (alleen netwerkversie)" >
-  <item name="Je mobiele apparaten beheren" url="Userspecific/Managing_your_mobile_devices.htm" />
-  <item name="Alle gegevens op je mobieltje wissen" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+<chunk name="Je mobiele apparaat beheren (alleen netwerkversie)" ref="whtdata7.xml" />
 </book>
 <book name="Je accountmappen opslaan" >
-<chunk name="Je accountmappen opslaan" ref="whtdata7.xml" />
+  <item name="De inhoud van je account offline opslaan" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 <book name="Zimlets gebruiken" >
 <chunk name="Zimlets gebruiken" ref="whtdata8.xml" />

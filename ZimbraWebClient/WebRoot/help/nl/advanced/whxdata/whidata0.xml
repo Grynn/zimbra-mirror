@@ -53,6 +53,9 @@
 <key name="afdrukken, taken" >
   <topic name="Info over taken" url="Tasks/About_Tasks.htm" />
 </key>
+<key name="afspraak doorsturen" >
+  <topic name="Een afspraak doorsturen" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
 <key name="Afspraak, herinnering aan" >
   <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
@@ -62,8 +65,14 @@
 <key name="afspraken als privé markeren" >
   <topic name="Een afspraak als privé markeren" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
+<key name="afspraken kopiëren" >
+  <topic name="Een afspraak maken vanuit een bestaande afspraak" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+</key>
 <key name="Afspraken maken, hoe" >
   <topic name="Afspraken, vergaderingen en evenementen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="afspraken opnieuw maken" >
+  <topic name="Een afspraak maken vanuit een bestaande afspraak" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 </key>
 <key name="Afwijzen, verzoek om agenda te delen" >
   <topic name="Een verzoek om een agenda te delen afwijzen" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
@@ -75,11 +84,20 @@
   <topic name="Je Agenda-voorkeuren instellen" url="Userspecific/Setting_your_Calendar_preferences.htm" />
   <topic name="Bepalen wie jou kan uitnodigen voor een vergadering" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
+<key name="agenda, beantwoorden" >
+  <topic name="Vergaderingen in je agenda bewerken" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
+<key name="agenda, beantwoorden vanuit" >
+  <topic name="Antwoorden vanuit een afspraak in mijn agenda" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+</key>
+<key name="agenda, een afspraak doorsturen" >
+  <topic name="Een afspraak doorsturen" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
 <key name="Agenda, evenementen" >
   <topic name="Dagvullende evenementen plannen" url="Calendar/Scheduling_All_Day_events.htm" />
 </key>
 <key name="agenda, gedeeld met beheerder" >
-  <topic name="Beheerdersrechten voor gedeelde Agenda’s" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <topic name="Beheerdersrechten voor gedeelde Agenda's" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
 </key>
 <key name="Agenda, info over" >
   <topic name="Info over Zimbra-agenda" url="Calendar/About_Calendar.htm" />
@@ -116,7 +134,7 @@
   <topic name="Algemene adreslijst versus contacten" url="Contacts/gal_vs_contacts.htm" />
 </key>
 <key name="als nieuw bewerken" >
-  <topic name="Rechtsklikmenu’s" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Rechtsklikmenu's" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="antwoord, onderwerp weergeven" >
   <topic name="Voorkeuren instellen voor het venster voor het opstellen van e-mailberichten" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
@@ -151,11 +169,14 @@
     <topic name="E-mailberichten beantwoorden" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
 </key>
+<key name="beantwoorden vanuit agenda" >
+  <topic name="Antwoorden vanuit een afspraak in mijn agenda" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+</key>
 <key name="Bedrijfsadresboek" >
   <topic name="Het bedrijfsadresboek gebruiken" url="Contacts/using_the_corporate_address_book.htm" />
 </key>
 <key name="beheerder in agenda" >
-  <topic name="Beheerdersrechten voor gedeelde Agenda’s" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <topic name="Beheerdersrechten voor gedeelde Agenda's" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
 </key>
 <key name="Bekijken als HTML" >
   <topic name="Bestanden in bijlagen openen" url="reading_mail/opening_file_attachments.htm" />
@@ -181,9 +202,6 @@
 <key name="Bewerken, toestemmingen voor e-mailmap" >
   <topic name="Toegang tot een gedeelde map intrekken" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </key>
-<key name="Bijlage, als bijlage toevoegen" >
-  <topic name="Bestanden als bijlage toevoegen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
 <key name="Bijlagen" >
   <topic name="Bestanden in bijlagen openen" url="reading_mail/opening_file_attachments.htm" />
 </key>
@@ -195,9 +213,6 @@
 </key>
 <key name="Browsers" >
   <topic name="Browser gebruiken met Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-</key>
-<key name="chatten" >
-  <topic name="Een IM-chat starten" url="instant_messaging/Starting_an_IM_chat.htm" />
 </key>
 <key name="client-type" >
   <topic name="Je algemene voorkeuren instellen" url="Userspecific/Setting_your_general_preferences.htm" />
@@ -275,15 +290,6 @@
 <key name="Delen, je agenda" >
   <topic name="Toegang tot een agenda delegeren" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
-<key name="Documenten, nieuwe pagina’s maken" >
-  <topic name="Een nieuwe pagina maken" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="Documenten, RTF-editor" >
-  <topic name="De RTF-editor gebruiken" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
-<key name="Documenten, tabellen toevoegen" >
-  <topic name="Een tabel aan een notitieboekpagina toevoegen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
 <key name="Doorsturen" >
   <topic name="Een e-mailbericht doorsturen" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
@@ -295,12 +301,6 @@
 </key>
 <key name="doorsturen, kopinformatie toevoegen" >
   <topic name="Voorkeuren instellen voor het venster voor het opstellen van e-mailberichten" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
-</key>
-<key name="Doorstuuradres" >
-  <topic name="Je eigen gebruikersvoorkeuren instellen" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="drie deelvensters" >
-  <topic name="De werkruimte van de Zimbra-webclient" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 
 </indexdata>

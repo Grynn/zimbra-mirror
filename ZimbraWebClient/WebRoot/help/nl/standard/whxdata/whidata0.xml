@@ -121,9 +121,6 @@
 <key name="Mappen" >
   <topic name="Mappen een nieuwe naam geven" url="Navigation_folders_and_tips/renaming_folders.htm" />
 </key>
-<key name="Markeren, afspraak als privé" >
-  <topic name="Pagina Afspraak" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="markeren, taak als voltooid" >
   <topic name="Een taak wijzigen" url="Tasks/Change_a_task.htm" />
 </key>
@@ -150,12 +147,6 @@
 </key>
 <key name="Opties voor kennisgeving nieuwe berichten" >
   <topic name="Kennisgeving nieuwe berichten" url="Userspecific/New_mail_notifications.htm" />
-</key>
-<key name="Plannen, een vergadering" >
-  <topic name="Info over de Afspraakpagina" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="Privéafspraken" >
-  <topic name="Pagina Afspraak" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="RSS-feed" >
   <topic name="Abonneren op RSS/ATOM-feed " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
@@ -190,9 +181,6 @@
 <key name="Vakantiebericht" >
   <topic name="Vakantiebericht" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="Vergaderingen" >
-  <topic name="Info over de Afspraakpagina" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="vergeten" >
   <topic name="Adres opzoeken gebruiken" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
@@ -201,9 +189,6 @@
 </key>
 <key name="Voorkeuren" >
   <topic name="Je opties instellen" url="Userspecific/b_Setting_your_Options.htm" />
-</key>
-<key name="Voorzien, een vergadering" >
-  <topic name="Info over de Afspraakpagina" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="vrij/bezet, agenda uitsluiten" >
   <topic name="Nieuwe agenda maken" url="Calendar/b_Create_New_Calendar.htm" />
