@@ -16,15 +16,15 @@ body {margin:0;}
 <script language="javascript1.2" src="whmozemu.js"></script>
 <script language="javascript1.2" src="whtbar.js"></script>
 </head>
-<body marginheight="0"  marginwidth="0"  bgcolor="Black"    background="toolbar_bg_m.jpg"  scroll="no">
+<body marginheight="0"  marginwidth="0"  bgcolor="#f0f2f4"    background="nor_back_i.gif"  scroll="no">
 <script language="javascript1.2">
 <!--
 if (window.gbWhTBar)
 {
-	setButtonFont("avprev","Arial","9pt","White","Normal","Normal","none");
-setButtonFont("avnext","Arial","9pt","White","Normal","Normal","none");
-setButtonFont("synctoc","Arial","9pt","White","Normal","Normal","none");
-setButtonFont("hide2","Arial","9pt","White","Normal","Normal","none");
+	setButtonFont("avprev","Tahoma","8pt","Black","Normal","Normal","none");
+setButtonFont("avnext","Tahoma","8pt","Black","Normal","Normal","none");
+setButtonFont("synctoc","Tahoma","8pt","Black","Normal","Normal","none");
+setButtonFont("hide2","Tahoma","8pt","Black","Normal","Normal","none");
 
 	gsIPrev = "wht_prev.gif";
 	gsIPrevD = "wht_prev_g.gif";
@@ -32,13 +32,13 @@ setButtonFont("hide2","Arial","9pt","White","Normal","Normal","none");
 	gsINextD = "wht_next_g.gif";
 	gsISync = "wht_sync.gif";
 	gsIHide = "wht_hide.gif";
-	setBackgroundcolor("Black");
-	setBackground("toolbar_bg_m.jpg");
+	setBackgroundcolor("#f0f2f4");
+	setBackground("nor_back_i.gif");
 	
-	addButton("avprev",BTN_TEXT|BTN_IMG,"","","","","",0,0,"navbar_prev.gif","","","navbar_prev_dis.gif","","");
-addButton("avnext",BTN_TEXT|BTN_IMG,"","","","","",0,0,"navbar_next.gif","","","navbar_next_dis.gif","","");
-addButton("synctoc",BTN_TEXT|BTN_IMG,"","","","","",0,0,"navbar_sync.gif","","","","","");
-addButton("hide2",BTN_TEXT|BTN_IMG,"","","","","",0,0,"navbar_close.gif","","","","","");
+	addButton("avprev",BTN_TEXT|BTN_IMG,"","","","","",0,0,"nor_prev_on.gif","","","nor_prev_out.gif","","");
+addButton("avnext",BTN_TEXT|BTN_IMG,"","","","","",0,0,"nor_forw_on.gif","","","nor_forw_out.gif","","");
+addButton("synctoc",BTN_TEXT|BTN_IMG,"","","","","",0,0,"nor_sync.gif","","","","","");
+addButton("hide2",BTN_TEXT|BTN_IMG,"","","","","",0,0,"nor_hide.gif","","","","","");
 
 	addButton("blankblock");
 	writeStyle(true);

@@ -6,8 +6,8 @@
 <item name="分享分發清單" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="分享郵件夾" >
   <item name="分享郵件夾" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-  <item name="分享你的郵箱" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="撤銷分享資料夾的存取權" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="分享你的郵件夾" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+  <item name="編輯分享資料夾的存取權" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
   <item name="接受對分享郵件夾的存取權" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="在分享郵件夾中工作" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
 </book>

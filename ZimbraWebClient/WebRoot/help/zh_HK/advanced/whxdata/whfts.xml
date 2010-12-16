@@ -79,10 +79,6 @@
 		<file url="whxdata\package_69.xml"/>
 		<file url="whxdata\package_70.xml"/>
 		<file url="whxdata\package_71.xml"/>
-		<file url="whxdata\package_72.xml"/>
-		<file url="whxdata\package_73.xml"/>
-		<file url="whxdata\package_74.xml"/>
-		<file url="whxdata\package_75.xml"/>
 		<file url="whxdata\packageindex.xml"/>
 		<file url="whxdata\synonym.xml"/>
 		<file url="whxdata\topictable_0.xml"/>
@@ -90,7 +86,6 @@
 		<file url="whxdata\topictable_2.xml"/>
 		<file url="whxdata\topictable_3.xml"/>
 		<file url="whxdata\topictable_4.xml"/>
-		<file url="whxdata\topictable_5.xml"/>
 		<file url="whxdata\topictableindex.xml"/>
 		<file url="whxdata\whfts.xml"/>
 	</files>

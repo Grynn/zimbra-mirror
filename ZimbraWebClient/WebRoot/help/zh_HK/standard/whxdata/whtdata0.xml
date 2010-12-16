@@ -9,7 +9,7 @@
 </book>
 <book name="瀏覽郵箱" >
   <item name="瀏覽你的郵箱" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
-  <item name="在郵箱內瀏覽" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+  <item name="在「郵件」索引標籤中瀏覽" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
   <item name="郵件系統資料夾" url="Navigation_folders_and_tips/inbox_folder.htm" />
 </book>
 <book name="管理郵件 " >
@@ -18,7 +18,7 @@
   <item name="郵件分類" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="列印郵件" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="設定轉寄地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
-  <item name="還原刪除的郵件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="還原已刪除項目" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="清除郵件" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="讀取郵件" >
     <item name="讀取郵件" url="reading_mail/reading_mail.htm" />
@@ -33,9 +33,8 @@
   <item name="自動加入你的署名" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="自動完成地址功能" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="將檔案附加到郵件" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
-  <item name="附件檔案類型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="支援的附件類型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="檢查拼字" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="把郵件儲存為草稿" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="回覆和轉寄郵件" >
@@ -57,15 +56,17 @@
   <item name="清除記事簿" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="安排預約、會議和活動" >
-  <item name="籌劃會議" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="安排會議" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="建立定期重複的預約" url="Calendar/b_creating_recurring_appointments.htm" />
   <item name="刪除預約" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
 <book name="使用事項清單" >
-  <item name="關於事項" url="Tasks/About_Tasks.htm" />
+  <item name="使用事項清單" url="Tasks/About_Tasks.htm" />
   <item name="建立事項清單" url="Tasks/bc_Create_task_lists.htm" />
   <item name="改變事項" url="Tasks/Change_a_task.htm" />
+</book>
+<book name="在「公事包」中工作" >
+  <item name="公事包中檔案版本管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </book>
 <book name="分享資料夾" >
   <book name="分享記事簿" >
@@ -92,7 +93,7 @@
 </book>
 <book name="偏好設定" >
   <item name="偏好設定" url="Userspecific/b_Setting_your_Options.htm" />
-  <item name="新郵件通知" url="Userspecific/New_mail_notifications.htm" />
+  <item name="電郵通知至另一地址" url="Userspecific/New_mail_notifications.htm" />
   <item name="建立外出不在訊息" url="Userspecific/vacation_message.htm" />
   <item name="訂閱 RSS/ATOM feed" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>

@@ -1,41 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="記事簿內的管理員角色" >
-  <topic name="對分享記事簿的管理員權限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-</key>
-<key name="記事簿存取權限" >
-  <topic name="記事簿存取權限" url="Calendar/Delegating_Calendar_Access.htm" />
-</key>
-<key name="記事簿清單視窗" >
-  <topic name="記事簿清單視窗" url="Calendar/Calendar_List_View.htm" />
-</key>
-<key name="記事簿視窗" >
-  <topic name="記事簿清單視窗" url="Calendar/Calendar_List_View.htm" />
-  <topic name="記事簿視窗" url="Calendar/Calendar_Views.htm" />
-  <topic name="關於 Zimbra 記事簿" url="Calendar/About_Calendar.htm" />
-</key>
-<key name="記事簿，事項" >
-  <topic name="安排全天活動" url="Calendar/Scheduling_All_Day_events.htm" />
-</key>
-<key name="記事簿，允許存取" >
-  <topic name="記事簿存取權限" url="Calendar/Delegating_Calendar_Access.htm" />
-</key>
-<key name="記事簿，允許邀請許可" >
-  <topic name="確定誰可邀請你參加會議" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
-</key>
-<key name="記事簿，分享管理員權限" >
-  <topic name="對分享記事簿的管理員權限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-</key>
-<key name="記事簿，列印" >
-  <topic name="列印記事簿" url="Calendar/Printing_a_calendar.htm" />
-</key>
-<key name="記事簿，遠端" >
-  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="記事簿，閑/忙時排除" >
-  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
 <key name="記事簿，閒/忙" >
   <topic name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
@@ -77,11 +42,17 @@
 <key name="轉寄" >
   <topic name="轉寄郵件" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
+<key name="轉寄記事簿邀請" >
+  <topic name="修改記事簿上的會議" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
 <key name="轉寄郵件" >
   <topic name="設定轉寄地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
 <key name="轉寄電郵地址" >
   <topic name="設定用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="轉寄預約" >
+  <topic name="轉寄預約" url="Calendar/Forwarding_an_appointment.htm" />
 </key>
 <key name="轉寄，包括標題資訊" >
   <topic name="設定寫信視窗的偏好設定" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
@@ -116,9 +87,6 @@
 </key>
 <key name="過濾郵件" >
   <topic name="過濾郵件" url="filters/filtering_your_messages.htm" />
-</key>
-<key name="遠端記事簿" >
-  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="選單，右鍵點擊" >
   <topic name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
@@ -173,24 +141,21 @@
   <topic name="請求回執" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
 <key name="郵箱身份" >
+  <topic name="建立身份" url="Userspecific/Creating_Personas.htm" />
   <topic name="設定用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
   <topic name="郵箱身份" url="Userspecific/Mail_Identities.htm" />
-  <topic name="建立身份" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="重新命名公事包中的檔案" >
   <topic name="在公事包中使用檔案" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
+<key name="重新建立預約" >
+  <topic name="透過現有預約，建立預約" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+</key>
 <key name="開啟公事包中的檔案" >
   <topic name="在公事包中使用檔案" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
-<key name="開始 IM 聊天" >
-  <topic name="開始 IM 聊天" url="instant_messaging/Starting_an_IM_chat.htm" />
-</key>
 <key name="閒/忙" >
   <topic name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
-</key>
-<key name="閒/忙排除記事簿" >
-  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="閒/忙，分享" >
   <topic name="將你的空閒/忙碌狀態傳送給其他人" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
@@ -198,12 +163,9 @@
 <key name="閱讀窗格視窗" >
   <topic name="管理電子郵件視窗" url="conversations/conversation_list_view.htm" />
 </key>
-<key name="閱讀窗格，視窗" >
-  <topic name="Zimbra 網路用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
 <key name="閱讀窗格，開關" >
-  <topic name="在「讀取」窗格中讀取郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
   <topic name="管理電子郵件視窗" url="conversations/conversation_list_view.htm" />
+  <topic name="在「讀取」窗格中讀取郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="關閉 Zimlet" >
   <topic name="管理 Zimlet" url="Zimlets/Managing_your_Zimlets.htm" />
@@ -223,7 +185,7 @@
 <key name="電郵通知" >
   <topic name="設定桌面提示" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
-<key name="頁面，文件" >
+<key name="頁面，在公事包中建立" >
   <topic name="建立新頁面" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="預約" >

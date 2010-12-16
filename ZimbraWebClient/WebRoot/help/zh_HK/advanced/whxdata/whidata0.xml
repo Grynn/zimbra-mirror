@@ -23,27 +23,12 @@
 <key name="ics 附件，儲存" >
   <topic name="回覆邀請函" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
-<key name="IM" >
-  <topic name="即時通信基本篇" url="instant_messaging/Instant_Messaging_Basics.htm" />
-</key>
-<key name="IM 中的好友" >
-  <topic name="存取即時通信" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
-<key name="IM 好友" >
-  <topic name="存取即時通信" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
-<key name="IM 通知" >
-  <topic name="設定桌面提示" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
 <key name="IMAP 地址，加入" >
   <topic name="新增 POP 帳戶" url="Userspecific/Adding_POP_accounts.htm" />
   <topic name="郵箱身份" url="Userspecific/Mail_Identities.htm" />
 </key>
 <key name="IMAP 帳戶" >
   <topic name="管理 POP 帳戶" url="Userspecific/Managing_your_POP_Accounts.htm" />
-</key>
-<key name="IM，使用其他用戶端" >
-  <topic name="登入其他 IM 用戶端" url="instant_messaging/Log_into_other_IM_clients.htm" />
 </key>
 <key name="POP 地址，加入" >
   <topic name="郵箱身份" url="Userspecific/Mail_Identities.htm" />
@@ -60,7 +45,7 @@
 <key name="QuickAdd" >
   <topic name="使用 QuickAdd 建立預約" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
-<key name="Rich text 編輯器文件頁" >
+<key name="rich text 編輯器" >
   <topic name="使用 Rich text 編輯器" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="RSS" >
@@ -114,6 +99,9 @@
 </key>
 <key name="使用標記" >
   <topic name="用標記分類郵件" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="來自記事簿的回覆" >
+  <topic name="來自記事簿上的預約的回覆" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
 </key>
 <key name="修改分享的事項清單" >
   <topic name="分享你的「事項」清單" url="Tasks/Share_your_Task_folder.htm" />
@@ -233,9 +221,6 @@
 <key name="刪除聯絡人" >
   <topic name="刪除聯絡人" url="Contacts/deleting_a_contact.htm" />
 </key>
-<key name="加入" >
-  <topic name="將檔案附加到郵件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
 <key name="加入字至我的詞典" >
   <topic name="使用拼字檢查" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
@@ -248,8 +233,8 @@
 <key name="加入聯絡人" >
   <topic name="建立新聯絡人" url="Contacts/creating_a_new_contact.htm" />
 </key>
-<key name="加入聯絡人至 IM" >
-  <topic name="存取即時通信" url="instant_messaging/Accessing_Instant_Messaging.htm" />
+<key name="加入表格" >
+  <topic name="在文件中加入表格" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="助手" >
   <topic name="Zimbra 助手" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
@@ -291,9 +276,6 @@
 <key name="右鍵點擊" >
   <topic name="Zimbra 網路用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
-<key name="同步至其他記事簿" >
-  <topic name="建立新的記事簿" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
 <key name="命名資料夾" >
   <topic name="關於資料夾" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
@@ -305,6 +287,9 @@
   <key name="郵件" >
     <topic name="回覆郵件" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
+</key>
+<key name="回覆記事簿邀請" >
+  <topic name="修改記事簿上的會議" url="Calendar/editing_meetings_on_your_calendar.htm" />
 </key>
 <key name="回覆，顯示主題" >
   <topic name="設定寫信視窗的偏好設定" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
@@ -354,9 +339,6 @@
 <key name="安排房間或設備" >
   <topic name="安排資源" url="Calendar/Scheduling_Resources.htm" />
 </key>
-<key name="安排會議" >
-  <topic name="關於預約頁" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="定期重複的預約，改變" >
   <topic name="改變定期重複的預約" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
@@ -372,9 +354,6 @@
 </key>
 <key name="將預約標記為私人" >
   <topic name="將預約標記為私人" url="Calendar/Marking_an_appointment_as_private.htm" />
-</key>
-<key name="將預約註明私人" >
-  <topic name="關於預約頁面" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="尋找分享項" >
   <topic name="管理你分享的內容" url="Sharing/Managing_items_you_share.htm" />
@@ -395,6 +374,24 @@
 </key>
 <key name="小日曆內的星期" >
   <topic name="查看記事簿星期" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
+<key name="帳戶，匯入" >
+  <topic name="備份你的帳戶的內容" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="帳戶，匯出" >
+  <topic name="備份你的帳戶的內容" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="建立" >
+  <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <key name="新郵件" >
+    <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  </key>
+</key>
+<key name="建立新頁面" >
+  <topic name="建立新頁面" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="建立標記" >
+  <topic name="用標記分類郵件" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
 
 </indexdata>

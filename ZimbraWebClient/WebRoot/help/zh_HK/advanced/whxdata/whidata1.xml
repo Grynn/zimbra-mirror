@@ -1,21 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="帳戶，匯入" >
-  <topic name="備份你的帳戶的內容" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="帳戶，匯出" >
-  <topic name="備份你的帳戶的內容" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="建立" >
-  <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  <key name="新郵件" >
-    <topic name="編寫新郵件" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-  </key>
-</key>
-<key name="建立標記" >
-  <topic name="用標記分類郵件" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
-</key>
 <key name="強制出席" >
   <topic name="建立預約時，使用日程安排索引標籤" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
@@ -35,6 +20,7 @@
   <topic name="快速搜尋" url="Search/Quick_search.htm" />
 </key>
 <key name="快速鍵" >
+  <topic name="Zimbra 網路用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <topic name="ZWC 快速鍵" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
   <topic name="設定用戶偏好設定" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
@@ -50,9 +36,6 @@
 <key name="拼字檢查，設為強制" >
   <topic name="設定寫信視窗的偏好設定" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
-<key name="捷徑" >
-  <topic name="Zimbra 網路用戶端工作空間" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
 <key name="接收郵件" >
   <topic name="如何知道有新郵件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
@@ -64,9 +47,6 @@
 </key>
 <key name="提醒" >
   <topic name="設定桌面提示" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
-<key name="搜尋 Builder" >
-  <topic name="建立搜尋條件" url="Search/building_search_queries.htm" />
 </key>
 <key name="搜尋例項" >
   <topic name="搜尋例項" url="Search/search_examples.htm" />
@@ -120,15 +100,6 @@
 <key name="改變預約" >
   <topic name="改變定期重複的預約" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
-<key name="文件，Rich text 編輯器" >
-  <topic name="使用 Rich text 編輯器" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
-<key name="文件，加入表格" >
-  <topic name="加入表格到記事本頁面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="文件，建立新頁面" >
-  <topic name="建立新頁面" url="Documents/Create_a_new_page.htm" />
-</key>
 <key name="新郵件" >
   <topic name="如何知道有新郵件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
@@ -149,7 +120,6 @@
 </key>
 <key name="會議" >
   <topic name="關於預約、會議和活動" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <topic name="關於預約頁" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="會議提醒" >
   <topic name="設定桌面提示" url="Userspecific/Setting_up_desktop_alerts.htm" />
@@ -259,9 +229,6 @@
 <key name="私人記事簿事件" >
   <topic name="將預約標記為私人" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
-<key name="私人預約" >
-  <topic name="關於預約頁面" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="私人預約，分享詳細資料" >
   <topic name="授與記事簿存取權限" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
@@ -283,9 +250,6 @@
 <key name="空閒/忙碌，設定查看許可" >
   <topic name="設定你的空閒/忙碌資訊的查看許可" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
 </key>
-<key name="籌劃會議" >
-  <topic name="關於預約頁" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="編輯聯絡人資料" >
   <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
 </key>
@@ -300,9 +264,6 @@
 </key>
 <key name="署名，自動加入" >
   <topic name="建立身份" url="Userspecific/Creating_Personas.htm" />
-</key>
-<key name="聊天" >
-  <topic name="開始 IM 聊天" url="instant_messaging/Starting_an_IM_chat.htm" />
 </key>
 <key name="聯絡人" >
   <topic name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
@@ -354,8 +315,11 @@
 <key name="自訂資料夾" >
   <topic name="建立自訂資料夾" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
 </key>
-<key name="表格，加入文件頁面" >
-  <topic name="加入表格到記事本頁面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<key name="表格，加入文件" >
+  <topic name="在文件中加入表格" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="複製預約" >
+  <topic name="透過現有預約，建立預約" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 </key>
 <key name="規則，過濾" >
   <topic name="過濾郵件" url="filters/filtering_your_messages.htm" />
@@ -376,15 +340,50 @@
 <key name="訊息，休假" >
   <topic name="休假訊息" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="記事本頁面" >
-  <topic name="建立新頁面" url="Documents/Create_a_new_page.htm" />
-</key>
 <key name="記事簿、自訂工作週" >
   <topic name="記事簿視窗" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="記事簿偏好設定" >
   <topic name="設定記事簿偏好設定" url="Userspecific/Setting_your_Calendar_preferences.htm" />
   <topic name="確定誰可邀請你參加會議" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+</key>
+<key name="記事簿內的管理員角色" >
+  <topic name="對分享記事簿的管理員權限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+</key>
+<key name="記事簿存取權限" >
+  <topic name="記事簿存取權限" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="記事簿清單視窗" >
+  <topic name="記事簿清單視窗" url="Calendar/Calendar_List_View.htm" />
+</key>
+<key name="記事簿視窗" >
+  <topic name="記事簿清單視窗" url="Calendar/Calendar_List_View.htm" />
+  <topic name="記事簿視窗" url="Calendar/Calendar_Views.htm" />
+  <topic name="關於 Zimbra 記事簿" url="Calendar/About_Calendar.htm" />
+</key>
+<key name="記事簿，事項" >
+  <topic name="安排全天活動" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
+<key name="記事簿，允許存取" >
+  <topic name="記事簿存取權限" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="記事簿，允許邀請許可" >
+  <topic name="確定誰可邀請你參加會議" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+</key>
+<key name="記事簿，分享管理員權限" >
+  <topic name="對分享記事簿的管理員權限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+</key>
+<key name="記事簿，列印" >
+  <topic name="列印記事簿" url="Calendar/Printing_a_calendar.htm" />
+</key>
+<key name="記事簿，回覆自" >
+  <topic name="來自記事簿上的預約的回覆" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+</key>
+<key name="記事簿，回覆至" >
+  <topic name="修改記事簿上的會議" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
+<key name="記事簿，轉寄預約" >
+  <topic name="轉寄預約" url="Calendar/Forwarding_an_appointment.htm" />
 </key>
 
 </indexdata>

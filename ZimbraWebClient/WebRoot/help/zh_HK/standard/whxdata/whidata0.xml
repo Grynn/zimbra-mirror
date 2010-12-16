@@ -55,14 +55,8 @@
 <key name="字型" >
   <topic name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
-<key name="安排會議" >
-  <topic name="關於預約頁" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="將事項標記為完成" >
   <topic name="改變事項" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="將預約註明私人" >
-  <topic name="關於預約頁面" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="對話視窗" >
   <topic name="管理郵件的顯示方式" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
@@ -91,9 +85,6 @@
 <key name="新視窗，查看郵件" >
   <topic name="管理郵件的顯示方式" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
-<key name="會議" >
-  <topic name="關於預約頁" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="查看郵件" >
   <topic name="管理郵件的顯示方式" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
@@ -114,12 +105,6 @@
 </key>
 <key name="登出" >
   <topic name="登入和登出" url="Userspecific/logging_on_and_off.htm" />
-</key>
-<key name="私人預約" >
-  <topic name="關於預約頁面" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="籌劃會議" >
-  <topic name="關於預約頁" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="署名，自動加入" >
   <topic name="自動加入署名" url="Userspecific/b_Automatically_adding_your_signature.htm" />

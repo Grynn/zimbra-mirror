@@ -19,7 +19,7 @@
   <item name="右鍵選單" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="將操作項套用於多重選擇" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
   <item name="使用瀏覽器" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-  <item name="儲存工作" url="Userspecific/browser_session_handling.htm" />
+  <item name="儲存我的工作" url="Userspecific/browser_session_handling.htm" />
   <item name="查看「概況」窗格" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="郵件系統資料夾" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="清空垃圾桶" url="Navigation_folders_and_tips/trash_folder.htm" />
@@ -27,7 +27,7 @@
 </book>
 <book name="管理郵件 " >
   <item name="管理電子郵件視窗" url="conversations/conversation_list_view.htm" />
-  <item name="電郵偏好設定" url="Userspecific/Setting_your_mail_preferences.htm" />
+  <item name="郵件偏好設定" url="Userspecific/Setting_your_mail_preferences.htm" />
   <item name="郵件分類" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="自訂初始電子郵件頁面" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
   <item name="如何使用對話" url="conversations/conversations_can_span_folders.htm" />
@@ -35,14 +35,14 @@
   <item name="在資料夾間移動郵件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <item name="設定轉寄地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="訂閱 RSS/Atom feed" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-  <item name="管理帳戶內的不同身份" url="Userspecific/Mail_Identities.htm" />
+  <item name="管理帳戶身份" url="Userspecific/Mail_Identities.htm" />
   <item name="管理雜件箱" url="filters/Managing_your_Junk_Folder.htm" />
-  <item name="還原刪除的郵件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="還原已刪除項目" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="清除郵件" url="reading_mail/archiving_old_messages.htm" />
   <book name="讀取郵件" >
     <item name="讀取郵件" url="reading_mail/reading_mail.htm" />
-    <item name="在「讀取」窗格中讀取郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-    <item name="設定桌面提示" url="Userspecific/Setting_up_desktop_alerts.htm" />
+    <item name="在閱讀窗格中查看郵件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+    <item name="設定桌面提示和提醒" url="Userspecific/Setting_up_desktop_alerts.htm" />
     <item name="將郵件標記為未讀" url="reading_mail/marking_mail_as_unread.htm" />
     <item name="新郵件通知" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
     <item name="顯示 HTML 格式郵件" url="reading_mail/displaying_html_in_email_messages.htm" />
@@ -60,13 +60,13 @@
   <item name="編寫新郵件" url="Creating_Messages/Composing_a_new_mail_message.htm" />
   <item name="設定寫信視窗的偏好設定" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="電子郵件的組成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
-  <item name="自動加入你的署名" url="Userspecific/using_a_signature.htm" />
+  <item name="自動加入署名" url="Userspecific/using_a_signature.htm" />
   <item name="自動完成地址功能" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="設定日後傳送郵件" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="請求回執" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="將檔案附加到郵件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-  <item name="附件檔案類型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="加入副本：和密件：地址" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="支援的附件類型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="加入副本：和 Bcc（密件：）地址" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="使用 HTML 編輯器" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="使用拼字檢查" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="把郵件儲存為草稿" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -84,7 +84,7 @@
   <item name="使用公司通訊錄" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="自動加入聯絡人" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
   <item name="建立聯絡人群組清單" url="Contacts/Creating_Group_Contact_Lists.htm" />
-  <item name="匯入通訊錄" url="Contacts/Importing_Contacts.htm" />
+  <item name="匯入聯絡人" url="Contacts/Importing_Contacts.htm" />
   <item name="匯出通訊錄" url="Contacts/Exporting_Address_Books.htm" />
   <item name="列印聯絡人姓名或通訊錄" url="Contacts/Printing_Contacts.htm" />
   <item name="編輯聯絡人資料" url="Contacts/editing_a_contact.htm" />
@@ -105,29 +105,31 @@
   <item name="列印記事簿" url="Calendar/Printing_a_calendar.htm" />
 </book>
 <book name="安排預約、會議和活動" >
-  <item name="關於預約、會議和活動" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="籌劃會議" url="Calendar/About_the_Appointment_Page.htm" />
-  <item name="建立預約" url="Calendar/Scheduling_meetings.htm" />
-  <item name="建立預約時，使用日程安排索引標籤" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-  <item name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
-  <item name="設定你的空閒/忙碌資訊的查看許可" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
-  <item name="將你的空閒/忙碌狀態傳送給其他人" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
-  <item name="將預約標記為私人" url="Calendar/Marking_an_appointment_as_private.htm" />
-  <item name="安排資源" url="Calendar/Scheduling_Resources.htm" />
-  <item name="將郵件轉為會議請求" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
-  <item name="使用 QuickAdd 建立預約" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+  <item name="關於預約排程" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <item name="排程預約項" url="Calendar/Scheduling_meetings.htm" />
   <item name="安排全天活動" url="Calendar/Scheduling_All_Day_events.htm" />
   <item name="建立定期重複的預約" url="Calendar/Creating_recurring_appointments.htm" />
-  <item name="改變記事簿上的會議細節" url="Calendar/editing_meetings_on_your_calendar.htm" />
+  <item name="透過現有預約，建立預約" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+  <item name="將郵件和聯絡人轉為會議請求" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+  <item name="查看參會者的閒忙狀態及地點可用性" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+  <item name="使用 QuickAdd 建立預約" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
   <item name="確定誰可邀請你參加會議" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
   <item name="收到權限被拒絕的郵件" url="Calendar/Receiving_a_permission_denied_message.htm" />
+  <item name="設定你的空閒/忙碌資訊的查看許可" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+  <item name="將你的空閒/忙碌狀態傳送給其他人" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+  <item name="查看空閒/忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="將預約標記為私人" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <item name="安排資源" url="Calendar/Scheduling_Resources.htm" />
+  <item name="改變記事簿上的會議細節" url="Calendar/editing_meetings_on_your_calendar.htm" />
   <item name="回覆會議邀請函" url="Calendar/Responding_to_an_invitation.htm" />
+  <item name="轉寄預約" url="Calendar/Forwarding_an_appointment.htm" />
+  <item name="來自記事簿上的預約的回覆" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
   <item name="改動一個你組織的會議" url="Calendar/Changing_a_meeting_.htm" />
+  <item name="改變定期重複的預約" url="Calendar/Deleting_recurring_appointments.htm" />
   <item name="刪除預約" url="Calendar/Deleting_an_appointment.htm" />
-  <item name="刪除定期重複的預約" url="Calendar/Deleting_recurring_appointments.htm" />
 </book>
 <book name="使用事項清單" >
-  <item name="關於事項" url="Tasks/About_Tasks.htm" />
+  <item name="使用事項清單" url="Tasks/About_Tasks.htm" />
   <item name="建立事項清單" url="Tasks/Create_tasks_folders.htm" />
   <item name="加入事項" url="Tasks/Add_a_task.htm" />
   <item name="改變事項" url="Tasks/Change_a_task.htm" />
@@ -138,9 +140,10 @@
 <book name="在「公事包」中工作" >
   <item name="在「公事包」中工作" url="Briefcase/Working_in_Briefcase.htm" />
   <item name="在公事包中使用檔案" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-  <item name="建立新頁面" url="Documents/Create_a_new_page.htm" />
+  <item name="建立新文件" url="Documents/Create_a_new_page.htm" />
   <item name="使用 Rich text 編輯器" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="加入表格到記事本頁面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="透過「公事包」，在文件中加入表格" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="公事包中檔案版本管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
   <item name="從公事包傳送檔案" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </book>
 <book name="分享資料夾" >
@@ -151,35 +154,31 @@
   <item name="快速搜尋" url="Search/Quick_search.htm" />
   <item name="使用「進階」搜尋功能" url="Search/building_search_queries.htm" />
   <item name="搜尋郵件" url="Search/_search__vs.__search_for_.htm" />
-  <item name="搜尋收件人" url="Search/Searching_for_Recipients_.htm" />
-  <item name="在「搜尋」中使用 * 作為通配字元" url="Search/Using_Wildcard_in_Search.htm" />
+  <item name="搜尋傳送給特定收件人的郵件" url="Search/Searching_for_Recipients_.htm" />
+  <item name="在搜尋中使用 * 作為通配字元" url="Search/Using_Wildcard_in_Search.htm" />
   <item name="儲存搜尋條件" url="Search/saving_search_queries.htm" />
   <item name="查詢語言說明" url="Search/query_language_description.htm" />
-  <item name="And 及 Or 類型搜尋項" url="Search/and_vs_or_searches.htm" />
+  <item name="And 與 Or 類型搜尋" url="Search/and_vs_or_searches.htm" />
   <item name="搜尋例項" url="Search/search_examples.htm" />
 </book>
 <book name="使用標記和資料夾整理郵件" >
 <chunk name="使用標記和資料夾整理郵件" ref="whtdata2.xml" />
 </book>
 <book name="郵件過濾器使用方法" >
-  <item name="設定過濾規則" url="filters/how_filtering_works.htm" />
-  <item name="過濾郵件" url="filters/filtering_your_messages.htm" />
-  <item name="支援的過濾條件與操作" url="filters/filter_conditions_and_actions_supported.htm" />
-  <item name="用 CONTAINS、MATCHES 和 IS 選項過濾" url="Search/contains_vs_matches.htm" />
-  <item name="過濾器通配字元" url="filters/wildcards.htm" />
+<chunk name="郵件過濾器使用方法" ref="whtdata3.xml" />
 </book>
 <book name="偏好設定" >
-<chunk name="偏好設定" ref="whtdata3.xml" />
+<chunk name="偏好設定" ref="whtdata4.xml" />
 </book>
 <book name="管理你的流動通信裝置（僅限網路版）" >
   <item name="管理你的流動通信裝置" url="Userspecific/Managing_your_mobile_devices.htm" />
   <item name="如何清除你的流動通信裝置" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </book>
 <book name="分享你的帳戶資料夾" >
-<chunk name="分享你的帳戶資料夾" ref="whtdata4.xml" />
+<chunk name="分享你的帳戶資料夾" ref="whtdata5.xml" />
 </book>
 <book name="使用 Zimlet" >
-<chunk name="使用 Zimlet" ref="whtdata5.xml" />
+<chunk name="使用 Zimlet" ref="whtdata6.xml" />
 </book>
 
 </tocdata>

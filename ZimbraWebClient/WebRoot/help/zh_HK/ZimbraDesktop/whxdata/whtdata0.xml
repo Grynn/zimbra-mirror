@@ -80,7 +80,6 @@
 </book>
 <book name="預約排程" >
   <item name="關於預約排程" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="安排預約" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="排程預約項" url="Calendar/Scheduling_meetings.htm" />
   <item name="查看空閒忙碌時間" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="將預約標記為私人" url="Calendar/Marking_an_appointment_as_private.htm" />
