@@ -55,15 +55,6 @@
 <key name="Beschreibung der Sprache für Suchabfragen" >
   <topic name="Beschreibung der Sprache für Suchabfragen" url="Search/query_language_description.htm" />
 </key>
-<key name="Besprechung anlegen" >
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="Besprechung planen" >
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="Besprechungen" >
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="Druckaufgaben" >
   <topic name="Wissenswertes zu Aufgaben" url="Tasks/About_Tasks.htm" />
 </key>
@@ -152,9 +143,6 @@
 <key name="Ordner, RSS-Feed" >
   <topic name="RSS-/Atom-Feeds abonnieren " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
-<key name="Private Termine" >
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="RSS-Feed" >
   <topic name="RSS-/Atom-Feeds abonnieren " url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </key>
@@ -183,9 +171,6 @@
 <key name="Tastenkürzel" >
   <topic name="Tastenkürzel" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
 </key>
-<key name="Termin als privat markieren" >
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="Unterhaltungsansicht" >
   <topic name="Anzeige der Mails einrichten" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
@@ -206,7 +191,7 @@
 </key>
 <key name="Wiederherstellen" >
   <topic name="Gelöschte Mails wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
-  <key name="Gelöschte Mail" >
+  <key name="Gelöschte Mails" >
     <topic name="Gelöschte Mails wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
   </key>
 </key>

@@ -6,9 +6,9 @@
 <item name="Über eine Verteilerliste freigeben" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="Mail-Ordner freigeben" >
   <item name="Mail-Ordner freigeben" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-  <item name="Mailbox freigeben" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="Zugriff auf einen freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-  <item name="Zugriff auf freigegebenen Mailbox-Ordner annehmen" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+  <item name="Ihren Mail-Ordner freigeben" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+  <item name="Zugriff auf einen freigegebenen Ordner ändern" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="Zugriff auf freigegebenen Mail-Ordner annehmen" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="In freigegebenem Mail-Ordner arbeiten" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
 </book>
 <book name="Kalender freigeben" >

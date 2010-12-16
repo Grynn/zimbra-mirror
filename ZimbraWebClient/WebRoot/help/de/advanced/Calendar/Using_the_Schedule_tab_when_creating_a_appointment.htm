@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="generator" content="Adobe RoboHelp 8" />
-<title>Registerkarte „Planung“ bei der Erstellung eines Termins verwenden</title>
+<title>Verfügbarkeit von Teilnehmern und Orten im Vorschlagbereich anzeigen</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
 //<![CDATA[
@@ -54,7 +54,7 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addTocInfo("Termine, Besprechungen und Ereignisse planen\nRegisterkarte „Planung“ bei der Erstellung eines Termins verwenden");
+	addTocInfo("Termine, Besprechungen und Ereignisse planen\nVerfügbarkeit von Teilnehmern und Orten anzeigen");
 addButton("show",BTN_TEXT,"Anzeigen","","","","",0,0,"","","");
 
 	}
@@ -82,13 +82,32 @@ else
 
 //-->
 //]]></script>
-<h1>Registerkarte "Planung" bei der Erstellung eines Termins verwenden</h1>
-<p>Die Registerkarte "Planung" auf der Kalender-Terminseite kann verwendet werden, um eine Besprechungszeit so zu planen, dass die meisten Teilnehmer teilnehmen können. Jede Person, die Sie einladen, wird mit einer Zeitachse angezeigt, die die freien und die beschäftigten Zeiträume dieser Person anzeigt, &#160;sofern der Plan des Teilnehmers bekannt ist. Sie können den Tag und die Uhrzeiten einstellen, um schnell die jeweilige Verfügbarkeit zu sehen.</p>
-<p>Se können die Teilnahme der jeweiligen Person an der Besprechung als obligatorisch oder optional kennzeichnen. Klicken Sie auf das Symbol neben dem Namen, um die Option auszuwählen.</p>
-<p style="margin-left: 48px;"><img src="../cal_manatory_optionalpulldn.png" alt="cal_manatory_optionalpulldn.png" style="border: none;" width="196" height="177" border="0" /></p>
-<p style="margin-left: 48px;">&#160;</p>
-<p>Erforderlich ist die Standardeinstellung. Wenn Sie <span style="font-weight: bold;"><b>Optionaler Teilnehmer</b></span> auswählen, wechselt das Symbol zu <img src="../cal_optionalicon.png" alt="cal_optionalicon.png" style="border: none;" width="33" height="31" border="0" />.</p>
-<p>Das Kontrollhäkchen mit dem Fragezeichen zeigt, dass der Teilnehmer nicht auf die Einladung reagiert hat. Wenn er reagiert , wird die Spalte aktualisiert, um den Status des Teilnehmers anzuzeigen. </p>
+<h1>Verfügbarkeit von Teilnehmern und Orten im Vorschlagbereich anzeigen</h1>
+<p>Beim Planen von Besprechungen können Sie überprüfen, ob die Teilnehmer belegt oder frei sind. So können Sie einen günstigen Termin finden, an dem alle Teilnehmer zu der Besprechung kommen können. Wenn Sie Teilnehmer zu einem Termin hinzufügen, wird in einem Vorschlagbereich im Überblicksfenster die Verfügbarkeit der Teilnehmer und die Verfügbarkeit von mindestens einem Raum in halbstündigen Zeitfenstern angezeigt. </p>
+<p>Im Mini-Kalender wird die Verfügbarkeit der Teilnehmer farblich gekennzeichnet angezeigt.</p>
+<ul type="disc">
+	<li><p>Grün bedeutet, dass alle Teilnehmer und mindestens ein Raum für den betreffenden Tag verfügbar sind. </p></li>
+	<li><p>Orange bedeutet, dass nicht alle Teilnehmer verfügbar sind, dass aber mehr als die Hälfte der Teilnehmer teilnehmen können und dass mindestens ein Raum verfügbar ist. Sie können den Mauszeiger über das Datum bewegen, um die Namen von maximal 10 Personen anzuzeigen, die nicht verfügbar sind. 
+	 </p></li>
+	<li><p>Rot bedeutet, dass mehr als die Hälfte der Teilnehmer an den betreffenden Tagen nicht an der Besprechung teilnehmen kann. </p></li>
+</ul>
+<p>Die Zahl rechts ist die Zahl der Räume, die für diese Zeit zur Verfügung stehen. Sie können darauf klicken, um eine Liste mit vorgeschlagenen Räumen anzuzeigen und einen Raum auszuwählen.</p>
+<p>In dem nachstehenden Beispiel sind alle Teilnehmer den ganzen Monat verfügbar, außer am 18. Januar. Am 18. Januar sind weniger als die Hälfte der Teilnehmer verfügbar.</p>
+<p><img src="../schedular.png" alt="schedular.png" style="border: none;" width="199" height="301" border="0" /></p>
+<p>&#160;</p>
+<p>Sie können Einstellungen darüber festlegen, welche Art von Räumen in die vorgeschlagenen Zeiten aufgenommen werden sollten. Klicken Sie oben im Übersichtsfenster auf <span style="font-weight: bold;"><b>Terminvorschläge</b></span>, um das Dialogfeld <span style="font-weight: bold;"><b>Einstellungen für Vorschläge</b></span> zu öffnen. </p>
+<ul type="disc">
+	<li><p><span style="font-weight: bold;"><b>Name</b></span>,<span style="font-weight: bold;"><b>Mindestkapazität</b></span>,<span style="font-weight: bold;"><b> Beschreibung</b></span>,<span  	 style="font-weight: bold;"><b>Standort</b></span>, <span style="font-weight: bold;"><b>Gebäude, Stockwerk</b></span>. &#160;Sie können konkrete Angaben über die <a href="Scheduling_Resources.htm">Raumressource</a> machen, die Sie reservieren möchten, einen Namen, eine Kapazität und einen bestimmten Standort angeben. <span style="font-weight: bold;"><b>Hinweis:</b></span> &#160;Diese Informationen müssen für den Raum vorher konfiguriert worden sein, damit sie gesucht werden können.</p></li>
+	<li><p><span style="font-weight: bold;"><b>Einschließen</b></span>. Sie können angeben, welche Zeiten bei der Suche nach Zeiten, zu denen die Teilnehmer verfügbar sind, einbezogen werden sollen. 
+	 </p></li>
+	<ul type="disc">
+		<li><p><span style="font-weight: bold;"><b>Nur meine Arbeitszeiten</b></span>. Mit dieser Option wird nur nach Zeiten gesucht, die innerhalb Ihrer konfigurierten Arbeitszeiten liegen. Das sind die wöchentlichen Arbeitszeiten, die Sie in Ihren Kalendereinstellungen festgelegt haben.</p></li>
+		<li><p><span style="font-weight: bold;"><b>Arbeitszeiten aller Teilnehmer.</b></span> Bei der Suche nach einem Raum werden die Arbeitszeiten aller Teilnehmer berücksichtigt. <span style="font-weight: bold;"><b>Hinweis:</b></span> &#160;Wenn Sie Teilnehmer aus verschiedenen Zeitzonen einschließen, insbesondere solche, die um viele Zeitzonen entfernt sind, werden Sie niemals einen Ort finden, an dem sich alle Teilnehmer treffen können. &#160;In diesem Fall werden im Vorschlagbereich keine Raumressourcen angezeigt.</p></li>
+		<li><p><span style="font-weight: bold;"><b>Arbeitsfreie Zeiten</b></span>. Bei dieser Suche werden Zeiten geplant, die nicht als Arbeitszeiten gekennzeichnet sind, zum Beispiel Abende und Wochenenden.</p></li>
+	</ul>
+</ul>
+<p>&#160;</p>
+<p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

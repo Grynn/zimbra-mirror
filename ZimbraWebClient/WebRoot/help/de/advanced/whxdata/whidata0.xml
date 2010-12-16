@@ -62,9 +62,6 @@
 <key name="Anhänge" >
   <topic name="Dateianhänge öffnen" url="reading_mail/opening_file_attachments.htm" />
 </key>
-<key name="Anhängen" >
-  <topic name="Dateien an eine Mail anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
 <key name="Ansicht benutzerspezifisch einrichten" >
   <topic name="Ansicht benutzerspezifisch einrichten" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 </key>
@@ -94,6 +91,9 @@
 </key>
 <key name="Atom-Feed" >
   <topic name="RSS-/Atom-Feeds abonnieren" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="Auf eine Einladung für einen Kalender antworten" >
+  <topic name="Besprechungen in Ihrem Kalender bearbeiten" url="Calendar/editing_meetings_on_your_calendar.htm" />
 </key>
 <key name="Auf externe Accounts zugreifen" >
   <topic name="Auf externe Accounts zugreifen" url="Userspecific/Managing_your_POP_Accounts.htm" />
@@ -143,18 +143,11 @@
 <key name="Beschreibung der Sprache für Suchabfragen" >
   <topic name="Beschreibung der Sprache für Suchabfragen" url="Search/query_language_description.htm" />
 </key>
-<key name="Besprechung anlegen" >
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="Besprechung löschen" >
   <topic name="Termin löschen" url="Calendar/Deleting_an_appointment.htm" />
 </key>
-<key name="Besprechung planen" >
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="Besprechungen" >
   <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="Besprechungen abbrechen" >
   <topic name="Termin löschen" url="Calendar/Deleting_an_appointment.htm" />
@@ -170,9 +163,6 @@
 </key>
 <key name="Browser" >
   <topic name="In Zimbra mit Browsern arbeiten" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-</key>
-<key name="Chat" >
-  <topic name="Einen IM-Chat beginnen" url="instant_messaging/Starting_an_IM_chat.htm" />
 </key>
 <key name="Clienttyp" >
   <topic name="Allgemeine Einstellungen einrichten" url="Userspecific/Setting_your_general_preferences.htm" />
@@ -194,9 +184,6 @@
 </key>
 <key name="Dateien, anhängen" >
   <topic name="Dateien an eine Mail anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="Dokumente, Rich-Text-Editor" >
-  <topic name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="Drei-Fenster-Ansicht" >
   <topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
@@ -260,9 +247,6 @@
 <key name="Erstellen von Tags" >
   <topic name="Mails mit Tags klassifizieren" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
-<key name="Erweiterte Suche" >
-  <topic name="Suchabfragen erstellen" url="Search/building_search_queries.htm" />
-</key>
 <key name="Externe Accounts" >
   <topic name="POP-Accounts verwalten" url="Userspecific/Managing_your_POP_Accounts.htm" />
 </key>
@@ -305,6 +289,24 @@
 </key>
 <key name="Freigabe, Adressbuch" >
   <topic name="Freigabe des eigenen Adressbuchs" url="Contacts/Sharing_your_Address_Book.htm" />
+</key>
+<key name="Freigaben suchen" >
+  <topic name="Freigegebene Objekte verwalten" url="Sharing/Managing_items_you_share.htm" />
+</key>
+<key name="Freigegebene Aufgabenliste ändern" >
+  <topic name="Aufgabenliste freigeben" url="Tasks/Share_your_Task_folder.htm" />
+</key>
+<key name="Funktionen der Benutzeroberfläche" >
+  <topic name="Funktionen und Tastenkürzel der Benutzeroberfläche" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="Funktionen des Zimbra-Web-Clients" >
+  <topic name="Wissenswertes zur Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
+</key>
+<key name="GAL und Kontakte" >
+  <topic name="GAL und Kontakte" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="Ganztägiger Termin" >
+  <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
 </key>
 
 </indexdata>

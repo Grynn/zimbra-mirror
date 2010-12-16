@@ -9,16 +9,16 @@
 </book>
 <book name="In der Mailbox navigieren" >
   <item name="In der Mailbox navigieren" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
-  <item name="In Mails navigieren" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+  <item name="Auf der Registerkarte &quot;Mail&quot; navigieren" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
   <item name="Mail-Systemordner" url="Navigation_folders_and_tips/inbox_folder.htm" />
 </book>
 <book name="Mails verwalten " >
   <item name="Anzeige der Mails einrichten" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
   <item name="Empfang neuer Mails erkennen" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
-  <item name="Mails nach Kategorien sortieren" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="Mails kategorisieren" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Mails drucken" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="Adresse für Weiterleitung einrichten" url="Userspecific/Setting_a_Forwarding_Address.htm" />
-  <item name="Gelöschte Mails wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Gelöschte Objekte wiederherstellen" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Mails löschen" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="Mails lesen" >
     <item name="Mails lesen" url="reading_mail/reading_mail.htm" />
@@ -33,9 +33,8 @@
   <item name="Signatur automatisch einfügen" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Automatische Vervollständigung von Adressen" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Dateien an Mail anhängen" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
-  <item name="Dateitypen für Anhänge" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Als Anhänge unterstützte Dateitypen" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Im HTML-Editor arbeiten " url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="Rechtschreibung überprüfen" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Mails als Entwürfe speichern" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Mails beantworten und weiterleiten" >
@@ -50,22 +49,24 @@
 </book>
 <book name="Kalender verwalten" >
   <item name="Wissenswertes zum Kalender" url="Calendar/b_About_Calendar.htm" />
-  <item name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="Neue Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
   <item name="Kalender farbcodieren" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Mögliche Kalenderansichten" url="Calendar/Calendar_Views.htm" />
   <item name="iCalendars importieren" url="Calendar/Importing_iCalendars.htm" />
   <item name="Kalender bereinigen" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Termine, Besprechungen und Ereignisse planen" >
-  <item name="Besprechung planen" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Besprechung anlegen" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="Wiederkehrende Termine anlegen" url="Calendar/b_creating_recurring_appointments.htm" />
   <item name="Termin löschen" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
 <book name="Aufgabenlisten nutzen" >
-  <item name="Wissenswertes zu Aufgaben" url="Tasks/About_Tasks.htm" />
+  <item name="Aufgabenlisten nutzen" url="Tasks/About_Tasks.htm" />
   <item name="Aufgabenlisten anlegen" url="Tasks/bc_Create_task_lists.htm" />
   <item name="Aufgaben ändern" url="Tasks/Change_a_task.htm" />
+</book>
+<book name="Im Ordner &quot;Dateien&quot; arbeiten" >
+  <item name="Versionskontrolle der Dateien im Ordner &quot;Dateien&quot;" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </book>
 <book name="Ordner freigeben" >
   <book name="Kalender freigeben" >
@@ -92,7 +93,7 @@
 </book>
 <book name="Einstellungen einrichten" >
   <item name="Einstellungen einrichten" url="Userspecific/b_Setting_your_Options.htm" />
-  <item name="Benachrichtigung bei neuen Mails" url="Userspecific/New_mail_notifications.htm" />
+  <item name="Mailbenachrichtigung an eine andere Adresse" url="Userspecific/New_mail_notifications.htm" />
   <item name="Abwesenheitsmeldungen erstellen" url="Userspecific/vacation_message.htm" />
   <item name="RSS/ATOM-Feeds abonnieren" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>

@@ -1,25 +1,27 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-<item name="Besprechung planen" url="Calendar/About_the_Appointment_Page.htm" />
-<item name="Termin anlegen" url="Calendar/Scheduling_meetings.htm" />
-<item name="Registerkarte „Planung“ bei der Erstellung eines Termins verwenden" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-<item name="Frei-/Belegt-Zeiten anzeigen" url="Calendar/Seeing_free_busy_times.htm" />
-<item name="Berechtigungen zum Anzeigen von Frei-/Belegt-Informationen einstellen" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
-<item name="Anderen Nutzern Ihren Frei-/Belegt-Status senden" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
-<item name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
-<item name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
-<item name="Mails in Terminanfragen umwandeln" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
-<item name="Termin über Schnelleingabe anlegen" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<item name="Wissenswertes zum Planen von Terminen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<item name="Zeitplanung für Termine" url="Calendar/Scheduling_meetings.htm" />
 <item name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
 <item name="Wiederkehrende Termine anlegen" url="Calendar/Creating_recurring_appointments.htm" />
-<item name="Besprechungsdetails in Ihrem Kalender ändern" url="Calendar/editing_meetings_on_your_calendar.htm" />
+<item name="Termin anhand eines vorhandenen Termins anlegen" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+<item name="Mails und Kontakte in Terminanfragen umwandeln" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+<item name="Verfügbarkeit von Teilnehmern und Orten anzeigen" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+<item name="Termin über Schnelleingabe anlegen" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 <item name="Festlegen, wer zu Besprechungen einladen darf" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 <item name="Mail &quot;Berechtigung verweigert&quot;" url="Calendar/Receiving_a_permission_denied_message.htm" />
+<item name="Berechtigungen zum Anzeigen von Frei-/Belegt-Informationen einstellen" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+<item name="Anderen Nutzern Ihren Frei-/Belegt-Status senden" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+<item name="Frei-/Belegt-Zeiten anzeigen" url="Calendar/Seeing_free_busy_times.htm" />
+<item name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
+<item name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
+<item name="Besprechungsdetails in Ihrem Kalender ändern" url="Calendar/editing_meetings_on_your_calendar.htm" />
 <item name="Einladung zu einer Besprechung beantworten" url="Calendar/Responding_to_an_invitation.htm" />
+<item name="Termin weiterleiten" url="Calendar/Forwarding_an_appointment.htm" />
+<item name="Von einem Termin auf meinem Kalender antworten" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
 <item name="Eine selbstorganisierte Besprechung ändern" url="Calendar/Changing_a_meeting_.htm" />
+<item name="Wiederkehrende Termine ändern" url="Calendar/Deleting_recurring_appointments.htm" />
 <item name="Termin löschen" url="Calendar/Deleting_an_appointment.htm" />
-<item name="Wiederkehrende Termine löschen" url="Calendar/Deleting_recurring_appointments.htm" />
 
 </tocdata>

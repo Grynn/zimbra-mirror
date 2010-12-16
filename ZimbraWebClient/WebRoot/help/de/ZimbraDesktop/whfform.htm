@@ -172,18 +172,18 @@ if (window.gbWhForm)
 	gsMaxSearchTitle = "Search results per page" ;
 	gsMaxSearchTitle = "Suchergebnisse pro Seite";
 	setGoImage1("wht_go.gif");
-	setBackgroundcolor("#dfdfdf");
-	
+	setBackgroundcolor("#e9e9e9");
+	setBackground("nor_back_ii.gif");
 	setBtnType("image");
-	setGoImage1("toolbar_searchbtn.gif");
+	setGoImage1("nor_go.gif");
 	
 	
 	setGoText("Start");
-	setFont("Title", "Arial","10pt","Black","Normal","Normal","none");
+	setFont("Title", "Tahoma","8pt","White","Normal","Normal","none");
 	
 	
 	var strHiliteSearchSetting = "enable,yellow,black";
-	strHiliteSearchSetting = "enable,silver,black";
+	strHiliteSearchSetting = "disable,silver,black";
 	var searchSetting = strHiliteSearchSetting.match("^(.+),(.+),(.*)$");
 	if(searchSetting != null && searchSetting[1] == "enable")
 		setHighlightSearch(true);

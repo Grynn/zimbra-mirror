@@ -1,37 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="Nachrichten in einen Ordner verschieben" >
-  <topic name="Funktionsweise von Filtern" url="filters/how_filtering_works.htm" />
-</key>
-<key name="Navigation" >
-  <topic name="Ordner (Bereich)" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
-<key name="Navigation mit Tastatur" >
-  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-  <topic name="ZWC, Tastenkürzel" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-</key>
-<key name="Navigieren" >
-  <topic name="In der Benutzeroberfläche navigieren" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="Neue Mails abfragen" >
-  <topic name="Empfang neuer Mails erkennen" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
-</key>
-<key name="Neue Mails abrufen" >
-  <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
-</key>
-<key name="Neue Zimlets hochladen" >
-  <topic name="Zimlets verwalten" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
-<key name="Notizbücher, Neue Seiten anlegen" >
-  <topic name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="Notizbücher, Tabellen hinzufügen" >
-  <topic name="Tabelle in Notizbuchseite einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="Obligatorische Teilnahme" >
-  <topic name="Registerkarte „Planung“ bei der Erstellung eines Termins verwenden" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-</key>
 <key name="Öffentliche/Private Kalenderereignisse" >
   <topic name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
@@ -123,9 +92,6 @@
 <key name="POP-Adressen hinzufügen" >
   <topic name="Mail-Identitäten" url="Userspecific/Mail_Identities.htm" />
 </key>
-<key name="Private Termine" >
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="Private Termine, Freigabedetails" >
   <topic name="Kalenderzugriff delegieren" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
@@ -163,7 +129,7 @@
 <key name="Ressource" >
   <topic name="Ressourcen planen" url="Calendar/Scheduling_Resources.htm" />
 </key>
-<key name="Rich-Text-Editor für Notizen" >
+<key name="Rich-Text-Editor" >
   <topic name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="Rollen" >
@@ -193,7 +159,7 @@
 <key name="Seite freigeben" >
   <topic name="Freigegebene Objekte verwalten" url="Sharing/Managing_items_you_share.htm" />
 </key>
-<key name="Seiten in Notizbüchern" >
+<key name="Seiten, im Ordner &quot;Dateien&quot; anlegen" >
   <topic name="Neue Seite anlegen" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="Signatur" >
@@ -236,8 +202,11 @@
     <topic name="Mit der Suchfunktion arbeiten" url="Search/using_the_search_feature.htm" />
   </key>
 </key>
-<key name="Tabellen in Notizbuchseiten einfügen" >
-  <topic name="Tabelle in Notizbuchseite einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<key name="Tabellen hinzufügen" >
+  <topic name="Tabelle in ein Dokument einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="Tabellen, in ein Dokument einfügen" >
+  <topic name="Tabelle in ein Dokument einfügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="Tag mit der Maus ziehen" >
   <topic name="Mails mit Tags versehen" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
@@ -260,15 +229,14 @@
 </key>
 <key name="Tastenkürzel" >
   <topic name="Arbeitsbereich im Zimbra-Web-Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-  <topic name="ZWC, Tastenkürzel" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
   <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="ZWC, Tastenkürzel" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="Telefon, Wipe" >
   <topic name="Mobilgeräte verwalten" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
 <key name="Termin als privat markieren" >
   <topic name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
-  <topic name="Wissenswertes zur Terminseite" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="Termin ändern" >
   <topic name="Wiederkehrende Termine ändern" url="Calendar/Deleting_recurring_appointments.htm" />
@@ -276,11 +244,20 @@
 <key name="Termin aus Mail anlegen" >
   <topic name="Zimbra-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
+<key name="Termin weiterleiten" >
+  <topic name="Termin weiterleiten" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
 <key name="Termine" >
   <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
 <key name="Termine anlegen" >
   <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+</key>
+<key name="Termine erneut anlegen" >
+  <topic name="Termin anhand eines vorhandenen Termins anlegen" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+</key>
+<key name="Termine kopieren" >
+  <topic name="Termin anhand eines vorhandenen Termins anlegen" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 </key>
 <key name="Terminerinnerung" >
   <topic name="Benutzereinstellungen einrichten" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -306,6 +283,30 @@
 </key>
 <key name="Unzustellbare Mail" >
   <topic name="Unzustellbare Mail" url="Creating_Messages/undeliverable_mail.htm" />
+</key>
+<key name="URL in Signaturen" >
+  <topic name="Signaturen verwenden" url="Userspecific/using_a_signature.htm" />
+</key>
+<key name="Vergessen" >
+  <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="Verschieben" >
+  <topic name="Mails zwischen Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <key name="Mails in Ordnern" >
+    <topic name="Mails zwischen Ordnern verschieben" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  </key>
+</key>
+<key name="Versionen" >
+  <topic name="Versionskontrolle der Dateien im Ordner &quot;Dateien&quot;" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
+</key>
+<key name="Vervollständigung der Adresse in Mails" >
+  <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
+</key>
+<key name="Vom Kalender beantworten" >
+  <topic name="Von einem Termin auf meinem Kalender antworten" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+</key>
+<key name="Vorhandene Accounts hinzufügen" >
+  <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
 </key>
 
 </indexdata>

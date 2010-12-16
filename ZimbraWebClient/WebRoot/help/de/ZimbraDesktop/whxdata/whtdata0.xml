@@ -80,7 +80,6 @@
 </book>
 <book name="Termine planen" >
   <item name="Wissenswertes zum Planen von Terminen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="Termin planen" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Zeitplanung für Termine" url="Calendar/Scheduling_meetings.htm" />
   <item name="Frei-/Belegt-Zeiten anzeigen" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
@@ -129,17 +128,18 @@
   <item name="Aufgaben sortieren" url="Tasks/Sorting_tasks_.htm" />
 </book>
 <book name="Ordner freigeben (nur Zimbra-Accounts)" >
-<chunk name="Ordner freigeben (nur Zimbra-Accounts)" ref="whtdata1.xml" />
+  <item name="Ihre Zimbra-Ordner freigeben" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
+  <item name="Ordner freigeben" url="Zdesktop/zd_Sharing_Folders_steps_.htm" />
+  <item name="Zugriff auf freigegebenen Mailbox-Ordner annehmen" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+  <item name="In einem freigegebenen Ordner arbeiten" url="Zdesktop/zd_working_in_a_shared_folder.htm" />
+  <item name="In freigegebenem Mail-Ordner arbeiten" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
+  <item name="Zugriff auf freigegebenen Ordner entziehen" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </book>
 <book name="Ordner &quot;Dateien&quot; nutzen" >
-  <item name="Im Ordner &quot;Dateien&quot; arbeiten" url="Briefcase/Working_in_Briefcase.htm" />
-  <item name="Neues Dokument erstellen " url="Documents/Create_a_new_page.htm" />
-  <item name="Im Rich-Text-Editor arbeiten" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="Einem Dokument eine Tabelle hinzufügen" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<chunk name="Ordner &quot;Dateien&quot; nutzen" ref="whtdata1.xml" />
 </book>
 <book name="Account-Inhalt verwalten" >
-  <item name="Mails archivieren" url="Zdesktop/Archiving_your_email_messages.htm" />
-  <item name="Account-Daten in einen anderen Account verschieben" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+<chunk name="Account-Inhalt verwalten" ref="whtdata2.xml" />
 </book>
 
 </tocdata>
