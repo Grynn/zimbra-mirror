@@ -75,9 +75,9 @@ import javax.xml.bind.annotation.XmlType;
 public class Folder {
 
     @XmlElements({
-        @XmlElement(name = "link", type = Mountpoint.class),
         @XmlElement(name = "search", type = SearchFolder.class),
-        @XmlElement(name = "folder")
+        @XmlElement(name = "folder"),
+        @XmlElement(name = "link", type = Mountpoint.class)
     })
     protected List<Folder> folderOrLinkOrSearch;
     protected Folder.Acl acl;
@@ -136,9 +136,9 @@ public class Folder {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link Mountpoint }
      * {@link SearchFolder }
      * {@link Folder }
+     * {@link Mountpoint }
      * 
      * 
      */

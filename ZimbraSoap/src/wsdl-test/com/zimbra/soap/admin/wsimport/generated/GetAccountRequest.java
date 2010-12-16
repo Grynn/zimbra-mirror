@@ -15,13 +15,12 @@ import javax.xml.bind.annotation.XmlType;
  * <pre>
  * &lt;complexType name="getAccountRequest">
  *   &lt;complexContent>
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
+ *     &lt;extension base="{urn:zimbraAdmin}attributeSelectorImpl">
  *       &lt;sequence>
  *         &lt;element name="account" type="{urn:zimbraAdmin}account" minOccurs="0"/>
  *       &lt;/sequence>
  *       &lt;attribute name="applyCos" use="required" type="{http://www.w3.org/2001/XMLSchema}boolean" />
- *       &lt;attribute name="attrs" type="{http://www.w3.org/2001/XMLSchema}string" />
- *     &lt;/restriction>
+ *     &lt;/extension>
  *   &lt;/complexContent>
  * &lt;/complexType>
  * </pre>
@@ -32,13 +31,13 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "getAccountRequest", propOrder = {
     "account"
 })
-public class GetAccountRequest {
+public class GetAccountRequest
+    extends AttributeSelectorImpl
+{
 
     protected Account account;
     @XmlAttribute(required = true)
     protected boolean applyCos;
-    @XmlAttribute
-    protected String attrs;
 
     /**
      * Gets the value of the account property.
@@ -78,30 +77,6 @@ public class GetAccountRequest {
      */
     public void setApplyCos(boolean value) {
         this.applyCos = value;
-    }
-
-    /**
-     * Gets the value of the attrs property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getAttrs() {
-        return attrs;
-    }
-
-    /**
-     * Sets the value of the attrs property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setAttrs(String value) {
-        this.attrs = value;
     }
 
 }
