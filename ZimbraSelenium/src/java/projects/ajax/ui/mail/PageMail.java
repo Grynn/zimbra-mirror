@@ -291,9 +291,19 @@ public class PageMail extends AbsAjaxPage {
 			}
 
 			locator = "//td[contains(@id, '__MOVE_left_icon')]";
+			
+			// Click it
+			this.zClick(locator);
+
 			page = new DialogMove(MyApplication);
 			
-			// FALL THROUGH
+			for(int i = 0; i < 10; i++) {
+				if ( ((DialogMove)page).zIsVisible() )
+					break;
+				SleepUtil.sleep(1000);
+			}
+			
+			return (page);
 			
 		} else if ( button == Button.B_PRINT ) {
 			

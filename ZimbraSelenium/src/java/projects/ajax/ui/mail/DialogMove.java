@@ -3,6 +3,8 @@
  */
 package projects.ajax.ui.mail;
 
+import projects.ajax.ui.AppAjaxClient;
+import framework.items.FolderItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsDialog;
 import framework.ui.Button;
@@ -19,6 +21,18 @@ public class DialogMove extends AbsDialog {
 
 	public static class Locators {
 	
+		// TODO:  See https://bugzilla.zimbra.com/show_bug.cgi?id=54173
+		public static final String zDialogId		= "ChooseFolderDialog";
+		
+		public static final String zTitleId	 		= "ChooseFolderDialog_title";
+
+		public static final String zDialogContentId	= "ChooseFolderDialog_content";
+
+		// TODO: Tree
+		public static final String zDialogInputId	= "ChooseFolderDialog_inputDivId";
+		public static final String zDialogInputLocator	= "//div[@id='"+ zDialogId +"']//div[@id='"+ zDialogInputId +"']/div/input";
+
+		public static final String zDialogButtonsId		= "ChooseFolderDialog_buttons";
 
 	}
 	
@@ -36,34 +50,132 @@ public class DialogMove extends AbsDialog {
 		return (this.getClass().getName());
 	}
 
+	public boolean zIsVisible() throws HarnessException {
+		logger.info(myPageName() + " zIsVisible()");
 
+		String locator = "//div[@id='"+ Locators.zDialogId +"']";
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			return (false); // Not even present
+		}
+		
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) ) {
+			return (false);	// Not visible per position
+		}
+	
+		// Yes, visible
+		logger.info(myPageName() + " zIsVisible() = true");
+		return (true);
+		
+	}
+	
+	
 	@Override
 	public void zClickButton(Button button) throws HarnessException {
-		throw new HarnessException("implement me!");		
+		logger.info(myPageName() + " zClickButton("+ button +")");
+
+		String locator = null;
+		
+		if ( button == Button.B_NEW ) {
+			
+			// TODO: L10N this		
+			locator = "//div[@id='"+ Locators.zDialogId +"']//div[@id='"+ Locators.zDialogButtonsId +"']//td[text()='New']";
+			throw new HarnessException("implement me!");
+
+		} else if ( button == Button.B_OK ) {
+			
+			// TODO: L10N this		
+			locator = "//div[@id='"+ Locators.zDialogId +"']//div[@id='"+ Locators.zDialogButtonsId +"']//td[text()='OK']";
+
+		} else if ( button == Button.B_CANCEL ) {
+			
+			// TODO: L10N this
+			locator = "//div[@id='"+ Locators.zDialogId +"']//div[@id='"+ Locators.zDialogButtonsId +"']//td[text()='Cancel']";
+
+		} else {
+			throw new HarnessException("Button "+ button +" not implemented");
+		}
+		
+		// Default behavior, click the locator
+		//
+		
+		// Make sure the locator was set
+		if ( locator == null ) {
+			throw new HarnessException("Button "+ button +" not implemented");
+		}
+		
+		// Make sure the locator exists
+		if ( !this.sIsElementPresent(locator) ) {
+			throw new HarnessException("Button "+ button +" locator "+ locator +" not present!");
+		}
+		
+		this.zClick(locator);
+		
 	}
 
 
 	@Override
 	public String zGetDisplayedText(String locator) throws HarnessException {
-		throw new HarnessException("implement me!");		
+		logger.info(myPageName() + " zGetDisplayedText("+ locator +")");
+		
+		if ( locator == null )
+			throw new HarnessException("locator was null");
+		
+		return (this.sGetText(locator));
 	}
 
+
+	/**
+	 * Click on the folder in the dialog tree
+	 * @param folder
+	 * @throws HarnessException
+	 */
+	public void zClickTreeFolder(FolderItem folder) throws HarnessException {
+		logger.info(myPageName() + " zClickTreeFolder("+ folder +")");
+		
+		if ( folder == null ) 
+			throw new HarnessException("folder must not be null");
+		
+		String locator = "//div[@id='"+ Locators.zDialogId + "']//td[@id='zti__ZmChooseFolderDialog_Mail__"+ folder.getId() +"_textCell']";
+
+		if ( !this.sIsElementPresent(locator) )
+			throw new HarnessException("unable to find folder in tree "+ locator);
+		
+		// For some reason, the text doesn't get entered on the first try
+		this.zClick(locator);
+		
+		// Is this sleep necessary?
+		SleepUtil.sleepSmall();
+		
+
+	}
 
 	/**
 	 * Enter text into the move message dialog folder name field
 	 * @param folder
 	 */
 	public void zEnterFolderName(String folder) throws HarnessException {
-		String locator = "//div[contains(@id, '_inputDivId')]";
-		if ( this.sIsElementPresent(locator) )
+		logger.info(myPageName() + " zEnterFolderName("+ folder +")");
+		
+		if ( folder == null ) 
+			throw new HarnessException("folder must not be null");
+		
+		String locator = Locators.zDialogInputLocator;
+
+		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("unable to find folder name field "+ locator);
 		
-		this.sType(locator, folder);
+		// For some reason, the text doesn't get entered on the first try
+		this.sFocus(locator);
+		this.zClick(locator);
+		((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeCharacters(folder);
+
+		// Is this sleep necessary?
 		SleepUtil.sleepSmall();
-		// TODO Auto-generated method stub
 		
 	}
 
+	
 
 
 }
