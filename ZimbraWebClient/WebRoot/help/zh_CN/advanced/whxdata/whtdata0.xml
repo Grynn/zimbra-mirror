@@ -19,7 +19,7 @@
   <item name="右键选单" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="将操作项应用于多重选择" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
   <item name="使用浏览器" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-  <item name="保存您的工作" url="Userspecific/browser_session_handling.htm" />
+  <item name="保存我的工作" url="Userspecific/browser_session_handling.htm" />
   <item name="查看窗格" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="邮件系统文件夹" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="清空“已删除邮件”文件夹" url="Navigation_folders_and_tips/trash_folder.htm" />
@@ -35,14 +35,14 @@
   <item name="在文件夹间移动邮件" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <item name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="订阅 RSS/Atom 源" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-  <item name="管理帐户内的不同身份" url="Userspecific/Mail_Identities.htm" />
+  <item name="管理您的帐户身份" url="Userspecific/Mail_Identities.htm" />
   <item name="管理垃圾邮件文件夹" url="filters/Managing_your_Junk_Folder.htm" />
-  <item name="还原删除的邮件" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="恢复已删除的项目" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="清除邮件" url="reading_mail/archiving_old_messages.htm" />
   <book name="阅读邮件" >
     <item name="阅读邮件" url="reading_mail/reading_mail.htm" />
-    <item name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-    <item name="设置桌面提示" url="Userspecific/Setting_up_desktop_alerts.htm" />
+    <item name="在阅读窗格中查看邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+    <item name="设置桌面提示和提醒" url="Userspecific/Setting_up_desktop_alerts.htm" />
     <item name="将邮件标记为未读" url="reading_mail/marking_mail_as_unread.htm" />
     <item name="新邮件提醒" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
     <item name="显示 HTML 格式邮件" url="reading_mail/displaying_html_in_email_messages.htm" />
@@ -60,13 +60,13 @@
   <item name="编写新邮件" url="Creating_Messages/Composing_a_new_mail_message.htm" />
   <item name="设置写信窗口的首选项" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="电子邮件的组成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
-  <item name="自动添签名" url="Userspecific/using_a_signature.htm" />
+  <item name="自动添加签名" url="Userspecific/using_a_signature.htm" />
   <item name="自动完成地址功能" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="安排将来发送的电子邮件" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="请求回执" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="将文件附加到邮件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-  <item name="附件文件类型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="添加“抄送”和“密送:”地址" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="支持的附件类型" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="添加“抄送:”和“密送:”地址" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="使用 HTML 编辑器" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="使用拼写检查" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="把邮件保存为草稿" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -84,7 +84,7 @@
   <item name="使用公司地址簿" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="自动添加联系人" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
   <item name="创建联系人组列表" url="Contacts/Creating_Group_Contact_Lists.htm" />
-  <item name="导入地址簿" url="Contacts/Importing_Contacts.htm" />
+  <item name="导入联系人" url="Contacts/Importing_Contacts.htm" />
   <item name="导出地址簿" url="Contacts/Exporting_Address_Books.htm" />
   <item name="打印联系人姓名或地址簿" url="Contacts/Printing_Contacts.htm" />
   <item name="编辑联系人信息" url="Contacts/editing_a_contact.htm" />
@@ -105,29 +105,31 @@
   <item name="打印行事历" url="Calendar/Printing_a_calendar.htm" />
 </book>
 <book name="安排约会、会议和活动事项" >
-  <item name="关于约会、会议和活动事项" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="筹划会议" url="Calendar/About_the_Appointment_Page.htm" />
-  <item name="创建约会" url="Calendar/Scheduling_meetings.htm" />
-  <item name="创建约会时使用“安排参会者”选项卡" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-  <item name="查看空闲忙碌时间" url="Calendar/Seeing_free_busy_times.htm" />
-  <item name="设置您的空闲/忙碌信息的查看权限" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
-  <item name="将您的空闲/忙碌状态发送给其他人" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
-  <item name="将约会标记为私人" url="Calendar/Marking_an_appointment_as_private.htm" />
-  <item name="安排资源" url="Calendar/Scheduling_Resources.htm" />
-  <item name="将邮件转为会议请求" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
-  <item name="使用 QuickAdd 创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+  <item name="关于安排约会" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <item name="安排约会" url="Calendar/Scheduling_meetings.htm" />
   <item name="安排全天活动" url="Calendar/Scheduling_All_Day_events.htm" />
   <item name="创建定期重复的约会" url="Calendar/Creating_recurring_appointments.htm" />
-  <item name="改变行事历上的会议细节" url="Calendar/editing_meetings_on_your_calendar.htm" />
+  <item name="从现有约会创建约会" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+  <item name="将邮件和联系人转为会议请求" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+  <item name="查看参会者和地点可用性" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+  <item name="使用 QuickAdd 创建约会" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
   <item name="确定谁可邀请您参加会议" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
   <item name="因权限不足而收到的被拒邮件" url="Calendar/Receiving_a_permission_denied_message.htm" />
+  <item name="设置您的空闲/忙碌信息的查看权限" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+  <item name="将您的空闲/忙碌状态发送给其他人" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+  <item name="查看空闲/忙碌时间" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="将约会标记为私人" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <item name="安排资源" url="Calendar/Scheduling_Resources.htm" />
+  <item name="改变行事历上的会议细节" url="Calendar/editing_meetings_on_your_calendar.htm" />
   <item name="回复会议邀请函" url="Calendar/Responding_to_an_invitation.htm" />
+  <item name="转发约会" url="Calendar/Forwarding_an_appointment.htm" />
+  <item name="从我的行事历上的约会中回复" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
   <item name="改动一个您组织的会议" url="Calendar/Changing_a_meeting_.htm" />
+  <item name="改变定期重复的约会" url="Calendar/Deleting_recurring_appointments.htm" />
   <item name="删除约会" url="Calendar/Deleting_an_appointment.htm" />
-  <item name="删除定期重复的约会" url="Calendar/Deleting_recurring_appointments.htm" />
 </book>
 <book name="使用任务列表" >
-  <item name="关于任务" url="Tasks/About_Tasks.htm" />
+  <item name="使用任务列表" url="Tasks/About_Tasks.htm" />
   <item name="创建任务列表" url="Tasks/Create_tasks_folders.htm" />
   <item name="添加任务" url="Tasks/Add_a_task.htm" />
   <item name="改变任务" url="Tasks/Change_a_task.htm" />
@@ -138,9 +140,10 @@
 <book name="在“公文包”中工作" >
   <item name="在“公文包”中工作" url="Briefcase/Working_in_Briefcase.htm" />
   <item name="在公文包中使用文件" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-  <item name="创建新页面" url="Documents/Create_a_new_page.htm" />
+  <item name="创建新文档" url="Documents/Create_a_new_page.htm" />
   <item name="使用 rich text 编辑器" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="添加表格到笔记本页面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="向公文包中的文档添加表格" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="公文包中文件的版本控制" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
   <item name="从公文包发送文件" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </book>
 <book name="共享文件夹" >
@@ -149,37 +152,33 @@
 <book name="搜索功能" >
   <item name="使用搜索功能" url="Search/using_the_search_feature.htm" />
   <item name="快速搜索" url="Search/Quick_search.htm" />
-  <item name="使用“高级”搜索功能" url="Search/building_search_queries.htm" />
+  <item name="使用高级搜索功能" url="Search/building_search_queries.htm" />
   <item name="搜索邮件" url="Search/_search__vs.__search_for_.htm" />
-  <item name="搜索收件人" url="Search/Searching_for_Recipients_.htm" />
+  <item name="搜索发送给特定收件人的邮件" url="Search/Searching_for_Recipients_.htm" />
   <item name="在搜索中使用 * 作为通配符" url="Search/Using_Wildcard_in_Search.htm" />
   <item name="保存搜索条件" url="Search/saving_search_queries.htm" />
   <item name="查询语言说明" url="Search/query_language_description.htm" />
-  <item name="And vs Or 类型搜索功能" url="Search/and_vs_or_searches.htm" />
+  <item name="And 及 Or 类型的搜索" url="Search/and_vs_or_searches.htm" />
   <item name="搜索实例" url="Search/search_examples.htm" />
 </book>
 <book name="使用标记和文件夹整理邮件" >
 <chunk name="使用标记和文件夹整理邮件" ref="whtdata2.xml" />
 </book>
 <book name="使用邮件过滤器" >
-  <item name="设置过滤规则" url="filters/how_filtering_works.htm" />
-  <item name="过滤邮件" url="filters/filtering_your_messages.htm" />
-  <item name="支持的过滤条件与操作" url="filters/filter_conditions_and_actions_supported.htm" />
-  <item name="通过 CONTAINS、MATCHES 和 IS 选项过滤" url="Search/contains_vs_matches.htm" />
-  <item name="过滤器通配符" url="filters/wildcards.htm" />
+<chunk name="使用邮件过滤器" ref="whtdata3.xml" />
 </book>
 <book name="设置首选项" >
-<chunk name="设置首选项" ref="whtdata3.xml" />
+<chunk name="设置首选项" ref="whtdata4.xml" />
 </book>
 <book name="管理您的移动通信设备（仅限网路版本）" >
   <item name="管理您的移动通信设备" url="Userspecific/Managing_your_mobile_devices.htm" />
   <item name="如何清除您的移动通信设备" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </book>
 <book name="保存您的帐户文件夹" >
-<chunk name="保存您的帐户文件夹" ref="whtdata4.xml" />
+<chunk name="保存您的帐户文件夹" ref="whtdata5.xml" />
 </book>
 <book name="使用 Zimlet" >
-<chunk name="使用 Zimlet" ref="whtdata5.xml" />
+<chunk name="使用 Zimlet" ref="whtdata6.xml" />
 </book>
 
 </tocdata>

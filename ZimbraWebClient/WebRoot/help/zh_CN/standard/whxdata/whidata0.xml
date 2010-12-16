@@ -19,9 +19,6 @@
 <key name="休假讯息" >
   <topic name="休假讯息" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="会议" >
-  <topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="会话视图" >
   <topic name="管理邮件的显示方式" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
@@ -55,14 +52,8 @@
 <key name="字体" >
   <topic name="使用 HTML 编辑器" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
-<key name="安排会议" >
-  <topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="将任务标记为完成" >
   <topic name="改变任务" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="将约会标记为私人" >
-  <topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="忘记" >
   <topic name="使用地址查询" url="Creating_Messages/Using_address_lookup.htm" />
@@ -123,12 +114,6 @@
 </key>
 <key name="电子邮件" >
   <topic name="电子邮件的组成部分" url="Creating_Messages/parts_of_an_email_message.htm" />
-</key>
-<key name="私人约会" >
-  <topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="筹划会议" >
-  <topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="签名，自动添加" >
   <topic name="自动添加签名" url="Userspecific/b_Automatically_adding_your_signature.htm" />

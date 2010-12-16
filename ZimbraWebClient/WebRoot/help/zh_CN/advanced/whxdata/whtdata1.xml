@@ -6,16 +6,16 @@
 <item name="共享发送名单" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="共享邮件文件夹" >
   <item name="共享邮件文件夹" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-  <item name="共享您的邮箱" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="撤销共享文件夹的访问权" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-  <item name="接受他人的共享邮箱邀请" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
+  <item name="共享您的邮箱文件夹" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+  <item name="编辑共享文件夹的访问权" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="接受他人的共享邮件文件夹邀请" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="在共享邮件文件夹中工作" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
 </book>
 <book name="共享行事历" >
   <item name="共享行事历" url="Calendar/Delegating_Calendar_Access.htm" />
   <item name="授予对共享行事历的管理员权限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-  <item name="授予对共享行事历的管理权限" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
-  <item name="接受对共享行事历的访问权限" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
+  <item name="授予对共享行事历的管理者权限" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
+  <item name="接受他人的共享行事历邀请" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
   <item name="拒绝行事历共享请求" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
 </book>
 <book name="共享地址簿" >
@@ -23,7 +23,7 @@
 </book>
 <book name="共享任务列表" >
   <item name="共享您的任务列表" url="Tasks/Share_your_Task_folder.htm" />
-  <item name="接受共享的任务列表" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
+  <item name="接受他人的共享任务列表邀请" url="Tasks/Responding_when_a_task_folder_is_assigned_to_you.htm" />
 </book>
 <book name="共享公文包" >
   <item name="共享您的公文包" url="Briefcase/Sharing_your_Briefcase.htm" />

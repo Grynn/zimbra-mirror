@@ -1,27 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="自定义文件夹" >
-  <topic name="创建自定义文件夹" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
-</key>
-<key name="自定义联系人字段" >
-  <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
-</key>
-<key name="行事历中的管理员角色" >
-  <topic name="对共享行事历的管理员权限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-</key>
-<key name="行事历的列表视图" >
-  <topic name="行事历列表视图" url="Calendar/Calendar_List_View.htm" />
-</key>
-<key name="行事历视图" >
-  <topic name="关于 Zimbra 行事历" url="Calendar/About_Calendar.htm" />
-  <topic name="行事历列表视图" url="Calendar/Calendar_List_View.htm" />
-  <topic name="行事历视图" url="Calendar/Calendar_Views.htm" />
-</key>
-<key name="行事历首选项" >
-  <topic name="设置行事历首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <topic name="确定谁可邀请您参加会议" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
-</key>
 <key name="行事历，与管理员角色共享" >
   <topic name="对共享行事历的管理员权限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
 </key>
@@ -46,8 +25,8 @@
 <key name="行事历，访问权限" >
   <topic name="授权他人访问行事历" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
-<key name="表格，添加到文档页面" >
-  <topic name="添加表格到笔记本页面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<key name="表格, 向文档中添加" >
+  <topic name="向文档中添加表格" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="规则，过滤" >
   <topic name="过滤邮件" url="filters/filtering_your_messages.htm" />
@@ -89,6 +68,12 @@
 </key>
 <key name="转发电邮地址" >
   <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+</key>
+<key name="转发约会" >
+  <topic name="转发约会" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
+<key name="转发行事历邀请" >
+  <topic name="编辑行事历上的会议" url="Calendar/editing_meetings_on_your_calendar.htm" />
 </key>
 <key name="转发邮件" >
   <topic name="设置转发地址" url="Userspecific/Setting_a_Forwarding_Address.htm" />
@@ -170,15 +155,15 @@
   <topic name="请求回执" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
 <key name="邮箱身份" >
-  <topic name="创建身份" url="Userspecific/Creating_Personas.htm" />
   <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
   <topic name="邮箱身份" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="重发" >
-  <topic name="右键选单" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="创建身份" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="重命名公文包中的文件" >
   <topic name="在公文包中使用文件" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+</key>
+<key name="重新创建约会" >
+  <topic name="从现有约会创建约会" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 </key>
 <key name="阅读窗格" >
   <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
@@ -188,12 +173,7 @@
 </key>
 <key name="阅读窗格，关闭/开启" >
   <topic name="管理电子邮件视图" url="conversations/conversation_list_view.htm" />
-</key>
-<key name="阅读窗格，开启或关闭" >
   <topic name="在阅读窗格中阅读邮件" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="阅读窗格，视图" >
-  <topic name="Zimbra Web Client 工作空间" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="阻止垃圾邮件" >
   <topic name="过滤垃圾邮件" url="filters/Filtering_Junk_Mail.htm" />
@@ -201,10 +181,7 @@
 <key name="附件" >
   <topic name="打开附加文件" url="reading_mail/opening_file_attachments.htm" />
 </key>
-<key name="附加" >
-  <topic name="将文件附加到邮件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="页面，文档" >
+<key name="页面, 在公文包中创建" >
   <topic name="创建新页面" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="预览窗格，开关" >

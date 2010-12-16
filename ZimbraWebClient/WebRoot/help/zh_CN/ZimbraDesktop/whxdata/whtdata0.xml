@@ -8,7 +8,7 @@
 </book>
 <book name="设置 Zimbra Desktop" >
   <item name="设置 Zimbra Web Client 帐户" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
-  <item name="设置 Yahoo! Mail 和 Gmail 帐户" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
+  <item name="设置 Yahoo!Mail 和 Gmail 帐户" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
   <item name="设置 POP/IMAP 帐户" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
   <item name="同步您的帐户" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
   <item name="关闭自动同步" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
@@ -80,7 +80,6 @@
 </book>
 <book name="安排约会" >
   <item name="关于安排约会" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="制定约会计划" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="安排约会" url="Calendar/Scheduling_meetings.htm" />
   <item name="查看空闲/忙碌时间" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="将约会标记为私人" url="Calendar/Marking_an_appointment_as_private.htm" />

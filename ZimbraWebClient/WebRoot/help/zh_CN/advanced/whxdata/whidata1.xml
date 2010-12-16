@@ -1,15 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="帐户，导入" >
-  <topic name="备份您的账户的内容。" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="常规选项卡" >
-  <topic name="设置常规首选项" url="Userspecific/Setting_your_general_preferences.htm" />
-</key>
-<key name="开始 IM 聊天" >
-  <topic name="开始 IM 聊天" url="instant_messaging/Starting_an_IM_chat.htm" />
-</key>
 <key name="强制出席" >
   <topic name="创建约会时使用“安排参会者”选项卡" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
@@ -20,9 +11,9 @@
   <topic name="查看空闲忙碌时间" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
 <key name="快捷键" >
-  <topic name="Zimbra Web Client 工作空间" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <topic name="ZWC 快捷键" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
   <topic name="设置用户首选项" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Zimbra Web Client 工作空间" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="快速搜索" >
   <topic name="快速搜索" url="Search/Quick_search.htm" />
@@ -84,7 +75,6 @@
 </key>
 <key name="搜索功能" >
   <topic name="使用搜索功能" url="Search/using_the_search_feature.htm" />
-  <topic name="建立搜索条件" url="Search/building_search_queries.htm" />
   <key name="使用" >
     <topic name="使用搜索功能" url="Search/using_the_search_feature.htm" />
   </key>
@@ -144,18 +134,6 @@
 </key>
 <key name="文件，附加" >
   <topic name="将文件附加到邮件" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="文档页面的 Rich text 编辑器" >
-  <topic name="使用 rich text 编辑器" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
-<key name="文档，Rich text 编辑器" >
-  <topic name="使用 rich text 编辑器" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
-<key name="文档，创建新页面" >
-  <topic name="创建新页面" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="文档，添加表格" >
-  <topic name="添加表格到笔记本页面" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="新邮件" >
   <topic name="如何知道有新邮件" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
@@ -237,6 +215,9 @@
 <key name="添加联系人" >
   <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
 </key>
+<key name="添加表格" >
+  <topic name="向文档中添加表格" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
 <key name="清除移动通信" >
   <topic name="如何清除您的移动通信设备" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
 </key>
@@ -276,9 +257,6 @@
 <key name="白名单" >
   <topic name="过滤垃圾邮件" url="filters/Filtering_Junk_Mail.htm" />
 </key>
-<key name="私人约会" >
-  <topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="私人约会，共享细节" >
   <topic name="Delegating_Calendar_Access" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
@@ -306,12 +284,6 @@
 <key name="窗格" >
   <topic name="文件夹区" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
-<key name="笔记本页面" >
-  <topic name="创建新页面" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="筹划会议" >
-  <topic name="关于约会页面" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="签出" >
   <topic name="在公文包中使用文件" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
@@ -338,9 +310,6 @@
 </key>
 <key name="编辑邮件夹共享权限" >
   <topic name="撤销共享文件夹的访问权" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
-</key>
-<key name="聊天" >
-  <topic name="开始 IM 聊天" url="instant_messaging/Starting_an_IM_chat.htm" />
 </key>
 <key name="联系人" >
   <topic name="编辑联系人资料" url="Contacts/editing_a_contact.htm" />
@@ -382,6 +351,34 @@
 </key>
 <key name="自定义工作周" >
   <topic name="行事历视图" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="自定义文件夹" >
+  <topic name="创建自定义文件夹" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+</key>
+<key name="自定义联系人字段" >
+  <topic name="创建新联系人" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="行事历, 回复" >
+  <topic name="从我的行事历上的约会中回复" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+  <topic name="编辑行事历上的会议" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
+<key name="行事历, 转发约会" >
+  <topic name="转发约会" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
+<key name="行事历中的管理员角色" >
+  <topic name="对共享行事历的管理员权限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+</key>
+<key name="行事历的列表视图" >
+  <topic name="行事历列表视图" url="Calendar/Calendar_List_View.htm" />
+</key>
+<key name="行事历视图" >
+  <topic name="关于 Zimbra 行事历" url="Calendar/About_Calendar.htm" />
+  <topic name="行事历列表视图" url="Calendar/Calendar_List_View.htm" />
+  <topic name="行事历视图" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="行事历首选项" >
+  <topic name="设置行事历首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="确定谁可邀请您参加会议" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 
 </indexdata>
