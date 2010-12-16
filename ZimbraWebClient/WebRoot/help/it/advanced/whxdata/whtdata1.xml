@@ -1,25 +1,27 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
-<item name="Appuntamenti, riunioni ed eventi" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-<item name="Organizzazione di una riunione" url="Calendar/About_the_Appointment_Page.htm" />
-<item name="Creazione di un appuntamento" url="Calendar/Scheduling_meetings.htm" />
-<item name="Uso della scheda Pianificazione durante la creazione di un appuntamento" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-<item name="Visualizzazione degli orari liberi/occupati" url="Calendar/Seeing_free_busy_times.htm" />
-<item name="Impostazione delle autorizzazioni per la visualizzazione dei tuoi orari liberi/occupati" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
-<item name="Invio dello stato libero/occupato ad altri" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
-<item name="Segnare un appuntamento come privato" url="Calendar/Marking_an_appointment_as_private.htm" />
-<item name="Pianificazione delle risorse" url="Calendar/Scheduling_Resources.htm" />
-<item name="Trasformazione di un messaggio in una richiesta di riunione" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
-<item name="Uso di Aggiunta rapida per creare un appuntamento" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+<item name="Informazioni sulla pianificazione di appuntamenti" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+<item name="Pianificazione di un appuntamento" url="Calendar/Scheduling_meetings.htm" />
 <item name="Pianificazione di Giornate intere" url="Calendar/Scheduling_All_Day_events.htm" />
 <item name="Creazione di appuntamenti ricorrenti" url="Calendar/Creating_recurring_appointments.htm" />
-<item name="Modifica dei dettagli delle riunioni in agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
+<item name="Creazione di un nuovo appuntamento da uno esistente" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+<item name="Trasformazione di un messaggio e dei contatti in richieste di riunione" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+<item name="Visualizzazione della disponibilità di partecipanti e luoghi" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+<item name="Uso di Aggiunta rapida per creare un appuntamento" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 <item name="Identificazione di chi può invitarti alle riunioni" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 <item name="Ricezione di un messaggio di autorizzazione negata" url="Calendar/Receiving_a_permission_denied_message.htm" />
+<item name="Impostazione delle autorizzazioni per la visualizzazione dei tuoi orari liberi/occupati" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+<item name="Invio dello stato libero/occupato ad altri" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+<item name="Visualizzazione degli orari liberi/occupati" url="Calendar/Seeing_free_busy_times.htm" />
+<item name="Segnare un appuntamento come privato" url="Calendar/Marking_an_appointment_as_private.htm" />
+<item name="Pianificazione delle risorse" url="Calendar/Scheduling_Resources.htm" />
+<item name="Modifica dei dettagli delle riunioni in agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
 <item name="Risposta a un invito a una riunione" url="Calendar/Responding_to_an_invitation.htm" />
+<item name="Inoltro di un appuntamento" url="Calendar/Forwarding_an_appointment.htm" />
+<item name="Risposta da un appuntamento nell'Agenda" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
 <item name="Modifica di una riunione organizzata da te" url="Calendar/Changing_a_meeting_.htm" />
+<item name="Modifica di appuntamenti ricorrenti" url="Calendar/Deleting_recurring_appointments.htm" />
 <item name="Eliminazione di un appuntamento" url="Calendar/Deleting_an_appointment.htm" />
-<item name="Eliminazione di appuntamenti ricorrenti" url="Calendar/Deleting_recurring_appointments.htm" />
 
 </tocdata>

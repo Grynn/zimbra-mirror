@@ -3,9 +3,10 @@
 <tocdata>
 <item name="Uso della Valigetta" url="Briefcase/Working_in_Briefcase.htm" />
 <item name="Uso dei file nella Valigetta" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-<item name="Creazione di una nuova pagina" url="Documents/Create_a_new_page.htm" />
+<item name="Creazione di un nuovo documento" url="Documents/Create_a_new_page.htm" />
 <item name="Uso dell'editor Rich Text" url="Documents/Using_the_rich_text_editor.htm" />
-<item name="Aggiunta di una tabella a una pagina del Blocco Note" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<item name="Aggiunta di una tabella a un documento nella Valigetta" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<item name="Controllo delle versioni dei file nella Valigetta" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 <item name="Invio di file dalla Valigetta" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 
 </tocdata>

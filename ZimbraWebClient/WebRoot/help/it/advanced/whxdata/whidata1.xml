@@ -1,19 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="dizionario, aggiunta di parole a" >
-  <topic name="Uso del controllo ortografico" url="Creating_Messages/Using_Spell_Check.htm" />
-</key>
-<key name="Documenti, aggiunta di tabelle" >
-  <topic name="Aggiunta di una tabella a una pagina del Blocco Note" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="Documenti, creazione di nuove pagine" >
-  <topic name="Creazione di una nuova pagina" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="Documenti, editor Rich Text" >
-  <topic name="Uso dell'editor Rich Text" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
-<key name="editor Rich Text per pagine di Documenti" >
+<key name="editor Rich Text" >
   <topic name="Uso dell'editor Rich Text" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="elenchi di distribuzione personali" >
@@ -116,9 +104,6 @@
 <key name="GAL e Contatti, differenze" >
   <topic name="GAL e Contatti, differenze" url="Contacts/gal_vs_contacts.htm" />
 </key>
-<key name="Generatore delle ricerche" >
-  <topic name="Uso della funzione di ricerca avanzata" url="Search/building_search_queries.htm" />
-</key>
 <key name="HTML" >
   <topic name="Visualizzazione HTML dei messaggi email" url="reading_mail/displaying_html_in_email_messages.htm" />
   <topic name="Uso dell'editor HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -130,18 +115,12 @@
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="identità di posta" >
-  <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
   <topic name="Creazione di personalità" url="Userspecific/Creating_Personas.htm" />
+  <topic name="Identità di posta" url="Userspecific/Mail_Identities.htm" />
   <topic name="Impostazione delle preferenze utente" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="identità di posta usata nella composizione del messaggio" >
   <topic name="Composizione di un nuovo messaggio email" url="Creating_Messages/Creating_a_new_mail_message.htm" />
-</key>
-<key name="IM" >
-  <topic name="Concetti di base sulla messaggeria istantanea" url="instant_messaging/Instant_Messaging_Basics.htm" />
-</key>
-<key name="IM, uso di altri client" >
-  <topic name="Accesso ad altri client IM " url="instant_messaging/Log_into_other_IM_clients.htm" />
 </key>
 <key name="immagini nella firma" >
   <topic name="Uso di una firma" url="Userspecific/using_a_signature.htm" />
@@ -194,6 +173,12 @@
 </key>
 <key name="inoltro dei messaggi" >
   <topic name="Impostazione di un indirizzo di inoltro" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="inoltro di un appuntamento" >
+  <topic name="Inoltro di un appuntamento" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
+<key name="inoltro di un invito dell'agenda" >
+  <topic name="Modifica delle riunioni in agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
 </key>
 <key name="inoltro di un messaggio come allegato" >
   <topic name="Impostazioni delle preferenze per la finestra di composizione delle mail" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
@@ -295,6 +280,22 @@
 </key>
 <key name="navigazione, tastiera" >
   <topic name="Tasti di scelta rapida della tastiera di ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+</key>
+<key name="notifica email" >
+  <topic name="Impostazione di avvisi sul desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
+  <topic name="Nuove notifiche email" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="numero settimana" >
+  <topic name="Visualizzazione numeri settimana dell'Agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+</key>
+<key name="nuova creazione di appuntamenti" >
+  <topic name="Creazione di un nuovo appuntamento da uno esistente" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+</key>
+<key name="nuovi messaggi" >
+  <topic name="Come ricevere nuovi messaggi" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+</key>
+<key name="opzione, messaggio di assenza" >
+  <topic name="Messaggio di assenza" url="Userspecific/vacation_message.htm" />
 </key>
 
 </indexdata>

@@ -9,7 +9,7 @@
 </book>
 <book name="Navigazione nella casella di posta" >
   <item name="Navigazione nella casella di posta" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
-  <item name="Navigazione in Mail" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+  <item name="Navigazione nella scheda Mail" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
   <item name="Cartelle di sistema di Mail" url="Navigation_folders_and_tips/inbox_folder.htm" />
 </book>
 <book name="Gestione dei messaggi email " >
@@ -18,7 +18,7 @@
   <item name="Suddivisione in categorie dei messaggi email" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Stampa dei messaggi email" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="Impostazione di un indirizzo di inoltro" url="Userspecific/Setting_a_Forwarding_Address.htm" />
-  <item name="Recupero dei messaggi email eliminati" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Recupero degli elementi eliminati" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Eliminazione di messaggi email" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="Lettura dei messaggi" >
     <item name="Lettura dei messaggi" url="reading_mail/reading_mail.htm" />
@@ -33,9 +33,8 @@
   <item name="Aggiunta automatica della firma" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Completamento automatico degli indirizzi" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Allegare file al messaggio" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
-  <item name="Tipi di file allegati" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Tipi di file allegati supportati" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Uso dell'editor HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="Controllo ortografico" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Salvataggio di messaggi come bozze" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Risposta e inoltro dei messaggi" >
@@ -50,22 +49,24 @@
 </book>
 <book name="Gestione dell'Agenda" >
   <item name="Agenda" url="Calendar/b_About_Calendar.htm" />
-  <item name="Crea una nuova Agenda" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="Creare nuove Agende" url="Calendar/b_Create_New_Calendar.htm" />
   <item name="Colore di codifica delle agende" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Opzioni di visualizzazione dell'Agenda" url="Calendar/Calendar_Views.htm" />
   <item name="Importazione di iCalendars" url="Calendar/Importing_iCalendars.htm" />
   <item name="Svuotamento dell'Agenda" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Pianificazione di appuntamenti, riunioni ed eventi" >
-  <item name="Organizzazione di una riunione" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Pianificazione di una riunione" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="Creazione di appuntamenti ricorrenti" url="Calendar/b_creating_recurring_appointments.htm" />
   <item name="Eliminazione di un appuntamento" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
 <book name="Uso dell'Elenco impegni" >
-  <item name="Impegni" url="Tasks/About_Tasks.htm" />
+  <item name="Uso degli elenchi di impegni" url="Tasks/About_Tasks.htm" />
   <item name="Creazione di elenchi di impegni" url="Tasks/bc_Create_task_lists.htm" />
   <item name="Modifica di un impegno" url="Tasks/Change_a_task.htm" />
+</book>
+<book name="Uso della Valigetta" >
+  <item name="Controllo delle versioni dei file nella Valigetta" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </book>
 <book name="Condivisione di cartelle" >
   <book name="Condivisione di Agende" >
@@ -76,7 +77,7 @@
   </book>
 </book>
 <book name="Ricerca di elementi" >
-  <item name="Uso della funzione di Ricerca" url="Search/b_Using_Search.htm" />
+  <item name="Uso della funzione di ricerca" url="Search/b_Using_Search.htm" />
   <item name="Creazione e salvataggio di una query di ricerca" url="Search/b_Create_and_Save_a_Search_Query.htm" />
   <item name="Descrizione del linguaggio di query" url="Search/query_language_description.htm" />
 </book>
@@ -92,7 +93,7 @@
 </book>
 <book name="Impostazione delle preferenze" >
   <item name="Impostazione delle preferenze" url="Userspecific/b_Setting_your_Options.htm" />
-  <item name="Nuove notifiche email" url="Userspecific/New_mail_notifications.htm" />
+  <item name="Mail di notifica a un altro indirizzo" url="Userspecific/New_mail_notifications.htm" />
   <item name="Creazione di messaggi di assenza" url="Userspecific/vacation_message.htm" />
   <item name="Iscrizione ai feed RSS/ATOM" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>

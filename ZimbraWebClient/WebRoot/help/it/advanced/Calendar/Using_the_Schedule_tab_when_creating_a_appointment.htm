@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Adobe RoboHelp 8" />
-<title>Uso della scheda Pianificazione durante la creazione di un appuntamento</title>
+<title>Visualizzazione della disponibilità di partecipanti e luoghi nel riquadro Suggerimenti</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
 //<![CDATA[
@@ -54,7 +54,7 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addTocInfo("Pianificazione di appuntamenti, riunioni ed eventi\nUso della scheda Pianificazione durante la creazione di un appuntamento");
+	addTocInfo("Pianificazione di appuntamenti, riunioni ed eventi\nVisualizzazione della disponibilità di partecipanti e luoghi");
 addButton("show",BTN_TEXT,"Mostra","","","","",0,0,"","","");
 
 	}
@@ -82,25 +82,70 @@ else
 
 //-->
 //]]></script>
-<h1>Uso del Pianificatore per la creazione di un appuntamento</h1>
-<p>Il Pianificatore nella pagina degli appuntamenti dell'Agenda può essere 
- utilizzato per agevolare la pianificazione di riunioni in orari in cui 
- la maggior parte dei partecipanti è disponibile. Tutte le persone invitate 
- sono elencate in una sequenza temporale 
- indicante i periodi liberi e occupati di ciascuna di esse, se le relative 
- pianificazioni sono note. È possibile modificare giorni e orari per esaminare 
- le diverse disponibilità.</p>
-<p>È inoltre possibile contrassegnare la partecipazione di una persona 
- alla riunione come obbligatoria o facoltativa. Clicca sull'icona accanto 
- al nome per selezionare l'opzione.</p>
-<p style="margin-left: 48px;"><img src="../cal_manatory_optionalpulldn.png" alt="cal_manatory_optionalpulldn.png" style="border: none;" width="484" height="220" border="0" /></p>
-<p style="margin-left: 48px;">&#160;</p>
-<p>L'opzione predefinita prevede la partecipazione obbligatoria. Quando 
- si seleziona <span style="font-weight: bold;"><b>Partecipante facoltativo</b></span> 
- l'icona diventa <img src="../cal_optionalicon.png" alt="cal_optionalicon.png" style="border: none;" width="33" height="31" border="0" />.</p>
-<p>Il segno di spunta con il punto interrogativo indica che il partecipante 
- non ha risposto all'invito. Quando viene ricevuta la risposta, la colonna 
- viene aggiornata di conseguenza. </p>
+<h1>Visualizzazione della disponibilità di partecipanti e luoghi nel riquadro 
+ Suggerimenti</h1>
+<p>Quando si pianificano riunioni, è possibile vedere quando i partecipanti 
+ sono disponibili o occupati in modo da stabilire un orario in cui tutti 
+ possano intervenire. Quando si aggiungono partecipanti a un appuntamento, 
+ nel riquadro dei suggerimenti in Panoramica viene indicata la disponibilità 
+ dei partecipanti e di almeno un luogo in intervalli di 30 minuti. </p>
+<p>Il minicalendario indica la disponibilità dei partecipanti tramite codifica 
+ a colori.</p>
+<ul type="disc">
+	<li><p>Il verde indica che tutti i partecipanti e almeno un luogo sono 
+	 disponibili nei giorni in questione. </p></li>
+	<li><p>L'arancione indica che non tutti possono partecipare, ma che 
+	 più di metà delle persone e almeno un luogo sono disponibili. È possibile 
+	 passare il cursore del mouse sulla data per visualizzare i nomi di 
+	 massimo 10 persone non disponibili </p></li>
+	<li><p>Il rosso indica che più della metà dei partecipanti non può 
+	 intervenire alla riunione nei giorni scelti. </p></li>
+</ul>
+<p>Il numero a destra corrisponde a quello dei luoghi disponibili nell'orario 
+ in questione. È possibile cliccare su di esso per visualizzare un elenco 
+ di luoghi consigliate oppure per selezionare un luogo.</p>
+<p>Nell'esempio seguente, tutti i partecipanti sono disponibili per l'intero 
+ mese, tranne il 18 gennaio. In questa data è disponibile meno della metà 
+ delle persone.</p>
+<p><img src="../schedular.png" alt="schedular.png" style="border: none;" width="178" height="378" border="0" /></p>
+<p>&#160;</p>
+<p>È possibile impostare le preferenze relative al tipo di luoghi da includere 
+ negli orari suggeriti. Clicca su <span style="font-weight: bold;"><b>Suggerisci 
+ ora</b></span> nell'intestazione del riquadro panoramica per aprire la finestra 
+ di dialogo <span style="font-weight: bold;"><b>Preferenze suggerimenti</b></span>. 
+ </p>
+<ul type="disc">
+	<li><p><span style="font-weight: bold;"><b>Nome</b></span>,<span style="font-weight: bold;"><b>Capacità 
+	 minima</b></span>,<span style="font-weight: bold;"><b> Descrizione</b></span>,<span 
+	 style="font-weight: bold;"><b> Sito</b></span>,<span style="font-weight: bold;"><b>Edificio, 
+	 Piano</b></span>. &#160;È possibile essere molto specifici circa la <a 
+	 href="Scheduling_Resources.htm">sala</a> da prenotare, indicando un 
+	 nome, la capacità e un luogo specifico. <span style="font-weight: bold;"><b>Nota</b></span>: 
+	 &#160;per poter cercare queste informazioni, esse devono essere state 
+	 già configurate per la sala riunioni.</p></li>
+	<li><p><span style="font-weight: bold;"><b>Includi</b></span>. L'utente specifica 
+	 gli orari da includere nella ricerca della disponibilità dei partecipanti. 
+	 </p></li>
+	<ul type="disc">
+		<li><p><span style="font-weight: bold;"><b>Solo mio orario di lavoro</b></span>. 
+		 Vengono cercati solo gli orari corrispondenti all'orario di lavoro 
+		 configurato. Si tratta delle ore e delle settimane impostate nelle 
+		 preferenze dell'Agenda.</p></li>
+		<li><p><span style="font-weight: bold;"><b>Orario di lavoro di tutti 
+		 i partecipanti.</b></span> Per la ricerca del luogo vengono presi 
+		 in considerazione gli orari di lavoro di tutti. <span style="font-weight: bold;"><b>Nota</b></span>: 
+		 &#160;se si includono partecipanti che si trovano in fusi orari 
+		 diversi, in particolari quelli particolarmente distanti, non è 
+		 possibile individuare un luogo a cui tutti possano accedere. &#160;In 
+		 questo caso, nel riquadro dei suggerimenti non vengono indicati 
+		 luoghi.</p></li>
+		<li><p><span style="font-weight: bold;"><b>Non in orario di lavoro</b></span>. 
+		 Questa ricerca consente di pianificare orari non lavorativi, ad 
+		 esempio sere e fine settimana.</p></li>
+	</ul>
+</ul>
+<p>&#160;</p>
+<p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

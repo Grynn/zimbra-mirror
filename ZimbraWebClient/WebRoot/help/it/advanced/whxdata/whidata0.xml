@@ -46,11 +46,20 @@
 <key name="Agenda, impostazione autorizzazioni di invito" >
   <topic name="Identificazione di chi può invitarti alle riunioni" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
+<key name="agenda, inoltro di un appuntamento" >
+  <topic name="Inoltro di un appuntamento" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
 <key name="Agenda, libero/occupato" >
   <topic name="Visualizzazione degli orari liberi/occupati" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
 <key name="agenda, personalizzazione della settimana lavorativa" >
   <topic name="Viste dell'Agenda" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="agenda, rispondi a" >
+  <topic name="Modifica delle riunioni in agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
+<key name="agenda, risposta da" >
+  <topic name="Risposta da un appuntamento nell'Agenda" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
 </key>
 <key name="Agenda, stampa" >
   <topic name="Stampa di un'Agenda" url="Calendar/Printing_a_calendar.htm" />
@@ -61,9 +70,6 @@
 </key>
 <key name="Agende iCal, importazione o esportazione" >
   <topic name="Importazione dell'Agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="Aggiunta contatti a IM" >
-  <topic name="Accesso alla messaggeria istantanea" url="instant_messaging/Accessing_Instant_Messaging.htm" />
 </key>
 <key name="aggiunta della firma" >
   <topic name="Uso di una firma" url="Userspecific/using_a_signature.htm" />
@@ -77,13 +83,13 @@
 <key name="aggiunta di parole al Mio dizionario" >
   <topic name="Uso del controllo ortografico" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
+<key name="aggiunta di tabelle" >
+  <topic name="Aggiunta di una tabella a un documento" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
 <key name="Aggiunta rapida" >
   <topic name="Uso di Aggiunta rapida per creare un appuntamento" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="allega dei file dalla valigetta" >
-  <topic name="Allegare file a un messaggio email" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
-<key name="allegare" >
   <topic name="Allegare file a un messaggio email" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="allegati" >
@@ -91,12 +97,6 @@
 </key>
 <key name="allegati ics, salvataggio" >
   <topic name="Risposta a un invito" url="Calendar/Responding_to_an_invitation.htm" />
-</key>
-<key name="Amici IM " >
-  <topic name="Accesso alla messaggeria istantanea" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
-<key name="Amici in IM" >
-  <topic name="Accesso alla messaggeria istantanea" url="instant_messaging/Accessing_Instant_Messaging.htm" />
 </key>
 <key name="annulla" >
   <topic name="Annullamento di un'azione" url="Userspecific/Undo_Action.htm" />
@@ -115,9 +115,6 @@
 </key>
 <key name="appuntamenti" >
   <topic name="Appuntamenti, riunioni ed eventi" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-</key>
-<key name="appuntamenti privati" >
-  <topic name="Pagina Appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="appuntamenti privati, condivisione dettagli" >
   <topic name="Delega dell'accesso all'Agenda" url="Calendar/Delegating_Calendar_Access.htm" />
@@ -149,17 +146,11 @@
 <key name="autorizzazione negata con invito alla riunione" >
   <topic name="Ricezione di un messaggio di autorizzazione negata" url="Calendar/Receiving_a_permission_denied_message.htm" />
 </key>
-<key name="avvio di chat IM " >
-  <topic name="Avvio di una chat in IM" url="instant_messaging/Starting_an_IM_chat.htm" />
-</key>
 <key name="avvisi" >
   <topic name="Impostazione di avvisi sul desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 <key name="backup dati account" >
   <topic name="Backup del contenuto dell'account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
-<key name="Blocco Note, pagine" >
-  <topic name="Creazione di una nuova pagina" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="blocco posta indesiderata" >
   <topic name="Filtro della posta indesiderata" url="filters/Filtering_Junk_Mail.htm" />
@@ -194,9 +185,6 @@
 </key>
 <key name="cellulare elimina" >
   <topic name="Cancellazione dei dati del dispositivo cellulare" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
-</key>
-<key name="chat" >
-  <topic name="Avvio di una chat in IM" url="instant_messaging/Starting_an_IM_chat.htm" />
 </key>
 <key name="clic con il tasto destro del mouse" >
   <topic name="Area di lavoro di Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
@@ -277,11 +265,17 @@
     <topic name="Stampa di una conversazione" url="conversations/printing_a_conversation.htm" />
   </key>
 </key>
+<key name="copia di appuntamenti" >
+  <topic name="Creazione di un nuovo appuntamento da uno esistente" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+</key>
 <key name="Creazione" >
   <topic name="Composizione di un nuovo messaggio email" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   <key name="nuovo messaggio email" >
     <topic name="Composizione di un nuovo messaggio email" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   </key>
+</key>
+<key name="creazione di nuove pagine" >
+  <topic name="Creazione di una nuova pagina" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="creazione di tag" >
   <topic name="Uso dei tag per classificare i messaggi email" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
@@ -309,6 +303,9 @@
 </key>
 <key name="dispositivo cellulare" >
   <topic name="Gestione dei dispositivi cellulari" url="Userspecific/Managing_your_mobile_devices.htm" />
+</key>
+<key name="dizionario, aggiunta di parole a" >
+  <topic name="Uso del controllo ortografico" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
 
 </indexdata>

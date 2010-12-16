@@ -80,7 +80,6 @@
 </book>
 <book name="Pianificazione di appuntamenti" >
   <item name="Informazioni sulla pianificazione di appuntamenti" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="Organizzazione di un appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Pianificazione di un appuntamento" url="Calendar/Scheduling_meetings.htm" />
   <item name="Visualizzazione degli orari liberi/occupati" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="Segnare un appuntamento come privato" url="Calendar/Marking_an_appointment_as_private.htm" />
@@ -126,11 +125,13 @@
 <chunk name="Condivisione di cartelle (solo account ZWC)" ref="whtdata2.xml" />
 </book>
 <book name="Uso della Valigetta" >
-<chunk name="Uso della Valigetta" ref="whtdata3.xml" />
+  <item name="Uso della Valigetta" url="Briefcase/Working_in_Briefcase.htm" />
+  <item name="Creazione di un nuovo documento " url="Documents/Create_a_new_page.htm" />
+  <item name="Uso dell'editor Rich Text" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="Aggiunta di una tabella a un documento" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </book>
 <book name="Gestione del contenuto dell'account" >
-  <item name="Archiviazione dei messaggi email" url="Zdesktop/Archiving_your_email_messages.htm" />
-  <item name="Spostamento dei dati da un account a un altro" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+<chunk name="Gestione del contenuto dell'account" ref="whtdata3.xml" />
 </book>
 
 </tocdata>

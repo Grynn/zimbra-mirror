@@ -28,9 +28,6 @@
 <key name="allegati" >
   <topic name="Apertura dei file allegati" url="reading_mail/opening_file_attachments.htm" />
 </key>
-<key name="appuntamenti privati" >
-  <topic name="Pagina Appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="assenza, messaggio di" >
   <topic name="Messaggio di assenza" url="Userspecific/vacation_message.htm" />
 </key>
@@ -142,14 +139,8 @@
 <key name="opzioni, nuova notifica email" >
   <topic name="Nuove notifiche email" url="Userspecific/New_mail_notifications.htm" />
 </key>
-<key name="organizzazione di una riunione" >
-  <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="personalizzazione della settimana lavorativa" >
   <topic name="Viste dell'Agenda" url="Calendar/Calendar_Views.htm" />
-</key>
-<key name="pianificazione di una riunione" >
-  <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="Recupero" >
   <topic name="Recupero dei messaggi email eliminati" url="reading_mail/recovering_deleted_mail_messages.htm" />
@@ -175,9 +166,6 @@
     <topic name="Risposta ai messaggi email" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
 </key>
-<key name="riunioni" >
-  <topic name="Pagina dell'appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="Rubrica, aggiunta di nuovi contatti" >
   <topic name="Aggiunta di nuovi contatti" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
@@ -186,9 +174,6 @@
 </key>
 <key name="salva ricerca" >
   <topic name="Creazione e salvataggio di una query di ricerca" url="Search/b_Create_and_Save_a_Search_Query.htm" />
-</key>
-<key name="segnare un appuntamento come privato" >
-  <topic name="Pagina Appuntamento" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="stampa impegni" >
   <topic name="Impegni" url="Tasks/About_Tasks.htm" />
