@@ -80,7 +80,6 @@
 </book>
 <book name="Планирование встреч" >
   <item name="О планировании встреч" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="Планирование встречи" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Назначение встречи" url="Calendar/Scheduling_meetings.htm" />
   <item name="Просмотр сведений о занятости" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="Пометка встречи как личной" url="Calendar/Marking_an_appointment_as_private.htm" />
@@ -135,7 +134,8 @@
 <chunk name="Использование портфеля" ref="whtdata2.xml" />
 </book>
 <book name="Управление содержимым учетной записи" >
-<chunk name="Управление содержимым учетной записи" ref="whtdata3.xml" />
+  <item name="Архивирование сообщений электронной почты" url="Zdesktop/Archiving_your_email_messages.htm" />
+  <item name="Перемещение данных учетной записи в другую учетную запись" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </book>
 
 </tocdata>

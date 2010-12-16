@@ -19,7 +19,7 @@
   <item name="Меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Применение действий к нескольким выбранным элементам" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
   <item name="Использование браузеров" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-  <item name="Сохранение работы" url="Userspecific/browser_session_handling.htm" />
+  <item name="Сохранение результатов работы" url="Userspecific/browser_session_handling.htm" />
   <item name="Просмотр области обзора" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="Системные папки почты" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="Очистка Корзины" url="Navigation_folders_and_tips/trash_folder.htm" />
@@ -27,7 +27,7 @@
 </book>
 <book name="Управление почтой " >
   <item name="Управление видом сообщений" url="conversations/conversation_list_view.htm" />
-  <item name="Установка настроек почты" url="Userspecific/Setting_your_mail_preferences.htm" />
+  <item name="Настройка параметров почты" url="Userspecific/Setting_your_mail_preferences.htm" />
   <item name="Систематизация почтовых сообщений" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Настройка исходной страницы почты" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
   <item name="Как работает функция «Разговоры»" url="conversations/conversations_can_span_folders.htm" />
@@ -37,12 +37,12 @@
   <item name="Подписка на RSS/Atom-ленты" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
   <item name="Управление личными данными учетной записи" url="Userspecific/Mail_Identities.htm" />
   <item name="Управление папкой «Спам»" url="filters/Managing_your_Junk_Folder.htm" />
-  <item name="Восстановление удаленных почтовых сообщений" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Восстановление удаленных элементов" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Удаление сообщений электронной почты" url="reading_mail/archiving_old_messages.htm" />
   <book name="Чтение сообщений" >
     <item name="Чтение почты" url="reading_mail/reading_mail.htm" />
-    <item name="Чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-    <item name="Настройка уведомлений" url="Userspecific/Setting_up_desktop_alerts.htm" />
+    <item name="Просмотр сообщений из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+    <item name="Настройка уведомлений и напоминаний" url="Userspecific/Setting_up_desktop_alerts.htm" />
     <item name="Пометка сообщения как непрочитанного" url="reading_mail/marking_mail_as_unread.htm" />
     <item name="Уведомление о новых сообщениях" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
     <item name="Отображение HTML-кода в почтовых сообщениях" url="reading_mail/displaying_html_in_email_messages.htm" />
@@ -65,8 +65,8 @@
   <item name="Расписание для последующей доставки сообщений" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Запрос подтверждения прочтения письма" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Вложение файлов в сообщение" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-  <item name="Типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="Добавление адресов в поля «Копия» и «Скрытая копия»" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="Поддерживаемые типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Добавление адресов в поля «Копия»  и «Скрытая копия»" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Использование проверки правописания" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="Сохранение сообщений как черновиков" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -84,7 +84,7 @@
   <item name="Использование адресной книги организации" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="Автоматическое добавление контактов" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
   <item name="Создание групповых списков контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
-  <item name="Импорт адресных книг" url="Contacts/Importing_Contacts.htm" />
+  <item name="Импорт контактов" url="Contacts/Importing_Contacts.htm" />
   <item name="Экспорт адресных книг" url="Contacts/Exporting_Address_Books.htm" />
   <item name="Печать контактов или адресных книг" url="Contacts/Printing_Contacts.htm" />
   <item name="Изменение данных контакта" url="Contacts/editing_a_contact.htm" />
@@ -95,7 +95,7 @@
   <item name="Создание ежедневников" url="Calendar/Create_Calendars.htm" />
   <item name="Цветная кодировка ежедневников" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Установка настроек ежедневника" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <item name="Просмотр номеров недель ежедневника" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <item name="Просмотр номеров недель ежедневника   " url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
   <item name="Параметры просмотра ежедневника" url="Calendar/Calendar_Views.htm" />
   <item name="Вид «Список» ежедневника" url="Calendar/Calendar_List_View.htm" />
   <item name="Просмотр нескольких ежедневников" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
@@ -108,7 +108,7 @@
 <chunk name="Планирование встреч, собраний и событий" ref="whtdata1.xml" />
 </book>
 <book name="Использование списков задач" >
-  <item name="О задачах" url="Tasks/About_Tasks.htm" />
+  <item name="Использование списков задач" url="Tasks/About_Tasks.htm" />
   <item name="Создание списков задач" url="Tasks/Create_tasks_folders.htm" />
   <item name="Добавление задачи" url="Tasks/Add_a_task.htm" />
   <item name="Изменение задачи" url="Tasks/Change_a_task.htm" />
@@ -119,9 +119,10 @@
 <book name="Работа в портфеле" >
   <item name="Работа в портфеле" url="Briefcase/Working_in_Briefcase.htm" />
   <item name="Работа с файлами в портфеле" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-  <item name="Создание новой страницы" url="Documents/Create_a_new_page.htm" />
+  <item name="Создание нового документа" url="Documents/Create_a_new_page.htm" />
   <item name="Использование редактора форматированного текста" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="Добавление таблицы на страницу блокнота" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="Добавление таблицы в документ в портфеле" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="Управление версиями файлов в портфеле" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
   <item name="Отправка файлов из портфеля" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </book>
 <book name="Общий доступ к папкам" >
@@ -140,14 +141,13 @@
 <chunk name="Установка настроек пользователя" ref="whtdata6.xml" />
 </book>
 <book name="Управление мобильным устройством (только для Network Edition)" >
-  <item name="Управление мобильными устройствами" url="Userspecific/Managing_your_mobile_devices.htm" />
-  <item name="Как очистить мобильное устройство" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+<chunk name="Управление мобильным устройством (только для Network Edition)" ref="whtdata7.xml" />
 </book>
 <book name="Сохранение папок учетной записи" >
-<chunk name="Сохранение папок учетной записи" ref="whtdata7.xml" />
+<chunk name="Сохранение папок учетной записи" ref="whtdata8.xml" />
 </book>
 <book name="Использование модулей Zimlet" >
-<chunk name="Использование модулей Zimlet" ref="whtdata8.xml" />
+<chunk name="Использование модулей Zimlet" ref="whtdata9.xml" />
 </book>
 
 </tocdata>

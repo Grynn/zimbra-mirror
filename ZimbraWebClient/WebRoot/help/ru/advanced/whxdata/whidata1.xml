@@ -1,299 +1,294 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="импорт ежедневников" >
-  <topic name="импорт и экспорт элементов " url="Userspecific/Importing_and_Exporting_Items_.htm" />
-</key>
-<key name="импорт ежедневников iCal" >
-  <topic name="импорт ежедневника iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
-</key>
-<key name="импорт контактов" >
-  <topic name="импорт контактов" url="Contacts/Importing_Contacts.htm" />
-</key>
 <key name="импорт учетных записей" >
-  <topic name="резервное копирование содержимого учетной записи" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <topic name="Резервное копирование содержимого учетной записи" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 <key name="использование меток" >
-  <topic name="использование меток для систематизации почтовых сообщений" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+  <topic name="Использование меток для систематизации почтовых сообщений" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
 <key name="использование пользовательского интерфейса" >
-  <topic name="функции и горячие клавиши пользовательского интерфейса" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+  <topic name="Функции и горячие клавиши пользовательского интерфейса" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
 </key>
 <key name="истекло время сеанса" >
-  <topic name="если истекло время сеанса" url="Userspecific/if_your_session_expires.htm" />
+  <topic name="Если истекло время сеанса" url="Userspecific/if_your_session_expires.htm" />
 </key>
 <key name="как создать встречи" >
-  <topic name="о встречах, собраниях и событиях" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="О встречах, собраниях и событиях" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
 <key name="как установить исходный вид области содержимого" >
-  <topic name="установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="контакт" >
-  <topic name="изменение контакта" url="Contacts/editing_a_contact.htm" />
-  <topic name="контакты" url="Contacts/contacts.htm" />
-  <topic name="создание нового контакта" url="Contacts/creating_a_new_contact.htm" />
+  <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
+  <topic name="Контакты" url="Contacts/contacts.htm" />
+  <topic name="Создание нового контакта" url="Contacts/creating_a_new_contact.htm" />
   <key name="изменение" >
-    <topic name="изменение контакта" url="Contacts/editing_a_contact.htm" />
+    <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
   </key>
 </key>
 <key name="контакт, печать списка" >
-  <topic name="печать контактов" url="Contacts/Printing_Contacts.htm" />
+  <topic name="Печать контактов" url="Contacts/Printing_Contacts.htm" />
 </key>
 <key name="контакты, добавление удаленных контактов обратно в список" >
-  <topic name="удаление контакта" url="Contacts/deleting_a_contact.htm" />
+  <topic name="Удаление контакта" url="Contacts/deleting_a_contact.htm" />
 </key>
 <key name="контакты, импорт" >
-  <topic name="импорт контактов" url="Contacts/Importing_Contacts.htm" />
+  <topic name="Импорт контактов" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="контакты, создание настраиваемых полей в форме" >
-  <topic name="создание нового контакта" url="Contacts/creating_a_new_contact.htm" />
+  <topic name="Создание нового контакта" url="Contacts/creating_a_new_contact.htm" />
+</key>
+<key name="копирование встреч" >
+  <topic name="Создание встречи из существующей встречи" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 </key>
 <key name="корзина" >
-  <topic name="корзина" url="Navigation_folders_and_tips/trash_folder.htm" />
-</key>
-<key name="личные встречи" >
-  <topic name="о встречах" url="Calendar/About_the_Appointment_Page.htm" />
+  <topic name="Корзина" url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="личные данные" >
-  <topic name="личные данные почты" url="Userspecific/Mail_Identities.htm" />
-  <topic name="создание образов" url="Userspecific/Creating_Personas.htm" />
+  <topic name="Личные данные почты" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Создание образов" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="личные данные почты" >
-  <topic name="личные данные почты" url="Userspecific/Mail_Identities.htm" />
-  <topic name="создание образов" url="Userspecific/Creating_Personas.htm" />
-  <topic name="установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Личные данные почты" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Создание образов" url="Userspecific/Creating_Personas.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="личные данные почты при создании сообщения" >
-  <topic name="создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <topic name="Создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
 </key>
 <key name="личные контакты" >
-  <topic name="изменение контакта" url="Contacts/editing_a_contact.htm" />
+  <topic name="Изменение контакта" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="личные списки рассылки" >
   <topic name="Создание групповых списков контактов" url="Contacts/Creating_Group_Contact_Lists.htm" />
 </key>
 <key name="локальный пользователь" >
-  <topic name="определение пользователей, которые могут приглашать вас на собрания" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+  <topic name="Определение пользователей, которые могут приглашать вас на собрания" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="меню, открываемые правой кнопкой мыши" >
-  <topic name="меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="меню, правая кнопка мыши" >
-  <topic name="меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="место, резервирование" >
-  <topic name="планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
+  <topic name="Планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="метка, перетаскивание" >
-  <topic name="назначение меток сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="Назначение меток сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
 </key>
 <key name="метки" >
-  <topic name="назначение меток сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
-  <topic name="удаление меток" url="Tags_and_flags/deleting_tags.htm" />
+  <topic name="Назначение меток сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+  <topic name="Удаление меток" url="Tags_and_flags/deleting_tags.htm" />
   <key name="назначение" >
-    <topic name="назначение меток сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
+    <topic name="Назначение меток сообщениям" url="Tags_and_flags/Assigning_tags_to_messages.htm" />
   </key>
   <key name="удаление" >
-    <topic name="удаление меток" url="Tags_and_flags/deleting_tags.htm" />
+    <topic name="Удаление меток" url="Tags_and_flags/deleting_tags.htm" />
   </key>
 </key>
 <key name="метки, создание" >
-  <topic name="использование меток для систематизации почтовых сообщений" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+  <topic name="Использование меток для систематизации почтовых сообщений" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
 </key>
 <key name="мини-календарь" >
-  <topic name="установка настроек ежедневника" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <topic name="просмотр номеров недель ежедневника" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="Установка настроек ежедневника" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="Просмотр номеров недель ежедневника" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="мобильное устройство" >
-  <topic name="управление мобильными устройствами" url="Userspecific/Managing_your_mobile_devices.htm" />
+  <topic name="Управление мобильными устройствами" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
 <key name="модули Zimlet, отключить" >
-  <topic name="управление модулями Zimlet" url="Zimlets/Managing_your_Zimlets.htm" />
+  <topic name="Управление модулями Zimlet" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
 <key name="н в мини-календаре" >
-  <topic name="просмотр номеров недель ежедневника   " url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
-</key>
-<key name="назначение собрания" >
-  <topic name="о странице «Встреча»" url="Calendar/About_the_Appointment_Page.htm" />
+  <topic name="Просмотр номеров недель ежедневника   " url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="напоминание о встрече" >
-  <topic name="установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="напоминания" >
-  <topic name="настройка уведомлений" url="Userspecific/Setting_up_desktop_alerts.htm" />
+  <topic name="Настройка уведомлений" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 <key name="напоминания о собрании" >
-  <topic name="настройка уведомлений" url="Userspecific/Setting_up_desktop_alerts.htm" />
+  <topic name="Настройка уведомлений" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 <key name="настройка пользовательского вида" >
-  <topic name="настройка пользовательского вида" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+  <topic name="Настройка пользовательского вида" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 </key>
 <key name="настройка рабочей недели" >
-  <topic name="виды ежедневника" url="Calendar/Calendar_Views.htm" />
+  <topic name="Виды ежедневника" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="настройки" >
-  <topic name="установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="настройки ежедневника" >
-  <topic name="установка настроек ежедневника" url="Userspecific/Setting_your_Calendar_preferences.htm" />
-  <topic name="определение пользователей, которые могут приглашать вас на собрания" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+  <topic name="Установка настроек ежедневника" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="Определение пользователей, которые могут приглашать вас на собрания" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
 </key>
 <key name="настройки, ежедневник" >
-  <topic name="установка настроек ежедневника" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="Установка настроек ежедневника" url="Userspecific/Setting_your_Calendar_preferences.htm" />
 </key>
 <key name="настройки, изменение" >
-  <topic name="изменение параметров пользователя" url="Userspecific/Changing_Your_User_Options.htm" />
+  <topic name="Изменение параметров пользователя" url="Userspecific/Changing_Your_User_Options.htm" />
 </key>
 <key name="настройки, общий доступ" >
-  <topic name="управление элементами общего доступа" url="Sharing/Managing_items_you_share.htm" />
+  <topic name="Управление элементами общего доступа" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="настройки, просмотр области чтения" >
-  <topic name="чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="начало чата МС" >
-  <topic name="начало чата МС" url="instant_messaging/Starting_an_IM_chat.htm" />
+  <topic name="Чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="необязательное посещение" >
-  <topic name="использование вкладки «Расписание» при создании встречи" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+  <topic name="Использование вкладки «Расписание» при создании встречи" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
 <key name="новые сообщения" >
-  <topic name="как узнать, что получено новое сообщение" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="Как узнать, что получено новое сообщение" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="номер недели" >
-  <topic name="просмотр номеров недель ежедневника" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
+  <topic name="Просмотр номеров недель ежедневника" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 <key name="область обзора" >
-  <topic name="область «Папки»" url="Navigation_folders_and_tips/Folders_area.htm" />
+  <topic name="Область «Папки»" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="область просмотра, включение или выключение" >
-  <topic name="чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <topic name="Чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="область содержимого, изменение заголовка столбца" >
-  <topic name="настройка пользовательского вида" url="Navigation_folders_and_tips/Customize_your_view.htm" />
+  <topic name="Настройка пользовательского вида" url="Navigation_folders_and_tips/Customize_your_view.htm" />
 </key>
 <key name="область чтения" >
   <topic name="Чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
-<key name="область чтения, вид" >
-  <topic name="рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
 <key name="область чтения, включение и отключение" >
-  <topic name="управление видом сообщений" url="conversations/conversation_list_view.htm" />
-  <topic name="чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <topic name="Управление видом сообщений" url="conversations/conversation_list_view.htm" />
+  <topic name="Чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="оборудование, резервирование" >
-  <topic name="планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
+  <topic name="Планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="образ" >
-  <topic name="личные данные почты" url="Userspecific/Mail_Identities.htm" />
-  <topic name="создание образов" url="Userspecific/Creating_Personas.htm" />
+  <topic name="Личные данные почты" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Создание образов" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="общедоступные/частные события ежедневника" >
-  <topic name="пометка встречи как личной" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <topic name="Пометка встречи как личной" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="общий доступ к адресным книгам" >
-  <topic name="предоставление доступа к адресной книге" url="Contacts/Sharing_your_Address_Book.htm" />
+  <topic name="Предоставление доступа к адресной книге" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
 <key name="общий доступ к ежедневнику" >
-  <topic name="предоставление доступа к ежедневнику" url="Calendar/Delegating_Calendar_Access.htm" />
+  <topic name="Предоставление доступа к ежедневнику" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
 <key name="общий доступ к папкам" >
-  <topic name="общий доступ к папке" url="Sharing/Sharing_a_folder.htm" />
+  <topic name="Общий доступ к папке" url="Sharing/Sharing_a_folder.htm" />
 </key>
 <key name="общий доступ к папкам портфеля" >
-  <topic name="общий доступ к портфелю" url="Briefcase/Sharing_your_Briefcase.htm" />
+  <topic name="Общий доступ к портфелю" url="Briefcase/Sharing_your_Briefcase.htm" />
 </key>
 <key name="общий доступ с помощью списка рассылки" >
-  <topic name="общий доступ с помощью списка рассылки" url="Sharing/Sharing_with_a_Distribution_List.htm" />
+  <topic name="Общий доступ с помощью списка рассылки" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 </key>
 <key name="общий доступ, адресная книга" >
-  <topic name="предоставление доступа к адресной книге" url="Contacts/Sharing_your_Address_Book.htm" />
+  <topic name="Предоставление доступа к адресной книге" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
 <key name="обязательное посещение" >
-  <topic name="использование вкладки «Расписание» при создании встречи" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+  <topic name="Использование вкладки «Расписание» при создании встречи" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
 <key name="описание языка запросов" >
-  <topic name="описание языка запросов" url="Search/query_language_description.htm" />
+  <topic name="Описание языка запросов" url="Search/query_language_description.htm" />
 </key>
 <key name="опрос новой почты" >
-  <topic name="установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="ответ" >
-  <topic name="ответ на почтовые сообщения" url="reading_mail/replying_to_mail_messages.htm" />
+  <topic name="Ответ на почтовые сообщения" url="reading_mail/replying_to_mail_messages.htm" />
   <key name="почтовые сообщения" >
-    <topic name="ответ на почтовые сообщения" url="reading_mail/replying_to_mail_messages.htm" />
+    <topic name="Ответ на почтовые сообщения" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
 </key>
+<key name="ответ из ежедневника" >
+  <topic name="Ответ из встречи в ежедневнике" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+</key>
+<key name="ответ на приглашение из ежедневника" >
+  <topic name="Изменение собраний в ежедневнике" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
 <key name="ответ, отображение сведений заголовка" >
-  <topic name="установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="Установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="ответ, отображение темы" >
-  <topic name="установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="Установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="отказ в доступе к адресной книге" >
-  <topic name="предоставление доступа к адресной книге" url="Contacts/Sharing_your_Address_Book.htm" />
+  <topic name="Предоставление доступа к адресной книге" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
 <key name="отказ в доступе к общедоступному списка задач" >
-  <topic name="общедоступный список задач" url="Tasks/Share_your_Task_folder.htm" />
+  <topic name="Общедоступный список задач" url="Tasks/Share_your_Task_folder.htm" />
 </key>
 <key name="отказ в доступе к папкам почты" >
-  <topic name="отказ в доступе к общей папке" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <topic name="Отказ в доступе к общей папке" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </key>
 <key name="отклонение запроса на общий доступ к ежедневнику" >
-  <topic name="отклонение запроса на общий доступ к ежедневнику" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
+  <topic name="Отклонение запроса на общий доступ к ежедневнику" url="Calendar/Declining_a_Calendar_Share_Request.htm" />
 </key>
 <key name="отключить модули Zimlet" >
-  <topic name="управление модулями Zimlet" url="Zimlets/Managing_your_Zimlets.htm" />
+  <topic name="Управление модулями Zimlet" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
 <key name="открытие файлов в портфеле" >
-  <topic name="работа с файлами в портфеле" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+  <topic name="Работа с файлами в портфеле" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="отмена" >
-  <topic name="отмена действия" url="Userspecific/Undo_Action.htm" />
+  <topic name="Отмена действия" url="Userspecific/Undo_Action.htm" />
 </key>
 <key name="отмена полномочий доступа к общему ежедневнику" >
-  <topic name="предоставление доступа к ежедневнику" url="Calendar/Delegating_Calendar_Access.htm" />
+  <topic name="Предоставление доступа к ежедневнику" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
 <key name="отмена собраний" >
   <topic name="удаление встречи" url="Calendar/Deleting_an_appointment.htm" />
 </key>
-<key name="отметить встречу как личную" >
-  <topic name="о встречах" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="отображение сведений заголовка в ответных сообщениях" >
-  <topic name="установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="Установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="отправить повторно" >
-  <topic name="меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="отправка сведений о занятости" >
-  <topic name="отправка сведений о занятости" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+  <topic name="Отправка сведений о занятости" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
 </key>
 <key name="отправка файлов из портфеля" >
-  <topic name="отправка файлов из портфеля" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
+  <topic name="Отправка файлов из портфеля" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </key>
 <key name="отсутствие разрешения с приглашением на собрание" >
-  <topic name="сообщение об отсутствии разрешения" url="Calendar/Receiving_a_permission_denied_message.htm" />
+  <topic name="Сообщение об отсутствии разрешения" url="Calendar/Receiving_a_permission_denied_message.htm" />
 </key>
 <key name="очистить мобильное устройство" >
-  <topic name="как очистить мобильное устройство" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
-  <topic name="управление мобильными устройствами" url="Userspecific/Managing_your_mobile_devices.htm" />
+  <topic name="Как очистить мобильное устройство" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+  <topic name="Управление мобильными устройствами" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
 <key name="папки" >
-  <topic name="переименование папок" url="Navigation_folders_and_tips/renaming_folders.htm" />
-  <topic name="о папках" url="Navigation_folders_and_tips/about_folders.htm" />
+  <topic name="Переименование папок" url="Navigation_folders_and_tips/renaming_folders.htm" />
+  <topic name="О папках" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
 <key name="папки, именование" >
-  <topic name="о папках" url="Navigation_folders_and_tips/about_folders.htm" />
+  <topic name="О папках" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
 <key name="параметры" >
-  <topic name="установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="параметры, изменение" >
-  <topic name="изменение параметров пользователя" url="Userspecific/Changing_Your_User_Options.htm" />
+  <topic name="Изменение параметров пользователя" url="Userspecific/Changing_Your_User_Options.htm" />
 </key>
 <key name="параметры, сообщение об отсутствии" >
-  <topic name="сообщение об отсутствии" url="Userspecific/vacation_message.htm" />
+  <topic name="Сообщение об отсутствии" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="параметры, уведомления о новых сообщениях" >
+  <topic name="Уведомления о новых сообщениях" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="пароль" >
+  <topic name="Если вы забыли пароль" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Изменение пароля" url="Userspecific/chaning_your_password.htm" />
+</key>
+<key name="переименование файлов в Портфеле" >
+  <topic name="Работа с файлами в Портфеле" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 
 </indexdata>

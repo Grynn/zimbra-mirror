@@ -56,8 +56,6 @@
 		<file url="whxdata\package_46.xml"/>
 		<file url="whxdata\package_47.xml"/>
 		<file url="whxdata\package_48.xml"/>
-		<file url="whxdata\package_49.xml"/>
-		<file url="whxdata\package_50.xml"/>
 		<file url="whxdata\packageindex.xml"/>
 		<file url="whxdata\synonym.xml"/>
 		<file url="whxdata\topictable_0.xml"/>
@@ -65,7 +63,6 @@
 		<file url="whxdata\topictable_2.xml"/>
 		<file url="whxdata\topictable_3.xml"/>
 		<file url="whxdata\topictable_4.xml"/>
-		<file url="whxdata\topictable_5.xml"/>
 		<file url="whxdata\topictableindex.xml"/>
 		<file url="whxdata\whfts.xml"/>
 	</files>

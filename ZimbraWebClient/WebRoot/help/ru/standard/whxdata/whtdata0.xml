@@ -9,7 +9,7 @@
 </book>
 <book name="Навигация в почтовом ящике" >
   <item name="Навигация в почтовом ящике" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
-  <item name="Навигация в почте" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+  <item name="Навигация на вкладке «Почта»" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
   <item name="Системные папки почты" url="Navigation_folders_and_tips/inbox_folder.htm" />
 </book>
 <book name="Управление почтой " >
@@ -18,7 +18,7 @@
   <item name="Систематизация почтовых сообщений" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Печать сообщений" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="Установка адреса для пересылки" url="Userspecific/Setting_a_Forwarding_Address.htm" />
-  <item name="Восстановление удаленных почтовых сообщений" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Восстановление удаленных элементов" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Удаление сообщений электронной почты" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="Чтение сообщений" >
     <item name="Чтение почты" url="reading_mail/reading_mail.htm" />
@@ -33,9 +33,8 @@
   <item name="Автоматическое добавление подписи" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Автоматическое заполнение адреса" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Вложение файлов в сообщение" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
-  <item name="Типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Поддерживаемые типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Использование HTML-редактора" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="Проверка правописания" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Сохранение сообщений как черновиков" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Ответ и пересылка сообщений" >
@@ -50,22 +49,24 @@
 </book>
 <book name="Управление ежедневником" >
   <item name="О ежедневнике" url="Calendar/b_About_Calendar.htm" />
-  <item name="Создание нового ежедневника" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="Создание новых ежедневников" url="Calendar/b_Create_New_Calendar.htm" />
   <item name="Цветная кодировка ежедневников" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Параметры просмотра ежедневника" url="Calendar/Calendar_Views.htm" />
   <item name="Импорт ежедневников iCal" url="Calendar/Importing_iCalendars.htm" />
   <item name="Очистка ежедневника" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Планирование встреч, собраний и событий" >
-  <item name="Назначение собрания" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Планирование собрания" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="Создание повторяющихся встреч" url="Calendar/b_creating_recurring_appointments.htm" />
   <item name="Удаление встречи" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
 <book name="Использование списков задач" >
-  <item name="О задачах" url="Tasks/About_Tasks.htm" />
+  <item name="Использование списков задач" url="Tasks/About_Tasks.htm" />
   <item name="Создание списков задач" url="Tasks/bc_Create_task_lists.htm" />
   <item name="Изменение задачи" url="Tasks/Change_a_task.htm" />
+</book>
+<book name="Работа в портфеле" >
+  <item name="Управление версиями файлов в портфеле" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </book>
 <book name="Общий доступ к папкам" >
   <book name="Общий доступ к ежедневникам" >
@@ -81,7 +82,7 @@
   <item name="Описание языка запросов" url="Search/query_language_description.htm" />
 </book>
 <book name="Использование меток и папок для систематизации почты" >
-  <item name="Назначение меток сообщениям и контактам" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
+  <item name="Назначение тегов сообщениям и контактам" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
   <item name="Установка флагов для почтовых сообщений" url="Tags_and_flags/b_Flagging_an_email_message.htm" />
   <item name="Переименование папок" url="Navigation_folders_and_tips/renaming_folders.htm" />
   <item name="Удаление папок" url="Navigation_folders_and_tips/bc_Deleting_folders.htm" />
@@ -92,9 +93,9 @@
 </book>
 <book name="Установка настроек пользователя" >
   <item name="Установка настроек пользователя" url="Userspecific/b_Setting_your_Options.htm" />
-  <item name="Уведомления о новых сообщениях" url="Userspecific/New_mail_notifications.htm" />
+  <item name="Уведомление о приходе почты на другой адрес" url="Userspecific/New_mail_notifications.htm" />
   <item name="Создание сообщений об отсутствии" url="Userspecific/vacation_message.htm" />
-  <item name="Подписка на RSS/Atom-ленты" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
+  <item name="Подписка на RSS/ATOM-ленты" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>
 
 </tocdata>

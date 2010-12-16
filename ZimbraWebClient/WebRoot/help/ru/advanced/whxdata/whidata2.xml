@@ -1,310 +1,314 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="параметры, уведомления о новых сообщениях" >
-  <topic name="уведомления о новых сообщениях" url="Userspecific/New_mail_notifications.htm" />
-</key>
-<key name="пароль" >
-  <topic name="если вы забыли пароль" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="изменение пароля" url="Userspecific/chaning_your_password.htm" />
-</key>
-<key name="переименование файлов в Портфеле" >
-  <topic name="работа с файлами в Портфеле" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-</key>
 <key name="перемещение" >
-  <topic name="область «Папки»" url="Navigation_folders_and_tips/Folders_area.htm" />
-  <topic name="перемещение по пользовательскому интерфейсу" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-  <topic name="перемещение почтовых сообщений по папкам" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+  <topic name="Область «Папки»" url="Navigation_folders_and_tips/Folders_area.htm" />
+  <topic name="Перемещение по пользовательскому интерфейсу" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Перемещение почтовых сообщений по папкам" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <key name="почтовые сообщения по папкам" >
-    <topic name="перемещение почтовых сообщений по папкам" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
+    <topic name="Перемещение почтовых сообщений по папкам" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   </key>
 </key>
 <key name="перемещение сообщений в папку" >
-  <topic name="как работают фильтры" url="filters/how_filtering_works.htm" />
+  <topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />
 </key>
 <key name="перемещение файлов в портфель" >
-  <topic name="работа с файлами в портфеле" url="Briefcase/Working_with_files_in_Briefcase.htm" />
+  <topic name="Работа с файлами в портфеле" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
 <key name="перемещение, клавиатура" >
-  <topic name="установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="перемещение, клавиши" >
-  <topic name="горячие клавиши ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+  <topic name="Горячие клавиши ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
 </key>
 <key name="пересылка" >
-  <topic name="пересылка сообщения" url="Creating_Messages/forwarding_a_mail_message.htm" />
+  <topic name="Пересылка сообщения" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
 <key name="пересылка ваших сообщений" >
-  <topic name="установка адреса для пересылки" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+  <topic name="Установка адреса для пересылки" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="пересылка встречи" >
+  <topic name="Пересылка встречи" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
+<key name="пересылка приглашения из ежедневника" >
+  <topic name="Изменение собраний в ежедневнике" url="Calendar/editing_meetings_on_your_calendar.htm" />
 </key>
 <key name="пересылка сообщения в качестве вложения" >
-  <topic name="установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="Установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="пересылка, включение сведений заголовка" >
-  <topic name="установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="Установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="перетаскивание" >
-  <topic name="рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="печать" >
-  <topic name="печать разговора" url="conversations/printing_a_conversation.htm" />
-  <topic name="печать сообщений" url="reading_mail/printing_a_mail_message.htm" />
+  <topic name="Печать разговора" url="conversations/printing_a_conversation.htm" />
+  <topic name="Печать сообщений" url="reading_mail/printing_a_mail_message.htm" />
   <key name="сообщение" >
     <topic name="Печать сообщений" url="reading_mail/printing_a_mail_message.htm" />
   </key>
 </key>
 <key name="печать ежедневника" >
-  <topic name="печать ежедневника" url="Calendar/Printing_a_calendar.htm" />
+  <topic name="Печать ежедневника" url="Calendar/Printing_a_calendar.htm" />
 </key>
 <key name="печать контактов" >
-  <topic name="печать контактов" url="Contacts/Printing_Contacts.htm" />
+  <topic name="Печать контактов" url="Contacts/Printing_Contacts.htm" />
 </key>
 <key name="планирование помещения или оборудования" >
-  <topic name="планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
+  <topic name="Планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
 </key>
-<key name="планирование собрания" >
-  <topic name="о странице «Встреча»" url="Calendar/About_the_Appointment_Page.htm" />
+<key name="повторное создание встреч" >
+  <topic name="Создание встречи из существующей встречи" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 </key>
 <key name="повторяющиеся встречи, изменение" >
-  <topic name="изменение повторяющихся встреч" url="Calendar/Deleting_recurring_appointments.htm" />
+  <topic name="Изменение повторяющихся встреч" url="Calendar/Deleting_recurring_appointments.htm" />
 </key>
 <key name="поддерживаемые типы файлов вложений" >
-  <topic name="поддерживаемые типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <topic name="Поддерживаемые типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
 <key name="подписи, автоматическое добавление" >
-  <topic name="создание образов" url="Userspecific/Creating_Personas.htm" />
+  <topic name="Создание образов" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="подписка на RSS" >
-  <topic name="подписка на RSS/Atom-ленты" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+  <topic name="Подписка на RSS/Atom-ленты" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
 <key name="подпись" >
-  <topic name="использование подписи" url="Userspecific/using_a_signature.htm" />
+  <topic name="Использование подписи" url="Userspecific/using_a_signature.htm" />
 </key>
 <key name="подсказки" >
-  <topic name="рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="подстановочные знаки" >
-  <topic name="подстановочные знаки" url="filters/wildcards.htm" />
+  <topic name="Подстановочные знаки" url="filters/wildcards.htm" />
 </key>
 <key name="подстановочные знаки, использование в поиске" >
-  <topic name="использование функции поиска" url="Search/using_the_search_feature.htm" />
+  <topic name="Использование функции поиска" url="Search/using_the_search_feature.htm" />
 </key>
 <key name="подтверждение прочтения письма" >
-  <topic name="запрос подтверждения прочтения письма" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+  <topic name="Запрос подтверждения прочтения письма" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
 <key name="поиск общих элементов" >
-  <topic name="управление элементами общего доступа" url="Sharing/Managing_items_you_share.htm" />
+  <topic name="Управление элементами общего доступа" url="Sharing/Managing_items_you_share.htm" />
 </key>
 <key name="поиск получателей" >
-  <topic name="поиск получателей " url="Search/Searching_for_Recipients_.htm" />
+  <topic name="Поиск получателей " url="Search/Searching_for_Recipients_.htm" />
 </key>
 <key name="поиск с помощью подстановочных знаков" >
-  <topic name="использование функции поиска" url="Search/using_the_search_feature.htm" />
+  <topic name="Использование функции поиска" url="Search/using_the_search_feature.htm" />
 </key>
 <key name="поиск сообщения" >
-  <topic name="поиск сообщений" url="Search/_search__vs.__search_for_.htm" />
+  <topic name="Поиск сообщений" url="Search/_search__vs.__search_for_.htm" />
 </key>
 <key name="поиск, and/or" >
-  <topic name="поиски с условиями типа AND и OR" url="Search/and_vs_or_searches.htm" />
+  <topic name="Поиски с условиями типа AND и OR" url="Search/and_vs_or_searches.htm" />
 </key>
 <key name="поле настраиваемого контакта" >
-  <topic name="создание нового контакта" url="Contacts/creating_a_new_contact.htm" />
+  <topic name="Создание нового контакта" url="Contacts/creating_a_new_contact.htm" />
 </key>
 <key name="получатели, поиск" >
-  <topic name="поиск получателей " url="Search/Searching_for_Recipients_.htm" />
+  <topic name="Поиск получателей " url="Search/Searching_for_Recipients_.htm" />
 </key>
 <key name="получение сообщений" >
-  <topic name="как узнать, что получено новое сообщение" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="Как узнать, что получено новое сообщение" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="пользовательские настройки" >
-  <topic name="установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="пометить завершение задачи" >
-  <topic name="изменение задачи" url="Tasks/Change_a_task.htm" />
+  <topic name="Изменение задачи" url="Tasks/Change_a_task.htm" />
 </key>
 <key name="пометка встречи как личной" >
-  <topic name="пометка встречи как личной" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <topic name="Пометка встречи как личной" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="помощник" >
-  <topic name="помощник Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <topic name="Помощник Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
 <key name="портфель, вложение файлов в сообщения" >
-  <topic name="вложение файлов в сообщения" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
+  <topic name="Вложение файлов в сообщения" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="портфель, общий доступ" >
-  <topic name="общий доступ к портфелю" url="Briefcase/Sharing_your_Briefcase.htm" />
+  <topic name="Общий доступ к портфелю" url="Briefcase/Sharing_your_Briefcase.htm" />
 </key>
 <key name="портфель, отправка файлов из" >
-  <topic name="отправка файлов из портфеля" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
+  <topic name="Отправка файлов из портфеля" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </key>
 <key name="почта" >
   <topic name="Чтение почты" url="reading_mail/reading_mail.htm" />
-  <key name="чтение" >
-    <topic name="чтение почты" url="reading_mail/reading_mail.htm" />
+  <key name="Чтение" >
+    <topic name="Чтение почты" url="reading_mail/reading_mail.htm" />
   </key>
 </key>
 <key name="почта учетной записи POP, получение" >
-  <topic name="установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Установка пользовательских настроек" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 <key name="правая кнопка мыши" >
-  <topic name="рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Рабочее пространство веб-клиента Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="правила фильтра, существующие фильтры" >
-  <topic name="как работают фильтры" url="filters/how_filtering_works.htm" />
+  <topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />
 </key>
 <key name="правила, фильтра" >
-  <topic name="фильтрация сообщений" url="filters/filtering_your_messages.htm" />
-  <topic name="как работают фильтры" url="filters/how_filtering_works.htm" />
+  <topic name="Фильтрация сообщений" url="filters/filtering_your_messages.htm" />
+  <topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />
 </key>
 <key name="предоставление доступа к вашему ежедневнику" >
-  <topic name="предоставление доступа к ежедневнику" url="Calendar/Delegating_Calendar_Access.htm" />
+  <topic name="Предоставление доступа к ежедневнику" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
 <key name="приглашение перемещено в Корзину" >
-  <topic name="ответ на приглашение" url="Calendar/Responding_to_an_invitation.htm" />
+  <topic name="Ответ на приглашение" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
 <key name="приглашение, ответ" >
-  <topic name="ответ на приглашение" url="Calendar/Responding_to_an_invitation.htm" />
+  <topic name="Ответ на приглашение" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
 <key name="примеры поиска" >
-  <topic name="примеры поиска" url="Search/search_examples.htm" />
-</key>
-<key name="приятели МС" >
-  <topic name="доступ к мгновенным сообщениям" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
-<key name="приятели по МС" >
-  <topic name="доступ к мгновенным сообщениям" url="instant_messaging/Accessing_Instant_Messaging.htm" />
+  <topic name="Примеры поиска" url="Search/search_examples.htm" />
 </key>
 <key name="проверка новых сообщений" >
-  <topic name="как узнать, что получено новое сообщение" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="Как узнать, что получено новое сообщение" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="проверка ответа на собрание" >
-  <topic name="использование вкладки «Расписание» при создании встречи" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+  <topic name="Использование вкладки «Расписание» при создании встречи" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
 <key name="проверка почты" >
-  <topic name="как узнать, что получено новое сообщение" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <topic name="Как узнать, что получено новое сообщение" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
 </key>
 <key name="проверка правописания" >
-  <topic name="использование проверки правописания" url="Creating_Messages/Using_Spell_Check.htm" />
+  <topic name="Использование проверки правописания" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
 <key name="проверка правописания, установка обязательной проверки" >
-  <topic name="установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+  <topic name="Установка параметров для окна создания сообщения" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="просмотр в виде HTML" >
-  <topic name="открытие вложений" url="reading_mail/opening_file_attachments.htm" />
+  <topic name="Открытие вложений" url="reading_mail/opening_file_attachments.htm" />
 </key>
 <key name="просмотр области чтения" >
-  <topic name="чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+  <topic name="Чтение почты из области чтения" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>
 <key name="разговоры" >
-  <topic name="разговоры, охватывающие несколько папок" url="conversations/conversations_can_span_folders.htm" />
-  <topic name="печать разговора" url="conversations/printing_a_conversation.htm" />
+  <topic name="Разговоры, охватывающие несколько папок" url="conversations/conversations_can_span_folders.htm" />
+  <topic name="Печать разговора" url="conversations/printing_a_conversation.htm" />
   <key name="печать" >
-    <topic name="печать разговора" url="conversations/printing_a_conversation.htm" />
+    <topic name="Печать разговора" url="conversations/printing_a_conversation.htm" />
   </key>
 </key>
 <key name="редактировать как новое" >
-  <topic name="меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
+  <topic name="Меню, открываемые правой кнопкой мыши" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
-<key name="редактор форматированного текста для страниц «Документы»" >
-  <topic name="использование редактора форматированного текста" url="Documents/Using_the_rich_text_editor.htm" />
+<key name="редактор форматированного текста" >
+  <topic name="Использование редактора форматированного текста" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="резервирование помещений и оборудования" >
-  <topic name="планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
+  <topic name="Планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="резервное копирование учетных записей" >
-  <topic name="резервное копирование содержимого учетной записи" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+  <topic name="Резервное копирование содержимого учетной записи" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 <key name="ресурсы" >
-  <topic name="планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
+  <topic name="Планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
 </key>
 <key name="роли" >
-  <topic name="личные данные почты" url="Userspecific/Mail_Identities.htm" />
+  <topic name="Личные данные почты" url="Userspecific/Mail_Identities.htm" />
 </key>
 <key name="роль администратора в ежедневнике" >
-  <topic name="права администратора для ежедневников общего доступа" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+  <topic name="Права администратора для ежедневников общего доступа" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
 </key>
 <key name="словарь, добавление слов" >
-  <topic name="использование проверки правописания" url="Creating_Messages/Using_Spell_Check.htm" />
+  <topic name="Использование проверки правописания" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
 <key name="собрания" >
-  <topic name="о встречах, собраниях и событиях" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <topic name="о странице «Встреча»" url="Calendar/About_the_Appointment_Page.htm" />
+  <topic name="О встречах, собраниях и событиях" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
 <key name="собрания, разрешение отсутствует" >
-  <topic name="сообщение об отсутствии разрешения" url="Calendar/Receiving_a_permission_denied_message.htm" />
+  <topic name="Сообщение об отсутствии разрешения" url="Calendar/Receiving_a_permission_denied_message.htm" />
 </key>
 <key name="события" >
-  <topic name="планирование событий на весь день" url="Calendar/Scheduling_All_Day_events.htm" />
-  <topic name="о встречах, собраниях и событиях" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <topic name="Планирование событий на весь день" url="Calendar/Scheduling_All_Day_events.htm" />
+  <topic name="О встречах, собраниях и событиях" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
 <key name="создание" >
-  <topic name="создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+  <topic name="Создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   <key name="новое сообщение" >
-    <topic name="создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+    <topic name="Создание нового сообщения" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   </key>
 </key>
 <key name="создание встречи из сообщения" >
-  <topic name="помощник Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <topic name="Помощник Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
 <key name="создание меток" >
-  <topic name="использование меток для систематизации почтовых сообщений" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+  <topic name="Использование меток для систематизации почтовых сообщений" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="создание новых страниц" >
+  <topic name="Создание новой страницы" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="сообщение об отсутствии" >
-  <topic name="сообщение об отсутствии" url="Userspecific/vacation_message.htm" />
+  <topic name="Сообщение об отсутствии" url="Userspecific/vacation_message.htm" />
 </key>
 <key name="сообщение, подтверждение прочтения письма" >
-  <topic name="запрос подтверждения прочтения письма" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
+  <topic name="Запрос подтверждения прочтения письма" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
 </key>
 <key name="сообщения электронной почты" >
-  <topic name="элементы сообщения электронной почты" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <topic name="Элементы сообщения электронной почты" url="Creating_Messages/parts_of_an_email_message.htm" />
 </key>
 <key name="сообщения, доставка которых невозможна" >
-  <topic name="сообщения, доставка которых невозможна" url="Creating_Messages/undeliverable_mail.htm" />
+  <topic name="Сообщения, доставка которых невозможна" url="Creating_Messages/undeliverable_mail.htm" />
 </key>
 <key name="сообщения, отсутствие" >
-  <topic name="сообщение об отсутствии" url="Userspecific/vacation_message.htm" />
+  <topic name="Сообщение об отсутствии" url="Userspecific/vacation_message.htm" />
 </key>
 <key name="сообщения, фильтрация" >
-  <topic name="фильтрация сообщений" url="filters/filtering_your_messages.htm" />
+  <topic name="Фильтрация сообщений" url="filters/filtering_your_messages.htm" />
 </key>
 <key name="сортировка входящих сообщений электронной почты" >
-  <topic name="как работают фильтры" url="filters/how_filtering_works.htm" />
+  <topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />
 </key>
 <key name="сортировка задач" >
-  <topic name="сортировка задач " url="Tasks/Sorting_tasks_.htm" />
+  <topic name="Сортировка задач " url="Tasks/Sorting_tasks_.htm" />
 </key>
 <key name="специальные папки" >
-  <topic name="создание специальных папок" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
+  <topic name="Создание специальных папок" url="Navigation_folders_and_tips/creating_custom_folders.htm" />
 </key>
 <key name="список контактов" >
-  <topic name="контакты" url="Contacts/contacts.htm" />
+  <topic name="Контакты" url="Contacts/contacts.htm" />
 </key>
 <key name="страница «Общий доступ»" >
-  <topic name="управление элементами общего доступа" url="Sharing/Managing_items_you_share.htm" />
+  <topic name="Управление элементами общего доступа" url="Sharing/Managing_items_you_share.htm" />
 </key>
-<key name="страницы блокнота" >
-  <topic name="создание новой страницы" url="Documents/Create_a_new_page.htm" />
+<key name="страницы, создание в портфеле" >
+  <topic name="Создание новой страницы" url="Documents/Create_a_new_page.htm" />
 </key>
-<key name="страницы, документы" >
-  <topic name="создание новой страницы" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="таблицы, добавление на страницу «Документы»" >
-  <topic name="добавление таблицы на страницу блокнота" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<key name="таблицы, добавление в документ" >
+  <topic name="Добавление таблицы в документ" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="телефон, очистить" >
-  <topic name="управление мобильными устройствами" url="Userspecific/Managing_your_mobile_devices.htm" />
+  <topic name="Управление мобильными устройствами" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
 <key name="тип клиента" >
-  <topic name="установка общих настроек" url="Userspecific/Setting_your_general_preferences.htm" />
-</key>
-<key name="уведомление МС" >
-  <topic name="настройка уведомлений" url="Userspecific/Setting_up_desktop_alerts.htm" />
+  <topic name="Установка общих настроек" url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
 <key name="уведомления" >
-  <topic name="настройка уведомлений" url="Userspecific/Setting_up_desktop_alerts.htm" />
+  <topic name="Настройка уведомлений" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 <key name="уведомления о сообщениях" >
-  <topic name="уведомления о новых сообщениях" url="Userspecific/New_mail_notifications.htm" />
+  <topic name="Уведомления о новых сообщениях" url="Userspecific/New_mail_notifications.htm" />
+</key>
+<key name="удаление" >
+  <topic name="Удаление папок" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  <key name="папки" >
+    <topic name="Удаление папок" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="удаление контактов" >
+  <topic name="Удаление контакта" url="Contacts/deleting_a_contact.htm" />
+</key>
+<key name="удаление повторяющихся встреч" >
+  <topic name="Изменение повторяющихся встреч" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="удаление собрания" >
+  <topic name="Удаление встречи" url="Calendar/Deleting_an_appointment.htm" />
+</key>
+<key name="удаленные файлы, восстановление" >
+  <topic name="Очистка Корзины " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 
 </indexdata>
