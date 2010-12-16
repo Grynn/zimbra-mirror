@@ -1,18 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="maletín, enviar archivos desde el" >
-  <topic name="Enviar archivos desde tu maletín" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
-</key>
-<key name="Marcar" >
-  <topic name="marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="mensaje de correo" >
-    <topic name="Marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
-</key>
-<key name="marcar cita como privada" >
-  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="marcar citas como privadas" >
   <topic name="Marcar una cita como privada" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
@@ -45,12 +33,6 @@
 </key>
 <key name="menús, clic con el botón derecho del ratón" >
   <topic name="menús accesibles con el botón derecho del ratón" url="Navigation_folders_and_tips/right-click_menus.htm" />
-</key>
-<key name="MI" >
-  <topic name="Fundamentos de la mensajería instantánea" url="instant_messaging/Instant_Messaging_Basics.htm" />
-</key>
-<key name="MI, utilizar otros programas" >
-  <topic name="Iniciar sesión en otros clientes de mensajería instantánea" url="instant_messaging/Log_into_other_IM_clients.htm" />
 </key>
 <key name="modificar permiso de acceso a carpetas de correo" >
   <topic name="revocar el acceso a una carpeta compartida" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
@@ -95,9 +77,6 @@
   <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
   <topic name="notificaciones de nuevos mensajes" url="Userspecific/New_mail_notifications.htm" />
 </key>
-<key name="notificación de MI" >
-  <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
-</key>
 <key name="notificar si estás ocupado o disponible" >
   <topic name="Notificar a los demás si estás ocupado o disponible" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
 </key>
@@ -122,13 +101,7 @@
 <key name="ordenar las tareas" >
   <topic name="ordenar las tareas " url="Tasks/Sorting_tasks_.htm" />
 </key>
-<key name="organizar una reunión" >
-  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="páginas del bloc de notas" >
-  <topic name="crear una nueva página" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="páginas, Bloc de notas" >
+<key name="páginas, crear en el Maletín" >
   <topic name="crear una nueva página" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="panel de carpetas" >
@@ -143,9 +116,6 @@
 <key name="panel de lectura, activar o desactivar" >
   <topic name="gestionar la vista de tus mensajes" url="conversations/conversation_list_view.htm" />
   <topic name="leer los mensajes en el panel de lectura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="panel de lectura, ver" >
-  <topic name="área de trabajo del programa en línea de Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="panel de resumen" >
   <topic name="área de carpetas" url="Navigation_folders_and_tips/Folders_area.htm" />
@@ -190,9 +160,6 @@
 </key>
 <key name="preferencias, ver el panel de lectura" >
   <topic name="leer los mensajes en el panel de lectura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="programar una reunión" >
-  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="programar una sala o equipamiento" >
   <topic name="programar recursos" url="Calendar/Scheduling_Resources.htm" />
@@ -240,8 +207,14 @@
 <key name="reenviar tus mensajes" >
   <topic name="configurar una dirección de reenvío" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
+<key name="reenviar una invitación de agenda" >
+  <topic name="Modificar las reuniones incluidas en tu agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
 <key name="reenviar, incluir información del encabezado" >
   <topic name="Configurar tus preferencias para la ventana de redacción de mensajes" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
+<key name="reenvío de una cita" >
+  <topic name="Reenvío de una cita" url="Calendar/Forwarding_an_appointment.htm" />
 </key>
 <key name="reglas de los filtros,  carpetas existentes" >
   <topic name="cómo funcionan los filtros" url="filters/how_filtering_works.htm" />
@@ -267,7 +240,6 @@
 </key>
 <key name="reuniones" >
   <topic name="acerca de las citas, las reuniones y los eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="reuniones, permiso denegado" >
   <topic name="Recibir un mensaje de permiso denegado" url="Calendar/Receiving_a_permission_denied_message.htm" />
@@ -283,6 +255,30 @@
 </key>
 <key name="revocar permisos de acceso a las agendas" >
   <topic name="determinar acceso a las agendas" url="Calendar/Delegating_Calendar_Access.htm" />
+</key>
+<key name="rol de administrador en la agenda" >
+  <topic name="Privilegios de administración para las agendas compartidas" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+</key>
+<key name="roles" >
+  <topic name="identidades de correo" url="Userspecific/Mail_Identities.htm" />
+</key>
+<key name="RSS" >
+  <topic name="Suscribirte a fuentes RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="salir de la cuenta" >
+  <topic name="iniciar sesión y salir de la cuenta" url="Userspecific/logging_on_and_off.htm" />
+</key>
+<key name="suscribirte a fuente RSS" >
+  <topic name="Suscribirte a fuentes RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+</key>
+<key name="tablas, añadir a un documento" >
+  <topic name="Añadir una tabla a un documento" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="tarea, marcar como completa" >
+  <topic name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
+</key>
+<key name="tareas, imprimir" >
+  <topic name="Acerca de las tareas" url="Tasks/About_Tasks.htm" />
 </key>
 
 </indexdata>

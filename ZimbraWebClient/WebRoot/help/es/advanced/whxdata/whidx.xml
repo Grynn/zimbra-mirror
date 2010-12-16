@@ -1,9 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="abrir los archivos del maletín" last="conversaciones" num="99" />
-<chunkinfo url="whidata1.xml" first="copia de seguridad de los datos de la cuenta" last="maletín, compartir" num="101" />
-<chunkinfo url="whidata2.xml" first="maletín, enviar archivos desde el" last="revocar permisos de acceso a las agendas" num="92" />
-<chunkinfo url="whidata3.xml" first="rol de administrador en la agenda" last="Zimlets, desactivar" num="35" />
+<chunkinfo url="whidata0.xml" first="abrir los archivos del maletín" last="copiar citas" num="98" />
+<chunkinfo url="whidata1.xml" first="corrección ortográfica, ajustar como obligatoria" last="Marcar" num="102" />
+<chunkinfo url="whidata2.xml" first="marcar citas como privadas" last="tareas, imprimir" num="91" />
+<chunkinfo url="whidata3.xml" first="teclas de acceso directo" last="Zimlets, desactivar" num="28" />
 
 </index>

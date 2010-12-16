@@ -10,12 +10,6 @@
 <key name="acceso compartido, libreta de direcciones" >
   <topic name="compartir tu libreta de direcciones" url="Contacts/Sharing_your_Address_Book.htm" />
 </key>
-<key name="accesos directos" >
-  <topic name="área de trabajo del programa en línea de Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="adjuntar archivos" >
-  <topic name="adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-</key>
 <key name="adjuntar archivos del maletín" >
   <topic name="adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
@@ -32,6 +26,12 @@
 <key name="agenda, compartida con rol de administrador" >
   <topic name="Privilegios de administración para las agendas compartidas" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
 </key>
+<key name="agenda, contestar a" >
+  <topic name="Modificar las reuniones incluidas en tu agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
+<key name="agenda, contestar desde" >
+  <topic name="Contestar desde una cita de la agenda" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+</key>
 <key name="agenda, disponible/ocupado" >
   <topic name="consultar la disponibilidad" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
@@ -47,23 +47,20 @@
 <key name="agenda, personalizar semana laboral" >
   <topic name="Vistas de la agenda" url="Calendar/Calendar_Views.htm" />
 </key>
+<key name="agenda, reenvío de una cita" >
+  <topic name="Reenvío de una cita" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
 <key name="agendas iCal, importar o exportar" >
   <topic name="importar tu agenda iCal " url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
 <key name="alertas" >
   <topic name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
-<key name="amigos de MI" >
-  <topic name="Acceder a la mensajería instantánea" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
 <key name="Añadido rápido" >
   <topic name="utilizar el Añadido rápido para crear una cita" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
 </key>
 <key name="añadir contactos" >
   <topic name="crear un nuevo contacto" url="Contacts/creating_a_new_contact.htm" />
-</key>
-<key name="añadir contactos a MI" >
-  <topic name="Acceder a la mensajería instantánea" url="instant_messaging/Accessing_Instant_Messaging.htm" />
 </key>
 <key name="añadir cuentas existentes" >
   <topic name="añadir cuentas POP" url="Userspecific/Adding_POP_accounts.htm" />
@@ -73,6 +70,9 @@
 </key>
 <key name="añadir palabras a mi diccionario" >
   <topic name="utilizar el corrector ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
+</key>
+<key name="añadir tablas" >
+  <topic name="Añadir una tabla a un documento" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="archivar mensajes" >
   <topic name="eliminar los mensajes" url="reading_mail/archiving_old_messages.htm" />
@@ -109,15 +109,6 @@
 </key>
 <key name="autocompletado de direcciones de correo" >
   <topic name="usar autocompletado de direcciones" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="Bloc de notas, añadir tablas" >
-  <topic name="añadir una tabla a la página del bloc de notas" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="Bloc de notas, crear páginas nuevas" >
-  <topic name="crear una nueva página" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="Bloc de notas, editor de texto enriquecido " >
-  <topic name="utilizar el editor de texto enriquecido" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="bloquear el spam" >
   <topic name="Filtrar el spam" url="filters/Filtering_Junk_Mail.htm" />
@@ -196,17 +187,11 @@
 <key name="carpetas, asignación de nombres a" >
   <topic name="acerca de las carpetas" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
-<key name="chat" >
-  <topic name="Iniciar un chat de mensajería instantánea" url="instant_messaging/Starting_an_IM_chat.htm" />
-</key>
 <key name="cita de todo el día" >
   <topic name="programar eventos para todo el día" url="Calendar/Scheduling_All_Day_events.htm" />
 </key>
 <key name="citas" >
   <topic name="acerca de las citas, las reuniones y los eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-</key>
-<key name="citas privadas" >
-  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="citas privadas, compartir detalles" >
   <topic name="Determinar el acceso a una agenda" url="Calendar/Delegating_Calendar_Access.htm" />
@@ -295,6 +280,12 @@
 <key name="contactos, volver a añadir un contacto eliminado a tu lista" >
   <topic name="eliminar un contacto" url="Contacts/deleting_a_contact.htm" />
 </key>
+<key name="contestar a una invitación de agenda" >
+  <topic name="Modificar las reuniones incluidas en tu agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
+<key name="contestar desde la agenda" >
+  <topic name="Contestar desde una cita de la agenda" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+</key>
 <key name="contraseña" >
   <topic name="si olvidas tu contraseña" url="Userspecific/if_you_forget_your_password.htm" />
   <topic name="cambiar tu contraseña" url="Userspecific/chaning_your_password.htm" />
@@ -305,6 +296,12 @@
   <key name="imprimir" >
     <topic name="imprimir una conversación" url="conversations/printing_a_conversation.htm" />
   </key>
+</key>
+<key name="copia de seguridad de los datos de la cuenta" >
+  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
+<key name="copiar citas" >
+  <topic name="Crear una cita a partir de otra ya existente" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 </key>
 
 </indexdata>

@@ -1,33 +1,10 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="rol de administrador en la agenda" >
-  <topic name="Privilegios de administración para las agendas compartidas" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
-</key>
-<key name="roles" >
-  <topic name="identidades de correo" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="RSS" >
-  <topic name="Suscribirte a fuentes RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-</key>
-<key name="salir de la cuenta" >
-  <topic name="iniciar sesión y salir de la cuenta" url="Userspecific/logging_on_and_off.htm" />
-</key>
-<key name="suscribirte a fuente RSS" >
-  <topic name="Suscribirte a fuentes RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-</key>
-<key name="tablas, añadir a las páginas de los blocs de notas" >
-  <topic name="añadir una tabla a la página del bloc de notas" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="tarea, marcar como completa" >
-  <topic name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="tareas, imprimir" >
-  <topic name="Acerca de las tareas" url="Tasks/About_Tasks.htm" />
-</key>
 <key name="teclas de acceso directo" >
-  <topic name="configurar tus preferencias" url="Userspecific/Setting_your_user_preferences.htm" />
   <topic name="teclas de acceso directo de Zimbra" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
+  <topic name="configurar tus preferencias" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="área de trabajo del programa en línea de Zimbra" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="teléfono, borrar" >
   <topic name="Gestionar tus dispositivos móviles" url="Userspecific/Managing_your_mobile_devices.htm" />
@@ -98,6 +75,9 @@
 </key>
 <key name="visualización de mensajes" >
   <topic name="gestionar la vista de tus mensajes" url="conversations/conversation_list_view.htm" />
+</key>
+<key name="volver a crear citas" >
+  <topic name="Crear una cita a partir de otra ya existente" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
 </key>
 <key name="W en agenda en miniatura" >
   <topic name="Ver números de semanas de la agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />

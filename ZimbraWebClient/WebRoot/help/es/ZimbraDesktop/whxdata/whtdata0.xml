@@ -37,7 +37,7 @@
   <item name="Redactar y enviar mensajes de correo" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   <item name="Los componentes de un mensaje" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="Utilizar los campos CC: y CCO: ." url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="Utilizar los campos CC: y CCO:  " url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Añadir la firma" url="Userspecific/using_a_signature.htm" />
   <item name="Adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Tipos de archivos adjuntos admitidos" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
@@ -45,7 +45,7 @@
   <item name="Guardar un borrador" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Leer, responder y reenviar mensajes" >
-  <item name="Leer tu correo" url="reading_mail/reading_mail.htm" />
+  <item name="Leer el correo" url="reading_mail/reading_mail.htm" />
   <item name="Cómo saber que tienes mensajes nuevos" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
   <item name="Ver mensajes desde el panel de lectura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
   <item name="Marcar los mensajes como no leídos" url="reading_mail/marking_mail_as_unread.htm" />
@@ -80,7 +80,6 @@
 </book>
 <book name="Programar citas" >
   <item name="Acerca de la programación de citas" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="Organizar una cita" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Programar una cita" url="Calendar/Scheduling_meetings.htm" />
   <item name="Consultar la disponibilidad" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="Marcar una cita como privada" url="Calendar/Marking_an_appointment_as_private.htm" />
@@ -95,7 +94,7 @@
   <item name="Buscar mensajes" url="Search/_search__vs.__search_for_.htm" />
   <item name="Búsqueda rápida" url="Search/Quick_search.htm" />
   <item name="Búsqueda avanzada" url="Search/building_search_queries.htm" />
-  <item name="Guardar tus búsquedas" url="Search/saving_search_queries.htm" />
+  <item name="Guardar búsquedas" url="Search/saving_search_queries.htm" />
   <item name="Descripción del lenguaje de búsquedas" url="Search/query_language_description.htm" />
   <item name="Ejemplos de búsquedas" url="Search/search_examples.htm" />
   <item name="Contiene frente a coincide" url="Search/contains_vs_matches.htm" />
@@ -132,11 +131,13 @@
 <chunk name="Compartir carpetas (sólo las cuentas de Zimbra)" ref="whtdata1.xml" />
 </book>
 <book name="Utilizar el maletín" >
-<chunk name="Utilizar el maletín" ref="whtdata2.xml" />
+  <item name="Trabajar con el Maletín" url="Briefcase/Working_in_Briefcase.htm" />
+  <item name="Crear un nuevo documento " url="Documents/Create_a_new_page.htm" />
+  <item name="Utilizar el editor de texto enriquecido" url="Documents/Using_the_rich_text_editor.htm" />
+  <item name="Añadir una tabla a un documento" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </book>
 <book name="Gestionar el contenido de tu cuenta" >
-  <item name="Archivar tus mensajes de correo" url="Zdesktop/Archiving_your_email_messages.htm" />
-  <item name="Mover los datos de una cuenta a otra" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+<chunk name="Gestionar el contenido de tu cuenta" ref="whtdata2.xml" />
 </book>
 
 </tocdata>

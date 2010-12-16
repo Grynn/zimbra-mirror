@@ -19,7 +19,7 @@
   <item name="Menús accesibles con el botón derecho del ratón" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Aplicar las acciones a varios elementos seleccionados" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
   <item name="Utilizar navegadores" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-  <item name="Guardar tu trabajo" url="Userspecific/browser_session_handling.htm" />
+  <item name="Guardar mi trabajo" url="Userspecific/browser_session_handling.htm" />
   <item name="Ver el panel de resumen" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="Carpetas del sistema de correo" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="Vacía la carpeta de la Papelera" url="Navigation_folders_and_tips/trash_folder.htm" />
@@ -27,27 +27,27 @@
 </book>
 <book name="Gestionar tus mensajes " >
   <item name="Gestionar la vista de tus mensajes" url="conversations/conversation_list_view.htm" />
-  <item name="Configurar tus preferencias de correo" url="Userspecific/Setting_your_mail_preferences.htm" />
-  <item name="Clasificar tus mensajes de correo" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
-  <item name="Personalizar la página de inicio de tu buzón de correo" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
+  <item name="Configurar las preferencias de correo" url="Userspecific/Setting_your_mail_preferences.htm" />
+  <item name="Clasificar los mensajes de correo electrónico" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="Personalizar la página de inicio del buzón de correo" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
   <item name="Cómo funcionan las conversaciones" url="conversations/conversations_can_span_folders.htm" />
   <item name="Imprimir una conversación" url="conversations/printing_a_conversation.htm" />
   <item name="Mover mensajes entre carpetas" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <item name="Configurar una dirección de reenvío" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Suscribirte a fuentes RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-  <item name="Gestionar diferentes identidades dentro de tu cuenta" url="Userspecific/Mail_Identities.htm" />
+  <item name="Gestionar las identidades de tu cuenta" url="Userspecific/Mail_Identities.htm" />
   <item name="Gestionar la carpeta Spam" url="filters/Managing_your_Junk_Folder.htm" />
-  <item name="Recuperar los mensajes eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Recuperar elementos eliminados" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Eliminar los mensajes" url="reading_mail/archiving_old_messages.htm" />
   <book name="Leer tus mensajes" >
     <item name="Leer el correo" url="reading_mail/reading_mail.htm" />
-    <item name="Leer los mensajes en el panel de lectura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-    <item name="Configurar las alertas de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
+    <item name="Ver mensajes desde el panel de lectura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+    <item name="Configurar las alertas y los recordatorios de Desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
     <item name="Marcar los mensajes como no leídos" url="reading_mail/marking_mail_as_unread.htm" />
     <item name="Notificación sobre la recepción de nuevos mensajes" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
     <item name="Ver HTML en los mensajes de correo" url="reading_mail/displaying_html_in_email_messages.htm" />
     <item name="Abrir archivos adjuntos" url="reading_mail/opening_file_attachments.htm" />
-    <item name="Imprimir un mensaje" url="reading_mail/printing_a_mail_message.htm" />
+    <item name="Imprimir un mensaje de correo" url="reading_mail/printing_a_mail_message.htm" />
     <item name="Mensajes que no se pueden entregar" url="Creating_Messages/undeliverable_mail.htm" />
   </book>
   <book name="Recuperar correo de otras cuentas" >
@@ -65,8 +65,8 @@
   <item name="Programar mensajes para entregarlos más adelante" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Solicitar una notificación de lectura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Adjuntar archivos a un mensaje" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-  <item name="Tipos de archivos adjuntos" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="Añadir direcciones CC: y CCO: ." url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="Tipos de archivos adjuntos admitidos" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Añadir direcciones CC: y CCO:  " url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Utilizar el editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Utilizar el corrector ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="Guardar un borrador" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -83,12 +83,12 @@
   <item name="Reenviar datos de contacto" url="Contacts/Forwarding_Contact_Information.htm" />
   <item name="Usar la libreta de direcciones de la empresa" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="Añadir un contacto de forma automática" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
-  <item name="Crear grupos de contactos" url="Contacts/Creating_Group_Contact_Lists.htm" />
-  <item name="Importar libretas de direcciones" url="Contacts/Importing_Contacts.htm" />
+  <item name="Crear listas de grupos de contactos" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="Importar contactos" url="Contacts/Importing_Contacts.htm" />
   <item name="Exportar libretas de direcciones" url="Contacts/Exporting_Address_Books.htm" />
   <item name="Imprimir los nombres de los contactos o las libretas de direcciones" url="Contacts/Printing_Contacts.htm" />
   <item name="Modificar los datos de contacto" url="Contacts/editing_a_contact.htm" />
-  <item name="Eliminar un contacto" url="Contacts/deleting_a_contact.htm" />
+  <item name="Eliminar contacto" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="Gestionar tu agenda" >
   <item name="Acerca@CompanyName@ de @CompanyName@" url="Calendar/About_Calendar.htm" />
@@ -108,7 +108,7 @@
 <chunk name="Programar citas, reuniones y eventos" ref="whtdata1.xml" />
 </book>
 <book name="Usar las listas de tareas" >
-  <item name="Acerca de las tareas" url="Tasks/About_Tasks.htm" />
+  <item name="Usar las listas de tareas" url="Tasks/About_Tasks.htm" />
   <item name="Crear listas de tareas" url="Tasks/Create_tasks_folders.htm" />
   <item name="Añadir una tarea" url="Tasks/Add_a_task.htm" />
   <item name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />

@@ -6,8 +6,8 @@
 <item name="Compartir con una lista de distribución" url="Sharing/Sharing_with_a_Distribution_List.htm" />
 <book name="Compartir carpetas de correo" >
   <item name="Compartir carpetas de correo" url="Delegated_mailboxes/How_sharing_your_mailbox_works.htm" />
-  <item name="Compartir tu buzón de correo" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
-  <item name="Revocar el acceso a una carpeta compartida" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <item name="Compartir tu carpeta de correo" url="Delegated_mailboxes/Sharing_your_mailbox.htm" />
+  <item name="Modificar el acceso a una carpeta compartida" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
   <item name="Aceptar el acceso a una carpeta de correo compartida" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
   <item name="Trabajar con una carpeta de correo compartida" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
 </book>

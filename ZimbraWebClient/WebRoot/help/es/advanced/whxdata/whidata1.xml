@@ -1,9 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="copia de seguridad de los datos de la cuenta" >
-  <topic name="Hacer una copia de seguridad del contenido de tu cuenta" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
-</key>
 <key name="corrección ortográfica, ajustar como obligatoria" >
   <topic name="Configurar tus preferencias para la ventana de redacción de mensajes" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
@@ -16,9 +13,6 @@
     <topic name="leer el correo" url="reading_mail/reading_mail.htm" />
   </key>
 </key>
-<key name="creador de búsquedas" >
-  <topic name="crear búsquedas" url="Search/building_search_queries.htm" />
-</key>
 <key name="Crear" >
   <topic name="redactar un nuevo mensaje" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   <key name="nuevo mensaje de correo" >
@@ -27,6 +21,9 @@
 </key>
 <key name="crear etiquetas" >
   <topic name="usar etiquetas para clasificar los mensajes" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="crear nuevas páginas" >
+  <topic name="Crear una nueva página" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="crear una cita desde un mensaje" >
   <topic name="Asistente de Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
@@ -100,7 +97,7 @@
 <key name="Editar contacto" >
   <topic name="modificar un contacto" url="Contacts/editing_a_contact.htm" />
 </key>
-<key name="editor de texto enriquecido para el bloc de notas" >
+<key name="editor de texto enriquecido" >
   <topic name="utilizar el editor de texto enriquecido" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="ejemplos de búsquedas" >
@@ -269,9 +266,6 @@
 <key name="imprimir una agenda" >
   <topic name="imprimir una agenda" url="Calendar/Printing_a_calendar.htm" />
 </key>
-<key name="iniciar un chat de mensajería instantánea" >
-  <topic name="Iniciar un chat de mensajería instantánea" url="instant_messaging/Starting_an_IM_chat.htm" />
-</key>
 <key name="invitación enviada a la papelera" >
   <topic name="responder a una invitación" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
@@ -310,6 +304,15 @@
 </key>
 <key name="maletín, compartir" >
   <topic name="Compartir tu Maletín" url="Briefcase/Sharing_your_Briefcase.htm" />
+</key>
+<key name="maletín, enviar archivos desde el" >
+  <topic name="Enviar archivos desde tu maletín" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
+</key>
+<key name="Marcar" >
+  <topic name="marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  <key name="mensaje de correo" >
+    <topic name="Marcar un mensaje de correo" url="Tags_and_flags/Flagging_an_email_message.htm" />
+  </key>
 </key>
 
 </indexdata>

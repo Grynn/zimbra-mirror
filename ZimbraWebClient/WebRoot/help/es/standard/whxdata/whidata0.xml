@@ -49,9 +49,6 @@
 <key name="carpetas" >
   <topic name="cambiar el nombre de las carpetas" url="Navigation_folders_and_tips/renaming_folders.htm" />
 </key>
-<key name="citas privadas" >
-  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="condiciones de los filtros" >
   <topic name="condiciones y acciones admitidas de los filtros" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
@@ -112,9 +109,6 @@
 <key name="libretas de direcciones, crear" >
   <topic name="tus libretas de direcciones" url="Contacts/b_Your_Address_Books.htm" />
 </key>
-<key name="marcar cita como privada" >
-  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="marcar tarea como completa" >
   <topic name="Cambiar una tarea" url="Tasks/Change_a_task.htm" />
 </key>
@@ -151,17 +145,11 @@
 <key name="opciones, notificación de mensaje nuevo" >
   <topic name="notificaciones de nuevos mensajes" url="Userspecific/New_mail_notifications.htm" />
 </key>
-<key name="organizar una reunión" >
-  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="personalizar semana laboral" >
   <topic name="Vistas de la agenda" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="preferencias" >
   <topic name="Configurar tus preferencias" url="Userspecific/b_Setting_your_Options.htm" />
-</key>
-<key name="programar una reunión" >
-  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="recordarme en este ordenador" >
   <topic name="iniciar sesión y salir de la cuenta" url="Userspecific/logging_on_and_off.htm" />
@@ -183,9 +171,6 @@
   <key name="mensajes de correo" >
     <topic name="responder a los mensajes" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
-</key>
-<key name="reuniones" >
-  <topic name="acerca de la página de citas" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="salir de la cuenta" >
   <topic name="iniciar sesión y salir de la cuenta" url="Userspecific/logging_on_and_off.htm" />
