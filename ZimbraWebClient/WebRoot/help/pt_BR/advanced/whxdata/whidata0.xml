@@ -19,11 +19,11 @@
 <key name="adicionando contatos" >
   <topic name="Criando um novo contato" url="Contacts/creating_a_new_contact.htm" />
 </key>
-<key name="adicionando contatos a MI" >
-  <topic name="Acessando o Sistema de troca de mensagens instantâneas" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
 <key name="adicionando palavras ao meu dicionário" >
   <topic name="Usando o verificador ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
+</key>
+<key name="adicionando tabelas" >
+  <topic name="Adicionando uma tabela a um documento" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="adicionar assinatura" >
   <topic name="Usando uma assinatura" url="Userspecific/using_a_signature.htm" />
@@ -33,6 +33,9 @@
 </key>
 <key name="agenda, configurando permissões de convite" >
   <topic name="Identificando quem pode convidar você para reuniões" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
+</key>
+<key name="agenda, encaminhando um compromisso" >
+  <topic name="Encaminhando um compromisso" url="Calendar/Forwarding_an_appointment.htm" />
 </key>
 <key name="agenda, eventos" >
   <topic name="Programando eventos que duram o dia todo" url="Calendar/Scheduling_All_Day_events.htm" />
@@ -48,6 +51,12 @@
 </key>
 <key name="agenda, personalizar semana útil" >
   <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="agenda, respondendo da" >
+  <topic name="Respondendo um compromisso na minha agenda" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+</key>
+<key name="agenda, responder" >
+  <topic name="Editando reuniões na agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
 </key>
 <key name="agenda, sobre" >
   <topic name="Sobre a agenda do Zimbra" url="Calendar/About_Calendar.htm" />
@@ -72,12 +81,6 @@
 </key>
 <key name="alterando um compromisso" >
   <topic name="Alterando compromissos recorrentes" url="Calendar/Deleting_recurring_appointments.htm" />
-</key>
-<key name="amigos de MI" >
-  <topic name="Acessando o Sistema de troca de mensagens instantâneas" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
-<key name="Anexando" >
-  <topic name="Anexando arquivos a uma mensagem de e-mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="anexando arquivos do porta-arquivos" >
   <topic name="Anexando arquivos a uma mensagem de e-mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -112,14 +115,8 @@
 <key name="assistente" >
   <topic name="Assistente Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
 </key>
-<key name="atalhos" >
-  <topic name="Espaço de trabalho do Cliente Zimbra para Web" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
 <key name="atalhos do teclado" >
   <topic name="Teclas de atalho de teclado do ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-</key>
-<key name="bate-papo" >
-  <topic name="Iniciando um bate-papo de MI" url="instant_messaging/Starting_an_IM_chat.htm" />
 </key>
 <key name="bloqueando spam" >
   <topic name="Filtrando spam" url="filters/Filtering_Junk_Mail.htm" />
@@ -190,9 +187,6 @@
 <key name="compromissos" >
   <topic name="Sobre compromissos, reuniões e eventos" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
-<key name="compromissos particulares" >
-  <topic name="Sobre a página Compromissos" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="compromissos particulares, compartilhando detalhes" >
   <topic name="Delegando acesso à agenda" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
@@ -205,9 +199,6 @@
 </key>
 <key name="confirmação de leitura" >
   <topic name="Solicitando uma confirmação de leitura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
-</key>
-<key name="Construtor de buscas" >
-  <topic name="Construindo critérios de busca" url="Search/building_search_queries.htm" />
 </key>
 <key name="conta IMAP" >
   <topic name="Gerenciando suas contas POP" url="Userspecific/Managing_your_POP_Accounts.htm" />
@@ -271,6 +262,9 @@
 <key name="convite, respondendo" >
   <topic name="Respondendo a um convite" url="Calendar/Responding_to_an_invitation.htm" />
 </key>
+<key name="copiar compromissos" >
+  <topic name="Criando um compromisso de um compromisso existente" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+</key>
 <key name="Criando" >
   <topic name="Criando uma nova mensagem de e-mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
   <key name="Nova mensagem de e-mail" >
@@ -279,6 +273,9 @@
 </key>
 <key name="criando marcadores" >
   <topic name="Usando marcadores para classificar mensagens de e-mail" url="Tags_and_flags/Using_tags_to_classify_mail_messages.htm" />
+</key>
+<key name="criando novas páginas" >
+  <topic name="Criar uma nova página" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="criar um compromisso a partir de uma mensagem" >
   <topic name="Assistente Zimbra" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
@@ -316,6 +313,9 @@
 </key>
 <key name="dicas de ferramentas" >
   <topic name="Espaço de trabalho do Cliente Zimbra para Web" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="dicionário, adicionando palavras ao" >
+  <topic name="Usando o verificador ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
 </key>
 
 </indexdata>

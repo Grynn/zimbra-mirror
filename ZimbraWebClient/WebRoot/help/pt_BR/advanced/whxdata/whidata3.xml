@@ -1,31 +1,10 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="Senha" >
-  <topic name="Se esquecer sua senha" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="Alterando sua senha" url="Userspecific/chaning_your_password.htm" />
-</key>
-<key name="sessão expirada" >
-  <topic name="Caso sua sessão expire" url="Userspecific/if_your_session_expires.htm" />
-</key>
-<key name="Sinalização" >
-  <topic name="Sinalizando uma mensagem de e-mail" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  <key name="Mensagem de e-mail" >
-    <topic name="Sinalizando uma mensagem de e-mail" url="Tags_and_flags/Flagging_an_email_message.htm" />
-  </key>
-</key>
-<key name="tabelas, adicionando a páginas de Documentos" >
-  <topic name="Adicionando uma tabela a uma página de Notebook" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="tarefa, marcar como concluída" >
-  <topic name="Alterar uma tarefa" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="tarefas, imprimir" >
-  <topic name="Sobre Tarefas" url="Tasks/About_Tasks.htm" />
-</key>
 <key name="teclas de atalho" >
   <topic name="Teclas de atalho de teclado do ZWC" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
   <topic name="Definindo suas preferências de usuário" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Espaço de trabalho do Cliente Zimbra para Web" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="telefone, limpeza" >
   <topic name="Gerenciando seus dispositivos móveis" url="Userspecific/Managing_your_mobile_devices.htm" />

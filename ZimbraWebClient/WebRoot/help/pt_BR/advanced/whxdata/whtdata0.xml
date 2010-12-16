@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="Informações básicas" >
-  <item name="Bem-vindo ao @ClientNameLong@, Edição avançada" url="Getting_Started/about_liquid_mail.htm" />
+  <item name="Bem-vindo ao @ClientNameLong@, Edição avançadax" url="Getting_Started/about_liquid_mail.htm" />
   <item name="Efetuando login e saindo" url="Userspecific/logging_on_and_off.htm" />
   <item name="Alterando meu tipo de cliente padrão para login" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Teclas de atalho do teclado" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
@@ -19,7 +19,7 @@
   <item name="Menus de botão direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
   <item name="Aplicando ações a várias seleções" url="Navigation_folders_and_tips/applying_actions_to_multiple_selections.htm" />
   <item name="Usando navegadores" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
-  <item name="Salvando seu trabalho" url="Userspecific/browser_session_handling.htm" />
+  <item name="Salvando meu trabalho" url="Userspecific/browser_session_handling.htm" />
   <item name="Visualizando o painel Visão geral" url="Navigation_folders_and_tips/Folders_area.htm" />
   <item name="Pastas do sistema de e-mail" url="Navigation_folders_and_tips/inbox_folder.htm" />
   <item name="Esvaziar sua pasta Lixeira" url="Navigation_folders_and_tips/trash_folder.htm" />
@@ -27,22 +27,22 @@
 </book>
 <book name="Gerenciando seu e-mail " >
   <item name="Gerenciando a visualização da mensagem de e-mail" url="conversations/conversation_list_view.htm" />
-  <item name="Configurando as preferências de e-mail" url="Userspecific/Setting_your_mail_preferences.htm" />
-  <item name="Categorizando suas mensagens de e-mail" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="Definindo preferências de e-mail" url="Userspecific/Setting_your_mail_preferences.htm" />
+  <item name="Categorizando mensagens de e-mail" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Personalizando sua página inicial de e-mails" url="Navigation_folders_and_tips/Customizing_your_initial_email_page.htm" />
   <item name="Como a conversação funciona" url="conversations/conversations_can_span_folders.htm" />
   <item name="Imprimindo um tópico de conversação" url="conversations/printing_a_conversation.htm" />
   <item name="Movendo mensagens de e-mail entre pastas" url="Navigation_folders_and_tips/moving_mail_messages_between_folders.htm" />
   <item name="Definindo um endereço de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
   <item name="Assinar conteúdos RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
-  <item name="Gerenciando várias identidades em sua conta" url="Userspecific/Mail_Identities.htm" />
+  <item name="Gerenciando suas identidades de conta" url="Userspecific/Mail_Identities.htm" />
   <item name="Gerenciando sua pasta Spam" url="filters/Managing_your_Junk_Folder.htm" />
-  <item name="Recuperando mensagens de e-mail excluidas " url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Recuperando itens excluídos" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Eliminando mensagens de e-mail" url="reading_mail/archiving_old_messages.htm" />
   <book name="Lendo mensagens" >
     <item name="Lendo e-mail" url="reading_mail/reading_mail.htm" />
-    <item name="Lendo e-mails no painel Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-    <item name="Configurando alertas de desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
+    <item name="Visualizando mensagens no painel Leitura" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+    <item name="Configurando alertas e lembretes de desktop" url="Userspecific/Setting_up_desktop_alerts.htm" />
     <item name="Marcando e-mail como não lido" url="reading_mail/marking_mail_as_unread.htm" />
     <item name="Notificação sobre novas mensagens" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
     <item name="Exibindo HTML em mensagens de e-mail" url="reading_mail/displaying_html_in_email_messages.htm" />
@@ -60,13 +60,13 @@
   <item name="Escrevendo uma nova mensagem de e-mail" url="Creating_Messages/Composing_a_new_mail_message.htm" />
   <item name="Definindo suas preferências para a janela de composição de e-mails" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
   <item name="Partes da mensagem de e-mail" url="Creating_Messages/parts_of_an_email_message.htm" />
-  <item name="Adicionar sua assinatura automaticamente" url="Userspecific/using_a_signature.htm" />
+  <item name="Adicionando automaticamente sua assinatura" url="Userspecific/using_a_signature.htm" />
   <item name="Preenchimento automático de endereços" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Programar e-mails para entrega futura" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Solicitando uma confirmação de leitura" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Anexando arquivos a sua mensagem" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-  <item name="Tipos de arquivo anexo" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
-  <item name="Adicionando endereços Cc: e e Cco:" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
+  <item name="Tipos de arquivo de anexo suportados" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Adicionando endereços Cc: e Cco: e Cco:" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="Usando o editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="Usando o corretor ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
   <item name="Salvando mensagens como rascunhos" url="Creating_Messages/saving_a_draft_message.htm" />
@@ -84,7 +84,7 @@
   <item name="Usando a lista de endereços da empresa" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="Adicionando contatos automaticamente" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
   <item name="Criando listas de grupos de contatos" url="Contacts/Creating_Group_Contact_Lists.htm" />
-  <item name="Importando listas de endereços" url="Contacts/Importing_Contacts.htm" />
+  <item name="Importando contatos" url="Contacts/Importing_Contacts.htm" />
   <item name="Exportando listas de endereços" url="Contacts/Exporting_Address_Books.htm" />
   <item name="Imprimindo nomes de contato ou listas de endereços" url="Contacts/Printing_Contacts.htm" />
   <item name="Editando informações do contato" url="Contacts/editing_a_contact.htm" />
@@ -97,7 +97,7 @@
   <item name="Definindo suas preferências de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
   <item name="Visualizando o número de semanas da agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
   <item name="Opções de visualização de agenda" url="Calendar/Calendar_Views.htm" />
-  <item name="Exibição em lista da Agenda" url="Calendar/Calendar_List_View.htm" />
+  <item name="Exibição em lista da agenda" url="Calendar/Calendar_List_View.htm" />
   <item name="Visualizando várias agendas" url="Calendar/Best_View_to_See_All_Your_Shared_Calendars.htm" />
   <item name="Excluindo agendas" url="Calendar/Deleting_Calendars.htm" />
   <item name="Importando sua agenda iCal" url="Calendar/Importing_your_iCal_calendar.htm" />
@@ -108,7 +108,7 @@
 <chunk name="Agendando compromissos, reuniões e eventos" ref="whtdata1.xml" />
 </book>
 <book name="Usando listas de tarefas" >
-  <item name="Sobre Tarefas" url="Tasks/About_Tasks.htm" />
+  <item name="Usando listas de tarefas" url="Tasks/About_Tasks.htm" />
   <item name="Criar listas de tarefas" url="Tasks/Create_tasks_folders.htm" />
   <item name="Adicionar uma tarefa" url="Tasks/Add_a_task.htm" />
   <item name="Alterar uma tarefa" url="Tasks/Change_a_task.htm" />

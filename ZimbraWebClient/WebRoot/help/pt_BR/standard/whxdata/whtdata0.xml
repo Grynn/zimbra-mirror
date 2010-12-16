@@ -9,16 +9,16 @@
 </book>
 <book name="Navegando em sua caixa de entrada" >
   <item name="Navegando por sua caixa de entrada" url="Navigation_folders_and_tips/b_Navigating_around_your_mailbox.htm" />
-  <item name="Navegando no E-mail" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
+  <item name="Guia Navegando no E-mail" url="Navigation_folders_and_tips/b_How_to_navigate_with_Mail.htm" />
   <item name="Pastas do sistema de e-mail" url="Navigation_folders_and_tips/inbox_folder.htm" />
 </book>
 <book name="Gerenciando seu e-mail " >
   <item name="Gerenciando a forma como os e-mails são exibidos" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
   <item name="Como saber quando recebi novas mensagens" url="reading_mail/b_How_do_I_know_when_I_receive_new_messages.htm" />
-  <item name="Categorizando suas mensagens de e-mail" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
+  <item name="Categorizando mensagens de e-mail" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Imprimindo mensagens de e-mail" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="Definindo um endereço de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
-  <item name="Recuperando mensagens de e-mail excluidas " url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Recuperando itens excluídos" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="Eliminando mensagens de e-mail" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="Lendo mensagens" >
     <item name="Lendo e-mail" url="reading_mail/reading_mail.htm" />
@@ -33,9 +33,8 @@
   <item name="Adicionando sua assinatura automaticamente" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="Preenchimento automático de endereços" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="Anexando arquivos a sua mensagem" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
-  <item name="Tipos de arquivo anexo" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="Tipos de arquivo de anexo suportados" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Usando o editor de HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="Verificar a ortografia" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="Salvando mensagens como rascunhos" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="Responder e encaminhar mensagens" >
@@ -50,22 +49,24 @@
 </book>
 <book name="Gerenciando sua agenda" >
   <item name="Sobre a agenda" url="Calendar/b_About_Calendar.htm" />
-  <item name="Criar nova agenda" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="Criar novas agendas" url="Calendar/b_Create_New_Calendar.htm" />
   <item name="Aplicar código de cores às suas agendas" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Opções de visualização de agenda" url="Calendar/Calendar_Views.htm" />
   <item name="Importando iCalendars" url="Calendar/Importing_iCalendars.htm" />
   <item name="Limpando sua agenda" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Agendando compromissos, reuniões e eventos" >
-  <item name="Planejando uma reunião" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Programando uma reunião" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="Criando compromissos recorrentes" url="Calendar/b_creating_recurring_appointments.htm" />
   <item name="Excluindo um compromisso" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
 <book name="Usando listas de tarefas" >
-  <item name="Sobre Tarefas" url="Tasks/About_Tasks.htm" />
+  <item name="Usando listas de tarefas" url="Tasks/About_Tasks.htm" />
   <item name="Criar listas de tarefas" url="Tasks/bc_Create_task_lists.htm" />
   <item name="Alterar uma tarefa" url="Tasks/Change_a_task.htm" />
+</book>
+<book name="Trabalhando no porta-arquivos" >
+  <item name="Controle de versão de arquivos no porta-arquivos" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </book>
 <book name="Compartilhando pastas" >
   <book name="Compartilhando agendas" >
@@ -92,7 +93,7 @@
 </book>
 <book name="Configurando suas preferências" >
   <item name="Configurando suas preferências" url="Userspecific/b_Setting_your_Options.htm" />
-  <item name="Notificações de novos e-mails" url="Userspecific/New_mail_notifications.htm" />
+  <item name="Notificação por e-mail para outro endereço" url="Userspecific/New_mail_notifications.htm" />
   <item name="Criando mensagens de ausência" url="Userspecific/vacation_message.htm" />
   <item name="Assinando conteúdos RSS/Atom" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>

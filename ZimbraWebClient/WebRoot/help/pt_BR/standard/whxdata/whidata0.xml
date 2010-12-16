@@ -40,9 +40,6 @@
 <key name="busca, salvando" >
   <topic name="Usando a busca" url="Search/b_Using_Search.htm" />
 </key>
-<key name="compromissos particulares" >
-  <topic name="Sobre a página Compromissos" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="Condições do filtro" >
   <topic name="Condições de filtro e ações suportadas" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
@@ -112,9 +109,6 @@
 <key name="marcadores" >
   <topic name="Atribuindo marcadores a mensagens e contatos" url="Tags_and_flags/b_Assigning_Tags_to_messages_and_contacts.htm" />
 </key>
-<key name="marcar compromisso como particular" >
-  <topic name="Sobre a página Compromissos" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="marcar tarefa como concluída" >
   <topic name="Alterar uma tarefa" url="Tasks/Change_a_task.htm" />
 </key>
@@ -157,9 +151,6 @@
 <key name="personalizar semana útil" >
   <topic name="Calendar_Views" url="Calendar/Calendar_Views.htm" />
 </key>
-<key name="planejando uma reunião" >
-  <topic name="Sobre a página de compromisso" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="preenchimento automático de endereços" >
   <topic name="Usando a procura de endereços" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
@@ -168,9 +159,6 @@
 </key>
 <key name="preferências" >
   <topic name="Configurando suas opções" url="Userspecific/b_Setting_your_Options.htm" />
-</key>
-<key name="programando uma reunião" >
-  <topic name="Sobre a página de compromisso" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="Recuperando" >
   <topic name="Recuperando mensagens de e-mail excluidas " url="reading_mail/recovering_deleted_mail_messages.htm" />
@@ -183,9 +171,6 @@
   <key name="Mensagens de e-mail" >
     <topic name="Respondendo a mensagens de e-mail" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
-</key>
-<key name="reuniões" >
-  <topic name="Sobre a página de compromisso" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="saindo" >
   <topic name="Fazendo login e saindo" url="Userspecific/logging_on_and_off.htm" />

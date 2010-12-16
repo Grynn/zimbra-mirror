@@ -1,20 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="dicionário, adicionando palavras ao" >
-  <topic name="Usando o verificador ortográfico" url="Creating_Messages/Using_Spell_Check.htm" />
-</key>
 <key name="dispositivo móvel" >
   <topic name="Gerenciando seus dispositivos móveis" url="Userspecific/Managing_your_mobile_devices.htm" />
-</key>
-<key name="Documentos, adicionando tabelas" >
-  <topic name="Adicionando uma tabela a uma página de Notebook" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="Documentos, criando novas páginas" >
-  <topic name="Criar uma nova página" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="Documentos, editor de texto com formatação" >
-  <topic name="Usando o editor de texto com formatação" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="e-mail" >
   <topic name="Lendo e-mail" url="reading_mail/reading_mail.htm" />
@@ -37,7 +25,7 @@
 <key name="editar permissões de pasta de e-mail" >
   <topic name="Revogando um acesso a uma pasta compartilhada" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </key>
-<key name="editor de texto com formatação para páginas de Documento" >
+<key name="editor de texto com formatação" >
   <topic name="Usando o editor de texto com formatação" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="Encaminhando" >
@@ -46,11 +34,17 @@
 <key name="encaminhando seus e-mails" >
   <topic name="Definindo um endereço de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
+<key name="encaminhando um compromisso" >
+  <topic name="Encaminhando um compromisso" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
 <key name="encaminhando uma mensagem como um anexo" >
   <topic name="Definindo suas preferências para a janela de composição de e-mails" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="encaminhando, incluir informações do cabeçalho" >
   <topic name="Definindo suas preferências para a janela de composição de e-mails" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
+</key>
+<key name="encaminhar um convite de agenda" >
+  <topic name="Editando reuniões na agenda" url="Calendar/editing_meetings_on_your_calendar.htm" />
 </key>
 <key name="endereço de e-mail de encaminhamento" >
   <topic name="Definindo suas preferências de usuário" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -196,9 +190,6 @@
 <key name="imprimir tarefas" >
   <topic name="Sobre Tarefas" url="Tasks/About_Tasks.htm" />
 </key>
-<key name="iniciando bate-papo de MI" >
-  <topic name="Iniciando um bate-papo de MI" url="instant_messaging/Starting_an_IM_chat.htm" />
-</key>
 <key name="lembrar-se de mim neste computador" >
   <topic name="Fazendo login e saindo" url="Userspecific/logging_on_and_off.htm" />
 </key>
@@ -281,9 +272,6 @@
 <key name="marcando compromissos como particular" >
   <topic name="Marcando um compromisso como particular" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
-<key name="marcar compromisso como particular" >
-  <topic name="Sobre a página Compromissos" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="marcar tarefa como concluída" >
   <topic name="Alterar uma tarefa" url="Tasks/Change_a_task.htm" />
 </key>
@@ -301,6 +289,16 @@
 </key>
 <key name="mensagens, férias" >
   <topic name="Mensagem de férias" url="Userspecific/vacation_message.htm" />
+</key>
+<key name="Menus de botão direito do mouse" >
+  <topic name="Menus de botão direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="menus, botão direito do mouse" >
+  <topic name="Menus de botão direito do mouse" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="miniagenda" >
+  <topic name="Definindo suas preferências de agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />
+  <topic name="Visualizando o número de semanas da agenda" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
 </key>
 
 </indexdata>
