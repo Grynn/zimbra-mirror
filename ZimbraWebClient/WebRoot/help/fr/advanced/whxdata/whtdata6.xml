@@ -4,7 +4,7 @@
 <item name="Configuration de règles de filtre" url="filters/how_filtering_works.htm" />
 <item name="Filtrer vos mails" url="filters/filtering_your_messages.htm" />
 <item name="Conditions et actions de filtre supportées" url="filters/filter_conditions_and_actions_supported.htm" />
-<item name="Filtrer à l’aide des options CONTIENT, CORRESPOND et EST" url="Search/contains_vs_matches.htm" />
+<item name="Filtrer à l'aide des options CONTIENT, CORRESPOND et EST" url="Search/contains_vs_matches.htm" />
 <item name="Substitution de filtre" url="filters/wildcards.htm" />
 
 </tocdata>

@@ -1,10 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <tocdata>
-<item name="Partager vos dossiers Zimbra" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
-<item name="Partager vos dossiers" url="Zdesktop/zd_Sharing_Folders_steps_.htm" />
-<item name="Accepter l’accès à un dossier de boîte de réception partagé" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
-<item name="Travailler dans un dossier partagé" url="Zdesktop/zd_working_in_a_shared_folder.htm" />
-<item name="Travailler dans un dossier de mails partagé" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
-<item name="Retrait d’accès à un dossier partagé" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+<item name="Travailler dans un Porte-documents" url="Briefcase/Working_in_Briefcase.htm" />
+<item name="Créer un document " url="Documents/Create_a_new_page.htm" />
+<item name="Utilisation de l'éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+<item name="Ajout d'un tableau à un document" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 
 </tocdata>

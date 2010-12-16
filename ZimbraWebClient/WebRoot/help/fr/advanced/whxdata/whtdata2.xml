@@ -3,9 +3,10 @@
 <tocdata>
 <item name="Travailler dans un Porte-documents" url="Briefcase/Working_in_Briefcase.htm" />
 <item name="Travailler avec des fichiers dans un Porte-documents" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-<item name="Créer une page" url="Documents/Create_a_new_page.htm" />
-<item name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
-<item name="Ajouter un tableau à une page de carnet" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<item name="Créer un document" url="Documents/Create_a_new_page.htm" />
+<item name="Utilisation de l'éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+<item name="Ajout d'un tableau à un document contenu dans le Porte-documents" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<item name="Contrôle de la version des fichiers du Porte-documents" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 <item name="Envoyer des fichiers à partir de votre Porte-documents" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 
 </tocdata>

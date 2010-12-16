@@ -1,9 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="Documents, éditeur de format RTF" >
-  <topic name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
 <key name="Dossier Corbeille" >
   <topic name="Dossier Corbeille" url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
@@ -17,8 +14,8 @@
 <key name="dossiers, nommer" >
   <topic name="À propos des dossiers" url="Navigation_folders_and_tips/about_folders.htm" />
 </key>
-<key name="éditeur de format RTF pour des pages de documents" >
-  <topic name="Utilisation de l’éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
+<key name="éditeur de format RTF" >
+  <topic name="Utilisation de l'éditeur RTF" url="Documents/Using_the_rich_text_editor.htm" />
 </key>
 <key name="emplacement, réserver" >
   <topic name="Planification des ressources" url="Calendar/Scheduling_Resources.htm" />
@@ -40,7 +37,7 @@
   <topic name="À propos des rendez-vous, réunions et événements" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
 <key name="évènements publics/privés du calendrier" >
-  <topic name="Marquer un rendez-vous comme étant d’ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <topic name="Marquer un rendez-vous comme étant d'ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="Exemples de recherches" >
   <topic name="Exemples de recherches" url="Search/search_examples.htm" />
@@ -60,10 +57,16 @@
 <key name="Faire suivre un mail en pièce jointe" >
   <topic name="Configurer vos préférences pour la fenêtre Écrire un mail " url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
+<key name="faire suivre un rendez-vous" >
+  <topic name="Faire suivre un rendez-vous" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
+<key name="faire suivre une invitation dans le calendrier" >
+  <topic name="Modifier une réunion dans votre calendrier" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
 <key name="faire suivre votre mail" >
   <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
-<key name="faire suivre, inclure les informations d’en-tête" >
+<key name="faire suivre, inclure les informations d'en-tête" >
   <topic name="Configurer vos préférences pour la fenêtre Écrire un mail " url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
 <key name="fichiers supprimés, récupérer" >
@@ -73,7 +76,7 @@
   <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="Fil Atom" >
-  <topic name="S’abonner à un fil RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
+  <topic name="S'abonner à un fil RSS/Atom" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
 </key>
 <key name="filtre, son fonctionnement" >
   <topic name="Fonctionnement du filtre" url="filters/how_filtering_works.htm" />
@@ -93,17 +96,17 @@
 <key name="fonctions" >
   <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
 </key>
-<key name="fonctions de l’interface" >
+<key name="Fonctions d'interface utilisateur" >
+  <topic name="Fonctions d'interface utilisateur et raccourcis" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
+</key>
+<key name="fonctions de l'interface" >
   <topic name="Espace de travail de Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="fonctions du client Web de Zimbra" >
   <topic name="À propos de Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
 </key>
-<key name="Fonctions d’interface utilisateur" >
-  <topic name="Fonctions d’interface utilisateur et raccourcis" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
-</key>
 <key name="formatage avec HTML" >
-  <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <topic name="Utilisation de l'éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="glisser-déposer" >
   <topic name="Espace de travail de Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
@@ -113,7 +116,7 @@
 </key>
 <key name="HTML" >
   <topic name="Affichage HTML dans les mails" url="reading_mail/displaying_html_in_email_messages.htm" />
-  <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <topic name="Utilisation de l'éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="html, afficher le mail au format" >
   <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -124,8 +127,8 @@
 <key name="identité mail" >
   <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
-<key name="identité mail pour la création d’un mail" >
-  <topic name="Création d’un mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
+<key name="identité mail pour la création d'un mail" >
+  <topic name="Création d'un mail" url="Creating_Messages/Creating_a_new_mail_message.htm" />
 </key>
 <key name="identités" >
   <topic name="Identités mail" url="Userspecific/Mail_Identities.htm" />
@@ -136,10 +139,10 @@
   <topic name="Créer des avatars" url="Userspecific/Creating_Personas.htm" />
 </key>
 <key name="ignorer" >
-  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Utilisation de la vérification d'adresse" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="images dans les signatures" >
-  <topic name="Utilisation d’une signature" url="Userspecific/using_a_signature.htm" />
+  <topic name="Utilisation d'une signature" url="Userspecific/using_a_signature.htm" />
 </key>
 <key name="Importation de calendriers" >
   <topic name="Importer et exporter des objets " url="Userspecific/Importing_and_Exporting_Items_.htm" />
@@ -158,17 +161,17 @@
   <topic name="Importer des contacts" url="Contacts/Importing_Contacts.htm" />
 </key>
 <key name="Impression" >
-  <topic name="Impression d’une conversation" url="conversations/printing_a_conversation.htm" />
-  <topic name="Impression d’un mail" url="reading_mail/printing_a_mail_message.htm" />
+  <topic name="Impression d'une conversation" url="conversations/printing_a_conversation.htm" />
+  <topic name="Impression d'un mail" url="reading_mail/printing_a_mail_message.htm" />
   <key name="mail" >
-    <topic name="Impression d’un mail" url="reading_mail/printing_a_mail_message.htm" />
+    <topic name="Impression d'un mail" url="reading_mail/printing_a_mail_message.htm" />
   </key>
+</key>
+<key name="impression d'un calendrier" >
+  <topic name="Impression d'un calendrier" url="Calendar/Printing_a_calendar.htm" />
 </key>
 <key name="impression des contacts" >
   <topic name="Impression des contacts" url="Contacts/Printing_Contacts.htm" />
-</key>
-<key name="impression d’un calendrier" >
-  <topic name="Impression d’un calendrier" url="Calendar/Printing_a_calendar.htm" />
 </key>
 <key name="info-bulles" >
   <topic name="Espace de travail de Zimbra Web Client" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
@@ -178,9 +181,6 @@
 </key>
 <key name="invitation, répondre" >
   <topic name="Répondre à une invitation" url="Calendar/Responding_to_an_invitation.htm" />
-</key>
-<key name="Joindre" >
-  <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="joindre les fichiers du porte-documents" >
   <topic name="Joindre des fichiers à un mail" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
@@ -212,11 +212,11 @@
 <key name="Livraison de mail impossible " >
   <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
 </key>
-<key name="Mail" >
-  <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
-  <topic name="Parties d’un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
+<key name="mail" >
+  <topic name="Lecture d'un mail" url="reading_mail/reading_mail.htm" />
+  <topic name="Parties d'un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <key name="Lecture" >
-    <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
+    <topic name="Lecture d'un mail" url="reading_mail/reading_mail.htm" />
   </key>
 </key>
 <key name="mail, accusé de réception" >
@@ -225,9 +225,8 @@
 <key name="marquer tâche comme terminée" >
   <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
 </key>
-<key name="marquer un rendez-vous comme étant d’ordre privé" >
-  <topic name="Marquer un rendez-vous comme étant d’ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
-  <topic name="À propos de la page de rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
+<key name="marquer un rendez-vous comme étant d'ordre privé" >
+  <topic name="Marquer un rendez-vous comme étant d'ordre privé" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
 <key name="Menus de clic droit" >
   <topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
@@ -240,12 +239,6 @@
 </key>
 <key name="messages, absence" >
   <topic name="Message d'absence" url="Userspecific/vacation_message.htm" />
-</key>
-<key name="MI" >
-  <topic name="Fonctions élémentaires de messagerie instantanée" url="instant_messaging/Instant_Messaging_Basics.htm" />
-</key>
-<key name="MI, utiliser d'autres clients" >
-  <topic name="Connexion aux autres clients de messagerie instantanée" url="instant_messaging/Log_into_other_IM_clients.htm" />
 </key>
 <key name="mini-calendrier " >
   <topic name="Configurer vos préférences de calendrier" url="Userspecific/Setting_your_Calendar_preferences.htm" />
@@ -261,13 +254,13 @@
   <topic name="Menus de clic droit" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
 <key name="Modifier contact" >
-  <topic name="Modification d’un contact" url="Contacts/editing_a_contact.htm" />
+  <topic name="Modification d'un contact" url="Contacts/editing_a_contact.htm" />
 </key>
 <key name="modifier le type de client par défaut" >
   <topic name="Configurer vos préférences générales " url="Userspecific/Setting_your_general_preferences.htm" />
 </key>
 <key name="modifier les autorisations d'un dossier de mails" >
-  <topic name="Retrait d’accès à un dossier partagé" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
+  <topic name="Retrait d'accès à un dossier partagé" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </key>
 <key name="modifier les options" >
   <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -284,6 +277,13 @@
 </key>
 <key name="navigateurs" >
   <topic name="Utilisation du navigateur avec Zimbra" url="Navigation_folders_and_tips/browser_use_with_liquid_mail.htm" />
+</key>
+<key name="Navigation" >
+  <topic name="Navigation sur l'interface utilisateur" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <topic name="Zone de dossiers" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
+<key name="navigation clavier" >
+  <topic name="Configuration de vos préférences d'utilisateur" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
 
 </indexdata>

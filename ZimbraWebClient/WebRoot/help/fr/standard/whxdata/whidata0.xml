@@ -13,8 +13,8 @@
 <key name="afficher au format HTML" >
   <topic name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
 </key>
-<key name="ajouter des carnets d’adresses" >
-  <topic name="Vos carnets d’adresses" url="Contacts/b_Your_Address_Books.htm" />
+<key name="ajouter des carnets d'adresses" >
+  <topic name="Vos carnets d'adresses" url="Contacts/b_Your_Address_Books.htm" />
 </key>
 <key name="ajouter des signatures" >
   <topic name="Ajouter automatiquement votre signature" url="Userspecific/b_Automatically_adding_your_signature.htm" />
@@ -23,7 +23,7 @@
   <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
 <key name="brouillon" >
-  <topic name="Enregistrement d’un brouillon" url="Creating_Messages/saving_a_draft_message.htm" />
+  <topic name="Enregistrement d'un brouillon" url="Creating_Messages/saving_a_draft_message.htm" />
 </key>
 <key name="calendrier distant" >
   <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
@@ -37,11 +37,11 @@
 <key name="calendrier, supprimer" >
   <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
-<key name="carnet d’adresses, ajouter de nouveaux contacts" >
+<key name="carnet d'adresses, ajouter de nouveaux contacts" >
   <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
-<key name="carnets d’adresses, créer" >
-  <topic name="Vos carnets d’adresses" url="Contacts/b_Your_Address_Books.htm" />
+<key name="carnets d'adresses, créer" >
+  <topic name="Vos carnets d'adresses" url="Contacts/b_Your_Address_Books.htm" />
 </key>
 <key name="Conditions de filtre" >
   <topic name="Conditions et actions de filtre supportées" url="filters/filter_conditions_and_actions_supported.htm" />
@@ -49,7 +49,7 @@
 <key name="configurer une adresse de redirection" >
   <topic name="Configurer une adresse de redirection" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </key>
-<key name="contacts, ajouter à un carnet d’adresses" >
+<key name="contacts, ajouter à un carnet d'adresses" >
   <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
 <key name="créer une recherche" >
@@ -80,16 +80,16 @@
   <topic name="Filtrer vos mails" url="filters/bc_Filtering_your_messages.htm" />
 </key>
 <key name="formatage avec HTML" >
-  <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <topic name="Utilisation de l'éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="groupes de contacts, ajouter" >
   <topic name="Ajout de nouveaux contacts" url="Contacts/b_Adding_new_contacts.htm" />
 </key>
 <key name="HTML" >
-  <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <topic name="Utilisation de l'éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="ignorer" >
-  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
+  <topic name="Utilisation de la vérification d'adresse" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="libre/occupé, exclure le calendrier" >
   <topic name="Créer un Calendrier" url="Calendar/b_Create_New_Calendar.htm" />
@@ -98,17 +98,14 @@
   <topic name="Livraison de mail impossible " url="Creating_Messages/undeliverable_mail.htm" />
 </key>
 <key name="Mail" >
-  <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
-  <topic name="Parties d’un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
+  <topic name="Lecture d'un mail" url="reading_mail/reading_mail.htm" />
+  <topic name="Parties d'un mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <key name="Lecture" >
-    <topic name="Lecture d’un mail" url="reading_mail/reading_mail.htm" />
+    <topic name="Lecture d'un mail" url="reading_mail/reading_mail.htm" />
   </key>
 </key>
 <key name="marquer tâche comme terminée" >
   <topic name="Modifier une tâche" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="marquer un rendez-vous comme étant d’ordre privé" >
-  <topic name="À propos de la page de rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="Message d'absence" >
   <topic name="Message d'absence" url="Userspecific/vacation_message.htm" />
@@ -125,7 +122,7 @@
 <key name="nouvelle fenêtre, affichage des mails" >
   <topic name="Choisir comment les mails sont affichés" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />
 </key>
-<key name="option, message d’absence" >
+<key name="option, message d'absence" >
   <topic name="Message d'absence" url="Userspecific/vacation_message.htm" />
 </key>
 <key name="options" >
@@ -140,17 +137,11 @@
 <key name="pièces jointes" >
   <topic name="Ouvrir des pièces jointes" url="reading_mail/opening_file_attachments.htm" />
 </key>
-<key name="planification d’une réunion" >
-  <topic name="À propos de la page de Rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="polices" >
-  <topic name="Utilisation de l’éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
+  <topic name="Utilisation de l'éditeur HTML" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
 <key name="préférences" >
   <topic name="Configuration de vos options" url="Userspecific/b_Setting_your_Options.htm" />
-</key>
-<key name="programmation d’une réunion" >
-  <topic name="À propos de la page de Rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="raccourcis clavier" >
   <topic name="Touches de raccourcis clavier" url="Navigation_folders_and_tips/b_Keyboard_Shortcut_keys.htm" />
@@ -173,23 +164,17 @@
 <key name="Redirection" >
   <topic name="Faire suivre un mail" url="Creating_Messages/forwarding_a_mail_message.htm" />
 </key>
-<key name="rendez-vous privés" >
-  <topic name="À propos de la page de rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="Répondre" >
   <topic name="Répondre à des mails" url="reading_mail/replying_to_mail_messages.htm" />
   <key name="mails" >
     <topic name="Répondre à des mails" url="reading_mail/replying_to_mail_messages.htm" />
   </key>
 </key>
-<key name="réunions" >
-  <topic name="À propos de la page de Rendez-vous" url="Calendar/About_the_Appointment_Page.htm" />
+<key name="saisie automatique d'adresses" >
+  <topic name="Utilisation de la vérification d'adresse" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
-<key name="saisie automatique d’adresses" >
-  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="saisie d’adresse" >
-  <topic name="Utilisation de la vérification d’adresse" url="Creating_Messages/Using_address_lookup.htm" />
+<key name="saisie d'adresse" >
+  <topic name="Utilisation de la vérification d'adresse" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
 <key name="se rappeler de moi sur cet ordinateur" >
   <topic name="Connexion et déconnexion" url="Userspecific/logging_on_and_off.htm" />
