@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -25,7 +25,7 @@ import java.util.Map;
 
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.Pair;
-import com.zimbra.cs.db.DbPool.Connection; 
+import com.zimbra.cs.db.DbPool.Connection;
 import com.zimbra.cs.localconfig.DebugConfig;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox;
 import com.zimbra.cs.mailbox.Flag;
@@ -48,7 +48,7 @@ public class DbOfflineMailbox {
     public static void renumberItemManual(MailItem item, int newId) throws ServiceException {
         Mailbox mbox = item.getMailbox();
         Connection conn = mbox.getOperationConnection();
-        byte type = item.getType();
+        MailItem.Type type = item.getType();
 
         PreparedStatement stmt = null;
         try {
@@ -82,7 +82,7 @@ public class DbOfflineMailbox {
                 stmt.close();
             }
 
-            if (type == MailItem.TYPE_MESSAGE || type == MailItem.TYPE_CHAT || type == MailItem.TYPE_CONVERSATION) {
+            if (type == MailItem.Type.MESSAGE || type == MailItem.Type.CHAT || type == MailItem.Type.CONVERSATION) {
                 // update OPEN_CONVERSATION.CONV_ID
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getConversationTableName(mbox) +
                         " SET conv_id = ?" +
@@ -95,7 +95,7 @@ public class DbOfflineMailbox {
                 stmt.close();
             }
 
-            if (type == MailItem.TYPE_APPOINTMENT || type == MailItem.TYPE_TASK) {
+            if (type == MailItem.Type.APPOINTMENT || type == MailItem.Type.TASK) {
                 // update APPOINTMENT.ITEM_ID
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getCalendarItemTableName(mbox) +
                         " SET item_id = ?" +
@@ -108,7 +108,7 @@ public class DbOfflineMailbox {
                 stmt.close();
             }
 
-            if (type == MailItem.TYPE_FOLDER || type == MailItem.TYPE_SEARCHFOLDER) {
+            if (type == MailItem.Type.FOLDER || type == MailItem.Type.SEARCHFOLDER) {
                 // update MAIL_ITEM.FOLDER_ID
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(mbox) +
                         " SET folder_id = ?" +
@@ -121,7 +121,8 @@ public class DbOfflineMailbox {
                 stmt.close();
             }
 
-            if (type == MailItem.TYPE_FOLDER || type == MailItem.TYPE_SEARCHFOLDER || type == MailItem.TYPE_CONVERSATION) {
+            if (type == MailItem.Type.FOLDER || type == MailItem.Type.SEARCHFOLDER ||
+                    type == MailItem.Type.CONVERSATION) {
                 // update MAIL_ITEM.PARENT_ID
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(mbox) +
                         " SET parent_id = ?" +
@@ -143,11 +144,11 @@ public class DbOfflineMailbox {
             stmt.executeUpdate();
             stmt.close();
 
-            if (type == MailItem.TYPE_TAG)
+            if (type == MailItem.Type.TAG) {
                 updateTagBitmask(conn, (Tag) item, newId);
-
+            }
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("renumbering " + MailItem.getNameForType(type) + " (" + item.getId() + " => " + newId + ")", e);
+            throw ServiceException.FAILURE("renumbering " + type + " (" + item.getId() + " => " + newId + ")", e);
         } finally {
             DbPool.closeStatement(stmt);
         }
@@ -156,7 +157,7 @@ public class DbOfflineMailbox {
     public static void renumberItemCascade(MailItem item, int newId) throws ServiceException {
         Mailbox mbox = item.getMailbox();
         Connection conn = mbox.getOperationConnection();
-        byte type = item.getType();
+        MailItem.Type type = item.getType();
 
         PreparedStatement stmt = null;
         try {
@@ -170,7 +171,7 @@ public class DbOfflineMailbox {
             stmt.executeUpdate();
             stmt.close();
 
-            if (type == MailItem.TYPE_FOLDER || type == MailItem.TYPE_SEARCHFOLDER) {
+            if (type == MailItem.Type.FOLDER || type == MailItem.Type.SEARCHFOLDER) {
                 // update MAIL_ITEM.FOLDER_ID
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(mbox) +
                         " SET folder_id = ?" +
@@ -183,7 +184,8 @@ public class DbOfflineMailbox {
                 stmt.close();
             }
 
-            if (type == MailItem.TYPE_FOLDER || type == MailItem.TYPE_SEARCHFOLDER || type == MailItem.TYPE_CONVERSATION) {
+            if (type == MailItem.Type.FOLDER || type == MailItem.Type.SEARCHFOLDER ||
+                    type == MailItem.Type.CONVERSATION) {
                 // update MAIL_ITEM.PARENT_ID
                 stmt = conn.prepareStatement("UPDATE " + DbMailItem.getMailItemTableName(mbox) +
                         " SET parent_id = ?" +
@@ -196,11 +198,11 @@ public class DbOfflineMailbox {
                 stmt.close();
             }
 
-            if (type == MailItem.TYPE_TAG)
+            if (type == MailItem.Type.TAG) {
                 updateTagBitmask(conn, (Tag) item, newId);
-
+            }
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("renumbering " + MailItem.getNameForType(type) + " (" + item.getId() + " => " + newId + ")", e);
+            throw ServiceException.FAILURE("renumbering " + type + " (" + item.getId() + " => " + newId + ")", e);
         } finally {
             DbPool.closeStatement(stmt);
         }
@@ -286,8 +288,9 @@ public class DbOfflineMailbox {
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
 
             rs = stmt.executeQuery();
-            while (rs.next())
-                result.add(rs.getByte(2), rs.getInt(1));
+            while (rs.next()) {
+                result.add(MailItem.Type.of(rs.getByte(2)), rs.getInt(1));
+            }
             return result;
         } catch (SQLException e) {
             throw ServiceException.FAILURE("getting changed item ids for ombx " + ombx.getId(), e);
@@ -296,11 +299,11 @@ public class DbOfflineMailbox {
             DbPool.closeStatement(stmt);
         }
     }
-    
+
     public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFolders(ChangeTrackingMailbox ombx)
             throws ServiceException {
         Connection conn = ombx.getOperationConnection();
-        
+
         Map<Integer, Pair<Integer, Integer>> result = new HashMap<Integer, Pair<Integer, Integer>>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
@@ -310,11 +313,12 @@ public class DbOfflineMailbox {
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask > 0 AND NOT type=?");
             int pos = 1;
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
-            stmt.setByte(pos++, MailItem.TYPE_FOLDER);
-        
+            stmt.setByte(pos++, MailItem.Type.FOLDER.toByte());
+
             rs = stmt.executeQuery();
-            while (rs.next())
+            while (rs.next()) {
                 result.put(rs.getInt(1), new Pair<Integer, Integer>(rs.getInt(2), rs.getInt(3)));
+            }
             return result;
         } catch (SQLException e) {
             throw ServiceException.FAILURE("getting changed item ids and folders for ombx " + ombx.getId(), e);
@@ -323,36 +327,36 @@ public class DbOfflineMailbox {
             DbPool.closeStatement(stmt);
         }
     }
-    
-	public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(ChangeTrackingMailbox ombx)
-			throws ServiceException {
-		Connection conn = ombx.getOperationConnection();
-		
-		Map<Integer, Pair<Integer, Integer>> result = new HashMap<Integer, Pair<Integer, Integer>>();
-		PreparedStatement stmt = null;
-		ResultSet rs = null;
-		try {
-			stmt = conn.prepareStatement("SELECT id, change_mask, flags" +
-					" FROM " + DbMailItem.getMailItemTableName(ombx) + Db.forceIndex("i_change_mask") +
-					" WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask > 0");
-			int pos = 1;
+
+    public static Map<Integer, Pair<Integer, Integer>> getChangeMasksAndFlags(ChangeTrackingMailbox ombx)
+            throws ServiceException {
+        Connection conn = ombx.getOperationConnection();
+
+        Map<Integer, Pair<Integer, Integer>> result = new HashMap<Integer, Pair<Integer, Integer>>();
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = conn.prepareStatement("SELECT id, change_mask, flags" +
+                    " FROM " + DbMailItem.getMailItemTableName(ombx) + Db.forceIndex("i_change_mask") +
+                    " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "change_mask > 0");
+            int pos = 1;
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
-		
-			rs = stmt.executeQuery();
-			while (rs.next())
-				result.put(rs.getInt(1), new Pair<Integer, Integer>(rs.getInt(2), rs.getInt(3)));
-			return result;
-		} catch (SQLException e) {
+
+            rs = stmt.executeQuery();
+            while (rs.next())
+                result.put(rs.getInt(1), new Pair<Integer, Integer>(rs.getInt(2), rs.getInt(3)));
+            return result;
+        } catch (SQLException e) {
             throw ServiceException.FAILURE("getting changed item ids and flags for ombx " + ombx.getId(), e);
-		} finally {
-			DbPool.closeResults(rs);
-			DbPool.closeStatement(stmt);
-		}
-	}
-    
+        } finally {
+            DbPool.closeResults(rs);
+            DbPool.closeStatement(stmt);
+        }
+    }
+
     public static List<Pair<Integer, Integer>> getSimpleUnreadChanges(ChangeTrackingMailbox ombx, boolean isUnread) throws ServiceException {
-    	Connection conn = ombx.getOperationConnection();
-    	List<Pair<Integer, Integer>> readList = new ArrayList<Pair<Integer, Integer>>();
+        Connection conn = ombx.getOperationConnection();
+        List<Pair<Integer, Integer>> readList = new ArrayList<Pair<Integer, Integer>>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
         try {
@@ -361,15 +365,15 @@ public class DbOfflineMailbox {
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?) AND change_mask=? AND unread=?");
             int pos = 1;
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
-            stmt.setShort(pos++, MailItem.TYPE_MESSAGE);
-            stmt.setShort(pos++, MailItem.TYPE_CHAT);
+            stmt.setShort(pos++, MailItem.Type.MESSAGE.toByte());
+            stmt.setShort(pos++, MailItem.Type.CHAT.toByte());
             stmt.setInt(pos++, Change.MODIFIED_UNREAD);
             stmt.setInt(pos++, isUnread ? 1 : 0);
             rs = stmt.executeQuery();
             while (rs.next()) {
-            	int id = rs.getInt(1);
-            	int modSequence = rs.getInt(2);
-            	readList.add(new Pair<Integer, Integer>(id, modSequence));
+                int id = rs.getInt(1);
+                int modSequence = rs.getInt(2);
+                readList.add(new Pair<Integer, Integer>(id, modSequence));
             }
             return readList;
         } catch (SQLException e) {
@@ -379,7 +383,7 @@ public class DbOfflineMailbox {
             DbPool.closeStatement(stmt);
         }
     }
-    
+
     public static Map<Integer, List<Pair<Integer, Integer>>> getFolderMoveChanges(ChangeTrackingMailbox ombx) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
         Map<Integer, List<Pair<Integer, Integer>>> changes = new HashMap<Integer, List<Pair<Integer, Integer>>>();
@@ -391,27 +395,27 @@ public class DbOfflineMailbox {
                     " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type IN (?, ?, ?, ?, ?, ?) AND change_mask=?");
             int pos = 1;
             pos = DbMailItem.setMailboxId(stmt, ombx, pos);
-            stmt.setShort(pos++, MailItem.TYPE_CONTACT);
-            stmt.setShort(pos++, MailItem.TYPE_MESSAGE);
-            stmt.setShort(pos++, MailItem.TYPE_CHAT);
-            stmt.setShort(pos++, MailItem.TYPE_APPOINTMENT);
-            stmt.setShort(pos++, MailItem.TYPE_TASK);
-            stmt.setShort(pos++, MailItem.TYPE_DOCUMENT);
+            stmt.setShort(pos++, MailItem.Type.CONTACT.toByte());
+            stmt.setShort(pos++, MailItem.Type.MESSAGE.toByte());
+            stmt.setShort(pos++, MailItem.Type.CHAT.toByte());
+            stmt.setShort(pos++, MailItem.Type.APPOINTMENT.toByte());
+            stmt.setShort(pos++, MailItem.Type.TASK.toByte());
+            stmt.setShort(pos++, MailItem.Type.DOCUMENT.toByte());
             stmt.setInt(pos++, Change.MODIFIED_FOLDER);
-            
+
             rs = stmt.executeQuery();
             while (rs.next()) {
-            	int id = rs.getInt(1);
-            	int folderId = rs.getInt(2);
-            	int modSequence = rs.getInt(3);
-            	List<Pair<Integer, Integer>> batch = changes.get(folderId);
-            	if (batch == null) {
-            		batch = new ArrayList<Pair<Integer, Integer>>();
-            		changes.put(folderId, batch);
-            	}
-            	batch.add(new Pair<Integer, Integer>(id, modSequence));
+                int id = rs.getInt(1);
+                int folderId = rs.getInt(2);
+                int modSequence = rs.getInt(3);
+                List<Pair<Integer, Integer>> batch = changes.get(folderId);
+                if (batch == null) {
+                    batch = new ArrayList<Pair<Integer, Integer>>();
+                    changes.put(folderId, batch);
+                }
+                batch.add(new Pair<Integer, Integer>(id, modSequence));
             }
-            
+
             return changes;
         } catch (SQLException e) {
             throw ServiceException.FAILURE("getting items with simple folder moves in mailbox " + ombx.getId(), e);
@@ -420,7 +424,7 @@ public class DbOfflineMailbox {
             DbPool.closeStatement(stmt);
         }
     }
-    
+
     public static Map<Integer, Integer> getItemModSequences(ChangeTrackingMailbox ombx, int[] ids) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
         Map<Integer, Integer> changes = new HashMap<Integer, Integer>();
@@ -437,12 +441,12 @@ public class DbOfflineMailbox {
                 pos = DbMailItem.setMailboxId(stmt, ombx, pos);
                 for (int index = i; index < i + count; index++)
                     stmt.setInt(pos++, ids[i]);
-                
+
                 rs = stmt.executeQuery();
                 while (rs.next()) {
-                	int id = rs.getInt(1);
-                	int modSequence = rs.getInt(2);
-                	changes.put(id, modSequence);
+                    int id = rs.getInt(1);
+                    int modSequence = rs.getInt(2);
+                    changes.put(id, modSequence);
                 }
             } catch (SQLException e) {
                 throw ServiceException.FAILURE("getting mod sequence of given items " + ombx.getId(), e);
@@ -453,13 +457,13 @@ public class DbOfflineMailbox {
         }
         return changes;
     }
-    
+
     public static Map<Integer, Integer> getItemFolderIds(ChangeTrackingMailbox ombx, int[] ids) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
         Map<Integer, Integer> result = new HashMap<Integer, Integer>();
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        
+
         for (int i = 0; i < ids.length; i += Db.getINClauseBatchSize()) {
             try {
                 int count = Math.min(Db.getINClauseBatchSize(), ids.length - i);
@@ -470,12 +474,12 @@ public class DbOfflineMailbox {
                 pos = DbMailItem.setMailboxId(stmt, ombx, pos);
                 for (int index = i; index < i + count; index++)
                     stmt.setInt(pos++, ids[i]);
-                
+
                 rs = stmt.executeQuery();
                 while (rs.next()) {
-                	int id = rs.getInt(1);
-                	int folderId = rs.getInt(2);
-                	result.put(id, folderId);
+                    int id = rs.getInt(1);
+                    int folderId = rs.getInt(2);
+                    result.put(id, folderId);
                 }
             } catch (SQLException e) {
                 throw ServiceException.FAILURE("getting folder ids of given items " + ombx.getId(), e);
@@ -575,12 +579,13 @@ public class DbOfflineMailbox {
         }
     }
 
-    public static boolean isTombstone(ChangeTrackingMailbox ombx, int id, byte type) throws ServiceException {
+    public static boolean isTombstone(ChangeTrackingMailbox ombx, int id, MailItem.Type type) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
         return !getMatchingTombstones(conn, ombx, id, type).isEmpty();
     }
 
-    private static List<Pair<Integer, String>> getMatchingTombstones(Connection conn, ChangeTrackingMailbox ombx, int id, byte type) throws ServiceException {
+    private static List<Pair<Integer, String>> getMatchingTombstones(Connection conn, ChangeTrackingMailbox ombx,
+            int id, MailItem.Type type) throws ServiceException {
         List<Pair<Integer, String>> matches = new ArrayList<Pair<Integer, String>>();
 
         PreparedStatement stmt = null;
@@ -592,7 +597,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type = ? AND (ids = ? OR ids LIKE ? OR ids LIKE ? OR ids LIKE ?)");
                 int pos = 1;
                 pos = DbMailItem.setMailboxId(stmt, ombx, pos);
-                stmt.setByte(pos++, type);
+                stmt.setByte(pos++, type.toByte());
                 stmt.setString(pos++, "" + id);
                 stmt.setString(pos++, "%," + id);
                 stmt.setString(pos++, id + ",%");
@@ -605,7 +610,7 @@ public class DbOfflineMailbox {
                         " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "type = ?");
                 int pos = 1;
                 pos = DbMailItem.setMailboxId(stmt, ombx, pos);
-                stmt.setByte(pos++, type);
+                stmt.setByte(pos++, type.toByte());
                 rs = stmt.executeQuery();
 
                 String idStr = Integer.toString(id);
@@ -617,14 +622,14 @@ public class DbOfflineMailbox {
             }
             return matches;
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("searching TOMBSTONE table for " + MailItem.getNameForType(type) + " " + id, e);
+            throw ServiceException.FAILURE("searching TOMBSTONE table for " + type + " " + id, e);
         } finally {
             DbPool.closeResults(rs);
             DbPool.closeStatement(stmt);
         }
     }
 
-    public static void removeTombstone(ChangeTrackingMailbox ombx, int id, byte type) throws ServiceException {
+    public static void removeTombstone(ChangeTrackingMailbox ombx, int id, MailItem.Type type) throws ServiceException {
         Connection conn = ombx.getOperationConnection();
         String itemId = Integer.toString(id);
 
@@ -640,14 +645,15 @@ public class DbOfflineMailbox {
                     int pos = 1;
                     pos = DbMailItem.setMailboxId(stmt, ombx, pos);
                     stmt.setInt(pos++, sequence);
-                    stmt.setByte(pos++, type);
+                    stmt.setByte(pos++, type.toByte());
                     stmt.executeUpdate();
                     stmt.close();
                 } else {
-                    StringBuffer sb = new StringBuffer();
+                    StringBuilder sb = new StringBuilder();
                     for (String deletedId : ids.split(",")) {
-                        if (!deletedId.equals(itemId))
+                        if (!deletedId.equals(itemId)) {
                             sb.append(sb.length() == 0 ? "" : ",").append(deletedId);
+                        }
                     }
                     stmt = conn.prepareStatement("UPDATE " + DbMailItem.getTombstoneTableName(ombx) + " SET ids = ?" +
                             " WHERE " + DbMailItem.IN_THIS_MAILBOX_AND + "sequence = ? AND type = ?");
@@ -655,13 +661,13 @@ public class DbOfflineMailbox {
                     stmt.setString(pos++, sb.toString());
                     pos = DbMailItem.setMailboxId(stmt, ombx, pos);
                     stmt.setInt(pos++, sequence);
-                    stmt.setByte(pos++, type);
+                    stmt.setByte(pos++, type.toByte());
                     stmt.executeUpdate();
                     stmt.close();
                 }
             }
         } catch (SQLException e) {
-            throw ServiceException.FAILURE("removing entry from TOMBSTONE table for " + MailItem.getNameForType(type) + " " + id, e);
+            throw ServiceException.FAILURE("removing entry from TOMBSTONE table for " + type + " " + id, e);
         } finally {
             DbPool.closeStatement(stmt);
         }
@@ -684,7 +690,7 @@ public class DbOfflineMailbox {
             DbPool.closeStatement(stmt);
         }
     }
-    
+
     public static void replaceAccountId(Mailbox mbox, String newAccountId) throws ServiceException {
         Connection conn = mbox.getOperationConnection();
 
@@ -701,7 +707,7 @@ public class DbOfflineMailbox {
             DbPool.closeStatement(stmt);
         }
     }
-    
+
     public static void forceDeleteMailbox(Connection conn, int id) throws ServiceException {
         assert(Db.supports(Db.Capability.ROW_LEVEL_LOCKING) || Thread.holdsLock(MailboxManager.getInstance()));
         PreparedStatement stmt = null;

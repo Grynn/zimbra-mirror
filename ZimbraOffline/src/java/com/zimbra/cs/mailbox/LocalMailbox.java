@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -33,7 +33,7 @@ public class LocalMailbox extends DesktopMailbox {
     public LocalMailbox(MailboxData data) throws ServiceException {
         super(data);
     }
-    
+
     @Override synchronized void ensureSystemFolderExists() throws ServiceException {
         super.ensureSystemFolderExists();
         try {
@@ -41,13 +41,13 @@ public class LocalMailbox extends DesktopMailbox {
         } catch (NoSuchItemException e) {
             CreateFolder redo = new CreateFolder(getId(), NOTIFICATIONS_PATH,
                 ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
-            
+                MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
+
             redo.setFolderId(ID_FOLDER_NOTIFICATIONS);
             redo.start(System.currentTimeMillis());
             createFolder(new TracelessContext(redo), NOTIFICATIONS_PATH,
                 ID_FOLDER_USER_ROOT, Folder.FOLDER_IS_IMMUTABLE,
-                MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
+                MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB, null);
         }
         OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
         for (String accountId : prov.getAllAccountIds()) {
@@ -59,7 +59,7 @@ public class LocalMailbox extends DesktopMailbox {
             } catch (NoSuchItemException e) {
                 createMountpoint(null, ID_FOLDER_NOTIFICATIONS, accountId,
                     accountId, ID_FOLDER_USER_ROOT,
-                    MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB);
+                    MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB);
             }
         }
     }
@@ -69,10 +69,11 @@ public class LocalMailbox extends DesktopMailbox {
         getCachedItem(ID_FOLDER_CALENDAR).setColor(new MailItem.Color((byte)8));
         Folder.create(ID_FOLDER_NOTIFICATIONS, this,
             getFolderById(ID_FOLDER_USER_ROOT), NOTIFICATIONS_PATH,
-            Folder.FOLDER_IS_IMMUTABLE, MailItem.TYPE_UNKNOWN, 0,
+            Folder.FOLDER_IS_IMMUTABLE, MailItem.Type.UNKNOWN, 0,
             MailItem.DEFAULT_COLOR_RGB, null, null);
     }
 
+    @Override
     Set<Folder> getAccessibleFolders(short rights) throws ServiceException {
         Set<Folder> accessable = super.getAccessibleFolders(rights);
         Set<Folder> visible = new HashSet<Folder>();
@@ -88,7 +89,7 @@ public class LocalMailbox extends DesktopMailbox {
         }
         return visible;
     }
-    
+
     public synchronized void forceDeleteMailbox(Mailbox mbox) throws ServiceException {
         DeleteMailbox redoRecorder = new DeleteMailbox(mbox.getId());
         boolean success = false;
@@ -100,7 +101,7 @@ public class LocalMailbox extends DesktopMailbox {
                 // remove all the relevant entries from the database
                 Connection conn = getOperationConnection();
                 ZimbraLog.mailbox.info("attempting to remove the zimbra.mailbox row for id "+mbox.getId());
-                DbOfflineMailbox.forceDeleteMailbox(conn, mbox.getId());    
+                DbOfflineMailbox.forceDeleteMailbox(conn, mbox.getId());
                 success = true;
             } finally {
                 // commit the DB transaction before touching the store!  (also ends the operation)

@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -37,7 +37,7 @@ public class OfflineMailSender extends MailSender {
     public OfflineMailSender() {
         setTrackBadHosts(false);
     }
-    
+
     @Override
     public ItemId sendMimeMessage(OperationContext octxt, Mailbox mbox,
             MimeMessage mm) throws ServiceException {
@@ -50,10 +50,10 @@ public class OfflineMailSender extends MailSender {
         }
 
         Account acct = mbox.getAccount();
-        Account authuser = octxt == null ? null : octxt.getAuthenticatedUser();        
+        Account authuser = octxt == null ? null : octxt.getAuthenticatedUser();
         if (authuser == null)
             authuser = acct;
-        // bug 49820: Hide the "local@host.local" fake account address from From/Sender header checks. 
+        // bug 49820: Hide the "local@host.local" fake account address from From/Sender header checks.
         if (AccountUtil.isZDesktopLocalAccount(authuser.getId()))
             authuser = acct;
 
@@ -71,7 +71,7 @@ public class OfflineMailSender extends MailSender {
             int draftId = mbox.saveDraft(octxt, pm, Mailbox.ID_AUTO_INCREMENT,
                 (getOriginalMessageId() != null ? getOriginalMessageId().toString(acct) : null), getReplyType(),
                 identityId, acct.getId(), 0).getId();
-            mbox.move(octxt, draftId, MailItem.TYPE_MESSAGE, DesktopMailbox.ID_FOLDER_OUTBOX);
+            mbox.move(octxt, draftId, MailItem.Type.MESSAGE, DesktopMailbox.ID_FOLDER_OUTBOX);
 
             // we can now purge the uploaded attachments
             if (getUploads() != null)
@@ -80,10 +80,10 @@ public class OfflineMailSender extends MailSender {
             // add any new contacts to the personal address book
             if (getSaveContacts() != null) {
                 Mailbox contactMbox = mbox;
-                
+
                 if (!acct.isFeatureContactsEnabled()) {
                     Account localAcct = OfflineProvisioning.getOfflineInstance().getLocalAccount();
-                    
+
                     contactMbox = MailboxManager.getInstance().getMailboxByAccount(localAcct);
                 }
                 for (InternetAddress iaddr : getSaveContacts()) {

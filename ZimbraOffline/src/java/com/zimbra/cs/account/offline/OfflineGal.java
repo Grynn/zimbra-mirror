@@ -15,7 +15,7 @@
 package com.zimbra.cs.account.offline;
 
 import java.util.Arrays;
-import java.util.Collections;
+import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Iterator;
@@ -116,7 +116,7 @@ public class OfflineGal {
 
         SearchParams sp = new SearchParams();
         sp.setQueryStr(query);
-        sp.setTypes(Collections.singleton(MailItem.TYPE_CONTACT));
+        sp.setTypes(EnumSet.of(MailItem.Type.CONTACT));
         sp.setSortByStr(sortBy);
         sp.setOffset(offset);
         sp.setLimit(limit);
@@ -140,7 +140,7 @@ public class OfflineGal {
                 ZimbraHit hit = zqr.getNext();
                 int id = hit.getItemId();
 
-                Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.TYPE_CONTACT);
+                Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.Type.CONTACT);
                 Element cn = response.addElement(MailConstants.E_CONTACT);
                 cn.addAttribute(MailConstants.A_ID, hit.getAcctIdStr() + ":" + Integer.toString(id));
 
@@ -177,7 +177,7 @@ public class OfflineGal {
         try {
             while (zqr.hasNext()) {
                 int id = zqr.getNext().getItemId();
-                Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.TYPE_CONTACT);
+                Contact contact = (Contact) mGalMbox.getItemById(mOpContext, id, MailItem.Type.CONTACT);
                 ItemId iid = new ItemId(mGalMbox, id);
                 ac.addMatchedContacts(name, contact.getFields(), ContactAutoComplete.FOLDER_ID_GAL, iid, result);
                 if (!result.canBeCached)

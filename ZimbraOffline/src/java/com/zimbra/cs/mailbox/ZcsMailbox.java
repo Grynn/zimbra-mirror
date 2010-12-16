@@ -113,6 +113,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         return getRemoteServerVersion().isAtLeast(MIN_ZCS_VER_PUSH) && getAccount().getTimeInterval(OfflineProvisioning.A_offlineSyncFreq, OfflineConstants.DEFAULT_SYNC_FREQ) == 0;
     }
 
+    @Override
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) {
         try {
             mMailboxSync.sync(isOnRequest, isDebugTraceOn);
@@ -219,12 +220,12 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     public synchronized Tag getTagById(OperationContext octxt, int id, boolean useRenumbered)
             throws ServiceException {
         if (useRenumbered) {
-            return (Tag) getItemById(octxt, id, MailItem.TYPE_TAG);
+            return (Tag) getItemById(octxt, id, MailItem.Type.TAG);
         } else {
             boolean success = false;
             try {
                 beginTransaction("getItemById", octxt);
-                MailItem item = checkAccess(getRenumberedItemById(id, MailItem.TYPE_TAG, false));
+                MailItem item = checkAccess(getRenumberedItemById(id, MailItem.Type.TAG, false));
                 success = true;
                 return (Tag) item;
             } finally {
@@ -233,26 +234,21 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    @Override MailItem getItemById(int id, byte type) throws ServiceException {
+    @Override
+    MailItem getItemById(int id, MailItem.Type type) throws ServiceException {
         return getRenumberedItemById(id, type, true);
     }
 
     /**
      * Get a MailItem. Optionally use renumbered item cache
-     * @param id
-     * @param type
-     * @param useRenumbered
-     * @return
-     * @throws ServiceException
      */
-    MailItem getRenumberedItemById(int id, byte type, boolean useRenumbered) throws ServiceException {
+    MailItem getRenumberedItemById(int id, MailItem.Type type, boolean useRenumbered) throws ServiceException {
         NoSuchItemException trappedExcept = null;
         try {
             MailItem item = super.getItemById(id, type);
             if (item != null)
                 return item;
-        }
-        catch (NoSuchItemException nsie) {
+        } catch (NoSuchItemException nsie) {
             trappedExcept = nsie;
         }
         if (useRenumbered) {
@@ -265,7 +261,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         return null;
     }
 
-    @Override MailItem[] getItemById(int[] ids, byte type) throws ServiceException {
+    @Override
+    MailItem[] getItemById(int[] ids, MailItem.Type type) throws ServiceException {
         int renumbered[] = new int[ids.length], i = 0;
         for (int id : ids) {
             // use a little sleight-of-hand so we pick up virtual conv ids from the corresponding message id
@@ -275,15 +272,18 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         return super.getItemById(renumbered, type);
     }
 
-    @Override public synchronized void delete(OperationContext octxt, int[] itemIds, byte type, TargetConstraint tcon) throws ServiceException {
+    @Override
+    public synchronized void delete(OperationContext octxt, int[] itemIds, MailItem.Type type, TargetConstraint tcon)
+            throws ServiceException {
         mLocalTagDeletes.clear();
 
         for (int id : itemIds) {
             try {
                 if (id != ID_AUTO_INCREMENT) {
                     getTagById(octxt, id);
-                    if ((getChangeMask(octxt, id, MailItem.TYPE_TAG) & Change.MODIFIED_CONFLICT) != 0)
+                    if ((getChangeMask(octxt, id, MailItem.Type.TAG) & Change.MODIFIED_CONFLICT) != 0) {
                         mLocalTagDeletes.add(id);
+                    }
                 }
             } catch (NoSuchItemException nsie) { }
 
@@ -296,10 +296,12 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    @Override TypedIdList collectPendingTombstones() {
+    @Override
+    TypedIdList collectPendingTombstones() {
         TypedIdList tombstones = super.collectPendingTombstones();
-        for (Integer tagId : mLocalTagDeletes)
-            tombstones.remove(MailItem.TYPE_TAG, tagId);
+        for (Integer tagId : mLocalTagDeletes) {
+            tombstones.remove(MailItem.Type.TAG, tagId);
+        }
         return tombstones;
     }
 
@@ -353,12 +355,13 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    synchronized boolean renumberItem(OperationContext octxt, int id, byte type, int newId) throws ServiceException {
-        if (id == newId)
+    synchronized boolean renumberItem(OperationContext octxt, int id, MailItem.Type type, int newId)
+            throws ServiceException {
+        if (id == newId) {
             return true;
-        else if (id <= 0 || newId <= 0)
+        } else if (id <= 0 || newId <= 0) {
             throw ServiceException.FAILURE("invalid item id when renumbering (" + id + " => " + newId + ")", null);
-
+        }
         boolean success = false;
         try {
             beginTransaction("renumberItem", octxt);
@@ -398,12 +401,12 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             uncacheItem(id);
             if (item instanceof Folder) {
                 // old items have the wrong folder id, which sucks
-                purge(MailItem.TYPE_MESSAGE);
-                purge(MailItem.TYPE_FOLDER);
+                purge(MailItem.Type.MESSAGE);
+                purge(MailItem.Type.FOLDER);
             } else if (item instanceof Tag) {
                 // old items have the wrong tag bitmask, which also sucks
-                purge(MailItem.TYPE_MESSAGE);
-                purge(MailItem.TYPE_TAG);
+                purge(MailItem.Type.MESSAGE);
+                purge(MailItem.Type.TAG);
             }
 
             success = true;
@@ -432,14 +435,14 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
             ZimbraLog.mailbox.info("folder already deleted, skipping: " + folderId);
             return;
         }
-        delete(octxt, folderId, MailItem.TYPE_FOLDER);
+        delete(octxt, folderId, MailItem.Type.FOLDER);
     }
 
-    synchronized void syncDate(OperationContext octxt, int itemId, byte type, int date)
+    synchronized void syncDate(OperationContext octxt, int itemId, MailItem.Type type, int date)
     throws ServiceException {
-        if (date < 0)
+        if (date < 0) {
             return;
-
+        }
         boolean success = false;
         try {
             beginTransaction("syncChangeIds", octxt);
@@ -459,8 +462,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    synchronized void syncMetadata(OperationContext octxt, int itemId, byte type, int folderId, int flags, long tags, byte color)
-        throws ServiceException {
+    synchronized void syncMetadata(OperationContext octxt, int itemId, MailItem.Type type, int folderId, int flags,
+            long tags, byte color) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("syncMetadata", octxt);
@@ -504,7 +507,8 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
         }
     }
 
-    synchronized void syncFolderDefaultView(OperationContext octxt, int itemId, byte type, byte defaultView) throws ServiceException {
+    synchronized void syncFolderDefaultView(OperationContext octxt, int itemId, MailItem.Type type,
+            MailItem.Type defaultView) throws ServiceException {
         boolean success = false;
         try {
             beginTransaction("syncFolderDefaultView", octxt);
@@ -514,7 +518,7 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
                 if (folder.getDefaultView() != defaultView) {
                     //use only the relevant parts of Folder.migrateDefaultView(); avoid immutable check in Folder.setDefaultView()
                     //UI will not see change until next time it is refreshed; if ZD was open during ZCS upgrade it must be closed and reopened
-                    folder.mDefaultView = defaultView;
+                    folder.defaultView = defaultView;
                     folder.saveMetadata();
                 }
             }
@@ -525,24 +529,33 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
 
     @Override
-    boolean isPushType(byte type) {
-        return PushChanges.PUSH_TYPES_SET.contains(type);
+    boolean isPushType(MailItem.Type type) {
+        return PushChanges.PUSH_TYPES.contains(type);
     }
 
     @Override
-    int getChangeMaskFilter(byte type) {
+    int getChangeMaskFilter(MailItem.Type type) {
         switch (type) {
-        case MailItem.TYPE_MESSAGE:       return PushChanges.MESSAGE_CHANGES;
-        case MailItem.TYPE_CHAT:          return PushChanges.CHAT_CHANGES;
-        case MailItem.TYPE_CONTACT:       return PushChanges.CONTACT_CHANGES;
-        case MailItem.TYPE_FOLDER:        return PushChanges.FOLDER_CHANGES;
-        case MailItem.TYPE_SEARCHFOLDER:  return PushChanges.SEARCH_CHANGES;
-        case MailItem.TYPE_TAG:           return PushChanges.TAG_CHANGES;
-        case MailItem.TYPE_APPOINTMENT:
-        case MailItem.TYPE_TASK:          return PushChanges.APPOINTMENT_CHANGES;
-        case MailItem.TYPE_WIKI:
-        case MailItem.TYPE_DOCUMENT:      return PushChanges.DOCUMENT_CHANGES;
-        default:                          return 0;
+        case MESSAGE:
+            return PushChanges.MESSAGE_CHANGES;
+        case CHAT:
+            return PushChanges.CHAT_CHANGES;
+        case CONTACT:
+            return PushChanges.CONTACT_CHANGES;
+        case FOLDER:
+            return PushChanges.FOLDER_CHANGES;
+        case SEARCHFOLDER:
+            return PushChanges.SEARCH_CHANGES;
+        case TAG:
+            return PushChanges.TAG_CHANGES;
+        case APPOINTMENT:
+        case TASK:
+            return PushChanges.APPOINTMENT_CHANGES;
+        case WIKI:
+        case DOCUMENT:
+            return PushChanges.DOCUMENT_CHANGES;
+        default:
+            return 0;
         }
     }
 
@@ -731,8 +744,9 @@ public class ZcsMailbox extends ChangeTrackingMailbox {
     }
 
     public boolean pushNewFolder(OperationContext octxt, int id, boolean suppressRssFailure, ZimbraSoapContext zsc) throws ServiceException {
-        if ((getChangeMask(octxt, id, MailItem.TYPE_FOLDER) & Change.MODIFIED_CONFLICT) == 0)
+        if ((getChangeMask(octxt, id, MailItem.Type.FOLDER) & Change.MODIFIED_CONFLICT) == 0) {
             return false;
+        }
         return PushChanges.syncFolder(this, id, suppressRssFailure, zsc);
     }
 

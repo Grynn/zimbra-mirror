@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -57,34 +57,39 @@ class OfflineMailboxMigration {
             return;
 
         Collection<DataSourceItem> dsItems = DbDataSource.getAllMappings(ds);
-        List<MailItem> folders = mbox.getItemList(null, MailItem.TYPE_FOLDER, Mailbox.ID_FOLDER_USER_ROOT);
+        List<MailItem> folders = mbox.getItemList(null, MailItem.Type.FOLDER, Mailbox.ID_FOLDER_USER_ROOT);
         Set<Integer> folderIds = new HashSet<Integer>(folders.size());
-        for (MailItem mi: folders)
+        for (MailItem mi: folders) {
             folderIds.add(mi.getId());
-        for (DataSourceItem dsi : dsItems)
+        }
+        for (DataSourceItem dsi : dsItems) {
             if (folderIds.contains(dsi.itemId) && dsi.remoteId != null &&
-                (dsi.remoteId.toLowerCase().startsWith("/dav/") || dsi.remoteId.toLowerCase().startsWith("/calendar/dav/")))
+                    (dsi.remoteId.toLowerCase().startsWith("/dav/") ||
+                            dsi.remoteId.toLowerCase().startsWith("/calendar/dav/"))) {
                 fixFolder(mbox, ds, dsi.itemId);
+            }
+        }
     }
 
     private static void fixFolder(Mailbox mbox, DataSource ds, int folderId) throws ServiceException {
         Folder folder = mbox.getFolderById(folderId);
-        if (folder.getDefaultView() != MailItem.TYPE_APPOINTMENT)
-            mbox.setFolderDefaultView(null, folderId, MailItem.TYPE_APPOINTMENT);
-
-        if ((folder.getFlagBitmask() & Flag.BITMASK_CHECKED) == 0)
-            mbox.alterTag(null, folderId, MailItem.TYPE_FOLDER, Flag.ID_FLAG_CHECKED, true);
-
-        if ((folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0)
-            mbox.alterTag(null, folderId, MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNC, false);
-
-        if ((folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0)
-            mbox.alterTag(null, folderId, MailItem.TYPE_FOLDER, Flag.ID_FLAG_SYNCFOLDER, false);
-
+        if (folder.getDefaultView() != MailItem.Type.APPOINTMENT) {
+            mbox.setFolderDefaultView(null, folderId, MailItem.Type.APPOINTMENT);
+        }
+        if ((folder.getFlagBitmask() & Flag.BITMASK_CHECKED) == 0) {
+            mbox.alterTag(null, folderId, MailItem.Type.FOLDER, Flag.ID_FLAG_CHECKED, true);
+        }
+        if ((folder.getFlagBitmask() & Flag.BITMASK_SYNC) != 0) {
+            mbox.alterTag(null, folderId, MailItem.Type.FOLDER, Flag.ID_FLAG_SYNC, false);
+        }
+        if ((folder.getFlagBitmask() & Flag.BITMASK_SYNCFOLDER) != 0) {
+            mbox.alterTag(null, folderId, MailItem.Type.FOLDER, Flag.ID_FLAG_SYNCFOLDER, false);
+        }
         ImapFolder imapFolder = DbImapFolder.getImapFolders(mbox, ds).getByItemId(folderId);
         if (imapFolder != null) {
             DbImapFolder.deleteImapFolder(mbox, ds, imapFolder);
-            DbImapFolder.createImapFolder(mbox, ds, -imapFolder.getItemId(), imapFolder.getLocalPath(), imapFolder.getRemoteId(), imapFolder.getUidValidity());
+            DbImapFolder.createImapFolder(mbox, ds, -imapFolder.getItemId(), imapFolder.getLocalPath(),
+                    imapFolder.getRemoteId(), imapFolder.getUidValidity());
         }
     }
 
@@ -93,16 +98,15 @@ class OfflineMailboxMigration {
             OfflineAccount account = mbox.getOfflineAccount();
             if (account.isDataSourceAccount()) {
                 OfflineDataSource ds = (OfflineDataSource)
-                    OfflineProvisioning.getOfflineInstance().getDataSource(account);
-                checkMappings(ds, ds.getContactSyncDataSource(), MailItem.TYPE_CONTACT, "contact");
-                checkMappings(ds, ds.getCalendarSyncDataSource(), MailItem.TYPE_APPOINTMENT, "appointment");
+                OfflineProvisioning.getOfflineInstance().getDataSource(account);
+                checkMappings(ds, ds.getContactSyncDataSource(), MailItem.Type.CONTACT, "contact");
+                checkMappings(ds, ds.getCalendarSyncDataSource(), MailItem.Type.APPOINTMENT, "appointment");
             }
         }
     }
 
-    private static void checkMappings(OfflineDataSource fromDs,
-                                      OfflineDataSource toDs,
-                                      byte type, String typeName) throws ServiceException {
+    private static void checkMappings(OfflineDataSource fromDs, OfflineDataSource toDs,
+            MailItem.Type type, String typeName) throws ServiceException {
         if (toDs == null) return;
         Mailbox mbox = fromDs.getMailbox();
         ZimbraLog.datasource.info("Migrating offline mailbox %s db mappings", typeName);

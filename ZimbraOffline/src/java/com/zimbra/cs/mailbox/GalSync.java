@@ -17,7 +17,7 @@ package com.zimbra.cs.mailbox;
 import java.util.HashMap;
 import java.util.Map;
 import java.io.IOException;
-import java.util.Collections;
+import java.util.EnumSet;
 import java.util.Iterator;
 import java.util.ArrayList;
 import java.util.List;
@@ -200,7 +200,7 @@ public class GalSync {
             if (ds == null) {
                 ZimbraQueryResults zqr = galMbox.index.search(context,
                         "#" + OfflineConstants.GAL_LDAP_DN + ":\"" + id + "\"",
-                        Collections.singleton(MailItem.TYPE_CONTACT), SortBy.NONE, 1);
+                        EnumSet.of(MailItem.Type.CONTACT), SortBy.NONE, 1);
                 try {
                     if (zqr.hasNext())
                         return zqr.getNext().getItemId();
@@ -352,7 +352,7 @@ public class GalSync {
             galMbox.getFolderByPath(octxt, OfflineGal.SECOND_GAL_FOLDER);
         } catch (MailServiceException.NoSuchItemException e) {
             try {
-                galMbox.createFolder(octxt, OfflineGal.SECOND_GAL_FOLDER, (byte)0, MailItem.TYPE_CONTACT);
+                galMbox.createFolder(octxt, OfflineGal.SECOND_GAL_FOLDER, (byte)0, MailItem.Type.CONTACT);
             } catch (ServiceException se) {
                 prov.deleteGalAccount(account);
                 throw se;

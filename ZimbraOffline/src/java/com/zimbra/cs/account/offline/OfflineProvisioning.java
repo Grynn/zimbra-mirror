@@ -21,7 +21,6 @@ import com.zimbra.common.net.TrustManagers;
 import com.zimbra.common.service.RemoteServiceException;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.soap.AccountConstants;
-import com.zimbra.common.soap.SoapProtocol;
 import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.SystemUtil;
@@ -95,6 +94,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         private EntryType(String abbr, boolean leaf)  { mAbbr = abbr;  mLeafEntry = leaf; }
 
         public boolean isLeafEntry()  { return mLeafEntry; }
+
+        @Override
         public String toString()      { return mAbbr; }
 
         public static EntryType typeForEntry(Entry e) {
@@ -972,7 +973,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             mbox.createMountpoint(null,
                 DesktopMailbox.ID_FOLDER_NOTIFICATIONS, accountId,
                 accountId, Mailbox.ID_FOLDER_USER_ROOT,
-                MailItem.TYPE_UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB);
+                MailItem.Type.UNKNOWN, 0, MailItem.DEFAULT_COLOR_RGB);
         }
     }
 
@@ -1128,7 +1129,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
             fldr = mbox.getFolderByName(null, DesktopMailbox.ID_FOLDER_NOTIFICATIONS,
                 zimbraId);
-            mbox.delete(null, fldr.getId(), MailItem.TYPE_MOUNTPOINT);
+            mbox.delete(null, fldr.getId(), MailItem.Type.MOUNTPOINT);
         } catch (Exception e) {
         }
         deleteGalAccount(zimbraId);
@@ -1651,6 +1652,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public List<NamedEntry> searchDirectory(SearchOptions options) throws ServiceException {
         //HACK: we were throwing UnsupportedOperationException, but DeleteAccount now does a searchDirectory to prevent from deleting
         //domain wiki accounts.  Hence the hack to always return empty.
@@ -2092,6 +2094,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     private static void sort(List<DataSource> sources) {
         Collections.sort(sources, new Comparator<DataSource>() {
+            @Override
             public int compare(DataSource ds1, DataSource ds2) {
                 return syncOrder(ds1) - syncOrder(ds2);
             }

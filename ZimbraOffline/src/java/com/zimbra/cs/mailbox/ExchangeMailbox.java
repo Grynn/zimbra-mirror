@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -45,10 +45,10 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     private static final Class[] EXCHANGE_HELPER_CONSTRUCTOR_SIGNATURE = {
         Mailbox.class, DataSource.class
     };
-    
+
     private static boolean isXsyncEnabled;
     private static boolean isXsyncExtChecked;
-    
+
     static boolean isXsyncEnabled() {
         if (!isXsyncExtChecked) {
             List<String> extNames = ZimbraApplication.getInstance().getExtensionNames();
@@ -61,12 +61,12 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         }
         return isXsyncEnabled;
     }
-    
+
     private ExchangeHelper helper;
-    
+
     public ExchangeMailbox(MailboxData data) throws ServiceException {
         super(data);
-        
+
         if (isXsyncEnabled()) {
             try {
                 Class cmdClass = null;
@@ -84,18 +84,18 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     }
 
     @Override
-    boolean isPushType(byte type) {
+    boolean isPushType(MailItem.Type type) {
         switch (type) {
-        case MailItem.TYPE_MESSAGE:
-        case MailItem.TYPE_APPOINTMENT:
-        case MailItem.TYPE_CONTACT:
-        case MailItem.TYPE_TASK:
-//        case MailItem.TYPE_WIKI:
+        case MESSAGE:
+        case APPOINTMENT:
+        case CONTACT:
+        case TASK:
             return true;
+        default:
+            return false;
         }
-        return false;
     }
-    
+
     /** The bitmask of all message changes that we propagate to the server. */
     static final int MESSAGE_CHANGES = Change.MODIFIED_UNREAD | Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER;
 
@@ -107,42 +107,47 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
 
     /** The bitmask of all folder changes that we propagate to the server. */
     static final int FOLDER_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_FOLDER | Change.MODIFIED_NAME;
-    
+
     /** The bitmask of all appointment changes that we propagate to the server. */
     static final int APPOINTMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
                                            Change.MODIFIED_CONTENT | Change.MODIFIED_INVITE;
-    
+
     /** The bitmask of all document changes that we propagate to the server. */
     static final int DOCUMENT_CHANGES = Change.MODIFIED_FLAGS | Change.MODIFIED_TAGS | Change.MODIFIED_FOLDER |
                                         Change.MODIFIED_CONTENT | Change.MODIFIED_NAME;
-    
+
     @Override
-    int getChangeMaskFilter(byte type) {
+    int getChangeMaskFilter(MailItem.Type type) {
         switch (type) {
-        case MailItem.TYPE_MESSAGE:       return MESSAGE_CHANGES;     
-        //case MailItem.TYPE_CHAT:          return CHAT_CHANGES;     
-        case MailItem.TYPE_CONTACT:       return CONTACT_CHANGES;     
-        case MailItem.TYPE_FOLDER:        return FOLDER_CHANGES;      
-        case MailItem.TYPE_APPOINTMENT:
-        case MailItem.TYPE_TASK:          return APPOINTMENT_CHANGES; 
-        case MailItem.TYPE_WIKI:
-        case MailItem.TYPE_DOCUMENT:      return DOCUMENT_CHANGES;
-        default:                          return 0;
+        case MESSAGE:
+            return MESSAGE_CHANGES;
+        case CONTACT:
+            return CONTACT_CHANGES;
+        case FOLDER:
+            return FOLDER_CHANGES;
+        case APPOINTMENT:
+        case TASK:
+            return APPOINTMENT_CHANGES;
+        case WIKI:
+        case DOCUMENT:
+            return DOCUMENT_CHANGES;
+        default:
+            return 0;
         }
     }
 
     private OfflineDataSource getDataSource() throws ServiceException {
         return (OfflineDataSource)OfflineProvisioning.getOfflineInstance().getDataSource(getAccount());
     }
-    
+
     @Override
     public MailSender getMailSender() throws ServiceException {
         return new OfflineMailSender();
     }
-    
+
     private static final OperationContext sContext = new TracelessContext();
     private static final Map<Integer, Pair<Integer, String>> sSendUIDs = new HashMap<Integer, Pair<Integer, String>>();
-    
+
     private int sendPendingMessages(boolean isOnRequest) throws ServiceException {
         int sentCount = 0;
         for (Iterator<Integer> iterator = OutboxTracker.iterator(this, isOnRequest ? 0 : 5 * Constants.MILLIS_PER_MINUTE); iterator.hasNext(); ) {
@@ -165,8 +170,8 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
                 continue;
 
             ZimbraLog.xsync.debug("sending pending mail (id=%d): %s", msg.getId(), msg.getSubject());
-            
-            
+
+
             // try to avoid repeated sends of the same message by tracking "send UIDs" on SendMsg requests
             Pair<Integer, String> sendRecord = sSendUIDs.get(id);
             String sendUID = sendRecord == null || sendRecord.getFirst() != msg.getSavedSequence() ? UUID.randomUUID().toString() : sendRecord.getSecond();
@@ -174,7 +179,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
 
             // Do we need to save a copy of the message ourselves to the Sent folder?
             boolean saveToSent = (ds.isSaveToSent()) && getAccount().isPrefSaveToSent();
-            
+
             try {
                 //new Request(syncFactory.getSyncSettings(ds), syncFactory.getPolicyKey(this))
                 helper.doSendMail(msg.getContentStream(), msg.getSize(), saveToSent);
@@ -189,7 +194,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
             ZimbraLog.xsync.debug("sent pending mail (id=%d)", msg.getId());
 
             // remove the draft from the outbox
-            delete(sContext, id, MailItem.TYPE_MESSAGE);
+            delete(sContext, id, MailItem.Type.MESSAGE);
             OutboxTracker.remove(this, id);
 
             // the draft is now gone, so remove it from the "send UID" hash and the list of items to push
@@ -203,7 +208,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     private boolean isAutoSyncDisabled(DataSource ds) {
         return ds.getSyncFrequency() <= 0;
     }
-    
+
     private boolean isTimeToSync(DataSource ds) throws ServiceException {
         OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         if (isAutoSyncDisabled(ds) || !syncMan.reauthOK(ds) || !syncMan.retryOK(ds))
@@ -212,7 +217,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         long frequency = ds.getSyncFrequency() < freqLimit ? freqLimit : ds.getSyncFrequency();
         return System.currentTimeMillis() - syncMan.getLastSyncTime(ds) >= frequency;
     }
-    
+
     @Override
     public boolean isAutoSyncDisabled() {
         try {
@@ -240,7 +245,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
     public void sync(boolean isOnRequest, boolean isDebugTraceOn) throws ServiceException {
         if (!isXsyncEnabled())
             return;
-        
+
         if (!OfflineSyncManager.getInstance().isServiceActive()) {
             if (isOnRequest)
                 OfflineLog.offline.debug("offline sync request ignored");
@@ -291,7 +296,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
         OfflineDataSource ds = getDataSource();
         if (!force && !isOnRequest && !isTimeToSync(ds) && !ds.isSyncNeeded())
             return;
-        
+
         OfflineSyncManager syncMan = OfflineSyncManager.getInstance();
         try {
             OfflineLog.offline.info(">>>>>>>> name=%s;version=%s;build=%s;release=%s;os=%s;type=%s",
@@ -311,7 +316,7 @@ public class ExchangeMailbox extends ChangeTrackingMailbox {
             syncMan.processSyncError(ds, e);
         }
     }
-    
+
     @Override
     public void deleteMailbox() throws ServiceException {
         super.deleteMailbox();
