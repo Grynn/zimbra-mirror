@@ -310,7 +310,8 @@ body						{	@ChromeBg@	}
 }
 
 .LoginScreen .copyright {
-    color:@lighten(LoginColor,36)@; 
+    color:@lighten(LoginColor,36)@;
+    position: static; 
 }
 
 .LoginScreen label {
