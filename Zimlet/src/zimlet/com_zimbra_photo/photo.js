@@ -19,7 +19,7 @@ function Com_Zimbra_Photo() {
 	"Bill Evans" : "bill_evans.jpg",
 	"Jimmy Smith" : "jimmy_smith.jpg",
 	"Medeski" : "medeski.jpg",
-	"Monk" : "monk.jpg",
+	"Thelonious Monk" : "monk.jpg",
 	"Ray Charles" : "ray_charles.jpg"
     };
 }
