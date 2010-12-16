@@ -48,30 +48,12 @@
   <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
   <topic name="パーソナを作成する" url="Userspecific/Creating_Personas.htm" />
 </key>
-<key name="IM" >
-  <topic name="インスタントメッセージの基本" url="instant_messaging/Instant_Messaging_Basics.htm" />
-</key>
 <key name="IMAPアカウント" >
   <topic name="POPアカウントを管理する" url="Userspecific/Managing_your_POP_Accounts.htm" />
 </key>
 <key name="IMAPアドレス、追加する" >
   <topic name="POPアカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
   <topic name="メールID" url="Userspecific/Mail_Identities.htm" />
-</key>
-<key name="IM、他のクライアントを使用する" >
-  <topic name="他のIMクライアントにログインする" url="instant_messaging/Log_into_other_IM_clients.htm" />
-</key>
-<key name="IMに連絡先を追加する" >
-  <topic name="インスタントメッセージにアクセスする" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
-<key name="IMの友人" >
-  <topic name="インスタントメッセージにアクセスする" url="instant_messaging/Accessing_Instant_Messaging.htm" />
-</key>
-<key name="IMチャットを開始する" >
-  <topic name="IMチャットを開始する" url="instant_messaging/Starting_an_IM_chat.htm" />
-</key>
-<key name="IM通知" >
-  <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
 <key name="POPアカウント" >
   <topic name="POPアカウントを管理する" url="Userspecific/Managing_your_POP_Accounts.htm" />
@@ -202,6 +184,9 @@
 <key name="カレンダー、予定なし/予定あり" >
   <topic name="予定あり/予定なしの時間帯を表示する" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
+<key name="カレンダー、予約を転送する" >
+  <topic name="予約を転送する" url="Calendar/Forwarding_an_appointment.htm" />
+</key>
 <key name="カレンダー、印刷する" >
   <topic name="カレンダーを印刷する" url="Calendar/Printing_a_calendar.htm" />
 </key>
@@ -211,8 +196,20 @@
 <key name="カレンダー、概要" >
   <topic name="Zimbraカレンダーについて" url="Calendar/About_Calendar.htm" />
 </key>
+<key name="カレンダー、返信元" >
+  <topic name="カレンダーの予約から返信する" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+</key>
+<key name="カレンダー、返信先" >
+  <topic name="カレンダー上の会議を編集する" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
 <key name="カレンダー、週平日をカスタマイズする" >
   <topic name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
+</key>
+<key name="カレンダーからの招待へ返信する" >
+  <topic name="カレンダー上の会議を編集する" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
+<key name="カレンダーから返信" >
+  <topic name="カレンダーの予約から返信する" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
 </key>
 <key name="カレンダーのシステム管理者の役割" >
   <topic name="共有カレンダーのシステム管理者権利" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
@@ -247,6 +244,9 @@
   <topic name="カレンダービュー" url="Calendar/Calendar_Views.htm" />
   <topic name="カレンダーリストビュー" url="Calendar/Calendar_List_View.htm" />
 </key>
+<key name="カレンダー招待を転送する" >
+  <topic name="カレンダー上の会議を編集する" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
 <key name="キーボードによる移動" >
   <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
 </key>
@@ -268,12 +268,10 @@
 <key name="サポートされている添付ファイルの種類" >
   <topic name="サポートされている添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
 </key>
-<key name="ショートカット" >
-  <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
 <key name="ショートカットキー" >
   <topic name="ZWCキーボードショートカットキー" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
   <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
+  <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="スペルチェック" >
   <topic name="スペルチェックを使用する" url="Creating_Messages/Using_Spell_Check.htm" />
@@ -334,14 +332,14 @@
 <key name="チェックアウト" >
   <topic name="ブリーフケースでファイルを操作する" url="Briefcase/Working_with_files_in_Briefcase.htm" />
 </key>
-<key name="チャット" >
-  <topic name="IMチャットを開始する" url="instant_messaging/Starting_an_IM_chat.htm" />
-</key>
 <key name="ツールヒント" >
   <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
-<key name="テーブル、文書ページに追加する" >
-  <topic name="ノートブックページにテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<key name="テーブル、文書に追加する" >
+  <topic name="文書にテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+</key>
+<key name="テーブルを追加する" >
+  <topic name="文書にテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 </key>
 <key name="デフォルトのクライアントの種類を変更する" >
   <topic name="全般のプリファレンスを指定する" url="Userspecific/Setting_your_general_preferences.htm" />
@@ -352,8 +350,8 @@
 <key name="ナビゲーション" >
   <topic name="[フォルダ]領域" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
-<key name="ノートブックページ" >
-  <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
+<key name="バージョン" >
+  <topic name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </key>
 
 </indexdata>

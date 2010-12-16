@@ -1,9 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="バージョン" >
-  <topic name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
-</key>
 <key name="パスワード" >
   <topic name="パスワードを忘れた場合" url="Userspecific/if_you_forget_your_password.htm" />
   <topic name="パスワードを変更する" url="Userspecific/chaning_your_password.htm" />
@@ -98,9 +95,6 @@
 <key name="プライベートカレンダーイベント" >
   <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
-<key name="プライベート予約" >
-  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="プライベート予約、詳細を共有する" >
   <topic name="カレンダーへのアクセスを委任する" url="Calendar/Delegating_Calendar_Access.htm" />
 </key>
@@ -128,7 +122,7 @@
 <key name="ヘッダー、含める" >
   <topic name="メール作成ウィンドウのプリファレンスを指定する" url="Userspecific/Setting_your_preferences_for_the_email_compose_window.htm" />
 </key>
-<key name="ページ、文書" >
+<key name="ページ、ブリーフケースで作成" >
   <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="ホワイトリスト" >
@@ -216,6 +210,9 @@
 <key name="リソース" >
   <topic name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
 </key>
+<key name="リッチテキストエディタ" >
+  <topic name="リッチテキストエディタを使用する" url="Documents/Using_the_rich_text_editor.htm" />
+</key>
 <key name="リマインダー" >
   <topic name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
 </key>
@@ -260,13 +257,21 @@
 </key>
 <key name="予約にプライベートのマークを付ける" >
   <topic name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
-  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="予約の作成方法" >
   <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
+<key name="予約をコピーする" >
+  <topic name="既存の予約から新規予約を作成する" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+</key>
+<key name="予約を再作成する" >
+  <topic name="既存の予約から新規予約を作成する" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+</key>
 <key name="予約を変更する" >
   <topic name="繰り返し予約を変更する" url="Calendar/Deleting_recurring_appointments.htm" />
+</key>
+<key name="予約を転送する" >
+  <topic name="予約を転送する" url="Calendar/Forwarding_an_appointment.htm" />
 </key>
 <key name="予約リマインダー" >
   <topic name="ユーザープリファレンスを指定する" url="Userspecific/Setting_your_user_preferences.htm" />
@@ -276,7 +281,6 @@
 </key>
 <key name="会議" >
   <topic name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="会議、アクセス許可が拒否される" >
   <topic name="アクセス許可が拒否されたメッセージを受信する" url="Calendar/Receiving_a_permission_denied_message.htm" />
@@ -293,14 +297,8 @@
 <key name="会議をキャンセルする" >
   <topic name="予約を削除する" url="Calendar/Deleting_an_appointment.htm" />
 </key>
-<key name="会議を予定する" >
-  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="会議を削除する" >
   <topic name="予約を削除する" url="Calendar/Deleting_an_appointment.htm" />
-</key>
-<key name="会議を計画する" >
-  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="作成する" >
   <topic name="新しいメールメッセージを作成する" url="Creating_Messages/Creating_a_new_mail_message.htm" />
@@ -354,6 +352,13 @@
   <topic name="フォルダを削除する" url="Navigation_folders_and_tips/deleting_folders.htm" />
   <key name="フォルダ" >
     <topic name="フォルダを削除する" url="Navigation_folders_and_tips/deleting_folders.htm" />
+  </key>
+</key>
+<key name="印刷する" >
+  <topic name="スレッドを印刷する" url="conversations/printing_a_conversation.htm" />
+  <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
+  <key name="メールメッセージ" >
+    <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
   </key>
 </key>
 

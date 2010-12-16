@@ -37,12 +37,12 @@
   <item name="RSS/Atomフィードを購読する" url="Navigation_folders_and_tips/b_Subscribe_to_RSS_Atom_feeds.htm" />
   <item name="アカウント内で複数のIDを管理する" url="Userspecific/Mail_Identities.htm" />
   <item name="[迷惑メール]フォルダを管理する" url="filters/Managing_your_Junk_Folder.htm" />
-  <item name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="削除した項目を復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="メールメッセージを完全に削除する" url="reading_mail/archiving_old_messages.htm" />
   <book name="メッセージを読む" >
     <item name="メッセージを読む" url="reading_mail/reading_mail.htm" />
-    <item name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-    <item name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
+    <item name="閲覧ペインにメッセージを表示する" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
+    <item name="デスクトップアラートとリマインダーを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
     <item name="メールを未読にする" url="reading_mail/marking_mail_as_unread.htm" />
     <item name="新着メッセージの通知" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
     <item name="メールメッセージをHTML形式で表示する" url="reading_mail/displaying_html_in_email_messages.htm" />
@@ -65,7 +65,7 @@
   <item name="メールを後で送信されるように予定する" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="閲覧確認を要求する" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="メッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
-  <item name="添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="サポートされている添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="Cc:アドレスとBcc:アドレスを追加する" url="Creating_Messages/using_cc__and_bcc__addresses.htm" />
   <item name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
   <item name="スペルチェックを使用する" url="Creating_Messages/Using_Spell_Check.htm" />
@@ -84,7 +84,7 @@
   <item name="社内アドレスブックを使用する" url="Contacts/using_the_corporate_address_book.htm" />
   <item name="連絡先を自動的に追加する" url="Contacts/importing_a_contact_from_the_company_directory.htm" />
   <item name="グループ連絡先リストを作成する" url="Contacts/Creating_Group_Contact_Lists.htm" />
-  <item name="アドレスブックをインポートする" url="Contacts/Importing_Contacts.htm" />
+  <item name="連絡先をインポートする" url="Contacts/Importing_Contacts.htm" />
   <item name="アドレスブックをエクスポートする" url="Contacts/Exporting_Address_Books.htm" />
   <item name="連絡先名またはアドレスブックを印刷する" url="Contacts/Printing_Contacts.htm" />
   <item name="連絡先情報を編集する" url="Contacts/editing_a_contact.htm" />
@@ -105,29 +105,31 @@
   <item name="カレンダーを印刷する" url="Calendar/Printing_a_calendar.htm" />
 </book>
 <book name="予約、会議、イベントを予定する" >
-  <item name="予約、会議、イベントについて" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="会議を計画する" url="Calendar/About_the_Appointment_Page.htm" />
-  <item name="予約を作成する" url="Calendar/Scheduling_meetings.htm" />
-  <item name="予約の作成時に[予定]タブを使用する" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
-  <item name="予定あり/予定なしの時間帯を表示する" url="Calendar/Seeing_free_busy_times.htm" />
-  <item name="予定なし/予定あり情報を見るアクセス許可を設定する" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
-  <item name="予定なし/予定ありのステータスを他のユーザーに送信する" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
-  <item name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
-  <item name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
-  <item name="メッセージを会議要求に変換する" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
-  <item name="簡易追加機能を使用して予約を作成する" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
+  <item name="予約の予定について" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
+  <item name="予約を予定する" url="Calendar/Scheduling_meetings.htm" />
   <item name="全日イベントを予定する" url="Calendar/Scheduling_All_Day_events.htm" />
   <item name="繰り返し予約を作成する" url="Calendar/Creating_recurring_appointments.htm" />
-  <item name="カレンダー上の会議の詳細を変更する" url="Calendar/editing_meetings_on_your_calendar.htm" />
+  <item name="既存の予約から新規予約を作成する" url="Calendar/Creating_an_appointment_from_an_existing_appointment.htm" />
+  <item name="メッセージや連絡先を会議要求に変換する" url="Calendar/Turning_a_message_into_a_meeting_request.htm" />
+  <item name="参加者および場所の空き状態を表示する" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+  <item name="簡易追加機能を使用して予約を作成する" url="Calendar/Using_QuickAdd_to_Create_an_Appointment.htm" />
   <item name="自分を会議に招待できる人物を指定する" url="Calendar/Identifying_who_can_invite_you_to_meetings.htm" />
   <item name="アクセス許可が拒否されたメッセージを受信する" url="Calendar/Receiving_a_permission_denied_message.htm" />
+  <item name="予定なし/予定あり情報を見るアクセス許可を設定する" url="Calendar/Setting_permissions_to_see_your_free_busy_information.htm" />
+  <item name="予定なし/予定ありのステータスを他のユーザーに送信する" url="Userspecific/Sending_your_free_busy_status_to_others.htm" />
+  <item name="予定あり/予定なしの時間帯を表示する" url="Calendar/Seeing_free_busy_times.htm" />
+  <item name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
+  <item name="リソースを予定する" url="Calendar/Scheduling_Resources.htm" />
+  <item name="カレンダー上の会議の詳細を変更する" url="Calendar/editing_meetings_on_your_calendar.htm" />
   <item name="会議の招待に応答する" url="Calendar/Responding_to_an_invitation.htm" />
+  <item name="予約を転送する" url="Calendar/Forwarding_an_appointment.htm" />
+  <item name="カレンダーの予約から返信する" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
   <item name="自分で企画した会議を変更する" url="Calendar/Changing_a_meeting_.htm" />
+  <item name="繰り返し予約を変更する" url="Calendar/Deleting_recurring_appointments.htm" />
   <item name="予約を削除する" url="Calendar/Deleting_an_appointment.htm" />
-  <item name="繰り返し予約を削除する" url="Calendar/Deleting_recurring_appointments.htm" />
 </book>
 <book name="タスクリストを使用する" >
-  <item name="タスクについて" url="Tasks/About_Tasks.htm" />
+  <item name="タスクリストを使用する" url="Tasks/About_Tasks.htm" />
   <item name="タスクリストを作成する" url="Tasks/Create_tasks_folders.htm" />
   <item name="タスクを追加する" url="Tasks/Add_a_task.htm" />
   <item name="タスクを変更する" url="Tasks/Change_a_task.htm" />
@@ -138,9 +140,10 @@
 <book name="ブリーフケースで作業する" >
   <item name="ブリーフケースで作業する" url="Briefcase/Working_in_Briefcase.htm" />
   <item name="ブリーフケースでファイルを操作する" url="Briefcase/Working_with_files_in_Briefcase.htm" />
-  <item name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
+  <item name="新しい文書を作成する" url="Documents/Create_a_new_page.htm" />
   <item name="リッチテキストエディタを使用する" url="Documents/Using_the_rich_text_editor.htm" />
-  <item name="ノートブックページにテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="ブリーフケースの文書にテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+  <item name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
   <item name="ブリーフケースからファイルを送信する" url="Briefcase/Send_Files_from_your_Briefcase.htm" />
 </book>
 <book name="フォルダを共有する" >
@@ -159,14 +162,13 @@
 <chunk name="プリファレンスを指定する" ref="whtdata5.xml" />
 </book>
 <book name="携帯デバイスを管理する（Network Editionのみ）" >
-  <item name="携帯デバイスを管理する" url="Userspecific/Managing_your_mobile_devices.htm" />
-  <item name="携帯デバイスをワイプする" url="Userspecific/How_to_wipe_your_mobile_device.htm" />
+<chunk name="携帯デバイスを管理する（Network Editionのみ）" ref="whtdata6.xml" />
 </book>
 <book name="アカウントのフォルダを保存する" >
-  <item name="アカウントの内容をバックアップする" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+<chunk name="アカウントのフォルダを保存する" ref="whtdata7.xml" />
 </book>
 <book name="Zimletを使用する" >
-<chunk name="Zimletを使用する" ref="whtdata6.xml" />
+<chunk name="Zimletを使用する" ref="whtdata8.xml" />
 </book>
 
 </tocdata>

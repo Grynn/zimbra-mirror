@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="generator" content="Adobe RoboHelp 8" />
-<title>予約の作成時に[予定]タブを使用する</title>
+<title>[提案]パネルで参加者および場所の空き状態を表示する</title>
 <link rel="StyleSheet" href="../default.css" type="text/css" />
 <script type="text/javascript" language="JavaScript">
 //<![CDATA[
@@ -54,7 +54,7 @@ if (window.gbWhTopic)
 
 	if (window.addTocInfo)
 	{
-	addTocInfo("予約、会議、イベントを予定する\n予約の作成時に[予定]タブを使用する");
+	addTocInfo("予約、会議、イベントを予定する\n参加者および場所の空き状態を表示する");
 addButton("show",BTN_TEXT,"表示","","","","",0,0,"","","");
 
 	}
@@ -82,13 +82,32 @@ else
 
 //-->
 //]]></script>
-<h1>予約の作成時に[スケジューラ]を使用する</h1>
-<p>カレンダーの[予約]ページの[スケジューラ]を使用すると、最も多くの参加者が参加可能な時刻に会議を予定できます。招待する各参加者の予定がわかっている場合、その参加者の予定あり/なし期間を示すスケジュールと一緒に参加者のリストが表示されます。日時を調整して、別の日時にした場合の参加可能状況を確認できます。</p>
-<p>参加者の会議への参加を必須または任意としてマークすることもできます。このオプションを選択するには、名前の横にあるアイコンをクリックします。</p>
-<p style="margin-left: 48px;"><img src="../cal_manatory_optionalpulldn.png" alt="cal_manatory_optionalpulldn.png" style="border: none;" width="196" height="177" border="0" /></p>
-<p style="margin-left: 48px;">&#160;</p>
-<p>デフォルトは[必須]です。[<span style="font-weight: bold;"><b>自由選択の参加者</b></span>]を選択すると、アイコンが<img src="../cal_optionalicon.png" alt="cal_optionalicon.png" style="border: none;" width="33" height="31" border="0" />に変化します。</p>
-<p>疑問符のついたチェックマークは、その参加者がまだ招待に応答していないことを示します。応答すると、ステータスを反映して列が更新されます。 </p>
+<h1>[提案]パネルで参加者および場所の空き状態を表示する</h1>
+<p>会議を予定する場合、参加者の予定なし/予定あり状態を確認することができるため、すべての参加者に良い時間を見つけることができます。参加者に予約を追加すると、[概要]ペインの[提案]パネルにその参加者の30分間のタイムスロットと、少なくとも1つの場所が示されます。 </p>
+<p>ミニカレンダーは、参加者の空き状態を色つきで表示します。</p>
+<ul type="disc">
+	<li><p>緑色はそれらの日にすべての参加者が参加でき、少なくとも1つの場所が使用可能であることを示します。 </p></li>
+	<li><p>オレンジは、全員は参加できないが、少なくとも半数は参加でき、少なくとも1つの場所が使用できることを示します。日付の上にマウスポインタを置くと、参加できない人の名前を最大10人まで表示することができます。 
+	 </p></li>
+	<li><p>赤はそれらの日に半数以上の参加者が参加できないことを示します。 </p></li>
+</ul>
+<p>右の数はその時に使用できる場所の数を示します。クリックして、提案される場所のリストを表示して、場所を選択できます。</p>
+<p>以下の例では、すべての参加者が1月中は1月18日以外は参加可能であることを示します。1月18日は半数以下の人しか参加できません。</p>
+<p><img src="../schedular.png" alt="schedular.png" style="border: none;" width="199" height="301" border="0" /></p>
+<p>&#160;</p>
+<p>提案時間にどの種類の場所を含めるのか、プリファレンスを設定できます。[概要]ペインの見出しで[<span style="font-weight: bold;"><b>提案時刻</b></span>]をクリックして、[<span style="font-weight: bold;"><b>提案のプリファレンス</b></span>]ダイアログを開きます。 </p>
+<ul type="disc">
+	<li><p>[<span style="font-weight: bold;"><b>名前</b></span>]、[<span style="font-weight: bold;"><b>最小収容</b></span>]、[<span style="font-weight: bold;"><b>説明</b></span>]、[<span   style="font-weight: bold;"><b>場所</b></span>]、[<span style="font-weight: bold;"><b>ビル</b></span>]、[<span style="font-weight: bold;"><b>階</b></span>]：&#160;予約する<a href="Scheduling_Resources.htm">部屋リソース</a>、名前、収容人数、特定の場所などについて、具体的に指定できます。<span style="font-weight: bold;"><b>備考</b></span>：&#160;この情報は、検索するために部屋に対してあらかじめ設定しておく必要があります。</p></li>
+	<li><p>[<span style="font-weight: bold;"><b>次を含む</b></span>]：参加者の空き状態の検索に含まれる時間を指定します。 
+	 </p></li>
+	<ul type="disc">
+		<li><p>[<span style="font-weight: bold;"><b>自分の勤務時間のみ</b></span>]：設定した勤務時間のみを検索します。カレンダーのプリファレンスで設定した勤務日と時間です。</p></li>
+		<li><p>[<span style="font-weight: bold;"><b>すべての参加者の勤務時間</b></span>]：場所を検索するとき、すべての人の勤務時間を考慮に入れます。<span style="font-weight: bold;"><b>備考</b></span>：&#160;異なるタイムゾーンの参加者を含める場合、特に離れたタイムゾーンの人が何人もいる場合は、すべての参加者が来れる場所を見つけることはできません。&#160;この場合、提案パネルには場所のリソースを示しません。</p></li>
+		<li><p>[<span style="font-weight: bold;"><b>非勤務時間</b></span>]：この検索では、勤務時間としてマークしていない時間を含めます。夜や週末などです。</p></li>
+	</ul>
+</ul>
+<p>&#160;</p>
+<p>&#160;</p>
 <script type="text/javascript" language="javascript1.2">//<![CDATA[
 <!--
 if (window.writeIntopicBar)

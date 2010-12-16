@@ -46,7 +46,7 @@
 </book>
 <book name="メッセージを閲覧、返信、転送する" >
   <item name="メッセージを読む" url="reading_mail/reading_mail.htm" />
-  <item name="新着メール" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
+  <item name="新着メールを確認する" url="reading_mail/how_to_tell_when_you_ve_got_new_mail.htm" />
   <item name="閲覧ペインにメッセージを表示する" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
   <item name="メールを未読にする" url="reading_mail/marking_mail_as_unread.htm" />
   <item name="添付ファイルを開く" url="reading_mail/opening_file_attachments.htm" />
@@ -62,7 +62,7 @@
 </book>
 <book name="連絡先リストを管理する" >
   <item name="新しい連絡先を追加する" url="Contacts/creating_a_new_contact.htm" />
-  <item name="連絡先グループリストを作成する" url="Contacts/Creating_Group_Contact_Lists.htm" />
+  <item name="グループ連絡先リストを作成する" url="Contacts/Creating_Group_Contact_Lists.htm" />
   <item name="連絡先を編集する" url="Contacts/editing_a_contact.htm" />
   <item name="連絡先を削除する" url="Contacts/deleting_a_contact.htm" />
   <item name="連絡先を印刷する" url="Contacts/Printing_Contacts.htm" />
@@ -80,7 +80,6 @@
 </book>
 <book name="予約を予定する" >
   <item name="予約の予定について" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="予約を計画する" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="予約を予定する" url="Calendar/Scheduling_meetings.htm" />
   <item name="予定あり/予定なしの時間帯を表示する" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="予約にプライベートのマークを付ける" url="Calendar/Marking_an_appointment_as_private.htm" />
@@ -105,7 +104,7 @@
 <book name="プリファレンスを指定する" >
   <item name="Desktopのプリファレンスを指定する" url="Userspecific/z-Setting_your_Desktop_Preferences.htm" />
   <item name="デスクトップアラートを設定する" url="Userspecific/Setting_up_desktop_alerts.htm" />
-  <item name="他のアドレスメール通知を送信する" url="Userspecific/New_mail_notifications.htm" />
+  <item name="他のアドレスにメール通知を送信する" url="Userspecific/New_mail_notifications.htm" />
   <item name="不在メッセージ" url="Userspecific/vacation_message.htm" />
   <item name="Zimbra Desktopをデフォルトのメールクライアントに設定する" url="managing_your_account/Making_Zimbra_Desktop_Default_Mail_Client.htm" />
 </book>

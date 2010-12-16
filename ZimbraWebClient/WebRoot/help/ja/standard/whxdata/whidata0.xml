@@ -100,9 +100,6 @@
 <key name="フォント" >
   <topic name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
 </key>
-<key name="プライベート予約" >
-  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
 <key name="プリファレンス" >
   <topic name="オプションを設定する" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
@@ -150,18 +147,6 @@
 </key>
 <key name="予定なし/予定あり、カレンダーを除外する" >
   <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />
-</key>
-<key name="予約にプライベートのマークを付ける" >
-  <topic name="予約ページについて" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="会議" >
-  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="会議を予定する" >
-  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
-</key>
-<key name="会議を計画する" >
-  <topic name="[予約]ページについて" url="Calendar/About_the_Appointment_Page.htm" />
 </key>
 <key name="別のカレンダーと同期する" >
   <topic name="新しいカレンダーを作成する" url="Calendar/b_Create_New_Calendar.htm" />

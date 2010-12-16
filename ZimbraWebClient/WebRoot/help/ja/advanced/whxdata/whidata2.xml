@@ -1,13 +1,6 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
-<key name="印刷する" >
-  <topic name="スレッドを印刷する" url="conversations/printing_a_conversation.htm" />
-  <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
-  <key name="メールメッセージ" >
-    <topic name="メールメッセージを印刷する" url="reading_mail/printing_a_mail_message.htm" />
-  </key>
-</key>
 <key name="取り消す" >
   <topic name="操作を取り消す" url="Userspecific/Undo_Action.htm" />
 </key>
@@ -68,18 +61,6 @@
 <key name="携帯デバイスをワイプする" >
   <topic name="携帯デバイスを管理する" url="Userspecific/Managing_your_mobile_devices.htm" />
 </key>
-<key name="文書、テーブルを追加する" >
-  <topic name="ノートブックページにテーブルを追加する" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
-</key>
-<key name="文書、リッチテキストエディタ" >
-  <topic name="リッチテキストエディタを使用する" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
-<key name="文書、新しいページを作成する" >
-  <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="文書ページ用のリッチテキストエディタ" >
-  <topic name="リッチテキストエディタを使用する" url="Documents/Using_the_rich_text_editor.htm" />
-</key>
 <key name="新しいZimletをアップロードする" >
   <topic name="Zimletを管理する" url="Zimlets/Managing_your_Zimlets.htm" />
 </key>
@@ -94,6 +75,9 @@
 </key>
 <key name="新規として編集する" >
   <topic name="右クリックメニュー" url="Navigation_folders_and_tips/right-click_menus.htm" />
+</key>
+<key name="新規ページを作成する" >
+  <topic name="新しいページを作成する" url="Documents/Create_a_new_page.htm" />
 </key>
 <key name="既存のアカウントを追加する" >
   <topic name="POPアカウントを追加する" url="Userspecific/Adding_POP_accounts.htm" />
@@ -114,9 +98,6 @@
     <topic name="検索クエリを保存する" url="Search/saving_search_queries.htm" />
   </key>
 </key>
-<key name="検索ビルダ" >
-  <topic name="検索クエリを作成する" url="Search/building_search_queries.htm" />
-</key>
 <key name="検索機能" >
   <topic name="検索機能を使用する" url="Search/using_the_search_feature.htm" />
   <key name="使用する" >
@@ -125,9 +106,6 @@
 </key>
 <key name="概要ペイン" >
   <topic name="[フォルダ]領域" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
-<key name="添付する" >
-  <topic name="メールメッセージにファイルを添付する" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
 </key>
 <key name="添付ファイル" >
   <topic name="添付ファイルを開く" url="reading_mail/opening_file_attachments.htm" />
@@ -289,9 +267,6 @@
 <key name="閲覧ペイン、オンとオフを切り替える" >
   <topic name="メールメッセージビューを管理する" url="conversations/conversation_list_view.htm" />
   <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
-</key>
-<key name="閲覧ペイン、ビュー" >
-  <topic name="Zimbraウェブクライアントのワークスペース" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
 </key>
 <key name="閲覧ペインを表示" >
   <topic name="閲覧ペインでメールを読む" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />

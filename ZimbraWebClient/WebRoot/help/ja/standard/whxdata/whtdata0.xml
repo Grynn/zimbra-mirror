@@ -18,7 +18,7 @@
   <item name="メールメッセージを分類する" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="メールメッセージを印刷する" url="reading_mail/b_Printing_email_messages.htm" />
   <item name="転送アドレスを設定する" url="Userspecific/Setting_a_Forwarding_Address.htm" />
-  <item name="削除したメールメッセージを復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="削除した項目を復元する" url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="メールメッセージを完全に削除する" url="reading_mail/b_Purging_email_messages.htm" />
   <book name="メッセージを読む" >
     <item name="メッセージを読む" url="reading_mail/reading_mail.htm" />
@@ -33,9 +33,8 @@
   <item name="署名を自動的に追加する" url="Userspecific/b_Automatically_adding_your_signature.htm" />
   <item name="アドレスのオートコンプリート" url="Creating_Messages/Using_address_lookup.htm" />
   <item name="メッセージにファイルを添付する" url="Creating_Messages/b_Attaching_files_to_your_message.htm" />
-  <item name="添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
+  <item name="サポートされている添付ファイルの種類" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
   <item name="HTMLエディタを使用する" url="Creating_Messages/Using_HTML_Editor.htm" />
-  <item name="スペルをチェックする" url="Creating_Messages/Check_the_spelling.htm" />
   <item name="メッセージを下書きとして保存する" url="Creating_Messages/saving_a_draft_message.htm" />
 </book>
 <book name="メッセージに返信する/メッセージを転送する" >
@@ -57,15 +56,17 @@
   <item name="カレンダーを削除する" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="予約、会議、イベントを予定する" >
-  <item name="会議を計画する" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="会議を予定する" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="繰り返し予約を作成する" url="Calendar/b_creating_recurring_appointments.htm" />
   <item name="予約を削除する" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>
 <book name="タスクリストを使用する" >
-  <item name="タスクについて" url="Tasks/About_Tasks.htm" />
+  <item name="タスクリストを使用する" url="Tasks/About_Tasks.htm" />
   <item name="タスクリストを作成する" url="Tasks/bc_Create_task_lists.htm" />
   <item name="タスクを変更する" url="Tasks/Change_a_task.htm" />
+</book>
+<book name="ブリーフケースで作業する" >
+  <item name="ブリーフケースにあるファイルのバージョン管理" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
 </book>
 <book name="フォルダを共有する" >
   <book name="カレンダーを共有する" >
@@ -92,7 +93,7 @@
 </book>
 <book name="プリファレンスを指定する" >
   <item name="プリファレンスを指定する" url="Userspecific/b_Setting_your_Options.htm" />
-  <item name="メール着信通知" url="Userspecific/New_mail_notifications.htm" />
+  <item name="他のアドレスにメール通知を送信する" url="Userspecific/New_mail_notifications.htm" />
   <item name="不在メッセージを作成する" url="Userspecific/vacation_message.htm" />
   <item name="RSS/ATOMフィードを購読する" url="Navigation_folders_and_tips/Subscribe_to_RSS_ATOM_feed_.htm" />
 </book>
