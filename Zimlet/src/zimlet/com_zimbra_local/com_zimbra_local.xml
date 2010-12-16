@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_local" version="3.0" description="Use Yahoo! Local to find businesses and services near you.">
+<zimlet name="com_zimbra_local" version="3.1" label="${msg.label}" description="${msg.description}">
 	<include>local.js</include>
     <include>yahoomaps.js</include>
     <include>upcoming.js</include>

@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_dimdim" version="0.2" label="DimDim" description="Easily schedule, start or join DimDim meetings.">
+<zimlet name="com_zimbra_dimdim" version="0.3" label="${msg.label}" description="${msg.description}">
   <include>dimdim.js</include>
   <includeCSS>dimdim.css</includeCSS>
   <handlerObject>com_zimbra_dimdim_HandlerObject</handlerObject>

@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_holidaycalendars" version="0.3" label="Holiday Calendars" description="Subscribe to Holiday Calendars of various countries.">
+<zimlet name="com_zimbra_holidaycalendars" version="0.4" label="${msg.label}" description="${msg.description}">
   <include>holidaycalendars.js</include>
   <includeCSS>holidaycalendars.css</includeCSS>
   <handlerObject>com_zimbra_holidaycalendars_HandlerObject</handlerObject>

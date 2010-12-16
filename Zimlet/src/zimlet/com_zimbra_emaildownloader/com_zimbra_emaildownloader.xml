@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_emaildownloader" version="1.0" label="Downloader" description="Drag-n-Drop to download one or more Emails(.eml), Contacts(.vcf) or Appointments(.ics) to your computer">
+<zimlet name="com_zimbra_emaildownloader" version="1.1" label="${msg.label}" description="${msg.description}">
 	<include>emaildownloader.js</include>
 	<includeCSS>emaildownloader.css</includeCSS>
 	<resource>emaildownloader-icon.gif</resource>

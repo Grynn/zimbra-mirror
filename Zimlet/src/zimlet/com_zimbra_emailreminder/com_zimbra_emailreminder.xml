@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_emailreminder" version="0.91" label="Email Reminder" description="Create a calendar reminder based on an email message." >
+<zimlet name="com_zimbra_emailreminder" version="0.92" label="${msg.label}" description="${msg.description}" >
 	<include>emailreminder.js</include>
 	<includeCSS>emailreminder.css</includeCSS>
 	<handlerObject>com_zimbra_emailreminder_HandlerObject</handlerObject>

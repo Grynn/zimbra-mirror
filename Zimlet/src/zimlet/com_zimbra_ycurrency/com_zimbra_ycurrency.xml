@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ycurrency" version="1.5" label="Yahoo! Currency" description="Highlights and converts currencies.">
+<zimlet name="com_zimbra_ycurrency" version="1.6" label="${msg.label}" description="${msg.description}">
     <include>ycurrency.js</include>
     <includeCSS>ycurrency.css</includeCSS>
     <handlerObject>Com_Zimbra_YCurrency_HandlerObject</handlerObject>

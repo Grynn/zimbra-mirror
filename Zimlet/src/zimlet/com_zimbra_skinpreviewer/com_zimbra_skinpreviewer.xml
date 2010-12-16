@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_skinpreviewer" version="1.2" label="Skin Previewer" description="Opens Zimbra in multiple windows with selected skins for preview.">
+<zimlet name="com_zimbra_skinpreviewer" version="1.3" label="${msg.label}" description="${msg.description}">
 	<include>skinpreviewer.js</include>
 	<includeCSS>skinpreviewer.css</includeCSS>
 	<resource>skinpreviewer-icon.gif</resource>

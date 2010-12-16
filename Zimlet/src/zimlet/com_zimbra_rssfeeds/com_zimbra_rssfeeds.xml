@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_rssfeeds" version="0.5" label="RSS Feeds" description="Quickly add RSS Feeds about breaking news, politics, technology and business.">
+<zimlet name="com_zimbra_rssfeeds" version="0.6" label="${msg.label}" description="${msg.description}">
   <include>rssfeeds.js</include>
   <includeCSS>rssfeeds.css</includeCSS>
   <handlerObject>com_zimbra_rssfeeds_HandlerObject</handlerObject>

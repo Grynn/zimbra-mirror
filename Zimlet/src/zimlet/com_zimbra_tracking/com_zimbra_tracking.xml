@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_tracking" version="1.5" label="Package Tracker" description="Find shipping information for FedEx and UPS using the tracking number.">
+<zimlet name="com_zimbra_tracking" version="1.6" label="${msg.label}" description="${msg.description}">
 	<include>shipping.js</include>
 	<handlerObject>com_zimbra_tracking_HandlerObject</handlerObject>
 	<contentObject type="tracking">

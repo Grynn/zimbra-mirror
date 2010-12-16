@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ybabelfish" version="1.1" description="Translate a conversation or message with Yahoo! Translator.">
+<zimlet name="com_zimbra_ybabelfish" version="1.2" label="${msg.label}" description="${msg.description}">
 	<include>ybabelfish.js</include>
 	<include>YBabelfishPrefsDialog.js</include>
 	<includeCSS>ybabelfish.css</includeCSS>

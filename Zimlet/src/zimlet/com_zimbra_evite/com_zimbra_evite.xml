@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_evite" version="1.4" label="Evite" description="Synchronizes Evite events to your Zimbra calendar.">
+<zimlet name="com_zimbra_evite" version="1.5" label="${msg.label}" description="${msg.description}">
   <include>evite.js</include>
   <includeCSS>evite.css</includeCSS>
   <handlerObject>Com_Zimbra_Evite_HandlerObject</handlerObject>

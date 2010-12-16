@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_ysearch" version="1.0" description="Perform a search using Yahoo!">
+<zimlet name="com_zimbra_ysearch" version="1.1" label="${msg.label}" description="${msg.description}">
 	<include>ysearch.js</include>
 	<include>yahoosearch.js</include>
     <includeCSS>ysearch.css</includeCSS>

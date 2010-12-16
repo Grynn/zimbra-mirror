@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_email2doc" version="1.5" label="Email2Doc" description="Drag-and-drop an email message to save as a Document page.">
+<zimlet name="com_zimbra_email2doc" version="1.6" label="${msg.label}" description="${msg.description}">
 	<include>email2doc.js</include>
 	<includeCSS>email2doc.css</includeCSS>
 	<resource>email2doc-icon.gif</resource>

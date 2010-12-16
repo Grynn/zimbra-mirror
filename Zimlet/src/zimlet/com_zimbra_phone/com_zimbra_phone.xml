@@ -1,4 +1,4 @@
-<zimlet name="com_zimbra_phone" version="2.4" label="Phone" target="main view-window" description="Highlights phone numbers to enable Skype calls.">
+<zimlet name="com_zimbra_phone" version="2.5" label="${msg.label}" target="main view-window" description="${msg.description}">
 	<include>phone.js</include>
 	<include>templates/Phone.template.js</include>
 	<handlerObject>Com_Zimbra_Phone</handlerObject>
