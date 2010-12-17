@@ -1050,7 +1050,7 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 			});
 			prefItems.push({type: _SPACER_ , height: "10px" });
 		}			
-		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefMessageViewHtmlPreferred,ZaAccount.A_zimbraPrefDisplayExternalImages,
+		if(ZAWizTopGrouper_XFormItem.isGroupVisible(entry,[ZaAccount.A_zimbraPrefMessageViewHtmlPreferred,ZaAccount.A_zimbraPrefDisplayExternalImages,ZaAccount.A_zimbraPrefMailToasterEnabled,
 			ZaAccount.A_zimbraPrefGroupMailBy,ZaAccount.A_zimbraPrefMailDefaultCharset],[])) {				
 			prefItems.push({type:_GROUP_, cssClass:"ZaHeader2", colSpan: "*", id:"account_form_prefs_mail_header",
 							items: [
@@ -1079,7 +1079,13 @@ ZaNewAccountXWizard.myXFormModifier = function(xFormObject, entry) {
 									label:ZaMsg.LBL_zimbraPrefGroupMailBy, labelLocation:_LEFT_
 								},
 								{ref:ZaAccount.A_zimbraPrefMailDefaultCharset, type:_SUPERWIZ_SELECT1_, msgName:ZaMsg.LBL_zimbraPrefMailDefaultCharset,
-									label:ZaMsg.LBL_zimbraPrefMailDefaultCharset, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS}
+									label:ZaMsg.LBL_zimbraPrefMailDefaultCharset, labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS},
+								{ref:ZaAccount.A_zimbraPrefMailToasterEnabled,
+                                                                        type:_SUPER_WIZ_CHECKBOX_, colSpan:2,
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                                                        msgName:ZaMsg.MSG_zimbraPrefMailToasterEnabled,
+                                                                        checkBoxLabel:ZaMsg.LBL_zimbraPrefMailToasterEnabled,
+                                                                        trueValue:"TRUE", falseValue:"FALSE"}
 							]
 						});
 		}

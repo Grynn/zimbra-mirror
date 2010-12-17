@@ -158,6 +158,7 @@ ZaAccount.A_zimbraPrefAutoSaveDraftInterval = "zimbraPrefAutoSaveDraftInterval";
 ZaAccount.A_zimbraPrefMailFlashTitle = "zimbraPrefMailFlashTitle";
 ZaAccount.A_zimbraPrefMailFlashIcon = "zimbraPrefMailFlashIcon" ;
 ZaAccount.A_zimbraPrefMailSoundsEnabled = "zimbraPrefMailSoundsEnabled" ;
+ZaAccount.A_zimbraPrefMailToasterEnabled = "zimbraPrefMailToasterEnabled";
 ZaAccount.A_zimbraMailMinPollingInterval = "zimbraMailMinPollingInterval";
 ZaAccount.A_zimbraPrefOutOfOfficeFromDate = "zimbraPrefOutOfOfficeFromDate";
 ZaAccount.A_zimbraPrefOutOfOfficeUntilDate = "zimbraPrefOutOfOfficeUntilDate";
@@ -1760,7 +1761,8 @@ ZaAccount.myXModel = {
         {id:ZaAccount.A_zimbraPrefClientType, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefClientType, choices:ZaSettings.clientTypeChoices},
         {id:ZaAccount.A_zimbraPrefTimeZoneId,type:_COS_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefTimeZoneId, choices:ZaSettings.timeZoneChoices},
         {id:ZaAccount.A_zimbraPrefMailDefaultCharset,type:_COS_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailDefaultCharset, choices:ZaSettings.mailCharsetChoices},
-        {id:ZaAccount.A_zimbraPrefLocale,type:_COS_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefLocale},
+        {id:ZaAccount.A_zimbraPrefMailToasterEnabled, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefMailToasterEnabled, choices:ZaModel.BOOLEAN_CHOICES},
+	{id:ZaAccount.A_zimbraPrefLocale,type:_COS_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefLocale},
         {id:ZaAccount.A_zimbraPrefSentMailFolder, type:_STRING_, ref:"attrs/"+ZaAccount.A_zimbraPrefSentMailFolder},
         {id:ZaAccount.A_zimbraPrefIncludeSpamInSearch, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefIncludeSpamInSearch, choices:ZaModel.BOOLEAN_CHOICES},
         {id:ZaAccount.A_zimbraPrefIncludeTrashInSearch, type:_COS_ENUM_, ref:"attrs/"+ZaAccount.A_zimbraPrefIncludeTrashInSearch, choices:ZaModel.BOOLEAN_CHOICES},

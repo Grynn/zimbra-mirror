@@ -632,7 +632,8 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 						ZaCos.A_zimbraPrefMessageViewHtmlPreferred,
 						ZaCos.A_zimbraPrefDisplayExternalImages,
 						ZaCos.A_zimbraPrefGroupMailBy,
-						ZaCos.A_zimbraPrefMailDefaultCharset
+						ZaCos.A_zimbraPrefMailDefaultCharset,
+						ZaCos.A_zimbraPrefCalendarToasterEnabled
 					]]
 				], 
                 items: [
@@ -658,7 +659,13 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                      msgName:ZaMsg.LBL_zimbraPrefMailDefaultCharset,label:ZaMsg.LBL_zimbraPrefMailDefaultCharset,
                      labelLocation:_LEFT_,
                      labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
+                },
+		{ref:ZaCos.A_zimbraPrefMailToasterEnabled, type:_CHECKBOX_,
+                    msgName:ZaMsg.LBL_zimbraPrefMailToasterEnabled,
+                    label:ZaMsg.LBL_zimbraPrefMailToasterEnabled,
+                    trueValue:"TRUE", falseValue:"FALSE"
                 }
+
             ]},
             {type:_ZA_TOP_GROUPER_, id:"cos_prefs_mail_receiving",label:ZaMsg.NAD_MailOptionsReceiving,
             	visibilityChecks:[[ZATopGrouper_XFormItem.isGroupVisible, 

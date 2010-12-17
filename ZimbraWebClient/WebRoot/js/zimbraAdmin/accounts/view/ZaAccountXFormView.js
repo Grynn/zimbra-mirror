@@ -2072,7 +2072,8 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 									ZaAccount.A_zimbraPrefMessageViewHtmlPreferred,
 									ZaAccount.A_zimbraPrefDisplayExternalImages,
 									ZaAccount.A_zimbraPrefGroupMailBy,
-									ZaAccount.A_zimbraPrefMailDefaultCharset
+									ZaAccount.A_zimbraPrefMailDefaultCharset,
+									ZaAccount.A_zimbraPrefMailToasterEnabled
 								]]
 							],
 							items: [
@@ -2107,7 +2108,14 @@ ZaAccountXFormView.myXFormModifier = function(xFormObject, entry) {
 								{ref:ZaAccount.A_zimbraPrefMailDefaultCharset, type:_SUPER_SELECT1_,
 									labelCssStyle:"width:195px", colSizes:["375px","190px"], 
 									msgName:ZaMsg.LBL_zimbraPrefMailDefaultCharset,label:ZaMsg.LBL_zimbraPrefMailDefaultCharset,
-									 labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS}
+									 labelLocation:_LEFT_, resetToSuperLabel:ZaMsg.NAD_ResetToCOS},
+								                                                                							      {ref:ZaAccount.A_zimbraPrefMailToasterEnabled,
+                                                                        type:_SUPER_CHECKBOX_,  colSpan:2,
+                                                                        colSizes:["195px","375px","190px"],
+                                                                        resetToSuperLabel:ZaMsg.NAD_ResetToCOS,
+                                                                        msgName:ZaMsg.MSG_zimbraPrefMailToasterEnabled,
+                                                                        checkBoxLabel:ZaMsg.LBL_zimbraPrefMailToasterEnabled,
+                                                                        trueValue:"TRUE", falseValue:"FALSE"}
 							]
 						},
 						{type:_ZA_TOP_GROUPER_,colSizes:["195px","auto"], id:"account_prefs_mail_receiving", numCols: 2,
