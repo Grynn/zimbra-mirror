@@ -297,15 +297,11 @@ ZaCosXFormView.ADVANCED_TAB_ATTRS = [ZaCos.A_zimbraAttachmentsBlocked,
 	ZaCos.A_zimbraMailTrashLifetime,
 	ZaCos.A_zimbraMailSpamLifetime,
 	ZaCos.A_zimbraFreebusyExchangeUserOrg,
-        ZaCos.A_zimbraDataSourcePollingInterval,
         ZaCos.A_zimbraDataSourcePop3PollingInterval,
         ZaCos.A_zimbraDataSourceImapPollingInterval,
         ZaCos.A_zimbraDataSourceCalendarPollingInterval,
-        ZaCos.A_zimbraDataSourceGalPollingInterval,
-        ZaCos.A_zimbraDataSourceLivePollingInterval,
         ZaCos.A_zimbraDataSourceRssPollingInterval,
         ZaCos.A_zimbraDataSourceCaldavPollingInterval,
-        ZaCos.A_zimbraDataSourceYabPollingInterval,
 	ZaCos.A_zimbraDataSourceMinPollingInterval
 
 ];
@@ -1094,12 +1090,6 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
             {type:_ZA_TOP_GROUPER_, id:"cos_datasourcepolling_settings",
                 label:ZaMsg.NAD_DataSourcePolling,
                 items: [
-                    {ref:ZaCos.A_zimbraDataSourcePollingInterval, type:_LIFETIME_,
-                        msgName:ZaMsg.MSG_zimbraDataSourcePollingInterval,
-                        label:ZaMsg.LBL_zimbraDataSourcePollingInterval, labelLocation:_LEFT_,
-                        onChange:ZaCosXFormView.validatePollingInterval,
-                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
-                    },
                     {ref:ZaCos.A_zimbraDataSourceMinPollingInterval, type:_LIFETIME_,
                         msgName:ZaMsg.MSG_zimbraDataSourceMinPollingInterval,
                         label:ZaMsg.LBL_zimbraDataSourceMinPollingInterval, labelLocation:_LEFT_,
@@ -1124,18 +1114,6 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                         onChange:ZaCosXFormView.validatePollingInterval,
                         labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
                     },
-                    {ref:ZaCos.A_zimbraDataSourceGalPollingInterval, type:_LIFETIME_,
-                        msgName:ZaMsg.MSG_zimbraDataSourceGalPollingInterval,
-                        label:ZaMsg.LBL_zimbraDataSourceGalPollingInterval, labelLocation:_LEFT_,
-                        onChange:ZaCosXFormView.validatePollingInterval,
-                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
-                    },
-                    {ref:ZaCos.A_zimbraDataSourceLivePollingInterval, type:_LIFETIME_,
-                        msgName:ZaMsg.MSG_zimbraDataSourceLivePollingInterval,
-                        label:ZaMsg.LBL_zimbraDataSourceLivePollingInterval, labelLocation:_LEFT_,
-                        onChange:ZaCosXFormView.validatePollingInterval,
-                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
-                    },
                     {ref:ZaCos.A_zimbraDataSourceRssPollingInterval, type:_LIFETIME_,
                         msgName:ZaMsg.MSG_zimbraDataSourceRssPollingInterval,
                         label:ZaMsg.LBL_zimbraDataSourceRssPollingInterval, labelLocation:_LEFT_,
@@ -1145,12 +1123,6 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     {ref:ZaCos.A_zimbraDataSourceCaldavPollingInterval, type:_LIFETIME_,
                         msgName:ZaMsg.MSG_zimbraDataSourceCaldavPollingInterval,
                         label:ZaMsg.LBL_zimbraDataSourceCaldavPollingInterval, labelLocation:_LEFT_,
-                        onChange:ZaCosXFormView.validatePollingInterval,
-                        labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
-                    },
-                    {ref:ZaCos.A_zimbraDataSourceYabPollingInterval, type:_LIFETIME_,
-                        msgName:ZaMsg.MSG_zimbraDataSourceYabPollingInterval,
-                        label:ZaMsg.LBL_zimbraDataSourceYabPollingInterval, labelLocation:_LEFT_,
                         onChange:ZaCosXFormView.validatePollingInterval,
                         labelCssStyle:"white-space:normal;",nowrap:false,labelWrap:true
                     }
