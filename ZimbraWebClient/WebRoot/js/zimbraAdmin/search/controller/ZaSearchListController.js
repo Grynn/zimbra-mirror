@@ -593,6 +593,15 @@ function () {
                 if(this._popupOperations[ZaOperation.VIEW_MAIL]) {
                     this._popupOperations[ZaOperation.VIEW_MAIL].enabled = false;
                 }
+
+		if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {
+                    this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+                }
+                                                
+		if(this._popupOperations[ZaOperation.EXPIRE_SESSION]) {
+                    this._popupOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
+                }
+
             } else if (item.type == ZaItem.DL) {
                 if(this._popupOperations[ZaOperation.MOVE_ALIAS])	{
                     this._popupOperations[ZaOperation.MOVE_ALIAS].enabled = false;
@@ -755,7 +764,7 @@ function () {
 						 	this._toolbarOperations[ZaOperation.CHNG_PWD].enabled = false;   
 					}		
 				}				
-			}	else if ( item.type == ZaItem.DOMAIN ){
+			}	else if ( item.type == ZaItem.DOMAIN || item.type == ZaItem.COS ){
 				
 					if(this._toolbarOperations[ZaOperation.EXPIRE_SESSION]) {	
 						this._toolbarOperations[ZaOperation.EXPIRE_SESSION].enabled = false;
