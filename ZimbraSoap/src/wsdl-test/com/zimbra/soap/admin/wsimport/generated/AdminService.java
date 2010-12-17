@@ -203,4 +203,16 @@ public interface AdminService {
         @WebParam(name = "ReloadLocalConfigRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
         ReloadLocalConfigRequest parameters);
 
+    /**
+     * 
+     * @param parameters
+     * @return
+     *     returns com.zimbra.soap.admin.wsimport.generated.GetServerStatsResponse
+     */
+    @WebMethod(action = "urn:zimbraAdmin/GetServerStats")
+    @WebResult(name = "GetServerStatsResponse", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+    public GetServerStatsResponse getServerStatsRequest(
+        @WebParam(name = "GetServerStatsRequest", targetNamespace = "urn:zimbraAdmin", partName = "parameters")
+        GetServerStatsRequest parameters);
+
 }

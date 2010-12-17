@@ -31,6 +31,7 @@ public class ObjectFactory {
     private final static QName _GetServerResponse_QNAME = new QName("urn:zimbraAdmin", "GetServerResponse");
     private final static QName _ModifyDomainRequest_QNAME = new QName("urn:zimbraAdmin", "ModifyDomainRequest");
     private final static QName _GetDomainResponse_QNAME = new QName("urn:zimbraAdmin", "GetDomainResponse");
+    private final static QName _GetServerStatsRequest_QNAME = new QName("urn:zimbraAdmin", "GetServerStatsRequest");
     private final static QName _GetAllServersRequest_QNAME = new QName("urn:zimbraAdmin", "GetAllServersRequest");
     private final static QName _CreateDomainResponse_QNAME = new QName("urn:zimbraAdmin", "CreateDomainResponse");
     private final static QName _ModifyDomainResponse_QNAME = new QName("urn:zimbraAdmin", "ModifyDomainResponse");
@@ -38,6 +39,7 @@ public class ObjectFactory {
     private final static QName _CreateAccountRequest_QNAME = new QName("urn:zimbraAdmin", "CreateAccountRequest");
     private final static QName _GetServerRequest_QNAME = new QName("urn:zimbraAdmin", "GetServerRequest");
     private final static QName _AuthResponse_QNAME = new QName("urn:zimbraAdmin", "AuthResponse");
+    private final static QName _GetServerStatsResponse_QNAME = new QName("urn:zimbraAdmin", "GetServerStatsResponse");
     private final static QName _AuthRequest_QNAME = new QName("urn:zimbraAdmin", "AuthRequest");
     private final static QName _DeleteDomainResponse_QNAME = new QName("urn:zimbraAdmin", "DeleteDomainResponse");
     private final static QName _AttributeSelectorImpl_QNAME = new QName("urn:zimbraAdmin", "attributeSelectorImpl");
@@ -70,83 +72,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AuthResponse }
+     * Create an instance of {@link AccountInfo }
      * 
      */
-    public AuthResponse createAuthResponse() {
-        return new AuthResponse();
-    }
-
-    /**
-     * Create an instance of {@link ServerInfo }
-     * 
-     */
-    public ServerInfo createServerInfo() {
-        return new ServerInfo();
-    }
-
-    /**
-     * Create an instance of {@link ModifyDomainRequest }
-     * 
-     */
-    public ModifyDomainRequest createModifyDomainRequest() {
-        return new ModifyDomainRequest();
-    }
-
-    /**
-     * Create an instance of {@link DeleteDomainResponse }
-     * 
-     */
-    public DeleteDomainResponse createDeleteDomainResponse() {
-        return new DeleteDomainResponse();
-    }
-
-    /**
-     * Create an instance of {@link DeleteServerRequest }
-     * 
-     */
-    public DeleteServerRequest createDeleteServerRequest() {
-        return new DeleteServerRequest();
-    }
-
-    /**
-     * Create an instance of {@link ReloadLocalConfigRequest }
-     * 
-     */
-    public ReloadLocalConfigRequest createReloadLocalConfigRequest() {
-        return new ReloadLocalConfigRequest();
-    }
-
-    /**
-     * Create an instance of {@link Account }
-     * 
-     */
-    public Account createAccount() {
-        return new Account();
-    }
-
-    /**
-     * Create an instance of {@link GetDomainInfoResponse }
-     * 
-     */
-    public GetDomainInfoResponse createGetDomainInfoResponse() {
-        return new GetDomainInfoResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetServerResponse }
-     * 
-     */
-    public GetServerResponse createGetServerResponse() {
-        return new GetServerResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetAllDomainsResponse }
-     * 
-     */
-    public GetAllDomainsResponse createGetAllDomainsResponse() {
-        return new GetAllDomainsResponse();
+    public AccountInfo createAccountInfo() {
+        return new AccountInfo();
     }
 
     /**
@@ -158,83 +88,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link CreateServerRequest }
-     * 
-     */
-    public CreateServerRequest createCreateServerRequest() {
-        return new CreateServerRequest();
-    }
-
-    /**
-     * Create an instance of {@link ModifyServerRequest }
-     * 
-     */
-    public ModifyServerRequest createModifyServerRequest() {
-        return new ModifyServerRequest();
-    }
-
-    /**
-     * Create an instance of {@link GetDomainResponse }
-     * 
-     */
-    public GetDomainResponse createGetDomainResponse() {
-        return new GetDomainResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateDomainRequest }
-     * 
-     */
-    public CreateDomainRequest createCreateDomainRequest() {
-        return new CreateDomainRequest();
-    }
-
-    /**
-     * Create an instance of {@link DomainInfo }
-     * 
-     */
-    public DomainInfo createDomainInfo() {
-        return new DomainInfo();
-    }
-
-    /**
      * Create an instance of {@link CreateAccountRequest }
      * 
      */
     public CreateAccountRequest createCreateAccountRequest() {
         return new CreateAccountRequest();
-    }
-
-    /**
-     * Create an instance of {@link GetDomainInfoRequest }
-     * 
-     */
-    public GetDomainInfoRequest createGetDomainInfoRequest() {
-        return new GetDomainInfoRequest();
-    }
-
-    /**
-     * Create an instance of {@link GetAccountRequest }
-     * 
-     */
-    public GetAccountRequest createGetAccountRequest() {
-        return new GetAccountRequest();
-    }
-
-    /**
-     * Create an instance of {@link ReloadLocalConfigResponse }
-     * 
-     */
-    public ReloadLocalConfigResponse createReloadLocalConfigResponse() {
-        return new ReloadLocalConfigResponse();
-    }
-
-    /**
-     * Create an instance of {@link ModifyDomainResponse }
-     * 
-     */
-    public ModifyDomainResponse createModifyDomainResponse() {
-        return new ModifyDomainResponse();
     }
 
     /**
@@ -246,75 +104,19 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link GetAllDomainsRequest }
+     * Create an instance of {@link DeleteDomainResponse }
      * 
      */
-    public GetAllDomainsRequest createGetAllDomainsRequest() {
-        return new GetAllDomainsRequest();
+    public DeleteDomainResponse createDeleteDomainResponse() {
+        return new DeleteDomainResponse();
     }
 
     /**
-     * Create an instance of {@link GetDomainRequest }
+     * Create an instance of {@link CreateServerRequest }
      * 
      */
-    public GetDomainRequest createGetDomainRequest() {
-        return new GetDomainRequest();
-    }
-
-    /**
-     * Create an instance of {@link ModifyServerResponse }
-     * 
-     */
-    public ModifyServerResponse createModifyServerResponse() {
-        return new ModifyServerResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateServerResponse }
-     * 
-     */
-    public CreateServerResponse createCreateServerResponse() {
-        return new CreateServerResponse();
-    }
-
-    /**
-     * Create an instance of {@link GetAllServersRequest }
-     * 
-     */
-    public GetAllServersRequest createGetAllServersRequest() {
-        return new GetAllServersRequest();
-    }
-
-    /**
-     * Create an instance of {@link ServerSelector }
-     * 
-     */
-    public ServerSelector createServerSelector() {
-        return new ServerSelector();
-    }
-
-    /**
-     * Create an instance of {@link GetAllServersResponse }
-     * 
-     */
-    public GetAllServersResponse createGetAllServersResponse() {
-        return new GetAllServersResponse();
-    }
-
-    /**
-     * Create an instance of {@link CreateDomainResponse }
-     * 
-     */
-    public CreateDomainResponse createCreateDomainResponse() {
-        return new CreateDomainResponse();
-    }
-
-    /**
-     * Create an instance of {@link Attr }
-     * 
-     */
-    public Attr createAttr() {
-        return new Attr();
+    public CreateServerRequest createCreateServerRequest() {
+        return new CreateServerRequest();
     }
 
     /**
@@ -334,11 +136,51 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link AccountInfo }
+     * Create an instance of {@link ModifyServerResponse }
      * 
      */
-    public AccountInfo createAccountInfo() {
-        return new AccountInfo();
+    public ModifyServerResponse createModifyServerResponse() {
+        return new ModifyServerResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateServerResponse }
+     * 
+     */
+    public CreateServerResponse createCreateServerResponse() {
+        return new CreateServerResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetDomainResponse }
+     * 
+     */
+    public GetDomainResponse createGetDomainResponse() {
+        return new GetDomainResponse();
+    }
+
+    /**
+     * Create an instance of {@link AuthResponse }
+     * 
+     */
+    public AuthResponse createAuthResponse() {
+        return new AuthResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetDomainInfoRequest }
+     * 
+     */
+    public GetDomainInfoRequest createGetDomainInfoRequest() {
+        return new GetDomainInfoRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetAllDomainsRequest }
+     * 
+     */
+    public GetAllDomainsRequest createGetAllDomainsRequest() {
+        return new GetAllDomainsRequest();
     }
 
     /**
@@ -350,11 +192,107 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link DeleteServerResponse }
+     * Create an instance of {@link GetServerStatsRequest }
      * 
      */
-    public DeleteServerResponse createDeleteServerResponse() {
-        return new DeleteServerResponse();
+    public GetServerStatsRequest createGetServerStatsRequest() {
+        return new GetServerStatsRequest();
+    }
+
+    /**
+     * Create an instance of {@link ModifyDomainRequest }
+     * 
+     */
+    public ModifyDomainRequest createModifyDomainRequest() {
+        return new ModifyDomainRequest();
+    }
+
+    /**
+     * Create an instance of {@link DomainInfo }
+     * 
+     */
+    public DomainInfo createDomainInfo() {
+        return new DomainInfo();
+    }
+
+    /**
+     * Create an instance of {@link Account }
+     * 
+     */
+    public Account createAccount() {
+        return new Account();
+    }
+
+    /**
+     * Create an instance of {@link GetDomainRequest }
+     * 
+     */
+    public GetDomainRequest createGetDomainRequest() {
+        return new GetDomainRequest();
+    }
+
+    /**
+     * Create an instance of {@link ServerInfo }
+     * 
+     */
+    public ServerInfo createServerInfo() {
+        return new ServerInfo();
+    }
+
+    /**
+     * Create an instance of {@link ModifyServerRequest }
+     * 
+     */
+    public ModifyServerRequest createModifyServerRequest() {
+        return new ModifyServerRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetServerStatsResponse }
+     * 
+     */
+    public GetServerStatsResponse createGetServerStatsResponse() {
+        return new GetServerStatsResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateDomainRequest }
+     * 
+     */
+    public CreateDomainRequest createCreateDomainRequest() {
+        return new CreateDomainRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetAllServersRequest }
+     * 
+     */
+    public GetAllServersRequest createGetAllServersRequest() {
+        return new GetAllServersRequest();
+    }
+
+    /**
+     * Create an instance of {@link GetAllDomainsResponse }
+     * 
+     */
+    public GetAllDomainsResponse createGetAllDomainsResponse() {
+        return new GetAllDomainsResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetDomainInfoResponse }
+     * 
+     */
+    public GetDomainInfoResponse createGetDomainInfoResponse() {
+        return new GetDomainInfoResponse();
+    }
+
+    /**
+     * Create an instance of {@link ServerSelector }
+     * 
+     */
+    public ServerSelector createServerSelector() {
+        return new ServerSelector();
     }
 
     /**
@@ -366,11 +304,99 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ReloadLocalConfigResponse }
+     * 
+     */
+    public ReloadLocalConfigResponse createReloadLocalConfigResponse() {
+        return new ReloadLocalConfigResponse();
+    }
+
+    /**
      * Create an instance of {@link GetServerRequest }
      * 
      */
     public GetServerRequest createGetServerRequest() {
         return new GetServerRequest();
+    }
+
+    /**
+     * Create an instance of {@link DeleteServerRequest }
+     * 
+     */
+    public DeleteServerRequest createDeleteServerRequest() {
+        return new DeleteServerRequest();
+    }
+
+    /**
+     * Create an instance of {@link Stat }
+     * 
+     */
+    public Stat createStat() {
+        return new Stat();
+    }
+
+    /**
+     * Create an instance of {@link ReloadLocalConfigRequest }
+     * 
+     */
+    public ReloadLocalConfigRequest createReloadLocalConfigRequest() {
+        return new ReloadLocalConfigRequest();
+    }
+
+    /**
+     * Create an instance of {@link Attr }
+     * 
+     */
+    public Attr createAttr() {
+        return new Attr();
+    }
+
+    /**
+     * Create an instance of {@link ModifyDomainResponse }
+     * 
+     */
+    public ModifyDomainResponse createModifyDomainResponse() {
+        return new ModifyDomainResponse();
+    }
+
+    /**
+     * Create an instance of {@link CreateDomainResponse }
+     * 
+     */
+    public CreateDomainResponse createCreateDomainResponse() {
+        return new CreateDomainResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetServerResponse }
+     * 
+     */
+    public GetServerResponse createGetServerResponse() {
+        return new GetServerResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetAccountRequest }
+     * 
+     */
+    public GetAccountRequest createGetAccountRequest() {
+        return new GetAccountRequest();
+    }
+
+    /**
+     * Create an instance of {@link DeleteServerResponse }
+     * 
+     */
+    public DeleteServerResponse createDeleteServerResponse() {
+        return new DeleteServerResponse();
+    }
+
+    /**
+     * Create an instance of {@link GetAllServersResponse }
+     * 
+     */
+    public GetAllServersResponse createGetAllServersResponse() {
+        return new GetAllServersResponse();
     }
 
     /**
@@ -437,6 +463,15 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetServerStatsRequest }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:zimbraAdmin", name = "GetServerStatsRequest")
+    public JAXBElement<GetServerStatsRequest> createGetServerStatsRequest(GetServerStatsRequest value) {
+        return new JAXBElement<GetServerStatsRequest>(_GetServerStatsRequest_QNAME, GetServerStatsRequest.class, null, value);
+    }
+
+    /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetAllServersRequest }{@code >}}
      * 
      */
@@ -497,6 +532,15 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "urn:zimbraAdmin", name = "AuthResponse")
     public JAXBElement<AuthResponse> createAuthResponse(AuthResponse value) {
         return new JAXBElement<AuthResponse>(_AuthResponse_QNAME, AuthResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link GetServerStatsResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "urn:zimbraAdmin", name = "GetServerStatsResponse")
+    public JAXBElement<GetServerStatsResponse> createGetServerStatsResponse(GetServerStatsResponse value) {
+        return new JAXBElement<GetServerStatsResponse>(_GetServerStatsResponse_QNAME, GetServerStatsResponse.class, null, value);
     }
 
     /**
