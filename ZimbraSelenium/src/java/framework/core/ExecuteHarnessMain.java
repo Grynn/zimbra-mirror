@@ -37,8 +37,8 @@ import org.apache.log4j.PropertyConfigurator;
 import org.testng.IInvokedMethod;
 import org.testng.IInvokedMethodListener;
 import org.testng.ITestContext;
-import org.testng.ITestListener;
 import org.testng.ITestResult;
+import org.testng.TestListenerAdapter;
 import org.testng.TestNG;
 import org.testng.xml.XmlClass;
 import org.testng.xml.XmlSuite;
@@ -408,7 +408,7 @@ public class ExecuteHarnessMain {
 		// Configure the runner
 		ng.setXmlSuites(suites);
 		ng.addListener(new MethodListener(this.testoutputfoldername));
-		ng.addListener(listener = new ResultListener());
+		ng.addListener(listener = new ResultListener(this.testoutputfoldername));
 		
 		try {
 			ng.setOutputDirectory(this.testoutputfoldername + "/TestNG");
@@ -522,7 +522,7 @@ public class ExecuteHarnessMain {
 	 * <p>
 	 * @author Matt Rhoades
 	 */
-	protected static class ResultListener implements ITestListener {
+	protected static class ResultListener extends TestListenerAdapter {
 
 		private int testsTotal = 0;
 		private int testsPass = 0;
@@ -531,7 +531,10 @@ public class ExecuteHarnessMain {
 		private List<String> failedTests = new ArrayList<String>();
 		private List<String> skippedTests = new ArrayList<String>();
 		
-		protected ResultListener() {
+		private String outputFolder = null;
+
+		protected ResultListener(String folder) {
+			outputFolder = (folder == null ? "logs" : folder);
 		}
 		
 		protected String getResults() {
@@ -555,6 +558,28 @@ public class ExecuteHarnessMain {
 			return (sb.toString());
 		}
 		
+		private static int screenshotcount = 0; 
+		/**
+		 * Generate the screenshot filename name
+		 * @param method
+		 * @return
+		 */
+		protected String getScreenCaptureFilename(Method method) {
+			String c = method.getDeclaringClass().getCanonicalName();
+			String m = method.getName();
+			return (String.format("%s/debug/%s.%s.screenshot%d.png", outputFolder, c, m, ++screenshotcount));
+		}
+
+		/**
+		 * Save a screenshot
+		 * @param result
+		 * @return
+		 */
+		protected void getScreenCapture(ITestResult result) {
+			String filename = getScreenCaptureFilename(result.getMethod().getMethod());
+			ClientSessionFactory.session().selenium().captureScreenshot(filename);
+		}
+		
 		@Override
 		public void onFinish(ITestContext context) {
 		}
@@ -565,6 +590,7 @@ public class ExecuteHarnessMain {
 
 		@Override
 		public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
+			this.getScreenCapture(result);
 		}
 
 		/**
@@ -574,6 +600,7 @@ public class ExecuteHarnessMain {
 		public void onTestFailure(ITestResult result) {
 			testsFailed++;
 			failedTests.add(result.getName());
+			this.getScreenCapture(result);
 		}
 
 		/**
@@ -599,6 +626,23 @@ public class ExecuteHarnessMain {
 		@Override
 		public void onTestSuccess(ITestResult result) {
 			testsPass++;
+		}
+
+		@Override
+		public void onConfigurationFailure(ITestResult result) {
+			this.getScreenCapture(result);
+		}
+
+		@Override
+		public void onConfigurationSkip(ITestResult result) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onConfigurationSuccess(ITestResult result) {
+			// TODO Auto-generated method stub
+			
 		}
 		
 	}
