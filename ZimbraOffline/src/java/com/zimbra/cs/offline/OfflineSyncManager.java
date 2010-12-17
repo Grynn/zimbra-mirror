@@ -606,6 +606,14 @@ public class OfflineSyncManager {
         return isServiceUp && !isConnectionDown &&
             !ZimbraApplication.getInstance().isShutdown() && !isUiLoading;
     }
+    
+    /**
+     * Returns true once ZD jetty is listening on configured host/port (e.g. localhost:7733)
+     * Does not care if remote connection is down; only local
+     */
+    public synchronized boolean isServiceUp () {
+        return isServiceUp;
+    }
 
     public synchronized void setConnectionDown(boolean b) {
         isConnectionDown = b;

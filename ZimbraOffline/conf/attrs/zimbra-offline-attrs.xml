@@ -194,4 +194,24 @@
   <desc>a unique ID of this client</desc>
 </attr>
 
+<attr name="zimbraPrefOfflineBackupInterval" type="long" cardinality="single" optionalIn="account" callback="com.zimbra.cs.offline.backup.BackupIntervalCallback">
+  <desc>interval to run account backup</desc>
+</attr>
+
+<attr name="zimbraPrefOfflineBackupAccountId" type="string" cardinality="multi" optionalIn="account">
+  <desc>account ID(s) to backup</desc>
+</attr>
+
+<attr name="zimbraPrefOfflineBackupPath" type="string" cardinality="single" optionalIn="account">
+  <desc>path for backup output</desc>
+</attr>
+
+<attr name="zimbraPrefOfflineBackupKeep" type="integer" cardinality="single" optionalIn="account">
+  <desc>number of backups to keep for each acct</desc>
+</attr>
+
+<attr name="offlineBackupLastSuccess" type="long" cardinality="single" optionalIn="account">
+  <desc>timestamp of last backup success</desc>
+</attr>
+
 </attrs>

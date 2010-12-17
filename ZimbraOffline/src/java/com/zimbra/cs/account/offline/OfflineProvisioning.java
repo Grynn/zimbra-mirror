@@ -14,6 +14,26 @@
  */
 package com.zimbra.cs.account.offline;
 
+import java.io.File;
+import java.security.GeneralSecurityException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.mail.AuthenticationFailedException;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.security.auth.login.LoginException;
+
 import com.sun.mail.smtp.SMTPTransport;
 import com.zimbra.common.auth.ZAuthToken;
 import com.zimbra.common.localconfig.LC;
@@ -25,7 +45,27 @@ import com.zimbra.common.util.Constants;
 import com.zimbra.common.util.StringUtil;
 import com.zimbra.common.util.SystemUtil;
 import com.zimbra.common.util.ZimbraLog;
-import com.zimbra.cs.account.*;
+import com.zimbra.cs.account.Account;
+import com.zimbra.cs.account.AccountServiceException;
+import com.zimbra.cs.account.AttributeManager;
+import com.zimbra.cs.account.CalendarResource;
+import com.zimbra.cs.account.Config;
+import com.zimbra.cs.account.Cos;
+import com.zimbra.cs.account.DataSource;
+import com.zimbra.cs.account.DistributionList;
+import com.zimbra.cs.account.Domain;
+import com.zimbra.cs.account.Entry;
+import com.zimbra.cs.account.EntrySearchFilter;
+import com.zimbra.cs.account.GlobalGrant;
+import com.zimbra.cs.account.IDNUtil;
+import com.zimbra.cs.account.Identity;
+import com.zimbra.cs.account.NamedEntry;
+import com.zimbra.cs.account.NamedEntryCache;
+import com.zimbra.cs.account.Provisioning;
+import com.zimbra.cs.account.Server;
+import com.zimbra.cs.account.Signature;
+import com.zimbra.cs.account.XMPPComponent;
+import com.zimbra.cs.account.Zimlet;
 import com.zimbra.cs.account.NamedEntry.Visitor;
 import com.zimbra.cs.account.auth.AuthContext;
 import com.zimbra.cs.datasource.DataSourceManager;
@@ -40,9 +80,9 @@ import com.zimbra.cs.mailbox.MailItem;
 import com.zimbra.cs.mailbox.Mailbox;
 import com.zimbra.cs.mailbox.MailboxManager;
 import com.zimbra.cs.mailbox.OfflineMailboxManager;
+import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailbox.OperationContext;
 import com.zimbra.cs.mailbox.ZcsMailbox;
-import com.zimbra.cs.mailbox.OfflineServiceException;
 import com.zimbra.cs.mailclient.smtp.SmtpTransport;
 import com.zimbra.cs.mime.MimeTypeInfo;
 import com.zimbra.cs.offline.Offline;
@@ -60,16 +100,6 @@ import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 
-import java.io.File;
-import java.security.GeneralSecurityException;
-import java.util.*;
-
-import javax.mail.AuthenticationFailedException;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.security.auth.login.LoginException;
-
 public class OfflineProvisioning extends Provisioning implements OfflineConstants {
 
     public static final String A_offlineClientId = "offlineClientId";
@@ -83,6 +113,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_zimbraPrefMailtoAccountId = "zimbraPrefMailtoAccountId";
     public static final String A_zimbraPrefShareContactsInAutoComplete = "zimbraPrefShareContactsInAutoComplete";
     public static final String A_zimbraPrefNotebookSyncEnabled = "zimbraPrefNotebookSyncEnabled";
+    public static final String A_zimbraPrefOfflineBackupInterval = "zimbraPrefOfflineBackupInterval";
+    public static final String A_zimbraPrefOfflineBackupAccountId = "zimbraPrefOfflineBackupAccountId";
+    public static final String A_zimbraPrefOfflineBackupPath = "zimbraPrefOfflineBackupPath";
+    public static final String A_zimbraPrefOfflineBackupKeep = "zimbraPrefOfflineBackupKeep";
+    public static final String A_offlineBackupLastSuccess = "offlineBackupLastSuccess";
 
     public enum EntryType {
         ACCOUNT("acct"), DATASOURCE("dsrc", true), IDENTITY("idnt", true), SIGNATURE("sig", true), COS("cos"), CONFIG("conf"), ZIMLET("zmlt");
@@ -441,7 +476,11 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraPrefShareContactsInAutoComplete,
             A_zimbraMailQuota,
             A_zimbraCreateTimestamp,
-            A_zimbraDumpsterEnabled
+            A_zimbraDumpsterEnabled,
+            A_zimbraPrefOfflineBackupAccountId,
+            A_zimbraPrefOfflineBackupInterval,
+            A_zimbraPrefOfflineBackupKeep,
+            A_zimbraPrefOfflineBackupPath
     ));
 
     @Override

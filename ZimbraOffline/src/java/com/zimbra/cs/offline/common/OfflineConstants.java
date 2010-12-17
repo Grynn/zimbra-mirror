@@ -33,6 +33,9 @@ public interface OfflineConstants {
     public static final QName GET_EXTENSIONS_REQUEST = QName.get("GetExtensionsRequest", NAMESPACE);
     public static final QName GET_EXTENSIONS_RESPONSE = QName.get("GetExtensionsResponse", NAMESPACE);
     
+    public static final QName ACCOUNT_BACKUP_REQUEST = QName.get("AccountBackupRequest", NAMESPACE);
+    public static final QName ACCOUNT_BACKUP_RESPONSE = QName.get("AccountBackupResponse", NAMESPACE);
+
     public static final String A_Event = "e";
     public static final String EVENT_UI_LOAD_BEGIN = "ui_load_begin";
     public static final String EVENT_UI_LOAD_END = "ui_load_end";

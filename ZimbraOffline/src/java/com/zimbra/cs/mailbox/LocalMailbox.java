@@ -121,4 +121,13 @@ public class LocalMailbox extends DesktopMailbox {
         }
     }
 
+    @Override
+    public boolean isImmutableSystemFolder(int folderId) {
+        if (folderId == ID_FOLDER_NOTIFICATIONS) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
 }
