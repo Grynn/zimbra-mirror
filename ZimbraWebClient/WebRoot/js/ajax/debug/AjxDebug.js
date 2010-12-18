@@ -947,7 +947,7 @@ function(params) {
 		AjxDebug.println(type, msg);
 	}
 	if (window.DBG) {
-		window.DBG.println(AjxDebug.DBG1, msg, params.methodNameStr);
+		window.DBG.println(window.DBG._level, msg, params.methodNameStr);
 	}
 };
 
