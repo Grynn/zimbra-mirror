@@ -42,13 +42,16 @@ public class MainScreen extends MobileCommonTest {
 	public void MainScreen_02() throws HarnessException {
 				
 		// The copyright doesn't seem to be translated
-		String copyright = "Copyright © 2008-2010 Zimbra, Inc.";
+		//use "\u00a9" (char)169 for Copyright ©
 		
+		String copyright = "Copyright " + "\u00a9" + " 2008-2010 Zimbra, Inc.";
+		
+				
 		ZAssert.assertTrue(app.zPageMain.sIsElementPresent(PageMain.Locators.zMainCopyright),	"Verify that the copyright notice is present");
 		
 		String text = app.zPageMain.sGetText(PageMain.Locators.zMainCopyright);
 		ZAssert.assertEquals(text, copyright, "Verify the copyright text is correct");
-		
+			
 		Calendar calendar = new GregorianCalendar();
 		String thisYear = "" + calendar.get(Calendar.YEAR);
 
