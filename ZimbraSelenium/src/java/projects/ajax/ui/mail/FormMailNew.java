@@ -337,6 +337,14 @@ public class FormMailNew extends AbsForm {
 
 		}
 		
+		if ( mail.dBodyText != null ) {
+			
+			zFillField(Field.Body, mail.dBodyText);
+			
+		}
+		
+		// TODO: how to handle HTML body?
+		
 		// Handle the Recipient list, which can be a combination
 		// of To, Cc, Bcc, and From
 		StringBuilder to = null;
@@ -399,8 +407,7 @@ public class FormMailNew extends AbsForm {
 		if ( bcc != null ) {
 			this.zFillField(Field.To, to.toString());
 		}
-		
-		// TODO: handle bodyText
+
 		
 	}
 
