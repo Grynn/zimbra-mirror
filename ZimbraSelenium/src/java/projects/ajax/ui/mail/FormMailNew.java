@@ -1,6 +1,9 @@
 package projects.ajax.ui.mail;
 
+import java.awt.event.KeyEvent;
 import java.util.List;
+
+import projects.ajax.ui.AppAjaxClient;
 
 import framework.items.MailItem;
 import framework.items.RecipientItem;
@@ -47,7 +50,10 @@ public class FormMailNew extends AbsForm {
 		public static final String zBccField = "css=[id^=zv__COMPOSE][id$=_bcc_control]";
 		public static final String zSubjectField = "css=[id^=zv__COMPOSE][id$=_subject_control]";
 		
-		public static final String zBodyField = "TODO";
+		public static final String zTextBodyField = "//div[contains(@id, 'zv__COMPOSE')]//textarea";
+		
+		public static final String zHtmlBodyFrame = "//div[contains(@id, 'zv__COMPOSE')]//iframe";
+		public static final String zHtmlBodyField = "//html//body";
 		
 	}
 
@@ -86,10 +92,23 @@ public class FormMailNew extends AbsForm {
 
 	}
 
+	public boolean zIsVisible() {
+		String locator = "//div[contains(@id,'ztb__COMPOSE')]";
+		
+		if ( !this.sIsElementPresent(locator) )
+			return (false);
+		
+		if ( !this.zIsVisiblePerPosition(locator, 0, 0) )
+			return (false);
+		
+		return (true);
+	}
+
 	@Override
 	public String myPageName() {
 		return (this.getClass().getName());
 	}
+	
 
 	@Override
 	public void zSubmit() throws HarnessException {
@@ -225,27 +244,51 @@ public class FormMailNew extends AbsForm {
 	 */
 	public void zFillField(Field field, String value) throws HarnessException {
 	
-		String locator;
+		String locator = null;
 		
 		if ( field == Field.To ) {
 			
 			locator = Locators.zToField;
 			
+			// FALL THROUGH
+			
 		} else if ( field == Field.Cc ) {
 			
 			locator = Locators.zCcField;
+			
+			// FALL THROUGH
 			
 		} else if ( field == Field.Bcc ) {
 			
 			locator = Locators.zBccField;
 			
+			// FALL THROUGH
+			
 		} else if ( field == Field.Subject ) {
 			
 			locator = Locators.zSubjectField;
 			
+			// FALL THROUGH
+			
 		} else if ( field == Field.Body ) {
 
-			throw new HarnessException("implement me!");
+			// It is difficult to focus in the body
+			// Click into Subject, then tab into body
+			
+			locator = Locators.zSubjectField;
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("Subject field not present");
+
+			this.sFocus(locator);
+			this.zClick(locator);
+			
+			((AppAjaxClient)this.MyAbsApplication).zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
+			SleepUtil.sleepSmall();
+			
+			((AppAjaxClient)this.MyAbsApplication).zKeyboard.zTypeCharacters(value);
+			SleepUtil.sleepSmall();
+			
+			return;
 			
 		} else {
 			throw new HarnessException("not implemented for field "+ field);

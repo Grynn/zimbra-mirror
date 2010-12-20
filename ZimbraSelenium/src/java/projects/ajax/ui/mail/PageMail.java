@@ -251,9 +251,25 @@ public class PageMail extends AbsAjaxPage {
 		if ( button == Button.B_NEW ) {
 			
 			locator = "//div[contains(@id,'ztb__')]//td[contains(@id,'__NEW_MENU_title')]";
-			page = new FormMailNew(this.MyApplication);
+			
+			// Make sure the button exists
+			if ( !this.sIsElementPresent(locator) )
+				throw new HarnessException("Button is not present locator="+ locator +" button="+ button);
+			
+			// Click it
+			this.zClick(locator);
 
-			// FALL THROUGH 
+			// Create the page
+			page = new FormMailNew(this.MyApplication);
+			
+			// Make sure it opens
+			for(int i = 0; i < 10; i++) {
+				if ( ((FormMailNew)page).zIsVisible() )
+					break;
+				SleepUtil.sleep(1000);
+			}
+			
+			return (page);
 			
 		} else if ( button == Button.B_GETMAIL ) {
 			
