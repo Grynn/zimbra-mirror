@@ -53,7 +53,7 @@ olcDbConfig: {4}
 olcDbConfig: {5}#
 olcDbConfig: {6}# Set database flags.
 olcDbConfig: {7}# Automatically remove log files that are no longer needed.
-olcDbConfig: {8}set_log_config DB_LOG_AUTO_REMOVE
+olcDbConfig: {8}log_set_config DB_LOG_AUTO_REMOVE
 olcDbConfig: {9}
 olcDbConfig: {10}#
 olcDbConfig: {11}# Set log values.
