@@ -82,10 +82,11 @@ function(zimlet, now, isDragProxy) {
 		} else if(field == ZaZimlet.A_zimbraZimletDescription) {	
 			// description
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
-			html[idx++] = AjxStringUtil.htmlEncode(zimlet.attrs[ZaZimlet.A_zimbraZimletDescription ]);
+            var desc = ZaZimletListView.__processMessage(zimlet[ZaZimlet.A_name], zimlet.attrs[ZaZimlet.A_zimbraZimletDescription ]);
+			html[idx++] = AjxStringUtil.htmlEncode(desc);
 			html[idx++] = "</td>";
 		} else if(field == ZaZimlet.A_zimbraZimletEnabled) {	
-			// description
+			// status
 			html[idx++] = "<td align='left' width=" + this._headerList[i]._width + ">";
 			html[idx++] = (zimlet.attrs[ZaZimlet.A_zimbraZimletEnabled] == "TRUE") ?  AjxStringUtil.htmlEncode(ZaMsg.NAD_Enabled) :AjxStringUtil.htmlEncode(ZaMsg.NAD_Disabled) ;
 			html[idx++] = "</td>";
@@ -111,4 +112,10 @@ function() {
 	return headerList;
 }
 
-
+ZaZimletListView.__RE_MSG = /\$\{msg\.(.*?)\}/g;
+ZaZimletListView.__processMessage = function(name, message) {
+    return (message||"").replace(ZaZimletListView.__RE_MSG, function($0, $1) {
+        var res = window[name];
+        return (res && res[$1]) || $0;
+    });
+};

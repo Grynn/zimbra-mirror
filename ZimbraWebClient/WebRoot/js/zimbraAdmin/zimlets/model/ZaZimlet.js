@@ -65,23 +65,50 @@ ZaZimlet.prototype.toString = function() {
 }
 
 ZaZimlet.getAll =
-function(exclude) {
+function(exclude, callback) {
 	var exc = exclude ? exclude : "none";
 	var soapDoc = AjxSoapDoc.create("GetAllZimletsRequest", ZaZimbraAdmin.URN, null);	
 	soapDoc.getMethod().setAttribute("exclude", exc);	
 	//var command = new ZmCsfeCommand();
-	var params = new Object();
-	params.soapDoc = soapDoc;	
+	var params = {
+        soapDoc: soapDoc,
+        asyncMode: Boolean(callback),
+        callback: callback && new AjxCallback(ZaZimlet._handleGetAllResponse, [callback])
+    };
 	var reqMgrParams = {
 		controller : ZaApp.getInstance().getCurrentController(),
 		busyMsg : ZaMsg.BUSY_GET_ZIMLET
 	}
-	var resp = ZaRequestMgr.invoke(params, reqMgrParams).Body.GetAllZimletsResponse;	
-	
-	var list = new ZaItemList(ZaZimlet);
-	list.loadFromJS(resp);	
-	return list;
+	var resp = ZaRequestMgr.invoke(params, reqMgrParams);
+    return resp && ZaZimlet._handleGetAllResponse(null, resp);
 }
+
+ZaZimlet._handleGetAllResponse = function(callback, resp) {
+    var list = new ZaItemList(ZaZimlet);
+    resp = resp instanceof ZmCsfeResult ? resp.getResponse() : resp;
+    list.loadFromJS(resp.Body.GetAllZimletsResponse);
+    if (callback) {
+        var args = callback.args;
+        args = args ? (args instanceof Array ? args : [args]) : [];
+        callback = new AjxCallback(callback.object, callback.func, args.concat(list));
+        ZaZimlet._handleGetAllResources(list, callback);
+    }
+    return list;
+};
+
+ZaZimlet._handleGetAllResources = function(list, callback) {
+    var includes = [];
+    for (var id in list.getIdHash()) {
+        var zimlet = list.getItemById(id);
+        // NOTE: Setting an ID on the includes will replace the old SCRIPT
+        // NOTE: tags with the new ones when the resources are requested
+        // NOTE: again.
+        includes.push( { src:["/res/",zimlet.name,".js"].join(""),id:"res_"+zimlet.name } );
+    }
+    var baseurl = appContextPath;
+    var proxy = null;
+    AjxInclude(includes, baseurl, callback, proxy);
+};
 
 ZaZimlet.prototype.isEnabled =
 function () {

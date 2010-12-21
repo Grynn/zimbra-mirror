@@ -841,18 +841,26 @@ ZaOverviewPanelController.searchListTreeListener = function (ev) {
 }
 
 ZaOverviewPanelController.zimletListTreeListener = function (ev) {
+    ZaZimlet.getAll(ZaZimlet.EXCLUDE_EXTENSIONS, new AjxCallback(ZaOverviewPanelController._zimletListTreeListener));
+};
+
+ZaOverviewPanelController._zimletListTreeListener = function (zimlets) {
 	if(ZaApp.getInstance().getCurrentController()) {
-		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getZimletListController(), ZaZimletListController.prototype.show, ZaZimlet.getAll(ZaZimlet.EXCLUDE_EXTENSIONS));
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getZimletListController(), ZaZimletListController.prototype.show, zimlets);
 	} else {
-		ZaApp.getInstance().getZimletListController().show(ZaZimlet.getAll(ZaZimlet.EXCLUDE_EXTENSIONS));
+		ZaApp.getInstance().getZimletListController().show(zimlets);
 	}	
 }
 
 ZaOverviewPanelController.adminExtListTreeListener = function (ev) {
+    ZaZimlet.getAll(ZaZimlet.EXCLUDE_MAIL, new AjxCallback(ZaOverviewPanelController._adminExtListTreeListener));
+};
+
+ZaOverviewPanelController._adminExtListTreeListener = function (zimlets) {
 	if(ZaApp.getInstance().getCurrentController()) {
-		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getAdminExtListController(), ZaAdminExtListController.prototype.show, ZaZimlet.getAll(ZaZimlet.EXCLUDE_MAIL ));
+		ZaApp.getInstance().getCurrentController().switchToNextView(ZaApp.getInstance().getAdminExtListController(), ZaAdminExtListController.prototype.show, zimlets);
 	} else {
-		ZaApp.getInstance().getAdminExtListController().show(ZaZimlet.getAll( ZaZimlet.EXCLUDE_MAIL ));
+		ZaApp.getInstance().getAdminExtListController().show(zimlets);
 	}	
 }
 

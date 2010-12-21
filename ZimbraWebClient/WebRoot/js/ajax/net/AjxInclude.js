@@ -26,7 +26,11 @@
  * that time.  DO pass a callback if you want to execute code that rely on
  * those scripts.
  *
- * @param {array}	includes 	an array of strings; each is the URL to some script
+ * @param {array}	includes 	An array of strings or object; each is the URL to
+ *                              some script OR an object with a required src property
+ *                              and an optional id property. The id, if specified,
+ *                              will be attached to the SCRIPT tag so that the caller
+ *                              can access the element later.
  * @param {string}	baseurl 	the URL that will be prepended to scripts with a
  *                            relative address (not starting with http://, ftp:// or /)
  * @param {AjxCallback}	callback the callback will be called when all scripts were processed
@@ -53,7 +57,8 @@ AjxInclude = function(includes, baseurl, callback, proxy) {
 			: includes;
 		window.status = "";
 		if (scripts.length > 0) {
-			var fullurl = scripts.shift();
+            var object = scripts.shift();
+			var fullurl = typeof object == "string" ? object : object.src;
 			var orig = fullurl;
 			if (!/^((https?|ftps?):\x2f\x2f|\x2f)/.test(fullurl)) {
 				if (baseurl)
@@ -76,7 +81,18 @@ AjxInclude = function(includes, baseurl, callback, proxy) {
 			script.type = "text/javascript";
 			script.src = fullurl;
 			window.status = "Loading script: " + orig;
-			head.appendChild(script);
+
+            var oscript = null;
+            if (object.id) {
+                script.id = object.id;
+                oscript = document.getElementById(object.id);
+            }
+            if (oscript) {
+                oscript.parentNode.replaceChild(script, oscript);
+            }
+            else {
+                head.appendChild(script);
+            }
 		} else if (includes.length == 0) {
 			script = null;
 			head = null;
