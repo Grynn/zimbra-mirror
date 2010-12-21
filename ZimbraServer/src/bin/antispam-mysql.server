@@ -126,7 +126,7 @@ case "$1" in
     SQLSTARTED=0
     for ((i = 0; i < 60; i++))
     do
-      ${zimbra_home}/bin/mysqladmin -s ping 2>&1 > /dev/null
+      ${zimbra_home}/bin/antispam-mysqladmin -s ping 2>&1 > /dev/null
       if [ $? = 0 ]; then
         SQLSTARTED=1
         break
