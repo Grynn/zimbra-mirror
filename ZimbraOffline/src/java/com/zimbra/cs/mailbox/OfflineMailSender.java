@@ -16,6 +16,7 @@ package com.zimbra.cs.mailbox;
 
 import java.io.IOException;
 
+import javax.mail.Address;
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -96,6 +97,13 @@ public class OfflineMailSender extends MailSender {
                     }
                 }
             }
+            
+            // update contact rankings
+            Address[] rcpts = getRecipients(mm);
+            if (rcpts != null && rcpts.length > 0) {
+                ContactRankings.increment(acct.getId(), rcpts);
+            }
+            
             return new ItemId(mbox, draftId);
         } catch (MessagingException me) {
             OfflineLog.offline.warn("exception occurred during SendMsg", me);

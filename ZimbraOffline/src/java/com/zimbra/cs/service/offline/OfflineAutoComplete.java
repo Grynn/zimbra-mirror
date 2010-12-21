@@ -52,6 +52,7 @@ public class OfflineAutoComplete extends AutoComplete {
         Provisioning.GalSearchType stype = Provisioning.GalSearchType.fromString(typeStr);
         int limit = account.getContactAutoCompleteMaxResults();
         AutoCompleteResult result = query(request, ctxt, account, true, name, limit, stype);
+        
         ContactAutoComplete ac = new ContactAutoComplete(account.getId());
         if (galAC && result.entries.size() < limit) {
             int galLimit = limit - result.entries.size();
