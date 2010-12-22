@@ -546,7 +546,7 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
 						ZaCos.A_zimbraPrefWarnOnExit,
 						ZaCos.A_zimbraPrefAdminConsoleWarnOnExit,
 						ZaCos.A_zimbraPrefShowSelectionCheckbox,
-						ZaCos.A_zimbraPrefIMAutoLogin,
+						//ZaCos.A_zimbraPrefIMAutoLogin,
 						ZaCos.A_zimbraJunkMessagesIndexingEnabled,
 						ZaCos.A_zimbraPrefLocale
 					]]
@@ -588,10 +588,10 @@ ZaCosXFormView.myXFormModifier = function(xFormObject, entry) {
                     msgName:ZaMsg.LBL_zimbraPrefShowSelectionCheckbox,label:ZaMsg.LBL_zimbraPrefShowSelectionCheckbox,
                     trueValue:"TRUE", falseValue:"FALSE"
                 },
-                {ref:ZaCos.A_zimbraPrefIMAutoLogin, type:_CHECKBOX_,
-                    msgName:ZaMsg.LBL_zimbraPrefIMAutoLogin,label:ZaMsg.LBL_zimbraPrefIMAutoLogin,
-                    trueValue:"TRUE", falseValue:"FALSE"
-                },
+                //{ref:ZaCos.A_zimbraPrefIMAutoLogin, type:_CHECKBOX_,
+                //    msgName:ZaMsg.LBL_zimbraPrefIMAutoLogin,label:ZaMsg.LBL_zimbraPrefIMAutoLogin,
+                //    trueValue:"TRUE", falseValue:"FALSE"
+                //},
                 {ref:ZaCos.A_zimbraJunkMessagesIndexingEnabled, type:_CHECKBOX_,
                     msgName:ZaMsg.LBL_zimbraJunkMessagesIndexingEnabled,
                     label:ZaMsg.LBL_zimbraJunkMessagesIndexingEnabled,
