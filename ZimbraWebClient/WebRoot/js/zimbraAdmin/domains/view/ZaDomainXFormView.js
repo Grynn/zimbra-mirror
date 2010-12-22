@@ -721,6 +721,7 @@ ZaDomainXFormView.myXFormModifier = function(xFormObject,entry) {
 		style: DwtAlert.INFO,
 		iconVisible: true, 
 		content: ZaMsg.Domain_InboundSMTPNote,
+		visibilityChecks:[[ZaItem.hasReadPermission, ZaDomain.A_zimbraDNSCheckHostname]],
 		colSpan:"2"});
 		group.items.push({ref: ZaDomain.A_zimbraDNSCheckHostname, type:_SUPER_TEXTFIELD_, colSpan:2,
 		txtBoxLabel:ZaMsg.Domain_zimbraDNSCheckHostname, onChange:ZaDomainXFormView.onFormFieldChanged,resetToSuperLabel:ZaMsg.NAD_ResetToGlobal});
