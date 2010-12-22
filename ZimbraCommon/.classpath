@@ -101,5 +101,6 @@
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/commons-cli-1.2-javadoc.zip!/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="jars/jetty-util-6.1.22.z6.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
