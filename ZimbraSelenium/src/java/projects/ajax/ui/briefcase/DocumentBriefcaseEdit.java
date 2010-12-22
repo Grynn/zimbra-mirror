@@ -9,20 +9,19 @@ import framework.ui.AbsForm;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
-public class DocumentBriefcaseNew extends AbsForm {
+public class DocumentBriefcaseEdit extends AbsForm {
 	
 	public static class Locators {		
-		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT9_left_icon']";
+		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT8_left_icon']";
 		public static final String zBodyField = "css=[id=DWT12][html$=][body$=]"; 
-		public static final String zNameField = "css=[id^=DWT4] [input$=]"; 	
-		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]"; 
+		public static final String zNameField = "css=[class=DwtInputField] [input$=]"; 
 	}
 	
 	public static String pageTitle;
 	
-	public DocumentBriefcaseNew(AbsApplication application) {
+	public DocumentBriefcaseEdit(AbsApplication application) {
 		super(application);		
-		logger.info("new " + DocumentBriefcaseNew.class.getCanonicalName());	
+		logger.info("new " + DocumentBriefcaseEdit.class.getCanonicalName());	
 	}
 
 	
@@ -41,16 +40,11 @@ public class DocumentBriefcaseNew extends AbsForm {
 	public void typeDocumentName(String text) throws HarnessException {
 		if(ClientSessionFactory.session().selenium().isElementPresent(Locators.zNameField))
 			sType(Locators.zNameField, text);	
-	}
-		
-	public void editDocumentName(DocumentItem docItem) throws HarnessException {
-		if(ClientSessionFactory.session().selenium().isElementPresent(Locators.zEditNameField))
-			sType(Locators.zEditNameField, docItem.getDocName());	
-	}
+	}	
 	
 	@Override
 	public void zFill(IItem item) throws HarnessException {
-		logger.info("DocumentBriefcaseNew.fill(ZimbraItem)");
+		logger.info("DocumentBriefcaseEdit(ZimbraItem)");
 		logger.info(item.prettyPrint());
 
 		// Make sure the item is a DocumentItem
@@ -69,7 +63,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 	
 	@Override
 	public void zSubmit() throws HarnessException {
-		logger.info("DocumentBriefcaseNew.SaveAndClose()");
+		logger.info("DocumentBriefcaseEdit.SaveAndClose()");
 		
 		// Look for "Save & Close"
 		if(!this.sIsElementPresent(Locators.zSaveAndCloseIconBtn))

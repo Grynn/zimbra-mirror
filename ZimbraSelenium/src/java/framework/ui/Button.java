@@ -43,7 +43,6 @@ public class Button {
 	public static final Button O_NEW_APPOINTMENT = new Button("O_NEW_APPOINTMENT");
 	public static final Button O_NEW_TASK = new Button("O_NEW_TASK");
 	public static final Button O_NEW_DOCUMENT = new Button("O_NEW_DOCUMENT");
-	public static final Button O_UPLOAD_FILE = new Button("O_UPLOAD_FILE");
 	public static final Button O_NEW_FOLDER = new Button("O_NEW_FOLDER");
 	public static final Button O_NEW_TAG = new Button("O_NEW_TAG");
 	public static final Button O_NEW_ADDRESSBOOK = new Button("O_NEW_ADDRESSBOOK");
@@ -104,6 +103,10 @@ public class Button {
 	public static final Button O_SEARCHTYPE_FILES = new Button("O_SEARCHTYPE_FILES");
 	public static final Button O_SEARCHTYPE_INCLUDESHARED = new Button("O_SEARCHTYPE_INCLUDESHARED");
 
+	//Briefcase buttons
+	public static final Button B_UPLOAD_FILE = new Button("B_UPLOAD_FILE");
+	public static final Button B_EDIT_FILE = new Button("B_EDIT_FILE");
+	
     //Addressbook button
 	public static final Button B_EDIT = new Button("zb__CNS__EDIT");
 	private final String ID;

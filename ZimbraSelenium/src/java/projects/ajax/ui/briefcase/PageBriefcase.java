@@ -5,6 +5,7 @@ package projects.ajax.ui.briefcase;
 
 import projects.ajax.ui.AbsAjaxPage;
 import projects.ajax.ui.PageMain;
+import framework.core.ClientSessionFactory;
 import framework.ui.AbsApplication;
 import framework.ui.AbsSeleniumObject;
 import framework.ui.Action;
@@ -27,6 +28,7 @@ public class PageBriefcase extends AbsAjaxPage {
 		public static final String zNewMenuIconBtn = "id=zb__BCD__NEW_FILE_left_icon";
 		public static final String zNewMenuLeftIconBtn = "id=zb__BDLV__NEW_MENU_left_icon";
 		public static final String zUploadFileIconBtn = "id=zb__BDLV__NEW_FILE_left_icon";
+		public static final String zEditFileIconBtn = "id=zb__BDLV__EDIT_FILE_left_icon";
 		public static final String zDeleteIconBtn = "id=zb__BCD__DELETE_left_icon";
 		public static final String zDeleteBtn = "id=zb__BCD__DELETE";
 		public static final String zMoveItemIconBtn = "id=zb__BCD__MOVE_left_icon";
@@ -171,7 +173,7 @@ public class PageBriefcase extends AbsAjaxPage {
 				throw new HarnessException("couldn't select window"
 						+ newPageTitle, ex);
 			}
-		} else if (button == Button.O_UPLOAD_FILE) {
+		} else if (button == Button.B_UPLOAD_FILE) {
 			// Check if the button is visible
 			String attrs = sGetAttribute("xpath=(//div[@id='zb__BDLV__NEW_FILE'])@style");
 			if (!attrs.contains("visible")) {
@@ -179,6 +181,14 @@ public class PageBriefcase extends AbsAjaxPage {
 			}
 			locator = Locators.zUploadFileIconBtn;
 			page = null;
+		} else if (button == Button.B_EDIT_FILE) {
+			// Check if the button is visible
+			String attrs = sGetAttribute("xpath=(//div[@id='zb__BDLV__EDIT_FILE'])@style");
+			if (!attrs.contains("visible")) {
+				throw new HarnessException(button + " not visible " + attrs);
+			}
+			locator = Locators.zEditFileIconBtn;	
+			page = new DocumentBriefcaseEdit(this.MyApplication);
 		} else if (button == Button.B_MOVE) {
 
 			// Check if the button is enabled
