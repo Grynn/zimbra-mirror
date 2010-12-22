@@ -1397,3 +1397,37 @@ function(ev) {
 	}
 	return false;
 };
+
+Dwt.selectText =
+function(el) {
+
+	if (!el) {
+		Dwt.deselectText();
+		return;
+	}
+
+	if (document.selection) {
+		// IE
+		var range = document.body.createTextRange();
+		range.moveToElementText(el);
+		range.select();
+	}
+	else if (window.getSelection) {
+		var range = document.createRange();
+		range.selectNode(el);
+		var sel = window.getSelection();
+		sel.addRange(range);
+	}
+};
+
+Dwt.deselectText =
+function() {
+
+	if (document.selection) {
+		// IE
+		document.selection.empty();
+	}
+	else if (window.getSelection) {
+		window.getSelection().removeAllRanges();
+	}
+};
