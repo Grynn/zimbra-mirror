@@ -55,6 +55,7 @@ import com.zimbra.cs.zclient.ZGetInfoResult;
 import com.zimbra.cs.zclient.ZIdentity;
 import com.zimbra.cs.zclient.ZMailbox;
 import com.zimbra.cs.zclient.ZSignature;
+import com.zimbra.cs.zimlet.ZimletUserProperties;
 
 public class DirectorySync {
 
@@ -343,7 +344,6 @@ public class DirectorySync {
         Map<String, Object> attrs = new HashMap<String, Object>();
         attrs.putAll(zgi.getAttrs());
         attrs.putAll(zgi.getPrefAttrs());
-        attrs.putAll(zgi.getZimletProps());
 
         attrs = diffAttributes(acct, attrs);
 
@@ -399,6 +399,18 @@ public class DirectorySync {
                 OfflineLog.offline.debug("dsync: deleted signature: " + acct.getName() + '/' + signature.getName());
             }
         }
+        if (prov.syncZimletProperties(acct.getId())) {
+            Map<String, Object> zimletAttrs = new HashMap<String, Object>();
+            zimletAttrs.putAll(zgi.getZimletProps());
+            Account localAccount = prov.getLocalAccount();
+            //TODO: right now we're assuming zimletAttr has a single key (zimbraZimletUserProperties)
+            //if that changes later may need to have diffattributes only delete from a subset of all acct attrs
+            zimletAttrs = diffAttributes(localAccount, zimletAttrs, false); //we're only looking at zimlet attrs; dont delete others
+            if (!zimletAttrs.isEmpty()) {
+                OfflineLog.offline.info("Syncing zimlet properties from account "+acct.getName());
+                prov.modifyAttrs(localAccount, zimletAttrs, false, true, false);
+            }
+        }
     }
 
     private static boolean isLocallyCreated(Entry e) {
@@ -414,8 +426,12 @@ public class DirectorySync {
         return attrs;
     }
 
-    @SuppressWarnings("unchecked")
     private static Map<String, Object> diffAttributes(Entry e, Map<String, Object> attrs) {
+        return diffAttributes(e, attrs, true);
+    }
+    
+    @SuppressWarnings("unchecked")
+    private static Map<String, Object> diffAttributes(Entry e, Map<String, Object> attrs, boolean delete) {
         // write over all unchanged account attributes
         Set<String> modified = e.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
         Map<String, Object> changes = new HashMap<String, Object>();
@@ -438,15 +454,16 @@ public class DirectorySync {
             }
             changes.put(zattr.getKey(), value);
         }
-
-        // make sure to detect any deleted attributes
-        Set<String> existing = new HashSet<String>(e.getAttrs().keySet());
-        existing.removeAll(modified);
-        existing.removeAll(changes.keySet());
-        for (String key : existing)
-            if (!key.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(key) && !key.equals(Provisioning.A_zimbraMailSieveScript) && !key.equals(Provisioning.A_zimbraMailOutgoingSieveScript))
-                changes.put(key, null);
-
+        
+        if (delete) {
+            // make sure to detect any deleted attributes
+            Set<String> existing = new HashSet<String>(e.getAttrs().keySet());
+            existing.removeAll(modified);
+            existing.removeAll(changes.keySet());
+            for (String key : existing)
+                if (!key.startsWith("offline") && !OfflineProvisioning.sOfflineAttributes.contains(key) && !key.equals(Provisioning.A_zimbraMailSieveScript) && !key.equals(Provisioning.A_zimbraMailOutgoingSieveScript))
+                    changes.put(key, null);
+        }
         return changes;
     }
 
@@ -614,6 +631,17 @@ public class DirectorySync {
         for (String signatureId : acct.getMultiAttrSet(OfflineProvisioning.A_offlineDeletedSignature)) {
             zmbx.deleteSignature(signatureId);
             OfflineLog.offline.debug("dpush: deleted signature: " + acct.getName() + '/' + signatureId);
+        }
+        
+        if (prov.syncZimletProperties(acct.getId())) {
+            Account localAcct = prov.getLocalAccount();
+            Set<String> zimletModified = localAcct.getMultiAttrSet(OfflineProvisioning.A_offlineModifiedAttrs);
+            if (zimletModified.contains(Provisioning.A_zimbraZimletUserProperties)) {
+                OfflineLog.offline.info("Pushing zimlet properties to remote account "+acct.getName());
+                zmbx.modifyProperties(ZimletUserProperties.getProperties(localAcct));
+            }
+            //other attrs are never synced for local acct; so it's clean no matter what
+            prov.markAccountClean(localAcct);
         }
     }
 

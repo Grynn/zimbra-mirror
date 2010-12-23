@@ -14,7 +14,6 @@
  */
 package com.zimbra.cs.taglib;
 
-import java.util.Iterator;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,8 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.mailbox.OperationContext;
-import com.zimbra.cs.zimlet.ZimletProperty;
 import com.zimbra.cs.zimlet.ZimletUserProperties;
+import com.zimbra.soap.account.type.Prop;
 
 public class Property extends ZimbraTag {
 
@@ -80,16 +79,14 @@ public class Property extends ZimbraTag {
         }
         ZimletUserProperties props = ZimletUserProperties.getProperties(acct);
 
-    	Iterator iter = props.getAllProperties().iterator();
-    	Map<String,String> m = new HashMap<String,String>();
-    	while (iter.hasNext()) {
-    		ZimletProperty zp = (ZimletProperty) iter.next();
-    		if (zp.getZimletName().equals(mZimlet)) {
-                m.put(zp.getKey(), zp.getValue());
+        Map<String,String> m = new HashMap<String,String>();
+        for (Prop zp: props.getAllProperties()) {
+            if (zp.getZimlet().equals(mZimlet)) {
+                m.put(zp.getName(), zp.getValue());
             }
-    	}
-    	HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
-    	req.setAttribute(mVar, m);
+        }
+        HttpServletRequest req = (HttpServletRequest)pageContext.getRequest();
+        req.setAttribute(mVar, m);
         return "";
     }
 
@@ -100,14 +97,12 @@ public class Property extends ZimbraTag {
         ZimletUserProperties props = ZimletUserProperties.getProperties(acct);
 
         StringBuffer ret = new StringBuffer("undefined");
-    	Iterator iter = props.getAllProperties().iterator();
-    	while (iter.hasNext()) {
-    		ZimletProperty zp = (ZimletProperty) iter.next();
-    		if (zp.getZimletName().equals(mZimlet) &&
-    			zp.getKey().equals(mName)) {
+        for (Prop zp: props.getAllProperties()) {
+            if (zp.getZimlet().equals(mZimlet) &&
+                zp.getName().equals(mName)) {
                 return zp.getValue();
             }
-    	}
+        }
         return ret.toString();
     }
 

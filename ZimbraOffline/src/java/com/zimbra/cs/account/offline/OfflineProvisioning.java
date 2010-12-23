@@ -113,6 +113,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     public static final String A_zimbraPrefMailtoAccountId = "zimbraPrefMailtoAccountId";
     public static final String A_zimbraPrefShareContactsInAutoComplete = "zimbraPrefShareContactsInAutoComplete";
     public static final String A_zimbraPrefNotebookSyncEnabled = "zimbraPrefNotebookSyncEnabled";
+    public static final String A_zimbraPrefOfflineZimletSyncAccountId = "zimbraPrefOfflineZimletSyncAccountId";
     public static final String A_zimbraPrefOfflineBackupInterval = "zimbraPrefOfflineBackupInterval";
     public static final String A_zimbraPrefOfflineBackupAccountId = "zimbraPrefOfflineBackupAccountId";
     public static final String A_zimbraPrefOfflineBackupPath = "zimbraPrefOfflineBackupPath";
@@ -215,7 +216,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
         options.setRetryCount(1);
         ZMailbox zmbox = ZMailbox.getMailbox(options);
 //        if (options.getAuthToken() == null) //it was auth by password
-//        	OfflineSyncManager.getInstance().authSuccess(options.getAccount(), options.getPassword(), zmbox.getAuthResult().getAuthToken(), zmbox.getAuthResult().getExpires());
+//        OfflineSyncManager.getInstance().authSuccess(options.getAccount(), options.getPassword(), zmbox.getAuthResult().getAuthToken(), zmbox.getAuthResult().getExpires());
         return zmbox;
     }
 
@@ -226,7 +227,7 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
 
     @Override
     public void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback) throws ServiceException {
-        modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account && isZcsAccount((Account)e));
+        modifyAttrs(e, attrs, checkImmutable, allowCallback, e instanceof Account && (isZcsAccount((Account)e) || isLocalAccount((Account)e)));
     }
 
     void modifyAttrs(Entry e, Map<String, ? extends Object> attrs, boolean checkImmutable, boolean allowCallback, boolean markChanged) throws ServiceException {
@@ -480,7 +481,8 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
             A_zimbraPrefOfflineBackupAccountId,
             A_zimbraPrefOfflineBackupInterval,
             A_zimbraPrefOfflineBackupKeep,
-            A_zimbraPrefOfflineBackupPath
+            A_zimbraPrefOfflineBackupPath,
+            A_zimbraPrefOfflineZimletSyncAccountId
     ));
 
     @Override
@@ -1367,6 +1369,18 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
                 Account acct = get(AccountBy.id, zimbraId);
                 if (acct != null && isZcsAccount(acct))
                     dirty.add(acct);
+            } else {
+                try {
+                    //if sync is setup for zimlet properties and local is dirty then the sync'd account is effectively dirty too
+                    String zimletAcctId = getZimletSyncAccountId();
+                    if (zimletAcctId != null) {
+                        Account zimletAcct = get(AccountBy.id, zimletAcctId);
+                        dirty.add(zimletAcct);
+                    }
+                } catch (ServiceException se) {
+                    //account id might be incorrect; this shouldn't cause all of dir sync to bomb
+                    OfflineLog.offline.error("Unable to find/mark account for zimlet sync",se);
+                }
             }
         }
         mHasDirtyAccounts = !dirty.isEmpty();
@@ -2428,5 +2442,14 @@ public class OfflineProvisioning extends Provisioning implements OfflineConstant
     @Override
     public boolean allowsPingRemote() {
         return false; // in offline don't actively ping remote servers for pending sessions
+    }
+    
+    public boolean syncZimletProperties(String accountId) throws ServiceException {
+        return accountId.equals(getZimletSyncAccountId());
+    }
+    
+    public String getZimletSyncAccountId() throws ServiceException {
+        Account localAcct = getLocalAccount();
+        return localAcct.getAttr(A_zimbraPrefOfflineZimletSyncAccountId);
     }
 }

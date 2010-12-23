@@ -1,7 +1,7 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2005, 2006, 2007, 2009, 2010 Zimbra, Inc.
+ * Copyright (C) 2010 Zimbra, Inc.
  * 
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
@@ -12,15 +12,18 @@
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
-package com.zimbra.cs.zimlet;
+
+package com.zimbra.soap.account.message;
+
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
+
 
 /**
- * 
- * @author jylee
- *
+<ModifyPropertiesResponse>
+</ModifyPropertiesResponse>
  */
-public interface ZimletProperty {
-	public String getZimletName();
-	public String getKey();
-	public String getValue();
+@XmlRootElement(name="ModifyPropertiesResponse")
+@XmlType(propOrder = {})
+public class ModifyPropertiesResponse {
 }

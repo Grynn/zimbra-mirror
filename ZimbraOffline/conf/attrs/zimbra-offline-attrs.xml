@@ -214,4 +214,8 @@
   <desc>timestamp of last backup success</desc>
 </attr>
 
+<attr name="zimbraPrefOfflineZimletSyncAccountId" type="string" cardinality="single" optionalIn="account">
+  <desc>account ID to sync zimlets with</desc>
+</attr>
+
 </attrs>

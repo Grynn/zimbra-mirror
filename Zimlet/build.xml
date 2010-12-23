@@ -35,7 +35,10 @@
 	<property name="common.jars.dir" location="${common.dir}/jars" />
 	<property name="common.classes.dir" location="../ZimbraCommon/build/classes" />
 
-    <property name="webinf.dir" location="WebRoot/WEB-INF" />
+    <property name="soap.dir" location="../ZimbraSoap"/>
+    <property name="soap.classes.dir" location="${soap.dir}/build/classes"/>
+
+	<property name="webinf.dir" location="WebRoot/WEB-INF" />
 	<property name="server.dir" location="../ZimbraServer" />
 	<property name="server.classes.dir" location="${server.dir}/build/classes" />
 	<property name="jars.dir" location="jars" />
@@ -73,6 +76,7 @@
 	<path id="class.path">
 		<pathelement location="${common.classes.dir}" />
 		<pathelement location="${server.classes.dir}" />
+		<pathelement location="${soap.classes.dir}"/> 
 		<pathelement location="${build.classes.dir}" />
 		<fileset dir="${jars.dir}">
 			<include name="**/*.jar" />
