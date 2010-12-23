@@ -109,6 +109,7 @@ public class PageMain extends AbsAjaxPage {
 		// Click on logout
 		sClick(Locators.zLogoffButton);
 				
+		sWaitForPageToLoad();
 		MyApplication.zPageLogin.zWaitForActive();
 		
 		MyApplication.zSetActiveAcount(null);

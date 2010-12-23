@@ -116,6 +116,7 @@ public class PageLogin extends AbsAjaxPage {
 		sClick(Locators.zBtnLogin);
 
 		// Wait for the app to load
+		sWaitForPageToLoad();
 		MyApplication.zPageMain.zWaitForActive();
 		
 		MyApplication.zSetActiveAcount(account);
