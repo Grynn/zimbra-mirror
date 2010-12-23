@@ -21,6 +21,7 @@ import com.zimbra.cs.account.Provisioning.AccountBy;
 import com.zimbra.cs.account.offline.OfflineAccount;
 import com.zimbra.cs.db.DbMailbox;
 import com.zimbra.cs.mailbox.ChangeTrackingMailbox.TracelessContext;
+import com.zimbra.cs.offline.OfflineLog;
 import com.zimbra.cs.redolog.op.CreateFolder;
 
 public abstract class DesktopMailbox extends Mailbox {
@@ -130,5 +131,10 @@ public abstract class DesktopMailbox extends Mailbox {
     @Override
     public boolean dumpsterEnabled() {
         return false;
+    }
+    
+    @Override
+    protected void migrateWikiFolders() throws ServiceException {
+        OfflineLog.offline.debug("wiki folder migration skipped");
     }
 }
