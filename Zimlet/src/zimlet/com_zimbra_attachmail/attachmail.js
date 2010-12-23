@@ -491,7 +491,7 @@ function() {
 	this.setSize(Dwt.DEFAULT, "255");
 	this._currentQuery = this._getQueryFromFolder("2");
 	this.treeView.setSelected("2");
-	this._treeListener();
+	this._treeListener(null, true);
 };
 
 
@@ -523,8 +523,9 @@ function(params) {
 };
 
 AttachMailTabView.prototype._treeListener =
-function(ev) {
-	if (ev.detail == DwtTree.ITEM_SELECTED) {
+function(ev, ignoreEvent) {
+	ev = ev || window.event; //this is called from onClick via simpleClosure and the event is not passed in IE as a param.
+	if (ignoreEvent || ev.detail == DwtTree.ITEM_SELECTED) {
 		var item = this.treeView.getSelected();
 		document.getElementById(AttachMailTabView.ELEMENT_ID_SEARCH_FIELD).value = ["in:\"", item.getSearchPath(),"\""].join("");
 		var query = this._getQueryFromFolder(item.id);
