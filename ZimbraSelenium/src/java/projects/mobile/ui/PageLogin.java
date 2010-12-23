@@ -1,10 +1,14 @@
 package projects.mobile.ui;
 
 import framework.ui.AbsApplication;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 
-public class PageLogin extends AbsMobilePage {
+public class PageLogin extends AbsTab {
 
 	public static class Locators {
 		
@@ -77,8 +81,8 @@ public class PageLogin extends AbsMobilePage {
 		
 		
 		// Logout
-		if ( MyApplication.zPageMain.zIsActive() ) {
-			MyApplication.zPageMain.zLogout();
+		if ( ((AppMobileClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppMobileClient)MyApplication).zPageMain.zLogout();
 		}
 		
 		zWaitForActive();
@@ -114,9 +118,9 @@ public class PageLogin extends AbsMobilePage {
 		sClick(Locators.zBtnLogin);
 
 		// Wait for the app to load
-		MyApplication.zPageMain.zWaitForActive();
+		((AppMobileClient)MyApplication).zPageMain.zWaitForActive();
 		
-		MyApplication.zSetActiveAcount(account);
+		((AppMobileClient)MyApplication).zSetActiveAcount(account);
 		
 	}
 	
@@ -151,6 +155,28 @@ public class PageLogin extends AbsMobilePage {
 			throw new HarnessException("Password field does not exist "+ locator);
 		}
 		sType(locator, password);
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, Action option, String item) throws HarnessException {
+		throw new HarnessException("Login page does not have lists");
+	}
+
+	@Override
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		throw new HarnessException("Login page does not have lists");
+	}
+
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		throw new HarnessException("Login page does not have lists");
 	}
 	
 

@@ -5,6 +5,10 @@ package projects.admin.ui;
 
 import projects.admin.items.AccountItem;
 import framework.ui.AbsApplication;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 
 /**
@@ -12,7 +16,7 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public class PageManageAccounts extends AbsAdminPage {
+public class PageManageAccounts extends AbsTab {
 
 	public static class Locators {
 		
@@ -57,7 +61,7 @@ public class PageManageAccounts extends AbsAdminPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsAdminPage#myPageName()
+	 * @see projects.admin.ui.AbsTab#myPageName()
 	 */
 	@Override
 	public String myPageName() {
@@ -65,7 +69,7 @@ public class PageManageAccounts extends AbsAdminPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsAdminPage#isActive()
+	 * @see projects.admin.ui.AbsTab#isActive()
 	 */
 	@Override
 	public boolean zIsActive() throws HarnessException {
@@ -90,7 +94,7 @@ public class PageManageAccounts extends AbsAdminPage {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsAdminPage#navigateTo()
+	 * @see projects.admin.ui.AbsTab#navigateTo()
 	 */
 	@Override
 	public void zNavigateTo() throws HarnessException {
@@ -218,6 +222,33 @@ public class PageManageAccounts extends AbsAdminPage {
 	 */
 	public void searchMailAccount(String emailaddress) throws HarnessException {
 		throw new HarnessException("implement me");
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, Action option, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

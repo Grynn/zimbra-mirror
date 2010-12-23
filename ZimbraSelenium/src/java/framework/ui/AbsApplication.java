@@ -20,7 +20,7 @@ import framework.util.ZimbraAccount;
  * <p>
  * The <code>Application</code> object is the main access point
  * for the test methods to access the GUI.  The application 
- * contains a list of  {@link AbsPage} objects, {@link AbsTree}
+ * contains a list of  {@link AbsTab} objects, {@link AbsTree}
  * objects, and other GUI objects.  Test case methods contain an
  * instance of the application and can access the GUI pages using
  * the application object.  The application is initialized during
@@ -38,9 +38,9 @@ public abstract class AbsApplication {
 	protected static Logger logger = LogManager.getLogger(AbsApplication.class);
 	
 	/**
-	 * A map of {@link AbsPage} objects being managed by this object
+	 * A map of {@link AbsTab} objects being managed by this object
 	 **/
-	protected Map<String, AbsPage>			pages = null;
+	protected Map<String, AbsTab>			pages = null;
 
 	/**
 	 * A map of {@link AbsTree} objects being managed by this object
@@ -60,7 +60,7 @@ public abstract class AbsApplication {
 	protected AbsApplication() {
 		logger.info("new " + AbsApplication.class.getCanonicalName());
 		
-		pages = new HashMap<String, AbsPage>();
+		pages = new HashMap<String, AbsTab>();
 		trees = new HashMap<String, AbsTree>();
 
 	}
@@ -88,9 +88,9 @@ public abstract class AbsApplication {
 	 * @return
 	 * @throws HarnessException
 	 */
-	public List<AbsPage> zGetActivePages() throws HarnessException {
-		List<AbsPage> actives = new ArrayList<AbsPage>();
-		for (AbsPage p : pages.values()) {
+	public List<AbsTab> zGetActivePages() throws HarnessException {
+		List<AbsTab> actives = new ArrayList<AbsTab>();
+		for (AbsTab p : pages.values()) {
 			if ( p.zIsActive() ) {
 				actives.add(p);
 			}

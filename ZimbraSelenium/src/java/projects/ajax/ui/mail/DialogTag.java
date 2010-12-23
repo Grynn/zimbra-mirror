@@ -126,6 +126,11 @@ public class DialogTag extends AbsDialog {
 		return (this.getClass().getName());
 	}
 
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		throw new HarnessException("implement me");
+	}
+
 
 
 }

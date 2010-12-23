@@ -6,7 +6,7 @@ package projects.ajax.ui.addressbook;
 import framework.items.FolderItem;
 import framework.items.IItem;
 import framework.ui.AbsApplication;
-import framework.ui.AbsSeleniumObject;
+import framework.ui.AbsPage;
 import framework.ui.AbsTree;
 import framework.ui.Action;
 import framework.util.HarnessException;
@@ -31,7 +31,7 @@ public class TreeContacts extends AbsTree {
 	/* (non-Javadoc)
 	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)
 	 */
-	public AbsSeleniumObject zTreeItem(Action action, IItem addressbook) throws HarnessException {
+	public AbsPage zTreeItem(Action action, IItem addressbook) throws HarnessException {
 		
 		// Validate the arguments
 		if ( (action == null) || (addressbook == null) ) {
@@ -44,7 +44,7 @@ public class TreeContacts extends AbsTree {
 		
 		FolderItem folder = (FolderItem)addressbook;
 		
-		AbsSeleniumObject page = null;
+		AbsPage page = null;
 		String locator = null;
 		
 		if ( action == Action.A_LEFTCLICK ) {
@@ -76,6 +76,12 @@ public class TreeContacts extends AbsTree {
 	@Override
 	public String myPageName() {
 		return (this.getClass().getName());
+	}
+
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

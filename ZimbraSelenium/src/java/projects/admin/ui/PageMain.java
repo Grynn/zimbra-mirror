@@ -1,6 +1,10 @@
 package projects.admin.ui;
 
 import framework.ui.AbsApplication;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 
 /**
@@ -8,7 +12,7 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public class PageMain extends AbsAdminPage {
+public class PageMain extends AbsTab {
 
 	public static class Locators {
 		public static final String zSkinContainerLogo		= "xpath=//*[@id='skin_container_logo']";
@@ -69,10 +73,10 @@ public class PageMain extends AbsAdminPage {
 		
 		// 1. Logout
 		// 2. Login as the default account
-		if ( !MyApplication.zPageLogin.zIsActive() ) {
-			MyApplication.zPageLogin.zNavigateTo();
+		if ( !((AppAdminConsole)MyApplication).zPageLogin.zIsActive() ) {
+			((AppAdminConsole)MyApplication).zPageLogin.zNavigateTo();
 		}
-		MyApplication.zPageLogin.login();
+		((AppAdminConsole)MyApplication).zPageLogin.login();
 
 		zWaitForActive();
 		
@@ -103,9 +107,9 @@ public class PageMain extends AbsAdminPage {
 		// This is the default configureation for the AdminConsoleAdmin() account
 		
 		
-		MyApplication.zPageLogin.zWaitForActive();
+		((AppAdminConsole)MyApplication).zPageLogin.zWaitForActive();
 		
-		MyApplication.zSetActiveAcount(null);
+		((AppAdminConsole)MyApplication).zSetActiveAcount(null);
 
 	}
 	
@@ -118,6 +122,33 @@ public class PageMain extends AbsAdminPage {
 		String username = sGetText(Locators.zSkinContainerUsername);	
 		return (username);
 		
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, Action option, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

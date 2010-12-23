@@ -3,11 +3,11 @@
  */
 package projects.ajax.ui.briefcase;
 
-import projects.ajax.ui.AbsAjaxPage;
+import projects.ajax.ui.AppAjaxClient;
 import projects.ajax.ui.PageMain;
-import framework.core.ClientSessionFactory;
 import framework.ui.AbsApplication;
-import framework.ui.AbsSeleniumObject;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
@@ -17,7 +17,7 @@ import framework.util.SleepUtil;
  * @author
  * 
  */
-public class PageBriefcase extends AbsAjaxPage {
+public class PageBriefcase extends AbsTab {
 
 	public static class Locators {
 		public static final String zNewBriefcaseOverviewPaneIcon = "id=ztih__main_Briefcase__BRIEFCASE_textCell";
@@ -55,8 +55,8 @@ public class PageBriefcase extends AbsAjaxPage {
 	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-		if (!this.MyApplication.zPageMain.zIsActive()) {
-			this.MyApplication.zPageMain.zNavigateTo();
+		if (!((AppAjaxClient)MyApplication).zPageMain.zIsActive()) {
+			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
 		// If the "folders" tree is visible, then Briefcase tab is active
@@ -93,8 +93,8 @@ public class PageBriefcase extends AbsAjaxPage {
 		}
 
 		// Make sure we are logged into the Ajax app
-		if (!MyApplication.zPageMain.zIsActive()) {
-			MyApplication.zPageMain.zNavigateTo();
+		if (!((AppAjaxClient)MyApplication).zPageMain.zIsActive()) {
+			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
 		// make sure mail page is loaded
@@ -116,7 +116,7 @@ public class PageBriefcase extends AbsAjaxPage {
 	}
 
 	@Override
-	public AbsSeleniumObject zToolbarPressButton(Button button)
+	public AbsPage zToolbarPressButton(Button button)
 			throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton(" + button + ")");
 
@@ -126,7 +126,7 @@ public class PageBriefcase extends AbsAjaxPage {
 		// Default behavior variables
 		//
 		String locator = null; // If set, this will be clicked
-		AbsSeleniumObject page = null; // If set, this page will be returned
+		AbsPage page = null; // If set, this page will be returned
 
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -139,7 +139,7 @@ public class PageBriefcase extends AbsAjaxPage {
 			// zToolbarPressPulldown(Button, Button)
 			//
 
-			MyApplication.zKeyboard.zTypeCharacters("n");
+			((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters("n");
 
 			// Not default behavior (zPressKeyboardShortcut vs. zClick)
 			return (new DocumentBriefcaseNew(this.MyApplication));
@@ -276,7 +276,7 @@ public class PageBriefcase extends AbsAjaxPage {
 	}
 
 	@Override
-	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown,
+	public AbsPage zToolbarPressPulldown(Button pulldown,
 			Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("
 				+ pulldown + ", " + option + ")");
@@ -291,7 +291,7 @@ public class PageBriefcase extends AbsAjaxPage {
 		//
 		String pulldownLocator = null; // If set, this will be expanded
 		String optionLocator = null; // If set, this will be clicked
-		AbsSeleniumObject page = null; // If set, this page will be returned
+		AbsPage page = null; // If set, this page will be returned
 
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -386,13 +386,13 @@ public class PageBriefcase extends AbsAjaxPage {
 	}
 
 	@Override
-	public AbsSeleniumObject zListItem(Action action, String subject)
+	public AbsPage zListItem(Action action, String subject)
 			throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 
 	@Override
-	public AbsSeleniumObject zListItem(Action action, Action option,
+	public AbsPage zListItem(Action action, Action option,
 			String subject) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}

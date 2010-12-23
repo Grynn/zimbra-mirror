@@ -5,18 +5,19 @@ import java.util.List;
 
 import org.apache.log4j.LogManager;
 
-import projects.ajax.ui.AbsAjaxPage;
+import projects.ajax.ui.AppAjaxClient;
 import projects.ajax.ui.PageMain;
 import framework.core.ClientSessionFactory;
 import framework.items.ContactItem;
 import framework.ui.AbsApplication;
-import framework.ui.AbsSeleniumObject;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
-public class PageAddressbook extends AbsAjaxPage{
+public class PageAddressbook extends AbsTab {
 
 
 
@@ -34,8 +35,8 @@ public class PageAddressbook extends AbsAjaxPage{
 	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-		if ( !this.MyApplication.zPageMain.zIsActive() ) {
-			this.MyApplication.zPageMain.zNavigateTo();
+		if ( !((AppAjaxClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
 		//make sure Addressbook  tab is selected		
@@ -72,8 +73,8 @@ public class PageAddressbook extends AbsAjaxPage{
 		}
 
 
-		if ( !MyApplication.zPageMain.zIsActive() ) {
-			MyApplication.zPageMain.zNavigateTo();
+		if ( !((AppAjaxClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
 		// Click on Addressbook icon
@@ -119,7 +120,7 @@ public class PageAddressbook extends AbsAjaxPage{
 	}
 
 	@Override
-	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 
 		if ( button == null )
@@ -129,7 +130,7 @@ public class PageAddressbook extends AbsAjaxPage{
 		// Default behavior variables
 		//
 		String locator = null;			// If set, this will be clicked
-		AbsSeleniumObject page = null;	// If set, this page will be returned
+		AbsPage page = null;	// If set, this page will be returned
 
 		if ( button == Button.B_NEW ) {
 
@@ -198,7 +199,7 @@ public class PageAddressbook extends AbsAjaxPage{
 	}
 
 	@Override
-	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButtonWithPulldown("+ pulldown +", "+ option +")");
 
 		if ( pulldown == null )
@@ -211,21 +212,21 @@ public class PageAddressbook extends AbsAjaxPage{
 		//
 		String pulldownLocator = null;	// If set, this will be expanded
 		String optionLocator = null;	// If set, this will be clicked
-		AbsSeleniumObject page = null;	// If set, this page will be returned
+		AbsPage page = null;	// If set, this page will be returned
 
 		return page;
 	}
 
 	@Override
-	public AbsSeleniumObject zListItem(Action action, Action option, String subject) throws HarnessException {
+	public AbsPage zListItem(Action action, Action option, String subject) throws HarnessException {
 		throw new HarnessException("implement me!");
 	}
 
 	@Override
-	public AbsSeleniumObject zListItem(Action action, String contact) throws HarnessException {
+	public AbsPage zListItem(Action action, String contact) throws HarnessException {
 		logger.info(myPageName() + " zListItem("+ action +", "+ contact +")");
 
-		AbsSeleniumObject page = null;
+		AbsPage page = null;
 
 		if ( action == Action.A_LEFTCLICK ) {
 

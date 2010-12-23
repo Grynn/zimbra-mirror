@@ -1,6 +1,10 @@
 package projects.admin.ui;
 
 import framework.ui.AbsApplication;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraAdminAccount;
@@ -10,7 +14,7 @@ import framework.util.ZimbraAdminAccount;
  * @author Matt Rhoades
  *
  */
-public class PageLogin extends AbsAdminPage {
+public class PageLogin extends AbsTab {
 	
 	public static class Locators {
 		
@@ -73,8 +77,8 @@ public class PageLogin extends AbsAdminPage {
 		
 		
 		// Logout
-		if ( MyApplication.zPageMain.zIsActive() ) {
-			MyApplication.zPageMain.logout();
+		if ( ((AppAdminConsole)MyApplication).zPageMain.zIsActive() ) {
+			((AppAdminConsole)MyApplication).zPageMain.logout();
 		}
 		
 		zWaitForActive();
@@ -108,9 +112,9 @@ public class PageLogin extends AbsAdminPage {
 		sClick(Locators.zLoginButtonContainer);
 
 		// Wait for the app to load
-		MyApplication.zPageMain.zWaitForActive();
+		((AppAdminConsole)MyApplication).zPageMain.zWaitForActive();
 		
-		MyApplication.zSetActiveAcount(account);
+		((AppAdminConsole)MyApplication).zSetActiveAcount(account);
 		
 	}
 	
@@ -126,6 +130,33 @@ public class PageLogin extends AbsAdminPage {
 		
 		sType(Locators.zLoginUserName, account.EmailAddress);
 		sType(Locators.zLoginPassword, account.Password);
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, Action option, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

@@ -3,10 +3,11 @@
  */
 package projects.ajax.ui.preferences;
 
-import projects.ajax.ui.AbsAjaxPage;
+import projects.ajax.ui.AppAjaxClient;
 import projects.ajax.ui.PageMain;
 import framework.ui.AbsApplication;
-import framework.ui.AbsSeleniumObject;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
@@ -16,7 +17,7 @@ import framework.util.SleepUtil;
  * @author Matt Rhoades
  *
  */
-public class PagePreferences extends AbsAjaxPage {
+public class PagePreferences extends AbsTab {
 
 	
 	public static class Locators {
@@ -50,8 +51,8 @@ public class PagePreferences extends AbsAjaxPage {
 	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-		if ( !this.MyApplication.zPageMain.zIsActive() ) {
-			this.MyApplication.zPageMain.zNavigateTo();
+		if ( !((AppAjaxClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 		
 		/*
@@ -95,8 +96,8 @@ public class PagePreferences extends AbsAjaxPage {
 		}
 		
 		// Make sure we are logged into the Mobile app
-		if ( !MyApplication.zPageMain.zIsActive() ) {
-			MyApplication.zPageMain.zNavigateTo();
+		if ( !((AppAjaxClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 		
 		// Click on Preferences icon
@@ -206,17 +207,17 @@ public class PagePreferences extends AbsAjaxPage {
 	}
 	
 	@Override
-	public AbsSeleniumObject zListItem(Action action, String item) throws HarnessException {
+	public AbsPage zListItem(Action action, String item) throws HarnessException {
 		throw new HarnessException(myPageName() + " does not have a Toolbar");
 	}
 
 	@Override
-	public AbsSeleniumObject zListItem(Action action, Action option, String item) throws HarnessException {
+	public AbsPage zListItem(Action action, Action option, String item) throws HarnessException {
 		throw new HarnessException(myPageName() + " does not have a Toolbar");
 	}
 
 	@Override
-	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 		
 		if ( button == null )
@@ -226,7 +227,7 @@ public class PagePreferences extends AbsAjaxPage {
 		// Default behavior variables
 		//
 		String locator = null;			// If set, this will be clicked
-		AbsSeleniumObject page = null;	// If set, this page will be returned
+		AbsPage page = null;	// If set, this page will be returned
 		
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -263,7 +264,7 @@ public class PagePreferences extends AbsAjaxPage {
 	}
 
 	@Override
-	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		throw new HarnessException(myPageName() + " does not have a Toolbar");
 	}
 

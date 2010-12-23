@@ -6,7 +6,7 @@ package projects.ajax.ui.mail;
 import framework.items.FolderItem;
 import framework.items.IItem;
 import framework.ui.AbsApplication;
-import framework.ui.AbsSeleniumObject;
+import framework.ui.AbsPage;
 import framework.ui.AbsTree;
 import framework.ui.Action;
 import framework.util.HarnessException;
@@ -31,7 +31,7 @@ public class TreeMail extends AbsTree {
 	/* (non-Javadoc)
 	 * @see framework.ui.AbsTree#zTreeItem(framework.ui.Action, framework.items.FolderItem)
 	 */
-	public AbsSeleniumObject zTreeItem(Action action, IItem folder) throws HarnessException {
+	public AbsPage zTreeItem(Action action, IItem folder) throws HarnessException {
 		
 		// Validate the arguments
 		if ( (action == null) || (folder == null) ) {
@@ -44,7 +44,7 @@ public class TreeMail extends AbsTree {
 		
 		FolderItem folderItem = (FolderItem)folder;
 		
-		AbsSeleniumObject page = null;
+		AbsPage page = null;
 		String locator = null;
 		
 		if ( action == Action.A_LEFTCLICK ) {
@@ -80,6 +80,12 @@ public class TreeMail extends AbsTree {
 	@Override
 	public String myPageName() {
 		return (this.getClass().getName());
+	}
+
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

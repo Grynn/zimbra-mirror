@@ -9,6 +9,10 @@ import java.util.List;
 import framework.items.ConversationItem;
 import framework.items.MailItem;
 import framework.ui.AbsApplication;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
@@ -16,7 +20,7 @@ import framework.util.SleepUtil;
  * @author Matt Rhoades
  *
  */
-public class PageMail extends AbsMobilePage {
+public class PageMail extends AbsTab {
 
 	public static class Locators {
 		
@@ -42,8 +46,8 @@ public class PageMail extends AbsMobilePage {
 	public boolean zIsActive() throws HarnessException {
 		
 		// Make sure the main page is active
-		if ( !this.MyApplication.zPageMain.zIsActive() ) {
-			this.MyApplication.zPageMain.zNavigateTo();
+		if ( !((AppMobileClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppMobileClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
 		boolean active = this.sIsElementPresent(Locators.zMailIsActive);
@@ -71,8 +75,8 @@ public class PageMail extends AbsMobilePage {
 		}
 		
 		// Make sure we are logged into the Mobile app
-		if ( !MyApplication.zPageMain.zIsActive() ) {
-			MyApplication.zPageMain.zNavigateTo();
+		if ( !((AppMobileClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppMobileClient)MyApplication).zPageMain.zNavigateTo();
 		}
 		
 		// Click on Mail icon
@@ -170,6 +174,33 @@ public class PageMail extends AbsMobilePage {
 		this.sClick(PageMain.Locators.zAppbarMail);
 		SleepUtil.sleepMedium();
 
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, Action option, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

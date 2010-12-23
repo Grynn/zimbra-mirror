@@ -168,11 +168,17 @@ public class DialogMove extends AbsDialog {
 		// For some reason, the text doesn't get entered on the first try
 		this.sFocus(locator);
 		this.zClick(locator);
-		((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeCharacters(folder);
+		((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters(folder);
 
 		// Is this sleep necessary?
 		SleepUtil.sleepSmall();
 		
+	}
+
+
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		throw new HarnessException("implement me");
 	}
 
 	

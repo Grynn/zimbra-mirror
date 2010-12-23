@@ -66,11 +66,17 @@ public class DialogContactMove extends AbsDialog {
 			throw new HarnessException("unable to find folder name field "+ locator);
 		
 		this.zClick(locator);
-		((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeCharacters(folder);
+		((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters(folder);
 		
 		SleepUtil.sleepSmall();
 		
 		
+	}
+
+
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		throw new HarnessException("implement me!");
 	}
 
 

@@ -14,22 +14,19 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public abstract class AbsTree extends AbsSeleniumObject {
+public abstract class AbsTree extends AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsTree.class);
 
 
-	/**
-	 * A pointer to the application that created this object
-	 */
-	protected AbsApplication MyAbsApplication = null;
 
 	/**
 	 * Create this page object that exists in the specified application
 	 * @param application
 	 */
 	public AbsTree(AbsApplication application) {
+		super(application);
+		
 		logger.info("new AbsTree");
-		MyAbsApplication = application;
 	}
 	
 	/**
@@ -39,7 +36,7 @@ public abstract class AbsTree extends AbsSeleniumObject {
 	 * @return
 	 * @throws HarnessException
 	 */
-	public abstract AbsSeleniumObject zTreeItem(Action action, IItem item) throws HarnessException;
+	public abstract AbsPage zTreeItem(Action action, IItem item) throws HarnessException;
 
 	/**
 	 * Return the unique name for this page class

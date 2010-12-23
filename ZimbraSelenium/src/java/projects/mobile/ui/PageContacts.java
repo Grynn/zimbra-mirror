@@ -9,6 +9,9 @@ import java.util.List;
 import framework.items.ContactItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
+import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
@@ -17,7 +20,7 @@ import framework.util.SleepUtil;
  * @author Matt Rhoades
  *
  */
-public class PageContacts extends AbsMobilePage {
+public class PageContacts extends AbsTab {
 
 	public static class Locators {
 	
@@ -42,8 +45,8 @@ public class PageContacts extends AbsMobilePage {
 	public boolean zIsActive() throws HarnessException {
 
 		// Make sure the main page is active
-		if ( !this.MyApplication.zPageMain.zIsActive() ) {
-			this.MyApplication.zPageMain.zNavigateTo();
+		if ( !((AppMobileClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppMobileClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
 		boolean active = this.sIsElementPresent(Locators.zContactsIsActive);
@@ -71,8 +74,8 @@ public class PageContacts extends AbsMobilePage {
 		}
 		
 		// Make sure we are logged into the Mobile app
-		if ( !MyApplication.zPageMain.zIsActive() ) {
-			MyApplication.zPageMain.zNavigateTo();
+		if ( !((AppMobileClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppMobileClient)MyApplication).zPageMain.zNavigateTo();
 		}
 		
 		// Click on Contact icon
@@ -201,6 +204,21 @@ public class PageContacts extends AbsMobilePage {
 
 		this.sClick(PageMain.Locators.zAppbarContact);
 		SleepUtil.sleepMedium();
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, String item) throws HarnessException {
+		throw new HarnessException("implement me!");
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, Action option, String item) throws HarnessException {
+		throw new HarnessException("implement me!");
+	}
+
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+		throw new HarnessException("implement me!");
 	}
 
 

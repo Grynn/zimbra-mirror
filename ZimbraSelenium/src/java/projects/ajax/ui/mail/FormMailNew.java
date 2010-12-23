@@ -272,10 +272,10 @@ public class FormMailNew extends AbsForm {
 			this.sFocus(locator);
 			this.zClick(locator);
 			
-			((AppAjaxClient)this.MyAbsApplication).zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
+			((AppAjaxClient)this.MyApplication).zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
 			SleepUtil.sleepSmall();
 			
-			((AppAjaxClient)this.MyAbsApplication).zKeyboard.zTypeCharacters(value);
+			((AppAjaxClient)this.MyApplication).zKeyboard.zTypeCharacters(value);
 			SleepUtil.sleepSmall();
 			
 			return;
@@ -399,6 +399,11 @@ public class FormMailNew extends AbsForm {
 		}
 
 		
+	}
+
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		throw new HarnessException("implement me");
 	}
 
 }

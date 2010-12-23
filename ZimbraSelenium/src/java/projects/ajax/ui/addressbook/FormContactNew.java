@@ -1,9 +1,8 @@
 package projects.ajax.ui.addressbook;
 
-import java.awt.event.KeyEvent;
-
 import projects.ajax.ui.AppAjaxClient;
-import framework.items.*;
+import framework.items.ContactItem;
+import framework.items.IItem;
 import framework.ui.AbsApplication;
 import framework.ui.AbsForm;
 import framework.ui.AbsSeleniumObject;
@@ -129,7 +128,7 @@ public class FormContactNew extends AbsForm {
 			this.sFocus(Locators.zFirstEditField);
 
 			this.zClick(Locators.zFirstEditField);			
-			((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeCharacters(contact.firstName);
+			((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters(contact.firstName);
 		}
 		
 		if ( contact.lastName != null ) {
@@ -137,7 +136,7 @@ public class FormContactNew extends AbsForm {
 			this.sFocus(Locators.zLastEditField);
 			
 			this.zClick(Locators.zLastEditField);
-			((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeCharacters(contact.lastName);
+			((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters(contact.lastName);
 		}
  
 		//TODO: need fix xpath for zEmail1EditField
@@ -147,6 +146,11 @@ public class FormContactNew extends AbsForm {
 
 		SleepUtil.sleepMedium();
 			
+	}
+
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		throw new HarnessException("implement me!");
 	}
 
 }

@@ -1,13 +1,14 @@
 package projects.ajax.ui;
 
 import framework.ui.AbsApplication;
-import framework.ui.AbsSeleniumObject;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 
-public class PageLogin extends AbsAjaxPage {
+public class PageLogin extends AbsTab {
 
 	public static class Locators {
 
@@ -79,8 +80,8 @@ public class PageLogin extends AbsAjaxPage {
 		
 		
 		// Logout
-		if ( MyApplication.zPageMain.zIsActive() ) {
-			MyApplication.zPageMain.zLogout();
+		if ( ((AppAjaxClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppAjaxClient)MyApplication).zPageMain.zLogout();
 		}
 		
 		zWaitForActive();
@@ -117,9 +118,9 @@ public class PageLogin extends AbsAjaxPage {
 
 		// Wait for the app to load
 		sWaitForPageToLoad();
-		MyApplication.zPageMain.zWaitForActive();
+		((AppAjaxClient)MyApplication).zPageMain.zWaitForActive();
 		
-		MyApplication.zSetActiveAcount(account);
+		((AppAjaxClient)MyApplication).zSetActiveAcount(account);
 		
 	}
 	
@@ -160,22 +161,22 @@ public class PageLogin extends AbsAjaxPage {
 	
 
 	@Override
-	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		throw new HarnessException("Login page does not have a Toolbar");
 	}
 
 	@Override
-	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		throw new HarnessException("Login page does not have a Toolbar");
 	}
 
 	@Override
-	public AbsSeleniumObject zListItem(Action action, String item) throws HarnessException {
+	public AbsPage zListItem(Action action, String item) throws HarnessException {
 		throw new HarnessException("Login page does not have lists");
 	}
 
 	@Override
-	public AbsSeleniumObject zListItem(Action action, Action option, String item) throws HarnessException {
+	public AbsPage zListItem(Action action, Action option, String item) throws HarnessException {
 		throw new HarnessException("Login page does not have lists");
 	}
 

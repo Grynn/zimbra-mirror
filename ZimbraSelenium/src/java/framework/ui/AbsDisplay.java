@@ -19,21 +19,17 @@ import org.apache.log4j.Logger;
  * @author Matt Rhoades
  *
  */
-public abstract class AbsDisplay extends AbsSeleniumObject {
+public abstract class AbsDisplay extends AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsDisplay.class);
-
-	/**
-	 * A pointer to the application that created this object
-	 */
-	protected AbsApplication MyAbsApplication = null;
 
 	/**
 	 * Create this page object that exists in the specified application
 	 * @param application
 	 */
 	public AbsDisplay(AbsApplication application) {
+		super(application);
+		
 		logger.info("new AbsDisplayPage");
-		MyAbsApplication = application;
 	}
 		
 	

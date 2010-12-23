@@ -5,6 +5,7 @@ package projects.admin.ui;
 
 import projects.admin.items.AccountItem;
 import framework.items.IItem;
+import framework.ui.AbsTab;
 import framework.ui.AbsWizard;
 import framework.util.HarnessException;
 
@@ -23,7 +24,7 @@ public class WizardCreateAccount extends AbsWizard {
 	public static final String DWT282_title = "xpath=//*[@id='DWT282_title']"; // "Next" button
 	public static final String DWT283_title = "xpath=//*[@id='DWT283_title']"; // "Finish" button
 
-	public WizardCreateAccount(AbsAdminPage page) {
+	public WizardCreateAccount(AbsTab page) {
 		super(page);
 		logger.info("New "+ WizardCreateAccount.class.getName());
 	}
@@ -79,6 +80,18 @@ public class WizardCreateAccount extends AbsWizard {
 		}
 
 		return (true);
+	}
+
+	@Override
+	public String myPageName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

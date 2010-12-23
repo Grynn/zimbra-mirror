@@ -4,7 +4,8 @@
 package projects.ajax.ui;
 
 import framework.ui.AbsApplication;
-import framework.ui.AbsSeleniumObject;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
@@ -13,7 +14,7 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public class PageMain extends AbsAjaxPage {
+public class PageMain extends AbsTab {
 
 	public static class Locators {
 				
@@ -84,10 +85,10 @@ public class PageMain extends AbsAjaxPage {
 		
 		// 1. Logout
 		// 2. Login as the default account
-		if ( !MyApplication.zPageLogin.zIsActive() ) {
-			MyApplication.zPageLogin.zNavigateTo();
+		if ( !((AppAjaxClient)MyApplication).zPageLogin.zIsActive() ) {
+			((AppAjaxClient)MyApplication).zPageLogin.zNavigateTo();
 		}
-		MyApplication.zPageLogin.zLogin();
+		((AppAjaxClient)MyApplication).zPageLogin.zLogin();
 
 		zWaitForActive();
 		
@@ -110,14 +111,14 @@ public class PageMain extends AbsAjaxPage {
 		sClick(Locators.zLogoffButton);
 				
 		sWaitForPageToLoad();
-		MyApplication.zPageLogin.zWaitForActive();
+		((AppAjaxClient)MyApplication).zPageLogin.zWaitForActive();
 		
-		MyApplication.zSetActiveAcount(null);
+		((AppAjaxClient)MyApplication).zSetActiveAcount(null);
 
 	}
 
 	@Override
-	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 
 		// Q. Should the tabs or help or logout be processed here?
 		// A. I don't think those are considered "toolbars", so don't handle here for now (Matt)
@@ -126,17 +127,17 @@ public class PageMain extends AbsAjaxPage {
 	}
 
 	@Override
-	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		throw new HarnessException("Main page does not have a Toolbar");
 	}
 
 	@Override
-	public AbsSeleniumObject zListItem(Action action, String item) throws HarnessException {
+	public AbsPage zListItem(Action action, String item) throws HarnessException {
 		throw new HarnessException("Main page does not have lists");
 	}
 
 	@Override
-	public AbsSeleniumObject zListItem(Action action, Action option, String item) throws HarnessException {
+	public AbsPage zListItem(Action action, Action option, String item) throws HarnessException {
 		throw new HarnessException("Main page does not have lists");
 	}
 

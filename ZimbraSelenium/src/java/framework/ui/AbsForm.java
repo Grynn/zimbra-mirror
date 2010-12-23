@@ -20,21 +20,18 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public abstract class AbsForm extends AbsSeleniumObject {
+public abstract class AbsForm extends AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsForm.class);
 
-	/**
-	 * A pointer to the application that created this object
-	 */
-	protected AbsApplication MyAbsApplication = null;
 
 	/**
 	 * Create this page object that exists in the specified application
 	 * @param application
 	 */
 	public AbsForm(AbsApplication application) {
+		super(application);
+		
 		logger.info("new AbsForm");
-		MyAbsApplication = application;
 	}
 	
 	/**

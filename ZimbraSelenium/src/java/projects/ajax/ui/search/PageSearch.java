@@ -3,9 +3,10 @@
  */
 package projects.ajax.ui.search;
 
-import projects.ajax.ui.AbsAjaxPage;
+import projects.ajax.ui.AppAjaxClient;
 import framework.ui.AbsApplication;
-import framework.ui.AbsSeleniumObject;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
 import framework.ui.Action;
 import framework.ui.Button;
 import framework.util.HarnessException;
@@ -15,7 +16,7 @@ import framework.util.SleepUtil;
  * @author Matt Rhoades
  *
  */
-public class PageSearch extends AbsAjaxPage {
+public class PageSearch extends AbsTab {
 
 	public static class Locators {
 		
@@ -79,8 +80,8 @@ public class PageSearch extends AbsAjaxPage {
 		
 
 		// If search is not active, then we must not be logged in
-		if ( !MyApplication.zPageMain.zIsActive() ) {
-			MyApplication.zPageMain.zNavigateTo();
+		if ( !((AppAjaxClient)MyApplication).zPageMain.zIsActive() ) {
+			((AppAjaxClient)MyApplication).zPageMain.zNavigateTo();
 		}
 
 		// Nothing more to do to make search appear, since it is always active if the app is active
@@ -90,7 +91,7 @@ public class PageSearch extends AbsAjaxPage {
 	}
 
 	@Override
-	public AbsSeleniumObject zToolbarPressButton(Button button) throws HarnessException {
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
 		logger.info(myPageName() + " zToolbarPressButton("+ button +")");
 		
 		if ( button == null )
@@ -100,7 +101,7 @@ public class PageSearch extends AbsAjaxPage {
 		// Default behavior variables
 		//
 		String locator = null;			// If set, this will be clicked
-		AbsSeleniumObject page = null;	// If set, this page will be returned
+		AbsPage page = null;	// If set, this page will be returned
 		
 		// Based on the button specified, take the appropriate action(s)
 		//
@@ -144,19 +145,17 @@ public class PageSearch extends AbsAjaxPage {
 	}
 
 	@Override
-	public AbsSeleniumObject zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option) throws HarnessException {
 		throw new HarnessException("implement me");
 	}
 
 	@Override
-	public AbsSeleniumObject zListItem(Action action, String item)
-			throws HarnessException {
+	public AbsPage zListItem(Action action, String item) throws HarnessException {
 		throw new HarnessException(myPageName() + " does not have a list view");
 	}
 
 	@Override
-	public AbsSeleniumObject zListItem(Action action, Action option, String item)
-			throws HarnessException {
+	public AbsPage zListItem(Action action, Action option, String item) throws HarnessException {
 		throw new HarnessException(myPageName() + " does not have a list view");
 	}
 

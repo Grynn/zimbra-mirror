@@ -74,4 +74,9 @@ public class FormContactNew extends AbsForm {
 
 	}
 
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		throw new HarnessException("implement me!");
+	}
+
 }

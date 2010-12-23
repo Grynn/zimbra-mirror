@@ -27,7 +27,7 @@ import framework.util.HarnessException;
  * @author Matt Rhoades
  *
  */
-public abstract class AbsWizard extends AbsSeleniumObject {
+public abstract class AbsWizard extends AbsPage {
 	protected static Logger logger = LogManager.getLogger(AbsWizard.class);
 
 	public enum WizardButton {
@@ -37,13 +37,15 @@ public abstract class AbsWizard extends AbsSeleniumObject {
 	/**
 	 * A pointer to the page that created this object
 	 */
-	protected AbsPage MyPage = null;
+	protected AbsTab MyPage = null;
 	
 	/**
 	 * Create a new wizard from the specified page
 	 * @param page
 	 */
-	public AbsWizard(AbsPage page) {
+	public AbsWizard(AbsTab page) {
+		super(page.MyApplication);
+		
 		logger.info("new "+ AbsWizard.class.getName());
 		MyPage = page;
 	}

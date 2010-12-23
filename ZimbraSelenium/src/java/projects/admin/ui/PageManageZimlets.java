@@ -15,7 +15,7 @@ public class PageManageZimlets extends PageManageAdminExtensions {
 	}
 
 	/* (non-Javadoc)
-	 * @see projects.admin.ui.AbsAdminPage#myPageName()
+	 * @see projects.admin.ui.AbsTab#myPageName()
 	 */
 	@Override
 	public String myPageName() {

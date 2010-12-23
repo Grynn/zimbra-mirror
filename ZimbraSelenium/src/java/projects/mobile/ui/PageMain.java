@@ -4,13 +4,17 @@
 package projects.mobile.ui;
 
 import framework.ui.AbsApplication;
+import framework.ui.AbsPage;
+import framework.ui.AbsTab;
+import framework.ui.Action;
+import framework.ui.Button;
 import framework.util.HarnessException;
 
 /**
  * @author Matt Rhoades
  *
  */
-public class PageMain extends AbsMobilePage {
+public class PageMain extends AbsTab {
 
 	public static class Locators {
 	
@@ -85,10 +89,10 @@ public class PageMain extends AbsMobilePage {
 		
 		// 1. Logout
 		// 2. Login as the default account
-		if ( !MyApplication.zPageLogin.zIsActive() ) {
-			MyApplication.zPageLogin.zNavigateTo();
+		if ( !((AppMobileClient)MyApplication).zPageLogin.zIsActive() ) {
+			((AppMobileClient)MyApplication).zPageLogin.zNavigateTo();
 		}
-		MyApplication.zPageLogin.zLogin();
+		((AppMobileClient)MyApplication).zPageLogin.zLogin();
 
 		zWaitForActive();
 		
@@ -110,10 +114,37 @@ public class PageMain extends AbsMobilePage {
 		// Click on logout
 		sClick(Locators.zBtnLogout);
 				
-		MyApplication.zPageLogin.zWaitForActive();
+		((AppMobileClient)MyApplication).zPageLogin.zWaitForActive();
 		
-		MyApplication.zSetActiveAcount(null);
+		((AppMobileClient)MyApplication).zSetActiveAcount(null);
 
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zListItem(Action action, Action option, String item)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zToolbarPressButton(Button button) throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AbsPage zToolbarPressPulldown(Button pulldown, Button option)
+			throws HarnessException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 

@@ -15,7 +15,7 @@ import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
 
 import framework.core.ClientSessionFactory;
-import framework.ui.AbsPage;
+import framework.ui.AbsTab;
 import framework.util.HarnessException;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
@@ -26,7 +26,7 @@ import framework.util.ZimbraSeleniumProperties;
  * <p>
  * The AjaxCommonTest provides two basic functionalities:
  * <ol>
- * <li>{@link AbsPage} {@link #startingPage} - navigate to this
+ * <li>{@link AbsTab} {@link #startingPage} - navigate to this
  * page before each test case method</li>
  * <li>{@link ZimbraAccount} {@link #startingAccount} - ensure this
  * account is authenticated before each test case method</li>
@@ -82,7 +82,7 @@ public class AjaxCommonTest {
 	 * startingPage = the starting page before the test method starts
 	 * startingAccount = the account to log in as
 	 */
-	protected AbsPage startingPage = null;
+	protected AbsTab startingPage = null;
 	protected ZimbraAccount startingAccount = null;
 	
 	protected AjaxCommonTest() {

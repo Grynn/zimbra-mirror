@@ -15,7 +15,7 @@ import com.thoughtworks.selenium.DefaultSelenium;
 import com.thoughtworks.selenium.SeleniumException;
 
 import framework.core.ClientSessionFactory;
-import framework.ui.AbsPage;
+import framework.ui.AbsTab;
 import framework.util.HarnessException;
 import framework.util.ZimbraAdminAccount;
 import framework.util.ZimbraSeleniumProperties;
@@ -44,7 +44,7 @@ public class AdminCommonTest {
 	 * startingPage = the starting page before the test method starts
 	 * startingAccount = the account to log in as
 	 */
-	protected AbsPage startingPage = null;
+	protected AbsTab startingPage = null;
 	protected ZimbraAdminAccount startingAccount = null;
 	
 	protected AdminCommonTest() {

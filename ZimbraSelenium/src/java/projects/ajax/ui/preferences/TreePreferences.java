@@ -9,7 +9,7 @@ import java.util.Map;
 
 import framework.items.IItem;
 import framework.ui.AbsApplication;
-import framework.ui.AbsSeleniumObject;
+import framework.ui.AbsPage;
 import framework.ui.AbsTree;
 import framework.ui.Action;
 import framework.util.HarnessException;
@@ -74,7 +74,7 @@ public class TreePreferences extends AbsTree {
 	/**
 	 * Not implemented.  Use zTreeItem(Action action, TreeItem item) instead
 	 */
-	public AbsSeleniumObject zTreeItem(Action action, IItem preference) throws HarnessException {
+	public AbsPage zTreeItem(Action action, IItem preference) throws HarnessException {
 		throw new HarnessException("Not implemented.  Use zTreeItem(Action action, TreeItem item) instead");
 	}
 	
@@ -108,6 +108,11 @@ public class TreePreferences extends AbsTree {
 	@Override
 	public String myPageName() {
 		return (this.getClass().getName());
+	}
+
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		throw new HarnessException("implement me");
 	}
 
 }

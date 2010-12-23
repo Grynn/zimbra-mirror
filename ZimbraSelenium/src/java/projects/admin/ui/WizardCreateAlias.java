@@ -4,6 +4,7 @@
 package projects.admin.ui;
 
 import framework.items.IItem;
+import framework.ui.AbsTab;
 import framework.ui.AbsWizard;
 import framework.util.HarnessException;
 
@@ -13,7 +14,7 @@ import framework.util.HarnessException;
  */
 public class WizardCreateAlias extends AbsWizard {
 
-	public WizardCreateAlias(AbsAdminPage page) {
+	public WizardCreateAlias(AbsTab page) {
 		super(page);
 	}
 
@@ -28,6 +29,18 @@ public class WizardCreateAlias extends AbsWizard {
 	@Override
 	public IItem zCompleteWizard(IItem item) throws HarnessException {
 		throw new HarnessException("implement me");
+	}
+
+	@Override
+	public String myPageName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

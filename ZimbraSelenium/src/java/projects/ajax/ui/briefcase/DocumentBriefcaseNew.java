@@ -33,7 +33,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	public void typeDocumentText(String text) throws HarnessException {
 		if(ClientSessionFactory.session().selenium().isElementPresent(Locators.zBodyField)){
-			((AppAjaxClient)MyAbsApplication).zKeyboard.zTypeCharacters(text);			
+			((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters(text);			
 		}
 		//ClientSessionFactory.session().selenium().type("xpath=(//html/body)",text);
 	}
@@ -86,5 +86,11 @@ public class DocumentBriefcaseNew extends AbsForm {
 		
 		// Wait for the page to be saved
 		SleepUtil.sleepSmall();
+	}
+
+
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		throw new HarnessException("implement me");
 	}	
 }

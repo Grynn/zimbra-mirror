@@ -4,6 +4,7 @@
 package projects.admin.ui;
 
 import framework.items.IItem;
+import framework.ui.AbsTab;
 import framework.ui.AbsWizard;
 import framework.util.HarnessException;
 
@@ -13,7 +14,7 @@ import framework.util.HarnessException;
  */
 public class WizardAddACL extends AbsWizard {
 
-	public WizardAddACL(AbsAdminPage page) {
+	public WizardAddACL(AbsTab page) {
 		super(page);
 	}
 
@@ -31,6 +32,18 @@ public class WizardAddACL extends AbsWizard {
 	@Override
 	public boolean zIsOpen() throws HarnessException {
 		throw new HarnessException("implement me");
+	}
+
+	@Override
+	public String myPageName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean zIsActive() throws HarnessException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }
