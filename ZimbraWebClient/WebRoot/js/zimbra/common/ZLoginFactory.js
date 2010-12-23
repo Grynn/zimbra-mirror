@@ -154,6 +154,7 @@ ZLoginFactory.getLoginButton = function () 		{	return this.get(ZLoginFactory.LOG
 ZLoginFactory.getLoginDialogHTML = function (params) {
 	var html = [
 		 "<div ", (params.showAbout ? " " : "class='center'"), ">",
+				"<div class='ImgAltBanner'></div>",
 		 		"<h1><a href='http://www.zimbra.com/' id='bannerLink' target='_new'>",
 		 			"<span class='ImgLoginBanner'></span>",
 		 		"</a></h1>",
