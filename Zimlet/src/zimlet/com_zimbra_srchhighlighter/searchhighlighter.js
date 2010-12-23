@@ -77,7 +77,7 @@ SearchHighlighterZimlet.prototype.generateSpan =
 function(html, idx, obj, spanId, context) {
 	var id = Dwt.getNextId();
 	this._spanIds.push(id);
-	html[idx++] = ["<span id= '",id,"'style='background-color:#FEF481'>",obj,"</span>"].join("");
+	html[idx++] = ["<span id= '",id,"'class='ZmSearchResult'>",obj,"</span>"].join("");
 	return idx;
 };
 
