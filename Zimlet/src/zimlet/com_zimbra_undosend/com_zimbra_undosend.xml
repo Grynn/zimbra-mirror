@@ -3,7 +3,7 @@
 	<includeCSS>undosend.css</includeCSS>
 	<handlerObject>com_zimbra_undosend_HandlerObject</handlerObject>
 
-  <zimletPanelItem label="${msg.UndoSendZimlet_Label}" icon="Send">
+  <zimletPanelItem label="${msg.UndoSendZimlet_Label}" icon="UndoSend-panelIcon">
   </zimletPanelItem>
 
   <userProperties>

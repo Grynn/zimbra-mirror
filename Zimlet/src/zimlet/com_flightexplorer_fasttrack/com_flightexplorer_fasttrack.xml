@@ -31,7 +31,7 @@
 			Track a flight in real time
 		</toolTip>
 	</contentObject>	
-	<zimletPanelItem label="Flight status" >
+	<zimletPanelItem label="Flight status" icon="Flightstatus-panelIcon" >
 		<toolTipText>Click to search flight status</toolTipText>
 		<contextMenu>
 			<menuItem label="Preferences..." id="PREFERENCES" />

@@ -14,7 +14,7 @@
 <resource>travel_agent.gif</resource>
 <includeCSS>com_zimbra_travelagent.css</includeCSS>	
 <handlerObject>Com_Zimbra_TravelAgent</handlerObject>
-	<zimletPanelItem label="Travel Agent" icon="TravelAgent-panelIcon">
+	<zimletPanelItem label="Travel Agent" icon="Globe">
 		<toolTipText>Search travel reservations.</toolTipText>
 		<dragSource type="ZmContact" />
 		<dragSource type="ZmAppt" />

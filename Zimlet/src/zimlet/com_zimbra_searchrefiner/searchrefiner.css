@@ -1,12 +1,12 @@
 .Imgsr-panelIcon {
-  background: url("sr.gif") no-repeat 0 0;
+  background: url("searchrefiner-icon.png") no-repeat 0 0;
   width: 16px;
   height: 16px;
   overflow: hidden;
 }
 
 .sr_header {
-	font-weight:bold;color:#6B6B6B;padding-top: 5px;
+	font-weight:bold;color:#6B6B6B;padding-top:5px;
 }
 .sr_num {
     color:gray;cursor:pointer;width:10%;
@@ -16,11 +16,11 @@
 }
 
 #sr_narrowResults{
-font-weight:bold;height:12px;padding-top:3px;padding-bottom:3px;text-align:center;
+    font-weight:bold;height:12px;padding-top:3px;padding-bottom:3px;text-align:center;
 }
 
 #sr_narrowedByMainDiv{
-display:none;background-color:lightBlue;border-width:0 0px 1px 0;border-color:#707980;border-style:solid;
+    display:none;background-color:lightBlue;border-width:0 0px 1px 0;border-color:#707980;border-style:solid;
 }
 .sr_disclaimer {
 	color:gray;font-size:10px;display: block;

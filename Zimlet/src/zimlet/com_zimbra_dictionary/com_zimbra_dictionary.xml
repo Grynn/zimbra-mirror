@@ -1,8 +1,9 @@
 <zimlet name="com_zimbra_dictionary" version="1.0" description="Allows you to quickly look-up a word in the dictionary.">
 	<include>dictionary.js</include>
 	<include>DictionaryPrefsDialog.js</include>
+    <includeCSS>dictionary.css</includeCSS>
 	<handlerObject>Com_Zimbra_Dictionary</handlerObject>
-	<zimletPanelItem label="Dictionary">
+	<zimletPanelItem label="Dictionary" icon="Dictionary-panelIcon">
 		<toolTipText>Click to look-up a word in the dictionary.</toolTipText>
 		<contextMenu>
 	      <menuItem label="Look Up Word" id="lookup"/>

@@ -1,11 +1,9 @@
 .Imgdy-panelIcon {
-  background: url("dy.gif") no-repeat 0 0;
+  background: url("discover-icon.png") no-repeat 0 0;
   width: 16px;
   height: 16px;
   overflow: hidden;
 }
-
-
 
 .dy_optionsName{
 font-size:28px;color:blue;font-family:Arial,Helvetica,sans-serif;

@@ -1,16 +1,3 @@
-.Imgbroadsoft-panelIcon {
-  background: url("broadsoft.gif") no-repeat 0 0;
-  width: 16px;
-  height: 16px;
-  overflow: hidden;
-}
-.Imgbroadsoft_phone {
-  background: url("broadsoft_phone") no-repeat 0 0;
-  width: 16px;
-  height: 16px;
-  overflow: hidden;
-}
-
 .broadsoft_sectionDiv{
 background:#FFFFFF;
 border-bottom:1px solid #A7A194;border-right:1px solid #A7A194;

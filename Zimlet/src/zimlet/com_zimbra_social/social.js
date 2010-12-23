@@ -51,7 +51,7 @@ function(app, toolbar, controller, view) {
 			text    : ZmMsg.socialBtnLabel,
 			tooltip: this.getMessage("socializeTooltip"),
 			index: buttonIndex,
-			image: "social_greenAppIcon"
+			image: "social-icon"
 		};
 		var button = toolbar.createOp("SOCIAL_ZIMLET_TOOLBAR_BUTTON", buttonArgs);
 		button.addSelectionListener(new AjxListener(this.miniDlg, this.miniDlg._buttonListener, [controller]));
@@ -1012,7 +1012,7 @@ function() {
 
 SocialZimlet.prototype._createsocialApp =
 function() {
-	this._socialAppName = this.createApp(this.getMessage("social"), "social_greenAppIcon", this.getMessage("socalAppTooltip"));
+	this._socialAppName = this.createApp(this.getMessage("social"), "social-icon", this.getMessage("socalAppTooltip"));
 };
 
 SocialZimlet.prototype.appActive = function(appName, active) {

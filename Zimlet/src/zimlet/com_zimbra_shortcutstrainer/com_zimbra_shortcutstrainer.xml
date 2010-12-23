@@ -4,7 +4,7 @@
 	<resource>shortcutstrainer.gif</resource>
 	<handlerObject>com_zimbra_shortcutstrainer</handlerObject>
 
-	<zimletPanelItem label="Shortcuts Trainer" icon="shortcutstrainer-panelIcon">
+	<zimletPanelItem label="Shortcuts Trainer" icon="Shortcut">
 		<toolTipText>Allows you to train and remember most common keyboard shortcuts.</toolTipText>
 	</zimletPanelItem>
 

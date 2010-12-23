@@ -3,7 +3,7 @@
 	<includeCSS>emaildownloader.css</includeCSS>
 	<resource>emaildownloader-icon.gif</resource>
 	<handlerObject>com_zimbra_emaildownloader_HandlerObject</handlerObject>
-	<zimletPanelItem label="${msg.EmailDownloaderZimlet_panel_label}" icon="emaildownloader-panelIcon">
+	<zimletPanelItem label="${msg.EmailDownloaderZimlet_panel_label}" icon="DownArrow">
 		<toolTipText>${msg.EmailDownloader_panel_tooltip}</toolTipText>
 		<dragSource type="ZmConv" />
 	    <dragSource type="ZmMailMsg"/>

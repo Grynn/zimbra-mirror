@@ -3,7 +3,7 @@
   <includeCSS>savedsearch.css</includeCSS>
   <handlerObject>com_zimbra_savedsearch</handlerObject>
 
-  <zimletPanelItem label="Auto Saved Search" icon="savedsearch-panelIcon">
+  <zimletPanelItem label="Auto Saved Search" icon="SearchFolder">
     <toolTipText>Automatically creates a Saved Search after repeated searches.</toolTipText>
   </zimletPanelItem>
 

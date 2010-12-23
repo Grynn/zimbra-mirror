@@ -4,7 +4,7 @@
 	<resource>attachmentalert-icon.gif</resource>
 	<handlerObject>com_zimbra_attachalert_HandlerObject</handlerObject>
 
-	<zimletPanelItem label="${msg.AttachmentAlert_panel_label}" icon="attachmentAlert-panelIcon">
+	<zimletPanelItem label="${msg.AttachmentAlert_panel_label}" icon="Attachment">
 		<toolTipText>${msg.AttachmentAlert_panel_tooltip}</toolTipText>
 	</zimletPanelItem>
 
