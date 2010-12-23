@@ -22,15 +22,15 @@ public class DialogMove extends AbsDialog {
 	public static class Locators {
 	
 		// TODO:  See https://bugzilla.zimbra.com/show_bug.cgi?id=54173
-		public static final String zDialogId		= "ChooseFolderDialog";
+		public static final String zDialogId			= "ChooseFolderDialog";
 		
-		public static final String zTitleId	 		= "ChooseFolderDialog_title";
+		public static final String zTitleId	 			= "ChooseFolderDialog_title";
 
-		public static final String zDialogContentId	= "ChooseFolderDialog_content";
+		public static final String zDialogContentId		= "ChooseFolderDialog_content";
 
 		// TODO: Tree
-		public static final String zDialogInputId	= "ChooseFolderDialog_inputDivId";
-		public static final String zDialogInputLocator	= "//div[@id='"+ zDialogId +"']//div[@id='"+ zDialogInputId +"']/div/input";
+		public static final String zDialogInputId		= "ChooseFolderDialog_inputDivId";
+		public static final String zDialogInputLocator	= "css=div[id='"+ zDialogId +"'] div[id='"+ zDialogInputId +"'] > div > input";
 
 		public static final String zDialogButtonsId		= "ChooseFolderDialog_buttons";
 
@@ -53,7 +53,7 @@ public class DialogMove extends AbsDialog {
 	public boolean zIsVisible() throws HarnessException {
 		logger.info(myPageName() + " zIsVisible()");
 
-		String locator = "//div[@id='"+ Locators.zDialogId +"']";
+		String locator = "id="+ Locators.zDialogId;
 		
 		if ( !this.sIsElementPresent(locator) ) {
 			return (false); // Not even present
@@ -136,8 +136,8 @@ public class DialogMove extends AbsDialog {
 		if ( folder == null ) 
 			throw new HarnessException("folder must not be null");
 		
-		String locator = "//div[@id='"+ Locators.zDialogId + "']//td[@id='zti__ZmChooseFolderDialog_Mail__"+ folder.getId() +"_textCell']";
-
+		String locator = "css=div[id='"+ Locators.zDialogId +"'] td[id='zti__ZmChooseFolderDialog_Mail__"+ folder.getId() +"_textCell']";
+		
 		if ( !this.sIsElementPresent(locator) )
 			throw new HarnessException("unable to find folder in tree "+ locator);
 		

@@ -26,12 +26,12 @@ public class DisplayMail extends AbsDisplay {
 	 * Defines Selenium locators for various objects in {@link DisplayMail}
 	 */
 	public static class Locators {
-		public static final String zSubject = "xpath=//td[@class='LabelColValue SubjectCol']";
-		public static final String zDate = "xpath=//td[@class='LabelColValue DateCol']";
+		public static final String zSubject				= "css=[class='LabelColValue SubjectCol']";
+		public static final String zDate 				= "css=[class='LabelColValue DateCol']";
 
 		
-		public static final String zViewEntireMessage = "id=zv__CLV__MSG_msgTruncation_link";
-		public static final String zHighlightObjects = "id=zv__CLV_highlightObjects_link";
+		public static final String zViewEntireMessage 	= "id=zv__CLV__MSG_msgTruncation_link";
+		public static final String zHighlightObjects 	= "id=zv__CLV_highlightObjects_link";
 
 	}
 
@@ -124,7 +124,7 @@ public class DisplayMail extends AbsDisplay {
 				
 				this.sSelectFrame("//iframe[contains(@id, '__MSG_body__iframe')]");
 				
-				String bodyLocator = "//body";
+				String bodyLocator = "css=body";
 				
 				// Make sure the body is present
 				if ( !this.sIsElementPresent(bodyLocator) )
@@ -144,19 +144,19 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.Cc ) {
 			
-			locator = "//tr[contains(@id,'_cc')]//td[contains(@class,'LabelColValue')]";
+			locator = "css=tr[id$='_cc'] td[class~='LabelColValue']";
 			
 		} else if ( field == Field.From ) {
 			
-			locator = "//tr[contains(@id,'_from')]";
+			locator = "css=tr[id$='_from']";
 
 		} else if ( field == Field.ReceivedDate ) {
 			
-			locator = "//tr[contains(@id, '__MSG_hdrTableTopRow')]//td[contains(@class,'DateCol')]";
+			locator = "css=tr[id$='__MSG_hdrTableTopRow'] td[class~='DateCol']";
 
 		} else if ( field == Field.ReceivedTime ) {
 			
-			String timeAndDateLocator = "//td[contains(@class, 'DateCol')]";
+			String timeAndDateLocator = "css=td[class~='DateCol']";
 
 			// Make sure the subject is present
 			if ( !this.sIsElementPresent(timeAndDateLocator) )
@@ -174,11 +174,11 @@ public class DisplayMail extends AbsDisplay {
 
 		} else if ( field == Field.Subject ) {
 			
-			locator = "//tr[contains(@id, '__MSG_hdrTableTopRow')]//td[contains(@class,'SubjectCol')]";
+			locator = "css=tr[id$='__MSG_hdrTableTopRow'] td[class~='SubjectCol']";
 
 		} else if ( field == Field.To ) {
 			
-			locator = "//tr[contains(@id,'_to')]//td[@class='LabelColValue']";
+			locator = "css=tr[id$='_to'] td[class~='LabelColValue']";
 
 		} else {
 			

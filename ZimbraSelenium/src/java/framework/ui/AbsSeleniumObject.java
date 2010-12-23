@@ -150,6 +150,17 @@ public abstract class AbsSeleniumObject {
 		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
 		((DefaultSelenium)ClientSessionFactory.session().selenium()).click(locator);
 		logger.info("click(" + locator + ")");
+		sWaitForPageToLoad();
+	}
+	
+	/**
+	 * DefaultSelenium.waitForPageToLoad()
+	 */
+	public void sWaitForPageToLoad() {
+		String timeout = "10000";
+		// Cast to DefaultSelenium ... Workaround until ZimbraSelnium is removed
+		((DefaultSelenium)ClientSessionFactory.session().selenium()).waitForPageToLoad(timeout);
+		logger.info("waitForPageToLoad(" + timeout + ")");
 	}
 	
 	/**

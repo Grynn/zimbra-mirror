@@ -185,7 +185,7 @@ public class PageMail extends AbsAjaxPage {
 		}
 		
 		// If the "folders" tree is visible, then mail is active
-		String locator = "//div[contains(@id,'__CHECK_MAIL')]";
+		String locator = "css=div[id$='__CHECK_MAIL']";
 		
 		boolean loaded = this.sIsElementPresent(locator);
 		if ( !loaded )
@@ -250,7 +250,7 @@ public class PageMail extends AbsAjaxPage {
 		
 		if ( button == Button.B_NEW ) {
 			
-			locator = "//div[contains(@id,'ztb__')]//td[contains(@id,'__NEW_MENU_title')]";
+			locator = "css=div[id^='ztb__'] td[id$='__NEW_MENU_title']";
 			
 			// Make sure the button exists
 			if ( !this.sIsElementPresent(locator) )
@@ -306,7 +306,7 @@ public class PageMail extends AbsAjaxPage {
 				throw new HarnessException("Tried clicking on "+ button +" but it was disabled "+ attrs);
 			}
 
-			locator = "//td[contains(@id, '__MOVE_left_icon')]";
+			locator = "css=td[id$='__MOVE_left_icon']";
 			
 			// Click it
 			this.zClick(locator);
@@ -515,8 +515,8 @@ public class PageMail extends AbsAjaxPage {
 			
 			if ( option == Button.O_TAG_NEWTAG ) {
 
-				pulldownLocator = "//div[contains(@id,'__TAG_MENU')]//td[contains(@id,'__TAG_MENU_dropdown')]";	
-				optionLocator = "//div[contains(@id,'__TAG_MENU|MENU')]//td[contains(@id,'NEWTAG_title')]";
+				pulldownLocator = "css=div[id$='__TAG_MENU'] td[id$='__TAG_MENU_dropdown']";
+				optionLocator = "css=div[id$='__TAG_MENU|MENU'] td[id$='NEWTAG_title']";
 				page = new DialogTag(this.MyApplication);
 
 				// FALL THROUGH

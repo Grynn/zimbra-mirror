@@ -16,16 +16,16 @@ import framework.util.HarnessException;
 public class PageMain extends AbsAjaxPage {
 
 	public static class Locators {
+				
+		public static final String zLogoffButton		= "id=skin_container_logoff";
 		
-		public static final String zLogoffButton = "xpath=//*[@id='skin_container_logoff']";
-		
-		public static final String zAppbarMail = "xpath=//div[@id='zb__App__Mail']";
-		public static final String zAppbarContact = "xpath=//div[@id='zb__App__Contacts']";
-		public static final String zAppbarCal = "xpath=//div[@id='appbar']//a[@id='zb__App__Calendar']";
-		public static final String zAppbarTasks = "xpath=//div[@id='appbar']//a[@id='zb__App__Tasks']";
-		public static final String zAppbarBriefcase = "css=td[id='zb__App__Briefcase_left_icon'] [class='ImgBriefcase']";
-		public static final String zAppbarPreferences = "xpath=//div[@id='appbar']//a[@id='zb__App__Options']";
-		
+		public static final String zAppbarMail			= "id=zb__App__Mail_title";
+		public static final String zAppbarContact		= "id=zb__App__Contacts_title";
+		public static final String zAppbarCal			= "id=zb__App__Calendar_title";
+		public static final String zAppbarTasks			= "id=zb__App__Tasks_title";
+		public static final String zAppbarBriefcase		= "css=td[id='zb__App__Briefcase_left_icon'] [class='ImgBriefcase']";
+		public static final String zAppbarPreferences	= "id=zb__App__Options_title";
+
 		// For Social tab, see Zimlet classes
 		
 	}

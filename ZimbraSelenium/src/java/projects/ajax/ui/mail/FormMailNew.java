@@ -35,25 +35,15 @@ public class FormMailNew extends AbsForm {
 	 */
 	public static class Locators {
 		
-		public static final String zSendIconBtn = "//div[contains(@id,'ztb__COMPOSE')]//td[contains(@id,'__SEND_title')]";
-		public static final String zCancelIconBtn = "css=[id^=zb__COMPOSE][id$=__CANCEL_title]";
-		public static final String zSaveDraftIconBtn = "css=[id^=zb__COMPOSE][id$=__SAVE_DRAFT_title]";
-		public static final String zAddAttachmentIconBtn = "css=[id^=zb__COMPOSE][id$=__ATTACHMENT_title]";
-		public static final String zSpellCheckIconBtn = "css=[id^=zb__COMPOSE][id$=__SPELL_CHECK_title]";
+		public static final String zSendIconBtn			= "css=[id^=zb__COMPOSE][id$=__SEND_title]";
+		public static final String zCancelIconBtn		= "css=[id^=zb__COMPOSE][id$=__CANCEL_title]";
+		public static final String zSaveDraftIconBtn	= "css=[id^=zb__COMPOSE][id$=__SAVE_DRAFT_title]";
+		public static final String zSpellCheckIconBtn	= "css=[id^=zb__COMPOSE][id$=__SPELL_CHECK_title]";
 
-		public static final String zSendPulldownBtn = "css=[id^=zb__COMPOSE][id$=__SEND_MENU_dropdown]";
-		public static final String zSignaturePulldownBtn = "css=[id^=zb__COMPOSE][id$=__ADD_SIGNATURE_dropdown]";
-		public static final String zOptionsPulldownBtn = "css=[id^=zb__COMPOSE][id$=__COMPOSE_OPTIONS_dropdown]";
-
-		public static final String zToField = "css=[id^=zv__COMPOSE][id$=_to_control]";
-		public static final String zCcField = "css=[id^=zv__COMPOSE][id$=_cc_control]";
-		public static final String zBccField = "css=[id^=zv__COMPOSE][id$=_bcc_control]";
-		public static final String zSubjectField = "css=[id^=zv__COMPOSE][id$=_subject_control]";
-		
-		public static final String zTextBodyField = "//div[contains(@id, 'zv__COMPOSE')]//textarea";
-		
-		public static final String zHtmlBodyFrame = "//div[contains(@id, 'zv__COMPOSE')]//iframe";
-		public static final String zHtmlBodyField = "//html//body";
+		public static final String zToField				= "css=[id^=zv__COMPOSE][id$=_to_control]";
+		public static final String zCcField				= "css=[id^=zv__COMPOSE][id$=_cc_control]";
+		public static final String zBccField			= "css=[id^=zv__COMPOSE][id$=_bcc_control]";
+		public static final String zSubjectField		= "css=[id^=zv__COMPOSE][id$=_subject_control]";
 		
 	}
 
