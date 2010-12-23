@@ -97,6 +97,9 @@
   <key name="zdesktop_local_account_id">
     <value>ffffffff-ffff-ffff-ffff-ffffffffffff</value>
   </key>
+  <key name="zdesktop_backup_dir">
+    <value>${zimbra_home}/backup</value>
+  </key>
   <key name="zimbra_admin_service_port">
     <value>@port@</value>
   </key>

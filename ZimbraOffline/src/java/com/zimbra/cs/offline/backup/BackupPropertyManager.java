@@ -21,6 +21,7 @@ import com.zimbra.common.service.ServiceException;
 import com.zimbra.cs.account.Account;
 import com.zimbra.cs.account.Provisioning;
 import com.zimbra.cs.account.offline.OfflineProvisioning;
+import com.zimbra.cs.offline.OfflineLC;
 
 public class BackupPropertyManager {
     
@@ -106,5 +107,14 @@ public class BackupPropertyManager {
             val = Integer.parseInt(keepStr);
         }
         return (val > 0 ? val : 1);
+    }
+
+    public void testAndSetDefaultBackupPath() throws ServiceException {
+        OfflineProvisioning prov = OfflineProvisioning.getOfflineInstance();
+        Account localAccount = prov.getLocalAccount();
+        String backupPath = localAccount.getAttr(OfflineProvisioning.A_zimbraPrefOfflineBackupPath);
+        if (backupPath == null) {
+            prov.setAccountAttribute(localAccount, OfflineProvisioning.A_zimbraPrefOfflineBackupPath, OfflineLC.zdesktop_backup_dir.value());
+        }
     }
 }

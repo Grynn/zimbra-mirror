@@ -93,6 +93,7 @@ public class BackupTimer extends Thread {
         try {
             intervalChanged();
             lastBackupSuccess = BackupPropertyManager.getInstance().getLastBackupSuccess(); 
+            BackupPropertyManager.getInstance().testAndSetDefaultBackupPath();
         } catch (ServiceException e) {
             OfflineLog.offline.error("Exception while initializing account backup",e);
             return; 

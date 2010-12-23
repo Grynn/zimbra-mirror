@@ -14,12 +14,12 @@
  */
 package com.zimbra.cs.service.offline;
 
-import com.zimbra.soap.DocumentDispatcher;
-import com.zimbra.soap.DocumentService;
-import com.zimbra.soap.SoapContextExtension;
 import com.zimbra.common.soap.AccountConstants;
 import com.zimbra.common.soap.MailConstants;
 import com.zimbra.cs.offline.common.OfflineConstants;
+import com.zimbra.soap.DocumentDispatcher;
+import com.zimbra.soap.DocumentService;
+import com.zimbra.soap.SoapContextExtension;
 
 public class OfflineService implements DocumentService {
 
@@ -67,6 +67,8 @@ public class OfflineService implements DocumentService {
         dispatcher.registerHandler(MailConstants.SEND_INVITE_REPLY_REQUEST, new OfflineSendInviteReply());
         dispatcher.registerHandler(MailConstants.SEND_REPORT_REQUEST, new OfflineSendDeliveryReport());
         dispatcher.registerHandler(OfflineConstants.ACCOUNT_BACKUP_REQUEST, new OfflineAccountBackupService());
+        dispatcher.registerHandler(OfflineConstants.ACCOUNT_RESTORE_REQUEST, new OfflineAccountRestoreService());
+        dispatcher.registerHandler(OfflineConstants.ACCOUNT_BACKUP_ENUM_REQUEST, new OfflineBackupEnumService());
 
         // not the most suitable place to do this, but it's just too easy.
         SoapContextExtension.register(OfflineContextExtension.ZDSYNC, new OfflineContextExtension());

@@ -112,6 +112,8 @@ public class OfflineLC {
     public static final KnownKey zdesktop_mobileme_smtp_auth =
         new KnownKey("zdesktop_mobileme_smtp_auth", "true");
 
+    public static final KnownKey zdesktop_backup_dir;
+
     static void init() {
         // This method is there to guarantee static initializer of this
         // class is run.
@@ -352,6 +354,8 @@ public class OfflineLC {
         zdesktop_message_cache_size = new KnownKey("zdesktop_message_cache_size", "12");
         // size threshold for blob store compression
         zdesktop_volume_compression_threshold = new KnownKey("zdesktop_volume_compression_threshold", "131072");
+
+        zdesktop_backup_dir = new KnownKey("zdesktop_backup_dir", "${zimbra_home}/backup");
     }
     
     public static String getFullVersion() {

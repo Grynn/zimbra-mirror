@@ -36,6 +36,12 @@ public interface OfflineConstants {
     public static final QName ACCOUNT_BACKUP_REQUEST = QName.get("AccountBackupRequest", NAMESPACE);
     public static final QName ACCOUNT_BACKUP_RESPONSE = QName.get("AccountBackupResponse", NAMESPACE);
 
+    public static final QName ACCOUNT_BACKUP_ENUM_REQUEST = QName.get("AccountBackupEnumerationRequest", NAMESPACE);
+    public static final QName ACCOUNT_BACKUP_ENUM_RESPONSE = QName.get("AccountBackupEnumerationResponse", NAMESPACE);
+
+    public static final QName ACCOUNT_RESTORE_REQUEST = QName.get("AccountRestoreRequest", NAMESPACE);
+    public static final QName ACCOUNT_RESTORE_RESPONSE = QName.get("AccountRestoreResponse", NAMESPACE);
+
     public static final String A_Event = "e";
     public static final String EVENT_UI_LOAD_BEGIN = "ui_load_begin";
     public static final String EVENT_UI_LOAD_END = "ui_load_end";
@@ -121,4 +127,7 @@ public interface OfflineConstants {
     public static final String CALDAV_DS = "caldav:";
     public static final String YAB_DS = "yab:";
     public static final String SYNC_SERVER_PREFIX = "offline_sync_server_";
+
+    public static final String E_BACKUP = "backup";
+    public static final String A_RESOLVE = "resolve";
 }
