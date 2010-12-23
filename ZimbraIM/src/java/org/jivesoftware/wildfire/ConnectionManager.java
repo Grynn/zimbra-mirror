@@ -2,19 +2,19 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2006, 2007, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
 package org.jivesoftware.wildfire;
 
-import org.apache.mina.common.IoSession;
+import org.apache.mina.core.session.IoSession;
 import org.jivesoftware.wildfire.net.SocketReader;
 
 import java.io.IOException;
@@ -47,7 +47,7 @@ public interface ConnectionManager {
      */
     public SocketReader createSocketReader(Socket socket, boolean isSecure, ServerPort serverPort)
     throws IOException;
-    
+
     /**
      * Creates a new nio-mode socket reader for the new accepted socket to be managed
      * by the connection manager.
@@ -57,9 +57,9 @@ public interface ConnectionManager {
      *        connections.
      * @param useBlockingMode true means that the server will use a thread per connection.
      */
-    public SocketReader createSocketReader(IoSession nioSocket, boolean isSecure, 
-                ServerPort serverPort) throws IOException;
-    
+    public SocketReader createSocketReader(IoSession nioSocket, boolean isSecure,
+            ServerPort serverPort) throws IOException;
+
     /**
      * Sets if the port listener for unsecured clients will be available or not. When disabled
      * there won't be a port listener active. Therefore, new clients won't be able to connect to

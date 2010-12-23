@@ -2,19 +2,19 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
 package org.jivesoftware.wildfire.net;
 
-import org.apache.mina.common.IoSession;
+import org.apache.mina.core.session.IoSession;
 import org.dom4j.Element;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.PacketRouter;
@@ -42,12 +42,12 @@ public class ComponentSocketReader extends SocketReader {
                 Socket socket, SocketConnection connection) {
         super(router, routingTable, socket, connection);
     }
-    
+
     public ComponentSocketReader(PacketRouter router, RoutingTable routingTable,
                 IoSession nioSocket, SocketConnection connection) {
         super(router, routingTable, nioSocket, connection);
         }
-    
+
 
     /**
      * Only <tt>bind<tt> packets will be processed by this class to bind more domains
@@ -57,6 +57,7 @@ public class ComponentSocketReader extends SocketReader {
      * @param doc the unknown DOM element that was received
      * @return false if packet is unknown otherwise true.
      */
+    @Override
     protected boolean processUnknowPacket(Element doc) {
         // Handle subsequent bind packets
         if ("bind".equals(doc.getName())) {
@@ -125,8 +126,9 @@ public class ComponentSocketReader extends SocketReader {
         return false;
     }
 
-    boolean createSession(String namespace, String host, Element streamElt) throws UnauthorizedException, XmlPullParserException,
-            IOException {
+    @Override
+    boolean createSession(String namespace, String host, Element streamElt)
+            throws UnauthorizedException, XmlPullParserException, IOException {
         if ("jabber:component:accept".equals(namespace)) {
             // The connected client is a component so create a ComponentSession
             session = ComponentSession.createSession(host, connection, streamElt);
@@ -135,14 +137,17 @@ public class ComponentSocketReader extends SocketReader {
         return false;
     }
 
+    @Override
     String getNamespace() {
         return "jabber:component:accept";
     }
 
+    @Override
     String getName() {
         return "Component SR - " + hashCode();
     }
 
+    @Override
     boolean validateHost() {
         return false;
     }

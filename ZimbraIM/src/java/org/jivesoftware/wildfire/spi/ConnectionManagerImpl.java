@@ -2,21 +2,20 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
 package org.jivesoftware.wildfire.spi;
 
-import org.apache.mina.common.IoSession;
+import org.apache.mina.core.session.IoSession;
 import org.jivesoftware.util.IMConfig;
-//import org.jivesoftware.util.JiveGlobals;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
 import org.jivesoftware.wildfire.*;
@@ -24,9 +23,7 @@ import org.jivesoftware.wildfire.container.BasicModule;
 import org.jivesoftware.wildfire.net.*;
 
 import java.io.IOException;
-//import java.net.InetAddress;
 import java.net.Socket;
-//import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -94,7 +91,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         if (isServerListenerEnabled()) {
             int port = getServerListenerPort();
             try {
-                serverSocketThread = new SocketAcceptThread(this, 
+                serverSocketThread = new SocketAcceptThread(this,
                             new ServerPort(port, XMPPServer.getInstance().getLocalDomains(),
                                         bindAddress, false, null, ServerPort.Type.server));
                 ports.add(serverSocketThread.getServerPort());
@@ -113,7 +110,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             }
         }
     }
-    
+
     private void startCloudRoutingListener(String bindAddress) {
         if (isCloudRoutingListenerEnabled()) {
             int port = getCloudRoutingPort();
@@ -123,9 +120,9 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
                     if (IMConfig.XMPP_CLOUDROUTING_SSL.getBoolean()) {
                         algorithm = IMConfig.XMPP_SOCKET_SSL_ALGORITHM.getString();
                     }
-                    
+
                     if (algorithm == null || algorithm.length() == 0) {
-                        cloudRoutingSocketThread = new SocketAcceptThread(this, 
+                        cloudRoutingSocketThread = new SocketAcceptThread(this,
                             new ServerPort(port, XMPPServer.getInstance().getLocalDomains(),
                                 bindAddress, (algorithm != null ? true : false), algorithm, ServerPort.Type.cloudRouter));
                         ports.add(cloudRoutingSocketThread.getServerPort());
@@ -156,7 +153,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             serverSocketThread = null;
         }
     }
-    
+
     private void stopCloudRoutingListener() {
         if (cloudRoutingSocketThread != null) {
             cloudRoutingSocketThread.shutdown();
@@ -241,7 +238,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             int port = getClientListenerPort();
 
             try {
-                socketThread = new SocketAcceptThread(this, 
+                socketThread = new SocketAcceptThread(this,
                     new ServerPort(port, XMPPServer.getInstance().getLocalDomains(), bindAddress, false, null, ServerPort.Type.client)
                 );
                 ports.add(socketThread.getServerPort());
@@ -305,10 +302,12 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         }
     }
 
+    @Override
     public Iterator<ServerPort> getPorts() {
         return ports.iterator();
     }
 
+    @Override
     public SocketReader createSocketReader(Socket sock, boolean isSecure, ServerPort serverPort) throws IOException {
         if (serverPort.isClientPort()) {
             SocketConnection conn = new StdSocketConnection(deliverer, sock, isSecure);
@@ -331,9 +330,10 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
             return null;
         }
     }
-    
+
+    @Override
     public SocketReader createSocketReader(IoSession nioSocket, boolean isSecure, ServerPort serverPort)
-    throws IOException 
+    throws IOException
     {
         if (serverPort.isClientPort()) {
             SocketConnection conn = new NioSocketConnection(deliverer, nioSocket, isSecure);
@@ -350,13 +350,14 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         } else {
             // Use the appropriate packeet deliverer for connection managers. The packet
             // deliverer will be configured with the domain of the connection manager once
-            // the connection manager has finished the handshake. 
+            // the connection manager has finished the handshake.
             //SocketConnection conn = new NioSocketConnection(new MultiplexerPacketDeliverer(), nioSocket, isSecure);
             //return new ConnectionMultiplexerSocketReader(router, routingTable, nioSocket, conn);
             return null;
         }
     }
-    
+
+    @Override
     public void initialize(XMPPServer server) {
         super.initialize(server);
         router = server.getPacketRouter();
@@ -380,19 +381,19 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
     private boolean isServerListenerEnabled() {
         return IMConfig.XMPP_SERVER_SOCKET_ACTIVE.getBoolean();
     }
-    
+
     private boolean isCloudRoutingListenerEnabled() {
         return IMConfig.XMPP_CLOUDROUTING_ACTIVE.getBoolean();
     }
-    
+
     private boolean isConnectionManagerListenerEnabled() {
         return false;
     }
-    
+
     private String getClientPlainListenerAddress() {
-        return IMConfig.XMPP_SOCKET_PLAIN_ADDRESS.getString(); 
+        return IMConfig.XMPP_SOCKET_PLAIN_ADDRESS.getString();
     }
-    
+
     private String getClientSSLListenerAddress() {
         return IMConfig.XMPP_SOCKET_SSL_ADDRESS.getString();
     }
@@ -400,11 +401,11 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
     private String getComponentListenerAddress() {
         return IMConfig.XMPP_COMPONENT_ADDRESS.getString();
     }
-    
+
     private String getServerListenerAddress() {
         return IMConfig.XMPP_SERVER_SOCKET_ADDRESS.getString();
     }
-    
+
     private String getCloudroutingListenerAddress() {
         return IMConfig.XMPP_CLOUDROUTING_ADDRESS.getString();
     }
@@ -412,15 +413,15 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
     private String getConnectionManagerListenerAddress() {
         return null;
     }
-    
+
     private int getClientListenerPort() {
         return IMConfig.XMPP_SOCKET_PLAIN_PORT.getInt();
     }
-    
+
     private int getClientSSLListenerPort() {
         return IMConfig.XMPP_SOCKET_SSL_PORT.getInt();
     }
-    
+
     private int getComponentListenerPort() {
         return IMConfig.XMPP_COMPONENT_SOCKET_PORT.getInt();
     }
@@ -428,20 +429,21 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
     private int getServerListenerPort() {
         return IMConfig.XMPP_SERVER_SOCKET_PORT.getInt();
     }
-    
+
     private int getCloudRoutingPort() {
         return IMConfig.XMPP_CLOUDROUTING_PORT.getInt();
     }
 
     public int getConnectionManagerListenerPort() {
-        return 0; 
+        return 0;
     }
-    
+
 
     // #####################################################################
     // Module management
     // #####################################################################
 
+    @Override
     public void start() {
         super.start();
         isStarted = true;
@@ -449,6 +451,7 @@ public class ConnectionManagerImpl extends BasicModule implements ConnectionMana
         SocketSendingTracker.getInstance().start();
     }
 
+    @Override
     public void stop() {
         super.stop();
         stopClientListeners();

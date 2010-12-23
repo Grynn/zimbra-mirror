@@ -2,19 +2,19 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
 package org.jivesoftware.wildfire.net;
 
-import org.apache.mina.common.IoSession;
+import org.apache.mina.core.session.IoSession;
 import org.dom4j.Element;
 import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.wildfire.ClientSession;
@@ -44,28 +44,31 @@ import java.net.Socket;
  */
 public class ClientSocketReader extends SocketReader {
 
-    public ClientSocketReader(PacketRouter router, RoutingTable routingTable, 
+    public ClientSocketReader(PacketRouter router, RoutingTable routingTable,
                 Socket socket, SocketConnection connection) {
         super(router, routingTable, socket, connection);
     }
 
-    public ClientSocketReader(PacketRouter router, RoutingTable routingTable, 
+    public ClientSocketReader(PacketRouter router, RoutingTable routingTable,
                 IoSession nioSocket, SocketConnection connection) {
         super(router, routingTable, nioSocket, connection);
     }
 
+    @Override
     protected void processIQ(IQ packet) throws UnauthorizedException {
         // Overwrite the FROM attribute to avoid spoofing
         packet.setFrom(session.getAddress());
         super.processIQ(packet);
     }
 
+    @Override
     protected void processPresence(Presence packet) throws UnauthorizedException {
         // Overwrite the FROM attribute to avoid spoofing
         packet.setFrom(session.getAddress());
         super.processPresence(packet);
     }
 
+    @Override
     protected void processMessage(Message packet) throws UnauthorizedException {
         // Overwrite the FROM attribute to avoid spoofing
         packet.setFrom(session.getAddress());
@@ -79,11 +82,14 @@ public class ClientSocketReader extends SocketReader {
      * @param doc the unknown DOM element that was received
      * @return always false.
      */
+    @Override
     protected boolean processUnknowPacket(Element doc) {
         return false;
     }
 
-    boolean createSession(String namespace, String host, Element streamElt) throws UnauthorizedException, XmlPullParserException, IOException {
+    @Override
+    boolean createSession(String namespace, String host, Element streamElt)
+            throws UnauthorizedException, XmlPullParserException, IOException {
         if ("jabber:client".equals(namespace)) {
             // The connected client is a regular client so create a ClientSession
             session = ClientSession.createSession(host, connection, streamElt);
@@ -92,14 +98,17 @@ public class ClientSocketReader extends SocketReader {
         return false;
     }
 
+    @Override
     String getNamespace() {
         return "jabber:client";
     }
 
+    @Override
     String getName() {
         return "Client SR - " + hashCode();
     }
 
+    @Override
     boolean validateHost() {
         return IMConfig.XMPP_CLIENT_VALIDATE_HOST.getBoolean();
     }

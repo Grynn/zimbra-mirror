@@ -2,22 +2,21 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
 package org.jivesoftware.wildfire.net;
 
-import org.apache.mina.common.IoSession;
+import org.apache.mina.core.session.IoSession;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
-import org.dom4j.Namespace;
 import org.dom4j.io.XMPPPacketReader;
 import org.jivesoftware.util.LocaleUtils;
 import org.jivesoftware.util.Log;
@@ -34,8 +33,6 @@ import org.xmpp.packet.*;
 
 import java.io.IOException;
 import java.io.Reader;
-//import java.net.Socket;
-import java.io.InputStream;
 import java.net.Socket;
 
 /**
@@ -78,7 +75,7 @@ public abstract class SocketReader implements Runnable {
     private SocketReadingMode readingMode;
     private XMPPPacketReader reader = null;
     private NioReadingMode nonblockingReadingMode = null;
-    
+
     protected boolean open;
 
     static {
@@ -109,7 +106,7 @@ public abstract class SocketReader implements Runnable {
             throw new UnsupportedOperationException("Cannot setInput on nonblocking SocketReader");
         }
     }
-    
+
     public void setSession(Session _session) {
         session = _session;
     }
@@ -130,14 +127,14 @@ public abstract class SocketReader implements Runnable {
 
     /**
      * Only supported for blocking-mode SocketReaders
-     * 
+     *
      * @return
      * @throws UnsupportedOperationException
      * @throws IOException
      * @throws XmlPullParserException
      * @throws DocumentException
      */
-    Element getNextElement() throws UnsupportedOperationException, IOException, 
+    Element getNextElement() throws UnsupportedOperationException, IOException,
     XmlPullParserException, DocumentException {
         if (reader != null) {
             return reader.parseDocument().getRootElement();
@@ -145,7 +142,7 @@ public abstract class SocketReader implements Runnable {
             throw new UnsupportedOperationException("SocketReader.getNextElement() only valid for blocking-mode sockets");
         }
     }
-    
+
     /**
      * @return
      */
@@ -161,7 +158,7 @@ public abstract class SocketReader implements Runnable {
             return null;
         }
     }
-    
+
     /**
      * Creates a dedicated reader for an NIO-mode socket.
      *
@@ -171,7 +168,7 @@ public abstract class SocketReader implements Runnable {
      * @param connection the connection object (for writing)
      * @param useBlockingMode true means that the server will use a thread per connection.
      */
-    public SocketReader(PacketRouter router, RoutingTable routingTable, 
+    public SocketReader(PacketRouter router, RoutingTable routingTable,
                 IoSession nioSocket, SocketConnection connection) {
         this.router = router;
         this.routingTable = routingTable;
@@ -183,7 +180,7 @@ public abstract class SocketReader implements Runnable {
         nonblockingReadingMode = new NioReadingMode(this);
         readingMode = nonblockingReadingMode;
     }
-    
+
 
     /**
      * Creates a dedicated reader for a socket.
@@ -194,7 +191,7 @@ public abstract class SocketReader implements Runnable {
      * @param connection the connection object (for writing)
      * @param useBlockingMode true means that the server will use a thread per connection.
      */
-    public SocketReader(PacketRouter router, RoutingTable routingTable, 
+    public SocketReader(PacketRouter router, RoutingTable routingTable,
                 Socket socket, SocketConnection connection) {
         this.router = router;
         this.routingTable = routingTable;
@@ -212,20 +209,21 @@ public abstract class SocketReader implements Runnable {
      * A dedicated thread loop for reading the stream and sending incoming
      * packets to the appropriate router.
      */
+    @Override
     public void run() {
         assert(reader != null); // blocking-mode operation only!
         readingMode.run();
     }
-    
+
     /**
      * For NIO SocketReaders, this is the API that socket upcalls should go to.
-     * 
+     *
      * @return
      */
     public NioCompletionHandler getNioCompletionHandler() {
         return nonblockingReadingMode;
     }
-    
+
 
     protected void process(Element doc) throws Exception {
         if (doc == null) {
@@ -425,7 +423,7 @@ public abstract class SocketReader implements Runnable {
             }
         }
     }
-    
+
     protected boolean shouldInvokeInterceptor() { return true; }
 
     /**
@@ -496,7 +494,7 @@ public abstract class SocketReader implements Runnable {
         if (reader != null)
             return reader.getLastActive();
         else
-            return nonblockingReadingMode.getLastActive(); 
+            return nonblockingReadingMode.getLastActive();
     }
 
     /**
@@ -531,13 +529,13 @@ public abstract class SocketReader implements Runnable {
             return new IQ(doc);
         }
     }
-    
+
     /**
      * @throws UnauthorizedException
      * @throws XmlPullParserException
      * @throws IOException
      */
-    void createSessionForBlockingMode()  throws UnauthorizedException, XmlPullParserException, 
+    void createSessionForBlockingMode()  throws UnauthorizedException, XmlPullParserException,
     IOException, UnsupportedOperationException  {
         if (reader != null) {
             Element streamElt = getInitialStreamElement();
@@ -562,10 +560,10 @@ public abstract class SocketReader implements Runnable {
 //        for (int eventType = xpp.getEventType(); eventType != XmlPullParser.START_TAG;) {
 //            eventType = xpp.next();
 //        }
-        
+
         String streamXML = streamElt.asXML();
         Log.debug("SocketReader.createSession: "+streamXML);
-        
+
         String nullNsPrefix = streamElt.getNamespaceForPrefix(null).getURI();
         String streamNsPrefix = streamElt.getNamespaceForPrefix("stream").getURI();
 

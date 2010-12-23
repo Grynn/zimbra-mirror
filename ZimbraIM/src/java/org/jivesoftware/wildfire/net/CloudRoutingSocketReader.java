@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -17,7 +17,6 @@ package org.jivesoftware.wildfire.net;
 import java.io.IOException;
 import java.net.Socket;
 
-import org.apache.mina.common.IoSession;
 import org.dom4j.Element;
 import org.jivesoftware.wildfire.PacketRouter;
 import org.jivesoftware.wildfire.RoutingTable;
@@ -28,16 +27,16 @@ import org.xmlpull.v1.XmlPullParserException;
 import com.zimbra.common.util.ZimbraLog;
 
 /**
- * 
+ *
  */
 public class CloudRoutingSocketReader extends SocketReader {
-    
+
     public static interface CloudRoutingSessionFactory {
-        Session createSession(String hostname, CloudRoutingSocketReader reader, SocketConnection connection, Element streamElt); 
+        Session createSession(String hostname, CloudRoutingSocketReader reader, SocketConnection connection, Element streamElt);
     }
-    
+
     private static CloudRoutingSessionFactory sSessionFact = null;
-    
+
     public static void setSessionFactory(CloudRoutingSessionFactory fact) {
         sSessionFact = fact;
     }
@@ -48,7 +47,7 @@ public class CloudRoutingSocketReader extends SocketReader {
      * @param nioSocket
      * @param connection
      */
-    public CloudRoutingSocketReader(PacketRouter router, RoutingTable routingTable, IoSession nioSocket,
+    public CloudRoutingSocketReader(PacketRouter router, RoutingTable routingTable, org.apache.mina.core.session.IoSession nioSocket,
         SocketConnection connection) {
         super(router, routingTable, nioSocket, connection);
         // TODO Auto-generated constructor stub
@@ -96,14 +95,14 @@ public class CloudRoutingSocketReader extends SocketReader {
     boolean validateHost() {
         return false;
     }
-    
+
     @Override
     protected boolean shouldInvokeInterceptor() { return false; }
-    
+
+    @Override
     protected void process(Element doc) throws Exception {
         ZimbraLog.im.debug("CloudRoutingSocketReader received incoming packet: "+doc.asXML());
         super.process(doc);
     }
-    
 
 }

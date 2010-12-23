@@ -2,19 +2,19 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2006, 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
  */
 package org.jivesoftware.wildfire.net;
 
-import org.apache.mina.common.IoSession;
+import org.apache.mina.core.session.IoSession;
 import org.dom4j.Element;
 import org.jivesoftware.util.IMConfig;
 import org.jivesoftware.util.Log;
@@ -55,7 +55,7 @@ public class ServerSocketReader extends SocketReader {
      */
     private ThreadPoolExecutor threadPool;
 
-    public ServerSocketReader(PacketRouter router, RoutingTable routingTable, 
+    public ServerSocketReader(PacketRouter router, RoutingTable routingTable,
                 Socket socket, SocketConnection connection)
     {
         super(router, routingTable, socket, connection);
@@ -69,8 +69,8 @@ public class ServerSocketReader extends SocketReader {
                         new LinkedBlockingQueue<Runnable>(queueSize),
                         new ThreadPoolExecutor.CallerRunsPolicy());
     }
-    
-    public ServerSocketReader(PacketRouter router, RoutingTable routingTable, 
+
+    public ServerSocketReader(PacketRouter router, RoutingTable routingTable,
                 IoSession nioSocket, SocketConnection connection) {
         super(router, routingTable, nioSocket, connection);
         // Create a pool of threads that will process received packets. If more threads are
@@ -83,7 +83,8 @@ public class ServerSocketReader extends SocketReader {
                         new LinkedBlockingQueue<Runnable>(queueSize),
                         new ThreadPoolExecutor.CallerRunsPolicy());
     }
-    
+
+    @Override
     protected void process(Element doc) throws Exception {
         if (doc != null && session != null && session instanceof DialbackCreatorSession) {
             DialbackCreatorSession dbcs = (DialbackCreatorSession)session;
@@ -92,13 +93,13 @@ public class ServerSocketReader extends SocketReader {
             super.process(doc);
         }
     }
-    
 
     /**
      * Processes the packet in another thread if the packet has not been rejected.
      *
      * @param packet the received packet.
      */
+    @Override
     protected void processIQ(final IQ packet) throws UnauthorizedException {
         try {
             packetReceived(packet);
@@ -124,6 +125,7 @@ public class ServerSocketReader extends SocketReader {
      *
      * @param packet the received packet.
      */
+    @Override
     protected void processPresence(final Presence packet) throws UnauthorizedException {
         try {
             packetReceived(packet);
@@ -149,11 +151,13 @@ public class ServerSocketReader extends SocketReader {
      *
      * @param packet the received packet.
      */
+    @Override
     protected void processMessage(final Message packet) throws UnauthorizedException {
         try {
             packetReceived(packet);
             // Process the packet in another thread
             threadPool.execute(new Runnable() {
+                @Override
                 public void run() {
                     try {
                         ServerSocketReader.super.processMessage(packet);
@@ -176,6 +180,7 @@ public class ServerSocketReader extends SocketReader {
      * @param doc the unknown DOM element that was received
      * @return true if the packet is a db:result packet otherwise false.
      */
+    @Override
     protected boolean processUnknowPacket(Element doc) {
         // Handle subsequent db:result packets
         if ("db".equals(doc.getNamespacePrefix()) && "result".equals(doc.getName())) {
@@ -227,6 +232,7 @@ public class ServerSocketReader extends SocketReader {
         }
     }
 
+    @Override
     protected void shutdown() {
         super.shutdown();
         // Shutdown the pool of threads that are processing packets sent by
@@ -234,8 +240,9 @@ public class ServerSocketReader extends SocketReader {
         threadPool.shutdown();
     }
 
-    boolean createSession(String namespace, String host, Element streamElt) throws UnauthorizedException, XmlPullParserException,
-            IOException {
+    @Override
+    boolean createSession(String namespace, String host, Element streamElt)
+            throws UnauthorizedException, XmlPullParserException, IOException {
         if (getNamespace().equals(namespace)) {
             // The connected client is a server so create an IncomingServerSession
             session = IncomingServerSession.createSession(host, connection, streamElt);
@@ -244,14 +251,17 @@ public class ServerSocketReader extends SocketReader {
         return false;
     }
 
+    @Override
     String getNamespace() {
         return "jabber:server";
     }
 
+    @Override
     String getName() {
         return "Server SR - " + hashCode();
     }
 
+    @Override
     boolean validateHost() {
         return true;
     }

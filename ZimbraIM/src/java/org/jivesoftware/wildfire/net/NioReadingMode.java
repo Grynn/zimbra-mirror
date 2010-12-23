@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -16,7 +16,7 @@ package org.jivesoftware.wildfire.net;
 
 import com.zimbra.cs.im.xp.parse.ApplicationException;
 
-import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.core.buffer.IoBuffer;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.jivesoftware.util.LocaleUtils;
@@ -35,11 +35,11 @@ import java.util.Locale;
  * TODOs
  *    -- parser to understand ByteBuffers (save extra copy)
  *
- *    
- * 
+ *
+ *
  */
 class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
-    
+
     static enum State {
         NO_SESSION,
         START_SASL,
@@ -52,38 +52,36 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
     private NioParser mParser = null;
     private State mState = State.NO_SESSION;
     private volatile long mLastReceiveTime = System.currentTimeMillis();
-    
+
     /**
      * @param sock
      * @param socketReader
      */
     public NioReadingMode(SocketReader socketReader)  {
         super(socketReader);
-        
+
         mParser = new NioParser(Locale.getDefault());
     }
-    
-    /* (non-Javadoc)
-     * @see org.jivesoftware.wildfire.net.SocketReadingMode#run()
-     */
+
+    @Override
     public void run() {
         throw new UnsupportedOperationException("run() method not supported for Nio SocketReadingMode");
     }
-    
+
     /**
      * @return
      */
     long getLastActive() {
         return mLastReceiveTime;
     }
-    
+
     /**
      * @param e
      * @throws Exception
      */
     private void process(Element e) throws Exception {
         Log.debug("NioReadingMode: Processing Element: "+e.asXML());
-        
+
         switch (mState) {
             case NO_SESSION:
                 assert("stream:stream".equals(e.getQualifiedName()));
@@ -126,15 +124,16 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
                 throw new IllegalStateException("Unknown or Invalid parser state: "+mState);
         }
     }
-    
-    protected boolean authenticateClient(Element doc) throws DocumentException, IOException, XmlPullParserException { 
+
+    @Override
+    protected boolean authenticateClient(Element doc) throws DocumentException, IOException, XmlPullParserException {
 //      Ensure that connection was secured if TLS was required
         if (socketReader.connection.getTlsPolicy() == Connection.TLSPolicy.required &&
                     !socketReader.connection.isSecure()) {
             socketReader.closeNeverSecuredConnection();
             return false;
         }
-        
+
         SASLAuthentication.Status status = SASLAuthentication.handle(socketReader.session, doc);
         switch(status) {
             case needResponse:
@@ -149,23 +148,19 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
         }
         return false;
     }
-    
-    /* (non-Javadoc)
-     * @see org.jivesoftware.wildfire.net.NioCompletionHandler#nioClosed()
-     */
+
+    @Override
     public void nioClosed() {
         socketReader.connection.close();
     }
 
-    /* (non-Javadoc)
-     * @see org.jivesoftware.wildfire.net.NioCompletionHandler#nioReadCompleted(org.apache.mina.common.ByteBuffer)
-     */
-    public void nioReadCompleted(ByteBuffer bb) {
+    @Override
+    public void nioReadCompleted(IoBuffer bb) {
 
         mLastReceiveTime = System.currentTimeMillis();
-        
+
         boolean closeIt = false;
-        
+
         try {
             mParser.parseBytes(bb);
             for (Element e : mParser.getCompletedElements()) {
@@ -204,7 +199,7 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
         } catch (Exception e) {
             closeIt = true;
 //            StringWriter sw = new StringWriter();
-//            PrintWriter pw = new PrintWriter(sw); 
+//            PrintWriter pw = new PrintWriter(sw);
 //            e.printStackTrace(pw);
 //            pw.flush();
             if (socketReader.session != null) {
@@ -213,7 +208,7 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
             } else {
                 Log.warn(LocaleUtils.getLocalizedString("admin.error.stream"), e);
             }
-            
+
         } finally {
             if (closeIt) {
                 try {
@@ -222,7 +217,8 @@ class NioReadingMode extends SocketReadingMode implements NioCompletionHandler {
             }
         }
     }
-    
+
+    @Override
     protected boolean compressClient(Element doc) throws IOException, XmlPullParserException {
         return false;
     }

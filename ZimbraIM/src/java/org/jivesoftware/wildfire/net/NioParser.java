@@ -2,12 +2,12 @@
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
  * Copyright (C) 2007, 2008, 2009, 2010 Zimbra, Inc.
- * 
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.mina.common.ByteBuffer;
+import org.apache.mina.core.buffer.IoBuffer;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.Namespace;
@@ -46,81 +46,106 @@ import com.zimbra.cs.im.xp.parse.StartElementEvent;
 import com.zimbra.cs.im.xp.parse.StartEntityReferenceEvent;
 
 public class NioParser implements Application {
-    
+
     DocumentFactory mDf = DocumentFactory.getInstance();
-    
+
     List<Element> mCompletedElements = new ArrayList<Element>();
     Element mCurElt = null;
     Element mStreamElt = null;
     int mCurDepth = 0;
     int mIndent = 0;
     final static boolean SPEW = false;
-    
+
     private static String trim(String s) {
         s = s.trim();
         if (s.endsWith("\n"))
             s = s.substring(0, s.length()-1);
         return s;
     }
-    
-    private String indent() { 
+
+    private String indent() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < mIndent; i++)
             sb.append(' ');
         return sb.toString();
     }
-    
+
     void indentOut() { mIndent+=3; }
     void indentIn() { mIndent-=3; }
 
+    @Override
     public void characterData(CharacterDataEvent event) throws Exception {
         StringWriter sw = new StringWriter();
         event.writeChars(sw);
         String s = sw.toString();
-        
-        if (mCurElt != null) { 
+
+        if (mCurElt != null) {
             mCurElt.addText(s);
         }
-        
+
         if (SPEW) {
-            if (s.endsWith("\n")) 
+            if (s.endsWith("\n"))
                 s = s.substring(0, s.length()-1);
             System.out.print(s);
         }
     }
+
+    @Override
     public void comment(CommentEvent event) throws Exception {
         if (SPEW) { System.out.println("comment "+event.getComment()); }
     }
+
+    @Override
     public void endCdataSection(EndCdataSectionEvent event) throws Exception {
         if (SPEW) { System.out.println("endCdataSection "+event); }
     }
+
+    @Override
     public void endDocument() throws Exception {
         if (SPEW) { System.out.println("endDocument "); }
     }
+
+    @Override
     public void endDocumentTypeDeclaration(EndDocumentTypeDeclarationEvent event) throws Exception {
         if (SPEW) { System.out.println("endDocumentTypeDeclaration "+event); }
     }
+
+    @Override
     public void endEntityReference(EndEntityReferenceEvent event) throws Exception {
         if (SPEW) { System.out.println("endEntityReference "+event); }
     }
+
+    @Override
     public void endProlog(EndPrologEvent event) throws Exception {
         if (SPEW) { System.out.println("endProlog "+event); }
     }
+
+    @Override
     public void markupDeclaration(MarkupDeclarationEvent event) throws Exception {
-        if (SPEW) { System.out.println("markupDeclaration "+event.getName()+" attrib="+event.getAttributeName()); } 
+        if (SPEW) { System.out.println("markupDeclaration "+event.getName()+" attrib="+event.getAttributeName()); }
     }
+
+    @Override
     public void processingInstruction(ProcessingInstructionEvent event) throws Exception {
         if (SPEW) { System.out.println("processingInstruction "+event.getName()+" instruct="+event.getInstruction()); }
     }
+
+    @Override
     public void startCdataSection(StartCdataSectionEvent event) throws Exception {
         if (SPEW) { System.out.println("startCdataSection "+event); }
     }
+
+    @Override
     public void startDocument() throws Exception {
         if (SPEW) { System.out.println("startDocument"); }
     }
+
+    @Override
     public void startDocumentTypeDeclaration(StartDocumentTypeDeclarationEvent event) throws Exception {
         if (SPEW) { System.out.println("startDocumentTypeDeclaration "+ event); }
     }
+
+    @Override
     public void startElement(StartElementEvent event) throws Exception {
         if (SPEW) {
             System.out.println();
@@ -136,10 +161,10 @@ public class NioParser implements Application {
             }
             System.out.print(">");
         }
-        
+
         ////////////////////////////////////
         String name = event.getName();
-        
+
         // special case the stream element -- we want each XMPP *stanza* returned as a single
         // Dom4j Document -- but the stanzas are enclosed in the outer <stream:stream>...
         // so basically we hack things so that the <stream:stream> is returned immediately
@@ -157,17 +182,17 @@ public class NioParser implements Application {
             mCurElt = newElement;
         }
     }
-    
+
     /**
      * foo:bar --> { foo, bar }
      * foo --> { null, foo }
-     * 
+     *
      * @param s
      * @return
      */
     private String[] splitPrefix(String s) {
         String[] toRet = new String[2];
-        
+
         int prefixIdx = s.indexOf(':');
         if (prefixIdx > 0) {
             toRet[0] = s.substring(0, prefixIdx);
@@ -177,13 +202,13 @@ public class NioParser implements Application {
         }
         return toRet;
     }
-    
-    private Element createStartElement(StartElementEvent event, boolean includeJabberNS) 
+
+    private Element createStartElement(StartElementEvent event, boolean includeJabberNS)
     {
         Element newElement = null;
 //        if (event.getName().equals("stream:features"))
 //            System.out.println("at features...");
-        
+
         String fullname = event.getName();
         String[] split = splitPrefix(fullname);
         String prefix = split[0];
@@ -202,10 +227,10 @@ public class NioParser implements Application {
                 ns = n.getURI();
         }
         if (!includeJabberNS && (
-                        ns == null || 
-                        ns.equals("jabber:client") || 
+                        ns == null ||
+                        ns.equals("jabber:client") ||
                         ns.equals("jabber:server") ||
-                        ns.equals("jabber.connectionmanager") || 
+                        ns.equals("jabber.connectionmanager") ||
                         ns.equals("jabber:component:accept")) ||
                         ns.equals("jabber:cloudrouting")
         ) {
@@ -213,12 +238,12 @@ public class NioParser implements Application {
         } else {
             QName qname;
             if (prefix == null)
-                qname = mDf.createQName(name, ns); 
+                qname = mDf.createQName(name, ns);
             else
                 qname = mDf.createQName(name, prefix, ns);
             newElement = mDf.createElement(qname);
         }
-        
+
         for (int i = 0; i < event.getAttributeCount(); i++) {
             String attrName = event.getAttributeName(i);
             if (attrName.startsWith("xmlns")) {
@@ -226,7 +251,7 @@ public class NioParser implements Application {
                 if (attrValue != null && attrValue.length() > 0) {
                     if (!attrName.equals(myNsName)) {
                         split = splitPrefix(attrName);
-                        if (split[0] != null) { 
+                        if (split[0] != null) {
                             newElement.addNamespace(split[1], attrValue);
                         } else {
                             newElement.addNamespace("",attrValue);
@@ -237,7 +262,7 @@ public class NioParser implements Application {
                 newElement.addAttribute(attrName, event.getAttributeValue(i));
             }
         }
-        
+
 //        if (SPEW) {
 //            System.out.print("NioParser: ");
 //            String asXML = newElement.asXML();
@@ -246,21 +271,22 @@ public class NioParser implements Application {
 
         return newElement;
     }
-    
+
+    @Override
     public void endElement(EndElementEvent event) throws Exception {
-        if (SPEW) { 
+        if (SPEW) {
             System.out.println();
             indentIn();
             System.out.print(indent()+"</"+trim(event.getName())+">");
         }
-        
+
         ////////////////////////////////////
         String name = event.getName();
         if (!name.equals("stream:stream")) {
             assert(mCurElt != null);
             assert(mCurDepth >= 1);
             mCurDepth--;
-            
+
             if (mCurDepth < 1) {
                 mCompletedElements.add(mCurElt);
                 mCurDepth = 0;
@@ -270,10 +296,12 @@ public class NioParser implements Application {
                 mCurElt = mCurElt.getParent();
         }
     }
+
+    @Override
     public void startEntityReference(StartEntityReferenceEvent event) throws Exception {
         if (SPEW) { System.out.println("startEntityReference "+event.getName()); }
     }
-    
+
     Locale mLocale;
     EntityParser mEp = null;
     boolean mPastProlog = false;
@@ -283,25 +311,25 @@ public class NioParser implements Application {
     private static byte[] sStreamStartBytes = new byte[] {
         '<', 's', 't', 'r', 'e', 'a', 'm', ':', 's', 't', 'r', 'e', 'a', 'm'
     };
-    
-    
-    
+
+
+
     public NioParser(Locale locale) {
         mLocale = locale;
     }
-    
+
     public void setEof() {
         if (mEp != null)
             mEp.setEof();
     }
-    
+
     public List<Element> getCompletedElements() { return mCompletedElements; }
     public void clearCompletedElements() { mCompletedElements.clear(); }
-    
+
     /**
-     * 
+     *
      * just like lhs.indexOf(rhs) for Strings
-     * 
+     *
      * @param lhs
      * @param rhs
      * @return
@@ -309,11 +337,11 @@ public class NioParser implements Application {
     private int byteArrayIndexOf(byte[] lhs, byte[] rhs) {
         if (lhs.length < rhs.length)
             throw new IllegalArgumentException("byteArrayIndexOf: lhs must be larger or same length as rhs (parameters in wrong order?)");
-        
+
         for (int start = 0; start < lhs.length; start++) {
             if (lhs.length - start < rhs.length)
                 return -1;
-            
+
             if (lhs[start] == rhs[0]) {
                 boolean eq = true;
                 for (int i = 1; i < rhs.length; i++) {
@@ -326,39 +354,40 @@ public class NioParser implements Application {
                     return start;
             }
         }
-        return -1; 
+        return -1;
     }
-    
+
     public static class NioParserException extends IOException {
         public NioParserException(String s) {
             mWhy = s;
         }
         private String mWhy;
+
+        @Override
         public String toString() { return mWhy; }
     }
-    
-    public void parseBytes(ByteBuffer bb) throws IOException, ApplicationException  
-    {
+
+    public void parseBytes(IoBuffer bb) throws IOException, ApplicationException {
         if (!bb.hasRemaining())
             return;
-        
-        
+
+
         // TODO, eliminate double-buffering here (make parser ByteBuffer-aware)
         // be careful: parser assumes it can take ownership of byte[], need to modify code
         // to remove this assumption if we convert things to ByteBuffers
         byte[] buf= new byte[bb.remaining()];
         bb.get(buf);
-        
+
         if (SPEW) {
             StringBuilder sb = new StringBuilder();
-            for (byte b : buf) 
+            for (byte b : buf)
                 sb.append((char)b);
             Log.debug("Parsing: "+sb.toString());
         }
-        
-        
+
+
         if (mEp == null) {
-            // append new data into initial buf (create it if necessary) 
+            // append new data into initial buf (create it if necessary)
             if (mInitialBuf != null) {
                 byte[] newInitial = new byte[mInitialBuf.length + buf.length];
                 System.arraycopy(mInitialBuf, 0, newInitial, 0, mInitialBuf.length);
@@ -372,12 +401,12 @@ public class NioParser implements Application {
             if (mInitialBuf != null && mInitialBuf.length >= sXMLPrologBytes.length) {
                 int index = byteArrayIndexOf(mInitialBuf, sXMLPrologBytes);
                 if (index >= 0) {
-                    // found <?xml> part                    
+                    // found <?xml> part
                     int endIdx = byteArrayIndexOf(mInitialBuf, sXMLPrologEndBytes);
                     if (endIdx > 0) {
                         if (endIdx <= index) {
                             StringBuilder sb = new StringBuilder();
-                            for (byte b : mInitialBuf) 
+                            for (byte b : mInitialBuf)
                                 sb.append((char)b);
                             throw new NioParserException("Garbage at beginning of stream: \""+sb.toString()+"\"");
                         } else {
@@ -395,7 +424,7 @@ public class NioParser implements Application {
                         }
                     }
                 } else if ((index = byteArrayIndexOf(mInitialBuf, sStreamStartBytes)) >= 0) {
-                    // found a <stream:stream part 
+                    // found a <stream:stream part
                     int leftoverLen = mInitialBuf.length-index;
                     Log.info("Handshaking complete for client");
                     byte[] leftover = new byte[mInitialBuf.length - index];
@@ -406,11 +435,11 @@ public class NioParser implements Application {
                     mEp.parseContent(false, true);
                 }
             }
-                
+
             // sanity check
             if (mEp == null && mInitialBuf != null && mInitialBuf.length > 2048) {
                 StringBuilder sb = new StringBuilder();
-                for (byte b : mInitialBuf) 
+                for (byte b : mInitialBuf)
                     sb.append((char)b);
                 mInitialBuf = null;
                 throw new NioParserException("Invalid handshake at beginning of stream: \""+sb.toString()+"\"");
