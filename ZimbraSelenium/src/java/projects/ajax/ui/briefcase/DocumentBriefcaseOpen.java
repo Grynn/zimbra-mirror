@@ -1,7 +1,6 @@
 package projects.ajax.ui.briefcase;
 
 import projects.ajax.ui.AppAjaxClient;
-import projects.ajax.ui.briefcase.DocumentBriefcaseEdit.Locators;
 import framework.core.ClientSessionFactory;
 import framework.items.DocumentItem;
 import framework.items.IItem;
@@ -10,21 +9,21 @@ import framework.ui.AbsForm;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 
-public class DocumentBriefcaseNew extends AbsForm {
+public class DocumentBriefcaseOpen extends AbsForm {
 	
 	public static class Locators {		
-		public static final String zFrame = "css=iframe[id='DWT10']";
-		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT9_left_icon']";
+		public static final String zFrame = "css=iframe[id='DWT9']";
+		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT8_left_icon']";
 		public static final String zBodyField = "css=body"; 
-		public static final String zNameField = "css=[id^=DWT4] [input$=]"; 	
-		public static final String zEditNameField = "css=[class=DwtInputField] [input$=]"; 
+		public static final String zDocumentBodyField = "css=div#zdocument"; 
+		public static final String zNameField = "css=[class=DwtInputField] [input$=]"; 
 	}
 	
 	public static String pageTitle;
 	
-	public DocumentBriefcaseNew(AbsApplication application) {
+	public DocumentBriefcaseOpen(AbsApplication application) {
 		super(application);		
-		logger.info("new " + DocumentBriefcaseNew.class.getCanonicalName());	
+		logger.info("new " + DocumentBriefcaseEdit.class.getCanonicalName());	
 	}
 
 	
@@ -35,27 +34,31 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	public void typeDocumentText(String text) throws HarnessException {
 		ClientSessionFactory.session().selenium().selectFrame(Locators.zFrame);
-		//ClientSessionFactory.session().selenium().selectFrame("css=iframe[id='DWT10',class='ZDEditor']");
-		//ClientSessionFactory.session().selenium().type("xpath=(//html/body)",text);
+		//ClientSessionFactory.session().selenium().selectFrame("css=iframe[id='DWT9',class='ZDEditor']");
+		//ClientSessionFactory.session().selenium().type("xpath=(//html/body)","fghjghj");
 		if(sIsElementPresent(Locators.zBodyField)){
 			ClientSessionFactory.session().selenium().type(Locators.zBodyField,text);			
+		}		
+	}
+	
+	public String retriveDocumentText() throws HarnessException {
+		//ClientSessionFactory.session().selenium().selectFrame(Locators.zFrame);
+		//ClientSessionFactory.session().selenium().selectFrame("css=iframe[id='DWT9',class='ZDEditor']");
+		String text = "";
+		if(sIsElementPresent(Locators.zDocumentBodyField)){
+			text = ClientSessionFactory.session().selenium().getText(Locators.zDocumentBodyField);
 		}	
+		return text;
 	}
 	
 	public void typeDocumentName(String text) throws HarnessException {
-		this.zSelectWindow("Zimbra Docs");
 		if(ClientSessionFactory.session().selenium().isElementPresent(Locators.zNameField))
 			sType(Locators.zNameField, text);	
-	}
-		
-	public void editDocumentName(DocumentItem docItem) throws HarnessException {
-		if(ClientSessionFactory.session().selenium().isElementPresent(Locators.zEditNameField))
-			sType(Locators.zEditNameField, docItem.getDocName());	
-	}
+	}	
 	
 	@Override
 	public void zFill(IItem item) throws HarnessException {
-		logger.info("DocumentBriefcaseNew.fill(ZimbraItem)");
+		logger.info("DocumentBriefcaseEdit(ZimbraItem)");
 		logger.info(item.prettyPrint());
 
 		// Make sure the item is a DocumentItem
@@ -74,7 +77,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 	
 	@Override
 	public void zSubmit() throws HarnessException {
-		logger.info("DocumentBriefcaseNew.SaveAndClose()");
+		logger.info("DocumentBriefcaseEdit.SaveAndClose()");
 		
 		// Look for "Save & Close"
 		if(!this.sIsElementPresent(Locators.zSaveAndCloseIconBtn))
@@ -96,6 +99,7 @@ public class DocumentBriefcaseNew extends AbsForm {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me");
+		// TODO Auto-generated method stub
+		return false;
 	}	
 }

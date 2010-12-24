@@ -16,10 +16,10 @@ import framework.util.ZAssert;
 import framework.util.ZimbraAccount;
 import framework.util.ZimbraSeleniumProperties;
 
-public class EditDocument extends AjaxCommonTest {
+public class OpenDocument extends AjaxCommonTest {
 
-	public EditDocument() {
-		logger.info("New " + EditDocument.class.getCanonicalName());
+	public OpenDocument() {
+		logger.info("New " + OpenDocument.class.getCanonicalName());
 
 		super.startingPage = app.zPageBriefcase;
 
@@ -27,111 +27,8 @@ public class EditDocument extends AjaxCommonTest {
 
 	}
 
-	@Test(description = "Create document through SOAP - edit name & verify through GUI", groups = { "smoke" })
-	public void EditDocument_01() throws HarnessException {
-
-		// Create document item
-		DocumentItem document = new DocumentItem();
-
-		ZimbraAccount account = app.zGetActiveAccount();
-		String briefcaseFolderId = document.GetBriefcaseIdUsingSOAP(account);
-
-		account
-				.soapSend("<SaveDocumentRequest requestId='0' xmlns='urn:zimbraMail'>"
-						+ "<doc name='"
-						+ document.getDocName()
-						+ "' l='"
-						+ briefcaseFolderId
-						+ "' ct='application/x-zimbra-doc'>"
-						+ "<content>&lt;html>&lt;body>"
-						+ document.getDocText()
-						+ "&lt;/body>&lt;/html></content>"
-						+ "</doc>"
-						+ "</SaveDocumentRequest>");
-
-		// Select Briefcase tab
-		SleepUtil.sleepSmall();
-		app.zPageBriefcase.zNavigateTo();
-
-		// ClientSessionFactory.session().selenium().refresh();
-		// refresh briefcase page
-		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
-
-		// Click on created document
-		SleepUtil.sleepLong();
-
-		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
-				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
-			app.zPageBriefcase
-					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
-							+ document.getDocName() + ")");
-		}
-
-		// Click on Edit document icon in toolbar
-		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase
-				.zToolbarPressButton(Button.B_EDIT_FILE);
-
-		// Select edit document window
-		SleepUtil.sleepLong();
-		String windowName = document.getDocName();
-		try {
-			documentBriefcaseEdit.zSelectWindow(windowName);
-
-			// if name field appears in the toolbar then document page is opened
-			int i = 0;
-			for(; i < 90; i++){
-				if (documentBriefcaseEdit.sIsElementPresent("//*[@id='DWT2_item_1']")) {
-					break;
-				}
-				SleepUtil.sleepSmall();
-			}
-			
-			if (!documentBriefcaseEdit.sIsVisible("//*[@id='DWT2_item_1']") ) {
-				throw new HarnessException("could not open an edit file page");
-			}
-		// Fill out the document with the new data
-		document.setDocName("name" + ZimbraSeleniumProperties.getUniqueString());
-		
- 		documentBriefcaseEdit.typeDocumentName(document.getDocName());
-
-		// Save and close
-		documentBriefcaseEdit.zSubmit();
-		} 
-		finally {
-			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");			
-		}
-		
-		// ClientSessionFactory.session().selenium().refresh();
-		// refresh briefcase page
-		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
-
-		// Verify document was saved with new data
-		SleepUtil.sleepLong();
-
-		String name = "";
-		if (app.zPageBriefcase.sIsElementPresent("css=[id='zl__BDLV__rows']")
-				&& app.zPageBriefcase.sIsVisible("css=[id='zl__BDLV__rows']")) {
-			name = app.zPageBriefcase
-					.sGetText("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
-							+ document.getDocName() + ")");
-		}
-
-		ZAssert.assertStringContains(name, document.getDocName(),
-				"Verify document name through GUI");
-
-		/*
-		 * //name =ClientSessionFactory.session().selenium().getText(
-		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div[id^=zlif__BDLV__]"
-		 * );//ClientSessionFactory.session().selenium().isElementPresent(
-		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto']>div:contains[id*='zlif__BDLV__']"
-		 * );//ClientSessionFactory.session().selenium().isElementPresent(
-		 * "css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] div:contains('name')"
-		 * );
-		 */
-	}
-
 	@Test(description = "Create document through SOAP - edit text & verify through GUI", groups = { "smoke" })
-	public void EditDocument_02() throws HarnessException {
+	public void OpenDocument_01() throws HarnessException {
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
@@ -169,7 +66,7 @@ public class EditDocument extends AjaxCommonTest {
 					.zClick("css=div[id='zl__BDLV__rows'][class='DwtListView-Rows'] td[width='auto'] div:contains("
 							+ document.getDocName() + ")");
 		}
-
+/*
 		// Click on Edit document icon in toolbar
 		DocumentBriefcaseEdit documentBriefcaseEdit = (DocumentBriefcaseEdit) app.zPageBriefcase
 				.zToolbarPressButton(Button.B_EDIT_FILE);
@@ -206,31 +103,11 @@ public class EditDocument extends AjaxCommonTest {
 		finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");			
 		}
-
+*/
 		// ClientSessionFactory.session().selenium().refresh();
 		// refresh briefcase page
 		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
-		
-		// Verify document name & text through SOAP
-		app.zGetActiveAccount().soapSend(
 
-		"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
-
-		"<query>" + document.getDocName() + "</query>" +
-
-		"</SearchRequest>");
-
-		String name = app.zGetActiveAccount().soapSelectValue("//mail:doc",
-				"name");
-		String text = app.zGetActiveAccount().soapSelectValue("//mail:doc",
-		"fr").trim();
-
-		ZAssert.assertEquals(document.getDocName(), name,
-				" Verify document name through SOAP");
-		ZAssert.assertEquals(document.getDocText(), text,
-		" Verify document text through SOAP");
-		
-/*
 		// Verify document was saved with new data
 		SleepUtil.sleepLong();
 
@@ -249,7 +126,7 @@ public class EditDocument extends AjaxCommonTest {
 		// Select document opened in a separate window
 		SleepUtil.sleepLong();
 		
-		windowName = document.getDocName();
+		String windowName = document.getDocName();
 		String text = "";
 		try {
 			documentBriefcaseOpen.zSelectWindow(windowName);
@@ -280,7 +157,6 @@ public class EditDocument extends AjaxCommonTest {
 		
 		ZAssert.assertEquals(text, document.getDocText(),
 				"Verify document name through GUI");
-*/
 		
 		/*
 		 * //name =ClientSessionFactory.session().selenium().getText(

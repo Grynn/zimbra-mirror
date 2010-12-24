@@ -106,6 +106,7 @@ public class Button {
 	//Briefcase buttons
 	public static final Button B_UPLOAD_FILE = new Button("B_UPLOAD_FILE");
 	public static final Button B_EDIT_FILE = new Button("B_EDIT_FILE");
+	public static final Button B_OPEN_IN_SEPARATE_WINDOW = new Button("B_OPEN_IN_SEPARATE_WINDOW");
 	
     //Addressbook button
 	public static final Button B_EDIT = new Button("zb__CNS__EDIT");

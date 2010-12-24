@@ -12,8 +12,9 @@ import framework.util.SleepUtil;
 public class DocumentBriefcaseEdit extends AbsForm {
 	
 	public static class Locators {		
+		public static final String zFrame = "css=iframe[id='DWT9']";
 		public static final String zSaveAndCloseIconBtn = "//*[@id='DWT8_left_icon']";
-		public static final String zBodyField = "css=[id=DWT12][html$=][body$=]"; 
+		public static final String zBodyField = "css=body"; 
 		public static final String zNameField = "css=[class=DwtInputField] [input$=]"; 
 	}
 	
@@ -31,10 +32,23 @@ public class DocumentBriefcaseEdit extends AbsForm {
 	}
 
 	public void typeDocumentText(String text) throws HarnessException {
-		if(ClientSessionFactory.session().selenium().isElementPresent(Locators.zBodyField)){
-			((AppAjaxClient)MyApplication).zKeyboard.zTypeCharacters(text);			
-		}
+		ClientSessionFactory.session().selenium().selectFrame(Locators.zFrame);
+		//ClientSessionFactory.session().selenium().selectFrame("css=iframe[id='DWT9',class='ZDEditor']");
 		//ClientSessionFactory.session().selenium().type("xpath=(//html/body)",text);
+		if(sIsElementPresent(Locators.zBodyField)){
+			ClientSessionFactory.session().selenium().type(Locators.zBodyField,text);			
+		}		
+	}
+	
+	public String retriveDocumentText() throws HarnessException {
+		ClientSessionFactory.session().selenium().selectFrame(Locators.zFrame);
+		//ClientSessionFactory.session().selenium().selectFrame("css=iframe[id='DWT9',class='ZDEditor']");
+		String text = "";
+		if(sIsElementPresent(Locators.zBodyField)){
+			text = ClientSessionFactory.session().selenium().getText(Locators.zBodyField);
+			//ClientSessionFactory.session().selenium().getText("xpath=(//html/body)");
+		}	
+		return text;
 	}
 	
 	public void typeDocumentName(String text) throws HarnessException {
@@ -56,7 +70,7 @@ public class DocumentBriefcaseEdit extends AbsForm {
 		DocumentItem docItem = (DocumentItem)item;
 		
 		// Fill out the form
-		//typeDocumentText(docItem.getDocText());
+		typeDocumentText(docItem.getDocText());
 		typeDocumentName(docItem.getDocName());	
 	}
 

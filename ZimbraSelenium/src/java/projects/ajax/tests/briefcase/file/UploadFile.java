@@ -22,7 +22,7 @@ public class UploadFile extends AjaxCommonTest {
 
 	}
 
-	@Test(description = "Upload file through SOAP - verify through SOAP", groups = { "sanity" })
+	@Test(description = "Upload file through SOAP - verify through SOAP", groups = { "smoke" })
 	public void UploadFile_01() throws HarnessException {
 
 		// Create document item

@@ -29,6 +29,7 @@ public class PageBriefcase extends AbsTab {
 		public static final String zNewMenuLeftIconBtn = "id=zb__BDLV__NEW_MENU_left_icon";
 		public static final String zUploadFileIconBtn = "id=zb__BDLV__NEW_FILE_left_icon";
 		public static final String zEditFileIconBtn = "id=zb__BDLV__EDIT_FILE_left_icon";
+		public static final String zOpenFileInSeparateWindowIconBtn = "id=zb__BDLV__NEW_BRIEFCASE_WIN_left_icon";
 		public static final String zDeleteIconBtn = "id=zb__BCD__DELETE_left_icon";
 		public static final String zDeleteBtn = "id=zb__BCD__DELETE";
 		public static final String zMoveItemIconBtn = "id=zb__BCD__MOVE_left_icon";
@@ -156,16 +157,25 @@ public class PageBriefcase extends AbsTab {
 			locator = Locators.zNewMenuLeftIconBtn;
 			// Click it
 			this.zClick(locator);
-			SleepUtil.sleepVeryLong();
+			SleepUtil.sleepLong();
 			try {
 				zSelectWindow(newPageTitle);
 				// if name field appears in the toolbar then document page is
 				// opened
-				if (!sIsElementPresent("//*[@id='DWT3_item_1']")) {
-					throw new HarnessException("could not open a new page");
+				int i = 0;
+				for (; i < 30; i++) {
+					if (sIsElementPresent("//*[@id='DWT3_item_1']")) {
+						break;
+					}
+					SleepUtil.sleepSmall();
+				}
+
+				if (!sIsVisible("//*[@id='DWT3_item_1']")) {
+					throw new HarnessException("could not open a new file page");
 				} else {
 					DocumentBriefcaseNew.pageTitle = newPageTitle;
 				}
+		
 				page = new DocumentBriefcaseNew(this.MyApplication);
 				return (page);
 			} catch (Exception ex) {
@@ -189,6 +199,14 @@ public class PageBriefcase extends AbsTab {
 			}
 			locator = Locators.zEditFileIconBtn;	
 			page = new DocumentBriefcaseEdit(this.MyApplication);
+		} else if (button == Button.B_OPEN_IN_SEPARATE_WINDOW) {
+			// Check if the button is visible
+			String attrs = sGetAttribute("css=div[id='zb__BDLV__NEW_BRIEFCASE_WIN']@style");
+			if (!attrs.contains("visible")) {
+				throw new HarnessException(button + " not visible " + attrs);
+			}
+			locator = Locators.zOpenFileInSeparateWindowIconBtn;	
+			page = new DocumentBriefcaseOpen(this.MyApplication);
 		} else if (button == Button.B_MOVE) {
 
 			// Check if the button is enabled
