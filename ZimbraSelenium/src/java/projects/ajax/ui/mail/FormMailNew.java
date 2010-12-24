@@ -43,7 +43,7 @@ public class FormMailNew extends AbsForm {
 		public static final String zToField				= "css=[id^=zv__COMPOSE][id$=_to_control]";
 		public static final String zCcField				= "css=[id^=zv__COMPOSE][id$=_cc_control]";
 		public static final String zBccField			= "css=[id^=zv__COMPOSE][id$=_bcc_control]";
-		public static final String zSubjectField		= "css=[id^=zv__COMPOSE][id$=_subject_control]";
+		public static final String zSubjectField		= "css=div[id^=zv__COMPOSE] input[id$=_subject_control]";
 		
 	}
 
@@ -403,7 +403,21 @@ public class FormMailNew extends AbsForm {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me");
+		logger.info(myPageName() + " zIsActive()");
+		
+		// Look for the div
+		String locator = "css=div[id^='ztb__COMPOSE']";
+		
+		if ( !this.sIsElementPresent(locator) ) {
+			return (false);	
+		}
+		
+		if ( !this.zIsVisiblePerPosition(locator, 150, 80) ) {
+			return (false);
+		}
+		
+		logger.info(myPageName() + " zIsActive() = true");
+		return (true);
 	}
 
 }

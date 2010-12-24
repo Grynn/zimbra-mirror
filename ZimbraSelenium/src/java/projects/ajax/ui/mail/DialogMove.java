@@ -50,7 +50,8 @@ public class DialogMove extends AbsDialog {
 		return (this.getClass().getName());
 	}
 
-	public boolean zIsVisible() throws HarnessException {
+	@Override
+	public boolean zIsActive() throws HarnessException {
 		logger.info(myPageName() + " zIsVisible()");
 
 		String locator = "id="+ Locators.zDialogId;
@@ -175,11 +176,6 @@ public class DialogMove extends AbsDialog {
 		
 	}
 
-
-	@Override
-	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me");
-	}
 
 	
 

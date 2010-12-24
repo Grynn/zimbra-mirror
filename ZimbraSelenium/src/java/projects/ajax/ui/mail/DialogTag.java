@@ -39,12 +39,6 @@ public class DialogTag extends AbsDialog {
 		super(application);
 	}
 	
-	public boolean isActive() {
-		
-		return ( this.sIsElementPresent(Locators.zTagDialogId) );
-		
-	}
-	
 	public void zSetTagName(String name) throws HarnessException {
 		logger.info(myPageName() + " zSetTagName("+ name +")");
 
@@ -128,7 +122,7 @@ public class DialogTag extends AbsDialog {
 
 	@Override
 	public boolean zIsActive() throws HarnessException {
-		throw new HarnessException("implement me");
+		return ( this.sIsElementPresent(Locators.zTagDialogId) );
 	}
 
 

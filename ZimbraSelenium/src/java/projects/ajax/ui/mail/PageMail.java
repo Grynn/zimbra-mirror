@@ -263,14 +263,7 @@ public class PageMail extends AbsTab {
 			// Create the page
 			page = new FormMailNew(this.MyApplication);
 			
-			// Make sure it opens
-			for(int i = 0; i < 10; i++) {
-				if ( ((FormMailNew)page).zIsVisible() )
-					break;
-				SleepUtil.sleep(1000);
-			}
-			
-			return (page);
+			// FALL THROUGH
 			
 		} else if ( button == Button.B_GETMAIL ) {
 			
@@ -313,14 +306,8 @@ public class PageMail extends AbsTab {
 			this.zClick(locator);
 
 			page = new DialogMove(MyApplication);
-			
-			for(int i = 0; i < 10; i++) {
-				if ( ((DialogMove)page).zIsVisible() )
-					break;
-				SleepUtil.sleep(1000);
-			}
-			
-			return (page);
+
+			// FALL THROUGH
 			
 		} else if ( button == Button.B_PRINT ) {
 			
@@ -435,6 +422,14 @@ public class PageMail extends AbsTab {
 		
 		// Click it
 		this.zClick(locator);
+		
+		// If page was specified, make sure it is active
+		if ( page != null ) {
+			
+			// This function (default) throws an exception if never active
+			page.zWaitForActive();
+			
+		}
 
 		return (page);
 	}
@@ -562,6 +557,12 @@ public class PageMail extends AbsTab {
 				this.zClick(optionLocator);
 				SleepUtil.sleepSmall();
 
+			}
+			
+			// If we click on pulldown/option and the page is specified, then
+			// wait for the page to go active
+			if ( page != null ) {
+				page.zWaitForActive();
 			}
 			
 		}
