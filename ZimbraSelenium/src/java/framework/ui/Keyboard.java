@@ -37,7 +37,8 @@ public class Keyboard {
 	 * @throws HarnessException
 	 */
 	public void zTypeKeyEvent(int keyEvent) throws HarnessException {
-		
+		logger.info("zTypeKeyEvent("+ keyEvent +")");
+
 		RobotKeyboard keyboard = new RobotKeyboard();
 		keyboard.doType(keyEvent);
 		

@@ -24,7 +24,7 @@ public class MoveMessage extends AjaxCommonTest {
 
 		// Check if the "Move Dialog is still open
 		DialogMove dialog = new DialogMove(app);
-		if ( dialog.zIsVisible() ) {
+		if ( dialog.zIsActive() ) {
 			logger.warn(dialog.myPageName() +" was still active.  Cancelling ...");
 			dialog.zClickButton(Button.B_CANCEL);
 		}
