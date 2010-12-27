@@ -950,6 +950,10 @@ public class BeanUtils {
         return ZFolderBean.getStyleColor(Color.fromString(color), View.fromString(view));
     }
 
+    public static String getFolderRgbColor(String color, String view) throws ServiceException {
+        return ZFolderBean.getRgbColor(Color.fromString(color), View.fromString(view));
+    }
+
     public static boolean actionSet(Map param, String action) {
         return param.containsKey(action) || param.containsKey(action+".x");
     }
@@ -1385,6 +1389,26 @@ public class BeanUtils {
                 return true;
         }
         return false;
+    }
+
+    /**
+     * Lightens the hex color string by a fraction of 0.3
+     */
+    public static String lightenColor(String color) {
+        java.awt.Color col = java.awt.Color.decode(color);
+        String retColor = "#";
+        int []rgb = new int[3];
+
+        rgb[0] = col.getRed();
+        rgb[1] = col.getGreen();
+        rgb[2] = col.getBlue();
+
+        for(int index = 0; index < 3 ;index ++)
+        {
+            rgb[index] = (int)Math.max(0, Math.min(255, rgb[index] + (255 - rgb[index])*0.3));
+            retColor += Integer.toHexString(rgb[index]);
+        }
+        return retColor;
     }
     
     public static boolean getIsMyCard(PageContext pc, String ids) throws ServiceException, JspException {

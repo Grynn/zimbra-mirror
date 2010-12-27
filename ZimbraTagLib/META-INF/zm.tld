@@ -3457,6 +3457,13 @@
             <rtexprvalue>true</rtexprvalue>
             <type>java.lang.String</type>
         </attribute>
+        <attribute>
+            <description>new folder rgb value of color </description>
+            <name>rgb</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.lang.String</type>
+        </attribute>
     </tag>
 
     <tag>
@@ -7144,6 +7151,12 @@
     </function>
 
     <function>
+        <name>getFolderRgbColor</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String getFolderRgbColor(java.lang.String,java.lang.String)</function-signature>
+    </function>
+
+    <function>
         <name>getPartHtmlContent</name>
         <function-class>com.zimbra.cs.taglib.bean.ZMessageBean</function-class>
         <function-signature>java.lang.String getHtmlContent(com.zimbra.cs.taglib.bean.ZMimePartBean,com.zimbra.cs.taglib.bean.ZMessageBean)</function-signature>
@@ -7428,4 +7441,11 @@
         <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
         <function-signature>boolean isAllowedUA(com.zimbra.cs.taglib.bean.ZUserAgentBean, java.lang.String[])</function-signature>
     </function>
+
+    <function>
+        <name>lightenColor</name>
+        <function-class>com.zimbra.cs.taglib.bean.BeanUtils</function-class>
+        <function-signature>java.lang.String lightenColor(java.lang.String)</function-signature>
+    </function>
+
 </taglib>

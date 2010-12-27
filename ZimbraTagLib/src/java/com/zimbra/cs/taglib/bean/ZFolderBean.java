@@ -125,6 +125,9 @@ public class  ZFolderBean {
         return color.name();
     }
 
+    public String getRgb() {
+        return mFolder.getRgb();
+    }
     /**
      * remote URL (RSS, iCal, etc) this folder syncs to
      * 
@@ -362,6 +365,21 @@ public class  ZFolderBean {
         }
     }
 
+    public String getRgbColor() {
+        return getRgbColor(mFolder.getColor(), mFolder.getDefaultView());
+    }
+
+    public static String getRgbColor(Color color, View view) {
+        int colorIndex = color.getValue();
+        if (color == Color.defaultColor) {
+            if (view == View.contact || view == View.task)
+                colorIndex = Color.gray.getValue();
+            else
+                colorIndex = Color.orange.getValue();
+        }
+        return ZFolder.RGB_COLORS[colorIndex];
+    }
+    
     public String getImage() {
         if (getIsSearchFolder()) {
             return "startup/ImgSearchFolder.png";

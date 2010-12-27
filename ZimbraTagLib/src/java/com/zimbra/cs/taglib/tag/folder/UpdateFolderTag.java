@@ -30,13 +30,14 @@ public class UpdateFolderTag extends ZimbraSimpleTag {
     private String mName;
     private String mParentId;
     private String mFlags;
+    private String mRgb;
 
     public void setId(String id) { mId = id; }
     public void setName(String name) { mName = name; }
     public void setParentid(String parentId) { mParentId = parentId; }
     public void setFlags(String flags) { mFlags = flags; }
     public void setColor(String color) throws ServiceException { mColor = ZFolder.Color.fromString(color); }
-
+    public void setRgb(String rgb) { mRgb = rgb; }
 
     public void doTag() throws JspException, IOException {
         try {
@@ -45,6 +46,7 @@ public class UpdateFolderTag extends ZimbraSimpleTag {
                     StringUtil.isNullOrEmpty(mName) ? null : mName,
                     StringUtil.isNullOrEmpty(mParentId) ? null : mParentId,
                     mColor,
+                    mRgb,
                     mFlags == null ? null : mFlags,
                     null);
         } catch (ServiceException e) {
