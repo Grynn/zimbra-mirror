@@ -1222,13 +1222,13 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                                                                                 {type:_CELLSPACER_},
                                                                                 {type:_DWT_BUTTON_, label:ZaMsg.Previous, width:75, id:"indirectBackButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
                                                                                         onActivate:"ZaAccountMemberOfListView.backButtonHndlr.call(this,event, ZaAccount.A2_indirectMemberList)",
-                                                                                        enabeDisableChecks:[[ZaAccountMemberOfListView.shouldEnableBackButton,ZaAccount.A2_indirectMemberList]],
+                                                                                        enableDisableChecks:[[ZaAccountMemberOfListView.shouldEnableBackButton,ZaAccount.A2_indirectMemberList]],
                                                                                         enableDisableChangeEventSources:[ZaAccount.A2_indirectMemberList+"_offset"]
                                                                             },
                                                                                 {type:_CELLSPACER_},
                                                                                 {type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"indirectFwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
                                                                                         onActivate:"ZaAccountMemberOfListView.fwdButtonHndlr.call(this,event, ZaAccount.A2_indirectMemberList)",
-                                                                                        enabeDisableChecks:[[ZaAccountMemberOfListView.shouldEnableForwardButton,ZaAccount.A2_indirectMemberList]],
+                                                                                        enableDisableChecks:[[ZaAccountMemberOfListView.shouldEnableForwardButton,ZaAccount.A2_indirectMemberList]],
                                                                                         enableDisableChangeEventSources:[ZaAccount.A2_indirectMemberList+"_offset"]
                                                                             },
                                                                                 {type:_CELLSPACER_}
@@ -1310,7 +1310,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
                                                                                 {type:_CELLSPACER_},
                                                                                 {type:_DWT_BUTTON_, label:ZaMsg.Next, width:75, id:"fwdButton", icon:"RightArrow", disIcon:"RightArrowDis",
                                                                                         enableDisableChangeEventSources:[ZaAccount.A2_nonMemberList + "_offset"],
-                                                                                        enableDisableChecks:[ZaAccountMemberOfListView.shouldEnableForwardButton,ZaAccount.A2_nonMemberList],
+                                                                                        enableDisableChecks:[[ZaAccountMemberOfListView.shouldEnableForwardButton,ZaAccount.A2_nonMemberList]],
                                                                                         onActivate:"ZaAccountMemberOfListView.fwdButtonHndlr.call(this,event, ZaAccount.A2_nonMemberList)"                                                  
  
                                                                                 },
