@@ -371,7 +371,8 @@ function(ex, method, params, restartOnError, obj) {
 			}
 			this._showLoginDialog();
 		} catch (ex2) {
-			console.log(ex2.code);
+			if(window.console && window.console.log)
+				console.log(ex2.code);
 		}
 	} 
 	else 

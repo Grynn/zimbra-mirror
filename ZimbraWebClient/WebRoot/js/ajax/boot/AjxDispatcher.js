@@ -257,7 +257,7 @@ AjxDispatcher._continueRequire =
 function(pkg, async, callback, args) {
 	var pkgString = pkg.join(", ");
 	AjxPackage.__log("------------------------------------- Loading package: " + pkgString);
-	if (window.console) { console.log("------------------------------------- Loading package: " + pkgString); }
+	if (window.console && window.console.log) { console.log("------------------------------------- Loading package: " + pkgString); }
 	if (async && callback) {
 		var postLoadCallback = new AjxCallback(null, AjxDispatcher._postLoadCallback, [pkg, true, callback, args]);
 		AjxPackage.require({name:pkg, callback:postLoadCallback});

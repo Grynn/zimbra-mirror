@@ -637,7 +637,8 @@ function(ev) {
                         this._loginDialog.setReloginMode(bReloginMode);
                         this._showLoginDialog(bReloginMode);
                 } catch (ex2) {
-                        console.log(ex2.code);
+			if(window.console && window.console.log)
+                        	console.log(ex2.code);
                 }
                 } else {
                       this._handleException(ex, "ZaAccountListController._chngPwdListenerLauncher", null, false);
