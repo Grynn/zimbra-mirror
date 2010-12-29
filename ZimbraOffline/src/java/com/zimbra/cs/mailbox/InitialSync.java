@@ -331,7 +331,7 @@ public class InitialSync {
                 continue;
             }
             try {
-                syncCalendarItem(id, folderId, true);
+                syncCalendarItem(id, folderId, mailItemType == MailItem.TYPE_APPOINTMENT);
                 if (++counter % 100 == 0) {
                     checkpoint(id);
                 }
