@@ -91,7 +91,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="jars/jython-2.5.1.jar"/>
-	<classpathentry kind="lib" path="jars/guava-r07.jar" sourcepath="jars-src/guava-src-r06.zip">
+	<classpathentry kind="lib" path="jars/guava-r07.jar" sourcepath="jars-src/guava-src-r07.zip">
 		<attributes>
 			<attribute name="javadoc_location" value="jar:platform:/resource/ZimbraCommon/jars-javadoc/guava-r07-javadoc.zip!/"/>
 		</attributes>
