@@ -140,7 +140,7 @@ public class OfflineLC {
         
         // Comma delimited list of installed skins.
         zdesktop_skins = new KnownKey("zdesktop_skins");
-        zdesktop_skins.setDefault("twilight");
+        zdesktop_skins.setDefault("carbon");
         
         // Whether to use redolog.  Default false.
         zdesktop_redolog_enabled = new KnownKey("zdesktop_redolog_enabled");

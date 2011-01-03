@@ -89,7 +89,7 @@
     <value>30000</value>
   </key>
   <key name="zdesktop_skins">
-    <value>twilight,lake,oasis,pebble,smoke,tree</value>
+    <value>carbon,twilight,lake,oasis,pebble,smoke,tree</value>
   </key>
   <key name="zdesktop_volume_compression_threshold">
     <value>131072</value>
