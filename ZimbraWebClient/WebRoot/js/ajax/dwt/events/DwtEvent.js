@@ -143,6 +143,10 @@ DwtEvent.ONSCROLL = "onscroll";
  */
 DwtEvent.ONPASTE = "onpaste";
 
+/**
+ * Browser "oncut" event.
+ */
+DwtEvent.ONCUT = "oncut";
 
 
 // semantic events
