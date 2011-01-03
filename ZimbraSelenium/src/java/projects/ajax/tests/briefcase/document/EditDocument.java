@@ -130,7 +130,7 @@ public class EditDocument extends AjaxCommonTest {
 		 */
 	}
 
-	@Test(description = "Create document through SOAP - edit text & verify through GUI", groups = { "smoke" })
+	@Test(description = "Create document through SOAP - edit text through GUI & verify through SOAP", groups = { "smoke" })
 	public void EditDocument_02() throws HarnessException {
 
 		// Create document item
@@ -212,17 +212,27 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
 		
 		// Verify document name & text through SOAP
-		app.zGetActiveAccount().soapSend(
+		int i = 20;
+		while (i > 0) {
+			SleepUtil.sleepSmall();
+			account.soapSend(
 
-		"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
+					"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
 
-		"<query>" + document.getDocName() + "</query>" +
+					"<query>" + document.getDocName() + "</query>" +
 
-		"</SearchRequest>");
+					"</SearchRequest>");
 
-		String name = app.zGetActiveAccount().soapSelectValue("//mail:doc",
+			if (account.soapSelectValue("//mail:doc","fr") != null)
+				break;
+			i--;
+			if(i == 0)
+			logger.info("after 20 seconds account.soapSelectValue(//mail:doc,fr) is null");
+		}
+		
+		String name = account.soapSelectValue("//mail:doc",
 				"name");
-		String text = app.zGetActiveAccount().soapSelectValue("//mail:doc",
+		String text = account.soapSelectValue("//mail:doc",
 		"fr").trim();
 
 		ZAssert.assertEquals(document.getDocName(), name,
