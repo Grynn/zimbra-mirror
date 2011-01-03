@@ -100,11 +100,11 @@ function(msgStr, style, title) {
 	title = title || DwtMessageDialog.TITLE[style];
 	this.setTitle(title);
 	if (msgStr) {
-		var html = [];
+        var html = [];
 		var i = 0;
 		html[i++] = "<table cellspacing=0 cellpadding=0 border=0 width=100% height=100%><tr><td valign='top'>";
-		html[i++] = AjxImg.getImageHtml(DwtMessageDialog.ICON[style]);
-		html[i++] = "</td><td class='DwtMsgArea'>";
+		html[i++] =  AjxImg.getImageHtml(DwtMessageDialog.ICON[style], null, "id='" + this._msgCellId + "_Image'");
+		html[i++] = "</td><td class='DwtMsgArea' id='" + this._msgCellId +"_Msg'>";
 		html[i++] = msgStr;
 		html[i++] = "</td></tr></table>";
 		this._msgCell.innerHTML = html.join("");
