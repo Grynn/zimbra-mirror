@@ -50,6 +50,8 @@ BirthdayReminderZimlet.REMINDER_TYPE_DAYS_BEFORE= "DAYS_BEFORE";
  */
 BirthdayReminderZimlet.REMINDER_TYPE_WEEKS_BEFORE= "WEEKS_BEFORE";
 
+BirthdayReminderZimlet.RE_YMD = /^(19|20)\d\d[- \/.](0[1-9]|1[012])[- \/.](0[1-9]|[12][0-9]|3[01])$/;
+
 
 /**
  *  Initialize
@@ -127,9 +129,9 @@ BirthdayReminderZimlet.prototype._saveAndAddHandler = function() {
 			}
 		}
 	}
-	if(birthday != "") {//test for yyyy-mm-dd format
-		var test= /\d{4}-\d{2}-\d{2}/.test(birthday);
-		if(!test) {
+	if (birthday != "") {//test for yyyy-mm-dd format
+		var test = BirthdayReminderZimlet.RE_YMD.test(birthday);
+		if (!test) {
 			appCtxt.getAppController().setStatusMsg({msg:this._birthdayReminderZimlet.getMessage("BirthdayReminder_formatIncorrect"), level:ZmStatusView.LEVEL_WARNING});
 			return;
 		}
@@ -395,13 +397,13 @@ function(obj, apptType) {
 /**
  * Takes months, day and year info and returns timezone specific date format.
  * 
- * @param {string} month    the month
  * @param {string} day  	the day
+ * @param {string} month    the month
  * @param {string} year		the year
  * @return {string}	timezone specific date format
  */
 BirthdayReminderZimlet.prototype._normalizeDate =
-function(month, day, year) {
+function(day, month, year) {
 	var fString = [];
 	var ds = I18nMsg.formatDateShort.toLowerCase();
 	var arry = [];
