@@ -3015,8 +3015,6 @@ function(ev, eventType, obj, mouseEv) {
 	if (!tn || (tn != "input" && tn != "textarea" && tn != "a")) {
 		mouseEv._stopPropagation = true;
 		mouseEv._returnValue = false;
-		if (DwtMouseEventCapture.getId() != "DwtControl")
-			DwtMouseEventCapture.runHandler(eventType, ev); // DwtMouseEventCaptures may still be interested in the event. DO NOT run handlers that may point back to DwtControl.__mouseEvent
 	} else {
 		mouseEv._stopPropagation = false;
 		mouseEv._returnValue = true;

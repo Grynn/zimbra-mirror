@@ -69,6 +69,7 @@ DwtKeyboardMgr = function(shell) {
 	this.__keyTimeout = 750;
 	this.__currTabGroup = null;
 	this.__currDefaultHandler = null;
+	this._evtMgr = new AjxEventMgr();
 };
 
 /**@private*/
@@ -397,6 +398,28 @@ function() {
 };
 
 /**
+ * Adds a global key event listener.
+ *
+ * @param {constant}	ev			key event type
+ * @param {AjxListener}	listener	listener to notify
+ */
+DwtKeyboardMgr.prototype.addListener =
+function(ev, listener) {
+	this._evtMgr.addListener(ev, listener);
+};
+
+/**
+ * Removes a global key event listener.
+ *
+ * @param {constant}	ev			key event type
+ * @param {AjxListener}	listener	listener to remove
+ */
+DwtKeyboardMgr.prototype.removeListener =
+function(ev, listener) {
+	this._evtMgr.removeListener(ev, listener);
+};
+
+/**
  * @private
  */
 DwtKeyboardMgr.prototype.__initKeyboardHandling =
@@ -554,6 +577,9 @@ function(ev) {
 	ev = DwtUiEvent.getEvent(ev);
 //	DBG.println("kbnav", "keyup: " + ev.keyCode);
 
+	var kbMgr = appCtxt.getKeyboardMgr();
+	kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYUP, ev);
+
 	// clear saved Gecko key
 	DwtKeyboardMgr.__geckoKeyCode = null;
 	if (AjxEnv.isMac && AjxEnv.isGeckoBased && ev.keyCode == 0) {
@@ -570,6 +596,10 @@ DwtKeyboardMgr.__keyPressHdlr =
 function(ev) {
 	ev = DwtUiEvent.getEvent(ev);
 //	DBG.println("kbnav", "keypress: " + (ev.keyCode || ev.charCode));
+
+	var kbMgr = appCtxt.getKeyboardMgr();
+	kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYPRESS, ev);
+
 	if (DwtKeyboardMgr.__geckoKeyCode && AjxEnv.isGeckoBased) {
 //		DBG.println("kbnav", "Gecko: calling keydown on keypress event");
 		return DwtKeyboardMgr.__keyDownHdlr(ev);
@@ -683,10 +713,12 @@ function(ev) {
 
 	try {
 
+	var kbMgr = appCtxt.getKeyboardMgr();
+	kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYDOWN, ev);
+
 	if (DwtKeyboardMgr.__shell._blockInput) { return false; }
 	ev = DwtUiEvent.getEvent(ev, this);
 //	DBG.println("kbnav", [ev.type, ev.keyCode, ev.charCode, ev.which].join(" / "));
-	var kbMgr = DwtKeyboardMgr.__shell.getKeyboardMgr();
 	if (kbMgr && !kbMgr.isEnabled()) { return true; }  // Allow key events to propagate when keyboard manager is disabled (to avoid taking over browser shortcuts). Bugzilla #45469.
 	if (!kbMgr || !kbMgr.__checkStatus()) { return false; }
 	var kev = DwtShell.keyEvent;
@@ -825,10 +857,6 @@ function(ev) {
 DwtKeyboardMgr.prototype.__dispatchKeyEvent = 
 function(hdlr, ev, forceActionCode) {
 
-	if (hdlr && hdlr.handleAnyKey) {
-		/* Let a controller take action on a key press without determining if it should be handled (so we don't return from this function too soon) */
-		hdlr.handleAnyKey(ev);
-	}
 	if (hdlr && hdlr.handleKeyEvent) {
 		var handled = hdlr.handleKeyEvent(ev);
 		return handled ? DwtKeyboardMgr.__KEYSEQ_HANDLED : DwtKeyboardMgr.__KEYSEQ_NOT_HANDLED;

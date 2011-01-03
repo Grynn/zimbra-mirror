@@ -87,28 +87,31 @@ DwtIframe.prototype.getDocument = function() {
 DwtIframe.prototype._rawEventHandler = function(ev) {
 	var iframe = this.getIframe();
 	var win = iframe.contentWindow;
-	if (AjxEnv.isIE)
+	if (AjxEnv.isIE) {
 		ev = win.event;
+	}
 
 	var dw;
 	// This probably sucks.
-	if (/mouse|context|click|select/i.test(ev.type))
+	if (/mouse|context|click|select/i.test(ev.type)) {
 		dw = new DwtMouseEvent(true);
-	else
+	}
+	else {
 		dw = new DwtUiEvent(true);
+	}
 	dw.setFromDhtmlEvent(ev);
 
-	// If we have a mousedown event, then let DwtMenu know. This is a nasty hack that we have to do since
-	// the iFrame is in a different document etc
-	if (ev.type == "mousedown" && DwtMenu && DwtMenu._outsideMouseDownListener) {
-		DwtMenu._outsideMouseDownListener(ev);
+	// Notify since the manager doesn't know about events in the iframe's document
+	if (ev.type == "mousedown" || ev.type == "mousewheel") {
+		DwtOutsideMouseEventMgr.forwardEvent(ev);
 	}
 
 	// HACK! who would have know.. :-(
 	// perhaps we need a proper mapping
 	var type = dw.type.toLowerCase();
-	if (!/^on/.test(type))
+	if (!/^on/.test(type)) {
 		type = "on" + type;
+	}
 	// translate event coordinates
 	var pos = this.getLocation();
 

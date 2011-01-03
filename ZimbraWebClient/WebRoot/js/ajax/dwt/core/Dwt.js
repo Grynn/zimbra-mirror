@@ -350,6 +350,23 @@ function(domElement, attrName) {
 	return domElement;
 };
 
+/**
+ * Returns true if el2 is an ancestor (in the parent chain) of el1.
+ *
+ * @param {DOMElement}	el1
+ * @param {DOMElement}	el2
+ */
+Dwt.isAncestor =
+function(el1, el2) {
+	var el = el1;
+	while (el) {
+		el = el.parentNode;
+		if (el == el2) {
+			return true;
+		}
+	}
+	return false;
+};
 
 Dwt.setHandler =
 function(htmlElement, event, func) {

@@ -124,13 +124,8 @@ DwtMenu = function(params) {
 	this._popdownActionId = -1;
 	this._popupAction = new AjxTimedAction(this, this._doPopup);
 	this._popupActionId = -1;
-	
-	if (AjxEnv.isIE) {
-	 	if ((this.parent instanceof DwtMenuItem && this.parent.parent._style == DwtMenu.BAR_STYLE) ||
-	 			!(this.parent instanceof DwtMenuItem)) {
-			this._outsideListener = new AjxListener(null, DwtMenu._outsideMouseDownListener);
-		}
-	}
+
+	this._outsideListener = new AjxListener(null, DwtMenu._outsideMouseDownListener);
 
 	this._menuItemsHaveChecks = false;	
 	this._menuItemsHaveIcons = false;
@@ -138,17 +133,6 @@ DwtMenu = function(params) {
 	this.__currentItem = null;
 	this.__preventMenuFocus = false;
 
-	// The global capture is used to detect mouse down events outside of the
-	// popped up menus and specifically outside of our scope of influence
-	// (particularly when Dwt is being used in existing HTML)
-	this._menuCapObj = new DwtMouseEventCapture({
-		targetObj:this,
-		id:"DwtMenu",
-		mouseDownHdlr:DwtMenu._capMouseDownHdlr,
-		mouseWheelHdlr:DwtMenu._capMouseWheelHdlr,
-		hardCapture:false
-	});
-	
 	// Default menu tab group. Note that we disable application handling of
 	// keyboard shortcuts, since we don't want the view underneath reacting to
 	// keystrokes in the menu.
@@ -1125,35 +1109,24 @@ function(x, y, kbGenerated) {
 	this.setZIndex(zIndex);
 	this._popupActionId = -1;
 	this._isPoppedUp = true;
-	
-	if (AjxEnv.isIE && this._outsideListener) {
-		this.shell._setEventHdlrs([DwtEvent.ONMOUSEDOWN,DwtEvent.ONMOUSEWHEEL]);
-		this.shell.addListener(DwtEvent.ONMOUSEDOWN, this._outsideListener);
-		this.shell.addListener(DwtEvent.ONMOUSEWHEEL, this._outsideListener);
+
+	var omem = appCtxt.getOutsideMouseEventMgr();
+	var omemParams = {
+		id:					"DwtMenu",
+		obj:				this,
+		outsideListener:	this._outsideListener
 	}
+	omem.startListening(omemParams);
 
 	if (!DwtMenu._activeMenu) {
 		DwtMenu._activeMenu = this;
 		DwtMenu._activeMenuUp = true;
-		if (AjxEnv.isIE) {
-			DwtEventManager.addListener(DwtEvent.ONMOUSEDOWN, DwtMenu._outsideMouseDownListener);
-			DwtEventManager.addListener(DwtEvent.ONMOUSEWHEEL, DwtMenu._outsideMouseDownListener);
-		}
 	}
 
 	DwtMenu._activeMenuIds.add(this._htmlElId, null, true);
 	DwtMenu._activeMenuIds.sort();	
 	DwtMenu._activeMenus.add(this, null, true);
-	
-	// Capture events only if we are not a sub-menu. Event capturing is to catch mouse-events outside
-	// of our framework (esp. vital when DWT is being used in existing HTML content)
-	if (!this._menuCapObj.capturing()) {
-		this._menuCapObj.capture();	
-		this._capturing = true;
-	} else {
-		this._capturing = false;
-	}
-	
+
 	// Put our tabgroup in play
 	if (!this.__preventMenuFocus) {
 		DwtShell.getShell(window).getKeyboardMgr().pushTabGroup(this._tabGroup);
@@ -1195,29 +1168,17 @@ function() {
 	
 	this.notifyListeners(DwtEvent.POPDOWN, this);
 
-	if (AjxEnv.isIE && this._outsideListener) {
-		this.shell._setEventHdlrs([DwtEvent.ONMOUSEDOWN,DwtEvent.ONMOUSEWHEEL], true);
-		this.shell.removeListener(DwtEvent.ONMOUSEDOWN, this._outsideListener);
-		this.shell.removeListener(DwtEvent.ONMOUSEWHEEL, this._outsideListener);
-	}
+	var omem = appCtxt.getOutsideMouseEventMgr();
+	omem.stopListening({id:"DwtMenu", obj:this});
 
 	if (DwtMenu._activeMenu == this) {
 		DwtMenu._activeMenu = null;
 		DwtMenu._activeMenuUp = false;
-		if (AjxEnv.isIE) {
-			DwtEventManager.removeListener(DwtEvent.ONMOUSEDOWN, DwtMenu._outsideMouseDownListener);
-			DwtEventManager.removeListener(DwtEvent.ONMOUSEWHEEL, DwtMenu._outsideMouseDownListener);
-		}
 	}
 	DwtMenu._activeMenuIds.remove(this._htmlElId);
 	DwtMenu._activeMenus.remove(this);
 	this._popdownActionId = -1;
 	this._isPoppedUp = false;
-
-	if (this._capturing && (DwtMouseEventCapture.getId() == "DwtMenu")) {
-		this._menuCapObj.release();
-		this._capturing = false;
-	}
 
 	if ((this._style == DwtMenu.POPUP_STYLE || this._style == DwtMenu.DROPDOWN_STYLE) &&
 		this._table.rows.length && this._table.rows[0].cells.length)
@@ -1278,13 +1239,9 @@ function(){
  */
 DwtMenu._outsideMouseDownListener =
 function(ev) {
+
 	if (DwtMenu._activeMenuUp) {
-		// figure out if we are over the menu that is up
 		var menu = DwtMenu._activeMenu;
-		var nearestDwtObj = DwtControl.getTargetControl(ev);
-		if (menu._associatedObj && menu._associatedObj == nearestDwtObj) {
-			return false;
-		}
 
 		// assuming that the active menu is the parent of all other menus
 		// that are up, search through the array of child menu dom IDs as
@@ -1311,31 +1268,14 @@ function(ev) {
 			if (cMenu!= null && cMenu instanceof DwtMenu) cMenu.popdown();
 		} while (cMenu != null) ;
 	}
-	// propagate the event
-	ev._stopPropagation = false;
-	ev._returnValue = true;
-	return true;
-};
-
-DwtMenu._capMouseDownHdlr =
-function(ev) {
-	var menu = DwtMouseEventCapture.getTargetObj();
-	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
-	DwtMenu._outsideMouseDownListener(mouseEv);
-	DwtUiEvent.setBehaviour(ev, false, true);
-	return true;
-};
-
-DwtMenu._capMouseWheelHdlr = function(ev) {
-	return DwtMenu._capMouseDownHdlr(ev);
 };
 
 DwtMenu._stopEvent = function(e) {
 	if (!e) e = window.event;
 	e.cancelBubble = true;
-	if (e.stopPropagation)
+	if (e.stopPropagation) {
 		e.stopPropagation();
+	}
 };
 
 /*

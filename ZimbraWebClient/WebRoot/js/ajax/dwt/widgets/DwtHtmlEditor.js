@@ -165,6 +165,7 @@ function() {
 	} else {
 		try {
 			if (!this._htmlModeInited) {
+				// TODO: potential for a loop here
 				setTimeout(AjxCallback.simpleClosure(this.focus, this), DwtHtmlEditor._INITDELAY);
 				return;
 			}
@@ -1303,12 +1304,12 @@ function(iFrameDoc, name) {
 
 DwtHtmlEditor.prototype._handleEditorEvent =
 function(ev) {
+
 	var retVal = true;
 
-	// If we have a mousedown event, then let DwtMenu know. This is a nasty hack that we have to do since
-	// the iFrame is in a different document etc
-    if (ev.type == "mousedown") {
-		DwtMenu._outsideMouseDownListener(ev);
+	// Notify since the manager doesn't know about events in the editor's document
+	if (ev.type == "mousedown" || ev.type == "mousewheel") {
+	 	DwtOutsideMouseEventMgr.forwardEvent(ev);
 	}
 
 	if (ev.type == "mouseup") {
@@ -1630,8 +1631,9 @@ function(iFrameDoc) {
 		Dwt.enableDesignMode(iFrameDoc, true);
 		// Probably a regression of FF 1.5.0.1/Linux requires us to
 		// reset event handlers here (Zimbra bug: 6545).
- 		if (AjxEnv.isGeckoBased && (AjxEnv.isLinux || AjxEnv.isMac))
+ 		if (AjxEnv.isGeckoBased && (AjxEnv.isLinux || AjxEnv.isMac)) {
  			this._registerEditorEventHandlers(document.getElementById(this._iFrameId), iFrameDoc);
+		}
 	} catch (ex) {
 		// Gecko may take some time to enable design mode..        
 		if (AjxEnv.isGeckoBased || AjxEnv.isSafari) {
