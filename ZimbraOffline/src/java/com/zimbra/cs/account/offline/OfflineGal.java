@@ -173,7 +173,7 @@ public class OfflineGal {
         if (zqr == null)
             return;
 
-        ContactAutoComplete ac = new ContactAutoComplete(mAccount.getId());
+        ContactAutoComplete ac = new ContactAutoComplete(mAccount);
         try {
             while (zqr.hasNext()) {
                 int id = zqr.getNext().getItemId();
