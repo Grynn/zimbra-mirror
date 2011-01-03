@@ -135,7 +135,8 @@
     appCurrentSkin = "${zm:jsEncode(skin)}";
     appExtension   = "${zm:jsEncode(ext)}";
     appDevMode     = ${isDevMode};
-    isTinyMCE      = true;
+    // support for TinyMCE suspended.
+    isTinyMCE      = false;
     window.isScriptErrorOn = ${isScriptErrorOn};
     window.isNotifyDebugOn = ${isNotifyDebugOn};
 </script>
