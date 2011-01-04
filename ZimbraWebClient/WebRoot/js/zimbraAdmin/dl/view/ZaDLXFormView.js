@@ -1335,15 +1335,9 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 					items: [
 					    {type:_SPACER_, height:"5"}, 							
 						//direct member group
-						{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "96%",  //height: 400,
+						{type:_ZALEFT_GROUPER_, numCols:1, label:ZaMsg.Account_DirectGroupLabel,containerCssStyle: "padding-top:5px", width: "100%",  //height: 400,
 							items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
-							   		items: [
-										{type:_OUTPUT_, value:ZaMsg.Account_DirectGroupLabel, cssClass:"RadioGrouperLabel"},
-										{type:_CELLSPACER_}
-									]
-								},
-								{ref: ZaAccount.A2_directMemberList, type: _S_DWT_LIST_, width: "100%", height: 200,
+								{ref: ZaAccount.A2_directMemberList, type: _S_DWT_LIST_, width: "98%", height: 200,
 									cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
 									headerList: directMemberOfHeaderList, defaultColumnSortable: 0,
 									onSelection:ZaDLXFormView.directMemberSelectionListener,
@@ -1382,22 +1376,16 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 						},		
 						{type:_SPACER_, height:"10"},	
 						//indirect member group
-						{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "98%", //colSizes:["auto"], height: "48%",
+						{type:_ZALEFT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.Account_IndirectGroupLabel, containerCssStyle: "padding-top:5px",
 							items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
-							   		items: [
-										{type:_OUTPUT_, value:ZaMsg.Account_IndirectGroupLabel, cssClass:"RadioGrouperLabel"},
-										{type:_CELLSPACER_}
-									]
-								},
-								{ref: ZaAccount.A2_indirectMemberList, type: _S_DWT_LIST_, width: "100%", height: 200,
+								{ref: ZaAccount.A2_indirectMemberList, type: _S_DWT_LIST_, width: "98%", height: 200,
 									cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
 									headerList: indirectMemberOfHeaderList, defaultColumnSortable: 0,
 									onSelection:ZaDLXFormView.indirectMemberSelectionListener,
 									forceUpdate: true 
 								},
 								{type:_SPACER_, height:"5"},
-								{type:_GROUP_, width:"100%", numCols:8, colSizes:[65,10,75,70,70,10,70,10], 
+								{type:_GROUP_, width:"100%", numCols:8, colSizes:[65,10,65,55,75,10,65,10], 
 									items:[
 										{type:_CELLSPACER_},
 										{type:_CELLSPACER_},
@@ -1405,13 +1393,13 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.Previous, id:"indirectBackButton", icon:"LeftArrow", disIcon:"LeftArrowDis",
 											onActivate:"ZaAccountMemberOfListView.backButtonHndlr.call(this,event, ZaAccount.A2_indirectMemberList)", 
-											enabeDisableChecks:[[ZaAccountMemberOfListView.shouldEnableBackButton,ZaAccount.A2_indirectMemberList]],
+											enableDisableChecks:[[ZaAccountMemberOfListView.shouldEnableBackButton,ZaAccount.A2_indirectMemberList]],
 											enableDisableChangeEventSources:[ZaAccount.A2_indirectMemberList+"_offset"]
 									    },								       
 										{type:_CELLSPACER_},
 										{type:_DWT_BUTTON_, label:ZaMsg.Next, id:"indirectFwdButton", icon:"RightArrow", disIcon:"RightArrowDis",	
 											onActivate:"ZaAccountMemberOfListView.fwdButtonHndlr.call(this,event, ZaAccount.A2_indirectMemberList)", 
-											enabeDisableChecks:[[ZaAccountMemberOfListView.shouldEnableForwardButton,ZaAccount.A2_indirectMemberList]],
+											enableDisableChecks:[[ZaAccountMemberOfListView.shouldEnableForwardButton,ZaAccount.A2_indirectMemberList]],
 											enableDisableChangeEventSources:[ZaAccount.A2_indirectMemberList+"_offset"]
 									    },								       
 										{type:_CELLSPACER_}									
@@ -1426,14 +1414,8 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 				{type: _GROUP_, width: "98%", numCols: 1, //colSizes: ["auto", 20],
 					items: [
 					    {type:_SPACER_, height:"5"}, 							
-						{type:_GROUP_, numCols:1, cssClass: "RadioGrouperBorder", width: "96%", //colSizes:["auto"], height: "98%",
+						{type:_ZARIGHT_GROUPER_, numCols:1, width: "100%", label:ZaMsg.Account_NonGroupLabel, containerCssStyle: "padding-top:5px",
 							items:[
-								{type:_GROUP_,  numCols:2, colSizes:["auto", "auto"],
-							   		items: [
-										{type:_OUTPUT_, value:ZaMsg.DL_NonGroupLabel, width: AjxEnv.isIE ? "248px": null, cssClass:"RadioGrouperLabel"},
-										{type:_CELLSPACER_}
-									]
-								},
 								{type:_GROUP_, numCols:3, width:"98%", 
 								   items:[
 										{ref:"query", type:_TEXTFIELD_, width:"100%", cssClass:"admin_xform_name_input",  
@@ -1460,7 +1442,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 									]
 						         },
 						        {type:_SPACER_, height:"5"},
-								{ref: ZaAccount.A2_nonMemberList, type: _S_DWT_LIST_, width: "100%", height: 440,
+								{ref: ZaAccount.A2_nonMemberList, type: _S_DWT_LIST_, width: "98%", height: 440,
 									cssClass: "DLSource", widgetClass: ZaAccountMemberOfListView, 
 									headerList: nonMemberOfHeaderList, defaultColumnSortable: 0,
 									onSelection:ZaDLXFormView.nonmemberSelectionListener,
@@ -1469,7 +1451,7 @@ ZaDLXFormView.myXFormModifier = function(xFormObject, entry) {
 									
 								{type:_SPACER_, height:"5"},	
 								//add action buttons
-								{type:_GROUP_, width:"100%", numCols:8, colSizes:[55,10,65,10,55,10,55,10],
+								{type:_GROUP_, width:"100%", numCols:8, colSizes:[55,10,65,10,65,10,55,10],
 									items: [
 									   {type:_DWT_BUTTON_, label:ZaMsg.DLXV_ButtonAddFromList, 
 										onActivate:"ZaAccountMemberOfListView.addGroups.call(this,event, ZaAccount.A2_nonMemberList)",
