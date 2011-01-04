@@ -1,0 +1,2 @@
+Zimbra-Extension-Class: com.zimbra.cs.security.openid.consumer.OpenIDConsumerExtension
+
