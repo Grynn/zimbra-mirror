@@ -97,6 +97,11 @@ public class EditDocument extends AjaxCommonTest {
 		// Save and close
 		documentBriefcaseEdit.zSubmit();
 		} 
+		catch (Exception ex) {
+			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
+			throw new HarnessException("couldn't open document for editing "
+					+ windowName, ex);
+		}
 		finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");			
 		}
@@ -203,6 +208,11 @@ public class EditDocument extends AjaxCommonTest {
  		
 		documentBriefcaseEdit.zSubmit();
 		} 
+		catch (Exception ex) {
+			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
+			throw new HarnessException("couldn't open document for editing "
+					+ windowName, ex);
+		}
 		finally {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");			
 		}
