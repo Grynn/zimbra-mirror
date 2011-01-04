@@ -1974,9 +1974,9 @@ function (value, event, form){
 	//form.parent.setDirty(true);
 	try {
 		var instance = form.getInstance();
+		var oldDomainName = ZaAccount.getDomain(instance[ZaAccount.A_name]);
 		this.setInstanceValue(value);
 		var p = form.parent ;
-        var oldDomainName = this.getOldDomainPart ();
         var newDomainName = ZaAccount.getDomain(value) ;
 	
 	if( !newDomainName ){

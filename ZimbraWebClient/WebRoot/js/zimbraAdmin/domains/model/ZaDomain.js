@@ -1513,6 +1513,7 @@ ZaDomain.getDomainByName =
 function(domName) {
 	if(!domName)
 		return null;
+	domName = domName.toLowerCase();
 	var domain = ZaDomain.staticDomainByNameCacheTable[domName];
 	if(!domain) {
 		domain = new ZaDomain();
