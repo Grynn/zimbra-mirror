@@ -343,7 +343,7 @@ function(params) {
 
 	// handle last line
 	if (wds.length) {
-		result += addPrefix + curP + wds.join(" ") + eol;
+		result += addPrefix + curP + wds.join("") + eol;
 	}
 
 	return [before, result, after].join("");
