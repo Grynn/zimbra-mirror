@@ -88,12 +88,12 @@ function() {
 }
 
 
-ZaSearch.standardAttributes = [ZaAccount.A_displayname, 
+ZaSearch.standardAttributes = [ZaAccount.A_displayname,
 							ZaItem.A_zimbraId,
 							ZaAlias.A_AliasTargetId,
 							ZaAccount.A_accountName,
 							ZaAccount.A_lastName,
-							ZaAccount.A_mailHost, 
+							ZaAccount.A_mailHost,
 							ZaAccount.A_uid,
 							ZaAccount.A_COSId,
 							ZaAccount.A_accountStatus,
@@ -102,6 +102,7 @@ ZaSearch.standardAttributes = [ZaAccount.A_displayname,
                             ZaAccount.A_zimbraIsDelegatedAdminAccount,
                             ZaAccount.A_zimbraIsAdminAccount,
                             ZaAccount.A_zimbraIsSystemResource,
+                            ZaAccount.A_zimbraAuthTokenValidityValue,
 							ZaDistributionList.A_mailStatus,
                             ZaDistributionList.A_isAdminGroup,
 							ZaResource.A_zimbraCalResType,

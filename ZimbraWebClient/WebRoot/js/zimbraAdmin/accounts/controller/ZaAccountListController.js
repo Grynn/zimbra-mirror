@@ -671,7 +671,7 @@ ZaAccountListController.prototype.expireSessions =
 function(acct) {
 	ZaApp.getInstance().dialogs["confirmMessageDialog"].popdown();
 	mods = {};
-	mods[ZaAccount.A_zimbraAuthTokenValidityValue] = (!acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue] ? 1 : (parseInt(acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue])+1)); 
+	mods[ZaAccount.A_zimbraAuthTokenValidityValue] = (!acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue] ? 1 : ((parseInt(acct.attrs[ZaAccount.A_zimbraAuthTokenValidityValue])+1) % 9)); 
 	acct.modify(mods,acct);
 }  
 
