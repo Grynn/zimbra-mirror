@@ -134,6 +134,7 @@
     appContextPath = "${zm:jsEncode(contextPath)}";
     appCurrentSkin = "${zm:jsEncode(skin)}";
     appExtension   = "${zm:jsEncode(ext)}";
+	appRequestLocaleId = "${locale}";
     appDevMode     = ${isDevMode};
     // support for TinyMCE suspended.
     isTinyMCE      = false;
