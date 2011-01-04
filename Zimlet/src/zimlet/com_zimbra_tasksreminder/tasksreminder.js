@@ -93,6 +93,7 @@ TaskReminderZimlet.prototype._handleSearchResponse = function(response) {
 	var today = new Date(tmp.getFullYear(), tmp.getMonth(), tmp.getDate());
 	for(var i =0; i< tasks.length; i++) {
 		var task = tasks[i];
+        if(!task || !task.endDate) continue;
 		var endDate = new Date(task.endDate.getFullYear(), task.endDate.getMonth(), task.endDate.getDate());
 		var endDate_normalized =this._normalizeDate(endDate.getMonth()+1,  endDate.getDate(), endDate.getFullYear());
 		var overdue = (endDate - today) / (3600 * 24 * 1000);
