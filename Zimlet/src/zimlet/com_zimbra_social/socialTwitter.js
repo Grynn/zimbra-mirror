@@ -182,7 +182,10 @@ com_zimbra_socialTwitter.prototype._checkIfFollowing = function(params) {
 com_zimbra_socialTwitter.prototype._checkIfFollowingCallback = function(params, response) {
 	var text = response.text;
 	var jsonObj = eval("(" + text + ")");
-	params["following"] = jsonObj.relationship.source.following;
+	params["following"] = false;
+	if(jsonObj.relationship && jsonObj.relationship.source && jsonObj.relationship.source.following) {
+		params["following"] = true;
+	}
 	this._addFollowUnFollowBtn(params);
 };
 
