@@ -146,6 +146,9 @@
 <key name="Besprechung löschen" >
   <topic name="Termin löschen" url="Calendar/Deleting_an_appointment.htm" />
 </key>
+<key name="Besprechung, Details ändern" >
+  <topic name="Besprechungen in Ihrem Kalender bearbeiten" url="Calendar/editing_meetings_on_your_calendar.htm" />
+</key>
 <key name="Besprechungen" >
   <topic name="Wissenswertes zu Terminen, Besprechungen und Ereignissen" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
 </key>
@@ -301,12 +304,6 @@
 </key>
 <key name="Funktionen des Zimbra-Web-Clients" >
   <topic name="Wissenswertes zur Zimbra Collaboration Suite" url="Getting_Started/about_liquid_mail.htm" />
-</key>
-<key name="GAL und Kontakte" >
-  <topic name="GAL und Kontakte" url="Contacts/gal_vs_contacts.htm" />
-</key>
-<key name="Ganztägiger Termin" >
-  <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
 </key>
 
 </indexdata>

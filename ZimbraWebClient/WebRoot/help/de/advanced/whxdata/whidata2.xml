@@ -1,6 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="Obligatorische Teilnahme" >
+  <topic name="Registerkarte „Planung“ bei der Erstellung eines Termins verwenden" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
+</key>
 <key name="Öffentliche/Private Kalenderereignisse" >
   <topic name="Termin als privat markieren" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
@@ -301,12 +304,6 @@
 </key>
 <key name="Vervollständigung der Adresse in Mails" >
   <topic name="Adressen vervollständigen" url="Creating_Messages/Using_address_lookup.htm" />
-</key>
-<key name="Vom Kalender beantworten" >
-  <topic name="Von einem Termin auf meinem Kalender antworten" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
-</key>
-<key name="Vorhandene Accounts hinzufügen" >
-  <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
 </key>
 
 </indexdata>

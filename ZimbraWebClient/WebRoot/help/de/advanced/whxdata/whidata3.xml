@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="Vom Kalender beantworten" >
+  <topic name="Von einem Termin auf meinem Kalender antworten" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
+</key>
+<key name="Vorhandene Accounts hinzufügen" >
+  <topic name="POP-Accounts hinzufügen" url="Userspecific/Adding_POP_accounts.htm" />
+</key>
 <key name="Vorschaufenster, ein- und ausschalten" >
   <topic name="Mails im Lesefenster lesen" url="reading_mail/Reading_Mail_from_the_Reading_Pane.htm" />
 </key>

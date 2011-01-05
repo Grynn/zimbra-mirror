@@ -1,6 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="GAL und Kontakte" >
+  <topic name="GAL und Kontakte" url="Contacts/gal_vs_contacts.htm" />
+</key>
+<key name="Ganztägiger Termin" >
+  <topic name="Ganztägige Ereignisse planen" url="Calendar/Scheduling_All_Day_events.htm" />
+</key>
 <key name="Gelöschte Dateien wiederherstellen" >
   <topic name="Papierkorb leeren " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
@@ -75,9 +81,6 @@
 <key name="Kalender, Arbeitswoche anpassen" >
   <topic name="Kalenderansichten" url="Calendar/Calendar_Views.htm" />
 </key>
-<key name="Kalender, beantworten" >
-  <topic name="Besprechungen in Ihrem Kalender bearbeiten" url="Calendar/editing_meetings_on_your_calendar.htm" />
-</key>
 <key name="Kalender, beantworten von" >
   <topic name="Von einem Termin auf meinem Kalender antworten" url="Calendar/Replying_from_an_appointment_on_my_calendar.htm" />
 </key>
@@ -92,6 +95,9 @@
 </key>
 <key name="Kalender, freigegeben mit Admin-Rolle" >
   <topic name="Admin-Rechte für freigegebene Kalender" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
+</key>
+<key name="Kalender, Termin weiterleiten" >
+  <topic name="Termin weiterleiten" url="Calendar/Forwarding_an_appointment.htm" />
 </key>
 <key name="Kalender, Wissenswertes" >
   <topic name="Wissenswertes zum Zimbra-Kalender" url="Calendar/About_Calendar.htm" />
@@ -118,9 +124,6 @@
 </key>
 <key name="Kalenderrechte entziehen" >
   <topic name="Kalenderzugriff delegieren" url="Calendar/Delegating_Calendar_Access.htm" />
-</key>
-<key name="Kalneder, Termin weiterleiten" >
-  <topic name="Termin weiterleiten" url="Calendar/Forwarding_an_appointment.htm" />
 </key>
 <key name="Kontakt" >
   <topic name="Kontakt ändern" url="Contacts/editing_a_contact.htm" />
@@ -309,9 +312,6 @@
 </key>
 <key name="Neue Zimlets hochladen" >
   <topic name="Zimlets verwalten" url="Zimlets/Managing_your_Zimlets.htm" />
-</key>
-<key name="Obligatorische Teilnahme" >
-  <topic name="Registerkarte „Planung“ bei der Erstellung eines Termins verwenden" url="Calendar/Using_the_Schedule_tab_when_creating_a_appointment.htm" />
 </key>
 
 </indexdata>

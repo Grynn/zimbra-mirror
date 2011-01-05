@@ -49,14 +49,14 @@
 </book>
 <book name="Kalender verwalten" >
   <item name="Wissenswertes zum Kalender" url="Calendar/b_About_Calendar.htm" />
-  <item name="Neue Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
+  <item name="Neue Kalender erstellen" url="Calendar/b_Create_New_Calendar.htm" />
   <item name="Kalender farbcodieren" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Mögliche Kalenderansichten" url="Calendar/Calendar_Views.htm" />
   <item name="iCalendars importieren" url="Calendar/Importing_iCalendars.htm" />
   <item name="Kalender bereinigen" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
 </book>
 <book name="Termine, Besprechungen und Ereignisse planen" >
-  <item name="Besprechung anlegen" url="Calendar/b_Scheduling_a_meeting.htm" />
+  <item name="Zeitplanung für Besprechungen" url="Calendar/b_Scheduling_a_meeting.htm" />
   <item name="Wiederkehrende Termine anlegen" url="Calendar/b_creating_recurring_appointments.htm" />
   <item name="Termin löschen" url="Calendar/b_Canceling_a_meeting.htm" />
 </book>

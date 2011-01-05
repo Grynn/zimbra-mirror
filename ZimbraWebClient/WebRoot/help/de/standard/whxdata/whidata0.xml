@@ -62,13 +62,13 @@
   <topic name="Optionen einrichten" url="Userspecific/b_Setting_your_Options.htm" />
 </key>
 <key name="Externer Kalender" >
-  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
+  <topic name="Neuen Kalender erstellen" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="Filterbedingungen" >
   <topic name="Von Filtern unterstützte Bedingungen und Aktionen" url="filters/filter_conditions_and_actions_supported.htm" />
 </key>
 <key name="Frei/Belegt, Kalender ausschließen" >
-  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
+  <topic name="Neuen Kalender erstellen" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="HTML" >
   <topic name="Im HTML-Editor arbeiten" url="Creating_Messages/Using_HTML_Editor.htm" />
@@ -80,10 +80,10 @@
   <topic name="Kalenderansichten" url="Calendar/Calendar_Views.htm" />
 </key>
 <key name="Kalender, aus Frei/Belegt ausschließen" >
-  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
+  <topic name="Neuen Kalender erstellen" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="Kalender, Extern" >
-  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
+  <topic name="Neuen Kalender erstellen" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="Kalenderansicht" >
   <topic name="Kalenderansichten" url="Calendar/Calendar_Views.htm" />
@@ -123,7 +123,7 @@
   <topic name="Abwesenheitsmeldung" url="Userspecific/vacation_message.htm" />
 </key>
 <key name="Mit einem anderen Kalender synchronisieren" >
-  <topic name="Neuen Kalender anlegen" url="Calendar/b_Create_New_Calendar.htm" />
+  <topic name="Neuen Kalender erstellen" url="Calendar/b_Create_New_Calendar.htm" />
 </key>
 <key name="Neues Fenster, Mails anzeigen in" >
   <topic name="Anzeige der Mails einrichten" url="Navigation_folders_and_tips/b_Managing_how_email_is_displayed.htm" />

@@ -6,13 +6,13 @@
   <item name="An- und Abmelden" url="Userspecific/logging_on_and_off.htm" />
   <item name="Voreingestellten Client-Typ für die Anmeldung ändern" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Tastenkürzel" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <item name="@CompanyName@-Assistant" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <item name="@CompanyName@-Assistent" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="Passwort ändern" url="Userspecific/chaning_your_password.htm" />
   <item name="Passwort vergessen?" url="Userspecific/if_you_forget_your_password.htm" />
   <item name="Ablauf der Sitzung" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="In der Mailbox navigieren" >
-  <item name="Durch @Clie@ClientNameLong@gieren" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="Durch @ClientNameLong@ navigieren" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <item name="Allgemeine Einstellungen einrichten" url="Userspecific/Setting_your_general_preferences.htm" />
   <item name="Ansicht benutzerspezifisch einrichten" url="Navigation_folders_and_tips/Customize_your_view.htm" />
   <item name="Funktionen und Tastenkürzel der Benutzeroberfläche" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
@@ -62,7 +62,7 @@
   <item name="Teile einer Mail" url="Creating_Messages/parts_of_an_email_message.htm" />
   <item name="Signatur automatisch einfügen" url="Userspecific/using_a_signature.htm" />
   <item name="Automatische Vervollständigung von Adressen" url="Creating_Messages/Using_address_lookup.htm" />
-  <item name="Mails für die künftige Zustellung planen" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
+  <item name="Mails für eine verzögerte Zustellung planen" url="Creating_Messages/Schedule_Emails_for_Future_Delivery.htm" />
   <item name="Lesebestätigung anfordern" url="Creating_Messages/Requesting_a_Return_Receipt.htm" />
   <item name="Dateien an Mail anhängen" url="Creating_Messages/attaching_files_to_a_mail_message.htm" />
   <item name="Als Anhänge unterstützte Dateitypen" url="Creating_Messages/Attachment_File_Types_Supported.htm" />
@@ -91,7 +91,7 @@
   <item name="Kontakte löschen" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="Kalender verwalten" >
-  <item name="Wissen@CompanyName@CompanyName@-Kalender" url="Calendar/About_Calendar.htm" />
+  <item name="Wissenswertes zum @CompanyName@-Kalender" url="Calendar/About_Calendar.htm" />
   <item name="Kalender erstellen" url="Calendar/Create_Calendars.htm" />
   <item name="Kalender farbcodieren" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Kalendereinstellungen einrichten" url="Userspecific/Setting_your_Calendar_preferences.htm" />
