@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="はじめに" >
-  <item name="@ClientNameLong@ClientNameLong@うこそ" url="Getting_Started/about_liquid_mail.htm" />
+  <item name="@ClientNameLong@（アドバンストバージョン）へようこそ" url="Getting_Started/about_liquid_mail.htm" />
   <item name="ログインとログアウト" url="Userspecific/logging_on_and_off.htm" />
   <item name="ログイン時のクライアントの種類を変更する" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="キーボードショートカット" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
@@ -12,7 +12,7 @@
   <item name="セッションの有効期限が切れた場合" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="メールボックス内を移動する" >
-  <item name="@ClientName@ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="@ClientNameLong@内を移動する" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <item name="全般のプリファレンスを指定する" url="Userspecific/Setting_your_general_preferences.htm" />
   <item name="ビューをカスタマイズする" url="Navigation_folders_and_tips/Customize_your_view.htm" />
   <item name="ユーザーインターフェイスの機能とショートカット" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
@@ -91,7 +91,7 @@
   <item name="連絡先を削除する" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="カレンダーを管理する" >
-  <item name="@Compa@CompanyName@ついて" url="Calendar/About_Calendar.htm" />
+  <item name="@CompanyName@カレンダーについて" url="Calendar/About_Calendar.htm" />
   <item name="カレンダーを作成する" url="Calendar/Create_Calendars.htm" />
   <item name="カレンダーを色分けする" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="カレンダーのプリファレンスを指定する" url="Userspecific/Setting_your_Calendar_preferences.htm" />
