@@ -2,17 +2,17 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="Para empezar" >
-  <item name="Bienvenido a la@ClientNameLong@a de @ClientNameLong@" url="Getting_Started/about_liquid_mail.htm" />
+  <item name="Bienvenido a la edición avanzada de @ClientNameLong@" url="Getting_Started/about_liquid_mail.htm" />
   <item name="Iniciar sesión y salir de la cuenta" url="Userspecific/logging_on_and_off.htm" />
   <item name="Cambiar la versión predeterminada del programa al iniciar sesión" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Teclas de acceso directo" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <item name="@CompanyName@@CompanyName@" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <item name="Asistente de @CompanyName@" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="Cambiar tu contraseña" url="Userspecific/chaning_your_password.htm" />
   <item name="¿No recuerdas tu contraseña?" url="Userspecific/if_you_forget_your_password.htm" />
   <item name="Si caduca tu sesión" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="Navegar por el buzón de correo" >
-  <item name="Navegar por@ClientNameLong@@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="Navegar por @ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <item name="Configurar tus preferencias generales" url="Userspecific/Setting_your_general_preferences.htm" />
   <item name="Personalizar la vista" url="Navigation_folders_and_tips/Customize_your_view.htm" />
   <item name="Funciones y accesos directos de la interfaz" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
@@ -91,7 +91,7 @@
   <item name="Eliminar contacto" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="Gestionar tu agenda" >
-  <item name="Acerca@CompanyName@ de @CompanyName@" url="Calendar/About_Calendar.htm" />
+  <item name="Acerca de la agenda de @CompanyName@" url="Calendar/About_Calendar.htm" />
   <item name="Crear agendas" url="Calendar/Create_Calendars.htm" />
   <item name="Codificación de color de las agendas" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Configurar las preferencias de tu agenda" url="Userspecific/Setting_your_Calendar_preferences.htm" />

@@ -58,7 +58,7 @@
   <item name="Usar filtros para clasificar los mensajes entrantes" url="filters/how_filtering_works.htm" />
   <item name="Filtrar tus mensajes" url="filters/filtering_your_messages.htm" />
   <item name="Condiciones y acciones admitidas de los filtros" url="filters/filter_conditions_and_actions_supported.htm" />
-  <item name="comodines" url="filters/wildcards.htm" />
+  <item name="Comodines" url="filters/wildcards.htm" />
 </book>
 <book name="Gestionar tus listas de contactos" >
   <item name="Añadir nuevos contactos" url="Contacts/creating_a_new_contact.htm" />
