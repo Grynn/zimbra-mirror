@@ -93,7 +93,7 @@
 <book name="Je agenda beheren" >
   <item name="Info over @CompanyName@ Agenda" url="Calendar/About_Calendar.htm" />
   <item name="Agenda's maken" url="Calendar/Create_Calendars.htm" />
-  <item name="agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Je Agenda-voorkeuren instellen" url="Userspecific/Setting_your_Calendar_preferences.htm" />
   <item name="Weeknummers in agenda weergeven" url="Calendar/Viewing_Calendar_Week_Numbers.htm" />
   <item name="Opties om agenda's weer te geven" url="Calendar/Calendar_Views.htm" />

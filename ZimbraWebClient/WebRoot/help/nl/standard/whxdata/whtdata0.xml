@@ -50,7 +50,7 @@
 <book name="Je agenda beheren" >
   <item name="Info over Agenda" url="Calendar/b_About_Calendar.htm" />
   <item name="Nieuwe agenda's maken" url="Calendar/b_Create_New_Calendar.htm" />
-  <item name="agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
+  <item name="Agenda's kleurcoderen" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Opties om agenda's weer te geven" url="Calendar/Calendar_Views.htm" />
   <item name="iCalendars importeren" url="Calendar/Importing_iCalendars.htm" />
   <item name="Je agenda opschonen" url="Calendar/b-Cleaning_up_your_Calendar.htm" />
