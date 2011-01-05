@@ -32,7 +32,9 @@ import javax.xml.bind.annotation.XmlType;
 @XmlSeeAlso({
     GetAccountRequest.class,
     GetServerRequest.class,
-    GetDomainRequest.class
+    GetCosRequest.class,
+    GetDomainRequest.class,
+    SearchDirectoryRequest.class
 })
 public abstract class AttributeSelectorImpl {
 

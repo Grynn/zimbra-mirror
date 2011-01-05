@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 import com.zimbra.common.soap.AdminConstants;
-import com.zimbra.soap.admin.type.Account;
+import com.zimbra.soap.admin.type.AccountSelector;
 import com.zimbra.soap.admin.type.AttributeSelectorImpl;
 
 
@@ -32,17 +32,18 @@ import com.zimbra.soap.admin.type.AttributeSelectorImpl;
 @XmlType(propOrder = {AdminConstants.E_ACCOUNT})
 public class GetAccountRequest extends AttributeSelectorImpl {
 
-    @XmlAttribute(name=AdminConstants.A_APPLY_COS, required=false) private boolean applyCos = true;
+    @XmlAttribute(name=AdminConstants.A_APPLY_COS, required=false)
+    private boolean applyCos = true;
     @XmlElement(name=AdminConstants.E_ACCOUNT)
-    private Account account;
+    private AccountSelector account;
 
     public GetAccountRequest() {
     }
 
-    public void setAccount(Account account) {
+    public void setAccount(AccountSelector account) {
         this.account = account;
     }
-    public Account getAccount() {
+    public AccountSelector getAccount() {
         return account;
     }
 

@@ -72,7 +72,7 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;complexContent>
  *               &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *                 &lt;sequence>
- *                   &lt;element name="signature" type="{urn:zimbraAccount}signature" maxOccurs="unbounded" minOccurs="0"/>
+ *                   &lt;element ref="{urn:zimbraAccount}signature" maxOccurs="unbounded" minOccurs="0"/>
  *                 &lt;/sequence>
  *               &lt;/restriction>
  *             &lt;/complexContent>
@@ -767,9 +767,9 @@ public class GetInfoResponse {
 
         @XmlElements({
             @XmlElement(name = "cal", type = AccountCalDataSource.class),
-            @XmlElement(name = "rss", type = AccountRssDataSource.class),
             @XmlElement(name = "imap", type = AccountImapDataSource.class),
-            @XmlElement(name = "pop3", type = AccountPop3DataSource.class)
+            @XmlElement(name = "pop3", type = AccountPop3DataSource.class),
+            @XmlElement(name = "rss", type = AccountRssDataSource.class)
         })
         protected List<AccountDataSource> pop3OrImapOrRss;
 
@@ -792,9 +792,9 @@ public class GetInfoResponse {
          * <p>
          * Objects of the following type(s) are allowed in the list
          * {@link AccountCalDataSource }
-         * {@link AccountRssDataSource }
          * {@link AccountImapDataSource }
          * {@link AccountPop3DataSource }
+         * {@link AccountRssDataSource }
          * 
          * 
          */
@@ -995,7 +995,7 @@ public class GetInfoResponse {
      *   &lt;complexContent>
      *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
      *       &lt;sequence>
-     *         &lt;element name="signature" type="{urn:zimbraAccount}signature" maxOccurs="unbounded" minOccurs="0"/>
+     *         &lt;element ref="{urn:zimbraAccount}signature" maxOccurs="unbounded" minOccurs="0"/>
      *       &lt;/sequence>
      *     &lt;/restriction>
      *   &lt;/complexContent>

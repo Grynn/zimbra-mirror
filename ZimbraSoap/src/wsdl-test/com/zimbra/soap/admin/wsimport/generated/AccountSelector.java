@@ -9,15 +9,15 @@ import javax.xml.bind.annotation.XmlValue;
 
 
 /**
- * <p>Java class for account complex type.
+ * <p>Java class for accountSelector complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="account">
+ * &lt;complexType name="accountSelector">
  *   &lt;simpleContent>
  *     &lt;extension base="&lt;http://www.w3.org/2001/XMLSchema>string">
- *       &lt;attribute name="by" type="{urn:zimbraAdmin}by" />
+ *       &lt;attribute name="by" type="{urn:zimbraAdmin}accountBy" />
  *     &lt;/extension>
  *   &lt;/simpleContent>
  * &lt;/complexType>
@@ -26,15 +26,15 @@ import javax.xml.bind.annotation.XmlValue;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "account", propOrder = {
+@XmlType(name = "accountSelector", propOrder = {
     "value"
 })
-public class Account {
+public class AccountSelector {
 
     @XmlValue
     protected String value;
     @XmlAttribute
-    protected By by;
+    protected AccountBy by;
 
     /**
      * Gets the value of the value property.
@@ -65,10 +65,10 @@ public class Account {
      * 
      * @return
      *     possible object is
-     *     {@link By }
+     *     {@link AccountBy }
      *     
      */
-    public By getBy() {
+    public AccountBy getBy() {
         return by;
     }
 
@@ -77,10 +77,10 @@ public class Account {
      * 
      * @param value
      *     allowed object is
-     *     {@link By }
+     *     {@link AccountBy }
      *     
      */
-    public void setBy(By value) {
+    public void setBy(AccountBy value) {
         this.by = value;
     }
 

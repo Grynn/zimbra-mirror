@@ -21,12 +21,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;complexType name="folder">
  *   &lt;complexContent>
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
- *       &lt;all>
- *         &lt;choice maxOccurs="unbounded" minOccurs="0">
- *           &lt;element ref="{urn:zimbraMail}folder"/>
- *           &lt;element ref="{urn:zimbraMail}link"/>
- *           &lt;element ref="{urn:zimbraMail}search"/>
- *         &lt;/choice>
+ *       &lt;sequence>
  *         &lt;element name="acl" minOccurs="0">
  *           &lt;complexType>
  *             &lt;complexContent>
@@ -38,7 +33,12 @@ import javax.xml.bind.annotation.XmlType;
  *             &lt;/complexContent>
  *           &lt;/complexType>
  *         &lt;/element>
- *       &lt;/all>
+ *         &lt;choice maxOccurs="unbounded" minOccurs="0">
+ *           &lt;element ref="{urn:zimbraMail}folder"/>
+ *           &lt;element ref="{urn:zimbraMail}link"/>
+ *           &lt;element ref="{urn:zimbraMail}search"/>
+ *         &lt;/choice>
+ *       &lt;/sequence>
  *       &lt;attribute name="id" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
  *       &lt;attribute name="l" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -66,7 +66,8 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "folder", propOrder = {
-
+    "acl",
+    "folderOrLinkOrSearch"
 })
 @XmlSeeAlso({
     Mountpoint.class,
@@ -74,13 +75,13 @@ import javax.xml.bind.annotation.XmlType;
 })
 public class Folder {
 
+    protected Folder.Acl acl;
     @XmlElements({
-        @XmlElement(name = "search", type = SearchFolder.class),
         @XmlElement(name = "folder"),
-        @XmlElement(name = "link", type = Mountpoint.class)
+        @XmlElement(name = "link", type = Mountpoint.class),
+        @XmlElement(name = "search", type = SearchFolder.class)
     })
     protected List<Folder> folderOrLinkOrSearch;
-    protected Folder.Acl acl;
     @XmlAttribute
     protected String id;
     @XmlAttribute
@@ -119,37 +120,6 @@ public class Folder {
     protected Integer i4Ms;
 
     /**
-     * Gets the value of the folderOrLinkOrSearch property.
-     * 
-     * <p>
-     * This accessor method returns a reference to the live list,
-     * not a snapshot. Therefore any modification you make to the
-     * returned list will be present inside the JAXB object.
-     * This is why there is not a <CODE>set</CODE> method for the folderOrLinkOrSearch property.
-     * 
-     * <p>
-     * For example, to add a new item, do as follows:
-     * <pre>
-     *    getFolderOrLinkOrSearch().add(newItem);
-     * </pre>
-     * 
-     * 
-     * <p>
-     * Objects of the following type(s) are allowed in the list
-     * {@link SearchFolder }
-     * {@link Folder }
-     * {@link Mountpoint }
-     * 
-     * 
-     */
-    public List<Folder> getFolderOrLinkOrSearch() {
-        if (folderOrLinkOrSearch == null) {
-            folderOrLinkOrSearch = new ArrayList<Folder>();
-        }
-        return this.folderOrLinkOrSearch;
-    }
-
-    /**
      * Gets the value of the acl property.
      * 
      * @return
@@ -171,6 +141,37 @@ public class Folder {
      */
     public void setAcl(Folder.Acl value) {
         this.acl = value;
+    }
+
+    /**
+     * Gets the value of the folderOrLinkOrSearch property.
+     * 
+     * <p>
+     * This accessor method returns a reference to the live list,
+     * not a snapshot. Therefore any modification you make to the
+     * returned list will be present inside the JAXB object.
+     * This is why there is not a <CODE>set</CODE> method for the folderOrLinkOrSearch property.
+     * 
+     * <p>
+     * For example, to add a new item, do as follows:
+     * <pre>
+     *    getFolderOrLinkOrSearch().add(newItem);
+     * </pre>
+     * 
+     * 
+     * <p>
+     * Objects of the following type(s) are allowed in the list
+     * {@link Folder }
+     * {@link Mountpoint }
+     * {@link SearchFolder }
+     * 
+     * 
+     */
+    public List<Folder> getFolderOrLinkOrSearch() {
+        if (folderOrLinkOrSearch == null) {
+            folderOrLinkOrSearch = new ArrayList<Folder>();
+        }
+        return this.folderOrLinkOrSearch;
     }
 
     /**

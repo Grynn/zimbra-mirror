@@ -15,37 +15,31 @@
 
 package com.zimbra.soap.admin.type;
 
+import java.util.Collection;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import com.zimbra.common.soap.AdminConstants;
 
-@XmlAccessorType(XmlAccessType.NONE)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name=AdminConstants.E_SERVER)
 @XmlType(propOrder = {})
-public class ServerInfo extends AdminAttrsImpl {
+public class ServerInfo extends AdminObjectInfo {
 
-    @XmlAttribute(name=AdminConstants.A_NAME, required=true) private String name;
-    @XmlAttribute(name=AdminConstants.A_ID, required=true) private String id;
-
-    public ServerInfo() {
+    /**
+     * no-argument constructor wanted by JAXB
+     */
+    @SuppressWarnings("unused")
+    private ServerInfo() {
+        this(null, null, null);
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public ServerInfo(String id, String name) {
+        this(id, name, null);
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public String getId() {
-        return id;
+    public ServerInfo(String id, String name, Collection <Attr> attrs) {
+        super(id, name, attrs);
     }
 }

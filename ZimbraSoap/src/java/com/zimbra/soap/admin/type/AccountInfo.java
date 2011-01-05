@@ -15,54 +15,31 @@
 
 package com.zimbra.soap.admin.type;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.XmlValue;
-
-import com.zimbra.common.soap.AdminConstants;
 import com.zimbra.common.soap.AccountConstants;
 
-@XmlAccessorType(XmlAccessType.NONE)
+@XmlAccessorType(XmlAccessType.FIELD)
 @XmlRootElement(name=AccountConstants.E_ACCOUNT)
-@XmlType(propOrder = {AdminConstants.E_A})
-public class AccountInfo {
+@XmlType(propOrder = {})
+public class AccountInfo extends AdminObjectInfo {
 
-    // Relates to "com.zimbra.cs.account.Account"
-    @XmlAttribute(name=AccountConstants.A_NAME, required=true) private String name;
-    @XmlAttribute(name=AccountConstants.A_ID, required=true) private String id;
-    @XmlAttribute(name=AccountConstants.A_isExternal, required=false) private boolean isExternal;
-
-    @XmlElement(name=AdminConstants.E_A)
-    private List<Attr> a = new ArrayList<Attr>();
-
-    public AccountInfo() {
-    }
-    
-    public AccountInfo setA(Collection<Attr> attrs) {
-        this.a.clear();
-        if (attrs != null) {
-            this.a.addAll(attrs);
-        }
-        return this;
+    /**
+     * no-argument constructor wanted by JAXB
+     */
+    @SuppressWarnings("unused")
+    private AccountInfo() {
+        this(null, null, null);
     }
 
-    public AccountInfo addAttr(Attr attr) {
-        a.add(attr);
-        return this;
+    public AccountInfo(String id, String name) {
+        this(id, name, null);
     }
 
-    public List<Attr> getA() {
-        return Collections.unmodifiableList(a);
+    public AccountInfo(String id, String name, Collection <Attr> attrs) {
+        super(id, name, attrs);
     }
 }

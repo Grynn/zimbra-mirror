@@ -51,8 +51,5 @@ public class GetServerRequest extends AttributeSelectorImpl {
         this.server = server;
     }
 
-    public ServerSelector getServer() {
-        return server;
-    }
-
+    public ServerSelector getServer() { return server; }
 }

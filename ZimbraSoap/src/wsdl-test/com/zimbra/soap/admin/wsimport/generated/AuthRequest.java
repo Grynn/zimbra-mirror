@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlType;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType">
  *       &lt;all>
  *         &lt;element name="authToken" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
- *         &lt;element name="account" type="{urn:zimbraAdmin}account" minOccurs="0"/>
+ *         &lt;element name="account" type="{urn:zimbraAdmin}accountSelector" minOccurs="0"/>
  *         &lt;element name="virtualHost" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/>
  *       &lt;/all>
  *       &lt;attribute name="name" type="{http://www.w3.org/2001/XMLSchema}string" />
@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlType;
 public class AuthRequest {
 
     protected String authToken;
-    protected Account account;
+    protected AccountSelector account;
     protected String virtualHost;
     @XmlAttribute
     protected String name;
@@ -73,10 +73,10 @@ public class AuthRequest {
      * 
      * @return
      *     possible object is
-     *     {@link Account }
+     *     {@link AccountSelector }
      *     
      */
-    public Account getAccount() {
+    public AccountSelector getAccount() {
         return account;
     }
 
@@ -85,10 +85,10 @@ public class AuthRequest {
      * 
      * @param value
      *     allowed object is
-     *     {@link Account }
+     *     {@link AccountSelector }
      *     
      */
-    public void setAccount(Account value) {
+    public void setAccount(AccountSelector value) {
         this.account = value;
     }
 
