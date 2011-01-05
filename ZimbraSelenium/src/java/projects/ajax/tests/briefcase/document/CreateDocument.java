@@ -9,6 +9,7 @@ import framework.ui.Button;
 import framework.util.HarnessException;
 import framework.util.SleepUtil;
 import framework.util.ZAssert;
+import framework.util.ZimbraAccount;
 
 public class CreateDocument extends AjaxCommonTest {
 
@@ -26,7 +27,9 @@ public class CreateDocument extends AjaxCommonTest {
 
 		// Create document item
 		DocumentItem document = new DocumentItem();
-
+		
+		ZimbraAccount account = app.zGetActiveAccount();
+		
 		// Select Briefcase tab
 		SleepUtil.sleepSmall();
 		app.zPageBriefcase.zNavigateTo();
@@ -47,14 +50,26 @@ public class CreateDocument extends AjaxCommonTest {
 		}
 
 		// Verify document name & text through SOAP
-		app.zGetActiveAccount().soapSend(
+		int i = 0;
+		while (i < 20) {
+			SleepUtil.sleepSmall();
+			account.soapSend(
 
-		"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
+					"<SearchRequest xmlns='urn:zimbraMail' types='document'>" +
 
-		"<query>" + document.getDocName() + "</query>" +
+					"<query>" + document.getDocName() + "</query>" +
 
-		"</SearchRequest>");
+					"</SearchRequest>");
 
+			if (account.soapSelectValue("//mail:doc","fr") != null){
+				logger.info(i + "sec account.soapSelectValue(//mail:doc,fr) succeeded");
+				break;
+			}
+			i++;
+			if(i == 20)
+			logger.info("after " + i + " seconds account.soapSelectValue(//mail:doc,fr) is null");
+		}
+		
 		String name = app.zGetActiveAccount().soapSelectValue("//mail:doc",
 				"name");
 		String text = app.zGetActiveAccount().soapSelectValue("//mail:doc",
