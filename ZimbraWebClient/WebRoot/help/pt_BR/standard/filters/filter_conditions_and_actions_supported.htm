@@ -87,51 +87,131 @@ else
 </div>
  
 <h1>Condições de filtro e ações suportadas</h1>
-<p>As regras de filtro são indiferentes a maiúsculas ou minúsculas, ou seja, tratam da mesma forma palavras iniciadas por maiúsculas ou minúsculas.</p>
+<p>As regras de filtro são indiferentes a maiúsculas ou minúsculas, 
+ ou seja, tratam da mesma forma palavras iniciadas por maiúsculas ou minúsculas.</p>
 <h3>Condições</h3>
 <p>Os campos de comparação incluem os seguintes:</p>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>De.</b></span> Use-o para especificar um nome no cabeçalho De: de uma mensagem de e-mail.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Para.</b></span> O mesmo que De, mas busca nomes especificados no cabeçalho Para:. :.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Cc.</b></span> Mesmo que De, mas busca no cabeçalho Cc:. :.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Para ou Cc</b></span>. O mesmo que De, mas procura tanto no cabeçalho Para quanto no Cc.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Assunto.</b></span> Busca no cabeçalho Assunto da mensagem.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>De.</b></span> 
+	 Use-o para especificar um nome no cabeçalho De: de uma mensagem 
+	 de e-mail.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Para.</b></span> 
+	 O mesmo que De, mas busca nomes especificados no cabeçalho Para 
+	 :.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Cc.</b></span> 
+	 Mesmo que De, mas busca no cabeçalho Cc :.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Para ou Cc</b></span>. 
+	 O mesmo que De, mas procura tanto no cabeçalho Para quanto no 
+	 Cc.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Assunto.</b></span> 
+	 Busca no cabeçalho Assunto da mensagem.</p></li>
 </ul>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Cabeçalho chamado.</b></span> Quando essa opção está selecionada, um campo de entrada de texto adicional é exibido antes do operador de comparação (a porção &quot;contém&quot;). Essa opção possibilita que você especifique qualquer cabeçalho de e-mail. Você pode especificar não apenas os campos padrão Para: ou De: mas também os campos Data, Responder para ou outros campos personalizados que podem ser incluídos no cabeçalho da mensagem. Use essa opção para filtrar mensagens de e-mail que têm cabeçalhos com &quot;má formação&quot;, o que quer dizer que eles não contêm certas informações que são normalmente consideradas padrão para uma mensagem de e-mail. Algumas vezes spam, que é gerado automaticamente, omite informações como os campos Remetente ou Responder para. Use o segundo campo de texto (o campo imediatamente à direta do operador de comparação) para especificar o cabeçalho que você desejar testar.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Tamanho.</b></span> Use essa opção para selecionar mensagens de e-mail que são maiores ou menores que um tamanho especificado. O tamanho do e-mail inclui qualquer anexo de arquivo. Use isso para descartar mensagens de e-mail que sejam muito grandes.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Data.</b></span> Use a  opção para especificar mensagens de e-mail enviadas antes ou depois de uma data especificada.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Corpo.</b></span> As opções para Corpo são: Contém/Não contém, e isso possibilita que se especifique palavras de correspondência no corpo do e-mail. Não é possível filtrar palavras em anexos de arquivo.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>É uma confirmação de leitura.</b> </span><span>As mensagens com confirmação de leitura podem ser filtradas.</span></p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Anexo.</b></span>   Você pode filtrar mensagens de e-mail que tenham, ou que não tenham, anexos de arquivo.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Endereço.</b></span>   Testa a presença de um endereço em seus contatos. O próximo campo possibilita que você especifique qual lista de endereços.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Convite da agenda</b></span>. Você pode filtrar mensagens relacionadas a agendas.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Cabeçalho chamado.</b></span> 
+	 Quando essa opção está selecionada, um campo de entrada de texto adicional 
+	 é exibido antes do operador de comparação (a porção &quot;contém&quot;). 
+	 Essa opção possibilita que você especifique qualquer cabeçalho 
+	 de e-mail. Você pode especificar não apenas os campos padrão 
+	 Para: ou De: mas também os campos Data, Responder 
+	 para ou outros campos personalizados que podem ser incluídos no cabeçalho 
+	 da mensagem. Use essa opção para filtrar mensagens de e-mail 
+	 que têm cabeçalhos com &quot;má formação&quot;, o que quer dizer que 
+	 eles não contêm certas informações que são normalmente consideradas 
+	 padrão para uma mensagem de e-mail. Algumas vezes spam, que 
+	 é gerado automaticamente, omite informações como os campos Remetente 
+	 ou Responder para. Use o segundo campo de texto (o campo imediatamente 
+	 à direta do operador de comparação) para especificar o cabeçalho que 
+	 você desejar testar.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Tamanho.</b></span> 
+	 Use essa opção para selecionar mensagens de e-mail que são maiores 
+	 ou menores que um tamanho especificado. O tamanho do e-mail 
+	 inclui qualquer anexo de arquivo. Use isso para descartar 
+	 mensagens de e-mail que sejam muito grandes.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Data.</b></span> 
+	 Use a opção para especificar mensagens de e-mail enviadas antes ou 
+	 depois de uma data especificada.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Corpo.</b></span> 
+	 As opções para Corpo são: Contém/Não contém, e isso possibilita que 
+	 se especifique palavras de correspondência no corpo do e-mail. 
+	 Não é possível filtrar palavras em anexos de arquivo.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>É uma confirmação 
+	 de leitura.</b></span><span> As mensagens com confirmação de leitura 
+	 podem ser filtradas.</span></p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Anexo.</b></span> 
+	 Você pode filtrar mensagens de e-mail que tenham, ou que não tenham, 
+	 anexos de arquivo.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Endereço.</b></span> 
+	 Testa a presença de um endereço em seus contatos. O próximo 
+	 campo possibilita que você especifique qual lista de endereços.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Convite da agenda</b></span>. 
+	 Você pode filtrar mensagens relacionadas a agendas.</p></li>
 </ul>
 <p>Os campos de comparação incluem os seguintes:</p>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Corresponde exatamente/não corresponde exatamente</b></span>. Especifica uma correspondência exata. Por exemplo, se você especificar <span style="font-weight: bold;"><b>Assunto</b></span> <span style="font-weight: bold;"><b>corresponde exatamente a</b></span> &ndash; <span style="font-weight: bold;"><b>Banana</b></span> somente corresponderia a &quot;Banana&quot; e não a &quot;Bananas&quot; ou &quot;Um caminhão cheio de cascas de banana&quot;.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Contém/não contém</b></span>. Especifica que a linha de assunto deve conter a subsequência. &nbsp;Por exemplo, especificar <span style="font-weight: bold;"><b>Assunto contém Banana</b></span> corresponderia a &quot;Estou embananado&quot;.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Corresponde à condição curinga/não corresponde à condição curinga</b></span>. O curinga * é um caractere usado no campo de comparação de filtro de e-mail para representar um ou mais caracteres no filtro. Por exemplo, se você especificar Assunto corresponde a &quot; banana*&quot;, haveria correspondência com &quot;bananas&quot; ou &quot;banana caramelada&quot;, mas não com &quot;maravilhoso doce de banana&quot;.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Corresponde exatamente/não 
+	 corresponde exatamente</b></span>. Especifica uma correspondência 
+	 exata. Por exemplo, se você especificar <span style="font-weight: bold;"><b>Assunto</b></span> 
+	 <span style="font-weight: bold;"><b>corresponde exatamente a</b></span> 
+	 – <span style="font-weight: bold;"><b>Banana</b></span> somente 
+	 corresponderia a &quot;Banana&quot; e não a &quot;Bananas&quot; ou 
+	 &quot;Um caminhão cheio de cascas de banana&quot;.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Contém/não contém</b></span>. 
+	 Especifica que a linha de assunto deve conter a subsequência. &#160;Por exemplo, especificar 
+	 <span style="font-weight: bold;"><b>Assunto contém Banana</b></span> 
+	 corresponderia a &quot;Estou embananado&quot;.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Corresponde à 
+	 condição curinga/não corresponde à condição curinga</b></span>. O 
+	 curinga * é um caractere usado no campo de comparação de filtro de 
+	 e-mail para representar um ou mais caracteres no filtro. Por 
+	 exemplo, se você especificar Assunto corresponde a &quot; banana*&quot;, haveria correspondência com &quot;bananas&quot; 
+	 ou &quot;banana caramelada&quot;, mas não com &quot;maravilhoso doce 
+	 de banana&quot;.</p></li>
 </ul>
 <h3>Ações</h3>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Manter na Caixa de entrada.</b></span>   Salva o e-mail na Caixa de entrada. Se nenhum dos filtros corresponder a uma mensagem de e-mail, essa ação acontece por padrão.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Arquivo na pasta.</b></span>   Move o e-mail para uma pasta especificada.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Descartar.</b></span> Apaga a mensagem de e-mail sem entregá-la. A mensagem não está em nenhuma de suas pastas, nem mesmo na Lixeira.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Encaminhar</b></span>. Encaminha o e-mail para o endereço especificado.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Marcar.</b></span> Selecione   <span style="font-weight: bold;"><b>como Lida</b></span> ou <span style="font-weight: bold;"><b>como Sinalizada</b></span>.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Marcar com.</b></span> Você pode marcar as mensagens correspondentes com um marcador selecionado.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Manter na Caixa 
+	 de entrada.</b></span> Salva o e-mail na Caixa de entrada. 
+	 Se nenhum dos filtros corresponder a uma mensagem de e-mail, essa 
+	 ação acontece por padrão.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Arquivo na pasta.</b></span> 
+	 Move o e-mail para uma pasta especificada.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Descartar.</b></span> 
+	 Apaga a mensagem de e-mail sem entregá-la. A mensagem não 
+	 está em nenhuma de suas pastas, nem mesmo na Lixeira.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Encaminhar</b></span>. 
+	 Encaminha o e-mail para o endereço especificado.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Marcar.</b></span> 
+	 Selecione <span style="font-weight: bold;"><b>como Lida</b></span> 
+	 ou <span style="font-weight: bold;"><b>como Sinalizada</b></span>.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Marcar com.</b></span> 
+	 Você pode marcar as mensagens correspondentes com um marcador selecionado.</p></li>
 </ul>
 <h3>Várias ações</h3>
-<p>Você pode criar uma regra de filtro que contenha várias ações. As combinações de ações na sua regra são interpretadas da seguinte forma:</p>
+<p>Você pode criar uma regra de filtro que contenha várias ações. 
+ As combinações de ações na sua regra são interpretadas da seguinte 
+ forma:</p>
 <ul type="disc">
-	<li class="p"><p><span style="font-weight: bold;"><b>Descartar.</b></span> Se combinada a outras ações, a ação descartar é ignorada e as outras ações ocorrem.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Arquivo na pasta.</b></span> Várias ações do tipo &quot;arquivar em&quot; resultam na criação de várias cópias da mensagem em diferentes pastas. Se uma pasta especificada não existir, a mensagem é deixada na Caixa de entrada.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Sinalizar/Marcar.</b></span> Essas ações aplicam-se à mensagem retornada da ação imediatamente anterior. No caso de várias ações do tipo &quot;Arquivar em&quot;, isso poderia resultar no armazenamento de algumas cópias da mensagem sem um marcador e outras armazenadas com marcador.</p></li>
-	<li class="p"><p><span style="font-weight: bold;"><b>Manter na Caixa de entrada.</b></span> Várias ações do tipo &quot;manter&quot; podem ser especificadas, mas somente uma cópia da mensagem é salva na Caixa de entrada.</p></li>
-	<li class="p"><p style="font-weight: bold;">Encaminhar para endereço. <span  	 style="font-weight: normal;">O e-mail é encaminhado para o endereço especificado.</span></p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Descartar.</b></span> 
+	 Se combinada a outras ações, a ação descartar é ignorada e as outras 
+	 ações ocorrem.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Arquivo na pasta.</b></span> 
+	 Várias ações do tipo &quot;arquivar em&quot; resultam na criação de 
+	 várias cópias da mensagem em diferentes pastas. Se uma pasta 
+	 especificada não existir, a mensagem é deixada na Caixa de entrada.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Sinalizar/Marcar.</b></span> 
+	 Essas ações aplicam-se à mensagem retornada da ação imediatamente 
+	 anterior. No caso de várias ações do tipo &quot;Arquivar em&quot;, 
+	 isso poderia resultar no armazenamento de algumas cópias da mensagem 
+	 sem um marcador e outras armazenadas com marcador.</p></li>
+	<li class="p"><p><span style="font-weight: bold;"><b>Manter na Caixa 
+	 de entrada.</b></span> Várias ações do tipo &quot;manter&quot; 
+	 podem ser especificadas, mas somente uma cópia da mensagem é salva 
+	 na Caixa de entrada.</p></li>
+	<li class="p"><p style="font-weight: bold;">Encaminhar para endereço. 
+	 <span style="font-weight: normal;">O e-mail é encaminhado para 
+	 o endereço especificado.</span></p></li>
 </ul>
-<p>&nbsp;</p>
+<p>&#160;</p>
 <div style="width: 100%; position: relative;" id="footer">
 	<p style="font-size: 8pt; background-color: #e9e9e9; border-top-width: 1px; 
 		 border-top-style: Solid;"><span style="font-size: 8pt; background-color: #e9e9e9; "><font size="1" style="font-size:8pt;">Copyright @ 2011 Zimbra and VMware, Inc. Todos os direitos reservados.</font></span></p>

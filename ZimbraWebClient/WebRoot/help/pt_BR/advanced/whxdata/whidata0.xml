@@ -143,7 +143,7 @@
   <topic name="Criando um novo contato" url="Contacts/creating_a_new_contact.htm" />
 </key>
 <key name="cancelar reuniões" >
-  <topic name="excluindo um compromisso" url="Calendar/Deleting_an_appointment.htm" />
+  <topic name="excluíndo um compromisso" url="Calendar/Deleting_an_appointment.htm" />
 </key>
 <key name="classificando mensagens de e-mail recebidas" >
   <topic name="Como funciona a filtragem" url="filters/how_filtering_works.htm" />
@@ -244,7 +244,7 @@
 <key name="Contatos pessoais" >
   <topic name="Editando um contato" url="Contacts/editing_a_contact.htm" />
 </key>
-<key name="contatos, adicionando um contato excluido novamente na lista" >
+<key name="contatos, adicionando um contato excluído novamente na lista" >
   <topic name="Excluindo um contato" url="Contacts/deleting_a_contact.htm" />
 </key>
 <key name="contatos, criando campos personalizados no formulário" >

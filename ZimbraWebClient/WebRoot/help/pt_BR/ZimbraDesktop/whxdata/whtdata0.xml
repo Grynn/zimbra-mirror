@@ -29,7 +29,7 @@
   <item name="Como funciona o recurso Tópicos de conversação" url="conversations/conversations_can_span_folders.htm" />
   <item name="Categorizando suas mensagens de e-mail" url="Navigation_folders_and_tips/categorizing_your_mail_messages.htm" />
   <item name="Imprimindo um tópico de conversação" url="conversations/printing_a_conversation.htm" />
-  <item name="Recuperando mensagens de e-mail excluidas " url="reading_mail/recovering_deleted_mail_messages.htm" />
+  <item name="Recuperando mensagens de e-mail excluídas " url="reading_mail/recovering_deleted_mail_messages.htm" />
   <item name="E-mail que não é possível entregar" url="Creating_Messages/undeliverable_mail.htm" />
   <item name="Definindo um endereço de encaminhamento" url="Userspecific/Setting_a_Forwarding_Address.htm" />
 </book>
@@ -58,7 +58,7 @@
   <item name="Usando os filtros para classificar os e-mails de entrada" url="filters/how_filtering_works.htm" />
   <item name="Filtrando suas mensagens" url="filters/filtering_your_messages.htm" />
   <item name="Condições de filtro e ações suportadas" url="filters/filter_conditions_and_actions_supported.htm" />
-  <item name="curingas" url="filters/wildcards.htm" />
+  <item name="Curingas" url="filters/wildcards.htm" />
 </book>
 <book name="Gerenciando sua lista de contatos" >
   <item name="Adicionando novos contatos" url="Contacts/creating_a_new_contact.htm" />
