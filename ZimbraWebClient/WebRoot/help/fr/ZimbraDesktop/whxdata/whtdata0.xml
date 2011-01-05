@@ -8,7 +8,7 @@
 </book>
 <book name="Configuration de Zimbra Desktop" >
   <item name="Configurer un compte client Web Zimbra" url="Zdesktop/Z-Setting_up_your_Zimbra_Web_Client_account.htm" />
-  <item name="Configuration de Yahoo! Comptes Mail et Gmail" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
+  <item name="Configuration de Comptes Yahoo! Mail et Gmail" url="Zdesktop/z-Setting_up_Yahoo!_Mail_Plus,_Gmail,_AOL_account_setup.htm" />
   <item name="Configurer les comptes POP/IMAP" url="Zdesktop/z-Setting_up_POP_IMAP_accounts.htm" />
   <item name="Synchroniser vos comptes" url="Zdesktop/Synchronize_your_account_to_Zimbra_Desktop.htm" />
   <item name="Désactivation de la synchronisation automatique" url="Zdesktop/Turning_Off_Automatic_Sync.htm" />
@@ -58,7 +58,7 @@
   <item name="Utiliser des filtres pour trier les mails entrants" url="filters/how_filtering_works.htm" />
   <item name="Filtrer vos mails" url="filters/filtering_your_messages.htm" />
   <item name="Conditions et actions de filtre supportées" url="filters/filter_conditions_and_actions_supported.htm" />
-  <item name="caractères de substitution" url="filters/wildcards.htm" />
+  <item name="Caractères de substitution" url="filters/wildcards.htm" />
 </book>
 <book name="Gestion de vos listes de contacts" >
   <item name="Ajout de nouveaux contacts" url="Contacts/creating_a_new_contact.htm" />

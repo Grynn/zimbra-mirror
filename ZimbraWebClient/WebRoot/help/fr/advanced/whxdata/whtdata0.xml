@@ -6,7 +6,7 @@
   <item name="Se connecter et se déconnecter" url="Userspecific/logging_on_and_off.htm" />
   <item name="Modification du type de connexion par défaut de mon client " url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="Touches de raccourcis clavier" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
-  <item name="@CompanyName@mpanyName@" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
+  <item name="Assistant @CompanyName@" url="Miscellaneous_one_off_topics/Zimbra_Assistant.htm" />
   <item name="Modifier votre mot de passe" url="Userspecific/chaning_your_password.htm" />
   <item name="Vous avez oublié votre mot de passe ?" url="Userspecific/if_you_forget_your_password.htm" />
   <item name="Si votre session a expiré" url="Userspecific/if_your_session_expires.htm" />
@@ -91,7 +91,7 @@
   <item name="Suppression de contacts" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="Gestion de votre calendrier" >
-  <item name="À prop@CompanyName@ier de @CompanyName@" url="Calendar/About_Calendar.htm" />
+  <item name="À propos du calendrier de @CompanyName@" url="Calendar/About_Calendar.htm" />
   <item name="Créer des calendriers" url="Calendar/Create_Calendars.htm" />
   <item name="Appliquer des codes de couleur à vos calendriers" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="Configurer vos préférences de calendrier" url="Userspecific/Setting_your_Calendar_preferences.htm" />
