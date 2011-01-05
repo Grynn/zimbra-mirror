@@ -2,7 +2,7 @@
 <!-- saved from url=(0014)about:internet -->
 <tocdata>
 <book name="入门" >
-  <item name="欢迎使用 @ClientNam@ClientNameLong@" url="Getting_Started/about_liquid_mail.htm" />
+  <item name="欢迎使用 @ClientNameLong@ 高级版本" url="Getting_Started/about_liquid_mail.htm" />
   <item name="登录和退出" url="Userspecific/logging_on_and_off.htm" />
   <item name="改变登录的默认客户端类型" url="Navigation_folders_and_tips/Changing_my_default_client_type_for_log_in.htm" />
   <item name="快捷键" url="Navigation_folders_and_tips/Keyboard_Shortcut_Keys.htm" />
@@ -12,7 +12,7 @@
   <item name="如果会话过期" url="Userspecific/if_your_session_expires.htm" />
 </book>
 <book name="浏览邮箱" >
-  <item name="浏览 @ClientN@ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+  <item name="浏览 @ClientNameLong@" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
   <item name="设置常规首选项" url="Userspecific/Setting_your_general_preferences.htm" />
   <item name="定制您的视图" url="Navigation_folders_and_tips/Customize_your_view.htm" />
   <item name="用户界面功能和快捷键" url="Getting_Started/user_interface_features_and_shortcuts.htm" />
@@ -91,7 +91,7 @@
   <item name="删除联系人" url="Contacts/deleting_a_contact.htm" />
 </book>
 <book name="管理行事历" >
-  <item name="关于 @Co@CompanyName@历" url="Calendar/About_Calendar.htm" />
+  <item name="关于 @CompanyName@ 行事历" url="Calendar/About_Calendar.htm" />
   <item name="创建行事历" url="Calendar/Create_Calendars.htm" />
   <item name="彩色编码行事历" url="Calendar/Adding_background_color_to_calendars.htm" />
   <item name="设置行事历首选项" url="Userspecific/Setting_your_Calendar_preferences.htm" />
