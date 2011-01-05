@@ -1,0 +1,38 @@
+/*
+ * ***** BEGIN LICENSE BLOCK *****
+ * Zimbra Collaboration Suite Server
+ * Copyright (C) 2009, 2010 Zimbra, Inc.
+ * 
+ * The contents of this file are subject to the Zimbra Public License
+ * Version 1.3 ("License"); you may not use this file except in
+ * compliance with the License.  You may obtain a copy of the License at
+ * http://www.zimbra.com/license.
+ * 
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
+ * ***** END LICENSE BLOCK *****
+ */
+
+/* Offline-specific styles */
+
+BODY {
+	width: 100%;
+	height: 100%;
+	background-color: #5C5C5C;
+    background-image: -moz-linear-gradient(top, #5C5C5C, #2E2E2E); /* FF3.6 */
+    background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #5C5C5C),color-stop(1, #2E2E2E)); /* Saf4+, Chrome */
+    filter:  progid:DXImageTransform.Microsoft.gradient(startColorStr='#5C5C5C', EndColorStr='#2E2E2E'); /* IE6,IE7 */
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorStr='#5C5C5C', EndColorStr='#2E2E2E')"; /* IE8 */
+}
+
+.ZPanel {
+	background: #a6a6a9 url("img/setup-bkgd-full.gif") no-repeat top left;
+}
+
+.ZTip a {
+	color: #333333;
+}
+
+.ZDot {
+	color: #333333;
+}
