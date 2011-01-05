@@ -13,6 +13,9 @@
 <key name="add signature" >
   <topic name="Using a signature" url="Userspecific/using_a_signature.htm" />
 </key>
+<key name="adding appointment information to calendar" >
+  <topic name="Responding_to_an_invitation" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="adding contacts" >
   <topic name="Creating a new contact" url="Contacts/creating_a_new_contact.htm" />
 </key>
@@ -261,7 +264,7 @@
 <key name="delete a meeting" >
   <topic name="Deleting_an_appointment" url="Calendar/Deleting_an_appointment.htm" />
 </key>
-<key name="deleted files, recover" >
+<key name="deleted messages, recover" >
   <topic name="Empty Trash " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="Deleting" >
@@ -315,9 +318,6 @@
 <key name="events" >
   <topic name="Scheduling All Day events" url="Calendar/Scheduling_All_Day_events.htm" />
   <topic name="About Appointments, Meetings and Events" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-</key>
-<key name="export account data" >
-  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 
 </indexdata>

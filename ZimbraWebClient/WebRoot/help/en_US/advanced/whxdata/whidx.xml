@@ -1,9 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <index>
-<chunkinfo url="whidata0.xml" first="accessing external accounts" last="export account data" num="104" />
-<chunkinfo url="whidata1.xml" first="export iCal calendars" last="password" num="99" />
-<chunkinfo url="whidata2.xml" first="permission denied with meeting invite" last="Trash folder" num="102" />
-<chunkinfo url="whidata3.xml" first="Undeliverable mail" last="Zimlets, disable" num="21" />
+<chunkinfo url="whidata0.xml" first="accessing external accounts" last="events" num="104" />
+<chunkinfo url="whidata1.xml" first="export account data" last="overview pane" num="100" />
+<chunkinfo url="whidata2.xml" first="pages, creating in Briefcase" last="task, mark as complete" num="101" />
+<chunkinfo url="whidata3.xml" first="tasks, print" last="Zimlets, disable" num="25" />
 
 </index>

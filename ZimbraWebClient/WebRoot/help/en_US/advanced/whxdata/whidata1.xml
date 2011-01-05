@@ -1,6 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="export account data" >
+  <topic name="Backing up the Content of Your Account" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
+</key>
 <key name="export iCal calendars" >
   <topic name="Importing your iCal calendar" url="Calendar/Importing_your_iCal_calendar.htm" />
 </key>
@@ -34,6 +37,9 @@
 </key>
 <key name="find shares" >
   <topic name="Managing items you share" url="Sharing/Managing_items_you_share.htm" />
+</key>
+<key name="finding shared items" >
+  <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
 </key>
 <key name="Flagging" >
   <topic name="Flagging an email message" url="Tags_and_flags/Flagging_an_email_message.htm" />
@@ -229,6 +235,9 @@
 <key name="menus, right-click" >
   <topic name="Right-click menus" url="Navigation_folders_and_tips/right-click_menus.htm" />
 </key>
+<key name="message count" >
+  <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
+</key>
 <key name="message view" >
   <topic name="Managing your email message view" url="conversations/conversation_list_view.htm" />
 </key>
@@ -298,13 +307,6 @@
 </key>
 <key name="overview pane" >
   <topic name="Folders area" url="Navigation_folders_and_tips/Folders_area.htm" />
-</key>
-<key name="pages, creating in Briefcase" >
-  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
-</key>
-<key name="password" >
-  <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
-  <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
 </key>
 
 </indexdata>

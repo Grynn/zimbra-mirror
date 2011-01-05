@@ -1,6 +1,13 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="pages, creating in Briefcase" >
+  <topic name="Create a new page" url="Documents/Create_a_new_page.htm" />
+</key>
+<key name="password" >
+  <topic name="If you forget your password" url="Userspecific/if_you_forget_your_password.htm" />
+  <topic name="Changing your password" url="Userspecific/chaning_your_password.htm" />
+</key>
 <key name="permission denied with meeting invite" >
   <topic name="Receiving a permission denied message" url="Calendar/Receiving_a_permission_denied_message.htm" />
 </key>
@@ -75,6 +82,9 @@
 <key name="private calendar event" >
   <topic name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
+<key name="propose new time" >
+  <topic name="Responding_to_an_invitation" url="Calendar/Responding_to_an_invitation.htm" />
+</key>
 <key name="public/private calendar events" >
   <topic name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
 </key>
@@ -103,7 +113,7 @@
 <key name="recipients, search" >
   <topic name="Searching for Recipients " url="Search/Searching_for_Recipients_.htm" />
 </key>
-<key name="recover deleted files" >
+<key name="recover deleted messages" >
   <topic name="Empty Trash " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 <key name="Recovering" >
@@ -302,18 +312,6 @@
 </key>
 <key name="task, mark as complete" >
   <topic name="Change a task" url="Tasks/Change_a_task.htm" />
-</key>
-<key name="tasks, print" >
-  <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
-</key>
-<key name="three-pane view" >
-  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="tool tips" >
-  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
-</key>
-<key name="Trash folder" >
-  <topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 
 </indexdata>

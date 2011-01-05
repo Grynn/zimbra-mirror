@@ -262,6 +262,7 @@ reading_mail\reading_mail.htm
 reading_mail\Reading_Mail_from_the_Reading_Pane.htm
 reading_mail\recovering_deleted_mail_messages.htm
 reading_mail\replying_to_mail_messages.htm
+reading_mail\Viewing_Message_Header_Information.htm
 Search\_search__vs.__search_for_.htm
 Search\and_vs_or_searches.htm
 Search\building_search_queries.htm
@@ -342,6 +343,7 @@ image19.jpg
 briefcasetoolbar.png
 overviewpane.png
 tootlips.png
+versionarrow.png
 7view.png
 print.gif
 documenttoolbar.png
@@ -365,10 +367,10 @@ conversation_view80.png
 shareproperties.png
 table.png
 newandarrow.gif
+forward_icon.png
 zimbra_desktop_icons_32x32_nc.png
 searchsavebutton.gif
 plusbutton.gif
-forward.gif
 newcalendar.png
 AB_dropdownarrow.png
 paperclip.png

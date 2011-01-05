@@ -1,6 +1,18 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="tasks, print" >
+  <topic name="About Tasks" url="Tasks/About_Tasks.htm" />
+</key>
+<key name="three-pane view" >
+  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="tool tips" >
+  <topic name="Zimbra Web Client Workspace" url="Navigation_folders_and_tips/navigating_through_the_user_interface.htm" />
+</key>
+<key name="Trash folder" >
+  <topic name="Trash folder" url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
 <key name="Undeliverable mail" >
   <topic name="Undeliverable mail" url="Creating_Messages/undeliverable_mail.htm" />
 </key>
