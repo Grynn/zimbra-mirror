@@ -83,6 +83,7 @@ olcDbIndex: zimbraMailDeliveryAddress eq,sub
 olcDbIndex: zimbraAuthKerberos5Realm eq
 olcDbIndex: zimbraMailForwardingAddress eq
 olcDbIndex: zimbraMailCatchAllAddress eq,sub
+olcDbIndex: zimbraMailHost eq
 olcDbIndex: zimbraShareInfo sub
 olcDbIndex: zimbraMailTransport eq
 olcDbIndex: zimbraMailAlias eq,sub
