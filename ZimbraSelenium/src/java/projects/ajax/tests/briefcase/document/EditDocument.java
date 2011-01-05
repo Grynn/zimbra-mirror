@@ -81,13 +81,14 @@ public class EditDocument extends AjaxCommonTest {
 			int i = 0;
 			for(; i < 90; i++){
 				if (documentBriefcaseEdit.sIsElementPresent("//*[@id='DWT2_item_1']")) {
+					logger.info("page loaded after " + i + " seconds");
 					break;
 				}
 				SleepUtil.sleepSmall();
 			}
 			
 			if (!documentBriefcaseEdit.sIsVisible("//*[@id='DWT2_item_1']") ) {
-				throw new HarnessException("could not open an edit file page");
+				throw new HarnessException("could not open an edit file page after " + i + " seconds");
 			}
 		// Fill out the document with the new data
 		document.setDocName("name" + ZimbraSeleniumProperties.getUniqueString());
@@ -99,7 +100,7 @@ public class EditDocument extends AjaxCommonTest {
 		} 
 		catch (Exception ex) {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
-			throw new HarnessException("couldn't open document for editing "
+			throw new HarnessException("error in editing document "
 					+ windowName, ex);
 		}
 		finally {
@@ -189,13 +190,14 @@ public class EditDocument extends AjaxCommonTest {
 			int i = 0;
 			for(; i < 90; i++){
 				if (documentBriefcaseEdit.sIsElementPresent("//*[@id='DWT2_item_1']")) {
+					logger.info("page loaded after " + i + " seconds");
 					break;
 				}
 				SleepUtil.sleepSmall();
 			}
 			
 			if (!documentBriefcaseEdit.sIsVisible("//*[@id='DWT2_item_1']") ) {
-				throw new HarnessException("could not open an edit file page");
+				throw new HarnessException("could not open an edit file page after " + i + " seconds");
 			}
 			
 		// Fill out the document with the new data
@@ -210,7 +212,7 @@ public class EditDocument extends AjaxCommonTest {
 		} 
 		catch (Exception ex) {
 			app.zPageBriefcase.zSelectWindow("Zimbra: Briefcase");
-			throw new HarnessException("couldn't open document for editing "
+			throw new HarnessException("error in editing document "
 					+ windowName, ex);
 		}
 		finally {
@@ -222,8 +224,8 @@ public class EditDocument extends AjaxCommonTest {
 		app.zPageBriefcase.zClick(Locators.zBriefcaseFolderIcon);
 		
 		// Verify document name & text through SOAP
-		int i = 20;
-		while (i > 0) {
+		int i = 0;
+		while (i < 20) {
 			SleepUtil.sleepSmall();
 			account.soapSend(
 
@@ -235,9 +237,9 @@ public class EditDocument extends AjaxCommonTest {
 
 			if (account.soapSelectValue("//mail:doc","fr") != null)
 				break;
-			i--;
-			if(i == 0)
-			logger.info("after 20 seconds account.soapSelectValue(//mail:doc,fr) is null");
+			i++;
+			if(i == 20)
+			logger.info("after " + i + " seconds account.soapSelectValue(//mail:doc,fr) is null");
 		}
 		
 		String name = account.soapSelectValue("//mail:doc",
