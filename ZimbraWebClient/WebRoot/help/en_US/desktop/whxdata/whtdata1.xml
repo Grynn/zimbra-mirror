@@ -1,9 +1,8 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <tocdata>
-<item name="Working in Zimbra Documents" url="Documents/Working_in_Notebooks.htm" />
-<item name="Create new notebooks" url="Documents/Create_multiple_notebooks.htm" />
-<item name="Create a new page" url="Documents/Create_a_new_page.htm" />
+<item name="Working in Briefcase" url="Briefcase/Working_in_Briefcase.htm" />
+<item name="Create a new document " url="Documents/Create_a_new_page.htm" />
 <item name="Using the rich text editor" url="Documents/Using_the_rich_text_editor.htm" />
-<item name="Adding a table to a  notebook page" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
+<item name="Adding a table to a document" url="Documents/Adding_a_table_to_a_Wiki_Notebook_Page.htm" />
 
 </tocdata>

@@ -53,12 +53,12 @@
   <item name="Printing individual mail messages" url="reading_mail/printing_a_mail_message.htm" />
   <item name="Replying to mail messages" url="reading_mail/replying_to_mail_messages.htm" />
   <item name="Forwarding a mail message" url="Creating_Messages/forwarding_a_mail_message.htm" />
-  <book name="Using Filters" >
-    <item name="Using filters to sort incoming mail" url="filters/how_filtering_works.htm" />
-    <item name="Filtering your messages" url="filters/filtering_your_messages.htm" />
-    <item name="Filter conditions and actions supported" url="filters/filter_conditions_and_actions_supported.htm" />
-    <item name="wildcards" url="filters/wildcards.htm" />
-  </book>
+</book>
+<book name="Using Filters" >
+  <item name="Using filters to sort incoming mail" url="filters/how_filtering_works.htm" />
+  <item name="Filtering your messages" url="filters/filtering_your_messages.htm" />
+  <item name="Filter conditions and actions supported" url="filters/filter_conditions_and_actions_supported.htm" />
+  <item name="wildcards" url="filters/wildcards.htm" />
 </book>
 <book name="Managing Your Contact Lists" >
   <item name="Adding new contacts" url="Contacts/creating_a_new_contact.htm" />
@@ -80,7 +80,6 @@
 </book>
 <book name="Scheduling Appointments" >
   <item name="About scheduling appointments" url="Calendar/About_Appointments,_Meetings_and_Events.htm" />
-  <item name="Planning an appointment" url="Calendar/About_the_Appointment_Page.htm" />
   <item name="Scheduling an appointment" url="Calendar/Scheduling_meetings.htm" />
   <item name="Seeing Free/Busy times" url="Calendar/Seeing_free_busy_times.htm" />
   <item name="Marking an appointment as private" url="Calendar/Marking_an_appointment_as_private.htm" />
@@ -128,7 +127,7 @@
   <item name="Moving tasks" url="Tasks/Moving_tasks.htm" />
   <item name="Sorting tasks" url="Tasks/Sorting_tasks_.htm" />
 </book>
-<book name="Sharing Folders (ZWC Accounts  Only)" >
+<book name="Sharing Folders (Zimbra Accounts  Only)" >
   <item name="Sharing your Zimbra folders" url="Zdesktop/zd_Sharing_Your_Zimbra_Folders.htm" />
   <item name="How to share your folders" url="Zdesktop/zd_Sharing_Folders_steps_.htm" />
   <item name="Accepting access to the shared mailbox folder" url="Delegated_mailboxes/Accepting_access_to_the_shared_mailbox_folder.htm" />
@@ -136,14 +135,11 @@
   <item name="Working within a shared mail folder" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
   <item name="Revoking a access to a shared folder" url="Delegated_mailboxes/Revoking_a_access_to_a_shared_folder.htm" />
 </book>
-<book name="Working in Documents" >
-<chunk name="Working in Documents" ref="whtdata1.xml" />
-</book>
 <book name="Using Briefcase" >
-<chunk name="Using Briefcase" ref="whtdata2.xml" />
+<chunk name="Using Briefcase" ref="whtdata1.xml" />
 </book>
 <book name="Managing your Account Content" >
-<chunk name="Managing your Account Content" ref="whtdata3.xml" />
+<chunk name="Managing your Account Content" ref="whtdata2.xml" />
 </book>
 
 </tocdata>

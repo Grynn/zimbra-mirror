@@ -33,7 +33,7 @@
 <item name="IndexSelectTopicLabel" value="Select a topic, then click Display" />
 <item name="JS_alert_NotAllDatabaseInited" value="Warning: Not all databases have been loaded. Some topics will not be found." />
 <item name="Disabled Prev" value="&lt;&lt;" />
-<item name="Glossary" value="glos" />
+<item name="Glossary" value="Glossary" />
 <item name="Search" value="Search" />
 <item name="CantSearch" value="Cannot search for that phrase." />
 <item name="LoadingIndex" value="Loading Index..." />
@@ -93,7 +93,6 @@
 
   <panes show="0">
     <toc />
-    <index />
     <fts />
   </panes>
 
@@ -200,67 +199,67 @@
   </stems>
 
 	<paneskin>
-		<background color="#dfdfdf" img="" />
-		<font name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+		<background color="#e9e9e9" img="nor_back_ii.gif" />
+		<font name="Tahoma" size="8pt" color="#ffffff" style="Normal" weight="Normal" decoration="none" />
 		<toc>
-			<background color="#e9e9e9" img="" />
+			<background color="#cccccc" img="" />
 			<icons>
-				<book open="navpane_opennode.gif" close="navpane_closednode.gif" />
-				<item  local="navpane_page.gif" remote="navpane_web.gif" />
+				<book open="nor_folder_op.gif" close="nor_folder_cl.gif" />
+				<item  local="nor_topic.gif" remote="nor_www.gif" />
 				<newbook open="" close="" />
 				<newitem  local="" remote="" />
 			</icons>
 			<fonts>
-				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="10pt" color="#004080" style="Normal" weight="Normal" decoration="underline" />
+				<normal name="Tahoma" size="8pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Tahoma" size="8pt" color="#77b0ff" style="Normal" weight="Normal" decoration="underline" />
 			</fonts>
-			<activebackgroundcolor attr="#c3c3c3" />
+			<activebackgroundcolor attr="#c4ddff" />
 			<margin attr="" />
 			<indent attr="" />
 		</toc>
 		<index>
 			<form>
 				<fonts>
-					<title name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+					<title name="Tahoma" size="8pt" color="#ffffff" style="Normal" weight="Normal" decoration="none" />
 				</fonts>
 				<button normal="" hover="" />
 				<editwith value="20" />
 			</form>
-			<background color="#e9e9e9" img="" />
+			<background color="#cccccc" img="" />
 			<fonts>
-				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="10pt" color="#004080" style="Normal" weight="Normal" decoration="underline" />
-				<empty name="" size="10pt" color="" style="" weight="" decoration="" />
+				<normal name="Tahoma" size="8pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Tahoma" size="8pt" color="#77b0ff" style="Normal" weight="Normal" decoration="underline" />
+				<empty name="" size="8pt" color="" style="" weight="" decoration="" />
 			</fonts>
-			<activebackgroundcolor attr="#c3c3c3" />
+			<activebackgroundcolor attr="#c4ddff" />
 			<margin attr="" />
 			<indent attr="" />
 		</index>
 		<fts>
 			<form>
 				<fonts>
-					<title name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+					<title name="Tahoma" size="8pt" color="#ffffff" style="Normal" weight="Normal" decoration="none" />
 				</fonts>
 				<button normal="" hover="" />
 				<editwith value="20" />
 			</form>
-			<background color="#e9e9e9" img="" />
+			<background color="#cccccc" img="" />
 			<fonts>
-				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="10pt" color="#004080" style="Normal" weight="Normal" decoration="underline" />
-				<error name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<normal name="Tahoma" size="8pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Tahoma" size="8pt" color="#77b0ff" style="Normal" weight="Normal" decoration="underline" />
+				<error name="Tahoma" size="8pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
 			</fonts>
-			<activebackgroundcolor attr="#c3c3c3" />
+			<activebackgroundcolor attr="#c4ddff" />
 			<margin attr="" />
 			<indent attr="" />
 		</fts>
 		<glossary>
-			<background color="#e9e9e9" img="" />
+			<background color="#cccccc" img="" />
 			<fonts>
-				<normal name="Arial" size="10pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
-				<hover name="Arial" size="10pt" color="#004080" style="Normal" weight="Normal" decoration="underline" />
+				<normal name="Tahoma" size="8pt" color="#000000" style="Normal" weight="Normal" decoration="none" />
+				<hover name="Tahoma" size="8pt" color="#77b0ff" style="Normal" weight="Normal" decoration="underline" />
 			</fonts>
-			<activebackgroundcolor attr="#c3c3c3" />
+			<activebackgroundcolor attr="#c4ddff" />
 			<margin attr="" />
 			<indent attr="" />
 		</glossary>
