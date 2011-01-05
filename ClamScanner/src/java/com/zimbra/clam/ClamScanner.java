@@ -1,13 +1,13 @@
 /*
  * ***** BEGIN LICENSE BLOCK *****
  * Zimbra Collaboration Suite Server
- * Copyright (C) 2005, 2006, 2007, 2009, 2010 Zimbra, Inc.
- * 
+ * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2011 Zimbra, Inc.
+ *
  * The contents of this file are subject to the Zimbra Public License
  * Version 1.3 ("License"); you may not use this file except in
  * compliance with the License.  You may obtain a copy of the License at
  * http://www.zimbra.com/license.
- * 
+ *
  * Software distributed under the License is distributed on an "AS IS"
  * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied.
  * ***** END LICENSE BLOCK *****
@@ -31,7 +31,7 @@ import com.zimbra.common.util.LogFactory;
 
 import com.zimbra.cs.extension.ZimbraExtension;
 import com.zimbra.cs.service.mail.UploadScanner;
-import com.zimbra.cs.tcpserver.TcpServerInputStream;
+import com.zimbra.cs.server.TcpServerInputStream;
 import com.zimbra.common.service.ServiceException;
 import com.zimbra.common.util.ByteUtil;
 import com.zimbra.common.util.CliUtil;
@@ -55,6 +55,7 @@ public class ClamScanner extends UploadScanner implements ZimbraExtension {
     public ClamScanner() {
     }
 
+    @Override
     public synchronized void init() {
         if (mInitialized) {
             return;
@@ -79,11 +80,13 @@ public class ClamScanner extends UploadScanner implements ZimbraExtension {
         }
     }
 
+    @Override
     public void destroy() {
         mInitialized = false;
         UploadScanner.unregisterScanner(this);
     }
 
+    @Override
     public void setURL(String urlArg) throws MalformedURLException {
         if (urlArg == null) {
             urlArg = DEFAULT_URL;
@@ -105,6 +108,7 @@ public class ClamScanner extends UploadScanner implements ZimbraExtension {
 
     private ClamScannerConfig mConfig;
 
+    @Override
     protected Result accept(byte[] array, StringBuffer info) {
         if (!mInitialized) {
             return ERROR;
@@ -118,6 +122,7 @@ public class ClamScanner extends UploadScanner implements ZimbraExtension {
         }
     }
 
+    @Override
     protected Result accept(InputStream is, StringBuffer info) {
         if (!mInitialized) {
             return ERROR;
@@ -202,6 +207,7 @@ public class ClamScanner extends UploadScanner implements ZimbraExtension {
         }
     }
 
+    @Override
     public boolean isEnabled() {
         return mInitialized && mConfig.getEnabled();
     }
@@ -237,6 +243,7 @@ public class ClamScanner extends UploadScanner implements ZimbraExtension {
         }
     }
 
+    @Override
     public String getName() {
         return "clamscanner";
     }
