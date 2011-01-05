@@ -199,9 +199,6 @@
 <key name="Vacation message" >
   <topic name="Vacation message" url="Userspecific/vacation_message.htm" />
 </key>
-<key name="versions" >
-  <topic name="Version Control of Files in Briefcase" url="Briefcase/Version_Control_of_Files_in_Briefcase.htm" />
-</key>
 <key name="view as HTML" >
   <topic name="Opening file attachments" url="reading_mail/opening_file_attachments.htm" />
 </key>
