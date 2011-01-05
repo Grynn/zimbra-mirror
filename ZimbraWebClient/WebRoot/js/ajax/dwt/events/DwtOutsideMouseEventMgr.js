@@ -229,13 +229,16 @@ function(ev) {
 	}
 };
 
-// Call the client's outside listener if the event happened outside of the elements
-// defined by the client's context.
+/**
+ * Call the client's outside listener if the event happened outside of the elements
+ * defined by the client's context. Note that the event that gets passed in might be
+ * a DOM event, or a DwtMouseEvent. That's okay, since both have a "target" property.
+ *
+ * @param {Event|DwtMouseEvent}	ev		event
+ */
 DwtOutsideMouseEventMgr._mouseEventHdlr =
 function(ev) {
 
-	var mouseEv = DwtShell.mouseEvent;
-	mouseEv.setFromDhtmlEvent(ev);
 	var omem = DwtOutsideMouseEventMgr.INSTANCE;
 	var targetEl = DwtUiEvent.getTarget(ev);
 	DBG.println("out", "target: " + targetEl.id);
