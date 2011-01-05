@@ -45,6 +45,8 @@ public class FormMailNew extends AbsForm {
 		public static final String zBccField			= "css=[id^=zv__COMPOSE][id$=_bcc_control]";
 		public static final String zSubjectField		= "css=div[id^=zv__COMPOSE] input[id$=_subject_control]";
 		
+		public static final String zBodyFrameHTML		= "//div[contains(id,'zv__COMPOSE')]//iframe";
+
 	}
 
 	public static class Field {
@@ -262,24 +264,31 @@ public class FormMailNew extends AbsForm {
 			
 		} else if ( field == Field.Body ) {
 
-			// It is difficult to focus in the body
-			// Click into Subject, then tab into body
-			
-			locator = Locators.zSubjectField;
-			if ( !this.sIsElementPresent(locator) )
-				throw new HarnessException("Subject field not present");
+			try {
+				
+				int frames = this.sGetXpathCount("//iframe");
+				logger.debug("Body: # of frames: "+ frames);
+				
+				if ( frames != 1 )
+					throw new HarnessException("Need to implement multiple iframe logic");
+				
+				this.sSelectFrame("index=0"); // iframe index is 0 based
+				
+				if ( !this.sIsElementPresent("//html//body"))
+					throw new HarnessException("Unable to locate compose body");
 
-			this.sFocus(locator);
-			this.zClick(locator);
-			
-			((AppAjaxClient)this.MyApplication).zKeyboard.zTypeKeyEvent(KeyEvent.VK_TAB);
-			SleepUtil.sleepSmall();
-			
-			((AppAjaxClient)this.MyApplication).zKeyboard.zTypeCharacters(value);
-			SleepUtil.sleepSmall();
+				this.sFocus("//html//body");
+				this.zClick("//html//body");
+				this.sType("//html//body", value);
+				
+			} finally {
+				// Make sure to go back to the original iframe
+				this.sSelectFrame("relative=top");
+			}
 			
 			return;
-			
+
+
 		} else {
 			throw new HarnessException("not implemented for field "+ field);
 		}
