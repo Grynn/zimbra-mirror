@@ -70,9 +70,6 @@
 <key name="задачи печати" >
   <topic name="О задачах" url="Tasks/About_Tasks.htm" />
 </key>
-<key name="задачи, печать" >
-  <topic name="О задачах" url="Tasks/About_Tasks.htm" />
-</key>
 <key name="заполнение адреса в почте" >
   <topic name="Использование поиска адреса" url="Creating_Messages/Using_address_lookup.htm" />
 </key>
@@ -123,6 +120,9 @@
 </key>
 <key name="пересылка ваших сообщений" >
   <topic name="Установка адреса для пересылки" url="Userspecific/Setting_a_Forwarding_Address.htm" />
+</key>
+<key name="печать, задачи" >
+  <topic name="О задачах" url="Tasks/About_Tasks.htm" />
 </key>
 <key name="поддерживаемые типы файлов вложений" >
   <topic name="Поддерживаемые типы файлов вложений" url="Creating_Messages/Attachment_File_Types_Supported.htm" />

@@ -1,6 +1,9 @@
 ﻿<?xml version='1.0' encoding='utf-8' ?>
 <!-- saved from url=(0014)about:internet -->
 <indexdata>
+<key name="удаленные файлы, восстановление" >
+  <topic name="Очистка Корзины " url="Navigation_folders_and_tips/trash_folder.htm" />
+</key>
 <key name="условия фильтра" >
   <topic name="Поддерживаемые условия и действия фильтров" url="filters/filter_conditions_and_actions_supported.htm" />
   <topic name="Как работают фильтры" url="filters/how_filtering_works.htm" />

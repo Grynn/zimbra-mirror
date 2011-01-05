@@ -246,9 +246,6 @@
 <key name="задачи печати" >
   <topic name="О задачах" url="Tasks/About_Tasks.htm" />
 </key>
-<key name="задачи, печать" >
-  <topic name="О задачах" url="Tasks/About_Tasks.htm" />
-</key>
 <key name="занятость" >
   <topic name="Просмотр сведений о занятости" url="Calendar/Seeing_free_busy_times.htm" />
 </key>
@@ -310,6 +307,9 @@
 </key>
 <key name="импорт контактов" >
   <topic name="Импорт контактов" url="Contacts/Importing_Contacts.htm" />
+</key>
+<key name="импорт учетных записей" >
+  <topic name="Резервное копирование содержимого учетной записи" url="managing_your_account/Backing_up_the_Content_of_Your_Account.htm" />
 </key>
 
 </indexdata>

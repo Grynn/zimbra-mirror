@@ -55,6 +55,9 @@
 <key name="печать контактов" >
   <topic name="Печать контактов" url="Contacts/Printing_Contacts.htm" />
 </key>
+<key name="печать, задачи" >
+  <topic name="О задачах" url="Tasks/About_Tasks.htm" />
+</key>
 <key name="планирование помещения или оборудования" >
   <topic name="Планирование ресурсов" url="Calendar/Scheduling_Resources.htm" />
 </key>
@@ -306,9 +309,6 @@
 </key>
 <key name="удаление собрания" >
   <topic name="Удаление встречи" url="Calendar/Deleting_an_appointment.htm" />
-</key>
-<key name="удаленные файлы, восстановление" >
-  <topic name="Очистка Корзины " url="Navigation_folders_and_tips/trash_folder.htm" />
 </key>
 
 </indexdata>
