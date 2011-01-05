@@ -12,7 +12,7 @@
   <item name="在分享郵件夾中工作" url="Delegated_mailboxes/Working_within_a_shared_mail_folder.htm" />
 </book>
 <book name="分享記事簿" >
-  <item name="分享您的記事簿" url="Calendar/Delegating_Calendar_Access.htm" />
+  <item name="分享你的記事簿" url="Calendar/Delegating_Calendar_Access.htm" />
   <item name="授予分享記事簿的管理員權限" url="Calendar/Admin_rights_for_shared_Calendars.htm" />
   <item name="授予對分享記事簿的管理權限" url="Calendar/Manager_rights_for_shared_Calendars.htm" />
   <item name="接受分享記事簿" url="Calendar/Accepting_Access_to_Shared_Calendar.htm" />
