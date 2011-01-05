@@ -1017,6 +1017,9 @@ function() {
 
 SocialZimlet.prototype.appActive = function(appName, active) {
 	if (active) {
+		if(!this._launched) {
+			this.appLaunch(appName);
+		}
 		this.appName = appName;
 		this._sociallistViews = [];
 		this.initializeVariables();
@@ -1042,6 +1045,7 @@ SocialZimlet.prototype.appLaunch = function(appName, params) {
 	this.app = appCtxt.getApp(appName);
 
 	this.showAppView();
+	this._launched = true;
 };
 
 SocialZimlet.prototype._selectDefaultFolder =
