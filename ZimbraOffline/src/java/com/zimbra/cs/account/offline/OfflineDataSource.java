@@ -42,7 +42,6 @@ import com.zimbra.cs.offline.util.OfflineYAuth;
 import com.zimbra.cs.offline.util.ymail.YMailClient;
 
 public class OfflineDataSource extends DataSource {
-    private DataSourceConfig.Service knownService;
     private OfflineDataSource contactSyncDataSource;
     private OfflineDataSource calendarSyncDataSource;
 
