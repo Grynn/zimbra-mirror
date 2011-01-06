@@ -1110,13 +1110,15 @@ function(x, y, kbGenerated) {
 	this._popupActionId = -1;
 	this._isPoppedUp = true;
 
-	var omem = appCtxt.getOutsideMouseEventMgr();
-	var omemParams = {
-		id:					"DwtMenu",
-		obj:				this,
-		outsideListener:	this._outsideListener
+	if(window.appCtxt){
+		var omem = appCtxt.getOutsideMouseEventMgr();
+		var omemParams = {
+			id:					"DwtMenu",
+			obj:				this,
+			outsideListener:	this._outsideListener
+		}
+		omem.startListening(omemParams);
 	}
-	omem.startListening(omemParams);
 
 	if (!DwtMenu._activeMenu) {
 		DwtMenu._activeMenu = this;
@@ -1168,9 +1170,11 @@ function() {
 	
 	this.notifyListeners(DwtEvent.POPDOWN, this);
 
-	var omem = appCtxt.getOutsideMouseEventMgr();
-	omem.stopListening({id:"DwtMenu", obj:this});
-
+	if(window.appCtxt){
+		var omem = appCtxt.getOutsideMouseEventMgr();
+		omem.stopListening({id:"DwtMenu", obj:this});
+	}
+	
 	if (DwtMenu._activeMenu == this) {
 		DwtMenu._activeMenu = null;
 		DwtMenu._activeMenuUp = false;
