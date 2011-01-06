@@ -147,8 +147,10 @@ function() {
  */
 AttachMailTabView.prototype._resetQuery =
 function(newQuery) {
-	if (this._currentQuery == undefined)
+	if (this._currentQuery == undefined) {
+		this._currentQuery = newQuery;
 		return newQuery;
+	}
 
 	if (this._currentQuery != newQuery) {
 		this._offset = 0;
@@ -235,10 +237,12 @@ function() {
 	this._navTB.addSelectionListener(ZmOperation.PAGE_FORWARD, navBarListener);
 
 	document.getElementById(AttachMailTabView.ELEMENT_ID_NAV_BUTTON_CELL).appendChild(this._navTB.getHtmlElement());
-	this.showAttachMailTreeView();
 
 	var params = {parent: appCtxt.getShell(), className: "AttachMailTabBox AttachMailList", posStyle: DwtControl.ABSOLUTE_STYLE, view: ZmId.VIEW_BRIEFCASE_ICON, type: ZmItem.ATT};
 	var bcView = this._tabAttachMailView = new ZmAttachMailListView(params);
+
+	this.showAttachMailTreeView(); //this must be called AFTER setting this._tabAttachMailView since callback called from it uses it. so far only on IE7 for some reason this callback was called before the previous line, when this line was above it, but it was the bug
+
 	bcView.reparentHtmlElement(this._folderListId);
 	bcView.addSelectionListener(new AjxListener(this, this._listSelectionListener));
 	Dwt.setPosition(bcView.getHtmlElement(), Dwt.RELATIVE_STYLE);
@@ -584,7 +588,7 @@ function(query, forward) {
 
 	//var bController = this._AttachMailController;
 	var callback = new AjxCallback(this, this.showResultContents);
-	this.searchFolder({query:this._currentQuery, offset:this._offset, limit:this._limit , callback:callback});
+	this.searchFolder({query:query, offset:this._offset, limit:this._limit , callback:callback});
 };
 
 /**
