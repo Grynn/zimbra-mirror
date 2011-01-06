@@ -556,6 +556,12 @@ function(obj, span, context) {
 	if (actionMenu.getOp("SEARCH") && (isDetachWindow || !appCtxt.get(ZmSetting.SEARCH_ENABLED))) {
 		ZmOperation.removeOperation(actionMenu, "SEARCH", actionMenu._menuItems);
 	}
+    else{
+        if (obj && obj.type) {
+            var findEmailMsg = obj.type=="TO" ? ZmMsg.findEmailByToRecpt : obj.type=="CC" ? ZmMsg.findEmailByCCRecpt : ZmMsg.findEmailBySender;
+            ZmOperation.setOperation(actionMenu, ZmOperation.SEARCH, ZmOperation.SEARCH, findEmailMsg);
+        }
+    }
 
 	if (actionMenu.getOp("SEARCHBUILDER") && (isDetachWindow || !appCtxt.get(ZmSetting.BROWSE_ENABLED))) {
 		ZmOperation.removeOperation(actionMenu, "SEARCHBUILDER", actionMenu._menuItems);
