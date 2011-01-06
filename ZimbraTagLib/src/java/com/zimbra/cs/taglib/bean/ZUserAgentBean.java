@@ -89,12 +89,10 @@ public class ZUserAgentBean {
                 } else if ((token.indexOf("webtv")) != -1) {
                     isWebTv = true;
                     isNav = false;
-                } else if ((token.indexOf("iphone")) != -1) {
+                } else if ((token.indexOf("iphone") != -1) || ((token.indexOf("ipad")) != -1)) {
                     isIPhone = true;
                 } else if ((token.indexOf("ipod")) != -1) {
                     isIPod = true;
-                } else if ((token.indexOf("ipad")) != -1) {
-                    isIPad = true;
                 } else if ((token.indexOf("hotjava")) != -1) {
                     isHotJava = true;
                     isNav = false;
