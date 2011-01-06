@@ -773,14 +773,15 @@ function(ev) {
  * This class represents the tab in a tab view.
  * 
  * @param {DwtComposite}      parent	the parent widget
- * @param {string}      id		the id
+ * @param {string}      id		the id 
  * @param {number}      index		the index
+ * @param {string}      className       the style class name
  * 
  * @extends		DwtButton
  */
-DwtTabButton = function(parent, id, index) {
+DwtTabButton = function(parent, id, index, className) {
 	if (arguments.length == 0) return;
-	DwtButton.call(this, {parent:parent, className:"ZTab", id:id, index:index});
+	DwtButton.call(this, {parent:parent, className:className, id:id, index:index});
 };
 
 DwtTabButton.prototype = new DwtButton;
@@ -910,7 +911,7 @@ function(type, element, index) {
 };
 
 DwtTabButtonFloat = function(parent, id) {
-	DwtTabButton.call(this, parent,id);
+	DwtTabButton.call(this, parent,id, undefined, "ZTab");
 };
 
 DwtTabButtonFloat.prototype = new DwtTabButton;
