@@ -578,7 +578,9 @@ function(ev) {
 //	DBG.println("kbnav", "keyup: " + ev.keyCode);
 
 	var kbMgr = appCtxt.getKeyboardMgr();
-	kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYUP, ev);
+	if (kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYUP, ev) === false) {
+		return false;
+	}
 
 	// clear saved Gecko key
 	DwtKeyboardMgr.__geckoKeyCode = null;
@@ -598,7 +600,9 @@ function(ev) {
 //	DBG.println("kbnav", "keypress: " + (ev.keyCode || ev.charCode));
 
 	var kbMgr = appCtxt.getKeyboardMgr();
-	kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYPRESS, ev);
+	if (kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYPRESS, ev) === false) {
+		return false;
+	}
 
 	if (DwtKeyboardMgr.__geckoKeyCode && AjxEnv.isGeckoBased) {
 //		DBG.println("kbnav", "Gecko: calling keydown on keypress event");
@@ -714,7 +718,9 @@ function(ev) {
 	try {
 
 	var kbMgr = appCtxt.getKeyboardMgr();
-	kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYDOWN, ev);
+	if (kbMgr._evtMgr.notifyListeners(DwtEvent.ONKEYDOWN, ev) === false) {
+		return false;
+	};
 
 	if (DwtKeyboardMgr.__shell._blockInput) { return false; }
 	ev = DwtUiEvent.getEvent(ev, this);

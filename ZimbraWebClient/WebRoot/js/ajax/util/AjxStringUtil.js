@@ -1532,8 +1532,8 @@ function(obj, recurse, showFuncs, omit) {
 	}
 
 	if (AjxUtil.isObject(obj)) {
-		var objStr = obj.toString();
-		if (omit && omit[objStr]) {
+		var objStr = obj.toString ? obj.toString() : "";
+		if (omit && objStr && omit[objStr]) {
 			return "[" + objStr + "]";
 		}
 		if (AjxStringUtil._visited.contains(obj)) {

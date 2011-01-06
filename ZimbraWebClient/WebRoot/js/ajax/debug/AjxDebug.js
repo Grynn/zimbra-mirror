@@ -447,6 +447,7 @@ function(args) {
 	var result = {args:null, linkName:null};
 
 	// remove link name from arg list if present - check if last arg is *Request or *Response
+	var origLen = argsArray.length;
 	if (argsArray.length > 1) {
 		var lastArg = argsArray[argsArray.length - 1];
 		if (lastArg && lastArg.indexOf && ((lastArg.indexOf(" ") == -1) && (/Request|Response$/.test(lastArg)))) {
@@ -458,7 +459,7 @@ function(args) {
 	// check level if provided, strip it from args; level is either a number, or 1-5 lowercase letters
 	var userLevel = null;
 	var firstArg = argsArray[0];
-	var gotUserLevel = (typeof firstArg == "number" || (firstArg.length <= 5 && /^[a-z]+$/.test(firstArg)));
+	var gotUserLevel = (typeof firstArg == "number" || ((origLen > 1) && firstArg.length <= 5 && /^[a-z]+$/.test(firstArg)));
 	if (gotUserLevel) {
 		userLevel = firstArg;
 		argsArray.shift();
