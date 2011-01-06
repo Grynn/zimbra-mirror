@@ -234,6 +234,13 @@ ZaItem.prototype.parseTargetsRightsFromJS = function(targetObj) {
 				this.rights[rights[r].n] = true;
 			}
 		}
+		
+		if(targetObj.id)
+			this.id = targetObj.id;
+		
+		if(targetObj.name)
+			this.name = targetObj.name;
+
 		if(!this._defaultValues)
 			this._defaultValues = {attrs:{}};
 

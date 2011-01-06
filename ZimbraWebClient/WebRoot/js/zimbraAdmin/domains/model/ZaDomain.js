@@ -297,8 +297,11 @@ ZaDomain.putDomainToCache = function(domain) {
 		ZaDomain.cacheCounter++;
 	}
 
-    ZaDomain.staticDomainByNameCacheTable[domain.name] = domain;
-    ZaDomain.staticDomainByIdCacheTable[domain.id] = domain;
+    	if(domain.name)
+    		ZaDomain.staticDomainByNameCacheTable[domain.name] = domain;
+  	
+	if(domain.id)
+    		ZaDomain.staticDomainByIdCacheTable[domain.id] = domain;
 }
 ZaDomain.compareACLs = function (val1, val2) {
 	if(AjxUtil.isEmpty(val1.name) && AjxUtil.isEmpty(val2.name)) {
